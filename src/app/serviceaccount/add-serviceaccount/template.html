@@ -29,20 +29,33 @@ limitations under the License.
           Name is <strong>required</strong>.
         </mat-error>
       </mat-form-field>
-      <mat-form-field fxFlex>
-        <mat-label>Group*</mat-label>
-        <mat-select id="km-add-serviceaccount-dialog-group-combobox"
-                    panelClass="km-add-dialog-dropdown"
-                    disableOptionCentering
-                    formControlName="group">
-          <mat-option value="editors">Editor</mat-option>
-          <mat-option value="projectmanagers">Project Manager</mat-option>
-          <mat-option value="viewers">Viewer</mat-option>
-        </mat-select>
-        <mat-error *ngIf="addServiceAccountForm.controls.group.hasError('required')">
-          Group is <strong>required</strong>.
-        </mat-error>
-      </mat-form-field>
+      <label class="km-radio-group-label">Select a Group</label>
+      <mat-radio-group formControlName="group"
+                       fxFlex
+                       fxLayout="column"
+                       class="km-radio-group">
+        <mat-radio-button value="projectmanagers"
+                          class="km-radio-button">
+          <div class="km-radio-button-title">Project Manager</div>
+          <div class="km-radio-button-description">
+            Project, members, and service accounts management, no access to clusters
+          </div>
+        </mat-radio-button>
+        <mat-radio-button value="editors"
+                          class="km-radio-button">
+          <div class="km-radio-button-title">Editor</div>
+          <div class="km-radio-button-description">
+            Write access and management of clusters, nodes and SSH keys
+          </div>
+        </mat-radio-button>
+        <mat-radio-button value="viewers"
+                          class="km-radio-button">
+          <div class="km-radio-button-title">Viewer</div>
+          <div class="km-radio-button-description">
+            Read-only access, can only view existing resources
+          </div>
+        </mat-radio-button>
+      </mat-radio-group>
     </form>
   </mat-dialog-content>
   <mat-dialog-actions>
