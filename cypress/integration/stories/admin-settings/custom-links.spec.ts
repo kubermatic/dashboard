@@ -38,20 +38,24 @@ describe('Admin Settings - Custom Links Story', () => {
     AdminSettingsPage.getLastCustomLinkLocationInput().get('mat-option').contains(linkLocation).click();
     AdminSettingsPage.getLastCustomLinkLabelInput().type(linkLabel).should(Condition.HaveValue, linkLabel);
     AdminSettingsPage.getLastCustomLinkURLInput().type(linkURL).should(Condition.HaveValue, linkURL);
+    AdminSettingsPage.waitForSave();
   });
 
   it('should make sure that API documentation display is enabled', () => {
     AdminSettingsPage.getApiDocsCheckbox().click();
+    AdminSettingsPage.waitForSave();
     AdminSettingsPage.getApiDocsCheckbox().find('input').should(Condition.BeChecked);
   });
 
   it('should make sure that terms of service display is enabled', () => {
     AdminSettingsPage.getTermsOfServiceCheckbox().click();
+    AdminSettingsPage.waitForSave();
     AdminSettingsPage.getTermsOfServiceCheckbox().find('input').should(Condition.BeChecked);
   });
 
   it('should make sure that demo information display is enabled', () => {
     AdminSettingsPage.getDemoInfoCheckbox().click();
+    AdminSettingsPage.waitForSave();
     AdminSettingsPage.getDemoInfoCheckbox().find('input').should(Condition.BeChecked);
   });
 
@@ -74,20 +78,24 @@ describe('Admin Settings - Custom Links Story', () => {
 
   it('should delete custom link', () => {
     AdminSettingsPage.getSecondLastCustomLinkDeleteButton().should(Condition.NotBe, 'disabled').click();
+    AdminSettingsPage.waitForSave();
   });
 
   it('should make sure that API documentation display is disabled', () => {
     AdminSettingsPage.getApiDocsCheckbox().click();
+    AdminSettingsPage.waitForSave();
     AdminSettingsPage.getApiDocsCheckbox().find('input').should(Condition.NotBeChecked);
   });
 
   it('should make sure that terms of service display is disabled', () => {
     AdminSettingsPage.getTermsOfServiceCheckbox().click();
+    AdminSettingsPage.waitForSave();
     AdminSettingsPage.getTermsOfServiceCheckbox().find('input').should(Condition.NotBeChecked);
   });
 
   it('should make sure that demo information display is disabled', () => {
     AdminSettingsPage.getDemoInfoCheckbox().click();
+    AdminSettingsPage.waitForSave();
     AdminSettingsPage.getDemoInfoCheckbox().find('input').should(Condition.NotBeChecked);
   });
 

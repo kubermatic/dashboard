@@ -12,6 +12,7 @@
 import {Condition} from '../utils/condition';
 import {Endpoint} from '../utils/endpoint';
 import {RequestType, TrafficMonitor} from '../utils/monitor';
+import {Provider} from '../utils/provider';
 import {View} from '../utils/view';
 import {UserPanel} from './user-panel.po';
 
@@ -158,6 +159,37 @@ export class AdminSettingsPage {
 
   static getDeleteAdminBtn(email: string): Cypress.Chainable {
     return cy.get(`#km-admin-delete-${btoa(email)}`);
+  }
+
+  static getPresetsTab(): Cypress.Chainable {
+    return cy.get('#mat-tab-label-0-2');
+  }
+
+  static getAddPresetBtn(): Cypress.Chainable {
+    return cy.get('#km-add-preset-btn');
+  }
+
+  static getAddPresetDialogNameInput(): Cypress.Chainable {
+    return cy.get('#km-settings-preset-name-input');
+  }
+
+  static getAddPresetDialogNextBtn(): Cypress.Chainable {
+    return cy.get('#km-settings-preset-next-btn');
+  }
+
+  static getAddPresetDialogCreateBtn(): Cypress.Chainable {
+    return cy.get('#km-settings-preset-create-btn');
+  }
+
+  static getAddPresetDialogProviderBtn(provider: Provider): Cypress.Chainable {
+    return cy
+      .get('#km-settings-preset-dialog-provider-' + provider)
+      .parent()
+      .parent();
+  }
+
+  static getAddPresetDialogDigitaloceanTokenInput(): Cypress.Chainable {
+    return cy.get('#km-settings-preset-digitalocean-token');
   }
 
   // Utils.
