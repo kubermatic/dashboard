@@ -52,7 +52,6 @@ describe('AlertmanagerConfigDialog', () => {
               title: '',
               projectId: '',
               clusterId: '',
-              mode: '',
               confirmLabel: '',
             },
           },
@@ -67,7 +66,6 @@ describe('AlertmanagerConfigDialog', () => {
     beforeEach(() => {
       fixture = TestBed.createComponent(AlertmanagerConfigDialog);
       component = fixture.componentInstance;
-      fixture.detectChanges();
 
       component.data = {
         title: 'Edit Alertmanager Config',
