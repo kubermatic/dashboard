@@ -16,11 +16,11 @@ import {AdminSettingsPage} from '../../../pages/admin-settings.po';
 import {RequestType, Response, ResponseType, TrafficMonitor} from '../../../utils/monitor';
 import {Endpoint} from '../../../utils/endpoint';
 
-describe('Admin Settings - Administrators Story', () => {
+xdescribe('Admin Settings - Administrators Story', () => {
   const userEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const adminEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
-  const retries = 5;
+  const retries = 15;
   let adminsCount = 1;
 
   it('should login as admin', () => {
