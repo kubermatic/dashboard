@@ -109,7 +109,7 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   displayKindNames(element: Kind[]): string {
-    return element.map(x => x.kinds).join(', ');
+    return element ? element.map(x => x.kinds).join(', ') : '';
   }
 
   getViolationCount(violations: Violation[]): number {
