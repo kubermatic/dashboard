@@ -9,60 +9,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-.km-error-background {
-  background-position: center top;
-  display: flex;
-  left: 0;
-  place-content: center;
-  position: absolute;
-  top: 0;
-  width: 100%;
+h1 {
+  font-size: 120px;
+  margin: 30px 0 0;
 }
 
-.km-page-not-found {
-  text-align: center;
-  z-index: 1;
+h2 {
+  font-size: 40px;
+  margin: 0;
+}
 
-  p {
-    font-size: 16px;
-    margin: 0 0 20px 0;
-
-    &:nth-child(1) {
-      font-size: 120px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    &:nth-child(2) {
-      font-size: 40px;
-      font-weight: bold;
-      margin-bottom: 30px;
-    }
-  }
+p {
+  font-size: 16px;
+  margin: 0;
 }
 
 @media screen and (max-height: 504px), screen and (max-width: 504px) {
-  .km-error-background {
-    height: 90%;
+  h1 {
+    font-size: 80px;
+    margin: 0;
   }
 
-  .km-page-not-found p {
-    margin: 0 0 10px 0;
-
-    &:nth-child(1) {
-      font-size: 80px;
-      margin-bottom: 0;
-    }
-
-    &:nth-child(2) {
-      font-size: 20px;
-      margin-bottom: 20px;
-    }
+  h2 {
+    font-size: 20px;
   }
-}
 
-@media screen and (max-width: 504px) {
-  .km-error-background {
-    background-size: cover;
+  p {
+    font-size: 12px;
   }
 }
