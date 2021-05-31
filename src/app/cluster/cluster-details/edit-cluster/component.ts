@@ -27,6 +27,10 @@ import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
+enum Controls {
+  OPAIntegration = 'opaIntegration',
+}
+
 @Component({
   selector: 'km-edit-cluster',
   templateUrl: './template.html',
@@ -79,7 +83,12 @@ export class EditClusterComponent implements OnInit, OnDestroy {
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this._settings = settings;
-      this._enforce('opaIntegration', this._settings.opaOptions.enforced);
+
+      this.form.get(Controls.OPAIntegration).setValue(this._settings.opaOptions.enabled);
+      if (this._settings.opaOptions.enforced) {
+        this.form.get(Controls.OPAIntegration).disable();
+      }
+      this.form.updateValueAndValidity();
     });
 
     this._clusterService.providerSettingsPatchChanges$
@@ -148,13 +157,6 @@ export class EditClusterComponent implements OnInit, OnDestroy {
 
   isOPAEnforced(): boolean {
     return !!this._settings && this._settings.opaOptions.enforced;
-  }
-
-  private _enforce(name: string, isEnforced: boolean): void {
-    if (isEnforced) {
-      this.form.get(name).setValue(true);
-      this.form.get(name).disable();
-    }
   }
 
   editCluster(): void {
