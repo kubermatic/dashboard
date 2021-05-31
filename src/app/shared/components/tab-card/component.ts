@@ -21,6 +21,7 @@ import {
 } from '@angular/core';
 import {TabComponent} from '@shared/components/tab-card/tab/component';
 import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-tab-card',
@@ -42,7 +43,7 @@ export class TabCardComponent implements AfterContentInit, OnDestroy {
     this._cdr.detectChanges();
 
     // Watch for tab changes and update the component.
-    this.inputTabs.changes.subscribe(_ => {
+    this.inputTabs.changes.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
       this.tabs = this.inputTabs.toArray();
       this._cdr.detectChanges();
     });
