@@ -11,21 +11,27 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div *ngIf="!isLoadingData()"
-     class="header">
+<div class="header">
   <div fxFlex></div>
-  <button id="km-alertmanager-config-reset-btn"
-          mat-icon-button
-          matTooltip="Reset Alertmanager Config to default"
-          (click)="reset()">
-    <i class="km-icon-reset"></i>
-  </button>
-  <button id="km-alertmanager-config-edit-btn"
-          mat-icon-button
-          matTooltip="Edit Alertmanager Config"
-          (click)="edit()">
-    <i class="km-icon-edit"></i>
-  </button>
+  <ng-container *ngIf="!isLoadingData()">
+    <div fxLayout="row"
+         fxLayoutGap="10px">
+      <button id="km-alertmanager-config-reset-btn"
+              mat-icon-button
+              color="tertiary"
+              matTooltip="Reset Alertmanager Config to default"
+              (click)="reset()">
+        <i class="km-icon-reset"></i>
+      </button>
+      <button id="km-alertmanager-config-edit-btn"
+              mat-icon-button
+              color="tertiary"
+              matTooltip="Edit Alertmanager Config"
+              (click)="edit()">
+        <i class="km-icon-edit"></i>
+      </button>
+    </div>
+  </ng-container>
 </div>
 
 <div *ngIf="!isLoadingData()"
