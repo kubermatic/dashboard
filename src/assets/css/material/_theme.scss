@@ -213,6 +213,16 @@
       }
     }
 
+    &.mat-quaternary:not([disabled]) {
+      background-color: transparent;
+      border: 1px solid map-get($colors, divider);
+      color: map-get($colors, text);
+
+      &:hover {
+        background-color: map-get($colors, background-hover);
+      }
+    }
+
     &.mat-pure:not([disabled]) {
       background-color: transparent;
       border: none;
@@ -239,6 +249,45 @@
 
     &:disabled i {
       background-color: map-get($colors, background-disabled-button);
+    }
+
+    &.mat-alternative:not([disabled]) {
+      background-color: map-get($colors, secondary);
+
+      &:hover {
+        background-color: map-get($colors, secondary-hover);
+      }
+
+      i {
+        background-color: #fff;
+      }
+    }
+
+    &.mat-tertiary:not([disabled]) {
+      background-color: transparent;
+      border: 1px solid map-get($colors, divider);
+
+      &:hover {
+        background-color: map-get($colors, background-hover);
+      }
+    }
+  }
+
+  .mat-radio-button {
+    &.mat-accent {
+      .mat-radio-ripple {
+        .mat-ripple-element {
+          background-color: map-get($colors, primary);
+        }
+      }
+
+      .mat-radio-inner-circle {
+        background-color: map-get($colors, primary);
+      }
+
+      &.mat-radio-checked .mat-radio-outer-circle {
+        border-color: map-get($colors, primary);
+      }
     }
   }
 

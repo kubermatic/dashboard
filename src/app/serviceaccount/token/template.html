@@ -10,6 +10,19 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
+
+<div fxLayout="row">
+  <div fxFlex></div>
+  <button mat-flat-button
+          color="quaternary"
+          id="km-add-serviceaccount-token"
+          (click)="createToken()"
+          [disabled]="!isEnabled('create')">
+    <i class="km-icon-add"></i>
+    Add Token
+  </button>
+</div>
+
 <table class="km-table km-table-dropdown"
        mat-table
        multiTemplateDataRows
@@ -112,15 +125,5 @@ limitations under the License.
     <mat-spinner color="accent"
                  class="km-spinner"
                  [diameter]="25"></mat-spinner>
-  </div>
-</ng-container>
-
-<ng-container>
-  <div class="km-mat-row km-mat-footer-row">
-    <button id="km-add-serviceaccount-token"
-            class="km-text-muted"
-            (click)="createToken()"
-            [disabled]="!isEnabled('create')">+ Add Token
-    </button>
   </div>
 </ng-container>

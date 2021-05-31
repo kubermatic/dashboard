@@ -45,12 +45,13 @@ limitations under the License.
     </mat-form-field>
   </div>
   <div fxFlex></div>
-  <button mat-icon-button
-          class="add-button"
-          matTooltip="Add Constraint"
+  <button mat-flat-button
+          color="quaternary"
+          matTooltip=""
           *ngIf="isClusterRunning"
           (click)="add()">
     <i class="km-icon-add"></i>
+    Add Constraint
   </button>
 </div>
 

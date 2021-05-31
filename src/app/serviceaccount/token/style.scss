@@ -16,12 +16,29 @@
 }
 
 .km-empty-list-msg {
+  border-radius: $border-radius;
   border-style: solid;
-  border-top-left-radius: $border-radius;
-  border-top-right-radius: $border-radius;
-  border-width: 1px 1px 0 1px;
+  border-width: 1px;
 }
 
 .km-table-actions button {
   opacity: 1;
+}
+
+.km-table-dropdown {
+  tr:last-child td:last-child {
+    border-bottom-right-radius: $border-radius;
+  }
+
+  tr:last-child td:first-child {
+    border-bottom-left-radius: $border-radius;
+  }
+
+  tr:first-child td:first-child {
+    border-top-left-radius: $border-radius;
+  }
+
+  tr:first-child td:last-child {
+    border-top-right-radius: $border-radius;
+  }
 }

@@ -11,6 +11,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<div fxLayout="row">
+  <div fxFlex></div>
+  <button mat-flat-button
+          color="quaternary"
+          [matTooltip]="getAddBtnTooltip()"
+          [disabled]="!isClusterReady"
+          (click)="add()">
+    <i class="km-icon-add"></i>
+    Add Addon
+  </button>
+</div>
+
 <div *ngIf="isClusterReady"
      fxLayout="row wrap"
      fxLayoutGap="10px">
@@ -45,12 +57,10 @@ limitations under the License.
       </button>
     </mat-menu>
   </div>
-  <div fxLayoutAlign="center center"
-       class="km-addon-container km-new-addon-container km-border-dashed"
-       (click)="add()"
-       [ngClass]="getAddBtnClass()"
-       [matTooltip]="getAddBtnTooltip()">
-    + Addon
+  <div *ngIf="addons.length === 0"
+       class="no-data-warning"
+       fxFlex>
+    No addons installed.
   </div>
 </div>
 

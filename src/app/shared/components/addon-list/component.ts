@@ -101,10 +101,6 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
     );
   }
 
-  getAddBtnClass(): string {
-    return !this.canAdd() ? 'disabled' : '';
-  }
-
   getAddBtnTooltip(): string {
     if (!this.canEdit) {
       return 'You have no permissions to edit addons in this cluster.';

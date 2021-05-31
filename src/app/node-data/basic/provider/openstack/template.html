@@ -92,19 +92,23 @@ limitations under the License.
            matInput
            min="1"
            type="number"
-           autocomplete="off"
-           required>
+           autocomplete="off">
     <mat-hint>Time in seconds between running a check for instance ready status.</mat-hint>
+    <mat-error *ngIf="form.get(Controls.InstanceReadyCheckPeriod).hasError('min')">
+      Instance Ready Check Period has to be at least 1.
+    </mat-error>
   </mat-form-field>
 
   <mat-form-field fxFlex>
     <mat-label>Instance Ready Check Timeout</mat-label>
     <input [formControlName]="Controls.InstanceReadyCheckTimeout"
            matInput
-           min="1"
+           min="0"
            type="number"
-           autocomplete="off"
-           required>
-    <mat-hint>Time in seconds to wait for instance to be in ready status before timing out.</mat-hint>
+           autocomplete="off">
+    <mat-hint>Time in seconds to wait for instance to be in ready status before timing out. Set to 0 to disable timeout.</mat-hint>
+    <mat-error *ngIf="form.get(Controls.InstanceReadyCheckTimeout).hasError('min')">
+      Instance Ready Check Timeout has to be at least 0.
+    </mat-error>
   </mat-form-field>
 </form>

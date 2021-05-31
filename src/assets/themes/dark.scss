@@ -84,10 +84,6 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
   filter: invert(.25) brightness(100) contrast(100);
 }
 
-.km-error-background {
-  background-image: url("/assets/images/branding/404-illustration-dark.svg");
-}
-
 .km-provider-logo-bringyourown {
   @include provider-image("/assets/images/clouds/bringyourown-dark.svg", 30px);
 

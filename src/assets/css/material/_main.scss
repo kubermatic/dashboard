@@ -56,7 +56,6 @@ mat-card {
         cursor: pointer;
         font-size: $font-size-body;
         outline: none;
-        padding: 0;
       }
     }
   }
@@ -391,16 +390,23 @@ button {
   &.mat-flat-button,
   &.mat-raised-button {
     font-size: $font-size-subhead;
+    height: 40px;
     line-height: 40px;
     min-width: unset;
 
     &:not(:first-child) {
       margin-left: 10px;
     }
+
+    i {
+      margin-right: 8px;
+    }
   }
 }
 
 .mat-icon-button {
+  border-radius: $border-radius !important;
+
   &[disabled] {
     * {
       cursor: auto;

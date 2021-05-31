@@ -10,19 +10,16 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<div class="km-error-background">
-  <div class="km-error-content"
-       fxLayout="column"
-       fxLayoutAlign="center center">
-    <div class="km-page-not-found">
-      <p>404</p>
-      <p>Looks like you're lost</p>
-      <p>This page does not exist or is temporarily unavailable.</p>
-    </div>
-    <button mat-flat-button
-            (click)="backToApp()"
-            color="secondary"
-            type="button">Go to projects
-    </button>
-  </div>
+
+<div fxLayout="column"
+     fxLayoutAlign="center center"
+     fxLayoutGap="30px">
+  <h1>404</h1>
+  <h2>Page Not Found</h2>
+  <p>This page does not exist or is temporarily unavailable.</p>
+  <button mat-flat-button
+          (click)="backToApp()"
+          color="secondary"
+          type="button">Go to projects
+  </button>
 </div>

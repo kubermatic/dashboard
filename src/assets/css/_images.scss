@@ -23,10 +23,6 @@
   background-size: cover;
 }
 
-.km-error-background {
-  @include background-image("/assets/images/branding/404-illustration-light.svg", 80%);
-}
-
 .km-icon-show {
   @include mask-image("/assets/images/icons/show.svg", 24px);
 }

@@ -436,7 +436,13 @@ km-dashboard {
       }
 
       .mat-form-field-suffix {
-        top: 0;
+        margin: 0 auto;
+
+        .mat-icon-button {
+          @include size(28px);
+
+          margin-top: -2px;
+        }
       }
     }
   }
