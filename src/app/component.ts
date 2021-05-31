@@ -107,7 +107,7 @@ export class KubermaticComponent implements OnInit, OnDestroy {
     const retryDelay = 500;
     const defaultThemeName = 'light';
     const defaultThemeClass = `km-style-${defaultThemeName}`;
-    const defaultThemePath = `assets/themes/${defaultThemeName}.css`;
+    const defaultThemePath = `${defaultThemeName}.css`;
     const positionElement = this._document.head.querySelector('link[rel="stylesheet"]:last-of-type');
     const themeElement: HTMLLinkElement = this._document.createElement('link');
     themeElement.setAttribute('rel', 'stylesheet');

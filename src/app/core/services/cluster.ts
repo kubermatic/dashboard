@@ -15,7 +15,7 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {combineLatest, merge, Observable, of, Subject, timer} from 'rxjs';
 import {catchError, filter, map, shareReplay, startWith, switchMap, switchMapTo, take} from 'rxjs/operators';
 
-import {environment} from 'environments/environment';
+import {environment} from '@environments/environment';
 import {AppConfigService} from '@app/config.service';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {LabelFormComponent} from '@shared/components/label-form/component';

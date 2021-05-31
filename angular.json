@@ -22,6 +22,10 @@
               "src/favicon.png",
               { "glob": "**/*", "input": "node_modules/ngx-monaco-editor/assets/monaco", "output": "./assets/monaco/" }
             ],
+            "allowedCommonJsDependencies": [
+              "semver",
+              "swagger-ui"
+            ],
             "stylePreprocessorOptions": {
               "includePaths": [
                 "src/assets/css"

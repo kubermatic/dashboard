@@ -16,7 +16,6 @@ import {Auth} from '@core/services/auth/service';
 import {environment} from '@environments/environment';
 import {Admin} from '@shared/entity/member';
 import {AdminSettings, CustomLink, DEFAULT_ADMIN_SETTINGS} from '@shared/entity/settings';
-import {Settings} from 'http2';
 import {BehaviorSubject, iif, merge, Observable, of, Subject, timer} from 'rxjs';
 import {catchError, delay, retryWhen, shareReplay, switchMap, tap} from 'rxjs/operators';
 import {webSocket} from 'rxjs/webSocket';
@@ -79,9 +78,9 @@ export class SettingsService {
     return settings;
   }
 
-  patchAdminSettings(patch: any): Observable<Settings> {
+  patchAdminSettings(patch: any): Observable<AdminSettings> {
     const url = `${this.restRoot}/admin/settings`;
-    return this._httpClient.patch<Settings>(url, patch);
+    return this._httpClient.patch<AdminSettings>(url, patch);
   }
 
   get customLinks(): Observable<CustomLink[]> {

@@ -9,7 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-const wp = require('@cypress/webpack-preprocessor');
+import webpack from '@cypress/webpack-preprocessor';
+import failFast from 'cypress-fail-fast/plugin';
 
 const webpackOptions = {
   resolve: {extensions: ['.ts', '.js']},
@@ -29,5 +30,8 @@ const webpackOptions = {
   },
 };
 
-const options = {webpackOptions};
-module.exports = wp(options);
+export default (on, config) => {
+  on('file:preprocessor', webpack({webpackOptions}));
+  failFast(on, config);
+  return config;
+}

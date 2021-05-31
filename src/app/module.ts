@@ -23,7 +23,7 @@ import {HistoryService} from '@core/services/history';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
-import {environment} from 'environments/environment';
+import {environment} from '@environments/environment';
 import {CookieService} from 'ngx-cookie-service';
 import {MonacoEditorModule} from 'ngx-monaco-editor';
 import {kmTooltipDefaultOptions} from '../app-config';
