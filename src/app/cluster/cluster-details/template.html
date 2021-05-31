@@ -246,7 +246,7 @@ limitations under the License.
                   [isClusterRunning]="isClusterAPIRunning"></km-node-list>
   </div>
 
-  <km-tab-card [ngClass]="{'hide-mla': !isMLAEnabled()}">
+  <km-tab-card>
     <km-tab label="Events">
       <km-event-list [events]="events"></km-event-list>
     </km-tab>
@@ -279,7 +279,8 @@ limitations under the License.
                             [projectID]="projectID"
                             [isClusterRunning]="isClusterRunning"></km-gatekeeper-config>
     </km-tab>
-    <km-tab label="MLA Alertmanager Config">
+    <km-tab label="MLA Alertmanager Config"
+            *ngIf="isMLAEnabled()">
       <km-alertmanager-config [alertmanagerConfig]="alertmanagerConfig"
                               [cluster]="cluster"
                               [projectID]="projectID"

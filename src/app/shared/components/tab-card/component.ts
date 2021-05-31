@@ -12,12 +12,15 @@
 import {
   AfterContentInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ContentChildren,
+  OnDestroy,
   QueryList,
   ViewEncapsulation,
 } from '@angular/core';
 import {TabComponent} from '@shared/components/tab-card/tab/component';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'km-tab-card',
@@ -26,11 +29,27 @@ import {TabComponent} from '@shared/components/tab-card/tab/component';
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TabCardComponent implements AfterContentInit {
+export class TabCardComponent implements AfterContentInit, OnDestroy {
   @ContentChildren(TabComponent) inputTabs: QueryList<TabComponent>;
   tabs: TabComponent[];
+  private _unsubscribe = new Subject<void>();
+
+  constructor(private readonly _cdr: ChangeDetectorRef) {}
 
   public ngAfterContentInit(): void {
+    // Initialization.
     this.tabs = this.inputTabs.toArray();
+    this._cdr.detectChanges();
+
+    // Watch for tab changes and update the component.
+    this.inputTabs.changes.subscribe(_ => {
+      this.tabs = this.inputTabs.toArray();
+      this._cdr.detectChanges();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 }
