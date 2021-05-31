@@ -9,12 +9,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use '~@angular/material' as mat;
+
 @import 'theme/main';
 @import 'mixins';
 @import 'variables';
 @import 'images';
-
-@use '~@angular/material' as mat;
 
 $colors-dark: (
   primary: #0072b0,
