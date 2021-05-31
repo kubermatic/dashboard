@@ -34,4 +34,4 @@ export default (on, config) => {
   on('file:preprocessor', webpack({webpackOptions}));
   failFast(on, config);
   return config;
-}
+};

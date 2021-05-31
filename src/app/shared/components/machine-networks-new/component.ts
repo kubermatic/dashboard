@@ -111,8 +111,9 @@ export class MachineNetworkComponent extends BaseFormValidator implements OnInit
   }
 
   private _setMachineNetworks(): void {
-    this._clusterSpecService.cluster.spec.machineNetworks = (this._networkArray
-      .value as MachineNetworkSpec[]).map(spec => new MachineNetworkSpec(spec).toMachineNetwork());
+    this._clusterSpecService.cluster.spec.machineNetworks = (this._networkArray.value as MachineNetworkSpec[]).map(
+      spec => new MachineNetworkSpec(spec).toMachineNetwork()
+    );
   }
 
   private _newEmptyMachineNetwork(): object {

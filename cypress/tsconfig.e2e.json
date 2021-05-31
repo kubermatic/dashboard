@@ -10,5 +10,6 @@
     "pages/**/*.ts",
     "utils/*.ts",
     "support/*.ts",
+    "plugins/*.ts",
     "../node_modules/cypress/**/*.ts"]
 }

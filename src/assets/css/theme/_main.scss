@@ -9,12 +9,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'sass:map';
-@use '~@angular/material' as mat;
-
 @import 'material/theme';
 @import 'global/theme';
 @import 'component';
+
+@use 'sass:map';
+@use '~@angular/material' as mat;
 
 @include mat.core();
 

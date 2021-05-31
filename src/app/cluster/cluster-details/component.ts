@@ -99,10 +99,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     this.config = this._appConfigService.getConfig();
     this.projectID = this._route.snapshot.paramMap.get(PathParam.ProjectID);
     const clusterID = this._route.snapshot.paramMap.get(PathParam.ClusterID);
-    const clusterObserver = {
-      next: this._onClusterDataLoad.bind(this),
-      error: this._onClusterDataLoadError.bind(this),
-    };
 
     this._userService.currentUser.pipe(take(1)).subscribe(user => (this._user = user));
 
