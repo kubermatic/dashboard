@@ -234,7 +234,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
     return internalFormValue ? internalFormValue[AutocompleteControls.Main] : '';
   }
 
-  _getResourceGroup(): string {
+  private _getResourceGroup(): string {
     const vNetResourceGroup = this.getValueFromInternalForm(Controls.VNetResourceGroup);
     return vNetResourceGroup ? vNetResourceGroup : this.getValueFromInternalForm(Controls.ResourceGroup);
   }
