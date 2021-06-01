@@ -9,12 +9,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import webpack from '@cypress/webpack-preprocessor';
-import failFast from 'cypress-fail-fast/plugin';
-import {configuration} from './cy-ts-preprocessor';
-
-export default async (on, config) => {
-  on('file:preprocessor', webpack(configuration));
-  failFast(on, config);
-  return config;
+const webpackOptions = {
+  resolve: {extensions: ['.ts', '.js']},
+  module: {
+    rules: [
+      {
+        test: /\.ts$/,
+        exclude: [/node_modules/],
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {configFile: 'cypress/tsconfig.e2e.json'},
+          },
+        ],
+      },
+    ],
+  },
 };
+
+export const configuration = {webpackOptions};

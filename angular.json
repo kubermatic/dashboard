@@ -88,8 +88,8 @@
                   "maximumWarning": "6kb"
                 }
               ],
-              "optimization": true,
-              "outputHashing": "all",
+              "commonChunk": false,
+              "optimization": false,
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
@@ -109,8 +109,8 @@
                   "maximumWarning": "6kb"
                 }
               ],
-              "optimization": true,
-              "outputHashing": "all",
+              "commonChunk": false,
+              "optimization": false,
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
@@ -140,11 +140,9 @@
               "proxyConfig": "./proxy-local.conf.cjs"
             },
             "e2e": {
-              "hmr": false,
               "browserTarget": "kubermatic:build:e2e"
             },
             "e2e-local": {
-              "hmr": false,
               "browserTarget": "kubermatic:build:e2e-local",
               "proxyConfig": "./proxy-local.conf.cjs"
             }

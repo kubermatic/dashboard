@@ -3,7 +3,7 @@
   "compilerOptions": {
     "strict": true,
     "baseUrl": "../node_modules",
-    "types": ["cypress"]
+    "types": ["cypress"],
   },
   "include": [
     "integration/**/*.ts",

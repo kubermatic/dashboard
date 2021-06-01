@@ -9,7 +9,7 @@
   "angular-cli": {},
   "scripts": {
     "start": "npm run vi && ng serve",
-    "start:prod": "npm run vi && ng serve --prod",
+    "start:prod": "npm run vi && ng serve --configuration=production",
     "start:local": "npm run vi && ng serve --configuration=local",
     "start:e2e": "npm run vi && ng serve --configuration=e2e",
     "start:e2e-local": "npm run vi && ng serve --configuration=e2e-local",
@@ -33,7 +33,7 @@
     "fix:license": "license-check-and-add add",
     "clean": "gts clean",
     "vi": "node version.js",
-    "postinstall": "ngcc",
+    "postinstall": "ngcc && rm cypress/**/*.js && rm cypress/tsconfig.json",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -75,7 +75,8 @@
     "@angular-devkit/build-angular": "12.0.1",
     "@angular/cli": "12.0.1",
     "@angular/compiler-cli": "12.0.1",
-    "@cypress/webpack-preprocessor": "^5.9.0",
+    "@bahmutov/add-typescript-to-cypress": "2.1.2",
+    "@cypress/webpack-preprocessor": "5.9.0",
     "@jest/globals": "27.0.1",
     "@types/jest": "26.0.23",
     "@types/js-yaml": "4.0.1",
@@ -83,7 +84,7 @@
     "@types/node": "15.6.1",
     "browserlist": "1.0.1",
     "cypress": "7.4.0",
-    "cypress-fail-fast": "2.3.2",
+    "cypress-fail-fast": "2.3.3",
     "eslint-plugin-compat": "3.9.0",
     "eslint-plugin-rxjs": "3.3.1",
     "gts": "3.1.0",
