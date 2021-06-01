@@ -151,6 +151,7 @@ export class AWSNodeSpec {
   subnetID: string;
   availabilityZone: string;
   assignPublicIP?: boolean;
+  isSpotInstance?: boolean;
 }
 
 export class AzureNodeSpec {
