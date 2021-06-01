@@ -93,7 +93,7 @@
     "license-compliance": "1.2.1",
     "lint-staged": "11.0.0",
     "ng2-mock-component": "0.2.0",
-    "start-server-and-test": "1.12.1",
+    "start-server-and-test": "1.12.3",
     "stylelint": "13.13.1",
     "stylelint-config-standard": "21.0.0",
     "stylelint-no-unsupported-browser-features": "4.1.4",
