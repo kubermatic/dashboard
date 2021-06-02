@@ -9,18 +9,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
+import {AlertmanagerConfig} from '@shared/entity/mla';
 
-.km-edit-cluster-form {
-  margin-bottom: 30px;
-}
-
-km-label-form:not(.pod-node-selector-config) {
-  margin-top: 30px;
-}
-
-mat-checkbox {
-  i {
-    margin: 4px 8px;
-  }
+export function fakeAlertmanagerConfig(): AlertmanagerConfig {
+  return {
+    spec: {
+      config:
+        'Z2xvYmFsOg0KICBzbXRwX3NtYXJ0aG9zdDogJ2xvY2FsaG9zdDoyNScNCiAgc210cF9mcm9tOiAndGVzdEBleGFtcGxlLm9yZycNCnJvdXRlOg0KICByZWNlaXZlcjogInRlc3QiDQpyZWNlaXZlcnM6DQogIC0gbmFtZTogInRlc3QiDQogICAgZW1haWxfY29uZmlnczoNCiAgICAtIHRvOiAndGVzdEBleGFtcGxlLm9yZyc=',
+    },
+  };
 }

@@ -10,10 +10,10 @@
 // limitations under the License.
 
 import {Injectable} from '@angular/core';
-import {Datacenter} from '@shared/entity/datacenter';
+import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {find} from 'lodash';
 import {Observable, of} from 'rxjs';
-import {fakeNodeDatacenters} from '../fake-data/datacenter';
+import {fakeNodeDatacenters, fakeSeedSettings} from '../fake-data/datacenter';
 
 @Injectable()
 export class DatacenterMockService {
@@ -24,5 +24,9 @@ export class DatacenterMockService {
   getDatacenter(dcName: string): Observable<Datacenter> {
     const dc = find(fakeNodeDatacenters(), ['metadata.name', dcName]);
     return of(dc);
+  }
+
+  seedSettings(_seedName: string): Observable<SeedSettings> {
+    return of(fakeSeedSettings());
   }
 }

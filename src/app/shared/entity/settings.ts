@@ -35,6 +35,7 @@ export class AdminSettings {
   enableExternalClusterImport: boolean;
   machineDeploymentVMResourceQuota: MachineDeploymentVMResourceQuota;
   opaOptions: OpaOptions;
+  mlaOptions: MLAOptions;
 }
 
 export class MachineDeploymentVMResourceQuota {
@@ -53,6 +54,13 @@ export class CleanupOptions {
 export class OpaOptions {
   enabled: boolean;
   enforced: boolean;
+}
+
+export class MLAOptions {
+  loggingEnabled: boolean;
+  loggingEnforced: boolean;
+  monitoringEnabled: boolean;
+  monitoringEnforced: boolean;
 }
 
 export class CustomLink {
@@ -138,5 +146,11 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
   opaOptions: {
     enforced: false,
     enabled: false,
+  },
+  mlaOptions: {
+    loggingEnforced: false,
+    loggingEnabled: false,
+    monitoringEnforced: false,
+    monitoringEnabled: false,
   },
 };
