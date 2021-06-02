@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {AuditLoggingSettings, CloudSpec, ClusterType, OPAIntegration} from '../entity/cluster';
+import {AuditLoggingSettings, CloudSpec, ClusterType, OPAIntegration, MLASettings} from '../entity/cluster';
 import {Datacenter} from '../entity/datacenter';
 import {NodeProvider} from './NodeProviderConstants';
 
@@ -24,6 +24,7 @@ export class ClusterSpecForm {
   podNodeSelectorAdmissionPluginConfig?: object;
   auditLogging?: AuditLoggingSettings;
   opaIntegration?: OPAIntegration;
+  mla?: MLASettings;
   valid: boolean;
 }
 

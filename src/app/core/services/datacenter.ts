@@ -14,7 +14,7 @@ import {Injectable} from '@angular/core';
 import {iif, merge, Observable, of, Subject, timer} from 'rxjs';
 import {map, shareReplay, switchMap, take} from 'rxjs/operators';
 import {environment} from '@environments/environment';
-import {CreateDatacenterModel, Datacenter} from '@shared/entity/datacenter';
+import {CreateDatacenterModel, Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {AppConfigService} from '@app/config.service';
 import {Auth} from './auth/service';
 import * as _ from 'lodash';
@@ -23,10 +23,13 @@ import * as _ from 'lodash';
 export class DatacenterService {
   private readonly _refreshTime = 60;
   private _restRoot: string = environment.restRoot;
+  private _newRestRoot: string = environment.newRestRoot;
   private _datacenters$: Observable<Datacenter[]>;
   private _datacentersRefresh$ = new Subject();
   private _seeds$: Observable<string[]>;
   private _seedsRefresh$ = new Subject();
+  private _seedSettings$ = new Map<string, Observable<SeedSettings>>();
+  private _seedSettingsRefresh$ = new Subject();
   private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
 
   constructor(
@@ -88,5 +91,26 @@ export class DatacenterService {
   private _getSeeds(): Observable<string[]> {
     const url = `${this._restRoot}/seed`;
     return this._httpClient.get<string[]>(url);
+  }
+
+  seedSettings(seedName: string): Observable<SeedSettings> {
+    if (!this._seedSettings$.get(seedName)) {
+      const _seedSettings$ = merge(this._seedSettingsRefresh$, this._refreshTimer$)
+        .pipe(switchMap(_ => this._getSeedSettings(seedName)))
+        .pipe(shareReplay({refCount: true, bufferSize: 1}));
+
+      this._seedSettings$.set(seedName, _seedSettings$);
+    }
+
+    return this._seedSettings$.get(seedName);
+  }
+
+  refreshSeedSettings(): void {
+    this._seedSettingsRefresh$.next();
+  }
+
+  private _getSeedSettings(seedName: string): Observable<SeedSettings> {
+    const url = `${this._newRestRoot}/seeds/${seedName}/settings`;
+    return this._httpClient.get<SeedSettings>(url);
   }
 }

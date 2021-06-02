@@ -188,6 +188,10 @@
   transform: rotate(45deg);
 }
 
+.km-icon-reset {
+  @include mask-image("/assets/images/icons/reset.svg", 18px);
+}
+
 .km-icon-running {
   @include mask-image("/assets/images/icons/tick.svg", 16px, $color: #1dc67f);
 }

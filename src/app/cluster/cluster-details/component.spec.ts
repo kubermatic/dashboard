@@ -35,6 +35,7 @@ import {ApiService} from '@core/services/api';
 import {Auth} from '@core/services/auth/service';
 import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
+import {MLAService} from '@core/services/mla';
 import {NodeService} from '@core/services/node';
 import {NotificationService} from '@core/services/notification';
 import {OPAService} from '@core/services/opa';
@@ -75,6 +76,9 @@ describe('ClusterDetailsComponent', () => {
       opaMock.constraints.mockReturnValue(of([]));
       opaMock.gatekeeperConfig.mockReturnValue(of(null));
 
+      const mlaMock = {alertmanagerConfig: jest.fn()};
+      mlaMock.alertmanagerConfig.mockReturnValue(of(null));
+
       TestBed.configureTestingModule({
         imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
         declarations: [
@@ -100,6 +104,7 @@ describe('ClusterDetailsComponent', () => {
           {provide: SettingsService, useClass: SettingsMockService},
           {provide: RBACService, useValue: rbacMock},
           {provide: OPAService, useValue: opaMock},
+          {provide: MLAService, useValue: mlaMock},
           {provide: MatDialogRef, useClass: MatDialogRefMock},
           {provide: MatDialog, useClass: MatDialogMock},
           GoogleAnalyticsService,
