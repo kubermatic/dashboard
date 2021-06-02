@@ -24,20 +24,12 @@ export class MembersPage {
     return cy.get('#km-add-member-dialog-email-input');
   }
 
-  static getAddMemberDialogGroupCombobox(): Cypress.Chainable {
-    return cy.get('#km-add-member-dialog-group-combobox');
-  }
-
   static getAddMemberDialogSaveBtn(): Cypress.Chainable {
     return cy.get('#km-add-member-dialog-add-btn');
   }
 
   static getMemberDialogGroup(group: Group): Cypress.Chainable {
     return cy.get('mat-radio-button').contains('div', group);
-  }
-
-  static getEditMemberDialogGroupCombobox(): Cypress.Chainable {
-    return cy.get('#km-edit-member-dialog-group-combobox');
   }
 
   static getEditBtn(email: string): Cypress.Chainable {

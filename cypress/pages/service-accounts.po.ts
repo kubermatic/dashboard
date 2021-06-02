@@ -24,12 +24,8 @@ export class ServiceAccountsPage {
     return cy.get('#km-add-serviceaccount-dialog-name-input');
   }
 
-  static getAddServiceAccountGroupCombobox(): Cypress.Chainable {
-    return cy.get('#km-add-serviceaccount-dialog-group-combobox');
-  }
-
-  static getAddServiceAccountGroupOption(group: Group): Cypress.Chainable {
-    return cy.get('mat-option').contains('span', group);
+  static getMemberDialogGroup(group: Group): Cypress.Chainable {
+    return cy.get('mat-radio-button').contains('div', group);
   }
 
   static getAddServiceAccountSaveBtn(): Cypress.Chainable {
@@ -90,8 +86,7 @@ export class ServiceAccountsPage {
   static addServiceAccount(name: string, group: Group): void {
     this.getAddServiceAccountBtn().should(Condition.NotBe, 'disabled').click();
     this.getAddServiceAccountNameInput().type(name).should(Condition.HaveValue, name);
-    this.getAddServiceAccountGroupCombobox().click();
-    this.getAddServiceAccountGroupOption(group).click();
+    this.getMemberDialogGroup(group).click();
     this.getAddServiceAccountSaveBtn().should(Condition.NotBe, 'disabled').click();
     this.waitForRefresh();
     this.getTable().should(Condition.Contain, name);
