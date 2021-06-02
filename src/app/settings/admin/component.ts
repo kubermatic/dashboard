@@ -93,6 +93,20 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     );
   }
 
+  isMLALoggingEqual(): boolean {
+    return (
+      this.isEqual(this.settings.mlaOptions.loggingEnabled, this.apiSettings.mlaOptions.loggingEnabled) &&
+      this.isEqual(this.settings.mlaOptions.loggingEnforced, this.apiSettings.mlaOptions.loggingEnforced)
+    );
+  }
+
+  isMLAMonitoringEqual(): boolean {
+    return (
+      this.isEqual(this.settings.mlaOptions.monitoringEnabled, this.apiSettings.mlaOptions.monitoringEnabled) &&
+      this.isEqual(this.settings.mlaOptions.monitoringEnforced, this.apiSettings.mlaOptions.monitoringEnforced)
+    );
+  }
+
   private _applySettings(settings: AdminSettings): void {
     this.apiSettings = settings;
     this.settings = _.cloneDeep(this.apiSettings);

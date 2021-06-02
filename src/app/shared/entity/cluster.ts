@@ -196,6 +196,7 @@ export class ClusterSpec {
   admissionPlugins?: string[];
   enableUserSSHKeyAgent?: boolean;
   podNodeSelectorAdmissionPluginConfig?: object;
+  mla?: MLASettings;
 }
 
 export class AuditLoggingSettings {
@@ -210,6 +211,11 @@ export class MachineNetwork {
   cidr: string;
   dnsServers: string[];
   gateway: string;
+}
+
+export class MLASettings {
+  loggingEnabled?: boolean;
+  monitoringEnabled?: boolean;
 }
 
 export class Status {
@@ -244,6 +250,7 @@ export class ClusterSpecPatch {
   podNodeSelectorAdmissionPluginConfig?: object;
   auditLogging?: AuditLoggingSettings;
   machineNetworks?: MachineNetwork[];
+  mla?: MLASettings;
 }
 
 export class CloudSpecPatch {

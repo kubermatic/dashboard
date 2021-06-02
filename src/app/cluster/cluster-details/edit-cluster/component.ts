@@ -10,7 +10,7 @@
 // limitations under the License.
 
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {ApiService} from '@core/services/api';
 import {ClusterService} from '@core/services/cluster';
@@ -19,13 +19,24 @@ import {NotificationService} from '@core/services/notification';
 import {SettingsService} from '@core/services/settings';
 import {Cluster, ClusterPatch, ProviderSettingsPatch} from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
-import {Datacenter} from '@shared/entity/datacenter';
+import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {AdminSettings} from '@shared/entity/settings';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
 import {AsyncValidators} from '@shared/validators/async-label-form.validator';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {switchMap, takeUntil, tap} from 'rxjs/operators';
+
+enum Controls {
+  Name = 'name',
+  AuditLogging = 'auditLogging',
+  Labels = 'labels',
+  AdmissionPlugins = 'admissionPlugins',
+  PodNodeSelectorAdmissionPluginConfig = 'podNodeSelectorAdmissionPluginConfig',
+  OPAIntegration = 'opaIntegration',
+  MLALogging = 'loggingEnabled',
+  MLAMonitoring = 'monitoringEnabled',
+}
 
 @Component({
   selector: 'km-edit-cluster',
@@ -47,11 +58,14 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   };
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
 
+  readonly Controls = Controls;
   private readonly _nameMinLen = 3;
   private _settings: AdminSettings;
+  private _seedSettings: SeedSettings;
   private _unsubscribe = new Subject<void>();
 
   constructor(
+    private readonly _builder: FormBuilder,
     private readonly _clusterService: ClusterService,
     private readonly _apiService: ApiService,
     private readonly _datacenterService: DatacenterService,
@@ -64,22 +78,30 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     this.labels = _.cloneDeep(this.cluster.labels);
     this.podNodeSelectorAdmissionPluginConfig = _.cloneDeep(this.cluster.spec.podNodeSelectorAdmissionPluginConfig);
 
-    this.form = new FormGroup({
-      name: new FormControl(this.cluster.name, [
+    this.form = this._builder.group({
+      [Controls.Name]: new FormControl(this.cluster.name, [
         Validators.required,
         Validators.minLength(this._nameMinLen),
         Validators.pattern('[a-zA-Z0-9-]*'),
       ]),
-      auditLogging: new FormControl(!!this.cluster.spec.auditLogging && this.cluster.spec.auditLogging.enabled),
-      opaIntegration: new FormControl(!!this.cluster.spec.opaIntegration && this.cluster.spec.opaIntegration.enabled),
-      admissionPlugins: new FormControl(this.cluster.spec.admissionPlugins),
-      podNodeSelectorAdmissionPluginConfig: new FormControl(''),
-      labels: new FormControl(''),
+      [Controls.AuditLogging]: new FormControl(
+        !!this.cluster.spec.auditLogging && this.cluster.spec.auditLogging.enabled
+      ),
+      [Controls.OPAIntegration]: new FormControl(
+        !!this.cluster.spec.opaIntegration && this.cluster.spec.opaIntegration.enabled
+      ),
+      [Controls.MLALogging]: new FormControl(!!this.cluster.spec.mla && this.cluster.spec.mla.loggingEnabled),
+      [Controls.MLAMonitoring]: new FormControl(!!this.cluster.spec.mla && this.cluster.spec.mla.monitoringEnabled),
+      [Controls.AdmissionPlugins]: new FormControl(this.cluster.spec.admissionPlugins),
+      [Controls.PodNodeSelectorAdmissionPluginConfig]: new FormControl(''),
+      [Controls.Labels]: new FormControl(''),
     });
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this._settings = settings;
-      this._enforce('opaIntegration', this._settings.opaOptions.enforced);
+      this._enforce(Controls.OPAIntegration, this._settings.opaOptions.enforced);
+      this._enforce(Controls.MLALogging, this._settings.mlaOptions.loggingEnforced);
+      this._enforce(Controls.MLAMonitoring, this._settings.mlaOptions.monitoringEnforced);
     });
 
     this._clusterService.providerSettingsPatchChanges$
@@ -88,8 +110,10 @@ export class EditClusterComponent implements OnInit, OnDestroy {
 
     this._datacenterService
       .getDatacenter(this.cluster.spec.cloud.dc)
+      .pipe(tap(datacenter => (this.datacenter = datacenter)))
+      .pipe(switchMap(_ => this._datacenterService.seedSettings(this.datacenter.spec.seed)))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(datacenter => (this.datacenter = datacenter));
+      .subscribe(seedSettings => (this._seedSettings = seedSettings));
 
     this._apiService
       .getAdmissionPlugins(this.cluster.spec.version)
@@ -102,18 +126,18 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   checkForLegacyAdmissionPlugins(): void {
     if (this.cluster.spec.usePodNodeSelectorAdmissionPlugin) {
       const value = AdmissionPluginUtils.updateSelectedPluginArray(
-        this.form.controls.admissionPlugins,
+        this.form.get(Controls.AdmissionPlugins),
         AdmissionPlugin.PodNodeSelector
       );
-      this.form.controls.admissionPlugins.setValue(value);
+      this.form.get(Controls.AdmissionPlugins).setValue(value);
     }
 
     if (this.cluster.spec.usePodSecurityPolicyAdmissionPlugin) {
       const value = AdmissionPluginUtils.updateSelectedPluginArray(
-        this.form.controls.admissionPlugins,
+        this.form.get(Controls.AdmissionPlugins),
         AdmissionPlugin.PodSecurityPolicy
       );
-      this.form.controls.admissionPlugins.setValue(value);
+      this.form.get(Controls.AdmissionPlugins).setValue(value);
     }
 
     this.checkEnforcedFieldsState();
@@ -121,16 +145,16 @@ export class EditClusterComponent implements OnInit, OnDestroy {
 
   checkEnforcedFieldsState(): void {
     if (this.datacenter.spec.enforceAuditLogging) {
-      this.form.controls.auditLogging.setValue(true);
-      this.form.controls.auditLogging.disable();
+      this.form.get(Controls.AuditLogging).setValue(true);
+      this.form.get(Controls.AuditLogging).disable();
     }
 
     if (this.datacenter.spec.enforcePodSecurityPolicy) {
       const value = AdmissionPluginUtils.updateSelectedPluginArray(
-        this.form.controls.admissionPlugins,
+        this.form.get(Controls.AdmissionPlugins),
         AdmissionPlugin.PodSecurityPolicy
       );
-      this.form.controls.admissionPlugins.setValue(value);
+      this.form.get(Controls.AdmissionPlugins).setValue(value);
     }
   }
 
@@ -139,21 +163,34 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   }
 
   isPluginEnabled(name: string): boolean {
-    return AdmissionPluginUtils.isPluginEnabled(this.form.controls.admissionPlugins, name);
+    return AdmissionPluginUtils.isPluginEnabled(this.form.get(Controls.AdmissionPlugins), name);
+  }
+
+  isMLAEnabled(): boolean {
+    return !!this._seedSettings && !!this._seedSettings.mla && !!this._seedSettings.mla.user_cluster_mla_enabled;
   }
 
   isPodSecurityPolicyEnforced(): boolean {
     return AdmissionPluginUtils.isPodSecurityPolicyEnforced(this.datacenter);
   }
 
-  isOPAEnforced(): boolean {
-    return !!this._settings && this._settings.opaOptions.enforced;
+  isEnforced(control: Controls): boolean {
+    switch (control) {
+      case Controls.OPAIntegration:
+        return !!this._settings && this._settings.opaOptions.enforced;
+      case Controls.MLALogging:
+        return !!this._settings && this._settings.mlaOptions.loggingEnforced;
+      case Controls.MLAMonitoring:
+        return !!this._settings && this._settings.mlaOptions.monitoringEnforced;
+      default:
+        return false;
+    }
   }
 
-  private _enforce(name: string, isEnforced: boolean): void {
+  private _enforce(control: Controls, isEnforced: boolean): void {
     if (isEnforced) {
-      this.form.get(name).setValue(true);
-      this.form.get(name).disable();
+      this.form.get(control).setValue(true);
+      this.form.get(control).disable();
     }
   }
 
@@ -163,19 +200,23 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     }
 
     const patch: ClusterPatch = {
-      name: this.form.controls.name.value,
+      name: this.form.get(Controls.Name).value,
       labels: this.labels,
       spec: {
         cloud: this.providerSettingsPatch.cloudSpecPatch,
         auditLogging: {
-          enabled: this.form.controls.auditLogging.value,
+          enabled: this.form.get(Controls.AuditLogging).value,
         },
         opaIntegration: {
-          enabled: this.form.controls.opaIntegration.value,
+          enabled: this.form.get(Controls.OPAIntegration).value,
+        },
+        mla: {
+          loggingEnabled: this.form.get(Controls.MLALogging).value,
+          monitoringEnabled: this.form.get(Controls.MLAMonitoring).value,
         },
         usePodNodeSelectorAdmissionPlugin: null,
         usePodSecurityPolicyAdmissionPlugin: null,
-        admissionPlugins: this.form.controls.admissionPlugins.value,
+        admissionPlugins: this.form.get(Controls.AdmissionPlugins).value,
         podNodeSelectorAdmissionPluginConfig: this.podNodeSelectorAdmissionPluginConfig,
       },
     };

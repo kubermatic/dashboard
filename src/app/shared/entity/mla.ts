@@ -9,18 +9,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
-
-.km-edit-cluster-form {
-  margin-bottom: 30px;
+export class AlertmanagerConfig {
+  spec: AlertmanagerSpec;
 }
 
-km-label-form:not(.pod-node-selector-config) {
-  margin-top: 30px;
-}
-
-mat-checkbox {
-  i {
-    margin: 4px 8px;
-  }
+export class AlertmanagerSpec {
+  config: string;
 }

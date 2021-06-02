@@ -45,6 +45,12 @@ export const DEFAULT_ADMIN_SETTINGS_MOCK: AdminSettings = {
     enforced: false,
     enabled: false,
   },
+  mlaOptions: {
+    loggingEnforced: false,
+    loggingEnabled: false,
+    monitoringEnforced: false,
+    monitoringEnabled: false,
+  },
 };
 
 @Injectable()
