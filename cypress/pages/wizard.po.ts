@@ -94,6 +94,14 @@ export class WizardPage {
     return cy.get('#km-wizard-opa-integration-checkbox');
   }
 
+  static getMLALoggingCheckbox(): Cypress.Chainable {
+    return cy.get('#km-wizard-mla-logging-checkbox');
+  }
+
+  static getMLAMonitoringCheckbox(): Cypress.Chainable {
+    return cy.get('#km-wizard-mla-monitoring-checkbox');
+  }
+
   static getSSHKeysSelectOption(name: string): Cypress.Chainable {
     return cy.get('#keys-panel').then(option => {
       if (option.find('mat-option').text(name).length > 0) {

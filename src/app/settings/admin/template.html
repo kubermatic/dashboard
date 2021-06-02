@@ -131,10 +131,12 @@ limitations under the License.
              fxLayout="row">
           <mat-checkbox [(ngModel)]="settings.mlaOptions.loggingEnabled"
                         (change)="onSettingsChange()"
+                        id="km-mla-logging-enable-setting"
                         fxFlexAlign=" center">Enable by Default
           </mat-checkbox>
           <mat-checkbox [(ngModel)]="settings.mlaOptions.loggingEnforced"
                         (change)="onSettingsChange()"
+                        id="km-mla-logging-force-setting"
                         fxFlexAlign=" center">Enforce
           </mat-checkbox>
           <km-spinner-with-confirmation [isSaved]="isMLALoggingEqual()"></km-spinner-with-confirmation>
@@ -153,10 +155,12 @@ limitations under the License.
              fxLayout="row">
           <mat-checkbox [(ngModel)]="settings.mlaOptions.monitoringEnabled"
                         (change)="onSettingsChange()"
+                        id="km-mla-monitoring-enable-setting"
                         fxFlexAlign=" center">Enable by Default
           </mat-checkbox>
           <mat-checkbox [(ngModel)]="settings.mlaOptions.monitoringEnforced"
                         (change)="onSettingsChange()"
+                        id="km-mla-monitoring-enforce-setting"
                         fxFlexAlign=" center">Enforce
           </mat-checkbox>
           <km-spinner-with-confirmation [isSaved]="isMLAMonitoringEqual()"></km-spinner-with-confirmation>
