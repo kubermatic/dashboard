@@ -145,6 +145,14 @@ export class ClustersPage {
     return cy.get('#km-share-kubeconfig-btn');
   }
 
+  static getMLALoggingInfoElement(): Cypress.Chainable {
+    return cy.get('.km-mla-logging-info').find('i.km-icon-running');
+  }
+
+  static getMLAMonitoringInfoElement(): Cypress.Chainable {
+    return cy.get('.km-mla-monitoring-info').find('i.km-icon-running');
+  }
+
   // Utils.
 
   static waitForRefresh(): void {
