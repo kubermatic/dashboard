@@ -176,8 +176,10 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       .subscribe(_ => (this._nodeDataService.operatingSystemSpec = this._getOperatingSystemSpec()));
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      const replicas = this.dialogEditMode ? this._nodeDataService.nodeData.count : settings.defaultNodeCount;
-      this.form.get(Controls.Count).setValue(replicas);
+      if (this.form.get(Controls.Count).pristine) {
+        const replicas = this.dialogEditMode ? this._nodeDataService.nodeData.count : settings.defaultNodeCount;
+        this.form.get(Controls.Count).setValue(replicas);
+      }
     });
   }
 
