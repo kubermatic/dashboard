@@ -21,6 +21,8 @@ spec:
     name: __SEED_NAME__-kubeconfig
     namespace: kubermatic
     fieldPath: kubeconfig
+  mla:
+    user_cluster_mla_enabled: true
   datacenters:
     byo-kubernetes:
       location: Frankfurt

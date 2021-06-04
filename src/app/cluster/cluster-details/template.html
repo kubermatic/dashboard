@@ -282,6 +282,7 @@ limitations under the License.
                             [isClusterRunning]="isClusterRunning"></km-gatekeeper-config>
     </km-tab>
     <km-tab label="MLA Alertmanager Config"
+            id="km-mla-alertmanager-tab"
             *ngIf="isMLAEnabled()">
       <km-alertmanager-config [alertmanagerConfig]="alertmanagerConfig"
                               [cluster]="cluster"

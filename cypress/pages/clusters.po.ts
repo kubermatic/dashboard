@@ -146,11 +146,15 @@ export class ClustersPage {
   }
 
   static getMLALoggingInfoElement(): Cypress.Chainable {
-    return cy.get('.km-mla-logging-info').find('i.km-icon-running');
+    return cy.get('#km-mla-logging-info');
   }
 
   static getMLAMonitoringInfoElement(): Cypress.Chainable {
-    return cy.get('.km-mla-monitoring-info').find('i.km-icon-running');
+    return cy.get('#km-mla-monitoring-info');
+  }
+
+  static getMLAAlertmanagerTab(): Cypress.Chainable {
+    return cy.get('#km-mla-alertmanager-tab');
   }
 
   // Utils.

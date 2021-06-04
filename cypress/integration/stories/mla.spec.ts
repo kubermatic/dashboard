@@ -10,13 +10,10 @@
 // limitations under the License.
 
 import {ClustersPage} from '../../pages/clusters.po';
-import {MachineDeploymentDetailsPage} from '../../pages/machine-deployment-details.po';
 import {ProjectsPage} from '../../pages/projects.po';
 import {WizardPage} from '../../pages/wizard.po';
 import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
-import {Endpoint} from '../../utils/endpoint';
-import {RequestType, TrafficMonitor} from '../../utils/monitor';
 import {Preset} from '../../utils/preset';
 import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
@@ -83,11 +80,15 @@ xdescribe('MLA Story', () => {
   });
 
   it('should verify that mla logging is enabled', () => {
-    ClustersPage.getMLALoggingInfoElement().should(Condition.Exist);
+    ClustersPage.getMLALoggingInfoElement().should(Condition.HaveClass, 'km-icon-running');
   });
 
   it('should verify that mla monitoring is enabled', () => {
-    ClustersPage.getMLAMonitoringInfoElement().should(Condition.Exist);
+    ClustersPage.getMLAMonitoringInfoElement().should(Condition.HaveClass, 'km-icon-running');
+  });
+
+  it('should verify that mla alertmanager tab is visible', () => {
+    ClustersPage.getMLAAlertmanagerTab().should(Condition.Exist);
   });
 
   it('should delete created cluster', () => {
