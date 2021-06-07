@@ -229,13 +229,17 @@
         }
 
         .mat-form-field-outline {
-          color: map-get($colors, sidenav-divider);
+          color: map-get($colors, project-switch);
         }
       }
 
       .mat-input-element::placeholder {
         color: map-get($colors, text-secondary);
       }
+    }
+
+    i {
+      background-color: map-get($colors, text-secondary);
     }
   }
 
