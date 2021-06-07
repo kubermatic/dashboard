@@ -38,4 +38,4 @@ window.Buffer = window.Buffer || require('buffer').Buffer;
 
 // Add global to process. Required by the 'swagger-ui'.
 // eslint-disable-next-line
-(window as any).process = {browser: true};
+(window as any).process = {browser: true, env: {}};
