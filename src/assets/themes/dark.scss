@@ -19,8 +19,8 @@ $colors-dark: (
   primary: #0072b0,
   primary-hover: #008bd6,
   primary-dark: #008bd6,
-  secondary: #00c9c9,
-  secondary-hover: #00b2b2,
+  secondary: #00b2b2,
+  secondary-hover: #099,
   secondary-dark: #00c9c9,
   indicator-green: #1dc67f,
   indicator-orange: #f7b500,
@@ -107,6 +107,6 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
 }
 
 // Make checkbox marks white.
-.mat-checkbox-checkmark-path {
-  stroke: #fff;
+.mat-checkbox .mat-checkbox-checkmark .mat-checkbox-checkmark-path {
+  stroke: #fff !important;
 }
