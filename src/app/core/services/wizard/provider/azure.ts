@@ -199,7 +199,9 @@ export class Azure extends Provider {
     }
 
     const url = `${this._newRestRoot}/providers/${this._provider}/vnets`;
-    return this._http.get<AzureVNets>(url, {headers: this._headers}).pipe(map(vnets => vnets.virtualNetworks));
+    return this._http
+      .get<AzureVNets>(url, {headers: this._headers})
+      .pipe(map(vnets => vnets.virtualNetworks));
   }
 
   subnets(onLoadingCb: () => void = null): Observable<string[]> {
@@ -221,7 +223,9 @@ export class Azure extends Provider {
     }
 
     const url = `${this._newRestRoot}/providers/${this._provider}/subnets`;
-    return this._http.get<AzureSubnets>(url, {headers: this._headers}).pipe(map(subnets => subnets.subnets));
+    return this._http
+      .get<AzureSubnets>(url, {headers: this._headers})
+      .pipe(map(subnets => subnets.subnets));
   }
 
   availabilityZones(onLoadingCb: () => void = null): Observable<AzureZones> {

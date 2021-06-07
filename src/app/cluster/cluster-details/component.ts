@@ -173,6 +173,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             Observable<Node[]>,
             Observable<MachineDeployment[]>,
             Observable<ClusterMetrics>,
+            Observable<AlertmanagerConfig>,
             Observable<Constraint[]>,
             Observable<GatekeeperConfig>
           ];
@@ -181,8 +182,17 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         })
       )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(
-        ([upgrades, addons, nodes, machineDeployments, metrics, alertmanagerConfig, constraints, gatekeeperConfig]: [
+      .subscribe({
+        next: ([
+          upgrades,
+          addons,
+          nodes,
+          machineDeployments,
+          metrics,
+          alertmanagerConfig,
+          constraints,
+          gatekeeperConfig,
+        ]: [
           MasterVersion[],
           Addon[],
           Node[],
@@ -201,13 +211,13 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.constraints = constraints;
           this.gatekeeperConfig = gatekeeperConfig;
         },
-        error => {
+        error: error => {
           const errorCodeNotFound = 404;
           if (error.status === errorCodeNotFound) {
             this._router.navigate(['404']);
           }
-        }
-      );
+        },
+      });
   }
 
   private _canReloadVersions(): boolean {
