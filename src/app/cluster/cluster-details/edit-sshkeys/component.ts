@@ -168,6 +168,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
     this.loading = true;
     const dialogRef = this._dialog.open(AddSshKeyDialogComponent);
     dialogRef.componentInstance.projectID = this.projectID;
+    dialogRef.componentInstance.title = 'Add SSH Key to the Project';
     dialogRef
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
