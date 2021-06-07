@@ -153,8 +153,8 @@ export class ClustersPage {
     return cy.get('#km-mla-monitoring-info');
   }
 
-  static getMLAAlertmanagerTab(): Cypress.Chainable {
-    return cy.get('#km-mla-alertmanager-tab');
+  static getTabCard(title: string): Cypress.Chainable {
+    return cy.get('#km-cluster-details-tab-card').find('div.mat-tab-label-content').contains(title);
   }
 
   // Utils.

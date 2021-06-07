@@ -49,9 +49,11 @@ describe('MLA Story', () => {
     WizardPage.getProviderBtn(Provider.Digitalocean).click();
     WizardPage.getDatacenterBtn(Datacenter.Digitalocean.Frankfurt).click();
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
-    WizardPage.getMLALoggingCheckbox().click();
+    WizardPage.getMLALoggingCheckbox().should(Condition.Exist);
+    WizardPage.getMLALoggingCheckbox().find('input').click({force: true});
     WizardPage.getMLALoggingCheckbox().find('input').should(Condition.BeChecked);
-    WizardPage.getMLAMonitoringCheckbox().click();
+    WizardPage.getMLAMonitoringCheckbox().should(Condition.Exist);
+    WizardPage.getMLAMonitoringCheckbox().find('input').click({force: true});
     WizardPage.getMLAMonitoringCheckbox().find('input').should(Condition.BeChecked);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
     WizardPage.getCustomPresetsCombobox().click();
@@ -80,15 +82,15 @@ describe('MLA Story', () => {
   });
 
   it('should verify that mla logging is enabled', () => {
-    ClustersPage.getMLALoggingInfoElement().should(Condition.HaveClass, 'km-icon-running');
+    ClustersPage.getMLALoggingInfoElement().find('i').should(Condition.HaveClass, 'km-icon-running');
   });
 
   it('should verify that mla monitoring is enabled', () => {
-    ClustersPage.getMLAMonitoringInfoElement().should(Condition.HaveClass, 'km-icon-running');
+    ClustersPage.getMLAMonitoringInfoElement().find('i').should(Condition.HaveClass, 'km-icon-running');
   });
 
   it('should verify that mla alertmanager tab is visible', () => {
-    ClustersPage.getMLAAlertmanagerTab().should(Condition.Exist);
+    ClustersPage.getTabCard('MLA Alertmanager Config').should(Condition.Exist);
   });
 
   it('should delete created cluster', () => {
