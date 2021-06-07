@@ -84,6 +84,10 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
   filter: invert(.25) brightness(100) contrast(100);
 }
 
+.km-icon-mask {
+  background-color: #fff;
+}
+
 .km-provider-logo-bringyourown {
   @include provider-image("/assets/images/clouds/bringyourown-dark.svg", 30px);
 
