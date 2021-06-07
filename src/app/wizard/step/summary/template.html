@@ -573,6 +573,10 @@ limitations under the License.
                                    label="Assign Public IP"
                                    [value]="nodeData.spec.cloud?.aws?.assignPublicIP">
               </km-property-boolean>
+              <km-property-boolean *ngIf="nodeData.spec.cloud?.aws?.isSpotInstance !== undefined"
+                                   label="Spot Instance"
+                                   [value]="nodeData.spec.cloud?.aws?.isSpotInstance">
+              </km-property-boolean>
             </ng-container>
 
             <!-- Azure Node Options -->
