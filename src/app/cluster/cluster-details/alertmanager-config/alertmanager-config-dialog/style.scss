@@ -11,16 +11,11 @@
 
 @import 'variables';
 
-.km-edit-cluster-form {
-  margin-bottom: 30px;
+.spec {
+  font-size: $font-size-subhead-lg;
+  line-height: 25px;
 }
 
-km-label-form:not(.pod-node-selector-config) {
-  margin-top: 30px;
-}
-
-mat-checkbox {
-  i {
-    margin: 4px 8px;
-  }
+.monaco-editor {
+  margin-top: 16px;
 }

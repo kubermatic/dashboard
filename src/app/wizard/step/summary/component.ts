@@ -15,6 +15,7 @@ import {DatacenterService} from '@core/services/datacenter';
 import {NodeDataService} from '@core/services/node-data/service';
 import {LabelFormComponent} from '@shared/components/label-form/component';
 import {Cluster} from '@shared/entity/cluster';
+import {SeedSettings} from '@shared/entity/datacenter';
 import {getOperatingSystem, getOperatingSystemLogoClass} from '@shared/entity/node';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {getIpCount} from '@shared/functions/get-ip-count';
@@ -23,7 +24,7 @@ import {NodeData} from '@shared/model/NodeSpecChange';
 import {AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
-import {take, switchMap, takeUntil} from 'rxjs/operators';
+import {take, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 @Component({
   selector: 'km-wizard-summary-step',
@@ -39,6 +40,7 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
 
   private _location: string;
   private _country: string;
+  private _seedSettings: SeedSettings;
   private _unsubscribe = new Subject<void>();
 
   constructor(
@@ -76,11 +78,15 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
 
     this._clusterSpecService.datacenterChanges
       .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
+      .pipe(
+        tap(dc => {
+          this._location = dc.spec.location;
+          this._country = dc.spec.country;
+        })
+      )
+      .pipe(switchMap(dc => this._datacenterService.seedSettings(dc.spec.seed)))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(dc => {
-        this._location = dc.spec.location;
-        this._country = dc.spec.country;
-      });
+      .subscribe(seedSettings => (this._seedSettings = seedSettings));
 
     if (this.cluster.spec.machineNetworks) {
       this.noMoreIpsLeft = this._noIpsLeft(this.cluster, this.nodeData.count);
@@ -148,6 +154,10 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
 
   getAdmissionPlugins(): string {
     return AdmissionPluginUtils.getJoinedPluginNames(this.clusterAdmissionPlugins);
+  }
+
+  isMLAEnabled(): boolean {
+    return !!this._seedSettings && !!this._seedSettings.mla && !!this._seedSettings.mla.user_cluster_mla_enabled;
   }
 
   private _hasProviderOptions(provider: NodeProvider): boolean {

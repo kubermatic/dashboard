@@ -108,6 +108,14 @@ export class VSphereDatacenterSpec {
   templates: DatacenterOperatingSystemOptions;
 }
 
+export class SeedSettings {
+  mla: MLA;
+}
+
+export class MLA {
+  user_cluster_mla_enabled: boolean;
+}
+
 export function getDatacenterProvider(datacenter: Datacenter): NodeProvider {
   return Object.values(NodeProvider).find(provider => provider === datacenter.spec.provider) || NodeProvider.NONE;
 }
