@@ -427,6 +427,10 @@ limitations under the License.
                                  label="Assign Public IP"
                                  [value]="element.spec.cloud.azure.assignPublicIP">
             </km-property-boolean>
+            <km-property-boolean *ngIf="element.spec.cloud.aws"
+                                 label="Spot Instance"
+                                 [value]="element.spec.cloud.aws.isSpotInstance">
+            </km-property-boolean>
             <!-- End of boolean properties. -->
 
             <div *ngIf="getMetrics(element.name)"
