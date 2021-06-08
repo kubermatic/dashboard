@@ -34,7 +34,7 @@ export class NodeDataOpenstackProvider {
   set tags(tags: object) {
     delete this._nodeDataService.nodeData.spec.cloud.openstack.tags;
     this._nodeDataService.nodeData.spec.cloud.openstack.tags = tags;
-    this._nodeDataService.nodeDataChanges.next();
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
   flavors(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<OpenstackFlavor[]> {

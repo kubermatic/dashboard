@@ -57,7 +57,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   searchQuery: string;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  private _unsubscribe: Subject<any> = new Subject();
+  private _unsubscribe: Subject<void> = new Subject<void>();
   private _selectedProject = {} as Project;
   private _user: Member;
   private _currentGroupConfig: GroupConfig;

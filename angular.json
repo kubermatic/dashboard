@@ -11,7 +11,6 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "aot": true,
             "sourceMap": true,
             "outputPath": "dist",
             "index": "src/index.html",
@@ -21,7 +20,11 @@
             "assets": [
               "src/assets",
               "src/favicon.png",
-              { "glob": "**/*", "input": "node_modules/ngx-monaco-editor/assets/monaco", "output": "./assets/monaco/" }
+              { "glob": "**/*", "input": "node_modules/monaco-editor", "output": "assets/monaco-editor" }
+            ],
+            "allowedCommonJsDependencies": [
+              "semver",
+              "swagger-ui"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
@@ -32,23 +35,28 @@
               "src/assets/css/root.scss",
               {
                 "input": "src/assets/themes/light.scss",
-                "bundleName": "assets/themes/light",
+                "bundleName": "light",
                 "inject": false
               },
               {
                 "input": "src/assets/themes/dark.scss",
-                "bundleName": "assets/themes/dark",
+                "bundleName": "dark",
                 "inject": false
               },
               {
                 "input": "src/assets/themes/custom.scss",
-                "bundleName": "assets/themes/custom",
+                "bundleName": "custom",
                 "inject": false
               }
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.js"
-            ]
+            ],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
@@ -63,7 +71,6 @@
               "outputHashing": "all",
               "sourceMap": false,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -81,11 +88,10 @@
                   "maximumWarning": "6kb"
                 }
               ],
-              "optimization": true,
-              "outputHashing": "all",
+              "commonChunk": false,
+              "optimization": false,
               "sourceMap": false,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -103,11 +109,10 @@
                   "maximumWarning": "6kb"
                 }
               ],
-              "optimization": true,
-              "outputHashing": "all",
+              "commonChunk": false,
+              "optimization": false,
               "sourceMap": false,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -124,7 +129,7 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "kubermatic:build",
-            "proxyConfig": "./proxy.conf.js",
+            "proxyConfig": "./proxy.conf.cjs",
             "port": 8000
           },
           "configurations": {
@@ -132,16 +137,14 @@
               "browserTarget": "kubermatic:build:production"
             },
             "local": {
-              "proxyConfig": "./proxy-local.conf.js"
+              "proxyConfig": "./proxy-local.conf.cjs"
             },
             "e2e": {
-              "hmr": false,
               "browserTarget": "kubermatic:build:e2e"
             },
             "e2e-local": {
-              "hmr": false,
               "browserTarget": "kubermatic:build:e2e-local",
-              "proxyConfig": "./proxy-local.conf.js"
+              "proxyConfig": "./proxy-local.conf.cjs"
             }
           }
         },
@@ -178,7 +181,6 @@
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "kubermatic",
-      "styleext": "scss"
     },
     "@schematics/angular:directive": {
       "prefix": "kubermatic"

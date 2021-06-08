@@ -11,7 +11,7 @@
 
 FROM quay.io/kubermatic/build:go-1.16-kind-0.8-nodejs-14.16-0 AS kkpbuild
 
-FROM cypress/browsers:node14.7.0-chrome84
+FROM cypress/browsers:node14.16.0-chrome90-ff88
 LABEL maintainer="support@kubermatic.com"
 
 ENV GO_VERSION="1.16.1"

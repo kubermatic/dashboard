@@ -25,11 +25,11 @@ export class DatacenterService {
   private _restRoot: string = environment.restRoot;
   private _newRestRoot: string = environment.newRestRoot;
   private _datacenters$: Observable<Datacenter[]>;
-  private _datacentersRefresh$ = new Subject();
+  private _datacentersRefresh$ = new Subject<void>();
   private _seeds$: Observable<string[]>;
-  private _seedsRefresh$ = new Subject();
   private _seedSettings$ = new Map<string, Observable<SeedSettings>>();
-  private _seedSettingsRefresh$ = new Subject();
+  private _seedSettingsRefresh$ = new Subject<void>();
+  private _seedsRefresh$ = new Subject<void>();
   private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
 
   constructor(

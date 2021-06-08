@@ -12,7 +12,7 @@
 import {Injectable} from '@angular/core';
 import {AppConfigService} from '@app/config.service';
 import {EndOfLife} from '@shared/model/Config';
-import {lte, compare} from 'semver';
+import * as semver from 'semver';
 
 @Injectable()
 export class EndOfLifeService {
@@ -34,8 +34,8 @@ class ClusterTypeEndOfLife implements EndOfLifeChecker {
 
   findVersion(version: string): string {
     return Object.keys(this._config)
-      .sort((v1, v2) => compare(v1, v2))
-      .find(v => lte(version, v));
+      .sort((v1, v2) => semver.compare(v1, v2))
+      .find(v => semver.lte(version, v));
   }
 
   getDate(version: string): Date {

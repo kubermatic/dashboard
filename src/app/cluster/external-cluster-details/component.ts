@@ -44,10 +44,10 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   events: Event[] = [];
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
-  private _clusterRefresh: Subject<any> = new Subject();
+  private _clusterRefresh: Subject<void> = new Subject<void>();
   private _metricsRefreshTimer = timer(0, this._appConfigService.getRefreshTimeBase() * this._metricsRefreshTime);
   private _refreshTimer = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
-  private _unsubscribe: Subject<any> = new Subject();
+  private _unsubscribe: Subject<void> = new Subject<void>();
 
   constructor(
     private readonly _activatedRoute: ActivatedRoute,

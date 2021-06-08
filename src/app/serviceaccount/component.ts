@@ -51,8 +51,8 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   private readonly _refreshTime = 10; // in seconds
-  private _unsubscribe: Subject<any> = new Subject();
-  private _serviceAccountUpdate: Subject<any> = new Subject();
+  private _unsubscribe: Subject<void> = new Subject<void>();
+  private _serviceAccountUpdate: Subject<void> = new Subject<void>();
   private _selectedProject = {} as Project;
   private _currentGroupConfig: GroupConfig;
 

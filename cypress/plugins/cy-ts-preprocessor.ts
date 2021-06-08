@@ -9,11 +9,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-const cypressTypeScriptPreprocessor = require('./cy-ts-preprocessor');
-const failFast = require('cypress-fail-fast/plugin');
-
-module.exports = (on, config) => {
-  on('file:preprocessor', cypressTypeScriptPreprocessor);
-  failFast(on, config);
-  return config;
+const webpackOptions = {
+  resolve: {extensions: ['.ts', '.js']},
+  module: {
+    rules: [
+      {
+        test: /\.ts$/,
+        exclude: [/node_modules/],
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {configFile: 'cypress/tsconfig.e2e.json'},
+          },
+        ],
+      },
+    ],
+  },
 };
+
+export const configuration = {webpackOptions};

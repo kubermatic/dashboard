@@ -137,7 +137,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       this.provider = this._clusterSpecService.provider;
     });
 
-    merge<string>(this._clusterSpecService.datacenterChanges, of(this._clusterSpecService.datacenter))
+    merge(this._clusterSpecService.datacenterChanges, of(this._clusterSpecService.datacenter))
       .pipe(filter(dc => !!dc))
       .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
       .pipe(takeUntil(this._unsubscribe))
@@ -249,12 +249,12 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       case OperatingSystem.CentOS:
       case OperatingSystem.SLES:
       case OperatingSystem.RHEL:
-        upgradeOnBoot = this._nodeDataService.operatingSystemSpec[this._nodeDataService.operatingSystem]
-          .distUpgradeOnBoot;
+        upgradeOnBoot =
+          this._nodeDataService.operatingSystemSpec[this._nodeDataService.operatingSystem].distUpgradeOnBoot;
         break;
       case OperatingSystem.Flatcar:
-        disableAutoUpdate = this._nodeDataService.operatingSystemSpec[this._nodeDataService.operatingSystem]
-          .disableAutoUpdate;
+        disableAutoUpdate =
+          this._nodeDataService.operatingSystemSpec[this._nodeDataService.operatingSystem].disableAutoUpdate;
     }
 
     this.onLabelsChange(this._nodeDataService.nodeData.spec.labels);

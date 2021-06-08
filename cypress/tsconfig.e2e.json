@@ -3,12 +3,13 @@
   "compilerOptions": {
     "strict": true,
     "baseUrl": "../node_modules",
-    "types": ["cypress"]
+    "types": ["cypress"],
   },
   "include": [
     "integration/**/*.ts",
     "pages/**/*.ts",
     "utils/*.ts",
     "support/*.ts",
+    "plugins/*.ts",
     "../node_modules/cypress/**/*.ts"]
 }
