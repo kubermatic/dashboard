@@ -114,6 +114,11 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
   opacity: .85;
 }
 
+// Make selected option text light blue.
+.mat-option.mat-option-multiple.mat-selected .mat-option-text {
+  color: map-get($colors-dark, primary-dark);
+}
+
 // Make checkbox marks white.
 .mat-checkbox .mat-checkbox-checkmark .mat-checkbox-checkmark-path {
   stroke: rgba(#fff, .85) !important;
