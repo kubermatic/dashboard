@@ -25,6 +25,7 @@ import {SSHKeyFormValidator} from '@shared/validators/ssh-key-form.validator';
 })
 export class AddSshKeyDialogComponent implements OnInit {
   @Input() projectID: string;
+  @Input() title = 'Add SSH Key';
   addSSHKeyForm: FormGroup;
 
   constructor(
