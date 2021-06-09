@@ -10,56 +10,55 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<ng-container *ngIf="isLoaded()">
-  <div fxLayout
+<div *ngIf="isLoaded()"
+     fxLayout="column">
+  <div fxFlex
+       fxLayoutAlign="end center"
        class="km-cluster-detail-actions">
-    <div fxFlex
-         fxLayoutAlign="end center">
-      <button id="km-delete-cluster-btn"
-              mat-flat-button
-              color="tertiary"
-              (click)="deleteClusterDialog()"
-              [disabled]="!isDeleteEnabled()">
-        Delete
-      </button>
-      <div fxFlex></div>
-      <button mat-icon-button
-              id="km-share-kubeconfig-btn"
-              class="km-share-kubeconfig-btn"
-              color="alternative"
-              (click)="shareConfigDialog()"
-              [disabled]="!isClusterRunning"
-              *ngIf="isShareConfigEnabled() | async"
-              matTooltip="Share">
-        <i class="km-icon-mask km-icon-share"></i>
-      </button>
-      <button class="km-download-kubeconfig-btn"
-              color="alternative"
-              mat-icon-button
-              [disabled]="!isClusterRunning"
-              matTooltip="Download config">
-        <a href="{{getDownloadURL() | async}}"
-           target="_blank"
-           rel="noopener">
-          <i class="km-icon-mask km-icon-download"></i>
-        </a>
-      </button>
-      <button mat-flat-button
-              (click)="addNode()"
-              [fxHide]="nodeDc?.spec?.provider === 'bringyourown'"
-              [disabled]="!isAddMachineDeploymentsEnabled()">
-        Add Machine Deployment
-      </button>
-      <a class="km-open-kubernetes-dashboard-btn"
-         id="km-open-kubernetes-dashboard-btn"
-         [href]="getProxyURL()"
+    <button id="km-delete-cluster-btn"
+            mat-flat-button
+            color="tertiary"
+            (click)="deleteClusterDialog()"
+            [disabled]="!isDeleteEnabled()">
+      Delete
+    </button>
+    <div fxFlex></div>
+    <button mat-icon-button
+            id="km-share-kubeconfig-btn"
+            class="km-share-kubeconfig-btn"
+            color="alternative"
+            (click)="shareConfigDialog()"
+            [disabled]="!isClusterRunning"
+            *ngIf="isShareConfigEnabled() | async"
+            matTooltip="Share">
+      <i class="km-icon-mask km-icon-share"></i>
+    </button>
+    <button class="km-download-kubeconfig-btn"
+            color="alternative"
+            mat-icon-button
+            [disabled]="!isClusterRunning"
+            matTooltip="Download config">
+      <a href="{{getDownloadURL() | async}}"
          target="_blank"
-         mat-flat-button
-         [disabled]="!isClusterRunning"
-         *ngIf="(settings.adminSettings | async)?.enableDashboard">
-        Open Dashboard
+         rel="noopener">
+        <i class="km-icon-mask km-icon-download"></i>
       </a>
-    </div>
+    </button>
+    <button mat-flat-button
+            (click)="addNode()"
+            [fxHide]="nodeDc?.spec?.provider === 'bringyourown'"
+            [disabled]="!isAddMachineDeploymentsEnabled()">
+      Add Machine Deployment
+    </button>
+    <a class="km-open-kubernetes-dashboard-btn"
+       id="km-open-kubernetes-dashboard-btn"
+       [href]="getProxyURL()"
+       target="_blank"
+       mat-flat-button
+       [disabled]="!isClusterRunning"
+       *ngIf="(settings.adminSettings | async)?.enableDashboard">
+      Open Dashboard
+    </a>
   </div>
 
   <mat-card>
@@ -287,7 +286,7 @@ limitations under the License.
                               [isClusterRunning]="isClusterRunning"></km-alertmanager-config>
     </km-tab>
   </km-tab-card>
-</ng-container>
+</div>
 
 <div *ngIf="!isLoaded()">
   <mat-spinner [diameter]="25"

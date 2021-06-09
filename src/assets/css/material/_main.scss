@@ -392,7 +392,8 @@ a,
 button {
   &.mat-button,
   &.mat-flat-button,
-  &.mat-raised-button {
+  &.mat-raised-button,
+  &.mat-icon-button {
     font-size: $font-size-subhead;
     height: 40px;
     line-height: 40px;
@@ -402,7 +403,7 @@ button {
       margin-left: 10px;
     }
 
-    i {
+    i:not(:last-child) {
       margin-right: 8px;
     }
   }
