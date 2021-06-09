@@ -39,6 +39,7 @@ export class PresetDialogService {
 
   set provider(provider: NodeProvider) {
     this._provider = provider;
+    this.preset.spec[provider] = {};
     this.providerChanges.emit(this._provider);
   }
 
