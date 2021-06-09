@@ -18,7 +18,11 @@ limitations under the License.
                  (labelsChange)="onTagsChange($event)"
                  [formControlName]="Controls.Tags"></km-label-form>
 
+  <mat-checkbox [id]="Controls.IsSpotInstance"
+                [formControlName]="Controls.IsSpotInstance"
+                class="checkbox">Spot Instance</mat-checkbox>
+
   <mat-checkbox [id]="Controls.AssignPublicIP"
                 [formControlName]="Controls.AssignPublicIP"
-                class="km-assign-ip-spacing">Assign Public IP</mat-checkbox>
+                class="checkbox">Assign Public IP</mat-checkbox>
 </form>
