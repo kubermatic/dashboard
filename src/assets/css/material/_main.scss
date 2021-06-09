@@ -263,6 +263,15 @@ mat-form-field {
   &.mat-form-field {
     width: 100%;
 
+    .mat-form-field-prefix,
+    .mat-form-field-suffix {
+      .mat-icon-button {
+        @include size(32px, $force: true);
+
+        margin-top: -4px;
+      }
+    }
+
     &.km-with-hint {
       margin-bottom: 15px;
     }
