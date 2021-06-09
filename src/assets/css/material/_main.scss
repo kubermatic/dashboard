@@ -412,6 +412,10 @@ button {
       margin-left: 10px;
     }
 
+    &.mat-quaternary {
+      font-weight: normal;
+    }
+
     i:not(:last-child) {
       margin-right: 8px;
     }
