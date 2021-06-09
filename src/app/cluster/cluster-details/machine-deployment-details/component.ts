@@ -57,7 +57,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   private _areNodesEventsLoaded = false;
   private _isClusterLoaded = false;
   private _isDatacenterLoaded = false;
-  private _unsubscribe: Subject<any> = new Subject();
+  private _unsubscribe: Subject<void> = new Subject<void>();
   private _clusterName: string;
   private _user: Member;
   private _currentGroupConfig: GroupConfig;

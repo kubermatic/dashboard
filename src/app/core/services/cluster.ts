@@ -15,7 +15,7 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {combineLatest, merge, Observable, of, Subject, timer} from 'rxjs';
 import {catchError, filter, map, shareReplay, startWith, switchMap, switchMapTo, take} from 'rxjs/operators';
 
-import {environment} from 'environments/environment';
+import {environment} from '@environments/environment';
 import {AppConfigService} from '@app/config.service';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {LabelFormComponent} from '@shared/components/label-form/component';
@@ -164,24 +164,24 @@ export class ClusterService {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/upgrades`;
     return this._http.get<MasterVersion[]>(url).pipe(
       catchError(() => {
-        return of<MasterVersion[]>([]).pipe(catchError(() => of<MasterVersion[]>()));
+        return of<MasterVersion[]>([]).pipe(catchError(() => of<MasterVersion[]>([])));
       })
     );
   }
 
   metrics(projectID: string, clusterID: string): Observable<ClusterMetrics> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/metrics`;
-    return this._http.get<ClusterMetrics>(url).pipe(catchError(() => of<ClusterMetrics>(undefined)));
+    return this._http.get<ClusterMetrics>(url).pipe(catchError(() => of<ClusterMetrics>({} as ClusterMetrics)));
   }
 
   externalClusterMetrics(projectID: string, clusterID: string): Observable<ClusterMetrics> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/metrics`;
-    return this._http.get<ClusterMetrics>(url).pipe(catchError(() => of<ClusterMetrics>(undefined)));
+    return this._http.get<ClusterMetrics>(url).pipe(catchError(() => of<ClusterMetrics>({} as ClusterMetrics)));
   }
 
   externalClusterNodesMetrics(projectID: string, clusterID: string): Observable<NodeMetrics[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/nodesmetrics`;
-    return this._http.get<NodeMetrics[]>(url).pipe(catchError(() => of<NodeMetrics[]>(undefined)));
+    return this._http.get<NodeMetrics[]>(url).pipe(catchError(() => of<NodeMetrics[]>([])));
   }
 
   events(projectID: string, clusterID: string): Observable<Event[]> {

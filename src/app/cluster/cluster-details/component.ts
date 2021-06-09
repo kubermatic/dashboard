@@ -74,7 +74,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   constraints: Constraint[] = [];
   gatekeeperConfig: GatekeeperConfig;
   alertmanagerConfig: AlertmanagerConfig;
-  private _unsubscribe: Subject<any> = new Subject();
+  private _unsubscribe: Subject<void> = new Subject<void>();
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
   private _seedSettings: SeedSettings;
@@ -140,7 +140,11 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           // Conditionally create an array of observables to use for 'combineLatest' operator.
           // In case real observable should not be returned, observable emitting empty array will be added to the array.
           const reload$ = []
-            .concat(this._canReloadVersions() ? this._clusterService.upgrades(this.projectID, this.cluster.id) : of([]))
+            .concat(
+              this._canReloadVersions()
+                ? this._clusterService.upgrades(this.projectID, this.cluster.id)
+                : of([] as MasterVersion[])
+            )
             .concat(
               this._canReloadNodes()
                 ? [
@@ -149,7 +153,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                     this._api.getMachineDeployments(this.cluster.id, this.projectID),
                     this._clusterService.metrics(this.projectID, this.cluster.id),
                   ]
-                : [of([]), of([]), of([]), of([])]
+                : [of([] as Addon[]), of([] as Node[]), of([] as MachineDeployment[]), of({} as ClusterMetrics)]
             )
             .concat(
               this._canReloadNodes() && this.isMLAEnabled()
@@ -162,15 +166,33 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                     this._opaService.constraints(this.projectID, this.cluster.id),
                     this._opaService.gatekeeperConfig(this.projectID, this.cluster.id),
                   ]
-                : [of([]), of([])]
-            );
+                : [of([] as Constraint[]), of({} as GatekeeperConfig)]
+            ) as [
+            Observable<MasterVersion[]>,
+            Observable<Addon[]>,
+            Observable<Node[]>,
+            Observable<MachineDeployment[]>,
+            Observable<ClusterMetrics>,
+            Observable<AlertmanagerConfig>,
+            Observable<Constraint[]>,
+            Observable<GatekeeperConfig>
+          ];
 
           return combineLatest(reload$);
         })
       )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(
-        ([upgrades, addons, nodes, machineDeployments, metrics, alertmanagerConfig, constraints, gatekeeperConfig]: [
+      .subscribe({
+        next: ([
+          upgrades,
+          addons,
+          nodes,
+          machineDeployments,
+          metrics,
+          alertmanagerConfig,
+          constraints,
+          gatekeeperConfig,
+        ]: [
           MasterVersion[],
           Addon[],
           Node[],
@@ -189,13 +211,13 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.constraints = constraints;
           this.gatekeeperConfig = gatekeeperConfig;
         },
-        error => {
+        error: error => {
           const errorCodeNotFound = 404;
           if (error.status === errorCodeNotFound) {
             this._router.navigate(['404']);
           }
-        }
-      );
+        },
+      });
   }
 
   private _canReloadVersions(): boolean {

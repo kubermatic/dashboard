@@ -68,7 +68,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   private readonly _maxOwnersLen = 30;
   private _apiSettings: UserSettings;
   private _settingsChange = new EventEmitter<void>();
-  private _unsubscribe: Subject<any> = new Subject();
+  private _unsubscribe: Subject<void> = new Subject<void>();
 
   get isAdmin(): boolean {
     return !!this.currentUser && this.currentUser.isAdmin;

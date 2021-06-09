@@ -9,7 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import '~@angular/material/theming';
+@use '~@angular/material' as mat;
+
 @import 'theme/main';
 
 $colors-light: (
@@ -47,7 +48,7 @@ $colors-light: (
   shadow-dark: (0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12)),
 );
 
-$theme-light: mat-light-theme(mat-palette($mat-blue), mat-palette($mat-light-blue), mat-palette($mat-pink));
+$theme-light: mat.define-light-theme(mat.define-palette(mat.$blue-palette), mat.define-palette(mat.$light-blue-palette), mat.define-palette(mat.$pink-palette));
 
 // sass-lint:disable function-name-format
 $background: map-get($theme-light, background);
@@ -65,5 +66,5 @@ $foreground: map_merge($foreground, (divider: #e0e3e5));
 $theme-light: map_merge($theme-light, (foreground: $foreground));
 // sass-lint:enable function-name-format
 
-@include angular-material-theme($theme-light);
+@include mat.all-component-themes($theme-light);
 @include theme($theme-light, $colors-light);

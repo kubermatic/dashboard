@@ -42,3 +42,6 @@ version.json
 cypress/fixtures
 cypress/screenshots
 cypress/videos
+cypress/plugins/index.js
+cypress/plugins/cy-ts-preprocessor.js
+cypress/tsconfig.json

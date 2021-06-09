@@ -137,36 +137,32 @@ export class NodeService {
     return dialogRef
       .afterClosed()
       .pipe(
-        mergeMap(
-          (isConfirmed: boolean): Observable<boolean> => {
-            if (isConfirmed) {
-              return this._apiService
-                .deleteMachineDeployment(clusterID, md, projectID)
-                .pipe(take(1))
-                .pipe(
-                  catchError(() => {
-                    this._notificationService.error('Could not remove the ${md.name} machine deployment');
-                    return of(false);
-                  })
-                );
-            }
-            return of(false);
+        mergeMap((isConfirmed: boolean): Observable<boolean> => {
+          if (isConfirmed) {
+            return this._apiService
+              .deleteMachineDeployment(clusterID, md, projectID)
+              .pipe(take(1))
+              .pipe(
+                catchError(() => {
+                  this._notificationService.error('Could not remove the ${md.name} machine deployment');
+                  return of(false);
+                })
+              );
           }
-        )
+          return of(false);
+        })
       )
       .pipe(
-        mergeMap(
-          (data: any): Observable<boolean> => {
-            if (data) {
-              this._notificationService.success(`The ${md.name} machine deployment was removed`);
-              if (changeEventEmitter) {
-                changeEventEmitter.emit(md);
-              }
-              return of(true);
+        mergeMap((data: any): Observable<boolean> => {
+          if (data) {
+            this._notificationService.success(`The ${md.name} machine deployment was removed`);
+            if (changeEventEmitter) {
+              changeEventEmitter.emit(md);
             }
-            return of(false);
+            return of(true);
           }
-        )
+          return of(false);
+        })
       )
       .pipe(take(1));
   }

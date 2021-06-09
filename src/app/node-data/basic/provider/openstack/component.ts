@@ -33,7 +33,7 @@ import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
 import {merge, Observable, of} from 'rxjs';
 import {filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import moment = require('moment');
+import {duration} from 'moment';
 
 enum Controls {
   Flavor = 'flavor',
@@ -150,7 +150,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
         this._nodeDataService.nodeData = this._getNodeData();
       });
 
-    merge<string>(this._clusterSpecService.datacenterChanges, of(this._clusterSpecService.datacenter))
+    merge(this._clusterSpecService.datacenterChanges, of(this._clusterSpecService.datacenter))
       .pipe(filter(dc => !!dc))
       .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
       .pipe(tap(dc => (this._images = dc.spec.openstack.images)))
@@ -190,12 +190,12 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
   onFlavorChange(flavor: string): void {
     this._nodeDataService.nodeData.spec.cloud.openstack.flavor = flavor;
-    this._nodeDataService.nodeDataChanges.next();
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
   onAvailabilityZoneChange(availabilityZone: string): void {
     this._nodeDataService.nodeData.spec.cloud.openstack.availabilityZone = availabilityZone;
-    this._nodeDataService.nodeDataChanges.next();
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
   flavorDisplayName(slug: string): string {
@@ -210,12 +210,12 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
   private _init(): void {
     if (this._nodeDataService.nodeData.spec.cloud.openstack) {
-      const instanceReadyCheckPeriod = moment
-        .duration(`PT${this._nodeDataService.nodeData.spec.cloud.openstack.instanceReadyCheckPeriod}`.toUpperCase())
-        .asSeconds();
-      const instanceReadyCheckTimeout = moment
-        .duration(`PT${this._nodeDataService.nodeData.spec.cloud.openstack.instanceReadyCheckTimeout}`.toUpperCase())
-        .asSeconds();
+      const instanceReadyCheckPeriod = duration(
+        `PT${this._nodeDataService.nodeData.spec.cloud.openstack.instanceReadyCheckPeriod}`.toUpperCase()
+      ).asSeconds();
+      const instanceReadyCheckTimeout = duration(
+        `PT${this._nodeDataService.nodeData.spec.cloud.openstack.instanceReadyCheckTimeout}`.toUpperCase()
+      ).asSeconds();
 
       this.form.get(Controls.UseFloatingIP).setValue(this._nodeDataService.nodeData.spec.cloud.openstack.useFloatingIP);
       this.form.get(Controls.Image).setValue(this._nodeDataService.nodeData.spec.cloud.openstack.image);

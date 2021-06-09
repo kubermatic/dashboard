@@ -53,7 +53,7 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
 
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
-  private _unsubscribe: Subject<any> = new Subject();
+  private _unsubscribe: Subject<void> = new Subject<void>();
 
   constructor(
     private readonly _api: ApiService,

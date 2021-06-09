@@ -156,18 +156,18 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
   onSizeChange(size: string): void {
     this._nodeDataService.nodeData.spec.cloud.aws.instanceType = size;
-    this._nodeDataService.nodeDataChanges.next();
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
   onSubnetChange(subnet: string): void {
     this._nodeDataService.nodeData.spec.cloud.aws.subnetID = subnet;
     this._nodeDataService.nodeData.spec.cloud.aws.availabilityZone = this._getAZFromSubnet(subnet);
-    this._nodeDataService.nodeDataChanges.next();
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
   onDiskTypeChange(diskType: string): void {
     this._nodeDataService.nodeData.spec.cloud.aws.volumeType = diskType;
-    this._nodeDataService.nodeDataChanges.next();
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
   sizeDisplayName(sizeName: string): string {

@@ -3,16 +3,15 @@
   "compilerOptions": {
     "outDir": "../dist/out-tsc/spec",
     "baseUrl": ".",
+    "module": "CommonJS",
+    "target": "ES2015",
     "types": [
       "jest",
-      "node"
     ]
   },
-  "files": [
-    "test.ts"
-  ],
   "include": [
     "**/*.spec.ts",
-    "**/*.d.ts"
+    "**/*.d.ts",
+    "environments/environment.ts"
   ]
 }

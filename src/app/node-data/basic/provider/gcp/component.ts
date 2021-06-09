@@ -162,18 +162,18 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
   onZoneChange(zone: string): void {
     this._nodeDataService.nodeData.spec.cloud.gcp.zone = zone;
-    this._nodeDataService.nodeDataChanges.next();
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
     this._zoneChanges.emit(!!zone);
   }
 
   onDiskTypeChange(diskType: string): void {
     this._nodeDataService.nodeData.spec.cloud.gcp.diskType = diskType;
-    this._nodeDataService.nodeDataChanges.next();
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
   onMachineTypeChange(machineType: string): void {
     this._nodeDataService.nodeData.spec.cloud.gcp.machineType = machineType;
-    this._nodeDataService.nodeDataChanges.next();
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
   sizeDisplayName(machineName: string): string {

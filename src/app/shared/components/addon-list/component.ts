@@ -41,7 +41,7 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
   accessibleAddons: string[] = [];
   installableAddons: string[] = [];
   addonConfigs = new Map<string, AddonConfig>();
-  private _unsubscribe: Subject<any> = new Subject();
+  private _unsubscribe: Subject<void> = new Subject<void>();
 
   constructor(
     private readonly _apiService: ApiService,

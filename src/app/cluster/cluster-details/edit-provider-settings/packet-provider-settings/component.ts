@@ -30,7 +30,7 @@ export class PacketProviderSettingsComponent implements OnInit, OnDestroy {
   private readonly _projectIDMaxLen = 64;
   private readonly _debounceTime = 1000;
   private _formData = {apiKey: '', projectID: '', billingCycle: ''};
-  private _unsubscribe: Subject<any> = new Subject();
+  private _unsubscribe: Subject<void> = new Subject<void>();
 
   constructor(private clusterService: ClusterService) {}
 
