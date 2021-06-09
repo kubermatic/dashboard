@@ -17,9 +17,11 @@ import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/node';
 import {NodeData} from '../../../../shared/model/NodeSpecChange';
 import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
 import {NodeDataMode} from '../../../config';
+import {merge} from 'rxjs';
 
 enum Controls {
   AssignPublicIP = 'assignPublicIP',
+  IsSpotInstance = 'isSpotInstance',
   Tags = 'tags',
 }
 
@@ -55,16 +57,16 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.AssignPublicIP]: this._builder.control(''),
+      [Controls.AssignPublicIP]: this._builder.control(true),
+      [Controls.IsSpotInstance]: this._builder.control(false),
       [Controls.Tags]: this._builder.control(''),
     });
 
     this._init();
     this._nodeDataService.nodeData = this._getNodeData();
 
-    this.form
-      .get(Controls.AssignPublicIP)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
+    merge(this.form.get(Controls.AssignPublicIP).valueChanges, this.form.get(Controls.IsSpotInstance).valueChanges)
+      .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
   }
 
@@ -82,6 +84,12 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
           ? this.nodeData.spec.cloud.aws.assignPublicIP
           : true;
       this.form.get(Controls.AssignPublicIP).setValue(assignPublicIP);
+
+      const isSpotInstance =
+        this._nodeDataService.mode === NodeDataMode.Dialog && !!this.nodeData.name
+          ? this.nodeData.spec.cloud.aws.isSpotInstance
+          : false;
+      this.form.get(Controls.IsSpotInstance).setValue(isSpotInstance);
     }
   }
 
@@ -91,6 +99,7 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
         cloud: {
           aws: {
             assignPublicIP: this.form.get(Controls.AssignPublicIP).value,
+            isSpotInstance: this.form.get(Controls.IsSpotInstance).value,
           },
         } as NodeCloudSpec,
       } as NodeSpec,

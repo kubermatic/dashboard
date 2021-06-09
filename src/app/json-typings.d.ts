@@ -9,16 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'zone.js/dist/zone-testing';
-import {getTestBed} from '@angular/core/testing';
-import {BrowserDynamicTestingModule, platformBrowserDynamicTesting} from '@angular/platform-browser-dynamic/testing';
-
-// eslint-disable-next-line
-declare const require: any;
-
-// First, initialize the Angular testing environment.
-getTestBed().initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
-// Then we find all the tests.
-const context = require.context('./', true, /\.spec\.ts$/);
-// And load the modules.
-context.keys().map(context);
+declare module '*.json' {
+  const value: any;
+  export default value;
+}

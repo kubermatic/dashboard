@@ -25,7 +25,7 @@ export class GCPProviderSettingsComponent implements OnInit, OnDestroy {
 
   private readonly _debounceTime = 1000;
   private _formData = {serviceAccount: ''};
-  private _unsubscribe: Subject<any> = new Subject();
+  private _unsubscribe: Subject<void> = new Subject<void>();
 
   constructor(private clusterService: ClusterService) {}
 

@@ -32,7 +32,7 @@ export class NodeDataPacketProvider {
   set tags(tags: string[]) {
     delete this._nodeDataService.nodeData.spec.cloud.packet.tags;
     this._nodeDataService.nodeData.spec.cloud.packet.tags = tags;
-    this._nodeDataService.nodeDataChanges.next();
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
   flavors(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<PacketSize[]> {

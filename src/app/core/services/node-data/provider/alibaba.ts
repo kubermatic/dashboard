@@ -35,7 +35,7 @@ export class NodeDataAlibabaProvider {
   set labels(labels: object) {
     delete this._nodeDataService.nodeData.spec.cloud.alibaba.labels;
     this._nodeDataService.nodeData.spec.cloud.alibaba.labels = labels;
-    this._nodeDataService.nodeDataChanges.next();
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
   instanceTypes(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<AlibabaInstanceType[]> {

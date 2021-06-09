@@ -24,7 +24,7 @@ export class NavigationComponent implements OnInit {
   @Input() showMenuSwitchAndProjectSelector: boolean;
   showSidenav = true;
   private _settingsChange = new Subject<void>();
-  private _unsubscribe: Subject<any> = new Subject();
+  private _unsubscribe: Subject<void> = new Subject<void>();
 
   constructor(private readonly _auth: Auth, private readonly _userService: UserService) {}
 

@@ -39,7 +39,8 @@ enum Controls {
 })
 export class MachineNetworkStepComponent
   extends StepBase
-  implements OnInit, ControlValueAccessor, Validator, OnDestroy {
+  implements OnInit, ControlValueAccessor, Validator, OnDestroy
+{
   cluster: Cluster;
 
   readonly controls = Controls;

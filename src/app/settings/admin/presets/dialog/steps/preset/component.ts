@@ -41,6 +41,7 @@ enum Controls {
 })
 export class PresetStepComponent extends BaseFormValidator implements OnInit {
   readonly controls = Controls;
+  readonly domainRegex = new RegExp('^(?!-)[A-Za-z0-9-]+([\\-.][a-z0-9]+)*\\.[A-Za-z]{2,6}$');
 
   constructor(private readonly _builder: FormBuilder, private readonly _presetDialogService: PresetDialogService) {
     super();

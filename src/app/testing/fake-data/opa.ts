@@ -35,8 +35,7 @@ export function fakeConstraintTemplates(): ConstraintTemplate[] {
         targets: [
           {
             target: 'admission.k8s.gatekeeper.sh',
-            rego:
-              'package k8sdenynames\nviolation[{"msg": msg}] {\n  input.review.object.metadata.name == input.parameters.invalidName\n  msg := sprintf("The name %v is not allowed", [input.parameters.invalidName])\n}\n',
+            rego: 'package k8sdenynames\nviolation[{"msg": msg}] {\n  input.review.object.metadata.name == input.parameters.invalidName\n  msg := sprintf("The name %v is not allowed", [input.parameters.invalidName])\n}\n',
           },
         ],
         selector: {
@@ -70,8 +69,7 @@ export function fakeConstraintTemplates(): ConstraintTemplate[] {
         targets: [
           {
             target: 'admission.k8s.gatekeeper.sh',
-            rego:
-              'package k8srequiredlabels\nviolation[{"msg": msg, "details": {"missing_labels": missing}}] {\n  provided := {label | input.review.object.metadata.labels[label]}\n  required := {label | label := input.parameters.labels[_]}\n  missing := required - provided\n  count(missing) \u003e 0\n  msg := sprintf("you must provide labels: %v", [missing])\n}\n',
+            rego: 'package k8srequiredlabels\nviolation[{"msg": msg, "details": {"missing_labels": missing}}] {\n  provided := {label | input.review.object.metadata.labels[label]}\n  required := {label | label := input.parameters.labels[_]}\n  missing := required - provided\n  count(missing) \u003e 0\n  msg := sprintf("you must provide labels: %v", [missing])\n}\n',
           },
         ],
         selector: {

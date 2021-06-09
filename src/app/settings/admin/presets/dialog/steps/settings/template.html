@@ -51,12 +51,8 @@ limitations under the License.
 
   <div class="optional-section">Optional Restrictions</div>
 
-  <mat-form-field fxFlex>
-    <mat-label>Restrict to Datacenter</mat-label>
-    <input matInput
-           [formControlName]="Controls.Datacenter"
-           type="text"
-           title="datacenter"
-           autocomplete="off">
-  </mat-form-field>
+  <km-autocomplete label="Restrict to Datacenter"
+                   [formControlName]="Controls.Datacenter"
+                   [isLoading]="isLoadingDatacenters"
+                   [options]="datacenters"></km-autocomplete>
 </form>
