@@ -70,7 +70,7 @@ export class ThemeManagerService {
 
   private readonly _themeClassName = themeName => `km-style-${themeName}`;
 
-  private readonly _themesPath = themeName => `assets/themes/${themeName}.css`;
+  private readonly _themesPath = themeName => `${themeName}.css`;
 
   private _isThemeDark(name: string): boolean {
     if (name === this.systemDefaultOption) {

@@ -12,10 +12,12 @@
 import {Component, forwardRef, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
+import {DatacenterService} from '@core/services/datacenter';
+import {Datacenter} from '@shared/entity/datacenter';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge} from 'rxjs';
-import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {distinctUntilChanged, map, switchMap, takeUntil} from 'rxjs/operators';
 
 enum Controls {
   Settings = 'settings',
@@ -42,11 +44,17 @@ enum Controls {
 export class PresetSettingsStepComponent extends BaseFormValidator implements OnInit {
   form: FormGroup;
   provider: NodeProvider;
+  datacenters: string[] = [];
+  isLoadingDatacenters = true;
 
   readonly Providers = NodeProvider;
   readonly Controls = Controls;
 
-  constructor(private readonly _builder: FormBuilder, private readonly _presetDialogService: PresetDialogService) {
+  constructor(
+    private readonly _builder: FormBuilder,
+    private readonly _presetDialogService: PresetDialogService,
+    private readonly _datacenterService: DatacenterService
+  ) {
     super();
   }
 
@@ -62,10 +70,28 @@ export class PresetSettingsStepComponent extends BaseFormValidator implements On
       this.form.addControl(Controls.Settings, this._builder.control(''));
     });
 
+    this._presetDialogService.providerChanges
+      .pipe(switchMap(_ => this._datacenterService.datacenters))
+      .pipe(map(datacenters => this._filterByProvider(datacenters)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe({
+        next: datacenters => {
+          this.datacenters = datacenters;
+          this.isLoadingDatacenters = false;
+        },
+        complete: () => {
+          this.isLoadingDatacenters = false;
+        },
+      });
+
     merge(this.form.get(Controls.Datacenter).valueChanges)
       .pipe(distinctUntilChanged())
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._update());
+  }
+
+  private _filterByProvider(datacenters: Datacenter[]): string[] {
+    return datacenters.filter(dc => dc.spec.provider === this.provider).map(dc => dc.metadata.name);
   }
 
   private _update(): void {

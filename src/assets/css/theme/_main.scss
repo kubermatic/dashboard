@@ -10,32 +10,32 @@
 // limitations under the License.
 
 @use 'sass:map';
+@use '~@angular/material' as mat;
 
-@import '~@angular/material/theming';
 @import 'material/theme';
 @import 'global/theme';
 @import 'component';
 
-@include mat-core();
+@include mat.core();
 
 @mixin theme($theme, $colors) {
   $palette-background: map-get($theme, background);
   $palette-foreground: map-get($theme, foreground);
 
   $theme-colors: (
-    background-app-bar: mat-color($palette-background, app-bar),
-    background-card: mat-color($palette-background, card),
-    background-dialog: mat-color($palette-background, dialog),
-    background-disabled-button: mat-color($palette-background, disabled-button),
-    background-hover: mat-color($palette-background, hover),
-    background: mat-color($palette-background, background),
-    checkbox-disabled: mat-color($palette-foreground, disabled-checkbox),
-    divider-disabled: mat-color($palette-foreground, disabled),
-    divider: mat-color($palette-foreground, divider),
-    project-switch: rgba(mat-color($palette-foreground, secondary-text), .7),
-    text-disabled: mat-color($palette-foreground, disabled-text),
-    text-secondary: mat-color($palette-foreground, secondary-text),
-    text: mat-color($palette-foreground, text),
+    background-app-bar: mat.get-color-from-palette($palette-background, app-bar),
+    background-card: mat.get-color-from-palette($palette-background, card),
+    background-dialog: mat.get-color-from-palette($palette-background, dialog),
+    background-disabled-button: mat.get-color-from-palette($palette-background, disabled-button),
+    background-hover: mat.get-color-from-palette($palette-background, hover),
+    background: mat.get-color-from-palette($palette-background, background),
+    checkbox-disabled: mat.get-color-from-palette($palette-foreground, disabled-checkbox),
+    divider-disabled: mat.get-color-from-palette($palette-foreground, disabled),
+    divider: mat.get-color-from-palette($palette-foreground, divider),
+    project-switch: rgba(mat.get-color-from-palette($palette-foreground, secondary-text), .7),
+    text-disabled: mat.get-color-from-palette($palette-foreground, disabled-text),
+    text-secondary: mat.get-color-from-palette($palette-foreground, secondary-text),
+    text: mat.get-color-from-palette($palette-foreground, text),
   );
 
   // Create merged colors map from custom and theme colors

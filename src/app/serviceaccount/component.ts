@@ -27,8 +27,8 @@ import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils} from '@shared/utils/member-utils/member-utils';
 import {ProjectUtils} from '@shared/utils/project-utils/project-utils';
 import * as _ from 'lodash';
-import {EMPTY, merge, Subject, timer} from 'rxjs';
-import {filter, switchMap, switchMapTo, take, takeUntil} from 'rxjs/operators';
+import {EMPTY, merge, of, Subject, timer} from 'rxjs';
+import {catchError, filter, switchMap, switchMapTo, take, takeUntil} from 'rxjs/operators';
 import {AddServiceAccountComponent} from './add-serviceaccount/component';
 import {EditServiceAccountComponent} from './edit-serviceaccount/component';
 
@@ -51,8 +51,8 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   private readonly _refreshTime = 10; // in seconds
-  private _unsubscribe: Subject<any> = new Subject();
-  private _serviceAccountUpdate: Subject<any> = new Subject();
+  private _unsubscribe: Subject<void> = new Subject<void>();
+  private _serviceAccountUpdate: Subject<void> = new Subject<void>();
   private _selectedProject = {} as Project;
   private _currentGroupConfig: GroupConfig;
 
@@ -89,7 +89,9 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(
         switchMap(userGroup => {
           this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup);
-          return this._apiService.getServiceAccounts(this._selectedProject.id);
+          return this._apiService
+            .getServiceAccounts(this._selectedProject.id)
+            .pipe(catchError(() => of<ServiceAccount[]>([])));
         })
       )
       .pipe(takeUntil(this._unsubscribe))

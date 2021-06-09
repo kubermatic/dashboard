@@ -90,7 +90,7 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
 
-    merge<string>(this._clusterSpecService.datacenterChanges, of(this._clusterSpecService.datacenter))
+    merge(this._clusterSpecService.datacenterChanges, of(this._clusterSpecService.datacenter))
       .pipe(filter(dc => !!dc))
       .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
       .pipe(tap(dc => (this._templates = dc.spec.vsphere.templates)))

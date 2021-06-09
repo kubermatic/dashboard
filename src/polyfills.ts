@@ -27,7 +27,7 @@ import 'core-js/es/set';
 import 'core-js/es/string';
 import 'core-js/es/symbol';
 
-import 'zone.js/dist/zone';
+import 'zone.js';
 
 // @ts-ignore
 window.Buffer = window.Buffer || require('buffer').Buffer;
@@ -38,4 +38,4 @@ window.Buffer = window.Buffer || require('buffer').Buffer;
 
 // Add global to process. Required by the 'swagger-ui'.
 // eslint-disable-next-line
-(window as any).process = {browser: true};
+(window as any).process = {browser: true, env: {}};

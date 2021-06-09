@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {Theme} from '../../../../shared/model/Config';
-import {AppConfigService} from '../../../../config.service';
+import {Theme} from '@shared/model/Config';
+import {AppConfigService} from '@app/config.service';
 
 @Injectable()
 export class ThemeService {

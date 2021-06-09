@@ -81,6 +81,11 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
       [Controls.VNet]: this._builder.control(''),
     });
 
+    const resourceGroupChanges = merge(
+      this.form.get(Controls.ResourceGroup).valueChanges,
+      this.form.get(Controls.VNetResourceGroup).valueChanges
+    );
+
     this.form.valueChanges
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.AZURE))
       .pipe(takeUntil(this._unsubscribe))
@@ -109,75 +114,44 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
         this._setIsLoadingResourceGroups(false);
       });
 
-    this._getCredentialChanges(this.form.get(Controls.ResourceGroup).valueChanges)
-      .pipe(
-        tap(_ =>
-          !this.hasRequiredCredentials() || !this.getValueFromInternalForm(Controls.ResourceGroup)
-            ? this._clearRouteTable()
-            : null
-        )
-      )
-      .pipe(
-        switchMap(_ => (this.getValueFromInternalForm(Controls.ResourceGroup) ? this._routeTableObservable() : of([])))
-      )
+    this._getCredentialChanges(resourceGroupChanges)
+      .pipe(tap(_ => (!this.hasRequiredCredentials() || !this._getResourceGroup() ? this._clearRouteTable() : null)))
+      .pipe(switchMap(_ => (this._getResourceGroup() ? this._routeTableObservable() : of([]))))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(routeTables => {
         this.routeTables = routeTables;
         this._setIsLoadingRouteTables(false);
       });
 
-    this._getCredentialChanges(this.form.get(Controls.ResourceGroup).valueChanges)
-      .pipe(
-        tap(_ =>
-          !this.hasRequiredCredentials() || !this.getValueFromInternalForm(Controls.ResourceGroup)
-            ? this._clearSecurityGroup()
-            : null
-        )
-      )
-      .pipe(
-        switchMap(_ =>
-          this.getValueFromInternalForm(Controls.ResourceGroup) ? this._securityGroupObservable() : of([])
-        )
-      )
+    this._getCredentialChanges(resourceGroupChanges)
+      .pipe(tap(_ => (!this.hasRequiredCredentials() || !this._getResourceGroup() ? this._clearSecurityGroup() : null)))
+      .pipe(switchMap(_ => (this._getResourceGroup() ? this._securityGroupObservable() : of([]))))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(securityGroups => {
         this.securityGroups = securityGroups;
         this._setIsLoadingSecurityGroups(false);
       });
 
-    this._getCredentialChanges(this.form.get(Controls.ResourceGroup).valueChanges)
-      .pipe(
-        tap(_ =>
-          !this.hasRequiredCredentials() || !this.getValueFromInternalForm(Controls.ResourceGroup)
-            ? this._clearVNet()
-            : null
-        )
-      )
-      .pipe(switchMap(_ => (this.getValueFromInternalForm(Controls.ResourceGroup) ? this._vnetObservable() : of([]))))
+    this._getCredentialChanges(resourceGroupChanges)
+      .pipe(tap(_ => (!this.hasRequiredCredentials() || !this._getResourceGroup() ? this._clearVNet() : null)))
+      .pipe(switchMap(_ => (this._getResourceGroup() ? this._vnetObservable() : of([]))))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(vnets => {
         this.vnets = vnets;
         this._setIsLoadingVnets(false);
       });
 
-    this._getCredentialChanges(
-      this.form.get(Controls.ResourceGroup).valueChanges,
-      this.form.get(Controls.VNet).valueChanges
-    )
+    this._getCredentialChanges(resourceGroupChanges, this.form.get(Controls.VNet).valueChanges)
       .pipe(
         tap(_ =>
-          !this.hasRequiredCredentials() ||
-          !this.getValueFromInternalForm(Controls.ResourceGroup) ||
-          !this.getValueFromInternalForm(Controls.VNet)
+          !this.hasRequiredCredentials() || !this._getResourceGroup() || !this.getValueFromInternalForm(Controls.VNet)
             ? this._clearSubnet()
             : null
         )
       )
       .pipe(
         switchMap(_ =>
-          this.getValueFromInternalForm(Controls.ResourceGroup) && this.getValueFromInternalForm(Controls.VNet)
-            ? this._subnetObservable()
-            : of([])
+          this._getResourceGroup() && this.getValueFromInternalForm(Controls.VNet) ? this._subnetObservable() : of([])
         )
       )
       .pipe(takeUntil(this._unsubscribe))
@@ -260,6 +234,11 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
     return internalFormValue ? internalFormValue[AutocompleteControls.Main] : '';
   }
 
+  private _getResourceGroup(): string {
+    const vNetResourceGroup = this.getValueFromInternalForm(Controls.VNetResourceGroup);
+    return vNetResourceGroup ? vNetResourceGroup : this.getValueFromInternalForm(Controls.ResourceGroup);
+  }
+
   private _resourceGroupObservable(): Observable<string[]> {
     let location = '';
     return this._datacenterService
@@ -312,7 +291,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
             .clientSecret(this._clusterSpecService.cluster.spec.cloud.azure.clientSecret)
             .subscriptionID(this._clusterSpecService.cluster.spec.cloud.azure.subscriptionID)
             .tenantID(this._clusterSpecService.cluster.spec.cloud.azure.tenantID)
-            .resourceGroup(this.getValueFromInternalForm(Controls.ResourceGroup))
+            .resourceGroup(this._getResourceGroup())
             .location(location)
             .credential(this._presets.preset)
             .routeTables(() => this._setIsLoadingRouteTables(true))
@@ -350,7 +329,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
             .clientSecret(this._clusterSpecService.cluster.spec.cloud.azure.clientSecret)
             .subscriptionID(this._clusterSpecService.cluster.spec.cloud.azure.subscriptionID)
             .tenantID(this._clusterSpecService.cluster.spec.cloud.azure.tenantID)
-            .resourceGroup(this.getValueFromInternalForm(Controls.ResourceGroup))
+            .resourceGroup(this._getResourceGroup())
             .location(location)
             .credential(this._presets.preset)
             .securityGroups(() => this._setIsLoadingSecurityGroups(true))
@@ -388,7 +367,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
             .clientSecret(this._clusterSpecService.cluster.spec.cloud.azure.clientSecret)
             .subscriptionID(this._clusterSpecService.cluster.spec.cloud.azure.subscriptionID)
             .tenantID(this._clusterSpecService.cluster.spec.cloud.azure.tenantID)
-            .resourceGroup(this.getValueFromInternalForm(Controls.ResourceGroup))
+            .resourceGroup(this._getResourceGroup())
             .location(location)
             .credential(this._presets.preset)
             .vnets(() => this._setIsLoadingVnets(true))
@@ -421,7 +400,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
       .clientSecret(this._clusterSpecService.cluster.spec.cloud.azure.clientSecret)
       .subscriptionID(this._clusterSpecService.cluster.spec.cloud.azure.subscriptionID)
       .tenantID(this._clusterSpecService.cluster.spec.cloud.azure.tenantID)
-      .resourceGroup(this.getValueFromInternalForm(Controls.ResourceGroup))
+      .resourceGroup(this._getResourceGroup())
       .vnet(this.getValueFromInternalForm(Controls.VNet))
       .credential(this._presets.preset)
       .subnets(() => this._setIsLoadingSubnets(true))

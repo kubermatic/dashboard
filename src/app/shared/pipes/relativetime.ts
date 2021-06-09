@@ -10,7 +10,7 @@
 // limitations under the License.
 
 import {Pipe, PipeTransform} from '@angular/core';
-import * as moment from 'moment';
+import moment from 'moment';
 
 @Pipe({name: 'kmRelativeTime'})
 export class RelativeTimePipe implements PipeTransform {

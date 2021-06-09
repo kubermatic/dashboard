@@ -1,7 +1,8 @@
-const {gitDescribeSync} = require('git-describe');
-const {resolve} = require('path');
-const {writeFileSync} = require('fs');
-const {execSync} = require('child_process');
+import gitDescribe from 'git-describe';
+import {resolve, dirname} from 'path';
+import {writeFileSync} from 'fs';
+import {execSync} from 'child_process';
+import {fileURLToPath} from 'url';
 
 function getEditionDisplayName() {
   return process.env.KUBERMATIC_EDITION === 'ce'
@@ -9,7 +10,7 @@ function getEditionDisplayName() {
     : 'Enterprise Edition';
 }
 
-const gitInfo = gitDescribeSync({
+const gitInfo = gitDescribe.gitDescribeSync({
   dirtyMark: false,
   dirtySemver: false,
 });
@@ -27,6 +28,9 @@ const versionInfoJson = JSON.stringify(gitInfo, null, 2);
 
 // eslint-disable-next-line no-console
 console.log(versionInfoJson + '\n');
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 writeFileSync(
   resolve(__dirname, 'src', 'assets', 'config', 'version.json'),

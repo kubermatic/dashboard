@@ -29,7 +29,7 @@ export class NotificationPanelComponent implements OnInit, OnDestroy {
   private _isOpen = false;
   private _filter: NotificationType = undefined;
   private _isAnimating = false;
-  private _unsubscribe: Subject<any> = new Subject();
+  private _unsubscribe: Subject<void> = new Subject<void>();
 
   constructor(
     private readonly _notificationService: NotificationService,

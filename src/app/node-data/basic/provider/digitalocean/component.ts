@@ -93,7 +93,7 @@ export class DigitalOceanBasicNodeDataComponent extends BaseFormValidator implem
 
   onTypeChange(size: string): void {
     this._nodeDataService.nodeData.spec.cloud.digitalocean.size = size;
-    this._nodeDataService.nodeDataChanges.next();
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
   sizeDisplayName(slug: string): string {

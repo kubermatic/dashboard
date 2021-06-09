@@ -30,7 +30,7 @@ export class ProjectSelectorComponent implements OnInit, OnDestroy {
   externalProjects: Project[] = [];
   selectedProject: Project;
 
-  private _unsubscribe: Subject<any> = new Subject();
+  private _unsubscribe: Subject<void> = new Subject<void>();
   private _displayAllProjects: boolean;
   private _projects: Project[];
 

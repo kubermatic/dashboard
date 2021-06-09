@@ -32,9 +32,13 @@ limitations under the License.
     <mat-label>Restrict Preset Group to Domain</mat-label>
     <input matInput
            [formControlName]="controls.Domain"
+           [pattern]="domainRegex"
            type="text"
            title="domain"
            autocomplete="off">
+    <mat-error *ngIf="form.get(controls.Domain).hasError( 'pattern')">
+      Input has to be a valid domain.
+    </mat-error>
   </mat-form-field>
 
   <mat-checkbox [formControlName]="controls.Disable"

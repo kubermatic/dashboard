@@ -45,7 +45,7 @@ export class RouterOutletStubComponent {}
 
 @Injectable()
 export class RouterStub {
-  events = new Subject();
+  events = new Subject<void>();
 
   navigate(_commands: any[], _extras?: NavigationExtras): void {}
 }

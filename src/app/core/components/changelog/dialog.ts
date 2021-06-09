@@ -68,10 +68,10 @@ export class ChangelogDialog implements OnInit {
     this._userService
       .patchCurrentUserSettings({lastSeenChangelogVersion: this.version} as UserSettings)
       .pipe(take(1))
-      .subscribe(
-        _ => this._matDialogRef.close(),
-        _ => {},
-        () => (this.saving = false)
-      );
+      .subscribe({
+        next: _ => this._matDialogRef.close(),
+        error: _ => {},
+        complete: () => (this.saving = false),
+      });
   }
 }
