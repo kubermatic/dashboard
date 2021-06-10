@@ -93,6 +93,11 @@ limitations under the License.
 </mat-dialog-content>
 <mat-dialog-actions *ngIf="stepper.selectedIndex === stepper.steps.length - 1">
   <button mat-flat-button
+          color="tertiary"
+          (click)="goBack()">
+    Back
+  </button>
+  <button mat-flat-button
           [disabled]="!form.valid"
           (click)="install()">
     Install

@@ -81,6 +81,13 @@ export class InstallAddonDialogComponent {
     this._stepper.next();
   }
 
+  goBack(): void {
+    this.selectedAddon = undefined;
+    this.form = undefined;
+    this.formBasic = undefined;
+    this._stepper.previous();
+  }
+
   install(): void {
     this.dialogRef.close(this._getAddonEntity());
   }
