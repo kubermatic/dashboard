@@ -119,6 +119,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.MLAMonitoring).setValue(this._settings.mlaOptions.monitoringEnabled, {emitEvent: false});
       this._enforce(Controls.MLAMonitoring, this._settings.mlaOptions.monitoringEnforced);
 
+      this.form.get(Controls.OPAIntegration).setValue(this._settings.opaOptions.enabled);
       if (this._settings.opaOptions.enforced) {
         this.form.get(Controls.OPAIntegration).disable();
       }
