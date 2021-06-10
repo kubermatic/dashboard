@@ -161,6 +161,14 @@ mat-card {
   .mat-sort-header-arrow {
     margin: auto 0 auto 6px;
   }
+
+  .mat-icon-button {
+    @include size(35px, $force: true);
+
+    i {
+      @include size(35px);
+    }
+  }
 }
 
 .mat-column-status,
@@ -414,6 +422,11 @@ button {
 
     &.mat-quaternary {
       font-weight: normal;
+    }
+
+    .mat-button-wrapper {
+      display: flex;
+      justify-content: center;
     }
 
     i:not(:last-child) {
