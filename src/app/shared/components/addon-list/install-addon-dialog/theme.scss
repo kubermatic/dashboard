@@ -14,7 +14,7 @@
     box-shadow: 0 0 0 1px map-get($colors, divider);
 
     &:hover {
-      box-shadow: 0 0 0 2px map-get($colors, secondary-hover);
+      box-shadow: 0 0 0 2px map-get($colors, secondary);
     }
 
     .option-desc {
