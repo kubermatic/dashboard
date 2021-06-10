@@ -30,11 +30,11 @@
         background-color: map-get($colors, sidenav-background-active);
 
         i {
-          background-color: map-get($colors, primary);
+          background-color: map-get($colors, sidenav-active);
         }
 
         span {
-          color: map-get($colors, primary);
+          color: map-get($colors, sidenav-active);
         }
       }
     }

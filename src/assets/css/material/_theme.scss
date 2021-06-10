@@ -99,11 +99,11 @@
       color: map-get($colors, text-secondary);
 
       &.mat-step-label-active {
-        color: map-get($colors, text-secondary);
+        color: map-get($colors, wizard-step-active);
       }
 
       &.mat-step-label-selected {
-        color: map-get($colors, primary);
+        color: map-get($colors, wizard-step-active);
       }
     }
 

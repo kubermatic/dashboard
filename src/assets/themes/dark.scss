@@ -19,23 +19,25 @@
 $colors-dark: (
   primary: #0072b0,
   primary-hover: #008bd6,
-  primary-dark: #008bd6,
-  secondary: #00c9c9,
-  secondary-hover: #00b2b2,
+  primary-dark: #66c9ff,
+  secondary: #00b2b2,
+  secondary-hover: #099,
   secondary-dark: #00c9c9,
   indicator-green: #1dc67f,
   indicator-orange: #f7b500,
   indicator-red: #eb5757,
-  footer-text: #fff,
+  footer-text: rgba(#fff, .85),
+  sidenav-active: #66c9ff,
   sidenav-background-hover: #202021,
-  sidenav-background-active: rgba(#00517d, .18),
+  sidenav-background-active: rgba(#00517d, .7),
   sidenav-divider: #cad1d9,
   project-selector-hover: #edeff0,
   tooltip-background: #0072b0,
   option-background: #2b2b2c,
   option-background-hover: #535354,
+  wizard-step-active: #66c9ff,
   wizard-step-background: #b2e4ff,
-  wizard-step-background-active: #008bd6,
+  wizard-step-background-active: #66c9ff,
   changelog-action-required: #f7b500,
   changelog-added: #008bd6,
   changelog-removed: #a5aeb8,
@@ -61,7 +63,7 @@ $background: map_merge($background, (dialog: #2b2b2c));
 $theme-dark: map_merge($theme-dark, (background: $background));
 
 $foreground: map-get($theme-dark, foreground);
-$foreground: map_merge($foreground, (text: #fff));
+$foreground: map_merge($foreground, (text: rgba(#fff, .85)));
 $foreground: map_merge($foreground, (secondary-text: #b8b8b8));
 $foreground: map_merge($foreground, (disabled-text: #636363));
 $foreground: map_merge($foreground, (disabled-checkbox: #3b3b3c));
@@ -73,7 +75,7 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
 @include mat.all-component-themes($theme-dark);
 @include theme($theme-dark, $colors-dark);
 
-// Make icons and logos white.
+// Make icons and logos white with 85% opacity.
 .km-header-logo,
 .km-provider-logo,
 .km-addon-logo,
@@ -83,6 +85,11 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
 .km-footer i,
 *[class*="km-os-image-"] {
   filter: invert(.25) brightness(100) contrast(100);
+  opacity: .85;
+}
+
+.km-icon-mask {
+  background-color: rgba(#fff, .85);
 }
 
 .km-provider-logo-bringyourown {
@@ -105,9 +112,16 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
 
 .km-icon-info {
   @include background-image("/assets/images/icons/info-dark.svg", 16px);
+
+  opacity: .85;
+}
+
+// Make selected option text light blue.
+.mat-option.mat-option-multiple.mat-selected .mat-option-text {
+  color: map-get($colors-dark, primary-dark);
 }
 
 // Make checkbox marks white.
-.mat-checkbox-checkmark-path {
-  stroke: #fff;
+.mat-checkbox .mat-checkbox-checkmark .mat-checkbox-checkmark-path {
+  stroke: rgba(#fff, .85) !important;
 }
