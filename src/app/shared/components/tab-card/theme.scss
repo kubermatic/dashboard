@@ -23,6 +23,10 @@
           background: map-get($colors, background-card);
         }
       }
+
+      .mat-ink-bar {
+        background-color: map-get($colors, primary);
+      }
     }
   }
 }

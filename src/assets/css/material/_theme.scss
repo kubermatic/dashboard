@@ -326,10 +326,8 @@
     }
   }
 
-  .mat-checkbox-checked {
-    .mat-checkbox-background {
-      background-color: map-get($colors, primary);
-    }
+  .mat-checkbox-checked .mat-checkbox-inner-container .mat-checkbox-background {
+    background-color: map-get($colors, primary);
   }
 
   .mat-checkbox-disabled {

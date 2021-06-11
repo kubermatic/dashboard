@@ -31,7 +31,10 @@ limitations under the License.
     <div fxFlex></div>
     <button (click)="addSSHKeyDialog()"
             mat-flat-button
-            [disabled]="!canAdd()">Add SSH key
+            color="quaternary"
+            [disabled]="!canAdd()">
+      <i class="km-icon-add"></i>
+      Add SSH key
     </button>
   </div>
 </form>

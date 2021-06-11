@@ -161,6 +161,14 @@ mat-card {
   .mat-sort-header-arrow {
     margin: auto 0 auto 6px;
   }
+
+  .mat-icon-button {
+    @include size(35px, $force: true);
+
+    i {
+      @include size(35px);
+    }
+  }
 }
 
 .mat-column-status,
@@ -262,6 +270,15 @@ mat-list-item {
 mat-form-field {
   &.mat-form-field {
     width: 100%;
+
+    .mat-form-field-prefix,
+    .mat-form-field-suffix {
+      .mat-icon-button {
+        @include size(32px, $force: true);
+
+        margin-top: -4px;
+      }
+    }
 
     &.km-with-hint {
       margin-bottom: 15px;
@@ -392,7 +409,8 @@ a,
 button {
   &.mat-button,
   &.mat-flat-button,
-  &.mat-raised-button {
+  &.mat-raised-button,
+  &.mat-icon-button {
     font-size: $font-size-subhead;
     height: 40px;
     line-height: 40px;
@@ -402,7 +420,16 @@ button {
       margin-left: 10px;
     }
 
-    i {
+    &.mat-quaternary {
+      font-weight: normal;
+    }
+
+    .mat-button-wrapper {
+      display: flex;
+      justify-content: center;
+    }
+
+    i:not(:last-child) {
       margin-right: 8px;
     }
   }
