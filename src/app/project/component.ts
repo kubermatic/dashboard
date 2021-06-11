@@ -144,11 +144,10 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     });
 
     this._projectService.projects.pipe(takeUntil(this._unsubscribe)).subscribe((projects: Project[]) => {
-      this.projects = projects;
-      this.projects = this._sortProjects(this.projects);
+      this.projects = this._sortProjects(projects);
       this._loadCurrentUserRoles();
-      this.dataSource.data = this.projects;
       this._sortProjectOwners();
+      this.dataSource.data = this.projects;
 
       if (this._shouldRedirectToCluster()) {
         this._redirectToCluster();
