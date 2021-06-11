@@ -111,6 +111,8 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit(): void {
     this.dataSource.data = this.projects;
+    this.dataSource.filterPredicate = this._filter.bind(this);
+    this.dataSource.filter = '';
 
     this._userService.currentUser.subscribe(user => {
       this.currentUser = user;
@@ -165,6 +167,45 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges(): void {
     this.dataSource.data = this.projects;
     this._cdr.detectChanges();
+  }
+
+  isEmpty(arr: any): boolean {
+    return _.isEmpty(arr);
+  }
+
+  onSearch(query: string): void {
+    this.dataSource.filter = query;
+  }
+
+  private _filter(project: Project, query: string): boolean {
+    query = query.toLowerCase();
+
+    // Check name.
+    if (project.name.toLowerCase().includes(query)) {
+      return true;
+    }
+
+    // Check ID.
+    if (project.id.toLowerCase().includes(query)) {
+      return true;
+    }
+
+    // Check labels.
+    if (project.labels) {
+      let hasMatchingLabel = false;
+      Object.keys(project.labels).forEach(key => {
+        const value = project.labels[key];
+        if (key.toLowerCase().includes(query) || value.toLowerCase().includes(query)) {
+          hasMatchingLabel = true;
+          return;
+        }
+      });
+      if (hasMatchingLabel) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   private _loadCurrentUserRoles(): void {
