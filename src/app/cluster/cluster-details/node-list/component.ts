@@ -12,7 +12,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
+import {MatSort, Sort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {ClusterService} from '@core/services/cluster';
@@ -29,8 +29,23 @@ import {NodeHealthStatus} from '@shared/utils/health-status/node-health-status';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {NodeUtils} from '@shared/utils/node-utils/node-utils';
 import * as _ from 'lodash';
+import * as semver from 'semver';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
+
+enum Column {
+  stateArrow = 'stateArrow',
+  status = 'status',
+  name = 'name',
+  kubeletVersion = 'kubeletVersion',
+  ipAddresses = 'ipAddresses',
+  creationDate = 'creationDate',
+  actions = 'actions',
+}
+
+enum ToggleableColumn {
+  nodeDetails = 'nodeDetails',
+}
 
 @Component({
   selector: 'km-node-list',
@@ -54,17 +69,12 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
     hasBackdrop: true,
   };
   isShowNodeItem = [];
-  displayedColumns: string[] = [
-    'stateArrow',
-    'status',
-    'name',
-    'kubeletVersion',
-    'ipAddresses',
-    'creationDate',
-    'actions',
-  ];
-  toggledColumns: string[] = ['nodeDetails'];
   dataSource = new MatTableDataSource<Node>();
+
+  readonly toggleableColumns: ToggleableColumn[] = [ToggleableColumn.nodeDetails];
+  readonly displayedColumns: Column[] = Object.values(Column);
+  readonly column = Column;
+  readonly toggleableColumn = ToggleableColumn;
 
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
@@ -82,7 +92,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
     this.dataSource.data = this.nodes;
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.sort.active = 'name';
+    this.sort.active = Column.name;
     this.sort.direction = 'asc';
 
     this._userService.currentUser.pipe(take(1)).subscribe(user => (this._user = user));
@@ -98,12 +108,38 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(): void {
-    this.dataSource.data = this.nodes;
+    this.onSortChange(this.dataSource.sort);
   }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  onSortChange(sort: Sort): void {
+    let data = this.nodes;
+    if (!sort || !sort.active || sort.direction === '') {
+      this.dataSource.data = data;
+      return;
+    }
+
+    const compare = (a: number | string, b: number | string, isAsc: boolean) => (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+
+    data = data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case Column.name:
+          return compare(a.name, b.name, isAsc);
+        case Column.kubeletVersion:
+          return semver.compare(a.spec.versions.kubelet, b.spec.versions.kubelet) * (isAsc ? 1 : -1);
+        case Column.creationDate:
+          return (a.creationTimestamp.valueOf() < b.creationTimestamp.valueOf() ? 1 : -1) * (isAsc ? 1 : -1);
+        default:
+          return 0;
+      }
+    });
+
+    this.dataSource.data = data;
   }
 
   getVersionHeadline(type: string, isKubelet: boolean): string {
@@ -141,7 +177,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
       });
   }
 
-  getNodeHealthStatus(n: Node): object {
+  getNodeHealthStatus(n: Node): NodeHealthStatus {
     return NodeHealthStatus.getHealthStatus(n);
   }
 
