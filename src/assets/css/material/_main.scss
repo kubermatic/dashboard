@@ -424,11 +424,6 @@ button {
       font-weight: normal;
     }
 
-    .mat-button-wrapper {
-      display: flex;
-      justify-content: center;
-    }
-
     i:not(:last-child) {
       margin-right: 8px;
     }
@@ -453,6 +448,11 @@ button {
     cursor: default;
     pointer-events: none;
     text-decoration: none;
+  }
+
+  .mat-button-wrapper {
+    display: flex;
+    justify-content: center;
   }
 }
 
