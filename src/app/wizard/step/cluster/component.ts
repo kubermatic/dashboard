@@ -113,12 +113,17 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this._settings = settings;
-      this.form.get(Controls.OPAIntegration).setValue(this._settings.opaOptions.enabled, {emitEvent: false});
-      this._enforce(Controls.OPAIntegration, this._settings.opaOptions.enforced);
+
       this.form.get(Controls.MLALogging).setValue(this._settings.mlaOptions.loggingEnabled, {emitEvent: false});
       this._enforce(Controls.MLALogging, this._settings.mlaOptions.loggingEnforced);
       this.form.get(Controls.MLAMonitoring).setValue(this._settings.mlaOptions.monitoringEnabled, {emitEvent: false});
       this._enforce(Controls.MLAMonitoring, this._settings.mlaOptions.monitoringEnforced);
+
+      this.form.get(Controls.OPAIntegration).setValue(this._settings.opaOptions.enabled);
+      if (this._settings.opaOptions.enforced) {
+        this.form.get(Controls.OPAIntegration).disable();
+      }
+      this.form.updateValueAndValidity();
     });
 
     this._clusterSpecService.datacenterChanges

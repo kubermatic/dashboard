@@ -99,7 +99,13 @@ export class EditClusterComponent implements OnInit, OnDestroy {
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this._settings = settings;
-      this._enforce(Controls.OPAIntegration, this._settings.opaOptions.enforced);
+
+      this.form.get(Controls.OPAIntegration).setValue(this._settings.opaOptions.enabled);
+      if (this._settings.opaOptions.enforced) {
+        this.form.get(Controls.OPAIntegration).disable();
+      }
+      this.form.updateValueAndValidity();
+
       this._enforce(Controls.MLALogging, this._settings.mlaOptions.loggingEnforced);
       this._enforce(Controls.MLAMonitoring, this._settings.mlaOptions.monitoringEnforced);
     });
