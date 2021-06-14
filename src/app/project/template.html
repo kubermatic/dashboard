@@ -11,34 +11,35 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div fxLayout>
-  <div fxFlex
-       fxLayoutAlign="end center">
-    <mat-slide-toggle *ngIf="isAdmin"
-                      class="km-all-projects-toggle"
-                      labelPosition="before"
-                      [ngModel]="settings.displayAllProjectsForAdmin"
-                      (toggleChange)="changeProjectVisibility()">Show All Projects</mat-slide-toggle>
-    <mat-button-toggle-group class="km-project-view-switch"
-                             group="projectsView"
-                             (change)="changeView()">
-      <mat-button-toggle value="projectscard"
-                         [checked]="showCards">
-        <i class="km-icon-mask km-icon-projects-card"></i>
-      </mat-button-toggle>
-      <mat-button-toggle value="projectstable"
-                         [checked]="!showCards">
-        <i class="km-icon-mask km-icon-projects-table"></i>
-      </mat-button-toggle>
-    </mat-button-toggle-group>
-    <button id="km-add-project-top-btn"
-            mat-flat-button
-            type="button"
-            [disabled]="isProjectCreationRestricted()"
-            (click)="addProject()">
-      Add Project
-    </button>
-  </div>
+<div fxLayout
+     fxLayoutAlign=" center">
+  <km-search-field (queryChange)="onSearch($event)"></km-search-field>
+  <div fxFlex></div>
+  <mat-slide-toggle *ngIf="isAdmin"
+                    class="km-all-projects-toggle"
+                    labelPosition="before"
+                    [ngModel]="settings.displayAllProjectsForAdmin"
+                    (toggleChange)="changeProjectVisibility()">Show All Projects
+  </mat-slide-toggle>
+  <mat-button-toggle-group class="km-project-view-switch"
+                           group="projectsView"
+                           (change)="changeView()">
+    <mat-button-toggle value="projectscard"
+                       [checked]="showCards">
+      <i class="km-icon-mask km-icon-projects-card"></i>
+    </mat-button-toggle>
+    <mat-button-toggle value="projectstable"
+                       [checked]="!showCards">
+      <i class="km-icon-mask km-icon-projects-table"></i>
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+  <button id="km-add-project-top-btn"
+          mat-flat-button
+          type="button"
+          [disabled]="isProjectCreationRestricted()"
+          (click)="addProject()">
+    Add Project
+  </button>
 </div>
 
 <!-- Table View -->
@@ -186,6 +187,16 @@ limitations under the License.
         </div>
       </ng-container>
 
+      <div class="km-row km-empty-list-msg"
+           *ngIf="isEmpty(projects)">
+        No projects available.
+      </div>
+
+      <div class="km-row km-empty-list-msg"
+           *ngIf="!isEmpty(projects) && isEmpty(dataSource.filteredData)">
+        No clusters found.
+      </div>
+
       <div [hidden]="!isPaginatorVisible || showCards">
         <mat-paginator showFirstLastButtons></mat-paginator>
       </div>
@@ -200,7 +211,7 @@ limitations under the License.
        fxLayout="row"
        fxLayoutGap="20px">
 
-    <mat-card *ngFor="let project of projects"
+    <mat-card *ngFor="let project of dataSource.filteredData"
               (click)="selectProject(project)">
       <mat-card-header>
         <i mat-card-avatar
