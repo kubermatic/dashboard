@@ -38,6 +38,7 @@ $sidenav-item-margin: 10px;
       i {
         @include size(24px);
 
+        background-size: contain;
         margin-right: 20px;
 
         &.km-icon-arrow-left {
