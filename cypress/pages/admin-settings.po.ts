@@ -192,6 +192,30 @@ export class AdminSettingsPage {
     return cy.get('#km-settings-preset-digitalocean-token');
   }
 
+  static getOPAConstraintTemplatesTab(): Cypress.Chainable {
+    return cy.get('#mat-tab-label-0-3');
+  }
+
+  static getAddConstraintTemplateBtn(): Cypress.Chainable {
+    return cy.get('#km-add-constraint-template-btn');
+  }
+
+  static getAddConstraintTemplateSpecTextarea(): Cypress.Chainable {
+    return cy.get('.monaco-editor textarea:first');
+  }
+
+  static getConstraintTemplateDialogSaveBtn(): Cypress.Chainable {
+    return cy.get('#km-constraint-template-dialog-btn');
+  }
+
+  static getDeleteConstraintTemplateBtn(name: string): Cypress.Chainable {
+    return cy.get(`#km-constraint-template-delete-btn-${name}`);
+  }
+
+  static getConstraintTemplatesTable(): Cypress.Chainable {
+    return cy.get('km-constraint-templates-list tbody');
+  }
+
   // Utils.
 
   static waitForSave(): void {

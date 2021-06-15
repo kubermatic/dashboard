@@ -145,6 +145,14 @@ export class ClustersPage {
     return cy.get('#km-share-kubeconfig-btn');
   }
 
+  static getOPAInfoElement(): Cypress.Chainable {
+    return cy.get('#km-opa-info');
+  }
+
+  static getTabCard(title: string): Cypress.Chainable {
+    return cy.get('#km-cluster-details-tab-card').find('div.mat-tab-label-content').contains(title);
+  }
+
   // Utils.
 
   static waitForRefresh(): void {

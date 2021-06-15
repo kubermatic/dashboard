@@ -15,7 +15,7 @@ limitations under the License.
   <div fxFlex></div>
   <button mat-flat-button
           color="quaternary"
-          id="km-add-admin-btn"
+          id="km-add-constraint-template-btn"
           fxLayoutAlign="center center"
           (click)="add()">
     <i class="km-icon-mask km-icon-add"></i>
@@ -49,7 +49,8 @@ limitations under the License.
           <i class="km-icon-edit"></i>
         </button>
         <button mat-icon-button
-                (click)="delete(element)">
+                (click)="delete(element)"
+                [attr.id]="'km-constraint-template-delete-btn-' + element.name">
           <i class="km-icon-delete"></i>
         </button>
       </div>
