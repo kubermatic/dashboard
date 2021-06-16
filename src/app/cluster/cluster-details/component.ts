@@ -398,8 +398,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     return (
       this.isMLAEnabledInSeed() &&
       !!this.cluster.spec.mla &&
-      !!this.cluster.spec.mla.loggingEnabled &&
-      !!this.cluster.spec.mla.monitoringEnabled
+      (!!this.cluster.spec.mla.loggingEnabled || !!this.cluster.spec.mla.monitoringEnabled)
     );
   }
 
