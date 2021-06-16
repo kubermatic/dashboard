@@ -21,7 +21,8 @@ limitations under the License.
              [formControlName]="Controls.Name"
              type="text"
              autocomplete="off"
-             cdkFocusInitial>
+             cdkFocusInitial
+             id="km-constraint-name-input">
       <mat-error *ngIf="form.get(Controls.Name).hasError('required')">
         Constraint Name is <strong>required</strong>.
       </mat-error>
@@ -30,7 +31,8 @@ limitations under the License.
     <mat-form-field fxFlex>
       <mat-label>Constraint Template</mat-label>
       <mat-select [formControlName]="Controls.ConstraintTemplate"
-                  disableOptionCentering>
+                  disableOptionCentering
+                  id="km-constraint-template-select">
         <mat-option *ngFor="let constraintTemplate of constraintTemplates"
                     [value]="constraintTemplate.spec?.crd?.spec?.names?.kind">
           {{constraintTemplate.name}}

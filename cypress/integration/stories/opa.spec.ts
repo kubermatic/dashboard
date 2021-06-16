@@ -32,8 +32,9 @@ describe('OPA Story', () => {
   const initialMachineDeploymentReplicas = '1';
   const constraintTemplateName = 'k8srequiredlabels'
   const constraintTemplateSpec = atob('Y3JkOg0KICBzcGVjOg0KICAgIG5hbWVzOg0KICAgICAga2luZDogSzhzUmVxdWlyZWRMYWJlbHMNCiAgICB2YWxpZGF0aW9uOg0KICAgICAgIyBTY2hlbWEgZm9yIHRoZSBgcGFyYW1ldGVyc2AgZmllbGQNCiAgICAgIG9wZW5BUElWM1NjaGVtYToNCiAgICAgICAgcHJvcGVydGllczoNCiAgICAgICAgICBsYWJlbHM6DQogICAgICAgICAgICB0eXBlOiBhcnJheQ0KICAgICAgICAgICAgaXRlbXM6IHN0cmluZw0KdGFyZ2V0czoNCiAgLSB0YXJnZXQ6IGFkbWlzc2lvbi5rOHMuZ2F0ZWtlZXBlci5zaA0KICAgIHJlZ286IHwNCiAgICAgIHBhY2thZ2UgazhzcmVxdWlyZWRsYWJlbHMNCg0KICAgICAgdmlvbGF0aW9uW3sibXNnIjogbXNnLCAiZGV0YWlscyI6IHsibWlzc2luZ19sYWJlbHMiOiBtaXNzaW5nfX1dIHsNCiAgICAgICAgcHJvdmlkZWQgOj0ge2xhYmVsIHwgaW5wdXQucmV2aWV3Lm9iamVjdC5tZXRhZGF0YS5sYWJlbHNbbGFiZWxdfQ0KICAgICAgICByZXF1aXJlZCA6PSB7bGFiZWwgfCBsYWJlbCA6PSBpbnB1dC5wYXJhbWV0ZXJzLmxhYmVsc1tfXX0NCiAgICAgICAgbWlzc2luZyA6PSByZXF1aXJlZCAtIHByb3ZpZGVkDQogICAgICAgIGNvdW50KG1pc3NpbmcpID4gMA0KICAgICAgICBtc2cgOj0gc3ByaW50ZigieW91IG11c3QgcHJvdmlkZSBsYWJlbHM6ICV2IiwgW21pc3NpbmddKQ0KICAgICAgfQ==');
-  const gatekeeperConfig = atob('c3luYzoKICBzeW5jT25seToKICAgIC0gZ3JvdXA6ICIiCiAgICAgIHZlcnNpb246ICJ2MSIKICAgICAga2luZDogIk5hbWVzcGFjZSIKICAgIC0gZ3JvdXA6ICIiCiAgICAgIHZlcnNpb246ICJ2MSIKICAgICAga2luZDogIlBvZCI=');
+  const constraintName = 'e2e-test-constraint';
   const constraintSpec = atob('bWF0Y2g6CiAga2luZHM6CiAgICAtIGFwaUdyb3VwczogWyIiXQogICAgICBraW5kczogWyJOYW1lc3BhY2UiXQpwYXJhbWV0ZXJzOgogIHJhd0pTT046ICd7ImxhYmVscyI6WyJnYXRla2VlcGVyIl19Jw==')
+  const gatekeeperConfig = atob('c3luYzoKICBzeW5jT25seToKICAgIC0gZ3JvdXA6ICIiCiAgICAgIHZlcnNpb246ICJ2MSIKICAgICAga2luZDogIk5hbWVzcGFjZSIKICAgIC0gZ3JvdXA6ICIiCiAgICAgIHZlcnNpb246ICJ2MSIKICAgICAga2luZDogIlBvZCI=');
 
   it('should login', () => {
     login(email, password);
@@ -142,8 +143,75 @@ describe('OPA Story', () => {
     ClustersPage.getTabCard('OPA Constraints').click();
   });
 
+  it('should open add constraint dialog', () => {
+    ClustersPage.getAddConstraintBtn().click();
+  });
+
+  it('should enter constraint name', () => {
+    ClustersPage.getConstraintNameInput().type(constraintName).should(Condition.HaveValue, constraintName);
+  });
+
+  it('should select constraint template', () => {
+    ClustersPage.getConstraintTemplateSelect().click();
+    ClustersPage.getConstraintTemplateSelectOption(constraintTemplateName).click();
+  });
+
+  it('should enter constraint spec and add a new constraint', () => {
+    ClustersPage.getAddConstraintSpecTextarea()
+      .click({force: true})
+      .then($element => {
+        const subString = constraintSpec.substr(0, constraintSpec.length - 1);
+        const lastChar = constraintSpec.slice(-1);
+        $element.text(subString);
+        $element.val(subString);
+        cy.get($element).type(lastChar);
+      });
+
+    ClustersPage.getConstraintDialogSaveBtn().click();
+  });
+
+  it('should check if constraint was created', () => {
+    ClustersPage.getConstraintTable().should(Condition.Contain, constraintName);
+  });
+
+  it('should delete created constraint', () => {
+    ClustersPage.getDeleteConstraintBtn(constraintName).click();
+    ClustersPage.getDeleteDialogConfirmButton().click();
+  });
+
   it('should switch to opa gatekeeper config tab', () => {
     ClustersPage.getTabCard('OPA Gatekeeper Config').click();
+  });
+
+  it('should have add button, as no gatekeeper config is defined', () => {
+    ClustersPage.getAddGatekeeperConfigBtn().should(Condition.Exist);
+  });
+
+  it('should open add gatekeeper config dialog', () => {
+    ClustersPage.getAddGatekeeperConfigBtn().click();
+  });
+
+  it('should add gatekeeper config', () => {
+    ClustersPage.getAddGatekeeperConfigTextarea()
+      .click({force: true})
+      .then($element => {
+        const subString = gatekeeperConfig.substr(0, gatekeeperConfig.length - 1);
+        const lastChar = gatekeeperConfig.slice(-1);
+        $element.text(subString);
+        $element.val(subString);
+        cy.get($element).type(lastChar);
+      });
+
+    ClustersPage.getGatekeeperConfigDialogSaveBtn().click();
+  });
+
+  it('should check if gatekeeper config was created', () => {
+    ClustersPage.getDeleteGatekeeperConfigBtn().should(Condition.Exist);
+  });
+
+  it('should delete gatekeeper config', () => {
+    ClustersPage.getDeleteGatekeeperConfigBtn().click();
+    ClustersPage.getDeleteDialogConfirmButton().click();
   });
 
   it('should delete created cluster', () => {

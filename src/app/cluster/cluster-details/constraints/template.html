@@ -48,6 +48,7 @@ limitations under the License.
   <button mat-flat-button
           color="quaternary"
           matTooltip=""
+          id="km-add-constraint-btn"
           *ngIf="isClusterRunning"
           fxLayoutAlign="center center"
           (click)="add()">
@@ -124,6 +125,7 @@ limitations under the License.
           <i class="km-icon-edit"></i>
         </button>
         <button mat-icon-button
+                [attr.id]="'km-constraint-delete-btn-' + element.name"
                 (click)="delete(element, $event)">
           <i class="km-icon-delete"></i>
         </button>
