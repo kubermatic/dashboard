@@ -148,7 +148,7 @@ limitations under the License.
 
             <mat-checkbox [formControlName]="Controls.MLALogging"
                           id="km-wizard-mla-logging-checkbox"
-                          *ngIf="isMLAEnabled()">
+                          *ngIf="isMLAEnabled">
               MLA Logging
               <i *ngIf="isEnforced(Controls.MLALogging)"
                  class="km-icon-info km-pointer"
@@ -157,7 +157,7 @@ limitations under the License.
 
             <mat-checkbox [formControlName]="Controls.MLAMonitoring"
                           id="km-wizard-mla-monitoring-checkbox"
-                          *ngIf="isMLAEnabled()">
+                          *ngIf="isMLAEnabled">
               MLA Monitoring
               <i *ngIf="isEnforced(Controls.MLAMonitoring)"
                  class="km-icon-info km-pointer"

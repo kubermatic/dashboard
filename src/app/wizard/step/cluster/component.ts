@@ -74,9 +74,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   labels: object;
   podNodeSelectorAdmissionPluginConfig: object;
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
+  isMLAEnabled = false;
   readonly Controls = Controls;
   private _datacenterSpec: Datacenter;
-  private _seedSettings: SeedSettings;
   private _settings: AdminSettings;
   private readonly _minNameLength = 5;
 
@@ -130,9 +130,12 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           this._enforcePodSecurityPolicy(datacenter.spec.enforcePodSecurityPolicy);
         })
       )
-      .pipe(switchMap(_ => this._datacenterService.seedSettings(this._datacenterSpec.spec.seed)))
+      .pipe(switchMap(datacenter => this._datacenterService.seedSettings(datacenter.spec.seed)))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe((seedSettings: SeedSettings) => (this._seedSettings = seedSettings));
+      .subscribe(
+        (seedSettings: SeedSettings) =>
+          (this.isMLAEnabled = seedSettings.mla ? seedSettings.mla.user_cluster_mla_enabled : false)
+      );
 
     this._api
       .getMasterVersions(ClusterType.Kubernetes)
@@ -201,10 +204,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
   isPluginEnabled(name: string): boolean {
     return AdmissionPluginUtils.isPluginEnabled(this.form.get(Controls.AdmissionPlugins), name);
-  }
-
-  isMLAEnabled(): boolean {
-    return !!this._seedSettings && !!this._seedSettings.mla && !!this._seedSettings.mla.user_cluster_mla_enabled;
   }
 
   private _enforce(control: Controls, isEnforced: boolean): void {
