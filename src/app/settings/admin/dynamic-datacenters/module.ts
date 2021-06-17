@@ -9,18 +9,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-.header {
-  padding: 0 30px;
-}
+import {NgModule} from '@angular/core';
+import {DynamicDatacentersComponent} from '@app/settings/admin/dynamic-datacenters/component';
+import {AdminSettingsDatacentersRoutingModule} from '@app/settings/admin/dynamic-datacenters/routing';
+import {SharedModule} from '@shared/module';
 
-.mat-card-title {
-  .km-icon-add {
-    margin-left: 0;
-    margin-right: 12px;
-  }
-}
-
-#km-add-admin-btn {
-  height: 50px;
-  margin: 2px 0;
-}
+@NgModule({
+  imports: [SharedModule, AdminSettingsDatacentersRoutingModule],
+  declarations: [DynamicDatacentersComponent],
+})
+export class AdminSettingsDatacentersModule {}

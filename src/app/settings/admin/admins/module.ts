@@ -9,18 +9,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-.header {
-  padding: 0 30px;
-}
+import {NgModule} from '@angular/core';
+import {AddAdminDialogComponent} from '@app/settings/admin/admins/add-admin-dialog/component';
+import {AdminsComponent} from '@app/settings/admin/admins/component';
+import {AdministratorsRoutingModule} from '@app/settings/admin/admins/routing';
+import {SharedModule} from '@shared/module';
 
-.mat-card-title {
-  .km-icon-add {
-    margin-left: 0;
-    margin-right: 12px;
-  }
-}
-
-#km-add-admin-btn {
-  height: 50px;
-  margin: 2px 0;
-}
+@NgModule({
+  imports: [SharedModule, AdministratorsRoutingModule],
+  declarations: [AdminsComponent, AddAdminDialogComponent],
+})
+export class AdministratorsModule {}

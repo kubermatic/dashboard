@@ -9,18 +9,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-.header {
-  padding: 0 30px;
-}
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {PresetListComponent} from '@app/settings/admin/presets/component';
 
-.mat-card-title {
-  .km-icon-add {
-    margin-left: 0;
-    margin-right: 12px;
-  }
-}
+const routes: Routes = [
+  {
+    path: '',
+    component: PresetListComponent,
+  },
+];
 
-#km-add-admin-btn {
-  height: 50px;
-  margin: 2px 0;
-}
+@NgModule({imports: [RouterModule.forChild(routes)], exports: [RouterModule]})
+export class AdminSettingsPresetsRoutingModule {}

@@ -9,48 +9,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'mixins';
 @import 'variables';
 
-.header {
-  padding: 0 30px;
-}
+.km-admin-settings {
+  font-size: $font-size-subhead;
+  padding-left: 30px;
 
-.km-provider-logo {
-  background-position: left;
-  margin: 8px 8px 0 0;
-  max-height: 28px;
-  max-width: 120px;
-  min-height: 28px;
-  min-width: 40px;
-
-  &.provider-logo-medium {
-    margin: unset;
-    max-height: 22px;
-    max-width: 80px;
-    min-height: 22px;
+  .entry-label {
+    min-width: 316px;
   }
 
-  &.provider-logo-small {
-    margin: unset;
-    max-height: 18px;
-    max-width: 80px;
-    min-height: 18px;
+  .input {
+    margin: 0 16px -20px 0;
+    width: 204px;
   }
-}
 
-.filters {
-  font-size: 16px;
-}
-
-.mat-card-title {
-  .km-icon-add {
-    margin-left: 0;
-    margin-right: 12px;
+  mat-checkbox {
+    margin-right: 48px;
   }
-}
 
-#km-admin-settings-add-dc-btn {
-  height: 50px;
-  margin: 2px 0;
+  .km-pointer,
+  .km-icon-error {
+    margin-left: 4px;
+    min-height: 16px;
+    min-width: 16px;
+  }
 }
