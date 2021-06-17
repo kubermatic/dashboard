@@ -161,7 +161,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                 : of([])
             )
             .concat(
-              this._canReloadNodes() && this.isOPAEnabled() && this.isHavingMD()
+              this._canReloadNodes() && this.isOPAEnabled() && this.hasMachineDeployments()
                 ? [
                     this._opaService.constraints(this.projectID, this.cluster.id),
                     this._opaService.gatekeeperConfig(this.projectID, this.cluster.id),
@@ -403,7 +403,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     );
   }
 
-  isHavingMD(): boolean {
+  hasMachineDeployments(): boolean {
     return !_.isEmpty(this.machineDeployments);
   }
 

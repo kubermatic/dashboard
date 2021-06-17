@@ -35,7 +35,7 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
   @Input() cluster: Cluster;
   @Input() projectID: string;
   @Input() isClusterRunning: boolean;
-  @Input() isHavingMD: boolean;
+  @Input() hasMachineDeployments: boolean;
   @Input() constraints: Constraint[] = [];
   settings: UserSettings;
   constraintTemplates: ConstraintTemplate[] = [];
@@ -98,11 +98,11 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isLoadingData(data: Constraint[]): boolean {
-    return _.isEmpty(data) && !this.isClusterRunning && !this.isHavingMD;
+    return _.isEmpty(data) && !this.isClusterRunning && !this.hasMachineDeployments;
   }
 
   hasNoData(data: Constraint[]): boolean {
-    return _.isEmpty(data) && this.isClusterRunning && this.isHavingMD;
+    return _.isEmpty(data) && this.isClusterRunning && this.hasMachineDeployments;
   }
 
   toggleDetails(element: Constraint): void {
