@@ -21,7 +21,7 @@ import {Datacenter, Provider} from '../../../utils/provider';
 import {View} from '../../../utils/view';
 import {WizardStep} from '../../../utils/wizard';
 
-describe('Admin Settings - Presets Story', () => {
+xdescribe('Admin Settings - Presets Story', () => {
   const adminEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const presetName = _.uniqueId('e2e-test-preset-');

@@ -19,7 +19,7 @@ import {Condition} from '../../../utils/condition';
 import {Datacenter, Provider} from '../../../utils/provider';
 import {View} from '../../../utils/view';
 
-describe('Admin Settings - Opa Integration Story', () => {
+xdescribe('Admin Settings - Opa Integration Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const projectName = _.uniqueId('e2e-test-project-');

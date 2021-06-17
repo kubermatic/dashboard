@@ -20,7 +20,7 @@ import {Datacenter, Provider} from '../../../utils/provider';
 import {WizardPage} from '../../../pages/wizard.po';
 import {WizardStep} from '../../../utils/wizard';
 
-describe('Admin Settings - Dynamic Datacenters Story', () => {
+xdescribe('Admin Settings - Dynamic Datacenters Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const seedName = Cypress.env('SEED_NAME');
