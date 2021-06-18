@@ -17,7 +17,7 @@ import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
 import {SettingsService} from '@core/services/settings';
-import {Cluster, ClusterPatch, ProviderSettingsPatch} from '@shared/entity/cluster';
+import {Cluster, ClusterPatch, ContainerRuntime, ProviderSettingsPatch} from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {AdminSettings} from '@shared/entity/settings';
@@ -29,6 +29,7 @@ import {switchMap, takeUntil, tap} from 'rxjs/operators';
 
 enum Controls {
   Name = 'name',
+  ContainerRuntime = 'containerRuntime',
   AuditLogging = 'auditLogging',
   Labels = 'labels',
   AdmissionPlugins = 'admissionPlugins',
@@ -47,6 +48,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster;
   @Input() projectID: string;
   datacenter: Datacenter;
+  containerRuntime = ContainerRuntime;
   admissionPlugin = AdmissionPlugin;
   form: FormGroup;
   labels: object;
@@ -83,6 +85,9 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         Validators.required,
         Validators.minLength(this._nameMinLen),
         Validators.pattern('[a-zA-Z0-9-]*'),
+      ]),
+      [Controls.ContainerRuntime]: new FormControl(this.cluster.spec.containerRuntime || ContainerRuntime.Containerd, [
+        Validators.required,
       ]),
       [Controls.AuditLogging]: new FormControl(
         !!this.cluster.spec.auditLogging && this.cluster.spec.auditLogging.enabled
@@ -224,6 +229,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         usePodSecurityPolicyAdmissionPlugin: null,
         admissionPlugins: this.form.get(Controls.AdmissionPlugins).value,
         podNodeSelectorAdmissionPluginConfig: this.podNodeSelectorAdmissionPluginConfig,
+        containerRuntime: this.form.get(Controls.ContainerRuntime).value,
       },
     };
 

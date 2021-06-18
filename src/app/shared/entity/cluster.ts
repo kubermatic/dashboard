@@ -257,6 +257,7 @@ export class ClusterSpecPatch {
   auditLogging?: AuditLoggingSettings;
   machineNetworks?: MachineNetwork[];
   mla?: MLASettings;
+  containerRuntime?: ContainerRuntime;
 }
 
 export class CloudSpecPatch {
