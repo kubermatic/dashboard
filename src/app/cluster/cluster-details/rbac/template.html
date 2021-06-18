@@ -17,9 +17,10 @@ limitations under the License.
   <button mat-flat-button
           color="quaternary"
           *ngIf="isClusterRunning"
+          fxLayoutAlign="center center"
           (click)="addBinding($event)">
     <i class="km-icon-mask km-icon-add"></i>
-    Add Binding
+    <span>Add Binding</span>
   </button>
 </div>
 
