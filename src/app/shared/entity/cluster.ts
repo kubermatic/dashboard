@@ -197,6 +197,7 @@ export class ClusterSpec {
   enableUserSSHKeyAgent?: boolean;
   podNodeSelectorAdmissionPluginConfig?: object;
   mla?: MLASettings;
+  containerRuntime?: string;
 }
 
 export class AuditLoggingSettings {

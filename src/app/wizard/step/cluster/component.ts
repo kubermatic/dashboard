@@ -38,6 +38,7 @@ import {StepBase} from '../base';
 enum Controls {
   Name = 'name',
   Version = 'version',
+  ContainerRuntime = 'containerRuntime',
   Type = 'type',
   AuditLogging = 'auditLogging',
   UserSSHKeyAgent = 'userSshKeyAgent',
@@ -100,6 +101,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         Validators.pattern('[a-zA-Z0-9-]*'),
       ]),
       [Controls.Version]: new FormControl('', [Validators.required]),
+      [Controls.ContainerRuntime]: new FormControl('containerd', [Validators.required]),
       [Controls.AuditLogging]: new FormControl(false),
       [Controls.UserSSHKeyAgent]: new FormControl(true),
       [Controls.OPAIntegration]: new FormControl(false),

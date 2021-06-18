@@ -128,6 +128,11 @@ limitations under the License.
           <div value>{{nodeDc?.spec?.country}} ({{nodeDc?.spec?.location}})</div>
         </km-property>
 
+        <km-property *ngIf="cluster.spec.containerRuntime">
+          <div key>Container Runtime</div>
+          <div value>{{cluster.spec.containerRuntime}}</div>
+        </km-property>
+
         <km-property>
           <div value
                class="km-provider-logo-value">
