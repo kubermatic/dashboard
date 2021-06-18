@@ -60,7 +60,7 @@ limitations under the License.
       <div fxLayout="column">
         <div fxFlex="100"
              fxFlexAlign=" start"
-             fxLayoutGap="20px"
+             fxLayoutGap="10px"
              fxLayout="row">
           <mat-form-field class="km-dropdown-with-suffix">
             <mat-label>Version</mat-label>
@@ -81,8 +81,8 @@ limitations under the License.
                         class="km-select-ellipsis"
                         disableOptionCentering
                         required>
-              <mat-option value="containerd">containerd</mat-option>
-              <mat-option value="docker">docker</mat-option>
+              <mat-option [value]="containerRuntime.Containerd">containerd</mat-option>
+              <mat-option [value]="containerRuntime.Docker">docker</mat-option>
             </mat-select>
           </mat-form-field>
         </div>

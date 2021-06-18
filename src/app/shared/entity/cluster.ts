@@ -21,6 +21,11 @@ export enum ClusterType {
   Empty = '',
 }
 
+export enum ContainerRuntime {
+  Containerd = 'containerd',
+  Docker = 'docker',
+}
+
 export class Cluster {
   creationTimestamp?: Date;
   deletionTimestamp?: Date;
@@ -197,7 +202,7 @@ export class ClusterSpec {
   enableUserSSHKeyAgent?: boolean;
   podNodeSelectorAdmissionPluginConfig?: object;
   mla?: MLASettings;
-  containerRuntime?: string;
+  containerRuntime?: ContainerRuntime;
 }
 
 export class AuditLoggingSettings {

@@ -25,7 +25,7 @@ import {DatacenterService} from '@core/services/datacenter';
 import {NameGeneratorService} from '@core/services/name-generator';
 import {SettingsService} from '@core/services/settings';
 import {WizardService} from '@core/services/wizard/wizard';
-import {Cluster, ClusterSpec, ClusterType, MasterVersion} from '@shared/entity/cluster';
+import {Cluster, ClusterSpec, ClusterType, ContainerRuntime, MasterVersion} from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {AdminSettings} from '@shared/entity/settings';
@@ -69,6 +69,7 @@ enum Controls {
   ],
 })
 export class ClusterStepComponent extends StepBase implements OnInit, ControlValueAccessor, Validator, OnDestroy {
+  containerRuntime = ContainerRuntime;
   admissionPlugin = AdmissionPlugin;
   masterVersions: MasterVersion[] = [];
   admissionPlugins: AdmissionPlugin[] = [];
@@ -101,7 +102,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         Validators.pattern('[a-zA-Z0-9-]*'),
       ]),
       [Controls.Version]: new FormControl('', [Validators.required]),
-      [Controls.ContainerRuntime]: new FormControl('containerd', [Validators.required]),
+      [Controls.ContainerRuntime]: new FormControl(ContainerRuntime.Containerd, [Validators.required]),
       [Controls.AuditLogging]: new FormControl(false),
       [Controls.UserSSHKeyAgent]: new FormControl(true),
       [Controls.OPAIntegration]: new FormControl(false),
@@ -163,7 +164,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.UserSSHKeyAgent).valueChanges,
       this.form.get(Controls.OPAIntegration).valueChanges,
       this.form.get(Controls.MLALogging).valueChanges,
-      this.form.get(Controls.MLAMonitoring).valueChanges
+      this.form.get(Controls.MLAMonitoring).valueChanges,
+      this.form.get(Controls.ContainerRuntime).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
@@ -257,6 +259,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           monitoringEnabled: this.controlValue(Controls.MLAMonitoring),
         },
         enableUserSSHKeyAgent: this.controlValue(Controls.UserSSHKeyAgent),
+        containerRuntime: this.controlValue(Controls.ContainerRuntime),
       } as ClusterSpec,
     } as Cluster;
   }
