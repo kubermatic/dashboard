@@ -16,6 +16,8 @@ import {ProjectsPage} from '../../../pages/projects.po';
 import {WizardPage} from '../../../pages/wizard.po';
 import {login, logout} from '../../../utils/auth';
 import {Condition} from '../../../utils/condition';
+import {Endpoint} from '../../../utils/endpoint';
+import {RequestType, TrafficMonitor} from '../../../utils/monitor';
 import {Datacenter, Provider} from '../../../utils/provider';
 import {View} from '../../../utils/view';
 
@@ -29,9 +31,6 @@ describe('Admin Settings - MLA Story', () => {
     cy.url().should(Condition.Include, View.Projects);
   });
 
-  it('should create a new project', () => {
-    ProjectsPage.addProject(projectName);
-  });
 
   it('should go to the admin settings', () => {
     AdminSettingsPage.visit();
@@ -56,6 +55,10 @@ describe('Admin Settings - MLA Story', () => {
   it('should go to projects view', () => {
     ProjectsPage.visit();
   });
+  
+  it('should create a new project', () => {
+    ProjectsPage.addProject(projectName);
+  });
 
   it('should select project', () => {
     ProjectsPage.selectProject(projectName);
@@ -68,6 +71,7 @@ describe('Admin Settings - MLA Story', () => {
   it('should make sure mla logging + mla monitoring in wizard is enabled and not checked', () => {
     WizardPage.getProviderBtn(Provider.Digitalocean).click();
     WizardPage.getDatacenterBtn(Datacenter.Digitalocean.Frankfurt).click();
+    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.SeedSettings).interceptAndWait();
     WizardPage.getMLALoggingCheckbox().find('input').should(Condition.BeEnabled);
     WizardPage.getMLALoggingCheckbox().find('input').should(Condition.NotBeChecked);
     WizardPage.getMLAMonitoringCheckbox().find('input').should(Condition.BeEnabled);
@@ -105,6 +109,7 @@ describe('Admin Settings - MLA Story', () => {
   it('should make sure mla logging + mla monitoring in wizard is enabled and checked', () => {
     WizardPage.getProviderBtn(Provider.Digitalocean).click();
     WizardPage.getDatacenterBtn(Datacenter.Digitalocean.Frankfurt).click();
+    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.SeedSettings).interceptAndWait();
     WizardPage.getMLALoggingCheckbox().find('input').should(Condition.BeEnabled);
     WizardPage.getMLALoggingCheckbox().find('input').should(Condition.BeChecked);
     WizardPage.getMLAMonitoringCheckbox().find('input').should(Condition.BeEnabled);
@@ -142,6 +147,7 @@ describe('Admin Settings - MLA Story', () => {
   it('should make sure mla logging + mla monitoring in wizard is disabled and checked', () => {
     WizardPage.getProviderBtn(Provider.Digitalocean).click();
     WizardPage.getDatacenterBtn(Datacenter.Digitalocean.Frankfurt).click();
+    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.SeedSettings).interceptAndWait();
     WizardPage.getMLALoggingCheckbox().find('input').should(Condition.BeDisabled);
     WizardPage.getMLALoggingCheckbox().find('input').should(Condition.BeChecked);
     WizardPage.getMLAMonitoringCheckbox().find('input').should(Condition.BeDisabled);
@@ -179,6 +185,7 @@ describe('Admin Settings - MLA Story', () => {
   it('should make sure mla logging + mla monitoring in wizard is disabled and checked', () => {
     WizardPage.getProviderBtn(Provider.Digitalocean).click();
     WizardPage.getDatacenterBtn(Datacenter.Digitalocean.Frankfurt).click();
+    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.SeedSettings).interceptAndWait();
     WizardPage.getMLALoggingCheckbox().find('input').should(Condition.BeDisabled);
     WizardPage.getMLALoggingCheckbox().find('input').should(Condition.BeChecked);
     WizardPage.getMLAMonitoringCheckbox().find('input').should(Condition.BeDisabled);
