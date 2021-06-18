@@ -15,11 +15,11 @@ limitations under the License.
     <mat-card-title>Machine Networks</mat-card-title>
     <div fxFlex></div>
     <button mat-icon-button
-            matTooltip="Add Machine Network"
             *ngIf="!cluster.spec.cloud.bringyourown"
             [disabled]="!isClusterRunning"
             (click)="addMachineNetwork()">
       <i class="km-icon-mask km-icon-add"></i>
+      <span>Add Machine Network</span>
     </button>
   </mat-card-header>
 

@@ -183,9 +183,7 @@
 }
 
 .km-icon-add {
-  @include mask-image("/assets/images/icons/close.svg", 18px);
-
-  transform: rotate(45deg);
+  @include mask-image("/assets/images/icons/plus.svg", 18px);
 }
 
 .km-icon-reset {
