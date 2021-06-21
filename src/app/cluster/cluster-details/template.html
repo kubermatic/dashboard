@@ -269,16 +269,14 @@ limitations under the License.
       <km-constraint-list [constraints]="constraints"
                           [cluster]="cluster"
                           [projectID]="projectID"
-                          [isClusterRunning]="isClusterRunning"
-                          [hasMachineDeployments]="hasMachineDeployments()"></km-constraint-list>
+                          [isClusterRunning]="isClusterRunning"></km-constraint-list>
     </km-tab>
     <km-tab label="OPA Gatekeeper Config"
             *ngIf="isOPAEnabled()">
       <km-gatekeeper-config [gatekeeperConfig]="gatekeeperConfig"
                             [cluster]="cluster"
                             [projectID]="projectID"
-                            [isClusterRunning]="isClusterRunning"
-                            [hasMachineDeployments]="hasMachineDeployments()"></km-gatekeeper-config>
+                            [isClusterRunning]="isClusterRunning"></km-gatekeeper-config>
     </km-tab>
     <km-tab label="MLA Alertmanager Config"
             *ngIf="isMLAEnabled()">

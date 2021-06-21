@@ -31,7 +31,6 @@ export class GatekeeperConfigComponent implements OnChanges, OnDestroy {
   @Input() cluster: Cluster;
   @Input() projectID: string;
   @Input() isClusterRunning: boolean;
-  @Input() hasMachineDeployments: boolean;
   @Input() gatekeeperConfig: GatekeeperConfig;
 
   syncDataSource = new MatTableDataSource<GVK>();
@@ -63,7 +62,7 @@ export class GatekeeperConfigComponent implements OnChanges, OnDestroy {
   }
 
   isLoadingData(): boolean {
-    return _.isEmpty(this.gatekeeperConfig) && !this.isClusterRunning && !this.hasMachineDeployments;
+    return _.isEmpty(this.gatekeeperConfig) && !this.isClusterRunning;
   }
 
   hasNoData(): boolean {

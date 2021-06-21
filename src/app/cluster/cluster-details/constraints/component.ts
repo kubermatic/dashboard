@@ -35,7 +35,6 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
   @Input() cluster: Cluster;
   @Input() projectID: string;
   @Input() isClusterRunning: boolean;
-  @Input() hasMachineDeployments: boolean;
   @Input() constraints: Constraint[] = [];
   settings: UserSettings;
   constraintTemplates: ConstraintTemplate[] = [];
@@ -98,7 +97,7 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isLoadingData(data: Constraint[]): boolean {
-    return _.isEmpty(data) && !this.isClusterRunning && !this.hasMachineDeployments;
+    return _.isEmpty(data) && !this.isClusterRunning;
   }
 
   hasNoData(data: Constraint[]): boolean {
