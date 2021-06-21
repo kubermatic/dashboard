@@ -18,6 +18,7 @@ import {Condition} from '../../utils/condition';
 import {Endpoint} from '../../utils/endpoint';
 import {RequestType, TrafficMonitor} from '../../utils/monitor';
 import {Preset} from '../../utils/preset';
+import {OPA} from '../../utils/opa';
 import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
@@ -31,16 +32,10 @@ describe('OPA Story', () => {
   const initialMachineDeploymentName = _.uniqueId('e2e-test-md-');
   const initialMachineDeploymentReplicas = '1';
   const constraintTemplateName = 'k8srequiredlabels';
-  const constraintTemplateSpec = atob(
-    'Y3JkOg0KICBzcGVjOg0KICAgIG5hbWVzOg0KICAgICAga2luZDogSzhzUmVxdWlyZWRMYWJlbHMNCiAgICB2YWxpZGF0aW9uOg0KICAgICAgIyBTY2hlbWEgZm9yIHRoZSBgcGFyYW1ldGVyc2AgZmllbGQNCiAgICAgIG9wZW5BUElWM1NjaGVtYToNCiAgICAgICAgcHJvcGVydGllczoNCiAgICAgICAgICBsYWJlbHM6DQogICAgICAgICAgICB0eXBlOiBhcnJheQ0KICAgICAgICAgICAgaXRlbXM6IHN0cmluZw0KdGFyZ2V0czoNCiAgLSB0YXJnZXQ6IGFkbWlzc2lvbi5rOHMuZ2F0ZWtlZXBlci5zaA0KICAgIHJlZ286IHwNCiAgICAgIHBhY2thZ2UgazhzcmVxdWlyZWRsYWJlbHMNCg0KICAgICAgdmlvbGF0aW9uW3sibXNnIjogbXNnLCAiZGV0YWlscyI6IHsibWlzc2luZ19sYWJlbHMiOiBtaXNzaW5nfX1dIHsNCiAgICAgICAgcHJvdmlkZWQgOj0ge2xhYmVsIHwgaW5wdXQucmV2aWV3Lm9iamVjdC5tZXRhZGF0YS5sYWJlbHNbbGFiZWxdfQ0KICAgICAgICByZXF1aXJlZCA6PSB7bGFiZWwgfCBsYWJlbCA6PSBpbnB1dC5wYXJhbWV0ZXJzLmxhYmVsc1tfXX0NCiAgICAgICAgbWlzc2luZyA6PSByZXF1aXJlZCAtIHByb3ZpZGVkDQogICAgICAgIGNvdW50KG1pc3NpbmcpID4gMA0KICAgICAgICBtc2cgOj0gc3ByaW50ZigieW91IG11c3QgcHJvdmlkZSBsYWJlbHM6ICV2IiwgW21pc3NpbmddKQ0KICAgICAgfQ=='
-  );
+  const constraintTemplateSpec = atob(OPA.ConstraintTemplateSpec);
   const constraintName = 'e2e-test-constraint';
-  const constraintSpec = atob(
-    'bWF0Y2g6CiAga2luZHM6CiAgICAtIGFwaUdyb3VwczogWyIiXQogICAgICBraW5kczogWyJOYW1lc3BhY2UiXQpwYXJhbWV0ZXJzOgogIHJhd0pTT046ICd7ImxhYmVscyI6WyJnYXRla2VlcGVyIl19Jw=='
-  );
-  const gatekeeperConfig = atob(
-    'c3luYzoKICBzeW5jT25seToKICAgIC0gZ3JvdXA6ICIiCiAgICAgIHZlcnNpb246ICJ2MSIKICAgICAga2luZDogIk5hbWVzcGFjZSIKICAgIC0gZ3JvdXA6ICIiCiAgICAgIHZlcnNpb246ICJ2MSIKICAgICAga2luZDogIlBvZCI='
-  );
+  const constraintSpec = atob(OPA.ConstraintSpec);
+  const gatekeeperConfig = atob(OPA.GatekeeperConfig);
 
   it('should login', () => {
     login(email, password);
