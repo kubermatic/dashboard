@@ -67,7 +67,7 @@ export class GatekeeperConfigComponent implements OnChanges, OnDestroy {
   }
 
   hasNoData(): boolean {
-    return _.isEmpty(this.gatekeeperConfig) && this.isClusterRunning && this.hasMachineDeployments;
+    return _.isEmpty(this.gatekeeperConfig) && this.isClusterRunning;
   }
 
   hasSection(section: string): boolean {

@@ -102,7 +102,7 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   hasNoData(data: Constraint[]): boolean {
-    return _.isEmpty(data) && this.isClusterRunning && this.hasMachineDeployments;
+    return _.isEmpty(data) && this.isClusterRunning;
   }
 
   toggleDetails(element: Constraint): void {
