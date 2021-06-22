@@ -69,9 +69,7 @@ describe('Admin Settings - MLA Story', () => {
 
   it('should make sure mla logging + mla monitoring in wizard is enabled and not checked', () => {
     WizardPage.getProviderBtn(Provider.Digitalocean).click();
-    const settings = TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.SeedSettings).intercept();
     WizardPage.getDatacenterBtn(Datacenter.Digitalocean.Frankfurt).click();
-    settings.wait();
     WizardPage.getMLALoggingCheckbox().find('input').should(Condition.BeEnabled);
     WizardPage.getMLALoggingCheckbox().find('input').should(Condition.NotBeChecked);
     WizardPage.getMLAMonitoringCheckbox().find('input').should(Condition.BeEnabled);

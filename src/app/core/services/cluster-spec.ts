@@ -19,6 +19,7 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
 export class ClusterSpecService {
   readonly providerChanges = new EventEmitter<NodeProvider>();
   readonly datacenterChanges = new EventEmitter<string>();
+  readonly seedChanges = new EventEmitter<string>();
   readonly sshKeyChanges = new EventEmitter<SSHKey[]>();
   readonly clusterChanges = new EventEmitter<Cluster>();
   readonly admissionPluginsChanges = new EventEmitter<string[]>();
@@ -26,6 +27,7 @@ export class ClusterSpecService {
 
   private _cluster: Cluster = Cluster.newEmptyClusterEntity();
   private _sshKeys: SSHKey[] = [];
+  private _seed = '';
   private _admissionPluginsEntity: string[] = [];
 
   set cluster(cluster: Cluster) {
@@ -86,6 +88,15 @@ export class ClusterSpecService {
 
   get datacenter(): string {
     return this._cluster.spec.cloud.dc;
+  }
+
+  set seed(seed: string) {
+    this._seed = seed;
+    this.seedChanges.emit(this._seed);
+  }
+
+  get seed(): string {
+    return this._seed;
   }
 
   set labels(labels: object) {

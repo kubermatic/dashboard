@@ -32,7 +32,7 @@ import {AdminSettings} from '@shared/entity/settings';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
 import {AsyncValidators} from '@shared/validators/async-label-form.validator';
 import {merge} from 'rxjs';
-import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {StepBase} from '../base';
 
 enum Controls {
@@ -111,6 +111,14 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.SSHKeys]: this._builder.control(''),
     });
 
+    this._clusterSpecService.seedChanges
+      .pipe(switchMap(seed => this._datacenterService.seedSettings(seed)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(
+        (seedSettings: SeedSettings) =>
+          (this.isMLAEnabled = seedSettings.mla ? seedSettings.mla.user_cluster_mla_enabled : false)
+      );
+
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this._settings = settings;
       this.form.get(Controls.OPAIntegration).setValue(this._settings.opaOptions.enabled, {emitEvent: false});
@@ -123,19 +131,12 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
     this._clusterSpecService.datacenterChanges
       .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
-      .pipe(
-        tap((datacenter: Datacenter) => {
-          this._datacenterSpec = datacenter;
-          this._enforce(Controls.AuditLogging, datacenter.spec.enforceAuditLogging);
-          this._enforcePodSecurityPolicy(datacenter.spec.enforcePodSecurityPolicy);
-        })
-      )
-      .pipe(switchMap(datacenter => this._datacenterService.seedSettings(datacenter.spec.seed)))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(
-        (seedSettings: SeedSettings) =>
-          (this.isMLAEnabled = seedSettings.mla ? seedSettings.mla.user_cluster_mla_enabled : false)
-      );
+      .subscribe((datacenter: Datacenter) => {
+        this._datacenterSpec = datacenter;
+        this._enforce(Controls.AuditLogging, datacenter.spec.enforceAuditLogging);
+        this._enforcePodSecurityPolicy(datacenter.spec.enforcePodSecurityPolicy);
+      });
 
     this._api
       .getMasterVersions(ClusterType.Kubernetes)

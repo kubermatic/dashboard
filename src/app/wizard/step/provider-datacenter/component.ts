@@ -26,6 +26,7 @@ import {Datacenter, getDatacenterProvider} from '@shared/entity/datacenter';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {filter, switchMap, takeUntil} from 'rxjs/operators';
 import {StepBase} from '../base';
+import * as _ from 'lodash';
 
 enum Controls {
   Provider = 'provider',
@@ -109,7 +110,11 @@ export class ProviderStepComponent extends StepBase implements OnInit, ControlVa
       .valueChanges // Allow only non-empty values
       .pipe(filter(value => value))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(datacenter => (this._clusterSpecService.datacenter = datacenter));
+      .subscribe(datacenter => {
+        this._clusterSpecService.datacenter = datacenter;
+        const seedDatacenter: Datacenter = _.find(this.datacenters, ['metadata.name', datacenter]);
+        this._clusterSpecService.seed = seedDatacenter.spec.seed;
+      });
   }
 
   getLocation(datacenter: Datacenter): string {
