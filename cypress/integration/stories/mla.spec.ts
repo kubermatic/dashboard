@@ -53,7 +53,7 @@ describe('MLA Story', () => {
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
 
     cy.intercept('GET', Endpoint.SeedSettings).as('seedSettings')
-    cy.wait('@seedSettings').its('response').should(Condition.Contain, {'user_cluster_mla_enabled': true})
+    cy.wait('@seedSettings').its('response.body').property('mla').should(Condition.Contain, {'user_cluster_mla_enabled': true})
 
     WizardPage.getMLALoggingCheckbox().should(Condition.Exist);
     WizardPage.getMLALoggingCheckbox().find('input').click({force: true});
