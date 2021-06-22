@@ -15,7 +15,6 @@ import {WizardPage} from '../../pages/wizard.po';
 import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
 import {Endpoint} from '../../utils/endpoint';
-import {RequestType, Response, ResponseType, TrafficMonitor} from '../../utils/monitor';
 import {Preset} from '../../utils/preset';
 import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
@@ -51,10 +50,6 @@ describe('MLA Story', () => {
     WizardPage.getProviderBtn(Provider.Digitalocean).click();
     WizardPage.getDatacenterBtn(Datacenter.Digitalocean.Frankfurt).click();
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
-
-    cy.intercept('GET', Endpoint.SeedSettings).as('seedSettings')
-    cy.wait('@seedSettings').its('response.body').property('mla').should(Condition.Contain, {'user_cluster_mla_enabled': true})
-
     WizardPage.getMLALoggingCheckbox().should(Condition.Exist);
     WizardPage.getMLALoggingCheckbox().find('input').click({force: true});
     WizardPage.getMLALoggingCheckbox().find('input').should(Condition.BeChecked);
