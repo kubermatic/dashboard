@@ -14,7 +14,6 @@ import {ProjectsPage} from '../../pages/projects.po';
 import {WizardPage} from '../../pages/wizard.po';
 import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
-import {Endpoint} from '../../utils/endpoint';
 import {Preset} from '../../utils/preset';
 import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
