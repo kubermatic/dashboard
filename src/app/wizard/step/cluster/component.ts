@@ -32,7 +32,7 @@ import {AdminSettings} from '@shared/entity/settings';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
 import {AsyncValidators} from '@shared/validators/async-label-form.validator';
 import {merge} from 'rxjs';
-import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {StepBase} from '../base';
 
 enum Controls {
@@ -74,9 +74,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   labels: object;
   podNodeSelectorAdmissionPluginConfig: object;
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
+  isMLAEnabled = false;
   readonly Controls = Controls;
   private _datacenterSpec: Datacenter;
-  private _seedSettings: SeedSettings;
   private _settings: AdminSettings;
   private readonly _minNameLength = 5;
 
@@ -111,6 +111,14 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.SSHKeys]: this._builder.control(''),
     });
 
+    this._clusterSpecService.seedChanges
+      .pipe(switchMap(seed => this._datacenterService.seedSettings(seed)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(
+        (seedSettings: SeedSettings) =>
+          (this.isMLAEnabled = seedSettings.mla ? seedSettings.mla.user_cluster_mla_enabled : false)
+      );
+
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this._settings = settings;
 
@@ -128,16 +136,12 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
     this._clusterSpecService.datacenterChanges
       .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
-      .pipe(
-        tap((datacenter: Datacenter) => {
-          this._datacenterSpec = datacenter;
-          this._enforce(Controls.AuditLogging, datacenter.spec.enforceAuditLogging);
-          this._enforcePodSecurityPolicy(datacenter.spec.enforcePodSecurityPolicy);
-        })
-      )
-      .pipe(switchMap(_ => this._datacenterService.seedSettings(this._datacenterSpec.spec.seed)))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe((seedSettings: SeedSettings) => (this._seedSettings = seedSettings));
+      .subscribe((datacenter: Datacenter) => {
+        this._datacenterSpec = datacenter;
+        this._enforce(Controls.AuditLogging, datacenter.spec.enforceAuditLogging);
+        this._enforcePodSecurityPolicy(datacenter.spec.enforcePodSecurityPolicy);
+      });
 
     this._api
       .getMasterVersions(ClusterType.Kubernetes)
@@ -206,10 +210,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
   isPluginEnabled(name: string): boolean {
     return AdmissionPluginUtils.isPluginEnabled(this.form.get(Controls.AdmissionPlugins), name);
-  }
-
-  isMLAEnabled(): boolean {
-    return !!this._seedSettings && !!this._seedSettings.mla && !!this._seedSettings.mla.user_cluster_mla_enabled;
   }
 
   private _enforce(control: Controls, isEnforced: boolean): void {

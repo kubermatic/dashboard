@@ -87,6 +87,11 @@ echodate "Deploying Kubermatic [${KUBERMATIC_VERSION}]..."
 echodate "Finished installing Kubermatic"
 cd $REPO_ROOT
 
+echodate "Creating MLA Resources in Seed..."
+MLA_NAMESPACE="mla"
+retry 2 kubectl create namespace $MLA_NAMESPACE
+retry 2 kubectl apply -n $MLA_NAMESPACE -f hack/e2e/fixtures/mla-grafana-secret.yaml
+
 echodate "Installing Seed..."
 SEED_MANIFEST="$(mktemp)"
 SEED_KUBECONFIG="$(cat $KUBECONFIG | sed 's/127.0.0.1.*/kubernetes.default.svc.cluster.local./' | base64 -w0)"

@@ -57,6 +57,22 @@ export class AdminSettingsPage {
     return cy.get('#km-opa-enforce-setting');
   }
 
+  static getMLALoggingEnableCheckbox(): Cypress.Chainable {
+    return cy.get('#km-mla-logging-enable-setting');
+  }
+
+  static getMLALoggingEnforceCheckbox(): Cypress.Chainable {
+    return cy.get('#km-mla-logging-enforce-setting');
+  }
+
+  static getMLAMonitoringEnableCheckbox(): Cypress.Chainable {
+    return cy.get('#km-mla-monitoring-enable-setting');
+  }
+
+  static getMLAMonitoringEnforceCheckbox(): Cypress.Chainable {
+    return cy.get('#km-mla-monitoring-enforce-setting');
+  }
+
   static getInitialReplicasInput(): Cypress.Chainable {
     return cy.get('#km-initial-replicas-setting');
   }

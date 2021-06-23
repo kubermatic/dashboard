@@ -31,3 +31,6 @@ spec:
     tokenIssuer: "http://dex.oauth:5556/dex"
     issuerRedirectURL: "http://localhost:8000"
     serviceAccountKey: "__SERVICE_ACCOUNT_KEY__"
+  featureGates:
+    UserClusterMLA:
+      enabled: true
