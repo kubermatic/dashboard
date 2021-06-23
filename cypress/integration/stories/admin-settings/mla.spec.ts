@@ -31,6 +31,14 @@ describe('Admin Settings - MLA Story', () => {
     cy.url().should(Condition.Include, View.Projects);
   });
 
+  it('should go to projects view', () => {
+    ProjectsPage.visit();
+  });
+
+  it('should create a new project', () => {
+    ProjectsPage.addProject(projectName);
+  });
+
   it('should go to the admin settings', () => {
     AdminSettingsPage.visit();
   });
@@ -53,10 +61,6 @@ describe('Admin Settings - MLA Story', () => {
 
   it('should go to projects view', () => {
     ProjectsPage.visit();
-  });
-
-  it('should create a new project', () => {
-    ProjectsPage.addProject(projectName);
   });
 
   it('should select project', () => {
