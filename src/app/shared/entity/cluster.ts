@@ -26,6 +26,8 @@ export enum ContainerRuntime {
   Docker = 'docker',
 }
 
+export const END_OF_DOCKER_SUPPORT_VERSION = '1.22.0';
+
 export class Cluster {
   creationTimestamp?: Date;
   deletionTimestamp?: Date;

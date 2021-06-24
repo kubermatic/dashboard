@@ -25,15 +25,23 @@ import {DatacenterService} from '@core/services/datacenter';
 import {NameGeneratorService} from '@core/services/name-generator';
 import {SettingsService} from '@core/services/settings';
 import {WizardService} from '@core/services/wizard/wizard';
-import {Cluster, ClusterSpec, ClusterType, ContainerRuntime, MasterVersion} from '@shared/entity/cluster';
+import {
+  Cluster,
+  ClusterSpec,
+  ClusterType,
+  ContainerRuntime,
+  END_OF_DOCKER_SUPPORT_VERSION,
+  MasterVersion,
+} from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {AdminSettings} from '@shared/entity/settings';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
 import {AsyncValidators} from '@shared/validators/async-label-form.validator';
-import {merge} from 'rxjs';
-import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {combineLatest, merge} from 'rxjs';
+import {filter, startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {StepBase} from '../base';
+import * as semver from 'semver';
 
 enum Controls {
   Name = 'name',
@@ -146,6 +154,23 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .getMasterVersions(ClusterType.Kubernetes)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setDefaultVersion.bind(this));
+
+    combineLatest([
+      this.control(Controls.Version).valueChanges.pipe(startWith(this.control(Controls.Version).value)),
+      this.control(Controls.ContainerRuntime).valueChanges.pipe(
+        startWith(this.control(Controls.ContainerRuntime).value)
+      ),
+    ])
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(([version, containerRuntime]) => {
+        if (
+          semver.valid(version) &&
+          semver.gte(version, END_OF_DOCKER_SUPPORT_VERSION) &&
+          containerRuntime === ContainerRuntime.Docker
+        ) {
+          this.control(Controls.ContainerRuntime).setErrors({dockerVersionCompatibility: true});
+        }
+      });
 
     this.control(Controls.Version)
       .valueChanges.pipe(filter(value => !!value))
