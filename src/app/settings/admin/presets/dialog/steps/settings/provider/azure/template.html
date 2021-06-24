@@ -66,6 +66,16 @@ limitations under the License.
   </mat-form-field>
 
   <mat-form-field fxFlex>
+    <mat-label>LoadBalancer SKU</mat-label>
+    <mat-select [formControlName]="Controls.LoadBalancerSKU">
+      <mat-option *ngFor="let loadBalancerSKU of loadBalancerSKUs"
+                  [value]="loadBalancerSKU">
+        {{loadBalancerSKU}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
     <mat-label>Resource Group</mat-label>
     <input matInput
            [formControlName]="Controls.ResourceGroup"

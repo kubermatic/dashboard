@@ -108,6 +108,7 @@ export class AzurePresetSpec extends PresetProviderSpec {
   subnet?: string;
   routeTable?: string;
   securityGroup?: string;
+  loadBalancerSKU?: string;
 }
 
 export class DigitaloceanPresetSpec extends PresetProviderSpec {

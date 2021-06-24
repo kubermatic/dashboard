@@ -19,6 +19,7 @@ import {EMPTY, merge, Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import * as _ from 'lodash';
 import {DatacenterService} from '@core/services/datacenter';
+import {AZURE_LOADBALANCER_SKUS} from '@shared/entity/cluster';
 import {Datacenter} from '@shared/entity/datacenter';
 import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
 
@@ -29,6 +30,7 @@ enum Controls {
   SecurityGroup = 'securityGroup',
   Subnet = 'subnet',
   VNet = 'vnet',
+  LoadBalancerSKU = 'loadBalancerSKU',
 }
 
 @Component({
@@ -60,6 +62,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
   isLoadingVnets = false;
   subnets: string[] = [];
   isLoadingSubnets = false;
+  loadBalancerSKUs = AZURE_LOADBALANCER_SKUS;
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -79,6 +82,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
       [Controls.SecurityGroup]: this._builder.control(''),
       [Controls.Subnet]: this._builder.control(''),
       [Controls.VNet]: this._builder.control(''),
+      [Controls.LoadBalancerSKU]: this._builder.control(''),
     });
 
     const resourceGroupChanges = merge(
@@ -213,6 +217,11 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
         takeUntil(this._unsubscribe)
       )
       .subscribe(s => (this._clusterSpecService.cluster.spec.cloud.azure.subnet = s));
+
+    this.form
+      .get(Controls.LoadBalancerSKU)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(sku => (this._clusterSpecService.cluster.spec.cloud.azure.loadBalancerSKU = sku));
   }
 
   ngOnDestroy(): void {
