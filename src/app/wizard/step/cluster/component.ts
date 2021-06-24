@@ -169,6 +169,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           containerRuntime === ContainerRuntime.Docker
         ) {
           this.control(Controls.ContainerRuntime).setErrors({dockerVersionCompatibility: true});
+        } else {
+          this.control(Controls.ContainerRuntime).setErrors(null);
         }
       });
 
