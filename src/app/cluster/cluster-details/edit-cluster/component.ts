@@ -17,7 +17,13 @@ import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
 import {SettingsService} from '@core/services/settings';
-import {Cluster, ClusterPatch, ContainerRuntime, ProviderSettingsPatch} from '@shared/entity/cluster';
+import {
+  Cluster,
+  ClusterPatch,
+  ContainerRuntime,
+  END_OF_DOCKER_SUPPORT_VERSION,
+  ProviderSettingsPatch,
+} from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {AdminSettings} from '@shared/entity/settings';
@@ -25,7 +31,8 @@ import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plu
 import {AsyncValidators} from '@shared/validators/async-label-form.validator';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
-import {switchMap, takeUntil, tap} from 'rxjs/operators';
+import {startWith, switchMap, takeUntil, tap} from 'rxjs/operators';
+import * as semver from 'semver';
 
 enum Controls {
   Name = 'name',
@@ -114,6 +121,21 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       this._enforce(Controls.MLALogging, this._settings.mlaOptions.loggingEnforced);
       this._enforce(Controls.MLAMonitoring, this._settings.mlaOptions.monitoringEnforced);
     });
+
+    this.form
+      .get(Controls.ContainerRuntime)
+      .valueChanges.pipe(startWith(this.form.get(Controls.ContainerRuntime).value), takeUntil(this._unsubscribe))
+      .subscribe(containerRuntime => {
+        if (
+          semver.valid(this.cluster.spec.version) &&
+          semver.gte(this.cluster.spec.version, END_OF_DOCKER_SUPPORT_VERSION) &&
+          containerRuntime === ContainerRuntime.Docker
+        ) {
+          this.form.get(Controls.ContainerRuntime).setErrors({dockerVersionCompatibility: true});
+        } else {
+          this.form.get(Controls.ContainerRuntime).setErrors(null);
+        }
+      });
 
     this._clusterService.providerSettingsPatchChanges$
       .pipe(takeUntil(this._unsubscribe))
