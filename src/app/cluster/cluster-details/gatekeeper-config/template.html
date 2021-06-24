@@ -19,9 +19,10 @@ limitations under the License.
             (click)="add()"
             mat-flat-button
             color="quaternary"
+            fxLayoutAlign="center center"
             [disabled]="!isClusterRunning">
       <i class="km-icon-mask km-icon-add"></i>
-      Add Gatekeeper Config
+      <span>Add Gatekeeper Config</span>
     </button>
   </ng-container>
   <ng-container *ngIf="!isLoadingData() && !hasNoData()">
