@@ -25,7 +25,7 @@ import {DatacenterService} from '@core/services/datacenter';
 import {NameGeneratorService} from '@core/services/name-generator';
 import {SettingsService} from '@core/services/settings';
 import {WizardService} from '@core/services/wizard/wizard';
-import {Cluster, ClusterSpec, ClusterType, MasterVersion} from '@shared/entity/cluster';
+import {Cluster, ClusterSpec, ClusterType, MasterVersion, ProxyMode} from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {AdminSettings} from '@shared/entity/settings';
@@ -48,6 +48,7 @@ enum Controls {
   OPAIntegration = 'opaIntegration',
   MLALogging = 'loggingEnabled',
   MLAMonitoring = 'monitoringEnabled',
+  ProxyMode = 'proxyMode',
 }
 
 @Component({
@@ -74,6 +75,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   labels: object;
   podNodeSelectorAdmissionPluginConfig: object;
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
+  proxyMode = ProxyMode;
   readonly Controls = Controls;
   private _datacenterSpec: Datacenter;
   private _seedSettings: SeedSettings;
@@ -109,6 +111,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.PodNodeSelectorAdmissionPluginConfig]: new FormControl(''),
       [Controls.Labels]: new FormControl(''),
       [Controls.SSHKeys]: this._builder.control(''),
+      [Controls.ProxyMode]: this._builder.control(''),
     });
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
@@ -161,7 +164,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.UserSSHKeyAgent).valueChanges,
       this.form.get(Controls.OPAIntegration).valueChanges,
       this.form.get(Controls.MLALogging).valueChanges,
-      this.form.get(Controls.MLAMonitoring).valueChanges
+      this.form.get(Controls.MLAMonitoring).valueChanges,
+      this.form.get(Controls.ProxyMode).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
@@ -255,6 +259,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           monitoringEnabled: this.controlValue(Controls.MLAMonitoring),
         },
         enableUserSSHKeyAgent: this.controlValue(Controls.UserSSHKeyAgent),
+        clusterNetwork: {
+          proxyMode: this.controlValue(Controls.ProxyMode),
+        },
       } as ClusterSpec,
     } as Cluster;
   }
