@@ -25,19 +25,28 @@ import {DatacenterService} from '@core/services/datacenter';
 import {NameGeneratorService} from '@core/services/name-generator';
 import {SettingsService} from '@core/services/settings';
 import {WizardService} from '@core/services/wizard/wizard';
-import {Cluster, ClusterSpec, ClusterType, MasterVersion} from '@shared/entity/cluster';
+import {
+  Cluster,
+  ClusterSpec,
+  ClusterType,
+  ContainerRuntime,
+  END_OF_DOCKER_SUPPORT_VERSION,
+  MasterVersion,
+} from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {AdminSettings} from '@shared/entity/settings';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
 import {AsyncValidators} from '@shared/validators/async-label-form.validator';
-import {merge} from 'rxjs';
-import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {combineLatest, merge} from 'rxjs';
+import {filter, startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {StepBase} from '../base';
+import * as semver from 'semver';
 
 enum Controls {
   Name = 'name',
   Version = 'version',
+  ContainerRuntime = 'containerRuntime',
   Type = 'type',
   AuditLogging = 'auditLogging',
   UserSSHKeyAgent = 'userSshKeyAgent',
@@ -68,6 +77,7 @@ enum Controls {
   ],
 })
 export class ClusterStepComponent extends StepBase implements OnInit, ControlValueAccessor, Validator, OnDestroy {
+  containerRuntime = ContainerRuntime;
   admissionPlugin = AdmissionPlugin;
   masterVersions: MasterVersion[] = [];
   admissionPlugins: AdmissionPlugin[] = [];
@@ -100,6 +110,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         Validators.pattern('[a-zA-Z0-9-]*'),
       ]),
       [Controls.Version]: new FormControl('', [Validators.required]),
+      [Controls.ContainerRuntime]: new FormControl(ContainerRuntime.Containerd, [Validators.required]),
       [Controls.AuditLogging]: new FormControl(false),
       [Controls.UserSSHKeyAgent]: new FormControl(true),
       [Controls.OPAIntegration]: new FormControl(false),
@@ -144,6 +155,25 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setDefaultVersion.bind(this));
 
+    combineLatest([
+      this.control(Controls.Version).valueChanges.pipe(startWith(this.control(Controls.Version).value)),
+      this.control(Controls.ContainerRuntime).valueChanges.pipe(
+        startWith(this.control(Controls.ContainerRuntime).value)
+      ),
+    ])
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(([version, containerRuntime]) => {
+        if (
+          semver.valid(version) &&
+          semver.gte(version, END_OF_DOCKER_SUPPORT_VERSION) &&
+          containerRuntime === ContainerRuntime.Docker
+        ) {
+          this.control(Controls.ContainerRuntime).setErrors({dockerVersionCompatibility: true});
+        } else {
+          this.control(Controls.ContainerRuntime).setErrors(null);
+        }
+      });
+
     this.control(Controls.Version)
       .valueChanges.pipe(filter(value => !!value))
       .pipe(switchMap(() => this._api.getAdmissionPlugins(this.form.get(Controls.Version).value)))
@@ -161,7 +191,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.UserSSHKeyAgent).valueChanges,
       this.form.get(Controls.OPAIntegration).valueChanges,
       this.form.get(Controls.MLALogging).valueChanges,
-      this.form.get(Controls.MLAMonitoring).valueChanges
+      this.form.get(Controls.MLAMonitoring).valueChanges,
+      this.form.get(Controls.ContainerRuntime).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
@@ -255,6 +286,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           monitoringEnabled: this.controlValue(Controls.MLAMonitoring),
         },
         enableUserSSHKeyAgent: this.controlValue(Controls.UserSSHKeyAgent),
+        containerRuntime: this.controlValue(Controls.ContainerRuntime),
       } as ClusterSpec,
     } as Cluster;
   }
