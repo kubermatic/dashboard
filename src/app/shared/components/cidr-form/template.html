@@ -15,7 +15,7 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column">
   <div formArrayName="cidrs">
-    <div *ngFor="let control of controlsArray.controls; let i = index;"
+    <div *ngFor="let control of controls.controls; let i = index;"
          [formGroupName]="i"
          fxLayout="row"
          fxLayoutGap="10px">
@@ -25,7 +25,7 @@ limitations under the License.
                (keyup)="check()"
                [formControl]="control">
         <mat-error *ngIf="control.hasError('pattern')">
-          Wrong pattern. Use CIDR notation, i.e. 192.168.1.0/24.
+          Invalid pattern. Use CIDR notation, i.e. 192.168.1.0/24.
         </mat-error>
       </mat-form-field>
       <button mat-icon-button

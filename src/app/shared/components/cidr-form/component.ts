@@ -34,43 +34,38 @@ export class CIDRFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this._formBuilder.group({cidrs: this._formBuilder.array([])});
-    this.cidrs.forEach(cidr => this._add(cidr));
-    this._add();
+    this.cidrs.forEach(cidr => this._addControl(cidr));
+    this._addControl();
   }
 
-  get controlsArray(): FormArray {
+  get controls(): FormArray {
     return this.form.get('cidrs') as FormArray;
   }
 
-  private _add(cidr = ''): void {
-    this.controlsArray.push(
+  private _addControl(cidr = ''): void {
+    this.controls.push(
       this._formBuilder.control(cidr, [Validators.pattern(/^((\d{1,3}\.){3}\d{1,3}\/([0-9]|[1-2][0-9]|3[0-2]))$/)])
     );
   }
 
-  private _update(): void {
-    this.cidrs = this.controlsArray.getRawValue().filter(v => !!v);
+  private _onChange(): void {
+    this.cidrs = this.controls.getRawValue().filter(v => !!v);
     this.cidrsChange.emit(this.cidrs);
   }
 
   isRemovable(index: number): boolean {
-    return index < this.controlsArray.length - 1;
+    return index < this.controls.length - 1;
   }
 
   delete(index: number): void {
-    this.controlsArray.removeAt(index);
-    this._update();
+    this.controls.removeAt(index);
+    this._onChange();
   }
 
   check(): void {
-    this._addLabelIfNeeded();
-    this._update();
-  }
-
-  private _addLabelIfNeeded(): void {
-    const lastLabel = this.controlsArray.at(this.controlsArray.length - 1);
-    if (lastLabel.value) {
-      this._add();
+    if (this.controls.at(this.controls.length - 1).value) {
+      this._addControl();
     }
+    this._onChange();
   }
 }
