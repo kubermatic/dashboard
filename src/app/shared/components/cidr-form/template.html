@@ -23,7 +23,6 @@ limitations under the License.
         <mat-label>CIDR {{i + 1}}</mat-label>
         <input matInput
                (keyup)="check()"
-               name="key"
                [formControl]="control">
         <mat-error *ngIf="control.hasError('pattern')">
           Wrong pattern. Use CIDR notation, i.e. 192.168.1.0/24.
