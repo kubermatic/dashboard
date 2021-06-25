@@ -28,12 +28,10 @@ limitations under the License.
     <mat-error *ngIf="form.get(controls.Name).hasError('required')">
       Name is <strong>required</strong>.
     </mat-error>
-    <mat-error *ngIf="form.get(controls.Name).hasError('validLabelValuePattern')"
-               i18n>
+    <mat-error *ngIf="form.get(controls.Name).hasError('validLabelValuePattern')">
       Only alphanumeric characters, "." and "-" can be used. "-" and "." cannot be first or last character.
     </mat-error>
-    <mat-error *ngIf="form.get(controls.Name).hasError('validLabelValueLength')"
-               i18n>
+    <mat-error *ngIf="form.get(controls.Name).hasError('validLabelValueLength')">
       Name cannot be longer than 63 characters.
     </mat-error>
   </mat-form-field>

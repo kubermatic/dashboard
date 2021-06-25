@@ -78,6 +78,17 @@ a {
   width: 100%;
 }
 
+.km-header {
+  font-size: $font-size-card-title;
+  line-height: 16px;
+  margin: 12px 0;
+  padding: 8px 0 16px;
+
+  &.sub {
+    font-size: $font-size-subhead;
+  }
+}
+
 .km-multiple-values-dropdown {
   margin-left: 30px;
 }

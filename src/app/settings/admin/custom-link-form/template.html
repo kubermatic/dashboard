@@ -23,8 +23,7 @@ limitations under the License.
                (keyup)="check()"
                [name]="Controls.Label"
                [formControlName]="Controls.Label">
-        <mat-error *ngIf="control.get(Controls.Label).errors?.required"
-                   i18n>
+        <mat-error *ngIf="control.get(Controls.Label).errors?.required">
           Label is required.
         </mat-error>
       </mat-form-field>
@@ -34,8 +33,7 @@ limitations under the License.
                (keyup)="check()"
                [name]="Controls.URL"
                [formControlName]="Controls.URL">
-        <mat-error *ngIf="control.get(Controls.URL).errors?.required"
-                   i18n>
+        <mat-error *ngIf="control.get(Controls.URL).errors?.required">
           URL is required.
         </mat-error>
       </mat-form-field>
