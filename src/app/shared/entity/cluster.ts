@@ -21,6 +21,13 @@ export enum ClusterType {
   Empty = '',
 }
 
+export enum ContainerRuntime {
+  Containerd = 'containerd',
+  Docker = 'docker',
+}
+
+export const END_OF_DOCKER_SUPPORT_VERSION = '1.22.0';
+
 export class Cluster {
   creationTimestamp?: Date;
   deletionTimestamp?: Date;
@@ -197,6 +204,7 @@ export class ClusterSpec {
   enableUserSSHKeyAgent?: boolean;
   podNodeSelectorAdmissionPluginConfig?: object;
   mla?: MLASettings;
+  containerRuntime?: ContainerRuntime;
   clusterNetwork?: ClusterNetwork;
 }
 
@@ -267,6 +275,7 @@ export class ClusterSpecPatch {
   auditLogging?: AuditLoggingSettings;
   machineNetworks?: MachineNetwork[];
   mla?: MLASettings;
+  containerRuntime?: ContainerRuntime;
 }
 
 export class CloudSpecPatch {

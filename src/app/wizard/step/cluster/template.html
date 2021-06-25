@@ -76,9 +76,10 @@ limitations under the License.
       </mat-card-header>
       <div fxLayout="column">
         <div fxFlex="100"
-             fxFlexAlign=" start"
+             fxLayoutGap="10px"
              fxLayout="row">
-          <mat-form-field class="km-version-inline km-dropdown-with-suffix">
+          <mat-form-field fxFlex
+                          class="km-dropdown-with-suffix">
             <mat-label>Version</mat-label>
             <mat-select [formControlName]="Controls.Version"
                         class="km-select-ellipsis"
@@ -89,6 +90,21 @@ limitations under the License.
                 {{ version.version }}
               </mat-option>
             </mat-select>
+          </mat-form-field>
+
+          <mat-form-field fxFlex
+                          class="km-dropdown-with-suffix">
+            <mat-label>Container Runtime</mat-label>
+            <mat-select [formControlName]="Controls.ContainerRuntime"
+                        class="km-select-ellipsis"
+                        disableOptionCentering
+                        required>
+              <mat-option [value]="containerRuntime.Containerd">containerd</mat-option>
+              <mat-option [value]="containerRuntime.Docker">docker</mat-option>
+            </mat-select>
+            <mat-error *ngIf="control(Controls.ContainerRuntime).hasError('dockerVersionCompatibility')">
+              Docker is not supported since v1.22.0.
+            </mat-error>
           </mat-form-field>
         </div>
 
