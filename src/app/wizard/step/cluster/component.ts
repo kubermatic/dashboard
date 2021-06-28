@@ -27,6 +27,7 @@ import {SettingsService} from '@core/services/settings';
 import {WizardService} from '@core/services/wizard/wizard';
 import {
   Cluster,
+  ClusterNetwork,
   ClusterSpec,
   ClusterType,
   ContainerRuntime,
@@ -59,6 +60,8 @@ enum Controls {
   MLALogging = 'loggingEnabled',
   MLAMonitoring = 'monitoringEnabled',
   ProxyMode = 'proxyMode',
+  PodsCIDR = 'podsCIDR',
+  ServicesCIDR = 'servicesCIDR',
 }
 
 @Component({
@@ -123,7 +126,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.PodNodeSelectorAdmissionPluginConfig]: new FormControl(''),
       [Controls.Labels]: new FormControl(''),
       [Controls.SSHKeys]: this._builder.control(''),
-      [Controls.ProxyMode]: this._builder.control(''),
+      [Controls.ProxyMode]: new FormControl(''),
+      [Controls.PodsCIDR]: new FormControl(''),
+      [Controls.ServicesCIDR]: new FormControl(''),
     });
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
@@ -197,10 +202,15 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.MLALogging).valueChanges,
       this.form.get(Controls.MLAMonitoring).valueChanges,
       this.form.get(Controls.ContainerRuntime).valueChanges,
-      this.form.get(Controls.ProxyMode).valueChanges
+      this.form.get(Controls.ProxyMode).valueChanges,
+      this.form.get(Controls.PodsCIDR).valueChanges,
+      this.form.get(Controls.ServicesCIDR).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
+      .subscribe(_ => {
+        this._clusterSpecService.cluster = this._getClusterEntity();
+        this._clusterSpecService.clusterNetwork = this._getClusterNetwork();
+      });
   }
 
   generateName(): void {
@@ -292,10 +302,19 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         },
         enableUserSSHKeyAgent: this.controlValue(Controls.UserSSHKeyAgent),
         containerRuntime: this.controlValue(Controls.ContainerRuntime),
-        clusterNetwork: {
-          proxyMode: this.controlValue(Controls.ProxyMode),
-        },
       } as ClusterSpec,
     } as Cluster;
+  }
+
+  private _getClusterNetwork(): ClusterNetwork {
+    let pods = this.controlValue(Controls.PodsCIDR);
+    pods = pods && pods.cidrs ? pods.cidrs.filter(v => !!v) : undefined;
+    let services = this.controlValue(Controls.ServicesCIDR);
+    services = services && services.cidrs ? services.cidrs.filter(v => !!v) : undefined;
+    return {
+      proxyMode: this.controlValue(Controls.ProxyMode),
+      pods: {cidrBlocks: pods},
+      services: {cidrBlocks: services},
+    };
   }
 }

@@ -11,7 +11,7 @@
 
 import {EventEmitter, Injectable} from '@angular/core';
 import * as _ from 'lodash';
-import {CloudSpec, Cluster, ClusterType} from '@shared/entity/cluster';
+import {CloudSpec, Cluster, ClusterNetwork, ClusterType} from '@shared/entity/cluster';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 
@@ -93,6 +93,11 @@ export class ClusterSpecService {
     this._cluster.labels = labels;
   }
 
+  set clusterNetwork(clusterNetwork: ClusterNetwork) {
+    delete this._cluster.spec.clusterNetwork;
+    this._cluster.spec.clusterNetwork = clusterNetwork;
+  }
+
   set podNodeSelectorAdmissionPluginConfig(config: object) {
     this._cluster.spec.podNodeSelectorAdmissionPluginConfig = config;
   }
@@ -110,10 +115,6 @@ export class ClusterSpecService {
     this._admissionPluginsEntity = plugins;
     this._cluster.spec.admissionPlugins = plugins;
     this.admissionPluginsChanges.emit(this._admissionPluginsEntity);
-  }
-
-  get admissionPlugins(): string[] {
-    return this._admissionPluginsEntity;
   }
 
   set clusterType(type: ClusterType) {

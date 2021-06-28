@@ -63,8 +63,10 @@ limitations under the License.
             <mat-option [value]="proxyMode.iptables">iptables</mat-option>
           </mat-select>
         </mat-form-field>
-        <km-cidr-form title="Pods CIDR"></km-cidr-form>
-        <km-cidr-form title="Services CIDR"></km-cidr-form>
+        <km-cidr-form title="Pods CIDR"
+                      [formControlName]="Controls.PodsCIDR"></km-cidr-form>
+        <km-cidr-form title="Services CIDR"
+                      [formControlName]="Controls.ServicesCIDR"></km-cidr-form>
       </div>
 
       <km-wizard-cluster-ssh-keys [formControl]="form.get(Controls.SSHKeys)"></km-wizard-cluster-ssh-keys>

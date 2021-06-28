@@ -10,7 +10,18 @@
 // limitations under the License.
 
 import {Component, EventEmitter, forwardRef, Input, OnInit, Output} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {
+  AbstractControl,
+  ControlValueAccessor,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  NG_VALUE_ACCESSOR,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
+import {takeUntil} from 'rxjs/operators';
+import {Observable, of, Subject} from 'rxjs';
 
 @Component({
   selector: 'km-cidr-form',
@@ -24,11 +35,12 @@ import {FormArray, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validators} from '
     },
   ],
 })
-export class CIDRFormComponent implements OnInit {
+export class CIDRFormComponent implements OnInit, ControlValueAccessor {
   @Input() title = '';
   @Input() cidrs: string[] = [];
   @Output() cidrsChange = new EventEmitter<string[]>();
   form: FormGroup;
+  private _unsubscribe = new Subject<void>();
 
   constructor(private readonly _formBuilder: FormBuilder) {}
 
@@ -36,6 +48,11 @@ export class CIDRFormComponent implements OnInit {
     this.form = this._formBuilder.group({cidrs: this._formBuilder.array([])});
     this.cidrs.forEach(cidr => this._addControl(cidr));
     this._addControl();
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   get controls(): FormArray {
@@ -67,5 +84,29 @@ export class CIDRFormComponent implements OnInit {
       this._addControl();
     }
     this._onChange();
+  }
+
+  onTouched(): void {}
+
+  writeValue(obj: any): void {
+    if (obj) {
+      this.form.setValue(obj, {emitEvent: false});
+    }
+  }
+
+  registerOnChange(fn: any): void {
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(fn);
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState?(isDisabled: boolean): void {
+    isDisabled ? this.form.disable() : this.form.enable();
+  }
+
+  validate(_: AbstractControl): Observable<ValidationErrors | null> {
+    return of(this.form.valid ? null : {invalid: true});
   }
 }
