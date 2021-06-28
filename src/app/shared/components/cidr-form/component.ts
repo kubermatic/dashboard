@@ -9,13 +9,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, EventEmitter, forwardRef, Input, OnInit, Output} from '@angular/core';
+import {Component, DoCheck, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {
   AbstractControl,
+  AsyncValidator,
   ControlValueAccessor,
   FormArray,
   FormBuilder,
   FormGroup,
+  NG_ASYNC_VALIDATORS,
   NG_VALUE_ACCESSOR,
   ValidationErrors,
   Validators,
@@ -33,9 +35,14 @@ import {Observable, of, Subject} from 'rxjs';
       useExisting: forwardRef(() => CIDRFormComponent),
       multi: true,
     },
+    {
+      provide: NG_ASYNC_VALIDATORS,
+      useExisting: forwardRef(() => CIDRFormComponent),
+      multi: true,
+    },
   ],
 })
-export class CIDRFormComponent implements OnInit, ControlValueAccessor {
+export class CIDRFormComponent implements OnInit, DoCheck, OnDestroy, ControlValueAccessor, AsyncValidator {
   @Input() title = '';
   @Input() cidrs: string[] = [];
   @Output() cidrsChange = new EventEmitter<string[]>();
@@ -48,6 +55,10 @@ export class CIDRFormComponent implements OnInit, ControlValueAccessor {
     this.form = this._formBuilder.group({cidrs: this._formBuilder.array([])});
     this.cidrs.forEach(cidr => this._addControl(cidr));
     this._addControl();
+  }
+
+  ngDoCheck(): void {
+    this.form.updateValueAndValidity();
   }
 
   ngOnDestroy(): void {
