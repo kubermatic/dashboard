@@ -59,7 +59,7 @@ describe('OPA Story', () => {
     AdminSettingsPage.getAddConstraintTemplateBtn().click();
   });
 
-  it('should add a new constraint template', () => {
+  it('should add spec for a new constraint template', () => {
     AdminSettingsPage.getAddConstraintTemplateSpecTextarea()
       .click({force: true})
       .then($element => {
@@ -69,8 +69,11 @@ describe('OPA Story', () => {
         $element.val(subString);
         cy.get($element).type(lastChar);
       });
+  });
 
-    AdminSettingsPage.getConstraintTemplateDialogSaveBtn().click();
+  it('should add constraint template', () => {
+    AdminSettingsPage.getConstraintTemplateDialogSaveBtn().should(Condition.BeEnabled);
+    AdminSettingsPage.getConstraintTemplateDialogSaveBtn().click({force: true});
   });
 
   it('should check if constraint template was created', () => {
@@ -157,7 +160,7 @@ describe('OPA Story', () => {
     ClustersPage.getConstraintTemplateSelectOption(constraintTemplateName).click();
   });
 
-  it('should enter constraint spec and add a new constraint', () => {
+  it('should enter constraint spec', () => {
     ClustersPage.getAddConstraintSpecTextarea()
       .click({force: true})
       .then($element => {
@@ -167,8 +170,11 @@ describe('OPA Story', () => {
         $element.val(subString);
         cy.get($element).type(lastChar);
       });
+  });
 
-    ClustersPage.getConstraintDialogSaveBtn().click();
+  it('should add constraint', () => {
+    ClustersPage.getConstraintDialogSaveBtn().should(Condition.BeEnabled);
+    ClustersPage.getConstraintDialogSaveBtn().click({force: true});
   });
 
   it('should check if constraint was created', () => {
@@ -192,7 +198,7 @@ describe('OPA Story', () => {
     ClustersPage.getAddGatekeeperConfigBtn().click();
   });
 
-  it('should add gatekeeper config', () => {
+  it('should add gatekeeper spec', () => {
     ClustersPage.getAddGatekeeperConfigTextarea()
       .click({force: true})
       .then($element => {
@@ -202,8 +208,11 @@ describe('OPA Story', () => {
         $element.val(subString);
         cy.get($element).type(lastChar);
       });
+  });
 
-    ClustersPage.getGatekeeperConfigDialogSaveBtn().click();
+  it('should add gatekeeper config', () => {
+    ClustersPage.getGatekeeperConfigDialogSaveBtn().should(Condition.BeEnabled);
+    ClustersPage.getGatekeeperConfigDialogSaveBtn().click({force: true});
   });
 
   it('should check if gatekeeper config was created', () => {
