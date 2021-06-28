@@ -12,7 +12,7 @@
 import {login, logout} from '../../../utils/auth';
 import {Condition} from '../../../utils/condition';
 import {View} from '../../../utils/view';
-import {AdminSettingsPage} from '../../../pages/admin-settings.po';
+import {AdminSettings} from '../../../pages/admin-settings.po';
 import {RequestType, Response, ResponseType, TrafficMonitor} from '../../../utils/monitor';
 import {Endpoint} from '../../../utils/endpoint';
 
@@ -25,15 +25,11 @@ xdescribe('Admin Settings - Administrators Story', () => {
 
   it('should login as admin', () => {
     login(adminEmail, password);
-    cy.url().should(Condition.Include, View.Projects);
+    cy.url().should(Condition.Include, View.Projects.Default);
   });
 
-  it('should go to the admin settings', () => {
-    AdminSettingsPage.visit();
-  });
-
-  it('should switch to admins tab', () => {
-    AdminSettingsPage.getAdminsTab().click();
+  it('should go to the admin settings - administrators view', () => {
+    AdminSettings.AdministratorsPage.visit();
   });
 
   it('should have only one admin', () => {
@@ -45,9 +41,11 @@ xdescribe('Admin Settings - Administrators Story', () => {
   });
 
   it('should add second admin', () => {
-    AdminSettingsPage.getAddAdminBtn().click();
-    AdminSettingsPage.getAddAdminDialogEmailInput().type(userEmail).should(Condition.HaveValue, userEmail);
-    AdminSettingsPage.getAddAdminDialogSaveBtn().click();
+    AdminSettings.AdministratorsPage.getAddAdminBtn().click();
+    AdminSettings.AdministratorsPage.getAddAdminDialogEmailInput()
+      .type(userEmail)
+      .should(Condition.HaveValue, userEmail);
+    AdminSettings.AdministratorsPage.getAddAdminDialogSaveBtn().click();
     adminsCount++;
   });
 
@@ -65,11 +63,11 @@ xdescribe('Admin Settings - Administrators Story', () => {
 
   it('should login as second admin', () => {
     login(userEmail, password);
-    cy.url().should(Condition.Include, View.Projects);
+    cy.url().should(Condition.Include, View.Projects.Default);
   });
 
   it('should go to the admin settings', () => {
-    AdminSettingsPage.visit();
+    AdminSettings.AdministratorsPage.visit();
   });
 
   it('should logout', () => {
@@ -78,15 +76,11 @@ xdescribe('Admin Settings - Administrators Story', () => {
 
   it('should login as admin', () => {
     login(adminEmail, password);
-    cy.url().should(Condition.Include, View.Projects);
+    cy.url().should(Condition.Include, View.Projects.Default);
   });
 
   it('should go to the admin settings', () => {
-    AdminSettingsPage.visit();
-  });
-
-  it('should switch to admins tab', () => {
-    AdminSettingsPage.getAdminsTab().click();
+    AdminSettings.AdministratorsPage.visit();
   });
 
   it('should have two admins', () => {
@@ -98,7 +92,7 @@ xdescribe('Admin Settings - Administrators Story', () => {
   });
 
   it('should remove second admin', () => {
-    AdminSettingsPage.getDeleteAdminBtn(userEmail).click();
+    AdminSettings.AdministratorsPage.getDeleteAdminBtn(userEmail).click();
     cy.get('#km-confirmation-dialog-confirm-btn').should(Condition.NotBe, 'disabled').click();
     adminsCount--;
   });

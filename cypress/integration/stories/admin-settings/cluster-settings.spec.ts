@@ -10,7 +10,7 @@
 // limitations under the License.
 
 import * as _ from 'lodash';
-import {AdminSettingsPage} from '../../../pages/admin-settings.po';
+import {AdminSettings} from '../../../pages/admin-settings.po';
 import {ClustersPage} from '../../../pages/clusters.po';
 import {ProjectsPage} from '../../../pages/projects.po';
 import {WizardPage} from '../../../pages/wizard.po';
@@ -33,23 +33,30 @@ describe('Admin Settings - Cluster Related Settings Story', () => {
 
   it('should login', () => {
     login(email, password);
-    cy.url().should(Condition.Include, View.Projects);
+    cy.url().should(Condition.Include, View.Projects.Default);
   });
 
   it('should create a new project', () => {
     ProjectsPage.addProject(projectName);
   });
 
-  it('should go to the admin settings', () => {
-    AdminSettingsPage.visit();
+  it('should go to the admin settings - defaults and limits page', () => {
+    AdminSettings.DefaultsAndLimitsPage.visit();
   });
 
   it('should make sure settings have default values', () => {
-    AdminSettingsPage.getCleanupEnableCheckbox().find('input').should(Condition.NotBeChecked);
-    AdminSettingsPage.getCleanupEnforceCheckbox().find('input').should(Condition.NotBeChecked);
-    AdminSettingsPage.getEnableKubernetesDashboardCheckbox().find('input').should(Condition.BeChecked);
-    AdminSettingsPage.getEnableOIDCCheckbox().find('input').should(Condition.NotBeChecked);
-    AdminSettingsPage.getEnableExternalClustersCheckbox().find('input').should(Condition.BeChecked);
+    AdminSettings.DefaultsAndLimitsPage.getCleanupEnableCheckbox().find('input').should(Condition.NotBeChecked);
+    AdminSettings.DefaultsAndLimitsPage.getCleanupEnforceCheckbox().find('input').should(Condition.NotBeChecked);
+  });
+
+  it('should go to the admin settings - interface page', () => {
+    AdminSettings.InterfacePage.visit();
+  });
+
+  it('should make sure settings have default values', () => {
+    AdminSettings.InterfacePage.getEnableKubernetesDashboardCheckbox().find('input').should(Condition.BeChecked);
+    AdminSettings.InterfacePage.getEnableOIDCCheckbox().find('input').should(Condition.NotBeChecked);
+    AdminSettings.InterfacePage.getEnableExternalClustersCheckbox().find('input').should(Condition.BeChecked);
   });
 
   it('should go to projects view', () => {
@@ -86,7 +93,7 @@ describe('Admin Settings - Cluster Related Settings Story', () => {
     WizardPage.getNextBtn(WizardStep.NodeSettings).should(Condition.BeEnabled).click({force: true});
     WizardPage.getCreateBtn().click({force: true});
 
-    cy.url().should(Condition.Contain, View.Clusters);
+    cy.url().should(Condition.Contain, View.Clusters.Default);
   });
 
   it('should check if cluster was created', () => {
@@ -119,25 +126,31 @@ describe('Admin Settings - Cluster Related Settings Story', () => {
     ClustersPage.getShareKubeconfigButton().should(Condition.Exist);
   });
 
-  it('should go to the admin settings', () => {
-    AdminSettingsPage.visit();
+  it('should go to the admin settings - defaults and limits page', () => {
+    AdminSettings.DefaultsAndLimitsPage.visit();
   });
 
-  it('should update admin settings', () => {
-    AdminSettingsPage.getCleanupEnableCheckbox().click();
-    AdminSettingsPage.waitForSave();
+  it('should make sure settings have default values', () => {
+    AdminSettings.DefaultsAndLimitsPage.getCleanupEnableCheckbox().click();
+    AdminSettings.waitForSave();
 
-    AdminSettingsPage.getCleanupEnforceCheckbox().click();
-    AdminSettingsPage.waitForSave();
+    AdminSettings.DefaultsAndLimitsPage.getCleanupEnforceCheckbox().click();
+    AdminSettings.waitForSave();
+  });
 
-    AdminSettingsPage.getEnableKubernetesDashboardCheckbox().click();
-    AdminSettingsPage.waitForSave();
+  it('should go to the admin settings - interface page', () => {
+    AdminSettings.InterfacePage.visit();
+  });
 
-    AdminSettingsPage.getEnableOIDCCheckbox().click();
-    AdminSettingsPage.waitForSave();
+  it('should make sure settings have default values', () => {
+    AdminSettings.InterfacePage.getEnableKubernetesDashboardCheckbox().click();
+    AdminSettings.waitForSave();
 
-    AdminSettingsPage.getEnableExternalClustersCheckbox().click();
-    AdminSettingsPage.waitForSave();
+    AdminSettings.InterfacePage.getEnableOIDCCheckbox().click();
+    AdminSettings.waitForSave();
+
+    AdminSettings.InterfacePage.getEnableExternalClustersCheckbox().click();
+    AdminSettings.waitForSave();
   });
 
   it('should go to projects view', () => {
@@ -172,25 +185,31 @@ describe('Admin Settings - Cluster Related Settings Story', () => {
     ClustersPage.getShareKubeconfigButton().should(Condition.NotExist);
   });
 
-  it('should go to the admin settings', () => {
-    AdminSettingsPage.visit();
+  it('should go to the admin settings - defaults and limits page', () => {
+    AdminSettings.DefaultsAndLimitsPage.visit();
   });
 
-  it('should restore default admin settings', () => {
-    AdminSettingsPage.getCleanupEnableCheckbox().click();
-    AdminSettingsPage.waitForSave();
+  it('should make sure settings have default values', () => {
+    AdminSettings.DefaultsAndLimitsPage.getCleanupEnableCheckbox().click();
+    AdminSettings.waitForSave();
 
-    AdminSettingsPage.getCleanupEnforceCheckbox().click();
-    AdminSettingsPage.waitForSave();
+    AdminSettings.DefaultsAndLimitsPage.getCleanupEnforceCheckbox().click();
+    AdminSettings.waitForSave();
+  });
 
-    AdminSettingsPage.getEnableKubernetesDashboardCheckbox().click();
-    AdminSettingsPage.waitForSave();
+  it('should go to the admin settings - interface page', () => {
+    AdminSettings.InterfacePage.visit();
+  });
 
-    AdminSettingsPage.getEnableOIDCCheckbox().click();
-    AdminSettingsPage.waitForSave();
+  it('should make sure settings have default values', () => {
+    AdminSettings.InterfacePage.getEnableKubernetesDashboardCheckbox().click();
+    AdminSettings.waitForSave();
 
-    AdminSettingsPage.getEnableExternalClustersCheckbox().click();
-    AdminSettingsPage.waitForSave();
+    AdminSettings.InterfacePage.getEnableOIDCCheckbox().click();
+    AdminSettings.waitForSave();
+
+    AdminSettings.InterfacePage.getEnableExternalClustersCheckbox().click();
+    AdminSettings.waitForSave();
   });
 
   it('should go to the projects page', () => {

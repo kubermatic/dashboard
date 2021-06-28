@@ -9,14 +9,52 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export enum View {
-  Clusters = 'clusters',
-  ExternalClusters = 'clusters/external',
-  Projects = 'projects',
-  Admin = 'settings',
-  Account = 'account',
-  Members = 'members',
-  ServiceAccounts = 'serviceaccounts',
-  SSHKeys = 'sshkeys',
-  Wizard = 'wizard',
+enum Clusters {
+  Default = 'clusters',
+  External = 'clusters/external',
+}
+
+enum Projects {
+  Default = 'projects',
+}
+
+enum AdminSettings {
+  Default = 'settings',
+  Administrators = 'settings/administrators',
+  Interface = 'settings/interface',
+  DefaultsAndLimits = 'settings/defaults',
+  DynamicDatacenters = 'settings/datacenters',
+  ProviderPresets = 'settings/presets',
+  OPA = 'settings/opa',
+}
+
+enum Account {
+  Default = 'account',
+}
+
+enum Members {
+  Default = 'members',
+}
+
+enum ServiceAccounts {
+  Default = 'serviceaccounts',
+}
+
+enum SSHKeys {
+  Default = 'sshkeys',
+}
+
+enum Wizard {
+  Default = 'wizard',
+}
+
+export class View {
+  static readonly Clusters = Clusters;
+  static readonly Projects = Projects;
+  static readonly AdminSettings = AdminSettings;
+  static readonly Account = Account;
+  static readonly Members = Members;
+  static readonly ServiceAccounts = ServiceAccounts;
+  static readonly SSHKeys = SSHKeys;
+  static readonly Wizard = Wizard;
 }

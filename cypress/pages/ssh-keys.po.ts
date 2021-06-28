@@ -54,7 +54,7 @@ export class SSHKeysPage {
   }
 
   static verifyUrl(): void {
-    cy.url().should(Condition.Include, View.SSHKeys);
+    cy.url().should(Condition.Include, View.SSHKeys.Default);
   }
 
   static visit(): void {

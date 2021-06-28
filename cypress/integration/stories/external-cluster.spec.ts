@@ -27,7 +27,7 @@ describe('External Cluster Story', () => {
   it('should login', () => {
     login(email, password);
 
-    cy.url().should(Condition.Include, View.Projects);
+    cy.url().should(Condition.Include, View.Projects.Default);
   });
 
   it('should create a new project', () => {

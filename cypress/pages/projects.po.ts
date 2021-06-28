@@ -80,7 +80,7 @@ export class ProjectsPage {
   }
 
   static verifyUrl(): void {
-    cy.url().should(Condition.Include, View.Projects);
+    cy.url().should(Condition.Include, View.Projects.Default);
   }
 
   static visit(): void {

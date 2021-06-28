@@ -111,6 +111,6 @@ export class WizardPage {
   // Utils
 
   static verifyUrl(): void {
-    cy.url().should(Condition.Include, View.Wizard);
+    cy.url().should(Condition.Include, View.Wizard.Default);
   }
 }

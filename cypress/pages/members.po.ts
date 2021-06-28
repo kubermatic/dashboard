@@ -71,7 +71,7 @@ export class MembersPage {
   }
 
   static verifyUrl(): void {
-    cy.url().should(Condition.Include, View.Members);
+    cy.url().should(Condition.Include, View.Members.Default);
   }
 
   static visit(): void {

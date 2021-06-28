@@ -28,7 +28,7 @@ describe('User Settings Story', () => {
 
   it('should login', () => {
     login(email, password);
-    cy.url().should(Condition.Include, View.Projects);
+    cy.url().should(Condition.Include, View.Projects.Default);
   });
 
   it('should create a new project', () => {
@@ -71,7 +71,7 @@ describe('User Settings Story', () => {
 
   it('should login and get redirected', () => {
     login(email, password);
-    cy.wait(waitTime).url().should(Condition.Include, View.Clusters);
+    cy.wait(waitTime).url().should(Condition.Include, View.Clusters.Default);
   });
 
   it('should go to the user settings', () => {

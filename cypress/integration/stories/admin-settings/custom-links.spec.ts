@@ -12,7 +12,7 @@
 import {login, logout} from '../../../utils/auth';
 import {Condition} from '../../../utils/condition';
 import {View} from '../../../utils/view';
-import {AdminSettingsPage} from '../../../pages/admin-settings.po';
+import {AdminSettings} from '../../../pages/admin-settings.po';
 import {HelpPanel} from '../../../pages/help-panel.po';
 
 describe('Admin Settings - Custom Links Story', () => {
@@ -26,41 +26,41 @@ describe('Admin Settings - Custom Links Story', () => {
 
   it('should login', () => {
     login(email, password);
-    cy.url().should(Condition.Include, View.Projects);
+    cy.url().should(Condition.Include, View.Projects.Default);
   });
 
-  it('should go to the admin settings', () => {
-    AdminSettingsPage.visit();
+  it('should go to the admin settings - interface page', () => {
+    AdminSettings.InterfacePage.visit();
   });
 
   it('should add custom link', () => {
-    AdminSettingsPage.getLastCustomLinkLocationInput().click();
-    AdminSettingsPage.getLastCustomLinkLocationInput().get('mat-option').contains(linkLocation).click();
-    AdminSettingsPage.getLastCustomLinkLabelInput().type(linkLabel).should(Condition.HaveValue, linkLabel);
-    AdminSettingsPage.getLastCustomLinkURLInput().type(linkURL).should(Condition.HaveValue, linkURL);
-    AdminSettingsPage.waitForSave();
+    AdminSettings.InterfacePage.getLastCustomLinkLocationInput().click();
+    AdminSettings.InterfacePage.getLastCustomLinkLocationInput().get('mat-option').contains(linkLocation).click();
+    AdminSettings.InterfacePage.getLastCustomLinkLabelInput().type(linkLabel).should(Condition.HaveValue, linkLabel);
+    AdminSettings.InterfacePage.getLastCustomLinkURLInput().type(linkURL).should(Condition.HaveValue, linkURL);
+    AdminSettings.waitForSave();
   });
 
   it('should make sure that API documentation display is enabled', () => {
-    AdminSettingsPage.getApiDocsCheckbox().click();
-    AdminSettingsPage.waitForSave();
-    AdminSettingsPage.getApiDocsCheckbox().find('input').should(Condition.BeChecked);
+    AdminSettings.InterfacePage.getApiDocsCheckbox().click();
+    AdminSettings.waitForSave();
+    AdminSettings.InterfacePage.getApiDocsCheckbox().find('input').should(Condition.BeChecked);
   });
 
   it('should make sure that terms of service display is enabled', () => {
-    AdminSettingsPage.getTermsOfServiceCheckbox().click();
-    AdminSettingsPage.waitForSave();
-    AdminSettingsPage.getTermsOfServiceCheckbox().find('input').should(Condition.BeChecked);
+    AdminSettings.InterfacePage.getTermsOfServiceCheckbox().click();
+    AdminSettings.waitForSave();
+    AdminSettings.InterfacePage.getTermsOfServiceCheckbox().find('input').should(Condition.BeChecked);
   });
 
   it('should make sure that demo information display is enabled', () => {
-    AdminSettingsPage.getDemoInfoCheckbox().click();
-    AdminSettingsPage.waitForSave();
-    AdminSettingsPage.getDemoInfoCheckbox().find('input').should(Condition.BeChecked);
+    AdminSettings.InterfacePage.getDemoInfoCheckbox().click();
+    AdminSettings.waitForSave();
+    AdminSettings.InterfacePage.getDemoInfoCheckbox().find('input').should(Condition.BeChecked);
   });
 
   it('should check if footer contains custom link', () => {
-    AdminSettingsPage.getFooterCustomIcon(linkURL).should(Condition.Exist);
+    AdminSettings.getFooterCustomIcon(linkURL).should(Condition.Exist);
   });
 
   it('should check if help panel contains API docs', () => {
@@ -69,46 +69,46 @@ describe('Admin Settings - Custom Links Story', () => {
   });
 
   it('should check if footer contains terms of service', () => {
-    AdminSettingsPage.getFooter().should(Condition.Contain, termsOfService);
+    AdminSettings.getFooter().should(Condition.Contain, termsOfService);
   });
 
   it('should check if footer contains demo information', () => {
-    AdminSettingsPage.getFooter().should(Condition.Contain, demoInfo);
+    AdminSettings.getFooter().should(Condition.Contain, demoInfo);
   });
 
   it('should delete custom link', () => {
-    AdminSettingsPage.getSecondLastCustomLinkDeleteButton().should(Condition.NotBe, 'disabled').click();
-    AdminSettingsPage.waitForSave();
+    AdminSettings.InterfacePage.getSecondLastCustomLinkDeleteButton().should(Condition.NotBe, 'disabled').click();
+    AdminSettings.waitForSave();
   });
 
   it('should make sure that API documentation display is disabled', () => {
-    AdminSettingsPage.getApiDocsCheckbox().click();
-    AdminSettingsPage.waitForSave();
-    AdminSettingsPage.getApiDocsCheckbox().find('input').should(Condition.NotBeChecked);
+    AdminSettings.InterfacePage.getApiDocsCheckbox().click();
+    AdminSettings.waitForSave();
+    AdminSettings.InterfacePage.getApiDocsCheckbox().find('input').should(Condition.NotBeChecked);
   });
 
   it('should make sure that terms of service display is disabled', () => {
-    AdminSettingsPage.getTermsOfServiceCheckbox().click();
-    AdminSettingsPage.waitForSave();
-    AdminSettingsPage.getTermsOfServiceCheckbox().find('input').should(Condition.NotBeChecked);
+    AdminSettings.InterfacePage.getTermsOfServiceCheckbox().click();
+    AdminSettings.waitForSave();
+    AdminSettings.InterfacePage.getTermsOfServiceCheckbox().find('input').should(Condition.NotBeChecked);
   });
 
   it('should make sure that demo information display is disabled', () => {
-    AdminSettingsPage.getDemoInfoCheckbox().click();
-    AdminSettingsPage.waitForSave();
-    AdminSettingsPage.getDemoInfoCheckbox().find('input').should(Condition.NotBeChecked);
+    AdminSettings.InterfacePage.getDemoInfoCheckbox().click();
+    AdminSettings.waitForSave();
+    AdminSettings.InterfacePage.getDemoInfoCheckbox().find('input').should(Condition.NotBeChecked);
   });
 
   it('should check if footer does not contain custom link', () => {
-    AdminSettingsPage.getFooterCustomIcon(linkURL).should(Condition.NotExist);
+    AdminSettings.getFooterCustomIcon(linkURL).should(Condition.NotExist);
   });
 
   it('should check if footer does not contain terms of service', () => {
-    AdminSettingsPage.getFooter().should(Condition.NotContain, termsOfService);
+    AdminSettings.getFooter().should(Condition.NotContain, termsOfService);
   });
 
   it('should check if footer does not contain demo information', () => {
-    AdminSettingsPage.getFooter().should(Condition.NotContain, demoInfo);
+    AdminSettings.getFooter().should(Condition.NotContain, demoInfo);
   });
 
   it('should logout', () => {

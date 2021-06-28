@@ -33,7 +33,7 @@ describe('KubeVirt Provider', () => {
 
   it('should login', () => {
     login(email, password);
-    cy.url().should(Condition.Include, View.Projects);
+    cy.url().should(Condition.Include, View.Projects.Default);
   });
 
   it('should create a new project', () => {
@@ -69,7 +69,7 @@ describe('KubeVirt Provider', () => {
     WizardPage.getNextBtn(WizardStep.NodeSettings).should(Condition.BeEnabled).click({force: true});
     WizardPage.getCreateBtn().click({force: true});
 
-    cy.url().should(Condition.Contain, View.Clusters);
+    cy.url().should(Condition.Contain, View.Clusters.Default);
   });
 
   it('should check if cluster was created', () => {

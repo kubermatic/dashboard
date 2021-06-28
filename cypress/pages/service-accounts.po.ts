@@ -71,7 +71,7 @@ export class ServiceAccountsPage {
   }
 
   static verifyUrl(): void {
-    cy.url().should(Condition.Include, View.ServiceAccounts);
+    cy.url().should(Condition.Include, View.ServiceAccounts.Default);
   }
 
   static visit(): void {

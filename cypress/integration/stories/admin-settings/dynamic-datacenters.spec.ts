@@ -12,7 +12,7 @@
 import {login, logout} from '../../../utils/auth';
 import {Condition} from '../../../utils/condition';
 import {View} from '../../../utils/view';
-import {AdminSettingsPage} from '../../../pages/admin-settings.po';
+import {AdminSettings} from '../../../pages/admin-settings.po';
 import {ProjectsPage} from '../../../pages/projects.po';
 import * as _ from 'lodash';
 import {ClustersPage} from '../../../pages/clusters.po';
@@ -33,36 +33,38 @@ describe('Admin Settings - Dynamic Datacenters Story', () => {
 
   it('should login', () => {
     login(email, password);
-    cy.url().should(Condition.Include, View.Projects);
+    cy.url().should(Condition.Include, View.Projects.Default);
   });
 
-  it('should go to the admin settings', () => {
-    AdminSettingsPage.visit();
-  });
-
-  it('should switch to dynamic datacenters tab', () => {
-    AdminSettingsPage.getDynamicDatacentersTab().click();
+  it('should go to the admin settings - dynamic datacenters page', () => {
+    AdminSettings.DynamicDatacentersPage.visit();
   });
 
   it('should open add datacenter dialog', () => {
-    AdminSettingsPage.getAddDatacenterBtn().click();
+    AdminSettings.DynamicDatacentersPage.getAddDatacenterBtn().click();
   });
 
   it('should add new datacenter', () => {
-    AdminSettingsPage.getAddDatacenterNameInput().type(datacenterName).should(Condition.HaveValue, datacenterName);
+    AdminSettings.DynamicDatacentersPage.getAddDatacenterNameInput()
+      .type(datacenterName)
+      .should(Condition.HaveValue, datacenterName);
 
-    AdminSettingsPage.getAddDatacenterProviderInput().click();
-    AdminSettingsPage.getAddDatacenterProviderInput().get(`mat-option .km-provider-logo-${provider}`).click();
+    AdminSettings.DynamicDatacentersPage.getAddDatacenterProviderInput().click();
+    AdminSettings.DynamicDatacentersPage.getAddDatacenterProviderInput()
+      .get(`mat-option .km-provider-logo-${provider}`)
+      .click();
 
-    AdminSettingsPage.getAddDatacenterSeedInput().click();
-    AdminSettingsPage.getAddDatacenterSeedInput().get('mat-option').contains(seedName).click();
+    AdminSettings.DynamicDatacentersPage.getAddDatacenterSeedInput().click();
+    AdminSettings.DynamicDatacentersPage.getAddDatacenterSeedInput().get('mat-option').contains(seedName).click();
 
-    AdminSettingsPage.getAddDatacenterCountryInput().click();
-    AdminSettingsPage.getAddDatacenterCountryInput().get('mat-option').contains(country).click();
+    AdminSettings.DynamicDatacentersPage.getAddDatacenterCountryInput().click();
+    AdminSettings.DynamicDatacentersPage.getAddDatacenterCountryInput().get('mat-option').contains(country).click();
 
-    AdminSettingsPage.getAddDatacenterLocationInput().type(location).should(Condition.HaveValue, location);
+    AdminSettings.DynamicDatacentersPage.getAddDatacenterLocationInput()
+      .type(location)
+      .should(Condition.HaveValue, location);
 
-    AdminSettingsPage.getAddDatacenterSaveBtn().click();
+    AdminSettings.DynamicDatacentersPage.getAddDatacenterSaveBtn().click();
   });
 
   it('should go to projects view', () => {
@@ -109,16 +111,12 @@ describe('Admin Settings - Dynamic Datacenters Story', () => {
     ProjectsPage.deleteProject(projectName);
   });
 
-  it('should go to the admin settings', () => {
-    AdminSettingsPage.visit();
-  });
-
-  it('should switch to dynamic datacenters tab', () => {
-    AdminSettingsPage.getDynamicDatacentersTab().click();
+  it('should go to the admin settings - dynamic datacenters page', () => {
+    AdminSettings.DynamicDatacentersPage.visit();
   });
 
   it('should delete created datacenter', () => {
-    AdminSettingsPage.getDeleteDatacenterBtn(datacenterName).click();
+    AdminSettings.DynamicDatacentersPage.getDeleteDatacenterBtn(datacenterName).click();
     cy.get('#km-confirmation-dialog-confirm-btn').should(Condition.NotBe, 'disabled').click();
   });
 
