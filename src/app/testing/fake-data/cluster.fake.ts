@@ -209,6 +209,7 @@ export function fakeAzureCluster(): Cluster {
           subscriptionID: 'azure-subscription-id',
           tenantID: 'azure-tenant-id',
           vnet: 'azure-vnet',
+          loadBalancerSKU: 'basic',
         },
       },
       version: '1.8.5',

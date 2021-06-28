@@ -12,6 +12,7 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
+import {AZURE_LOADBALANCER_SKUS} from '@shared/entity/cluster';
 import {AzurePresetSpec} from '@shared/entity/preset';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge, of} from 'rxjs';
@@ -28,6 +29,7 @@ export enum Controls {
   Subnet = 'subnet',
   RouteTable = 'routeTable',
   SecurityGroup = 'securityGroup',
+  LoadBalancerSKU = 'loadBalancerSKU',
 }
 
 @Component({
@@ -48,6 +50,7 @@ export enum Controls {
 })
 export class AzureSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
+  loadBalancerSKUs = AZURE_LOADBALANCER_SKUS;
 
   constructor(private readonly _builder: FormBuilder, private readonly _presetDialogService: PresetDialogService) {
     super();
@@ -65,6 +68,7 @@ export class AzureSettingsComponent extends BaseFormValidator implements OnInit,
       [Controls.Subnet]: this._builder.control(''),
       [Controls.RouteTable]: this._builder.control(''),
       [Controls.SecurityGroup]: this._builder.control(''),
+      [Controls.LoadBalancerSKU]: this._builder.control(''),
     });
 
     this.form.valueChanges
@@ -95,6 +99,7 @@ export class AzureSettingsComponent extends BaseFormValidator implements OnInit,
       subnet: this.form.get(Controls.Subnet).value,
       routeTable: this.form.get(Controls.RouteTable).value,
       securityGroup: this.form.get(Controls.SecurityGroup).value,
+      loadBalancerSKU: this.form.get(Controls.LoadBalancerSKU).value,
     } as AzurePresetSpec;
   }
 }
