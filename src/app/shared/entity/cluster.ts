@@ -161,6 +161,9 @@ export class KubeVirtCloudSpec {
 }
 
 export class OpenstackCloudSpec {
+  useToken?: boolean;
+  applicationCredentialID?: string;
+  applicationCredentialSecret?: string;
   username: string;
   password: string;
   tenant: string;

@@ -10,23 +10,17 @@
 // limitations under the License.
 
 import {HttpClient} from '@angular/common/http';
-import {EMPTY, Observable} from 'rxjs';
+import {OpenstackAvailabilityZone, OpenstackFlavor, OpenstackNetwork, OpenstackSecurityGroup, OpenstackSubnet, OpenstackTenant,} from '@shared/entity/provider/openstack';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {EMPTY, Observable} from 'rxjs';
 import {Provider} from './provider';
-import {
-  OpenstackAvailabilityZone,
-  OpenstackFlavor,
-  OpenstackNetwork,
-  OpenstackSecurityGroup,
-  OpenstackSubnet,
-  OpenstackTenant,
-} from '@shared/entity/provider/openstack';
 
 export class Openstack extends Provider {
   private readonly _tenantsUrl = `${this._restRoot}/providers/openstack/tenants`;
   private readonly _securityGroupsUrl = `${this._restRoot}/providers/openstack/securitygroups`;
   private readonly _networksUrl = `${this._restRoot}/providers/openstack/networks`;
   private readonly _availabilityZonesUrl = `${this._restRoot}/providers/openstack/availabilityzones`;
+  private _usingApplicationCredentials = false;
 
   constructor(http: HttpClient, provider: NodeProvider) {
     super(http, provider);
@@ -35,8 +29,7 @@ export class Openstack extends Provider {
       Openstack.Header.Username,
       Openstack.Header.Password,
       Openstack.Header.Domain,
-      Openstack.Header.Datacenter,
-      Openstack.Header.Tenant
+      Openstack.Header.Datacenter
     );
   }
 
@@ -55,6 +48,22 @@ export class Openstack extends Provider {
   password(password: string): Openstack {
     if (password) {
       this._headers = this._headers.set(Openstack.Header.Password, password);
+    }
+    return this;
+  }
+
+  applicationCredentialID(id: string): Openstack {
+    if (id) {
+      this._usingApplicationCredentials = true;
+      this._headers = this._headers.set(Openstack.Header.ApplicationCredentialID, id);
+    }
+    return this;
+  }
+
+  applicationCredentialPassword(password: string): Openstack {
+    if (password) {
+      this._usingApplicationCredentials = true;
+      this._headers = this._headers.set(Openstack.Header.ApplicationCredentialSecret, password);
     }
     return this;
   }
@@ -82,13 +91,22 @@ export class Openstack extends Provider {
 
   tenantID(tenantID: string): Openstack {
     if (tenantID) {
-      this._changeRequiredHeader(Openstack.Header.Tenant, Openstack.Header.TenantID);
       this._headers = this._headers.set(Openstack.Header.TenantID, tenantID);
     }
     return this;
   }
 
   flavors(onLoadingCb: () => void = null): Observable<OpenstackFlavor[]> {
+    if (this._usingApplicationCredentials) {
+      this._setRequiredHeaders(
+        Openstack.Header.ApplicationCredentialID,
+        Openstack.Header.ApplicationCredentialSecret,
+        Openstack.Header.Datacenter
+      );
+
+      this._cleanupOptionalHeaders();
+    }
+
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
@@ -103,12 +121,16 @@ export class Openstack extends Provider {
   }
 
   tenants(onLoadingCb: () => void = null): Observable<OpenstackTenant[]> {
-    this._setRequiredHeaders(
-      Openstack.Header.Username,
-      Openstack.Header.Password,
-      Openstack.Header.Domain,
-      Openstack.Header.Datacenter
-    );
+    if (this._usingApplicationCredentials) {
+      this._setRequiredHeaders(
+        Openstack.Header.ApplicationCredentialID,
+        Openstack.Header.ApplicationCredentialSecret,
+        Openstack.Header.Datacenter
+      );
+
+      this._cleanupOptionalHeaders();
+    }
+
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
@@ -123,6 +145,16 @@ export class Openstack extends Provider {
   }
 
   securityGroups(onLoadingCb: () => void = null): Observable<OpenstackSecurityGroup[]> {
+    if (this._usingApplicationCredentials) {
+      this._setRequiredHeaders(
+        Openstack.Header.ApplicationCredentialID,
+        Openstack.Header.ApplicationCredentialSecret,
+        Openstack.Header.Datacenter
+      );
+
+      this._cleanupOptionalHeaders();
+    }
+
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
@@ -137,6 +169,16 @@ export class Openstack extends Provider {
   }
 
   networks(onLoadingCb: () => void = null): Observable<OpenstackNetwork[]> {
+    if (this._usingApplicationCredentials) {
+      this._setRequiredHeaders(
+        Openstack.Header.ApplicationCredentialID,
+        Openstack.Header.ApplicationCredentialSecret,
+        Openstack.Header.Datacenter
+      );
+
+      this._cleanupOptionalHeaders();
+    }
+
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
@@ -151,6 +193,16 @@ export class Openstack extends Provider {
   }
 
   subnets(network: string, onLoadingCb: () => void = null): Observable<OpenstackSubnet[]> {
+    if (this._usingApplicationCredentials) {
+      this._setRequiredHeaders(
+        Openstack.Header.ApplicationCredentialID,
+        Openstack.Header.ApplicationCredentialSecret,
+        Openstack.Header.Datacenter
+      );
+
+      this._cleanupOptionalHeaders();
+    }
+
     if (!this._hasRequiredHeaders() || !network) {
       return EMPTY;
     }
@@ -164,6 +216,16 @@ export class Openstack extends Provider {
   }
 
   availabilityZones(onLoadingCb: () => void = null): Observable<OpenstackAvailabilityZone[]> {
+    if (this._usingApplicationCredentials) {
+      this._setRequiredHeaders(
+        Openstack.Header.ApplicationCredentialID,
+        Openstack.Header.ApplicationCredentialSecret,
+        Openstack.Header.Datacenter
+      );
+
+      this._cleanupOptionalHeaders();
+    }
+
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
@@ -182,6 +244,8 @@ export namespace Openstack {
   export enum Header {
     Username = 'Username',
     Password = 'Password',
+    ApplicationCredentialID = 'ApplicationCredentialID',
+    ApplicationCredentialSecret = 'ApplicationCredentialSecret',
     Domain = 'Domain',
     Datacenter = 'DatacenterName',
     Tenant = 'Tenant',

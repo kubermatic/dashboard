@@ -71,21 +71,19 @@ enum SubnetIDState {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpenstackProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  @ViewChild('networkCombobox')
-  private readonly _networkCombobox: FilteredComboboxComponent;
-  @ViewChild('securityGroupCombobox')
-  private readonly _securityGroupCombobox: FilteredComboboxComponent;
-  @ViewChild('subnetIDCombobox')
-  private readonly _subnetIDCombobox: FilteredComboboxComponent;
-
   readonly Controls = Controls;
-
   securityGroups: OpenstackSecurityGroup[] = [];
   securityGroupsLabel = SecurityGroupState.Empty;
   networks: OpenstackNetwork[] = [];
   networksLabel = NetworkState.Empty;
   subnetIDs: OpenstackSubnet[] = [];
   subnetIDsLabel = SubnetIDState.Empty;
+  @ViewChild('networkCombobox')
+  private readonly _networkCombobox: FilteredComboboxComponent;
+  @ViewChild('securityGroupCombobox')
+  private readonly _securityGroupCombobox: FilteredComboboxComponent;
+  @ViewChild('subnetIDCombobox')
+  private readonly _subnetIDCombobox: FilteredComboboxComponent;
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -118,14 +116,16 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator implem
 
     this._clusterSpecService.clusterChanges
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
-      .pipe(tap(_ => (!this._hasRequiredBasicCredentials() ? this._clearSecurityGroup() : null)))
+      .pipe(tap(_ => (!this._hasRequiredCredentials() ? this._clearSecurityGroup() : null)))
+      .pipe(filter(_ => this._hasRequiredCredentials()))
       .pipe(switchMap(_ => this._securityGroupListObservable()))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._loadSecurityGroups.bind(this));
 
     this._clusterSpecService.clusterChanges
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
-      .pipe(tap(_ => (!this._hasRequiredBasicCredentials() ? this._clearNetwork() : null)))
+      .pipe(tap(_ => (!this._canLoadNetwork() ? this._clearNetwork() : null)))
+      .pipe(filter(_ => this._canLoadNetwork()))
       .pipe(switchMap(_ => this._networkListObservable()))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._loadNetworks.bind(this));
@@ -133,7 +133,8 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator implem
     this.form
       .get(Controls.Network)
       .valueChanges.pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
-      .pipe(tap(_ => (!this._hasRequiredCredentials() ? this._clearSubnetID() : null)))
+      .pipe(tap(_ => (!this._canLoadSubnet() ? this._clearSubnetID() : null)))
+      .pipe(filter(_ => this._canLoadSubnet()))
       .pipe(switchMap(_ => this._subnetIDListObservable()))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._loadSubnetIDs.bind(this));
@@ -154,10 +155,11 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator implem
   getHint(control: Controls): string {
     switch (control) {
       case Controls.SecurityGroup:
+        return this._hasRequiredCredentials() ? '' : 'Please enter your credentials first.';
       case Controls.Network:
-        return this._hasRequiredBasicCredentials() ? '' : 'Please enter your credentials first.';
+        return this._canLoadNetwork() ? '' : 'Please enter your credentials first.';
       case Controls.SubnetID:
-        return this._hasRequiredCredentials() ? '' : 'Please enter your credentials and network first.';
+        return this._canLoadSubnet() ? '' : 'Please enter your credentials and network first.';
     }
   }
 
@@ -189,23 +191,40 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator implem
     this._cdr.detectChanges();
   }
 
-  private _hasRequiredBasicCredentials(): boolean {
+  private _hasBasicCredentials(): boolean {
     return (
       !!this._clusterSpecService.cluster.spec.cloud.openstack &&
       !!this._clusterSpecService.cluster.spec.cloud.openstack.username &&
-      !!this._clusterSpecService.cluster.spec.cloud.openstack.password &&
-      !!this._clusterSpecService.cluster.spec.cloud.openstack.domain &&
+      !!this._clusterSpecService.cluster.spec.cloud.openstack.password
+    );
+  }
+
+  private _hasApplicationCredentials(): boolean {
+    return (
+      !!this._clusterSpecService.cluster.spec.cloud.openstack &&
+      !!this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialID &&
+      !!this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialSecret
+    );
+  }
+
+  private _hasRequiredCredentials(): boolean {
+    return this._hasBasicCredentials() || this._hasApplicationCredentials();
+  }
+
+  private _hasTenant(): boolean {
+    return (
+      !!this._clusterSpecService.cluster.spec.cloud.openstack &&
       (!!this._clusterSpecService.cluster.spec.cloud.openstack.tenant ||
         !!this._clusterSpecService.cluster.spec.cloud.openstack.tenantID)
     );
   }
 
-  private _hasRequiredCredentials(): boolean {
-    return (
-      this._hasRequiredBasicCredentials() &&
-      !!this._clusterSpecService.cluster.spec.cloud.openstack &&
-      !!this._clusterSpecService.cluster.spec.cloud.openstack.network
-    );
+  private _canLoadSubnet(): boolean {
+    return this._hasRequiredCredentials() && !!this._clusterSpecService.cluster.spec.cloud.openstack.network;
+  }
+
+  private _canLoadNetwork(): boolean {
+    return (this._hasBasicCredentials() && this._hasTenant()) || this._hasApplicationCredentials();
   }
 
   private _securityGroupListObservable(): Observable<OpenstackSecurityGroup[]> {
@@ -214,8 +233,8 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator implem
       .domain(this._clusterSpecService.cluster.spec.cloud.openstack.domain)
       .username(this._clusterSpecService.cluster.spec.cloud.openstack.username)
       .password(this._clusterSpecService.cluster.spec.cloud.openstack.password)
-      .tenant(this._clusterSpecService.cluster.spec.cloud.openstack.tenant)
-      .tenantID(this._clusterSpecService.cluster.spec.cloud.openstack.tenantID)
+      .applicationCredentialID(this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialID)
+      .applicationCredentialPassword(this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialSecret)
       .datacenter(this._clusterSpecService.cluster.spec.cloud.dc)
       .securityGroups(this._onSecurityGroupLoading.bind(this))
       .pipe(map(securityGroups => _.sortBy(securityGroups, sg => sg.name.toLowerCase())))
@@ -241,14 +260,25 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator implem
   }
 
   private _networkListObservable(): Observable<OpenstackNetwork[]> {
-    return this._presets
+    let openstackProvider = this._presets
       .provider(NodeProvider.OPENSTACK)
       .domain(this._clusterSpecService.cluster.spec.cloud.openstack.domain)
       .username(this._clusterSpecService.cluster.spec.cloud.openstack.username)
       .password(this._clusterSpecService.cluster.spec.cloud.openstack.password)
-      .tenant(this._clusterSpecService.cluster.spec.cloud.openstack.tenant)
-      .tenantID(this._clusterSpecService.cluster.spec.cloud.openstack.tenantID)
-      .datacenter(this._clusterSpecService.cluster.spec.cloud.dc)
+      .applicationCredentialID(this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialID)
+      .applicationCredentialPassword(this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialSecret)
+      .datacenter(this._clusterSpecService.cluster.spec.cloud.dc);
+
+    if (
+      this._clusterSpecService.cluster.spec.cloud.openstack.username ||
+      this._clusterSpecService.cluster.spec.cloud.openstack.password
+    ) {
+      openstackProvider = openstackProvider
+        .tenant(this._clusterSpecService.cluster.spec.cloud.openstack.tenant)
+        .tenantID(this._clusterSpecService.cluster.spec.cloud.openstack.tenantID);
+    }
+
+    return openstackProvider
       .networks(this._onNetworkLoading.bind(this))
       .pipe(map(networks => _.sortBy(networks, n => n.name.toLowerCase())))
       .pipe(
@@ -280,6 +310,8 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator implem
       .password(this._clusterSpecService.cluster.spec.cloud.openstack.password)
       .tenant(this._clusterSpecService.cluster.spec.cloud.openstack.tenant)
       .tenantID(this._clusterSpecService.cluster.spec.cloud.openstack.tenantID)
+      .applicationCredentialID(this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialID)
+      .applicationCredentialPassword(this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialSecret)
       .datacenter(this._clusterSpecService.cluster.spec.cloud.dc)
       .subnets(this._clusterSpecService.cluster.spec.cloud.openstack.network, this._onSubnetIDLoading.bind(this))
       .pipe(map(subnetIDs => _.sortBy(subnetIDs, s => s.name.toLowerCase())))

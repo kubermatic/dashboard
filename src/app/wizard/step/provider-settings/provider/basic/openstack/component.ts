@@ -19,8 +19,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {Auth} from '@core/services/auth/service';
 import {AppConfigService} from '@app/config.service';
+import {Auth} from '@core/services/auth/service';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {PresetsService} from '@core/services/wizard/presets';
@@ -36,9 +36,9 @@ import {
   debounceTime,
   distinctUntilChanged,
   filter,
-  take,
   map,
   switchMap,
+  take,
   takeUntil,
   tap,
 } from 'rxjs/operators';
@@ -47,6 +47,8 @@ enum Controls {
   Domain = 'domain',
   Username = 'username',
   Password = 'password',
+  ApplicationCredentialID = 'applicationCredentialID',
+  ApplicationCredentialSecret = 'applicationCredentialSecret',
   Project = 'project',
   ProjectID = 'projectID',
   FloatingIPPool = 'floatingIPPool',
@@ -115,6 +117,8 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
       [Controls.Domain]: this._builder.control('', Validators.required),
       [Controls.Username]: this._builder.control('', Validators.required),
       [Controls.Password]: this._builder.control('', Validators.required),
+      [Controls.ApplicationCredentialID]: this._builder.control('', Validators.required),
+      [Controls.ApplicationCredentialSecret]: this._builder.control('', Validators.required),
       [Controls.Project]: this._builder.control('', Validators.required),
       [Controls.ProjectID]: this._builder.control('', Validators.required),
       [Controls.FloatingIPPool]: this._builder.control('', Validators.required),
@@ -153,7 +157,9 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
     merge(
       this.form.get(Controls.Domain).valueChanges,
       this.form.get(Controls.Username).valueChanges,
-      this.form.get(Controls.Password).valueChanges
+      this.form.get(Controls.Password).valueChanges,
+      this.form.get(Controls.ApplicationCredentialID).valueChanges,
+      this.form.get(Controls.ApplicationCredentialSecret).valueChanges
     )
       .pipe(debounceTime(this._debounceTime))
       .pipe(tap(_ => this._clearProject()))
@@ -168,7 +174,13 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
         }
       });
 
-    merge(this.form.get(Controls.Project).valueChanges, this.form.get(Controls.ProjectID).valueChanges)
+    merge(
+      this.form.get(Controls.Domain).valueChanges,
+      this.form.get(Controls.Username).valueChanges,
+      this.form.get(Controls.Password).valueChanges,
+      this.form.get(Controls.ApplicationCredentialID).valueChanges,
+      this.form.get(Controls.ApplicationCredentialSecret).valueChanges
+    )
       .pipe(tap(_ => this._clearFloatingIPPool()))
       .pipe(switchMap(_ => this._floatingIPPoolListObservable()))
       .pipe(takeUntil(this._unsubscribe))
@@ -196,6 +208,37 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
       .subscribe(value => {
         value ? this.form.get(Controls.Project).disable() : this.form.get(Controls.Project).enable();
       });
+
+    merge(this.form.get(Controls.Username).valueChanges, this.form.get(Controls.Password).valueChanges)
+      .pipe(distinctUntilChanged())
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(value => {
+        if (value) {
+          this._enable(false, Controls.ApplicationCredentialID);
+          this._enable(false, Controls.ApplicationCredentialSecret);
+          return;
+        }
+
+        this._enable(true, Controls.ApplicationCredentialID);
+        this._enable(true, Controls.ApplicationCredentialSecret);
+      });
+
+    merge(
+      this.form.get(Controls.ApplicationCredentialID).valueChanges,
+      this.form.get(Controls.ApplicationCredentialSecret).valueChanges
+    )
+      .pipe(distinctUntilChanged())
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(value => {
+        if (value) {
+          this._enable(false, Controls.Username);
+          this._enable(false, Controls.Password);
+          return;
+        }
+
+        this._enable(true, Controls.Username);
+        this._enable(true, Controls.Password);
+      });
   }
 
   private _formReset(): void {
@@ -222,10 +265,9 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
 
   getHint(control: Controls): string {
     switch (control) {
-      case Controls.Project:
-        return this._hasRequiredBasicCredentials() ? '' : 'Please enter your credentials first.';
       case Controls.FloatingIPPool:
-        return this._hasRequiredCredentials() ? '' : 'Please enter your credentials first & project/project ID.';
+      case Controls.Project:
+        return this._hasRequiredCredentials() ? '' : 'Please enter your credentials first.';
     }
 
     return '';
@@ -233,6 +275,16 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
 
   isRequired(control: Controls): boolean {
     switch (control) {
+      case Controls.Username:
+      case Controls.Password:
+        return !this._hasRequiredApplicationCredentials();
+      case Controls.ApplicationCredentialID:
+      case Controls.ApplicationCredentialSecret:
+        return (
+          !!this._clusterSpecService.cluster.spec.cloud.openstack &&
+          !!this._clusterSpecService.cluster.spec.cloud.openstack.domain &&
+          !!this._clusterSpecService.cluster.spec.cloud.openstack.username
+        );
       case Controls.Project:
         return !this.form.get(Controls.ProjectID).value;
       case Controls.ProjectID:
@@ -254,20 +306,23 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
     }
   }
 
+  private _hasRequiredCredentials(): boolean {
+    return this._hasRequiredBasicCredentials() || this._hasRequiredApplicationCredentials();
+  }
+
   private _hasRequiredBasicCredentials(): boolean {
     return (
       !!this._clusterSpecService.cluster.spec.cloud.openstack &&
-      !!this._clusterSpecService.cluster.spec.cloud.openstack.domain &&
       !!this._clusterSpecService.cluster.spec.cloud.openstack.username &&
       !!this._clusterSpecService.cluster.spec.cloud.openstack.password
     );
   }
 
-  private _hasRequiredCredentials(): boolean {
+  private _hasRequiredApplicationCredentials(): boolean {
     return (
-      this._hasRequiredBasicCredentials() &&
-      (!!this._clusterSpecService.cluster.spec.cloud.openstack.tenant ||
-        !!this._clusterSpecService.cluster.spec.cloud.openstack.tenantID)
+      !!this._clusterSpecService.cluster.spec.cloud.openstack &&
+      !!this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialID &&
+      !!this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialSecret
     );
   }
 
@@ -277,6 +332,8 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
       .domain(this.form.get(Controls.Domain).value)
       .username(this.form.get(Controls.Username).value)
       .password(this.form.get(Controls.Password).value)
+      .applicationCredentialID(this.form.get(Controls.ApplicationCredentialID).value)
+      .applicationCredentialPassword(this.form.get(Controls.ApplicationCredentialSecret).value)
       .datacenter(this._clusterSpecService.cluster.spec.cloud.dc)
       .tenants(this._onProjectLoading.bind(this))
       .pipe(map(projects => _.sortBy(projects, p => p.name.toLowerCase())))
@@ -308,8 +365,8 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
       .domain(this.form.get(Controls.Domain).value)
       .username(this.form.get(Controls.Username).value)
       .password(this.form.get(Controls.Password).value)
-      .tenant(this.form.get(Controls.Project).value)
-      .tenantID(this.form.get(Controls.ProjectID).value)
+      .applicationCredentialID(this.form.get(Controls.ApplicationCredentialID).value)
+      .applicationCredentialPassword(this.form.get(Controls.ApplicationCredentialSecret).value)
       .datacenter(this._clusterSpecService.cluster.spec.cloud.dc)
       .networks(this._onFloatingIPPoolLoading.bind(this))
       .pipe(
@@ -349,6 +406,8 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
             password: this.form.get(Controls.Password).value,
             tenant: this.form.get(Controls.Project).value,
             tenantID: this.form.get(Controls.ProjectID).value,
+            applicationCredentialID: this.form.get(Controls.ApplicationCredentialID).value,
+            applicationCredentialSecret: this.form.get(Controls.ApplicationCredentialSecret).value,
           } as OpenstackCloudSpec,
         } as CloudSpec,
       } as ClusterSpec,
