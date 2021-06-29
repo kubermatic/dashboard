@@ -300,6 +300,10 @@ limitations under the License.
               <div key>Datastore Cluster</div>
               <div value>{{cluster.spec.cloud?.vsphere.datastoreCluster}}</div>
             </km-property>
+            <km-property *ngIf="cluster.spec.cloud?.vsphere.resourcePool">
+              <div key>Resource Pool</div>
+              <div value>{{cluster.spec.cloud?.vsphere.resourcePool}}</div>
+            </km-property>
           </ng-container>
         </ng-container>
       </div>
