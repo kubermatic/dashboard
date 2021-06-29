@@ -189,6 +189,20 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       return true;
     }
 
+    // Check owner names.
+    let hasMatchingOwner = false;
+    if (project.owners) {
+      project.owners.forEach(owner => {
+        if (owner.name && owner.name.toLowerCase().includes(query)) {
+          hasMatchingOwner = true;
+          return;
+        }
+      });
+      if (hasMatchingOwner) {
+        return true;
+      }
+    }
+
     // Check labels.
     if (project.labels) {
       let hasMatchingLabel = false;
