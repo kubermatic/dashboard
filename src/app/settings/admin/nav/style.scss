@@ -46,16 +46,6 @@ $sidenav-item-margin: 10px;
       }
     }
   }
-
-  .mat-divider {
-    margin: $sidenav-item-margin 0 $sidenav-item-margin $sidenav-item-margin;
-  }
-
-  .km-disabled {
-    cursor: default;
-    opacity: .4;
-    pointer-events: none;
-  }
 }
 
 .km-collapse-sidenav {
