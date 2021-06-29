@@ -186,6 +186,7 @@ export class VSphereCloudSpec {
   infraManagementUser: VSphereInfraManagementUser;
   datastore?: string;
   datastoreCluster?: string;
+  resourcePool?: string;
 }
 
 export class VSphereInfraManagementUser {
