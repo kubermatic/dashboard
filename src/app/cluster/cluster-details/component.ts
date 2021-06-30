@@ -32,7 +32,7 @@ import {Health, HealthState} from '@shared/entity/health';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {Member} from '@shared/entity/member';
 import {ClusterMetrics} from '@shared/entity/metrics';
-import {AlertmanagerConfig} from '@shared/entity/mla';
+import {AlertmanagerConfig, RuleGroup} from '@shared/entity/mla';
 import {Constraint, GatekeeperConfig} from '@shared/entity/opa';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {Config, GroupConfig} from '@shared/model/Config';
@@ -74,6 +74,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   constraints: Constraint[] = [];
   gatekeeperConfig: GatekeeperConfig;
   alertmanagerConfig: AlertmanagerConfig;
+  ruleGroups: RuleGroup[];
   private _unsubscribe: Subject<void> = new Subject<void>();
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
@@ -157,8 +158,11 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             )
             .concat(
               this._canReloadNodes() && this.isMLAEnabled()
-                ? this._mlaService.alertmanagerConfig(this.projectID, this.cluster.id)
-                : of([])
+                ? [
+                    this._mlaService.alertmanagerConfig(this.projectID, this.cluster.id),
+                    this._mlaService.ruleGroups(this.projectID, this.cluster.id),
+                  ]
+                : [of([]), of([] as RuleGroup[])]
             )
             .concat(
               this._canReloadNodes() && this.isOPAEnabled() && this._hasMachineDeployments()
@@ -174,6 +178,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             Observable<MachineDeployment[]>,
             Observable<ClusterMetrics>,
             Observable<AlertmanagerConfig>,
+            Observable<RuleGroup[]>,
             Observable<Constraint[]>,
             Observable<GatekeeperConfig>
           ];
@@ -190,6 +195,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           machineDeployments,
           metrics,
           alertmanagerConfig,
+          ruleGroups,
           constraints,
           gatekeeperConfig,
         ]: [
@@ -199,6 +205,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           MachineDeployment[],
           ClusterMetrics,
           AlertmanagerConfig,
+          RuleGroup[],
           Constraint[],
           GatekeeperConfig
         ]) => {
@@ -207,6 +214,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.machineDeployments = machineDeployments;
           this.metrics = metrics;
           this.alertmanagerConfig = alertmanagerConfig;
+          this.ruleGroups = ruleGroups;
           this.upgrades = _.isEmpty(upgrades) ? [] : upgrades;
           this.constraints = constraints;
           this.gatekeeperConfig = gatekeeperConfig;

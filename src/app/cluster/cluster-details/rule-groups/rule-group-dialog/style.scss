@@ -9,24 +9,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export class AlertmanagerConfig {
-  spec: AlertmanagerSpec;
+@import 'variables';
+
+.spec {
+  font-size: $font-size-subhead-lg;
+  line-height: 25px;
 }
 
-export class AlertmanagerSpec {
-  config: string;
-}
-
-export class RuleGroup {
-  data: string;
-  type: RuleGroupType;
-}
-
-export class RuleGroupName {
-  name: string;
-}
-
-export enum RuleGroupType {
-  Metrics = 'Metrics',
-  Logs = 'Logs',
+.monaco-editor {
+  margin-top: 16px;
 }

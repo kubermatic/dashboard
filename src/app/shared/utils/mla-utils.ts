@@ -9,24 +9,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export class AlertmanagerConfig {
-  spec: AlertmanagerSpec;
-}
+import {RuleGroupName} from '@shared/entity/mla';
+import {load} from 'js-yaml';
+import * as _ from 'lodash';
 
-export class AlertmanagerSpec {
-  config: string;
-}
-
-export class RuleGroup {
-  data: string;
-  type: RuleGroupType;
-}
-
-export class RuleGroupName {
-  name: string;
-}
-
-export enum RuleGroupType {
-  Metrics = 'Metrics',
-  Logs = 'Logs',
+export class MLAUtils {
+  static getRuleGroupName(data: string): string {
+    let ruleGroupName = new RuleGroupName();
+    const yamlData = atob(data);
+    const jsonData = load(yamlData) as RuleGroupName;
+    if (!_.isEmpty(jsonData)) {
+      ruleGroupName = jsonData;
+    }
+    return ruleGroupName.name ? ruleGroupName.name : '';
+  }
 }

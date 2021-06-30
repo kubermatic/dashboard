@@ -305,6 +305,14 @@ limitations under the License.
                               [projectID]="projectID"
                               [isClusterRunning]="isClusterRunning"></km-alertmanager-config>
     </km-tab>
+    <km-tab label="MLA Rule Groups"
+            *ngIf="isMLAEnabled()">
+      <km-rule-groups [ruleGroups]="ruleGroups"
+                      [cluster]="cluster"
+                      [projectID]="projectID"
+                      [isClusterRunning]="isClusterRunning">
+      </km-rule-groups>
+    </km-tab>
   </km-tab-card>
 </div>
 
