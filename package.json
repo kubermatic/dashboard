@@ -79,7 +79,7 @@
     "@angular/cli": "12.0.3",
     "@angular/compiler-cli": "12.0.3",
     "@bahmutov/add-typescript-to-cypress": "2.1.2",
-    "@cypress/webpack-preprocessor": "5.9.0",
+    "@cypress/webpack-preprocessor": "5.9.1",
     "@jest/globals": "27.0.6",
     "@types/jest": "26.0.23",
     "@types/js-yaml": "4.0.1",
