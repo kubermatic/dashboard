@@ -85,6 +85,7 @@ import {TaintsComponent} from './components/taints/component';
 import {AutofocusDirective} from './directives/autofocus/directive';
 import {RelativeTimePipe} from './pipes/relativetime';
 import {AutocompleteComponent} from '@shared/components/autocomplete/component';
+import {CIDRFormComponent} from '@shared/components/cidr-form/component';
 
 const modules: any[] = [
   CommonModule,
@@ -140,6 +141,7 @@ const components: any[] = [
   LabelsComponent,
   TaintFormComponent,
   TaintsComponent,
+  CIDRFormComponent,
   RelativeTimePipe,
   RelativeTimeComponent,
   SSHKeyListComponent,

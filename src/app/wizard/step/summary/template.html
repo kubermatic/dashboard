@@ -61,6 +61,18 @@ limitations under the License.
             <span>{{getOperatingSystem()}}</span>
           </div>
         </km-property>
+        <km-property *ngIf="cluster.spec.clusterNetwork?.proxyMode">
+          <div key>Proxy Mode</div>
+          <div value>{{cluster.spec.clusterNetwork.proxyMode}}</div>
+        </km-property>
+        <km-property *ngIf="cluster.spec.clusterNetwork?.pods?.cidrBlocks?.length > 0">
+          <div key>Pods CIDR</div>
+          <div value>{{cluster.spec.clusterNetwork.pods.cidrBlocks.join(', ')}}</div>
+        </km-property>
+        <km-property *ngIf="cluster.spec.clusterNetwork?.services?.cidrBlocks?.length > 0">
+          <div key>Services CIDR</div>
+          <div value>{{cluster.spec.clusterNetwork.services.cidrBlocks.join(', ')}}</div>
+        </km-property>
         <div [ngSwitch]="displayTags(cluster.labels)">
           <km-property *ngSwitchCase="true">
             <div key>Cluster Labels</div>

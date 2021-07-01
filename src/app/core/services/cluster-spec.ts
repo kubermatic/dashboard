@@ -40,6 +40,12 @@ export class ClusterSpecService {
     this._cluster = _.mergeWith(this._cluster, cluster, (dest, src) =>
       _.isArray(dest) && _.isArray(src) ? dest : undefined
     );
+
+    // Copy cluster network without using customizer from above.
+    if (cluster && cluster.spec) {
+      this._cluster.spec.clusterNetwork = cluster.spec.clusterNetwork;
+    }
+
     this.clusterChanges.emit(this._cluster);
   }
 
@@ -110,10 +116,6 @@ export class ClusterSpecService {
     this._admissionPluginsEntity = plugins;
     this._cluster.spec.admissionPlugins = plugins;
     this.admissionPluginsChanges.emit(this._admissionPluginsEntity);
-  }
-
-  get admissionPlugins(): string[] {
-    return this._admissionPluginsEntity;
   }
 
   set clusterType(type: ClusterType) {

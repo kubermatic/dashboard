@@ -32,6 +32,7 @@ import {
   ContainerRuntime,
   END_OF_DOCKER_SUPPORT_VERSION,
   MasterVersion,
+  ProxyMode,
 } from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
@@ -57,6 +58,9 @@ enum Controls {
   OPAIntegration = 'opaIntegration',
   MLALogging = 'loggingEnabled',
   MLAMonitoring = 'monitoringEnabled',
+  ProxyMode = 'proxyMode',
+  PodsCIDR = 'podsCIDR',
+  ServicesCIDR = 'servicesCIDR',
 }
 
 @Component({
@@ -84,6 +88,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   labels: object;
   podNodeSelectorAdmissionPluginConfig: object;
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
+  proxyMode = ProxyMode;
   readonly Controls = Controls;
   private _datacenterSpec: Datacenter;
   private _seedSettings: SeedSettings;
@@ -120,6 +125,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.PodNodeSelectorAdmissionPluginConfig]: new FormControl(''),
       [Controls.Labels]: new FormControl(''),
       [Controls.SSHKeys]: this._builder.control(''),
+      [Controls.ProxyMode]: this._builder.control(''),
+      [Controls.PodsCIDR]: this._builder.control(''),
+      [Controls.ServicesCIDR]: this._builder.control(''),
     });
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
@@ -192,7 +200,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.OPAIntegration).valueChanges,
       this.form.get(Controls.MLALogging).valueChanges,
       this.form.get(Controls.MLAMonitoring).valueChanges,
-      this.form.get(Controls.ContainerRuntime).valueChanges
+      this.form.get(Controls.ContainerRuntime).valueChanges,
+      this.form.get(Controls.ProxyMode).valueChanges,
+      this.form.get(Controls.PodsCIDR).valueChanges,
+      this.form.get(Controls.ServicesCIDR).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
@@ -270,6 +281,11 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   }
 
   private _getClusterEntity(): Cluster {
+    let pods = this.controlValue(Controls.PodsCIDR);
+    pods = pods && pods.cidrs ? pods.cidrs.filter(v => !!v) : undefined;
+    let services = this.controlValue(Controls.ServicesCIDR);
+    services = services && services.cidrs ? services.cidrs.filter(v => !!v) : undefined;
+
     return {
       name: this.controlValue(Controls.Name),
       type: ClusterType.Kubernetes,
@@ -287,6 +303,11 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         },
         enableUserSSHKeyAgent: this.controlValue(Controls.UserSSHKeyAgent),
         containerRuntime: this.controlValue(Controls.ContainerRuntime),
+        clusterNetwork: {
+          proxyMode: this.controlValue(Controls.ProxyMode),
+          pods: {cidrBlocks: pods},
+          services: {cidrBlocks: services},
+        },
       } as ClusterSpec,
     } as Cluster;
   }
