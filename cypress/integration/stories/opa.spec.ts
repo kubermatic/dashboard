@@ -74,6 +74,7 @@ describe('OPA Story', () => {
   it('should add constraint template', () => {
     AdminSettingsPage.getConstraintTemplateDialogSaveBtn().should(Condition.BeEnabled);
     AdminSettingsPage.getConstraintTemplateDialogSaveBtn().click({force: true});
+    TrafficMonitor.newTrafficMonitor().url(Endpoint.ConstraintTemplates).method(RequestType.POST).interceptAndWait();
   });
 
   it('should check if constraint template was created', () => {
@@ -175,6 +176,7 @@ describe('OPA Story', () => {
   it('should add constraint', () => {
     ClustersPage.getConstraintDialogSaveBtn().should(Condition.BeEnabled);
     ClustersPage.getConstraintDialogSaveBtn().click({force: true});
+    TrafficMonitor.newTrafficMonitor().url(Endpoint.Constraints).method(RequestType.POST).interceptAndWait();
   });
 
   it('should check if constraint was created', () => {
@@ -213,6 +215,7 @@ describe('OPA Story', () => {
   it('should add gatekeeper config', () => {
     ClustersPage.getGatekeeperConfigDialogSaveBtn().should(Condition.BeEnabled);
     ClustersPage.getGatekeeperConfigDialogSaveBtn().click({force: true});
+    TrafficMonitor.newTrafficMonitor().url(Endpoint.GatekeeperConfig).method(RequestType.POST).interceptAndWait();
   });
 
   it('should check if gatekeeper config was created', () => {

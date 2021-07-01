@@ -24,4 +24,7 @@ export namespace Endpoint {
   export const SSHKeys = '**/sshkeys';
   export const AdminSettings = '**/admin/settings';
   export const Administrators = '**/admin';
+  export const ConstraintTemplates = '**/constrainttemplates';
+  export const Constraints = '**/constraints';
+  export const GatekeeperConfig = '**/gatekeeper/config';
 }
