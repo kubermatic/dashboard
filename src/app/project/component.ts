@@ -113,6 +113,27 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     this.dataSource.data = this.projects;
     this.dataSource.filterPredicate = this._filter.bind(this);
     this.dataSource.filter = '';
+    this.dataSource.sortData = (data: Project[], sort: MatSort) => {
+      if (!sort.active || sort.direction === '') {
+        return data;
+      }
+
+      return data.sort((a: Project, b: Project) => {
+        const isAsc = sort.direction === 'asc';
+        switch (sort.active) {
+          case 'name':
+            return this.compare(a.name, b.name, isAsc);
+          case 'id':
+            return this.compare(a.id, b.id, isAsc);
+          case 'role':
+            return this.compare(this.getRole(a.id), this.getRole(b.id), isAsc);
+          case 'clusters':
+            return this.compare(a.clustersNumber, b.clustersNumber, isAsc);
+          default:
+            return 0;
+        }
+      });
+    };
 
     this._userService.currentUser.subscribe(user => {
       this.currentUser = user;
@@ -166,6 +187,10 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges(): void {
     this.dataSource.data = this.projects;
     this._cdr.detectChanges();
+  }
+
+  compare(a: number | string, b: number | string, isAsc: boolean) {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
   isEmpty(arr: any): boolean {

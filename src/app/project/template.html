@@ -66,7 +66,7 @@ limitations under the License.
           <th mat-header-cell
               *matHeaderCellDef
               class="km-header-cell p-20"
-              mat-sort-header>Name</th>
+              mat-sort-header="name">Name</th>
           <td mat-cell
               *matCellDef="let element"
               [attr.id]="'km-project-name-' + element.name">{{element.name}}</td>
@@ -87,13 +87,14 @@ limitations under the License.
           <th mat-header-cell
               *matHeaderCellDef
               class="km-header-cell p-15"
-              mat-sort-header>ID</th>
+              mat-sort-header="id">ID</th>
           <td mat-cell
               *matCellDef="let element">{{element.id}}</td>
         </ng-container>
 
         <ng-container matColumnDef="role">
           <th mat-header-cell
+              mat-sort-header="role"
               *matHeaderCellDef
               class="km-header-cell p-15">Role</th>
           <td mat-cell
@@ -106,6 +107,7 @@ limitations under the License.
 
         <ng-container matColumnDef="clusters">
           <th mat-header-cell
+              mat-sort-header="clusters"
               *matHeaderCellDef
               class="km-header-cell p-10">Clusters</th>
           <td mat-cell
