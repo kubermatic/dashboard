@@ -9,6 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@import 'mixins';
 @import 'variables';
 
 .km-admin-settings {
@@ -30,8 +31,8 @@
 
   .km-pointer,
   .km-icon-error {
+    @include size(16);
+
     margin-left: 4px;
-    min-height: 16px;
-    min-width: 16px;
   }
 }

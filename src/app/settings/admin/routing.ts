@@ -22,7 +22,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'administrators',
+        redirectTo: 'defaults',
         pathMatch: 'full',
       },
       {
