@@ -11,7 +11,7 @@
 
 import {EventEmitter, Injectable} from '@angular/core';
 import * as _ from 'lodash';
-import {CloudSpec, Cluster, ClusterNetwork, ClusterType} from '@shared/entity/cluster';
+import {CloudSpec, Cluster, ClusterType} from '@shared/entity/cluster';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 
@@ -40,6 +40,12 @@ export class ClusterSpecService {
     this._cluster = _.mergeWith(this._cluster, cluster, (dest, src) =>
       _.isArray(dest) && _.isArray(src) ? dest : undefined
     );
+
+    // Copy cluster network without using customizer from above.
+    if (cluster && cluster.spec) {
+      this._cluster.spec.clusterNetwork = cluster.spec.clusterNetwork;
+    }
+
     this.clusterChanges.emit(this._cluster);
   }
 
@@ -91,11 +97,6 @@ export class ClusterSpecService {
   set labels(labels: object) {
     delete this._cluster.labels;
     this._cluster.labels = labels;
-  }
-
-  set clusterNetwork(clusterNetwork: ClusterNetwork) {
-    delete this._cluster.spec.clusterNetwork;
-    this._cluster.spec.clusterNetwork = clusterNetwork;
   }
 
   set podNodeSelectorAdmissionPluginConfig(config: object) {
