@@ -188,6 +188,10 @@ limitations under the License.
 
           <!-- Azure -->
           <ng-container *ngIf="cluster.spec.cloud?.azure">
+            <km-property *ngIf="cluster.spec.cloud?.azure.loadBalancerSKU">
+              <div key>LoadBalancer SKU</div>
+              <div value>{{cluster.spec.cloud?.azure.loadBalancerSKU}}</div>
+            </km-property>
             <km-property *ngIf="cluster.spec.cloud?.azure.resourceGroup">
               <div key>Resource Group</div>
               <div value>{{cluster.spec.cloud?.azure.resourceGroup}}</div>
@@ -307,6 +311,10 @@ limitations under the License.
             <km-property *ngIf="cluster.spec.cloud?.vsphere.datastoreCluster">
               <div key>Datastore Cluster</div>
               <div value>{{cluster.spec.cloud?.vsphere.datastoreCluster}}</div>
+            </km-property>
+            <km-property *ngIf="cluster.spec.cloud?.vsphere.resourcePool">
+              <div key>Resource Pool</div>
+              <div value>{{cluster.spec.cloud?.vsphere.resourcePool}}</div>
             </km-property>
           </ng-container>
         </ng-container>

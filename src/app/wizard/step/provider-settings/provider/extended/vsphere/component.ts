@@ -30,7 +30,7 @@ import {isObjectEmpty} from '@shared/utils/common-utils';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 
 import * as _ from 'lodash';
-import {EMPTY, forkJoin, Observable, of, onErrorResumeNext} from 'rxjs';
+import {EMPTY, forkJoin, merge, Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
 
@@ -39,6 +39,7 @@ enum Controls {
   Folder = 'folder',
   Datastore = 'datastore',
   DatastoreCluster = 'datastoreCluster',
+  ResourcePool = 'resourcePool',
 }
 
 enum NetworkState {
@@ -108,6 +109,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       [Controls.Folder]: this._builder.control({value: '', disabled: true}),
       [Controls.Datastore]: this._builder.control(''),
       [Controls.DatastoreCluster]: this._builder.control(''),
+      [Controls.ResourcePool]: this._builder.control(''),
     });
 
     this.form.valueChanges
@@ -160,10 +162,8 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(val => this._enable(!val, Controls.Datastore));
 
-    this.form
-      .get(Controls.DatastoreCluster)
-      .valueChanges.pipe(distinctUntilChanged())
-      .pipe(takeUntil(this._unsubscribe))
+    merge(this.form.get(Controls.DatastoreCluster).valueChanges, this.form.get(Controls.ResourcePool).valueChanges)
+      .pipe(distinctUntilChanged(), takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getCluster()));
 
     this.form
@@ -354,6 +354,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
         cloud: {
           vsphere: {
             datastoreCluster: this.form.get(Controls.DatastoreCluster).value,
+            resourcePool: this.form.get(Controls.ResourcePool).value,
           } as VSphereCloudSpec,
         } as CloudSpec,
       } as ClusterSpec,

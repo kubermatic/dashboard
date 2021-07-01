@@ -25,6 +25,7 @@
       .mat-tab-label {
         font-size: $font-size-subhead;
         font-weight: 400;
+        min-width: 120px;
         opacity: 1;
         padding-bottom: $border-radius;
       }

@@ -124,6 +124,7 @@ export class AzureCloudSpec {
   subscriptionID: string;
   tenantID: string;
   vnet: string;
+  loadBalancerSKU: string;
 }
 
 export class BareMetalCloudSpec {
@@ -185,6 +186,7 @@ export class VSphereCloudSpec {
   infraManagementUser: VSphereInfraManagementUser;
   datastore?: string;
   datastoreCluster?: string;
+  resourcePool?: string;
 }
 
 export class VSphereInfraManagementUser {
@@ -411,6 +413,7 @@ export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
         subscriptionID: '',
         tenantID: '',
         vnet: '',
+        loadBalancerSKU: '',
       } as AzureCloudSpec;
     case NodeProvider.PACKET:
       return {} as PacketCloudSpec;
@@ -436,3 +439,5 @@ export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
 }
 
 export const AVAILABLE_PACKET_BILLING_CYCLES = ['hourly', 'daily'];
+
+export const AZURE_LOADBALANCER_SKUS = ['basic', 'standard'];
