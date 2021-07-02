@@ -83,6 +83,10 @@
   @include mask-image("/assets/images/icons/disconnect.svg", 18px);
 }
 
+.km-icon-cancel {
+  @include mask-image("/assets/images/icons/x.svg", 18px);
+}
+
 .km-icon-regenerate {
   @include mask-image("/assets/images/icons/regenerate.svg", 18px);
 }
@@ -188,6 +192,12 @@
 
 .km-icon-back {
   @include mask-image("/assets/images/icons/back.svg", 18px);
+}
+
+.km-icon-next {
+  @include mask-image("/assets/images/icons/back.svg", 18px);
+
+  transform: rotate(180deg);
 }
 
 .km-icon-add {
