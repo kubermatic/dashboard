@@ -14,11 +14,13 @@ limitations under the License.
   <div fxFlex
        fxLayoutAlign="end center">
     <button id="km-add-ssh-key-top-btn"
+            fxLayoutAlign="center center"
             mat-flat-button
             type="button"
             (click)="addSshKey()"
             [disabled]="!canAdd()">
-      Add SSH Key
+      <i class="km-icon-mask km-icon-add"></i>
+      <span>Add SSH Key</span>
     </button>
   </div>
 </div>
