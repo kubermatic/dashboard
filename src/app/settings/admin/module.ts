@@ -10,7 +10,7 @@
 // limitations under the License.
 
 import {NgModule} from '@angular/core';
-import {PresetListComponent} from '@app/settings/admin/presets/component';
+import {AdminSidenavComponent} from '@app/settings/admin/nav/component';
 import {PresetDialogComponent} from '@app/settings/admin/presets/dialog/component';
 import {PresetStepComponent} from '@app/settings/admin/presets/dialog/steps/preset/component';
 import {PresetProviderStepComponent} from '@app/settings/admin/presets/dialog/steps/provider/component';
@@ -29,26 +29,17 @@ import {PacketSettingsComponent} from '@app/settings/admin/presets/dialog/steps/
 import {VSphereSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/vsphere/component';
 import {EditPresetDialogComponent} from '@app/settings/admin/presets/edit-dialog/component';
 import {SharedModule} from '@shared/module';
-import {AddAdminDialogComponent} from './admins/add-admin-dialog/component';
-import {AdminsComponent} from './admins/component';
 import {AdminSettingsComponent} from './component';
-import {CustomLinksFormComponent} from './custom-link-form/component';
-import {DynamicDatacentersComponent} from './dynamic-datacenters/component';
-import {DatacenterDataDialogComponent} from './dynamic-datacenters/datacenter-data-dialog/component';
-import {ConstraintTemplatesComponent} from './constraint-templates/component';
 import {ConstraintTemplateDialog} from './constraint-templates/constraint-template-dialog/component';
+import {DatacenterDataDialogComponent} from './dynamic-datacenters/datacenter-data-dialog/component';
 import {AdminSettingsRoutingModule} from './routing';
 
 @NgModule({
   imports: [SharedModule, AdminSettingsRoutingModule],
   declarations: [
+    AdminSidenavComponent,
     AdminSettingsComponent,
-    AddAdminDialogComponent,
-    CustomLinksFormComponent,
     DatacenterDataDialogComponent,
-    DynamicDatacentersComponent,
-    AdminsComponent,
-    PresetListComponent,
     PresetDialogComponent,
     EditPresetDialogComponent,
     PresetStepComponent,
@@ -65,7 +56,6 @@ import {AdminSettingsRoutingModule} from './routing';
     OpenstackSettingsComponent,
     PacketSettingsComponent,
     VSphereSettingsComponent,
-    ConstraintTemplatesComponent,
     ConstraintTemplateDialog,
   ],
   providers: [PresetDialogService],

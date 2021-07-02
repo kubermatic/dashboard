@@ -26,7 +26,7 @@ describe('Multi Owner Story', () => {
 
   it('should login as a first owner', () => {
     login(email, password);
-    cy.url().should(Condition.Include, View.Projects);
+    cy.url().should(Condition.Include, View.Projects.Default);
   });
 
   it('should create a new project', () => {
@@ -51,7 +51,7 @@ describe('Multi Owner Story', () => {
 
   it('should login as a second owner', () => {
     login(newUserEmail, password);
-    cy.url().should(Condition.Include, View.Projects);
+    cy.url().should(Condition.Include, View.Projects.Default);
   });
 
   it('should wait for autoredirect and go back to projects', () => {

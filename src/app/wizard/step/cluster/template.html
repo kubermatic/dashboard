@@ -50,6 +50,25 @@ limitations under the License.
         </mat-form-field>
       </div>
 
+      <mat-card-header class="km-no-padding">
+        <mat-card-title>Network Configuration</mat-card-title>
+      </mat-card-header>
+      <div>
+        <mat-form-field class="km-dropdown-with-suffix">
+          <mat-label>Proxy Mode</mat-label>
+          <mat-select [formControlName]="Controls.ProxyMode"
+                      class="km-select-ellipsis"
+                      disableOptionCentering>
+            <mat-option [value]="proxyMode.ipvs">ipvs</mat-option>
+            <mat-option [value]="proxyMode.iptables">iptables</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <km-cidr-form title="Pods CIDR"
+                      [formControlName]="Controls.PodsCIDR"></km-cidr-form>
+        <km-cidr-form title="Services CIDR"
+                      [formControlName]="Controls.ServicesCIDR"></km-cidr-form>
+      </div>
+
       <km-wizard-cluster-ssh-keys [formControl]="form.get(Controls.SSHKeys)"></km-wizard-cluster-ssh-keys>
     </div>
 

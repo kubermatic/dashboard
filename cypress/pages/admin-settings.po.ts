@@ -16,179 +16,231 @@ import {Provider} from '../utils/provider';
 import {View} from '../utils/view';
 import {UserPanel} from './user-panel.po';
 
-export class AdminSettingsPage {
-  private static lastCustomLink = 'km-custom-links-form > form > div > div:last-child';
-  private static secondLastCustomLink = 'km-custom-links-form > form > div > div:nth-last-child(2)';
-
-  static getLastCustomLinkLabelInput(): Cypress.Chainable {
-    return cy.get(`${AdminSettingsPage.lastCustomLink} > mat-form-field:nth-child(1) input`);
-  }
-
-  static getLastCustomLinkURLInput(): Cypress.Chainable {
-    return cy.get(`${AdminSettingsPage.lastCustomLink} > mat-form-field:nth-child(2) input`);
-  }
-
-  // It should be used before setting the label and the URL because otherwise the new inputs will be added to form.
-  static getLastCustomLinkLocationInput(): Cypress.Chainable {
-    return cy.get(`${AdminSettingsPage.lastCustomLink} > mat-form-field:nth-child(4)`);
-  }
-
-  static getSecondLastCustomLinkDeleteButton(): Cypress.Chainable {
-    return cy.get(`${AdminSettingsPage.secondLastCustomLink} > button`);
-  }
-
-  static getApiDocsCheckbox(): Cypress.Chainable {
-    return cy.get('#km-api-docs-setting');
-  }
-
-  static getTermsOfServiceCheckbox(): Cypress.Chainable {
-    return cy.get('#km-tos-setting');
-  }
-
-  static getDemoInfoCheckbox(): Cypress.Chainable {
-    return cy.get('#km-demo-info-setting');
-  }
-
-  static getOPAEnableCheckbox(): Cypress.Chainable {
-    return cy.get('#km-opa-enable-setting');
-  }
-
-  static getOPAEnforceCheckbox(): Cypress.Chainable {
-    return cy.get('#km-opa-enforce-setting');
-  }
-
-  static getInitialReplicasInput(): Cypress.Chainable {
-    return cy.get('#km-initial-replicas-setting');
-  }
-
-  static getMinCPUResourceQuotaInput(): Cypress.Chainable {
-    return cy.get('#km-cpu-resource-quota-setting');
-  }
-
-  static getMinRAMResourceQuotaInput(): Cypress.Chainable {
-    return cy.get('#km-ram-resource-quota-setting');
-  }
-
-  static getRestrictProjectCreationToAdminsCheckbox(): Cypress.Chainable {
-    return cy.get('#km-project-admin-only-setting');
-  }
-
-  static getProjectLimitInput(): Cypress.Chainable {
-    return cy.get('#km-project-limit-setting');
-  }
-
-  static getCleanupEnableCheckbox(): Cypress.Chainable {
-    return cy.get('#km-cleanup-enable-setting');
-  }
-
-  static getCleanupEnforceCheckbox(): Cypress.Chainable {
-    return cy.get('#km-cleanup-enforce-setting');
-  }
-
-  static getEnableKubernetesDashboardCheckbox(): Cypress.Chainable {
-    return cy.get('#km-enable-kubernetes-dashboard-setting');
-  }
-
-  static getEnableOIDCCheckbox(): Cypress.Chainable {
-    return cy.get('#km-enable-oidc-setting');
-  }
-
-  static getEnableExternalClustersCheckbox(): Cypress.Chainable {
-    return cy.get('#km-enable-external-clusters-setting');
-  }
-
-  static getFooter(): Cypress.Chainable {
-    return cy.get('.km-footer');
-  }
-
-  static getFooterCustomIcon(url: string): Cypress.Chainable {
-    return cy.get(`.km-footer a[href="${url}"]`);
-  }
-
-  static getDynamicDatacentersTab(): Cypress.Chainable {
-    return cy.get('#mat-tab-label-0-0');
-  }
-
-  static getAddDatacenterBtn(): Cypress.Chainable {
-    return cy.get('#km-admin-settings-add-dc-btn');
-  }
-
-  static getAddDatacenterNameInput(): Cypress.Chainable {
-    return cy.get('#km-add-dc-name-input');
-  }
-
-  static getAddDatacenterProviderInput(): Cypress.Chainable {
-    return cy.get('#km-add-dc-provider-input');
-  }
-
-  static getAddDatacenterSeedInput(): Cypress.Chainable {
-    return cy.get('#km-add-dc-seed-input');
-  }
-
-  static getAddDatacenterCountryInput(): Cypress.Chainable {
-    return cy.get('#km-add-dc-country-input');
-  }
-
-  static getAddDatacenterLocationInput(): Cypress.Chainable {
-    return cy.get('#km-add-dc-location-input');
-  }
-
-  static getAddDatacenterSaveBtn(): Cypress.Chainable {
-    return cy.get('#km-add-dc-save-btn');
-  }
-
-  static getDeleteDatacenterBtn(name: string): Cypress.Chainable {
-    return cy.get(`#km-datacenter-delete-btn-${name}`);
-  }
-
-  static getAdminsTab(): Cypress.Chainable {
-    return cy.get('#mat-tab-label-0-1');
-  }
-
-  static getAddAdminBtn(): Cypress.Chainable {
+class AdministratorsPage {
+  getAddAdminBtn(): Cypress.Chainable {
     return cy.get('#km-add-admin-btn');
   }
 
-  static getAddAdminDialogEmailInput(): Cypress.Chainable {
+  getAddAdminDialogEmailInput(): Cypress.Chainable {
     return cy.get('#km-add-admin-dialog-email-input');
   }
 
-  static getAddAdminDialogSaveBtn(): Cypress.Chainable {
+  getAddAdminDialogSaveBtn(): Cypress.Chainable {
     return cy.get('#km-add-admin-dialog-save-btn');
   }
 
-  static getDeleteAdminBtn(email: string): Cypress.Chainable {
+  getDeleteAdminBtn(email: string): Cypress.Chainable {
     return cy.get(`#km-admin-delete-${btoa(email)}`);
   }
 
-  static getPresetsTab(): Cypress.Chainable {
-    return cy.get('#mat-tab-label-0-2');
+  getNavItem(): Cypress.Chainable {
+    return cy.get('#km-nav-item-administrators');
   }
 
-  static getAddPresetBtn(): Cypress.Chainable {
+  verifyUrl(): void {
+    cy.url().should(Condition.Include, View.AdminSettings.Administrators);
+  }
+
+  visit(): void {
+    UserPanel.open();
+    UserPanel.getAdminSettingsBtn()
+      .click()
+      .then(() => this.getNavItem().click())
+      .then(() => this.verifyUrl());
+  }
+}
+
+class InterfacePage {
+  private _lastCustomLink = 'km-custom-links-form > form > div > div:last-child';
+  private _secondLastCustomLink = 'km-custom-links-form > form > div > div:nth-last-child(2)';
+
+  getLastCustomLinkLabelInput(): Cypress.Chainable {
+    return cy.get(`${this._lastCustomLink} > mat-form-field:nth-child(1) input`);
+  }
+
+  getLastCustomLinkURLInput(): Cypress.Chainable {
+    return cy.get(`${this._lastCustomLink} > mat-form-field:nth-child(2) input`);
+  }
+
+  // It should be used before setting the label and the URL because otherwise the new inputs will be added to form.
+  getLastCustomLinkLocationInput(): Cypress.Chainable {
+    return cy.get(`${this._lastCustomLink} > mat-form-field:nth-child(4)`);
+  }
+
+  getSecondLastCustomLinkDeleteButton(): Cypress.Chainable {
+    return cy.get(`${this._secondLastCustomLink} > button`);
+  }
+
+  getEnableKubernetesDashboardCheckbox(): Cypress.Chainable {
+    return cy.get('#km-enable-kubernetes-dashboard-setting');
+  }
+
+  getEnableOIDCCheckbox(): Cypress.Chainable {
+    return cy.get('#km-enable-oidc-setting');
+  }
+
+  getEnableExternalClustersCheckbox(): Cypress.Chainable {
+    return cy.get('#km-enable-external-clusters-setting');
+  }
+
+  getApiDocsCheckbox(): Cypress.Chainable {
+    return cy.get('#km-api-docs-setting');
+  }
+
+  getTermsOfServiceCheckbox(): Cypress.Chainable {
+    return cy.get('#km-tos-setting');
+  }
+
+  getDemoInfoCheckbox(): Cypress.Chainable {
+    return cy.get('#km-demo-info-setting');
+  }
+
+  getNavItem(): Cypress.Chainable {
+    return cy.get('#km-nav-item-interface');
+  }
+
+  verifyUrl(): void {
+    cy.url().should(Condition.Include, View.AdminSettings.Interface);
+  }
+
+  visit(): void {
+    UserPanel.open();
+    UserPanel.getAdminSettingsBtn()
+      .click()
+      .then(() => this.getNavItem().click())
+      .then(() => this.verifyUrl());
+  }
+}
+
+class DefaultsAndLimitsPage {
+  getOPAEnableCheckbox(): Cypress.Chainable {
+    return cy.get('#km-opa-enable-setting');
+  }
+
+  getOPAEnforceCheckbox(): Cypress.Chainable {
+    return cy.get('#km-opa-enforce-setting');
+  }
+
+  getInitialReplicasInput(): Cypress.Chainable {
+    return cy.get('#km-initial-replicas-setting');
+  }
+
+  getMinCPUResourceQuotaInput(): Cypress.Chainable {
+    return cy.get('#km-cpu-resource-quota-setting');
+  }
+
+  getMinRAMResourceQuotaInput(): Cypress.Chainable {
+    return cy.get('#km-ram-resource-quota-setting');
+  }
+
+  getRestrictProjectCreationToAdminsCheckbox(): Cypress.Chainable {
+    return cy.get('#km-project-admin-only-setting');
+  }
+
+  getProjectLimitInput(): Cypress.Chainable {
+    return cy.get('#km-project-limit-setting');
+  }
+
+  getCleanupEnableCheckbox(): Cypress.Chainable {
+    return cy.get('#km-cleanup-enable-setting');
+  }
+
+  getCleanupEnforceCheckbox(): Cypress.Chainable {
+    return cy.get('#km-cleanup-enforce-setting');
+  }
+
+  getNavItem(): Cypress.Chainable {
+    return cy.get('#km-nav-item-defaults');
+  }
+
+  verifyUrl(): void {
+    cy.url().should(Condition.Include, View.AdminSettings.DefaultsAndLimits);
+  }
+
+  visit(): void {
+    UserPanel.open();
+    UserPanel.getAdminSettingsBtn()
+      .click()
+      .then(() => this.getNavItem().click())
+      .then(() => this.verifyUrl());
+  }
+}
+
+class DynamicDatacentersPage {
+  getAddDatacenterBtn(): Cypress.Chainable {
+    return cy.get('#km-admin-settings-add-dc-btn');
+  }
+
+  getAddDatacenterNameInput(): Cypress.Chainable {
+    return cy.get('#km-add-dc-name-input');
+  }
+
+  getAddDatacenterProviderInput(): Cypress.Chainable {
+    return cy.get('#km-add-dc-provider-input');
+  }
+
+  getAddDatacenterSeedInput(): Cypress.Chainable {
+    return cy.get('#km-add-dc-seed-input');
+  }
+
+  getAddDatacenterCountryInput(): Cypress.Chainable {
+    return cy.get('#km-add-dc-country-input');
+  }
+
+  getAddDatacenterLocationInput(): Cypress.Chainable {
+    return cy.get('#km-add-dc-location-input');
+  }
+
+  getAddDatacenterSaveBtn(): Cypress.Chainable {
+    return cy.get('#km-add-dc-save-btn');
+  }
+
+  getDeleteDatacenterBtn(name: string): Cypress.Chainable {
+    return cy.get(`#km-datacenter-delete-btn-${name}`);
+  }
+
+  getNavItem(): Cypress.Chainable {
+    return cy.get('#km-nav-item-dc');
+  }
+
+  verifyUrl(): void {
+    cy.url().should(Condition.Include, View.AdminSettings.DynamicDatacenters);
+  }
+
+  visit(): void {
+    UserPanel.open();
+    UserPanel.getAdminSettingsBtn()
+      .click()
+      .then(() => this.getNavItem().click())
+      .then(() => this.verifyUrl());
+  }
+}
+
+class ProviderPresetsPage {
+  getAddPresetBtn(): Cypress.Chainable {
     return cy.get('#km-add-preset-btn');
   }
 
-  static getAddPresetDialogNameInput(): Cypress.Chainable {
+  getAddPresetDialogNameInput(): Cypress.Chainable {
     return cy.get('#km-settings-preset-name-input');
   }
 
-  static getAddPresetDialogNextBtn(): Cypress.Chainable {
+  getAddPresetDialogNextBtn(): Cypress.Chainable {
     return cy.get('#km-settings-preset-next-btn');
   }
 
-  static getAddPresetDialogCreateBtn(): Cypress.Chainable {
+  getAddPresetDialogCreateBtn(): Cypress.Chainable {
     return cy.get('#km-settings-preset-create-btn');
   }
 
-  static getAddPresetDialogProviderBtn(provider: Provider): Cypress.Chainable {
+  getAddPresetDialogProviderBtn(provider: Provider): Cypress.Chainable {
     return cy
       .get('#km-settings-preset-dialog-provider-' + provider)
       .parent()
       .parent();
   }
 
-  static getAddPresetDialogDigitaloceanTokenInput(): Cypress.Chainable {
+  getAddPresetDialogDigitaloceanTokenInput(): Cypress.Chainable {
     return cy.get('#km-settings-preset-digitalocean-token');
   }
 
@@ -217,19 +269,59 @@ export class AdminSettingsPage {
   }
 
   // Utils.
-
-  static waitForSave(): void {
-    TrafficMonitor.newTrafficMonitor().url(Endpoint.AdminSettings).method(RequestType.PATCH).interceptAndWait();
+  getNavItem(): Cypress.Chainable {
+    return cy.get('#km-nav-item-presets');
   }
 
-  static verifyUrl(): void {
-    cy.url().should(Condition.Include, View.Admin);
+  verifyUrl(): void {
+    cy.url().should(Condition.Include, View.AdminSettings.ProviderPresets);
   }
 
-  static visit(): void {
+  visit(): void {
     UserPanel.open();
     UserPanel.getAdminSettingsBtn()
       .click()
+      .then(() => this.getNavItem().click())
       .then(() => this.verifyUrl());
+  }
+}
+
+class OPAPage {
+  getNavItem(): Cypress.Chainable {
+    return cy.get('#km-nav-item-opa');
+  }
+
+  verifyUrl(): void {
+    cy.url().should(Condition.Include, View.AdminSettings.OPA);
+  }
+
+  visit(): void {
+    UserPanel.open();
+    UserPanel.getAdminSettingsBtn()
+      .click()
+      .then(() => this.getNavItem().click())
+      .then(() => this.verifyUrl());
+  }
+}
+
+export class AdminSettings {
+  static readonly AdministratorsPage = new AdministratorsPage();
+  static readonly InterfacePage = new InterfacePage();
+  static readonly DefaultsAndLimitsPage = new DefaultsAndLimitsPage();
+  static readonly DynamicDatacentersPage = new DynamicDatacentersPage();
+  static readonly ProviderPresetsPage = new ProviderPresetsPage();
+  static readonly OPAPage = new OPAPage();
+
+  static getFooter(): Cypress.Chainable {
+    return cy.get('.km-footer');
+  }
+
+  static getFooterCustomIcon(url: string): Cypress.Chainable {
+    return cy.get(`.km-footer a[href="${url}"]`);
+  }
+
+  // Utils.
+  static waitForSave(): void {
+    TrafficMonitor.newTrafficMonitor().url(Endpoint.AdminSettings).method(RequestType.PATCH).interceptAndWait();
   }
 }

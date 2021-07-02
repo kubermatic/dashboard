@@ -214,11 +214,11 @@ export class ClustersPage {
   }
 
   static verifyUrl(): void {
-    cy.url().should(Condition.Include, View.Clusters);
+    cy.url().should(Condition.Include, View.Clusters.Default);
   }
 
   static verifyExternalClustersUrl(): void {
-    cy.url().should(Condition.Include, View.ExternalClusters);
+    cy.url().should(Condition.Include, View.Clusters.External);
   }
 
   static visit(): void {

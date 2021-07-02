@@ -186,6 +186,7 @@ export class VSphereCloudSpec {
   infraManagementUser: VSphereInfraManagementUser;
   datastore?: string;
   datastoreCluster?: string;
+  resourcePool?: string;
 }
 
 export class VSphereInfraManagementUser {
@@ -206,6 +207,22 @@ export class ClusterSpec {
   podNodeSelectorAdmissionPluginConfig?: object;
   mla?: MLASettings;
   containerRuntime?: ContainerRuntime;
+  clusterNetwork?: ClusterNetwork;
+}
+
+export class ClusterNetwork {
+  pods?: NetworkRanges;
+  proxyMode?: ProxyMode;
+  services?: NetworkRanges;
+}
+
+export class NetworkRanges {
+  cidrBlocks: string[];
+}
+
+export enum ProxyMode {
+  ipvs = 'ipvs',
+  iptables = 'iptables',
 }
 
 export class AuditLoggingSettings {

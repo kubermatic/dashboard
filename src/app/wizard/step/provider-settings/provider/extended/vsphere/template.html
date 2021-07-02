@@ -61,4 +61,13 @@ limitations under the License.
            autocomplete="off">
     <mat-hint>Datastore to be used for the virtual machines. It is mutually exclusive with Datastore field.</mat-hint>
   </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>Resource Pool</mat-label>
+    <input matInput
+           [formControlName]="Controls.ResourcePool"
+           [name]="Controls.ResourcePool"
+           type="text"
+           autocomplete="off">
+  </mat-form-field>
 </form>

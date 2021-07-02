@@ -19,6 +19,37 @@ const routes: Routes = [
     path: '',
     component: AdminSettingsComponent,
     canActivate: [AuthGuard],
+    children: [
+      {
+        path: '',
+        redirectTo: 'defaults',
+        pathMatch: 'full',
+      },
+      {
+        path: 'administrators',
+        loadChildren: () => import('./admins/module').then(m => m.AdministratorsModule),
+      },
+      {
+        path: 'interface',
+        loadChildren: () => import('./interface/module').then(m => m.AdminSettingsInterfaceModule),
+      },
+      {
+        path: 'defaults',
+        loadChildren: () => import('./defaults/module').then(m => m.AdminSettingsDefaultsModule),
+      },
+      {
+        path: 'datacenters',
+        loadChildren: () => import('./dynamic-datacenters/module').then(m => m.AdminSettingsDatacentersModule),
+      },
+      {
+        path: 'presets',
+        loadChildren: () => import('./presets/module').then(m => m.AdminSettingsPresetsModule),
+      },
+      {
+        path: 'opa',
+        loadChildren: () => import('./constraint-templates/module').then(m => m.AdminSettingsOPAModule),
+      },
+    ],
   },
 ];
 

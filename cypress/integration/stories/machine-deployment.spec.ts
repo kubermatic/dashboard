@@ -33,7 +33,7 @@ xdescribe('Machine Deployment Story', () => {
 
   it('should login', () => {
     login(email, password);
-    cy.url().should(Condition.Include, View.Projects);
+    cy.url().should(Condition.Include, View.Projects.Default);
   });
 
   it('should create a new project', () => {
@@ -66,7 +66,7 @@ xdescribe('Machine Deployment Story', () => {
     WizardPage.getNextBtn(WizardStep.NodeSettings).should(Condition.BeEnabled).click({force: true});
     WizardPage.getCreateBtn().click({force: true});
 
-    cy.url().should(Condition.Contain, View.Clusters);
+    cy.url().should(Condition.Contain, View.Clusters.Default);
   });
 
   it('should check if cluster was created', () => {
@@ -100,7 +100,7 @@ xdescribe('Machine Deployment Story', () => {
 
   it('should go back to cluster details page and remove initial machine deployment', () => {
     MachineDeploymentDetailsPage.getBackToClusterBtn().click();
-    cy.url().should(Condition.Contain, View.Clusters);
+    cy.url().should(Condition.Contain, View.Clusters.Default);
     ClustersPage.getClusterName().should(Condition.Contain, clusterName);
 
     ClustersPage.getMachineDeploymentList().should(Condition.Contain, initialMachineDeploymentName);

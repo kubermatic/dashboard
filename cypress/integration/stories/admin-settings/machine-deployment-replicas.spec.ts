@@ -10,7 +10,7 @@
 // limitations under the License.
 
 import * as _ from 'lodash';
-import {AdminSettingsPage} from '../../../pages/admin-settings.po';
+import {AdminSettings} from '../../../pages/admin-settings.po';
 import {ClustersPage} from '../../../pages/clusters.po';
 import {ProjectsPage} from '../../../pages/projects.po';
 import {WizardPage} from '../../../pages/wizard.po';
@@ -31,21 +31,21 @@ describe('Admin Settings - Machine Deployment Replicas Story', () => {
 
   it('should login', () => {
     login(email, password);
-    cy.url().should(Condition.Include, View.Projects);
+    cy.url().should(Condition.Include, View.Projects.Default);
   });
 
   it('should create a new project', () => {
     ProjectsPage.addProject(projectName);
   });
 
-  it('should go to the admin settings', () => {
-    AdminSettingsPage.visit();
+  it('should go to the admin settings - defaults page', () => {
+    AdminSettings.DefaultsAndLimitsPage.visit();
   });
 
   it('should update machine deployment replicas count', () => {
-    AdminSettingsPage.getInitialReplicasInput().clear().type(`${newMDReplicas}`).trigger('change');
-    AdminSettingsPage.waitForSave();
-    AdminSettingsPage.getInitialReplicasInput().should(Condition.HaveValue, newMDReplicas);
+    AdminSettings.DefaultsAndLimitsPage.getInitialReplicasInput().clear().type(`${newMDReplicas}`).trigger('change');
+    AdminSettings.waitForSave();
+    AdminSettings.DefaultsAndLimitsPage.getInitialReplicasInput().should(Condition.HaveValue, newMDReplicas);
   });
 
   it('should go to projects view', () => {
@@ -71,14 +71,17 @@ describe('Admin Settings - Machine Deployment Replicas Story', () => {
     WizardPage.getNodeCountInput().should(Condition.HaveValue, newMDReplicas);
   });
 
-  it('should go to the admin settings', () => {
-    AdminSettingsPage.visit();
+  it('should go to the admin settings - defaults page', () => {
+    AdminSettings.DefaultsAndLimitsPage.visit();
   });
 
   it('should restore original replicas count', () => {
-    AdminSettingsPage.getInitialReplicasInput().clear().type(`${defaultMDReplicas}`).trigger('change');
-    AdminSettingsPage.waitForSave();
-    AdminSettingsPage.getInitialReplicasInput().should(Condition.HaveValue, defaultMDReplicas);
+    AdminSettings.DefaultsAndLimitsPage.getInitialReplicasInput()
+      .clear()
+      .type(`${defaultMDReplicas}`)
+      .trigger('change');
+    AdminSettings.waitForSave();
+    AdminSettings.DefaultsAndLimitsPage.getInitialReplicasInput().should(Condition.HaveValue, defaultMDReplicas);
   });
 
   it('should go to the projects page', () => {

@@ -37,7 +37,7 @@ export class UserSettingsPage {
   // Utils.
 
   static verifyUrl(): void {
-    cy.url().should(Condition.Include, View.Account);
+    cy.url().should(Condition.Include, View.Account.Default);
   }
 
   static visit(): void {

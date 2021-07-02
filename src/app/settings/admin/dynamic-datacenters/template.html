@@ -11,207 +11,220 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div class="header">
-  <div class="filters"
-       fxLayoutAlign=" center"
-       fxLayoutGap="16px">
-    <div class="filter-title">Filter by</div>
-    <mat-form-field fxFlex
-                    class="km-dropdown-with-suffix">
-      <mat-label>Seed</mat-label>
-      <mat-select disableOptionCentering
-                  class="km-select-ellipsis"
-                  [(ngModel)]="seedFilter"
-                  (selectionChange)="filter()">
-        <mat-select-trigger fxFlex
-                            fxLayout="row">
-          <div fxFlex
-               fxLayoutAlign="start">{{seedFilter}}</div>
-          <div fxFlex
-               fxLayoutAlign="end">
-            <button *ngIf="seedFilter"
-                    (click)="seedFilter = undefined; filter(); $event.stopPropagation()"
-                    matSuffix
-                    mat-icon-button
-                    aria-label="Clear">
-              <i class="km-icon-mask km-icon-remove"></i>
-            </button>
-          </div>
-        </mat-select-trigger>
-        <mat-option *ngFor="let seed of seeds"
-                    [value]="seed">
-          {{seed}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field fxFlex
-                    class="km-dropdown-with-suffix">
-      <mat-label>Country</mat-label>
-      <mat-select disableOptionCentering
-                  class="km-select-ellipsis"
-                  [(ngModel)]="countryFilter"
-                  (selectionChange)="filter()">
-        <mat-select-trigger fxFlex
-                            fxLayout="row">
-          <div fxFlex
-               fxLayoutAlign="start"
-               fxLayoutGap="6px">
-            <ng-container *ngIf="countryFilter">
-              <span class="flag-icon flag-icon-{{countryFilter.toLowerCase()}}"></span>
-              <span>{{getCountryName(countryFilter)}}</span>
-            </ng-container>
-          </div>
-          <div fxFlex
-               fxLayoutAlign="end">
-            <button *ngIf="countryFilter"
-                    (click)="countryFilter = undefined; filter(); $event.stopPropagation()"
-                    matSuffix
-                    mat-icon-button
-                    aria-label="Clear">
-              <i class="km-icon-mask km-icon-remove"></i>
-            </button>
-          </div>
-        </mat-select-trigger>
-        <mat-option *ngFor="let country of countries"
-                    [value]="country">
-          <div fxLayoutGap="6px">
-            <span class="flag-icon flag-icon-{{country.toLowerCase()}}"></span>
-            <span>{{getCountryName(country)}}</span>
-          </div>
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field fxFlex
-                    class="km-dropdown-with-suffix">
-      <mat-label>Provider</mat-label>
-      <mat-select disableOptionCentering
-                  class="km-select-ellipsis"
-                  [(ngModel)]="providerFilter"
-                  (selectionChange)="filter()">
-        <mat-select-trigger fxFlex
-                            fxLayout="row">
-          <div fxFlex
-               fxLayoutAlign="start">
-            <span class="km-provider-logo km-provider-logo-{{providerFilter}} provider-logo-small"></span>
-          </div>
-          <div fxFlex
-               fxLayoutAlign="end">
-            <button *ngIf="providerFilter"
-                    (click)="providerFilter = undefined; filter(); $event.stopPropagation()"
-                    matSuffix
-                    mat-icon-button
-                    aria-label="Clear">
-              <i class="km-icon-mask km-icon-remove"></i>
-            </button>
-          </div>
-        </mat-select-trigger>
-        <mat-option *ngFor="let provider of providers"
-                    [value]="provider">
-          <span class="km-provider-logo km-provider-logo-{{provider}} provider-logo-medium"></span>
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-  <div fxFlex></div>
-  <button mat-flat-button
-          color="quaternary"
-          id="km-admin-settings-add-dc-btn"
-          (click)="add()"
-          fxLayoutAlign="center center">
-    <i class="km-icon-mask km-icon-add"></i>
-    <span>Add Datacenter</span>
-  </button>
-</div>
-
-<table class="km-table"
-       mat-table
-       matSort
-       [dataSource]="dataSource">
-  <ng-container matColumnDef="datacenter">
-    <th mat-header-cell
-        *matHeaderCellDef
-        class="km-header-cell"
-        mat-sort-header>Datacenter
-    </th>
-    <td mat-cell
-        *matCellDef="let element">{{element.metadata.name}}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="seed">
-    <th mat-header-cell
-        *matHeaderCellDef
-        class="km-header-cell"
-        mat-sort-header>Seed Cluster
-    </th>
-    <td mat-cell
-        *matCellDef="let element">{{element.spec.seed}}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="country">
-    <th mat-header-cell
-        *matHeaderCellDef
-        class="km-header-cell"
-        mat-sort-header>Country
-    </th>
-    <td mat-cell
-        *matCellDef="let element"
-        fxLayoutGap="6px">
-      <ng-container *ngIf="element.spec && element.spec.country">
-        <span class="flag-icon flag-icon-{{element.spec.country.toLowerCase()}}"></span>
-        <span>{{getCountryName(element.spec.country)}}</span>
-      </ng-container>
-    </td>
-  </ng-container>
-
-  <ng-container matColumnDef="provider">
-    <th mat-header-cell
-        *matHeaderCellDef
-        class="km-header-cell"
-        mat-sort-header>Provider
-    </th>
-    <td mat-cell
-        *matCellDef="let element"
-        fxLayoutAlign=" center"><span class="km-provider-logo km-provider-logo-{{element.spec.provider}}"></span></td>
-  </ng-container>
-
-  <ng-container matColumnDef="actions">
-    <th mat-header-cell
-        *matHeaderCellDef
-        class="km-header-cell"></th>
-    <td mat-cell
-        *matCellDef="let element">
-      <div class="km-table-actions"
-           fxLayoutAlign="end">
-        <button mat-icon-button
-                (click)="edit(element)">
-          <i class="km-icon-edit"></i>
-        </button>
-
-        <button mat-icon-button
-                (click)="delete(element)"
-                [attr.id]="'km-datacenter-delete-btn-' + element.metadata.name">
-          <i class="km-icon-delete"></i>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title fxFlex
+                    fxLayout="column"
+                    fxLayoutAlign="start"
+                    fxLayoutGap="32px">
+      <div fxFlex>Dynamic Datacenters</div>
+      <div fxLayout="row">
+        <div class="filters"
+             fxLayoutAlign=" center"
+             fxLayoutGap="16px">
+          <div>Filter by</div>
+          <mat-form-field fxFlex
+                          class="km-dropdown-without-subtext">
+            <mat-label>Seed</mat-label>
+            <mat-select disableOptionCentering
+                        class="km-select-ellipsis"
+                        [(ngModel)]="seedFilter"
+                        (selectionChange)="filter()">
+              <mat-select-trigger fxFlex
+                                  fxLayout="row">
+                <div fxFlex
+                     fxLayoutAlign="start">{{seedFilter}}</div>
+                <div fxFlex
+                     fxLayoutAlign="end">
+                  <button *ngIf="seedFilter"
+                          (click)="seedFilter = undefined; filter(); $event.stopPropagation()"
+                          matSuffix
+                          mat-icon-button
+                          aria-label="Clear">
+                    <i class="km-icon-mask km-icon-remove"></i>
+                  </button>
+                </div>
+              </mat-select-trigger>
+              <mat-option *ngFor="let seed of seeds"
+                          [value]="seed">
+                {{seed}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex
+                          class="km-dropdown-without-subtext">
+            <mat-label>Country</mat-label>
+            <mat-select disableOptionCentering
+                        class="km-select-ellipsis"
+                        [(ngModel)]="countryFilter"
+                        (selectionChange)="filter()">
+              <mat-select-trigger fxFlex
+                                  fxLayout="row">
+                <div fxFlex
+                     fxLayoutAlign="start"
+                     fxLayoutGap="6px">
+                  <ng-container *ngIf="countryFilter">
+                    <span class="flag-icon flag-icon-{{countryFilter.toLowerCase()}}"></span>
+                    <span>{{getCountryName(countryFilter)}}</span>
+                  </ng-container>
+                </div>
+                <div fxFlex
+                     fxLayoutAlign="end">
+                  <button *ngIf="countryFilter"
+                          (click)="countryFilter = undefined; filter(); $event.stopPropagation()"
+                          matSuffix
+                          mat-icon-button
+                          aria-label="Clear">
+                    <i class="km-icon-mask km-icon-remove"></i>
+                  </button>
+                </div>
+              </mat-select-trigger>
+              <mat-option *ngFor="let country of countries"
+                          [value]="country">
+                <div fxLayoutGap="6px">
+                  <span class="flag-icon flag-icon-{{country.toLowerCase()}}"></span>
+                  <span>{{getCountryName(country)}}</span>
+                </div>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field fxFlex
+                          class="km-dropdown-without-subtext">
+            <mat-label>Provider</mat-label>
+            <mat-select disableOptionCentering
+                        class="km-select-ellipsis"
+                        [(ngModel)]="providerFilter"
+                        (selectionChange)="filter()">
+              <mat-select-trigger fxFlex
+                                  fxLayout="row">
+                <div fxFlex
+                     fxLayoutAlign="start">
+                  <span class="km-provider-logo km-provider-logo-{{providerFilter}} provider-logo-small"></span>
+                </div>
+                <div fxFlex
+                     fxLayoutAlign="end">
+                  <button *ngIf="providerFilter"
+                          (click)="providerFilter = undefined; filter(); $event.stopPropagation()"
+                          matSuffix
+                          mat-icon-button
+                          aria-label="Clear">
+                    <i class="km-icon-mask km-icon-remove"></i>
+                  </button>
+                </div>
+              </mat-select-trigger>
+              <mat-option *ngFor="let provider of providers"
+                          [value]="provider">
+                <span class="km-provider-logo km-provider-logo-{{provider}} provider-logo-medium"></span>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div fxFlex></div>
+        <button mat-flat-button
+                color="quaternary"
+                id="km-admin-settings-add-dc-btn"
+                fxLayoutAlign="center center"
+                (click)="add()">
+          <i class="km-icon-mask km-icon-add"></i>
+          <span>Add Datacenter</span>
         </button>
       </div>
-    </td>
-  </ng-container>
+    </mat-card-title>
+  </mat-card-header>
 
-  <tr mat-header-row
-      class="km-header-row"
-      *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row
-      *matRowDef="let row; columns: displayedColumns"
-      class="km-mat-row"></tr>
-</table>
+  <mat-card-content>
+    <table class="km-table"
+           mat-table
+           matSort
+           [dataSource]="dataSource">
+      <ng-container matColumnDef="datacenter">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"
+            mat-sort-header>Datacenter
+        </th>
+        <td mat-cell
+            *matCellDef="let element">{{element.metadata.name}}</td>
+      </ng-container>
 
-<ng-container *ngIf="!datacenters">
-  <div class="km-row">
-    <mat-spinner color="accent"
-                 class="km-spinner"
-                 [diameter]="25"></mat-spinner>
-  </div>
-</ng-container>
+      <ng-container matColumnDef="seed">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"
+            mat-sort-header>Seed Cluster
+        </th>
+        <td mat-cell
+            *matCellDef="let element">{{element.spec.seed}}</td>
+      </ng-container>
 
-<div [hidden]="!isPaginatorVisible()">
-  <mat-paginator showFirstLastButtons></mat-paginator>
-</div>
+      <ng-container matColumnDef="country">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"
+            mat-sort-header>Country
+        </th>
+        <td mat-cell
+            *matCellDef="let element"
+            fxLayoutGap="6px">
+          <ng-container *ngIf="element.spec && element.spec.country">
+            <span class="flag-icon flag-icon-{{element.spec.country.toLowerCase()}}"></span>
+            <span>{{getCountryName(element.spec.country)}}</span>
+          </ng-container>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="provider">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"
+            mat-sort-header>Provider
+        </th>
+        <td mat-cell
+            *matCellDef="let element"
+            fxLayoutAlign=" center"><span class="km-provider-logo km-provider-logo-{{element.spec.provider}}"></span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"></th>
+        <td mat-cell
+            *matCellDef="let element">
+          <div class="km-table-actions"
+               fxLayoutAlign="end">
+            <button mat-icon-button
+                    (click)="edit(element)">
+              <i class="km-icon-edit"></i>
+            </button>
+
+            <button mat-icon-button
+                    (click)="delete(element)"
+                    [attr.id]="'km-datacenter-delete-btn-' + element.metadata.name">
+              <i class="km-icon-delete"></i>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row
+          class="km-header-row"
+          *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          class="km-mat-row"></tr>
+    </table>
+
+    <ng-container *ngIf="!datacenters">
+      <div class="km-row">
+        <mat-spinner color="accent"
+                     class="km-spinner"
+                     [diameter]="25"></mat-spinner>
+      </div>
+    </ng-container>
+
+    <div [hidden]="!isPaginatorVisible()">
+      <mat-paginator showFirstLastButtons></mat-paginator>
+    </div>
+  </mat-card-content>
+</mat-card>
