@@ -29,6 +29,10 @@
   vertical-align: middle;
 }
 
-.km-code-block {
+.kubeadm-manual {
   margin: $content-padding;
+
+  li {
+    margin: 15px 0;
+  }
 }
