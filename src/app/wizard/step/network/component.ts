@@ -13,7 +13,7 @@ import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {ControlValueAccessor, FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator} from '@angular/forms';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {WizardService} from '@core/services/wizard/wizard';
-import {Cluster} from '../../../shared/entity/cluster';
+import {Cluster} from '@shared/entity/cluster';
 import {StepBase} from '../base';
 
 enum Controls {

@@ -17,12 +17,12 @@ import * as _ from 'lodash';
 import {merge, of} from 'rxjs';
 import {delay, takeUntil} from 'rxjs/operators';
 import {ClusterSpecService} from '@core/services/cluster-spec';
-import {Cluster} from '../../shared/entity/cluster';
-import {getDefaultNodeProviderSpec} from '../../shared/entity/node';
-import {NodeProvider} from '../../shared/model/NodeProviderConstants';
-import {NodeData} from '../../shared/model/NodeSpecChange';
-import {objectDiff} from '../../shared/utils/common-utils';
-import {BaseFormValidator} from '../../shared/validators/base-form.validator';
+import {Cluster} from '@shared/entity/cluster';
+import {getDefaultNodeProviderSpec} from '@shared/entity/node';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {NodeData} from '@shared/model/NodeSpecChange';
+import {objectDiff} from '@shared/utils/common-utils';
+import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {NodeDataMode} from '../config';
 
 enum Mode {

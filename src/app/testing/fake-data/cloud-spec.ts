@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ProviderSettingsPatch} from '../../shared/entity/cluster';
+import {ProviderSettingsPatch} from '@shared/entity/cluster';
 
 export function doPatchCloudSpecFake(): ProviderSettingsPatch {
   return {

@@ -22,7 +22,7 @@ import {
   hasAddonLogoData,
   hasAddonFormData,
   AddonFormSpec,
-} from '../../../entity/addon';
+} from '@shared/entity/addon';
 
 export enum Controls {
   ContinuouslyReconcile = 'continuouslyReconcile',

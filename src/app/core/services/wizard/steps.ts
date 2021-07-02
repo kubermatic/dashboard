@@ -11,7 +11,7 @@
 
 import {Injectable} from '@angular/core';
 import {Subject} from 'rxjs';
-import {GoogleAnalyticsService} from '../../../google-analytics.service';
+import {GoogleAnalyticsService} from '@app/google-analytics.service';
 
 @Injectable()
 export class StepsService {

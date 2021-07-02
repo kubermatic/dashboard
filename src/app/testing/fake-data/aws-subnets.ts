@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {AWSSubnet} from '../../shared/entity/provider/aws';
+import {AWSSubnet} from '@shared/entity/provider/aws';
 
 export function fakeAwsSubnets(): AWSSubnet[] {
   return [

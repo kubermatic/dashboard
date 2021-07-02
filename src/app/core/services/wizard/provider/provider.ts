@@ -10,8 +10,8 @@
 // limitations under the License.
 
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {environment} from '../../../../../environments/environment';
-import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
+import {environment} from '@environments/environment';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
 
 export abstract class Provider {
   private _requiredHeaders = [];

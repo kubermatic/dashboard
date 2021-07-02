@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Member} from '../../shared/entity/member';
+import {Member} from '@shared/entity/member';
 
 export function fakeMembers(): Member[] {
   return [

@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Cluster, ClusterType} from '../../shared/entity/cluster';
+import {Cluster, ClusterType} from '@shared/entity/cluster';
 
 // fakeClusterWithMachineNetwork could contain 6 IPs
 export function fakeClusterWithMachineNetwork(): Cluster {

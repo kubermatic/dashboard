@@ -11,10 +11,10 @@
 
 import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
-import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
 
 import {Provider} from './provider';
-import {GCPDiskType, GCPMachineSize, GCPNetwork, GCPSubnetwork, GCPZone} from '../../../../shared/entity/provider/gcp';
+import {GCPDiskType, GCPMachineSize, GCPNetwork, GCPSubnetwork, GCPZone} from '@shared/entity/provider/gcp';
 
 export class GCP extends Provider {
   constructor(http: HttpClient, provider: NodeProvider) {

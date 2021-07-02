@@ -14,9 +14,9 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angula
 import {NodeDataService} from '@core/services/node-data/service';
 import {merge} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/node';
-import {NodeData} from '../../../../shared/model/NodeSpecChange';
-import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
+import {NodeCloudSpec, NodeSpec} from '@shared/entity/node';
+import {NodeData} from '@shared/model/NodeSpecChange';
+import {BaseFormValidator} from '@shared/validators/base-form.validator';
 
 enum Controls {
   CPUs = 'cpus',

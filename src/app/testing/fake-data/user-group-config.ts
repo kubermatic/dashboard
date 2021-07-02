@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {UserGroupConfig} from '../../shared/model/Config';
+import {UserGroupConfig} from '@shared/model/Config';
 
 export function fakeUserGroupConfig(): UserGroupConfig {
   return {

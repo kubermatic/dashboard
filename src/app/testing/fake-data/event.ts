@@ -9,8 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ObjectReference} from '../../shared/entity/common';
-import {Event} from '../../shared/entity/event';
+import {ObjectReference} from '@shared/entity/common';
+import {Event} from '@shared/entity/event';
 
 export function fakeEvents(): Event[] {
   return [

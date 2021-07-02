@@ -9,11 +9,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {OpenstackFlavor, OpenstackAvailabilityZone} from '../../shared/entity/provider/openstack';
-import {DigitaloceanSizes} from '../../shared/entity/provider/digitalocean';
-import {AzureSizes} from '../../shared/entity/provider/azure';
-import {HetznerTypes} from '../../shared/entity/provider/hetzner';
-import {PacketSize} from '../../shared/entity/provider/packet';
+import {OpenstackFlavor, OpenstackAvailabilityZone} from '@shared/entity/provider/openstack';
+import {DigitaloceanSizes} from '@shared/entity/provider/digitalocean';
+import {AzureSizes} from '@shared/entity/provider/azure';
+import {HetznerTypes} from '@shared/entity/provider/hetzner';
+import {PacketSize} from '@shared/entity/provider/packet';
 
 export function fakeDigitaloceanSizes(): DigitaloceanSizes {
   return {

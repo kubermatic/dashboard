@@ -15,8 +15,8 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {SharedModule} from '@shared/module';
-import {AppConfigService} from '../../config.service';
-import {COOKIE, COOKIE_DI_TOKEN} from '../../config';
+import {AppConfigService} from '@app/config.service';
+import {COOKIE, COOKIE_DI_TOKEN} from '@app/config';
 import {fakeUserGroupConfig} from '@app/testing/fake-data/user-group-config';
 import {RouterTestingModule} from '@app/testing/router-stubs';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock';

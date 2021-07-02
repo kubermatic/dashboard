@@ -11,7 +11,7 @@
 
 import {AbstractControl} from '@angular/forms';
 import {WizardService} from '@core/services/wizard/wizard';
-import {BaseFormValidator} from '../../shared/validators/base-form.validator';
+import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {Directive} from '@angular/core';
 
 @Directive()
