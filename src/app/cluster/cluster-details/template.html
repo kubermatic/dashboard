@@ -18,46 +18,54 @@ limitations under the License.
     <button id="km-delete-cluster-btn"
             mat-flat-button
             color="tertiary"
+            fxLayoutAlign="center center"
             (click)="deleteClusterDialog()"
             [disabled]="!isDeleteEnabled()">
-      Delete
+      <i class="km-icon-mask km-icon-delete"></i>
+      <span>Delete</span>
     </button>
     <div fxFlex></div>
-    <button mat-icon-button
+    <button mat-flat-button
+            type="button"
+            fxLayoutAlign="center center"
             id="km-share-kubeconfig-btn"
             class="km-share-kubeconfig-btn"
             color="alternative"
             (click)="shareConfigDialog()"
             [disabled]="!isClusterRunning"
-            *ngIf="isShareConfigEnabled() | async"
-            matTooltip="Share">
+            *ngIf="isShareConfigEnabled() | async">
       <i class="km-icon-mask km-icon-share"></i>
+      <span>Share</span>
     </button>
-    <button class="km-download-kubeconfig-btn"
-            color="alternative"
-            mat-icon-button
-            [disabled]="!isClusterRunning"
-            matTooltip="Download config">
-      <a href="{{getDownloadURL() | async}}"
-         target="_blank"
-         rel="noopener">
-        <i class="km-icon-mask km-icon-download"></i>
-      </a>
+    <button color="alternative"
+            fxLayoutAlign="center center"
+            mat-flat-button
+            type="button"
+            (click)="downloadKubeconfig()"
+            [disabled]="!isClusterRunning">
+      <i class="km-icon-mask km-icon-download"></i>
+      <span>Download</span>
     </button>
-    <button mat-flat-button
+    <button fxLayoutAlign="center center"
+            mat-flat-button
+            type="button"
             (click)="addNode()"
             [fxHide]="nodeDc?.spec?.provider === 'bringyourown'"
             [disabled]="!isAddMachineDeploymentsEnabled()">
-      Add Machine Deployment
+      <i class="km-icon-mask km-icon-add"></i>
+      <span>Add Machine Deployment</span>
+
     </button>
     <a class="km-open-kubernetes-dashboard-btn"
        id="km-open-kubernetes-dashboard-btn"
+       fxLayoutAlign="center center"
        [href]="getProxyURL()"
        target="_blank"
        mat-flat-button
        [disabled]="!isClusterRunning"
        *ngIf="(settings.adminSettings | async)?.enableDashboard">
-      Open Dashboard
+      <i class="km-icon-mask km-icon-external-link"></i>
+      <span>Open Dashboard</span>
     </a>
   </div>
 

@@ -21,10 +21,8 @@ limitations under the License.
           *ngIf="(adminSettings$ | async).enableExternalClusterImport"
           [disabled]="!canAdd()"
           (click)="connectCluster()">
-    <i class="km-icon-mask km-icon-add"></i>
-    <span>
-      <!--TODO--> Connect Cluster
-    </span>
+    <i class="km-icon-mask km-icon-connect"></i>
+    <span>Connect Cluster</span>
   </button>
   <button id="km-add-cluster-top-btn"
           mat-flat-button

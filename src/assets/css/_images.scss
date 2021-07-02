@@ -75,6 +75,10 @@
   @include mask-image("/assets/images/icons/edit.svg", 18px);
 }
 
+.km-icon-connect {
+  @include mask-image("/assets/images/icons/connect.svg", 18px);
+}
+
 .km-icon-disconnect {
   @include mask-image("/assets/images/icons/disconnect.svg", 18px);
 }
