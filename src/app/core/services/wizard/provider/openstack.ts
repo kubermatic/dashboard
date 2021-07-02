@@ -11,7 +11,7 @@
 
 import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
-import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Provider} from './provider';
 import {
   OpenstackAvailabilityZone,
@@ -20,7 +20,7 @@ import {
   OpenstackSecurityGroup,
   OpenstackSubnet,
   OpenstackTenant,
-} from '../../../../shared/entity/provider/openstack';
+} from '@shared/entity/provider/openstack';
 
 export class Openstack extends Provider {
   private readonly _tenantsUrl = `${this._restRoot}/providers/openstack/tenants`;

@@ -25,12 +25,12 @@ import {NodeDataService} from '@core/services/node-data/service';
 import * as _ from 'lodash';
 import {merge, Observable} from 'rxjs';
 import {filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
-import {FilteredComboboxComponent} from '../../../../shared/components/combobox/component';
-import {GCPNodeSpec, NodeCloudSpec, NodeSpec} from '../../../../shared/entity/node';
-import {GCPDiskType, GCPMachineSize, GCPZone} from '../../../../shared/entity/provider/gcp';
-import {NodeData} from '../../../../shared/model/NodeSpecChange';
-import {compare} from '../../../../shared/utils/common-utils';
-import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
+import {FilteredComboboxComponent} from '@shared/components/combobox/component';
+import {GCPNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
+import {GCPDiskType, GCPMachineSize, GCPZone} from '@shared/entity/provider/gcp';
+import {NodeData} from '@shared/model/NodeSpecChange';
+import {compare} from '@shared/utils/common-utils';
+import {BaseFormValidator} from '@shared/validators/base-form.validator';
 
 enum Controls {
   DiskSize = 'diskSize',

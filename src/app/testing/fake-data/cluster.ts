@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Cluster, ClusterType, Token} from '../../shared/entity/cluster';
+import {Cluster, ClusterType, Token} from '@shared/entity/cluster';
 
 export function fakeDigitaloceanCluster(): Cluster {
   return {

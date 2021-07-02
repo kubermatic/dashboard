@@ -11,9 +11,9 @@
 
 import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
-import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Provider} from './provider';
-import {HetznerTypes} from '../../../../shared/entity/provider/hetzner';
+import {HetznerTypes} from '@shared/entity/provider/hetzner';
 
 export class Hetzner extends Provider {
   constructor(http: HttpClient, provider: NodeProvider) {

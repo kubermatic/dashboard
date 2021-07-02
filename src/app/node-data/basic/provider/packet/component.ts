@@ -23,11 +23,11 @@ import {NodeDataService} from '@core/services/node-data/service';
 import * as _ from 'lodash';
 import {Observable} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {NodeCloudSpec, NodeSpec, PacketNodeSpec} from '../../../../shared/entity/node';
-import {PacketSize} from '../../../../shared/entity/provider/packet';
-import {NodeData} from '../../../../shared/model/NodeSpecChange';
-import {compare} from '../../../../shared/utils/common-utils';
-import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
+import {NodeCloudSpec, NodeSpec, PacketNodeSpec} from '@shared/entity/node';
+import {PacketSize} from '@shared/entity/provider/packet';
+import {NodeData} from '@shared/model/NodeSpecChange';
+import {compare} from '@shared/utils/common-utils';
+import {BaseFormValidator} from '@shared/validators/base-form.validator';
 
 enum Controls {
   InstanceType = 'instanceType',

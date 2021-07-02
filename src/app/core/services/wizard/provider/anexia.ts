@@ -12,10 +12,10 @@
 import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
 
-import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
 
 import {Provider} from './provider';
-import {AnexiaTemplate, AnexiaVlan} from '../../../../shared/entity/provider/anexia';
+import {AnexiaTemplate, AnexiaVlan} from '@shared/entity/provider/anexia';
 
 export class Anexia extends Provider {
   constructor(http: HttpClient, provider: NodeProvider) {

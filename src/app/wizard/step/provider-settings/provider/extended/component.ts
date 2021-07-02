@@ -14,8 +14,8 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {merge} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {NodeProvider} from '../../../../../shared/model/NodeProviderConstants';
-import {BaseFormValidator} from '../../../../../shared/validators/base-form.validator';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {BaseFormValidator} from '@shared/validators/base-form.validator';
 
 enum Controls {
   ProviderExtended = 'providerExtended',

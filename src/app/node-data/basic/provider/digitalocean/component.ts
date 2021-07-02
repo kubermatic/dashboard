@@ -14,8 +14,8 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angula
 import {NodeDataService} from '@core/services/node-data/service';
 import {Observable} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {DigitaloceanSizes, Optimized, Standard} from '../../../../shared/entity/provider/digitalocean';
-import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
+import {DigitaloceanSizes, Optimized, Standard} from '@shared/entity/provider/digitalocean';
+import {BaseFormValidator} from '@shared/validators/base-form.validator';
 
 enum Controls {
   Size = 'size',

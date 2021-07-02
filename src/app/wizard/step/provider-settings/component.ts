@@ -13,7 +13,7 @@ import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {takeUntil} from 'rxjs/operators';
 
-import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {WizardService} from '@core/services/wizard/wizard';
 import {StepBase} from '../base';

@@ -13,9 +13,9 @@ import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {NodeDataService} from '@core/services/node-data/service';
 import {takeUntil} from 'rxjs/operators';
-import {NodeCloudSpec, NodeSpec} from '../../../../shared/entity/node';
-import {NodeData} from '../../../../shared/model/NodeSpecChange';
-import {BaseFormValidator} from '../../../../shared/validators/base-form.validator';
+import {NodeCloudSpec, NodeSpec} from '@shared/entity/node';
+import {NodeData} from '@shared/model/NodeSpecChange';
+import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {NodeDataMode} from '../../../config';
 import {merge} from 'rxjs';
 

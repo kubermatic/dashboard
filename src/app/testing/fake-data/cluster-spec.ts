@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {MasterVersion} from '../../shared/entity/cluster';
+import {MasterVersion} from '@shared/entity/cluster';
 
 export function masterVersionsFake(): MasterVersion[] {
   return [

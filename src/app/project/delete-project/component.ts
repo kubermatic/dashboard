@@ -11,7 +11,7 @@
 
 import {Component, Input} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
-import {Project} from '../../shared/entity/project';
+import {Project} from '@shared/entity/project';
 
 @Component({
   selector: 'km-delete-project',
