@@ -163,12 +163,12 @@ limitations under the License.
                              [value]="isOPAEnabled()">
         </km-property-boolean>
 
-        <km-property-boolean label="MLA Logging"
+        <km-property-boolean label="User Cluster Logging"
                              [value]="!!cluster.spec.mla && cluster.spec.mla.loggingEnabled"
                              *ngIf="isMLAEnabledInSeed()">
         </km-property-boolean>
 
-        <km-property-boolean label="MLA Monitoring"
+        <km-property-boolean label="User Cluster Monitoring"
                              [value]="!!cluster.spec.mla && cluster.spec.mla.monitoringEnabled"
                              *ngIf="isMLAEnabledInSeed()">
         </km-property-boolean>
@@ -298,12 +298,20 @@ limitations under the License.
                             [projectID]="projectID"
                             [isClusterRunning]="isClusterRunning"></km-gatekeeper-config>
     </km-tab>
-    <km-tab label="MLA Alertmanager Config"
+    <km-tab label="User Cluster Alertmanager"
             *ngIf="isMLAEnabled()">
       <km-alertmanager-config [alertmanagerConfig]="alertmanagerConfig"
                               [cluster]="cluster"
                               [projectID]="projectID"
                               [isClusterRunning]="isClusterRunning"></km-alertmanager-config>
+    </km-tab>
+    <km-tab label="User Cluster Alert Rules"
+            *ngIf="isMLAEnabled()">
+      <km-rule-groups [ruleGroups]="ruleGroups"
+                      [cluster]="cluster"
+                      [projectID]="projectID"
+                      [isClusterRunning]="isClusterRunning">
+      </km-rule-groups>
     </km-tab>
   </km-tab-card>
 </div>

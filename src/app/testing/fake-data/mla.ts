@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {AlertmanagerConfig} from '@shared/entity/mla';
+import {AlertmanagerConfig, RuleGroup, RuleGroupType} from '@shared/entity/mla';
 
 export function fakeAlertmanagerConfig(): AlertmanagerConfig {
   return {
@@ -18,4 +18,17 @@ export function fakeAlertmanagerConfig(): AlertmanagerConfig {
         'Z2xvYmFsOg0KICBzbXRwX3NtYXJ0aG9zdDogJ2xvY2FsaG9zdDoyNScNCiAgc210cF9mcm9tOiAndGVzdEBleGFtcGxlLm9yZycNCnJvdXRlOg0KICByZWNlaXZlcjogInRlc3QiDQpyZWNlaXZlcnM6DQogIC0gbmFtZTogInRlc3QiDQogICAgZW1haWxfY29uZmlnczoNCiAgICAtIHRvOiAndGVzdEBleGFtcGxlLm9yZyc=',
     },
   };
+}
+
+export function fakeRuleGroups(): RuleGroup[] {
+  return [
+    {
+      data: 'bmFtZTogZXhhbXBsZQpydWxlczoKICAtIGFsZXJ0OiBIaWdoVGhyb3VnaHB1dExvZ1N0cmVhbXMKICAgIGV4cHI6IHN1bSBieShjb250YWluZXIpKHJhdGUoe2pvYj1+Imt1YmUtc3lzdGVtLy4qIn1bMW1dKSkgPiA1MAogICAgZm9yOiAxbQ==',
+      type: RuleGroupType.Logs,
+    },
+    {
+      data: 'bmFtZTogZXhhbXBsZTIKcnVsZXM6CiAgLSBhbGVydDogSGlnaFRocm91Z2hwdXRMb2dTdHJlYW1zCiAgICBleHByOiBzdW0gYnkoY29udGFpbmVyKShyYXRlKHtqb2I9fiJrdWJlLXN5c3RlbS8uKiJ9WzFtXSkpID4gNTAKICAgIGZvcjogMW0=',
+      type: RuleGroupType.Metrics,
+    },
+  ];
 }

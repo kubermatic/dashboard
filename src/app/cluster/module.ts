@@ -48,6 +48,8 @@ import {NodeListComponent} from './cluster-details/node-list/component';
 import {AddBindingComponent} from './cluster-details/rbac/add-binding/component';
 import {RBACComponent} from './cluster-details/rbac/component';
 import {RevokeTokenComponent} from './cluster-details/revoke-token/component';
+import {RuleGroupsComponent} from './cluster-details/rule-groups/component';
+import {RuleGroupDialog} from './cluster-details/rule-groups/rule-group-dialog/component';
 import {ShareKubeconfigComponent} from './cluster-details/share-kubeconfig/component';
 import {VersionPickerComponent} from './cluster-details/version-picker/component';
 import {ClusterListComponent} from './cluster-list/component';
@@ -93,6 +95,8 @@ const components: any[] = [
   GatekeeperConfigDialog,
   AlertmanagerConfigComponent,
   AlertmanagerConfigDialog,
+  RuleGroupsComponent,
+  RuleGroupDialog,
 ];
 
 const dialogs: any[] = [AddMachineNetworkComponent];

@@ -11,19 +11,24 @@
 
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
+import {AppConfigService} from '@app/config.service';
 import {environment} from '@environments/environment';
-import {AlertmanagerConfig} from '@shared/entity/mla';
-import {Observable, Subject, merge, of} from 'rxjs';
+import {AlertmanagerConfig, RuleGroup} from '@shared/entity/mla';
+import {Observable, Subject, timer, merge, of} from 'rxjs';
 import {switchMap, shareReplay, catchError} from 'rxjs/operators';
 
 @Injectable()
 export class MLAService {
+  private readonly _refreshTime = 10;
   private _newRestRoot: string = environment.newRestRoot;
+  private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
 
   private _alertmanagerConfig$ = new Map<string, Observable<AlertmanagerConfig>>();
   private _alertmanagerConfigRefresh$ = new Subject<void>();
+  private _ruleGroups$ = new Map<string, Observable<RuleGroup[]>>();
+  private _ruleGroupsRefresh$ = new Subject<void>();
 
-  constructor(private readonly _http: HttpClient) {}
+  constructor(private readonly _http: HttpClient, private readonly _appConfigService: AppConfigService) {}
 
   alertmanagerConfig(projectId: string, clusterId: string): Observable<AlertmanagerConfig> {
     const id = `${projectId}-${clusterId}`;
@@ -59,6 +64,49 @@ export class MLAService {
 
   resetAlertmanagerConfig(projectId: string, clusterId: string): Observable<any> {
     const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/alertmanager/config`;
+    return this._http.delete(url);
+  }
+
+  ruleGroups(projectId: string, clusterId: string): Observable<RuleGroup[]> {
+    const id = `${projectId}-${clusterId}`;
+
+    if (!this._ruleGroups$.get(id)) {
+      const _ruleGroups$ = merge(this._ruleGroupsRefresh$, this._refreshTimer$)
+        .pipe(switchMap(_ => this._getRuleGroups(projectId, clusterId)))
+        .pipe(shareReplay({refCount: true, bufferSize: 1}));
+
+      this._ruleGroups$.set(id, _ruleGroups$);
+    }
+
+    return this._ruleGroups$.get(id);
+  }
+
+  private _getRuleGroups(projectId: string, clusterId: string): Observable<RuleGroup[]> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/rulegroups`;
+    return this._http.get<RuleGroup[]>(url).pipe(catchError(() => of<RuleGroup[]>()));
+  }
+
+  refreshRuleGroups(): void {
+    this._ruleGroupsRefresh$.next();
+  }
+
+  createRuleGroup(projectId: string, clusterId: string, ruleGroup: RuleGroup): Observable<RuleGroup> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/rulegroups`;
+    return this._http.post<RuleGroup>(url, ruleGroup);
+  }
+
+  editRuleGroup(
+    projectId: string,
+    clusterId: string,
+    ruleGroup: RuleGroup,
+    ruleGroupName: string
+  ): Observable<RuleGroup> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/rulegroups/${ruleGroupName}`;
+    return this._http.put<RuleGroup>(url, ruleGroup);
+  }
+
+  deleteRuleGroup(projectId: string, clusterId: string, ruleGroupName: string): Observable<any> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/rulegroups/${ruleGroupName}`;
     return this._http.delete(url);
   }
 }

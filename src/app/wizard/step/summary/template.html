@@ -110,11 +110,11 @@ limitations under the License.
         <km-property-boolean label="OPA Integration"
                              [value]="cluster.spec.opaIntegration?.enabled">
         </km-property-boolean>
-        <km-property-boolean label="MLA Logging"
+        <km-property-boolean label="User Cluster Logging"
                              [value]="cluster.spec.mla?.loggingEnabled"
                              *ngIf="isMLAEnabled()">
         </km-property-boolean>
-        <km-property-boolean label="MLA Monitoring"
+        <km-property-boolean label="User Cluster Monitoring"
                              [value]="cluster.spec.mla?.monitoringEnabled"
                              *ngIf="isMLAEnabled()">
         </km-property-boolean>
