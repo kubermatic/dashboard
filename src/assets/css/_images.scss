@@ -182,6 +182,10 @@
   @include mask-image("/assets/images/icons/circle.svg", 14px);
 }
 
+.km-icon-back {
+  @include mask-image("/assets/images/icons/back.svg", 18px);
+}
+
 .km-icon-add {
   @include mask-image("/assets/images/icons/plus.svg", 18px);
 }

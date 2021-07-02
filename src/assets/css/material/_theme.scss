@@ -195,6 +195,10 @@
       background-color: map-get($colors, primary-hover);
     }
 
+    .km-icon-mask {
+      background-color: #fff;
+    }
+
     &.mat-alternative:not([disabled]) {
       background-color: map-get($colors, secondary);
 
@@ -211,6 +215,10 @@
       &:hover {
         background-color: map-get($colors, background-hover);
       }
+
+      .km-icon-mask {
+        background-color: map-get($colors, text-secondary);
+      }
     }
 
     &.mat-quaternary:not([disabled]) {
@@ -220,6 +228,10 @@
 
       &:hover {
         background-color: map-get($colors, background-hover);
+      }
+
+      .km-icon-mask {
+        background-color: map-get($colors, text);
       }
     }
 
@@ -231,6 +243,10 @@
       &:hover {
         background-color: map-get($colors, background-hover);
       }
+
+      .km-icon-mask {
+        background-color: map-get($colors, text);
+      }
     }
   }
 
@@ -239,7 +255,7 @@
   }
 
   .mat-icon-button {
-    i {
+    .km-icon-mask {
       background-color: map-get($colors, text);
     }
 

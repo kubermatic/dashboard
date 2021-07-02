@@ -18,9 +18,11 @@ limitations under the License.
       <button id="km-delete-cluster-btn"
               mat-flat-button
               color="tertiary"
+              fxLayoutAlign="center center"
               (click)="disconnect()"
               [disabled]="!isDisconnectEnabled()">
-        Disconnect
+        <i class="km-icon-mask km-icon-disconnect"></i>
+        <span>Disconnect</span>
       </button>
       <div fxFlex></div>
     </div>
