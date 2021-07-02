@@ -261,6 +261,15 @@ a {
     line-height: 25px;
     padding: 0;
 
+    // Generate width classes like &.p-5, &.p-10 etc., up to &.p-95.
+    @for $i from 1 through 19 {
+      $w: 5 * $i;
+
+      &.p-#{$w} {
+        width: #{$w}#{'%'};
+      }
+    }
+
     &:last-of-type {
       padding-right: 30px;
     }
