@@ -93,7 +93,7 @@
     "gts": "3.1.0",
     "husky": "7.0.0",
     "jest": "27.0.4",
-    "jest-preset-angular": "9.0.2",
+    "jest-preset-angular": "9.0.4",
     "js-beautify": "1.13.13",
     "license-check-and-add": "4.0.2",
     "license-compliance": "1.2.1",
