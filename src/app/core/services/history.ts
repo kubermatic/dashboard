@@ -40,7 +40,7 @@ export class HistoryService {
         .pipe(filter(e => e instanceof NavigationEnd))
         .pipe(pairwise())
         .subscribe((e: [NavigationEnd, NavigationEnd]) => {
-          if (e[0].url !== e[1].url) {
+          if (e[0].url !== e[1].url && !this._isAdminPanelUrl(e[0].url)) {
             this._previousStateUrl = e[0].url;
             this._currentStateUrl = e[1].url;
             this.onNavigationChange.next();
@@ -62,5 +62,9 @@ export class HistoryService {
     return this._router.navigate([defaultState], {
       queryParamsHandling: 'preserve',
     });
+  }
+
+  private _isAdminPanelUrl(url: string): boolean {
+    return url.startsWith('/settings');
   }
 }

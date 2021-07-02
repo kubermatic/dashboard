@@ -12,72 +12,14 @@
 @import 'mixins';
 @import 'variables';
 
-.mat-card {
-  .mat-card-header {
-    padding: 0 30px;
-  }
+:host {
+  padding: 20px 0;
+}
 
-  .mat-card-content {
-    padding: 30px;
-  }
+.drawer {
+  position: fixed;
+}
 
-  .km-admin-settings {
-    font-size: $font-size-subhead;
-
-    .entry-label {
-      min-width: 316px;
-    }
-
-    .km-pointer,
-    .km-icon-error {
-      margin-left: 4px;
-      min-height: 16px;
-      min-width: 16px;
-    }
-
-    .km-account-settings-toggle {
-      mat-button-toggle {
-        @include size(150px, 50px, true);
-
-        border-radius: $border-radius;
-        margin-bottom: 0;
-
-        .tech-preview-name {
-          line-height: 22px;
-        }
-
-        .tech-preview-tag {
-          border-radius: 4px;
-          font-size: $font-size-small;
-          line-height: 12px;
-        }
-
-        i {
-          filter: grayscale(100%);
-        }
-
-        &:hover {
-          background-color: transparent;
-          transition: all .5s ease;
-        }
-
-        &.mat-button-toggle-checked {
-          background-color: transparent;
-
-          i {
-            filter: none;
-          }
-        }
-      }
-    }
-
-    .input {
-      margin: 0 16px -20px 0;
-      width: 204px;
-    }
-
-    mat-checkbox {
-      margin-right: 48px;
-    }
-  }
+.content-padding {
+  padding: 0 20px;
 }

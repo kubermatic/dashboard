@@ -16,16 +16,6 @@
   padding: 0 30px;
 }
 
-.filters {
-  .filter-title {
-    margin: -20px 8px 0 0;
-  }
-
-  .mat-form-field {
-    width: 280px;
-  }
-}
-
 .km-provider-logo {
   background-position: left;
   margin: 8px 8px 0 0;
@@ -47,4 +37,20 @@
     max-width: 80px;
     min-height: 18px;
   }
+}
+
+.filters {
+  font-size: 16px;
+}
+
+.mat-card-title {
+  .km-icon-add {
+    margin-left: 0;
+    margin-right: 12px;
+  }
+}
+
+#km-admin-settings-add-dc-btn {
+  height: 50px;
+  margin: 2px 0;
 }

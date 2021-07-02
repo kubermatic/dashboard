@@ -10,7 +10,7 @@
 // limitations under the License.
 
 import * as _ from 'lodash';
-import {AdminSettingsPage} from '../../../pages/admin-settings.po';
+import {AdminSettings} from '../../../pages/admin-settings.po';
 import {ClustersPage} from '../../../pages/clusters.po';
 import {ProjectsPage} from '../../../pages/projects.po';
 import {WizardPage} from '../../../pages/wizard.po';
@@ -35,24 +35,24 @@ describe('Admin Settings - Resource Quota Story', () => {
 
   it('should login', () => {
     login(email, password);
-    cy.url().should(Condition.Include, View.Projects);
+    cy.url().should(Condition.Include, View.Projects.Default);
   });
 
   it('should create a new project', () => {
     ProjectsPage.addProject(projectName);
   });
 
-  it('should go to the admin settings', () => {
-    AdminSettingsPage.visit();
+  it('should go to the admin settings - defaults page', () => {
+    AdminSettings.DefaultsAndLimitsPage.visit();
   });
 
   it('should update resource quota', () => {
-    AdminSettingsPage.getMinCPUResourceQuotaInput().clear().type(`${minCPU}`).trigger('change');
-    AdminSettingsPage.waitForSave();
-    AdminSettingsPage.getMinRAMResourceQuotaInput().clear().type(`${minRAM}`).trigger('change');
-    AdminSettingsPage.waitForSave();
-    AdminSettingsPage.getMinCPUResourceQuotaInput().should(Condition.HaveValue, minCPU);
-    AdminSettingsPage.getMinRAMResourceQuotaInput().should(Condition.HaveValue, minRAM);
+    AdminSettings.DefaultsAndLimitsPage.getMinCPUResourceQuotaInput().clear().type(`${minCPU}`).trigger('change');
+    AdminSettings.waitForSave();
+    AdminSettings.DefaultsAndLimitsPage.getMinRAMResourceQuotaInput().clear().type(`${minRAM}`).trigger('change');
+    AdminSettings.waitForSave();
+    AdminSettings.DefaultsAndLimitsPage.getMinCPUResourceQuotaInput().should(Condition.HaveValue, minCPU);
+    AdminSettings.DefaultsAndLimitsPage.getMinRAMResourceQuotaInput().should(Condition.HaveValue, minRAM);
   });
 
   it('should go to projects view', () => {

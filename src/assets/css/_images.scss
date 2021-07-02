@@ -256,6 +256,26 @@
   @include background-image("/assets/images/icons/kubernetes.svg", 30px);
 }
 
+.km-icon-opa {
+  @include mask-image("/assets/images/icons/opa.svg", 24px);
+}
+
+.km-icon-defaults {
+  @include mask-image("/assets/images/icons/defaults.svg", 24px);
+}
+
+.km-icon-node {
+  @include mask-image("/assets/images/icons/node.svg", 24px);
+}
+
+.km-icon-id {
+  @include mask-image("/assets/images/icons/id.svg", 24px);
+}
+
+.km-icon-interface {
+  @include mask-image("/assets/images/icons/interface.svg", 24px);
+}
+
 .km-provider-logo-alibaba {
   @include provider-image("/assets/images/clouds/alibaba.svg", 30px);
 }

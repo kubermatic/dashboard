@@ -12,7 +12,7 @@
 import {login, logout} from '../../../utils/auth';
 import {Condition} from '../../../utils/condition';
 import {View} from '../../../utils/view';
-import {AdminSettingsPage} from '../../../pages/admin-settings.po';
+import {AdminSettings} from '../../../pages/admin-settings.po';
 import {ProjectsPage} from '../../../pages/projects.po';
 import * as _ from 'lodash';
 import {LoginPage} from '../../../pages/login.po';
@@ -30,17 +30,19 @@ describe('Admin Settings - Project Limit Story', () => {
 
   it('should login as admin', () => {
     login(adminEmail, password);
-    cy.url().should(Condition.Include, View.Projects);
+    cy.url().should(Condition.Include, View.Projects.Default);
   });
 
-  it('should go to the admin settings', () => {
-    AdminSettingsPage.visit();
+  it('should go to the admin settings - default page', () => {
+    AdminSettings.DefaultsAndLimitsPage.visit();
   });
 
   it('restrict project creation to admins only', () => {
-    AdminSettingsPage.getRestrictProjectCreationToAdminsCheckbox().click();
-    AdminSettingsPage.waitForSave();
-    AdminSettingsPage.getRestrictProjectCreationToAdminsCheckbox().find('input').should(Condition.BeChecked);
+    AdminSettings.DefaultsAndLimitsPage.getRestrictProjectCreationToAdminsCheckbox().click();
+    AdminSettings.waitForSave();
+    AdminSettings.DefaultsAndLimitsPage.getRestrictProjectCreationToAdminsCheckbox()
+      .find('input')
+      .should(Condition.BeChecked);
   });
 
   it('should logout', () => {
@@ -49,7 +51,7 @@ describe('Admin Settings - Project Limit Story', () => {
 
   it('should login as normal user', () => {
     login(userEmail, password);
-    cy.url().should(Condition.Include, View.Projects);
+    cy.url().should(Condition.Include, View.Projects.Default);
   });
 
   it('should not be able to create a new project', () => {
@@ -66,23 +68,25 @@ describe('Admin Settings - Project Limit Story', () => {
 
   it('should login as admin', () => {
     login(adminEmail, password);
-    cy.url().should(Condition.Include, View.Projects);
+    cy.url().should(Condition.Include, View.Projects.Default);
   });
 
   it('should go to the admin settings', () => {
-    AdminSettingsPage.visit();
+    AdminSettings.DefaultsAndLimitsPage.visit();
   });
 
   it('remove restriction for project creation to admins only', () => {
-    AdminSettingsPage.getRestrictProjectCreationToAdminsCheckbox().click();
-    AdminSettingsPage.waitForSave();
-    AdminSettingsPage.getRestrictProjectCreationToAdminsCheckbox().find('input').should(Condition.NotBeChecked);
+    AdminSettings.DefaultsAndLimitsPage.getRestrictProjectCreationToAdminsCheckbox().click();
+    AdminSettings.waitForSave();
+    AdminSettings.DefaultsAndLimitsPage.getRestrictProjectCreationToAdminsCheckbox()
+      .find('input')
+      .should(Condition.NotBeChecked);
   });
 
   it('set project limit for normal users to 1', () => {
-    AdminSettingsPage.getProjectLimitInput().clear().type('1').trigger('change');
-    AdminSettingsPage.waitForSave();
-    AdminSettingsPage.getProjectLimitInput().should(Condition.HaveValue, '1');
+    AdminSettings.DefaultsAndLimitsPage.getProjectLimitInput().clear().type('1').trigger('change');
+    AdminSettings.waitForSave();
+    AdminSettings.DefaultsAndLimitsPage.getProjectLimitInput().should(Condition.HaveValue, '1');
   });
 
   it('should logout', () => {
@@ -91,7 +95,7 @@ describe('Admin Settings - Project Limit Story', () => {
 
   it('should login as normal user', () => {
     login(userEmail, password);
-    cy.url().should(Condition.Include, View.Projects);
+    cy.url().should(Condition.Include, View.Projects.Default);
   });
 
   it('should create first project', () => {
@@ -123,17 +127,17 @@ describe('Admin Settings - Project Limit Story', () => {
 
   it('should login as admin', () => {
     login(adminEmail, password);
-    cy.url().should(Condition.Include, View.Projects);
+    cy.url().should(Condition.Include, View.Projects.Default);
   });
 
-  it('should go to the admin settings', () => {
-    AdminSettingsPage.visit();
+  it('should go to the admin settings - defaults page', () => {
+    AdminSettings.DefaultsAndLimitsPage.visit();
   });
 
   it('remove project limit', () => {
-    AdminSettingsPage.getProjectLimitInput().clear().type('0').trigger('change');
-    AdminSettingsPage.waitForSave();
-    AdminSettingsPage.getProjectLimitInput().should(Condition.HaveValue, '0');
+    AdminSettings.DefaultsAndLimitsPage.getProjectLimitInput().clear().type('0').trigger('change');
+    AdminSettings.waitForSave();
+    AdminSettings.DefaultsAndLimitsPage.getProjectLimitInput().should(Condition.HaveValue, '0');
   });
 
   it('should logout', () => {

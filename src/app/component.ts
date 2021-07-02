@@ -25,7 +25,8 @@ import {takeUntil} from 'rxjs/operators';
 import {AppConfigService} from './config.service';
 import {GoogleAnalyticsService} from './google-analytics.service';
 
-const PAGES_WITHOUT_MENU = ['/projects', '/account', '/settings', '/rest-api', '/terms-of-service', '/404'];
+// A list of regular expressions that match our views on which main side menu should not be displayed
+const PAGES_WITHOUT_MENU = ['/projects$', '/account$', '/settings', '/rest-api$', '/terms-of-service$', '/404$'];
 
 @Component({
   selector: 'km-root',
@@ -92,14 +93,16 @@ export class KubermaticComponent implements OnInit, OnDestroy {
   }
 
   private _handleSidenav(url: string): void {
-    if (this.sidenav) {
-      if (PAGES_WITHOUT_MENU.includes(url)) {
-        this.sidenav.close();
-        this.showMenuSwitchAndProjectSelector = false;
-      } else {
-        this.sidenav.open();
-        this.showMenuSwitchAndProjectSelector = true;
-      }
+    if (!this.sidenav) {
+      return;
+    }
+
+    if (PAGES_WITHOUT_MENU.some(u => new RegExp(u).test(url))) {
+      this.sidenav.close();
+      this.showMenuSwitchAndProjectSelector = false;
+    } else {
+      this.sidenav.open();
+      this.showMenuSwitchAndProjectSelector = true;
     }
   }
 

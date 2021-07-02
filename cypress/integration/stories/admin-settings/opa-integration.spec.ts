@@ -10,7 +10,7 @@
 // limitations under the License.
 
 import * as _ from 'lodash';
-import {AdminSettingsPage} from '../../../pages/admin-settings.po';
+import {AdminSettings} from '../../../pages/admin-settings.po';
 import {ClustersPage} from '../../../pages/clusters.po';
 import {ProjectsPage} from '../../../pages/projects.po';
 import {WizardPage} from '../../../pages/wizard.po';
@@ -26,23 +26,23 @@ describe('Admin Settings - Opa Integration Story', () => {
 
   it('should login', () => {
     login(email, password);
-    cy.url().should(Condition.Include, View.Projects);
+    cy.url().should(Condition.Include, View.Projects.Default);
   });
 
   it('should create a new project', () => {
     ProjectsPage.addProject(projectName);
   });
 
-  it('should go to the admin settings', () => {
-    AdminSettingsPage.visit();
+  it('should go to the admin settings - defaults page', () => {
+    AdminSettings.DefaultsAndLimitsPage.visit();
   });
 
   it('should make sure opa integration enable settings is not checked', () => {
-    AdminSettingsPage.getOPAEnableCheckbox().find('input').should(Condition.NotBeChecked);
+    AdminSettings.DefaultsAndLimitsPage.getOPAEnableCheckbox().find('input').should(Condition.NotBeChecked);
   });
 
   it('should make sure opa integration enforce settings is not checked', () => {
-    AdminSettingsPage.getOPAEnforceCheckbox().find('input').should(Condition.NotBeChecked);
+    AdminSettings.DefaultsAndLimitsPage.getOPAEnforceCheckbox().find('input').should(Condition.NotBeChecked);
   });
 
   it('should go to projects view', () => {
@@ -65,13 +65,13 @@ describe('Admin Settings - Opa Integration Story', () => {
   });
 
   it('should go to the admin settings', () => {
-    AdminSettingsPage.visit();
+    AdminSettings.DefaultsAndLimitsPage.visit();
   });
 
   it("should enable opa integration 'enable by default' settings", () => {
-    AdminSettingsPage.getOPAEnableCheckbox().click();
-    AdminSettingsPage.waitForSave();
-    AdminSettingsPage.getOPAEnableCheckbox().find('input').should(Condition.BeChecked);
+    AdminSettings.DefaultsAndLimitsPage.getOPAEnableCheckbox().click();
+    AdminSettings.waitForSave();
+    AdminSettings.DefaultsAndLimitsPage.getOPAEnableCheckbox().find('input').should(Condition.BeChecked);
   });
 
   it('should go to projects view', () => {
@@ -94,13 +94,13 @@ describe('Admin Settings - Opa Integration Story', () => {
   });
 
   it('should go to the admin settings', () => {
-    AdminSettingsPage.visit();
+    AdminSettings.DefaultsAndLimitsPage.visit();
   });
 
   it("should enable opa integration 'enforce' settings", () => {
-    AdminSettingsPage.getOPAEnforceCheckbox().click();
-    AdminSettingsPage.waitForSave();
-    AdminSettingsPage.getOPAEnforceCheckbox().find('input').should(Condition.BeChecked);
+    AdminSettings.DefaultsAndLimitsPage.getOPAEnforceCheckbox().click();
+    AdminSettings.waitForSave();
+    AdminSettings.DefaultsAndLimitsPage.getOPAEnforceCheckbox().find('input').should(Condition.BeChecked);
   });
 
   it('should go to projects view', () => {
@@ -123,13 +123,13 @@ describe('Admin Settings - Opa Integration Story', () => {
   });
 
   it('should go to the admin settings', () => {
-    AdminSettingsPage.visit();
+    AdminSettings.DefaultsAndLimitsPage.visit();
   });
 
   it("should disable opa integration 'enable by default' settings", () => {
-    AdminSettingsPage.getOPAEnableCheckbox().click();
-    AdminSettingsPage.waitForSave();
-    AdminSettingsPage.getOPAEnableCheckbox().find('input').should(Condition.NotBeChecked);
+    AdminSettings.DefaultsAndLimitsPage.getOPAEnableCheckbox().click();
+    AdminSettings.waitForSave();
+    AdminSettings.DefaultsAndLimitsPage.getOPAEnableCheckbox().find('input').should(Condition.NotBeChecked);
   });
 
   it('should go to projects view', () => {
@@ -152,13 +152,13 @@ describe('Admin Settings - Opa Integration Story', () => {
   });
 
   it('should go to the admin settings', () => {
-    AdminSettingsPage.visit();
+    AdminSettings.DefaultsAndLimitsPage.visit();
   });
 
   it('should restore default opa integration settings', () => {
-    AdminSettingsPage.getOPAEnforceCheckbox().click();
-    AdminSettingsPage.waitForSave();
-    AdminSettingsPage.getOPAEnforceCheckbox().find('input').should(Condition.NotBeChecked);
+    AdminSettings.DefaultsAndLimitsPage.getOPAEnforceCheckbox().click();
+    AdminSettings.waitForSave();
+    AdminSettings.DefaultsAndLimitsPage.getOPAEnforceCheckbox().find('input').should(Condition.NotBeChecked);
   });
 
   it('should go to the projects page', () => {

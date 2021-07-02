@@ -10,7 +10,7 @@
 // limitations under the License.
 
 import * as _ from 'lodash';
-import {AdminSettingsPage} from '../../../pages/admin-settings.po';
+import {AdminSettings} from '../../../pages/admin-settings.po';
 import {ClustersPage} from '../../../pages/clusters.po';
 import {ProjectsPage} from '../../../pages/projects.po';
 import {WizardPage} from '../../../pages/wizard.po';
@@ -30,34 +30,34 @@ describe('Admin Settings - Presets Story', () => {
 
   it('should login as admin', () => {
     login(adminEmail, password);
-    cy.url().should(Condition.Include, View.Projects);
+    cy.url().should(Condition.Include, View.Projects.Default);
   });
 
   it('should create a new project', () => {
     ProjectsPage.addProject(projectName);
   });
 
-  it('should go to the admin settings', () => {
-    AdminSettingsPage.visit();
-  });
-
-  it('should switch to presets tab', () => {
-    AdminSettingsPage.getPresetsTab().click();
+  it('should go to the admin settings - provider presets page', () => {
+    AdminSettings.ProviderPresetsPage.visit();
   });
 
   it('should create a preset', () => {
     const token = 'test';
 
-    AdminSettingsPage.getAddPresetBtn().click();
-    AdminSettingsPage.getAddPresetDialogNameInput().type(presetName).should(Condition.HaveValue, presetName);
-    AdminSettingsPage.getAddPresetDialogNextBtn().click();
+    AdminSettings.ProviderPresetsPage.getAddPresetBtn().click();
+    AdminSettings.ProviderPresetsPage.getAddPresetDialogNameInput()
+      .type(presetName)
+      .should(Condition.HaveValue, presetName);
+    AdminSettings.ProviderPresetsPage.getAddPresetDialogNextBtn().click();
 
     // Select provider
-    AdminSettingsPage.getAddPresetDialogProviderBtn(Provider.Digitalocean).click();
-    AdminSettingsPage.getAddPresetDialogNextBtn().click();
+    AdminSettings.ProviderPresetsPage.getAddPresetDialogProviderBtn(Provider.Digitalocean).click();
+    AdminSettings.ProviderPresetsPage.getAddPresetDialogNextBtn().click();
 
-    AdminSettingsPage.getAddPresetDialogDigitaloceanTokenInput().type(token).should(Condition.HaveValue, token);
-    AdminSettingsPage.getAddPresetDialogCreateBtn().click();
+    AdminSettings.ProviderPresetsPage.getAddPresetDialogDigitaloceanTokenInput()
+      .type(token)
+      .should(Condition.HaveValue, token);
+    AdminSettings.ProviderPresetsPage.getAddPresetDialogCreateBtn().click();
   });
 
   it('should go to projects view', () => {

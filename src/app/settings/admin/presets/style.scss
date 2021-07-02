@@ -17,12 +17,13 @@
 }
 
 .filters {
-  .filter-title {
-    margin: -20px 8px 0 0;
-  }
+  font-size: 16px;
+}
 
-  .mat-form-field {
-    width: 280px;
+.mat-card-title {
+  .km-icon-add {
+    margin-left: 0;
+    margin-right: 12px;
   }
 }
 
@@ -59,4 +60,9 @@
 
 .tooltip {
   margin-left: 4px;
+}
+
+#km-add-preset-btn {
+  height: 50px;
+  margin: 2px 0;
 }

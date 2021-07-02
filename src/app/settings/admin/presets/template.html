@@ -11,188 +11,200 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div class="header">
-  <div class="filters"
-       fxLayoutAlign=" center"
-       fxLayoutGap="16px">
-    <div class="filter-title">Filter by</div>
-    <mat-form-field fxFlex
-                    class="km-dropdown-with-suffix">
-      <mat-label>Provider</mat-label>
-      <mat-select disableOptionCentering
-                  class="km-select-ellipsis"
-                  [(ngModel)]="providerFilter"
-                  (selectionChange)="filter()">
-        <mat-select-trigger fxFlex
-                            fxLayout="row">
-          <div fxFlex
-               fxLayoutAlign="start">
-            <span class="km-provider-logo km-provider-logo-{{providerFilter}} provider-logo-small"></span>
-          </div>
-          <div fxFlex
-               fxLayoutAlign="end">
-            <button *ngIf="providerFilter"
-                    (click)="providerFilter = undefined; filter(); $event.stopPropagation()"
-                    matSuffix
-                    mat-icon-button
-                    aria-label="Clear">
-              <i class="km-icon-mask km-icon-remove"></i>
-            </button>
-          </div>
-        </mat-select-trigger>
-        <mat-option *ngFor="let provider of providers"
-                    [value]="provider">
-          <span class="km-provider-logo km-provider-logo-{{provider}} provider-logo-small"></span>
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field fxFlex
-                    class="km-dropdown-with-suffix">
-      <mat-label>Datacenter</mat-label>
-      <mat-select disableOptionCentering
-                  class="km-select-ellipsis"
-                  [disabled]="!providerFilter"
-                  [(ngModel)]="datacenterFilter"
-                  (selectionChange)="filter()">
-        <mat-select-trigger fxFlex
-                            fxLayout="row">
-          <div fxFlex
-               fxLayoutAlign="start">{{datacenterFilter}}</div>
-          <div fxFlex
-               fxLayoutAlign="end">
-            <button *ngIf="datacenterFilter"
-                    (click)="datacenterFilter = undefined; filter(); $event.stopPropagation()"
-                    matSuffix
-                    mat-icon-button
-                    aria-label="Clear">
-              <i class="km-icon-mask km-icon-remove"></i>
-            </button>
-          </div>
-        </mat-select-trigger>
-        <mat-option *ngFor="let datacenter of datacenters"
-                    [value]="datacenter.metadata.name">
-          {{datacenter.metadata.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-  </div>
-  <div fxFlex></div>
-  <button mat-flat-button
-          color="quaternary"
-          id="km-add-preset-btn"
-          fxLayoutAlign="center center"
-          (click)="createPreset()">
-    <i class="km-icon-mask km-icon-add"></i>
-    <span>Create Preset</span>
-  </button>
-</div>
-
-<table class="km-table"
-       mat-table
-       matSort
-       [dataSource]="dataSource">
-  <ng-container matColumnDef="name">
-    <th mat-header-cell
-        *matHeaderCellDef
-        class="km-header-cell"
-        mat-sort-header>Name
-    </th>
-    <td mat-cell
-        *matCellDef="let element">{{element.name}}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="providers">
-    <th mat-header-cell
-        *matHeaderCellDef
-        class="km-header-cell">Providers
-    </th>
-    <td mat-cell
-        *matCellDef="let element"
-        fxLayout="row"
-        class="providers-column">
-      <ng-container *ngFor="let provider of element.providers">
-        <span class="km-provider-logo km-provider-logo-{{provider.name}} provider-logo-medium"
-              [ngClass]="provider.enabled ? '' : 'disabled'">
-        </span>
-      </ng-container>
-    </td>
-  </ng-container>
-
-  <ng-container matColumnDef="show">
-    <th mat-header-cell
-        *matHeaderCellDef
-        class="km-header-cell">
+<mat-card>
+  <mat-card-header>
+    <mat-card-title fxFlex
+                    fxLayout="column"
+                    fxLayoutAlign="start"
+                    fxLayoutGap="32px">
+      <div>Provider Presets</div>
       <div fxLayout="row"
-           class="show">
-        Show
-        <div fxFlexAlign="center"
-             fxLayoutAlign="center"
-             class="km-icon-info km-pointer tooltip"
-             matTooltip="Shows if the Preset is enabled or disabled. Disabled Presets cannot be used to create new clusters."></div>
-      </div>
-    </th>
-    <td mat-cell
-        *matCellDef="let element"
-        fxLayoutGap="6px">
-      <button mat-icon-button
-              (click)="updatePresetStatus(element.name, !element.enabled)"
-              fxLayoutAlign="center center">
-        <i [ngClass]="element.enabled ? 'km-icon-show' : 'km-icon-hide'"></i>
-      </button>
-    </td>
-  </ng-container>
+           class="filters">
+        <div fxLayoutAlign=" center"
+             fxLayoutGap="16px">
+          <div>Filter by</div>
+          <mat-form-field fxFlex
+                          class="km-dropdown-without-subtext">
+            <mat-label>Provider</mat-label>
+            <mat-select disableOptionCentering
+                        class="km-select-ellipsis"
+                        [(ngModel)]="providerFilter"
+                        (selectionChange)="filter()">
+              <mat-select-trigger fxFlex
+                                  fxLayout="row">
+                <div fxFlex
+                     fxLayoutAlign="start">
+                  <span class="km-provider-logo km-provider-logo-{{providerFilter}} provider-logo-small"></span>
+                </div>
+                <div fxFlex
+                     fxLayoutAlign="end">
+                  <button *ngIf="providerFilter"
+                          (click)="providerFilter = undefined; filter(); $event.stopPropagation()"
+                          matSuffix
+                          mat-icon-button
+                          aria-label="Clear">
+                    <i class="km-icon-mask km-icon-remove"></i>
+                  </button>
+                </div>
+              </mat-select-trigger>
+              <mat-option *ngFor="let provider of providers"
+                          [value]="provider">
+                <span class="km-provider-logo km-provider-logo-{{provider}} provider-logo-small"></span>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
 
-  <ng-container matColumnDef="actions">
-    <th mat-header-cell
-        *matHeaderCellDef
-        class="km-header-cell"></th>
-    <td mat-cell
-        *matCellDef="let element">
-      <div fxLayoutAlign="end">
-        <button mat-icon-button
-                [matMenuTriggerFor]="menu">
-          <i class="km-icon-mask km-icon-points-menu"></i>
+          <mat-form-field fxFlex
+                          class="km-dropdown-without-subtext">
+            <mat-label>Datacenter</mat-label>
+            <mat-select disableOptionCentering
+                        class="km-select-ellipsis"
+                        [disabled]="!providerFilter"
+                        [(ngModel)]="datacenterFilter"
+                        (selectionChange)="filter()">
+              <mat-select-trigger fxFlex
+                                  fxLayout="row">
+                <div fxFlex
+                     fxLayoutAlign="start">{{datacenterFilter}}</div>
+                <div fxFlex
+                     fxLayoutAlign="end">
+                  <button *ngIf="datacenterFilter"
+                          (click)="datacenterFilter = undefined; filter(); $event.stopPropagation()"
+                          matSuffix
+                          mat-icon-button
+                          aria-label="Clear">
+                    <i class="km-icon-mask km-icon-remove"></i>
+                  </button>
+                </div>
+              </mat-select-trigger>
+              <mat-option *ngFor="let datacenter of datacenters"
+                          [value]="datacenter.metadata.name">
+                {{datacenter.metadata.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        </div>
+        <div fxFlex></div>
+        <button mat-flat-button
+                color="quaternary"
+                id="km-add-preset-btn"
+                fxLayoutAlign="center center"
+                (click)="createPreset()">
+          <i class="km-icon-mask km-icon-add"></i>
+          <span>Add Preset</span>
         </button>
-        <mat-menu #menu="matMenu"
-                  class="km-provider-edit-settings">
-          <button mat-menu-item
-                  (click)="editPreset(element)">
-            <span>Edit Preset</span>
-          </button>
-
-          <button mat-menu-item
-                  [disabled]="!canAddProvider(element)"
-                  (click)="addProvider(element)">
-            <span>Add Provider</span>
-          </button>
-
-          <button mat-menu-item
-                  (click)="editProvider(element)">
-            <span>Edit Provider</span>
-          </button>
-        </mat-menu>
       </div>
-    </td>
-  </ng-container>
+    </mat-card-title>
+  </mat-card-header>
 
-  <tr mat-header-row
-      class="km-header-row"
-      *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row
-      *matRowDef="let row; columns: displayedColumns"
-      class="km-mat-row"></tr>
-</table>
+  <mat-card-content>
+    <table class="km-table"
+           mat-table
+           matSort
+           [dataSource]="dataSource">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"
+            mat-sort-header>Name
+        </th>
+        <td mat-cell
+            *matCellDef="let element">{{element.name}}</td>
+      </ng-container>
 
-<ng-container *ngIf="!presets">
-  <div class="km-row">
-    <mat-spinner color="accent"
-                 class="km-spinner"
-                 [diameter]="25"></mat-spinner>
-  </div>
-</ng-container>
+      <ng-container matColumnDef="providers">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell">Providers
+        </th>
+        <td mat-cell
+            *matCellDef="let element"
+            fxLayout="row"
+            class="providers-column">
+          <ng-container *ngFor="let provider of element.providers">
+            <span class="km-provider-logo km-provider-logo-{{provider.name}} provider-logo-medium"
+                  [ngClass]="provider.enabled ? '' : 'disabled'">
+            </span>
+          </ng-container>
+        </td>
+      </ng-container>
 
-<div [hidden]="!isPaginatorVisible()">
-  <mat-paginator showFirstLastButtons></mat-paginator>
-</div>
+      <ng-container matColumnDef="show">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell">
+          <div fxLayout="row"
+               class="show">
+            Show
+            <div fxFlexAlign="center"
+                 fxLayoutAlign="center"
+                 class="km-icon-info km-pointer tooltip"
+                 matTooltip="Shows if the Preset is enabled or disabled. Disabled Presets cannot be used to create new clusters."></div>
+          </div>
+        </th>
+        <td mat-cell
+            *matCellDef="let element"
+            fxLayoutGap="6px">
+          <button mat-icon-button
+                  (click)="updatePresetStatus(element.name, !element.enabled)"
+                  fxLayoutAlign="center center">
+            <i [ngClass]="element.enabled ? 'km-icon-show' : 'km-icon-hide'"></i>
+          </button>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"></th>
+        <td mat-cell
+            *matCellDef="let element">
+          <div fxLayoutAlign="end">
+            <button mat-icon-button
+                    [matMenuTriggerFor]="menu">
+              <i class="km-icon-mask km-icon-points-menu"></i>
+            </button>
+            <mat-menu #menu="matMenu"
+                      class="km-provider-edit-settings">
+              <button mat-menu-item
+                      (click)="editPreset(element)">
+                <span>Edit Preset</span>
+              </button>
+
+              <button mat-menu-item
+                      [disabled]="!canAddProvider(element)"
+                      (click)="addProvider(element)">
+                <span>Add Provider</span>
+              </button>
+
+              <button mat-menu-item
+                      (click)="editProvider(element)">
+                <span>Edit Provider</span>
+              </button>
+            </mat-menu>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row
+          class="km-header-row"
+          *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          class="km-mat-row"></tr>
+    </table>
+
+    <ng-container *ngIf="!presets">
+      <div class="km-row">
+        <mat-spinner color="accent"
+                     class="km-spinner"
+                     [diameter]="25"></mat-spinner>
+      </div>
+    </ng-container>
+
+    <div [hidden]="!isPaginatorVisible()">
+      <mat-paginator showFirstLastButtons></mat-paginator>
+    </div>
+  </mat-card-content>
+</mat-card>
