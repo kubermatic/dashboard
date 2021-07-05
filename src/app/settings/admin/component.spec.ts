@@ -14,6 +14,8 @@ import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterTestingModule} from '@angular/router/testing';
+import {AppConfigService} from '@app/config.service';
+import {AppConfigMockService} from '@app/testing/services/app-config-mock';
 import {DatacenterMockService} from '@app/testing/services/datacenter-mock';
 import {MatDialogMock} from '@app/testing/services/mat-dialog-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
@@ -64,6 +66,7 @@ describe('AdminSettingsComponent', () => {
         {provide: MatDialog, useClass: MatDialogMock},
         {provide: DatacenterService, useClass: DatacenterMockService},
         {provide: OPAService, useValue: opaMock},
+        {provide: AppConfigService, useClass: AppConfigMockService},
         HistoryService,
         NotificationService,
       ],
