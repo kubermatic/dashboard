@@ -143,6 +143,14 @@ limitations under the License.
               <ng-container *ngSwitchCase="false">
                 <button mat-icon-button
                         class="km-machine-deployment-action"
+                        matTooltip="Restart Machine Deployment"
+                        (click)="showRestartDialog(element); $event.stopPropagation()"
+                        [disabled]="!isEditEnabled()">
+                  <i class="km-icon-reset"></i>
+                </button>
+
+                <button mat-icon-button
+                        class="km-machine-deployment-action"
                         matTooltip="Edit Machine Deployment"
                         (click)="showEditDialog(element); $event.stopPropagation()"
                         [disabled]="!isEditEnabled()">

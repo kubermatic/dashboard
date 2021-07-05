@@ -105,6 +105,12 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'machineDeployments', Permission.Edit);
   }
 
+  showRestartDialog(md: MachineDeployment): void {
+    this._nodeService
+      .showMachineDeploymentRestartDialog(md, this.cluster.id, this.projectID, this.changeMachineDeployment)
+      .subscribe(() => {});
+  }
+
   showEditDialog(md: MachineDeployment): void {
     this._nodeService
       .showMachineDeploymentEditDialog(md, this.cluster, this.projectID)
