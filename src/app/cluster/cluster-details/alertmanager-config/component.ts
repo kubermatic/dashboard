@@ -59,7 +59,7 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
     return _.isEmpty(this.alertmanagerConfig) && !this.isClusterRunning;
   }
 
-  displayAlertmanagerUILink(): boolean {
+  shouldDisplayAlertmanagerUILink(): boolean {
     return !!this._settings && !!this._settings.mlaAlertmanagerDomain;
   }
 
