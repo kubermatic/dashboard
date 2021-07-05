@@ -10,7 +10,14 @@
 // limitations under the License.
 
 import {HttpClient} from '@angular/common/http';
-import {OpenstackAvailabilityZone, OpenstackFlavor, OpenstackNetwork, OpenstackSecurityGroup, OpenstackSubnet, OpenstackTenant,} from '@shared/entity/provider/openstack';
+import {
+  OpenstackAvailabilityZone,
+  OpenstackFlavor,
+  OpenstackNetwork,
+  OpenstackSecurityGroup,
+  OpenstackSubnet,
+  OpenstackTenant,
+} from '@shared/entity/provider/openstack';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {EMPTY, Observable} from 'rxjs';
 import {Provider} from './provider';
