@@ -71,6 +71,13 @@ enum SubnetIDState {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpenstackProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  readonly Controls = Controls;
+  securityGroups: OpenstackSecurityGroup[] = [];
+  securityGroupsLabel = SecurityGroupState.Empty;
+  networks: OpenstackNetwork[] = [];
+  networksLabel = NetworkState.Empty;
+  subnetIDs: OpenstackSubnet[] = [];
+  subnetIDsLabel = SubnetIDState.Empty;
   @ViewChild('networkCombobox')
   private readonly _networkCombobox: FilteredComboboxComponent;
   @ViewChild('securityGroupCombobox')
@@ -78,19 +85,10 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator implem
   @ViewChild('subnetIDCombobox')
   private readonly _subnetIDCombobox: FilteredComboboxComponent;
 
-  readonly Controls = Controls;
-
-  securityGroups: OpenstackSecurityGroup[] = [];
-  securityGroupsLabel = SecurityGroupState.Empty;
-  networks: OpenstackNetwork[] = [];
-  networksLabel = NetworkState.Empty;
-  subnetIDs: OpenstackSubnet[] = [];
-  subnetIDsLabel = SubnetIDState.Empty;
-
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _presets: PresetsService,
-    private readonly _clusterService: ClusterService,
+    private readonly _clusterSpecService: ClusterService,
     private readonly _cdr: ChangeDetectorRef
   ) {
     super('Openstack Provider Extended');
@@ -108,56 +106,60 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator implem
       .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
 
     this.form.valueChanges
-      .pipe(filter(_ => this._clusterService.provider === NodeProvider.OPENSTACK))
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
         this._presets.enablePresets(
-          Object.values(this._clusterService.cluster.spec.cloud.openstack).every(value => !value)
+          Object.values(this._clusterSpecService.cluster.spec.cloud.openstack).every(value => !value)
         )
       );
 
-    this._clusterService.clusterChanges
-      .pipe(filter(_ => this._clusterService.provider === NodeProvider.OPENSTACK))
-      .pipe(tap(_ => (!this._hasRequiredBasicCredentials() ? this._clearSecurityGroup() : null)))
+    this._clusterSpecService.clusterChanges
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
+      .pipe(tap(_ => (!this._hasRequiredCredentials() ? this._clearSecurityGroup() : null)))
+      .pipe(filter(_ => this._hasRequiredCredentials()))
       .pipe(switchMap(_ => this._securityGroupListObservable()))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._loadSecurityGroups.bind(this));
 
-    this._clusterService.clusterChanges
-      .pipe(filter(_ => this._clusterService.provider === NodeProvider.OPENSTACK))
-      .pipe(tap(_ => (!this._hasRequiredBasicCredentials() ? this._clearNetwork() : null)))
+    this._clusterSpecService.clusterChanges
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
+      .pipe(tap(_ => (!this._canLoadNetwork() ? this._clearNetwork() : null)))
+      .pipe(filter(_ => this._canLoadNetwork()))
       .pipe(switchMap(_ => this._networkListObservable()))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._loadNetworks.bind(this));
 
     this.form
       .get(Controls.Network)
-      .valueChanges.pipe(filter(_ => this._clusterService.provider === NodeProvider.OPENSTACK))
-      .pipe(tap(_ => (!this._hasRequiredCredentials() ? this._clearSubnetID() : null)))
+      .valueChanges.pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
+      .pipe(tap(_ => (!this._canLoadSubnet() ? this._clearSubnetID() : null)))
+      .pipe(filter(_ => this._canLoadSubnet()))
       .pipe(switchMap(_ => this._subnetIDListObservable()))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._loadSubnetIDs.bind(this));
   }
 
   onSecurityGroupChange(securityGroup: string): void {
-    this._clusterService.cluster.spec.cloud.openstack.securityGroups = securityGroup;
+    this._clusterSpecService.cluster.spec.cloud.openstack.securityGroups = securityGroup;
   }
 
   onNetworkChange(network: string): void {
-    this._clusterService.cluster.spec.cloud.openstack.network = network;
+    this._clusterSpecService.cluster.spec.cloud.openstack.network = network;
   }
 
   onSubnetIDChange(subnetID: string): void {
-    this._clusterService.cluster.spec.cloud.openstack.subnetID = subnetID;
+    this._clusterSpecService.cluster.spec.cloud.openstack.subnetID = subnetID;
   }
 
   getHint(control: Controls): string {
     switch (control) {
       case Controls.SecurityGroup:
+        return this._hasRequiredCredentials() ? '' : 'Please enter your credentials first.';
       case Controls.Network:
-        return this._hasRequiredBasicCredentials() ? '' : 'Please enter your credentials first.';
+        return this._canLoadNetwork() ? '' : 'Please enter your credentials first.';
       case Controls.SubnetID:
-        return this._hasRequiredCredentials() ? '' : 'Please enter your credentials and network first.';
+        return this._canLoadSubnet() ? '' : 'Please enter your credentials and network first.';
     }
   }
 
@@ -189,34 +191,51 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator implem
     this._cdr.detectChanges();
   }
 
-  private _hasRequiredBasicCredentials(): boolean {
+  private _hasBasicCredentials(): boolean {
     return (
-      !!this._clusterService.cluster.spec.cloud.openstack &&
-      !!this._clusterService.cluster.spec.cloud.openstack.username &&
-      !!this._clusterService.cluster.spec.cloud.openstack.password &&
-      !!this._clusterService.cluster.spec.cloud.openstack.domain &&
-      (!!this._clusterService.cluster.spec.cloud.openstack.tenant ||
-        !!this._clusterService.cluster.spec.cloud.openstack.tenantID)
+      !!this._clusterSpecService.cluster.spec.cloud.openstack &&
+      !!this._clusterSpecService.cluster.spec.cloud.openstack.username &&
+      !!this._clusterSpecService.cluster.spec.cloud.openstack.password
+    );
+  }
+
+  private _hasApplicationCredentials(): boolean {
+    return (
+      !!this._clusterSpecService.cluster.spec.cloud.openstack &&
+      !!this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialID &&
+      !!this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialSecret
     );
   }
 
   private _hasRequiredCredentials(): boolean {
+    return this._hasBasicCredentials() || this._hasApplicationCredentials();
+  }
+
+  private _hasTenant(): boolean {
     return (
-      this._hasRequiredBasicCredentials() &&
-      !!this._clusterService.cluster.spec.cloud.openstack &&
-      !!this._clusterService.cluster.spec.cloud.openstack.network
+      !!this._clusterSpecService.cluster.spec.cloud.openstack &&
+      (!!this._clusterSpecService.cluster.spec.cloud.openstack.tenant ||
+        !!this._clusterSpecService.cluster.spec.cloud.openstack.tenantID)
     );
+  }
+
+  private _canLoadSubnet(): boolean {
+    return this._hasRequiredCredentials() && !!this._clusterSpecService.cluster.spec.cloud.openstack.network;
+  }
+
+  private _canLoadNetwork(): boolean {
+    return (this._hasBasicCredentials() && this._hasTenant()) || this._hasApplicationCredentials();
   }
 
   private _securityGroupListObservable(): Observable<OpenstackSecurityGroup[]> {
     return this._presets
       .provider(NodeProvider.OPENSTACK)
-      .domain(this._clusterService.cluster.spec.cloud.openstack.domain)
-      .username(this._clusterService.cluster.spec.cloud.openstack.username)
-      .password(this._clusterService.cluster.spec.cloud.openstack.password)
-      .tenant(this._clusterService.cluster.spec.cloud.openstack.tenant)
-      .tenantID(this._clusterService.cluster.spec.cloud.openstack.tenantID)
-      .datacenter(this._clusterService.cluster.spec.cloud.dc)
+      .domain(this._clusterSpecService.cluster.spec.cloud.openstack.domain)
+      .username(this._clusterSpecService.cluster.spec.cloud.openstack.username)
+      .password(this._clusterSpecService.cluster.spec.cloud.openstack.password)
+      .applicationCredentialID(this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialID)
+      .applicationCredentialPassword(this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialSecret)
+      .datacenter(this._clusterSpecService.cluster.spec.cloud.dc)
       .securityGroups(this._onSecurityGroupLoading.bind(this))
       .pipe(map(securityGroups => _.sortBy(securityGroups, sg => sg.name.toLowerCase())))
       .pipe(
@@ -241,14 +260,25 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator implem
   }
 
   private _networkListObservable(): Observable<OpenstackNetwork[]> {
-    return this._presets
+    let openstackProvider = this._presets
       .provider(NodeProvider.OPENSTACK)
-      .domain(this._clusterService.cluster.spec.cloud.openstack.domain)
-      .username(this._clusterService.cluster.spec.cloud.openstack.username)
-      .password(this._clusterService.cluster.spec.cloud.openstack.password)
-      .tenant(this._clusterService.cluster.spec.cloud.openstack.tenant)
-      .tenantID(this._clusterService.cluster.spec.cloud.openstack.tenantID)
-      .datacenter(this._clusterService.cluster.spec.cloud.dc)
+      .domain(this._clusterSpecService.cluster.spec.cloud.openstack.domain)
+      .username(this._clusterSpecService.cluster.spec.cloud.openstack.username)
+      .password(this._clusterSpecService.cluster.spec.cloud.openstack.password)
+      .applicationCredentialID(this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialID)
+      .applicationCredentialPassword(this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialSecret)
+      .datacenter(this._clusterSpecService.cluster.spec.cloud.dc);
+
+    if (
+      this._clusterSpecService.cluster.spec.cloud.openstack.username ||
+      this._clusterSpecService.cluster.spec.cloud.openstack.password
+    ) {
+      openstackProvider = openstackProvider
+        .tenant(this._clusterSpecService.cluster.spec.cloud.openstack.tenant)
+        .tenantID(this._clusterSpecService.cluster.spec.cloud.openstack.tenantID);
+    }
+
+    return openstackProvider
       .networks(this._onNetworkLoading.bind(this))
       .pipe(map(networks => _.sortBy(networks, n => n.name.toLowerCase())))
       .pipe(
@@ -275,13 +305,15 @@ export class OpenstackProviderExtendedComponent extends BaseFormValidator implem
   private _subnetIDListObservable(): Observable<OpenstackSubnet[]> {
     return this._presets
       .provider(NodeProvider.OPENSTACK)
-      .domain(this._clusterService.cluster.spec.cloud.openstack.domain)
-      .username(this._clusterService.cluster.spec.cloud.openstack.username)
-      .password(this._clusterService.cluster.spec.cloud.openstack.password)
-      .tenant(this._clusterService.cluster.spec.cloud.openstack.tenant)
-      .tenantID(this._clusterService.cluster.spec.cloud.openstack.tenantID)
-      .datacenter(this._clusterService.cluster.spec.cloud.dc)
-      .subnets(this._clusterService.cluster.spec.cloud.openstack.network, this._onSubnetIDLoading.bind(this))
+      .domain(this._clusterSpecService.cluster.spec.cloud.openstack.domain)
+      .username(this._clusterSpecService.cluster.spec.cloud.openstack.username)
+      .password(this._clusterSpecService.cluster.spec.cloud.openstack.password)
+      .tenant(this._clusterSpecService.cluster.spec.cloud.openstack.tenant)
+      .tenantID(this._clusterSpecService.cluster.spec.cloud.openstack.tenantID)
+      .applicationCredentialID(this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialID)
+      .applicationCredentialPassword(this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialSecret)
+      .datacenter(this._clusterSpecService.cluster.spec.cloud.dc)
+      .subnets(this._clusterSpecService.cluster.spec.cloud.openstack.network, this._onSubnetIDLoading.bind(this))
       .pipe(map(subnetIDs => _.sortBy(subnetIDs, s => s.name.toLowerCase())))
       .pipe(
         catchError(() => {

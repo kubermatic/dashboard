@@ -27,11 +27,8 @@ export abstract class Provider {
     this._requiredHeaders = headers;
   }
 
-  protected _changeRequiredHeader(from: any, to: any): void {
-    const idx = this._requiredHeaders.indexOf(from);
-    if (idx > -1) {
-      this._requiredHeaders[idx] = to;
-    }
+  protected _addRequiredHeader(header: any): void {
+    this._requiredHeaders.push(header);
   }
 
   protected _hasRequiredHeaders(): boolean {
@@ -40,6 +37,14 @@ export abstract class Provider {
       this._requiredHeaders.filter(header => this._headers.keys().includes(header)).length ===
         this._requiredHeaders.length
     );
+  }
+
+  protected _cleanupOptionalHeaders(): void {
+    for (const hKey of this._headers.keys()) {
+      if (!this._requiredHeaders.includes(hKey)) {
+        this._headers = this._headers.delete(hKey);
+      }
+    }
   }
 
   protected _credential(credential: string): void {

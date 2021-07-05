@@ -25,7 +25,7 @@ export class NodeDataOpenstackProvider {
 
   constructor(
     private readonly _nodeDataService: NodeDataService,
-    private readonly _clusterService: ClusterService,
+    private readonly _clusterSpecService: ClusterService,
     private readonly _presetService: PresetsService,
     private readonly _apiService: ApiService,
     private readonly _projectService: ProjectService
@@ -40,19 +40,23 @@ export class NodeDataOpenstackProvider {
   flavors(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<OpenstackFlavor[]> {
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
-        return this._clusterService.clusterChanges
+        return this._clusterSpecService.clusterChanges
           .pipe(debounceTime(this._debounceTime))
-          .pipe(filter(_ => this._clusterService.provider === NodeProvider.OPENSTACK))
+          .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
           .pipe(
             switchMap(_ =>
               this._presetService
                 .provider(NodeProvider.OPENSTACK)
-                .domain(this._clusterService.cluster.spec.cloud.openstack.domain)
-                .username(this._clusterService.cluster.spec.cloud.openstack.username)
-                .password(this._clusterService.cluster.spec.cloud.openstack.password)
-                .tenant(this._clusterService.cluster.spec.cloud.openstack.tenant)
-                .tenantID(this._clusterService.cluster.spec.cloud.openstack.tenantID)
-                .datacenter(this._clusterService.cluster.spec.cloud.dc)
+                .domain(this._clusterSpecService.cluster.spec.cloud.openstack.domain)
+                .username(this._clusterSpecService.cluster.spec.cloud.openstack.username)
+                .password(this._clusterSpecService.cluster.spec.cloud.openstack.password)
+                .applicationCredentialID(this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialID)
+                .applicationCredentialPassword(
+                  this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialSecret
+                )
+                .tenant(this._clusterSpecService.cluster.spec.cloud.openstack.tenant)
+                .tenantID(this._clusterSpecService.cluster.spec.cloud.openstack.tenantID)
+                .datacenter(this._clusterSpecService.cluster.spec.cloud.dc)
                 .credential(this._presetService.preset)
                 .flavors(onLoadingCb)
                 .pipe(
@@ -71,7 +75,9 @@ export class NodeDataOpenstackProvider {
         return this._projectService.selectedProject
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
-          .pipe(switchMap(_ => this._apiService.getOpenStackFlavors(selectedProject, this._clusterService.cluster.id)))
+          .pipe(
+            switchMap(_ => this._apiService.getOpenStackFlavors(selectedProject, this._clusterSpecService.cluster.id))
+          )
           .pipe(
             catchError(_ => {
               if (onError) {
@@ -92,19 +98,23 @@ export class NodeDataOpenstackProvider {
   ): Observable<OpenstackAvailabilityZone[]> {
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
-        return this._clusterService.clusterChanges
+        return this._clusterSpecService.clusterChanges
           .pipe(debounceTime(this._debounceTime))
-          .pipe(filter(_ => this._clusterService.provider === NodeProvider.OPENSTACK))
+          .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
           .pipe(
             switchMap(_ =>
               this._presetService
                 .provider(NodeProvider.OPENSTACK)
-                .domain(this._clusterService.cluster.spec.cloud.openstack.domain)
-                .username(this._clusterService.cluster.spec.cloud.openstack.username)
-                .password(this._clusterService.cluster.spec.cloud.openstack.password)
-                .tenant(this._clusterService.cluster.spec.cloud.openstack.tenant)
-                .tenantID(this._clusterService.cluster.spec.cloud.openstack.tenantID)
-                .datacenter(this._clusterService.cluster.spec.cloud.dc)
+                .domain(this._clusterSpecService.cluster.spec.cloud.openstack.domain)
+                .username(this._clusterSpecService.cluster.spec.cloud.openstack.username)
+                .password(this._clusterSpecService.cluster.spec.cloud.openstack.password)
+                .applicationCredentialID(this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialID)
+                .applicationCredentialPassword(
+                  this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialSecret
+                )
+                .tenant(this._clusterSpecService.cluster.spec.cloud.openstack.tenant)
+                .tenantID(this._clusterSpecService.cluster.spec.cloud.openstack.tenantID)
+                .datacenter(this._clusterSpecService.cluster.spec.cloud.dc)
                 .credential(this._presetService.preset)
                 .availabilityZones(onLoadingCb)
                 .pipe(
@@ -125,7 +135,7 @@ export class NodeDataOpenstackProvider {
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(
             switchMap(_ =>
-              this._apiService.getOpenStackAvailabilityZones(selectedProject, this._clusterService.cluster.id)
+              this._apiService.getOpenStackAvailabilityZones(selectedProject, this._clusterSpecService.cluster.id)
             )
           )
           .pipe(
