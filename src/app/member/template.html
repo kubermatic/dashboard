@@ -15,11 +15,13 @@ limitations under the License.
        fxLayoutAlign="end center"
        fxLayoutGap="20px">
     <button id="km-add-member-top-btn"
+            fxLayoutAlign="center center"
             mat-flat-button
             type="button"
             (click)="addMember()"
             [disabled]="!isAddEnabled()">
-      Add Member
+      <i class="km-icon-mask km-icon-add"></i>
+      <span>Add Member</span>
     </button>
   </div>
 </div>
