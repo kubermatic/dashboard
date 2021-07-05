@@ -36,6 +36,7 @@ export class AdminSettings {
   machineDeploymentVMResourceQuota: MachineDeploymentVMResourceQuota;
   opaOptions: OpaOptions;
   mlaOptions: MLAOptions;
+  mlaAlertmanagerDomain: string;
 }
 
 export class MachineDeploymentVMResourceQuota {
@@ -153,4 +154,5 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
     monitoringEnforced: false,
     monitoringEnabled: false,
   },
+  mlaAlertmanagerDomain: '',
 };
