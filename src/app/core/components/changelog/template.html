@@ -84,9 +84,9 @@ limitations under the License.
     </a>
     <mat-spinner *ngIf="saving"
                  [diameter]="25"
+                 @pushToSide
                  color="accent"
-                 class="spinner"
-                 @slideInOut></mat-spinner>
+                 class="spinner"></mat-spinner>
     <button mat-flat-button
             [disabled]="saving"
             (click)="remember()">Got It
