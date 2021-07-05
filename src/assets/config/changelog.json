@@ -1,1 +1,93 @@
-{}
+{
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/release/v2.17/CHANGELOG.md#kubermatic-217",
+  "entries": [
+    {
+      "category": "added",
+      "description": "Added addon for Multus CNI",
+      "links": [
+        {
+          "url": "https://docs.kubermatic.com/kubermatic/v2.17/guides/addons/multus/",
+          "caption": "Guide"
+        }
+      ]
+    },
+    {
+      "category": "added",
+      "description": "Added support for Open Policy Agent",
+      "links": [
+        {
+          "url": "https://docs.kubermatic.com/kubermatic/v2.17/tutorials_howtos/opa_integration/opa_integration_via_ui/",
+          "caption": "UI Tutorial"
+        },
+        {
+          "url": "https://docs.kubermatic.com/kubermatic/v2.17/tutorials_howtos/opa_integration/",
+          "caption": "API Tutorial"
+        }
+      ]
+    },
+    {
+      "category": "added",
+      "description": "Added option to disable User SSH Key Agent during cluster creation",
+      "links": [
+        {
+          "url": "https://docs.kubermatic.com/kubermatic/v2.17/tutorials_howtos/administration/user_settings/user_ssh_key_agent/",
+          "caption": "Tutorial"
+        }
+      ]
+    },
+    {
+      "category": "added",
+      "description": "Added support for resource quota",
+      "links": [
+        {
+          "url": "https://docs.kubermatic.com/kubermatic/v2.17/tutorials_howtos/administration/admin_panel/cluster_settings/#resource-quota",
+          "caption": "Tutorial"
+        }
+      ]
+    },
+    {
+      "category": "added",
+      "description": "Added GPU information to several provider node sizes"
+    },
+    {
+      "category": "added",
+      "description": "Added support for 'use-octavia' setting in the Openstack provider spec"
+    },
+    {
+      "category": "added",
+      "description": "Added support for Hetzner CCM"
+    },
+    {
+      "category": "added",
+      "description": "Added support for AWS spot instances to the API"
+    },
+    {
+      "category": "removed",
+      "description": "Removed support for CoreOS"
+    },
+    {
+      "category": "removed",
+      "description": "Removed support for OpenShift"
+    },
+    {
+      "category": "fixed",
+      "description": "Fixed kube-system/coredns PodDisruptionBudget matchLabels in user clusters"
+    },
+    {
+      "category": "fixed",
+      "description": "Fixed nodeport-proxy role used with LoadBalancer expose strategy"
+    },
+    {
+      "category": "fixed",
+      "description": "Fixed the operator failing to reconcile the ValidatingWebhookConfiguration object for the cluster validation webhook"
+    },
+    {
+      "category": "changed",
+      "description": "Updated memory limits for the OpenVPN container"
+    },
+    {
+      "category": "changed",
+      "description": "Updated default Gatekeeper webhook timeout to 3 seconds"
+    }
+  ]
+}

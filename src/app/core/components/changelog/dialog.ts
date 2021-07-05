@@ -10,19 +10,19 @@
 // limitations under the License.
 
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {MatDialogRef} from '@angular/material/dialog';
 import {AppConfigService} from '@app/config.service';
 import {ChangelogService} from '@core/services/changelog';
-import {UserService} from '@core/services/user';
-import {UserSettings} from '@shared/entity/settings';
+import {slideInOut} from '@shared/animations/slide';
 import {Changelog, ChangelogCategory, ChangelogEntry} from '@shared/model/changelog';
 import {compare} from '@shared/utils/common-utils';
-import {take} from 'rxjs/operators';
+import {of} from 'rxjs';
+import {delay} from 'rxjs/operators';
 
 @Component({
   selector: 'km-changelog',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
+  animations: [slideInOut],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChangelogDialog implements OnInit {
@@ -39,9 +39,7 @@ export class ChangelogDialog implements OnInit {
 
   constructor(
     private readonly _changelogService: ChangelogService,
-    private readonly _configService: AppConfigService,
-    private readonly _userService: UserService,
-    private readonly _matDialogRef: MatDialogRef<ChangelogDialog>
+    private readonly _configService: AppConfigService // private readonly _userService: UserService, // private readonly _matDialogRef: MatDialogRef<ChangelogDialog>
   ) {}
 
   ngOnInit(): void {
@@ -65,13 +63,21 @@ export class ChangelogDialog implements OnInit {
 
   remember(): void {
     this.saving = true;
-    this._userService
-      .patchCurrentUserSettings({lastSeenChangelogVersion: this.version} as UserSettings)
-      .pipe(take(1))
+    of(true)
+      .pipe(delay(60000))
       .subscribe({
-        next: _ => this._matDialogRef.close(),
+        next: _ => {},
         error: _ => {},
         complete: () => (this.saving = false),
       });
+
+    // this._userService
+    //   .patchCurrentUserSettings({lastSeenChangelogVersion: this.version} as UserSettings)
+    //   .pipe(take(1))
+    //   .subscribe({
+    //     next: _ => this._matDialogRef.close(),
+    //     error: _ => {},
+    //     complete: () => (this.saving = false),
+    //   });
   }
 }
