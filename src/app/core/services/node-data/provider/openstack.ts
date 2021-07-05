@@ -50,6 +50,10 @@ export class NodeDataOpenstackProvider {
                 .domain(this._clusterSpecService.cluster.spec.cloud.openstack.domain)
                 .username(this._clusterSpecService.cluster.spec.cloud.openstack.username)
                 .password(this._clusterSpecService.cluster.spec.cloud.openstack.password)
+                .applicationCredentialID(this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialID)
+                .applicationCredentialPassword(
+                  this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialSecret
+                )
                 .tenant(this._clusterSpecService.cluster.spec.cloud.openstack.tenant)
                 .tenantID(this._clusterSpecService.cluster.spec.cloud.openstack.tenantID)
                 .datacenter(this._clusterSpecService.cluster.spec.cloud.dc)
@@ -104,6 +108,10 @@ export class NodeDataOpenstackProvider {
                 .domain(this._clusterSpecService.cluster.spec.cloud.openstack.domain)
                 .username(this._clusterSpecService.cluster.spec.cloud.openstack.username)
                 .password(this._clusterSpecService.cluster.spec.cloud.openstack.password)
+                .applicationCredentialID(this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialID)
+                .applicationCredentialPassword(
+                  this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialSecret
+                )
                 .tenant(this._clusterSpecService.cluster.spec.cloud.openstack.tenant)
                 .tenantID(this._clusterSpecService.cluster.spec.cloud.openstack.tenantID)
                 .datacenter(this._clusterSpecService.cluster.spec.cloud.dc)
