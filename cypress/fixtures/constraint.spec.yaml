@@ -1,0 +1,6 @@
+match:
+  kinds:
+    - apiGroups: [""]
+      kinds: ["Namespace"]
+parameters:
+  rawJSON: '{"labels":["gatekeeper"]}'

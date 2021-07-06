@@ -11,4 +11,6 @@
 
 export enum FileRegistry {
   ConstraintTemplateSpec = 'constrainttemplate.spec.yaml',
+  ConstraintSpec = 'constraint.spec.yaml',
+  GatekeeperConfig = 'gatekeeperconfig.spec.yaml',
 }

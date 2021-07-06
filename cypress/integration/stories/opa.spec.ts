@@ -19,7 +19,6 @@ import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
 import {Endpoint} from '../../utils/endpoint';
 import {RequestType, TrafficMonitor} from '../../utils/monitor';
-import {OPA} from '../../utils/opa';
 import {Preset} from '../../utils/preset';
 import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
@@ -35,8 +34,8 @@ describe('OPA Story', () => {
   const constraintTemplateName = 'k8srequiredlabels';
   const constraintTemplateSpec = FileRegistry.ConstraintTemplateSpec;
   const constraintName = 'e2e-test-constraint';
-  const constraintSpec = atob(OPA.ConstraintSpec);
-  const gatekeeperConfig = atob(OPA.GatekeeperConfig);
+  const constraintSpec = FileRegistry.ConstraintSpec;
+  const gatekeeperConfig = FileRegistry.GatekeeperConfig;
 
   it('should login', () => {
     login(email, password);
@@ -63,7 +62,6 @@ describe('OPA Story', () => {
   it('should add constraint template', () => {
     AdminSettings.OPAPage.getConstraintTemplateDialogSaveBtn().should(Condition.BeEnabled);
     AdminSettings.OPAPage.getConstraintTemplateDialogSaveBtn().click({force: true});
-    TrafficMonitor.newTrafficMonitor().url(Endpoint.ConstraintTemplates).method(RequestType.POST).interceptAndWait();
   });
 
   it('should check if constraint template was created', () => {
@@ -151,21 +149,12 @@ describe('OPA Story', () => {
   });
 
   it('should enter constraint spec', () => {
-    ClustersPage.getAddConstraintSpecTextarea()
-      .click({force: true})
-      .then($element => {
-        const subString = constraintSpec.substr(0, constraintSpec.length - 1);
-        const lastChar = constraintSpec.slice(-1);
-        $element.text(subString);
-        $element.val(subString);
-        cy.get($element).type(lastChar);
-      });
+    ClustersPage.getAddConstraintSpecTextarea().click({force: true}).pasteFile(constraintSpec);
   });
 
   it('should add constraint', () => {
     ClustersPage.getConstraintDialogSaveBtn().should(Condition.BeEnabled);
     ClustersPage.getConstraintDialogSaveBtn().click({force: true});
-    TrafficMonitor.newTrafficMonitor().url(Endpoint.Constraints).method(RequestType.POST).interceptAndWait();
   });
 
   it('should check if constraint was created', () => {
@@ -190,21 +179,12 @@ describe('OPA Story', () => {
   });
 
   it('should add gatekeeper spec', () => {
-    ClustersPage.getAddGatekeeperConfigTextarea()
-      .click({force: true})
-      .then($element => {
-        const subString = gatekeeperConfig.substr(0, gatekeeperConfig.length - 1);
-        const lastChar = gatekeeperConfig.slice(-1);
-        $element.text(subString);
-        $element.val(subString);
-        cy.get($element).type(lastChar);
-      });
+    ClustersPage.getAddGatekeeperConfigTextarea().click({force: true}).pasteFile(gatekeeperConfig);
   });
 
   it('should add gatekeeper config', () => {
     ClustersPage.getGatekeeperConfigDialogSaveBtn().should(Condition.BeEnabled);
     ClustersPage.getGatekeeperConfigDialogSaveBtn().click({force: true});
-    TrafficMonitor.newTrafficMonitor().url(Endpoint.GatekeeperConfig).method(RequestType.POST).interceptAndWait();
   });
 
   it('should check if gatekeeper config was created', () => {
