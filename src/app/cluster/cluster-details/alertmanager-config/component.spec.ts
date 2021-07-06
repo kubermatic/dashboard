@@ -17,9 +17,11 @@ import {DialogTestModule, NoopConfirmDialogComponent} from '@app/testing/compone
 import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
 import {fakeAlertmanagerConfig} from '@app/testing/fake-data/mla';
 import {fakeProject} from '@app/testing/fake-data/project';
+import {SettingsMockService} from '@app/testing/services/settings-mock';
 import {CoreModule} from '@core/module';
 import {NotificationService} from '@core/services/notification';
 import {MLAService} from '@core/services/mla';
+import {SettingsService} from '@core/services/settings';
 import {SharedModule} from '@shared/module';
 import {of} from 'rxjs';
 import {AlertmanagerConfigComponent} from './component';
@@ -43,7 +45,12 @@ describe('AlertmanagerConfigComponent', () => {
       TestBed.configureTestingModule({
         imports: [...modules],
         declarations: [AlertmanagerConfigComponent],
-        providers: [{provide: MLAService, useValue: mlaMock}, MatDialog, NotificationService],
+        providers: [
+          {provide: MLAService, useValue: mlaMock},
+          {provide: SettingsService, useClass: SettingsMockService},
+          MatDialog,
+          NotificationService,
+        ],
       }).compileComponents();
     })
   );

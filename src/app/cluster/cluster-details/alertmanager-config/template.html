@@ -16,6 +16,14 @@ limitations under the License.
   <ng-container *ngIf="!isLoadingData()">
     <div fxLayout="row"
          fxLayoutGap="10px">
+      <a [href]="getAlertmanagerURL()"
+         target="_blank"
+         mat-flat-button
+         color="quaternary"
+         *ngIf="shouldDisplayAlertmanagerUILink()">
+        <i class="km-icon-external-link"></i>
+        <span>Open Alertmanager UI</span>
+      </a>
       <button id="km-alertmanager-config-reset-btn"
               mat-icon-button
               color="tertiary"

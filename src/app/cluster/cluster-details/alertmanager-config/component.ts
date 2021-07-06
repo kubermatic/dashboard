@@ -9,16 +9,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
 import {MLAService} from '@core/services/mla';
+import {SettingsService} from '@core/services/settings';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Cluster} from '@shared/entity/cluster';
 import {AlertmanagerConfig} from '@shared/entity/mla';
+import {AdminSettings} from '@shared/entity/settings';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
-import {filter, switchMap, take} from 'rxjs/operators';
+import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {AlertmanagerConfigDialog} from './alertmanager-config-dialog/component';
 
 @Component({
@@ -26,19 +28,27 @@ import {AlertmanagerConfigDialog} from './alertmanager-config-dialog/component';
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class AlertmanagerConfigComponent implements OnDestroy {
+export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster;
   @Input() projectID: string;
   @Input() isClusterRunning: boolean;
   @Input() alertmanagerConfig: AlertmanagerConfig;
 
+  private _settings: AdminSettings;
   private readonly _unsubscribe = new Subject<void>();
 
   constructor(
     private readonly _matDialog: MatDialog,
     private readonly _mlaService: MLAService,
-    private readonly _notificationService: NotificationService
+    private readonly _notificationService: NotificationService,
+    private readonly _settingsService: SettingsService
   ) {}
+
+  ngOnInit(): void {
+    this._settingsService.adminSettings
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(settings => (this._settings = settings));
+  }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
@@ -47,6 +57,18 @@ export class AlertmanagerConfigComponent implements OnDestroy {
 
   isLoadingData(): boolean {
     return _.isEmpty(this.alertmanagerConfig) && !this.isClusterRunning;
+  }
+
+  shouldDisplayAlertmanagerUILink(): boolean {
+    return !!this._settings && !!this._settings.mlaAlertmanagerDomain;
+  }
+
+  getAlertmanagerURL(): string {
+    const domain = this._settings.mlaAlertmanagerDomain || '';
+    if (domain.slice(domain.length - 1) === '/') {
+      return this._settings.mlaAlertmanagerDomain + this.cluster.id;
+    }
+    return this._settings.mlaAlertmanagerDomain + '/' + this.cluster.id;
   }
 
   edit(): void {
