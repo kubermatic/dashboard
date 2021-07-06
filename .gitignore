@@ -39,7 +39,6 @@ bindata_assetfs.go
 version.json
 
 # Cypress.
-cypress/fixtures
 cypress/screenshots
 cypress/videos
 cypress/plugins/index.js

@@ -9,25 +9,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'cypress-fail-fast';
-import {paste, pasteFile} from './paste';
-
-before(() => {
-  cy.clearCookies();
-});
-
-beforeEach(() => {
-  Cypress.Cookies.preserveOnce('token', 'nonce');
-});
-
-declare global {
-  namespace Cypress {
-    interface Chainable {
-      pasteFile(filename: string): Chainable;
-      paste(text: string): Chainable;
-    }
-  }
+export enum Paths {
+  Fixtures = 'cypress/fixtures',
 }
-
-Cypress.Commands.add('pasteFile', {prevSubject: 'element'}, pasteFile);
-Cypress.Commands.add('paste', {prevSubject: 'element'}, paste);

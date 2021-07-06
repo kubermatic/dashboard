@@ -9,7 +9,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {AdminSettingsPage} from '../../pages/admin-settings.po';
+import * as _ from 'lodash';
+import {FileRegistry} from '../../fixtures/registry';
+import {AdminSettings} from '../../pages/admin-settings.po';
 import {ClustersPage} from '../../pages/clusters.po';
 import {ProjectsPage} from '../../pages/projects.po';
 import {WizardPage} from '../../pages/wizard.po';
@@ -17,12 +19,11 @@ import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
 import {Endpoint} from '../../utils/endpoint';
 import {RequestType, TrafficMonitor} from '../../utils/monitor';
-import {Preset} from '../../utils/preset';
 import {OPA} from '../../utils/opa';
+import {Preset} from '../../utils/preset';
 import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
-import * as _ from 'lodash';
 
 describe('OPA Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
@@ -32,7 +33,7 @@ describe('OPA Story', () => {
   const initialMachineDeploymentName = _.uniqueId('e2e-test-md-');
   const initialMachineDeploymentReplicas = '1';
   const constraintTemplateName = 'k8srequiredlabels';
-  const constraintTemplateSpec = atob(OPA.ConstraintTemplateSpec);
+  const constraintTemplateSpec = FileRegistry.ConstraintTemplateSpec;
   const constraintName = 'e2e-test-constraint';
   const constraintSpec = atob(OPA.ConstraintSpec);
   const gatekeeperConfig = atob(OPA.GatekeeperConfig);
@@ -40,45 +41,33 @@ describe('OPA Story', () => {
   it('should login', () => {
     login(email, password);
 
-    cy.url().should(Condition.Include, View.Projects);
+    cy.url().should(Condition.Include, View.Projects.Default);
   });
 
   it('should create a new project', () => {
     ProjectsPage.addProject(projectName);
   });
 
-  it('should go to the admin settings', () => {
-    AdminSettingsPage.visit();
-  });
-
-  it('should switch to opa constraint templates tab', () => {
-    AdminSettingsPage.getOPAConstraintTemplatesTab().click();
+  it('should go to the admin settings - opa page', () => {
+    AdminSettings.OPAPage.visit();
   });
 
   it('should open add constraint template dialog', () => {
-    AdminSettingsPage.getAddConstraintTemplateBtn().click();
+    AdminSettings.OPAPage.getAddConstraintTemplateBtn().click();
   });
 
   it('should add spec for a new constraint template', () => {
-    AdminSettingsPage.getAddConstraintTemplateSpecTextarea()
-      .click({force: true})
-      .then($element => {
-        const subString = constraintTemplateSpec.substr(0, constraintTemplateSpec.length - 1);
-        const lastChar = constraintTemplateSpec.slice(-1);
-        $element.text(subString);
-        $element.val(subString);
-        cy.get($element).type(lastChar);
-      });
+    AdminSettings.OPAPage.getAddConstraintTemplateSpecTextarea().click({force: true}).pasteFile(constraintTemplateSpec);
   });
 
   it('should add constraint template', () => {
-    AdminSettingsPage.getConstraintTemplateDialogSaveBtn().should(Condition.BeEnabled);
-    AdminSettingsPage.getConstraintTemplateDialogSaveBtn().click({force: true});
+    AdminSettings.OPAPage.getConstraintTemplateDialogSaveBtn().should(Condition.BeEnabled);
+    AdminSettings.OPAPage.getConstraintTemplateDialogSaveBtn().click({force: true});
     TrafficMonitor.newTrafficMonitor().url(Endpoint.ConstraintTemplates).method(RequestType.POST).interceptAndWait();
   });
 
   it('should check if constraint template was created', () => {
-    AdminSettingsPage.getConstraintTemplatesTable().should(Condition.Contain, constraintTemplateName);
+    AdminSettings.OPAPage.getConstraintTemplatesTable().should(Condition.Contain, constraintTemplateName);
   });
 
   it('should go to projects view', () => {
@@ -246,15 +235,11 @@ describe('OPA Story', () => {
   });
 
   it('should go to the admin settings', () => {
-    AdminSettingsPage.visit();
-  });
-
-  it('should switch to opa constraint templates tab', () => {
-    AdminSettingsPage.getOPAConstraintTemplatesTab().click();
+    AdminSettings.OPAPage.visit();
   });
 
   it('should delete created constraint template', () => {
-    AdminSettingsPage.getDeleteConstraintTemplateBtn(constraintTemplateName).click();
+    AdminSettings.OPAPage.getDeleteConstraintTemplateBtn(constraintTemplateName).click();
     cy.get('#km-confirmation-dialog-confirm-btn').should(Condition.NotBe, 'disabled').click();
   });
 

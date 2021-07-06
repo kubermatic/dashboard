@@ -287,6 +287,26 @@ class ProviderPresetsPage {
 }
 
 class OPAPage {
+  getAddConstraintTemplateBtn(): Cypress.Chainable {
+    return cy.get('#km-add-constraint-template-btn');
+  }
+
+  getAddConstraintTemplateSpecTextarea(): Cypress.Chainable {
+    return cy.get('.monaco-editor textarea:first');
+  }
+
+  getConstraintTemplateDialogSaveBtn(): Cypress.Chainable {
+    return cy.get('#km-constraint-template-dialog-btn');
+  }
+
+  getDeleteConstraintTemplateBtn(name: string): Cypress.Chainable {
+    return cy.get(`#km-constraint-template-delete-btn-${name}`);
+  }
+
+  getConstraintTemplatesTable(): Cypress.Chainable {
+    return cy.get('km-constraint-templates-list tbody');
+  }
+
   getNavItem(): Cypress.Chainable {
     return cy.get('#km-nav-item-opa');
   }
