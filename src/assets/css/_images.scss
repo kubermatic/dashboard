@@ -75,8 +75,16 @@
   @include mask-image("/assets/images/icons/edit.svg", 18px);
 }
 
+.km-icon-connect {
+  @include mask-image("/assets/images/icons/connect.svg", 18px);
+}
+
 .km-icon-disconnect {
   @include mask-image("/assets/images/icons/disconnect.svg", 18px);
+}
+
+.km-icon-cancel {
+  @include mask-image("/assets/images/icons/x.svg", 18px);
 }
 
 .km-icon-regenerate {
@@ -180,6 +188,16 @@
 
 .km-icon-circle {
   @include mask-image("/assets/images/icons/circle.svg", 14px);
+}
+
+.km-icon-back {
+  @include mask-image("/assets/images/icons/back.svg", 18px);
+}
+
+.km-icon-next {
+  @include mask-image("/assets/images/icons/back.svg", 18px);
+
+  transform: rotate(180deg);
 }
 
 .km-icon-add {

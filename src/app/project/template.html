@@ -36,9 +36,11 @@ limitations under the License.
   <button id="km-add-project-top-btn"
           mat-flat-button
           type="button"
+          fxLayoutAlign="center center"
           [disabled]="isProjectCreationRestricted()"
           (click)="addProject()">
-    Add Project
+    <i class="km-icon-mask km-icon-add"></i>
+    <span>Add Project</span>
   </button>
 </div>
 

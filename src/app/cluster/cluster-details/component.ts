@@ -288,6 +288,12 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     modal.componentInstance.projectID = this.projectID;
   }
 
+  downloadKubeconfig(): void {
+    this.getDownloadURL()
+      .pipe(take(1))
+      .subscribe(url => window.open(url, '_blank'));
+  }
+
   getDownloadURL(): Observable<string> {
     if (!this.isClusterAPIRunning) {
       return of('');

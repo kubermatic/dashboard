@@ -54,30 +54,47 @@ limitations under the License.
 
         <div class="km-button-navigation"
              id="{{step.id}}-nav">
-          <a mat-flat-button
+          <a fxLayoutAlign="center center"
+             mat-flat-button
+             type="button"
              color="tertiary"
-             routerLink="/projects/{{project?.id}}/clusters">Cancel</a>
+             routerLink="/projects/{{project?.id}}/clusters">
+            <i class="km-icon-mask km-icon-cancel"></i>
+            <span>Cancel</span>
+          </a>
           <div fxFlex></div>
           <mat-spinner fxFlexAlign="center"
                        [diameter]="30"
                        color="accent"
                        *ngIf="creating"></mat-spinner>
-          <button mat-flat-button
+          <button fxLayoutAlign="center center"
+                  mat-flat-button
+                  type="button"
                   color="tertiary"
                   matStepperPrevious
-                  *ngIf="!first">Back
+                  *ngIf="!first">
+            <i class="km-icon-mask km-icon-back"></i>
+            <span>Back</span>
           </button>
           <button id="km-wizard-{{step.id}}-next-btn"
+                  fxLayoutAlign="center center"
                   mat-flat-button
+                  type="button"
                   matStepperNext
                   [disabled]="invalid"
-                  *ngIf="!last">Next
+                  *ngIf="!last">
+            <i class="km-icon-mask km-icon-next"></i>
+            <span>Next</span>
           </button>
           <button id="km-wizard-create-btn"
+                  fxLayoutAlign="center center"
                   mat-flat-button
+                  type="button"
                   [disabled]="creating"
                   *ngIf="last"
-                  (click)="create()">Create Cluster
+                  (click)="create()">
+            <i class="km-icon-mask km-icon-add"></i>
+            <span>Create Cluster</span>
           </button>
         </div>
       </mat-step>

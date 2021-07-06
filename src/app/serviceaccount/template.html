@@ -14,11 +14,13 @@ limitations under the License.
   <div fxFlex
        align="right">
     <button id="km-add-serviceaccount-top-btn"
+            fxLayoutAlign="center center"
             mat-flat-button
             type="button"
             (click)="addServiceAccount()"
             [disabled]="!isEnabled('create')">
-      Add Service Account
+      <i class="km-icon-mask km-icon-add"></i>
+      <span>Add Service Account</span>
     </button>
   </div>
 </div>
