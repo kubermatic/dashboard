@@ -58,6 +58,31 @@ limitations under the License.
   </mat-form-field>
 
   <mat-form-field fxFlex>
+    <mat-label>Application Credential ID</mat-label>
+    <input [formControlName]="Controls.ApplicationCredentialID"
+           [name]="Controls.ApplicationCredentialID"
+           matInput
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.get(Controls.ApplicationCredentialID).hasError('required')">
+      Application Credential ID is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>Application Credential Secret</mat-label>
+    <input [formControlName]="Controls.ApplicationCredentialSecret"
+           [name]="Controls.ApplicationCredentialSecret"
+           matInput
+           type="password"
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.get(Controls.ApplicationCredentialSecret).hasError('required')">
+      Application Credential Secret is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
     <mat-label>{{projectsLabel}}</mat-label>
     <input matInput
            [formControlName]="Controls.Project"
