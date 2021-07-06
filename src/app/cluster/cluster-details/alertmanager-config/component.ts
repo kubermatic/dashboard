@@ -45,9 +45,9 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      this._settings = settings;
-    });
+    this._settingsService.adminSettings
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(settings => (this._settings = settings));
   }
 
   ngOnDestroy(): void {
