@@ -282,6 +282,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   }
 
   private _getClusterEntity(): Cluster {
+    const pods = this.controlValue(Controls.PodsCIDR);
+    const services = this.controlValue(Controls.ServicesCIDR);
     return {
       name: this.controlValue(Controls.Name),
       type: ClusterType.Kubernetes,
@@ -301,8 +303,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         containerRuntime: this.controlValue(Controls.ContainerRuntime),
         clusterNetwork: {
           proxyMode: this.controlValue(Controls.ProxyMode),
-          pods: {cidrBlocks: [this.controlValue(Controls.PodsCIDR)]},
-          services: {cidrBlocks: [this.controlValue(Controls.ServicesCIDR)]},
+          pods: {cidrBlocks: pods ? [pods] : []},
+          services: {cidrBlocks: services ? [services] : []},
         },
       } as ClusterSpec,
     } as Cluster;
