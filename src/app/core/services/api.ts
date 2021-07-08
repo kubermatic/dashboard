@@ -112,6 +112,11 @@ export class ApiService {
     return this._http.delete(url);
   }
 
+  restartMachineDeployment(cluster: string, md: MachineDeployment, projectID: string): Observable<any> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments/${md.id}/restart`;
+    return this._http.post(url, {});
+  }
+
   createProject(createProjectModel: CreateProjectModel): Observable<Project> {
     const url = `${this._restRoot}/projects`;
     return this._http.post<Project>(url, createProjectModel);

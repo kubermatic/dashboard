@@ -144,7 +144,7 @@ export class NodeService {
               .pipe(take(1))
               .pipe(
                 catchError(() => {
-                  this._notificationService.error('Could not remove the ${md.name} machine deployment');
+                  this._notificationService.error(`Could not remove the ${md.name} machine deployment`);
                   return of(false);
                 })
               );
@@ -156,6 +156,59 @@ export class NodeService {
         mergeMap((data: any): Observable<boolean> => {
           if (data) {
             this._notificationService.success(`The ${md.name} machine deployment was removed`);
+            if (changeEventEmitter) {
+              changeEventEmitter.emit(md);
+            }
+            return of(true);
+          }
+          return of(false);
+        })
+      )
+      .pipe(take(1));
+  }
+
+  showMachineDeploymentRestartDialog(
+    md: MachineDeployment,
+    clusterID: string,
+    projectID: string,
+    changeEventEmitter: EventEmitter<MachineDeployment> = undefined
+  ): Observable<boolean> {
+    const dialogConfig: MatDialogConfig = {
+      disableClose: false,
+      hasBackdrop: true,
+      data: {
+        title: 'Restart Machine Deployment',
+        message: `Start rolling restart of ${md.name} machine deployment?`,
+        confirmLabel: 'Restart',
+      },
+    };
+
+    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
+
+    return dialogRef
+      .afterClosed()
+      .pipe(
+        mergeMap((isConfirmed: boolean): Observable<boolean> => {
+          if (isConfirmed) {
+            return this._apiService
+              .restartMachineDeployment(clusterID, md, projectID)
+              .pipe(take(1))
+              .pipe(
+                catchError(() => {
+                  this._notificationService.error(
+                    `Could not start rolling restart of the ${md.name} machine deployment`
+                  );
+                  return of(false);
+                })
+              );
+          }
+          return of(false);
+        })
+      )
+      .pipe(
+        mergeMap((data: any): Observable<boolean> => {
+          if (data) {
+            this._notificationService.success(`The rolling restart of ${md.name} machine deployment was started`);
             if (changeEventEmitter) {
               changeEventEmitter.emit(md);
             }

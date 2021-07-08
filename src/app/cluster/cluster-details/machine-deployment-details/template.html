@@ -31,6 +31,12 @@ limitations under the License.
            fxLayoutGap="10px">
         <button mat-icon-button
                 color="tertiary"
+                (click)="showRestartDialog()"
+                [disabled]="!isEditEnabled()">
+          <i class="km-icon-regenerate"></i>
+        </button>
+        <button mat-icon-button
+                color="tertiary"
                 (click)="showEditDialog()"
                 [disabled]="!isEditEnabled()">
           <i class="km-icon-edit"></i>

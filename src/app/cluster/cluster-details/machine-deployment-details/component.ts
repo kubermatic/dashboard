@@ -186,6 +186,12 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'machineDeployments', Permission.Edit);
   }
 
+  showRestartDialog(): void {
+    this._nodeService
+      .showMachineDeploymentRestartDialog(this.machineDeployment, this.cluster.id, this.projectID)
+      .subscribe(_ => {});
+  }
+
   showEditDialog(): void {
     this._nodeService
       .showMachineDeploymentEditDialog(this.machineDeployment, this.cluster, this.projectID)
