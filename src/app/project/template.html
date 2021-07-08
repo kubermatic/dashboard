@@ -178,19 +178,6 @@ limitations under the License.
             (click)="selectProject(row)"></tr>
       </table>
 
-      <ng-container *ngIf="!projects || projects.length === 0">
-        <div class="km-row km-empty-list-msg"
-             *ngIf="!isInitializing">
-          No projects available.
-        </div>
-        <div class="km-row"
-             *ngIf="isInitializing">
-          <mat-spinner color="accent"
-                       class="km-projects-spinner"
-                       [diameter]="25"></mat-spinner>
-        </div>
-      </ng-container>
-
       <div class="km-row km-empty-list-msg"
            *ngIf="isEmpty(projects)">
         No projects available.
@@ -198,7 +185,14 @@ limitations under the License.
 
       <div class="km-row km-empty-list-msg"
            *ngIf="!isEmpty(projects) && isEmpty(dataSource.filteredData)">
-        No clusters found.
+        No projects found.
+      </div>
+
+      <div class="km-row"
+           *ngIf="isInitializing">
+        <mat-spinner color="accent"
+                     class="km-projects-spinner"
+                     [diameter]="25"></mat-spinner>
       </div>
 
       <div [hidden]="!isPaginatorVisible || showCards">

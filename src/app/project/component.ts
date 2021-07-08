@@ -194,7 +194,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isEmpty(arr: any): boolean {
-    return _.isEmpty(arr);
+    return _.isEmpty(arr) && !this.isInitializing;
   }
 
   onSearch(query: string): void {

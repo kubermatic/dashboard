@@ -55,7 +55,8 @@ limitations under the License.
             <i class="km-icon-edit"></i>
           </button>
           <button mat-icon-button
-                  (click)="delete(element)">
+                  (click)="delete(element)"
+                  [attr.id]="'km-constraint-template-delete-btn-' + element.name">
             <i class="km-icon-delete"></i>
           </button>
         </div>

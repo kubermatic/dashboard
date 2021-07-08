@@ -167,7 +167,8 @@ limitations under the License.
         </km-property-boolean>
 
         <km-property-boolean label="OPA Integration"
-                             [value]="isOPAEnabled()">
+                             [value]="isOPAEnabled()"
+                             id="km-opa-info">
         </km-property-boolean>
 
         <km-property-boolean label="User Cluster Logging"
@@ -272,7 +273,7 @@ limitations under the License.
                   [isClusterRunning]="isClusterAPIRunning"></km-node-list>
   </div>
 
-  <km-tab-card>
+  <km-tab-card id="km-cluster-details-tab-card">
     <km-tab label="Events">
       <km-event-list [events]="events"></km-event-list>
     </km-tab>

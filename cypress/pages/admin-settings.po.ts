@@ -244,6 +244,31 @@ class ProviderPresetsPage {
     return cy.get('#km-settings-preset-digitalocean-token');
   }
 
+  static getOPAConstraintTemplatesTab(): Cypress.Chainable {
+    return cy.get('#mat-tab-label-0-3');
+  }
+
+  static getAddConstraintTemplateBtn(): Cypress.Chainable {
+    return cy.get('#km-add-constraint-template-btn');
+  }
+
+  static getAddConstraintTemplateSpecTextarea(): Cypress.Chainable {
+    return cy.get('.monaco-editor textarea:first');
+  }
+
+  static getConstraintTemplateDialogSaveBtn(): Cypress.Chainable {
+    return cy.get('#km-constraint-template-dialog-btn');
+  }
+
+  static getDeleteConstraintTemplateBtn(name: string): Cypress.Chainable {
+    return cy.get(`#km-constraint-template-delete-btn-${name}`);
+  }
+
+  static getConstraintTemplatesTable(): Cypress.Chainable {
+    return cy.get('km-constraint-templates-list tbody');
+  }
+
+  // Utils.
   getNavItem(): Cypress.Chainable {
     return cy.get('#km-nav-item-presets');
   }
@@ -262,6 +287,26 @@ class ProviderPresetsPage {
 }
 
 class OPAPage {
+  getAddConstraintTemplateBtn(): Cypress.Chainable {
+    return cy.get('#km-add-constraint-template-btn');
+  }
+
+  getAddConstraintTemplateSpecTextarea(): Cypress.Chainable {
+    return cy.get('.monaco-editor textarea:first');
+  }
+
+  getConstraintTemplateDialogSaveBtn(): Cypress.Chainable {
+    return cy.get('#km-constraint-template-dialog-btn');
+  }
+
+  getDeleteConstraintTemplateBtn(name: string): Cypress.Chainable {
+    return cy.get(`#km-constraint-template-delete-btn-${name}`);
+  }
+
+  getConstraintTemplatesTable(): Cypress.Chainable {
+    return cy.get('km-constraint-templates-list tbody');
+  }
+
   getNavItem(): Cypress.Chainable {
     return cy.get('#km-nav-item-opa');
   }

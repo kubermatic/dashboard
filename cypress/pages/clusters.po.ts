@@ -145,6 +145,68 @@ export class ClustersPage {
     return cy.get('#km-share-kubeconfig-btn');
   }
 
+  static getOPAInfoElement(): Cypress.Chainable {
+    return cy.get('#km-opa-info');
+  }
+
+  static getTabCard(title: string): Cypress.Chainable {
+    return cy.get('#km-cluster-details-tab-card').find('div.mat-tab-label-content').contains(title);
+  }
+
+  static getAddConstraintBtn(): Cypress.Chainable {
+    return cy.get('#km-add-constraint-btn');
+  }
+
+  static getConstraintNameInput(): Cypress.Chainable {
+    return cy.get('#km-constraint-name-input');
+  }
+
+  static getConstraintTemplateSelect(): Cypress.Chainable {
+    return cy.get('#km-constraint-template-select');
+  }
+
+  static getConstraintTemplateSelectOption(name: string): Cypress.Chainable {
+    return cy.get('#km-constraint-template-select').then(option => {
+      if (option.find('mat-option').text(name).length > 0) {
+        return cy.get('mat-option').contains(name);
+      }
+
+      return cy.get('mat-option');
+    });
+  }
+
+  static getAddConstraintSpecTextarea(): Cypress.Chainable {
+    return cy.get('km-constraint-dialog .monaco-editor textarea:first');
+  }
+
+  static getConstraintDialogSaveBtn(): Cypress.Chainable {
+    return cy.get('#km-constraint-dialog-btn');
+  }
+
+  static getDeleteConstraintBtn(name: string): Cypress.Chainable {
+    return cy.get(`#km-constraint-delete-btn-${name}`);
+  }
+
+  static getConstraintTable(): Cypress.Chainable {
+    return cy.get('km-constraint-list tbody');
+  }
+
+  static getAddGatekeeperConfigBtn(): Cypress.Chainable {
+    return cy.get('#km-gatekeeper-config-add-btn');
+  }
+
+  static getAddGatekeeperConfigTextarea(): Cypress.Chainable {
+    return cy.get('km-gatekeeper-config-dialog .monaco-editor textarea:first');
+  }
+
+  static getGatekeeperConfigDialogSaveBtn(): Cypress.Chainable {
+    return cy.get('#km-gatekeeper-config-dialog-btn');
+  }
+
+  static getDeleteGatekeeperConfigBtn(): Cypress.Chainable {
+    return cy.get('#km-gatekeeper-config-delete-btn');
+  }
+
   // Utils.
 
   static waitForRefresh(): void {

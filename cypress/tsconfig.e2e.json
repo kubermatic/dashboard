@@ -7,9 +7,10 @@
   },
   "include": [
     "integration/**/*.ts",
+    "fixtures/**/*.ts",
     "pages/**/*.ts",
     "utils/*.ts",
     "support/*.ts",
     "plugins/*.ts",
-    "../node_modules/cypress/**/*.ts"]
+    "../node_modules/cypress"]
 }
