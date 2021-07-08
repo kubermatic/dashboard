@@ -12,9 +12,9 @@
 export enum ChangelogPriority {
   ActionRequired,
   Security,
+  Fixed,
   Added,
   Changed,
-  Fixed,
   Deprecated,
   Removed,
 }

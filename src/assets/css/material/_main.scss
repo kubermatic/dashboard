@@ -617,6 +617,7 @@ mat-chip-list {
 mat-tooltip-component .mat-tooltip {
   font-size: $font-size-caption;
   margin-top: 5px;
+  word-wrap: break-word;
 }
 
 .mat-tooltip-panel {
