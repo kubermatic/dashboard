@@ -84,7 +84,7 @@
     "@types/jest": "26.0.23",
     "@types/js-yaml": "4.0.1",
     "@types/lodash": "4.14.170",
-    "@types/node": "16.0.0",
+    "@types/node": "16.0.1",
     "browserlist": "1.0.1",
     "cypress": "7.6.0",
     "cypress-fail-fast": "3.0.0",
