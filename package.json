@@ -83,7 +83,7 @@
     "@jest/globals": "27.0.6",
     "@types/jest": "26.0.23",
     "@types/js-yaml": "4.0.1",
-    "@types/lodash": "4.14.170",
+    "@types/lodash": "4.14.171",
     "@types/node": "16.0.0",
     "browserlist": "1.0.1",
     "cypress": "7.6.0",
