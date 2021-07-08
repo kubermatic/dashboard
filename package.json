@@ -82,7 +82,7 @@
     "@cypress/webpack-preprocessor": "5.9.1",
     "@jest/globals": "27.0.6",
     "@types/jest": "26.0.23",
-    "@types/js-yaml": "4.0.1",
+    "@types/js-yaml": "4.0.2",
     "@types/lodash": "4.14.170",
     "@types/node": "16.0.0",
     "browserlist": "1.0.1",
