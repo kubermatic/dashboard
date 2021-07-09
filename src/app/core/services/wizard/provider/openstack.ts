@@ -104,6 +104,11 @@ export class Openstack extends Provider {
   }
 
   flavors(onLoadingCb: () => void = null): Observable<OpenstackFlavor[]> {
+    const tenantHeader = this._headers.get(Openstack.Header.Tenant)
+      ? Openstack.Header.Tenant
+      : Openstack.Header.TenantID;
+    this._addRequiredHeader(tenantHeader);
+
     if (this._usingApplicationCredentials) {
       this._setRequiredHeaders(
         Openstack.Header.ApplicationCredentialID,
@@ -152,6 +157,11 @@ export class Openstack extends Provider {
   }
 
   securityGroups(onLoadingCb: () => void = null): Observable<OpenstackSecurityGroup[]> {
+    const tenantHeader = this._headers.get(Openstack.Header.Tenant)
+      ? Openstack.Header.Tenant
+      : Openstack.Header.TenantID;
+    this._addRequiredHeader(tenantHeader);
+
     if (this._usingApplicationCredentials) {
       this._setRequiredHeaders(
         Openstack.Header.ApplicationCredentialID,
@@ -176,6 +186,11 @@ export class Openstack extends Provider {
   }
 
   networks(onLoadingCb: () => void = null): Observable<OpenstackNetwork[]> {
+    const tenantHeader = this._headers.get(Openstack.Header.Tenant)
+      ? Openstack.Header.Tenant
+      : Openstack.Header.TenantID;
+    this._addRequiredHeader(tenantHeader);
+
     if (this._usingApplicationCredentials) {
       this._setRequiredHeaders(
         Openstack.Header.ApplicationCredentialID,
@@ -223,6 +238,11 @@ export class Openstack extends Provider {
   }
 
   availabilityZones(onLoadingCb: () => void = null): Observable<OpenstackAvailabilityZone[]> {
+    const tenantHeader = this._headers.get(Openstack.Header.Tenant)
+      ? Openstack.Header.Tenant
+      : Openstack.Header.TenantID;
+    this._addRequiredHeader(tenantHeader);
+
     if (this._usingApplicationCredentials) {
       this._setRequiredHeaders(
         Openstack.Header.ApplicationCredentialID,

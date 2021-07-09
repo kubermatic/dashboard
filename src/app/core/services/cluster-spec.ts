@@ -10,23 +10,27 @@
 // limitations under the License.
 
 import {EventEmitter, Injectable} from '@angular/core';
-import * as _ from 'lodash';
 import {CloudSpec, Cluster, ClusterType} from '@shared/entity/cluster';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import * as _ from 'lodash';
+import {ReplaySubject} from 'rxjs';
 
 @Injectable()
 export class ClusterSpecService {
+  private _admissionPluginsEntity: string[] = [];
   readonly providerChanges = new EventEmitter<NodeProvider>();
-  readonly datacenterChanges = new EventEmitter<string>();
+  readonly datacenterChanges = new ReplaySubject<string>();
   readonly sshKeyChanges = new EventEmitter<SSHKey[]>();
   readonly clusterChanges = new EventEmitter<Cluster>();
   readonly admissionPluginsChanges = new EventEmitter<string[]>();
   readonly clusterTypeChanges = new EventEmitter<ClusterType>();
 
   private _cluster: Cluster = Cluster.newEmptyClusterEntity();
-  private _sshKeys: SSHKey[] = [];
-  private _admissionPluginsEntity: string[] = [];
+
+  get cluster(): Cluster {
+    return this._cluster;
+  }
 
   set cluster(cluster: Cluster) {
     if (
@@ -49,8 +53,23 @@ export class ClusterSpecService {
     this.clusterChanges.emit(this._cluster);
   }
 
-  get cluster(): Cluster {
-    return this._cluster;
+  private _sshKeys: SSHKey[] = [];
+
+  get sshKeys(): SSHKey[] {
+    return this._sshKeys;
+  }
+
+  set sshKeys(keys: SSHKey[]) {
+    this._sshKeys = keys;
+    this.sshKeyChanges.emit(this._sshKeys);
+  }
+
+  get provider(): NodeProvider {
+    const clusterProviders = Object.values(NodeProvider)
+      .map(provider => (this._cluster.spec.cloud[provider] ? provider : undefined))
+      .filter(p => p !== undefined);
+
+    return clusterProviders.length > 0 ? clusterProviders[0] : NodeProvider.NONE;
   }
 
   set provider(provider: NodeProvider) {
@@ -64,16 +83,12 @@ export class ClusterSpecService {
     } as Cluster;
 
     if (provider) {
-      this.providerChanges.emit(provider);
+      this.providerChanges.next(provider);
     }
   }
 
-  get provider(): NodeProvider {
-    const clusterProviders = Object.values(NodeProvider)
-      .map(provider => (this._cluster.spec.cloud[provider] ? provider : undefined))
-      .filter(p => p !== undefined);
-
-    return clusterProviders.length > 0 ? clusterProviders[0] : NodeProvider.NONE;
+  get datacenter(): string {
+    return this._cluster.spec.cloud.dc;
   }
 
   set datacenter(datacenter: string) {
@@ -86,12 +101,8 @@ export class ClusterSpecService {
     } as Cluster;
 
     if (datacenter) {
-      this.datacenterChanges.emit(datacenter);
+      this.datacenterChanges.next(datacenter);
     }
-  }
-
-  get datacenter(): string {
-    return this._cluster.spec.cloud.dc;
   }
 
   set labels(labels: object) {
@@ -103,28 +114,19 @@ export class ClusterSpecService {
     this._cluster.spec.podNodeSelectorAdmissionPluginConfig = config;
   }
 
-  set sshKeys(keys: SSHKey[]) {
-    this._sshKeys = keys;
-    this.sshKeyChanges.emit(this._sshKeys);
-  }
-
-  get sshKeys(): SSHKey[] {
-    return this._sshKeys;
-  }
-
   set admissionPlugins(plugins: string[]) {
     this._admissionPluginsEntity = plugins;
     this._cluster.spec.admissionPlugins = plugins;
     this.admissionPluginsChanges.emit(this._admissionPluginsEntity);
   }
 
+  get clusterType(): ClusterType {
+    return this._cluster.type;
+  }
+
   set clusterType(type: ClusterType) {
     this._cluster.type = type;
     this.clusterTypeChanges.emit(type);
-  }
-
-  get clusterType(): ClusterType {
-    return this._cluster.type;
   }
 
   reset(): void {

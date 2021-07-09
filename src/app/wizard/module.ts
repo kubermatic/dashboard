@@ -10,13 +10,19 @@
 // limitations under the License.
 
 import {NgModule} from '@angular/core';
+import {OpenstackProviderBasicAppCredentialsComponent} from '@app/wizard/step/provider-settings/provider/basic/openstack/application/component';
+import {OpenstackProviderBasicDefaultCredentialsComponent} from '@app/wizard/step/provider-settings/provider/basic/openstack/default/component';
+import {OpenstackProviderExtendedAppCredentialsComponent} from '@app/wizard/step/provider-settings/provider/extended/openstack/application/component';
+import {OpenstackProviderExtendedDefaultCredentialsComponent} from '@app/wizard/step/provider-settings/provider/extended/openstack/default/component';
+import {OpenstackCredentialsTypeService} from '@app/wizard/step/provider-settings/provider/extended/openstack/service';
 import {WizardService} from '@core/services/wizard/wizard';
+import {SharedModule} from '@shared/module';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '../node-data/config';
 import {NodeDataModule} from '../node-data/module';
-import {SharedModule} from '@shared/module';
 import {WizardComponent} from './component';
 import {Routing} from './routing';
 import {ClusterStepComponent} from './step/cluster/component';
+import {ClusterSSHKeysComponent} from './step/cluster/ssh-keys/component';
 import {MachineNetworkStepComponent} from './step/network/component';
 import {NodeSettingsStepComponent} from './step/node-settings/component';
 import {ProviderStepComponent} from './step/provider-datacenter/component';
@@ -41,7 +47,6 @@ import {GCPProviderExtendedComponent} from './step/provider-settings/provider/ex
 import {HetznerProviderExtendedComponent} from './step/provider-settings/provider/extended/hetzner/component';
 import {OpenstackProviderExtendedComponent} from './step/provider-settings/provider/extended/openstack/component';
 import {VSphereProviderExtendedComponent} from './step/provider-settings/provider/extended/vsphere/component';
-import {ClusterSSHKeysComponent} from './step/cluster/ssh-keys/component';
 import {SummaryStepComponent} from './step/summary/component';
 
 const components: any[] = [
@@ -60,7 +65,11 @@ const components: any[] = [
   HetznerProviderExtendedComponent,
   KubeVirtProviderBasicComponent,
   OpenstackProviderBasicComponent,
+  OpenstackProviderBasicDefaultCredentialsComponent,
+  OpenstackProviderBasicAppCredentialsComponent,
   OpenstackProviderExtendedComponent,
+  OpenstackProviderExtendedDefaultCredentialsComponent,
+  OpenstackProviderExtendedAppCredentialsComponent,
   PacketProviderBasicComponent,
   VSphereProviderBasicComponent,
   ProviderExtendedComponent,
@@ -84,6 +93,7 @@ const components: any[] = [
       useValue: {mode: NodeDataMode.Wizard} as NodeDataConfig,
     },
     WizardService,
+    OpenstackCredentialsTypeService,
   ],
   exports: [...components],
 })
