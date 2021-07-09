@@ -10,6 +10,7 @@
 // limitations under the License.
 
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -71,7 +72,7 @@ enum FolderState {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class VSphereProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class VSphereProviderExtendedComponent extends BaseFormValidator implements OnInit, AfterViewInit, OnDestroy {
   private readonly _debounceTime = 1000;
   private _networkMap: {[type: string]: VSphereNetwork[]} = {};
   private _credentialsChanged = new EventEmitter<void>();
@@ -126,16 +127,6 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._handleClusterChange.bind(this));
 
-    this._credentialsChanged
-      .pipe(tap(_ => this._clearFolders()))
-      .pipe(tap(_ => this._clearNetworks()))
-      .pipe(switchMap(_ => forkJoin([this._folderListObservable(), this._networkListObservable()])))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(([folders, networks]) => {
-        this._loadFolders(folders);
-        this._loadNetworks(networks);
-      });
-
     this._clusterSpecService.clusterChanges
       .pipe(
         filter(_ => this._clusterSpecService.provider === NodeProvider.VSPHERE),
@@ -174,6 +165,18 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
         takeUntil(this._unsubscribe)
       )
       .subscribe(d => (this._clusterSpecService.cluster.spec.cloud.vsphere.datastore = d));
+  }
+
+  ngAfterViewInit(): void {
+    this._credentialsChanged
+      .pipe(tap(_ => this._clearFolders()))
+      .pipe(tap(_ => this._clearNetworks()))
+      .pipe(switchMap(_ => forkJoin([this._folderListObservable(), this._networkListObservable()])))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(([folders, networks]) => {
+        this._loadFolders(folders);
+        this._loadNetworks(networks);
+      });
   }
 
   getNetworks(type: string): VSphereNetwork[] {
