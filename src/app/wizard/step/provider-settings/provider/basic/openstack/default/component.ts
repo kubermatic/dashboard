@@ -224,6 +224,9 @@ export class OpenstackProviderBasicDefaultCredentialsComponent extends BaseFormV
   getHint(control: Controls): string {
     switch (control) {
       case Controls.FloatingIPPool:
+        return this._hasRequiredCredentials() && this._hasTenant()
+          ? ''
+          : 'Please enter your credentials & project first.';
       case Controls.Project:
         return this._hasRequiredCredentials() ? '' : 'Please enter your credentials first.';
     }
@@ -267,6 +270,14 @@ export class OpenstackProviderBasicDefaultCredentialsComponent extends BaseFormV
       !!this._clusterSpecService.cluster.spec.cloud.openstack &&
       !!this._clusterSpecService.cluster.spec.cloud.openstack.username &&
       !!this._clusterSpecService.cluster.spec.cloud.openstack.password
+    );
+  }
+
+  private _hasTenant(): boolean {
+    return (
+      !!this._clusterSpecService.cluster.spec.cloud.openstack &&
+      (!!this._clusterSpecService.cluster.spec.cloud.openstack.tenant ||
+        !!this._clusterSpecService.cluster.spec.cloud.openstack.tenantID)
     );
   }
 
