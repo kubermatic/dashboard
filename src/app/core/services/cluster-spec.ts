@@ -14,13 +14,12 @@ import {CloudSpec, Cluster, ClusterType} from '@shared/entity/cluster';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import * as _ from 'lodash';
-import {ReplaySubject} from 'rxjs';
 
 @Injectable()
 export class ClusterSpecService {
   private _admissionPluginsEntity: string[] = [];
   readonly providerChanges = new EventEmitter<NodeProvider>();
-  readonly datacenterChanges = new ReplaySubject<string>();
+  readonly datacenterChanges = new EventEmitter<string>();
   readonly sshKeyChanges = new EventEmitter<SSHKey[]>();
   readonly clusterChanges = new EventEmitter<Cluster>();
   readonly admissionPluginsChanges = new EventEmitter<string[]>();

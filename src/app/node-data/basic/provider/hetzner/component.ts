@@ -11,8 +11,8 @@
 
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {NodeDataService} from '@core/services/node-data/service';
 import {ClusterSpecService} from '@core/services/cluster-spec';
+import {NodeDataService} from '@core/services/node-data/service';
 import {HetznerNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {HetznerTypes, Type} from '@shared/entity/provider/hetzner';
 import {NodeData} from '@shared/model/NodeSpecChange';
@@ -87,9 +87,12 @@ export class HetznerBasicNodeDataComponent extends BaseFormValidator implements 
 
     this._nodeDataService.nodeData = this._getNodeData();
 
-    this._clusterSpecService.clusterChanges
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
+    this.form
+      .get(Controls.Type)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        this._nodeDataService.nodeData = this._getNodeData();
+      });
   }
 
   ngOnDestroy(): void {

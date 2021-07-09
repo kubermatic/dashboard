@@ -11,17 +11,17 @@
 
 import {ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {PresetsService} from '@core/services/wizard/presets';
-import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {ClusterSpecService} from '@core/services/cluster-spec';
+import {DatacenterService} from '@core/services/datacenter';
+import {PresetsService} from '@core/services/wizard/presets';
+import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
+import {AZURE_LOADBALANCER_SKUS, AzureCloudSpec, CloudSpec, Cluster, ClusterSpec} from '@shared/entity/cluster';
+import {Datacenter} from '@shared/entity/datacenter';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
+import * as _ from 'lodash';
 import {EMPTY, merge, Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import * as _ from 'lodash';
-import {DatacenterService} from '@core/services/datacenter';
-import {AZURE_LOADBALANCER_SKUS} from '@shared/entity/cluster';
-import {Datacenter} from '@shared/entity/datacenter';
-import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
 
 enum Controls {
   ResourceGroup = 'resourceGroup',
@@ -221,7 +221,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
     this.form
       .get(Controls.LoadBalancerSKU)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(sku => (this._clusterSpecService.cluster.spec.cloud.azure.loadBalancerSKU = sku));
+      .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
   }
 
   ngOnDestroy(): void {
@@ -454,5 +454,17 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
     if (!enable && this.form.get(name).enabled) {
       this.form.get(name).disable();
     }
+  }
+
+  private _getClusterEntity(): Cluster {
+    return {
+      spec: {
+        cloud: {
+          azure: {
+            loadBalancerSKU: this.form.get(Controls.LoadBalancerSKU).value,
+          } as AzureCloudSpec,
+        } as CloudSpec,
+      } as ClusterSpec,
+    } as Cluster;
   }
 }

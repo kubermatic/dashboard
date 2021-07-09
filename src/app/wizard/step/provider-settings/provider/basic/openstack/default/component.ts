@@ -20,6 +20,7 @@ import {
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {AppConfigService} from '@app/config.service';
+import {OpenstackCredentialsTypeService} from '@app/wizard/step/provider-settings/provider/extended/openstack/service';
 import {Auth} from '@core/services/auth/service';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
@@ -97,6 +98,7 @@ export class OpenstackProviderBasicDefaultCredentialsComponent extends BaseFormV
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _datacenterService: DatacenterService,
     private readonly _appConfigService: AppConfigService,
+    private readonly _credentialsTypeService: OpenstackCredentialsTypeService,
     private readonly _auth: Auth,
     private readonly _cdr: ChangeDetectorRef
   ) {
@@ -125,7 +127,11 @@ export class OpenstackProviderBasicDefaultCredentialsComponent extends BaseFormV
         )
       );
 
-    merge(this._clusterSpecService.providerChanges, this._clusterSpecService.datacenterChanges)
+    merge(
+      this._clusterSpecService.providerChanges,
+      this._clusterSpecService.datacenterChanges,
+      this._credentialsTypeService.credentialsTypeChanges
+    )
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
       .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterSpecService.datacenter).pipe(take(1))))
       .pipe(tap(dc => (this._isFloatingPoolIPEnforced = dc.spec.openstack.enforce_floating_ip)))
@@ -257,10 +263,6 @@ export class OpenstackProviderBasicDefaultCredentialsComponent extends BaseFormV
   }
 
   private _hasRequiredCredentials(): boolean {
-    return this._hasRequiredBasicCredentials();
-  }
-
-  private _hasRequiredBasicCredentials(): boolean {
     return (
       !!this._clusterSpecService.cluster.spec.cloud.openstack &&
       !!this._clusterSpecService.cluster.spec.cloud.openstack.username &&

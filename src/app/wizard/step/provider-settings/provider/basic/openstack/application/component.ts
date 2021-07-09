@@ -19,6 +19,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {OpenstackCredentialsTypeService} from '@app/wizard/step/provider-settings/provider/extended/openstack/service';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {PresetsService} from '@core/services/wizard/presets';
@@ -84,6 +85,7 @@ export class OpenstackProviderBasicAppCredentialsComponent extends BaseFormValid
     private readonly _presets: PresetsService,
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _datacenterService: DatacenterService,
+    private readonly _credentialsTypeService: OpenstackCredentialsTypeService,
     private readonly _cdr: ChangeDetectorRef
   ) {
     super('Openstack Provider Basic');
@@ -134,7 +136,11 @@ export class OpenstackProviderBasicAppCredentialsComponent extends BaseFormValid
         }
       });
 
-    merge(this._clusterSpecService.providerChanges, this._clusterSpecService.datacenterChanges)
+    merge(
+      this._clusterSpecService.providerChanges,
+      this._clusterSpecService.datacenterChanges,
+      this._credentialsTypeService.credentialsTypeChanges
+    )
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
       .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterSpecService.datacenter).pipe(take(1))))
       .pipe(tap(dc => (this._isFloatingPoolIPEnforced = dc.spec.openstack.enforce_floating_ip)))
@@ -182,14 +188,10 @@ export class OpenstackProviderBasicAppCredentialsComponent extends BaseFormValid
   }
 
   private _hasRequiredCredentials(): boolean {
-    return this._hasRequiredBasicCredentials();
-  }
-
-  private _hasRequiredBasicCredentials(): boolean {
     return (
       !!this._clusterSpecService.cluster.spec.cloud.openstack &&
-      !!this._clusterSpecService.cluster.spec.cloud.openstack.username &&
-      !!this._clusterSpecService.cluster.spec.cloud.openstack.password
+      !!this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialID &&
+      !!this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialSecret
     );
   }
 
