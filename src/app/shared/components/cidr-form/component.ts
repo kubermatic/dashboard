@@ -20,10 +20,10 @@ import {
   NG_ASYNC_VALIDATORS,
   NG_VALUE_ACCESSOR,
   ValidationErrors,
-  Validators,
 } from '@angular/forms';
 import {takeUntil} from 'rxjs/operators';
 import {Observable, of, Subject} from 'rxjs';
+import {CIDR_PATTERN_VALIDATOR} from '@shared/validators/others';
 
 @Component({
   selector: 'km-cidr-form',
@@ -67,9 +67,7 @@ export class CIDRFormComponent implements OnInit, OnDestroy, ControlValueAccesso
   }
 
   private _addControl(cidr = ''): void {
-    this.controls.push(
-      this._formBuilder.control(cidr, [Validators.pattern(/^((\d{1,3}\.){3}\d{1,3}\/([0-9]|[1-2][0-9]|3[0-2]))$/)])
-    );
+    this.controls.push(this._formBuilder.control(cidr, [CIDR_PATTERN_VALIDATOR]));
   }
 
   private _onChange(): void {

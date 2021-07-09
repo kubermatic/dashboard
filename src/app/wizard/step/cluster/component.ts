@@ -43,6 +43,7 @@ import {combineLatest, merge} from 'rxjs';
 import {filter, startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {StepBase} from '../base';
 import * as semver from 'semver';
+import {CIDR_PATTERN_VALIDATOR} from '@shared/validators/others';
 
 enum Controls {
   Name = 'name',
@@ -126,8 +127,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.Labels]: new FormControl(''),
       [Controls.SSHKeys]: this._builder.control(''),
       [Controls.ProxyMode]: this._builder.control(''),
-      [Controls.PodsCIDR]: this._builder.control(''),
-      [Controls.ServicesCIDR]: this._builder.control(''),
+      [Controls.PodsCIDR]: new FormControl('', [CIDR_PATTERN_VALIDATOR]),
+      [Controls.ServicesCIDR]: new FormControl('', [CIDR_PATTERN_VALIDATOR]),
     });
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
@@ -281,11 +282,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   }
 
   private _getClusterEntity(): Cluster {
-    let pods = this.controlValue(Controls.PodsCIDR);
-    pods = pods && pods.cidrs ? pods.cidrs.filter(v => !!v) : undefined;
-    let services = this.controlValue(Controls.ServicesCIDR);
-    services = services && services.cidrs ? services.cidrs.filter(v => !!v) : undefined;
-
+    const pods = this.controlValue(Controls.PodsCIDR);
+    const services = this.controlValue(Controls.ServicesCIDR);
     return {
       name: this.controlValue(Controls.Name),
       type: ClusterType.Kubernetes,
@@ -305,8 +303,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         containerRuntime: this.controlValue(Controls.ContainerRuntime),
         clusterNetwork: {
           proxyMode: this.controlValue(Controls.ProxyMode),
-          pods: {cidrBlocks: pods},
-          services: {cidrBlocks: services},
+          pods: {cidrBlocks: pods ? [pods] : []},
+          services: {cidrBlocks: services ? [services] : []},
         },
       } as ClusterSpec,
     } as Cluster;
