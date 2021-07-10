@@ -10,13 +10,14 @@
 // limitations under the License.
 
 import {RuleGroupName} from '@shared/entity/mla';
+import {decode} from 'js-base64';
 import {load} from 'js-yaml';
 import * as _ from 'lodash';
 
 export class MLAUtils {
   static getRuleGroupName(data: string): string {
     let ruleGroupName = new RuleGroupName();
-    const yamlData = atob(data);
+    const yamlData = decode(data);
     const jsonData = load(yamlData) as RuleGroupName;
     if (!_.isEmpty(jsonData)) {
       ruleGroupName = jsonData;

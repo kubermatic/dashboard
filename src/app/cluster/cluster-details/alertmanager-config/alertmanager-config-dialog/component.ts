@@ -15,6 +15,7 @@ import {MLAService} from '@core/services/mla';
 import {NotificationService} from '@core/services/notification';
 import {AlertmanagerConfig} from '@shared/entity/mla';
 import * as _ from 'lodash';
+import {encode, decode} from 'js-base64';
 import {Subject} from 'rxjs';
 import {take} from 'rxjs/operators';
 
@@ -70,12 +71,12 @@ export class AlertmanagerConfigDialog implements OnInit, OnDestroy {
   private _initProviderConfigEditor(): void {
     const spec = this.data.alertmanagerConfig.spec.config;
     if (!_.isEmpty(spec)) {
-      this.spec = atob(spec);
+      this.spec = decode(spec);
     }
   }
 
   private _getSpec(): string {
-    return btoa(this.spec);
+    return encode(this.spec);
   }
 
   private _edit(alertmanagerConfig: AlertmanagerConfig): void {
