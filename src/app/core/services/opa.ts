@@ -26,6 +26,8 @@ export class OPAService {
   private _constraintTemplatesRefresh$ = new Subject<void>();
   private _constraints$ = new Map<string, Observable<Constraint[]>>();
   private _constraintsRefresh$ = new Subject<void>();
+  private _defaultConstraints$: Observable<Constraint[]>;
+  private _defaultConstraintsRefresh$ = new Subject<void>();
   private _gatekeeperConfig$ = new Map<string, Observable<GatekeeperConfig>>();
   private _gatekeeperConfigRefresh$ = new Subject<void>();
   private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
@@ -102,6 +104,35 @@ export class OPAService {
 
   deleteConstraint(projectId: string, clusterId: string, name: string): Observable<any> {
     const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/constraints/${name}`;
+    return this._http.delete(url);
+  }
+
+  get defaultConstraints(): Observable<Constraint[]> {
+    if (!this._defaultConstraints$) {
+      this._defaultConstraints$ = merge(this._defaultConstraintsRefresh$, this._refreshTimer$)
+        .pipe(switchMap(_ => this._getDefaultConstraints()))
+        .pipe(shareReplay({refCount: true, bufferSize: 1}));
+    }
+
+    return this._defaultConstraints$;
+  }
+
+  private _getDefaultConstraints(): Observable<Constraint[]> {
+    const url = `${this._newRestRoot}/constraints`;
+    return this._http.get<Constraint[]>(url).pipe(catchError(() => of<Constraint[]>()));
+  }
+
+  refreshDefaultConstraints(): void {
+    this._defaultConstraintsRefresh$.next();
+  }
+
+  createDefaultConstraint(constraint: Constraint): Observable<Constraint> {
+    const url = `${this._newRestRoot}/constraints`;
+    return this._http.post<Constraint>(url, constraint);
+  }
+
+  deleteDefaultConstraint(name: string): Observable<any> {
+    const url = `${this._newRestRoot}/projects/constraints/${name}`;
     return this._http.delete(url);
   }
 
