@@ -131,7 +131,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.ServicesCIDR]: new FormControl('', [CIDR_PATTERN_VALIDATOR]),
     });
 
-    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+    this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
       this._settings = settings;
 
       this.form.get(Controls.MLALogging).setValue(this._settings.mlaOptions.loggingEnabled, {emitEvent: false});
