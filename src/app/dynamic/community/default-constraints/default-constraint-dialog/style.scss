@@ -9,17 +9,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {SharedModule} from '@shared/module';
-import {DefaultConstraintComponent} from './component';
-import {DefaultConstraintDialog} from './default-constraint-dialog/component';
+@import 'variables';
 
-const routes: Routes = [{path: '', outlet: 'default-constraints', component: DefaultConstraintComponent}];
+.spec {
+  font-size: $font-size-subhead-lg;
+  line-height: 25px;
+  margin-top: 24px;
+}
 
-@NgModule({
-  imports: [SharedModule, RouterModule.forChild(routes)],
-  exports: [RouterModule],
-  declarations: [DefaultConstraintComponent, DefaultConstraintDialog],
-})
-export class DefaultConstraintsModule {}
+.monaco-editor {
+  margin-top: 16px;
+}

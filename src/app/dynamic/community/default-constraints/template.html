@@ -33,17 +33,7 @@ limitations under the License.
          matSort
          matSortActive="constraintName"
          matSortDirection="asc"
-         multiTemplateDataRows
          [dataSource]="dataSource">
-    <ng-container matColumnDef="stateArrow">
-      <th mat-header-cell
-          *matHeaderCellDef
-          class="km-header-cell"></th>
-      <td mat-cell
-          *matCellDef="let element">
-        <i [ngClass]="isShowDetails[element.name] ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
-      </td>
-    </ng-container>
     <ng-container matColumnDef="name">
       <th mat-header-cell
           *matHeaderCellDef
@@ -72,16 +62,14 @@ limitations under the License.
           *matCellDef="let element">
         <div class="km-table-actions"
              fxLayoutAlign="end">
-        </div>
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="violationDetails">
-      <td mat-cell
-          *matCellDef="let element; let i=dataIndex"
-          class="km-violation-details"
-          [attr.colspan]="displayedColumns.length">
-        <div class="km-violation-details-wrapper">
+          <button mat-icon-button
+                  (click)="edit(element)">
+            <i class="km-icon-edit"></i>
+          </button>
+          <button mat-icon-button
+                  (click)="delete(element)">
+            <i class="km-icon-delete"></i>
+          </button>
         </div>
       </td>
     </ng-container>
@@ -92,12 +80,7 @@ limitations under the License.
     <tr mat-row
         *matRowDef="let row; columns: displayedColumns"
         class="km-mat-row km-pointer"
-        [attr.id]="row.name"
-        (click)="toggleDetails(row)"></tr>
-    <tr mat-row
-        *matRowDef="let row; let i=index; columns: toggledColumns;"
-        [ngClass]="isShowDetails[row.name] ? '' : 'km-hidden'"
-        class="km-mat-row"></tr>
+        [attr.id]="row.name"></tr>
   </table>
 
   <div class="km-row km-empty-list-msg"

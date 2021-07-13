@@ -131,6 +131,11 @@ export class OPAService {
     return this._http.post<Constraint>(url, constraint);
   }
 
+  patchDefaultConstraint(name: string, patch: Constraint): Observable<Constraint> {
+    const url = `${this._newRestRoot}/constraints/${name}`;
+    return this._http.patch<Constraint>(url, patch);
+  }
+
   deleteDefaultConstraint(name: string): Observable<any> {
     const url = `${this._newRestRoot}/projects/constraints/${name}`;
     return this._http.delete(url);

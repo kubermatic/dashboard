@@ -10,16 +10,20 @@
 // limitations under the License.
 
 import {Component, OnChanges, OnDestroy, OnInit, ViewChild, SimpleChanges} from '@angular/core';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {OPAService} from '@core/services/opa';
 import {UserService} from '@core/services/user';
+import {NotificationService} from '@core/services/notification';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Constraint} from '@shared/entity/opa';
 import {UserSettings} from '@shared/entity/settings';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
+import {Mode, DefaultConstraintDialog} from './default-constraint-dialog/component';
 
 @Component({
   selector: 'km-default-constraint-list',
@@ -30,14 +34,17 @@ export class DefaultConstraintComponent implements OnInit, OnChanges, OnDestroy 
   settings: UserSettings;
   defaultConstraints: Constraint[] = [];
   dataSource = new MatTableDataSource<Constraint>();
-  displayedColumns: string[] = ['stateArrow', 'name', 'constraintTemplate', 'actions'];
-  toggledColumns: string[] = ['violationDetails'];
-  isShowDetails = [];
+  displayedColumns: string[] = ['name', 'constraintTemplate', 'actions'];
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   private readonly _unsubscribe = new Subject<void>();
 
-  constructor(private readonly _opaService: OPAService, private readonly _userService: UserService) {}
+  constructor(
+    private readonly _opaService: OPAService,
+    private readonly _userService: UserService,
+    private readonly _notificationService: NotificationService,
+    private readonly _matDialog: MatDialog
+  ) {}
 
   ngOnInit() {
     this.dataSource.data = this.defaultConstraints;
@@ -82,9 +89,51 @@ export class DefaultConstraintComponent implements OnInit, OnChanges, OnDestroy 
     return _.isEmpty(this.defaultConstraints);
   }
 
-  toggleDetails(element: Constraint): void {
-    this.isShowDetails[element.name] = !this.isShowDetails[element.name];
+  add(): void {
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        title: 'Add Default Constraint',
+        mode: Mode.Add,
+        confirmLabel: 'Add',
+      },
+    };
+
+    this._matDialog.open(DefaultConstraintDialog, dialogConfig);
   }
 
-  add(): void {}
+  edit(defaultConstraint: Constraint): void {
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        title: 'Edit Default Constraint',
+        defaultConstraint: defaultConstraint,
+        mode: Mode.Edit,
+        confirmLabel: 'Edit',
+      },
+    };
+
+    this._matDialog.open(DefaultConstraintDialog, dialogConfig);
+  }
+
+  delete(defaultConstraint: Constraint): void {
+    const dialogConfig: MatDialogConfig = {
+      disableClose: false,
+      hasBackdrop: true,
+      data: {
+        title: 'Delete Default Constraint',
+        message: `Are you sure you want to delete the default constraint ${defaultConstraint.name}?`,
+        confirmLabel: 'Delete',
+      },
+    };
+
+    this._matDialog
+      .open(ConfirmationDialogComponent, dialogConfig)
+      .afterClosed()
+      .pipe(filter(isConfirmed => isConfirmed))
+      .pipe(switchMap(_ => this._opaService.deleteDefaultConstraint(defaultConstraint.name)))
+      .pipe(take(1))
+      .subscribe(_ => {
+        this._notificationService.success(`The default constraint ${defaultConstraint.name} was deleted`);
+        this._opaService.refreshDefaultConstraints();
+      });
+  }
 }
