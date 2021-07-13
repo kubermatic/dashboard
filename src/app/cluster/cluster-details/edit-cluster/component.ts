@@ -31,7 +31,7 @@ import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plu
 import {AsyncValidators} from '@shared/validators/async-label-form.validator';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
-import {startWith, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import * as semver from 'semver';
 
 enum Controls {
@@ -109,10 +109,12 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       [Controls.Labels]: new FormControl(''),
     });
 
-    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+    this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
       this._settings = settings;
 
-      this.form.get(Controls.OPAIntegration).setValue(this._settings.opaOptions.enabled);
+      if (this._settings.opaOptions.enabled) {
+        this.form.get(Controls.OPAIntegration).setValue(true);
+      }
       if (this._settings.opaOptions.enforced) {
         this.form.get(Controls.OPAIntegration).disable();
       }
