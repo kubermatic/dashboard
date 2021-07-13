@@ -9,13 +9,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-.km-custom-disk-size {
-  align-items: center;
-  display: flex;
-  height: 65px;
+import {Injectable} from '@angular/core';
+import {ReplaySubject} from 'rxjs';
+
+export enum CredentialsType {
+  Default = 'default',
+  Application = 'application',
 }
 
-.icon-info {
-  align-self: center;
-  margin-left: 5px;
+@Injectable()
+export class OpenstackCredentialsTypeService {
+  private _credentialsType = CredentialsType.Default;
+
+  readonly credentialsTypeChanges = new ReplaySubject<CredentialsType>();
+
+  get credentialsType(): CredentialsType {
+    return this._credentialsType;
+  }
+
+  set credentialsType(type: CredentialsType) {
+    this._credentialsType = type;
+    this.credentialsTypeChanges.next(type);
+  }
 }
