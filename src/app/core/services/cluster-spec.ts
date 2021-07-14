@@ -44,9 +44,14 @@ export class ClusterSpecService {
       _.isArray(dest) && _.isArray(src) ? dest : undefined
     );
 
-    // Copy cluster network without using customizer from above.
-    if (cluster && cluster.spec) {
-      this._cluster.spec.clusterNetwork = cluster.spec.clusterNetwork;
+    // Copy cluster network using different customizer, it will overwrite
+    // destination array with source array instead of ignoring the changes.
+    if (cluster && cluster.spec && cluster.spec.clusterNetwork) {
+      this._cluster.spec.clusterNetwork = _.mergeWith(
+        this._cluster.spec.clusterNetwork,
+        cluster.spec.clusterNetwork,
+        (dest, src) => (_.isArray(dest) && _.isArray(src) ? src : undefined)
+      );
     }
 
     this.clusterChanges.emit(this._cluster);
