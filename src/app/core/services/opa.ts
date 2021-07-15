@@ -137,7 +137,7 @@ export class OPAService {
   }
 
   deleteDefaultConstraint(name: string): Observable<any> {
-    const url = `${this._newRestRoot}/projects/constraints/${name}`;
+    const url = `${this._newRestRoot}/constraints/${name}`;
     return this._http.delete(url);
   }
 

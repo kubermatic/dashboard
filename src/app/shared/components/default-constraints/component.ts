@@ -93,6 +93,18 @@ export class DefaultConstraintComponent implements OnInit, OnChanges, OnDestroy 
     return element ? element.map(x => x.kinds).join(', ') : '';
   }
 
+  updateStatus(constraint: Constraint): void {
+    const patch = constraint;
+    patch.spec.disabled = !constraint.spec.disabled;
+    this._opaService
+      .patchDefaultConstraint(constraint.name, patch)
+      .pipe(take(1))
+      .subscribe(result => {
+        this._notificationService.success(`The default constraint ${result.name} was updated`);
+        this._opaService.refreshConstraint();
+      });
+  }
+
   add(): void {
     const dialogConfig: MatDialogConfig = {
       data: {
