@@ -12,14 +12,13 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {SharedModule} from '@shared/module';
-import {DefaultConstraintComponent} from './component';
-import {DefaultConstraintDialog} from './default-constraint-dialog/component';
+import {DefaultConstraintDynamicComponent} from './component';
 
-const routes: Routes = [{path: '', outlet: 'default-constraints', component: DefaultConstraintComponent}];
+const routes: Routes = [{path: '', outlet: 'default-constraints', component: DefaultConstraintDynamicComponent}];
 
 @NgModule({
   imports: [SharedModule, RouterModule.forChild(routes)],
   exports: [RouterModule],
-  declarations: [DefaultConstraintComponent, DefaultConstraintDialog],
+  declarations: [DefaultConstraintDynamicComponent],
 })
 export class DefaultConstraintsModule {}

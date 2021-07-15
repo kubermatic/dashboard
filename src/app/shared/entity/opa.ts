@@ -47,6 +47,7 @@ export class ConstraintStatus {
   enforcement?: string;
   auditTimestamp?: string;
   violations?: Violation[];
+  synced?: boolean;
 }
 
 export class Violation {
@@ -59,8 +60,10 @@ export class Violation {
 
 export class ConstraintSpec {
   constraintType: string;
+  disabled?: boolean;
   match?: Match;
   parameters?: object;
+  selector?: ConstraintSelector;
 }
 
 export class Match {
@@ -75,6 +78,22 @@ export class Match {
 export class Kind {
   kinds?: string[];
   apiGroups?: string[];
+}
+
+export class ConstraintSelector {
+  providers?: string[];
+  labelSelector?: LabelSelector;
+}
+
+export class LabelSelector {
+  matchExpressions?: MatchExpression[];
+  matchLabels?: object;
+}
+
+export class MatchExpression {
+  key?: string;
+  values?: string[];
+  operator?: string;
 }
 
 // Gatekeeper Config

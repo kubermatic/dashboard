@@ -16,5 +16,5 @@ import {Component} from '@angular/core';
   templateUrl: './template.html',
 })
 export class DefaultConstraintDynamicComponent {
-  displayedColumns: string[] = ['name', 'constraintTemplate', 'match', 'actions'];
+  displayedColumns: string[] = ['name', 'constraintTemplate', 'match', 'appliesTo', 'status', 'actions'];
 }
