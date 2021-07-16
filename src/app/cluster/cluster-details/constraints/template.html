@@ -121,12 +121,14 @@ limitations under the License.
       <div class="km-table-actions"
            fxLayoutAlign="end">
         <button mat-icon-button
-                (click)="edit(element, $event)">
+                (click)="edit(element, $event)"
+                [disabled]="element.spec.disabled">
           <i class="km-icon-edit"></i>
         </button>
         <button mat-icon-button
                 [attr.id]="'km-constraint-delete-btn-' + element.name"
-                (click)="delete(element, $event)">
+                (click)="delete(element, $event)"
+                [disabled]="element.spec.disabled">
           <i class="km-icon-delete"></i>
         </button>
       </div>
@@ -153,7 +155,9 @@ limitations under the License.
       *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row
       *matRowDef="let row; columns: displayedColumns"
-      class="km-mat-row km-pointer"
+      class="km-mat-row km-pointe"
+      [ngClass]="row.spec?.disabled ? 'row-disabled': ''"
+      [matTooltip]="getRowTooltip(row)"
       [attr.id]="row.name"
       (click)="toggleDetails(row)"></tr>
   <tr mat-row

@@ -105,7 +105,14 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   toggleDetails(element: Constraint): void {
+    if (element.spec.disabled) {
+      return;
+    }
     this.isShowDetails[element.name] = !this.isShowDetails[element.name];
+  }
+
+  getRowTooltip(constraint: Constraint): string {
+    return constraint.spec.disabled ? 'Constraint is disabled by your admin' : '';
   }
 
   displayKindNames(element: Kind[]): string {

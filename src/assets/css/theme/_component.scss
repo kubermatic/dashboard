@@ -9,6 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@import 'src/app/cluster/cluster-details/constraints/theme';
 @import 'src/app/cluster/cluster-details/machine-deployment-details/cluster-panel/theme';
 @import 'src/app/cluster/cluster-details/version-picker/theme';
 @import 'src/app/core/components/footer/theme';
@@ -61,4 +62,5 @@
   @include theme-admin-sidenav-component($colors);
   @include theme-tab-navigation-component($colors);
   @include theme-wizard-openstack-provider-basic($colors);
+  @include theme-constraints-component($colors);
 }
