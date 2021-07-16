@@ -9,19 +9,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {RuleGroupName} from '@shared/entity/mla';
-import {decode} from 'js-base64';
-import {load} from 'js-yaml';
-import * as _ from 'lodash';
-
-export class MLAUtils {
-  static getRuleGroupName(data: string): string {
-    let ruleGroupName = new RuleGroupName();
-    const yamlData = decode(data);
-    const jsonData = load(yamlData) as RuleGroupName;
-    if (!_.isEmpty(jsonData)) {
-      ruleGroupName = jsonData;
+@mixin theme-wizard-openstack-provider-basic($colors) {
+  .km-wizard-openstack-button-toggle-group {
+    &.mat-button-toggle-group {
+      .mat-button-toggle {
+        &:not(.mat-button-toggle-checked) {
+          background-color: map-get($colors, divider);
+        }
+      }
     }
-    return ruleGroupName.name ? ruleGroupName.name : '';
   }
 }

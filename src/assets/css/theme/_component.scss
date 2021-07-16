@@ -33,6 +33,7 @@
 @import 'src/app/settings/admin/presets/theme';
 @import 'src/app/settings/admin/presets/edit-dialog/theme';
 @import 'src/app/settings/admin/nav/theme';
+@import 'src/app/wizard/step/provider-settings/provider/basic/openstack/theme';
 
 @mixin theme-components($colors) {
   @include theme-addon-list-component($colors);
@@ -59,4 +60,5 @@
   @include theme-changelog-component($colors);
   @include theme-admin-sidenav-component($colors);
   @include theme-tab-navigation-component($colors);
+  @include theme-wizard-openstack-provider-basic($colors);
 }

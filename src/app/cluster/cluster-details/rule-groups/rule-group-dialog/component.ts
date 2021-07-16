@@ -17,6 +17,7 @@ import {NotificationService} from '@core/services/notification';
 import {RuleGroup, RuleGroupType} from '@shared/entity/mla';
 import {MLAUtils} from '@shared/utils/mla-utils';
 import * as _ from 'lodash';
+import {encode, decode} from 'js-base64';
 import {Subject} from 'rxjs';
 import {take} from 'rxjs/operators';
 
@@ -121,12 +122,12 @@ export class RuleGroupDialog implements OnInit, OnDestroy {
     if (this.data.mode === Mode.Edit) {
       const data = this.data.ruleGroup.data;
       if (!_.isEmpty(data)) {
-        this.ruleGroupData = atob(data);
+        this.ruleGroupData = decode(data);
       }
     }
   }
 
   private _getRuleGroupData(): string {
-    return btoa(this.ruleGroupData);
+    return encode(this.ruleGroupData);
   }
 }

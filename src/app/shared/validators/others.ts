@@ -9,19 +9,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {RuleGroupName} from '@shared/entity/mla';
-import {decode} from 'js-base64';
-import {load} from 'js-yaml';
-import * as _ from 'lodash';
+import {Validators} from '@angular/forms';
 
-export class MLAUtils {
-  static getRuleGroupName(data: string): string {
-    let ruleGroupName = new RuleGroupName();
-    const yamlData = decode(data);
-    const jsonData = load(yamlData) as RuleGroupName;
-    if (!_.isEmpty(jsonData)) {
-      ruleGroupName = jsonData;
-    }
-    return ruleGroupName.name ? ruleGroupName.name : '';
-  }
-}
+export const CIDR_PATTERN_VALIDATOR = Validators.pattern(/^((\d{1,3}\.){3}\d{1,3}\/([0-9]|[1-2][0-9]|3[0-2]))$/);

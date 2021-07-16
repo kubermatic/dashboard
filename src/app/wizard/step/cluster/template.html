@@ -20,40 +20,38 @@ limitations under the License.
       <mat-card-header class="km-no-padding">
         <mat-card-title>Cluster</mat-card-title>
       </mat-card-header>
-      <div>
-        <mat-form-field fxFlex>
-          <mat-label>Name</mat-label>
-          <input id="km-wizard-cluster-name-input"
-                 matInput
-                 [formControlName]="Controls.Name"
-                 type="text"
-                 title="name"
-                 autocomplete="off"
-                 required>
-          <button mat-icon-button
-                  type="button"
-                  matSuffix
-                  class="km-randomize-btn"
-                  matTooltip="Generate name"
-                  (click)="generateName()">
-            <i class="km-icon-randomize"></i>
-          </button>
-          <mat-error *ngIf="form.get(Controls.Name).hasError('required')">
-            Name is <strong>required</strong>.
-          </mat-error>
-          <mat-error *ngIf="form.get(Controls.Name).hasError('minlength')">
-            Name must be at least {{ control(Controls.Name).getError('minlength').requiredLength }} characters.
-          </mat-error>
-          <mat-error *ngIf="form.get(Controls.Name).hasError('pattern')">
-            Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -).
-          </mat-error>
-        </mat-form-field>
-      </div>
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input id="km-wizard-cluster-name-input"
+               matInput
+               [formControlName]="Controls.Name"
+               type="text"
+               title="name"
+               autocomplete="off"
+               required>
+        <button mat-icon-button
+                type="button"
+                matSuffix
+                class="km-randomize-btn"
+                matTooltip="Generate name"
+                (click)="generateName()">
+          <i class="km-icon-randomize"></i>
+        </button>
+        <mat-error *ngIf="form.get(Controls.Name).hasError('required')">
+          Name is <strong>required</strong>.
+        </mat-error>
+        <mat-error *ngIf="form.get(Controls.Name).hasError('minlength')">
+          Name must be at least {{ control(Controls.Name).getError('minlength').requiredLength }} characters.
+        </mat-error>
+        <mat-error *ngIf="form.get(Controls.Name).hasError('pattern')">
+          Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -).
+        </mat-error>
+      </mat-form-field>
 
       <mat-card-header class="km-no-padding">
         <mat-card-title>Network Configuration</mat-card-title>
       </mat-card-header>
-      <div>
+      <div fxLayout="column">
         <mat-form-field class="km-dropdown-with-suffix">
           <mat-label>Proxy Mode</mat-label>
           <mat-select [formControlName]="Controls.ProxyMode"
@@ -63,10 +61,26 @@ limitations under the License.
             <mat-option [value]="proxyMode.iptables">iptables</mat-option>
           </mat-select>
         </mat-form-field>
-        <km-cidr-form title="Pods CIDR"
-                      [formControlName]="Controls.PodsCIDR"></km-cidr-form>
-        <km-cidr-form title="Services CIDR"
-                      [formControlName]="Controls.ServicesCIDR"></km-cidr-form>
+        <mat-form-field fxFlex>
+          <mat-label>Pods CIDR</mat-label>
+          <input matInput
+                 [formControlName]="Controls.PodsCIDR"
+                 type="text"
+                 autocomplete="off">
+          <mat-error *ngIf="form.get(Controls.PodsCIDR).hasError('pattern')">
+            Invalid pattern. Use CIDR notation, i.e. 192.168.1.0/24.
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field fxFlex>
+          <mat-label>Services CIDR</mat-label>
+          <input matInput
+                 [formControlName]="Controls.ServicesCIDR"
+                 type="text"
+                 autocomplete="off">
+          <mat-error *ngIf="form.get(Controls.ServicesCIDR).hasError('pattern')">
+            Invalid pattern. Use CIDR notation, i.e. 192.168.1.0/24.
+          </mat-error>
+        </mat-form-field>
       </div>
 
       <km-wizard-cluster-ssh-keys [formControl]="form.get(Controls.SSHKeys)"></km-wizard-cluster-ssh-keys>

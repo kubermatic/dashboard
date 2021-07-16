@@ -9,19 +9,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {RuleGroupName} from '@shared/entity/mla';
-import {decode} from 'js-base64';
-import {load} from 'js-yaml';
-import * as _ from 'lodash';
+import {Injectable} from '@angular/core';
+import {ReplaySubject} from 'rxjs';
 
-export class MLAUtils {
-  static getRuleGroupName(data: string): string {
-    let ruleGroupName = new RuleGroupName();
-    const yamlData = decode(data);
-    const jsonData = load(yamlData) as RuleGroupName;
-    if (!_.isEmpty(jsonData)) {
-      ruleGroupName = jsonData;
-    }
-    return ruleGroupName.name ? ruleGroupName.name : '';
+export enum CredentialsType {
+  Default = 'default',
+  Application = 'application',
+}
+
+@Injectable()
+export class OpenstackCredentialsTypeService {
+  private _credentialsType = CredentialsType.Default;
+
+  readonly credentialsTypeChanges = new ReplaySubject<CredentialsType>();
+
+  get credentialsType(): CredentialsType {
+    return this._credentialsType;
+  }
+
+  set credentialsType(type: CredentialsType) {
+    this._credentialsType = type;
+    this.credentialsTypeChanges.next(type);
   }
 }
