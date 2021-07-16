@@ -31,3 +31,20 @@
 .tooltip {
   margin-left: 4px;
 }
+
+.filters {
+  margin-top: -16px;
+
+  .filter-title {
+    margin: -20px 8px 0 0;
+  }
+
+  .mat-form-field {
+    width: 250px;
+  }
+}
+
+.provider-logo {
+  margin: 10px 0;
+  min-width: 112px;
+}

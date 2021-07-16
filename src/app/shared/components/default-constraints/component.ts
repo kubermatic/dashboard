@@ -18,7 +18,7 @@ import {OPAService} from '@core/services/opa';
 import {UserService} from '@core/services/user';
 import {NotificationService} from '@core/services/notification';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
-import {Constraint, Kind} from '@shared/entity/opa';
+import {Constraint, ConstraintSelector, ConstraintTemplate, Kind} from '@shared/entity/opa';
 import {UserSettings} from '@shared/entity/settings';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
@@ -31,10 +31,13 @@ import {Mode, DefaultConstraintDialog} from './default-constraint-dialog/compone
   styleUrls: ['./style.scss'],
 })
 export class DefaultConstraintComponent implements OnInit, OnChanges, OnDestroy {
+  @Input() displayedColumns: string[];
+
   settings: UserSettings;
   defaultConstraints: Constraint[] = [];
+  constraintTemplates: ConstraintTemplate[] = [];
   dataSource = new MatTableDataSource<Constraint>();
-  @Input() displayedColumns: string[];
+  constraintTemplateFilter: string;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   private readonly _unsubscribe = new Subject<void>();
@@ -58,6 +61,12 @@ export class DefaultConstraintComponent implements OnInit, OnChanges, OnDestroy 
       this.dataSource.data = this.defaultConstraints;
     });
 
+    this._opaService.constraintTemplates
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(
+        constraintTemplates => (this.constraintTemplates = _.sortBy(constraintTemplates, ct => ct.name.toLowerCase()))
+      );
+
     this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.settings = settings;
       this.paginator.pageSize = settings.itemsPerPage;
@@ -69,6 +78,7 @@ export class DefaultConstraintComponent implements OnInit, OnChanges, OnDestroy 
     if (changes.defaultConstraints) {
       this.dataSource.data = this.defaultConstraints;
     }
+    this.filter();
   }
 
   ngOnDestroy(): void {
@@ -87,6 +97,16 @@ export class DefaultConstraintComponent implements OnInit, OnChanges, OnDestroy 
 
   hasNoData(): boolean {
     return _.isEmpty(this.defaultConstraints);
+  }
+
+  hasNoMatches(selector: ConstraintSelector): boolean {
+    return _.isEmpty(selector.providers) && _.isEmpty(selector.labelSelector.matchLabels);
+  }
+
+  filter(): void {
+    this.dataSource.data = this.defaultConstraints.filter(constraint =>
+      this.constraintTemplateFilter ? constraint.spec.constraintType === this.constraintTemplateFilter : true
+    );
   }
 
   displayKindNames(element: Kind[]): string {
