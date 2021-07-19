@@ -163,6 +163,8 @@ export class WizardComponent implements OnInit, OnDestroy {
         spec: {
           template: nodeData.spec,
           replicas: nodeData.count,
+          minReplicas: nodeData.minReplicas,
+          maxReplicas: nodeData.maxReplicas,
           dynamicConfig: nodeData.dynamicConfig,
         },
       },

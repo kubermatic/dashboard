@@ -17,6 +17,10 @@ div.km-os-options {
   margin: 0 0 10px;
 }
 
+mat-checkbox.km-use-autoscaling {
+  margin-bottom: 10px;
+}
+
 mat-button-toggle-group[group='operatingSystemGroup'] {
   flex-wrap: wrap;
 
