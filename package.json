@@ -98,7 +98,7 @@
     "js-beautify": "1.14.0",
     "license-check-and-add": "4.0.2",
     "license-compliance": "1.2.2",
-    "lint-staged": "11.0.0",
+    "lint-staged": "11.0.1",
     "ng2-mock-component": "0.2.0",
     "start-server-and-test": "1.12.6",
     "stylelint": "13.13.1",
