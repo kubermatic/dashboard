@@ -49,6 +49,8 @@ import {NotificationComponent} from '@core/components/notification/component';
 import {EventCardComponent} from '@shared/components/event-card/component';
 import {TabCardComponent} from '@shared/components/tab-card/component';
 import {TabComponent} from '@shared/components/tab-card/tab/component';
+import {TabNavigationComponent} from '@shared/components/tab-navigation/component';
+import {NavTabComponent} from '@shared/components/tab-navigation/tab/component';
 import {LinkLocationPipe} from '@shared/pipes/linklocation';
 import {ClipboardModule} from 'ngx-clipboard';
 import {FilterPipeModule} from 'ngx-filter-pipe';
@@ -62,6 +64,8 @@ import {ChipComponent} from './components/chip/component';
 import {FilteredComboboxComponent} from './components/combobox/component';
 import {OptionDirective} from './components/combobox/directive';
 import {ConfirmationDialogComponent} from './components/confirmation-dialog/component';
+import {DefaultConstraintComponent} from './components/default-constraints/component';
+import {DefaultConstraintDialog} from './components/default-constraints/default-constraint-dialog/component';
 import {DialogTitleComponent} from './components/dialog-title/component';
 import {EditorComponent} from './components/editor/component';
 import {ClusterTypeEOLComponent} from './components/eol/component';
@@ -168,6 +172,10 @@ const components: any[] = [
   TabComponent,
   AutocompleteComponent,
   LinkLocationPipe,
+  TabNavigationComponent,
+  NavTabComponent,
+  DefaultConstraintComponent,
+  DefaultConstraintDialog,
 ];
 
 const directives: any[] = [AutofocusDirective, OptionDirective];

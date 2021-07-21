@@ -35,7 +35,7 @@ import {AdminsComponent} from './admins/component';
 import {AdminSettingsComponent} from './component';
 import {CustomLinksFormComponent} from './custom-link-form/component';
 import {DynamicDatacentersComponent} from './dynamic-datacenters/component';
-import {ConstraintTemplatesComponent} from './constraint-templates/component';
+import {ConstraintTemplatesComponent} from './opa/constraint-templates/component';
 
 describe('AdminSettingsComponent', () => {
   let fixture: ComponentFixture<AdminSettingsComponent>;

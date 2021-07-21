@@ -118,6 +118,14 @@
   margin: 4px 14px 4px 0;
 }
 
+.km-icon-power-on {
+  @include mask-image("/assets/images/icons/power.svg", 18px, $color: #1dc67f);
+}
+
+.km-icon-power-off {
+  @include mask-image("/assets/images/icons/power.svg", 18px, $color: #cad1d9);
+}
+
 .km-icon-download {
   @include mask-image("/assets/images/icons/download.svg", 20px, $color: #fff);
 }

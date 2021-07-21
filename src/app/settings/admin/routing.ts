@@ -47,7 +47,7 @@ const routes: Routes = [
       },
       {
         path: 'opa',
-        loadChildren: () => import('./constraint-templates/module').then(m => m.AdminSettingsOPAModule),
+        loadChildren: () => import('./opa/module').then(m => m.AdminSettingsOPAModule),
       },
     ],
   },

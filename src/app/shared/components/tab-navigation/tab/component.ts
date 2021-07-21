@@ -9,13 +9,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {NgModule} from '@angular/core';
-import {ConstraintTemplatesComponent} from '@app/settings/admin/constraint-templates/component';
-import {AdminSettingsOPARoutingModule} from '@app/settings/admin/constraint-templates/routing';
-import {SharedModule} from '@shared/module';
+import {Component, Input, TemplateRef, ViewChild} from '@angular/core';
 
-@NgModule({
-  imports: [SharedModule, AdminSettingsOPARoutingModule],
-  declarations: [ConstraintTemplatesComponent],
+@Component({
+  selector: 'km-nav-tab',
+  templateUrl: 'template.html',
 })
-export class AdminSettingsOPAModule {}
+export class NavTabComponent {
+  @Input() label: string;
+  @ViewChild(TemplateRef) template: TemplateRef<any>;
+}
