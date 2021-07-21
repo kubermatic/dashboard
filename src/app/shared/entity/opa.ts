@@ -41,6 +41,7 @@ export class Constraint {
   name: string;
   spec: ConstraintSpec;
   status?: ConstraintStatus;
+  labels?: object;
 }
 
 export class ConstraintStatus {

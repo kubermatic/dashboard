@@ -81,7 +81,14 @@ limitations under the License.
         mat-sort-header>Constraint Name
     </th>
     <td mat-cell
-        *matCellDef="let element">{{element.name}}</td>
+        *matCellDef="let element">
+      <div fxLayoutAlign=" center"
+           fxLayoutGap="8px">
+        <span>{{element.name}}</span>
+        <span *ngIf="isDefaultConstraint(element)"
+              class="km-label-primary">Admin Constraint</span>
+      </div>
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="constraintTemplate">
@@ -122,13 +129,13 @@ limitations under the License.
            fxLayoutAlign="end">
         <button mat-icon-button
                 (click)="edit(element, $event)"
-                [disabled]="element.spec.disabled">
+                [disabled]="isDefaultConstraint(element)">
           <i class="km-icon-edit"></i>
         </button>
         <button mat-icon-button
                 [attr.id]="'km-constraint-delete-btn-' + element.name"
                 (click)="delete(element, $event)"
-                [disabled]="element.spec.disabled">
+                [disabled]="isDefaultConstraint(element)">
           <i class="km-icon-delete"></i>
         </button>
       </div>
@@ -155,7 +162,7 @@ limitations under the License.
       *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row
       *matRowDef="let row; columns: displayedColumns"
-      class="km-mat-row km-pointe"
+      class="km-mat-row km-pointer"
       [ngClass]="row.spec?.disabled ? 'row-disabled': ''"
       [matTooltip]="getRowTooltip(row)"
       [attr.id]="row.name"

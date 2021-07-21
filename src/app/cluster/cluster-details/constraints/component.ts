@@ -104,6 +104,10 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
     return _.isEmpty(data) && this.isClusterRunning;
   }
 
+  isDefaultConstraint(element: Constraint): boolean {
+    return !!element.labels && !!Object.keys(element.labels).find(key => key === 'default');
+  }
+
   toggleDetails(element: Constraint): void {
     if (element.spec.disabled) {
       return;
