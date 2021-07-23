@@ -12,7 +12,24 @@
 @import 'variables';
 
 .header {
+  min-height: 75px;
   padding: 0 30px;
+}
+
+.mat-card-title {
+  .km-icon-add {
+    margin-left: 0;
+    margin-right: 12px;
+  }
+}
+
+#km-add-constraint-btn {
+  height: 50px;
+  margin: 2px 0;
+}
+
+.tooltip {
+  margin-left: 4px;
 }
 
 .filters {
@@ -23,25 +40,11 @@
   }
 
   .mat-form-field {
-    width: 280px;
+    width: 250px;
   }
 }
 
-td {
-  &.mat-cell {
-    &.cdk-cell {
-      &.km-violation-details {
-        padding: 0;
-
-        .km-violation-details-wrapper {
-          box-shadow: $border-box-shadow-inset;
-          padding: $item-details-padding;
-        }
-      }
-    }
-  }
-}
-
-.row-disabled {
-  cursor: default;
+.provider-logo {
+  margin: 10px 0;
+  min-width: 112px;
 }

@@ -9,16 +9,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {ConstraintTemplatesComponent} from '@app/settings/admin/constraint-templates/component';
+@import 'variables';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: ConstraintTemplatesComponent,
-  },
-];
+.spec {
+  font-size: $font-size-subhead-lg;
+  line-height: 25px;
+  margin-top: 24px;
+}
 
-@NgModule({imports: [RouterModule.forChild(routes)], exports: [RouterModule]})
-export class AdminSettingsOPARoutingModule {}
+.monaco-editor {
+  margin-top: 16px;
+}

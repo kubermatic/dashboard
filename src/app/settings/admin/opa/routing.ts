@@ -10,12 +10,15 @@
 // limitations under the License.
 
 import {NgModule} from '@angular/core';
-import {ConstraintTemplatesComponent} from '@app/settings/admin/constraint-templates/component';
-import {AdminSettingsOPARoutingModule} from '@app/settings/admin/constraint-templates/routing';
-import {SharedModule} from '@shared/module';
+import {RouterModule, Routes} from '@angular/router';
+import {AdminSettingsOPAComponent} from '@app/settings/admin/opa/component';
 
-@NgModule({
-  imports: [SharedModule, AdminSettingsOPARoutingModule],
-  declarations: [ConstraintTemplatesComponent],
-})
-export class AdminSettingsOPAModule {}
+const routes: Routes = [
+  {
+    path: '',
+    component: AdminSettingsOPAComponent,
+  },
+];
+
+@NgModule({imports: [RouterModule.forChild(routes)], exports: [RouterModule]})
+export class AdminSettingsOPARoutingModule {}

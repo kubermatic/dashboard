@@ -9,28 +9,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
+import {Component} from '@angular/core';
+import {Context} from '@shared/components/tab-card/component';
 
-@mixin theme-tab-card-component($colors) {
-  .km-tab-card {
-    .mat-tab-header {
-      .mat-ink-bar {
-        background-color: map-get($colors, primary);
-      }
-    }
-  }
-
-  .km-tab-card.tab-cards {
-    .mat-tab-header {
-      .mat-tab-label-container {
-        .mat-tab-label:hover:not(.mat-tab-label-active) {
-          background: map-get($colors, background-hover);
-        }
-
-        .mat-tab-label-active {
-          background: map-get($colors, background-card);
-        }
-      }
-    }
-  }
+@Component({
+  selector: 'km-admin-settings-opa',
+  templateUrl: './template.html',
+})
+export class AdminSettingsOPAComponent {
+  readonly Context = Context;
 }

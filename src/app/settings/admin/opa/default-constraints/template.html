@@ -10,13 +10,27 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<div class="header">
+
+<mat-card-header fxLayout="column">
+  <mat-card-title fxFlex
+                  fxLayout="row"
+                  fxLayoutAlign=" center">
+    <div fxFlex>OPA Default Constraints</div>
+    <button mat-flat-button
+            color="quaternary"
+            id="km-add-constraint-btn"
+            fxLayoutAlign="center center"
+            (click)="add()">
+      <i class="km-icon-mask km-icon-add"></i>
+      <span>Add Default Constraint</span>
+    </button>
+  </mat-card-title>
+
   <div class="filters"
        fxLayoutAlign=" center"
        fxLayoutGap="16px">
     <div class="filter-title">Filter by</div>
-    <mat-form-field fxFlex
-                    class="km-dropdown-with-suffix">
+    <mat-form-field class="km-dropdown-with-suffix">
       <mat-label>Constraint Template</mat-label>
       <mat-select disableOptionCentering
                   class="km-select-ellipsis"
@@ -44,36 +58,15 @@ limitations under the License.
       </mat-select>
     </mat-form-field>
   </div>
-  <div fxFlex></div>
-  <button mat-flat-button
-          color="quaternary"
-          matTooltip=""
-          id="km-add-constraint-btn"
-          *ngIf="isClusterRunning"
-          fxLayoutAlign="center center"
-          (click)="add()">
-    <i class="km-icon-mask km-icon-add"></i>
-    <span>Add Constraint</span>
-  </button>
-</div>
+
+</mat-card-header>
 
 <table class="km-table"
        mat-table
        matSort
        matSortActive="constraintName"
        matSortDirection="asc"
-       multiTemplateDataRows
-       [dataSource]="dataSource"
-       [hidden]="isLoadingData(dataSource.data)">
-  <ng-container matColumnDef="stateArrow">
-    <th mat-header-cell
-        *matHeaderCellDef
-        class="km-header-cell"></th>
-    <td mat-cell
-        *matCellDef="let element">
-      <i [ngClass]="isShowDetails[element.name] ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
-    </td>
-  </ng-container>
+       [dataSource]="dataSource">
   <ng-container matColumnDef="name">
     <th mat-header-cell
         *matHeaderCellDef
@@ -81,14 +74,7 @@ limitations under the License.
         mat-sort-header>Constraint Name
     </th>
     <td mat-cell
-        *matCellDef="let element">
-      <div fxLayoutAlign=" center"
-           fxLayoutGap="8px">
-        <span>{{element.name}}</span>
-        <span *ngIf="isDefaultConstraint(element)"
-              class="km-label-primary">Admin Constraint</span>
-      </div>
-    </td>
+        *matCellDef="let element">{{element.name}}</td>
   </ng-container>
 
   <ng-container matColumnDef="constraintTemplate">
@@ -104,19 +90,49 @@ limitations under the License.
   <ng-container matColumnDef="match">
     <th mat-header-cell
         *matHeaderCellDef
-        class="km-header-cell">Match
+        class="km-header-cell"
+        mat-sort-header>Match
     </th>
     <td mat-cell
         *matCellDef="let element">{{displayKindNames(element.spec.match.kinds)}}</td>
   </ng-container>
 
-  <ng-container matColumnDef="violations">
+  <ng-container matColumnDef="appliesTo">
     <th mat-header-cell
         *matHeaderCellDef
-        class="km-header-cell">Violations
+        class="km-header-cell"
+        mat-sort-header>Applies To
     </th>
     <td mat-cell
-        *matCellDef="let element">{{getViolationCount(element.status.violations)}}</td>
+        *matCellDef="let element">
+      <ng-container *ngFor="let provider of element.spec?.selector?.providers">
+        <i class="km-provider-logo km-provider-logo-{{provider}} provider-logo"></i>
+      </ng-container>
+      <km-labels [labels]="element.spec?.selector?.labelSelector?.matchLabels"></km-labels>
+      <ng-container *ngIf="hasNoMatches(element.spec.selector)">*</ng-container>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="status">
+    <th mat-header-cell
+        *matHeaderCellDef
+        class="km-header-cell">
+      <div fxLayout="row">
+        On/Off
+        <div fxFlexAlign="center"
+             fxLayoutAlign="center"
+             class="km-icon-info km-pointer tooltip"
+             matTooltip="Turning off a default constraint disables and hides the constraint for all the user clusters it is applied to."></div>
+      </div>
+    </th>
+    <td mat-cell
+        *matCellDef="let element">
+      <button mat-icon-button
+              (click)="updateStatus(element)"
+              fxLayoutAlign="center center">
+        <i [ngClass]="element.spec?.disabled ? 'km-icon-power-off' : 'km-icon-power-on'"></i>
+      </button>
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="actions">
@@ -128,31 +144,13 @@ limitations under the License.
       <div class="km-table-actions"
            fxLayoutAlign="end">
         <button mat-icon-button
-                (click)="edit(element, $event)"
-                [disabled]="isDefaultConstraint(element)">
+                (click)="edit(element)">
           <i class="km-icon-edit"></i>
         </button>
         <button mat-icon-button
-                [attr.id]="'km-constraint-delete-btn-' + element.name"
-                (click)="delete(element, $event)"
-                [disabled]="isDefaultConstraint(element)">
+                (click)="delete(element)">
           <i class="km-icon-delete"></i>
         </button>
-      </div>
-    </td>
-  </ng-container>
-
-  <ng-container matColumnDef="violationDetails">
-    <td mat-cell
-        *matCellDef="let element; let i=dataIndex"
-        class="km-violation-details"
-        [attr.colspan]="displayedColumns.length">
-      <div class="km-violation-details-wrapper">
-        <km-violation-details-list [violations]="element.status.violations"
-                                   [settings]="settings"
-                                   [constraintName]="element.name"
-                                   [projectId]="projectId"
-                                   [clusterId]="cluster.id"></km-violation-details-list>
       </div>
     </td>
   </ng-container>
@@ -163,22 +161,13 @@ limitations under the License.
   <tr mat-row
       *matRowDef="let row; columns: displayedColumns"
       class="km-mat-row km-pointer"
-      [ngClass]="row.spec?.disabled ? 'row-disabled': ''"
-      [matTooltip]="getRowTooltip(row)"
-      [attr.id]="row.name"
-      (click)="toggleDetails(row)"></tr>
-  <tr mat-row
-      *matRowDef="let row; let i=index; columns: toggledColumns;"
-      [ngClass]="isShowDetails[row.name] ? '' : 'km-hidden'"
-      class="km-mat-row"></tr>
+      [attr.id]="row.name"></tr>
 </table>
 
 <div class="km-row km-empty-list-msg"
-     *ngIf="hasNoData(dataSource.data)">
-  No constraints available.
+     *ngIf="hasNoData()">
+  No default constraints available.
 </div>
-
-<km-loader *ngIf="isLoadingData(dataSource.data)"></km-loader>
 
 <div [hidden]="!isPaginatorVisible()">
   <mat-paginator showFirstLastButtons></mat-paginator>

@@ -12,7 +12,7 @@
 @import 'mixins';
 @import 'variables';
 
-.km-tab-card {
+.km-tab-card.tab-cards {
   margin: 0 (-$content-padding);
 
   .mat-tab-header {
@@ -47,5 +47,22 @@
     .mat-card {
       margin: 0;
     }
+  }
+}
+
+.km-tab-card.tab-navigation {
+  .mat-tab-label-container .mat-tab-label {
+    font-size: $font-size-subhead;
+    font-weight: 400;
+    min-width: 120px;
+    opacity: 1;
+  }
+
+  .mat-ink-bar {
+    transition-duration: 200ms;
+  }
+
+  .tab-content {
+    margin-top: 30px;
   }
 }
