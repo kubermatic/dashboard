@@ -11,23 +11,12 @@
 
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {getEditionDirName} from '@app/dynamic/common';
 import {AdminSettingsOPAComponent} from '@app/settings/admin/opa/component';
 
 const routes: Routes = [
   {
     path: '',
     component: AdminSettingsOPAComponent,
-    children: [
-      {
-        path: '',
-        loadChildren: () =>
-          import(`../../../dynamic/${getEditionDirName()}/default-constraints/module`).then(
-            module => module.DefaultConstraintsModule
-          ),
-        data: {preload: true},
-      },
-    ],
   },
 ];
 

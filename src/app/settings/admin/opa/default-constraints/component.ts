@@ -9,11 +9,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnChanges, OnDestroy, OnInit, ViewChild, SimpleChanges, Input} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit, ViewChild, SimpleChanges} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import {getEditionDirName} from '@app/dynamic/common';
 import {OPAService} from '@core/services/opa';
 import {UserService} from '@core/services/user';
 import {NotificationService} from '@core/services/notification';
@@ -31,8 +32,7 @@ import {Mode, DefaultConstraintDialog} from './default-constraint-dialog/compone
   styleUrls: ['./style.scss'],
 })
 export class DefaultConstraintComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() displayedColumns: string[];
-
+  displayedColumns: string[] = this.getColumns();
   settings: UserSettings;
   defaultConstraints: Constraint[] = [];
   constraintTemplates: ConstraintTemplate[] = [];
@@ -84,6 +84,15 @@ export class DefaultConstraintComponent implements OnInit, OnChanges, OnDestroy 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  getColumns(): string[] {
+    switch (getEditionDirName()) {
+      case 'community':
+        return ['name', 'constraintTemplate', 'match', 'actions'];
+      case 'enterprise':
+        return ['name', 'constraintTemplate', 'match', 'appliesTo', 'status', 'actions'];
+    }
   }
 
   isPaginatorVisible(): boolean {

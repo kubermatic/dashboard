@@ -10,9 +10,9 @@
 // limitations under the License.
 
 @mixin theme-constraints-component($colors) {
-  .row-disabled {
+  .km-pointer.row-disabled {
     &:hover {
-      background-color: transparent !important;
+      background-color: transparent;
     }
 
     td {

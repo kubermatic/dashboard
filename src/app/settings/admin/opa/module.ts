@@ -14,9 +14,18 @@ import {AdminSettingsOPAComponent} from '@app/settings/admin/opa/component';
 import {AdminSettingsOPARoutingModule} from '@app/settings/admin/opa/routing';
 import {SharedModule} from '@shared/module';
 import {ConstraintTemplatesComponent} from '@app/settings/admin/opa/constraint-templates/component';
+import {ConstraintTemplateDialog} from '@app/settings/admin/opa/constraint-templates/constraint-template-dialog/component';
+import {DefaultConstraintComponent} from '@app/settings/admin/opa/default-constraints/component';
+import {DefaultConstraintDialog} from '@app/settings/admin/opa/default-constraints/default-constraint-dialog/component';
 
 @NgModule({
   imports: [SharedModule, AdminSettingsOPARoutingModule],
-  declarations: [AdminSettingsOPAComponent, ConstraintTemplatesComponent],
+  declarations: [
+    AdminSettingsOPAComponent,
+    ConstraintTemplatesComponent,
+    ConstraintTemplateDialog,
+    DefaultConstraintComponent,
+    DefaultConstraintDialog,
+  ],
 })
 export class AdminSettingsOPAModule {}

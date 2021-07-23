@@ -30,7 +30,6 @@ import {VSphereSettingsComponent} from '@app/settings/admin/presets/dialog/steps
 import {EditPresetDialogComponent} from '@app/settings/admin/presets/edit-dialog/component';
 import {SharedModule} from '@shared/module';
 import {AdminSettingsComponent} from './component';
-import {ConstraintTemplateDialog} from './opa/constraint-templates/constraint-template-dialog/component';
 import {DatacenterDataDialogComponent} from './dynamic-datacenters/datacenter-data-dialog/component';
 import {AdminSettingsRoutingModule} from './routing';
 
@@ -56,7 +55,6 @@ import {AdminSettingsRoutingModule} from './routing';
     OpenstackSettingsComponent,
     PacketSettingsComponent,
     VSphereSettingsComponent,
-    ConstraintTemplateDialog,
   ],
   providers: [PresetDialogService],
 })
