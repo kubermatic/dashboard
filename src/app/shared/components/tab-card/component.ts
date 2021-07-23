@@ -15,6 +15,7 @@ import {
   ChangeDetectorRef,
   Component,
   ContentChildren,
+  Input,
   OnDestroy,
   QueryList,
   ViewEncapsulation,
@@ -22,6 +23,11 @@ import {
 import {TabComponent} from '@shared/components/tab-card/tab/component';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+
+export enum Context {
+  Card = 'tab-cards',
+  Navigation = 'tab-navigation',
+}
 
 @Component({
   selector: 'km-tab-card',
@@ -32,6 +38,7 @@ import {takeUntil} from 'rxjs/operators';
 })
 export class TabCardComponent implements AfterContentInit, OnDestroy {
   @ContentChildren(TabComponent) inputTabs: QueryList<TabComponent>;
+  @Input() context: Context = Context.Card;
   tabs: TabComponent[];
   private _unsubscribe = new Subject<void>();
 
@@ -47,6 +54,10 @@ export class TabCardComponent implements AfterContentInit, OnDestroy {
       this.tabs = this.inputTabs.toArray();
       this._cdr.detectChanges();
     });
+  }
+
+  getClass(): string {
+    return 'km-tab-card ' + this.context;
   }
 
   ngOnDestroy(): void {

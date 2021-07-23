@@ -11,11 +11,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<km-tab-navigation>
-  <km-nav-tab label="Constraint Templates">
+<km-tab-card id="km-admin-opa-card"
+             [context]="Context.Navigation">
+  <km-tab label="Constraint Templates">
     <km-constraint-templates-list></km-constraint-templates-list>
-  </km-nav-tab>
-  <km-nav-tab label="Default Constraints">
+  </km-tab>
+  <km-tab label="Default Constraints">
     <km-default-constraint-list></km-default-constraint-list>
-  </km-nav-tab>
-</km-tab-navigation>
+  </km-tab>
+</km-tab-card>

@@ -10,9 +10,12 @@
 // limitations under the License.
 
 import {Component} from '@angular/core';
+import {Context} from '@shared/components/tab-card/component';
 
 @Component({
   selector: 'km-admin-settings-opa',
   templateUrl: './template.html',
 })
-export class AdminSettingsOPAComponent {}
+export class AdminSettingsOPAComponent {
+  readonly Context = Context;
+}

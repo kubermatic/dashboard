@@ -14,6 +14,14 @@
 @mixin theme-tab-card-component($colors) {
   .km-tab-card {
     .mat-tab-header {
+      .mat-ink-bar {
+        background-color: map-get($colors, primary);
+      }
+    }
+  }
+
+  .km-tab-card.tab-cards {
+    .mat-tab-header {
       .mat-tab-label-container {
         .mat-tab-label:hover:not(.mat-tab-label-active) {
           background: map-get($colors, background-hover);
@@ -22,10 +30,6 @@
         .mat-tab-label-active {
           background: map-get($colors, background-card);
         }
-      }
-
-      .mat-ink-bar {
-        background-color: map-get($colors, primary);
       }
     }
   }

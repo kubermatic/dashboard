@@ -11,7 +11,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div class="km-tab-card">
+<div [ngClass]="getClass()">
   <mat-tab-group animationDuration="0ms"
                  dynamicHeight>
     <mat-tab *ngFor="let tab of tabs; let i = index"

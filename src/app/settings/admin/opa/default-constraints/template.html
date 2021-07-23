@@ -11,166 +11,164 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<mat-card>
-  <mat-card-header fxLayout="column">
-    <mat-card-title fxFlex
-                    fxLayout="row"
-                    fxLayoutAlign=" center">
-      <div fxFlex>OPA Default Constraints</div>
-      <button mat-flat-button
-              color="quaternary"
-              id="km-add-constraint-btn"
-              fxLayoutAlign="center center"
-              (click)="add()">
-        <i class="km-icon-mask km-icon-add"></i>
-        <span>Add Default Constraint</span>
+<mat-card-header fxLayout="column">
+  <mat-card-title fxFlex
+                  fxLayout="row"
+                  fxLayoutAlign=" center">
+    <div fxFlex>OPA Default Constraints</div>
+    <button mat-flat-button
+            color="quaternary"
+            id="km-add-constraint-btn"
+            fxLayoutAlign="center center"
+            (click)="add()">
+      <i class="km-icon-mask km-icon-add"></i>
+      <span>Add Default Constraint</span>
+    </button>
+  </mat-card-title>
+
+  <div class="filters"
+       fxLayoutAlign=" center"
+       fxLayoutGap="16px">
+    <div class="filter-title">Filter by</div>
+    <mat-form-field class="km-dropdown-with-suffix">
+      <mat-label>Constraint Template</mat-label>
+      <mat-select disableOptionCentering
+                  class="km-select-ellipsis"
+                  [(ngModel)]="constraintTemplateFilter"
+                  (selectionChange)="filter()">
+        <mat-select-trigger fxFlex
+                            fxLayout="row">
+          <div fxFlex
+               fxLayoutAlign="start">{{constraintTemplateFilter}}</div>
+          <div fxFlex
+               fxLayoutAlign="end">
+            <button *ngIf="constraintTemplateFilter"
+                    (click)="constraintTemplateFilter = undefined; filter(); $event.stopPropagation()"
+                    matSuffix
+                    mat-icon-button
+                    aria-label="Clear">
+              <i class="km-icon-mask km-icon-remove"></i>
+            </button>
+          </div>
+        </mat-select-trigger>
+        <mat-option *ngFor="let constraintTemplate of constraintTemplates"
+                    [value]="constraintTemplate.spec?.crd?.spec?.names?.kind">
+          {{constraintTemplate.spec?.crd?.spec?.names?.kind}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+</mat-card-header>
+
+<table class="km-table"
+       mat-table
+       matSort
+       matSortActive="constraintName"
+       matSortDirection="asc"
+       [dataSource]="dataSource">
+  <ng-container matColumnDef="name">
+    <th mat-header-cell
+        *matHeaderCellDef
+        class="km-header-cell"
+        mat-sort-header>Constraint Name
+    </th>
+    <td mat-cell
+        *matCellDef="let element">{{element.name}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="constraintTemplate">
+    <th mat-header-cell
+        *matHeaderCellDef
+        class="km-header-cell"
+        mat-sort-header>Constraint Template
+    </th>
+    <td mat-cell
+        *matCellDef="let element">{{element.spec.constraintType}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="match">
+    <th mat-header-cell
+        *matHeaderCellDef
+        class="km-header-cell"
+        mat-sort-header>Match
+    </th>
+    <td mat-cell
+        *matCellDef="let element">{{displayKindNames(element.spec.match.kinds)}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="appliesTo">
+    <th mat-header-cell
+        *matHeaderCellDef
+        class="km-header-cell"
+        mat-sort-header>Applies To
+    </th>
+    <td mat-cell
+        *matCellDef="let element">
+      <ng-container *ngFor="let provider of element.spec?.selector?.providers">
+        <i class="km-provider-logo km-provider-logo-{{provider}} provider-logo"></i>
+      </ng-container>
+      <km-labels [labels]="element.spec?.selector?.labelSelector?.matchLabels"></km-labels>
+      <ng-container *ngIf="hasNoMatches(element.spec.selector)">*</ng-container>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="status">
+    <th mat-header-cell
+        *matHeaderCellDef
+        class="km-header-cell">
+      <div fxLayout="row">
+        On/Off
+        <div fxFlexAlign="center"
+             fxLayoutAlign="center"
+             class="km-icon-info km-pointer tooltip"
+             matTooltip="Turning off a default constraint disables and hides the constraint for all the user clusters it is applied to."></div>
+      </div>
+    </th>
+    <td mat-cell
+        *matCellDef="let element">
+      <button mat-icon-button
+              (click)="updateStatus(element)"
+              fxLayoutAlign="center center">
+        <i [ngClass]="element.spec?.disabled ? 'km-icon-power-off' : 'km-icon-power-on'"></i>
       </button>
-    </mat-card-title>
+    </td>
+  </ng-container>
 
-    <div class="filters"
-         fxLayoutAlign=" center"
-         fxLayoutGap="16px">
-      <div class="filter-title">Filter by</div>
-      <mat-form-field class="km-dropdown-with-suffix">
-        <mat-label>Constraint Template</mat-label>
-        <mat-select disableOptionCentering
-                    class="km-select-ellipsis"
-                    [(ngModel)]="constraintTemplateFilter"
-                    (selectionChange)="filter()">
-          <mat-select-trigger fxFlex
-                              fxLayout="row">
-            <div fxFlex
-                 fxLayoutAlign="start">{{constraintTemplateFilter}}</div>
-            <div fxFlex
-                 fxLayoutAlign="end">
-              <button *ngIf="constraintTemplateFilter"
-                      (click)="constraintTemplateFilter = undefined; filter(); $event.stopPropagation()"
-                      matSuffix
-                      mat-icon-button
-                      aria-label="Clear">
-                <i class="km-icon-mask km-icon-remove"></i>
-              </button>
-            </div>
-          </mat-select-trigger>
-          <mat-option *ngFor="let constraintTemplate of constraintTemplates"
-                      [value]="constraintTemplate.spec?.crd?.spec?.names?.kind">
-            {{constraintTemplate.spec?.crd?.spec?.names?.kind}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-
-  </mat-card-header>
-
-  <table class="km-table"
-         mat-table
-         matSort
-         matSortActive="constraintName"
-         matSortDirection="asc"
-         [dataSource]="dataSource">
-    <ng-container matColumnDef="name">
-      <th mat-header-cell
-          *matHeaderCellDef
-          class="km-header-cell"
-          mat-sort-header>Constraint Name
-      </th>
-      <td mat-cell
-          *matCellDef="let element">{{element.name}}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="constraintTemplate">
-      <th mat-header-cell
-          *matHeaderCellDef
-          class="km-header-cell"
-          mat-sort-header>Constraint Template
-      </th>
-      <td mat-cell
-          *matCellDef="let element">{{element.spec.constraintType}}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="match">
-      <th mat-header-cell
-          *matHeaderCellDef
-          class="km-header-cell"
-          mat-sort-header>Match
-      </th>
-      <td mat-cell
-          *matCellDef="let element">{{displayKindNames(element.spec.match.kinds)}}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="appliesTo">
-      <th mat-header-cell
-          *matHeaderCellDef
-          class="km-header-cell"
-          mat-sort-header>Applies To
-      </th>
-      <td mat-cell
-          *matCellDef="let element">
-        <ng-container *ngFor="let provider of element.spec?.selector?.providers">
-          <i class="km-provider-logo km-provider-logo-{{provider}} provider-logo"></i>
-        </ng-container>
-        <km-labels [labels]="element.spec?.selector?.labelSelector?.matchLabels"></km-labels>
-        <ng-container *ngIf="hasNoMatches(element.spec.selector)">*</ng-container>
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="status">
-      <th mat-header-cell
-          *matHeaderCellDef
-          class="km-header-cell">
-        <div fxLayout="row">
-          On/Off
-          <div fxFlexAlign="center"
-               fxLayoutAlign="center"
-               class="km-icon-info km-pointer tooltip"
-               matTooltip="Turning off a default constraint disables and hides the constraint for all the user clusters it is applied to."></div>
-        </div>
-      </th>
-      <td mat-cell
-          *matCellDef="let element">
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell
+        *matHeaderCellDef
+        class="km-header-cell"></th>
+    <td mat-cell
+        *matCellDef="let element">
+      <div class="km-table-actions"
+           fxLayoutAlign="end">
         <button mat-icon-button
-                (click)="updateStatus(element)"
-                fxLayoutAlign="center center">
-          <i [ngClass]="element.spec?.disabled ? 'km-icon-power-off' : 'km-icon-power-on'"></i>
+                (click)="edit(element)">
+          <i class="km-icon-edit"></i>
         </button>
-      </td>
-    </ng-container>
+        <button mat-icon-button
+                (click)="delete(element)">
+          <i class="km-icon-delete"></i>
+        </button>
+      </div>
+    </td>
+  </ng-container>
 
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell
-          *matHeaderCellDef
-          class="km-header-cell"></th>
-      <td mat-cell
-          *matCellDef="let element">
-        <div class="km-table-actions"
-             fxLayoutAlign="end">
-          <button mat-icon-button
-                  (click)="edit(element)">
-            <i class="km-icon-edit"></i>
-          </button>
-          <button mat-icon-button
-                  (click)="delete(element)">
-            <i class="km-icon-delete"></i>
-          </button>
-        </div>
-      </td>
-    </ng-container>
+  <tr mat-header-row
+      class="km-header-row"
+      *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      class="km-mat-row km-pointer"
+      [attr.id]="row.name"></tr>
+</table>
 
-    <tr mat-header-row
-        class="km-header-row"
-        *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row
-        *matRowDef="let row; columns: displayedColumns"
-        class="km-mat-row km-pointer"
-        [attr.id]="row.name"></tr>
-  </table>
+<div class="km-row km-empty-list-msg"
+     *ngIf="hasNoData()">
+  No default constraints available.
+</div>
 
-  <div class="km-row km-empty-list-msg"
-       *ngIf="hasNoData()">
-    No default constraints available.
-  </div>
-
-  <div [hidden]="!isPaginatorVisible()">
-    <mat-paginator showFirstLastButtons></mat-paginator>
-  </div>
-</mat-card>
+<div [hidden]="!isPaginatorVisible()">
+  <mat-paginator showFirstLastButtons></mat-paginator>
+</div>
