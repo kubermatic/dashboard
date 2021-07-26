@@ -9,18 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component} from '@angular/core';
-import {Context} from '@shared/components/tab-card/component';
-import {getEditionDirName} from '@app/dynamic/common';
+import {NgModule} from '@angular/core';
+import {RouterModule} from '@angular/router';
 
-@Component({
-  selector: 'km-admin-settings-opa',
-  templateUrl: './template.html',
-})
-export class AdminSettingsOPAComponent {
-  readonly Context = Context;
-
-  isEE(): boolean {
-    return getEditionDirName() === 'enterprise';
-  }
-}
+@NgModule({imports: [RouterModule.forChild([])]})
+export class AllowedRegistriesModule {}

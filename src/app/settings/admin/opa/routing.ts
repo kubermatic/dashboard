@@ -12,11 +12,22 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AdminSettingsOPAComponent} from '@app/settings/admin/opa/component';
+import {getEditionDirName} from '@app/dynamic/common';
 
 const routes: Routes = [
   {
     path: '',
     component: AdminSettingsOPAComponent,
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import(`../../../dynamic/${getEditionDirName()}/allowed-registries/module`).then(
+            module => module.AllowedRegistriesModule
+          ),
+        data: {preload: true},
+      },
+    ],
   },
 ];
 
