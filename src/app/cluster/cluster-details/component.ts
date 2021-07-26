@@ -10,7 +10,7 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {ApiService} from '@core/services/api';
@@ -54,6 +54,7 @@ import {EditClusterComponent} from './edit-cluster/component';
 import {EditSSHKeysComponent} from './edit-sshkeys/component';
 import {RevokeTokenComponent} from './revoke-token/component';
 import {ShareKubeconfigComponent} from './share-kubeconfig/component';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 
 @Component({
   selector: 'km-cluster-details',
@@ -337,6 +338,38 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     }
 
     return getExternalCCMMigrationStatusMessage(this.cluster.status.externalCCMMigration);
+  }
+
+  startExternalCCMMigration(): void {
+    if (
+      !this.cluster ||
+      !this.cluster.status ||
+      this.cluster.status.externalCCMMigration !== ExternalCCMMigrationStatus.Supported
+    ) {
+      return;
+    }
+
+    const dialogConfig: MatDialogConfig = {
+      disableClose: false,
+      hasBackdrop: true,
+      data: {
+        title: 'External CCM Migration',
+        message: `Start external CCM migration procedure of ${this.cluster.name} cluster?`,
+        confirmLabel: 'Start',
+      },
+    };
+
+    this._matDialog
+      .open(ConfirmationDialogComponent, dialogConfig)
+      .afterClosed()
+      .pipe(filter(isConfirmed => isConfirmed))
+      .pipe(switchMap(_ => this._clusterService.startExternalCCMMigration(this.projectID, this.cluster.id)))
+      .pipe(take(1))
+      .subscribe(_ =>
+        this._notificationService.success(
+          `External CCM migration procedure of ${this.cluster.name} cluster has started`
+        )
+      );
   }
 
   isLoaded(): boolean {
