@@ -265,7 +265,7 @@ export class ClusterService {
 
   startExternalCCMMigration(projectID: string, cluster: string): Observable<any> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/externalccmmigration`;
-    return this._http.get<any>(url);
+    return this._http.post<any>(url, {});
   }
 
   private _getClusters(projectID: string): Observable<Cluster[]> {
