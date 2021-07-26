@@ -107,6 +107,10 @@
     }
   }
 
+  .km-alternative-hover:hover {
+    color: map-get($colors, secondary);
+  }
+
   .km-login-footer {
     * {
       color: #fff;

@@ -24,7 +24,13 @@ import {PathParam} from '@core/services/params';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {Addon} from '@shared/entity/addon';
-import {Cluster, getClusterProvider, MasterVersion} from '@shared/entity/cluster';
+import {
+  Cluster,
+  ExternalCCMMigrationStatus,
+  getClusterProvider,
+  getExternalCCMMigrationStatusMessage,
+  MasterVersion,
+} from '@shared/entity/cluster';
 import {View} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {Event} from '@shared/entity/event';
@@ -55,6 +61,7 @@ import {ShareKubeconfigComponent} from './share-kubeconfig/component';
   styleUrls: ['./style.scss'],
 })
 export class ClusterDetailsComponent implements OnInit, OnDestroy {
+  externalCCMMigrationStatus = ExternalCCMMigrationStatus;
   cluster: Cluster;
   nodeDc: Datacenter;
   seed: string;
@@ -314,6 +321,22 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   getProxyURL(): string {
     return this._api.getDashboardProxyURL(this.projectID, this.cluster.id);
+  }
+
+  getExternalCCMMigrationStatus(): string {
+    if (!this.cluster || !this.cluster.status) {
+      return '';
+    }
+
+    return _.startCase(this.cluster.status.externalCCMMigration);
+  }
+
+  getExternalCCMMigrationStatusMessage(): string {
+    if (!this.cluster || !this.cluster.status) {
+      return '';
+    }
+
+    return getExternalCCMMigrationStatusMessage(this.cluster.status.externalCCMMigration);
   }
 
   isLoaded(): boolean {

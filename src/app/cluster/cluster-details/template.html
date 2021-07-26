@@ -150,6 +150,21 @@ limitations under the License.
           <div value>{{cluster.spec.clusterNetwork.proxyMode}}</div>
         </km-property>
 
+        <km-property *ngIf="cluster?.status?.externalCCMMigration">
+          <div key>External CCM Migration Status</div>
+          <div value
+               fxLayoutAlign=" center"
+               fxLayoutGap="4px"
+               [ngClass]="{'km-pointer km-alternative-hover': cluster.status.externalCCMMigration === externalCCMMigrationStatus.Supported}"
+               [matTooltip]="getExternalCCMMigrationStatusMessage()">
+            <i class="km-icon-update-available"
+               *ngIf="cluster.status.externalCCMMigration === externalCCMMigrationStatus.Supported"></i>
+            <i class="km-icon-pending km-info"
+               *ngIf="cluster.status.externalCCMMigration === externalCCMMigrationStatus.InProgress"></i>
+            <span>{{getExternalCCMMigrationStatus()}}</span>
+          </div>
+        </km-property>
+
         <km-property *ngIf="nodeDc?.spec?.provider !== 'bringyourown'">
           <div key>Region</div>
           <div value>{{nodeDc?.spec?.country}} ({{nodeDc?.spec?.location}})</div>
