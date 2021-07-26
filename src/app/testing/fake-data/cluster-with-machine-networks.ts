@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Cluster, ClusterType} from '@shared/entity/cluster';
+import {Cluster, ClusterType, ExternalCCMMigrationStatus} from '@shared/entity/cluster';
 
 // fakeClusterWithMachineNetwork could contain 6 IPs
 export function fakeClusterWithMachineNetwork(): Cluster {
@@ -43,6 +43,7 @@ export function fakeClusterWithMachineNetwork(): Cluster {
     status: {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
       version: '1.8.5',
+      externalCCMMigration: ExternalCCMMigrationStatus.NotNeeded,
     },
     type: ClusterType.Kubernetes,
   };
@@ -80,6 +81,7 @@ export function fakeGatewayInCidr(): Cluster {
     status: {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
       version: '1.8.5',
+      externalCCMMigration: ExternalCCMMigrationStatus.NotNeeded,
     },
     type: ClusterType.Kubernetes,
   };
@@ -117,6 +119,7 @@ export function fakeGatewayNotInCidr(): Cluster {
     status: {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
       version: '1.8.5',
+      externalCCMMigration: ExternalCCMMigrationStatus.NotNeeded,
     },
     type: ClusterType.Kubernetes,
   };
