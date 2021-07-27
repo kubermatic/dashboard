@@ -27,13 +27,13 @@ import {KubevirtProviderSettingsComponent} from '../kubevirt-provider-settings/c
 import {OpenstackProviderSettingsComponent} from '../openstack-provider-settings/component';
 import {PacketProviderSettingsComponent} from '../packet-provider-settings/component';
 import {VSphereProviderSettingsComponent} from '../vsphere-provider-settings/component';
-import {DigitaloceanProviderSettingsComponent} from './component';
+import {AnexiaProviderSettingsComponent} from './component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
-describe('DigitaloceanProviderSettingsComponent', () => {
-  let fixture: ComponentFixture<DigitaloceanProviderSettingsComponent>;
-  let component: DigitaloceanProviderSettingsComponent;
+describe('AnexiaProviderSettingsComponent', () => {
+  let fixture: ComponentFixture<AnexiaProviderSettingsComponent>;
+  let component: AnexiaProviderSettingsComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -41,7 +41,7 @@ describe('DigitaloceanProviderSettingsComponent', () => {
       declarations: [
         EditProviderSettingsComponent,
         AWSProviderSettingsComponent,
-        DigitaloceanProviderSettingsComponent,
+        AnexiaProviderSettingsComponent,
         HetznerProviderSettingsComponent,
         OpenstackProviderSettingsComponent,
         VSphereProviderSettingsComponent,
@@ -59,16 +59,16 @@ describe('DigitaloceanProviderSettingsComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DigitaloceanProviderSettingsComponent);
+    fixture = TestBed.createComponent(AnexiaProviderSettingsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create the digitalocean provider settings cmp', () => {
+  it('should create the anexia provider settings cmp', () => {
     expect(component).toBeTruthy();
   });
 
   it('form valid after creating', () => {
-    expect(component.form.valid).toBeTruthy();
+    expect(component.form.valid).toBeFalsy();
   });
 });
