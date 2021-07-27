@@ -10,66 +10,40 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {ClusterService} from '@core/services/cluster';
 import {ProviderSettingsPatch} from '@shared/entity/cluster';
-import {Subject} from 'rxjs';
-import {debounceTime, takeUntil} from 'rxjs/operators';
+import {merge, Subject} from 'rxjs';
+import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
+
+enum Control {
+  Username = 'username',
+  Password = 'password',
+}
 
 @Component({
   selector: 'km-openstack-provider-settings',
   templateUrl: './template.html',
 })
 export class OpenstackProviderSettingsComponent implements OnInit, OnDestroy {
+  private readonly _debounceTime = 500;
+  private readonly _unsubscribe = new Subject<void>();
+  readonly Control = Control;
   form: FormGroup;
 
-  private readonly _debounceTime = 1000;
-  private _formData = {username: '', password: ''};
-  private _unsubscribe = new Subject<void>();
-
-  constructor(private clusterService: ClusterService) {}
+  constructor(private readonly _clusterService: ClusterService, private readonly _builder: FormBuilder) {}
 
   ngOnInit(): void {
-    this.form = new FormGroup({
-      username: new FormControl(''),
-      password: new FormControl(''),
+    this.form = this._builder.group({
+      [Control.Username]: this._builder.control(''),
+      [Control.Password]: this._builder.control(''),
     });
 
-    this.form.valueChanges
+    merge(this.form.get(Control.Username).valueChanges, this.form.get(Control.Password).valueChanges)
+      .pipe(distinctUntilChanged())
       .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
-        if (data.username !== this._formData.username || data.password !== this._formData.password) {
-          this._formData = data;
-          this.setValidators();
-          this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
-        }
-      });
-  }
-
-  get username(): AbstractControl {
-    return this.form.controls.username;
-  }
-
-  get password(): AbstractControl {
-    return this.form.controls.password;
-  }
-
-  setValidators(): void {
-    if (!this.username.value && !this.password.value) {
-      this.username.clearValidators();
-      this.password.clearValidators();
-    } else {
-      this.username.setValidators([Validators.required]);
-      this.password.setValidators([Validators.required]);
-    }
-
-    this.username.updateValueAndValidity();
-    this.password.updateValueAndValidity();
-  }
-
-  isRequiredField(): string {
-    return !this.username.value && !this.password.value ? '' : '*';
+      .subscribe(_ => this._clusterService.changeProviderSettingsPatch(this._getProviderSettingsPatch()));
   }
 
   ngOnDestroy(): void {
@@ -77,12 +51,12 @@ export class OpenstackProviderSettingsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  getProviderSettingsPatch(): ProviderSettingsPatch {
+  private _getProviderSettingsPatch(): ProviderSettingsPatch {
     return {
       cloudSpecPatch: {
         openstack: {
-          password: this.form.controls.password.value,
-          username: this.form.controls.username.value,
+          password: this.form.get(Control.Password).value,
+          username: this.form.get(Control.Username).value,
         },
       },
       isValid: this.form.valid,

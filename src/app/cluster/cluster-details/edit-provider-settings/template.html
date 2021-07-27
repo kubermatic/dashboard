@@ -10,18 +10,31 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<mat-card-header>
-  <mat-card-title>Provider Credentials</mat-card-title>
-</mat-card-header>
 
-<km-alibaba-provider-settings *ngIf="!!cluster.spec.cloud.alibaba"></km-alibaba-provider-settings>
-<km-aws-provider-settings *ngIf="!!cluster.spec.cloud.aws"></km-aws-provider-settings>
-<km-digitalocean-provider-settings *ngIf="!!cluster.spec.cloud.digitalocean"></km-digitalocean-provider-settings>
-<km-hetzner-provider-settings *ngIf="!!cluster.spec.cloud.hetzner"></km-hetzner-provider-settings>
-<km-openstack-provider-settings *ngIf="!!cluster.spec.cloud.openstack"></km-openstack-provider-settings>
-<km-vsphere-provider-settings *ngIf="!!cluster.spec.cloud.vsphere"></km-vsphere-provider-settings>
-<km-azure-provider-settings *ngIf="!!cluster.spec.cloud.azure"></km-azure-provider-settings>
-<km-packet-provider-settings *ngIf="!!cluster.spec.cloud.packet"
-                             [cluster]="cluster"></km-packet-provider-settings>
-<km-gcp-provider-settings *ngIf="!!cluster.spec.cloud.gcp"></km-gcp-provider-settings>
-<km-kubevirt-provider-settings *ngIf="!!cluster.spec.cloud.kubevirt"></km-kubevirt-provider-settings>
+<div id="km-edit-cluster-dialog">
+  <km-dialog-title>Provider Settings</km-dialog-title>
+
+  <mat-dialog-content>
+    <km-anexia-provider-settings *ngIf="!!cluster.spec.cloud.anexia"></km-anexia-provider-settings>
+    <km-alibaba-provider-settings *ngIf="!!cluster.spec.cloud.alibaba"></km-alibaba-provider-settings>
+    <km-aws-provider-settings *ngIf="!!cluster.spec.cloud.aws"></km-aws-provider-settings>
+    <km-digitalocean-provider-settings *ngIf="!!cluster.spec.cloud.digitalocean"></km-digitalocean-provider-settings>
+    <km-hetzner-provider-settings *ngIf="!!cluster.spec.cloud.hetzner"></km-hetzner-provider-settings>
+    <km-openstack-provider-settings *ngIf="!!cluster.spec.cloud.openstack"></km-openstack-provider-settings>
+    <km-vsphere-provider-settings *ngIf="!!cluster.spec.cloud.vsphere"></km-vsphere-provider-settings>
+    <km-azure-provider-settings *ngIf="!!cluster.spec.cloud.azure"></km-azure-provider-settings>
+    <km-packet-provider-settings *ngIf="!!cluster.spec.cloud.packet"
+                                 [billingCycle]="cluster.spec.cloud.packet.billingCycle"></km-packet-provider-settings>
+    <km-gcp-provider-settings *ngIf="!!cluster.spec.cloud.gcp"></km-gcp-provider-settings>
+    <km-kubevirt-provider-settings *ngIf="!!cluster.spec.cloud.kubevirt"></km-kubevirt-provider-settings>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button id="km-edit-cluster-dialog-edit-btn"
+            mat-flat-button
+            type="submit"
+            [disabled]="!providerSettingsPatch.isValid">
+      Save
+    </button>
+  </mat-dialog-actions>
+</div>

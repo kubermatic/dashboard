@@ -10,58 +10,43 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormGroup} from '@angular/forms';
 import {ClusterService} from '@core/services/cluster';
 import {ProviderSettingsPatch} from '@shared/entity/cluster';
 import {Subject} from 'rxjs';
-import {debounceTime, takeUntil} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
+
+enum Control {
+  Kubeconfig = 'kubeconfig',
+}
 
 @Component({
   selector: 'km-kubevirt-provider-settings',
   templateUrl: './template.html',
 })
 export class KubevirtProviderSettingsComponent implements OnInit, OnDestroy {
+  private readonly _debounceTime = 500;
+  private readonly _unsubscribe = new Subject<void>();
+  readonly Control = Control;
   form: FormGroup;
-
-  private readonly _debounceTime = 1000;
-  private _formData = {kubeconfig: ''};
-  private _unsubscribe = new Subject<void>();
-
-  constructor(private clusterService: ClusterService) {}
-
-  ngOnInit(): void {
-    this.form = new FormGroup({
-      kubeconfig: new FormControl(''),
-    });
-
-    this.form.valueChanges
-      .pipe(debounceTime(this._debounceTime))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
-        if (data.kubeconfig !== this._formData.kubeconfig) {
-          this._formData = data;
-          this.setValidators();
-          this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
-        }
-      });
-  }
 
   get kubeconfig(): AbstractControl {
     return this.form.controls.kubeconfig;
   }
 
-  setValidators(): void {
-    if (!this.kubeconfig.value) {
-      this.kubeconfig.clearValidators();
-    } else {
-      this.kubeconfig.setValidators([Validators.required]);
-    }
+  constructor(private readonly _clusterService: ClusterService, private readonly _builder: FormBuilder) {}
 
-    this.kubeconfig.updateValueAndValidity();
-  }
+  ngOnInit(): void {
+    this.form = this._builder.group({
+      [Control.Kubeconfig]: this._builder.control(''),
+    });
 
-  isRequiredField(): string {
-    return !this.kubeconfig.value ? '' : '*';
+    this.form
+      .get(Control.Kubeconfig)
+      .valueChanges.pipe(distinctUntilChanged())
+      .pipe(debounceTime(this._debounceTime))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => this._clusterService.changeProviderSettingsPatch(this._getProviderSettingsPatch()));
   }
 
   ngOnDestroy(): void {
@@ -69,11 +54,11 @@ export class KubevirtProviderSettingsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  getProviderSettingsPatch(): ProviderSettingsPatch {
+  private _getProviderSettingsPatch(): ProviderSettingsPatch {
     return {
       cloudSpecPatch: {
         kubevirt: {
-          kubeconfig: this.form.controls.kubeconfig.value,
+          kubeconfig: this.form.get(Control.Kubeconfig).value,
         },
       },
       isValid: this.form.valid,

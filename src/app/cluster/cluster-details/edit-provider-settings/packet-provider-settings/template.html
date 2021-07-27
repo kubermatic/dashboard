@@ -13,31 +13,33 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column">
   <mat-form-field fxFlex>
-    <mat-label>API Token{{isRequiredField()}}</mat-label>
+    <mat-label>API Token</mat-label>
     <input matInput
-           formControlName="apiKey"
-           name="apiKey"
+           [formControlName]="Control.ApiKey"
+           [name]="Control.ApiKey"
            type="password"
-           autocomplete="off">
-    <mat-error *ngIf="form.controls.apiKey.hasError('required')">
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.get(Control.ApiKey).hasError('required')">
       Packet API key is <strong>required</strong>.
     </mat-error>
-    <mat-error *ngIf="form.controls.apiKey.hasError('maxlength')">
+    <mat-error *ngIf="form.get(Control.ApiKey).hasError('maxlength')">
       Packet API key must be less than <strong>256</strong> characters long.
     </mat-error>
   </mat-form-field>
 
   <mat-form-field fxFlex>
-    <mat-label>Project ID{{isRequiredField()}}</mat-label>
+    <mat-label>Project ID</mat-label>
     <input matInput
-           formControlName="projectID"
-           name="projectID"
+           [formControlName]="Control.ProjectID"
+           [name]="Control.ProjectID"
            type="text"
-           autocomplete="off">
-    <mat-error *ngIf="form.controls.projectID.hasError('required')">
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.get(Control.ProjectID).hasError('required')">
       Packet project ID is <strong>required</strong>.
     </mat-error>
-    <mat-error *ngIf="form.controls.projectID.hasError('maxlength')">
+    <mat-error *ngIf="form.get(Control.ProjectID).hasError('maxlength')">
       Packet project ID must be less than <strong>256</strong> characters long.
     </mat-error>
   </mat-form-field>
@@ -46,8 +48,9 @@ limitations under the License.
        class="mat-select-container">
     <mat-form-field>
       <mat-label>Billing Cycle</mat-label>
-      <mat-select formControlName="billingCycle"
-                  disableOptionCentering>
+      <mat-select [formControlName]="Control.BillingCycle"
+                  disableOptionCentering
+                  required>
         <mat-option *ngFor="let billingCycle of getAvailableBillingCycles()"
                     [value]="billingCycle">
           {{billingCycle}}

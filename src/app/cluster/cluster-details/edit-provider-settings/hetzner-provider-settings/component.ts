@@ -10,59 +10,39 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {ClusterService} from '@core/services/cluster';
 import {ProviderSettingsPatch} from '@shared/entity/cluster';
 import {Subject} from 'rxjs';
-import {debounceTime, takeUntil} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
+
+enum Control {
+  Token = 'token',
+}
 
 @Component({
   selector: 'km-hetzner-provider-settings',
   templateUrl: './template.html',
 })
 export class HetznerProviderSettingsComponent implements OnInit, OnDestroy {
+  private readonly _debounceTime = 500;
+  private readonly _unsubscribe = new Subject<void>();
+  readonly Control = Control;
   form: FormGroup;
 
-  private readonly _debounceTime = 1000;
-  private _formData = {token: ''};
-  private _unsubscribe = new Subject<void>();
-
-  constructor(private clusterService: ClusterService) {}
+  constructor(private readonly _clusterService: ClusterService, private readonly _builder: FormBuilder) {}
 
   ngOnInit(): void {
-    this.form = new FormGroup({
-      token: new FormControl(''),
+    this.form = this._builder.group({
+      [Control.Token]: this._builder.control(''),
     });
 
-    this.form.valueChanges
+    this.form
+      .get(Control.Token)
+      .valueChanges.pipe(distinctUntilChanged())
       .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
-        if (data.token !== this._formData.token) {
-          this._formData = data;
-          this.setValidators();
-          this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
-        }
-      });
-  }
-
-  get token(): AbstractControl {
-    return this.form.controls.token;
-  }
-
-  setValidators(): void {
-    if (!this.token.value) {
-      this.token.clearValidators();
-    } else {
-      const tokenLen = 64;
-      this.token.setValidators([Validators.required, Validators.minLength(tokenLen), Validators.maxLength(tokenLen)]);
-    }
-
-    this.token.updateValueAndValidity();
-  }
-
-  isRequiredField(): string {
-    return !this.token.value ? '' : '*';
+      .subscribe(_ => this._clusterService.changeProviderSettingsPatch(this._getProviderSettingsPatch()));
   }
 
   ngOnDestroy(): void {
@@ -70,11 +50,11 @@ export class HetznerProviderSettingsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  getProviderSettingsPatch(): ProviderSettingsPatch {
+  private _getProviderSettingsPatch(): ProviderSettingsPatch {
     return {
       cloudSpecPatch: {
         hetzner: {
-          token: this.form.controls.token.value,
+          token: this.form.get(Control.Token).value,
         },
       },
       isValid: this.form.valid,
