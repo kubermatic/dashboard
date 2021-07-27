@@ -263,6 +263,11 @@ export class ClusterService {
     return this._http.delete(url);
   }
 
+  startExternalCCMMigration(projectID: string, cluster: string): Observable<any> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/externalccmmigration`;
+    return this._http.post<any>(url, {});
+  }
+
   private _getClusters(projectID: string): Observable<Cluster[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters`;
     return this._http.get<Cluster[]>(url).pipe(catchError(() => of<Cluster[]>()));

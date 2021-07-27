@@ -250,6 +250,29 @@ export class MLASettings {
 export class Status {
   url: string;
   version: string;
+  externalCCMMigration: ExternalCCMMigrationStatus;
+}
+
+export enum ExternalCCMMigrationStatus {
+  NotNeeded = 'NotNeeded',
+  Supported = 'Supported',
+  Unsupported = 'Unsupported',
+  InProgress = 'InProgress',
+}
+
+export function getExternalCCMMigrationStatusMessage(status: ExternalCCMMigrationStatus): string {
+  switch (status) {
+    case ExternalCCMMigrationStatus.InProgress:
+      return 'Migration procedure to the external CCM is in progress.';
+    case ExternalCCMMigrationStatus.NotNeeded:
+      return 'External CCM is already in use.';
+    case ExternalCCMMigrationStatus.Supported:
+      return 'External CCM is not used but supported. Click here to start migration.';
+    case ExternalCCMMigrationStatus.Unsupported:
+      return 'External CCM is not used and not supported.';
+    default:
+      return '';
+  }
 }
 
 export class MasterVersion {

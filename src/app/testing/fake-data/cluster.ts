@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Cluster, ClusterType, Token} from '@shared/entity/cluster';
+import {Cluster, ClusterType, ExternalCCMMigrationStatus, Token} from '@shared/entity/cluster';
 
 export function fakeDigitaloceanCluster(): Cluster {
   return {
@@ -28,6 +28,7 @@ export function fakeDigitaloceanCluster(): Cluster {
     status: {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
       version: '1.8.5',
+      externalCCMMigration: ExternalCCMMigrationStatus.Unsupported,
     },
     type: ClusterType.Kubernetes,
   };
@@ -52,6 +53,7 @@ export function fakePacketCluster(): Cluster {
     status: {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
       version: '1.8.5',
+      externalCCMMigration: ExternalCCMMigrationStatus.Unsupported,
     },
     type: ClusterType.Kubernetes,
   };
@@ -76,6 +78,7 @@ export function fakeGCPCluster(): Cluster {
     status: {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
       version: '1.8.5',
+      externalCCMMigration: ExternalCCMMigrationStatus.Unsupported,
     },
     type: ClusterType.Kubernetes,
   };
@@ -98,6 +101,7 @@ export function fakeHetznerCluster(): Cluster {
     status: {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
       version: '1.8.5',
+      externalCCMMigration: ExternalCCMMigrationStatus.NotNeeded,
     },
     type: ClusterType.Kubernetes,
   };
@@ -127,6 +131,7 @@ export function fakeVSphereCluster(): Cluster {
     status: {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
       version: '1.8.5',
+      externalCCMMigration: ExternalCCMMigrationStatus.Unsupported,
     },
     type: ClusterType.Kubernetes,
   };
@@ -155,6 +160,7 @@ export function fakeAWSCluster(): Cluster {
     status: {
       url: 'https://vr4m6wpqv6.europe-west3-c.dev.kubermatic.io:30003',
       version: '1.9.6',
+      externalCCMMigration: ExternalCCMMigrationStatus.Unsupported,
     },
     type: ClusterType.Kubernetes,
   };
@@ -185,6 +191,7 @@ export function fakeOpenstackCluster(): Cluster {
     status: {
       url: 'https://vr4m6wpqv6.europe-west3-c.dev.kubermatic.io:30003',
       version: '1.9.6',
+      externalCCMMigration: ExternalCCMMigrationStatus.Unsupported,
     },
     type: ClusterType.Kubernetes,
   };
@@ -217,6 +224,7 @@ export function fakeAzureCluster(): Cluster {
     status: {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
       version: '1.8.5',
+      externalCCMMigration: ExternalCCMMigrationStatus.Unsupported,
     },
     type: ClusterType.Kubernetes,
   };
@@ -237,6 +245,7 @@ export function fakeBringyourownCluster(): Cluster {
     status: {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
       version: '1.8.5',
+      externalCCMMigration: ExternalCCMMigrationStatus.Unsupported,
     },
     type: ClusterType.Kubernetes,
   };
@@ -260,6 +269,7 @@ export function fakeAlibabaCluster(): Cluster {
     status: {
       url: 'https://vr4m6wpqv6.europe-west3-c.dev.kubermatic.io:30003',
       version: '1.9.6',
+      externalCCMMigration: ExternalCCMMigrationStatus.Unsupported,
     },
     type: ClusterType.Kubernetes,
   };
