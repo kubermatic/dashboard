@@ -13,19 +13,18 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ClusterService} from '@core/services/cluster';
 import {ProviderSettingsPatch} from '@shared/entity/cluster';
-import {merge, Subject} from 'rxjs';
-import {debounceTime, takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs';
+import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
 
 enum Control {
-  AccessKeyID = 'accessKeyID',
-  AccessKeySecret = 'accessKeySecret',
+  Token = 'token',
 }
 
 @Component({
-  selector: 'km-alibaba-provider-settings',
+  selector: 'km-anexia-provider-settings',
   templateUrl: './template.html',
 })
-export class AlibabaProviderSettingsComponent implements OnInit, OnDestroy {
+export class AnexiaProviderSettingsComponent implements OnInit, OnDestroy {
   private readonly _debounceTime = 500;
   private readonly _unsubscribe = new Subject<void>();
   readonly Control = Control;
@@ -35,11 +34,12 @@ export class AlibabaProviderSettingsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Control.AccessKeyID]: this._builder.control('', Validators.required),
-      [Control.AccessKeySecret]: this._builder.control('', Validators.required),
+      [Control.Token]: this._builder.control('', [Validators.required]),
     });
 
-    merge(this.form.get(Control.AccessKeyID).valueChanges, this.form.get(Control.AccessKeySecret).valueChanges)
+    this.form
+      .get(Control.Token)
+      .valueChanges.pipe(distinctUntilChanged())
       .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._clusterService.changeProviderSettingsPatch(this._getProviderSettingsPatch()));
@@ -53,9 +53,8 @@ export class AlibabaProviderSettingsComponent implements OnInit, OnDestroy {
   private _getProviderSettingsPatch(): ProviderSettingsPatch {
     return {
       cloudSpecPatch: {
-        alibaba: {
-          accessKeyID: this.form.get(Control.AccessKeyID).value,
-          accessKeySecret: this.form.get(Control.AccessKeySecret).value,
+        anexia: {
+          token: this.form.get(Control.Token).value,
         },
       },
       isValid: this.form.valid,

@@ -13,47 +13,48 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column">
   <mat-form-field fxFlex>
-    <mat-label>Client ID{{isRequiredField()}}</mat-label>
+    <mat-label>Client ID</mat-label>
     <input matInput
-           formControlName="clientID"
-           name="clientID"
-           type="password"
-           autocomplete="off">
-    <mat-error *ngIf="form.controls.clientID.hasError('required')">
+           [formControlName]="Control.ClientID"
+           [name]="Control.ClientID"
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.get(Control.ClientID).hasError('required')">
       Client ID is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
 
   <mat-form-field fxFlex>
-    <mat-label>Client Secret{{isRequiredField()}}</mat-label>
+    <mat-label>Client Secret</mat-label>
     <input matInput
-           formControlName="clientSecret"
-           name="clientSecret"
+           [formControlName]="Control.ClientSecret"
+           [name]="Control.ClientSecret"
            type="password"
-           autocomplete="off">
-    <mat-error *ngIf="form.controls.clientSecret.hasError('required')">
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.get(Control.ClientSecret).hasError('required')">
       Client Secret is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
 
   <mat-form-field fxFlex>
-    <mat-label>Tenant ID{{isRequiredField()}}</mat-label>
+    <mat-label>Tenant ID</mat-label>
     <input matInput
-           formControlName="tenantID"
-           type="password"
-           autocomplete="off">
-    <mat-error *ngIf="form.controls.tenantID.hasError('required')">
+           [formControlName]="Control.TenantID"
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.get(Control.TenantID).hasError('required')">
       Tenant ID is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
 
   <mat-form-field fxFlex>
-    <mat-label>Subscription ID{{isRequiredField()}}</mat-label>
+    <mat-label>Subscription ID</mat-label>
     <input matInput
-           formControlName="subscriptionID"
-           type="password"
-           autocomplete="off">
-    <mat-error *ngIf="form.controls.subscriptionID.hasError('required')">
+           [formControlName]="Control.SubscriptionID"
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.get(Control.SubscriptionID).hasError('required')">
       Subscription ID is <strong>required</strong>.
     </mat-error>
   </mat-form-field>

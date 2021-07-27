@@ -12,6 +12,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
+import {EditProviderSettingsComponent} from '@app/cluster/cluster-details/edit-provider-settings/component';
 import {AppConfigService} from '@app/config.service';
 import {ApiService} from '@core/services/api';
 import {ClusterService} from '@core/services/cluster';
@@ -328,6 +329,11 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     const modal = this._matDialog.open(EditClusterComponent);
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.projectID = this.projectID;
+  }
+
+  editProviderSettings(): void {
+    const modal = this._matDialog.open(EditProviderSettingsComponent);
+    modal.componentInstance.cluster = this.cluster;
   }
 
   isSSHKeysEditEnabled(): boolean {

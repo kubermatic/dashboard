@@ -10,78 +10,49 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ClusterService} from '@core/services/cluster';
 import {ProviderSettingsPatch} from '@shared/entity/cluster';
-import {Subject} from 'rxjs';
-import {debounceTime, takeUntil} from 'rxjs/operators';
+import {merge, Subject} from 'rxjs';
+import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
+
+enum Control {
+  InfraManagementUsername = 'infraManagementUsername',
+  InfraManagementPassword = 'infraManagementPassword',
+  Username = 'username',
+  Password = 'password',
+}
 
 @Component({
   selector: 'km-vsphere-provider-settings',
   templateUrl: './template.html',
 })
 export class VSphereProviderSettingsComponent implements OnInit, OnDestroy {
+  private readonly _debounceTime = 500;
+  private readonly _unsubscribe = new Subject<void>();
+  readonly Control = Control;
   form: FormGroup;
 
-  private readonly _debounceTime = 1000;
-  private _formData = {
-    infraManagementUsername: '',
-    infraManagementPassword: '',
-    username: '',
-    password: '',
-  };
-  private _unsubscribe = new Subject<void>();
-
-  constructor(private clusterService: ClusterService) {}
+  constructor(private readonly _clusterService: ClusterService, private readonly _builder: FormBuilder) {}
 
   ngOnInit(): void {
-    this.form = new FormGroup({
-      infraManagementUsername: new FormControl(''),
-      infraManagementPassword: new FormControl(''),
-      username: new FormControl(''),
-      password: new FormControl(''),
+    this.form = this._builder.group({
+      [Control.InfraManagementUsername]: this._builder.control('', Validators.required),
+      [Control.InfraManagementPassword]: this._builder.control('', Validators.required),
+      [Control.Username]: this._builder.control('', Validators.required),
+      [Control.Password]: this._builder.control('', Validators.required),
     });
 
-    this.form.valueChanges
+    merge(
+      this.form.get(Control.InfraManagementUsername).valueChanges,
+      this.form.get(Control.InfraManagementPassword).valueChanges,
+      this.form.get(Control.Username).valueChanges,
+      this.form.get(Control.Password).valueChanges
+    )
+      .pipe(distinctUntilChanged())
       .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
-        if (
-          data.infraManagementUsername !== this._formData.infraManagementUsername ||
-          data.infraManagementPassword !== this._formData.infraManagementPassword ||
-          data.username !== this._formData.username ||
-          data.password !== this._formData.password
-        ) {
-          this._formData = data;
-          this.setValidators();
-          this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
-        }
-      });
-  }
-
-  get infraManagementUsername(): AbstractControl {
-    return this.form.controls.infraManagementUsername;
-  }
-
-  get infraManagementPassword(): AbstractControl {
-    return this.form.controls.infraManagementPassword;
-  }
-
-  setValidators(): void {
-    if (!this.infraManagementUsername.value && !this.infraManagementPassword.value) {
-      this.infraManagementUsername.clearValidators();
-      this.infraManagementPassword.clearValidators();
-    } else {
-      this.infraManagementUsername.setValidators([Validators.required]);
-      this.infraManagementPassword.setValidators([Validators.required]);
-    }
-
-    this.infraManagementUsername.updateValueAndValidity();
-    this.infraManagementPassword.updateValueAndValidity();
-  }
-
-  isRequiredField(): string {
-    return !this.infraManagementUsername.value && !this.infraManagementPassword.value ? '' : '*';
+      .subscribe(_ => this._clusterService.changeProviderSettingsPatch(this._getProviderSettingsPatch()));
   }
 
   ngOnDestroy(): void {
@@ -89,15 +60,15 @@ export class VSphereProviderSettingsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  getProviderSettingsPatch(): ProviderSettingsPatch {
+  private _getProviderSettingsPatch(): ProviderSettingsPatch {
     return {
       cloudSpecPatch: {
         vsphere: {
-          password: this.form.controls.password.value,
-          username: this.form.controls.username.value,
+          password: this.form.get(Control.Password).value,
+          username: this.form.get(Control.Username).value,
           infraManagementUser: {
-            username: this.form.controls.infraManagementUsername.value,
-            password: this.form.controls.infraManagementPassword.value,
+            username: this.form.get(Control.InfraManagementUsername).value,
+            password: this.form.get(Control.InfraManagementPassword).value,
           },
         },
       },

@@ -98,6 +98,11 @@ limitations under the License.
             <span>Edit Cluster</span>
           </button>
           <button mat-menu-item
+                  (click)="editProviderSettings()"
+                  [disabled]="!isClusterRunning || !isEditEnabled()">
+            <span>Edit Provider</span>
+          </button>
+          <button mat-menu-item
                   (click)="editSSHKeys()"
                   *ngIf="cluster.spec.enableUserSSHKeyAgent"
                   [disabled]="!isSSHKeysEditEnabled()">

@@ -13,25 +13,27 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column">
   <mat-form-field fxFlex>
-    <mat-label>Username{{isRequiredField()}}</mat-label>
+    <mat-label>Username</mat-label>
     <input matInput
-           formControlName="username"
-           name="username"
+           [formControlName]="Control.Username"
+           [name]="Control.Username"
            type="text"
            title="Username"
-           autocomplete="off">
-    <mat-error *ngIf="form.controls.username.hasError('required')">
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.get(Control.Username).hasError('required')">
       Username is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
   <mat-form-field fxFlex>
-    <mat-label>Password{{isRequiredField()}}</mat-label>
+    <mat-label>Password</mat-label>
     <input matInput
-           formControlName="password"
+           [formControlName]="Control.Password"
            type="password"
            title="Password"
-           autocomplete="off">
-    <mat-error *ngIf="form.controls.password.hasError('required')">
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.get(Control.Password).hasError('required')">
       Password is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
