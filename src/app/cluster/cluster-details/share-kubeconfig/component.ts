@@ -27,6 +27,7 @@ export class ShareKubeconfigComponent implements OnInit {
   @Input() projectID: string;
   private userID: string;
   kubeconfigLink: string;
+  kubeloginCommand = 'TODO';
 
   constructor(
     private readonly _api: ApiService,
