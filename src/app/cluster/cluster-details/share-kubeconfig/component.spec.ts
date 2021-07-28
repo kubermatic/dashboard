@@ -30,7 +30,7 @@ describe('ShareKubeconfigComponent', () => {
 
   beforeEach(
     waitForAsync(() => {
-      const apiMock = {getShareKubeconfigURL: jest.fn()};
+      const apiMock = {getShareKubeconfigURL: jest.fn(), getClusterOIDCParams: jest.fn()};
       const authMock = {authenticated: jest.fn()};
       TestBed.configureTestingModule({
         imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
