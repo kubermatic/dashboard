@@ -3,6 +3,14 @@
                   fxLayout="row"
                   fxLayoutAlign=" center">
     <div fxFlex>OPA Allowed Registries</div>
+    <button mat-flat-button
+            color="quaternary"
+            id="km-add-allowed-registry-btn"
+            fxLayoutAlign="center center"
+            (click)="add()">
+      <i class="km-icon-mask km-icon-add"></i>
+      <span>Add Allowed Registries</span>
+    </button>
   </mat-card-title>
 </mat-card-header>
 
@@ -38,6 +46,15 @@
         *matCellDef="let element">
       <div class="km-table-actions"
            fxLayoutAlign="end">
+        <button mat-icon-button
+                (click)="edit(element)">
+          <i class="km-icon-edit"></i>
+        </button>
+        <button mat-icon-button
+                (click)="delete(element)"
+                [attr.id]="'km-allowed-registry-delete-btn-' + element.name">
+          <i class="km-icon-delete"></i>
+        </button>
       </div>
     </td>
   </ng-container>

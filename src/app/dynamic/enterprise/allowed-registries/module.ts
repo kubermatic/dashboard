@@ -2,6 +2,7 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {SharedModule} from '@shared/module';
 import {AllowedRegistriesComponent} from './component';
+import {AllowedRegistryDialog} from './allowed-registry-dialog/component';
 import {AllowedRegistriesService} from './service';
 
 const routes: Routes = [{path: '', outlet: 'allowed-registries', component: AllowedRegistriesComponent}];
@@ -9,6 +10,6 @@ const routes: Routes = [{path: '', outlet: 'allowed-registries', component: Allo
 @NgModule({
   imports: [SharedModule, RouterModule.forChild(routes)],
   providers: [AllowedRegistriesService],
-  declarations: [AllowedRegistriesComponent],
+  declarations: [AllowedRegistriesComponent, AllowedRegistryDialog],
 })
 export class AllowedRegistriesModule {}
