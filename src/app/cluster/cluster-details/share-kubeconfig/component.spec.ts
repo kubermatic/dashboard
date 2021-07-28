@@ -23,6 +23,7 @@ import {Auth} from '@core/services/auth/service';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
 import {ShareKubeconfigComponent} from './component';
+import {ApiMockService} from '@app/testing/services/api-mock';
 
 describe('ShareKubeconfigComponent', () => {
   let component: ShareKubeconfigComponent;
@@ -30,13 +31,12 @@ describe('ShareKubeconfigComponent', () => {
 
   beforeEach(
     waitForAsync(() => {
-      const apiMock = {getShareKubeconfigURL: jest.fn(), getClusterOIDCParams: jest.fn()};
       const authMock = {authenticated: jest.fn()};
       TestBed.configureTestingModule({
         imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
         declarations: [ShareKubeconfigComponent],
         providers: [
-          {provide: ApiService, useValue: apiMock},
+          {provide: ApiService, useClass: ApiMockService},
           {provide: Auth, useValue: authMock},
           {provide: UserService, useClass: UserMockService},
           {
