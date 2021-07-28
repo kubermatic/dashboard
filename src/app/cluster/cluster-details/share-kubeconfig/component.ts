@@ -13,7 +13,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ApiService} from '@core/services/api';
 import {Auth} from '@core/services/auth/service';
 import {UserService} from '@core/services/user';
-import {Cluster} from '@shared/entity/cluster';
+import {Cluster, OIDCParams} from '@shared/entity/cluster';
 import {take} from 'rxjs/operators';
 
 @Component({
@@ -27,7 +27,7 @@ export class ShareKubeconfigComponent implements OnInit {
   @Input() projectID: string;
   private userID: string;
   kubeconfigLink: string;
-  kubeloginCommand = 'TODO';
+  oidcParams: OIDCParams;
 
   constructor(
     private readonly _api: ApiService,
@@ -42,5 +42,17 @@ export class ShareKubeconfigComponent implements OnInit {
         this.kubeconfigLink = this._api.getShareKubeconfigURL(this.projectID, this.seed, this.cluster.id, this.userID);
       });
     }
+
+    this._api
+      .getClusterOIDCParams(this.projectID, this.cluster.id)
+      .pipe(take(1))
+      .subscribe(oidcParams => (this.oidcParams = oidcParams));
+  }
+
+  getKubeloginCommand(): string {
+    const iu = this.oidcParams && this.oidcParams.issuerUrl ? this.oidcParams.issuerUrl : '<<ISSUER_URL>>';
+    const ci = this.oidcParams && this.oidcParams.clientId ? this.oidcParams.clientId : '<<CLIENT_ID>>';
+    const cs = this.oidcParams && this.oidcParams.clientSecret ? this.oidcParams.clientSecret : '<<CLIENT_SECRET>>';
+    return `kubectl oidc-login setup --oidc-issuer-url=${iu} --oidc-client-id=${ci} --oidc-client-secret=${cs}`;
   }
 }

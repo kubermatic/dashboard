@@ -467,3 +467,9 @@ export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
 export const AVAILABLE_PACKET_BILLING_CYCLES = ['hourly', 'daily'];
 
 export const AZURE_LOADBALANCER_SKUS = ['basic', 'standard'];
+
+export interface OIDCParams {
+  issuerUrl?: string;
+  clientId?: string;
+  clientSecret?: string;
+}
