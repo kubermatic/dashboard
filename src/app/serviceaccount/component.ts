@@ -25,7 +25,6 @@ import {Project} from '@shared/entity/project';
 import {ServiceAccount} from '@shared/entity/service-account';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils} from '@shared/utils/member-utils/member-utils';
-import {ProjectUtils} from '@shared/utils/project-utils/project-utils';
 import * as _ from 'lodash';
 import {EMPTY, merge, of, Subject, timer} from 'rxjs';
 import {catchError, filter, switchMap, switchMapTo, take, takeUntil} from 'rxjs/operators';
@@ -43,7 +42,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
   isShowToken = [];
   tokenList = [];
   isTokenInitializing = [];
-  displayedColumns: string[] = ['stateArrow', 'status', 'name', 'group', 'creationDate', 'actions'];
+  displayedColumns: string[] = ['stateArrow', 'name', 'group', 'creationDate', 'actions'];
   toggledColumns: string[] = ['token'];
   dataSource = new MatTableDataSource<ServiceAccount>();
 
@@ -109,10 +108,6 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
-  }
-
-  getStateIconClass(status: string): string {
-    return ProjectUtils.getStateIconClass(status);
   }
 
   getGroupDisplayName(group: string): string {
