@@ -20,7 +20,7 @@ limitations under the License.
     <km-default-constraint-list></km-default-constraint-list>
   </km-tab>
   <km-tab label="Allowed Registries"
-          *ngIf="isEE()">
+          *ngIf="isEnterpriseEdition()">
     <!-- Load the allowed registries module -->
     <router-outlet name="allowed-registries"></router-outlet>
   </km-tab>

@@ -20,7 +20,7 @@ import {isEnterpriseEdition} from '@app/dynamic/common';
 export class AdminSettingsOPAComponent {
   readonly Context = Context;
 
-  isEE(): boolean {
+  isEnterpriseEdition(): boolean {
     return isEnterpriseEdition();
   }
 }
