@@ -11,7 +11,7 @@
 
 import {Component} from '@angular/core';
 import {Context} from '@shared/components/tab-card/component';
-import {getEditionDirName} from '@app/dynamic/common';
+import {isEnterpriseEdition} from '@app/dynamic/common';
 
 @Component({
   selector: 'km-admin-settings-opa',
@@ -21,6 +21,6 @@ export class AdminSettingsOPAComponent {
   readonly Context = Context;
 
   isEE(): boolean {
-    return getEditionDirName() === 'enterprise';
+    return isEnterpriseEdition();
   }
 }
