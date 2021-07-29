@@ -82,10 +82,6 @@ describe('ServiceAccountComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should get correct state icon class', () => {
-    expect(component.getStateIconClass('Active')).toBe(HealthStatusColor.Green);
-  });
-
   it('should get correct group display name', () => {
     expect(component.getGroupDisplayName('editors')).toBe('Editor');
   });
