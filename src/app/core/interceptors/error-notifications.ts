@@ -9,11 +9,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
+import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {Injectable, Injector} from '@angular/core';
 import {NotificationService} from '@core/services/notification';
 import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
+
+export interface APIError {
+  error: Error;
+}
+
+export interface Error {
+  code: number;
+  message: string;
+}
 
 @Injectable()
 export class ErrorNotificationsInterceptor implements HttpInterceptor {
@@ -24,45 +33,64 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
     'configs.config.gatekeeper.sh "config" not found',
   ];
 
+  private readonly _errorMap = new Map<string, string>([
+    ['"AccessKeyId" is not valid', 'Invalid credentials provided'],
+    ['InvalidAccessKeySecret', 'Invalid credentials provided'],
+  ]);
+
   constructor(private readonly _inj: Injector) {
     this._notificationService = this._inj.get(NotificationService);
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
-      tap(
-        () => {},
-        errorInstance => {
-          if (!errorInstance) {
+      tap({
+        next: () => {},
+        error: (httpError: HttpErrorResponse) => {
+          if (!httpError) {
             return;
           }
 
-          if (this._shouldSilenceError(errorInstance)) {
+          let error = this._toError(httpError);
+          if (this._shouldSilenceError(error)) {
             return;
           }
 
-          let errorMsg = '';
+          error = this._mapError(error);
+          this._notificationService.error(error.message);
+        },
+      })
+    );
+  }
 
-          if (errorInstance.status) {
-            errorMsg += `Error ${errorInstance.status} `;
-          }
+  private _mapError(error: Error): Error {
+    for (const key of this._errorMap.keys()) {
+      if (error.message.includes(key)) {
+        error.message = this._errorMap.get(key);
+        break;
+      }
+    }
 
-          errorMsg += errorInstance.error.error.message || errorInstance.message || errorInstance.statusText;
-          this._notificationService.error(errorMsg);
+    return error;
+  }
+
+  private _shouldSilenceError(error: Error): boolean {
+    return this._silenceErrArr.some(partial => error.message.includes(partial));
+  }
+
+  private _isAPIError(httpError: HttpErrorResponse): boolean {
+    return !!httpError.error && !!httpError.error.error;
+  }
+
+  private _toError(httpError: HttpErrorResponse): Error {
+    return this._isAPIError(httpError)
+      ? {
+          message: (httpError.error as APIError).error.message,
+          code: (httpError.error as APIError).error.code,
         }
-      )
-    );
-  }
-
-  private _isAPIError(instance: any): boolean {
-    return !!instance.error && !!instance.error.error;
-  }
-
-  private _shouldSilenceError(instance: any): boolean {
-    return (
-      (this._isAPIError(instance) &&
-        this._silenceErrArr.some(partial => instance.error.error.message.includes(partial))) ||
-      this._silenceErrArr.some(partial => instance.message.includes(partial))
-    );
+      : {
+          message: httpError.message || httpError.statusText,
+          code: httpError.status,
+        };
   }
 }
