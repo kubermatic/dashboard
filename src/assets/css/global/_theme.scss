@@ -250,4 +250,10 @@
   .km-randomize-btn i {
     background-color: transparent;
   }
+
+  .km-notification {
+    &.mat-snack-bar-container {
+      background-color: map-get($colors, option-background);
+    }
+  }
 }

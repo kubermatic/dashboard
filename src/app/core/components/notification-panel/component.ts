@@ -25,11 +25,11 @@ import {takeUntil} from 'rxjs/operators';
   animations: [slideOut],
 })
 export class NotificationPanelComponent implements OnInit, OnDestroy {
-  notifications: Notification[] = [];
   private _isOpen = false;
   private _filter: NotificationType = undefined;
   private _isAnimating = false;
   private _unsubscribe: Subject<void> = new Subject<void>();
+  notifications: Notification[] = [];
 
   constructor(
     private readonly _notificationService: NotificationService,
@@ -74,6 +74,10 @@ export class NotificationPanelComponent implements OnInit, OnDestroy {
 
   toggle(): void {
     this._isOpen = !this._isOpen;
+
+    if (this._isOpen) {
+      this._onOpen();
+    }
   }
 
   isVisible(notification: Notification): boolean {
@@ -84,6 +88,12 @@ export class NotificationPanelComponent implements OnInit, OnDestroy {
     return this._filter === undefined
       ? this.notifications.length
       : this.notifications.filter(n => this._filter === n.type).length;
+  }
+
+  getUnreadNotificationCount(): number {
+    return this._filter === undefined
+      ? this.notifications.filter(n => n.unread).length
+      : this.notifications.filter(n => this._filter === n.type && n.unread).length;
   }
 
   getNotificationIconClass(type: NotificationType): string {
@@ -135,5 +145,9 @@ export class NotificationPanelComponent implements OnInit, OnDestroy {
 
   finishAnimation(): void {
     this._isAnimating = false;
+  }
+
+  private _onOpen(): void {
+    this._notificationService.markAllAsRead();
   }
 }
