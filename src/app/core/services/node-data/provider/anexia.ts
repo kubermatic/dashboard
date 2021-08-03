@@ -19,10 +19,12 @@ import {Cluster} from '@shared/entity/cluster';
 import {AnexiaTemplate, AnexiaVlan} from '@shared/entity/provider/anexia';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
-import {catchError, filter, take, switchMap, tap} from 'rxjs/operators';
+import {catchError, filter, take, switchMap, tap, debounceTime} from 'rxjs/operators';
 import {NodeDataService} from '../service';
 
 export class NodeDataAnexiaProvider {
+  private readonly _debounce = 500;
+
   constructor(
     private readonly _nodeDataService: NodeDataService,
     private readonly _clusterSpecService: ClusterSpecService,
@@ -37,6 +39,7 @@ export class NodeDataAnexiaProvider {
       case NodeDataMode.Wizard:
         return this._clusterSpecService.clusterChanges
           .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.ANEXIA))
+          .pipe(debounceTime(this._debounce))
           .pipe(
             switchMap(cluster =>
               this._presetService
@@ -58,6 +61,7 @@ export class NodeDataAnexiaProvider {
       case NodeDataMode.Dialog: {
         let selectedProject: string;
         return this._projectService.selectedProject
+          .pipe(debounceTime(this._debounce))
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(switchMap(_ => this._apiService.getAnexiaVlans(selectedProject, this._clusterSpecService.cluster.id)))
@@ -83,6 +87,7 @@ export class NodeDataAnexiaProvider {
       case NodeDataMode.Wizard:
         return this._clusterSpecService.clusterChanges
           .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.ANEXIA))
+          .pipe(debounceTime(this._debounce))
           .pipe(tap(c => (cluster = c)))
           .pipe(switchMap(_ => this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(take(1))))
           .pipe(tap(dc => (location = dc.spec.anexia.location_id)))
@@ -108,6 +113,7 @@ export class NodeDataAnexiaProvider {
       case NodeDataMode.Dialog: {
         let selectedProject: string;
         return this._projectService.selectedProject
+          .pipe(debounceTime(this._debounce))
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterSpecService.cluster.spec.cloud.dc)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))

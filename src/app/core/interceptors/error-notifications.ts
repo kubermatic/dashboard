@@ -36,6 +36,7 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
   private readonly _errorMap = new Map<string, string>([
     ['"AccessKeyId" is not valid', 'Invalid credentials provided'],
     ['InvalidAccessKeySecret', 'Invalid credentials provided'],
+    ['Unauthorized', 'Invalid credentials provided'],
   ]);
 
   constructor(private readonly _inj: Injector) {
