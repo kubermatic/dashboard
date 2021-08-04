@@ -37,7 +37,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@angular/animations": "12.1.1",
+    "@angular/animations": "12.1.4",
     "@angular/cdk": "12.1.1",
     "@angular/common": "12.1.2",
     "@angular/compiler": "12.1.1",
@@ -72,7 +72,7 @@
     "rxjs": "7.2.0",
     "rxjs-compat": "6.6.7",
     "semver": "7.3.5",
-    "swagger-ui": "3.51.1",
+    "swagger-ui": "3.51.2",
     "zone.js": "0.11.4"
   },
   "devDependencies": {
