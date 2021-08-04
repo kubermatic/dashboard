@@ -3,6 +3,7 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import {DynamicTab} from '@shared/model/dynamic-tab';
 import {AllowedRegistriesService} from './service';
 import {UserService} from '@core/services/user';
 import {NotificationService} from '@core/services/notification';
@@ -18,7 +19,7 @@ import {Mode, AllowedRegistryDialog} from './allowed-registry-dialog/component';
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class AllowedRegistriesComponent implements OnInit, OnChanges, OnDestroy {
+export class AllowedRegistriesComponent extends DynamicTab implements OnInit, OnChanges, OnDestroy {
   allowedRegistries: AllowedRegistry[] = [];
   dataSource = new MatTableDataSource<AllowedRegistry>();
   displayedColumns: string[] = ['name', 'registryPrefix', 'actions'];
@@ -31,7 +32,9 @@ export class AllowedRegistriesComponent implements OnInit, OnChanges, OnDestroy 
     private readonly _userService: UserService,
     private readonly _notificationService: NotificationService,
     private readonly _matDialog: MatDialog
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit() {
     this.dataSource.data = this.allowedRegistries;

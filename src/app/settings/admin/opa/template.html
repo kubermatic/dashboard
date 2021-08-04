@@ -12,16 +12,15 @@ limitations under the License.
 -->
 
 <km-tab-card id="km-admin-opa-card"
-             [context]="Context.Navigation">
+             [context]="Context.Navigation"
+             [dynamicTabs]="dynamicTabs">
   <km-tab label="Constraint Templates">
     <km-constraint-templates-list></km-constraint-templates-list>
   </km-tab>
   <km-tab label="Default Constraints">
     <km-default-constraint-list></km-default-constraint-list>
   </km-tab>
-  <km-tab label="Allowed Registries"
-          *ngIf="isEnterpriseEdition()">
-    <!-- Load the allowed registries module -->
-    <router-outlet name="allowed-registries"></router-outlet>
-  </km-tab>
+  <!-- Load the allowed registries module -->
+  <router-outlet name="allowed-registries"
+                 (activate)="onActivate($event)"></router-outlet>
 </km-tab-card>
