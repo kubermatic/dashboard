@@ -108,8 +108,8 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
       .subscribe(_ => this.form.reset());
 
     this._clusterSpecService.clusterChanges
-      .pipe(debounceTime(this._debounceTime))
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.AZURE))
+      .pipe(debounceTime(this._debounceTime))
       .pipe(tap(_ => (!this.hasRequiredCredentials() ? this._clearResourceGroup() : null)))
       .pipe(switchMap(_ => this._resourceGroupObservable()))
       .pipe(takeUntil(this._unsubscribe))
@@ -435,8 +435,8 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
 
   private _getCredentialChanges(...changes: Observable<any>[]): Observable<any> {
     return merge(this._clusterSpecService.clusterChanges, ...changes)
-      .pipe(debounceTime(this._debounceTime))
-      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.AZURE));
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.AZURE))
+      .pipe(debounceTime(this._debounceTime));
   }
 
   private _getDatacenter(): Observable<Datacenter> {
