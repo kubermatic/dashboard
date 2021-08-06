@@ -42,6 +42,7 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
     ['InvalidAccessKeySecret', Errors.InvalidCredentials],
     ['Unauthorized', Errors.InvalidCredentials],
     ['validate the provided access credentials', Errors.InvalidCredentials],
+    ['Unable to authenticate you', Errors.InvalidCredentials],
   ]);
 
   constructor(private readonly _inj: Injector) {
