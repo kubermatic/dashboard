@@ -24,6 +24,10 @@ export interface Error {
   message: string;
 }
 
+enum Errors {
+  InvalidCredentials = 'Invalid credentials provided',
+}
+
 @Injectable()
 export class ErrorNotificationsInterceptor implements HttpInterceptor {
   private readonly _notificationService: NotificationService;
@@ -34,9 +38,10 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
   ];
 
   private readonly _errorMap = new Map<string, string>([
-    ['"AccessKeyId" is not valid', 'Invalid credentials provided'],
-    ['InvalidAccessKeySecret', 'Invalid credentials provided'],
-    ['Unauthorized', 'Invalid credentials provided'],
+    ['"AccessKeyId" is not valid', Errors.InvalidCredentials],
+    ['InvalidAccessKeySecret', Errors.InvalidCredentials],
+    ['Unauthorized', Errors.InvalidCredentials],
+    ['validate the provided access credentials', Errors.InvalidCredentials],
     ['Check to make sure you have the correct tenant ID', 'Invalid tenant ID provided'],
     ['Invalid client secret is provided', 'Invalid client secret provided'],
     ['The provided subscription identifier .* is malformed or invalid', 'Invalid subscription ID provided'],
@@ -73,7 +78,7 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
 
   private _mapError(error: Error): Error {
     for (const key of this._errorMap.keys()) {
-      if (error.message.includes(key) || error.message.match(key)) {
+      if (error.message.toLocaleLowerCase().includes(key.toLocaleLowerCase()) || error.message.match(key)) {
         error.message = this._errorMap.get(key);
         break;
       }

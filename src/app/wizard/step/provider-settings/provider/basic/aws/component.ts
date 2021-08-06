@@ -60,7 +60,7 @@ enum VPCState {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AWSProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  private readonly _debounceTime = 250;
+  private readonly _debounceTime = 500;
 
   readonly Controls = Controls;
 
@@ -93,6 +93,7 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
 
     this.form.valueChanges
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.AWS))
+      .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
         this._presets.enablePresets(
@@ -113,7 +114,8 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
 
     this.form
       .get(Controls.VPCID)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .valueChanges.pipe(debounceTime(this._debounceTime))
+      .pipe(takeUntil(this._unsubscribe))
       .pipe(distinctUntilChanged())
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
   }
