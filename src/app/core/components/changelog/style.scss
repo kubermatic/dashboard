@@ -17,6 +17,10 @@
   padding: 2px 4px 2px 2px;
 }
 
+:host {
+  height: 100%;
+}
+
 .header-title {
   font-size: $font-size-card-title;
   padding-bottom: 8px;
