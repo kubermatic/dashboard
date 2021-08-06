@@ -9,15 +9,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'mixins';
-@import 'variables';
+@use 'mixins';
+@use 'variables';
 
 header {
-  height: $toolbar-height;
+  height: variables.$toolbar-height;
 }
 
 .km-navbar {
-  @include size(100%, $toolbar-height);
+  @include mixins.size(100%, variables.$toolbar-height);
 
   padding-left: 10px;
   position: relative;
@@ -26,18 +26,18 @@ header {
   .km-header-logo {
     display: block;
     height: 30px;
-    margin-left: $content-padding - 10px;
+    margin-left: variables.$content-padding - 10px;
     width: 200px;
   }
 }
 
 .km-icon-arrow-up {
-  @include size(14px);
+  @include mixins.size(14px);
 
   margin: 0 8px 0 24px;
 }
 
-@include breakpoint('small') {
+@include mixins.breakpoint('small') {
   .collapse-button {
     display: none;
   }

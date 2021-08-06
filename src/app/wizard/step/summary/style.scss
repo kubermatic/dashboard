@@ -9,8 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
-@import 'mixins';
+@use 'variables';
+@use 'mixins';
 
 :host {
   counter-reset: section-number;
@@ -20,11 +20,11 @@
   margin: 45px 0 0;
 
   .header {
-    font-size: $font-size-subhead-lg;
+    font-size: variables.$font-size-subhead-lg;
     margin-bottom: 16px;
 
     &::before {
-      @include size(22px);
+      @include mixins.size(22px);
 
       align-items: center;
       border-radius: 50%;
@@ -33,7 +33,7 @@
       content: counter(section-number);
       counter-increment: section-number;
       display: inline-flex;
-      font-size: $font-size-body;
+      font-size: variables.$font-size-body;
       justify-content: center;
       margin-right: 12px;
     }
@@ -47,7 +47,7 @@
 }
 
 .km-os-image {
-  @include size(28px);
+  @include mixins.size(28px);
 }
 
 .km-icon-key {

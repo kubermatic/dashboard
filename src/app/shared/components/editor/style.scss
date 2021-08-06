@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
+@use 'variables';
 
 $numbers-column-width: 35px;
 $content-left-margin: 10px;
@@ -21,7 +21,7 @@ $content-top-margin: 7px;
 
   .monaco-editor {
     background-color: transparent;
-    border-radius: $border-radius;
+    border-radius: variables.$border-radius;
     overflow: hidden;
 
     .margin {
@@ -44,7 +44,7 @@ $content-top-margin: 7px;
   }
 
   .header {
-    font-size: $font-size-caption;
+    font-size: variables.$font-size-caption;
     left: $numbers-column-width + $content-left-margin;
     line-height: 14px;
     padding: 0 4px;

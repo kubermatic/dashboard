@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
+@use 'variables';
 
 mat-card-header {
   cursor: pointer;
@@ -20,7 +20,7 @@ mat-card-header {
   padding-bottom: 8px;
 
   mat-card-header {
-    border-radius: $border-radius;
+    border-radius: variables.$border-radius;
   }
 }
 
@@ -40,7 +40,7 @@ mat-card-header {
 }
 
 .km-events-title {
-  font-size: $font-size-subhead;
+  font-size: variables.$font-size-subhead;
   line-height: 20px;
   padding: 8px 30px 16px 0;
 

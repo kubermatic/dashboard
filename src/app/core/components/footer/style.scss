@@ -9,17 +9,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'mixins';
-@import 'variables';
+@use 'mixins';
+@use 'variables';
 
 footer {
-  @include size(100%, $toolbar-height);
+  @include mixins.size(100%, variables.$toolbar-height);
 
   padding: 8px 28px 20px;
   z-index: 999;
 
   * {
-    font-size: $font-size-body;
+    font-size: variables.$font-size-body;
     text-decoration: none;
   }
 
@@ -52,7 +52,7 @@ footer {
 }
 
 i {
-  @include size(20px);
+  @include mixins.size(20px);
 
   background-size: contain;
   display: inline-block;

@@ -9,10 +9,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
+@use 'variables';
 
 .spec {
-  font-size: $font-size-subhead-lg;
+  font-size: variables.$font-size-subhead-lg;
   line-height: 25px;
   margin-top: 24px;
 }

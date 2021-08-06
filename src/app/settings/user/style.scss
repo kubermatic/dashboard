@@ -9,8 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
-@import 'mixins';
+@use 'variables';
+@use 'mixins';
 
 .mat-card {
   .mat-card-header {
@@ -22,19 +22,19 @@
   }
 
   .user-name {
-    font-size: $font-size-subhead-lg;
+    font-size: variables.$font-size-subhead-lg;
   }
 
   .user-email {
-    font-size: $font-size-subhead;
+    font-size: variables.$font-size-subhead;
   }
 
   .km-account-settings {
-    font-size: $font-size-subhead;
+    font-size: variables.$font-size-subhead;
     min-width: 390px;
 
     .km-account-settings-header {
-      font-size: $font-size-subhead-lg;
+      font-size: variables.$font-size-subhead-lg;
       line-height: initial;
       margin-bottom: 24px;
     }

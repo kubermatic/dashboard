@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
+@use 'variables';
 
 .km-content-edit-sshkeys {
   overflow-y: hidden;
@@ -36,7 +36,7 @@
 }
 
 .combobox-caption {
-  font-size: $font-size-caption;
+  font-size: variables.$font-size-caption;
 
   &.indent {
     margin-left: 12px;

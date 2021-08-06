@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
+@use 'variables';
 
 td {
   &.mat-cell {
@@ -18,8 +18,8 @@ td {
         padding: 0;
 
         .km-serviceaccount-token-wrapper {
-          box-shadow: $border-box-shadow-inset;
-          padding: $item-details-padding;
+          box-shadow: variables.$border-box-shadow-inset;
+          padding: variables.$item-details-padding;
         }
       }
     }
