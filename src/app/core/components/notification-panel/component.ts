@@ -47,9 +47,15 @@ export class NotificationPanelComponent implements OnInit, OnDestroy {
     this._notificationService
       .getNotificationHistory()
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(notifications => {
-        this.notifications = notifications;
-      });
+      .subscribe(
+        notifications =>
+          (this.notifications = notifications.sort((a, b) => {
+            const aDate = new Date(a.timestamp);
+            const bDate = new Date(b.timestamp);
+
+            return aDate < bDate ? 1 : aDate > bDate ? -1 : 0;
+          }))
+      );
   }
 
   ngOnDestroy(): void {
