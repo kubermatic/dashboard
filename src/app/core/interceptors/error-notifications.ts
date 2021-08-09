@@ -42,6 +42,7 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
     ['InvalidAccessKeySecret', Errors.InvalidCredentials],
     ['Unauthorized', Errors.InvalidCredentials],
     ['validate the provided access credentials', Errors.InvalidCredentials],
+    ['Unable to authenticate you', Errors.InvalidCredentials],
     ['Check to make sure you have the correct tenant ID', 'Invalid tenant ID provided'],
     ['Invalid client secret is provided', 'Invalid client secret provided'],
     ['The provided subscription identifier .* is malformed or invalid', 'Invalid subscription ID provided'],

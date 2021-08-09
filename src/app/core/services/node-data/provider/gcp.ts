@@ -18,10 +18,12 @@ import {Cluster} from '@shared/entity/cluster';
 import {GCPDiskType, GCPMachineSize, GCPZone} from '@shared/entity/provider/gcp';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
-import {catchError, filter, take, switchMap, tap} from 'rxjs/operators';
+import {catchError, filter, take, switchMap, tap, debounceTime} from 'rxjs/operators';
 import {NodeDataService} from '../service';
 
 export class NodeDataGCPProvider {
+  private readonly _debounce = 500;
+
   constructor(
     private readonly _nodeDataService: NodeDataService,
     private readonly _clusterSpecService: ClusterSpecService,
@@ -49,6 +51,7 @@ export class NodeDataGCPProvider {
       case NodeDataMode.Wizard:
         return this._clusterSpecService.clusterChanges
           .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.GCP))
+          .pipe(debounceTime(this._debounce))
           .pipe(tap(c => (cluster = c)))
           .pipe(
             switchMap(_ =>
@@ -71,6 +74,7 @@ export class NodeDataGCPProvider {
       case NodeDataMode.Dialog: {
         let selectedProject: string;
         return this._projectService.selectedProject
+          .pipe(debounceTime(this._debounce))
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(switchMap(_ => this._apiService.getGCPZones(selectedProject, this._clusterSpecService.cluster.id)))
@@ -105,10 +109,12 @@ export class NodeDataGCPProvider {
 
               return onErrorResumeNext(of([]));
             })
-          );
+          )
+          .pipe(debounceTime(this._debounce));
       case NodeDataMode.Dialog: {
         let selectedProject: string;
         return this._projectService.selectedProject
+          .pipe(debounceTime(this._debounce))
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(
@@ -151,10 +157,12 @@ export class NodeDataGCPProvider {
 
               return onErrorResumeNext(of([]));
             })
-          );
+          )
+          .pipe(debounceTime(this._debounce));
       case NodeDataMode.Dialog: {
         let selectedProject: string;
         return this._projectService.selectedProject
+          .pipe(debounceTime(this._debounce))
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(
