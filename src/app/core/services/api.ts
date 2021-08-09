@@ -202,7 +202,7 @@ export class ApiService {
   }
 
   getAWSSizes(projectId: string, clusterId: string): Observable<AWSSize[]> {
-    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/aws/sizes?architecture=x64`;
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/aws/sizes`;
     return this._http.get<AWSSize[]>(url);
   }
 

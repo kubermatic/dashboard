@@ -24,7 +24,7 @@ import {NodeDataService} from '@core/services/node-data/service';
 import {PresetsService} from '@core/services/wizard/presets';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {NodeCloudSpec, NodeSpec} from '@shared/entity/node';
-import {AWSSize, AWSSubnet} from '@shared/entity/provider/aws';
+import {Architecture, AWSSize, AWSSubnet} from '@shared/entity/provider/aws';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {compare} from '@shared/utils/common-utils';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
@@ -71,7 +71,10 @@ enum SubnetState {
 })
 export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnInit, AfterViewChecked, OnDestroy {
   readonly Controls = Controls;
-  sizes: AWSSize[] = [];
+  readonly Architecture = Architecture;
+  selectedArchitecture = Architecture.X64;
+  private _sizes: AWSSize[] = [];
+  filteredSizes: AWSSize[] = [];
   selectedSize = '';
   sizeLabel = SizeState.Empty;
   selectedSubnet = '';
@@ -122,7 +125,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     this._init();
     this._nodeDataService.nodeData = this._getNodeData();
 
-    this._sizesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSize.bind(this));
+    this._sizesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setSizes.bind(this));
     this._subnetIdsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSubnet.bind(this));
 
     this._presets.presetChanges
@@ -154,6 +157,26 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     return subnet.name !== '' ? subnet.name + ' (' + subnet.id + ')' : subnet.id;
   }
 
+  onArchitectureChange(): void {
+    // Filter sizes by selected architecture.
+    this.filteredSizes = this._sizes.filter(size => size.architecture === this.selectedArchitecture);
+
+    // Reset selected size if it doesn't belong to the filtered set.
+    const matchingSize = this.filteredSizes.find(size => size.name === this.selectedSize);
+    if (!matchingSize) {
+      this.selectedSize = '';
+    }
+
+    // If there are any sizes in the filtered set pick the cheapest one as default option.
+    if (!this.selectedSize && this.filteredSizes.length > 0) {
+      const cheapestInstance = this.filteredSizes.reduce((p, c) => (p.price < c.price ? p : c));
+      this.selectedSize = cheapestInstance.name;
+    }
+
+    this.sizeLabel = this.selectedSize ? SizeState.Ready : SizeState.Empty;
+    this._cdr.detectChanges();
+  }
+
   onSizeChange(size: string): void {
     this._nodeDataService.nodeData.spec.cloud.aws.instanceType = size;
     this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
@@ -171,7 +194,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   }
 
   sizeDisplayName(sizeName: string): string {
-    const size = this.sizes.find(size => size.name === sizeName);
+    const size = this._sizes.find(size => size.name === sizeName);
     if (!size) {
       return sizeName;
     }
@@ -202,12 +225,24 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     this._cdr.detectChanges();
   }
 
-  private _setDefaultSize(sizes: AWSSize[]): void {
-    this.sizes = sizes.sort((a, b) => compare(a.price, b.price));
-    this.selectedSize = this._nodeDataService.nodeData.spec.cloud.aws.instanceType;
+  private _setSizes(sizes: AWSSize[]): void {
+    this._sizes = sizes.sort((a, b) => compare(a.price, b.price));
 
-    if (!this.selectedSize && this.sizes.length > 0) {
-      const cheapestInstance = this.sizes.reduce((prev, curr) => (prev.price < curr.price ? prev : curr));
+    // If node data service contains defaults (i.e. in the edit dialog) then set size and architecture based on that.
+    if (!this.selectedSize && this._nodeDataService.nodeData.spec.cloud.aws.instanceType) {
+      const matchingSize = this._sizes.find(
+        size => size.name === this._nodeDataService.nodeData.spec.cloud.aws.instanceType
+      );
+      if (matchingSize) {
+        this.selectedArchitecture = matchingSize.architecture;
+        this.selectedSize = matchingSize.name;
+      }
+    }
+
+    // If there are any sizes in the filtered set pick the cheapest one as default option.
+    this.filteredSizes = this._sizes.filter(size => size.architecture === this.selectedArchitecture);
+    if (!this.selectedSize && this.filteredSizes.length > 0) {
+      const cheapestInstance = this.filteredSizes.reduce((p, c) => (p.price < c.price ? p : c));
       this.selectedSize = cheapestInstance.name;
     }
 
@@ -236,7 +271,8 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   }
 
   private _clearSize(): void {
-    this.sizes = [];
+    this._sizes = [];
+    this.filteredSizes = [];
     this.selectedSize = '';
     this.sizeLabel = SizeState.Empty;
     this._sizeCombobox.reset();
