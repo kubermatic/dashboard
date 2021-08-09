@@ -9,14 +9,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
-@import 'mixins';
+@use 'variables';
+@use 'mixins';
 
 html,
 body {
   background-color: #edeff0;
   color: #4d555c;
-  font-family: $font-primary;
+  font-family: variables.$font-primary;
   height: 100%;
   margin: 0;
   padding: 0;
@@ -30,12 +30,12 @@ a {
 }
 
 ::-webkit-scrollbar {
-  @include size($scrollbar-size);
+  @include mixins.size(variables.$scrollbar-size);
 }
 
 .km-empty-list-msg {
   border-top: 1px solid;
-  font-size: $font-size-body;
+  font-size: variables.$font-size-body;
   padding: 15px 30px 15px;
   text-align: center;
 }
@@ -43,14 +43,14 @@ a {
 .mat-card {
   .km-mat-row {
     .km-mat-footer-row {
-      border-bottom-left-radius: $border-radius;
-      border-bottom-right-radius: $border-radius;
+      border-bottom-left-radius: variables.$border-radius;
+      border-bottom-right-radius: variables.$border-radius;
       border-style: solid dashed dashed dashed;
       border-width: 1px;
       padding: 0;
 
       button {
-        font-size: $font-size-subhead;
+        font-size: variables.$font-size-subhead;
         font-weight: normal;
         line-height: 40px;
         width: 100%;
@@ -79,13 +79,13 @@ a {
 }
 
 .km-header {
-  font-size: $font-size-card-title;
+  font-size: variables.$font-size-card-title;
   line-height: 16px;
   margin: 12px 0;
   padding: 8px 0 16px;
 
   &.sub {
-    font-size: $font-size-subhead;
+    font-size: variables.$font-size-subhead;
   }
 }
 
@@ -102,16 +102,16 @@ a {
   padding: 0;
 
   tr:first-child td:first-child {
-    border-top-left-radius: $border-radius;
+    border-top-left-radius: variables.$border-radius;
   }
 
   tr:first-child td:last-child {
-    border-top-right-radius: $border-radius;
+    border-top-right-radius: variables.$border-radius;
   }
 }
 
 .km-card-expansion-panel {
-  font-size: $font-size-subhead;
+  font-size: variables.$font-size-subhead;
   line-height: 48px;
   margin: 0 60px;
   padding: 8px 0;
@@ -129,25 +129,25 @@ a {
 
 .km-table-with-frame {
   tr:last-child td:last-child {
-    border-bottom-right-radius: $border-radius;
+    border-bottom-right-radius: variables.$border-radius;
   }
 
   tr:last-child td:first-child {
-    border-bottom-left-radius: $border-radius;
+    border-bottom-left-radius: variables.$border-radius;
   }
 
   tr:first-child td:first-child {
-    border-top-left-radius: $border-radius;
+    border-top-left-radius: variables.$border-radius;
   }
 
   tr:first-child td:last-child {
-    border-top-right-radius: $border-radius;
+    border-top-right-radius: variables.$border-radius;
   }
 }
 
 .km-panel {
   .panel {
-    border-radius: $border-radius;
+    border-radius: variables.$border-radius;
     overflow: hidden;
     position: fixed;
     z-index: 3;
@@ -155,8 +155,8 @@ a {
 }
 
 .km-provider-logo {
-  @include size(70px, 24px, true);
-  @include size(100%);
+  @include mixins.size(70px, 24px, true);
+  @include mixins.size(100%);
 
   display: block;
 }
@@ -193,9 +193,9 @@ a {
 }
 
 .km-code-block {
-  border-radius: $border-radius;
-  font-family: $font-primary-mono;
-  font-size: $font-size-body;
+  border-radius: variables.$border-radius;
+  font-family: variables.$font-primary-mono;
+  font-size: variables.$font-size-body;
   line-height: 20px;
   margin: 16px 0;
   padding: 12px 16px;
@@ -207,15 +207,15 @@ a {
 
 .km-notification {
   &.mat-snack-bar-container {
-    border-radius: $border-radius;
-    box-shadow: $notification-shadow;
+    border-radius: variables.$border-radius;
+    box-shadow: variables.$notification-shadow;
     display: flex;
     flex: 1 1 auto;
-    margin: $notification-margin;
-    max-height: $notification-max-height;
-    max-width: $notification-width;
-    min-height: $notification-min-height;
-    min-width: $notification-width;
+    margin: variables.$notification-margin;
+    max-height: variables.$notification-max-height;
+    max-width: variables.$notification-width;
+    min-height: variables.$notification-min-height;
+    min-width: variables.$notification-width;
     overflow: hidden;
     padding: 0;
 
@@ -228,16 +228,16 @@ a {
 
 .km-table {
   border-collapse: separate;
-  border-radius: $border-radius;
+  border-radius: variables.$border-radius;
   border-spacing: 0;
   width: 100%;
 
   tr:first-child th:first-child {
-    border-top-left-radius: $border-radius;
+    border-top-left-radius: variables.$border-radius;
   }
 
   tr:first-child th:last-child {
-    border-top-right-radius: $border-radius;
+    border-top-right-radius: variables.$border-radius;
   }
 
   td:first-child:not(.km-serviceaccount-token):not(.km-key-publickey) {
@@ -250,13 +250,13 @@ a {
 
   .km-header-row {
     border-collapse: separate;
-    border-radius: $border-radius;
+    border-radius: variables.$border-radius;
     line-height: 40px;
   }
 
   .km-header-cell {
     border-bottom: none;
-    font-size: $font-size-body;
+    font-size: variables.$font-size-body;
     font-weight: normal;
     height: 40px;
     line-height: 25px;
@@ -287,7 +287,7 @@ a {
 
   td.mat-cell {
     border-bottom-width: 0;
-    font-size: $font-size-subhead;
+    font-size: variables.$font-size-subhead;
     line-height: 25px;
     padding-right: 16px;
 
@@ -365,14 +365,14 @@ km-dashboard {
 
   & > *:not(router-outlet) {
     flex: 1 1 auto;
-    padding: $content-padding;
+    padding: variables.$content-padding;
   }
 }
 
 .km-update-available-badge {
-  border-radius: $border-radius;
+  border-radius: variables.$border-radius;
   cursor: default;
-  font-size: $font-size-body;
+  font-size: variables.$font-size-body;
   line-height: 18px;
   margin-left: 12px;
   padding: 0 4px;
@@ -391,7 +391,7 @@ km-dashboard {
   }
 
   p {
-    font-size: $font-size-body;
+    font-size: variables.$font-size-body;
     margin: 0;
   }
 }
@@ -409,10 +409,10 @@ km-dashboard {
 }
 
 .km-label-primary {
-  border-radius: $border-radius;
+  border-radius: variables.$border-radius;
   border-style: solid;
   border-width: 1px;
-  font-size: $font-size-body;
+  font-size: variables.$font-size-body;
   line-height: 12px;
   margin: 4px 0;
   max-width: 120px;
@@ -508,7 +508,7 @@ km-dashboard {
 }
 
 .km-radio-button-description {
-  font-size: $font-size-body;
+  font-size: variables.$font-size-body;
 }
 
 .mat-form-field.km-edit-sshkeys-dropdown {

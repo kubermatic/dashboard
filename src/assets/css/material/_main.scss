@@ -9,24 +9,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
-@import 'mixins';
+@use 'variables';
+@use 'mixins';
+
 @import 'images';
 
 // Cards.
 mat-card {
   &.mat-card {
-    border-radius: $border-radius;
-    box-shadow: $border-box-shadow;
+    border-radius: variables.$border-radius;
+    box-shadow: variables.$border-box-shadow;
     margin: 20px 0 0 0;
     padding: 30px 0;
 
     &:not([class*=mat-elevation-z]) {
-      box-shadow: $border-box-shadow;
+      box-shadow: variables.$border-box-shadow;
     }
 
     .mat-card-header {
-      border-radius: $border-radius $border-radius 0 0;
+      border-radius: variables.$border-radius variables.$border-radius 0 0;
       line-height: 16px;
       margin: 0;
       padding: 0 30px;
@@ -37,12 +38,12 @@ mat-card {
       }
 
       .mat-card-title {
-        font-size: $font-size-card-title;
+        font-size: variables.$font-size-card-title;
         font-weight: normal;
         padding: 8px 0 16px;
 
         i {
-          font-size: $font-size-subhead-lg;
+          font-size: variables.$font-size-subhead-lg;
           margin: 0 20px;
         }
       }
@@ -50,12 +51,12 @@ mat-card {
 
     .mat-card-content {
       p {
-        font-size: $font-size-caption;
+        font-size: variables.$font-size-caption;
       }
 
       button {
         cursor: pointer;
-        font-size: $font-size-body;
+        font-size: variables.$font-size-body;
         outline: none;
       }
     }
@@ -64,12 +65,12 @@ mat-card {
 
 // Dialogs.
 .cdk-overlay-pane .mat-dialog-container {
-  box-shadow: $border-box-shadow;
+  box-shadow: variables.$border-box-shadow;
 }
 
 .mat-dialog-container {
-  max-width: $dialog-width;
-  min-width: $dialog-width;
+  max-width: variables.$dialog-width;
+  min-width: variables.$dialog-width;
 
   .mat-dialog-title {
     font-weight: 400;
@@ -89,10 +90,10 @@ mat-card {
   }
 
   .mat-dialog-content {
-    font-size: $font-size-subhead;
+    font-size: variables.$font-size-subhead;
     font-weight: 400;
     line-height: 24px;
-    max-height: $dialog-content-max-height;
+    max-height: variables.$dialog-content-max-height;
     overflow-x: unset;
     overflow-y: auto;
 
@@ -117,7 +118,7 @@ mat-card {
   .mat-sort-header-container {
     &.mat-sort-header-button {
       border-bottom: none;
-      font-size: $font-size-body;
+      font-size: variables.$font-size-body;
       font-weight: normal;
       height: 40px;
       line-height: 25px;
@@ -164,10 +165,10 @@ mat-card {
   }
 
   .mat-icon-button {
-    @include size(35px, $force: true);
+    @include mixins.size(35px, $force: true);
 
     i {
-      @include size(35px);
+      @include mixins.size(35px);
     }
   }
 }
@@ -179,7 +180,7 @@ mat-card {
 
 // Steppers.
 .mat-stepper-horizontal {
-  @include breakpoint('small') {
+  @include mixins.breakpoint('small') {
     .mat-horizontal-stepper-header-container {
       display: none;
     }
@@ -218,11 +219,11 @@ mat-card {
   }
 
   .mat-step-icon-content {
-    font-size: $font-size-body;
+    font-size: variables.$font-size-body;
   }
 
   .mat-step-label {
-    font-size: $font-size-subhead;
+    font-size: variables.$font-size-subhead;
     font-weight: 400;
 
     &.mat-step-label-selected {
@@ -237,7 +238,7 @@ mat-card {
 
   button {
     &.mat-menu-item {
-      font-size: $font-size-body;
+      font-size: variables.$font-size-body;
       height: 48px;
       line-height: 48px;
       padding: 0 10px;
@@ -275,7 +276,7 @@ mat-form-field {
     .mat-form-field-prefix,
     .mat-form-field-suffix {
       .mat-icon-button {
-        @include size(32px, $force: true);
+        @include mixins.size(32px, $force: true);
 
         margin-top: -4px;
       }
@@ -299,7 +300,7 @@ mat-form-field {
           justify-content: center;
 
           .mat-select-arrow {
-            @include size(14px);
+            @include mixins.size(14px);
 
             color: transparent;
             display: inline-block;
@@ -315,7 +316,7 @@ mat-form-field {
       &.mat-primary {
         .mat-select-arrow-wrapper {
           .mat-select-arrow {
-            @include size(14px);
+            @include mixins.size(14px);
 
             -webkit-transform: rotate(180deg);
             transform: rotate(180deg);
@@ -376,12 +377,12 @@ mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):no
   }
 
   .mat-select-value-text {
-    font-size: $font-size-subhead;
+    font-size: variables.$font-size-subhead;
     line-height: 20px;
   }
 
   .mat-select-placeholder {
-    font-size: $font-size-subhead;
+    font-size: variables.$font-size-subhead;
     line-height: 20px;
     opacity: .7;
   }
@@ -414,7 +415,7 @@ mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):no
 }
 
 .mat-optgroup-label {
-  font-size: $font-size-caption;
+  font-size: variables.$font-size-caption;
   height: 35px;
   line-height: 35px;
   padding-left: 10px;
@@ -427,7 +428,7 @@ button {
   &.mat-flat-button,
   &.mat-raised-button,
   &.mat-icon-button {
-    font-size: $font-size-subhead;
+    font-size: variables.$font-size-subhead;
     height: 40px;
     line-height: 40px;
     min-width: unset;
@@ -447,7 +448,7 @@ button {
 }
 
 .mat-icon-button {
-  border-radius: $border-radius !important;
+  border-radius: variables.$border-radius !important;
 
   &[disabled] {
     * {
@@ -480,14 +481,14 @@ button {
 
   &:hover {
     border: none;
-    transition: $transition-all;
+    transition: variables.$transition-all;
   }
 
   .mat-button-toggle {
-    @include size(150px, 60px, true);
+    @include mixins.size(150px, 60px, true);
 
     align-items: center;
-    border-radius: $border-radius;
+    border-radius: variables.$border-radius;
     border-style: solid;
     border-width: 1px;
     cursor: pointer;
@@ -496,13 +497,13 @@ button {
   }
 
   .mat-button-toggle-label {
-    @include size(100%);
+    @include mixins.size(100%);
   }
 
   .mat-button-toggle-label-content {
     align-items: center;
     display: flex;
-    font-size: $font-size-subhead;
+    font-size: variables.$font-size-subhead;
     font-weight: normal;
     height: 100%;
     justify-content: center;
@@ -532,7 +533,7 @@ button {
 .mat-slide-toggle {
   .mat-slide-toggle-label {
     .mat-slide-toggle-bar {
-      @include size(50px, 24px);
+      @include mixins.size(50px, 24px);
 
       border-radius: 50px;
     }
@@ -561,7 +562,7 @@ button {
     margin-right: 15px;
 
     .mat-checkbox-frame {
-      border-radius: $border-radius;
+      border-radius: variables.$border-radius;
     }
   }
 
@@ -580,9 +581,9 @@ button {
 // Chips.
 .mat-chip {
   &.mat-standard-chip {
-    border-radius: $border-radius;
+    border-radius: variables.$border-radius;
     box-shadow: none !important;
-    font-size: $font-size-body;
+    font-size: variables.$font-size-body;
     font-weight: normal;
     height: 100%;
     line-height: 16px;
@@ -615,7 +616,7 @@ mat-chip-list {
 
 // Tooltips.
 mat-tooltip-component .mat-tooltip {
-  font-size: $font-size-caption;
+  font-size: variables.$font-size-caption;
   margin-top: 5px;
   word-wrap: break-word;
 }

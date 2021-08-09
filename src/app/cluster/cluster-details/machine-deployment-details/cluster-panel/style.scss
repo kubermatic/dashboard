@@ -9,20 +9,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'mixins';
-@import 'variables';
+@use 'mixins';
+@use 'variables';
 
 .km-cluster-panel {
   .mat-icon-button {
-    @include size(40px);
+    @include mixins.size(40px);
 
     i {
-      @include size(16px, $force: true);
+      @include mixins.size(16px, $force: true);
     }
   }
 
   .cluster-type-icon {
-    @include size(28px);
+    @include mixins.size(28px);
 
     filter: grayscale(100%);
     margin: 5px 20px;

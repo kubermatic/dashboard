@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
+@use 'variables';
 
 .mat-card {
   .mat-card-header {
@@ -30,7 +30,7 @@
 }
 
 .kubeadm-manual {
-  margin: $content-padding;
+  margin: variables.$content-padding;
 
   li {
     margin: 15px 0;

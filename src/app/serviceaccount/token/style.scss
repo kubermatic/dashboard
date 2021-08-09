@@ -9,14 +9,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
+@use 'variables';
 
 .km-serviceaccount-token-view {
   margin: 0;
 }
 
 .km-empty-list-msg {
-  border-radius: $border-radius;
+  border-radius: variables.$border-radius;
   border-style: solid;
   border-width: 1px;
 }
@@ -27,18 +27,18 @@
 
 .km-table-dropdown {
   tr:last-child td:last-child {
-    border-bottom-right-radius: $border-radius;
+    border-bottom-right-radius: variables.$border-radius;
   }
 
   tr:last-child td:first-child {
-    border-bottom-left-radius: $border-radius;
+    border-bottom-left-radius: variables.$border-radius;
   }
 
   tr:first-child td:first-child {
-    border-top-left-radius: $border-radius;
+    border-top-left-radius: variables.$border-radius;
   }
 
   tr:first-child td:last-child {
-    border-top-right-radius: $border-radius;
+    border-top-right-radius: variables.$border-radius;
   }
 }

@@ -9,8 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import '../../assets/css/variables';
-@import '../../assets/css/mixins';
+@use 'mixins';
+@use 'variables';
 
 @mixin card-border {
   border: 1px solid;
@@ -18,12 +18,12 @@
 }
 
 .header-title {
-  font-size: $font-size-card-title;
+  font-size: variables.$font-size-card-title;
   padding-bottom: 8px;
 }
 
 .header-info {
-  font-size: $font-size-body;
+  font-size: variables.$font-size-body;
   padding-bottom: 30px;
 }
 
@@ -58,7 +58,7 @@
   &.mat-standard-chip {
     border: none;
     border-radius: 4px;
-    font-size: $font-size-body;
+    font-size: variables.$font-size-body;
     font-weight: bold;
     min-height: 18px;
     padding: 4px 8px;
@@ -78,7 +78,7 @@
   border-top-left-radius: 8px;
 
   > i {
-    @include size($font-size-card-title, $force: true);
+    @include mixins.size(variables.$font-size-card-title, $force: true);
   }
 }
 
@@ -88,7 +88,7 @@
   border-bottom-right-radius: 8px;
   border-left: none;
   border-top-right-radius: 8px;
-  font-size: $font-size-body;
+  font-size: variables.$font-size-body;
   padding-left: 0;
 }
 

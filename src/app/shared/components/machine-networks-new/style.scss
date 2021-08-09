@@ -9,8 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
-@import 'mixins';
+@use 'variables';
+@use 'mixins';
 
 .km-machine-network:nth-child(odd) {
   margin-right: 16px;
@@ -36,7 +36,7 @@
 }
 
 .km-icon-close {
-  @include size(16px);
+  @include mixins.size(16px);
 
   cursor: pointer;
   float: right;

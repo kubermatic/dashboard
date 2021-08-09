@@ -9,10 +9,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
+@use 'variables';
 
 .km-admin-settings {
-  font-size: $font-size-subhead;
+  font-size: variables.$font-size-subhead;
   padding-left: 30px;
 
   .entry-label {

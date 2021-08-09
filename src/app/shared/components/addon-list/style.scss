@@ -9,14 +9,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
-@import 'mixins';
+@use 'variables';
+@use 'mixins';
 
 .km-addon-container {
-  @include size(250px, 64px);
+  @include mixins.size(250px, 64px);
 
-  border-radius: $border-radius;
-  font-size: $font-size-subhead;
+  border-radius: variables.$border-radius;
+  font-size: variables.$font-size-subhead;
   margin-top: 10px;
   outline: none;
 
@@ -34,7 +34,7 @@
 }
 
 .no-data-warning {
-  font-size: $font-size-body;
+  font-size: variables.$font-size-body;
   padding: 30px;
   text-align: center;
 }

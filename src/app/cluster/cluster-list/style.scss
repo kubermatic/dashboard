@@ -9,11 +9,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
+@use 'mixins';
 
-$MOBILE_RESOLUTION_BREAKPOINT: 504px;
-
-@media screen and (max-width: $MOBILE_RESOLUTION_BREAKPOINT) {
+@include mixins.breakpoint('small') {
   .btn-text-default {
     display: none;
   }

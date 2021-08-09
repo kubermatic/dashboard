@@ -9,29 +9,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'mixins';
-@import 'variables';
+@use 'mixins';
+@use 'variables';
 
 .km-tab-card.tab-cards {
-  margin: 0 (-$content-padding);
+  margin: 0 (- variables.$content-padding);
 
   .mat-tab-header {
     border-bottom: none;
-    margin: $content-padding $content-padding (-$border-radius) 0;
+    margin: variables.$content-padding variables.$content-padding (- variables.$border-radius) 0;
 
     .mat-tab-label-container {
-      padding-left: $content-padding;
+      padding-left: variables.$content-padding;
 
       .mat-tab-label {
-        font-size: $font-size-subhead;
+        font-size: variables.$font-size-subhead;
         font-weight: 400;
         min-width: 120px;
         opacity: 1;
-        padding-bottom: $border-radius;
+        padding-bottom: variables.$border-radius;
       }
 
       .mat-tab-label-active {
-        box-shadow: $border-box-shadow;
+        box-shadow: variables.$border-box-shadow;
       }
     }
 
@@ -42,7 +42,7 @@
   }
 
   .tab-content {
-    margin: 0 $content-padding $content-padding $content-padding;
+    margin: 0 variables.$content-padding variables.$content-padding variables.$content-padding;
 
     .mat-card {
       margin: 0;
@@ -52,7 +52,7 @@
 
 .km-tab-card.tab-navigation {
   .mat-tab-label-container .mat-tab-label {
-    font-size: $font-size-subhead;
+    font-size: variables.$font-size-subhead;
     font-weight: 400;
     min-width: 120px;
     opacity: 1;

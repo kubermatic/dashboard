@@ -9,10 +9,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
+@use 'variables';
 
 .km-install-addon-dialog-option-desc {
-  font-size: $font-size-subhead;
+  font-size: variables.$font-size-subhead;
   line-height: 24px;
   margin-top: 20px;
 }
