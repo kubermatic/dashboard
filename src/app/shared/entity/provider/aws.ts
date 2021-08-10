@@ -60,8 +60,14 @@ export class AWSCidrBlockSet {
 export class AWSSize {
   name: string;
   pretty_name: string;
+  architecture: Architecture;
   memory: number;
   vcpus: number;
   price: number;
   gpus: number;
+}
+
+export enum Architecture {
+  ARM64 = 'arm64',
+  X64 = 'x64',
 }

@@ -10,68 +10,79 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<form [formGroup]="form"
-      fxLayout="column"
-      fxLayoutGap="16px">
-  <km-combobox #sizeCombobox
-               [required]="true"
-               [grouped]="false"
-               [selected]="selectedSize"
-               [options]="sizes"
-               [formControlName]="Controls.Size"
-               [valueFormatter]="sizeDisplayName.bind(this)"
-               (changed)="onSizeChange($event)"
-               [label]="sizeLabel"
-               inputLabel="Select size..."
-               filterBy="name">
-    <div *option="let size">
-      {{sizeDisplayName(size.name)}}
-    </div>
-  </km-combobox>
 
-  <km-combobox [required]="true"
-               [grouped]="false"
-               [selected]="selectedDiskType"
-               [options]="diskTypes"
-               [formControlName]="Controls.DiskType"
-               (changed)="onDiskTypeChange($event)"
-               label="Disk Type"
-               inputLabel="Select disk type..."
-               filterBy="name">
-    <div *option="let diskType">
-      {{diskType.name}}
-    </div>
-  </km-combobox>
+<div fxLayout="column"
+     fxLayoutGap="15px">
+  <mat-radio-group [(ngModel)]="selectedArchitecture"
+                   (change)="onArchitectureChange()"
+                   fxLayoutGap="15px">
+    <mat-radio-button [value]="Architecture.X64">{{Architecture.X64}} architecture</mat-radio-button>
+    <mat-radio-button [value]="Architecture.ARM64">{{Architecture.ARM64}} architecture</mat-radio-button>
+  </mat-radio-group>
 
-  <mat-form-field fxFlex>
-    <mat-label>Disk Size in GB (gp2)</mat-label>
-    <input [formControlName]="Controls.DiskSize"
-           min="10"
-           max="16000"
-           type="number"
-           autocomplete="off"
-           matInput
-           required>
-  </mat-form-field>
+  <form [formGroup]="form"
+        fxLayout="column"
+        fxLayoutGap="16px">
+    <km-combobox #sizeCombobox
+                 [required]="true"
+                 [grouped]="false"
+                 [selected]="selectedSize"
+                 [options]="filteredSizes"
+                 [formControlName]="Controls.Size"
+                 [valueFormatter]="sizeDisplayName.bind(this)"
+                 (changed)="onSizeChange($event)"
+                 [label]="sizeLabel"
+                 inputLabel="Select size..."
+                 filterBy="name">
+      <div *option="let size">
+        {{sizeDisplayName(size.name)}}
+      </div>
+    </km-combobox>
 
-  <km-combobox #subnetCombobox
-               [required]="true"
-               [grouped]="true"
-               [groups]="subnetAZ"
-               [selected]="selectedSubnet"
-               [optionsGetter]="getSubnetToAZ.bind(this)"
-               [formControlName]="Controls.SubnetID"
-               (changed)="onSubnetChange($event)"
-               [label]="subnetLabel"
-               inputLabel="Select subnet..."
-               filterBy="id">
-    <div *option="let network">{{getSubnetOptionName(network)}}</div>
-  </km-combobox>
+    <km-combobox [required]="true"
+                 [grouped]="false"
+                 [selected]="selectedDiskType"
+                 [options]="diskTypes"
+                 [formControlName]="Controls.DiskType"
+                 (changed)="onDiskTypeChange($event)"
+                 label="Disk Type"
+                 inputLabel="Select disk type..."
+                 filterBy="name">
+      <div *option="let diskType">
+        {{diskType.name}}
+      </div>
+    </km-combobox>
 
-  <mat-form-field fxFlex>
-    <mat-label>AMI ID</mat-label>
-    <input matInput
-           [formControlName]="Controls.AMI"
-           autocomplete="off">
-  </mat-form-field>
-</form>
+    <mat-form-field fxFlex>
+      <mat-label>Disk Size in GB (gp2)</mat-label>
+      <input [formControlName]="Controls.DiskSize"
+             min="10"
+             max="16000"
+             type="number"
+             autocomplete="off"
+             matInput
+             required>
+    </mat-form-field>
+
+    <km-combobox #subnetCombobox
+                 [required]="true"
+                 [grouped]="true"
+                 [groups]="subnetAZ"
+                 [selected]="selectedSubnet"
+                 [optionsGetter]="getSubnetToAZ.bind(this)"
+                 [formControlName]="Controls.SubnetID"
+                 (changed)="onSubnetChange($event)"
+                 [label]="subnetLabel"
+                 inputLabel="Select subnet..."
+                 filterBy="id">
+      <div *option="let network">{{getSubnetOptionName(network)}}</div>
+    </km-combobox>
+
+    <mat-form-field fxFlex>
+      <mat-label>AMI ID</mat-label>
+      <input matInput
+             [formControlName]="Controls.AMI"
+             autocomplete="off">
+    </mat-form-field>
+  </form>
+</div>
