@@ -88,10 +88,10 @@ export class DefaultConstraintComponent implements OnInit, OnChanges, OnDestroy 
 
   getColumns(): string[] {
     switch (getEditionDirName()) {
-      case 'community':
-        return ['name', 'constraintTemplate', 'match', 'actions'];
       case 'enterprise':
         return ['name', 'constraintTemplate', 'match', 'appliesTo', 'status', 'actions'];
+      default:
+        return ['name', 'constraintTemplate', 'match', 'actions'];
     }
   }
 
