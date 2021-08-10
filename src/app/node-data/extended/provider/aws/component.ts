@@ -127,7 +127,7 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
           aws: {
             assignPublicIP: this.form.get(Controls.AssignPublicIP).value,
             isSpotInstance: this.form.get(Controls.IsSpotInstance).value,
-            spotInstanceMaxPrice: this.form.get(Controls.SpotInstanceMaxPrice).value,
+            spotInstanceMaxPrice: `${this.form.get(Controls.SpotInstanceMaxPrice).value}`,
             spotInstancePersistentRequest: this.form.get(Controls.SpotInstancePersistentRequest).value,
           },
         } as NodeCloudSpec,
