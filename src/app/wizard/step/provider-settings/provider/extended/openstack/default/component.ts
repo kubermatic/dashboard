@@ -29,7 +29,7 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
-import {catchError, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {catchError, debounceTime, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 enum Controls {
   SecurityGroup = 'securityGroup',
@@ -82,6 +82,7 @@ export class OpenstackProviderExtendedDefaultCredentialsComponent
   private readonly _securityGroupCombobox: FilteredComboboxComponent;
   @ViewChild('subnetIDCombobox')
   private readonly _subnetIDCombobox: FilteredComboboxComponent;
+  private readonly _debounceTime = 500;
   readonly Controls = Controls;
   securityGroups: OpenstackSecurityGroup[] = [];
   securityGroupsLabel = SecurityGroupState.Empty;
@@ -119,6 +120,7 @@ export class OpenstackProviderExtendedDefaultCredentialsComponent
   ngAfterViewInit(): void {
     merge(this._clusterSpecService.clusterChanges, this._credentialsTypeService.credentialsTypeChanges)
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
+      .pipe(debounceTime(this._debounceTime))
       .pipe(tap(_ => (!this._hasRequiredCredentials() ? this._clearSecurityGroup() : null)))
       .pipe(filter(_ => this._hasRequiredCredentials()))
       .pipe(switchMap(_ => this._securityGroupListObservable()))
@@ -127,6 +129,7 @@ export class OpenstackProviderExtendedDefaultCredentialsComponent
 
     merge(this._clusterSpecService.clusterChanges, this._credentialsTypeService.credentialsTypeChanges)
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
+      .pipe(debounceTime(this._debounceTime))
       .pipe(tap(_ => (!this._hasRequiredCredentials() ? this._clearNetwork() : null)))
       .pipe(filter(_ => this._hasRequiredCredentials()))
       .pipe(switchMap(_ => this._networkListObservable()))
@@ -136,6 +139,7 @@ export class OpenstackProviderExtendedDefaultCredentialsComponent
     this.form
       .get(Controls.Network)
       .valueChanges.pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
+      .pipe(debounceTime(this._debounceTime))
       .pipe(tap(_ => (!this._canLoadSubnet() ? this._clearSubnetID() : null)))
       .pipe(filter(_ => this._canLoadSubnet()))
       .pipe(switchMap(_ => this._subnetIDListObservable()))

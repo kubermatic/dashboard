@@ -17,10 +17,12 @@ import {PresetsService} from '@core/services/wizard/presets';
 import {PacketSize} from '@shared/entity/provider/packet';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
-import {catchError, filter, switchMap, take, tap} from 'rxjs/operators';
+import {catchError, debounceTime, filter, switchMap, take, tap} from 'rxjs/operators';
 import {NodeDataService} from '../service';
 
 export class NodeDataPacketProvider {
+  private readonly _debounceTime = 500;
+
   constructor(
     private readonly _nodeDataService: NodeDataService,
     private readonly _clusterSpecService: ClusterSpecService,
@@ -40,6 +42,7 @@ export class NodeDataPacketProvider {
       case NodeDataMode.Wizard:
         return this._clusterSpecService.clusterChanges
           .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.PACKET))
+          .pipe(debounceTime(this._debounceTime))
           .pipe(
             switchMap(cluster =>
               this._presetService
@@ -62,6 +65,7 @@ export class NodeDataPacketProvider {
       case NodeDataMode.Dialog: {
         let selectedProject: string;
         return this._projectService.selectedProject
+          .pipe(debounceTime(this._debounceTime))
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(switchMap(_ => this._apiService.getPacketSizes(selectedProject, this._clusterSpecService.cluster.id)))

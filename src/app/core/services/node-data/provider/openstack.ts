@@ -41,8 +41,8 @@ export class NodeDataOpenstackProvider {
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
         return this._clusterSpecService.clusterChanges
-          .pipe(debounceTime(this._debounceTime))
           .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
+          .pipe(debounceTime(this._debounceTime))
           .pipe(
             switchMap(_ =>
               this._presetService
@@ -73,6 +73,7 @@ export class NodeDataOpenstackProvider {
       case NodeDataMode.Dialog: {
         let selectedProject: string;
         return this._projectService.selectedProject
+          .pipe(debounceTime(this._debounceTime))
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(
@@ -99,8 +100,8 @@ export class NodeDataOpenstackProvider {
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
         return this._clusterSpecService.clusterChanges
-          .pipe(debounceTime(this._debounceTime))
           .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
+          .pipe(debounceTime(this._debounceTime))
           .pipe(
             switchMap(_ =>
               this._presetService
@@ -131,6 +132,7 @@ export class NodeDataOpenstackProvider {
       case NodeDataMode.Dialog: {
         let selectedProject: string;
         return this._projectService.selectedProject
+          .pipe(debounceTime(this._debounceTime))
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(
