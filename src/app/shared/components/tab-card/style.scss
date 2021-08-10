@@ -51,11 +51,17 @@
 }
 
 .km-tab-card.tab-navigation {
-  .mat-tab-label-container .mat-tab-label {
-    font-size: variables.$font-size-subhead;
-    font-weight: 400;
-    min-width: 120px;
-    opacity: 1;
+  .mat-tab-label-container {
+    .mat-tab-label {
+      font-size: variables.$font-size-subhead;
+      font-weight: 400;
+      min-width: 120px;
+      opacity: 1;
+    }
+
+    .mat-tab-label-active {
+      font-weight: 600;
+    }
   }
 
   .mat-ink-bar {
