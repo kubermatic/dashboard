@@ -477,7 +477,10 @@ km-dashboard {
 
   &.km-changelog-dialog {
     .mat-dialog-container {
+      height: auto;
+      margin: 20px 0;
       max-width: 600px;
+      min-height: 400px;
       min-width: 600px;
 
       .mat-dialog-content {
