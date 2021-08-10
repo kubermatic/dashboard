@@ -1,6 +1,10 @@
 {
   "extends": "./tsconfig.ee.json",
   "exclude": [
-    "app/dynamic/enterprise/**"
+    "app/dynamic/enterprise/**",
+    "test*.ts",
+    "environments/environment.*.ts",
+    "**/*.spec.ts",
+    "**/testing/**"
   ]
 }
