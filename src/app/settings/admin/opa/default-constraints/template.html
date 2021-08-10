@@ -10,27 +10,13 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-
-<mat-card-header fxLayout="column">
-  <mat-card-title fxFlex
-                  fxLayout="row"
-                  fxLayoutAlign=" center">
-    <div fxFlex>OPA Default Constraints</div>
-    <button mat-flat-button
-            color="quaternary"
-            id="km-add-constraint-btn"
-            fxLayoutAlign="center center"
-            (click)="add()">
-      <i class="km-icon-mask km-icon-add"></i>
-      <span>Add Default Constraint</span>
-    </button>
-  </mat-card-title>
-
+<div class="header">
   <div class="filters"
        fxLayoutAlign=" center"
        fxLayoutGap="16px">
     <div class="filter-title">Filter by</div>
-    <mat-form-field class="km-dropdown-with-suffix">
+    <mat-form-field fxFlex
+                    class="km-dropdown-with-suffix">
       <mat-label>Constraint Template</mat-label>
       <mat-select disableOptionCentering
                   class="km-select-ellipsis"
@@ -58,8 +44,16 @@ limitations under the License.
       </mat-select>
     </mat-form-field>
   </div>
-
-</mat-card-header>
+  <div fxFlex></div>
+  <button mat-flat-button
+          color="quaternary"
+          id="km-add-constraint-btn"
+          fxLayoutAlign="center center"
+          (click)="add()">
+    <i class="km-icon-mask km-icon-add"></i>
+    <span>Add Default Constraint</span>
+  </button>
+</div>
 
 <table class="km-table"
        mat-table
