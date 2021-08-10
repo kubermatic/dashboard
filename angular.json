@@ -180,7 +180,7 @@
   "defaultProject": "kubermatic",
   "schematics": {
     "@schematics/angular:component": {
-      "prefix": "kubermatic",
+      "prefix": "kubermatic"
     },
     "@schematics/angular:directive": {
       "prefix": "kubermatic"
