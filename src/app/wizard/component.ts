@@ -78,6 +78,8 @@ export class WizardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this._wizard.reset();
+
     // Init steps for wizard
     this._wizard.steps = steps;
     this._wizard.stepper = this._stepper;
