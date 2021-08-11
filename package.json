@@ -219,6 +219,7 @@
     ]
   },
   "eslintIgnore": [
+    "dist/*",
     "node_modules/*",
     "src/assets/*"
   ],
