@@ -12,6 +12,8 @@
     "./**/*.ts"
   ],
   "exclude": [
+    "app/dynamic/community/**",
+    "app/dynamic/module-registry.ce.ts",
     "test*.ts",
     "environments/environment.*.ts",
     "**/*.spec.ts",
