@@ -14,6 +14,6 @@
 // The configuration can be found in the angular.json and package.json files.
 // IMPORTANT: Keep in sync with module-registry.ce.ts file.
 
-export function loadThemingModule() {
-  return import('./enterprise/theming/module').then(module => module.ThemingModule);
+export namespace DynamicModule {
+  export const Theming = import('./enterprise/theming/module').then(module => module.ThemingModule);
 }

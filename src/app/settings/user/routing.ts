@@ -11,7 +11,7 @@
 
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {loadThemingModule} from '@app/dynamic/module-registry';
+import {DynamicModule} from '@app/dynamic/module-registry';
 import {AuthGuard} from '@core/services/auth/guard';
 import {UserSettingsComponent} from './component';
 
@@ -23,7 +23,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        loadChildren: () => loadThemingModule(),
+        loadChildren: () => DynamicModule.Theming,
         data: {preload: true},
       },
     ],

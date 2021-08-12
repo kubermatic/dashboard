@@ -11,6 +11,6 @@
 
 // IMPORTANT: Keep in sync with module-registry.ts file.
 
-export function loadThemingModule() {
-  return import('./community/theming/module').then(module => module.ThemingModule);
+export namespace DynamicModule {
+  export const Theming = import('./community/theming/module').then(module => module.ThemingModule);
 }

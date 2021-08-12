@@ -182,10 +182,6 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.e2e.local.ts"
-                },
-                {
-                  "replace": "src/app/dynamic/module-registry.ts",
-                  "with": "src/app/dynamic/module-registry.ce.ts"
                 }
               ]
             },
@@ -208,6 +204,10 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.e2e.local.ts"
+                },
+                {
+                  "replace": "src/app/dynamic/module-registry.ts",
+                  "with": "src/app/dynamic/module-registry.ce.ts"
                 }
               ]
             }
@@ -236,6 +236,12 @@
             },
             "e2e-ce": {
               "browserTarget": "kubermatic:build:e2e-ce"
+            },
+            "e2e-local-ee": {
+              "browserTarget": "kubermatic:build:e2e-local-ee"
+            },
+            "e2e-local-ce": {
+              "browserTarget": "kubermatic:build:e2e-local-ce"
             }
           }
         },
