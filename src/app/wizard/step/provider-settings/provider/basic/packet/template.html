@@ -50,7 +50,8 @@ limitations under the License.
   <mat-form-field fxFlex>
     <mat-label>Billing Cycle</mat-label>
     <mat-select [formControlName]="Controls.BillingCycle"
-                disableOptionCentering>
+                disableOptionCentering
+                required>
       <mat-option *ngFor="let billingCycle of getAvailableBillingCycles()"
                   [value]="billingCycle">
         {{billingCycle}}

@@ -82,7 +82,7 @@ enum ProjectState {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpenstackProviderBasicDefaultCredentialsComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  private readonly _debounceTime = 250;
+  private readonly _debounceTime = 500;
   private _isFloatingPoolIPEnforced = false;
   @ViewChild('floatingIPPoolCombobox')
   private readonly _floatingIPPoolCombobox: FilteredComboboxComponent;

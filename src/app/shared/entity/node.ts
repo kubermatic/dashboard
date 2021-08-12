@@ -152,6 +152,8 @@ export class AWSNodeSpec {
   availabilityZone: string;
   assignPublicIP?: boolean;
   isSpotInstance?: boolean;
+  spotInstanceMaxPrice?: string;
+  spotInstancePersistentRequest?: boolean;
 }
 
 export class AzureNodeSpec {

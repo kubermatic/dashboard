@@ -205,8 +205,14 @@ mat-card {
     margin: 0 20px;
   }
 
-  .mat-horizontal-stepper-content[aria-expanded="false"] {
-    width: 0;
+  .mat-horizontal-stepper-content {
+    // Required to disable wizard step animation without disabling all child animations
+    transform: none !important;
+    transition: none;
+
+    &[aria-expanded="false"] {
+      width: 0;
+    }
   }
 }
 
