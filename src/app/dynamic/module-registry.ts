@@ -16,4 +16,7 @@
 
 export namespace DynamicModule {
   export const Theming = import('./enterprise/theming/module').then(module => module.ThemingModule);
+  export const AllowedRegistries = import('./enterprise/allowed-registries/module').then(
+    module => module.AllowedRegistriesModule
+  );
 }

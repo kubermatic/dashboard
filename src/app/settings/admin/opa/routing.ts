@@ -11,8 +11,8 @@
 
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
+import {DynamicModule} from '@app/dynamic/module-registry';
 import {AdminSettingsOPAComponent} from '@app/settings/admin/opa/component';
-import {getEditionDirName} from '@app/dynamic/common';
 
 const routes: Routes = [
   {
@@ -21,10 +21,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        loadChildren: () =>
-          import(`../../../dynamic/${getEditionDirName()}/allowed-registries/module`).then(
-            module => module.AllowedRegistriesModule
-          ),
+        loadChildren: () => DynamicModule.AllowedRegistries,
         data: {preload: true},
       },
     ],
