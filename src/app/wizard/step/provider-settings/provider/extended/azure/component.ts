@@ -98,14 +98,16 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
       .subscribe(_ => {
         this._presets.enablePresets(
           Object.keys(this._clusterSpecService.cluster.spec.cloud.azure)
-            .filter(key => key != 'assignAvailabilitySet')
+            .filter(key => key !== 'assignAvailabilitySet')
             .every(key => !this._clusterSpecService.cluster.spec.cloud.azure[key])
         );
       });
 
-    this._presets.presetChanges
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
+    this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset =>
+      Object.values(Controls)
+        .filter(control => control !== Controls.AssignAvailabilitySet)
+        .forEach(control => this._enable(!preset, control))
+    );
 
     merge(this._clusterSpecService.providerChanges, this._clusterSpecService.datacenterChanges)
       .pipe(takeUntil(this._unsubscribe))
@@ -228,8 +230,9 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
 
     merge(
       this.form.get(Controls.LoadBalancerSKU).valueChanges,
-      this.form.get(Controls.AssignAvailabilitySet).valueChanges,
-    ).pipe(takeUntil(this._unsubscribe))
+      this.form.get(Controls.AssignAvailabilitySet).valueChanges
+    )
+      .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
   }
 

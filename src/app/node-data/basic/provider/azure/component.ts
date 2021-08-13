@@ -29,6 +29,8 @@ import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
 import {merge, Observable} from 'rxjs';
 import {filter, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {ClusterSpecService} from '@core/services/cluster-spec';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
 
 enum Controls {
   Size = 'size',
@@ -75,6 +77,7 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
 
   sizes: AzureSizes[] = [];
   zones: Array<{name: string}> = [];
+  isZoneDisabled = false;
   sizeLabel = SizeState.Empty;
   zoneLabel = ZoneState.Empty;
   selectedSize = '';
@@ -92,6 +95,7 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
     private readonly _builder: FormBuilder,
     private readonly _presets: PresetsService,
     private readonly _nodeDataService: NodeDataService,
+    private readonly _clusterSpecService: ClusterSpecService,
     private readonly _cdr: ChangeDetectorRef
   ) {
     super();
@@ -112,6 +116,11 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
     this._sizesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSize.bind(this));
 
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(this._clearSize.bind(this));
+
+    this._clusterSpecService.clusterChanges
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.AZURE))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(cluster => (this.isZoneDisabled = !cluster.spec.cloud.azure.assignAvailabilitySet));
 
     this._sizeChanges
       .pipe(tap(_ => this._clearZone()))

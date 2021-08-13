@@ -125,7 +125,7 @@ export class AzureCloudSpec {
   tenantID: string;
   vnet: string;
   loadBalancerSKU: string;
-  assignAvailabilitySet: string;
+  assignAvailabilitySet: boolean;
 }
 
 export class BareMetalCloudSpec {

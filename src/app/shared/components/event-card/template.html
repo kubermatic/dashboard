@@ -20,7 +20,7 @@ limitations under the License.
     <div fxFlex></div>
     <span class="km-events-title">
       <i [ngClass]="getTypeIconForEvents()"></i>
-      {{events.length}} event<ng-container *ngIf="events.length != 1">s</ng-container>
+      {{events.length}} event<ng-container *ngIf="events.length !== 1">s</ng-container>
     </span>
   </mat-card-header>
   <mat-card-content>
