@@ -31,6 +31,7 @@ enum Controls {
   Subnet = 'subnet',
   VNet = 'vnet',
   LoadBalancerSKU = 'loadBalancerSKU',
+  AssignAvailabilitySet = 'assignAvailabilitySet',
 }
 
 @Component({
@@ -83,6 +84,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
       [Controls.Subnet]: this._builder.control(''),
       [Controls.VNet]: this._builder.control(''),
       [Controls.LoadBalancerSKU]: this._builder.control(''),
+      [Controls.AssignAvailabilitySet]: this._builder.control(true),
     });
 
     const resourceGroupChanges = merge(
@@ -95,7 +97,9 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         this._presets.enablePresets(
-          Object.values(this._clusterSpecService.cluster.spec.cloud.azure).every(value => !value)
+          Object.keys(this._clusterSpecService.cluster.spec.cloud.azure)
+            .filter(key => key != 'assignAvailabilitySet')
+            .every(key => !this._clusterSpecService.cluster.spec.cloud.azure[key])
         );
       });
 
@@ -105,7 +109,11 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
 
     merge(this._clusterSpecService.providerChanges, this._clusterSpecService.datacenterChanges)
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this.form.reset());
+      .subscribe(_ => {
+        // TODO: This causes reset of all default values set in the init stage. It should be fixed.
+        this.form.reset();
+        this.form.get(Controls.AssignAvailabilitySet).setValue(true);
+      });
 
     this._clusterSpecService.clusterChanges
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.AZURE))
@@ -218,9 +226,10 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
       )
       .subscribe(s => (this._clusterSpecService.cluster.spec.cloud.azure.subnet = s));
 
-    this.form
-      .get(Controls.LoadBalancerSKU)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
+    merge(
+      this.form.get(Controls.LoadBalancerSKU).valueChanges,
+      this.form.get(Controls.AssignAvailabilitySet).valueChanges,
+    ).pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
   }
 
@@ -462,6 +471,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
         cloud: {
           azure: {
             loadBalancerSKU: this.form.get(Controls.LoadBalancerSKU).value,
+            assignAvailabilitySet: this.form.get(Controls.AssignAvailabilitySet).value,
           } as AzureCloudSpec,
         } as CloudSpec,
       } as ClusterSpec,
