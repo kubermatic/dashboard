@@ -9,14 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// This is the dynamic module registry file that will be used by default in enterprise edition builds.
-// In the community edition builds it will be replaced by the module-registry.ce.ts file.
-// The configuration can be found in the angular.json and package.json files.
-// IMPORTANT: Keep in sync with module-registry.ce.ts file.
+import {NgModule} from '@angular/core';
+import {RouterModule} from '@angular/router';
 
-export namespace DynamicModule {
-  export const Theming = import('./enterprise/theming/module').then(module => module.ThemingModule);
-  export const AllowedRegistries = import('./enterprise/allowed-registries/module').then(
-    module => module.AllowedRegistriesModule
-  );
-}
+@NgModule({imports: [RouterModule.forChild([])]})
+export class AllowedRegistriesModule {}

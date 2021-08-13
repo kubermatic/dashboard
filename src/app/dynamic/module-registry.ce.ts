@@ -13,4 +13,7 @@
 
 export namespace DynamicModule {
   export const Theming = import('./community/theming/module').then(module => module.ThemingModule);
+  export const AllowedRegistries = import('./community/allowed-registries/module').then(
+    module => module.AllowedRegistriesModule
+  );
 }

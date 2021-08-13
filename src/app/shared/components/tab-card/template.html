@@ -22,5 +22,14 @@ limitations under the License.
         </mat-card>
       </div>
     </mat-tab>
+
+    <mat-tab *ngFor="let tab of dynamicTabs; let i = index"
+             [label]="tab.label">
+      <div class="tab-content">
+        <mat-card>
+          <ng-container *ngTemplateOutlet="tab.template"></ng-container>
+        </mat-card>
+      </div>
+    </mat-tab>
   </mat-tab-group>
 </div>

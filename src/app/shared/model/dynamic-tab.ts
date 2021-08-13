@@ -9,14 +9,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// This is the dynamic module registry file that will be used by default in enterprise edition builds.
-// In the community edition builds it will be replaced by the module-registry.ce.ts file.
-// The configuration can be found in the angular.json and package.json files.
-// IMPORTANT: Keep in sync with module-registry.ce.ts file.
+import {AfterViewInit, Directive, Output, ViewChild} from '@angular/core';
+import {DynamicTabComponent} from '@shared/components/tab-card/dynamic-tab/component';
+import {ReplaySubject} from 'rxjs';
 
-export namespace DynamicModule {
-  export const Theming = import('./enterprise/theming/module').then(module => module.ThemingModule);
-  export const AllowedRegistries = import('./enterprise/allowed-registries/module').then(
-    module => module.AllowedRegistriesModule
-  );
+@Directive()
+export abstract class DynamicTab implements AfterViewInit {
+  @ViewChild(DynamicTabComponent) tab: DynamicTabComponent;
+  @Output('ontabready') onTabReady = new ReplaySubject<DynamicTabComponent>();
+
+  ngAfterViewInit(): void {
+    if (this.tab) {
+      this.onTabReady.next(this.tab);
+    }
+  }
 }
