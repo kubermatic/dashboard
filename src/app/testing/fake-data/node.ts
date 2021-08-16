@@ -343,6 +343,7 @@ export function nodeDataCentOsFake(): NodeData {
           tags: {},
           dataDiskSize: 0,
           osDiskSize: 0,
+          assignAvailabilitySet: true,
         },
         gcp: {
           diskSize: 25,
@@ -412,6 +413,7 @@ export function nodeDataSLESFake(): NodeData {
           tags: {},
           dataDiskSize: 0,
           osDiskSize: 0,
+          assignAvailabilitySet: true,
         },
         gcp: {
           diskSize: 25,
@@ -509,6 +511,7 @@ export function nodeDataFlatcarFake(): NodeData {
           tags: {},
           dataDiskSize: 0,
           osDiskSize: 0,
+          assignAvailabilitySet: true,
         },
       },
       operatingSystem: {

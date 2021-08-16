@@ -102,7 +102,13 @@ export class NodeDataAzureProvider {
         return this._datacenterService
           .getDatacenter(this._clusterSpecService.cluster.spec.cloud.dc)
           .pipe(take(1))
-          .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.AZURE && this._clusterSpecService.cluster.spec.cloud.azure.assignAvailabilitySet))
+          .pipe(
+            filter(
+              _ =>
+                this._clusterSpecService.provider === NodeProvider.AZURE &&
+                this._clusterSpecService.cluster.spec.cloud.azure.assignAvailabilitySet
+            )
+          )
           .pipe(debounceTime(this._debounce))
           .pipe(tap(dc => (location = dc.spec.azure.location)))
           .pipe(
