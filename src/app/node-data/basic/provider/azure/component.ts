@@ -30,7 +30,6 @@ import * as _ from 'lodash';
 import {merge, Observable} from 'rxjs';
 import {filter, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {ClusterSpecService} from '@core/services/cluster-spec';
-import {NodeProvider} from '@shared/model/NodeProviderConstants';
 
 enum Controls {
   Size = 'size',
@@ -77,7 +76,6 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
 
   sizes: AzureSizes[] = [];
   zones: Array<{name: string}> = [];
-  isZoneDisabled = false;
   sizeLabel = SizeState.Empty;
   zoneLabel = ZoneState.Empty;
   selectedSize = '';
@@ -117,11 +115,6 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
 
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(this._clearSize.bind(this));
 
-    this._clusterSpecService.clusterChanges
-      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.AZURE))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(cluster => (this.isZoneDisabled = !cluster.spec.cloud.azure.assignAvailabilitySet));
-
     this._sizeChanges
       .pipe(tap(_ => this._clearZone()))
       .pipe(filter(hasValue => hasValue))
@@ -149,17 +142,21 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
     this._sizeChanges.emit(!!size);
   }
 
+  isZoneEnabled(): boolean {
+    return this._clusterSpecService.cluster.spec.cloud.azure.assignAvailabilitySet;
+  }
+
   onZoneChange(zones: string[]): void {
     this._nodeDataService.nodeData.spec.cloud.azure.zones = zones;
     this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
-  getHint(control: Controls): string {
-    switch (control) {
-      case Controls.Zone:
-        return this._nodeDataService.nodeData.spec.cloud.azure.size !== '' ? '' : 'Please select Node Size first.';
+  getZoneHint(): string {
+    if (!this.isZoneEnabled()) {
+      return 'Assigning availability sets was disabled on cluster level.';
+    } else if (!this._nodeDataService.nodeData.spec.cloud.azure.size) {
+      return 'Please select node size first.';
     }
-
     return '';
   }
 
