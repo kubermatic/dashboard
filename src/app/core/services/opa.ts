@@ -21,7 +21,7 @@ import {switchMap, shareReplay, catchError} from 'rxjs/operators';
 export class OPAService {
   private _newRestRoot: string = environment.newRestRoot;
 
-  private readonly _refreshTime = 100000;
+  private readonly _refreshTime = 10;
   private _constraintTemplates$: Observable<ConstraintTemplate[]>;
   private _constraintTemplatesRefresh$ = new Subject<void>();
   private _constraints$ = new Map<string, Observable<Constraint[]>>();
