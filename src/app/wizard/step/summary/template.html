@@ -161,6 +161,9 @@ limitations under the License.
             <div value>{{cluster.credential}}</div>
           </km-property>
         </ng-container>
+        <km-property-boolean *ngIf="cluster.spec.cloud?.azure"
+                             label="Assign Availability Set"
+                             [value]="cluster.spec.cloud.azure.assignAvailabilitySet"></km-property-boolean>
         <ng-container *ngIf="!cluster.credential">
           <!-- AWS -->
           <ng-container *ngIf="cluster.spec.cloud?.aws">
@@ -412,7 +415,7 @@ limitations under the License.
                 <div key>Node Size</div>
                 <div value>{{nodeData.spec.cloud?.azure.size}}</div>
               </km-property>
-              <km-property *ngIf="nodeData.spec.cloud?.azure.zones">
+              <km-property *ngIf="cluster.spec.cloud.azure.assignAvailabilitySet && nodeData.spec.cloud?.azure.zones">
                 <div key>Zones</div>
                 <div value>{{nodeData.spec.cloud?.azure.zones}}</div>
               </km-property>
