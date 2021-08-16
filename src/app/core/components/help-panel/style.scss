@@ -9,29 +9,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
-@import 'mixins';
+@use 'variables';
+@use 'mixins';
 
 .root-button {
-  @include toolbar-button(3);
+  @include mixins.toolbar-button(3);
 }
 
 .panel {
   right: 152px;
-  top: $toolbar-height - 5px;
+  top: variables.$toolbar-height - 5px;
   width: 200px;
 
   .header {
-    font-size: $font-size-subhead;
+    font-size: variables.$font-size-subhead;
     padding: 20px 20px 8px;
 
     .mat-icon-button {
-      @include size(35px);
+      @include mixins.size(35px);
 
       margin: -8px -4px 0 0;
 
       i {
-        @include size(16px);
+        @include mixins.size(16px);
 
         margin-top: -4px;
       }

@@ -1,0 +1,79 @@
+<km-dynamic-tab label="Allowed Registries">
+  <mat-card-header>
+    <mat-card-title fxFlex
+                    fxLayout="row"
+                    fxLayoutAlign=" center">
+      <div fxFlex>OPA Allowed Registries</div>
+      <button mat-flat-button
+              color="quaternary"
+              id="km-add-allowed-registry-btn"
+              fxLayoutAlign="center center"
+              (click)="add()">
+        <i class="km-icon-mask km-icon-add"></i>
+        <span>Add Allowed Registries</span>
+      </button>
+    </mat-card-title>
+  </mat-card-header>
+
+  <table class="km-table"
+         mat-table
+         matSort
+         [dataSource]="dataSource">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell
+          *matHeaderCellDef
+          class="km-header-cell"
+          mat-sort-header>Name
+      </th>
+      <td mat-cell
+          *matCellDef="let element">{{element.name}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="registryPrefix">
+      <th mat-header-cell
+          *matHeaderCellDef
+          class="km-header-cell"
+          mat-sort-header>Registry Prefix
+      </th>
+      <td mat-cell
+          *matCellDef="let element">{{element.spec.registryPrefix}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell
+          *matHeaderCellDef
+          class="km-header-cell"></th>
+      <td mat-cell
+          *matCellDef="let element">
+        <div class="km-table-actions"
+             fxLayoutAlign="end">
+          <button mat-icon-button
+                  (click)="edit(element)">
+            <i class="km-icon-edit"></i>
+          </button>
+          <button mat-icon-button
+                  (click)="delete(element)"
+                  [attr.id]="'km-allowed-registry-delete-btn-' + element.name">
+            <i class="km-icon-delete"></i>
+          </button>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row
+        class="km-header-row"
+        *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        class="km-mat-row"></tr>
+  </table>
+
+  <div class="km-row km-empty-list-msg"
+       *ngIf="hasNoData()">
+    No allowed registries available.
+  </div>
+
+  <div [hidden]="!isPaginatorVisible()">
+    <mat-paginator showFirstLastButtons></mat-paginator>
+  </div>
+</km-dynamic-tab>

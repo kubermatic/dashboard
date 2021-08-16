@@ -8,19 +8,20 @@
   "license": "proprietary",
   "angular-cli": {},
   "scripts": {
-    "start": "npm run vi && ng serve",
-    "start:prod": "npm run vi && ng serve --configuration=production",
-    "start:local": "npm run vi && ng serve --configuration=local",
-    "start:e2e": "npm run vi && ng serve --configuration=e2e",
-    "start:e2e-local": "npm run vi && ng serve --configuration=e2e-local",
-    "build": "npm run vi && ng build --configuration=production --tsConfig=src/tsconfig.\"${KUBERMATIC_EDITION:=ee}\".json",
+    "start": "npm run vi && ng s -c=default-\"${KUBERMATIC_EDITION:=ee}\"",
+    "start:local": "npm run vi && ng s -c=default-\"${KUBERMATIC_EDITION:=ee}\" --proxy-config=proxy-local.conf.cjs",
+    "start:prod": "npm run vi && ng s -c=production-\"${KUBERMATIC_EDITION:=ee}\"",
+    "start:prod:local": "npm run vi && ng s -c=production-\"${KUBERMATIC_EDITION:=ee}\" --proxy-config=proxy-local.conf.cjs",
+    "start:e2e": "npm run vi && ng s -c=e2e-\"${KUBERMATIC_EDITION:=ee}\"",
+    "start:e2e:local": "npm run vi && ng s -c=e2e-local-\"${KUBERMATIC_EDITION:=ee}\" --proxy-config=proxy-local.conf.cjs",
+    "build": "npm run vi && ng b -c=production-\"${KUBERMATIC_EDITION:=ee}\"",
     "build:themes": "npm run build && ./hack/extract-themes.sh",
     "test": "jest",
     "test:ci": "jest --coverage -i",
     "test:watch": "jest --watch",
-    "cy": "cypress run --record false --browser chrome --headless",
+    "cy": "cypress run --record false -b chrome --headless",
     "e2e": "start-server-and-test start:e2e http-get://localhost:8000 cy",
-    "e2e:local": "start-server-and-test start:e2e-local http-get://localhost:8000 cy",
+    "e2e:local": "start-server-and-test start:e2e:local http-get://localhost:8000 cy",
     "check": "npm run check:ts && npm run check:scss && npm run check:license && npm run check:dependency-licenses",
     "check:ts": "gts lint",
     "check:scss": "stylelint \"src/**/*.scss\"",
@@ -37,7 +38,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@angular/animations": "12.1.1",
+    "@angular/animations": "12.1.4",
     "@angular/cdk": "12.1.1",
     "@angular/common": "12.1.2",
     "@angular/compiler": "12.1.1",
@@ -63,7 +64,7 @@
     "lodash": "4.17.21",
     "modern-normalize": "1.1.0",
     "moment": "2.29.1",
-    "monaco-editor": "0.25.2",
+    "monaco-editor": "0.26.1",
     "ngx-clipboard": "14.0.1",
     "ngx-cookie-service": "12.0.0",
     "ngx-custom-validators": "11.0.1",
@@ -76,7 +77,7 @@
     "zone.js": "0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "12.1.1",
+    "@angular-devkit/build-angular": "12.1.4",
     "@angular/cli": "12.1.1",
     "@angular/compiler-cli": "12.1.1",
     "@bahmutov/add-typescript-to-cypress": "2.1.2",
@@ -218,6 +219,7 @@
     ]
   },
   "eslintIgnore": [
+    "dist/*",
     "node_modules/*",
     "src/assets/*"
   ],

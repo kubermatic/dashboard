@@ -48,6 +48,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {NotificationComponent} from '@core/components/notification/component';
 import {EventCardComponent} from '@shared/components/event-card/component';
 import {TabCardComponent} from '@shared/components/tab-card/component';
+import {DynamicTabComponent} from '@shared/components/tab-card/dynamic-tab/component';
 import {TabComponent} from '@shared/components/tab-card/tab/component';
 import {LinkLocationPipe} from '@shared/pipes/linklocation';
 import {ClipboardModule} from 'ngx-clipboard';
@@ -166,6 +167,7 @@ const components: any[] = [
   SearchFieldComponent,
   TabCardComponent,
   TabComponent,
+  DynamicTabComponent,
   AutocompleteComponent,
   LinkLocationPipe,
 ];

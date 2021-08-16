@@ -9,8 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'mixins';
-@import 'variables';
+@use 'variables';
 
 .mat-card {
   .mat-card-header {
@@ -18,7 +17,7 @@
 
     .mat-card-title {
       &.km-machine-deployment-name {
-        font-size: $font-size-card-title;
+        font-size: variables.$font-size-card-title;
         font-weight: 500;
         margin: 2px 20px 0 -22px;
 

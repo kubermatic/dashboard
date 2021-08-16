@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
+@use 'variables';
 
 km-root {
   bottom: 0;
@@ -23,7 +23,7 @@ mat-sidenav-container {
   bottom: 0;
   margin: 0;
   position: absolute;
-  top: $toolbar-height;
+  top: variables.$toolbar-height;
   width: 100%;
 }
 

@@ -9,8 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
-@import 'mixins';
+@use 'variables';
+@use 'mixins';
 
 .km-provider-logo {
   background-position: center;
@@ -18,11 +18,11 @@
 
 .mat-button-toggle {
   .mat-button-toggle-button {
-    @include size(150px, 100%);
+    @include mixins.size(150px, 100%);
   }
 }
 
 .mat-button-toggle-group[group='providerGroup'] {
   margin-bottom: 0;
-  padding-bottom: $content-padding;
+  padding-bottom: variables.$content-padding;
 }

@@ -9,14 +9,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
+@use 'variables';
 
 .km-project-selector {
-  height: $toolbar-height - 2px;
+  height: variables.$toolbar-height - 2px;
 }
 
 .km-projects-container {
-  border-radius: $border-radius;
+  border-radius: variables.$border-radius;
   margin: 0 20px;
   padding: 10px 15px;
 

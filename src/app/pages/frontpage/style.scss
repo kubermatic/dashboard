@@ -9,11 +9,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
-@import 'mixins';
+@use 'variables';
+@use 'mixins';
 
 .km-frontpage-background {
-  @include size(100%);
+  @include mixins.size(100%);
 
   background-color: #001930;
   left: 0;
@@ -30,7 +30,7 @@
 
   .km-frontpage-inner-text {
     color: #fff;
-    font-family: $font-secondary;
+    font-family: variables.$font-secondary;
     font-size: 28px;
     font-weight: 500;
     line-height: 42px;
@@ -39,11 +39,11 @@
   }
 
   .mat-raised-button {
-    @include size(200px, 50px);
+    @include mixins.size(200px, 50px);
 
     background-color: #fff;
     color: #203f58;
-    font-family: $font-primary;
+    font-family: variables.$font-primary;
     font-size: 20px;
     font-weight: 500;
     line-height: 50px;

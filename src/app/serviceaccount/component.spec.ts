@@ -30,7 +30,6 @@ import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
-import {HealthStatusColor} from '@shared/utils/health-status/health-status';
 import {of} from 'rxjs';
 import {AppConfigService} from '../config.service';
 import {ServiceAccountComponent} from './component';
@@ -80,10 +79,6 @@ describe('ServiceAccountComponent', () => {
 
   it('should create service accounts cmp', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should get correct state icon class', () => {
-    expect(component.getStateIconClass('Active')).toBe(HealthStatusColor.Green);
   });
 
   it('should get correct group display name', () => {

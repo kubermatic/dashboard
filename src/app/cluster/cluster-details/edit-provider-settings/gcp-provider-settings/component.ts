@@ -10,58 +10,39 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {ClusterService} from '@core/services/cluster';
 import {ProviderSettingsPatch} from '@shared/entity/cluster';
 import {Subject} from 'rxjs';
-import {debounceTime, takeUntil} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
+
+enum Control {
+  ServiceAccount = 'serviceAccount',
+}
 
 @Component({
   selector: 'km-gcp-provider-settings',
   templateUrl: './template.html',
 })
 export class GCPProviderSettingsComponent implements OnInit, OnDestroy {
+  private readonly _debounceTime = 500;
+  private readonly _unsubscribe = new Subject<void>();
+  readonly Control = Control;
   form: FormGroup;
 
-  private readonly _debounceTime = 1000;
-  private _formData = {serviceAccount: ''};
-  private _unsubscribe: Subject<void> = new Subject<void>();
-
-  constructor(private clusterService: ClusterService) {}
+  constructor(private readonly _clusterService: ClusterService, private readonly _builder: FormBuilder) {}
 
   ngOnInit(): void {
-    this.form = new FormGroup({
-      serviceAccount: new FormControl(''),
+    this.form = this._builder.group({
+      [Control.ServiceAccount]: this._builder.control(''),
     });
 
-    this.form.valueChanges
+    this.form
+      .get(Control.ServiceAccount)
+      .valueChanges.pipe(distinctUntilChanged())
       .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
-        if (data.serviceAccount !== this._formData.serviceAccount) {
-          this._formData = data;
-          this.setValidators();
-          this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
-        }
-      });
-  }
-
-  get serviceAccount(): AbstractControl {
-    return this.form.controls.serviceAccount;
-  }
-
-  setValidators(): void {
-    if (!this.serviceAccount.value) {
-      this.serviceAccount.clearValidators();
-    } else {
-      this.serviceAccount.setValidators([Validators.required]);
-    }
-
-    this.serviceAccount.updateValueAndValidity();
-  }
-
-  isRequiredField(): string {
-    return !this.serviceAccount.value ? '' : '*';
+      .subscribe(_ => this._clusterService.changeProviderSettingsPatch(this._getProviderSettingsPatch()));
   }
 
   ngOnDestroy(): void {
@@ -69,11 +50,11 @@ export class GCPProviderSettingsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  getProviderSettingsPatch(): ProviderSettingsPatch {
+  private _getProviderSettingsPatch(): ProviderSettingsPatch {
     return {
       cloudSpecPatch: {
         gcp: {
-          serviceAccount: this.form.controls.serviceAccount.value,
+          serviceAccount: this.form.get(Control.ServiceAccount).value,
         },
       },
       isValid: this.form.valid,

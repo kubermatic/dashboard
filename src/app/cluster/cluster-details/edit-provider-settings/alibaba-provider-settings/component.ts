@@ -10,69 +10,39 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ClusterService} from '@core/services/cluster';
 import {ProviderSettingsPatch} from '@shared/entity/cluster';
-import {Subject} from 'rxjs';
+import {merge, Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
+
+enum Control {
+  AccessKeyID = 'accessKeyID',
+  AccessKeySecret = 'accessKeySecret',
+}
 
 @Component({
   selector: 'km-alibaba-provider-settings',
   templateUrl: './template.html',
 })
 export class AlibabaProviderSettingsComponent implements OnInit, OnDestroy {
+  private readonly _debounceTime = 500;
+  private readonly _unsubscribe = new Subject<void>();
+  readonly Control = Control;
   form: FormGroup;
 
-  private readonly _debounceTime = 1000;
-  private _formData = {accessKeyID: '', accessKeySecret: ''};
-  private _unsubscribe = new Subject<void>();
-
-  constructor(private clusterService: ClusterService) {}
+  constructor(private readonly _clusterService: ClusterService, private readonly _builder: FormBuilder) {}
 
   ngOnInit(): void {
-    this.form = new FormGroup({
-      accessKeyID: new FormControl(''),
-      accessKeySecret: new FormControl(''),
+    this.form = this._builder.group({
+      [Control.AccessKeyID]: this._builder.control('', Validators.required),
+      [Control.AccessKeySecret]: this._builder.control('', Validators.required),
     });
 
-    this.form.valueChanges
+    merge(this.form.get(Control.AccessKeyID).valueChanges, this.form.get(Control.AccessKeySecret).valueChanges)
       .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
-        if (
-          data.accessKeyID !== this._formData.accessKeyID ||
-          data.accessKeySecret !== this._formData.accessKeySecret
-        ) {
-          this._formData = data;
-          this.setValidators();
-          this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
-        }
-      });
-  }
-
-  get accessKeyID(): AbstractControl {
-    return this.form.controls.accessKeyID;
-  }
-
-  get accessKeySecret(): AbstractControl {
-    return this.form.controls.accessKeySecret;
-  }
-
-  setValidators(): void {
-    if (!this.accessKeyID.value && !this.accessKeySecret.value) {
-      this.accessKeyID.clearValidators();
-      this.accessKeySecret.clearValidators();
-    } else {
-      this.accessKeyID.setValidators([Validators.required]);
-      this.accessKeySecret.setValidators([Validators.required]);
-    }
-
-    this.accessKeyID.updateValueAndValidity();
-    this.accessKeySecret.updateValueAndValidity();
-  }
-
-  addRequiredIndicator(): string {
-    return !this.accessKeyID.value && !this.accessKeySecret.value ? '' : '*';
+      .subscribe(_ => this._clusterService.changeProviderSettingsPatch(this._getProviderSettingsPatch()));
   }
 
   ngOnDestroy(): void {
@@ -80,12 +50,12 @@ export class AlibabaProviderSettingsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  getProviderSettingsPatch(): ProviderSettingsPatch {
+  private _getProviderSettingsPatch(): ProviderSettingsPatch {
     return {
       cloudSpecPatch: {
         alibaba: {
-          accessKeyID: this.form.controls.accessKeyID.value,
-          accessKeySecret: this.form.controls.accessKeySecret.value,
+          accessKeyID: this.form.get(Control.AccessKeyID).value,
+          accessKeySecret: this.form.get(Control.AccessKeySecret).value,
         },
       },
       isValid: this.form.valid,

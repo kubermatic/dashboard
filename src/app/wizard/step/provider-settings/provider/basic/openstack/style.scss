@@ -9,11 +9,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
+@use 'variables';
 
 .km-wizard-openstack-button-toggle-group {
   &.mat-button-toggle-group {
-    border-radius: $border-radius;
+    border-radius: variables.$border-radius;
     margin-bottom: 0;
 
     &.km-toggle-subject-type {
@@ -27,15 +27,15 @@
       min-height: 40px;
 
       &:first-child {
-        border-bottom-left-radius: $border-radius;
-        border-top-left-radius: $border-radius;
+        border-bottom-left-radius: variables.$border-radius;
+        border-top-left-radius: variables.$border-radius;
         max-width: initial;
         min-width: 82px;
       }
 
       &:last-child {
-        border-bottom-right-radius: $border-radius;
-        border-top-right-radius: $border-radius;
+        border-bottom-right-radius: variables.$border-radius;
+        border-top-right-radius: variables.$border-radius;
         max-width: initial;
         min-width: 115px;
       }

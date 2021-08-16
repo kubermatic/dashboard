@@ -11,6 +11,7 @@
 
 import {NgModule} from '@angular/core';
 import {AddMachineNetworkComponent} from '@app/cluster/cluster-details/add-machine-network/component';
+import {AnexiaProviderSettingsComponent} from '@app/cluster/cluster-details/edit-provider-settings/anexia-provider-settings/component';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '@app/node-data/config';
 import {NodeDataModule} from '@app/node-data/module';
 import {NodeService} from '@core/services/node';
@@ -74,6 +75,7 @@ const components: any[] = [
   RevokeTokenComponent,
   EditProviderSettingsComponent,
   AWSProviderSettingsComponent,
+  AnexiaProviderSettingsComponent,
   DigitaloceanProviderSettingsComponent,
   HetznerProviderSettingsComponent,
   GCPProviderSettingsComponent,

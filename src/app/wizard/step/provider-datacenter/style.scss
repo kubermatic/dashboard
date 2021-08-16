@@ -9,11 +9,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
-@import 'mixins';
+@use 'variables';
+@use 'mixins';
 
 .no-data-warning {
-  font-size: $font-size-body;
+  font-size: variables.$font-size-body;
   padding: 30px;
   text-align: center;
 }
@@ -24,7 +24,7 @@
 
 .km-location {
   display: inline-block;
-  font-size: $font-size-subhead;
+  font-size: variables.$font-size-subhead;
   font-weight: normal;
   line-height: 16px;
   max-width: 105px;
@@ -35,18 +35,18 @@
 
   .km-country-prefix {
     display: block;
-    font-size: $font-size-caption;
+    font-size: variables.$font-size-caption;
     line-height: 14px;
   }
 }
 
 .mat-button-toggle {
   .mat-button-toggle-button {
-    @include size(150px, 100%);
+    @include mixins.size(150px, 100%);
   }
 }
 
 .mat-button-toggle-group[group='providerGroup'] {
   margin-bottom: 0;
-  padding-bottom: $content-padding;
+  padding-bottom: variables.$content-padding;
 }

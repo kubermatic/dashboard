@@ -20,9 +20,10 @@ import {
   QueryList,
   ViewEncapsulation,
 } from '@angular/core';
+import {DynamicTabComponent} from '@shared/components/tab-card/dynamic-tab/component';
 import {TabComponent} from '@shared/components/tab-card/tab/component';
 import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {startWith, takeUntil} from 'rxjs/operators';
 
 export enum Context {
   Card = 'tab-cards',
@@ -38,30 +39,29 @@ export enum Context {
 })
 export class TabCardComponent implements AfterContentInit, OnDestroy {
   @ContentChildren(TabComponent) inputTabs: QueryList<TabComponent>;
+  @Input() dynamicTabs: DynamicTabComponent[];
   @Input() context: Context = Context.Card;
   tabs: TabComponent[];
   private _unsubscribe = new Subject<void>();
 
   constructor(private readonly _cdr: ChangeDetectorRef) {}
 
-  public ngAfterContentInit(): void {
-    // Initialization.
-    this.tabs = this.inputTabs.toArray();
-    this._cdr.detectChanges();
-
+  ngAfterContentInit(): void {
     // Watch for tab changes and update the component.
-    this.inputTabs.changes.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
-      this.tabs = this.inputTabs.toArray();
-      this._cdr.detectChanges();
-    });
+    this.inputTabs.changes.pipe(startWith(true)).pipe(takeUntil(this._unsubscribe)).subscribe(this._init.bind(this));
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   getClass(): string {
     return 'km-tab-card ' + this.context;
   }
 
-  ngOnDestroy(): void {
-    this._unsubscribe.next();
-    this._unsubscribe.complete();
+  private _init(): void {
+    this.tabs = this.inputTabs.toArray();
+    this._cdr.detectChanges();
   }
 }

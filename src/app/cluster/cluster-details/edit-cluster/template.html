@@ -137,8 +137,6 @@ limitations under the License.
                      [inheritedLabels]="cluster.inheritedLabels"
                      [asyncKeyValidators]=asyncLabelValidators
                      [formControlName]="Controls.Labels"></km-label-form>
-      <km-edit-provider-settings [cluster]="cluster"
-                                 *ngIf="!cluster.spec.cloud.bringyourown"></km-edit-provider-settings>
     </form>
   </mat-dialog-content>
   <mat-dialog-actions>

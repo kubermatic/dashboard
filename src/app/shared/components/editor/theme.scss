@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
+@use 'variables';
 
 @mixin theme-editor-component($colors) {
   .km-editor {
@@ -52,7 +52,7 @@
 
       .monaco-editor {
         box-shadow: 0 0 0 2px map-get($colors, secondary-hover);
-        transition: $transition-all;
+        transition: variables.$transition-all;
       }
     }
   }

@@ -9,9 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {OpenstackFlavor, OpenstackAvailabilityZone} from '@shared/entity/provider/openstack';
+import {OpenstackFlavor} from '@shared/entity/provider/openstack';
 import {DigitaloceanSizes} from '@shared/entity/provider/digitalocean';
-import {AzureSizes} from '@shared/entity/provider/azure';
 import {HetznerTypes} from '@shared/entity/provider/hetzner';
 import {PacketSize} from '@shared/entity/provider/packet';
 
@@ -44,31 +43,6 @@ export function fakeOpenstackFlavors(): OpenstackFlavor[] {
       region: 'os1',
       slug: 'tiny-m1',
       swap: 0,
-    },
-  ];
-}
-
-export function fakeOpenstackAvailabilityZones(): OpenstackAvailabilityZone[] {
-  return [
-    {
-      name: 'zone_1',
-    },
-    {
-      name: 'zone_2',
-    },
-  ];
-}
-
-export function fakeAzureSizes(): AzureSizes[] {
-  return [
-    {
-      name: 'Standard_A0',
-      maxDataDiskCount: 1,
-      memoryInMB: 768,
-      numberOfCores: 1,
-      numberOfGPUs: 1,
-      osDiskSizeInMB: 1047552,
-      resourceDiskSizeInMB: 20480,
     },
   ];
 }

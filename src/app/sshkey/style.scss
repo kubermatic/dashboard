@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
+@use 'variables';
 
 td {
   &.mat-cell {
@@ -18,8 +18,8 @@ td {
         padding: 0;
 
         .km-publickey-wrapper {
-          box-shadow: $border-box-shadow-inset;
-          padding: $item-details-padding;
+          box-shadow: variables.$border-box-shadow-inset;
+          padding: variables.$item-details-padding;
 
           .km-publickey-content {
             .km-publickey-name {
@@ -28,7 +28,7 @@ td {
             }
 
             .km-publickey {
-              font-size: $font-size-caption;
+              font-size: variables.$font-size-caption;
               line-height: 18px;
               word-break: break-all;
             }

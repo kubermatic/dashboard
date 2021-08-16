@@ -11,12 +11,20 @@
 
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
+import {DynamicModule} from '@app/dynamic/module-registry';
 import {AdminSettingsOPAComponent} from '@app/settings/admin/opa/component';
 
 const routes: Routes = [
   {
     path: '',
     component: AdminSettingsOPAComponent,
+    children: [
+      {
+        path: '',
+        loadChildren: () => DynamicModule.AllowedRegistries,
+        data: {preload: true},
+      },
+    ],
   },
 ];
 

@@ -10,27 +10,29 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
+
 <form [formGroup]="form"
       fxLayout="column">
   <mat-form-field fxFlex>
-    <mat-label>Access Key ID{{addRequiredIndicator()}}</mat-label>
+    <mat-label>Access Key ID</mat-label>
     <input matInput
-           formControlName="accessKeyID"
-           name="accessKeyID"
-           type="password"
-           autocomplete="off">
-    <mat-error *ngIf="form.controls.accessKeyID.hasError('required')">
+           [formControlName]="Control.AccessKeyID"
+           [name]="Control.AccessKeyID"
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.get(Control.AccessKeyID).hasError('required')">
       Access key ID is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
   <mat-form-field fxFlex>
-    <mat-label>Access Key Secret{{addRequiredIndicator()}}</mat-label>
+    <mat-label>Access Key Secret</mat-label>
     <input matInput
-           formControlName="accessKeySecret"
-           name="accessKeySecret"
+           [formControlName]="Control.AccessKeySecret"
+           [name]="Control.AccessKeySecret"
            type="password"
-           autocomplete="off">
-    <mat-error *ngIf="form.controls.accessKeySecret.hasError('required')">
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.get(Control.AccessKeySecret).hasError('required')">
       Access Key Secret is <strong>required</strong>.
     </mat-error>
   </mat-form-field>

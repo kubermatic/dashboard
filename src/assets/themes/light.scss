@@ -10,8 +10,7 @@
 // limitations under the License.
 
 @use '~@angular/material' as mat;
-
-@import 'theme/main';
+@use 'theme/main';
 
 $colors-light: (
   primary: #00517d,
@@ -67,4 +66,4 @@ $theme-light: map_merge($theme-light, (foreground: $foreground));
 // sass-lint:enable function-name-format
 
 @include mat.all-component-themes($theme-light);
-@include theme($theme-light, $colors-light);
+@include main.theme($theme-light, $colors-light);

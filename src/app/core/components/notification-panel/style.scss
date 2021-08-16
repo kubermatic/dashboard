@@ -9,32 +9,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'mixins';
-@import 'variables';
-
-$panel-width: 350px;
+@use 'mixins';
+@use 'variables';
 
 .root-button {
-  @include toolbar-button(2);
+  @include mixins.toolbar-button(2);
 }
 
 .panel {
-  @include size($panel-width);
+  @include mixins.size(350px);
 
   right: 96px;
-  top: $toolbar-height - 5px;
+  top: variables.$toolbar-height - 5px;
 
   .header {
-    font-size: $font-size-subhead;
+    font-size: variables.$font-size-subhead;
     padding: 20px 20px 8px;
 
     .mat-icon-button {
-      @include size(35px, $force: true);
+      @include mixins.size(35px, $force: true);
 
       margin: -8px 4px 0 0;
 
       i {
-        @include size(16px, $force: true);
+        @include mixins.size(16px, $force: true);
 
         margin-top: -4px;
 
@@ -44,11 +42,11 @@ $panel-width: 350px;
       }
 
       .km-icon-clear {
-        @include size(18px, $force: true);
+        @include mixins.size(18px, $force: true);
       }
 
       .filter-indicator {
-        @include size(8px);
+        @include mixins.size(8px);
 
         border-radius: 50%;
         bottom: 10px;
@@ -72,7 +70,7 @@ $panel-width: 350px;
       }
 
       .notification-message {
-        font-size: $font-size-body;
+        font-size: variables.$font-size-body;
         line-height: 16px;
         margin-bottom: 8px;
         word-break: break-word;
@@ -82,7 +80,7 @@ $panel-width: 350px;
         padding: 0 20px 8px 0;
 
         .km-icon-copy-small {
-          @include size(14px);
+          @include mixins.size(14px);
 
           cursor: pointer;
           margin-right: 8px;
@@ -91,13 +89,13 @@ $panel-width: 350px;
 
       .notification-timestamp {
         cursor: pointer;
-        font-size: $font-size-caption;
+        font-size: variables.$font-size-caption;
         line-height: 14px;
       }
     }
   }
 
   .zero-state {
-    font-size: $font-size-subhead;
+    font-size: variables.$font-size-subhead;
   }
 }

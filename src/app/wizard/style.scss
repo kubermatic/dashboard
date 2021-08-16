@@ -9,8 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
-@import 'mixins';
+@use 'variables';
+@use 'mixins';
 
 .km-button-navigation {
   margin-top: 16px;
@@ -26,7 +26,7 @@
 
 .km-wizard-step {
   cursor: default;
-  font-size: $font-size-subhead;
+  font-size: variables.$font-size-subhead;
   font-weight: 400;
   margin-bottom: 0;
   margin-top: 0;
@@ -34,12 +34,12 @@
   user-select: none;
 
   .km-wizard-step-number {
-    @include size(24px);
+    @include mixins.size(24px);
 
     align-items: center;
     border-radius: 50%;
     display: inline-flex;
-    font-size: $font-size-body;
+    font-size: variables.$font-size-body;
     font-weight: normal;
     justify-content: center;
     margin-right: 14px;

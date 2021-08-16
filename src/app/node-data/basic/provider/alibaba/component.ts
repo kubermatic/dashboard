@@ -25,7 +25,7 @@ import {PresetsService} from '@core/services/wizard/presets';
 import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {NodeCloudSpec, NodeSpec} from '@shared/entity/node';
-import {AlibabaInstanceType, AlibabaZone, AlibabaVSwitch} from '@shared/entity/provider/alibaba';
+import {AlibabaInstanceType, AlibabaVSwitch, AlibabaZone} from '@shared/entity/provider/alibaba';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {compare} from '@shared/utils/common-utils';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
@@ -72,10 +72,19 @@ enum ZoneState {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements OnInit, AfterViewChecked, OnDestroy {
-  private _diskTypes: string[] = ['cloud', 'cloud_efficiency', 'cloud_ssd', 'cloud_essd', 'san_ssd', 'san_efficiency'];
-
+  private readonly _diskTypes: string[] = [
+    'cloud',
+    'cloud_efficiency',
+    'cloud_ssd',
+    'cloud_essd',
+    'san_ssd',
+    'san_efficiency',
+  ];
+  @ViewChild('instanceTypeCombobox')
+  private _instanceTypeCombobox: FilteredComboboxComponent;
+  @ViewChild('zoneCombobox')
+  private _zoneCombobox: FilteredComboboxComponent;
   readonly Controls = Controls;
-
   instanceTypes: AlibabaInstanceType[] = [];
   selectedInstanceType = '';
   instanceTypeLabel = InstanceTypeState.Empty;
@@ -86,11 +95,6 @@ export class AlibabaBasicNodeDataComponent extends BaseFormValidator implements 
   selectedDiskType = '';
   vSwitches: string[] = [];
   isLoadingVSwitches = false;
-
-  @ViewChild('instanceTypeCombobox')
-  private _instanceTypeCombobox: FilteredComboboxComponent;
-  @ViewChild('zoneCombobox')
-  private _zoneCombobox: FilteredComboboxComponent;
 
   private get _instanceTypesObservable(): Observable<AlibabaInstanceType[]> {
     return this._nodeDataService.alibaba.instanceTypes(

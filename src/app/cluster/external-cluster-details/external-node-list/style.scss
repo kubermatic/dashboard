@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
+@use 'variables';
 
 .mat-card {
   .mat-card-header {
@@ -39,8 +39,8 @@ i.km-icon-info {
 }
 
 .km-node-details {
-  box-shadow: $border-box-shadow-inset;
-  padding: $item-details-padding;
+  box-shadow: variables.$border-box-shadow-inset;
+  padding: variables.$item-details-padding;
 
   mat-card-content {
     border: none;

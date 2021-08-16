@@ -9,8 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
-@import 'mixins';
+@use 'variables';
+@use 'mixins';
 
 $view-switch-height: 40px;
 $view-switch-width: 50px;
@@ -27,19 +27,19 @@ $project-card-width: 330px;
 
 .km-project-view-switch {
   .mat-button-toggle {
-    @include size($view-switch-width, $view-switch-height, true);
+    @include mixins.size($view-switch-width, $view-switch-height, true);
 
     border-radius: unset;
     margin: 0;
 
     &:first-child {
-      border-bottom-left-radius: $border-radius;
-      border-top-left-radius: $border-radius;
+      border-bottom-left-radius: variables.$border-radius;
+      border-top-left-radius: variables.$border-radius;
     }
 
     &:last-child {
-      border-bottom-right-radius: $border-radius;
-      border-top-right-radius: $border-radius;
+      border-bottom-right-radius: variables.$border-radius;
+      border-top-right-radius: variables.$border-radius;
     }
   }
 }
@@ -52,19 +52,19 @@ $project-card-width: 330px;
   }
 
   .km-icon-cluster {
-    @include size(24px);
+    @include mixins.size(24px);
   }
 
   .mat-card {
-    @include size($project-card-width, $project-card-height, true);
+    @include mixins.size($project-card-width, $project-card-height, true);
 
-    box-shadow: $border-box-shadow;
+    box-shadow: variables.$border-box-shadow;
     cursor: pointer;
     margin-top: 20px;
     padding: 0;
 
     &:hover {
-      box-shadow: $border-box-shadow-hover;
+      box-shadow: variables.$border-box-shadow-hover;
 
       button {
         opacity: 1;
@@ -93,13 +93,13 @@ $project-card-width: 330px;
     padding: 5px 0 0 0;
 
     strong {
-      font-family: $font-primary-mono;
+      font-family: variables.$font-primary-mono;
       margin-right: 5px;
     }
   }
 
   .km-project-cards-status {
-    @include size(27px, auto);
+    @include mixins.size(27px, auto);
 
     align-items: center;
     display: flex;
