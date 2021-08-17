@@ -9,10 +9,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
+@use 'variables';
 
 .km-install-addon-option {
-  border-radius: $border-radius;
+  border-radius: variables.$border-radius;
   cursor: pointer;
   margin: 10px 0;
   padding: 24px;
@@ -22,14 +22,14 @@
   }
 
   .option-desc {
-    font-size: $font-size-body;
+    font-size: variables.$font-size-body;
     line-height: 16px;
     margin-top: 16px;
   }
 }
 
 .desc {
-  font-size: $font-size-subhead;
+  font-size: variables.$font-size-subhead;
   line-height: 24px;
   margin-top: 20px;
 }

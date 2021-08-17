@@ -14,7 +14,7 @@ limitations under the License.
   <mat-card fxFlex="100%">
     <mat-horizontal-stepper linear
                             disableRipple
-                            [@.disabled]="true"
+                            style="transition: none;"
                             #stepper>
       <ng-template matStepperIcon="edit">
         <i class="km-icon-done"></i>
@@ -22,7 +22,8 @@ limitations under the License.
 
       <mat-step *ngFor="let step of steps; index as i;"
                 [stepControl]="form.get(step.name)"
-                fxFlex="100%">
+                fxFlex="100%"
+                style="transition: none;">
         <ng-template matStepLabel>{{step.name}}</ng-template>
         <div [ngSwitch]="step.name"
              id="{{step.id}}-step"

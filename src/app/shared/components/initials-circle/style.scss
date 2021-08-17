@@ -9,10 +9,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'mixins';
+@use 'mixins';
 
 .km-initials-circle {
-  @include size(32px);
+  @include mixins.size(32px);
 
   border-radius: 50%;
   margin-left: -5px;

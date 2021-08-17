@@ -78,6 +78,8 @@ export class WizardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this._wizard.reset();
+
     // Init steps for wizard
     this._wizard.steps = steps;
     this._wizard.stepper = this._stepper;
@@ -132,8 +134,8 @@ export class WizardComponent implements OnInit, OnDestroy {
         })
       )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(
-        (keys: SSHKey[]) => {
+      .subscribe({
+        next: (keys: SSHKey[]) => {
           this._router.navigate([`/projects/${this.project.id}/clusters/${createdCluster.id}`]);
           keys.forEach(key =>
             this._notificationService.success(
@@ -141,12 +143,12 @@ export class WizardComponent implements OnInit, OnDestroy {
             )
           );
         },
-        () => {
+        error: () => {
           this._notificationService.error(`Could not create the ${createCluster.cluster.name} cluster`);
           this._googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationFailed');
           this.creating = false;
-        }
-      );
+        },
+      });
   }
 
   private _getCreateClusterModel(cluster: Cluster, nodeData: NodeData): CreateClusterModel {

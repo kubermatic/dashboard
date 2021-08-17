@@ -9,13 +9,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
 import {Context} from '@shared/components/tab-card/component';
+import {DynamicTabComponent} from '@shared/components/tab-card/dynamic-tab/component';
+import {DynamicTab} from '@shared/model/dynamic-tab';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-admin-settings-opa',
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AdminSettingsOPAComponent {
+export class AdminSettingsOPAComponent implements OnDestroy {
+  private readonly _unsubscribe = new Subject<void>();
   readonly Context = Context;
+  private _dynamicTabs = new Set<DynamicTabComponent>();
+
+  get dynamicTabs(): DynamicTabComponent[] {
+    return [...this._dynamicTabs];
+  }
+
+  onActivate(component: DynamicTab): void {
+    component.onTabReady.pipe(takeUntil(this._unsubscribe)).subscribe(tab => this._dynamicTabs.add(tab));
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
+  }
 }

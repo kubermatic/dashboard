@@ -9,15 +9,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input} from '@angular/core';
-import {Cluster} from '@shared/entity/cluster';
+import {Component, Input, OnInit} from '@angular/core';
+import {ClusterService} from '@core/services/cluster';
+import {Cluster, ProviderSettingsPatch} from '@shared/entity/cluster';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-edit-provider-settings',
   templateUrl: './template.html',
 })
-export class EditProviderSettingsComponent {
-  @Input() cluster: Cluster;
+export class EditProviderSettingsComponent implements OnInit {
+  private _unsubscribe = new Subject<void>();
 
-  constructor() {}
+  @Input() cluster: Cluster;
+  providerSettingsPatch: ProviderSettingsPatch = {
+    isValid: false,
+    cloudSpecPatch: {},
+  };
+
+  constructor(private readonly _clusterService: ClusterService) {}
+
+  ngOnInit(): void {
+    this._clusterService.providerSettingsPatchChanges$
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(patch => (this.providerSettingsPatch = patch));
+  }
 }

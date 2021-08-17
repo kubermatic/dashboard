@@ -9,8 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
-@import 'mixins';
+@use 'mixins';
 
 h2 {
   font-weight: 400;
@@ -66,7 +65,7 @@ h3 {
 }
 
 .km-icon-close {
-  @include size(16px);
+  @include mixins.size(16px);
 
   cursor: pointer;
   float: right;

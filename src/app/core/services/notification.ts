@@ -20,6 +20,7 @@ export interface Notification {
   type: NotificationType;
   timestamp: string;
   beingDispatched: boolean;
+  unread: boolean;
 }
 
 @Injectable({
@@ -34,19 +35,19 @@ export class NotificationService {
   };
 
   private readonly _notificationPopDelay = 250; // in ms
-  private readonly snackBarQueue = new BehaviorSubject<Notification[]>([]);
-  private _notificationHistory = new BehaviorSubject<Notification[]>([]);
+  private readonly _snackBarQueue = new BehaviorSubject<Notification[]>([]);
+  private readonly _notificationHistory = new BehaviorSubject<Notification[]>([]);
 
   constructor(private readonly _snackBar: MatSnackBar) {
     /* Dispatches all queued snack bars one by one */
-    this.snackBarQueue
+    this._snackBarQueue
       .asObservable()
       .pipe(filter(queue => queue.length > 0 && !queue[0].beingDispatched))
       .pipe(
         tap(() => {
-          const updatedQueue = this.snackBarQueue.value;
+          const updatedQueue = this._snackBarQueue.value;
           updatedQueue[0].beingDispatched = true;
-          this.snackBarQueue.next(updatedQueue);
+          this._snackBarQueue.next(updatedQueue);
         })
       )
       .pipe(map(queue => queue[0]))
@@ -69,6 +70,15 @@ export class NotificationService {
     this._notificationHistory.next([]);
   }
 
+  markAllAsRead(): void {
+    this._notificationHistory.next(
+      this._notificationHistory.value.map(n => {
+        n.unread = false;
+        return n;
+      })
+    );
+  }
+
   private _open(message: string, type: NotificationType): void {
     const snackBarRef = this._snackBar.openFromComponent(NotificationComponent, this._config);
 
@@ -84,11 +94,11 @@ export class NotificationService {
       .pipe(delay(this._notificationPopDelay))
       .pipe(take(1))
       .subscribe(() => {
-        const updatedQueue = this.snackBarQueue.value;
+        const updatedQueue = this._snackBarQueue.value;
         if (updatedQueue[0].beingDispatched) {
           updatedQueue.shift();
         }
-        this.snackBarQueue.next(updatedQueue);
+        this._snackBarQueue.next(updatedQueue);
       });
   }
 
@@ -98,6 +108,7 @@ export class NotificationService {
       type,
       timestamp: new Date().toUTCString(),
       beingDispatched: false,
+      unread: true,
     };
 
     if (this._isUnique(message)) {
@@ -105,11 +116,11 @@ export class NotificationService {
       this._notificationHistory.next(
         this._notificationHistory.value.filter(n => n.message !== message).concat(notification)
       );
-      this.snackBarQueue.next(this.snackBarQueue.value.concat([notification]));
+      this._snackBarQueue.next(this._snackBarQueue.value.concat([notification]));
     }
   }
 
   private _isUnique(message: string): boolean {
-    return !this.snackBarQueue.value.find(n => n.message === message);
+    return !this._snackBarQueue.value.find(n => n.message === message);
   }
 }

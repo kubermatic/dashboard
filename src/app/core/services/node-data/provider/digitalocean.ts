@@ -17,10 +17,12 @@ import {PresetsService} from '@core/services/wizard/presets';
 import {DigitaloceanSizes} from '@shared/entity/provider/digitalocean';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
-import {catchError, filter, take, switchMap, tap} from 'rxjs/operators';
+import {catchError, filter, take, switchMap, tap, debounceTime} from 'rxjs/operators';
 import {NodeDataService} from '../service';
 
 export class NodeDataDigitalOceanProvider {
+  private readonly _debounce = 500;
+
   constructor(
     private readonly _nodeDataService: NodeDataService,
     private readonly _clusterSpecService: ClusterSpecService,
@@ -40,6 +42,7 @@ export class NodeDataDigitalOceanProvider {
       case NodeDataMode.Wizard:
         return this._clusterSpecService.clusterChanges
           .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.DIGITALOCEAN))
+          .pipe(debounceTime(this._debounce))
           .pipe(
             switchMap(cluster =>
               this._presetService
@@ -61,6 +64,7 @@ export class NodeDataDigitalOceanProvider {
       case NodeDataMode.Dialog: {
         let selectedProject: string;
         return this._projectService.selectedProject
+          .pipe(debounceTime(this._debounce))
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(

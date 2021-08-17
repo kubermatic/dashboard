@@ -9,15 +9,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
+@use 'variables';
 
 .type {
-  border-radius: $border-radius 0 0 $border-radius;
+  border-radius: variables.$border-radius 0 0 variables.$border-radius;
   padding-left: 12px;
 }
 
 .content {
-  font-size: $font-size-subhead;
+  font-size: variables.$font-size-subhead;
   max-height: 100%;
   padding: 8px 20px;
   word-break: break-word;

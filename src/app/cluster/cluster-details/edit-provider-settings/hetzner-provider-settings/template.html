@@ -13,16 +13,17 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column">
   <mat-form-field fxFlex>
-    <mat-label>API Token{{isRequiredField()}}</mat-label>
+    <mat-label>API Token</mat-label>
     <input matInput
-           formControlName="token"
-           name="token"
+           [formControlName]="Control.Token"
+           [name]="Control.Token"
            type="password"
-           autocomplete="off">
-    <mat-error *ngIf="(form.controls.token.hasError('minlength') || form.controls.token.hasError('maxlength'))">
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.get(Control.Token).hasError('minlength') || form.get(Control.Token).hasError('maxlength')">
       Tokens must be exactly <strong>64</strong> characters long.
     </mat-error>
-    <mat-error *ngIf="form.controls.token.hasError('required')">
+    <mat-error *ngIf="form.get(Control.Token).hasError('required')">
       API Token is <strong>required</strong>.
     </mat-error>
   </mat-form-field>

@@ -10,94 +10,48 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {ClusterService} from '@core/services/cluster';
 import {ProviderSettingsPatch} from '@shared/entity/cluster';
-import {Subject} from 'rxjs';
+import {merge, Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
+
+enum Control {
+  ClientID = 'clientID',
+  ClientSecret = 'clientSecret',
+  SubscriptionID = 'subscriptionID',
+  TenantID = 'tenantID',
+}
 
 @Component({
   selector: 'km-azure-provider-settings',
   templateUrl: './template.html',
 })
 export class AzureProviderSettingsComponent implements OnInit, OnDestroy {
+  private readonly _debounceTime = 500;
+  private readonly _unsubscribe = new Subject<void>();
+  readonly Control = Control;
   form: FormGroup;
 
-  private readonly _debounceTime = 1000;
-  private _formData = {
-    clientID: '',
-    clientSecret: '',
-    subscriptionID: '',
-    tenantID: '',
-  };
-  private _unsubscribe = new Subject<void>();
-
-  constructor(private clusterService: ClusterService) {}
+  constructor(private readonly _clusterService: ClusterService, private readonly _builder: FormBuilder) {}
 
   ngOnInit(): void {
-    this.form = new FormGroup({
-      clientID: new FormControl(''),
-      clientSecret: new FormControl(''),
-      subscriptionID: new FormControl(''),
-      tenantID: new FormControl(''),
+    this.form = this._builder.group({
+      [Control.ClientID]: this._builder.control(''),
+      [Control.ClientSecret]: this._builder.control(''),
+      [Control.SubscriptionID]: this._builder.control(''),
+      [Control.TenantID]: this._builder.control(''),
     });
 
-    this.form.valueChanges
+    merge(
+      this.form.get(Control.ClientID).valueChanges,
+      this.form.get(Control.ClientSecret).valueChanges,
+      this.form.get(Control.SubscriptionID).valueChanges,
+      this.form.get(Control.TenantID).valueChanges
+    )
       .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
-        if (
-          data.clientID !== this._formData.clientID ||
-          data.clientSecret !== this._formData.clientSecret ||
-          data.subscriptionID !== this._formData.subscriptionID ||
-          data.tenantID !== this._formData.tenantID
-        ) {
-          this._formData = data;
-          this.setValidators();
-          this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
-        }
-      });
-  }
-
-  get clientID(): AbstractControl {
-    return this.form.controls.clientID;
-  }
-
-  get clientSecret(): AbstractControl {
-    return this.form.controls.clientSecret;
-  }
-
-  get subscriptionID(): AbstractControl {
-    return this.form.controls.subscriptionID;
-  }
-
-  get tenantID(): AbstractControl {
-    return this.form.controls.tenantID;
-  }
-
-  setValidators(): void {
-    if (!this.clientID.value && !this.clientSecret.value && !this.subscriptionID.value && !this.tenantID.value) {
-      this.clientID.clearValidators();
-      this.clientSecret.clearValidators();
-      this.subscriptionID.clearValidators();
-      this.tenantID.clearValidators();
-    } else {
-      this.clientID.setValidators([Validators.required]);
-      this.clientSecret.setValidators([Validators.required]);
-      this.subscriptionID.setValidators([Validators.required]);
-      this.tenantID.setValidators([Validators.required]);
-    }
-
-    this.clientID.updateValueAndValidity();
-    this.clientSecret.updateValueAndValidity();
-    this.subscriptionID.updateValueAndValidity();
-    this.tenantID.updateValueAndValidity();
-  }
-
-  isRequiredField(): string {
-    return !this.clientID.value && !this.clientSecret.value && !this.subscriptionID.value && !this.tenantID.value
-      ? ''
-      : '*';
+      .subscribe(_ => this._clusterService.changeProviderSettingsPatch(this._getProviderSettingsPatch()));
   }
 
   ngOnDestroy(): void {
@@ -105,14 +59,14 @@ export class AzureProviderSettingsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  getProviderSettingsPatch(): ProviderSettingsPatch {
+  private _getProviderSettingsPatch(): ProviderSettingsPatch {
     return {
       cloudSpecPatch: {
         azure: {
-          clientID: this.form.controls.clientID.value,
-          clientSecret: this.form.controls.clientSecret.value,
-          subscriptionID: this.form.controls.subscriptionID.value,
-          tenantID: this.form.controls.tenantID.value,
+          clientID: this.form.get(Control.ClientID).value,
+          clientSecret: this.form.get(Control.ClientSecret).value,
+          subscriptionID: this.form.get(Control.SubscriptionID).value,
+          tenantID: this.form.get(Control.TenantID).value,
         },
       },
       isValid: this.form.valid,

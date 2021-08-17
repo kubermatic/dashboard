@@ -13,7 +13,6 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {fakePacketCluster} from '@app/testing/fake-data/cluster';
 import {ApiMockService} from '@app/testing/services/api-mock';
 import {ClusterMockService} from '@app/testing/services/cluster-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
@@ -23,8 +22,8 @@ import {SharedModule} from '@shared/module';
 import {AlibabaProviderSettingsComponent} from '../alibaba-provider-settings/component';
 import {AWSProviderSettingsComponent} from '../aws-provider-settings/component';
 import {AzureProviderSettingsComponent} from '../azure-provider-settings/component';
-import {DigitaloceanProviderSettingsComponent} from '../digitalocean-provider-settings/component';
 import {EditProviderSettingsComponent} from '../component';
+import {DigitaloceanProviderSettingsComponent} from '../digitalocean-provider-settings/component';
 import {GCPProviderSettingsComponent} from '../gcp-provider-settings/component';
 import {HetznerProviderSettingsComponent} from '../hetzner-provider-settings/component';
 import {KubevirtProviderSettingsComponent} from '../kubevirt-provider-settings/component';
@@ -66,10 +65,7 @@ describe('PacketProviderSettingsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PacketProviderSettingsComponent);
     component = fixture.componentInstance;
-    component.cluster = fakePacketCluster();
-    component.cluster.spec.cloud.packet.billingCycle = '';
-    component.cluster.spec.cloud.packet.apiKey = '';
-    component.cluster.spec.cloud.packet.projectID = '';
+    component.billingCycle = '';
     fixture.detectChanges();
   });
 
@@ -78,6 +74,6 @@ describe('PacketProviderSettingsComponent', () => {
   });
 
   it('form valid after creating', () => {
-    expect(component.form.valid).toBeTruthy();
+    expect(component.form.valid).toBeFalsy();
   });
 });

@@ -20,9 +20,11 @@ import {Cluster} from '@shared/entity/cluster';
 import {AzureSizes, AzureZones} from '@shared/entity/provider/azure';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
-import {catchError, filter, take, switchMap, tap} from 'rxjs/operators';
+import {catchError, filter, take, switchMap, tap, debounceTime} from 'rxjs/operators';
 
 export class NodeDataAzureProvider {
+  private readonly _debounce = 500;
+
   constructor(
     private readonly _nodeDataService: NodeDataService,
     private readonly _clusterSpecService: ClusterSpecService,
@@ -45,6 +47,7 @@ export class NodeDataAzureProvider {
       case NodeDataMode.Wizard:
         return this._clusterSpecService.clusterChanges
           .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.AZURE))
+          .pipe(debounceTime(this._debounce))
           .pipe(tap(c => (cluster = c)))
           .pipe(switchMap(_ => this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(take(1))))
           .pipe(tap(dc => (location = dc.spec.azure.location)))
@@ -73,6 +76,7 @@ export class NodeDataAzureProvider {
       case NodeDataMode.Dialog: {
         let selectedProject: string;
         return this._projectService.selectedProject
+          .pipe(debounceTime(this._debounce))
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(switchMap(_ => this._apiService.getAzureSizes(selectedProject, this._clusterSpecService.cluster.id)))
@@ -99,6 +103,7 @@ export class NodeDataAzureProvider {
           .getDatacenter(this._clusterSpecService.cluster.spec.cloud.dc)
           .pipe(take(1))
           .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.AZURE))
+          .pipe(debounceTime(this._debounce))
           .pipe(tap(dc => (location = dc.spec.azure.location)))
           .pipe(
             switchMap(_ =>
@@ -126,6 +131,7 @@ export class NodeDataAzureProvider {
       case NodeDataMode.Dialog: {
         let selectedProject: string;
         return this._projectService.selectedProject
+          .pipe(debounceTime(this._debounce))
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(

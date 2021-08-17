@@ -20,15 +20,15 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {PresetsService} from '@core/services/wizard/presets';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {GCPNetwork, GCPSubnetwork} from '@shared/entity/provider/gcp';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {ClusterSpecService} from '@core/services/cluster-spec';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import * as _ from 'lodash';
 import {EMPTY, Observable, onErrorResumeNext} from 'rxjs';
-import {catchError, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {catchError, debounceTime, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 enum Controls {
   Network = 'network',
@@ -65,16 +65,17 @@ enum SubNetworkState {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GCPProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  readonly Controls = Controls;
-  networks: GCPNetwork[] = [];
-  networkLabel = NetworkState.Empty;
-  subNetworks: GCPSubnetwork[] = [];
-  subNetworkLabel = SubNetworkState.Empty;
+  private readonly _debounceTime = 500;
   private _onNetworkChange = new EventEmitter<void>();
   @ViewChild('networkCombobox')
   private readonly _networkCombobox: FilteredComboboxComponent;
   @ViewChild('subNetworkCombobox')
   private readonly _subNetworkCombobox: FilteredComboboxComponent;
+  readonly Controls = Controls;
+  networks: GCPNetwork[] = [];
+  networkLabel = NetworkState.Empty;
+  subNetworks: GCPSubnetwork[] = [];
+  subNetworkLabel = SubNetworkState.Empty;
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -106,6 +107,7 @@ export class GCPProviderExtendedComponent extends BaseFormValidator implements O
 
     this._clusterSpecService.clusterChanges
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.GCP))
+      .pipe(debounceTime(this._debounceTime))
       .pipe(
         tap(_ => {
           if (!this._hasRequiredCredentials()) {

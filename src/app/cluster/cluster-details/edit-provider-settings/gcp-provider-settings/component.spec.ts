@@ -69,6 +69,6 @@ describe('GCPProviderSettingsComponent', () => {
   });
 
   it('form valid after creating', () => {
-    expect(component.form.valid).toBeTruthy();
+    expect(component.form.valid).toBeFalsy();
   });
 });

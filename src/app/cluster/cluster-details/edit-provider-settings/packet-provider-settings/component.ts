@@ -10,83 +10,56 @@
 // limitations under the License.
 
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ClusterService} from '@core/services/cluster';
-import {AVAILABLE_PACKET_BILLING_CYCLES, Cluster, ProviderSettingsPatch} from '@shared/entity/cluster';
-import {Subject} from 'rxjs';
-import {debounceTime, takeUntil} from 'rxjs/operators';
+import {AVAILABLE_PACKET_BILLING_CYCLES, ProviderSettingsPatch} from '@shared/entity/cluster';
+import {merge, Subject} from 'rxjs';
+import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
+
+enum Control {
+  ApiKey = 'apiKey',
+  ProjectID = 'projectID',
+  BillingCycle = 'billingCycle',
+}
 
 @Component({
   selector: 'km-packet-provider-settings',
   templateUrl: './template.html',
 })
 export class PacketProviderSettingsComponent implements OnInit, OnDestroy {
-  @Input() cluster: Cluster;
-
-  form: FormGroup;
-
   private readonly _billingCycleMaxLen = 64;
   private readonly _apiKeyMaxLen = 64;
   private readonly _projectIDMaxLen = 64;
-  private readonly _debounceTime = 1000;
-  private _formData = {apiKey: '', projectID: '', billingCycle: ''};
-  private _unsubscribe: Subject<void> = new Subject<void>();
+  private readonly _debounceTime = 500;
+  private readonly _unsubscribe = new Subject<void>();
+  readonly Control = Control;
+  @Input() billingCycle: string;
+  form: FormGroup;
 
-  constructor(private clusterService: ClusterService) {}
-
-  get apiKey(): AbstractControl {
-    return this.form.controls.apiKey;
-  }
-
-  get projectID(): AbstractControl {
-    return this.form.controls.projectID;
-  }
+  constructor(private readonly _clusterService: ClusterService, private readonly _builder: FormBuilder) {}
 
   ngOnInit(): void {
-    let billingCycle = this.cluster.spec.cloud.packet.billingCycle;
-    if (!billingCycle) {
-      billingCycle = this.getAvailableBillingCycles()[0];
-    }
-
-    this._formData.billingCycle = billingCycle;
-
-    this.form = new FormGroup({
-      apiKey: new FormControl(''),
-      projectID: new FormControl(''),
-      billingCycle: new FormControl(billingCycle, [Validators.maxLength(this._billingCycleMaxLen)]),
+    this.form = this._builder.group({
+      [Control.ApiKey]: this._builder.control('', [Validators.required, Validators.maxLength(this._apiKeyMaxLen)]),
+      [Control.ProjectID]: this._builder.control('', [
+        Validators.required,
+        Validators.maxLength(this._projectIDMaxLen),
+      ]),
+      [Control.BillingCycle]: this._builder.control(this._getDefaultBillingCycle(), [
+        Validators.required,
+        Validators.maxLength(this._billingCycleMaxLen),
+      ]),
     });
 
-    this.form.valueChanges
+    merge(
+      this.form.get(Control.ApiKey).valueChanges,
+      this.form.get(Control.ProjectID).valueChanges,
+      this.form.get(Control.BillingCycle).valueChanges
+    )
+      .pipe(distinctUntilChanged())
       .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(data => {
-        if (
-          data.apiKey !== this._formData.apiKey ||
-          data.projectID !== this._formData.projectID ||
-          data.billingCycle !== this._formData.billingCycle
-        ) {
-          this._formData = data;
-          this.setValidators();
-          this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
-        }
-      });
-  }
-
-  setValidators(): void {
-    if (!this.apiKey.value && !this.projectID.value) {
-      this.apiKey.clearValidators();
-      this.projectID.clearValidators();
-    } else {
-      this.apiKey.setValidators([Validators.required, Validators.maxLength(this._apiKeyMaxLen)]);
-      this.projectID.setValidators([Validators.required, Validators.maxLength(this._projectIDMaxLen)]);
-    }
-
-    this.apiKey.updateValueAndValidity();
-    this.projectID.updateValueAndValidity();
-  }
-
-  isRequiredField(): string {
-    return !this.apiKey.value && !this.projectID.value ? '' : '*';
+      .subscribe(_ => this._clusterService.changeProviderSettingsPatch(this._getProviderSettingsPatch()));
   }
 
   ngOnDestroy(): void {
@@ -98,13 +71,17 @@ export class PacketProviderSettingsComponent implements OnInit, OnDestroy {
     return AVAILABLE_PACKET_BILLING_CYCLES;
   }
 
-  getProviderSettingsPatch(): ProviderSettingsPatch {
+  private _getDefaultBillingCycle(): string {
+    return this.billingCycle || this.getAvailableBillingCycles()[0];
+  }
+
+  private _getProviderSettingsPatch(): ProviderSettingsPatch {
     return {
       cloudSpecPatch: {
         packet: {
-          apiKey: this.form.controls.apiKey.value,
-          projectID: this.form.controls.projectID.value,
-          billingCycle: this.form.controls.billingCycle.value,
+          apiKey: this.form.get(Control.ApiKey).value,
+          projectID: this.form.get(Control.ProjectID).value,
+          billingCycle: this.form.get(Control.BillingCycle).value,
         },
       },
       isValid: this.form.valid,

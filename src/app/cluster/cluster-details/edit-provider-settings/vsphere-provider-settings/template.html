@@ -13,41 +13,48 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column">
   <mat-form-field fxFlex>
-    <mat-label>Username{{isRequiredField()}}</mat-label>
+    <mat-label>Username</mat-label>
     <input matInput
-           formControlName="infraManagementUsername"
-           name="infraManagementUsername"
+           [formControlName]="Control.InfraManagementUsername"
+           [name]="Control.InfraManagementUsername"
            type="text"
-           autocomplete="off">
-    <mat-error *ngIf="form?.controls.infraManagementUsername.hasError('required')">
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.get(Control.InfraManagementUsername).hasError('required')">
       Username is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
+
   <mat-form-field fxFlex>
-    <mat-label>Password{{isRequiredField()}}</mat-label>
+    <mat-label>Password</mat-label>
     <input matInput
-           formControlName="infraManagementPassword"
-           name="infraManagementPassword"
+           [formControlName]="Control.InfraManagementPassword"
+           [name]="Control.InfraManagementPassword"
            type="password"
-           autocomplete="off">
-    <mat-error *ngIf="form?.controls.infraManagementPassword.hasError('required')">
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.get(Control.InfraManagementPassword).hasError('required')">
       Password is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
+
   <mat-form-field fxFlex>
     <mat-label>VSphere Cloud Provider Username</mat-label>
     <input matInput
-           formControlName="username"
-           name="username"
+           [formControlName]="Control.Username"
+           [name]="Control.Username"
            type="text"
-           autocomplete="off">
+           autocomplete="off"
+           required>
   </mat-form-field>
+
   <mat-form-field fxFlex>
     <mat-label>VSphere Cloud Provider Password</mat-label>
     <input matInput
-           formControlName="password"
-           name="password"
+           [formControlName]="Control.Password"
+           [name]="Control.Password"
            type="password"
-           autocomplete="off">
+           autocomplete="off"
+           required>
   </mat-form-field>
 </form>

@@ -11,7 +11,7 @@
 
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {getEditionDirName} from '@app/dynamic/common';
+import {DynamicModule} from '@app/dynamic/module-registry';
 import {AuthGuard} from '@core/services/auth/guard';
 import {UserSettingsComponent} from './component';
 
@@ -23,8 +23,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        loadChildren: () =>
-          import(`../../dynamic/${getEditionDirName()}/theming/module`).then(module => module.ThemingModule),
+        loadChildren: () => DynamicModule.Theming,
         data: {preload: true},
       },
     ],

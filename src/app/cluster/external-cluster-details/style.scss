@@ -9,11 +9,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
-@import 'mixins';
+@use 'mixins';
 
 .km-cluster-detail-actions .mat-icon-button i {
-  @include size(24px);
+  @include mixins.size(24px);
 }
 
 .km-cluster-name {
@@ -43,5 +42,5 @@
 }
 
 .mat-icon.km-icon-edit {
-  @include size(18px);
+  @include mixins.size(18px);
 }

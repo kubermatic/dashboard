@@ -12,15 +12,14 @@
 import {ChangeDetectionStrategy, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {ClusterSpecService} from '@core/services/cluster-spec';
+import {DatacenterService} from '@core/services/datacenter';
 import {PresetsService} from '@core/services/wizard/presets';
 import {CloudSpec, Cluster, ClusterSpec, HetznerCloudSpec} from '@shared/entity/cluster';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {DatacenterService} from '@core/services/datacenter';
 import {isObjectEmpty} from '@shared/utils/common-utils';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import * as _ from 'lodash';
 import {merge} from 'rxjs';
-import {filter, takeUntil, distinctUntilChanged, switchMap, take, tap} from 'rxjs/operators';
+import {distinctUntilChanged, filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 enum Controls {
   Network = 'network',
@@ -45,7 +44,6 @@ enum Controls {
 })
 export class HetznerProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
-
   defaultNetwork = '';
 
   constructor(

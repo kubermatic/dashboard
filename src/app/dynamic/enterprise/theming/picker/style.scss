@@ -1,5 +1,4 @@
-@import 'variables';
-@import 'mixins';
+@use 'mixins';
 
 .entry-label {
   align-items: center;
@@ -14,7 +13,7 @@
 
 .toggle-button {
   .mat-button-toggle {
-    @include size(140px, 50px, true);
+    @include mixins.size(140px, 50px, true);
 
     margin: 10px 10px 10px 0;
   }

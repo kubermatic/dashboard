@@ -400,6 +400,10 @@ limitations under the License.
                 <div key>AMI ID</div>
                 <div value>{{nodeData.spec.cloud?.aws?.ami}}</div>
               </km-property>
+              <km-property *ngIf="nodeData.spec.cloud?.aws?.spotInstanceMaxPrice">
+                <div key>Spot Instance Max Price (in USD)</div>
+                <div value>{{nodeData.spec.cloud.aws.spotInstanceMaxPrice}}</div>
+              </km-property>
             </ng-container>
 
             <!-- Azure Nodes -->
@@ -587,19 +591,19 @@ limitations under the License.
               </km-property>
             </ng-container>
 
-            <km-property-boolean label="Dynamic kubelet Config"
-                                 [value]="nodeData.dynamicConfig">
-            </km-property-boolean>
-
             <!-- AWS Node Options -->
             <ng-container *ngIf="cluster.spec.cloud?.aws">
-              <km-property-boolean *ngIf="nodeData.spec.cloud?.aws?.assignPublicIP !== undefined"
-                                   label="Assign Public IP"
-                                   [value]="nodeData.spec.cloud?.aws?.assignPublicIP">
-              </km-property-boolean>
               <km-property-boolean *ngIf="nodeData.spec.cloud?.aws?.isSpotInstance !== undefined"
                                    label="Spot Instance"
                                    [value]="nodeData.spec.cloud?.aws?.isSpotInstance">
+              </km-property-boolean>
+              <km-property-boolean *ngIf="nodeData.spec.cloud?.aws?.spotInstancePersistentRequest !== undefined"
+                                   label="Spot Instance Persistent Request"
+                                   [value]="nodeData.spec.cloud.aws.spotInstancePersistentRequest">
+              </km-property-boolean>
+              <km-property-boolean *ngIf="nodeData.spec.cloud?.aws?.assignPublicIP !== undefined"
+                                   label="Assign Public IP"
+                                   [value]="nodeData.spec.cloud?.aws?.assignPublicIP">
               </km-property-boolean>
             </ng-container>
 
@@ -636,6 +640,10 @@ limitations under the License.
                                    [value]="nodeData.spec.cloud?.openstack?.useFloatingIP">
               </km-property-boolean>
             </ng-container>
+
+            <km-property-boolean label="Dynamic kubelet Config"
+                                 [value]="nodeData.dynamicConfig">
+            </km-property-boolean>
 
             <div [ngSwitch]="displayTags(nodeData.spec.labels)">
               <km-property *ngSwitchCase="true">

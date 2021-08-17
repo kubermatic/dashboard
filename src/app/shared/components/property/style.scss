@@ -9,20 +9,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
+@use 'variables';
 
 .container {
   margin: 6px 50px 6px 0;
 
   .label {
-    font-size: $font-size-caption;
+    font-size: variables.$font-size-caption;
     line-height: 14px;
     margin-bottom: 4px;
     min-height: 14px;
   }
 
   .value {
-    font-size: $font-size-subhead;
+    font-size: variables.$font-size-subhead;
     line-height: 24px;
     margin-bottom: 8px;
     min-height: 24px;

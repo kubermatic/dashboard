@@ -307,6 +307,7 @@ export class ClusterSpecPatch {
 }
 
 export class CloudSpecPatch {
+  anexia?: AnexiaCloudSpecPatch;
   digitalocean?: DigitaloceanCloudSpecPatch;
   aws?: AWSCloudSpecPatch;
   openstack?: OpenstackCloudSpecPatch;
@@ -317,6 +318,10 @@ export class CloudSpecPatch {
   gcp?: GCPCloudSpecPatch;
   kubevirt?: KubevirtCloudSpecPatch;
   alibaba?: AlibabaCloudSpecPatch;
+}
+
+export class AnexiaCloudSpecPatch {
+  token?: string;
 }
 
 export class DigitaloceanCloudSpecPatch {

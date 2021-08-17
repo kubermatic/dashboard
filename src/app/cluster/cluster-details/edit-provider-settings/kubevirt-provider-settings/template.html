@@ -13,13 +13,14 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column">
   <mat-form-field fxFlex>
-    <mat-label>Kubeconfig{{isRequiredField()}}</mat-label>
+    <mat-label>Kubeconfig</mat-label>
     <input matInput
-           formControlName="kubeconfig"
-           name="kubeconfig"
+           [formControlName]="Control.Kubeconfig"
+           [name]="Control.Kubeconfig"
            type="password"
-           autocomplete="off">
-    <mat-error *ngIf="form.controls.kubeconfig.hasError('required')">
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.get(Control.Kubeconfig).hasError('required')">
       Kubeconfig is <strong>required</strong>.
     </mat-error>
   </mat-form-field>

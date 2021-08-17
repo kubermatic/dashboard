@@ -10,18 +10,21 @@
 // limitations under the License.
 
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {NodeDataService} from '@core/services/node-data/service';
-import {takeUntil} from 'rxjs/operators';
+import {pushDown} from '@shared/animations/push';
 import {NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {NodeDataMode} from '../../../config';
 import {merge} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {NodeDataMode} from '../../../config';
 
 enum Controls {
   AssignPublicIP = 'assignPublicIP',
   IsSpotInstance = 'isSpotInstance',
+  SpotInstanceMaxPrice = 'spotInstanceMaxPrice',
+  SpotInstancePersistentRequest = 'spotInstancePersistentRequest',
   Tags = 'tags',
 }
 
@@ -41,6 +44,7 @@ enum Controls {
       multi: true,
     },
   ],
+  animations: [pushDown],
 })
 export class AWSExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   tags: object;
@@ -49,6 +53,10 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
 
   get nodeData(): NodeData {
     return this._nodeDataService.nodeData;
+  }
+
+  get isSpotInstance(): boolean {
+    return this.form.get(Controls.IsSpotInstance).value;
   }
 
   constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
@@ -60,12 +68,19 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
       [Controls.AssignPublicIP]: this._builder.control(true),
       [Controls.IsSpotInstance]: this._builder.control(false),
       [Controls.Tags]: this._builder.control(''),
+      [Controls.SpotInstanceMaxPrice]: this._builder.control('', [Validators.min(1)]),
+      [Controls.SpotInstancePersistentRequest]: this._builder.control(false),
     });
 
     this._init();
     this._nodeDataService.nodeData = this._getNodeData();
 
-    merge(this.form.get(Controls.AssignPublicIP).valueChanges, this.form.get(Controls.IsSpotInstance).valueChanges)
+    merge(
+      this.form.get(Controls.AssignPublicIP).valueChanges,
+      this.form.get(Controls.IsSpotInstance).valueChanges,
+      this.form.get(Controls.SpotInstanceMaxPrice).valueChanges,
+      this.form.get(Controls.SpotInstancePersistentRequest).valueChanges
+    )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
   }
@@ -90,6 +105,18 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
           ? this.nodeData.spec.cloud.aws.isSpotInstance
           : false;
       this.form.get(Controls.IsSpotInstance).setValue(isSpotInstance);
+
+      const spotInstanceMaxPrice =
+        this._nodeDataService.mode === NodeDataMode.Dialog && !!this.nodeData.name
+          ? this.nodeData.spec.cloud.aws.spotInstanceMaxPrice
+          : false;
+      this.form.get(Controls.SpotInstanceMaxPrice).setValue(spotInstanceMaxPrice);
+
+      const spotInstancePersistentRequest =
+        this._nodeDataService.mode === NodeDataMode.Dialog && !!this.nodeData.name
+          ? this.nodeData.spec.cloud.aws.spotInstancePersistentRequest
+          : false;
+      this.form.get(Controls.SpotInstancePersistentRequest).setValue(spotInstancePersistentRequest);
     }
   }
 
@@ -100,6 +127,8 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
           aws: {
             assignPublicIP: this.form.get(Controls.AssignPublicIP).value,
             isSpotInstance: this.form.get(Controls.IsSpotInstance).value,
+            spotInstanceMaxPrice: `${this.form.get(Controls.SpotInstanceMaxPrice).value}`,
+            spotInstancePersistentRequest: this.form.get(Controls.SpotInstancePersistentRequest).value,
           },
         } as NodeCloudSpec,
       } as NodeSpec,

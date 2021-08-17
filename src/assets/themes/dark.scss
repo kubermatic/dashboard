@@ -10,10 +10,10 @@
 // limitations under the License.
 
 @use '~@angular/material' as mat;
+@use 'mixins';
+@use 'theme/main';
+@use 'variables';
 
-@import 'theme/main';
-@import 'mixins';
-@import 'variables';
 @import 'images';
 
 $colors-dark: (
@@ -73,7 +73,7 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
 // sass-lint:enable function-name-format
 
 @include mat.all-component-themes($theme-dark);
-@include theme($theme-dark, $colors-dark);
+@include main.theme($theme-dark, $colors-dark);
 
 // Make icons and logos white with 85% opacity.
 .km-header-logo,
@@ -93,25 +93,25 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
 }
 
 .km-provider-logo-bringyourown {
-  @include provider-image("/assets/images/clouds/bringyourown-dark.svg", 30px);
+  @include mixins.provider-image("/assets/images/clouds/bringyourown-dark.svg", 30px);
 
   filter: none;
 }
 
 .km-provider-logo-kubevirt {
-  @include provider-image("/assets/images/clouds/kubevirt-dark.svg", 30px);
+  @include mixins.provider-image("/assets/images/clouds/kubevirt-dark.svg", 30px);
 
   filter: none;
 }
 
 .km-provider-logo-vsphere {
-  @include provider-image("/assets/images/clouds/vsphere-dark.svg", 30px);
+  @include mixins.provider-image("/assets/images/clouds/vsphere-dark.svg", 30px);
 
   filter: none;
 }
 
 .km-icon-info {
-  @include background-image("/assets/images/icons/info-dark.svg", 16px);
+  @include mixins.background-image("/assets/images/icons/info-dark.svg", 16px);
 
   opacity: .85;
 }

@@ -9,10 +9,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'variables';
+@use 'variables';
 
 div.km-os-options {
-  font-size: $font-size-body;
+  font-size: variables.$font-size-body;
   line-height: 30px;
   margin: 0 0 10px;
 }
@@ -21,7 +21,7 @@ mat-button-toggle-group[group='operatingSystemGroup'] {
   flex-wrap: wrap;
 
   .mat-button-toggle {
-    border-radius: $border-radius;
+    border-radius: variables.$border-radius;
     max-height: 60px;
     max-width: 170px;
     min-height: 60px;
@@ -51,7 +51,7 @@ mat-button-toggle-group[group='operatingSystemGroup'] {
 }
 
 .km-provider-options {
-  font-size: $font-size-card-title;
+  font-size: variables.$font-size-card-title;
   font-weight: normal;
   margin-bottom: 16px;
 }
@@ -59,7 +59,7 @@ mat-button-toggle-group[group='operatingSystemGroup'] {
 .eol-warning {
   align-items: center;
   display: flex;
-  font-size: $font-size-body;
+  font-size: variables.$font-size-body;
 
   &.with-margin {
     margin-bottom: 10px;

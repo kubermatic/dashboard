@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {animate, style, transition, trigger} from '@angular/animations';
+import {animate, keyframes, style, transition, trigger} from '@angular/animations';
 
 export const pushToSide = trigger('pushToSide', [
   transition(':enter', [
@@ -20,4 +20,18 @@ export const pushToSide = trigger('pushToSide', [
     animate('200ms', style({opacity: 1, width: '*'})),
   ]),
   transition(':leave', [animate('200ms', style({opacity: 0, width: 0}))]),
+]);
+
+export const pushDown = trigger('pushDown', [
+  transition(':enter', [
+    style({
+      opacity: 0,
+      height: 0,
+    }),
+    animate(
+      '200ms',
+      keyframes([style({opacity: 0, height: '*', offset: 0.5}), style({opacity: 1, height: '*', offset: 1})])
+    ),
+  ]),
+  transition(':leave', [animate('200ms', style({opacity: 0, height: 0}))]),
 ]);

@@ -73,7 +73,7 @@ enum FolderState {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VSphereProviderExtendedComponent extends BaseFormValidator implements OnInit, AfterViewInit, OnDestroy {
-  private readonly _debounceTime = 1000;
+  private readonly _debounceTime = 500;
   private _networkMap: {[type: string]: VSphereNetwork[]} = {};
   private _credentialsChanged = new EventEmitter<void>();
   private _username = '';
@@ -169,6 +169,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
 
   ngAfterViewInit(): void {
     this._credentialsChanged
+      .pipe(debounceTime(this._debounceTime))
       .pipe(tap(_ => this._clearFolders()))
       .pipe(tap(_ => this._clearNetworks()))
       .pipe(switchMap(_ => forkJoin([this._folderListObservable(), this._networkListObservable()])))
