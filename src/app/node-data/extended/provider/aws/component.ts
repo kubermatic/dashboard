@@ -91,6 +91,11 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
     this._nodeDataService.aws.tags = tags;
   }
 
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
+  }
+
   private _init(): void {
     if (this.nodeData.spec.cloud.aws) {
       this.onTagsChange(this.nodeData.spec.cloud.aws.tags);
@@ -134,10 +139,5 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
         } as NodeCloudSpec,
       } as NodeSpec,
     } as NodeData;
-  }
-
-  ngOnDestroy(): void {
-    this._unsubscribe.next();
-    this._unsubscribe.complete();
   }
 }

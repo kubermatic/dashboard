@@ -401,8 +401,8 @@ limitations under the License.
                 <div value>{{nodeData.spec.cloud?.aws?.ami}}</div>
               </km-property>
               <km-property *ngIf="nodeData.spec.cloud?.aws?.spotInstanceMaxPrice">
-                <div key>Spot Instance Max Price (in USD)</div>
-                <div value>{{nodeData.spec.cloud.aws.spotInstanceMaxPrice}}</div>
+                <div key>Spot Instance Max Price</div>
+                <div value>{{nodeData.spec.cloud.aws.spotInstanceMaxPrice | currency:'USD'}}</div>
               </km-property>
             </ng-container>
 
