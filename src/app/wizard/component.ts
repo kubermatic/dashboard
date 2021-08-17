@@ -134,8 +134,8 @@ export class WizardComponent implements OnInit, OnDestroy {
         })
       )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(
-        (keys: SSHKey[]) => {
+      .subscribe({
+        next: (keys: SSHKey[]) => {
           this._router.navigate([`/projects/${this.project.id}/clusters/${createdCluster.id}`]);
           keys.forEach(key =>
             this._notificationService.success(
@@ -143,12 +143,12 @@ export class WizardComponent implements OnInit, OnDestroy {
             )
           );
         },
-        () => {
+        error: () => {
           this._notificationService.error(`Could not create the ${createCluster.cluster.name} cluster`);
           this._googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationFailed');
           this.creating = false;
-        }
-      );
+        },
+      });
   }
 
   private _getCreateClusterModel(cluster: Cluster, nodeData: NodeData): CreateClusterModel {

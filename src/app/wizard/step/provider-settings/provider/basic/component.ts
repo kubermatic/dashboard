@@ -52,7 +52,7 @@ export class ProviderBasicComponent extends BaseFormValidator implements OnInit 
       [Controls.ProviderBasic]: this._builder.control(''),
     });
 
-    merge(this._clusterSpecService.providerChanges, this._clusterSpecService.datacenterChanges)
+    merge(this._clusterSpecService.providerChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
         this.form.removeControl(Controls.ProviderBasic);

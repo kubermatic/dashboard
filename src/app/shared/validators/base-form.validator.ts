@@ -13,11 +13,11 @@ import {AbstractControl, ControlValueAccessor, FormGroup, ValidationErrors, Vali
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
-export class BaseFormValidator implements ControlValueAccessor, Validator {
+export abstract class BaseFormValidator implements ControlValueAccessor, Validator {
   form: FormGroup;
   protected _unsubscribe = new Subject<void>();
 
-  constructor(private _formName = 'Form') {}
+  protected constructor(private _formName = 'Form') {}
 
   // Validator interface implementation
   validate(_: AbstractControl): ValidationErrors | null {

@@ -1,0 +1,43 @@
+<km-dialog-title>{{data.title}}</km-dialog-title>
+<mat-dialog-content>
+  <form [formGroup]="form"
+        fxLayout="column">
+    <mat-form-field fxFlex>
+      <mat-label>Name</mat-label>
+      <input required
+             matInput
+             [formControlName]="controls.Name"
+             type="text"
+             autocomplete="off"
+             cdkFocusInitial>
+      <mat-error *ngIf="form.get(controls.Name).hasError('required')">
+        Name is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field fxFlex>
+      <mat-label>RegistryPrefix</mat-label>
+      <input required
+             matInput
+             [formControlName]="controls.RegistryPrefix"
+             type="text"
+             autocomplete="off"
+             cdkFocusInitial>
+      <mat-error *ngIf="form.get(controls.RegistryPrefix).hasError('required')">
+        RegistryPrefix is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+  </form>
+  <div fxLayoutAlign=" center">
+    <i class="km-icon-warning"></i>
+    <span>Adding this registry could compromise your infrastructure</span>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button id="km-allowed-registry-dialog-btn"
+          mat-flat-button
+          (click)="save()"
+          [disabled]="form.invalid">
+    {{data.confirmLabel}}
+  </button>
+</mat-dialog-actions>
