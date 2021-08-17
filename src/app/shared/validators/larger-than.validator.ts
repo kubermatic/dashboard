@@ -15,6 +15,10 @@ export class LargerThanValidator implements Validator {
   constructor(readonly min: number, readonly inclusive: boolean) {}
 
   validate(control: AbstractControl): ValidationErrors | null {
+    if ((!control.value && control.value !== 0) || control.value.length === 0) {
+      return null;
+    }
+
     const value = +control.value;
 
     if (isNaN(value)) {

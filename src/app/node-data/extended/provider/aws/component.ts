@@ -115,7 +115,7 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
       const spotInstanceMaxPrice =
         this._nodeDataService.mode === NodeDataMode.Dialog && !!this.nodeData.name
           ? this.nodeData.spec.cloud.aws.spotInstanceMaxPrice
-          : false;
+          : '';
       this.form.get(Controls.SpotInstanceMaxPrice).setValue(spotInstanceMaxPrice);
 
       const spotInstancePersistentRequest =
