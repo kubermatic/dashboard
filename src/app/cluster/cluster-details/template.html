@@ -183,6 +183,10 @@ limitations under the License.
           </div>
         </km-property>
 
+        <km-property-boolean *ngIf="cluster?.spec?.cloud?.azure"
+                             label="Assign Availability Set"
+                             [value]="cluster.spec.cloud.azure.assignAvailabilitySet"></km-property-boolean>
+
         <km-property-boolean label="User SSH Key Agent"
                              [value]="cluster.spec.enableUserSSHKeyAgent">
         </km-property-boolean>
