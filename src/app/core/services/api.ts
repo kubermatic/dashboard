@@ -16,7 +16,7 @@ import {environment} from '@environments/environment';
 import {LabelFormComponent} from '@shared/components/label-form/component';
 import {TaintFormComponent} from '@shared/components/taint-form/component';
 import {AddonConfig} from '@shared/entity/addon';
-import {Cluster, ClusterType, MasterVersion, OIDCParams, Token} from '@shared/entity/cluster';
+import {Cluster, ClusterType, MasterVersion, Token} from '@shared/entity/cluster';
 import {Event} from '@shared/entity/event';
 import {MachineDeployment, MachineDeploymentPatch} from '@shared/entity/machine-deployment';
 import {CreateMember, Member} from '@shared/entity/member';
@@ -243,11 +243,6 @@ export class ApiService {
 
   getShareKubeconfigURL(projectID: string, seed: string, clusterID: string, userID: string): string {
     return `${this._location}/${this._restRoot}/kubeconfig?project_id=${projectID}&datacenter=${seed}&cluster_id=${clusterID}&user_id=${userID}`;
-  }
-
-  getClusterOIDCParams(projectID: string, clusterID: string): Observable<OIDCParams> {
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/oidc`;
-    return this._http.get<OIDCParams>(url);
   }
 
   getMasterVersions(type: ClusterType): Observable<MasterVersion[]> {

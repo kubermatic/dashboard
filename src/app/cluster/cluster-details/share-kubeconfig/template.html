@@ -13,7 +13,7 @@ limitations under the License.
 <km-dialog-title>Share</km-dialog-title>
 <mat-dialog-content>
   <p>
-    You can share this cluster with others by giving them the following link that can be used to authenticate with
+    You can share this cluster with other users by giving them the following link that can be used to authenticate with
     an OIDC provider and then generate a kubeconfig file.
   </p>
   <p>
@@ -26,15 +26,6 @@ limitations under the License.
        matTooltip="Click to copy"
        ngxClipboard
        [cbContent]="kubeconfigLink">{{kubeconfigLink}}</div>
-  <p>
-    You can also share this cluster with others by providing them following kubelogin command that they can use to
-    login directly from the CLI.
-  </p>
-  <div class="km-code-block km-copy"
-       matTooltip="Click to copy"
-       ngxClipboard
-       [cbContent]="getKubeloginCommand()">{{getKubeloginCommand()}}
-  </div>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-dialog-close

@@ -12,7 +12,7 @@
 import {Injectable} from '@angular/core';
 import {defer, Observable, of} from 'rxjs';
 import {async} from 'rxjs-compat/scheduler/async';
-import {Cluster, MasterVersion, OIDCParams, Token} from '@shared/entity/cluster';
+import {Cluster, MasterVersion, Token} from '@shared/entity/cluster';
 import {CreateMember, Member} from '@shared/entity/member';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {Node} from '@shared/entity/node';
@@ -174,10 +174,6 @@ export class ApiMockService {
 
   createServiceAccountToken(_projectID: string, _serviceaccount: ServiceAccount): Observable<ServiceAccountToken> {
     return of(this.serviceAccountToken);
-  }
-
-  getClusterOIDCParams(_projectID: string, _clusterID: string): Observable<OIDCParams> {
-    return of({});
   }
 
   editServiceAccountToken(
