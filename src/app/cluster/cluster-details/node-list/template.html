@@ -321,7 +321,7 @@ limitations under the License.
               <div key>Node Size</div>
               <div value>{{element.spec.cloud.azure.size}}</div>
             </km-property>
-            <km-property *ngIf="element.spec.cloud.azure?.zones">
+            <km-property *ngIf="element.spec.cloud.azure?.zones?.length > 0">
               <div key>Zones</div>
               <div value>{{element.spec.cloud.azure.zones}}</div>
             </km-property>
@@ -426,6 +426,10 @@ limitations under the License.
             <km-property-boolean *ngIf="element.spec.cloud.azure"
                                  label="Assign Public IP"
                                  [value]="element.spec.cloud.azure.assignPublicIP">
+            </km-property-boolean>
+            <km-property-boolean *ngIf="element.spec.cloud.azure"
+                                 label="Assign Availability Set"
+                                 [value]="element.spec.cloud.azure.assignAvailabilitySet">
             </km-property-boolean>
             <km-property-boolean *ngIf="element.spec.cloud.aws"
                                  label="Spot Instance"
