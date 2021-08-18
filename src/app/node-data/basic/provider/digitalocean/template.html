@@ -26,7 +26,7 @@ limitations under the License.
                inputLabel="Select size..."
                filterBy="slug">
     <div *option="let size">
-      {{size.slug}} ({{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus != 1) ? 's' : '' }}, ${{ size.price_monthly }} per month)
+      {{size.slug}} ({{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus !== 1) ? 's' : '' }}, ${{ size.price_monthly }} per month)
     </div>
   </km-combobox>
 </form>

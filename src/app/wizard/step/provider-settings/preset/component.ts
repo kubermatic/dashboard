@@ -72,6 +72,10 @@ export class PresetsComponent extends BaseFormValidator implements OnInit, OnDes
 
   set selectedPreset(preset: string) {
     this.form.get(Controls.Preset).setValue(preset);
+    if (!preset) {
+      this.form.get(Controls.Preset).reset();
+    }
+
     this._presets.preset = preset;
     this._clusterSpecService.cluster = {credential: preset} as Cluster;
   }
