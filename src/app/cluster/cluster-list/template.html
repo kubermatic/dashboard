@@ -24,6 +24,13 @@ limitations under the License.
     <i class="km-icon-mask km-icon-connect"></i>
     <span>Connect Cluster</span>
   </button>
+  <button mat-flat-button
+          type="button"
+          fxLayoutAlign="center center"
+          [disabled]="!canAdd()">
+    <i class="km-icon-mask km-icon-add"></i>
+    <span>Create Cluster from Template</span>
+  </button>
   <button id="km-add-cluster-top-btn"
           mat-flat-button
           type="button"

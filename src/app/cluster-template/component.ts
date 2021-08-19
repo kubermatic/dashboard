@@ -28,9 +28,9 @@ import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import * as _ from 'lodash';
 import {EMPTY, merge, Subject, timer} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
-import {Router} from "@angular/router";
-import {ClusterTemplateService} from "@core/services/cluster-templates";
-import {AppConfigService} from "@app/config.service";
+import {Router} from '@angular/router';
+import {ClusterTemplateService} from '@core/services/cluster-templates';
+import {AppConfigService} from '@app/config.service';
 
 @Component({
   selector: 'km-cluster-template',
@@ -67,7 +67,7 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit(): void {
     this._setupList();
 
-    this._userService.currentUser.pipe(take(1)).subscribe(user => this.currentUser = user);
+    this._userService.currentUser.pipe(take(1)).subscribe(user => (this.currentUser = user));
 
     this._projectService.selectedProject
       .pipe(
@@ -81,7 +81,11 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
     merge(timer(0, this._refreshTime * this._appConfig.getRefreshTimeBase()), this._membersUpdate)
-      .pipe(switchMap(() => (this._selectedProject ? this._clusterTemplateService.clusterTemplates(this._selectedProject.id) : EMPTY)))
+      .pipe(
+        switchMap(() =>
+          this._selectedProject ? this._clusterTemplateService.clusterTemplates(this._selectedProject.id) : EMPTY
+        )
+      )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(clusterTemplates => {
         this.clusterTemplates = clusterTemplates;
@@ -110,6 +114,10 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  onSearch(query: string): void {
+    this.dataSource.filter = query;
   }
 
   isAddEnabled(): boolean {
@@ -166,6 +174,8 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isPaginatorVisible(): boolean {
-    return !_.isEmpty(this.clusterTemplates) && this.paginator && this.clusterTemplates.length > this.paginator.pageSize;
+    return (
+      !_.isEmpty(this.clusterTemplates) && this.paginator && this.clusterTemplates.length > this.paginator.pageSize
+    );
   }
 }
