@@ -217,6 +217,7 @@ export function fakeAzureCluster(): Cluster {
           tenantID: 'azure-tenant-id',
           vnet: 'azure-vnet',
           loadBalancerSKU: 'basic',
+          assignAvailabilitySet: true,
         },
       },
       version: '1.8.5',

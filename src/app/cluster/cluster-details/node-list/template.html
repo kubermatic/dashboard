@@ -235,6 +235,10 @@ limitations under the License.
               <div key>AMI ID</div>
               <div value>{{element.spec.cloud.aws.ami}}</div>
             </km-property>
+            <km-property *ngIf="element.spec.cloud.aws?.spotInstanceMaxPrice">
+              <div key>Spot Instance Max Price</div>
+              <div value>{{element.spec.cloud.aws.spotInstanceMaxPrice | currency:'USD'}}</div>
+            </km-property>
 
             <km-property *ngIf="element.spec.cloud.openstack">
               <div key>Node Image</div>
@@ -321,7 +325,7 @@ limitations under the License.
               <div key>Node Size</div>
               <div value>{{element.spec.cloud.azure.size}}</div>
             </km-property>
-            <km-property *ngIf="element.spec.cloud.azure?.zones">
+            <km-property *ngIf="element.spec.cloud.azure?.zones?.length > 0">
               <div key>Zones</div>
               <div value>{{element.spec.cloud.azure.zones}}</div>
             </km-property>
@@ -427,9 +431,17 @@ limitations under the License.
                                  label="Assign Public IP"
                                  [value]="element.spec.cloud.azure.assignPublicIP">
             </km-property-boolean>
+            <km-property-boolean *ngIf="element.spec.cloud.azure"
+                                 label="Assign Availability Set"
+                                 [value]="element.spec.cloud.azure.assignAvailabilitySet">
+            </km-property-boolean>
             <km-property-boolean *ngIf="element.spec.cloud.aws"
                                  label="Spot Instance"
                                  [value]="element.spec.cloud.aws.isSpotInstance">
+            </km-property-boolean>
+            <km-property-boolean *ngIf="element.spec.cloud.aws"
+                                 label="Spot Instance Persistent Request"
+                                 [value]="element.spec.cloud.aws.spotInstancePersistentRequest">
             </km-property-boolean>
             <!-- End of boolean properties. -->
 

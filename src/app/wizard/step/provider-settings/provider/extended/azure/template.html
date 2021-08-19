@@ -78,4 +78,13 @@ limitations under the License.
       Enter your credentials, resource group and VNet to load autocompletions.
     </ng-container>
   </km-autocomplete>
+  <mat-checkbox [formControlName]="Controls.AssignAvailabilitySet"
+                [name]="Controls.AssignAvailabilitySet">
+    <div fxLayoutGap="8px"
+         fxLayoutAlign=" center">
+      <span>Assign Availability Set</span>
+      <i class="km-pointer km-icon-info"
+         matTooltip="Enable to create availability set and assign worker machines to it."></i>
+    </div>
+  </mat-checkbox>
 </form>

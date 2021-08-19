@@ -10,12 +10,13 @@
 // limitations under the License.
 
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {NodeDataService} from '@core/services/node-data/service';
 import {pushDown} from '@shared/animations/push';
 import {NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
+import {KmValidators} from '@shared/validators/validators';
 import {merge} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {NodeDataMode} from '../../../config';
@@ -68,7 +69,7 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
       [Controls.AssignPublicIP]: this._builder.control(true),
       [Controls.IsSpotInstance]: this._builder.control(false),
       [Controls.Tags]: this._builder.control(''),
-      [Controls.SpotInstanceMaxPrice]: this._builder.control('', [Validators.min(1)]),
+      [Controls.SpotInstanceMaxPrice]: this._builder.control('', [KmValidators.largerThan(0)]),
       [Controls.SpotInstancePersistentRequest]: this._builder.control(false),
     });
 
@@ -90,6 +91,11 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
     this._nodeDataService.aws.tags = tags;
   }
 
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
+  }
+
   private _init(): void {
     if (this.nodeData.spec.cloud.aws) {
       this.onTagsChange(this.nodeData.spec.cloud.aws.tags);
@@ -109,7 +115,7 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
       const spotInstanceMaxPrice =
         this._nodeDataService.mode === NodeDataMode.Dialog && !!this.nodeData.name
           ? this.nodeData.spec.cloud.aws.spotInstanceMaxPrice
-          : false;
+          : '';
       this.form.get(Controls.SpotInstanceMaxPrice).setValue(spotInstanceMaxPrice);
 
       const spotInstancePersistentRequest =
@@ -133,10 +139,5 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
         } as NodeCloudSpec,
       } as NodeSpec,
     } as NodeData;
-  }
-
-  ngOnDestroy(): void {
-    this._unsubscribe.next();
-    this._unsubscribe.complete();
   }
 }

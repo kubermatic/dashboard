@@ -13,26 +13,21 @@ limitations under the License.
 <km-dialog-title>Share</km-dialog-title>
 <mat-dialog-content>
   <p>
-    You can share this cluster with users by giving them the following link.
-    They can use it to authenticate with an OIDC provider and then generate a kubeconfig.
+    You can share this cluster with other users by giving them the following link that can be used to authenticate with
+    an OIDC provider and then generate a kubeconfig file.
   </p>
   <p>
-    Please <a href="https://docs.kubermatic.com/kubermatic/master/advanced/oidc_auth/"
+    Please <a href="https://docs.kubermatic.com/kubermatic/master/tutorials_howtos/oidc_provider_configuration/share-_clusters_via_delegated_oidc_authentication/"
        target="_blank"
        rel="noopener">visit our documentation</a>
     for more details.
   </p>
-  <div class="km-code-block"
+  <div class="km-code-block km-copy"
+       matTooltip="Click to copy"
        ngxClipboard
        [cbContent]="kubeconfigLink">{{kubeconfigLink}}</div>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-flat-button
-          color="alternative"
-          ngxClipboard
-          [cbContent]="kubeconfigLink">
-    <i class="km-icon-copy"></i>
-  </button>
   <button mat-dialog-close
           mat-flat-button>
     Got it

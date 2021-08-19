@@ -164,6 +164,7 @@ export class AzureNodeSpec {
   zones: string[];
   osDiskSize: number;
   dataDiskSize: number;
+  assignAvailabilitySet: boolean;
 }
 
 export class DigitaloceanNodeSpec {

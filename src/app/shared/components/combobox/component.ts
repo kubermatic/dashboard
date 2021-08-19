@@ -55,6 +55,7 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
   @Input() inputLabel: string;
   @Input() required = false;
   @Input() grouped = false;
+  @Input() isDisabled = false;
   @Input() groups: string[] = [];
   @Input() options: object[] = [];
   @Input() filterBy: string;
@@ -82,6 +83,8 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
       [Controls.Select]: this._builder.control('', this.required ? Validators.required : []),
     });
 
+    this._updateFormState();
+
     if (!this.selectBy) {
       this.selectBy = this.filterBy;
     }
@@ -92,6 +95,22 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
       .pipe(distinctUntilChanged())
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.changed.emit(this.form.get(Controls.Select).value));
+  }
+
+  private _updateFormState(): void {
+    if (!this.form) {
+      return;
+    }
+
+    this.form.get(Controls.Select).setValue(this.selected);
+
+    if (this.isDisabled) {
+      this.form.disable();
+    } else {
+      this.form.enable();
+    }
+
+    this.form.updateValueAndValidity();
   }
 
   onOpen(opened: boolean): void {
@@ -111,12 +130,7 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
   }
 
   ngOnChanges(): void {
-    if (!this.form) {
-      return;
-    }
-
-    this.form.get(Controls.Select).setValue(this.selected);
-    this.form.updateValueAndValidity();
+    this._updateFormState();
   }
 
   ngOnDestroy(): void {
