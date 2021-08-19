@@ -14,8 +14,6 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
-import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {ApiService} from '@core/services/api';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
@@ -31,10 +29,10 @@ import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {Router} from '@angular/router';
 import {ClusterTemplateService} from '@core/services/cluster-templates';
 import {AppConfigService} from '@app/config.service';
-import {ClusterTemplate} from "@shared/entity/cluster-template";
-import {Datacenter} from "@shared/entity/datacenter";
-import {DatacenterService} from "@core/services/datacenter";
-import {CloudSpec, Cluster} from "@shared/entity/cluster";
+import {ClusterTemplate} from '@shared/entity/cluster-template';
+import {Datacenter} from '@shared/entity/datacenter';
+import {DatacenterService} from '@core/services/datacenter';
+import {CloudSpec, Cluster} from '@shared/entity/cluster';
 
 @Component({
   selector: 'km-cluster-template',
@@ -54,52 +52,26 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
 
   private readonly _refreshTime = 10; // in seconds
   private _unsubscribe = new Subject<void>();
-  private _membersUpdate = new Subject<void>();
+  private _refresh = new Subject<void>();
   private _currentGroupConfig: GroupConfig;
   private _selectedProject: Project;
 
   constructor(
-    private readonly _clusterTemplateService: ClusterTemplateService,
+    private readonly _ctService: ClusterTemplateService,
     private readonly _datacenterService: DatacenterService,
     private readonly _router: Router,
-    private readonly _apiService: ApiService,
     private readonly _projectService: ProjectService,
     private readonly _matDialog: MatDialog,
     private readonly _userService: UserService,
-    private readonly _googleAnalyticsService: GoogleAnalyticsService,
     private readonly _appConfig: AppConfigService,
     private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
     this._setupList();
-
-    this._userService.currentUser.pipe(take(1)).subscribe(user => (this.currentUser = user));
-
-    this._projectService.selectedProject
-      .pipe(
-        switchMap(project => {
-          this._selectedProject = project;
-          this._membersUpdate.next();
-          return this._userService.getCurrentUserGroup(project.id);
-        })
-      )
-      .pipe(take(1))
-      .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
-
-    merge(timer(0, this._refreshTime * this._appConfig.getRefreshTimeBase()), this._membersUpdate)
-      .pipe(
-        switchMap(() =>
-          this._selectedProject ? this._clusterTemplateService.clusterTemplates(this._selectedProject.id) : EMPTY
-        )
-      )
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(clusterTemplates => {
-        this.clusterTemplates = clusterTemplates;
-        this.dataSource.data = this.clusterTemplates;
-        this.isInitializing = false;
-        this._loadDatacenters();
-      });
+    this._loadUser();
+    this._loadProject();
+    this._loadClusterTemplates();
   }
 
   private _setupList(): void {
@@ -115,11 +87,42 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  private _loadDatacenters(): void {
-    this.clusterTemplates.map(clusterTemplate => this._datacenterService
-      .getDatacenter(clusterTemplate.cluster.spec.cloud.dc)
+  private _loadUser(): void {
+    this._userService.currentUser.pipe(take(1)).subscribe(user => (this.currentUser = user));
+  }
+
+  private _loadProject(): void {
+    this._projectService.selectedProject
+      .pipe(
+        switchMap(project => {
+          this._selectedProject = project;
+          this._refresh.next();
+          return this._userService.getCurrentUserGroup(project.id);
+        })
+      )
       .pipe(take(1))
-      .subscribe(datacenter => this.templateDatacenterMap[clusterTemplate.id] = datacenter));
+      .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
+  }
+
+  private _loadClusterTemplates(): void {
+    merge(timer(0, this._refreshTime * this._appConfig.getRefreshTimeBase()), this._refresh)
+      .pipe(switchMap(() => (this._selectedProject ? this._ctService.list(this._selectedProject.id) : EMPTY)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(clusterTemplates => {
+        this.clusterTemplates = clusterTemplates;
+        this.dataSource.data = this.clusterTemplates;
+        this.isInitializing = false;
+        this._loadDatacenters();
+      });
+  }
+
+  private _loadDatacenters(): void {
+    this.clusterTemplates.map(clusterTemplate =>
+      this._datacenterService
+        .getDatacenter(clusterTemplate.cluster.spec.cloud.dc)
+        .pipe(take(1))
+        .subscribe(datacenter => (this.templateDatacenterMap[clusterTemplate.id] = datacenter))
+    );
   }
 
   ngOnChanges(): void {
@@ -161,30 +164,26 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
     );
   }
 
-  delete(member: Member): void {
+  delete(ct: ClusterTemplate): void {
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,
       data: {
         title: 'Delete Cluster Template',
-        message: `Delete ${member.name} member from the ${this._selectedProject.name} project?`,
+        message: `Delete ${ct.name} cluster template?`,
         confirmLabel: 'Delete',
       },
     };
 
-    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
-    this._googleAnalyticsService.emitEvent('memberOverview', 'deleteMemberOpened');
-
-    dialogRef
+    this._matDialog
+      .open(ConfirmationDialogComponent, dialogConfig)
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
-      .pipe(switchMap(_ => this._apiService.deleteMembers(this._selectedProject.id, member)))
+      .pipe(switchMap(_ => this._ctService.delete(this._selectedProject.id, ct.id)))
       .pipe(take(1))
       .subscribe(() => {
-        this._notificationService.success(
-          `The ${member.name} member was removed from the ${this._selectedProject.name} project`
-        );
-        this._googleAnalyticsService.emitEvent('memberOverview', 'MemberDeleted');
+        this._refresh.next();
+        this._notificationService.success(`The ${ct.name} cluster template was removed`);
       });
   }
 
