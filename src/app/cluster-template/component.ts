@@ -31,13 +31,19 @@ import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {Router} from '@angular/router';
 import {ClusterTemplateService} from '@core/services/cluster-templates';
 import {AppConfigService} from '@app/config.service';
+import {ClusterTemplate} from "@shared/entity/cluster-template";
+import {Datacenter} from "@shared/entity/datacenter";
+import {DatacenterService} from "@core/services/datacenter";
+import {CloudSpec, Cluster} from "@shared/entity/cluster";
 
 @Component({
   selector: 'km-cluster-template',
   templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
-  clusterTemplates: any[] = [];
+  clusterTemplates: ClusterTemplate[] = [];
+  templateDatacenterMap: Map<string, Datacenter> = new Map<string, Datacenter>();
   isInitializing = true;
   currentUser: Member;
   displayedColumns: string[] = ['name', 'scope', 'provider', 'region', 'actions'];
@@ -54,6 +60,7 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     private readonly _clusterTemplateService: ClusterTemplateService,
+    private readonly _datacenterService: DatacenterService,
     private readonly _router: Router,
     private readonly _apiService: ApiService,
     private readonly _projectService: ProjectService,
@@ -91,6 +98,7 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
         this.clusterTemplates = clusterTemplates;
         this.dataSource.data = this.clusterTemplates;
         this.isInitializing = false;
+        this._loadDatacenters();
       });
   }
 
@@ -105,6 +113,13 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
       this.paginator.pageSize = settings.itemsPerPage;
       this.dataSource.paginator = this.paginator;
     });
+  }
+
+  private _loadDatacenters(): void {
+    this.clusterTemplates.map(clusterTemplate => this._datacenterService
+      .getDatacenter(clusterTemplate.cluster.spec.cloud.dc)
+      .pipe(take(1))
+      .subscribe(datacenter => this.templateDatacenterMap[clusterTemplate.id] = datacenter));
   }
 
   ngOnChanges(): void {
@@ -171,6 +186,10 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
         );
         this._googleAnalyticsService.emitEvent('memberOverview', 'MemberDeleted');
       });
+  }
+
+  getProvider(cloud: CloudSpec): string {
+    return Cluster.getProvider(cloud);
   }
 
   isPaginatorVisible(): boolean {

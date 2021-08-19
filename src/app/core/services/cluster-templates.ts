@@ -15,8 +15,7 @@ import {Observable, of} from 'rxjs';
 import {catchError, shareReplay} from 'rxjs/operators';
 
 import {environment} from '@environments/environment';
-import {Cluster} from '@shared/entity/cluster';
-
+import {ClusterTemplate} from "@shared/entity/cluster-template";
 
 @Injectable()
 export class ClusterTemplateService {
@@ -24,10 +23,10 @@ export class ClusterTemplateService {
 
   constructor(private readonly _http: HttpClient,) {}
 
-  clusterTemplates(projectID: string): Observable<any[]> {
+  clusterTemplates(projectID: string): Observable<ClusterTemplate[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/clustertemplates`;
-    return this._http.get<Cluster[]>(url).pipe(
-      catchError(() => of<any[]>()),
+    return this._http.get<ClusterTemplate[]>(url).pipe(
+      catchError(() => of<ClusterTemplate[]>()),
       shareReplay({refCount: true, bufferSize: 1})
     );
   }

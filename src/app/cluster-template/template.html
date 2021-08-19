@@ -56,7 +56,10 @@ limitations under the License.
             *matHeaderCellDef
             class="km-header-cell">Provider</th>
         <td mat-cell
-            *matCellDef="let element">-</td>
+            *matCellDef="let element">
+          <span *ngIf="element?.cluster?.spec?.cloud"
+                class="km-provider-logo km-provider-logo-{{getProvider(element.cluster.spec.cloud)}}"></span>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="region">
@@ -64,7 +67,11 @@ limitations under the License.
             *matHeaderCellDef
             class="km-header-cell">Region</th>
         <td mat-cell
-            *matCellDef="let element">-</td>
+            *matCellDef="let element">
+          <ng-container *ngIf="!!templateDatacenterMap[element.id]">
+            {{templateDatacenterMap[element.id].spec.country}} ({{templateDatacenterMap[element.id].spec.location}})
+          </ng-container>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="actions">
