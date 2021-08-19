@@ -83,6 +83,10 @@
   @include mixins.mask-image("/assets/images/icons/disconnect.svg", 18px);
 }
 
+.km-icon-cluster-from-template {
+  @include mixins.mask-image("/assets/images/icons/cluster-from-template.svg", 18px);
+}
+
 .km-icon-cancel {
   @include mixins.mask-image("/assets/images/icons/x.svg", 18px);
 }
@@ -156,6 +160,10 @@
 
 .km-icon-key {
   @include mixins.mask-image("/assets/images/icons/ssh-keys.svg", 24px);
+}
+
+.km-icon-cluster-template {
+  @include mixins.mask-image("/assets/images/icons/cluster-template.svg", 24px);
 }
 
 .km-icon-member {
