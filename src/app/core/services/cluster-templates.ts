@@ -23,12 +23,22 @@ export class ClusterTemplateService {
 
   constructor(private readonly _http: HttpClient) {}
 
+  create(template: ClusterTemplate, projectID: string): Observable<ClusterTemplate> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clustertemplates`;
+    return this._http.post<ClusterTemplate>(url, template);
+  }
+
   list(projectID: string): Observable<ClusterTemplate[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/clustertemplates`;
     return this._http.get<ClusterTemplate[]>(url).pipe(
       catchError(() => of<ClusterTemplate[]>()),
       shareReplay({refCount: true, bufferSize: 1})
     );
+  }
+
+  get(projectID: string, templateID: string): Observable<ClusterTemplate> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clustertemplates/${templateID}`;
+    return this._http.get<ClusterTemplate>(url);
   }
 
   delete(projectID: string, templateID: string): Observable<any> {

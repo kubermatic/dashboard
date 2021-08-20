@@ -28,7 +28,7 @@ limitations under the License.
         </km-property>
         <km-property>
           <div key>Datacenter</div>
-          <div value>{{datacenter?.spec?.location}} ({{datacenter?.spec?.country}})</div>
+          <div value><span *ngIf="datacenter?.spec">{{datacenter.spec.location}} ({{datacenter.spec.country}})</span></div>
         </km-property>
       </div>
     </div>

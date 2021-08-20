@@ -93,7 +93,7 @@ limitations under the License.
               <ng-container *ngSwitchCase="false">
                 <button mat-icon-button
                         matTooltip="Create Cluster from Template"
-                        (click)="delete(element)"
+                        (click)="createCluster(element)"
                         [disabled]="!canCreateCluster()">
                   <i class="km-icon-cluster-from-template"></i>
                 </button>

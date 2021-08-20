@@ -88,6 +88,7 @@ import {RelativeTimePipe} from './pipes/relativetime';
 import {AutocompleteComponent} from '@shared/components/autocomplete/component';
 import {CIDRFormComponent} from '@shared/components/cidr-form/component';
 import {ClusterSummaryComponent} from '@shared/components/cluster-summary/component';
+import {ClusterFromTemplateDialogComponent} from '@shared/components/cluster-from-template/component';
 
 const modules: any[] = [
   CommonModule,
@@ -172,6 +173,7 @@ const components: any[] = [
   AutocompleteComponent,
   LinkLocationPipe,
   ClusterSummaryComponent,
+  ClusterFromTemplateDialogComponent,
 ];
 
 const directives: any[] = [AutofocusDirective, OptionDirective];

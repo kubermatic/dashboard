@@ -33,6 +33,7 @@ import {ClusterTemplate, ClusterTemplateScope} from '@shared/entity/cluster-temp
 import {Datacenter} from '@shared/entity/datacenter';
 import {DatacenterService} from '@core/services/datacenter';
 import {CloudSpec, Cluster} from '@shared/entity/cluster';
+import {ClusterFromTemplateDialogComponent} from '@shared/components/cluster-from-template/component';
 
 @Component({
   selector: 'km-cluster-template',
@@ -219,5 +220,15 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
       MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, View.ClusterTemplates, Permission.View) &&
       MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, View.Clusters, Permission.Create)
     );
+  }
+
+  createCluster(template: ClusterTemplate): void {
+    const dialogConfig: MatDialogConfig = {
+      disableClose: false,
+      hasBackdrop: true,
+      data: template,
+    };
+
+    this._matDialog.open(ClusterFromTemplateDialogComponent, dialogConfig);
   }
 }
