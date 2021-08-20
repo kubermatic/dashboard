@@ -87,6 +87,7 @@ import {AutofocusDirective} from './directives/autofocus/directive';
 import {RelativeTimePipe} from './pipes/relativetime';
 import {AutocompleteComponent} from '@shared/components/autocomplete/component';
 import {CIDRFormComponent} from '@shared/components/cidr-form/component';
+import {ClusterSummaryComponent} from '@shared/components/cluster-summary/component';
 
 const modules: any[] = [
   CommonModule,
@@ -170,6 +171,7 @@ const components: any[] = [
   DynamicTabComponent,
   AutocompleteComponent,
   LinkLocationPipe,
+  ClusterSummaryComponent,
 ];
 
 const directives: any[] = [AutofocusDirective, OptionDirective];

@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@mixin theme-wizard-summary-step-component($colors) {
+@mixin theme-cluster-summary-component($colors) {
   .km-main,
   .km-main > div {
     background-color: map-get($colors, background);

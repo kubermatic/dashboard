@@ -13,34 +13,21 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {NodeDataService} from '@core/services/node-data/service';
-import {LabelFormComponent} from '@shared/components/label-form/component';
 import {Cluster} from '@shared/entity/cluster';
-import {SeedSettings} from '@shared/entity/datacenter';
-import {getOperatingSystem, getOperatingSystemLogoClass} from '@shared/entity/node';
+import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {SSHKey} from '@shared/entity/ssh-key';
-import {getIpCount} from '@shared/functions/get-ip-count';
-import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {NodeData} from '@shared/model/NodeSpecChange';
-import {AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
-import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {take, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {MachineDeployment} from '@shared/entity/machine-deployment';
 
 @Component({
   selector: 'km-wizard-summary-step',
   templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
 })
 export class SummaryStepComponent implements OnInit, OnDestroy {
-  clusterSSHKeys: SSHKey[] = [];
-  clusterAdmissionPlugins: string[] = [];
-  nodeData: NodeData;
-  cluster: Cluster;
-  noMoreIpsLeft = false;
-
-  private _location: string;
-  private _country: string;
-  private _seedSettings: SeedSettings;
+  datacenter: Datacenter;
+  seedSettings: SeedSettings;
+  sshKeys: SSHKey[] = [];
   private _unsubscribe = new Subject<void>();
 
   constructor(
@@ -49,48 +36,15 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
     private readonly _datacenterService: DatacenterService
   ) {}
 
-  get country(): string {
-    return this._country;
-  }
-
-  get location(): string {
-    return this._location;
-  }
-
-  get datacenter(): string {
-    return this.cluster.spec.cloud.dc;
-  }
-
-  get provider(): NodeProvider {
-    return this._clusterSpecService.provider;
-  }
-
   ngOnInit(): void {
-    this.nodeData = this._nodeDataService.nodeData;
-    this.cluster = this._clusterSpecService.cluster;
-    this._clusterSpecService.sshKeyChanges
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(keys => (this.clusterSSHKeys = keys));
-
-    this._clusterSpecService.admissionPluginsChanges
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(plugins => (this.clusterAdmissionPlugins = plugins));
+    this._clusterSpecService.sshKeyChanges.pipe(takeUntil(this._unsubscribe)).subscribe(keys => (this.sshKeys = keys));
 
     this._clusterSpecService.datacenterChanges
       .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
-      .pipe(
-        tap(dc => {
-          this._location = dc.spec.location;
-          this._country = dc.spec.country;
-        })
-      )
+      .pipe(tap(dc => (this.datacenter = dc)))
       .pipe(switchMap(dc => this._datacenterService.seedSettings(dc.spec.seed)))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(seedSettings => (this._seedSettings = seedSettings));
-
-    if (this.cluster.spec.machineNetworks) {
-      this.noMoreIpsLeft = this._noIpsLeft(this.cluster, this.nodeData.count);
-    }
+      .subscribe(seedSettings => (this.seedSettings = seedSettings));
   }
 
   ngOnDestroy(): void {
@@ -98,78 +52,19 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  getOperatingSystem(): string {
-    return getOperatingSystem(this.nodeData.spec);
+  get cluster(): Cluster {
+    return this._clusterSpecService.cluster;
   }
 
-  getOperatingSystemLogoClass(): string {
-    return getOperatingSystemLogoClass(this.nodeData.spec);
-  }
-
-  getClusterType(): string {
-    return Cluster.getDisplayType(this.cluster);
-  }
-
-  displaySettings(): boolean {
-    return Object.values(NodeProvider).some(p => this._hasProviderOptions(p));
-  }
-
-  displayTags(tags: object): boolean {
-    return !!tags && !_.isEmpty(Object.keys(LabelFormComponent.filterNullifiedKeys(tags)));
-  }
-
-  displayNoProviderTags(): boolean {
-    const provider = this._clusterSpecService.provider;
-    switch (provider) {
-      case NodeProvider.AWS:
-      case NodeProvider.OPENSTACK:
-      case NodeProvider.AZURE:
-        return !this.displayTags(this.nodeData.spec.cloud[provider].tags);
-      case NodeProvider.ALIBABA:
-        return !this.displayTags(this.nodeData.spec.cloud[provider].labels);
-      case NodeProvider.DIGITALOCEAN:
-      case NodeProvider.GCP:
-      case NodeProvider.PACKET:
-        return (
-          this.nodeData.spec.cloud[provider] &&
-          this.nodeData.spec.cloud[provider].tags &&
-          _.isEmpty(this.nodeData.spec.cloud[provider].tags)
-        );
-    }
-
-    return false;
-  }
-
-  getDnsServers(dnsServers: string[]): string {
-    return dnsServers.join(', ');
-  }
-
-  getSSHKeyNames(): string {
-    return this.clusterSSHKeys.map(key => key.name).join(', ');
-  }
-
-  hasAdmissionPlugins(): boolean {
-    return !_.isEmpty(this.clusterAdmissionPlugins);
-  }
-
-  getAdmissionPlugins(): string {
-    return AdmissionPluginUtils.getJoinedPluginNames(this.clusterAdmissionPlugins);
-  }
-
-  isMLAEnabled(): boolean {
-    return !!this._seedSettings && !!this._seedSettings.mla && !!this._seedSettings.mla.user_cluster_mla_enabled;
-  }
-
-  private _hasProviderOptions(provider: NodeProvider): boolean {
-    return (
-      this._clusterSpecService.provider === provider &&
-      this.cluster.spec.cloud[provider] &&
-      Object.values(this.cluster.spec.cloud[provider]).some(val => val)
-    );
-  }
-
-  private _noIpsLeft(cluster: Cluster, nodeCount: number): boolean {
-    const ipCount = getIpCount(cluster.spec.machineNetworks);
-    return ipCount > 0 ? ipCount < nodeCount : false;
+  get machineDeployment(): MachineDeployment {
+    const data = this._nodeDataService.nodeData;
+    return {
+      name: data.name,
+      spec: {
+        template: data.spec,
+        replicas: data.count,
+        dynamicConfig: data.dynamicConfig,
+      },
+    };
   }
 }

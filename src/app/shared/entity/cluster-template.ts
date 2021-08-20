@@ -14,7 +14,7 @@ import {Cluster} from '@shared/entity/cluster';
 
 export class ClusterTemplate {
   name: string;
-  id: string;
+  id?: string;
   projectID?: string;
   user?: string;
   scope: ClusterTemplateScope;
