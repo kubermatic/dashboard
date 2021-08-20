@@ -53,7 +53,7 @@ import {NotificationPanelComponent} from './components/notification-panel/compon
 import {SidenavComponent} from './components/sidenav/component';
 import {UserPanelComponent} from './components/user-panel/component';
 import {AuthInterceptor, CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor} from './interceptors';
-import {ClusterTemplateService} from "@core/services/cluster-templates";
+import {ClusterTemplateService} from '@core/services/cluster-templates';
 
 const modules: any[] = [
   CommonModule,
