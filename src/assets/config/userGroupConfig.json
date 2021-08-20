@@ -24,6 +24,12 @@
       "create": true,
       "delete": true
     },
+    "clusterTemplates": {
+      "view": true,
+      "edit": true,
+      "create": true,
+      "delete": true
+    },
     "nodes": {
       "view": true,
       "edit": true,
@@ -80,6 +86,12 @@
       "create": true,
       "delete": true
     },
+    "clusterTemplates": {
+      "view": true,
+      "edit": true,
+      "create": true,
+      "delete": true
+    },
     "nodes": {
       "view": true,
       "edit": true,
@@ -131,6 +143,12 @@
       "delete": false
     },
     "clusters": {
+      "view": true,
+      "edit": false,
+      "create": false,
+      "delete": false
+    },
+    "clusterTemplates": {
       "view": true,
       "edit": false,
       "create": false,

@@ -29,7 +29,7 @@ import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {Router} from '@angular/router';
 import {ClusterTemplateService} from '@core/services/cluster-templates';
 import {AppConfigService} from '@app/config.service';
-import {ClusterTemplate} from '@shared/entity/cluster-template';
+import {ClusterTemplate, ClusterTemplateScope} from '@shared/entity/cluster-template';
 import {Datacenter} from '@shared/entity/datacenter';
 import {DatacenterService} from '@core/services/datacenter';
 import {CloudSpec, Cluster} from '@shared/entity/cluster';
@@ -40,7 +40,7 @@ import {CloudSpec, Cluster} from '@shared/entity/cluster';
   styleUrls: ['./style.scss'],
 })
 export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
-  clusterTemplates: ClusterTemplate[] = [];
+  templates: ClusterTemplate[] = [];
   templateDatacenterMap: Map<string, Datacenter> = new Map<string, Datacenter>();
   isInitializing = true;
   currentUser: Member;
@@ -71,7 +71,16 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
     this._setupList();
     this._loadUser();
     this._loadProject();
-    this._loadClusterTemplates();
+    this._loadTemplates();
+  }
+
+  ngOnChanges(): void {
+    this.dataSource.data = this.templates;
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   private _setupList(): void {
@@ -104,73 +113,91 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
   }
 
-  private _loadClusterTemplates(): void {
+  private _loadTemplates(): void {
     merge(timer(0, this._refreshTime * this._appConfig.getRefreshTimeBase()), this._refresh)
       .pipe(switchMap(() => (this._selectedProject ? this._ctService.list(this._selectedProject.id) : EMPTY)))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(clusterTemplates => {
-        this.clusterTemplates = clusterTemplates;
-        this.dataSource.data = this.clusterTemplates;
+      .subscribe(templates => {
+        this.templates = templates;
+        this.dataSource.data = this.templates;
         this.isInitializing = false;
         this._loadDatacenters();
       });
   }
 
   private _loadDatacenters(): void {
-    this.clusterTemplates.map(clusterTemplate =>
+    this.templates.map(template =>
       this._datacenterService
-        .getDatacenter(clusterTemplate.cluster.spec.cloud.dc)
+        .getDatacenter(template.cluster.spec.cloud.dc)
         .pipe(take(1))
-        .subscribe(datacenter => (this.templateDatacenterMap[clusterTemplate.id] = datacenter))
+        .subscribe(datacenter => (this.templateDatacenterMap[template.id] = datacenter))
     );
-  }
-
-  ngOnChanges(): void {
-    this.dataSource.data = this.clusterTemplates;
-  }
-
-  ngOnDestroy(): void {
-    this._unsubscribe.next();
-    this._unsubscribe.complete();
   }
 
   onSearch(query: string): void {
     this.dataSource.filter = query;
   }
 
-  isAddEnabled(): boolean {
-    return MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, View.Members, Permission.Create);
+  isPaginatorVisible(): boolean {
+    return !_.isEmpty(this.templates) && this.paginator && this.templates.length > this.paginator.pageSize;
   }
 
-  createClusterTemplate(): void {
+  getProvider(cloud: CloudSpec): string {
+    return Cluster.getProvider(cloud);
+  }
+
+  canCreate(): boolean {
+    return MemberUtils.hasPermission(
+      this.currentUser,
+      this._currentGroupConfig,
+      View.ClusterTemplates,
+      Permission.Create
+    );
+  }
+
+  create(): void {
     this._router.navigate([`/projects/${this._selectedProject.id}/wizard`]);
   }
 
-  isEditEnabled(member: Member): boolean {
-    return (
-      MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, View.Members, Permission.Edit) &&
-      this.currentUser &&
-      member &&
-      this.currentUser.email !== member.email
-    );
+  canEdit(template: ClusterTemplate): boolean {
+    switch (template.scope) {
+      case ClusterTemplateScope.Global:
+        return this.currentUser.isAdmin;
+      case ClusterTemplateScope.User:
+        return this.currentUser.isAdmin || this.currentUser.email === template.user;
+      case ClusterTemplateScope.Project:
+        return MemberUtils.hasPermission(
+          this.currentUser,
+          this._currentGroupConfig,
+          View.ClusterTemplates,
+          Permission.Edit
+        );
+    }
   }
 
-  isDeleteEnabled(member: Member): boolean {
-    return (
-      MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, View.Members, Permission.Delete) &&
-      this.currentUser &&
-      member &&
-      this.currentUser.email !== member.email
-    );
+  canDelete(template: ClusterTemplate): boolean {
+    switch (template.scope) {
+      case ClusterTemplateScope.Global:
+        return this.currentUser.isAdmin;
+      case ClusterTemplateScope.User:
+        return this.currentUser.isAdmin || this.currentUser.email === template.user;
+      case ClusterTemplateScope.Project:
+        return MemberUtils.hasPermission(
+          this.currentUser,
+          this._currentGroupConfig,
+          View.ClusterTemplates,
+          Permission.Delete
+        );
+    }
   }
 
-  delete(ct: ClusterTemplate): void {
+  delete(template: ClusterTemplate): void {
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,
       data: {
         title: 'Delete Cluster Template',
-        message: `Delete ${ct.name} cluster template?`,
+        message: `Delete ${template.name} cluster template?`,
         confirmLabel: 'Delete',
       },
     };
@@ -179,21 +206,18 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
       .open(ConfirmationDialogComponent, dialogConfig)
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
-      .pipe(switchMap(_ => this._ctService.delete(this._selectedProject.id, ct.id)))
+      .pipe(switchMap(_ => this._ctService.delete(this._selectedProject.id, template.id)))
       .pipe(take(1))
       .subscribe(() => {
         this._refresh.next();
-        this._notificationService.success(`The ${ct.name} cluster template was removed`);
+        this._notificationService.success(`The ${template.name} cluster template was removed`);
       });
   }
 
-  getProvider(cloud: CloudSpec): string {
-    return Cluster.getProvider(cloud);
-  }
-
-  isPaginatorVisible(): boolean {
+  canCreateCluster(): boolean {
     return (
-      !_.isEmpty(this.clusterTemplates) && this.paginator && this.clusterTemplates.length > this.paginator.pageSize
+      MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, View.ClusterTemplates, Permission.View) &&
+      MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, View.Clusters, Permission.Create)
     );
   }
 }
