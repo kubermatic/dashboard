@@ -9,19 +9,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input} from '@angular/core';
+@use 'mixins';
+@use 'variables';
 
-enum Margin {
-  Default = 'default',
-  None = 'none',
+.snapshot-info-container {
+  padding-bottom: 18px;
+  padding-top: 30px;
 }
 
-@Component({
-  selector: 'km-property',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
-})
-export class PropertyComponent {
-  readonly Margin = Margin;
-  @Input() margin = Margin.Default;
+.property-key {
+  font-size: variables.$font-size-caption;
 }

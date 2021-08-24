@@ -11,14 +11,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div [ngClass]="margin === Margin.Default ? 'container' : ''">
-  <div fxLayout="column"
-       fxLayoutAlign="end start">
-    <div class="label km-text-muted">
-      <ng-content select="[key]"></ng-content>
-    </div>
-    <div class="value km-text">
-      <ng-content select="[value]"></ng-content>
-    </div>
-  </div>
-</div>
+<mat-tab-group animationDuration="0ms">
+  <mat-tab label="Automatic Backups">
+    <km-automatic-backup-list></km-automatic-backup-list>
+  </mat-tab>
+
+  <mat-tab label="Snapshots">
+    <km-snapshot-list></km-snapshot-list>
+  </mat-tab>
+</mat-tab-group>

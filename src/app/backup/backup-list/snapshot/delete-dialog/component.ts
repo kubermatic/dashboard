@@ -9,19 +9,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input} from '@angular/core';
+import {Component, Inject} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {EtcdBackupConfig} from '@shared/entity/backup';
 
-enum Margin {
-  Default = 'default',
-  None = 'none',
+export interface DeleteSnapshotDialogConfig {
+  snapshot: EtcdBackupConfig;
 }
 
 @Component({
-  selector: 'km-property',
+  selector: 'km-delete-snapshot-dialog',
   templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
 })
-export class PropertyComponent {
-  readonly Margin = Margin;
-  @Input() margin = Margin.Default;
+export class DeleteSnapshotDialogComponent {
+  constructor(
+    public dialogRef: MatDialogRef<DeleteSnapshotDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DeleteSnapshotDialogConfig
+  ) {}
 }

@@ -630,3 +630,19 @@ mat-tooltip-component .mat-tooltip {
 .mat-tooltip-panel {
   height: 32px;
 }
+
+// Tab.
+.mat-tab-list {
+  .mat-tab-label {
+    opacity: 1;
+
+    .mat-tab-label-content {
+      font-size: 16px;
+    }
+  }
+}
+
+// Radio button.
+.mat-radio-label-content {
+  flex: 1 1 auto;
+}

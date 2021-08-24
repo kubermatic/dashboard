@@ -10,15 +10,22 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
+<div id="km-delete-snapshot-dialog">
+  <km-dialog-title>
+    <div>Delete Snapshot <b>"{{data.snapshot.spec.name}}"</b></div>
+  </km-dialog-title>
 
-<div [ngClass]="margin === Margin.Default ? 'container' : ''">
-  <div fxLayout="column"
-       fxLayoutAlign="end start">
-    <div class="label km-text-muted">
-      <ng-content select="[key]"></ng-content>
+  <mat-dialog-content>
+    <div fxLayoutAlign=" center">
+      <i class="km-icon-warning"></i>
+      <div>The data will be irreversibly lost.</div>
     </div>
-    <div class="value km-text">
-      <ng-content select="[value]"></ng-content>
-    </div>
-  </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button mat-flat-button
+            [mat-dialog-close]="true">
+      Delete Snapshot
+    </button>
+  </mat-dialog-actions>
 </div>

@@ -9,19 +9,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input} from '@angular/core';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {BackupListComponent} from '@app/backup/backup-list/component';
+import {AuthGuard, AuthzGuard} from '@core/services/auth/guard';
 
-enum Margin {
-  Default = 'default',
-  None = 'none',
-}
+const routes: Routes = [
+  {
+    path: '',
+    component: BackupListComponent,
+    canActivate: [AuthGuard, AuthzGuard],
+  },
+];
 
-@Component({
-  selector: 'km-property',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
 })
-export class PropertyComponent {
-  readonly Margin = Margin;
-  @Input() margin = Margin.Default;
-}
+export class BackupRoutingModule {}

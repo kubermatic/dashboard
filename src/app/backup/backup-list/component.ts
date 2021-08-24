@@ -9,19 +9,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input} from '@angular/core';
-
-enum Margin {
-  Default = 'default',
-  None = 'none',
-}
+import {Component} from '@angular/core';
 
 @Component({
-  selector: 'km-property',
+  selector: 'km-backup-list',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class PropertyComponent {
-  readonly Margin = Margin;
-  @Input() margin = Margin.Default;
-}
+export class BackupListComponent {}

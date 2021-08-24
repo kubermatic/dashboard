@@ -53,7 +53,10 @@ $colors-dark: (
   dropdown-hover: #464646,
 );
 
-$theme-dark: mat.define-dark-theme(mat.define-palette(mat.$blue-palette), mat.define-palette(mat.$light-blue-palette), mat.define-palette(mat.$pink-palette));
+$colors-dark-palette: mat.$blue-palette;
+$colors-dark-palette: map-merge($colors-dark-palette, (500: #0072b0));
+
+$theme-dark: mat.define-dark-theme(mat.define-palette($colors-dark-palette), mat.define-palette(mat.$light-blue-palette), mat.define-palette(mat.$pink-palette));
 
 // sass-lint:disable function-name-format
 $background: map-get($theme-dark, background);

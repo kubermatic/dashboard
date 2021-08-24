@@ -54,6 +54,7 @@ export class GroupConfig {
   serviceaccounts?: ServiceAccounts;
   serviceaccountToken?: ServiceAccountToken;
   rbac?: RBAC;
+  backups?: Backups;
 }
 
 export class Projects implements Viewable {
@@ -113,6 +114,13 @@ export class ServiceAccountToken implements Viewable {
 }
 
 export class RBAC implements Viewable {
+  view?: boolean;
+  edit?: boolean;
+  create?: boolean;
+  delete?: boolean;
+}
+
+export class Backups implements Viewable {
   view?: boolean;
   edit?: boolean;
   create?: boolean;

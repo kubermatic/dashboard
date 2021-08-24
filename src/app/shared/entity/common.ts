@@ -46,6 +46,7 @@ export enum View {
   Account = 'account',
   Settings = 'settings',
   MachineDeployment = 'md',
+  Backups = 'backups',
 }
 
 // IMPORTANT: names in 'ViewDisplayName' have to be in sync with names in 'View'
@@ -60,6 +61,7 @@ export enum ViewDisplayName {
   Account = 'User Settings',
   Settings = 'Admin Panel',
   MachineDeployment = 'Machine Deployment',
+  Backups = 'Backups',
 }
 
 export function getViewDisplayName(viewName: string): string {

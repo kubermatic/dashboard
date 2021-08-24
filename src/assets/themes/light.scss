@@ -48,7 +48,10 @@ $colors-light: (
   shadow-dark: (0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12)),
 );
 
-$theme-light: mat.define-light-theme(mat.define-palette(mat.$blue-palette), mat.define-palette(mat.$light-blue-palette), mat.define-palette(mat.$pink-palette));
+$colors-light-palette: mat.$blue-palette;
+$colors-light-palette: map-merge($colors-light-palette, (500: #00517d));
+
+$theme-light: mat.define-light-theme(mat.define-palette($colors-light-palette), mat.define-palette(mat.$light-blue-palette), mat.define-palette(mat.$pink-palette));
 
 // sass-lint:disable function-name-format
 $background: map-get($theme-light, background);
