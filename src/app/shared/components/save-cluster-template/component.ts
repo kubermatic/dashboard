@@ -18,6 +18,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {UserService} from '@core/services/user';
 import {take} from 'rxjs/operators';
 import {Member} from '@shared/entity/member';
+import {ClusterTemplateService} from '@core/services/cluster-templates';
 
 enum Control {
   Name = 'name',
@@ -31,6 +32,7 @@ enum Control {
 export class SaveClusterTemplateDialogComponent implements OnInit {
   @Input() cluster: Cluster;
   @Input() nodeData: NodeData;
+  @Input() projectID: string;
   scope = ClusterTemplateScope;
   control = Control;
   form: FormGroup;
@@ -38,6 +40,7 @@ export class SaveClusterTemplateDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<SaveClusterTemplateDialogComponent>,
+    private readonly _clusterTemplateService: ClusterTemplateService,
     private readonly _userService: UserService
   ) {}
 
@@ -51,7 +54,10 @@ export class SaveClusterTemplateDialogComponent implements OnInit {
   }
 
   save(): void {
-    this._getClusterTemplate();
+    this._clusterTemplateService
+      .create(this._getClusterTemplate(), this.projectID)
+      .pipe(take(1))
+      .subscribe(ct => this.dialogRef.close(ct));
   }
 
   private _getClusterTemplate(): ClusterTemplate {
