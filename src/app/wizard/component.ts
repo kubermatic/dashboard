@@ -28,6 +28,8 @@ import {NodeData} from '@shared/model/NodeSpecChange';
 import {forkJoin, of, Subject} from 'rxjs';
 import {switchMap, takeUntil, tap} from 'rxjs/operators';
 import {StepRegistry, steps, WizardStep} from './config';
+import {MatDialog} from '@angular/material/dialog';
+import {SaveClusterTemplateDialogComponent} from '@shared/components/save-cluster-template/component';
 
 @Component({
   selector: 'km-wizard',
@@ -53,6 +55,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _clusterService: ClusterService,
     private readonly _nodeDataService: NodeDataService,
+    private readonly _matDialog: MatDialog,
     private readonly _router: Router,
     private readonly _googleAnalyticsService: GoogleAnalyticsService
   ) {}
@@ -175,5 +178,11 @@ export class WizardComponent implements OnInit, OnDestroy {
     const controls = {};
     steps.forEach(step => (controls[step.name] = this._formBuilder.control('')));
     this.form = this._formBuilder.group(controls);
+  }
+
+  saveAsTemplate(): void {
+    const modal = this._matDialog.open(SaveClusterTemplateDialogComponent);
+    modal.componentInstance.cluster = this._clusterSpecService.cluster;
+    modal.componentInstance.nodeData = this._nodeDataService.nodeData;
   }
 }
