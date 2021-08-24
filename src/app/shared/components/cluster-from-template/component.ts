@@ -9,17 +9,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ClusterTemplate} from '@shared/entity/cluster-template';
+import {switchMap, take, tap} from 'rxjs/operators';
+import {DatacenterService} from '@core/services/datacenter';
+import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 
 @Component({
   selector: 'km-cluster-from-template-dialog',
   templateUrl: './template.html',
 })
-export class ClusterFromTemplateDialogComponent {
+export class ClusterFromTemplateDialogComponent implements OnInit {
+  datacenter: Datacenter;
+  seedSettings: SeedSettings;
+
   constructor(
     public dialogRef: MatDialogRef<ClusterFromTemplateDialogComponent>,
+    private readonly _datacenterService: DatacenterService,
     @Inject(MAT_DIALOG_DATA) public data: ClusterTemplate
   ) {}
+
+  ngOnInit() {
+    this._datacenterService
+      .getDatacenter(this.data.cluster.spec.cloud.dc)
+      .pipe(tap(dc => (this.datacenter = dc)))
+      .pipe(switchMap(dc => this._datacenterService.seedSettings(dc.spec.seed)))
+      .pipe(take(1))
+      .subscribe(seedSettings => (this.seedSettings = seedSettings));
+  }
 }

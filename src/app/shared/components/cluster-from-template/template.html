@@ -16,7 +16,9 @@ limitations under the License.
 </km-dialog-title>
 <mat-dialog-content>
   <km-cluster-summary [cluster]="data.cluster"
-                      [machineDeployment]="data.nodeDeployment"></km-cluster-summary>
+                      [machineDeployment]="data.nodeDeployment"
+                      [datacenter]="datacenter"
+                      [seedSettings]="seedSettings"></km-cluster-summary>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-flat-button>
