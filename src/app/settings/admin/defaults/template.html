@@ -122,18 +122,18 @@ limitations under the License.
           <div fxFlex="16%"
                fxLayoutAlign=" center"
                class="entry-label">
-            <span>User Cluster Alertmanager Domain</span>
+            <span>User Cluster Alertmanager Prefix</span>
             <div class="km-icon-info km-pointer"
-                 matTooltip="Set &quot;User Cluster Alertmanager Domain&quot; to expose the Alertmanager UI to users. It has to be the same domain that has been set up during the MLA stack installation in the seed (e.g. &quot;https://alertmanager.mla.kkp.example.com&quot;). A link to it will then be visible in tab &quot;User Cluster Alertmanager&quot; in cluster details view."></div>
+                 matTooltip="Domain name prefix on which the User Cluster Alertmanager is running. Seed name and the base domain under which KKP is running will be appended to it, e.g. for prefix &quot;alertmanger&quot; the final url would be &quot;https://alertmanager.<seed-name>.<kkp-domain>&quot;"></div>
           </div>
           <mat-form-field fxFlex="40">
-            <mat-label>User Cluster Alertmanager Domain</mat-label>
+            <mat-label>User Cluster Alertmanager Prefix</mat-label>
             <input matInput
                    (keyup)="onSettingsChange()"
-                   [(ngModel)]="settings.mlaAlertmanagerDomain"
+                   [(ngModel)]="settings.mlaAlertmanagerPrefix"
                    type="text">
           </mat-form-field>
-          <km-spinner-with-confirmation [isSaved]="isEqual(settings.mlaAlertmanagerDomain, apiSettings.mlaAlertmanagerDomain)"></km-spinner-with-confirmation>
+          <km-spinner-with-confirmation [isSaved]="isEqual(settings.mlaAlertmanagerPrefix, apiSettings.mlaAlertmanagerPrefix)"></km-spinner-with-confirmation>
         </div>
 
         <div fxLayout="row">

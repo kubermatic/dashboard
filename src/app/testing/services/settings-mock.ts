@@ -51,7 +51,7 @@ export const DEFAULT_ADMIN_SETTINGS_MOCK: AdminSettings = {
     monitoringEnforced: false,
     monitoringEnabled: false,
   },
-  mlaAlertmanagerDomain: '',
+  mlaAlertmanagerPrefix: '',
 };
 
 @Injectable()
