@@ -402,7 +402,7 @@ const AUTOMATIC_BACKUPS_MOCK = [
       conditions: [
         {
           Type: 'SchedulingActive',
-          Status: 'Unknown',
+          Status: 'True',
         } as EtcdBackupConfigCondition,
       ],
     } as EtcdBackupConfigStatus,
@@ -516,6 +516,14 @@ export class BackupService {
     return this._listAutomaticBackups(projectID);
   }
 
+  get(projectID: string, backupName: string, isSnapshot = false): Observable<EtcdBackupConfig> {
+    if (isSnapshot) {
+      return this._getSnapshot(projectID, backupName);
+    }
+
+    return this._getAutomaticBackup(projectID, backupName);
+  }
+
   refreshAutomaticBackups(): void {
     this.onAutomaticBackupsUpdate.next();
     this._automaticBackups$.clear();
@@ -574,5 +582,13 @@ export class BackupService {
     // return this._http
     //   .get<EtcdBackupConfig[]>(url)
     //   .pipe(catchError(() => of<EtcdBackupConfig[]>([])));
+  }
+
+  private _getAutomaticBackup(_projectID: string, _backupName: string): Observable<EtcdBackupConfig> {
+    return of(AUTOMATIC_BACKUPS_MOCK[6]);
+  }
+
+  private _getSnapshot(_projectID: string, _backupName: string): Observable<EtcdBackupConfig> {
+    return of(SNAPSHOTS_MOCK[0]);
   }
 }

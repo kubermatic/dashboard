@@ -13,10 +13,11 @@ import {Component, OnDestroy, OnInit, TrackByFunction, ViewChild} from '@angular
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
+import {ActivatedRoute} from '@angular/router';
 import {
   AddAutomaticBackupDialogComponent,
   AddAutomaticBackupDialogConfig,
-} from '@app/backup/backup-list/automatic-backup/add-dialog/component';
+} from '@app/backup/list/automatic-backup/add-dialog/component';
 import {BackupService} from '@core/services/backup';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
@@ -38,11 +39,11 @@ import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 
 @Component({
-  selector: 'km-automatic-backup-list',
+  selector: 'km-automatic-backup-details',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class AutomaticBackupListComponent implements OnInit, OnDestroy {
+export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator, {static: true}) private readonly _paginator: MatPaginator;
   private readonly _unsubscribe = new Subject<void>();
   private _user: Member;
@@ -51,13 +52,14 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
   private _backups = [];
   dataSource = new MatTableDataSource<EtcdBackupConfig>();
   isInitialized = true;
+  backup: EtcdBackupConfig;
 
   get trackByID(): TrackByFunction<EtcdBackupConfig> {
     return (_: number, backup: EtcdBackupConfig): string => backup.id;
   }
 
   get columns(): string[] {
-    return ['status', 'name', 'cluster', 'schedule', 'keep', 'created', 'actions'];
+    return ['status', 'name', 'created', 'actions'];
   }
 
   get isEmpty(): boolean {
@@ -84,7 +86,8 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
     private readonly _backupService: BackupService,
     private readonly _projectService: ProjectService,
     private readonly _userService: UserService,
-    private readonly _matDialog: MatDialog
+    private readonly _matDialog: MatDialog,
+    private readonly _route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -114,6 +117,11 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
         this._backups = backups;
         this.dataSource.data = this._backups;
       });
+
+    this._backupService
+      .get(this._route.snapshot.data.projectID, this._route.snapshot.data.backupName)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(backup => (this.backup = backup));
   }
 
   ngOnDestroy(): void {

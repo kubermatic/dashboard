@@ -13,15 +13,12 @@ import {Component, OnDestroy, OnInit, TrackByFunction, ViewChild} from '@angular
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
-import {
-  AddSnapshotDialogComponent,
-  AddSnapshotDialogConfig,
-} from '@app/backup/backup-list/snapshot/add-dialog/component';
+import {AddSnapshotDialogComponent, AddSnapshotDialogConfig} from '@app/backup/list/snapshot/add-dialog/component';
 import {
   DeleteSnapshotDialogComponent,
   DeleteSnapshotDialogConfig,
-} from '@app/backup/backup-list/snapshot/delete-dialog/component';
-import {RestoreSnapshotDialogComponent} from '@app/backup/backup-list/snapshot/restore-dialog/component';
+} from '@app/backup/list/snapshot/delete-dialog/component';
+import {RestoreSnapshotDialogComponent} from '@app/backup/list/snapshot/restore-dialog/component';
 import {BackupService} from '@core/services/backup';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
