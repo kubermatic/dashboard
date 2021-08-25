@@ -21,6 +21,7 @@ limitations under the License.
        fxLayoutAlign="start start">
     <div class="header">Provider</div>
     <div class="properties"
+         fxLayoutAlign=" center"
          [fxLayout]="flipLayout ? 'row wrap' : 'column'">
       <km-property>
         <div key>Provider</div>
@@ -39,6 +40,7 @@ limitations under the License.
        fxLayoutAlign="start start">
     <div class="header">Cluster</div>
     <div class="properties"
+         fxLayoutAlign=" center"
          [fxLayout]="flipLayout ? 'row wrap' : 'column'">
       <km-property>
         <div key>Name</div>
@@ -158,6 +160,7 @@ limitations under the License.
        fxLayoutAlign="start start">
     <div class="header">Settings</div>
     <div class="properties"
+         fxLayoutAlign=" center"
          [fxLayout]="flipLayout ? 'row wrap' : 'column'">
       <ng-container *ngIf="cluster.credential">
         <km-property>
@@ -337,6 +340,7 @@ limitations under the License.
          *ngIf="!cluster.spec.cloud?.bringyourown">
       <div class="header">Initial Nodes</div>
       <div class="properties"
+           fxLayoutAlign=" center"
            [fxLayout]="flipLayout ? 'row wrap' : 'column'">
         <km-property>
           <div key>Initial Deployment Replicas</div>
@@ -770,6 +774,7 @@ limitations under the License.
          *ngIf="cluster.spec.cloud?.vsphere && cluster.spec.machineNetworks && cluster.spec.machineNetworks?.length > 0">
       <div class="header">Machine Networks</div>
       <div class="properties"
+           fxLayoutAlign=" center"
            fxLayout="row"
            fxLayoutGap="20px">
         <div fxFlex
