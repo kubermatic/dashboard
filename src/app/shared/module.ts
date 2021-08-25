@@ -90,6 +90,7 @@ import {CIDRFormComponent} from '@shared/components/cidr-form/component';
 import {ClusterSummaryComponent} from '@shared/components/cluster-summary/component';
 import {ClusterFromTemplateDialogComponent} from '@shared/components/cluster-from-template/component';
 import {SaveClusterTemplateDialogComponent} from '@shared/components/save-cluster-template/component';
+import {SelectClusterTemplateDialogComponent} from '@shared/components/select-cluster-template/component';
 
 const modules: any[] = [
   CommonModule,
@@ -176,6 +177,7 @@ const components: any[] = [
   ClusterSummaryComponent,
   ClusterFromTemplateDialogComponent,
   SaveClusterTemplateDialogComponent,
+  SelectClusterTemplateDialogComponent,
 ];
 
 const directives: any[] = [AutofocusDirective, OptionDirective];

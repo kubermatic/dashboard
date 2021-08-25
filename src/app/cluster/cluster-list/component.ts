@@ -39,6 +39,7 @@ import {EMPTY, forkJoin, Observable, of, onErrorResumeNext, Subject} from 'rxjs'
 import {catchError, distinctUntilChanged, filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ClusterDeleteConfirmationComponent} from '../cluster-details/cluster-delete-confirmation/component';
 import {PathParam} from '@core/services/params';
+import {SelectClusterTemplateDialogComponent} from '@shared/components/select-cluster-template/component';
 
 @Component({
   selector: 'km-cluster-list',
@@ -148,6 +149,11 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
       )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe();
+  }
+
+  selectTemplate(): void {
+    const dialog = this._matDialog.open(SelectClusterTemplateDialogComponent);
+    dialog.componentInstance.projectID = this._selectedProject.id;
   }
 
   ngOnChanges(): void {
