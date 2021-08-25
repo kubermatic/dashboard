@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnChanges, OnDestroy, OnInit, ViewChild, SimpleChanges} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit, ViewChild, SimpleChanges, AfterViewChecked} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -31,13 +31,15 @@ import {Mode, DefaultConstraintDialog} from './default-constraint-dialog/compone
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class DefaultConstraintComponent implements OnInit, OnChanges, OnDestroy {
+export class DefaultConstraintComponent implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
   displayedColumns: string[] = this.getColumns();
   settings: UserSettings;
   defaultConstraints: Constraint[] = [];
   constraintTemplates: ConstraintTemplate[] = [];
   dataSource = new MatTableDataSource<Constraint>();
   constraintTemplateFilter: string;
+  isToggled = [];
+  appliesToColumnWidth = 0;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   private readonly _unsubscribe = new Subject<void>();
@@ -72,6 +74,13 @@ export class DefaultConstraintComponent implements OnInit, OnChanges, OnDestroy 
       this.paginator.pageSize = settings.itemsPerPage;
       this.dataSource.paginator = this.paginator; // Force refresh.
     });
+  }
+
+  ngAfterViewChecked(): void {
+    const box = document.querySelector('.applies-to-column') as HTMLElement;
+    if (box) {
+      this.appliesToColumnWidth = box.offsetWidth;
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -110,6 +119,10 @@ export class DefaultConstraintComponent implements OnInit, OnChanges, OnDestroy 
 
   hasNoMatches(selector: ConstraintSelector): boolean {
     return _.isEmpty(selector.providers) && _.isEmpty(selector.labelSelector.matchLabels);
+  }
+
+  toggleColumn(name: string): void {
+    this.isToggled[name] = !this.isToggled[name];
   }
 
   filter(): void {

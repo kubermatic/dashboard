@@ -9,42 +9,45 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'variables';
+.provider-wrapper {
+  vertical-align: text-top;
 
-.header {
-  padding: 0 30px;
-}
+  .provider-logo {
+    display: inline-block;
+    margin-right: 10px;
+    max-width: 95px;
 
-#km-add-constraint-btn {
-  height: 50px;
-  margin: 2px 0;
+    &.aws {
+      max-width: 40px;
+      min-width: 40px;
+    }
 
-  .km-icon-add {
-    margin-left: 0;
-    margin-right: 12px;
+    &.anexia,
+    &.packet {
+      max-width: 60px;
+      min-width: 60px;
+    }
+
+    &.azure {
+      max-width: 80px;
+    }
+
+    &.bringyourown {
+      max-width: 85px;
+    }
+
+    &.vsphere {
+      max-width: 75px;
+    }
   }
 }
 
-.tooltip {
-  margin-left: 4px;
+.labels-wrapper {
+  display: inline-block;
+  margin-right: 10px;
 }
 
-.filters {
-  margin-top: -7px;
-
-  .filter-title {
-    margin: -20px 8px 0 0;
-  }
-
-  .mat-form-field {
-    width: 250px;
-  }
-}
-
-tr {
-  vertical-align: baseline;
-}
-
-td button {
-  top: 6px;
+.toggle-indicator {
+  display: inline-block;
+  position: absolute;
 }

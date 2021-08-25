@@ -91,6 +91,7 @@ import {ClusterSummaryComponent} from '@shared/components/cluster-summary/compon
 import {ClusterFromTemplateDialogComponent} from '@shared/components/cluster-from-template/component';
 import {SaveClusterTemplateDialogComponent} from '@shared/components/save-cluster-template/component';
 import {SelectClusterTemplateDialogComponent} from '@shared/components/select-cluster-template/component';
+import {ToggleColumnComponent} from '@shared/components/toggle-column/component';
 
 const modules: any[] = [
   CommonModule,
@@ -178,6 +179,7 @@ const components: any[] = [
   ClusterFromTemplateDialogComponent,
   SaveClusterTemplateDialogComponent,
   SelectClusterTemplateDialogComponent,
+  ToggleColumnComponent,
 ];
 
 const directives: any[] = [AutofocusDirective, OptionDirective];
