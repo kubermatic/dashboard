@@ -23,6 +23,7 @@ import {MachineDeployment} from '@shared/entity/machine-deployment';
 @Component({
   selector: 'km-wizard-summary-step',
   templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class SummaryStepComponent implements OnInit, OnDestroy {
   datacenter: Datacenter;

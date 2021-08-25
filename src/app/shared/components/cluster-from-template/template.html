@@ -12,16 +12,51 @@ limitations under the License.
 -->
 
 <km-dialog-title>
-  <div>Create Cluster from Template</div>
+  <div>Create Clusters from {{template.name}} Template</div>
 </km-dialog-title>
 <mat-dialog-content>
-  <km-cluster-summary [cluster]="data.cluster"
-                      [machineDeployment]="data.nodeDeployment"
+  <form [formGroup]="form"
+        fxLayout="column"
+        id="create-template-instance-form"
+        (submit)="create()">
+    <mat-form-field fxFlex>
+      <mat-label>Number of Clusters</mat-label>
+      <input matInput
+             [formControlName]="control.Replicas"
+             type="number"
+             autocomplete="off"
+             required
+             cdkFocusInitial>
+      <mat-error *ngIf="form.get(control.Replicas).hasError('required')">
+        Number of clusters is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+  </form>
+  <km-cluster-summary [cluster]="template.cluster"
+                      [machineDeployment]="template.nodeDeployment"
                       [datacenter]="datacenter"
-                      [seedSettings]="seedSettings"></km-cluster-summary>
+                      [seedSettings]="seedSettings"
+                      [flipLayout]="true"
+                      *ngIf="showDetails"
+                      @shrinkGrow></km-cluster-summary>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-flat-button>
-    Create Cluster
+  <div (click)="showDetails = !showDetails"
+       class="km-pointer km-expand-button"
+       fxLayoutAlign="center center"
+       fxLayoutGap="8px"
+       fxFlex="100">
+    <hr fxFlex />
+    <span>{{showDetails ? 'Hide' : 'Show'}} cluster template details</span>
+    <i [ngClass]="showDetails ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
+    <hr fxFlex />
+  </div>
+  <button mat-flat-button
+          type="submit"
+          form="create-template-instance-form"
+          fxLayoutAlign="center center"
+          [disabled]="!form.valid">
+    <i class="km-icon-mask km-icon-add"></i>
+    <span>Create Clusters</span>
   </button>
 </mat-dialog-actions>

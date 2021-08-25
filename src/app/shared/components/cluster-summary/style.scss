@@ -16,8 +16,8 @@
   counter-reset: section-number;
 }
 
-.section {
-  margin: 45px 0 0;
+.km-wizard-summary {
+  row-gap: 20px;
 
   .header {
     font-size: variables.$font-size-subhead-lg;

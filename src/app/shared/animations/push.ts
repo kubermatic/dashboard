@@ -17,9 +17,9 @@ export const pushToSide = trigger('pushToSide', [
       opacity: 0,
       width: 0,
     }),
-    animate('200ms', style({opacity: 1, width: '*'})),
+    animate('.25s', style({opacity: 1, width: '*'})),
   ]),
-  transition(':leave', [animate('200ms', style({opacity: 0, width: 0}))]),
+  transition(':leave', [animate('.25s', style({opacity: 0, width: 0}))]),
 ]);
 
 export const pushDown = trigger('pushDown', [
@@ -29,9 +29,9 @@ export const pushDown = trigger('pushDown', [
       height: 0,
     }),
     animate(
-      '200ms',
+      '.25s',
       keyframes([style({opacity: 0, height: '*', offset: 0.5}), style({opacity: 1, height: '*', offset: 1})])
     ),
   ]),
-  transition(':leave', [animate('200ms', style({opacity: 0, height: 0}))]),
+  transition(':leave', [animate('.25s', style({opacity: 0, height: 0}))]),
 ]);

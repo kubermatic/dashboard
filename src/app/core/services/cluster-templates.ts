@@ -15,7 +15,7 @@ import {Observable, of} from 'rxjs';
 import {catchError, shareReplay} from 'rxjs/operators';
 
 import {environment} from '@environments/environment';
-import {ClusterTemplate} from '@shared/entity/cluster-template';
+import {ClusterTemplate, CreateTemplateInstances} from '@shared/entity/cluster-template';
 
 @Injectable()
 export class ClusterTemplateService {
@@ -44,5 +44,11 @@ export class ClusterTemplateService {
   delete(projectID: string, templateID: string): Observable<any> {
     const url = `${this._newRestRoot}/projects/${projectID}/clustertemplates/${templateID}`;
     return this._http.delete<any>(url);
+  }
+
+  createInstances(replicas: number, projectID: string, templateID: string): Observable<any> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clustertemplates/${templateID}/instances`;
+    const body: CreateTemplateInstances = {replicas: replicas};
+    return this._http.post<any>(url, body);
   }
 }

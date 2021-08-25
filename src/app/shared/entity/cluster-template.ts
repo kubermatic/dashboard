@@ -27,3 +27,7 @@ export enum ClusterTemplateScope {
   Project = 'project',
   User = 'user',
 }
+
+export class CreateTemplateInstances {
+  replicas: number;
+}

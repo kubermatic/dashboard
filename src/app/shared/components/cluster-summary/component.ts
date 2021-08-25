@@ -33,6 +33,7 @@ export class ClusterSummaryComponent {
   @Input() seedSettings: SeedSettings;
   @Input() sshKeys: SSHKey[] = [];
   @Input() clusterAdmissionPlugins: string[] = [];
+  @Input() flipLayout = false;
 
   get provider(): NodeProvider {
     const providers = Object.values(NodeProvider)

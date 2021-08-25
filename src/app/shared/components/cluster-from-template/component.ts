@@ -9,33 +9,56 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {Component, Input, OnInit} from '@angular/core';
+import {MatDialogRef} from '@angular/material/dialog';
 import {ClusterTemplate} from '@shared/entity/cluster-template';
 import {switchMap, take, tap} from 'rxjs/operators';
 import {DatacenterService} from '@core/services/datacenter';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
+import {ClusterTemplateService} from '@core/services/cluster-templates';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {shrinkGrow} from '@shared/animations/grow';
+
+enum Control {
+  Replicas = 'replicas',
+}
 
 @Component({
   selector: 'km-cluster-from-template-dialog',
   templateUrl: './template.html',
+  animations: [shrinkGrow],
 })
 export class ClusterFromTemplateDialogComponent implements OnInit {
+  control = Control;
+  @Input() template: ClusterTemplate;
+  @Input() projectID: string;
   datacenter: Datacenter;
   seedSettings: SeedSettings;
+  form: FormGroup;
+  showDetails = false;
 
   constructor(
     public dialogRef: MatDialogRef<ClusterFromTemplateDialogComponent>,
     private readonly _datacenterService: DatacenterService,
-    @Inject(MAT_DIALOG_DATA) public data: ClusterTemplate
+    private readonly _clusterTemplateService: ClusterTemplateService
   ) {}
 
   ngOnInit() {
     this._datacenterService
-      .getDatacenter(this.data.cluster.spec.cloud.dc)
+      .getDatacenter(this.template.cluster.spec.cloud.dc)
       .pipe(tap(dc => (this.datacenter = dc)))
       .pipe(switchMap(dc => this._datacenterService.seedSettings(dc.spec.seed)))
       .pipe(take(1))
       .subscribe(seedSettings => (this.seedSettings = seedSettings));
+
+    this.form = new FormGroup({[Control.Replicas]: new FormControl(1, [Validators.required])});
+  }
+
+  create(): void {
+    const replicas = this.form.get(Control.Replicas).value;
+    this._clusterTemplateService
+      .createInstances(replicas, this.projectID, this.template.id)
+      .pipe(take(1))
+      .subscribe(_ => {});
   }
 }

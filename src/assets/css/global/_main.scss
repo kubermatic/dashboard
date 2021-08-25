@@ -29,6 +29,11 @@ a {
   text-decoration: none;
 }
 
+hr {
+  border-style: solid;
+  border-width: 1px 0 0 0;
+}
+
 ::-webkit-scrollbar {
   @include mixins.size(variables.$scrollbar-size);
 }
@@ -57,6 +62,12 @@ a {
       }
     }
   }
+}
+
+.km-expand-button {
+  font-size: variables.$font-size-caption;
+  margin-bottom: 12px;
+  text-transform: uppercase;
 }
 
 .km-pointer {

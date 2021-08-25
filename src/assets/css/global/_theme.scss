@@ -20,6 +20,10 @@
     }
   }
 
+  hr {
+    border-color: map-get($colors, divider);
+  }
+
   ::-webkit-scrollbar-thumb {
     background: map-get($colors, scrollbar);
   }
@@ -36,7 +40,8 @@
     color: map-get($colors, text);
   }
 
-  .km-text-muted {
+  .km-text-muted,
+  .km-expand-button {
     color: map-get($colors, text-secondary);
   }
 

@@ -26,6 +26,6 @@ export const fadeInOut = trigger('fadeInOut', [
       overflow: 'hidden',
     })
   ),
-  transition('true => false', animate('500ms ease-in-out')),
-  transition('false => true', animate('500ms ease-in-out')),
+  transition('true => false', animate('.5s ease-in-out')),
+  transition('false => true', animate('.5s ease-in-out')),
 ]);
