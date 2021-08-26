@@ -11,12 +11,13 @@
 
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {ClusterTemplate} from '@shared/entity/cluster-template';
 import {takeUntil} from 'rxjs/operators';
 import {ClusterTemplateService} from '@core/services/cluster-templates';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {ClusterFromTemplateDialogComponent} from '@shared/components/cluster-from-template/component';
+import {ClusterTemplate} from '@shared/entity/cluster-template';
+import {AutocompleteControls} from '@shared/components/autocomplete/component';
 
 enum Control {
   ClusterTemplate = 'clusterTemplate',
@@ -30,6 +31,8 @@ export class SelectClusterTemplateDialogComponent implements OnInit, OnDestroy {
   control = Control;
   @Input() projectID: string;
   templates: ClusterTemplate[] = [];
+  templateNames: string[] = [];
+  isLoadingTemplates = true;
   form: FormGroup;
   private _unsubscribe = new Subject<void>();
 
@@ -45,7 +48,11 @@ export class SelectClusterTemplateDialogComponent implements OnInit, OnDestroy {
     this._clusterTemplateService
       .list(this.projectID)
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(ct => (this.templates = ct));
+      .subscribe(templates => {
+        this.templates = templates;
+        this.templateNames = templates.map(t => t.name);
+        this.isLoadingTemplates = false;
+      });
   }
 
   ngOnDestroy(): void {
@@ -54,9 +61,10 @@ export class SelectClusterTemplateDialogComponent implements OnInit, OnDestroy {
   }
 
   create(): void {
+    const templateName = this.form.get(Control.ClusterTemplate).value[AutocompleteControls.Main];
     const dialog = this._matDialog.open(ClusterFromTemplateDialogComponent);
     dialog.componentInstance.projectID = this.projectID;
-    dialog.componentInstance.template = this.form.get(Control.ClusterTemplate).value;
+    dialog.componentInstance.template = this.templates.find(t => t.name === templateName);
     this.dialogRef.close();
   }
 }

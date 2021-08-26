@@ -19,20 +19,12 @@ limitations under the License.
         fxLayout="column"
         id="select-template-form"
         (submit)="create()">
-    <mat-form-field fxFlex>
-      <mat-label>Cluster Template</mat-label>
-      <mat-select [formControlName]="control.ClusterTemplate"
-                  disableOptionCentering
-                  required>
-        <mat-option *ngFor="let template of templates"
-                    [value]="template">
-          {{template.name}}
-        </mat-option>
-      </mat-select>
-      <mat-error *ngIf="form.get(control.ClusterTemplate).hasError('required')">
-        Cluster template is <strong>required</strong>.
-      </mat-error>
-    </mat-form-field>
+    <km-autocomplete label="Cluster Template"
+                     [formControlName]="control.ClusterTemplate"
+                     [isLoading]="isLoadingTemplates"
+                     [options]="templateNames"
+                     required="true">
+    </km-autocomplete>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
