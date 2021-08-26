@@ -127,7 +127,7 @@ limitations under the License.
           class="km-mat-row"></tr>
     </table>
 
-    <ng-container *ngIf="!templates || templates.length === 0">
+    <ng-container *ngIf="isEmpty()">
       <div class="km-row km-empty-list-msg"
            *ngIf="!isInitializing">
         No cluster templates available.

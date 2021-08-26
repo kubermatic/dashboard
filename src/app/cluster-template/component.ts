@@ -51,11 +51,11 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  private readonly _refreshTime = 10; // in seconds
-  private _unsubscribe = new Subject<void>();
-  private _refresh = new Subject<void>();
+  private readonly _refreshTime = 10;
   private _currentGroupConfig: GroupConfig;
   private _selectedProject: Project;
+  private _unsubscribe = new Subject<void>();
+  private _refresh = new Subject<void>();
 
   constructor(
     private readonly _ctService: ClusterTemplateService,
@@ -139,8 +139,12 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
     this.dataSource.filter = query;
   }
 
+  isEmpty(): boolean {
+    return _.isEmpty(this.templates);
+  }
+
   isPaginatorVisible(): boolean {
-    return !_.isEmpty(this.templates) && this.paginator && this.templates.length > this.paginator.pageSize;
+    return !this.isEmpty() && this.paginator && this.templates.length > this.paginator.pageSize;
   }
 
   getProvider(cloud: CloudSpec): string {
