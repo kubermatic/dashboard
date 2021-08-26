@@ -41,17 +41,33 @@ export class ClusterSummaryComponent {
     return providers.length > 0 ? providers[0] : NodeProvider.NONE;
   }
 
-  hasIPLeft(): boolean {
-    const ipCount = getIpCount(this.cluster.spec.machineNetworks);
-    return ipCount > 0 ? ipCount < this.machineDeployment.spec.replicas : false;
+  get admissionPlugins(): string {
+    return AdmissionPluginUtils.getJoinedPluginNames(this.cluster.spec.admissionPlugins);
   }
 
-  getOperatingSystem(): string {
+  get hasAdmissionPlugins(): boolean {
+    return !_.isEmpty(this.cluster.spec.admissionPlugins);
+  }
+
+  get sshKeyNames(): string {
+    return this.sshKeys.map(key => key.name).join(', ');
+  }
+
+  get operatingSystem(): string {
     return getOperatingSystem(this.machineDeployment.spec.template);
   }
 
-  getOperatingSystemLogoClass(): string {
+  get operatingSystemLogoClass(): string {
     return getOperatingSystemLogoClass(this.machineDeployment.spec.template);
+  }
+
+  get isMLAEnabled(): boolean {
+    return !!this.seedSettings && !!this.seedSettings.mla && !!this.seedSettings.mla.user_cluster_mla_enabled;
+  }
+
+  get hasIPLeft(): boolean {
+    const ipCount = getIpCount(this.cluster.spec.machineNetworks);
+    return ipCount > 0 ? ipCount < this.machineDeployment.spec.replicas : false;
   }
 
   displaySettings(): boolean {
@@ -82,22 +98,6 @@ export class ClusterSummaryComponent {
     }
 
     return false;
-  }
-
-  getSSHKeyNames(): string {
-    return this.sshKeys.map(key => key.name).join(', ');
-  }
-
-  hasAdmissionPlugins(): boolean {
-    return !_.isEmpty(this.cluster.spec.admissionPlugins);
-  }
-
-  getAdmissionPlugins(): string {
-    return AdmissionPluginUtils.getJoinedPluginNames(this.cluster.spec.admissionPlugins);
-  }
-
-  isMLAEnabled(): boolean {
-    return !!this.seedSettings && !!this.seedSettings.mla && !!this.seedSettings.mla.user_cluster_mla_enabled;
   }
 
   private _hasProviderOptions(provider: NodeProvider): boolean {

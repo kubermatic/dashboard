@@ -63,8 +63,8 @@ limitations under the License.
              fxLayout="row"
              fxLayoutAlign=" center"
              fxLayoutGap="10px">
-          <i class="km-os-image km-os-image-{{getOperatingSystemLogoClass()}}"></i>
-          <span>{{getOperatingSystem()}}</span>
+          <i class="km-os-image km-os-image-{{operatingSystemLogoClass}}"></i>
+          <span>{{operatingSystem}}</span>
         </div>
       </km-property>
       <km-property *ngIf="cluster.spec.clusterNetwork?.proxyMode">
@@ -91,10 +91,10 @@ limitations under the License.
                              [value]="false">
         </km-property-boolean>
       </div>
-      <div [ngSwitch]="hasAdmissionPlugins()">
+      <div [ngSwitch]="hasAdmissionPlugins">
         <km-property *ngSwitchCase="true">
           <div key>Enabled Admission Plugins</div>
-          <div value>{{getAdmissionPlugins()}}</div>
+          <div value>{{admissionPlugins}}</div>
         </km-property>
         <km-property-boolean *ngSwitchCase="false"
                              label="Admission Plugins"
@@ -118,11 +118,11 @@ limitations under the License.
       </km-property-boolean>
       <km-property-boolean label="User Cluster Logging"
                            [value]="cluster.spec.mla?.loggingEnabled"
-                           *ngIf="isMLAEnabled()">
+                           *ngIf="isMLAEnabled">
       </km-property-boolean>
       <km-property-boolean label="User Cluster Monitoring"
                            [value]="cluster.spec.mla?.monitoringEnabled"
-                           *ngIf="isMLAEnabled()">
+                           *ngIf="isMLAEnabled">
       </km-property-boolean>
       <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.ubuntu"
                            label="Upgrade system on the first boot"
@@ -149,7 +149,7 @@ limitations under the License.
            fxLayoutGap="10px"
            *ngIf="sshKeys.length">
         <i class="km-icon-key"></i>
-        <span>{{getSSHKeyNames()}}</span>
+        <span>{{sshKeyNames}}</span>
       </div>
     </div>
   </div>
@@ -798,7 +798,7 @@ limitations under the License.
       </div>
     </div>
 
-    <p *ngIf="hasIPLeft()"
+    <p *ngIf="hasIPLeft"
        class="km-warning km-error">
       Not enough IPs left. Reduce number of nodes or add more machine networks.
     </p>
