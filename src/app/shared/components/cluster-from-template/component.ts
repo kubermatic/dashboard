@@ -18,6 +18,8 @@ import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {ClusterTemplateService} from '@core/services/cluster-templates';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {shrinkGrow} from '@shared/animations/grow';
+import {NotificationService} from '@core/services/notification';
+import {Router} from '@angular/router';
 
 enum Control {
   Replicas = 'replicas',
@@ -39,8 +41,10 @@ export class ClusterFromTemplateDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<ClusterFromTemplateDialogComponent>,
+    private readonly _router: Router,
     private readonly _datacenterService: DatacenterService,
-    private readonly _clusterTemplateService: ClusterTemplateService
+    private readonly _clusterTemplateService: ClusterTemplateService,
+    private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit() {
@@ -51,7 +55,7 @@ export class ClusterFromTemplateDialogComponent implements OnInit {
       .pipe(take(1))
       .subscribe(seedSettings => (this.seedSettings = seedSettings));
 
-    this.form = new FormGroup({[Control.Replicas]: new FormControl(1, [Validators.required])});
+    this.form = new FormGroup({[Control.Replicas]: new FormControl(1, [Validators.required, Validators.min(1)])});
   }
 
   create(): void {
@@ -59,6 +63,12 @@ export class ClusterFromTemplateDialogComponent implements OnInit {
     this._clusterTemplateService
       .createInstances(replicas, this.projectID, this.template.id)
       .pipe(take(1))
-      .subscribe(_ => {});
+      .subscribe(_ => {
+        this._notificationService.success(
+          `Successfully created ${replicas} instance${replicas > 1 ? 's' : ''} from ${this.template.name} template`
+        );
+        this.dialogRef.close();
+        this._router.navigate([`/projects/${this.projectID}/clusters`]);
+      });
   }
 }

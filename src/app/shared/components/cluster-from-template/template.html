@@ -24,11 +24,15 @@ limitations under the License.
       <input matInput
              [formControlName]="control.Replicas"
              type="number"
+             min="1"
              autocomplete="off"
              required
              cdkFocusInitial>
       <mat-error *ngIf="form.get(control.Replicas).hasError('required')">
         Number of clusters is <strong>required</strong>.
+      </mat-error>
+      <mat-error *ngIf="form.get(control.Replicas).hasError('min')">
+        At least 1 cluster has to be created.
       </mat-error>
     </mat-form-field>
   </form>

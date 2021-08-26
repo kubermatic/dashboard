@@ -24,11 +24,10 @@ import {Project} from '@shared/entity/project';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import * as _ from 'lodash';
-import {EMPTY, merge, Subject, timer} from 'rxjs';
-import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs';
+import {distinctUntilChanged, filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {Router} from '@angular/router';
 import {ClusterTemplateService} from '@core/services/cluster-templates';
-import {AppConfigService} from '@app/config.service';
 import {ClusterTemplate, ClusterTemplateScope} from '@shared/entity/cluster-template';
 import {Datacenter} from '@shared/entity/datacenter';
 import {DatacenterService} from '@core/services/datacenter';
@@ -51,7 +50,6 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  private readonly _refreshTime = 10;
   private _currentGroupConfig: GroupConfig;
   private _selectedProject: Project;
   private _unsubscribe = new Subject<void>();
@@ -64,7 +62,6 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _projectService: ProjectService,
     private readonly _matDialog: MatDialog,
     private readonly _userService: UserService,
-    private readonly _appConfig: AppConfigService,
     private readonly _notificationService: NotificationService
   ) {}
 
@@ -115,8 +112,9 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private _loadTemplates(): void {
-    merge(timer(0, this._refreshTime * this._appConfig.getRefreshTimeBase()), this._refresh)
-      .pipe(switchMap(() => (this._selectedProject ? this._ctService.list(this._selectedProject.id) : EMPTY)))
+    this._projectService.selectedProject
+      .pipe(distinctUntilChanged((p: Project, q: Project) => p.id === q.id))
+      .pipe(switchMap(project => this._ctService.list(project.id)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(templates => {
         this.templates = templates;
