@@ -48,7 +48,8 @@ limitations under the License.
        fxFlex="100">
     <hr fxFlex />
     <span>{{showDetails ? 'Hide' : 'Show'}} cluster template details</span>
-    <i [ngClass]="showDetails ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
+    <i class="km-muted-bg"
+       [ngClass]="showDetails ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
     <hr fxFlex />
   </div>
   <button mat-flat-button

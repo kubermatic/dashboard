@@ -48,7 +48,6 @@ export class ClusterTemplateService {
 
   createInstances(replicas: number, projectID: string, templateID: string): Observable<any> {
     const url = `${this._newRestRoot}/projects/${projectID}/clustertemplates/${templateID}/instances`;
-    const body: CreateTemplateInstances = {replicas: replicas};
-    return this._http.post<any>(url, body);
+    return this._http.post<any>(url, {replicas: replicas} as CreateTemplateInstances);
   }
 }

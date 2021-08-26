@@ -45,6 +45,10 @@
     color: map-get($colors, text-secondary);
   }
 
+  .km-muted-bg {
+    background-color: map-get($colors, text-secondary);
+  }
+
   .km-info {
     background-color: map-get($colors, primary-hover);
   }
