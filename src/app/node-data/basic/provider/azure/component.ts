@@ -79,7 +79,7 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
   sizeLabel = SizeState.Empty;
   zoneLabel = ZoneState.Empty;
   selectedSize = '';
-  selectedZones: string[] = [];
+  selectedZone = '';
 
   private get _sizesObservable(): Observable<AzureSizes[]> {
     return this._nodeDataService.azure.flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this));
@@ -146,8 +146,8 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
     return !this._clusterSpecService.cluster.spec.cloud.azure.assignAvailabilitySet;
   }
 
-  onZoneChange(zones: string[]): void {
-    this._nodeDataService.nodeData.spec.cloud.azure.zones = zones;
+  onZoneChange(zone: string): void {
+    this._nodeDataService.nodeData.spec.cloud.azure.zones = [zone];
     this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
@@ -172,7 +172,8 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
 
   private _init(): void {
     if (this._nodeDataService.nodeData.spec.cloud.azure) {
-      this.selectedZones = this._nodeDataService.nodeData.spec.cloud.azure.zones;
+      const selectedZones = this._nodeDataService.nodeData.spec.cloud.azure.zones;
+      this.selectedZone = selectedZones && selectedZones.length > 0 ? selectedZones[0] : '';
 
       this.form.get(Controls.ImageID).setValue(this._nodeDataService.nodeData.spec.cloud.azure.imageID);
       this.form
@@ -228,8 +229,8 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
       this.zones = _.sortBy(zones.zones, s => s.toLowerCase()).map(zone => ({name: zone}));
     }
 
-    if (!!this.selectedZones && this.selectedZones.length > 0) {
-      this.form.get(Controls.Zone).setValue(this.selectedZones);
+    if (this.selectedZone) {
+      this.form.get(Controls.Zone).setValue(this.selectedZone);
     }
 
     this.zoneLabel = this.zones && this.zones.length > 0 ? ZoneState.Ready : ZoneState.Empty;

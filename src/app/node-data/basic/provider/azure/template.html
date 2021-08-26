@@ -29,12 +29,11 @@ limitations under the License.
   <km-combobox [required]="false"
                [grouped]="false"
                [options]="zones"
-               [selected]="selectedZones"
+               [selected]="selectedZone"
                [isDisabled]="!isZoneEnabled()"
                [hint]="getZoneHint()"
                [formControlName]="Controls.Zone"
                (changed)="onZoneChange($event)"
-               [multiple]="true"
                [label]="zoneLabel"
                inputLabel="Select zone..."
                filterBy="name">
