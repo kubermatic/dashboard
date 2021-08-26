@@ -143,7 +143,7 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
   }
 
   isZoneEnabled(): boolean {
-    return this._clusterSpecService.cluster.spec.cloud.azure.assignAvailabilitySet;
+    return !this._clusterSpecService.cluster.spec.cloud.azure.assignAvailabilitySet;
   }
 
   onZoneChange(zones: string[]): void {
@@ -153,7 +153,7 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
 
   getZoneHint(): string {
     if (!this.isZoneEnabled()) {
-      return 'Assigning availability sets was disabled on cluster level.';
+      return 'Assigning availability zones is disabled in this cluster.';
     } else if (!this._nodeDataService.nodeData.spec.cloud.azure.size) {
       return 'Please select node size first.';
     }

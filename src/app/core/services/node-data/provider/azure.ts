@@ -106,7 +106,7 @@ export class NodeDataAzureProvider {
             filter(
               _ =>
                 this._clusterSpecService.provider === NodeProvider.AZURE &&
-                this._clusterSpecService.cluster.spec.cloud.azure.assignAvailabilitySet
+                !this._clusterSpecService.cluster.spec.cloud.azure.assignAvailabilitySet
             )
           )
           .pipe(debounceTime(this._debounce))

@@ -415,7 +415,7 @@ limitations under the License.
                 <div key>Node Size</div>
                 <div value>{{nodeData.spec.cloud?.azure.size}}</div>
               </km-property>
-              <km-property *ngIf="cluster.spec.cloud.azure.assignAvailabilitySet && nodeData.spec.cloud?.azure.zones">
+              <km-property *ngIf="!cluster.spec.cloud.azure.assignAvailabilitySet && nodeData.spec.cloud?.azure.zones">
                 <div key>Zones</div>
                 <div value>{{nodeData.spec.cloud?.azure.zones}}</div>
               </km-property>
