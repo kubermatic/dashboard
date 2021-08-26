@@ -41,10 +41,6 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this._clusterSpecService.sshKeyChanges.pipe(takeUntil(this._unsubscribe)).subscribe(keys => (this.sshKeys = keys));
 
-    this._clusterSpecService.admissionPluginsChanges
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(plugins => (this.clusterAdmissionPlugins = plugins));
-
     this._clusterSpecService.datacenterChanges
       .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
       .pipe(tap(dc => (this.datacenter = dc)))

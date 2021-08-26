@@ -32,7 +32,6 @@ export class ClusterSummaryComponent {
   @Input() datacenter: Datacenter;
   @Input() seedSettings: SeedSettings;
   @Input() sshKeys: SSHKey[] = [];
-  @Input() clusterAdmissionPlugins: string[] = [];
   @Input() flipLayout = false;
 
   get provider(): NodeProvider {
@@ -90,11 +89,11 @@ export class ClusterSummaryComponent {
   }
 
   hasAdmissionPlugins(): boolean {
-    return !_.isEmpty(this.clusterAdmissionPlugins);
+    return !_.isEmpty(this.cluster.spec.admissionPlugins);
   }
 
   getAdmissionPlugins(): string {
-    return AdmissionPluginUtils.getJoinedPluginNames(this.clusterAdmissionPlugins);
+    return AdmissionPluginUtils.getJoinedPluginNames(this.cluster.spec.admissionPlugins);
   }
 
   isMLAEnabled(): boolean {
