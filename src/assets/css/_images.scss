@@ -131,11 +131,11 @@
 }
 
 .km-icon-download {
-  @include mixins.mask-image("/assets/images/icons/download.svg", 20px, $color: #fff);
+  @include mixins.mask-image("/assets/images/icons/download.svg", 24px, $color: #fff);
 }
 
 .km-icon-share {
-  @include mixins.mask-image("/assets/images/icons/share.svg", 20px);
+  @include mixins.mask-image("/assets/images/icons/share.svg", 24px);
 }
 
 .km-icon-copy {
