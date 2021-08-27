@@ -69,6 +69,10 @@
 
 .km-icon-delete {
   @include mixins.mask-image("/assets/images/icons/trash.svg", 18px);
+
+  &.with-text {
+    @include mixins.mask-image("/assets/images/icons/trash-24.svg", 24px);
+  }
 }
 
 .km-icon-edit {
