@@ -83,6 +83,10 @@
   @include mixins.mask-image("/assets/images/icons/disconnect.svg", 18px);
 }
 
+.km-icon-cluster-from-template {
+  @include mixins.mask-image("/assets/images/icons/cluster-from-template.svg", 18px);
+}
+
 .km-icon-cancel {
   @include mixins.mask-image("/assets/images/icons/x.svg", 18px);
 }
@@ -158,6 +162,10 @@
   @include mixins.mask-image("/assets/images/icons/ssh-keys.svg", 24px);
 }
 
+.km-icon-cluster-template {
+  @include mixins.mask-image("/assets/images/icons/cluster-template.svg", 24px);
+}
+
 .km-icon-member {
   @include mixins.mask-image("/assets/images/icons/members.svg", 24px);
 }
@@ -210,6 +218,10 @@
 
 .km-icon-add {
   @include mixins.mask-image("/assets/images/icons/plus.svg", 18px);
+}
+
+.km-icon-save {
+  @include mixins.mask-image("/assets/images/icons/save.svg", 18px);
 }
 
 .km-icon-reset {

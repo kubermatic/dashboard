@@ -9,26 +9,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {animate, keyframes, style, transition, trigger} from '@angular/animations';
+.scope {
+  text-transform: capitalize;
+}
 
-export const slideOut = trigger('slideOut', [
-  transition(':leave', [
-    animate(
-      '.25s 0s',
-      keyframes([
-        style({
-          transform: 'translate3d(0, 0, 0)',
-          offset: 0,
-          opacity: '*',
-          height: '*',
-        }),
-        style({
-          transform: 'translate3d(100%, 0, 0)',
-          offset: 1,
-          opacity: 0,
-          height: '*',
-        }),
-      ])
-    ),
-  ]),
-]);
+.km-provider-logo {
+  background-position: left;
+  margin: 0 8px 0 0;
+  max-width: 150px;
+  min-width: 70px;
+}
+
+.km-provider-logo-digitalocean,
+.km-provider-logo-openstack {
+  max-height: 20px;
+  min-height: 20px;
+}
+
+.km-provider-logo-hetzner {
+  max-height: 16px;
+  min-height: 16px;
+}

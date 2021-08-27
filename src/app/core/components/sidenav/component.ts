@@ -16,7 +16,7 @@ import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {environment} from '@environments/environment';
-import {View} from '@shared/entity/common';
+import {getViewDisplayName, View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {CustomLink, UserSettings} from '@shared/entity/settings';
@@ -31,6 +31,7 @@ import {switchMap, takeUntil} from 'rxjs/operators';
   styleUrls: ['./style.scss'],
 })
 export class SidenavComponent implements OnInit, OnDestroy {
+  view = View;
   environment: any = environment;
   customLinks: CustomLink[] = [];
   settings: UserSettings;
@@ -104,35 +105,13 @@ export class SidenavComponent implements OnInit, OnDestroy {
     );
   }
 
-  getRouterLink(target: string): string {
-    const selectedProjectId = this._selectedProject.id;
-    return `/projects/${selectedProjectId}/${target}`;
+  getRouterLink(view: View): string {
+    return `/projects/${this._selectedProject.id}/${view}`;
   }
 
-  getTooltip(viewName: string): string {
-    let tooltip = '';
-
-    if (this.isSidenavCollapsed()) {
-      switch (viewName) {
-        case View.Clusters:
-          tooltip += 'Clusters';
-          break;
-        case View.SSHKeys:
-          tooltip += 'SSH Keys';
-          break;
-        case View.Members:
-          tooltip += 'Members';
-          break;
-        case View.ServiceAccounts:
-          tooltip += 'Service Accounts';
-          break;
-        case View.Projects:
-          tooltip += 'Projects';
-          break;
-      }
-    }
-
-    if (!MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, viewName, Permission.View)) {
+  getTooltip(view: View): string {
+    let tooltip = this.isSidenavCollapsed() ? getViewDisplayName(view) : '';
+    if (!MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, view, Permission.View)) {
       tooltip = 'Cannot enter this view.';
       if (this._selectedProject.status !== 'Active') {
         tooltip += ' Selected project is not active.';
@@ -144,13 +123,11 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   getCustomLinkIconStyle(link: CustomLink): any {
-    return {
-      'background-image': `url('${CustomLink.getIcon(link)}')`,
-    };
+    return {'background-image': `url('${CustomLink.getIcon(link)}')`};
   }
 
-  getMenuItemClass(viewName: string): string {
-    return MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, viewName, Permission.View)
+  getMenuItemClass(view: View): string {
+    return MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, view, Permission.View)
       ? ''
       : 'km-disabled';
   }

@@ -37,6 +37,7 @@ export type ResourceLabelMap = {
 
 export enum View {
   Clusters = 'clusters',
+  ClusterTemplates = 'clustertemplates',
   Projects = 'projects',
   Members = 'members',
   SSHKeys = 'sshkeys',
@@ -50,6 +51,7 @@ export enum View {
 // IMPORTANT: names in 'ViewDisplayName' have to be in sync with names in 'View'
 export enum ViewDisplayName {
   Clusters = 'Clusters',
+  ClusterTemplates = 'Cluster Templates',
   Projects = 'Projects',
   Members = 'Members',
   SSHKeys = 'SSH Keys',

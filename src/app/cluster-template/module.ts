@@ -9,26 +9,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {animate, keyframes, style, transition, trigger} from '@angular/animations';
+import {NgModule} from '@angular/core';
+import {SharedModule} from '@shared/module';
+import {ClusterTemplateRoutingModule} from './routing';
+import {ClusterTemplateComponent} from './component';
 
-export const slideOut = trigger('slideOut', [
-  transition(':leave', [
-    animate(
-      '.25s 0s',
-      keyframes([
-        style({
-          transform: 'translate3d(0, 0, 0)',
-          offset: 0,
-          opacity: '*',
-          height: '*',
-        }),
-        style({
-          transform: 'translate3d(100%, 0, 0)',
-          offset: 1,
-          opacity: 0,
-          height: '*',
-        }),
-      ])
-    ),
-  ]),
-]);
+const components: any[] = [ClusterTemplateComponent];
+
+@NgModule({
+  imports: [SharedModule, ClusterTemplateRoutingModule],
+  declarations: [...components],
+  exports: [...components],
+})
+export class ClusterTemplateModule {}

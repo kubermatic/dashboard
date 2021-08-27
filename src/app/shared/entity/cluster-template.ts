@@ -9,9 +9,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@mixin theme-wizard-summary-step-component($colors) {
-  .km-main,
-  .km-main > div {
-    background-color: map-get($colors, background);
-  }
+import {MachineDeployment} from '@shared/entity/machine-deployment';
+import {Cluster} from '@shared/entity/cluster';
+
+export class ClusterTemplate {
+  name: string;
+  id?: string;
+  projectID?: string;
+  user?: string;
+  scope: ClusterTemplateScope;
+  cluster?: Cluster;
+  nodeDeployment?: MachineDeployment;
+}
+
+export enum ClusterTemplateScope {
+  Global = 'global',
+  Project = 'project',
+  User = 'user',
+}
+
+export class CreateTemplateInstances {
+  replicas: number;
 }

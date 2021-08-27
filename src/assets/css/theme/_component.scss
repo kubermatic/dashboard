@@ -25,8 +25,8 @@
 @import 'src/app/shared/components/editor/theme';
 @import 'src/app/shared/components/property-usage/theme';
 @import 'src/app/wizard/step/cluster/theme';
-@import 'src/app/wizard/step/summary/theme';
 @import 'src/app/shared/components/eol/theme';
+@import 'src/app/shared/components/cluster-summary/theme';
 @import 'src/app/shared/components/chip/theme';
 @import 'src/app/shared/components/tab-card/theme';
 @import 'src/app/cluster/cluster-details/rbac/add-binding/theme';
@@ -50,7 +50,7 @@
   @include theme-sidenav-component($colors);
   @include theme-version-picker-component($colors);
   @include theme-wizard-cluster-step-component($colors);
-  @include theme-wizard-summary-step-component($colors);
+  @include theme-cluster-summary-component($colors);
   @include theme-eol-component($colors);
   @include theme-chip-component($colors);
   @include theme-add-binding-component($colors);
