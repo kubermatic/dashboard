@@ -11,6 +11,7 @@
 
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
 import {MLAService} from '@core/services/mla';
 import {SettingsService} from '@core/services/settings';
@@ -35,19 +36,26 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
   @Input() alertmanagerConfig: AlertmanagerConfig;
 
   private _settings: AdminSettings;
+  private _seed: string;
   private readonly _unsubscribe = new Subject<void>();
 
   constructor(
     private readonly _matDialog: MatDialog,
     private readonly _mlaService: MLAService,
     private readonly _notificationService: NotificationService,
-    private readonly _settingsService: SettingsService
+    private readonly _settingsService: SettingsService,
+    private readonly _datacenterService: DatacenterService
   ) {}
 
   ngOnInit(): void {
     this._settingsService.adminSettings
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(settings => (this._settings = settings));
+
+    this._datacenterService
+      .getDatacenter(this.cluster.spec.cloud.dc)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(datacenter => (this._seed = datacenter.spec.seed));
   }
 
   ngOnDestroy(): void {
@@ -60,15 +68,20 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
   }
 
   shouldDisplayAlertmanagerUILink(): boolean {
-    return !!this._settings && !!this._settings.mlaAlertmanagerDomain;
+    return !!this._settings && !!this._settings.mlaAlertmanagerPrefix;
   }
 
   getAlertmanagerURL(): string {
-    const domain = this._settings.mlaAlertmanagerDomain || '';
-    if (domain.slice(domain.length - 1) === '/') {
-      return this._settings.mlaAlertmanagerDomain + this.cluster.id;
-    }
-    return this._settings.mlaAlertmanagerDomain + '/' + this.cluster.id;
+    return (
+      'https://' +
+      this._settings.mlaAlertmanagerPrefix +
+      '.' +
+      this._seed +
+      '.' +
+      window.location.hostname +
+      '/' +
+      this.cluster.id
+    );
   }
 
   edit(): void {
