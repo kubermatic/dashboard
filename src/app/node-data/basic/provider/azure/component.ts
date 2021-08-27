@@ -143,7 +143,10 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
   }
 
   isZoneEnabled(): boolean {
-    return !this._clusterSpecService.cluster.spec.cloud.azure.assignAvailabilitySet;
+    return (
+      this._clusterSpecService.cluster.spec.cloud.azure &&
+      !this._clusterSpecService.cluster.spec.cloud.azure.assignAvailabilitySet
+    );
   }
 
   onZoneChange(zone: string): void {
