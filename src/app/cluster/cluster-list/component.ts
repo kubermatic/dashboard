@@ -10,7 +10,7 @@
 // limitations under the License.
 
 import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -152,8 +152,13 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   selectTemplate(): void {
-    const dialog = this._matDialog.open(SelectClusterTemplateDialogComponent);
-    dialog.componentInstance.projectID = this._selectedProject.id;
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        projectID: this._selectedProject.id,
+      },
+    };
+
+    this._matDialog.open(SelectClusterTemplateDialogComponent, dialogConfig);
   }
 
   ngOnChanges(): void {

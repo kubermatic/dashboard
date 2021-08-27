@@ -12,7 +12,7 @@ limitations under the License.
 -->
 
 <km-dialog-title>
-  <div>Create Clusters from {{template.name}} Template</div>
+  <div>Create Clusters from {{data.template.name}} Template</div>
 </km-dialog-title>
 <mat-dialog-content>
   <form [formGroup]="form"
@@ -36,8 +36,8 @@ limitations under the License.
       </mat-error>
     </mat-form-field>
   </form>
-  <km-cluster-summary [cluster]="template.cluster"
-                      [machineDeployment]="template.nodeDeployment"
+  <km-cluster-summary [cluster]="data.template.cluster"
+                      [machineDeployment]="data.template.nodeDeployment"
                       [datacenter]="datacenter"
                       [seedSettings]="seedSettings"
                       [flipLayout]="true"

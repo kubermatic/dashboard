@@ -209,8 +209,13 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   createCluster(template: ClusterTemplate): void {
-    const dialog = this._matDialog.open(ClusterFromTemplateDialogComponent);
-    dialog.componentInstance.projectID = this._selectedProject.id;
-    dialog.componentInstance.template = template;
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        template: template,
+        projectID: this._selectedProject.id,
+      },
+    };
+
+    this._matDialog.open(ClusterFromTemplateDialogComponent, dialogConfig);
   }
 }

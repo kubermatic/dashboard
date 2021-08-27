@@ -28,7 +28,7 @@ import {NodeData} from '@shared/model/NodeSpecChange';
 import {forkJoin, of, Subject, take} from 'rxjs';
 import {switchMap, takeUntil, tap} from 'rxjs/operators';
 import {StepRegistry, steps, WizardStep} from './config';
-import {MatDialog} from '@angular/material/dialog';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {SaveClusterTemplateDialogComponent} from '@shared/components/save-cluster-template/component';
 
 @Component({
@@ -181,11 +181,16 @@ export class WizardComponent implements OnInit, OnDestroy {
   }
 
   saveAsTemplate(): void {
-    const dialog = this._matDialog.open(SaveClusterTemplateDialogComponent);
-    dialog.componentInstance.cluster = this._clusterSpecService.cluster;
-    dialog.componentInstance.nodeData = this._nodeDataService.nodeData;
-    dialog.componentInstance.projectID = this.project.id;
-    dialog
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        cluster: this._clusterSpecService.cluster,
+        nodeData: this._nodeDataService.nodeData,
+        projectID: this.project.id,
+      },
+    };
+
+    this._matDialog
+      .open(SaveClusterTemplateDialogComponent, dialogConfig)
       .afterClosed()
       .pipe(take(1))
       .subscribe(ct => this._notificationService.success(`The ${ct.name} cluster template was saved`));

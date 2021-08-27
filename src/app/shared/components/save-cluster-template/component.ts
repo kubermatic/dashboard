@@ -9,8 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnInit} from '@angular/core';
-import {MatDialogRef} from '@angular/material/dialog';
+import {Component, Inject, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {Cluster} from '@shared/entity/cluster';
 import {ClusterTemplate, ClusterTemplateScope} from '@shared/entity/cluster-template';
@@ -19,6 +19,12 @@ import {UserService} from '@core/services/user';
 import {take} from 'rxjs/operators';
 import {Member} from '@shared/entity/member';
 import {ClusterTemplateService} from '@core/services/cluster-templates';
+
+class SaveClusterTemplateDialogData {
+  cluster: Cluster;
+  nodeData: NodeData;
+  projectID: string;
+}
 
 enum Control {
   Name = 'name',
@@ -30,15 +36,13 @@ enum Control {
   templateUrl: './template.html',
 })
 export class SaveClusterTemplateDialogComponent implements OnInit {
-  @Input() cluster: Cluster;
-  @Input() nodeData: NodeData;
-  @Input() projectID: string;
   scope = ClusterTemplateScope;
   control = Control;
   form: FormGroup;
   user: Member;
 
   constructor(
+    @Inject(MAT_DIALOG_DATA) public data: SaveClusterTemplateDialogData,
     public dialogRef: MatDialogRef<SaveClusterTemplateDialogComponent>,
     private readonly _clusterTemplateService: ClusterTemplateService,
     private readonly _userService: UserService
@@ -55,7 +59,7 @@ export class SaveClusterTemplateDialogComponent implements OnInit {
 
   save(): void {
     this._clusterTemplateService
-      .create(this._getClusterTemplate(), this.projectID)
+      .create(this._getClusterTemplate(), this.data.projectID)
       .pipe(take(1))
       .subscribe(ct => this.dialogRef.close(ct));
   }
@@ -64,13 +68,13 @@ export class SaveClusterTemplateDialogComponent implements OnInit {
     return {
       name: this.form.get(Control.Name).value,
       scope: this.form.get(Control.Scope).value,
-      cluster: this.cluster,
+      cluster: this.data.cluster,
       nodeDeployment: {
-        name: this.nodeData.name,
+        name: this.data.nodeData.name,
         spec: {
-          template: this.nodeData.spec,
-          replicas: this.nodeData.count,
-          dynamicConfig: this.nodeData.dynamicConfig,
+          template: this.data.nodeData.spec,
+          replicas: this.data.nodeData.count,
+          dynamicConfig: this.data.nodeData.dynamicConfig,
         },
       },
     };
