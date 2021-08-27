@@ -7,7 +7,7 @@ import {DynamicTab} from '@shared/model/dynamic-tab';
 import {AllowedRegistriesService} from './service';
 import {UserService} from '@core/services/user';
 import {NotificationService} from '@core/services/notification';
-import {ConfirmationDialogComponent, ConfirmLabel} from '@shared/components/confirmation-dialog/component';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {AllowedRegistry} from './entity';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
@@ -110,7 +110,7 @@ export class AllowedRegistriesComponent extends DynamicTab implements OnInit, On
       data: {
         title: 'Delete Allowed Registry',
         message: `Are you sure you want to delete the allowed registry ${allowedRegistry.name}?`,
-        confirmLabel: ConfirmLabel.Delete,
+        confirmLabel: 'Delete',
       },
     };
 

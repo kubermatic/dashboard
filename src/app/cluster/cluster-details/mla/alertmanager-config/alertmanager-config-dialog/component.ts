@@ -14,6 +14,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MLAService} from '@core/services/mla';
 import {NotificationService} from '@core/services/notification';
 import {AlertmanagerConfig} from '@shared/entity/mla';
+import {getIconClassForButton} from '@shared/utils/common-utils';
 import * as _ from 'lodash';
 import {encode, decode} from 'js-base64';
 import {Subject} from 'rxjs';
@@ -56,6 +57,10 @@ export class AlertmanagerConfigDialog implements OnInit, OnDestroy {
 
   isValid(): boolean {
     return !_.isEmpty(this.spec);
+  }
+
+  getIconClass(): string {
+    return getIconClassForButton(this.data.confirmLabel);
   }
 
   save(): void {

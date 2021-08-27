@@ -38,6 +38,7 @@
           mat-flat-button
           (click)="save()"
           [disabled]="form.invalid">
+    <i [ngClass]="getIconClass()"></i>
     {{data.confirmLabel}}
   </button>
 </mat-dialog-actions>

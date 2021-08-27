@@ -47,7 +47,9 @@ limitations under the License.
             id="km-serviceaccount-token-dialog-update-btn"
             mat-flat-button
             [disabled]="updating || form.invalid"
-            (click)="update()">{{mode}}
+            (click)="update()">
+      <i [ngClass]="getIconClass()"></i>
+      <span>{{mode}}</span>
     </button>
 
     <a *ngIf="!first"
@@ -65,7 +67,9 @@ limitations under the License.
     <button id="km-serviceaccount-token-dialog-confirm-btn"
             mat-flat-button
             mat-dialog-close
-            *ngIf="!first">Got it
+            *ngIf="!first">
+      <i class="km-icon-mask km-icon-check"></i>
+      <span>Got it</span>
     </button>
   </mat-dialog-actions>
 </form>
@@ -81,7 +85,9 @@ limitations under the License.
                  *ngIf="updating"></mat-spinner>
     <button mat-flat-button
             [disabled]="updating || form.invalid"
-            (click)="update()">{{mode}}
+            (click)="update()">
+      <i [ngClass]="getIconClass()"></i>
+      <span>{{mode}}</span>
     </button>
   </mat-dialog-actions>
 </form>

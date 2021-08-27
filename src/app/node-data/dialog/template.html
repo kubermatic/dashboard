@@ -37,7 +37,8 @@ limitations under the License.
             (click)="onConfirm()"
             [disabled]="form.invalid"
             class="btn btn-primary">
-      {{getConfirmButtonText()}}
+      <i [ngClass]="getIconClass()"></i>
+      <span>{{getConfirmButtonText()}}</span>
     </button>
   </mat-dialog-actions>
 </form>

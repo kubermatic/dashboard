@@ -19,7 +19,7 @@ import {ClusterService} from '@core/services/cluster';
 import {NotificationService} from '@core/services/notification';
 import {UserService} from '@core/services/user';
 import {AddSshKeyDialogComponent} from '@shared/components/add-ssh-key-dialog/component';
-import {ConfirmationDialogComponent, ConfirmLabel} from '@shared/components/confirmation-dialog/component';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Cluster} from '@shared/entity/cluster';
 import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
@@ -126,7 +126,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
         title: 'Delete SSH Key',
         message: `Are you sure you want to permanently delete the ${sshKey.name}
           SSH key from the ${this.cluster.name} cluster?`,
-        confirmLabel: ConfirmLabel.Delete,
+        confirmLabel: 'Delete',
       },
     };
 

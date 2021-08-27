@@ -23,6 +23,7 @@ import {
   ServiceAccountToken,
   ServiceAccountTokenPatch,
 } from '@shared/entity/service-account';
+import {getIconClassForButton} from '@shared/utils/common-utils';
 import {take} from 'rxjs/operators';
 
 enum StepRegistry {
@@ -119,6 +120,10 @@ export class ServiceAccountTokenDialog implements OnInit {
         this._edit();
         return;
     }
+  }
+
+  getIconClass(): string {
+    return getIconClassForButton(this._data.mode);
   }
 
   private _create(): void {

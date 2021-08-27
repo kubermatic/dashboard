@@ -20,7 +20,7 @@ import {ApiService} from '@core/services/api';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
-import {ConfirmationDialogComponent, ConfirmLabel} from '@shared/components/confirmation-dialog/component';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Project} from '@shared/entity/project';
 import {ServiceAccount} from '@shared/entity/service-account';
 import {GroupConfig} from '@shared/model/Config';
@@ -180,7 +180,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
       data: {
         title: 'Delete Service Account',
         message: `Delete ${serviceAccount.name} from ${this._selectedProject.name} permanently?`,
-        confirmLabel: ConfirmLabel.Delete,
+        confirmLabel: 'Delete',
       },
     };
 

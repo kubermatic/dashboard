@@ -20,7 +20,7 @@ import {ApiService} from '@core/services/api';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
-import {ConfirmationDialogComponent, ConfirmLabel} from '@shared/components/confirmation-dialog/component';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
@@ -181,7 +181,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
       data: {
         title: 'Delete Member',
         message: `Delete ${member.name} member from the ${this._selectedProject.name} project?`,
-        confirmLabel: ConfirmLabel.Delete,
+        confirmLabel: 'Delete',
       },
     };
 

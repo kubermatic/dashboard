@@ -21,7 +21,7 @@ import {Cluster} from '@shared/entity/cluster';
 import {getDefaultNodeProviderSpec} from '@shared/entity/node';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
-import {objectDiff} from '@shared/utils/common-utils';
+import {objectDiff, getIconClassForButton} from '@shared/utils/common-utils';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {NodeDataMode} from '../config';
 
@@ -153,6 +153,10 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
       default:
         return 'Add Machine Deployment';
     }
+  }
+
+  getIconClass(): string {
+    return getIconClassForButton(this.mode);
   }
 
   private _updateNodeData(): void {

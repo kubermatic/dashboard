@@ -17,7 +17,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {NotificationService} from '@core/services/notification';
 import {MLAService} from '@core/services/mla';
 import {UserService} from '@core/services/user';
-import {ConfirmationDialogComponent, ConfirmLabel} from '@shared/components/confirmation-dialog/component';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Cluster} from '@shared/entity/cluster';
 import {RuleGroup, RuleGroupType} from '@shared/entity/mla';
 import {MLAUtils} from '@shared/utils/mla-utils';
@@ -144,7 +144,7 @@ export class RuleGroupsComponent implements OnInit, OnChanges, OnDestroy {
       data: {
         title: 'Delete Rule Group',
         message: `Are you sure you want to delete the Rule Group ${ruleGroupName}?`,
-        confirmLabel: ConfirmLabel.Delete,
+        confirmLabel: 'Delete',
       },
     };
 

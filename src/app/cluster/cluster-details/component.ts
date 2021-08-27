@@ -55,7 +55,7 @@ import {EditClusterComponent} from './edit-cluster/component';
 import {EditSSHKeysComponent} from './edit-sshkeys/component';
 import {RevokeTokenComponent} from './revoke-token/component';
 import {ShareKubeconfigComponent} from './share-kubeconfig/component';
-import {ConfirmationDialogComponent, ConfirmLabel} from '@shared/components/confirmation-dialog/component';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 
 @Component({
   selector: 'km-cluster-details',
@@ -356,7 +356,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       data: {
         title: 'External CCM Migration',
         message: `Start external CCM migration procedure of ${this.cluster.name} cluster?`,
-        confirmLabel: ConfirmLabel.Start,
+        confirmLabel: 'Start',
       },
     };
 
