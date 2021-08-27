@@ -88,7 +88,7 @@
 }
 
 .km-icon-cancel {
-  @include mixins.mask-image("/assets/images/icons/x.svg", 18px);
+  @include mixins.mask-image("/assets/images/icons/x.svg", 24px);
 }
 
 .km-icon-regenerate {
@@ -207,11 +207,11 @@
 }
 
 .km-icon-back {
-  @include mixins.mask-image("/assets/images/icons/back.svg", 18px);
+  @include mixins.mask-image("/assets/images/icons/back.svg", 24px);
 }
 
 .km-icon-next {
-  @include mixins.mask-image("/assets/images/icons/back.svg", 18px);
+  @include mixins.mask-image("/assets/images/icons/back.svg", 24px);
 
   transform: rotate(180deg);
 }
