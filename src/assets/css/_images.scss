@@ -51,6 +51,10 @@
   @include mixins.mask-image("/assets/images/icons/clear.svg", 24px);
 }
 
+.km-icon-check {
+  @include mixins.mask-image("/assets/images/icons/check.svg", 24px);
+}
+
 .km-icon-collapse-menu {
   @include mixins.mask-image("/assets/images/icons/collapse-menu.svg", 24px);
 }
