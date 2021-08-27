@@ -18,7 +18,7 @@ import {getEditionDirName} from '@app/dynamic/common';
 import {OPAService} from '@core/services/opa';
 import {UserService} from '@core/services/user';
 import {NotificationService} from '@core/services/notification';
-import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
+import {ConfirmationDialogComponent, ConfirmLabel} from '@shared/components/confirmation-dialog/component';
 import {Constraint, ConstraintSelector, ConstraintTemplate, Kind} from '@shared/entity/opa';
 import {UserSettings} from '@shared/entity/settings';
 import * as _ from 'lodash';
@@ -166,7 +166,7 @@ export class DefaultConstraintComponent implements OnInit, OnChanges, OnDestroy 
       data: {
         title: 'Delete Default Constraint',
         message: `Are you sure you want to delete the default constraint ${defaultConstraint.name}?`,
-        confirmLabel: 'Delete',
+        confirmLabel: ConfirmLabel.Delete,
       },
     };
 

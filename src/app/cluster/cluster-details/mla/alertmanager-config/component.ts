@@ -16,7 +16,7 @@ import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
 import {MLAService} from '@core/services/mla';
 import {SettingsService} from '@core/services/settings';
-import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
+import {ConfirmationDialogComponent, ConfirmLabel} from '@shared/components/confirmation-dialog/component';
 import {Cluster} from '@shared/entity/cluster';
 import {AlertmanagerConfig} from '@shared/entity/mla';
 import {AdminSettings} from '@shared/entity/settings';
@@ -126,7 +126,7 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
       data: {
         title: 'Reset Alertmanager Config',
         message: 'Are you sure you want to reset the Alertmanager Config?',
-        confirmLabel: 'Reset',
+        confirmLabel: ConfirmLabel.Reset,
       },
     };
 

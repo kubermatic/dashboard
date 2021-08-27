@@ -12,10 +12,20 @@
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
+export enum ConfirmLabel {
+  Add = 'Add',
+  Edit = 'Edit',
+  Delete = 'Delete',
+  Start = 'Start',
+  Restart = 'Restart',
+  Reset = 'Reset',
+  Disconnect = 'Disconnect',
+}
+
 export interface ConfirmationDialogConfig {
   title: string;
   message: string;
-  confirmLabel: string;
+  confirmLabel: ConfirmLabel;
   // Following field is required only if dialog should have an warning message with an icon.
   warning?: string;
   // Following fields are required only if dialog should have an input field for verification.
@@ -52,5 +62,26 @@ export class ConfirmationDialogComponent {
       return this.inputName === this.data.compareName;
     }
     return true;
+  }
+
+  getIconClass(): string {
+    switch (this.data.confirmLabel) {
+      case ConfirmLabel.Add:
+        return 'km-icon-mask km-icon-add';
+      case ConfirmLabel.Edit:
+        return 'km-icon-mask km-icon-edit with-text';
+      case ConfirmLabel.Delete:
+        return 'km-icon-mask km-icon-delete with-text';
+      case ConfirmLabel.Start:
+        return 'km-icon-mask km-icon-check';
+      case ConfirmLabel.Restart:
+        return 'km-icon-mask km-icon-regenerate with-text';
+      case ConfirmLabel.Reset:
+        return 'km-icon-mask km-icon-reset with-text';
+      case ConfirmLabel.Disconnect:
+        return 'km-icon-mask km-icon-disconnect with-text';
+      default:
+        return '';
+    }
   }
 }

@@ -17,7 +17,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {OPAService} from '@core/services/opa';
 import {UserService} from '@core/services/user';
 import {NotificationService} from '@core/services/notification';
-import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
+import {ConfirmationDialogComponent, ConfirmLabel} from '@shared/components/confirmation-dialog/component';
 import {Cluster} from '@shared/entity/cluster';
 import {Constraint, ConstraintTemplate, Kind, Violation} from '@shared/entity/opa';
 import {UserSettings} from '@shared/entity/settings';
@@ -171,7 +171,7 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
       data: {
         title: 'Delete Constraint',
         message: `Are you sure you want to delete the constraint ${constraint.name}?`,
-        confirmLabel: 'Delete',
+        confirmLabel: ConfirmLabel.Delete,
       },
     };
 

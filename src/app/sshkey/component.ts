@@ -21,7 +21,7 @@ import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
 import {AddSshKeyDialogComponent} from '@shared/components/add-ssh-key-dialog/component';
-import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
+import {ConfirmationDialogComponent, ConfirmLabel} from '@shared/components/confirmation-dialog/component';
 import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
 import {SSHKey} from '@shared/entity/ssh-key';
@@ -152,7 +152,7 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
         dialogId: 'km-delete-sshkey-dialog',
         title: 'Delete SSH Key',
         message: `Delete SSH key ${sshKey.name} permanently?`,
-        confirmLabel: 'Delete',
+        confirmLabel: ConfirmLabel.Delete,
         confirmLabelId: 'km-delete-sshkey-dialog-btn',
       },
     };

@@ -18,7 +18,7 @@ import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {ClusterService} from '@core/services/cluster';
 import {NotificationService} from '@core/services/notification';
 import {UserService} from '@core/services/user';
-import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
+import {ConfirmationDialogComponent, ConfirmLabel} from '@shared/components/confirmation-dialog/component';
 import {Cluster} from '@shared/entity/cluster';
 import {Member} from '@shared/entity/member';
 import {NodeMetrics} from '@shared/entity/metrics';
@@ -158,7 +158,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
       data: {
         title: 'Delete Node',
         message: `Are you sure you want to permanently delete node ${node.name}?`,
-        confirmLabel: 'Delete',
+        confirmLabel: ConfirmLabel.Delete,
       },
     };
 

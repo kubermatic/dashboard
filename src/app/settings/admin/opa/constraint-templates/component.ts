@@ -17,7 +17,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {OPAService} from '@core/services/opa';
 import {UserService} from '@core/services/user';
 import {NotificationService} from '@core/services/notification';
-import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
+import {ConfirmationDialogComponent, ConfirmLabel} from '@shared/components/confirmation-dialog/component';
 import {ConstraintTemplate} from '@shared/entity/opa';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
@@ -126,7 +126,7 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
       data: {
         title: 'Delete Constraint Template',
         message: `Are you sure you want to delete the constraint template ${constraintTemplate.name}?`,
-        confirmLabel: 'Delete',
+        confirmLabel: ConfirmLabel.Delete,
         warning: 'Deleting this constraint template will cause all constraints related to it to be deleted as well.',
       },
     };

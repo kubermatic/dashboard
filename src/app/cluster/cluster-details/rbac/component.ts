@@ -14,7 +14,7 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatTableDataSource} from '@angular/material/table';
 import {NotificationService} from '@core/services/notification';
 import {RBACService} from '@core/services/rbac';
-import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
+import {ConfirmationDialogComponent, ConfirmLabel} from '@shared/components/confirmation-dialog/component';
 import {Cluster} from '@shared/entity/cluster';
 import {Binding, ClusterBinding, SimpleBinding, SimpleClusterBinding} from '@shared/entity/rbac';
 import * as _ from 'lodash';
@@ -143,7 +143,7 @@ export class RBACComponent implements OnInit, OnDestroy {
         message: `Are you sure you want to permanently delete the ${element.kind.toLowerCase()} ${
           element.name
         } from binding?`,
-        confirmLabel: 'Delete',
+        confirmLabel: ConfirmLabel.Delete,
       },
     };
 
@@ -181,7 +181,7 @@ export class RBACComponent implements OnInit, OnDestroy {
         message: `Are you sure you want to permanently delete the ${element.kind.toLowerCase()} ${
           element.name
         } from binding?`,
-        confirmLabel: 'Delete',
+        confirmLabel: ConfirmLabel.Delete,
       },
     };
 

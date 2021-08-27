@@ -17,7 +17,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
 import {UserService} from '@core/services/user';
-import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
+import {ConfirmationDialogComponent, ConfirmLabel} from '@shared/components/confirmation-dialog/component';
 import {CreateDatacenterModel, Datacenter} from '@shared/entity/datacenter';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import * as countryCodeLookup from 'country-code-lookup';
@@ -198,7 +198,7 @@ export class DynamicDatacentersComponent implements OnInit, OnDestroy, OnChanges
       data: {
         title: 'Delete Datacenter',
         message: `Are you sure you want to delete the ${datacenter.metadata.name} datacenter?`,
-        confirmLabel: 'Delete',
+        confirmLabel: ConfirmLabel.Delete,
       },
     };
 

@@ -17,7 +17,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {NotificationService} from '@core/services/notification';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
-import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
+import {ConfirmationDialogComponent, ConfirmLabel} from '@shared/components/confirmation-dialog/component';
 import {Admin, Member} from '@shared/entity/member';
 import {Subject} from 'rxjs';
 import {filter, take, takeUntil} from 'rxjs/operators';
@@ -84,7 +84,7 @@ export class AdminsComponent implements OnInit, OnChanges {
       data: {
         title: 'Delete Admin',
         message: `Are you sure you want to take admin rights from ${admin.name}?`,
-        confirmLabel: 'Delete',
+        confirmLabel: ConfirmLabel.Delete,
       },
     };
 

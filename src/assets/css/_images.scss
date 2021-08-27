@@ -405,3 +405,7 @@
 .km-os-image-flatcar {
   @include mixins.background-image("/assets/images/os/flatcar.svg", 24px);
 }
+
+.with-text {
+  @include mixins.size(24px, $force: true);
+}

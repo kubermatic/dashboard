@@ -17,7 +17,7 @@ import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 import {Addon, AddonConfig, getAddonLogoData, hasAddonLogoData} from '../../entity/addon';
-import {ConfirmationDialogComponent} from '../confirmation-dialog/component';
+import {ConfirmationDialogComponent, ConfirmLabel} from '../confirmation-dialog/component';
 import {EditAddonDialogComponent} from './edit-addon-dialog/component';
 import {InstallAddonDialogComponent} from './install-addon-dialog/component';
 
@@ -151,7 +151,7 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
       data: {
         title: 'Delete Addon',
         message: `Delete ${addon.name} addon permanently?`,
-        confirmLabel: 'Delete',
+        confirmLabel: ConfirmLabel.Delete,
       },
     };
 

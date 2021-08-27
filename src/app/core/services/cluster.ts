@@ -17,7 +17,7 @@ import {catchError, filter, map, shareReplay, startWith, switchMap, switchMapTo,
 
 import {environment} from '@environments/environment';
 import {AppConfigService} from '@app/config.service';
-import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
+import {ConfirmationDialogComponent, ConfirmLabel} from '@shared/components/confirmation-dialog/component';
 import {LabelFormComponent} from '@shared/components/label-form/component';
 import {TaintFormComponent} from '@shared/components/taint-form/component';
 import {Addon} from '@shared/entity/addon';
@@ -143,7 +143,7 @@ export class ClusterService {
       data: {
         title: 'Disconnect Cluster',
         message: `Are you sure you want to disconnect ${cluster.name} cluster?`,
-        confirmLabel: 'Disconnect',
+        confirmLabel: ConfirmLabel.Disconnect,
       },
     };
 

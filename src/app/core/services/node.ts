@@ -14,7 +14,7 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {DialogDataInput, DialogDataOutput, NodeDataDialogComponent} from '@app/node-data/dialog/component';
 import {ApiService} from '@core/services/api';
 import {NotificationService} from '@core/services/notification';
-import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
+import {ConfirmationDialogComponent, ConfirmLabel} from '@shared/components/confirmation-dialog/component';
 import {Cluster} from '@shared/entity/cluster';
 import {MachineDeployment, MachineDeploymentPatch} from '@shared/entity/machine-deployment';
 import {NodeData} from '@shared/model/NodeSpecChange';
@@ -128,7 +128,7 @@ export class NodeService {
       data: {
         title: 'Delete Machine Deployment',
         message: `Delete ${md.name} machine deployment permanently?`,
-        confirmLabel: 'Delete',
+        confirmLabel: ConfirmLabel.Delete,
       },
     };
 
@@ -179,7 +179,7 @@ export class NodeService {
       data: {
         title: 'Restart Machine Deployment',
         message: `Start rolling restart of ${md.name} machine deployment?`,
-        confirmLabel: 'Restart',
+        confirmLabel: ConfirmLabel.Restart,
       },
     };
 
