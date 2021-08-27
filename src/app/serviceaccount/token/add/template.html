@@ -49,7 +49,7 @@ limitations under the License.
             [disabled]="updating || form.invalid"
             (click)="update()">
       <i [ngClass]="getIconClass()"></i>
-      <span>{{mode}}</span>
+      <span>{{mode}} Token</span>
     </button>
 
     <a *ngIf="!first"
@@ -87,7 +87,7 @@ limitations under the License.
             [disabled]="updating || form.invalid"
             (click)="update()">
       <i [ngClass]="getIconClass()"></i>
-      <span>{{mode}}</span>
+      <span>{{mode}} Token</span>
     </button>
   </mat-dialog-actions>
 </form>
