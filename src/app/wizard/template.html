@@ -87,6 +87,16 @@ limitations under the License.
             <i class="km-icon-mask km-icon-next"></i>
             <span>Next</span>
           </button>
+          <button fxLayoutAlign="center center"
+                  mat-flat-button
+                  type="button"
+                  color="alternative"
+                  [disabled]="creating"
+                  *ngIf="last"
+                  (click)="saveAsTemplate()">
+            <i class="km-icon-mask km-icon-save"></i>
+            <span>Save Cluster Template</span>
+          </button>
           <button id="km-wizard-create-btn"
                   fxLayoutAlign="center center"
                   mat-flat-button

@@ -1,0 +1,67 @@
+<!--
+Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<km-dialog-title>
+  <div>Create Clusters from {{data.template.name}} Template</div>
+</km-dialog-title>
+<mat-dialog-content>
+  <form [formGroup]="form"
+        fxLayout="column"
+        id="create-template-instance-form"
+        (submit)="create()">
+    <mat-form-field fxFlex>
+      <mat-label>Number of Clusters</mat-label>
+      <input matInput
+             [formControlName]="control.Replicas"
+             type="number"
+             min="1"
+             autocomplete="off"
+             required
+             cdkFocusInitial>
+      <mat-error *ngIf="form.get(control.Replicas).hasError('required')">
+        Number of clusters is <strong>required</strong>.
+      </mat-error>
+      <mat-error *ngIf="form.get(control.Replicas).hasError('min')">
+        At least 1 cluster has to be created.
+      </mat-error>
+    </mat-form-field>
+  </form>
+  <km-cluster-summary [cluster]="data.template.cluster"
+                      [machineDeployment]="data.template.nodeDeployment"
+                      [datacenter]="datacenter"
+                      [seedSettings]="seedSettings"
+                      [flipLayout]="true"
+                      *ngIf="showDetails"
+                      @shrinkGrow></km-cluster-summary>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div (click)="showDetails = !showDetails"
+       class="km-pointer km-expand-button"
+       fxLayoutAlign="center center"
+       fxLayoutGap="8px"
+       fxFlex="100">
+    <hr fxFlex />
+    <span>{{showDetails ? 'Hide' : 'Show'}} cluster template details</span>
+    <i class="km-muted-bg"
+       [ngClass]="showDetails ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
+    <hr fxFlex />
+  </div>
+  <button mat-flat-button
+          type="submit"
+          form="create-template-instance-form"
+          fxLayoutAlign="center center"
+          [disabled]="!form.valid">
+    <i class="km-icon-mask km-icon-add"></i>
+    <span>Create Clusters</span>
+  </button>
+</mat-dialog-actions>

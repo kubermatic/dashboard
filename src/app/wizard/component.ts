@@ -25,9 +25,11 @@ import {Project} from '@shared/entity/project';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {CreateClusterModel} from '@shared/model/CreateClusterModel';
 import {NodeData} from '@shared/model/NodeSpecChange';
-import {forkJoin, of, Subject} from 'rxjs';
+import {forkJoin, of, Subject, take} from 'rxjs';
 import {switchMap, takeUntil, tap} from 'rxjs/operators';
 import {StepRegistry, steps, WizardStep} from './config';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {SaveClusterTemplateDialogComponent} from '@shared/components/save-cluster-template/component';
 
 @Component({
   selector: 'km-wizard',
@@ -53,6 +55,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _clusterService: ClusterService,
     private readonly _nodeDataService: NodeDataService,
+    private readonly _matDialog: MatDialog,
     private readonly _router: Router,
     private readonly _googleAnalyticsService: GoogleAnalyticsService
   ) {}
@@ -175,5 +178,21 @@ export class WizardComponent implements OnInit, OnDestroy {
     const controls = {};
     steps.forEach(step => (controls[step.name] = this._formBuilder.control('')));
     this.form = this._formBuilder.group(controls);
+  }
+
+  saveAsTemplate(): void {
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        cluster: this._clusterSpecService.cluster,
+        nodeData: this._nodeDataService.nodeData,
+        projectID: this.project.id,
+      },
+    };
+
+    this._matDialog
+      .open(SaveClusterTemplateDialogComponent, dialogConfig)
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(ct => this._notificationService.success(`The ${ct.name} cluster template was saved`));
   }
 }

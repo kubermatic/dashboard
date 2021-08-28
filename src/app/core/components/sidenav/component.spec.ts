@@ -31,6 +31,7 @@ import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
 import {MockComponent} from 'ng2-mock-component';
 import {SidenavComponent} from './component';
+import {View} from '@shared/entity/common';
 
 const modules: any[] = [BrowserModule, RouterTestingModule, HttpClientModule, BrowserAnimationsModule, SharedModule];
 
@@ -85,7 +86,7 @@ describe('SidenavComponent', () => {
   );
 
   it('should get RouterLinks from template', () => {
-    const expectedLinks = 5;
+    const expectedLinks = 6;
     fixture.detectChanges();
     expect(links.length).toBe(expectedLinks);
     expect(links[0].linkParams).toBe(`/projects/${fakeProjects()[0].id}/clusters`);
@@ -104,7 +105,7 @@ describe('SidenavComponent', () => {
 
   it('should correctly create router links', () => {
     fixture.detectChanges();
-    expect(component.getRouterLink('clusters')).toBe('/projects/' + fakeProjects()[0].id + '/clusters');
-    expect(component.getRouterLink('members')).toBe('/projects/' + fakeProjects()[0].id + '/members');
+    expect(component.getRouterLink(View.Clusters)).toBe('/projects/' + fakeProjects()[0].id + '/clusters');
+    expect(component.getRouterLink(View.Members)).toBe('/projects/' + fakeProjects()[0].id + '/members');
   });
 });

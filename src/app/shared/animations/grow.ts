@@ -9,26 +9,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {animate, keyframes, style, transition, trigger} from '@angular/animations';
+import {animate, style, transition, trigger} from '@angular/animations';
 
-export const slideOut = trigger('slideOut', [
-  transition(':leave', [
-    animate(
-      '.25s 0s',
-      keyframes([
-        style({
-          transform: 'translate3d(0, 0, 0)',
-          offset: 0,
-          opacity: '*',
-          height: '*',
-        }),
-        style({
-          transform: 'translate3d(100%, 0, 0)',
-          offset: 1,
-          opacity: 0,
-          height: '*',
-        }),
-      ])
-    ),
-  ]),
+export const shrinkGrow = trigger('shrinkGrow', [
+  transition(':enter', [style({height: 0}), animate('.25s', style({height: '*'}))]),
+  transition(':leave', [animate('.25s', style({height: 0}))]),
 ]);

@@ -9,60 +9,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'variables';
-@use 'mixins';
-
-:host {
-  counter-reset: section-number;
-}
-
-.section {
-  margin: 45px 0 0;
-
-  .header {
-    font-size: variables.$font-size-subhead-lg;
-    margin-bottom: 16px;
-
-    &::before {
-      @include mixins.size(22px);
-
-      align-items: center;
-      border-radius: 50%;
-      border-style: solid;
-      border-width: 1px;
-      content: counter(section-number);
-      counter-increment: section-number;
-      display: inline-flex;
-      font-size: variables.$font-size-body;
-      justify-content: center;
-      margin-right: 12px;
-    }
-  }
-
-  .properties {
-    .network-id {
-      margin-bottom: 16px;
-    }
-  }
-}
-
-.km-os-image {
-  @include mixins.size(28px);
-}
-
-.km-icon-key {
-  cursor: default;
-  margin-right: 16px;
-  user-select: none;
-}
-
-.km-provider-logo {
-  height: 30px;
-  max-height: 30px;
-  max-width: 100px;
-  width: 100px;
-
-  &.km-provider-logo-anexia {
-    margin-left: -15px;
-  }
+km-cluster-summary {
+  margin-top: 45px;
 }

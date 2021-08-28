@@ -17,12 +17,10 @@ import * as _ from 'lodash';
 
 @Injectable()
 export class ClusterSpecService {
-  private _admissionPluginsEntity: string[] = [];
   readonly providerChanges = new EventEmitter<NodeProvider>();
   readonly datacenterChanges = new EventEmitter<string>();
   readonly sshKeyChanges = new EventEmitter<SSHKey[]>();
   readonly clusterChanges = new EventEmitter<Cluster>();
-  readonly admissionPluginsChanges = new EventEmitter<string[]>();
   readonly clusterTypeChanges = new EventEmitter<ClusterType>();
 
   private _cluster: Cluster = Cluster.newEmptyClusterEntity();
@@ -119,9 +117,8 @@ export class ClusterSpecService {
   }
 
   set admissionPlugins(plugins: string[]) {
-    this._admissionPluginsEntity = plugins;
     this._cluster.spec.admissionPlugins = plugins;
-    this.admissionPluginsChanges.emit(this._admissionPluginsEntity);
+    this.clusterChanges.emit(this._cluster);
   }
 
   get clusterType(): ClusterType {
@@ -136,7 +133,6 @@ export class ClusterSpecService {
   reset(): void {
     this._cluster = Cluster.newEmptyClusterEntity();
     this._sshKeys = [];
-    this._admissionPluginsEntity = [];
   }
 
   private _getProvider(cluster: Cluster): NodeProvider {

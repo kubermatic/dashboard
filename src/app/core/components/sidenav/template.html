@@ -14,49 +14,60 @@ limitations under the License.
 <div class="km-sidenav"
      fxLayout="column"
      [ngClass]="isSidenavCollapsed() ? 'km-collapse-sidenav' : ''">
-  <div [matTooltip]="getTooltip('clusters')"
-       [ngClass]="getMenuItemClass('clusters')"
+  <div [matTooltip]="getTooltip(view.Clusters)"
+       [ngClass]="getMenuItemClass(view.Clusters)"
        class="menu-item">
     <a id="km-nav-item-clusters"
        fxLayoutAlign=" center"
-       [routerLink]="getRouterLink('clusters')"
-       [ngClass]="getLinkClass('clusters')">
+       [routerLink]="getRouterLink(view.Clusters)"
+       [ngClass]="getLinkClass(view.Clusters)">
       <i class="km-icon-cluster"></i>
       <span *ngIf="!isSidenavCollapsed()">Clusters</span>
     </a>
   </div>
 
-  <div [matTooltip]="getTooltip('sshkeys')"
-       [ngClass]="getMenuItemClass('sshkeys')"
+  <div [matTooltip]="getTooltip(view.ClusterTemplates)"
+       [ngClass]="getMenuItemClass(view.ClusterTemplates)"
+       class="menu-item">
+    <a fxLayoutAlign=" center"
+       [routerLink]="getRouterLink(view.ClusterTemplates)"
+       [ngClass]="getLinkClass(view.ClusterTemplates)">
+      <i class="km-icon-cluster-template"></i>
+      <span *ngIf="!isSidenavCollapsed()">Cluster Templates</span>
+    </a>
+  </div>
+
+  <div [matTooltip]="getTooltip(view.SSHKeys)"
+       [ngClass]="getMenuItemClass(view.SSHKeys)"
        class="menu-item">
     <a id="km-nav-item-sshkeys"
        fxLayoutAlign=" center"
-       [routerLink]="getRouterLink('sshkeys')"
-       [ngClass]="getLinkClass('sshkeys')">
+       [routerLink]="getRouterLink(view.SSHKeys)"
+       [ngClass]="getLinkClass(view.SSHKeys)">
       <i class="km-icon-key"></i>
       <span *ngIf="!isSidenavCollapsed()">SSH Keys</span>
     </a>
   </div>
 
-  <div [matTooltip]="getTooltip('members')"
-       [ngClass]="getMenuItemClass('members')"
+  <div [matTooltip]="getTooltip(view.Members)"
+       [ngClass]="getMenuItemClass(view.Members)"
        class="menu-item">
     <a id="km-nav-item-members"
        fxLayoutAlign=" center"
-       [routerLink]="getRouterLink('members')"
-       [ngClass]="getLinkClass('members')">
+       [routerLink]="getRouterLink(view.Members)"
+       [ngClass]="getLinkClass(view.Members)">
       <i class="km-icon-member"></i>
       <span *ngIf="!isSidenavCollapsed()">Members</span>
     </a>
   </div>
 
-  <div [matTooltip]="getTooltip('serviceaccounts')"
-       [ngClass]="getMenuItemClass('serviceaccounts')"
+  <div [matTooltip]="getTooltip(view.ServiceAccounts)"
+       [ngClass]="getMenuItemClass(view.ServiceAccounts)"
        class="menu-item">
     <a id="km-nav-item-service-accounts"
        fxLayoutAlign=" center"
-       [routerLink]="getRouterLink('serviceaccounts')"
-       [ngClass]="getLinkClass('serviceaccounts')">
+       [routerLink]="getRouterLink(view.ServiceAccounts)"
+       [ngClass]="getLinkClass(view.ServiceAccounts)">
       <i class="km-icon-serviceaccount"></i>
       <span *ngIf="!isSidenavCollapsed()">Service Accounts</span></a>
   </div>
@@ -78,7 +89,7 @@ limitations under the License.
 
   <div fxFlex></div>
 
-  <div [matTooltip]="getTooltip('projects')"
+  <div [matTooltip]="getTooltip(view.Projects)"
        class="menu-item">
     <a id="km-nav-item-projects"
        fxLayoutAlign="center center"

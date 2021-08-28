@@ -9,26 +9,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {animate, keyframes, style, transition, trigger} from '@angular/animations';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {AuthGuard, AuthzGuard} from '@core/services/auth/guard';
+import {ClusterTemplateComponent} from './component';
 
-export const slideOut = trigger('slideOut', [
-  transition(':leave', [
-    animate(
-      '.25s 0s',
-      keyframes([
-        style({
-          transform: 'translate3d(0, 0, 0)',
-          offset: 0,
-          opacity: '*',
-          height: '*',
-        }),
-        style({
-          transform: 'translate3d(100%, 0, 0)',
-          offset: 1,
-          opacity: 0,
-          height: '*',
-        }),
-      ])
-    ),
-  ]),
-]);
+const routes: Routes = [
+  {
+    path: '',
+    component: ClusterTemplateComponent,
+    canActivate: [AuthGuard, AuthzGuard],
+  },
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
+})
+export class ClusterTemplateRoutingModule {}

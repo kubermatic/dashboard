@@ -10,7 +10,7 @@
 // limitations under the License.
 
 import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -39,6 +39,7 @@ import {EMPTY, forkJoin, Observable, of, onErrorResumeNext, Subject} from 'rxjs'
 import {catchError, distinctUntilChanged, filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ClusterDeleteConfirmationComponent} from '../cluster-details/cluster-delete-confirmation/component';
 import {PathParam} from '@core/services/params';
+import {SelectClusterTemplateDialogComponent} from '@shared/components/select-cluster-template/component';
 
 @Component({
   selector: 'km-cluster-list',
@@ -148,6 +149,16 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
       )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe();
+  }
+
+  selectTemplate(): void {
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        projectID: this._selectedProject.id,
+      },
+    };
+
+    this._matDialog.open(SelectClusterTemplateDialogComponent, dialogConfig);
   }
 
   ngOnChanges(): void {
