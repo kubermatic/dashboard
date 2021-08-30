@@ -12,6 +12,7 @@
 import {Component, Input, OnChanges} from '@angular/core';
 import * as _ from 'lodash';
 
+// provider width according to stylesheet
 enum Width {
   Indicator = 45,
   Padding = 10,
@@ -97,6 +98,8 @@ export class ToggleColumnComponent implements OnChanges {
     return count > 0 ? sign + count : '';
   }
 
+  // Calculate how many items would fit in one line minus the indicator.
+  // As long as width >= 0, the number of providers will be increased.
   private _calculateItemsCount(): void {
     let calculatedWidth = this.maxColumnWidth - Width.Indicator;
     let providerCount = 0;
@@ -138,6 +141,9 @@ export class ToggleColumnComponent implements OnChanges {
     }
   }
 
+  // Calculate how many items would fit in one line minus the indicator
+  // and possible providers.
+  // As long as width >= 0, the number of labels will be increased.
   private _calculateLabelsCount(): void {
     let calculatedWidth =
       this._remainingWidth > 0 ? this._remainingWidth - Width.Indicator : this.maxColumnWidth - Width.Indicator;
@@ -154,6 +160,9 @@ export class ToggleColumnComponent implements OnChanges {
     this._maxLabelCount = labelCount;
   }
 
+  // To get a valid width of a label to decide whether it still fits
+  // into the line, we need to append a mat-chip element.
+  // Once we have the width, we remove it again.
   private _labelWidth(key, value): number {
     const matChip = document.createElement('mat-chips');
     matChip.innerHTML = '<div>' + key + '</div><div>' + value + '</div>';
