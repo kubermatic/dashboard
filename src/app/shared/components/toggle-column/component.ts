@@ -9,11 +9,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnChanges} from '@angular/core';
 import * as _ from 'lodash';
 
 enum Width {
-  Indicator = 50,
+  Indicator = 45,
   Padding = 10,
   AWS = 40,
   Anexia = 60,
@@ -28,41 +28,85 @@ enum Width {
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class ToggleColumnComponent {
+export class ToggleColumnComponent implements OnChanges {
   @Input() providers: string[] = [];
   @Input() labels: object = {};
+  @Input() name: string;
   @Input() maxColumnWidth = 0;
   @Input() isToggled = false;
-  columnMaxInput = 0;
+  private _maxProviderCount = 0;
+  private _maxLabelCount = 0;
+  private _remainingWidth = 0;
 
-  displayLabels(): boolean {
-    return (this.isToggled && !_.isEmpty(this.labels)) || (_.isEmpty(this.providers) && !_.isEmpty(this.labels));
+  ngOnChanges(): void {
+    this._calculateItemsCount();
   }
 
   getProviders(): string[] {
-    this.calculateWidth(this.providers);
-
     if (!!this.providers && this.isToggled) {
       return this.providers;
     }
     if (this.maxColumnWidth > 0) {
-      if (!!this.providers && this.providers.length > this.columnMaxInput) {
-        return this.providers.slice(0, this.columnMaxInput);
+      if (!!this.providers && this.providers.length > this._maxProviderCount) {
+        return this.providers.slice(0, this._maxProviderCount);
       }
       return this.providers;
     }
     return [];
   }
 
-  calculateWidth(providers: string[]): void {
+  getLabels(): object {
+    if (!_.isEmpty(this.labels)) {
+      if (this.isToggled) {
+        return this.labels;
+      }
+
+      if (this.providers) {
+        if (this.providers.length > this._maxProviderCount) {
+          return {};
+        }
+      }
+
+      return Object.keys(this.labels)
+        .slice(0, this._maxLabelCount)
+        .reduce((result, key) => {
+          result[key] = this.labels[key];
+          return result;
+        }, {});
+    }
+    return {};
+  }
+
+  displayHiddenItemsLength(): boolean {
+    return (
+      (!_.isEmpty(this.providers) && this.providers.length > this._maxProviderCount) ||
+      (!_.isEmpty(this.labels) && Object.keys(this.labels).length > this._maxLabelCount)
+    );
+  }
+
+  getHiddenItemsLength(): string {
+    const sign = this.isToggled ? '−' : '+';
+    let count = 0;
+    if (!_.isEmpty(this.providers)) {
+      count += this.providers.length - this._maxProviderCount;
+    }
+    if (!_.isEmpty(this.labels)) {
+      count += Object.keys(this.labels).length - this._maxLabelCount;
+    }
+
+    return count > 0 ? sign + count : '';
+  }
+
+  private _calculateItemsCount(): void {
     let calculatedWidth = this.maxColumnWidth - Width.Indicator;
     let providerCount = 0;
-    if (providers) {
-      for (const p of providers) {
+    if (this.providers) {
+      for (const p of this.providers) {
         if (calculatedWidth >= 0) {
-          calculatedWidth = calculatedWidth - this.providerWidth(p) - Width.Padding;
+          calculatedWidth = calculatedWidth - this._providerWidth(p) - Width.Padding;
           if (calculatedWidth >= 0) {
             providerCount += 1;
+            this._remainingWidth = calculatedWidth;
           } else {
             break;
           }
@@ -71,10 +115,12 @@ export class ToggleColumnComponent {
         }
       }
     }
-    this.columnMaxInput = providerCount;
+    this._maxProviderCount = providerCount;
+
+    this._calculateLabelsCount();
   }
 
-  providerWidth(provider): number {
+  private _providerWidth(provider: string): number {
     switch (provider) {
       case 'aws':
         return Width.AWS;
@@ -92,23 +138,32 @@ export class ToggleColumnComponent {
     }
   }
 
-  displayHiddenItemsLength(): boolean {
-    return (
-      (!_.isEmpty(this.providers) && this.providers.length > this.columnMaxInput) ||
-      (!_.isEmpty(this.providers) && this.providers.length >= this.columnMaxInput && !_.isEmpty(this.labels))
-    );
+  private _calculateLabelsCount(): void {
+    let calculatedWidth =
+      this._remainingWidth > 0 ? this._remainingWidth - Width.Indicator : this.maxColumnWidth - Width.Indicator;
+    let labelCount = 0;
+    if (!_.isEmpty(this.labels) && !!this.providers && !(this.providers.length > this._maxProviderCount)) {
+      Object.entries(this.labels).forEach(([key, value]) => {
+        calculatedWidth = calculatedWidth - this._labelWidth(key, value) - Width.Padding;
+        if (calculatedWidth >= 0) {
+          labelCount += 1;
+        }
+      });
+    }
+
+    this._maxLabelCount = labelCount;
   }
 
-  getHiddenItemsLength(): string {
-    const sign = this.isToggled ? '−' : '+';
-    let count = 0;
-    if (!_.isEmpty(this.providers)) {
-      count += this.providers.length - this.columnMaxInput;
-    }
-    if (!_.isEmpty(this.labels)) {
-      count += Object.keys(this.labels).length;
-    }
-
-    return count > 0 ? sign + count : '';
+  private _labelWidth(key, value): number {
+    const matChip = document.createElement('mat-chips');
+    matChip.innerHTML = '<div>' + key + '</div><div>' + value + '</div>';
+    matChip.className = 'mat-standard-chip';
+    matChip.style.visibility = 'hidden';
+    matChip.style.position = 'absolute';
+    matChip.style.display = 'inline-flex';
+    document.body.appendChild(matChip);
+    const width = matChip.offsetWidth;
+    matChip.parentNode.removeChild(matChip);
+    return width;
   }
 }

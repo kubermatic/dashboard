@@ -100,10 +100,12 @@ limitations under the License.
     <td mat-cell
         *matCellDef="let element"
         (click)="toggleColumn(element.name)">
-      <km-toggle-column [providers]="element.spec?.selector?.providers"
+      <km-toggle-column *ngIf="!hasNoMatches(element.spec?.selector)"
+                        [providers]="element.spec?.selector?.providers"
                         [labels]="element.spec?.selector?.labelSelector?.matchLabels"
                         [maxColumnWidth]="appliesToColumnWidth"
-                        [isToggled]="isToggled[element.name]"></km-toggle-column>
+                        [isToggled]="isToggled[element.name]"
+                        [name]="element.name"></km-toggle-column>
 
       <ng-container *ngIf="hasNoMatches(element.spec?.selector)">All</ng-container>
     </td>

@@ -10,19 +10,19 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
+<div fxFlex>
+  <span class="provider-wrapper">
+    <ng-container *ngFor="let provider of getProviders()">
+      <i class="km-provider-logo km-provider-logo-{{provider}} provider-logo {{provider}}"></i>
+    </ng-container>
+  </span>
 
-<span class="provider-wrapper">
-  <ng-container *ngFor="let provider of getProviders()">
-    <i class="km-provider-logo km-provider-logo-{{provider}} provider-logo {{provider}}"></i>
-  </ng-container>
-</span>
+  <km-labels class="labels-wrapper"
+             [labels]="getLabels()"></km-labels>
 
-<km-labels *ngIf="displayLabels()"
-           class="labels-wrapper"
-           [labels]="labels"></km-labels>
-
-<span *ngIf="displayHiddenItemsLength()"
-      class="toggle-indicator">
-  {{getHiddenItemsLength()}}
-  <i [ngClass]="isToggled ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
-</span>
+  <span *ngIf="displayHiddenItemsLength()"
+        class="toggle-indicator">
+    {{getHiddenItemsLength()}}
+    <i [ngClass]="isToggled ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
+  </span>
+</div>

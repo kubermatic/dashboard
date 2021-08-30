@@ -43,6 +43,7 @@ export class DefaultConstraintComponent implements OnInit, OnChanges, OnDestroy,
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   private readonly _unsubscribe = new Subject<void>();
+  private readonly PADDING_APPLIES_TO_COLUMN = 16;
 
   constructor(
     private readonly _opaService: OPAService,
@@ -79,7 +80,7 @@ export class DefaultConstraintComponent implements OnInit, OnChanges, OnDestroy,
   ngAfterViewChecked(): void {
     const box = document.querySelector('.applies-to-column') as HTMLElement;
     if (box) {
-      this.appliesToColumnWidth = box.offsetWidth;
+      this.appliesToColumnWidth = box.offsetWidth - this.PADDING_APPLIES_TO_COLUMN;
     }
   }
 
