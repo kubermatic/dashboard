@@ -37,6 +37,7 @@ export class AdminSettings {
   opaOptions: OpaOptions;
   mlaOptions: MLAOptions;
   mlaAlertmanagerPrefix: string;
+  mlaGrafanaPrefix: string;
 }
 
 export class MachineDeploymentVMResourceQuota {
