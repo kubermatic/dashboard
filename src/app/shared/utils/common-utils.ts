@@ -44,18 +44,18 @@ export function getIconClassForButton(type: string): string {
     case 'Add':
       return 'km-icon-mask km-icon-add';
     case 'Edit':
-      return 'km-icon-mask km-icon-edit with-text';
+      return 'km-icon-mask km-icon-edit w-24';
     case 'Delete':
       return 'km-icon-mask km-icon-delete with-text';
     case 'Start':
       return 'km-icon-mask km-icon-check';
     case 'Regenerate':
     case 'Restart':
-      return 'km-icon-mask km-icon-regenerate with-text';
+      return 'km-icon-mask km-icon-regenerate w-24';
     case 'Reset':
-      return 'km-icon-mask km-icon-reset with-text';
+      return 'km-icon-mask km-icon-reset w-24';
     case 'Disconnect':
-      return 'km-icon-mask km-icon-disconnect with-text';
+      return 'km-icon-mask km-icon-disconnect w-24';
     default:
       return '';
   }

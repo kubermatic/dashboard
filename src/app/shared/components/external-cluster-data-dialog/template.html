@@ -44,7 +44,7 @@ limitations under the License.
           id="external-cluster-confirm-btn"
           (click)="handler()"
           [disabled]="!form.valid || !kubeconfig">
-    <i [ngClass]="editMode ? 'km-icon-mask km-icon-edit with-text' : 'km-icon-mask km-icon-add'"></i>
+    <i [ngClass]="editMode ? 'km-icon-mask km-icon-edit w-24' : 'km-icon-mask km-icon-add'"></i>
     <span>{{getLabel()}}</span>
   </button>
 </mat-dialog-actions>

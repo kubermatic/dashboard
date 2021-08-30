@@ -406,6 +406,10 @@
   @include mixins.background-image("/assets/images/os/flatcar.svg", 24px);
 }
 
-.with-text {
-  @include mixins.size(24px, $force: true);
+@for $i from 1 through 50 {
+  $w: 2 * $i;
+
+  .w-#{$w} {
+    @include mixins.size(#{$w}#{'px'}, $force: true);
+  }
 }
