@@ -17,19 +17,19 @@ limitations under the License.
           color="tertiary"
           fxLayoutAlign="center center"
           (click)="switchBackupStatus(backup)"
-          [disabled]="!canDelete || getStatus(backup).message === 'Unknown'">
-    <i class="km-icon-power-{{isEnabled(backup) ? 'on' : 'off'}}"></i>
-    <span>{{isEnabled(backup) ? 'Disable': 'Enable'}}</span>
+          [disabled]="!canEdit || getStatus(backup).message === 'Unknown'">
+    <i class="km-icon-mask km-icon-power"></i>
+    <span>Turn {{isEnabled(backup) ? 'Off': 'On'}} Automatic Backup</span>
   </button>
 
   <button mat-flat-button
           type="button"
           color="tertiary"
-          (click)="add()"
-          [disabled]="!canAdd"
-          fxLayoutAlign="center center">
-    <i class="km-icon-mask km-icon-add"></i>
-    <span>Delete</span>
+          [attr.id]="'km-delete-backup-' + backup.name"
+          (click)="delete(backup)"
+          [disabled]="!canDelete">
+    <i class="km-icon-mask km-icon-delete"></i>
+    <span>Delete Automatic Backup</span>
   </button>
 </div>
 
@@ -40,19 +40,19 @@ limitations under the License.
                     fxLayoutAlign=" center"
                     class="title">
       <i class="health-state km-icon-circle {{isEnabled(backup) ? 'km-success-bg' : 'km-unknown-bg'}}"></i>
-      <div>{{backup.spec.name}}</div>
+      <div>{{backup.name}}</div>
     </mat-card-title>
   </mat-card-header>
 
   <mat-card-content fxLayout="row">
     <km-property>
-      <div key>Cluster</div>
-      <div value>{{backup.spec.cluster.name}}</div>
+      <div key>Cluster ID</div>
+      <div value>{{backup.spec?.clusterId}}</div>
     </km-property>
 
     <km-property>
       <div key>Schedule</div>
-      <div value>{{backup.spec.schedule}}</div>
+      <div value>{{backup.spec?.schedule}}</div>
     </km-property>
 
     <km-property>
@@ -102,7 +102,7 @@ limitations under the License.
             *matCellDef="let element">
           <div fxLayoutAlign=" center"
                fxLayoutGap="8px">
-            <span>{{element.spec.name}}</span>
+            <span>{{element.name}}</span>
           </div>
         </td>
       </ng-container>
@@ -137,7 +137,7 @@ limitations under the License.
                 <button mat-icon-button
                         [attr.id]="'km-delete-backup-' + backup.name"
                         matTooltip="Delete Snapshot"
-                        (click)="delete(backup)"
+                        (click)="delete(backup); $event.stopPropagation()"
                         [disabled]="!canDelete">
                   <i class="km-icon-delete"></i>
                 </button>
@@ -150,10 +150,6 @@ limitations under the License.
       <tr mat-header-row
           class="km-header-row"
           *matHeaderRowDef="columns"></tr>
-      <tr mat-row
-          *matRowDef="let element; columns: columns"
-          class="km-mat-row km-pointer"
-          (click)="goToDetails(element)"></tr>
     </table>
 
     <div class="km-row km-empty-list-msg"

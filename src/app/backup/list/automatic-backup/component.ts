@@ -19,6 +19,7 @@ import {
   AddAutomaticBackupDialogConfig,
 } from '@app/backup/list/automatic-backup/add-dialog/component';
 import {BackupService} from '@core/services/backup';
+import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
 import {ConfirmationDialogComponent, ConfirmationDialogConfig} from '@shared/components/confirmation-dialog/component';
@@ -54,7 +55,7 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
   isInitialized = true;
 
   get trackByID(): TrackByFunction<EtcdBackupConfig> {
-    return (_: number, backup: EtcdBackupConfig): string => backup.id;
+    return (_: number, backup: EtcdBackupConfig): string => backup.name;
   }
 
   get columns(): string[] {
@@ -73,6 +74,10 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Backups, Permission.Delete);
   }
 
+  get canEdit(): boolean {
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Backups, Permission.Edit);
+  }
+
   get canAdd(): boolean {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Backups, Permission.Create);
   }
@@ -82,7 +87,8 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
     private readonly _projectService: ProjectService,
     private readonly _userService: UserService,
     private readonly _matDialog: MatDialog,
-    private readonly _router: Router
+    private readonly _router: Router,
+    private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -125,7 +131,7 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
 
   getStatus(backup: EtcdBackupConfig): HealthStatus {
     const condition =
-      backup.status.conditions.find(
+      backup.status.conditions?.find(
         condition => condition.Type === EtcdBackupConfigConditionType.EtcdBackupConfigConditionSchedulingActive
       ) || ({} as EtcdBackupConfigCondition);
 
@@ -136,7 +142,7 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
     const config: MatDialogConfig = {
       data: {
         title: 'Delete Automatic Backup',
-        message: `Delete "${backup.spec.name}" automatic backup permanently?`,
+        message: `Delete "${backup.name}" automatic backup permanently?`,
         confirmLabel: 'Delete Automatic Backup',
       } as ConfirmationDialogConfig,
     };
@@ -146,7 +152,11 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
       .afterClosed()
       .pipe(filter(confirmed => confirmed))
       .pipe(take(1))
-      .subscribe(_ => this._backupService.delete(this._selectedProject.id, backup.spec.name));
+      .pipe(switchMap(_ => this._backupService.delete(this._selectedProject.id, backup.spec.clusterId, backup.id)))
+      .subscribe(_ => {
+        this._notificationService.success(`Successfully deleted automatic backup ${backup.name}`);
+        this._backupService.refreshAutomaticBackups();
+      });
   }
 
   add(): void {
@@ -166,7 +176,7 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
 
   isEnabled(backup: EtcdBackupConfig): boolean {
     const condition =
-      backup.status.conditions.find(
+      backup.status.conditions?.find(
         condition => condition.Type === EtcdBackupConfigConditionType.EtcdBackupConfigConditionSchedulingActive
       ) || ({} as EtcdBackupConfigCondition);
 
@@ -177,7 +187,7 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
   }
 
   switchBackupStatus(backup: EtcdBackupConfig): void {
-    const condition = backup.status.conditions.find(
+    const condition = backup.status.conditions?.find(
       condition => condition.Type === EtcdBackupConfigConditionType.EtcdBackupConfigConditionSchedulingActive
     );
 
@@ -194,6 +204,6 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
   }
 
   goToDetails(backup: EtcdBackupConfig): void {
-    this._router.navigate([`/projects/${this._selectedProject.id}/backups/${backup.name}`]);
+    this._router.navigate([`/projects/${this._selectedProject.id}/backups/${backup.id}`]);
   }
 }

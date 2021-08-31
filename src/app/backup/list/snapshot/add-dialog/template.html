@@ -27,7 +27,7 @@ limitations under the License.
                     disableOptionCentering
                     required>
           <mat-option *ngFor="let cluster of clusters"
-                      [value]="cluster.name">{{cluster.name}}</mat-option>
+                      [value]="cluster.id">{{cluster.name}}</mat-option>
         </mat-select>
         <mat-hint>The list of existing clusters for the selected project.</mat-hint>
       </mat-form-field>
@@ -44,6 +44,7 @@ limitations under the License.
 
   <mat-dialog-actions>
     <button mat-flat-button
+            (click)="save()"
             [disabled]="form.invalid">
       Add Snapshot
     </button>

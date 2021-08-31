@@ -52,7 +52,7 @@ limitations under the License.
             *matCellDef="let element">
           <div fxLayoutAlign=" center"
                fxLayoutGap="8px">
-            <span>{{element.spec.name}}</span>
+            <span>{{element.name}}</span>
           </div>
         </td>
       </ng-container>
@@ -60,11 +60,11 @@ limitations under the License.
       <ng-container matColumnDef="cluster">
         <th mat-header-cell
             *matHeaderCellDef
-            class="km-header-cell">Cluster
+            class="km-header-cell">Cluster ID
         </th>
         <td mat-cell
             *matCellDef="let element">
-          <span>{{element.spec.cluster.name}}</span>
+          <span>{{element.spec.clusterId}}</span>
         </td>
       </ng-container>
 
@@ -97,7 +97,7 @@ limitations under the License.
               <ng-container *ngSwitchCase="false">
                 <button mat-icon-button
                         matTooltip="Restore Cluster from Snapshot"
-                        (click)="restore(backup)"
+                        (click)="restore(backup); $event.stopPropagation()"
                         [disabled]="!canRestore">
                   <i class="km-icon-add"></i>
                 </button>
@@ -105,7 +105,7 @@ limitations under the License.
                 <button mat-icon-button
                         [attr.id]="'km-delete-snapshot-' + backup.name"
                         matTooltip="Delete Snapshot"
-                        (click)="delete(backup)"
+                        (click)="delete(backup); $event.stopPropagation()"
                         [disabled]="!canDelete">
                   <i class="km-icon-delete"></i>
                 </button>
@@ -119,14 +119,12 @@ limitations under the License.
           class="km-header-row"
           *matHeaderRowDef="columns"></tr>
       <tr mat-row
-          *matRowDef="let element; columns: columns"
-          class="km-mat-row km-pointer"
-          (click)="goToDetails(element)"></tr>
+          *matRowDef="let element; columns: columns"></tr>
     </table>
 
     <div class="km-row km-empty-list-msg"
          *ngIf="isInitialized && isEmpty">
-      No automatic backups available.
+      No snapshots available.
     </div>
 
     <div class="km-row"

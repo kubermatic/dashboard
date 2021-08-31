@@ -18,7 +18,10 @@ import {
   DeleteSnapshotDialogComponent,
   DeleteSnapshotDialogConfig,
 } from '@app/backup/list/snapshot/delete-dialog/component';
-import {RestoreSnapshotDialogComponent} from '@app/backup/list/snapshot/restore-dialog/component';
+import {
+  RestoreSnapshotDialogComponent,
+  RestoreSnapshotDialogConfig,
+} from '@app/backup/list/snapshot/restore-dialog/component';
 import {BackupService} from '@core/services/backup';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
@@ -49,7 +52,7 @@ export class SnapshotListComponent implements OnInit, OnDestroy {
   isInitialized = true;
 
   get trackByID(): TrackByFunction<EtcdBackupConfig> {
-    return (_: number, backup: EtcdBackupConfig): string => backup.id;
+    return (_: number, backup: EtcdBackupConfig): string => backup.name;
   }
 
   get columns(): string[] {
@@ -119,7 +122,7 @@ export class SnapshotListComponent implements OnInit, OnDestroy {
 
   getStatus(backup: EtcdBackupConfig): HealthStatus {
     let condition = {} as EtcdBackupConfigCondition;
-    if (backup.status.conditions.length === 1) {
+    if (backup.status?.conditions?.length === 1) {
       condition = backup.status.conditions[0];
     }
 
@@ -130,6 +133,7 @@ export class SnapshotListComponent implements OnInit, OnDestroy {
     const config: MatDialogConfig = {
       data: {
         snapshot: backup,
+        projectID: this._selectedProject.id,
       } as DeleteSnapshotDialogConfig,
     };
 
@@ -138,14 +142,15 @@ export class SnapshotListComponent implements OnInit, OnDestroy {
       .afterClosed()
       .pipe(filter(confirmed => confirmed))
       .pipe(take(1))
-      .subscribe(_ => this._backupService.delete(this._selectedProject.id, backup.spec.name));
+      .subscribe(_ => this._backupService.refreshSnapshots());
   }
 
   restore(backup: EtcdBackupConfig): void {
     const config: MatDialogConfig = {
       data: {
         snapshot: backup,
-      } as DeleteSnapshotDialogConfig,
+        projectID: this._selectedProject.id,
+      } as RestoreSnapshotDialogConfig,
     };
 
     const dialog = this._matDialog.open(RestoreSnapshotDialogComponent, config);
@@ -153,7 +158,7 @@ export class SnapshotListComponent implements OnInit, OnDestroy {
       .afterClosed()
       .pipe(filter(confirmed => confirmed))
       .pipe(take(1))
-      .subscribe(_ => this._backupService.delete(this._selectedProject.id, backup.spec.name));
+      .subscribe(_ => this._backupService.refreshSnapshots());
   }
 
   add(): void {
@@ -168,8 +173,6 @@ export class SnapshotListComponent implements OnInit, OnDestroy {
       .afterClosed()
       .pipe(filter(confirmed => confirmed))
       .pipe(take(1))
-      .subscribe(_ => this._backupService.refreshAutomaticBackups());
+      .subscribe(_ => this._backupService.refreshSnapshots());
   }
-
-  goToDetails(_: EtcdBackupConfig): void {}
 }

@@ -14,10 +14,6 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {ActivatedRoute} from '@angular/router';
-import {
-  AddAutomaticBackupDialogComponent,
-  AddAutomaticBackupDialogConfig,
-} from '@app/backup/list/automatic-backup/add-dialog/component';
 import {BackupService} from '@core/services/backup';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
@@ -36,7 +32,7 @@ import {BackupHealthStatus} from '@shared/utils/health-status/backup-health-stat
 import {HealthStatus} from '@shared/utils/health-status/health-status';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {Subject} from 'rxjs';
-import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
+import {filter, map, switchMap, take, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-automatic-backup-details',
@@ -52,10 +48,10 @@ export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
   private _backups = [];
   dataSource = new MatTableDataSource<EtcdBackupConfig>();
   isInitialized = true;
-  backup: EtcdBackupConfig;
+  backup: EtcdBackupConfig = {} as EtcdBackupConfig;
 
   get trackByID(): TrackByFunction<EtcdBackupConfig> {
-    return (_: number, backup: EtcdBackupConfig): string => backup.id;
+    return (_: number, backup: EtcdBackupConfig): string => backup.name;
   }
 
   get columns(): string[] {
@@ -74,12 +70,16 @@ export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Backups, Permission.Delete);
   }
 
+  get canEdit(): boolean {
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Backups, Permission.Edit);
+  }
+
   get canAdd(): boolean {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Backups, Permission.Create);
   }
 
   keep(backup: EtcdBackupConfig): string | number {
-    return backup.spec.schedule ? (backup.spec.keep ? backup.spec.keep : 'Default') : '-';
+    return backup.spec?.schedule ? (backup.spec?.keep ? backup.spec?.keep : 'Default') : '-';
   }
 
   constructor(
@@ -112,14 +112,7 @@ export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
 
     this._projectService.selectedProject
       .pipe(switchMap(project => this._backupService.list(project.id)))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(backups => {
-        this._backups = backups;
-        this.dataSource.data = this._backups;
-      });
-
-    this._backupService
-      .get(this._route.snapshot.data.projectID, this._route.snapshot.data.backupName)
+      .pipe(map(backups => backups.find(backup => backup.id === this._route.snapshot.params.backupID)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(backup => (this.backup = backup));
   }
@@ -131,7 +124,7 @@ export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
 
   getStatus(backup: EtcdBackupConfig): HealthStatus {
     const condition =
-      backup.status.conditions.find(
+      backup.status?.conditions?.find(
         condition => condition.Type === EtcdBackupConfigConditionType.EtcdBackupConfigConditionSchedulingActive
       ) || ({} as EtcdBackupConfigCondition);
 
@@ -142,7 +135,7 @@ export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
     const config: MatDialogConfig = {
       data: {
         title: 'Delete Automatic Backup',
-        message: `Delete "${backup.spec.name}" automatic backup permanently?`,
+        message: `Delete "${backup.name}" automatic backup permanently?`,
         confirmLabel: 'Delete Automatic Backup',
       } as ConfirmationDialogConfig,
     };
@@ -152,27 +145,12 @@ export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
       .afterClosed()
       .pipe(filter(confirmed => confirmed))
       .pipe(take(1))
-      .subscribe(_ => this._backupService.delete(this._selectedProject.id, backup.spec.name));
-  }
-
-  add(): void {
-    const config: MatDialogConfig = {
-      data: {
-        projectID: this._selectedProject.id,
-      } as AddAutomaticBackupDialogConfig,
-    };
-
-    const dialog = this._matDialog.open(AddAutomaticBackupDialogComponent, config);
-    dialog
-      .afterClosed()
-      .pipe(filter(confirmed => confirmed))
-      .pipe(take(1))
-      .subscribe(_ => this._backupService.refreshAutomaticBackups());
+      .subscribe(_ => this._backupService.delete(this._selectedProject.id, backup.spec.clusterId, backup.id));
   }
 
   isEnabled(backup: EtcdBackupConfig): boolean {
     const condition =
-      backup.status.conditions.find(
+      backup.status?.conditions?.find(
         condition => condition.Type === EtcdBackupConfigConditionType.EtcdBackupConfigConditionSchedulingActive
       ) || ({} as EtcdBackupConfigCondition);
 
@@ -183,7 +161,7 @@ export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
   }
 
   switchBackupStatus(backup: EtcdBackupConfig): void {
-    const condition = backup.status.conditions.find(
+    const condition = backup.status?.conditions?.find(
       condition => condition.Type === EtcdBackupConfigConditionType.EtcdBackupConfigConditionSchedulingActive
     );
 
@@ -198,6 +176,4 @@ export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
 
     // TODO(floreks): Patch backup
   }
-
-  goToDetails(_: EtcdBackupConfig): void {}
 }

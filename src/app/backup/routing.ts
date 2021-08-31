@@ -22,7 +22,7 @@ const routes: Routes = [
     canActivate: [AuthGuard, AuthzGuard],
   },
   {
-    path: ':backupName',
+    path: ':backupID',
     component: AutomaticBackupDetailsComponent,
     canActivate: [AuthGuard, AuthzGuard],
   },

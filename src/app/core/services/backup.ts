@@ -13,486 +13,14 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {AppConfigService} from '@app/config.service';
 import {environment} from '@environments/environment';
-import {
-  EtcdBackupConfig,
-  EtcdBackupConfigCondition,
-  EtcdBackupConfigSpec,
-  EtcdBackupConfigStatus,
-} from '@shared/entity/backup';
-import {Cluster, ClusterType} from '@shared/entity/cluster';
+import {EtcdBackupConfig} from '@shared/entity/backup';
 import {merge, Observable, of, Subject, timer} from 'rxjs';
-import {shareReplay, switchMapTo} from 'rxjs/operators';
+import {catchError, shareReplay, switchMapTo} from 'rxjs/operators';
 
-const SNAPSHOTS_MOCK = [
-  {
-    id: 'test-1234-abcd',
-    creationTimestamp: new Date(),
-    name: 'some-crd-name',
-    spec: {
-      name: 'my-snapshot',
-      cluster: {
-        name: 'boring-leakey',
-        id: 'test-1234-abcd',
-        type: ClusterType.Kubernetes,
-      } as Cluster,
-    } as EtcdBackupConfigSpec,
-    status: {
-      conditions: [
-        {
-          Type: 'SchedulingActive',
-          Status: 'True',
-        } as EtcdBackupConfigCondition,
-      ],
-    } as EtcdBackupConfigStatus,
-  } as EtcdBackupConfig,
-  {
-    id: 'test-1234-abcd',
-    creationTimestamp: new Date(),
-    name: 'some-crd-name',
-    spec: {
-      name: 'my-snapshot-2',
-      cluster: {
-        name: 'boring-leakey',
-        id: 'test-1234-abcd',
-        type: ClusterType.Kubernetes,
-      } as Cluster,
-    } as EtcdBackupConfigSpec,
-    status: {
-      conditions: [
-        {
-          Type: 'SchedulingActive',
-          Status: 'False',
-        } as EtcdBackupConfigCondition,
-      ],
-    } as EtcdBackupConfigStatus,
-  } as EtcdBackupConfig,
-  {
-    id: 'test-1234-abcd',
-    creationTimestamp: new Date(),
-    name: 'some-crd-name',
-    spec: {
-      name: 'my-snapshot-3',
-      cluster: {
-        name: 'boring-leakey',
-        id: 'test-1234-abcd',
-        type: ClusterType.Kubernetes,
-      } as Cluster,
-    } as EtcdBackupConfigSpec,
-    status: {
-      conditions: [
-        {
-          Type: 'SchedulingActive',
-          Status: 'Unknown',
-        } as EtcdBackupConfigCondition,
-      ],
-    } as EtcdBackupConfigStatus,
-  } as EtcdBackupConfig,
-  {
-    id: 'test-1234-abcd',
-    creationTimestamp: new Date(),
-    name: 'some-crd-name',
-    spec: {
-      name: 'my-snapshot-3',
-      cluster: {
-        name: 'boring-leakey',
-        id: 'test-1234-abcd',
-        type: ClusterType.Kubernetes,
-      } as Cluster,
-    } as EtcdBackupConfigSpec,
-    status: {
-      conditions: [
-        {
-          Type: 'SchedulingActive',
-          Status: 'Unknown',
-        } as EtcdBackupConfigCondition,
-      ],
-    } as EtcdBackupConfigStatus,
-  } as EtcdBackupConfig,
-  {
-    id: 'test-1234-abcd',
-    creationTimestamp: new Date(),
-    name: 'some-crd-name',
-    spec: {
-      name: 'my-snapshot-3',
-      cluster: {
-        name: 'boring-leakey',
-        id: 'test-1234-abcd',
-        type: ClusterType.Kubernetes,
-      } as Cluster,
-    } as EtcdBackupConfigSpec,
-    status: {
-      conditions: [
-        {
-          Type: 'SchedulingActive',
-          Status: 'Unknown',
-        } as EtcdBackupConfigCondition,
-      ],
-    } as EtcdBackupConfigStatus,
-  } as EtcdBackupConfig,
-  {
-    id: 'test-1234-abcd',
-    creationTimestamp: new Date(),
-    name: 'some-crd-name',
-    spec: {
-      name: 'my-snapshot-3',
-      cluster: {
-        name: 'boring-leakey',
-        id: 'test-1234-abcd',
-        type: ClusterType.Kubernetes,
-      } as Cluster,
-    } as EtcdBackupConfigSpec,
-    status: {
-      conditions: [
-        {
-          Type: 'SchedulingActive',
-          Status: 'Unknown',
-        } as EtcdBackupConfigCondition,
-      ],
-    } as EtcdBackupConfigStatus,
-  } as EtcdBackupConfig,
-  {
-    id: 'test-1234-abcd',
-    creationTimestamp: new Date(),
-    name: 'some-crd-name',
-    spec: {
-      name: 'my-snapshot-3',
-      cluster: {
-        name: 'boring-leakey',
-        id: 'test-1234-abcd',
-        type: ClusterType.Kubernetes,
-      } as Cluster,
-    } as EtcdBackupConfigSpec,
-    status: {
-      conditions: [
-        {
-          Type: 'SchedulingActive',
-          Status: 'Unknown',
-        } as EtcdBackupConfigCondition,
-      ],
-    } as EtcdBackupConfigStatus,
-  } as EtcdBackupConfig,
-  {
-    id: 'test-1234-abcd',
-    creationTimestamp: new Date(),
-    name: 'some-crd-name',
-    spec: {
-      name: 'my-snapshot-3',
-      cluster: {
-        name: 'boring-leakey',
-        id: 'test-1234-abcd',
-        type: ClusterType.Kubernetes,
-      } as Cluster,
-    } as EtcdBackupConfigSpec,
-    status: {
-      conditions: [
-        {
-          Type: 'SchedulingActive',
-          Status: 'Unknown',
-        } as EtcdBackupConfigCondition,
-      ],
-    } as EtcdBackupConfigStatus,
-  } as EtcdBackupConfig,
-  {
-    id: 'test-1234-abcd',
-    creationTimestamp: new Date(),
-    name: 'some-crd-name',
-    spec: {
-      name: 'my-snapshot-3',
-      cluster: {
-        name: 'boring-leakey',
-        id: 'test-1234-abcd',
-        type: ClusterType.Kubernetes,
-      } as Cluster,
-    } as EtcdBackupConfigSpec,
-    status: {
-      conditions: [
-        {
-          Type: 'SchedulingActive',
-          Status: 'Unknown',
-        } as EtcdBackupConfigCondition,
-      ],
-    } as EtcdBackupConfigStatus,
-  } as EtcdBackupConfig,
-  {
-    id: 'test-1234-abcd',
-    creationTimestamp: new Date(),
-    deletionTimestamp: new Date(),
-    name: 'some-crd-name',
-    spec: {
-      name: 'my-snapshot-8',
-      cluster: {
-        name: 'boring-leakey',
-        id: 'test-1234-abcd',
-        type: ClusterType.Kubernetes,
-      } as Cluster,
-    } as EtcdBackupConfigSpec,
-    status: {
-      conditions: [
-        {
-          Type: 'SchedulingActive',
-          Status: 'Unknown',
-        } as EtcdBackupConfigCondition,
-      ],
-    } as EtcdBackupConfigStatus,
-  } as EtcdBackupConfig,
-  {
-    id: 'test-1234-abcd',
-    creationTimestamp: new Date(),
-    name: 'some-crd-name',
-    spec: {
-      name: 'my-snapshot-3',
-      cluster: {
-        name: 'boring-leakey',
-        id: 'test-1234-abcd',
-        type: ClusterType.Kubernetes,
-      } as Cluster,
-    } as EtcdBackupConfigSpec,
-    status: {
-      conditions: [
-        {
-          Type: 'SchedulingActive',
-          Status: 'Unknown',
-        } as EtcdBackupConfigCondition,
-      ],
-    } as EtcdBackupConfigStatus,
-  } as EtcdBackupConfig,
-];
-
-const AUTOMATIC_BACKUPS_MOCK = [
-  {
-    id: 'test-1234-abcd',
-    creationTimestamp: new Date(),
-    name: 'some-crd-name',
-    spec: {
-      name: 'my-backup',
-      cluster: {
-        name: 'boring-leakey',
-        id: 'test-1234-abcd',
-        type: ClusterType.Kubernetes,
-      } as Cluster,
-    } as EtcdBackupConfigSpec,
-    status: {
-      conditions: [
-        {
-          Type: 'SchedulingActive',
-          Status: 'True',
-        } as EtcdBackupConfigCondition,
-      ],
-    } as EtcdBackupConfigStatus,
-  } as EtcdBackupConfig,
-  {
-    id: 'test-1234-abcd',
-    creationTimestamp: new Date(),
-    name: 'some-crd-name',
-    spec: {
-      name: 'my-backup-2',
-      cluster: {
-        name: 'boring-leakey',
-        id: 'test-1234-abcd',
-        type: ClusterType.Kubernetes,
-      } as Cluster,
-    } as EtcdBackupConfigSpec,
-    status: {
-      conditions: [
-        {
-          Type: 'SchedulingActive',
-          Status: 'False',
-        } as EtcdBackupConfigCondition,
-      ],
-    } as EtcdBackupConfigStatus,
-  } as EtcdBackupConfig,
-  {
-    id: 'test-1234-abcd',
-    creationTimestamp: new Date(),
-    name: 'some-crd-name',
-    spec: {
-      name: 'my-backup-3',
-      cluster: {
-        name: 'boring-leakey',
-        id: 'test-1234-abcd',
-        type: ClusterType.Kubernetes,
-      } as Cluster,
-    } as EtcdBackupConfigSpec,
-    status: {
-      conditions: [
-        {
-          Type: 'SchedulingActive',
-          Status: 'Unknown',
-        } as EtcdBackupConfigCondition,
-      ],
-    } as EtcdBackupConfigStatus,
-  } as EtcdBackupConfig,
-  {
-    id: 'test-1234-abcd',
-    creationTimestamp: new Date(),
-    name: 'some-crd-name',
-    spec: {
-      name: 'my-backup-3',
-      cluster: {
-        name: 'boring-leakey',
-        id: 'test-1234-abcd',
-        type: ClusterType.Kubernetes,
-      } as Cluster,
-    } as EtcdBackupConfigSpec,
-    status: {
-      conditions: [
-        {
-          Type: 'SchedulingActive',
-          Status: 'Unknown',
-        } as EtcdBackupConfigCondition,
-      ],
-    } as EtcdBackupConfigStatus,
-  } as EtcdBackupConfig,
-  {
-    id: 'test-1234-abcd',
-    creationTimestamp: new Date(),
-    name: 'some-crd-name',
-    spec: {
-      name: 'my-backup-3',
-      cluster: {
-        name: 'boring-leakey',
-        id: 'test-1234-abcd',
-        type: ClusterType.Kubernetes,
-      } as Cluster,
-    } as EtcdBackupConfigSpec,
-    status: {
-      conditions: [
-        {
-          Type: 'SchedulingActive',
-          Status: 'Unknown',
-        } as EtcdBackupConfigCondition,
-      ],
-    } as EtcdBackupConfigStatus,
-  } as EtcdBackupConfig,
-  {
-    id: 'test-1234-abcd',
-    creationTimestamp: new Date(),
-    name: 'some-crd-name',
-    spec: {
-      name: 'my-backup-3',
-      cluster: {
-        name: 'boring-leakey',
-        id: 'test-1234-abcd',
-        type: ClusterType.Kubernetes,
-      } as Cluster,
-    } as EtcdBackupConfigSpec,
-    status: {
-      conditions: [
-        {
-          Type: 'SchedulingActive',
-          Status: 'Unknown',
-        } as EtcdBackupConfigCondition,
-      ],
-    } as EtcdBackupConfigStatus,
-  } as EtcdBackupConfig,
-  {
-    id: 'test-1234-abcd',
-    creationTimestamp: new Date(),
-    name: 'some-crd-name',
-    spec: {
-      name: 'my-backup-3',
-      schedule: '5 4 * * *',
-      cluster: {
-        name: 'boring-leakey',
-        id: 'test-1234-abcd',
-        type: ClusterType.Kubernetes,
-      } as Cluster,
-    } as EtcdBackupConfigSpec,
-    status: {
-      conditions: [
-        {
-          Type: 'SchedulingActive',
-          Status: 'True',
-        } as EtcdBackupConfigCondition,
-      ],
-    } as EtcdBackupConfigStatus,
-  } as EtcdBackupConfig,
-  {
-    id: 'test-1234-abcd',
-    creationTimestamp: new Date(),
-    name: 'some-crd-name',
-    spec: {
-      name: 'my-backup-3',
-      cluster: {
-        name: 'boring-leakey',
-        id: 'test-1234-abcd',
-        type: ClusterType.Kubernetes,
-      } as Cluster,
-    } as EtcdBackupConfigSpec,
-    status: {
-      conditions: [
-        {
-          Type: 'SchedulingActive',
-          Status: 'Unknown',
-        } as EtcdBackupConfigCondition,
-      ],
-    } as EtcdBackupConfigStatus,
-  } as EtcdBackupConfig,
-  {
-    id: 'test-1234-abcd',
-    creationTimestamp: new Date(),
-    name: 'some-crd-name',
-    spec: {
-      name: 'my-backup-3',
-      cluster: {
-        name: 'boring-leakey',
-        id: 'test-1234-abcd',
-        type: ClusterType.Kubernetes,
-      } as Cluster,
-    } as EtcdBackupConfigSpec,
-    status: {
-      conditions: [
-        {
-          Type: 'SchedulingActive',
-          Status: 'Unknown',
-        } as EtcdBackupConfigCondition,
-      ],
-    } as EtcdBackupConfigStatus,
-  } as EtcdBackupConfig,
-  {
-    id: 'test-1234-abcd',
-    creationTimestamp: new Date(),
-    deletionTimestamp: new Date(),
-    name: 'some-crd-name',
-    spec: {
-      name: 'my-backup-8',
-      cluster: {
-        name: 'boring-leakey',
-        id: 'test-1234-abcd',
-        type: ClusterType.Kubernetes,
-      } as Cluster,
-    } as EtcdBackupConfigSpec,
-    status: {
-      conditions: [
-        {
-          Type: 'SchedulingActive',
-          Status: 'Unknown',
-        } as EtcdBackupConfigCondition,
-      ],
-    } as EtcdBackupConfigStatus,
-  } as EtcdBackupConfig,
-  {
-    id: 'test-1234-abcd',
-    creationTimestamp: new Date(),
-    name: 'some-crd-name',
-    spec: {
-      name: 'my-backup-3',
-      cluster: {
-        name: 'boring-leakey',
-        id: 'test-1234-abcd',
-        type: ClusterType.Kubernetes,
-      } as Cluster,
-    } as EtcdBackupConfigSpec,
-    status: {
-      conditions: [
-        {
-          Type: 'SchedulingActive',
-          Status: 'Unknown',
-        } as EtcdBackupConfigCondition,
-      ],
-    } as EtcdBackupConfigStatus,
-  } as EtcdBackupConfig,
-];
+enum Type {
+  AutomaticBackup = 'automatic',
+  Snapshot = 'snapshot',
+}
 
 @Injectable()
 export class BackupService {
@@ -516,12 +44,8 @@ export class BackupService {
     return this._listAutomaticBackups(projectID);
   }
 
-  get(projectID: string, backupName: string, isSnapshot = false): Observable<EtcdBackupConfig> {
-    if (isSnapshot) {
-      return this._getSnapshot(projectID, backupName);
-    }
-
-    return this._getAutomaticBackup(projectID, backupName);
+  get(projectID: string, clusterID: string, backupID: string): Observable<EtcdBackupConfig> {
+    return this._getBackup(projectID, clusterID, backupID);
   }
 
   refreshAutomaticBackups(): void {
@@ -534,14 +58,19 @@ export class BackupService {
     this._snapshots$.clear();
   }
 
-  delete(projectID: string, name: string): Observable<any> {
-    const url = `${this._newRestRoot}/projects/${projectID}/etcdbackupconfig/${name}`;
+  delete(projectID: string, clusterID: string, backupID: string): Observable<any> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/etcdbackupconfigs/${backupID}`;
     return this._http.delete(url, {headers: this._headers});
   }
 
-  create(projectID: string, backup: EtcdBackupConfig): Observable<any> {
-    const url = `${this._newRestRoot}/projects/${projectID}/etcdbackupconfig`;
+  create(projectID: string, clusterID: string, backup: EtcdBackupConfig): Observable<any> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/etcdbackupconfigs`;
     return this._http.post(url, backup);
+  }
+
+  restore(projectID: string, clusterID: string): Observable<any> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/etcdrestores`;
+    return this._http.post(url, {});
   }
 
   private _listAutomaticBackups(projectID: string): Observable<EtcdBackupConfig[]> {
@@ -566,29 +95,18 @@ export class BackupService {
     return this._snapshots$.get(projectID);
   }
 
-  private _getAutomaticBackups(_: string): Observable<EtcdBackupConfig[]> {
-    // const url = `${this._newRestRoot}/projects/${projectID}/etcdconfigbackups`;
-    return of(AUTOMATIC_BACKUPS_MOCK);
-
-    // return this._http
-    //   .get<EtcdBackupConfig[]>(url)
-    //   .pipe(catchError(() => of<EtcdBackupConfig[]>([])));
+  private _getAutomaticBackups(projectID: string): Observable<EtcdBackupConfig[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/etcdbackupconfigs?type=${Type.AutomaticBackup}`;
+    return this._http.get<EtcdBackupConfig[]>(url).pipe(catchError(() => of<EtcdBackupConfig[]>([])));
   }
 
-  private _getSnapshots(_: string): Observable<EtcdBackupConfig[]> {
-    // const url = `${this._newRestRoot}/projects/${projectID}/etcdconfigbackups`;
-    return of(SNAPSHOTS_MOCK);
-
-    // return this._http
-    //   .get<EtcdBackupConfig[]>(url)
-    //   .pipe(catchError(() => of<EtcdBackupConfig[]>([])));
+  private _getSnapshots(projectID: string): Observable<EtcdBackupConfig[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/etcdbackupconfigs?type=${Type.Snapshot}`;
+    return this._http.get<EtcdBackupConfig[]>(url).pipe(catchError(() => of<EtcdBackupConfig[]>([])));
   }
 
-  private _getAutomaticBackup(_projectID: string, _backupName: string): Observable<EtcdBackupConfig> {
-    return of(AUTOMATIC_BACKUPS_MOCK[6]);
-  }
-
-  private _getSnapshot(_projectID: string, _backupName: string): Observable<EtcdBackupConfig> {
-    return of(SNAPSHOTS_MOCK[0]);
+  private _getBackup(projectID: string, clusterID: string, backupName: string): Observable<EtcdBackupConfig> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/etcdbackupconfigs/${backupName}`;
+    return this._http.get<EtcdBackupConfig>(url, {headers: this._headers});
   }
 }

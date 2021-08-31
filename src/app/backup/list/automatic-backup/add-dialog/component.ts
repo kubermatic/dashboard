@@ -14,6 +14,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BackupService} from '@core/services/backup';
 import {ClusterService} from '@core/services/cluster';
+import {NotificationService} from '@core/services/notification';
 import {EtcdBackupConfig, EtcdBackupConfigSpec} from '@shared/entity/backup';
 import {Cluster} from '@shared/entity/cluster';
 import {Subject} from 'rxjs';
@@ -31,11 +32,23 @@ enum Controls {
   Keep = 'keep',
 }
 
-enum DefaultBackupSchedules {
+enum DefaultSchuleOption {
   Daily = 'daily',
   Weekly = 'weekly',
   Monthly = 'monthly',
   Custom = 'custom',
+}
+
+enum DefaultSchedule {
+  Daily = '00 22 * * *',
+  Weekly = '00 22 * * 1',
+  Monthly = '00 22 1 * *',
+}
+
+enum DefaultScheduleKeep {
+  Daily = 7,
+  Weekly = 4,
+  Monthly = 3,
 }
 
 @Component({
@@ -46,23 +59,58 @@ enum DefaultBackupSchedules {
 export class AddAutomaticBackupDialogComponent implements OnInit {
   private readonly _unsubscribe = new Subject<void>();
   readonly Controls = Controls;
-  readonly Schedules = DefaultBackupSchedules;
+  readonly ScheduleOption = DefaultSchuleOption;
   clusters: Cluster[] = [];
   form: FormGroup;
+
+  private get _selectedClusterID(): string {
+    return this.form.get(Controls.Cluster).value;
+  }
+
+  private get _backupSchedule(): DefaultSchuleOption {
+    return this.form.get(Controls.Group).value;
+  }
+
+  private get _schedule(): string {
+    switch (this._backupSchedule) {
+      case DefaultSchuleOption.Daily:
+        return DefaultSchedule.Daily;
+      case DefaultSchuleOption.Weekly:
+        return DefaultSchedule.Weekly;
+      case DefaultSchuleOption.Monthly:
+        return DefaultSchedule.Monthly;
+      case DefaultSchuleOption.Custom:
+        return this.form.get(Controls.Schedule).value;
+    }
+  }
+
+  private get _keep(): number {
+    switch (this._backupSchedule) {
+      case DefaultSchuleOption.Daily:
+        return DefaultScheduleKeep.Daily;
+      case DefaultSchuleOption.Weekly:
+        return DefaultScheduleKeep.Weekly;
+      case DefaultSchuleOption.Monthly:
+        return DefaultScheduleKeep.Monthly;
+      case DefaultSchuleOption.Custom:
+        return this.form.get(Controls.Keep).value;
+    }
+  }
 
   constructor(
     private readonly _dialogRef: MatDialogRef<AddAutomaticBackupDialogComponent>,
     @Inject(MAT_DIALOG_DATA) private readonly _config: AddAutomaticBackupDialogConfig,
     private readonly _clusterService: ClusterService,
     private readonly _backupService: BackupService,
-    private readonly _builder: FormBuilder
+    private readonly _builder: FormBuilder,
+    private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.Cluster]: this._builder.control('', Validators.required),
       [Controls.Name]: this._builder.control('', Validators.required),
-      [Controls.Group]: this._builder.control(DefaultBackupSchedules.Daily, Validators.required),
+      [Controls.Group]: this._builder.control(DefaultSchuleOption.Daily, Validators.required),
       [Controls.Schedule]: this._builder.control(''),
       [Controls.Keep]: this._builder.control(1, Validators.min(1)),
     });
@@ -80,19 +128,22 @@ export class AddAutomaticBackupDialogComponent implements OnInit {
 
   save(): void {
     this._backupService
-      .create(this._config.projectID, this._toEtcdBackupConfig())
+      .create(this._config.projectID, this._selectedClusterID, this._toEtcdBackupConfig())
       .pipe(take(1))
-      .subscribe(_ => this._dialogRef.close(true));
+      .subscribe(_ => {
+        this._notificationService.success(`Successfully created automatic backup ${this._toEtcdBackupConfig().name}`);
+        this._dialogRef.close(true);
+      });
   }
 
-  private _onScheduleChange(schedule: DefaultBackupSchedules): void {
+  private _onScheduleChange(schedule: DefaultSchuleOption): void {
     switch (schedule) {
-      case DefaultBackupSchedules.Custom:
+      case DefaultSchuleOption.Custom:
         this._updateFieldValidation(true);
         break;
-      case DefaultBackupSchedules.Daily:
-      case DefaultBackupSchedules.Monthly:
-      case DefaultBackupSchedules.Weekly:
+      case DefaultSchuleOption.Daily:
+      case DefaultSchuleOption.Monthly:
+      case DefaultSchuleOption.Weekly:
         this._updateFieldValidation(false);
     }
   }
@@ -112,8 +163,11 @@ export class AddAutomaticBackupDialogComponent implements OnInit {
 
   private _toEtcdBackupConfig(): EtcdBackupConfig {
     return {
+      name: this.form.get(Controls.Name).value,
       spec: {
-        name: this.form.get(Controls.Name).value,
+        clusterId: this._selectedClusterID,
+        keep: this._keep,
+        schedule: this._schedule,
       } as EtcdBackupConfigSpec,
     } as EtcdBackupConfig;
   }

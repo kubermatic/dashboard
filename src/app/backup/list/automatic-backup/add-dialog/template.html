@@ -27,7 +27,7 @@ limitations under the License.
                     disableOptionCentering
                     required>
           <mat-option *ngFor="let cluster of clusters"
-                      [value]="cluster.name">{{cluster.name}}</mat-option>
+                      [value]="cluster.id">{{cluster.name}}</mat-option>
         </mat-select>
         <mat-hint>The list of existing clusters for the selected project.</mat-hint>
       </mat-form-field>
@@ -43,27 +43,27 @@ limitations under the License.
       <mat-radio-group [formControlName]="Controls.Group"
                        fxLayout="column"
                        fxLayoutGap="20px">
-        <mat-radio-button [value]="Schedules.Daily">
+        <mat-radio-button [value]="ScheduleOption.Daily">
           <div class="km-radio-button-title">Daily</div>
           <div class="km-radio-button-description">Create backups every day at 22:00 and keep the backups for a week.
           </div>
         </mat-radio-button>
 
-        <mat-radio-button [value]="Schedules.Weekly">
+        <mat-radio-button [value]="ScheduleOption.Weekly">
           <div class="km-radio-button-title">Weekly</div>
-          <div class="km-radio-button-description">Create backups every week at 22:00 and keep the backups for 4
+          <div class="km-radio-button-description">Create backups every week at 22:00 on Monday and keep the backups for 4
             weeks.
           </div>
         </mat-radio-button>
 
-        <mat-radio-button [value]="Schedules.Monthly">
+        <mat-radio-button [value]="ScheduleOption.Monthly">
           <div class="km-radio-button-title">Monthly</div>
-          <div class="km-radio-button-description">Create backups every month at 22:00 and keep the backups for 3
+          <div class="km-radio-button-description">Create backups every month at 22:00 on 1st day of the month and keep the backups for 3
             months.
           </div>
         </mat-radio-button>
 
-        <mat-radio-button [value]="Schedules.Custom">
+        <mat-radio-button [value]="ScheduleOption.Custom">
           <div fxFlex
                fxLayout="column">
             <div class="km-radio-button-title">Custom Intervals</div>
@@ -73,7 +73,7 @@ limitations under the License.
         </mat-radio-button>
       </mat-radio-group>
 
-      <div *ngIf="form.get(Controls.Group).value === Schedules.Custom"
+      <div *ngIf="form.get(Controls.Group).value === ScheduleOption.Custom"
            fxLayout="column"
            fxLayoutGap="20px">
         <mat-form-field>
@@ -103,6 +103,7 @@ limitations under the License.
 
   <mat-dialog-actions>
     <button mat-flat-button
+            (click)="save()"
             [disabled]="form.invalid">
       Add Automatic Backup
     </button>

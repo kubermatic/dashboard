@@ -14,6 +14,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BackupService} from '@core/services/backup';
 import {ClusterService} from '@core/services/cluster';
+import {NotificationService} from '@core/services/notification';
 import {EtcdBackupConfig, EtcdBackupConfigSpec} from '@shared/entity/backup';
 import {Cluster} from '@shared/entity/cluster';
 import {Subject} from 'rxjs';
@@ -39,12 +40,17 @@ export class AddSnapshotDialogComponent implements OnInit {
   clusters: Cluster[] = [];
   form: FormGroup;
 
+  private _selectedClusterID(): string {
+    return this.form.get(Controls.Cluster).value;
+  }
+
   constructor(
     private readonly _dialogRef: MatDialogRef<AddSnapshotDialogComponent>,
     @Inject(MAT_DIALOG_DATA) private readonly _config: AddSnapshotDialogConfig,
     private readonly _clusterService: ClusterService,
     private readonly _backupService: BackupService,
-    private readonly _builder: FormBuilder
+    private readonly _builder: FormBuilder,
+    private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -61,15 +67,19 @@ export class AddSnapshotDialogComponent implements OnInit {
 
   save(): void {
     this._backupService
-      .create(this._config.projectID, this._toEtcdBackupConfig())
+      .create(this._config.projectID, this._selectedClusterID(), this._toEtcdBackupConfig())
       .pipe(take(1))
-      .subscribe(_ => this._dialogRef.close(true));
+      .subscribe(_ => {
+        this._notificationService.success(`Successfully created snapshot ${this._toEtcdBackupConfig().name}`);
+        this._dialogRef.close(true);
+      });
   }
 
   private _toEtcdBackupConfig(): EtcdBackupConfig {
     return {
+      name: this.form.get(Controls.Name).value,
       spec: {
-        name: this.form.get(Controls.Name).value,
+        clusterId: this._selectedClusterID(),
       } as EtcdBackupConfigSpec,
     } as EtcdBackupConfig;
   }

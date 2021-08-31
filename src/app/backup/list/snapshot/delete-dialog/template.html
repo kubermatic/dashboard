@@ -12,7 +12,7 @@ limitations under the License.
 -->
 <div id="km-delete-snapshot-dialog">
   <km-dialog-title>
-    <div>Delete Snapshot <b>"{{data.snapshot.spec.name}}"</b></div>
+    <div>Delete Snapshot <b>"{{config.snapshot.name}}"</b></div>
   </km-dialog-title>
 
   <mat-dialog-content>
@@ -24,7 +24,7 @@ limitations under the License.
 
   <mat-dialog-actions>
     <button mat-flat-button
-            [mat-dialog-close]="true">
+            (click)="delete()">
       Delete Snapshot
     </button>
   </mat-dialog-actions>

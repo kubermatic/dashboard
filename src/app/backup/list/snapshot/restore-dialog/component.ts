@@ -11,10 +11,14 @@
 
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {BackupService} from '@core/services/backup';
+import {NotificationService} from '@core/services/notification';
 import {EtcdBackupConfig} from '@shared/entity/backup';
+import {take} from 'rxjs/operators';
 
 export interface RestoreSnapshotDialogConfig {
   snapshot: EtcdBackupConfig;
+  projectID: string;
 }
 
 @Component({
@@ -29,15 +33,18 @@ export class RestoreSnapshotDialogComponent {
 
   constructor(
     private readonly _dialogRef: MatDialogRef<RestoreSnapshotDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) private readonly _config: RestoreSnapshotDialogConfig
+    @Inject(MAT_DIALOG_DATA) private readonly _config: RestoreSnapshotDialogConfig,
+    private readonly _backupService: BackupService,
+    private readonly _notificationService: NotificationService
   ) {}
 
   restore(): void {
-    // this._backupService
-    //   .create(this._config.projectID, this._toEtcdBackupConfig())
-    //   .pipe(take(1))
-    //   .subscribe(_ => this._dialogRef.close(true));
-
-    this._dialogRef.close(true);
+    this._backupService
+      .restore(this._config.projectID, this._config.snapshot.spec.clusterId)
+      .pipe(take(1))
+      .subscribe(_ => {
+        this._notificationService.success(`Successfully restored snapshot ${this._config.snapshot.name}`);
+        this._dialogRef.close(true);
+      });
   }
 }

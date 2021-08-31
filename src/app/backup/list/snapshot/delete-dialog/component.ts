@@ -11,10 +11,14 @@
 
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {BackupService} from '@core/services/backup';
+import {NotificationService} from '@core/services/notification';
 import {EtcdBackupConfig} from '@shared/entity/backup';
+import {take} from 'rxjs/operators';
 
 export interface DeleteSnapshotDialogConfig {
   snapshot: EtcdBackupConfig;
+  projectID: string;
 }
 
 @Component({
@@ -23,7 +27,19 @@ export interface DeleteSnapshotDialogConfig {
 })
 export class DeleteSnapshotDialogComponent {
   constructor(
-    public dialogRef: MatDialogRef<DeleteSnapshotDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DeleteSnapshotDialogConfig
+    private readonly _dialogRef: MatDialogRef<DeleteSnapshotDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public config: DeleteSnapshotDialogConfig,
+    private readonly _backupService: BackupService,
+    private readonly _notificationService: NotificationService
   ) {}
+
+  delete(): void {
+    this._backupService
+      .delete(this.config.projectID, this.config.snapshot.spec.clusterId, this.config.snapshot.id)
+      .pipe(take(1))
+      .subscribe(_ => {
+        this._notificationService.success(`Successfully deleted snapshot ${this.config.snapshot.name}`);
+        this._dialogRef.close(true);
+      });
+  }
 }
