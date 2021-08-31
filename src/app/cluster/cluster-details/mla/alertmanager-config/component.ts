@@ -24,12 +24,18 @@ import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {AlertmanagerConfigDialog} from './alertmanager-config-dialog/component';
 
+export enum Type {
+  Alertmanager = 'Alertmanager',
+  Grafana = 'Grafana',
+}
+
 @Component({
   selector: 'km-alertmanager-config',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
 export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
+  readonly Type = Type;
   @Input() cluster: Cluster;
   @Input() projectID: string;
   @Input() isClusterRunning: boolean;
@@ -63,25 +69,29 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  isLoadingData(): boolean {
-    return _.isEmpty(this.alertmanagerConfig) && !this.isClusterRunning;
+  shouldDisplayLink(type: string): boolean {
+    switch (type) {
+      case Type.Alertmanager:
+        return !!this._settings && !!this._settings.mlaAlertmanagerPrefix;
+      case Type.Grafana:
+        return !!this._settings && !!this._settings.mlaGrafanaPrefix;
+      default:
+        return false;
+    }
   }
 
-  shouldDisplayAlertmanagerUILink(): boolean {
-    return !!this._settings && !!this._settings.mlaAlertmanagerPrefix;
-  }
+  getLinkURL(type: string): string {
+    let prefix = '';
+    switch (type) {
+      case Type.Alertmanager:
+        prefix = this._settings.mlaAlertmanagerPrefix;
+        break;
+      case Type.Grafana:
+        prefix = this._settings.mlaGrafanaPrefix;
+        break;
+    }
 
-  getAlertmanagerURL(): string {
-    return (
-      'https://' +
-      this._settings.mlaAlertmanagerPrefix +
-      '.' +
-      this._seed +
-      '.' +
-      window.location.hostname +
-      '/' +
-      this.cluster.id
-    );
+    return 'https://' + prefix + '.' + this._seed + '.' + window.location.hostname + '/' + this.cluster.id;
   }
 
   edit(): void {

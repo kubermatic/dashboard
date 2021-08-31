@@ -156,4 +156,5 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
     monitoringEnabled: false,
   },
   mlaAlertmanagerPrefix: '',
+  mlaGrafanaPrefix: '',
 };

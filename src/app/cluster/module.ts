@@ -17,8 +17,8 @@ import {NodeDataModule} from '@app/node-data/module';
 import {NodeService} from '@core/services/node';
 import {SharedModule} from '@shared/module';
 import {MachineNetworksModule} from '../machine-networks/module';
-import {AlertmanagerConfigComponent} from './cluster-details/alertmanager-config/component';
-import {AlertmanagerConfigDialog} from './cluster-details/alertmanager-config/alertmanager-config-dialog/component';
+import {AlertmanagerConfigComponent} from './cluster-details/mla/alertmanager-config/component';
+import {AlertmanagerConfigDialog} from './cluster-details/mla/alertmanager-config/alertmanager-config-dialog/component';
 import {ChangeClusterVersionComponent} from './cluster-details/change-cluster-version/component';
 import {ClusterDeleteConfirmationComponent} from './cluster-details/cluster-delete-confirmation/component';
 import {ClusterSecretsComponent} from './cluster-details/cluster-secrets/component';
@@ -45,12 +45,13 @@ import {ClusterPanelComponent} from './cluster-details/machine-deployment-detail
 import {MachineDeploymentDetailsComponent} from './cluster-details/machine-deployment-details/component';
 import {MachineDeploymentListComponent} from './cluster-details/machine-deployment-list/component';
 import {MachineNetworksDisplayComponent} from './cluster-details/machine-networks-display/component';
+import {MLAComponent} from './cluster-details/mla/component';
 import {NodeListComponent} from './cluster-details/node-list/component';
 import {AddBindingComponent} from './cluster-details/rbac/add-binding/component';
 import {RBACComponent} from './cluster-details/rbac/component';
 import {RevokeTokenComponent} from './cluster-details/revoke-token/component';
-import {RuleGroupsComponent} from './cluster-details/rule-groups/component';
-import {RuleGroupDialog} from './cluster-details/rule-groups/rule-group-dialog/component';
+import {RuleGroupsComponent} from './cluster-details/mla/rule-groups/component';
+import {RuleGroupDialog} from './cluster-details/mla/rule-groups/rule-group-dialog/component';
 import {ShareKubeconfigComponent} from './cluster-details/share-kubeconfig/component';
 import {VersionPickerComponent} from './cluster-details/version-picker/component';
 import {ClusterListComponent} from './cluster-list/component';
@@ -99,6 +100,7 @@ const components: any[] = [
   AlertmanagerConfigDialog,
   RuleGroupsComponent,
   RuleGroupDialog,
+  MLAComponent,
 ];
 
 const dialogs: any[] = [AddMachineNetworkComponent];
