@@ -9,7 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, Inject} from '@angular/core';
+import {DOCUMENT} from '@angular/common';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
@@ -50,7 +51,8 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
     private readonly _mlaService: MLAService,
     private readonly _notificationService: NotificationService,
     private readonly _settingsService: SettingsService,
-    private readonly _datacenterService: DatacenterService
+    private readonly _datacenterService: DatacenterService,
+    @Inject(DOCUMENT) private readonly _document: Document
   ) {}
 
   ngOnInit(): void {
@@ -91,7 +93,16 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
         break;
     }
 
-    return 'https://' + prefix + '.' + this._seed + '.' + window.location.hostname + '/' + this.cluster.id;
+    return (
+      'https://' +
+      prefix +
+      '.' +
+      this._seed +
+      '.' +
+      this._document.defaultView.location.hostname +
+      '/' +
+      this.cluster.id
+    );
   }
 
   edit(): void {
