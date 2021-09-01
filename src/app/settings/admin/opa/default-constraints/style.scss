@@ -45,32 +45,46 @@ tr {
   vertical-align: baseline;
 }
 
-.provider-logo {
-  background-position: left;
+.provider-wrapper {
+  vertical-align: text-top;
+
+  .provider-logo {
+    background-position: left;
+    display: inline-block;
+    margin-right: 10px;
+    max-width: 95px;
+
+    &.aws {
+      max-width: 40px;
+      min-width: 40px;
+    }
+
+    &.anexia,
+    &.packet {
+      max-width: 60px;
+      min-width: 60px;
+    }
+
+    &.azure {
+      max-width: 80px;
+    }
+
+    &.bringyourown {
+      max-width: 85px;
+    }
+
+    &.vsphere {
+      max-width: 75px;
+    }
+  }
+}
+
+.labels-wrapper {
   display: inline-block;
+  margin-bottom: 10px;
   margin-right: 10px;
-  max-width: 95px;
+}
 
-  &.aws {
-    max-width: 40px;
-    min-width: 40px;
-  }
-
-  &.anexia,
-  &.packet {
-    max-width: 60px;
-    min-width: 60px;
-  }
-
-  &.azure {
-    max-width: 80px;
-  }
-
-  &.bringyourown {
-    max-width: 85px;
-  }
-
-  &.vsphere {
-    max-width: 75px;
-  }
+td button {
+  top: 6px;
 }
