@@ -13,7 +13,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {AppConfigService} from '@app/config.service';
 import {environment} from '@environments/environment';
-import {EtcdBackupConfig} from '@shared/entity/backup';
+import {EtcdBackupConfig, EtcdRestore} from '@shared/entity/backup';
 import {merge, Observable, of, Subject, timer} from 'rxjs';
 import {catchError, shareReplay, switchMapTo} from 'rxjs/operators';
 
@@ -68,9 +68,9 @@ export class BackupService {
     return this._http.post(url, backup);
   }
 
-  restore(projectID: string, clusterID: string): Observable<any> {
+  restore(projectID: string, clusterID: string, restore: EtcdRestore): Observable<any> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/etcdrestores`;
-    return this._http.post(url, {});
+    return this._http.post(url, restore);
   }
 
   private _listAutomaticBackups(projectID: string): Observable<EtcdBackupConfig[]> {

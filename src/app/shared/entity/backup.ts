@@ -86,3 +86,27 @@ export enum ConditionStatus {
 }
 
 type BackupStatusPhase = string;
+
+export class EtcdRestore {
+  name?: string;
+
+  spec: EtcdRestoreSpec;
+  status: EtcdRestoreStatus;
+}
+
+export class EtcdRestoreSpec {
+  clusterId: string;
+  backupName: string;
+  backupDownloadCredentialsSecret?: string;
+}
+
+export class EtcdRestoreStatus {
+  phase: EtcdRestorePhase;
+  restoreTime?: Date;
+}
+
+export enum EtcdRestorePhase {
+  Started = 'Started',
+  StsRebuilding = 'StsRebuilding',
+  Completed = 'Completed',
+}
