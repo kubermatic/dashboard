@@ -37,13 +37,13 @@ limitations under the License.
     </a>
   </div>
 
-  <div [matTooltip]="getTooltip('backups')"
-       [ngClass]="getMenuItemClass('backups')"
+  <div [matTooltip]="getTooltip(view.Backups)"
+       [ngClass]="getMenuItemClass(view.Backups)"
        class="menu-item">
     <a id="km-nav-item-backups"
        fxLayoutAlign=" center"
-       [routerLink]="getRouterLink('backups')"
-       [ngClass]="getLinkClass('backups')">
+       [routerLink]="getRouterLink(view.Backups)"
+       [ngClass]="getLinkClass(view.Backups)">
       <i class="km-icon-backup"></i>
       <span *ngIf="!isSidenavCollapsed()">Backups</span>
     </a>
