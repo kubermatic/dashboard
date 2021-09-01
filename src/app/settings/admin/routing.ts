@@ -49,6 +49,10 @@ const routes: Routes = [
         path: 'opa',
         loadChildren: () => import('./opa/module').then(m => m.AdminSettingsOPAModule),
       },
+      {
+        path: 'metering',
+        loadChildren: () => import('./metering/module').then(m => m.MeteringModule),
+      },
     ],
   },
 ];
