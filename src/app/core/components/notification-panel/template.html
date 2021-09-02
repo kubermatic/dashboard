@@ -55,8 +55,11 @@ limitations under the License.
         <div class="notification"
              fxLayout="row"
              *ngIf="isVisible(notification)">
-          <i class="notification-icon km-icon"
-             [ngClass]="getNotificationIconClass(notification.type)"></i>
+          <div fxLayoutAlign="center"
+               [ngClass]="notification.type === NotificationType.success ? 'km-notification-success-bg' : ''">
+            <i class="notification-icon"
+               [ngClass]="getNotificationIconClass(notification.type)"></i>
+          </div>
           <div fxLayout="column"
                fxFlex>
             <span class="notification-message km-text">{{notification.message}}</span>

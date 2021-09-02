@@ -9,35 +9,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'variables';
+@mixin theme-notification-panel-component($colors) {
+  .km-notification-success-bg {
+    background-color: #1dc67f;
 
-.type {
-  border-radius: variables.$border-radius 0 0 variables.$border-radius;
-  padding-left: 12px;
-}
-
-.content {
-  font-size: variables.$font-size-subhead;
-  max-height: 100%;
-  padding: 8px 20px;
-  word-break: break-word;
-
-  div {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    i {
+      &.km-icon-check {
+        background-color: #fff;
+      }
+    }
   }
-}
-
-.km-icon-close {
-  margin: auto 16px;
-}
-
-:host {
-  height: 100%;
-  width: 100%;
-}
-
-.notification {
-  margin: 4px 14px 4px 0;
 }

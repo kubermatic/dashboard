@@ -104,6 +104,10 @@
     background-color: map-get($colors, text);
   }
 
+  .km-icon-mask-white {
+    background-color: #fff;
+  }
+
   .km-menu-header {
     color: map-get($colors, text);
   }

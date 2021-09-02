@@ -30,6 +30,7 @@ export class NotificationPanelComponent implements OnInit, OnDestroy {
   private _isAnimating = false;
   private _unsubscribe: Subject<void> = new Subject<void>();
   notifications: Notification[] = [];
+  readonly NotificationType = NotificationType;
 
   constructor(
     private readonly _notificationService: NotificationService,
@@ -105,7 +106,7 @@ export class NotificationPanelComponent implements OnInit, OnDestroy {
   getNotificationIconClass(type: NotificationType): string {
     switch (type) {
       case NotificationType.success:
-        return 'km-icon-tick';
+        return 'km-icon-check i-12';
       case NotificationType.error:
         return 'km-icon-warning';
       default:

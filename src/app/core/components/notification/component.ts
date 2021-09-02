@@ -43,7 +43,7 @@ export class NotificationComponent {
     switch (this._type) {
       case NotificationType.success:
         this.typeIconBackground = 'success';
-        this.typeIconClassName = 'km-icon-tick';
+        this.typeIconClassName = 'km-icon-mask-white km-icon-check';
         break;
       case NotificationType.error:
         this.typeIconBackground = 'error';

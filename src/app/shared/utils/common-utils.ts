@@ -48,7 +48,7 @@ export function getIconClassForButton(type: string): string {
     case 'Delete':
       return 'km-icon-mask km-icon-delete with-text';
     case 'Start':
-      return 'km-icon-mask km-icon-check';
+      return 'km-icon-mask km-icon-check i-24';
     case 'Regenerate':
     case 'Restart':
       return 'km-icon-mask km-icon-regenerate w-24';

@@ -52,7 +52,15 @@
 }
 
 .km-icon-check {
-  @include mixins.mask-image("/assets/images/icons/check.svg", 24px);
+  @include mixins.mask-image("/assets/images/icons/check.svg#16", 16px);
+
+  &.i-12 {
+    @include mixins.mask-image("/assets/images/icons/check.svg#16", 12px);
+  }
+
+  &.i-24 {
+    @include mixins.mask-image("/assets/images/icons/check.svg#24", 24px);
+  }
 }
 
 .km-icon-collapse-menu {
@@ -72,10 +80,10 @@
 }
 
 .km-icon-delete {
-  @include mixins.mask-image("/assets/images/icons/trash.svg", 18px);
+  @include mixins.mask-image("/assets/images/icons/trash.svg#18", 18px);
 
-  &.with-text {
-    @include mixins.mask-image("/assets/images/icons/trash-24.svg", 24px);
+  &.i-24 {
+    @include mixins.mask-image("/assets/images/icons/trash.svg#24", 24px);
   }
 }
 
@@ -117,15 +125,6 @@
 
   background-color: #f7b500 !important;
   background-size: 12px !important;
-  border-radius: 50%;
-  margin: 4px 14px 4px 0;
-}
-
-.km-icon-tick {
-  @include mixins.background-image("/assets/images/icons/tick.svg", 16px);
-
-  background-color: #1dc67f;
-  background-size: 12px;
   border-radius: 50%;
   margin: 4px 14px 4px 0;
 }
