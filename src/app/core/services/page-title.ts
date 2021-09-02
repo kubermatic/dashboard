@@ -18,27 +18,32 @@ import {ProjectService} from '@core/services/project';
 import {Cluster} from '@shared/entity/cluster';
 import {getViewDisplayName, View, ViewDisplayName} from '@shared/entity/common';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
-import {Observable, of, Subject} from 'rxjs';
-import {switchMap, takeUntil, tap} from 'rxjs/operators';
+import {Observable, of} from 'rxjs';
+import {switchMap, take, tap} from 'rxjs/operators';
+import {Auth} from './auth/service';
 
 @Injectable()
 export class PageTitleService {
   projectName: string;
   clusterName: string;
   mdName: string;
-  private readonly _unsubscribe = new Subject<void>();
 
   constructor(
     private readonly _titleService: Title,
     private readonly _params: ParamsService,
     private readonly _projectService: ProjectService,
     private readonly _clusterService: ClusterService,
-    private readonly _apiService: ApiService
+    private readonly _apiService: ApiService,
+    private readonly _auth: Auth
   ) {}
 
   setTitle(url: string): void {
     const viewName = this._getViewName(url.split('/').reverse());
     this._titleService.setTitle(viewName);
+
+    if (!this._auth.authenticated()) {
+      return;
+    }
 
     this._projectService.selectedProject
       .pipe(tap(project => (this.projectName = project ? project.name : '')))
@@ -46,7 +51,7 @@ export class PageTitleService {
       .pipe(tap(cluster => (this.clusterName = cluster ? cluster.name : '')))
       .pipe(switchMap(_ => this._machineDeploymentObservable()))
       .pipe(tap(md => (this.mdName = md ? md.name : '')))
-      .pipe(takeUntil(this._unsubscribe))
+      .pipe(take(1))
       .subscribe(_ => {
         this._titleService.setTitle(this._generateTitle(viewName));
       });
