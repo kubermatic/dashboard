@@ -78,7 +78,7 @@ KUBERMATICDOCKERTAG=latest UIDOCKERTAG=latest make kubermatic-installer
 TEST_NAME="Deploy Kubermatic"
 echodate "Deploying Kubermatic [${KUBERMATIC_VERSION}]..."
 
-./_build/kubermatic-installer deploy \
+./_build/kubermatic-installer deploy --disable-telemetry \
   --storageclass copy-default \
   --config "$KUBERMATIC_CONFIG" \
   --helm-values "$HELM_VALUES_FILE" \
