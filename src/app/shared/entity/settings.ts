@@ -37,6 +37,7 @@ export class AdminSettings {
   opaOptions: OpaOptions;
   mlaOptions: MLAOptions;
   mlaAlertmanagerPrefix: string;
+  mlaGrafanaPrefix: string;
 }
 
 export class MachineDeploymentVMResourceQuota {
@@ -155,4 +156,5 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
     monitoringEnabled: false,
   },
   mlaAlertmanagerPrefix: '',
+  mlaGrafanaPrefix: '',
 };

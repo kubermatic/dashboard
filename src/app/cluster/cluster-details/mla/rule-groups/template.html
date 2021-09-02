@@ -10,6 +10,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
+<h3>Recording & Alerting Rules</h3>
 <div class="header">
   <div class="filters"
        fxLayoutAlign=" center"
@@ -61,8 +62,7 @@ limitations under the License.
        matSort
        matSortActive="name"
        matSortDirection="asc"
-       [dataSource]="dataSource"
-       [hidden]="isLoadingData()">
+       [dataSource]="dataSource">
   <ng-container matColumnDef="name">
     <th mat-header-cell
         *matHeaderCellDef
@@ -116,8 +116,6 @@ limitations under the License.
      *ngIf="hasNoData()">
   No rule groups available.
 </div>
-
-<km-loader *ngIf="isLoadingData()"></km-loader>
 
 <div [hidden]="!isPaginatorVisible()">
   <mat-paginator showFirstLastButtons></mat-paginator>

@@ -52,6 +52,7 @@ export const DEFAULT_ADMIN_SETTINGS_MOCK: AdminSettings = {
     monitoringEnabled: false,
   },
   mlaAlertmanagerPrefix: '',
+  mlaGrafanaPrefix: '',
 };
 
 @Injectable()

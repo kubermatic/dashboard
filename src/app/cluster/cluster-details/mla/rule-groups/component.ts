@@ -91,10 +91,6 @@ export class RuleGroupsComponent implements OnInit, OnChanges, OnDestroy {
     );
   }
 
-  isLoadingData(): boolean {
-    return _.isEmpty(this.ruleGroups) && !this.isClusterRunning;
-  }
-
   hasNoData(): boolean {
     return _.isEmpty(this.ruleGroups) && this.isClusterRunning;
   }
