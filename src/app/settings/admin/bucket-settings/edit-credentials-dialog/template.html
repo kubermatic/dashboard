@@ -10,45 +10,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<km-dialog-title>Add Bucket Setting</km-dialog-title>
+<km-dialog-title>Edit Credentials for {{data.seed.name}}</km-dialog-title>
 <mat-dialog-content>
   <form [formGroup]="form"
-        fxLayout="column"
-        fxLayoutGap="7px"
-        (submit)="add()"
-        id="add-bucket-setting-form">
-
-    <mat-form-field fxFlex>
-      <mat-label>Seed</mat-label>
-      <mat-select [formControlName]="Controls.Seed"
-                  disableOptionCentering>
-        <mat-option *ngFor="let seed of data.seeds"
-                    [value]="seed.name">
-          {{seed.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field fxFlex>
-      <mat-label>Bucket</mat-label>
-      <input matInput
-             [formControlName]="Controls.Bucket"
-             type="text"
-             title="name"
-             autocomplete="off"
-             required>
-    </mat-form-field>
-
-    <mat-form-field fxFlex>
-      <mat-label>Endpoint</mat-label>
-      <input matInput
-             [formControlName]="Controls.Endpoint"
-             type="text"
-             title="name"
-             autocomplete="off">
-      <mat-hint>If not specified default endpoint `s3.amazonaws.com` will be used.</mat-hint>
-    </mat-form-field>
-
+        fxLayout="column">
     <mat-form-field fxFlex>
       <mat-label>Secret Access Key</mat-label>
       <input matInput
@@ -59,7 +24,7 @@ limitations under the License.
              required>
     </mat-form-field>
 
-    <mat-form-field fxFlex>
+    <mat-form-field fxFlx>
       <mat-label>Access Key</mat-label>
       <input matInput
              [formControlName]="Controls.AccessKey"
@@ -73,10 +38,9 @@ limitations under the License.
 <mat-dialog-actions>
   <button mat-flat-button
           type="submit"
-          form="add-bucket-setting-form-form"
-          id="km-add-bucket-setting-dialog-save-btn"
+          id="km-edit-credentials-dialog-save-btn"
           [disabled]="!form.valid">
-    <i class="km-icon-mask km-icon-add"></i>
-    <span>Add</span>
+    <i class="km-icon-mask km-icon-edit"></i>
+    <span>Edit Credentials</span>
   </button>
 </mat-dialog-actions>

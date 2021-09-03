@@ -16,15 +16,7 @@ limitations under the License.
     <mat-card-title fxFlex
                     fxLayout="row"
                     fxLayoutAlign=" center">
-      <div fxFlex>Bucket Settings for Backups</div>
-      <button mat-flat-button
-              color="quaternary"
-              fxLayoutAlign="center center"
-              id="km-add-bucket-setting-btn"
-              (click)="add()">
-        <i class="km-icon-mask km-icon-add"></i>
-        <span>Add Bucket Setting</span>
-      </button>
+      <div fxFlex>Backup Buckets</div>
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
@@ -71,8 +63,14 @@ limitations under the License.
           <div class="km-table-actions"
                fxLayoutAlign="end">
             <button mat-icon-button
+                    matTooltip="Edit Bucket Settings"
                     (click)="editBucketSettings(element)">
               <i class="km-mask-icon km-icon-edit"></i>
+            </button>
+            <button mat-icon-button
+                    matTooltip="Edit Credentials"
+                    (click)="editCredentials(element)">
+              <i class="km-mask-icon km-icon-credentials"></i>
             </button>
           </div>
         </td>

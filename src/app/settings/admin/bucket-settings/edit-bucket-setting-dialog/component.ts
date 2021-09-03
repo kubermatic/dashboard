@@ -10,13 +10,14 @@
 // limitations under the License.
 
 import {Component, OnInit, Inject} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
 import {DatacenterService} from '@core/services/datacenter';
 import {AdminSeed} from '@shared/entity/datacenter';
+import * as _ from 'lodash';
 
-export interface BucketSettingsDialogConfig {
+export interface EditBucketSettingsDialogConfig {
   seed: AdminSeed;
 }
 
@@ -30,22 +31,21 @@ enum Controls {
   templateUrl: './template.html',
 })
 export class EditBucketSettingDialog implements OnInit {
-  form: FormGroup;
-
   readonly Controls = Controls;
+  form: FormGroup;
 
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _datacenterService: DatacenterService,
     private readonly _matDialogRef: MatDialogRef<EditBucketSettingDialog>,
     private readonly _notificationService: NotificationService,
-    @Inject(MAT_DIALOG_DATA) public data: BucketSettingsDialogConfig
+    @Inject(MAT_DIALOG_DATA) public data: EditBucketSettingsDialogConfig
   ) {}
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Bucket]: new FormControl(this.data.seed.spec.backupRestore.s3BucketName, [Validators.required]),
-      [Controls.Endpoint]: new FormControl(this.data.seed.spec.backupRestore.s3Endpoint),
+      [Controls.Bucket]: this._builder.control(this._setBucketName(), [Validators.required]),
+      [Controls.Endpoint]: this._builder.control(this._setEndpoint()),
     });
   }
 
@@ -62,8 +62,22 @@ export class EditBucketSettingDialog implements OnInit {
 
     this._datacenterService.patchAdminSeed(configuration.name, configuration).subscribe(_ => {
       this._matDialogRef.close();
-      this._notificationService.success('Bucket settings were successfully updated');
+      this._notificationService.success('Bucket settings were successfully edited');
       this._datacenterService.refreshAdminSeeds();
     });
+  }
+
+  private _setBucketName(): string {
+    if (!_.isEmpty(this.data.seed.spec.backupRestore) && !_.isEmpty(this.data.seed.spec.backupRestore.s3BucketName)) {
+      return this.data.seed.spec.backupRestore.s3BucketName;
+    }
+    return '';
+  }
+
+  private _setEndpoint(): string {
+    if (!_.isEmpty(this.data.seed.spec.backupRestore) && !_.isEmpty(this.data.seed.spec.backupRestore.s3Endpoint)) {
+      return this.data.seed.spec.backupRestore.s3Endpoint;
+    }
+    return '';
   }
 }

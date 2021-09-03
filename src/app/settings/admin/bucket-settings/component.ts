@@ -17,11 +17,11 @@ import {MatTableDataSource} from '@angular/material/table';
 import {DatacenterService} from '@core/services/datacenter';
 import {UserService} from '@core/services/user';
 import {AdminSeed} from '@shared/entity/datacenter';
+import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {AddBucketSettingDialog} from './add-bucket-setting-dialog/component';
 import {EditBucketSettingDialog} from './edit-bucket-setting-dialog/component';
-import * as _ from 'lodash';
+import {EditCredentialsDialog} from './edit-credentials-dialog/component';
 
 @Component({
   selector: 'km-admin-settings-bucket-settings',
@@ -30,7 +30,6 @@ import * as _ from 'lodash';
 })
 export class BucketSettingsComponent implements OnInit, OnChanges {
   seeds: AdminSeed[] = [];
-  unconfiguredSeedNames: AdminSeed[] = [];
   dataSource = new MatTableDataSource<AdminSeed>();
   displayedColumns: string[] = ['seed', 'bucket', 'endpoint', 'actions'];
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -51,8 +50,7 @@ export class BucketSettingsComponent implements OnInit, OnChanges {
     this.sort.direction = 'asc';
 
     this._datacenterService.adminSeeds.pipe(takeUntil(this._unsubscribe)).subscribe(seeds => {
-      this.unconfiguredSeedNames = seeds.filter(seed => _.isEmpty(seed.spec.backupRestore));
-      this.seeds = seeds.filter(seed => !_.isEmpty(seed.spec.backupRestore));
+      this.seeds = _.sortBy(seeds, seed => seed.name.toLowerCase());
       this.dataSource.data = this.seeds;
     });
 
@@ -71,16 +69,6 @@ export class BucketSettingsComponent implements OnInit, OnChanges {
     this._unsubscribe.complete();
   }
 
-  add(): void {
-    const dialogConfig: MatDialogConfig = {
-      data: {
-        seeds: this.unconfiguredSeedNames,
-      },
-    };
-
-    this._matDialog.open(AddBucketSettingDialog, dialogConfig);
-  }
-
   editBucketSettings(seed: AdminSeed): void {
     const dialogConfig: MatDialogConfig = {
       data: {
@@ -89,6 +77,16 @@ export class BucketSettingsComponent implements OnInit, OnChanges {
     };
 
     this._matDialog.open(EditBucketSettingDialog, dialogConfig);
+  }
+
+  editCredentials(seed: AdminSeed): void {
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        seed: seed,
+      },
+    };
+
+    this._matDialog.open(EditCredentialsDialog, dialogConfig);
   }
 
   isPaginatorVisible(): boolean {

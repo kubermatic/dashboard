@@ -11,13 +11,13 @@
 
 import {NgModule} from '@angular/core';
 import {BucketSettingsComponent} from '@app/settings/admin/bucket-settings/component';
-import {AddBucketSettingDialog} from '@app/settings/admin/bucket-settings/add-bucket-setting-dialog/component';
 import {EditBucketSettingDialog} from '@app/settings/admin/bucket-settings/edit-bucket-setting-dialog/component';
+import {EditCredentialsDialog} from '@app/settings/admin/bucket-settings/edit-credentials-dialog/component';
 import {AdminSettingsBucketSettingsRoutingModule} from '@app/settings/admin/bucket-settings/routing';
 import {SharedModule} from '@shared/module';
 
 @NgModule({
   imports: [SharedModule, AdminSettingsBucketSettingsRoutingModule],
-  declarations: [BucketSettingsComponent, AddBucketSettingDialog, EditBucketSettingDialog],
+  declarations: [BucketSettingsComponent, EditBucketSettingDialog, EditCredentialsDialog],
 })
 export class AdminSettingsBucketSettingsModule {}
