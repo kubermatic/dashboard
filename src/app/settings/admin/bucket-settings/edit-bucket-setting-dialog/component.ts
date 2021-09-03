@@ -14,7 +14,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
 import {DatacenterService} from '@core/services/datacenter';
-import {AdminSeed} from '@shared/entity/datacenter';
+import {AdminSeed, BackupRestoreConfiguration} from '@shared/entity/datacenter';
 import * as _ from 'lodash';
 
 export interface EditBucketSettingsDialogConfig {
@@ -50,15 +50,14 @@ export class EditBucketSettingDialog implements OnInit {
   }
 
   edit(): void {
-    const configuration: AdminSeed = {
-      name: this.data.seed.name,
-      spec: {
-        backupRestore: {
-          [Controls.Bucket]: this.form.get(Controls.Bucket).value,
-          [Controls.Endpoint]: this.form.get(Controls.Endpoint).value,
-        },
-      },
+    const backupRestore: BackupRestoreConfiguration = {
+      [Controls.Bucket]: this.form.get(Controls.Bucket).value,
+      [Controls.Endpoint]: this.form.get(Controls.Endpoint).value,
     };
+
+    let configuration = new AdminSeed();
+    configuration = this.data.seed;
+    configuration.spec.backupRestore = backupRestore;
 
     this._datacenterService.patchAdminSeed(configuration.name, configuration).subscribe(_ => {
       this._matDialogRef.close();

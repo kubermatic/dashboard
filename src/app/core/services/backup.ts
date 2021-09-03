@@ -22,7 +22,7 @@ export class BackupService {
   constructor(private readonly _http: HttpClient) {}
 
   updateBackupCredentials(seedName: string, credentials: BackupCredentials): Observable<any> {
-    const url = `${this._newRestRoot}/seeds/${seedName}/backupscredentials`;
+    const url = `${this._newRestRoot}/seeds/${seedName}/backupcredentials`;
     return this._http.put(url, credentials);
   }
 }
