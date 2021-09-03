@@ -1,19 +1,15 @@
 <km-dynamic-tab label="Allowed Registries">
-  <mat-card-header>
-    <mat-card-title fxFlex
-                    fxLayout="row"
-                    fxLayoutAlign=" center">
-      <div fxFlex>OPA Allowed Registries</div>
-      <button mat-flat-button
-              color="quaternary"
-              id="km-add-allowed-registry-btn"
-              fxLayoutAlign="center center"
-              (click)="add()">
-        <i class="km-icon-mask km-icon-add"></i>
-        <span>Add Allowed Registries</span>
-      </button>
-    </mat-card-title>
-  </mat-card-header>
+  <div class="header">
+    <div fxFlex></div>
+    <button mat-flat-button
+            color="quaternary"
+            id="km-add-allowed-registry-btn"
+            fxLayoutAlign="center center"
+            (click)="add()">
+      <i class="km-icon-mask km-icon-add"></i>
+      <span>Add Allowed Registries</span>
+    </button>
+  </div>
 
   <table class="km-table"
          mat-table
