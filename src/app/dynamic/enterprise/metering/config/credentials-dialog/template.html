@@ -33,7 +33,7 @@
       <input required
              matInput
              [formControlName]="controls.BucketName"
-             type="password"
+             type="text"
              autocomplete="off">
       <mat-error *ngIf="form.get(controls.BucketName).hasError('required')">
         Bucket Name is <strong>required</strong>.
@@ -45,7 +45,7 @@
       <input required
              matInput
              [formControlName]="controls.Endpoint"
-             type="password"
+             type="text"
              autocomplete="off">
       <mat-error *ngIf="form.get(controls.Endpoint).hasError('required')">
         Endpoint is <strong>required</strong>.
