@@ -14,7 +14,7 @@ import {Injectable} from '@angular/core';
 import {iif, merge, Observable, of, Subject, timer} from 'rxjs';
 import {map, shareReplay, switchMap, take} from 'rxjs/operators';
 import {environment} from '@environments/environment';
-import {CreateDatacenterModel, Datacenter, SeedSettings} from '@shared/entity/datacenter';
+import {AdminSeed, CreateDatacenterModel, Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {AppConfigService} from '@app/config.service';
 import {Auth} from './auth/service';
 import * as _ from 'lodash';
@@ -30,6 +30,8 @@ export class DatacenterService {
   private _seedSettings$ = new Map<string, Observable<SeedSettings>>();
   private _seedSettingsRefresh$ = new Subject<void>();
   private _seedsRefresh$ = new Subject<void>();
+  private _adminSeeds$: Observable<any[]>;
+  private _adminSeedsRefresh$ = new Subject<void>();
   private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
 
   constructor(
@@ -112,5 +114,30 @@ export class DatacenterService {
   private _getSeedSettings(seedName: string): Observable<SeedSettings> {
     const url = `${this._newRestRoot}/seeds/${seedName}/settings`;
     return this._httpClient.get<SeedSettings>(url);
+  }
+
+  // only admins can call following endpoints
+  get adminSeeds(): Observable<AdminSeed[]> {
+    if (!this._adminSeeds$) {
+      this._adminSeeds$ = merge(this._adminSeedsRefresh$, this._refreshTimer$)
+        .pipe(switchMap(_ => this._getAdminSeeds()))
+        .pipe(shareReplay({refCount: true, bufferSize: 1}));
+    }
+
+    return this._adminSeeds$;
+  }
+
+  private _getAdminSeeds(): Observable<AdminSeed[]> {
+    const url = `${this._restRoot}/admin/seeds`;
+    return this._httpClient.get<AdminSeed[]>(url);
+  }
+
+  refreshAdminSeeds(): void {
+    this._adminSeedsRefresh$.next();
+  }
+
+  patchAdminSeed(seedName: string, patch: AdminSeed): Observable<AdminSeed> {
+    const url = `${this._restRoot}/admin/seeds/${seedName}`;
+    return this._httpClient.patch<AdminSeed>(url, patch);
   }
 }

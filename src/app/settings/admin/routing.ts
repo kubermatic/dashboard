@@ -49,6 +49,10 @@ const routes: Routes = [
         path: 'opa',
         loadChildren: () => import('./opa/module').then(m => m.AdminSettingsOPAModule),
       },
+      {
+        path: 'bucketsettings',
+        loadChildren: () => import('./bucket-settings/module').then(m => m.AdminSettingsBucketSettingsModule),
+      },
     ],
   },
 ];

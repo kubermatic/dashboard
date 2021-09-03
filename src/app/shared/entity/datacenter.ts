@@ -116,6 +116,20 @@ export class MLA {
   user_cluster_mla_enabled: boolean;
 }
 
+export class AdminSeed {
+  name: string;
+  spec: AdminSeedSpec;
+}
+
+export class AdminSeedSpec {
+  backupRestore?: BackupRestoreConfiguration;
+}
+
+export class BackupRestoreConfiguration {
+  s3BucketName?: string;
+  s3Endpoint?: string;
+}
+
 export function getDatacenterProvider(datacenter: Datacenter): NodeProvider {
   return Object.values(NodeProvider).find(provider => provider === datacenter.spec.provider) || NodeProvider.NONE;
 }
