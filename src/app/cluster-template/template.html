@@ -99,13 +99,13 @@ limitations under the License.
                         matTooltip="Create Cluster from Template"
                         (click)="createCluster(element)"
                         [disabled]="!canCreateCluster()">
-                  <i class="km-icon-cluster-from-template"></i>
+                  <i class="km-icon-mask km-icon-cluster-from-template"></i>
                 </button>
                 <button mat-icon-button
                         matTooltip="Delete Cluster Template"
                         (click)="delete(element)"
                         [disabled]="!canDelete(element)">
-                  <i class="km-icon-delete"></i>
+                  <i class="km-icon-mask km-icon-delete"></i>
                 </button>
               </ng-container>
             </ng-container>

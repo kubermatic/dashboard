@@ -15,7 +15,8 @@ limitations under the License.
 
 <form *ngIf="mode === modes.Create"
       (keydown.enter)="form.valid ? update() : null">
-  <mat-horizontal-stepper linear
+  <mat-horizontal-stepper class="km-stepper-in-dialog"
+                          linear
                           disableRipple
                           [@.disabled]="true"
                           #stepper>

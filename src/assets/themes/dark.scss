@@ -31,7 +31,7 @@ $colors-dark: (
   sidenav-background-hover: #202021,
   sidenav-background-active: rgba(#00517d, .7),
   sidenav-divider: #cad1d9,
-  project-selector-hover: #edeff0,
+  project-selector-hover: #464647,
   tooltip-background: #0072b0,
   option-background: #2b2b2c,
   option-background-hover: #535354,
@@ -50,6 +50,7 @@ $colors-dark: (
   tab-divider: #cad1d9,
   shadow: 0 4px 4px rgba(#000, .08),
   shadow-dark: (0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12)),
+  dropdown-hover: #464646,
 );
 
 $theme-dark: mat.define-dark-theme(mat.define-palette(mat.$blue-palette), mat.define-palette(mat.$light-blue-palette), mat.define-palette(mat.$pink-palette));
@@ -122,7 +123,25 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
   color: map-get($colors-dark, primary-dark);
 }
 
+.mat-option:hover:not(.mat-option-disabled),
+.mat-option:focus:not(.mat-option-disabled) {
+  background-color: map-get($colors-dark, dropdown-hover);
+}
+
 // Make checkbox marks white.
 .mat-checkbox .mat-checkbox-checkmark .mat-checkbox-checkmark-path {
   stroke: rgba(#fff, .85) !important;
+}
+
+// Change background color of steppers in dialogs
+.mat-stepper-horizontal.km-stepper-in-dialog {
+  background-color: map-get($colors-dark, option-background);
+
+  .mat-button-toggle-group .mat-button-toggle {
+    background-color: map-get($colors-dark, option-background);
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #2b2b2c;
+  }
 }

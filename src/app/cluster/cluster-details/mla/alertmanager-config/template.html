@@ -21,14 +21,14 @@ limitations under the License.
             color="tertiary"
             matTooltip="Reset Alertmanager Config to default"
             (click)="reset()">
-      <i class="km-icon-reset"></i>
+      <i class="km-icon-mask km-icon-reset"></i>
     </button>
     <button id="km-alertmanager-config-edit-btn"
             mat-icon-button
             color="tertiary"
             matTooltip="Edit Alertmanager Config"
             (click)="edit()">
-      <i class="km-icon-edit"></i>
+      <i class="km-icon-mask km-icon-edit"></i>
     </button>
   </div>
   <div fxFlex></div>
@@ -40,7 +40,7 @@ limitations under the License.
        *ngIf="shouldDisplayLink(Type.Alertmanager)"
        fxFlex
        fxLayoutAlign=" center">
-      <i class="km-icon-external-link"></i>
+      <i class="km-icon-mask km-icon-external-link"></i>
       <span>Open Alertmanager UI</span>
     </a>
     <a [href]="getLinkURL(Type.Grafana)"
@@ -50,7 +50,7 @@ limitations under the License.
        *ngIf="shouldDisplayLink(Type.Grafana)"
        fxFlex
        fxLayoutAlign=" center">
-      <i class="km-icon-external-link"></i>
+      <i class="km-icon-mask km-icon-external-link"></i>
       <span>Open Grafana UI</span>
     </a>
   </div>
