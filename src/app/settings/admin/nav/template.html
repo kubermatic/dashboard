@@ -73,7 +73,8 @@ limitations under the License.
     </a>
   </div>
 
-  <div class="menu-item">
+  <div *ngIf="isEnterpriseEdition"
+       class="menu-item">
     <a id="km-nav-item-metering"
        routerLink="metering"
        routerLinkActive="active"

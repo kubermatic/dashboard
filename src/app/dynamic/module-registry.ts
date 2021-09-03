@@ -19,4 +19,5 @@ export namespace DynamicModule {
   export const AllowedRegistries = import('./enterprise/allowed-registries/module').then(
     module => module.AllowedRegistriesModule
   );
+  export const Metering = import('./enterprise/metering/module').then(module => module.MeteringModule);
 }

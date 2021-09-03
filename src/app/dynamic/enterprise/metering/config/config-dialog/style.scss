@@ -9,16 +9,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {MeteringComponent} from './component';
-
-const routes: Routes = [
-  {
-    path: '',
-    component: MeteringComponent,
-  },
-];
-
-@NgModule({imports: [RouterModule.forChild(routes)], exports: [RouterModule]})
-export class MeteringRoutingModule {}
+.toggle-button {
+  margin-bottom: 20px;
+}

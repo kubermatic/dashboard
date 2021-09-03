@@ -10,12 +10,13 @@
 // limitations under the License.
 
 import {DOCUMENT} from '@angular/common';
-import {Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Inject, Input, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
+import {MeteringConfiguration} from '@shared/entity/datacenter';
 import {Report} from '@shared/entity/metering';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -24,18 +25,24 @@ import {takeUntil} from 'rxjs/operators';
   selector: 'km-metering-list',
   templateUrl: './template.html',
 })
-export class MeteringListComponent implements OnInit {
-  private _unsubscribe = new Subject<void>();
-  private _isLoading = true;
+export class MeteringListComponent implements OnInit, AfterViewInit {
+  private readonly _unsubscribe = new Subject<void>();
   private _fetchingReport = '';
   reports: Report[] = [];
   dataSource = new MatTableDataSource<Report>();
   readonly displayedColumns: string[] = ['name', 'size', 'modified', 'actions'];
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @Input() config: MeteringConfiguration;
+
+  private _isLoading = true;
 
   get isLoading(): boolean {
     return this._isLoading;
+  }
+
+  get enabled(): boolean {
+    return this.config.enabled && !!this.config.storageSize && !!this.config.storageClassName;
   }
 
   constructor(
@@ -46,14 +53,17 @@ export class MeteringListComponent implements OnInit {
 
   ngOnInit() {
     this.dataSource.data = this.reports;
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
 
     this._settingsService.reports.pipe(takeUntil(this._unsubscribe)).subscribe(reports => {
       this.reports = reports;
       this.dataSource.data = this.reports;
       this._isLoading = false;
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
 
     this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.paginator.pageSize = settings.itemsPerPage;

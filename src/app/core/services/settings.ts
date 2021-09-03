@@ -35,6 +35,7 @@ export class SettingsService {
   private _adminsRefresh$ = new Subject<void>();
   private _customLinks$: Observable<CustomLink[]>;
   private _customLinksRefresh$ = new Subject<void>();
+  private _reports$: Observable<Report[]>;
   private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
 
   constructor(
@@ -126,6 +127,15 @@ export class SettingsService {
   }
 
   get reports(): Observable<Report[]> {
+    if (!this._reports$) {
+      this._reports$ = this._refreshTimer$
+        .pipe(switchMap(() => this._getReports()))
+        .pipe(shareReplay({refCount: true, bufferSize: 1}));
+    }
+    return this._reports$;
+  }
+
+  private _getReports(): Observable<Report[]> {
     const url = `${this.restRoot}/admin/metering/reports`;
     return this._httpClient.get<Report[]>(url);
   }

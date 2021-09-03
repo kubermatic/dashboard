@@ -9,14 +9,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {NgModule} from '@angular/core';
-import {MeteringComponent} from '@app/settings/admin/metering/component';
-import {MeteringListComponent} from '@app/settings/admin/metering/list/component';
-import {MeteringRoutingModule} from '@app/settings/admin/metering/routing';
-import {SharedModule} from '@shared/module';
-
-@NgModule({
-  imports: [SharedModule, MeteringRoutingModule],
-  declarations: [MeteringComponent, MeteringListComponent],
-})
-export class MeteringModule {}
+.toggle-button {
+  margin-bottom: 20px;
+}

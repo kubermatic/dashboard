@@ -9,8 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export class Report {
-  name: string;
-  size: number;
-  lastModified: Date;
-}
+import {NgModule} from '@angular/core';
+import {RouterModule} from '@angular/router';
+
+@NgModule({imports: [RouterModule.forChild([])]})
+export class MeteringModule {}
