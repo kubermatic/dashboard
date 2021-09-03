@@ -10,7 +10,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<km-dialog-title>Edit Credentials for {{data.seed.name}}</km-dialog-title>
+<km-dialog-title>Edit Credentials for <strong>&nbsp;{{data.seed.name}}</strong></km-dialog-title>
 <mat-dialog-content>
   <form [formGroup]="form"
         fxLayout="column">
@@ -25,7 +25,7 @@ limitations under the License.
     </mat-form-field>
 
     <mat-form-field fxFlx>
-      <mat-label>Access Key</mat-label>
+      <mat-label>Access Key ID</mat-label>
       <input matInput
              [formControlName]="Controls.AccessKey"
              type="password"
@@ -37,8 +37,8 @@ limitations under the License.
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-flat-button
-          type="submit"
           id="km-edit-credentials-dialog-save-btn"
+          (click)="edit()"
           [disabled]="!form.valid">
     <i class="km-icon-mask km-icon-edit"></i>
     <span>Edit Credentials</span>

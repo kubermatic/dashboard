@@ -59,8 +59,8 @@ export class EditCredentialsDialog implements OnInit {
     };
 
     this._backupService.updateBackupCredentials(this.data.seed.name, credentials).subscribe(_ => {
-      this._notificationService.success('Credentials were successfully edited');
       this._matDialogRef.close();
+      this._notificationService.success('Credentials were successfully edited');
     });
   }
 }
