@@ -11,7 +11,6 @@
 
 import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {Cluster} from '@shared/entity/cluster';
-import {SSHKey} from '@shared/entity/ssh-key';
 
 export class ClusterTemplate {
   name: string;
@@ -21,7 +20,12 @@ export class ClusterTemplate {
   scope: ClusterTemplateScope;
   cluster?: Cluster;
   nodeDeployment?: MachineDeployment;
-  userSshKeys?: SSHKey[];
+  userSshKeys?: ClusterTemplateSSHKey[];
+}
+
+export class ClusterTemplateSSHKey {
+  id: string;
+  name: string;
 }
 
 export enum ClusterTemplateScope {
