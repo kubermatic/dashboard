@@ -18,3 +18,8 @@ export default async (on, config) => {
   failFast(on, config);
   return config;
 };
+
+module.exports = (on, config) => {
+  config.ignoreTestFiles = '**/integration/providers/*.spec.ts';
+  return config;
+};
