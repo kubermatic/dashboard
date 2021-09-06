@@ -55,6 +55,12 @@ limitations under the License.
       </mat-radio-button>
     </mat-radio-group>
   </form>
+  <div *ngIf="showSSHKeyWarning"
+       class="km-dialog-warning"
+       fxLayoutAlign=" center">
+    <i class="km-icon-error"></i>
+    <div>SSH keys will not be saved in the cluster templates that are not in the project scope.</div>
+  </div>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-flat-button
