@@ -30,7 +30,7 @@ export class MeteringService {
   }
 
   saveCredentials(credentials: MeteringCredentials): Observable<any> {
-    const url = `${this._restRoot}admin/metering/credentials`;
+    const url = `${this._restRoot}/admin/metering/credentials`;
     return this._http.put(url, credentials);
   }
 }

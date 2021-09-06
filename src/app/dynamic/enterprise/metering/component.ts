@@ -11,10 +11,10 @@
 
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {DatacenterService} from '@core/services/datacenter';
-import {MeteringService} from '@core/services/metering';
 import {MeteringConfiguration} from '@shared/entity/datacenter';
 import {Subject} from 'rxjs';
 import {filter, map, switchMap, takeUntil} from 'rxjs/operators';
+import {MeteringService} from './service/metering';
 
 @Component({
   selector: 'km-metering',

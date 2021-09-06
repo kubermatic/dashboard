@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-import {MeteringService} from '@core/services/metering';
+import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
 import {NotificationService} from '@core/services/notification';
 import {pushToSide} from '@shared/animations/push';
 import {MeteringCredentials} from '@shared/entity/datacenter';
