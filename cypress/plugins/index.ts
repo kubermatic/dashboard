@@ -14,12 +14,8 @@ import failFast from 'cypress-fail-fast/plugin';
 import {configuration} from './cy-ts-preprocessor';
 
 export default async (on, config) => {
+  config.ignoreTestFiles = '**/integration/providers/*.spec.ts';
   on('file:preprocessor', webpack(configuration));
   failFast(on, config);
-  return config;
-};
-
-module.exports = (on, config) => {
-  config.ignoreTestFiles = '**/integration/providers/*.spec.ts';
   return config;
 };
