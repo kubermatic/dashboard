@@ -19,10 +19,12 @@ import {UserService} from '@core/services/user';
 import {take} from 'rxjs/operators';
 import {Member} from '@shared/entity/member';
 import {ClusterTemplateService} from '@core/services/cluster-templates';
+import {SSHKey} from '@shared/entity/ssh-key';
 
 class SaveClusterTemplateDialogData {
   cluster: Cluster;
   nodeData: NodeData;
+  sshKeys: SSHKey[];
   projectID: string;
 }
 
@@ -77,6 +79,7 @@ export class SaveClusterTemplateDialogComponent implements OnInit {
           dynamicConfig: this.data.nodeData.dynamicConfig,
         },
       },
+      userSshKeys: this.data.sshKeys,
     };
   }
 }

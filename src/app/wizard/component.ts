@@ -185,6 +185,7 @@ export class WizardComponent implements OnInit, OnDestroy {
       data: {
         cluster: this._clusterSpecService.cluster,
         nodeData: this._nodeDataService.nodeData,
+        sshKeys: this._clusterSpecService.sshKeys,
         projectID: this.project.id,
       },
     };
