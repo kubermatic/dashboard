@@ -102,6 +102,8 @@ presubmits:
               memory: 6Gi
               cpu: 4
           env:
+            - name: NO_COLOR
+              value: 1
             - name: SERVICE_ACCOUNT_KEY
               valueFrom:
                 secretKeyRef:
@@ -155,6 +157,8 @@ presubmits:
           env:
             - name: KUBERMATIC_EDITION
               value: ce
+            - name: NO_COLOR
+              value: 1
             - name: SERVICE_ACCOUNT_KEY
               valueFrom:
                 secretKeyRef:
