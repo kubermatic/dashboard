@@ -62,6 +62,10 @@ export class ClusterFromTemplateDialogComponent implements OnInit {
     this.form = new FormGroup({[Control.Replicas]: new FormControl(1, [Validators.required, Validators.min(1)])});
   }
 
+  get sshKeys(): string[] {
+    return this.data.template.userSshKeys ? this.data.template.userSshKeys.map(key => key.name) : [];
+  }
+
   create(): void {
     const replicas = this.form.get(Control.Replicas).value;
     this._clusterTemplateService

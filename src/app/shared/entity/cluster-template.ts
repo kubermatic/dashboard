@@ -20,6 +20,12 @@ export class ClusterTemplate {
   scope: ClusterTemplateScope;
   cluster?: Cluster;
   nodeDeployment?: MachineDeployment;
+  userSshKeys?: ClusterTemplateSSHKey[];
+}
+
+export class ClusterTemplateSSHKey {
+  id: string;
+  name: string;
 }
 
 export enum ClusterTemplateScope {
