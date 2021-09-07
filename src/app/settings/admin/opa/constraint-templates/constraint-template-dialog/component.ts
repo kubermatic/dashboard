@@ -14,6 +14,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {OPAService} from '@core/services/opa';
 import {NotificationService} from '@core/services/notification';
 import {ConstraintTemplate, ConstraintTemplateSpec} from '@shared/entity/opa';
+import {getIconClassForButton} from '@shared/utils/common-utils';
 import {dump, load} from 'js-yaml';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
@@ -65,6 +66,10 @@ export class ConstraintTemplateDialog implements OnInit, OnDestroy {
 
   isValid(): boolean {
     return !_.isEmpty(this.spec);
+  }
+
+  getIconClass(): string {
+    return getIconClassForButton(this.data.confirmLabel);
   }
 
   save(): void {

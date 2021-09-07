@@ -38,3 +38,25 @@ export function isObjectEmpty(obj: object): boolean {
 export function compare(a: number, b: number): -1 | 0 | 1 {
   return a < b ? -1 : a !== b ? 1 : 0;
 }
+
+export function getIconClassForButton(type: string): string {
+  switch (type) {
+    case 'Add':
+      return 'km-icon-mask km-icon-add';
+    case 'Edit':
+      return 'km-icon-mask km-icon-edit w-24';
+    case 'Delete':
+      return 'km-icon-mask km-icon-delete with-text';
+    case 'Start':
+      return 'km-icon-mask km-icon-check i-24';
+    case 'Regenerate':
+    case 'Restart':
+      return 'km-icon-mask km-icon-regenerate w-24';
+    case 'Reset':
+      return 'km-icon-mask km-icon-reset w-24';
+    case 'Disconnect':
+      return 'km-icon-mask km-icon-disconnect w-24';
+    default:
+      return '';
+  }
+}

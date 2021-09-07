@@ -48,6 +48,7 @@ limitations under the License.
           mat-flat-button
           (click)="save()"
           [disabled]="!form.valid">
-    {{data.confirmLabel}}
+    <i [ngClass]="getIconClass()"></i>
+    <span>{{data.confirmLabel}} Default Constraint</span>
   </button>
 </mat-dialog-actions>

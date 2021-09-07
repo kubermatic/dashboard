@@ -17,6 +17,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DatacenterService} from '@core/services/datacenter';
 import {Datacenter} from '@shared/entity/datacenter';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {getIconClassForButton} from '@shared/utils/common-utils';
 import * as countryCodeLookup from 'country-code-lookup';
 import {dump, load} from 'js-yaml';
 import * as _ from 'lodash';
@@ -94,6 +95,10 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  getIconClass(): string {
+    return getIconClassForButton(this.data.confirmLabel);
   }
 
   private _initRequiredEmailDomainsInput(): void {

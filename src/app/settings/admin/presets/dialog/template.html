@@ -52,21 +52,30 @@ limitations under the License.
                  color="accent"
                  *ngIf="creating"></mat-spinner>
     <button mat-flat-button
+            type="button"
             color="tertiary"
             (click)="stepper.previous()"
-            *ngIf="!first">Back
+            *ngIf="!first">
+      <i class="km-icon-mask km-icon-back"></i>
+      <span>Back</span>
     </button>
     <button mat-flat-button
+            type="button"
             id="km-settings-preset-next-btn"
             (click)="stepper.next()"
             [disabled]="invalid"
-            *ngIf="!last">Next
+            *ngIf="!last">
+      <i class="km-icon-mask km-icon-next"></i>
+      <span>Next</span>
     </button>
     <button mat-flat-button
+            type="button"
             id="km-settings-preset-create-btn"
             [disabled]="creating || invalid"
             *ngIf="last"
-            (click)="save()">Create
+            (click)="save()">
+      <i class="km-icon-mask km-icon-add"></i>
+      <span>Create</span>
     </button>
   </div>
 </mat-dialog-actions>

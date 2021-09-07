@@ -21,6 +21,7 @@ limitations under the License.
           mat-flat-button
           (click)="save()"
           [disabled]="!isValid()">
-    {{data.confirmLabel}}
+    <i [ngClass]="getIconClass"></i>
+    <span>{{data.confirmLabel}} Alertmanager Config</span>
   </button>
 </mat-dialog-actions>

@@ -16,6 +16,7 @@
 @import 'src/app/core/components/navigation/project/theme';
 @import 'src/app/core/components/navigation/theme';
 @import 'src/app/core/components/notification/theme';
+@import 'src/app/core/components/notification-panel/theme';
 @import 'src/app/core/components/sidenav/theme';
 @import 'src/app/core/components/changelog/theme';
 @import 'src/app/pages/api-docs/theme';
@@ -43,6 +44,7 @@
   @include theme-footer-component($colors);
   @include theme-navigation-component($colors);
   @include theme-notification-component($colors);
+  @include theme-notification-panel-component($colors);
   @include theme-project-component($colors);
   @include theme-project-selector-component($colors);
   @include theme-property-usage-component($colors);
