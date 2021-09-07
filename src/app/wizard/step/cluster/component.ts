@@ -159,8 +159,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .pipe(takeUntil(this._unsubscribe))
       .subscribe((seedSettings: SeedSettings) => (this._seedSettings = seedSettings));
 
-    this._api
-      .getMasterVersions(ClusterType.Kubernetes)
+    this._clusterSpecService.providerChanges
+      .pipe(switchMap(provider => this._api.getMasterVersions(provider)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setDefaultVersion.bind(this));
 

@@ -16,14 +16,14 @@ import {environment} from '@environments/environment';
 import {LabelFormComponent} from '@shared/components/label-form/component';
 import {TaintFormComponent} from '@shared/components/taint-form/component';
 import {AddonConfig} from '@shared/entity/addon';
-import {Cluster, ClusterType, MasterVersion, Token} from '@shared/entity/cluster';
+import {Cluster, MasterVersion, Token} from '@shared/entity/cluster';
 import {Event} from '@shared/entity/event';
 import {MachineDeployment, MachineDeploymentPatch} from '@shared/entity/machine-deployment';
 import {CreateMember, Member} from '@shared/entity/member';
 import {NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
 import {EditProject, Project} from '@shared/entity/project';
-import {AlibabaInstanceType, AlibabaZone, AlibabaVSwitch} from '@shared/entity/provider/alibaba';
+import {AlibabaInstanceType, AlibabaVSwitch, AlibabaZone} from '@shared/entity/provider/alibaba';
 import {AnexiaTemplate, AnexiaVlan} from '@shared/entity/provider/anexia';
 import {AWSSize, AWSSubnet} from '@shared/entity/provider/aws';
 import {AzureSizes, AzureZones} from '@shared/entity/provider/azure';
@@ -43,6 +43,7 @@ import {SSHKey} from '@shared/entity/ssh-key';
 import {CreateProjectModel} from '@shared/model/CreateProjectModel';
 import {Observable, of, timer} from 'rxjs';
 import {catchError, shareReplay, switchMap} from 'rxjs/operators';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
 
 @Injectable()
 export class ApiService {
@@ -245,8 +246,8 @@ export class ApiService {
     return `${this._location}/${this._restRoot}/kubeconfig?project_id=${projectID}&datacenter=${seed}&cluster_id=${clusterID}&user_id=${userID}`;
   }
 
-  getMasterVersions(type: ClusterType): Observable<MasterVersion[]> {
-    const url = `${this._restRoot}/upgrades/cluster?type=${type}`;
+  getMasterVersions(provider: NodeProvider): Observable<MasterVersion[]> {
+    const url = `${this._newRestRoot}/providers/${provider}/versions`;
     return this._http.get<MasterVersion[]>(url);
   }
 
