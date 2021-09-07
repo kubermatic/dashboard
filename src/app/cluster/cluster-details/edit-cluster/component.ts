@@ -122,13 +122,6 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       if (this._settings.opaOptions.enforced) {
         this.form.get(Controls.OPAIntegration).disable();
       }
-
-      if (this._settings.konnectivity.enabled) {
-        this.form.get(Controls.Konnectivity).setValue(true);
-      }
-      if (this._settings.konnectivity.enforced) {
-        this.form.get(Controls.Konnectivity).disable();
-      }
       this.form.updateValueAndValidity();
 
       this._enforce(Controls.MLALogging, this._settings.mlaOptions.loggingEnforced);
@@ -261,6 +254,9 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         mla: {
           loggingEnabled: this.form.get(Controls.MLALogging).value,
           monitoringEnabled: this.form.get(Controls.MLAMonitoring).value,
+        },
+        clusterNetwork: {
+          konnectivityEnabled: this.form.get(Controls.Konnectivity).value,
         },
         usePodNodeSelectorAdmissionPlugin: null,
         usePodSecurityPolicyAdmissionPlugin: null,

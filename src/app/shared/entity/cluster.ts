@@ -306,6 +306,7 @@ export class ClusterSpecPatch {
   machineNetworks?: MachineNetwork[];
   mla?: MLASettings;
   containerRuntime?: ContainerRuntime;
+  clusterNetwork?: ClusterNetwork;
 }
 
 export class CloudSpecPatch {
