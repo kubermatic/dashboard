@@ -104,7 +104,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         !!this.cluster.spec.opaIntegration && this.cluster.spec.opaIntegration.enabled
       ),
       [Controls.Konnectivity]: new FormControl(
-        !!this.cluster.spec.clusterNetwork && this.cluster.spec.clusterNetwork.KonnectivityEnabled
+        !!this.cluster.spec.clusterNetwork && this.cluster.spec.clusterNetwork.konnectivityEnabled
       ),
       [Controls.MLALogging]: new FormControl(!!this.cluster.spec.mla && this.cluster.spec.mla.loggingEnabled),
       [Controls.MLAMonitoring]: new FormControl(!!this.cluster.spec.mla && this.cluster.spec.mla.monitoringEnabled),
@@ -122,7 +122,6 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       if (this._settings.opaOptions.enforced) {
         this.form.get(Controls.OPAIntegration).disable();
       }
-      this.form.updateValueAndValidity();
 
       if (this._settings.konnectivity.enabled) {
         this.form.get(Controls.Konnectivity).setValue(true);

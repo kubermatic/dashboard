@@ -218,7 +218,7 @@ export class ClusterNetwork {
   pods?: NetworkRanges;
   proxyMode?: ProxyMode;
   services?: NetworkRanges;
-  KonnectivityEnabled?: boolean;
+  konnectivityEnabled?: boolean;
 }
 
 export class NetworkRanges {

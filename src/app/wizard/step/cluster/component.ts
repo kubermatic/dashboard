@@ -314,7 +314,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           proxyMode: this.controlValue(Controls.ProxyMode),
           pods: {cidrBlocks: pods ? [pods] : []},
           services: {cidrBlocks: services ? [services] : []},
-          KonnectivityEnabled: this.controlValue(Controls.Konnectivity),
+          konnectivityEnabled: this.controlValue(Controls.Konnectivity),
         },
       } as ClusterSpec,
     } as Cluster;
