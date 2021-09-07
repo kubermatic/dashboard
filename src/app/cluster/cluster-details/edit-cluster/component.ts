@@ -217,8 +217,6 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     switch (control) {
       case Controls.OPAIntegration:
         return !!this._settings && this._settings.opaOptions.enforced;
-      case Controls.Konnectivity:
-        return !!this._settings && this._settings.konnectivity.enforced;
       case Controls.MLALogging:
         return !!this._settings && this._settings.mlaOptions.loggingEnforced;
       case Controls.MLAMonitoring:

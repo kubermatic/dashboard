@@ -145,10 +145,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       if (this._settings.opaOptions.enforced) {
         this.form.get(Controls.OPAIntegration).disable();
       }
-      this.form.get(Controls.Konnectivity).setValue(this._settings.konnectivity.enabled);
-      if (this._settings.konnectivity.enforced) {
-        this.form.get(Controls.Konnectivity).disable();
-      }
       this.form.updateValueAndValidity();
     });
 
@@ -237,8 +233,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         return !!this._datacenterSpec && this._datacenterSpec.spec.enforceAuditLogging;
       case Controls.OPAIntegration:
         return !!this._settings && this._settings.opaOptions.enforced;
-      case Controls.Konnectivity:
-        return !!this._settings && this._settings.konnectivity.enforced;
       case Controls.MLALogging:
         return !!this._settings && this._settings.mlaOptions.loggingEnforced;
       case Controls.MLAMonitoring:
