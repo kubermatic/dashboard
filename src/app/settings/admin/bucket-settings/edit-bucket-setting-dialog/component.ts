@@ -44,8 +44,8 @@ export class EditBucketSettingDialog implements OnInit {
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Bucket]: this._builder.control(this._setBucketName(), [Validators.required]),
-      [Controls.Endpoint]: this._builder.control(this._setEndpoint()),
+      [Controls.Bucket]: this._builder.control(this._bucketName, [Validators.required]),
+      [Controls.Endpoint]: this._builder.control(this._endpoint),
     });
   }
 
@@ -55,8 +55,7 @@ export class EditBucketSettingDialog implements OnInit {
       [Controls.Endpoint]: this.form.get(Controls.Endpoint).value,
     };
 
-    let configuration = new AdminSeed();
-    configuration = this.data.seed;
+    const configuration: AdminSeed = this.data.seed;
     configuration.spec.backupRestore = backupRestore;
 
     this._datacenterService.patchAdminSeed(configuration.name, configuration).subscribe(_ => {
@@ -66,17 +65,15 @@ export class EditBucketSettingDialog implements OnInit {
     });
   }
 
-  private _setBucketName(): string {
-    if (!_.isEmpty(this.data.seed.spec.backupRestore) && !_.isEmpty(this.data.seed.spec.backupRestore.s3BucketName)) {
-      return this.data.seed.spec.backupRestore.s3BucketName;
-    }
-    return '';
+  private get _bucketName(): string {
+    return !!this.data.seed.spec.backupRestore && this.data.seed.spec.backupRestore.s3BucketName
+      ? this.data.seed.spec.backupRestore.s3BucketName
+      : '';
   }
 
-  private _setEndpoint(): string {
-    if (!_.isEmpty(this.data.seed.spec.backupRestore) && !_.isEmpty(this.data.seed.spec.backupRestore.s3Endpoint)) {
-      return this.data.seed.spec.backupRestore.s3Endpoint;
-    }
-    return '';
+  private get _endpoint(): string {
+    return !!this.data.seed.spec.backupRestore && this.data.seed.spec.backupRestore.s3Endpoint
+      ? this.data.seed.spec.backupRestore.s3Endpoint
+      : '';
   }
 }

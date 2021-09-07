@@ -30,7 +30,7 @@ export class DatacenterService {
   private _seedSettings$ = new Map<string, Observable<SeedSettings>>();
   private _seedSettingsRefresh$ = new Subject<void>();
   private _seedsRefresh$ = new Subject<void>();
-  private _adminSeeds$: Observable<any[]>;
+  private _adminSeeds$: Observable<AdminSeed[]>;
   private _adminSeedsRefresh$ = new Subject<void>();
   private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
 

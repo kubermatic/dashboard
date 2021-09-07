@@ -123,6 +123,14 @@ export class AdminSeed {
 
 export class AdminSeedSpec {
   backupRestore?: BackupRestoreConfiguration;
+  country?: string;
+  location?: string;
+  kubeconfig?: object;
+  datacenters?: Datacenter;
+  seed_dns_overwrite?: string;
+  proxy_settings?: object;
+  expose_strategy?: string;
+  mla: MLA;
 }
 
 export class BackupRestoreConfiguration {
