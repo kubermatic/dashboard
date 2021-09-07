@@ -42,6 +42,7 @@ enum Controls {
   AdmissionPlugins = 'admissionPlugins',
   PodNodeSelectorAdmissionPluginConfig = 'podNodeSelectorAdmissionPluginConfig',
   OPAIntegration = 'opaIntegration',
+  Konnectivity = 'konnectivity',
   MLALogging = 'loggingEnabled',
   MLAMonitoring = 'monitoringEnabled',
 }
@@ -102,6 +103,9 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       [Controls.OPAIntegration]: new FormControl(
         !!this.cluster.spec.opaIntegration && this.cluster.spec.opaIntegration.enabled
       ),
+      [Controls.Konnectivity]: new FormControl(
+        !!this.cluster.spec.clusterNetwork && this.cluster.spec.clusterNetwork.KonnectivityEnabled
+      ),
       [Controls.MLALogging]: new FormControl(!!this.cluster.spec.mla && this.cluster.spec.mla.loggingEnabled),
       [Controls.MLAMonitoring]: new FormControl(!!this.cluster.spec.mla && this.cluster.spec.mla.monitoringEnabled),
       [Controls.AdmissionPlugins]: new FormControl(this.cluster.spec.admissionPlugins),
@@ -117,6 +121,14 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       }
       if (this._settings.opaOptions.enforced) {
         this.form.get(Controls.OPAIntegration).disable();
+      }
+      this.form.updateValueAndValidity();
+
+      if (this._settings.konnectivity.enabled) {
+        this.form.get(Controls.Konnectivity).setValue(true);
+      }
+      if (this._settings.konnectivity.enforced) {
+        this.form.get(Controls.Konnectivity).disable();
       }
       this.form.updateValueAndValidity();
 
@@ -213,6 +225,8 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     switch (control) {
       case Controls.OPAIntegration:
         return !!this._settings && this._settings.opaOptions.enforced;
+      case Controls.Konnectivity:
+        return !!this._settings && this._settings.konnectivity.enforced;
       case Controls.MLALogging:
         return !!this._settings && this._settings.mlaOptions.loggingEnforced;
       case Controls.MLAMonitoring:

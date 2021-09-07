@@ -35,6 +35,7 @@ export class AdminSettings {
   enableExternalClusterImport: boolean;
   machineDeploymentVMResourceQuota: MachineDeploymentVMResourceQuota;
   opaOptions: OpaOptions;
+  konnectivity: KonnectivityOptions;
   mlaOptions: MLAOptions;
   mlaAlertmanagerPrefix: string;
   mlaGrafanaPrefix: string;
@@ -54,6 +55,11 @@ export class CleanupOptions {
 }
 
 export class OpaOptions {
+  enabled: boolean;
+  enforced: boolean;
+}
+
+export class KonnectivityOptions {
   enabled: boolean;
   enforced: boolean;
 }
@@ -146,6 +152,10 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
     enableGPU: false,
   },
   opaOptions: {
+    enforced: false,
+    enabled: false,
+  },
+  konnectivity: {
     enforced: false,
     enabled: false,
   },

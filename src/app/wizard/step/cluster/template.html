@@ -81,6 +81,12 @@ limitations under the License.
             Invalid pattern. Use CIDR notation, i.e. 192.168.1.0/24.
           </mat-error>
         </mat-form-field>
+        <mat-checkbox [formControlName]="Controls.Konnectivity">
+          Konnectivity
+          <i *ngIf="isEnforced(Controls.Konnectivity)"
+             class="km-icon-info km-pointer"
+             matTooltip="Konnectivity is enforced by your admin."></i>
+        </mat-checkbox>
       </div>
 
       <km-wizard-cluster-ssh-keys [formControl]="form.get(Controls.SSHKeys)"></km-wizard-cluster-ssh-keys>
