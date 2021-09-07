@@ -83,26 +83,30 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
   }
 
   getLinkURL(type: string): string {
-    let prefix = '';
     switch (type) {
       case Type.Alertmanager:
-        prefix = this._settings.mlaAlertmanagerPrefix;
-        break;
+        return (
+          'https://' +
+          this._settings.mlaAlertmanagerPrefix +
+          '.' +
+          this._seed +
+          '.' +
+          this._document.defaultView.location.hostname +
+          '/' +
+          this.cluster.id
+        );
       case Type.Grafana:
-        prefix = this._settings.mlaGrafanaPrefix;
-        break;
+        return (
+          'https://' +
+          this._settings.mlaGrafanaPrefix +
+          '.' +
+          this._seed +
+          '.' +
+          this._document.defaultView.location.hostname
+        );
+      default:
+        return '';
     }
-
-    return (
-      'https://' +
-      prefix +
-      '.' +
-      this._seed +
-      '.' +
-      this._document.defaultView.location.hostname +
-      '/' +
-      this.cluster.id
-    );
   }
 
   edit(): void {
