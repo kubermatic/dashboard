@@ -45,10 +45,6 @@ export const DEFAULT_ADMIN_SETTINGS_MOCK: AdminSettings = {
     enforced: false,
     enabled: false,
   },
-  konnectivity: {
-    enforced: false,
-    enabled: false,
-  },
   mlaOptions: {
     loggingEnforced: false,
     loggingEnabled: false,
