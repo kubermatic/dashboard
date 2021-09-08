@@ -80,7 +80,7 @@
 }
 
 .km-icon-done {
-  @include mixins.mask-image("/assets/images/icons/tick.svg", 12px, $color: #00a3d9);
+  @include mixins.mask-image("/assets/images/icons/check.svg#16", 12px, $color: #00a3d9);
 }
 
 .km-icon-delete {
@@ -240,7 +240,7 @@
 }
 
 .km-icon-running {
-  @include mixins.mask-image("/assets/images/icons/tick.svg", 16px, $color: #1dc67f);
+  @include mixins.mask-image("/assets/images/icons/check.svg#16", 16px, $color: #1dc67f);
 }
 
 .km-icon-failed {
