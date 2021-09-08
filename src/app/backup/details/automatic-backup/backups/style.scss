@@ -9,13 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Pipe, PipeTransform} from '@angular/core';
-import moment from 'moment';
+@use 'mixins';
+@use 'variables';
 
-@Pipe({name: 'kmRelativeTime'})
-export class RelativeTimePipe implements PipeTransform {
-  transform(value: string): string {
-    const minDate = moment.utc('0001-01-01');
-    return moment(value).isAfter(minDate) ? moment(value).fromNow() : '-';
-  }
-}
+

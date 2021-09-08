@@ -75,6 +75,7 @@ limitations under the License.
           <div fxLayoutAlign=" center"
                fxLayoutGap="8px">
             <span>{{element.name}}</span>
+            <span>{{isRestoring(element.id)}}</span>
             <span *ngIf="element.isExternal"
                   class="km-label-primary">External</span>
           </div>

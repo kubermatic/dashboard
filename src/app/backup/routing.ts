@@ -12,13 +12,13 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AutomaticBackupDetailsComponent} from '@app/backup/details/automatic-backup/component';
-import {BackupListComponent} from '@app/backup/list/component';
+import {BackupsComponent} from '@app/backup/list/component';
 import {AuthGuard, AuthzGuard} from '@core/services/auth/guard';
 
 const routes: Routes = [
   {
     path: '',
-    component: BackupListComponent,
+    component: BackupsComponent,
     canActivate: [AuthGuard, AuthzGuard],
   },
   {

@@ -9,10 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit, TrackByFunction, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatTableDataSource} from '@angular/material/table';
 import {ActivatedRoute} from '@angular/router';
 import {BackupService} from '@core/services/backup';
 import {ProjectService} from '@core/services/project';
@@ -40,31 +38,12 @@ import {filter, map, switchMap, take, takeUntil} from 'rxjs/operators';
   styleUrls: ['./style.scss'],
 })
 export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
-  @ViewChild(MatPaginator, {static: true}) private readonly _paginator: MatPaginator;
   private readonly _unsubscribe = new Subject<void>();
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
-  private _selectedProject = {} as Project;
-  private _backups = [];
-  dataSource = new MatTableDataSource<EtcdBackupConfig>();
-  isInitialized = true;
+  selectedProject = {} as Project;
+  isInitialized = false;
   backup: EtcdBackupConfig = {} as EtcdBackupConfig;
-
-  get trackByID(): TrackByFunction<EtcdBackupConfig> {
-    return (_: number, backup: EtcdBackupConfig): string => backup.name;
-  }
-
-  get columns(): string[] {
-    return ['status', 'name', 'created', 'actions'];
-  }
-
-  get isEmpty(): boolean {
-    return this._backups.length === 0;
-  }
-
-  get hasPaginator(): boolean {
-    return !this.isEmpty && this._paginator && this._backups.length > this._paginator.pageSize;
-  }
 
   get canDelete(): boolean {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Backups, Permission.Delete);
@@ -78,10 +57,6 @@ export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Backups, Permission.Create);
   }
 
-  keep(backup: EtcdBackupConfig): string | number {
-    return backup.spec?.schedule ? (backup.spec?.keep ? backup.spec?.keep : 'Default') : '-';
-  }
-
   constructor(
     private readonly _backupService: BackupService,
     private readonly _projectService: ProjectService,
@@ -90,20 +65,17 @@ export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
     private readonly _route: ActivatedRoute
   ) {}
 
+  keep(backup: EtcdBackupConfig): string | number {
+    return backup.spec?.schedule ? (backup.spec?.keep ? backup.spec?.keep : 'Default') : '-';
+  }
+
   ngOnInit(): void {
-    this.dataSource.paginator = this._paginator;
-
     this._userService.currentUser.pipe(take(1)).subscribe(user => (this._user = user));
-
-    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      this._paginator.pageSize = settings.itemsPerPage;
-      this.dataSource.paginator = this._paginator;
-    });
 
     this._projectService.selectedProject
       .pipe(
         switchMap(project => {
-          this._selectedProject = project;
+          this.selectedProject = project;
           return this._userService.getCurrentUserGroup(project.id);
         })
       )
@@ -114,7 +86,10 @@ export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
       .pipe(switchMap(project => this._backupService.list(project.id)))
       .pipe(map(backups => backups.find(backup => backup.id === this._route.snapshot.params.backupID)))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(backup => (this.backup = backup));
+      .subscribe(backup => {
+        this.backup = backup;
+        this.isInitialized = true;
+      });
   }
 
   ngOnDestroy(): void {
@@ -125,7 +100,7 @@ export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
   getStatus(backup: EtcdBackupConfig): HealthStatus {
     const condition =
       backup.status?.conditions?.find(
-        condition => condition.Type === EtcdBackupConfigConditionType.EtcdBackupConfigConditionSchedulingActive
+        condition => condition.type === EtcdBackupConfigConditionType.EtcdBackupConfigConditionSchedulingActive
       ) || ({} as EtcdBackupConfigCondition);
 
     return BackupHealthStatus.getHealthStatus(backup, condition);
@@ -145,32 +120,32 @@ export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
       .afterClosed()
       .pipe(filter(confirmed => confirmed))
       .pipe(take(1))
-      .subscribe(_ => this._backupService.delete(this._selectedProject.id, backup.spec.clusterId, backup.id));
+      .subscribe(_ => this._backupService.delete(this.selectedProject.id, backup.spec.clusterId, backup.id));
   }
 
   isEnabled(backup: EtcdBackupConfig): boolean {
     const condition =
       backup.status?.conditions?.find(
-        condition => condition.Type === EtcdBackupConfigConditionType.EtcdBackupConfigConditionSchedulingActive
+        condition => condition.type === EtcdBackupConfigConditionType.EtcdBackupConfigConditionSchedulingActive
       ) || ({} as EtcdBackupConfigCondition);
 
     return (
-      condition.Type === EtcdBackupConfigConditionType.EtcdBackupConfigConditionSchedulingActive &&
-      condition.Status === ConditionStatus.ConditionTrue
+      condition.type === EtcdBackupConfigConditionType.EtcdBackupConfigConditionSchedulingActive &&
+      condition.status === ConditionStatus.ConditionTrue
     );
   }
 
   switchBackupStatus(backup: EtcdBackupConfig): void {
     const condition = backup.status?.conditions?.find(
-      condition => condition.Type === EtcdBackupConfigConditionType.EtcdBackupConfigConditionSchedulingActive
+      condition => condition.type === EtcdBackupConfigConditionType.EtcdBackupConfigConditionSchedulingActive
     );
 
-    if (!condition || condition.Status === ConditionStatus.ConditionUnknown) {
+    if (!condition || condition.status === ConditionStatus.ConditionUnknown) {
       return;
     }
 
-    condition.Status =
-      condition.Status === ConditionStatus.ConditionTrue
+    condition.status =
+      condition.status === ConditionStatus.ConditionTrue
         ? ConditionStatus.ConditionFalse
         : ConditionStatus.ConditionTrue;
 

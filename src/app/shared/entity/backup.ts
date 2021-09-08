@@ -37,7 +37,7 @@ export class EtcdBackupConfigSpec {
 
 export class EtcdBackupConfigStatus {
   // CurrentBackups tracks the creation and deletion progress if all backups managed by the EtcdBackupConfig
-  currentBackups?: BackupStatus[];
+  lastBackups?: BackupStatus[];
   // Conditions contains conditions of the EtcdBackupConfig
   conditions?: EtcdBackupConfigCondition[];
   // If the controller was configured with a cleanupContainer, CleanupRunning keeps track of the corresponding job
@@ -62,17 +62,17 @@ export class BackupStatus {
 
 export class EtcdBackupConfigCondition {
   // Type of EtcdBackupConfig condition.
-  Type: EtcdBackupConfigConditionType;
+  type: EtcdBackupConfigConditionType;
   // Status of the condition, one of True, False, Unknown.
-  Status: ConditionStatus;
+  status: ConditionStatus;
   // Last time we got an update on a given condition.
-  LastHeartbeatTime?: Date;
+  lastHeartbeatTime?: Date;
   // Last time the condition transit from one status to another.
-  LastTransitionTime?: Date;
+  lastTransitionTime?: Date;
   // (brief) reason for the condition's last transition.
-  Reason?: string;
+  reason?: string;
   // Human readable message indicating details about last transition.
-  Message?: string;
+  message?: string;
 }
 
 export enum EtcdBackupConfigConditionType {

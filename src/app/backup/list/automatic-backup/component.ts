@@ -132,7 +132,7 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
   getStatus(backup: EtcdBackupConfig): HealthStatus {
     const condition =
       backup.status.conditions?.find(
-        condition => condition.Type === EtcdBackupConfigConditionType.EtcdBackupConfigConditionSchedulingActive
+        condition => condition.type === EtcdBackupConfigConditionType.EtcdBackupConfigConditionSchedulingActive
       ) || ({} as EtcdBackupConfigCondition);
 
     return BackupHealthStatus.getHealthStatus(backup, condition);
@@ -177,26 +177,26 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
   isEnabled(backup: EtcdBackupConfig): boolean {
     const condition =
       backup.status.conditions?.find(
-        condition => condition.Type === EtcdBackupConfigConditionType.EtcdBackupConfigConditionSchedulingActive
+        condition => condition.type === EtcdBackupConfigConditionType.EtcdBackupConfigConditionSchedulingActive
       ) || ({} as EtcdBackupConfigCondition);
 
     return (
-      condition.Type === EtcdBackupConfigConditionType.EtcdBackupConfigConditionSchedulingActive &&
-      condition.Status === ConditionStatus.ConditionTrue
+      condition.type === EtcdBackupConfigConditionType.EtcdBackupConfigConditionSchedulingActive &&
+      condition.status === ConditionStatus.ConditionTrue
     );
   }
 
   switchBackupStatus(backup: EtcdBackupConfig): void {
     const condition = backup.status.conditions?.find(
-      condition => condition.Type === EtcdBackupConfigConditionType.EtcdBackupConfigConditionSchedulingActive
+      condition => condition.type === EtcdBackupConfigConditionType.EtcdBackupConfigConditionSchedulingActive
     );
 
-    if (!condition || condition.Status === ConditionStatus.ConditionUnknown) {
+    if (!condition || condition.status === ConditionStatus.ConditionUnknown) {
       return;
     }
 
-    condition.Status =
-      condition.Status === ConditionStatus.ConditionTrue
+    condition.status =
+      condition.status === ConditionStatus.ConditionTrue
         ? ConditionStatus.ConditionFalse
         : ConditionStatus.ConditionTrue;
 

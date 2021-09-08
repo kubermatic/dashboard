@@ -12,8 +12,8 @@
 import {Component} from '@angular/core';
 
 @Component({
-  selector: 'km-backup-list',
+  selector: 'km-backups',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class BackupListComponent {}
+export class BackupsComponent {}

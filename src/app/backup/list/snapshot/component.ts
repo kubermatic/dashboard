@@ -148,7 +148,8 @@ export class SnapshotListComponent implements OnInit, OnDestroy {
   restore(backup: EtcdBackupConfig): void {
     const config: MatDialogConfig = {
       data: {
-        snapshot: backup,
+        backupName: backup.status.lastBackups[0].backupName,
+        clusterID: backup.spec.clusterId,
         projectID: this._selectedProject.id,
       } as RestoreSnapshotDialogConfig,
     };

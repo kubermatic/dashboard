@@ -17,9 +17,9 @@ export class BackupHealthStatus extends HealthStatus {
   static getHealthStatus(backup: EtcdBackupConfig, condition: EtcdBackupConfigCondition): BackupHealthStatus {
     if (backup.deletionTimestamp) {
       return new BackupHealthStatus(HealthStatusMessage.Deleting, HealthStatusColor.Red);
-    } else if (condition.Status === 'True') {
+    } else if (condition.status === 'True') {
       return new BackupHealthStatus(HealthStatusMessage.Running, HealthStatusColor.Green);
-    } else if (condition.Status === 'False') {
+    } else if (condition.status === 'False') {
       return new BackupHealthStatus(HealthStatusMessage.Disabled, HealthStatusColor.Unknown);
     }
 

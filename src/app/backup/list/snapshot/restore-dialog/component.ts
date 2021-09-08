@@ -13,11 +13,12 @@ import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BackupService} from '@core/services/backup';
 import {NotificationService} from '@core/services/notification';
-import {EtcdBackupConfig, EtcdRestore, EtcdRestoreSpec} from '@shared/entity/backup';
+import {EtcdRestore, EtcdRestoreSpec} from '@shared/entity/backup';
 import {take} from 'rxjs/operators';
 
 export interface RestoreSnapshotDialogConfig {
-  snapshot: EtcdBackupConfig;
+  backupName: string;
+  clusterID: string;
   projectID: string;
 }
 
@@ -27,23 +28,19 @@ export interface RestoreSnapshotDialogConfig {
   styleUrls: ['style.scss'],
 })
 export class RestoreSnapshotDialogComponent {
-  get snapshot(): EtcdBackupConfig {
-    return this._config.snapshot;
-  }
-
   constructor(
     private readonly _dialogRef: MatDialogRef<RestoreSnapshotDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) private readonly _config: RestoreSnapshotDialogConfig,
+    @Inject(MAT_DIALOG_DATA) readonly config: RestoreSnapshotDialogConfig,
     private readonly _backupService: BackupService,
     private readonly _notificationService: NotificationService
   ) {}
 
   restore(): void {
     this._backupService
-      .restore(this._config.projectID, this.snapshot.spec.clusterId, this._toEtcdRestore())
+      .restore(this.config.projectID, this.config.clusterID, this._toEtcdRestore())
       .pipe(take(1))
       .subscribe(_ => {
-        this._notificationService.success(`Successfully restored snapshot ${this._config.snapshot.name}`);
+        this._notificationService.success(`Successfully restored backup ${this.config.backupName}`);
         this._dialogRef.close(true);
       });
   }
@@ -51,8 +48,8 @@ export class RestoreSnapshotDialogComponent {
   private _toEtcdRestore(): EtcdRestore {
     return {
       spec: {
-        backupName: this.snapshot.name,
-        clusterId: this.snapshot.spec.clusterId,
+        backupName: this.config.backupName,
+        clusterId: this.config.clusterID,
       } as EtcdRestoreSpec,
     } as EtcdRestore;
   }
