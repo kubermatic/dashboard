@@ -1,0 +1,69 @@
+<km-dialog-title>Edit Credentials</km-dialog-title>
+<mat-dialog-content>
+  <form [formGroup]="form"
+        fxLayout="column"
+        fxLayoutGap="10px">
+    <mat-form-field fxFlex>
+      <mat-label>S3 Access Key</mat-label>
+      <input required
+             matInput
+             [formControlName]="controls.AccessKey"
+             type="text"
+             autocomplete="off"
+             cdkFocusInitial>
+      <mat-error *ngIf="form.get(controls.AccessKey).hasError('required')">
+        Access Key is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field fxFlex>
+      <mat-label>S3 Access Secret</mat-label>
+      <input required
+             matInput
+             [formControlName]="controls.AccessSecret"
+             type="password"
+             autocomplete="off">
+      <mat-error *ngIf="form.get(controls.AccessSecret).hasError('required')">
+        Access Secret is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field fxFlex>
+      <mat-label>S3 Bucket Name</mat-label>
+      <input required
+             matInput
+             [formControlName]="controls.BucketName"
+             type="text"
+             autocomplete="off">
+      <mat-error *ngIf="form.get(controls.BucketName).hasError('required')">
+        Bucket Name is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field fxFlex>
+      <mat-label>S3 Endpoint</mat-label>
+      <input required
+             matInput
+             [formControlName]="controls.Endpoint"
+             type="text"
+             autocomplete="off">
+      <mat-error *ngIf="form.get(controls.Endpoint).hasError('required')">
+        Endpoint is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <mat-spinner *ngIf="saving"
+               [diameter]="25"
+               @pushToSide
+               color="accent"
+               class="spinner"></mat-spinner>
+
+  <button mat-flat-button
+          (click)="save()"
+          [disabled]="form.invalid || saving">
+    <i class="km-icon-mask km-icon-edit"></i>
+    <span>Edit Credentials</span>
+  </button>
+</mat-dialog-actions>

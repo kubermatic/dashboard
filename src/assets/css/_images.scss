@@ -35,6 +35,10 @@
   @include mixins.mask-image("/assets/images/icons/user.svg", 24px);
 }
 
+.km-icon-metering {
+  @include mixins.mask-image("/assets/images/icons/metering.svg", 24px);
+}
+
 .km-icon-bell {
   @include mixins.mask-image("/assets/images/icons/bell.svg", 24px);
 }

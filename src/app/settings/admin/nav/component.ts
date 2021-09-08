@@ -11,6 +11,7 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
+import {isEnterpriseEdition} from '@app/dynamic/common';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {environment} from '@environments/environment';
@@ -32,6 +33,10 @@ export class AdminSidenavComponent implements OnInit, OnDestroy {
   screenWidth = 0;
 
   private _unsubscribe = new Subject<void>();
+
+  get isEnterpriseEdition(): boolean {
+    return isEnterpriseEdition();
+  }
 
   constructor(
     public dialog: MatDialog,

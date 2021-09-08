@@ -9,16 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {AdminsComponent} from './component';
-
-const routes: Routes = [
-  {
-    path: '',
-    component: AdminsComponent,
-  },
-];
-
-@NgModule({imports: [RouterModule.forChild(routes)]})
-export class AdministratorsRoutingModule {}
+export class Report {
+  name: string;
+  size: number;
+  lastModified: Date;
+}

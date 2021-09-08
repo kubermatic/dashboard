@@ -72,4 +72,15 @@ limitations under the License.
       <span>Administrators</span>
     </a>
   </div>
+
+  <div *ngIf="isEnterpriseEdition"
+       class="menu-item">
+    <a id="km-nav-item-metering"
+       routerLink="metering"
+       routerLinkActive="active"
+       fxLayoutAlign=" center">
+      <i class="km-icon-metering"></i>
+      <span>Metering</span>
+    </a>
+  </div>
 </div>

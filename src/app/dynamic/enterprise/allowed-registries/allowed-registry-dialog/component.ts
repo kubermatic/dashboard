@@ -1,12 +1,11 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {FormControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
 import {getIconClassForButton} from '@shared/utils/common-utils';
-import {AllowedRegistry} from '../entity';
-import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {take} from 'rxjs/operators';
+import {AllowedRegistry} from '../entity';
 import {AllowedRegistriesService} from '../service';
 
 export interface AllowedRegistryDialogConfig {

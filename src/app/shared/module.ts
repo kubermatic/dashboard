@@ -10,7 +10,7 @@
 // limitations under the License.
 
 import {ScrollingModule} from '@angular/cdk/scrolling';
-import {CommonModule} from '@angular/common';
+import {CommonModule, DecimalPipe} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -46,11 +46,18 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {NotificationComponent} from '@core/components/notification/component';
+import {AutocompleteComponent} from '@shared/components/autocomplete/component';
+import {CIDRFormComponent} from '@shared/components/cidr-form/component';
+import {ClusterFromTemplateDialogComponent} from '@shared/components/cluster-from-template/component';
+import {ClusterSummaryComponent} from '@shared/components/cluster-summary/component';
 import {EventCardComponent} from '@shared/components/event-card/component';
+import {SaveClusterTemplateDialogComponent} from '@shared/components/save-cluster-template/component';
+import {SelectClusterTemplateDialogComponent} from '@shared/components/select-cluster-template/component';
 import {TabCardComponent} from '@shared/components/tab-card/component';
 import {DynamicTabComponent} from '@shared/components/tab-card/dynamic-tab/component';
 import {TabComponent} from '@shared/components/tab-card/tab/component';
 import {LinkLocationPipe} from '@shared/pipes/linklocation';
+import {SizeFormatterPipe} from '@shared/pipes/size';
 import {ClipboardModule} from 'ngx-clipboard';
 import {FilterPipeModule} from 'ngx-filter-pipe';
 import {MonacoEditorModule} from 'ngx-monaco-editor';
@@ -85,12 +92,6 @@ import {TaintFormComponent} from './components/taint-form/component';
 import {TaintsComponent} from './components/taints/component';
 import {AutofocusDirective} from './directives/autofocus/directive';
 import {RelativeTimePipe} from './pipes/relativetime';
-import {AutocompleteComponent} from '@shared/components/autocomplete/component';
-import {CIDRFormComponent} from '@shared/components/cidr-form/component';
-import {ClusterSummaryComponent} from '@shared/components/cluster-summary/component';
-import {ClusterFromTemplateDialogComponent} from '@shared/components/cluster-from-template/component';
-import {SaveClusterTemplateDialogComponent} from '@shared/components/save-cluster-template/component';
-import {SelectClusterTemplateDialogComponent} from '@shared/components/select-cluster-template/component';
 
 const modules: any[] = [
   CommonModule,
@@ -178,6 +179,7 @@ const components: any[] = [
   ClusterFromTemplateDialogComponent,
   SaveClusterTemplateDialogComponent,
   SelectClusterTemplateDialogComponent,
+  SizeFormatterPipe,
 ];
 
 const directives: any[] = [AutofocusDirective, OptionDirective];
@@ -185,6 +187,7 @@ const directives: any[] = [AutofocusDirective, OptionDirective];
 @NgModule({
   imports: [...modules],
   declarations: [...components, ...directives],
+  providers: [DecimalPipe],
   exports: [...modules, ...components, ...directives],
 })
 export class SharedModule {}

@@ -10,15 +10,7 @@
 // limitations under the License.
 
 import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {AdminsComponent} from './component';
+import {RouterModule} from '@angular/router';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: AdminsComponent,
-  },
-];
-
-@NgModule({imports: [RouterModule.forChild(routes)]})
-export class AdministratorsRoutingModule {}
+@NgModule({imports: [RouterModule.forChild([])]})
+export class MeteringModule {}
