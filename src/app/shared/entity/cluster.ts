@@ -218,6 +218,7 @@ export class ClusterNetwork {
   pods?: NetworkRanges;
   proxyMode?: ProxyMode;
   services?: NetworkRanges;
+  konnectivityEnabled?: boolean;
 }
 
 export class NetworkRanges {
@@ -305,6 +306,7 @@ export class ClusterSpecPatch {
   machineNetworks?: MachineNetwork[];
   mla?: MLASettings;
   containerRuntime?: ContainerRuntime;
+  clusterNetwork?: ClusterNetwork;
 }
 
 export class CloudSpecPatch {
