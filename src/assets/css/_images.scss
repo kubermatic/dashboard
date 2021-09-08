@@ -35,6 +35,10 @@
   @include mixins.mask-image("/assets/images/icons/user.svg", 24px);
 }
 
+.km-icon-metering {
+  @include mixins.mask-image("/assets/images/icons/metering.svg", 24px);
+}
+
 .km-icon-bell {
   @include mixins.mask-image("/assets/images/icons/bell.svg", 24px);
 }
@@ -49,6 +53,18 @@
 
 .km-icon-clear {
   @include mixins.mask-image("/assets/images/icons/clear.svg", 24px);
+}
+
+.km-icon-check {
+  @include mixins.mask-image("/assets/images/icons/check.svg#16", 16px);
+
+  &.i-12 {
+    @include mixins.mask-image("/assets/images/icons/check.svg#16", 12px);
+  }
+
+  &.i-24 {
+    @include mixins.mask-image("/assets/images/icons/check.svg#24", 24px);
+  }
 }
 
 .km-icon-collapse-menu {
@@ -68,7 +84,11 @@
 }
 
 .km-icon-delete {
-  @include mixins.mask-image("/assets/images/icons/trash.svg", 18px);
+  @include mixins.mask-image("/assets/images/icons/trash.svg#18", 18px);
+
+  &.i-24 {
+    @include mixins.mask-image("/assets/images/icons/trash.svg#24", 24px);
+  }
 }
 
 .km-icon-edit {
@@ -80,7 +100,7 @@
 }
 
 .km-icon-connect {
-  @include mixins.mask-image("/assets/images/icons/connect.svg", 18px);
+  @include mixins.mask-image("/assets/images/icons/connect.svg", 24px);
 }
 
 .km-icon-disconnect {
@@ -92,7 +112,7 @@
 }
 
 .km-icon-cancel {
-  @include mixins.mask-image("/assets/images/icons/x.svg", 18px);
+  @include mixins.mask-image("/assets/images/icons/x.svg", 24px);
 }
 
 .km-icon-regenerate {
@@ -117,15 +137,6 @@
   margin: 4px 14px 4px 0;
 }
 
-.km-icon-tick {
-  @include mixins.background-image("/assets/images/icons/tick.svg", 16px);
-
-  background-color: #1dc67f;
-  background-size: 12px;
-  border-radius: 50%;
-  margin: 4px 14px 4px 0;
-}
-
 .km-icon-power-on {
   @include mixins.mask-image("/assets/images/icons/power.svg", 18px, $color: #1dc67f);
 }
@@ -135,11 +146,11 @@
 }
 
 .km-icon-download {
-  @include mixins.mask-image("/assets/images/icons/download.svg", 20px, $color: #fff);
+  @include mixins.mask-image("/assets/images/icons/download.svg", 24px, $color: #fff);
 }
 
 .km-icon-share {
-  @include mixins.mask-image("/assets/images/icons/share.svg", 20px);
+  @include mixins.mask-image("/assets/images/icons/share.svg", 24px);
 }
 
 .km-icon-copy {
@@ -215,11 +226,11 @@
 }
 
 .km-icon-back {
-  @include mixins.mask-image("/assets/images/icons/back.svg", 18px);
+  @include mixins.mask-image("/assets/images/icons/back.svg", 24px);
 }
 
 .km-icon-next {
-  @include mixins.mask-image("/assets/images/icons/back.svg", 18px);
+  @include mixins.mask-image("/assets/images/icons/back.svg", 24px);
 
   transform: rotate(180deg);
 }
@@ -229,7 +240,7 @@
 }
 
 .km-icon-save {
-  @include mixins.mask-image("/assets/images/icons/save.svg", 18px);
+  @include mixins.mask-image("/assets/images/icons/save.svg", 24px);
 }
 
 .km-icon-reset {
@@ -404,4 +415,12 @@
 
 .km-os-image-flatcar {
   @include mixins.background-image("/assets/images/os/flatcar.svg", 24px);
+}
+
+@for $i from 1 through 50 {
+  $w: 2 * $i;
+
+  .w-#{$w} {
+    @include mixins.size(#{$w}#{'px'}, $force: true);
+  }
 }

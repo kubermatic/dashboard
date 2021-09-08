@@ -96,7 +96,7 @@ describe('ConstraintDialog', () => {
     });
 
     it('should have correct button text: add', () => {
-      expect(document.body.querySelector('#km-constraint-dialog-btn').textContent).toBe(' Add ');
+      expect(document.body.querySelector('#km-constraint-dialog-btn').textContent).toContain('Add');
     });
 
     it('should call createConstraint()', () => {
@@ -135,7 +135,7 @@ describe('ConstraintDialog', () => {
     });
 
     it('should have correct button text: edit', () => {
-      expect(document.body.querySelector('#km-constraint-dialog-btn').textContent).toContain(' Edit ');
+      expect(document.body.querySelector('#km-constraint-dialog-btn').textContent).toContain('Edit');
     });
 
     it('should call patchConstraint()', () => {

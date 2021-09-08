@@ -12,20 +12,17 @@
 @use 'variables';
 
 .header {
-  min-height: 75px;
   padding: 0 30px;
-}
-
-.mat-card-title {
-  .km-icon-add {
-    margin-left: 0;
-    margin-right: 12px;
-  }
 }
 
 #km-add-constraint-btn {
   height: 50px;
   margin: 2px 0;
+
+  .km-icon-add {
+    margin-left: 0;
+    margin-right: 12px;
+  }
 }
 
 .tooltip {
@@ -33,7 +30,7 @@
 }
 
 .filters {
-  margin-top: -16px;
+  margin-top: -7px;
 
   .filter-title {
     margin: -20px 8px 0 0;
@@ -44,7 +41,49 @@
   }
 }
 
-.provider-logo {
-  margin: 10px 0;
-  min-width: 112px;
+tr {
+  vertical-align: baseline;
+}
+
+.provider-wrapper {
+  vertical-align: text-top;
+
+  .provider-logo {
+    background-position: left;
+    display: inline-block;
+    margin-right: 10px;
+    max-width: 95px;
+
+    &.aws {
+      max-width: 40px;
+      min-width: 40px;
+    }
+
+    &.anexia,
+    &.packet {
+      max-width: 60px;
+      min-width: 60px;
+    }
+
+    &.azure {
+      max-width: 80px;
+    }
+
+    &.bringyourown {
+      max-width: 85px;
+    }
+
+    &.vsphere {
+      max-width: 75px;
+    }
+  }
+}
+
+.labels-wrapper {
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+td button {
+  top: 6px;
 }

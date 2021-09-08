@@ -84,7 +84,7 @@ limitations under the License.
                     matTooltip="Regenerate Service Account Token"
                     (click)="regenerateToken(element)"
                     [disabled]="!isEnabled('edit')">
-              <i class="km-icon-regenerate"></i>
+              <i class="km-icon-mask km-icon-regenerate"></i>
             </button>
 
             <button mat-icon-button
@@ -92,7 +92,7 @@ limitations under the License.
                     matTooltip="Edit Service Account Token"
                     (click)="editToken(element)"
                     [disabled]="!isEnabled('edit')">
-              <i class="km-icon-edit"></i>
+              <i class="km-icon-mask km-icon-edit"></i>
             </button>
 
             <button mat-icon-button
@@ -100,7 +100,7 @@ limitations under the License.
                     matTooltip="Delete Service Account Token"
                     (click)="deleteToken(element)"
                     [disabled]="!isEnabled('delete')">
-              <i class="km-icon-delete"></i>
+              <i class="km-icon-mask km-icon-delete"></i>
             </button>
           </ng-container>
         </ng-container>

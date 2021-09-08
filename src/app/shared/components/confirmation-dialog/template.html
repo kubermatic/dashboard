@@ -39,7 +39,8 @@ limitations under the License.
             [mat-dialog-close]="true"
             id="km-confirmation-dialog-confirm-btn"
             [disabled]="!inputNameMatches()">
-      {{data.confirmLabel}}
+      <i [ngClass]="getIconClass()"></i>
+      <span>{{data.confirmLabel}}</span>
     </button>
   </mat-dialog-actions>
 </div>

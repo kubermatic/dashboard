@@ -106,7 +106,7 @@ describe('SSHKeyComponent', () => {
     const deleteButton = document.body.querySelector('#km-confirmation-dialog-confirm-btn') as HTMLInputElement;
 
     expect(dialogTitle.textContent).toBe('Delete SSH Key');
-    expect(deleteButton.textContent).toBe(' Delete ');
+    expect(deleteButton.textContent).toContain('Delete');
 
     deleteButton.click();
 

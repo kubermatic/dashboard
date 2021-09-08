@@ -199,6 +199,13 @@
       background-color: #fff;
     }
 
+    &:disabled {
+      .km-icon-mask {
+        background-color: map-get($colors, text);
+        opacity: .3;
+      }
+    }
+
     &.mat-alternative:not([disabled]) {
       background-color: map-get($colors, secondary);
 

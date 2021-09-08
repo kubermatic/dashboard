@@ -110,6 +110,16 @@ export class VSphereDatacenterSpec {
 
 export class SeedSettings {
   mla: MLA;
+  metering: MeteringConfiguration;
+}
+
+export class MeteringConfiguration {
+  enabled: boolean;
+  // StorageClassName is the name of the storage class that the metering tool uses to save processed files before
+  // exporting it to s3 bucket. Default value is kubermatic-fast.
+  storageClassName: string;
+  // StorageSize is the size of the storage class. Default value is 100Gi.
+  storageSize: string;
 }
 
 export class MLA {
@@ -136,6 +146,13 @@ export class AdminSeedSpec {
 export class BackupRestoreConfiguration {
   s3BucketName?: string;
   s3Endpoint?: string;
+}
+
+export class MeteringCredentials {
+  bucketName: string;
+  accessKey: string;
+  secretKey: string;
+  endpoint: string;
 }
 
 export function getDatacenterProvider(datacenter: Datacenter): NodeProvider {

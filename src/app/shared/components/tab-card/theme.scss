@@ -14,6 +14,8 @@
 @mixin theme-tab-card-component($colors) {
   .km-tab-card {
     .mat-tab-header {
+      border-bottom: 1px solid map-get($colors, tab-divider);
+
       .mat-ink-bar {
         background-color: map-get($colors, primary);
       }

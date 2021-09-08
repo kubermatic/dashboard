@@ -9,7 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, Inject} from '@angular/core';
+import {DOCUMENT} from '@angular/common';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
@@ -24,12 +25,18 @@ import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {AlertmanagerConfigDialog} from './alertmanager-config-dialog/component';
 
+export enum Type {
+  Alertmanager = 'Alertmanager',
+  Grafana = 'Grafana',
+}
+
 @Component({
   selector: 'km-alertmanager-config',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
 export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
+  readonly Type = Type;
   @Input() cluster: Cluster;
   @Input() projectID: string;
   @Input() isClusterRunning: boolean;
@@ -44,7 +51,8 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
     private readonly _mlaService: MLAService,
     private readonly _notificationService: NotificationService,
     private readonly _settingsService: SettingsService,
-    private readonly _datacenterService: DatacenterService
+    private readonly _datacenterService: DatacenterService,
+    @Inject(DOCUMENT) private readonly _document: Document
   ) {}
 
   ngOnInit(): void {
@@ -63,25 +71,42 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  isLoadingData(): boolean {
-    return _.isEmpty(this.alertmanagerConfig) && !this.isClusterRunning;
+  shouldDisplayLink(type: string): boolean {
+    switch (type) {
+      case Type.Alertmanager:
+        return !!this._settings && !!this._settings.mlaAlertmanagerPrefix;
+      case Type.Grafana:
+        return !!this._settings && !!this._settings.mlaGrafanaPrefix;
+      default:
+        return false;
+    }
   }
 
-  shouldDisplayAlertmanagerUILink(): boolean {
-    return !!this._settings && !!this._settings.mlaAlertmanagerPrefix;
-  }
-
-  getAlertmanagerURL(): string {
-    return (
-      'https://' +
-      this._settings.mlaAlertmanagerPrefix +
-      '.' +
-      this._seed +
-      '.' +
-      window.location.hostname +
-      '/' +
-      this.cluster.id
-    );
+  getLinkURL(type: string): string {
+    switch (type) {
+      case Type.Alertmanager:
+        return (
+          'https://' +
+          this._settings.mlaAlertmanagerPrefix +
+          '.' +
+          this._seed +
+          '.' +
+          this._document.defaultView.location.hostname +
+          '/' +
+          this.cluster.id
+        );
+      case Type.Grafana:
+        return (
+          'https://' +
+          this._settings.mlaGrafanaPrefix +
+          '.' +
+          this._seed +
+          '.' +
+          this._document.defaultView.location.hostname
+        );
+      default:
+        return '';
+    }
   }
 
   edit(): void {

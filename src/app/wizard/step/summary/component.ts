@@ -28,8 +28,8 @@ import {MachineDeployment} from '@shared/entity/machine-deployment';
 export class SummaryStepComponent implements OnInit, OnDestroy {
   datacenter: Datacenter;
   seedSettings: SeedSettings;
-  sshKeys: SSHKey[] = [];
   clusterAdmissionPlugins: string[] = [];
+  private _sshKeys: SSHKey[] = [];
   private _unsubscribe = new Subject<void>();
 
   constructor(
@@ -39,7 +39,7 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this._clusterSpecService.sshKeyChanges.pipe(takeUntil(this._unsubscribe)).subscribe(keys => (this.sshKeys = keys));
+    this._clusterSpecService.sshKeyChanges.pipe(takeUntil(this._unsubscribe)).subscribe(keys => (this._sshKeys = keys));
 
     this._clusterSpecService.datacenterChanges
       .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
@@ -68,5 +68,9 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
         dynamicConfig: data.dynamicConfig,
       },
     };
+  }
+
+  get sshKeys(): string[] {
+    return this._sshKeys.map(key => key.name);
   }
 }

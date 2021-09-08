@@ -149,7 +149,7 @@ limitations under the License.
           <button mat-icon-button
                   (click)="updatePresetStatus(element.name, !element.enabled)"
                   fxLayoutAlign="center center">
-            <i [ngClass]="element.enabled ? 'km-icon-show' : 'km-icon-hide'"></i>
+            <i [ngClass]="element.enabled ? 'km-icon-mask km-icon-show' : 'km-icon-mask km-icon-hide'"></i>
           </button>
         </td>
       </ng-container>

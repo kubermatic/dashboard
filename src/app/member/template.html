@@ -81,7 +81,7 @@ limitations under the License.
                           [attr.id]="'km-edit-member-' + element?.email"
                           (click)="editMember(element)"
                           [disabled]="!isEditEnabled(element)">
-                    <i class="km-icon-edit"></i>
+                    <i class="km-icon-mask km-icon-edit"></i>
                   </button>
                 </div>
 
@@ -90,7 +90,7 @@ limitations under the License.
                           [attr.id]="'km-delete-member-' + element?.email"
                           (click)="deleteMember(element)"
                           [disabled]="!isDeleteEnabled(element)">
-                    <i class="km-icon-delete"></i>
+                    <i class="km-icon-mask km-icon-delete"></i>
                   </button>
                 </div>
               </ng-container>

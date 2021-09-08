@@ -147,9 +147,9 @@ limitations under the License.
       <div fxLayout="row"
            fxLayoutAlign=" center"
            fxLayoutGap="10px"
-           *ngIf="sshKeys.length">
+           *ngIf="sshKeys && sshKeys.length">
         <i class="km-icon-key"></i>
-        <span>{{sshKeyNames}}</span>
+        <span>{{sshKeys.join(', ')}}</span>
       </div>
     </div>
   </div>

@@ -146,7 +146,7 @@ limitations under the License.
                         matTooltip="Restart Machine Deployment"
                         (click)="showRestartDialog(element); $event.stopPropagation()"
                         [disabled]="!isEditEnabled()">
-                  <i class="km-icon-regenerate"></i>
+                  <i class="km-icon-mask km-icon-regenerate"></i>
                 </button>
 
                 <button mat-icon-button
@@ -154,7 +154,7 @@ limitations under the License.
                         matTooltip="Edit Machine Deployment"
                         (click)="showEditDialog(element); $event.stopPropagation()"
                         [disabled]="!isEditEnabled()">
-                  <i class="km-icon-edit"></i>
+                  <i class="km-icon-mask km-icon-edit"></i>
                 </button>
 
                 <button mat-icon-button
@@ -162,7 +162,7 @@ limitations under the License.
                         matTooltip="Delete Machine Deployment"
                         (click)="showDeleteDialog(element); $event.stopPropagation()"
                         [disabled]="!isDeleteEnabled()">
-                  <i class="km-icon-delete"
+                  <i class="km-icon-mask km-icon-delete"
                      aria-hidden="true"></i>
                 </button>
               </ng-container>

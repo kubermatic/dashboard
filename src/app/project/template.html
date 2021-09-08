@@ -153,14 +153,14 @@ limitations under the License.
                           matTooltip="Edit Project"
                           (click)="editProject(element, $event)"
                           [disabled]="!isEditEnabled(element)">
-                    <i class="km-icon-edit"></i>
+                    <i class="km-icon-mask km-icon-edit"></i>
                   </button>
                   <button mat-icon-button
                           [attr.id]="'km-delete-project-' + element.name"
                           matTooltip="Delete Project"
                           (click)="deleteProject(element, $event)"
                           [disabled]="!isDeleteEnabled(element)">
-                    <i class="km-icon-delete"></i>
+                    <i class="km-icon-mask km-icon-delete"></i>
                   </button>
                 </ng-container>
               </ng-container>
@@ -231,14 +231,14 @@ limitations under the License.
                   matTooltip="Edit Project"
                   (click)="editProject(project, $event)"
                   [disabled]="!isEditEnabled(project)">
-            <i class="km-icon-edit"></i>
+            <i class="km-icon-mask km-icon-edit"></i>
           </button>
           <button mat-icon-button
                   [attr.id]="'km-delete-project-' + project.name"
                   matTooltip="Delete Project"
                   (click)="deleteProject(project, $event)"
                   [disabled]="!isDeleteEnabled(project)">
-            <i class="km-icon-delete"></i>
+            <i class="km-icon-mask km-icon-delete"></i>
           </button>
         </div>
       </mat-card-header>

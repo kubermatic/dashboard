@@ -38,6 +38,7 @@ limitations under the License.
   </form>
   <km-cluster-summary [cluster]="data.template.cluster"
                       [machineDeployment]="data.template.nodeDeployment"
+                      [sshKeys]="sshKeys"
                       [datacenter]="datacenter"
                       [seedSettings]="seedSettings"
                       [flipLayout]="true"
@@ -53,7 +54,7 @@ limitations under the License.
     <hr fxFlex />
     <span>{{showDetails ? 'Hide' : 'Show'}} cluster template details</span>
     <i class="km-muted-bg"
-       [ngClass]="showDetails ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
+       [ngClass]="showDetails ? 'km-icon-mask km-icon-arrow-up' : 'km-icon-mask km-icon-arrow-down'"></i>
     <hr fxFlex />
   </div>
   <button mat-flat-button

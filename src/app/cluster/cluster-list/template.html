@@ -168,14 +168,14 @@ limitations under the License.
                         matTooltip="Delete Cluster"
                         (click)="deleteClusterDialog(element, $event)"
                         [disabled]="!canDelete()">
-                  <i class="km-icon-delete"></i>
+                  <i class="km-icon-mask km-icon-delete"></i>
                 </button>
                 <button *ngIf="element.isExternal"
                         mat-icon-button
                         matTooltip="Disconnect Cluster"
                         (click)="disconnectClusterDialog(element, $event)"
                         [disabled]="!canDelete()">
-                  <i class="km-icon-disconnect"></i>
+                  <i class="km-icon-mask km-icon-disconnect"></i>
                 </button>
               </ng-container>
             </ng-container>

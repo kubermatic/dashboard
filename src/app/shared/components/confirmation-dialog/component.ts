@@ -11,6 +11,7 @@
 
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {getIconClassForButton} from '@shared/utils/common-utils';
 
 export interface ConfirmationDialogConfig {
   title: string;
@@ -52,5 +53,9 @@ export class ConfirmationDialogComponent {
       return this.inputName === this.data.compareName;
     }
     return true;
+  }
+
+  getIconClass(): string {
+    return getIconClassForButton(this.data.confirmLabel);
   }
 }

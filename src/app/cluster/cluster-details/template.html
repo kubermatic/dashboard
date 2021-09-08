@@ -21,7 +21,7 @@ limitations under the License.
             fxLayoutAlign="center center"
             (click)="deleteClusterDialog()"
             [disabled]="!isDeleteEnabled()">
-      <i class="km-icon-mask km-icon-delete"></i>
+      <i class="km-icon-mask km-icon-delete i-24"></i>
       <span>Delete</span>
     </button>
     <div fxFlex></div>
@@ -331,20 +331,13 @@ limitations under the License.
                             [projectID]="projectID"
                             [isClusterRunning]="isClusterRunning"></km-gatekeeper-config>
     </km-tab>
-    <km-tab label="User Cluster Alertmanager"
+    <km-tab label="Monitoring, Logging & Alerting"
             *ngIf="isMLAEnabled()">
-      <km-alertmanager-config [alertmanagerConfig]="alertmanagerConfig"
-                              [cluster]="cluster"
-                              [projectID]="projectID"
-                              [isClusterRunning]="isClusterRunning"></km-alertmanager-config>
-    </km-tab>
-    <km-tab label="User Cluster Recording & Alerting Rules"
-            *ngIf="isMLAEnabled()">
-      <km-rule-groups [ruleGroups]="ruleGroups"
-                      [cluster]="cluster"
-                      [projectID]="projectID"
-                      [isClusterRunning]="isClusterRunning">
-      </km-rule-groups>
+      <km-mla [alertmanagerConfig]="alertmanagerConfig"
+              [ruleGroups]="ruleGroups"
+              [cluster]="cluster"
+              [projectID]="projectID"
+              [isClusterRunning]="isClusterRunning"></km-mla>
     </km-tab>
   </km-tab-card>
 </div>

@@ -143,6 +143,7 @@ limitations under the License.
           (click)="save()"
           id="km-add-dc-save-btn"
           [disabled]="!form.valid">
-    {{data.confirmLabel}}
+    <i [ngClass]="getIconClass()"></i>
+    <span>{{data.confirmLabel}} Datacenter</span>
   </button>
 </mat-dialog-actions>

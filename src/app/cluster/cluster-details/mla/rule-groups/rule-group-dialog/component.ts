@@ -15,6 +15,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MLAService} from '@core/services/mla';
 import {NotificationService} from '@core/services/notification';
 import {RuleGroup, RuleGroupType} from '@shared/entity/mla';
+import {getIconClassForButton} from '@shared/utils/common-utils';
 import {MLAUtils} from '@shared/utils/mla-utils';
 import * as _ from 'lodash';
 import {encode, decode} from 'js-base64';
@@ -78,6 +79,10 @@ export class RuleGroupDialog implements OnInit, OnDestroy {
 
   isValid(): boolean {
     return !_.isEmpty(this.ruleGroupData) && this.form.valid;
+  }
+
+  getIconClass(): string {
+    return getIconClassForButton(this.data.confirmLabel);
   }
 
   save(): void {

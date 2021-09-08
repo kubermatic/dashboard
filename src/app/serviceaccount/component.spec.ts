@@ -96,7 +96,7 @@ describe('ServiceAccountComponent', () => {
     const deleteButton = document.body.querySelector('#km-confirmation-dialog-confirm-btn') as HTMLInputElement;
 
     expect(dialogTitle.textContent).toBe('Delete Service Account');
-    expect(deleteButton.textContent).toBe(' Delete ');
+    expect(deleteButton.textContent).toContain('Delete');
 
     deleteButton.click();
 

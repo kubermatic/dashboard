@@ -10,17 +10,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<km-dialog-title>{{data.title}}</km-dialog-title>
-<mat-dialog-content>
-  <div class="spec">Spec</div>
-  <km-editor [(model)]="spec"
-             header="YAML"></km-editor>
-</mat-dialog-content>
-<mat-dialog-actions>
-  <button id="km-alertmanager-config-dialog-btn"
-          mat-flat-button
-          (click)="save()"
-          [disabled]="!isValid()">
-    {{data.confirmLabel}}
-  </button>
-</mat-dialog-actions>
+
+<ng-container *ngIf="!isLoading">
+  <km-metering-config [config]="config"></km-metering-config>
+  <km-metering-list [config]="config"></km-metering-list>
+</ng-container>
+
+<ng-container *ngIf="isLoading">
+  <mat-spinner [diameter]="50"
+               class="km-spinner"
+               color="accent"></mat-spinner>
+</ng-container>

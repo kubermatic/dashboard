@@ -11,6 +11,7 @@
 
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
+import {DynamicModule} from '@app/dynamic/module-registry';
 import {AuthGuard} from '@core/services/auth/guard';
 import {AdminSettingsComponent} from './component';
 
@@ -52,6 +53,11 @@ const routes: Routes = [
       {
         path: 'bucketsettings',
         loadChildren: () => import('./bucket-settings/module').then(m => m.AdminSettingsBucketSettingsModule),
+      },
+      {
+        path: 'metering',
+        loadChildren: () => DynamicModule.Metering,
+        data: {preload: true},
       },
     ],
   },

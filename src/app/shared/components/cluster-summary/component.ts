@@ -13,7 +13,6 @@ import {Component, Input} from '@angular/core';
 import {Cluster} from '@shared/entity/cluster';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {getOperatingSystem, getOperatingSystemLogoClass} from '@shared/entity/node';
-import {SSHKey} from '@shared/entity/ssh-key';
 import {getIpCount} from '@shared/functions/get-ip-count';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import * as _ from 'lodash';
@@ -31,7 +30,7 @@ export class ClusterSummaryComponent {
   @Input() machineDeployment: MachineDeployment;
   @Input() datacenter: Datacenter;
   @Input() seedSettings: SeedSettings;
-  @Input() sshKeys: SSHKey[] = [];
+  @Input() sshKeys: string[] = [];
   @Input() flipLayout = false;
 
   get provider(): NodeProvider {
@@ -47,10 +46,6 @@ export class ClusterSummaryComponent {
 
   get hasAdmissionPlugins(): boolean {
     return !_.isEmpty(this.cluster.spec.admissionPlugins);
-  }
-
-  get sshKeyNames(): string {
-    return this.sshKeys.map(key => key.name).join(', ');
   }
 
   get operatingSystem(): string {

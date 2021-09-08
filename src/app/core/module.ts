@@ -29,6 +29,7 @@ import {EndOfLifeService} from '@core/services/eol';
 import {GlobalModule} from '@core/services/global/module';
 import {HistoryService} from '@core/services/history';
 import {LabelService} from '@core/services/label';
+import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
 import {MLAService} from '@core/services/mla';
 import {NameGeneratorService} from '@core/services/name-generator';
 import {OPAService} from '@core/services/opa';
@@ -107,6 +108,7 @@ const services: any[] = [
   MLAService,
   ClusterTemplateService,
   BackupService,
+  MeteringService,
 ];
 
 const interceptors: any[] = [

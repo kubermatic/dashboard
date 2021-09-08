@@ -26,7 +26,7 @@ import {SSHKey} from '@shared/entity/ssh-key';
 import {CreateClusterModel} from '@shared/model/CreateClusterModel';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {forkJoin, of, Subject, take} from 'rxjs';
-import {switchMap, takeUntil, tap} from 'rxjs/operators';
+import {filter, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {StepRegistry, steps, WizardStep} from './config';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {SaveClusterTemplateDialogComponent} from '@shared/components/save-cluster-template/component';
@@ -185,6 +185,7 @@ export class WizardComponent implements OnInit, OnDestroy {
       data: {
         cluster: this._clusterSpecService.cluster,
         nodeData: this._nodeDataService.nodeData,
+        sshKeys: this._clusterSpecService.sshKeys,
         projectID: this.project.id,
       },
     };
@@ -192,6 +193,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     this._matDialog
       .open(SaveClusterTemplateDialogComponent, dialogConfig)
       .afterClosed()
+      .pipe(filter(ct => !!ct))
       .pipe(take(1))
       .subscribe(ct => this._notificationService.success(`The ${ct.name} cluster template was saved`));
   }

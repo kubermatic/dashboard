@@ -18,6 +18,13 @@
         color: map-get($colors, primary-hover);
       }
     }
+
+    &.mat-button-disabled {
+      .km-icon-mask {
+        background-color: map-get($colors, text);
+        opacity: .3;
+      }
+    }
   }
 
   hr {
@@ -95,6 +102,10 @@
 
   .km-icon-mask {
     background-color: map-get($colors, text);
+  }
+
+  .km-icon-mask-white {
+    background-color: #fff;
   }
 
   .km-menu-header {

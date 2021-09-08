@@ -15,7 +15,8 @@ limitations under the License.
 
 <form *ngIf="mode === modes.Create"
       (keydown.enter)="form.valid ? update() : null">
-  <mat-horizontal-stepper linear
+  <mat-horizontal-stepper class="km-stepper-in-dialog"
+                          linear
                           disableRipple
                           [@.disabled]="true"
                           #stepper>
@@ -47,7 +48,9 @@ limitations under the License.
             id="km-serviceaccount-token-dialog-update-btn"
             mat-flat-button
             [disabled]="updating || form.invalid"
-            (click)="update()">{{mode}}
+            (click)="update()">
+      <i [ngClass]="getIconClass()"></i>
+      <span>{{mode}} Token</span>
     </button>
 
     <a *ngIf="!first"
@@ -65,7 +68,9 @@ limitations under the License.
     <button id="km-serviceaccount-token-dialog-confirm-btn"
             mat-flat-button
             mat-dialog-close
-            *ngIf="!first">Got it
+            *ngIf="!first">
+      <i class="km-icon-mask km-icon-check i-24"></i>
+      <span>Got it</span>
     </button>
   </mat-dialog-actions>
 </form>
@@ -81,7 +86,9 @@ limitations under the License.
                  *ngIf="updating"></mat-spinner>
     <button mat-flat-button
             [disabled]="updating || form.invalid"
-            (click)="update()">{{mode}}
+            (click)="update()">
+      <i [ngClass]="getIconClass()"></i>
+      <span>{{mode}} Token</span>
     </button>
   </mat-dialog-actions>
 </form>
@@ -110,7 +117,8 @@ limitations under the License.
 
       <button mat-flat-button
               mat-dialog-close>
-        Got it
+        <i class="km-icon-mask km-icon-check i-24"></i>
+        <span>Got It</span>
       </button>
     </mat-dialog-actions>
   </ng-container>
