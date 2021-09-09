@@ -30,9 +30,6 @@ ifeq (${HUMAN_VERSION},)
 	endif
 endif
 
-# TODO: Old images config. Remove once deprecation period ends.
-REPO_OLD=quay.io/kubermatic/ui-v2
-
 all: install run
 
 version:
@@ -73,14 +70,9 @@ docker-build: build dist
 
 docker-push: docker-build
 	docker push $(REPO):$(IMAGE_TAG)
-	# TODO: Pushing old images. Remove once deprecation period ends.
-	docker tag $(REPO):$(IMAGE_TAG) $(REPO_OLD):$(IMAGE_TAG)
-	docker push $(REPO_OLD):$(IMAGE_TAG)
 	for TAG in $(ADDITIONAL_TAGS) ; do \
 		docker tag $(REPO):$(IMAGE_TAG) $(REPO):$$TAG ; \
 		docker push $(REPO):$$TAG ; \
-		docker tag $(REPO_OLD):$(IMAGE_TAG) $(REPO_OLD):$$TAG ; \
-		docker push $(REPO_OLD):$$TAG ; \
 	done
 
 deploy:
