@@ -262,9 +262,6 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
 
   private _resourceGroupObservable(): Observable<string[]> {
     let location = '';
-
-    console.log(this._clusterSpecService.cluster.spec.cloud.dc)
-
     return this._datacenterService
       .getDatacenter(this._clusterSpecService.cluster.spec.cloud.dc)
       .pipe(take(1))
