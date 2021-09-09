@@ -118,7 +118,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
       });
 
     this._clusterSpecService.clusterChanges
-      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.AZURE))
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.AZURE && this.hasRequiredCredentials()))
       .pipe(debounceTime(this._debounceTime))
       .pipe(tap(_ => (!this.hasRequiredCredentials() ? this._clearResourceGroup() : null)))
       .pipe(switchMap(_ => this._resourceGroupObservable()))
