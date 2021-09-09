@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
+import {Datacenter, MeteringConfiguration, SeedSettings} from '@shared/entity/datacenter';
 
 export function fakeDigitaloceanDatacenter(): Datacenter {
   return {
@@ -178,5 +178,5 @@ export function fakeNodeDatacenters(): Datacenter[] {
 }
 
 export function fakeSeedSettings(): SeedSettings {
-  return {mla: {user_cluster_mla_enabled: true}};
+  return {mla: {user_cluster_mla_enabled: true}, metering: {} as MeteringConfiguration};
 }

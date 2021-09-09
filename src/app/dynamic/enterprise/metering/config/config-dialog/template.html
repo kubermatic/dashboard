@@ -1,0 +1,52 @@
+<km-dialog-title>Configure Metering</km-dialog-title>
+<mat-dialog-content>
+  <form [formGroup]="form"
+        fxLayout="column"
+        fxLayoutGap="10px">
+    <div>
+      <mat-slide-toggle [formControlName]="controls.Enabled"
+                        class="toggle-button">
+        Enable Metering
+      </mat-slide-toggle>
+    </div>
+
+    <mat-form-field fxFlex>
+      <mat-label>Storage Class Name</mat-label>
+      <input required
+             matInput
+             [formControlName]="controls.StorageClassName"
+             type="text"
+             autocomplete="off"
+             cdkFocusInitial>
+      <mat-error *ngIf="form.get(controls.StorageClassName).hasError('required')">
+        Storage Class Name is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field fxFlex>
+      <mat-label>Storage Size</mat-label>
+      <input required
+             matInput
+             [formControlName]="controls.StorageSize"
+             type="text"
+             autocomplete="off">
+      <mat-error *ngIf="form.get(controls.StorageSize).hasError('required')">
+        Storage Size is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <mat-spinner *ngIf="saving"
+               [diameter]="25"
+               @pushToSide
+               color="accent"
+               class="spinner"></mat-spinner>
+
+  <button mat-flat-button
+          (click)="save()"
+          [disabled]="form.invalid || saving">
+    <i class="km-icon-mask km-icon-edit"></i>
+    <span>Configure Metering</span>
+  </button>
+</mat-dialog-actions>

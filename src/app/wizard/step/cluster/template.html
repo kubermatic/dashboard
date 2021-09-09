@@ -81,6 +81,9 @@ limitations under the License.
             Invalid pattern. Use CIDR notation, i.e. 192.168.1.0/24.
           </mat-error>
         </mat-form-field>
+        <mat-checkbox [formControlName]="Controls.Konnectivity">
+          Konnectivity
+        </mat-checkbox>
       </div>
 
       <km-wizard-cluster-ssh-keys [formControl]="form.get(Controls.SSHKeys)"></km-wizard-cluster-ssh-keys>

@@ -10,9 +10,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-TAG=v0.8
+TAG=v0.9
 
-set -euox pipefail
+set -euo pipefail
 
 cd $(dirname $0)
 

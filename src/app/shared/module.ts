@@ -10,7 +10,7 @@
 // limitations under the License.
 
 import {ScrollingModule} from '@angular/cdk/scrolling';
-import {CommonModule} from '@angular/common';
+import {CommonModule, DecimalPipe} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -57,6 +57,7 @@ import {TabCardComponent} from '@shared/components/tab-card/component';
 import {DynamicTabComponent} from '@shared/components/tab-card/dynamic-tab/component';
 import {TabComponent} from '@shared/components/tab-card/tab/component';
 import {LinkLocationPipe} from '@shared/pipes/linklocation';
+import {SizeFormatterPipe} from '@shared/pipes/size';
 import {ClipboardModule} from 'ngx-clipboard';
 import {FilterPipeModule} from 'ngx-filter-pipe';
 import {MonacoEditorModule} from 'ngx-monaco-editor';
@@ -178,6 +179,7 @@ const components: any[] = [
   ClusterFromTemplateDialogComponent,
   SaveClusterTemplateDialogComponent,
   SelectClusterTemplateDialogComponent,
+  SizeFormatterPipe,
 ];
 
 const directives: any[] = [AutofocusDirective, OptionDirective];
@@ -185,6 +187,7 @@ const directives: any[] = [AutofocusDirective, OptionDirective];
 @NgModule({
   imports: [...modules],
   declarations: [...components, ...directives],
+  providers: [DecimalPipe],
   exports: [...modules, ...components, ...directives],
 })
 export class SharedModule {}

@@ -11,6 +11,7 @@
 
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
+import {DynamicModule} from '@app/dynamic/module-registry';
 import {AuthGuard} from '@core/services/auth/guard';
 import {AdminSettingsComponent} from './component';
 
@@ -48,6 +49,11 @@ const routes: Routes = [
       {
         path: 'opa',
         loadChildren: () => import('./opa/module').then(m => m.AdminSettingsOPAModule),
+      },
+      {
+        path: 'metering',
+        loadChildren: () => DynamicModule.Metering,
+        data: {preload: true},
       },
     ],
   },

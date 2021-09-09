@@ -1,0 +1,55 @@
+<!--
+Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<mat-card>
+  <mat-card-header>
+    <mat-card-title fxFlex
+                    fxLayout="row"
+                    fxLayoutAlign=" center">
+      <div fxFlex>Metering</div>
+      <button mat-flat-button
+              color="quaternary"
+              fxLayoutAlign="center center"
+              (click)="configureCredentials()">
+        <i class="km-icon-mask km-icon-edit"></i>
+        <span>Edit Credentials</span>
+      </button>
+      <button mat-flat-button
+              color="quaternary"
+              fxLayoutAlign="center center"
+              (click)="configureMetering()">
+        <i class="km-icon-mask km-icon-edit"></i>
+        <span>Configure Metering</span>
+      </button>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="content"
+         fxLayout="row">
+      <km-property>
+        <div key>Enabled</div>
+        <div value>{{config.enabled}}</div>
+      </km-property>
+
+      <km-property>
+        <div key>Storage Class Name</div>
+        <div value>{{config.storageClassName}}</div>
+      </km-property>
+
+      <km-property>
+        <div key>Storage Size</div>
+        <div value>{{config.storageSize}}</div>
+      </km-property>
+    </div>
+  </mat-card-content>
+</mat-card>

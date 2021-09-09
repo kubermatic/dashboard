@@ -9,22 +9,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnChanges, OnDestroy, OnInit, ViewChild, SimpleChanges} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
-import {getEditionDirName} from '@app/dynamic/common';
+import {isEnterpriseEdition} from '@app/dynamic/common';
+import {NotificationService} from '@core/services/notification';
 import {OPAService} from '@core/services/opa';
 import {UserService} from '@core/services/user';
-import {NotificationService} from '@core/services/notification';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Constraint, ConstraintSelector, ConstraintTemplate, Kind} from '@shared/entity/opa';
 import {UserSettings} from '@shared/entity/settings';
 import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
-import {Mode, DefaultConstraintDialog} from './default-constraint-dialog/component';
+import {DefaultConstraintDialog, Mode} from './default-constraint-dialog/component';
 
 @Component({
   selector: 'km-default-constraint-list',
@@ -87,12 +87,11 @@ export class DefaultConstraintComponent implements OnInit, OnChanges, OnDestroy 
   }
 
   getColumns(): string[] {
-    switch (getEditionDirName()) {
-      case 'enterprise':
-        return ['name', 'constraintTemplate', 'match', 'appliesTo', 'status', 'actions'];
-      default:
-        return ['name', 'constraintTemplate', 'match', 'actions'];
+    if (isEnterpriseEdition()) {
+      return ['name', 'constraintTemplate', 'match', 'appliesTo', 'status', 'actions'];
     }
+
+    return ['name', 'constraintTemplate', 'match', 'actions'];
   }
 
   isPaginatorVisible(): boolean {
