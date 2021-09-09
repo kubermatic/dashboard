@@ -75,7 +75,10 @@ limitations under the License.
           <div fxLayoutAlign=" center"
                fxLayoutGap="8px">
             <span>{{element.name}}</span>
-            <span>{{isRestoring(element.id)}}</span>
+            <div *ngIf="isRestoring(element.id)"
+                 class="km-update-available-badge">
+              Restoring
+            </div>
             <span *ngIf="element.isExternal"
                   class="km-label-primary">External</span>
           </div>

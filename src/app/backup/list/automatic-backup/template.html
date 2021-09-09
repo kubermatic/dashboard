@@ -132,13 +132,6 @@ limitations under the License.
 
               <ng-container *ngSwitchCase="false">
                 <button mat-icon-button
-                        matTooltip="{{isEnabled(backup) ? 'Disable': 'Enable'}} Automatic Backup"
-                        (click)="switchBackupStatus(backup); $event.stopPropagation()"
-                        [disabled]="!canEdit || getStatus(backup).message === 'Unknown'">
-                  <i class="km-icon-power-{{isEnabled(backup) ? 'on' : 'off'}}"></i>
-                </button>
-
-                <button mat-icon-button
                         [attr.id]="'km-delete-backup-' + backup.name"
                         matTooltip="Delete Automatic Backup"
                         (click)="delete(backup); $event.stopPropagation()"

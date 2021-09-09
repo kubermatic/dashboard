@@ -20,7 +20,7 @@ import {
 import {BackupService} from '@core/services/backup';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
-import {BackupStatus} from '@shared/entity/backup';
+import {BackupStatus, BackupStatusPhaseCompleted} from '@shared/entity/backup';
 import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
 import {GroupConfig} from '@shared/model/Config';
@@ -45,7 +45,7 @@ export class BackupListComponent implements OnInit, OnChanges, OnDestroy {
   dataSource = new MatTableDataSource<BackupStatus>();
 
   get columns(): string[] {
-    return ['name', 'phase', 'finishedAt', 'created', 'actions'];
+    return ['name', 'phase', 'message', 'finishedAt', 'created', 'actions'];
   }
 
   get isEmpty(): boolean {
@@ -56,8 +56,11 @@ export class BackupListComponent implements OnInit, OnChanges, OnDestroy {
     return !this.isEmpty && this._paginator && this.dataSource.data.length > this._paginator.pageSize;
   }
 
-  get canRestore(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, Permission.Create);
+  canRestore(backup: BackupStatus): boolean {
+    return (
+      MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, Permission.Create) &&
+      backup.backupPhase === BackupStatusPhaseCompleted
+    );
   }
 
   constructor(

@@ -13,7 +13,7 @@ limitations under the License.
 
 <mat-card class="table">
   <mat-card-header>
-    <mat-card-title>Backups</mat-card-title>
+    <mat-card-title>Etcd Backups</mat-card-title>
   </mat-card-header>
 
   <mat-card-content>
@@ -43,6 +43,17 @@ limitations under the License.
         <td mat-cell
             *matCellDef="let element">
           <span>{{element.backupPhase}}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="message">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell">Message
+        </th>
+        <td mat-cell
+            *matCellDef="let element">
+          <span>{{element.backupMessage || '-'}}</span>
         </td>
       </ng-container>
 
@@ -79,7 +90,7 @@ limitations under the License.
             <button mat-icon-button
                     matTooltip="Restore Cluster from Snapshot"
                     (click)="restore(backup); $event.stopPropagation()"
-                    [disabled]="!canRestore">
+                    [disabled]="!canRestore(backup)">
               <i class="km-icon-add"></i>
             </button>
           </div>
@@ -89,7 +100,8 @@ limitations under the License.
       <tr mat-header-row
           class="km-header-row"
           *matHeaderRowDef="columns"></tr>
-      <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+      <tr mat-row
+          *matRowDef="let row; columns: columns;"></tr>
     </table>
 
     <div class="km-row km-empty-list-msg"

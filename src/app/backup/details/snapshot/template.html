@@ -26,7 +26,7 @@ limitations under the License.
             (click)="delete(backup)"
             [disabled]="!canDelete">
       <i class="km-icon-mask km-icon-delete"></i>
-      <span>Delete Automatic Backup</span>
+      <span>Delete Snapshot</span>
     </button>
   </div>
 
@@ -45,23 +45,6 @@ limitations under the License.
       <km-property>
         <div key>Cluster ID</div>
         <div value>{{backup.spec?.clusterId}}</div>
-      </km-property>
-
-      <km-property>
-        <div key>Schedule</div>
-        <div value>{{backup.spec?.schedule}}</div>
-      </km-property>
-
-      <km-property>
-        <div key
-             fxLayout="row"
-             fxLayoutGap="4px"
-             fxLayoutAlign=" center">
-          <div>Keep</div>
-          <div class="km-icon-info km-pointer"
-               matTooltip="Keep is the number of backups to keep around before deleting the oldest one. If not set, it will be controlled by the Kubermatic. Only used if Schedule is set."></div>
-        </div>
-        <div value>{{keep(backup)}}</div>
       </km-property>
     </mat-card-content>
   </mat-card>

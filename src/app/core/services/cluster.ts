@@ -29,7 +29,7 @@ import {SSHKey} from '@shared/entity/ssh-key';
 import {CreateClusterModel} from '@shared/model/CreateClusterModel';
 import {ExternalClusterModel} from '@shared/model/ExternalClusterModel';
 import {combineLatest, merge, Observable, of, Subject, timer} from 'rxjs';
-import {catchError, filter, map, shareReplay, startWith, switchMap, switchMapTo, take, tap} from 'rxjs/operators';
+import {catchError, filter, map, shareReplay, startWith, switchMap, switchMapTo, take} from 'rxjs/operators';
 
 @Injectable()
 export class ClusterService {
@@ -266,7 +266,7 @@ export class ClusterService {
 
   restores(projectID: string): Observable<EtcdRestore[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/etcdrestores`;
-    return this._http.get<EtcdRestore[]>(url).pipe(tap(restores => console.log(restores)));
+    return this._http.get<EtcdRestore[]>(url);
   }
 
   private _deleteExternalCluster(projectID: string, clusterID: string): Observable<any> {

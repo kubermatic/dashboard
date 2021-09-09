@@ -73,6 +73,21 @@ export class BackupService {
     return this._http.post(url, restore);
   }
 
+  restoreList(projectID: string): Observable<EtcdRestore[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/etcdrestores`;
+    return this._http.get<EtcdRestore[]>(url);
+  }
+
+  restoreDelete(projectID: string, clusterID: string, name: string): Observable<any> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/etcdrestores/${name}`;
+    return this._http.delete(url, {headers: this._headers});
+  }
+
+  enable(projectID: string, clusterID: string, enable: boolean): Observable<any> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/etcdbackupconfigs`;
+    return this._http.post(url, {enable});
+  }
+
   private _listAutomaticBackups(projectID: string): Observable<EtcdBackupConfig[]> {
     if (!this._automaticBackups$.get(projectID)) {
       const backups$: Observable<EtcdBackupConfig[]> = merge(this.onAutomaticBackupsUpdate, this._refreshTimer$)

@@ -13,71 +13,53 @@ import {Component, OnDestroy, OnInit, TrackByFunction, ViewChild} from '@angular
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
-import {Router} from '@angular/router';
-import {AddSnapshotDialogComponent, AddSnapshotDialogConfig} from '@app/backup/list/snapshot/add-dialog/component';
-import {
-  DeleteSnapshotDialogComponent,
-  DeleteSnapshotDialogConfig,
-} from '@app/backup/list/snapshot/delete-dialog/component';
-import {
-  RestoreSnapshotDialogComponent,
-  RestoreSnapshotDialogConfig,
-} from '@app/backup/list/snapshot/restore-dialog/component';
 import {BackupService} from '@core/services/backup';
+import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
-import {EtcdBackupConfig, EtcdBackupConfigCondition} from '@shared/entity/backup';
+import {ConfirmationDialogComponent, ConfirmationDialogConfig} from '@shared/components/confirmation-dialog/component';
+import {EtcdRestore} from '@shared/entity/backup';
 import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {GroupConfig} from '@shared/model/Config';
-import {BackupHealthStatus} from '@shared/utils/health-status/backup-health-status';
-import {HealthStatus} from '@shared/utils/health-status/health-status';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 
 @Component({
-  selector: 'km-snapshot-list',
+  selector: 'km-restore-list',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class SnapshotListComponent implements OnInit, OnDestroy {
+export class RestoreListComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator, {static: true}) private readonly _paginator: MatPaginator;
   private readonly _unsubscribe = new Subject<void>();
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
   private _selectedProject = {} as Project;
-  private _backups = [];
-  dataSource = new MatTableDataSource<EtcdBackupConfig>();
+  private _restores = [];
+  dataSource = new MatTableDataSource<EtcdRestore>();
   isInitialized = true;
 
-  get trackByID(): TrackByFunction<EtcdBackupConfig> {
-    return (_: number, backup: EtcdBackupConfig): string => backup.name;
+  get trackByID(): TrackByFunction<EtcdRestore> {
+    return (_: number, restore: EtcdRestore): string => restore.name;
   }
 
   get columns(): string[] {
-    return ['status', 'name', 'cluster', 'created', 'actions'];
+    return ['name', 'phase', 'clusterID', 'backupName', 'created', 'actions'];
   }
 
   get isEmpty(): boolean {
-    return this._backups.length === 0;
+    return this._restores.length === 0;
   }
 
   get hasPaginator(): boolean {
-    return !this.isEmpty && this._paginator && this._backups.length > this._paginator.pageSize;
+    return !this.isEmpty && this._paginator && this._restores.length > this._paginator.pageSize;
   }
 
   get canDelete(): boolean {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Backups, Permission.Delete);
-  }
-
-  get canAdd(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Backups, Permission.Create);
-  }
-
-  get canRestore(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, Permission.Create);
   }
 
   constructor(
@@ -85,7 +67,7 @@ export class SnapshotListComponent implements OnInit, OnDestroy {
     private readonly _projectService: ProjectService,
     private readonly _userService: UserService,
     private readonly _matDialog: MatDialog,
-    private readonly _router: Router
+    private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -109,11 +91,11 @@ export class SnapshotListComponent implements OnInit, OnDestroy {
       .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
     this._projectService.selectedProject
-      .pipe(switchMap(project => this._backupService.list(project.id, true)))
+      .pipe(switchMap(project => this._backupService.restoreList(project.id)))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(backups => {
-        this._backups = backups;
-        this.dataSource.data = this._backups;
+      .subscribe(restores => {
+        this._restores = restores;
+        this.dataSource.data = this._restores;
       });
   }
 
@@ -122,64 +104,27 @@ export class SnapshotListComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  getStatus(backup: EtcdBackupConfig): HealthStatus {
-    let condition = {} as EtcdBackupConfigCondition;
-    if (backup.status?.conditions?.length === 1) {
-      condition = backup.status.conditions[0];
-    }
-
-    return BackupHealthStatus.getHealthStatus(backup, condition);
-  }
-
-  delete(backup: EtcdBackupConfig): void {
+  delete(restore: EtcdRestore): void {
     const config: MatDialogConfig = {
       data: {
-        snapshot: backup,
-        projectID: this._selectedProject.id,
-      } as DeleteSnapshotDialogConfig,
+        title: 'Delete Restore Object',
+        message: `Delete "${restore.name}" restore object permanently?`,
+        confirmLabel: 'Delete',
+      } as ConfirmationDialogConfig,
     };
 
-    const dialog = this._matDialog.open(DeleteSnapshotDialogComponent, config);
+    const dialog = this._matDialog.open(ConfirmationDialogComponent, config);
     dialog
       .afterClosed()
       .pipe(filter(confirmed => confirmed))
       .pipe(take(1))
-      .subscribe(_ => this._backupService.refreshSnapshots());
-  }
-
-  restore(backup: EtcdBackupConfig): void {
-    const config: MatDialogConfig = {
-      data: {
-        backupName: backup.status.lastBackups[0].backupName,
-        clusterID: backup.spec.clusterId,
-        projectID: this._selectedProject.id,
-      } as RestoreSnapshotDialogConfig,
-    };
-
-    const dialog = this._matDialog.open(RestoreSnapshotDialogComponent, config);
-    dialog
-      .afterClosed()
-      .pipe(filter(confirmed => confirmed))
-      .pipe(take(1))
-      .subscribe(_ => this._backupService.refreshSnapshots());
-  }
-
-  add(): void {
-    const config: MatDialogConfig = {
-      data: {
-        projectID: this._selectedProject.id,
-      } as AddSnapshotDialogConfig,
-    };
-
-    const dialog = this._matDialog.open(AddSnapshotDialogComponent, config);
-    dialog
-      .afterClosed()
-      .pipe(filter(confirmed => confirmed))
-      .pipe(take(1))
-      .subscribe(_ => this._backupService.refreshSnapshots());
-  }
-
-  goToDetails(backup: EtcdBackupConfig): void {
-    this._router.navigate([`/projects/${this._selectedProject.id}/backups/snapshot/${backup.id}`]);
+      .pipe(
+        switchMap(_ =>
+          this._backupService.restoreDelete(this._selectedProject.id, restore.spec.clusterId, restore.name)
+        )
+      )
+      .subscribe(_ => {
+        this._notificationService.success(`Successfully deleted restore object ${restore.name}`);
+      });
   }
 }

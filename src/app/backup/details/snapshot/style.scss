@@ -11,3 +11,30 @@
 
 @use 'mixins';
 @use 'variables';
+
+.mat-card {
+  &.info {
+    .mat-card-header {
+      padding-left: 20px;
+
+      .mat-card-title {
+        &.title {
+          padding: 0;
+
+          .health-state {
+            font-size: variables.$font-size-subhead;
+          }
+        }
+
+        i {
+          margin-left: 0;
+          margin-right: 15px;
+        }
+      }
+    }
+
+    .mat-card-content {
+      padding-left: 50px;
+    }
+  }
+}

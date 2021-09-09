@@ -23,12 +23,7 @@ import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
 import {ConfirmationDialogComponent, ConfirmationDialogConfig} from '@shared/components/confirmation-dialog/component';
-import {
-  ConditionStatus,
-  EtcdBackupConfig,
-  EtcdBackupConfigCondition,
-  EtcdBackupConfigConditionType,
-} from '@shared/entity/backup';
+import {EtcdBackupConfig, EtcdBackupConfigCondition, EtcdBackupConfigConditionType} from '@shared/entity/backup';
 import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
@@ -143,7 +138,7 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
       data: {
         title: 'Delete Automatic Backup',
         message: `Delete "${backup.name}" automatic backup permanently?`,
-        confirmLabel: 'Delete Automatic Backup',
+        confirmLabel: 'Delete',
       } as ConfirmationDialogConfig,
     };
 
@@ -172,35 +167,6 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
       .pipe(filter(confirmed => confirmed))
       .pipe(take(1))
       .subscribe(_ => this._backupService.refreshAutomaticBackups());
-  }
-
-  isEnabled(backup: EtcdBackupConfig): boolean {
-    const condition =
-      backup.status.conditions?.find(
-        condition => condition.type === EtcdBackupConfigConditionType.EtcdBackupConfigConditionSchedulingActive
-      ) || ({} as EtcdBackupConfigCondition);
-
-    return (
-      condition.type === EtcdBackupConfigConditionType.EtcdBackupConfigConditionSchedulingActive &&
-      condition.status === ConditionStatus.ConditionTrue
-    );
-  }
-
-  switchBackupStatus(backup: EtcdBackupConfig): void {
-    const condition = backup.status.conditions?.find(
-      condition => condition.type === EtcdBackupConfigConditionType.EtcdBackupConfigConditionSchedulingActive
-    );
-
-    if (!condition || condition.status === ConditionStatus.ConditionUnknown) {
-      return;
-    }
-
-    condition.status =
-      condition.status === ConditionStatus.ConditionTrue
-        ? ConditionStatus.ConditionFalse
-        : ConditionStatus.ConditionTrue;
-
-    // TODO(floreks): Patch backup
   }
 
   goToDetails(backup: EtcdBackupConfig): void {

@@ -290,7 +290,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     return _.isEmpty(arr);
   }
 
-  isRestoring(clusterID: string) {
+  isRestoring(clusterID: string): boolean {
     const matching = this._etcdRestores.filter(restore => restore.spec.clusterId === clusterID) || [];
     return matching.length > 0
       ? matching.some(

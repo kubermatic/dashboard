@@ -12,10 +12,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ActivatedRoute} from '@angular/router';
+import {
+  DeleteSnapshotDialogComponent,
+  DeleteSnapshotDialogConfig,
+} from '@app/backup/list/snapshot/delete-dialog/component';
 import {BackupService} from '@core/services/backup';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
-import {ConfirmationDialogComponent, ConfirmationDialogConfig} from '@shared/components/confirmation-dialog/component';
 import {
   ConditionStatus,
   EtcdBackupConfig,
@@ -33,11 +36,11 @@ import {Subject} from 'rxjs';
 import {filter, map, switchMap, take, takeUntil} from 'rxjs/operators';
 
 @Component({
-  selector: 'km-automatic-backup-details',
+  selector: 'km-snapshot-details',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
+export class SnapshotDetailsComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
@@ -83,7 +86,7 @@ export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
       .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
     this._projectService.selectedProject
-      .pipe(switchMap(project => this._backupService.list(project.id)))
+      .pipe(switchMap(project => this._backupService.list(project.id, true)))
       .pipe(map(backups => backups.find(backup => backup.id === this._route.snapshot.params.backupID)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(backup => {
@@ -109,18 +112,17 @@ export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
   delete(backup: EtcdBackupConfig): void {
     const config: MatDialogConfig = {
       data: {
-        title: 'Delete Automatic Backup',
-        message: `Delete "${backup.name}" automatic backup permanently?`,
-        confirmLabel: 'Delete',
-      } as ConfirmationDialogConfig,
+        snapshot: backup,
+        projectID: this.selectedProject.id,
+      } as DeleteSnapshotDialogConfig,
     };
 
-    const dialog = this._matDialog.open(ConfirmationDialogComponent, config);
+    const dialog = this._matDialog.open(DeleteSnapshotDialogComponent, config);
     dialog
       .afterClosed()
       .pipe(filter(confirmed => confirmed))
       .pipe(take(1))
-      .subscribe(_ => this._backupService.delete(this.selectedProject.id, backup.spec.clusterId, backup.id));
+      .subscribe(_ => this._backupService.refreshSnapshots());
   }
 
   isEnabled(backup: EtcdBackupConfig): boolean {

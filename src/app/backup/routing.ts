@@ -12,6 +12,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AutomaticBackupDetailsComponent} from '@app/backup/details/automatic-backup/component';
+import {SnapshotDetailsComponent} from '@app/backup/details/snapshot/component';
 import {BackupsComponent} from '@app/backup/list/component';
 import {AuthGuard, AuthzGuard} from '@core/services/auth/guard';
 
@@ -24,6 +25,11 @@ const routes: Routes = [
   {
     path: ':backupID',
     component: AutomaticBackupDetailsComponent,
+    canActivate: [AuthGuard, AuthzGuard],
+  },
+  {
+    path: 'snapshot/:backupID',
+    component: SnapshotDetailsComponent,
     canActivate: [AuthGuard, AuthzGuard],
   },
 ];

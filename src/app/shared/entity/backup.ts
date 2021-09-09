@@ -87,6 +87,8 @@ export enum ConditionStatus {
 
 type BackupStatusPhase = string;
 
+export const BackupStatusPhaseCompleted = 'Completed';
+
 export class EtcdRestore {
   name?: string;
 

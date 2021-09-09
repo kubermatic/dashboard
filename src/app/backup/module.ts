@@ -12,9 +12,11 @@
 import {NgModule} from '@angular/core';
 import {BackupListComponent} from '@app/backup/details/automatic-backup/backups/component';
 import {AutomaticBackupDetailsComponent} from '@app/backup/details/automatic-backup/component';
+import {SnapshotDetailsComponent} from '@app/backup/details/snapshot/component';
 import {AddAutomaticBackupDialogComponent} from '@app/backup/list/automatic-backup/add-dialog/component';
 import {AutomaticBackupListComponent} from '@app/backup/list/automatic-backup/component';
 import {BackupsComponent} from '@app/backup/list/component';
+import {RestoreListComponent} from '@app/backup/list/restore/component';
 import {AddSnapshotDialogComponent} from '@app/backup/list/snapshot/add-dialog/component';
 import {SnapshotListComponent} from '@app/backup/list/snapshot/component';
 import {DeleteSnapshotDialogComponent} from '@app/backup/list/snapshot/delete-dialog/component';
@@ -32,6 +34,8 @@ const components: any[] = [
   AddSnapshotDialogComponent,
   DeleteSnapshotDialogComponent,
   RestoreSnapshotDialogComponent,
+  SnapshotDetailsComponent,
+  RestoreListComponent,
 ];
 
 @NgModule({
