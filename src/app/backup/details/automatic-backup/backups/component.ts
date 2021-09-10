@@ -32,7 +32,6 @@ import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 @Component({
   selector: 'km-backup-list',
   templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
 })
 export class BackupListComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild(MatPaginator, {static: true}) private readonly _paginator: MatPaginator;
