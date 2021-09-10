@@ -11,7 +11,7 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {BackupService} from '@core/services/backup';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
@@ -62,7 +62,8 @@ export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
     private readonly _projectService: ProjectService,
     private readonly _userService: UserService,
     private readonly _matDialog: MatDialog,
-    private readonly _route: ActivatedRoute
+    private readonly _route: ActivatedRoute,
+    private readonly _router: Router
   ) {}
 
   keep(backup: EtcdBackupConfig): string | number {
@@ -119,8 +120,9 @@ export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
     dialog
       .afterClosed()
       .pipe(filter(confirmed => confirmed))
+      .pipe(switchMap(_ => this._backupService.delete(this.selectedProject.id, backup.spec.clusterId, backup.id)))
       .pipe(take(1))
-      .subscribe(_ => this._backupService.delete(this.selectedProject.id, backup.spec.clusterId, backup.id));
+      .subscribe(_ => this._router.navigate([`/projects/${this.selectedProject.id}/backups`]));
   }
 
   isEnabled(backup: EtcdBackupConfig): boolean {
