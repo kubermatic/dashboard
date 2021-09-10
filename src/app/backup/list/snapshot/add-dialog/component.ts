@@ -9,7 +9,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BackupService} from '@core/services/backup';
@@ -34,7 +34,7 @@ enum Controls {
   templateUrl: './template.html',
   styleUrls: ['style.scss'],
 })
-export class AddSnapshotDialogComponent implements OnInit {
+export class AddSnapshotDialogComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   readonly Controls = Controls;
   clusters: Cluster[] = [];
@@ -63,6 +63,11 @@ export class AddSnapshotDialogComponent implements OnInit {
       .clusters(this._config.projectID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(clusters => (this.clusters = clusters));
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   save(): void {
