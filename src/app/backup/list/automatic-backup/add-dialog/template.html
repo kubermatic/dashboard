@@ -1,0 +1,111 @@
+<!--
+Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<div id="km-add-automatic-backup-dialog">
+  <km-dialog-title>
+    <div>Add Automatic Backup</div>
+  </km-dialog-title>
+
+  <mat-dialog-content>
+    <form [formGroup]="form"
+          fxFlex
+          fxLayout="column"
+          fxLayoutGap="10px">
+      <mat-form-field>
+        <mat-label *ngIf="clusters.length > 0">Cluster</mat-label>
+        <mat-label *ngIf="clusters.length === 0">No Clusters Available</mat-label>
+        <mat-select [formControlName]="Controls.Cluster"
+                    disableOptionCentering
+                    required>
+          <mat-option *ngFor="let cluster of clusters"
+                      [value]="cluster.id">{{cluster.name}}</mat-option>
+        </mat-select>
+        <mat-hint>The list of existing clusters for the selected project.</mat-hint>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input [formControlName]="Controls.Name"
+               matInput
+               required>
+        <mat-hint>The name of the created automatic backup.</mat-hint>
+      </mat-form-field>
+
+      <mat-radio-group [formControlName]="Controls.Group"
+                       fxLayout="column"
+                       fxLayoutGap="20px">
+        <mat-radio-button [value]="ScheduleOption.Daily">
+          <div class="km-radio-button-title">Daily</div>
+          <div class="km-radio-button-description">Create backups every day at 22:00 and keep the backups for a week.
+          </div>
+        </mat-radio-button>
+
+        <mat-radio-button [value]="ScheduleOption.Weekly">
+          <div class="km-radio-button-title">Weekly</div>
+          <div class="km-radio-button-description">Create backups every week at 22:00 on Monday and keep the backups for 4
+            weeks.
+          </div>
+        </mat-radio-button>
+
+        <mat-radio-button [value]="ScheduleOption.Monthly">
+          <div class="km-radio-button-title">Monthly</div>
+          <div class="km-radio-button-description">Create backups every month at 22:00 on 1st day of the month and keep the backups for 3
+            months.
+          </div>
+        </mat-radio-button>
+
+        <mat-radio-button [value]="ScheduleOption.Custom">
+          <div fxFlex
+               fxLayout="column">
+            <div class="km-radio-button-title">Custom Intervals</div>
+            <div class="km-radio-button-description">Set a custom backup time and how many backups should be kept.
+            </div>
+          </div>
+        </mat-radio-button>
+      </mat-radio-group>
+
+      <div *ngIf="form.get(Controls.Group).value === ScheduleOption.Custom"
+           fxLayout="column"
+           fxLayoutGap="20px">
+        <mat-form-field>
+          <mat-label>Cron Expression</mat-label>
+          <input [formControlName]="Controls.Schedule"
+                 type="text"
+                 matInput
+                 required>
+          <mat-hint>Cron expression that describes how often a backup should be created. Must match the criteria specified
+            <a href="https://pkg.go.dev/github.com/robfig/cron?utm_source=godoc"
+               target="_blank">here</a>.
+          </mat-hint>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Number of Backups to Keep</mat-label>
+          <input [formControlName]="Controls.Keep"
+                 type="number"
+                 min="1"
+                 matInput
+                 required>
+          <mat-hint>How many backups should be kept before deleting the oldest ones.</mat-hint>
+        </mat-form-field>
+      </div>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button mat-flat-button
+            (click)="save()"
+            [disabled]="form.invalid">
+      Add Automatic Backup
+    </button>
+  </mat-dialog-actions>
+</div>

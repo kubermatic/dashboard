@@ -59,6 +59,12 @@
       "edit": true,
       "create": true,
       "delete": true
+    },
+    "backups": {
+      "view": true,
+      "edit": true,
+      "create": true,
+      "delete": true
     }
   },
   "editors": {
@@ -117,6 +123,12 @@
       "delete": false
     },
     "rbac": {
+      "view": true,
+      "edit": true,
+      "create": true,
+      "delete": true
+    },
+    "backups": {
       "view": true,
       "edit": true,
       "create": true,
@@ -180,6 +192,12 @@
     },
     "rbac": {
       "view": false,
+      "edit": false,
+      "create": false,
+      "delete": false
+    },
+    "backups": {
+      "view": true,
       "edit": false,
       "create": false,
       "delete": false

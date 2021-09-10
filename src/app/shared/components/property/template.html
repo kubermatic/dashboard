@@ -11,7 +11,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div class="container">
+<div [ngClass]="margin === Margin.Default ? 'container' : ''">
   <div fxLayout="column"
        fxLayoutAlign="end start">
     <div class="label km-text-muted">

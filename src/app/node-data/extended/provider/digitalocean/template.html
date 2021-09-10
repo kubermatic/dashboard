@@ -16,7 +16,7 @@ limitations under the License.
       fxLayoutAlign="start start">
   <mat-checkbox id="backups"
                 [formControlName]="Controls.Backups"
-                fxFlex>Backups</mat-checkbox>
+                fxFlex>etcd Backups</mat-checkbox>
 
   <mat-checkbox id="monitoring"
                 [formControlName]="Controls.Monitoring"
@@ -29,6 +29,7 @@ limitations under the License.
   <km-tag-list title="Provider Tags"
                [tags]="tags"
                (tagsChange)="onTagsChange($event)"
+
                [formControlName]="Controls.Tags"
                fxFlex></km-tag-list>
 </form>

@@ -55,6 +55,10 @@ function createRouting(): Routes {
           loadChildren: () => import('./cluster-template/module').then(m => m.ClusterTemplateModule),
         },
         {
+          path: 'projects/:projectID/backups',
+          loadChildren: () => import('./backup/module').then(m => m.BackupModule),
+        },
+        {
           path: 'account',
           loadChildren: () => import('./settings/user/module').then(m => m.UserSettingsModule),
           data: {preload: true},

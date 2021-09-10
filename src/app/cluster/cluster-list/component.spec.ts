@@ -48,9 +48,11 @@ describe('ClusterListComponent', () => {
         clusters: jest.fn(),
         health: jest.fn(),
         refreshClusters: () => {},
+        restores: jest.fn(),
       };
       getClustersSpy = clusterServiceMock.clusters.mockReturnValue(asyncData([fakeAWSCluster()]));
       clusterServiceMock.health.mockReturnValue(asyncData([fakeHealth()]));
+      clusterServiceMock.restores.mockReturnValue(asyncData([]));
 
       TestBed.configureTestingModule({
         imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],

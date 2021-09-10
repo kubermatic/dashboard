@@ -84,6 +84,10 @@
     background-color: map-get($colors, indicator-red);
   }
 
+  .km-unknown-bg {
+    background-color: map-get($colors, changelog-deprecated);
+  }
+
   .km-hover-bg:hover {
     background-color: map-get($colors, background-hover);
   }

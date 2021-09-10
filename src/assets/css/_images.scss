@@ -141,6 +141,10 @@
   @include mixins.mask-image("/assets/images/icons/power.svg", 18px, $color: #cad1d9);
 }
 
+.km-icon-power {
+  @include mixins.mask-image("/assets/images/icons/power.svg", 18px);
+}
+
 .km-icon-download {
   @include mixins.mask-image("/assets/images/icons/download.svg", 24px, $color: #fff);
 }
@@ -167,6 +171,10 @@
 
 .km-icon-cluster {
   @include mixins.mask-image("/assets/images/icons/clusters.svg", 24px);
+}
+
+.km-icon-backup {
+  @include mixins.mask-image("/assets/images/icons/backups.svg", 24px);
 }
 
 .km-icon-key {
@@ -323,6 +331,10 @@
 
 .km-icon-interface {
   @include mixins.mask-image("/assets/images/icons/interface.svg", 24px);
+}
+
+.km-icon-restore {
+  @include mixins.mask-image("/assets/images/icons/restore.svg", 18px);
 }
 
 .km-provider-logo-alibaba {

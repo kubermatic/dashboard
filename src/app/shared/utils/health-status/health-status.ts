@@ -13,6 +13,7 @@ export enum HealthStatusColor {
   Green = 'km-icon-circle km-success-bg',
   Orange = 'km-icon-circle km-warning-bg',
   Red = 'km-icon-circle km-error-bg',
+  Unknown = 'km-icon-circle km-unknown-bg',
 }
 
 export enum HealthStatusMessage {
@@ -21,6 +22,8 @@ export enum HealthStatusMessage {
   Running = 'Running',
   Updating = 'Updating',
   Failed = 'Failed',
+  Unknown = 'Unknown',
+  Disabled = 'Disabled',
 }
 
 export class HealthStatus {

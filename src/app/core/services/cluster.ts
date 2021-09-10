@@ -12,15 +12,14 @@
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {combineLatest, merge, Observable, of, Subject, timer} from 'rxjs';
-import {catchError, filter, map, shareReplay, startWith, switchMap, switchMapTo, take} from 'rxjs/operators';
+import {AppConfigService} from '@app/config.service';
 
 import {environment} from '@environments/environment';
-import {AppConfigService} from '@app/config.service';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {LabelFormComponent} from '@shared/components/label-form/component';
 import {TaintFormComponent} from '@shared/components/taint-form/component';
 import {Addon} from '@shared/entity/addon';
+import {EtcdRestore} from '@shared/entity/backup';
 import {Cluster, ClusterPatch, Finalizer, MasterVersion, ProviderSettingsPatch} from '@shared/entity/cluster';
 import {Event} from '@shared/entity/event';
 import {Health} from '@shared/entity/health';
@@ -29,6 +28,8 @@ import {Node} from '@shared/entity/node';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {CreateClusterModel} from '@shared/model/CreateClusterModel';
 import {ExternalClusterModel} from '@shared/model/ExternalClusterModel';
+import {combineLatest, merge, Observable, of, Subject, timer} from 'rxjs';
+import {catchError, filter, map, shareReplay, startWith, switchMap, switchMapTo, take} from 'rxjs/operators';
 
 @Injectable()
 export class ClusterService {
@@ -155,11 +156,6 @@ export class ClusterService {
       .pipe(take(1));
   }
 
-  private _deleteExternalCluster(projectID: string, clusterID: string): Observable<any> {
-    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}`;
-    return this._http.delete(url);
-  }
-
   upgrades(projectID: string, clusterID: string): Observable<MasterVersion[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/upgrades`;
     return this._http.get<MasterVersion[]>(url).pipe(
@@ -266,6 +262,16 @@ export class ClusterService {
   startExternalCCMMigration(projectID: string, cluster: string): Observable<any> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/externalccmmigration`;
     return this._http.post<any>(url, {});
+  }
+
+  restores(projectID: string): Observable<EtcdRestore[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/etcdrestores`;
+    return this._http.get<EtcdRestore[]>(url);
+  }
+
+  private _deleteExternalCluster(projectID: string, clusterID: string): Observable<any> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}`;
+    return this._http.delete(url);
   }
 
   private _getClusters(projectID: string): Observable<Cluster[]> {
