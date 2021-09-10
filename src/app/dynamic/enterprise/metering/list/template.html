@@ -26,87 +26,87 @@ limitations under the License.
       Enable and configure metering to get regular usage reports
     </div>
 
-      <table [hidden]="!config.enabled"
-             class="km-table"
-             mat-table
-             matSort
-             matSortActive="name"
-             matSortDirection="asc"
-             [dataSource]="dataSource">
-        <ng-container matColumnDef="name">
-          <th mat-header-cell
-              *matHeaderCellDef
-              class="km-header-cell"
-              mat-sort-header>Name
-          </th>
-          <td mat-cell
-              *matCellDef="let element">{{element.name}}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="size">
-          <th mat-header-cell
-              *matHeaderCellDef
-              class="km-header-cell"
-              mat-sort-header>Size
-          </th>
-          <td mat-cell
-              *matCellDef="let element">{{element.size | kmSize}}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="modified">
-          <th mat-header-cell
-              *matHeaderCellDef
-              class="km-header-cell"
-              mat-sort-header>Modified
-          </th>
-          <td mat-cell
-              *matCellDef="let element">
-            <km-relative-time [date]="element.lastModified"></km-relative-time>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell
-              *matHeaderCellDef
-              class="km-header-cell"></th>
-          <td mat-cell
-              *matCellDef="let element">
-            <div class="km-table-actions"
-                 fxLayoutAlign="end">
-              <ng-container *ngIf="isFetchingReport(element)">
-                <mat-spinner color="accent"
-                             class="km-spinner"
-                             fxFlexAlign=" center"
-                             [diameter]="25"></mat-spinner>
-              </ng-container>
-
-              <button mat-icon-button
-                      (click)="download(element)"
-                      [disabled]="!canDownload(element)">
-                <i class="km-icon-mask km-icon-download"></i>
-              </button>
-            </div>
-          </td>
-        </ng-container>
-
-        <tr mat-header-row
-            class="km-header-row"
-            *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row
-            *matRowDef="let row; columns: displayedColumns"
-            class="km-mat-row"></tr>
-      </table>
-
-      <ng-container *ngIf="isLoading">
-        <div class="km-row">
-          <mat-spinner color="accent"
-                       class="km-spinner"
-                       [diameter]="25"></mat-spinner>
-        </div>
+    <table [hidden]="!config.enabled"
+           class="km-table"
+           mat-table
+           matSort
+           matSortActive="name"
+           matSortDirection="asc"
+           [dataSource]="dataSource">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"
+            mat-sort-header>Name
+        </th>
+        <td mat-cell
+            *matCellDef="let element">{{element.name}}</td>
       </ng-container>
 
-      <div [hidden]="!isPaginatorVisible() || !enabled">
-        <mat-paginator showFirstLastButtons></mat-paginator>
+      <ng-container matColumnDef="size">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"
+            mat-sort-header>Size
+        </th>
+        <td mat-cell
+            *matCellDef="let element">{{element.size | kmSize}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="modified">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"
+            mat-sort-header>Modified
+        </th>
+        <td mat-cell
+            *matCellDef="let element">
+          <km-relative-time [date]="element.lastModified"></km-relative-time>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"></th>
+        <td mat-cell
+            *matCellDef="let element">
+          <div class="km-table-actions"
+               fxLayoutAlign="end">
+            <ng-container *ngIf="isFetchingReport(element)">
+              <mat-spinner color="accent"
+                           class="km-spinner"
+                           fxFlexAlign=" center"
+                           [diameter]="25"></mat-spinner>
+            </ng-container>
+
+            <button mat-icon-button
+                    (click)="download(element)"
+                    [disabled]="!canDownload(element)">
+              <i class="km-icon-mask km-icon-download"></i>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row
+          class="km-header-row"
+          *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          class="km-mat-row"></tr>
+    </table>
+
+    <ng-container *ngIf="isLoading && enabled">
+      <div class="km-row">
+        <mat-spinner color="accent"
+                     class="km-spinner"
+                     [diameter]="25"></mat-spinner>
       </div>
+    </ng-container>
+
+    <div [hidden]="!isPaginatorVisible() || !enabled">
+      <mat-paginator showFirstLastButtons></mat-paginator>
+    </div>
   </mat-card-content>
 </mat-card>
