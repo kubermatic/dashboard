@@ -171,7 +171,7 @@ limitations under the License.
                         [attr.id]="'km-delete-cluster-' + element.name"
                         matTooltip="Delete Cluster"
                         (click)="deleteClusterDialog(element, $event)"
-                        [disabled]="!canDelete()">
+                        [disabled]="!canDelete() || isRestoring(element.id)">
                   <i class="km-icon-mask km-icon-delete"></i>
                 </button>
                 <button *ngIf="element.isExternal"
@@ -192,8 +192,9 @@ limitations under the License.
           *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row
           *matRowDef="let row; columns: displayedColumns"
-          class="km-mat-row km-pointer"
-          (click)="navigateToCluster(row)"></tr>
+          [ngClass]="!isRestoring(row.id) ? 'km-mat-row km-pointer' : ''"
+          [matTooltip]="isRestoring(row.id) ? 'Access to this cluster is disabled due to pending restore process' : ''"
+          (click)="!isRestoring(row.id) ? navigateToCluster(row) : null"></tr>
     </table>
 
     <div class="km-row km-empty-list-msg"
