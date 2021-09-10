@@ -96,13 +96,6 @@ limitations under the License.
 
               <ng-container *ngSwitchCase="false">
                 <button mat-icon-button
-                        matTooltip="Restore Cluster from Snapshot"
-                        (click)="restore(backup); $event.stopPropagation()"
-                        [disabled]="!canRestore">
-                  <i class="km-icon-add"></i>
-                </button>
-
-                <button mat-icon-button
                         [attr.id]="'km-delete-snapshot-' + backup.name"
                         matTooltip="Delete Snapshot"
                         (click)="delete(backup); $event.stopPropagation()"

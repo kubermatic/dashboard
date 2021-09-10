@@ -19,10 +19,6 @@ import {
   DeleteSnapshotDialogComponent,
   DeleteSnapshotDialogConfig,
 } from '@app/backup/list/snapshot/delete-dialog/component';
-import {
-  RestoreSnapshotDialogComponent,
-  RestoreSnapshotDialogConfig,
-} from '@app/backup/list/snapshot/restore-dialog/component';
 import {BackupService} from '@core/services/backup';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
@@ -140,23 +136,6 @@ export class SnapshotListComponent implements OnInit, OnDestroy {
     };
 
     const dialog = this._matDialog.open(DeleteSnapshotDialogComponent, config);
-    dialog
-      .afterClosed()
-      .pipe(filter(confirmed => confirmed))
-      .pipe(take(1))
-      .subscribe(_ => this._backupService.refreshSnapshots());
-  }
-
-  restore(backup: EtcdBackupConfig): void {
-    const config: MatDialogConfig = {
-      data: {
-        backupName: backup.status.lastBackups[0].backupName,
-        clusterID: backup.spec.clusterId,
-        projectID: this._selectedProject.id,
-      } as RestoreSnapshotDialogConfig,
-    };
-
-    const dialog = this._matDialog.open(RestoreSnapshotDialogComponent, config);
     dialog
       .afterClosed()
       .pipe(filter(confirmed => confirmed))
