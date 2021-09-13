@@ -112,3 +112,12 @@ export enum EtcdRestorePhase {
   StsRebuilding = 'StsRebuilding',
   Completed = 'Completed',
 }
+
+export class BackupCredentials {
+  s3: S3BackupCredentials;
+}
+
+export class S3BackupCredentials {
+  accessKeyId: string;
+  secretAccessKey: string;
+}

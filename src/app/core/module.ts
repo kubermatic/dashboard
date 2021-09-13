@@ -107,6 +107,7 @@ const services: any[] = [
   EndOfLifeService,
   MLAService,
   ClusterTemplateService,
+  BackupService,
   MeteringService,
   BackupService,
 ];

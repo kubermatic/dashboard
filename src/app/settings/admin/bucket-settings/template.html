@@ -1,0 +1,100 @@
+<!--
+Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<mat-card>
+  <mat-card-header>
+    <mat-card-title fxFlex
+                    fxLayout="row"
+                    fxLayoutAlign=" center">
+      <div fxFlex>Backup Buckets</div>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <table class="km-table"
+           mat-table
+           matSort
+           [matSortActive]="Column.Seed"
+           matSortDirection="asc"
+           (matSortChange)="onSortChange($event)"
+           [dataSource]="dataSource">
+      <ng-container [matColumnDef]="Column.Seed">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"
+            mat-sort-header>Seed
+        </th>
+        <td mat-cell
+            *matCellDef="let element">{{element.name}}</td>
+      </ng-container>
+
+      <ng-container [matColumnDef]="Column.Bucket">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell">Bucket
+        </th>
+        <td mat-cell
+            *matCellDef="let element">{{element?.spec?.backupRestore?.s3BucketName}}</td>
+      </ng-container>
+
+      <ng-container [matColumnDef]="Column.Endpoint">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell">Endpoint
+        </th>
+        <td mat-cell
+            *matCellDef="let element">{{element?.spec?.backupRestore?.s3Endpoint}}</td>
+      </ng-container>
+
+      <ng-container [matColumnDef]="Column.Actions">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"></th>
+        <td mat-cell
+            *matCellDef="let element">
+          <div class="km-table-actions"
+               fxLayoutAlign="end">
+            <button mat-icon-button
+                    matTooltip="Edit Bucket Settings"
+                    (click)="editBucketSettings(element)">
+              <i class="km-mask-icon km-icon-edit"></i>
+            </button>
+            <button mat-icon-button
+                    matTooltip="Edit Credentials"
+                    (click)="editCredentials(element)">
+              <i class="km-mask-icon km-icon-credentials"></i>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row
+          class="km-header-row"
+          *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          class="km-mat-row"></tr>
+    </table>
+
+    <ng-container *ngIf="isLoading">
+      <div class="km-row">
+        <mat-spinner color="accent"
+                     class="km-spinner"
+                     [diameter]="25"></mat-spinner>
+      </div>
+    </ng-container>
+
+    <div [hidden]="!isPaginatorVisible()">
+      <mat-paginator showFirstLastButtons></mat-paginator>
+    </div>
+  </mat-card-content>
+</mat-card>

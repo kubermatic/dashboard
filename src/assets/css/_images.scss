@@ -95,6 +95,10 @@
   @include mixins.mask-image("/assets/images/icons/edit.svg", 18px);
 }
 
+.km-icon-credentials {
+  @include mixins.mask-image("/assets/images/icons/credentials.svg", 18px);
+}
+
 .km-icon-connect {
   @include mixins.mask-image("/assets/images/icons/connect.svg", 24px);
 }

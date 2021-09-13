@@ -51,6 +51,10 @@ const routes: Routes = [
         loadChildren: () => import('./opa/module').then(m => m.AdminSettingsOPAModule),
       },
       {
+        path: 'bucketsettings',
+        loadChildren: () => import('./bucket-settings/module').then(m => m.AdminSettingsBucketSettingsModule),
+      },
+      {
         path: 'metering',
         loadChildren: () => DynamicModule.Metering,
         data: {preload: true},

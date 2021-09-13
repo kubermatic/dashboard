@@ -126,6 +126,28 @@ export class MLA {
   user_cluster_mla_enabled: boolean;
 }
 
+export class AdminSeed {
+  name: string;
+  spec: AdminSeedSpec;
+}
+
+export class AdminSeedSpec {
+  backupRestore?: BackupRestoreConfiguration;
+  country?: string;
+  location?: string;
+  kubeconfig?: object;
+  datacenters?: Datacenter;
+  seed_dns_overwrite?: string;
+  proxy_settings?: object;
+  expose_strategy?: string;
+  mla: MLA;
+}
+
+export class BackupRestoreConfiguration {
+  s3BucketName?: string;
+  s3Endpoint?: string;
+}
+
 export class MeteringCredentials {
   bucketName: string;
   accessKey: string;
