@@ -24,6 +24,7 @@ import {take, takeUntil} from 'rxjs/operators';
 @Component({
   selector: 'km-change-cluster-version',
   templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster;

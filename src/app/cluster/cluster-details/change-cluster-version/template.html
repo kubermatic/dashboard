@@ -33,9 +33,11 @@ limitations under the License.
       </mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-checkbox [(ngModel)]="isMachineDeploymentUpgradeEnabled">
-    Upgrade Machine Deployments
-  </mat-checkbox>
+  <div class="checkbox-wrapper">
+    <mat-checkbox [(ngModel)]="isMachineDeploymentUpgradeEnabled">
+      Upgrade Machine Deployments
+    </mat-checkbox>
+  </div>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-flat-button
