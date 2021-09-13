@@ -55,6 +55,7 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
   private readonly _domains: string[] = ['Default'];
   readonly Controls = Controls;
   readonly CredentialsType = CredentialsType;
+  isPresetSelected = false;
   projects: OpenstackTenant[] = [];
   projectsLabel = ProjectState.Empty;
   domains = this._domains.map(type => ({name: type}));
@@ -74,15 +75,18 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Domain]: this._builder.control(this._domains[0], Validators.required),
+      [Controls.Domain]: this._builder.control('', Validators.required),
       [Controls.Credentials]: this._builder.control(''),
     });
 
     this._init();
 
-    this._presets.presetChanges
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
+    this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset =>
+      Object.values(Controls).forEach(control => {
+        this.isPresetSelected = !!preset;
+        this._enable(!this.isPresetSelected, control);
+      })
+    );
 
     this.form.valueChanges
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))

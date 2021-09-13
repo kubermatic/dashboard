@@ -34,6 +34,7 @@ limitations under the License.
 
   <mat-button-toggle-group class="km-wizard-openstack-button-toggle-group"
                            group="bindingType"
+                           [disabled]="isPresetSelected"
                            (change)="changeView($event)">
     <mat-button-toggle [value]="CredentialsType.Default"
                        [checked]="credentialsType === CredentialsType.Default">

@@ -61,9 +61,8 @@ enum VPCState {
 })
 export class AWSProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private readonly _debounceTime = 500;
-
   readonly Controls = Controls;
-
+  isPresetSelected = false;
   vpcIds: AWSVPC[] = [];
   selectedVPC = '';
   vpcLabel = VPCState.Empty;
@@ -87,9 +86,12 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
       [Controls.VPCID]: this._builder.control('', Validators.required),
     });
 
-    this._presets.presetChanges
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
+    this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset =>
+      Object.values(Controls).forEach(control => {
+        this.isPresetSelected = !!preset;
+        this._enable(!this.isPresetSelected, control);
+      })
+    );
 
     this.form.valueChanges
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.AWS))

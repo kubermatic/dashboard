@@ -72,6 +72,7 @@ limitations under the License.
   <km-combobox #floatingIPPoolCombobox
                [required]="isRequired(Controls.FloatingIPPool)"
                [grouped]="false"
+               [isDisabled]="isPresetSelected"
                [options]="floatingIPPools"
                [hint]="getHint(Controls.FloatingIPPool)"
                [formControlName]="Controls.FloatingIPPool"

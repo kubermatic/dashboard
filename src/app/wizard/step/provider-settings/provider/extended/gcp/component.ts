@@ -72,6 +72,7 @@ export class GCPProviderExtendedComponent extends BaseFormValidator implements O
   @ViewChild('subNetworkCombobox')
   private readonly _subNetworkCombobox: FilteredComboboxComponent;
   readonly Controls = Controls;
+  isPresetSelected = false;
   networks: GCPNetwork[] = [];
   networkLabel = NetworkState.Empty;
   subNetworks: GCPSubnetwork[] = [];
@@ -92,9 +93,12 @@ export class GCPProviderExtendedComponent extends BaseFormValidator implements O
       [Controls.SubNetwork]: this._builder.control(''),
     });
 
-    this._presets.presetChanges
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
+    this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset =>
+      Object.values(Controls).forEach(control => {
+        this.isPresetSelected = !!preset;
+        this._enable(!this.isPresetSelected, control);
+      })
+    );
 
     this.form.valueChanges
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.GCP))
