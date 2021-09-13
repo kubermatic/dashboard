@@ -9,32 +9,46 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnChanges, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
+import {MatSort, Sort, SortDirection} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {DatacenterService} from '@core/services/datacenter';
 import {UserService} from '@core/services/user';
 import {AdminSeed} from '@shared/entity/datacenter';
-import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {EditBucketSettingDialog} from './edit-bucket-setting-dialog/component';
 import {EditCredentialsDialog} from './edit-credentials-dialog/component';
 
+enum Column {
+  Seed = 'seed',
+  Bucket = 'bucket',
+  Endpoint = 'endpoint',
+  Actions = 'actions',
+}
+
 @Component({
   selector: 'km-admin-settings-bucket-settings',
   templateUrl: './template.html',
   styleUrls: ['style.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BucketSettingsComponent implements OnInit, OnChanges {
-  seeds: AdminSeed[] = [];
-  dataSource = new MatTableDataSource<AdminSeed>();
-  displayedColumns: string[] = ['seed', 'bucket', 'endpoint', 'actions'];
+export class BucketSettingsComponent implements OnInit, OnDestroy, AfterViewInit {
+  private readonly _unsubscribe = new Subject<void>();
+
+  isLoading = false;
+  dataSource: MatTableDataSource<AdminSeed>;
+  displayedColumns: string[] = Object.keys(Column).map(key => Column[key]);
+  readonly Column = Column;
+
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  private _unsubscribe = new Subject<void>();
+
+  private get _seeds(): AdminSeed[] {
+    return this.dataSource.data;
+  }
 
   constructor(
     private readonly _datacenterService: DatacenterService,
@@ -42,16 +56,14 @@ export class BucketSettingsComponent implements OnInit, OnChanges {
     private readonly _matDialog: MatDialog
   ) {}
 
-  ngOnInit() {
-    this.dataSource.data = this.seeds;
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
-    this.sort.active = 'seed';
-    this.sort.direction = 'asc';
+  ngOnInit(): void {
+    this.dataSource = new MatTableDataSource<AdminSeed>([]);
+    this.isLoading = true;
 
     this._datacenterService.adminSeeds.pipe(takeUntil(this._unsubscribe)).subscribe(seeds => {
-      this.seeds = _.sortBy(seeds, seed => seed.name.toLowerCase());
-      this.dataSource.data = this.seeds;
+      this.dataSource.data = seeds;
+      this._sortByName('asc');
+      this.isLoading = false;
     });
 
     this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
@@ -60,8 +72,9 @@ export class BucketSettingsComponent implements OnInit, OnChanges {
     });
   }
 
-  ngOnChanges(): void {
-    this.dataSource.data = this.seeds;
+  ngAfterViewInit(): void {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
   }
 
   ngOnDestroy(): void {
@@ -89,7 +102,20 @@ export class BucketSettingsComponent implements OnInit, OnChanges {
     this._matDialog.open(EditCredentialsDialog, dialogConfig);
   }
 
+  onSortChange(sort: Sort): void {
+    switch (sort.active) {
+      case Column.Seed:
+        this._sortByName(sort.direction);
+    }
+  }
+
   isPaginatorVisible(): boolean {
-    return this.seeds && this.seeds.length > 0 && this.paginator && this.seeds.length > this.paginator.pageSize;
+    return this._seeds && this._seeds.length > 0 && this.paginator && this._seeds.length > this.paginator.pageSize;
+  }
+
+  private _sortByName(direction: SortDirection): void {
+    this.dataSource.data = this.dataSource.data.sort((a, b) =>
+      direction === 'asc' ? a.name.localeCompare(b.name) : a.name.localeCompare(b.name) * -1
+    );
   }
 }

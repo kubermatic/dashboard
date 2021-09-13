@@ -23,8 +23,11 @@ limitations under the License.
     <table class="km-table"
            mat-table
            matSort
+           [matSortActive]="Column.Seed"
+           matSortDirection="asc"
+           (matSortChange)="onSortChange($event)"
            [dataSource]="dataSource">
-      <ng-container matColumnDef="seed">
+      <ng-container [matColumnDef]="Column.Seed">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell"
@@ -34,27 +37,25 @@ limitations under the License.
             *matCellDef="let element">{{element.name}}</td>
       </ng-container>
 
-      <ng-container matColumnDef="bucket">
+      <ng-container [matColumnDef]="Column.Bucket">
         <th mat-header-cell
             *matHeaderCellDef
-            class="km-header-cell"
-            mat-sort-header>Bucket
+            class="km-header-cell">Bucket
         </th>
         <td mat-cell
             *matCellDef="let element">{{element?.spec?.backupRestore?.s3BucketName}}</td>
       </ng-container>
 
-      <ng-container matColumnDef="endpoint">
+      <ng-container [matColumnDef]="Column.Endpoint">
         <th mat-header-cell
             *matHeaderCellDef
-            class="km-header-cell"
-            mat-sort-header>Endpoint
+            class="km-header-cell">Endpoint
         </th>
         <td mat-cell
             *matCellDef="let element">{{element?.spec?.backupRestore?.s3Endpoint}}</td>
       </ng-container>
 
-      <ng-container matColumnDef="actions">
+      <ng-container [matColumnDef]="Column.Actions">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell"></th>
@@ -84,7 +85,7 @@ limitations under the License.
           class="km-mat-row"></tr>
     </table>
 
-    <ng-container *ngIf="!seeds">
+    <ng-container *ngIf="isLoading">
       <div class="km-row">
         <mat-spinner color="accent"
                      class="km-spinner"
