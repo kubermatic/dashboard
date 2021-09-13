@@ -51,6 +51,7 @@ limitations under the License.
   <km-combobox #vpcCombobox
                [required]="true"
                [grouped]="false"
+               [isDisabled]="isPresetSelected"
                [options]="vpcIds"
                [selected]="selectedVPC"
                [hint]="getHint(Controls.VPCID)"
