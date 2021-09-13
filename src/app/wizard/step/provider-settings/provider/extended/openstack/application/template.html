@@ -16,6 +16,7 @@ limitations under the License.
   <km-combobox #securityGroupCombobox
                [required]="false"
                [grouped]="false"
+               [isDisabled]="isPresetSelected"
                [options]="securityGroups"
                [hint]="getHint(Controls.SecurityGroup)"
                [formControlName]="Controls.SecurityGroup"
@@ -31,6 +32,7 @@ limitations under the License.
   <km-combobox #networkCombobox
                [required]="false"
                [grouped]="false"
+               [isDisabled]="isPresetSelected"
                [options]="networks"
                [hint]="getHint(Controls.Network)"
                [formControlName]="Controls.Network"
@@ -46,6 +48,7 @@ limitations under the License.
   <km-combobox #subnetIDCombobox
                [required]="false"
                [grouped]="false"
+               [isDisabled]="isPresetSelected"
                [valueFormatter]="subnetIDDisplayName.bind(this)"
                [options]="subnetIDs"
                [hint]="getHint(Controls.SubnetID)"

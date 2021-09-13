@@ -83,6 +83,7 @@ export class OpenstackProviderExtendedAppCredentialsComponent
   @ViewChild('subnetIDCombobox')
   private readonly _subnetIDCombobox: FilteredComboboxComponent;
   readonly Controls = Controls;
+  isPresetSelected = false;
   securityGroups: OpenstackSecurityGroup[] = [];
   securityGroupsLabel = SecurityGroupState.Empty;
   networks: OpenstackNetwork[] = [];
@@ -107,9 +108,12 @@ export class OpenstackProviderExtendedAppCredentialsComponent
       [Controls.SubnetID]: this._builder.control(''),
     });
 
-    this._presets.presetChanges
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
+    this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset =>
+      Object.values(Controls).forEach(control => {
+        this.isPresetSelected = !!preset;
+        this._enable(!this.isPresetSelected, control);
+      })
+    );
 
     this._credentialsTypeService.credentialsTypeChanges
       .pipe(takeUntil(this._unsubscribe))

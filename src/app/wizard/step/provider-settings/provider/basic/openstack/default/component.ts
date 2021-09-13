@@ -115,10 +115,6 @@ export class OpenstackProviderBasicDefaultCredentialsComponent extends BaseFormV
       [Controls.FloatingIPPool]: this._builder.control('', Validators.required),
     });
 
-    // Initialize values. It's required because of the switch between user and application credentials.
-    this.isPresetSelected = !!this._presets.preset;
-    Object.values(Controls).forEach(control => this._enable(!this.isPresetSelected, control));
-
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset =>
       Object.values(Controls).forEach(control => {
         this.isPresetSelected = !!preset;
