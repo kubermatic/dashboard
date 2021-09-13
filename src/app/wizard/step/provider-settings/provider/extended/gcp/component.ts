@@ -93,12 +93,12 @@ export class GCPProviderExtendedComponent extends BaseFormValidator implements O
       [Controls.SubNetwork]: this._builder.control(''),
     });
 
-    this._presets.presetChanges
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(preset => Object.values(Controls).forEach(control => {
+    this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset =>
+      Object.values(Controls).forEach(control => {
         this.isPresetSelected = !!preset;
         this._enable(!this.isPresetSelected, control);
-      }));
+      })
+    );
 
     this.form.valueChanges
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.GCP))

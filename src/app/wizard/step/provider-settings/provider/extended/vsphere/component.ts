@@ -118,12 +118,12 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._presets.enablePresets(isObjectEmpty(this._clusterSpecService.cluster.spec.cloud.vsphere)));
 
-    this._presets.presetChanges
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(preset => Object.values(Controls).forEach(control => {
+    this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset =>
+      Object.values(Controls).forEach(control => {
         this.isPresetSelected = !!preset;
         this._enable(!this.isPresetSelected, control);
-      }));
+      })
+    );
 
     this._clusterSpecService.clusterChanges
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.VSPHERE))
