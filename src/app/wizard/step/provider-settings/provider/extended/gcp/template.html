@@ -16,6 +16,7 @@ limitations under the License.
   <km-combobox #networkCombobox
                [required]="false"
                [grouped]="false"
+               [isDisabled]="isPresetSelected"
                [options]="networks"
                [hint]="getHint(Controls.Network)"
                [formControlName]="Controls.Network"
@@ -32,6 +33,7 @@ limitations under the License.
   <km-combobox #subNetworkCombobox
                [required]="false"
                [grouped]="false"
+               [isDisabled]="isPresetSelected"
                [options]="subNetworks"
                [hint]="getHint(Controls.SubNetwork)"
                [formControlName]="Controls.SubNetwork"
