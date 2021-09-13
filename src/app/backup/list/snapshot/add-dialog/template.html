@@ -1,0 +1,52 @@
+<!--
+Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<div id="km-add-snapshot-dialog">
+  <km-dialog-title>
+    <div>Add Snapshot</div>
+  </km-dialog-title>
+
+  <mat-dialog-content>
+    <form [formGroup]="form"
+          fxFlex
+          fxLayout="column"
+          fxLayoutGap="10px">
+      <mat-form-field>
+        <mat-label *ngIf="clusters.length > 0">Cluster</mat-label>
+        <mat-label *ngIf="clusters.length === 0">No Clusters Available</mat-label>
+        <mat-select [formControlName]="Controls.Cluster"
+                    disableOptionCentering
+                    required>
+          <mat-option *ngFor="let cluster of clusters"
+                      [value]="cluster.id">{{cluster.name}}</mat-option>
+        </mat-select>
+        <mat-hint>The list of existing clusters for the selected project.</mat-hint>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input [formControlName]="Controls.Name"
+               matInput
+               required>
+        <mat-hint>The name of the created automatic backup.</mat-hint>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button mat-flat-button
+            (click)="save()"
+            [disabled]="form.invalid">
+      Add Snapshot
+    </button>
+  </mat-dialog-actions>
+</div>

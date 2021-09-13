@@ -10,7 +10,7 @@
 // limitations under the License.
 
 import {DOCUMENT} from '@angular/common';
-import {AfterViewInit, Component, Inject, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Inject, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -18,16 +18,17 @@ import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {MeteringConfiguration} from '@shared/entity/datacenter';
 import {Report} from '@shared/entity/metering';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {merge, of, Subject} from 'rxjs';
+import {filter, switchMap, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-metering-list',
   templateUrl: './template.html',
 })
-export class MeteringListComponent implements OnInit, AfterViewInit {
+export class MeteringListComponent implements OnInit, OnChanges, AfterViewInit {
   private readonly _unsubscribe = new Subject<void>();
   private _fetchingReport = '';
+  private _configChanged$ = new Subject<MeteringConfiguration>();
   reports: Report[] = [];
   dataSource = new MatTableDataSource<Report>();
   readonly displayedColumns: string[] = ['name', 'size', 'modified', 'actions'];
@@ -54,11 +55,21 @@ export class MeteringListComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.dataSource.data = this.reports;
 
-    this._settingsService.reports.pipe(takeUntil(this._unsubscribe)).subscribe(reports => {
-      this.reports = reports;
-      this.dataSource.data = this.reports;
-      this._isLoading = false;
-    });
+    merge(this._configChanged$, of(this.config))
+      .pipe(filter(config => config.enabled))
+      .pipe(switchMap(_ => this._settingsService.reports))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(reports => {
+        this.reports = reports;
+        this.dataSource.data = this.reports;
+        this._isLoading = false;
+      });
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.config) {
+      this._configChanged$.next(changes.config.currentValue as MeteringConfiguration);
+    }
   }
 
   ngAfterViewInit(): void {

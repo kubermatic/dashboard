@@ -37,6 +37,18 @@ limitations under the License.
     </a>
   </div>
 
+  <div [matTooltip]="getTooltip(view.Backups)"
+       [ngClass]="getMenuItemClass(view.Backups)"
+       class="menu-item">
+    <a id="km-nav-item-backups"
+       fxLayoutAlign=" center"
+       [routerLink]="getRouterLink(view.Backups)"
+       [ngClass]="getLinkClass(view.Backups)">
+      <i class="km-icon-backup"></i>
+      <span *ngIf="!isSidenavCollapsed()">etcd Backups</span>
+    </a>
+  </div>
+
   <div [matTooltip]="getTooltip(view.SSHKeys)"
        [ngClass]="getMenuItemClass(view.SSHKeys)"
        class="menu-item">

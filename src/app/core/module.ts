@@ -109,6 +109,7 @@ const services: any[] = [
   ClusterTemplateService,
   BackupService,
   MeteringService,
+  BackupService,
 ];
 
 const interceptors: any[] = [

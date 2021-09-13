@@ -46,7 +46,7 @@ export class NodeDataAzureProvider {
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
         return this._clusterSpecService.clusterChanges
-          .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.AZURE))
+          .pipe(filter(c => this._clusterSpecService.provider === NodeProvider.AZURE && !!c?.spec?.cloud?.dc))
           .pipe(debounceTime(this._debounce))
           .pipe(tap(c => (cluster = c)))
           .pipe(switchMap(_ => this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(take(1))))

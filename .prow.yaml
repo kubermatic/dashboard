@@ -7,7 +7,7 @@ presubmits:
       preset-goproxy: "true"
     spec:
       containers:
-        - image: quay.io/kubermatic/build:go-1.16-kind-0.8-nodejs-14.16-0
+        - image: quay.io/kubermatic/build:go-1.16-node-14-kind-0.11-2
           command:
             - make
             - verify-go
@@ -21,7 +21,7 @@ presubmits:
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     spec:
       containers:
-        - image: quay.io/kubermatic/build:go-1.16-kind-0.8-nodejs-14.16-0
+        - image: quay.io/kubermatic/build:go-1.16-node-14-kind-0.11-2
           command:
             - make
             - check
@@ -39,7 +39,7 @@ presubmits:
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     spec:
       containers:
-        - image: quay.io/kubermatic/chrome-headless:v0.8
+        - image: quay.io/kubermatic/chrome-headless:v0.9
           command:
             - make
             - test-headless
@@ -102,6 +102,8 @@ presubmits:
               memory: 6Gi
               cpu: 4
           env:
+            - name: NO_COLOR
+              value: "1"
             - name: SERVICE_ACCOUNT_KEY
               valueFrom:
                 secretKeyRef:
@@ -155,6 +157,8 @@ presubmits:
           env:
             - name: KUBERMATIC_EDITION
               value: ce
+            - name: NO_COLOR
+              value: "1"
             - name: SERVICE_ACCOUNT_KEY
               valueFrom:
                 secretKeyRef:
@@ -170,7 +174,7 @@ presubmits:
       preset-goproxy: "true"
     spec:
       containers:
-        - image: quay.io/kubermatic/build:go-1.16-kind-0.8-nodejs-14.16-0
+        - image: quay.io/kubermatic/build:go-1.16-node-14-kind-0.11-2
           imagePullPolicy: Always
           command:
             - /bin/bash
@@ -198,7 +202,7 @@ presubmits:
       preset-goproxy: "true"
     spec:
       containers:
-        - image: quay.io/kubermatic/build:go-1.16-kind-0.8-nodejs-14.16-0
+        - image: quay.io/kubermatic/build:go-1.16-node-14-kind-0.11-2
           imagePullPolicy: Always
           command:
             - /bin/bash
