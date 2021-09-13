@@ -47,7 +47,7 @@ export class NodeDataAlibabaProvider {
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
         return this._clusterSpecService.clusterChanges
-          .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.ALIBABA))
+          .pipe(filter(c => this._clusterSpecService.provider === NodeProvider.ALIBABA && !!c?.spec?.cloud?.dc))
           .pipe(debounceTime(this._debounce))
           .pipe(tap(c => (cluster = c)))
           .pipe(switchMap(_ => this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(take(1))))
@@ -113,7 +113,7 @@ export class NodeDataAlibabaProvider {
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
         return this._clusterSpecService.clusterChanges
-          .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.ALIBABA))
+          .pipe(filter(c => this._clusterSpecService.provider === NodeProvider.ALIBABA && !!c?.spec?.cloud?.dc))
           .pipe(debounceTime(this._debounce))
           .pipe(tap(c => (cluster = c)))
           .pipe(switchMap(_ => this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(take(1))))
@@ -175,7 +175,7 @@ export class NodeDataAlibabaProvider {
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
         return this._clusterSpecService.clusterChanges
-          .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.ALIBABA))
+          .pipe(filter(c => this._clusterSpecService.provider === NodeProvider.ALIBABA && !!c?.spec?.cloud?.dc))
           .pipe(debounceTime(this._debounce))
           .pipe(tap(c => (cluster = c)))
           .pipe(switchMap(_ => this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(take(1))))
