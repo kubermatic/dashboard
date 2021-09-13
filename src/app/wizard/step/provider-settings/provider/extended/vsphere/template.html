@@ -15,6 +15,7 @@ limitations under the License.
       fxLayoutGap="16px">
   <km-combobox #networkCombobox
                [grouped]="true"
+               [isDisabled]="isPresetSelected"
                [groups]="networkTypes"
                [optionsGetter]="getNetworks.bind(this)"
                [formControlName]="Controls.VMNetName"
@@ -30,6 +31,7 @@ limitations under the License.
 
   <km-combobox #folderCombobox
                [grouped]="false"
+               [isDisabled]="isPresetSelected"
                [options]="folders"
                [formControlName]="Controls.Folder"
                [hint]="getHint(Controls.VMNetName)"
