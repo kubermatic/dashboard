@@ -31,7 +31,7 @@ Every assignee should mark their name next to the checks or groups they're willi
 
 ### Projects
 - [ ] Check operations like create, list, update and delete
-- [ ] Check filtering and sorting (in the list view)
+- [ ] Check pagination, filtering and sorting (in the list view)
 - [ ] Check switch between list and cards view
 - [ ] Check switch to show all project (as administrator)
 
@@ -41,6 +41,16 @@ Every assignee should mark their name next to the checks or groups they're willi
 - [ ] Check addon management from cluster details
 - [ ] Check connection to Kubernetes Dashboard from cluster details
 - [ ] Check external cluster connection, details and disconnection
+
+### Cluster Templates
+- [ ] Check creation of cluster templates with SSH key in the project scope and verify it was saved 
+- [ ] Check creation of cluster templates in the user scope and verify it was saved
+- [ ] Check creation of cluster templates in the global scope and verify it was saved (as administrator)
+- [ ] Check cluster creation from the templates created before and verify if it is the same as expected
+- [ ] Check cluster creation from the cluster template list and from the clusters list
+- [ ] Check cluster template deletion
+- [ ] Check cluster template management for at least 3 most common providers
+- [ ] Check pagination, search and filtering
 
 ### Providers
 - [ ] Alibaba
