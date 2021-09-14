@@ -19,21 +19,43 @@ Every assignee should mark their name next to the checks or groups they're willi
 - [ ] Check default project switch functionality
 
 ### Admin Settings
-- [ ] Check using two browser windows if default and interface settings are successfully saved and loaded (as administrator)
-- [ ] Check initial machine deployment replicas (as administrator)
-- [ ] Check user project limit (as administrator)
-- [ ] Check resource quota (as administrator)
-- [ ] Check cleanup on cluster deletion (as administrator)
-- [ ] Check operations like create, list, update and delete of dynamic datacenters (as administrator)
-- [ ] Check operations like create, list, update and delete of presets (as administrator)
-- [ ] Check operations like create, list, update and delete of constraint templates (as administrator)
-- [ ] Check operations like create, list and delete of administrators (as administrator)
+- [ ] Check if admin settings are available to administrators only
+- [ ] Check using two browser windows if default and interface settings are successfully saved and loaded
+- [ ] Check initial machine deployment replicas
+- [ ] Check user project limit
+- [ ] Check resource quota
+- [ ] Check cleanup on cluster deletion
+- [ ] Check operations like create, list, update and delete of dynamic datacenters
+- [ ] Check operations like create, list, update and delete of presets
+- [ ] Check operations like create, list, update and delete of constraint templates
+- [ ] Check operations like create, list and delete of administrators
+
+### Metering
+- [ ] Check metering configuration
+- [ ] Check metering credentials configuration
+- [ ] Check enabling and disabling metering
+- [ ] Check listing reports
+- [ ] Check downloading reports
+
+### OPA
+- [ ] Check if `Applies To` and `On/Off` columns are available only in enterprise edition in the default constraints list
+- [ ] Check if allowed registries view is available only in enterprise edition
+- [ ] Check options to enable and enforce OPA from the admin settings
+- [ ] Check if `Constraints` and `Gatekeeper` tabs are visible in the cluster details if OPA was enabled
+- [ ] Check operations like create, list, update and delete of constraints
+- [ ] Check operations like create, list, update and delete of Gatekeeper config
+
+### MLA
+- [ ] Check options to enable and enforce MLA from the admin settings
+- [ ] Check if `Monitoring, Logging & Alerting` tab is visible in the cluster details if MLA was enabled
+- [ ] Check operations like create, list, update and delete of rule groups
+- [ ] Check operations like update and reset of Alertmanager config
 
 ### Projects
 - [ ] Check operations like create, list, update and delete
-- [ ] Check pagination, filtering and sorting (in the list view)
+- [ ] Check pagination, filtering and sorting
 - [ ] Check switch between list and cards view
-- [ ] Check switch to show all project (as administrator)
+- [ ] Check switch to show all project
 
 ### Clusters
 - [ ] Check SSH key management from cluster details
@@ -45,12 +67,18 @@ Every assignee should mark their name next to the checks or groups they're willi
 ### Cluster Templates
 - [ ] Check creation of cluster templates with SSH key in the project scope and verify it was saved 
 - [ ] Check creation of cluster templates in the user scope and verify it was saved
-- [ ] Check creation of cluster templates in the global scope and verify it was saved (as administrator)
+- [ ] Check creation of cluster templates in the global scope and verify it was saved
 - [ ] Check cluster creation from the templates created before and verify if it is the same as expected
 - [ ] Check cluster creation from the cluster template list and from the clusters list
 - [ ] Check cluster template deletion
 - [ ] Check cluster template management for at least 3 most common providers
 - [ ] Check pagination, search and filtering
+
+### Backups
+- [ ] Check create and delete of automatic cluster backup/snapshot
+- [ ] Check restore from snapshot
+- [ ] Check if information about pending cluster restoration is available
+- [ ] Check automated snapshot creation by automatic cluster backups
 
 ### Providers
 - [ ] Alibaba
