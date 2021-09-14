@@ -10,90 +10,111 @@ labels: sig/ui, sig/release
 List of steps to execute before proceeding with the release procedure. It mainly consists of
 manual tests and visual checks of the Kubermatic Dashboard.
 
-Every assignee should mark their name next to the checks they're willing to work on.
+Every assignee should mark their name next to the checks or groups they're willing to work on.
 
-- [ ] Validate display all projects switch on the projects view
-- [ ] Visual check of theme changes in the user settings (EE only)
-- [ ] Items per page changes in the user settings
-- [ ] Changes of the initial machine deployment replicas in the admin settings
-- [ ] Changes of the user project limit in the admin settings
-- [ ] Changes of the resource quota in the admin settings
-- [ ] Creation, update, check and deletion in the admin settings of the:
-  - [ ] Dynamic datacenters
-  - [ ] Administrators
-  - [ ] Presets
-  - [ ] Constraint templates
-- [ ] API documentation
-- [ ] Changelog
-- [ ] AWS provider
-  - [ ] Cluster creation with SSH key assigned
-  - [ ] Cluster version upgrade
-  - [ ] Initial machine deployment creation
-  - [ ] Manual machine deployment creation
-  - [ ] Machine deployment scaling
-  - [ ] Machine deployment deletion
-  - [ ] Addon creation & deletion
-  - [ ] RBAC creation & deletion
-  - [ ] SSH Key management from cluster details
-  - [ ] Connection to Kubernetes Dashboard
-- [ ] Azure provider
-  - [ ] Cluster creation with SSH key assigned
-  - [ ] Cluster version upgrade
-  - [ ] Initial machine deployment creation
-  - [ ] Manual machine deployment creation
-  - [ ] Machine deployment scaling
-  - [ ] Machine deployment deletion
-  - [ ] Addon creation & deletion
-  - [ ] RBAC creation & deletion
-  - [ ] SSH Key management from cluster details
-- [ ] DigitalOcean provider
-  - [ ] Cluster creation with SSH key assigned
-  - [ ] Cluster version upgrade
-  - [ ] Initial machine deployment creation
-  - [ ] Manual machine deployment creation
-  - [ ] Machine deployment scaling
-  - [ ] Machine deployment deletion
-  - [ ] Addon creation & deletion
-  - [ ] RBAC creation & deletion
-  - [ ] SSH Key management from cluster details
-- [ ] Hetzner provider
-  - [ ] Cluster creation with SSH key assigned
-  - [ ] Cluster version upgrade
-  - [ ] Initial machine deployment creation
-  - [ ] Manual machine deployment creation
-  - [ ] Machine deployment scaling
-  - [ ] Machine deployment deletion
-  - [ ] Addon creation & deletion
-  - [ ] RBAC creation & deletion
-  - [ ] SSH Key management from cluster details
-- [ ] OpenStack provider
-  - [ ] Cluster creation with SSH key assigned
-  - [ ] Cluster version upgrade
-  - [ ] Initial machine deployment creation
-  - [ ] Manual machine deployment creation
-  - [ ] Machine deployment scaling
-  - [ ] Machine deployment deletion
-  - [ ] Addon creation & deletion
-  - [ ] RBAC creation & deletion
-  - [ ] SSH Key management from cluster details
-- [ ] Google Cloud provider
-  - [ ] Cluster creation with SSH key assigned
-  - [ ] Cluster version upgrade
-  - [ ] Initial machine deployment creation
-  - [ ] Manual machine deployment creation
-  - [ ] Machine deployment scaling
-  - [ ] Machine deployment deletion
-  - [ ] Addon creation & deletion
-  - [ ] RBAC creation & deletion
-  - [ ] SSH Key management from cluster details
-- [ ] vSphere provider
-  - [ ] Cluster creation with SSH key assigned
-  - [ ] Cluster version upgrade
-  - [ ] Initial machine deployment creation
-  - [ ] Manual machine deployment creation
-  - [ ] Machine deployment scaling
-  - [ ] Machine deployment deletion
-  - [ ] Addon creation & deletion
-  - [ ] RBAC creation & deletion
-  - [ ] SSH Key management from cluster details
-- [ ] External cluster connection
+### User Settings
+- [ ] Check using two browser windows if settings are successfully saved and loaded
+- [ ] Check all available themes (in enterprise edition)
+- [ ] Check different items per page options across the application
+- [ ] Check default project switch functionality
+
+### Admin Settings
+- [ ] Check using two browser windows if default and interface settings are successfully saved and loaded (as administrator)
+- [ ] Check initial machine deployment replicas (as administrator)
+- [ ] Check user project limit (as administrator)
+- [ ] Check resource quota (as administrator)
+- [ ] Check cleanup on cluster deletion (as administrator)
+- [ ] Check operations like create, list, update and delete of dynamic datacenters (as administrator)
+- [ ] Check operations like create, list, update and delete of presets (as administrator)
+- [ ] Check operations like create, list, update and delete of constraint templates (as administrator)
+- [ ] Check operations like create, list and delete of administrators (as administrator)
+
+### Projects
+- [ ] Check operations like create, list, update and delete
+- [ ] Check filtering and sorting (in the list view)
+- [ ] Check switch between list and cards view
+- [ ] Check switch to show all project (as administrator)
+
+### Clusters
+- [ ] Check SSH key management from cluster details
+- [ ] Check RBAC management from cluster details
+- [ ] Check addon management from cluster details
+- [ ] Check connection to Kubernetes Dashboard from cluster details
+- [ ] Check external cluster connection, details and disconnection
+
+### Providers
+- [ ] Alibaba
+  - [ ] Check cluster creation with SSH key assigned
+  - [ ] Check initial machine deployment creation
+  - [ ] Check manual machine deployment creation with different operating systems
+  - [ ] Check cluster version upgrades
+  - [ ] Check machine deployment scaling
+  - [ ] Check machine deployment deletion
+- [ ] AWS
+  - [ ] Check cluster creation with SSH key assigned
+  - [ ] Check initial machine deployment creation
+  - [ ] Check manual machine deployment creation with different operating systems
+  - [ ] Check cluster version upgrades
+  - [ ] Check machine deployment scaling
+  - [ ] Check machine deployment deletion
+- [ ] Azure
+  - [ ] Check cluster creation with SSH key assigned
+  - [ ] Check initial machine deployment creation
+  - [ ] Check manual machine deployment creation with different operating systems
+  - [ ] Check cluster version upgrades
+  - [ ] Check machine deployment scaling
+  - [ ] Check machine deployment deletion
+- [ ] DigitalOcean
+  - [ ] Check cluster creation with SSH key assigned
+  - [ ] Check initial machine deployment creation
+  - [ ] Check manual machine deployment creation with different operating systems
+  - [ ] Check cluster version upgrades
+  - [ ] Check machine deployment scaling
+  - [ ] Check machine deployment deletion
+- [ ] GCP
+  - [ ] Check cluster creation with SSH key assigned
+  - [ ] Check initial machine deployment creation
+  - [ ] Check manual machine deployment creation with different operating systems
+  - [ ] Check cluster version upgrades
+  - [ ] Check machine deployment scaling
+  - [ ] Check machine deployment deletion
+- [ ] Hetzner
+  - [ ] Check cluster creation with SSH key assigned
+  - [ ] Check initial machine deployment creation
+  - [ ] Check manual machine deployment creation with different operating systems
+  - [ ] Check cluster version upgrades
+  - [ ] Check machine deployment scaling
+  - [ ] Check machine deployment deletion
+- [ ] OpenStack
+  - [ ] Check cluster creation with SSH key assigned
+  - [ ] Check initial machine deployment creation
+  - [ ] Check manual machine deployment creation with different operating systems
+  - [ ] Check cluster version upgrades
+  - [ ] Check machine deployment scaling
+  - [ ] Check machine deployment deletion
+- [ ] KubeVirt
+  - [ ] Check cluster creation with SSH key assigned
+  - [ ] Check initial machine deployment creation
+  - [ ] Check manual machine deployment creation with different operating systems
+  - [ ] Check cluster version upgrades
+  - [ ] Check machine deployment scaling
+  - [ ] Check machine deployment deletion
+- [ ] Packet
+  - [ ] Check cluster creation with SSH key assigned
+  - [ ] Check initial machine deployment creation
+  - [ ] Check manual machine deployment creation with different operating systems
+  - [ ] Check cluster version upgrades
+  - [ ] Check machine deployment scaling
+  - [ ] Check machine deployment deletion
+- [ ] vSphere
+  - [ ] Check cluster creation with SSH key assigned
+  - [ ] Check initial machine deployment creation
+  - [ ] Check manual machine deployment creation with different operating systems
+  - [ ] Check cluster version upgrades
+  - [ ] Check machine deployment scaling
+  - [ ] Check machine deployment deletion
+
+### Other Features
+- [ ] Check the changelog
+- [ ] Check the API documentation
+- [ ] Check the terms of service
