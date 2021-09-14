@@ -23,6 +23,7 @@ export enum Controls {
   VMNetName = 'vmNetName',
   Datastore = 'datastore',
   DatastoreCluster = 'datastoreCluster',
+  ResourcePool = 'resourcePool',
 }
 
 @Component({
@@ -55,6 +56,7 @@ export class VSphereSettingsComponent extends BaseFormValidator implements OnIni
       [Controls.VMNetName]: this._builder.control(null),
       [Controls.Datastore]: this._builder.control(null),
       [Controls.DatastoreCluster]: this._builder.control(null),
+      [Controls.ResourcePool]: this._builder.control(null),
     });
 
     this.form.valueChanges
@@ -80,6 +82,7 @@ export class VSphereSettingsComponent extends BaseFormValidator implements OnIni
       vmNetName: this.form.get(Controls.VMNetName).value,
       datastore: this.form.get(Controls.Datastore).value,
       datastoreCluster: this.form.get(Controls.DatastoreCluster).value,
+      resourcePool: this.form.get(Controls.ResourcePool).value,
     } as VSpherePresetSpec;
   }
 }

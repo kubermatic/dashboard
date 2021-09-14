@@ -158,4 +158,5 @@ export class VSpherePresetSpec extends PresetProviderSpec {
   vmNetName?: string;
   datastore?: string;
   datastoreCluster?: string;
+  resourcePool?: string;
 }
