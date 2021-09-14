@@ -88,6 +88,7 @@ Every assignee should mark their name next to the checks or groups they're willi
   - [ ] Check cluster version upgrades
   - [ ] Check machine deployment scaling
   - [ ] Check machine deployment deletion
+  - [ ] Check cluster deletion
 - [ ] AWS
   - [ ] Check cluster creation with SSH key assigned
   - [ ] Check initial machine deployment creation
@@ -95,6 +96,7 @@ Every assignee should mark their name next to the checks or groups they're willi
   - [ ] Check cluster version upgrades
   - [ ] Check machine deployment scaling
   - [ ] Check machine deployment deletion
+  - [ ] Check cluster deletion
 - [ ] Azure
   - [ ] Check cluster creation with SSH key assigned
   - [ ] Check initial machine deployment creation
@@ -102,6 +104,7 @@ Every assignee should mark their name next to the checks or groups they're willi
   - [ ] Check cluster version upgrades
   - [ ] Check machine deployment scaling
   - [ ] Check machine deployment deletion
+  - [ ] Check cluster deletion
 - [ ] DigitalOcean
   - [ ] Check cluster creation with SSH key assigned
   - [ ] Check initial machine deployment creation
@@ -109,6 +112,7 @@ Every assignee should mark their name next to the checks or groups they're willi
   - [ ] Check cluster version upgrades
   - [ ] Check machine deployment scaling
   - [ ] Check machine deployment deletion
+  - [ ] Check cluster deletion
 - [ ] GCP
   - [ ] Check cluster creation with SSH key assigned
   - [ ] Check initial machine deployment creation
@@ -116,6 +120,7 @@ Every assignee should mark their name next to the checks or groups they're willi
   - [ ] Check cluster version upgrades
   - [ ] Check machine deployment scaling
   - [ ] Check machine deployment deletion
+  - [ ] Check cluster deletion
 - [ ] Hetzner
   - [ ] Check cluster creation with SSH key assigned
   - [ ] Check initial machine deployment creation
@@ -123,6 +128,7 @@ Every assignee should mark their name next to the checks or groups they're willi
   - [ ] Check cluster version upgrades
   - [ ] Check machine deployment scaling
   - [ ] Check machine deployment deletion
+  - [ ] Check cluster deletion
 - [ ] OpenStack
   - [ ] Check cluster creation with SSH key assigned
   - [ ] Check initial machine deployment creation
@@ -130,6 +136,7 @@ Every assignee should mark their name next to the checks or groups they're willi
   - [ ] Check cluster version upgrades
   - [ ] Check machine deployment scaling
   - [ ] Check machine deployment deletion
+  - [ ] Check cluster deletion
 - [ ] KubeVirt
   - [ ] Check cluster creation with SSH key assigned
   - [ ] Check initial machine deployment creation
@@ -137,6 +144,7 @@ Every assignee should mark their name next to the checks or groups they're willi
   - [ ] Check cluster version upgrades
   - [ ] Check machine deployment scaling
   - [ ] Check machine deployment deletion
+  - [ ] Check cluster deletion
 - [ ] Packet
   - [ ] Check cluster creation with SSH key assigned
   - [ ] Check initial machine deployment creation
@@ -144,6 +152,7 @@ Every assignee should mark their name next to the checks or groups they're willi
   - [ ] Check cluster version upgrades
   - [ ] Check machine deployment scaling
   - [ ] Check machine deployment deletion
+  - [ ] Check cluster deletion
 - [ ] vSphere
   - [ ] Check cluster creation with SSH key assigned
   - [ ] Check initial machine deployment creation
@@ -151,6 +160,7 @@ Every assignee should mark their name next to the checks or groups they're willi
   - [ ] Check cluster version upgrades
   - [ ] Check machine deployment scaling
   - [ ] Check machine deployment deletion
+  - [ ] Check cluster deletion
 
 ### Other Features
 - [ ] Check the changelog
