@@ -9,11 +9,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnInit, Inject} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {NotificationService} from '@core/services/notification';
 import {BackupService} from '@core/services/backup';
+import {NotificationService} from '@core/services/notification';
 import {BackupCredentials} from '@shared/entity/backup';
 import {AdminSeed} from '@shared/entity/datacenter';
 
@@ -52,9 +52,11 @@ export class EditCredentialsDialog implements OnInit {
 
   edit(): void {
     const credentials: BackupCredentials = {
-      s3: {
-        [Controls.SecretAccessKey]: this.form.get(Controls.SecretAccessKey).value,
-        [Controls.AccessKey]: this.form.get(Controls.AccessKey).value,
+      backup_credentials: {
+        s3: {
+          [Controls.SecretAccessKey]: this.form.get(Controls.SecretAccessKey).value,
+          [Controls.AccessKey]: this.form.get(Controls.AccessKey).value,
+        },
       },
     };
 

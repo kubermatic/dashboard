@@ -114,6 +114,10 @@ export enum EtcdRestorePhase {
 }
 
 export class BackupCredentials {
+  backup_credentials: S3Credentials;
+}
+
+export class S3Credentials {
   s3: S3BackupCredentials;
 }
 
