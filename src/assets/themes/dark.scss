@@ -97,12 +97,6 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
   background-color: rgba(#fff, .85);
 }
 
-.km-provider-logo-bringyourown {
-  @include mixins.provider-image("/assets/images/clouds/bringyourown-dark.svg", 30px);
-
-  filter: none;
-}
-
 .km-provider-logo-kubevirt {
   @include mixins.provider-image("/assets/images/clouds/kubevirt-dark.svg", 30px);
 
