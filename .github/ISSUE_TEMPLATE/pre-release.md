@@ -170,3 +170,4 @@ Every assignee should mark their name next to the checks or groups they're willi
 - [ ] Check the changelog
 - [ ] Check the API documentation
 - [ ] Check the terms of service
+- [ ] Check if all provider logos are up-to-date
