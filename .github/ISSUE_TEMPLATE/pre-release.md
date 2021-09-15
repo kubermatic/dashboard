@@ -137,6 +137,10 @@ Every assignee should mark their name next to the checks or groups they're willi
   - [ ] Check machine deployment scaling
   - [ ] Check machine deployment deletion
   - [ ] Check cluster deletion
+- [ ] kubeadm
+  - [ ] Check cluster creation with SSH key assigned
+  - [ ] Check cluster version upgrades
+  - [ ] Check cluster deletion
 - [ ] KubeVirt
   - [ ] Check cluster creation with SSH key assigned
   - [ ] Check initial machine deployment creation
