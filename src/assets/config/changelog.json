@@ -119,7 +119,7 @@
     },
     {
       "category": "fixed",
-      "description": "Fix the issue where Seed API was using seed clients to update the Seeds on master cluster instead of using the master client. This was causing Seed API not to work on Seeds which were not also the master clusters"
+      "description": "Fix the issue where Seed API was using seed clients to update the Seeds on master cluster instead of using the master client. This was causing Seed API not to work on Seeds which were not also the master clusters."
     }
   ]
 }
