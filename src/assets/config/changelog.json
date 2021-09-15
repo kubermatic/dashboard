@@ -1,1 +1,125 @@
-{}
+{
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/release/v2.18/CHANGELOG.md#kubermatic-218",
+  "entries": [
+    {
+      "category": "action-required",
+      "description": "Helm 2 is not supported anymore, please use Helm 3 instead. It might still be possible to install KKP using Helm 2, but it's neither supported nor recommended."
+    },
+    {
+      "category": "action-required",
+      "description": "The new backup mechanism replaces the old mechanism and is not backwards compatible. Furthermore the admin of the platform needs to enable the backup mechanism as described in the documentation.",
+      "links": [
+        {
+          "url": "https://docs.kubermatic.com/kubermatic/v2.18/cheat_sheets/etcd/backup-and-restore/",
+          "caption": "Documentation"
+        }
+      ]
+    },
+    {
+      "category": "added",
+      "description": "User cluster monitoring, logging and alerting",
+      "links": [
+        {
+          "url": "https://docs.kubermatic.com/kubermatic/v2.18/guides/monitoring_logging_alerting/user_cluster/",
+          "caption": "MLA"
+        }
+      ]
+    },
+    {
+      "category": "added",
+      "description": "Cluster templates for deploying optimal clusters instantly",
+      "links": [
+        {
+          "url": "https://docs.kubermatic.com/kubermatic/v2.18/tutorials_howtos/cluster_templates/",
+          "caption": "Tutorial"
+        },
+        {
+          "url": "https://docs.kubermatic.com/kubermatic/v2.18/guides/cluster_templates/",
+          "caption": "Guide"
+        }
+      ]
+    },
+    {
+      "category": "added",
+      "description": "Metering tool integration for easier accountability of resources (EE only)",
+      "links": [
+        {
+          "url": "https://docs.kubermatic.com/kubermatic/v2.18/tutorials_howtos/metering/",
+          "caption": "Tutorial"
+        }
+      ]
+    },
+    {
+      "category": "added",
+      "description": "AWS spot instances support to optimize workloads"
+    },
+    {
+      "category": "added",
+      "description": "User cluster backup & restore UI"
+    },
+    {
+      "category": "added",
+      "description": "Enhancements on Open Policy Agent for allowed container registries and standard policies"
+    },
+    {
+      "category": "added",
+      "description": "Kubevirt cloud controller integration"
+    },
+    {
+      "category": "added",
+      "description": "Add Kubernetes 1.22 support"
+    },
+    {
+      "category": "added",
+      "description": "Enabled CCM and CSI migration on distinct cloud providers"
+    },
+    {
+      "category": "added",
+      "description": "Docker to containerd container runtime migration"
+    },
+    {
+      "category": "removed",
+      "description": "Removed Gatekeeper from default accessible addon list"
+    },
+    {
+      "category": "fixed",
+      "description": "Do not delete custom links after pressing enter key"
+    },
+    {
+      "category": "fixed",
+      "description": "Fix a bug that always applies default values to container resources"
+    },
+    {
+      "category": "fixed",
+      "description": "Fix cluster list endpoint that was returning errors when user didn't have access to at least one cluster datacenter"
+    },
+    {
+      "category": "fixed",
+      "description": "Fix finalizers duplication"
+    },
+    {
+      "category": "fixed",
+      "description": "Fix issue where Kubermatic non-admin users were not allowed to manage Kubermatic Constraints"
+    },
+    {
+      "category": "fixed",
+      "description": "Fix issue where cluster validation was failing on certificate error because the validation provider was not using the provided custom CA Bundle"
+    },
+    {
+      "category": "fixed",
+      "description": "Fix missed cluster-autoscaler resource from the ClusterRole"
+    },
+    {
+      "category": "fixed",
+      "description": "Fix user-ssh-keys-agent migration"
+    },
+    {
+      "category": "fixed",
+      "description": "Fix for Seed API PATCH endpoint which sometimes removed Seed fields unrelated to the PATCH"
+    },
+    {
+      "category": "fixed",
+      "description": "Fix the issue where Seed API was using seed clients to update the Seeds on master cluster instead of using the master client. This was causing Seed API not to work on Seeds which were not also the master clusters."
+    }
+  ]
+}
