@@ -17,7 +17,7 @@
     },
     {
       "category": "added",
-      "description": "User Cluster Monitoring, Logging and Alerting",
+      "description": "User cluster monitoring, logging and alerting",
       "links": [
         {
           "url": "https://docs.kubermatic.com/kubermatic/v2.18/guides/monitoring_logging_alerting/user_cluster/",
@@ -27,7 +27,7 @@
     },
     {
       "category": "added",
-      "description": "Cluster Templates for Deploying Optimal Clusters Instantly",
+      "description": "Cluster templates for deploying optimal clusters instantly",
       "links": [
         {
           "url": "https://docs.kubermatic.com/kubermatic/v2.18/tutorials_howtos/cluster_templates/",
@@ -41,7 +41,7 @@
     },
     {
       "category": "added",
-      "description": "Metering Tool Integration for Easier Accountability of Resources (EE only)",
+      "description": "Metering tool integration for easier accountability of resources (EE only)",
       "links": [
         {
           "url": "https://docs.kubermatic.com/kubermatic/v2.18/tutorials_howtos/metering/",
@@ -51,31 +51,31 @@
     },
     {
       "category": "added",
-      "description": "AWS Spot Instances Support to Optimize Workloads"
+      "description": "AWS spot instances support to optimize workloads"
     },
     {
       "category": "added",
-      "description": "User Cluster Backup & Restore UI"
+      "description": "User cluster backup & restore UI"
     },
     {
       "category": "added",
-      "description": "Enhancements on Open Policy Agent for Allowed Container Registries and Standard Policies"
+      "description": "Enhancements on Open Policy Agent for allowed container registries and standard policies"
     },
     {
       "category": "added",
-      "description": "Kubevirt Cloud Controller Integration"
+      "description": "Kubevirt cloud controller integration"
     },
     {
       "category": "added",
-      "description": "Add Kubernetes 1.22 Support"
+      "description": "Add Kubernetes 1.22 support"
     },
     {
       "category": "added",
-      "description": "Enabled CCM and CSI Migration on distinct Cloud Providers"
+      "description": "Enabled CCM and CSI migration on distinct cloud providers"
     },
     {
       "category": "added",
-      "description": "Docker to containerd Container Runtime Migration"
+      "description": "Docker to containerd container runtime migration"
     },
     {
       "category": "removed",
