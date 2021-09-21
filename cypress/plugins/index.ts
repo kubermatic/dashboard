@@ -15,9 +15,7 @@ import {configuration} from './cy-ts-preprocessor';
 
 export default async (on, config) => {
   config.ignoreTestFiles = ['**/integration/stories/opa.spec.ts'];
-  const kubermaticEdition = Cypress.env('KUBERMATIC_EDITION');
-  const isEnterpriseEdition = kubermaticEdition === 'ee';
-  if (!isEnterpriseEdition) {
+  if (config.env.edition !== 'ee') {
     config.ignoreTestFiles.concat('**/integration/providers/*.spec.ts');
   }
 
