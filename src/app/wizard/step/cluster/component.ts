@@ -33,6 +33,7 @@ import {
   END_OF_DOCKER_SUPPORT_VERSION,
   MasterVersion,
   ProxyMode,
+  CNIPlugins,
 } from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
@@ -62,6 +63,8 @@ enum Controls {
   ProxyMode = 'proxyMode',
   PodsCIDR = 'podsCIDR',
   ServicesCIDR = 'servicesCIDR',
+  CNIPlugin = 'cniPlugin',
+  CNIPluginVersion = 'cniPluginVersion',
 }
 
 @Component({
@@ -90,6 +93,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   podNodeSelectorAdmissionPluginConfig: object;
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
   proxyMode = ProxyMode;
+  cniPlugin = CNIPlugins;
+  csiPluginVersions = [];
+  availableProxyModes = [];
   readonly Controls = Controls;
   private _datacenterSpec: Datacenter;
   private _seedSettings: SeedSettings;
@@ -129,6 +135,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.ProxyMode]: this._builder.control(''),
       [Controls.PodsCIDR]: new FormControl('', [CIDR_PATTERN_VALIDATOR]),
       [Controls.ServicesCIDR]: new FormControl('', [CIDR_PATTERN_VALIDATOR]),
+      [Controls.CNIPlugin]: new FormControl(''),
+      [Controls.CNIPluginVersion]: new FormControl(''),
     });
 
     this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
@@ -193,6 +201,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe(() => (this._clusterSpecService.admissionPlugins = this.form.get(Controls.AdmissionPlugins).value));
 
+    this.control(Controls.AdmissionPlugins).valueChanges.subscribe(() => {
+      this.updateCNIPluginOptions();
+    });
+
     merge(
       this.form.get(Controls.Name).valueChanges,
       this.form.get(Controls.Version).valueChanges,
@@ -204,7 +216,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.ContainerRuntime).valueChanges,
       this.form.get(Controls.ProxyMode).valueChanges,
       this.form.get(Controls.PodsCIDR).valueChanges,
-      this.form.get(Controls.ServicesCIDR).valueChanges
+      this.form.get(Controls.ServicesCIDR).valueChanges,
+      this.form.get(Controls.CNIPlugin).valueChanges,
+      this.form.get(Controls.CNIPluginVersion).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
@@ -247,6 +261,25 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     return AdmissionPluginUtils.getPluginName(name);
   }
 
+  updateCNIPluginOptions() {
+    switch (this.controlValue(Controls.CNIPlugin)) {
+      case 'canal':
+        this.availableProxyModes = ['ipvs', 'iptables'];
+        this.csiPluginVersions = ['v3.19'];
+        this.control(Controls.CNIPluginVersion).setValue('v3.19');
+        break;
+      case 'cilium':
+        this.availableProxyModes = ['ipvs', 'iptables', 'eBPF'];
+        this.csiPluginVersions = ['v1.10'];
+        this.control(Controls.CNIPluginVersion).setValue('v1.10');
+        break;
+      default:
+        this.availableProxyModes = ['ipvs', 'iptables'];
+        this.csiPluginVersions = [];
+        break;
+    }
+  }
+
   isPluginEnabled(name: string): boolean {
     return AdmissionPluginUtils.isPluginEnabled(this.form.get(Controls.AdmissionPlugins), name);
   }
@@ -279,6 +312,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         this.control(Controls.Version).setValue(version.version);
       }
     }
+    this.control(Controls.CNIPlugin).setValue('canal');
   }
 
   private _getClusterEntity(): Cluster {
@@ -305,6 +339,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           proxyMode: this.controlValue(Controls.ProxyMode),
           pods: {cidrBlocks: pods ? [pods] : []},
           services: {cidrBlocks: services ? [services] : []},
+        },
+        cniPlugin: {
+          type: this.controlValue(Controls.CNIPlugin),
+          version: this.controlValue(Controls.CNIPluginVersion),
         },
       } as ClusterSpec,
     } as Cluster;
