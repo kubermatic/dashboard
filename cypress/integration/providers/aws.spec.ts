@@ -19,9 +19,9 @@ import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 import * as _ from 'lodash';
-import {beforeAll} from "@jest/globals";
-import {Endpoint} from "../../utils/endpoint";
-import {Fixtures} from "../../fixtures/registry";
+import {beforeAll} from '@jest/globals';
+import {Endpoint} from '../../utils/endpoint';
+import {Fixtures} from '../../fixtures/registry';
 
 describe('AWS Provider', () => {
   const useMocks = true;
@@ -34,9 +34,9 @@ describe('AWS Provider', () => {
 
   beforeAll(() => {
     if (useMocks) {
-      cy.intercept(Endpoint.Projects, { fixture: Fixtures.Projects }).as('getProjects')
+      cy.intercept(Endpoint.Projects, {fixture: Fixtures.Projects}).as('getProjects');
     }
-  })
+  });
 
   it('should login', () => {
     login(email, password);
