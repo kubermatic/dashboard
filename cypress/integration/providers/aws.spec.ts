@@ -19,14 +19,24 @@ import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 import * as _ from 'lodash';
+import {beforeAll} from "@jest/globals";
+import {Endpoint} from "../../utils/endpoint";
+import {Fixtures} from "../../fixtures/registry";
 
 describe('AWS Provider', () => {
+  const useMocks = true;
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const projectName = _.uniqueId('e2e-test-project-');
   const clusterName = _.uniqueId('e2e-test-cluster-');
   const initialMachineDeploymentName = _.uniqueId('e2e-test-md-');
   const initialMachineDeploymentReplicas = '0';
+
+  beforeAll(() => {
+    if (useMocks) {
+      cy.intercept(Endpoint.Projects, { fixture: Fixtures.Projects }).as('getProjects')
+    }
+  })
 
   it('should login', () => {
     login(email, password);

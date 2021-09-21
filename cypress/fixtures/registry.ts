@@ -9,8 +9,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export enum FileRegistry {
+export enum Fixtures {
   ConstraintTemplateSpec = 'constrainttemplate.spec.yaml',
   ConstraintSpec = 'constraint.spec.yaml',
   GatekeeperConfig = 'gatekeeperconfig.spec.yaml',
+  Projects = 'projects.json'
 }
