@@ -19,24 +19,29 @@ import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 import * as _ from 'lodash';
-import {beforeAll} from '@jest/globals';
-import {Endpoint} from '../../utils/endpoint';
-import {Fixtures} from '../../fixtures/registry';
 
 describe('AWS Provider', () => {
   const useMocks = true;
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
-  const projectName = _.uniqueId('e2e-test-project-');
-  const clusterName = _.uniqueId('e2e-test-cluster-');
-  const initialMachineDeploymentName = _.uniqueId('e2e-test-md-');
+  const projectName = useMocks ? 'test' : _.uniqueId('test-project-');
+  const clusterName = useMocks ? 'test' : _.uniqueId('test-cluster-');
+  const initialMachineDeploymentName = useMocks ? 'test' : _.uniqueId('test-md-');
   const initialMachineDeploymentReplicas = '0';
 
-  beforeAll(() => {
+  beforeEach(() => {
     if (useMocks) {
-      cy.intercept(Endpoint.Projects, {fixture: Fixtures.Projects}).as('getProjects');
+      cy.intercept({method: 'GET', path: '**/me'}, {fixture: 'me.json'}).as('getUser'); // TODO: WebSocket.
+      cy.intercept({method: 'GET', path: '**/seed'}, {fixture: 'seed.json'}).as('getSeeds');
+      cy.intercept({method: 'GET', path: '**/dc'}, {fixture: 'dc.json'}).as('getDatacenters');
+      cy.intercept({method: 'GET', path: '**/projects?displayAll=false'}, {fixture: 'projects/list.json'}).as('listProjects');
+      cy.intercept({method: 'GET', path: '**/projects/*'}, {fixture: 'projects/single.json'}).as('getProject');
+      cy.intercept({method: 'POST', path: '**/projects'}, {fixture: 'projects/single.json'}).as('createProject');
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters'}, {fixture: 'clusters/aws/list.json'}).as('listClusters');
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*'}, {fixture: 'clusters/aws/single.json'}).as('getCluster');
+      cy.intercept({method: 'POST', path: '**/projects/*/clusters'}, {fixture: 'clusters/aws/single.json'}).as('createCluster');
     }
-  });
+  })
 
   it('should login', () => {
     login(email, password);

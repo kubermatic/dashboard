@@ -108,7 +108,7 @@ export class ProjectsPage {
       .click()
       .then(() => {
         ClustersPage.waitForRefresh();
-        ClustersPage.verifyUrl();
+        //ClustersPage.verifyUrl();
       });
   }
 

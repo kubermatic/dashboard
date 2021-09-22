@@ -1,0 +1,20 @@
+[
+  {
+    "metadata": {
+      "name": "aws-eu-central-1a"
+    },
+    "spec": {
+      "seed": "kubermatic",
+      "country": "DE",
+      "location": "EU (Frankfurt)",
+      "provider": "aws",
+      "aws": {
+        "region": "eu-central-1",
+        "images": null
+      },
+      "node": {},
+      "enforceAuditLogging": false,
+      "enforcePodSecurityPolicy": false
+    }
+  }
+]

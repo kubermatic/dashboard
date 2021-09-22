@@ -1,0 +1,17 @@
+{
+  "id": "user-j9e03",
+  "name": "roxy",
+  "creationTimestamp": "2018-09-17T09:53:36Z",
+  "email": "roxy@loodse.com",
+  "isAdmin": false,
+  "projects": [
+    {
+      "id": "fn9234fn1d",
+      "group": "owners"
+    }
+  ],
+  "userSettings": {
+    "itemsPerPage": 5,
+    "lastSeenChangelogVersion": "v2.18.0"
+  }
+}
