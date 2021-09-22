@@ -129,6 +129,27 @@ limitations under the License.
       <mat-hint>Use commas or enter key as the separators.</mat-hint>
     </mat-form-field>
 
+    <mat-form-field class="domain-input">
+      <mat-label>Enabled Operating Systems</mat-label>
+      <mat-chip-list #chipList
+                     class="km-chip-list-with-input">
+        <mat-chip *ngFor="let os of enabledOperatingSystems"
+                  removable
+                  (removed)="removeOS(os)"
+                  [selectable]="false">
+          {{os}}
+          <i matChipRemove
+             class="km-icon-mask km-icon-remove"></i>
+        </mat-chip>
+        <input [formControlName]="controls.EnabledOperatingSystems"
+               matChipInputAddOnBlur
+               [matChipInputFor]="chipList"
+               [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
+               (matChipInputTokenEnd)="addOS($event)">
+      </mat-chip-list>
+      <mat-hint>Use commas or enter key as the separators. Supported: [ubuntu, flatcar, centos, sles, rhel]</mat-hint>
+    </mat-form-field>
+
     <mat-checkbox [formControlName]="controls.EnforcePodSecurityPolicy">Enforce Pod Security Policy</mat-checkbox>
     <mat-checkbox [formControlName]="controls.EnforceAuditLogging">Enforce Audit Logging</mat-checkbox>
   </form>

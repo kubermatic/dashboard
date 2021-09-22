@@ -42,6 +42,7 @@ export enum Controls {
   RequiredEmailDomains = 'requiredEmailDomains',
   EnforcePodSecurityPolicy = 'enforcePodSecurityPolicy',
   EnforceAuditLogging = 'enforceAuditLogging',
+  EnabledOperatingSystems = 'enabledOperatingSystems',
 }
 
 @Component({
@@ -57,6 +58,7 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
   seeds: string[] = [];
   form: FormGroup;
   requiredEmailDomains: string[] = [];
+  enabledOperatingSystems: string[] = [];
   providerConfig = '';
   private _unsubscribe = new Subject<void>();
 
@@ -82,6 +84,7 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
       country: new FormControl(this.data.isEditing ? this.data.datacenter.spec.country : '', [Validators.required]),
       location: new FormControl(this.data.isEditing ? this.data.datacenter.spec.location : '', [Validators.required]),
       requiredEmailDomains: new FormControl(),
+      enabledOperatingSystems: new FormControl(),
       enforcePodSecurityPolicy: new FormControl(
         this.data.isEditing && this.data.datacenter.spec.enforcePodSecurityPolicy
       ),
@@ -89,6 +92,7 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
     });
 
     this._initRequiredEmailDomainsInput();
+    this._initEnabledOperatingSystemsInput();
     this._initProviderConfigEditor();
   }
 
@@ -106,6 +110,14 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
       this.requiredEmailDomains = this.data.datacenter.spec.requiredEmailDomains;
     } else {
       this.requiredEmailDomains = [];
+    }
+  }
+
+  private _initEnabledOperatingSystemsInput(): void {
+    if (this.data.isEditing && !_.isEmpty(this.data.datacenter.spec.enabledOperatingSystems)) {
+      this.enabledOperatingSystems = this.data.datacenter.spec.enabledOperatingSystems;
+    } else {
+      this.enabledOperatingSystems = [];
     }
   }
 
@@ -148,6 +160,27 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
     }
   }
 
+  addOS(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+
+    if ((value || '').trim()) {
+      this.enabledOperatingSystems.push(value.trim());
+    }
+
+    if (input) {
+      input.value = '';
+    }
+  }
+
+  removeOS(os: string): void {
+    const index = this.enabledOperatingSystems.indexOf(os);
+
+    if (index >= 0) {
+      this.enabledOperatingSystems.splice(index, 1);
+    }
+  }
+
   private _getProviderConfig(): any {
     const raw = load(this.providerConfig);
     return !_.isEmpty(raw) ? raw : {};
@@ -164,6 +197,7 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
         country: this.form.get(Controls.Country).value,
         location: this.form.get(Controls.Location).value,
         requiredEmailDomains: this.requiredEmailDomains,
+        enabledOperatingSystems: this.enabledOperatingSystems,
         enforcePodSecurityPolicy: this.form.get(Controls.EnforcePodSecurityPolicy).value,
         enforceAuditLogging: this.form.get(Controls.EnforceAuditLogging).value,
       },
