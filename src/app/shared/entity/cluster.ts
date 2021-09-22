@@ -223,7 +223,6 @@ export class ClusterNetwork {
 
 export class CNIPlugin {
   type: string;
-  version: string;
 }
 
 export class NetworkRanges {

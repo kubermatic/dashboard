@@ -52,30 +52,15 @@ limitations under the License.
         <mat-card-title>Network Configuration</mat-card-title>
       </mat-card-header>
       <div fxLayout="column">
-        <div fxFlex="100"
-             fxLayoutGap="10px"
-             fxLayout="row">
-          <mat-form-field class="km-dropdown-with-suffix">
-            <mat-label>CNI Plugin</mat-label>
-            <mat-select [formControlName]="Controls.CNIPlugin"
-                        class="km-select-ellipsis"
-                        disableOptionCentering>
-              <mat-option [value]="cniPlugin.canal">canal</mat-option>
-              <mat-option [value]="cniPlugin.cilium">cilium</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field class="km-dropdown-with-suffix">
-            <mat-label>CNI Plugin Version</mat-label>
-            <mat-select [formControlName]="Controls.CNIPluginVersion"
-                        class="km-select-ellipsis"
-                        disableOptionCentering>
-              <mat-option *ngFor="let version of csiPluginVersions"
-                          [value]="version">
-                {{version}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
+        <mat-form-field class="km-dropdown-with-suffix">
+          <mat-label>CNI Plugin</mat-label>
+          <mat-select [formControlName]="Controls.CNIPlugin"
+                      class="km-select-ellipsis"
+                      disableOptionCentering>
+            <mat-option [value]="cniPlugin.canal">canal</mat-option>
+            <mat-option [value]="cniPlugin.cilium">cilium</mat-option>
+          </mat-select>
+        </mat-form-field>
 
         <mat-form-field class="km-dropdown-with-suffix">
           <mat-label>Proxy Mode</mat-label>
@@ -109,6 +94,7 @@ limitations under the License.
           </mat-error>
         </mat-form-field>
       </div>
+
       <km-wizard-cluster-ssh-keys [formControl]="form.get(Controls.SSHKeys)"></km-wizard-cluster-ssh-keys>
     </div>
 
