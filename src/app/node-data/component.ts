@@ -30,6 +30,7 @@ import {NodeProvider, NodeProviderConstants, OperatingSystem} from '@shared/mode
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {NoIpsLeftValidator} from '@shared/validators/no-ips-left.validator';
+import * as _ from 'lodash';
 import {merge, of} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
@@ -191,44 +192,43 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   }
 
   isOperatingSystemSupported(os: OperatingSystem): boolean {
-    if (this._datacenterSpec.spec.enabledOperatingSystems.length > 0) {
+    if (!_.isEmpty(this._datacenterSpec.spec.enabledOperatingSystems)) {
       for (const enabledOS of this._datacenterSpec.spec.enabledOperatingSystems) {
-        if (enabledOS as OperatingSystem == os ) {
-          return true
+        if ((enabledOS as OperatingSystem) === os) {
+          return true;
         }
       }
-      return false
-    } else {
-      // If VSphere is selected enable OS only if it is also defined in the datacenter spec
-      if (this._hasSystemTemplate(NodeProvider.VSPHERE, os)) {
-        return true;
-      }
+      return false;
+    }
 
-      // Enable OS per-provider basis
-      switch (os) {
-        case OperatingSystem.SLES:
-          return this.isProvider(NodeProvider.AWS);
-        case OperatingSystem.RHEL:
-          return this.isProvider(
-            NodeProvider.AWS,
-            NodeProvider.AZURE,
-            NodeProvider.GCP,
-            NodeProvider.KUBEVIRT,
-            NodeProvider.OPENSTACK
-          );
-        case OperatingSystem.Flatcar:
-          return this.isProvider(
-            NodeProvider.AWS,
-            NodeProvider.AZURE,
-            NodeProvider.OPENSTACK,
-            NodeProvider.ANEXIA,
-            NodeProvider.KUBEVIRT
-          );
-        case OperatingSystem.Ubuntu:
-          return !this.isProvider(NodeProvider.VSPHERE, NodeProvider.ANEXIA);
-        case OperatingSystem.CentOS:
-          return !this.isProvider(NodeProvider.VSPHERE, NodeProvider.ANEXIA, NodeProvider.GCP);
-      }
+    // If VSphere is selected enable OS only if it is also defined in the datacenter spec
+    if (this._hasSystemTemplate(NodeProvider.VSPHERE, os)) {
+      return true;
+    }
+    // Enable OS per-provider basis
+    switch (os) {
+      case OperatingSystem.SLES:
+        return this.isProvider(NodeProvider.AWS);
+      case OperatingSystem.RHEL:
+        return this.isProvider(
+          NodeProvider.AWS,
+          NodeProvider.AZURE,
+          NodeProvider.GCP,
+          NodeProvider.KUBEVIRT,
+          NodeProvider.OPENSTACK
+        );
+      case OperatingSystem.Flatcar:
+        return this.isProvider(
+          NodeProvider.AWS,
+          NodeProvider.AZURE,
+          NodeProvider.OPENSTACK,
+          NodeProvider.ANEXIA,
+          NodeProvider.KUBEVIRT
+        );
+      case OperatingSystem.Ubuntu:
+        return !this.isProvider(NodeProvider.VSPHERE, NodeProvider.ANEXIA);
+      case OperatingSystem.CentOS:
+        return !this.isProvider(NodeProvider.VSPHERE, NodeProvider.ANEXIA, NodeProvider.GCP);
     }
   }
 
