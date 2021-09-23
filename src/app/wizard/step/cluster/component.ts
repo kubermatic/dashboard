@@ -33,7 +33,7 @@ import {
   END_OF_DOCKER_SUPPORT_VERSION,
   MasterVersion,
   ProxyMode,
-  CNIPlugins,
+  CNIPlugin,
 } from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
@@ -92,7 +92,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   podNodeSelectorAdmissionPluginConfig: object;
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
   proxyMode = ProxyMode;
-  cniPlugin = CNIPlugins;
+  cniPlugin = CNIPlugin;
   availableProxyModes = ['ipvs', 'iptables'];
   readonly Controls = Controls;
   private _datacenterSpec: Datacenter;
@@ -198,9 +198,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe(() => (this._clusterSpecService.admissionPlugins = this.form.get(Controls.AdmissionPlugins).value));
 
-    this.control(Controls.CNIPlugin).valueChanges.subscribe(() => {
-      this.updateCNIPluginOptions();
-    });
+    this.control(Controls.CNIPlugin)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => this.updateCNIPluginOptions());
 
     merge(
       this.form.get(Controls.Name).valueChanges,
@@ -258,7 +258,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   }
 
   updateCNIPluginOptions() {
-    if (this.controlValue(Controls.CNIPlugin) === 'cilium') {
+    if (this.controlValue(Controls.CNIPlugin) === CNIPlugin.Cilium) {
       this.availableProxyModes = ['ipvs', 'iptables', 'ebpf'];
     } else {
       this.availableProxyModes = ['ipvs', 'iptables'];
@@ -303,10 +303,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     const pods = this.controlValue(Controls.PodsCIDR);
     const services = this.controlValue(Controls.ServicesCIDR);
     const cniPluginType = this.controlValue(Controls.CNIPlugin);
-    let cniPlugin = null;
-    if (cniPluginType !== '') {
-      cniPlugin = {type: cniPluginType};
-    }
+    const cniPlugin = cniPluginType ? {type: cniPluginType} : null;
     return {
       name: this.controlValue(Controls.Name),
       type: ClusterType.Kubernetes,
