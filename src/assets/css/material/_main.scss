@@ -593,10 +593,10 @@ button {
     font-weight: normal;
     height: 100%;
     line-height: 16px;
-    max-height: 22px;
     min-height: 22px;
     overflow: hidden;
-    padding: 3px 0;
+    padding: 0;
+    word-break: break-word;
 
     div.mat-chip-ripple {
       display: none;
