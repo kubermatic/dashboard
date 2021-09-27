@@ -25,7 +25,7 @@ import {GCPSettingsComponent} from '@app/settings/admin/presets/dialog/steps/set
 import {HetznerSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/hetzner/component';
 import {KubevirtSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/kubevirt/component';
 import {OpenstackSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/openstack/component';
-import {PacketSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/packet/component';
+import {EquinixSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/equinix/component';
 import {VSphereSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/vsphere/component';
 import {EditPresetDialogComponent} from '@app/settings/admin/presets/edit-dialog/component';
 import {SharedModule} from '@shared/module';
@@ -53,7 +53,7 @@ import {AdminSettingsRoutingModule} from './routing';
     HetznerSettingsComponent,
     KubevirtSettingsComponent,
     OpenstackSettingsComponent,
-    PacketSettingsComponent,
+    EquinixSettingsComponent,
     VSphereSettingsComponent,
   ],
   providers: [PresetDialogService],

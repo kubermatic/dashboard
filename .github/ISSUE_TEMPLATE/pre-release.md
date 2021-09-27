@@ -149,7 +149,7 @@ Every assignee should mark their name next to the checks or groups they're willi
   - [ ] Check machine deployment scaling
   - [ ] Check machine deployment deletion
   - [ ] Check cluster deletion
-- [ ] Packet
+- [ ] Equinix Metal
   - [ ] Check cluster creation with SSH key assigned
   - [ ] Check initial machine deployment creation
   - [ ] Check manual machine deployment creation with different operating systems

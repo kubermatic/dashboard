@@ -12,7 +12,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ClusterService} from '@core/services/cluster';
-import {AVAILABLE_PACKET_BILLING_CYCLES, ProviderSettingsPatch} from '@shared/entity/cluster';
+import {AVAILABLE_EQUINIX_BILLING_CYCLES, ProviderSettingsPatch} from '@shared/entity/cluster';
 import {merge, Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
 
@@ -23,10 +23,10 @@ enum Control {
 }
 
 @Component({
-  selector: 'km-packet-provider-settings',
+  selector: 'km-equinix-provider-settings',
   templateUrl: './template.html',
 })
-export class PacketProviderSettingsComponent implements OnInit, OnDestroy {
+export class EquinixProviderSettingsComponent implements OnInit, OnDestroy {
   private readonly _billingCycleMaxLen = 64;
   private readonly _apiKeyMaxLen = 64;
   private readonly _projectIDMaxLen = 64;
@@ -68,7 +68,7 @@ export class PacketProviderSettingsComponent implements OnInit, OnDestroy {
   }
 
   getAvailableBillingCycles(): string[] {
-    return AVAILABLE_PACKET_BILLING_CYCLES;
+    return AVAILABLE_EQUINIX_BILLING_CYCLES;
   }
 
   private _getDefaultBillingCycle(): string {

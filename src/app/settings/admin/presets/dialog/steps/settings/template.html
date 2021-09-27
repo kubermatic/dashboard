@@ -41,9 +41,9 @@ limitations under the License.
     <km-openstack-settings *ngSwitchCase="Providers.OPENSTACK"
                            [formControl]="form.get(Controls.Settings)">
     </km-openstack-settings>
-    <km-packet-settings *ngSwitchCase="Providers.PACKET"
-                        [formControl]="form.get(Controls.Settings)">
-    </km-packet-settings>
+    <km-equinix-settings *ngSwitchCase="Providers.EQUINIX"
+                         [formControl]="form.get(Controls.Settings)">
+    </km-equinix-settings>
     <km-vsphere-settings *ngSwitchCase="Providers.VSPHERE"
                          [formControl]="form.get(Controls.Settings)">
     </km-vsphere-settings>

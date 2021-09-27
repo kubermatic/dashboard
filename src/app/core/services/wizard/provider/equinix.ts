@@ -15,35 +15,35 @@ import {EMPTY, Observable} from 'rxjs';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 
 import {Provider} from './provider';
-import {PacketSize} from '@shared/entity/provider/packet';
+import {EquinixSize} from '@shared/entity/provider/equinix';
 
-export class Packet extends Provider {
+export class Equinix extends Provider {
   constructor(http: HttpClient, provider: NodeProvider) {
     super(http, provider);
 
-    this._setRequiredHeaders(Packet.Header.APIKey, Packet.Header.ProjectID);
+    this._setRequiredHeaders(Equinix.Header.APIKey, Equinix.Header.ProjectID);
   }
 
-  credential(credential: string): Packet {
+  credential(credential: string): Equinix {
     super._credential(credential);
     return this;
   }
 
-  apiKey(key: string): Packet {
+  apiKey(key: string): Equinix {
     if (key) {
-      this._headers = this._headers.set(Packet.Header.APIKey, key);
+      this._headers = this._headers.set(Equinix.Header.APIKey, key);
     }
     return this;
   }
 
-  projectID(id: string): Packet {
+  projectID(id: string): Equinix {
     if (id) {
-      this._headers = this._headers.set(Packet.Header.ProjectID, id);
+      this._headers = this._headers.set(Equinix.Header.ProjectID, id);
     }
     return this;
   }
 
-  flavors(onLoadingCb: () => void = null): Observable<PacketSize[]> {
+  flavors(onLoadingCb: () => void = null): Observable<EquinixSize[]> {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
@@ -52,11 +52,11 @@ export class Packet extends Provider {
       onLoadingCb();
     }
 
-    return this._http.get<PacketSize[]>(this._url, {headers: this._headers});
+    return this._http.get<EquinixSize[]>(this._url, {headers: this._headers});
   }
 }
 
-export namespace Packet {
+export namespace Equinix {
   export enum Header {
     APIKey = 'apiKey',
     ProjectID = 'projectID',

@@ -20,7 +20,7 @@ export enum Provider {
   Hetzner = 'hetzner',
   KubeVirt = 'kubevirt',
   OpenStack = 'openstack',
-  Packet = 'packet',
+  Equinix = 'packet',
   VSphere = 'vsphere',
 }
 
@@ -66,7 +66,7 @@ export namespace Datacenter {
     Syseleven = 'dbl1',
   }
 
-  export enum Packet {
+  export enum Equinix {
     NewYork = 'New York',
   }
 

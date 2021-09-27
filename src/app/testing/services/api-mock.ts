@@ -23,7 +23,7 @@ import {
   ServiceAccountTokenPatch,
 } from '@shared/entity/service-account';
 import {SSHKey} from '@shared/entity/ssh-key';
-import {fakeDigitaloceanSizes, fakePacketSizes} from '../fake-data/add-node-modal';
+import {fakeDigitaloceanSizes, fakeEquinixSizes} from '../fake-data/add-node-modal';
 import {fakeAlibabaInstanceTypes, fakeAlibabaZones, fakeAlibabaVSwitches} from '../fake-data/alibaba';
 import {fakeAnexiaTemplates, fakeAnexiaVlans} from '../fake-data/anexia';
 import {masterVersionsFake} from '../fake-data/cluster-spec';
@@ -43,7 +43,7 @@ import {EditProject, Project} from '@shared/entity/project';
 import {VSphereNetwork} from '@shared/entity/provider/vsphere';
 import {AlibabaInstanceType, AlibabaZone, AlibabaVSwitch} from '@shared/entity/provider/alibaba';
 import {AnexiaTemplate, AnexiaVlan} from '@shared/entity/provider/anexia';
-import {PacketSize} from '@shared/entity/provider/packet';
+import {EquinixSize} from '@shared/entity/provider/equinix';
 import {GCPDiskType, GCPMachineSize, GCPNetwork, GCPSubnetwork, GCPZone} from '@shared/entity/provider/gcp';
 import {DigitaloceanSizes} from '@shared/entity/provider/digitalocean';
 
@@ -242,8 +242,8 @@ export class ApiMockService {
     return '';
   }
 
-  getPacketSizes(): Observable<PacketSize[]> {
-    return of(fakePacketSizes());
+  getEquinixSizes(): Observable<EquinixSize[]> {
+    return of(fakeEquinixSizes());
   }
 
   getAlibabaInstanceTypes(): Observable<AlibabaInstanceType[]> {

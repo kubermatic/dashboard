@@ -23,7 +23,7 @@ import {Digitalocean} from './provider/digitalocean';
 import {GCP} from './provider/gcp';
 import {Hetzner} from './provider/hetzner';
 import {Openstack} from './provider/openstack';
-import {Packet} from './provider/packet';
+import {Equinix} from './provider/equinix';
 import {Provider} from './provider/provider';
 import {VSphere} from './provider/vsphere';
 
@@ -56,7 +56,7 @@ export class PresetsService {
   provider(provider: NodeProvider.GCP): GCP;
   provider(provider: NodeProvider.HETZNER): Hetzner;
   provider(provider: NodeProvider.OPENSTACK): Openstack;
-  provider(provider: NodeProvider.PACKET): Packet;
+  provider(provider: NodeProvider.EQUINIX): Equinix;
   provider(provider: NodeProvider.VSPHERE): VSphere;
   provider(provider: NodeProvider.ALIBABA): Alibaba;
   provider(provider: NodeProvider.ANEXIA): Anexia;
@@ -74,8 +74,8 @@ export class PresetsService {
         return new Hetzner(this._http, NodeProvider.HETZNER);
       case NodeProvider.OPENSTACK:
         return new Openstack(this._http, NodeProvider.OPENSTACK);
-      case NodeProvider.PACKET:
-        return new Packet(this._http, NodeProvider.PACKET);
+      case NodeProvider.EQUINIX:
+        return new Equinix(this._http, NodeProvider.EQUINIX);
       case NodeProvider.VSPHERE:
         return new VSphere(this._http, NodeProvider.VSPHERE);
       case NodeProvider.ALIBABA:

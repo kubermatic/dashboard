@@ -21,12 +21,12 @@ limitations under the License.
            name="apiKey"
            type="password"
            autocomplete="off">
-    <mat-hint>We need the Packet API key.</mat-hint>
+    <mat-hint>We need the Equinix Metal API key.</mat-hint>
     <mat-error *ngIf="form.get(Controls.APIKey).hasError('required')">
-      Packet API key is <strong>required</strong>.
+      Equinix Metal API key is <strong>required</strong>.
     </mat-error>
     <mat-error *ngIf="form.get(Controls.APIKey).hasError('maxlength')">
-      Packet API key must be less than <strong>256</strong> characters long.
+      Equinix Metal API key must be less than <strong>256</strong> characters long.
     </mat-error>
   </mat-form-field>
 
@@ -38,12 +38,12 @@ limitations under the License.
            [name]="Controls.ProjectID"
            type="text"
            autocomplete="off">
-    <mat-hint>We need the Packet Project ID.</mat-hint>
+    <mat-hint>We need the Equinix Metal Project ID.</mat-hint>
     <mat-error *ngIf="form.get(Controls.ProjectID).hasError('required')">
-      Packet project ID is <strong>required</strong>.
+      Equinix Metal project ID is <strong>required</strong>.
     </mat-error>
     <mat-error *ngIf="form.get(Controls.ProjectID).hasError('maxlength')">
-      Packet project ID must be less than <strong>256</strong> characters long.
+      Equinix Metal project ID must be less than <strong>256</strong> characters long.
     </mat-error>
   </mat-form-field>
 

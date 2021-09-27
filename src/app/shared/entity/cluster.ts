@@ -86,7 +86,7 @@ export class CloudSpec {
   aws?: AWSCloudSpec;
   bringyourown?: BringYourOwnCloudSpec;
   openstack?: OpenstackCloudSpec;
-  packet?: PacketCloudSpec;
+  packet?: EquinixCloudSpec;
   baremetal?: BareMetalCloudSpec;
   vsphere?: VSphereCloudSpec;
   hetzner?: HetznerCloudSpec;
@@ -176,7 +176,7 @@ export class OpenstackCloudSpec {
   subnetID: string;
 }
 
-export class PacketCloudSpec {
+export class EquinixCloudSpec {
   apiKey: string;
   projectID: string;
   billingCycle: string;
@@ -322,7 +322,7 @@ export class CloudSpecPatch {
   digitalocean?: DigitaloceanCloudSpecPatch;
   aws?: AWSCloudSpecPatch;
   openstack?: OpenstackCloudSpecPatch;
-  packet?: PacketCloudSpecPatch;
+  packet?: EquinixCloudSpecPatch;
   vsphere?: VSphereCloudSpecPatch;
   hetzner?: HetznerCloudSpecPatch;
   azure?: AzureCloudSpecPatch;
@@ -348,7 +348,7 @@ export class OpenstackCloudSpecPatch {
   password?: string;
 }
 
-export class PacketCloudSpecPatch {
+export class EquinixCloudSpecPatch {
   apiKey?: string;
   projectID?: string;
   billingCycle?: string;
@@ -457,8 +457,8 @@ export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
         vnet: '',
         loadBalancerSKU: '',
       } as AzureCloudSpec;
-    case NodeProvider.PACKET:
-      return {} as PacketCloudSpec;
+    case NodeProvider.EQUINIX:
+      return {} as EquinixCloudSpec;
     case NodeProvider.KUBEVIRT:
       return {kubeconfig: ''} as KubeVirtCloudSpec;
     case NodeProvider.GCP:
@@ -480,6 +480,6 @@ export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
   return {};
 }
 
-export const AVAILABLE_PACKET_BILLING_CYCLES = ['hourly', 'daily'];
+export const AVAILABLE_EQUINIX_BILLING_CYCLES = ['hourly', 'daily'];
 
 export const AZURE_LOADBALANCER_SKUS = ['basic', 'standard'];
