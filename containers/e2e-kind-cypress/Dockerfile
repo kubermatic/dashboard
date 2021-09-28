@@ -22,6 +22,7 @@ ENV KIND_VERSION="v0.11.1"
 ENV KIND_NODE_VERSION="v1.21.1"
 
 COPY --from=kkpbuild /kindest.tar /kindest.tar
+COPY --from=kkpbuild /usr/local/bin/helm /usr/local/bin/helm
 COPY --from=kkpbuild /usr/local/bin/kubectl /usr/local/bin/kubectl
 COPY --from=kkpbuild /usr/local/bin/yq /usr/local/bin/yq
 COPY --from=kkpbuild /usr/local/bin/jq /usr/local/bin/jq
