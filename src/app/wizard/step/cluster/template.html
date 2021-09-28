@@ -53,12 +53,24 @@ limitations under the License.
       </mat-card-header>
       <div fxLayout="column">
         <mat-form-field class="km-dropdown-with-suffix">
+          <mat-label>CNI Plugin</mat-label>
+          <mat-select [formControlName]="Controls.CNIPlugin"
+                      class="km-select-ellipsis"
+                      disableOptionCentering>
+            <mat-option [value]="cniPlugin.Canal">Canal</mat-option>
+            <mat-option [value]="cniPlugin.Cilium">Cilium</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="km-dropdown-with-suffix">
           <mat-label>Proxy Mode</mat-label>
           <mat-select [formControlName]="Controls.ProxyMode"
                       class="km-select-ellipsis"
                       disableOptionCentering>
-            <mat-option [value]="proxyMode.ipvs">ipvs</mat-option>
-            <mat-option [value]="proxyMode.iptables">iptables</mat-option>
+            <mat-option *ngFor="let proxyMode of availableProxyModes"
+                        [value]="proxyMode">
+              {{proxyMode}}
+            </mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field fxFlex>

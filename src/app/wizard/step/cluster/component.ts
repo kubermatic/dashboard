@@ -33,6 +33,7 @@ import {
   END_OF_DOCKER_SUPPORT_VERSION,
   MasterVersion,
   ProxyMode,
+  CNIPlugin,
 } from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
@@ -62,6 +63,7 @@ enum Controls {
   ProxyMode = 'proxyMode',
   PodsCIDR = 'podsCIDR',
   ServicesCIDR = 'servicesCIDR',
+  CNIPlugin = 'cniPlugin',
 }
 
 @Component({
@@ -90,6 +92,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   podNodeSelectorAdmissionPluginConfig: object;
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
   proxyMode = ProxyMode;
+  cniPlugin = CNIPlugin;
+  availableProxyModes = ['ipvs', 'iptables'];
   readonly Controls = Controls;
   private _datacenterSpec: Datacenter;
   private _seedSettings: SeedSettings;
@@ -129,6 +133,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.ProxyMode]: this._builder.control(''),
       [Controls.PodsCIDR]: new FormControl('', [CIDR_PATTERN_VALIDATOR]),
       [Controls.ServicesCIDR]: new FormControl('', [CIDR_PATTERN_VALIDATOR]),
+      [Controls.CNIPlugin]: new FormControl(''),
     });
 
     this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
@@ -193,6 +198,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe(() => (this._clusterSpecService.admissionPlugins = this.form.get(Controls.AdmissionPlugins).value));
 
+    this.control(Controls.CNIPlugin)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => this.updateCNIPluginOptions());
+
     merge(
       this.form.get(Controls.Name).valueChanges,
       this.form.get(Controls.Version).valueChanges,
@@ -204,7 +213,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.ContainerRuntime).valueChanges,
       this.form.get(Controls.ProxyMode).valueChanges,
       this.form.get(Controls.PodsCIDR).valueChanges,
-      this.form.get(Controls.ServicesCIDR).valueChanges
+      this.form.get(Controls.ServicesCIDR).valueChanges,
+      this.form.get(Controls.CNIPlugin).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
@@ -247,6 +257,14 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     return AdmissionPluginUtils.getPluginName(name);
   }
 
+  updateCNIPluginOptions() {
+    if (this.controlValue(Controls.CNIPlugin) === CNIPlugin.Cilium) {
+      this.availableProxyModes = ['ipvs', 'iptables', 'ebpf'];
+    } else {
+      this.availableProxyModes = ['ipvs', 'iptables'];
+    }
+  }
+
   isPluginEnabled(name: string): boolean {
     return AdmissionPluginUtils.isPluginEnabled(this.form.get(Controls.AdmissionPlugins), name);
   }
@@ -284,6 +302,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   private _getClusterEntity(): Cluster {
     const pods = this.controlValue(Controls.PodsCIDR);
     const services = this.controlValue(Controls.ServicesCIDR);
+    const cniPluginType = this.controlValue(Controls.CNIPlugin);
+    const cniPlugin = cniPluginType ? {type: cniPluginType} : null;
     return {
       name: this.controlValue(Controls.Name),
       type: ClusterType.Kubernetes,
@@ -306,6 +326,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           pods: {cidrBlocks: pods ? [pods] : []},
           services: {cidrBlocks: services ? [services] : []},
         },
+        cniPlugin: cniPlugin,
       } as ClusterSpec,
     } as Cluster;
   }

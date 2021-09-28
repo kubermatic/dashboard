@@ -212,12 +212,17 @@ export class ClusterSpec {
   mla?: MLASettings;
   containerRuntime?: ContainerRuntime;
   clusterNetwork?: ClusterNetwork;
+  cniPlugin?: CNIPluginConfig;
 }
 
 export class ClusterNetwork {
   pods?: NetworkRanges;
   proxyMode?: ProxyMode;
   services?: NetworkRanges;
+}
+
+export class CNIPluginConfig {
+  type: string;
 }
 
 export class NetworkRanges {
@@ -227,6 +232,11 @@ export class NetworkRanges {
 export enum ProxyMode {
   ipvs = 'ipvs',
   iptables = 'iptables',
+}
+
+export enum CNIPlugin {
+  Canal = 'canal',
+  Cilium = 'cilium',
 }
 
 export class AuditLoggingSettings {
