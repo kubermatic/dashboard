@@ -67,6 +67,10 @@ limitations under the License.
           <span>{{operatingSystem}}</span>
         </div>
       </km-property>
+      <km-property *ngIf="cluster.spec.cniPlugin?.type">
+        <div key>CNI Plugin</div>
+        <div value>{{cluster.spec.cniPlugin.type}}</div>
+      </km-property>
       <km-property *ngIf="cluster.spec.clusterNetwork?.proxyMode">
         <div key>Proxy Mode</div>
         <div value>{{cluster.spec.clusterNetwork.proxyMode}}</div>
