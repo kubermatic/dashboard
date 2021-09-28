@@ -34,14 +34,22 @@ describe('AWS Provider', () => {
       cy.intercept({method: 'GET', path: '**/me'}, {fixture: 'me.json'}).as('getUser'); // TODO: WebSocket.
       cy.intercept({method: 'GET', path: '**/seed'}, {fixture: 'seed.json'}).as('getSeeds');
       cy.intercept({method: 'GET', path: '**/dc'}, {fixture: 'dc.json'}).as('getDatacenters');
-      cy.intercept({method: 'GET', path: '**/projects?displayAll=false'}, {fixture: 'projects/list.json'}).as('listProjects');
+      cy.intercept({method: 'GET', path: '**/projects?displayAll=false'}, {fixture: 'projects/list.json'}).as(
+        'listProjects'
+      );
       cy.intercept({method: 'GET', path: '**/projects/*'}, {fixture: 'projects/single.json'}).as('getProject');
       cy.intercept({method: 'POST', path: '**/projects'}, {fixture: 'projects/single.json'}).as('createProject');
-      cy.intercept({method: 'GET', path: '**/projects/*/clusters'}, {fixture: 'clusters/aws/list.json'}).as('listClusters');
-      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*'}, {fixture: 'clusters/aws/single.json'}).as('getCluster');
-      cy.intercept({method: 'POST', path: '**/projects/*/clusters'}, {fixture: 'clusters/aws/single.json'}).as('createCluster');
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters'}, {fixture: 'clusters/aws/list.json'}).as(
+        'listClusters'
+      );
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*'}, {fixture: 'clusters/aws/single.json'}).as(
+        'getCluster'
+      );
+      cy.intercept({method: 'POST', path: '**/projects/*/clusters'}, {fixture: 'clusters/aws/single.json'}).as(
+        'createCluster'
+      );
     }
-  })
+  });
 
   it('should login', () => {
     login(email, password);
