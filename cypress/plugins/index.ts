@@ -14,7 +14,14 @@ import failFast from 'cypress-fail-fast/plugin';
 import {configuration} from './cy-ts-preprocessor';
 
 export default async (on, config) => {
-  let ignored = ['**/integration/stories/opa.spec.ts'];
+  let ignored = [
+    '**/integration/providers/kubevirt.spec.ts',
+    '**/integration/providers/openstack.spec.ts',
+    '**/integration/providers/vsphere.spec.ts',
+    '**/integration/stories/machine-deployment.spec.ts',
+    '**/integration/stories/opa.spec.ts',
+    '**/integration/stories/admin-settings/administrators.spec.ts',
+  ];
   if (config.env.edition !== 'ee') {
     ignored = [...ignored, '**/integration/providers/*.spec.ts'];
   }
