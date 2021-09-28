@@ -45,7 +45,7 @@ export class EditBucketSettingDialog implements OnInit {
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.Bucket]: this._builder.control(this._bucketName, [Validators.required]),
-      [Controls.Endpoint]: this._builder.control(this._endpoint),
+      [Controls.Endpoint]: this._builder.control(this._endpoint, [Validators.required]),
     });
   }
 
