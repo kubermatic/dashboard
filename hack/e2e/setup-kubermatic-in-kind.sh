@@ -81,8 +81,7 @@ echodate "Deploying Kubermatic [${KUBERMATIC_VERSION}]..."
 ./_build/kubermatic-installer deploy --disable-telemetry \
   --storageclass copy-default \
   --config "$KUBERMATIC_CONFIG" \
-  --helm-values "$HELM_VALUES_FILE" \
-  --helm-binary "helm3"
+  --helm-values "$HELM_VALUES_FILE"
 
 echodate "Finished installing Kubermatic"
 cd $REPO_ROOT
