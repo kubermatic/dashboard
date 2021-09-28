@@ -20,7 +20,7 @@ import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 import * as _ from 'lodash';
 
-xdescribe('VSPhere Provider', () => {
+describe('VSPhere Provider', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const projectName = _.uniqueId('e2e-test-project-');
