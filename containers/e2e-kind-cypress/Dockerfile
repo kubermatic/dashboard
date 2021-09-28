@@ -39,8 +39,7 @@ RUN apt-get update -qq && \
       gettext \
       git && \
     rm -rf /var/lib/apt/lists/* && \
-    curl --fail -L https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz | tar -C /usr/local -xz && \
-    ln -s /usr/local/bin/helm2 /usr/local/bin/helm
+    curl --fail -L https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz | tar -C /usr/local -xz
 
 ENV PATH /usr/local/go/bin:$PATH
 
