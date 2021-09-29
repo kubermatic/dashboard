@@ -9,7 +9,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM quay.io/kubermatic/build:go-1.16-node-14-kind-0.11-2
+FROM quay.io/kubermatic/build:go-1.17-node-14-kind-0.11-1
 LABEL maintainer="support@kubermatic.com"
 
 # Install Google Chrome

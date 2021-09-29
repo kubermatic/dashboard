@@ -16,7 +16,7 @@ import {AdminSettings} from '../../../pages/admin-settings.po';
 import {RequestType, Response, ResponseType, TrafficMonitor} from '../../../utils/monitor';
 import {Endpoint} from '../../../utils/endpoint';
 
-xdescribe('Admin Settings - Administrators Story', () => {
+describe('Admin Settings - Administrators Story', () => {
   const userEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const adminEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
