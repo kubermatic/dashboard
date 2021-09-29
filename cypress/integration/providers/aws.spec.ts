@@ -19,40 +19,58 @@ import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 import * as _ from 'lodash';
+import {mockAuthCookies} from "../../utils/mock";
 
 describe('AWS Provider', () => {
   const useMocks = true;
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
-  const projectName = useMocks ? 'test' : _.uniqueId('test-project-');
-  const clusterName = useMocks ? 'test' : _.uniqueId('test-cluster-');
-  const initialMachineDeploymentName = useMocks ? 'test' : _.uniqueId('test-md-');
+  const preset = useMocks ? Preset.Mock : Preset.AWS;
+  const projectName = useMocks ? 'test-project' : _.uniqueId('test-project-');
+  const clusterName = useMocks ? 'test-cluster' : _.uniqueId('test-cluster-');
+  const initialMachineDeploymentName = useMocks ? 'test-md' : _.uniqueId('test-md-');
   const initialMachineDeploymentReplicas = '0';
 
   beforeEach(() => {
     if (useMocks) {
-      cy.intercept({method: 'GET', path: '**/me'}, {fixture: 'me.json'}).as('getUser'); // TODO: WebSocket.
-      cy.intercept({method: 'GET', path: '**/seed'}, {fixture: 'seed.json'}).as('getSeeds');
-      cy.intercept({method: 'GET', path: '**/dc'}, {fixture: 'dc.json'}).as('getDatacenters');
-      cy.intercept({method: 'GET', path: '**/projects?displayAll=false'}, {fixture: 'projects/list.json'}).as(
-        'listProjects'
-      );
+      cy.intercept({method: 'GET', path: '**/seed'}, {fixture: 'config/seeds.json'}).as('getSeeds');
+      cy.intercept({method: 'GET', path: '**/seeds/kubermatic/settings'}, {fixture: 'config/seed-settings.json'}).as('getSeedSettings');
+      cy.intercept({method: 'GET', path: '**/dc'}, {fixture: 'config/datacenters.json'}).as('getDatacenters');
+      cy.intercept({method: 'GET', path: '**/projects?displayAll=false'}, {fixture: 'projects/list.json'}).as('listProjects');
       cy.intercept({method: 'GET', path: '**/projects/*'}, {fixture: 'projects/single.json'}).as('getProject');
       cy.intercept({method: 'POST', path: '**/projects'}, {fixture: 'projects/single.json'}).as('createProject');
-      cy.intercept({method: 'GET', path: '**/projects/*/clusters'}, {fixture: 'clusters/aws/list.json'}).as(
-        'listClusters'
-      );
-      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*'}, {fixture: 'clusters/aws/single.json'}).as(
-        'getCluster'
-      );
-      cy.intercept({method: 'POST', path: '**/projects/*/clusters'}, {fixture: 'clusters/aws/single.json'}).as(
-        'createCluster'
-      );
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters'}, {fixture: 'clusters/aws/list.json'}).as('listClusters');
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*'}, {fixture: 'clusters/aws/single.json'}).as('getCluster');
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/health'}, {fixture: 'clusters/health.json'}).as('getClusterHealth');
+      cy.intercept({method: 'POST', path: '**/projects/*/clusters'}, {fixture: 'clusters/aws/single.json'}).as('createCluster');
+      cy.intercept({method: 'GET', path: '**/projects/*/kubernetes/clusters'}, {fixture: 'empty.json'}).as('listExternalClusters');
+      cy.intercept({method: 'GET', path: '**/providers/aws/presets*'}, {fixture: 'config/preset.json'}).as('listPresets');
+      cy.intercept({method: 'GET', path: '**/providers/aws/*/subnets'}, {fixture: 'clusters/aws/subnets.json'}).as('listSubnets');
+      cy.intercept({method: 'GET', path: '**/projects/*/etcdrestores'}, {fixture: 'empty.json'}).as('listEtcdRestores');
+      cy.intercept({method: 'GET', path: '**/projects/*/sshkeys'}, {fixture: 'empty.json'}).as('listSSHKeys');
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/sshkeys'}, {fixture: 'empty.json'}).as('listSSHKeys');
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/events'}, {fixture: 'empty.json'}).as('listEvents');
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/bindings'}, {fixture: 'empty.json'}).as('listBindings');
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/clusterbindings'}, {fixture: 'empty.json'}).as('listClusterBindings');
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/rulegroups'}, {fixture: 'empty.json'}).as('listRuleGroups');
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/machinedeployments'}, {fixture: 'empty.json'}).as('listMachineDeployments');
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/nodes**'}, {fixture: 'empty.json'}).as('listNodes');
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/addons'}, {fixture: 'empty.json'}).as('listAddons');
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/upgrades'}, {fixture: 'empty.json'}).as('listUpgrades');
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/metrics'}, {fixture: 'empty.json'}).as('listMetrics');
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/alertmanager/config'}, {fixture: 'empty-item.json'}).as('getAlergManagerConfig');
     }
   });
 
   it('should login', () => {
-    login(email, password);
+    if (useMocks) {
+      mockAuthCookies();
+      cy.setCookie('autoredirect', 'false');
+      cy.visit('/projects');
+    } else {
+      login(email, password);
+    }
+
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -74,7 +92,7 @@ describe('AWS Provider', () => {
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
     WizardPage.getCustomPresetsCombobox().click();
-    WizardPage.getPreset(Preset.AWS).click();
+    WizardPage.getPreset(preset).click();
     WizardPage.getNextBtn(WizardStep.ProviderSettings).click({force: true});
     WizardPage.getNodeNameInput()
       .type(initialMachineDeploymentName)
@@ -105,6 +123,12 @@ describe('AWS Provider', () => {
 
   it('should delete created cluster', () => {
     ClustersPage.deleteCluster(clusterName);
+
+    if (useMocks) {
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters'}, {fixture: 'empty.json'}).as('listClusters');
+    }
+
+    ClustersPage.verifyNoCluster(clusterName);
   });
 
   it('should verify that there are no clusters', () => {

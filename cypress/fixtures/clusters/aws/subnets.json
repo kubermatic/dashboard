@@ -1,0 +1,15 @@
+[
+  {
+    "name": "test-subnet-aws-eu-central-1a",
+    "id": "subnet-0cfda22f6b09ee38b",
+    "availability_zone": "eu-central-1a",
+    "availability_zone_id": "euc1-az2",
+    "ipv4cidr": "172.31.87.0/24",
+    "ipv6cidr": "",
+    "tags": [],
+    "state": "available",
+    "available_ip_address_count": 231,
+    "default": false,
+    "isDefaultSubnet": true
+  }
+]

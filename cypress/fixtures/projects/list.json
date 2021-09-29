@@ -1,14 +1,14 @@
 [
   {
     "id": "fn9234fn1d",
-    "name": "test",
+    "name": "test-project",
     "creationTimestamp": "2021-09-14T11:22:07Z",
     "status": "Active",
     "owners": [
       {
         "name": "roxy",
         "creationTimestamp": "0001-01-01T00:00:00Z",
-        "email": "roxy@loodse.com"
+        "email": "roxy@kubermatic.io"
       }
     ]
   }

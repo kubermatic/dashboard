@@ -21,4 +21,5 @@ export enum Preset {
   OpenStack = 'e2e-openstack',
   Equinix = 'e2e-equinix',
   VSPhere = 'e2e-vsphere',
+  Mock = 'test',
 }

@@ -1,7 +1,7 @@
 [
   {
     "id": "zs6qc9b9wh",
-    "name": "test",
+    "name": "test-cluster",
     "creationTimestamp": "2021-09-22T11:43:45Z",
     "labels": {},
     "type": "kubernetes",
@@ -38,7 +38,7 @@
     },
     "status": {
       "version": "1.21.3",
-      "url": "https://test.com:6443",
+      "url": "https://test-cluster.com:6443",
       "externalCCMMigration": "Unsupported"
     }
   }
