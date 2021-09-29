@@ -168,28 +168,28 @@ presubmits:
                   key: serviceAccountSigningKey
 
   - name: pre-dashboard-test-mocks-e2e
-      always_run: true
-      decorate: true
-      clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
-      spec:
-        containers:
-          - image: cypress/browsers:node14.17.0-chrome88-ff89
-            imagePullPolicy: Always
-            command:
-              - make
-              - run-e2e-ci
-            resources:
-              requests:
-                memory: 6Gi
-                cpu: 4
-              limits:
-                memory: 6Gi
-                cpu: 4
-            env:
-              - name: NO_COLOR
-                value: "1"
-              - name: USE_MOCKS
-                value: true
+    always_run: true
+    decorate: true
+    clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
+    spec:
+      containers:
+        - image: cypress/browsers:node14.17.0-chrome88-ff89
+          imagePullPolicy: Always
+          command:
+            - make
+            - run-e2e-ci
+          resources:
+            requests:
+              memory: 6Gi
+              cpu: 4
+            limits:
+              memory: 6Gi
+              cpu: 4
+          env:
+            - name: NO_COLOR
+              value: "1"
+            - name: USE_MOCKS
+              value: true
 
   - name: pre-dashboard-build-image
     always_run: true
