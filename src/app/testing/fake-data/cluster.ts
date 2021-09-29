@@ -34,14 +34,14 @@ export function fakeDigitaloceanCluster(): Cluster {
   };
 }
 
-export function fakePacketCluster(): Cluster {
+export function fakeEquinixCluster(): Cluster {
   return {
     creationTimestamp: new Date(),
     id: '4k6txp5sq',
     name: 'nifty-haibt',
     spec: {
       cloud: {
-        dc: 'packet-ams',
+        dc: 'equinix-ams',
         packet: {
           apiKey: '123',
           projectID: '1',

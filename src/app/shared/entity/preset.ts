@@ -60,7 +60,7 @@ export class CreatePresetSpec {
   hetzner?: HetznerPresetSpec;
   kubevirt?: KubevirtPresetSpec;
   openstack?: OpenstackPresetSpec;
-  packet?: PacketPresetSpec;
+  packet?: EquinixPresetSpec;
   vsphere?: VSpherePresetSpec;
 
   requiredEmailDomain?: string;
@@ -144,7 +144,7 @@ export class OpenstackPresetSpec extends PresetProviderSpec {
   subnetID?: string;
 }
 
-export class PacketPresetSpec extends PresetProviderSpec {
+export class EquinixPresetSpec extends PresetProviderSpec {
   apiKey: string;
   projectID: string;
 

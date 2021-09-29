@@ -31,7 +31,7 @@ import {DigitaloceanSizes} from '@shared/entity/provider/digitalocean';
 import {GCPDiskType, GCPMachineSize, GCPZone} from '@shared/entity/provider/gcp';
 import {HetznerTypes} from '@shared/entity/provider/hetzner';
 import {OpenstackAvailabilityZone, OpenstackFlavor} from '@shared/entity/provider/openstack';
-import {PacketSize} from '@shared/entity/provider/packet';
+import {EquinixSize} from '@shared/entity/provider/equinix';
 import {
   CreateTokenEntity,
   ServiceAccount,
@@ -153,9 +153,9 @@ export class ApiService {
     return this._http.get<HetznerTypes>(url);
   }
 
-  getPacketSizes(projectId: string, clusterId: string): Observable<PacketSize[]> {
+  getEquinixSizes(projectId: string, clusterId: string): Observable<EquinixSize[]> {
     const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/packet/sizes`;
-    return this._http.get<PacketSize[]>(url);
+    return this._http.get<EquinixSize[]>(url);
   }
 
   getAlibabaInstanceTypes(projectId: string, clusterId: string, region: string): Observable<AlibabaInstanceType[]> {

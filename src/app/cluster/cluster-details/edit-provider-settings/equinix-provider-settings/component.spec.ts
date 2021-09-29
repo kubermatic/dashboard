@@ -29,13 +29,13 @@ import {HetznerProviderSettingsComponent} from '../hetzner-provider-settings/com
 import {KubevirtProviderSettingsComponent} from '../kubevirt-provider-settings/component';
 import {OpenstackProviderSettingsComponent} from '../openstack-provider-settings/component';
 import {VSphereProviderSettingsComponent} from '../vsphere-provider-settings/component';
-import {PacketProviderSettingsComponent} from './component';
+import {EquinixProviderSettingsComponent} from './component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
-describe('PacketProviderSettingsComponent', () => {
-  let fixture: ComponentFixture<PacketProviderSettingsComponent>;
-  let component: PacketProviderSettingsComponent;
+describe('EquinixProviderSettingsComponent', () => {
+  let fixture: ComponentFixture<EquinixProviderSettingsComponent>;
+  let component: EquinixProviderSettingsComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -43,13 +43,13 @@ describe('PacketProviderSettingsComponent', () => {
       declarations: [
         EditProviderSettingsComponent,
         AWSProviderSettingsComponent,
-        PacketProviderSettingsComponent,
+        EquinixProviderSettingsComponent,
         HetznerProviderSettingsComponent,
         OpenstackProviderSettingsComponent,
         VSphereProviderSettingsComponent,
         AzureProviderSettingsComponent,
         DigitaloceanProviderSettingsComponent,
-        PacketProviderSettingsComponent,
+        EquinixProviderSettingsComponent,
         GCPProviderSettingsComponent,
         KubevirtProviderSettingsComponent,
         AlibabaProviderSettingsComponent,
@@ -63,7 +63,7 @@ describe('PacketProviderSettingsComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PacketProviderSettingsComponent);
+    fixture = TestBed.createComponent(EquinixProviderSettingsComponent);
     component = fixture.componentInstance;
     component.billingCycle = '';
     fixture.detectChanges();
