@@ -15,6 +15,7 @@ import {configuration} from './cy-ts-preprocessor';
 
 export default async (on, config) => {
   let ignored = [
+    '**/integration/providers/anexia.spec.ts',
     '**/integration/providers/kubevirt.spec.ts',
     '**/integration/providers/openstack.spec.ts',
     '**/integration/providers/vsphere.spec.ts',
