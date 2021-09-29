@@ -9,20 +9,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export class PacketSize {
+export class EquinixSize {
   name: string;
-  cpus: PacketCPU[];
+  cpus: EquinixCPU[];
   memory: string;
-  drives: PacketDrive[];
+  drives: EquinixDrive[];
 }
 
-export class PacketDrive {
+export class EquinixDrive {
   count: number;
   size: string;
   type: string;
 }
 
-export class PacketCPU {
+export class EquinixCPU {
   count: number;
   type: string;
 }

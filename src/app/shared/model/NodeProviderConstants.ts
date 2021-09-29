@@ -22,7 +22,7 @@ export enum NodeProvider {
   GCP = 'gcp',
   HETZNER = 'hetzner',
   OPENSTACK = 'openstack',
-  PACKET = 'packet',
+  EQUINIX = 'packet',
   KUBEVIRT = 'kubevirt',
   VSPHERE = 'vsphere',
   NONE = '',
@@ -49,7 +49,7 @@ export namespace NodeProviderConstants {
     [NodeProvider.HETZNER, 'Hetzner'],
     [NodeProvider.KUBEVIRT, 'KubeVirt'],
     [NodeProvider.OPENSTACK, 'Openstack'],
-    [NodeProvider.PACKET, 'Packet'],
+    [NodeProvider.EQUINIX, 'Equinix Metal'],
     [NodeProvider.VSPHERE, 'VSphere'],
   ]);
 

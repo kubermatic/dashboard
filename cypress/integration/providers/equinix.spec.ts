@@ -20,7 +20,7 @@ import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 import * as _ from 'lodash';
 
-describe('Packet Provider', () => {
+describe('Equinix Provider', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const projectName = _.uniqueId('e2e-test-project-');
@@ -46,12 +46,12 @@ describe('Packet Provider', () => {
   });
 
   it('should create a new cluster', () => {
-    WizardPage.getProviderBtn(Provider.Packet).click();
-    WizardPage.getDatacenterBtn(Datacenter.Packet.NewYork).click();
+    WizardPage.getProviderBtn(Provider.Equinix).click();
+    WizardPage.getDatacenterBtn(Datacenter.Equinix.NewYork).click();
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
     WizardPage.getCustomPresetsCombobox().click();
-    WizardPage.getPreset(Preset.Packet).click();
+    WizardPage.getPreset(Preset.Equinix).click();
     WizardPage.getNextBtn(WizardStep.ProviderSettings).click({force: true});
     WizardPage.getNodeNameInput()
       .type(initialMachineDeploymentName)

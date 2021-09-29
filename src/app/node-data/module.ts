@@ -32,7 +32,7 @@ import {GCPBasicNodeDataComponent} from './basic/provider/gcp/component';
 import {HetznerBasicNodeDataComponent} from './basic/provider/hetzner/component';
 import {KubeVirtBasicNodeDataComponent} from './basic/provider/kubevirt/component';
 import {OpenstackBasicNodeDataComponent} from './basic/provider/openstack/component';
-import {PacketBasicNodeDataComponent} from './basic/provider/packet/component';
+import {EquinixBasicNodeDataComponent} from './basic/provider/equinix/component';
 import {VSphereBasicNodeDataComponent} from './basic/provider/vsphere/component';
 import {NodeDataComponent} from './component';
 import {NodeDataDialogComponent} from './dialog/component';
@@ -43,7 +43,7 @@ import {AzureExtendedNodeDataComponent} from './extended/provider/azure/componen
 import {DigitalOceanExtendedNodeDataComponent} from './extended/provider/digitalocean/component';
 import {GCPExtendedNodeDataComponent} from './extended/provider/gcp/component';
 import {OpenstackExtendedNodeDataComponent} from './extended/provider/openstack/component';
-import {PacketExtendedNodeDataComponent} from './extended/provider/packet/component';
+import {EquinixExtendedNodeDataComponent} from './extended/provider/equinix/component';
 import {KubeletVersionNodeDataComponent} from './kubelet-version/component';
 
 const components = [
@@ -56,8 +56,8 @@ const components = [
   VSphereBasicNodeDataComponent,
   KubeVirtBasicNodeDataComponent,
   HetznerBasicNodeDataComponent,
-  PacketBasicNodeDataComponent,
-  PacketExtendedNodeDataComponent,
+  EquinixBasicNodeDataComponent,
+  EquinixExtendedNodeDataComponent,
   AzureBasicNodeDataComponent,
   AzureExtendedNodeDataComponent,
   GCPBasicNodeDataComponent,

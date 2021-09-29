@@ -17,23 +17,24 @@ import {
   fakeDigitaloceanCluster,
   fakeHetznerCluster,
   fakeOpenstackCluster,
-  fakePacketCluster,
+  fakeEquinixCluster,
   fakeVSphereCluster,
 } from '@app/testing/fake-data/cluster';
 
 import {Cluster} from './cluster';
+import {Provider} from '../../../../cypress/utils/provider';
 
 describe('ClusterEntity', () => {
   it('should get correct provider', () => {
-    expect(Cluster.getProvider(fakeDigitaloceanCluster().spec.cloud)).toBe('digitalocean');
-    expect(Cluster.getProvider(fakeAWSCluster().spec.cloud)).toBe('aws');
-    expect(Cluster.getProvider(fakeOpenstackCluster().spec.cloud)).toBe('openstack');
-    expect(Cluster.getProvider(fakeBringyourownCluster().spec.cloud)).toBe('bringyourown');
-    expect(Cluster.getProvider(fakeHetznerCluster().spec.cloud)).toBe('hetzner');
-    expect(Cluster.getProvider(fakeVSphereCluster().spec.cloud)).toBe('vsphere');
-    expect(Cluster.getProvider(fakeAzureCluster().spec.cloud)).toBe('azure');
-    expect(Cluster.getProvider(fakePacketCluster().spec.cloud)).toBe('packet');
-    expect(Cluster.getProvider(fakeAlibabaCluster().spec.cloud)).toBe('alibaba');
+    expect(Cluster.getProvider(fakeDigitaloceanCluster().spec.cloud)).toBe(Provider.Digitalocean);
+    expect(Cluster.getProvider(fakeAWSCluster().spec.cloud)).toBe(Provider.AWS);
+    expect(Cluster.getProvider(fakeOpenstackCluster().spec.cloud)).toBe(Provider.OpenStack);
+    expect(Cluster.getProvider(fakeBringyourownCluster().spec.cloud)).toBe(Provider.BringYourOwn);
+    expect(Cluster.getProvider(fakeHetznerCluster().spec.cloud)).toBe(Provider.Hetzner);
+    expect(Cluster.getProvider(fakeVSphereCluster().spec.cloud)).toBe(Provider.VSphere);
+    expect(Cluster.getProvider(fakeAzureCluster().spec.cloud)).toBe(Provider.Azure);
+    expect(Cluster.getProvider(fakeEquinixCluster().spec.cloud)).toBe(Provider.Equinix);
+    expect(Cluster.getProvider(fakeAlibabaCluster().spec.cloud)).toBe(Provider.Alibaba);
   });
 
   it('should get correct version headline', () => {

@@ -23,8 +23,8 @@ import {NodeDataService} from '@core/services/node-data/service';
 import * as _ from 'lodash';
 import {Observable} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {NodeCloudSpec, NodeSpec, PacketNodeSpec} from '@shared/entity/node';
-import {PacketSize} from '@shared/entity/provider/packet';
+import {NodeCloudSpec, NodeSpec, EquinixNodeSpec} from '@shared/entity/node';
+import {EquinixSize} from '@shared/entity/provider/equinix';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {compare} from '@shared/utils/common-utils';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
@@ -40,26 +40,26 @@ enum SizeState {
 }
 
 @Component({
-  selector: 'km-packet-basic-node-data',
+  selector: 'km-equinix-basic-node-data',
   templateUrl: './template.html',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PacketBasicNodeDataComponent),
+      useExisting: forwardRef(() => EquinixBasicNodeDataComponent),
       multi: true,
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => PacketBasicNodeDataComponent),
+      useExisting: forwardRef(() => EquinixBasicNodeDataComponent),
       multi: true,
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PacketBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy, AfterViewInit {
+export class EquinixBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy, AfterViewInit {
   readonly Controls = Controls;
 
-  sizes: PacketSize[] = [];
+  sizes: EquinixSize[] = [];
   selectedSize = '';
   sizeLabel = SizeState.Empty;
 
@@ -71,8 +71,8 @@ export class PacketBasicNodeDataComponent extends BaseFormValidator implements O
     super();
   }
 
-  private get _sizesObservable(): Observable<PacketSize[]> {
-    return this._nodeDataService.packet.flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this));
+  private get _sizesObservable(): Observable<EquinixSize[]> {
+    return this._nodeDataService.equinix.flavors(this._clearSize.bind(this), this._onSizeLoading.bind(this));
   }
 
   ngOnInit(): void {
@@ -96,13 +96,13 @@ export class PacketBasicNodeDataComponent extends BaseFormValidator implements O
         cloud: {
           packet: {
             instanceType: size,
-          } as PacketNodeSpec,
+          } as EquinixNodeSpec,
         } as NodeCloudSpec,
       } as NodeSpec,
     } as NodeData;
   }
 
-  getPlanDetails(size: PacketSize): string {
+  getPlanDetails(size: EquinixSize): string {
     let description = '';
     size.drives = size.drives ? size.drives : [];
     size.cpus = size.cpus ? size.cpus : [];
@@ -144,7 +144,7 @@ export class PacketBasicNodeDataComponent extends BaseFormValidator implements O
     this._cdr.detectChanges();
   }
 
-  private _setDefaultSize(sizes: PacketSize[]): void {
+  private _setDefaultSize(sizes: EquinixSize[]): void {
     this.sizes = sizes.filter(size => size.memory !== 'N/A');
     this.selectedSize = this._nodeDataService.nodeData.spec.cloud.packet
       ? this._nodeDataService.nodeData.spec.cloud.packet.instanceType
@@ -158,18 +158,18 @@ export class PacketBasicNodeDataComponent extends BaseFormValidator implements O
     this._cdr.detectChanges();
   }
 
-  private _findCheapestInstance(sizes: PacketSize[]): PacketSize {
+  private _findCheapestInstance(sizes: EquinixSize[]): EquinixSize {
     // Avoid mutating original array
     return [...sizes]
       .sort((a, b) => compare(this._getMemory(a), this._getMemory(b)))
       .sort((a, b) => compare(this._getCPUCount(a), this._getCPUCount(b)))[0];
   }
 
-  private _getMemory(size: PacketSize): number {
+  private _getMemory(size: EquinixSize): number {
     return Number.parseInt(size.memory);
   }
 
-  private _getCPUCount(size: PacketSize): number {
+  private _getCPUCount(size: EquinixSize): number {
     return size.cpus ? size.cpus.map(s => s.count).reduce((a, b) => a + b) : -1;
   }
 }

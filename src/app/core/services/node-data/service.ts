@@ -29,7 +29,7 @@ import {NodeDataDigitalOceanProvider} from './provider/digitalocean';
 import {NodeDataGCPProvider} from './provider/gcp';
 import {NodeDataHetznerProvider} from './provider/hetzner';
 import {NodeDataOpenstackProvider} from './provider/openstack';
-import {NodeDataPacketProvider} from './provider/packet';
+import {NodeDataEquinixProvider} from './provider/equinix';
 
 @Injectable()
 export class NodeDataService {
@@ -146,7 +146,7 @@ export class NodeDataService {
     this._apiService,
     this._projectService
   );
-  readonly packet = new NodeDataPacketProvider(
+  readonly equinix = new NodeDataEquinixProvider(
     this,
     this._clusterSpecService,
     this._presetService,

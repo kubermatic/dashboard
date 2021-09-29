@@ -45,7 +45,7 @@ import {GCPProviderSettingsComponent} from '../edit-provider-settings/gcp-provid
 import {HetznerProviderSettingsComponent} from '../edit-provider-settings/hetzner-provider-settings/component';
 import {KubevirtProviderSettingsComponent} from '../edit-provider-settings/kubevirt-provider-settings/component';
 import {OpenstackProviderSettingsComponent} from '../edit-provider-settings/openstack-provider-settings/component';
-import {PacketProviderSettingsComponent} from '../edit-provider-settings/packet-provider-settings/component';
+import {EquinixProviderSettingsComponent} from '../edit-provider-settings/equinix-provider-settings/component';
 import {VSphereProviderSettingsComponent} from '../edit-provider-settings/vsphere-provider-settings/component';
 import {EditClusterComponent} from './component';
 
@@ -77,7 +77,7 @@ describe('EditClusterComponent', () => {
           OpenstackProviderSettingsComponent,
           VSphereProviderSettingsComponent,
           AzureProviderSettingsComponent,
-          PacketProviderSettingsComponent,
+          EquinixProviderSettingsComponent,
           GCPProviderSettingsComponent,
           KubevirtProviderSettingsComponent,
           AlibabaProviderSettingsComponent,

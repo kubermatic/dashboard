@@ -22,9 +22,9 @@ limitations under the License.
   <km-digitalocean-extended-node-data *ngSwitchCase="Provider.DIGITALOCEAN"
                                       [formControl]="form.get(Control.ProviderExtended)">
   </km-digitalocean-extended-node-data>
-  <km-packet-extended-node-data *ngSwitchCase="Provider.PACKET"
-                                [formControl]="form.get(Control.ProviderExtended)">
-  </km-packet-extended-node-data>
+  <km-equinix-extended-node-data *ngSwitchCase="Provider.EQUINIX"
+                                 [formControl]="form.get(Control.ProviderExtended)">
+  </km-equinix-extended-node-data>
   <km-azure-extended-node-data *ngSwitchCase="Provider.AZURE"
                                [formControl]="form.get(Control.ProviderExtended)">
   </km-azure-extended-node-data>

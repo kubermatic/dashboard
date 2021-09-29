@@ -38,7 +38,7 @@ import {GCPProviderBasicComponent} from './step/provider-settings/provider/basic
 import {HetznerProviderBasicComponent} from './step/provider-settings/provider/basic/hetzner/component';
 import {KubeVirtProviderBasicComponent} from './step/provider-settings/provider/basic/kubevirt/component';
 import {OpenstackProviderBasicComponent} from './step/provider-settings/provider/basic/openstack/component';
-import {PacketProviderBasicComponent} from './step/provider-settings/provider/basic/packet/component';
+import {EquinixProviderBasicComponent} from './step/provider-settings/provider/basic/equinix/component';
 import {VSphereProviderBasicComponent} from './step/provider-settings/provider/basic/vsphere/component';
 import {AWSProviderExtendedComponent} from './step/provider-settings/provider/extended/aws/component';
 import {AzureProviderExtendedComponent} from './step/provider-settings/provider/extended/azure/component';
@@ -70,7 +70,7 @@ const components: any[] = [
   OpenstackProviderExtendedComponent,
   OpenstackProviderExtendedDefaultCredentialsComponent,
   OpenstackProviderExtendedAppCredentialsComponent,
-  PacketProviderBasicComponent,
+  EquinixProviderBasicComponent,
   VSphereProviderBasicComponent,
   ProviderExtendedComponent,
   AWSProviderExtendedComponent,

@@ -34,7 +34,7 @@ export class DatacenterSpec {
   bringyourown?: BringYourOwnDatacenterSpec;
   aws?: AWSDatacenterSpec;
   openstack?: OpenStackDatacenterSpec;
-  packet?: PacketDatacenterSpec;
+  packet?: EquinixDatacenterSpec;
   vsphere?: VSphereDatacenterSpec;
   hetzner?: HetznerDatacenterSpec;
   azure?: AzureDatacenterSpec;
@@ -96,7 +96,7 @@ export class OpenStackDatacenterSpec {
   enforce_floating_ip: boolean;
 }
 
-export class PacketDatacenterSpec {
+export class EquinixDatacenterSpec {
   facilities: string[];
 }
 

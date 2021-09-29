@@ -20,22 +20,22 @@ enum Controls {
 }
 
 @Component({
-  selector: 'km-packet-extended-node-data',
+  selector: 'km-equinix-extended-node-data',
   templateUrl: './template.html',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PacketExtendedNodeDataComponent),
+      useExisting: forwardRef(() => EquinixExtendedNodeDataComponent),
       multi: true,
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => PacketExtendedNodeDataComponent),
+      useExisting: forwardRef(() => EquinixExtendedNodeDataComponent),
       multi: true,
     },
   ],
 })
-export class PacketExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class EquinixExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   tags: string[] = [];
 
   readonly Controls = Controls;
@@ -58,7 +58,7 @@ export class PacketExtendedNodeDataComponent extends BaseFormValidator implement
 
   onTagsChange(tags: string[]): void {
     this.tags = tags;
-    this._nodeDataService.packet.tags = tags;
+    this._nodeDataService.equinix.tags = tags;
   }
 
   ngOnDestroy(): void {

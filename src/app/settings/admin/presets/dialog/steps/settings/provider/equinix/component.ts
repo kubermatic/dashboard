@@ -12,7 +12,7 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
-import {PacketPresetSpec} from '@shared/entity/preset';
+import {EquinixPresetSpec} from '@shared/entity/preset';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge, of} from 'rxjs';
 import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
@@ -24,22 +24,22 @@ export enum Controls {
 }
 
 @Component({
-  selector: 'km-packet-settings',
+  selector: 'km-equinix-settings',
   templateUrl: './template.html',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PacketSettingsComponent),
+      useExisting: forwardRef(() => EquinixSettingsComponent),
       multi: true,
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => PacketSettingsComponent),
+      useExisting: forwardRef(() => EquinixSettingsComponent),
       multi: true,
     },
   ],
 })
-export class PacketSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class EquinixSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
 
   constructor(private readonly _builder: FormBuilder, private readonly _presetDialogService: PresetDialogService) {
@@ -74,6 +74,6 @@ export class PacketSettingsComponent extends BaseFormValidator implements OnInit
       apiKey: this.form.get(Controls.ApiKey).value,
       projectID: this.form.get(Controls.ProjectID).value,
       billingCycle: this.form.get(Controls.BillingCycle).value,
-    } as PacketPresetSpec;
+    } as EquinixPresetSpec;
   }
 }

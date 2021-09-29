@@ -84,7 +84,7 @@ export class ClusterSummaryComponent {
         return !this.displayTags(this.machineDeployment.spec.template.cloud[provider].labels);
       case NodeProvider.DIGITALOCEAN:
       case NodeProvider.GCP:
-      case NodeProvider.PACKET:
+      case NodeProvider.EQUINIX:
         return (
           this.machineDeployment.spec.template.cloud[provider] &&
           this.machineDeployment.spec.template.cloud[provider].tags &&

@@ -14,11 +14,11 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angula
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {PresetsService} from '@core/services/wizard/presets';
 import {
-  AVAILABLE_PACKET_BILLING_CYCLES,
+  AVAILABLE_EQUINIX_BILLING_CYCLES,
   CloudSpec,
   Cluster,
   ClusterSpec,
-  PacketCloudSpec,
+  EquinixCloudSpec,
 } from '@shared/entity/cluster';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
@@ -32,22 +32,22 @@ export enum Controls {
 }
 
 @Component({
-  selector: 'km-wizard-packet-provider-basic',
+  selector: 'km-wizard-equinix-provider-basic',
   templateUrl: './template.html',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => PacketProviderBasicComponent),
+      useExisting: forwardRef(() => EquinixProviderBasicComponent),
       multi: true,
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => PacketProviderBasicComponent),
+      useExisting: forwardRef(() => EquinixProviderBasicComponent),
       multi: true,
     },
   ],
 })
-export class PacketProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class EquinixProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private readonly _apiKeyLength = 256;
   private readonly _projectIDLength = 256;
   private readonly _billingCycleLength = 64;
@@ -59,7 +59,7 @@ export class PacketProviderBasicComponent extends BaseFormValidator implements O
     private readonly _presets: PresetsService,
     private readonly _clusterSpecService: ClusterSpecService
   ) {
-    super('Packet Provider Basic');
+    super('Equinix Provider Basic');
   }
 
   ngOnInit(): void {
@@ -76,7 +76,7 @@ export class PacketProviderBasicComponent extends BaseFormValidator implements O
     });
 
     this.form.valueChanges
-      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.PACKET))
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.EQUINIX))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
         this._presets.enablePresets(Object.values(Controls).every(control => !this.form.get(control).value))
@@ -101,7 +101,7 @@ export class PacketProviderBasicComponent extends BaseFormValidator implements O
   }
 
   getAvailableBillingCycles(): string[] {
-    return AVAILABLE_PACKET_BILLING_CYCLES;
+    return AVAILABLE_EQUINIX_BILLING_CYCLES;
   }
 
   ngOnDestroy(): void {
@@ -127,7 +127,7 @@ export class PacketProviderBasicComponent extends BaseFormValidator implements O
             apiKey: this.form.get(Controls.APIKey).value,
             projectID: this.form.get(Controls.ProjectID).value,
             billingCycle: this.form.get(Controls.BillingCycle).value,
-          } as PacketCloudSpec,
+          } as EquinixCloudSpec,
         } as CloudSpec,
       } as ClusterSpec,
     } as Cluster;

@@ -12,7 +12,7 @@
 import {OpenstackFlavor} from '@shared/entity/provider/openstack';
 import {DigitaloceanSizes} from '@shared/entity/provider/digitalocean';
 import {HetznerTypes} from '@shared/entity/provider/hetzner';
-import {PacketSize} from '@shared/entity/provider/packet';
+import {EquinixSize} from '@shared/entity/provider/equinix';
 
 export function fakeDigitaloceanSizes(): DigitaloceanSizes {
   return {
@@ -54,7 +54,7 @@ export function fakeHetznerTypes(): HetznerTypes {
   };
 }
 
-export function fakePacketSizes(): PacketSize[] {
+export function fakeEquinixSizes(): EquinixSize[] {
   return [
     {
       name: 'x1.small.x86',
