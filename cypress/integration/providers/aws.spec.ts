@@ -33,6 +33,7 @@ describe('AWS Provider', () => {
 
   beforeEach(() => {
     if (useMocks) {
+      cy.intercept({method: 'GET', path: '**/me'}, {fixture: 'me.json'}).as('getCurrentUser');
       cy.intercept({method: 'GET', path: '**/seed'}, {fixture: 'config/seeds.json'}).as('getSeeds');
       cy.intercept({method: 'GET', path: '**/seeds/kubermatic/settings'}, {fixture: 'config/seed-settings.json'}).as('getSeedSettings');
       cy.intercept({method: 'GET', path: '**/dc'}, {fixture: 'config/datacenters.json'}).as('getDatacenters');
@@ -46,6 +47,8 @@ describe('AWS Provider', () => {
       cy.intercept({method: 'GET', path: '**/projects/*/kubernetes/clusters'}, {fixture: 'empty.json'}).as('listExternalClusters');
       cy.intercept({method: 'GET', path: '**/providers/aws/presets*'}, {fixture: 'config/preset.json'}).as('listPresets');
       cy.intercept({method: 'GET', path: '**/providers/aws/*/subnets'}, {fixture: 'clusters/aws/subnets.json'}).as('listSubnets');
+      cy.intercept({method: 'GET', path: '**/providers/aws/versions'}, {fixture: 'clusters/aws/versions.json'}).as('listVersions');
+      cy.intercept({method: 'GET', path: '**/providers/aws/sizes'}, {fixture: 'clusters/aws/sizes.json'}).as('listSizes');
       cy.intercept({method: 'GET', path: '**/projects/*/etcdrestores'}, {fixture: 'empty.json'}).as('listEtcdRestores');
       cy.intercept({method: 'GET', path: '**/projects/*/sshkeys'}, {fixture: 'empty.json'}).as('listSSHKeys');
       cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/sshkeys'}, {fixture: 'empty.json'}).as('listSSHKeys');
