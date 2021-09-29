@@ -19,7 +19,6 @@ limitations under the License.
       <input matInput
              [formControlName]="Controls.Bucket"
              type="text"
-             title="name"
              autocomplete="off"
              required>
     </mat-form-field>
@@ -29,9 +28,8 @@ limitations under the License.
       <input matInput
              [formControlName]="Controls.Endpoint"
              type="text"
-             title="name"
-             autocomplete="off">
-      <mat-hint>If not specified default endpoint `s3.amazonaws.com` will be used.</mat-hint>
+             autocomplete="off"
+             required>
     </mat-form-field>
   </form>
 </mat-dialog-content>
