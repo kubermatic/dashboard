@@ -12,7 +12,10 @@
 
 set -euo pipefail
 
-source "${GOPATH}/src/github.com/kubermatic/kubermatic/hack/lib.sh"
+echodate() {
+  # do not use -Is to keep this compatible with macOS
+  echo "[$(date +%Y-%m-%dT%H:%M:%S%:z)]" "$@"
+}
 
 if [ -z "${JOB_NAME:-}" ] || [ -z "${PROW_JOB_ID:-}" ]; then
   echodate "This script should only be running in a CI environment."
@@ -26,6 +29,7 @@ if [ "$USE_MOCKS" != "true" ]; then
   export SEED_NAME="kubermatic"
   export KIND_CLUSTER_NAME="${SEED_NAME}"
 
+  source "${GOPATH}/src/github.com/kubermatic/kubermatic/hack/lib.sh"
   source hack/e2e/setup-kind-cluster.sh
   source hack/e2e/setup-kubermatic-in-kind.sh
 
@@ -39,6 +43,7 @@ if [ "$USE_MOCKS" != "true" ]; then
 fi
 
 export CYPRESS_KUBERMATIC_EDITION="${KUBERMATIC_EDITION}"
+export CYPRESS_USE_MOCKS="${USE_MOCKS}"
 export CYPRESS_RECORD_KEY=7859bcb8-1d2a-4d56-b7f5-ca70b93f944c
 export WAIT_ON_TIMEOUT=600000
 
