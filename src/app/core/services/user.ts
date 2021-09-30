@@ -39,7 +39,11 @@ export class UserService {
 
   init(): void {
     // TODO: Test.
-    iif(() => this._tokenService.hasExpired(), environment.avoidWebsockets ? this._getCurrentUser() : this._getCurrentUserWebSocket(), EMPTY)
+    iif(
+      () => this._tokenService.hasExpired(),
+      environment.avoidWebsockets ? this._getCurrentUser() : this._getCurrentUserWebSocket(),
+      EMPTY
+    )
       .pipe(filter(user => !!user))
       .subscribe(user => {
         this._currentUser$.next(user);
