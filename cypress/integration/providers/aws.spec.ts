@@ -22,7 +22,7 @@ import * as _ from 'lodash';
 import {mockAuthCookies} from "../../utils/mock";
 
 describe('AWS Provider', () => {
-  const useMocks = true;
+  const useMocks = Cypress.env('USE_MOCKS');
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const preset = useMocks ? Preset.Mock : Preset.AWS;
@@ -135,6 +135,10 @@ describe('AWS Provider', () => {
   });
 
   it('should verify that there are no clusters', () => {
+    if (useMocks) {
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters'}, {fixture: 'empty.json'}).as('listClusters');
+    }
+
     ClustersPage.verifyNoClusters();
   });
 
@@ -144,6 +148,10 @@ describe('AWS Provider', () => {
 
   it('should delete the project', () => {
     ProjectsPage.deleteProject(projectName);
+
+    if (useMocks) {
+      cy.intercept({method: 'GET', path: '**/projects?displayAll=false'}, {fixture: 'empty.json'}).as('listProjects');
+    }
   });
 
   it('should logout', () => {
