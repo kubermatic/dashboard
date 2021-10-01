@@ -32,7 +32,8 @@ limitations under the License.
               type="button"
               class="delete-button"
               [disabled]="!isRemovable(i)"
-              (click)="delete(i)">
+              kmThrottleClick
+              (throttleClick)="delete(i)">
         <i class="km-icon-delete"
            aria-hidden="true"></i>
       </button>

@@ -62,6 +62,8 @@ limitations under the License.
     <button id="km-add-serviceaccount-dialog-add-btn"
             mat-flat-button
             type="submit"
+            kmThrottleClick
+            (throttleClick)="addServiceAccount()"
             form="add-service-account-form"
             [disabled]="!addServiceAccountForm.valid">
       <i class="km-icon-mask km-icon-add"></i>

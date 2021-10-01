@@ -85,7 +85,8 @@ limitations under the License.
                 <button mat-icon-button
                         [attr.id]="'km-delete-restore-' + backup.name"
                         matTooltip="Delete Automatic Backup"
-                        (click)="delete(backup); $event.stopPropagation()"
+                        kmThrottleClick
+                        (throttleClick)="delete(backup); $event.stopPropagation()"
                         [disabled]="!canDelete">
                   <i class="km-icon-delete"></i>
                 </button>

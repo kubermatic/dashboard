@@ -48,7 +48,8 @@ limitations under the License.
 <mat-dialog-actions>
   <button id="km-constraint-dialog-btn"
           mat-flat-button
-          (click)="save()"
+          kmThrottleClick
+          (throttleClick)="save()"
           [disabled]="!form.valid">
     <i [ngClass]="getIconClass()"></i>
     <span>{{data.confirmLabel}} Constraint</span>
