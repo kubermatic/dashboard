@@ -167,10 +167,12 @@ presubmits:
                   name: e2e-ci
                   key: serviceAccountSigningKey
 
-  - name: pre-dashboard-test-mocks-e2e
+  - name: pre-dashboard-test-e2e-mock
     always_run: true
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
+    labels:
+      preset-minio: "true"
     spec:
       containers:
         - image: cypress/browsers:node14.17.0-chrome88-ff89

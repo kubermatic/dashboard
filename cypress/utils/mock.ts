@@ -74,33 +74,45 @@ export function mockProjectEndpoints(): void {
 // Registers standard set of interceptors for clusters with chosen provider. Interceptors can be modified later
 // to simulate resource deletion or creation.
 export function mockClusterEndpoints(provider: Provider): void {
-  cy.intercept({method: Method.POST, path: '**/projects/*/clusters'}, {fixture: `clusters/${provider}/single`}).as(
-    'createCluster'
+  const p = '**/projects/*/clusters'; // Common path for cluster related endpoints.
+  cy.intercept({method: Method.POST, path: p}, {fixture: `clusters/${provider}/single.json`}).as('createCluster');
+  cy.intercept({method: Method.GET, path: p}, {fixture: `clusters/${provider}/list.json`}).as('listClusters');
+  cy.intercept({method: Method.GET, path: `${p}/*`}, {fixture: `clusters/${provider}/single.json`}).as('getCluster');
+  cy.intercept({method: Method.GET, path: `${p}/*/health`}, {fixture: 'clusters/health.json'}).as('getHealth');
+  cy.intercept({method: Method.GET, path: `${p}/*/metrics`}, {fixture: 'empty-list.json'}).as('listMetrics');
+  cy.intercept({method: Method.GET, path: `${p}/*/machinedeployments`}, {fixture: 'empty-list.json'}).as(
+    'listMachineDeployments'
   );
-  cy.intercept({method: Method.GET, path: '**/projects/*/clusters'}, {fixture: `clusters/${provider}/list`}).as(
-    'listClusters'
+  cy.intercept({method: Method.GET, path: `${p}/*/nodes**`}, {fixture: 'empty-list.json'}).as('listNodes');
+  cy.intercept({method: Method.GET, path: `${p}/*/events`}, {fixture: 'empty-list.json'}).as('listEvents');
+  cy.intercept({method: Method.GET, path: `${p}/*/bindings`}, {fixture: 'empty-list.json'}).as('listBindings');
+  cy.intercept({method: Method.GET, path: `${p}/*/clusterbindings`}, {fixture: 'empty-list.json'}).as(
+    'listClusterBindings'
   );
-  cy.intercept({method: Method.GET, path: '**/projects/*/clusters/*'}, {fixture: `clusters/${provider}/single`}).as(
-    'getCluster'
+  cy.intercept({method: Method.GET, path: `${p}/*/rulegroups`}, {fixture: 'empty-list.json'}).as('listRuleGroups');
+  cy.intercept({method: Method.GET, path: `${p}/*/addons`}, {fixture: 'empty-list.json'}).as('listAddons');
+  cy.intercept({method: Method.GET, path: `${p}/*/sshkeys`}, {fixture: 'empty-list.json'}).as('listSSHKeys');
+  cy.intercept({method: Method.GET, path: `${p}/*/upgrades`}, {fixture: 'empty-list.json'}).as('listUpgrades');
+
+  cy.intercept(
+    {method: Method.GET, path: '**/projects/*/kubernetes/clusters'},
+    {fixture: 'clusters/external/list.json'}
+  ).as('listExternalClusters');
+  cy.intercept({method: Method.GET, path: '**/projects/*/etcdrestores'}, {fixture: 'empty-list.json'}).as(
+    'listEtcdRestores'
   );
-  cy.intercept({method: Method.GET, path: '**/projects/*/clusters/*/health'}, {fixture: 'clusters/health'}).as(
-    'getClusterHealth'
-  );
-  cy.intercept({method: Method.GET, path: '**/providers/*/versions'}, {fixture: 'clusters/versions'}).as(
-    'listVersions'
-  );
-  cy.intercept({method: Method.GET, path: '**/projects/*/kubernetes/clusters'}, {fixture: 'clusters/external/list'}).as(
-    'listExternalClusters'
-  );
-  cy.intercept({method: Method.GET, path: '**/alertmanager/config'}, {fixture: 'clusters/alertmanager-config'}).as(
+  cy.intercept({method: Method.GET, path: '**/alertmanager/config'}, {fixture: 'empty-object.json'}).as(
     'getAlertmanagerConfig'
+  );
+  cy.intercept({method: Method.GET, path: '**/providers/*/versions'}, {fixture: 'clusters/versions.json'}).as(
+    'listVersions'
   );
 
   switch (provider) {
     case Provider.AWS:
-      cy.intercept({method: Method.GET, path: '**/aws/*/subnets'}, {fixture: 'clusters/aws/subnets'}).as(
+      cy.intercept({method: Method.GET, path: '**/aws/*/subnets'}, {fixture: 'clusters/aws/subnets.json'}).as(
         'listAWSSubnets'
       );
-      cy.intercept({method: Method.GET, path: '**/aws/sizes'}, {fixture: 'clusters/aws/sizes'}).as('listAWSSizes');
+      cy.intercept({method: Method.GET, path: '**/aws/sizes'}, {fixture: 'clusters/aws/sizes.json'}).as('listAWSSizes');
   }
 }
