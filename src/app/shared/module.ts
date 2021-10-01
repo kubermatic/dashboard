@@ -91,6 +91,7 @@ import {TagListComponent} from './components/tag-list/component';
 import {TaintFormComponent} from './components/taint-form/component';
 import {TaintsComponent} from './components/taints/component';
 import {AutofocusDirective} from './directives/autofocus/directive';
+import {ThrottleClickDirective} from './directives/throttle-click';
 import {RelativeTimePipe} from './pipes/relativetime';
 
 const modules: any[] = [
@@ -182,7 +183,7 @@ const components: any[] = [
   SizeFormatterPipe,
 ];
 
-const directives: any[] = [AutofocusDirective, OptionDirective];
+const directives: any[] = [AutofocusDirective, ThrottleClickDirective, OptionDirective];
 
 @NgModule({
   imports: [...modules],
