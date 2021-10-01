@@ -63,6 +63,8 @@ limitations under the License.
     <button id="km-edit-serviceaccount-dialog-edit-btn"
             mat-flat-button
             type="submit"
+            kmThrottleClick
+            (throttleClick)="editServiceAccount()"
             form="edit-service-account-form"
             [disabled]="!editServiceAccountForm.valid">
       <i class="km-icon-mask km-icon-edit w-24"></i>

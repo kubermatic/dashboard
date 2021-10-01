@@ -42,7 +42,8 @@ limitations under the License.
 <mat-dialog-actions>
   <button mat-flat-button
           id="external-cluster-confirm-btn"
-          (click)="handler()"
+          kmThrottleClick
+          (throttleClick)="handler()"
           [disabled]="!form.valid || !kubeconfig">
     <i [ngClass]="editMode ? 'km-icon-mask km-icon-edit w-24' : 'km-icon-mask km-icon-add'"></i>
     <span>{{getLabel()}}</span>

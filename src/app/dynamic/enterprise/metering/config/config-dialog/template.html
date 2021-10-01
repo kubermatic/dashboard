@@ -44,7 +44,8 @@
                class="spinner"></mat-spinner>
 
   <button mat-flat-button
-          (click)="save()"
+          kmThrottleClick
+          (throttleClick)="save()"
           [disabled]="form.invalid || saving">
     <i class="km-icon-mask km-icon-edit"></i>
     <span>Configure Metering</span>

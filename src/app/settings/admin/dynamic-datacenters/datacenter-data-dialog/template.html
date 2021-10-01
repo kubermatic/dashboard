@@ -140,7 +140,8 @@ limitations under the License.
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-flat-button
-          (click)="save()"
+          kmThrottleClick
+          (throttleClick)="save()"
           id="km-add-dc-save-btn"
           [disabled]="!form.valid">
     <i [ngClass]="getIconClass()"></i>

@@ -48,7 +48,8 @@ limitations under the License.
             id="km-serviceaccount-token-dialog-update-btn"
             mat-flat-button
             [disabled]="updating || form.invalid"
-            (click)="update()">
+            kmThrottleClick
+            (throttleClick)="update()">
       <i [ngClass]="getIconClass()"></i>
       <span>{{mode}} Token</span>
     </button>
@@ -86,7 +87,8 @@ limitations under the License.
                  *ngIf="updating"></mat-spinner>
     <button mat-flat-button
             [disabled]="updating || form.invalid"
-            (click)="update()">
+            kmThrottleClick
+            (throttleClick)="update()">
       <i [ngClass]="getIconClass()"></i>
       <span>{{mode}} Token</span>
     </button>

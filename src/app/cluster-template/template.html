@@ -19,7 +19,8 @@ limitations under the License.
     <button fxLayoutAlign="center center"
             mat-flat-button
             type="button"
-            (click)="create()"
+            kmThrottleClick
+            (throttleClick)="create()"
             [disabled]="!canCreate()">
       <i class="km-icon-mask km-icon-add"></i>
       <span>Create Cluster Template</span>
@@ -97,13 +98,15 @@ limitations under the License.
               <ng-container *ngSwitchCase="false">
                 <button mat-icon-button
                         matTooltip="Create Cluster from Template"
-                        (click)="createCluster(element)"
+                        kmThrottleClick
+                        (throttleClick)="createCluster(element)"
                         [disabled]="!canCreateCluster()">
                   <i class="km-icon-mask km-icon-cluster-from-template"></i>
                 </button>
                 <button mat-icon-button
                         matTooltip="Delete Cluster Template"
-                        (click)="delete(element)"
+                        kmThrottleClick
+                        (throttleClick)="delete(element)"
                         [disabled]="!canDelete(element)">
                   <i class="km-icon-mask km-icon-delete"></i>
                 </button>

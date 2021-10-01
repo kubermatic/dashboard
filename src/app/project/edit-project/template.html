@@ -39,6 +39,8 @@ limitations under the License.
     <button id="km-edit-project-dialog-edit-btn"
             mat-flat-button
             type="submit"
+            kmThrottleClick
+            (throttleClick)="editProject()"
             form="edit-project-form"
             [disabled]="!form.valid">
       <i class="km-icon-mask km-icon-edit w-24"></i>

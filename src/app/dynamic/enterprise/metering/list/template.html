@@ -81,7 +81,8 @@ limitations under the License.
             </ng-container>
 
             <button mat-icon-button
-                    (click)="download(element)"
+                    kmThrottleClick
+                    (throttleClick)="download(element)"
                     [disabled]="!canDownload(element)">
               <i class="km-icon-mask km-icon-download"></i>
             </button>

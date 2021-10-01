@@ -61,7 +61,8 @@ limitations under the License.
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-flat-button
-          (click)="edit()"
+          kmThrottleClick
+          (throttleClick)="edit()"
           [disabled]="!form.valid">
     Edit
   </button>
