@@ -37,32 +37,24 @@ describe('AWS Provider', () => {
       mockProjectEndpoints();
       mockClusterEndpoints(Provider.AWS);
 
-      cy.intercept({method: 'GET', path: '**/projects/*/etcdrestores'}, {fixture: 'empty.json'}).as('listEtcdRestores');
-      cy.intercept({method: 'GET', path: '**/projects/*/sshkeys'}, {fixture: 'empty.json'}).as('listSSHKeys');
-      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/sshkeys'}, {fixture: 'empty.json'}).as(
-        'listSSHKeys'
-      );
-      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/events'}, {fixture: 'empty.json'}).as('listEvents');
-      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/bindings'}, {fixture: 'empty.json'}).as(
-        'listBindings'
-      );
-      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/clusterbindings'}, {fixture: 'empty.json'}).as(
+      cy.intercept({method: 'GET', path: '**/projects/*/etcdrestores'}, {fixture: 'empty'}).as('listEtcdRestores');
+      cy.intercept({method: 'GET', path: '**/projects/*/sshkeys'}, {fixture: 'empty'}).as('listSSHKeys');
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/sshkeys'}, {fixture: 'empty'}).as('listSSHKeys');
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/events'}, {fixture: 'empty'}).as('listEvents');
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/bindings'}, {fixture: 'empty'}).as('listBindings');
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/clusterbindings'}, {fixture: 'empty'}).as(
         'listClusterBindings'
       );
-      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/rulegroups'}, {fixture: 'empty.json'}).as(
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/rulegroups'}, {fixture: 'empty'}).as(
         'listRuleGroups'
       );
-      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/machinedeployments'}, {fixture: 'empty.json'}).as(
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/machinedeployments'}, {fixture: 'empty'}).as(
         'listMachineDeployments'
       );
-      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/nodes**'}, {fixture: 'empty.json'}).as('listNodes');
-      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/addons'}, {fixture: 'empty.json'}).as('listAddons');
-      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/upgrades'}, {fixture: 'empty.json'}).as(
-        'listUpgrades'
-      );
-      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/metrics'}, {fixture: 'empty.json'}).as(
-        'listMetrics'
-      );
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/nodes**'}, {fixture: 'empty'}).as('listNodes');
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/addons'}, {fixture: 'empty'}).as('listAddons');
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/upgrades'}, {fixture: 'empty'}).as('listUpgrades');
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters/*/metrics'}, {fixture: 'empty'}).as('listMetrics');
     }
   });
 
@@ -127,7 +119,7 @@ describe('AWS Provider', () => {
     ClustersPage.deleteCluster(clusterName);
 
     if (useMocks) {
-      cy.intercept({method: 'GET', path: '**/projects/*/clusters'}, {fixture: 'empty.json'}).as('listClusters');
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters'}, {fixture: 'empty'}).as('listClusters');
     }
 
     ClustersPage.verifyNoCluster(clusterName);
@@ -135,7 +127,7 @@ describe('AWS Provider', () => {
 
   it('should verify that there are no clusters', () => {
     if (useMocks) {
-      cy.intercept({method: 'GET', path: '**/projects/*/clusters'}, {fixture: 'empty.json'}).as('listClusters');
+      cy.intercept({method: 'GET', path: '**/projects/*/clusters'}, {fixture: 'empty'}).as('listClusters');
     }
 
     ClustersPage.verifyNoClusters();
@@ -149,8 +141,10 @@ describe('AWS Provider', () => {
     ProjectsPage.deleteProject(projectName);
 
     if (useMocks) {
-      cy.intercept({method: 'GET', path: '**/projects?displayAll=false'}, {fixture: 'empty.json'}).as('listProjects');
+      cy.intercept({method: 'GET', path: '**/projects*'}, {fixture: 'empty'}).as('listProjects');
     }
+
+    ProjectsPage.verifyNoProjects();
   });
 
   it('should logout', () => {

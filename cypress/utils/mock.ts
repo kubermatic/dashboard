@@ -54,60 +54,53 @@ export function mockLogin(): void {
 // Registers standard set of interceptors for configuration like datacenters, seeds and settings. Interceptors can be
 // modified later to simulate resource deletion or creation.
 export function mockConfigEndpoints(): void {
-  cy.intercept({method: Method.GET, path: '**/me'}, {fixture: 'config/me.json'}).as('getCurrentUser');
-  cy.intercept({method: Method.GET, path: '**/seed'}, {fixture: 'config/seeds.json'}).as('getSeeds');
-  cy.intercept({method: Method.GET, path: '**/seeds/kubermatic/settings'}, {fixture: 'config/seed-settings.json'}).as(
+  cy.intercept({method: Method.GET, path: '**/me'}, {fixture: 'config/me'}).as('getCurrentUser');
+  cy.intercept({method: Method.GET, path: '**/seed'}, {fixture: 'config/seeds'}).as('getSeeds');
+  cy.intercept({method: Method.GET, path: '**/seeds/*/settings'}, {fixture: 'config/seed-settings'}).as(
     'getSeedSettings'
   );
-  cy.intercept({method: Method.GET, path: '**/dc'}, {fixture: 'config/datacenters.json'}).as('getDatacenters');
-  cy.intercept({method: Method.GET, path: '**/providers/*/presets*'}, {fixture: 'config/preset.json'}).as(
-    'listPresets'
-  );
+  cy.intercept({method: Method.GET, path: '**/dc'}, {fixture: 'config/datacenters'}).as('getDatacenters');
+  cy.intercept({method: Method.GET, path: '**/providers/*/presets*'}, {fixture: 'config/preset'}).as('listPresets');
 }
 
 // Registers standard set of interceptors for projects. Interceptors can be modified later to simulate resource
 // deletion or creation.
 export function mockProjectEndpoints(): void {
-  cy.intercept({method: Method.POST, path: '**/projects'}, {fixture: 'projects/single.json'}).as('createProject');
-  cy.intercept({method: Method.GET, path: '**/projects*'}, {fixture: 'projects/list.json'}).as('listProjects');
-  cy.intercept({method: Method.GET, path: '**/projects/*'}, {fixture: 'projects/single.json'}).as('getProject');
+  cy.intercept({method: Method.POST, path: '**/projects'}, {fixture: 'projects/single'}).as('createProject');
+  cy.intercept({method: Method.GET, path: '**/projects*'}, {fixture: 'projects/list'}).as('listProjects');
+  cy.intercept({method: Method.GET, path: '**/projects/*'}, {fixture: 'projects/single'}).as('getProject');
 }
 
 // Registers standard set of interceptors for clusters with chosen provider. Interceptors can be modified later
 // to simulate resource deletion or creation.
 export function mockClusterEndpoints(provider: Provider): void {
-  cy.intercept({method: Method.POST, path: '**/projects/*/clusters'}, {fixture: `clusters/${provider}/single.json`}).as(
+  cy.intercept({method: Method.POST, path: '**/projects/*/clusters'}, {fixture: `clusters/${provider}/single`}).as(
     'createCluster'
   );
-  cy.intercept({method: Method.GET, path: '**/projects/*/clusters'}, {fixture: `clusters/${provider}/list.json`}).as(
+  cy.intercept({method: Method.GET, path: '**/projects/*/clusters'}, {fixture: `clusters/${provider}/list`}).as(
     'listClusters'
   );
-  cy.intercept(
-    {method: Method.GET, path: '**/projects/*/clusters/*'},
-    {fixture: `clusters/${provider}/single.json`}
-  ).as('getCluster');
-  cy.intercept({method: Method.GET, path: '**/projects/*/clusters/*/health'}, {fixture: 'clusters/health.json'}).as(
+  cy.intercept({method: Method.GET, path: '**/projects/*/clusters/*'}, {fixture: `clusters/${provider}/single`}).as(
+    'getCluster'
+  );
+  cy.intercept({method: Method.GET, path: '**/projects/*/clusters/*/health'}, {fixture: 'clusters/health'}).as(
     'getClusterHealth'
   );
-  cy.intercept({method: Method.GET, path: '**/providers/*/versions'}, {fixture: 'clusters/versions.json'}).as(
+  cy.intercept({method: Method.GET, path: '**/providers/*/versions'}, {fixture: 'clusters/versions'}).as(
     'listVersions'
   );
-  cy.intercept(
-    {method: Method.GET, path: '**/projects/*/kubernetes/clusters'},
-    {fixture: 'clusters/external/list.json'}
-  ).as('listExternalClusters');
-  cy.intercept(
-    {method: Method.GET, path: '**/projects/*/clusters/*/alertmanager/config'},
-    {fixture: 'alertmanager-config.json'}
-  ).as('getAlertManagerConfig');
+  cy.intercept({method: Method.GET, path: '**/projects/*/kubernetes/clusters'}, {fixture: 'clusters/external/list'}).as(
+    'listExternalClusters'
+  );
+  cy.intercept({method: Method.GET, path: '**/alertmanager/config'}, {fixture: 'clusters/alertmanager-config'}).as(
+    'getAlertmanagerConfig'
+  );
 
   switch (provider) {
     case Provider.AWS:
-      cy.intercept({method: Method.GET, path: '**/providers/aws/*/subnets'}, {fixture: 'clusters/aws/subnets.json'}).as(
+      cy.intercept({method: Method.GET, path: '**/aws/*/subnets'}, {fixture: 'clusters/aws/subnets'}).as(
         'listAWSSubnets'
       );
-      cy.intercept({method: Method.GET, path: '**/providers/aws/sizes'}, {fixture: 'clusters/aws/sizes.json'}).as(
-        'listAWSSizes'
-      );
+      cy.intercept({method: Method.GET, path: '**/aws/sizes'}, {fixture: 'clusters/aws/sizes'}).as('listAWSSizes');
   }
 }

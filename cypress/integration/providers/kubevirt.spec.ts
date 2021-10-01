@@ -100,6 +100,7 @@ describe('KubeVirt Provider', () => {
 
   it('should delete the project', () => {
     ProjectsPage.deleteProject(projectName);
+    ProjectsPage.verifyNoProjects();
   });
 
   it('should logout', () => {
