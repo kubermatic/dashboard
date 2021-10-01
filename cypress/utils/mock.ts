@@ -54,27 +54,30 @@ export function mockLogin(): void {
 // Registers standard set of interceptors for configuration like datacenters, seeds and settings. Interceptors can be
 // modified later to simulate resource deletion or creation.
 export function mockConfigEndpoints(): void {
-  cy.intercept({method: Method.GET, path: '**/me'}, {fixture: 'config/me'}).as('getCurrentUser');
-  cy.intercept({method: Method.GET, path: '**/seed'}, {fixture: 'config/seeds'}).as('getSeeds');
-  cy.intercept({method: Method.GET, path: '**/seeds/*/settings'}, {fixture: 'config/seed-settings'}).as(
+  cy.intercept({method: Method.GET, path: '**/api/**/me'}, {fixture: 'config/me.json'}).as('getCurrentUser');
+  cy.intercept({method: Method.GET, path: '**/api/**/seed'}, {fixture: 'config/seeds.json'}).as('getSeeds');
+  cy.intercept({method: Method.GET, path: '**/api/**/seeds/*/settings'}, {fixture: 'config/seed-settings.json'}).as(
     'getSeedSettings'
   );
-  cy.intercept({method: Method.GET, path: '**/dc'}, {fixture: 'config/datacenters'}).as('getDatacenters');
-  cy.intercept({method: Method.GET, path: '**/providers/*/presets*'}, {fixture: 'config/preset'}).as('listPresets');
+  cy.intercept({method: Method.GET, path: '**/api/**/dc'}, {fixture: 'config/datacenters.json'}).as('getDatacenters');
+  cy.intercept({method: Method.GET, path: '**/api/**/providers/*/presets*'}, {fixture: 'config/preset.json'}).as(
+    'listPresets'
+  );
 }
 
 // Registers standard set of interceptors for projects. Interceptors can be modified later to simulate resource
 // deletion or creation.
 export function mockProjectEndpoints(): void {
-  cy.intercept({method: Method.POST, path: '**/projects'}, {fixture: 'projects/single'}).as('createProject');
-  cy.intercept({method: Method.GET, path: '**/projects*'}, {fixture: 'projects/list'}).as('listProjects');
-  cy.intercept({method: Method.GET, path: '**/projects/*'}, {fixture: 'projects/single'}).as('getProject');
+  const p = '**/api/**/projects'; // Common path for project related endpoints.
+  cy.intercept({method: Method.POST, path: p}, {fixture: 'projects/single.json'}).as('createProject');
+  cy.intercept({method: Method.GET, path: `${p}*`}, {fixture: 'projects/list.json'}).as('listProjects');
+  cy.intercept({method: Method.GET, path: `${p}/*`}, {fixture: 'projects/single.json'}).as('getProject');
 }
 
 // Registers standard set of interceptors for clusters with chosen provider. Interceptors can be modified later
 // to simulate resource deletion or creation.
 export function mockClusterEndpoints(provider: Provider): void {
-  const p = '**/projects/*/clusters'; // Common path for cluster related endpoints.
+  const p = '**/api/**/projects/*/clusters'; // Common path for cluster related endpoints.
   cy.intercept({method: Method.POST, path: p}, {fixture: `clusters/${provider}/single.json`}).as('createCluster');
   cy.intercept({method: Method.GET, path: p}, {fixture: `clusters/${provider}/list.json`}).as('listClusters');
   cy.intercept({method: Method.GET, path: `${p}/*`}, {fixture: `clusters/${provider}/single.json`}).as('getCluster');
@@ -95,24 +98,26 @@ export function mockClusterEndpoints(provider: Provider): void {
   cy.intercept({method: Method.GET, path: `${p}/*/upgrades`}, {fixture: 'empty-list.json'}).as('listUpgrades');
 
   cy.intercept(
-    {method: Method.GET, path: '**/projects/*/kubernetes/clusters'},
+    {method: Method.GET, path: '**/api/**/projects/*/kubernetes/clusters'},
     {fixture: 'clusters/external/list.json'}
   ).as('listExternalClusters');
-  cy.intercept({method: Method.GET, path: '**/projects/*/etcdrestores'}, {fixture: 'empty-list.json'}).as(
+  cy.intercept({method: Method.GET, path: '**/api/**/projects/*/etcdrestores'}, {fixture: 'empty-list.json'}).as(
     'listEtcdRestores'
   );
-  cy.intercept({method: Method.GET, path: '**/alertmanager/config'}, {fixture: 'empty-object.json'}).as(
+  cy.intercept({method: Method.GET, path: '**/api/**/alertmanager/config'}, {fixture: 'empty-object.json'}).as(
     'getAlertmanagerConfig'
   );
-  cy.intercept({method: Method.GET, path: '**/providers/*/versions'}, {fixture: 'clusters/versions.json'}).as(
+  cy.intercept({method: Method.GET, path: '**/api/**/providers/*/versions'}, {fixture: 'clusters/versions.json'}).as(
     'listVersions'
   );
 
   switch (provider) {
     case Provider.AWS:
-      cy.intercept({method: Method.GET, path: '**/aws/*/subnets'}, {fixture: 'clusters/aws/subnets.json'}).as(
+      cy.intercept({method: Method.GET, path: '**/api/**/aws/*/subnets'}, {fixture: 'clusters/aws/subnets.json'}).as(
         'listAWSSubnets'
       );
-      cy.intercept({method: Method.GET, path: '**/aws/sizes'}, {fixture: 'clusters/aws/sizes.json'}).as('listAWSSizes');
+      cy.intercept({method: Method.GET, path: '**/api/**/aws/sizes'}, {fixture: 'clusters/aws/sizes.json'}).as(
+        'listAWSSizes'
+      );
   }
 }
