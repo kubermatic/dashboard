@@ -28,7 +28,7 @@ export const environment = {
   restRoot: 'api/v1',
   newRestRoot: '/api/v2',
   wsRoot: `${wsProtocol}//${host}/api/v1/ws`,
-  avoidWebsockets: true, // TODO: Set to false.
+  avoidWebsockets: false,
   oidcProviderUrl: 'https://dev.kubermatic.io/dex/auth',
   oidcConnectorId: null,
   animations: true,
