@@ -97,10 +97,9 @@ export function mockClusterEndpoints(provider: Provider): void {
   cy.intercept({method: Method.GET, path: `${p}/*/sshkeys`}, {fixture: 'empty-list.json'}).as('listSSHKeys');
   cy.intercept({method: Method.GET, path: `${p}/*/upgrades`}, {fixture: 'empty-list.json'}).as('listUpgrades');
 
-  cy.intercept(
-    {method: Method.GET, path: '**/api/**/projects/*/kubernetes/clusters'},
-    {fixture: 'clusters/external/list.json'}
-  ).as('listExternalClusters');
+  cy.intercept({method: Method.GET, path: '**/api/**/projects/*/kubernetes/clusters'}, {fixture: 'empty-list.json'}).as(
+    'listExternalClusters'
+  );
   cy.intercept({method: Method.GET, path: '**/api/**/projects/*/etcdrestores'}, {fixture: 'empty-list.json'}).as(
     'listEtcdRestores'
   );
