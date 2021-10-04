@@ -22,6 +22,7 @@ export default async (on, config) => {
   } else {
     if (isEnterpriseEdition) {
       config.ignoreTestFiles = [
+        '**/integration/providers/anexia.spec.ts',
         '**/integration/providers/aws.spec.ts',
         '**/integration/providers/kubevirt.spec.ts',
         '**/integration/providers/openstack.spec.ts',

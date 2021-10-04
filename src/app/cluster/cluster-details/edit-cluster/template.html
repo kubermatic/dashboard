@@ -143,6 +143,8 @@ limitations under the License.
     <button id="km-edit-cluster-dialog-edit-btn"
             mat-flat-button
             type="submit"
+            kmThrottleClick
+            (throttleClick)="editCluster()"
             form="edit-cluster-form"
             [disabled]="!form.valid || !providerSettingsPatch.isValid">
       <i class="km-icon-mask km-icon-save"></i>

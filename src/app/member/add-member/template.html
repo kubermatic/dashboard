@@ -59,6 +59,8 @@ limitations under the License.
     <button id="km-add-member-dialog-add-btn"
             mat-flat-button
             type="submit"
+            kmThrottleClick
+            (throttleClick)="addMember()"
             form="add-member-form"
             [disabled]="!addMemberForm.valid">
       <i class="km-icon-mask km-icon-add"></i>

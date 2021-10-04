@@ -28,7 +28,8 @@ limitations under the License.
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-flat-button
-          (click)="revokeToken()"
+          kmThrottleClick
+          (throttleClick)="revokeToken()"
           [disabled]="!revokeAdminToken && !revokeViewerToken">
     <i class="km-icon-mask km-icon-check i-24"></i>
     <span>Revoke Token</span>

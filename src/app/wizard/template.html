@@ -93,7 +93,8 @@ limitations under the License.
                   color="alternative"
                   [disabled]="creating"
                   *ngIf="last"
-                  (click)="saveAsTemplate()">
+                  kmThrottleClick
+                  (throttleClick)="saveAsTemplate()">
             <i class="km-icon-mask km-icon-save"></i>
             <span>Save Cluster Template</span>
           </button>
@@ -103,7 +104,8 @@ limitations under the License.
                   type="button"
                   [disabled]="creating"
                   *ngIf="last"
-                  (click)="create()">
+                  kmThrottleClick
+                  (throttleClick)="create()">
             <i class="km-icon-mask km-icon-add"></i>
             <span>Create Cluster</span>
           </button>

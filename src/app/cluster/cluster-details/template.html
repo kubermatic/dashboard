@@ -41,7 +41,8 @@ limitations under the License.
             fxLayoutAlign="center center"
             mat-flat-button
             type="button"
-            (click)="downloadKubeconfig()"
+            kmThrottleClick
+            (throttleClick)="downloadKubeconfig()"
             [disabled]="!isClusterRunning">
       <i class="km-icon-mask km-icon-download"></i>
       <span>Download</span>
@@ -148,6 +149,11 @@ limitations under the License.
         <km-property *ngIf="cluster.spec.clusterNetwork?.services?.cidrBlocks">
           <div key>Services CIDR</div>
           <div value>{{cluster.spec.clusterNetwork.services.cidrBlocks.join(', ')}}</div>
+        </km-property>
+
+        <km-property *ngIf="cluster.spec.cniPlugin?.type">
+          <div key>CNI Plugin</div>
+          <div value>{{cluster.spec.cniPlugin.type}}</div>
         </km-property>
 
         <km-property *ngIf="cluster.spec.clusterNetwork?.proxyMode">

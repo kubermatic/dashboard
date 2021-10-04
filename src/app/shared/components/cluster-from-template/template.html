@@ -58,6 +58,8 @@ limitations under the License.
     <hr fxFlex />
   </div>
   <button mat-flat-button
+          kmThrottleClick
+          (throttleClick)="create()"
           type="submit"
           form="create-template-instance-form"
           fxLayoutAlign="center center"

@@ -100,7 +100,8 @@ limitations under the License.
   </button>
   <button mat-flat-button
           [disabled]="!form.valid"
-          (click)="install()">
+          kmThrottleClick
+          (throttleClick)="install()">
     Install
   </button>
 </mat-dialog-actions>

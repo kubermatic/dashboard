@@ -58,6 +58,8 @@ limitations under the License.
     <button id="km-edit-member-dialog-edit-btn"
             mat-flat-button
             type="submit"
+            kmThrottleClick
+            (throttleClick)="editMember()"
             form="edit-member-form"
             [disabled]="!form.valid">
       <i class="km-icon-mask km-icon-edit w-24"></i>

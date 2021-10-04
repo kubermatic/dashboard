@@ -65,6 +65,8 @@ limitations under the License.
 <mat-dialog-actions>
   <button mat-flat-button
           type="submit"
+          kmThrottleClick
+          (throttleClick)="save()"
           form="save-template-form"
           fxLayoutAlign="center center"
           [disabled]="!form.valid">

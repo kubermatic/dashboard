@@ -50,6 +50,8 @@ limitations under the License.
 <mat-dialog-actions>
   <button id="km-add-ssh-key-dialog-save"
           type="submit"
+          kmThrottleClick
+          (throttleClick)="addSSHKey()"
           mat-flat-button
           form="add-ssh-key-form"
           [disabled]="!addSSHKeyForm.valid">

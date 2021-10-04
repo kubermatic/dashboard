@@ -36,7 +36,8 @@
 <mat-dialog-actions>
   <button id="km-allowed-registry-dialog-btn"
           mat-flat-button
-          (click)="save()"
+          kmThrottleClick
+          (throttleClick)="save()"
           [disabled]="form.invalid">
     <i [ngClass]="getIconClass()"></i>
     <span>{{data.confirmLabel}} Allowed Registry</span>

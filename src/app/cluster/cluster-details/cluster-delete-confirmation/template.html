@@ -55,6 +55,8 @@ limitations under the License.
   <button id="km-delete-cluster-dialog-delete-btn"
           type="submit"
           mat-flat-button
+          kmThrottleClick
+          (throttleClick)="deleteCluster()"
           form="km-delete-cluster-dialog"
           [disabled]="!inputNameMatches()">
     <i class="km-icon-mask km-icon-delete i-24"></i>

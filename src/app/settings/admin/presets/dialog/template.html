@@ -73,7 +73,8 @@ limitations under the License.
             id="km-settings-preset-create-btn"
             [disabled]="creating || invalid"
             *ngIf="last"
-            (click)="save()">
+            kmThrottleClick
+            (throttleClick)="save()">
       <i class="km-icon-mask km-icon-add"></i>
       <span>Create</span>
     </button>
