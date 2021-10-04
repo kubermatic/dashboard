@@ -58,8 +58,8 @@ presubmits:
                   key: token
 
   - name: pre-dashboard-test-e2e
-    always_run: false
-    optional: true
+    always_run: true
+    optional: false
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     extra_refs:
@@ -112,8 +112,8 @@ presubmits:
                   key: serviceAccountSigningKey
 
   - name: pre-dashboard-test-e2e-ce
-    always_run: false
-    optional: true
+    always_run: true
+    optional: false
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     extra_refs:
@@ -167,8 +167,9 @@ presubmits:
                   name: e2e-ci
                   key: serviceAccountSigningKey
 
-  - name: pre-dashboard-test-e2e-mock
+  - name: pre-dashboard-test-e2e-mock-ee
     always_run: true
+    optional: false
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     labels:
@@ -182,12 +183,41 @@ presubmits:
             - run-e2e-ci
           resources:
             requests:
-              memory: 6Gi
-              cpu: 4
+              memory: 3Gi
+              cpu: 2
             limits:
               memory: 6Gi
               cpu: 4
           env:
+            - name: NO_COLOR
+              value: "1"
+            - name: USE_MOCKS
+              value: "true"
+
+  - name: pre-dashboard-test-e2e-mock-ce
+    always_run: true
+    optional: false
+    decorate: true
+    clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
+    labels:
+      preset-minio: "true"
+    spec:
+      containers:
+        - image: cypress/browsers:node14.17.0-chrome88-ff89
+          imagePullPolicy: Always
+          command:
+            - make
+            - run-e2e-ci
+          resources:
+            requests:
+              memory: 3Gi
+              cpu: 2
+            limits:
+              memory: 6Gi
+              cpu: 4
+          env:
+            - name: KUBERMATIC_EDITION
+              value: ce
             - name: NO_COLOR
               value: "1"
             - name: USE_MOCKS

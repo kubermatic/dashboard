@@ -14,20 +14,37 @@ import failFast from 'cypress-fail-fast/plugin';
 import {configuration} from './cy-ts-preprocessor';
 
 export default async (on, config) => {
-  let ignored = [
-    '**/integration/providers/kubevirt.spec.ts',
-    '**/integration/providers/openstack.spec.ts',
-    '**/integration/providers/vsphere.spec.ts',
-    '**/integration/stories/machine-deployment.spec.ts',
-    '**/integration/stories/opa.spec.ts',
-    '**/integration/stories/admin-settings/administrators.spec.ts',
-  ];
-  if (config.env.edition !== 'ee') {
-    ignored = [...ignored, '**/integration/providers/*.spec.ts'];
+  const useMocks = config.env.mock === 'true';
+  const isEnterpriseEdition = config.env.edition === 'ee';
+
+  if (useMocks) {
+    config.ignoreTestFiles = ['**/integration/**/!(aws.spec.ts)']; // Skip everything except already mocked tests.
+  } else {
+    if (isEnterpriseEdition) {
+      config.ignoreTestFiles = [
+        '**/integration/providers/aws.spec.ts',
+        '**/integration/providers/kubevirt.spec.ts',
+        '**/integration/providers/openstack.spec.ts',
+        '**/integration/providers/vsphere.spec.ts',
+        '**/integration/stories/machine-deployment.spec.ts',
+        '**/integration/stories/opa.spec.ts',
+        '**/integration/stories/admin-settings/administrators.spec.ts', // Skip flaky and already mocked tests.
+      ];
+    } else {
+      config.ignoreTestFiles = [
+        '**/integration/providers/*.spec.ts',
+        '**/integration/stories/machine-deployment.spec.ts',
+        '**/integration/stories/opa.spec.ts',
+        '**/integration/stories/admin-settings/administrators.spec.ts', // Skip flaky, already mocked and provider tests.
+      ];
+    }
   }
-  config.ignoreTestFiles = ignored;
-  // eslint-disable-next-line no-console
-  console.log('Testing ' + config.env.edition + ', ignoring: ' + config.ignoreTestFiles);
+
+  /* eslint-disable no-console */
+  console.log('edition: ' + config.env.edition);
+  console.log('mock: ' + config.env.mock);
+  console.log('ignore: ' + config.ignoreTestFiles);
+  /* eslint-enable no-console */
 
   on('file:preprocessor', webpack(configuration));
   failFast(on, config);
