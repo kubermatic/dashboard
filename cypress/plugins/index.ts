@@ -14,7 +14,7 @@ import failFast from 'cypress-fail-fast/plugin';
 import {configuration} from './cy-ts-preprocessor';
 
 export default async (on, config) => {
-  const useMocks = config.env.mock === 'true';
+  const useMocks = config.env.mock;
   const isEnterpriseEdition = config.env.edition === 'ee';
 
   if (useMocks) {
@@ -42,8 +42,8 @@ export default async (on, config) => {
   }
 
   /* eslint-disable no-console */
-  console.log('edition: ' + config.env.edition);
-  console.log('mock: ' + config.env.mock);
+  console.log('use mocks: ' + useMocks);
+  console.log('use enterprise edition: ' + isEnterpriseEdition);
   console.log('ignore: ' + config.ignoreTestFiles);
   /* eslint-enable no-console */
 
