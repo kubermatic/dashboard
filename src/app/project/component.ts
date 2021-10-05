@@ -128,7 +128,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
           case 'role':
             return this.compare(this.getRole(a.id), this.getRole(b.id), isAsc);
           case 'clusters':
-            return this.compare(a.clustersNumber, b.clustersNumber, isAsc);
+            return this.compare(a.clustersNumber || 0, b.clustersNumber || 0, isAsc);
           default:
             return 0;
         }
