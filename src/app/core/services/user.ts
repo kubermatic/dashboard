@@ -38,7 +38,6 @@ export class UserService {
   ) {}
 
   init(): void {
-    // TODO: Test.
     iif(
       () => this._tokenService.hasExpired(),
       environment.avoidWebsockets ? this._getCurrentUser() : this._getCurrentUserWebSocket(),

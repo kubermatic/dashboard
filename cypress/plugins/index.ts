@@ -18,9 +18,13 @@ export default async (on, config) => {
   const isEnterpriseEdition = config.env.edition === 'ee';
 
   if (useMocks) {
-    config.ignoreTestFiles = ['**/integration/**/!(aws.spec.ts)']; // Skip everything except already mocked tests.
+    // Skip everything except already mocked tests.
+    // TODO: Remove all ignores once all tests have their mocks configured.
+    config.ignoreTestFiles = ['**/integration/**/!(aws.spec.ts)'];
   } else {
     if (isEnterpriseEdition) {
+      // Skip flaky and already mocked tests.
+      // TODO: Remove all ignores after fixing flaky tests and making the full tests optional.
       config.ignoreTestFiles = [
         '**/integration/providers/anexia.spec.ts',
         '**/integration/providers/aws.spec.ts',
@@ -29,14 +33,16 @@ export default async (on, config) => {
         '**/integration/providers/vsphere.spec.ts',
         '**/integration/stories/machine-deployment.spec.ts',
         '**/integration/stories/opa.spec.ts',
-        '**/integration/stories/admin-settings/administrators.spec.ts', // Skip flaky and already mocked tests.
+        '**/integration/stories/admin-settings/administrators.spec.ts',
       ];
     } else {
+      // Skip flaky, already mocked and provider tests.
+      // TODO: Remove ignores of flaky tests after fixing them.
       config.ignoreTestFiles = [
         '**/integration/providers/*.spec.ts',
         '**/integration/stories/machine-deployment.spec.ts',
         '**/integration/stories/opa.spec.ts',
-        '**/integration/stories/admin-settings/administrators.spec.ts', // Skip flaky, already mocked and provider tests.
+        '**/integration/stories/admin-settings/administrators.spec.ts',
       ];
     }
   }
