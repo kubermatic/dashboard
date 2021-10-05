@@ -128,11 +128,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
           case 'role':
             return this.compare(this.getRole(a.id), this.getRole(b.id), isAsc);
           case 'clusters':
-            return this.compare(
-              this._toValidClusterCount(a.clustersNumber),
-              this._toValidClusterCount(b.clustersNumber),
-              isAsc
-            );
+            return this.compare(a.clustersNumber || 0, b.clustersNumber || 0, isAsc);
           default:
             return 0;
         }
@@ -268,10 +264,6 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
 
   getRole(project: string): string {
     return this.role.get(project);
-  }
-
-  private _toValidClusterCount(count: number): number {
-    return count ? count : 0;
   }
 
   private _sortProjectOwners(): void {
