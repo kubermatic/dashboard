@@ -19,17 +19,33 @@ import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 import * as _ from 'lodash';
+import {mockClusterEndpoints, mockConfigEndpoints, mockLogin, mockProjectEndpoints} from '../../utils/mock';
 
 describe('Hetzner Provider', () => {
+  const useMocks = Cypress.env('USE_MOCKS');
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
-  const projectName = _.uniqueId('e2e-test-project-');
-  const clusterName = _.uniqueId('e2e-test-cluster-');
-  const initialMachineDeploymentName = _.uniqueId('e2e-test-md-');
+  const preset = useMocks ? Preset.Mock : Preset.Hetzner;
+  const projectName = useMocks ? 'test-project' : _.uniqueId('test-project-');
+  const clusterName = useMocks ? 'test-cluster' : _.uniqueId('test-cluster-');
+  const initialMachineDeploymentName = useMocks ? 'test-md' : _.uniqueId('test-md-');
   const initialMachineDeploymentReplicas = '0';
 
+  beforeEach(() => {
+    if (useMocks) {
+      mockConfigEndpoints();
+      mockProjectEndpoints();
+      mockClusterEndpoints(Provider.Hetzner);
+    }
+  });
+
   it('should login', () => {
-    login(email, password);
+    if (useMocks) {
+      mockLogin();
+    } else {
+      login(email, password);
+    }
+
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -51,7 +67,7 @@ describe('Hetzner Provider', () => {
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
     WizardPage.getCustomPresetsCombobox().click();
-    WizardPage.getPreset(Preset.Hetzner).click();
+    WizardPage.getPreset(preset).click();
     WizardPage.getNextBtn(WizardStep.ProviderSettings).click({force: true});
     WizardPage.getNodeNameInput()
       .type(initialMachineDeploymentName)
@@ -82,9 +98,19 @@ describe('Hetzner Provider', () => {
 
   it('should delete created cluster', () => {
     ClustersPage.deleteCluster(clusterName);
+
+    if (useMocks) {
+      cy.intercept({method: 'GET', path: '**/api/**/projects/*/clusters'}, []).as('listClusters');
+    }
+
+    ClustersPage.verifyNoCluster(clusterName);
   });
 
   it('should verify that there are no clusters', () => {
+    if (useMocks) {
+      cy.intercept({method: 'GET', path: '**/api/**/projects/*/clusters'}, []).as('listClusters');
+    }
+
     ClustersPage.verifyNoClusters();
   });
 
@@ -94,6 +120,11 @@ describe('Hetzner Provider', () => {
 
   it('should delete the project', () => {
     ProjectsPage.deleteProject(projectName);
+
+    if (useMocks) {
+      cy.intercept({method: 'GET', path: '**/api/**/projects*'}, []).as('listProjects');
+    }
+
     ProjectsPage.verifyNoProjects();
   });
 

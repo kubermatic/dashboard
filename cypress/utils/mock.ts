@@ -82,30 +82,20 @@ export function mockClusterEndpoints(provider: Provider): void {
   cy.intercept({method: Method.GET, path: p}, {fixture: `clusters/${provider}/list.json`}).as('listClusters');
   cy.intercept({method: Method.GET, path: `${p}/*`}, {fixture: `clusters/${provider}/single.json`}).as('getCluster');
   cy.intercept({method: Method.GET, path: `${p}/*/health`}, {fixture: 'clusters/health.json'}).as('getHealth');
-  cy.intercept({method: Method.GET, path: `${p}/*/metrics`}, {fixture: 'empty-list.json'}).as('listMetrics');
-  cy.intercept({method: Method.GET, path: `${p}/*/machinedeployments`}, {fixture: 'empty-list.json'}).as(
-    'listMachineDeployments'
-  );
-  cy.intercept({method: Method.GET, path: `${p}/*/nodes**`}, {fixture: 'empty-list.json'}).as('listNodes');
-  cy.intercept({method: Method.GET, path: `${p}/*/events`}, {fixture: 'empty-list.json'}).as('listEvents');
-  cy.intercept({method: Method.GET, path: `${p}/*/bindings`}, {fixture: 'empty-list.json'}).as('listBindings');
-  cy.intercept({method: Method.GET, path: `${p}/*/clusterbindings`}, {fixture: 'empty-list.json'}).as(
-    'listClusterBindings'
-  );
-  cy.intercept({method: Method.GET, path: `${p}/*/rulegroups`}, {fixture: 'empty-list.json'}).as('listRuleGroups');
-  cy.intercept({method: Method.GET, path: `${p}/*/addons`}, {fixture: 'empty-list.json'}).as('listAddons');
-  cy.intercept({method: Method.GET, path: `${p}/*/sshkeys`}, {fixture: 'empty-list.json'}).as('listSSHKeys');
-  cy.intercept({method: Method.GET, path: `${p}/*/upgrades`}, {fixture: 'empty-list.json'}).as('listUpgrades');
+  cy.intercept({method: Method.GET, path: `${p}/*/metrics`}, []).as('listMetrics');
+  cy.intercept({method: Method.GET, path: `${p}/*/machinedeployments`}, []).as('listMachineDeployments');
+  cy.intercept({method: Method.GET, path: `${p}/*/nodes**`}, []).as('listNodes');
+  cy.intercept({method: Method.GET, path: `${p}/*/events`}, []).as('listEvents');
+  cy.intercept({method: Method.GET, path: `${p}/*/bindings`}, []).as('listBindings');
+  cy.intercept({method: Method.GET, path: `${p}/*/clusterbindings`}, []).as('listClusterBindings');
+  cy.intercept({method: Method.GET, path: `${p}/*/rulegroups`}, []).as('listRuleGroups');
+  cy.intercept({method: Method.GET, path: `${p}/*/addons`}, []).as('listAddons');
+  cy.intercept({method: Method.GET, path: `${p}/*/sshkeys`}, []).as('listSSHKeys');
+  cy.intercept({method: Method.GET, path: `${p}/*/upgrades`}, []).as('listUpgrades');
 
-  cy.intercept({method: Method.GET, path: '**/api/**/projects/*/kubernetes/clusters'}, {fixture: 'empty-list.json'}).as(
-    'listExternalClusters'
-  );
-  cy.intercept({method: Method.GET, path: '**/api/**/projects/*/etcdrestores'}, {fixture: 'empty-list.json'}).as(
-    'listEtcdRestores'
-  );
-  cy.intercept({method: Method.GET, path: '**/api/**/alertmanager/config'}, {fixture: 'empty-object.json'}).as(
-    'getAlertmanagerConfig'
-  );
+  cy.intercept({method: Method.GET, path: '**/api/**/projects/*/kubernetes/clusters'}, []).as('listExternalClusters');
+  cy.intercept({method: Method.GET, path: '**/api/**/projects/*/etcdrestores'}, []).as('listEtcdRestores');
+  cy.intercept({method: Method.GET, path: '**/api/**/alertmanager/config'}, {}).as('getAlertmanagerConfig');
   cy.intercept({method: Method.GET, path: '**/api/**/providers/*/versions'}, {fixture: 'clusters/versions.json'}).as(
     'listVersions'
   );
@@ -118,5 +108,8 @@ export function mockClusterEndpoints(provider: Provider): void {
       cy.intercept({method: Method.GET, path: '**/api/**/aws/sizes'}, {fixture: 'clusters/aws/sizes.json'}).as(
         'listAWSSizes'
       );
+      break;
+    case Provider.Hetzner:
+      break;
   }
 }

@@ -20,7 +20,7 @@ export default async (on, config) => {
   if (useMocks) {
     // Skip everything except already mocked tests.
     // TODO: Remove all ignores once all tests have their mocks configured.
-    config.ignoreTestFiles = ['**/integration/**/!(aws.spec.ts)'];
+    config.ignoreTestFiles = ['**/integration/**/!(aws.spec.ts|hetzner.spec.ts)'];
   } else {
     if (isEnterpriseEdition) {
       // Skip flaky and already mocked tests.
@@ -28,6 +28,7 @@ export default async (on, config) => {
       config.ignoreTestFiles = [
         '**/integration/providers/anexia.spec.ts',
         '**/integration/providers/aws.spec.ts',
+        '**/integration/providers/hetzner.spec.ts',
         '**/integration/providers/kubevirt.spec.ts',
         '**/integration/providers/openstack.spec.ts',
         '**/integration/providers/vsphere.spec.ts',

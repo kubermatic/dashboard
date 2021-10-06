@@ -100,9 +100,7 @@ describe('AWS Provider', () => {
     ClustersPage.deleteCluster(clusterName);
 
     if (useMocks) {
-      cy.intercept({method: 'GET', path: '**/api/**/projects/*/clusters'}, {fixture: 'empty-list.json'}).as(
-        'listClusters'
-      );
+      cy.intercept({method: 'GET', path: '**/api/**/projects/*/clusters'}, []).as('listClusters');
     }
 
     ClustersPage.verifyNoCluster(clusterName);
@@ -110,9 +108,7 @@ describe('AWS Provider', () => {
 
   it('should verify that there are no clusters', () => {
     if (useMocks) {
-      cy.intercept({method: 'GET', path: '**/api/**/projects/*/clusters'}, {fixture: 'empty-list.json'}).as(
-        'listClusters'
-      );
+      cy.intercept({method: 'GET', path: '**/api/**/projects/*/clusters'}, []).as('listClusters');
     }
 
     ClustersPage.verifyNoClusters();
@@ -126,7 +122,7 @@ describe('AWS Provider', () => {
     ProjectsPage.deleteProject(projectName);
 
     if (useMocks) {
-      cy.intercept({method: 'GET', path: '**/api/**/projects*'}, {fixture: 'empty-list.json'}).as('listProjects');
+      cy.intercept({method: 'GET', path: '**/api/**/projects*'}, []).as('listProjects');
     }
 
     ProjectsPage.verifyNoProjects();
