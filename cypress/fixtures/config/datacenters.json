@@ -16,5 +16,24 @@
       "enforceAuditLogging": false,
       "enforcePodSecurityPolicy": false
     }
+  },
+  {
+    "metadata": {
+      "name": "hetzner-nbg1"
+    },
+    "spec": {
+      "seed": "kubermatic",
+      "country": "DE",
+      "location": "Nuremberg 1 DC 3",
+      "provider": "hetzner",
+      "hetzner": {
+        "datacenter": "nbg1-dc3",
+        "network": "dev",
+        "location": ""
+      },
+      "node": {},
+      "enforceAuditLogging": false,
+      "enforcePodSecurityPolicy": false
+    }
   }
 ]

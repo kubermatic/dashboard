@@ -110,6 +110,9 @@ export function mockClusterEndpoints(provider: Provider): void {
       );
       break;
     case Provider.Hetzner:
+      cy.intercept({method: Method.GET, path: '**/api/**/hetzner/sizes'}, {fixture: 'clusters/hetzner/sizes.json'}).as(
+        'listHetznerSizes'
+      );
       break;
   }
 }
