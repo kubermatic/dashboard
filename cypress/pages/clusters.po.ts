@@ -241,11 +241,15 @@ export class ClustersPage {
     cy.get('div').should(Condition.Contain, 'No clusters available.');
   }
 
+  static verifyNoCluster(name: string): void {
+    this.waitForRefresh();
+    this.verifyUrl();
+    this.getTable().should(Condition.NotContain, name);
+  }
+
   static deleteCluster(name: string): void {
     this.getDeleteClusterBtn().click();
     this.getDeleteDialogInput().type(name).should(Condition.HaveValue, name);
     this.getDeleteDialogBtn().should(Condition.NotBe, 'disabled').click();
-    this.waitForRefresh();
-    this.getTable().should(Condition.NotContain, name);
   }
 }

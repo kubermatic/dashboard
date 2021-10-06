@@ -126,18 +126,18 @@ export class ProjectsPage {
   }
 
   static deleteProject(projectName: string): void {
-    const retries = 5;
     this.getDeleteProjectBtn(projectName).should(Condition.BeEnabled).click();
     cy.get('#km-delete-project-dialog-input').type(projectName).should(Condition.HaveValue, projectName);
-    cy.get('#km-delete-project-dialog-confirm-btn')
-      .should(Condition.BeEnabled)
-      .click()
-      .then(() => {
-        TrafficMonitor.newTrafficMonitor()
-          .method(RequestType.GET)
-          .url(Endpoint.Projects)
-          .retry(retries)
-          .expect(Response.newResponse(ResponseType.LIST).elements(0));
-      });
+    cy.get('#km-delete-project-dialog-confirm-btn').should(Condition.BeEnabled).click();
+  }
+
+  static verifyNoProjects(): void {
+    this.verifyUrl();
+    const retries = 5;
+    TrafficMonitor.newTrafficMonitor()
+      .method(RequestType.GET)
+      .url(Endpoint.Projects)
+      .retry(retries)
+      .expect(Response.newResponse(ResponseType.LIST).elements(0));
   }
 }

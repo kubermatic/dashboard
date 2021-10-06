@@ -14,21 +14,44 @@ import failFast from 'cypress-fail-fast/plugin';
 import {configuration} from './cy-ts-preprocessor';
 
 export default async (on, config) => {
-  let ignored = [
-    '**/integration/providers/anexia.spec.ts',
-    '**/integration/providers/kubevirt.spec.ts',
-    '**/integration/providers/openstack.spec.ts',
-    '**/integration/providers/vsphere.spec.ts',
-    '**/integration/stories/machine-deployment.spec.ts',
-    '**/integration/stories/opa.spec.ts',
-    '**/integration/stories/admin-settings/administrators.spec.ts',
-  ];
-  if (config.env.edition !== 'ee') {
-    ignored = [...ignored, '**/integration/providers/*.spec.ts'];
+  const useMocks = config.env.mock;
+  const isEnterpriseEdition = config.env.edition === 'ee';
+
+  if (useMocks) {
+    // Skip everything except already mocked tests.
+    // TODO: Remove all ignores once all tests have their mocks configured.
+    config.ignoreTestFiles = ['**/integration/**/!(aws.spec.ts)'];
+  } else {
+    if (isEnterpriseEdition) {
+      // Skip flaky and already mocked tests.
+      // TODO: Remove all ignores after fixing flaky tests and making the full tests optional.
+      config.ignoreTestFiles = [
+        '**/integration/providers/anexia.spec.ts',
+        '**/integration/providers/aws.spec.ts',
+        '**/integration/providers/kubevirt.spec.ts',
+        '**/integration/providers/openstack.spec.ts',
+        '**/integration/providers/vsphere.spec.ts',
+        '**/integration/stories/machine-deployment.spec.ts',
+        '**/integration/stories/opa.spec.ts',
+        '**/integration/stories/admin-settings/administrators.spec.ts',
+      ];
+    } else {
+      // Skip flaky, already mocked and provider tests.
+      // TODO: Remove ignores of flaky tests after fixing them.
+      config.ignoreTestFiles = [
+        '**/integration/providers/*.spec.ts',
+        '**/integration/stories/machine-deployment.spec.ts',
+        '**/integration/stories/opa.spec.ts',
+        '**/integration/stories/admin-settings/administrators.spec.ts',
+      ];
+    }
   }
-  config.ignoreTestFiles = ignored;
-  // eslint-disable-next-line no-console
-  console.log('Testing ' + config.env.edition + ', ignoring: ' + config.ignoreTestFiles);
+
+  /* eslint-disable no-console */
+  console.log('use mocks: ' + useMocks);
+  console.log('use enterprise edition: ' + isEnterpriseEdition);
+  console.log('ignore: ' + config.ignoreTestFiles);
+  /* eslint-enable no-console */
 
   on('file:preprocessor', webpack(configuration));
   failFast(on, config);

@@ -10,7 +10,7 @@
 // limitations under the License.
 
 import * as _ from 'lodash';
-import {FileRegistry} from '../../fixtures/registry';
+import {Fixtures} from '../../fixtures/registry';
 import {AdminSettings} from '../../pages/admin-settings.po';
 import {ClustersPage} from '../../pages/clusters.po';
 import {ProjectsPage} from '../../pages/projects.po';
@@ -32,10 +32,10 @@ describe('OPA Story', () => {
   const initialMachineDeploymentName = _.uniqueId('e2e-test-md-');
   const initialMachineDeploymentReplicas = '1';
   const constraintTemplateName = 'k8srequiredlabels';
-  const constraintTemplateSpec = FileRegistry.ConstraintTemplateSpec;
+  const constraintTemplateSpec = Fixtures.ConstraintTemplateSpec;
   const constraintName = 'e2e-test-constraint';
-  const constraintSpec = FileRegistry.ConstraintSpec;
-  const gatekeeperConfig = FileRegistry.GatekeeperConfig;
+  const constraintSpec = Fixtures.ConstraintSpec;
+  const gatekeeperConfig = Fixtures.GatekeeperConfig;
 
   it('should login', () => {
     login(email, password);
@@ -212,6 +212,7 @@ describe('OPA Story', () => {
 
   it('should delete the project', () => {
     ProjectsPage.deleteProject(projectName);
+    ProjectsPage.verifyNoProjects();
   });
 
   it('should go to the admin settings', () => {

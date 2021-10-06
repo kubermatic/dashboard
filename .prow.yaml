@@ -59,6 +59,7 @@ presubmits:
 
   - name: pre-dashboard-test-e2e
     always_run: true
+    optional: false
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     extra_refs:
@@ -112,6 +113,7 @@ presubmits:
 
   - name: pre-dashboard-test-e2e-ce
     always_run: true
+    optional: false
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     extra_refs:
@@ -164,6 +166,62 @@ presubmits:
                 secretKeyRef:
                   name: e2e-ci
                   key: serviceAccountSigningKey
+
+  - name: pre-dashboard-test-e2e-mock-ee
+    always_run: true
+    optional: false
+    decorate: true
+    clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
+    labels:
+      preset-minio: "true"
+    spec:
+      containers:
+        - image: quay.io/kubermatic/e2e-cypress:v1.0.0
+          imagePullPolicy: Always
+          command:
+            - make
+            - run-e2e-ci
+          resources:
+            requests:
+              memory: 3Gi
+              cpu: 2
+            limits:
+              memory: 6Gi
+              cpu: 4
+          env:
+            - name: NO_COLOR
+              value: "1"
+            - name: USE_MOCKS
+              value: "true"
+
+  - name: pre-dashboard-test-e2e-mock-ce
+    always_run: true
+    optional: false
+    decorate: true
+    clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
+    labels:
+      preset-minio: "true"
+    spec:
+      containers:
+        - image: quay.io/kubermatic/e2e-cypress:v1.0.0
+          imagePullPolicy: Always
+          command:
+            - make
+            - run-e2e-ci
+          resources:
+            requests:
+              memory: 3Gi
+              cpu: 2
+            limits:
+              memory: 6Gi
+              cpu: 4
+          env:
+            - name: KUBERMATIC_EDITION
+              value: ce
+            - name: NO_COLOR
+              value: "1"
+            - name: USE_MOCKS
+              value: "true"
 
   - name: pre-dashboard-build-image
     always_run: true

@@ -1,0 +1,9 @@
+{
+  "apiserver": 1,
+  "scheduler": 1,
+  "controller": 1,
+  "machineController": 1,
+  "etcd": 1,
+  "cloudProviderInfrastructure": 1,
+  "userClusterControllerManager": 1
+}

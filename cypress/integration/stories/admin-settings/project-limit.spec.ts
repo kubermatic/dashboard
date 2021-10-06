@@ -111,6 +111,7 @@ describe('Admin Settings - Project Limit Story', () => {
 
   it('should delete first project', () => {
     ProjectsPage.deleteProject(firstProjectName);
+    ProjectsPage.verifyNoProjects();
   });
 
   it('should verify there are no projects', () => {

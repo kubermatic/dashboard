@@ -11,8 +11,8 @@
 
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, EMPTY, iif, Observable, of} from 'rxjs';
-import {catchError, delay, filter, take, map, retryWhen, switchMap, tap} from 'rxjs/operators';
+import {BehaviorSubject, EMPTY, iif, Observable, of, timer} from 'rxjs';
+import {catchError, delay, filter, take, map, retryWhen, switchMap, tap, shareReplay} from 'rxjs/operators';
 import {environment} from '@environments/environment';
 import {AppConfigService} from '@app/config.service';
 import {Member} from '@shared/entity/member';
@@ -29,6 +29,7 @@ export class UserService {
   private readonly _currentUser$ = new BehaviorSubject<Member>(undefined);
   private readonly _currentUserSettings$ = new BehaviorSubject<UserSettings>(DEFAULT_USER_SETTINGS);
   private readonly _refreshTime = 3; // in seconds
+  private readonly _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
 
   constructor(
     private readonly _httpClient: HttpClient,
@@ -37,7 +38,28 @@ export class UserService {
   ) {}
 
   init(): void {
-    const webSocket$ = webSocket<Member>(`${this.wsRoot}/me`)
+    iif(
+      () => this._tokenService.hasExpired(),
+      environment.avoidWebsockets ? this._getCurrentUser() : this._getCurrentUserWebSocket(),
+      EMPTY
+    )
+      .pipe(filter(user => !!user))
+      .subscribe(user => {
+        this._currentUser$.next(user);
+        this._currentUserSettings$.next(this._defaultUserSettings(user.userSettings));
+      });
+  }
+
+  private _getCurrentUser(): Observable<Member> {
+    const url = `${this.restRoot}/me`;
+    const observable = this._httpClient.get<Member>(url).pipe(catchError(_ => of<Member>()));
+    return this._refreshTimer$
+      .pipe(switchMap(_ => iif(() => this._tokenService.hasExpired(), observable, EMPTY)))
+      .pipe(shareReplay({refCount: true, bufferSize: 1}));
+  }
+
+  private _getCurrentUserWebSocket(): Observable<Member> {
+    return webSocket<Member>(`${this.wsRoot}/me`)
       .asObservable()
       .pipe(
         retryWhen(errors =>
@@ -48,13 +70,6 @@ export class UserService {
           )
         )
       );
-
-    iif(() => this._tokenService.hasExpired(), webSocket$, EMPTY)
-      .pipe(filter(user => !!user))
-      .subscribe(user => {
-        this._currentUser$.next(user);
-        this._currentUserSettings$.next(this._defaultUserSettings(user.userSettings));
-      });
   }
 
   get currentUser(): Observable<Member> {
