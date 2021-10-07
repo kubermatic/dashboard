@@ -10,7 +10,6 @@
 // limitations under the License.
 
 import * as _ from 'lodash';
-import {Fixtures} from '../../fixtures/registry';
 import {AdminSettings} from '../../pages/admin-settings.po';
 import {ClustersPage} from '../../pages/clusters.po';
 import {ProjectsPage} from '../../pages/projects.po';
@@ -32,10 +31,10 @@ describe('OPA Story', () => {
   const initialMachineDeploymentName = _.uniqueId('e2e-test-md-');
   const initialMachineDeploymentReplicas = '1';
   const constraintTemplateName = 'k8srequiredlabels';
-  const constraintTemplateSpec = Fixtures.ConstraintTemplateSpec;
+  const constraintTemplateSpec = 'constrainttemplate.spec.yaml';
   const constraintName = 'e2e-test-constraint';
-  const constraintSpec = Fixtures.ConstraintSpec;
-  const gatekeeperConfig = Fixtures.GatekeeperConfig;
+  const constraintSpec = 'constraint.spec.yaml';
+  const gatekeeperConfig = 'gatekeeperconfig.yaml';
 
   it('should login', () => {
     login(email, password);
