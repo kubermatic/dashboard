@@ -37,7 +37,8 @@ limitations under the License.
              autocomplete="off"
              matInput>
       <mat-hint>Maximum price you are willing to pay per instance hour. Your instance runs when your maximum price is greater than the Spot Instance price.</mat-hint>
-      <mat-error>Spot Instance Max Price has to be bigger than 0.</mat-error>
+      <mat-error *ngIf="form.get(Controls.SpotInstanceMaxPrice).hasError('largerThan')">Spot Instance Max Price has to be bigger than 0.</mat-error>
+      <mat-error *ngIf="form.get(Controls.SpotInstanceMaxPrice).hasError('invalidFloat')">Invalid Spot Instance Max Price provided.</mat-error>
     </mat-form-field>
 
     <mat-checkbox [id]="Controls.SpotInstancePersistentRequest"

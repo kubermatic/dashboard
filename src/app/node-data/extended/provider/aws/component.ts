@@ -16,6 +16,7 @@ import {pushDown} from '@shared/animations/push';
 import {NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
+import {FloatValidator} from '@shared/validators/float.validator';
 import {KmValidators} from '@shared/validators/validators';
 import {merge} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -69,7 +70,7 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
       [Controls.AssignPublicIP]: this._builder.control(true),
       [Controls.IsSpotInstance]: this._builder.control(false),
       [Controls.Tags]: this._builder.control(''),
-      [Controls.SpotInstanceMaxPrice]: this._builder.control('', [KmValidators.largerThan(0)]),
+      [Controls.SpotInstanceMaxPrice]: this._builder.control('', [KmValidators.largerThan(0), FloatValidator()]),
       [Controls.SpotInstancePersistentRequest]: this._builder.control(false),
     });
 
