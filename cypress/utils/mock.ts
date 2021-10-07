@@ -54,7 +54,7 @@ export function mockLogin(): void {
 // modified later to simulate resource deletion or creation.
 export function mockConfigEndpoints(): void {
   cy.intercept({method: Method.GET, path: '**/api/**/me'}, {fixture: 'me.json'}).as('getCurrentUser');
-  cy.intercept({method: Method.GET, path: '**/api/**/seed'}, {fixture: 'seeds.json'}).as('getSeeds');
+  cy.intercept({method: Method.GET, path: '**/api/**/seed'}, ['test-seed']).as('getSeeds');
   cy.intercept({method: Method.GET, path: '**/api/**/seeds/*/settings'}, {fixture: 'seed-settings.json'}).as(
     'getSeedSettings'
   );
