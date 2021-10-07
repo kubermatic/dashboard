@@ -55,9 +55,13 @@ export function mockLogin(): void {
 export function mockConfigEndpoints(): void {
   cy.intercept({method: Method.GET, path: '**/api/**/me'}, {fixture: 'me.json'}).as('getCurrentUser');
   cy.intercept({method: Method.GET, path: '**/api/**/seed'}, {fixture: 'seeds.json'}).as('getSeeds');
-  cy.intercept({method: Method.GET, path: '**/api/**/seeds/*/settings'}, {fixture: 'seed-settings.json'}).as('getSeedSettings');
+  cy.intercept({method: Method.GET, path: '**/api/**/seeds/*/settings'}, {fixture: 'seed-settings.json'}).as(
+    'getSeedSettings'
+  );
   cy.intercept({method: Method.GET, path: '**/api/**/dc'}, {fixture: 'datacenters.json'}).as('getDatacenters');
-  cy.intercept({method: Method.GET, path: '**/api/**/providers/*/presets*'}, {fixture: 'preset.json'}).as('listPresets');
+  cy.intercept({method: Method.GET, path: '**/api/**/providers/*/presets*'}, {fixture: 'preset.json'}).as(
+    'listPresets'
+  );
 }
 
 // Registers standard set of interceptors for projects. Interceptors can be modified later to simulate resource
@@ -95,28 +99,43 @@ export function mockClusterEndpoints(provider: Provider): void {
 
   switch (provider) {
     case Provider.Alibaba:
-      cy.intercept({method: Method.GET, path: '**/api/**/alibaba/instancetypes'}, {fixture: 'alibaba/instancetypes.json'}).as('listAlibabaInstanceTypes');
+      cy.intercept(
+        {method: Method.GET, path: '**/api/**/alibaba/instancetypes'},
+        {fixture: 'alibaba/instancetypes.json'}
+      ).as('listAlibabaInstanceTypes');
       break;
     case Provider.Anexia:
-      cy.intercept({method: Method.GET, path: '**/api/**/anexia/vlans'}, {fixture: 'anexia/vlans.json'}).as('listAnexiaVLANs');
+      cy.intercept({method: Method.GET, path: '**/api/**/anexia/vlans'}, {fixture: 'anexia/vlans.json'}).as(
+        'listAnexiaVLANs'
+      );
       break;
     case Provider.AWS:
-      cy.intercept({method: Method.GET, path: '**/api/**/aws/*/subnets'}, {fixture: 'aws/subnets.json'}).as('listAWSSubnets');
+      cy.intercept({method: Method.GET, path: '**/api/**/aws/*/subnets'}, {fixture: 'aws/subnets.json'}).as(
+        'listAWSSubnets'
+      );
       cy.intercept({method: Method.GET, path: '**/api/**/aws/sizes'}, {fixture: 'aws/sizes.json'}).as('listAWSSizes');
       break;
     case Provider.Azure:
-      cy.intercept({method: Method.GET, path: '**/api/**/azure/sizes'}, {fixture: 'azure/sizes.json'}).as('listAzureSizes');
+      cy.intercept({method: Method.GET, path: '**/api/**/azure/sizes'}, {fixture: 'azure/sizes.json'}).as(
+        'listAzureSizes'
+      );
       break;
     case Provider.GCP:
-      cy.intercept({method: Method.GET, path: '**/api/**/gcp/disktypes'}, {fixture: 'aws/disktypes.json'}).as('listGCPDiskTypes');
+      cy.intercept({method: Method.GET, path: '**/api/**/gcp/disktypes'}, {fixture: 'aws/disktypes.json'}).as(
+        'listGCPDiskTypes'
+      );
       cy.intercept({method: Method.GET, path: '**/api/**/gcp/sizes'}, {fixture: 'aws/sizes.json'}).as('listGCPSizes');
       cy.intercept({method: Method.GET, path: '**/api/**/gcp/*/zones'}, {fixture: 'aws/zones.json'}).as('listGCPZones');
       break;
     case Provider.Equinix:
-      cy.intercept({method: Method.GET, path: '**/api/**/packet/sizes'}, {fixture: 'equinix/sizes.json'}).as('listEquinixSizes');
+      cy.intercept({method: Method.GET, path: '**/api/**/packet/sizes'}, {fixture: 'equinix/sizes.json'}).as(
+        'listEquinixSizes'
+      );
       break;
     case Provider.Hetzner:
-      cy.intercept({method: Method.GET, path: '**/api/**/hetzner/sizes'}, {fixture: 'hetzner/sizes.json'}).as('listHetznerSizes');
+      cy.intercept({method: Method.GET, path: '**/api/**/hetzner/sizes'}, {fixture: 'hetzner/sizes.json'}).as(
+        'listHetznerSizes'
+      );
       break;
   }
 }

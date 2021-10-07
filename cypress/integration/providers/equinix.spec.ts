@@ -19,7 +19,7 @@ import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 import * as _ from 'lodash';
-import {mockClusterEndpoints, mockConfigEndpoints, mockLogin, mockProjectEndpoints} from "../../utils/mock";
+import {mockClusterEndpoints, mockConfigEndpoints, mockLogin, mockProjectEndpoints} from '../../utils/mock';
 
 describe('Equinix Provider', () => {
   const useMocks = Cypress.env('USE_MOCKS');
