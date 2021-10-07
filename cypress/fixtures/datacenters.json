@@ -5,11 +5,11 @@
     },
     "spec": {
       "seed": "test-seed",
-      "country": "JP",
-      "location": "Tokyo",
+      "country": "DE",
+      "location": "Frankfurt",
       "provider": "alibaba",
       "alibaba": {
-        "region": "ap-northeast-1"
+        "region": "eu-central-1"
       },
       "node": {},
       "enforceAuditLogging": false,
@@ -22,8 +22,8 @@
     },
     "spec": {
       "seed": "test-seed",
-      "country": "DE",
-      "location": "test",
+      "country": "AT",
+      "location": "Vienna",
       "provider": "anexia",
       "anexia": {
         "location_id": ""
@@ -57,11 +57,11 @@
     },
     "spec": {
       "seed": "test-seed",
-      "country": "US",
-      "location": "Azure East US",
+      "country": "NL",
+      "location": "Azure West europe",
       "provider": "azure",
       "azure": {
-        "location": "eastus"
+        "location": "westeurope"
       },
       "node": {},
       "enforceAuditLogging": false,
@@ -135,12 +135,12 @@
     },
     "spec": {
       "seed": "test-seed",
-      "country": "NL",
-      "location": "Packet AMS1 (Amsterdam)",
+      "country": "US",
+      "location": "Packet EWR1 (New York)",
       "provider": "packet",
       "packet": {
         "facilities": [
-          "ams1"
+          "ewr1"
         ]
       },
       "node": {},
