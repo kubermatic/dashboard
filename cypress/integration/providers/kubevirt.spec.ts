@@ -19,12 +19,10 @@ import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 import * as _ from 'lodash';
-import {mockClusterEndpoints, mockConfigEndpoints, mockLogin, mockProjectEndpoints} from '../../utils/mock';
+import {mockClusterEndpoints, mockConfigEndpoints, mockProjectEndpoints} from '../../utils/mock';
 
 describe('KubeVirt Provider', () => {
   const useMocks = Cypress.env('USE_MOCKS');
-  const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
-  const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const preset = useMocks ? Preset.Mock : Preset.Alibaba;
   const projectName = useMocks ? 'test-project' : _.uniqueId('test-project-');
   const clusterName = useMocks ? 'test-cluster' : _.uniqueId('test-cluster-');
@@ -43,12 +41,7 @@ describe('KubeVirt Provider', () => {
   });
 
   it('should login', () => {
-    if (useMocks) {
-      mockLogin();
-    } else {
-      login(email, password);
-    }
-
+    login();
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 

@@ -16,40 +16,6 @@ export enum Method {
   POST = 'POST',
 }
 
-// Prepares mock of auth cookies and saves them in the browser. Thanks to it the login page should be skipped.
-export function mockAuthCookies(): void {
-  const radix = 36;
-  const slice = 2;
-  const day = 8640000;
-  const nonce = Math.random().toString(radix).slice(slice);
-  const header = {alg: 'RS256', typ: 'JWT'};
-  const payload = {
-    iss: 'http://dex.oauth:5556/dex/auth',
-    sub: btoa(Math.random().toString(radix).slice(slice)),
-    aud: 'kubermatic',
-    exp: Date.now() + day,
-    iat: Date.now(),
-    nonce: nonce,
-    email: 'roxy@kubermatic.io',
-    email_verified: true,
-    name: 'roxy',
-  };
-  const signature = Math.random().toString(radix).slice(slice);
-  const token =
-    btoa(JSON.stringify(header)) + '.' + btoa(JSON.stringify(payload)) + '.' + btoa(JSON.stringify(signature));
-
-  cy.setCookie('token', token);
-  cy.setCookie('nonce', nonce);
-  cy.setCookie('autoredirect', 'false');
-}
-
-// Mocks login action.
-export function mockLogin(): void {
-  mockAuthCookies();
-
-  cy.visit('/projects');
-}
-
 // Registers standard set of interceptors for configuration like datacenters, seeds and settings. Interceptors can be
 // modified later to simulate resource deletion or creation.
 export function mockConfigEndpoints(): void {

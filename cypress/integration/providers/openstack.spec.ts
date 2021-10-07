@@ -19,7 +19,7 @@ import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 import * as _ from 'lodash';
-import {mockClusterEndpoints, mockConfigEndpoints, mockLogin, mockProjectEndpoints} from '../../utils/mock';
+import {mockClusterEndpoints, mockConfigEndpoints, mockProjectEndpoints} from '../../utils/mock';
 
 // Re-enable once openstack sys11 db starts working again
 describe('OpenStack Provider', () => {
@@ -41,12 +41,7 @@ describe('OpenStack Provider', () => {
   });
 
   it('should login', () => {
-    if (useMocks) {
-      mockLogin();
-    } else {
-      login(email, password);
-    }
-
+    login();
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
