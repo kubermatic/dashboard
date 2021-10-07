@@ -6,7 +6,7 @@
     "type": "kubernetes",
     "spec": {
       "cloud": {
-        "dc": "test",
+        "dc": "test-anexia-dc",
         "anexia": {}
       },
       "version": "1.21.5",

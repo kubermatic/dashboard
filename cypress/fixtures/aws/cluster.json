@@ -6,7 +6,7 @@
   "type": "kubernetes",
   "spec": {
     "cloud": {
-      "dc": "aws-eu-central-1a",
+      "dc": "test-aws-dc",
       "aws": {}
     },
     "version": "1.21.3",

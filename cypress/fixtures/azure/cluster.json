@@ -5,7 +5,7 @@
   "type": "kubernetes",
   "spec": {
     "cloud": {
-      "dc": "azure-westeurope",
+      "dc": "test-azure-dc",
       "azure": {
         "assignAvailabilitySet": true
       }

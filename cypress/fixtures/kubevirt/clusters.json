@@ -6,7 +6,7 @@
     "type": "kubernetes",
     "spec": {
       "cloud": {
-        "dc": "kv-europe-west3-c",
+        "dc": "test-kubevirt-dc",
         "kubevirt": {}
       },
       "version": "1.21.5",

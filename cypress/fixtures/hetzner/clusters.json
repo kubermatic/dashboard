@@ -6,7 +6,7 @@
     "type": "kubernetes",
     "spec": {
       "cloud": {
-        "dc": "hetzner-nbg1",
+        "dc": "test-hetzner-dc",
         "hetzner": {}
       },
       "version": "1.21.5",

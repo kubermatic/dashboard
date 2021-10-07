@@ -6,7 +6,7 @@
     "type": "kubernetes",
     "spec": {
       "cloud": {
-        "dc": "packet-ams1",
+        "dc": "test-equinix-dc",
         "packet": {}
       },
       "version": "1.21.5",

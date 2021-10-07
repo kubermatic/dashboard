@@ -5,7 +5,7 @@
   "type": "kubernetes",
   "spec": {
     "cloud": {
-      "dc": "gcp-westeurope",
+      "dc": "test-gcp-dc",
       "gcp": {}
     },
     "version": "1.21.5",

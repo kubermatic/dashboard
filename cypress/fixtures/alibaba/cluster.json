@@ -5,7 +5,7 @@
   "type": "kubernetes",
   "spec": {
     "cloud": {
-      "dc": "alibaba-eu-central-1a",
+      "dc": "test-alibaba-dc",
       "alibaba": {}
     },
     "version": "1.21.5",
