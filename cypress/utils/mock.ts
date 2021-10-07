@@ -137,5 +137,11 @@ export function mockClusterEndpoints(provider: Provider): void {
         'listHetznerSizes'
       );
       break;
+    case Provider.KubeVirt:
+      break;
+    case Provider.OpenStack:
+      break;
+    case Provider.VSphere:
+      break;
   }
 }
