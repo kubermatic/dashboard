@@ -98,11 +98,14 @@ export function mockClusterEndpoints(provider: Provider): void {
       cy.intercept({method: Method.GET, path: '**/api/**/alibaba/instancetypes'}, {fixture: 'alibaba/instancetypes.json'}).as('listAlibabaInstanceTypes');
       break;
     case Provider.Anexia:
-      cy.intercept({method: Method.GET, path: '**/api/**/alibaba/vlans'}, {fixture: 'alibaba/vlans.json'}).as('listAlibabaVLANs');
+      cy.intercept({method: Method.GET, path: '**/api/**/anexia/vlans'}, {fixture: 'anexia/vlans.json'}).as('listAnexiaVLANs');
       break;
     case Provider.AWS:
       cy.intercept({method: Method.GET, path: '**/api/**/aws/*/subnets'}, {fixture: 'aws/subnets.json'}).as('listAWSSubnets');
       cy.intercept({method: Method.GET, path: '**/api/**/aws/sizes'}, {fixture: 'aws/sizes.json'}).as('listAWSSizes');
+      break;
+    case Provider.Azure:
+      cy.intercept({method: Method.GET, path: '**/api/**/azure/sizes'}, {fixture: 'azure/sizes.json'}).as('listAzureSizes');
       break;
     case Provider.Equinix:
       cy.intercept({method: Method.GET, path: '**/api/**/packet/sizes'}, {fixture: 'equinix/sizes.json'}).as('listEquinixSizes');
