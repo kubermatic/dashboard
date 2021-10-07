@@ -1,0 +1,42 @@
+{
+  "id": "n94lld8dp4",
+  "name": "test-cluster",
+  "creationTimestamp": "2021-10-07T08:46:12Z",
+  "type": "kubernetes",
+  "spec": {
+    "cloud": {
+      "dc": "gcp-westeurope",
+      "gcp": {}
+    },
+    "version": "1.21.5",
+    "oidc": {},
+    "enableUserSSHKeyAgent": true,
+    "auditLogging": {},
+    "opaIntegration": {},
+    "mla": {
+      "monitoringEnabled": true,
+      "loggingEnabled": true
+    },
+    "containerRuntime": "containerd",
+    "clusterNetwork": {
+      "services": {
+        "cidrBlocks": [
+          "10.240.16.0/20"
+        ]
+      },
+      "pods": {
+        "cidrBlocks": [
+          "172.25.0.0/16"
+        ]
+      },
+      "dnsDomain": "cluster.local",
+      "proxyMode": "ipvs",
+      "nodeLocalDNSCacheEnabled": true
+    }
+  },
+  "status": {
+    "version": "1.21.5",
+    "url": "",
+    "externalCCMMigration": "Unsupported"
+  }
+}

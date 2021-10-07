@@ -1,0 +1,14 @@
+[
+  {
+    "name": "pd-extreme",
+    "description": "Extreme Persistent Disk"
+  },
+  {
+    "name": "pd-ssd",
+    "description": "SSD Persistent Disk"
+  },
+  {
+    "name": "pd-standard",
+    "description": "Standard Persistent Disk"
+  }
+]
