@@ -35,7 +35,7 @@ describe('Equinix Provider', () => {
     if (useMocks) {
       mockConfigEndpoints();
       mockProjectEndpoints();
-      mockClusterEndpoints(Provider.AWS);
+      mockClusterEndpoints(Provider.Equinix);
     }
   });
 

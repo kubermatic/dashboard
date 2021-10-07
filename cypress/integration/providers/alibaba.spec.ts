@@ -35,7 +35,7 @@ describe('Alibaba Provider', () => {
     if (useMocks) {
       mockConfigEndpoints();
       mockProjectEndpoints();
-      mockClusterEndpoints(Provider.AWS);
+      mockClusterEndpoints(Provider.Alibaba);
     }
   });
 
