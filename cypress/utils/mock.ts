@@ -109,6 +109,11 @@ export function mockClusterEndpoints(provider: Provider): void {
         'listAWSSizes'
       );
       break;
+    case Provider.Equinix:
+      cy.intercept({method: Method.GET, path: '**/api/**/packet/sizes'}, {fixture: 'clusters/equinix/sizes.json'}).as(
+        'listEquinixSizes'
+      );
+      break;
     case Provider.Hetzner:
       cy.intercept({method: Method.GET, path: '**/api/**/hetzner/sizes'}, {fixture: 'clusters/hetzner/sizes.json'}).as(
         'listHetznerSizes'
