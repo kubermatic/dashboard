@@ -69,6 +69,8 @@ export function mockClusterEndpoints(provider: Provider): void {
         {method: Method.GET, path: '**/api/**/alibaba/instancetypes'},
         {fixture: 'alibaba/instancetypes.json'}
       ).as('listAlibabaInstanceTypes');
+      cy.intercept({method: Method.GET, path: '**/api/**/alibaba/vswitches'}, {fixture: 'alibaba/vswitches.json'}).as(
+        'listAlibabaVSwitches');
       break;
     case Provider.Anexia:
       cy.intercept({method: Method.GET, path: '**/api/**/anexia/vlans'}, {fixture: 'anexia/vlans.json'}).as(
