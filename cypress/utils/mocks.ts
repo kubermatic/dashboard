@@ -17,7 +17,7 @@ import {Endpoint} from './endpoint';
 // modified later to simulate resource deletion or creation.
 export function mockConfigEndpoints(): void {
   cy.intercept({method: Method.GET, path: '**/api/**/dc'}, {fixture: 'datacenters.json'});
-  cy.intercept({method: Method.GET, path: '**/api/**/providers/*/presets*'}, {fixture: 'preset.json'})
+  cy.intercept({method: Method.GET, path: '**/api/**/providers/*/presets*'}, {fixture: 'preset.json'});
   cy.intercept({method: Method.GET, path: '**/api/**/settings/customlinks'}, []);
   cy.intercept({method: Method.GET, path: '**/api/**/addons'}, []);
   cy.intercept({method: Method.GET, path: '**/api/**/addonconfigs'}, []);
