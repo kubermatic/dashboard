@@ -7,7 +7,7 @@ This document describes how to use and run the KKP Dashboard.
 This approach assumes that you have all required dependencies available on your local machine:
 - Node v14 - v16
 - NPM v6+
-- Go v1.16+ (required only by the production build)
+- Go v1.17+ (required only by the production build)
 
 ## Preparation
 Install the application dependencies by running:
