@@ -19,7 +19,7 @@ import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 import * as _ from 'lodash';
-import {mockClusterEndpoints, mockConfigEndpoints, mockProjectEndpoints} from '../../utils/mock';
+import {mockClusterEndpoints, mockConfigEndpoints} from '../../utils/mocks';
 
 describe('KubeVirt Provider', () => {
   const useMocks = Cypress.env('USE_MOCKS');
@@ -34,8 +34,7 @@ describe('KubeVirt Provider', () => {
   beforeEach(() => {
     if (useMocks) {
       mockConfigEndpoints();
-      mockProjectEndpoints();
-      mockClusterEndpoints(Provider.Alibaba);
+      mockClusterEndpoints(Provider.KubeVirt);
     }
   });
 

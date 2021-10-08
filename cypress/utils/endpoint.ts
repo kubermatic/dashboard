@@ -10,8 +10,47 @@
 // limitations under the License.
 
 export namespace Endpoint {
+  export enum Alibaba {
+    InstanceTypes = '**/api/**/alibaba/instancetypes',
+    VSwitches = '**/api/**/alibaba/vswitches',
+    Zones = '**/api/**/alibaba/zones',
+  }
+
+  export enum Anexia {
+    Templates = '**/api/**/anexia/templates',
+    VLANs = '**/api/**/anexia/vlans',
+  }
+
+  export enum AWS {
+    Sizes = '**/api/**/aws/sizes',
+    Subnets = '**/api/**/aws/*/subnets',
+  }
+
+  export enum Azure {
+    Sizes = '**/api/**/azure/sizes',
+  }
+
   export enum Digitalocean {
     Sizes = '**/providers/digitalocean/sizes',
+  }
+
+  export enum GCP {
+    DiskTypes = '**/api/**/gcp/disktypes',
+    Sizes = '**/api/**/gcp/sizes',
+    Zones = '**/api/**/gcp/*/zones',
+  }
+
+  export enum Equinix {
+    Sizes = '**/api/**/packet/sizes',
+  }
+
+  export enum Hetzner {
+    Sizes = '**/api/**/hetzner/sizes',
+  }
+
+  export enum OpenStack {
+    AvailabilityZones = '**/api/**/openstack/availabilityzones',
+    Sizes = '**/api/**/openstack/sizes',
   }
 
   export const Clusters = '**/clusters';
@@ -26,5 +65,4 @@ export namespace Endpoint {
   export const Administrators = '**/admin';
   export const ConstraintTemplates = '**/constrainttemplates';
   export const Constraints = '**/constraints';
-  export const GatekeeperConfig = '**/gatekeeper/config';
 }

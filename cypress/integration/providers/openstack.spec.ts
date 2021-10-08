@@ -19,12 +19,10 @@ import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 import * as _ from 'lodash';
-import {mockClusterEndpoints, mockConfigEndpoints, mockProjectEndpoints} from '../../utils/mock';
+import {mockClusterEndpoints, mockConfigEndpoints} from '../../utils/mocks';
 
 describe('OpenStack Provider', () => {
   const useMocks = Cypress.env('USE_MOCKS');
-  const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
-  const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const preset = useMocks ? Preset.Mock : Preset.OpenStack;
   const projectName = useMocks ? 'test-project' : _.uniqueId('test-project-');
   const clusterName = useMocks ? 'test-cluster' : _.uniqueId('test-cluster-');
@@ -33,18 +31,12 @@ describe('OpenStack Provider', () => {
   beforeEach(() => {
     if (useMocks) {
       mockConfigEndpoints();
-      mockProjectEndpoints();
       mockClusterEndpoints(Provider.OpenStack);
     }
   });
 
   it('should login', () => {
     login();
-    cy.url().should(Condition.Include, View.Projects.Default);
-  });
-
-  it('should login', () => {
-    login(email, password);
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 

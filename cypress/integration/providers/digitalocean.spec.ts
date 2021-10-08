@@ -22,20 +22,19 @@ import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 import * as _ from 'lodash';
-import {mockClusterEndpoints, mockConfigEndpoints, mockProjectEndpoints} from "../../utils/mock";
+import {mockClusterEndpoints, mockConfigEndpoints} from '../../utils/mocks';
 
 describe('DigitalOcean Provider', () => {
   const useMocks = Cypress.env('USE_MOCKS');
   const preset = useMocks ? Preset.Mock : Preset.Digitalocean;
   const projectName = useMocks ? 'test-project' : _.uniqueId('test-project-');
   const clusterName = useMocks ? 'test-cluster' : _.uniqueId('test-cluster-');
-  const initialMachineDeploymentName = useMocks ? 'test-md' :_.uniqueId('test-md-');
+  const initialMachineDeploymentName = useMocks ? 'test-md' : _.uniqueId('test-md-');
   const initialMachineDeploymentReplicas = '1';
 
   beforeEach(() => {
     if (useMocks) {
       mockConfigEndpoints();
-      mockProjectEndpoints();
       mockClusterEndpoints(Provider.Digitalocean);
     }
   });
