@@ -28,6 +28,10 @@ export function mockConfigEndpoints(): void {
   cy.intercept({method: Method.GET, path: '**/api/**/providers/*/presets*'}, {fixture: 'preset.json'}).as(
     'listPresets'
   );
+  cy.intercept({method: Method.GET, path: '**/api/**/settings/customlinks'}, []).as('listCustomLinks');
+  cy.intercept({method: Method.GET, path: '**/api/**/addons'}, []).as('listAddons');
+  cy.intercept({method: Method.GET, path: '**/api/**/addonconfigs'}, []).as('listAddonConfigs');
+  cy.intercept({method: Method.GET, path: '**/api/**/labels/system'}, {}).as('listSystemLabels');
 }
 
 // Registers standard set of interceptors for projects. Interceptors can be modified later to simulate resource
@@ -80,6 +84,9 @@ export function mockClusterEndpoints(provider: Provider): void {
       cy.intercept({method: Method.GET, path: '**/api/**/anexia/vlans'}, {fixture: 'anexia/vlans.json'}).as(
         'listAnexiaVLANs'
       );
+      cy.intercept({method: Method.GET, path: '**/api/**/anexia/templates'}, {fixture: 'anexia/templates.json'}).as(
+        'listAnexiaTemplates'
+      );
       break;
     case Provider.AWS:
       cy.intercept({method: Method.GET, path: '**/api/**/aws/*/subnets'}, {fixture: 'aws/subnets.json'}).as(
@@ -93,11 +100,11 @@ export function mockClusterEndpoints(provider: Provider): void {
       );
       break;
     case Provider.GCP:
-      cy.intercept({method: Method.GET, path: '**/api/**/gcp/disktypes'}, {fixture: 'aws/disktypes.json'}).as(
+      cy.intercept({method: Method.GET, path: '**/api/**/gcp/disktypes'}, {fixture: 'gcp/disktypes.json'}).as(
         'listGCPDiskTypes'
       );
-      cy.intercept({method: Method.GET, path: '**/api/**/gcp/sizes'}, {fixture: 'aws/sizes.json'}).as('listGCPSizes');
-      cy.intercept({method: Method.GET, path: '**/api/**/gcp/*/zones'}, {fixture: 'aws/zones.json'}).as('listGCPZones');
+      cy.intercept({method: Method.GET, path: '**/api/**/gcp/sizes'}, {fixture: 'gcp/sizes.json'}).as('listGCPSizes');
+      cy.intercept({method: Method.GET, path: '**/api/**/gcp/*/zones'}, {fixture: 'gcp/zones.json'}).as('listGCPZones');
       break;
     case Provider.Equinix:
       cy.intercept({method: Method.GET, path: '**/api/**/packet/sizes'}, {fixture: 'equinix/sizes.json'}).as(

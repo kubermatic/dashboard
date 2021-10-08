@@ -150,6 +150,44 @@
   },
   {
     "metadata": {
+      "name": "test-openstack-dc"
+    },
+    "spec": {
+      "seed": "test-seed",
+      "country": "DE",
+      "location": "Germany - dbl1",
+      "provider": "openstack",
+      "openstack": {
+        "auth_url": "https://api.cloud.test.net:5000/v3",
+        "availability_zone": "dbl1",
+        "region": "dbl",
+        "ignore_volume_az": false,
+        "enforce_floating_ip": true,
+        "dns_servers": [
+          "68.123.44.116",
+          "68.123.44.117"
+        ],
+        "images": {
+          "centos": "kubermatic-e2e-centos",
+          "coreos": "kubermatic-e2e-coreos",
+          "ubuntu": "kubermatic-e2e-ubuntu"
+        },
+        "manage_security_groups": null,
+        "use_octavia": null,
+        "trust_device_path": null,
+        "node_size_requirements": {
+          "minimum_vcpus": 0,
+          "minimum_memory": 0
+        },
+        "enabled_flavors": null
+      },
+      "node": {},
+      "enforceAuditLogging": false,
+      "enforcePodSecurityPolicy": false
+    }
+  },
+  {
+    "metadata": {
       "name": "test-vsphere-dc"
     },
     "spec": {
