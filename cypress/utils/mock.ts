@@ -107,7 +107,7 @@ export function mockClusterEndpoints(provider: Provider): void {
       cy.intercept({method: Method.GET, path: '**/api/**/gcp/*/zones'}, {fixture: 'gcp/zones.json'}).as('listGCPZones');
       break;
     case Provider.Equinix:
-      cy.intercept({method: Method.GET, path: '**/api/**/packet/sizes'}, {fixture: 'equinix/sizes.json'}).as(
+      cy.intercept({method: Method.GET, path: '**/api/**/packet/sizes'}, {fixture: 'packet/sizes.json'}).as(
         'listEquinixSizes'
       );
       break;
