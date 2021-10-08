@@ -70,9 +70,11 @@ export function mockClusterEndpoints(provider: Provider): void {
         {fixture: 'alibaba/instancetypes.json'}
       ).as('listAlibabaInstanceTypes');
       cy.intercept({method: Method.GET, path: '**/api/**/alibaba/vswitches'}, {fixture: 'alibaba/vswitches.json'}).as(
-        'listAlibabaVSwitches');
+        'listAlibabaVSwitches'
+      );
       cy.intercept({method: Method.GET, path: '**/api/**/alibaba/zones'}, {fixture: 'alibaba/zones.json'}).as(
-        'listAlibabaZones');
+        'listAlibabaZones'
+      );
       break;
     case Provider.Anexia:
       cy.intercept({method: Method.GET, path: '**/api/**/anexia/vlans'}, {fixture: 'anexia/vlans.json'}).as(
@@ -110,6 +112,13 @@ export function mockClusterEndpoints(provider: Provider): void {
     case Provider.KubeVirt:
       break;
     case Provider.OpenStack:
+      cy.intercept({method: Method.GET, path: '**/api/**/openstack/sizes'}, {fixture: 'openstack/sizes.json'}).as(
+        'listOpenStackSizes'
+      );
+      cy.intercept(
+        {method: Method.GET, path: '**/api/**/openstack/availabilityzones'},
+        {fixture: 'openstack/availabilityzones.json'}
+      ).as('listOpenStackZones');
       break;
     case Provider.VSphere:
       break;
