@@ -26,7 +26,6 @@ describe('KubeVirt Provider', () => {
   const preset = useMocks ? Preset.Mock : Preset.Alibaba;
   const projectName = useMocks ? 'test-project' : _.uniqueId('test-project-');
   const clusterName = useMocks ? 'test-cluster' : _.uniqueId('test-cluster-');
-  const initialMachineDeploymentName = useMocks ? 'test-md' : _.uniqueId('test-md-');
   const initialMachineDeploymentReplicas = '0';
   const namespace = 'kube-system';
   const sourceURL = 'http://10.102.236.197/ubuntu.img';
@@ -65,9 +64,6 @@ describe('KubeVirt Provider', () => {
     WizardPage.getCustomPresetsCombobox().click();
     WizardPage.getPreset(preset).click();
     WizardPage.getNextBtn(WizardStep.ProviderSettings).click({force: true});
-    WizardPage.getNodeNameInput()
-      .type(initialMachineDeploymentName)
-      .should(Condition.HaveValue, initialMachineDeploymentName);
     WizardPage.getNodeCountInput()
       .clear()
       .type(initialMachineDeploymentReplicas)
@@ -97,19 +93,9 @@ describe('KubeVirt Provider', () => {
 
   it('should delete created cluster', () => {
     ClustersPage.deleteCluster(clusterName);
-
-    if (useMocks) {
-      cy.intercept({method: 'GET', path: '**/api/**/projects/*/clusters'}, []).as('listClusters');
-    }
-
-    ClustersPage.verifyNoCluster(clusterName);
   });
 
   it('should verify that there are no clusters', () => {
-    if (useMocks) {
-      cy.intercept({method: 'GET', path: '**/api/**/projects/*/clusters'}, []).as('listClusters');
-    }
-
     ClustersPage.verifyNoClusters();
   });
 
@@ -119,11 +105,9 @@ describe('KubeVirt Provider', () => {
 
   it('should delete the project', () => {
     ProjectsPage.deleteProject(projectName);
+  });
 
-    if (useMocks) {
-      cy.intercept({method: 'GET', path: '**/api/**/projects*'}, []).as('listProjects');
-    }
-
+  it('should verify that there are no projects', () => {
     ProjectsPage.verifyNoProjects();
   });
 

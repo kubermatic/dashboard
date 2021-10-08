@@ -132,7 +132,12 @@ export class ProjectsPage {
   }
 
   static verifyNoProjects(): void {
+    if (Cypress.env('USE_MOCKS')) {
+      cy.intercept({method: 'GET', path: '**/api/**/projects*'}, []).as('listProjects');
+    }
+
     this.verifyUrl();
+
     const retries = 5;
     TrafficMonitor.newTrafficMonitor()
       .method(RequestType.GET)

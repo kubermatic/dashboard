@@ -22,17 +22,26 @@ import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 import * as _ from 'lodash';
+import {mockClusterEndpoints, mockConfigEndpoints, mockProjectEndpoints} from "../../utils/mock";
 
-describe('Machine Deployment Story', () => {
-  const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
-  const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
-  const projectName = _.uniqueId('e2e-test-project-');
-  const clusterName = _.uniqueId('e2e-test-cluster-');
-  const initialMachineDeploymentName = _.uniqueId('e2e-test-md-');
+describe('DigitalOcean Provider', () => {
+  const useMocks = Cypress.env('USE_MOCKS');
+  const preset = useMocks ? Preset.Mock : Preset.Digitalocean;
+  const projectName = useMocks ? 'test-project' : _.uniqueId('test-project-');
+  const clusterName = useMocks ? 'test-cluster' : _.uniqueId('test-cluster-');
+  const initialMachineDeploymentName = useMocks ? 'test-md' :_.uniqueId('test-md-');
   const initialMachineDeploymentReplicas = '1';
 
+  beforeEach(() => {
+    if (useMocks) {
+      mockConfigEndpoints();
+      mockProjectEndpoints();
+      mockClusterEndpoints(Provider.Digitalocean);
+    }
+  });
+
   it('should login', () => {
-    login(email, password);
+    login();
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -54,7 +63,7 @@ describe('Machine Deployment Story', () => {
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
     WizardPage.getCustomPresetsCombobox().click();
-    WizardPage.getPreset(Preset.Digitalocean).click();
+    WizardPage.getPreset(preset).click();
     WizardPage.getNextBtn(WizardStep.ProviderSettings).click({force: true});
     WizardPage.getNodeNameInput()
       .type(initialMachineDeploymentName)
@@ -124,6 +133,9 @@ describe('Machine Deployment Story', () => {
 
   it('should delete the project', () => {
     ProjectsPage.deleteProject(projectName);
+  });
+
+  it('should verify that there are no projects', () => {
     ProjectsPage.verifyNoProjects();
   });
 

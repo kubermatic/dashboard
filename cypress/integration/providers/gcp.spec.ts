@@ -21,12 +21,11 @@ import {WizardStep} from '../../utils/wizard';
 import * as _ from 'lodash';
 import {mockClusterEndpoints, mockConfigEndpoints, mockProjectEndpoints} from '../../utils/mock';
 
-describe('Google Cloud Provider', () => {
+describe('Google Cloud Platform Provider', () => {
   const useMocks = Cypress.env('USE_MOCKS');
   const preset = useMocks ? Preset.Mock : Preset.GCP;
   const projectName = useMocks ? 'test-project' : _.uniqueId('test-project-');
   const clusterName = useMocks ? 'test-cluster' : _.uniqueId('test-cluster-');
-  const initialMachineDeploymentName = useMocks ? 'test-md' : _.uniqueId('test-md-');
   const initialMachineDeploymentReplicas = '0';
 
   beforeEach(() => {
@@ -62,9 +61,6 @@ describe('Google Cloud Provider', () => {
     WizardPage.getCustomPresetsCombobox().click();
     WizardPage.getPreset(preset).click();
     WizardPage.getNextBtn(WizardStep.ProviderSettings).click({force: true});
-    WizardPage.getNodeNameInput()
-      .type(initialMachineDeploymentName)
-      .should(Condition.HaveValue, initialMachineDeploymentName);
     WizardPage.getNodeCountInput()
       .clear()
       .type(initialMachineDeploymentReplicas)
@@ -91,19 +87,9 @@ describe('Google Cloud Provider', () => {
 
   it('should delete created cluster', () => {
     ClustersPage.deleteCluster(clusterName);
-
-    if (useMocks) {
-      cy.intercept({method: 'GET', path: '**/api/**/projects/*/clusters'}, []).as('listClusters');
-    }
-
-    ClustersPage.verifyNoCluster(clusterName);
   });
 
   it('should verify that there are no clusters', () => {
-    if (useMocks) {
-      cy.intercept({method: 'GET', path: '**/api/**/projects/*/clusters'}, []).as('listClusters');
-    }
-
     ClustersPage.verifyNoClusters();
   });
 
@@ -113,11 +99,9 @@ describe('Google Cloud Provider', () => {
 
   it('should delete the project', () => {
     ProjectsPage.deleteProject(projectName);
+  });
 
-    if (useMocks) {
-      cy.intercept({method: 'GET', path: '**/api/**/projects*'}, []).as('listProjects');
-    }
-
+  it('should verify that there are no projects', () => {
     ProjectsPage.verifyNoProjects();
   });
 

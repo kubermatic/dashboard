@@ -236,15 +236,14 @@ export class ClustersPage {
   }
 
   static verifyNoClusters(): void {
-    this.waitForRefresh();
-    this.verifyUrl();
-    cy.get('div').should(Condition.Contain, 'No clusters available.');
-  }
+    if (Cypress.env('USE_MOCKS')) {
+      cy.intercept({method: 'GET', path: '**/api/**/projects/*/clusters'}, []).as('listClusters');
+    }
 
-  static verifyNoCluster(name: string): void {
     this.waitForRefresh();
     this.verifyUrl();
-    this.getTable().should(Condition.NotContain, name);
+
+    cy.get('div').should(Condition.Contain, 'No clusters available.');
   }
 
   static deleteCluster(name: string): void {
