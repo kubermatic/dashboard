@@ -20,12 +20,12 @@ export default async (on, config) => {
   if (useMocks) {
     // Skip everything except already mocked tests.
     // TODO: Remove all ignores once all tests have their mocks configured.
-    config.ignoreTestFiles = ['**/integration/stories/*.spec.ts'];
+    config.ignoreTestFiles = ['**/integration/stories/**.spec.ts'];
   } else {
     // Skip flaky and already mocked tests.
     // TODO: Remove all ignores after fixing flaky tests and making the full tests optional.
     config.ignoreTestFiles = [
-      '**/integration/providers/*.spec.ts',
+      '**/integration/providers/**.spec.ts',
       '**/integration/stories/machine-deployment.spec.ts',
       '**/integration/stories/opa.spec.ts',
       '**/integration/stories/admin-settings/administrators.spec.ts',
