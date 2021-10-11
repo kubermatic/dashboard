@@ -13,17 +13,6 @@ import {Provider} from './provider';
 import {RouteHandler} from 'cypress/types/net-stubbing';
 import {Endpoint} from './endpoint';
 
-// Registers standard set of interceptors for configuration like datacenters, seeds and settings. Interceptors can be
-// modified later to simulate resource deletion or creation.
-export function mockConfigEndpoints(): void {
-  cy.intercept({method: Method.GET, path: '**/api/**/dc'}, {fixture: 'datacenters.json'});
-  cy.intercept({method: Method.GET, path: '**/api/**/providers/*/presets*'}, {fixture: 'preset.json'});
-  cy.intercept({method: Method.GET, path: '**/api/**/settings/customlinks'}, []);
-  cy.intercept({method: Method.GET, path: '**/api/**/addons'}, []);
-  cy.intercept({method: Method.GET, path: '**/api/**/addonconfigs'}, []);
-  cy.intercept({method: Method.GET, path: '**/api/**/labels/system'}, {});
-}
-
 // Registers standard set of interceptors for clusters with chosen provider. Interceptors can be modified later
 // to simulate resource deletion or creation.
 export function mockClusterEndpoints(provider: Provider): void {
@@ -39,11 +28,6 @@ export function mockClusterEndpoints(provider: Provider): void {
   cy.intercept({method: Method.GET, path: `${p}/*/addons`}, []).as('listAddons');
   cy.intercept({method: Method.GET, path: `${p}/*/sshkeys`}, []).as('listSSHKeys');
   cy.intercept({method: Method.GET, path: `${p}/*/upgrades`}, []).as('listUpgrades');
-
-  cy.intercept({method: Method.GET, path: '**/api/**/projects/*/kubernetes/clusters'}, []).as('listExternalClusters');
-  cy.intercept({method: Method.GET, path: '**/projects/*/etcdrestores'}, []).as('listEtcdRestores');
-  cy.intercept({method: Method.GET, path: '**/alertmanager/config'}, {}).as('getAlertmanagerConfig');
-  cy.intercept({method: Method.GET, path: '**/providers/*/versions'}, {fixture: 'versions.json'}).as('listVersions');
 
   Mocks.register(provider);
 }
@@ -61,15 +45,23 @@ interface Mock {
 
 export class Mocks {
   // TODO: Add namespace for fixtures like it is done for endpoints.
-  private static _common: Mock[] = [
-    {m: Method.GET, p: '**/api/**/me', r: {fixture: 'me.json'}},
-    {m: Method.GET, p: '**/api/**/seed', r: ['test-seed']},
-    {m: Method.GET, p: '**/api/**/seeds/*/settings', r: {fixture: 'seed-settings.json'}},
-
-    {m: Method.POST, p: '**/api/**/projects', r: {fixture: 'project.json'}},
-    {m: Method.GET, p: '**/api/**/projects*', r: {fixture: 'projects.json'}},
-    {m: Method.GET, p: '**/api/**/projects/*', r: {fixture: 'project.json'}},
-
+  private static _defaults: Mock[] = [
+    {m: Method.GET, p: Endpoint.CurrentUser, r: {fixture: 'me.json'}},
+    {m: Method.GET, p: Endpoint.Seeds, r: ['test-seed']},
+    {m: Method.GET, p: Endpoint.SeedSettings, r: {fixture: 'seed-settings.json'}},
+    {m: Method.GET, p: Endpoint.Datacenters, r: {fixture: 'datacenters.json'}},
+    {m: Method.GET, p: Endpoint.Presets, r: {fixture: 'preset.json'}},
+    {m: Method.GET, p: Endpoint.CustomLinks, r: []},
+    {m: Method.GET, p: Endpoint.Addons, r: []},
+    {m: Method.GET, p: Endpoint.AddonConfigs, r: []},
+    {m: Method.GET, p: Endpoint.SystemLabels, r: {}},
+    {m: Method.POST, p: Endpoint.Projects, r: {fixture: 'project.json'}},
+    {m: Method.GET, p: Endpoint.Projects, r: {fixture: 'projects.json'}},
+    {m: Method.GET, p: Endpoint.Project, r: {fixture: 'project.json'}},
+    {m: Method.GET, p: Endpoint.ExternalClusters, r: []},
+    {m: Method.GET, p: Endpoint.EtcdRestores, r: []},
+    {m: Method.GET, p: Endpoint.AlertmanagerConfig, r: {}},
+    {m: Method.GET, p: Endpoint.Versions, r: {fixture: 'versions.json'}},
     {m: Method.GET, p: Endpoint.Alibaba.InstanceTypes, r: {fixture: 'alibaba/instancetypes.json'}},
     {m: Method.GET, p: Endpoint.Alibaba.VSwitches, r: {fixture: 'alibaba/vswitches.json'}},
     {m: Method.GET, p: Endpoint.Alibaba.Zones, r: {fixture: 'alibaba/zones.json'}},
@@ -87,23 +79,22 @@ export class Mocks {
     {m: Method.GET, p: Endpoint.OpenStack.Sizes, r: {fixture: 'openstack/sizes.json'}},
   ];
 
-  static register(p?: Provider): void {
-    Mocks._registerCommonMocks();
+  static register(provider?: Provider): void {
+    Mocks._registerDefaultMocks();
 
-    if (p) {
-      Mocks._registerProviderMocks(p);
+    if (provider) {
+      Mocks._registerProviderMocks(provider);
     }
   }
 
-  private static _registerCommonMocks(): void {
-    this._common.forEach(mock => this._intercept(mock.m, mock.p, mock.r));
+  private static _registerDefaultMocks(): void {
+    this._defaults.forEach(mock => this._intercept(mock.m, mock.p, mock.r));
   }
 
-  // TODO: Add paths into endpoint namespace.
   private static _registerProviderMocks(provider: Provider): void {
-    this._intercept(Method.POST, '**/api/**/projects/*/clusters', {fixture: `${provider}/cluster.json`});
-    this._intercept(Method.GET, '**/api/**/projects/*/clusters', {fixture: `${provider}/cluster.json`});
-    this._intercept(Method.GET, '**/api/**/projects/*/clusters/*', {fixture: `${provider}/cluster.json`});
+    this._intercept(Method.POST, Endpoint.Clusters, {fixture: `${provider}/cluster.json`});
+    this._intercept(Method.GET, Endpoint.Clusters, {fixture: `${provider}/cluster.json`});
+    this._intercept(Method.GET, Endpoint.Cluster, {fixture: `${provider}/cluster.json`});
   }
 
   private static _intercept(method: Method, path: string, response?: RouteHandler): void {

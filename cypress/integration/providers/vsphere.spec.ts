@@ -19,7 +19,7 @@ import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 import * as _ from 'lodash';
-import {mockClusterEndpoints, mockConfigEndpoints} from '../../utils/mocks';
+import {mockClusterEndpoints} from '../../utils/mocks';
 
 describe('vSphere Provider', () => {
   const useMocks = Cypress.env('USE_MOCKS');
@@ -30,7 +30,6 @@ describe('vSphere Provider', () => {
 
   beforeEach(() => {
     if (useMocks) {
-      mockConfigEndpoints();
       mockClusterEndpoints(Provider.VSphere);
     }
   });

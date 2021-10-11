@@ -53,10 +53,24 @@ export namespace Endpoint {
     Sizes = '**/api/**/openstack/sizes',
   }
 
-  export const Clusters = '**/clusters';
+  export const CurrentUser = '**/api/**/me';
+  export const Seeds = '**/api/**/seed';
+  export const SeedSettings = '**/api/**/seeds/*/settings';
+  export const Datacenters = '**/api/**/dc';
+  export const Presets = '**/api/**/providers/*/presets*';
+  export const CustomLinks = '**/api/**/settings/customlinks';
+  export const Addons = '**/api/**/addons';
+  export const AddonConfigs = '**/api/**/addonconfigs';
+  export const SystemLabels = '**/api/**/labels/system';
+  export const Project = '**/api/**/projects/*';
+  export const Projects = '**/api/**/projects*';
+  export const Clusters = '**/api/**/projects/*/clusters';
+  export const Cluster = '**/api/**/projects/*/clusters/*';
+  export const ExternalClusters = '**/api/**/projects/*/kubernetes/clusters';
   export const MachineDeployments = '**/machinedeployments';
+  export const EtcdRestores = '**/projects/*/etcdrestores';
+  export const AlertmanagerConfig = '**/alertmanager/config';
   export const Users = '**/users';
-  export const Projects = '**/projects?displayAll=false';
   export const Tokens = '**/tokens';
   export const ServiceAccounts = '**/serviceaccounts';
   export const Settings = '**/me/settings';
@@ -65,4 +79,5 @@ export namespace Endpoint {
   export const Administrators = '**/admin';
   export const ConstraintTemplates = '**/constrainttemplates';
   export const Constraints = '**/constraints';
+  export const Versions = '**/providers/*/versions';
 }
