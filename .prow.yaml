@@ -192,7 +192,7 @@ presubmits:
             - name: NO_COLOR
               value: "1"
             - name: USE_MOCKS
-              value: "true"
+              value: true
 
   - name: pre-dashboard-test-e2e-mock-ce
     always_run: true
@@ -221,7 +221,7 @@ presubmits:
             - name: NO_COLOR
               value: "1"
             - name: USE_MOCKS
-              value: "true"
+              value: true
 
   - name: pre-dashboard-build-image
     always_run: true
