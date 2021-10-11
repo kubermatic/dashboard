@@ -21,7 +21,6 @@ interface Mock {
 }
 
 export class Mocks {
-  // TODO: Add namespace for fixtures like it is done for endpoints.
   private static _defaults: Mock[] = [
     {m: RequestType.GET, p: Endpoint.CurrentUser, r: {fixture: 'me.json'}},
     {m: RequestType.GET, p: Endpoint.Seeds, r: ['test-seed']},
