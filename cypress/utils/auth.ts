@@ -14,13 +14,13 @@ import {LoginPage} from '../pages/login.po';
 import {Condition} from './condition';
 import {ProjectsPage} from '../pages/projects.po';
 import {UserPanel} from '../pages/user-panel.po';
+import {Mocks} from './mocks';
 
 export function login(
-  useMocks = Cypress.env('USE_MOCKS'),
   email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME'),
   password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD')
 ): void {
-  if (useMocks) {
+  if (Mocks.enabled()) {
     mockLogin();
   } else {
     doLogin(email, password);

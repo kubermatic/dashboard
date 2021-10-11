@@ -21,8 +21,6 @@ import {WizardStep} from '../../utils/wizard';
 import * as _ from 'lodash';
 
 describe('SSH Key Management Story', () => {
-  const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
-  const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const projectName = _.uniqueId('e2e-test-project-');
   const clusterName = _.uniqueId('e2e-test-cluster-');
   const sshKeyName = 'test-ssh-key';
@@ -33,7 +31,7 @@ describe('SSH Key Management Story', () => {
     'vopqZemjIGzQT8Bgu1inXcwMfo3sB5bYMDnnP3Wyn/gz';
 
   it('should login', () => {
-    login(email, password);
+    login();
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
