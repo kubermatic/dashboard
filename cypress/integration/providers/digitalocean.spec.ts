@@ -22,7 +22,7 @@ import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 import * as _ from 'lodash';
-import {mockClusterEndpoints} from '../../utils/mocks';
+import {Mocks} from '../../utils/mocks';
 
 describe('DigitalOcean Provider', () => {
   const useMocks = Cypress.env('USE_MOCKS');
@@ -34,7 +34,7 @@ describe('DigitalOcean Provider', () => {
 
   beforeEach(() => {
     if (useMocks) {
-      mockClusterEndpoints(Provider.Digitalocean);
+      Mocks.register(Provider.Digitalocean);
     }
   });
 
@@ -105,16 +105,19 @@ describe('DigitalOcean Provider', () => {
     MachineDeploymentDetailsPage.getMachineDeploymentClusterNameElement().should(Condition.Contain, clusterName);
   });
 
-  it('should go back to cluster details page and remove initial machine deployment', () => {
+  it('should go back to cluster details page', () => {
     MachineDeploymentDetailsPage.getBackToClusterBtn().click();
     cy.url().should(Condition.Contain, View.Clusters.Default);
     ClustersPage.getClusterName().should(Condition.Contain, clusterName);
-
     ClustersPage.getMachineDeploymentList().should(Condition.Contain, initialMachineDeploymentName);
+  });
 
-    ClustersPage.getMachineDeploymentRemoveBtn(initialMachineDeploymentName).click();
-    ClustersPage.getDeleteDialogConfirmButton().click();
-    ClustersPage.getTableRowMachineDeploymentNameColumn(initialMachineDeploymentName).should(Condition.NotExist);
+  it('should delete initial machine deployment', () => {
+    ClustersPage.deleteMachineDeployment(initialMachineDeploymentName);
+  });
+
+  it('should verify that there are no machine deployments', () => {
+    ClustersPage.verifyNoMachineDeployments();
   });
 
   it('should delete created cluster', () => {

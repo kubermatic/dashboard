@@ -1,0 +1,859 @@
+{
+  "standard": [
+    {
+      "slug": "s-2vcpu-2gb",
+      "available": true,
+      "transfer": 3,
+      "price_monthly": 15,
+      "price_hourly": 0.02232,
+      "memory": 2048,
+      "vcpus": 2,
+      "disk": 60,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "s-2vcpu-2gb-amd",
+      "available": true,
+      "transfer": 3,
+      "price_monthly": 18,
+      "price_hourly": 0.02679,
+      "memory": 2048,
+      "vcpus": 2,
+      "disk": 60,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "s-2vcpu-2gb-intel",
+      "available": true,
+      "transfer": 3,
+      "price_monthly": 18,
+      "price_hourly": 0.02679,
+      "memory": 2048,
+      "vcpus": 2,
+      "disk": 60,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "s-2vcpu-4gb",
+      "available": true,
+      "transfer": 4,
+      "price_monthly": 20,
+      "price_hourly": 0.02976,
+      "memory": 4096,
+      "vcpus": 2,
+      "disk": 80,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "s-2vcpu-4gb-amd",
+      "available": true,
+      "transfer": 4,
+      "price_monthly": 24,
+      "price_hourly": 0.03571,
+      "memory": 4096,
+      "vcpus": 2,
+      "disk": 80,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "s-2vcpu-4gb-intel",
+      "available": true,
+      "transfer": 4,
+      "price_monthly": 24,
+      "price_hourly": 0.03571,
+      "memory": 4096,
+      "vcpus": 2,
+      "disk": 80,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "s-4vcpu-8gb",
+      "available": true,
+      "transfer": 5,
+      "price_monthly": 40,
+      "price_hourly": 0.05952,
+      "memory": 8192,
+      "vcpus": 4,
+      "disk": 160,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "s-4vcpu-8gb-amd",
+      "available": true,
+      "transfer": 5,
+      "price_monthly": 48,
+      "price_hourly": 0.07143,
+      "memory": 8192,
+      "vcpus": 4,
+      "disk": 160,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "s-4vcpu-8gb-intel",
+      "available": true,
+      "transfer": 5,
+      "price_monthly": 48,
+      "price_hourly": 0.07143,
+      "memory": 8192,
+      "vcpus": 4,
+      "disk": 160,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "s-8vcpu-16gb",
+      "available": true,
+      "transfer": 6,
+      "price_monthly": 80,
+      "price_hourly": 0.11905,
+      "memory": 16384,
+      "vcpus": 8,
+      "disk": 320,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "s-6vcpu-16gb",
+      "available": true,
+      "transfer": 6,
+      "price_monthly": 80,
+      "price_hourly": 0.11905,
+      "memory": 16384,
+      "vcpus": 6,
+      "disk": 320,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "s-8vcpu-16gb-amd",
+      "available": true,
+      "transfer": 6,
+      "price_monthly": 96,
+      "price_hourly": 0.14286,
+      "memory": 16384,
+      "vcpus": 8,
+      "disk": 320,
+      "regions": [
+        "ams3",
+        "blr1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "s-8vcpu-16gb-intel",
+      "available": true,
+      "transfer": 6,
+      "price_monthly": 96,
+      "price_hourly": 0.14286,
+      "memory": 16384,
+      "vcpus": 8,
+      "disk": 320,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "so-2vcpu-16gb",
+      "available": true,
+      "transfer": 4,
+      "price_monthly": 125,
+      "price_hourly": 0.18601,
+      "memory": 16384,
+      "vcpus": 2,
+      "disk": 300,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "so1_5-2vcpu-16gb",
+      "available": true,
+      "transfer": 4,
+      "price_monthly": 155,
+      "price_hourly": 0.23065,
+      "memory": 16384,
+      "vcpus": 2,
+      "disk": 450,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "s-8vcpu-32gb",
+      "available": true,
+      "transfer": 7,
+      "price_monthly": 160,
+      "price_hourly": 0.2381,
+      "memory": 32768,
+      "vcpus": 8,
+      "disk": 640,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "s-12vcpu-48gb",
+      "available": true,
+      "transfer": 8,
+      "price_monthly": 240,
+      "price_hourly": 0.35714,
+      "memory": 49152,
+      "vcpus": 12,
+      "disk": 960,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "so-4vcpu-32gb",
+      "available": true,
+      "transfer": 6,
+      "price_monthly": 250,
+      "price_hourly": 0.37202,
+      "memory": 32768,
+      "vcpus": 4,
+      "disk": 600,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "so1_5-4vcpu-32gb",
+      "available": true,
+      "transfer": 6,
+      "price_monthly": 310,
+      "price_hourly": 0.46131,
+      "memory": 32768,
+      "vcpus": 4,
+      "disk": 900,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "s-16vcpu-64gb",
+      "available": true,
+      "transfer": 9,
+      "price_monthly": 320,
+      "price_hourly": 0.47619,
+      "memory": 65536,
+      "vcpus": 16,
+      "disk": 1280,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "s-20vcpu-96gb",
+      "available": true,
+      "transfer": 10,
+      "price_monthly": 480,
+      "price_hourly": 0.71429,
+      "memory": 98304,
+      "vcpus": 20,
+      "disk": 1920,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "so-8vcpu-64gb",
+      "available": true,
+      "transfer": 7,
+      "price_monthly": 500,
+      "price_hourly": 0.74405,
+      "memory": 65536,
+      "vcpus": 8,
+      "disk": 1200,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "so1_5-8vcpu-64gb",
+      "available": true,
+      "transfer": 7,
+      "price_monthly": 620,
+      "price_hourly": 0.92262,
+      "memory": 65536,
+      "vcpus": 8,
+      "disk": 1800,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "s-24vcpu-128gb",
+      "available": true,
+      "transfer": 11,
+      "price_monthly": 640,
+      "price_hourly": 0.95238,
+      "memory": 131072,
+      "vcpus": 24,
+      "disk": 2560,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "s-32vcpu-192gb",
+      "available": true,
+      "transfer": 12,
+      "price_monthly": 960,
+      "price_hourly": 1.42857,
+      "memory": 196608,
+      "vcpus": 32,
+      "disk": 3840,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "so-16vcpu-128gb",
+      "available": true,
+      "transfer": 8,
+      "price_monthly": 1000,
+      "price_hourly": 1.4881,
+      "memory": 131072,
+      "vcpus": 16,
+      "disk": 2400,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "so1_5-16vcpu-128gb",
+      "available": true,
+      "transfer": 8,
+      "price_monthly": 1240,
+      "price_hourly": 1.84524,
+      "memory": 131072,
+      "vcpus": 16,
+      "disk": 3600,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "so-24vcpu-192gb",
+      "available": true,
+      "transfer": 9,
+      "price_monthly": 1500,
+      "price_hourly": 2.23214,
+      "memory": 196608,
+      "vcpus": 24,
+      "disk": 3600,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "so1_5-24vcpu-192gb",
+      "available": true,
+      "transfer": 9,
+      "price_monthly": 1850,
+      "price_hourly": 2.75298,
+      "memory": 196608,
+      "vcpus": 24,
+      "disk": 5400,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "so-32vcpu-256gb",
+      "available": true,
+      "transfer": 10,
+      "price_monthly": 2000,
+      "price_hourly": 2.97619,
+      "memory": 262144,
+      "vcpus": 32,
+      "disk": 4800,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "sfo3",
+        "sgp1"
+      ]
+    },
+    {
+      "slug": "so1_5-32vcpu-256gb",
+      "available": true,
+      "transfer": 10,
+      "price_monthly": 2480,
+      "price_hourly": 3.69048,
+      "memory": 262144,
+      "vcpus": 32,
+      "disk": 7200,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "sfo3",
+        "sgp1"
+      ]
+    }
+  ],
+  "optimized": [
+    {
+      "slug": "c-2",
+      "available": true,
+      "transfer": 4,
+      "price_monthly": 40,
+      "price_hourly": 0.05952,
+      "memory": 4096,
+      "vcpus": 2,
+      "disk": 25,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "c2-2vcpu-4gb",
+      "available": true,
+      "transfer": 4,
+      "price_monthly": 45,
+      "price_hourly": 0.06696,
+      "memory": 4096,
+      "vcpus": 2,
+      "disk": 50,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "c-4",
+      "available": true,
+      "transfer": 5,
+      "price_monthly": 80,
+      "price_hourly": 0.11905,
+      "memory": 8192,
+      "vcpus": 4,
+      "disk": 50,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "c2-4vcpu-8gb",
+      "available": true,
+      "transfer": 5,
+      "price_monthly": 90,
+      "price_hourly": 0.13393,
+      "memory": 8192,
+      "vcpus": 4,
+      "disk": 100,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "c-8",
+      "available": true,
+      "transfer": 6,
+      "price_monthly": 160,
+      "price_hourly": 0.2381,
+      "memory": 16384,
+      "vcpus": 8,
+      "disk": 100,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "c2-8vcpu-16gb",
+      "available": true,
+      "transfer": 6,
+      "price_monthly": 180,
+      "price_hourly": 0.26786,
+      "memory": 16384,
+      "vcpus": 8,
+      "disk": 200,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "c-16",
+      "available": true,
+      "transfer": 7,
+      "price_monthly": 320,
+      "price_hourly": 0.47619,
+      "memory": 32768,
+      "vcpus": 16,
+      "disk": 200,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "c2-16vcpu-32gb",
+      "available": true,
+      "transfer": 7,
+      "price_monthly": 360,
+      "price_hourly": 0.53571,
+      "memory": 32768,
+      "vcpus": 16,
+      "disk": 400,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "c-32",
+      "available": true,
+      "transfer": 9,
+      "price_monthly": 640,
+      "price_hourly": 0.95238,
+      "memory": 65536,
+      "vcpus": 32,
+      "disk": 400,
+      "regions": [
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "c2-32vcpu-64gb",
+      "available": true,
+      "transfer": 9,
+      "price_monthly": 720,
+      "price_hourly": 1.07143,
+      "memory": 65536,
+      "vcpus": 32,
+      "disk": 800,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    }
+  ]
+}

@@ -19,7 +19,7 @@ import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 import * as _ from 'lodash';
-import {mockClusterEndpoints} from '../../utils/mocks';
+import {Mocks} from '../../utils/mocks';
 
 describe('Equinix Metal Provider', () => {
   const useMocks = Cypress.env('USE_MOCKS');
@@ -30,7 +30,7 @@ describe('Equinix Metal Provider', () => {
 
   beforeEach(() => {
     if (useMocks) {
-      mockClusterEndpoints(Provider.Equinix);
+      Mocks.register(Provider.Equinix);
     }
   });
 

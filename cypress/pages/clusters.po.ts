@@ -11,7 +11,7 @@
 
 import {Condition} from '../utils/condition';
 import {Endpoint} from '../utils/endpoint';
-import {RequestType, TrafficMonitor} from '../utils/monitor';
+import {RequestType, Response, ResponseType, TrafficMonitor} from '../utils/monitor';
 import {View} from '../utils/view';
 import {WizardPage} from './wizard.po';
 
@@ -237,7 +237,7 @@ export class ClustersPage {
 
   static verifyNoClusters(): void {
     if (Cypress.env('USE_MOCKS')) {
-      cy.intercept({method: 'GET', path: '**/api/**/projects/*/clusters'}, []).as('listClusters');
+      cy.intercept({method: RequestType.GET, path: Endpoint.Clusters}, []);
     }
 
     this.waitForRefresh();
@@ -250,5 +250,25 @@ export class ClustersPage {
     this.getDeleteClusterBtn().click();
     this.getDeleteDialogInput().type(name).should(Condition.HaveValue, name);
     this.getDeleteDialogBtn().should(Condition.NotBe, 'disabled').click();
+  }
+
+  static verifyNoMachineDeployments(): void {
+    if (Cypress.env('USE_MOCKS')) {
+      cy.intercept({method: RequestType.GET, path: Endpoint.MachineDeployments}, []);
+    }
+
+    this.verifyUrl();
+
+    const retries = 5;
+    TrafficMonitor.newTrafficMonitor()
+      .method(RequestType.GET)
+      .url(Endpoint.MachineDeployments)
+      .retry(retries)
+      .expect(Response.newResponse(ResponseType.LIST).elements(0));
+  }
+
+  static deleteMachineDeployment(name: string): void {
+    this.getMachineDeploymentRemoveBtn(name).click();
+    this.getDeleteDialogConfirmButton().click();
   }
 }

@@ -19,7 +19,7 @@
     "test": "jest",
     "test:ci": "jest --coverage -i",
     "test:watch": "jest --watch",
-    "cy": "cypress run --record false -b chrome -e edition=\"${KUBERMATIC_EDITION:=ee}\",mock=\"${USE_MOCKS:=false}\"",
+    "cy": "cypress run --record false -b chrome -e edition=\"${KUBERMATIC_EDITION:=ee}\",mock=\"${USE_MOCKS:=false}\" -s cypress/integration/providers/digitalocean.spec.ts",
     "e2e": "start-server-and-test start:e2e http-get://localhost:8000 cy",
     "e2e:local": "start-server-and-test start:e2e:local http-get://localhost:8000 cy",
     "check": "npm run check:ts && npm run check:scss && npm run check:license && npm run check:dependency-licenses",

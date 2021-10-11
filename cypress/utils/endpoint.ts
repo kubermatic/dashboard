@@ -31,7 +31,7 @@ export namespace Endpoint {
   }
 
   export enum Digitalocean {
-    Sizes = '**/providers/digitalocean/sizes',
+    Sizes = '**/api/**/digitalocean/sizes',
   }
 
   export enum GCP {
@@ -66,8 +66,22 @@ export namespace Endpoint {
   export const Projects = '**/api/**/projects*';
   export const Clusters = '**/api/**/projects/*/clusters';
   export const Cluster = '**/api/**/projects/*/clusters/*';
+  export const ClusterHealth = '**/api/**/projects/*/clusters/*/health';
+  export const ClusterMetrics = '**/api/**/projects/*/clusters/*/metrics';
+  export const ClusterNodes = '**/api/**/projects/*/clusters/*/nodes**';
+  export const ClusterEvents = '**/api/**/projects/*/clusters/*/events';
+  export const ClusterBindings = '**/api/**/projects/*/clusters/*/bindings';
+  export const ClusterClusterBindings = '**/api/**/projects/*/clusters/*/clusterbindings';
+  export const ClusterRuleGroups = '**/api/**/projects/*/clusters/*/rulegroups';
+  export const ClusterAddons = '**/api/**/projects/*/clusters/*/addons';
+  export const ClusterSSHKeys = '**/api/**/projects/*/clusters/*/sshkeys';
+  export const ClusterUpgrades = '**/api/**/projects/*/clusters/*/upgrades';
   export const ExternalClusters = '**/api/**/projects/*/kubernetes/clusters';
-  export const MachineDeployments = '**/machinedeployments';
+  export const MachineDeployments = '**/api/**/projects/*/clusters/*/machinedeployments';
+  export const MachineDeployment = '**/api/**/projects/*/clusters/*/machinedeployments/*';
+  export const MachineDeploymentNodes = '**/api/**/projects/*/clusters/*/machinedeployments/*/nodes';
+  export const MachineDeploymentNodesMetrics = '**/api/**/projects/*/clusters/*/machinedeployments/*/nodes/metrics';
+  export const MachineDeploymentNodesEvents = '**/api/**/projects/*/clusters/*/machinedeployments/*/nodes/events';
   export const EtcdRestores = '**/projects/*/etcdrestores';
   export const AlertmanagerConfig = '**/alertmanager/config';
   export const Users = '**/users';

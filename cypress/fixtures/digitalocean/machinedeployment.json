@@ -1,0 +1,48 @@
+{
+  "id": "test-md",
+  "name": "test-md",
+  "annotations": {
+    "machinedeployment.clusters.k8s.io/revision": "1"
+  },
+  "creationTimestamp": "2021-10-11T08:32:31Z",
+  "spec": {
+    "replicas": 1,
+    "template": {
+      "cloud": {
+        "digitalocean": {
+          "size": "s-2vcpu-2gb",
+          "backups": false,
+          "ipv6": false,
+          "monitoring": false,
+          "tags": [
+            "kubernetes",
+            "kubernetes-cluster-s8ztcnc8bp",
+            "system-cluster-s8ztcnc8bp",
+            "system-project-4zqlrjbwlb"
+          ]
+        }
+      },
+      "operatingSystem": {
+        "ubuntu": {
+          "distUpgradeOnBoot": false
+        }
+      },
+      "versions": {
+        "kubelet": "1.21.5"
+      },
+      "labels": {
+        "system/cluster": "s8ztcnc8bp",
+        "system/project": "4zqlrjbwlb"
+      }
+    },
+    "paused": false,
+    "dynamicConfig": false
+  },
+  "status": {
+    "observedGeneration": 1,
+    "replicas": 1,
+    "updatedReplicas": 1,
+    "readyReplicas": 1,
+    "availableReplicas": 1
+  }
+}

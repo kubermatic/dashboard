@@ -19,7 +19,7 @@ import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 import * as _ from 'lodash';
-import {mockClusterEndpoints} from '../../utils/mocks';
+import {Mocks} from '../../utils/mocks';
 
 describe('Alibaba Provider', () => {
   const useMocks = Cypress.env('USE_MOCKS');
@@ -30,7 +30,7 @@ describe('Alibaba Provider', () => {
 
   beforeEach(() => {
     if (useMocks) {
-      mockClusterEndpoints(Provider.Alibaba);
+      Mocks.register(Provider.Alibaba);
     }
   });
 

@@ -70,6 +70,23 @@
   },
   {
     "metadata": {
+      "name": "test-digitalocean-dc"
+    },
+    "spec": {
+      "seed": "test-seed",
+      "country": "DE",
+      "location": "Frankfurt",
+      "provider": "digitalocean",
+      "digitalocean": {
+        "region": "ams3"
+      },
+      "node": {},
+      "enforceAuditLogging": false,
+      "enforcePodSecurityPolicy": false
+    }
+  },
+  {
+    "metadata": {
       "name": "test-gcp-dc"
     },
     "spec": {
