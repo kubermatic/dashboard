@@ -14,6 +14,7 @@ import {Endpoint} from '../utils/endpoint';
 import {RequestType, Response, ResponseType, TrafficMonitor} from '../utils/monitor';
 import {View} from '../utils/view';
 import {WizardPage} from './wizard.po';
+import {Mocks} from '../utils/mocks';
 
 export enum ProviderMenuOption {
   EditCluster = 'Edit Cluster',
@@ -236,7 +237,7 @@ export class ClustersPage {
   }
 
   static verifyNoClusters(): void {
-    if (Cypress.env('USE_MOCKS')) {
+    if (Mocks.enabled()) {
       cy.intercept({method: RequestType.GET, path: Endpoint.Clusters}, []);
     }
 
@@ -253,7 +254,7 @@ export class ClustersPage {
   }
 
   static verifyNoMachineDeployments(): void {
-    if (Cypress.env('USE_MOCKS')) {
+    if (Mocks.enabled()) {
       cy.intercept({method: RequestType.GET, path: Endpoint.MachineDeployments}, []);
     }
 

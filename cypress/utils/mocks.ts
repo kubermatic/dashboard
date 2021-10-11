@@ -69,6 +69,11 @@ export class Mocks {
     {m: RequestType.GET, p: Endpoint.OpenStack.Sizes, r: {fixture: 'openstack/sizes.json'}},
   ];
 
+  static enabled(): boolean {
+    const isEnabled = Cypress.env('USE_MOCKS');
+    return isEnabled === 'true' || isEnabled === true;
+  }
+
   static register(provider?: Provider): void {
     Mocks._registerDefaultMocks();
 

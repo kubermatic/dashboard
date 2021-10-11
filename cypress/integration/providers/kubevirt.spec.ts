@@ -22,17 +22,16 @@ import * as _ from 'lodash';
 import {Mocks} from '../../utils/mocks';
 
 describe('KubeVirt Provider', () => {
-  const useMocks = Cypress.env('USE_MOCKS');
-  const preset = useMocks ? Preset.Mock : Preset.Alibaba;
-  const projectName = useMocks ? 'test-project' : _.uniqueId('test-project-');
-  const clusterName = useMocks ? 'test-cluster' : _.uniqueId('test-cluster-');
+  const preset = Mocks.enabled() ? Preset.Mock : Preset.Alibaba;
+  const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
+  const clusterName = Mocks.enabled() ? 'test-cluster' : _.uniqueId('test-cluster-');
   const initialMachineDeploymentReplicas = '0';
   const namespace = 'kube-system';
   const sourceURL = 'http://10.102.236.197/ubuntu.img';
   const storageClassName = 'kubermatic-fast';
 
   beforeEach(() => {
-    if (useMocks) {
+    if (Mocks.enabled()) {
       Mocks.register(Provider.KubeVirt);
     }
   });

@@ -25,15 +25,14 @@ import * as _ from 'lodash';
 import {Mocks} from '../../utils/mocks';
 
 describe('DigitalOcean Provider', () => {
-  const useMocks = Cypress.env('USE_MOCKS');
-  const preset = useMocks ? Preset.Mock : Preset.Digitalocean;
-  const projectName = useMocks ? 'test-project' : _.uniqueId('test-project-');
-  const clusterName = useMocks ? 'test-cluster' : _.uniqueId('test-cluster-');
-  const initialMachineDeploymentName = useMocks ? 'test-md' : _.uniqueId('test-md-');
+  const preset = Mocks.enabled() ? Preset.Mock : Preset.Digitalocean;
+  const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
+  const clusterName = Mocks.enabled() ? 'test-cluster' : _.uniqueId('test-cluster-');
+  const initialMachineDeploymentName = Mocks.enabled() ? 'test-md' : _.uniqueId('test-md-');
   const initialMachineDeploymentReplicas = '1';
 
   beforeEach(() => {
-    if (useMocks) {
+    if (Mocks.enabled()) {
       Mocks.register(Provider.Digitalocean);
     }
   });

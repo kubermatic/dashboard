@@ -22,14 +22,13 @@ import * as _ from 'lodash';
 import {Mocks} from '../../utils/mocks';
 
 describe('AWS Provider', () => {
-  const useMocks = Cypress.env('USE_MOCKS');
-  const preset = useMocks ? Preset.Mock : Preset.AWS;
-  const projectName = useMocks ? 'test-project' : _.uniqueId('test-project-');
-  const clusterName = useMocks ? 'test-cluster' : _.uniqueId('test-cluster-');
+  const preset = Mocks.enabled() ? Preset.Mock : Preset.AWS;
+  const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
+  const clusterName = Mocks.enabled() ? 'test-cluster' : _.uniqueId('test-cluster-');
   const initialMachineDeploymentReplicas = '0';
 
   beforeEach(() => {
-    if (useMocks) {
+    if (Mocks.enabled()) {
       Mocks.register(Provider.AWS);
     }
   });
