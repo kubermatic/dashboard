@@ -17,7 +17,7 @@ import {environment} from '@environments/environment';
 import {Admin} from '@shared/entity/member';
 import {Report} from '@shared/entity/metering';
 import {AdminSettings, CustomLink, DEFAULT_ADMIN_SETTINGS} from '@shared/entity/settings';
-import {BehaviorSubject, iif, merge, Observable, of, Subject, timer} from 'rxjs';
+import {BehaviorSubject, EMPTY, iif, merge, Observable, of, Subject, timer} from 'rxjs';
 import {catchError, delay, retryWhen, shareReplay, switchMap, tap} from 'rxjs/operators';
 import {webSocket} from 'rxjs/webSocket';
 
@@ -46,22 +46,37 @@ export class SettingsService {
 
   get adminSettings(): Observable<AdminSettings> {
     if (!this._adminSettingsWatch$) {
-      const webSocket$ = webSocket<AdminSettings>(`${this.wsRoot}/admin/settings`)
-        .asObservable()
-        .pipe(
-          retryWhen(errors =>
-            errors.pipe(
-              // eslint-disable-next-line no-console
-              tap(console.debug),
-              delay(this._appConfigService.getRefreshTimeBase() * this._retryDelayTime)
-            )
-          )
-        );
-      this._adminSettingsWatch$ = iif(() => this._auth.authenticated(), webSocket$, of(DEFAULT_ADMIN_SETTINGS));
+      this._adminSettingsWatch$ = iif(
+        () => this._auth.authenticated(),
+        environment.avoidWebsockets ? this._getAdminSettings() : this._getAdminSettingsWebSocket(),
+        of(DEFAULT_ADMIN_SETTINGS)
+      );
       this._adminSettingsWatch$.subscribe(settings => this._adminSettings$.next(this._defaultAdminSettings(settings)));
     }
 
     return this._adminSettings$;
+  }
+
+  private _getAdminSettingsWebSocket(): Observable<AdminSettings> {
+    return webSocket<AdminSettings>(`${this.wsRoot}/admin/settings`)
+      .asObservable()
+      .pipe(
+        retryWhen(errors =>
+          errors.pipe(
+            // eslint-disable-next-line no-console
+            tap(console.debug),
+            delay(this._appConfigService.getRefreshTimeBase() * this._retryDelayTime)
+          )
+        )
+      );
+  }
+
+  private _getAdminSettings(): Observable<AdminSettings> {
+    const url = `${this.restRoot}/admin/settings`;
+    const observable = this._httpClient.get<AdminSettings>(url).pipe(catchError(() => of(DEFAULT_ADMIN_SETTINGS)));
+    return this._refreshTimer$
+      .pipe(switchMap(_ => iif(() => this._auth.authenticated(), observable, EMPTY)))
+      .pipe(shareReplay({refCount: true, bufferSize: 1}));
   }
 
   get defaultAdminSettings(): AdminSettings {

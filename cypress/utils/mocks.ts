@@ -22,6 +22,7 @@ interface Mock {
 
 export class Mocks {
   private static _defaults: Mock[] = [
+    {m: RequestType.GET, p: Endpoint.AdminSettings, r: {fixture: 'admin-settings.json'}},
     {m: RequestType.GET, p: Endpoint.CurrentUser, r: {fixture: 'me.json'}},
     {m: RequestType.GET, p: Endpoint.Seeds, r: ['test-seed']},
     {m: RequestType.GET, p: Endpoint.SeedSettings, r: {fixture: 'seed-settings.json'}},

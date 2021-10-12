@@ -1,0 +1,36 @@
+{
+  "customLinks": [],
+  "cleanupOptions": {
+    "Enabled": true,
+    "Enforced": false
+  },
+  "defaultNodeCount": 1,
+  "clusterTypeOptions": 0,
+  "displayDemoInfo": true,
+  "displayAPIDocs": true,
+  "displayTermsOfService": true,
+  "enableDashboard": true,
+  "enableOIDCKubeconfig": false,
+  "userProjectsLimit": 0,
+  "restrictProjectCreation": false,
+  "enableExternalClusterImport": true,
+  "opaOptions": {
+    "enabled": false,
+    "enforced": false
+  },
+  "mlaOptions": {
+    "loggingEnabled": true,
+    "loggingEnforced": false,
+    "monitoringEnabled": true,
+    "monitoringEnforced": false
+  },
+  "mlaAlertmanagerPrefix": "alertmanager",
+  "mlaGrafanaPrefix": "grafana",
+  "machineDeploymentVMResourceQuota": {
+    "minCPU": 2,
+    "maxCPU": 0,
+    "minRAM": 2,
+    "maxRAM": 0,
+    "enableGPU": false
+  }
+}

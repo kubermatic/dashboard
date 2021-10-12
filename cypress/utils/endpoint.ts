@@ -54,6 +54,7 @@ export namespace Endpoint {
   }
 
   export const CurrentUser = '**/api/**/me';
+  export const AdminSettings = '**/api/**/admin/settings';
   export const Seeds = '**/api/**/seed';
   export const SeedSettings = '**/api/**/seeds/*/settings';
   export const Datacenters = '**/api/**/dc';
@@ -89,7 +90,6 @@ export namespace Endpoint {
   export const ServiceAccounts = '**/serviceaccounts';
   export const Settings = '**/me/settings';
   export const SSHKeys = '**/api/**/projects/*/sshkeys';
-  export const AdminSettings = '**/admin/settings';
   export const Administrators = '**/admin';
   export const ConstraintTemplates = '**/constrainttemplates';
   export const Constraints = '**/constraints';
