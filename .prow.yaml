@@ -183,8 +183,8 @@ presubmits:
             - run-e2e-ci
           resources:
             requests:
-              memory: 3Gi
-              cpu: 2
+              memory: 4Gi
+              cpu: 3
             limits:
               memory: 6Gi
               cpu: 4
@@ -210,8 +210,8 @@ presubmits:
             - run-e2e-ci
           resources:
             requests:
-              memory: 3Gi
-              cpu: 2
+              memory: 4Gi
+              cpu: 3
             limits:
               memory: 6Gi
               cpu: 4
