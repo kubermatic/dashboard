@@ -48,7 +48,12 @@ export CYPRESS_RECORD_KEY=7859bcb8-1d2a-4d56-b7f5-ca70b93f944c
 export WAIT_ON_TIMEOUT=600000
 
 set +e
-npm run e2e:local
+if [ $USE_MOCKS != "true" ]; then
+  npm run e2e:mock
+else
+  npm run e2e:local
+fi
+
 exitcode=$?
 
 if [ -d cypress/videos ] || [ -d cypress/screenshots ]; then
