@@ -50,7 +50,7 @@ export class Mocks {
     {m: RequestType.GET, p: Endpoint.MachineDeploymentNodesMetrics, r: []},
     {m: RequestType.GET, p: Endpoint.SSHKeys, r: []},
     {m: RequestType.GET, p: Endpoint.EtcdRestores, r: []},
-    {m: RequestType.GET, p: Endpoint.AlertmanagerConfig, r: {spec:{config:''}}},
+    {m: RequestType.GET, p: Endpoint.AlertmanagerConfig, r: {spec: {config: ''}}},
     {m: RequestType.GET, p: Endpoint.AdmissionPlugins, r: []},
     {m: RequestType.GET, p: Endpoint.Versions, r: {fixture: 'versions.json'}},
     {m: RequestType.GET, p: Endpoint.Alibaba.InstanceTypes, r: {fixture: 'alibaba/instancetypes.json'}},
