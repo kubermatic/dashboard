@@ -49,9 +49,9 @@ export WAIT_ON_TIMEOUT=600000
 
 set +e
 if [ $USE_MOCKS != "true" ]; then
-  npm run e2e:mock
-else
   npm run e2e:local
+else
+  npm run e2e:mock
 fi
 
 exitcode=$?
