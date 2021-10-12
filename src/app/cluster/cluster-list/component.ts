@@ -54,7 +54,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   health: Health[] = [];
   machineDeployments: MachineDeployment[][] = [];
   provider = [];
-  displayedColumns: string[] = ['status', 'name', 'labels', 'provider', 'region', 'type', 'created', 'actions'];
+  displayedColumns: string[] = ['status', 'name', 'labels', 'provider', 'region', 'created', 'actions'];
   dataSource = new MatTableDataSource<Cluster>();
   searchQuery: string;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
