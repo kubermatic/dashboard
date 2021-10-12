@@ -49,6 +49,7 @@ export class Mocks {
     {m: RequestType.GET, p: Endpoint.MachineDeploymentNodes, r: []},
     {m: RequestType.GET, p: Endpoint.MachineDeploymentNodesEvents, r: []},
     {m: RequestType.GET, p: Endpoint.MachineDeploymentNodesMetrics, r: []},
+    {m: RequestType.GET, p: Endpoint.ClusterTemplates, r: []},
     {m: RequestType.GET, p: Endpoint.SSHKeys, r: []},
     {m: RequestType.GET, p: Endpoint.EtcdRestores, r: []},
     {m: RequestType.GET, p: Endpoint.AlertmanagerConfig, r: {spec: {config: ''}}},
