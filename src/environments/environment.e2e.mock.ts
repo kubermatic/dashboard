@@ -9,12 +9,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-const host = window.location.host.replace(/\/+$/, '');
-const protocol = window.location.protocol;
-const wsProtocol = protocol.replace('http', 'ws');
-
 export const environment = {
-  name: 'dev',
+  name: 'mock',
   production: false,
   configUrl: '../../assets/config/config.json',
   changelogUrl: '../../assets/config/changelog.json',
@@ -22,9 +18,9 @@ export const environment = {
   refreshTimeBase: 1000,
   restRoot: '/api/v1',
   newRestRoot: '/api/v2',
-  wsRoot: `${wsProtocol}//${host}/api/v1/ws`,
+  wsRoot: '',
   avoidWebsockets: true,
-  oidcProviderUrl: 'http://dex.oauth:5556/dex/auth',
-  oidcConnectorId: 'local',
+  oidcProviderUrl: '',
+  oidcConnectorId: '',
   animations: false,
 };
