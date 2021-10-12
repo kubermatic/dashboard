@@ -184,7 +184,7 @@ presubmits:
           resources:
             requests:
               memory: 6Gi
-                cpu: 4
+              cpu: 4
             limits:
               memory: 6Gi
               cpu: 4
@@ -211,7 +211,7 @@ presubmits:
           resources:
             requests:
               memory: 6Gi
-                cpu: 4
+              cpu: 4
             limits:
               memory: 6Gi
               cpu: 4
