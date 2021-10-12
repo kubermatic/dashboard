@@ -51,12 +51,12 @@ describe('NodeService', () => {
   it('should resolve with true value', fakeAsync(
     inject([NodeService], (service: NodeService) => {
       const md = machineDeploymentsFake()[0];
-      const clusterID = fakeDigitaloceanCluster().id;
+      const cluster = fakeDigitaloceanCluster();
       const projectID = fakeProject().id;
       let isConfirmed = false;
 
       service
-        .showMachineDeploymentDeleteDialog(md, clusterID, projectID, null)
+        .showMachineDeploymentDeleteDialog(md, cluster, projectID, null)
         .subscribe(confirmed => (isConfirmed = confirmed));
       tick();
       flush();

@@ -11,9 +11,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<km-dialog-title>Manage SSH Keys of "<span class="cluster-name">{{cluster.name}}</span>"</km-dialog-title>
+<km-dialog-title>Manage SSH Keys</km-dialog-title>
 
 <mat-dialog-content class="km-content-edit-sshkeys">
+  <p class="km-dialog-context-description">Manage SSH keys of <b>{{cluster.name}}</b> cluster</p>
+
   <ng-container *ngIf="loading">
     <mat-spinner [diameter]="50"
                  class="km-spinner"
@@ -56,7 +58,7 @@ limitations under the License.
 
             <ng-container *ngSwitchCase="false">
               <button mat-icon-button
-                      matTooltip="Delete SSH key"
+                      matTooltip="Remove SSH key"
                       (click)="deleteSSHKey(element)"
                       [disabled]="!canDelete()">
                 <i class="km-icon-mask km-icon-delete"></i>

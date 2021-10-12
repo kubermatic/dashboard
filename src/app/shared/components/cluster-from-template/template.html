@@ -12,9 +12,10 @@ limitations under the License.
 -->
 
 <km-dialog-title>
-  <div>Create Clusters from {{data.template.name}} Template</div>
+  <div>Create Clusters from Template</div>
 </km-dialog-title>
 <mat-dialog-content>
+  <p class="km-dialog-context-description">Create Clusters from <b>{{data.template.name}}</b> template</p>
   <form [formGroup]="form"
         fxLayout="column"
         id="create-template-instance-form"

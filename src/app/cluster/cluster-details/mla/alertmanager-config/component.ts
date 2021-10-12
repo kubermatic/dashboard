@@ -114,7 +114,7 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
       data: {
         title: 'Edit Alertmanager Config',
         projectId: this.projectID,
-        clusterId: this.cluster.id,
+        clusterId: this.cluster,
         alertmanagerConfig: this.alertmanagerConfig,
         confirmLabel: 'Edit',
       },
@@ -129,7 +129,7 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Reset Alertmanager Config',
-        message: 'Are you sure you want to reset the Alertmanager Config?',
+        message: 'Reset Alertmanager Config of <b>${this.cluster.name}</b> cluster to default?',
         confirmLabel: 'Reset',
       },
     };

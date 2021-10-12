@@ -125,7 +125,7 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
       hasBackdrop: true,
       data: {
         title: 'Delete Constraint Template',
-        message: `Delete <strong>${constraintTemplate.name}</strong> constraint template permanently?`,
+        message: `Delete <b>${constraintTemplate.name}</b> constraint template permanently?`,
         confirmLabel: 'Delete',
         warning: 'Deleting this constraint template will cause all constraints related to it to be deleted as well.',
       },

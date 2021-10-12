@@ -12,6 +12,8 @@ limitations under the License.
 -->
 <km-dialog-title>Edit Addon</km-dialog-title>
 <mat-dialog-content>
+  <p class="km-dialog-context-description">Edit <b>{{addon.name}}</b> addon</p>
+
   <img class="km-addon-logo"
        *ngIf="hasLogo()"
        [src]="getAddonLogo()"

@@ -140,7 +140,9 @@ export class RBACComponent implements OnInit, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete Binding',
-        message: `Delete <strong>${element.kind.toLowerCase()} ${element.name}</strong> from binding?`,
+        message: `Delete binding for ${element.kind.toLowerCase()} <b>${element.name}</b> of <b>${
+          this.cluster.name
+        }</b> cluster permanently?`,
         confirmLabel: 'Delete',
       },
     };
@@ -176,7 +178,9 @@ export class RBACComponent implements OnInit, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete Binding',
-        message: `Delete <strong>${element.kind.toLowerCase()} ${element.name}</strong> from binding?`,
+        message: `Delete binding for ${element.kind.toLowerCase()} <b>${element.name}</b> of <b>${
+          this.cluster.name
+        }</b> cluster permanently?`,
         confirmLabel: 'Delete',
       },
     };

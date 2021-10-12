@@ -14,6 +14,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {OPAService} from '@core/services/opa';
 import {NotificationService} from '@core/services/notification';
+import {Cluster} from '@shared/entity/cluster';
 import {Constraint, ConstraintTemplate, ConstraintSpec} from '@shared/entity/opa';
 import {getIconClassForButton} from '@shared/utils/common-utils';
 import {dump, load} from 'js-yaml';
@@ -24,7 +25,7 @@ import {take, takeUntil} from 'rxjs/operators';
 export interface ConstraintDialogConfig {
   title: string;
   projectId: string;
-  clusterId: string;
+  cluster: Cluster;
   mode: Mode;
   confirmLabel: string;
 
@@ -108,7 +109,7 @@ export class ConstraintDialog implements OnInit, OnDestroy {
 
   private _create(constraint: Constraint): void {
     this._opaService
-      .createConstraint(this.data.projectId, this.data.clusterId, constraint)
+      .createConstraint(this.data.projectId, this.data.cluster.id, constraint)
       .pipe(take(1))
       .subscribe(result => {
         this._matDialogRef.close(true);
@@ -119,7 +120,7 @@ export class ConstraintDialog implements OnInit, OnDestroy {
 
   private _edit(constraint: Constraint): void {
     this._opaService
-      .patchConstraint(this.data.projectId, this.data.clusterId, this.data.constraint.name, constraint)
+      .patchConstraint(this.data.projectId, this.data.cluster.id, this.data.constraint.name, constraint)
       .pipe(take(1))
       .subscribe(result => {
         this._matDialogRef.close(true);

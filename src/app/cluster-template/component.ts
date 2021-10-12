@@ -184,7 +184,7 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete Cluster Template',
-        message: `Delete <strong>${template.name}</strong> cluster template permanently?`,
+        message: `Delete <b>${template.name}</b> cluster template permanently? All clusters created using this template will persist.`,
         confirmLabel: 'Delete',
       },
     };

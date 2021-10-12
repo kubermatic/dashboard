@@ -197,7 +197,7 @@ export class DynamicDatacentersComponent implements OnInit, OnDestroy, OnChanges
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Delete Datacenter',
-        message: `Delete <strong>${datacenter.metadata.name}</strong> datacenter permanently?`,
+        message: `Delete <b>${datacenter.metadata.name}</b> datacenter permanently?`,
         confirmLabel: 'Delete',
       },
     };

@@ -112,7 +112,7 @@ export class RuleGroupsComponent implements OnInit, OnChanges, OnDestroy {
       data: {
         title: 'Add Rule Group',
         projectId: this.projectID,
-        clusterId: this.cluster.id,
+        cluster: this.cluster,
         mode: Mode.Add,
         confirmLabel: 'Add',
       },
@@ -126,7 +126,7 @@ export class RuleGroupsComponent implements OnInit, OnChanges, OnDestroy {
       data: {
         title: 'Edit Rule Group',
         projectId: this.projectID,
-        clusterId: this.cluster.id,
+        cluster: this.cluster,
         mode: Mode.Edit,
         ruleGroup: ruleGroup,
         confirmLabel: 'Edit',
@@ -143,7 +143,7 @@ export class RuleGroupsComponent implements OnInit, OnChanges, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete Rule Group',
-        message: `Delete <strong>${ruleGroupName}</strong> rule group permanently?`,
+        message: `Delete <b>${ruleGroupName}</b> recording and alerting rule group of <b>${this.cluster.name}</b> cluster permanently?`,
         confirmLabel: 'Delete',
       },
     };

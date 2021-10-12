@@ -12,6 +12,8 @@ limitations under the License.
 -->
 <km-dialog-title>{{data.title}}</km-dialog-title>
 <mat-dialog-content>
+  <p *ngIf="data.mode === 'edit'"
+     class="km-dialog-context-description">Edit recording and alerting rule group of <b>{{data.cluster.name}}</b> cluster</p>
   <form [formGroup]="form"
         fxLayout="column">
     <mat-form-field fxFlex>

@@ -179,7 +179,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete Service Account',
-        message: `Delete <strong>${serviceAccount.name}</strong> service account from <strong>${this._selectedProject.name}</strong> project permanently?`,
+        message: `Delete <b>${serviceAccount.name}</b> service account of <b>${this._selectedProject.name}</b> project permanently?`,
         confirmLabel: 'Delete',
       },
     };

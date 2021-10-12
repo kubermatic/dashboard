@@ -81,6 +81,14 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
     return this._data.existingNodesCount;
   }
 
+  get clusterName(): string {
+    return this._data.initialClusterData.name;
+  }
+
+  get machineDeploymentName(): string {
+    return this._data.initialNodeData.name;
+  }
+
   constructor(
     @Inject(MAT_DIALOG_DATA) private _data: DialogDataInput,
     private _dialogRef: MatDialogRef<NodeDataDialogComponent>,

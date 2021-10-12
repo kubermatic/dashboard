@@ -45,7 +45,7 @@ export class NodeMockService {
 
   showMachineDeploymentDeleteDialog(
     _md: MachineDeployment,
-    _clusterID: string,
+    _cluster: Cluster,
     _projectID: string,
     _dcName: string,
     _changeEventEmitter: EventEmitter<MachineDeployment>

@@ -13,6 +13,7 @@ import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {OPAService} from '@core/services/opa';
 import {NotificationService} from '@core/services/notification';
+import {Cluster} from '@shared/entity/cluster';
 import {GatekeeperConfig, GatekeeperConfigSpec} from '@shared/entity/opa';
 import {getIconClassForButton} from '@shared/utils/common-utils';
 import {dump, load} from 'js-yaml';
@@ -23,7 +24,7 @@ import {take} from 'rxjs/operators';
 export interface GatekeeperConfigDialogData {
   title: string;
   projectId: string;
-  clusterId: string;
+  cluster: Cluster;
   mode: Mode;
   confirmLabel: string;
 
@@ -102,7 +103,7 @@ export class GatekeeperConfigDialog implements OnInit, OnDestroy {
 
   private _create(gatekeeperConfig: GatekeeperConfig): void {
     this._opaService
-      .createGatekeeperConfig(this.data.projectId, this.data.clusterId, gatekeeperConfig)
+      .createGatekeeperConfig(this.data.projectId, this.data.cluster.id, gatekeeperConfig)
       .pipe(take(1))
       .subscribe(_ => {
         this._matDialogRef.close(true);
@@ -113,7 +114,7 @@ export class GatekeeperConfigDialog implements OnInit, OnDestroy {
 
   private _edit(gatekeeperConfig: GatekeeperConfig): void {
     this._opaService
-      .patchGatekeeperConfig(this.data.projectId, this.data.clusterId, gatekeeperConfig)
+      .patchGatekeeperConfig(this.data.projectId, this.data.cluster.id, gatekeeperConfig)
       .pipe(take(1))
       .subscribe(_ => {
         this._matDialogRef.close(true);

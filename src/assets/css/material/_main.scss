@@ -99,6 +99,10 @@ mat-card {
 
     p {
       margin: 0 0 8px;
+
+      &.km-dialog-context-description {
+        margin-bottom: 30px;
+      }
     }
 
     .km-dialog-warning {

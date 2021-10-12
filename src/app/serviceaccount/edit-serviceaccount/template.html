@@ -13,6 +13,8 @@ limitations under the License.
 <div id="km-edit-serviceaccount-dialog">
   <km-dialog-title>Edit Service Account</km-dialog-title>
   <mat-dialog-content>
+    <p class="km-dialog-context-description">Edit <b>{{serviceaccount.name}}</b> service account of <b>{{project.name}}</b> project</p>
+
     <form [formGroup]="editServiceAccountForm"
           fxLayout="column"
           (submit)="editServiceAccount()"

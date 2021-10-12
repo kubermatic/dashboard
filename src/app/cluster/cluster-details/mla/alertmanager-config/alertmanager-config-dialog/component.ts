@@ -13,6 +13,7 @@ import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MLAService} from '@core/services/mla';
 import {NotificationService} from '@core/services/notification';
+import {Cluster} from '@shared/entity/cluster';
 import {AlertmanagerConfig} from '@shared/entity/mla';
 import {getIconClassForButton} from '@shared/utils/common-utils';
 import * as _ from 'lodash';
@@ -23,7 +24,7 @@ import {take} from 'rxjs/operators';
 export interface AlertmanagerConfigDialogData {
   title: string;
   projectId: string;
-  clusterId: string;
+  cluster: Cluster;
   confirmLabel: string;
 
   // Alertmanager Config has to be specified only if dialog is used in the edit mode.
@@ -86,7 +87,7 @@ export class AlertmanagerConfigDialog implements OnInit, OnDestroy {
 
   private _edit(alertmanagerConfig: AlertmanagerConfig): void {
     this._mlaService
-      .putAlertmanagerConfig(this.data.projectId, this.data.clusterId, alertmanagerConfig)
+      .putAlertmanagerConfig(this.data.projectId, this.data.cluster.id, alertmanagerConfig)
       .pipe(take(1))
       .subscribe(_ => {
         this._matDialogRef.close(true);
