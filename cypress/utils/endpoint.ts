@@ -88,10 +88,11 @@ export namespace Endpoint {
   export const Tokens = '**/tokens';
   export const ServiceAccounts = '**/serviceaccounts';
   export const Settings = '**/me/settings';
-  export const SSHKeys = '**/sshkeys';
+  export const SSHKeys = '**/api/**/projects/*/sshkeys';
   export const AdminSettings = '**/admin/settings';
   export const Administrators = '**/admin';
   export const ConstraintTemplates = '**/constrainttemplates';
   export const Constraints = '**/constraints';
+  export const AdmissionPlugins = '**/api/**/admission/plugins/*';
   export const Versions = '**/providers/*/versions';
 }
