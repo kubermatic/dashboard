@@ -150,7 +150,7 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
     const config: MatDialogConfig = {
       data: {
         title: 'Delete Addon',
-        message: `Delete ${addon.name} addon permanently?`,
+        message: `Delete <strong>${addon.name}</strong> addon permanently?`,
         confirmLabel: 'Delete',
       },
     };

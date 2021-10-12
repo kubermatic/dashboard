@@ -117,7 +117,7 @@ export class GatekeeperConfigComponent implements OnChanges, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete Gatekeeper Config',
-        message: 'Are you sure you want to delete the Gatekeeper Config?',
+        message: 'Delete Gatekeeper Config permanently?',
         confirmLabel: 'Delete',
       },
     };

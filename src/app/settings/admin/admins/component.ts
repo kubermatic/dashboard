@@ -83,7 +83,7 @@ export class AdminsComponent implements OnInit, OnChanges {
       hasBackdrop: true,
       data: {
         title: 'Delete Admin',
-        message: `Are you sure you want to take admin rights from ${admin.name}?`,
+        message: `Remove <strong>${admin.name}</strong> from admins?`,
         confirmLabel: 'Delete',
       },
     };

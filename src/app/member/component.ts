@@ -180,7 +180,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete Member',
-        message: `Delete ${member.name} member from the ${this._selectedProject.name} project?`,
+        message: `Remove <strong>${member.name}</strong> member from <strong>${this._selectedProject.name}</strong> project?`,
         confirmLabel: 'Delete',
       },
     };

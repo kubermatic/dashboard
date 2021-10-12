@@ -170,7 +170,7 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete Constraint',
-        message: `Are you sure you want to delete the constraint ${constraint.name}?`,
+        message: `Delete <strong>${constraint.name}</strong> constraint permanently?`,
         confirmLabel: 'Delete',
       },
     };

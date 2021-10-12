@@ -143,7 +143,7 @@ export class RuleGroupsComponent implements OnInit, OnChanges, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete Rule Group',
-        message: `Are you sure you want to delete the Rule Group ${ruleGroupName}?`,
+        message: `Delete <strong>${ruleGroupName}</strong> rule group permanently?`,
         confirmLabel: 'Delete',
       },
     };

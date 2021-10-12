@@ -15,10 +15,12 @@ limitations under the License.
   <form [formGroup]="deleteForm"
         (submit)="deleteCluster()"
         id="km-delete-cluster-dialog">
-    <p>Are you sure you want to permanently delete the <strong ngxClipboard
+    <p>Delete
+      <strong ngxClipboard
               [cbContent]="cluster.name"
               matTooltip="Click to copy"
-              class="km-copy">{{cluster.name}}</strong> cluster?
+              class="km-copy">{{cluster.name}}</strong>
+      cluster permanently?
     </p>
     <mat-form-field>
       <mat-label>Cluster Name*</mat-label>

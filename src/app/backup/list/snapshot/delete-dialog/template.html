@@ -12,11 +12,13 @@ limitations under the License.
 -->
 <div id="km-delete-snapshot-dialog">
   <km-dialog-title>
-    <div>Delete Snapshot <b>"{{config.snapshot.name}}"</b></div>
+    <div>Delete Snapshot</div>
   </km-dialog-title>
 
   <mat-dialog-content>
-    <div fxLayoutAlign=" center">
+    <p>Delete <strong>{{config.snapshot.name}}</strong> snapshot permanently?</p>
+    <div fxLayoutAlign=" center"
+         class="warning-container">
       <i class="km-icon-warning"></i>
       <div>The data will be irreversibly lost.</div>
     </div>

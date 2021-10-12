@@ -164,7 +164,7 @@ export class DefaultConstraintComponent implements OnInit, OnChanges, OnDestroy 
       hasBackdrop: true,
       data: {
         title: 'Delete Default Constraint',
-        message: `Are you sure you want to delete the default constraint ${defaultConstraint.name}?`,
+        message: `Delete <strong>${defaultConstraint.name}</strong> default constraint permanently?`,
         confirmLabel: 'Delete',
       },
     };
