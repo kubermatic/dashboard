@@ -59,6 +59,7 @@ export class DefaultConstraintComponent implements OnInit, OnChanges, OnDestroy 
     this._opaService.defaultConstraints.pipe(takeUntil(this._unsubscribe)).subscribe(defaultConstraints => {
       this.defaultConstraints = defaultConstraints;
       this.dataSource.data = this.defaultConstraints;
+      this.filter();
     });
 
     this._opaService.constraintTemplates
