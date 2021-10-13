@@ -11,6 +11,7 @@
 
 import webpack from '@cypress/webpack-preprocessor';
 import failFast from 'cypress-fail-fast/plugin';
+import del from 'del';
 import {configuration} from './cy-ts-preprocessor';
 
 export default async (on, config) => {
@@ -54,6 +55,17 @@ export default async (on, config) => {
   /* eslint-enable no-console */
 
   on('file:preprocessor', webpack(configuration));
+
+  // Remove videos of successful tests and keep only failed ones.
+  // @ts-ignore
+  on('after:spec', (_, results) => {
+    if (results && results.video) {
+      if (!_.some(results.tests, (test) => _.some(test.attempts, { state: 'failed' }))) {
+        return del(results.video)
+      }
+    }
+  })
+
   failFast(on, config);
   return config;
 };
