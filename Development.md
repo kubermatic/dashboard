@@ -15,7 +15,7 @@ mentioned environment variable leads to using Kubermatic Kubernetes Platform Ent
 **Note:** `src/assets/config/version.json` should not be edited manually.
 
 ### Using Local Environment
-To start development server that will proxy API calls to the https://dev.kubermatic.io/ use 
+To start development server that will proxy API calls to the https://dev.kubermatic.io/ use
 `npm start` command and navigate to http://localhost:8000/.
 
 If you would like to connect with your local API then you should use `npm run serve:local`.
@@ -42,10 +42,20 @@ To check if files are formatted and linted use `npm run check` command.
 
 To automatically fix issues run `npm run fix` command.
 
-## Running the Unit Tests
+## Running Unit Tests
 Run `npm test` to execute the unit tests via [Jest](https://jestjs.io/).
 
-## Running the End-to-end Tests
+## Running End-to-end Tests
+#### Mocked Tests
+Mocked tests can be run locally without need to connect to the whole KKP.
+
+```
+USE_MOCKS="true" CYPRESS_USE_MOCKS="true" npm run e2e:mock
+```
+
+Additionally, you can choose which version will be tested with `KUBERMATIC_EDITION` environment variable.
+
+#### Full Tests
 End-to-end tests by default are executed against `dev.kubermatic.io` server. Before running tests set
 `CYPRESS_KUBERMATIC_DEX_DEV_E2E_USERNAME`, `CYPRESS_KUBERMATIC_DEX_DEV_E2E_USERNAME_2` and
 `CYPRESS_KUBERMATIC_DEX_DEV_E2E_PASSWORD` environment variables. To run tests, execute `npm run e2e`.
