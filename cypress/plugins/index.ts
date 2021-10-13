@@ -60,11 +60,11 @@ export default async (on, config) => {
   // @ts-ignore
   on('after:spec', (_, results) => {
     if (results && results.video) {
-      if (!_.some(results.tests, (test) => _.some(test.attempts, { state: 'failed' }))) {
-        return del(results.video)
+      if (!_.some(results.tests, test => _.some(test.attempts, {state: 'failed'}))) {
+        return del(results.video);
       }
     }
-  })
+  });
 
   failFast(on, config);
   return config;

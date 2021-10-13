@@ -11,7 +11,7 @@
 # limitations under the License.
 set -euo pipefail
 
-IMAGE_NAME="node:12"
+IMAGE_NAME="node:14"
 REL_ROOT_DIR="$(dirname "$0")/../"
 ABS_ROOT_DIR="$(cd "${REL_ROOT_DIR}"; pwd)"
 
