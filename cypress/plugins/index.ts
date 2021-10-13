@@ -12,6 +12,7 @@
 import webpack from '@cypress/webpack-preprocessor';
 import failFast from 'cypress-fail-fast/plugin';
 import del from 'del';
+import * as _ from 'lodash';
 import {configuration} from './cy-ts-preprocessor';
 
 export default async (on, config) => {
