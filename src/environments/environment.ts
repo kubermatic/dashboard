@@ -25,7 +25,7 @@ export const environment = {
   changelogUrl: '../../assets/config/changelog.json',
   gitVersionUrl: '../../assets/config/version.json',
   refreshTimeBase: 1000,
-  restRoot: '/api/v1',
+  restRoot: 'api/v1',
   newRestRoot: '/api/v2',
   wsRoot: `${wsProtocol}//${host}/api/v1/ws`,
   avoidWebsockets: false,
