@@ -19,17 +19,22 @@ import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 import * as _ from 'lodash';
+import {Mocks} from '../../utils/mocks';
 
 describe('Anexia Provider', () => {
-  const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
-  const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
-  const projectName = _.uniqueId('e2e-test-project-');
-  const clusterName = _.uniqueId('e2e-test-cluster-');
-  const initialMachineDeploymentName = _.uniqueId('e2e-test-md-');
+  const preset = Mocks.enabled() ? Preset.Mock : Preset.Anexia;
+  const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
+  const clusterName = Mocks.enabled() ? 'test-cluster' : _.uniqueId('test-cluster-');
   const initialMachineDeploymentReplicas = '0';
 
+  beforeEach(() => {
+    if (Mocks.enabled()) {
+      Mocks.register(Provider.Anexia);
+    }
+  });
+
   it('should login', () => {
-    login(email, password);
+    login();
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -51,11 +56,8 @@ describe('Anexia Provider', () => {
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
     WizardPage.getCustomPresetsCombobox().click();
-    WizardPage.getPreset(Preset.Anexia).click();
+    WizardPage.getPreset(preset).click();
     WizardPage.getNextBtn(WizardStep.ProviderSettings).click({force: true});
-    WizardPage.getNodeNameInput()
-      .type(initialMachineDeploymentName)
-      .should(Condition.HaveValue, initialMachineDeploymentName);
     WizardPage.getNodeCountInput()
       .clear()
       .type(initialMachineDeploymentReplicas)
@@ -94,6 +96,9 @@ describe('Anexia Provider', () => {
 
   it('should delete the project', () => {
     ProjectsPage.deleteProject(projectName);
+  });
+
+  it('should verify that there are no projects', () => {
     ProjectsPage.verifyNoProjects();
   });
 

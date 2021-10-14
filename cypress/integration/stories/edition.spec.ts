@@ -16,16 +16,13 @@ import {Condition} from '../../utils/condition';
 import {View} from '../../utils/view';
 
 describe('Edition Story', () => {
-  const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
-  const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const kubermaticEdition = Cypress.env('KUBERMATIC_EDITION');
   const isEnterpriseEdition = kubermaticEdition === 'ee';
   const editionName = isEnterpriseEdition ? 'Enterprise Edition' : 'Community Edition';
   const themePickerAvailability = isEnterpriseEdition ? 'available' : 'not available';
 
   it('should login', () => {
-    login(email, password);
-
+    login();
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 

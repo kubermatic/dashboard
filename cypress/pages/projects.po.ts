@@ -14,6 +14,7 @@ import {Endpoint} from '../utils/endpoint';
 import {Property, RequestType, Response, ResponseType, TrafficMonitor} from '../utils/monitor';
 import {View} from '../utils/view';
 import {ClustersPage} from './clusters.po';
+import {Mocks} from '../utils/mocks';
 
 export class ProjectsPage {
   static getProjectItem(projectName: string): Cypress.Chainable {
@@ -132,7 +133,12 @@ export class ProjectsPage {
   }
 
   static verifyNoProjects(): void {
+    if (Mocks.enabled()) {
+      cy.intercept({method: RequestType.GET, path: '**/api/**/projects*'}, []);
+    }
+
     this.verifyUrl();
+
     const retries = 5;
     TrafficMonitor.newTrafficMonitor()
       .method(RequestType.GET)

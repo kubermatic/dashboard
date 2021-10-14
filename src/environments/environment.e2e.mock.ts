@@ -9,8 +9,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export enum Fixtures {
-  ConstraintTemplateSpec = 'constrainttemplate.spec.yaml',
-  ConstraintSpec = 'constraint.spec.yaml',
-  GatekeeperConfig = 'gatekeeperconfig.spec.yaml',
-}
+export const environment = {
+  name: 'mock',
+  production: false,
+  configUrl: '../../assets/config/config.json',
+  changelogUrl: '../../assets/config/changelog.json',
+  gitVersionUrl: '../../assets/config/version.json',
+  refreshTimeBase: 1000,
+  restRoot: '/api/v1',
+  newRestRoot: '/api/v2',
+  wsRoot: '',
+  avoidWebsockets: true,
+  oidcProviderUrl: '',
+  oidcConnectorId: '',
+  animations: false,
+};

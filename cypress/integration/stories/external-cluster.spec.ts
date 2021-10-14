@@ -17,16 +17,13 @@ import {Condition} from '../../utils/condition';
 import {View} from '../../utils/view';
 
 describe('External Cluster Story', () => {
-  const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
-  const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const kubeconfigEncoded = Cypress.env('KUBECONFIG_ENCODED');
   const kubeconfig = atob(kubeconfigEncoded);
   const projectName = _.uniqueId('e2e-test-project-');
   const clusterName = _.uniqueId('e2e-test-cluster-');
 
   it('should login', () => {
-    login(email, password);
-
+    login();
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 

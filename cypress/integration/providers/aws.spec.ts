@@ -19,33 +19,22 @@ import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 import * as _ from 'lodash';
-import {mockClusterEndpoints, mockConfigEndpoints, mockLogin, mockProjectEndpoints} from '../../utils/mock';
+import {Mocks} from '../../utils/mocks';
 
 describe('AWS Provider', () => {
-  const useMocks = Cypress.env('USE_MOCKS');
-  const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
-  const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
-  const preset = useMocks ? Preset.Mock : Preset.AWS;
-  const projectName = useMocks ? 'test-project' : _.uniqueId('test-project-');
-  const clusterName = useMocks ? 'test-cluster' : _.uniqueId('test-cluster-');
-  const initialMachineDeploymentName = useMocks ? 'test-md' : _.uniqueId('test-md-');
+  const preset = Mocks.enabled() ? Preset.Mock : Preset.AWS;
+  const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
+  const clusterName = Mocks.enabled() ? 'test-cluster' : _.uniqueId('test-cluster-');
   const initialMachineDeploymentReplicas = '0';
 
   beforeEach(() => {
-    if (useMocks) {
-      mockConfigEndpoints();
-      mockProjectEndpoints();
-      mockClusterEndpoints(Provider.AWS);
+    if (Mocks.enabled()) {
+      Mocks.register(Provider.AWS);
     }
   });
 
   it('should login', () => {
-    if (useMocks) {
-      mockLogin();
-    } else {
-      login(email, password);
-    }
-
+    login();
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -69,9 +58,6 @@ describe('AWS Provider', () => {
     WizardPage.getCustomPresetsCombobox().click();
     WizardPage.getPreset(preset).click();
     WizardPage.getNextBtn(WizardStep.ProviderSettings).click({force: true});
-    WizardPage.getNodeNameInput()
-      .type(initialMachineDeploymentName)
-      .should(Condition.HaveValue, initialMachineDeploymentName);
     WizardPage.getNodeCountInput()
       .clear()
       .type(initialMachineDeploymentReplicas)
@@ -98,23 +84,9 @@ describe('AWS Provider', () => {
 
   it('should delete created cluster', () => {
     ClustersPage.deleteCluster(clusterName);
-
-    if (useMocks) {
-      cy.intercept({method: 'GET', path: '**/api/**/projects/*/clusters'}, {fixture: 'empty-list.json'}).as(
-        'listClusters'
-      );
-    }
-
-    ClustersPage.verifyNoCluster(clusterName);
   });
 
   it('should verify that there are no clusters', () => {
-    if (useMocks) {
-      cy.intercept({method: 'GET', path: '**/api/**/projects/*/clusters'}, {fixture: 'empty-list.json'}).as(
-        'listClusters'
-      );
-    }
-
     ClustersPage.verifyNoClusters();
   });
 
@@ -124,11 +96,9 @@ describe('AWS Provider', () => {
 
   it('should delete the project', () => {
     ProjectsPage.deleteProject(projectName);
+  });
 
-    if (useMocks) {
-      cy.intercept({method: 'GET', path: '**/api/**/projects*'}, {fixture: 'empty-list.json'}).as('listProjects');
-    }
-
+  it('should verify that there are no projects', () => {
     ProjectsPage.verifyNoProjects();
   });
 

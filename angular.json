@@ -210,6 +210,53 @@
                   "with": "src/app/dynamic/module-registry.ce.ts"
                 }
               ]
+            },
+            "e2e-mock-ee": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
+              "commonChunk": false,
+              "optimization": false,
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.e2e.mock.ts"
+                }
+              ]
+            },
+            "e2e-mock-ce": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
+              "commonChunk": false,
+              "optimization": false,
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "tsConfig": "src/tsconfig.ce.json",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.e2e.mock.ts"
+                },
+                {
+                  "replace": "src/app/dynamic/module-registry.ts",
+                  "with": "src/app/dynamic/module-registry.ce.ts"
+                }
+              ]
             }
           }
         },
@@ -242,6 +289,12 @@
             },
             "e2e-local-ce": {
               "browserTarget": "kubermatic:build:e2e-local-ce"
+            },
+            "e2e-mock-ee": {
+              "browserTarget": "kubermatic:build:e2e-mock-ee"
+            },
+            "e2e-mock-ce": {
+              "browserTarget": "kubermatic:build:e2e-mock-ce"
             }
           }
         },

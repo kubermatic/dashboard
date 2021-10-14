@@ -1,16 +1,15 @@
 [
   {
-    "id": "zs6qc9b9wh",
+    "id": "vcx8rlgnhc",
     "name": "test-cluster",
-    "creationTimestamp": "2021-09-22T11:43:45Z",
-    "labels": {},
+    "creationTimestamp": "2021-10-06T14:11:43Z",
     "type": "kubernetes",
     "spec": {
       "cloud": {
-        "dc": "aws-eu-central-1a",
-        "aws": {}
+        "dc": "test-hetzner-dc",
+        "hetzner": {}
       },
-      "version": "1.21.3",
+      "version": "1.21.5",
       "oidc": {},
       "enableUserSSHKeyAgent": true,
       "auditLogging": {},
@@ -32,14 +31,14 @@
           ]
         },
         "dnsDomain": "cluster.local",
-        "proxyMode": "ipvs",
+        "proxyMode": "iptables",
         "nodeLocalDNSCacheEnabled": true
       }
     },
     "status": {
-      "version": "1.21.3",
-      "url": "https://test-cluster.com:6443",
-      "externalCCMMigration": "Unsupported"
+      "version": "1.21.5",
+      "url": "",
+      "externalCCMMigration": "NotNeeded"
     }
   }
 ]

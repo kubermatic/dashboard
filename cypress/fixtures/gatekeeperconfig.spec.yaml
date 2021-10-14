@@ -1,8 +1,0 @@
-sync:
-  syncOnly:
-    - group: ""
-      version: "v1"
-      kind: "Namespace"
-    - group: ""
-      version: "v1"
-      kind: "Pod"

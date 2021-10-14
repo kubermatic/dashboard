@@ -11,9 +11,10 @@
 
 import {Condition} from '../utils/condition';
 import {Endpoint} from '../utils/endpoint';
-import {RequestType, TrafficMonitor} from '../utils/monitor';
+import {RequestType, Response, ResponseType, TrafficMonitor} from '../utils/monitor';
 import {View} from '../utils/view';
 import {WizardPage} from './wizard.po';
+import {Mocks} from '../utils/mocks';
 
 export enum ProviderMenuOption {
   EditCluster = 'Edit Cluster',
@@ -236,20 +237,39 @@ export class ClustersPage {
   }
 
   static verifyNoClusters(): void {
-    this.waitForRefresh();
-    this.verifyUrl();
-    cy.get('div').should(Condition.Contain, 'No clusters available.');
-  }
+    if (Mocks.enabled()) {
+      cy.intercept({method: RequestType.GET, path: Endpoint.Clusters}, []);
+    }
 
-  static verifyNoCluster(name: string): void {
     this.waitForRefresh();
     this.verifyUrl();
-    this.getTable().should(Condition.NotContain, name);
+
+    cy.get('div').should(Condition.Contain, 'No clusters available.');
   }
 
   static deleteCluster(name: string): void {
     this.getDeleteClusterBtn().click();
     this.getDeleteDialogInput().type(name).should(Condition.HaveValue, name);
     this.getDeleteDialogBtn().should(Condition.NotBe, 'disabled').click();
+  }
+
+  static verifyNoMachineDeployments(): void {
+    if (Mocks.enabled()) {
+      cy.intercept({method: RequestType.GET, path: Endpoint.MachineDeployments}, []);
+    }
+
+    this.verifyUrl();
+
+    const retries = 5;
+    TrafficMonitor.newTrafficMonitor()
+      .method(RequestType.GET)
+      .url(Endpoint.MachineDeployments)
+      .retry(retries)
+      .expect(Response.newResponse(ResponseType.LIST).elements(0));
+  }
+
+  static deleteMachineDeployment(name: string): void {
+    this.getMachineDeploymentRemoveBtn(name).click();
+    this.getDeleteDialogConfirmButton().click();
   }
 }

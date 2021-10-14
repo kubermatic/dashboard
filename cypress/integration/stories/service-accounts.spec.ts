@@ -18,14 +18,12 @@ import {View} from '../../utils/view';
 import * as _ from 'lodash';
 
 describe('Service Accounts Story', () => {
-  const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
-  const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const projectName = _.uniqueId('e2e-test-project-');
   const serviceAccountName = 'test-sa';
   const tokenName = 'test-token';
 
   it('should login', () => {
-    login(email, password);
+    login();
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 

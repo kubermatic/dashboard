@@ -10,21 +10,89 @@
 // limitations under the License.
 
 export namespace Endpoint {
-  export enum Digitalocean {
-    Sizes = '**/providers/digitalocean/sizes',
+  export enum Alibaba {
+    InstanceTypes = '**/api/**/alibaba/instancetypes',
+    VSwitches = '**/api/**/alibaba/vswitches',
+    Zones = '**/api/**/alibaba/zones',
   }
 
-  export const Clusters = '**/clusters';
-  export const MachineDeployments = '**/machinedeployments';
+  export enum Anexia {
+    Templates = '**/api/**/anexia/templates',
+    VLANs = '**/api/**/anexia/vlans',
+  }
+
+  export enum AWS {
+    Sizes = '**/api/**/aws/sizes',
+    Subnets = '**/api/**/aws/*/subnets',
+  }
+
+  export enum Azure {
+    Sizes = '**/api/**/azure/sizes',
+  }
+
+  export enum Digitalocean {
+    Sizes = '**/api/**/digitalocean/sizes',
+  }
+
+  export enum GCP {
+    DiskTypes = '**/api/**/gcp/disktypes',
+    Sizes = '**/api/**/gcp/sizes',
+    Zones = '**/api/**/gcp/*/zones',
+  }
+
+  export enum Equinix {
+    Sizes = '**/api/**/packet/sizes',
+  }
+
+  export enum Hetzner {
+    Sizes = '**/api/**/hetzner/sizes',
+  }
+
+  export enum OpenStack {
+    AvailabilityZones = '**/api/**/openstack/availabilityzones',
+    Sizes = '**/api/**/openstack/sizes',
+  }
+
+  export const CurrentUser = '**/api/*/me';
+  export const AdminSettings = '**/api/*/admin/settings';
+  export const Seeds = '**/api/*/seed';
+  export const SeedSettings = '**/api/*/seeds/*/settings';
+  export const Datacenters = '**/api/*/dc';
+  export const Presets = '**/api/*/providers/*/presets*';
+  export const CustomLinks = '**/api/*/admin/settings/customlinks';
+  export const Addons = '**/api/*/addons';
+  export const AddonConfigs = '**/api/*/addonconfigs';
+  export const SystemLabels = '**/api/*/labels/system';
+  export const Project = '**/api/*/projects/*';
+  export const Projects = '**/api/*/projects*';
+  export const Clusters = '**/api/*/projects/*/clusters';
+  export const Cluster = '**/api/*/projects/*/clusters/*';
+  export const ClusterHealth = '**/api/*/projects/*/clusters/*/health';
+  export const ClusterMetrics = '**/api/*/projects/*/clusters/*/metrics';
+  export const ClusterNodes = '**/api/*/projects/*/clusters/*/nodes**';
+  export const ClusterEvents = '**/api/*/projects/*/clusters/*/events';
+  export const ClusterBindings = '**/api/*/projects/*/clusters/*/bindings';
+  export const ClusterClusterBindings = '*/api/**/projects/*/clusters/*/clusterbindings';
+  export const ClusterRuleGroups = '**/api/*/projects/*/clusters/*/rulegroups';
+  export const ClusterAddons = '**/api/*/projects/*/clusters/*/addons';
+  export const ClusterSSHKeys = '**/api/*/projects/*/clusters/*/sshkeys';
+  export const ClusterUpgrades = '**/api/*/projects/*/clusters/*/upgrades';
+  export const ExternalClusters = '**/api/*/projects/*/kubernetes/clusters';
+  export const ClusterTemplates = '**/api/*/projects/*/clustertemplates';
+  export const MachineDeployments = '**/api/*/projects/*/clusters/*/machinedeployments';
+  export const MachineDeployment = '**/api/*/projects/*/clusters/*/machinedeployments/*';
+  export const MachineDeploymentNodes = '**/api/*/projects/*/clusters/*/machinedeployments/*/nodes';
+  export const MachineDeploymentNodesMetrics = '**/api/*/projects/*/clusters/*/machinedeployments/*/nodes/metrics';
+  export const MachineDeploymentNodesEvents = '**/api/*/projects/*/clusters/*/machinedeployments/*/nodes/events';
+  export const EtcdRestores = '**/api/*/projects/*/etcdrestores';
+  export const AlertmanagerConfig = '**/alertmanager/config';
   export const Users = '**/users';
-  export const Projects = '**/projects?displayAll=false';
   export const Tokens = '**/tokens';
   export const ServiceAccounts = '**/serviceaccounts';
-  export const Settings = '**/me/settings';
-  export const SSHKeys = '**/sshkeys';
-  export const AdminSettings = '**/admin/settings';
+  export const SSHKeys = '**/api/**/projects/*/sshkeys';
   export const Administrators = '**/admin';
   export const ConstraintTemplates = '**/constrainttemplates';
   export const Constraints = '**/constraints';
-  export const GatekeeperConfig = '**/gatekeeper/config';
+  export const AdmissionPlugins = '**/api/**/admission/plugins/*';
+  export const Versions = '**/providers/*/versions';
 }

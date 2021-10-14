@@ -23,9 +23,9 @@ if [ -z "${JOB_NAME:-}" ] || [ -z "${PROW_JOB_ID:-}" ]; then
 fi
 
 export KUBERMATIC_EDITION="${KUBERMATIC_EDITION:-ee}"
-export USE_MOCKS="${USE_MOCKS:-false}"
+export USE_MOCKS=${USE_MOCKS:-"false"}
 
-if [ "$USE_MOCKS" != "true" ]; then
+if [ $USE_MOCKS != "true" ]; then
   export SEED_NAME="kubermatic"
   export KIND_CLUSTER_NAME="${SEED_NAME}"
 
@@ -48,7 +48,13 @@ export CYPRESS_RECORD_KEY=7859bcb8-1d2a-4d56-b7f5-ca70b93f944c
 export WAIT_ON_TIMEOUT=600000
 
 set +e
-npm run e2e:local
+npx cypress verify || true
+if [ $USE_MOCKS != "true" ]; then
+  npm run e2e:local
+else
+  npm run e2e:mock
+fi
+
 exitcode=$?
 
 if [ -d cypress/videos ] || [ -d cypress/screenshots ]; then
