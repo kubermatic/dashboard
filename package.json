@@ -8,8 +8,8 @@
   "license": "proprietary",
   "angular-cli": {},
   "scripts": {
-    "start": "npm run vi && ng s -c=default-\"${KUBERMATIC_EDITION:=ee}\"",
-    "start:local": "npm run vi && ng s -c=default-\"${KUBERMATIC_EDITION:=ee}\" --proxy-config=proxy-local.conf.cjs",
+    "start": "npm run vi && ng s -c=default-\"${KUBERMATIC_EDITION:=ee}\" --host \"${KUBERMATIC_HOST:=localhost}\"",
+    "start:local": "npm run vi && ng s -c=default-\"${KUBERMATIC_EDITION:=ee}\" --proxy-config=proxy-local.conf.cjs --host \"${KUBERMATIC_HOST:=localhost}\"",
     "start:prod": "npm run vi && ng s -c=production-\"${KUBERMATIC_EDITION:=ee}\"",
     "start:prod:local": "npm run vi && ng s -c=production-\"${KUBERMATIC_EDITION:=ee}\" --proxy-config=proxy-local.conf.cjs",
     "start:e2e": "npm run vi && ng s -c=e2e-\"${KUBERMATIC_EDITION:=ee}\"",
@@ -92,6 +92,7 @@
     "browserlist": "1.0.1",
     "cypress": "8.6.0",
     "cypress-fail-fast": "3.1.1",
+    "del": "6.0.0",
     "eslint-plugin-compat": "3.13.0",
     "eslint-plugin-rxjs": "3.3.7",
     "gts": "3.1.0",
