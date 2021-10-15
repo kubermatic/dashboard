@@ -14,14 +14,14 @@ export enum Provider {
   Anexia = 'anexia',
   AWS = 'aws',
   Azure = 'azure',
-  BringYourOwn = 'bringyourown',
+  kubeAdm = 'bringyourown',
   Digitalocean = 'digitalocean',
   GCP = 'gcp',
   Hetzner = 'hetzner',
   KubeVirt = 'kubevirt',
   OpenStack = 'openstack',
   Equinix = 'packet',
-  VSphere = 'vsphere',
+  vSphere = 'vsphere',
 }
 
 export namespace Datacenter {

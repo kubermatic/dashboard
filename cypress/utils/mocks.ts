@@ -74,7 +74,7 @@ export class Mocks {
   ];
 
   static enabled(): boolean {
-    const isEnabled = Cypress.env('USE_MOCKS');
+    const isEnabled = Cypress.env('MOCKS');
     return isEnabled === 'true' || isEnabled === true;
   }
 

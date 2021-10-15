@@ -29,7 +29,7 @@ describe('vSphere Provider', () => {
 
   beforeEach(() => {
     if (Mocks.enabled()) {
-      Mocks.register(Provider.VSphere);
+      Mocks.register(Provider.vSphere);
     }
   });
 
@@ -51,7 +51,7 @@ describe('vSphere Provider', () => {
   });
 
   it('should create a new cluster', () => {
-    WizardPage.getProviderBtn(Provider.VSphere).click();
+    WizardPage.getProviderBtn(Provider.vSphere).click();
     WizardPage.getDatacenterBtn(Datacenter.VSphere.Hamburg).click();
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
@@ -65,7 +65,7 @@ describe('vSphere Provider', () => {
     WizardPage.getNextBtn(WizardStep.NodeSettings).should(Condition.BeEnabled).click({force: true});
     WizardPage.getCreateBtn().click({force: true});
 
-    cy.url().should(Condition.Contain, View.Clusters.Default);
+    ClustersPage.verifyUrl();
   });
 
   it('should check if cluster was created', () => {

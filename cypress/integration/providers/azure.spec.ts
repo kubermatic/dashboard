@@ -65,7 +65,7 @@ describe('Azure Provider', () => {
     WizardPage.getNextBtn(WizardStep.NodeSettings).should(Condition.BeEnabled).click({force: true});
     WizardPage.getCreateBtn().click({force: true});
 
-    cy.url().should(Condition.Contain, View.Clusters.Default);
+    ClustersPage.verifyUrl();
   });
 
   it('should check if cluster was created', () => {

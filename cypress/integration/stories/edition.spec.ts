@@ -14,12 +14,19 @@ import {UserSettingsPage} from '../../pages/user-settings.po';
 import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
 import {View} from '../../utils/view';
+import {Mocks} from '../../utils/mocks';
 
 describe('Edition Story', () => {
   const kubermaticEdition = Cypress.env('KUBERMATIC_EDITION');
   const isEnterpriseEdition = kubermaticEdition === 'ee';
   const editionName = isEnterpriseEdition ? 'Enterprise Edition' : 'Community Edition';
   const themePickerAvailability = isEnterpriseEdition ? 'available' : 'not available';
+
+  beforeEach(() => {
+    if (Mocks.enabled()) {
+      Mocks.register();
+    }
+  });
 
   it('should login', () => {
     login();
