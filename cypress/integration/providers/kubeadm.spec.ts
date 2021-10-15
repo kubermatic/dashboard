@@ -10,21 +10,25 @@
 // limitations under the License.
 
 import {ClustersPage} from '../../pages/clusters.po';
-import {MembersPage} from '../../pages/members.po';
 import {ProjectsPage} from '../../pages/projects.po';
 import {WizardPage} from '../../pages/wizard.po';
 import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
-import {Group, reloadUsers} from '../../utils/member';
 import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 import * as _ from 'lodash';
+import {Mocks} from '../../utils/mocks';
 
-describe('Basic Story', () => {
-  const newUserEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
-  let projectName = _.uniqueId('e2e-test-project-');
-  const clusterName = _.uniqueId('e2e-test-cluster-');
+describe('kubeAdm Provider', () => {
+  const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
+  const clusterName = Mocks.enabled() ? 'test-cluster' : _.uniqueId('test-cluster-');
+
+  beforeEach(() => {
+    if (Mocks.enabled()) {
+      Mocks.register(Provider.kubeAdm);
+    }
+  });
 
   it('should login', () => {
     login();
@@ -44,36 +48,13 @@ describe('Basic Story', () => {
   });
 
   it('should create a new cluster', () => {
-    WizardPage.getProviderBtn(Provider.BringYourOwn).click();
+    WizardPage.getProviderBtn(Provider.kubeAdm).click();
     WizardPage.getDatacenterBtn(Datacenter.BringYourOwn.Frankfurt).click();
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
     WizardPage.getCreateBtn().click({force: true});
 
     ClustersPage.verifyUrl();
-  });
-
-  it('should go to members view', () => {
-    MembersPage.visit();
-  });
-
-  it('should add a new member', () => {
-    MembersPage.addMember(newUserEmail, Group.Editor);
-  });
-
-  it('should edit created member info', () => {
-    reloadUsers();
-    MembersPage.editMember(newUserEmail, Group.Viewer);
-    reloadUsers();
-    MembersPage.getTableRowGroupColumn(newUserEmail).should(Condition.Contain, Group.Viewer);
-  });
-
-  it('should delete created member', () => {
-    reloadUsers();
-    MembersPage.getDeleteBtn(newUserEmail).click();
-    MembersPage.getDeleteMemberDialogDeleteBtn().click();
-    reloadUsers();
-    MembersPage.getTableRowEmailColumn(newUserEmail).should(Condition.NotExist);
   });
 
   it('should delete created cluster', () => {
@@ -88,16 +69,6 @@ describe('Basic Story', () => {
 
   it('should go to the projects page', () => {
     ProjectsPage.visit();
-  });
-
-  it('should edit created project name', () => {
-    ProjectsPage.getEditProjectBtn(projectName).click();
-
-    projectName = `${projectName}-edited`;
-    ProjectsPage.getEditDialogInput().type('-edited').should(Condition.HaveValue, projectName);
-    ProjectsPage.getEditDialogConfirmBtn().click();
-
-    ProjectsPage.waitForRefresh();
   });
 
   it('should delete the project', () => {

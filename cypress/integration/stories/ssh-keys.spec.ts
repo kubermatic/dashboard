@@ -65,7 +65,7 @@ describe('SSH Key Management Story', () => {
   it('should create the cluster with ssh key', () => {
     ClustersPage.visit();
     ClustersPage.openWizard();
-    WizardPage.getProviderBtn(Provider.BringYourOwn).click();
+    WizardPage.getProviderBtn(Provider.kubeAdm).click();
     WizardPage.getDatacenterBtn(Datacenter.BringYourOwn.Frankfurt).click();
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getSSHKeysSelect().click();

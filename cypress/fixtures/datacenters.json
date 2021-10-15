@@ -70,6 +70,21 @@
   },
   {
     "metadata": {
+      "name": "byo-europe-west3-c"
+    },
+    "spec": {
+      "seed": "europe-west3-c",
+      "country": "DE",
+      "location": "Frankfurt",
+      "provider": "bringyourown",
+      "bringyourown": {},
+      "node": {},
+      "enforceAuditLogging": false,
+      "enforcePodSecurityPolicy": false
+    }
+  },
+  {
+    "metadata": {
       "name": "test-digitalocean-dc"
     },
     "spec": {

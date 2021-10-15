@@ -27,7 +27,7 @@ describe('Admin Settings - Dynamic Datacenters Story', () => {
   const projectName = _.uniqueId('e2e-test-project-');
   const clusterName = _.uniqueId('e2e-test-cluster-');
   const datacenterName = _.uniqueId('e2e-test-datacenter-');
-  const provider = Provider.BringYourOwn;
+  const provider = Provider.kubeAdm;
   const country = 'Germany';
   const location = Datacenter.BringYourOwn.Hamburg;
 
