@@ -57,9 +57,21 @@ describe('kubeAdm Provider', () => {
     ClustersPage.verifyUrl();
   });
 
-  it('should delete created cluster', () => {
+  it('should check if cluster was created', () => {
     ClustersPage.visit();
+    ClustersPage.getTable().should(Condition.Contain, clusterName);
+  });
+
+  it('should go to cluster details page', () => {
     ClustersPage.getClusterItem(clusterName).click();
+  });
+
+  it('should wait for the cluster to be ready', () => {
+    ClustersPage.getClusterName().should(Condition.Contain, clusterName);
+    ClustersPage.getClusterStatus().should(Condition.HaveClass, 'km-success-bg');
+  });
+
+  it('should delete created cluster', () => {
     ClustersPage.deleteCluster(clusterName);
   });
 
@@ -73,6 +85,9 @@ describe('kubeAdm Provider', () => {
 
   it('should delete the project', () => {
     ProjectsPage.deleteProject(projectName);
+  });
+
+  it('should verify that there are no projects', () => {
     ProjectsPage.verifyNoProjects();
   });
 
