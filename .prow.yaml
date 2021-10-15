@@ -191,7 +191,7 @@ presubmits:
           env:
             - name: NO_COLOR
               value: "1"
-            - name: USE_MOCKS
+            - name: CYPRESS_MOCKS
               value: "true"
 
   - name: pre-dashboard-test-e2e-mock-ce
@@ -220,7 +220,7 @@ presubmits:
               value: ce
             - name: NO_COLOR
               value: "1"
-            - name: USE_MOCKS
+            - name: CYPRESS_MOCKS
               value: "true"
 
   - name: pre-dashboard-build-image
