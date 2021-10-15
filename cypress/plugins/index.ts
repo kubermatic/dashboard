@@ -30,7 +30,7 @@ export default async (on, config) => {
     // TODO: Remove all ignores after fixing flaky tests and making the full tests optional.
     config.ignoreTestFiles = [
       '**/integration/providers/**.spec.ts',
-      '**/integration/stories/machine-deployment.spec.ts',
+      '**/integration/stories/edition.spec.ts',
       '**/integration/stories/opa.spec.ts',
       '**/integration/stories/admin-settings/administrators.spec.ts',
     ];
