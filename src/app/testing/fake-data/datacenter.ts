@@ -73,7 +73,7 @@ export function fakeOpenstackDatacenter(): Datacenter {
       seed: 'europe-west3-c',
       country: 'DE',
       openstack: {
-        auth_url: 'loodse.com',
+        auth_url: 'kubermatic.com',
         availability_zone: 'az1',
         region: '',
         images: {
@@ -129,8 +129,8 @@ export function fakeVSphereDatacenter(): Datacenter {
       enforceAuditLogging: false,
       enforcePodSecurityPolicy: false,
       vsphere: {
-        cluster: 'loodse-cluster',
-        endpoint: 'https://loodse.com',
+        cluster: 'kubermatic-cluster',
+        endpoint: 'https://kubermatic.com',
         datacenter: 'Datacenter',
         datastore: 'datastore1',
         templates: {

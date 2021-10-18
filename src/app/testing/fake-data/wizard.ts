@@ -20,15 +20,15 @@ export function openstackTenantsFake(): OpenstackTenant[] {
   return [
     {
       id: 'id123',
-      name: 'loodse-poc',
+      name: 'kubermatic-poc',
     },
     {
       id: 'id456',
-      name: 'loodse-poc2',
+      name: 'kubermatic-poc2',
     },
     {
       id: 'id789',
-      name: 'another-loodse-poc',
+      name: 'another-kubermatic-poc',
     },
   ];
 }

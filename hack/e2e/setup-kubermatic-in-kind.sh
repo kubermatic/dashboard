@@ -11,7 +11,7 @@
 
 export KUBERMATIC_VERSION=latest
 export TARGET_BRANCH="${PULL_BASE_REF:-master}"
-export KUBERMATIC_OIDC_LOGIN="roxy@loodse.com"
+export KUBERMATIC_OIDC_LOGIN="roxy@kubermatic.com"
 export KUBERMATIC_OIDC_PASSWORD="password"
 
 # Set docker config

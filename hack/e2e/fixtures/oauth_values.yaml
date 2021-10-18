@@ -25,11 +25,11 @@ dex:
     - http://localhost:8000
     - http://localhost:8000/projects
   staticPasswords:
-  - email: "roxy@loodse.com"
+  - email: "roxy@kubermatic.com"
     hash: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"
     username: "roxy"
     userID: "08a8684b-db88-4b73-90a9-3cd1661f5466"
-  - email: "roxy2@loodse.com"
+  - email: "roxy2@kubermatic.com"
     hash: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"
     username: "roxy2"
     userID: "08a8684b-db88-4b73-90a9-3cd1661f5467"
