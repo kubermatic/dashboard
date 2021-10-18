@@ -9,32 +9,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {UserSettings} from './settings';
+@use 'variables';
 
-export class Member {
-  creationTimestamp: Date;
-  deletionTimestamp?: Date;
-  email: string;
-  isAdmin?: boolean;
-  id: string;
-  name: string;
-  userSettings?: UserSettings;
-  projects: MemberProject[];
-  lastSeen?: Date;
+.mat-card-title {
+  .km-icon-add {
+    margin-left: 0;
+    margin-right: 12px;
+  }
 }
 
-export class MemberProject {
-  group: string;
-  id: string;
+.card {
+  margin-top: 20px;
 }
 
-export class CreateMember {
-  email: string;
-  projects: MemberProject[];
-}
+km-search-field {
+  font-size: variables.$font-size-subhead;
 
-export class Admin {
-  name?: string;
-  email?: string;
-  isAdmin?: boolean;
+  i {
+    margin: 0;
+  }
 }

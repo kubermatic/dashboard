@@ -9,32 +9,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {UserSettings} from './settings';
+import {NgModule} from '@angular/core';
+import {UsersComponent} from '@app/settings/admin/users/component';
+import {UsersRoutingModule} from '@app/settings/admin/users/routing';
+import {SharedModule} from '@shared/module';
 
-export class Member {
-  creationTimestamp: Date;
-  deletionTimestamp?: Date;
-  email: string;
-  isAdmin?: boolean;
-  id: string;
-  name: string;
-  userSettings?: UserSettings;
-  projects: MemberProject[];
-  lastSeen?: Date;
-}
-
-export class MemberProject {
-  group: string;
-  id: string;
-}
-
-export class CreateMember {
-  email: string;
-  projects: MemberProject[];
-}
-
-export class Admin {
-  name?: string;
-  email?: string;
-  isAdmin?: boolean;
-}
+@NgModule({
+  imports: [SharedModule, UsersRoutingModule],
+  declarations: [UsersComponent],
+})
+export class UsersModule {}

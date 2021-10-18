@@ -9,32 +9,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {UserSettings} from './settings';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {UsersComponent} from '@app/settings/admin/users/component';
 
-export class Member {
-  creationTimestamp: Date;
-  deletionTimestamp?: Date;
-  email: string;
-  isAdmin?: boolean;
-  id: string;
-  name: string;
-  userSettings?: UserSettings;
-  projects: MemberProject[];
-  lastSeen?: Date;
-}
+const routes: Routes = [
+  {
+    path: '',
+    component: UsersComponent,
+  },
+];
 
-export class MemberProject {
-  group: string;
-  id: string;
-}
-
-export class CreateMember {
-  email: string;
-  projects: MemberProject[];
-}
-
-export class Admin {
-  name?: string;
-  email?: string;
-  isAdmin?: boolean;
-}
+@NgModule({imports: [RouterModule.forChild(routes)]})
+export class UsersRoutingModule {}
