@@ -14,13 +14,19 @@ import {ClustersPage} from '../../pages/clusters.po';
 import {ProjectsPage} from '../../pages/projects.po';
 import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
+import {Mocks} from '../../utils/mocks';
 import {View} from '../../utils/view';
 
 describe('External Cluster Story', () => {
-  const kubeconfigEncoded = Cypress.env('KUBECONFIG_ENCODED');
-  const kubeconfig = atob(kubeconfigEncoded);
-  const projectName = _.uniqueId('e2e-test-project-');
-  const clusterName = _.uniqueId('e2e-test-cluster-');
+  const kubeconfig = Mocks.enabled() ? 'test-kubeconfig' : atob(Cypress.env('KUBECONFIG_ENCODED'));
+  const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
+  const clusterName = Mocks.enabled() ? 'test-cluster' : _.uniqueId('test-cluster-');
+
+  beforeEach(() => {
+    if (Mocks.enabled()) {
+      Mocks.register();
+    }
+  });
 
   it('should login', () => {
     login();

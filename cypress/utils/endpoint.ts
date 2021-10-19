@@ -78,6 +78,11 @@ export namespace Endpoint {
   export const ClusterSSHKeys = '**/api/*/projects/*/clusters/*/sshkeys';
   export const ClusterUpgrades = '**/api/*/projects/*/clusters/*/upgrades';
   export const ExternalClusters = '**/api/*/projects/*/kubernetes/clusters';
+  export const ExternalCluster = '**/api/*/projects/*/kubernetes/clusters/*';
+  export const ExternalClusterNodes = '**/api/*/projects/*/kubernetes/clusters/*/nodes';
+  export const ExternalClusterMetrics = '**/api/*/projects/*/kubernetes/clusters/*/metrics';
+  export const ExternalClusterNodesMetrics = '**/api/*/projects/*/kubernetes/clusters/*/nodesmetrics';
+  export const ExternalClusterEvents = '**/api/*/projects/*/kubernetes/clusters/*/events';
   export const ClusterTemplates = '**/api/*/projects/*/clustertemplates';
   export const MachineDeployments = '**/api/*/projects/*/clusters/*/machinedeployments';
   export const MachineDeployment = '**/api/*/projects/*/clusters/*/machinedeployments/*';
