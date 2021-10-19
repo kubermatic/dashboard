@@ -14,7 +14,8 @@
 
 import {Condition} from '../utils/condition';
 import {Endpoint} from '../utils/endpoint';
-import {RequestType, TrafficMonitor} from '../utils/monitor';
+import {Mocks} from '../utils/mocks';
+import {RequestType, Response, ResponseType, TrafficMonitor} from '../utils/monitor';
 import {View} from '../utils/view';
 
 export class SSHKeysPage {
@@ -83,5 +84,20 @@ export class SSHKeysPage {
     this.getDeleteSSHKeyConfirmationButton().should(Condition.NotBe, 'disabled').click();
     this.waitForRefresh();
     this.getTable().should(Condition.NotContain, name);
+  }
+
+  static verifyNoSSHKeys(): void {
+    if (Mocks.enabled()) {
+      cy.intercept({method: RequestType.GET, path: Endpoint.SSHKeys}, []);
+    }
+
+    this.verifyUrl();
+
+    const retries = 5;
+    TrafficMonitor.newTrafficMonitor()
+      .method(RequestType.GET)
+      .url(Endpoint.SSHKeys)
+      .retry(retries)
+      .expect(Response.newResponse(ResponseType.LIST).elements(0));
   }
 }
