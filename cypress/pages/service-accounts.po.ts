@@ -12,7 +12,8 @@
 import {Condition} from '../utils/condition';
 import {Endpoint} from '../utils/endpoint';
 import {Group} from '../utils/member';
-import {RequestType, TrafficMonitor} from '../utils/monitor';
+import {Mocks} from '../utils/mocks';
+import {Response, RequestType, ResponseType, TrafficMonitor} from '../utils/monitor';
 import {View} from '../utils/view';
 
 export class ServiceAccountsPage {
@@ -95,8 +96,21 @@ export class ServiceAccountsPage {
   static deleteServiceAccount(name: string): void {
     this.getDeleteServiceAccountBtn(name).should(Condition.NotBe, 'disabled').click();
     cy.get('#km-confirmation-dialog-confirm-btn').should(Condition.NotBe, 'disabled').click();
-    this.waitForRefresh();
-    this.getTable().should(Condition.NotContain, name);
+  }
+
+  static verifyNoServiceAccounts(): void {
+    if (Mocks.enabled()) {
+      cy.intercept({method: RequestType.GET, path: Endpoint.ServiceAccounts}, []);
+    }
+
+    this.verifyUrl();
+
+    const retries = 5;
+    TrafficMonitor.newTrafficMonitor()
+      .method(RequestType.GET)
+      .url(Endpoint.ServiceAccounts)
+      .retry(retries)
+      .expect(Response.newResponse(ResponseType.LIST).elements(0));
   }
 
   static addToken(name: string): void {

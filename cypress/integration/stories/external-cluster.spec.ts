@@ -86,6 +86,9 @@ describe('External Cluster Story', () => {
 
   it('should delete the project', () => {
     ProjectsPage.deleteProject(projectName);
+  });
+
+  it('should verify that there are no projects', () => {
     ProjectsPage.verifyNoProjects();
   });
 

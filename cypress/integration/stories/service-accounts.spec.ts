@@ -16,11 +16,18 @@ import {ServiceAccountsPage} from '../../pages/service-accounts.po';
 import {Group} from '../../utils/member';
 import {View} from '../../utils/view';
 import * as _ from 'lodash';
+import {Mocks} from '../../utils/mocks';
 
 describe('Service Accounts Story', () => {
-  const projectName = _.uniqueId('e2e-test-project-');
+  const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
   const serviceAccountName = 'test-sa';
   const tokenName = 'test-token';
+
+  beforeEach(() => {
+    if (Mocks.enabled()) {
+      Mocks.register();
+    }
+  });
 
   it('should login', () => {
     login();
@@ -59,12 +66,19 @@ describe('Service Accounts Story', () => {
     ServiceAccountsPage.deleteServiceAccount(serviceAccountName);
   });
 
+  it('should verify that there are no service accounts', () => {
+    ServiceAccountsPage.verifyNoServiceAccounts();
+  });
+
   it('should go to the projects page', () => {
     ProjectsPage.visit();
   });
 
   it('should delete the project', () => {
     ProjectsPage.deleteProject(projectName);
+  });
+
+  it('should verify that there are no projects', () => {
     ProjectsPage.verifyNoProjects();
   });
 

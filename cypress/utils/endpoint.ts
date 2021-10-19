@@ -94,6 +94,8 @@ export namespace Endpoint {
   export const Users = '**/users';
   export const Tokens = '**/tokens';
   export const ServiceAccounts = '**/serviceaccounts';
+  export const ServiceAccount = '**/serviceaccounts/*';
+  export const ServiceAccountTokens = '**/serviceaccounts/*/tokens';
   export const SSHKeys = '**/api/**/projects/*/sshkeys';
   export const Administrators = '**/admin';
   export const ConstraintTemplates = '**/constrainttemplates';
