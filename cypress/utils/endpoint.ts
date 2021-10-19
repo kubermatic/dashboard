@@ -76,6 +76,7 @@ export namespace Endpoint {
   export const ClusterRuleGroups = '**/api/*/projects/*/clusters/*/rulegroups';
   export const ClusterAddons = '**/api/*/projects/*/clusters/*/addons';
   export const ClusterSSHKeys = '**/api/*/projects/*/clusters/*/sshkeys';
+  export const ClusterSSHKey = '**/api/*/projects/*/clusters/*/sshkeys/*';
   export const ClusterUpgrades = '**/api/*/projects/*/clusters/*/upgrades';
   export const ExternalClusters = '**/api/*/projects/*/kubernetes/clusters';
   export const ExternalCluster = '**/api/*/projects/*/kubernetes/clusters/*';
@@ -97,6 +98,7 @@ export namespace Endpoint {
   export const ServiceAccount = '**/serviceaccounts/*';
   export const ServiceAccountTokens = '**/serviceaccounts/*/tokens';
   export const SSHKeys = '**/api/**/projects/*/sshkeys';
+  export const SSHKey = '**/api/**/projects/*/sshkeys/*';
   export const Administrators = '**/admin';
   export const ConstraintTemplates = '**/constrainttemplates';
   export const Constraints = '**/constraints';
