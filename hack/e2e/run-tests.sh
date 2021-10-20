@@ -38,11 +38,9 @@ if [ $CYPRESS_MOCKS != "true" ]; then
 
   export CYPRESS_SEED_NAME="${SEED_NAME}"
   export CYPRESS_KUBECONFIG_ENCODED="$(kind get kubeconfig --name="$KIND_CLUSTER_NAME" --internal | yq r - -j -I=0 | base64 -w0)"
-  export CYPRESS_ANEXIA_TEMPLATE_ID="${ANEXIA_TEMPLATE_ID}"
-  export CYPRESS_ANEXIA_VLAN_ID="${ANEXIA_VLAN_ID}"
-  export CYPRESS_KUBERMATIC_DEX_DEV_E2E_USERNAME="roxy@kubermatic.com"
-  export CYPRESS_KUBERMATIC_DEX_DEV_E2E_USERNAME_2="roxy2@kubermatic.com"
-  export CYPRESS_KUBERMATIC_DEX_DEV_E2E_PASSWORD="password"
+  export CYPRESS_USERNAME="roxy@kubermatic.com"
+  export CYPRESS_USERNAME_2="roxy2@kubermatic.com"
+  export CYPRESS_PASSWORD="password"
 fi
 
 export CYPRESS_KUBERMATIC_EDITION="${KUBERMATIC_EDITION}"

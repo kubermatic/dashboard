@@ -21,18 +21,16 @@ import _ from 'lodash';
 import {LoginPage} from '../../../pages/login.po';
 import {RequestType, Response, ResponseType, TrafficMonitor} from '../../../utils/monitor';
 import {Endpoint} from '../../../utils/endpoint';
+import {Config} from '../../../utils/config';
 
 describe('Admin Settings - Project Limit Story', () => {
-  const userEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
-  const adminEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
-  const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const firstProjectName = _.uniqueId('e2e-test-project-');
   const secondProjectName = _.uniqueId('e2e-test-project-');
   const timeout = 10000;
   const retries = 5;
 
   it('should login as admin', () => {
-    login(adminEmail, password);
+    login(Config.adminEmail());
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -53,7 +51,7 @@ describe('Admin Settings - Project Limit Story', () => {
   });
 
   it('should login as normal user', () => {
-    login(userEmail, password);
+    login(Config.userEmail());
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -70,7 +68,7 @@ describe('Admin Settings - Project Limit Story', () => {
   });
 
   it('should login as admin', () => {
-    login(adminEmail, password);
+    login(Config.adminEmail());
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -97,7 +95,7 @@ describe('Admin Settings - Project Limit Story', () => {
   });
 
   it('should login as normal user', () => {
-    login(userEmail, password);
+    login(Config.userEmail());
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -130,7 +128,7 @@ describe('Admin Settings - Project Limit Story', () => {
   });
 
   it('should login as admin', () => {
-    login(adminEmail, password);
+    login(Config.adminEmail());
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 

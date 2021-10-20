@@ -19,13 +19,10 @@ import {UserSettingsPage} from '../../pages/user-settings.po';
 import {ProjectsPage} from '../../pages/projects.po';
 import _ from 'lodash';
 import {Mocks} from '../../utils/mocks';
+import {Config} from '../../utils/config';
 
 describe('User Settings Story', () => {
-  const email = Mocks.enabled() ? 'roxy@kubermatic.io' : Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
-  const kubermaticEdition = Cypress.env('KUBERMATIC_EDITION');
-  const isEnterpriseEdition = kubermaticEdition === 'ee';
-  const themePickerAvailability = isEnterpriseEdition ? 'available' : 'not available';
   const itemsPerPage = '5';
   const waitTime = 5000;
 
@@ -49,14 +46,14 @@ describe('User Settings Story', () => {
   });
 
   it('should check if user email is correct', () => {
-    UserSettingsPage.getUserEmail().should(Condition.Contain, email);
+    UserSettingsPage.getUserEmail().should(Condition.Contain, Config.userEmail());
   });
 
-  it(`should check if theme picker is ${themePickerAvailability}`, () => {
-    UserSettingsPage.getThemePicker().should(isEnterpriseEdition ? Condition.Exist : Condition.NotExist);
+  it(`should check if theme picker is ${Config.isEnterpriseEdition() ? 'available' : 'not available'}`, () => {
+    UserSettingsPage.getThemePicker().should(Config.isEnterpriseEdition() ? Condition.Exist : Condition.NotExist);
   });
 
-  if (isEnterpriseEdition) {
+  if (Config.isEnterpriseEdition()) {
     it('should set dark theme', () => {
       UserSettingsPage.getThemeButton('dark').click();
       cy.get('.km-style-dark').should(Condition.Exist);
@@ -94,7 +91,7 @@ describe('User Settings Story', () => {
     UserSettingsPage.visit();
   });
 
-  if (isEnterpriseEdition) {
+  if (Config.isEnterpriseEdition()) {
     it('should set default theme', () => {
       UserSettingsPage.getThemeButton('light').click();
       cy.get('.km-style-light').should(Condition.Exist);

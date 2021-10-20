@@ -18,11 +18,9 @@ import {Condition} from './condition';
 import {ProjectsPage} from '../pages/projects.po';
 import {UserPanel} from '../pages/user-panel.po';
 import {Mocks} from './mocks';
+import {Config} from './config';
 
-export function login(
-  email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME'),
-  password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD')
-): void {
+export function login(email = Config.userEmail(), password = Config.password()): void {
   if (Mocks.enabled()) {
     mockLogin();
     Mocks.updateUser(email);

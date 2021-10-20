@@ -21,10 +21,9 @@ import {ClustersPage} from '../../pages/clusters.po';
 import {View} from '../../utils/view';
 import _ from 'lodash';
 import {Mocks} from '../../utils/mocks';
+import {Config} from '../../utils/config';
 
 describe('Multi Owner Story', () => {
-  const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
-  const newUserEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
   const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
 
   beforeEach(() => {
@@ -51,7 +50,7 @@ describe('Multi Owner Story', () => {
   });
 
   it('should add a new member', () => {
-    MembersPage.addMember(newUserEmail, Group.Owner);
+    MembersPage.addMember(Config.adminEmail(), Group.Owner);
   });
 
   it('should logout', () => {
@@ -59,7 +58,7 @@ describe('Multi Owner Story', () => {
   });
 
   it('should login as a second owner', () => {
-    login(newUserEmail);
+    login(Config.adminEmail());
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -85,13 +84,13 @@ describe('Multi Owner Story', () => {
   });
 
   it('should delete first owner from project', () => {
-    MembersPage.getDeleteBtn(email).click();
+    MembersPage.getDeleteBtn(Config.userEmail()).click();
     MembersPage.getDeleteMemberDialogDeleteBtn().click();
   });
 
   it('should verify that first owner was deleted from project', () => {
     reloadUsers();
-    MembersPage.verifyNoMember(email);
+    MembersPage.verifyNoMember(Config.userEmail());
   });
 
   it('should go to the projects page', () => {

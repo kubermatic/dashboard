@@ -22,11 +22,9 @@ import {ClustersPage} from '../../../pages/clusters.po';
 import {Datacenter, Provider} from '../../../utils/provider';
 import {WizardPage} from '../../../pages/wizard.po';
 import {WizardStep} from '../../../utils/wizard';
+import {Config} from '../../../utils/config';
 
 describe('Admin Settings - Dynamic Datacenters Story', () => {
-  const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
-  const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
-  const seedName = Cypress.env('SEED_NAME');
   const projectName = _.uniqueId('e2e-test-project-');
   const clusterName = _.uniqueId('e2e-test-cluster-');
   const datacenterName = _.uniqueId('e2e-test-datacenter-');
@@ -35,7 +33,7 @@ describe('Admin Settings - Dynamic Datacenters Story', () => {
   const location = Datacenter.BringYourOwn.Hamburg;
 
   it('should login', () => {
-    login(email, password);
+    login(Config.adminEmail());
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -58,7 +56,10 @@ describe('Admin Settings - Dynamic Datacenters Story', () => {
       .click();
 
     AdminSettings.DynamicDatacentersPage.getAddDatacenterSeedInput().click();
-    AdminSettings.DynamicDatacentersPage.getAddDatacenterSeedInput().get('mat-option').contains(seedName).click();
+    AdminSettings.DynamicDatacentersPage.getAddDatacenterSeedInput()
+      .get('mat-option')
+      .contains(Config.seedName())
+      .click();
 
     AdminSettings.DynamicDatacentersPage.getAddDatacenterCountryInput().click();
     AdminSettings.DynamicDatacentersPage.getAddDatacenterCountryInput().get('mat-option').contains(country).click();

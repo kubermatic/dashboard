@@ -17,10 +17,9 @@ import {Condition} from '../../../utils/condition';
 import {View} from '../../../utils/view';
 import {AdminSettings} from '../../../pages/admin-settings.po';
 import {HelpPanel} from '../../../pages/help-panel.po';
+import {Config} from '../../../utils/config';
 
 describe('Admin Settings - Custom Links Story', () => {
-  const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
-  const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const linkLocation = 'Footer';
   const linkLabel = 'Google';
   const linkURL = 'https://www.google.com/';
@@ -28,7 +27,7 @@ describe('Admin Settings - Custom Links Story', () => {
   const termsOfService = 'Terms of Service';
 
   it('should login', () => {
-    login(email, password);
+    login(Config.adminEmail());
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 

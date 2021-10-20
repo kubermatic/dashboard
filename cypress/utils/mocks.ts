@@ -16,6 +16,7 @@ import {Provider} from './provider';
 import {RouteHandler} from 'cypress/types/net-stubbing';
 import {Endpoint} from './endpoint';
 import {RequestType} from './monitor';
+import {Config} from './config';
 
 interface Mock {
   m: RequestType;
@@ -115,8 +116,7 @@ export class Mocks {
   ];
 
   static enabled(): boolean {
-    const isEnabled = Cypress.env('MOCKS');
-    return isEnabled === 'true' || isEnabled === true;
+    return Config.isAPIMocked();
   }
 
   static register(provider?: Provider): void {

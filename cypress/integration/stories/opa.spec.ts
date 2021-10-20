@@ -20,6 +20,7 @@ import {WizardPage} from '../../pages/wizard.po';
 import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
 import {Endpoint} from '../../utils/endpoint';
+import {Config} from '../../utils/config';
 import {RequestType, TrafficMonitor} from '../../utils/monitor';
 import {Preset} from '../../utils/preset';
 import {Datacenter, Provider} from '../../utils/provider';
@@ -27,8 +28,6 @@ import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 
 describe('OPA Story', () => {
-  const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
-  const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const projectName = _.uniqueId('e2e-test-project-');
   const clusterName = _.uniqueId('e2e-test-cluster-');
   const initialMachineDeploymentName = _.uniqueId('e2e-test-md-');
@@ -40,7 +39,7 @@ describe('OPA Story', () => {
   const gatekeeperConfig = 'gatekeeperconfig.yaml';
 
   it('should login', () => {
-    login(email, password);
+    login(Config.adminEmail());
 
     cy.url().should(Condition.Include, View.Projects.Default);
   });

@@ -18,16 +18,14 @@ import {View} from '../../../utils/view';
 import {AdminSettings} from '../../../pages/admin-settings.po';
 import {RequestType, Response, ResponseType, TrafficMonitor} from '../../../utils/monitor';
 import {Endpoint} from '../../../utils/endpoint';
+import {Config} from '../../../utils/config';
 
 describe('Admin Settings - Administrators Story', () => {
-  const userEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
-  const adminEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
-  const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const retries = 15;
   let adminsCount = 1;
 
   it('should login as admin', () => {
-    login(adminEmail, password);
+    login(Config.adminEmail());
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -46,8 +44,8 @@ describe('Admin Settings - Administrators Story', () => {
   it('should add second admin', () => {
     AdminSettings.AdministratorsPage.getAddAdminBtn().click();
     AdminSettings.AdministratorsPage.getAddAdminDialogEmailInput()
-      .type(userEmail)
-      .should(Condition.HaveValue, userEmail);
+      .type(Config.userEmail())
+      .should(Condition.HaveValue, Config.userEmail());
     AdminSettings.AdministratorsPage.getAddAdminDialogSaveBtn().click();
     adminsCount++;
   });
@@ -65,7 +63,7 @@ describe('Admin Settings - Administrators Story', () => {
   });
 
   it('should login as second admin', () => {
-    login(userEmail, password);
+    login(Config.userEmail());
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -78,7 +76,7 @@ describe('Admin Settings - Administrators Story', () => {
   });
 
   it('should login as admin', () => {
-    login(adminEmail, password);
+    login(Config.adminEmail());
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -95,7 +93,7 @@ describe('Admin Settings - Administrators Story', () => {
   });
 
   it('should remove second admin', () => {
-    AdminSettings.AdministratorsPage.getDeleteAdminBtn(userEmail).click();
+    AdminSettings.AdministratorsPage.getDeleteAdminBtn(Config.userEmail()).click();
     cy.get('#km-confirmation-dialog-confirm-btn').should(Condition.NotBe, 'disabled').click();
     adminsCount--;
   });
