@@ -20,7 +20,7 @@ import {Condition} from '../../utils/condition';
 import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Mocks} from '../../utils/mocks';
 
 describe('kubeAdm Provider', () => {

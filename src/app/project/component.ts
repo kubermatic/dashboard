@@ -43,7 +43,7 @@ import {UserSettings} from '@shared/entity/settings';
 import {objectDiff} from '@shared/utils/common-utils';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {ProjectUtils} from '@shared/utils/project-utils/project-utils';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {CookieService} from 'ngx-cookie-service';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';

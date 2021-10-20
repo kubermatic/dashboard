@@ -18,7 +18,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
 import {DatacenterService} from '@core/services/datacenter';
 import {AdminSeed, BackupRestoreConfiguration} from '@shared/entity/datacenter';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 export interface EditBucketSettingsDialogConfig {
   seed: AdminSeed;

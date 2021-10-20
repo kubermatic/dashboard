@@ -20,7 +20,7 @@ import {environment} from '@environments/environment';
 import {AdminSeed, CreateDatacenterModel, Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {AppConfigService} from '@app/config.service';
 import {Auth} from './auth/service';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 @Injectable()
 export class DatacenterService {

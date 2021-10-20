@@ -17,7 +17,7 @@ import {Condition} from '../../../utils/condition';
 import {View} from '../../../utils/view';
 import {AdminSettings} from '../../../pages/admin-settings.po';
 import {ProjectsPage} from '../../../pages/projects.po';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {ClustersPage} from '../../../pages/clusters.po';
 import {Datacenter, Provider} from '../../../utils/provider';
 import {WizardPage} from '../../../pages/wizard.po';

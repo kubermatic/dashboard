@@ -24,7 +24,7 @@ import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialo
 import {Cluster} from '@shared/entity/cluster';
 import {Constraint, ConstraintTemplate, Kind, Violation} from '@shared/entity/opa';
 import {UserSettings} from '@shared/entity/settings';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {take, takeUntil, filter, switchMap} from 'rxjs/operators';
 import {Mode, ConstraintDialog} from './constraint-dialog/component';

@@ -16,7 +16,7 @@ import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, Si
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {ApiService} from '@core/services/api';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 import {Addon, AddonConfig, getAddonLogoData, hasAddonLogoData} from '../../entity/addon';

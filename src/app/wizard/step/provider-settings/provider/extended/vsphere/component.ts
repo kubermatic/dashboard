@@ -33,7 +33,7 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {isObjectEmpty} from '@shared/utils/common-utils';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {EMPTY, forkJoin, merge, Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';

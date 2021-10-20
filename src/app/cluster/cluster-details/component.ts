@@ -50,7 +50,7 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
 import {ClusterHealthStatus} from '@shared/utils/health-status/cluster-health-status';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {combineLatest, iif, Observable, of, Subject} from 'rxjs';
 import {filter, map, switchMap, take, takeUntil} from 'rxjs/operators';
 import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation/component';

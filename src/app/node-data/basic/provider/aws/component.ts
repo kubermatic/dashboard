@@ -31,7 +31,7 @@ import {Architecture, AWSSize, AWSSubnet} from '@shared/entity/provider/aws';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {compare} from '@shared/utils/common-utils';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {merge, Observable} from 'rxjs';
 import {map, switchMap, takeUntil, tap} from 'rxjs/operators';
 

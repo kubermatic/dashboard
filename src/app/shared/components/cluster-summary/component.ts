@@ -18,7 +18,7 @@ import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {getOperatingSystem, getOperatingSystemLogoClass} from '@shared/entity/node';
 import {getIpCount} from '@shared/functions/get-ip-count';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {LabelFormComponent} from '@shared/components/label-form/component';
 import {AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';

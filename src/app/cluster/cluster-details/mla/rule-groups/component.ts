@@ -25,7 +25,7 @@ import {Cluster} from '@shared/entity/cluster';
 import {RuleGroup, RuleGroupType} from '@shared/entity/mla';
 import {MLAUtils} from '@shared/utils/mla-utils';
 import {UserSettings} from '@shared/entity/settings';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {Mode, RuleGroupDialog} from './rule-group-dialog/component';

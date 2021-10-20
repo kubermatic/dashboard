@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {ClustersPage} from '../../pages/clusters.po';
 import {ProjectsPage} from '../../pages/projects.po';
 import {login, logout} from '../../utils/auth';

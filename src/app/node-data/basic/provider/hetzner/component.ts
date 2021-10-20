@@ -20,7 +20,7 @@ import {HetznerNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {HetznerTypes, Type} from '@shared/entity/provider/hetzner';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Observable} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 

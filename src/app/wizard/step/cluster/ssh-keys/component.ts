@@ -28,7 +28,7 @@ import {GroupConfig} from '@shared/model/Config';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 enum Controls {

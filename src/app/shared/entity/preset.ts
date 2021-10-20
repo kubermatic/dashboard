@@ -14,7 +14,7 @@
 
 import {Metadata} from '@shared/entity/common';
 import {NodeProvider, NodeProviderConstants} from '@shared/model/NodeProviderConstants';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 export class SimplePresetList {
   names: string[] = [];

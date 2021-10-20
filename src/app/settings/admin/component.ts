@@ -20,7 +20,7 @@ import {UserService} from '@core/services/user';
 import {Member} from '@shared/entity/member';
 import {AdminSettings} from '@shared/entity/settings';
 import {objectDiff} from '@shared/utils/common-utils';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, switchMap, take, takeUntil} from 'rxjs/operators';
 

@@ -20,7 +20,7 @@ import {NotificationService} from '@core/services/notification';
 import {RBACService} from '@core/services/rbac';
 import {Cluster} from '@shared/entity/cluster';
 import {ClusterRoleName, CreateBinding, RoleName} from '@shared/entity/rbac';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 

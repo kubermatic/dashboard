@@ -23,7 +23,7 @@ import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialo
 import {Cluster} from '@shared/entity/cluster';
 import {AlertmanagerConfig} from '@shared/entity/mla';
 import {AdminSettings} from '@shared/entity/settings';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {AlertmanagerConfigDialog} from './alertmanager-config-dialog/component';

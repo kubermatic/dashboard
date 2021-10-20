@@ -16,7 +16,7 @@ import {ChangeDetectionStrategy, Component, forwardRef, Inject, OnDestroy, OnIni
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {NodeDataService} from '@core/services/node-data/service';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {merge, of} from 'rxjs';
 import {delay, takeUntil} from 'rxjs/operators';
 import {ClusterSpecService} from '@core/services/cluster-spec';

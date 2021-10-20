@@ -15,7 +15,7 @@
 import {Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CustomLink, CustomLinkLocation} from '@shared/entity/settings';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 

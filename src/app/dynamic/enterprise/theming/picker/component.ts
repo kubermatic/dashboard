@@ -26,7 +26,7 @@ import {UserService} from '@core/services/user';
 import {UserSettings} from '@shared/entity/settings';
 import {Theme} from '@shared/model/Config';
 import {objectDiff} from '@shared/utils/common-utils';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, take, switchMap, takeUntil} from 'rxjs/operators';
 

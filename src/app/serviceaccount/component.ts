@@ -28,7 +28,7 @@ import {Project} from '@shared/entity/project';
 import {ServiceAccount} from '@shared/entity/service-account';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils} from '@shared/utils/member-utils/member-utils';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {EMPTY, merge, of, Subject, timer} from 'rxjs';
 import {catchError, filter, switchMap, switchMapTo, take, takeUntil} from 'rxjs/operators';
 import {AddServiceAccountComponent} from './add-serviceaccount/component';

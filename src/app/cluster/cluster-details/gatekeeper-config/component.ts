@@ -20,7 +20,7 @@ import {OPAService} from '@core/services/opa';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Cluster} from '@shared/entity/cluster';
 import {GatekeeperConfig, GVK, MatchEntry, Trace} from '@shared/entity/opa';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take} from 'rxjs/operators';
 import {Mode, GatekeeperConfigDialog} from './gatekeeper-config-dialog/component';

@@ -18,7 +18,7 @@ import {environment} from '@environments/environment';
 import {Changelog} from '@shared/model/changelog';
 import {of} from 'rxjs';
 import {catchError, take} from 'rxjs/operators';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 @Injectable({providedIn: 'root'})
 export class ChangelogService {

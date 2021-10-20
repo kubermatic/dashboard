@@ -17,7 +17,7 @@ import {Condition} from '../../utils/condition';
 import {View} from '../../utils/view';
 import {UserSettingsPage} from '../../pages/user-settings.po';
 import {ProjectsPage} from '../../pages/projects.po';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 describe('User Settings Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');

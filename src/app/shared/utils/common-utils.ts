@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 export function objectDiff(object: any, base: any): any {
   return _.transform(object, (result, value, key) => {

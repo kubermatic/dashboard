@@ -24,7 +24,7 @@ import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialo
 import {CreateDatacenterModel, Datacenter} from '@shared/entity/datacenter';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import * as countryCodeLookup from 'country-code-lookup';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {DatacenterDataDialogComponent} from './datacenter-data-dialog/component';

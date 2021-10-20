@@ -30,7 +30,7 @@ import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {OpenstackNetwork, OpenstackSecurityGroup, OpenstackSubnet} from '@shared/entity/provider/openstack';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 

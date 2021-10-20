@@ -23,7 +23,7 @@ import {
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {NodeDataService} from '@core/services/node-data/service';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Observable} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {NodeCloudSpec, NodeSpec, EquinixNodeSpec} from '@shared/entity/node';

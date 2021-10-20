@@ -22,7 +22,7 @@ import {PresetsService} from '@core/services/wizard/presets';
 import {OperatingSystemSpec, Taint} from '@shared/entity/node';
 import {OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {ReplaySubject} from 'rxjs';
 import {NodeDataAlibabaProvider} from './provider/alibaba';
 import {NodeDataAnexiaProvider} from './provider/anexia';

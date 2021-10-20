@@ -19,7 +19,7 @@ import {Condition} from '../../utils/condition';
 import {Group, reloadUsers} from '../../utils/member';
 import {ClustersPage} from '../../pages/clusters.po';
 import {View} from '../../utils/view';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 describe('Multi Owner Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
