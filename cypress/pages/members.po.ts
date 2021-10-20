@@ -15,6 +15,7 @@
 import {Condition} from '../utils/condition';
 import {Endpoint} from '../utils/endpoint';
 import {Group} from '../utils/member';
+import {Mocks} from '../utils/mocks';
 import {RequestType, TrafficMonitor} from '../utils/monitor';
 import {View} from '../utils/view';
 
@@ -84,6 +85,16 @@ export class MembersPage {
         this.waitForRefresh();
         this.verifyUrl();
       });
+  }
+
+  static verifyNoMember(email: string): void {
+    if (Mocks.enabled()) {
+      cy.intercept({method: RequestType.GET, path: Endpoint.Members}, []);
+    }
+
+    this.verifyUrl();
+
+    MembersPage.getTableRowEmailColumn(email).should(Condition.NotExist);
   }
 
   static addMember(email: string, group: Group): void {

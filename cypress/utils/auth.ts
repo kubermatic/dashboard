@@ -25,13 +25,19 @@ export function login(
 ): void {
   if (Mocks.enabled()) {
     mockLogin();
+    Mocks.updateUser(email);
   } else {
     doLogin(email, password);
   }
 }
 
 export function logout(): void {
-  UserPanel.logout();
+  if (Mocks.enabled()) {
+    cy.clearCookies();
+    cy.visit('/');
+  } else {
+    UserPanel.logout();
+  }
 }
 
 function doLogin(email: string, password: string): void {

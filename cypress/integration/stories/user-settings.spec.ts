@@ -18,19 +18,25 @@ import {View} from '../../utils/view';
 import {UserSettingsPage} from '../../pages/user-settings.po';
 import {ProjectsPage} from '../../pages/projects.po';
 import _ from 'lodash';
+import {Mocks} from '../../utils/mocks';
 
 describe('User Settings Story', () => {
-  const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
-  const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
-  const projectName = _.uniqueId('e2e-test-project-');
+  const email = Mocks.enabled() ? 'roxy@kubermatic.io' : Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
+  const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
   const kubermaticEdition = Cypress.env('KUBERMATIC_EDITION');
   const isEnterpriseEdition = kubermaticEdition === 'ee';
   const themePickerAvailability = isEnterpriseEdition ? 'available' : 'not available';
   const itemsPerPage = '5';
   const waitTime = 5000;
 
+  beforeEach(() => {
+    if (Mocks.enabled()) {
+      Mocks.register();
+    }
+  });
+
   it('should login', () => {
-    login(email, password);
+    login();
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -73,8 +79,15 @@ describe('User Settings Story', () => {
   });
 
   it('should login and get redirected', () => {
-    login(email, password);
-    cy.wait(waitTime).url().should(Condition.Include, View.Clusters.Default);
+    login();
+
+    if (Mocks.enabled()) {
+      cy.setCookie('autoredirect', 'true');
+    } else {
+      cy.wait(waitTime);
+    }
+
+    cy.url().should(Condition.Include, View.Clusters.Default);
   });
 
   it('should go to the user settings', () => {
@@ -105,6 +118,9 @@ describe('User Settings Story', () => {
 
   it('should delete the project', () => {
     ProjectsPage.deleteProject(projectName);
+  });
+
+  it('should verify that there are no projects', () => {
     ProjectsPage.verifyNoProjects();
   });
 

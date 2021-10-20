@@ -97,6 +97,7 @@ export namespace Endpoint {
   export const AlertmanagerConfig = '**/alertmanager/config';
   export const Users = '**/users';
   export const Tokens = '**/tokens';
+  export const Members = '**/api/**/users';
   export const ServiceAccounts = '**/serviceaccounts';
   export const ServiceAccount = '**/serviceaccounts/*';
   export const ServiceAccountTokens = '**/serviceaccounts/*/tokens';
