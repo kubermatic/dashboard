@@ -22,7 +22,7 @@ import {Config} from './config';
 
 /**
  * Authenticates the user using the login page or mocked authentication cookies if mocks are enabled.
- * 
+ *
  * @param email Email of user to authenticate.
  * @param password Password of user to authenticate. Used only if mocks are disabled.
  * @param isAdmin Specifies if mocked user should be an admin. Used only if mocks are enabled.

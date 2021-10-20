@@ -20,14 +20,14 @@ import {WizardPage} from '../../../pages/wizard.po';
 import {login, logout} from '../../../utils/auth';
 import {Condition} from '../../../utils/condition';
 import {Config} from '../../../utils/config';
-import { Mocks } from '../../../utils/mocks';
+import {Mocks} from '../../../utils/mocks';
 import {Preset} from '../../../utils/preset';
 import {Datacenter, Provider} from '../../../utils/provider';
 import {View} from '../../../utils/view';
 import {WizardStep} from '../../../utils/wizard';
 
 describe('Admin Settings - Presets Story', () => {
-  const presetName = Mocks.enabled() ? 'test-preset' :_.uniqueId('test-preset-');
+  const presetName = Mocks.enabled() ? 'test-preset' : _.uniqueId('test-preset-');
   const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
   const clusterName = Mocks.enabled() ? 'test-cluster' : _.uniqueId('test-cluster-');
 
