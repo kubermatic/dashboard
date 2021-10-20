@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,16 +22,23 @@ import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 import * as _ from 'lodash';
+import {Mocks} from '../../utils/mocks';
 
 describe('SSH Key Management Story', () => {
-  const projectName = _.uniqueId('e2e-test-project-');
-  const clusterName = _.uniqueId('e2e-test-cluster-');
+  const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
+  const clusterName = Mocks.enabled() ? 'test-cluster' : _.uniqueId('test-cluster-');
   const sshKeyName = 'test-ssh-key';
   const sshKeyPublic =
     'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCo/3xm3JmJ7rp7I6GNYvjySYlWIGe75Oyr/u2cv5Fv2vsqfsiAP2xvIrJKxQ3+LwZAo0JnTvNQ' +
     'bVKo+G6pV1HEXhRlPuLuKWtkKCJue0wJXnIUz3dSniQDSIovjM+j5FUQauE3KeVgII2SQ7vVIKJcpFNVoA6cUjCeV8S9IHndOERzbBMhFe2sI3Ej' +
     'HSYSw2PCyXrUvDWBFjeUEV9jr3TJHLs7ea0bXJj+SA5o4nw/XOCqnoJsnBZa+I3KIAiHgV779R3XGlWZ1aD0ow4y3UzXy2U+aKKPBEoXFmKAKezt' +
     'vopqZemjIGzQT8Bgu1inXcwMfo3sB5bYMDnnP3Wyn/gz';
+
+  beforeEach(() => {
+    if (Mocks.enabled()) {
+      Mocks.register(Provider.kubeAdm);
+    }
+  });
 
   it('should login', () => {
     login();
@@ -65,7 +75,7 @@ describe('SSH Key Management Story', () => {
   it('should create the cluster with ssh key', () => {
     ClustersPage.visit();
     ClustersPage.openWizard();
-    WizardPage.getProviderBtn(Provider.BringYourOwn).click();
+    WizardPage.getProviderBtn(Provider.kubeAdm).click();
     WizardPage.getDatacenterBtn(Datacenter.BringYourOwn.Frankfurt).click();
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getSSHKeysSelect().click();
@@ -82,12 +92,6 @@ describe('SSH Key Management Story', () => {
     ClustersPage.getProviderMenuOption(ProviderMenuOption.ManageSSHKeys).click();
     ClustersPage.getSSHKeysTableRemoveButton(sshKeyName).click();
     ClustersPage.getDeleteDialogConfirmButton().click();
-  });
-
-  it('should re-add the ssh key to the cluster', () => {
-    ClustersPage.getSSHKeysAddDropdown().click();
-    ClustersPage.getSSHKeysDropdownOption(sshKeyName).click();
-    ClustersPage.getSSHKeysTableRow(sshKeyName).should(Condition.Exist);
     ClustersPage.getDialogCloseButton().click();
   });
 
@@ -95,8 +99,10 @@ describe('SSH Key Management Story', () => {
     SSHKeysPage.visit();
     SSHKeysPage.getDeleteSSHKeyButton(sshKeyName).click();
     SSHKeysPage.getDeleteSSHKeyConfirmationButton().click();
+  });
 
-    SSHKeysPage.getTable().should(Condition.NotContain, sshKeyName);
+  it('should verify that there are no projects', () => {
+    SSHKeysPage.verifyNoSSHKeys();
   });
 
   it('should go to the projects page', () => {
@@ -105,6 +111,9 @@ describe('SSH Key Management Story', () => {
 
   it('should delete the project', () => {
     ProjectsPage.deleteProject(projectName);
+  });
+
+  it('should verify that there are no projects', () => {
     ProjectsPage.verifyNoProjects();
   });
 

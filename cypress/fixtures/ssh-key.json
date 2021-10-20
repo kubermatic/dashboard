@@ -1,0 +1,9 @@
+{
+  "id": "key-931602919cd3fb263835f222d07b3d9a-zz96",
+  "name": "test-ssh-key",
+  "creationTimestamp": "2021-10-19T10:28:25Z",
+  "spec": {
+    "fingerprint": "93:16:02:91:9c:d3:fb:26:38:35:f2:22:d0:7b:3d:9a",
+    "publicKey": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCo/3xm3JmJ7rp7I6GNYvjySYlWIGe75Oyr/u2cv5Fv2vsqfsiAP2xvIrJKxQ3+LwZAo0JnTvNQbVKo+G6pV1HEXhRlPuLuKWtkKCJue0wJXnIUz3dSniQDSIovjM+j5FUQauE3KeVgII2SQ7vVIKJcpFNVoA6cUjCeV8S9IHndOERzbBMhFe2sI3EjHSYSw2PCyXrUvDWBFjeUEV9jr3TJHLs7ea0bXJj+SA5o4nw/XOCqnoJsnBZa+I3KIAiHgV779R3XGlWZ1aD0ow4y3UzXy2U+aKKPBEoXFmKAKeztvopqZemjIGzQT8Bgu1inXcwMfo3sB5bYMDnnP3Wyn/gz"
+  }
+}

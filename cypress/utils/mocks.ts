@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,6 +39,12 @@ export class Mocks {
     {m: RequestType.GET, p: Endpoint.Projects, r: {fixture: 'projects.json'}},
     {m: RequestType.GET, p: Endpoint.Project, r: {fixture: 'project.json'}},
     {m: RequestType.GET, p: Endpoint.ExternalClusters, r: []},
+    {m: RequestType.POST, p: Endpoint.ExternalClusters, r: {fixture: 'external-cluster.json'}},
+    {m: RequestType.GET, p: Endpoint.ExternalCluster, r: {fixture: 'external-cluster.json'}},
+    {m: RequestType.GET, p: Endpoint.ExternalClusterNodes, r: []},
+    {m: RequestType.GET, p: Endpoint.ExternalClusterMetrics, r: []},
+    {m: RequestType.GET, p: Endpoint.ExternalClusterNodesMetrics, r: []},
+    {m: RequestType.GET, p: Endpoint.ExternalClusterEvents, r: []},
     {m: RequestType.GET, p: Endpoint.ClusterHealth, r: {fixture: 'health.json'}},
     {m: RequestType.GET, p: Endpoint.ClusterMetrics, r: []},
     {m: RequestType.GET, p: Endpoint.ClusterNodes, r: []},
@@ -45,12 +54,19 @@ export class Mocks {
     {m: RequestType.GET, p: Endpoint.ClusterRuleGroups, r: []},
     {m: RequestType.GET, p: Endpoint.ClusterAddons, r: []},
     {m: RequestType.GET, p: Endpoint.ClusterUpgrades, r: []},
-    {m: RequestType.GET, p: Endpoint.ClusterSSHKeys, r: []},
+    {m: RequestType.GET, p: Endpoint.ClusterSSHKeys, r: {fixture: 'ssh-keys.json'}},
+    {m: RequestType.PUT, p: Endpoint.ClusterSSHKey, r: {fixture: 'ssh-key.json'}},
     {m: RequestType.GET, p: Endpoint.MachineDeploymentNodes, r: []},
     {m: RequestType.GET, p: Endpoint.MachineDeploymentNodesEvents, r: []},
     {m: RequestType.GET, p: Endpoint.MachineDeploymentNodesMetrics, r: []},
     {m: RequestType.GET, p: Endpoint.ClusterTemplates, r: []},
-    {m: RequestType.GET, p: Endpoint.SSHKeys, r: []},
+    {m: RequestType.POST, p: Endpoint.ServiceAccounts, r: {fixture: 'service-account.json'}},
+    {m: RequestType.GET, p: Endpoint.ServiceAccount, r: {fixture: 'service-account.json'}},
+    {m: RequestType.GET, p: Endpoint.ServiceAccounts, r: {fixture: 'service-accounts.json'}},
+    {m: RequestType.POST, p: Endpoint.ServiceAccountTokens, r: {fixture: 'token.json'}},
+    {m: RequestType.GET, p: Endpoint.ServiceAccountTokens, r: {fixture: 'tokens.json'}},
+    {m: RequestType.POST, p: Endpoint.SSHKeys, r: {fixture: 'ssh-key.json'}},
+    {m: RequestType.GET, p: Endpoint.SSHKeys, r: {fixture: 'ssh-keys.json'}},
     {m: RequestType.GET, p: Endpoint.EtcdRestores, r: []},
     {m: RequestType.GET, p: Endpoint.AlertmanagerConfig, r: {spec: {config: ''}}},
     {m: RequestType.GET, p: Endpoint.AdmissionPlugins, r: []},
@@ -74,7 +90,7 @@ export class Mocks {
   ];
 
   static enabled(): boolean {
-    const isEnabled = Cypress.env('USE_MOCKS');
+    const isEnabled = Cypress.env('MOCKS');
     return isEnabled === 'true' || isEnabled === true;
   }
 

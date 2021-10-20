@@ -61,7 +61,7 @@ Run `npm test` to execute the unit tests via [Jest](https://jestjs.io/).
 Mocked tests can be run locally without need to connect to the whole KKP.
 
 ```
-USE_MOCKS="true" CYPRESS_USE_MOCKS="true" npm run e2e:mock
+CYPRESS_MOCKS="true" npm run e2e:mock
 ```
 
 Additionally, you can choose which version will be tested with `KUBERMATIC_EDITION` environment variable.

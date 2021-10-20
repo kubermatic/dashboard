@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,7 +32,7 @@ describe('vSphere Provider', () => {
 
   beforeEach(() => {
     if (Mocks.enabled()) {
-      Mocks.register(Provider.VSphere);
+      Mocks.register(Provider.vSphere);
     }
   });
 
@@ -51,7 +54,7 @@ describe('vSphere Provider', () => {
   });
 
   it('should create a new cluster', () => {
-    WizardPage.getProviderBtn(Provider.VSphere).click();
+    WizardPage.getProviderBtn(Provider.vSphere).click();
     WizardPage.getDatacenterBtn(Datacenter.VSphere.Hamburg).click();
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
@@ -65,7 +68,7 @@ describe('vSphere Provider', () => {
     WizardPage.getNextBtn(WizardStep.NodeSettings).should(Condition.BeEnabled).click({force: true});
     WizardPage.getCreateBtn().click({force: true});
 
-    cy.url().should(Condition.Contain, View.Clusters.Default);
+    ClustersPage.verifyUrl();
   });
 
   it('should check if cluster was created', () => {
