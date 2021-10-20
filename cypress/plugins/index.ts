@@ -18,8 +18,8 @@ import del from 'del';
 import {configuration} from './cy-ts-preprocessor';
 
 export default async (on, config) => {
-  const mocks = config.env.mock;
-  const isEnterpriseEdition = config.env.edition === 'ee';
+  const mocks = config.env.MOCKS;
+  const isEnterpriseEdition = config.env.KUBERMATIC_EDITION === 'ee';
 
   if (mocks) {
     // Skip everything except already mocked tests.
