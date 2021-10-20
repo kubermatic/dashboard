@@ -22,11 +22,11 @@ export class Config {
   }
 
   static userEmail(): string {
-    return Config.isAPIMocked() ? 'roxy@kubermatic.com' : Cypress.env('USERNAME');
+    return Config.isAPIMocked() ? 'roxy@kubermatic.io' : Cypress.env('USERNAME');
   }
 
   static adminEmail(): string {
-    return Config.isAPIMocked() ? 'roxy2@kubermatic.com' : Cypress.env('USERNAME_2');
+    return Config.isAPIMocked() ? 'roxy2@kubermatic.io' : Cypress.env('USERNAME_2');
   }
 
   static password(): string {

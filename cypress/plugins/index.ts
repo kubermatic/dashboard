@@ -18,10 +18,10 @@ import del from 'del';
 import {configuration} from './cy-ts-preprocessor';
 
 export default async (on, config) => {
-  const mocks = config.env.MOCKS;
+  const isAPIMocked = config.env.MOCKS === 'true' || config.env.MOCKS === true;
   const isEnterpriseEdition = config.env.KUBERMATIC_EDITION === 'ee';
 
-  if (mocks) {
+  if (isAPIMocked) {
     // Skip everything except already mocked tests.
     // TODO: Remove all ignores tests have their mocks configured.
     config.ignoreTestFiles = ['**/integration/stories/opa.spec.ts', '**/integration/stories/admin-settings/**.spec.ts'];
@@ -42,7 +42,7 @@ export default async (on, config) => {
   }
 
   /* eslint-disable no-console */
-  console.log('mocks: ' + mocks);
+  console.log('mocks: ' + isAPIMocked);
   console.log('enterprise edition: ' + isEnterpriseEdition);
   console.log('ignore: ' + config.ignoreTestFiles);
   /* eslint-enable no-console */
