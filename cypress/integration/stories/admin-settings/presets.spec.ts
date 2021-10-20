@@ -20,18 +20,25 @@ import {WizardPage} from '../../../pages/wizard.po';
 import {login, logout} from '../../../utils/auth';
 import {Condition} from '../../../utils/condition';
 import {Config} from '../../../utils/config';
+import { Mocks } from '../../../utils/mocks';
 import {Preset} from '../../../utils/preset';
 import {Datacenter, Provider} from '../../../utils/provider';
 import {View} from '../../../utils/view';
 import {WizardStep} from '../../../utils/wizard';
 
 describe('Admin Settings - Presets Story', () => {
-  const presetName = _.uniqueId('e2e-test-preset-');
-  const projectName = _.uniqueId('e2e-test-project-');
-  const clusterName = _.uniqueId('e2e-test-cluster-');
+  const presetName = Mocks.enabled() ? 'test-preset' :_.uniqueId('test-preset-');
+  const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
+  const clusterName = Mocks.enabled() ? 'test-cluster' : _.uniqueId('test-cluster-');
+
+  beforeEach(() => {
+    if (Mocks.enabled()) {
+      Mocks.register(Provider.Digitalocean);
+    }
+  });
 
   it('should login as admin', () => {
-    login(Config.adminEmail());
+    login(Config.adminEmail(), Config.password(), true);
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -89,6 +96,9 @@ describe('Admin Settings - Presets Story', () => {
 
   it('should delete the project', () => {
     ProjectsPage.deleteProject(projectName);
+  });
+
+  it('should verify that there are no projects', () => {
     ProjectsPage.verifyNoProjects();
   });
 

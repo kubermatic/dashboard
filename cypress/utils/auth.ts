@@ -20,10 +20,17 @@ import {UserPanel} from '../pages/user-panel.po';
 import {Mocks} from './mocks';
 import {Config} from './config';
 
-export function login(email = Config.userEmail(), password = Config.password()): void {
+/**
+ * Authenticates the user using the login page or mocked authentication cookies if mocks are enabled.
+ * 
+ * @param email Email of user to authenticate.
+ * @param password Password of user to authenticate. Used only if mocks are disabled.
+ * @param isAdmin Specifies if mocked user should be an admin. Used only if mocks are enabled.
+ */
+export function login(email = Config.userEmail(), password = Config.password(), isAdmin = false): void {
   if (Mocks.enabled()) {
     mockLogin();
-    Mocks.updateUser(email);
+    Mocks.updateUser(email, isAdmin);
   } else {
     doLogin(email, password);
   }

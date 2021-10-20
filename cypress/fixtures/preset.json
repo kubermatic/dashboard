@@ -49,6 +49,16 @@
           "enabled": true
         }
       ]
+    },
+    {
+      "name": "test-preset",
+      "enabled": true,
+      "providers": [
+        {
+          "name": "digitalocean",
+          "enabled": true
+        }
+      ]
     }
   ]
 }
