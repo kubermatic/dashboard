@@ -22,19 +22,16 @@ export default async (on, config) => {
   const isEnterpriseEdition = config.env.KUBERMATIC_EDITION === 'ee';
 
   if (isAPIMocked) {
-    // Skip everything except already mocked tests.
-    // TODO: Remove all ignores tests have their mocks configured.
+    // TODO: Remove it once all tests will have mocks configured.
     config.ignoreTestFiles = [
       '**/integration/stories/opa.spec.ts',
       '**/integration/stories/admin-settings/administrators.spec.ts',
       '**/integration/stories/admin-settings/cluster-settings.spec.ts',
       '**/integration/stories/admin-settings/custom-links.spec.ts',
-      '**/integration/stories/admin-settings/dynamic-datacenters.spec.ts',
       '**/integration/stories/admin-settings/opa-integration.spec.ts',
     ];
   } else {
-    // Skip flaky and already mocked tests.
-    // TODO: Remove all ignores after fixing flaky tests and making the full tests optional.
+    // TODO: Remove it after fixing flaky tests and making the full tests optional.
     config.ignoreTestFiles = [
       '**/integration/providers/**.spec.ts',
       '**/integration/stories/edition.spec.ts',
@@ -45,6 +42,7 @@ export default async (on, config) => {
       '**/integration/stories/ssh-keys.spec.ts',
       '**/integration/stories/user-settings.spec.ts',
       '**/integration/stories/admin-settings/administrators.spec.ts',
+      '**/integration/stories/admin-settings/dynamic-datacenters.spec.ts',
       '**/integration/stories/admin-settings/machine-deployment-replicas.spec.ts',
       '**/integration/stories/admin-settings/presets.spec.ts',
       '**/integration/stories/admin-settings/project-limit.spec.ts',

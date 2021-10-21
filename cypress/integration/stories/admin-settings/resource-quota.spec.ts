@@ -109,12 +109,12 @@ describe('Admin Settings - Resource Quota Story', () => {
     ProjectsPage.visit();
   });
 
-  it('should go to the projects page', () => {
-    ProjectsPage.visit();
-  });
-
   it('should delete the project', () => {
     ProjectsPage.deleteProject(projectName);
+  });
+
+  it('should verify that there are no projects', () => {
+    ProjectsPage.verifyNoProjects();
   });
 
   it('should logout', () => {
