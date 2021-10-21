@@ -21,13 +21,15 @@ import _ from 'lodash';
 import {LoginPage} from '../../../pages/login.po';
 import {Config} from '../../../utils/config';
 import {Mocks} from '../../../utils/mocks';
-import { Endpoint } from '../../../utils/endpoint';
-import { RequestType } from '../../../utils/monitor';
+import {Endpoint} from '../../../utils/endpoint';
+import {RequestType} from '../../../utils/monitor';
 
 describe('Admin Settings - Project Limit Story', () => {
   const firstProjectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
   const secondProjectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
-  const timeout = Mocks.enabled() ? 100 : 10000;
+  const shortTimeout = 100;
+  const longTimeout = 10000;
+  const timeout = Mocks.enabled() ? shortTimeout : longTimeout;
 
   beforeEach(() => {
     if (Mocks.enabled()) {

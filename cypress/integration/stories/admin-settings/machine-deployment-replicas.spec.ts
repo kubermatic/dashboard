@@ -96,7 +96,10 @@ describe('Admin Settings - Machine Deployment Replicas Story', () => {
     if (Mocks.enabled()) {
       Mocks.adminSettings.defaultNodeCount = initialReplicas;
     } else {
-      AdminSettings.DefaultsAndLimitsPage.getInitialReplicasInput().clear().type(`${initialReplicas}`).trigger('change');
+      AdminSettings.DefaultsAndLimitsPage.getInitialReplicasInput()
+        .clear()
+        .type(`${initialReplicas}`)
+        .trigger('change');
       AdminSettings.waitForSave();
     }
   });

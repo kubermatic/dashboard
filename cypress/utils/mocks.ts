@@ -52,7 +52,7 @@ export class Mocks {
     customLinks: [],
     cleanupOptions: {
       Enabled: true,
-      Enforced: false
+      Enforced: false,
     },
     defaultNodeCount: 1,
     clusterTypeOptions: 0,
@@ -66,24 +66,24 @@ export class Mocks {
     enableExternalClusterImport: true,
     opaOptions: {
       enabled: false,
-      enforced: false
+      enforced: false,
     },
     mlaOptions: {
       loggingEnabled: true,
       loggingEnforced: false,
       monitoringEnabled: true,
-      monitoringEnforced: false
+      monitoringEnforced: false,
     },
-    mlaAlertmanagerPrefix: "alertmanager",
-    mlaGrafanaPrefix: "grafana",
+    mlaAlertmanagerPrefix: 'alertmanager',
+    mlaGrafanaPrefix: 'grafana',
     machineDeploymentVMResourceQuota: {
       minCPU: 2,
       maxCPU: 0,
       minRAM: 2,
       maxRAM: 0,
-      enableGPU: false
-    }
-  };  
+      enableGPU: false,
+    },
+  };
 
   private static _defaults: Mock[] = [
     {m: RequestType.GET, p: Endpoint.CurrentUser, r: Mocks._currentUser},
