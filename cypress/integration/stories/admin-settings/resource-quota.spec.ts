@@ -26,17 +26,25 @@ import {Preset} from '../../../utils/preset';
 import {Datacenter, Provider} from '../../../utils/provider';
 import {View} from '../../../utils/view';
 import {WizardStep} from '../../../utils/wizard';
+import { Mocks } from '../../../utils/mocks';
 
 describe('Admin Settings - Resource Quota Story', () => {
-  const projectName = _.uniqueId('e2e-test-project-');
-  const clusterName = _.uniqueId('e2e-test-cluster-');
+  const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
+  const clusterName = Mocks.enabled() ? 'test-cluster' : _.uniqueId('test-cluster-');
+  const preset = Mocks.enabled() ? Preset.Mock : Preset.Digitalocean;
   const smallSize = 's-1vcpu-1gb';
   const bigSize = 'c2-16vcpu-32gb';
   const minCPU = 2;
   const minRAM = 2;
 
-  it('should login', () => {
-    login(Config.adminEmail());
+  beforeEach(() => {
+    if (Mocks.enabled()) {
+      Mocks.register(Provider.Digitalocean);
+    }
+  });
+
+  it('should login as admin', () => {
+    login(Config.adminEmail(), Config.password(), true);
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -48,11 +56,19 @@ describe('Admin Settings - Resource Quota Story', () => {
     AdminSettings.DefaultsAndLimitsPage.visit();
   });
 
-  it('should update resource quota', () => {
-    AdminSettings.DefaultsAndLimitsPage.getMinCPUResourceQuotaInput().clear().type(`${minCPU}`).trigger('change');
-    AdminSettings.waitForSave();
-    AdminSettings.DefaultsAndLimitsPage.getMinRAMResourceQuotaInput().clear().type(`${minRAM}`).trigger('change');
-    AdminSettings.waitForSave();
+  it('should update resource quotas', () => {
+    if (Mocks.enabled()) {
+      Mocks.adminSettings.machineDeploymentVMResourceQuota.minCPU = minCPU;
+      Mocks.adminSettings.machineDeploymentVMResourceQuota.minRAM = minRAM;
+    } else {
+      AdminSettings.DefaultsAndLimitsPage.getMinCPUResourceQuotaInput().clear().type(`${minCPU}`).trigger('change');
+      AdminSettings.waitForSave();
+      AdminSettings.DefaultsAndLimitsPage.getMinRAMResourceQuotaInput().clear().type(`${minRAM}`).trigger('change');
+      AdminSettings.waitForSave();
+    }
+  });
+
+  it('should verify resource quotas', () => {
     AdminSettings.DefaultsAndLimitsPage.getMinCPUResourceQuotaInput().should(Condition.HaveValue, minCPU);
     AdminSettings.DefaultsAndLimitsPage.getMinRAMResourceQuotaInput().should(Condition.HaveValue, minRAM);
   });
@@ -80,7 +96,7 @@ describe('Admin Settings - Resource Quota Story', () => {
       .url(Endpoint.Digitalocean.Sizes)
       .method(RequestType.GET)
       .intercept();
-    WizardPage.getPreset(Preset.Digitalocean).click();
+    WizardPage.getPreset(preset).click();
     monitor.wait();
 
     WizardPage.getNextBtn(WizardStep.ProviderSettings).click({force: true});
@@ -93,9 +109,12 @@ describe('Admin Settings - Resource Quota Story', () => {
     ProjectsPage.visit();
   });
 
+  it('should go to the projects page', () => {
+    ProjectsPage.visit();
+  });
+
   it('should delete the project', () => {
     ProjectsPage.deleteProject(projectName);
-    ProjectsPage.verifyNoProjects();
   });
 
   it('should logout', () => {

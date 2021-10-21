@@ -31,7 +31,6 @@ export default async (on, config) => {
       '**/integration/stories/admin-settings/custom-links.spec.ts',
       '**/integration/stories/admin-settings/dynamic-datacenters.spec.ts',
       '**/integration/stories/admin-settings/opa-integration.spec.ts',
-      '**/integration/stories/admin-settings/resource-quota.spec.ts',
     ];
   } else {
     // Skip flaky and already mocked tests.
@@ -49,6 +48,7 @@ export default async (on, config) => {
       '**/integration/stories/admin-settings/machine-deployment-replicas.spec.ts',
       '**/integration/stories/admin-settings/presets.spec.ts',
       '**/integration/stories/admin-settings/project-limit.spec.ts',
+      '**/integration/stories/admin-settings/resource-quota.spec.ts',
     ];
   }
 
