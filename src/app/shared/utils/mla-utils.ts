@@ -15,7 +15,7 @@
 import {RuleGroupName} from '@shared/entity/mla';
 import {decode} from 'js-base64';
 import {load} from 'js-yaml';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 export class MLAUtils {
   static getRuleGroupName(data: string): string {

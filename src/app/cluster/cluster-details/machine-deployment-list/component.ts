@@ -27,7 +27,7 @@ import {getOperatingSystem} from '@shared/entity/node';
 import {GroupConfig} from '@shared/model/Config';
 import {MachineDeploymentHealthStatus} from '@shared/utils/health-status/machine-deployment-health-status';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {switchMap, take, takeUntil} from 'rxjs/operators';
 

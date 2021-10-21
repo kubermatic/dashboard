@@ -20,7 +20,7 @@ import {RBACService} from '@core/services/rbac';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Cluster} from '@shared/entity/cluster';
 import {Binding, ClusterBinding, SimpleBinding, SimpleClusterBinding} from '@shared/entity/rbac';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {AddBindingComponent} from './add-binding/component';
 import {combineLatest, iif, merge, of, Subject, timer} from 'rxjs';

@@ -18,7 +18,7 @@ import {MLAService} from '@core/services/mla';
 import {NotificationService} from '@core/services/notification';
 import {AlertmanagerConfig} from '@shared/entity/mla';
 import {getIconClassForButton} from '@shared/utils/common-utils';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {encode, decode} from 'js-base64';
 import {Subject} from 'rxjs';
 import {take} from 'rxjs/operators';

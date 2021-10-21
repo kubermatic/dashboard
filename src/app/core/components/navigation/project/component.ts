@@ -17,7 +17,7 @@ import {MatSelect, MatSelectChange} from '@angular/material/select';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
 import {Project} from '@shared/entity/project';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {differenceBy} from 'lodash';
 import {merge, Subject} from 'rxjs';
 import {switchMap, takeUntil, tap} from 'rxjs/operators';

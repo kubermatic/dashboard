@@ -19,7 +19,7 @@ import {NotificationService} from '@core/services/notification';
 import {GatekeeperConfig, GatekeeperConfigSpec} from '@shared/entity/opa';
 import {getIconClassForButton} from '@shared/utils/common-utils';
 import {dump, load} from 'js-yaml';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {take} from 'rxjs/operators';
 

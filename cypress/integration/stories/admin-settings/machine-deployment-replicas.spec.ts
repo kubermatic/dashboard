@@ -12,28 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {AdminSettings} from '../../../pages/admin-settings.po';
 import {ClustersPage} from '../../../pages/clusters.po';
 import {ProjectsPage} from '../../../pages/projects.po';
 import {WizardPage} from '../../../pages/wizard.po';
 import {login, logout} from '../../../utils/auth';
 import {Condition} from '../../../utils/condition';
+import {Config} from '../../../utils/config';
+import {Mocks} from '../../../utils/mocks';
 import {Preset} from '../../../utils/preset';
 import {Datacenter, Provider} from '../../../utils/provider';
 import {View} from '../../../utils/view';
 import {WizardStep} from '../../../utils/wizard';
 
 describe('Admin Settings - Machine Deployment Replicas Story', () => {
-  const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
-  const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
-  const projectName = _.uniqueId('e2e-test-project-');
-  const clusterName = _.uniqueId('e2e-test-cluster-');
-  const defaultMDReplicas = 1;
-  const newMDReplicas = 5;
+  const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
+  const clusterName = Mocks.enabled() ? 'test-cluster' : _.uniqueId('test-cluster-');
+  const preset = Mocks.enabled() ? Preset.Mock : Preset.Digitalocean;
+  const initialReplicas = 1;
+  const newReplicas = 5;
 
-  it('should login', () => {
-    login(email, password);
+  beforeEach(() => {
+    if (Mocks.enabled()) {
+      Mocks.register(Provider.Digitalocean);
+    }
+  });
+
+  it('should login as admin', () => {
+    login(Config.adminEmail(), Config.password(), true);
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -46,9 +53,16 @@ describe('Admin Settings - Machine Deployment Replicas Story', () => {
   });
 
   it('should update machine deployment replicas count', () => {
-    AdminSettings.DefaultsAndLimitsPage.getInitialReplicasInput().clear().type(`${newMDReplicas}`).trigger('change');
-    AdminSettings.waitForSave();
-    AdminSettings.DefaultsAndLimitsPage.getInitialReplicasInput().should(Condition.HaveValue, newMDReplicas);
+    if (Mocks.enabled()) {
+      Mocks.adminSettings.defaultNodeCount = newReplicas;
+    } else {
+      AdminSettings.DefaultsAndLimitsPage.getInitialReplicasInput().clear().type(`${newReplicas}`).trigger('change');
+      AdminSettings.waitForSave();
+    }
+  });
+
+  it('should verify machine deployment replicas count', () => {
+    AdminSettings.DefaultsAndLimitsPage.getInitialReplicasInput().should(Condition.HaveValue, newReplicas);
   });
 
   it('should go to projects view', () => {
@@ -69,9 +83,9 @@ describe('Admin Settings - Machine Deployment Replicas Story', () => {
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
     WizardPage.getCustomPresetsCombobox().click();
-    WizardPage.getPreset(Preset.Digitalocean).click();
+    WizardPage.getPreset(preset).click();
     WizardPage.getNextBtn(WizardStep.ProviderSettings).click({force: true});
-    WizardPage.getNodeCountInput().should(Condition.HaveValue, newMDReplicas);
+    WizardPage.getNodeCountInput().should(Condition.HaveValue, newReplicas);
   });
 
   it('should go to the admin settings - defaults page', () => {
@@ -79,12 +93,19 @@ describe('Admin Settings - Machine Deployment Replicas Story', () => {
   });
 
   it('should restore original replicas count', () => {
-    AdminSettings.DefaultsAndLimitsPage.getInitialReplicasInput()
-      .clear()
-      .type(`${defaultMDReplicas}`)
-      .trigger('change');
-    AdminSettings.waitForSave();
-    AdminSettings.DefaultsAndLimitsPage.getInitialReplicasInput().should(Condition.HaveValue, defaultMDReplicas);
+    if (Mocks.enabled()) {
+      Mocks.adminSettings.defaultNodeCount = initialReplicas;
+    } else {
+      AdminSettings.DefaultsAndLimitsPage.getInitialReplicasInput()
+        .clear()
+        .type(`${initialReplicas}`)
+        .trigger('change');
+      AdminSettings.waitForSave();
+    }
+  });
+
+  it('should verify machine deployment replicas count', () => {
+    AdminSettings.DefaultsAndLimitsPage.getInitialReplicasInput().should(Condition.HaveValue, initialReplicas);
   });
 
   it('should go to the projects page', () => {
@@ -93,6 +114,9 @@ describe('Admin Settings - Machine Deployment Replicas Story', () => {
 
   it('should delete the project', () => {
     ProjectsPage.deleteProject(projectName);
+  });
+
+  it('should verify that there are no projects', () => {
     ProjectsPage.verifyNoProjects();
   });
 

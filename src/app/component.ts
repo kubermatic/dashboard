@@ -22,7 +22,7 @@ import {SettingsService} from '@core/services/settings';
 import {AdminSettings, CustomLink} from '@shared/entity/settings';
 import {VersionInfo} from '@shared/entity/version-info';
 import {Config} from '@shared/model/Config';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {AppConfigService} from './config.service';

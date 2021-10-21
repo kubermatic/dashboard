@@ -40,7 +40,7 @@ import {AdminSettings} from '@shared/entity/settings';
 import {GroupConfig} from '@shared/model/Config';
 import {ClusterHealthStatus} from '@shared/utils/health-status/cluster-health-status';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {EMPTY, forkJoin, Observable, of, onErrorResumeNext, Subject} from 'rxjs';
 import {catchError, distinctUntilChanged, filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ClusterDeleteConfirmationComponent} from '../cluster-details/cluster-delete-confirmation/component';

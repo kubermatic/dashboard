@@ -20,7 +20,7 @@ import {NotificationService} from '@core/services/notification';
 import {ResourceType} from '@shared/entity/common';
 import {EditProject, Project} from '@shared/entity/project';
 import {AsyncValidators} from '@shared/validators/async-label-form.validator';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 @Component({
   selector: 'km-edit-project',

@@ -31,7 +31,7 @@ import {ClusterHealthStatus} from '@shared/utils/health-status/cluster-health-st
 import {NodeHealthStatus} from '@shared/utils/health-status/node-health-status';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {NodeUtils} from '@shared/utils/node-utils/node-utils';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import * as semver from 'semver';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';

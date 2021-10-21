@@ -17,20 +17,23 @@ import {Condition} from '../../utils/condition';
 import {View} from '../../utils/view';
 import {UserSettingsPage} from '../../pages/user-settings.po';
 import {ProjectsPage} from '../../pages/projects.po';
-import * as _ from 'lodash';
+import _ from 'lodash';
+import {Mocks} from '../../utils/mocks';
+import {Config} from '../../utils/config';
 
 describe('User Settings Story', () => {
-  const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
-  const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
-  const projectName = _.uniqueId('e2e-test-project-');
-  const kubermaticEdition = Cypress.env('KUBERMATIC_EDITION');
-  const isEnterpriseEdition = kubermaticEdition === 'ee';
-  const themePickerAvailability = isEnterpriseEdition ? 'available' : 'not available';
+  const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
   const itemsPerPage = '5';
   const waitTime = 5000;
 
+  beforeEach(() => {
+    if (Mocks.enabled()) {
+      Mocks.register();
+    }
+  });
+
   it('should login', () => {
-    login(email, password);
+    login();
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -43,14 +46,14 @@ describe('User Settings Story', () => {
   });
 
   it('should check if user email is correct', () => {
-    UserSettingsPage.getUserEmail().should(Condition.Contain, email);
+    UserSettingsPage.getUserEmail().should(Condition.Contain, Config.userEmail());
   });
 
-  it(`should check if theme picker is ${themePickerAvailability}`, () => {
-    UserSettingsPage.getThemePicker().should(isEnterpriseEdition ? Condition.Exist : Condition.NotExist);
+  it(`should check if theme picker is ${Config.isEnterpriseEdition() ? 'available' : 'not available'}`, () => {
+    UserSettingsPage.getThemePicker().should(Config.isEnterpriseEdition() ? Condition.Exist : Condition.NotExist);
   });
 
-  if (isEnterpriseEdition) {
+  if (Config.isEnterpriseEdition()) {
     it('should set dark theme', () => {
       UserSettingsPage.getThemeButton('dark').click();
       cy.get('.km-style-dark').should(Condition.Exist);
@@ -73,15 +76,22 @@ describe('User Settings Story', () => {
   });
 
   it('should login and get redirected', () => {
-    login(email, password);
-    cy.wait(waitTime).url().should(Condition.Include, View.Clusters.Default);
+    login();
+
+    if (Mocks.enabled()) {
+      cy.setCookie('autoredirect', 'true');
+    } else {
+      cy.wait(waitTime);
+    }
+
+    cy.url().should(Condition.Include, View.Clusters.Default);
   });
 
   it('should go to the user settings', () => {
     UserSettingsPage.visit();
   });
 
-  if (isEnterpriseEdition) {
+  if (Config.isEnterpriseEdition()) {
     it('should set default theme', () => {
       UserSettingsPage.getThemeButton('light').click();
       cy.get('.km-style-light').should(Condition.Exist);
@@ -105,6 +115,9 @@ describe('User Settings Story', () => {
 
   it('should delete the project', () => {
     ProjectsPage.deleteProject(projectName);
+  });
+
+  it('should verify that there are no projects', () => {
     ProjectsPage.verifyNoProjects();
   });
 

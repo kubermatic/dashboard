@@ -15,7 +15,7 @@
 import {Component, Input} from '@angular/core';
 import {Cluster} from '@shared/entity/cluster';
 import {AlertmanagerConfig, RuleGroup} from '@shared/entity/mla';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 @Component({
   selector: 'km-mla',

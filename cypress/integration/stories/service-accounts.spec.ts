@@ -18,7 +18,7 @@ import {Condition} from '../../utils/condition';
 import {ServiceAccountsPage} from '../../pages/service-accounts.po';
 import {Group} from '../../utils/member';
 import {View} from '../../utils/view';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Mocks} from '../../utils/mocks';
 
 describe('Service Accounts Story', () => {

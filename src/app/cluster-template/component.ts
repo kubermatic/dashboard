@@ -26,7 +26,7 @@ import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {distinctUntilChanged, filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {Router} from '@angular/router';

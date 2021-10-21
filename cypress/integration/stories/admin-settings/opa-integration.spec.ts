@@ -12,23 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {AdminSettings} from '../../../pages/admin-settings.po';
 import {ClustersPage} from '../../../pages/clusters.po';
 import {ProjectsPage} from '../../../pages/projects.po';
 import {WizardPage} from '../../../pages/wizard.po';
 import {login, logout} from '../../../utils/auth';
 import {Condition} from '../../../utils/condition';
+import {Config} from '../../../utils/config';
 import {Datacenter, Provider} from '../../../utils/provider';
 import {View} from '../../../utils/view';
 
 describe('Admin Settings - Opa Integration Story', () => {
-  const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
-  const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const projectName = _.uniqueId('e2e-test-project-');
 
   it('should login', () => {
-    login(email, password);
+    login(Config.adminEmail());
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 

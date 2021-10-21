@@ -18,34 +18,40 @@ import del from 'del';
 import {configuration} from './cy-ts-preprocessor';
 
 export default async (on, config) => {
-  const mocks = config.env.mock;
-  const isEnterpriseEdition = config.env.edition === 'ee';
+  const isAPIMocked = config.env.MOCKS === 'true' || config.env.MOCKS === true;
+  const isEnterpriseEdition = config.env.KUBERMATIC_EDITION === 'ee';
 
-  if (mocks) {
-    // Skip everything except already mocked tests.
-    // TODO: Remove all ignores tests have their mocks configured.
+  if (isAPIMocked) {
+    // TODO: Remove it once all tests will have mocks configured.
     config.ignoreTestFiles = [
-      '**/integration/stories/multi-owner.spec.ts',
       '**/integration/stories/opa.spec.ts',
-      '**/integration/stories/user-settings.spec.ts',
-      '**/integration/stories/admin-settings/**.spec.ts',
+      '**/integration/stories/admin-settings/administrators.spec.ts',
+      '**/integration/stories/admin-settings/cluster-settings.spec.ts',
+      '**/integration/stories/admin-settings/custom-links.spec.ts',
+      '**/integration/stories/admin-settings/opa-integration.spec.ts',
     ];
   } else {
-    // Skip flaky and already mocked tests.
-    // TODO: Remove all ignores after fixing flaky tests and making the full tests optional.
+    // TODO: Remove it after fixing flaky tests and making the full tests optional.
     config.ignoreTestFiles = [
       '**/integration/providers/**.spec.ts',
       '**/integration/stories/edition.spec.ts',
       '**/integration/stories/external-cluster.spec.ts',
+      '**/integration/stories/multi-owner.spec.ts',
       '**/integration/stories/opa.spec.ts',
       '**/integration/stories/service-accounts.spec.ts',
       '**/integration/stories/ssh-keys.spec.ts',
+      '**/integration/stories/user-settings.spec.ts',
       '**/integration/stories/admin-settings/administrators.spec.ts',
+      '**/integration/stories/admin-settings/dynamic-datacenters.spec.ts',
+      '**/integration/stories/admin-settings/machine-deployment-replicas.spec.ts',
+      '**/integration/stories/admin-settings/presets.spec.ts',
+      '**/integration/stories/admin-settings/project-limit.spec.ts',
+      '**/integration/stories/admin-settings/resource-quota.spec.ts',
     ];
   }
 
   /* eslint-disable no-console */
-  console.log('mocks: ' + mocks);
+  console.log('mocks: ' + isAPIMocked);
   console.log('enterprise edition: ' + isEnterpriseEdition);
   console.log('ignore: ' + config.ignoreTestFiles);
   /* eslint-enable no-console */

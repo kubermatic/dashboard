@@ -85,6 +85,21 @@
   },
   {
     "metadata": {
+      "name": "a-test-datacenter"
+    },
+    "spec": {
+      "seed": "test-seed",
+      "country": "DE",
+      "location": "Hamburg",
+      "provider": "bringyourown",
+      "bringyourown": {},
+      "node": {},
+      "enforceAuditLogging": false,
+      "enforcePodSecurityPolicy": false
+    }
+  },
+  {
+    "metadata": {
       "name": "test-digitalocean-dc"
     },
     "spec": {

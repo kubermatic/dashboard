@@ -23,7 +23,7 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {getIconClassForButton} from '@shared/utils/common-utils';
 import * as countryCodeLookup from 'country-code-lookup';
 import {dump, load} from 'js-yaml';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 

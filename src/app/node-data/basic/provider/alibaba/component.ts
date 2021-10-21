@@ -32,7 +32,7 @@ import {AlibabaInstanceType, AlibabaVSwitch, AlibabaZone} from '@shared/entity/p
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {compare} from '@shared/utils/common-utils';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {merge, Observable} from 'rxjs';
 import {filter, map, takeUntil} from 'rxjs/operators';
 

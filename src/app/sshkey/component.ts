@@ -30,7 +30,7 @@ import {Member} from '@shared/entity/member';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Subject, timer} from 'rxjs';
 import {filter, retry, switchMap, take, takeUntil} from 'rxjs/operators';
 

@@ -16,6 +16,7 @@ import {Provider} from './provider';
 import {RouteHandler} from 'cypress/types/net-stubbing';
 import {Endpoint} from './endpoint';
 import {RequestType} from './monitor';
+import {Config} from './config';
 
 interface Mock {
   m: RequestType;
@@ -24,9 +25,69 @@ interface Mock {
 }
 
 export class Mocks {
+  private static _currentUser: any = {
+    id: 'user-j9e03',
+    name: 'roxy',
+    creationTimestamp: new Date(),
+    email: 'roxy@kubermatic.io',
+    projects: [
+      {
+        id: 'fn9234fn1d',
+        group: 'owners',
+      },
+    ],
+    userSettings: {
+      itemsPerPage: 5,
+      lastSeenChangelogVersion: 'v9.0.0',
+    },
+  };
+
+  static updateCurrentUser(email: string, isAdmin = false): void {
+    this._currentUser.email = email;
+    this._currentUser.name = email.split('@')[0];
+    this._currentUser.isAdmin = isAdmin;
+  }
+
+  static adminSettings: any = {
+    customLinks: [],
+    cleanupOptions: {
+      Enabled: true,
+      Enforced: false,
+    },
+    defaultNodeCount: 1,
+    clusterTypeOptions: 0,
+    displayDemoInfo: true,
+    displayAPIDocs: true,
+    displayTermsOfService: true,
+    enableDashboard: true,
+    enableOIDCKubeconfig: false,
+    userProjectsLimit: 0,
+    restrictProjectCreation: false,
+    enableExternalClusterImport: true,
+    opaOptions: {
+      enabled: false,
+      enforced: false,
+    },
+    mlaOptions: {
+      loggingEnabled: true,
+      loggingEnforced: false,
+      monitoringEnabled: true,
+      monitoringEnforced: false,
+    },
+    mlaAlertmanagerPrefix: 'alertmanager',
+    mlaGrafanaPrefix: 'grafana',
+    machineDeploymentVMResourceQuota: {
+      minCPU: 2,
+      maxCPU: 0,
+      minRAM: 2,
+      maxRAM: 0,
+      enableGPU: false,
+    },
+  };
+
   private static _defaults: Mock[] = [
-    {m: RequestType.GET, p: Endpoint.AdminSettings, r: {fixture: 'admin-settings.json'}},
-    {m: RequestType.GET, p: Endpoint.CurrentUser, r: {fixture: 'me.json'}},
+    {m: RequestType.GET, p: Endpoint.CurrentUser, r: Mocks._currentUser},
+    {m: RequestType.GET, p: Endpoint.AdminSettings, r: Mocks.adminSettings},
     {m: RequestType.GET, p: Endpoint.Seeds, r: ['test-seed']},
     {m: RequestType.GET, p: Endpoint.SeedSettings, r: {fixture: 'seed-settings.json'}},
     {m: RequestType.GET, p: Endpoint.Datacenters, r: {fixture: 'datacenters.json'}},
@@ -60,6 +121,8 @@ export class Mocks {
     {m: RequestType.GET, p: Endpoint.MachineDeploymentNodesEvents, r: []},
     {m: RequestType.GET, p: Endpoint.MachineDeploymentNodesMetrics, r: []},
     {m: RequestType.GET, p: Endpoint.ClusterTemplates, r: []},
+    {m: RequestType.POST, p: Endpoint.Members, r: {fixture: 'member.json'}},
+    {m: RequestType.GET, p: Endpoint.Members, r: {fixture: 'members.json'}},
     {m: RequestType.POST, p: Endpoint.ServiceAccounts, r: {fixture: 'service-account.json'}},
     {m: RequestType.GET, p: Endpoint.ServiceAccount, r: {fixture: 'service-account.json'}},
     {m: RequestType.GET, p: Endpoint.ServiceAccounts, r: {fixture: 'service-accounts.json'}},
@@ -90,8 +153,7 @@ export class Mocks {
   ];
 
   static enabled(): boolean {
-    const isEnabled = Cypress.env('MOCKS');
-    return isEnabled === 'true' || isEnabled === true;
+    return Config.isAPIMocked();
   }
 
   static register(provider?: Provider): void {

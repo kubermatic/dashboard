@@ -24,7 +24,7 @@ import {UserService} from '@core/services/user';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Constraint, ConstraintSelector, ConstraintTemplate, Kind} from '@shared/entity/opa';
 import {UserSettings} from '@shared/entity/settings';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {DefaultConstraintDialog, Mode} from './default-constraint-dialog/component';

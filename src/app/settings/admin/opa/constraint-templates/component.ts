@@ -22,7 +22,7 @@ import {UserService} from '@core/services/user';
 import {NotificationService} from '@core/services/notification';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {ConstraintTemplate} from '@shared/entity/opa';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {Mode, ConstraintTemplateDialog} from './constraint-template-dialog/component';

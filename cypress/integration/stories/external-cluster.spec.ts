@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {ClustersPage} from '../../pages/clusters.po';
 import {ProjectsPage} from '../../pages/projects.po';
 import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
+import {Config} from '../../utils/config';
 import {Mocks} from '../../utils/mocks';
 import {View} from '../../utils/view';
 
 describe('External Cluster Story', () => {
-  const kubeconfig = Mocks.enabled() ? 'test-kubeconfig' : atob(Cypress.env('KUBECONFIG_ENCODED'));
   const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
   const clusterName = Mocks.enabled() ? 'test-cluster' : _.uniqueId('test-cluster-');
 
@@ -56,8 +56,8 @@ describe('External Cluster Story', () => {
     ClustersPage.getConnectClusterKubeconfigTextarea()
       .click({force: true})
       .then($element => {
-        const subString = kubeconfig.substr(0, kubeconfig.length - 1);
-        const lastChar = kubeconfig.slice(-1);
+        const subString = Config.kubeconfig().substr(0, Config.kubeconfig().length - 1);
+        const lastChar = Config.kubeconfig().slice(-1);
         $element.text(subString);
         $element.val(subString);
         cy.get($element).type(lastChar);

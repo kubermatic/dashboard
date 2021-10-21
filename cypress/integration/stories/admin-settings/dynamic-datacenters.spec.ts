@@ -17,25 +17,29 @@ import {Condition} from '../../../utils/condition';
 import {View} from '../../../utils/view';
 import {AdminSettings} from '../../../pages/admin-settings.po';
 import {ProjectsPage} from '../../../pages/projects.po';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {ClustersPage} from '../../../pages/clusters.po';
 import {Datacenter, Provider} from '../../../utils/provider';
 import {WizardPage} from '../../../pages/wizard.po';
 import {WizardStep} from '../../../utils/wizard';
+import {Config} from '../../../utils/config';
+import {Mocks} from '../../../utils/mocks';
 
 describe('Admin Settings - Dynamic Datacenters Story', () => {
-  const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
-  const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
-  const seedName = Cypress.env('SEED_NAME');
-  const projectName = _.uniqueId('e2e-test-project-');
-  const clusterName = _.uniqueId('e2e-test-cluster-');
-  const datacenterName = _.uniqueId('e2e-test-datacenter-');
-  const provider = Provider.kubeAdm;
+  const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
+  const clusterName = Mocks.enabled() ? 'test-cluster' : _.uniqueId('test-cluster-');
+  const datacenterName = Mocks.enabled() ? 'a-test-datacenter' : _.uniqueId('a-test-datacenter-');
   const country = 'Germany';
   const location = Datacenter.BringYourOwn.Hamburg;
 
-  it('should login', () => {
-    login(email, password);
+  beforeEach(() => {
+    if (Mocks.enabled()) {
+      Mocks.register(Provider.kubeAdm);
+    }
+  });
+
+  it('should login as admin', () => {
+    login(Config.adminEmail(), Config.password(), true);
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -54,11 +58,14 @@ describe('Admin Settings - Dynamic Datacenters Story', () => {
 
     AdminSettings.DynamicDatacentersPage.getAddDatacenterProviderInput().click();
     AdminSettings.DynamicDatacentersPage.getAddDatacenterProviderInput()
-      .get(`mat-option .km-provider-logo-${provider}`)
+      .get(`mat-option .km-provider-logo-${Provider.kubeAdm}`)
       .click();
 
     AdminSettings.DynamicDatacentersPage.getAddDatacenterSeedInput().click();
-    AdminSettings.DynamicDatacentersPage.getAddDatacenterSeedInput().get('mat-option').contains(seedName).click();
+    AdminSettings.DynamicDatacentersPage.getAddDatacenterSeedInput()
+      .get('mat-option')
+      .contains(Config.seedName())
+      .click();
 
     AdminSettings.DynamicDatacentersPage.getAddDatacenterCountryInput().click();
     AdminSettings.DynamicDatacentersPage.getAddDatacenterCountryInput().get('mat-option').contains(country).click();
@@ -87,7 +94,7 @@ describe('Admin Settings - Dynamic Datacenters Story', () => {
   });
 
   it('should create a new cluster in the new datacenter', () => {
-    WizardPage.getProviderBtn(provider).click();
+    WizardPage.getProviderBtn(Provider.kubeAdm).click();
     WizardPage.getDatacenterBtn(location).click();
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
@@ -112,6 +119,9 @@ describe('Admin Settings - Dynamic Datacenters Story', () => {
 
   it('should delete the project', () => {
     ProjectsPage.deleteProject(projectName);
+  });
+
+  it('should verify that there are no projects', () => {
     ProjectsPage.verifyNoProjects();
   });
 

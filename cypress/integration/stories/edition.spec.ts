@@ -18,12 +18,10 @@ import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
 import {View} from '../../utils/view';
 import {Mocks} from '../../utils/mocks';
+import {Config} from '../../utils/config';
 
 describe('Edition Story', () => {
-  const kubermaticEdition = Cypress.env('KUBERMATIC_EDITION');
-  const isEnterpriseEdition = kubermaticEdition === 'ee';
-  const editionName = isEnterpriseEdition ? 'Enterprise Edition' : 'Community Edition';
-  const themePickerAvailability = isEnterpriseEdition ? 'available' : 'not available';
+  const editionName = Config.isEnterpriseEdition() ? 'Enterprise Edition' : 'Community Edition';
 
   beforeEach(() => {
     if (Mocks.enabled()) {
@@ -44,8 +42,8 @@ describe('Edition Story', () => {
     UserSettingsPage.visit();
   });
 
-  it(`should check if theme picker is ${themePickerAvailability}`, () => {
-    UserSettingsPage.getThemePicker().should(isEnterpriseEdition ? Condition.Exist : Condition.NotExist);
+  it(`should check if theme picker is ${Config.isEnterpriseEdition() ? 'available' : 'not available'}`, () => {
+    UserSettingsPage.getThemePicker().should(Config.isEnterpriseEdition() ? Condition.Exist : Condition.NotExist);
   });
 
   it('should logout', () => {

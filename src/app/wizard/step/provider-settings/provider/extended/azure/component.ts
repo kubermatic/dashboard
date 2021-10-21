@@ -22,7 +22,7 @@ import {AZURE_LOADBALANCER_SKUS, AzureCloudSpec, CloudSpec, Cluster, ClusterSpec
 import {Datacenter} from '@shared/entity/datacenter';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {EMPTY, merge, Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 

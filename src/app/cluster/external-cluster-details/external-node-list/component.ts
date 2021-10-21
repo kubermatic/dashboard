@@ -22,7 +22,7 @@ import {NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
 import {NodeHealthStatus} from '@shared/utils/health-status/node-health-status';
 import {NodeUtils} from '@shared/utils/node-utils/node-utils';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 

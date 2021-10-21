@@ -19,7 +19,7 @@ import {PresetsService} from '@core/services/wizard/presets';
 import {Cluster} from '@shared/entity/cluster';
 import {SimplePresetList} from '@shared/entity/preset';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {map, switchMap, takeUntil} from 'rxjs/operators';
 
 export enum Controls {
