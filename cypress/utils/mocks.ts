@@ -25,7 +25,7 @@ interface Mock {
 }
 
 export class Mocks {
-  private static _user: any = {
+  private static _currentUser: any = {
     id: 'user-j9e03',
     name: 'roxy',
     creationTimestamp: new Date(),
@@ -42,15 +42,52 @@ export class Mocks {
     },
   };
 
-  static updateUser(email: string, isAdmin = false): void {
-    this._user.email = email;
-    this._user.name = email.split('@')[0];
-    this._user.isAdmin = isAdmin;
+  static updateCurrentUser(email: string, isAdmin = false): void {
+    this._currentUser.email = email;
+    this._currentUser.name = email.split('@')[0];
+    this._currentUser.isAdmin = isAdmin;
   }
 
+  static adminSettings: any = {
+    customLinks: [],
+    cleanupOptions: {
+      Enabled: true,
+      Enforced: false
+    },
+    defaultNodeCount: 1,
+    clusterTypeOptions: 0,
+    displayDemoInfo: true,
+    displayAPIDocs: true,
+    displayTermsOfService: true,
+    enableDashboard: true,
+    enableOIDCKubeconfig: false,
+    userProjectsLimit: 0,
+    restrictProjectCreation: false,
+    enableExternalClusterImport: true,
+    opaOptions: {
+      enabled: false,
+      enforced: false
+    },
+    mlaOptions: {
+      loggingEnabled: true,
+      loggingEnforced: false,
+      monitoringEnabled: true,
+      monitoringEnforced: false
+    },
+    mlaAlertmanagerPrefix: "alertmanager",
+    mlaGrafanaPrefix: "grafana",
+    machineDeploymentVMResourceQuota: {
+      minCPU: 2,
+      maxCPU: 0,
+      minRAM: 2,
+      maxRAM: 0,
+      enableGPU: false
+    }
+  };  
+
   private static _defaults: Mock[] = [
-    {m: RequestType.GET, p: Endpoint.AdminSettings, r: {fixture: 'admin-settings.json'}},
-    {m: RequestType.GET, p: Endpoint.CurrentUser, r: Mocks._user},
+    {m: RequestType.GET, p: Endpoint.CurrentUser, r: Mocks._currentUser},
+    {m: RequestType.GET, p: Endpoint.AdminSettings, r: Mocks.adminSettings},
     {m: RequestType.GET, p: Endpoint.Seeds, r: ['test-seed']},
     {m: RequestType.GET, p: Endpoint.SeedSettings, r: {fixture: 'seed-settings.json'}},
     {m: RequestType.GET, p: Endpoint.Datacenters, r: {fixture: 'datacenters.json'}},

@@ -19,18 +19,24 @@ import {AdminSettings} from '../../../pages/admin-settings.po';
 import {ProjectsPage} from '../../../pages/projects.po';
 import _ from 'lodash';
 import {LoginPage} from '../../../pages/login.po';
-import {RequestType, Response, ResponseType, TrafficMonitor} from '../../../utils/monitor';
-import {Endpoint} from '../../../utils/endpoint';
 import {Config} from '../../../utils/config';
+import {Mocks} from '../../../utils/mocks';
+import { Endpoint } from '../../../utils/endpoint';
+import { RequestType } from '../../../utils/monitor';
 
 describe('Admin Settings - Project Limit Story', () => {
-  const firstProjectName = _.uniqueId('e2e-test-project-');
-  const secondProjectName = _.uniqueId('e2e-test-project-');
-  const timeout = 10000;
-  const retries = 5;
+  const firstProjectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
+  const secondProjectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
+  const timeout = Mocks.enabled() ? 100 : 10000;
+
+  beforeEach(() => {
+    if (Mocks.enabled()) {
+      Mocks.register();
+    }
+  });
 
   it('should login as admin', () => {
-    login(Config.adminEmail());
+    login(Config.adminEmail(), Config.password(), true);
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -39,8 +45,15 @@ describe('Admin Settings - Project Limit Story', () => {
   });
 
   it('restrict project creation to admins only', () => {
-    AdminSettings.DefaultsAndLimitsPage.getRestrictProjectCreationToAdminsCheckbox().click();
-    AdminSettings.waitForSave();
+    if (Mocks.enabled()) {
+      Mocks.adminSettings.restrictProjectCreation = true;
+    } else {
+      AdminSettings.DefaultsAndLimitsPage.getRestrictProjectCreationToAdminsCheckbox().click();
+      AdminSettings.waitForSave();
+    }
+  });
+
+  it('should verify project creation restriction', () => {
     AdminSettings.DefaultsAndLimitsPage.getRestrictProjectCreationToAdminsCheckbox()
       .find('input')
       .should(Condition.BeChecked);
@@ -51,7 +64,7 @@ describe('Admin Settings - Project Limit Story', () => {
   });
 
   it('should login as normal user', () => {
-    login(Config.userEmail());
+    login(Config.userEmail(), Config.password(), false);
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -68,7 +81,7 @@ describe('Admin Settings - Project Limit Story', () => {
   });
 
   it('should login as admin', () => {
-    login(Config.adminEmail());
+    login(Config.adminEmail(), Config.password(), true);
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -77,16 +90,30 @@ describe('Admin Settings - Project Limit Story', () => {
   });
 
   it('remove restriction for project creation to admins only', () => {
-    AdminSettings.DefaultsAndLimitsPage.getRestrictProjectCreationToAdminsCheckbox().click();
-    AdminSettings.waitForSave();
+    if (Mocks.enabled()) {
+      Mocks.adminSettings.restrictProjectCreation = false;
+    } else {
+      AdminSettings.DefaultsAndLimitsPage.getRestrictProjectCreationToAdminsCheckbox().click();
+      AdminSettings.waitForSave();
+    }
+  });
+
+  it('should verify project creation restriction is off', () => {
     AdminSettings.DefaultsAndLimitsPage.getRestrictProjectCreationToAdminsCheckbox()
       .find('input')
       .should(Condition.NotBeChecked);
   });
 
   it('set project limit for normal users to 1', () => {
-    AdminSettings.DefaultsAndLimitsPage.getProjectLimitInput().clear().type('1').trigger('change');
-    AdminSettings.waitForSave();
+    if (Mocks.enabled()) {
+      Mocks.adminSettings.userProjectsLimit = 1;
+    } else {
+      AdminSettings.DefaultsAndLimitsPage.getProjectLimitInput().clear().type('1').trigger('change');
+      AdminSettings.waitForSave();
+    }
+  });
+
+  it('should verify project limit for normal users', () => {
     AdminSettings.DefaultsAndLimitsPage.getProjectLimitInput().should(Condition.HaveValue, '1');
   });
 
@@ -95,7 +122,7 @@ describe('Admin Settings - Project Limit Story', () => {
   });
 
   it('should login as normal user', () => {
-    login(Config.userEmail());
+    login(Config.userEmail(), Config.password(), false);
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -104,6 +131,10 @@ describe('Admin Settings - Project Limit Story', () => {
   });
 
   it('should not be able to create second project', () => {
+    if (Mocks.enabled()) {
+      cy.intercept(RequestType.POST, Endpoint.Projects, {statusCode: 500});
+    }
+
     ProjectsPage.getAddProjectBtn().should(Condition.NotBe, 'disabled').click();
     ProjectsPage.getAddProjectInput().type(secondProjectName).should(Condition.HaveValue, secondProjectName);
     ProjectsPage.getAddProjectConfirmBtn().should(Condition.NotBe, 'disabled').click();
@@ -112,15 +143,10 @@ describe('Admin Settings - Project Limit Story', () => {
 
   it('should delete first project', () => {
     ProjectsPage.deleteProject(firstProjectName);
-    ProjectsPage.verifyNoProjects();
   });
 
-  it('should verify there are no projects', () => {
-    TrafficMonitor.newTrafficMonitor()
-      .method(RequestType.GET)
-      .url(Endpoint.Projects)
-      .retry(retries)
-      .expect(Response.newResponse(ResponseType.LIST).elements(0));
+  it('should verify that there are no projects', () => {
+    ProjectsPage.verifyNoProjects();
   });
 
   it('should logout', () => {
@@ -128,7 +154,7 @@ describe('Admin Settings - Project Limit Story', () => {
   });
 
   it('should login as admin', () => {
-    login(Config.adminEmail());
+    login(Config.adminEmail(), Config.password(), true);
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -137,8 +163,15 @@ describe('Admin Settings - Project Limit Story', () => {
   });
 
   it('remove project limit', () => {
-    AdminSettings.DefaultsAndLimitsPage.getProjectLimitInput().clear().type('0').trigger('change');
-    AdminSettings.waitForSave();
+    if (Mocks.enabled()) {
+      Mocks.adminSettings.userProjectsLimit = 0;
+    } else {
+      AdminSettings.DefaultsAndLimitsPage.getProjectLimitInput().clear().type('0').trigger('change');
+      AdminSettings.waitForSave();
+    }
+  });
+
+  it('should verify project limit for normal users', () => {
     AdminSettings.DefaultsAndLimitsPage.getProjectLimitInput().should(Condition.HaveValue, '0');
   });
 

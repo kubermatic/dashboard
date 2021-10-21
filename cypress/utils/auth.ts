@@ -30,7 +30,7 @@ import {Config} from './config';
 export function login(email = Config.userEmail(), password = Config.password(), isAdmin = false): void {
   if (Mocks.enabled()) {
     mockLogin();
-    Mocks.updateUser(email, isAdmin);
+    Mocks.updateCurrentUser(email, isAdmin);
   } else {
     doLogin(email, password);
   }

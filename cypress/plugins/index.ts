@@ -30,9 +30,7 @@ export default async (on, config) => {
       '**/integration/stories/admin-settings/cluster-settings.spec.ts',
       '**/integration/stories/admin-settings/custom-links.spec.ts',
       '**/integration/stories/admin-settings/dynamic-datacenters.spec.ts',
-      '**/integration/stories/admin-settings/machine-deployment-replicas.spec.ts',
       '**/integration/stories/admin-settings/opa-integration.spec.ts',
-      '**/integration/stories/admin-settings/project-limit.spec.ts',
       '**/integration/stories/admin-settings/resource-quota.spec.ts',
     ];
   } else {
@@ -48,7 +46,9 @@ export default async (on, config) => {
       '**/integration/stories/ssh-keys.spec.ts',
       '**/integration/stories/user-settings.spec.ts',
       '**/integration/stories/admin-settings/administrators.spec.ts',
+      '**/integration/stories/admin-settings/machine-deployment-replicas.spec.ts',
       '**/integration/stories/admin-settings/presets.spec.ts',
+      '**/integration/stories/admin-settings/project-limit.spec.ts',
     ];
   }
 
