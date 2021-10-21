@@ -26,7 +26,7 @@ import {Preset} from '../../../utils/preset';
 import {Datacenter, Provider} from '../../../utils/provider';
 import {View} from '../../../utils/view';
 import {WizardStep} from '../../../utils/wizard';
-import { Mocks } from '../../../utils/mocks';
+import {Mocks} from '../../../utils/mocks';
 
 describe('Admin Settings - Resource Quota Story', () => {
   const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
