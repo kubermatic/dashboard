@@ -23,16 +23,16 @@ import {Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 
 @Component({
-  selector: 'km-users',
+  selector: 'km-accounts',
   templateUrl: './template.html',
   styleUrls: ['style.scss'],
 })
-export class UsersComponent implements OnInit, OnChanges {
+export class AccountsComponent implements OnInit, OnChanges {
   users: Member[] = [];
   isLoading = false;
   currentUser: Member;
   dataSource = new MatTableDataSource<Member>();
-  displayedColumns: string[] = ['name', 'email', 'lastSeen', 'creationTimestamp'];
+  displayedColumns: string[] = ['name', 'role', 'email', 'lastSeen', 'creationTimestamp'];
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   private _unsubscribe = new Subject<void>();

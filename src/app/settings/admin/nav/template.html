@@ -76,26 +76,6 @@ limitations under the License.
     </a>
   </div>
 
-  <div class="menu-item">
-    <a id="km-nav-item-administrators"
-       routerLink="administrators"
-       routerLinkActive="active"
-       fxLayoutAlign=" center">
-      <i class="km-user"></i>
-      <span>Administrators</span>
-    </a>
-  </div>
-
-  <div class="menu-item">
-    <a id="km-nav-item-users"
-       routerLink="users"
-       routerLinkActive="active"
-       fxLayoutAlign=" center">
-      <i class="km-user"></i>
-      <span>Members</span>
-    </a>
-  </div>
-
   <div *ngIf="isEnterpriseEdition"
        class="menu-item">
     <a id="km-nav-item-metering"
@@ -104,6 +84,26 @@ limitations under the License.
        fxLayoutAlign=" center">
       <i class="km-icon-metering"></i>
       <span>Metering</span>
+    </a>
+  </div>
+
+  <div class="menu-item">
+    <a id="km-nav-item-users"
+       routerLink="accounts"
+       routerLinkActive="active"
+       fxLayoutAlign=" center">
+      <i class="km-icon-member"></i>
+      <span>Accounts</span>
+    </a>
+  </div>
+
+  <div class="menu-item">
+    <a id="km-nav-item-administrators"
+       routerLink="administrators"
+       routerLinkActive="active"
+       fxLayoutAlign=" center">
+      <i class="km-user"></i>
+      <span>Administrators</span>
     </a>
   </div>
 </div>

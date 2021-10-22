@@ -13,15 +13,12 @@
 // limitations under the License.
 
 import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {UsersComponent} from '@app/settings/admin/users/component';
+import {AccountsComponent} from '@app/settings/admin/accounts/component';
+import {AccountsRoutingModule} from '@app/settings/admin/accounts/routing';
+import {SharedModule} from '@shared/module';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: UsersComponent,
-  },
-];
-
-@NgModule({imports: [RouterModule.forChild(routes)]})
-export class UsersRoutingModule {}
+@NgModule({
+  imports: [SharedModule, AccountsRoutingModule],
+  declarations: [AccountsComponent],
+})
+export class AccountsModule {}
