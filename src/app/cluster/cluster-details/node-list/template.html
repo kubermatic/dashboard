@@ -324,10 +324,6 @@ limitations under the License.
               <div value>{{element.spec.cloud.anexia.vlanID}}</div>
             </km-property>
 
-            <km-property *ngIf="element.spec.cloud.azure?.size">
-              <div key>Node Size</div>
-              <div value>{{element.spec.cloud.azure.size}}</div>
-            </km-property>
             <km-property *ngIf="element.spec.cloud.azure?.zones?.length > 0">
               <div key>Zone</div>
               <div value>{{element.spec.cloud.azure.zones}}</div>
