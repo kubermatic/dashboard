@@ -87,9 +87,9 @@ presubmits:
                   name: kubermatic-codecov
                   key: token
 
-  - name: pre-dashboard-test-e2e
-    always_run: true
-    optional: false
+  - name: pre-dashboard-test-full-e2e
+    always_run: false
+    optional: true
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     extra_refs:
@@ -141,9 +141,9 @@ presubmits:
                   name: e2e-ci
                   key: serviceAccountSigningKey
 
-  - name: pre-dashboard-test-e2e-ce
-    always_run: true
-    optional: false
+  - name: pre-dashboard-test-full-e2e-ce
+    always_run: false
+    optional: true
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     extra_refs:
@@ -197,9 +197,8 @@ presubmits:
                   name: e2e-ci
                   key: serviceAccountSigningKey
 
-  - name: pre-dashboard-test-e2e-mock-ee
+  - name: pre-dashboard-test-e2e
     always_run: true
-    optional: false
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     labels:
@@ -224,9 +223,8 @@ presubmits:
             - name: CYPRESS_MOCKS
               value: "true"
 
-  - name: pre-dashboard-test-e2e-mock-ce
+  - name: pre-dashboard-test-e2e-ce
     always_run: true
-    optional: false
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     labels:
