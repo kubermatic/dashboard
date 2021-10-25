@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use 'variables';
+
 @mixin theme-changelog-component($colors) {
   .km-changelog-category {
     .mat-chip {
@@ -64,15 +66,8 @@
 
   .km-changelog-link-card {
     &:hover {
-      i {
-        background-color: map-get($colors, primary-hover);
-      }
-
-      .km-changelog-link-caption {
-        > span {
-          color: map-get($colors, text-secondary);
-        }
-      }
+      background-color: #edeff0;
+      border-radius: 8px;
     }
   }
 
