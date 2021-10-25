@@ -14,7 +14,6 @@
 
 @use 'variables';
 @use 'mixins';
-
 @import 'images';
 
 // Cards.
@@ -22,10 +21,10 @@ mat-card {
   &.mat-card {
     border-radius: variables.$border-radius;
     box-shadow: variables.$border-box-shadow;
-    margin: 20px 0 0 0;
+    margin: 20px 0 0;
     padding: 30px 0;
 
-    &:not([class*=mat-elevation-z]) {
+    &:not([class*='mat-elevation-z']) {
       box-shadow: variables.$border-box-shadow;
     }
 
@@ -133,8 +132,8 @@ mat-card {
     .mat-sort-header-arrow {
       .mat-sort-header-indicator {
         &::before {
-          content: "";
-          mask: url("/assets/images/icons/arrow-down.svg");
+          content: '';
+          mask: url('/assets/images/icons/arrow-down.svg');
           mask-position: center;
           mask-repeat: no-repeat;
           min-height: 8px;
@@ -150,8 +149,8 @@ mat-card {
     .mat-sort-header-arrow {
       .mat-sort-header-indicator {
         &::before {
-          content: "";
-          mask: url("/assets/images/icons/arrow-up.svg");
+          content: '';
+          mask: url('/assets/images/icons/arrow-up.svg');
           mask-position: center;
           mask-repeat: no-repeat;
           min-height: 8px;
@@ -176,10 +175,12 @@ mat-card {
   }
 }
 
+/* stylelint-disable selector-class-pattern */
 .mat-column-status,
 .mat-column-stateArrow {
   width: 8px;
 }
+/* stylelint-enable selector-class-pattern */
 
 // Steppers.
 .mat-stepper-horizontal {
@@ -213,7 +214,7 @@ mat-card {
     transform: none !important;
     transition: none;
 
-    &[aria-expanded="false"] {
+    &[aria-expanded='false'] {
       width: 0;
     }
   }
@@ -272,7 +273,7 @@ mat-card {
 mat-list-item {
   &.disabled {
     i {
-      opacity: .3;
+      opacity: 30%;
     }
   }
 }
@@ -313,7 +314,7 @@ mat-form-field {
 
             color: transparent;
             display: inline-block;
-            mask: url("/assets/images/icons/arrow-down.svg");
+            mask: url('/assets/images/icons/arrow-down.svg');
             mask-repeat: no-repeat;
             mask-size: contain;
           }
@@ -327,7 +328,6 @@ mat-form-field {
           .mat-select-arrow {
             @include mixins.size(14px);
 
-            -webkit-transform: rotate(180deg);
             transform: rotate(180deg);
           }
         }
@@ -341,7 +341,7 @@ mat-form-field {
 
   &.km-dropdown-with-suffix {
     .mat-form-field-infix {
-      padding: 8px 0 12px 0;
+      padding: 8px 0 12px;
     }
 
     &.mat-primary {
@@ -364,14 +364,16 @@ mat-form-field {
 
     .mat-form-field-infix {
       border-top: 8px solid transparent;
-      padding: 8px 0 8px 0;
+      padding: 8px 0;
     }
   }
 }
 
+/* stylelint-disable */
 mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):not(.mat-form-field-disabled) div.mat-form-field-flex:hover label {
   transition: all .2s ease;
 }
+/* stylelint-enable */
 
 .mat-select {
   width: fit-content;
@@ -393,7 +395,7 @@ mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):no
   .mat-select-placeholder {
     font-size: variables.$font-size-subhead;
     line-height: 20px;
-    opacity: .7;
+    opacity: 70%;
   }
 
   .mat-icon-button {
@@ -637,7 +639,7 @@ mat-tooltip-component .mat-tooltip {
 // Tab.
 .mat-tab-list {
   .mat-tab-label {
-    opacity: 1;
+    opacity: 100%;
 
     .mat-tab-label-content {
       font-size: 16px;

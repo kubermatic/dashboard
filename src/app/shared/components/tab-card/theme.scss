@@ -12,15 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use 'sass:map';
 @use 'variables';
 
 @mixin theme-tab-card-component($colors) {
   .km-tab-card {
     .mat-tab-header {
-      border-bottom: 1px solid map-get($colors, tab-divider);
+      border-bottom: 1px solid map.get($colors, tab-divider);
 
       .mat-ink-bar {
-        background-color: map-get($colors, primary);
+        background-color: map.get($colors, primary);
       }
     }
   }
@@ -29,11 +30,11 @@
     .mat-tab-header {
       .mat-tab-label-container {
         .mat-tab-label:hover:not(.mat-tab-label-active) {
-          background: map-get($colors, background-hover);
+          background: map.get($colors, background-hover);
         }
 
         .mat-tab-label-active {
-          background: map-get($colors, background-card);
+          background: map.get($colors, background-card);
         }
       }
     }

@@ -12,14 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use 'sass:map';
+
 @mixin theme-project-selector-component($colors) {
   .km-projects-container {
     i {
-      background-color: map-get($colors, text);
+      background-color: map.get($colors, text);
     }
 
     &:hover {
-      background-color: map-get($colors, project-selector-hover);
+      background-color: map.get($colors, project-selector-hover);
     }
   }
 }

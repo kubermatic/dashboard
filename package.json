@@ -56,7 +56,7 @@
     "@fontsource/ubuntu": "4.5.0",
     "core-js": "3.19.0",
     "country-code-lookup": "0.0.19",
-    "flag-icon-css": "4.0.0",
+    "flag-icon-css": "3.5.0",
     "git-describe": "4.1.0",
     "jquery": "3.6.0",
     "js-base64": "3.7.2",
@@ -70,6 +70,8 @@
     "ngx-custom-validators": "11.0.1",
     "ngx-filter-pipe": "2.1.2",
     "ngx-monaco-editor": "12.0.0",
+    "postcss": "^8.3.11",
+    "postcss-scss": "^4.0.1",
     "rxjs": "7.3.0",
     "rxjs-compat": "6.6.7",
     "semver": "7.3.5",
@@ -243,12 +245,8 @@
       "stylelint-order"
     ],
     "rules": {
-      "at-rule-no-unknown": null,
-      "font-family-no-missing-generic-family-keyword": null,
+      "alpha-value-notation": "percentage",
       "no-descending-specificity": null,
-      "number-leading-zero": null,
-      "selector-type-no-unknown": null,
-      "no-invalid-position-at-import-rule": null,
       "selector-pseudo-element-no-unknown": true,
       "order/order": [
         "dollar-variables",
@@ -269,13 +267,15 @@
         "at-rules",
         "rules"
       ],
+      "order/properties-alphabetical-order": true,
       "plugin/no-unsupported-browser-features": [
         true,
         {
           "severity": "warning"
         }
       ],
-      "order/properties-alphabetical-order": true
+      "scss/comment-no-empty": null,
+      "string-quotes": "single"
     }
   }
 }

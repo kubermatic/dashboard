@@ -12,16 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use 'sass:map';
+
 @mixin theme-install-addon-dialog-component($colors) {
   .km-install-addon-option {
-    box-shadow: 0 0 0 1px map-get($colors, divider);
+    box-shadow: 0 0 0 1px map.get($colors, divider);
 
     &:hover {
-      box-shadow: 0 0 0 2px map-get($colors, secondary);
+      box-shadow: 0 0 0 2px map.get($colors, secondary);
     }
 
     .option-desc {
-      color: map-get($colors, text);
+      color: map.get($colors, text);
     }
   }
 }

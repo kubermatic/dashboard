@@ -12,16 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use 'sass:map';
+
 @mixin theme-footer-component($colors) {
   .km-footer {
-    background-color: map-get($colors, background);
+    background-color: map.get($colors, background);
 
     * {
-      color: map-get($colors, footer-text);
+      color: map.get($colors, footer-text);
     }
 
     i {
+      /* stylelint-disable */
       filter: grayscale(1) brightness(0) invert(.75);
+      /* stylelint-enable */
     }
   }
 }

@@ -28,10 +28,10 @@ $toggle-height: 61px;
 
     border-radius: unset;
     border-width: 2px;
-    margin: 4px 0 0 0;
+    margin: 4px 0 0;
 
     &:hover {
-      transition: all .5s ease;
+      transition: all 0.5s ease;
     }
   }
 }

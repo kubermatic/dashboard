@@ -12,12 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use 'sass:map';
+
 @mixin theme-wizard-openstack-provider-basic($colors) {
   .km-wizard-openstack-button-toggle-group {
     &.mat-button-toggle-group {
       .mat-button-toggle {
         &:not(.mat-button-toggle-checked) {
-          background-color: map-get($colors, divider);
+          background-color: map.get($colors, divider);
         }
       }
     }

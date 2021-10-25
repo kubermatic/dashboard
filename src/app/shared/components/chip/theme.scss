@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use 'sass:map';
+
 @mixin theme-chip-component($colors) {
   km-chip {
     .mat-chip {
@@ -20,15 +22,15 @@
       }
 
       &.km-info-bg {
-        background-color: map-get($colors, primary-hover);
+        background-color: map.get($colors, primary-hover);
       }
 
       &.km-warning-bg {
-        background-color: map-get($colors, indicator-orange);
+        background-color: map.get($colors, indicator-orange);
       }
 
       &.km-error-bg {
-        background-color: map-get($colors, indicator-red);
+        background-color: map.get($colors, indicator-red);
       }
     }
   }

@@ -12,11 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use 'sass:map';
+
 @mixin theme-wizard-cluster-step-component($colors) {
   .km-cluster-spec-type {
     &.mat-button-toggle-group {
       .mat-button-toggle {
-        background-color: map-get($colors, background-hover);
+        background-color: map.get($colors, background-hover);
 
         i {
           filter: grayscale(100%);
@@ -24,12 +26,12 @@
 
         &:hover {
           background-color: transparent;
-          border: 2px solid map-get($colors, secondary);
+          border: 2px solid map.get($colors, secondary);
         }
 
         &.mat-button-toggle-checked {
           background-color: transparent;
-          border: 2px solid map-get($colors, primary);
+          border: 2px solid map.get($colors, primary);
 
           i {
             filter: none;

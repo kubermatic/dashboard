@@ -12,12 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use 'sass:map';
+
 @mixin theme-eol-component($colors) {
   .km-warning-border {
-    border-color: map-get($colors, indicator-orange);
+    border-color: map.get($colors, indicator-orange);
   }
 
   .km-error-border {
-    border-color: map-get($colors, indicator-red);
+    border-color: map.get($colors, indicator-red);
   }
 }

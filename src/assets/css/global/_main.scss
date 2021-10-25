@@ -34,7 +34,7 @@ a {
 
 hr {
   border-style: solid;
-  border-width: 1px 0 0 0;
+  border-width: 1px 0 0;
 }
 
 ::-webkit-scrollbar {
@@ -44,7 +44,7 @@ hr {
 .km-empty-list-msg {
   border-top: 1px solid;
   font-size: variables.$font-size-body;
-  padding: 15px 30px 15px;
+  padding: 15px 30px;
   text-align: center;
 }
 
@@ -53,7 +53,7 @@ hr {
     .km-mat-footer-row {
       border-bottom-left-radius: variables.$border-radius;
       border-bottom-right-radius: variables.$border-radius;
-      border-style: solid dashed dashed dashed;
+      border-style: solid dashed dashed;
       border-width: 1px;
       padding: 0;
 
@@ -321,15 +321,15 @@ hr {
   .km-table-actions {
     button {
       margin-left: 5px;
-      opacity: 0;
+      opacity: 0%;
       transition: visibility 0s 0s, opacity 0s ease-out;
     }
   }
 
   tr:hover {
     button {
-      opacity: 1;
-      transition: opacity .1s ease-out;
+      opacity: 100%;
+      transition: opacity 0.1s ease-out;
     }
   }
 }
@@ -341,7 +341,7 @@ hr {
     }
 
     .mat-form-field-infix {
-      padding: 12px 0 12px 0;
+      padding: 12px 0;
       width: 120px;
     }
 
@@ -357,8 +357,8 @@ hr {
       }
 
       .mat-form-field-outline-thick {
-        opacity: 1;
-        transition: all .5s ease;
+        opacity: 100%;
+        transition: all 0.5s ease;
       }
     }
   }
@@ -458,7 +458,7 @@ km-dashboard {
 
 .km-search-input {
   &.mat-form-field {
-    margin: -10px 0 -30px 0;
+    margin: -10px 0 -30px;
     max-height: 30px;
     width: 280px;
 
