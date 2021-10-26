@@ -34,6 +34,8 @@ export enum Controls {
   AccessKeyID = 'accessKeyID',
   AccessKeySecret = 'accessKeySecret',
   VPCID = 'vpcId',
+  AssumeRoleARN = 'assumeRoleARN',
+  AssumeRoleExternalID = 'assumeRoleID',
 }
 
 enum VPCState {
@@ -83,6 +85,8 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
     this.form = this._builder.group({
       [Controls.AccessKeyID]: this._builder.control('', Validators.required),
       [Controls.AccessKeySecret]: this._builder.control('', Validators.required),
+      [Controls.AssumeRoleARN]: this._builder.control('', Validators.required),
+      [Controls.AssumeRoleExternalID]: this._builder.control('', Validators.required),
       [Controls.VPCID]: this._builder.control('', Validators.required),
     });
 
@@ -107,7 +111,12 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.form.reset());
 
-    merge(this.form.get(Controls.AccessKeyID).valueChanges, this.form.get(Controls.AccessKeySecret).valueChanges)
+    merge(
+      this.form.get(Controls.AccessKeyID).valueChanges,
+      this.form.get(Controls.AccessKeySecret).valueChanges,
+      this.form.get(Controls.AssumeRoleARN).valueChanges,
+      this.form.get(Controls.AssumeRoleExternalID).valueChanges
+    )
       .pipe(debounceTime(this._debounceTime))
       .pipe(tap(_ => this._clearVPC()))
       .pipe(switchMap(_ => this._vpcListObservable()))
@@ -165,6 +174,8 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
       .provider(NodeProvider.AWS)
       .accessKeyID(this.form.get(Controls.AccessKeyID).value)
       .secretAccessKey(this.form.get(Controls.AccessKeySecret).value)
+      .assumeRoleARN(this.form.get(Controls.AssumeRoleARN).value)
+      .assumeRoleExternalID(this.form.get(Controls.AssumeRoleExternalID).value)
       .vpcs(this._clusterSpecService.datacenter, this._onVPCLoading.bind(this))
       .pipe(map(vpcs => _.sortBy(vpcs, v => v.name.toLowerCase())))
       .pipe(
@@ -204,6 +215,8 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
           aws: {
             accessKeyId: this.form.get(Controls.AccessKeyID).value,
             secretAccessKey: this.form.get(Controls.AccessKeySecret).value,
+            assumeRoleARN: this.form.get(Controls.AssumeRoleARN).value,
+            assumeRoleExternalID: this.form.get(Controls.AssumeRoleExternalID).value,
           } as AWSCloudSpec,
         } as CloudSpec,
       } as ClusterSpec,

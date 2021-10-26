@@ -93,6 +93,8 @@ export class NodeDataAWSProvider {
                 .provider(NodeProvider.AWS)
                 .accessKeyID(cluster.spec.cloud.aws.accessKeyId)
                 .secretAccessKey(cluster.spec.cloud.aws.secretAccessKey)
+                .assumeRoleARN(cluster.spec.cloud.aws.assumeRoleARN)
+                .assumeRoleExternalID(cluster.spec.cloud.aws.assumeRoleExternalID)
                 .vpc(cluster.spec.cloud.aws.vpcId)
                 .credential(this._presetService.preset)
                 .subnets(cluster.spec.cloud.dc, onLoadingCb)
