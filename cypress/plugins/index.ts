@@ -31,8 +31,10 @@ export default async (on, config) => {
       '**/integration/stories/admin-settings/opa-integration.spec.ts',
     ];
   } else {
+    let ignored: string[];
+
     // TODO: Remove it after fixing flaky tests.
-    config.ignoreTestFiles = [
+    ignored = [
       '**/integration/providers/digitalocean.spec.ts',
       '**/integration/providers/kubevirt.spec.ts',
       '**/integration/providers/openstack.spec.ts',
@@ -40,6 +42,13 @@ export default async (on, config) => {
       '**/integration/stories/opa.spec.ts',
       '**/integration/stories/admin-settings/administrators.spec.ts',
     ];
+
+    // Do not test providers in both editions when running full tests.
+    if (isEnterpriseEdition) {
+      ignored = ['**/integration/providers/**', ...ignored];
+    }
+
+    config.ignoreTestFiles = ignored;
   }
 
   /* eslint-disable no-console */
