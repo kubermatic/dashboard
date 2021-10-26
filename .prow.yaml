@@ -30,7 +30,7 @@ presubmits:
             cpu: 100m
 
   - name: pre-dashboard-go-mod-verify
-    always_run: true
+    run_if_changed: "^(go.sum|go.mod)$|\\.(go)$"
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     labels:
@@ -64,7 +64,7 @@ presubmits:
               memory: 5Gi
 
   - name: pre-dashboard-test-unit
-    always_run: true
+    run_if_changed: "^src/"
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     spec:
@@ -88,7 +88,7 @@ presubmits:
                   key: token
 
   - name: pre-dashboard-test-full-e2e
-    always_run: false
+    run_if_changed: "^(cypress|hack/e2e)/"
     optional: true
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
@@ -142,7 +142,7 @@ presubmits:
                   key: serviceAccountSigningKey
 
   - name: pre-dashboard-test-full-e2e-ce
-    always_run: false
+    run_if_changed: "^(cypress|hack/e2e)/"
     optional: true
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
@@ -198,7 +198,7 @@ presubmits:
                   key: serviceAccountSigningKey
 
   - name: pre-dashboard-test-e2e
-    always_run: true
+    skip_if_only_changed: "^(containers|docs)/|\\.(md)$"
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     labels:
@@ -224,7 +224,7 @@ presubmits:
               value: "true"
 
   - name: pre-dashboard-test-e2e-ce
-    always_run: true
+    skip_if_only_changed: "^(containers|docs)/|\\.(md)$"
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     labels:
@@ -252,7 +252,7 @@ presubmits:
               value: "true"
 
   - name: pre-dashboard-build-image
-    always_run: true
+    skip_if_only_changed: "^(containers|docs)/|\\.(md)$"
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     labels:
@@ -280,7 +280,7 @@ presubmits:
               memory: 2.5Gi
 
   - name: pre-dashboard-build-image-ce
-    always_run: true
+    skip_if_only_changed: "^(containers|docs)/|\\.(md)$"
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     labels:
