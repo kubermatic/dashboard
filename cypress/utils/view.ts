@@ -17,6 +17,10 @@ enum Clusters {
   External = 'clusters/external',
 }
 
+enum ClusterTemplates {
+  Default = 'clustertemplates',
+}
+
 enum Projects {
   Default = 'projects',
 }
@@ -53,6 +57,7 @@ enum Wizard {
 
 export class View {
   static readonly Clusters = Clusters;
+  static readonly ClusterTemplates = ClusterTemplates;
   static readonly Projects = Projects;
   static readonly AdminSettings = AdminSettings;
   static readonly Account = Account;
