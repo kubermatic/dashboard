@@ -65,6 +65,18 @@ export class WizardPage {
     return cy.get('#km-wizard-create-btn');
   }
 
+  static getCreateTemplateBtn(): Cypress.Chainable {
+    return cy.get('#km-wizard-create-template-btn');
+  }
+
+  static getCreateTemplateNameInput(): Cypress.Chainable {
+    return cy.get('#km-save-template-name');
+  }
+
+  static getCreateTemplateConfirmBtn(): Cypress.Chainable {
+    return cy.get('#km-save-template-confirm-btn');
+  }
+
   static getProviderBtn(providerName: string): Cypress.Chainable {
     return cy.get(`.km-provider-logo-${providerName}`);
   }

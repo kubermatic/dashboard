@@ -32,7 +32,8 @@ limitations under the License.
   <div [matTooltip]="getTooltip(view.ClusterTemplates)"
        [ngClass]="getMenuItemClass(view.ClusterTemplates)"
        class="menu-item">
-    <a fxLayoutAlign=" center"
+    <a id="km-nav-item-cluster-templates"
+       fxLayoutAlign=" center"
        [routerLink]="getRouterLink(view.ClusterTemplates)"
        [ngClass]="getLinkClass(view.ClusterTemplates)">
       <i class="km-icon-cluster-template"></i>

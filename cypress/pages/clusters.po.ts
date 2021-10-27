@@ -250,6 +250,18 @@ export class ClustersPage {
     cy.get('div').should(Condition.Contain, 'No clusters available.');
   }
 
+  static verifyClustersCount(count: number): void {
+    this.waitForRefresh();
+    this.verifyUrl();
+
+    const retries = 5;
+    TrafficMonitor.newTrafficMonitor()
+      .method(RequestType.GET)
+      .url(Endpoint.Clusters)
+      .retry(retries)
+      .expect(Response.newResponse(ResponseType.LIST).elements(count));
+  }
+
   static deleteCluster(name: string): void {
     this.getDeleteClusterBtn().click();
     this.getDeleteDialogInput().type(name).should(Condition.HaveValue, name);

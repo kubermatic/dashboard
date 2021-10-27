@@ -25,6 +25,7 @@ limitations under the License.
     <mat-form-field fxFlex>
       <mat-label>Name</mat-label>
       <input matInput
+             id="km-save-template-name"
              [formControlName]="control.Name"
              type="text"
              autocomplete="off"
@@ -67,6 +68,7 @@ limitations under the License.
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-flat-button
+          id="km-save-template-confirm-btn"
           type="submit"
           kmThrottleClick
           (throttleClick)="save()"
