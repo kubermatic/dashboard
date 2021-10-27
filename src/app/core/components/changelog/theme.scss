@@ -65,6 +65,9 @@
   }
 
   .km-changelog-link-card {
+    background-color: #edeff0;
+    border-radius: 8px;
+
     &:hover {
       i {
         background-color: map.get($colors, primary-hover);

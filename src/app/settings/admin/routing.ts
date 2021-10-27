@@ -58,6 +58,10 @@ const routes: Routes = [
         loadChildren: () => import('./bucket-settings/module').then(m => m.AdminSettingsBucketSettingsModule),
       },
       {
+        path: 'accounts',
+        loadChildren: () => import('./accounts/module').then(m => m.AccountsModule),
+      },
+      {
         path: 'metering',
         loadChildren: () => DynamicModule.Metering,
         data: {preload: true},

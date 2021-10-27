@@ -15,8 +15,8 @@
 export enum ChangelogPriority {
   ActionRequired,
   Security,
-  Fixed,
   Added,
+  Fixed,
   Changed,
   Deprecated,
   Removed,

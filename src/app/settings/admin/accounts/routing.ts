@@ -12,21 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'mixins';
-@use 'variables';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {AccountsComponent} from '@app/settings/admin/accounts/component';
 
-:host {
-  padding: 20px 0;
-}
+const routes: Routes = [
+  {
+    path: '',
+    component: AccountsComponent,
+  },
+];
 
-.drawer {
-  position: fixed;
-}
-
-.content-padding {
-  padding: 0 20px;
-}
-
-.search {
-  height: 50px;
-}
+@NgModule({imports: [RouterModule.forChild(routes)]})
+export class AccountsRoutingModule {}

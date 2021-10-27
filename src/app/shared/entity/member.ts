@@ -23,6 +23,7 @@ export class Member {
   name: string;
   userSettings?: UserSettings;
   projects: MemberProject[];
+  lastSeen?: Date;
 }
 
 export class MemberProject {

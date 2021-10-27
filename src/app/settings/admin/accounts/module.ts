@@ -12,21 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'mixins';
-@use 'variables';
+import {NgModule} from '@angular/core';
+import {AccountsComponent} from '@app/settings/admin/accounts/component';
+import {AccountsRoutingModule} from '@app/settings/admin/accounts/routing';
+import {SharedModule} from '@shared/module';
 
-:host {
-  padding: 20px 0;
-}
-
-.drawer {
-  position: fixed;
-}
-
-.content-padding {
-  padding: 0 20px;
-}
-
-.search {
-  height: 50px;
-}
+@NgModule({
+  imports: [SharedModule, AccountsRoutingModule],
+  declarations: [AccountsComponent],
+})
+export class AccountsModule {}

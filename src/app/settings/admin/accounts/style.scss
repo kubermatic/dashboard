@@ -12,21 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'mixins';
 @use 'variables';
 
-:host {
-  padding: 20px 0;
+.mat-card-title {
+  .km-icon-add {
+    margin-left: 0;
+    margin-right: 12px;
+  }
 }
 
-.drawer {
-  position: fixed;
+.card {
+  margin-top: 20px;
 }
 
-.content-padding {
-  padding: 0 20px;
-}
+km-search-field {
+  font-size: variables.$font-size-subhead;
 
-.search {
-  height: 50px;
+  i {
+    margin: 0;
+  }
 }

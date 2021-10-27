@@ -48,6 +48,12 @@ mat-card {
           font-size: variables.$font-size-subhead-lg;
           margin: 0 20px;
         }
+
+        .km-search-input {
+          i {
+            margin: 0;
+          }
+        }
       }
     }
 

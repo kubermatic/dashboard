@@ -22,7 +22,7 @@ export default async (on, config) => {
   const isEnterpriseEdition = config.env.KUBERMATIC_EDITION === 'ee';
 
   if (isAPIMocked) {
-    // TODO: Remove it once all tests will have mocks configured.
+    // TODO: Remove it after configuring mocks.
     config.ignoreTestFiles = [
       '**/integration/stories/opa.spec.ts',
       '**/integration/stories/admin-settings/administrators.spec.ts',
@@ -31,23 +31,24 @@ export default async (on, config) => {
       '**/integration/stories/admin-settings/opa-integration.spec.ts',
     ];
   } else {
-    // TODO: Remove it after fixing flaky tests and making the full tests optional.
-    config.ignoreTestFiles = [
-      '**/integration/providers/**.spec.ts',
-      '**/integration/stories/edition.spec.ts',
-      '**/integration/stories/external-cluster.spec.ts',
-      '**/integration/stories/multi-owner.spec.ts',
+    let ignored: string[];
+
+    // TODO: Remove it after fixing flaky tests.
+    ignored = [
+      '**/integration/providers/digitalocean.spec.ts',
+      '**/integration/providers/kubevirt.spec.ts',
+      '**/integration/providers/openstack.spec.ts',
+      '**/integration/providers/vsphere.spec.ts',
       '**/integration/stories/opa.spec.ts',
-      '**/integration/stories/service-accounts.spec.ts',
-      '**/integration/stories/ssh-keys.spec.ts',
-      '**/integration/stories/user-settings.spec.ts',
       '**/integration/stories/admin-settings/administrators.spec.ts',
-      '**/integration/stories/admin-settings/dynamic-datacenters.spec.ts',
-      '**/integration/stories/admin-settings/machine-deployment-replicas.spec.ts',
-      '**/integration/stories/admin-settings/presets.spec.ts',
-      '**/integration/stories/admin-settings/project-limit.spec.ts',
-      '**/integration/stories/admin-settings/resource-quota.spec.ts',
     ];
+
+    // Do not test providers in both editions when running full tests.
+    if (isEnterpriseEdition) {
+      ignored = ['**/integration/providers/**', ...ignored];
+    }
+
+    config.ignoreTestFiles = ignored;
   }
 
   /* eslint-disable no-console */
