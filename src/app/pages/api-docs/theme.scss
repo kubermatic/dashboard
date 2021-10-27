@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use 'sass:map';
+
 @mixin theme-api-docs-component($colors) {
   .km-swagger-container {
     .info *,
@@ -21,7 +23,7 @@
     .swagger-ui .opblock-summary-description,
     .swagger-ui .markdown p,
     .swagger-ui .title {
-      color: map-get($colors, text);
+      color: map.get($colors, text);
     }
 
     .scheme-container {

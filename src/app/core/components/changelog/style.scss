@@ -42,7 +42,7 @@
 
 .bullet {
   &::before {
-    content: "\2B24";
+    content: '\2B24';
     font-size: 4px;
     padding: 0 5px;
     vertical-align: middle;
@@ -83,7 +83,7 @@
   border-bottom-left-radius: 8px;
   border-right: none;
   border-top-left-radius: 8px;
-  padding: 2px 4px 2px 4px;
+  padding: 2px 4px;
 
   > i {
     @include mixins.size(variables.$font-size-card-title, $force: true);

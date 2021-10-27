@@ -12,32 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use 'sass:map';
+
 @mixin theme-admin-sidenav-component($colors) {
   .km-sidenav {
-    background-color: map-get($colors, background);
+    background-color: map.get($colors, background);
 
     span {
-      color: map-get($colors, text);
+      color: map.get($colors, text);
     }
 
     .mat-divider {
-      border-top-color: map-get($colors, sidenav-divider);
+      border-top-color: map.get($colors, sidenav-divider);
     }
 
     .menu-item a {
       &:hover {
-        background-color: map-get($colors, sidenav-background-hover);
+        background-color: map.get($colors, sidenav-background-hover);
       }
 
       &.active {
-        background-color: map-get($colors, sidenav-background-active);
+        background-color: map.get($colors, sidenav-background-active);
 
         i {
-          background-color: map-get($colors, sidenav-active);
+          background-color: map.get($colors, sidenav-active);
         }
 
         span {
-          color: map-get($colors, sidenav-active);
+          color: map.get($colors, sidenav-active);
         }
       }
     }

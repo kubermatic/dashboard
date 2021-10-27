@@ -12,18 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use 'sass:map';
+
 @mixin theme-notification-component($colors) {
   km-notification {
-    background: map-get($colors, background-card);
-    color: map-get($colors, text);
+    background: map.get($colors, background-card);
+    color: map.get($colors, text);
 
     .type {
       &.success {
-        background: map-get($colors, indicator-green);
+        background: map.get($colors, indicator-green);
       }
 
       &.error {
-        background: map-get($colors, indicator-red);
+        background: map.get($colors, indicator-red);
       }
     }
   }

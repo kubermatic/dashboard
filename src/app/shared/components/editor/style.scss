@@ -36,9 +36,11 @@ $content-top-margin: 7px;
       left: $numbers-column-width + $content-left-margin !important;
       top: $content-top-margin;
 
+      /* stylelint-disable selector-class-pattern */
       .decorationsOverviewRuler {
         visibility: hidden;
       }
+      /* stylelint-enable selector-class-pattern */
     }
 
     .monaco-editor-background {

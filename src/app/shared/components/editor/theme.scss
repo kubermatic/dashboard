@@ -12,49 +12,50 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use 'sass:map';
 @use 'variables';
 
 @mixin theme-editor-component($colors) {
   .km-editor {
     .header {
-      color: map-get($colors, text-secondary);
+      color: map.get($colors, text-secondary);
 
       &.card {
-        background-color: map-get($colors, background-card);
+        background-color: map.get($colors, background-card);
       }
 
       &.dialog {
-        background-color: map-get($colors, background-dialog);
+        background-color: map.get($colors, background-dialog);
       }
 
       &.focused {
-        color: map-get($colors, primary-dark);
+        color: map.get($colors, primary-dark);
       }
     }
 
     .monaco-editor {
-      box-shadow: 0 0 0 1px map-get($colors, divider);
+      box-shadow: 0 0 0 1px map.get($colors, divider);
 
       .margin {
-        background-color: map-get($colors, divider);
+        background-color: map.get($colors, divider);
 
         .line-numbers {
-          color: map-get($colors, text);
+          color: map.get($colors, text);
         }
       }
 
       &.focused {
-        box-shadow: 0 0 0 2px map-get($colors, primary-hover);
+        box-shadow: 0 0 0 2px map.get($colors, primary-hover);
       }
     }
 
     &:hover {
       .header {
-        color: map-get($colors, secondary-dark);
+        color: map.get($colors, secondary-dark);
       }
 
       .monaco-editor {
-        box-shadow: 0 0 0 2px map-get($colors, secondary-hover);
+        box-shadow: 0 0 0 2px map.get($colors, secondary-hover);
         transition: variables.$transition-all;
       }
     }

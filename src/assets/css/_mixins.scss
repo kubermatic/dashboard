@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use 'sass:map';
+
 $breakpoints: (
   'small':  767px,
   'medium': 992px,
@@ -20,7 +22,7 @@ $breakpoints: (
 
 @mixin breakpoint($breakpoint) {
   @if map-has-key($breakpoints, $breakpoint) {
-    @media (max-width: map-get($breakpoints, $breakpoint)) {
+    @media (max-width: map.get($breakpoints, $breakpoint)) {
       @content;
     }
   }
@@ -65,7 +67,7 @@ $breakpoints: (
 
   @if $color {
     background-color: $color;
-  } @else { /* stylelint-disable-line */
+  } @else {
     background-color: #4d555c;
   }
 
@@ -74,8 +76,10 @@ $breakpoints: (
   }
 }
 
+/* stylelint-disable */
 @mixin toolbar-button($position: 1) {
   position: fixed;
   right: ($position * 40px) + (16px * ($position - 1));
   top: 11px;
 }
+/* stylelint-enable */

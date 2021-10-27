@@ -12,13 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use 'sass:map';
+
 @mixin theme-addon-list-component($colors) {
   .km-addon-container {
     .km-addon-menu {
-      border-left: 1px solid map-get($colors, divider);
+      border-left: 1px solid map.get($colors, divider);
 
       &:hover {
-        background-color: map-get($colors, background-hover);
+        background-color: map.get($colors, background-hover);
       }
     }
   }

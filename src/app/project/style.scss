@@ -51,7 +51,7 @@ $project-card-width: 330px;
   flex-wrap: wrap;
 
   button {
-    opacity: 0;
+    opacity: 0%;
   }
 
   .km-icon-cluster {
@@ -70,8 +70,8 @@ $project-card-width: 330px;
       box-shadow: variables.$border-box-shadow-hover;
 
       button {
-        opacity: 1;
-        transition: opacity .1s ease-out;
+        opacity: 100%;
+        transition: opacity 0.1s ease-out;
       }
     }
   }
@@ -93,7 +93,7 @@ $project-card-width: 330px;
   .mat-card-subtitle {
     line-height: 16px;
     margin: 0;
-    padding: 5px 0 0 0;
+    padding: 5px 0 0;
 
     strong {
       font-family: variables.$font-primary-mono;

@@ -32,9 +32,6 @@ import 'core-js/es/symbol';
 
 import 'zone.js';
 
-// @ts-ignore
-window.Buffer = window.Buffer || require('buffer').Buffer;
-
 // Add global to window, assigning the value of window itself.
 // eslint-disable-next-line
 (window as any).global = window;

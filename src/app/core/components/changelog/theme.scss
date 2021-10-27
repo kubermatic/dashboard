@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'variables';
+@use 'sass:map';
 
 @mixin theme-changelog-component($colors) {
   .km-changelog-category {
@@ -22,31 +22,31 @@
       }
 
       &.km-action-required {
-        background-color: map-get($colors, changelog-action-required);
+        background-color: map.get($colors, changelog-action-required);
       }
 
       &.km-added {
-        background-color: map-get($colors, changelog-added);
+        background-color: map.get($colors, changelog-added);
       }
 
       &.km-removed {
-        background-color: map-get($colors, changelog-removed);
+        background-color: map.get($colors, changelog-removed);
       }
 
       &.km-fixed {
-        background-color: map-get($colors, changelog-fixed);
+        background-color: map.get($colors, changelog-fixed);
       }
 
       &.km-changed {
-        background-color: map-get($colors, changelog-changed);
+        background-color: map.get($colors, changelog-changed);
       }
 
       &.km-deprecated {
-        background-color: map-get($colors, changelog-deprecated);
+        background-color: map.get($colors, changelog-deprecated);
       }
 
       &.km-security {
-        background-color: map-get($colors, changelog-security);
+        background-color: map.get($colors, changelog-security);
       }
     }
   }
@@ -54,20 +54,30 @@
   .km-changelog-external-link-icon,
   .km-changelog-link-caption {
     > i {
-      background-color: map-get($colors, primary);
+      background-color: map.get($colors, primary);
     }
   }
 
   .km-changelog-link-caption {
     > span {
-      color: map-get($colors, text);
+      color: map.get($colors, text);
     }
   }
 
   .km-changelog-link-card {
+    background-color: #edeff0;
+    border-radius: 8px;
+
     &:hover {
-      background-color: #edeff0;
-      border-radius: 8px;
+      i {
+        background-color: map.get($colors, primary-hover);
+      }
+
+      .km-changelog-link-caption {
+        > span {
+          color: map.get($colors, text-secondary);
+        }
+      }
     }
   }
 

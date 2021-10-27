@@ -12,17 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use 'sass:color';
+@use 'sass:map';
+
 @mixin theme-cluster-panel-component($colors) {
   .km-cluster-panel {
-    color: map-get($colors, text);
+    color: map.get($colors, text);
 
     .mat-icon-button {
       &:hover {
-        background-color: rgba(map-get($colors, text), .1);
+        background-color: color.adjust(map.get($colors, text), $alpha: 0.1);
       }
 
       i {
-        background-color: map-get($colors, text);
+        background-color: map.get($colors, text);
       }
     }
   }

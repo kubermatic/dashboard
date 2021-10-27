@@ -12,13 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use 'sass:map';
+
 @mixin theme-preset-edit-dialog-component($colors) {
   .table {
-    border-color: map-get($colors, divider);
+    border-color: map.get($colors, divider);
   }
 
   .row {
-    border-bottom-color: map-get($colors, divider);
+    border-bottom-color: map.get($colors, divider);
   }
 
   .km-provider-logo {
