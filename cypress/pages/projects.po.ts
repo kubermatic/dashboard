@@ -44,18 +44,6 @@ export class ProjectsPage {
     return cy.get(`#km-delete-project-${projectName}`);
   }
 
-  static getEditProjectBtn(projectName: string): Cypress.Chainable {
-    return cy.get(`#km-edit-project-${projectName}`);
-  }
-
-  static getEditDialogInput(): Cypress.Chainable {
-    return cy.get('#km-edit-project-dialog-input');
-  }
-
-  static getEditDialogConfirmBtn(): Cypress.Chainable {
-    return cy.get('#km-edit-project-dialog-edit-btn');
-  }
-
   static getAppEdition(): Cypress.Chainable {
     return cy.get('#km-edition');
   }

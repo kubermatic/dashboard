@@ -16,7 +16,7 @@ import {login, logout} from '../../../utils/auth';
 import {Condition} from '../../../utils/condition';
 import {View} from '../../../utils/view';
 import {AdminSettings} from '../../../pages/admin-settings.po';
-import {RequestType, Response, ResponseType, TrafficMonitor} from '../../../utils/monitor';
+import {RequestType, ResponseCheck, ResponseType, TrafficMonitor} from '../../../utils/monitor';
 import {Endpoint} from '../../../utils/endpoint';
 import {Config} from '../../../utils/config';
 
@@ -38,7 +38,7 @@ describe('Admin Settings - Administrators Story', () => {
       .method(RequestType.GET)
       .url(Endpoint.Administrators)
       .retry(retries)
-      .expect(Response.newResponse(ResponseType.LIST).elements(adminsCount));
+      .expect(new ResponseCheck(ResponseType.LIST).elements(adminsCount));
   });
 
   it('should add second admin', () => {
@@ -55,7 +55,7 @@ describe('Admin Settings - Administrators Story', () => {
       .method(RequestType.GET)
       .url(Endpoint.Administrators)
       .retry(retries)
-      .expect(Response.newResponse(ResponseType.LIST).elements(adminsCount));
+      .expect(new ResponseCheck(ResponseType.LIST).elements(adminsCount));
   });
 
   it('should logout', () => {
@@ -89,7 +89,7 @@ describe('Admin Settings - Administrators Story', () => {
       .method(RequestType.GET)
       .url(Endpoint.Administrators)
       .retry(retries)
-      .expect(Response.newResponse(ResponseType.LIST).elements(adminsCount));
+      .expect(new ResponseCheck(ResponseType.LIST).elements(adminsCount));
   });
 
   it('should remove second admin', () => {
@@ -103,7 +103,7 @@ describe('Admin Settings - Administrators Story', () => {
       .method(RequestType.GET)
       .url(Endpoint.Administrators)
       .retry(retries)
-      .expect(Response.newResponse(ResponseType.LIST).elements(adminsCount));
+      .expect(new ResponseCheck(ResponseType.LIST).elements(adminsCount));
   });
 
   it('should logout', () => {
