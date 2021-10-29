@@ -219,23 +219,29 @@ hr {
   vertical-align: middle;
 }
 
-.km-notification {
-  &.mat-snack-bar-container {
-    border-radius: variables.$border-radius;
-    box-shadow: variables.$notification-shadow;
-    display: flex;
-    flex: 1 1 auto;
-    margin: variables.$notification-margin;
-    max-height: variables.$notification-max-height;
-    max-width: variables.$notification-width;
-    min-height: variables.$notification-min-height;
-    min-width: variables.$notification-width;
-    overflow: hidden;
-    padding: 0;
+.km-notification-overlay {
+  bottom: 80px;
+  position: relative !important;
+  right: 24px;
 
-    div {
+  .km-notification {
+    &.mat-snack-bar-container {
+      border-radius: variables.$border-radius;
+      box-shadow: variables.$notification-shadow;
+      display: flex;
       flex: 1 1 auto;
-      height: 100%;
+      margin: 0;
+      max-height: variables.$notification-max-height;
+      max-width: variables.$notification-width;
+      min-height: variables.$notification-min-height;
+      min-width: variables.$notification-width;
+      overflow: hidden;
+      padding: 0;
+
+      div {
+        flex: 1 1 auto;
+        height: 100%;
+      }
     }
   }
 }
