@@ -115,7 +115,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
     merge(this._clusterSpecService.providerChanges, this._clusterSpecService.datacenterChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
-        // TODO: This causes reset of all default values set in the init stage. It should be fixed.
+        // TODO: This causes reset of all default values set in the init stage. It should be fixed.git p
         this.form.reset();
         this.form.get(Controls.AssignAvailabilitySet).setValue(true);
       });
