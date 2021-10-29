@@ -79,7 +79,7 @@
     "zone.js": "0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "12.2.11",
+    "@angular-devkit/build-angular": "12.2.12",
     "@angular/cli": "12.2.11",
     "@angular/compiler-cli": "12.2.11",
     "@bahmutov/add-typescript-to-cypress": "2.1.2",
@@ -94,7 +94,7 @@
     "cypress-fail-fast": "3.1.1",
     "del": "6.0.0",
     "eslint-plugin-compat": "3.13.0",
-    "eslint-plugin-rxjs": "4.0.0",
+    "eslint-plugin-rxjs": "4.0.1",
     "gts": "3.1.0",
     "husky": "7.0.4",
     "jest": "27.3.1",
