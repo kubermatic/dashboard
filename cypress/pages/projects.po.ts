@@ -24,10 +24,6 @@ export class ProjectsPage {
     return cy.get(`#km-project-name-${projectName}`);
   }
 
-  static getActiveProjects(): Cypress.Chainable {
-    return cy.get('i.km-health-state.km-icon-circle.km-success-bg');
-  }
-
   static getAddProjectBtn(): Cypress.Chainable {
     return cy.get('#km-add-project-top-btn');
   }
@@ -68,7 +64,9 @@ export class ProjectsPage {
       .method(RequestType.GET)
       .url(Endpoint.Projects)
       .retry(retries)
-      .expect(new ResponseCheck(ResponseType.LIST, MatchRule.SOME).property('name', projectName));
+      .expect(
+        new ResponseCheck(ResponseType.LIST, MatchRule.SOME).property('name', projectName).property('status', 'Active')
+      );
   }
 
   static verifyUrl(): void {
@@ -92,11 +90,9 @@ export class ProjectsPage {
   }
 
   static selectProject(projectName: string): void {
-    const waitTime = 500;
-    this.getProjectItem(projectName).should(Condition.HaveLength, 1);
-    this.getActiveProjects()
+    this.waitForProject(projectName);
+    this.getProjectItem(projectName)
       .should(Condition.HaveLength, 1)
-      .wait(waitTime)
       .click()
       .then(() => {
         ClustersPage.waitForRefresh();
