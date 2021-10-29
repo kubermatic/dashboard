@@ -90,9 +90,11 @@ export class ProjectsPage {
   }
 
   static selectProject(projectName: string): void {
+    const waitTime = 500;
     this.waitForProject(projectName);
     this.getProjectItem(projectName)
       .should(Condition.HaveLength, 1)
+      .wait(waitTime)
       .click()
       .then(() => {
         ClustersPage.waitForRefresh();
