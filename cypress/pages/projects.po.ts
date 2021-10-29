@@ -14,7 +14,7 @@
 
 import {Condition} from '../utils/condition';
 import {Endpoint} from '../utils/endpoint';
-import {Property, RequestType, Response, ResponseType, TrafficMonitor} from '../utils/monitor';
+import {MatchRule, RequestType, ResponseCheck, ResponseType, TrafficMonitor} from '../utils/monitor';
 import {View} from '../utils/view';
 import {ClustersPage} from './clusters.po';
 import {Mocks} from '../utils/mocks';
@@ -80,7 +80,7 @@ export class ProjectsPage {
       .method(RequestType.GET)
       .url(Endpoint.Projects)
       .retry(retries)
-      .expect(Response.newResponse(ResponseType.LIST).elements(1).property(Property.newProperty('name', projectName)));
+      .expect(new ResponseCheck(ResponseType.LIST, MatchRule.SOME).property('name', projectName));
   }
 
   static verifyUrl(): void {
@@ -147,6 +147,6 @@ export class ProjectsPage {
       .method(RequestType.GET)
       .url(Endpoint.Projects)
       .retry(retries)
-      .expect(Response.newResponse(ResponseType.LIST).elements(0));
+      .expect(new ResponseCheck(ResponseType.LIST).elements(0));
   }
 }
