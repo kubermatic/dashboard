@@ -16,7 +16,7 @@ import {Condition} from '../utils/condition';
 import {Endpoint} from '../utils/endpoint';
 import {Group} from '../utils/member';
 import {Mocks} from '../utils/mocks';
-import {Response, RequestType, ResponseType, TrafficMonitor} from '../utils/monitor';
+import {RequestType, ResponseType, TrafficMonitor, ResponseCheck} from '../utils/monitor';
 import {View} from '../utils/view';
 
 export class ServiceAccountsPage {
@@ -113,7 +113,7 @@ export class ServiceAccountsPage {
       .method(RequestType.GET)
       .url(Endpoint.ServiceAccounts)
       .retry(retries)
-      .expect(Response.newResponse(ResponseType.LIST).elements(0));
+      .expect(new ResponseCheck(ResponseType.LIST).elements(0));
   }
 
   static addToken(name: string): void {

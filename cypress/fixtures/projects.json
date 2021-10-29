@@ -11,6 +11,19 @@
         "email": "roxy@kubermatic.io"
       }
     ]
+  },
+  {
+    "id": "ho9444bq1y",
+    "name": "other-project",
+    "creationTimestamp": "2021-09-12T14:23:54Z",
+    "status": "Active",
+    "owners": [
+      {
+        "name": "roxy",
+        "creationTimestamp": "0001-01-01T00:00:00Z",
+        "email": "roxy@kubermatic.io"
+      }
+    ]
   }
 ]
 
