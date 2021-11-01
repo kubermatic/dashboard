@@ -46,7 +46,7 @@ export class Mocks {
   static adminSettings: any = {
     customLinks: [],
     cleanupOptions: {
-      Enabled: true,
+      Enabled: false,
       Enforced: false,
     },
     defaultNodeCount: 1,

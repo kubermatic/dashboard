@@ -27,7 +27,6 @@ export default async (on, config) => {
     ignored = [
       '**/integration/stories/opa.spec.ts',
       '**/integration/stories/admin-settings/administrators.spec.ts',
-      '**/integration/stories/admin-settings/cluster-settings.spec.ts',
       '**/integration/stories/admin-settings/custom-links.spec.ts',
       '**/integration/stories/admin-settings/opa-integration.spec.ts',
     ];
