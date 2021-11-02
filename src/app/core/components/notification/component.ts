@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component} from '@angular/core';
+import {DOCUMENT} from '@angular/common';
+import {AfterViewInit, Component, Inject} from '@angular/core';
 import {MatSnackBarRef} from '@angular/material/snack-bar';
 
 export enum NotificationType {
@@ -25,7 +26,7 @@ export enum NotificationType {
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class NotificationComponent {
+export class NotificationComponent implements AfterViewInit {
   private _snackBarRef: MatSnackBarRef<NotificationComponent>;
   private _type: NotificationType;
 
@@ -41,6 +42,20 @@ export class NotificationComponent {
   message: string;
   typeIconBackground: string;
   typeIconClassName: string;
+
+  constructor(@Inject(DOCUMENT) private readonly _document: Document) {}
+
+  ngAfterViewInit(): void {
+    // As there is no other way to style wrapping overlay container
+    // element we need to get it this way and add a style class manually.
+    // It makes sure that the invisible spacing surrounding the notification
+    // does not block the access to the underlying elements.
+    const overlayElement = this._document.body.querySelector('.cdk-overlay-pane > .km-notification')?.parentElement;
+
+    if (overlayElement) {
+      overlayElement.classList.add('km-notification-overlay');
+    }
+  }
 
   private _init(): void {
     switch (this._type) {

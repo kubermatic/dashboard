@@ -57,6 +57,7 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
       'You may have sent your authentication request to the wrong tenant',
       'Invalid credentials provided or provided user credentials do not belong to this tenant',
     ],
+    ['failed to list.*Resource group.*could not be found', 'Invalid resource group provided.'],
   ]);
 
   constructor(private readonly _inj: Injector) {

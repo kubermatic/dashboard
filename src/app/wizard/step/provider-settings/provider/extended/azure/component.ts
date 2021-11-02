@@ -54,7 +54,7 @@ enum Controls {
   ],
 })
 export class AzureProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  private readonly _debounceTime = 500;
+  private readonly _debounceTime = 1000;
   readonly Controls = Controls;
   resourceGroups: string[] = [];
   isLoadingResourceGroups = false;
