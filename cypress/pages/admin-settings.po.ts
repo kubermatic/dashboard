@@ -55,30 +55,29 @@ class AdministratorsPage {
 
   addAdmin(email: string): void {
     AdminSettings.AdministratorsPage.getAddAdminBtn().click();
-    AdminSettings.AdministratorsPage.getAddAdminDialogEmailInput()
-      .type(email)
-      .should(Condition.HaveValue, email);
+    AdminSettings.AdministratorsPage.getAddAdminDialogEmailInput().type(email).should(Condition.HaveValue, email);
     AdminSettings.AdministratorsPage.getAddAdminDialogSaveBtn().click();
   }
 
   verifyAdminCount(count: number): void {
     if (Mocks.enabled()) {
-      switch(count) {
+      switch (count) {
         case 1:
-          cy.intercept({method: RequestType.GET, path: Endpoint.Administrators}, {fixture:'administrators.json'});
+          cy.intercept({method: RequestType.GET, path: Endpoint.Administrators}, {fixture: 'administrators.json'});
           break;
+        // eslint-disable-next-line @typescript-eslint/no-magic-numbers
         case 2:
-          cy.intercept({method: RequestType.GET, path: Endpoint.Administrators}, {fixture:'administrators-2.json'});
+          cy.intercept({method: RequestType.GET, path: Endpoint.Administrators}, {fixture: 'administrators-2.json'});
           break;
       }
     }
-    
+
     const retries = 15;
     TrafficMonitor.newTrafficMonitor()
-    .method(RequestType.GET)
-    .url(Endpoint.Administrators)
-    .retry(retries)
-    .expect(Response.newResponse(ResponseType.LIST).elements(count));
+      .method(RequestType.GET)
+      .url(Endpoint.Administrators)
+      .retry(retries)
+      .expect(Response.newResponse(ResponseType.LIST).elements(count));
   }
 }
 

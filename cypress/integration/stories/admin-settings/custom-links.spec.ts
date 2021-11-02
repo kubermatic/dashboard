@@ -44,7 +44,7 @@ describe('Admin Settings - Custom Links Story', () => {
 
   it('should add custom link', () => {
     if (Mocks.enabled()) {
-      Mocks.adminSettings.customLinks.push({'label': linkLabel, 'url': linkURL, 'icon': '', 'location': linkLocation});
+      Mocks.adminSettings.customLinks.push({label: linkLabel, url: linkURL, icon: '', location: linkLocation});
     } else {
       AdminSettings.InterfacePage.getLastCustomLinkLocationInput().click();
       AdminSettings.InterfacePage.getLastCustomLinkLocationInput().get('mat-option').contains(linkLocation).click();
@@ -61,7 +61,7 @@ describe('Admin Settings - Custom Links Story', () => {
       AdminSettings.InterfacePage.getApiDocsCheckbox().click();
       AdminSettings.waitForSave();
     }
-    
+
     AdminSettings.InterfacePage.getApiDocsCheckbox().find('input').should(Condition.BeChecked);
   });
 

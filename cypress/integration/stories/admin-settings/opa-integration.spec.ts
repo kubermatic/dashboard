@@ -48,7 +48,6 @@ describe('Admin Settings - Opa Integration Story', () => {
 
   it('should make sure opa integration enable settings is not checked', () => {
     AdminSettings.DefaultsAndLimitsPage.getOPAEnableCheckbox().find('input').should(Condition.NotBeChecked);
-
   });
 
   it('should make sure opa integration enforce settings is not checked', () => {
@@ -119,7 +118,7 @@ describe('Admin Settings - Opa Integration Story', () => {
       AdminSettings.DefaultsAndLimitsPage.getOPAEnforceCheckbox().click();
       AdminSettings.waitForSave();
     }
-    
+
     AdminSettings.DefaultsAndLimitsPage.getOPAEnforceCheckbox().find('input').should(Condition.BeChecked);
   });
 

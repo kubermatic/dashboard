@@ -53,7 +53,7 @@ describe('Admin Settings - Administrators Story', () => {
   });
 
   it('should login as second admin', () => {
-    login(Config.userEmail());
+    login(Config.userEmail(), Config.password(), true);
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -66,7 +66,7 @@ describe('Admin Settings - Administrators Story', () => {
   });
 
   it('should login as admin', () => {
-    login(Config.adminEmail());
+    login(Config.adminEmail(), Config.password(), true);
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
