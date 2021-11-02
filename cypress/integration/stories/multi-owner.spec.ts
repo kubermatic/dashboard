@@ -63,9 +63,7 @@ describe('Multi Owner Story', () => {
   });
 
   it('should wait for autoredirect and go back to projects', () => {
-    if (Mocks.enabled()) {
-      cy.setCookie('autoredirect', 'true');
-    } else {
+    if (!Mocks.enabled()) {
       ClustersPage.waitForRefresh();
       ProjectsPage.visit();
     }
