@@ -25,7 +25,7 @@ interface Mock {
 }
 
 export class Mocks {
-  private static _currentUser: any = {
+  static currentUser: any = {
     id: 'user-j9e03',
     name: 'roxy',
     creationTimestamp: new Date(),
@@ -39,14 +39,9 @@ export class Mocks {
     userSettings: {
       itemsPerPage: 5,
       lastSeenChangelogVersion: 'v9.0.0',
+      selectedProjectId: '',
     },
   };
-
-  static updateCurrentUser(email: string, isAdmin = false): void {
-    this._currentUser.email = email;
-    this._currentUser.name = email.split('@')[0];
-    this._currentUser.isAdmin = isAdmin;
-  }
 
   static adminSettings: any = {
     customLinks: [],
@@ -86,7 +81,7 @@ export class Mocks {
   };
 
   private static _defaults: Mock[] = [
-    {m: RequestType.GET, p: Endpoint.CurrentUser, r: Mocks._currentUser},
+    {m: RequestType.GET, p: Endpoint.CurrentUser, r: Mocks.currentUser},
     {m: RequestType.GET, p: Endpoint.AdminSettings, r: Mocks.adminSettings},
     {m: RequestType.GET, p: Endpoint.Seeds, r: ['test-seed']},
     {m: RequestType.GET, p: Endpoint.SeedSettings, r: {fixture: 'seed-settings.json'}},
