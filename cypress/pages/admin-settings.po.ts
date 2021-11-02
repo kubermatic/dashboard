@@ -14,7 +14,8 @@
 
 import {Condition} from '../utils/condition';
 import {Endpoint} from '../utils/endpoint';
-import {RequestType, TrafficMonitor} from '../utils/monitor';
+import {Mocks} from '../utils/mocks';
+import {RequestType, Response, ResponseType, TrafficMonitor} from '../utils/monitor';
 import {Provider} from '../utils/provider';
 import {View} from '../utils/view';
 import {UserPanel} from './user-panel.po';
@@ -50,6 +51,34 @@ class AdministratorsPage {
       .click()
       .then(() => this.getNavItem().click())
       .then(() => this.verifyUrl());
+  }
+
+  addAdmin(email: string): void {
+    AdminSettings.AdministratorsPage.getAddAdminBtn().click();
+    AdminSettings.AdministratorsPage.getAddAdminDialogEmailInput()
+      .type(email)
+      .should(Condition.HaveValue, email);
+    AdminSettings.AdministratorsPage.getAddAdminDialogSaveBtn().click();
+  }
+
+  verifyAdminCount(count: number): void {
+    if (Mocks.enabled()) {
+      switch(count) {
+        case 1:
+          cy.intercept({method: RequestType.GET, path: Endpoint.Administrators}, {fixture:'administrators.json'});
+          break;
+        case 2:
+          cy.intercept({method: RequestType.GET, path: Endpoint.Administrators}, {fixture:'administrators-2.json'});
+          break;
+      }
+    }
+    
+    const retries = 15;
+    TrafficMonitor.newTrafficMonitor()
+    .method(RequestType.GET)
+    .url(Endpoint.Administrators)
+    .retry(retries)
+    .expect(Response.newResponse(ResponseType.LIST).elements(count));
   }
 }
 

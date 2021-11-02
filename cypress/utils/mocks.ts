@@ -82,6 +82,8 @@ export class Mocks {
 
   private static _defaults: Mock[] = [
     {m: RequestType.GET, p: Endpoint.CurrentUser, r: Mocks.currentUser},
+    {m: RequestType.GET, p: Endpoint.Administrators, r: []},
+    {m: RequestType.POST, p: Endpoint.Administrators, r: 'administrator.json'},
     {m: RequestType.GET, p: Endpoint.AdminSettings, r: Mocks.adminSettings},
     {m: RequestType.GET, p: Endpoint.Seeds, r: ['test-seed']},
     {m: RequestType.GET, p: Endpoint.SeedSettings, r: {fixture: 'seed-settings.json'}},

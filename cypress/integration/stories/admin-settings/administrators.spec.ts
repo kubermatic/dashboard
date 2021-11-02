@@ -16,16 +16,20 @@ import {login, logout} from '../../../utils/auth';
 import {Condition} from '../../../utils/condition';
 import {View} from '../../../utils/view';
 import {AdminSettings} from '../../../pages/admin-settings.po';
-import {RequestType, ResponseCheck, ResponseType, TrafficMonitor} from '../../../utils/monitor';
-import {Endpoint} from '../../../utils/endpoint';
 import {Config} from '../../../utils/config';
+import {Mocks} from '../../../utils/mocks';
 
 describe('Admin Settings - Administrators Story', () => {
-  const retries = 15;
   let adminsCount = 1;
 
+  beforeEach(() => {
+    if (Mocks.enabled()) {
+      Mocks.register();
+    }
+  });
+
   it('should login as admin', () => {
-    login(Config.adminEmail());
+    login(Config.adminEmail(), Config.password(), true);
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -34,29 +38,15 @@ describe('Admin Settings - Administrators Story', () => {
   });
 
   it('should have only one admin', () => {
-    TrafficMonitor.newTrafficMonitor()
-      .method(RequestType.GET)
-      .url(Endpoint.Administrators)
-      .retry(retries)
-      .expect(new ResponseCheck(ResponseType.LIST).elements(adminsCount));
-  });
+    AdminSettings.AdministratorsPage.verifyAdminCount(adminsCount);  });
 
   it('should add second admin', () => {
-    AdminSettings.AdministratorsPage.getAddAdminBtn().click();
-    AdminSettings.AdministratorsPage.getAddAdminDialogEmailInput()
-      .type(Config.userEmail())
-      .should(Condition.HaveValue, Config.userEmail());
-    AdminSettings.AdministratorsPage.getAddAdminDialogSaveBtn().click();
+    AdminSettings.AdministratorsPage.addAdmin(Config.userEmail());
     adminsCount++;
   });
 
   it('should have two admins', () => {
-    TrafficMonitor.newTrafficMonitor()
-      .method(RequestType.GET)
-      .url(Endpoint.Administrators)
-      .retry(retries)
-      .expect(new ResponseCheck(ResponseType.LIST).elements(adminsCount));
-  });
+    AdminSettings.AdministratorsPage.verifyAdminCount(adminsCount);  });
 
   it('should logout', () => {
     logout();
@@ -85,12 +75,7 @@ describe('Admin Settings - Administrators Story', () => {
   });
 
   it('should have two admins', () => {
-    TrafficMonitor.newTrafficMonitor()
-      .method(RequestType.GET)
-      .url(Endpoint.Administrators)
-      .retry(retries)
-      .expect(new ResponseCheck(ResponseType.LIST).elements(adminsCount));
-  });
+    AdminSettings.AdministratorsPage.verifyAdminCount(adminsCount);  });
 
   it('should remove second admin', () => {
     AdminSettings.AdministratorsPage.getDeleteAdminBtn(Config.userEmail()).click();
@@ -99,12 +84,7 @@ describe('Admin Settings - Administrators Story', () => {
   });
 
   it('should have only one admin', () => {
-    TrafficMonitor.newTrafficMonitor()
-      .method(RequestType.GET)
-      .url(Endpoint.Administrators)
-      .retry(retries)
-      .expect(new ResponseCheck(ResponseType.LIST).elements(adminsCount));
-  });
+    AdminSettings.AdministratorsPage.verifyAdminCount(adminsCount);  });
 
   it('should logout', () => {
     logout();
