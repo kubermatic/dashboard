@@ -65,10 +65,10 @@ describe('Multi Owner Story', () => {
   it('should wait for autoredirect and go back to projects', () => {
     if (Mocks.enabled()) {
       cy.setCookie('autoredirect', 'true');
+    } else {
+      ClustersPage.waitForRefresh();
+      ProjectsPage.visit();
     }
-
-    ClustersPage.waitForRefresh();
-    ProjectsPage.visit();
   });
 
   it('should check if multi owner project is in list', () => {
