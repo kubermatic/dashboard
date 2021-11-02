@@ -276,7 +276,7 @@ class ProviderPresetsPage {
     return cy.get('#km-settings-preset-digitalocean-token');
   }
 
-  static getOPAConstraintTemplatesTab(): Cypress.Chainable {
+  /*static getOPAConstraintTemplatesTab(): Cypress.Chainable {
     return cy.get('#mat-tab-label-0-3');
   }
 
@@ -298,7 +298,7 @@ class ProviderPresetsPage {
 
   static getConstraintTemplatesTable(): Cypress.Chainable {
     return cy.get('km-constraint-templates-list tbody');
-  }
+  }*/
 
   // Utils.
   getNavItem(): Cypress.Chainable {
@@ -341,6 +341,10 @@ class OPAPage {
 
   getNavItem(): Cypress.Chainable {
     return cy.get('#km-nav-item-opa');
+  }
+
+  getTabCard(title: string): Cypress.Chainable {
+    return cy.get('#km-admin-opa-card').find('div.mat-tab-label-content').contains(title);
   }
 
   verifyUrl(): void {

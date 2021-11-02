@@ -21,6 +21,7 @@ import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
 import {Endpoint} from '../../utils/endpoint';
 import {Config} from '../../utils/config';
+import {Mocks} from '../../utils/mocks';
 import {RequestType, TrafficMonitor} from '../../utils/monitor';
 import {Preset} from '../../utils/preset';
 import {Datacenter, Provider} from '../../utils/provider';
@@ -28,9 +29,9 @@ import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 
 describe('OPA Story', () => {
-  const projectName = _.uniqueId('e2e-test-project-');
-  const clusterName = _.uniqueId('e2e-test-cluster-');
-  const initialMachineDeploymentName = _.uniqueId('e2e-test-md-');
+  const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('e2e-test-project-');
+  const clusterName = Mocks.enabled() ? 'test-cluster' : _.uniqueId('e2e-test-cluster-');
+  const initialMachineDeploymentName = Mocks.enabled() ? 'test-md' : _.uniqueId('e2e-test-md-');
   const initialMachineDeploymentReplicas = '1';
   const constraintTemplateName = 'k8srequiredlabels';
   const constraintTemplateSpec = 'constrainttemplate.spec.yaml';
@@ -38,8 +39,14 @@ describe('OPA Story', () => {
   const constraintSpec = 'constraint.spec.yaml';
   const gatekeeperConfig = 'gatekeeperconfig.yaml';
 
+  beforeEach(() => {
+    if (Mocks.enabled()) {
+      Mocks.register();
+    }
+  });
+
   it('should login', () => {
-    login(Config.adminEmail());
+    login(Config.adminEmail(), Config.password(), true);
 
     cy.url().should(Condition.Include, View.Projects.Default);
   });
@@ -50,6 +57,10 @@ describe('OPA Story', () => {
 
   it('should go to the admin settings - opa page', () => {
     AdminSettings.OPAPage.visit();
+  });
+
+  it('should go to constraint templates tab', () => {
+    AdminSettings.OPAPage.getTabCard('Constraint Templates').click();
   });
 
   it('should open add constraint template dialog', () => {
@@ -218,6 +229,10 @@ describe('OPA Story', () => {
 
   it('should go to the admin settings', () => {
     AdminSettings.OPAPage.visit();
+  });
+
+  it('should go to constraint templates tab', () => {
+    AdminSettings.OPAPage.getTabCard('Constraint Templates').click();
   });
 
   it('should delete created constraint template', () => {

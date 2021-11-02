@@ -28,6 +28,7 @@ export default async (on, config) => {
       '**/integration/stories/opa.spec.ts',
     ];
   } else {
+
     // TODO: Remove it after fixing flaky tests.
     ignored = [
       '**/integration/providers/equinix.spec.ts',
