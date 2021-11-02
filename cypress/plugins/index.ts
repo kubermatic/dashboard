@@ -26,7 +26,6 @@ export default async (on, config) => {
     // TODO: Remove it after configuring mocks.
     ignored = [
       '**/integration/stories/opa.spec.ts',
-      '**/integration/stories/admin-settings/opa-integration.spec.ts',
     ];
   } else {
     // TODO: Remove it after fixing flaky tests.

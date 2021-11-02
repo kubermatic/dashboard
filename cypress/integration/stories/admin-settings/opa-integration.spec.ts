@@ -20,14 +20,21 @@ import {WizardPage} from '../../../pages/wizard.po';
 import {login, logout} from '../../../utils/auth';
 import {Condition} from '../../../utils/condition';
 import {Config} from '../../../utils/config';
+import {Mocks} from '../../../utils/mocks';
 import {Datacenter, Provider} from '../../../utils/provider';
 import {View} from '../../../utils/view';
 
 describe('Admin Settings - Opa Integration Story', () => {
   const projectName = _.uniqueId('e2e-test-project-');
 
+  beforeEach(() => {
+    if (Mocks.enabled()) {
+      Mocks.register();
+    }
+  });
+
   it('should login', () => {
-    login(Config.adminEmail());
+    login(Config.adminEmail(), Config.password(), true);
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -41,6 +48,7 @@ describe('Admin Settings - Opa Integration Story', () => {
 
   it('should make sure opa integration enable settings is not checked', () => {
     AdminSettings.DefaultsAndLimitsPage.getOPAEnableCheckbox().find('input').should(Condition.NotBeChecked);
+
   });
 
   it('should make sure opa integration enforce settings is not checked', () => {
@@ -71,8 +79,13 @@ describe('Admin Settings - Opa Integration Story', () => {
   });
 
   it("should enable opa integration 'enable by default' settings", () => {
-    AdminSettings.DefaultsAndLimitsPage.getOPAEnableCheckbox().click();
-    AdminSettings.waitForSave();
+    if (Mocks.enabled()) {
+      Mocks.adminSettings.opaOptions.enabled = true;
+    } else {
+      AdminSettings.DefaultsAndLimitsPage.getOPAEnableCheckbox().click();
+      AdminSettings.waitForSave();
+    }
+
     AdminSettings.DefaultsAndLimitsPage.getOPAEnableCheckbox().find('input').should(Condition.BeChecked);
   });
 
@@ -100,8 +113,13 @@ describe('Admin Settings - Opa Integration Story', () => {
   });
 
   it("should enable opa integration 'enforce' settings", () => {
-    AdminSettings.DefaultsAndLimitsPage.getOPAEnforceCheckbox().click();
-    AdminSettings.waitForSave();
+    if (Mocks.enabled()) {
+      Mocks.adminSettings.opaOptions.enforced = true;
+    } else {
+      AdminSettings.DefaultsAndLimitsPage.getOPAEnforceCheckbox().click();
+      AdminSettings.waitForSave();
+    }
+    
     AdminSettings.DefaultsAndLimitsPage.getOPAEnforceCheckbox().find('input').should(Condition.BeChecked);
   });
 
@@ -129,8 +147,13 @@ describe('Admin Settings - Opa Integration Story', () => {
   });
 
   it("should disable opa integration 'enable by default' settings", () => {
-    AdminSettings.DefaultsAndLimitsPage.getOPAEnableCheckbox().click();
-    AdminSettings.waitForSave();
+    if (Mocks.enabled()) {
+      Mocks.adminSettings.opaOptions.enabled = false;
+    } else {
+      AdminSettings.DefaultsAndLimitsPage.getOPAEnableCheckbox().click();
+      AdminSettings.waitForSave();
+    }
+
     AdminSettings.DefaultsAndLimitsPage.getOPAEnableCheckbox().find('input').should(Condition.NotBeChecked);
   });
 
@@ -158,8 +181,13 @@ describe('Admin Settings - Opa Integration Story', () => {
   });
 
   it('should restore default opa integration settings', () => {
-    AdminSettings.DefaultsAndLimitsPage.getOPAEnforceCheckbox().click();
-    AdminSettings.waitForSave();
+    if (Mocks.enabled()) {
+      Mocks.adminSettings.opaOptions.enforced = false;
+    } else {
+      AdminSettings.DefaultsAndLimitsPage.getOPAEnforceCheckbox().click();
+      AdminSettings.waitForSave();
+    }
+
     AdminSettings.DefaultsAndLimitsPage.getOPAEnforceCheckbox().find('input').should(Condition.NotBeChecked);
   });
 
