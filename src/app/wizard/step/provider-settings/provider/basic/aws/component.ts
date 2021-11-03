@@ -36,6 +36,7 @@ export enum Controls {
   VPCID = 'vpcId',
   AssumeRoleARN = 'assumeRoleARN',
   AssumeRoleExternalID = 'assumeRoleID',
+  UseAssumeRole = 'useAssumeRole',
 }
 
 enum VPCState {
@@ -69,6 +70,10 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
   selectedVPC = '';
   vpcLabel = VPCState.Empty;
 
+  get isAssumeRoleEnabled(): boolean {
+    return !!this.form.get(Controls.UseAssumeRole).value;
+  }
+
   @ViewChild('vpcCombobox')
   private readonly _vpcCombobox: FilteredComboboxComponent;
 
@@ -85,9 +90,10 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
     this.form = this._builder.group({
       [Controls.AccessKeyID]: this._builder.control('', Validators.required),
       [Controls.AccessKeySecret]: this._builder.control('', Validators.required),
-      [Controls.AssumeRoleARN]: this._builder.control('', Validators.required),
-      [Controls.AssumeRoleExternalID]: this._builder.control('', Validators.required),
       [Controls.VPCID]: this._builder.control('', Validators.required),
+      [Controls.UseAssumeRole]: this._builder.control(false),
+      [Controls.AssumeRoleARN]: this._builder.control(''),
+      [Controls.AssumeRoleExternalID]: this._builder.control(''),
     });
 
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset =>
@@ -129,6 +135,23 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
       .pipe(takeUntil(this._unsubscribe))
       .pipe(distinctUntilChanged())
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
+
+    this.form
+      .get(Controls.UseAssumeRole)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        if (this.isAssumeRoleEnabled) {
+          this.form.get(Controls.AssumeRoleARN).setValidators(Validators.required);
+          this.form.get(Controls.AssumeRoleExternalID).setValidators(Validators.required);
+        } else {
+          this.form.get(Controls.AssumeRoleARN).clearValidators();
+          this.form.get(Controls.AssumeRoleExternalID).clearValidators();
+        }
+
+        this.form.get(Controls.AssumeRoleARN).updateValueAndValidity();
+        this.form.get(Controls.AssumeRoleExternalID).updateValueAndValidity();
+        this._cdr.detectChanges();
+      });
   }
 
   getHint(control: Controls): string {
