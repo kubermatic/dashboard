@@ -14,7 +14,6 @@
 
 import {Condition} from '../utils/condition';
 import {Endpoint} from '../utils/endpoint';
-import {Mocks} from '../utils/mocks';
 import {RequestType, Response, ResponseType, TrafficMonitor} from '../utils/monitor';
 import {Provider} from '../utils/provider';
 import {View} from '../utils/view';
@@ -60,18 +59,6 @@ class AdministratorsPage {
   }
 
   verifyAdminCount(count: number): void {
-    if (Mocks.enabled()) {
-      switch (count) {
-        case 1:
-          cy.intercept({method: RequestType.GET, path: Endpoint.Administrators}, {fixture: 'administrators.json'});
-          break;
-        // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-        case 2:
-          cy.intercept({method: RequestType.GET, path: Endpoint.Administrators}, {fixture: 'administrators-2.json'});
-          break;
-      }
-    }
-
     const retries = 15;
     TrafficMonitor.newTrafficMonitor()
       .method(RequestType.GET)

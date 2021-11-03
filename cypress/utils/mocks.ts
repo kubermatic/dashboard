@@ -80,10 +80,24 @@ export class Mocks {
     },
   };
 
+  static defaultAdmin: any = {
+    email: Config.adminEmail(),
+    name: Config.adminEmail().split('@')[0],
+    isAdmin: true,
+  };
+
+  static secondAdmin: any = {
+    email: Config.userEmail(),
+    name: Config.userEmail().split('@')[0],
+    isAdmin: true,
+  };
+
+  static administrators: any = [Mocks.defaultAdmin];
+
   private static _defaults: Mock[] = [
     {m: RequestType.GET, p: Endpoint.CurrentUser, r: Mocks.currentUser},
-    {m: RequestType.GET, p: Endpoint.Administrators, r: {fixture: 'administrators.json'}},
-    {m: RequestType.POST, p: Endpoint.Administrators, r: {fixture: 'administrator.json'}},
+    {m: RequestType.GET, p: Endpoint.Administrators, r: Mocks.administrators},
+    {m: RequestType.POST, p: Endpoint.Administrators, r: Mocks.defaultAdmin},
     {m: RequestType.GET, p: Endpoint.AdminSettings, r: Mocks.adminSettings},
     {m: RequestType.GET, p: Endpoint.Seeds, r: ['test-seed']},
     {m: RequestType.GET, p: Endpoint.SeedSettings, r: {fixture: 'seed-settings.json'}},

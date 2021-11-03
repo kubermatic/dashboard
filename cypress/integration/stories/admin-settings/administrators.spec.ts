@@ -41,7 +41,11 @@ describe('Admin Settings - Administrators Story', () => {
     AdminSettings.AdministratorsPage.verifyAdminCount(adminsCount);  });
 
   it('should add second admin', () => {
-    AdminSettings.AdministratorsPage.addAdmin(Config.userEmail());
+    if (Mocks.enabled()) {
+      Mocks.administrators.push(Mocks.secondAdmin);
+    } else {
+      AdminSettings.AdministratorsPage.addAdmin(Config.userEmail());
+    }
     adminsCount++;
   });
 
@@ -78,9 +82,15 @@ describe('Admin Settings - Administrators Story', () => {
     AdminSettings.AdministratorsPage.verifyAdminCount(adminsCount);  });
 
   it('should remove second admin', () => {
-    AdminSettings.AdministratorsPage.getDeleteAdminBtn(Config.userEmail()).click();
-    cy.get('#km-confirmation-dialog-confirm-btn').should(Condition.NotBe, 'disabled').click()
-      .then(() => adminsCount--);
+    if (Mocks.enabled()) {
+      const index = Mocks.administrators.findIndex(a => a.email === Config.userEmail);
+      Mocks.administrators.splice(index, 1);
+    } else {
+      AdminSettings.AdministratorsPage.getDeleteAdminBtn(Config.userEmail()).click();
+      cy.get('#km-confirmation-dialog-confirm-btn').should(Condition.NotBe, 'disabled').click();
+    }
+
+    adminsCount--;
   });
 
   it('should have only one admin', () => {
