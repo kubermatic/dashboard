@@ -99,6 +99,11 @@ limitations under the License.
                        fxFlex="100"></km-label-form>
       </div>
 
+      <mat-checkbox *ngIf="isKonnectivityEnabled"
+                    [formControlName]="Controls.Konnectivity">
+        Konnectivity
+      </mat-checkbox>
+
       <div fxLayout="row"
            fxLayoutGap="16px">
         <div fxLayout="row"

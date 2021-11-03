@@ -51,6 +51,8 @@ import {OpenstackProviderSettingsComponent} from '../edit-provider-settings/open
 import {EquinixProviderSettingsComponent} from '../edit-provider-settings/equinix-provider-settings/component';
 import {VSphereProviderSettingsComponent} from '../edit-provider-settings/vsphere-provider-settings/component';
 import {EditClusterComponent} from './component';
+import {FeatureGateService} from '@core/services/feature-gate';
+import {FeatureGatesMockService} from '@app/testing/services/feature-gate-mock';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
 
@@ -93,6 +95,7 @@ describe('EditClusterComponent', () => {
           {provide: AppConfigService, useClass: AppConfigMockService},
           {provide: UserService, useClass: UserMockService},
           {provide: SettingsService, useClass: SettingsMockService},
+          {provide: FeatureGateService, useClass: FeatureGatesMockService},
           {provide: Router, useClass: RouterStub},
         ],
       }).compileComponents();

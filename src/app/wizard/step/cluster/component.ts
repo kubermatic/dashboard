@@ -48,6 +48,7 @@ import {filter, startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators
 import {StepBase} from '../base';
 import * as semver from 'semver';
 import {CIDR_PATTERN_VALIDATOR} from '@shared/validators/others';
+import {FeatureGateService} from '@core/services/feature-gate';
 
 enum Controls {
   Name = 'name',
@@ -61,6 +62,7 @@ enum Controls {
   SSHKeys = 'sshKeys',
   PodNodeSelectorAdmissionPluginConfig = 'podNodeSelectorAdmissionPluginConfig',
   OPAIntegration = 'opaIntegration',
+  Konnectivity = 'konnectivity',
   MLALogging = 'loggingEnabled',
   MLAMonitoring = 'monitoringEnabled',
   ProxyMode = 'proxyMode',
@@ -97,6 +99,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   proxyMode = ProxyMode;
   cniPlugin = CNIPlugin;
   availableProxyModes = ['ipvs', 'iptables'];
+  isKonnectivityEnabled = false;
   readonly Controls = Controls;
   private _datacenterSpec: Datacenter;
   private _seedSettings: SeedSettings;
@@ -110,12 +113,17 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _datacenterService: DatacenterService,
     private readonly _settingsService: SettingsService,
+    private readonly _featureGatesService: FeatureGateService,
     wizard: WizardService
   ) {
     super(wizard);
   }
 
   ngOnInit(): void {
+    this._featureGatesService.featureGates
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(featureGates => (this.isKonnectivityEnabled = !!featureGates?.konnectivityService));
+
     this.form = this._builder.group({
       [Controls.Name]: new FormControl('', [
         Validators.required,
@@ -127,6 +135,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.AuditLogging]: new FormControl(false),
       [Controls.UserSSHKeyAgent]: new FormControl(true),
       [Controls.OPAIntegration]: new FormControl(false),
+      [Controls.Konnectivity]: new FormControl(false),
       [Controls.MLALogging]: new FormControl(false),
       [Controls.MLAMonitoring]: new FormControl(false),
       [Controls.AdmissionPlugins]: new FormControl([]),
@@ -211,6 +220,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.AuditLogging).valueChanges,
       this.form.get(Controls.UserSSHKeyAgent).valueChanges,
       this.form.get(Controls.OPAIntegration).valueChanges,
+      this.form.get(Controls.Konnectivity).valueChanges,
       this.form.get(Controls.MLALogging).valueChanges,
       this.form.get(Controls.MLAMonitoring).valueChanges,
       this.form.get(Controls.ContainerRuntime).valueChanges,
@@ -328,6 +338,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           proxyMode: this.controlValue(Controls.ProxyMode),
           pods: {cidrBlocks: pods ? [pods] : []},
           services: {cidrBlocks: services ? [services] : []},
+          konnectivityEnabled: this.controlValue(Controls.Konnectivity),
         },
         cniPlugin: cniPlugin,
       } as ClusterSpec,

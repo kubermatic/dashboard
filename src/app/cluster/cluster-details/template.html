@@ -169,6 +169,10 @@ limitations under the License.
           <div value>{{cluster.spec.clusterNetwork.proxyMode}}</div>
         </km-property>
 
+        <km-property-boolean label="Konnectivity"
+                             [value]="cluster.spec.clusterNetwork?.konnectivityEnabled">
+        </km-property-boolean>
+
         <km-property *ngIf="cluster?.status?.externalCCMMigration">
           <div key>External CCM Migration Status</div>
           <div value
