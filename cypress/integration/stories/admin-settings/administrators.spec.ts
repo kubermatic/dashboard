@@ -79,8 +79,8 @@ describe('Admin Settings - Administrators Story', () => {
 
   it('should remove second admin', () => {
     AdminSettings.AdministratorsPage.getDeleteAdminBtn(Config.userEmail()).click();
-    cy.get('#km-confirmation-dialog-confirm-btn').should(Condition.NotBe, 'disabled').click();
-    adminsCount--;
+    cy.get('#km-confirmation-dialog-confirm-btn').should(Condition.NotBe, 'disabled').click()
+      .then(() => adminsCount--);
   });
 
   it('should have only one admin', () => {
