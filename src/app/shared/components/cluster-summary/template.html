@@ -86,6 +86,9 @@ limitations under the License.
         <div key>Services CIDR</div>
         <div value>{{cluster.spec.clusterNetwork.services.cidrBlocks.join(', ')}}</div>
       </km-property>
+      <km-property-boolean label="Konnectivity"
+                           [value]="cluster.spec.clusterNetwork?.konnectivityEnabled">
+      </km-property-boolean>
       <div [ngSwitch]="displayTags(cluster.labels)">
         <km-property *ngSwitchCase="true">
           <div key>Cluster Labels</div>

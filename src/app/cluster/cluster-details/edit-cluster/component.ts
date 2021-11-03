@@ -45,6 +45,7 @@ enum Controls {
   AdmissionPlugins = 'admissionPlugins',
   PodNodeSelectorAdmissionPluginConfig = 'podNodeSelectorAdmissionPluginConfig',
   OPAIntegration = 'opaIntegration',
+  Konnectivity = 'konnectivity',
   MLALogging = 'loggingEnabled',
   MLAMonitoring = 'monitoringEnabled',
 }
@@ -104,6 +105,9 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       ),
       [Controls.OPAIntegration]: new FormControl(
         !!this.cluster.spec.opaIntegration && this.cluster.spec.opaIntegration.enabled
+      ),
+      [Controls.Konnectivity]: new FormControl(
+        !!this.cluster.spec.clusterNetwork && this.cluster.spec.clusterNetwork.konnectivityEnabled
       ),
       [Controls.MLALogging]: new FormControl(!!this.cluster.spec.mla && this.cluster.spec.mla.loggingEnabled),
       [Controls.MLAMonitoring]: new FormControl(!!this.cluster.spec.mla && this.cluster.spec.mla.monitoringEnabled),
@@ -247,6 +251,9 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         },
         opaIntegration: {
           enabled: this.form.get(Controls.OPAIntegration).value,
+        },
+        clusterNetwork: {
+          konnectivityEnabled: this.form.get(Controls.Konnectivity).value,
         },
         mla: {
           loggingEnabled: this.form.get(Controls.MLALogging).value,

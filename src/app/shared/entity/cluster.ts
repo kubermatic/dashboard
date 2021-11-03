@@ -222,6 +222,7 @@ export class ClusterNetwork {
   pods?: NetworkRanges;
   proxyMode?: ProxyMode;
   services?: NetworkRanges;
+  konnectivityEnabled?: boolean;
 }
 
 export class CNIPluginConfig {
@@ -230,6 +231,7 @@ export class CNIPluginConfig {
 
 export class NetworkRanges {
   cidrBlocks: string[];
+  clusterNetwork?: ClusterNetwork;
 }
 
 export enum ProxyMode {
@@ -313,6 +315,7 @@ export class ClusterSpecPatch {
   usePodNodeSelectorAdmissionPlugin?: boolean;
   admissionPlugins?: string[];
   opaIntegration?: OPAIntegration;
+  clusterNetwork?: ClusterNetwork;
   podNodeSelectorAdmissionPluginConfig?: object;
   auditLogging?: AuditLoggingSettings;
   machineNetworks?: MachineNetwork[];

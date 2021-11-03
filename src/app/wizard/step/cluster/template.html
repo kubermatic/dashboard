@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
+
 <form [formGroup]="form">
   <div fxLayout="row"
        fxLayout.md="column"
@@ -96,6 +97,10 @@ limitations under the License.
             Invalid pattern. Use CIDR notation, i.e. 192.168.1.0/24.
           </mat-error>
         </mat-form-field>
+        <mat-checkbox *ngIf="isKonnectivityEnabled"
+                      [formControlName]="Controls.Konnectivity">
+          Konnectivity
+        </mat-checkbox>
       </div>
 
       <km-wizard-cluster-ssh-keys [formControl]="form.get(Controls.SSHKeys)"></km-wizard-cluster-ssh-keys>

@@ -1,0 +1,50 @@
+// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {AppConfigService} from '@app/config.service';
+import {environment} from '@environments/environment';
+import {Observable, of, timer} from 'rxjs';
+import {catchError, shareReplay, switchMap} from 'rxjs/operators';
+
+export interface FeatureGates {
+  konnectivityService?: boolean;
+}
+
+@Injectable({
+  providedIn: 'root',
+})
+export class FeatureGateService {
+  private readonly _restRoot = environment.newRestRoot;
+  private readonly _refreshTime = 30;
+  private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
+  private _featureGates$: Observable<FeatureGates>;
+
+  constructor(private readonly _httpClient: HttpClient, private readonly _appConfigService: AppConfigService) {}
+
+  get featureGates(): Observable<FeatureGates> {
+    if (!this._featureGates$) {
+      this._featureGates$ = this._refreshTimer$
+        .pipe(switchMap(() => this._getFeatureGates()))
+        .pipe(shareReplay({refCount: true, bufferSize: 1}));
+    }
+    return this._featureGates$;
+  }
+
+  private _getFeatureGates(): Observable<FeatureGates> {
+    const url = `${this._restRoot}/featuregates`;
+    return this._httpClient.get<FeatureGates>(url).pipe(catchError(() => of({})));
+  }
+}
