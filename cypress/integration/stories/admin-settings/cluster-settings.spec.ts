@@ -29,6 +29,7 @@ import {View} from '../../../utils/view';
 import {WizardStep} from '../../../utils/wizard';
 
 describe('Admin Settings - Cluster Related Settings Story', () => {
+  const preset = Mocks.enabled() ? Preset.Mock : Preset.Digitalocean;
   const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('e2e-test-project-');
   const clusterName = Mocks.enabled() ? 'test-cluster' : _.uniqueId('e2e-test-cluster-');
   const initialMachineDeploymentName = Mocks.enabled() ? 'test-md' : _.uniqueId('e2e-test-md-');
@@ -90,7 +91,7 @@ describe('Admin Settings - Cluster Related Settings Story', () => {
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
     WizardPage.getCustomPresetsCombobox().click();
-    WizardPage.getPreset(Preset.Digitalocean).click();
+    WizardPage.getPreset(preset).click();
     WizardPage.getNextBtn(WizardStep.ProviderSettings).click({force: true});
     WizardPage.getNodeNameInput()
       .type(initialMachineDeploymentName)
