@@ -25,7 +25,7 @@ import {Datacenter, Provider} from '../../../utils/provider';
 import {View} from '../../../utils/view';
 
 describe('Admin Settings - Opa Integration Story', () => {
-  const projectName = _.uniqueId('e2e-test-project-');
+  const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('e2e-test-project-');
 
   beforeEach(() => {
     if (Mocks.enabled()) {
@@ -77,14 +77,16 @@ describe('Admin Settings - Opa Integration Story', () => {
     AdminSettings.DefaultsAndLimitsPage.visit();
   });
 
-  it("should enable opa integration 'enable by default' settings", () => {
+  it('should enable opa integration "enable by default" settings', () => {
     if (Mocks.enabled()) {
       Mocks.adminSettings.opaOptions.enabled = true;
     } else {
       AdminSettings.DefaultsAndLimitsPage.getOPAEnableCheckbox().click();
       AdminSettings.waitForSave();
     }
+  });
 
+  it('should verify that opa integration "enable by default" checkbox is enabled', () => {
     AdminSettings.DefaultsAndLimitsPage.getOPAEnableCheckbox().find('input').should(Condition.BeChecked);
   });
 
@@ -111,14 +113,16 @@ describe('Admin Settings - Opa Integration Story', () => {
     AdminSettings.DefaultsAndLimitsPage.visit();
   });
 
-  it("should enable opa integration 'enforce' settings", () => {
+  it('should enable opa integration "enforce" settings', () => {
     if (Mocks.enabled()) {
       Mocks.adminSettings.opaOptions.enforced = true;
     } else {
       AdminSettings.DefaultsAndLimitsPage.getOPAEnforceCheckbox().click();
       AdminSettings.waitForSave();
     }
+  });
 
+  it('should verify that opa integration "enforce" checkbox is enabled', () => {
     AdminSettings.DefaultsAndLimitsPage.getOPAEnforceCheckbox().find('input').should(Condition.BeChecked);
   });
 
@@ -145,14 +149,16 @@ describe('Admin Settings - Opa Integration Story', () => {
     AdminSettings.DefaultsAndLimitsPage.visit();
   });
 
-  it("should disable opa integration 'enable by default' settings", () => {
+  it('should disable opa integration "enable by default" settings', () => {
     if (Mocks.enabled()) {
       Mocks.adminSettings.opaOptions.enabled = false;
     } else {
       AdminSettings.DefaultsAndLimitsPage.getOPAEnableCheckbox().click();
       AdminSettings.waitForSave();
     }
+  });
 
+  it('should verify that opa integration "enable by default" checkbox is disabled', () => {
     AdminSettings.DefaultsAndLimitsPage.getOPAEnableCheckbox().find('input').should(Condition.NotBeChecked);
   });
 
@@ -179,14 +185,16 @@ describe('Admin Settings - Opa Integration Story', () => {
     AdminSettings.DefaultsAndLimitsPage.visit();
   });
 
-  it('should restore default opa integration settings', () => {
+  it('should disable opa integration "enforce" settings', () => {
     if (Mocks.enabled()) {
       Mocks.adminSettings.opaOptions.enforced = false;
     } else {
       AdminSettings.DefaultsAndLimitsPage.getOPAEnforceCheckbox().click();
       AdminSettings.waitForSave();
     }
+  });
 
+  it('should verify that opa integration "enforce" checkbox is disabled', () => {
     AdminSettings.DefaultsAndLimitsPage.getOPAEnforceCheckbox().find('input').should(Condition.NotBeChecked);
   });
 

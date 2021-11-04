@@ -29,6 +29,7 @@ import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 
 describe('OPA Story', () => {
+  const preset = Mocks.enabled() ? Preset.Mock : Preset.Digitalocean;
   const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('e2e-test-project-');
   const clusterName = Mocks.enabled() ? 'test-cluster' : _.uniqueId('e2e-test-cluster-');
   const initialMachineDeploymentName = Mocks.enabled() ? 'test-md' : _.uniqueId('e2e-test-md-');
@@ -41,7 +42,7 @@ describe('OPA Story', () => {
 
   beforeEach(() => {
     if (Mocks.enabled()) {
-      Mocks.register();
+      Mocks.register(Provider.Digitalocean);
     }
   });
 
@@ -101,7 +102,7 @@ describe('OPA Story', () => {
     WizardPage.getOPAIntegrationCheckbox().find('input').should(Condition.BeChecked);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
     WizardPage.getCustomPresetsCombobox().click();
-    WizardPage.getPreset(Preset.Digitalocean).click();
+    WizardPage.getPreset(preset).click();
     WizardPage.getNextBtn(WizardStep.ProviderSettings).click({force: true});
     WizardPage.getNodeNameInput()
       .type(initialMachineDeploymentName)
@@ -137,18 +138,21 @@ describe('OPA Story', () => {
     ClustersPage.getTabCard('OPA Gatekeeper Config').should(Condition.Exist);
   });
 
-  it('should wait for initial machine deployment to be created and healthy', () => {
+  it('should wait for initial machine deployment to be created', () => {
     TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.MachineDeployments).interceptAndWait();
     ClustersPage.getMachineDeploymentList().should(Condition.Contain, initialMachineDeploymentName);
-    ClustersPage.getMachineDeploymentList().find('i').should(Condition.HaveClass, 'km-success-bg');
+  });
+
+  it('should have healthy machine deployment', () => {
+      ClustersPage.getMachineDeploymentList().find('i').should(Condition.HaveClass, 'km-success-bg');
   });
 
   it('should switch to opa constraint tab', () => {
-    ClustersPage.getTabCard('OPA Constraints').click();
+    ClustersPage.getTabCard('OPA Constraints').should(Condition.Exist).click({force: true});
   });
 
   it('should open add constraint dialog', () => {
-    ClustersPage.getAddConstraintBtn().click();
+    ClustersPage.getAddConstraintBtn().should(Condition.Exist).click();
   });
 
   it('should enter constraint name', () => {
@@ -179,7 +183,7 @@ describe('OPA Story', () => {
   });
 
   it('should switch to opa gatekeeper config tab', () => {
-    ClustersPage.getTabCard('OPA Gatekeeper Config').click();
+    ClustersPage.getTabCard('OPA Gatekeeper Config').should(Condition.Exist).click({force: true});
   });
 
   it('should have add button, as no gatekeeper config is defined', () => {
