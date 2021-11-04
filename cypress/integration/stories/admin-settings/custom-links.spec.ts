@@ -44,7 +44,12 @@ describe('Admin Settings - Custom Links Story', () => {
 
   it('should add custom link', () => {
     if (Mocks.enabled()) {
-      Mocks.adminSettings.customLinks.push({label: linkLabel, url: linkURL, icon: '', location: linkLocation});
+      Mocks.adminSettings.customLinks.push({
+        label: linkLabel,
+        url: linkURL,
+        icon: '',
+        location: linkLocation.toLowerCase(),
+      });
     } else {
       AdminSettings.InterfacePage.getLastCustomLinkLocationInput().click();
       AdminSettings.InterfacePage.getLastCustomLinkLocationInput().get('mat-option').contains(linkLocation).click();
@@ -54,36 +59,42 @@ describe('Admin Settings - Custom Links Story', () => {
     }
   });
 
-  it('should make sure that API documentation display is enabled', () => {
+  it('should enable API documentation checkbox', () => {
     if (Mocks.enabled()) {
       Mocks.adminSettings.displayAPIDocs = true;
     } else {
       AdminSettings.InterfacePage.getApiDocsCheckbox().click();
       AdminSettings.waitForSave();
     }
+  });
 
+  it('should verify that API documentation display is enabled', () => {
     AdminSettings.InterfacePage.getApiDocsCheckbox().find('input').should(Condition.BeChecked);
   });
 
-  it('should make sure that terms of service display is enabled', () => {
+  it('should enable terms of service checkbox', () => {
     if (Mocks.enabled()) {
       Mocks.adminSettings.displayTermsOfService = true;
     } else {
       AdminSettings.InterfacePage.getTermsOfServiceCheckbox().click();
       AdminSettings.waitForSave();
     }
+  });
 
+  it('should verify that terms of service display is enabled', () => {
     AdminSettings.InterfacePage.getTermsOfServiceCheckbox().find('input').should(Condition.BeChecked);
   });
 
-  it('should make sure that demo information display is enabled', () => {
+  it('should enable demo information checkbox', () => {
     if (Mocks.enabled()) {
       Mocks.adminSettings.displayDemoInfo = true;
     } else {
       AdminSettings.InterfacePage.getDemoInfoCheckbox().click();
       AdminSettings.waitForSave();
     }
+  });
 
+  it('should verify that demo information display is enabled', () => {
     AdminSettings.InterfacePage.getDemoInfoCheckbox().find('input').should(Condition.BeChecked);
   });
 
@@ -113,35 +124,42 @@ describe('Admin Settings - Custom Links Story', () => {
     }
   });
 
-  it('should make sure that API documentation display is disabled', () => {
+  it('should disable API documentation checkbox', () => {
     if (Mocks.enabled()) {
       Mocks.adminSettings.displayAPIDocs = false;
     } else {
       AdminSettings.InterfacePage.getApiDocsCheckbox().click();
       AdminSettings.waitForSave();
     }
+  });
 
+  it('should verify that API documentation display is disabled', () => {
     AdminSettings.InterfacePage.getApiDocsCheckbox().find('input').should(Condition.NotBeChecked);
   });
 
-  it('should make sure that terms of service display is disabled', () => {
+  it('should disable terms of service checkbox', () => {
     if (Mocks.enabled()) {
-      Mocks.adminSettings.displayTermsOfService = true;
+      Mocks.adminSettings.displayTermsOfService = false;
     } else {
       AdminSettings.InterfacePage.getTermsOfServiceCheckbox().click();
       AdminSettings.waitForSave();
     }
+  });
 
+  it('should veryfy that terms of service display is disabled', () => {
     AdminSettings.InterfacePage.getTermsOfServiceCheckbox().find('input').should(Condition.NotBeChecked);
   });
 
-  it('should make sure that demo information display is disabled', () => {
+  it('should disable demo information checkbox', () => {
     if (Mocks.enabled()) {
-      Mocks.adminSettings.displayDemoInfo = true;
+      Mocks.adminSettings.displayDemoInfo = false;
     } else {
       AdminSettings.InterfacePage.getDemoInfoCheckbox().click();
       AdminSettings.waitForSave();
     }
+  });
+
+  it('should verify that demo information display is disabled', () => {
     AdminSettings.InterfacePage.getDemoInfoCheckbox().find('input').should(Condition.NotBeChecked);
   });
 
