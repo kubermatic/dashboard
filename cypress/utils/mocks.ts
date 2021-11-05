@@ -166,7 +166,9 @@ export class Mocks {
     {m: RequestType.POST, p: Endpoint.ConstraintTemplates, r: {fixture: 'constrainttemplate.json'}},
     {m: RequestType.GET, p: Endpoint.ConstraintTemplates, r: {fixture: 'constrainttemplates.json'}},
     {m: RequestType.GET, p: Endpoint.Constraints, r: {fixture: 'constraints.json'}},
+    {m: RequestType.POST, p: Endpoint.Constraints, r: {fixture: 'constraint.json'}},
     {m: RequestType.GET, p: Endpoint.GatekeeperConfig, r: {fixture: 'gatekeeperconfig.json'}},
+    {m: RequestType.POST, p: Endpoint.GatekeeperConfig, r: {fixture: 'gatekeeperconfig.json'}},
   ];
 
   static enabled(): boolean {

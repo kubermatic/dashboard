@@ -34,7 +34,7 @@ export default async (on, config) => {
       '**/integration/stories/service-accounts.spec.ts',
       '**/integration/stories/ssh-keys.spec.ts',
       '**/integration/stories/user-settings.spec.ts',
-      ];
+    ];
   } else {
 
     // TODO: Remove it after fixing flaky tests.
