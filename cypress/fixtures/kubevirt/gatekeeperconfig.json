@@ -1,0 +1,18 @@
+{
+  "spec": {
+    "sync": {
+      "syncOnly": [
+        {
+          "version": "v1",
+          "kind": "Namespace"
+        },
+        {
+          "version": "v1",
+          "kind": "Pod"
+        }
+      ]
+    },
+    "validation": {},
+    "readiness": {}
+  }
+}
