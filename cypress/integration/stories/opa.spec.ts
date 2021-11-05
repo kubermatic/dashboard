@@ -148,14 +148,6 @@ describe('OPA Story', () => {
     ClustersPage.getTabCard('OPA Constraints').should(Condition.Exist).click({force: true});
   });
 
-  it('should open add constraint template dialog', () => {
-    AdminSettings.OPAPage.getAddConstraintTemplateBtn().click();
-  });
-
-  it('should add spec for a new constraint template', () => {
-    AdminSettings.OPAPage.getAddConstraintTemplateSpecTextarea().click({force: true}).pasteFile(constraintTemplateSpec);
-  });
-
   it('should open add constraint dialog', () => {
     ClustersPage.getAddConstraintBtn().should(Condition.Exist).click();
   });
