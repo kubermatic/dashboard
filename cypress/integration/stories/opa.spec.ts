@@ -202,7 +202,7 @@ describe('OPA Story', () => {
   });
 
   it('should check if gatekeeper config was created', () => {
-    if (Mocks.enabled) {
+    if (Mocks.enabled()) {
       cy.intercept({method: RequestType.GET, path: Endpoint.GatekeeperConfig}, {fixture: 'gatekeeperconfig.json'});
     }
 
@@ -212,8 +212,8 @@ describe('OPA Story', () => {
   it('should delete gatekeeper config', () => {
     ClustersPage.getDeleteGatekeeperConfigBtn().click();
     ClustersPage.getDeleteDialogConfirmButton().click();
-    
-    if (Mocks.enabled) {
+
+    if (Mocks.enabled()) {
       cy.intercept({method: RequestType.GET, path: Endpoint.GatekeeperConfig}, {});
     }
   });
