@@ -19,6 +19,54 @@
       "selector": {
         "labelSelector": {}
       }
+    },
+    "status": {
+      "auditTimestamp": "2021-11-05T12:10:16Z",
+      "violations": [
+        {
+          "enforcementAction": "deny",
+          "kind": "Namespace",
+          "message": "you must provide labels: {\"gatekeeper\"}",
+          "name": "cloud-init-settings"
+        },
+        {
+          "enforcementAction": "deny",
+          "kind": "Namespace",
+          "message": "you must provide labels: {\"gatekeeper\"}",
+          "name": "default"
+        },
+        {
+          "enforcementAction": "deny",
+          "kind": "Namespace",
+          "message": "you must provide labels: {\"gatekeeper\"}",
+          "name": "gatekeeper-system"
+        },
+        {
+          "enforcementAction": "deny",
+          "kind": "Namespace",
+          "message": "you must provide labels: {\"gatekeeper\"}",
+          "name": "kube-node-lease"
+        },
+        {
+          "enforcementAction": "deny",
+          "kind": "Namespace",
+          "message": "you must provide labels: {\"gatekeeper\"}",
+          "name": "kube-public"
+        },
+        {
+          "enforcementAction": "deny",
+          "kind": "Namespace",
+          "message": "you must provide labels: {\"gatekeeper\"}",
+          "name": "kube-system"
+        },
+        {
+          "enforcementAction": "deny",
+          "kind": "Namespace",
+          "message": "you must provide labels: {\"gatekeeper\"}",
+          "name": "kubernetes-dashboard"
+        }
+      ],
+      "synced": true
     }
   }
 ]
