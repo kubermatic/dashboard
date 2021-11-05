@@ -22,7 +22,7 @@ import {fakeVersionInfo} from '../fake-data/version-info';
 
 @Injectable()
 export class AppConfigMockService {
-  private readonly _refreshTimeBase = 1000;
+  private readonly _refreshTimeBase = 200;
 
   getConfig(): Config {
     return fakeAppConfig();

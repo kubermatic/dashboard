@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Subject, timer} from 'rxjs';
 import {AppConfigService} from '@app/config.service';
 import {takeUntil} from 'rxjs/operators';
@@ -22,7 +22,7 @@ import {takeUntil} from 'rxjs/operators';
   templateUrl: './template.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RelativeTimeComponent implements OnDestroy {
+export class RelativeTimeComponent implements OnInit, OnDestroy {
   @Input() date: string;
   private readonly _unsubscribe = new Subject<void>();
   private readonly _refreshTime = 30;
@@ -31,7 +31,9 @@ export class RelativeTimeComponent implements OnDestroy {
   constructor(
     private readonly _changeDetectorRef: ChangeDetectorRef,
     private readonly _appConfigService: AppConfigService
-  ) {
+  ) {}
+
+  ngOnInit(): void {
     this._refreshTimer.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this._changeDetectorRef.detectChanges());
   }
 
