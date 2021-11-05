@@ -139,7 +139,6 @@ describe('OPA Story', () => {
   });
 
   it('should wait for initial machine deployment to be created', () => {
-    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.MachineDeployments).interceptAndWait();
     ClustersPage.getMachineDeploymentList().should(Condition.Contain, initialMachineDeploymentName);
   });
 
