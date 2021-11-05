@@ -114,8 +114,8 @@ limitations under the License.
           <input [formControlName]="Controls.RhelSubscriptionManagerUser"
                  matInput
                  type="text"
-                 autocomplete="off"
-                 required>
+                 autocomplete="off">
+          <mat-hint>RHEL Subscription Manager User is required to register a machine.</mat-hint>
         </mat-form-field>
 
         <mat-form-field>
@@ -123,13 +123,13 @@ limitations under the License.
           <input [formControlName]="Controls.RhelSubscriptionManagerPassword"
                  matInput
                  type="password"
-                 autocomplete="off"
-                 required>
+                 autocomplete="off">
+          <mat-hint>RHEL Subscription Manager Password is required to register a machine.</mat-hint>
         </mat-form-field>
 
         <mat-form-field>
           <mat-label>RHEL Subscription Manager Offline Token</mat-label>
-          <input [formControlName]="Controls.RhsmOfflineToken"
+          <input [formControlName]="Controls.RhelOfflineToken"
                  matInput
                  type="password"
                  autocomplete="off">
