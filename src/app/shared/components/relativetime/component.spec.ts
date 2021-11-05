@@ -19,6 +19,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {SharedModule} from '@shared/module';
 import {RelativeTimeComponent} from './component';
+import {AppConfigService} from '@app/config.service';
+import {AppConfigMockService} from '@app/testing/services/app-config-mock';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
@@ -30,6 +32,7 @@ describe('RelativeTimeComponent', () => {
     TestBed.configureTestingModule({
       imports: [...modules],
       providers: [
+        {provide: AppConfigService, useClass: AppConfigMockService},
         {provide: MatDialogRef, useClass: MatDialogRefMock},
         {provide: MAT_DIALOG_DATA, useValue: {}},
       ],

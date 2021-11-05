@@ -12,12 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Subject, timer} from 'rxjs';
+import {AppConfigService} from '@app/config.service';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-relative-time',
   templateUrl: './template.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RelativeTimeComponent {
+export class RelativeTimeComponent implements OnInit, OnDestroy {
   @Input() date: string;
+  private readonly _unsubscribe = new Subject<void>();
+  private readonly _refreshTime = 30;
+  private _refreshTimer = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
+
+  constructor(
+    private readonly _changeDetectorRef: ChangeDetectorRef,
+    private readonly _appConfigService: AppConfigService
+  ) {}
+
+  ngOnInit(): void {
+    this._refreshTimer.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this._changeDetectorRef.detectChanges());
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
+  }
 }

@@ -50,7 +50,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['name', 'actions'];
   dataSource = new MatTableDataSource<SSHKey>();
 
-  private readonly _refreshTime = 999; // in seconds
+  private readonly _refreshTime = 10;
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
   private _unsubscribe = new Subject<void>();

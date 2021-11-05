@@ -15,7 +15,7 @@
 import {Pipe, PipeTransform} from '@angular/core';
 import moment from 'moment';
 
-@Pipe({name: 'kmRelativeTime'})
+@Pipe({name: 'kmRelativeTime', pure: false})
 export class RelativeTimePipe implements PipeTransform {
   transform(value: string): string {
     const minDate = moment.utc('0001-01-01');
