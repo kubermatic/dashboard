@@ -20,13 +20,12 @@ import {WizardPage} from '../../pages/wizard.po';
 import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
 import {Config} from '../../utils/config';
-import {Endpoint} from '../../utils/endpoint';
 import {Mocks} from '../../utils/mocks';
-import {RequestType} from '../../utils/monitor';
 import {Preset} from '../../utils/preset';
 import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
+
 describe('OPA Story', () => {
   const preset = Mocks.enabled() ? Preset.Mock : Preset.Digitalocean;
   const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('e2e-test-project-');
@@ -197,25 +196,20 @@ describe('OPA Story', () => {
   });
 
   it('should add gatekeeper config', () => {
+    if (Mocks.enabled()) {
+      Mocks.gatekeeperConfig = cy.readFile('cypress/fixtures/gatekeeperconfig.json');
+    }
     ClustersPage.getGatekeeperConfigDialogSaveBtn().should(Condition.BeEnabled);
     ClustersPage.getGatekeeperConfigDialogSaveBtn().click({force: true});
   });
 
   it('should check if gatekeeper config was created', () => {
-    if (Mocks.enabled()) {
-      cy.intercept({method: RequestType.GET, path: Endpoint.GatekeeperConfig}, {fixture: 'gatekeeperconfig.json'});
-    }
-
     ClustersPage.getDeleteGatekeeperConfigBtn().should(Condition.Exist);
   });
 
   it('should delete gatekeeper config', () => {
     ClustersPage.getDeleteGatekeeperConfigBtn().click();
     ClustersPage.getDeleteDialogConfirmButton().click();
-
-    if (Mocks.enabled()) {
-      cy.intercept({method: RequestType.GET, path: Endpoint.GatekeeperConfig}, {});
-    }
   });
 
   it('should delete created cluster', () => {

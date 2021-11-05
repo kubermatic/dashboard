@@ -94,6 +94,8 @@ export class Mocks {
 
   static administrators: any = [Mocks.defaultAdmin];
 
+  static gatekeeperConfig: any = {};
+
   private static _defaults: Mock[] = [
     {m: RequestType.GET, p: Endpoint.CurrentUser, r: Mocks.currentUser},
     {m: RequestType.GET, p: Endpoint.Administrators, r: Mocks.administrators},
@@ -167,7 +169,7 @@ export class Mocks {
     {m: RequestType.GET, p: Endpoint.ConstraintTemplates, r: {fixture: 'constrainttemplates.json'}},
     {m: RequestType.GET, p: Endpoint.Constraints, r: {fixture: 'constraints.json'}},
     {m: RequestType.POST, p: Endpoint.Constraints, r: {fixture: 'constraint.json'}},
-    {m: RequestType.GET, p: Endpoint.GatekeeperConfig, r: {}},
+    {m: RequestType.GET, p: Endpoint.GatekeeperConfig, r: Mocks.gatekeeperConfig},
     {m: RequestType.POST, p: Endpoint.GatekeeperConfig, r: {fixture: 'gatekeeperconfig.json'}},
   ];
 
