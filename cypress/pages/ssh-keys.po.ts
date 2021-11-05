@@ -15,7 +15,7 @@
 import {Condition} from '../utils/condition';
 import {Endpoint} from '../utils/endpoint';
 import {Mocks} from '../utils/mocks';
-import {RequestType, Response, ResponseType, TrafficMonitor} from '../utils/monitor';
+import {RequestType, ResponseCheck, ResponseType, TrafficMonitor} from '../utils/monitor';
 import {View} from '../utils/view';
 
 export class SSHKeysPage {
@@ -98,6 +98,6 @@ export class SSHKeysPage {
       .method(RequestType.GET)
       .url(Endpoint.SSHKeys)
       .retry(retries)
-      .expect(Response.newResponse(ResponseType.LIST).elements(0));
+      .expect(new ResponseCheck(ResponseType.LIST).elements(0));
   }
 }

@@ -61,30 +61,38 @@ describe('User Settings Story', () => {
   }
 
   it(`should set ${itemsPerPage} items per page`, () => {
-    UserSettingsPage.getItemsPerPageInput().click();
-    UserSettingsPage.getItemsPerPageInput().get('mat-option').contains(itemsPerPage).click();
+    if (Mocks.enabled()) {
+      Mocks.currentUser.userSettings.itemsPerPage = parseInt(itemsPerPage);
+    } else {
+      UserSettingsPage.getItemsPerPageInput().click();
+      UserSettingsPage.getItemsPerPageInput().get('mat-option').contains(itemsPerPage).click();
+    }
   });
 
   it(`should set ${projectName} as default project`, () => {
-    UserSettingsPage.getDefaultProjectInput().click();
-    UserSettingsPage.getDefaultProjectInput().get('mat-option').contains(projectName).click();
+    if (Mocks.enabled()) {
+      Mocks.currentUser.userSettings.selectedProjectId = 'fn9234fn1d';
+    } else {
+      UserSettingsPage.getDefaultProjectInput().click();
+      UserSettingsPage.getDefaultProjectInput().get('mat-option').contains(projectName).click();
+    }
   });
 
   it('should logout', () => {
     logout();
+
     cy.wait(waitTime);
   });
 
   it('should login and get redirected', () => {
     login();
 
-    if (Mocks.enabled()) {
-      cy.setCookie('autoredirect', 'true');
-    } else {
+    // TODO: Check it also when mocks are enabled once mock login will be able to trigger default project selection.
+    //  It's not happening at the moment as PreviousRouteService doesn't have any history registered during login.
+    if (!Mocks.enabled()) {
       cy.wait(waitTime);
+      cy.url().should(Condition.Include, View.Clusters.Default);
     }
-
-    cy.url().should(Condition.Include, View.Clusters.Default);
   });
 
   it('should go to the user settings', () => {
@@ -99,13 +107,21 @@ describe('User Settings Story', () => {
   }
 
   it('should set default items per page', () => {
-    UserSettingsPage.getItemsPerPageInput().click();
-    UserSettingsPage.getItemsPerPageInput().get('mat-option').contains('10').click();
+    if (Mocks.enabled()) {
+      Mocks.currentUser.userSettings.selectedProjectId = '';
+    } else {
+      UserSettingsPage.getItemsPerPageInput().click();
+      UserSettingsPage.getItemsPerPageInput().get('mat-option').contains('10').click();
+    }
   });
 
   it('should set unset default project', () => {
-    UserSettingsPage.getDefaultProjectInput().click();
-    UserSettingsPage.getDefaultProjectInput().get('mat-option').contains('None').click();
+    if (Mocks.enabled()) {
+      Mocks.currentUser.userSettings.itemsPerPage = 10;
+    } else {
+      UserSettingsPage.getDefaultProjectInput().click();
+      UserSettingsPage.getDefaultProjectInput().get('mat-option').contains('None').click();
+    }
   });
 
   it('should go to the projects page', () => {

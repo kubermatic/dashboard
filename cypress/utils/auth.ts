@@ -29,8 +29,7 @@ import {Config} from './config';
  */
 export function login(email = Config.userEmail(), password = Config.password(), isAdmin = false): void {
   if (Mocks.enabled()) {
-    mockLogin();
-    Mocks.updateCurrentUser(email, isAdmin);
+    mockLogin(email, isAdmin);
   } else {
     doLogin(email, password);
   }
@@ -62,7 +61,11 @@ function doLogin(email: string, password: string): void {
   ProjectsPage.waitForRefresh();
 }
 
-function mockLogin(): void {
+function mockLogin(email: string, isAdmin: boolean): void {
+  Mocks.currentUser.email = email;
+  Mocks.currentUser.name = email.split('@')[0];
+  Mocks.currentUser.isAdmin = isAdmin;
+
   mockAuthCookies();
 
   cy.visit('/projects');
@@ -81,7 +84,7 @@ function mockAuthCookies(): void {
     exp: Date.now() + day,
     iat: Date.now(),
     nonce: nonce,
-    email: 'roxy@kubermatic.io',
+    email: Mocks.currentUser.email,
     email_verified: true,
     name: 'roxy',
   };
@@ -91,5 +94,5 @@ function mockAuthCookies(): void {
 
   cy.setCookie('token', token);
   cy.setCookie('nonce', nonce);
-  cy.setCookie('autoredirect', 'false');
+  cy.setCookie('autoredirect', 'true');
 }

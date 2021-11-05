@@ -14,7 +14,7 @@
 
 import {Condition} from '../utils/condition';
 import {Endpoint} from '../utils/endpoint';
-import {RequestType, Response, ResponseType, TrafficMonitor} from '../utils/monitor';
+import {RequestType, ResponseCheck, ResponseType, TrafficMonitor} from '../utils/monitor';
 import {View} from '../utils/view';
 import {WizardPage} from './wizard.po';
 import {Mocks} from '../utils/mocks';
@@ -259,7 +259,7 @@ export class ClustersPage {
       .method(RequestType.GET)
       .url(Endpoint.Clusters)
       .retry(retries)
-      .expect(Response.newResponse(ResponseType.LIST).elements(count));
+      .expect(new ResponseCheck(ResponseType.LIST).elements(count));
   }
 
   static deleteCluster(name: string): void {
@@ -280,7 +280,7 @@ export class ClustersPage {
       .method(RequestType.GET)
       .url(Endpoint.MachineDeployments)
       .retry(retries)
-      .expect(Response.newResponse(ResponseType.LIST).elements(0));
+      .expect(new ResponseCheck(ResponseType.LIST).elements(0));
   }
 
   static deleteMachineDeployment(name: string): void {

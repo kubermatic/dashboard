@@ -14,6 +14,23 @@
 
 import _ from 'lodash';
 
+export enum RequestType {
+  GET = 'GET',
+  POST = 'POST',
+  PUT = 'PUT',
+  PATCH = 'PATCH',
+}
+
+export enum ResponseType {
+  LIST = 'list',
+  OBJECT = 'object',
+}
+
+export enum MatchRule {
+  EVERY,
+  SOME,
+}
+
 export class TrafficMonitor {
   private _timeout = -1;
   private _url = '';
@@ -84,7 +101,7 @@ export class TrafficMonitor {
     return this._timeout > 0 ? cy.wait(this._alias, {timeout: this._timeout}) : cy.wait(this._alias);
   }
 
-  expect(response: Response): Cypress.Chainable {
+  expect(response: ResponseCheck): Cypress.Chainable {
     if (this._retry < 1) {
       throw new Error('Expected conditions not met within retry limit');
     }
@@ -104,19 +121,23 @@ export class TrafficMonitor {
     });
   }
 
-  private _expectObject(response: Response, obj: any): TrafficMonitor {
-    expect(response.properties.every(property => property.compare(obj)));
+  private _expectObject(response: ResponseCheck, obj: any): TrafficMonitor {
+    expect(response.properties.check(obj));
     return this;
   }
 
-  private _expectArray(response: Response, objArr: any[]): TrafficMonitor {
+  private _expectArray(response: ResponseCheck, objArr: any[]): TrafficMonitor {
     if (response.limit > -1) {
       expect(objArr.length).to.eq(response.limit);
     }
 
-    if (response.properties.length > 0) {
-      // TODO: Right now only first object properties are checked
-      expect(response.properties.every(property => property.compare(objArr[0]))).to.be.true;
+    switch (response.objMatchRule) {
+      case MatchRule.EVERY:
+        expect(objArr.every(obj => response.properties.check(obj))).to.be.true;
+        break;
+      case MatchRule.SOME:
+        expect(objArr.some(obj => response.properties.check(obj))).to.be.true;
+        break;
     }
 
     return this;
@@ -135,76 +156,77 @@ export class TrafficMonitor {
   }
 }
 
-export enum RequestType {
-  GET = 'GET',
-  POST = 'POST',
-  PUT = 'PUT',
-  PATCH = 'PATCH',
-}
+/**
+ * ResponseCheck is used to perform check on a response to verify its type, properties (set match rule to specify
+ * if every or just some objects from list should pass this check; applies only to lists) and number of elements
+ * (applies only to lists).
+ */
+export class ResponseCheck {
+  private _type: ResponseType;
+  private _properties: PropertiesCheck = new PropertiesCheck();
+  private _objMatchRule: MatchRule;
+  private _limit = -1;
 
-export enum ResponseType {
-  LIST = 'list',
-  OBJECT = 'object',
-}
-
-export class Property {
-  private readonly _name: string;
-  private readonly _value: string;
-
-  get name(): string {
-    return this._name;
+  constructor(type: ResponseType, objMatchRule = MatchRule.EVERY) {
+    this._type = type;
+    this._objMatchRule = objMatchRule;
   }
-
-  get value(): string {
-    return this._value;
-  }
-
-  constructor(name: string, value: string) {
-    this._name = name;
-    this._value = value;
-  }
-
-  compare(obj: any): boolean {
-    return obj[this._name] === this._value;
-  }
-
-  static newProperty(name: string, value: string) {
-    return new Property(name, value);
-  }
-}
-
-export class Response {
-  private _responseType: ResponseType;
-  private _elementsCount = -1;
-  private _properties: Property[] = [];
 
   get type(): ResponseType {
-    return this._responseType;
+    return this._type;
   }
 
-  get limit(): number {
-    return this._elementsCount;
-  }
-
-  get properties(): Property[] {
+  get properties(): PropertiesCheck {
     return this._properties;
   }
 
-  constructor(responseType: ResponseType) {
-    this._responseType = responseType;
+  get objMatchRule(): MatchRule {
+    return this._objMatchRule;
   }
 
-  elements(count: number): Response {
-    this._elementsCount = count;
+  get limit(): number {
+    return this._limit;
+  }
+
+  elements(limit: number): ResponseCheck {
+    this._limit = limit;
     return this;
   }
 
-  property(property: Property): Response {
-    this._properties.push(property);
+  property(key: string, value: string): ResponseCheck {
+    this._properties.add(key, value);
     return this;
   }
+}
 
-  static newResponse(responseType: ResponseType): Response {
-    return new Response(responseType);
+/**
+ * PropertiesCheck is used to perform check on a object to verify if it contains specific set of properties.
+ */
+class PropertiesCheck {
+  private readonly _propertyChecks: PropertyCheck[] = [];
+
+  add(key: string, value: string): void {
+    this._propertyChecks.push(new PropertyCheck(key, value));
+  }
+
+  check(obj: any): boolean {
+    return this._propertyChecks.every(propertyCheck => propertyCheck.check(obj));
+  }
+}
+
+/**
+ * PropertyCheck is used to perform check on a object to verify if it contains specific property.
+ */
+class PropertyCheck {
+  private readonly _key: string;
+  private readonly _value: string;
+
+  constructor(key: string, value: string) {
+    this._key = key;
+    this._value = value;
+  }
+
+  check(obj: any): boolean {
+    return obj[this._key] === this._value;
   }
 }

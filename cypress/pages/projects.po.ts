@@ -14,7 +14,7 @@
 
 import {Condition} from '../utils/condition';
 import {Endpoint} from '../utils/endpoint';
-import {Property, RequestType, Response, ResponseType, TrafficMonitor} from '../utils/monitor';
+import {MatchRule, RequestType, ResponseCheck, ResponseType, TrafficMonitor} from '../utils/monitor';
 import {View} from '../utils/view';
 import {ClustersPage} from './clusters.po';
 import {Mocks} from '../utils/mocks';
@@ -22,10 +22,6 @@ import {Mocks} from '../utils/mocks';
 export class ProjectsPage {
   static getProjectItem(projectName: string): Cypress.Chainable {
     return cy.get(`#km-project-name-${projectName}`);
-  }
-
-  static getActiveProjects(): Cypress.Chainable {
-    return cy.get('i.km-health-state.km-icon-circle.km-success-bg');
   }
 
   static getAddProjectBtn(): Cypress.Chainable {
@@ -42,18 +38,6 @@ export class ProjectsPage {
 
   static getDeleteProjectBtn(projectName: string): Cypress.Chainable {
     return cy.get(`#km-delete-project-${projectName}`);
-  }
-
-  static getEditProjectBtn(projectName: string): Cypress.Chainable {
-    return cy.get(`#km-edit-project-${projectName}`);
-  }
-
-  static getEditDialogInput(): Cypress.Chainable {
-    return cy.get('#km-edit-project-dialog-input');
-  }
-
-  static getEditDialogConfirmBtn(): Cypress.Chainable {
-    return cy.get('#km-edit-project-dialog-edit-btn');
   }
 
   static getAppEdition(): Cypress.Chainable {
@@ -80,7 +64,9 @@ export class ProjectsPage {
       .method(RequestType.GET)
       .url(Endpoint.Projects)
       .retry(retries)
-      .expect(Response.newResponse(ResponseType.LIST).elements(1).property(Property.newProperty('name', projectName)));
+      .expect(
+        new ResponseCheck(ResponseType.LIST, MatchRule.SOME).property('name', projectName).property('status', 'Active')
+      );
   }
 
   static verifyUrl(): void {
@@ -104,11 +90,9 @@ export class ProjectsPage {
   }
 
   static selectProject(projectName: string): void {
-    const waitTime = 500;
-    this.getProjectItem(projectName).should(Condition.HaveLength, 1);
-    this.getActiveProjects()
+    this.waitForProject(projectName);
+    this.getProjectItem(projectName)
       .should(Condition.HaveLength, 1)
-      .wait(waitTime)
       .click()
       .then(() => {
         ClustersPage.waitForRefresh();
@@ -147,6 +131,6 @@ export class ProjectsPage {
       .method(RequestType.GET)
       .url(Endpoint.Projects)
       .retry(retries)
-      .expect(Response.newResponse(ResponseType.LIST).elements(0));
+      .expect(new ResponseCheck(ResponseType.LIST).elements(0));
   }
 }
