@@ -165,6 +165,8 @@ export class Mocks {
     {m: RequestType.GET, p: Endpoint.OpenStack.Sizes, r: {fixture: 'openstack/sizes.json'}},
     {m: RequestType.POST, p: Endpoint.ConstraintTemplates, r: {fixture: 'constrainttemplate.json'}},
     {m: RequestType.GET, p: Endpoint.ConstraintTemplates, r: {fixture: 'constrainttemplates.json'}},
+    {m: RequestType.GET, p: Endpoint.Constraints, r: {fixture: 'constraints.json'}},
+    {m: RequestType.GET, p: Endpoint.GatekeeperConfig, r: {fixture: 'gatekeeperconfig.json'}},
   ];
 
   static enabled(): boolean {
@@ -189,8 +191,6 @@ export class Mocks {
     this._intercept(RequestType.GET, Endpoint.Cluster, {fixture: `${provider}/cluster.json`});
     this._intercept(RequestType.GET, Endpoint.MachineDeployments, {fixture: `${provider}/machinedeployments.json`});
     this._intercept(RequestType.GET, Endpoint.MachineDeployment, {fixture: `${provider}/machinedeployment.json`});
-    this._intercept(RequestType.GET, Endpoint.Constraints, {fixture: `${provider}/constraints.json`});
-    this._intercept(RequestType.GET, Endpoint.GatekeeperConfig, {fixture: `${provider}/gatekeeperconfig.json`});
   }
 
   private static _intercept(method: RequestType, path: string, response?: RouteHandler): void {

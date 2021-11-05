@@ -41,11 +41,7 @@ describe('Admin Settings - Administrators Story', () => {
     AdminSettings.AdministratorsPage.verifyAdminCount(adminsCount);  });
 
   it('should add second admin', () => {
-    if (Mocks.enabled()) {
-      Mocks.administrators.push(Mocks.secondAdmin);
-    } else {
-      AdminSettings.AdministratorsPage.addAdmin(Config.userEmail());
-    }
+    AdminSettings.AdministratorsPage.addAdmin(Config.userEmail());
     adminsCount++;
   });
 

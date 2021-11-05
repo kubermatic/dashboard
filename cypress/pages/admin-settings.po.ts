@@ -13,8 +13,10 @@
 // limitations under the License.
 
 import {Condition} from '../utils/condition';
+import {Config} from '../utils/config';
 import {Endpoint} from '../utils/endpoint';
-import {RequestType, Response, ResponseType, TrafficMonitor} from '../utils/monitor';
+import {Mocks} from '../utils/mocks';
+import {RequestType, ResponseCheck, ResponseType, TrafficMonitor} from '../utils/monitor';
 import {Provider} from '../utils/provider';
 import {View} from '../utils/view';
 import {UserPanel} from './user-panel.po';
@@ -53,9 +55,20 @@ class AdministratorsPage {
   }
 
   addAdmin(email: string): void {
-    AdminSettings.AdministratorsPage.getAddAdminBtn().click();
-    AdminSettings.AdministratorsPage.getAddAdminDialogEmailInput().type(email).should(Condition.HaveValue, email);
-    AdminSettings.AdministratorsPage.getAddAdminDialogSaveBtn().click();
+    if (Mocks.enabled()) {
+      switch (email) {
+        case Config.adminEmail():
+          Mocks.administrators.push(Mocks.defaultAdmin);
+          break;
+        case Config.userEmail():
+          Mocks.administrators.push(Mocks.secondAdmin);
+          break;
+      }
+    } else {
+      AdminSettings.AdministratorsPage.getAddAdminBtn().click();
+      AdminSettings.AdministratorsPage.getAddAdminDialogEmailInput().type(email).should(Condition.HaveValue, email);
+      AdminSettings.AdministratorsPage.getAddAdminDialogSaveBtn().click();
+    }
   }
 
   verifyAdminCount(count: number): void {
@@ -64,7 +77,7 @@ class AdministratorsPage {
       .method(RequestType.GET)
       .url(Endpoint.Administrators)
       .retry(retries)
-      .expect(Response.newResponse(ResponseType.LIST).elements(count));
+      .expect(new ResponseCheck(ResponseType.LIST).elements(count));
   }
 }
 
