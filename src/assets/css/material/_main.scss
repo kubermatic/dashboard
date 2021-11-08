@@ -490,29 +490,31 @@ button {
   }
 }
 
-.mat-icon-button {
-  border-radius: variables.$border-radius !important;
+button {
+  &.mat-icon-button {
+    border-radius: variables.$border-radius;
 
-  &[disabled] {
-    * {
-      cursor: auto;
+    &[disabled] {
+      * {
+        cursor: auto;
+      }
     }
-  }
 
-  a {
-    display: flex;
-    justify-content: center;
-  }
+    a {
+      display: flex;
+      justify-content: center;
+    }
 
-  &:disabled a {
-    cursor: default;
-    pointer-events: none;
-    text-decoration: none;
-  }
+    &:disabled a {
+      cursor: default;
+      pointer-events: none;
+      text-decoration: none;
+    }
 
-  .mat-button-wrapper {
-    display: flex;
-    justify-content: center;
+    .mat-button-wrapper {
+      display: flex;
+      justify-content: center;
+    }
   }
 }
 

@@ -164,19 +164,18 @@ limitations under the License.
                fxLayoutAlign=" center"
                class="entry-label">Machine Deployment
           </div>
-          <mat-form-field class="input km-no-padding">
-            <mat-label>Initial Replicas</mat-label>
-            <input matInput
-                   required
-                   type="number"
-                   min="0"
-                   max="50"
-                   autocomplete="off"
-                   id="km-initial-replicas-setting"
-                   [(ngModel)]="settings.defaultNodeCount"
-                   (keyup)="onSettingsChange()"
-                   (change)="onSettingsChange()">
-          </mat-form-field>
+          <km-number-stepper [(ngModel)]="settings.defaultNodeCount"
+                             (change)="onSettingsChange()"></km-number-stepper>
+          <!--            <input matInput-->
+          <!--                   required-->
+          <!--                   type="number"-->
+          <!--                   min="0"-->
+          <!--                   max="50"-->
+          <!--                   autocomplete="off"-->
+          <!--                   id="km-initial-replicas-setting"-->
+          <!--                   [(ngModel)]="settings.defaultNodeCount"-->
+          <!--                   (keyup)="onSettingsChange()"-->
+          <!--                   (change)="onSettingsChange()">-->
           <km-spinner-with-confirmation [isSaved]="isEqual(settings.defaultNodeCount, apiSettings.defaultNodeCount)"></km-spinner-with-confirmation>
         </div>
 

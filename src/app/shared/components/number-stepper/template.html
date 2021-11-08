@@ -1,0 +1,20 @@
+<button mat-icon-button
+        (click)="onDecrease()"
+        class="stepper-button left">
+  -
+</button>
+<mat-form-field class="km-number-stepper-input">
+  <mat-label>Initial Replicas</mat-label>
+  <input matInput
+         required
+         type="number"
+         [(ngModel)]="value"
+         min="0"
+         max="50"
+         autocomplete="off">
+</mat-form-field>
+<button mat-icon-button
+        (click)="onIncrease()"
+        class="stepper-button right">
+  +
+</button>

@@ -387,6 +387,15 @@ hr {
   }
 }
 
+.km-number-stepper-input {
+  &.mat-form-field {
+    .mat-form-field-outline-start,
+    .mat-form-field-outline-end {
+      border-radius: 0;
+    }
+  }
+}
+
 km-dashboard {
   display: flex;
 

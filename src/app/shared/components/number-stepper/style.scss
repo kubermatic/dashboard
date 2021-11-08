@@ -1,0 +1,34 @@
+:host {
+  display: flex;
+  flex-direction: row;
+}
+
+input[type='number'] {
+  appearance: textfield;
+  appearance: textfield;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  appearance: none;
+}
+
+.stepper-button {
+  background: rgb(45 45 45 / 13%);
+  height: 59.5px;
+  width: 30px;
+
+  &.mat-icon-button {
+    margin: 4px 0 0;
+
+    &.left {
+      border-bottom-right-radius: 0;
+      border-top-right-radius: 0;
+    }
+
+    &.right {
+      border-bottom-left-radius: 0;
+      border-top-left-radius: 0;
+    }
+  }
+}
