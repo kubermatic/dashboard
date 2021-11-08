@@ -96,6 +96,25 @@ export class Mocks {
 
   static gatekeeperConfig: any = {};
 
+  static defaultGatekeeperConfig: any = {
+    spec: {
+      sync: {
+        syncOnly: [
+          {
+            version: 'v1',
+            kind: 'Namespace',
+          },
+          {
+            version: 'v1',
+            kind: 'Pod',
+          },
+        ],
+      },
+      validation: {},
+      readiness: {},
+    },
+  };
+
   private static _defaults: Mock[] = [
     {m: RequestType.GET, p: Endpoint.CurrentUser, r: Mocks.currentUser},
     {m: RequestType.GET, p: Endpoint.Administrators, r: Mocks.administrators},
@@ -170,7 +189,7 @@ export class Mocks {
     {m: RequestType.GET, p: Endpoint.Constraints, r: {fixture: 'constraints.json'}},
     {m: RequestType.POST, p: Endpoint.Constraints, r: {fixture: 'constraint.json'}},
     {m: RequestType.GET, p: Endpoint.GatekeeperConfig, r: Mocks.gatekeeperConfig},
-    {m: RequestType.POST, p: Endpoint.GatekeeperConfig, r: {fixture: 'gatekeeperconfig.json'}},
+    {m: RequestType.POST, p: Endpoint.GatekeeperConfig, r: Mocks.defaultGatekeeperConfig},
   ];
 
   static enabled(): boolean {
