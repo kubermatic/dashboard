@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM quay.io/kubermatic/build:go-1.17-node-14-kind-0.11-1 AS kkpbuild
+FROM quay.io/kubermatic/build:go-1.17-node-16-kind-0.11-1 AS kkpbuild
 
 FROM cypress/browsers:node14.17.0-chrome88-ff89
 LABEL maintainer="support@kubermatic.com"

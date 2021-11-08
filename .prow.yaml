@@ -69,7 +69,7 @@ presubmits:
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     spec:
       containers:
-        - image: quay.io/kubermatic/chrome-headless:v0.10
+        - image: quay.io/kubermatic/chrome-headless:v0.11
           command:
             - make
             - test-headless
@@ -117,7 +117,7 @@ presubmits:
       preset-scratch-tmpfs: "true"
     spec:
       containers:
-        - image: quay.io/kubermatic/e2e-kind-cypress:v1.8.0
+        - image: quay.io/kubermatic/e2e-kind-cypress:v1.9.0
           imagePullPolicy: Always
           command:
             - make
@@ -170,7 +170,7 @@ presubmits:
       preset-scratch-tmpfs: "true"
     spec:
       containers:
-        - image: quay.io/kubermatic/e2e-kind-cypress:v1.8.0
+        - image: quay.io/kubermatic/e2e-kind-cypress:v1.9.0
           imagePullPolicy: Always
           command:
             - make
@@ -203,7 +203,7 @@ presubmits:
       preset-minio: "true"
     spec:
       containers:
-        - image: quay.io/kubermatic/e2e-cypress:v1.0.0
+        - image: quay.io/kubermatic/e2e-cypress:v1.1.0
           imagePullPolicy: Always
           command:
             - make
@@ -229,7 +229,7 @@ presubmits:
       preset-minio: "true"
     spec:
       containers:
-        - image: quay.io/kubermatic/e2e-cypress:v1.0.0
+        - image: quay.io/kubermatic/e2e-cypress:v1.1.0
           imagePullPolicy: Always
           command:
             - make
