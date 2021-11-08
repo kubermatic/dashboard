@@ -31,10 +31,11 @@ export default async (on, config) => {
       '**/integration/stories/admin-settings/opa-integration.spec.ts',
     ];
   } else {
-    let ignored: string[];
-
     // TODO: Remove it after fixing flaky tests.
-    ignored = ['**/integration/stories/opa.spec.ts', '**/integration/stories/admin-settings/administrators.spec.ts'];
+    let ignored = [
+      '**/integration/stories/opa.spec.ts',
+      '**/integration/stories/admin-settings/administrators.spec.ts',
+    ];
 
     // Do not test providers in both editions when running full tests.
     if (isEnterpriseEdition) {
