@@ -34,14 +34,7 @@ export default async (on, config) => {
     let ignored: string[];
 
     // TODO: Remove it after fixing flaky tests.
-    ignored = [
-      '**/integration/providers/digitalocean.spec.ts',
-      '**/integration/providers/kubevirt.spec.ts',
-      '**/integration/providers/openstack.spec.ts',
-      '**/integration/providers/vsphere.spec.ts',
-      '**/integration/stories/opa.spec.ts',
-      '**/integration/stories/admin-settings/administrators.spec.ts',
-    ];
+    ignored = ['**/integration/stories/opa.spec.ts', '**/integration/stories/admin-settings/administrators.spec.ts'];
 
     // Do not test providers in both editions when running full tests.
     if (isEnterpriseEdition) {
