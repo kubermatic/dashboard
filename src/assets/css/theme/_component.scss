@@ -28,6 +28,7 @@
 @import 'src/app/shared/components/addon-list/theme';
 @import 'src/app/shared/components/editor/theme';
 @import 'src/app/shared/components/property-usage/theme';
+@import 'src/app/shared/components/number-stepper/theme';
 @import 'src/app/wizard/step/cluster/theme';
 @import 'src/app/shared/components/eol/theme';
 @import 'src/app/shared/components/cluster-summary/theme';
@@ -66,4 +67,5 @@
   @include theme-admin-sidenav-component($colors);
   @include theme-wizard-openstack-provider-basic($colors);
   @include theme-constraints-component($colors);
+  @include theme-number-stepper-component($colors);
 }

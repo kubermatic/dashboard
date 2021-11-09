@@ -1,20 +1,27 @@
 <button mat-icon-button
-        (click)="onDecrease()"
-        class="stepper-button left">
+        class="km-stepper-button left"
+        [disabled]="disabled"
+        (click)="onDecrease()">
   -
 </button>
-<mat-form-field class="km-number-stepper-input">
-  <mat-label>Initial Replicas</mat-label>
-  <input matInput
-         required
+<mat-form-field class="km-number-stepper-input"
+                [ngClass]="mode === 'hint' || mode === 'errors' || mode === 'all' ? 'message' : ''">
+  <mat-label *ngIf="!!label">{{label}}</mat-label>
+  <input #input="ngModel"
+         matInput
          type="number"
+         autocomplete="off"
+         [disabled]="disabled"
+         [required]="required"
          [(ngModel)]="value"
-         min="0"
-         max="50"
-         autocomplete="off">
+         [min]="min"
+         [max]="max">
+  <mat-error *ngFor="let message of errors">{{message}}</mat-error>
+  <mat-hint *ngIf="(mode === 'hint' || mode === 'all') && !!hint">{{hint}}</mat-hint>
 </mat-form-field>
 <button mat-icon-button
-        (click)="onIncrease()"
-        class="stepper-button right">
+        class="km-stepper-button right"
+        [disabled]="disabled"
+        (click)="onIncrease()">
   +
 </button>

@@ -1,7 +1,20 @@
-import {Component, forwardRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self} from '@angular/core';
-import {AbstractControl, ControlValueAccessor, NgControl, ValidationErrors, Validator} from '@angular/forms';
-import {MatFormFieldControl} from '@angular/material/form-field';
-import {Subject} from 'rxjs';
+import {ChangeDetectionStrategy, Component, forwardRef, Input, OnDestroy, ViewChild} from '@angular/core';
+import {
+  AbstractControl,
+  ControlValueAccessor,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  NgModel,
+  ValidationErrors,
+  Validator,
+} from '@angular/forms';
+import {noop, Subject} from 'rxjs';
+
+enum Error {
+  Required = 'required',
+  Min = 'min',
+  Max = 'max',
+}
 
 @Component({
   selector: 'km-number-stepper',
@@ -9,106 +22,56 @@ import {Subject} from 'rxjs';
   templateUrl: 'template.html',
   providers: [
     {
-      provide: MatFormFieldControl,
+      provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => NumberStepperComponent),
       multi: true,
     },
-    // {
-    //   provide: NG_VALUE_ACCESSOR,
-    //   useExisting: forwardRef(() => NumberStepperComponent),
-    //   multi: true,
-    // },
-    // {
-    //   provide: NG_VALIDATORS,
-    //   useExisting: forwardRef(() => NumberStepperComponent),
-    //   multi: true,
-    // },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => NumberStepperComponent),
+      multi: true,
+    },
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NumberStepperComponent
-  implements OnInit, OnDestroy, ControlValueAccessor, Validator, MatFormFieldControl<number>
-{
+export class NumberStepperComponent implements OnDestroy, ControlValueAccessor, Validator {
   private readonly _unsubscribe = new Subject<void>();
-  static nextId = 0;
+  private _onChange: (_: number) => void = noop;
+  @Input() label: string;
+  @Input() hint: string;
+  @Input() min: number;
+  @Input() max: number;
+  @Input() required = false;
+  @Input() disabled = false;
+
+  /**
+   * Defines internal behavior of the stepper field.
+   *    raw - all additional error/hint messages will be hidden
+   *    errors - only error message will be shown
+   *    hint - only hint message will be shown
+   *    all - both error and hint messages will be shown
+   */
+  @Input() mode: 'raw' | 'errors' | 'hint' | 'all' = 'raw';
+  @ViewChild('input') model: NgModel;
 
   private _value: number;
 
-  @Input()
   get value(): number {
     return this._value;
   }
 
   set value(val: number) {
     this._value = val;
-    this.stateChanges.next();
+    this._onChange(val);
   }
 
-  readonly stateChanges: Subject<void> = new Subject<void>();
-
-  @HostBinding()
-  readonly id: string = `km-number-stepper-${NumberStepperComponent.nextId++}`;
-
-  private _placeholder: string;
-
-  @Input()
-  get placeholder(): string {
-    return this._placeholder;
-  }
-
-  set placeholder(placeholder: string) {
-    this._placeholder = placeholder;
-  }
-
-  readonly focused: boolean;
-  get empty(): boolean {
-    return !this.value;
-  }
-
-  @HostBinding('class.floating')
-  get shouldLabelFloat() {
-    return this.focused || !this.empty;
-  }
-
-  private _required = false;
-
-  @Input()
-  get required(): boolean {
-    return this._required;
-  }
-
-  set required(req: boolean) {
-    this._required = req;
-    this.stateChanges.next();
-  }
-
-  private _disabled = false;
-
-  @Input()
-  get disabled(): boolean {
-    return this._disabled;
-  }
-
-  set disabled(disabled: boolean) {
-    this._disabled = disabled;
-    this.stateChanges.next();
-  }
-
-  readonly errorState: boolean;
-  readonly controlType: string;
-  readonly autofilled = false;
-  readonly userAriaDescribedBy: string;
-
-  constructor(@Optional() @Self() public ngControl: NgControl) {
-    if (this.ngControl !== null) {
-      this.ngControl.valueAccessor = this;
+  get errors(): string[] {
+    if (this.mode !== 'errors' && this.mode !== 'all') {
+      return [];
     }
+
+    return Object.values(this._getErrors());
   }
-
-  setDescribedByIds(_ids: string[]): void {}
-
-  onContainerClick(_event: MouseEvent): void {}
-
-  ngOnInit(): void {}
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
@@ -116,28 +79,54 @@ export class NumberStepperComponent
   }
 
   writeValue(value: number | null): void {
-    if (value !== null) {
-      this.value = value;
-    }
+    this.value = value;
   }
 
-  registerOnChange(_fn: any): void {}
+  registerOnChange(fn: (_: number) => void): void {
+    this._onChange = fn;
+  }
 
-  registerOnTouched(_fn: any): void {}
+  registerOnTouched(_fn: () => void): void {}
 
   validate(_control: AbstractControl): ValidationErrors | null {
-    return undefined;
+    if (!this.model || this.model.valid) {
+      return null;
+    }
+
+    return this._getErrors();
   }
 
   onIncrease(): void {
-    this.value++;
-  }
-
-  onDecrease(): void {
-    if (this.value === 0) {
+    if (this.value >= this.max) {
       return;
     }
 
-    this.value--;
+    this.value = this._value + 1;
+  }
+
+  onDecrease(): void {
+    if (this.value <= this.min) {
+      return;
+    }
+
+    this.value = this._value - 1;
+  }
+
+  private _getErrors(): ValidationErrors {
+    const errors: ValidationErrors = {};
+
+    if (this.model?.hasError(Error.Required)) {
+      errors[Error.Required] = `${this.label} is required.`;
+    }
+
+    if (this.model?.hasError(Error.Max)) {
+      errors[Error.Max] = `Maximum acceptable value is ${this.max}.`;
+    }
+
+    if (this.model?.hasError(Error.Min)) {
+      errors[Error.Min] = `Minimum acceptable value is ${this.min}.`;
+    }
+
+    return errors;
   }
 }
