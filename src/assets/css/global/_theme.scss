@@ -39,6 +39,7 @@
 
   ::-webkit-scrollbar-thumb {
     background: map.get($colors, scrollbar);
+    border-color: map.get($colors, scrollbar-background);
   }
 
   ::-webkit-scrollbar-track {
