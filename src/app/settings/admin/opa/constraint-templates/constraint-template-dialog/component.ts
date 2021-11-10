@@ -75,6 +75,10 @@ export class ConstraintTemplateDialog implements OnInit, OnDestroy {
     return getIconClassForButton(this.data.confirmLabel);
   }
 
+  getCTName(): string {
+    return this.data.constraintTemplate.spec.crd.spec.names.kind.toLowerCase();
+  }
+
   save(): void {
     const formSpec = this._getSpec();
 

@@ -89,6 +89,15 @@ export class RuleGroupDialog implements OnInit, OnDestroy {
     return getIconClassForButton(this.data.confirmLabel);
   }
 
+  getDescription(): string {
+    switch (this.data.mode) {
+      case Mode.Add:
+        return 'Create recording and alerting rule group';
+      case Mode.Edit:
+        return `Edit recording and alerting rule group of <b>${this.data.cluster.name}</b> cluster`;
+    }
+  }
+
   save(): void {
     const ruleGroupName = this.data.mode === Mode.Edit ? MLAUtils.getRuleGroupName(this.data.ruleGroup.data) : '';
     const ruleGroup: RuleGroup = {

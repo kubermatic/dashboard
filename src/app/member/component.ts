@@ -183,7 +183,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Remove Member',
-        message: `Remove <b>${member.name}</b> member from <b>${this._selectedProject.name}</b> project?`,
+        message: `Remove <b>${member.name}</b> from <b>${this._selectedProject.name}</b> project?`,
         confirmLabel: 'Remove',
       },
     };

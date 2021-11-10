@@ -125,7 +125,7 @@ export class ServiceAccountTokenComponent implements OnInit {
       hasBackdrop: true,
       data: {
         title: 'Delete Token',
-        message: `Delete <b>${token.name}</b> token of <b>${this.serviceaccount.name}</b> service account permanently?`,
+        message: `Delete <b>${token.name}</b> token of <b>${this.serviceaccount.name}</b> service account of <b>${this._selectedProject.name}</b> project permanently?`,
         confirmLabel: 'Delete',
       },
     };

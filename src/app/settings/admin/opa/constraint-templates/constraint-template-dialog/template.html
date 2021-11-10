@@ -15,6 +15,7 @@ limitations under the License.
 -->
 <km-dialog-title>{{data.title}}</km-dialog-title>
 <mat-dialog-content>
+  <p class="km-dialog-context-description">Edit <b>{{getCTName()}}</b> constraint template</p>
   <div class="spec">Spec</div>
   <km-editor [(model)]="spec"
              header="YAML"></km-editor>

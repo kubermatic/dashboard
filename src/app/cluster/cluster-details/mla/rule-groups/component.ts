@@ -113,11 +113,11 @@ export class RuleGroupsComponent implements OnInit, OnChanges, OnDestroy {
   add(): void {
     const dialogConfig: MatDialogConfig = {
       data: {
-        title: 'Add Rule Group',
+        title: 'Create Rule Group',
         projectId: this.projectID,
         cluster: this.cluster,
         mode: Mode.Add,
-        confirmLabel: 'Add',
+        confirmLabel: 'Create',
       },
     };
 

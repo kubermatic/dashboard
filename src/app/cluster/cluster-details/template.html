@@ -328,6 +328,7 @@ limitations under the License.
     <km-tab label="Addons">
       <div class="addon-tab-content">
         <km-addon-list [addons]="addons"
+                       [cluster]="cluster"
                        [isClusterReady]="isClusterRunning"
                        [canEdit]="isEditEnabled()"
                        (addAddon)="handleAddonCreation($event)"
