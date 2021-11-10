@@ -92,25 +92,25 @@ export class Openstack extends Provider {
     return this;
   }
 
-  tenant(tenant: string): Openstack {
-    if (tenant) {
-      this._headers = this._headers.set(Openstack.Header.Tenant, tenant);
+  project(project: string): Openstack {
+    if (project) {
+      this._headers = this._headers.set(Openstack.Header.Project, project);
     }
     return this;
   }
 
-  tenantID(tenantID: string): Openstack {
-    if (tenantID) {
-      this._headers = this._headers.set(Openstack.Header.TenantID, tenantID);
+  projectID(projectID: string): Openstack {
+    if (projectID) {
+      this._headers = this._headers.set(Openstack.Header.ProjectID, projectID);
     }
     return this;
   }
 
   flavors(onLoadingCb: () => void = null): Observable<OpenstackFlavor[]> {
-    const tenantHeader = this._headers.get(Openstack.Header.Tenant)
-      ? Openstack.Header.Tenant
-      : Openstack.Header.TenantID;
-    this._addRequiredHeader(tenantHeader);
+    const projectHeader = this._headers.get(Openstack.Header.Project)
+      ? Openstack.Header.Project
+      : Openstack.Header.ProjectID;
+    this._addRequiredHeader(projectHeader);
 
     if (this._usingApplicationCredentials) {
       this._setRequiredHeaders(
@@ -160,10 +160,10 @@ export class Openstack extends Provider {
   }
 
   securityGroups(onLoadingCb: () => void = null): Observable<OpenstackSecurityGroup[]> {
-    const tenantHeader = this._headers.get(Openstack.Header.Tenant)
-      ? Openstack.Header.Tenant
-      : Openstack.Header.TenantID;
-    this._addRequiredHeader(tenantHeader);
+    const projectHeader = this._headers.get(Openstack.Header.Project)
+      ? Openstack.Header.Project
+      : Openstack.Header.ProjectID;
+    this._addRequiredHeader(projectHeader);
 
     if (this._usingApplicationCredentials) {
       this._setRequiredHeaders(
@@ -189,10 +189,10 @@ export class Openstack extends Provider {
   }
 
   networks(onLoadingCb: () => void = null): Observable<OpenstackNetwork[]> {
-    const tenantHeader = this._headers.get(Openstack.Header.Tenant)
-      ? Openstack.Header.Tenant
-      : Openstack.Header.TenantID;
-    this._addRequiredHeader(tenantHeader);
+    const projectHeader = this._headers.get(Openstack.Header.Project)
+      ? Openstack.Header.Project
+      : Openstack.Header.ProjectID;
+    this._addRequiredHeader(projectHeader);
 
     if (this._usingApplicationCredentials) {
       this._setRequiredHeaders(
@@ -241,10 +241,10 @@ export class Openstack extends Provider {
   }
 
   availabilityZones(onLoadingCb: () => void = null): Observable<OpenstackAvailabilityZone[]> {
-    const tenantHeader = this._headers.get(Openstack.Header.Tenant)
-      ? Openstack.Header.Tenant
-      : Openstack.Header.TenantID;
-    this._addRequiredHeader(tenantHeader);
+    const projectHeader = this._headers.get(Openstack.Header.Project)
+      ? Openstack.Header.Project
+      : Openstack.Header.ProjectID;
+    this._addRequiredHeader(projectHeader);
 
     if (this._usingApplicationCredentials) {
       this._setRequiredHeaders(
@@ -278,7 +278,7 @@ export namespace Openstack {
     ApplicationCredentialSecret = 'ApplicationCredentialSecret',
     Domain = 'Domain',
     Datacenter = 'DatacenterName',
-    Tenant = 'Tenant',
-    TenantID = 'TenantID',
+    Project = 'Project',
+    ProjectID = 'ProjectID',
   }
 }

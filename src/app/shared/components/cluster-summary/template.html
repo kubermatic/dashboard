@@ -268,13 +268,13 @@ limitations under the License.
             <div key>Username</div>
             <div value>{{cluster.spec.cloud?.openstack.username}}</div>
           </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.openstack.tenant">
+          <km-property *ngIf="cluster.spec.cloud?.openstack.project">
             <div key>Project</div>
-            <div value>{{cluster.spec.cloud?.openstack.tenant}}</div>
+            <div value>{{cluster.spec.cloud?.openstack.project}}</div>
           </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.openstack.tenantID">
+          <km-property *ngIf="cluster.spec.cloud?.openstack.projectID">
             <div key>Project ID</div>
-            <div value>{{cluster.spec.cloud?.openstack.tenantID}}</div>
+            <div value>{{cluster.spec.cloud?.openstack.projectID}}</div>
           </km-property>
           <km-property *ngIf="cluster.spec.cloud?.openstack.network">
             <div key>Network Name</div>
