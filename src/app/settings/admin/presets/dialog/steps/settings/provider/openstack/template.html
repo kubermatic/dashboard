@@ -43,7 +43,7 @@ limitations under the License.
   </mat-form-field>
 
   <mat-form-field fxFlex>
-    <mat-label>Tenant</mat-label>
+    <mat-label>Project</mat-label>
     <input matInput
            [formControlName]="Controls.Tenant"
            [name]="Controls.Tenant"
@@ -51,12 +51,12 @@ limitations under the License.
            autocomplete="off"
            required>
     <mat-error *ngIf="form.get(Controls.Tenant).hasError('required')">
-      Tenant is <strong>required</strong>.
+      Project is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
 
   <mat-form-field fxFlex>
-    <mat-label>Tenant ID</mat-label>
+    <mat-label>Project ID</mat-label>
     <input matInput
            [formControlName]="Controls.TenantID"
            [name]="Controls.TenantID"
@@ -64,7 +64,7 @@ limitations under the License.
            autocomplete="off"
            required>
     <mat-error *ngIf="form.get(Controls.TenantID).hasError('required')">
-      Tenant ID is <strong>required</strong>.
+      Project ID is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
 
