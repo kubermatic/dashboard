@@ -1,8 +1,11 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2021 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,7 +34,7 @@ a {
 
 hr {
   border-style: solid;
-  border-width: 1px 0 0 0;
+  border-width: 1px 0 0;
 }
 
 ::-webkit-scrollbar {
@@ -41,7 +44,7 @@ hr {
 .km-empty-list-msg {
   border-top: 1px solid;
   font-size: variables.$font-size-body;
-  padding: 15px 30px 15px;
+  padding: 15px 30px;
   text-align: center;
 }
 
@@ -50,7 +53,7 @@ hr {
     .km-mat-footer-row {
       border-bottom-left-radius: variables.$border-radius;
       border-bottom-right-radius: variables.$border-radius;
-      border-style: solid dashed dashed dashed;
+      border-style: solid dashed dashed;
       border-width: 1px;
       padding: 0;
 
@@ -216,23 +219,29 @@ hr {
   vertical-align: middle;
 }
 
-.km-notification {
-  &.mat-snack-bar-container {
-    border-radius: variables.$border-radius;
-    box-shadow: variables.$notification-shadow;
-    display: flex;
-    flex: 1 1 auto;
-    margin: variables.$notification-margin;
-    max-height: variables.$notification-max-height;
-    max-width: variables.$notification-width;
-    min-height: variables.$notification-min-height;
-    min-width: variables.$notification-width;
-    overflow: hidden;
-    padding: 0;
+.km-notification-overlay {
+  bottom: 80px;
+  position: relative !important;
+  right: 24px;
 
-    div {
+  .km-notification {
+    &.mat-snack-bar-container {
+      border-radius: variables.$border-radius;
+      box-shadow: variables.$notification-shadow;
+      display: flex;
       flex: 1 1 auto;
-      height: 100%;
+      margin: 0;
+      max-height: variables.$notification-max-height;
+      max-width: variables.$notification-width;
+      min-height: variables.$notification-min-height;
+      min-width: variables.$notification-width;
+      overflow: hidden;
+      padding: 0;
+
+      div {
+        flex: 1 1 auto;
+        height: 100%;
+      }
     }
   }
 }
@@ -318,15 +327,15 @@ hr {
   .km-table-actions {
     button {
       margin-left: 5px;
-      opacity: 0;
+      opacity: 0%;
       transition: visibility 0s 0s, opacity 0s ease-out;
     }
   }
 
   tr:hover {
     button {
-      opacity: 1;
-      transition: opacity .1s ease-out;
+      opacity: 100%;
+      transition: opacity 0.1s ease-out;
     }
   }
 }
@@ -338,7 +347,7 @@ hr {
     }
 
     .mat-form-field-infix {
-      padding: 12px 0 12px 0;
+      padding: 12px 0;
       width: 120px;
     }
 
@@ -354,8 +363,8 @@ hr {
       }
 
       .mat-form-field-outline-thick {
-        opacity: 1;
-        transition: all .5s ease;
+        opacity: 100%;
+        transition: all 0.5s ease;
       }
     }
   }
@@ -455,7 +464,7 @@ km-dashboard {
 
 .km-search-input {
   &.mat-form-field {
-    margin: -10px 0 -30px 0;
+    margin: -10px 0 -30px;
     max-height: 30px;
     width: 280px;
 

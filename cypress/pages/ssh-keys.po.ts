@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -11,7 +14,8 @@
 
 import {Condition} from '../utils/condition';
 import {Endpoint} from '../utils/endpoint';
-import {RequestType, TrafficMonitor} from '../utils/monitor';
+import {Mocks} from '../utils/mocks';
+import {RequestType, ResponseCheck, ResponseType, TrafficMonitor} from '../utils/monitor';
 import {View} from '../utils/view';
 
 export class SSHKeysPage {
@@ -80,5 +84,20 @@ export class SSHKeysPage {
     this.getDeleteSSHKeyConfirmationButton().should(Condition.NotBe, 'disabled').click();
     this.waitForRefresh();
     this.getTable().should(Condition.NotContain, name);
+  }
+
+  static verifyNoSSHKeys(): void {
+    if (Mocks.enabled()) {
+      cy.intercept({method: RequestType.GET, path: Endpoint.SSHKeys}, []);
+    }
+
+    this.verifyUrl();
+
+    const retries = 5;
+    TrafficMonitor.newTrafficMonitor()
+      .method(RequestType.GET)
+      .url(Endpoint.SSHKeys)
+      .retry(retries)
+      .expect(new ResponseCheck(ResponseType.LIST).elements(0));
   }
 }

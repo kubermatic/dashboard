@@ -1,8 +1,11 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2021 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -12,115 +15,115 @@
 @use 'mixins';
 
 .km-header-logo {
-  background-image: url("/assets/images/branding/logo.svg");
+  background-image: url('/assets/images/branding/logo.svg');
   background-repeat: no-repeat;
 }
 
 .km-frontpage-background {
-  @include mixins.background-image("/assets/images/branding/bg.svg", 100%);
+  @include mixins.background-image('/assets/images/branding/bg.svg', 100%);
 
   background-attachment: fixed;
   background-size: cover;
 }
 
 .km-icon-show {
-  @include mixins.mask-image("/assets/images/icons/show.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/show.svg', 24px);
 }
 
 .km-icon-hide {
-  @include mixins.mask-image("/assets/images/icons/hide.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/hide.svg', 24px);
 }
 
 .km-user {
-  @include mixins.mask-image("/assets/images/icons/user.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/user.svg', 24px);
 }
 
 .km-icon-metering {
-  @include mixins.mask-image("/assets/images/icons/metering.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/metering.svg', 24px);
 }
 
 .km-icon-bell {
-  @include mixins.mask-image("/assets/images/icons/bell.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/bell.svg', 24px);
 }
 
 .km-icon-search {
-  @include mixins.mask-image("/assets/images/icons/search.svg", 20px);
+  @include mixins.mask-image('/assets/images/icons/search.svg', 20px);
 }
 
 .km-icon-filter {
-  @include mixins.mask-image("/assets/images/icons/filter.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/filter.svg', 24px);
 }
 
 .km-icon-clear {
-  @include mixins.mask-image("/assets/images/icons/clear.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/clear.svg', 24px);
 }
 
 .km-icon-check {
-  @include mixins.mask-image("/assets/images/icons/check.svg#16", 16px);
+  @include mixins.mask-image('/assets/images/icons/check.svg#16', 16px);
 
   &.i-12 {
-    @include mixins.mask-image("/assets/images/icons/check.svg#16", 12px);
+    @include mixins.mask-image('/assets/images/icons/check.svg#16', 12px);
   }
 
   &.i-24 {
-    @include mixins.mask-image("/assets/images/icons/check.svg#24", 24px);
+    @include mixins.mask-image('/assets/images/icons/check.svg#24', 24px);
   }
 }
 
 .km-icon-collapse-menu {
-  @include mixins.mask-image("/assets/images/icons/collapse-menu.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/collapse-menu.svg', 24px);
 }
 
 .km-icon-points-menu {
-  @include mixins.mask-image("/assets/images/icons/points-menu.svg", 18px);
+  @include mixins.mask-image('/assets/images/icons/points-menu.svg', 18px);
 }
 
 .km-icon-remove {
-  @include mixins.mask-image("/assets/images/icons/remove.svg", 14px);
+  @include mixins.mask-image('/assets/images/icons/remove.svg', 14px);
 }
 
 .km-icon-done {
-  @include mixins.mask-image("/assets/images/icons/check.svg#16", 12px, $color: #00a3d9);
+  @include mixins.mask-image('/assets/images/icons/check.svg#16', 12px, $color: #00a3d9);
 }
 
 .km-icon-delete {
-  @include mixins.mask-image("/assets/images/icons/trash.svg#18", 18px);
+  @include mixins.mask-image('/assets/images/icons/trash.svg#18', 18px);
 
   &.i-24 {
-    @include mixins.mask-image("/assets/images/icons/trash.svg#24", 24px);
+    @include mixins.mask-image('/assets/images/icons/trash.svg#24', 24px);
   }
 }
 
 .km-icon-edit {
-  @include mixins.mask-image("/assets/images/icons/edit.svg", 18px);
+  @include mixins.mask-image('/assets/images/icons/edit.svg', 18px);
 }
 
 .km-icon-credentials {
-  @include mixins.mask-image("/assets/images/icons/credentials.svg", 18px);
+  @include mixins.mask-image('/assets/images/icons/credentials.svg', 18px);
 }
 
 .km-icon-connect {
-  @include mixins.mask-image("/assets/images/icons/connect.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/connect.svg', 24px);
 }
 
 .km-icon-disconnect {
-  @include mixins.mask-image("/assets/images/icons/disconnect.svg", 18px);
+  @include mixins.mask-image('/assets/images/icons/disconnect.svg', 18px);
 }
 
 .km-icon-cluster-from-template {
-  @include mixins.mask-image("/assets/images/icons/cluster-from-template.svg", 18px);
+  @include mixins.mask-image('/assets/images/icons/cluster-from-template.svg', 18px);
 }
 
 .km-icon-cancel {
-  @include mixins.mask-image("/assets/images/icons/x.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/x.svg', 24px);
 }
 
 .km-icon-regenerate {
-  @include mixins.mask-image("/assets/images/icons/regenerate.svg", 18px);
+  @include mixins.mask-image('/assets/images/icons/regenerate.svg', 18px);
 }
 
 .km-icon-error {
-  @include mixins.background-image("/assets/images/icons/warning.svg", 16px);
+  @include mixins.background-image('/assets/images/icons/warning.svg', 16px);
 
   background-color: #eb5757;
   background-size: 12px;
@@ -129,7 +132,7 @@
 }
 
 .km-icon-warning {
-  @include mixins.background-image("/assets/images/icons/warning.svg", 16px);
+  @include mixins.background-image('/assets/images/icons/warning.svg', 16px);
 
   background-color: #f7b500 !important;
   background-size: 12px !important;
@@ -138,287 +141,287 @@
 }
 
 .km-icon-power-on {
-  @include mixins.mask-image("/assets/images/icons/power.svg", 18px, $color: #1dc67f);
+  @include mixins.mask-image('/assets/images/icons/power.svg', 18px, $color: #1dc67f);
 }
 
 .km-icon-power-off {
-  @include mixins.mask-image("/assets/images/icons/power.svg", 18px, $color: #cad1d9);
+  @include mixins.mask-image('/assets/images/icons/power.svg', 18px, $color: #cad1d9);
 }
 
 .km-icon-power {
-  @include mixins.mask-image("/assets/images/icons/power.svg", 18px);
+  @include mixins.mask-image('/assets/images/icons/power.svg', 18px);
 }
 
 .km-icon-download {
-  @include mixins.mask-image("/assets/images/icons/download.svg", 24px, $color: #fff);
+  @include mixins.mask-image('/assets/images/icons/download.svg', 24px, $color: #fff);
 }
 
 .km-icon-share {
-  @include mixins.mask-image("/assets/images/icons/share.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/share.svg', 24px);
 }
 
 .km-icon-copy {
-  @include mixins.mask-image("/assets/images/icons/copy.svg", 20px, $color: #fff);
+  @include mixins.mask-image('/assets/images/icons/copy.svg', 20px, $color: #fff);
 }
 
 .km-icon-copy-small {
-  @include mixins.mask-image("/assets/images/icons/copy-small.svg", 12px);
+  @include mixins.mask-image('/assets/images/icons/copy-small.svg', 12px);
 }
 
 .km-icon-update-available {
-  @include mixins.background-image("/assets/images/icons/update-available.svg", 16px);
+  @include mixins.background-image('/assets/images/icons/update-available.svg', 16px);
 }
 
 .km-icon-update-available-arrow {
-  @include mixins.mask-image("/assets/images/icons/update-available-arrow.svg", 16px);
+  @include mixins.mask-image('/assets/images/icons/update-available-arrow.svg', 16px);
 }
 
 .km-icon-cluster {
-  @include mixins.mask-image("/assets/images/icons/clusters.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/clusters.svg', 24px);
 }
 
 .km-icon-backup {
-  @include mixins.mask-image("/assets/images/icons/backups.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/backups.svg', 24px);
 }
 
 .km-icon-key {
-  @include mixins.mask-image("/assets/images/icons/ssh-keys.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/ssh-keys.svg', 24px);
 }
 
 .km-icon-cluster-template {
-  @include mixins.mask-image("/assets/images/icons/cluster-template.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/cluster-template.svg', 24px);
 }
 
 .km-icon-member {
-  @include mixins.mask-image("/assets/images/icons/members.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/members.svg', 24px);
 }
 
 .km-icon-serviceaccount {
-  @include mixins.mask-image("/assets/images/icons/service-accounts.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/service-accounts.svg', 24px);
 }
 
 .km-icon-randomize {
-  @include mixins.background-image("/assets/images/icons/randomize.svg", 16px);
+  @include mixins.background-image('/assets/images/icons/randomize.svg', 16px);
 }
 
 .km-icon-arrow-down {
-  @include mixins.mask-image("/assets/images/icons/arrow-down.svg", 12px);
+  @include mixins.mask-image('/assets/images/icons/arrow-down.svg', 12px);
 }
 
 .km-icon-arrow-up {
-  @include mixins.mask-image("/assets/images/icons/arrow-down.svg", 12px);
+  @include mixins.mask-image('/assets/images/icons/arrow-down.svg', 12px);
 
   transform: rotate(180deg);
 }
 
 .km-icon-arrow-left {
-  @include mixins.mask-image("/assets/images/icons/arrow-down.svg", 16px);
+  @include mixins.mask-image('/assets/images/icons/arrow-down.svg', 16px);
 
   transform: rotate(90deg);
 }
 
 .km-icon-close {
-  @include mixins.mask-image("/assets/images/icons/close.svg", 20px);
+  @include mixins.mask-image('/assets/images/icons/close.svg', 20px);
 }
 
 .km-icon-info {
-  @include mixins.background-image("/assets/images/icons/info.svg", 16px);
+  @include mixins.background-image('/assets/images/icons/info.svg', 16px);
 }
 
 .km-icon-circle {
-  @include mixins.mask-image("/assets/images/icons/circle.svg", 14px);
+  @include mixins.mask-image('/assets/images/icons/circle.svg', 14px);
 }
 
 .km-icon-back {
-  @include mixins.mask-image("/assets/images/icons/back.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/back.svg', 24px);
 }
 
 .km-icon-next {
-  @include mixins.mask-image("/assets/images/icons/back.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/back.svg', 24px);
 
   transform: rotate(180deg);
 }
 
 .km-icon-add {
-  @include mixins.mask-image("/assets/images/icons/plus.svg", 18px);
+  @include mixins.mask-image('/assets/images/icons/plus.svg', 18px);
 }
 
 .km-icon-save {
-  @include mixins.mask-image("/assets/images/icons/save.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/save.svg', 24px);
 }
 
 .km-icon-reset {
-  @include mixins.mask-image("/assets/images/icons/reset.svg", 18px);
+  @include mixins.mask-image('/assets/images/icons/reset.svg', 18px);
 }
 
 .km-icon-running {
-  @include mixins.mask-image("/assets/images/icons/check.svg#16", 16px, $color: #1dc67f);
+  @include mixins.mask-image('/assets/images/icons/check.svg#16', 16px, $color: #1dc67f);
 }
 
 .km-icon-failed {
-  @include mixins.mask-image("/assets/images/icons/warning.svg", 16px, $color: #eb5757);
+  @include mixins.mask-image('/assets/images/icons/warning.svg', 16px, $color: #eb5757);
 }
 
 .km-icon-pending {
-  @include mixins.mask-image("/assets/images/icons/spinner.svg", 16px);
+  @include mixins.mask-image('/assets/images/icons/spinner.svg', 16px);
 }
 
 .km-icon-disabled {
-  @include mixins.mask-image("/assets/images/icons/close.svg", 16px, $color: #7e868f);
+  @include mixins.mask-image('/assets/images/icons/close.svg', 16px, $color: #7e868f);
 }
 
 .km-icon-labels {
-  @include mixins.mask-image("/assets/images/icons/labels.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/labels.svg', 24px);
 
   transform: rotate(180deg);
 }
 
 .km-icon-link {
-  @include mixins.mask-image("/assets/images/icons/link.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/link.svg', 24px);
 }
 
 .km-icon-external-link {
-  @include mixins.mask-image("/assets/images/icons/external-link.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/external-link.svg', 24px);
 }
 
 .km-icon-help {
-  @include mixins.mask-image("/assets/images/icons/help.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/help.svg', 24px);
 }
 
 .km-icon-loading {
-  @include mixins.mask-image("/assets/images/icons/sandclock.svg", 28px);
+  @include mixins.mask-image('/assets/images/icons/sandclock.svg', 28px);
 }
 
 .km-icon-owner {
-  @include mixins.mask-image("/assets/images/icons/owner.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/owner.svg', 24px);
 }
 
 .km-icon-role {
-  @include mixins.mask-image("/assets/images/icons/role.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/role.svg', 24px);
 }
 
 .km-icon-projects-table {
-  @include mixins.mask-image("/assets/images/icons/projects-table.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/projects-table.svg', 24px);
 }
 
 .km-icon-projects-card {
-  @include mixins.mask-image("/assets/images/icons/projects-cards.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/projects-cards.svg', 24px);
 }
 
 .km-icon-sun {
-  @include mixins.mask-image("/assets/images/icons/sun.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/sun.svg', 24px);
 }
 
 .km-icon-moon {
-  @include mixins.mask-image("/assets/images/icons/moon.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/moon.svg', 24px);
 }
 
 .km-icon-kubernetes {
-  @include mixins.background-image("/assets/images/icons/kubernetes.svg", 30px);
+  @include mixins.background-image('/assets/images/icons/kubernetes.svg', 30px);
 }
 
 .km-icon-opa {
-  @include mixins.mask-image("/assets/images/icons/opa.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/opa.svg', 24px);
 }
 
 .km-icon-defaults {
-  @include mixins.mask-image("/assets/images/icons/defaults.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/defaults.svg', 24px);
 }
 
 .km-icon-node {
-  @include mixins.mask-image("/assets/images/icons/node.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/node.svg', 24px);
 }
 
 .km-icon-id {
-  @include mixins.mask-image("/assets/images/icons/id.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/id.svg', 24px);
 }
 
 .km-icon-interface {
-  @include mixins.mask-image("/assets/images/icons/interface.svg", 24px);
+  @include mixins.mask-image('/assets/images/icons/interface.svg', 24px);
 }
 
 .km-icon-restore {
-  @include mixins.mask-image("/assets/images/icons/restore.svg", 18px);
+  @include mixins.mask-image('/assets/images/icons/restore.svg', 18px);
 }
 
 .km-provider-logo-alibaba {
-  @include mixins.provider-image("/assets/images/clouds/alibaba.svg", 30px);
+  @include mixins.provider-image('/assets/images/clouds/alibaba.svg', 30px);
 }
 
 .km-provider-logo-aws {
-  @include mixins.provider-image("/assets/images/clouds/aws.svg", 24px);
+  @include mixins.provider-image('/assets/images/clouds/aws.svg', 24px);
 }
 
 .km-provider-logo-azure {
-  @include mixins.provider-image("/assets/images/clouds/azure.svg", 24px);
+  @include mixins.provider-image('/assets/images/clouds/azure.svg', 24px);
 }
 
 .km-provider-logo-baremetal {
-  @include mixins.provider-image("/assets/images/clouds/baremetal.png", 30px);
+  @include mixins.provider-image('/assets/images/clouds/baremetal.png', 30px);
 }
 
 .km-provider-logo-bringyourown {
-  @include mixins.provider-image("/assets/images/clouds/bringyourown.svg", 30px);
+  @include mixins.provider-image('/assets/images/clouds/bringyourown.svg', 30px);
 }
 
 .km-provider-logo-digitalocean {
-  @include mixins.provider-image("/assets/images/clouds/digitalocean.svg", 30px);
+  @include mixins.provider-image('/assets/images/clouds/digitalocean.svg', 30px);
 }
 
 .km-provider-logo-gcp {
-  @include mixins.provider-image("/assets/images/clouds/gcp.svg", 30px);
+  @include mixins.provider-image('/assets/images/clouds/gcp.svg', 30px);
 }
 
 .km-provider-logo-hetzner {
-  @include mixins.provider-image("/assets/images/clouds/hetzner.svg", 30px);
+  @include mixins.provider-image('/assets/images/clouds/hetzner.svg', 30px);
 }
 
 .km-provider-logo-openstack {
-  @include mixins.provider-image("/assets/images/clouds/openstack.svg", 30px);
+  @include mixins.provider-image('/assets/images/clouds/openstack.svg', 30px);
 }
 
 .km-provider-logo-packet {
-  @include mixins.provider-image("/assets/images/clouds/equinix.svg", 24px);
+  @include mixins.provider-image('/assets/images/clouds/equinix.svg', 24px);
 }
 
 .km-provider-logo-kubevirt {
-  @include mixins.provider-image("/assets/images/clouds/kubevirt.svg", 30px);
+  @include mixins.provider-image('/assets/images/clouds/kubevirt.svg', 30px);
 }
 
 .km-provider-logo-vsphere {
-  @include mixins.provider-image("/assets/images/clouds/vsphere.svg", 24px);
+  @include mixins.provider-image('/assets/images/clouds/vsphere.svg', 24px);
 }
 
 .km-provider-logo-anexia {
-  @include mixins.provider-image("/assets/images/clouds/anexia.svg", 24px);
+  @include mixins.provider-image('/assets/images/clouds/anexia.svg', 24px);
 }
 
 .km-os-image-centos {
-  @include mixins.background-image("/assets/images/os/centos.svg", 24px);
+  @include mixins.background-image('/assets/images/os/centos.svg', 24px);
 }
 
 .km-os-image-container-linux {
-  @include mixins.background-image("/assets/images/os/container-linux.svg", 24px);
+  @include mixins.background-image('/assets/images/os/container-linux.svg', 24px);
 }
 
 .km-os-image-ubuntu {
-  @include mixins.background-image("/assets/images/os/ubuntu.svg", 24px);
+  @include mixins.background-image('/assets/images/os/ubuntu.svg', 24px);
 }
 
 .km-os-image-sles {
-  @include mixins.background-image("/assets/images/os/sles.svg", 24px);
+  @include mixins.background-image('/assets/images/os/sles.svg', 24px);
 }
 
 .km-os-image-rhel {
-  @include mixins.background-image("/assets/images/os/rhel.svg", 24px);
+  @include mixins.background-image('/assets/images/os/rhel.svg', 24px);
 }
 
 .km-os-image-rhel-gray {
-  @include mixins.background-image("/assets/images/os/rhel-gray.svg", 24px);
+  @include mixins.background-image('/assets/images/os/rhel-gray.svg', 24px);
 }
 
 .km-os-image-flatcar {
-  @include mixins.background-image("/assets/images/os/flatcar.svg", 24px);
+  @include mixins.background-image('/assets/images/os/flatcar.svg', 24px);
 }
 
 @for $i from 1 through 50 {

@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,7 +31,7 @@ import {ClusterHealthStatus} from '@shared/utils/health-status/cluster-health-st
 import {NodeHealthStatus} from '@shared/utils/health-status/node-health-status';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {NodeUtils} from '@shared/utils/node-utils/node-utils';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import * as semver from 'semver';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';

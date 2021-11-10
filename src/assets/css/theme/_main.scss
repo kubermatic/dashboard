@@ -1,27 +1,28 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2021 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use 'sass:color';
 @use 'sass:map';
 @use '~@angular/material' as mat;
-
 @import 'material/theme';
 @import 'global/theme';
 @import 'component';
-
-@include mat.core();
+@include mat.core;
 
 @mixin theme($theme, $colors) {
-  $palette-background: map-get($theme, background);
-  $palette-foreground: map-get($theme, foreground);
-
+  $palette-background: map.get($theme, background);
+  $palette-foreground: map.get($theme, foreground);
   $theme-colors: (
     background-app-bar: mat.get-color-from-palette($palette-background, app-bar),
     background-card: mat.get-color-from-palette($palette-background, card),
@@ -32,7 +33,7 @@
     checkbox-disabled: mat.get-color-from-palette($palette-foreground, disabled-checkbox),
     divider-disabled: mat.get-color-from-palette($palette-foreground, disabled),
     divider: mat.get-color-from-palette($palette-foreground, divider),
-    project-switch: rgba(mat.get-color-from-palette($palette-foreground, secondary-text), .7),
+    project-switch: color.adjust(mat.get-color-from-palette($palette-foreground, secondary-text), $alpha: 0.7),
     text-disabled: mat.get-color-from-palette($palette-foreground, disabled-text),
     text-secondary: mat.get-color-from-palette($palette-foreground, secondary-text),
     text: mat.get-color-from-palette($palette-foreground, text),

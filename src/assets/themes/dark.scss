@@ -1,19 +1,22 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2021 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use 'sass:map';
 @use '~@angular/material' as mat;
 @use 'mixins';
 @use 'theme/main';
 @use 'variables';
-
 @import 'images';
 
 $colors-dark: (
@@ -26,10 +29,10 @@ $colors-dark: (
   indicator-green: #1dc67f,
   indicator-orange: #f7b500,
   indicator-red: #eb5757,
-  footer-text: rgba(#fff, .85),
+  footer-text: rgb(255 255 255 / 85%),
   sidenav-active: #66c9ff,
   sidenav-background-hover: #202021,
-  sidenav-background-active: rgba(#00517d, .7),
+  sidenav-background-active: rgb(0 81 125 / 70%),
   sidenav-divider: #cad1d9,
   project-selector-hover: #464647,
   tooltip-background: #0072b0,
@@ -48,34 +51,32 @@ $colors-dark: (
   scrollbar: #464647,
   scrollbar-background: #202021,
   tab-divider: #cad1d9,
-  shadow: 0 4px 4px rgba(#000, .08),
-  shadow-dark: (0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12)),
+  shadow: 0 4px 4px rgb(0 0 0 / 8%),
+  shadow-dark: (0 2px 4px -1px rgb(0 0 0 / 20%), 0 4px 5px 0 rgb(0 0 0 / 14%), 0 1px 10px 0 rgb(0 0 0 / 12%)),
   dropdown-hover: #464646,
 );
-
 $colors-dark-palette: mat.$blue-palette;
-$colors-dark-palette: map-merge($colors-dark-palette, (500: #0072b0));
-
-$theme-dark: mat.define-dark-theme(mat.define-palette($colors-dark-palette), mat.define-palette(mat.$light-blue-palette), mat.define-palette(mat.$pink-palette));
-
-// sass-lint:disable function-name-format
-$background: map-get($theme-dark, background);
-$background: map_merge($background, (background: #000));
-$background: map_merge($background, (hover: #2d2d2e));
-$background: map_merge($background, (app-bar: #2b2b2c));
-$background: map_merge($background, (card: #202021));
-$background: map_merge($background, (dialog: #2b2b2c));
-$theme-dark: map_merge($theme-dark, (background: $background));
-
-$foreground: map-get($theme-dark, foreground);
-$foreground: map_merge($foreground, (text: rgba(#fff, .85)));
-$foreground: map_merge($foreground, (secondary-text: #b8b8b8));
-$foreground: map_merge($foreground, (disabled-text: #636363));
-$foreground: map_merge($foreground, (disabled-checkbox: #3b3b3c));
-$foreground: map_merge($foreground, (disabled: #313132));
-$foreground: map_merge($foreground, (divider: #464647));
-$theme-dark: map_merge($theme-dark, (foreground: $foreground));
-// sass-lint:enable function-name-format
+$colors-dark-palette: map.merge($colors-dark-palette, (500: #0072b0));
+$theme-dark: mat.define-dark-theme(
+  mat.define-palette($colors-dark-palette),
+  mat.define-palette(mat.$light-blue-palette),
+  mat.define-palette(mat.$pink-palette),
+);
+$background: map.get($theme-dark, background);
+$background: map.merge($background, (background: #000));
+$background: map.merge($background, (hover: #2d2d2e));
+$background: map.merge($background, (app-bar: #2b2b2c));
+$background: map.merge($background, (card: #202021));
+$background: map.merge($background, (dialog: #2b2b2c));
+$theme-dark: map.merge($theme-dark, (background: $background));
+$foreground: map.get($theme-dark, foreground);
+$foreground: map.merge($foreground, (text: rgb(255 255 255 / 85%)));
+$foreground: map.merge($foreground, (secondary-text: #b8b8b8));
+$foreground: map.merge($foreground, (disabled-text: #636363));
+$foreground: map.merge($foreground, (disabled-checkbox: #3b3b3c));
+$foreground: map.merge($foreground, (disabled: #313132));
+$foreground: map.merge($foreground, (divider: #464647));
+$theme-dark: map.merge($theme-dark, (foreground: $foreground));
 
 @include mat.all-component-themes($theme-dark);
 @include main.theme($theme-dark, $colors-dark);
@@ -88,54 +89,57 @@ $theme-dark: map_merge($theme-dark, (foreground: $foreground));
 .km-icon-randomize,
 .km-sidenav a:not(.active) i,
 .km-footer i,
-*[class*="km-os-image-"] {
+*[class*='km-os-image-'] {
+  /* stylelint-disable */
   filter: invert(.25) brightness(100) contrast(100);
-  opacity: .85;
+  /* stylelint-enable */
+
+  opacity: 85%;
 }
 
 .km-icon-mask {
-  background-color: rgba(#fff, .85);
+  background-color: rgb(255 255 255 / 85%);
 }
 
 .km-provider-logo-kubevirt {
-  @include mixins.provider-image("/assets/images/clouds/kubevirt-dark.svg", 30px);
+  @include mixins.provider-image('/assets/images/clouds/kubevirt-dark.svg', 30px);
 
   filter: none;
 }
 
 .km-provider-logo-vsphere {
-  @include mixins.provider-image("/assets/images/clouds/vsphere-dark.svg", 30px);
+  @include mixins.provider-image('/assets/images/clouds/vsphere-dark.svg', 30px);
 
   filter: none;
 }
 
 .km-icon-info {
-  @include mixins.background-image("/assets/images/icons/info-dark.svg", 16px);
+  @include mixins.background-image('/assets/images/icons/info-dark.svg', 16px);
 
-  opacity: .85;
+  opacity: 85%;
 }
 
 // Make selected option text light blue.
 .mat-option.mat-option-multiple.mat-selected .mat-option-text {
-  color: map-get($colors-dark, primary-dark);
+  color: map.get($colors-dark, primary-dark);
 }
 
 .mat-option:hover:not(.mat-option-disabled),
 .mat-option:focus:not(.mat-option-disabled) {
-  background-color: map-get($colors-dark, dropdown-hover);
+  background-color: map.get($colors-dark, dropdown-hover);
 }
 
 // Make checkbox marks white.
 .mat-checkbox .mat-checkbox-checkmark .mat-checkbox-checkmark-path {
-  stroke: rgba(#fff, .85) !important;
+  stroke: rgb(255 255 255 / 85%) !important;
 }
 
 // Change background color of steppers in dialogs
 .mat-stepper-horizontal.km-stepper-in-dialog {
-  background-color: map-get($colors-dark, option-background);
+  background-color: map.get($colors-dark, option-background);
 
   .mat-button-toggle-group .mat-button-toggle {
-    background-color: map-get($colors-dark, option-background);
+    background-color: map.get($colors-dark, option-background);
   }
 
   ::-webkit-scrollbar-track {

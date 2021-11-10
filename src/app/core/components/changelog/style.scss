@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,9 +42,9 @@
 
 .bullet {
   &::before {
-    content: "\2B24";
+    content: '\2B24';
     font-size: 4px;
-    padding-right: 6px;
+    padding: 0 5px;
     vertical-align: middle;
   }
 }
@@ -71,7 +74,7 @@
 }
 
 .km-changelog-link-card {
-  margin: 0 8px 10px 10px;
+  margin: 5px 8px 10px 15px;
 }
 
 .km-changelog-external-link-icon {
@@ -80,6 +83,7 @@
   border-bottom-left-radius: 8px;
   border-right: none;
   border-top-left-radius: 8px;
+  padding: 2px 4px;
 
   > i {
     @include mixins.size(variables.$font-size-card-title, $force: true);
@@ -93,7 +97,7 @@
   border-left: none;
   border-top-right-radius: 8px;
   font-size: variables.$font-size-body;
-  padding-left: 0;
+  padding: 2px 6px 2px 0;
 }
 
 .km-changelog-link-button {

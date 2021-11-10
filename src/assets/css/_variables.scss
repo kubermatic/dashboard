@@ -1,8 +1,11 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2021 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,12 +23,11 @@ $notification-width: 300px;
 $notification-min-height: 60px;
 $notification-max-height: 160px;
 $notification-margin: 0 24px 80px 0;
-$notification-shadow: 0 5px 5px rgba(0, 0, 0, .2), 0 8px 10px rgba(0, 0, 0, .14), 0 3px 14px rgba(0, 0, 0, .12);
-$border-box-shadow: 0 1px 3px rgba(0, 0, 0, .12);
-$border-box-shadow-hover: 0 3px 5px rgba(0, 0, 0, .2), 0 6px 10px rgba(0, 0, 0, .14), 0 1px 18px rgba(0, 0, 0, .12);
-$border-box-shadow-inset: inset 0 4px 4px rgba(0, 0, 0, .1);
-$transition-all: all .5s ease;
-
+$notification-shadow: 0 5px 5px rgb(0 0 0 / 20%), 0 8px 10px rgb(0 0 0 / 14%), 0 3px 14px rgb(0 0 0 / 12%);
+$border-box-shadow: 0 1px 3px rgb(0 0 0 / 12%);
+$border-box-shadow-hover: 0 3px 5px rgb(0 0 0 / 20%), 0 6px 10px rgb(0 0 0 / 14%), 0 1px 18px rgb(0 0 0 / 12%);
+$border-box-shadow-inset: inset 0 4px 4px rgb(0 0 0 / 10%);
+$transition-all: all 0.5s ease;
 $font-size-head: 24px !default;
 $font-size-card-title: 20px !default;
 $font-size-subhead-lg: 18px !default;
@@ -33,7 +35,6 @@ $font-size-subhead: 16px !default;
 $font-size-body: 14px !default;
 $font-size-caption: 12px !default;
 $font-size-small: 10px !default;
-
 $font-primary: 'Roboto', helvetica, arial, sans-serif;
 $font-primary-mono: 'Roboto Mono', monospace;
 $font-secondary: 'Ubuntu', sans-serif;

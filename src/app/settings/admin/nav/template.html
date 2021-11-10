@@ -1,9 +1,12 @@
 <!--
 Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
+
     http://www.apache.org/licenses/LICENSE-2.0
+
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -73,16 +76,6 @@ limitations under the License.
     </a>
   </div>
 
-  <div class="menu-item">
-    <a id="km-nav-item-administrators"
-       routerLink="administrators"
-       routerLinkActive="active"
-       fxLayoutAlign=" center">
-      <i class="km-user"></i>
-      <span>Administrators</span>
-    </a>
-  </div>
-
   <div *ngIf="isEnterpriseEdition"
        class="menu-item">
     <a id="km-nav-item-metering"
@@ -91,6 +84,26 @@ limitations under the License.
        fxLayoutAlign=" center">
       <i class="km-icon-metering"></i>
       <span>Metering</span>
+    </a>
+  </div>
+
+  <div class="menu-item">
+    <a id="km-nav-item-users"
+       routerLink="accounts"
+       routerLinkActive="active"
+       fxLayoutAlign=" center">
+      <i class="km-icon-member"></i>
+      <span>Accounts</span>
+    </a>
+  </div>
+
+  <div class="menu-item">
+    <a id="km-nav-item-administrators"
+       routerLink="administrators"
+       routerLinkActive="active"
+       fxLayoutAlign=" center">
+      <i class="km-user"></i>
+      <span>Administrators</span>
     </a>
   </div>
 </div>

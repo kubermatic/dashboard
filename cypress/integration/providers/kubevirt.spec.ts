@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,21 +21,26 @@ import {Preset} from '../../utils/preset';
 import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
-import * as _ from 'lodash';
+import _ from 'lodash';
+import {Mocks} from '../../utils/mocks';
 
 describe('KubeVirt Provider', () => {
-  const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
-  const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
-  const projectName = _.uniqueId('e2e-test-project-');
-  const clusterName = _.uniqueId('e2e-test-cluster-');
-  const initialMachineDeploymentName = _.uniqueId('e2e-test-md-');
+  const preset = Mocks.enabled() ? Preset.Mock : Preset.Alibaba;
+  const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
+  const clusterName = Mocks.enabled() ? 'test-cluster' : _.uniqueId('test-cluster-');
   const initialMachineDeploymentReplicas = '0';
   const namespace = 'kube-system';
   const sourceURL = 'http://10.102.236.197/ubuntu.img';
   const storageClassName = 'kubermatic-fast';
 
+  beforeEach(() => {
+    if (Mocks.enabled()) {
+      Mocks.register(Provider.KubeVirt);
+    }
+  });
+
   it('should login', () => {
-    login(email, password);
+    login();
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -54,11 +62,8 @@ describe('KubeVirt Provider', () => {
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
     WizardPage.getCustomPresetsCombobox().click();
-    WizardPage.getPreset(Preset.KubeVirt).click();
+    WizardPage.getPreset(preset).click();
     WizardPage.getNextBtn(WizardStep.ProviderSettings).click({force: true});
-    WizardPage.getNodeNameInput()
-      .type(initialMachineDeploymentName)
-      .should(Condition.HaveValue, initialMachineDeploymentName);
     WizardPage.getNodeCountInput()
       .clear()
       .type(initialMachineDeploymentReplicas)
@@ -69,7 +74,7 @@ describe('KubeVirt Provider', () => {
     WizardPage.getNextBtn(WizardStep.NodeSettings).should(Condition.BeEnabled).click({force: true});
     WizardPage.getCreateBtn().click({force: true});
 
-    cy.url().should(Condition.Contain, View.Clusters.Default);
+    ClustersPage.verifyUrl();
   });
 
   it('should check if cluster was created', () => {
@@ -100,6 +105,9 @@ describe('KubeVirt Provider', () => {
 
   it('should delete the project', () => {
     ProjectsPage.deleteProject(projectName);
+  });
+
+  it('should verify that there are no projects', () => {
     ProjectsPage.verifyNoProjects();
   });
 

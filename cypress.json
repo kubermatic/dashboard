@@ -3,7 +3,7 @@
   "supportFile": "./cypress/support/index.ts",
   "chromeWebSecurity": false,
   "screenshotOnRunFailure": true,
-  "videoCompression": 4,
+  "videoCompression": false,
   "pageLoadTimeout": 60000,
   "defaultCommandTimeout": 600000,
   "responseTimeout": 600000,

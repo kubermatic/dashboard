@@ -1,46 +1,51 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2021 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use 'sass:map';
+
 @mixin theme-material($colors) {
   // Cards.
   .mat-card {
-    color: map-get($colors, text);
+    color: map.get($colors, text);
   }
 
   .mat-card-content {
     p {
-      color: map-get($colors, text);
+      color: map.get($colors, text);
     }
 
     button {
       border: none;
-      color: map-get($colors, primary);
+      color: map.get($colors, primary);
     }
   }
 
   // Dialogs.
   .mat-dialog-container {
-    color: map-get($colors, text);
+    color: map.get($colors, text);
   }
 
   // Tables.
   .mat-table {
     .mat-header-cell,
     .mat-sort-header-button {
-      color: map-get($colors, text);
+      color: map.get($colors, text);
     }
 
     td {
       &.mat-cell {
-        border-top: 1px solid map-get($colors, divider);
+        border-top: 1px solid map.get($colors, divider);
       }
     }
 
@@ -57,7 +62,7 @@
       .mat-sort-header-arrow {
         .mat-sort-header-indicator {
           &::before {
-            background-color: map-get($colors, text);
+            background-color: map.get($colors, text);
           }
         }
       }
@@ -67,7 +72,7 @@
       .mat-sort-header-arrow {
         .mat-sort-header-indicator {
           &::before {
-            background-color: map-get($colors, text);
+            background-color: map.get($colors, text);
           }
         }
       }
@@ -75,35 +80,35 @@
   }
 
   .mat-paginator {
-    border-top: 1px solid map-get($colors, divider);
+    border-top: 1px solid map.get($colors, divider);
 
     .mat-paginator-range-actions > .mat-icon-button:not([disabled]) {
-      color: map-get($colors, text-secondary);
+      color: map.get($colors, text-secondary);
     }
   }
 
   // Steppers.
   .mat-step-header {
     .mat-step-icon {
-      background: map-get($colors, divider);
-      color: map-get($colors, text-secondary);
+      background: map.get($colors, divider);
+      color: map.get($colors, text-secondary);
 
       &.mat-step-icon-selected,
       &.mat-step-icon-state-edit {
-        background: map-get($colors, wizard-step-background);
-        color: map-get($colors, primary);
+        background: map.get($colors, wizard-step-background);
+        color: map.get($colors, primary);
       }
     }
 
     .mat-step-label {
-      color: map-get($colors, text-secondary);
+      color: map.get($colors, text-secondary);
 
       &.mat-step-label-active {
-        color: map-get($colors, wizard-step-active);
+        color: map.get($colors, wizard-step-active);
       }
 
       &.mat-step-label-selected {
-        color: map-get($colors, wizard-step-active);
+        color: map.get($colors, wizard-step-active);
       }
     }
 
@@ -114,7 +119,7 @@
 
   // Menus.
   .mat-drawer-container {
-    background-color: map-get($colors, background);
+    background-color: map.get($colors, background);
   }
 
   .mat-drawer-side {
@@ -124,13 +129,13 @@
   // Forms.
   mat-form-field {
     &.mat-form-field {
-      color: map-get($colors, text);
+      color: map.get($colors, text);
     }
 
     &.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):not(.mat-form-field-disabled) {
       div.mat-form-field-flex:hover {
         label {
-          color: map-get($colors, secondary-dark);
+          color: map.get($colors, secondary-dark);
         }
       }
     }
@@ -139,7 +144,7 @@
       &:not(.ng-invalid),
       &.ng-pristine:not(.ng-touched) {
         label.mat-form-field-label {
-          color: map-get($colors, primary-dark);
+          color: map.get($colors, primary-dark);
         }
       }
     }
@@ -147,40 +152,40 @@
 
   .mat-form-field-appearance-outline {
     .mat-form-field-outline {
-      color: map-get($colors, divider);
+      color: map.get($colors, divider);
     }
 
     &.mat-focused {
       .mat-form-field-outline-thick {
-        color: map-get($colors, primary);
+        color: map.get($colors, primary);
       }
     }
 
     &.mat-form-field-disabled {
       .mat-form-field-outline {
-        color: map-get($colors, divider-disabled);
+        color: map.get($colors, divider-disabled);
       }
     }
   }
 
   div.mat-form-field-outline.mat-form-field-outline-thick {
-    color: map-get($colors, secondary);
+    color: map.get($colors, secondary);
   }
 
   .mat-select-arrow {
-    background-color: map-get($colors, text);
+    background-color: map.get($colors, text);
   }
 
   .mat-optgroup-label {
-    background-color: map-get($colors, option-background);
+    background-color: map.get($colors, option-background);
   }
 
   .mat-option {
-    background-color: map-get($colors, option-background);
-    color: map-get($colors, text);
+    background-color: map.get($colors, option-background);
+    color: map.get($colors, text);
 
     &:hover {
-      background-color: map-get($colors, option-background-hover);
+      background-color: map.get($colors, option-background-hover);
     }
   }
 
@@ -188,11 +193,11 @@
   .mat-button,
   .mat-flat-button,
   .mat-raised-button {
-    background-color: map-get($colors, primary);
+    background-color: map.get($colors, primary);
     color: #fff;
 
     &:hover:not([disabled]) {
-      background-color: map-get($colors, primary-hover);
+      background-color: map.get($colors, primary-hover);
     }
 
     .km-icon-mask {
@@ -201,58 +206,58 @@
 
     &:disabled {
       .km-icon-mask {
-        background-color: map-get($colors, text);
-        opacity: .3;
+        background-color: map.get($colors, text);
+        opacity: 30%;
       }
     }
 
     &.mat-alternative:not([disabled]) {
-      background-color: map-get($colors, secondary);
+      background-color: map.get($colors, secondary);
 
       &:hover {
-        background-color: map-get($colors, secondary-hover);
+        background-color: map.get($colors, secondary-hover);
       }
     }
 
     &.mat-tertiary:not([disabled]) {
       background-color: transparent;
-      border: 1px solid map-get($colors, project-switch);
-      color: map-get($colors, text-secondary);
+      border: 1px solid map.get($colors, project-switch);
+      color: map.get($colors, text-secondary);
 
       &:hover {
-        background-color: map-get($colors, background-hover);
+        background-color: map.get($colors, background-hover);
       }
 
       .km-icon-mask {
-        background-color: map-get($colors, text-secondary);
+        background-color: map.get($colors, text-secondary);
       }
     }
 
     &.mat-quaternary:not([disabled]) {
       background-color: transparent;
-      border: 1px solid map-get($colors, divider);
-      color: map-get($colors, text);
+      border: 1px solid map.get($colors, divider);
+      color: map.get($colors, text);
 
       &:hover {
-        background-color: map-get($colors, background-hover);
+        background-color: map.get($colors, background-hover);
       }
 
       .km-icon-mask {
-        background-color: map-get($colors, text);
+        background-color: map.get($colors, text);
       }
     }
 
     &.mat-pure:not([disabled]) {
       background-color: transparent;
       border: none;
-      color: map-get($colors, text-secondary);
+      color: map.get($colors, text-secondary);
 
       &:hover {
-        background-color: map-get($colors, background-hover);
+        background-color: map.get($colors, background-hover);
       }
 
       .km-icon-mask {
-        background-color: map-get($colors, text);
+        background-color: map.get($colors, text);
       }
     }
   }
@@ -263,22 +268,22 @@
 
   .mat-icon-button {
     .km-icon-mask {
-      background-color: map-get($colors, text);
+      background-color: map.get($colors, text);
     }
 
     &:hover:not([disabled]) {
-      background-color: map-get($colors, divider);
+      background-color: map.get($colors, divider);
     }
 
     &:disabled i {
-      background-color: map-get($colors, background-disabled-button);
+      background-color: map.get($colors, background-disabled-button);
     }
 
     &.mat-alternative:not([disabled]) {
-      background-color: map-get($colors, secondary);
+      background-color: map.get($colors, secondary);
 
       &:hover {
-        background-color: map-get($colors, secondary-hover);
+        background-color: map.get($colors, secondary-hover);
       }
 
       i {
@@ -288,10 +293,10 @@
 
     &.mat-tertiary:not([disabled]) {
       background-color: transparent;
-      border: 1px solid map-get($colors, divider);
+      border: 1px solid map.get($colors, divider);
 
       &:hover {
-        background-color: map-get($colors, background-hover);
+        background-color: map.get($colors, background-hover);
       }
     }
   }
@@ -300,16 +305,16 @@
     &.mat-accent {
       .mat-radio-ripple {
         .mat-ripple-element {
-          background-color: map-get($colors, primary);
+          background-color: map.get($colors, primary);
         }
       }
 
       .mat-radio-inner-circle {
-        background-color: map-get($colors, primary);
+        background-color: map.get($colors, primary);
       }
 
       &.mat-radio-checked .mat-radio-outer-circle {
-        border-color: map-get($colors, primary);
+        border-color: map.get($colors, primary);
       }
     }
   }
@@ -317,13 +322,13 @@
   .mat-slide-toggle {
     .mat-slide-toggle-label {
       .mat-slide-toggle-bar {
-        background-color: map-get($colors, divider);
+        background-color: map.get($colors, divider);
       }
     }
 
     &.mat-checked {
       .mat-slide-toggle-bar {
-        background-color: map-get($colors, primary);
+        background-color: map.get($colors, primary);
       }
 
       .mat-slide-toggle-thumb {
@@ -336,46 +341,46 @@
     background-color: transparent;
 
     .mat-button-toggle {
-      border-color: map-get($colors, divider);
+      border-color: map.get($colors, divider);
 
       &.mat-button-toggle-checked {
         background-color: transparent;
-        border-color: map-get($colors, primary);
+        border-color: map.get($colors, primary);
       }
 
       .mat-button-toggle-label-content {
-        color: map-get($colors, text);
+        color: map.get($colors, text);
       }
     }
   }
 
   .mat-checkbox-checked .mat-checkbox-inner-container .mat-checkbox-background {
-    background-color: map-get($colors, primary);
+    background-color: map.get($colors, primary);
   }
 
   .mat-checkbox-disabled {
     .mat-checkbox-background {
-      background-color: map-get($colors, checkbox-disabled);
+      background-color: map.get($colors, checkbox-disabled);
     }
   }
 
   .mat-checkbox-frame {
-    border: 2px solid map-get($colors, divider);
+    border: 2px solid map.get($colors, divider);
   }
 
   // Chips.
   .mat-chip {
     &.mat-standard-chip {
       background: transparent;
-      border: 1px solid map-get($colors, divider);
-      color: map-get($colors, text);
+      border: 1px solid map.get($colors, divider);
+      color: map.get($colors, text);
 
       &::after {
         background: transparent;
       }
 
       div:not(.mat-chip-ripple) {
-        background: map-get($colors, divider);
+        background: map.get($colors, divider);
       }
 
       div.km-chip-accent {
@@ -386,19 +391,19 @@
 
   // Tooltips.
   .mat-tooltip {
-    background-color: map-get($colors, tooltip-background);
+    background-color: map.get($colors, tooltip-background);
   }
 
   // Spinners.
   .mat-progress-spinner circle,
   .mat-spinner circle {
-    stroke: map-get($colors, primary-hover);
+    stroke: map.get($colors, primary-hover);
   }
 
   // Tab group.
   .mat-tab-group {
     .mat-tab-header {
-      border-bottom: 1px solid map-get($colors, sidenav-divider);
+      border-bottom: 1px solid map.get($colors, sidenav-divider);
     }
   }
 }

@@ -1,0 +1,209 @@
+[
+  {
+    "slug": "l1c.small",
+    "memory": 4096,
+    "vcpus": 2,
+    "disk": 50,
+    "swap": 0,
+    "region": "dbl",
+    "isPublic": true
+  },
+  {
+    "slug": "m1c.small",
+    "memory": 4096,
+    "vcpus": 2,
+    "disk": 50,
+    "swap": 0,
+    "region": "dbl",
+    "isPublic": true
+  },
+  {
+    "slug": "m1.small",
+    "memory": 8192,
+    "vcpus": 2,
+    "disk": 50,
+    "swap": 0,
+    "region": "dbl",
+    "isPublic": true
+  },
+  {
+    "slug": "l1.xlarge",
+    "memory": 65536,
+    "vcpus": 16,
+    "disk": 400,
+    "swap": 0,
+    "region": "dbl",
+    "isPublic": true
+  },
+  {
+    "slug": "l1.2xlarge",
+    "memory": 131072,
+    "vcpus": 32,
+    "disk": 800,
+    "swap": 0,
+    "region": "dbl",
+    "isPublic": true
+  },
+  {
+    "slug": "l1.medium",
+    "memory": 16384,
+    "vcpus": 4,
+    "disk": 100,
+    "swap": 0,
+    "region": "dbl",
+    "isPublic": true
+  },
+  {
+    "slug": "l1.4xlarge",
+    "memory": 262144,
+    "vcpus": 64,
+    "disk": 1600,
+    "swap": 0,
+    "region": "dbl",
+    "isPublic": true
+  },
+  {
+    "slug": "m1.large",
+    "memory": 32768,
+    "vcpus": 8,
+    "disk": 50,
+    "swap": 0,
+    "region": "dbl",
+    "isPublic": true
+  },
+  {
+    "slug": "m1r.small",
+    "memory": 16384,
+    "vcpus": 2,
+    "disk": 50,
+    "swap": 0,
+    "region": "dbl",
+    "isPublic": true
+  },
+  {
+    "slug": "l1.small",
+    "memory": 8192,
+    "vcpus": 2,
+    "disk": 50,
+    "swap": 0,
+    "region": "dbl",
+    "isPublic": true
+  },
+  {
+    "slug": "l1c.xlarge",
+    "memory": 32768,
+    "vcpus": 16,
+    "disk": 400,
+    "swap": 0,
+    "region": "dbl",
+    "isPublic": true
+  },
+  {
+    "slug": "l1.large",
+    "memory": 32768,
+    "vcpus": 8,
+    "disk": 200,
+    "swap": 0,
+    "region": "dbl",
+    "isPublic": true
+  },
+  {
+    "slug": "m1c.xlarge",
+    "memory": 32768,
+    "vcpus": 16,
+    "disk": 50,
+    "swap": 0,
+    "region": "dbl",
+    "isPublic": true
+  },
+  {
+    "slug": "m1.medium",
+    "memory": 16384,
+    "vcpus": 4,
+    "disk": 50,
+    "swap": 0,
+    "region": "dbl",
+    "isPublic": true
+  },
+  {
+    "slug": "m1c.large",
+    "memory": 16384,
+    "vcpus": 8,
+    "disk": 50,
+    "swap": 0,
+    "region": "dbl",
+    "isPublic": true
+  },
+  {
+    "slug": "l1r.small",
+    "memory": 16384,
+    "vcpus": 2,
+    "disk": 50,
+    "swap": 0,
+    "region": "dbl",
+    "isPublic": true
+  },
+  {
+    "slug": "l1r.large",
+    "memory": 65536,
+    "vcpus": 8,
+    "disk": 200,
+    "swap": 0,
+    "region": "dbl",
+    "isPublic": true
+  },
+  {
+    "slug": "m1c.medium",
+    "memory": 8192,
+    "vcpus": 4,
+    "disk": 50,
+    "swap": 0,
+    "region": "dbl",
+    "isPublic": true
+  },
+  {
+    "slug": "l1c.medium",
+    "memory": 8192,
+    "vcpus": 4,
+    "disk": 100,
+    "swap": 0,
+    "region": "dbl",
+    "isPublic": true
+  },
+  {
+    "slug": "l1r.medium",
+    "memory": 32768,
+    "vcpus": 4,
+    "disk": 100,
+    "swap": 0,
+    "region": "dbl",
+    "isPublic": true
+  },
+  {
+    "slug": "l1c.large",
+    "memory": 16384,
+    "vcpus": 8,
+    "disk": 200,
+    "swap": 0,
+    "region": "dbl",
+    "isPublic": true
+  },
+  {
+    "slug": "l1c.2xlarge",
+    "memory": 65536,
+    "vcpus": 32,
+    "disk": 800,
+    "swap": 0,
+    "region": "dbl",
+    "isPublic": true
+  },
+  {
+    "slug": "m1r.medium",
+    "memory": 32768,
+    "vcpus": 4,
+    "disk": 50,
+    "swap": 0,
+    "region": "dbl",
+    "isPublic": true
+  }
+]

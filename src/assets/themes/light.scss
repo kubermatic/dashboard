@@ -1,14 +1,18 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2021 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use 'sass:map';
 @use '~@angular/material' as mat;
 @use 'theme/main';
 
@@ -25,7 +29,7 @@ $colors-light: (
   footer-text: #a5aeb8,
   sidenav-active: #00517d,
   sidenav-background-hover: #dce0e3,
-  sidenav-background-active: rgba(#00517d, .18),
+  sidenav-background-active: rgb(0 81 125 / 18%),
   sidenav-divider: #cad1d9,
   project-selector-hover: #edeff0,
   tooltip-background: #00517d,
@@ -44,30 +48,28 @@ $colors-light: (
   scrollbar: #e0e3e5,
   scrollbar-background: #fff,
   tab-divider: #cad1d9,
-  shadow: 0 4px 4px rgba(#000, .08),
-  shadow-dark: (0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12)),
+  shadow: 0 4px 4px rgb(0 0 0 / 8%),
+  shadow-dark: (0 2px 4px -1px rgb(0 0 0 / 20%), 0 4px 5px 0 rgb(0 0 0 / 14%), 0 1px 10px 0 rgb(0 0 0 / 12%)),
 );
-
 $colors-light-palette: mat.$blue-palette;
-$colors-light-palette: map-merge($colors-light-palette, (500: #00517d));
-
-$theme-light: mat.define-light-theme(mat.define-palette($colors-light-palette), mat.define-palette(mat.$light-blue-palette), mat.define-palette(mat.$pink-palette));
-
-// sass-lint:disable function-name-format
-$background: map-get($theme-light, background);
-$background: map_merge($background, (background: #edeff0));
-$background: map_merge($background, (app-bar: #fff));
-$theme-light: map_merge($theme-light, (background: $background));
-
-$foreground: map-get($theme-light, foreground);
-$foreground: map_merge($foreground, (text: #4d555c));
-$foreground: map_merge($foreground, (secondary-text: #7e868f));
-$foreground: map_merge($foreground, (disabled-text: #d2d7db));
-$foreground: map_merge($foreground, (disabled-checkbox: #cad1c9));
-$foreground: map_merge($foreground, (disabled: #eff1f2));
-$foreground: map_merge($foreground, (divider: #e0e3e5));
-$theme-light: map_merge($theme-light, (foreground: $foreground));
-// sass-lint:enable function-name-format
+$colors-light-palette: map.merge($colors-light-palette, (500: #00517d));
+$theme-light: mat.define-light-theme(
+  mat.define-palette($colors-light-palette),
+  mat.define-palette(mat.$light-blue-palette),
+  mat.define-palette(mat.$pink-palette),
+);
+$background: map.get($theme-light, background);
+$background: map.merge($background, (background: #edeff0));
+$background: map.merge($background, (app-bar: #fff));
+$theme-light: map.merge($theme-light, (background: $background));
+$foreground: map.get($theme-light, foreground);
+$foreground: map.merge($foreground, (text: #4d555c));
+$foreground: map.merge($foreground, (secondary-text: #7e868f));
+$foreground: map.merge($foreground, (disabled-text: #d2d7db));
+$foreground: map.merge($foreground, (disabled-checkbox: #cad1c9));
+$foreground: map.merge($foreground, (disabled: #eff1f2));
+$foreground: map.merge($foreground, (divider: #e0e3e5));
+$theme-light: map.merge($theme-light, (foreground: $foreground));
 
 @include mat.all-component-themes($theme-light);
 @include main.theme($theme-light, $colors-light);

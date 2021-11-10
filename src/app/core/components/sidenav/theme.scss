@@ -1,40 +1,45 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use 'sass:map';
+
 @mixin theme-sidenav-component($colors) {
   .km-sidenav {
-    background-color: map-get($colors, background);
+    background-color: map.get($colors, background);
 
     span {
-      color: map-get($colors, text);
+      color: map.get($colors, text);
     }
 
     .mat-divider {
-      border-top-color: map-get($colors, sidenav-divider);
+      border-top-color: map.get($colors, sidenav-divider);
     }
 
     .menu-item a {
       &:hover {
-        background-color: map-get($colors, sidenav-background-hover);
+        background-color: map.get($colors, sidenav-background-hover);
       }
 
       &.active {
-        background-color: map-get($colors, sidenav-background-active);
+        background-color: map.get($colors, sidenav-background-active);
 
         i {
-          background-color: map-get($colors, sidenav-active);
+          background-color: map.get($colors, sidenav-active);
         }
 
         span {
-          color: map-get($colors, sidenav-active);
+          color: map.get($colors, sidenav-active);
         }
       }
     }

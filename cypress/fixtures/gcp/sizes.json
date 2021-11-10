@@ -1,0 +1,14 @@
+[
+  {
+    "name": "e2-highcpu-2",
+    "description": "Efficient Instance, 2 vCPUs, 2 GB RAM",
+    "memory": 2048,
+    "vcpus": 2
+  },
+  {
+    "name": "c2-standard-4",
+    "description": "Compute Optimized: 4 vCPUs, 16 GB RAM",
+    "memory": 16384,
+    "vcpus": 4
+  }
+]

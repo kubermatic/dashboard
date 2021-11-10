@@ -1,0 +1,69 @@
+{
+  "standard": [
+    {
+      "slug": "s-2vcpu-2gb",
+      "available": true,
+      "transfer": 3,
+      "price_monthly": 15,
+      "price_hourly": 0.02232,
+      "memory": 2048,
+      "vcpus": 2,
+      "disk": 60,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    }
+  ],
+  "optimized": [
+    {
+      "slug": "c-2",
+      "available": true,
+      "transfer": 4,
+      "price_monthly": 40,
+      "price_hourly": 0.05952,
+      "memory": 4096,
+      "vcpus": 2,
+      "disk": 25,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    },
+    {
+      "slug": "c2-16vcpu-32gb",
+      "available": true,
+      "transfer": 7,
+      "price_monthly": 360,
+      "price_hourly": 0.53571,
+      "memory": 32768,
+      "vcpus": 16,
+      "disk": 400,
+      "regions": [
+        "ams3",
+        "blr1",
+        "fra1",
+        "lon1",
+        "nyc1",
+        "nyc3",
+        "sfo3",
+        "sgp1",
+        "tor1"
+      ]
+    }
+  ]
+}

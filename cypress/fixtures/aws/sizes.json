@@ -1,0 +1,38 @@
+[
+  {
+    "name": "t3a.small",
+    "pretty_name": "T3A Small",
+    "memory": 2,
+    "vcpus": 2,
+    "gpus": 0,
+    "price": 0.0216,
+    "architecture": "x64"
+  },
+  {
+    "name": "t3.small",
+    "pretty_name": "T3 Small",
+    "memory": 2,
+    "vcpus": 2,
+    "gpus": 0,
+    "price": 0.024,
+    "architecture": "x64"
+  },
+  {
+    "name": "m5dn.xlarge",
+    "pretty_name": "M5DN Extra Large",
+    "memory": 16,
+    "vcpus": 4,
+    "gpus": 0,
+    "price": 0.324,
+    "architecture": "x64"
+  },
+  {
+    "name": "t4g.small",
+    "pretty_name": "T4G Small",
+    "memory": 2,
+    "vcpus": 2,
+    "gpus": 0,
+    "price": 0.0192,
+    "architecture": "arm64"
+  }
+]

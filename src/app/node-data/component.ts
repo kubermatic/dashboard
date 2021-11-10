@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,7 +45,7 @@ enum Controls {
   DisableAutoUpdate = 'disableAutoUpdate',
   RhelSubscriptionManagerUser = 'rhelSubscriptionManagerUser',
   RhelSubscriptionManagerPassword = 'rhelSubscriptionManagerPassword',
-  RhsmOfflineToken = 'rhsmOfflineToken',
+  RhelOfflineToken = 'rhelOfflineToken',
   ProviderBasic = 'providerBasic',
   ProviderExtended = 'providerExtended',
   Kubelet = 'kubelet',
@@ -111,7 +114,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       [Controls.DisableAutoUpdate]: this._builder.control(false),
       [Controls.RhelSubscriptionManagerUser]: this._builder.control(''),
       [Controls.RhelSubscriptionManagerPassword]: this._builder.control(''),
-      [Controls.RhsmOfflineToken]: this._builder.control(''),
+      [Controls.RhelOfflineToken]: this._builder.control(''),
       [Controls.ProviderBasic]: this._builder.control(''),
       [Controls.ProviderExtended]: this._builder.control(''),
     });
@@ -144,18 +147,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       .pipe(tap(dc => (this._datacenterSpec = dc)))
       .subscribe(_ => this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS()));
 
-    this.form
-      .get(Controls.OperatingSystem)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(os => {
-        if (os !== OperatingSystem.RHEL) {
-          this.form.get(Controls.RhelSubscriptionManagerUser).clearValidators();
-          this.form.get(Controls.RhelSubscriptionManagerPassword).clearValidators();
-          this.form.get(Controls.RhelSubscriptionManagerUser).updateValueAndValidity();
-          this.form.get(Controls.RhelSubscriptionManagerPassword).updateValueAndValidity();
-        }
-      });
-
     merge(
       this.form.get(Controls.Name).valueChanges,
       this.form.get(Controls.Count).valueChanges,
@@ -170,7 +161,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       this.form.get(Controls.DisableAutoUpdate).valueChanges,
       this.form.get(Controls.RhelSubscriptionManagerUser).valueChanges,
       this.form.get(Controls.RhelSubscriptionManagerPassword).valueChanges,
-      this.form.get(Controls.RhsmOfflineToken).valueChanges
+      this.form.get(Controls.RhelOfflineToken).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.operatingSystemSpec = this._getOperatingSystemSpec()));
@@ -191,11 +182,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   }
 
   isOperatingSystemSupported(os: OperatingSystem): boolean {
-    // If VSphere is selected enable OS only if it is also defined in the datacenter spec
-    if (this._hasSystemTemplate(NodeProvider.VSPHERE, os)) {
-      return true;
-    }
-
     // Enable OS per-provider basis
     switch (os) {
       case OperatingSystem.SLES:
@@ -206,7 +192,8 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
           NodeProvider.AZURE,
           NodeProvider.GCP,
           NodeProvider.KUBEVIRT,
-          NodeProvider.OPENSTACK
+          NodeProvider.OPENSTACK,
+          NodeProvider.VSPHERE
         );
       case OperatingSystem.Flatcar:
         return this.isProvider(
@@ -214,12 +201,13 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
           NodeProvider.AZURE,
           NodeProvider.OPENSTACK,
           NodeProvider.ANEXIA,
-          NodeProvider.KUBEVIRT
+          NodeProvider.KUBEVIRT,
+          NodeProvider.VSPHERE
         );
       case OperatingSystem.Ubuntu:
-        return !this.isProvider(NodeProvider.VSPHERE, NodeProvider.ANEXIA);
+        return !this.isProvider(NodeProvider.ANEXIA);
       case OperatingSystem.CentOS:
-        return !this.isProvider(NodeProvider.VSPHERE, NodeProvider.ANEXIA, NodeProvider.GCP);
+        return !this.isProvider(NodeProvider.ANEXIA, NodeProvider.GCP);
     }
   }
 
@@ -294,28 +282,11 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
             distUpgradeOnBoot: this.form.get(Controls.UpgradeOnBoot).value,
             rhelSubscriptionManagerUser: this.form.get(Controls.RhelSubscriptionManagerUser).value,
             rhelSubscriptionManagerPassword: this.form.get(Controls.RhelSubscriptionManagerPassword).value,
-            rhsmOfflineToken: this.form.get(Controls.RhsmOfflineToken).value,
+            rhsmOfflineToken: this.form.get(Controls.RhelOfflineToken).value,
           },
         };
       default:
         return {ubuntu: {distUpgradeOnBoot: false}};
-    }
-  }
-
-  private _hasSystemTemplate(provider: NodeProvider, os: OperatingSystem): boolean {
-    if (!this._datacenterSpec) {
-      return false;
-    }
-
-    switch (provider) {
-      case NodeProvider.VSPHERE: {
-        const vSphereSpec = this._datacenterSpec.spec.vsphere;
-        const templates = vSphereSpec ? Object.keys(vSphereSpec.templates) : [];
-        return templates.includes(os);
-      }
-      default: {
-        return false;
-      }
     }
   }
 

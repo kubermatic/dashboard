@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,16 +19,21 @@ import {Condition} from '../../utils/condition';
 import {Group, reloadUsers} from '../../utils/member';
 import {ClustersPage} from '../../pages/clusters.po';
 import {View} from '../../utils/view';
-import * as _ from 'lodash';
+import _ from 'lodash';
+import {Mocks} from '../../utils/mocks';
+import {Config} from '../../utils/config';
 
 describe('Multi Owner Story', () => {
-  const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
-  const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
-  const newUserEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
-  const projectName = _.uniqueId('e2e-test-project-');
+  const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
+
+  beforeEach(() => {
+    if (Mocks.enabled()) {
+      Mocks.register();
+    }
+  });
 
   it('should login as a first owner', () => {
-    login(email, password);
+    login();
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -42,7 +50,7 @@ describe('Multi Owner Story', () => {
   });
 
   it('should add a new member', () => {
-    MembersPage.addMember(newUserEmail, Group.Owner);
+    MembersPage.addMember(Config.adminEmail(), Group.Owner);
   });
 
   it('should logout', () => {
@@ -50,13 +58,15 @@ describe('Multi Owner Story', () => {
   });
 
   it('should login as a second owner', () => {
-    login(newUserEmail, password);
+    login(Config.adminEmail());
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
   it('should wait for autoredirect and go back to projects', () => {
-    ClustersPage.waitForRefresh();
-    ProjectsPage.visit();
+    if (!Mocks.enabled()) {
+      ClustersPage.waitForRefresh();
+      ProjectsPage.visit();
+    }
   });
 
   it('should check if multi owner project is in list', () => {
@@ -72,12 +82,13 @@ describe('Multi Owner Story', () => {
   });
 
   it('should delete first owner from project', () => {
-    MembersPage.getDeleteBtn(email).click();
+    MembersPage.getDeleteBtn(Config.userEmail()).click();
     MembersPage.getDeleteMemberDialogDeleteBtn().click();
+  });
 
+  it('should verify that first owner was deleted from project', () => {
     reloadUsers();
-
-    MembersPage.getTableRowEmailColumn(email).should(Condition.NotExist);
+    MembersPage.verifyNoMember(Config.userEmail());
   });
 
   it('should go to the projects page', () => {
@@ -86,6 +97,9 @@ describe('Multi Owner Story', () => {
 
   it('should delete the project', () => {
     ProjectsPage.deleteProject(projectName);
+  });
+
+  it('should verify that there are no projects', () => {
     ProjectsPage.verifyNoProjects();
   });
 

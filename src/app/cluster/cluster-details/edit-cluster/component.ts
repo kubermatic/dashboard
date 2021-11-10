@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,10 +32,11 @@ import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {AdminSettings} from '@shared/entity/settings';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
 import {AsyncValidators} from '@shared/validators/async-label-form.validator';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import * as semver from 'semver';
+import {FeatureGateService} from '@core/services/feature-gate';
 
 enum Controls {
   Name = 'name',
@@ -42,6 +46,7 @@ enum Controls {
   AdmissionPlugins = 'admissionPlugins',
   PodNodeSelectorAdmissionPluginConfig = 'podNodeSelectorAdmissionPluginConfig',
   OPAIntegration = 'opaIntegration',
+  Konnectivity = 'konnectivity',
   MLALogging = 'loggingEnabled',
   MLAMonitoring = 'monitoringEnabled',
 }
@@ -61,6 +66,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   labels: object;
   podNodeSelectorAdmissionPluginConfig: object;
   admissionPlugins: string[] = [];
+  isKonnectivityEnabled = false;
   providerSettingsPatch: ProviderSettingsPatch = {
     isValid: true,
     cloudSpecPatch: {},
@@ -80,10 +86,15 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     private readonly _datacenterService: DatacenterService,
     private readonly _matDialogRef: MatDialogRef<EditClusterComponent>,
     private readonly _notificationService: NotificationService,
-    private readonly _settingsService: SettingsService
+    private readonly _settingsService: SettingsService,
+    private readonly _featureGatesService: FeatureGateService
   ) {}
 
   ngOnInit(): void {
+    this._featureGatesService.featureGates
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(featureGates => (this.isKonnectivityEnabled = !!featureGates?.konnectivityService));
+
     this.labels = _.cloneDeep(this.cluster.labels);
     this.podNodeSelectorAdmissionPluginConfig = _.cloneDeep(this.cluster.spec.podNodeSelectorAdmissionPluginConfig);
 
@@ -101,6 +112,9 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       ),
       [Controls.OPAIntegration]: new FormControl(
         !!this.cluster.spec.opaIntegration && this.cluster.spec.opaIntegration.enabled
+      ),
+      [Controls.Konnectivity]: new FormControl(
+        !!this.cluster.spec.clusterNetwork && this.cluster.spec.clusterNetwork.konnectivityEnabled
       ),
       [Controls.MLALogging]: new FormControl(!!this.cluster.spec.mla && this.cluster.spec.mla.loggingEnabled),
       [Controls.MLAMonitoring]: new FormControl(!!this.cluster.spec.mla && this.cluster.spec.mla.monitoringEnabled),
@@ -244,6 +258,9 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         },
         opaIntegration: {
           enabled: this.form.get(Controls.OPAIntegration).value,
+        },
+        clusterNetwork: {
+          konnectivityEnabled: this.form.get(Controls.Konnectivity).value,
         },
         mla: {
           loggingEnabled: this.form.get(Controls.MLALogging).value,
