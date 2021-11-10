@@ -16,15 +16,7 @@
 @use 'mixins';
 
 .km-button-navigation {
-  margin-top: 16px;
-
-  &:not(#summary-nav) {
-    margin-top: 4px;
-  }
-}
-
-.km-wizard-step:not(#summary-step) {
-  padding-top: 45px;
+  margin-top: 30px;
 }
 
 .km-wizard-step {

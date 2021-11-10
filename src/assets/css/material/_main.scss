@@ -71,6 +71,13 @@ mat-card {
   }
 }
 
+km-wizard {
+  mat-card.mat-card .mat-card-header .mat-card-title {
+    margin: 0;
+    padding: 26px 0 20px;
+  }
+}
+
 // Dialogs.
 .cdk-overlay-pane .mat-dialog-container {
   box-shadow: variables.$border-box-shadow;
@@ -204,7 +211,7 @@ mat-card {
 
   .mat-horizontal-content-container {
     overflow: initial;
-    padding: 15px 0;
+    padding: 10px 0 0;
   }
 
   .mat-horizontal-stepper-header {
