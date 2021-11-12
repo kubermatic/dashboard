@@ -27,7 +27,7 @@ import {Paths} from './paths';
  * @example
  * cy.get('body').pasteFile('filename.txt');
  */
-export function pasteFile(subject, filename): Chainable {
+export function pasteFile(subject: any, filename: string): Chainable {
   Cypress.log({
     displayName: 'pasteFile',
     message: `Subject: ${subject.selector}\n Filename: ${filename}\n`,
@@ -49,7 +49,7 @@ export function pasteFile(subject, filename): Chainable {
  * @example
  * cy.get('body').paste('some text to paste');
  */
-export function paste(subject, text): Chainable {
+export function paste(subject: any, text: string): Chainable {
   Cypress.log({
     displayName: 'paste',
     message: `Subject: ${subject.selector}\n Text: ${text}\n`,

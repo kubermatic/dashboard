@@ -32,5 +32,10 @@ declare global {
   }
 }
 
+// Remove and update the interface method above after https://github.com/cypress-io/cypress/issues/18879 will be fixed.
+// @ts-ignore
 Cypress.Commands.add('pasteFile', {prevSubject: 'element'}, pasteFile);
+
+// Remove and update the interface method above after https://github.com/cypress-io/cypress/issues/18879 will be fixed.
+// @ts-ignore
 Cypress.Commands.add('paste', {prevSubject: 'element'}, paste);
