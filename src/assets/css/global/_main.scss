@@ -38,7 +38,14 @@ hr {
 }
 
 ::-webkit-scrollbar {
-  @include mixins.size(variables.$scrollbar-size);
+  height: 12px;
+  width: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-clip: content-box;
+  border: 2px solid;
+  border-radius: 3px;
 }
 
 .km-empty-list-msg {
