@@ -134,6 +134,8 @@ presubmits:
           env:
             - name: NO_COLOR
               value: "1"
+            - name: NODE_OPTIONS
+              value: "--max-old-space-size=6144"
             - name: SERVICE_ACCOUNT_KEY
               valueFrom:
                 secretKeyRef:
@@ -189,6 +191,8 @@ presubmits:
               value: ce
             - name: NO_COLOR
               value: "1"
+            - name: NODE_OPTIONS
+              value: "--max-old-space-size=6144"
             - name: SERVICE_ACCOUNT_KEY
               valueFrom:
                 secretKeyRef:
@@ -220,6 +224,8 @@ presubmits:
               value: "1"
             - name: CYPRESS_MOCKS
               value: "true"
+            - name: NODE_OPTIONS
+              value: "--max-old-space-size=6144"
 
   - name: pre-dashboard-test-e2e-ce
     skip_if_only_changed: "^(containers|docs)/|\\.(md)$"
@@ -248,6 +254,8 @@ presubmits:
               value: "1"
             - name: CYPRESS_MOCKS
               value: "true"
+            - name: NODE_OPTIONS
+              value: "--max-old-space-size=6144"
 
   - name: pre-dashboard-build-image
     skip_if_only_changed: "^(containers|docs)/|\\.(md)$"
