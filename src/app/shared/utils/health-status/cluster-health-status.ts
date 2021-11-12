@@ -39,11 +39,7 @@ export class ClusterHealthStatus extends HealthStatus {
   }
 
   static isClusterRunning(c: Cluster, h: Health): boolean {
-    if (c.spec.cloud.bringyourown) {
-      return true;
-    }
-
-    return !!h && Health.allHealthy(h) && !c.deletionTimestamp;
+    return !!c && !!h && Health.allHealthy(h) && !c.deletionTimestamp;
   }
 
   static isClusterAPIRunning(c: Cluster, h: Health): boolean {
