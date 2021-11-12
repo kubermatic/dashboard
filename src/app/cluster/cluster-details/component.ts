@@ -177,7 +177,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                 : [of([]), of([] as RuleGroup[])]
             )
             .concat(
-              this._canReloadNodes() && this.isOPAEnabled() && this._hasMachineDeployments()
+              this._canReloadNodes() && this.isOPAEnabled() && this.isClusterRunning
                 ? [
                     this._opaService.constraints(this.projectID, this.cluster.id),
                     this._opaService.gatekeeperConfig(this.projectID, this.cluster.id),
@@ -251,10 +251,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   private _canReloadNodes(): boolean {
     return this.cluster && Health.allHealthy(this.health);
-  }
-
-  private _hasMachineDeployments(): boolean {
-    return !_.isEmpty(this.machineDeployments);
   }
 
   getProvider(provider: string): string {
