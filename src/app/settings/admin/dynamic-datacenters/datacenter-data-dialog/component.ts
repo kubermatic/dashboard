@@ -22,7 +22,7 @@ import {Datacenter} from '@shared/entity/datacenter';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {getIconClassForButton} from '@shared/utils/common-utils';
 import * as countryCodeLookup from 'country-code-lookup';
-import {dump, load} from 'js-yaml';
+import * as y from 'js-yaml';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -116,7 +116,7 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
     if (this.data.isEditing && this.data.datacenter.spec.provider) {
       const spec = this.data.datacenter.spec[this.data.datacenter.spec.provider];
       if (!_.isEmpty(spec)) {
-        this.providerConfig = dump(spec);
+        this.providerConfig = y.dump(spec);
       }
     }
   }
@@ -152,7 +152,7 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
   }
 
   private _getProviderConfig(): any {
-    const raw = load(this.providerConfig);
+    const raw = y.load(this.providerConfig);
     return !_.isEmpty(raw) ? raw : {};
   }
 

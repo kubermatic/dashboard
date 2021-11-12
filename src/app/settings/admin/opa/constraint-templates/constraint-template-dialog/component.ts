@@ -18,7 +18,7 @@ import {OPAService} from '@core/services/opa';
 import {NotificationService} from '@core/services/notification';
 import {ConstraintTemplate, ConstraintTemplateSpec} from '@shared/entity/opa';
 import {getIconClassForButton} from '@shared/utils/common-utils';
-import {dump, load} from 'js-yaml';
+import * as y from 'js-yaml';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {take} from 'rxjs/operators';
@@ -95,14 +95,14 @@ export class ConstraintTemplateDialog implements OnInit, OnDestroy {
     if (this.data.mode === Mode.Edit) {
       const spec = this.data.constraintTemplate.spec;
       if (!_.isEmpty(spec)) {
-        this.spec = dump(spec);
+        this.spec = y.dump(spec);
       }
     }
   }
 
   private _getSpec(): ConstraintTemplateSpec {
     let spec = new ConstraintTemplateSpec();
-    const raw = load(this.spec) as ConstraintTemplateSpec;
+    const raw = y.load(this.spec) as ConstraintTemplateSpec;
     if (!_.isEmpty(raw)) {
       spec = raw;
     }
