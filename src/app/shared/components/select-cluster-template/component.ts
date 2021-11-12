@@ -67,6 +67,13 @@ export class SelectClusterTemplateDialogComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
+  get disabled(): boolean {
+    return (
+      !this.form.valid ||
+      !this.templateNames.includes(this.form.get(Control.ClusterTemplate).value[AutocompleteControls.Main])
+    );
+  }
+
   create(): void {
     const templateName = this.form.get(Control.ClusterTemplate).value[AutocompleteControls.Main];
     const dialogConfig: MatDialogConfig = {
