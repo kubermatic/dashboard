@@ -71,7 +71,7 @@
     "ngx-filter-pipe": "2.1.2",
     "ngx-monaco-editor": "12.0.0",
     "postcss": "8.3.11",
-    "postcss-scss": "4.0.1",
+    "postcss-scss": "4.0.2",
     "rxjs": "7.3.0",
     "rxjs-compat": "6.6.7",
     "semver": "7.3.5",
