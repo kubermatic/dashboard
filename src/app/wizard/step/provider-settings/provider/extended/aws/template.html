@@ -15,15 +15,15 @@ limitations under the License.
 -->
 <form [formGroup]="form"
       fxLayout="column"
-      fxLayoutGap="16px">
+      fxLayoutGap="8px">
   <km-autocomplete label="Security Group ID"
                    [formControlName]="Controls.SecurityGroup"
                    [isLoading]="isLoadingSecurityGroups"
                    [options]="securityGroups"
                    [validators]="securityGroupValidators">
     <ng-container hint>
-      Specify to attach worker nodes to it, otherwise a new security group will be used.
-      <span *ngIf="!hasRequiredCredentials()">&nbsp;Enter your credentials to load autocompletions.</span>
+      Specify to attach worker nodes to it, otherwise a new security group will be used.&nbsp;
+      <span *ngIf="!hasRequiredCredentials()">Enter your credentials to load autocompletions.</span>
     </ng-container>
     <ng-container patternError>
       The security group ID need to look similar to 'sg-a2c195ca'.

@@ -31,6 +31,7 @@ enum Controls {
 @Component({
   selector: 'km-digitalocean-extended-node-data',
   templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
