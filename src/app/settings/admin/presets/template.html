@@ -40,7 +40,8 @@ limitations under the License.
                   <span class="km-provider-logo km-provider-logo-{{providerFilter}} provider-logo-small"></span>
                 </div>
                 <div fxFlex
-                     fxLayoutAlign="end">
+                     fxLayoutAlign="end"
+                     class="km-select-trigger-button-wrapper">
                   <button *ngIf="providerFilter"
                           (click)="providerFilter = undefined; filter(); $event.stopPropagation()"
                           matSuffix
@@ -70,7 +71,8 @@ limitations under the License.
                 <div fxFlex
                      fxLayoutAlign="start">{{datacenterFilter}}</div>
                 <div fxFlex
-                     fxLayoutAlign="end">
+                     fxLayoutAlign="end"
+                     class="km-select-trigger-button-wrapper">
                   <button *ngIf="datacenterFilter"
                           (click)="datacenterFilter = undefined; filter(); $event.stopPropagation()"
                           matSuffix
