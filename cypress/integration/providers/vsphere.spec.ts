@@ -25,7 +25,7 @@ import _ from 'lodash';
 import {Mocks} from '../../utils/mocks';
 
 describe('vSphere Provider', () => {
-  const preset = Mocks.enabled() ? Preset.Mock : Preset.VSPhere;
+  const preset = Mocks.enabled() ? Preset.Mock : Preset.vSphere;
   const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
   const clusterName = Mocks.enabled() ? 'test-cluster' : _.uniqueId('test-cluster-');
   const initialMachineDeploymentReplicas = '0';
