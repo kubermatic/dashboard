@@ -1,4 +1,13 @@
-import {ChangeDetectionStrategy, Component, forwardRef, Input, OnDestroy, ViewChild} from '@angular/core';
+import {DecimalPipe} from '@angular/common';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  forwardRef,
+  Input,
+  OnDestroy,
+  ViewChild,
+} from '@angular/core';
 import {
   AbstractControl,
   ControlValueAccessor,
@@ -14,6 +23,7 @@ enum Error {
   Required = 'required',
   Min = 'min',
   Max = 'max',
+  Pattern = 'pattern',
 }
 
 @Component({
@@ -34,15 +44,20 @@ enum Error {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NumberStepperComponent implements OnDestroy, ControlValueAccessor, Validator {
+export class NumberStepperComponent implements AfterViewInit, OnDestroy, ControlValueAccessor, Validator {
   private readonly _unsubscribe = new Subject<void>();
-  private _onChange: (_: number) => void = noop;
+  private readonly _integerPattern = /^[-]?[0-9]*$/;
+  @ViewChild('input') private readonly _model: NgModel;
+  private _onChange: (_: number | string) => void = noop;
+  private _valid = false;
   @Input() label: string;
   @Input() hint: string;
   @Input() min: number;
   @Input() max: number;
   @Input() required = false;
   @Input() disabled = false;
+  @Input() step = 1;
+  @Input() type: 'integer' | 'decimal' = 'integer';
 
   /**
    * Defines internal behavior of the stepper field.
@@ -52,16 +67,25 @@ export class NumberStepperComponent implements OnDestroy, ControlValueAccessor, 
    *    all - both error and hint messages will be shown
    */
   @Input() mode: 'raw' | 'errors' | 'hint' | 'all' = 'raw';
-  @ViewChild('input') model: NgModel;
 
-  private _value: number;
+  private _focus = false;
 
-  get value(): number {
+  get focus(): boolean {
+    return this._focus;
+  }
+
+  @Input() set focus(focus: boolean | '') {
+    this._focus = focus === '' || focus;
+  }
+
+  private _value: number | string;
+
+  get value(): number | string {
     return this._value;
   }
 
-  set value(val: number) {
-    this._value = val;
+  set value(val: number | string) {
+    this._value = this._decimalPipe.transform(val, '1.0-4');
     this._onChange(val);
   }
 
@@ -71,6 +95,19 @@ export class NumberStepperComponent implements OnDestroy, ControlValueAccessor, 
     }
 
     return Object.values(this._getErrors());
+  }
+
+  get pattern(): string | RegExp {
+    return this.type === 'integer' ? this._integerPattern : '';
+  }
+
+  constructor(private readonly _decimalPipe: DecimalPipe) {}
+
+  ngAfterViewInit(): void {
+    this._model.statusChanges.subscribe(status => {
+      this._valid = status === 'VALID';
+      this._onChange(this.value);
+    });
   }
 
   ngOnDestroy(): void {
@@ -88,8 +125,8 @@ export class NumberStepperComponent implements OnDestroy, ControlValueAccessor, 
 
   registerOnTouched(_fn: () => void): void {}
 
-  validate(_control: AbstractControl): ValidationErrors | null {
-    if (!this.model || this.model.valid) {
+  validate(_?: AbstractControl): ValidationErrors | null {
+    if (this._valid) {
       return null;
     }
 
@@ -97,34 +134,38 @@ export class NumberStepperComponent implements OnDestroy, ControlValueAccessor, 
   }
 
   onIncrease(): void {
-    if (this.value >= this.max) {
+    if (this.max !== undefined && +this._value + +this.step >= this.max) {
       return;
     }
 
-    this.value = this._value + 1;
+    this.value = +this._value + +this.step;
   }
 
   onDecrease(): void {
-    if (this.value <= this.min) {
+    if (this.min !== undefined && +this._value - +this.step <= this.min) {
       return;
     }
 
-    this.value = this._value - 1;
+    this.value = +this._value - +this.step;
   }
 
   private _getErrors(): ValidationErrors {
     const errors: ValidationErrors = {};
 
-    if (this.model?.hasError(Error.Required)) {
+    if (this._model?.hasError(Error.Required)) {
       errors[Error.Required] = `${this.label} is required.`;
     }
 
-    if (this.model?.hasError(Error.Max)) {
+    if (this._model?.hasError(Error.Max)) {
       errors[Error.Max] = `Maximum acceptable value is ${this.max}.`;
     }
 
-    if (this.model?.hasError(Error.Min)) {
+    if (this._model?.hasError(Error.Min)) {
       errors[Error.Min] = `Minimum acceptable value is ${this.min}.`;
+    }
+
+    if (this._model?.hasError(Error.Pattern)) {
+      errors[Error.Pattern] = 'Expected provided number to be an integer.';
     }
 
     return errors;

@@ -11,11 +11,13 @@
          matInput
          type="number"
          autocomplete="off"
+         [pattern]="pattern"
          [disabled]="disabled"
          [required]="required"
          [(ngModel)]="value"
          [min]="min"
-         [max]="max">
+         [max]="max"
+         [attr.cdkFocusInitial]="focus ? focus : null">
   <mat-error *ngFor="let message of errors">{{message}}</mat-error>
   <mat-hint *ngIf="(mode === 'hint' || mode === 'all') && !!hint">{{hint}}</mat-hint>
 </mat-form-field>

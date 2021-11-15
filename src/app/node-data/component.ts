@@ -32,7 +32,6 @@ import {OperatingSystemSpec, Taint} from '@shared/entity/node';
 import {NodeProvider, NodeProviderConstants, OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {NoIpsLeftValidator} from '@shared/validators/no-ips-left.validator';
 import {merge, of} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
@@ -70,6 +69,7 @@ enum Controls {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  private _datacenterSpec: Datacenter;
   readonly NodeProvider = NodeProvider;
   readonly Controls = Controls;
   readonly OperatingSystem = OperatingSystem;
@@ -80,7 +80,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   labels: object = {};
   taints: Taint[] = [];
   dialogEditMode = false;
-  private _datacenterSpec: Datacenter;
 
   get providerDisplayName(): string {
     return NodeProviderConstants.displayName(this.provider);
@@ -103,11 +102,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       [Controls.Name]: this._builder.control(this._nodeDataService.nodeData.name, [
         Validators.pattern('[a-zA-Z0-9-]*'),
       ]),
-      [Controls.Count]: this._builder.control(this._nodeDataService.nodeData.count, [
-        Validators.required,
-        Validators.min(0),
-        NoIpsLeftValidator(this._clusterSpecService.cluster.spec.machineNetworks, this.existingNodesCount),
-      ]),
+      [Controls.Count]: this._builder.control(0),
       [Controls.DynamicConfig]: this._builder.control(this._nodeDataService.nodeData.dynamicConfig),
       [Controls.OperatingSystem]: this._builder.control(this._getDefaultOS(), [Validators.required]),
       [Controls.UpgradeOnBoot]: this._builder.control(false),

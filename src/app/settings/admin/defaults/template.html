@@ -170,7 +170,7 @@ limitations under the License.
                              label="Initial Replicas"
                              min="0"
                              max="50"
-                             required>
+                             mandatory>
           </km-number-stepper>
           <km-spinner-with-confirmation [isSaved]="isEqual(settings.defaultNodeCount, apiSettings.defaultNodeCount)"></km-spinner-with-confirmation>
         </div>
@@ -216,7 +216,7 @@ limitations under the License.
                              id="km-project-limit-setting"
                              label="User Projects Limit"
                              min="0"
-                             required>
+                             mandatory>
           </km-number-stepper>
           <km-spinner-with-confirmation [isSaved]="isEqual(settings.userProjectsLimit, apiSettings.userProjectsLimit) && isEqual(settings.restrictProjectCreation, apiSettings.restrictProjectCreation)"></km-spinner-with-confirmation>
         </div>
@@ -230,42 +230,45 @@ limitations under the License.
                  matTooltip="Filters out machine sizes that do not meet specified conditions"></div>
           </div>
 
-          <km-number-stepper [(ngModel)]="settings.machineDeploymentVMResourceQuota.minCPU"
-                             (ngModelChange)="onSettingsChange()"
-                             id="km-cpu-resource-quota-setting"
-                             label="Min CPU"
-                             min="0"
-                             required>
-          </km-number-stepper>
+          <div fxLayout="row wrap"
+               fxLayoutGap="16px">
+            <km-number-stepper [(ngModel)]="settings.machineDeploymentVMResourceQuota.minCPU"
+                               (ngModelChange)="onSettingsChange()"
+                               id="km-cpu-resource-quota-setting"
+                               label="Min CPU"
+                               min="0"
+                               required>
+            </km-number-stepper>
 
-          <km-number-stepper [(ngModel)]="settings.machineDeploymentVMResourceQuota.maxCPU"
-                             (ngModelChange)="onSettingsChange()"
-                             label="Max CPU"
-                             min="0"
-                             required>
-          </km-number-stepper>
+            <km-number-stepper [(ngModel)]="settings.machineDeploymentVMResourceQuota.maxCPU"
+                               (ngModelChange)="onSettingsChange()"
+                               label="Max CPU"
+                               min="0"
+                               required>
+            </km-number-stepper>
 
-          <km-number-stepper [(ngModel)]="settings.machineDeploymentVMResourceQuota.minRAM"
-                             (ngModelChange)="onSettingsChange()"
-                             id="km-ram-resource-quota-setting"
-                             label="Min RAM"
-                             min="0"
-                             required>
-          </km-number-stepper>
+            <km-number-stepper [(ngModel)]="settings.machineDeploymentVMResourceQuota.minRAM"
+                               (ngModelChange)="onSettingsChange()"
+                               id="km-ram-resource-quota-setting"
+                               label="Min RAM"
+                               min="0"
+                               required>
+            </km-number-stepper>
 
-          <km-number-stepper [(ngModel)]="settings.machineDeploymentVMResourceQuota.maxRAM"
-                             (ngModelChange)="onSettingsChange()"
-                             label="Max RAM"
-                             min="0"
-                             required>
-          </km-number-stepper>
+            <km-number-stepper [(ngModel)]="settings.machineDeploymentVMResourceQuota.maxRAM"
+                               (ngModelChange)="onSettingsChange()"
+                               label="Max RAM"
+                               min="0"
+                               required>
+            </km-number-stepper>
 
-          <mat-checkbox fxLayoutAlign=" center"
-                        [(ngModel)]="settings.machineDeploymentVMResourceQuota.enableGPU"
-                        (change)="onSettingsChange()">Enable GPU
-          </mat-checkbox>
+            <mat-checkbox fxLayoutAlign=" center"
+                          [(ngModel)]="settings.machineDeploymentVMResourceQuota.enableGPU"
+                          (change)="onSettingsChange()">Enable GPU
+            </mat-checkbox>
 
-          <km-spinner-with-confirmation [isSaved]="isEqual(settings.machineDeploymentVMResourceQuota, apiSettings.machineDeploymentVMResourceQuota)"></km-spinner-with-confirmation>
+            <km-spinner-with-confirmation [isSaved]="isEqual(settings.machineDeploymentVMResourceQuota, apiSettings.machineDeploymentVMResourceQuota)"></km-spinner-with-confirmation>
+          </div>
         </div>
 
       </div>

@@ -20,24 +20,14 @@ limitations under the License.
 <mat-dialog-content>
   <form [formGroup]="form"
         fxLayout="column"
-        id="create-template-instance-form"
-        (submit)="create()">
-    <mat-form-field fxFlex>
-      <mat-label>Number of Clusters</mat-label>
-      <input matInput
-             [formControlName]="control.Replicas"
-             type="number"
-             min="1"
-             autocomplete="off"
-             required
-             cdkFocusInitial>
-      <mat-error *ngIf="form.get(control.Replicas).hasError('required')">
-        Number of clusters is <strong>required</strong>.
-      </mat-error>
-      <mat-error *ngIf="form.get(control.Replicas).hasError('min')">
-        At least 1 cluster has to be created.
-      </mat-error>
-    </mat-form-field>
+        id="create-template-instance-form">
+    <km-number-stepper [formControlName]="control.Replicas"
+                       mode="errors"
+                       label="Number of Clusters"
+                       min="1"
+                       focus
+                       required>
+    </km-number-stepper>
   </form>
   <km-cluster-summary [cluster]="data.template.cluster"
                       [machineDeployment]="data.template.nodeDeployment"
@@ -67,7 +57,7 @@ limitations under the License.
           id="km-create-template-instance-btn"
           form="create-template-instance-form"
           fxLayoutAlign="center center"
-          [disabled]="!form.valid">
+          [disabled]="form.invalid">
     <i class="km-icon-mask km-icon-add"></i>
     <span>Create Clusters</span>
   </button>

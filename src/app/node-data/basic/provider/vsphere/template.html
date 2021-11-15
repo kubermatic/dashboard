@@ -15,38 +15,20 @@ limitations under the License.
 -->
 <form [formGroup]="form"
       fxLayout="column"
-      fxLayoutGap="8px">
-  <mat-form-field fxFlex>
-    <mat-label>Number of CPUs</mat-label>
-    <input matInput
-           [formControlName]="Controls.CPU"
-           min="1"
-           type="number"
-           autocomplete="off"
-           required>
-    <mat-error *ngIf="form.get(Controls.CPU).hasError('required')">
-      Number of CPUs is <strong>required</strong>.
-    </mat-error>
-    <mat-error *ngIf="form.get(Controls.CPU).hasError('min')">
-      Number of CPUs have to be at least 1.
-    </mat-error>
-  </mat-form-field>
+      fxLayoutGap="16px">
+  <km-number-stepper [formControlName]="Controls.CPU"
+                     mode="errors"
+                     label="Number of CPUs"
+                     min="1"
+                     required>
+  </km-number-stepper>
 
-  <mat-form-field fxFlex>
-    <mat-label>Memory in MB</mat-label>
-    <input matInput
-           [formControlName]="Controls.Memory"
-           min="512"
-           type="number"
-           autocomplete="off"
-           required>
-    <mat-error *ngIf="form.get(Controls.Memory).hasError('required')">
-      Memory is <strong>required</strong>.
-    </mat-error>
-    <mat-error *ngIf="form.get(Controls.Memory).hasError('min')">
-      Memory has to be at least 512.
-    </mat-error>
-  </mat-form-field>
+  <km-number-stepper [formControlName]="Controls.Memory"
+                     mode="errors"
+                     label="Memory in MB"
+                     min="512"
+                     required>
+  </km-number-stepper>
 
   <mat-form-field fxFlex>
     <mat-label>VM Template</mat-label>
@@ -60,19 +42,10 @@ limitations under the License.
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field fxFlex>
-    <mat-label>Disk Size in GB</mat-label>
-    <input matInput
-           [formControlName]="Controls.DiskSizeGB"
-           min="1"
-           type="number"
-           autocomplete="off"
-           required>
-    <mat-error *ngIf="form.get(Controls.DiskSizeGB).hasError('required')">
-      Disk Size is <strong>required</strong>.
-    </mat-error>
-    <mat-error *ngIf="form.get(Controls.DiskSizeGB).hasError('min')">
-      Disk Size has to be at least 1.
-    </mat-error>
-  </mat-form-field>
+  <km-number-stepper [formControlName]="Controls.DiskSizeGB"
+                     mode="errors"
+                     label="Disk Size in GB"
+                     min="1"
+                     required>
+  </km-number-stepper>
 </form>
