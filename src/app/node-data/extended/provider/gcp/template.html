@@ -20,7 +20,8 @@ limitations under the License.
                  (labelsChange)="onLabelsChange($event)"
                  [formControlName]="Controls.Labels"></km-label-form>
 
-  <km-tag-list title="Provider Tags"
+  <km-tag-list class="tag-list"
+               title="Provider Tags"
                [tags]="tags"
                (tagsChange)="onTagsChange($event)"
                [formControlName]="Controls.Tags"></km-tag-list>
