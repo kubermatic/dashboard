@@ -35,6 +35,7 @@ export default async (on, config) => {
     // TODO: Remove it after fixing flaky tests.
     ignored = [
       '**/integration/providers/equinix.spec.ts',
+      '**/integration/providers/vsphere.spec.ts',
       '**/integration/stories/opa.spec.ts',
       '**/integration/stories/admin-settings/administrators.spec.ts',
     ];

@@ -23,6 +23,6 @@ export enum Preset {
   KubeVirt = 'e2e-kubevirt',
   OpenStack = 'e2e-openstack',
   Equinix = 'e2e-equinix',
-  vSphere = 'e2e-vsphere',
+  VSphere = 'e2e-vsphere',
   Mock = 'test',
 }

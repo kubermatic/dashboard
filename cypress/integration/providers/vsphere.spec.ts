@@ -25,14 +25,14 @@ import _ from 'lodash';
 import {Mocks} from '../../utils/mocks';
 
 describe('vSphere Provider', () => {
-  const preset = Mocks.enabled() ? Preset.Mock : Preset.vSphere;
+  const preset = Mocks.enabled() ? Preset.Mock : Preset.VSphere;
   const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
   const clusterName = Mocks.enabled() ? 'test-cluster' : _.uniqueId('test-cluster-');
   const initialMachineDeploymentReplicas = '0';
 
   beforeEach(() => {
     if (Mocks.enabled()) {
-      Mocks.register(Provider.vSphere);
+      Mocks.register(Provider.VSphere);
     }
   });
 
@@ -54,7 +54,7 @@ describe('vSphere Provider', () => {
   });
 
   it('should create a new cluster', () => {
-    WizardPage.getProviderBtn(Provider.vSphere).click();
+    WizardPage.getProviderBtn(Provider.VSphere).click();
     WizardPage.getDatacenterBtn(Datacenter.VSphere.Hamburg).click();
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
