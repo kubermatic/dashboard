@@ -170,7 +170,7 @@ limitations under the License.
                              label="Initial Replicas"
                              min="0"
                              max="50"
-                             mandatory>
+                             required>
           </km-number-stepper>
           <km-spinner-with-confirmation [isSaved]="isEqual(settings.defaultNodeCount, apiSettings.defaultNodeCount)"></km-spinner-with-confirmation>
         </div>
@@ -216,7 +216,7 @@ limitations under the License.
                              id="km-project-limit-setting"
                              label="User Projects Limit"
                              min="0"
-                             mandatory>
+                             required>
           </km-number-stepper>
           <km-spinner-with-confirmation [isSaved]="isEqual(settings.userProjectsLimit, apiSettings.userProjectsLimit) && isEqual(settings.restrictProjectCreation, apiSettings.restrictProjectCreation)"></km-spinner-with-confirmation>
         </div>

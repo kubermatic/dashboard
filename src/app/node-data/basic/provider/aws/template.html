@@ -56,16 +56,13 @@ limitations under the License.
       </div>
     </km-combobox>
 
-    <mat-form-field fxFlex>
-      <mat-label>Disk Size in GB (gp2)</mat-label>
-      <input [formControlName]="Controls.DiskSize"
-             min="10"
-             max="16000"
-             type="number"
-             autocomplete="off"
-             matInput
-             required>
-    </mat-form-field>
+    <km-number-stepper [formControlName]="Controls.DiskSize"
+                       mode="errors"
+                       label="Disk Size in GB (gp2)"
+                       min="10"
+                       max="16000"
+                       required>
+    </km-number-stepper>
 
     <km-combobox #subnetCombobox
                  [required]="true"

@@ -85,8 +85,11 @@ export class NumberStepperComponent implements AfterViewInit, OnDestroy, Control
   }
 
   set value(val: number | string) {
-    this._value = this._decimalPipe.transform(val, '1.0-4');
-    this._onChange(val);
+    const parsed = this._decimalPipe.transform(val, '1.0-4');
+    if (!Number.isNaN(parsed) && parsed !== null) {
+      this._value = Number.parseFloat(parsed);
+      this._onChange(val);
+    }
   }
 
   get errors(): string[] {
@@ -134,7 +137,7 @@ export class NumberStepperComponent implements AfterViewInit, OnDestroy, Control
   }
 
   onIncrease(): void {
-    if (this.max !== undefined && +this._value + +this.step >= this.max) {
+    if (this.max !== undefined && +this._value + +this.step > this.max) {
       return;
     }
 
@@ -142,7 +145,7 @@ export class NumberStepperComponent implements AfterViewInit, OnDestroy, Control
   }
 
   onDecrease(): void {
-    if (this.min !== undefined && +this._value - +this.step <= this.min) {
+    if (this.min !== undefined && +this._value - +this.step < this.min) {
       return;
     }
 
