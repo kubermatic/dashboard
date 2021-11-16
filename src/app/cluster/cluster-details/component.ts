@@ -75,6 +75,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   machineDeployments: MachineDeployment[];
   isClusterRunning = false;
   isClusterAPIRunning = false;
+  isOPARunning = false;
   clusterHealthStatus: ClusterHealthStatus;
   health: Health;
   config: Config = {share_kubeconfig: false};
@@ -149,6 +150,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.isClusterAPIRunning = ClusterHealthStatus.isClusterAPIRunning(this.cluster, health);
           this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, health);
           this.clusterHealthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, health);
+          this.isOPARunning = ClusterHealthStatus.isOPARunning(this.cluster, health);
 
           // Conditionally create an array of observables to use for 'combineLatest' operator.
           // In case real observable should not be returned, observable emitting empty array will be added to the array.
@@ -159,7 +161,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                 : of([] as MasterVersion[])
             )
             .concat(
-              this._canReloadNodes()
+              this.isClusterRunning
                 ? [
                     this._clusterService.addons(this.projectID, this.cluster.id),
                     this._clusterService.nodes(this.projectID, this.cluster.id),
@@ -169,7 +171,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                 : [of([] as Addon[]), of([] as Node[]), of([] as MachineDeployment[]), of({} as ClusterMetrics)]
             )
             .concat(
-              this._canReloadNodes() && this.isMLAEnabled()
+              this.isClusterRunning && this.isMLAEnabled()
                 ? [
                     this._mlaService.alertmanagerConfig(this.projectID, this.cluster.id),
                     this._mlaService.ruleGroups(this.projectID, this.cluster.id),
@@ -177,7 +179,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                 : [of([]), of([] as RuleGroup[])]
             )
             .concat(
-              this._canReloadNodes() && this.isOPAEnabled() && this._hasMachineDeployments()
+              this.isClusterRunning && this.isOPARunning && this.isOPAEnabled()
                 ? [
                     this._opaService.constraints(this.projectID, this.cluster.id),
                     this._opaService.gatekeeperConfig(this.projectID, this.cluster.id),
@@ -247,14 +249,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       HealthState.isUp(this.health.apiserver) &&
       HealthState.isUp(this.health.machineController)
     );
-  }
-
-  private _canReloadNodes(): boolean {
-    return this.cluster && Health.allHealthy(this.health);
-  }
-
-  private _hasMachineDeployments(): boolean {
-    return !_.isEmpty(this.machineDeployments);
   }
 
   getProvider(provider: string): string {
