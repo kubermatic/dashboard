@@ -75,6 +75,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   machineDeployments: MachineDeployment[];
   isClusterRunning = false;
   isClusterAPIRunning = false;
+  isOPARunning = false;
   clusterHealthStatus: ClusterHealthStatus;
   health: Health;
   config: Config = {share_kubeconfig: false};
@@ -149,6 +150,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.isClusterAPIRunning = ClusterHealthStatus.isClusterAPIRunning(this.cluster, health);
           this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, health);
           this.clusterHealthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, health);
+          this.isOPARunning = ClusterHealthStatus.isOPARunning(this.cluster, health);
 
           // Conditionally create an array of observables to use for 'combineLatest' operator.
           // In case real observable should not be returned, observable emitting empty array will be added to the array.
@@ -177,7 +179,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                 : [of([]), of([] as RuleGroup[])]
             )
             .concat(
-              this.isClusterRunning && this.isOPAEnabled()
+              this.isClusterRunning && this.isOPARunning && this.isOPAEnabled()
                 ? [
                     this._opaService.constraints(this.projectID, this.cluster.id),
                     this._opaService.gatekeeperConfig(this.projectID, this.cluster.id),

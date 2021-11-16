@@ -46,6 +46,12 @@ export class ClusterHealthStatus extends HealthStatus {
     return !!h && HealthState.isUp(h.apiserver) && !c.deletionTimestamp;
   }
 
+  static isOPARunning(c: Cluster, h: Health): boolean {
+    return (
+      !!h && HealthState.isUp(h.gatekeeperAudit) && HealthState.isUp(h.gatekeeperController) && !c.deletionTimestamp
+    );
+  }
+
   css: string;
 
   constructor(message: HealthStatusMessage, color: HealthStatusColor, css: string) {
