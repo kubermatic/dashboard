@@ -17,7 +17,7 @@
 
 .km-cluster-panel {
   .mat-icon-button {
-    @include mixins.size(40px);
+    @include mixins.size(45px);
 
     i {
       @include mixins.size(16px, $force: true);
