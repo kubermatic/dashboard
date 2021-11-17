@@ -33,7 +33,7 @@ limitations under the License.
          [(ngModel)]="value"
          [min]="min"
          [max]="max"
-         [attr.id]="!!id ? id : null"
+         [id]="id"
          [attr.cdkFocusInitial]="focus ? focus : null">
   <mat-error *ngFor="let message of errors">{{message}}</mat-error>
   <mat-hint *ngIf="(mode === 'hint' || mode === 'all') && !!hint">{{hint}}</mat-hint>

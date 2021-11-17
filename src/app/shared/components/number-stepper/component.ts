@@ -18,6 +18,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   forwardRef,
+  HostBinding,
   Input,
   OnDestroy,
   ViewChild,
@@ -64,7 +65,6 @@ export class NumberStepperComponent implements AfterViewInit, OnDestroy, Control
   @ViewChild('input') private readonly _model: NgModel;
   private _onChange: (_: number | string) => void = noop;
   private _valid = false;
-  @Input() id: string;
   @Input() label: string;
   @Input() hint: string;
   @Input() min: number;
@@ -73,6 +73,20 @@ export class NumberStepperComponent implements AfterViewInit, OnDestroy, Control
   @Input() disabled = false;
   @Input() step = 1;
   @Input() type: 'integer' | 'decimal' = 'integer';
+
+  @HostBinding('attr.id')
+  protected _hostID = '';
+  private _id = '';
+
+  @Input()
+  set id(value: string) {
+    this._id = value;
+    this._hostID = null;
+  }
+
+  get id(): string {
+    return this._id;
+  }
 
   /**
    * Defines internal behavior of the stepper field.
