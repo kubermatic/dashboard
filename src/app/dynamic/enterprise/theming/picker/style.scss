@@ -33,7 +33,7 @@
 
 .toggle-button {
   .mat-button-toggle {
-    @include mixins.size(140px, 47px, true);
+    @include mixins.size(140px, 45px, true);
 
     margin: 10px 10px 10px 0;
   }
