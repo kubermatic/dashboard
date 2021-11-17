@@ -20,10 +20,11 @@ import {configuration} from './cy-ts-preprocessor';
 export default async (on, config) => {
   const isAPIMocked = config.env.MOCKS === 'true' || config.env.MOCKS === true;
   const isEnterpriseEdition = config.env.KUBERMATIC_EDITION === 'ee';
+  let ignored: string[];
 
   if (isAPIMocked) {
     // TODO: Remove it after configuring mocks.
-    config.ignoreTestFiles = [
+    ignored = [
       '**/integration/stories/opa.spec.ts',
       '**/integration/stories/admin-settings/administrators.spec.ts',
       '**/integration/stories/admin-settings/cluster-settings.spec.ts',
@@ -31,32 +32,27 @@ export default async (on, config) => {
       '**/integration/stories/admin-settings/opa-integration.spec.ts',
     ];
   } else {
-    let ignored: string[];
-
     // TODO: Remove it after fixing flaky tests.
     ignored = [
-      '**/integration/providers/digitalocean.spec.ts',
-      '**/integration/providers/kubevirt.spec.ts',
-      '**/integration/providers/openstack.spec.ts',
+      '**/integration/providers/equinix.spec.ts',
       '**/integration/providers/vsphere.spec.ts',
       '**/integration/stories/opa.spec.ts',
       '**/integration/stories/admin-settings/administrators.spec.ts',
     ];
+  }
 
-    // Do not test providers in both editions when running full tests.
-    if (isEnterpriseEdition) {
-      ignored = ['**/integration/providers/**', ...ignored];
-    }
-
-    config.ignoreTestFiles = ignored;
+  // Do not test providers in both editions.
+  if (!isEnterpriseEdition) {
+    ignored = ['**/integration/providers/**', ...ignored];
   }
 
   /* eslint-disable no-console */
   console.log('mocks: ' + isAPIMocked);
   console.log('enterprise edition: ' + isEnterpriseEdition);
-  console.log('ignore: ' + config.ignoreTestFiles);
+  console.log('ignored: ' + ignored);
   /* eslint-enable no-console */
 
+  config.ignoreTestFiles = ignored;
   on('file:preprocessor', webpack(configuration));
 
   // Remove videos of successful tests and keep only failed ones.
