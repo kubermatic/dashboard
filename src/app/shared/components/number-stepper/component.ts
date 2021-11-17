@@ -114,9 +114,9 @@ export class NumberStepperComponent implements AfterViewInit, OnDestroy, Control
   }
 
   set value(val: number | string) {
-    const parsed = this._decimalPipe.transform(val, '1.0-4');
+    const parsed = this.type === 'decimal' ? this._decimalPipe.transform(val, '1.0-4') : val?.toString();
     if (!Number.isNaN(parsed) && parsed !== null) {
-      this._value = Number.parseFloat(parsed);
+      this._value = this.type === 'decimal' ? Number.parseFloat(parsed) : Number.parseInt(parsed);
       this._onChange(val);
     }
   }
