@@ -219,7 +219,7 @@ limitations under the License.
                   recommended
                 </mat-button-toggle>
               </mat-button-toggle-group>
-              <i *ngIf="!isEnforced(Controls.AuditLogging)"
+              <i *ngIf="isEnforced(Controls.AuditLogging)"
                  class="km-icon-info km-pointer"
                  matTooltip="Audit Logging is enforced by your admin in the chosen datacenter."></i>
             </div>
