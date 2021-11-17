@@ -472,8 +472,8 @@ button {
   &.mat-raised-button,
   &.mat-icon-button {
     font-size: variables.$font-size-subhead;
-    height: 40px;
-    line-height: 40px;
+    height: 45px;
+    line-height: 45px;
     min-width: unset;
 
     &:not(:first-child) {
@@ -492,7 +492,9 @@ button {
 
 button {
   &.mat-icon-button {
-    border-radius: variables.$border-radius;
+    @include mixins.size(45px);
+
+    border-radius: variables.$border-radius !important;
 
     &[disabled] {
       * {
@@ -522,6 +524,10 @@ button {
   &.mat-button-toggle-group-appearance-standard {
     border: none;
     box-shadow: none;
+
+    .mat-button-toggle-label-content {
+      padding: 0 10px;
+    }
   }
 
   &:hover {
@@ -530,7 +536,7 @@ button {
   }
 
   .mat-button-toggle {
-    @include mixins.size(150px, 60px, true);
+    @include mixins.size(150px, 45px, true);
 
     align-items: center;
     border-radius: variables.$border-radius;
