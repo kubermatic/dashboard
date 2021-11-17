@@ -244,8 +244,16 @@ export enum CNIPlugin {
   Cilium = 'cilium',
 }
 
+export enum AuditPolicyPreset {
+  Custom = '',
+  Metadata = 'metadata',
+  Recommended = 'recommended',
+  Minimal = 'minimal',
+}
+
 export class AuditLoggingSettings {
   enabled?: boolean;
+  policyPreset?: AuditPolicyPreset;
 }
 
 export class OPAIntegration {

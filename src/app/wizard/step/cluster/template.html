@@ -202,19 +202,19 @@ limitations under the License.
               <mat-button-toggle-group *ngIf="!!controlValue(Controls.AuditLogging)"
                                        [formControlName]="Controls.AuditPolicyPreset"
                                        group="auditLogging">
-                <mat-button-toggle value="custom"
+                <mat-button-toggle [value]="AuditPolicyPreset.Custom"
                 matTooltip="Sets up cluster with a metadata audit policy that can be edited after the cluster has been created.">
                   custom
                 </mat-button-toggle>
-                <mat-button-toggle value="metadata"
+                <mat-button-toggle [value]="AuditPolicyPreset.Metadata"
                 matTooltip="Logs metadata for all requests received by the Kubernetes API.">
                   metadata
                 </mat-button-toggle>
-                <mat-button-toggle value="minimal"
+                <mat-button-toggle [value]="AuditPolicyPreset.Minimal"
                 matTooltip="Logs extended information about key security concerns like workload modifications and access to sensitive information.">
                   minimal
                 </mat-button-toggle>
-                <mat-button-toggle value="recommended"
+                <mat-button-toggle [value]="AuditPolicyPreset.Recommended"
                                    matTooltip="Logs extended information about key security concerns and metadata for all other requests. Recommended for best security coverage.">
                   recommended
                 </mat-button-toggle>

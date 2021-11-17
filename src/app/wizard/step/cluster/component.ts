@@ -37,6 +37,7 @@ import {
   MasterVersion,
   ProxyMode,
   CNIPlugin,
+  AuditPolicyPreset,
 } from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
@@ -102,6 +103,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   availableProxyModes = ['ipvs', 'iptables'];
   isKonnectivityEnabled = false;
   readonly Controls = Controls;
+  readonly AuditPolicyPreset = AuditPolicyPreset;
   private _datacenterSpec: Datacenter;
   private _seedSettings: SeedSettings;
   private _settings: AdminSettings;
@@ -134,7 +136,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.Version]: new FormControl('', [Validators.required]),
       [Controls.ContainerRuntime]: new FormControl(ContainerRuntime.Containerd, [Validators.required]),
       [Controls.AuditLogging]: new FormControl(false),
-      [Controls.AuditPolicyPreset]: new FormControl('custom'),
+      [Controls.AuditPolicyPreset]: new FormControl(''),
       [Controls.UserSSHKeyAgent]: new FormControl(true),
       [Controls.OPAIntegration]: new FormControl(false),
       [Controls.Konnectivity]: new FormControl(false),
@@ -220,6 +222,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.Name).valueChanges,
       this.form.get(Controls.Version).valueChanges,
       this.form.get(Controls.AuditLogging).valueChanges,
+      this.form.get(Controls.AuditPolicyPreset).valueChanges,
       this.form.get(Controls.UserSSHKeyAgent).valueChanges,
       this.form.get(Controls.OPAIntegration).valueChanges,
       this.form.get(Controls.Konnectivity).valueChanges,
@@ -326,6 +329,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         version: this.controlValue(Controls.Version),
         auditLogging: {
           enabled: this.controlValue(Controls.AuditLogging),
+          policyPreset: this.controlValue(Controls.AuditPolicyPreset),
         },
         opaIntegration: {
           enabled: this.controlValue(Controls.OPAIntegration),
