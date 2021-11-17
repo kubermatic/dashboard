@@ -64,6 +64,7 @@ export class NumberStepperComponent implements AfterViewInit, OnDestroy, Control
   @ViewChild('input') private readonly _model: NgModel;
   private _onChange: (_: number | string) => void = noop;
   private _valid = false;
+  @Input() id: string;
   @Input() label: string;
   @Input() hint: string;
   @Input() min: number;
