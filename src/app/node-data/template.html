@@ -24,10 +24,10 @@ limitations under the License.
       fxLayoutGap.xs="30px">
   <div [fxFlex]="isDialogView() ? '100%' : '50%'"
        fxLayout="column"
-       fxLayoutGap="16px">
+       fxLayoutGap="8px">
     <mat-card-header *ngIf="!isDialogView()"
                      class="km-no-padding">
-      <mat-card-title>Basic</mat-card-title>
+      <mat-card-title>Basic Settings</mat-card-title>
     </mat-card-header>
     <mat-form-field>
       <mat-label>Name</mat-label>
@@ -170,7 +170,8 @@ limitations under the License.
                              [formControlName]="Controls.ProviderExtended"></km-extended-node-data>
     </div>
 
-    <km-label-form title="Node Labels"
+    <km-label-form [ngClass]="isDialogView() ? 'additional-margin' : ''"
+                   title="Node Labels"
                    [labels]="labels"
                    (labelsChange)="onLabelsChange($event)"></km-label-form>
 
@@ -182,9 +183,9 @@ limitations under the License.
   <div *ngIf="!isDialogView()"
        fxFlex="50%"
        fxLayout="column"
-       fxLayoutGap="16px">
+       fxLayoutGap="8px">
     <mat-card-header class="km-no-padding">
-      <mat-card-title>{{ providerDisplayName }}</mat-card-title>
+      <mat-card-title>{{ providerDisplayName }} Settings</mat-card-title>
     </mat-card-header>
 
     <km-basic-node-data [provider]="provider"

@@ -16,7 +16,7 @@ limitations under the License.
 
 <form [formGroup]="form"
       fxLayout="column"
-      fxLayoutGap="16px">
+      fxLayoutGap="8px">
   <ng-container *ngIf="credentialsType === CredentialsType.Default">
     <km-wizard-openstack-provider-extended-default-credentials [formControl]="form.get(Controls.Credentials)"></km-wizard-openstack-provider-extended-default-credentials>
   </ng-container>

@@ -15,7 +15,7 @@ limitations under the License.
 -->
 <form [formGroup]="form"
       fxLayout="column"
-      fxLayoutGap="16px">
+      fxLayoutGap="8px">
 
   <div fxLayout="row"
        fxLayoutGap="10px">
@@ -81,7 +81,8 @@ limitations under the License.
            required>
   </mat-form-field>
 
-  <mat-checkbox [formControlName]="Controls.UseFloatingIP"
+  <mat-checkbox class="use-floating-ip-checkbox"
+                [formControlName]="Controls.UseFloatingIP"
                 fxFlex>
     Allocate Floating IP
     <i *ngIf="isFloatingIPEnforced()"

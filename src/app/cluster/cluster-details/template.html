@@ -340,14 +340,14 @@ limitations under the License.
       <km-constraint-list [constraints]="constraints"
                           [cluster]="cluster"
                           [projectID]="projectID"
-                          [isClusterRunning]="isClusterRunning"></km-constraint-list>
+                          [isClusterRunning]="isClusterRunning && isOPARunning"></km-constraint-list>
     </km-tab>
     <km-tab label="OPA Gatekeeper Config"
             *ngIf="isOPAEnabled()">
       <km-gatekeeper-config [gatekeeperConfig]="gatekeeperConfig"
                             [cluster]="cluster"
                             [projectID]="projectID"
-                            [isClusterRunning]="isClusterRunning"></km-gatekeeper-config>
+                            [isClusterRunning]="isClusterRunning && isOPARunning"></km-gatekeeper-config>
     </km-tab>
     <km-tab label="Monitoring, Logging & Alerting"
             *ngIf="isMLAEnabled()">

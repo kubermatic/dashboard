@@ -31,7 +31,8 @@ limitations under the License.
           <div fxFlex
                fxLayoutAlign="start">{{typeFilter}}</div>
           <div fxFlex
-               fxLayoutAlign="end">
+               fxLayoutAlign="end"
+               class="km-select-trigger-button-wrapper">
             <button *ngIf="typeFilter"
                     (click)="typeFilter = undefined; filter(); $event.stopPropagation()"
                     matSuffix

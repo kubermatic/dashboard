@@ -15,8 +15,9 @@ limitations under the License.
 -->
 <form [formGroup]="form"
       fxLayout="column"
-      fxLayoutGap="16px">
-  <km-label-form title="Provider Tags"
+      fxLayoutGap="8px">
+  <km-label-form class="label-form"
+                 title="Provider Tags"
                  [labels]="tags"
                  (labelsChange)="onTagsChange($event)"
                  [formControlName]="Controls.Tags"></km-label-form>

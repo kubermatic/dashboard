@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <form [formGroup]="form"
-      fxLayout="column"
-      fxLayoutGap="16px">
+      fxLayout="column">
   <km-label-form title="Provider Labels"
                  [labels]="labels"
                  (labelsChange)="onLabelsChange($event)"
                  [formControlName]="Controls.Labels"></km-label-form>
 
-  <km-tag-list title="Provider Tags"
+  <km-tag-list class="tag-list"
+               title="Provider Tags"
                [tags]="tags"
                (tagsChange)="onTagsChange($event)"
                [formControlName]="Controls.Tags"></km-tag-list>
