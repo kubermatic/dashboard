@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {
   OpenstackAvailabilityZone,
@@ -25,11 +26,12 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {EMPTY, Observable} from 'rxjs';
 import {Provider} from './provider';
 
+@Injectable()
 export class Openstack extends Provider {
   private readonly _tenantsUrl = `${this._restRoot}/providers/openstack/tenants`;
-  private readonly _securityGroupsUrl = `${this._restRoot}/providers/openstack/securitygroups`;
-  private readonly _networksUrl = `${this._restRoot}/providers/openstack/networks`;
-  private readonly _availabilityZonesUrl = `${this._restRoot}/providers/openstack/availabilityzones`;
+  readonly securityGroupsUrl = `${this._restRoot}/providers/openstack/securitygroups`;
+  readonly networksUrl = `${this._restRoot}/providers/openstack/networks`;
+  readonly availabilityZonesUrl = `${this._restRoot}/providers/openstack/availabilityzones`;
   private _usingApplicationCredentials = false;
 
   constructor(http: HttpClient, provider: NodeProvider) {
@@ -183,7 +185,7 @@ export class Openstack extends Provider {
       onLoadingCb();
     }
 
-    return this._http.get<OpenstackSecurityGroup[]>(this._securityGroupsUrl, {
+    return this._http.get<OpenstackSecurityGroup[]>(this.securityGroupsUrl, {
       headers: this._headers,
     });
   }
@@ -212,7 +214,7 @@ export class Openstack extends Provider {
       onLoadingCb();
     }
 
-    return this._http.get<OpenstackNetwork[]>(this._networksUrl, {
+    return this._http.get<OpenstackNetwork[]>(this.networksUrl, {
       headers: this._headers,
     });
   }
@@ -264,7 +266,7 @@ export class Openstack extends Provider {
       onLoadingCb();
     }
 
-    return this._http.get<OpenstackAvailabilityZone[]>(this._availabilityZonesUrl, {
+    return this._http.get<OpenstackAvailabilityZone[]>(this.availabilityZonesUrl, {
       headers: this._headers,
     });
   }
