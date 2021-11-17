@@ -97,8 +97,8 @@ describe('SSH Key Management Story', () => {
 
   it('should delete the ssh key', () => {
     SSHKeysPage.visit();
-    SSHKeysPage.getDeleteSSHKeyButton(sshKeyName).click();
-    SSHKeysPage.getDeleteSSHKeyConfirmationButton().click();
+    SSHKeysPage.getDeleteSSHKeyButton(sshKeyName).click({force: true});
+    SSHKeysPage.getDeleteSSHKeyConfirmationButton().click({force: true});
   });
 
   it('should verify that there are no projects', () => {

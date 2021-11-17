@@ -23,10 +23,9 @@ limitations under the License.
        fxLayoutGap="30px">
     <div fxFlex="50"
          fxLayout="column"
-         fxLayoutGap="16px">
-      <mat-card-header *ngIf="hasExtendedSection(provider)"
-                       class="km-no-padding">
-        <mat-card-title>Basic</mat-card-title>
+         fxLayoutGap="8px">
+      <mat-card-header class="km-no-padding">
+        <mat-card-title>Basic Settings</mat-card-title>
       </mat-card-header>
       <km-wizard-presets [formControl]="form.get(Control.Preset)"></km-wizard-presets>
       <km-wizard-provider-basic [provider]="provider"

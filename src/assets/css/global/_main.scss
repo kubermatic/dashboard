@@ -38,7 +38,14 @@ hr {
 }
 
 ::-webkit-scrollbar {
-  @include mixins.size(variables.$scrollbar-size);
+  height: 12px;
+  width: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-clip: content-box;
+  border: 2px solid;
+  border-radius: 3px;
 }
 
 .km-empty-list-msg {
@@ -343,11 +350,11 @@ hr {
 .km-version-picker {
   .mat-form-field {
     .mat-form-field-flex {
-      height: 54px;
+      height: 49px;
     }
 
     .mat-form-field-infix {
-      padding: 12px 0;
+      padding: 9px 0;
       width: 120px;
     }
 
@@ -442,7 +449,7 @@ km-dashboard {
 
 .km-select-ellipsis {
   .mat-select-trigger {
-    height: 30px;
+    height: 18px;
   }
 
   mat-select-trigger {

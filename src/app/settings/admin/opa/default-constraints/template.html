@@ -30,7 +30,8 @@ limitations under the License.
           <div fxFlex
                fxLayoutAlign="start">{{constraintTemplateFilter}}</div>
           <div fxFlex
-               fxLayoutAlign="end">
+               fxLayoutAlign="end"
+               class="km-select-trigger-button-wrapper">
             <button *ngIf="constraintTemplateFilter"
                     (click)="constraintTemplateFilter = undefined; filter(); $event.stopPropagation()"
                     matSuffix

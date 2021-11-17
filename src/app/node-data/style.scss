@@ -15,13 +15,13 @@
 @use 'variables';
 
 div.km-os-options {
-  font-size: variables.$font-size-body;
   line-height: 30px;
   margin: 0 0 10px;
 }
 
 mat-button-toggle-group[group='operatingSystemGroup'] {
   flex-wrap: wrap;
+  margin-bottom: 8px;
 
   .mat-button-toggle {
     border-radius: variables.$border-radius;
@@ -56,7 +56,7 @@ mat-button-toggle-group[group='operatingSystemGroup'] {
 .km-provider-options {
   font-size: variables.$font-size-card-title;
   font-weight: normal;
-  margin-bottom: 16px;
+  margin: 16px 0 22px;
 }
 
 .eol-warning {
@@ -75,4 +75,8 @@ mat-button-toggle-group[group='operatingSystemGroup'] {
       margin-left: 8px;
     }
   }
+}
+
+.additional-margin {
+  margin-top: 16px;
 }

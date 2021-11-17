@@ -93,7 +93,7 @@ export class ProjectsPage {
     this.waitForProject(projectName);
     this.getProjectItem(projectName)
       .should(Condition.HaveLength, 1)
-      .click()
+      .click({force: true})
       .then(() => {
         ClustersPage.waitForRefresh();
         ClustersPage.verifyUrl();

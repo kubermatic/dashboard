@@ -129,7 +129,8 @@ limitations under the License.
             <div class="km-icon-info km-pointer"
                  matTooltip="Domain name prefix on which the User Cluster Alertmanager is running. Seed name and the base domain under which KKP is running will be appended to it, e.g. for prefix &quot;alertmanger&quot; the final url would be &quot;https://alertmanager.<seed-name>.<kkp-domain>&quot;"></div>
           </div>
-          <mat-form-field fxFlex="40">
+          <mat-form-field fxFlex="40"
+                          fxFlexAlign=" center">
             <mat-label>User Cluster Alertmanager Prefix</mat-label>
             <input matInput
                    (keyup)="onSettingsChange()"
@@ -147,7 +148,8 @@ limitations under the License.
             <div class="km-icon-info km-pointer"
                  matTooltip="Domain name prefix on which the User Cluster Grafana is running. Seed name and the base domain under which KKP is running will be appended to it, e.g. for prefix &quot;grafana&quot; the final url would be &quot;https://grafana.<seed-name>.<kkp-domain>&quot;"></div>
           </div>
-          <mat-form-field fxFlex="40">
+          <mat-form-field fxFlex="40"
+                          fxFlexAlign=" center">
             <mat-label>User Cluster Grafana Prefix</mat-label>
             <input matInput
                    (keyup)="onSettingsChange()"
@@ -199,7 +201,8 @@ limitations under the License.
            fxLayout="column"
            fxLayoutGap="16px">
 
-        <div fxLayout="row">
+        <div fxLayout="row"
+             fxLayoutAlign=" center">
           <div fxFlex="16%"
                fxLayoutAlign=" center"
                class="entry-label">

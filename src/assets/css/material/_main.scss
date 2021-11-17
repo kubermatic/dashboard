@@ -71,6 +71,13 @@ mat-card {
   }
 }
 
+km-wizard {
+  mat-card.mat-card .mat-card-header .mat-card-title {
+    margin: 0;
+    padding: 26px 0 20px;
+  }
+}
+
 // Dialogs.
 .cdk-overlay-pane .mat-dialog-container {
   box-shadow: variables.$border-box-shadow;
@@ -204,7 +211,7 @@ mat-card {
 
   .mat-horizontal-content-container {
     overflow: initial;
-    padding: 15px 0;
+    padding: 10px 0 0;
   }
 
   .mat-horizontal-stepper-header {
@@ -310,6 +317,10 @@ mat-form-field {
       .mat-select-trigger {
         display: flex;
 
+        .km-select-trigger-button-wrapper {
+          margin-bottom: 8px;
+        }
+
         .mat-select-arrow-wrapper {
           align-items: center;
           display: flex;
@@ -347,15 +358,7 @@ mat-form-field {
 
   &.km-dropdown-with-suffix {
     .mat-form-field-infix {
-      padding: 8px 0 12px;
-    }
-
-    &.mat-primary {
-      .mat-select-trigger {
-        .mat-select-arrow-wrapper {
-          transform: none;
-        }
-      }
+      padding: 9px 0;
     }
   }
 
@@ -365,13 +368,36 @@ mat-form-field {
     }
 
     .mat-select-arrow-wrapper {
-      height: 57px;
+      height: 20px;
     }
 
     .mat-form-field-infix {
-      border-top: 8px solid transparent;
-      padding: 8px 0;
+      padding: 9px 0;
     }
+  }
+
+  &.mat-form-field-appearance-outline {
+    &.mat-form-field-can-float {
+      &.mat-form-field-should-float {
+        .mat-form-field-label {
+          transform: translateY(-21px) scale(0.75);
+        }
+      }
+    }
+
+    .mat-form-field-infix {
+      padding: 9px 0;
+    }
+
+    .mat-form-field-label-wrapper {
+      top: -20px;
+    }
+  }
+}
+
+km-admin-settings-defaults {
+  mat-form-field.mat-form-field .mat-form-field-wrapper {
+    padding-bottom: 0;
   }
 }
 
@@ -400,7 +426,7 @@ mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):no
 
   .mat-select-placeholder {
     font-size: variables.$font-size-subhead;
-    line-height: 20px;
+    line-height: 18px;
     opacity: 70%;
   }
 
@@ -413,7 +439,7 @@ mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):no
 
 .mat-select-panel {
   margin-left: 6px;
-  margin-top: 38px;
+  margin-top: 28px;
   max-width: calc(100% + 20px) !important;
   min-width: calc(100% + 20px) !important;
   transform-origin: 50% 0 0;

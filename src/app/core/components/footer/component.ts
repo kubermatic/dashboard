@@ -34,13 +34,18 @@ export class FooterComponent {
     return this.authenticated ? this.settings.customLinks : this.customLinks;
   }
 
-  getBackgroundImageUrlStyle(link: CustomLink): SafeStyle {
+  getBackgroundImage(link: CustomLink): SafeStyle {
     return this._sanitizer.sanitize(SecurityContext.STYLE, `url(${CustomLink.getIcon(link)})`);
   }
 
-  getFilterStyle(): SafeStyle {
+  getFilter(): SafeStyle {
     return this.authenticated
       ? ''
       : this._sanitizer.bypassSecurityTrustStyle('invert(.25) brightness(100) contrast(100)');
+  }
+
+  getVersion(): string {
+    const isTag = !!this.version && this.version.distance === 0;
+    return isTag ? this.version.tag : this.version.hash;
   }
 }

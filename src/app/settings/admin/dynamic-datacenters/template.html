@@ -38,7 +38,8 @@ limitations under the License.
                 <div fxFlex
                      fxLayoutAlign="start">{{seedFilter}}</div>
                 <div fxFlex
-                     fxLayoutAlign="end">
+                     fxLayoutAlign="end"
+                     class="km-select-trigger-button-wrapper">
                   <button *ngIf="seedFilter"
                           (click)="seedFilter = undefined; filter(); $event.stopPropagation()"
                           matSuffix
@@ -72,7 +73,8 @@ limitations under the License.
                   </ng-container>
                 </div>
                 <div fxFlex
-                     fxLayoutAlign="end">
+                     fxLayoutAlign="end"
+                     class="km-select-trigger-button-wrapper">
                   <button *ngIf="countryFilter"
                           (click)="countryFilter = undefined; filter(); $event.stopPropagation()"
                           matSuffix
@@ -105,7 +107,8 @@ limitations under the License.
                   <span class="km-provider-logo km-provider-logo-{{providerFilter}} provider-logo-small"></span>
                 </div>
                 <div fxFlex
-                     fxLayoutAlign="end">
+                     fxLayoutAlign="end"
+                     class="km-select-trigger-button-wrapper">
                   <button *ngIf="providerFilter"
                           (click)="providerFilter = undefined; filter(); $event.stopPropagation()"
                           matSuffix
