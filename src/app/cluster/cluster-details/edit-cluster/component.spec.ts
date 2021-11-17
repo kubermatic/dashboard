@@ -102,25 +102,20 @@ describe('EditClusterComponent', () => {
     })
   );
 
-  beforeEach(
-    waitForAsync(() => {
-      fixture = TestBed.createComponent(EditClusterComponent);
-      component = fixture.componentInstance;
-      component.cluster = fakeDigitaloceanCluster();
-      component.datacenter = fakeDigitaloceanDatacenter();
-      component.projectID = fakeProject().id;
-      component.labels = {};
-      component.asyncLabelValidators = [];
-      fixture.detectChanges();
-    })
-  );
+  beforeEach(() => {
+    fixture = TestBed.createComponent(EditClusterComponent);
+    component = fixture.componentInstance;
+    component.cluster = fakeDigitaloceanCluster();
+    component.datacenter = fakeDigitaloceanDatacenter();
+    component.projectID = fakeProject().id;
+    component.labels = {};
+    component.asyncLabelValidators = [];
+    fixture.detectChanges();
+  });
 
-  it(
-    'should create the edit cluster component',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should create the edit cluster component', () => {
+    expect(component).toBeTruthy();
+  });
 
   it('should have valid form after creating', () => {
     expect(component.form.valid).toBeTruthy();

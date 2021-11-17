@@ -19,7 +19,7 @@ import {OPAService} from '@core/services/opa';
 import {NotificationService} from '@core/services/notification';
 import {Constraint, ConstraintTemplate, ConstraintSpec} from '@shared/entity/opa';
 import {getIconClassForButton} from '@shared/utils/common-utils';
-import {dump, load} from 'js-yaml';
+import * as y from 'js-yaml';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
@@ -133,14 +133,14 @@ export class DefaultConstraintDialog implements OnInit, OnDestroy {
     if (this.data.mode === Mode.Edit) {
       const spec = this.data.defaultConstraint.spec;
       if (!_.isEmpty(spec)) {
-        this.spec = dump(spec);
+        this.spec = y.dump(spec);
       }
     }
   }
 
   private _getSpec(): ConstraintSpec {
     let spec = new ConstraintSpec();
-    const raw = load(this.spec) as ConstraintSpec;
+    const raw = y.load(this.spec) as ConstraintSpec;
     if (!_.isEmpty(raw)) {
       spec = raw;
     }

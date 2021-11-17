@@ -14,14 +14,14 @@
 
 import {RuleGroupName} from '@shared/entity/mla';
 import {decode} from 'js-base64';
-import {load} from 'js-yaml';
+import * as y from 'js-yaml';
 import _ from 'lodash';
 
 export class MLAUtils {
   static getRuleGroupName(data: string): string {
     let ruleGroupName = new RuleGroupName();
     const yamlData = decode(data);
-    const jsonData = load(yamlData) as RuleGroupName;
+    const jsonData = y.load(yamlData) as RuleGroupName;
     if (!_.isEmpty(jsonData)) {
       ruleGroupName = jsonData;
     }
