@@ -24,19 +24,8 @@ export default async (on, config) => {
 
   if (isAPIMocked) {
     // TODO: Remove it after configuring mocks.
-    ignored = [
-      '**/integration/providers/**',
-      '**/integration/stories/admin-settings/**',
-      '**/integration/stories/cluster-templates.spec.ts',
-      '**/integration/stories/edition.spec.ts',
-      '**/integration/stories/external-cluster.spec.ts',
-      '**/integration/stories/multi-owner.spec.ts',
-      '**/integration/stories/service-accounts.spec.ts',
-      '**/integration/stories/ssh-keys.spec.ts',
-      '**/integration/stories/user-settings.spec.ts',
-    ];
+    ignored = [];
   } else {
-
     // TODO: Remove it after fixing flaky tests.
     ignored = [
       '**/integration/providers/equinix.spec.ts',

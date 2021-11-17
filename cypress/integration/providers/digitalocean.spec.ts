@@ -18,8 +18,6 @@ import {ProjectsPage} from '../../pages/projects.po';
 import {WizardPage} from '../../pages/wizard.po';
 import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
-import {Endpoint} from '../../utils/endpoint';
-import {RequestType, TrafficMonitor} from '../../utils/monitor';
 import {Preset} from '../../utils/preset';
 import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
@@ -88,7 +86,6 @@ describe('DigitalOcean Provider', () => {
   });
 
   it('should wait for initial machine deployment to be created', () => {
-    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.MachineDeployments).interceptAndWait();
     ClustersPage.getMachineDeploymentList().should(Condition.Contain, initialMachineDeploymentName);
   });
 

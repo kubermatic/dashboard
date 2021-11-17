@@ -38,7 +38,8 @@ describe('Admin Settings - Administrators Story', () => {
   });
 
   it('should have only one admin', () => {
-    AdminSettings.AdministratorsPage.verifyAdminCount(adminsCount);  });
+    AdminSettings.AdministratorsPage.verifyAdminCount(adminsCount);
+  });
 
   it('should add second admin', () => {
     AdminSettings.AdministratorsPage.addAdmin(Config.userEmail());
@@ -46,7 +47,8 @@ describe('Admin Settings - Administrators Story', () => {
   });
 
   it('should have two admins', () => {
-    AdminSettings.AdministratorsPage.verifyAdminCount(adminsCount);  });
+    AdminSettings.AdministratorsPage.verifyAdminCount(adminsCount);
+  });
 
   it('should logout', () => {
     logout();
@@ -75,7 +77,8 @@ describe('Admin Settings - Administrators Story', () => {
   });
 
   it('should have two admins', () => {
-    AdminSettings.AdministratorsPage.verifyAdminCount(adminsCount);  });
+    AdminSettings.AdministratorsPage.verifyAdminCount(adminsCount);
+  });
 
   it('should remove second admin', () => {
     if (Mocks.enabled()) {
@@ -90,7 +93,8 @@ describe('Admin Settings - Administrators Story', () => {
   });
 
   it('should have only one admin', () => {
-    AdminSettings.AdministratorsPage.verifyAdminCount(adminsCount);  });
+    AdminSettings.AdministratorsPage.verifyAdminCount(adminsCount);
+  });
 
   it('should logout', () => {
     logout();

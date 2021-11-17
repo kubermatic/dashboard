@@ -25,8 +25,6 @@ import {Preset} from '../../utils/preset';
 import {Datacenter, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
-import {Endpoint} from '../../utils/endpoint';
-import {RequestType, TrafficMonitor} from '../../utils/monitor';
 
 describe('OPA Story', () => {
   const preset = Mocks.enabled() ? Preset.Mock : Preset.Digitalocean;
@@ -198,15 +196,14 @@ describe('OPA Story', () => {
   });
 
   it('should add gatekeeper config', () => {
+    if (Mocks.enabled()) {
+      Mocks.gatekeeperConfig = Mocks.defaultGatekeeperConfig;
+    }
     ClustersPage.getGatekeeperConfigDialogSaveBtn().should(Condition.BeEnabled);
     ClustersPage.getGatekeeperConfigDialogSaveBtn().click({force: true});
   });
 
   it('should check if gatekeeper config was created', () => {
-    if (Mocks.enabled()) {
-      Mocks.gatekeeperConfig = Mocks.defaultGatekeeperConfig;
-      TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.GatekeeperConfig).interceptAndWait();
-    }
     ClustersPage.getDeleteGatekeeperConfigBtn().should(Condition.Exist);
   });
 
