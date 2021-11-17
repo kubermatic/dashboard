@@ -24,7 +24,7 @@ export enum Provider {
   KubeVirt = 'kubevirt',
   OpenStack = 'openstack',
   Equinix = 'packet',
-  vSphere = 'vsphere',
+  VSphere = 'vsphere',
 }
 
 export namespace Datacenter {

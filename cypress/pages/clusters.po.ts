@@ -275,12 +275,8 @@ export class ClustersPage {
 
     this.verifyUrl();
 
-    const retries = 5;
-    TrafficMonitor.newTrafficMonitor()
-      .method(RequestType.GET)
-      .url(Endpoint.MachineDeployments)
-      .retry(retries)
-      .expect(new ResponseCheck(ResponseType.LIST).elements(0));
+    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.MachineDeployments).interceptAndWait();
+    cy.get('div').should(Condition.Contain, 'No machine deployments available.');
   }
 
   static deleteMachineDeployment(name: string): void {
