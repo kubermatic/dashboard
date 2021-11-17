@@ -140,10 +140,6 @@ describe('OPA Story', () => {
     ClustersPage.getMachineDeploymentList().should(Condition.Contain, initialMachineDeploymentName);
   });
 
-  it('should have healthy machine deployment', () => {
-    ClustersPage.getMachineDeploymentList().find('i').should(Condition.HaveClass, 'km-success-bg');
-  });
-
   it('should switch to opa constraint tab', () => {
     ClustersPage.getTabCard('OPA Constraints').should(Condition.Exist).click({force: true});
   });
