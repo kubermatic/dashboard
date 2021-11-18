@@ -120,6 +120,10 @@ limitations under the License.
       <km-property-boolean label="Audit Logging"
                            [value]="cluster.spec.auditLogging?.enabled">
       </km-property-boolean>
+      <km-property *ngIf="cluster.spec.auditLogging?.enabled">
+        <div key>Audit Policy Preset</div>
+        <div value>{{cluster.spec.auditLogging.policyPreset || 'custom'}}</div>
+      </km-property>
       <km-property-boolean label="User SSH Key Agent"
                            [value]="cluster.spec.enableUserSSHKeyAgent">
       </km-property-boolean>

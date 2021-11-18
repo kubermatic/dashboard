@@ -18,7 +18,7 @@ import {OPAService} from '@core/services/opa';
 import {NotificationService} from '@core/services/notification';
 import {GatekeeperConfig, GatekeeperConfigSpec} from '@shared/entity/opa';
 import {getIconClassForButton} from '@shared/utils/common-utils';
-import {dump, load} from 'js-yaml';
+import * as y from 'js-yaml';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {take} from 'rxjs/operators';
@@ -89,14 +89,14 @@ export class GatekeeperConfigDialog implements OnInit, OnDestroy {
     if (this.data.mode === Mode.Edit) {
       const spec = this.data.gatekeeperConfig.spec;
       if (!_.isEmpty(spec)) {
-        this.spec = dump(spec);
+        this.spec = y.dump(spec);
       }
     }
   }
 
   private _getSpec(): GatekeeperConfigSpec {
     let spec = new GatekeeperConfigSpec();
-    const raw = load(this.spec) as GatekeeperConfigSpec;
+    const raw = y.load(this.spec) as GatekeeperConfigSpec;
     if (!_.isEmpty(raw)) {
       spec = raw;
     }

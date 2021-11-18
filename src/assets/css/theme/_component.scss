@@ -29,7 +29,6 @@
 @import 'src/app/shared/components/editor/theme';
 @import 'src/app/shared/components/property-usage/theme';
 @import 'src/app/shared/components/number-stepper/theme';
-@import 'src/app/wizard/step/cluster/theme';
 @import 'src/app/shared/components/eol/theme';
 @import 'src/app/shared/components/cluster-summary/theme';
 @import 'src/app/shared/components/chip/theme';
@@ -55,7 +54,6 @@
   @include theme-install-addon-dialog-component($colors);
   @include theme-sidenav-component($colors);
   @include theme-version-picker-component($colors);
-  @include theme-wizard-cluster-step-component($colors);
   @include theme-cluster-summary-component($colors);
   @include theme-eol-component($colors);
   @include theme-chip-component($colors);
