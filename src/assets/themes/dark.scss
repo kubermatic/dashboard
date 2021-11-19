@@ -151,7 +151,9 @@ $theme-dark: map.merge($theme-dark, (foreground: $foreground));
 .km-swagger-container {
   .swagger-ui {
     .model-toggle {
+      /* stylelint-disable */
       filter: invert(0.25) brightness(100) contrast(100);
+      /* stylelint-enable */
     }
   }
 }
