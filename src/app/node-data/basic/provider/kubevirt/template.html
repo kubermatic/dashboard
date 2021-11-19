@@ -16,21 +16,12 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column"
       fxLayoutGap="8px">
-  <mat-form-field fxFlex>
-    <mat-label>Number of CPUs</mat-label>
-    <input matInput
-           required
-           [formControlName]="Controls.CPUs"
-           type="number"
-           min="1"
-           autocomplete="off">
-    <mat-error *ngIf="form.get(Controls.CPUs).hasError('required')">
-      Number of CPUs is <strong>required</strong>.
-    </mat-error>
-    <mat-error *ngIf="form.get(Controls.CPUs).hasError('pattern')">
-      Wrong quantity format, use values like 2, 3Gi and 2M.
-    </mat-error>
-  </mat-form-field>
+  <km-number-stepper [formControlName]="Controls.CPUs"
+                     mode="errors"
+                     label="Number of CPUs"
+                     min="1"
+                     required>
+  </km-number-stepper>
 
   <mat-form-field fxFlex>
     <mat-label>Memory</mat-label>

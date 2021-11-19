@@ -91,15 +91,13 @@ limitations under the License.
           </mat-hint>
         </mat-form-field>
 
-        <mat-form-field>
-          <mat-label>Number of Backups to Keep</mat-label>
-          <input [formControlName]="Controls.Keep"
-                 type="number"
-                 min="1"
-                 matInput
-                 required>
-          <mat-hint>How many backups should be kept before deleting the oldest ones.</mat-hint>
-        </mat-form-field>
+        <km-number-stepper [formControlName]="Controls.Keep"
+                           mode="errors"
+                           label="Number of Backups to Keep"
+                           hint="How many backups should be kept before deleting the oldest ones."
+                           min="1"
+                           required>
+        </km-number-stepper>
       </div>
     </form>
   </mat-dialog-content>

@@ -1,0 +1,46 @@
+<!--
+Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<button mat-icon-button
+        class="km-stepper-button left"
+        [disabled]="disabled"
+        (click)="onDecrease()">
+  -
+</button>
+<mat-form-field class="km-number-stepper-input"
+                [ngClass]="mode === 'hint' || mode === 'errors' || mode === 'all' ? 'message' : ''">
+  <mat-label *ngIf="!!label">{{label}}</mat-label>
+  <input #input="ngModel"
+         matInput
+         type="number"
+         autocomplete="off"
+         [pattern]="pattern"
+         [disabled]="disabled"
+         [required]="required"
+         [(ngModel)]="value"
+         [min]="min"
+         [max]="max"
+         [id]="id"
+         [attr.cdkFocusInitial]="focus ? focus : null">
+  <mat-error *ngFor="let message of errors">{{message}}</mat-error>
+  <mat-hint *ngIf="(mode === 'hint' || mode === 'all') && !!hint">{{hint}}</mat-hint>
+</mat-form-field>
+<button mat-icon-button
+        class="km-stepper-button right"
+        [disabled]="disabled"
+        (click)="onIncrease()">
+  +
+</button>
