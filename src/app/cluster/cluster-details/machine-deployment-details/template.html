@@ -161,6 +161,7 @@ limitations under the License.
   </mat-card>
 
   <km-node-list [cluster]="cluster"
+                [mdName]="machineDeployment.name"
                 [nodes]="nodes"
                 [nodesMetrics]="metrics"
                 (deleteNode)="loadNodes()"

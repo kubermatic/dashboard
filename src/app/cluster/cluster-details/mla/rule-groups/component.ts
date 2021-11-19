@@ -113,11 +113,11 @@ export class RuleGroupsComponent implements OnInit, OnChanges, OnDestroy {
   add(): void {
     const dialogConfig: MatDialogConfig = {
       data: {
-        title: 'Add Rule Group',
+        title: 'Create Rule Group',
         projectId: this.projectID,
-        clusterId: this.cluster.id,
+        cluster: this.cluster,
         mode: Mode.Add,
-        confirmLabel: 'Add',
+        confirmLabel: 'Create',
       },
     };
 
@@ -129,7 +129,7 @@ export class RuleGroupsComponent implements OnInit, OnChanges, OnDestroy {
       data: {
         title: 'Edit Rule Group',
         projectId: this.projectID,
-        clusterId: this.cluster.id,
+        cluster: this.cluster,
         mode: Mode.Edit,
         ruleGroup: ruleGroup,
         confirmLabel: 'Edit',
@@ -146,7 +146,7 @@ export class RuleGroupsComponent implements OnInit, OnChanges, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete Rule Group',
-        message: `Are you sure you want to delete the Rule Group ${ruleGroupName}?`,
+        message: `Delete <b>${ruleGroupName}</b> recording and alerting rule group of <b>${this.cluster.name}</b> cluster permanently?`,
         confirmLabel: 'Delete',
       },
     };

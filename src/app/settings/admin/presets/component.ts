@@ -180,6 +180,8 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
         steps: ['Provider', 'Settings'],
         mode: Mode.Add,
         preset: preset,
+        descriptionProvider: `Add provider to <b>${preset.name}</b> preset`,
+        descriptionSettings: `Specify provider settings for <b>${preset.name}</b> provider preset`,
       } as PresetDialogData,
     };
 
@@ -197,6 +199,8 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
       data: {
         title: 'Edit Preset Provider',
         steps: ['Provider', 'Settings'],
+        descriptionProvider: `Choose a provider of <b>${preset.name}</b> provider preset to edit`,
+        descriptionSettings: `Edit provider settings of <b>${preset.name}</b> provider preset`,
         mode: Mode.Edit,
         preset: preset,
       } as PresetDialogData,

@@ -16,10 +16,11 @@ import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, Si
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {ApiService} from '@core/services/api';
+import {Addon, AddonConfig, getAddonLogoData, hasAddonLogoData} from '@shared/entity/addon';
+import {Cluster} from '@shared/entity/cluster';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
-import {Addon, AddonConfig, getAddonLogoData, hasAddonLogoData} from '../../entity/addon';
 import {ConfirmationDialogComponent} from '../confirmation-dialog/component';
 import {EditAddonDialogComponent} from './edit-addon-dialog/component';
 import {InstallAddonDialogComponent} from './install-addon-dialog/component';
@@ -31,6 +32,7 @@ import {InstallAddonDialogComponent} from './install-addon-dialog/component';
 })
 export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() addons: Addon[] = [];
+  @Input() cluster: Cluster;
   @Input() isClusterReady = true;
   @Input() canEdit = true;
 
@@ -138,6 +140,7 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
   edit(addon: Addon): void {
     const dialog = this._matDialog.open(EditAddonDialogComponent);
     dialog.componentInstance.addon = addon;
+    dialog.componentInstance.cluster = this.cluster;
     dialog.componentInstance.addonConfig = this.addonConfigs.get(addon.name);
     dialog
       .afterClosed()
@@ -153,7 +156,7 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
     const config: MatDialogConfig = {
       data: {
         title: 'Delete Addon',
-        message: `Delete ${addon.name} addon permanently?`,
+        message: `Delete <b>${addon.name}</b> addon of <b>${this.cluster.name}</b> cluster permanently?`,
         confirmLabel: 'Delete',
       },
     };

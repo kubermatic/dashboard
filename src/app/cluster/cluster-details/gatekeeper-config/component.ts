@@ -90,7 +90,7 @@ export class GatekeeperConfigComponent implements OnChanges, OnDestroy {
       data: {
         title: 'Add Gatekeeper Config',
         projectId: this.projectID,
-        clusterId: this.cluster.id,
+        cluster: this.cluster,
         mode: Mode.Add,
         confirmLabel: 'Add',
       },
@@ -104,7 +104,7 @@ export class GatekeeperConfigComponent implements OnChanges, OnDestroy {
       data: {
         title: 'Edit Gatekeeper Config',
         projectId: this.projectID,
-        clusterId: this.cluster.id,
+        cluster: this.cluster,
         gatekeeperConfig: this.gatekeeperConfig,
         mode: Mode.Edit,
         confirmLabel: 'Edit',
@@ -120,7 +120,7 @@ export class GatekeeperConfigComponent implements OnChanges, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete Gatekeeper Config',
-        message: 'Are you sure you want to delete the Gatekeeper Config?',
+        message: `Delete OPA gatekeeper config of <b>${this.cluster.name}</b> cluster permanently?`,
         confirmLabel: 'Delete',
       },
     };

@@ -17,6 +17,8 @@ import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {fakeAlertmanagerConfig} from '@app/testing/fake-data/mla';
+import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
+import {fakeProject} from '@app/testing/fake-data/project';
 import {asyncData} from '@app/testing/services/api-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';
@@ -54,7 +56,7 @@ describe('AlertmanagerConfigDialog', () => {
             useValue: {
               title: '',
               projectId: '',
-              clusterId: '',
+              cluster: {},
               confirmLabel: '',
             },
           },
@@ -72,8 +74,8 @@ describe('AlertmanagerConfigDialog', () => {
 
       component.data = {
         title: 'Edit Alertmanager Config',
-        projectId: '123ab4cd5e',
-        clusterId: '4k6txp5sq',
+        projectId: fakeProject().id,
+        cluster: fakeDigitaloceanCluster(),
         confirmLabel: 'Edit',
         alertmanagerConfig: fakeAlertmanagerConfig(),
       };

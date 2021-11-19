@@ -16,6 +16,7 @@ limitations under the License.
 <div id="km-edit-project-dialog">
   <km-dialog-title>Edit Project</km-dialog-title>
   <mat-dialog-content>
+    <p class="km-dialog-context-description">Edit <strong>{{project.name}}</strong> project</p>
     <form [formGroup]="form"
           fxLayout="column"
           (submit)="editProject()"

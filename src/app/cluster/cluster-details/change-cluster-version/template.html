@@ -25,6 +25,8 @@ limitations under the License.
                        type="badge"></km-cluster-type-eol>
 </km-dialog-title>
 <mat-dialog-content>
+  <p class="km-dialog-context-description">Change Kubernetes version of <b>{{cluster.name}}</b> cluster</p>
+
   <mat-form-field>
     <mat-label>Control Plane Version</mat-label>
     <mat-select [(ngModel)]="selectedVersion"

@@ -28,6 +28,7 @@ import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialo
 import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
 import {SSHKey} from '@shared/entity/ssh-key';
+import {Project} from '@shared/entity/project';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import _ from 'lodash';
@@ -43,7 +44,7 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
   loading = true;
   sshKeys: SSHKey[] = [];
   userGroup: string;
-  projectID: string;
+  project: Project;
   isShowPublicKey = [];
   displayedColumns: string[] = ['stateArrow', 'name', 'fingerprint', 'creationTimestamp', 'actions'];
   toggledColumns: string[] = ['publickey'];
@@ -84,8 +85,8 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
     this._projectService.selectedProject
       .pipe(
         switchMap(project => {
-          this.projectID = project.id;
-          return this._userService.getCurrentUserGroup(this.projectID);
+          this.project = project;
+          return this._userService.getCurrentUserGroup(this.project.id);
         })
       )
       .pipe(
@@ -119,7 +120,7 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
   refreshSSHKeys(): void {
     const retries = 3;
     this._api
-      .getSSHKeys(this.projectID)
+      .getSSHKeys(this.project.id)
       .pipe(retry(retries))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(res => {
@@ -135,7 +136,7 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
 
   addSshKey(): void {
     const dialogRef = this.dialog.open(AddSshKeyDialogComponent);
-    dialogRef.componentInstance.projectID = this.projectID;
+    dialogRef.componentInstance.projectID = this.project.id;
 
     dialogRef.afterClosed().subscribe(result => {
       result && this.refreshSSHKeys();
@@ -154,7 +155,7 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
       data: {
         dialogId: 'km-delete-sshkey-dialog',
         title: 'Delete SSH Key',
-        message: `Delete SSH key ${sshKey.name} permanently?`,
+        message: `Delete <b>${sshKey.name}</b> SSH key of <b>${this.project.name}</b> project permanently?`,
         confirmLabel: 'Delete',
         confirmLabelId: 'km-delete-sshkey-dialog-btn',
       },
@@ -166,10 +167,10 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
     dialogRef
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
-      .pipe(switchMap(_ => this._api.deleteSSHKey(sshKey.id, this.projectID)))
+      .pipe(switchMap(_ => this._api.deleteSSHKey(sshKey.id, this.project.id)))
       .pipe(take(1))
       .subscribe(() => {
-        this._notificationService.success(`The ${sshKey.name} SSH key was removed from the ${this.projectID} project`);
+        this._notificationService.success(`The ${sshKey.name} SSH key was removed from the ${this.project.id} project`);
         this._googleAnalyticsService.emitEvent('sshKeyOverview', 'SshKeyDeleted');
       });
   }

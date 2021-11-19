@@ -18,6 +18,10 @@ limitations under the License.
   <km-dialog-title>Provider Settings</km-dialog-title>
 
   <mat-dialog-content>
+    <p class="km-dialog-context-description">
+      Edit {{providerDisplayName(cluster.spec.cloud)}} provider settings of <b>{{cluster.name}}</b> cluster
+    </p>
+
     <km-anexia-provider-settings *ngIf="!!cluster.spec.cloud.anexia"></km-anexia-provider-settings>
     <km-alibaba-provider-settings *ngIf="!!cluster.spec.cloud.alibaba"></km-alibaba-provider-settings>
     <km-aws-provider-settings *ngIf="!!cluster.spec.cloud.aws"></km-aws-provider-settings>

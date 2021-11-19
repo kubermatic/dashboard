@@ -57,6 +57,7 @@ enum ToggleableColumn {
 })
 export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() cluster: Cluster;
+  @Input() mdName: string;
   @Input() nodes: Node[] = [];
   @Input() nodesMetrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
   @Input() projectID: string;
@@ -160,7 +161,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete Node',
-        message: `Are you sure you want to permanently delete node ${node.name}?`,
+        message: `Delete <b>${node.name}</b> node of <b>${this.mdName}</b> machine deployment of <b>${this.cluster.name}</b> cluster permanently?`,
         confirmLabel: 'Delete',
       },
     };

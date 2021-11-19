@@ -14,7 +14,8 @@
 
 import {Component, Input, OnInit} from '@angular/core';
 import {ClusterService} from '@core/services/cluster';
-import {Cluster, ProviderSettingsPatch} from '@shared/entity/cluster';
+import {Cluster, CloudSpec, ProviderSettingsPatch} from '@shared/entity/cluster';
+import {NodeProvider, NodeProviderConstants} from '@shared/model/NodeProviderConstants';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
@@ -37,5 +38,11 @@ export class EditProviderSettingsComponent implements OnInit {
     this._clusterService.providerSettingsPatchChanges$
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(patch => (this.providerSettingsPatch = patch));
+  }
+
+  providerDisplayName(cloud: CloudSpec): string {
+    const provider = Cluster.getProvider(cloud),
+      nodeProvider = Object.keys(NodeProvider)[(Object.values(NodeProvider) as string[]).indexOf(provider)];
+    return NodeProviderConstants.displayName(NodeProvider[nodeProvider]);
   }
 }
