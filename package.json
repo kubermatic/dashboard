@@ -94,7 +94,7 @@
     "cypress-fail-fast": "3.2.0",
     "del": "6.0.0",
     "eslint-plugin-compat": "3.13.0",
-    "eslint-plugin-rxjs": "4.0.2",
+    "eslint-plugin-rxjs": "4.0.3",
     "gts": "3.1.0",
     "husky": "7.0.4",
     "jest": "27.3.1",
