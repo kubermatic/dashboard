@@ -16,18 +16,29 @@
 
 @mixin theme-api-docs-component($colors) {
   .km-swagger-container {
-    .info *,
-    .schemes-title,
-    .model-title,
-    .swagger-ui a.nostyle,
-    .swagger-ui .opblock-summary-description,
-    .swagger-ui .markdown p,
-    .swagger-ui .title {
-      color: map.get($colors, text);
-    }
+    .swagger-ui {
+      .info *,
+      .base-url,
+      .schemes-title,
+      .model-title,
+      .opblock-summary-description,
+      .markdown p,
+      .title,
+      .tablinks,
+      .parameters *,
+      .responses-header *,
+      .response *,
+      a.nostyle {
+        color: map.get($colors, text);
+      }
 
-    .scheme-container {
-      background-color: transparent;
+      svg {
+        fill: map.get($colors, text);
+      }
+
+      .scheme-container {
+        background-color: transparent;
+      }
     }
   }
 }
