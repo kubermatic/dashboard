@@ -203,15 +203,15 @@ limitations under the License.
                                        [formControlName]="Controls.AuditPolicyPreset"
                                        group="auditLogging">
                 <mat-button-toggle [value]="AuditPolicyPreset.Custom"
-                matTooltip="Sets up cluster with a metadata audit policy that can be edited after the cluster has been created.">
+                                   matTooltip="Sets up cluster with a metadata audit policy that can be edited after the cluster has been created.">
                   custom
                 </mat-button-toggle>
                 <mat-button-toggle [value]="AuditPolicyPreset.Metadata"
-                matTooltip="Logs metadata for all requests received by the Kubernetes API.">
+                                   matTooltip="Logs metadata for all requests received by the Kubernetes API.">
                   metadata
                 </mat-button-toggle>
                 <mat-button-toggle [value]="AuditPolicyPreset.Minimal"
-                matTooltip="Logs extended information about key security concerns like workload modifications and access to sensitive information.">
+                                   matTooltip="Logs extended information about key security concerns like workload modifications and access to sensitive information.">
                   minimal
                 </mat-button-toggle>
                 <mat-button-toggle [value]="AuditPolicyPreset.Recommended"
