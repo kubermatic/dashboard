@@ -57,8 +57,8 @@ export class NodeDataOpenstackProvider {
                 .applicationCredentialPassword(
                   this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialSecret
                 )
-                .tenant(this._clusterSpecService.cluster.spec.cloud.openstack.tenant)
-                .tenantID(this._clusterSpecService.cluster.spec.cloud.openstack.tenantID)
+                .project(this._clusterSpecService.cluster.spec.cloud.openstack.project)
+                .projectID(this._clusterSpecService.cluster.spec.cloud.openstack.projectID)
                 .datacenter(this._clusterSpecService.cluster.spec.cloud.dc)
                 .credential(this._presetService.preset)
                 .flavors(onLoadingCb)
@@ -116,8 +116,8 @@ export class NodeDataOpenstackProvider {
                 .applicationCredentialPassword(
                   this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialSecret
                 )
-                .tenant(this._clusterSpecService.cluster.spec.cloud.openstack.tenant)
-                .tenantID(this._clusterSpecService.cluster.spec.cloud.openstack.tenantID)
+                .project(this._clusterSpecService.cluster.spec.cloud.openstack.project)
+                .projectID(this._clusterSpecService.cluster.spec.cloud.openstack.projectID)
                 .datacenter(this._clusterSpecService.cluster.spec.cloud.dc)
                 .credential(this._presetService.preset)
                 .availabilityZones(onLoadingCb)
