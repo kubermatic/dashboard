@@ -174,7 +174,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
   getDeleteTooltip(member: Member): string {
     return this.currentUser && member && this.currentUser.email === member.email
       ? 'You cannot edit your own data and permissions'
-      : 'Delete member';
+      : 'Remove member';
   }
 
   deleteMember(member: Member): void {
@@ -182,9 +182,9 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
       disableClose: false,
       hasBackdrop: true,
       data: {
-        title: 'Delete Member',
-        message: `Delete ${member.name} member from the ${this._selectedProject.name} project?`,
-        confirmLabel: 'Delete',
+        title: 'Remove Member',
+        message: `Remove <b>${member.name}</b> from <b>${this._selectedProject.name}</b> project?`,
+        confirmLabel: 'Remove',
       },
     };
 

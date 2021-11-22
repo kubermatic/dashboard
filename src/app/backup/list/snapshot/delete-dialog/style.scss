@@ -1,4 +1,4 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2021 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,20 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'sass:map';
-
-@mixin theme-footer-component($colors) {
-  .km-footer {
-    background-color: map.get($colors, background);
-
-    * {
-      color: map.get($colors, footer-text);
-    }
-
-    i {
-      /* stylelint-disable */
-      filter: grayscale(1) brightness(0) invert(0.75);
-      /* stylelint-enable */
-    }
-  }
+.warning-container {
+  margin-top: 20px;
 }

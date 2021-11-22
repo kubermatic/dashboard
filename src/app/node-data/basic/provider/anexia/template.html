@@ -16,35 +16,26 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column"
       fxLayoutGap="8px">
-  <mat-form-field fxFlex>
-    <mat-label>Number of CPUs</mat-label>
-    <input [formControlName]="Controls.Cpus"
-           min="1"
-           type="number"
-           autocomplete="off"
-           matInput
-           required>
-  </mat-form-field>
+  <km-number-stepper [formControlName]="Controls.Cpus"
+                     mode="errors"
+                     label="Number of CPUs"
+                     min="1"
+                     required>
+  </km-number-stepper>
 
-  <mat-form-field fxFlex>
-    <mat-label>Memory in MB</mat-label>
-    <input [formControlName]="Controls.Memory"
-           min="2048"
-           type="number"
-           autocomplete="off"
-           matInput
-           required>
-  </mat-form-field>
+  <km-number-stepper [formControlName]="Controls.Memory"
+                     mode="errors"
+                     label="Memory in MB"
+                     min="2048"
+                     required>
+  </km-number-stepper>
 
-  <mat-form-field fxFlex>
-    <mat-label>Disk Size in GB</mat-label>
-    <input [formControlName]="Controls.DiskSize"
-           min="1"
-           type="number"
-           autocomplete="off"
-           matInput
-           required>
-  </mat-form-field>
+  <km-number-stepper [formControlName]="Controls.DiskSize"
+                     mode="errors"
+                     label="Disk Size in GB"
+                     min="1"
+                     required>
+  </km-number-stepper>
 
   <km-autocomplete label="Template ID"
                    [formControlName]="Controls.TemplateID"

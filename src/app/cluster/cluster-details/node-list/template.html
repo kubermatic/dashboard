@@ -240,7 +240,7 @@ limitations under the License.
             </km-property>
             <km-property *ngIf="element.spec.cloud.aws?.spotInstanceMaxPrice">
               <div key>Spot Instance Max Price</div>
-              <div value>{{element.spec.cloud.aws.spotInstanceMaxPrice | currency:'USD'}}</div>
+              <div value>{{element.spec.cloud.aws.spotInstanceMaxPrice | currency:'USD':'symbol':'1.0-4'}}</div>
             </km-property>
 
             <km-property *ngIf="element.spec.cloud.openstack">

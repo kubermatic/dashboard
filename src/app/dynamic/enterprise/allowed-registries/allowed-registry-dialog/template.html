@@ -22,6 +22,9 @@ END OF TERMS AND CONDITIONS
 
 <km-dialog-title>{{data.title}}</km-dialog-title>
 <mat-dialog-content>
+  <p *ngIf="data.mode === 'edit'"
+     class="km-dialog-context-description">Edit <b>{{data.allowedRegistry.name}}</b> project</p>
+
   <form [formGroup]="form"
         fxLayout="column">
     <mat-form-field fxFlex>

@@ -129,7 +129,7 @@ export class AllowedRegistriesComponent extends DynamicTab implements OnInit, On
       hasBackdrop: true,
       data: {
         title: 'Delete Allowed Registry',
-        message: `Are you sure you want to delete the allowed registry ${allowedRegistry.name}?`,
+        message: `Delete <b>${allowedRegistry.name}</b> allowed registry permanently?`,
         confirmLabel: 'Delete',
       },
     };

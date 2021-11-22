@@ -14,31 +14,8 @@
 
 @use 'sass:map';
 
-@mixin theme-api-docs-component($colors) {
-  .km-swagger-container {
-    .swagger-ui {
-      .info *,
-      .base-url,
-      .schemes-title,
-      .model-title,
-      .opblock-summary-description,
-      .markdown p,
-      .title,
-      .tablinks,
-      .parameters *,
-      .responses-header *,
-      .response *,
-      a.nostyle {
-        color: map.get($colors, text);
-      }
-
-      svg {
-        fill: map.get($colors, text);
-      }
-
-      .scheme-container {
-        background-color: transparent;
-      }
-    }
+@mixin theme-number-stepper-component($colors) {
+  .km-stepper-button {
+    background-color: map.get($colors, divider);
   }
 }

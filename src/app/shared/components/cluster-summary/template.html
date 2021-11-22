@@ -272,13 +272,13 @@ limitations under the License.
             <div key>Username</div>
             <div value>{{cluster.spec.cloud?.openstack.username}}</div>
           </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.openstack.tenant">
+          <km-property *ngIf="cluster.spec.cloud?.openstack.project">
             <div key>Project</div>
-            <div value>{{cluster.spec.cloud?.openstack.tenant}}</div>
+            <div value>{{cluster.spec.cloud?.openstack.project}}</div>
           </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.openstack.tenantID">
+          <km-property *ngIf="cluster.spec.cloud?.openstack.projectID">
             <div key>Project ID</div>
-            <div value>{{cluster.spec.cloud?.openstack.tenantID}}</div>
+            <div value>{{cluster.spec.cloud?.openstack.projectID}}</div>
           </km-property>
           <km-property *ngIf="cluster.spec.cloud?.openstack.network">
             <div key>Network Name</div>
@@ -427,7 +427,7 @@ limitations under the License.
             </km-property>
             <km-property *ngIf="machineDeployment.spec.template.cloud?.aws?.spotInstanceMaxPrice > 0">
               <div key>Spot Instance Max Price</div>
-              <div value>{{machineDeployment.spec.template.cloud.aws.spotInstanceMaxPrice | currency:'USD'}}</div>
+              <div value>{{machineDeployment.spec.template.cloud.aws.spotInstanceMaxPrice | currency:'USD':'symbol':'1.0-4'}}</div>
             </km-property>
           </ng-container>
 

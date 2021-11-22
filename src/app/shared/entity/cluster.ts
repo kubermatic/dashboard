@@ -170,8 +170,8 @@ export class OpenstackCloudSpec {
   applicationCredentialSecret?: string;
   username: string;
   password: string;
-  tenant: string;
-  tenantID: string;
+  project: string;
+  projectID: string;
   domain: string;
   network: string;
   securityGroups: string;
@@ -437,8 +437,8 @@ export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
         securityGroups: '',
         network: '',
         domain: '',
-        tenant: '',
-        tenantID: '',
+        project: '',
+        projectID: '',
         subnetID: '',
       } as OpenstackCloudSpec;
     case NodeProvider.BRINGYOUROWN:

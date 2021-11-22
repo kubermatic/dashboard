@@ -46,16 +46,13 @@ limitations under the License.
     </div>
   </km-combobox>
 
-  <mat-form-field fxFlex>
-    <mat-label>Disk Size in GB</mat-label>
-    <input [formControlName]="Controls.DiskSize"
-           min="10"
-           max="16000"
-           type="number"
-           autocomplete="off"
-           matInput
-           required>
-  </mat-form-field>
+  <km-number-stepper [formControlName]="Controls.DiskSize"
+                     mode="errors"
+                     label="Disk Size in GB"
+                     min="10"
+                     max="16000"
+                     required>
+  </km-number-stepper>
 
   <km-autocomplete label="VSwitch ID"
                    [formControlName]="Controls.VSwitchID"
@@ -64,14 +61,13 @@ limitations under the License.
                    required="true">
   </km-autocomplete>
 
-  <mat-form-field fxFlex>
-    <mat-label>Internet Max Bandwidth Out</mat-label>
-    <input [formControlName]="Controls.InternetMaxBandwidthOut"
-           type="number"
-           autocomplete="off"
-           matInput
-           required>
-  </mat-form-field>
+  <km-number-stepper [formControlName]="Controls.InternetMaxBandwidthOut"
+                     mode="errors"
+                     label="Internet Max Bandwidth Out"
+                     min="10"
+                     max="16000"
+                     required>
+  </km-number-stepper>
 
   <km-combobox #zoneCombobox
                [required]="true"

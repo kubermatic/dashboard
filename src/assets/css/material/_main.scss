@@ -114,6 +114,10 @@ km-wizard {
 
     p {
       margin: 0 0 8px;
+
+      &.km-dialog-context-description {
+        margin-bottom: 30px;
+      }
     }
 
     .km-dialog-warning {
@@ -488,7 +492,9 @@ button {
       margin-right: 12px;
     }
   }
+}
 
+button {
   &.mat-icon-button {
     @include mixins.size(45px);
 

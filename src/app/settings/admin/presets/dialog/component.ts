@@ -28,6 +28,9 @@ export interface PresetDialogData {
   mode: Mode;
   steps: StepRegistry[];
   preset: Preset;
+  descriptionPreset?: string;
+  descriptionProvider?: string;
+  descriptionSettings?: string;
 }
 
 export enum Mode {
@@ -89,6 +92,19 @@ export class PresetDialogComponent implements OnInit, OnDestroy {
       this.form.get(this.active).invalid ||
       (this.active === StepRegistry.Settings && !this._presetDialogService.isSettingsStepValid)
     );
+  }
+
+  get description(): string {
+    switch (this.active) {
+      case StepRegistry.Preset:
+        return this.data.descriptionPreset;
+      case StepRegistry.Provider:
+        return this.data.descriptionProvider;
+      case StepRegistry.Settings:
+        return this.data.descriptionSettings;
+      default:
+        return '';
+    }
   }
 
   ngOnInit(): void {

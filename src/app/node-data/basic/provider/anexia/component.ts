@@ -87,9 +87,9 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
     this.form = this._builder.group({
       [Controls.VlanID]: this._builder.control('', Validators.required),
       [Controls.TemplateID]: this._builder.control('', Validators.required),
-      [Controls.Cpus]: this._builder.control(this._defaultCpus, Validators.required),
-      [Controls.Memory]: this._builder.control(this._defaultMemory, Validators.required),
-      [Controls.DiskSize]: this._builder.control(this._defaultDiskSize, Validators.required),
+      [Controls.Cpus]: this._builder.control(this._defaultCpus),
+      [Controls.Memory]: this._builder.control(this._defaultMemory),
+      [Controls.DiskSize]: this._builder.control(this._defaultDiskSize),
     });
 
     this._init();

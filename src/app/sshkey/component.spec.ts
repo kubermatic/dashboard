@@ -83,7 +83,7 @@ describe('SSHKeyComponent', () => {
     noop = TestBed.createComponent(NoopConfirmDialogComponent);
 
     activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
-    activatedRoute.testParamMap = {projectID: '4k6txp5sq'};
+    activatedRoute.testParamMap = {project: '4k6txp5sq'};
 
     fixture.detectChanges();
     fixture.debugElement.injector.get(Router);
@@ -95,7 +95,7 @@ describe('SSHKeyComponent', () => {
 
   it('should open delete ssh key confirmation dialog & call deleteSSHKey()', fakeAsync(() => {
     const waitTime = 15000;
-    component.projectID = fakeProject().id;
+    component.project = fakeProject();
     component.sshKeys = fakeSSHKeys();
     const event = new MouseEvent('click');
 

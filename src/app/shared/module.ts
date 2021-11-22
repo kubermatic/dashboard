@@ -54,6 +54,7 @@ import {CIDRFormComponent} from '@shared/components/cidr-form/component';
 import {ClusterFromTemplateDialogComponent} from '@shared/components/cluster-from-template/component';
 import {ClusterSummaryComponent} from '@shared/components/cluster-summary/component';
 import {EventCardComponent} from '@shared/components/event-card/component';
+import {NumberStepperComponent} from '@shared/components/number-stepper/component';
 import {SaveClusterTemplateDialogComponent} from '@shared/components/save-cluster-template/component';
 import {SelectClusterTemplateDialogComponent} from '@shared/components/select-cluster-template/component';
 import {TabCardComponent} from '@shared/components/tab-card/component';
@@ -184,6 +185,7 @@ const components: any[] = [
   SaveClusterTemplateDialogComponent,
   SelectClusterTemplateDialogComponent,
   SizeFormatterPipe,
+  NumberStepperComponent,
 ];
 
 const directives: any[] = [AutofocusDirective, ThrottleClickDirective, OptionDirective];

@@ -17,6 +17,8 @@ import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {fakeConstraints, fakeConstraintTemplates} from '@app/testing/fake-data/opa';
+import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
+import {fakeProject} from '@app/testing/fake-data/project';
 import {asyncData} from '@app/testing/services/api-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';
@@ -59,7 +61,7 @@ describe('ConstraintDialog', () => {
             useValue: {
               title: '',
               projectId: '',
-              clusterId: '',
+              cluster: {},
               mode: '',
               confirmLabel: '',
             },
@@ -79,8 +81,8 @@ describe('ConstraintDialog', () => {
 
       component.data = {
         title: 'Add Constraint',
-        projectId: '123ab4cd5e',
-        clusterId: '4k6txp5sq',
+        projectId: fakeProject().id,
+        cluster: fakeDigitaloceanCluster(),
         mode: Mode.Add,
         confirmLabel: 'Add',
       };
@@ -117,8 +119,8 @@ describe('ConstraintDialog', () => {
 
       component.data = {
         title: 'Edit Constraint',
-        projectId: '123ab4cd5e',
-        clusterId: '4k6txp5sq',
+        projectId: fakeProject().id,
+        cluster: fakeDigitaloceanCluster(),
         mode: Mode.Edit,
         confirmLabel: 'Edit',
         constraint: fakeConstraints()[0],

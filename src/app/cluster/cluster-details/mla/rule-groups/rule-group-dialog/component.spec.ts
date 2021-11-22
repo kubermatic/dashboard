@@ -17,6 +17,8 @@ import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {fakeRuleGroups} from '@app/testing/fake-data/mla';
+import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
+import {fakeProject} from '@app/testing/fake-data/project';
 import {asyncData} from '@app/testing/services/api-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';
@@ -57,7 +59,7 @@ describe('RuleGroupDialog', () => {
             useValue: {
               title: '',
               projectId: '',
-              clusterId: '',
+              cluster: {},
               confirmLabel: '',
             },
           },
@@ -76,8 +78,8 @@ describe('RuleGroupDialog', () => {
 
       component.data = {
         title: 'Add Rule Group',
-        projectId: '123ab4cd5e',
-        clusterId: '4k6txp5sq',
+        projectId: fakeProject().id,
+        cluster: fakeDigitaloceanCluster(),
         mode: Mode.Add,
         confirmLabel: 'Add',
       };
@@ -113,8 +115,8 @@ describe('RuleGroupDialog', () => {
 
       component.data = {
         title: 'Edit Rule Group',
-        projectId: '123ab4cd5e',
-        clusterId: '4k6txp5sq',
+        projectId: fakeProject().id,
+        cluster: fakeDigitaloceanCluster(),
         confirmLabel: 'Edit',
         mode: Mode.Edit,
         ruleGroup: fakeRuleGroups()[0],

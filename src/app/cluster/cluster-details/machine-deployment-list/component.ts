@@ -110,7 +110,7 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
 
   showRestartDialog(md: MachineDeployment): void {
     this._nodeService
-      .showMachineDeploymentRestartDialog(md, this.cluster.id, this.projectID, this.changeMachineDeployment)
+      .showMachineDeploymentRestartDialog(md, this.cluster, this.projectID, this.changeMachineDeployment)
       .subscribe(() => {});
   }
 
@@ -133,7 +133,7 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
 
   showDeleteDialog(md: MachineDeployment): void {
     this._nodeService
-      .showMachineDeploymentDeleteDialog(md, this.cluster.id, this.projectID, this.changeMachineDeployment)
+      .showMachineDeploymentDeleteDialog(md, this.cluster, this.projectID, this.changeMachineDeployment)
       .subscribe(() => {});
   }
 

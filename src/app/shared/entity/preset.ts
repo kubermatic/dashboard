@@ -136,8 +136,8 @@ export class KubevirtPresetSpec extends PresetProviderSpec {
 export class OpenstackPresetSpec extends PresetProviderSpec {
   username: string;
   password: string;
-  tenant: string;
-  tenantID: string;
+  project: string;
+  projectID: string;
   domain: string;
 
   network?: string;

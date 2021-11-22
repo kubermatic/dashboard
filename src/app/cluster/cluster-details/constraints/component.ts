@@ -141,7 +141,7 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
       data: {
         title: 'Add Constraint',
         projectId: this.projectID,
-        clusterId: this.cluster.id,
+        cluster: this.cluster,
         mode: Mode.Add,
         confirmLabel: 'Add',
       },
@@ -156,7 +156,7 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
       data: {
         title: 'Edit Constraint',
         projectId: this.projectID,
-        clusterId: this.cluster.id,
+        cluster: this.cluster,
         constraint: constraint,
         mode: Mode.Edit,
         confirmLabel: 'Edit',
@@ -173,7 +173,7 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete Constraint',
-        message: `Are you sure you want to delete the constraint ${constraint.name}?`,
+        message: `Delete <b>${constraint.name}</b> OPA constraint of <b>${this.cluster.name}</b> cluster permanently?`,
         confirmLabel: 'Delete',
       },
     };

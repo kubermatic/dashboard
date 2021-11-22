@@ -111,7 +111,7 @@ export class RestoreListComponent implements OnInit, OnDestroy {
     const config: MatDialogConfig = {
       data: {
         title: 'Delete Restore Object',
-        message: `Delete "${restore.name}" restore object permanently?`,
+        message: `Delete <b>${restore.name}</b> restore object permanently?`,
         confirmLabel: 'Delete',
       } as ConfirmationDialogConfig,
     };

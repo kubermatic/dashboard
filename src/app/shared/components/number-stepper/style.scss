@@ -12,33 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'sass:map';
+:host {
+  display: flex;
+  flex: 0;
+  flex-direction: row;
+}
 
-@mixin theme-api-docs-component($colors) {
-  .km-swagger-container {
-    .swagger-ui {
-      .info *,
-      .base-url,
-      .schemes-title,
-      .model-title,
-      .opblock-summary-description,
-      .markdown p,
-      .title,
-      .tablinks,
-      .parameters *,
-      .responses-header *,
-      .response *,
-      a.nostyle {
-        color: map.get($colors, text);
-      }
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  appearance: none;
+}
 
-      svg {
-        fill: map.get($colors, text);
-      }
+.km-stepper-button {
+  height: 45.5px;
+  width: 30px;
 
-      .scheme-container {
-        background-color: transparent;
-      }
+  &.mat-icon-button {
+    margin: 4px 0 0;
+
+    &.left {
+      border-bottom-right-radius: 0;
+      border-top-right-radius: 0;
+    }
+
+    &.right {
+      border-bottom-left-radius: 0;
+      border-top-left-radius: 0;
     }
   }
+}
+
+.mat-form-field {
+  min-width: 150px;
 }

@@ -14,6 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <km-dialog-title>{{title}}</km-dialog-title>
+
+<p class="km-dialog-context-description"
+   [innerHTML]="description"></p>
+
 <mat-horizontal-stepper id="km-preset-dialog-stepper"
                         class="km-stepper-in-dialog"
                         linear

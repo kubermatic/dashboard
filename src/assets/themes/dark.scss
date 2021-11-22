@@ -13,7 +13,7 @@
 // limitations under the License.
 
 @use 'sass:map';
-@use '@angular/material' as mat;
+@use '~@angular/material' as mat;
 @use 'mixins';
 @use 'theme/main';
 @use 'variables';
@@ -144,5 +144,16 @@ $theme-dark: map.merge($theme-dark, (foreground: $foreground));
 
   ::-webkit-scrollbar-track {
     background: #2b2b2c;
+  }
+}
+
+// Adjust Swagger styling.
+.km-swagger-container {
+  .swagger-ui {
+    .model-toggle {
+      /* stylelint-disable */
+      filter: invert(0.25) brightness(100) contrast(100);
+      /* stylelint-enable */
+    }
   }
 }

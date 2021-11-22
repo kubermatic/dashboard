@@ -16,6 +16,7 @@ limitations under the License.
 <div id="km-edit-member-dialog">
   <km-dialog-title>Edit Member</km-dialog-title>
   <mat-dialog-content>
+    <p class="km-dialog-context-description">Edit <b>{{member.name}}</b> of <b>{{project.name}}</b> project</p>
     <form [formGroup]="form"
           fxLayout="column"
           (submit)="editMember()"

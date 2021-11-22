@@ -17,6 +17,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MLAService} from '@core/services/mla';
 import {NotificationService} from '@core/services/notification';
+import {Cluster} from '@shared/entity/cluster';
 import {RuleGroup, RuleGroupType} from '@shared/entity/mla';
 import {getIconClassForButton} from '@shared/utils/common-utils';
 import {MLAUtils} from '@shared/utils/mla-utils';
@@ -28,7 +29,7 @@ import {take} from 'rxjs/operators';
 export interface RuleGroupDialogData {
   title: string;
   projectId: string;
-  clusterId: string;
+  cluster: Cluster;
   mode: Mode;
   confirmLabel: string;
 
@@ -88,6 +89,15 @@ export class RuleGroupDialog implements OnInit, OnDestroy {
     return getIconClassForButton(this.data.confirmLabel);
   }
 
+  getDescription(): string {
+    switch (this.data.mode) {
+      case Mode.Add:
+        return 'Create recording and alerting rule group';
+      case Mode.Edit:
+        return `Edit recording and alerting rule group of <b>${this.data.cluster.name}</b> cluster`;
+    }
+  }
+
   save(): void {
     const ruleGroupName = this.data.mode === Mode.Edit ? MLAUtils.getRuleGroupName(this.data.ruleGroup.data) : '';
     const ruleGroup: RuleGroup = {
@@ -105,7 +115,7 @@ export class RuleGroupDialog implements OnInit, OnDestroy {
 
   private _create(ruleGroup: RuleGroup): void {
     this._mlaService
-      .createRuleGroup(this.data.projectId, this.data.clusterId, ruleGroup)
+      .createRuleGroup(this.data.projectId, this.data.cluster.id, ruleGroup)
       .pipe(take(1))
       .subscribe((result: RuleGroup) => {
         this._matDialogRef.close(true);
@@ -117,7 +127,7 @@ export class RuleGroupDialog implements OnInit, OnDestroy {
 
   private _edit(ruleGroup: RuleGroup, ruleGroupName: string): void {
     this._mlaService
-      .editRuleGroup(this.data.projectId, this.data.clusterId, ruleGroup, ruleGroupName)
+      .editRuleGroup(this.data.projectId, this.data.cluster.id, ruleGroup, ruleGroupName)
       .pipe(take(1))
       .subscribe(_ => {
         this._matDialogRef.close(true);

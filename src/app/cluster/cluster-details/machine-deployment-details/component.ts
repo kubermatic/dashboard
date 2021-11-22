@@ -191,7 +191,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   showRestartDialog(): void {
     this._nodeService
-      .showMachineDeploymentRestartDialog(this.machineDeployment, this.cluster.id, this.projectID)
+      .showMachineDeploymentRestartDialog(this.machineDeployment, this.cluster, this.projectID)
       .subscribe(_ => {});
   }
 
@@ -215,7 +215,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   showDeleteDialog(): void {
     this._nodeService
-      .showMachineDeploymentDeleteDialog(this.machineDeployment, this.cluster.id, this.projectID, undefined)
+      .showMachineDeploymentDeleteDialog(this.machineDeployment, this.cluster, this.projectID, undefined)
       .subscribe(isConfirmed => {
         if (isConfirmed) {
           this.goBackToCluster();
