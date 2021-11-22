@@ -78,7 +78,7 @@ import {DialogTitleComponent} from './components/dialog-title/component';
 import {EditorComponent} from './components/editor/component';
 import {ClusterTypeEOLComponent} from './components/eol/component';
 import {EventListComponent} from './components/event-list/component';
-import {ExternalClusterDataDialogComponent} from './components/external-cluster-data-dialog/component';
+import {EditClusterConnectionDialogComponent} from './components/external-cluster-data-dialog/component';
 import {InitialsCircleComponent} from './components/initials-circle/component';
 import {LabelFormComponent} from './components/label-form/component';
 import {LabelsComponent} from './components/labels/component';
@@ -97,6 +97,8 @@ import {TaintsComponent} from './components/taints/component';
 import {AutofocusDirective} from './directives/autofocus/directive';
 import {ThrottleClickDirective} from './directives/throttle-click';
 import {RelativeTimePipe} from './pipes/relativetime';
+import {AddExternalClusterDialogComponent} from '@shared/components/add-external-cluster-dialog/component';
+import {ProviderStepComponent} from '@shared/components/add-external-cluster-dialog/steps/provider/component';
 
 const modules: any[] = [
   CommonModule,
@@ -172,7 +174,8 @@ const components: any[] = [
   ConfirmationDialogComponent,
   InstallAddonDialogComponent,
   EditAddonDialogComponent,
-  ExternalClusterDataDialogComponent,
+  AddExternalClusterDialogComponent,
+  EditClusterConnectionDialogComponent,
   LoaderComponent,
   SearchFieldComponent,
   TabCardComponent,
@@ -192,7 +195,7 @@ const directives: any[] = [AutofocusDirective, ThrottleClickDirective, OptionDir
 
 @NgModule({
   imports: [...modules],
-  declarations: [...components, ...directives],
+  declarations: [...components, ...directives, ProviderStepComponent],
   providers: [DecimalPipe],
   exports: [...modules, ...components, ...directives],
 })
