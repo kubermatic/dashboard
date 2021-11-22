@@ -238,7 +238,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     this._router.navigate([`/projects/${this._selectedProject.id}/wizard`]);
   }
 
-  connectCluster(): void {
+  addExternalCluster(): void {
     const dialog = this._matDialog.open(ExternalClusterDataDialogComponent);
     dialog.componentInstance.projectId = this._selectedProject.id;
 
