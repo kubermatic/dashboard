@@ -37,3 +37,7 @@ mat-sidenav-container {
 .km-main {
   height: 100%;
 }
+
+.footer-sm {
+  margin-left: variables.$sidenav-width;
+}
