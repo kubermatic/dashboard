@@ -15,13 +15,11 @@
 @use 'mixins';
 @use 'variables';
 
-$sidenav-width: 264px;
-$sidenav-width-collapsed: 54px;
 $sidenav-item-height: 45px;
 $sidenav-item-margin: 10px;
 
 .sidenav {
-  @include mixins.size($sidenav-width, 100%);
+  @include mixins.size(variables.$sidenav-width, 100%);
 
   overflow-y: auto;
   padding-top: variables.$content-padding + variables.$toolbar-height;
@@ -48,14 +46,5 @@ $sidenav-item-margin: 10px;
         }
       }
     }
-  }
-}
-
-.km-collapse-sidenav {
-  overflow-x: hidden;
-  width: $sidenav-width-collapsed;
-
-  .menu-item a i {
-    margin-right: 0;
   }
 }
