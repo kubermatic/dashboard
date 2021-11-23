@@ -13,40 +13,35 @@
 // limitations under the License.
 
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {takeUntil} from 'rxjs/operators';
+import {merge, of} from 'rxjs';
+import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
-import {ExternalProvider} from '@shared/model/ExternalClusterModel';
 
-enum Controls {
-  Provider = 'provider',
+export enum Controls {
+  Name = 'name',
 }
 
 @Component({
-  selector: 'km-external-cluster-provider-step',
+  selector: 'km-custom-credentials',
   templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ProviderStepComponent),
+      useExisting: forwardRef(() => CustomCredentialsComponent),
       multi: true,
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => ProviderStepComponent),
+      useExisting: forwardRef(() => CustomCredentialsComponent),
       multi: true,
     },
   ],
 })
-export class ProviderStepComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  providers: NodeProvider[] = [];
-  form: FormGroup;
-
-  readonly controls = Controls;
-  readonly provider = ExternalProvider;
+export class CustomCredentialsComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  readonly Controls = Controls;
+  kubeconfig = '';
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -57,23 +52,32 @@ export class ProviderStepComponent extends BaseFormValidator implements OnInit, 
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Provider]: new FormControl('', [Validators.required]),
+      [Controls.Name]: this._builder.control('', Validators.required),
     });
 
-    this.form
-      .get(Controls.Provider)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(provider => {
-        // Force early validation to allow entering the next step by just selecting one of the providers.
-        // Without it the form is not marked as valid yet and next step cannot be selected.
-        this.form.updateValueAndValidity();
+    this.form.valueChanges
+      .pipe(distinctUntilChanged())
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => this._update());
 
-        this._externalClusterService.provider = provider;
-      });
+    merge(of(false), this.form.statusChanges)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => this.updateValidity());
   }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  updateValidity(): void {
+    this._externalClusterService.credentialsStepValidity = this.form.valid && !!this.kubeconfig;
+  }
+
+  private _update(): void {
+    this._externalClusterService.externalCluster.custom = {
+      name: this.form.get(Controls.Name).value,
+      kubeconfig: this.kubeconfig,
+    };
   }
 }

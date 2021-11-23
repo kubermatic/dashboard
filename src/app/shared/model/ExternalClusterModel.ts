@@ -12,6 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+export enum ExternalProvider {
+  Custom,
+  GKE,
+}
+
+export class ExternalCluster {
+  custom?: ExternalClusterModel;
+}
+
 export class ExternalClusterModel {
   name: string;
   kubeconfig: string;

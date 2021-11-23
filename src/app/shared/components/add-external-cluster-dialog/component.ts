@@ -15,15 +15,9 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-import {ExternalClusterDialogService} from '@shared/components/add-external-cluster-dialog/steps/service';
+import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
 import {MatStepper} from '@angular/material/stepper';
-
-export enum Provider {
-  Custom,
-  AWS,
-  Azure,
-  GoogleCloud,
-}
+import {ExternalProvider} from '@shared/model/ExternalClusterModel';
 
 export enum Step {
   Provider = 'Pick Provider',
@@ -42,14 +36,14 @@ export class AddExternalClusterDialogComponent implements OnInit {
   form: FormGroup;
 
   readonly step = Step;
-  readonly provider = Provider;
+  readonly provider = ExternalProvider;
 
   @ViewChild('stepper', {static: true}) private readonly _stepper: MatStepper;
 
   constructor(
     private readonly _matDialogRef: MatDialogRef<AddExternalClusterDialogComponent>,
     private readonly _formBuilder: FormBuilder,
-    readonly externalClusterDialogService: ExternalClusterDialogService
+    readonly externalClusterService: ExternalClusterService
   ) {}
 
   ngOnInit(): void {
@@ -57,9 +51,9 @@ export class AddExternalClusterDialogComponent implements OnInit {
     this.steps.forEach(step => (controls[step] = this._formBuilder.control('')));
     this.form = this._formBuilder.group(controls);
 
-    this.externalClusterDialogService.providerChanges.pipe().subscribe(provider => {
+    this.externalClusterService.providerChanges.pipe().subscribe(provider => {
       this.steps =
-        provider === Provider.Custom
+        provider === ExternalProvider.Custom
           ? [Step.Provider, Step.Credentials]
           : [Step.Provider, Step.Credentials, Step.Cluster];
 
@@ -67,12 +61,23 @@ export class AddExternalClusterDialogComponent implements OnInit {
     });
   }
 
+  get active(): string {
+    return this.steps[this._stepper.selectedIndex];
+  }
+
+  get last(): boolean {
+    return this._stepper.selectedIndex === this.steps.length - 1;
+  }
+
   get creating(): boolean {
     return false;
   }
 
   get invalid(): boolean {
-    return false;
+    return (
+      this.form.get(this.active).invalid ||
+      (this.active === Step.Credentials && !this.externalClusterService.isCredentialsStepValid)
+    );
   }
 
   isEnabled(step: Step): boolean {

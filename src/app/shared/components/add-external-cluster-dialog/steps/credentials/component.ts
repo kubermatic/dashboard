@@ -12,41 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {Component, forwardRef, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {takeUntil} from 'rxjs/operators';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
 import {ExternalProvider} from '@shared/model/ExternalClusterModel';
 
 enum Controls {
-  Provider = 'provider',
+  Settings = 'settings',
 }
 
 @Component({
-  selector: 'km-external-cluster-provider-step',
+  selector: 'km-external-cluster-credentials-step',
   templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ProviderStepComponent),
+      useExisting: forwardRef(() => CredentialsStepComponent),
       multi: true,
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => ProviderStepComponent),
+      useExisting: forwardRef(() => CredentialsStepComponent),
       multi: true,
     },
   ],
 })
-export class ProviderStepComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  providers: NodeProvider[] = [];
+export class CredentialsStepComponent extends BaseFormValidator implements OnInit {
   form: FormGroup;
+  provider: ExternalProvider;
 
-  readonly controls = Controls;
-  readonly provider = ExternalProvider;
+  readonly Provider = ExternalProvider;
+  readonly Controls = Controls;
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -57,23 +55,13 @@ export class ProviderStepComponent extends BaseFormValidator implements OnInit, 
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Provider]: new FormControl('', [Validators.required]),
+      [Controls.Settings]: this._builder.control(''),
     });
 
-    this.form
-      .get(Controls.Provider)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(provider => {
-        // Force early validation to allow entering the next step by just selecting one of the providers.
-        // Without it the form is not marked as valid yet and next step cannot be selected.
-        this.form.updateValueAndValidity();
-
-        this._externalClusterService.provider = provider;
-      });
-  }
-
-  ngOnDestroy(): void {
-    this._unsubscribe.next();
-    this._unsubscribe.complete();
+    this._externalClusterService.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(provider => {
+      this.provider = provider;
+      this.form.removeControl(Controls.Settings);
+      this.form.addControl(Controls.Settings, this._builder.control(''));
+    });
   }
 }

@@ -99,6 +99,8 @@ import {ThrottleClickDirective} from './directives/throttle-click';
 import {RelativeTimePipe} from './pipes/relativetime';
 import {AddExternalClusterDialogComponent} from '@shared/components/add-external-cluster-dialog/component';
 import {ProviderStepComponent} from '@shared/components/add-external-cluster-dialog/steps/provider/component';
+import {CredentialsStepComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/component';
+import {CustomCredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/custom/component';
 
 const modules: any[] = [
   CommonModule,
@@ -189,13 +191,16 @@ const components: any[] = [
   SelectClusterTemplateDialogComponent,
   SizeFormatterPipe,
   NumberStepperComponent,
+  ProviderStepComponent,
+  CredentialsStepComponent,
+  CustomCredentialsComponent,
 ];
 
 const directives: any[] = [AutofocusDirective, ThrottleClickDirective, OptionDirective];
 
 @NgModule({
   imports: [...modules],
-  declarations: [...components, ...directives, ProviderStepComponent],
+  declarations: [...components, ...directives],
   providers: [DecimalPipe],
   exports: [...modules, ...components, ...directives],
 })

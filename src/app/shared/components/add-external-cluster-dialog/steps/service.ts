@@ -13,19 +13,37 @@
 // limitations under the License.
 
 import {EventEmitter, Injectable} from '@angular/core';
-import {Provider} from '@shared/components/add-external-cluster-dialog/component';
+import {ExternalCluster, ExternalProvider} from '@shared/model/ExternalClusterModel';
 
 @Injectable({providedIn: 'root'})
-export class ExternalClusterDialogService {
-  providerChanges = new EventEmitter<Provider>();
-  private _provider: Provider;
+export class ExternalClusterService {
+  providerChanges = new EventEmitter<ExternalProvider>();
+  private _provider: ExternalProvider;
+  private _externalCluster: ExternalCluster = {};
+  private _credentialsStepValidity = false;
 
-  get provider(): Provider {
+  get provider(): ExternalProvider {
     return this._provider;
   }
 
-  set provider(provider: Provider) {
+  set provider(provider: ExternalProvider) {
     this._provider = provider;
     this.providerChanges.emit(this._provider);
+  }
+
+  get externalCluster(): ExternalCluster {
+    return this._externalCluster;
+  }
+
+  set externalCluster(externalCluster: ExternalCluster) {
+    this._externalCluster = externalCluster;
+  }
+
+  get isCredentialsStepValid(): boolean {
+    return this._credentialsStepValidity;
+  }
+
+  set credentialsStepValidity(valid: boolean) {
+    this._credentialsStepValidity = valid;
   }
 }

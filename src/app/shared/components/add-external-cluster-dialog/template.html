@@ -36,9 +36,7 @@ limitations under the License.
             [stepControl]="form.get(step.Credentials)"
             [label]="step.Credentials"
             fxFlex="100%">
-<!--    <km-preset-provider-step [existingProviders]="data.preset?.providers"-->
-<!--                             [mode]="data.mode"-->
-<!--                             [formControl]="form.get(stepRegistry.Provider)"></km-preset-provider-step>-->
+    <km-external-cluster-credentials-step [formControl]="form.get(step.Credentials)"></km-external-cluster-credentials-step>
   </mat-step>
 
   <mat-step *ngIf="isEnabled(step.Cluster)"
@@ -56,28 +54,20 @@ limitations under the License.
                  *ngIf="creating"></mat-spinner>
     <button mat-flat-button
             type="button"
-            color="tertiary"
-            (click)="stepper.previous()"
-            *ngIf="stepper.selectedIndex !== 0">
-      <i class="km-icon-mask km-icon-back"></i>
-      <span>Back</span>
-    </button>
-    <button mat-flat-button
-            type="button"
             (click)="stepper.next()"
             [disabled]="invalid"
-            *ngIf="stepper.selectedIndex !== 0 && stepper.selectedIndex < this.steps.length - 1">
+            *ngIf="active === step.Credentials && !last">
       <i class="km-icon-mask km-icon-next"></i>
       <span>Next</span>
     </button>
     <button mat-flat-button
             type="button"
             [disabled]="creating || invalid"
-            *ngIf="stepper.selectedIndex === this.steps.length - 1"
+            *ngIf="last"
             kmThrottleClick
             (throttleClick)="add()">
       <i class="km-icon-mask km-icon-add"></i>
-      <ng-container [ngSwitch]="externalClusterDialogService.provider">
+      <ng-container [ngSwitch]="externalClusterService.provider">
         <span *ngSwitchCase="provider.Custom">Add External Cluster</span>
         <span *ngSwitchDefault>Import Cluster</span>
       </ng-container>
