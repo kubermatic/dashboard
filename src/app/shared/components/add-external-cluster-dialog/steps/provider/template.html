@@ -19,11 +19,11 @@ limitations under the License.
       fxLayout="column">
   <mat-button-toggle-group group="providerGroup"
                            [formControlName]="controls.Provider"
-                           fxLayout="row wrap"
-                           fxLayoutAlign="center center">
+                           fxLayout="row wrap">
     <h3>Import</h3>
     <mat-button-toggle [value]="provider.GoogleCloud"><span class="km-provider-logo km-provider-logo-gcp"></span></mat-button-toggle>
-    <h3 fxLayoutGap="10px">
+    <h3 fxLayoutGap="10px"
+        fxLayoutAlign=" center">
       <span>Connect</span>
       <i class="km-icon-info"></i>
       <span class="tooltip">Connected clusters can only be viewed, not edited</span>

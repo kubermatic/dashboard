@@ -12,9 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
+import {ExternalClusterDialogService} from '@shared/components/add-external-cluster-dialog/steps/service';
+import {MatStepper} from '@angular/material/stepper';
 
 export enum Provider {
   Custom,
@@ -23,7 +25,7 @@ export enum Provider {
   GoogleCloud,
 }
 
-enum Step {
+export enum Step {
   Provider = 'Pick Provider',
   Credentials = 'Enter Credentials',
   Cluster = 'Pick Cluster',
@@ -37,21 +39,32 @@ export class AddExternalClusterDialogComponent implements OnInit {
   @Input() projectId: string;
 
   steps: Step[] = [Step.Provider, Step.Credentials];
-  selectedProvider: Provider;
   form: FormGroup;
 
   readonly step = Step;
   readonly provider = Provider;
 
+  @ViewChild('stepper', {static: true}) private readonly _stepper: MatStepper;
+
   constructor(
     private readonly _matDialogRef: MatDialogRef<AddExternalClusterDialogComponent>,
-    private readonly _formBuilder: FormBuilder
+    private readonly _formBuilder: FormBuilder,
+    readonly externalClusterDialogService: ExternalClusterDialogService
   ) {}
 
   ngOnInit(): void {
     const controls = {};
     this.steps.forEach(step => (controls[step] = this._formBuilder.control('')));
     this.form = this._formBuilder.group(controls);
+
+    this.externalClusterDialogService.providerChanges.pipe().subscribe(provider => {
+      this.steps =
+        provider === Provider.Custom
+          ? [Step.Provider, Step.Credentials]
+          : [Step.Provider, Step.Credentials, Step.Cluster];
+
+      this._stepper.next();
+    });
   }
 
   get creating(): boolean {

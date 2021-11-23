@@ -50,7 +50,6 @@ limitations under the License.
 </mat-horizontal-stepper>
 
 <mat-dialog-actions>
-  <div>
     <mat-spinner fxFlexAlign="center"
                  [diameter]="30"
                  color="accent"
@@ -67,7 +66,7 @@ limitations under the License.
             type="button"
             (click)="stepper.next()"
             [disabled]="invalid"
-            *ngIf="stepper.selectedIndex < this.steps.length - 1">
+            *ngIf="stepper.selectedIndex !== 0 && stepper.selectedIndex < this.steps.length - 1">
       <i class="km-icon-mask km-icon-next"></i>
       <span>Next</span>
     </button>
@@ -78,11 +77,10 @@ limitations under the License.
             kmThrottleClick
             (throttleClick)="add()">
       <i class="km-icon-mask km-icon-add"></i>
-      <ng-container [ngSwitch]="selectedProvider">
+      <ng-container [ngSwitch]="externalClusterDialogService.provider">
         <span *ngSwitchCase="provider.Custom">Add External Cluster</span>
         <span *ngSwitchDefault>Import Cluster</span>
       </ng-container>
       <span></span>
     </button>
-  </div>
 </mat-dialog-actions>

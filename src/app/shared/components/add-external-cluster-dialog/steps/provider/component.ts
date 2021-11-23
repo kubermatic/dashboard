@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, OnInit} from '@angular/core';
+import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {takeUntil} from 'rxjs/operators';
 import {Provider} from '@shared/components/add-external-cluster-dialog/component';
+import {ExternalClusterDialogService} from '@shared/components/add-external-cluster-dialog/steps/service';
 
 enum Controls {
   Provider = 'provider',
@@ -41,14 +41,17 @@ enum Controls {
     },
   ],
 })
-export class ProviderStepComponent extends BaseFormValidator implements OnInit {
+export class ProviderStepComponent extends BaseFormValidator implements OnInit, OnDestroy {
   providers: NodeProvider[] = [];
   form: FormGroup;
 
   readonly controls = Controls;
   readonly provider = Provider;
 
-  constructor(private readonly _builder: FormBuilder, private readonly _presetDialogService: PresetDialogService) {
+  constructor(
+    private readonly _builder: FormBuilder,
+    private readonly _externalClusterDialogService: ExternalClusterDialogService
+  ) {
     super();
   }
 
@@ -60,6 +63,17 @@ export class ProviderStepComponent extends BaseFormValidator implements OnInit {
     this.form
       .get(Controls.Provider)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(provider => (this._presetDialogService.provider = provider));
+      .subscribe(provider => {
+        // Force early validation to allow entering the next step by just selecting one of the providers.
+        // Without it the form is not marked as valid yet and next step cannot be selected.
+        this.form.updateValueAndValidity();
+
+        this._externalClusterDialogService.provider = provider;
+      });
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 }

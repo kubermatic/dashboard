@@ -13,41 +13,19 @@
 // limitations under the License.
 
 import {EventEmitter, Injectable} from '@angular/core';
-import {CreatePresetReq} from '@shared/entity/preset';
-import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {Provider} from '@shared/components/add-external-cluster-dialog/component';
 
 @Injectable({providedIn: 'root'})
-export class PresetDialogService {
-  providerChanges = new EventEmitter<NodeProvider>();
-  preset: CreatePresetReq = new CreatePresetReq();
+export class ExternalClusterDialogService {
+  providerChanges = new EventEmitter<Provider>();
+  private _provider: Provider;
 
-  private _provider: NodeProvider;
-  // Settings step child form validation status has to be shared through the service
-  // with the preset dialog wizard as dynamically created child forms using CVA are
-  // not added to the parent form until user manually enters something into the child form.
-  // This is just a workaround. Can be refactored if better suited solution is found.
-  private _settingsStepValidity = false;
-
-  get isSettingsStepValid(): boolean {
-    return this._settingsStepValidity;
-  }
-
-  set settingsStepValidity(valid: boolean) {
-    this._settingsStepValidity = valid;
-  }
-
-  get provider(): NodeProvider {
+  get provider(): Provider {
     return this._provider;
   }
 
-  set provider(provider: NodeProvider) {
+  set provider(provider: Provider) {
     this._provider = provider;
-    this.preset.spec[provider] = {};
     this.providerChanges.emit(this._provider);
-  }
-
-  // Presets cannot be created for those providers
-  get unsupportedProviders(): NodeProvider[] {
-    return [NodeProvider.BAREMETAL, NodeProvider.BRINGYOUROWN, NodeProvider.NONE];
   }
 }
