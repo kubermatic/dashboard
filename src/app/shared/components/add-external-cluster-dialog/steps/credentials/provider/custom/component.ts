@@ -15,8 +15,8 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {merge, of} from 'rxjs';
-import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {merge} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
 
 export enum Controls {
@@ -55,14 +55,9 @@ export class CustomCredentialsComponent extends BaseFormValidator implements OnI
       [Controls.Name]: this._builder.control('', Validators.required),
     });
 
-    this.form.valueChanges
-      .pipe(distinctUntilChanged())
+    merge(this.form.valueChanges, this.form.statusChanges)
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this._update());
-
-    merge(of(false), this.form.statusChanges)
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this.updateValidity());
+      .subscribe(_ => this.update());
   }
 
   ngOnDestroy(): void {
@@ -70,14 +65,13 @@ export class CustomCredentialsComponent extends BaseFormValidator implements OnI
     this._unsubscribe.complete();
   }
 
-  updateValidity(): void {
+  update(): void {
     this._externalClusterService.credentialsStepValidity = this.form.valid && !!this.kubeconfig;
-  }
-
-  private _update(): void {
-    this._externalClusterService.externalCluster.custom = {
-      name: this.form.get(Controls.Name).value,
-      kubeconfig: this.kubeconfig,
+    this._externalClusterService.externalCluster = {
+      custom: {
+        name: this.form.get(Controls.Name).value,
+        kubeconfig: btoa(this.kubeconfig),
+      },
     };
   }
 }
