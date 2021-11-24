@@ -41,7 +41,7 @@ import {ClusterHealthStatus} from '@shared/utils/health-status/cluster-health-st
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import _ from 'lodash';
 import {EMPTY, forkJoin, Observable, of, onErrorResumeNext, Subject} from 'rxjs';
-import {catchError, distinctUntilChanged, filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {catchError, distinctUntilChanged, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ClusterDeleteConfirmationComponent} from '../cluster-details/cluster-delete-confirmation/component';
 import {AddExternalClusterDialogComponent} from '@shared/components/add-external-cluster-dialog/component';
 
@@ -241,16 +241,6 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   addExternalCluster(): void {
     const dialog = this._matDialog.open(AddExternalClusterDialogComponent);
     dialog.componentInstance.projectId = this._selectedProject.id;
-
-    dialog
-      .afterClosed()
-      .pipe(filter(model => !!model))
-      .pipe(switchMap(model => this._clusterService.addExternalCluster(this._selectedProject.id, model)))
-      .pipe(take(1))
-      .subscribe(addedCluster => {
-        this._router.navigate([`/projects/${this._selectedProject.id}/clusters/external/${addedCluster.id}`]);
-        this._notificationService.success(`The ${addedCluster.name} cluster was added`);
-      });
   }
 
   navigateToCluster(cluster: Cluster): void {

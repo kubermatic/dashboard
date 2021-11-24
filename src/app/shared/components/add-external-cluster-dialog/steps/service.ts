@@ -14,6 +14,9 @@
 
 import {EventEmitter, Injectable} from '@angular/core';
 import {ExternalCluster, ExternalProvider} from '@shared/model/ExternalClusterModel';
+import {ClusterService} from '@core/services/cluster';
+import {Observable, of} from 'rxjs';
+import {Cluster} from '@shared/entity/cluster';
 
 @Injectable({providedIn: 'root'})
 export class ExternalClusterService {
@@ -21,6 +24,8 @@ export class ExternalClusterService {
   private _provider: ExternalProvider;
   private _externalCluster: ExternalCluster = {};
   private _credentialsStepValidity = false;
+
+  constructor(private readonly _clusterService: ClusterService) {}
 
   get provider(): ExternalProvider {
     return this._provider;
@@ -45,5 +50,14 @@ export class ExternalClusterService {
 
   set credentialsStepValidity(valid: boolean) {
     this._credentialsStepValidity = valid;
+  }
+
+  create(projectId: string): Observable<Cluster> {
+    switch (this._provider) {
+      case ExternalProvider.Custom:
+        return this._clusterService.addExternalCluster(projectId, this._externalCluster.custom);
+      case ExternalProvider.GKE:
+        return of(null);
+    }
   }
 }

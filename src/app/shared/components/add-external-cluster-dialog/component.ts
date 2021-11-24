@@ -18,6 +18,9 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
 import {MatStepper} from '@angular/material/stepper';
 import {ExternalProvider} from '@shared/model/ExternalClusterModel';
+import {take} from 'rxjs/operators';
+import {NotificationService} from '@core/services/notification';
+import {Router} from '@angular/router';
 
 export enum Step {
   Provider = 'Pick Provider',
@@ -39,10 +42,13 @@ export class AddExternalClusterDialogComponent implements OnInit {
   readonly provider = ExternalProvider;
 
   @ViewChild('stepper', {static: true}) private readonly _stepper: MatStepper;
+  private _creating = false;
 
   constructor(
     private readonly _matDialogRef: MatDialogRef<AddExternalClusterDialogComponent>,
     private readonly _formBuilder: FormBuilder,
+    private readonly _router: Router,
+    private readonly _notificationService: NotificationService,
     readonly externalClusterService: ExternalClusterService
   ) {}
 
@@ -70,7 +76,7 @@ export class AddExternalClusterDialogComponent implements OnInit {
   }
 
   get creating(): boolean {
-    return false;
+    return this._creating;
   }
 
   get invalid(): boolean {
@@ -85,6 +91,18 @@ export class AddExternalClusterDialogComponent implements OnInit {
   }
 
   add(): void {
-    this._matDialogRef.close();
+    this._creating = true;
+    this.externalClusterService
+      .create(this.projectId)
+      .pipe(take(1))
+      .subscribe(
+        cluster => {
+          this._creating = false;
+          this._matDialogRef.close();
+          this._notificationService.success(`The ${cluster.name} cluster was added`);
+          this._router.navigate([`/projects/${this.projectId}/clusters/external/${cluster.id}`]);
+        },
+        () => (this._creating = false)
+      );
   }
 }
