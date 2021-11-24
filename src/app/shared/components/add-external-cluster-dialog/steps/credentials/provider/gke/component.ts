@@ -13,40 +13,35 @@
 // limitations under the License.
 
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {takeUntil} from 'rxjs/operators';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
-import {ExternalClusterProvider} from '@shared/entity/external-cluster';
 
-enum Controls {
-  Provider = 'provider',
+export enum Controls {
+  Name = 'name',
+  ServiceAccount = 'serviceAccount',
+  Zone = 'zone',
 }
 
 @Component({
-  selector: 'km-external-cluster-provider-step',
+  selector: 'km-gke-credentials',
   templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ProviderStepComponent),
+      useExisting: forwardRef(() => GKECredentialsComponent),
       multi: true,
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => ProviderStepComponent),
+      useExisting: forwardRef(() => GKECredentialsComponent),
       multi: true,
     },
   ],
 })
-export class ProviderStepComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  providers: NodeProvider[] = [];
-  form: FormGroup;
-
-  readonly controls = Controls;
-  readonly provider = ExternalClusterProvider;
+export class GKECredentialsComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  readonly Controls = Controls;
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -57,23 +52,32 @@ export class ProviderStepComponent extends BaseFormValidator implements OnInit, 
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Provider]: new FormControl('', [Validators.required]),
+      [Controls.Name]: this._builder.control('', Validators.required),
+      [Controls.ServiceAccount]: this._builder.control(''),
+      [Controls.Zone]: this._builder.control(''),
     });
 
-    this.form
-      .get(Controls.Provider)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(provider => {
-        // Force early validation to allow entering the next step by just selecting one of the providers.
-        // Without it the form is not marked as valid yet and next step cannot be selected.
-        this.form.updateValueAndValidity();
+    this.form.statusChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => (this._externalClusterService.credentialsStepValidity = this.form.valid));
 
-        this._externalClusterService.provider = provider;
-      });
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this.update());
   }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  update(): void {
+    this._externalClusterService.externalCluster = {
+      name: this.form.get(Controls.Name).value,
+      cloud: {
+        gke: {
+          name: '',
+          serviceAccount: '',
+        },
+      },
+    };
   }
 }

@@ -15,7 +15,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-import {ExternalClusterModel} from '../../model/ExternalClusterModel';
+import {ExternalCluster} from '@shared/entity/external-cluster';
 
 export enum Controls {
   Name = 'name',
@@ -39,7 +39,7 @@ export class EditClusterConnectionDialogComponent implements OnInit {
   }
 
   handler(): void {
-    const model: ExternalClusterModel = {
+    const model: ExternalCluster = {
       name: this.form.get(Controls.Name).value,
       kubeconfig: btoa(this.kubeconfig),
     };

@@ -17,7 +17,7 @@ import {FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {takeUntil} from 'rxjs/operators';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
-import {ExternalProvider} from '@shared/model/ExternalClusterModel';
+import {ExternalClusterProvider} from '@shared/entity/external-cluster';
 
 enum Controls {
   Settings = 'settings',
@@ -26,6 +26,7 @@ enum Controls {
 @Component({
   selector: 'km-external-cluster-credentials-step',
   templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -41,9 +42,9 @@ enum Controls {
 })
 export class CredentialsStepComponent extends BaseFormValidator implements OnInit {
   form: FormGroup;
-  provider: ExternalProvider;
+  provider: ExternalClusterProvider;
 
-  readonly Provider = ExternalProvider;
+  readonly Provider = ExternalClusterProvider;
   readonly Controls = Controls;
 
   constructor(

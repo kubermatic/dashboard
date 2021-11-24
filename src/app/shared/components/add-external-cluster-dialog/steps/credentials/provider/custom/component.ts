@@ -68,10 +68,8 @@ export class CustomCredentialsComponent extends BaseFormValidator implements OnI
   update(): void {
     this._externalClusterService.credentialsStepValidity = this.form.valid && !!this.kubeconfig;
     this._externalClusterService.externalCluster = {
-      custom: {
-        name: this.form.get(Controls.Name).value,
-        kubeconfig: btoa(this.kubeconfig),
-      },
+      name: this.form.get(Controls.Name).value,
+      kubeconfig: btoa(this.kubeconfig),
     };
   }
 }

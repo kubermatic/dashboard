@@ -101,6 +101,7 @@ import {AddExternalClusterDialogComponent} from '@shared/components/add-external
 import {ProviderStepComponent} from '@shared/components/add-external-cluster-dialog/steps/provider/component';
 import {CredentialsStepComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/component';
 import {CustomCredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/custom/component';
+import {GKECredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/gke/component';
 
 const modules: any[] = [
   CommonModule,
@@ -194,6 +195,7 @@ const components: any[] = [
   ProviderStepComponent,
   CredentialsStepComponent,
   CustomCredentialsComponent,
+  GKECredentialsComponent,
 ];
 
 const directives: any[] = [AutofocusDirective, ThrottleClickDirective, OptionDirective];

@@ -13,25 +13,20 @@
 // limitations under the License.
 
 import {EventEmitter, Injectable} from '@angular/core';
-import {ExternalCluster, ExternalProvider} from '@shared/model/ExternalClusterModel';
-import {ClusterService} from '@core/services/cluster';
-import {Observable, of} from 'rxjs';
-import {Cluster} from '@shared/entity/cluster';
+import {ExternalCluster, ExternalClusterProvider} from '@shared/entity/external-cluster';
 
 @Injectable({providedIn: 'root'})
 export class ExternalClusterService {
-  providerChanges = new EventEmitter<ExternalProvider>();
-  private _provider: ExternalProvider;
-  private _externalCluster: ExternalCluster = {};
+  providerChanges = new EventEmitter<ExternalClusterProvider>();
+  private _provider: ExternalClusterProvider;
+  private _externalCluster: ExternalCluster = ExternalCluster.new();
   private _credentialsStepValidity = false;
 
-  constructor(private readonly _clusterService: ClusterService) {}
-
-  get provider(): ExternalProvider {
+  get provider(): ExternalClusterProvider {
     return this._provider;
   }
 
-  set provider(provider: ExternalProvider) {
+  set provider(provider: ExternalClusterProvider) {
     this._provider = provider;
     this.providerChanges.emit(this._provider);
   }
@@ -50,14 +45,5 @@ export class ExternalClusterService {
 
   set credentialsStepValidity(valid: boolean) {
     this._credentialsStepValidity = valid;
-  }
-
-  create(projectId: string): Observable<Cluster> {
-    switch (this._provider) {
-      case ExternalProvider.Custom:
-        return this._clusterService.addExternalCluster(projectId, this._externalCluster.custom);
-      case ExternalProvider.GKE:
-        return of(null);
-    }
   }
 }

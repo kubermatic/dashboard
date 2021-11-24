@@ -17,10 +17,11 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
 import {MatStepper} from '@angular/material/stepper';
-import {ExternalProvider} from '@shared/model/ExternalClusterModel';
 import {take} from 'rxjs/operators';
 import {NotificationService} from '@core/services/notification';
 import {Router} from '@angular/router';
+import {ExternalClusterProvider} from '@shared/entity/external-cluster';
+import {ClusterService} from '@core/services/cluster';
 
 export enum Step {
   Provider = 'Pick Provider',
@@ -39,7 +40,7 @@ export class AddExternalClusterDialogComponent implements OnInit {
   form: FormGroup;
 
   readonly step = Step;
-  readonly provider = ExternalProvider;
+  readonly provider = ExternalClusterProvider;
 
   @ViewChild('stepper', {static: true}) private readonly _stepper: MatStepper;
   private _creating = false;
@@ -49,6 +50,7 @@ export class AddExternalClusterDialogComponent implements OnInit {
     private readonly _formBuilder: FormBuilder,
     private readonly _router: Router,
     private readonly _notificationService: NotificationService,
+    private readonly _clusterService: ClusterService,
     readonly externalClusterService: ExternalClusterService
   ) {}
 
@@ -59,7 +61,7 @@ export class AddExternalClusterDialogComponent implements OnInit {
 
     this.externalClusterService.providerChanges.pipe().subscribe(provider => {
       this.steps =
-        provider === ExternalProvider.Custom
+        provider === ExternalClusterProvider.Custom
           ? [Step.Provider, Step.Credentials]
           : [Step.Provider, Step.Credentials, Step.Cluster];
 
@@ -92,8 +94,8 @@ export class AddExternalClusterDialogComponent implements OnInit {
 
   add(): void {
     this._creating = true;
-    this.externalClusterService
-      .create(this.projectId)
+    this._clusterService
+      .addExternalCluster(this.projectId, this.externalClusterService.externalCluster)
       .pipe(take(1))
       .subscribe(
         cluster => {
