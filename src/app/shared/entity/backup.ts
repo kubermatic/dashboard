@@ -121,6 +121,7 @@ export class BackupCredentials {
 }
 
 export class S3Credentials {
+  destination: string;
   s3: S3BackupCredentials;
 }
 

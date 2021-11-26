@@ -13,11 +13,22 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<km-dialog-title>Edit Bucket Settings</km-dialog-title>
+<km-dialog-title>{{data.title}}</km-dialog-title>
 <mat-dialog-content>
-  <p class="km-dialog-context-description">Edit <b>{{data.seed.name}}</b> bucket settings</p>
+  <p *ngIf="data.mode === 'edit'"
+     class="km-dialog-context-description">Edit <b>{{data.destination.destinationName}}</b> destination</p>
   <form [formGroup]="form"
         fxLayout="column">
+    <mat-form-field fxFlex
+                    *ngIf="data.mode === 'add'">
+      <mat-label>Destination Name</mat-label>
+      <input matInput
+             [formControlName]="Controls.DestinationName"
+             type="text"
+             autocomplete="off"
+             required>
+    </mat-form-field>
+
     <mat-form-field fxFlex>
       <mat-label>Bucket</mat-label>
       <input matInput
@@ -38,12 +49,12 @@ limitations under the License.
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-flat-button
-          id="km-edit-bucket-setting-dialog-save-btn"
+  <button id="km-destination-dialog-btn"
+          mat-flat-button
           kmThrottleClick
-          (throttleClick)="edit()"
-          [disabled]="!form.valid">
-    <i class="km-icon-mask km-icon-edit"></i>
-    <span>Edit Bucket Settings</span>
+          (throttleClick)="save()"
+          [disabled]="form.invalid">
+    <i [ngClass]="getIconClass()"></i>
+    <span>{{data.confirmLabel}} Destination</span>
   </button>
 </mat-dialog-actions>

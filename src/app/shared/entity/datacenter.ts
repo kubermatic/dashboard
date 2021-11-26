@@ -144,6 +144,7 @@ export class AdminSeedSpec {
   proxy_settings?: object;
   expose_strategy?: string;
   mla: MLA;
+  etcdBackupRestore?: EtcdBackupRestore;
 }
 
 export class BackupRestoreConfiguration {
@@ -156,6 +157,33 @@ export class MeteringCredentials {
   accessKey: string;
   secretKey: string;
   endpoint: string;
+}
+
+export class EtcdBackupRestore {
+  destinations: Destinations;
+}
+
+export class Destinations {
+  [key: string]: DestinationDetails;
+}
+
+export class DestinationDetails {
+  bucketName: string;
+  endpoint: string;
+  credentials?: BackupCredentials;
+}
+
+export class BackupCredentials {
+  name: string;
+  namespace: string;
+}
+
+//for internal use
+export class BackupDestination {
+  destinationName: string;
+  bucketName: string;
+  endpoint: string;
+  credentials?: BackupCredentials;
 }
 
 export function getDatacenterProvider(datacenter: Datacenter): NodeProvider {
