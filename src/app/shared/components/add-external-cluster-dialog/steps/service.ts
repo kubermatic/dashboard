@@ -12,15 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {EventEmitter, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {ExternalCluster, ExternalClusterProvider} from '@shared/entity/external-cluster';
+import {BehaviorSubject} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class ExternalClusterService {
-  providerChanges = new EventEmitter<ExternalClusterProvider>();
+  providerChanges = new BehaviorSubject<ExternalClusterProvider>(undefined);
   private _provider: ExternalClusterProvider;
   private _externalCluster: ExternalCluster = ExternalCluster.new();
   private _credentialsStepValidity = false;
+  private _clusterStepValidity = false;
 
   get provider(): ExternalClusterProvider {
     return this._provider;
@@ -28,7 +30,7 @@ export class ExternalClusterService {
 
   set provider(provider: ExternalClusterProvider) {
     this._provider = provider;
-    this.providerChanges.emit(this._provider);
+    this.providerChanges.next(this._provider);
   }
 
   get externalCluster(): ExternalCluster {
@@ -45,5 +47,13 @@ export class ExternalClusterService {
 
   set credentialsStepValidity(valid: boolean) {
     this._credentialsStepValidity = valid;
+  }
+
+  get isClusterStepValid(): boolean {
+    return this._clusterStepValidity;
+  }
+
+  set clusterStepValidity(valid: boolean) {
+    this._clusterStepValidity = valid;
   }
 }

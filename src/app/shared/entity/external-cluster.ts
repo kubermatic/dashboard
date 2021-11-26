@@ -34,4 +34,5 @@ export class ExternalClusterCloudSpec {
 export class GKECloudSpec {
   name: string;
   serviceAccount?: string;
+  zone?: string;
 }

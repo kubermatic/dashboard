@@ -13,13 +13,12 @@
 // limitations under the License.
 
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {takeUntil} from 'rxjs/operators';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
 
 export enum Controls {
-  Name = 'name',
   ServiceAccount = 'serviceAccount',
   Zone = 'zone',
 }
@@ -52,7 +51,6 @@ export class GKECredentialsComponent extends BaseFormValidator implements OnInit
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Name]: this._builder.control('', Validators.required),
       [Controls.ServiceAccount]: this._builder.control(''),
       [Controls.Zone]: this._builder.control(''),
     });
@@ -71,11 +69,12 @@ export class GKECredentialsComponent extends BaseFormValidator implements OnInit
 
   update(): void {
     this._externalClusterService.externalCluster = {
-      name: this.form.get(Controls.Name).value,
+      name: '',
       cloud: {
         gke: {
           name: '',
-          serviceAccount: '',
+          serviceAccount: this.form.get(Controls.ServiceAccount).value,
+          zone: this.form.get(Controls.Zone).value,
         },
       },
     };

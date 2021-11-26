@@ -82,13 +82,19 @@ export class AddExternalClusterDialogComponent implements OnInit {
   }
 
   get invalid(): boolean {
-    return (
-      this.form.get(this.active).invalid ||
-      (this.active === Step.Credentials && !this.externalClusterService.isCredentialsStepValid)
-    );
+    switch (this.active) {
+      case Step.Provider:
+        return this.form.get(Step.Provider).invalid;
+      case Step.Credentials:
+        return !this.externalClusterService.isCredentialsStepValid;
+      case Step.Cluster:
+        return !this.externalClusterService.isClusterStepValid;
+      default:
+        return true;
+    }
   }
 
-  isEnabled(step: Step): boolean {
+  isAvailable(step: Step): boolean {
     return this.steps.indexOf(step) > -1;
   }
 

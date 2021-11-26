@@ -25,52 +25,52 @@ limitations under the License.
     <i class="km-icon-done"></i>
   </ng-template>
 
-  <mat-step *ngIf="isEnabled(step.Provider)"
+  <mat-step *ngIf="isAvailable(step.Provider)"
             [stepControl]="form.get(step.Provider)"
             [label]="step.Provider"
             fxFlex="100%">
     <km-external-cluster-provider-step [formControl]="form.get(step.Provider)"></km-external-cluster-provider-step>
   </mat-step>
 
-  <mat-step *ngIf="isEnabled(step.Credentials)"
+  <mat-step *ngIf="isAvailable(step.Credentials)"
             [stepControl]="form.get(step.Credentials)"
             [label]="step.Credentials"
             fxFlex="100%">
     <km-external-cluster-credentials-step [formControl]="form.get(step.Credentials)"></km-external-cluster-credentials-step>
   </mat-step>
 
-  <mat-step *ngIf="isEnabled(step.Cluster)"
+  <mat-step *ngIf="isAvailable(step.Cluster)"
             [stepControl]="form.get(step.Cluster)"
             [label]="step.Cluster"
             fxFlex="100%">
-<!--    <km-preset-settings-step [formControl]="form.get(stepRegistry.Settings)"></km-preset-settings-step>-->
+    <km-external-cluster-cluster-step></km-external-cluster-cluster-step>
   </mat-step>
 </mat-horizontal-stepper>
 
 <mat-dialog-actions>
-    <mat-spinner fxFlexAlign="center"
-                 [diameter]="30"
-                 color="accent"
-                 *ngIf="creating"></mat-spinner>
-    <button mat-flat-button
-            type="button"
-            (click)="stepper.next()"
-            [disabled]="invalid"
-            *ngIf="active === step.Credentials && !last">
-      <i class="km-icon-mask km-icon-next"></i>
-      <span>Next</span>
-    </button>
-    <button mat-flat-button
-            type="button"
-            [disabled]="creating || invalid"
-            *ngIf="last"
-            kmThrottleClick
-            (throttleClick)="add()">
-      <i class="km-icon-mask km-icon-add"></i>
-      <ng-container [ngSwitch]="externalClusterService.provider">
-        <span *ngSwitchCase="provider.Custom">Add External Cluster</span>
-        <span *ngSwitchDefault>Import Cluster</span>
-      </ng-container>
-      <span></span>
-    </button>
+  <mat-spinner fxFlexAlign="center"
+               [diameter]="30"
+               color="accent"
+               *ngIf="creating"></mat-spinner>
+  <button mat-flat-button
+          type="button"
+          (click)="stepper.next()"
+          [disabled]="invalid"
+          *ngIf="active === step.Credentials && !last">
+    <i class="km-icon-mask km-icon-next"></i>
+    <span>Next</span>
+  </button>
+  <button mat-flat-button
+          type="button"
+          [disabled]="creating || invalid"
+          *ngIf="last"
+          kmThrottleClick
+          (throttleClick)="add()">
+    <i class="km-icon-mask km-icon-add"></i>
+    <ng-container [ngSwitch]="externalClusterService.provider">
+      <span *ngSwitchCase="provider.Custom">Add External Cluster</span>
+      <span *ngSwitchDefault>Import Cluster</span>
+    </ng-container>
+    <span></span>
+  </button>
 </mat-dialog-actions>
