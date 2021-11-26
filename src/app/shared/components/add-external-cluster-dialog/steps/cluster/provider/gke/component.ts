@@ -24,6 +24,7 @@ import {UserService} from '@core/services/user';
 @Component({
   selector: 'km-gke-cluster',
   templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class GKEClusterComponent implements OnInit, OnDestroy {
   isInitialized = false;
