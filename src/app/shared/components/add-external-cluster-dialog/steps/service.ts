@@ -19,16 +19,6 @@ import {catchError} from 'rxjs/operators';
 import {environment} from '@environments/environment';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 
-export namespace Header {
-  export enum Common {
-    Credentials = 'Credentials',
-  }
-
-  export enum GKE {
-    ServiceAccount = 'ServiceAccount',
-  }
-}
-
 @Injectable({providedIn: 'root'})
 export class ExternalClusterService {
   providerChanges = new BehaviorSubject<ExternalClusterProvider>(undefined);
@@ -42,9 +32,11 @@ export class ExternalClusterService {
 
   getGKEClusters(): Observable<GKECluster[]> {
     const url = `${this._newRestRoot}/providers/gke/clusters`;
-    const headers = new HttpHeaders();
-    headers.set(Header.GKE.ServiceAccount, this.externalCluster.cloud.gke.serviceAccount);
-    return this._http.get<GKECluster[]>(url, {headers}).pipe(catchError(() => of<GKECluster[]>()));
+    const headers = new HttpHeaders({
+      ServiceAccount: this._externalCluster.cloud.gke.serviceAccount,
+    });
+
+    return this._http.get<GKECluster[]>(url, {headers: headers}).pipe(catchError(() => of<GKECluster[]>()));
   }
 
   get provider(): ExternalClusterProvider {

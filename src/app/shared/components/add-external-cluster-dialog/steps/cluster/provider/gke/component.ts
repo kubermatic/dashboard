@@ -12,36 +12,60 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {GKECluster} from '@shared/entity/external-cluster';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatPaginator} from '@angular/material/paginator';
+import {UserService} from '@core/services/user';
 
 @Component({
   selector: 'km-gke-cluster',
   templateUrl: './template.html',
 })
 export class GKEClusterComponent implements OnInit, OnDestroy {
-  clusters: GKECluster[];
-  isLoading = true;
+  isInitialized = false;
+  clusters: GKECluster[] = [];
+  dataSource = new MatTableDataSource<GKECluster>();
+  columns: string[] = ['name', 'zone', 'import'];
+  @ViewChild(MatPaginator, {static: true}) private readonly _paginator: MatPaginator;
   private _unsubscribe = new Subject<void>();
 
-  constructor(private readonly _externalClusterService: ExternalClusterService) {}
+  constructor(
+    private readonly _externalClusterService: ExternalClusterService,
+    private readonly _userService: UserService
+  ) {}
 
   ngOnInit() {
+    this.dataSource.paginator = this._paginator;
+    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this._paginator.pageSize = settings.itemsPerPage;
+      this.dataSource.paginator = this._paginator;
+    });
+
     this._externalClusterService
       .getGKEClusters()
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(clusters => {
         this.clusters = clusters;
-        this.isLoading = false;
+        this.dataSource.data = clusters;
+        this.isInitialized = true;
       });
   }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  get isEmpty(): boolean {
+    return this.clusters.length === 0;
+  }
+
+  get hasPaginator(): boolean {
+    return !this.isEmpty && this._paginator && this.clusters.length > this._paginator.pageSize;
   }
 
   update(): void {
