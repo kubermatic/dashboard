@@ -20,7 +20,6 @@ import {ExternalClusterService} from '@shared/components/add-external-cluster-di
 
 export enum Controls {
   ServiceAccount = 'serviceAccount',
-  Zone = 'zone',
 }
 
 @Component({
@@ -52,7 +51,6 @@ export class GKECredentialsComponent extends BaseFormValidator implements OnInit
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.ServiceAccount]: this._builder.control(''),
-      [Controls.Zone]: this._builder.control(''),
     });
 
     this.form.statusChanges
@@ -74,7 +72,6 @@ export class GKECredentialsComponent extends BaseFormValidator implements OnInit
         gke: {
           name: '',
           serviceAccount: this.form.get(Controls.ServiceAccount).value,
-          zone: this.form.get(Controls.Zone).value,
         },
       },
     };

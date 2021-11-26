@@ -12,44 +12,40 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef} from '@angular/core';
-import {NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
-
-export enum Controls {
-  ServiceAccount = 'serviceAccount',
-  Zone = 'zone',
-}
+import {takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs';
+import {GKECluster} from '@shared/entity/external-cluster';
 
 @Component({
   selector: 'km-gke-cluster',
   templateUrl: './template.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => GKEClusterComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => GKEClusterComponent),
-      multi: true,
-    },
-  ],
 })
-export class GKEClusterComponent {
+export class GKEClusterComponent implements OnInit, OnDestroy {
+  clusters: GKECluster[];
+  isLoading = true;
+  private _unsubscribe = new Subject<void>();
+
   constructor(private readonly _externalClusterService: ExternalClusterService) {}
 
+  ngOnInit() {
+    this._externalClusterService
+      .getGKEClusters()
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(clusters => {
+        this.clusters = clusters;
+        this.isLoading = false;
+      });
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
+  }
+
   update(): void {
-    this._externalClusterService.externalCluster = {
-      name: '',
-      cloud: {
-        gke: {
-          name: '',
-          serviceAccount: '',
-          zone: '',
-        },
-      },
-    };
+    this._externalClusterService.externalCluster.name = '';
+    this._externalClusterService.externalCluster.cloud.gke.name = '';
   }
 }

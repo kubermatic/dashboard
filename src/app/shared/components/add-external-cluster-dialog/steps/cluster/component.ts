@@ -21,6 +21,7 @@ import {Subject} from 'rxjs';
 @Component({
   selector: 'km-external-cluster-cluster-step',
   templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class ClusterStepComponent {
   provider: ExternalClusterProvider;
@@ -30,9 +31,9 @@ export class ClusterStepComponent {
   constructor(private readonly _externalClusterService: ExternalClusterService) {}
 
   ngOnInit(): void {
-    this._externalClusterService.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(provider => {
-      this.provider = provider;
-    });
+    this._externalClusterService.providerChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(provider => (this.provider = provider));
   }
 
   ngOnDestroy(): void {

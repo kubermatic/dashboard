@@ -13,8 +13,21 @@
 // limitations under the License.
 
 import {Injectable} from '@angular/core';
-import {ExternalCluster, ExternalClusterProvider} from '@shared/entity/external-cluster';
-import {BehaviorSubject} from 'rxjs';
+import {ExternalCluster, ExternalClusterProvider, GKECluster} from '@shared/entity/external-cluster';
+import {BehaviorSubject, Observable, of} from 'rxjs';
+import {catchError} from 'rxjs/operators';
+import {environment} from '@environments/environment';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+
+export namespace Header {
+  export enum Common {
+    Credentials = 'Credentials',
+  }
+
+  export enum GKE {
+    ServiceAccount = 'ServiceAccount',
+  }
+}
 
 @Injectable({providedIn: 'root'})
 export class ExternalClusterService {
@@ -23,6 +36,16 @@ export class ExternalClusterService {
   private _externalCluster: ExternalCluster = ExternalCluster.new();
   private _credentialsStepValidity = false;
   private _clusterStepValidity = false;
+  private _newRestRoot: string = environment.newRestRoot;
+
+  constructor(private readonly _http: HttpClient) {}
+
+  getGKEClusters(): Observable<GKECluster[]> {
+    const url = `${this._newRestRoot}/providers/gke/clusters`;
+    const headers = new HttpHeaders();
+    headers.set(Header.GKE.ServiceAccount, this.externalCluster.cloud.gke.serviceAccount);
+    return this._http.get<GKECluster[]>(url, {headers}).pipe(catchError(() => of<GKECluster[]>()));
+  }
 
   get provider(): ExternalClusterProvider {
     return this._provider;
