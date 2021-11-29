@@ -69,7 +69,8 @@ limitations under the License.
           [disabled]="creating || invalid"
           *ngIf="last"
           kmThrottleClick
-          (throttleClick)="add()">
+          (throttleClick)="add()"
+          id="external-cluster-add-btn">
     <i class="km-icon-mask km-icon-add"></i>
     <ng-container [ngSwitch]="externalClusterService.provider">
       <span *ngSwitchCase="provider.Custom">Add External Cluster</span>
