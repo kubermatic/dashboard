@@ -54,7 +54,9 @@ limitations under the License.
       <ng-container [ngSwitch]="element.imported">
         <i *ngSwitchCase="true"
            class="km-icon-running"></i>
-        <div *ngSwitchCase="false"></div>
+        <mat-checkbox *ngSwitchCase="false"
+                      [ngModel]="isSelected(element)"
+                      (ngModelChange)="select(element, $event)"></mat-checkbox>
       </ng-container>
     </td>
   </ng-container>

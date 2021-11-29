@@ -32,6 +32,7 @@ export class GKEClusterComponent implements OnInit, OnDestroy {
   dataSource = new MatTableDataSource<GKECluster>();
   columns: string[] = ['name', 'zone', 'import'];
   @ViewChild(MatPaginator, {static: true}) private readonly _paginator: MatPaginator;
+  private _selected: GKECluster;
   private _unsubscribe = new Subject<void>();
 
   constructor(
@@ -69,8 +70,19 @@ export class GKEClusterComponent implements OnInit, OnDestroy {
     return !this.isEmpty && this._paginator && this.clusters.length > this._paginator.pageSize;
   }
 
-  update(): void {
-    this._externalClusterService.externalCluster.name = '';
-    this._externalClusterService.externalCluster.cloud.gke.name = '';
+  isSelected(cluster: GKECluster): boolean {
+    return this._selected === cluster;
+  }
+
+  select(cluster: GKECluster, state: boolean): void {
+    this._selected = state ? cluster : undefined;
+
+    this._externalClusterService.clusterStepValidity = !!this._selected;
+
+    if (this._selected) {
+      this._externalClusterService.externalCluster.name = this._selected.name;
+      this._externalClusterService.externalCluster.cloud.gke.name = this._selected.name;
+      this._externalClusterService.externalCluster.cloud.gke.zone = this._selected.zone;
+    }
   }
 }
