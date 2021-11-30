@@ -74,15 +74,13 @@ export class GKEClusterComponent implements OnInit, OnDestroy {
     return this._selected === cluster;
   }
 
-  select(cluster: GKECluster, state: boolean): void {
-    this._selected = state ? cluster : undefined;
+  select(cluster: GKECluster): void {
+    this._selected = cluster;
 
-    this._externalClusterService.clusterStepValidity = !!this._selected;
+    this._externalClusterService.clusterStepValidity = true;
 
-    if (this._selected) {
-      this._externalClusterService.externalCluster.name = this._selected.name;
-      this._externalClusterService.externalCluster.cloud.gke.name = this._selected.name;
-      this._externalClusterService.externalCluster.cloud.gke.zone = this._selected.zone;
-    }
+    this._externalClusterService.externalCluster.name = this._selected.name;
+    this._externalClusterService.externalCluster.cloud.gke.name = this._selected.name;
+    this._externalClusterService.externalCluster.cloud.gke.zone = this._selected.zone;
   }
 }
