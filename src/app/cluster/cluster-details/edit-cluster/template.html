@@ -105,17 +105,31 @@ limitations under the License.
         Konnectivity
       </mat-checkbox>
 
-      <div fxLayout="row"
-           fxLayoutGap="16px">
-        <div fxLayout="row"
-             fxLayoutGap="8px"
-             fxLayoutAlign=" center">
-          <mat-checkbox [formControlName]="Controls.AuditLogging">Audit Logging</mat-checkbox>
-          <i *ngIf="!!datacenter.spec.enforceAuditLogging"
-             class="km-icon-error km-warning"
-             matTooltip="Audit Logging is enforced by your admin in the chosen datacenter.">
-          </i>
-        </div>
+      <div fxLayoutAlign=" center">
+        <mat-checkbox [formControlName]="Controls.AuditLogging">Audit Logging</mat-checkbox>
+        <mat-button-toggle-group *ngIf="!!form.get(Controls.AuditLogging).value"
+                                 [formControlName]="Controls.AuditPolicyPreset"
+                                 group="auditLogging">
+          <mat-button-toggle [value]="AuditPolicyPreset.Custom"
+                             matTooltip="Sets up cluster with a metadata audit policy that can be edited after the cluster has been created.">
+            custom
+          </mat-button-toggle>
+          <mat-button-toggle [value]="AuditPolicyPreset.Metadata"
+                             matTooltip="Logs metadata for all requests received by the Kubernetes API.">
+            metadata
+          </mat-button-toggle>
+          <mat-button-toggle [value]="AuditPolicyPreset.Minimal"
+                             matTooltip="Logs extended information about key security concerns like workload modifications and access to sensitive information.">
+            minimal
+          </mat-button-toggle>
+          <mat-button-toggle [value]="AuditPolicyPreset.Recommended"
+                             matTooltip="Logs extended information about key security concerns and metadata for all other requests. Recommended for best security coverage.">
+            recommended
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+        <i *ngIf="isEnforced(Controls.AuditLogging)"
+           class="km-icon-info km-pointer"
+           matTooltip="Audit Logging is enforced by your admin in the chosen datacenter."></i>
       </div>
 
       <mat-checkbox [formControlName]="Controls.OPAIntegration">

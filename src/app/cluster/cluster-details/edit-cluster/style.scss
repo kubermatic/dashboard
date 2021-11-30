@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use 'variables';
+
 .km-edit-cluster-form {
   margin-bottom: 30px;
 }
@@ -23,5 +25,34 @@ km-label-form:not(.pod-node-selector-config) {
 mat-checkbox {
   i {
     margin: 4px 8px;
+  }
+}
+
+mat-button-toggle-group[group='auditLogging'] {
+  margin: 0 10px;
+
+  mat-button-toggle {
+    margin: 0 0 0 -1px;
+    max-height: 28px;
+    min-height: 28px;
+    min-width: unset;
+
+    &.mat-button-toggle-checked {
+      z-index: 1;
+    }
+
+    &:not(:first-of-type),
+    &:not(:last-of-type) {
+      border-radius: 0;
+    }
+
+    &:first-of-type {
+      border-radius: variables.$border-radius 0 0 variables.$border-radius;
+      margin: 0;
+    }
+
+    &:last-of-type {
+      border-radius: 0 variables.$border-radius variables.$border-radius 0;
+    }
   }
 }
