@@ -16,7 +16,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {Auth} from '@core/services/auth/service';
 import {UserService} from '@core/services/user';
 import {Subject} from 'rxjs';
-import {switchMap, takeUntil} from 'rxjs/operators';
+import {take, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-navigation',
@@ -24,10 +24,9 @@ import {switchMap, takeUntil} from 'rxjs/operators';
   styleUrls: ['./style.scss'],
 })
 export class NavigationComponent implements OnInit {
+  private _unsubscribe: Subject<void> = new Subject<void>();
   @Input() showMenuSwitchAndProjectSelector: boolean;
   showSidenav = true;
-  private _settingsChange = new Subject<void>();
-  private _unsubscribe: Subject<void> = new Subject<void>();
 
   constructor(private readonly _auth: Auth, private readonly _userService: UserService) {}
 
@@ -35,19 +34,6 @@ export class NavigationComponent implements OnInit {
     this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.showSidenav = !settings.collapseSidenav;
     });
-
-    this._settingsChange
-      .pipe(takeUntil(this._unsubscribe))
-      .pipe(
-        switchMap(() =>
-          this._userService.patchCurrentUserSettings({
-            collapseSidenav: !this.showSidenav,
-          })
-        )
-      )
-      .subscribe(settings => {
-        this.showSidenav = !settings.collapseSidenav;
-      });
   }
 
   isAuthenticated(): boolean {
@@ -56,6 +42,11 @@ export class NavigationComponent implements OnInit {
 
   collapseSidenav(): void {
     this.showSidenav = !this.showSidenav;
-    this._settingsChange.next();
+    this._userService
+      .patchCurrentUserSettings({
+        collapseSidenav: !this.showSidenav,
+      })
+      .pipe(take(1))
+      .subscribe(_ => {});
   }
 }
