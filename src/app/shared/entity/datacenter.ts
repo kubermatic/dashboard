@@ -114,6 +114,7 @@ export class VSphereDatacenterSpec {
 export class SeedSettings {
   mla: MLA;
   metering: MeteringConfiguration;
+  seedDNSOverwrite?: string;
 }
 
 export class MeteringConfiguration {
