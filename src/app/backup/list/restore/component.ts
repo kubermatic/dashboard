@@ -50,7 +50,7 @@ export class RestoreListComponent implements OnInit, OnDestroy {
   }
 
   get columns(): string[] {
-    return ['name', 'phase', 'clusterID', 'backupName', 'actions'];
+    return ['name', 'phase', 'clusterID', 'backupName', 'destination', 'actions'];
   }
 
   get isEmpty(): boolean {
