@@ -46,7 +46,7 @@ limitations under the License.
             fxFlex="100%">
     <ng-template matStepLabel>{{step.Cluster}}</ng-template>
     <ng-template matStepContent>
-      <km-external-cluster-cluster-step></km-external-cluster-cluster-step>
+      <km-external-cluster-cluster-step [projectID]="projectId"></km-external-cluster-cluster-step>
     </ng-template>
   </mat-step>
 </mat-horizontal-stepper>

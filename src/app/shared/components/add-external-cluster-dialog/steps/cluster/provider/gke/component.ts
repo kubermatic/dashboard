@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
@@ -27,6 +27,7 @@ import {UserService} from '@core/services/user';
   styleUrls: ['./style.scss'],
 })
 export class GKEClusterComponent implements OnInit, OnDestroy {
+  @Input() projectID: string;
   isInitialized = false;
   clusters: GKECluster[] = [];
   dataSource = new MatTableDataSource<GKECluster>();
@@ -48,7 +49,7 @@ export class GKEClusterComponent implements OnInit, OnDestroy {
     });
 
     this._externalClusterService
-      .getGKEClusters()
+      .getGKEClusters(this.projectID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(clusters => {
         this.clusters = clusters;

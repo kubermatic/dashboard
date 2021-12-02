@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {ExternalClusterProvider} from '@shared/entity/external-cluster';
 import {takeUntil} from 'rxjs/operators';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
@@ -24,6 +24,7 @@ import {Subject} from 'rxjs';
   styleUrls: ['./style.scss'],
 })
 export class ClusterStepComponent {
+  @Input() projectID: string;
   provider: ExternalClusterProvider;
   readonly Provider = ExternalClusterProvider;
   private _unsubscribe = new Subject<void>();
@@ -39,5 +40,7 @@ export class ClusterStepComponent {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+
+    this._externalClusterService.clusterStepValidity = false;
   }
 }

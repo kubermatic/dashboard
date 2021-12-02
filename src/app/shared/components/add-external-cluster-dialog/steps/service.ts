@@ -30,8 +30,8 @@ export class ExternalClusterService {
 
   constructor(private readonly _http: HttpClient) {}
 
-  getGKEClusters(): Observable<GKECluster[]> {
-    const url = `${this._newRestRoot}/providers/gke/clusters`;
+  getGKEClusters(projectID: string): Observable<GKECluster[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/providers/gke/clusters`;
     const headers = new HttpHeaders({
       ServiceAccount: this._externalCluster.cloud.gke.serviceAccount,
     });
