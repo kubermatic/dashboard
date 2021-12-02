@@ -53,8 +53,8 @@ export class GKECredentialsComponent extends BaseFormValidator implements OnInit
     this.form = this._builder.group({
       [Controls.ServiceAccount]: this._builder.control(
         '',
-        [],
-        Validators.composeAsync([AsyncValidators.InvalidGKEServiceAccount()])
+        [Validators.required],
+        [AsyncValidators.InvalidGKEServiceAccount()]
       ),
     });
 

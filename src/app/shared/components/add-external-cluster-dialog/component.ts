@@ -62,8 +62,8 @@ export class AddExternalClusterDialogComponent implements OnInit, OnDestroy {
     this.form = this._formBuilder.group(controls);
 
     this.externalClusterService.providerChanges
-      .pipe(takeUntil(this._unsubscribe))
       .pipe(filter(provider => !!provider))
+      .pipe(takeUntil(this._unsubscribe))
       .subscribe(provider => {
         this.steps =
           provider === ExternalClusterProvider.Custom
