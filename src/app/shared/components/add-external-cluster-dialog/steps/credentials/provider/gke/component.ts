@@ -17,7 +17,7 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angula
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {takeUntil} from 'rxjs/operators';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
-import {AsyncValidators} from '@shared/validators/gke-service-account.validator';
+import {CredentialsAsyncValidatorService} from '@shared/validators/async-credentials.validator';
 
 export enum Controls {
   ServiceAccount = 'serviceAccount',
@@ -44,18 +44,18 @@ export class GKECredentialsComponent extends BaseFormValidator implements OnInit
 
   constructor(
     private readonly _builder: FormBuilder,
-    private readonly _externalClusterService: ExternalClusterService
+    private readonly _externalClusterService: ExternalClusterService,
+    private readonly _credentialsAsyncValidatorService: CredentialsAsyncValidatorService
   ) {
     super();
   }
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.ServiceAccount]: this._builder.control(
-        '',
-        [Validators.required],
-        [AsyncValidators.InvalidGKEServiceAccount()]
-      ),
+      [Controls.ServiceAccount]: this._builder.control('', {
+        validators: [Validators.required],
+        asyncValidators: [this._credentialsAsyncValidatorService.gkeServiceAccountValidator()],
+      }),
     });
 
     this.form.statusChanges
