@@ -66,8 +66,8 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
       .getDatacenter(this.cluster.spec.cloud.dc)
       .pipe(takeUntil(this._unsubscribe))
       .pipe(tap(datacenter => (this._seed = datacenter.spec.seed)))
-      .pipe(takeUntil(this._unsubscribe))
       .pipe(switchMap(_ => this._datacenterService.seedSettings(this._seed)))
+      .pipe(takeUntil(this._unsubscribe))
       .subscribe(seedSettings => (this._seedSettings = seedSettings));
   }
 
