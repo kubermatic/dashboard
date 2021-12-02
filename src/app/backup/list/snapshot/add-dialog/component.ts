@@ -120,7 +120,7 @@ export class AddSnapshotDialogComponent implements OnInit, OnDestroy {
     }
 
     this._backupService
-      .getDestinations(clusterID, this._config.projectID)
+      .getDestinations(this._config.projectID, clusterID)
       .pipe(take(1))
       .subscribe(destinations => (this.destinations = destinations));
   }
