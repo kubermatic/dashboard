@@ -15,7 +15,7 @@
 import {AbstractControl, AsyncValidator, AsyncValidatorFn, ValidationErrors} from '@angular/forms';
 import {GlobalModule} from '@core/services/global/module';
 import {Observable, of} from 'rxjs';
-import {catchError} from 'rxjs/operators';
+import {catchError, take} from 'rxjs/operators';
 import {Cluster} from '@shared/entity/cluster';
 import {environment} from '@environments/environment';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
@@ -38,7 +38,8 @@ export class GKEServiceAccountValidator implements AsyncValidator {
     const headers = new HttpHeaders({ServiceAccount: value});
     return this._http
       .get<Cluster>(url, {headers: headers})
-      .pipe(catchError(() => of({invalidGKEServiceAccount: true})));
+      .pipe(catchError(() => of({invalidGKEServiceAccount: true})))
+      .pipe(take(1));
   }
 }
 
