@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, OnInit} from '@angular/core';
+import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {takeUntil} from 'rxjs/operators';
@@ -40,7 +40,7 @@ enum Controls {
     },
   ],
 })
-export class CredentialsStepComponent extends BaseFormValidator implements OnInit {
+export class CredentialsStepComponent extends BaseFormValidator implements OnInit, OnDestroy {
   form: FormGroup;
   provider: ExternalClusterProvider;
 
@@ -64,5 +64,9 @@ export class CredentialsStepComponent extends BaseFormValidator implements OnIni
       this.form.removeControl(Controls.Settings);
       this.form.addControl(Controls.Settings, this._builder.control(''));
     });
+  }
+
+  ngOnDestroy(): void {
+    this._externalClusterService.credentialsStepValidity = false;
   }
 }
