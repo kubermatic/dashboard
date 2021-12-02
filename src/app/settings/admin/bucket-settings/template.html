@@ -32,7 +32,7 @@ limitations under the License.
            (matSortChange)="onSortChange($event)"
            [dataSource]="dataSource">
 
-      <ng-container matColumnDef="stateArrow">
+      <ng-container [matColumnDef]="Column.StateArrow">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell"></th>

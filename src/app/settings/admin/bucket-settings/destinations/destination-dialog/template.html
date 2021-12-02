@@ -53,7 +53,7 @@ limitations under the License.
           mat-flat-button
           kmThrottleClick
           (throttleClick)="save()"
-          [disabled]="form.invalid">
+          [disabled]="!form.valid">
     <i [ngClass]="getIconClass()"></i>
     <span>{{data.confirmLabel}} Destination</span>
   </button>

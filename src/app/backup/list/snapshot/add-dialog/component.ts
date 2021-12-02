@@ -70,7 +70,7 @@ export class AddSnapshotDialogComponent implements OnInit, OnDestroy {
     this.form = this._builder.group({
       [Controls.Cluster]: this._builder.control('', Validators.required),
       [Controls.Name]: this._builder.control('', Validators.required),
-      [Controls.Destination]: this._builder.control(''),
+      [Controls.Destination]: this._builder.control('', Validators.required),
     });
 
     this._clusterService
@@ -110,15 +110,19 @@ export class AddSnapshotDialogComponent implements OnInit, OnDestroy {
       });
   }
 
-  private _onClusterChange(clusterId: string) {
-    const matchingCluster = this.clusters.find(cluster => cluster.id === clusterId);
+  private _onClusterChange(clusterID: string) {
+    const matchingCluster = this.clusters.find(cluster => cluster.id === clusterID);
     if (matchingCluster) {
       this._datacenterService
         .getDatacenter(matchingCluster.spec.cloud.dc)
         .pipe(take(1))
         .subscribe(dc => (this.seed = dc.spec.seed));
-      this.destinations = [];
     }
+
+    this._backupService
+      .getDestinations(clusterID, this._config.projectID)
+      .pipe(take(1))
+      .subscribe(destinations => (this.destinations = destinations));
   }
 
   private _toEtcdBackupConfig(): EtcdBackupConfig {
