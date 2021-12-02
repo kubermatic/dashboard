@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {merge} from 'rxjs';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {merge, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
 
@@ -26,29 +25,17 @@ export enum Controls {
 @Component({
   selector: 'km-custom-credentials',
   templateUrl: './template.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => CustomCredentialsComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => CustomCredentialsComponent),
-      multi: true,
-    },
-  ],
 })
-export class CustomCredentialsComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  readonly Controls = Controls;
+export class CustomCredentialsComponent implements OnInit, OnDestroy {
   kubeconfig = '';
+  form: FormGroup;
+  readonly Controls = Controls;
+  private readonly _unsubscribe = new Subject<void>();
 
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _externalClusterService: ExternalClusterService
-  ) {
-    super();
-  }
+  ) {}
 
   ngOnInit(): void {
     this.form = this._builder.group({

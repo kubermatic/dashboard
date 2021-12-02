@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {BaseFormValidator} from '@shared/validators/base-form.validator';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {FormGroup} from '@angular/forms';
 import {takeUntil} from 'rxjs/operators';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
 import {ExternalClusterProvider} from '@shared/entity/external-cluster';
+import {Subject} from 'rxjs';
 
 enum Controls {
   Settings = 'settings',
@@ -27,43 +27,20 @@ enum Controls {
   selector: 'km-external-cluster-credentials-step',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => CredentialsStepComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => CredentialsStepComponent),
-      multi: true,
-    },
-  ],
 })
-export class CredentialsStepComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class CredentialsStepComponent implements OnInit, OnDestroy {
   form: FormGroup;
   provider: ExternalClusterProvider;
-
   readonly Provider = ExternalClusterProvider;
   readonly Controls = Controls;
+  private readonly _unsubscribe = new Subject<void>();
 
-  constructor(
-    private readonly _builder: FormBuilder,
-    private readonly _externalClusterService: ExternalClusterService
-  ) {
-    super();
-  }
+  constructor(private readonly _externalClusterService: ExternalClusterService) {}
 
   ngOnInit(): void {
-    this.form = this._builder.group({
-      [Controls.Settings]: this._builder.control(''),
-    });
-
-    this._externalClusterService.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(provider => {
-      this.provider = provider;
-      this.form.removeControl(Controls.Settings);
-      this.form.addControl(Controls.Settings, this._builder.control(''));
-    });
+    this._externalClusterService.providerChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(provider => (this.provider = provider));
   }
 
   ngOnDestroy(): void {

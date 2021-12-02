@@ -26,23 +26,20 @@ limitations under the License.
   </ng-template>
 
   <mat-step *ngIf="isAvailable(step.Provider)"
-            [stepControl]="form.get(step.Provider)"
             [label]="step.Provider"
             fxFlex="100%">
-    <km-external-cluster-provider-step [formControl]="form.get(step.Provider)"></km-external-cluster-provider-step>
+    <km-external-cluster-provider-step></km-external-cluster-provider-step>
   </mat-step>
 
   <mat-step *ngIf="isAvailable(step.Credentials)"
-            [stepControl]="form.get(step.Credentials)"
             fxFlex="100%">
     <ng-template matStepLabel>{{step.Credentials}}</ng-template>
     <ng-template matStepContent>
-      <km-external-cluster-credentials-step [formControl]="form.get(step.Credentials)"></km-external-cluster-credentials-step>
+      <km-external-cluster-credentials-step></km-external-cluster-credentials-step>
     </ng-template>
   </mat-step>
 
   <mat-step *ngIf="isAvailable(step.Cluster)"
-            [stepControl]="form.get(step.Cluster)"
             fxFlex="100%">
     <ng-template matStepLabel>{{step.Cluster}}</ng-template>
     <ng-template matStepContent>

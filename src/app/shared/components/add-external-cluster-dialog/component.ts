@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
 import {MatStepper} from '@angular/material/stepper';
@@ -36,20 +35,15 @@ export enum Step {
 })
 export class AddExternalClusterDialogComponent implements OnInit, OnDestroy {
   @Input() projectId: string;
-
   steps: Step[] = [Step.Provider, Step.Credentials];
-  form: FormGroup;
-
   readonly step = Step;
   readonly provider = ExternalClusterProvider;
-
   @ViewChild('stepper', {static: true}) private readonly _stepper: MatStepper;
   private readonly _unsubscribe = new Subject<void>();
   private _creating = false;
 
   constructor(
     private readonly _matDialogRef: MatDialogRef<AddExternalClusterDialogComponent>,
-    private readonly _formBuilder: FormBuilder,
     private readonly _router: Router,
     private readonly _notificationService: NotificationService,
     private readonly _clusterService: ClusterService,
@@ -57,10 +51,6 @@ export class AddExternalClusterDialogComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    const controls = {};
-    this.steps.forEach(step => (controls[step] = this._formBuilder.control('')));
-    this.form = this._formBuilder.group(controls);
-
     this.externalClusterService.providerChanges
       .pipe(filter(provider => !!provider))
       .pipe(takeUntil(this._unsubscribe))
@@ -95,7 +85,7 @@ export class AddExternalClusterDialogComponent implements OnInit, OnDestroy {
   get invalid(): boolean {
     switch (this.active) {
       case Step.Provider:
-        return this.form.get(Step.Provider).invalid;
+        return false;
       case Step.Credentials:
         return !this.externalClusterService.isCredentialsStepValid;
       case Step.Cluster:

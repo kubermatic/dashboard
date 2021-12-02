@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {takeUntil} from 'rxjs/operators';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
 import {ExternalClusterProvider} from '@shared/entity/external-cluster';
+import {Subject} from 'rxjs';
 
 enum Controls {
   Provider = 'provider',
@@ -28,32 +28,18 @@ enum Controls {
   selector: 'km-external-cluster-provider-step',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ProviderStepComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => ProviderStepComponent),
-      multi: true,
-    },
-  ],
 })
-export class ProviderStepComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class ProviderStepComponent implements OnInit, OnDestroy {
   providers: NodeProvider[] = [];
   form: FormGroup;
-
   readonly controls = Controls;
   readonly provider = ExternalClusterProvider;
+  private readonly _unsubscribe = new Subject<void>();
 
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _externalClusterService: ExternalClusterService
-  ) {
-    super();
-  }
+  ) {}
 
   ngOnInit(): void {
     this.form = this._builder.group({
@@ -63,13 +49,7 @@ export class ProviderStepComponent extends BaseFormValidator implements OnInit, 
     this.form
       .get(Controls.Provider)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(provider => {
-        // Force early validation to allow entering the next step by just selecting one of the providers.
-        // Without it the form is not marked as valid yet and next step cannot be selected.
-        this.form.updateValueAndValidity();
-
-        this._externalClusterService.provider = provider;
-      });
+      .subscribe(provider => (this._externalClusterService.provider = provider));
   }
 
   ngOnDestroy(): void {

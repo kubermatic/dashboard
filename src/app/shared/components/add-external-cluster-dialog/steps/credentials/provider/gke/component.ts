@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {BaseFormValidator} from '@shared/validators/base-form.validator';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {takeUntil} from 'rxjs/operators';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
 import {CredentialsAsyncValidatorService} from '@shared/validators/async-credentials.validator';
+import {Subject} from 'rxjs';
 
 export enum Controls {
   ServiceAccount = 'serviceAccount',
@@ -26,29 +26,17 @@ export enum Controls {
 @Component({
   selector: 'km-gke-credentials',
   templateUrl: './template.html',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => GKECredentialsComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => GKECredentialsComponent),
-      multi: true,
-    },
-  ],
 })
-export class GKECredentialsComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class GKECredentialsComponent implements OnInit, OnDestroy {
+  form: FormGroup;
   readonly Controls = Controls;
+  private readonly _unsubscribe = new Subject<void>();
 
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _externalClusterService: ExternalClusterService,
     private readonly _credentialsAsyncValidatorService: CredentialsAsyncValidatorService
-  ) {
-    super();
-  }
+  ) {}
 
   ngOnInit(): void {
     this.form = this._builder.group({
