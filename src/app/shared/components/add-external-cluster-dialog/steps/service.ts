@@ -71,4 +71,11 @@ export class ExternalClusterService {
   set clusterStepValidity(valid: boolean) {
     this._clusterStepValidity = valid;
   }
+
+  reset(): void {
+    this.provider = undefined;
+    this.externalCluster = ExternalCluster.new();
+    this.credentialsStepValidity = false;
+    this.clusterStepValidity = false;
+  }
 }

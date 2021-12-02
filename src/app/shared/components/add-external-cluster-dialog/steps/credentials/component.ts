@@ -67,6 +67,7 @@ export class CredentialsStepComponent extends BaseFormValidator implements OnIni
   }
 
   ngOnDestroy(): void {
-    this._externalClusterService.credentialsStepValidity = false;
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 }

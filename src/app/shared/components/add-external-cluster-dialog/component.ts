@@ -12,16 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
 import {MatStepper} from '@angular/material/stepper';
-import {take} from 'rxjs/operators';
+import {filter, take, takeUntil} from 'rxjs/operators';
 import {NotificationService} from '@core/services/notification';
 import {Router} from '@angular/router';
 import {ExternalClusterProvider} from '@shared/entity/external-cluster';
 import {ClusterService} from '@core/services/cluster';
+import {Subject} from 'rxjs';
 
 export enum Step {
   Provider = 'Pick Provider',
@@ -33,7 +34,7 @@ export enum Step {
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class AddExternalClusterDialogComponent implements OnInit {
+export class AddExternalClusterDialogComponent implements OnInit, OnDestroy {
   @Input() projectId: string;
 
   steps: Step[] = [Step.Provider, Step.Credentials];
@@ -43,6 +44,7 @@ export class AddExternalClusterDialogComponent implements OnInit {
   readonly provider = ExternalClusterProvider;
 
   @ViewChild('stepper', {static: true}) private readonly _stepper: MatStepper;
+  private readonly _unsubscribe = new Subject<void>();
   private _creating = false;
 
   constructor(
@@ -59,14 +61,23 @@ export class AddExternalClusterDialogComponent implements OnInit {
     this.steps.forEach(step => (controls[step] = this._formBuilder.control('')));
     this.form = this._formBuilder.group(controls);
 
-    this.externalClusterService.providerChanges.pipe().subscribe(provider => {
-      this.steps =
-        provider === ExternalClusterProvider.Custom
-          ? [Step.Provider, Step.Credentials]
-          : [Step.Provider, Step.Credentials, Step.Cluster];
+    this.externalClusterService.providerChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .pipe(filter(provider => !!provider))
+      .subscribe(provider => {
+        this.steps =
+          provider === ExternalClusterProvider.Custom
+            ? [Step.Provider, Step.Credentials]
+            : [Step.Provider, Step.Credentials, Step.Cluster];
 
-      this._stepper.next();
-    });
+        this._stepper.next();
+      });
+  }
+
+  ngOnDestroy() {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
+    this.externalClusterService.reset();
   }
 
   get active(): string {
