@@ -58,7 +58,7 @@ limitations under the License.
                *ngIf="creating"></mat-spinner>
   <button mat-flat-button
           type="button"
-          (click)="stepper.next()"
+          (click)="next()"
           [disabled]="invalid"
           *ngIf="active === step.Credentials && !last">
     <i class="km-icon-mask km-icon-next"></i>

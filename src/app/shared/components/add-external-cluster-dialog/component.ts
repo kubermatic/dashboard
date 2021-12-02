@@ -109,6 +109,10 @@ export class AddExternalClusterDialogComponent implements OnInit, OnDestroy {
     return this.steps.indexOf(step) > -1;
   }
 
+  next(): void {
+    this._stepper.next();
+  }
+
   add(): void {
     this._creating = true;
     this._clusterService
