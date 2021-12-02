@@ -40,6 +40,9 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
     'configs.config.gatekeeper.sh "config" not found',
   ];
 
+  // Array of endpoints that should be silenced in the UI.
+  private readonly _silencedEndpoints = ['providers/gke/validatecredetials'];
+
   private readonly _errorMap = new Map<string, string>([
     ['"AccessKeyId" is not valid', Errors.InvalidCredentials],
     ['InvalidAccessKeySecret', Errors.InvalidCredentials],
@@ -69,6 +72,10 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
       tap({
         next: () => {},
         error: (httpError: HttpErrorResponse) => {
+          if (this._shouldSilenceRequest(req)) {
+            return;
+          }
+
           if (!httpError) {
             return;
           }
@@ -98,6 +105,10 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
 
   private _shouldSilenceError(error: Error): boolean {
     return this._silenceErrArr.some(partial => error.message.includes(partial));
+  }
+
+  private _shouldSilenceRequest(req: HttpRequest<any>): boolean {
+    return this._silencedEndpoints.some(endpoint => req.url.includes(endpoint));
   }
 
   private _isAPIError(httpError: HttpErrorResponse): boolean {

@@ -13,10 +13,11 @@
 // limitations under the License.
 
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {takeUntil} from 'rxjs/operators';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
+import {AsyncValidators} from '@shared/validators/gke-service-account.validator';
 
 export enum Controls {
   ServiceAccount = 'serviceAccount',
@@ -50,7 +51,11 @@ export class GKECredentialsComponent extends BaseFormValidator implements OnInit
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.ServiceAccount]: this._builder.control(''),
+      [Controls.ServiceAccount]: this._builder.control(
+        '',
+        [],
+        Validators.composeAsync([AsyncValidators.InvalidGKEServiceAccount()])
+      ),
     });
 
     this.form.statusChanges
