@@ -30,9 +30,9 @@ import {ClusterMetrics, NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {CreateClusterModel} from '@shared/model/CreateClusterModel';
-import {ExternalClusterModel} from '@shared/model/ExternalClusterModel';
 import {combineLatest, merge, Observable, of, Subject, timer} from 'rxjs';
 import {catchError, filter, map, shareReplay, startWith, switchMap, switchMapTo, take} from 'rxjs/operators';
+import {ExternalCluster} from '@shared/entity/external-cluster';
 
 @Injectable()
 export class ClusterService {
@@ -114,7 +114,7 @@ export class ClusterService {
     return this._http.post<Cluster>(url, createClusterModel);
   }
 
-  addExternalCluster(projectID: string, model: ExternalClusterModel): Observable<Cluster> {
+  addExternalCluster(projectID: string, model: ExternalCluster): Observable<Cluster> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters`;
     return this._http.post<Cluster>(url, model);
   }
@@ -124,7 +124,7 @@ export class ClusterService {
     return this._http.patch<Cluster>(url, patch);
   }
 
-  updateExternalCluster(projectID: string, clusterID: string, model: ExternalClusterModel): Observable<Cluster> {
+  updateExternalCluster(projectID: string, clusterID: string, model: ExternalCluster): Observable<Cluster> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}`;
     return this._http.put<Cluster>(url, model);
   }

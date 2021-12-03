@@ -13,16 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<km-dialog-title>{{getLabel()}}</km-dialog-title>
+<km-dialog-title>Edit Cluster Connection</km-dialog-title>
 <mat-dialog-content>
-  <div class="km-dialog-warning"
-       fxLayoutAlign=" center"
-       fxLayoutGap="12px"
-       *ngIf="!editMode">
-    <i class="km-icon-info"></i>
-    <div>External clusters can only be viewed, not edited.</div>
-  </div>
-
   <form [formGroup]="form">
     <mat-form-field fxFlex>
       <mat-label>Name</mat-label>
@@ -48,7 +40,7 @@ limitations under the License.
           kmThrottleClick
           (throttleClick)="handler()"
           [disabled]="!form.valid || !kubeconfig">
-    <i [ngClass]="editMode ? 'km-icon-mask km-icon-edit w-24' : 'km-icon-mask km-icon-add'"></i>
-    <span>{{getLabel()}}</span>
+    <i class="km-icon-mask km-icon-edit w-24"></i>
+    <span>Edit Cluster Connection</span>
   </button>
 </mat-dialog-actions>

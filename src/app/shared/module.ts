@@ -78,7 +78,7 @@ import {DialogTitleComponent} from './components/dialog-title/component';
 import {EditorComponent} from './components/editor/component';
 import {ClusterTypeEOLComponent} from './components/eol/component';
 import {EventListComponent} from './components/event-list/component';
-import {ExternalClusterDataDialogComponent} from './components/external-cluster-data-dialog/component';
+import {EditClusterConnectionDialogComponent} from './components/external-cluster-data-dialog/component';
 import {InitialsCircleComponent} from './components/initials-circle/component';
 import {LabelFormComponent} from './components/label-form/component';
 import {LabelsComponent} from './components/labels/component';
@@ -97,6 +97,14 @@ import {TaintsComponent} from './components/taints/component';
 import {AutofocusDirective} from './directives/autofocus/directive';
 import {ThrottleClickDirective} from './directives/throttle-click';
 import {RelativeTimePipe} from './pipes/relativetime';
+import {AddExternalClusterDialogComponent} from '@shared/components/add-external-cluster-dialog/component';
+import {ProviderStepComponent} from '@shared/components/add-external-cluster-dialog/steps/provider/component';
+import {CredentialsStepComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/component';
+import {CustomCredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/custom/component';
+import {GKECredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/gke/component';
+import {GKEClusterComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/gke/component';
+import {ClusterStepComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/component';
+import {CredentialsAsyncValidatorService} from '@shared/validators/async-credentials.validator';
 
 const modules: any[] = [
   CommonModule,
@@ -172,7 +180,8 @@ const components: any[] = [
   ConfirmationDialogComponent,
   InstallAddonDialogComponent,
   EditAddonDialogComponent,
-  ExternalClusterDataDialogComponent,
+  AddExternalClusterDialogComponent,
+  EditClusterConnectionDialogComponent,
   LoaderComponent,
   SearchFieldComponent,
   TabCardComponent,
@@ -186,14 +195,22 @@ const components: any[] = [
   SelectClusterTemplateDialogComponent,
   SizeFormatterPipe,
   NumberStepperComponent,
+  ProviderStepComponent,
+  CredentialsStepComponent,
+  CustomCredentialsComponent,
+  GKECredentialsComponent,
+  ClusterStepComponent,
+  GKEClusterComponent,
 ];
+
+const services: any[] = [CredentialsAsyncValidatorService];
 
 const directives: any[] = [AutofocusDirective, ThrottleClickDirective, OptionDirective];
 
 @NgModule({
   imports: [...modules],
   declarations: [...components, ...directives],
-  providers: [DecimalPipe],
+  providers: [...services, DecimalPipe],
   exports: [...modules, ...components, ...directives],
 })
 export class SharedModule {}

@@ -18,14 +18,14 @@ limitations under the License.
      fxLayoutAlign=" center">
   <km-search-field (queryChange)="onSearch($event)"></km-search-field>
   <div fxFlex></div>
-  <button id="km-connect-cluster-top-btn"
+  <button id="km-add-external-cluster-btn"
           mat-flat-button
           color="alternative"
           *ngIf="(adminSettings$ | async).enableExternalClusterImport"
           [disabled]="!canAdd()"
-          (click)="connectCluster()">
-    <i class="km-icon-mask km-icon-connect"></i>
-    <span>Connect Cluster</span>
+          (click)="addExternalCluster()">
+    <i class="km-icon-mask km-icon-add"></i>
+    <span>Add External Cluster</span>
   </button>
   <button mat-flat-button
           type="button"

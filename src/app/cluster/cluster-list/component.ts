@@ -26,7 +26,6 @@ import {PathParam} from '@core/services/params';
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
-import {ExternalClusterDataDialogComponent} from '@shared/components/external-cluster-data-dialog/component';
 import {SelectClusterTemplateDialogComponent} from '@shared/components/select-cluster-template/component';
 import {EtcdRestore, EtcdRestorePhase} from '@shared/entity/backup';
 import {CloudSpec, Cluster} from '@shared/entity/cluster';
@@ -42,8 +41,9 @@ import {ClusterHealthStatus} from '@shared/utils/health-status/cluster-health-st
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import _ from 'lodash';
 import {EMPTY, forkJoin, Observable, of, onErrorResumeNext, Subject} from 'rxjs';
-import {catchError, distinctUntilChanged, filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {catchError, distinctUntilChanged, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ClusterDeleteConfirmationComponent} from '../cluster-details/cluster-delete-confirmation/component';
+import {AddExternalClusterDialogComponent} from '@shared/components/add-external-cluster-dialog/component';
 
 @Component({
   selector: 'km-cluster-list',
@@ -238,19 +238,9 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     this._router.navigate([`/projects/${this._selectedProject.id}/wizard`]);
   }
 
-  connectCluster(): void {
-    const dialog = this._matDialog.open(ExternalClusterDataDialogComponent);
+  addExternalCluster(): void {
+    const dialog = this._matDialog.open(AddExternalClusterDialogComponent);
     dialog.componentInstance.projectId = this._selectedProject.id;
-
-    dialog
-      .afterClosed()
-      .pipe(filter(model => !!model))
-      .pipe(switchMap(model => this._clusterService.addExternalCluster(this._selectedProject.id, model)))
-      .pipe(take(1))
-      .subscribe(addedCluster => {
-        this._router.navigate([`/projects/${this._selectedProject.id}/clusters/external/${addedCluster.id}`]);
-        this._notificationService.success(`The ${addedCluster.name} cluster was added`);
-      });
   }
 
   navigateToCluster(cluster: Cluster): void {

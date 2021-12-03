@@ -49,7 +49,7 @@ export class ProjectsPage {
   }
 
   static getConnectClusterBtn(): Cypress.Chainable {
-    return cy.get('#km-connect-cluster-top-btn');
+    return cy.get('#km-add-external-cluster-btn');
   }
 
   // Utils.

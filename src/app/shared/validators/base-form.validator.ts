@@ -24,6 +24,10 @@ export abstract class BaseFormValidator implements ControlValueAccessor, Validat
 
   // Validator interface implementation
   validate(_: AbstractControl): ValidationErrors | null {
+    if (this.form.pending) {
+      this._revalidateAfterPendingProcessEnds();
+    }
+
     return this.form.valid || this.form.disabled
       ? null
       : {
@@ -32,6 +36,18 @@ export abstract class BaseFormValidator implements ControlValueAccessor, Validat
             message: `${this._formName} validation failed.`,
           },
         };
+  }
+
+  // This method is required to rerun validation once form will be no longer in pending state.
+  // It might be the case when at least one of the validators is async.
+  // Without it validate method would return error and no longer check if the status has changed.
+  private _revalidateAfterPendingProcessEnds(): void {
+    const timeout = 500;
+    if (this.form.pending) {
+      setTimeout(() => this._revalidateAfterPendingProcessEnds(), timeout);
+    } else {
+      this.form.updateValueAndValidity();
+    }
   }
 
   // ControlValueAccessor interface implementation

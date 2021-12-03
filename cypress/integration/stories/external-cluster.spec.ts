@@ -48,6 +48,10 @@ describe('External Cluster Story', () => {
     ClustersPage.getConnectClusterBtn().click();
   });
 
+  it('should select any provider', () => {
+    ClustersPage.getExternalClusterAnyProviderBtn().click();
+  });
+
   it('should enter name', () => {
     ClustersPage.getConnectClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
   });
