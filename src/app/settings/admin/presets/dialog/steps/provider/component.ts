@@ -18,13 +18,16 @@ import {Mode} from '@app/settings/admin/presets/dialog/component';
 import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
 import {DatacenterService} from '@core/services/datacenter';
 import {PresetProvider} from '@shared/entity/preset';
-import {NodeProvider, NodeProviderConstants} from '@shared/model/NodeProviderConstants';
+import {EXTERNAL_NODE_PROVIDERS, NodeProvider, NodeProviderConstants} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {map, takeUntil} from 'rxjs/operators';
+import _ from 'lodash';
+import {takeUntil} from 'rxjs/operators';
 
 enum Controls {
   Provider = 'provider',
 }
+
+const UNSUPPORTED_PROVIDERS = [NodeProvider.BRINGYOUROWN, NodeProvider.BAREMETAL];
 
 @Component({
   selector: 'km-preset-provider-step',
@@ -67,24 +70,18 @@ export class PresetProviderStepComponent extends BaseFormValidator implements On
 
     this.existingProviders = this.existingProviders || [];
 
-    this._datacenterService.datacenters
-      .pipe(map(datacenters => datacenters.map(dc => NodeProviderConstants.newNodeProvider(dc.spec.provider))))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(providers => {
-        if (this.mode === Mode.Edit) {
-          this.providers = this.existingProviders.map(p => p.name);
-          return;
-        }
-
-        const seen = {
-          [NodeProvider.BRINGYOUROWN]: true,
-          [NodeProvider.BAREMETAL]: true,
-        };
-        this.existingProviders.forEach(p => (seen[p.name] = true));
-        this.providers = providers.filter(provider =>
-          Object.prototype.hasOwnProperty.call(seen, provider) ? false : (seen[provider] = true)
-        );
+    if (this.mode === Mode.Edit) {
+      this.providers = this.existingProviders.map(p => p.name);
+    } else {
+      this._datacenterService.datacenters.pipe(takeUntil(this._unsubscribe)).subscribe(dc => {
+        const providers = [
+          ..._.uniq(dc.map(dc => NodeProviderConstants.newNodeProvider(dc.spec.provider))),
+          ...EXTERNAL_NODE_PROVIDERS,
+        ];
+        const existingProviders = this.existingProviders.map(e => e.name);
+        this.providers = providers.filter(p => !existingProviders.includes(p) && !UNSUPPORTED_PROVIDERS.includes(p));
       });
+    }
 
     this.form
       .get(Controls.Provider)

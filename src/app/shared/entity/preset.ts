@@ -54,12 +54,15 @@ export class CreatePresetReq {
 }
 
 export class CreatePresetSpec {
+  aks?: AKSPresetSpec;
   alibaba?: AlibabaPresetSpec;
   anexia?: AnexiaPresetSpec;
   aws?: AWSPresetSpec;
   azure?: AzurePresetSpec;
   digitalocean?: DigitaloceanPresetSpec;
+  eks?: EKSPresetSpec;
   gcp?: GCPPresetSpec;
+  gke?: GKEPresetSpec;
   hetzner?: HetznerPresetSpec;
   kubevirt?: KubevirtPresetSpec;
   openstack?: OpenstackPresetSpec;
@@ -100,6 +103,11 @@ export class AWSPresetSpec extends PresetProviderSpec {
   roleARN?: string;
 }
 
+export class EKSPresetSpec extends PresetProviderSpec {
+  accessKeyID: string;
+  secretAccessKey: string;
+}
+
 export class AzurePresetSpec extends PresetProviderSpec {
   tenantID: string;
   subscriptionID: string;
@@ -114,6 +122,13 @@ export class AzurePresetSpec extends PresetProviderSpec {
   loadBalancerSKU?: string;
 }
 
+export class AKSPresetSpec extends PresetProviderSpec {
+  tenantID: string;
+  subscriptionID: string;
+  clientID: string;
+  clientSecret: string;
+}
+
 export class DigitaloceanPresetSpec extends PresetProviderSpec {
   token: string;
 }
@@ -123,6 +138,10 @@ export class GCPPresetSpec extends PresetProviderSpec {
 
   network?: string;
   subnetwork?: string;
+}
+
+export class GKEPresetSpec extends PresetProviderSpec {
+  serviceAccount: string;
 }
 
 export class HetznerPresetSpec extends PresetProviderSpec {
