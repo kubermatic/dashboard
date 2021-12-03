@@ -41,7 +41,7 @@ describe('ClusterEntity', () => {
   });
 
   it('should get correct version headline', () => {
-    expect(Cluster.getVersionHeadline('kubernetes', false)).toBe('Master Version');
+    expect(Cluster.getVersionHeadline('kubernetes', false)).toBe('Control Plane Version');
     expect(Cluster.getVersionHeadline('kubernetes', true)).toBe('kubelet Version');
   });
 });

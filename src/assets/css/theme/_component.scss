@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@import 'src/app/cluster/cluster-details/cni-version/theme';
 @import 'src/app/cluster/cluster-details/constraints/theme';
 @import 'src/app/cluster/cluster-details/machine-deployment-details/cluster-panel/theme';
 @import 'src/app/cluster/cluster-details/version-picker/theme';
@@ -66,4 +67,5 @@
   @include theme-wizard-openstack-provider-basic($colors);
   @include theme-constraints-component($colors);
   @include theme-number-stepper-component($colors);
+  @include theme-cni-version-component($colors);
 }

@@ -71,6 +71,7 @@ enum Controls {
   PodsCIDR = 'podsCIDR',
   ServicesCIDR = 'servicesCIDR',
   CNIPlugin = 'cniPlugin',
+  CNIPluginVersion = 'cniPluginVersion',
 }
 
 @Component({
@@ -100,6 +101,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
   proxyMode = ProxyMode;
   cniPlugin = CNIPlugin;
+  cniPluginVersions: string[] = [];
   availableProxyModes = ['ipvs', 'iptables'];
   isKonnectivityEnabled = false;
   readonly Controls = Controls;
@@ -149,7 +151,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.ProxyMode]: this._builder.control(''),
       [Controls.PodsCIDR]: new FormControl('', [CIDR_PATTERN_VALIDATOR]),
       [Controls.ServicesCIDR]: new FormControl('', [CIDR_PATTERN_VALIDATOR]),
-      [Controls.CNIPlugin]: new FormControl(''),
+      [Controls.CNIPlugin]: new FormControl(CNIPlugin.Canal),
+      [Controls.CNIPluginVersion]: new FormControl(''),
     });
 
     this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
@@ -216,7 +219,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
     this.control(Controls.CNIPlugin)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this.updateCNIPluginOptions());
+      .subscribe(_ => {
+        this.updateCNIPluginOptions();
+        this.form.get(Controls.CNIPluginVersion).setValue('');
+      });
 
     merge(
       this.form.get(Controls.Name).valueChanges,
@@ -232,7 +238,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.ProxyMode).valueChanges,
       this.form.get(Controls.PodsCIDR).valueChanges,
       this.form.get(Controls.ServicesCIDR).valueChanges,
-      this.form.get(Controls.CNIPlugin).valueChanges
+      this.form.get(Controls.CNIPlugin).valueChanges,
+      this.form.get(Controls.CNIPluginVersion).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
@@ -291,6 +298,18 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     return !!this._seedSettings && !!this._seedSettings.mla && !!this._seedSettings.mla.user_cluster_mla_enabled;
   }
 
+  hasCNIPluginType(): boolean {
+    return this.form.get(Controls.CNIPlugin).value !== CNIPlugin.None;
+  }
+
+  getCNIPluginVersions(): string[] {
+    this.cniPluginVersions = Cluster.getCNIVersions(this.form.get(Controls.CNIPlugin).value);
+    if (this.cniPluginVersions.length > 0 && !this.form.get(Controls.CNIPluginVersion).value) {
+      this.form.get(Controls.CNIPluginVersion).setValue(this.cniPluginVersions[this.cniPluginVersions.length - 1]);
+    }
+    return this.cniPluginVersions;
+  }
+
   private _enforce(control: Controls, isEnforced: boolean): void {
     if (isEnforced) {
       this.form.get(control).setValue(true);
@@ -321,7 +340,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     const pods = this.controlValue(Controls.PodsCIDR);
     const services = this.controlValue(Controls.ServicesCIDR);
     const cniPluginType = this.controlValue(Controls.CNIPlugin);
-    const cniPlugin = cniPluginType ? {type: cniPluginType} : null;
+    const cniPluginVersion = this.controlValue(Controls.CNIPluginVersion);
+    const cniPlugin = cniPluginType ? {type: cniPluginType, version: cniPluginVersion} : null;
     return {
       name: this.controlValue(Controls.Name),
       type: ClusterType.Kubernetes,

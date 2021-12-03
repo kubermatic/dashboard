@@ -26,6 +26,8 @@ import {ChangeClusterVersionComponent} from './cluster-details/change-cluster-ve
 import {ClusterDeleteConfirmationComponent} from './cluster-details/cluster-delete-confirmation/component';
 import {ClusterSecretsComponent} from './cluster-details/cluster-secrets/component';
 import {ClusterDetailsComponent} from './cluster-details/component';
+import {CNIVersionComponent} from './cluster-details/cni-version/component';
+import {CNIVersionDialog} from './cluster-details/cni-version/cni-version-dialog/component';
 import {ConstraintsComponent} from './cluster-details/constraints/component';
 import {ConstraintDialog} from './cluster-details/constraints/constraint-dialog/component';
 import {ViolationDetailsComponent} from './cluster-details/constraints/violation-details/component';
@@ -104,6 +106,8 @@ const components: any[] = [
   RuleGroupsComponent,
   RuleGroupDialog,
   MLAComponent,
+  CNIVersionComponent,
+  CNIVersionDialog,
 ];
 
 const dialogs: any[] = [AddMachineNetworkComponent];
