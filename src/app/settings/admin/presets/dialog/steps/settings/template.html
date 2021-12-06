@@ -17,6 +17,9 @@ limitations under the License.
       fxFlex="100%"
       fxLayout="column">
   <div [ngSwitch]="provider">
+    <km-aks-settings *ngSwitchCase="Providers.AKS"
+                     [formControl]="form.get(Controls.Settings)">
+    </km-aks-settings>
     <km-alibaba-settings *ngSwitchCase="Providers.ALIBABA"
                          [formControl]="form.get(Controls.Settings)">
     </km-alibaba-settings>
