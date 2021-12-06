@@ -17,10 +17,11 @@ import {FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular
 import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
 import {DatacenterService} from '@core/services/datacenter';
 import {Datacenter} from '@shared/entity/datacenter';
-import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {EXTERNAL_NODE_PROVIDERS, NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge} from 'rxjs';
 import {distinctUntilChanged, map, switchMap, takeUntil} from 'rxjs/operators';
+import {AutocompleteInitialState} from '@shared/components/autocomplete/component';
 
 enum Controls {
   Settings = 'settings',
@@ -71,6 +72,8 @@ export class PresetSettingsStepComponent extends BaseFormValidator implements On
       this.provider = provider;
       this.form.removeControl(Controls.Settings);
       this.form.addControl(Controls.Settings, this._builder.control(''));
+      this.form.get(Controls.Datacenter).setValue(AutocompleteInitialState);
+      this.form.updateValueAndValidity();
     });
 
     this._presetDialogService.providerChanges
@@ -101,5 +104,9 @@ export class PresetSettingsStepComponent extends BaseFormValidator implements On
     this._presetDialogService.preset.spec[this._presetDialogService.provider].datacenter = this.form.get(
       Controls.Datacenter
     ).value;
+  }
+
+  isExternal(): boolean {
+    return EXTERNAL_NODE_PROVIDERS.includes(this.provider);
   }
 }
