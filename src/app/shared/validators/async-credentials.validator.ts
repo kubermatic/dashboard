@@ -32,7 +32,7 @@ export class CredentialsAsyncValidatorService {
         return of(null);
       }
 
-      const url = `${this._newRestRoot}/providers/gke/validatecredetials`;
+      const url = `${this._newRestRoot}/providers/gke/validatecredentials`;
       const headers = new HttpHeaders({ServiceAccount: value});
       return this._http.get(url, {headers: headers}).pipe(
         take(1),
