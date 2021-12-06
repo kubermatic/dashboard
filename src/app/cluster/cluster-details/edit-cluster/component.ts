@@ -21,6 +21,7 @@ import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
 import {SettingsService} from '@core/services/settings';
 import {
+  AuditPolicyPreset,
   Cluster,
   ClusterPatch,
   ContainerRuntime,
@@ -42,6 +43,7 @@ enum Controls {
   Name = 'name',
   ContainerRuntime = 'containerRuntime',
   AuditLogging = 'auditLogging',
+  AuditPolicyPreset = 'auditPolicyPreset',
   Labels = 'labels',
   AdmissionPlugins = 'admissionPlugins',
   PodNodeSelectorAdmissionPluginConfig = 'podNodeSelectorAdmissionPluginConfig',
@@ -74,6 +76,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
 
   readonly Controls = Controls;
+  readonly AuditPolicyPreset = AuditPolicyPreset;
   private readonly _nameMinLen = 3;
   private _settings: AdminSettings;
   private _seedSettings: SeedSettings;
@@ -110,6 +113,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       [Controls.AuditLogging]: new FormControl(
         !!this.cluster.spec.auditLogging && this.cluster.spec.auditLogging.enabled
       ),
+      [Controls.AuditPolicyPreset]: new FormControl(this._getAuditPolicyPresetInitialState()),
       [Controls.OPAIntegration]: new FormControl(
         !!this.cluster.spec.opaIntegration && this.cluster.spec.opaIntegration.enabled
       ),
@@ -170,6 +174,16 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       .subscribe(plugins => (this.admissionPlugins = plugins));
 
     this.checkForLegacyAdmissionPlugins();
+  }
+
+  private _getAuditPolicyPresetInitialState(): AuditPolicyPreset | '' {
+    if (!this.cluster.spec.auditLogging) {
+      return '';
+    }
+
+    return this.cluster.spec.auditLogging.policyPreset
+      ? this.cluster.spec.auditLogging.policyPreset
+      : AuditPolicyPreset.Custom;
   }
 
   checkForLegacyAdmissionPlugins(): void {
@@ -255,6 +269,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         cloud: this.providerSettingsPatch.cloudSpecPatch,
         auditLogging: {
           enabled: this.form.get(Controls.AuditLogging).value,
+          policyPreset: this.form.get(Controls.AuditPolicyPreset).value,
         },
         opaIntegration: {
           enabled: this.form.get(Controls.OPAIntegration).value,

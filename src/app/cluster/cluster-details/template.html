@@ -103,6 +103,7 @@ limitations under the License.
           </button>
           <button mat-menu-item
                   (click)="editProviderSettings()"
+                  *ngIf="!cluster.spec.cloud.bringyourown"
                   [disabled]="!isClusterRunning || !isEditEnabled()">
             <span>Edit Provider</span>
           </button>

@@ -396,6 +396,10 @@
   @include mixins.provider-image('/assets/images/clouds/anexia.svg', 24px);
 }
 
+.km-provider-logo-gke {
+  @include mixins.provider-image('/assets/images/clouds/gke.svg', 30px);
+}
+
 .km-os-image-centos {
   @include mixins.background-image('/assets/images/os/centos.svg', 24px);
 }

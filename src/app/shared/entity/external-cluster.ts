@@ -12,7 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export class ExternalClusterModel {
+export enum ExternalClusterProvider {
+  Custom = 'custom',
+  GKE = 'gke',
+}
+
+export class ExternalCluster {
   name: string;
-  kubeconfig: string;
+  kubeconfig?: string;
+  cloud?: ExternalClusterCloudSpec;
+
+  static new(): ExternalCluster {
+    return {name: ''};
+  }
+}
+
+export class ExternalClusterCloudSpec {
+  gke?: GKECloudSpec;
+}
+
+export class GKECloudSpec {
+  name: string;
+  serviceAccount?: string;
+  zone?: string;
+}
+
+export class GKECluster {
+  name: string;
+  zone: string;
+  imported: boolean;
 }

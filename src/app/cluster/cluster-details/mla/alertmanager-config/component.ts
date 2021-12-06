@@ -21,11 +21,12 @@ import {MLAService} from '@core/services/mla';
 import {SettingsService} from '@core/services/settings';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Cluster} from '@shared/entity/cluster';
+import {SeedSettings} from '@shared/entity/datacenter';
 import {AlertmanagerConfig} from '@shared/entity/mla';
 import {AdminSettings} from '@shared/entity/settings';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
-import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
+import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {AlertmanagerConfigDialog} from './alertmanager-config-dialog/component';
 
 export enum Type {
@@ -46,6 +47,7 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
   @Input() alertmanagerConfig: AlertmanagerConfig;
 
   private _settings: AdminSettings;
+  private _seedSettings: SeedSettings;
   private _seed: string;
   private readonly _unsubscribe = new Subject<void>();
 
@@ -66,7 +68,10 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
     this._datacenterService
       .getDatacenter(this.cluster.spec.cloud.dc)
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(datacenter => (this._seed = datacenter.spec.seed));
+      .pipe(tap(datacenter => (this._seed = datacenter.spec.seed)))
+      .pipe(switchMap(_ => this._datacenterService.seedSettings(this._seed)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(seedSettings => (this._seedSettings = seedSettings));
   }
 
   ngOnDestroy(): void {
@@ -86,13 +91,16 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
   }
 
   getLinkURL(type: string): string {
+    const seed =
+      !!this._seedSettings && !!this._seedSettings.seedDNSOverwrite ? this._seedSettings.seedDNSOverwrite : this._seed;
+
     switch (type) {
       case Type.Alertmanager:
         return (
           'https://' +
           this._settings.mlaAlertmanagerPrefix +
           '.' +
-          this._seed +
+          seed +
           '.' +
           this._document.defaultView.location.hostname +
           '/' +
@@ -100,12 +108,7 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
         );
       case Type.Grafana:
         return (
-          'https://' +
-          this._settings.mlaGrafanaPrefix +
-          '.' +
-          this._seed +
-          '.' +
-          this._document.defaultView.location.hostname
+          'https://' + this._settings.mlaGrafanaPrefix + '.' + seed + '.' + this._document.defaultView.location.hostname
         );
       default:
         return '';
