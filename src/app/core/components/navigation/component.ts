@@ -15,8 +15,8 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Auth} from '@core/services/auth/service';
 import {UserService} from '@core/services/user';
-import {Subject} from 'rxjs';
-import {take, takeUntil} from 'rxjs/operators';
+import {merge, of, Subject} from 'rxjs';
+import {switchMapTo, take, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-navigation',
@@ -24,14 +24,16 @@ import {take, takeUntil} from 'rxjs/operators';
   styleUrls: ['./style.scss'],
 })
 export class NavigationComponent implements OnInit, OnDestroy {
-  private _unsubscribe: Subject<void> = new Subject<void>();
+  private readonly _unsubscribe = new Subject<void>();
+  private readonly _onSettingsChange = new Subject<void>();
   @Input() showMenuSwitchAndProjectSelector: boolean;
   showSidenav = true;
 
   constructor(private readonly _auth: Auth, private readonly _userService: UserService) {}
 
   ngOnInit(): void {
-    this._userService.currentUserSettings
+    merge(of(true), this._onSettingsChange)
+      .pipe(switchMapTo(this._userService.currentUserSettings))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(settings => (this.showSidenav = !settings.collapseSidenav));
   }
@@ -51,6 +53,6 @@ export class NavigationComponent implements OnInit, OnDestroy {
         collapseSidenav: this.showSidenav,
       })
       .pipe(take(1))
-      .subscribe(_ => {});
+      .subscribe(_ => this._onSettingsChange.next());
   }
 }
