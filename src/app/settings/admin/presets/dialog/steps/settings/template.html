@@ -35,6 +35,9 @@ limitations under the License.
     <km-gcp-settings *ngSwitchCase="Providers.GCP"
                      [formControl]="form.get(Controls.Settings)">
     </km-gcp-settings>
+    <km-gke-settings *ngSwitchCase="Providers.GKE"
+                     [formControl]="form.get(Controls.Settings)">
+    </km-gke-settings>
     <km-hetzner-settings *ngSwitchCase="Providers.HETZNER"
                          [formControl]="form.get(Controls.Settings)">
     </km-hetzner-settings>

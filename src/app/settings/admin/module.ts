@@ -35,6 +35,7 @@ import {SharedModule} from '@shared/module';
 import {AdminSettingsComponent} from './component';
 import {DatacenterDataDialogComponent} from './dynamic-datacenters/datacenter-data-dialog/component';
 import {AdminSettingsRoutingModule} from './routing';
+import {GKESettingsComponent} from "@app/settings/admin/presets/dialog/steps/settings/provider/gke/component";
 
 @NgModule({
   imports: [SharedModule, AdminSettingsRoutingModule],
@@ -53,6 +54,7 @@ import {AdminSettingsRoutingModule} from './routing';
     AzureSettingsComponent,
     DigitaloceanSettingsComponent,
     GCPSettingsComponent,
+    GKESettingsComponent,
     HetznerSettingsComponent,
     KubevirtSettingsComponent,
     OpenstackSettingsComponent,
