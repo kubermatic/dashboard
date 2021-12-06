@@ -43,15 +43,11 @@ export class DestinationsComponent implements OnInit {
   ) {}
 
   get oldBucket(): string {
-    return !!this.seed && !!this.seed.spec && !!this.seed.spec.backupRestore
-      ? this.seed.spec.backupRestore.s3BucketName
-      : '';
+    return this.seed?.spec?.backupRestore ? this.seed.spec.backupRestore.s3BucketName : '';
   }
 
   get oldEndpoint(): string {
-    return !!this.seed && !!this.seed.spec && !!this.seed.spec.backupRestore
-      ? this.seed.spec.backupRestore.s3Endpoint
-      : '';
+    return this.seed?.spec?.backupRestore ? this.seed.spec.backupRestore.s3Endpoint : '';
   }
 
   ngOnInit(): void {
@@ -68,12 +64,7 @@ export class DestinationsComponent implements OnInit {
   }
 
   hasDestinations(): boolean {
-    return (
-      !!this.seed &&
-      !!this.seed.spec &&
-      !!this.seed.spec.etcdBackupRestore &&
-      !!this.seed.spec.etcdBackupRestore.destinations
-    );
+    return !!this.seed?.spec?.etcdBackupRestore?.destinations;
   }
 
   displayWarning(): boolean {
@@ -167,9 +158,7 @@ export class DestinationsComponent implements OnInit {
 
   private _hasOldData(): boolean {
     return (
-      !!this.seed &&
-      !!this.seed.spec &&
-      !!this.seed.spec.backupRestore &&
+      !!this.seed?.spec?.backupRestore &&
       (!!this.seed.spec.backupRestore.s3BucketName || !!this.seed.spec.backupRestore.s3Endpoint)
     );
   }

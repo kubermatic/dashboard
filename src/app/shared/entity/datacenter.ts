@@ -178,7 +178,6 @@ export class BackupCredentials {
   namespace: string;
 }
 
-//for internal use
 export class BackupDestination {
   destinationName: string;
   bucketName: string;

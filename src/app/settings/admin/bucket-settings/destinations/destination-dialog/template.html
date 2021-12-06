@@ -15,12 +15,12 @@ limitations under the License.
 -->
 <km-dialog-title>{{data.title}}</km-dialog-title>
 <mat-dialog-content>
-  <p *ngIf="data.mode === 'edit'"
+  <p *ngIf="data.mode === Mode.Edit"
      class="km-dialog-context-description">Edit <b>{{data.destination.destinationName}}</b> destination</p>
   <form [formGroup]="form"
         fxLayout="column">
     <mat-form-field fxFlex
-                    *ngIf="data.mode === 'add'">
+                    *ngIf="data.mode === Mode.Add">
       <mat-label>Destination Name</mat-label>
       <input matInput
              [formControlName]="Controls.DestinationName"
