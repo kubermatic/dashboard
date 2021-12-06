@@ -106,9 +106,7 @@ export class BucketSettingsComponent implements OnInit, OnDestroy, AfterViewInit
   // This check can be removed within one of the following versions,
   // but not sure yet in which version exactly.
   private _hasOldData(seed: AdminSeed): boolean {
-    return (
-      !!seed?.spec?.backupRestore && (!!seed.spec.backupRestore.s3BucketName || !!seed.spec.backupRestore.s3Endpoint)
-    );
+    return !!seed?.spec?.backupRestore?.s3BucketName || !!seed?.spec?.backupRestore?.s3Endpoint;
   }
 
   private _hasDestinations(seed): boolean {
