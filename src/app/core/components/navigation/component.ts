@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Auth} from '@core/services/auth/service';
 import {UserService} from '@core/services/user';
 import {Subject} from 'rxjs';
@@ -23,7 +23,7 @@ import {take, takeUntil} from 'rxjs/operators';
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class NavigationComponent implements OnInit {
+export class NavigationComponent implements OnInit, OnDestroy {
   private _unsubscribe: Subject<void> = new Subject<void>();
   @Input() showMenuSwitchAndProjectSelector: boolean;
   showSidenav = true;
@@ -31,9 +31,14 @@ export class NavigationComponent implements OnInit {
   constructor(private readonly _auth: Auth, private readonly _userService: UserService) {}
 
   ngOnInit(): void {
-    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      this.showSidenav = !settings.collapseSidenav;
-    });
+    this._userService.currentUserSettings
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(settings => (this.showSidenav = !settings.collapseSidenav));
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   isAuthenticated(): boolean {
@@ -41,10 +46,9 @@ export class NavigationComponent implements OnInit {
   }
 
   collapseSidenav(): void {
-    this.showSidenav = !this.showSidenav;
     this._userService
       .patchCurrentUserSettings({
-        collapseSidenav: !this.showSidenav,
+        collapseSidenav: this.showSidenav,
       })
       .pipe(take(1))
       .subscribe(_ => {});
