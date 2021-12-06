@@ -21,7 +21,7 @@ import {EXTERNAL_NODE_PROVIDERS, NodeProvider} from '@shared/model/NodeProviderC
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge} from 'rxjs';
 import {distinctUntilChanged, map, switchMap, takeUntil} from 'rxjs/operators';
-import {AutocompleteInitialState} from "@shared/components/autocomplete/component";
+import {AutocompleteInitialState} from '@shared/components/autocomplete/component';
 
 enum Controls {
   Settings = 'settings',
