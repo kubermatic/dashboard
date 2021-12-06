@@ -165,7 +165,6 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   canAddProvider(preset: Preset): boolean {
-    // TODO
     return (
       this._supportedProviders.filter(p => this._presetDialogService.unsupportedProviders.indexOf(p) < 0).length >
       preset.providers.length
