@@ -61,10 +61,11 @@ limitations under the License.
     </km-vsphere-settings>
   </div>
 
-  <div class="optional-section">Optional Restrictions</div>
-
-  <km-autocomplete label="Restrict to Datacenter"
-                   [formControlName]="Controls.Datacenter"
-                   [isLoading]="isLoadingDatacenters"
-                   [options]="datacenters"></km-autocomplete>
+  <ng-container *ngIf="!isExternal()">
+    <div class="optional-section">Optional Restrictions</div>
+    <km-autocomplete label="Restrict to Datacenter"
+                     [formControlName]="Controls.Datacenter"
+                     [isLoading]="isLoadingDatacenters"
+                     [options]="datacenters"></km-autocomplete>
+  </ng-container>
 </form>
