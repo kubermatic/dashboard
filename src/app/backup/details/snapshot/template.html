@@ -50,6 +50,13 @@ limitations under the License.
         <div value>{{backup.spec?.clusterId}}</div>
       </km-property>
     </mat-card-content>
+
+    <mat-card-content>
+      <km-property>
+        <div key>Destination</div>
+        <div value>{{backup.spec?.destination}}</div>
+      </km-property>
+    </mat-card-content>
   </mat-card>
 
   <km-backup-list [backups]="backup.status.lastBackups"

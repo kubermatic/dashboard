@@ -19,17 +19,29 @@ limitations under the License.
     <mat-card-title fxFlex
                     fxLayout="row"
                     fxLayoutAlign=" center">
-      <div fxFlex>Backup Buckets</div>
+      <div fxFlex>Backup Destinations</div>
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
     <table class="km-table"
            mat-table
+           multiTemplateDataRows
            matSort
            [matSortActive]="Column.Seed"
            matSortDirection="asc"
            (matSortChange)="onSortChange($event)"
            [dataSource]="dataSource">
+
+      <ng-container [matColumnDef]="Column.StateArrow">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"></th>
+        <td mat-cell
+            *matCellDef="let element">
+          <i [ngClass]="isShowDestinations[element.name] ? 'km-icon-mask km-icon-arrow-up' : 'km-icon-mask km-icon-arrow-down'"></i>
+        </td>
+      </ng-container>
+
       <ng-container [matColumnDef]="Column.Seed">
         <th mat-header-cell
             *matHeaderCellDef
@@ -37,45 +49,25 @@ limitations under the License.
             mat-sort-header>Seed
         </th>
         <td mat-cell
-            *matCellDef="let element">{{element.name}}</td>
-      </ng-container>
-
-      <ng-container [matColumnDef]="Column.Bucket">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell">Bucket
-        </th>
-        <td mat-cell
-            *matCellDef="let element">{{element?.spec?.backupRestore?.s3BucketName}}</td>
-      </ng-container>
-
-      <ng-container [matColumnDef]="Column.Endpoint">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell">Endpoint
-        </th>
-        <td mat-cell
-            *matCellDef="let element">{{element?.spec?.backupRestore?.s3Endpoint}}</td>
-      </ng-container>
-
-      <ng-container [matColumnDef]="Column.Actions">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell"></th>
-        <td mat-cell
             *matCellDef="let element">
-          <div class="km-table-actions"
-               fxLayoutAlign="end">
-            <button mat-icon-button
-                    matTooltip="Edit Bucket Settings"
-                    (click)="editBucketSettings(element)">
-              <i class="km-mask-icon km-icon-edit"></i>
-            </button>
-            <button mat-icon-button
-                    matTooltip="Edit Credentials"
-                    (click)="editCredentials(element)">
-              <i class="km-mask-icon km-icon-credentials"></i>
-            </button>
+          <div fxLayout="row"
+               fxLayoutGap="10px"
+               fxLayoutAlign=" center">
+            <span>{{element.name}}</span>
+            <i *ngIf="displayWarning(element)"
+               class="km-icon-mask km-icon-warning"
+               matTooltip="Warning"></i>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container [matColumnDef]="Column.Destinations">
+        <td mat-cell
+            *matCellDef="let element"
+            class="bucket-destinations"
+            [attr.colspan]="displayedColumns.length">
+          <div class="bucket-destinations-wrapper">
+            <km-destinations [seed]="element"></km-destinations>
           </div>
         </td>
       </ng-container>
@@ -85,6 +77,11 @@ limitations under the License.
           *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row
           *matRowDef="let row; columns: displayedColumns"
+          class="km-mat-row km-pointer"
+          (click)="toggleDestinations(row)"></tr>
+      <tr mat-row
+          *matRowDef="let row; let i=index; columns: toggledColumns;"
+          [ngClass]="isShowDestinations[row.name] ? '' : 'km-hidden'"
           class="km-mat-row"></tr>
     </table>
 

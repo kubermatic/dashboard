@@ -1,5 +1,5 @@
 <!--
-Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+Copyright 2021 The Kubermatic Kubernetes Platform contributors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,9 +13,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<km-dialog-title>Edit Credentials</km-dialog-title>
-<p class="km-dialog-context-description">Edit <b>{{data.seed.name}}</b> credentials</p>
+<km-dialog-title>Edit Destination Credentials</km-dialog-title>
 <mat-dialog-content>
+  <p class="km-dialog-context-description">Edit <b>{{data.destination.destinationName}}</b> destination credentials</p>
+
   <form [formGroup]="form"
         fxLayout="column">
     <mat-form-field fxFlex>
@@ -46,6 +47,6 @@ limitations under the License.
           (throttleClick)="edit()"
           [disabled]="!form.valid">
     <i class="km-icon-mask km-icon-edit"></i>
-    <span>Edit Credentials</span>
+    <span>Edit Destination Credentials</span>
   </button>
 </mat-dialog-actions>

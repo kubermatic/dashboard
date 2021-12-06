@@ -1,4 +1,4 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2021 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,32 +14,10 @@
 
 @use 'variables';
 
-.header {
-  padding: 0 30px;
+.property-key {
+  font-size: variables.$font-size-caption;
 }
 
-.mat-card-title {
-  .km-icon-add {
-    margin-left: 0;
-    margin-right: 12px;
-  }
-}
-
-#km-add-bucket-setting-btn {
-  margin: 2px 0;
-}
-
-td {
-  &.mat-cell {
-    &.cdk-cell {
-      &.bucket-destinations {
-        padding: 0;
-
-        .bucket-destinations-wrapper {
-          box-shadow: variables.$border-box-shadow-inset;
-          padding: variables.$item-details-padding;
-        }
-      }
-    }
-  }
+.no-destinations {
+  padding-bottom: 12px;
 }

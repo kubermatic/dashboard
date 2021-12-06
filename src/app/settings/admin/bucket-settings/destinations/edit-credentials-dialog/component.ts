@@ -1,4 +1,4 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2021 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,10 +18,11 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BackupService} from '@core/services/backup';
 import {NotificationService} from '@core/services/notification';
 import {BackupCredentials} from '@shared/entity/backup';
-import {AdminSeed} from '@shared/entity/datacenter';
+import {AdminSeed, BackupDestination} from '@shared/entity/datacenter';
 
 export interface EditCredentialsDialogConfig {
   seed: AdminSeed;
+  destination: BackupDestination;
 }
 
 enum Controls {
@@ -56,6 +57,7 @@ export class EditCredentialsDialog implements OnInit {
   edit(): void {
     const credentials: BackupCredentials = {
       backup_credentials: {
+        destination: this.data.destination.destinationName,
         s3: {
           [Controls.SecretAccessKey]: this.form.get(Controls.SecretAccessKey).value,
           [Controls.AccessKey]: this.form.get(Controls.AccessKey).value,
