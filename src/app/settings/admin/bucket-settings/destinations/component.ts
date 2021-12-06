@@ -72,7 +72,7 @@ export class DestinationsComponent implements OnInit {
   }
 
   hasCredentials(destination: BackupDestination): boolean {
-    return !!destination && !!destination.credentials;
+    return !!destination?.credentials;
   }
 
   addDestination(): void {
@@ -157,9 +157,6 @@ export class DestinationsComponent implements OnInit {
   }
 
   private _hasOldData(): boolean {
-    return (
-      !!this.seed?.spec?.backupRestore &&
-      (!!this.seed.spec.backupRestore.s3BucketName || !!this.seed.spec.backupRestore.s3Endpoint)
-    );
+    return !!this.seed?.spec?.backupRestore?.s3BucketName || !!this.seed?.spec?.backupRestore?.s3Endpoint;
   }
 }

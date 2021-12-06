@@ -107,17 +107,12 @@ export class BucketSettingsComponent implements OnInit, OnDestroy, AfterViewInit
   // but not sure yet in which version exactly.
   private _hasOldData(seed: AdminSeed): boolean {
     return (
-      !!seed &&
-      !!seed.spec &&
-      !!seed.spec.backupRestore &&
-      (!!seed.spec.backupRestore.s3BucketName || !!seed.spec.backupRestore.s3Endpoint)
+      !!seed?.spec?.backupRestore && (!!seed.spec.backupRestore.s3BucketName || !!seed.spec.backupRestore.s3Endpoint)
     );
   }
 
   private _hasDestinations(seed): boolean {
-    return (
-      !!seed && !!seed.spec && !!seed.spec.etcdBackupRestore && !_.isEmpty(seed.spec.etcdBackupRestore.destinations)
-    );
+    return !!seed?.spec?.etcdBackupRestore && !_.isEmpty(seed.spec.etcdBackupRestore.destinations);
   }
 
   private _sortByName(direction: SortDirection): void {
