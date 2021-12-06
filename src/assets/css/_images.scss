@@ -400,6 +400,14 @@
   @include mixins.provider-image('/assets/images/clouds/gke.svg', 30px);
 }
 
+.km-provider-logo-aks {
+  @include mixins.provider-image('/assets/images/clouds/aks.svg', 30px);
+}
+
+.km-provider-logo-eks {
+  @include mixins.provider-image('/assets/images/clouds/eks.svg', 30px);
+}
+
 .km-os-image-centos {
   @include mixins.background-image('/assets/images/os/centos.svg', 24px);
 }
