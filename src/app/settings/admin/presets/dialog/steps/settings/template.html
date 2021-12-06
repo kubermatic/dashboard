@@ -32,6 +32,9 @@ limitations under the License.
     <km-digitalocean-settings *ngSwitchCase="Providers.DIGITALOCEAN"
                               [formControl]="form.get(Controls.Settings)">
     </km-digitalocean-settings>
+    <km-eks-settings *ngSwitchCase="Providers.EKS"
+                     [formControl]="form.get(Controls.Settings)">
+    </km-eks-settings>
     <km-gcp-settings *ngSwitchCase="Providers.GCP"
                      [formControl]="form.get(Controls.Settings)">
     </km-gcp-settings>
