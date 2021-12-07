@@ -18,22 +18,40 @@ import {BehaviorSubject, Observable, of} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {environment} from '@environments/environment';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {PresetList} from '@shared/entity/preset';
 
 @Injectable({providedIn: 'root'})
 export class ExternalClusterService {
   providerChanges = new BehaviorSubject<ExternalClusterProvider>(undefined);
+  presetChanges = new BehaviorSubject<string>(undefined);
+  presetStatusChanges = new BehaviorSubject<boolean>(false);
   private _provider: ExternalClusterProvider;
   private _externalCluster: ExternalCluster = ExternalCluster.new();
+  private _preset: string;
   private _credentialsStepValidity = false;
   private _clusterStepValidity = false;
   private _newRestRoot: string = environment.newRestRoot;
 
   constructor(private readonly _http: HttpClient) {}
 
+  getPresets(provider: ExternalClusterProvider): Observable<PresetList> {
+    const url = `${this._newRestRoot}/providers/${provider}/presets?disabled=false`;
+    return this._http.get<PresetList>(url);
+  }
+
   getGKEClusters(projectID: string): Observable<GKECluster[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/providers/gke/clusters`;
-    const headers = new HttpHeaders({ServiceAccount: this._externalCluster.cloud.gke.serviceAccount});
-    return this._http.get<GKECluster[]>(url, {headers: headers}).pipe(catchError(() => of<GKECluster[]>()));
+    return this._http
+      .get<GKECluster[]>(url, {headers: this._getGKEHeaders()})
+      .pipe(catchError(() => of<GKECluster[]>()));
+  }
+
+  private _getGKEHeaders(): HttpHeaders {
+    if (this._preset) {
+      return new HttpHeaders({Credential: this._preset});
+    }
+
+    return new HttpHeaders({ServiceAccount: this._externalCluster.cloud.gke.serviceAccount});
   }
 
   get provider(): ExternalClusterProvider {
@@ -51,6 +69,19 @@ export class ExternalClusterService {
 
   set externalCluster(externalCluster: ExternalCluster) {
     this._externalCluster = externalCluster;
+  }
+
+  get preset(): string {
+    return this._preset;
+  }
+
+  set preset(preset: string) {
+    this._preset = preset;
+    this.presetChanges.next(preset);
+  }
+
+  set isPresetEnabled(isPresetEnabled: boolean) {
+    this.presetStatusChanges.next(isPresetEnabled);
   }
 
   get isCredentialsStepValid(): boolean {

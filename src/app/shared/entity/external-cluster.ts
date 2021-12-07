@@ -14,6 +14,8 @@
 
 export enum ExternalClusterProvider {
   Custom = 'custom',
+  AKS = 'aks',
+  EKS = 'eks',
   GKE = 'gke',
 }
 
