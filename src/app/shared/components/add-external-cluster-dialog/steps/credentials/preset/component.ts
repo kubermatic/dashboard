@@ -100,6 +100,10 @@ export class CredentialsPresetsComponent extends BaseFormValidator implements On
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe(preset => (this._externalClusterService.preset = preset));
 
+    this.form.statusChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => (this._externalClusterService.credentialsStepValidity = this.form.valid));
+
     this._externalClusterService.presetStatusChanges.pipe(takeUntil(this._unsubscribe)).subscribe(enable => {
       if (this._state !== PresetsState.Empty) {
         this._enable(enable, Controls.Preset);
