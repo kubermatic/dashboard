@@ -55,6 +55,14 @@ export class ClusterSecretsComponent implements OnInit {
           return this.getIconClass(this.health.gatekeeperAudit);
         case 'gatekeeperController':
           return this.getIconClass(this.health.gatekeeperController);
+        case 'mlaGateway':
+          return this.getIconClass(this.health.mlaGateway);
+        case 'alertmanagerConfig':
+          return this.getIconClass(this.health.alertmanagerConfig);
+        case 'logging':
+          return this.getIconClass(this.health.logging);
+        case 'monitoring':
+          return this.getIconClass(this.health.monitoring);
         default:
           return '';
       }
@@ -95,6 +103,14 @@ export class ClusterSecretsComponent implements OnInit {
           return this.getHealthStatus(this.health.gatekeeperAudit);
         case 'gatekeeperController':
           return this.getHealthStatus(this.health.gatekeeperController);
+        case 'mlaGateway':
+          return this.getHealthStatus(this.health.mlaGateway);
+        case 'alertmanagerConfig':
+          return this.getHealthStatus(this.health.alertmanagerConfig);
+        case 'logging':
+          return this.getHealthStatus(this.health.logging);
+        case 'monitoring':
+          return this.getHealthStatus(this.health.monitoring);
         default:
           return '';
       }
@@ -115,5 +131,17 @@ export class ClusterSecretsComponent implements OnInit {
 
   isOPAEnabled(): boolean {
     return !!this.cluster.spec.opaIntegration && this.cluster.spec.opaIntegration.enabled;
+  }
+
+  isMLAEnabled(): boolean {
+    return !!this.isLoggingEnabled() || !!this.isMonitoringEnabled();
+  }
+
+  isLoggingEnabled(): boolean {
+    return !!this.cluster?.spec?.mla?.loggingEnabled;
+  }
+
+  isMonitoringEnabled(): boolean {
+    return !!this.cluster?.spec?.mla?.monitoringEnabled;
   }
 }

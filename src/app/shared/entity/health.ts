@@ -22,6 +22,10 @@ export class Health {
   userClusterControllerManager: HealthState;
   gatekeeperAudit?: HealthState;
   gatekeeperController?: HealthState;
+  mlaGateway?: HealthState;
+  alertmanagerConfig?: HealthState;
+  logging?: HealthState;
+  monitoring?: HealthState;
 
   static allHealthy(health: Health): boolean {
     const supported = [

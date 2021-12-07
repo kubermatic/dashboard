@@ -62,4 +62,28 @@ limitations under the License.
     <span>OPA Gatekeeper Audit</span>
   </div>
 
+  <div *ngIf="isMLAEnabled()"
+       [matTooltip]="getStatus('mlaGateway')">
+    <span [ngClass]="getIcon('mlaGateway')"></span>
+    <span>MLA Gateway</span>
+  </div>
+
+  <div *ngIf="isMLAEnabled()"
+       [matTooltip]="getStatus('alertmanagerConfig')">
+    <span [ngClass]="getIcon('alertmanagerConfig')"></span>
+    <span>Alertmanager Config</span>
+  </div>
+
+  <div *ngIf="isLoggingEnabled()"
+       [matTooltip]="getStatus('logging')">
+    <span [ngClass]="getIcon('logging')"></span>
+    <span>Logging</span>
+  </div>
+
+  <div *ngIf="isMonitoringEnabled()"
+       [matTooltip]="getStatus('monitoring')">
+    <span [ngClass]="getIcon('monitoring')"></span>
+    <span>Monitoring</span>
+  </div>
+
 </div>
