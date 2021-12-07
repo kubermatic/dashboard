@@ -50,7 +50,14 @@ export class GKECredentialsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._externalClusterService.credentialsStepValidity = this.form.valid));
 
-    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this.update());
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
+      this._externalClusterService.isPresetEnabled = Object.values(Controls).every(c => !this.form.get(c).value);
+      this.update();
+    });
+
+    this._externalClusterService.presetChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
   }
 
   ngOnDestroy(): void {
@@ -68,5 +75,15 @@ export class GKECredentialsComponent implements OnInit, OnDestroy {
         },
       },
     };
+  }
+
+  private _enable(enable: boolean, name: string): void {
+    if (enable && this.form.get(name).disabled) {
+      this.form.get(name).enable();
+    }
+
+    if (!enable && this.form.get(name).enabled) {
+      this.form.get(name).disable();
+    }
   }
 }
