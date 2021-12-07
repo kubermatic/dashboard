@@ -1,0 +1,126 @@
+<!--
+Copyright 2021 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<div *ngIf="displayWarning()"
+     class="depricated-warning"
+     fxLayout="row"
+     fxLayoutGap="20px">
+  <i class="km-icon-mask km-icon-warning"></i>
+  <span>KKP version 2.19 makes it possible to configure multiple destinations. This seed had Bucket <b>{{oldBucket}}</b> and Endpoint <b>{{oldEndpoint}}</b> configured and these settings are still useable for this release. Migrate the configuration to a destination to keep using it in the future.</span>
+</div>
+
+<div fxLayout="row">
+  <div fxFlex></div>
+  <button mat-flat-button
+          color="quaternary"
+          id="km-add-destination"
+          fxLayoutAlign="center center"
+          (click)="addDestination()">
+    <i class="km-icon-mask km-icon-add"></i>
+    <span>Add Destination</span>
+  </button>
+</div>
+
+<table class="km-table km-table-dropdown table-dropdown"
+       mat-table
+       multiTemplateDataRows
+       matSort
+       [dataSource]="getDataSource()">
+  <ng-container matColumnDef="name">
+    <th mat-header-cell
+        *matHeaderCellDef
+        class="km-header-cell"
+        mat-sort-header>Destination Name
+    </th>
+    <td mat-cell
+        *matCellDef="let element">{{element.destinationName}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="bucket">
+    <th mat-header-cell
+        *matHeaderCellDef
+        class="km-header-cell"
+        mat-sort-header>Bucket
+    </th>
+    <td mat-cell
+        *matCellDef="let element">{{element.bucketName}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="endpoint">
+    <th mat-header-cell
+        *matHeaderCellDef
+        class="km-header-cell"
+        mat-sort-header>Endpoint
+    </th>
+    <td mat-cell
+        *matCellDef="let element">{{element.endpoint}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="credentials">
+    <th mat-header-cell
+        *matHeaderCellDef
+        class="km-header-cell"
+        mat-sort-header>Credentials
+    </th>
+    <td mat-cell
+        *matCellDef="let element">
+      <i *ngIf="hasCredentials(element)"
+         class="km-icon-mask km-icon-check green-icon"></i>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell
+        *matHeaderCellDef
+        class="km-header-cell"></th>
+    <td mat-cell
+        *matCellDef="let element">
+      <div fxLayoutAlign="end"
+           class="km-table-actions table-actions">
+        <button mat-icon-button
+                matTooltip="Edit Destination"
+                (click)="editDestination(element)">
+          <i class="km-mask-icon km-icon-edit"></i>
+        </button>
+
+        <button mat-icon-button
+                matTooltip="Edit Credentials"
+                (click)="editCredentials(element)">
+          <i class="km-mask-icon km-icon-credentials"></i>
+        </button>
+
+        <button mat-icon-button
+                matTooltip="Delete Destination"
+                (click)="deleteDestination(element)">
+          <i class="km-icon-mask km-icon-delete"></i>
+        </button>
+      </div>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row
+      class="km-header-row"
+      *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      class="km-mat-row"></tr>
+</table>
+
+<ng-container *ngIf="!hasDestinations()">
+  <div class="km-row km-empty-list-msg empty-list">
+    No destinations available.
+  </div>
+</ng-container>

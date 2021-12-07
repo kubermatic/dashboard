@@ -26,7 +26,7 @@ import {UserService} from '@core/services/user';
 import {PresetsService} from '@core/services/wizard/presets';
 import {Datacenter} from '@shared/entity/datacenter';
 import {Preset, PresetList} from '@shared/entity/preset';
-import {NodeProvider, NodeProviderConstants} from '@shared/model/NodeProviderConstants';
+import {EXTERNAL_NODE_PROVIDERS, NodeProvider, NodeProviderConstants} from '@shared/model/NodeProviderConstants';
 import {merge, Observable, of, Subject} from 'rxjs';
 import {switchMap, take, takeUntil} from 'rxjs/operators';
 
@@ -106,10 +106,10 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
 
     this._datacenterService.datacenters.pipe(takeUntil(this._unsubscribe)).subscribe(datacenters => {
       this.datacenters = datacenters;
-      const uniqueProviders = new Set<NodeProvider>(
+      const configuredProviders = new Set<NodeProvider>(
         this.datacenters.map(dc => NodeProviderConstants.newNodeProvider(dc.spec.provider))
       );
-      this._supportedProviders = Array.from(uniqueProviders);
+      this._supportedProviders = [...configuredProviders, ...EXTERNAL_NODE_PROVIDERS];
     });
 
     this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {

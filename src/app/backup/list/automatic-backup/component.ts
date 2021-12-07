@@ -57,7 +57,7 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
   }
 
   get columns(): string[] {
-    return ['status', 'name', 'cluster', 'schedule', 'keep', 'created', 'actions'];
+    return ['status', 'name', 'cluster', 'destination', 'schedule', 'keep', 'created', 'actions'];
   }
 
   get isEmpty(): boolean {

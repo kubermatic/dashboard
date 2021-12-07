@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use 'variables';
+
 .header {
   padding: 0 30px;
 }
@@ -25,4 +27,19 @@
 
 #km-add-bucket-setting-btn {
   margin: 2px 0;
+}
+
+td {
+  &.mat-cell {
+    &.cdk-cell {
+      &.bucket-destinations {
+        padding: 0;
+
+        .bucket-destinations-wrapper {
+          box-shadow: variables.$border-box-shadow-inset;
+          padding: variables.$item-details-padding;
+        }
+      }
+    }
+  }
 }

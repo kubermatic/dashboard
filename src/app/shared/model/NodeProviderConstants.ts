@@ -15,14 +15,17 @@
 import {NodeSpec} from '../entity/node';
 
 export enum NodeProvider {
+  AKS = 'aks',
   ALIBABA = 'alibaba',
   ANEXIA = 'anexia',
   AWS = 'aws',
   AZURE = 'azure',
   DIGITALOCEAN = 'digitalocean',
+  EKS = 'eks',
   BAREMETAL = 'baremetal',
   BRINGYOUROWN = 'bringyourown',
   GCP = 'gcp',
+  GKE = 'gke',
   HETZNER = 'hetzner',
   OPENSTACK = 'openstack',
   EQUINIX = 'packet',
@@ -30,6 +33,8 @@ export enum NodeProvider {
   VSPHERE = 'vsphere',
   NONE = '',
 }
+
+export const EXTERNAL_NODE_PROVIDERS = [NodeProvider.AKS, NodeProvider.EKS, NodeProvider.GKE];
 
 export enum OperatingSystem {
   Ubuntu = 'ubuntu',

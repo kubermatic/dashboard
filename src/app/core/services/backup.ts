@@ -96,6 +96,11 @@ export class BackupService {
     return this._http.put(url, credentials);
   }
 
+  getDestinations(projectID: string, clusterID: string): Observable<string[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/backupdestinations`;
+    return this._http.get<string[]>(url);
+  }
+
   private _listAutomaticBackups(projectID: string): Observable<EtcdBackupConfig[]> {
     if (!this._automaticBackups$.get(projectID)) {
       const backups$: Observable<EtcdBackupConfig[]> = merge(this.onAutomaticBackupsUpdate, this._refreshTimer$)

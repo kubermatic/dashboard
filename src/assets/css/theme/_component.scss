@@ -35,6 +35,7 @@
 @import 'src/app/shared/components/chip/theme';
 @import 'src/app/shared/components/tab-card/theme';
 @import 'src/app/cluster/cluster-details/rbac/add-binding/theme';
+@import 'src/app/settings/admin/bucket-settings/destinations/theme';
 @import 'src/app/settings/admin/presets/theme';
 @import 'src/app/settings/admin/presets/edit-dialog/theme';
 @import 'src/app/settings/admin/nav/theme';
@@ -67,5 +68,6 @@
   @include theme-wizard-openstack-provider-basic($colors);
   @include theme-constraints-component($colors);
   @include theme-number-stepper-component($colors);
+  @include theme-admin-backup-destinations-component($colors);
   @include theme-cni-version-component($colors);
 }

@@ -30,7 +30,11 @@ export class ClustersPage {
   }
 
   static getConnectClusterBtn(): Cypress.Chainable {
-    return cy.get('#km-connect-cluster-top-btn');
+    return cy.get('#km-add-external-cluster-btn');
+  }
+
+  static getExternalClusterAnyProviderBtn(): Cypress.Chainable {
+    return cy.get('#external-cluster-any-provider-btn');
   }
 
   static getConnectClusterNameInput(): Cypress.Chainable {
@@ -38,7 +42,7 @@ export class ClustersPage {
   }
 
   static getConnectClusterSaveBtn(): Cypress.Chainable {
-    return cy.get('#external-cluster-confirm-btn');
+    return cy.get('#external-cluster-add-btn');
   }
 
   static getPrimaryLabel(): Cypress.Chainable {
