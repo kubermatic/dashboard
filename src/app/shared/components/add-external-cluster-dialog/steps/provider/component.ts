@@ -14,7 +14,6 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {takeUntil} from 'rxjs/operators';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
 import {ExternalClusterProvider} from '@shared/entity/external-cluster';
@@ -30,10 +29,10 @@ enum Controls {
   styleUrls: ['./style.scss'],
 })
 export class ProviderStepComponent implements OnInit, OnDestroy {
-  providers: NodeProvider[] = [];
   form: FormGroup;
   readonly controls = Controls;
   readonly provider = ExternalClusterProvider;
+  readonly EXTERNAL_PROVIDERS = [ExternalClusterProvider.AKS, ExternalClusterProvider.EKS, ExternalClusterProvider.GKE];
   private readonly _unsubscribe = new Subject<void>();
 
   constructor(
