@@ -18,6 +18,8 @@ limitations under the License.
 
 <div [ngSwitch]="provider"
      fxLayout="column">
+  <km-eks-cluster *ngSwitchCase="Provider.EKS"
+                  [projectID]="projectID"></km-eks-cluster>
   <km-gke-cluster *ngSwitchCase="Provider.GKE"
                   [projectID]="projectID"></km-gke-cluster>
 </div>

@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Injectable} from '@angular/core';
-import {ExternalCluster, ExternalClusterProvider, GKECluster} from '@shared/entity/external-cluster';
+import {EKSCluster, ExternalCluster, ExternalClusterProvider, GKECluster} from '@shared/entity/external-cluster';
 import {BehaviorSubject, Observable, of} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {environment} from '@environments/environment';
@@ -37,6 +37,24 @@ export class ExternalClusterService {
   getPresets(provider: ExternalClusterProvider): Observable<PresetList> {
     const url = `${this._newRestRoot}/providers/${provider}/presets?disabled=false`;
     return this._http.get<PresetList>(url);
+  }
+
+  getEKSClusters(projectID: string): Observable<EKSCluster[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/providers/eks/clusters`;
+    return this._http
+      .get<EKSCluster[]>(url, {headers: this._getEKSHeaders()})
+      .pipe(catchError(() => of<EKSCluster[]>()));
+  }
+
+  private _getEKSHeaders(): HttpHeaders {
+    if (this._preset) {
+      return new HttpHeaders({Credential: this._preset});
+    }
+
+    return new HttpHeaders({
+      AccessKeyID: this._externalCluster.cloud.eks.accessKeyID,
+      SecretAccessKey: this._externalCluster.cloud.eks.secretAccessKey,
+    });
   }
 
   getGKEClusters(projectID: string): Observable<GKECluster[]> {

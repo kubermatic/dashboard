@@ -106,6 +106,8 @@ import {GKEClusterComponent} from '@shared/components/add-external-cluster-dialo
 import {ClusterStepComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/component';
 import {CredentialsAsyncValidatorService} from '@shared/validators/async-credentials.validator';
 import {CredentialsPresetsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/preset/component';
+import {EKSCredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/eks/component';
+import {EKSClusterComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/eks/component';
 
 const modules: any[] = [
   CommonModule,
@@ -199,9 +201,11 @@ const components: any[] = [
   ProviderStepComponent,
   CredentialsStepComponent,
   CustomCredentialsComponent,
+  EKSCredentialsComponent,
   GKECredentialsComponent,
   ClusterStepComponent,
   GKEClusterComponent,
+  EKSClusterComponent,
   CredentialsPresetsComponent,
 ];
 
