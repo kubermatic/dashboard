@@ -108,6 +108,7 @@ import {CredentialsAsyncValidatorService} from '@shared/validators/async-credent
 import {CredentialsPresetsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/preset/component';
 import {EKSCredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/eks/component';
 import {EKSClusterComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/eks/component';
+import {AKSCredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/aks/component';
 
 const modules: any[] = [
   CommonModule,
@@ -201,6 +202,7 @@ const components: any[] = [
   ProviderStepComponent,
   CredentialsStepComponent,
   CustomCredentialsComponent,
+  AKSCredentialsComponent,
   EKSCredentialsComponent,
   GKECredentialsComponent,
   ClusterStepComponent,
