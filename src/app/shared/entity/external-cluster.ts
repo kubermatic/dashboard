@@ -57,6 +57,11 @@ export class GKECloudSpec {
   zone?: string;
 }
 
+export class AKSCluster {
+  name: string;
+  imported: boolean;
+}
+
 export class EKSCluster {
   name: string;
   region: string;

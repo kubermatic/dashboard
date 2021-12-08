@@ -109,6 +109,7 @@ import {CredentialsPresetsComponent} from '@shared/components/add-external-clust
 import {EKSCredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/eks/component';
 import {EKSClusterComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/eks/component';
 import {AKSCredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/aks/component';
+import {AKSClusterComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/aks/component';
 
 const modules: any[] = [
   CommonModule,
@@ -206,6 +207,7 @@ const components: any[] = [
   EKSCredentialsComponent,
   GKECredentialsComponent,
   ClusterStepComponent,
+  AKSClusterComponent,
   GKEClusterComponent,
   EKSClusterComponent,
   CredentialsPresetsComponent,

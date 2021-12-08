@@ -13,7 +13,13 @@
 // limitations under the License.
 
 import {Injectable} from '@angular/core';
-import {EKSCluster, ExternalCluster, ExternalClusterProvider, GKECluster} from '@shared/entity/external-cluster';
+import {
+  AKSCluster,
+  EKSCluster,
+  ExternalCluster,
+  ExternalClusterProvider,
+  GKECluster,
+} from '@shared/entity/external-cluster';
 import {BehaviorSubject, Observable, of} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {environment} from '@environments/environment';
@@ -37,6 +43,27 @@ export class ExternalClusterService {
   getPresets(provider: ExternalClusterProvider): Observable<PresetList> {
     const url = `${this._newRestRoot}/providers/${provider}/presets?disabled=false`;
     return this._http.get<PresetList>(url);
+  }
+
+  getAKSClusters(projectID: string): Observable<AKSCluster[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/providers/aks/clusters`;
+    return this._http
+      .get<AKSCluster[]>(url, {headers: this._getAKSHeaders()})
+      .pipe(catchError(() => of<AKSCluster[]>()));
+  }
+
+  private _getAKSHeaders(): HttpHeaders {
+    if (this._preset) {
+      return new HttpHeaders({Credential: this._preset});
+    }
+
+    return new HttpHeaders({
+      TenantID: this._externalCluster.cloud.aks.tenantID,
+      SubscriptionID: this._externalCluster.cloud.aks.subscriptionID,
+      ClientID: this._externalCluster.cloud.aks.clientID,
+      ClientSecret: this._externalCluster.cloud.aks.clientSecret,
+      ResourceGroup: this._externalCluster.cloud.aks.resourceGroup,
+    });
   }
 
   getEKSClusters(projectID: string): Observable<EKSCluster[]> {
