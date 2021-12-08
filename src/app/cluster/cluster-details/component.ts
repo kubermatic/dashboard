@@ -30,6 +30,7 @@ import {UserService} from '@core/services/user';
 import {Addon} from '@shared/entity/addon';
 import {
   Cluster,
+  CNIPlugin,
   ExternalCCMMigrationStatus,
   getClusterProvider,
   getExternalCCMMigrationStatusMessage,
@@ -492,5 +493,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   getAdmissionPlugins(): string {
     return AdmissionPluginUtils.getJoinedPluginNames(this.cluster.spec.admissionPlugins);
+  }
+
+  isHavingCNI(): boolean {
+    return !!this.cluster?.spec?.cniPlugin && this.cluster?.spec?.cniPlugin?.type !== CNIPlugin.None;
   }
 }

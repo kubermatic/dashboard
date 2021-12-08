@@ -129,7 +129,7 @@ limitations under the License.
                            [isClusterRunning]="isClusterAPIRunning"
                            [upgrades]="isEditEnabled() ? upgrades : []"></km-version-picker>
 
-        <km-cni-version *ngIf="cluster.spec.cniPlugin?.type !== 'none'"
+        <km-cni-version *ngIf="isHavingCNI()"
                         [cluster]="cluster"
                         [isClusterRunning]="isClusterAPIRunning"></km-cni-version>
 
