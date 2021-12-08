@@ -328,6 +328,10 @@
   @include mixins.mask-image('/assets/images/icons/opa.svg', 24px);
 }
 
+.km-icon-rulegroups {
+  @include mixins.mask-image('/assets/images/icons/rulegroups.svg', 24px);
+}
+
 .km-icon-defaults {
   @include mixins.mask-image('/assets/images/icons/defaults.svg', 24px);
 }
