@@ -28,7 +28,7 @@ import {UserMockService} from '@app/testing/services/user-mock';
 import {ClusterService} from '@core/services/cluster';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
-import {HealthState} from '@shared/entity/health';
+import {HealthState, HealthType} from '@shared/entity/health';
 import {SharedModule} from '@shared/module';
 import {ClusterSecretsComponent} from './component';
 
@@ -86,13 +86,12 @@ describe('ClusterSecretsComponent', () => {
 
   it('should set correct icon for controllers', () => {
     component.health = fakeHealthProvisioning();
-    expect(component.getIcon('apiserver')).toBe('km-icon-running');
-    expect(component.getIcon('controller')).toBe('km-icon-running');
-    expect(component.getIcon('etcd')).toBe('km-icon-pending km-info');
-    expect(component.getIcon('scheduler')).toBe('km-icon-pending km-info');
-    expect(component.getIcon('machineController')).toBe('km-icon-running');
-    expect(component.getIcon('userClusterControllerManager')).toBe('km-icon-pending km-info');
-    expect(component.getIcon('test-controller')).toBe('');
+    expect(component.getIcon(HealthType.Apiserver)).toBe('km-icon-running');
+    expect(component.getIcon(HealthType.Controller)).toBe('km-icon-running');
+    expect(component.getIcon(HealthType.Etcd)).toBe('km-icon-pending km-info');
+    expect(component.getIcon(HealthType.Scheduler)).toBe('km-icon-pending km-info');
+    expect(component.getIcon(HealthType.MachineController)).toBe('km-icon-running');
+    expect(component.getIcon(HealthType.UserClusterControllerManager)).toBe('km-icon-pending km-info');
   });
 
   it('should set health status `Running`', () => {
@@ -111,12 +110,11 @@ describe('ClusterSecretsComponent', () => {
 
   it('should set correct status for controllers', () => {
     component.health = fakeHealthProvisioning();
-    expect(component.getStatus('apiserver')).toBe('Running');
-    expect(component.getStatus('controller')).toBe('Running');
-    expect(component.getStatus('etcd')).toBe('Pending');
-    expect(component.getStatus('scheduler')).toBe('Pending');
-    expect(component.getStatus('machineController')).toBe('Running');
-    expect(component.getStatus('userClusterControllerManager')).toBe('Pending');
-    expect(component.getStatus('test-controller')).toBe('');
+    expect(component.getStatus(HealthType.Apiserver)).toBe('Running');
+    expect(component.getStatus(HealthType.Controller)).toBe('Running');
+    expect(component.getStatus(HealthType.Etcd)).toBe('Pending');
+    expect(component.getStatus(HealthType.Scheduler)).toBe('Pending');
+    expect(component.getStatus(HealthType.MachineController)).toBe('Running');
+    expect(component.getStatus(HealthType.UserClusterControllerManager)).toBe('Pending');
   });
 });

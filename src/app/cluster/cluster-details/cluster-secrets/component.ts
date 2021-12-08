@@ -15,7 +15,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Cluster} from '@shared/entity/cluster';
-import {Health, HealthState} from '@shared/entity/health';
+import {Health, HealthState, HealthType} from '@shared/entity/health';
 import {ClusterHealthStatus} from '@shared/utils/health-status/cluster-health-status';
 
 @Component({
@@ -24,6 +24,7 @@ import {ClusterHealthStatus} from '@shared/utils/health-status/cluster-health-st
   styleUrls: ['./style.scss'],
 })
 export class ClusterSecretsComponent implements OnInit {
+  readonly HealthType = HealthType;
   @Input() cluster: Cluster;
   @Input() health: Health;
   isClusterRunning: boolean;
@@ -36,25 +37,33 @@ export class ClusterSecretsComponent implements OnInit {
     this.healthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, this.health);
   }
 
-  getIcon(name: string): string {
+  getIcon(name: HealthType): string {
     if (this.health) {
       switch (name) {
-        case 'apiserver':
+        case HealthType.Apiserver:
           return this.getIconClass(this.health.apiserver);
-        case 'controller':
+        case HealthType.Controller:
           return this.getIconClass(this.health.controller);
-        case 'etcd':
+        case HealthType.Etcd:
           return this.getIconClass(this.health.etcd);
-        case 'scheduler':
+        case HealthType.Scheduler:
           return this.getIconClass(this.health.scheduler);
-        case 'machineController':
+        case HealthType.MachineController:
           return this.getIconClass(this.health.machineController);
-        case 'userClusterControllerManager':
+        case HealthType.UserClusterControllerManager:
           return this.getIconClass(this.health.userClusterControllerManager);
-        case 'gatekeeperAudit':
+        case HealthType.GatekeeperAudit:
           return this.getIconClass(this.health.gatekeeperAudit);
-        case 'gatekeeperController':
+        case HealthType.GatekeeperController:
           return this.getIconClass(this.health.gatekeeperController);
+        case HealthType.MlaGateway:
+          return this.getIconClass(this.health.mlaGateway);
+        case HealthType.AlertmanagerConfig:
+          return this.getIconClass(this.health.alertmanagerConfig);
+        case HealthType.Logging:
+          return this.getIconClass(this.health.logging);
+        case HealthType.Monitoring:
+          return this.getIconClass(this.health.monitoring);
         default:
           return '';
       }
@@ -76,25 +85,33 @@ export class ClusterSecretsComponent implements OnInit {
     }
   }
 
-  getStatus(name: string): string {
+  getStatus(name: HealthType): string {
     if (this.health) {
       switch (name) {
-        case 'apiserver':
+        case HealthType.Apiserver:
           return this.getHealthStatus(this.health.apiserver);
-        case 'controller':
+        case HealthType.Controller:
           return this.getHealthStatus(this.health.controller);
-        case 'etcd':
+        case HealthType.Etcd:
           return this.getHealthStatus(this.health.etcd);
-        case 'scheduler':
+        case HealthType.Scheduler:
           return this.getHealthStatus(this.health.scheduler);
-        case 'machineController':
+        case HealthType.MachineController:
           return this.getHealthStatus(this.health.machineController);
-        case 'userClusterControllerManager':
+        case HealthType.UserClusterControllerManager:
           return this.getHealthStatus(this.health.userClusterControllerManager);
-        case 'gatekeeperAudit':
+        case HealthType.GatekeeperAudit:
           return this.getHealthStatus(this.health.gatekeeperAudit);
-        case 'gatekeeperController':
+        case HealthType.GatekeeperController:
           return this.getHealthStatus(this.health.gatekeeperController);
+        case HealthType.MlaGateway:
+          return this.getHealthStatus(this.health.mlaGateway);
+        case HealthType.AlertmanagerConfig:
+          return this.getHealthStatus(this.health.alertmanagerConfig);
+        case HealthType.Logging:
+          return this.getHealthStatus(this.health.logging);
+        case HealthType.Monitoring:
+          return this.getHealthStatus(this.health.monitoring);
         default:
           return '';
       }
@@ -115,5 +132,17 @@ export class ClusterSecretsComponent implements OnInit {
 
   isOPAEnabled(): boolean {
     return !!this.cluster.spec.opaIntegration && this.cluster.spec.opaIntegration.enabled;
+  }
+
+  isMLAEnabled(): boolean {
+    return !!this.isLoggingEnabled() || !!this.isMonitoringEnabled();
+  }
+
+  isLoggingEnabled(): boolean {
+    return !!this.cluster?.spec?.mla?.loggingEnabled;
+  }
+
+  isMonitoringEnabled(): boolean {
+    return !!this.cluster?.spec?.mla?.monitoringEnabled;
   }
 }
