@@ -1,4 +1,4 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2021 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,17 +15,17 @@
 @use 'variables';
 @use 'mixins';
 
-.km-version-picker-container {
-  margin: 6px 30px 6px 0;
+.cni-version-container {
+  margin: 0 30px 0 0;
 
-  .km-version-picker {
-    height: 50px;
+  .cni-version {
+    height: 55px;
 
     * {
       cursor: default;
     }
 
-    .km-version-picker-type {
+    .cni-version-type {
       @include mixins.size(52px, 45px);
 
       border-radius: variables.$border-radius 0 0 variables.$border-radius;
@@ -36,31 +36,34 @@
       top: -1px;
 
       i {
-        @include mixins.size(30px);
-
         margin: 0;
-      }
 
-      .km-icon-update-available,
-      .km-icon-warning,
-      .km-icon-error {
-        @include mixins.size(16px);
+        &.type-canal {
+          @include mixins.size(40px, $force: true);
+        }
 
-        position: absolute;
-        right: 4px;
-        top: 6px;
+        &.type-cilium {
+          @include mixins.size(50px, $force: true);
+        }
       }
+    }
+
+    .updates-available {
+      @include mixins.size(16px);
+
+      position: absolute;
+      right: 28px;
+      top: -9px;
     }
 
     .mat-form-field {
       font-size: variables.$font-size-subhead;
-      margin-top: 20px;
     }
   }
 
-  .km-version-picker-enabled {
+  .enabled {
     &:hover {
-      .km-version-picker-type {
+      .cni-version-type {
         border-style: solid;
         transition: all 0.5s ease;
       }

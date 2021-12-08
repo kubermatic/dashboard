@@ -59,3 +59,25 @@ mat-button-toggle-group[group='auditLogging'] {
     }
   }
 }
+
+mat-button-toggle-group[group='cniPluginTypeGroup'] {
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+
+  .mat-button-toggle {
+    max-height: 45px;
+    max-width: 170px;
+    min-height: 45px;
+    min-width: 120px;
+
+    i {
+      filter: grayscale(100%);
+    }
+
+    &.mat-button-toggle-checked {
+      i {
+        filter: none;
+      }
+    }
+  }
+}

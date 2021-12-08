@@ -60,10 +60,23 @@ export class Cluster {
 
   static getVersionHeadline(type: string, isKubelet: boolean): string {
     if (type === 'kubernetes') {
-      return isKubelet ? 'kubelet Version' : 'Master Version';
+      return isKubelet ? 'kubelet Version' : 'Control Plane Version';
     }
 
     return '';
+  }
+
+  // for now keep in sync with
+  // https://github.com/kubermatic/kubermatic/blob/master/pkg/webhook/cluster/validation/validation.go#L50-L52
+  static getCNIVersions(cniPluginType: string): string[] {
+    switch (cniPluginType) {
+      case CNIPlugin.Canal:
+        return ['v3.8', 'v3.19', 'v3.20'];
+      case CNIPlugin.Cilium:
+        return ['v1.10'];
+      default:
+        return [];
+    }
   }
 
   static newEmptyClusterEntity(): Cluster {
@@ -227,6 +240,7 @@ export class ClusterNetwork {
 
 export class CNIPluginConfig {
   type: string;
+  version: string;
 }
 
 export class NetworkRanges {
@@ -242,6 +256,7 @@ export enum ProxyMode {
 export enum CNIPlugin {
   Canal = 'canal',
   Cilium = 'cilium',
+  None = 'none',
 }
 
 export enum AuditPolicyPreset {
@@ -329,6 +344,11 @@ export class ClusterSpecPatch {
   machineNetworks?: MachineNetwork[];
   mla?: MLASettings;
   containerRuntime?: ContainerRuntime;
+  cniPlugin?: CNIPluginConfigPatch;
+}
+
+export class CNIPluginConfigPatch {
+  version: string;
 }
 
 export class CloudSpecPatch {

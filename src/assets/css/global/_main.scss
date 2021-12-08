@@ -567,3 +567,40 @@ km-dashboard {
     padding: 0;
   }
 }
+
+km-cni-version {
+  .mat-form-field {
+    .mat-form-field-flex {
+      height: 49px;
+    }
+
+    .mat-form-field-infix {
+      width: 120px;
+    }
+
+    .mat-form-field-outline-start {
+      border-radius: 0;
+    }
+  }
+
+  .enabled:hover {
+    * {
+      cursor: pointer;
+    }
+
+    .mat-form-field-outline-thick {
+      opacity: 100%;
+      transition: all 0.5s ease;
+    }
+  }
+
+  .disabled {
+    mat-form-field.mat-primary {
+      .mat-select-arrow-wrapper {
+        .mat-select-arrow {
+          display: none;
+        }
+      }
+    }
+  }
+}

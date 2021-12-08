@@ -57,15 +57,36 @@ limitations under the License.
       </mat-card-header>
       <div fxLayout="column"
            fxLayoutGap="8px">
-        <mat-form-field class="km-dropdown-with-suffix">
-          <mat-label>CNI Plugin</mat-label>
-          <mat-select [formControlName]="Controls.CNIPlugin"
-                      class="km-select-ellipsis"
-                      disableOptionCentering>
-            <mat-option [value]="cniPlugin.Canal">Canal</mat-option>
-            <mat-option [value]="cniPlugin.Cilium">Cilium</mat-option>
-          </mat-select>
-        </mat-form-field>
+
+        <div class="cni-plugin"
+             fxLayout="column">
+          <mat-button-toggle-group group="cniPluginTypeGroup"
+                                   [formControlName]="Controls.CNIPlugin">
+            <mat-button-toggle [value]="cniPlugin.Canal">
+              <i class="km-cni-image-canal"></i>
+            </mat-button-toggle>
+            <mat-button-toggle [value]="cniPlugin.Cilium">
+              <i class="km-cni-image-cilium"></i>
+            </mat-button-toggle>
+            <mat-button-toggle [value]="cniPlugin.None">
+              None
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+
+          <mat-form-field fxFlex
+                          class="km-dropdown-with-suffix"
+                          *ngIf="hasCNIPluginType()">
+            <mat-label>CNI Plugin Version</mat-label>
+            <mat-select [formControlName]="Controls.CNIPluginVersion"
+                        class="km-select-ellipsis"
+                        disableOptionCentering>
+              <mat-option *ngFor="let version of getCNIPluginVersions()"
+                          [value]="version">
+                {{version}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
 
         <mat-form-field class="km-dropdown-with-suffix">
           <mat-label>Proxy Mode</mat-label>
@@ -118,7 +139,7 @@ limitations under the License.
              fxLayout="row">
           <mat-form-field fxFlex
                           class="km-dropdown-with-suffix">
-            <mat-label>Version</mat-label>
+            <mat-label>Control Plane Version</mat-label>
             <mat-select [formControlName]="Controls.Version"
                         class="km-select-ellipsis"
                         disableOptionCentering

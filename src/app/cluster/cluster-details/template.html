@@ -129,6 +129,10 @@ limitations under the License.
                            [isClusterRunning]="isClusterAPIRunning"
                            [upgrades]="isEditEnabled() ? upgrades : []"></km-version-picker>
 
+        <km-cni-version *ngIf="isHavingCNI()"
+                        [cluster]="cluster"
+                        [isClusterRunning]="isClusterAPIRunning"></km-cni-version>
+
         <km-property>
           <div key>Cluster ID</div>
           <div value
@@ -160,10 +164,6 @@ limitations under the License.
           <div value>{{cluster.spec.clusterNetwork.services.cidrBlocks.join(', ')}}</div>
         </km-property>
 
-        <km-property *ngIf="cluster.spec.cniPlugin?.type">
-          <div key>CNI Plugin</div>
-          <div value>{{cluster.spec.cniPlugin.type}}</div>
-        </km-property>
 
         <km-property *ngIf="cluster.spec.clusterNetwork?.proxyMode">
           <div key>Proxy Mode</div>
