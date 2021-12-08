@@ -48,6 +48,22 @@ export enum HealthState {
   provisioning = 2,
 }
 
+export enum HealthType {
+  Apiserver = 'apiserver',
+  Controller = 'controller',
+  Etcd = 'etcd',
+  MachineController = 'machineController',
+  Scheduler = 'scheduler',
+  CloudProviderInfrastructure = 'cloudProviderInfrastructure',
+  UserClusterControllerManager = 'userClusterControllerManager',
+  GatekeeperAudit = 'gatekeeperAudit',
+  GatekeeperController = 'gatekeeperController',
+  MlaGateway = 'mlaGateway',
+  AlertmanagerConfig = 'alertmanagerConfig',
+  Logging = 'logging',
+  Monitoring = 'monitoring',
+}
+
 export namespace HealthState {
   export function isUp(state: HealthState): boolean {
     return HealthState.up === state;
