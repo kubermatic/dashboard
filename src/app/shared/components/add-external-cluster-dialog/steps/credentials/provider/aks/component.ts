@@ -13,10 +13,10 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {take, takeUntil} from 'rxjs/operators';
+import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
+import {catchError, take, takeUntil} from 'rxjs/operators';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
-import {Subject} from 'rxjs';
+import {Observable, of, Subject} from 'rxjs';
 
 export enum Controls {
   TenantID = 'tenantID',
@@ -32,8 +32,6 @@ export enum Controls {
 })
 export class AKSCredentialsComponent implements OnInit, OnDestroy {
   form: FormGroup;
-  isValidationPending = false;
-  areCredentialsValid = false;
   readonly Controls = Controls;
   private readonly _unsubscribe = new Subject<void>();
 
@@ -43,19 +41,23 @@ export class AKSCredentialsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.form = this._builder.group({
-      [Controls.TenantID]: this._builder.control('', [Validators.required]),
-      [Controls.SubscriptionID]: this._builder.control('', [Validators.required]),
-      [Controls.ClientID]: this._builder.control('', [Validators.required]),
-      [Controls.ClientSecret]: this._builder.control('', [Validators.required]),
-      [Controls.ResourceGroup]: this._builder.control('', [Validators.required]),
-    });
+    this.form = this._builder.group(
+      {
+        [Controls.TenantID]: this._builder.control('', [Validators.required]),
+        [Controls.SubscriptionID]: this._builder.control('', [Validators.required]),
+        [Controls.ClientID]: this._builder.control('', [Validators.required]),
+        [Controls.ClientSecret]: this._builder.control('', [Validators.required]),
+        [Controls.ResourceGroup]: this._builder.control('', [Validators.required]),
+      },
+      {asyncValidators: [this._credentialsValidator.bind(this)]}
+    );
 
-    this.form.statusChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this._updateStepValidity());
+    this.form.statusChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => (this._externalClusterService.credentialsStepValidity = this.form.valid));
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
       this._update();
-      this._validate();
       this._externalClusterService.isPresetEnabled = Object.values(Controls).every(c => !this.form.get(c).value);
     });
 
@@ -69,38 +71,19 @@ export class AKSCredentialsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  private _validate(): void {
-    this.isValidationPending = true;
-    const tenantID = this.form.get(Controls.TenantID).value;
-    const subscriptionID = this.form.get(Controls.SubscriptionID).value;
-    const clientID = this.form.get(Controls.ClientID).value;
-    const clientSecret = this.form.get(Controls.ClientSecret).value;
-    if (tenantID && subscriptionID && clientID && clientSecret) {
-      this._externalClusterService
-        .validateAKSCredentials(tenantID, subscriptionID, clientID, clientSecret)
-        .pipe(take(1))
-        .subscribe({
-          next: _ => {
-            this.isValidationPending = false;
-            this.areCredentialsValid = true;
-            this._updateStepValidity();
-          },
-          error: _ => {
-            this.isValidationPending = false;
-            this.areCredentialsValid = false;
-            this._updateStepValidity();
-          },
-        });
-    } else {
-      this.isValidationPending = false;
-      this.areCredentialsValid = false;
-      this._updateStepValidity();
+  private _credentialsValidator(control: AbstractControl): Observable<ValidationErrors | null> {
+    const tenantID = control.get(Controls.TenantID).value;
+    const subscriptionID = control.get(Controls.SubscriptionID).value;
+    const clientID = control.get(Controls.ClientID).value;
+    const clientSecret = control.get(Controls.ClientSecret).value;
+    if (!tenantID || !subscriptionID || !clientID || !clientSecret) {
+      return of(null);
     }
-  }
 
-  private _updateStepValidity(): void {
-    this._externalClusterService.credentialsStepValidity =
-      this.form.valid && this.areCredentialsValid && !this.isValidationPending;
+    return this._externalClusterService.validateAKSCredentials(tenantID, subscriptionID, clientID, clientSecret).pipe(
+      take(1),
+      catchError(() => of({invalidCredentials: true}))
+    );
   }
 
   private _update(): void {
