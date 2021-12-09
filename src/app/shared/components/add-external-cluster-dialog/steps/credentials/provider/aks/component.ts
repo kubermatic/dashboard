@@ -69,8 +69,8 @@ export class AKSCredentialsComponent implements OnInit, OnDestroy {
       .subscribe(_ => (this._externalClusterService.credentialsStepValidity = this.form.valid));
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
+      this._update();
       this._externalClusterService.isPresetEnabled = Object.values(Controls).every(c => !this.form.get(c).value);
-      this.update();
     });
 
     this._externalClusterService.presetChanges
@@ -83,7 +83,7 @@ export class AKSCredentialsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  update(): void {
+  private _update(): void {
     this._externalClusterService.externalCluster = {
       name: '',
       cloud: {

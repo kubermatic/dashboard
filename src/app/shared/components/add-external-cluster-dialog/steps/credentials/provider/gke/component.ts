@@ -49,8 +49,8 @@ export class GKECredentialsComponent implements OnInit, OnDestroy {
       .subscribe(_ => (this._externalClusterService.credentialsStepValidity = this.form.valid));
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
+      this._update();
       this._externalClusterService.isPresetEnabled = Object.values(Controls).every(c => !this.form.get(c).value);
-      this.update();
     });
 
     this._externalClusterService.presetChanges
@@ -63,21 +63,19 @@ export class GKECredentialsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  private _serviceAccountValidator(
-    control: AbstractControl
-  ): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
-    const sa = control.value.toString();
-    if (!sa) {
+  private _serviceAccountValidator(control: AbstractControl): Observable<ValidationErrors | null> {
+    const serviceAccount = control.value.toString();
+    if (!serviceAccount) {
       return of(null);
     }
 
-    return this._externalClusterService.validateGKECredentials(sa).pipe(
+    return this._externalClusterService.validateGKECredentials(serviceAccount).pipe(
       take(1),
-      catchError(() => of({invalidGKEServiceAccount: true}))
+      catchError(() => of({invalidServiceAccount: true}))
     );
   }
 
-  update(): void {
+  private _update(): void {
     this._externalClusterService.externalCluster = {
       name: '',
       cloud: {
