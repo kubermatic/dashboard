@@ -45,6 +45,22 @@ export class ExternalClusterService {
     return this._http.get<PresetList>(url);
   }
 
+  validateAKSCredentials(
+    tenantID: string,
+    subscriptionID: string,
+    clientID: string,
+    clientSecret: string
+  ): Observable<any> {
+    const url = `${this._newRestRoot}/providers/aks/validatecredentials`;
+    const headers = new HttpHeaders({
+      TenantID: tenantID,
+      SubscriptionID: subscriptionID,
+      ClientID: clientID,
+      ClientSecret: clientSecret,
+    });
+    return this._http.get(url, {headers: headers});
+  }
+
   getAKSClusters(projectID: string): Observable<AKSCluster[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/providers/aks/clusters`;
     return this._http
