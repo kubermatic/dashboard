@@ -16,12 +16,151 @@ limitations under the License.
 <mat-card>
   <mat-card-header>
     <mat-card-title fxFlex
-                    fxLayout="row"
-                    fxLayoutAlign=" center">
+                    fxLayout="column"
+                    fxLayoutAlign="start"
+                    fxLayoutGap="32px">
       <div fxFlex>Rule Groups</div>
+
+      <div fyLayout="row">
+        <div class="filters"
+             fxLayoutAlign=" center"
+             fxLayoutGap="16px">
+          <div>Filter by</div>
+          <mat-form-field fxFlex
+                          class="km-dropdown-without-subtext">
+            <mat-label>Seed</mat-label>
+            <mat-select disableOptionCentering
+                        class="km-select-ellipsis"
+                        [(ngModel)]="seedFilter"
+                        (selectionChange)="filter()">
+              <mat-select-trigger fxFlex
+                                  fxLayout="row">
+                <div fxFlex
+                     fxLayoutAlign="start">{{seedFilter}}</div>
+                <div fxFlex
+                     fxLayoutAlign="end"
+                     class="km-select-trigger-button-wrapper">
+                  <button *ngIf="seedFilter"
+                          (click)="seedFilter = undefined; filter(); $event.stopPropagation()"
+                          matSuffix
+                          mat-icon-button
+                          aria-label="Clear">
+                    <i class="km-icon-mask km-icon-remove"></i>
+                  </button>
+                </div>
+              </mat-select-trigger>
+              <mat-option *ngFor="let seed of seeds"
+                          [value]="seed">
+                {{seed}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field fxFlex
+                          class="km-dropdown-without-subtext">
+            <mat-label>Type</mat-label>
+            <mat-select disableOptionCentering
+                        class="km-select-ellipsis"
+                        [(ngModel)]="typeFilter"
+                        (selectionChange)="filter()">
+              <mat-select-trigger fxFlex
+                                  fxLayout="row">
+                <div fxFlex
+                     fxLayoutAlign="start">{{typeFilter}}</div>
+                <div fxFlex
+                     fxLayoutAlign="end"
+                     class="km-select-trigger-button-wrapper">
+                  <button *ngIf="typeFilter"
+                          (click)="typeFilter = undefined; filter(); $event.stopPropagation()"
+                          matSuffix
+                          mat-icon-button
+                          aria-label="Clear">
+                    <i class="km-icon-mask km-icon-remove"></i>
+                  </button>
+                </div>
+              </mat-select-trigger>
+              <mat-option *ngFor="let type of ruleGroupTypes"
+                          [value]="type">
+                {{type}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div fxFlex></div>
+        <button mat-flat-button
+                color="quaternary"
+                fxLayoutAlign="center center"
+                (click)="add()">
+          <i class="km-icon-mask km-icon-add icon-add"></i>
+          <span>Add Rule Group</span>
+        </button>
+      </div>
+
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    Rule Groups
+    <table class="km-table"
+           mat-table
+           matSort
+           matSortActive="name"
+           matSortDirection="asc"
+           [dataSource]="dataSource">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"
+            mat-sort-header>Name
+        </th>
+        <td mat-cell
+            *matCellDef="let element">{{getName(element.data)}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="type">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"
+            mat-sort-header>Type
+        </th>
+        <td mat-cell
+            *matCellDef="let element">{{element.type}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"></th>
+        <td mat-cell
+            *matCellDef="let element">
+          <div class="km-table-actions"
+               fxLayoutAlign="end">
+            <button mat-icon-button
+                    (click)="edit(element, $event)">
+              <i class="km-icon-mask km-icon-edit"></i>
+            </button>
+            <button mat-icon-button
+                    (click)="delete(element.type, element, $event)">
+              <i class="km-icon-mask km-icon-delete"></i>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row
+          class="km-header-row"
+          *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          class="km-mat-row km-pointer"
+          [attr.id]="row.name"></tr>
+    </table>
+
+    <div class="km-row km-empty-list-msg"
+         *ngIf="hasNoData()">
+      No rule groups available.
+    </div>
+
+    <div [hidden]="!isPaginatorVisible()">
+      <mat-paginator showFirstLastButtons></mat-paginator>
+    </div>
   </mat-card-content>
 </mat-card>

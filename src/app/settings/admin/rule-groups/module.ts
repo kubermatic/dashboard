@@ -15,10 +15,11 @@
 import {NgModule} from '@angular/core';
 import {AdminSettingsRuleGroupsComponent} from '@app/settings/admin/rule-groups/component';
 import {AdminSettingsRuleGroupsRoutingModule} from '@app/settings/admin/rule-groups/routing';
+import {AdminRuleGroupDialog} from '@app/settings/admin/rule-groups/rule-group-dialog/component';
 import {SharedModule} from '@shared/module';
 
 @NgModule({
   imports: [SharedModule, AdminSettingsRuleGroupsRoutingModule],
-  declarations: [AdminSettingsRuleGroupsComponent],
+  declarations: [AdminSettingsRuleGroupsComponent, AdminRuleGroupDialog],
 })
 export class AdminSettingsRuleGroupsModule {}
