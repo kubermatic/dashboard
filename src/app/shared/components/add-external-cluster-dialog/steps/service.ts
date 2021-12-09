@@ -66,11 +66,12 @@ export class ExternalClusterService {
     });
   }
 
-  validateEKSCredentials(accessKeyID: string, secretAccessKey: string): Observable<any> {
+  validateEKSCredentials(accessKeyID: string, secretAccessKey: string, region: string): Observable<any> {
     const url = `${this._newRestRoot}/providers/eks/validatecredentials`;
     const headers = new HttpHeaders({
       AccessKeyID: accessKeyID,
       SecretAccessKey: secretAccessKey,
+      Region: region,
     });
     return this._http.get(url, {headers: headers});
   }
@@ -90,6 +91,7 @@ export class ExternalClusterService {
     return new HttpHeaders({
       AccessKeyID: this._externalCluster.cloud.eks.accessKeyID,
       SecretAccessKey: this._externalCluster.cloud.eks.secretAccessKey,
+      Region: this._externalCluster.cloud.eks.region,
     });
   }
 

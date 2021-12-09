@@ -21,6 +21,7 @@ import {Subject} from 'rxjs';
 export enum Controls {
   AccessKeyID = 'accessKeyID',
   SecretAccessKey = 'secretAccessKey',
+  Region = 'region',
 }
 
 @Component({
@@ -43,6 +44,7 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
     this.form = this._builder.group({
       [Controls.AccessKeyID]: this._builder.control('', [Validators.required]),
       [Controls.SecretAccessKey]: this._builder.control('', [Validators.required]),
+      [Controls.Region]: this._builder.control('', [Validators.required]),
     });
 
     this.form.statusChanges
@@ -73,19 +75,25 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
     this.isValidationPending = true;
     const accessKeyID = this.form.get(Controls.AccessKeyID).value;
     const secretAccessKey = this.form.get(Controls.SecretAccessKey).value;
-    this._externalClusterService
-      .validateEKSCredentials(accessKeyID, secretAccessKey)
-      .pipe(take(1))
-      .subscribe({
-        next: _ => {
-          this.isValidationPending = false;
-          this.areCredentialsValid = true;
-        },
-        error: _ => {
-          this.isValidationPending = false;
-          this.areCredentialsValid = false;
-        },
-      });
+    const region = this.form.get(Controls.Region).value;
+    if (accessKeyID && secretAccessKey && region) {
+      this._externalClusterService
+        .validateEKSCredentials(accessKeyID, secretAccessKey, region)
+        .pipe(take(1))
+        .subscribe({
+          next: _ => {
+            this.isValidationPending = false;
+            this.areCredentialsValid = true;
+          },
+          error: _ => {
+            this.isValidationPending = false;
+            this.areCredentialsValid = false;
+          },
+        });
+    } else {
+      this.isValidationPending = false;
+      this.areCredentialsValid = false;
+    }
   }
 
   private _update(): void {
@@ -96,6 +104,7 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
           name: '',
           accessKeyID: this.form.get(Controls.AccessKeyID).value,
           secretAccessKey: this.form.get(Controls.SecretAccessKey).value,
+          region: this.form.get(Controls.Region).value,
         },
       },
     };
