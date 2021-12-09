@@ -48,9 +48,10 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
       {asyncValidators: [this._credentialsValidator.bind(this)]}
     );
 
-    this.form.statusChanges
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => (this._externalClusterService.credentialsStepValidity = this.form.valid));
+    this.form.statusChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
+      this._externalClusterService.isValidating = this.form.pending;
+      this._externalClusterService.credentialsStepValidity = this.form.valid;
+    });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
       this._update();

@@ -52,7 +52,7 @@ limitations under the License.
   <mat-spinner fxFlexAlign="center"
                [diameter]="30"
                color="accent"
-               *ngIf="creating"></mat-spinner>
+               *ngIf="creating || externalClusterService.isValidating"></mat-spinner>
   <button mat-flat-button
           type="button"
           (click)="next()"

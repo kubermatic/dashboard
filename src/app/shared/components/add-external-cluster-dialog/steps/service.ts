@@ -31,6 +31,7 @@ export class ExternalClusterService {
   providerChanges = new BehaviorSubject<ExternalClusterProvider>(undefined);
   presetChanges = new BehaviorSubject<string>(undefined);
   presetStatusChanges = new BehaviorSubject<boolean>(false);
+  private _isValidating = false;
   private _provider: ExternalClusterProvider;
   private _externalCluster: ExternalCluster = ExternalCluster.new();
   private _preset: string;
@@ -160,6 +161,14 @@ export class ExternalClusterService {
 
   set isPresetEnabled(isPresetEnabled: boolean) {
     this.presetStatusChanges.next(isPresetEnabled);
+  }
+
+  get isValidating(): boolean {
+    return this._isValidating;
+  }
+
+  set isValidating(isValidating: boolean) {
+    this._isValidating = isValidating;
   }
 
   get isCredentialsStepValid(): boolean {
