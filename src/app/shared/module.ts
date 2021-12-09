@@ -104,7 +104,6 @@ import {CustomCredentialsComponent} from '@shared/components/add-external-cluste
 import {GKECredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/gke/component';
 import {GKEClusterComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/gke/component';
 import {ClusterStepComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/component';
-import {CredentialsAsyncValidatorService} from '@shared/validators/async-credentials.validator';
 import {CredentialsPresetsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/preset/component';
 import {EKSCredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/eks/component';
 import {EKSClusterComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/eks/component';
@@ -213,14 +212,12 @@ const components: any[] = [
   CredentialsPresetsComponent,
 ];
 
-const services: any[] = [CredentialsAsyncValidatorService];
-
 const directives: any[] = [AutofocusDirective, ThrottleClickDirective, OptionDirective];
 
 @NgModule({
   imports: [...modules],
   declarations: [...components, ...directives],
-  providers: [...services, DecimalPipe],
+  providers: [DecimalPipe],
   exports: [...modules, ...components, ...directives],
 })
 export class SharedModule {}

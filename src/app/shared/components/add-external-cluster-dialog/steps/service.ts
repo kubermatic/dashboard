@@ -21,7 +21,7 @@ import {
   GKECluster,
 } from '@shared/entity/external-cluster';
 import {BehaviorSubject, Observable, of} from 'rxjs';
-import {catchError} from 'rxjs/operators';
+import {catchError, take} from 'rxjs/operators';
 import {environment} from '@environments/environment';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {PresetList} from '@shared/entity/preset';
@@ -82,6 +82,15 @@ export class ExternalClusterService {
       AccessKeyID: this._externalCluster.cloud.eks.accessKeyID,
       SecretAccessKey: this._externalCluster.cloud.eks.secretAccessKey,
     });
+  }
+
+  validateGKECredentials(serviceAccount: string): Observable<any> {
+    const url = `${this._newRestRoot}/providers/gke/validatecredentials`;
+    const headers = new HttpHeaders({ServiceAccount: serviceAccount});
+    return this._http.get(url, {headers: headers}).pipe(
+      take(1),
+      catchError(() => of({invalidGKEServiceAccount: true}))
+    );
   }
 
   getGKEClusters(projectID: string): Observable<GKECluster[]> {

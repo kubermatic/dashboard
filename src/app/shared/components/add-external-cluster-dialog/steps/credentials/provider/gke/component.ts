@@ -13,11 +13,10 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {takeUntil} from 'rxjs/operators';
+import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
+import {catchError, take, takeUntil} from 'rxjs/operators';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
-import {CredentialsAsyncValidatorService} from '@shared/validators/async-credentials.validator';
-import {Subject} from 'rxjs';
+import {Observable, of, Subject} from 'rxjs';
 
 export enum Controls {
   ServiceAccount = 'serviceAccount',
@@ -34,15 +33,14 @@ export class GKECredentialsComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly _builder: FormBuilder,
-    private readonly _externalClusterService: ExternalClusterService,
-    private readonly _credentialsAsyncValidatorService: CredentialsAsyncValidatorService
+    private readonly _externalClusterService: ExternalClusterService
   ) {}
 
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.ServiceAccount]: this._builder.control('', {
         validators: [Validators.required],
-        asyncValidators: [this._credentialsAsyncValidatorService.gkeServiceAccountValidator()],
+        asyncValidators: [this._serviceAccountValidator.bind(this)],
       }),
     });
 
@@ -63,6 +61,20 @@ export class GKECredentialsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  private _serviceAccountValidator(
+    control: AbstractControl
+  ): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
+    const sa = control.value.toString();
+    if (!sa) {
+      return of(null);
+    }
+
+    return this._externalClusterService.validateGKECredentials(sa).pipe(
+      take(1),
+      catchError(() => of({invalidGKEServiceAccount: true}))
+    );
   }
 
   update(): void {
