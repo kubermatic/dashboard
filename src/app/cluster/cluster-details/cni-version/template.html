@@ -21,7 +21,7 @@ limitations under the License.
      fxLayoutGap="6px">
 
   <div class="cni-version"
-       [ngClass]="{'enabled': isEnabled(), 'disabled': !isEnabled()}"
+       [ngClass]="{'enabled': hasAvailableUpdates(), 'disabled': !hasAvailableUpdates()}"
        fxFlex
        fxLayoutAlign="center center"
        (click)="changeCNIVersionDialog()">
