@@ -12,10 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use 'mixins';
+
 mat-dialog-content .km-dialog-warning {
   margin-top: 0;
 }
 
 mat-dialog-actions {
   min-height: unset;
+
+  .km-icon-error {
+    @include mixins.size(25px, $force: true);
+
+    background-size: 15px;
+    margin: unset;
+  }
 }

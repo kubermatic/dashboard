@@ -51,6 +51,9 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
     this.form.statusChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
       this._externalClusterService.isValidating = this.form.pending;
       this._externalClusterService.credentialsStepValidity = this.form.valid;
+      this._externalClusterService.error = this.form.hasError('invalidCredentials')
+        ? 'Provided predentials are invalid.'
+        : undefined;
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {

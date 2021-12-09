@@ -34,6 +34,7 @@ export class ExternalClusterService {
   private _provider: ExternalClusterProvider;
   private _externalCluster: ExternalCluster = ExternalCluster.new();
   private _preset: string;
+  private _error: string;
   private _isValidating = false;
   private _credentialsStepValidity = false;
   private _clusterStepValidity = false;
@@ -161,6 +162,14 @@ export class ExternalClusterService {
 
   set isPresetEnabled(isPresetEnabled: boolean) {
     this.presetStatusChanges.next(isPresetEnabled);
+  }
+
+  get error(): string {
+    return this._error;
+  }
+
+  set error(error: string) {
+    this._error = error;
   }
 
   get isValidating(): boolean {
