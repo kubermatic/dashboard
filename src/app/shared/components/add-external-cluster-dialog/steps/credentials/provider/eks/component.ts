@@ -47,13 +47,7 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
       [Controls.Region]: this._builder.control('', [Validators.required]),
     });
 
-    this.form.statusChanges
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(
-        _ =>
-          (this._externalClusterService.credentialsStepValidity =
-            this.form.valid && this.areCredentialsValid && !this.isValidationPending)
-      );
+    this.form.statusChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this._updateStepValidity());
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
       this._update();
@@ -84,16 +78,24 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
           next: _ => {
             this.isValidationPending = false;
             this.areCredentialsValid = true;
+            this._updateStepValidity();
           },
           error: _ => {
             this.isValidationPending = false;
             this.areCredentialsValid = false;
+            this._updateStepValidity();
           },
         });
     } else {
       this.isValidationPending = false;
       this.areCredentialsValid = false;
+      this._updateStepValidity();
     }
+  }
+
+  private _updateStepValidity(): void {
+    this._externalClusterService.credentialsStepValidity =
+      this.form.valid && this.areCredentialsValid && !this.isValidationPending;
   }
 
   private _update(): void {
