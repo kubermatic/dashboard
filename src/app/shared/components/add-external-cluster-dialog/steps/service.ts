@@ -31,10 +31,10 @@ export class ExternalClusterService {
   providerChanges = new BehaviorSubject<ExternalClusterProvider>(undefined);
   presetChanges = new BehaviorSubject<string>(undefined);
   presetStatusChanges = new BehaviorSubject<boolean>(false);
-  private _isValidating = false;
   private _provider: ExternalClusterProvider;
   private _externalCluster: ExternalCluster = ExternalCluster.new();
   private _preset: string;
+  private _isValidating = false;
   private _credentialsStepValidity = false;
   private _clusterStepValidity = false;
   private _newRestRoot: string = environment.newRestRoot;
