@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,18 +17,20 @@ import {UserSettingsPage} from '../../pages/user-settings.po';
 import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
 import {View} from '../../utils/view';
+import {Mocks} from '../../utils/mocks';
+import {Config} from '../../utils/config';
 
 describe('Edition Story', () => {
-  const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
-  const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
-  const kubermaticEdition = Cypress.env('KUBERMATIC_EDITION');
-  const isEnterpriseEdition = kubermaticEdition === 'ee';
-  const editionName = isEnterpriseEdition ? 'Enterprise Edition' : 'Community Edition';
-  const themePickerAvailability = isEnterpriseEdition ? 'available' : 'not available';
+  const editionName = Config.isEnterpriseEdition() ? 'Enterprise Edition' : 'Community Edition';
+
+  beforeEach(() => {
+    if (Mocks.enabled()) {
+      Mocks.register();
+    }
+  });
 
   it('should login', () => {
-    login(email, password);
-
+    login();
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -37,8 +42,8 @@ describe('Edition Story', () => {
     UserSettingsPage.visit();
   });
 
-  it(`should check if theme picker is ${themePickerAvailability}`, () => {
-    UserSettingsPage.getThemePicker().should(isEnterpriseEdition ? Condition.Exist : Condition.NotExist);
+  it(`should check if theme picker is ${Config.isEnterpriseEdition() ? 'available' : 'not available'}`, () => {
+    UserSettingsPage.getThemePicker().should(Config.isEnterpriseEdition() ? Condition.Exist : Condition.NotExist);
   });
 
   it('should logout', () => {

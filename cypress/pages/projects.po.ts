@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -11,17 +14,14 @@
 
 import {Condition} from '../utils/condition';
 import {Endpoint} from '../utils/endpoint';
-import {Property, RequestType, Response, ResponseType, TrafficMonitor} from '../utils/monitor';
+import {MatchRule, RequestType, ResponseCheck, ResponseType, TrafficMonitor} from '../utils/monitor';
 import {View} from '../utils/view';
 import {ClustersPage} from './clusters.po';
+import {Mocks} from '../utils/mocks';
 
 export class ProjectsPage {
   static getProjectItem(projectName: string): Cypress.Chainable {
     return cy.get(`#km-project-name-${projectName}`);
-  }
-
-  static getActiveProjects(): Cypress.Chainable {
-    return cy.get('i.km-health-state.km-icon-circle.km-success-bg');
   }
 
   static getAddProjectBtn(): Cypress.Chainable {
@@ -40,18 +40,6 @@ export class ProjectsPage {
     return cy.get(`#km-delete-project-${projectName}`);
   }
 
-  static getEditProjectBtn(projectName: string): Cypress.Chainable {
-    return cy.get(`#km-edit-project-${projectName}`);
-  }
-
-  static getEditDialogInput(): Cypress.Chainable {
-    return cy.get('#km-edit-project-dialog-input');
-  }
-
-  static getEditDialogConfirmBtn(): Cypress.Chainable {
-    return cy.get('#km-edit-project-dialog-edit-btn');
-  }
-
   static getAppEdition(): Cypress.Chainable {
     return cy.get('#km-edition');
   }
@@ -61,7 +49,7 @@ export class ProjectsPage {
   }
 
   static getConnectClusterBtn(): Cypress.Chainable {
-    return cy.get('#km-connect-cluster-top-btn');
+    return cy.get('#km-add-external-cluster-btn');
   }
 
   // Utils.
@@ -76,7 +64,9 @@ export class ProjectsPage {
       .method(RequestType.GET)
       .url(Endpoint.Projects)
       .retry(retries)
-      .expect(Response.newResponse(ResponseType.LIST).elements(1).property(Property.newProperty('name', projectName)));
+      .expect(
+        new ResponseCheck(ResponseType.LIST, MatchRule.SOME).property('name', projectName).property('status', 'Active')
+      );
   }
 
   static verifyUrl(): void {
@@ -100,12 +90,10 @@ export class ProjectsPage {
   }
 
   static selectProject(projectName: string): void {
-    const waitTime = 500;
-    this.getProjectItem(projectName).should(Condition.HaveLength, 1);
-    this.getActiveProjects()
+    this.waitForProject(projectName);
+    this.getProjectItem(projectName)
       .should(Condition.HaveLength, 1)
-      .wait(waitTime)
-      .click()
+      .click({force: true})
       .then(() => {
         ClustersPage.waitForRefresh();
         ClustersPage.verifyUrl();
@@ -132,12 +120,17 @@ export class ProjectsPage {
   }
 
   static verifyNoProjects(): void {
+    if (Mocks.enabled()) {
+      cy.intercept({method: RequestType.GET, path: '**/api/**/projects*'}, []);
+    }
+
     this.verifyUrl();
+
     const retries = 5;
     TrafficMonitor.newTrafficMonitor()
       .method(RequestType.GET)
       .url(Endpoint.Projects)
       .retry(retries)
-      .expect(Response.newResponse(ResponseType.LIST).elements(0));
+      .expect(new ResponseCheck(ResponseType.LIST).elements(0));
   }
 }

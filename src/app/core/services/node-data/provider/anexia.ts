@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -90,7 +93,8 @@ export class NodeDataAnexiaProvider {
           .pipe(debounceTime(this._debounce))
           .pipe(tap(c => (cluster = c)))
           .pipe(switchMap(_ => this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(take(1))))
-          .pipe(tap(dc => (location = dc.spec.anexia.location_id)))
+          .pipe(tap(dc => (location = dc?.spec.anexia.location_id)))
+          .pipe(filter(_ => location?.length > 0))
           .pipe(
             switchMap(_ =>
               this._presetService

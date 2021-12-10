@@ -29,7 +29,8 @@ It will run a proxy for the API hosted at [dev.kubermatic.io](https://dev.kuberm
 It is always based on our latest `master` build, but be aware that it might be unstable.
 
 ### Using the Local API
-In order to start the KKP API locally, refer to the [Kubermatic](https://github.com/kubermatic/kubermatic) repository documentation. 
+In order to start the KKP API locally, refer to the [Kubermatic](https://github.com/kubermatic/kubermatic) repository
+documentation. 
 
 Once you have started your local API, start the Dashboard by running:
 ```bash
@@ -61,24 +62,22 @@ Run `npm test` to execute the unit tests via [Jest](https://jestjs.io/).
 Mocked tests can be run locally without need to connect to the whole KKP.
 
 ```
-USE_MOCKS="true" CYPRESS_USE_MOCKS="true" npm run e2e:mock
+KUBERMATIC_EDITION="ee" CYPRESS_MOCKS="true" npm run e2e:mock
 ```
 
-Additionally, you can choose which version will be tested with `KUBERMATIC_EDITION` environment variable.
-
 #### Full Tests
-End-to-end tests by default are executed against `dev.kubermatic.io` server. Before running tests set
-`CYPRESS_KUBERMATIC_DEX_DEV_E2E_USERNAME`, `CYPRESS_KUBERMATIC_DEX_DEV_E2E_USERNAME_2` and
-`CYPRESS_KUBERMATIC_DEX_DEV_E2E_PASSWORD` environment variables. To run tests, execute `npm run e2e`.
+Full end-to-end tests by default are executed against `dev.kubermatic.io` server.
 
-**NOTE**: For the local tests `roxy@kubermatic.io` & `roxy2@kubermatic.io` users can be used. Password can be found in
-our vault inside `e2e-dex` secret.
+```
+KUBERMATIC_EDITION="ee" CYPRESS_USERNAME="roxy@kubermatic.io" CYPRESS_USERNAME_2="roxy2@kubermatic.io" CYPRESS_PASSWORD="" npm run e2e
+```
 
-**NOTE**: `npm run e2e` command uses configuration from `src/environments/environment.e2e.ts`. You can modify it to
-match your setup.
+`CYPRESS_PASSWORD` contains password for users defined in `CYPRESS_USERNAME` and `CYPRESS_USERNAME_2`. It can be found
+in our vault inside `e2e-dex` secret.
 
-**NOTE**: End-to-end tests can be also run manually with `npm run cy` command. It requires app running at
-`http://localhost:8000`.
+**NOTE**: To test community edition use `KUBERMATIC_EDITION="ce"`.
+
+**NOTE**: Tests can be also run manually with `npm run cy` command. It requires app running at `http://localhost:8000`.
 
 ## Building the Application
 Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory.

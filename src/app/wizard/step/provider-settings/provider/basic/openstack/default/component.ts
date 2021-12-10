@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,7 +33,7 @@ import {CloudSpec, Cluster, ClusterSpec, OpenstackCloudSpec} from '@shared/entit
 import {OpenstackFloatingIpPool, OpenstackTenant} from '@shared/entity/provider/openstack';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
 import {
   catchError,
@@ -228,7 +231,7 @@ export class OpenstackProviderBasicDefaultCredentialsComponent extends BaseFormV
   getHint(control: Controls): string {
     switch (control) {
       case Controls.FloatingIPPool:
-        return this._hasRequiredCredentials() && this._hasTenant()
+        return this._hasRequiredCredentials() && this._hasProject()
           ? ''
           : 'Please enter your credentials & project first.';
       case Controls.Project:
@@ -277,11 +280,11 @@ export class OpenstackProviderBasicDefaultCredentialsComponent extends BaseFormV
     );
   }
 
-  private _hasTenant(): boolean {
+  private _hasProject(): boolean {
     return (
       !!this._clusterSpecService.cluster.spec.cloud.openstack &&
-      (!!this._clusterSpecService.cluster.spec.cloud.openstack.tenant ||
-        !!this._clusterSpecService.cluster.spec.cloud.openstack.tenantID)
+      (!!this._clusterSpecService.cluster.spec.cloud.openstack.project ||
+        !!this._clusterSpecService.cluster.spec.cloud.openstack.projectID)
     );
   }
 
@@ -291,8 +294,8 @@ export class OpenstackProviderBasicDefaultCredentialsComponent extends BaseFormV
       .domain(this._clusterSpecService.cluster.spec.cloud.openstack.domain)
       .username(this.form.get(Controls.Username).value)
       .password(this.form.get(Controls.Password).value)
-      .tenant(this.form.get(Controls.Project).value)
-      .tenantID(this.form.get(Controls.ProjectID).value)
+      .project(this.form.get(Controls.Project).value)
+      .projectID(this.form.get(Controls.ProjectID).value)
       .datacenter(this._clusterSpecService.cluster.spec.cloud.dc)
       .tenants(this._onProjectLoading.bind(this))
       .pipe(map(projects => _.sortBy(projects, p => p.name.toLowerCase())))
@@ -324,8 +327,8 @@ export class OpenstackProviderBasicDefaultCredentialsComponent extends BaseFormV
       .domain(this._clusterSpecService.cluster.spec.cloud.openstack.domain)
       .username(this.form.get(Controls.Username).value)
       .password(this.form.get(Controls.Password).value)
-      .tenant(this.form.get(Controls.Project).value)
-      .tenantID(this.form.get(Controls.ProjectID).value)
+      .project(this.form.get(Controls.Project).value)
+      .projectID(this.form.get(Controls.ProjectID).value)
       .datacenter(this._clusterSpecService.cluster.spec.cloud.dc)
       .networks(this._onFloatingIPPoolLoading.bind(this))
       .pipe(
@@ -362,8 +365,8 @@ export class OpenstackProviderBasicDefaultCredentialsComponent extends BaseFormV
           openstack: {
             username: this.form.get(Controls.Username).value,
             password: this.form.get(Controls.Password).value,
-            tenant: this.form.get(Controls.Project).value,
-            tenantID: this.form.get(Controls.ProjectID).value,
+            project: this.form.get(Controls.Project).value,
+            projectID: this.form.get(Controls.ProjectID).value,
           } as OpenstackCloudSpec,
         } as CloudSpec,
       } as ClusterSpec,

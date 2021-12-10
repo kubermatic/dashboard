@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,7 +22,7 @@ import {UserService} from '@core/services/user';
 import {NotificationService} from '@core/services/notification';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {ConstraintTemplate} from '@shared/entity/opa';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {Mode, ConstraintTemplateDialog} from './constraint-template-dialog/component';
@@ -125,7 +128,7 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
       hasBackdrop: true,
       data: {
         title: 'Delete Constraint Template',
-        message: `Are you sure you want to delete the constraint template ${constraintTemplate.name}?`,
+        message: `Delete <b>${constraintTemplate.name}</b> constraint template permanently?`,
         confirmLabel: 'Delete',
         warning: 'Deleting this constraint template will cause all constraints related to it to be deleted as well.',
       },

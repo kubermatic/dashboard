@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,8 +23,8 @@ import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 export enum Controls {
   Username = 'username',
   Password = 'password',
-  Tenant = 'tenant',
-  TenantID = 'tenantID',
+  Project = 'project',
+  ProjectID = 'projectID',
   Domain = 'domain',
   Network = 'network',
   SecurityGroups = 'securityGroups',
@@ -57,8 +60,8 @@ export class OpenstackSettingsComponent extends BaseFormValidator implements OnI
     this.form = this._builder.group({
       [Controls.Username]: this._builder.control('', Validators.required),
       [Controls.Password]: this._builder.control('', Validators.required),
-      [Controls.Tenant]: this._builder.control('', Validators.required),
-      [Controls.TenantID]: this._builder.control('', Validators.required),
+      [Controls.Project]: this._builder.control('', Validators.required),
+      [Controls.ProjectID]: this._builder.control('', Validators.required),
       [Controls.Domain]: this._builder.control('', Validators.required),
       [Controls.Network]: this._builder.control(''),
       [Controls.SecurityGroups]: this._builder.control(''),
@@ -87,8 +90,8 @@ export class OpenstackSettingsComponent extends BaseFormValidator implements OnI
     this._presetDialogService.preset.spec.openstack = {
       username: this.form.get(Controls.Username).value,
       password: this.form.get(Controls.Password).value,
-      tenant: this.form.get(Controls.Tenant).value,
-      tenantID: this.form.get(Controls.TenantID).value,
+      project: this.form.get(Controls.Project).value,
+      projectID: this.form.get(Controls.ProjectID).value,
       domain: this.form.get(Controls.Domain).value,
       network: this.form.get(Controls.Network).value,
       securityGroups: this.form.get(Controls.SecurityGroups).value,

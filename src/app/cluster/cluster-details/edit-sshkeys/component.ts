@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,7 +29,7 @@ import {Member} from '@shared/entity/member';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {EMPTY, merge, Observer, Subject, timer} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
@@ -47,7 +50,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['name', 'actions'];
   dataSource = new MatTableDataSource<SSHKey>();
 
-  private readonly _refreshTime = 999; // in seconds
+  private readonly _refreshTime = 10;
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
   private _unsubscribe = new Subject<void>();
@@ -123,10 +126,10 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
       disableClose: false,
       hasBackdrop: true,
       data: {
-        title: 'Delete SSH Key',
-        message: `Are you sure you want to permanently delete the ${sshKey.name}
-          SSH key from the ${this.cluster.name} cluster?`,
-        confirmLabel: 'Delete',
+        title: 'Remove SSH Key',
+        message: `Remove <b>${sshKey.name}</b>
+          SSH key from <b>${this.cluster.name}</b> cluster?`,
+        confirmLabel: 'Remove',
       },
     };
 

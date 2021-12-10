@@ -1,9 +1,12 @@
 <!--
 Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
+
     http://www.apache.org/licenses/LICENSE-2.0
+
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,10 +23,9 @@ limitations under the License.
        fxLayoutGap="30px">
     <div fxFlex="50"
          fxLayout="column"
-         fxLayoutGap="16px">
-      <mat-card-header *ngIf="hasExtendedSection(provider)"
-                       class="km-no-padding">
-        <mat-card-title>Basic</mat-card-title>
+         fxLayoutGap="8px">
+      <mat-card-header class="km-no-padding">
+        <mat-card-title>Basic Settings</mat-card-title>
       </mat-card-header>
       <km-wizard-presets [formControl]="form.get(Control.Preset)"></km-wizard-presets>
       <km-wizard-provider-basic [provider]="provider"

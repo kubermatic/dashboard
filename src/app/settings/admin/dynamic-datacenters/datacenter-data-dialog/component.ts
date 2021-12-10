@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,8 +22,8 @@ import {Datacenter} from '@shared/entity/datacenter';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {getIconClassForButton} from '@shared/utils/common-utils';
 import * as countryCodeLookup from 'country-code-lookup';
-import {dump, load} from 'js-yaml';
-import * as _ from 'lodash';
+import * as y from 'js-yaml';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
@@ -113,7 +116,7 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
     if (this.data.isEditing && this.data.datacenter.spec.provider) {
       const spec = this.data.datacenter.spec[this.data.datacenter.spec.provider];
       if (!_.isEmpty(spec)) {
-        this.providerConfig = dump(spec);
+        this.providerConfig = y.dump(spec);
       }
     }
   }
@@ -149,7 +152,7 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
   }
 
   private _getProviderConfig(): any {
-    const raw = load(this.providerConfig);
+    const raw = y.load(this.providerConfig);
     return !_.isEmpty(raw) ? raw : {};
   }
 

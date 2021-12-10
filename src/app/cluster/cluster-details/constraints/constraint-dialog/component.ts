@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,17 +17,18 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {OPAService} from '@core/services/opa';
 import {NotificationService} from '@core/services/notification';
+import {Cluster} from '@shared/entity/cluster';
 import {Constraint, ConstraintTemplate, ConstraintSpec} from '@shared/entity/opa';
 import {getIconClassForButton} from '@shared/utils/common-utils';
-import {dump, load} from 'js-yaml';
-import * as _ from 'lodash';
+import * as y from 'js-yaml';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 
 export interface ConstraintDialogConfig {
   title: string;
   projectId: string;
-  clusterId: string;
+  cluster: Cluster;
   mode: Mode;
   confirmLabel: string;
 
@@ -108,7 +112,7 @@ export class ConstraintDialog implements OnInit, OnDestroy {
 
   private _create(constraint: Constraint): void {
     this._opaService
-      .createConstraint(this.data.projectId, this.data.clusterId, constraint)
+      .createConstraint(this.data.projectId, this.data.cluster.id, constraint)
       .pipe(take(1))
       .subscribe(result => {
         this._matDialogRef.close(true);
@@ -119,7 +123,7 @@ export class ConstraintDialog implements OnInit, OnDestroy {
 
   private _edit(constraint: Constraint): void {
     this._opaService
-      .patchConstraint(this.data.projectId, this.data.clusterId, this.data.constraint.name, constraint)
+      .patchConstraint(this.data.projectId, this.data.cluster.id, this.data.constraint.name, constraint)
       .pipe(take(1))
       .subscribe(result => {
         this._matDialogRef.close(true);
@@ -132,14 +136,14 @@ export class ConstraintDialog implements OnInit, OnDestroy {
     if (this.data.mode === Mode.Edit) {
       const spec = this.data.constraint.spec;
       if (!_.isEmpty(spec)) {
-        this.spec = dump(spec);
+        this.spec = y.dump(spec);
       }
     }
   }
 
   private _getSpec(): ConstraintSpec {
     let spec = new ConstraintSpec();
-    const raw = load(this.spec) as ConstraintSpec;
+    const raw = y.load(this.spec) as ConstraintSpec;
     if (!_.isEmpty(raw)) {
       spec = raw;
     }

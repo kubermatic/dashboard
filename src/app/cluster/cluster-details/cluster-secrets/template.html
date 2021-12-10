@@ -1,9 +1,12 @@
 <!--
 Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
+
     http://www.apache.org/licenses/LICENSE-2.0
+
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,46 +20,70 @@ limitations under the License.
      fxLayout="row wrap"
      fxLayoutAlign=" center">
 
-  <div [matTooltip]="getStatus('apiserver')">
-    <span [ngClass]="getIcon('apiserver')"></span>
+  <div [matTooltip]="getStatus(HealthType.Apiserver)">
+    <span [ngClass]="getIcon(HealthType.Apiserver)"></span>
     <span>API Server</span>
   </div>
 
-  <div [matTooltip]="getStatus('etcd')">
-    <span [ngClass]="getIcon('etcd')"></span>
+  <div [matTooltip]="getStatus(HealthType.Etcd)">
+    <span [ngClass]="getIcon(HealthType.Etcd)"></span>
     <span>etcd</span>
   </div>
 
-  <div [matTooltip]="getStatus('machineController')">
-    <span [ngClass]="getIcon('machineController')"></span>
+  <div [matTooltip]="getStatus(HealthType.MachineController)">
+    <span [ngClass]="getIcon(HealthType.MachineController)"></span>
     <span>Machine Controller</span>
   </div>
 
-  <div [matTooltip]="getStatus('scheduler')">
-    <span [ngClass]="getIcon('scheduler')"></span>
+  <div [matTooltip]="getStatus(HealthType.Scheduler)">
+    <span [ngClass]="getIcon(HealthType.Scheduler)"></span>
     <span>Scheduler</span>
   </div>
 
-  <div [matTooltip]="getStatus('controller')">
-    <span [ngClass]="getIcon('controller')"></span>
+  <div [matTooltip]="getStatus(HealthType.Controller)">
+    <span [ngClass]="getIcon(HealthType.Controller)"></span>
     <span>Controller</span>
   </div>
 
-  <div [matTooltip]="getStatus('userClusterControllerManager')">
-    <span [ngClass]="getIcon('userClusterControllerManager')"></span>
+  <div [matTooltip]="getStatus(HealthType.UserClusterControllerManager)">
+    <span [ngClass]="getIcon(HealthType.UserClusterControllerManager)"></span>
     <span>User Controller Manager</span>
   </div>
 
   <div *ngIf="isOPAEnabled()"
-       [matTooltip]="getStatus('gatekeeperController')">
-    <span [ngClass]="getIcon('gatekeeperController')"></span>
+       [matTooltip]="getStatus(HealthType.GatekeeperController)">
+    <span [ngClass]="getIcon(HealthType.GatekeeperController)"></span>
     <span>OPA Gatekeeper Controller</span>
   </div>
 
   <div *ngIf="isOPAEnabled()"
-       [matTooltip]="getStatus('gatekeeperAudit')">
-    <span [ngClass]="getIcon('gatekeeperAudit')"></span>
+       [matTooltip]="getStatus(HealthType.GatekeeperAudit)">
+    <span [ngClass]="getIcon(HealthType.GatekeeperAudit)"></span>
     <span>OPA Gatekeeper Audit</span>
+  </div>
+
+  <div *ngIf="isMLAEnabled()"
+       [matTooltip]="getStatus(HealthType.MlaGateway)">
+    <span [ngClass]="getIcon(HealthType.MlaGateway)"></span>
+    <span>MLA Gateway</span>
+  </div>
+
+  <div *ngIf="isMLAEnabled()"
+       [matTooltip]="getStatus(HealthType.AlertmanagerConfig)">
+    <span [ngClass]="getIcon(HealthType.AlertmanagerConfig)"></span>
+    <span>Alertmanager Config</span>
+  </div>
+
+  <div *ngIf="isLoggingEnabled()"
+       [matTooltip]="getStatus(HealthType.Logging)">
+    <span [ngClass]="getIcon(HealthType.Logging)"></span>
+    <span>Logging</span>
+  </div>
+
+  <div *ngIf="isMonitoringEnabled()"
+       [matTooltip]="getStatus(HealthType.Monitoring)">
+    <span [ngClass]="getIcon(HealthType.Monitoring)"></span>
+    <span>Monitoring</span>
   </div>
 
 </div>

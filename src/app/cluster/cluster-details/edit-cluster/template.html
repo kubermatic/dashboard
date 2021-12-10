@@ -1,9 +1,12 @@
 <!--
 Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
+
     http://www.apache.org/licenses/LICENSE-2.0
+
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,6 +16,7 @@ limitations under the License.
 <div id="km-edit-cluster-dialog">
   <km-dialog-title>Edit Cluster</km-dialog-title>
   <mat-dialog-content>
+    <p class="km-dialog-context-description">Edit <b>{{cluster.name}}</b> cluster</p>
     <form [formGroup]="form"
           fxLayout="column"
           class="km-edit-cluster-form"
@@ -96,17 +100,36 @@ limitations under the License.
                        fxFlex="100"></km-label-form>
       </div>
 
-      <div fxLayout="row"
-           fxLayoutGap="16px">
-        <div fxLayout="row"
-             fxLayoutGap="8px"
-             fxLayoutAlign=" center">
-          <mat-checkbox [formControlName]="Controls.AuditLogging">Audit Logging</mat-checkbox>
-          <i *ngIf="!!datacenter.spec.enforceAuditLogging"
-             class="km-icon-error km-warning"
-             matTooltip="Audit Logging is enforced by your admin in the chosen datacenter.">
-          </i>
-        </div>
+      <mat-checkbox *ngIf="isKonnectivityEnabled"
+                    [formControlName]="Controls.Konnectivity">
+        Konnectivity
+      </mat-checkbox>
+
+      <div fxLayoutAlign=" center">
+        <mat-checkbox [formControlName]="Controls.AuditLogging">Audit Logging</mat-checkbox>
+        <mat-button-toggle-group *ngIf="!!form.get(Controls.AuditLogging).value"
+                                 [formControlName]="Controls.AuditPolicyPreset"
+                                 group="auditLogging">
+          <mat-button-toggle [value]="AuditPolicyPreset.Custom"
+                             matTooltip="Sets up cluster with a metadata audit policy that can be edited after the cluster has been created.">
+            custom
+          </mat-button-toggle>
+          <mat-button-toggle [value]="AuditPolicyPreset.Metadata"
+                             matTooltip="Logs metadata for all requests received by the Kubernetes API.">
+            metadata
+          </mat-button-toggle>
+          <mat-button-toggle [value]="AuditPolicyPreset.Minimal"
+                             matTooltip="Logs extended information about key security concerns like workload modifications and access to sensitive information.">
+            minimal
+          </mat-button-toggle>
+          <mat-button-toggle [value]="AuditPolicyPreset.Recommended"
+                             matTooltip="Logs extended information about key security concerns and metadata for all other requests. Recommended for best security coverage.">
+            recommended
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+        <i *ngIf="!!datacenter.spec.enforceAuditLogging"
+           class="km-icon-info km-pointer"
+           matTooltip="Audit Logging is enforced by your admin in the chosen datacenter."></i>
       </div>
 
       <mat-checkbox [formControlName]="Controls.OPAIntegration">

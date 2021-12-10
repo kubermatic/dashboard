@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,10 +17,11 @@ import {FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular
 import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
 import {DatacenterService} from '@core/services/datacenter';
 import {Datacenter} from '@shared/entity/datacenter';
-import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {EXTERNAL_NODE_PROVIDERS, NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge} from 'rxjs';
 import {distinctUntilChanged, map, switchMap, takeUntil} from 'rxjs/operators';
+import {AutocompleteInitialState} from '@shared/components/autocomplete/component';
 
 enum Controls {
   Settings = 'settings',
@@ -68,6 +72,8 @@ export class PresetSettingsStepComponent extends BaseFormValidator implements On
       this.provider = provider;
       this.form.removeControl(Controls.Settings);
       this.form.addControl(Controls.Settings, this._builder.control(''));
+      this.form.get(Controls.Datacenter).setValue(AutocompleteInitialState);
+      this.form.updateValueAndValidity();
     });
 
     this._presetDialogService.providerChanges
@@ -98,5 +104,9 @@ export class PresetSettingsStepComponent extends BaseFormValidator implements On
     this._presetDialogService.preset.spec[this._presetDialogService.provider].datacenter = this.form.get(
       Controls.Datacenter
     ).value;
+  }
+
+  isExternal(): boolean {
+    return EXTERNAL_NODE_PROVIDERS.includes(this.provider);
   }
 }

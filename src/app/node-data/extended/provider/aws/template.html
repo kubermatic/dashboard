@@ -1,9 +1,12 @@
 <!--
 Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
+
     http://www.apache.org/licenses/LICENSE-2.0
+
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -12,7 +15,7 @@ limitations under the License.
 -->
 <form [formGroup]="form"
       fxLayout="column"
-      fxLayoutGap="16px">
+      fxLayoutGap="8px">
   <km-label-form title="Provider Tags"
                  [labels]="tags"
                  (labelsChange)="onTagsChange($event)"
@@ -30,15 +33,14 @@ limitations under the License.
        @pushDown
        fxLayout="column"
        fxLayoutGap="16px">
-    <mat-form-field fxFlex>
-      <mat-label>Spot Instance Max Price (in USD)</mat-label>
-      <input [formControlName]="Controls.SpotInstanceMaxPrice"
-             type="number"
-             autocomplete="off"
-             matInput>
-      <mat-hint>Maximum price you are willing to pay per instance hour. Your instance runs when your maximum price is greater than the Spot Instance price.</mat-hint>
-      <mat-error>Spot Instance Max Price has to be bigger than 0.</mat-error>
-    </mat-form-field>
+    <km-number-stepper [formControlName]="Controls.SpotInstanceMaxPrice"
+                       mode="errors"
+                       label="Spot Instance Max Price (in USD)"
+                       hint="Maximum price you are willing to pay per instance hour. Your instance runs when your maximum price is greater than the Spot Instance price."
+                       type="decimal"
+                       min="0.0001"
+                       step="0.01">
+    </km-number-stepper>
 
     <mat-checkbox [id]="Controls.SpotInstancePersistentRequest"
                   [formControlName]="Controls.SpotInstancePersistentRequest">

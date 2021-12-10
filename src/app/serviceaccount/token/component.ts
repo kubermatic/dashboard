@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -122,7 +125,7 @@ export class ServiceAccountTokenComponent implements OnInit {
       hasBackdrop: true,
       data: {
         title: 'Delete Token',
-        message: `Delete ${token.name} token from ${this.serviceaccount.name} service account permanently?`,
+        message: `Delete <b>${token.name}</b> token of <b>${this.serviceaccount.name}</b> service account of <b>${this._selectedProject.name}</b> project permanently?`,
         confirmLabel: 'Delete',
       },
     };

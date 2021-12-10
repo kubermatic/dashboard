@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -10,7 +13,6 @@
 // limitations under the License.
 
 import {AfterViewInit, ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort, SortDirection} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -19,14 +21,12 @@ import {UserService} from '@core/services/user';
 import {AdminSeed} from '@shared/entity/datacenter';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {EditBucketSettingDialog} from './edit-bucket-setting-dialog/component';
-import {EditCredentialsDialog} from './edit-credentials-dialog/component';
+import _ from 'lodash';
 
 enum Column {
   Seed = 'seed',
-  Bucket = 'bucket',
-  Endpoint = 'endpoint',
-  Actions = 'actions',
+  Destinations = 'destinations',
+  StateArrow = 'stateArrow',
 }
 
 @Component({
@@ -40,7 +40,9 @@ export class BucketSettingsComponent implements OnInit, OnDestroy, AfterViewInit
 
   isLoading = false;
   dataSource: MatTableDataSource<AdminSeed>;
-  displayedColumns: string[] = Object.keys(Column).map(key => Column[key]);
+  displayedColumns: string[] = [Column.StateArrow, Column.Seed];
+  toggledColumns: string[] = [Column.Destinations];
+  isShowDestinations = [];
   readonly Column = Column;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -50,11 +52,7 @@ export class BucketSettingsComponent implements OnInit, OnDestroy, AfterViewInit
     return this.dataSource.data;
   }
 
-  constructor(
-    private readonly _datacenterService: DatacenterService,
-    private readonly _userService: UserService,
-    private readonly _matDialog: MatDialog
-  ) {}
+  constructor(private readonly _datacenterService: DatacenterService, private readonly _userService: UserService) {}
 
   ngOnInit(): void {
     this.dataSource = new MatTableDataSource<AdminSeed>([]);
@@ -82,24 +80,12 @@ export class BucketSettingsComponent implements OnInit, OnDestroy, AfterViewInit
     this._unsubscribe.complete();
   }
 
-  editBucketSettings(seed: AdminSeed): void {
-    const dialogConfig: MatDialogConfig = {
-      data: {
-        seed: seed,
-      },
-    };
-
-    this._matDialog.open(EditBucketSettingDialog, dialogConfig);
+  displayWarning(seed: AdminSeed): boolean {
+    return !!this._hasOldData(seed) && !this._hasDestinations(seed);
   }
 
-  editCredentials(seed: AdminSeed): void {
-    const dialogConfig: MatDialogConfig = {
-      data: {
-        seed: seed,
-      },
-    };
-
-    this._matDialog.open(EditCredentialsDialog, dialogConfig);
+  toggleDestinations(element: any): void {
+    this.isShowDestinations[element.name] = !this.isShowDestinations[element.name];
   }
 
   onSortChange(sort: Sort): void {
@@ -111,6 +97,20 @@ export class BucketSettingsComponent implements OnInit, OnDestroy, AfterViewInit
 
   isPaginatorVisible(): boolean {
     return this._seeds && this._seeds.length > 0 && this.paginator && this._seeds.length > this.paginator.pageSize;
+  }
+
+  // hasOldData() is used to verify, if a user has configured
+  // backupRestore.s3BucketName or backupRestore.s3Endpoint
+  // in kubermatic 2.18. Starting with 2.19 the recommended way
+  // is to use backup destinations.
+  // This check can be removed within one of the following versions,
+  // but not sure yet in which version exactly.
+  private _hasOldData(seed: AdminSeed): boolean {
+    return !!seed?.spec?.backupRestore?.s3BucketName || !!seed?.spec?.backupRestore?.s3Endpoint;
+  }
+
+  private _hasDestinations(seed): boolean {
+    return !!seed?.spec?.etcdBackupRestore && !_.isEmpty(seed.spec.etcdBackupRestore.destinations);
   }
 
   private _sortByName(direction: SortDirection): void {

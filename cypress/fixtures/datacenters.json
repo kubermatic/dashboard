@@ -1,0 +1,264 @@
+[
+  {
+    "metadata": {
+      "name": "test-alibaba-dc"
+    },
+    "spec": {
+      "seed": "test-seed",
+      "country": "DE",
+      "location": "Frankfurt",
+      "provider": "alibaba",
+      "alibaba": {
+        "region": "eu-central-1"
+      },
+      "node": {},
+      "enforceAuditLogging": false,
+      "enforcePodSecurityPolicy": false
+    }
+  },
+  {
+    "metadata": {
+      "name": "test-anexia-dc"
+    },
+    "spec": {
+      "seed": "test-seed",
+      "country": "AT",
+      "location": "Vienna",
+      "provider": "anexia",
+      "anexia": {
+        "location_id": "52b5f6b2fd3a4a7eaaedf1a7c019e9ea"
+      },
+      "node": {},
+      "enforceAuditLogging": false,
+      "enforcePodSecurityPolicy": false
+    }
+  },
+  {
+    "metadata": {
+      "name": "test-aws-dc"
+    },
+    "spec": {
+      "seed": "test-seed",
+      "country": "DE",
+      "location": "EU (Frankfurt)",
+      "provider": "aws",
+      "aws": {
+        "region": "eu-central-1",
+        "images": null
+      },
+      "node": {},
+      "enforceAuditLogging": false,
+      "enforcePodSecurityPolicy": false
+    }
+  },
+  {
+    "metadata": {
+      "name": "test-azure-dc"
+    },
+    "spec": {
+      "seed": "test-seed",
+      "country": "NL",
+      "location": "Azure West europe",
+      "provider": "azure",
+      "azure": {
+        "location": "westeurope"
+      },
+      "node": {},
+      "enforceAuditLogging": false,
+      "enforcePodSecurityPolicy": false
+    }
+  },
+  {
+    "metadata": {
+      "name": "byo-europe-west3-c"
+    },
+    "spec": {
+      "seed": "europe-west3-c",
+      "country": "DE",
+      "location": "Frankfurt",
+      "provider": "bringyourown",
+      "bringyourown": {},
+      "node": {},
+      "enforceAuditLogging": false,
+      "enforcePodSecurityPolicy": false
+    }
+  },
+  {
+    "metadata": {
+      "name": "a-test-datacenter"
+    },
+    "spec": {
+      "seed": "test-seed",
+      "country": "DE",
+      "location": "Hamburg",
+      "provider": "bringyourown",
+      "bringyourown": {},
+      "node": {},
+      "enforceAuditLogging": false,
+      "enforcePodSecurityPolicy": false
+    }
+  },
+  {
+    "metadata": {
+      "name": "test-digitalocean-dc"
+    },
+    "spec": {
+      "seed": "test-seed",
+      "country": "DE",
+      "location": "Frankfurt",
+      "provider": "digitalocean",
+      "digitalocean": {
+        "region": "ams3"
+      },
+      "node": {},
+      "enforceAuditLogging": false,
+      "enforcePodSecurityPolicy": false
+    }
+  },
+  {
+    "metadata": {
+      "name": "test-gcp-dc"
+    },
+    "spec": {
+      "seed": "test-seed",
+      "country": "DE",
+      "location": "Europe West (Germany)",
+      "provider": "gcp",
+      "gcp": {
+        "region": "europe-west3",
+        "zone_suffixes": [
+          "c"
+        ]
+      },
+      "node": {},
+      "enforceAuditLogging": false,
+      "enforcePodSecurityPolicy": false
+    }
+  },
+  {
+    "metadata": {
+      "name": "test-hetzner-dc"
+    },
+    "spec": {
+      "seed": "test-seed",
+      "country": "DE",
+      "location": "Nuremberg 1 DC 3",
+      "provider": "hetzner",
+      "hetzner": {
+        "datacenter": "nbg1-dc3",
+        "network": "dev",
+        "location": ""
+      },
+      "node": {},
+      "enforceAuditLogging": false,
+      "enforcePodSecurityPolicy": false
+    }
+  },
+  {
+    "metadata": {
+      "name": "test-kubevirt-dc"
+    },
+    "spec": {
+      "seed": "test-seed",
+      "country": "DE",
+      "location": "Frankfurt",
+      "provider": "kubevirt",
+      "kubevirt": {
+        "dns_policy": "None",
+        "dns_config": {
+          "nameservers": [
+            "8.8.8.8"
+          ]
+        }
+      },
+      "node": {},
+      "enforceAuditLogging": false,
+      "enforcePodSecurityPolicy": false
+    }
+  },
+  {
+    "metadata": {
+      "name": "test-equinix-dc"
+    },
+    "spec": {
+      "seed": "test-seed",
+      "country": "US",
+      "location": "Packet EWR1 (New York)",
+      "provider": "packet",
+      "packet": {
+        "facilities": [
+          "ewr1"
+        ]
+      },
+      "node": {},
+      "enforceAuditLogging": false,
+      "enforcePodSecurityPolicy": false
+    }
+  },
+  {
+    "metadata": {
+      "name": "test-openstack-dc"
+    },
+    "spec": {
+      "seed": "test-seed",
+      "country": "DE",
+      "location": "Germany - dbl1",
+      "provider": "openstack",
+      "openstack": {
+        "auth_url": "https://api.cloud.test.net:5000/v3",
+        "availability_zone": "dbl1",
+        "region": "dbl",
+        "ignore_volume_az": false,
+        "enforce_floating_ip": true,
+        "dns_servers": [
+          "68.123.44.116",
+          "68.123.44.117"
+        ],
+        "images": {
+          "centos": "kubermatic-e2e-centos",
+          "coreos": "kubermatic-e2e-coreos",
+          "ubuntu": "kubermatic-e2e-ubuntu"
+        },
+        "manage_security_groups": null,
+        "use_octavia": null,
+        "trust_device_path": null,
+        "node_size_requirements": {
+          "minimum_vcpus": 0,
+          "minimum_memory": 0
+        },
+        "enabled_flavors": null
+      },
+      "node": {},
+      "enforceAuditLogging": false,
+      "enforcePodSecurityPolicy": false
+    }
+  },
+  {
+    "metadata": {
+      "name": "test-vsphere-dc"
+    },
+    "spec": {
+      "seed": "test-seed",
+      "country": "DE",
+      "location": "Hamburg",
+      "provider": "vsphere",
+      "vsphere": {
+        "endpoint": "https://vcenter.test.com",
+        "allow_insecure": false,
+        "datastore": "exsi-nas",
+        "datacenter": "dc-1",
+        "cluster": "cl-1",
+        "storage_policy": "",
+        "root_path": "/dc-1/vm/test",
+        "templates": {
+          "centos": "machine-controller-e2e-centos",
+          "coreos": "machine-controller-e2e-coreos",
+          "ubuntu": "machine-controller-e2e-ubuntu"
+        }
+      },
+      "node": {},
+      "enforceAuditLogging": false,
+      "enforcePodSecurityPolicy": false
+    }
+  }
+]

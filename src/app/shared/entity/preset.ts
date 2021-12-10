@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -11,7 +14,7 @@
 
 import {Metadata} from '@shared/entity/common';
 import {NodeProvider, NodeProviderConstants} from '@shared/model/NodeProviderConstants';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 export class SimplePresetList {
   names: string[] = [];
@@ -51,12 +54,15 @@ export class CreatePresetReq {
 }
 
 export class CreatePresetSpec {
+  aks?: AKSPresetSpec;
   alibaba?: AlibabaPresetSpec;
   anexia?: AnexiaPresetSpec;
   aws?: AWSPresetSpec;
   azure?: AzurePresetSpec;
   digitalocean?: DigitaloceanPresetSpec;
+  eks?: EKSPresetSpec;
   gcp?: GCPPresetSpec;
+  gke?: GKEPresetSpec;
   hetzner?: HetznerPresetSpec;
   kubevirt?: KubevirtPresetSpec;
   openstack?: OpenstackPresetSpec;
@@ -97,6 +103,11 @@ export class AWSPresetSpec extends PresetProviderSpec {
   roleARN?: string;
 }
 
+export class EKSPresetSpec extends PresetProviderSpec {
+  accessKeyID: string;
+  secretAccessKey: string;
+}
+
 export class AzurePresetSpec extends PresetProviderSpec {
   tenantID: string;
   subscriptionID: string;
@@ -111,6 +122,13 @@ export class AzurePresetSpec extends PresetProviderSpec {
   loadBalancerSKU?: string;
 }
 
+export class AKSPresetSpec extends PresetProviderSpec {
+  tenantID: string;
+  subscriptionID: string;
+  clientID: string;
+  clientSecret: string;
+}
+
 export class DigitaloceanPresetSpec extends PresetProviderSpec {
   token: string;
 }
@@ -120,6 +138,10 @@ export class GCPPresetSpec extends PresetProviderSpec {
 
   network?: string;
   subnetwork?: string;
+}
+
+export class GKEPresetSpec extends PresetProviderSpec {
+  serviceAccount: string;
 }
 
 export class HetznerPresetSpec extends PresetProviderSpec {
@@ -133,8 +155,8 @@ export class KubevirtPresetSpec extends PresetProviderSpec {
 export class OpenstackPresetSpec extends PresetProviderSpec {
   username: string;
   password: string;
-  tenant: string;
-  tenantID: string;
+  project: string;
+  projectID: string;
   domain: string;
 
   network?: string;

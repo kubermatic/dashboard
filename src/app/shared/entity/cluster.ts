@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -57,10 +60,23 @@ export class Cluster {
 
   static getVersionHeadline(type: string, isKubelet: boolean): string {
     if (type === 'kubernetes') {
-      return isKubelet ? 'kubelet Version' : 'Master Version';
+      return isKubelet ? 'kubelet Version' : 'Control Plane Version';
     }
 
     return '';
+  }
+
+  // for now keep in sync with
+  // https://github.com/kubermatic/kubermatic/blob/master/pkg/webhook/cluster/validation/validation.go#L50-L52
+  static getCNIVersions(cniPluginType: string): string[] {
+    switch (cniPluginType) {
+      case CNIPlugin.Canal:
+        return ['v3.8', 'v3.19', 'v3.20'];
+      case CNIPlugin.Cilium:
+        return ['v1.10'];
+      default:
+        return [];
+    }
   }
 
   static newEmptyClusterEntity(): Cluster {
@@ -169,8 +185,8 @@ export class OpenstackCloudSpec {
   applicationCredentialSecret?: string;
   username: string;
   password: string;
-  tenant: string;
-  tenantID: string;
+  project: string;
+  projectID: string;
   domain: string;
   network: string;
   securityGroups: string;
@@ -221,14 +237,17 @@ export class ClusterNetwork {
   pods?: NetworkRanges;
   proxyMode?: ProxyMode;
   services?: NetworkRanges;
+  konnectivityEnabled?: boolean;
 }
 
 export class CNIPluginConfig {
   type: string;
+  version: string;
 }
 
 export class NetworkRanges {
   cidrBlocks: string[];
+  clusterNetwork?: ClusterNetwork;
 }
 
 export enum ProxyMode {
@@ -239,10 +258,19 @@ export enum ProxyMode {
 export enum CNIPlugin {
   Canal = 'canal',
   Cilium = 'cilium',
+  None = 'none',
+}
+
+export enum AuditPolicyPreset {
+  Custom = '',
+  Metadata = 'metadata',
+  Recommended = 'recommended',
+  Minimal = 'minimal',
 }
 
 export class AuditLoggingSettings {
   enabled?: boolean;
+  policyPreset?: AuditPolicyPreset;
 }
 
 export class OPAIntegration {
@@ -312,11 +340,17 @@ export class ClusterSpecPatch {
   usePodNodeSelectorAdmissionPlugin?: boolean;
   admissionPlugins?: string[];
   opaIntegration?: OPAIntegration;
+  clusterNetwork?: ClusterNetwork;
   podNodeSelectorAdmissionPluginConfig?: object;
   auditLogging?: AuditLoggingSettings;
   machineNetworks?: MachineNetwork[];
   mla?: MLASettings;
   containerRuntime?: ContainerRuntime;
+  cniPlugin?: CNIPluginConfigPatch;
+}
+
+export class CNIPluginConfigPatch {
+  version: string;
 }
 
 export class CloudSpecPatch {
@@ -425,8 +459,8 @@ export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
         securityGroups: '',
         network: '',
         domain: '',
-        tenant: '',
-        tenantID: '',
+        project: '',
+        projectID: '',
         subnetID: '',
       } as OpenstackCloudSpec;
     case NodeProvider.BRINGYOUROWN:

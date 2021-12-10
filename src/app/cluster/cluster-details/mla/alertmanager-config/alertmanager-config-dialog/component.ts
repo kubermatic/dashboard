@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,9 +16,10 @@ import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MLAService} from '@core/services/mla';
 import {NotificationService} from '@core/services/notification';
+import {Cluster} from '@shared/entity/cluster';
 import {AlertmanagerConfig} from '@shared/entity/mla';
 import {getIconClassForButton} from '@shared/utils/common-utils';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {encode, decode} from 'js-base64';
 import {Subject} from 'rxjs';
 import {take} from 'rxjs/operators';
@@ -23,7 +27,7 @@ import {take} from 'rxjs/operators';
 export interface AlertmanagerConfigDialogData {
   title: string;
   projectId: string;
-  clusterId: string;
+  cluster: Cluster;
   confirmLabel: string;
 
   // Alertmanager Config has to be specified only if dialog is used in the edit mode.
@@ -86,7 +90,7 @@ export class AlertmanagerConfigDialog implements OnInit, OnDestroy {
 
   private _edit(alertmanagerConfig: AlertmanagerConfig): void {
     this._mlaService
-      .putAlertmanagerConfig(this.data.projectId, this.data.clusterId, alertmanagerConfig)
+      .putAlertmanagerConfig(this.data.projectId, this.data.cluster.id, alertmanagerConfig)
       .pipe(take(1))
       .subscribe(_ => {
         this._matDialogRef.close(true);

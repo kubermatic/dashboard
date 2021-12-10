@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -11,9 +14,10 @@
 
 import {Condition} from '../utils/condition';
 import {Endpoint} from '../utils/endpoint';
-import {RequestType, TrafficMonitor} from '../utils/monitor';
+import {RequestType, ResponseCheck, ResponseType, TrafficMonitor} from '../utils/monitor';
 import {View} from '../utils/view';
 import {WizardPage} from './wizard.po';
+import {Mocks} from '../utils/mocks';
 
 export enum ProviderMenuOption {
   EditCluster = 'Edit Cluster',
@@ -26,7 +30,11 @@ export class ClustersPage {
   }
 
   static getConnectClusterBtn(): Cypress.Chainable {
-    return cy.get('#km-connect-cluster-top-btn');
+    return cy.get('#km-add-external-cluster-btn');
+  }
+
+  static getExternalClusterAnyProviderBtn(): Cypress.Chainable {
+    return cy.get('#external-cluster-any-provider-btn');
   }
 
   static getConnectClusterNameInput(): Cypress.Chainable {
@@ -34,7 +42,7 @@ export class ClustersPage {
   }
 
   static getConnectClusterSaveBtn(): Cypress.Chainable {
-    return cy.get('#external-cluster-confirm-btn');
+    return cy.get('#external-cluster-add-btn');
   }
 
   static getPrimaryLabel(): Cypress.Chainable {
@@ -236,20 +244,47 @@ export class ClustersPage {
   }
 
   static verifyNoClusters(): void {
+    if (Mocks.enabled()) {
+      cy.intercept({method: RequestType.GET, path: Endpoint.Clusters}, []);
+    }
+
     this.waitForRefresh();
     this.verifyUrl();
+
     cy.get('div').should(Condition.Contain, 'No clusters available.');
   }
 
-  static verifyNoCluster(name: string): void {
+  static verifyClustersCount(count: number): void {
     this.waitForRefresh();
     this.verifyUrl();
-    this.getTable().should(Condition.NotContain, name);
+
+    const retries = 5;
+    TrafficMonitor.newTrafficMonitor()
+      .method(RequestType.GET)
+      .url(Endpoint.Clusters)
+      .retry(retries)
+      .expect(new ResponseCheck(ResponseType.LIST).elements(count));
   }
 
   static deleteCluster(name: string): void {
     this.getDeleteClusterBtn().click();
     this.getDeleteDialogInput().type(name).should(Condition.HaveValue, name);
     this.getDeleteDialogBtn().should(Condition.NotBe, 'disabled').click();
+  }
+
+  static verifyNoMachineDeployments(): void {
+    if (Mocks.enabled()) {
+      cy.intercept({method: RequestType.GET, path: Endpoint.MachineDeployments}, []);
+    }
+
+    this.verifyUrl();
+
+    TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.MachineDeployments).interceptAndWait();
+    cy.get('div').should(Condition.Contain, 'No machine deployments available.');
+  }
+
+  static deleteMachineDeployment(name: string): void {
+    this.getMachineDeploymentRemoveBtn(name).click();
+    this.getDeleteDialogConfirmButton().click();
   }
 }

@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,11 +21,12 @@ import {MLAService} from '@core/services/mla';
 import {SettingsService} from '@core/services/settings';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Cluster} from '@shared/entity/cluster';
+import {SeedSettings} from '@shared/entity/datacenter';
 import {AlertmanagerConfig} from '@shared/entity/mla';
 import {AdminSettings} from '@shared/entity/settings';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
-import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
+import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {AlertmanagerConfigDialog} from './alertmanager-config-dialog/component';
 
 export enum Type {
@@ -43,6 +47,7 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
   @Input() alertmanagerConfig: AlertmanagerConfig;
 
   private _settings: AdminSettings;
+  private _seedSettings: SeedSettings;
   private _seed: string;
   private readonly _unsubscribe = new Subject<void>();
 
@@ -63,7 +68,10 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
     this._datacenterService
       .getDatacenter(this.cluster.spec.cloud.dc)
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(datacenter => (this._seed = datacenter.spec.seed));
+      .pipe(tap(datacenter => (this._seed = datacenter.spec.seed)))
+      .pipe(switchMap(_ => this._datacenterService.seedSettings(this._seed)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(seedSettings => (this._seedSettings = seedSettings));
   }
 
   ngOnDestroy(): void {
@@ -83,13 +91,16 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
   }
 
   getLinkURL(type: string): string {
+    const seed =
+      !!this._seedSettings && !!this._seedSettings.seedDNSOverwrite ? this._seedSettings.seedDNSOverwrite : this._seed;
+
     switch (type) {
       case Type.Alertmanager:
         return (
           'https://' +
           this._settings.mlaAlertmanagerPrefix +
           '.' +
-          this._seed +
+          seed +
           '.' +
           this._document.defaultView.location.hostname +
           '/' +
@@ -97,12 +108,7 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
         );
       case Type.Grafana:
         return (
-          'https://' +
-          this._settings.mlaGrafanaPrefix +
-          '.' +
-          this._seed +
-          '.' +
-          this._document.defaultView.location.hostname
+          'https://' + this._settings.mlaGrafanaPrefix + '.' + seed + '.' + this._document.defaultView.location.hostname
         );
       default:
         return '';
@@ -114,7 +120,7 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
       data: {
         title: 'Edit Alertmanager Config',
         projectId: this.projectID,
-        clusterId: this.cluster.id,
+        clusterId: this.cluster,
         alertmanagerConfig: this.alertmanagerConfig,
         confirmLabel: 'Edit',
       },
@@ -129,7 +135,7 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Reset Alertmanager Config',
-        message: 'Are you sure you want to reset the Alertmanager Config?',
+        message: 'Reset Alertmanager Config of <b>${this.cluster.name}</b> cluster to default?',
         confirmLabel: 'Reset',
       },
     };

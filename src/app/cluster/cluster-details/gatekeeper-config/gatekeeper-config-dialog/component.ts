@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,17 +16,18 @@ import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {OPAService} from '@core/services/opa';
 import {NotificationService} from '@core/services/notification';
+import {Cluster} from '@shared/entity/cluster';
 import {GatekeeperConfig, GatekeeperConfigSpec} from '@shared/entity/opa';
 import {getIconClassForButton} from '@shared/utils/common-utils';
-import {dump, load} from 'js-yaml';
-import * as _ from 'lodash';
+import * as y from 'js-yaml';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {take} from 'rxjs/operators';
 
 export interface GatekeeperConfigDialogData {
   title: string;
   projectId: string;
-  clusterId: string;
+  cluster: Cluster;
   mode: Mode;
   confirmLabel: string;
 
@@ -86,14 +90,14 @@ export class GatekeeperConfigDialog implements OnInit, OnDestroy {
     if (this.data.mode === Mode.Edit) {
       const spec = this.data.gatekeeperConfig.spec;
       if (!_.isEmpty(spec)) {
-        this.spec = dump(spec);
+        this.spec = y.dump(spec);
       }
     }
   }
 
   private _getSpec(): GatekeeperConfigSpec {
     let spec = new GatekeeperConfigSpec();
-    const raw = load(this.spec) as GatekeeperConfigSpec;
+    const raw = y.load(this.spec) as GatekeeperConfigSpec;
     if (!_.isEmpty(raw)) {
       spec = raw;
     }
@@ -102,7 +106,7 @@ export class GatekeeperConfigDialog implements OnInit, OnDestroy {
 
   private _create(gatekeeperConfig: GatekeeperConfig): void {
     this._opaService
-      .createGatekeeperConfig(this.data.projectId, this.data.clusterId, gatekeeperConfig)
+      .createGatekeeperConfig(this.data.projectId, this.data.cluster.id, gatekeeperConfig)
       .pipe(take(1))
       .subscribe(_ => {
         this._matDialogRef.close(true);
@@ -113,7 +117,7 @@ export class GatekeeperConfigDialog implements OnInit, OnDestroy {
 
   private _edit(gatekeeperConfig: GatekeeperConfig): void {
     this._opaService
-      .patchGatekeeperConfig(this.data.projectId, this.data.clusterId, gatekeeperConfig)
+      .patchGatekeeperConfig(this.data.projectId, this.data.cluster.id, gatekeeperConfig)
       .pipe(take(1))
       .subscribe(_ => {
         this._matDialogRef.close(true);

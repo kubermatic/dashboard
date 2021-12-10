@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,7 +25,7 @@ import {Cluster} from '@shared/entity/cluster';
 import {RuleGroup, RuleGroupType} from '@shared/entity/mla';
 import {MLAUtils} from '@shared/utils/mla-utils';
 import {UserSettings} from '@shared/entity/settings';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {Mode, RuleGroupDialog} from './rule-group-dialog/component';
@@ -110,11 +113,11 @@ export class RuleGroupsComponent implements OnInit, OnChanges, OnDestroy {
   add(): void {
     const dialogConfig: MatDialogConfig = {
       data: {
-        title: 'Add Rule Group',
+        title: 'Create Rule Group',
         projectId: this.projectID,
-        clusterId: this.cluster.id,
+        cluster: this.cluster,
         mode: Mode.Add,
-        confirmLabel: 'Add',
+        confirmLabel: 'Create',
       },
     };
 
@@ -126,7 +129,7 @@ export class RuleGroupsComponent implements OnInit, OnChanges, OnDestroy {
       data: {
         title: 'Edit Rule Group',
         projectId: this.projectID,
-        clusterId: this.cluster.id,
+        cluster: this.cluster,
         mode: Mode.Edit,
         ruleGroup: ruleGroup,
         confirmLabel: 'Edit',
@@ -143,7 +146,7 @@ export class RuleGroupsComponent implements OnInit, OnChanges, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete Rule Group',
-        message: `Are you sure you want to delete the Rule Group ${ruleGroupName}?`,
+        message: `Delete <b>${ruleGroupName}</b> recording and alerting rule group of <b>${this.cluster.name}</b> cluster permanently?`,
         confirmLabel: 'Delete',
       },
     };

@@ -1,0 +1,21 @@
+{
+  "id": "zq2m2fmkc7",
+  "name": "dev",
+  "creationTimestamp": "2021-10-19T08:58:59Z",
+  "labels": {
+    "project-id": "4zqlrjbwlb"
+  },
+  "type": "kubernetes",
+  "spec": {
+    "cloud": {
+      "dc": ""
+    },
+    "version": "1.20.10-gke.301",
+    "oidc": {}
+  },
+  "status": {
+    "version": "",
+    "url": "",
+    "externalCCMMigration": ""
+  }
+}

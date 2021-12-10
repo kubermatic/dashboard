@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -51,6 +54,7 @@ import {CIDRFormComponent} from '@shared/components/cidr-form/component';
 import {ClusterFromTemplateDialogComponent} from '@shared/components/cluster-from-template/component';
 import {ClusterSummaryComponent} from '@shared/components/cluster-summary/component';
 import {EventCardComponent} from '@shared/components/event-card/component';
+import {NumberStepperComponent} from '@shared/components/number-stepper/component';
 import {SaveClusterTemplateDialogComponent} from '@shared/components/save-cluster-template/component';
 import {SelectClusterTemplateDialogComponent} from '@shared/components/select-cluster-template/component';
 import {TabCardComponent} from '@shared/components/tab-card/component';
@@ -74,7 +78,7 @@ import {DialogTitleComponent} from './components/dialog-title/component';
 import {EditorComponent} from './components/editor/component';
 import {ClusterTypeEOLComponent} from './components/eol/component';
 import {EventListComponent} from './components/event-list/component';
-import {ExternalClusterDataDialogComponent} from './components/external-cluster-data-dialog/component';
+import {EditClusterConnectionDialogComponent} from './components/external-cluster-data-dialog/component';
 import {InitialsCircleComponent} from './components/initials-circle/component';
 import {LabelFormComponent} from './components/label-form/component';
 import {LabelsComponent} from './components/labels/component';
@@ -93,6 +97,15 @@ import {TaintsComponent} from './components/taints/component';
 import {AutofocusDirective} from './directives/autofocus/directive';
 import {ThrottleClickDirective} from './directives/throttle-click';
 import {RelativeTimePipe} from './pipes/relativetime';
+import {AddExternalClusterDialogComponent} from '@shared/components/add-external-cluster-dialog/component';
+import {ProviderStepComponent} from '@shared/components/add-external-cluster-dialog/steps/provider/component';
+import {CredentialsStepComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/component';
+import {CustomCredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/custom/component';
+import {GKECredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/gke/component';
+import {GKEClusterComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/gke/component';
+import {ClusterStepComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/component';
+import {CredentialsAsyncValidatorService} from '@shared/validators/async-credentials.validator';
+import {CredentialsPresetsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/preset/component';
 
 const modules: any[] = [
   CommonModule,
@@ -168,7 +181,8 @@ const components: any[] = [
   ConfirmationDialogComponent,
   InstallAddonDialogComponent,
   EditAddonDialogComponent,
-  ExternalClusterDataDialogComponent,
+  AddExternalClusterDialogComponent,
+  EditClusterConnectionDialogComponent,
   LoaderComponent,
   SearchFieldComponent,
   TabCardComponent,
@@ -181,14 +195,24 @@ const components: any[] = [
   SaveClusterTemplateDialogComponent,
   SelectClusterTemplateDialogComponent,
   SizeFormatterPipe,
+  NumberStepperComponent,
+  ProviderStepComponent,
+  CredentialsStepComponent,
+  CustomCredentialsComponent,
+  GKECredentialsComponent,
+  ClusterStepComponent,
+  GKEClusterComponent,
+  CredentialsPresetsComponent,
 ];
+
+const services: any[] = [CredentialsAsyncValidatorService];
 
 const directives: any[] = [AutofocusDirective, ThrottleClickDirective, OptionDirective];
 
 @NgModule({
   imports: [...modules],
   declarations: [...components, ...directives],
-  providers: [DecimalPipe],
+  providers: [...services, DecimalPipe],
   exports: [...modules, ...components, ...directives],
 })
 export class SharedModule {}

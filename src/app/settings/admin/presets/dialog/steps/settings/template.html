@@ -1,9 +1,12 @@
 <!--
 Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
+
     http://www.apache.org/licenses/LICENSE-2.0
+
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,6 +17,9 @@ limitations under the License.
       fxFlex="100%"
       fxLayout="column">
   <div [ngSwitch]="provider">
+    <km-aks-settings *ngSwitchCase="Providers.AKS"
+                     [formControl]="form.get(Controls.Settings)">
+    </km-aks-settings>
     <km-alibaba-settings *ngSwitchCase="Providers.ALIBABA"
                          [formControl]="form.get(Controls.Settings)">
     </km-alibaba-settings>
@@ -29,9 +35,15 @@ limitations under the License.
     <km-digitalocean-settings *ngSwitchCase="Providers.DIGITALOCEAN"
                               [formControl]="form.get(Controls.Settings)">
     </km-digitalocean-settings>
+    <km-eks-settings *ngSwitchCase="Providers.EKS"
+                     [formControl]="form.get(Controls.Settings)">
+    </km-eks-settings>
     <km-gcp-settings *ngSwitchCase="Providers.GCP"
                      [formControl]="form.get(Controls.Settings)">
     </km-gcp-settings>
+    <km-gke-settings *ngSwitchCase="Providers.GKE"
+                     [formControl]="form.get(Controls.Settings)">
+    </km-gke-settings>
     <km-hetzner-settings *ngSwitchCase="Providers.HETZNER"
                          [formControl]="form.get(Controls.Settings)">
     </km-hetzner-settings>
@@ -49,10 +61,11 @@ limitations under the License.
     </km-vsphere-settings>
   </div>
 
-  <div class="optional-section">Optional Restrictions</div>
-
-  <km-autocomplete label="Restrict to Datacenter"
-                   [formControlName]="Controls.Datacenter"
-                   [isLoading]="isLoadingDatacenters"
-                   [options]="datacenters"></km-autocomplete>
+  <ng-container *ngIf="!isExternal()">
+    <div class="optional-section">Optional Restrictions</div>
+    <km-autocomplete label="Restrict to Datacenter"
+                     [formControlName]="Controls.Datacenter"
+                     [isLoading]="isLoadingDatacenters"
+                     [options]="datacenters"></km-autocomplete>
+  </ng-container>
 </form>

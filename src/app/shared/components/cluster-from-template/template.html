@@ -1,9 +1,12 @@
 <!--
 Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
+
     http://www.apache.org/licenses/LICENSE-2.0
+
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -12,29 +15,20 @@ limitations under the License.
 -->
 
 <km-dialog-title>
-  <div>Create Clusters from {{data.template.name}} Template</div>
+  <div>Create Clusters from Template</div>
 </km-dialog-title>
 <mat-dialog-content>
+  <p class="km-dialog-context-description">Create Clusters from <b>{{data.template.name}}</b> template</p>
   <form [formGroup]="form"
         fxLayout="column"
-        id="create-template-instance-form"
-        (submit)="create()">
-    <mat-form-field fxFlex>
-      <mat-label>Number of Clusters</mat-label>
-      <input matInput
-             [formControlName]="control.Replicas"
-             type="number"
-             min="1"
-             autocomplete="off"
-             required
-             cdkFocusInitial>
-      <mat-error *ngIf="form.get(control.Replicas).hasError('required')">
-        Number of clusters is <strong>required</strong>.
-      </mat-error>
-      <mat-error *ngIf="form.get(control.Replicas).hasError('min')">
-        At least 1 cluster has to be created.
-      </mat-error>
-    </mat-form-field>
+        id="create-template-instance-form">
+    <km-number-stepper [formControlName]="control.Replicas"
+                       mode="errors"
+                       label="Number of Clusters"
+                       min="1"
+                       focus
+                       required>
+    </km-number-stepper>
   </form>
   <km-cluster-summary [cluster]="data.template.cluster"
                       [machineDeployment]="data.template.nodeDeployment"
@@ -61,9 +55,10 @@ limitations under the License.
           kmThrottleClick
           (throttleClick)="create()"
           type="submit"
+          id="km-create-template-instance-btn"
           form="create-template-instance-form"
           fxLayoutAlign="center center"
-          [disabled]="!form.valid">
+          [disabled]="form.invalid">
     <i class="km-icon-mask km-icon-add"></i>
     <span>Create Clusters</span>
   </button>

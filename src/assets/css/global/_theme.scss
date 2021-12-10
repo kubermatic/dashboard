@@ -1,111 +1,119 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2021 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use 'sass:color';
+@use 'sass:map';
+
 @mixin theme-global($colors) {
   a {
     &:not(.mat-button-base) {
-      color: map-get($colors, primary);
+      color: map.get($colors, primary);
 
       &:hover {
-        color: map-get($colors, primary-hover);
+        color: map.get($colors, primary-hover);
       }
     }
 
     &.mat-button-disabled {
       .km-icon-mask {
-        background-color: map-get($colors, text);
-        opacity: .3;
+        background-color: map.get($colors, text);
+        opacity: 30%;
       }
     }
   }
 
   hr {
-    border-color: map-get($colors, divider);
+    border-color: map.get($colors, divider);
   }
 
   ::-webkit-scrollbar-thumb {
-    background: map-get($colors, scrollbar);
+    background: map.get($colors, scrollbar);
+    border-color: map.get($colors, scrollbar-background);
   }
 
+  ::-webkit-scrollbar-corner,
   ::-webkit-scrollbar-track {
-    background: map-get($colors, scrollbar-background);
+    background: map.get($colors, scrollbar-background);
   }
 
   .km-header {
-    color: map-get($colors, text);
+    color: map.get($colors, text);
   }
 
   .km-text {
-    color: map-get($colors, text);
+    color: map.get($colors, text);
   }
 
   .km-text-muted,
   .km-expand-button {
-    color: map-get($colors, text-secondary);
+    color: map.get($colors, text-secondary);
   }
 
   .km-muted-bg {
-    background-color: map-get($colors, text-secondary);
+    background-color: map.get($colors, text-secondary);
   }
 
   .km-info {
-    background-color: map-get($colors, primary-hover);
+    background-color: map.get($colors, primary-hover);
   }
 
   .km-success {
-    color: map-get($colors, indicator-green);
+    color: map.get($colors, indicator-green);
   }
 
   .km-success-bg {
-    background-color: map-get($colors, indicator-green);
+    background-color: map.get($colors, indicator-green);
   }
 
   .km-warning {
-    color: map-get($colors, indicator-orange);
+    color: map.get($colors, indicator-orange);
   }
 
   .km-warning-bg {
-    background-color: map-get($colors, indicator-orange);
+    background-color: map.get($colors, indicator-orange);
   }
 
   .km-error {
-    color: map-get($colors, indicator-red);
+    color: map.get($colors, indicator-red);
   }
 
   .km-error-bg {
-    background-color: map-get($colors, indicator-red);
+    background-color: map.get($colors, indicator-red);
   }
 
   .km-unknown-bg {
-    background-color: map-get($colors, changelog-deprecated);
+    background-color: map.get($colors, changelog-deprecated);
   }
 
   .km-hover-bg:hover {
-    background-color: map-get($colors, background-hover);
+    background-color: map.get($colors, background-hover);
   }
 
   .km-border {
-    border: 1px solid map-get($colors, divider);
+    border: 1px solid map.get($colors, divider);
   }
 
   .km-border-dashed {
-    border: 1px dashed map-get($colors, divider);
+    border: 1px dashed map.get($colors, divider);
   }
 
   .km-icon {
-    color: map-get($colors, text);
+    color: map.get($colors, text);
   }
 
   .km-icon-mask {
-    background-color: map-get($colors, text);
+    background-color: map.get($colors, text);
   }
 
   .km-icon-mask-white {
@@ -113,26 +121,26 @@
   }
 
   .km-menu-header {
-    color: map-get($colors, text);
+    color: map.get($colors, text);
   }
 
   .km-code-block {
-    background-color: map-get($colors, divider);
-    color: map-get($colors, text);
+    background-color: map.get($colors, divider);
+    color: map.get($colors, text);
   }
 
   .km-copy {
     &:hover {
-      color: map-get($colors, primary);
+      color: map.get($colors, primary);
     }
 
     &:active {
-      color: lighten(map-get($colors, primary), .5);
+      color: color.adjust(map.get($colors, primary), $lightness: 50%);
     }
   }
 
   .km-alternative-hover:hover {
-    color: map-get($colors, secondary);
+    color: map.get($colors, secondary);
   }
 
   .km-login-footer {
@@ -142,7 +150,7 @@
   }
 
   .km-empty-list-msg {
-    border-color: map-get($colors, divider);
+    border-color: map.get($colors, divider);
   }
 
   .km-table-dropdown {
@@ -153,15 +161,15 @@
     }
 
     td.mat-cell {
-      border-top: 1px solid map-get($colors, divider);
+      border-top: 1px solid map.get($colors, divider);
     }
 
     td:first-child {
-      border-left: 1px solid map-get($colors, divider);
+      border-left: 1px solid map.get($colors, divider);
     }
 
     td:last-child {
-      border-right: 1px solid map-get($colors, divider);
+      border-right: 1px solid map.get($colors, divider);
     }
 
     tr {
@@ -169,7 +177,7 @@
         &:last-of-type {
           td {
             &.mat-cell {
-              border-bottom: 1px solid map-get($colors, divider);
+              border-bottom: 1px solid map.get($colors, divider);
             }
           }
         }
@@ -179,69 +187,69 @@
 
   .km-table-with-frame {
     td:first-child {
-      border-left: 1px solid map-get($colors, divider);
+      border-left: 1px solid map.get($colors, divider);
     }
 
     td:last-child {
-      border-right: 1px solid map-get($colors, divider);
+      border-right: 1px solid map.get($colors, divider);
     }
 
     tr:last-child td.mat-cell {
-      border-bottom: 1px solid map-get($colors, divider);
+      border-bottom: 1px solid map.get($colors, divider);
     }
   }
 
   .km-panel {
     .panel {
-      background-color: map-get($colors, background-app-bar);
-      box-shadow: map-get($colors, shadow-dark);
-      color: map-get($colors, text);
+      background-color: map.get($colors, background-app-bar);
+      box-shadow: map.get($colors, shadow-dark);
+      color: map.get($colors, text);
 
       .notification-info .km-icon-mask {
-        background-color: map-get($colors, text-secondary);
+        background-color: map.get($colors, text-secondary);
       }
 
       .custom-link {
-        color: map-get($colors, text);
+        color: map.get($colors, text);
       }
     }
   }
 
   .km-update-available-badge {
-    border: 1px solid map-get($colors, secondary);
+    border: 1px solid map.get($colors, secondary);
 
     .km-icon-update-available-arrow {
-      background-color: map-get($colors, secondary);
+      background-color: map.get($colors, secondary);
     }
   }
 
   .km-add-machine-network {
     &:hover {
-      background-color: map-get($colors, background-hover);
+      background-color: map.get($colors, background-hover);
     }
   }
 
   .km-mat-row.km-pointer:hover {
-    background-color: map-get($colors, background-hover);
+    background-color: map.get($colors, background-hover);
   }
 
   .km-mat-footer-row {
-    border-color: map-get($colors, divider);
-    color: map-get($colors, text-secondary);
+    border-color: map.get($colors, divider);
+    color: map.get($colors, text-secondary);
 
     &:hover {
-      background-color: map-get($colors, background-hover);
+      background-color: map.get($colors, background-hover);
     }
 
     button {
       background-color: transparent;
-      color: map-get($colors, text-secondary);
+      color: map.get($colors, text-secondary);
     }
   }
 
   .km-label-primary {
-    border-color: map-get($colors, primary);
-    color: map-get($colors, text);
+    border-color: map.get($colors, primary);
+    color: map.get($colors, text);
   }
 
   .km-search-input {
@@ -252,22 +260,22 @@
           .mat-form-field-outline-gap,
           .mat-form-field-outline-end {
             border-width: 2px;
-            color: map-get($colors, primary);
+            color: map.get($colors, primary);
           }
         }
 
         .mat-form-field-outline {
-          color: map-get($colors, project-switch);
+          color: map.get($colors, project-switch);
         }
       }
 
       .mat-input-element::placeholder {
-        color: map-get($colors, text-secondary);
+        color: map.get($colors, text-secondary);
       }
     }
 
     i {
-      background-color: map-get($colors, text-secondary);
+      background-color: map.get($colors, text-secondary);
     }
   }
 
@@ -277,7 +285,7 @@
 
   .km-notification {
     &.mat-snack-bar-container {
-      background-color: map-get($colors, option-background);
+      background-color: map.get($colors, option-background);
     }
   }
 }

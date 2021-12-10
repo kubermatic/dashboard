@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,10 +17,10 @@ import {Injectable} from '@angular/core';
 import {AppConfigService} from '@app/config.service';
 import {Auth} from '@core/services/auth/service';
 import {environment} from '@environments/environment';
-import {Admin} from '@shared/entity/member';
+import {Admin, Member} from '@shared/entity/member';
 import {Report} from '@shared/entity/metering';
 import {AdminSettings, CustomLink, DEFAULT_ADMIN_SETTINGS} from '@shared/entity/settings';
-import {BehaviorSubject, iif, merge, Observable, of, Subject, timer} from 'rxjs';
+import {BehaviorSubject, EMPTY, iif, merge, Observable, of, Subject, timer} from 'rxjs';
 import {catchError, delay, retryWhen, shareReplay, switchMap, tap} from 'rxjs/operators';
 import {webSocket} from 'rxjs/webSocket';
 
@@ -25,14 +28,17 @@ import {webSocket} from 'rxjs/webSocket';
   providedIn: 'root',
 })
 export class SettingsService {
-  private readonly restRoot = environment.restRoot;
-  private readonly wsRoot = environment.wsRoot;
+  private readonly _restRoot = environment.restRoot;
+  private readonly _newRestRoot = environment.newRestRoot;
+  private readonly _wsRoot = environment.wsRoot;
   private readonly _adminSettings$ = new BehaviorSubject(DEFAULT_ADMIN_SETTINGS);
   private readonly _refreshTime = 5; // in seconds
   private readonly _retryDelayTime = 3; // in seconds
   private _adminSettingsWatch$: Observable<AdminSettings>;
   private _admins$: Observable<Admin[]>;
   private _adminsRefresh$ = new Subject<void>();
+  private _users$: Observable<Member[]>;
+  private _usersRefresh$ = new Subject<void>();
   private _customLinks$: Observable<CustomLink[]>;
   private _customLinksRefresh$ = new Subject<void>();
   private _reports$: Observable<Report[]>;
@@ -46,22 +52,37 @@ export class SettingsService {
 
   get adminSettings(): Observable<AdminSettings> {
     if (!this._adminSettingsWatch$) {
-      const webSocket$ = webSocket<AdminSettings>(`${this.wsRoot}/admin/settings`)
-        .asObservable()
-        .pipe(
-          retryWhen(errors =>
-            errors.pipe(
-              // eslint-disable-next-line no-console
-              tap(console.debug),
-              delay(this._appConfigService.getRefreshTimeBase() * this._retryDelayTime)
-            )
-          )
-        );
-      this._adminSettingsWatch$ = iif(() => this._auth.authenticated(), webSocket$, of(DEFAULT_ADMIN_SETTINGS));
+      this._adminSettingsWatch$ = iif(
+        () => this._auth.authenticated(),
+        environment.avoidWebsockets ? this._getAdminSettings() : this._getAdminSettingsWebSocket(),
+        of(DEFAULT_ADMIN_SETTINGS)
+      );
       this._adminSettingsWatch$.subscribe(settings => this._adminSettings$.next(this._defaultAdminSettings(settings)));
     }
 
     return this._adminSettings$;
+  }
+
+  private _getAdminSettingsWebSocket(): Observable<AdminSettings> {
+    return webSocket<AdminSettings>(`${this._wsRoot}/admin/settings`)
+      .asObservable()
+      .pipe(
+        retryWhen(errors =>
+          errors.pipe(
+            // eslint-disable-next-line no-console
+            tap(console.debug),
+            delay(this._appConfigService.getRefreshTimeBase() * this._retryDelayTime)
+          )
+        )
+      );
+  }
+
+  private _getAdminSettings(): Observable<AdminSettings> {
+    const url = `${this._restRoot}/admin/settings`;
+    const observable = this._httpClient.get<AdminSettings>(url).pipe(catchError(() => of(DEFAULT_ADMIN_SETTINGS)));
+    return this._refreshTimer$
+      .pipe(switchMap(_ => iif(() => this._auth.authenticated(), observable, EMPTY)))
+      .pipe(shareReplay({refCount: true, bufferSize: 1}));
   }
 
   get defaultAdminSettings(): AdminSettings {
@@ -81,7 +102,7 @@ export class SettingsService {
   }
 
   patchAdminSettings(patch: any): Observable<AdminSettings> {
-    const url = `${this.restRoot}/admin/settings`;
+    const url = `${this._restRoot}/admin/settings`;
     return this._httpClient.patch<AdminSettings>(url, patch);
   }
 
@@ -95,7 +116,7 @@ export class SettingsService {
   }
 
   private getCustomLinks_(): Observable<CustomLink[]> {
-    const url = `${this.restRoot}/admin/settings/customlinks`;
+    const url = `${this._restRoot}/admin/settings/customlinks`;
     return this._httpClient.get<CustomLink[]>(url).pipe(catchError(() => of([])));
   }
 
@@ -113,7 +134,7 @@ export class SettingsService {
   }
 
   private _getAdmins(): Observable<Admin[]> {
-    const url = `${this.restRoot}/admin`;
+    const url = `${this._restRoot}/admin`;
     return this._httpClient.get<Admin[]>(url);
   }
 
@@ -122,8 +143,26 @@ export class SettingsService {
   }
 
   setAdmin(admin: Admin): Observable<Admin> {
-    const url = `${this.restRoot}/admin`;
+    const url = `${this._restRoot}/admin`;
     return this._httpClient.put<Admin>(url, admin);
+  }
+
+  get users(): Observable<Member[]> {
+    if (!this._users$) {
+      this._users$ = merge(this._refreshTimer$, this._usersRefresh$)
+        .pipe(switchMap(() => this._getUsers()))
+        .pipe(shareReplay({refCount: true, bufferSize: 1}));
+    }
+    return this._users$;
+  }
+
+  private _getUsers(): Observable<Member[]> {
+    const url = `${this._newRestRoot}/users`;
+    return this._httpClient.get<Member[]>(url);
+  }
+
+  refreshUsers(): void {
+    this._usersRefresh$.next();
   }
 
   get reports(): Observable<Report[]> {
@@ -136,12 +175,12 @@ export class SettingsService {
   }
 
   private _getReports(): Observable<Report[]> {
-    const url = `${this.restRoot}/admin/metering/reports`;
+    const url = `${this._restRoot}/admin/metering/reports`;
     return this._httpClient.get<Report[]>(url);
   }
 
   reportDownload(reportName: string): Observable<string> {
-    const url = `${this.restRoot}/admin/metering/reports/${reportName}`;
+    const url = `${this._restRoot}/admin/metering/reports/${reportName}`;
     return this._httpClient.get<string>(url);
   }
 }

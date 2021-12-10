@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +20,7 @@ import {ClusterService} from '@core/services/cluster';
 import {NotificationService} from '@core/services/notification';
 import {PathParam} from '@core/services/params';
 import {UserService} from '@core/services/user';
-import {ExternalClusterDataDialogComponent} from '@shared/components/external-cluster-data-dialog/component';
+import {EditClusterConnectionDialogComponent} from '@shared/components/external-cluster-data-dialog/component';
 import {Cluster} from '@shared/entity/cluster';
 import {Event} from '@shared/entity/event';
 import {Member} from '@shared/entity/member';
@@ -109,10 +112,9 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   edit(): void {
-    const dialog = this._matDialog.open(ExternalClusterDataDialogComponent);
+    const dialog = this._matDialog.open(EditClusterConnectionDialogComponent);
     dialog.componentInstance.projectId = this.projectId;
     dialog.componentInstance.name = this.cluster.name;
-    dialog.componentInstance.editMode = true;
 
     dialog
       .afterClosed()

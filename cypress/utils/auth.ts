@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,12 +17,37 @@ import {LoginPage} from '../pages/login.po';
 import {Condition} from './condition';
 import {ProjectsPage} from '../pages/projects.po';
 import {UserPanel} from '../pages/user-panel.po';
+import {Mocks} from './mocks';
+import {Config} from './config';
 
-export function login(email: string, password: string): void {
+/**
+ * Authenticates the user using the login page or mocked authentication cookies if mocks are enabled.
+ *
+ * @param email Email of user to authenticate.
+ * @param password Password of user to authenticate. Used only if mocks are disabled.
+ * @param isAdmin Specifies if mocked user should be an admin. Used only if mocks are enabled.
+ */
+export function login(email = Config.userEmail(), password = Config.password(), isAdmin = false): void {
+  if (Mocks.enabled()) {
+    mockLogin(email, isAdmin);
+  } else {
+    doLogin(email, password);
+  }
+}
+
+export function logout(): void {
+  if (Mocks.enabled()) {
+    cy.clearCookies();
+    cy.visit('/');
+  } else {
+    UserPanel.logout();
+  }
+}
+
+function doLogin(email: string, password: string): void {
   LoginPage.visit();
   LoginPage.getLoginBtn().click();
 
-  // Conditionally click on the login with email btn if it exists
   DexPage.getLoginPanel().then(element => {
     if (DexPage.hasLoginWithEmailBtn(element)) {
       DexPage.getLoginWithEmailBtn().click();
@@ -33,6 +61,38 @@ export function login(email: string, password: string): void {
   ProjectsPage.waitForRefresh();
 }
 
-export function logout(): void {
-  UserPanel.logout();
+function mockLogin(email: string, isAdmin: boolean): void {
+  Mocks.currentUser.email = email;
+  Mocks.currentUser.name = email.split('@')[0];
+  Mocks.currentUser.isAdmin = isAdmin;
+
+  mockAuthCookies();
+
+  cy.visit('/projects');
+}
+
+function mockAuthCookies(): void {
+  const radix = 36;
+  const slice = 2;
+  const day = 8640000;
+  const nonce = Math.random().toString(radix).slice(slice);
+  const header = {alg: 'RS256', typ: 'JWT'};
+  const payload = {
+    iss: 'http://dex.oauth:5556/dex/auth',
+    sub: btoa(Math.random().toString(radix).slice(slice)),
+    aud: 'kubermatic',
+    exp: Date.now() + day,
+    iat: Date.now(),
+    nonce: nonce,
+    email: Mocks.currentUser.email,
+    email_verified: true,
+    name: 'roxy',
+  };
+  const signature = Math.random().toString(radix).slice(slice);
+  const token =
+    btoa(JSON.stringify(header)) + '.' + btoa(JSON.stringify(payload)) + '.' + btoa(JSON.stringify(signature));
+
+  cy.setCookie('token', token);
+  cy.setCookie('nonce', nonce);
+  cy.setCookie('autoredirect', 'true');
 }

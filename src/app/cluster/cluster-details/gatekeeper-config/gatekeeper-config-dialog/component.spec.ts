@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,6 +17,8 @@ import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {fakeGatekeeperConfig} from '@app/testing/fake-data/opa';
+import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
+import {fakeProject} from '@app/testing/fake-data/project';
 import {asyncData} from '@app/testing/services/api-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';
@@ -54,7 +59,7 @@ describe('GatekeeperConfigDialog', () => {
             useValue: {
               title: '',
               projectId: '',
-              clusterId: '',
+              cluster: {},
               mode: '',
               confirmLabel: '',
             },
@@ -74,8 +79,8 @@ describe('GatekeeperConfigDialog', () => {
 
       component.data = {
         title: 'Add Gatekeeper Config',
-        projectId: '123ab4cd5e',
-        clusterId: '4k6txp5sq',
+        projectId: fakeProject().id,
+        cluster: fakeDigitaloceanCluster(),
         mode: Mode.Add,
         confirmLabel: 'Add',
       };
@@ -112,8 +117,8 @@ describe('GatekeeperConfigDialog', () => {
 
       component.data = {
         title: 'Edit Gatekeeper Config',
-        projectId: '123ab4cd5e',
-        clusterId: '4k6txp5sq',
+        projectId: fakeProject().id,
+        cluster: fakeDigitaloceanCluster(),
         mode: Mode.Edit,
         confirmLabel: 'Edit',
         gatekeeperConfig: fakeGatekeeperConfig(),

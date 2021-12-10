@@ -1,0 +1,29 @@
+[
+  {
+    "name": "Standard_A2",
+    "numberOfCores": 2,
+    "numberOfGPUs": 0,
+    "osDiskSizeInMB": 1047552,
+    "resourceDiskSizeInMB": 138240,
+    "memoryInMB": 3584,
+    "maxDataDiskCount": 4
+  },
+  {
+    "name": "Standard_B2s",
+    "numberOfCores": 2,
+    "numberOfGPUs": 0,
+    "osDiskSizeInMB": 1047552,
+    "resourceDiskSizeInMB": 8192,
+    "memoryInMB": 4096,
+    "maxDataDiskCount": 4
+  },
+  {
+    "name": "Standard_B4ms",
+    "numberOfCores": 4,
+    "numberOfGPUs": 0,
+    "osDiskSizeInMB": 1047552,
+    "resourceDiskSizeInMB": 32768,
+    "memoryInMB": 16384,
+    "maxDataDiskCount": 8
+  }
+]

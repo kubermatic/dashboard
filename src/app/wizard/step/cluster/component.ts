@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,6 +37,7 @@ import {
   MasterVersion,
   ProxyMode,
   CNIPlugin,
+  AuditPolicyPreset,
 } from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
@@ -45,6 +49,7 @@ import {filter, startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators
 import {StepBase} from '../base';
 import * as semver from 'semver';
 import {CIDR_PATTERN_VALIDATOR} from '@shared/validators/others';
+import {FeatureGateService} from '@core/services/feature-gate';
 
 enum Controls {
   Name = 'name',
@@ -52,18 +57,21 @@ enum Controls {
   ContainerRuntime = 'containerRuntime',
   Type = 'type',
   AuditLogging = 'auditLogging',
+  AuditPolicyPreset = 'auditPolicyPreset',
   UserSSHKeyAgent = 'userSshKeyAgent',
   Labels = 'labels',
   AdmissionPlugins = 'admissionPlugins',
   SSHKeys = 'sshKeys',
   PodNodeSelectorAdmissionPluginConfig = 'podNodeSelectorAdmissionPluginConfig',
   OPAIntegration = 'opaIntegration',
+  Konnectivity = 'konnectivity',
   MLALogging = 'loggingEnabled',
   MLAMonitoring = 'monitoringEnabled',
   ProxyMode = 'proxyMode',
   PodsCIDR = 'podsCIDR',
   ServicesCIDR = 'servicesCIDR',
   CNIPlugin = 'cniPlugin',
+  CNIPluginVersion = 'cniPluginVersion',
 }
 
 @Component({
@@ -93,8 +101,11 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
   proxyMode = ProxyMode;
   cniPlugin = CNIPlugin;
+  cniPluginVersions: string[] = [];
   availableProxyModes = ['ipvs', 'iptables'];
+  isKonnectivityEnabled = false;
   readonly Controls = Controls;
+  readonly AuditPolicyPreset = AuditPolicyPreset;
   private _datacenterSpec: Datacenter;
   private _seedSettings: SeedSettings;
   private _settings: AdminSettings;
@@ -107,12 +118,17 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _datacenterService: DatacenterService,
     private readonly _settingsService: SettingsService,
+    private readonly _featureGatesService: FeatureGateService,
     wizard: WizardService
   ) {
     super(wizard);
   }
 
   ngOnInit(): void {
+    this._featureGatesService.featureGates
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(featureGates => (this.isKonnectivityEnabled = !!featureGates?.konnectivityService));
+
     this.form = this._builder.group({
       [Controls.Name]: new FormControl('', [
         Validators.required,
@@ -122,8 +138,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.Version]: new FormControl('', [Validators.required]),
       [Controls.ContainerRuntime]: new FormControl(ContainerRuntime.Containerd, [Validators.required]),
       [Controls.AuditLogging]: new FormControl(false),
+      [Controls.AuditPolicyPreset]: new FormControl(''),
       [Controls.UserSSHKeyAgent]: new FormControl(true),
       [Controls.OPAIntegration]: new FormControl(false),
+      [Controls.Konnectivity]: new FormControl(false),
       [Controls.MLALogging]: new FormControl(false),
       [Controls.MLAMonitoring]: new FormControl(false),
       [Controls.AdmissionPlugins]: new FormControl([]),
@@ -133,7 +151,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.ProxyMode]: this._builder.control(''),
       [Controls.PodsCIDR]: new FormControl('', [CIDR_PATTERN_VALIDATOR]),
       [Controls.ServicesCIDR]: new FormControl('', [CIDR_PATTERN_VALIDATOR]),
-      [Controls.CNIPlugin]: new FormControl(''),
+      [Controls.CNIPlugin]: new FormControl(CNIPlugin.Canal),
+      [Controls.CNIPluginVersion]: new FormControl(''),
     });
 
     this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
@@ -200,21 +219,27 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
     this.control(Controls.CNIPlugin)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this.updateCNIPluginOptions());
+      .subscribe(_ => {
+        this.updateCNIPluginOptions();
+        this.form.get(Controls.CNIPluginVersion).setValue('');
+      });
 
     merge(
       this.form.get(Controls.Name).valueChanges,
       this.form.get(Controls.Version).valueChanges,
       this.form.get(Controls.AuditLogging).valueChanges,
+      this.form.get(Controls.AuditPolicyPreset).valueChanges,
       this.form.get(Controls.UserSSHKeyAgent).valueChanges,
       this.form.get(Controls.OPAIntegration).valueChanges,
+      this.form.get(Controls.Konnectivity).valueChanges,
       this.form.get(Controls.MLALogging).valueChanges,
       this.form.get(Controls.MLAMonitoring).valueChanges,
       this.form.get(Controls.ContainerRuntime).valueChanges,
       this.form.get(Controls.ProxyMode).valueChanges,
       this.form.get(Controls.PodsCIDR).valueChanges,
       this.form.get(Controls.ServicesCIDR).valueChanges,
-      this.form.get(Controls.CNIPlugin).valueChanges
+      this.form.get(Controls.CNIPlugin).valueChanges,
+      this.form.get(Controls.CNIPluginVersion).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
@@ -273,6 +298,18 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     return !!this._seedSettings && !!this._seedSettings.mla && !!this._seedSettings.mla.user_cluster_mla_enabled;
   }
 
+  hasCNIPluginType(): boolean {
+    return this.form.get(Controls.CNIPlugin).value !== CNIPlugin.None;
+  }
+
+  getCNIPluginVersions(): string[] {
+    this.cniPluginVersions = Cluster.getCNIVersions(this.form.get(Controls.CNIPlugin).value);
+    if (this.cniPluginVersions.length > 0 && !this.form.get(Controls.CNIPluginVersion).value) {
+      this.form.get(Controls.CNIPluginVersion).setValue(this.cniPluginVersions[this.cniPluginVersions.length - 1]);
+    }
+    return this.cniPluginVersions;
+  }
+
   private _enforce(control: Controls, isEnforced: boolean): void {
     if (isEnforced) {
       this.form.get(control).setValue(true);
@@ -303,7 +340,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     const pods = this.controlValue(Controls.PodsCIDR);
     const services = this.controlValue(Controls.ServicesCIDR);
     const cniPluginType = this.controlValue(Controls.CNIPlugin);
-    const cniPlugin = cniPluginType ? {type: cniPluginType} : null;
+    const cniPluginVersion = this.controlValue(Controls.CNIPluginVersion);
+    const cniPlugin = cniPluginType ? {type: cniPluginType, version: cniPluginVersion} : null;
     return {
       name: this.controlValue(Controls.Name),
       type: ClusterType.Kubernetes,
@@ -311,6 +349,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         version: this.controlValue(Controls.Version),
         auditLogging: {
           enabled: this.controlValue(Controls.AuditLogging),
+          policyPreset: this.controlValue(Controls.AuditPolicyPreset),
         },
         opaIntegration: {
           enabled: this.controlValue(Controls.OPAIntegration),
@@ -325,6 +364,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           proxyMode: this.controlValue(Controls.ProxyMode),
           pods: {cidrBlocks: pods ? [pods] : []},
           services: {cidrBlocks: services ? [services] : []},
+          konnectivityEnabled: this.controlValue(Controls.Konnectivity),
         },
         cniPlugin: cniPlugin,
       } as ClusterSpec,

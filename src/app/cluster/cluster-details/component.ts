@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,6 +30,7 @@ import {UserService} from '@core/services/user';
 import {Addon} from '@shared/entity/addon';
 import {
   Cluster,
+  CNIPlugin,
   ExternalCCMMigrationStatus,
   getClusterProvider,
   getExternalCCMMigrationStatusMessage,
@@ -47,7 +51,7 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
 import {ClusterHealthStatus} from '@shared/utils/health-status/cluster-health-status';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {combineLatest, iif, Observable, of, Subject} from 'rxjs';
 import {filter, map, switchMap, take, takeUntil} from 'rxjs/operators';
 import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation/component';
@@ -72,6 +76,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   machineDeployments: MachineDeployment[];
   isClusterRunning = false;
   isClusterAPIRunning = false;
+  isOPARunning = false;
   clusterHealthStatus: ClusterHealthStatus;
   health: Health;
   config: Config = {share_kubeconfig: false};
@@ -146,6 +151,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.isClusterAPIRunning = ClusterHealthStatus.isClusterAPIRunning(this.cluster, health);
           this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, health);
           this.clusterHealthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, health);
+          this.isOPARunning = ClusterHealthStatus.isOPARunning(this.cluster, health);
 
           // Conditionally create an array of observables to use for 'combineLatest' operator.
           // In case real observable should not be returned, observable emitting empty array will be added to the array.
@@ -156,7 +162,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                 : of([] as MasterVersion[])
             )
             .concat(
-              this._canReloadNodes()
+              this.isClusterRunning
                 ? [
                     this._clusterService.addons(this.projectID, this.cluster.id),
                     this._clusterService.nodes(this.projectID, this.cluster.id),
@@ -166,7 +172,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                 : [of([] as Addon[]), of([] as Node[]), of([] as MachineDeployment[]), of({} as ClusterMetrics)]
             )
             .concat(
-              this._canReloadNodes() && this.isMLAEnabled()
+              this.isClusterRunning && this.isMLAEnabled()
                 ? [
                     this._mlaService.alertmanagerConfig(this.projectID, this.cluster.id),
                     this._mlaService.ruleGroups(this.projectID, this.cluster.id),
@@ -174,7 +180,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                 : [of([]), of([] as RuleGroup[])]
             )
             .concat(
-              this._canReloadNodes() && this.isOPAEnabled() && this._hasMachineDeployments()
+              this.isClusterRunning && this.isOPARunning && this.isOPAEnabled()
                 ? [
                     this._opaService.constraints(this.projectID, this.cluster.id),
                     this._opaService.gatekeeperConfig(this.projectID, this.cluster.id),
@@ -244,14 +250,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       HealthState.isUp(this.health.apiserver) &&
       HealthState.isUp(this.health.machineController)
     );
-  }
-
-  private _canReloadNodes(): boolean {
-    return this.cluster && Health.allHealthy(this.health);
-  }
-
-  private _hasMachineDeployments(): boolean {
-    return !_.isEmpty(this.machineDeployments);
   }
 
   getProvider(provider: string): string {
@@ -495,5 +493,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   getAdmissionPlugins(): string {
     return AdmissionPluginUtils.getJoinedPluginNames(this.cluster.spec.admissionPlugins);
+  }
+
+  isHavingCNI(): boolean {
+    return !!this.cluster?.spec?.cniPlugin && this.cluster?.spec?.cniPlugin?.type !== CNIPlugin.None;
   }
 }

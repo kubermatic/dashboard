@@ -1,8 +1,11 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2021 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -54,7 +57,7 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
   }
 
   get columns(): string[] {
-    return ['status', 'name', 'cluster', 'schedule', 'keep', 'created', 'actions'];
+    return ['status', 'name', 'cluster', 'destination', 'schedule', 'keep', 'created', 'actions'];
   }
 
   get isEmpty(): boolean {
@@ -137,7 +140,7 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
     const config: MatDialogConfig = {
       data: {
         title: 'Delete Automatic Backup',
-        message: `Delete "${backup.name}" automatic backup permanently?`,
+        message: `Delete <b>${backup.name}</b> automatic backup of <b>${this._selectedProject.name}</b> project and all its associated backups permanently?`,
         confirmLabel: 'Delete',
       } as ConfirmationDialogConfig,
     };

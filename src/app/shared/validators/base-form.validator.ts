@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,6 +24,10 @@ export abstract class BaseFormValidator implements ControlValueAccessor, Validat
 
   // Validator interface implementation
   validate(_: AbstractControl): ValidationErrors | null {
+    if (this.form.pending) {
+      this._revalidateAfterPendingProcessEnds();
+    }
+
     return this.form.valid || this.form.disabled
       ? null
       : {
@@ -29,6 +36,18 @@ export abstract class BaseFormValidator implements ControlValueAccessor, Validat
             message: `${this._formName} validation failed.`,
           },
         };
+  }
+
+  // This method is required to rerun validation once form will be no longer in pending state.
+  // It might be the case when at least one of the validators is async.
+  // Without it validate method would return error and no longer check if the status has changed.
+  private _revalidateAfterPendingProcessEnds(): void {
+    const timeout = 500;
+    if (this.form.pending) {
+      setTimeout(() => this._revalidateAfterPendingProcessEnds(), timeout);
+    } else {
+      this.form.updateValueAndValidity();
+    }
   }
 
   // ControlValueAccessor interface implementation

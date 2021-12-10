@@ -1,0 +1,20 @@
+[
+  {
+    "id": "ecs.ic5.large",
+    "cpuCoreCount": 2,
+    "gpuCoreCount": 0,
+    "memorySize": 2
+  },
+  {
+    "id": "ecs.ic5.xlarge",
+    "cpuCoreCount": 4,
+    "gpuCoreCount": 0,
+    "memorySize": 4
+  },
+  {
+    "id": "ecs.ic5.2xlarge",
+    "cpuCoreCount": 8,
+    "gpuCoreCount": 0,
+    "memorySize": 8
+  }
+]

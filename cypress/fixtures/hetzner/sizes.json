@@ -1,0 +1,198 @@
+{
+  "standard": [
+    {
+      "id": 3,
+      "name": "cx21",
+      "description": "CX21",
+      "cores": 2,
+      "memory": 4,
+      "disk": 40
+    },
+    {
+      "id": 4,
+      "name": "cx21-ceph",
+      "description": "CX21 Ceph Disk",
+      "cores": 2,
+      "memory": 4,
+      "disk": 40
+    },
+    {
+      "id": 5,
+      "name": "cx31",
+      "description": "CX31",
+      "cores": 2,
+      "memory": 8,
+      "disk": 80
+    },
+    {
+      "id": 6,
+      "name": "cx31-ceph",
+      "description": "CX31 Ceph Disk",
+      "cores": 2,
+      "memory": 8,
+      "disk": 80
+    },
+    {
+      "id": 7,
+      "name": "cx41",
+      "description": "CX41",
+      "cores": 4,
+      "memory": 16,
+      "disk": 160
+    },
+    {
+      "id": 8,
+      "name": "cx41-ceph",
+      "description": "CX41 Ceph Disk",
+      "cores": 4,
+      "memory": 16,
+      "disk": 160
+    },
+    {
+      "id": 9,
+      "name": "cx51",
+      "description": "CX51",
+      "cores": 8,
+      "memory": 32,
+      "disk": 240
+    },
+    {
+      "id": 10,
+      "name": "cx51-ceph",
+      "description": "CX51 Ceph Disk",
+      "cores": 8,
+      "memory": 32,
+      "disk": 240
+    },
+    {
+      "id": 22,
+      "name": "cpx11",
+      "description": "CPX 11",
+      "cores": 2,
+      "memory": 2,
+      "disk": 40
+    },
+    {
+      "id": 23,
+      "name": "cpx21",
+      "description": "CPX 21",
+      "cores": 3,
+      "memory": 4,
+      "disk": 80
+    },
+    {
+      "id": 24,
+      "name": "cpx31",
+      "description": "CPX 31",
+      "cores": 4,
+      "memory": 8,
+      "disk": 160
+    },
+    {
+      "id": 25,
+      "name": "cpx41",
+      "description": "CPX 41",
+      "cores": 8,
+      "memory": 16,
+      "disk": 240
+    },
+    {
+      "id": 26,
+      "name": "cpx51",
+      "description": "CPX 51",
+      "cores": 16,
+      "memory": 32,
+      "disk": 360
+    }
+  ],
+  "dedicated": [
+    {
+      "id": 11,
+      "name": "ccx11",
+      "description": "CCX11 Dedicated CPU",
+      "cores": 2,
+      "memory": 8,
+      "disk": 80
+    },
+    {
+      "id": 12,
+      "name": "ccx21",
+      "description": "CCX21 Dedicated CPU",
+      "cores": 4,
+      "memory": 16,
+      "disk": 160
+    },
+    {
+      "id": 13,
+      "name": "ccx31",
+      "description": "CCX31 Dedicated CPU",
+      "cores": 8,
+      "memory": 32,
+      "disk": 240
+    },
+    {
+      "id": 14,
+      "name": "ccx41",
+      "description": "CCX41 Dedicated CPU",
+      "cores": 16,
+      "memory": 64,
+      "disk": 360
+    },
+    {
+      "id": 15,
+      "name": "ccx51",
+      "description": "CCX51 Dedicated CPU",
+      "cores": 32,
+      "memory": 128,
+      "disk": 600
+    },
+    {
+      "id": 33,
+      "name": "ccx12",
+      "description": "CCX12 Dedicated CPU",
+      "cores": 2,
+      "memory": 8,
+      "disk": 80
+    },
+    {
+      "id": 34,
+      "name": "ccx22",
+      "description": "CCX22 Dedicated CPU",
+      "cores": 4,
+      "memory": 16,
+      "disk": 160
+    },
+    {
+      "id": 35,
+      "name": "ccx32",
+      "description": "CCX32 Dedicated CPU",
+      "cores": 8,
+      "memory": 32,
+      "disk": 240
+    },
+    {
+      "id": 36,
+      "name": "ccx42",
+      "description": "CCX42 Dedicated CPU",
+      "cores": 16,
+      "memory": 64,
+      "disk": 360
+    },
+    {
+      "id": 37,
+      "name": "ccx52",
+      "description": "CCX52 Dedicated CPU",
+      "cores": 32,
+      "memory": 128,
+      "disk": 600
+    },
+    {
+      "id": 38,
+      "name": "ccx62",
+      "description": "CCX62 Dedicated CPU",
+      "cores": 48,
+      "memory": 192,
+      "disk": 960
+    }
+  ]
+}

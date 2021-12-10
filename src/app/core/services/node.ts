@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -118,7 +121,7 @@ export class NodeService {
 
   showMachineDeploymentDeleteDialog(
     md: MachineDeployment,
-    clusterID: string,
+    cluster: Cluster,
     projectID: string,
     changeEventEmitter: EventEmitter<MachineDeployment>
   ): Observable<boolean> {
@@ -127,7 +130,7 @@ export class NodeService {
       hasBackdrop: true,
       data: {
         title: 'Delete Machine Deployment',
-        message: `Delete ${md.name} machine deployment permanently?`,
+        message: `Delete <b>${md.name}</b> machine deployment of <b>${cluster.name}</b> cluster permanently?`,
         confirmLabel: 'Delete',
       },
     };
@@ -140,7 +143,7 @@ export class NodeService {
         mergeMap((isConfirmed: boolean): Observable<boolean> => {
           if (isConfirmed) {
             return this._apiService
-              .deleteMachineDeployment(clusterID, md, projectID)
+              .deleteMachineDeployment(cluster.id, md, projectID)
               .pipe(take(1))
               .pipe(
                 catchError(() => {
@@ -169,7 +172,7 @@ export class NodeService {
 
   showMachineDeploymentRestartDialog(
     md: MachineDeployment,
-    clusterID: string,
+    cluster: Cluster,
     projectID: string,
     changeEventEmitter: EventEmitter<MachineDeployment> = undefined
   ): Observable<boolean> {
@@ -178,7 +181,7 @@ export class NodeService {
       hasBackdrop: true,
       data: {
         title: 'Restart Machine Deployment',
-        message: `Start rolling restart of ${md.name} machine deployment?`,
+        message: `Perform rolling restart of <b>${md.name}</b> machine deployment of <b>${cluster.name}</b> cluster?`,
         confirmLabel: 'Restart',
       },
     };
@@ -191,7 +194,7 @@ export class NodeService {
         mergeMap((isConfirmed: boolean): Observable<boolean> => {
           if (isConfirmed) {
             return this._apiService
-              .restartMachineDeployment(clusterID, md, projectID)
+              .restartMachineDeployment(cluster.id, md, projectID)
               .pipe(take(1))
               .pipe(
                 catchError(() => {

@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -80,7 +83,7 @@ describe('SSHKeyComponent', () => {
     noop = TestBed.createComponent(NoopConfirmDialogComponent);
 
     activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
-    activatedRoute.testParamMap = {projectID: '4k6txp5sq'};
+    activatedRoute.testParamMap = {project: '4k6txp5sq'};
 
     fixture.detectChanges();
     fixture.debugElement.injector.get(Router);
@@ -92,7 +95,7 @@ describe('SSHKeyComponent', () => {
 
   it('should open delete ssh key confirmation dialog & call deleteSSHKey()', fakeAsync(() => {
     const waitTime = 15000;
-    component.projectID = fakeProject().id;
+    component.project = fakeProject();
     component.sshKeys = fakeSSHKeys();
     const event = new MouseEvent('click');
 

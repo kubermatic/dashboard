@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,7 +27,7 @@ import {Paths} from './paths';
  * @example
  * cy.get('body').pasteFile('filename.txt');
  */
-export function pasteFile(subject, filename): Chainable {
+export function pasteFile(subject: any, filename: string): Chainable {
   Cypress.log({
     displayName: 'pasteFile',
     message: `Subject: ${subject.selector}\n Filename: ${filename}\n`,
@@ -46,7 +49,7 @@ export function pasteFile(subject, filename): Chainable {
  * @example
  * cy.get('body').paste('some text to paste');
  */
-export function paste(subject, text): Chainable {
+export function paste(subject: any, text: string): Chainable {
   Cypress.log({
     displayName: 'paste',
     message: `Subject: ${subject.selector}\n Text: ${text}\n`,

@@ -1,8 +1,11 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2021 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -11,7 +14,6 @@
 
 @use 'variables';
 @use 'mixins';
-
 @import 'images';
 
 // Cards.
@@ -19,10 +21,10 @@ mat-card {
   &.mat-card {
     border-radius: variables.$border-radius;
     box-shadow: variables.$border-box-shadow;
-    margin: 20px 0 0 0;
+    margin: 20px 0 0;
     padding: 30px 0;
 
-    &:not([class*=mat-elevation-z]) {
+    &:not([class*='mat-elevation-z']) {
       box-shadow: variables.$border-box-shadow;
     }
 
@@ -46,6 +48,12 @@ mat-card {
           font-size: variables.$font-size-subhead-lg;
           margin: 0 20px;
         }
+
+        .km-search-input {
+          i {
+            margin: 0;
+          }
+        }
       }
     }
 
@@ -60,6 +68,13 @@ mat-card {
         outline: none;
       }
     }
+  }
+}
+
+km-wizard {
+  mat-card.mat-card .mat-card-header .mat-card-title {
+    margin: 0;
+    padding: 26px 0 20px;
   }
 }
 
@@ -99,6 +114,10 @@ mat-card {
 
     p {
       margin: 0 0 8px;
+
+      &.km-dialog-context-description {
+        margin-bottom: 30px;
+      }
     }
 
     .km-dialog-warning {
@@ -130,8 +149,8 @@ mat-card {
     .mat-sort-header-arrow {
       .mat-sort-header-indicator {
         &::before {
-          content: "";
-          mask: url("/assets/images/icons/arrow-down.svg");
+          content: '';
+          mask: url('/assets/images/icons/arrow-down.svg');
           mask-position: center;
           mask-repeat: no-repeat;
           min-height: 8px;
@@ -147,8 +166,8 @@ mat-card {
     .mat-sort-header-arrow {
       .mat-sort-header-indicator {
         &::before {
-          content: "";
-          mask: url("/assets/images/icons/arrow-up.svg");
+          content: '';
+          mask: url('/assets/images/icons/arrow-up.svg');
           mask-position: center;
           mask-repeat: no-repeat;
           min-height: 8px;
@@ -173,10 +192,12 @@ mat-card {
   }
 }
 
+/* stylelint-disable selector-class-pattern */
 .mat-column-status,
 .mat-column-stateArrow {
   width: 8px;
 }
+/* stylelint-enable selector-class-pattern */
 
 // Steppers.
 .mat-stepper-horizontal {
@@ -194,7 +215,7 @@ mat-card {
 
   .mat-horizontal-content-container {
     overflow: initial;
-    padding: 15px 0;
+    padding: 10px 0 0;
   }
 
   .mat-horizontal-stepper-header {
@@ -210,7 +231,7 @@ mat-card {
     transform: none !important;
     transition: none;
 
-    &[aria-expanded="false"] {
+    &[aria-expanded='false'] {
       width: 0;
     }
   }
@@ -269,7 +290,7 @@ mat-card {
 mat-list-item {
   &.disabled {
     i {
-      opacity: .3;
+      opacity: 30%;
     }
   }
 }
@@ -300,6 +321,10 @@ mat-form-field {
       .mat-select-trigger {
         display: flex;
 
+        .km-select-trigger-button-wrapper {
+          margin-bottom: 8px;
+        }
+
         .mat-select-arrow-wrapper {
           align-items: center;
           display: flex;
@@ -310,7 +335,7 @@ mat-form-field {
 
             color: transparent;
             display: inline-block;
-            mask: url("/assets/images/icons/arrow-down.svg");
+            mask: url('/assets/images/icons/arrow-down.svg');
             mask-repeat: no-repeat;
             mask-size: contain;
           }
@@ -324,7 +349,6 @@ mat-form-field {
           .mat-select-arrow {
             @include mixins.size(14px);
 
-            -webkit-transform: rotate(180deg);
             transform: rotate(180deg);
           }
         }
@@ -338,15 +362,7 @@ mat-form-field {
 
   &.km-dropdown-with-suffix {
     .mat-form-field-infix {
-      padding: 8px 0 12px 0;
-    }
-
-    &.mat-primary {
-      .mat-select-trigger {
-        .mat-select-arrow-wrapper {
-          transform: none;
-        }
-      }
+      padding: 9px 0;
     }
   }
 
@@ -356,19 +372,44 @@ mat-form-field {
     }
 
     .mat-select-arrow-wrapper {
-      height: 57px;
+      height: 20px;
     }
 
     .mat-form-field-infix {
-      border-top: 8px solid transparent;
-      padding: 8px 0 8px 0;
+      padding: 9px 0;
+    }
+  }
+
+  &.mat-form-field-appearance-outline {
+    &.mat-form-field-can-float {
+      &.mat-form-field-should-float {
+        .mat-form-field-label {
+          transform: translateY(-21px) scale(0.75);
+        }
+      }
+    }
+
+    .mat-form-field-infix {
+      padding: 9px 0;
+    }
+
+    .mat-form-field-label-wrapper {
+      top: -20px;
     }
   }
 }
 
+km-admin-settings-defaults {
+  mat-form-field.mat-form-field .mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
+}
+
+/* stylelint-disable */
 mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):not(.mat-form-field-disabled) div.mat-form-field-flex:hover label {
   transition: all .2s ease;
 }
+/* stylelint-enable */
 
 .mat-select {
   width: fit-content;
@@ -389,8 +430,8 @@ mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):no
 
   .mat-select-placeholder {
     font-size: variables.$font-size-subhead;
-    line-height: 20px;
-    opacity: .7;
+    line-height: 18px;
+    opacity: 70%;
   }
 
   .mat-icon-button {
@@ -402,7 +443,7 @@ mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):no
 
 .mat-select-panel {
   margin-left: 6px;
-  margin-top: 38px;
+  margin-top: 28px;
   max-width: calc(100% + 20px) !important;
   min-width: calc(100% + 20px) !important;
   transform-origin: 50% 0 0;
@@ -435,8 +476,8 @@ button {
   &.mat-raised-button,
   &.mat-icon-button {
     font-size: variables.$font-size-subhead;
-    height: 40px;
-    line-height: 40px;
+    height: 45px;
+    line-height: 45px;
     min-width: unset;
 
     &:not(:first-child) {
@@ -453,29 +494,33 @@ button {
   }
 }
 
-.mat-icon-button {
-  border-radius: variables.$border-radius !important;
+button {
+  &.mat-icon-button {
+    @include mixins.size(45px);
 
-  &[disabled] {
-    * {
-      cursor: auto;
+    border-radius: variables.$border-radius !important;
+
+    &[disabled] {
+      * {
+        cursor: auto;
+      }
     }
-  }
 
-  a {
-    display: flex;
-    justify-content: center;
-  }
+    a {
+      display: flex;
+      justify-content: center;
+    }
 
-  &:disabled a {
-    cursor: default;
-    pointer-events: none;
-    text-decoration: none;
-  }
+    &:disabled a {
+      cursor: default;
+      pointer-events: none;
+      text-decoration: none;
+    }
 
-  .mat-button-wrapper {
-    display: flex;
-    justify-content: center;
+    .mat-button-wrapper {
+      display: flex;
+      justify-content: center;
+    }
   }
 }
 
@@ -483,6 +528,10 @@ button {
   &.mat-button-toggle-group-appearance-standard {
     border: none;
     box-shadow: none;
+
+    .mat-button-toggle-label-content {
+      padding: 0 10px;
+    }
   }
 
   &:hover {
@@ -491,7 +540,7 @@ button {
   }
 
   .mat-button-toggle {
-    @include mixins.size(150px, 60px, true);
+    @include mixins.size(150px, 45px, true);
 
     align-items: center;
     border-radius: variables.$border-radius;
@@ -634,7 +683,7 @@ mat-tooltip-component .mat-tooltip {
 // Tab.
 .mat-tab-list {
   .mat-tab-label {
-    opacity: 1;
+    opacity: 100%;
 
     .mat-tab-label-content {
       font-size: 16px;

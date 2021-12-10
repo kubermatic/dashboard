@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,7 +24,7 @@ import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialo
 import {Cluster} from '@shared/entity/cluster';
 import {Constraint, ConstraintTemplate, Kind, Violation} from '@shared/entity/opa';
 import {UserSettings} from '@shared/entity/settings';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {take, takeUntil, filter, switchMap} from 'rxjs/operators';
 import {Mode, ConstraintDialog} from './constraint-dialog/component';
@@ -138,7 +141,7 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
       data: {
         title: 'Add Constraint',
         projectId: this.projectID,
-        clusterId: this.cluster.id,
+        cluster: this.cluster,
         mode: Mode.Add,
         confirmLabel: 'Add',
       },
@@ -153,7 +156,7 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
       data: {
         title: 'Edit Constraint',
         projectId: this.projectID,
-        clusterId: this.cluster.id,
+        cluster: this.cluster,
         constraint: constraint,
         mode: Mode.Edit,
         confirmLabel: 'Edit',
@@ -170,7 +173,7 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete Constraint',
-        message: `Are you sure you want to delete the constraint ${constraint.name}?`,
+        message: `Delete <b>${constraint.name}</b> OPA constraint of <b>${this.cluster.name}</b> cluster permanently?`,
         confirmLabel: 'Delete',
       },
     };

@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,7 +28,7 @@ import {Project} from '@shared/entity/project';
 import {ServiceAccount} from '@shared/entity/service-account';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils} from '@shared/utils/member-utils/member-utils';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {EMPTY, merge, of, Subject, timer} from 'rxjs';
 import {catchError, filter, switchMap, switchMapTo, take, takeUntil} from 'rxjs/operators';
 import {AddServiceAccountComponent} from './add-serviceaccount/component';
@@ -179,7 +182,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete Service Account',
-        message: `Delete ${serviceAccount.name} from ${this._selectedProject.name} permanently?`,
+        message: `Delete <b>${serviceAccount.name}</b> service account of <b>${this._selectedProject.name}</b> project permanently?`,
         confirmLabel: 'Delete',
       },
     };

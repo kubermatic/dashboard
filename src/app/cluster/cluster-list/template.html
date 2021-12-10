@@ -1,9 +1,12 @@
 <!--
 Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
+
     http://www.apache.org/licenses/LICENSE-2.0
+
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,14 +18,14 @@ limitations under the License.
      fxLayoutAlign=" center">
   <km-search-field (queryChange)="onSearch($event)"></km-search-field>
   <div fxFlex></div>
-  <button id="km-connect-cluster-top-btn"
+  <button id="km-add-external-cluster-btn"
           mat-flat-button
           color="alternative"
           *ngIf="(adminSettings$ | async).enableExternalClusterImport"
           [disabled]="!canAdd()"
-          (click)="connectCluster()">
-    <i class="km-icon-mask km-icon-connect"></i>
-    <span>Connect Cluster</span>
+          (click)="addExternalCluster()">
+    <i class="km-icon-mask km-icon-add"></i>
+    <span>Add External Cluster</span>
   </button>
   <button mat-flat-button
           type="button"

@@ -1,9 +1,12 @@
 <!--
 Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
+
     http://www.apache.org/licenses/LICENSE-2.0
+
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -100,6 +103,7 @@ limitations under the License.
           </button>
           <button mat-menu-item
                   (click)="editProviderSettings()"
+                  *ngIf="!cluster.spec.cloud.bringyourown"
                   [disabled]="!isClusterRunning || !isEditEnabled()">
             <span>Edit Provider</span>
           </button>
@@ -124,6 +128,10 @@ limitations under the License.
         <km-version-picker [cluster]="cluster"
                            [isClusterRunning]="isClusterAPIRunning"
                            [upgrades]="isEditEnabled() ? upgrades : []"></km-version-picker>
+
+        <km-cni-version *ngIf="isHavingCNI()"
+                        [cluster]="cluster"
+                        [isClusterRunning]="isClusterAPIRunning"></km-cni-version>
 
         <km-property>
           <div key>Cluster ID</div>
@@ -156,15 +164,15 @@ limitations under the License.
           <div value>{{cluster.spec.clusterNetwork.services.cidrBlocks.join(', ')}}</div>
         </km-property>
 
-        <km-property *ngIf="cluster.spec.cniPlugin?.type">
-          <div key>CNI Plugin</div>
-          <div value>{{cluster.spec.cniPlugin.type}}</div>
-        </km-property>
 
         <km-property *ngIf="cluster.spec.clusterNetwork?.proxyMode">
           <div key>Proxy Mode</div>
           <div value>{{cluster.spec.clusterNetwork.proxyMode}}</div>
         </km-property>
+
+        <km-property-boolean label="Konnectivity"
+                             [value]="cluster.spec.clusterNetwork?.konnectivityEnabled">
+        </km-property-boolean>
 
         <km-property *ngIf="cluster?.status?.externalCCMMigration">
           <div key>External CCM Migration Status</div>
@@ -218,9 +226,14 @@ limitations under the License.
         </km-property-boolean>
 
         <km-property-boolean label="Audit Logging"
-                             [value]="!!cluster.spec.auditLogging && cluster.spec.auditLogging.enabled"
-                             *ngIf="!!cluster.spec.auditLogging && !!cluster.spec.auditLogging.enabled">
+                             *ngIf="cluster.spec.auditLogging?.enabled"
+                             [value]="!!cluster.spec.auditLogging && cluster.spec.auditLogging.enabled">
         </km-property-boolean>
+
+        <km-property *ngIf="cluster.spec.auditLogging?.enabled">
+          <div key>Audit Policy Preset</div>
+          <div value>{{cluster.spec.auditLogging.policyPreset || 'custom'}}</div>
+        </km-property>
 
         <km-property-boolean label="Pod Security Policy"
                              [value]="cluster.spec.usePodSecurityPolicyAdmissionPlugin"
@@ -321,6 +334,7 @@ limitations under the License.
     <km-tab label="Addons">
       <div class="addon-tab-content">
         <km-addon-list [addons]="addons"
+                       [cluster]="cluster"
                        [isClusterReady]="isClusterRunning"
                        [canEdit]="isEditEnabled()"
                        (addAddon)="handleAddonCreation($event)"
@@ -333,14 +347,14 @@ limitations under the License.
       <km-constraint-list [constraints]="constraints"
                           [cluster]="cluster"
                           [projectID]="projectID"
-                          [isClusterRunning]="isClusterRunning"></km-constraint-list>
+                          [isClusterRunning]="isClusterRunning && isOPARunning"></km-constraint-list>
     </km-tab>
     <km-tab label="OPA Gatekeeper Config"
             *ngIf="isOPAEnabled()">
       <km-gatekeeper-config [gatekeeperConfig]="gatekeeperConfig"
                             [cluster]="cluster"
                             [projectID]="projectID"
-                            [isClusterRunning]="isClusterRunning"></km-gatekeeper-config>
+                            [isClusterRunning]="isClusterRunning && isOPARunning"></km-gatekeeper-config>
     </km-tab>
     <km-tab label="Monitoring, Logging & Alerting"
             *ngIf="isMLAEnabled()">

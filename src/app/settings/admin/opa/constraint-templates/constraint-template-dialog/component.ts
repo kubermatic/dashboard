@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,8 +18,8 @@ import {OPAService} from '@core/services/opa';
 import {NotificationService} from '@core/services/notification';
 import {ConstraintTemplate, ConstraintTemplateSpec} from '@shared/entity/opa';
 import {getIconClassForButton} from '@shared/utils/common-utils';
-import {dump, load} from 'js-yaml';
-import * as _ from 'lodash';
+import * as y from 'js-yaml';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {take} from 'rxjs/operators';
 
@@ -72,6 +75,10 @@ export class ConstraintTemplateDialog implements OnInit, OnDestroy {
     return getIconClassForButton(this.data.confirmLabel);
   }
 
+  getCTName(): string {
+    return this.data.constraintTemplate.spec.crd.spec.names.kind.toLowerCase();
+  }
+
   save(): void {
     const formSpec = this._getSpec();
 
@@ -92,14 +99,14 @@ export class ConstraintTemplateDialog implements OnInit, OnDestroy {
     if (this.data.mode === Mode.Edit) {
       const spec = this.data.constraintTemplate.spec;
       if (!_.isEmpty(spec)) {
-        this.spec = dump(spec);
+        this.spec = y.dump(spec);
       }
     }
   }
 
   private _getSpec(): ConstraintTemplateSpec {
     let spec = new ConstraintTemplateSpec();
-    const raw = load(this.spec) as ConstraintTemplateSpec;
+    const raw = y.load(this.spec) as ConstraintTemplateSpec;
     if (!_.isEmpty(raw)) {
       spec = raw;
     }

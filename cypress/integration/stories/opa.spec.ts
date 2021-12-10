@@ -1,16 +1,18 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import * as _ from 'lodash';
-import {Fixtures} from '../../fixtures/registry';
+import _ from 'lodash';
 import {AdminSettings} from '../../pages/admin-settings.po';
 import {ClustersPage} from '../../pages/clusters.po';
 import {ProjectsPage} from '../../pages/projects.po';
@@ -18,6 +20,7 @@ import {WizardPage} from '../../pages/wizard.po';
 import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
 import {Endpoint} from '../../utils/endpoint';
+import {Config} from '../../utils/config';
 import {RequestType, TrafficMonitor} from '../../utils/monitor';
 import {Preset} from '../../utils/preset';
 import {Datacenter, Provider} from '../../utils/provider';
@@ -25,20 +28,18 @@ import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 
 describe('OPA Story', () => {
-  const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
-  const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const projectName = _.uniqueId('e2e-test-project-');
   const clusterName = _.uniqueId('e2e-test-cluster-');
   const initialMachineDeploymentName = _.uniqueId('e2e-test-md-');
   const initialMachineDeploymentReplicas = '1';
   const constraintTemplateName = 'k8srequiredlabels';
-  const constraintTemplateSpec = Fixtures.ConstraintTemplateSpec;
+  const constraintTemplateSpec = 'constrainttemplate.spec.yaml';
   const constraintName = 'e2e-test-constraint';
-  const constraintSpec = Fixtures.ConstraintSpec;
-  const gatekeeperConfig = Fixtures.GatekeeperConfig;
+  const constraintSpec = 'constraint.spec.yaml';
+  const gatekeeperConfig = 'gatekeeperconfig.yaml';
 
   it('should login', () => {
-    login(email, password);
+    login(Config.adminEmail());
 
     cy.url().should(Condition.Include, View.Projects.Default);
   });

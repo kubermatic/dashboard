@@ -1,0 +1,78 @@
+<!--
+Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<km-dialog-title>Add External Cluster</km-dialog-title>
+
+<mat-horizontal-stepper class="km-stepper-in-dialog"
+                        linear
+                        disableRipple
+                        [@.disabled]="true"
+                        #stepper>
+  <ng-template matStepperIcon="edit">
+    <i class="km-icon-done"></i>
+  </ng-template>
+
+  <mat-step *ngIf="isAvailable(step.Provider)"
+            [label]="step.Provider"
+            fxFlex="100%">
+    <km-external-cluster-provider-step></km-external-cluster-provider-step>
+  </mat-step>
+
+  <mat-step *ngIf="isAvailable(step.Credentials)"
+            fxFlex="100%">
+    <ng-template matStepLabel>{{step.Credentials}}</ng-template>
+    <ng-template matStepContent>
+      <km-external-cluster-credentials-step></km-external-cluster-credentials-step>
+    </ng-template>
+  </mat-step>
+
+  <mat-step *ngIf="isAvailable(step.Cluster)"
+            fxFlex="100%">
+    <ng-template matStepLabel>{{step.Cluster}}</ng-template>
+    <ng-template matStepContent>
+      <km-external-cluster-cluster-step [projectID]="projectId"></km-external-cluster-cluster-step>
+    </ng-template>
+  </mat-step>
+</mat-horizontal-stepper>
+
+<mat-dialog-actions>
+  <mat-spinner fxFlexAlign="center"
+               [diameter]="30"
+               color="accent"
+               *ngIf="creating"></mat-spinner>
+  <button mat-flat-button
+          type="button"
+          (click)="next()"
+          [disabled]="invalid"
+          *ngIf="active === step.Credentials && !last">
+    <i class="km-icon-mask km-icon-next"></i>
+    <span>Next</span>
+  </button>
+  <button mat-flat-button
+          type="button"
+          [disabled]="creating || invalid"
+          *ngIf="last"
+          kmThrottleClick
+          (throttleClick)="add()"
+          id="external-cluster-add-btn">
+    <i class="km-icon-mask km-icon-add"></i>
+    <ng-container [ngSwitch]="externalClusterService.provider">
+      <span *ngSwitchCase="provider.Custom">Add External Cluster</span>
+      <span *ngSwitchDefault>Import Cluster</span>
+    </ng-container>
+    <span></span>
+  </button>
+</mat-dialog-actions>

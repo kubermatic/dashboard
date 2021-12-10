@@ -1,9 +1,12 @@
 <!--
 Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
+
     http://www.apache.org/licenses/LICENSE-2.0
+
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -12,7 +15,7 @@ limitations under the License.
 -->
 <form [formGroup]="form"
       fxLayout="column"
-      fxLayoutGap="16px">
+      fxLayoutGap="8px">
   <km-combobox #instanceTypeCombobox
                [required]="true"
                [grouped]="false"
@@ -43,16 +46,13 @@ limitations under the License.
     </div>
   </km-combobox>
 
-  <mat-form-field fxFlex>
-    <mat-label>Disk Size in GB</mat-label>
-    <input [formControlName]="Controls.DiskSize"
-           min="10"
-           max="16000"
-           type="number"
-           autocomplete="off"
-           matInput
-           required>
-  </mat-form-field>
+  <km-number-stepper [formControlName]="Controls.DiskSize"
+                     mode="errors"
+                     label="Disk Size in GB"
+                     min="10"
+                     max="16000"
+                     required>
+  </km-number-stepper>
 
   <km-autocomplete label="VSwitch ID"
                    [formControlName]="Controls.VSwitchID"
@@ -61,14 +61,13 @@ limitations under the License.
                    required="true">
   </km-autocomplete>
 
-  <mat-form-field fxFlex>
-    <mat-label>Internet Max Bandwidth Out</mat-label>
-    <input [formControlName]="Controls.InternetMaxBandwidthOut"
-           type="number"
-           autocomplete="off"
-           matInput
-           required>
-  </mat-form-field>
+  <km-number-stepper [formControlName]="Controls.InternetMaxBandwidthOut"
+                     mode="errors"
+                     label="Internet Max Bandwidth Out"
+                     min="10"
+                     max="16000"
+                     required>
+  </km-number-stepper>
 
   <km-combobox #zoneCombobox
                [required]="true"

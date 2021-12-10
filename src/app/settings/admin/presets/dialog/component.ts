@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,6 +28,9 @@ export interface PresetDialogData {
   mode: Mode;
   steps: StepRegistry[];
   preset: Preset;
+  descriptionPreset?: string;
+  descriptionProvider?: string;
+  descriptionSettings?: string;
 }
 
 export enum Mode {
@@ -86,6 +92,19 @@ export class PresetDialogComponent implements OnInit, OnDestroy {
       this.form.get(this.active).invalid ||
       (this.active === StepRegistry.Settings && !this._presetDialogService.isSettingsStepValid)
     );
+  }
+
+  get description(): string {
+    switch (this.active) {
+      case StepRegistry.Preset:
+        return this.data.descriptionPreset;
+      case StepRegistry.Provider:
+        return this.data.descriptionProvider;
+      case StepRegistry.Settings:
+        return this.data.descriptionSettings;
+      default:
+        return '';
+    }
   }
 
   ngOnInit(): void {

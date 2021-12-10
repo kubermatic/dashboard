@@ -1,0 +1,49 @@
+[
+  {
+    "name": "test-template",
+    "id": "d2fmqd97sl",
+    "projectID": "4zqlrjbwlb",
+    "user": "roxy@kubermatic.io",
+    "scope": "user",
+    "cluster": {
+      "name": "",
+      "creationTimestamp": "0001-01-01T00:00:00Z",
+      "labels": {
+        "project-id": "4zqlrjbwlb"
+      },
+      "type": "",
+      "spec": {
+        "cloud": {
+          "dc": "byo-europe-west3-c",
+          "bringyourown": {}
+        },
+        "version": "1.21.5",
+        "oidc": {},
+        "enableUserSSHKeyAgent": true,
+        "auditLogging": {},
+        "opaIntegration": {},
+        "mla": {},
+        "containerRuntime": "containerd"
+      },
+      "status": {
+        "version": "",
+        "url": "",
+        "externalCCMMigration": ""
+      }
+    },
+    "nodeDeployment": {
+      "name": "",
+      "creationTimestamp": "0001-01-01T00:00:00Z",
+      "spec": {
+        "template": {
+          "cloud": {},
+          "operatingSystem": {},
+          "versions": {
+            "kubelet": ""
+          }
+        }
+      },
+      "status": {}
+    }
+  }
+]

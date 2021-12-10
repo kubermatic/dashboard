@@ -1,9 +1,12 @@
 <!--
 Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
+
     http://www.apache.org/licenses/LICENSE-2.0
+
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,7 +26,7 @@ limitations under the License.
          rel="noopener">powered by Kubermatic</a>
     </div>
 
-    <div *ngIf="version?.humanReadable">{{version.humanReadable}}</div>
+    <div>{{getVersion()}}</div>
 
     <div id="km-edition">{{version?.edition}}</div>
 
@@ -42,8 +45,8 @@ limitations under the License.
        class="km-pointer"
        target="_blank"
        rel="noopener">
-      <i [style.background-image]="getBackgroundImageUrlStyle(link)"
-         [style.filter]="getFilterStyle()"></i>
+      <i [style.background-image]="getBackgroundImage(link)"
+         [style.filter]="getFilter()"></i>
     </a>
   </div>
 </footer>

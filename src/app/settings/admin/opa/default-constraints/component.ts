@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,7 +24,7 @@ import {UserService} from '@core/services/user';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Constraint, ConstraintSelector, ConstraintTemplate, Kind} from '@shared/entity/opa';
 import {UserSettings} from '@shared/entity/settings';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {DefaultConstraintDialog, Mode} from './default-constraint-dialog/component';
@@ -165,7 +168,7 @@ export class DefaultConstraintComponent implements OnInit, OnChanges, OnDestroy 
       hasBackdrop: true,
       data: {
         title: 'Delete Default Constraint',
-        message: `Are you sure you want to delete the default constraint ${defaultConstraint.name}?`,
+        message: `Delete <b>${defaultConstraint.name}</b> default constraint permanently?`,
         confirmLabel: 'Delete',
       },
     };

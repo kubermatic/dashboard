@@ -1,8 +1,11 @@
 // Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,7 +27,7 @@ import {getOperatingSystem} from '@shared/entity/node';
 import {GroupConfig} from '@shared/model/Config';
 import {MachineDeploymentHealthStatus} from '@shared/utils/health-status/machine-deployment-health-status';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {switchMap, take, takeUntil} from 'rxjs/operators';
 
@@ -107,7 +110,7 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
 
   showRestartDialog(md: MachineDeployment): void {
     this._nodeService
-      .showMachineDeploymentRestartDialog(md, this.cluster.id, this.projectID, this.changeMachineDeployment)
+      .showMachineDeploymentRestartDialog(md, this.cluster, this.projectID, this.changeMachineDeployment)
       .subscribe(() => {});
   }
 
@@ -130,7 +133,7 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
 
   showDeleteDialog(md: MachineDeployment): void {
     this._nodeService
-      .showMachineDeploymentDeleteDialog(md, this.cluster.id, this.projectID, this.changeMachineDeployment)
+      .showMachineDeploymentDeleteDialog(md, this.cluster, this.projectID, this.changeMachineDeployment)
       .subscribe(() => {});
   }
 
