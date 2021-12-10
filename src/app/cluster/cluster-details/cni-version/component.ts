@@ -32,23 +32,26 @@ export class CNIVersionComponent implements OnInit {
   constructor(private readonly _matDialog: MatDialog) {}
 
   ngOnInit(): void {
-    this.versions = Cluster.getCNIVersions(this.cluster.spec.cniPlugin.type);
-    this.versions.forEach(version => {
+    const cniVersions = Cluster.getCNIVersions(this.cluster.spec.cniPlugin.type);
+    cniVersions.forEach(version => {
       const isUpgrade = lt(coerce(this.cluster.spec.cniPlugin.version), coerce(version));
       this.upgradeAvailable = this.upgradeAvailable ? true : isUpgrade;
+      if (isUpgrade) {
+        this.versions.push(version);
+      }
     });
   }
 
-  isEnabled(): boolean {
-    return this.isClusterRunning && this.versions.length > 1;
+  private _isEnabled(): boolean {
+    return this.isClusterRunning && this.versions.length > 0;
   }
 
   hasAvailableUpdates(): boolean {
-    return this.upgradeAvailable && this.versions.length > 1;
+    return this._isEnabled() && this.upgradeAvailable;
   }
 
   changeCNIVersionDialog(): void {
-    if (this.isEnabled()) {
+    if (this._isEnabled()) {
       const dialogConfig: MatDialogConfig = {
         data: {
           cluster: this.cluster,

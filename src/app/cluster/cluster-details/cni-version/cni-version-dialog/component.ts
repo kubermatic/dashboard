@@ -46,7 +46,7 @@ export class CNIVersionDialog implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.selectedCNIVersion = this.data.cluster?.spec?.cniPlugin?.version || '';
+    this.selectedCNIVersion = this.data.cniVersions[0] || '';
 
     this._projectService.selectedProject
       .pipe(takeUntil(this._unsubscribe))
