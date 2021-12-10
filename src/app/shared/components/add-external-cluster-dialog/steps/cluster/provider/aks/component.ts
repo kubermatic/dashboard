@@ -81,6 +81,6 @@ export class AKSClusterComponent implements OnInit, OnDestroy {
     this._externalClusterService.clusterStepValidity = true;
 
     this._externalClusterService.externalCluster.name = this._selected.name;
-    this._externalClusterService.externalCluster.cloud.eks.name = this._selected.name;
+    this._externalClusterService.externalCluster.cloud.aks.name = this._selected.name;
   }
 }
