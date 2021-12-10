@@ -205,7 +205,11 @@ export class ExternalClusterService {
 
   reset(): void {
     this.provider = undefined;
+    this.preset = undefined;
+    this.isPresetEnabled = false;
     this.externalCluster = ExternalCluster.new();
+    this.error = undefined;
+    this.isValidating = false;
     this.credentialsStepValidity = false;
     this.clusterStepValidity = false;
   }
