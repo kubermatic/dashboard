@@ -13,13 +13,17 @@
 // limitations under the License.
 
 import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
 import {RouterStub} from '@app/testing/router-stubs';
 import {ClusterMockService} from '@app/testing/services/cluster-mock';
+import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
+import {NotificationMockService} from '@app/testing/services/notification-mock';
 import {ClusterService} from '@core/services/cluster';
+import {NotificationService} from '@core/services/notification';
 import {SharedModule} from '@shared/module';
 import {AlibabaProviderSettingsComponent} from './alibaba-provider-settings/component';
 import {AWSProviderSettingsComponent} from './aws-provider-settings/component';
@@ -58,6 +62,8 @@ describe('EditProviderSettingsComponent', () => {
       providers: [
         {provide: Router, useClass: RouterStub},
         {provide: ClusterService, useClass: ClusterMockService},
+        {provide: NotificationService, useClass: NotificationMockService},
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
       ],
     }).compileComponents();
   });
