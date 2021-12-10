@@ -39,8 +39,8 @@ limitations under the License.
   <mat-dialog-actions>
     <button id="km-edit-cluster-dialog-edit-btn"
             mat-flat-button
-            type="submit"
-            [disabled]="!providerSettingsPatch.isValid">
+            (click)="onSettingsSave()"
+            [disabled]="!canSave">
       <i class="km-icon-mask km-icon-save"></i>
       <span>Save Settings</span>
     </button>

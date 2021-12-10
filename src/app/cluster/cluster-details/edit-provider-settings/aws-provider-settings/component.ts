@@ -22,6 +22,9 @@ import {debounceTime, takeUntil} from 'rxjs/operators';
 enum Control {
   AccessKeyID = 'accessKeyID',
   SecretAccessKey = 'secretAccessKey',
+  AssumeRoleARN = 'assumeRoleARN',
+  AssumeRoleExternalID = 'assumeRoleID',
+  UseAssumeRole = 'useAssumeRole',
 }
 
 @Component({
@@ -34,18 +37,48 @@ export class AWSProviderSettingsComponent implements OnInit, OnDestroy {
   readonly Control = Control;
   form: FormGroup;
 
+  get isAssumeRoleEnabled(): boolean {
+    return !!this.form.get(Control.UseAssumeRole).value;
+  }
+
   constructor(private readonly _clusterService: ClusterService, private readonly _builder: FormBuilder) {}
 
   ngOnInit(): void {
     this.form = this._builder.group({
       [Control.AccessKeyID]: this._builder.control('', Validators.required),
       [Control.SecretAccessKey]: this._builder.control('', Validators.required),
+      [Control.UseAssumeRole]: this._builder.control(false),
+      [Control.AssumeRoleARN]: this._builder.control(''),
+      [Control.AssumeRoleExternalID]: this._builder.control(''),
     });
 
-    merge(this.form.get(Control.AccessKeyID).valueChanges, this.form.get(Control.SecretAccessKey).valueChanges)
+    merge(
+      this.form.get(Control.AccessKeyID).valueChanges,
+      this.form.get(Control.SecretAccessKey).valueChanges,
+      this.form.get(Control.AssumeRoleARN).valueChanges,
+      this.form.get(Control.AssumeRoleExternalID).valueChanges
+    )
       .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._clusterService.changeProviderSettingsPatch(this._getProviderSettingsPatch()));
+
+    this.form
+      .get(Control.UseAssumeRole)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        if (this.isAssumeRoleEnabled) {
+          this.form.get(Control.AssumeRoleARN).setValidators(Validators.required);
+          this.form.get(Control.AssumeRoleExternalID).setValidators(Validators.required);
+        } else {
+          this.form.get(Control.AssumeRoleARN).clearValidators();
+          this.form.get(Control.AssumeRoleARN).setValue(undefined);
+          this.form.get(Control.AssumeRoleExternalID).clearValidators();
+          this.form.get(Control.AssumeRoleExternalID).setValue(undefined);
+        }
+
+        this.form.get(Control.AssumeRoleARN).updateValueAndValidity();
+        this.form.get(Control.AssumeRoleExternalID).updateValueAndValidity();
+      });
   }
 
   ngOnDestroy(): void {

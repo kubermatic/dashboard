@@ -76,6 +76,15 @@ export class AWS extends Provider {
   }
 
   vpcs(seed: string, onLoadingCb: () => void = null): Observable<AWSVPC[]> {
+    if (this._headers.has(AWS.Header.AssumeRoleARN) || this._headers.has(AWS.Header.AssumeRoleExternalID)) {
+      this._setRequiredHeaders(
+        AWS.Header.AccessKeyID,
+        AWS.Header.SecretAccessKey,
+        AWS.Header.AssumeRoleARN,
+        AWS.Header.AssumeRoleExternalID
+      );
+    }
+
     if (!this._hasRequiredHeaders() || !seed) {
       return EMPTY;
     }
@@ -91,6 +100,15 @@ export class AWS extends Provider {
   }
 
   securityGroups(dc: string, onLoadingCb: () => void = null): Observable<string[]> {
+    if (this._headers.has(AWS.Header.AssumeRoleARN) || this._headers.has(AWS.Header.AssumeRoleExternalID)) {
+      this._setRequiredHeaders(
+        AWS.Header.AccessKeyID,
+        AWS.Header.SecretAccessKey,
+        AWS.Header.AssumeRoleARN,
+        AWS.Header.AssumeRoleExternalID
+      );
+    }
+
     if (!this._hasRequiredHeaders() || !dc) {
       return EMPTY;
     }

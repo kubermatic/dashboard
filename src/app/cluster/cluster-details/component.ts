@@ -388,6 +388,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   editProviderSettings(): void {
     const modal = this._matDialog.open(EditProviderSettingsComponent);
     modal.componentInstance.cluster = this.cluster;
+    modal.componentInstance.projectID = this.projectID;
   }
 
   isSSHKeysEditEnabled(): boolean {
