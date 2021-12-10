@@ -25,6 +25,7 @@ import {catchError} from 'rxjs/operators';
 import {environment} from '@environments/environment';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {PresetList} from '@shared/entity/preset';
+import {Cluster} from '@shared/entity/cluster';
 
 @Injectable({providedIn: 'root'})
 export class ExternalClusterService {
@@ -41,6 +42,12 @@ export class ExternalClusterService {
   private _newRestRoot: string = environment.newRestRoot;
 
   constructor(private readonly _http: HttpClient) {}
+
+  import(projectID: string, model: ExternalCluster): Observable<Cluster> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters`;
+    const headers = this._preset ? new HttpHeaders({Credential: this._preset}) : undefined;
+    return this._http.post<Cluster>(url, model, {headers: headers});
+  }
 
   getPresets(provider: ExternalClusterProvider): Observable<PresetList> {
     const url = `${this._newRestRoot}/providers/${provider}/presets?disabled=false`;
