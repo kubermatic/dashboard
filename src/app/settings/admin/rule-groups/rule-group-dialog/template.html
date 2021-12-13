@@ -16,9 +16,22 @@ limitations under the License.
 <km-dialog-title>{{data.title}}</km-dialog-title>
 <mat-dialog-content>
   <p class="km-dialog-context-description"
-     [innerHTML]="getDescription()"></p>
+     *ngIf="data.mode === Mode.Edit">Edit rule group of <b>{{data.adminRuleGroup.seed}}</b> seed</p>
   <form [formGroup]="form"
         fxLayout="column">
+    <mat-form-field fxFlex
+                    *ngIf="data.mode === Mode.Add">
+      <mat-label>Seed</mat-label>
+      <mat-select [formControlName]="Controls.Seed"
+                  disableOptionCentering
+                  required>
+        <mat-option *ngFor="let seed of data.seeds"
+                    [value]="seed">
+          {{seed}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <mat-form-field fxFlex>
       <mat-label>Type</mat-label>
       <mat-select [formControlName]="Controls.Type"

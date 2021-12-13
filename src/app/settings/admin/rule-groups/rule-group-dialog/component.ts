@@ -17,7 +17,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MLAService} from '@core/services/mla';
 import {NotificationService} from '@core/services/notification';
-import {RuleGroup, RuleGroupType} from '@shared/entity/mla';
+import {AdminRuleGroup, RuleGroup, RuleGroupType} from '@shared/entity/mla';
 import {getIconClassForButton} from '@shared/utils/common-utils';
 import {MLAUtils} from '@shared/utils/mla-utils';
 import _ from 'lodash';
@@ -29,9 +29,10 @@ export interface RuleGroupDialogData {
   title: string;
   mode: Mode;
   confirmLabel: string;
+  seeds: string[];
 
   // Rule Group has to be specified only if dialog is used in the edit mode.
-  ruleGroup?: RuleGroup;
+  adminRuleGroup?: AdminRuleGroup;
 }
 
 export enum Mode {
@@ -41,6 +42,7 @@ export enum Mode {
 
 export enum Controls {
   Type = 'type',
+  Seed = 'seed',
 }
 
 @Component({
@@ -50,10 +52,10 @@ export enum Controls {
 })
 export class AdminRuleGroupDialog implements OnInit, OnDestroy {
   readonly Controls = Controls;
+  readonly Mode = Mode;
   form: FormGroup;
   ruleGroupData = '';
   ruleGroupTypes = Object.values(RuleGroupType);
-  seedName: string;
   private readonly _unsubscribe = new Subject<void>();
 
   constructor(
@@ -66,7 +68,10 @@ export class AdminRuleGroupDialog implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Type]: this._builder.control(this.data.mode === Mode.Edit ? this.data.ruleGroup.type : '', [
+      [Controls.Type]: this._builder.control(this.data.mode === Mode.Edit ? this.data.adminRuleGroup.type : '', [
+        Validators.required,
+      ]),
+      [Controls.Seed]: this._builder.control(this.data.mode === Mode.Edit ? this.data.adminRuleGroup.seed : '', [
         Validators.required,
       ]),
     });
@@ -88,16 +93,11 @@ export class AdminRuleGroupDialog implements OnInit, OnDestroy {
   }
 
   getDescription(): string {
-    switch (this.data.mode) {
-      case Mode.Add:
-        return 'Create recording and alerting rule group';
-      case Mode.Edit:
-        return 'Edit recording and alerting rule group';
-    }
+    return `Edit rule group of <b>this.data.adminRuleGroup.seed</b> seed`;
   }
 
   save(): void {
-    const ruleGroupName = this.data.mode === Mode.Edit ? MLAUtils.getRuleGroupName(this.data.ruleGroup.data) : '';
+    const ruleGroupName = this.data.mode === Mode.Edit ? MLAUtils.getRuleGroupName(this.data.adminRuleGroup.data) : '';
     const ruleGroup: RuleGroup = {
       data: this._getRuleGroupData(),
       type: this.form.get(Controls.Type).value,
@@ -105,15 +105,15 @@ export class AdminRuleGroupDialog implements OnInit, OnDestroy {
 
     switch (this.data.mode) {
       case Mode.Add:
-        return this._create(ruleGroup);
+        return this._create(ruleGroup, this.form.get(Controls.Seed).value);
       case Mode.Edit:
-        return this._edit(ruleGroup, ruleGroupName);
+        return this._edit(ruleGroup, ruleGroupName, this.form.get(Controls.Seed).value);
     }
   }
 
-  private _create(ruleGroup: RuleGroup): void {
+  private _create(ruleGroup: RuleGroup, seed: string): void {
     this._mlaService
-      .createAdminRuleGroup(this.seedName, ruleGroup)
+      .createAdminRuleGroup(seed, ruleGroup)
       .pipe(take(1))
       .subscribe((result: RuleGroup) => {
         this._matDialogRef.close(true);
@@ -123,9 +123,9 @@ export class AdminRuleGroupDialog implements OnInit, OnDestroy {
       });
   }
 
-  private _edit(ruleGroup: RuleGroup, ruleGroupName: string): void {
+  private _edit(ruleGroup: RuleGroup, ruleGroupName: string, seed: string): void {
     this._mlaService
-      .editAdminRuleGroup(this.seedName, ruleGroup, ruleGroupName)
+      .editAdminRuleGroup(seed, ruleGroup, ruleGroupName)
       .pipe(take(1))
       .subscribe(_ => {
         this._matDialogRef.close(true);
@@ -136,7 +136,7 @@ export class AdminRuleGroupDialog implements OnInit, OnDestroy {
 
   private _initProviderConfigEditor(): void {
     if (this.data.mode === Mode.Edit) {
-      const data = this.data.ruleGroup.data;
+      const data = this.data.adminRuleGroup.data;
       if (!_.isEmpty(data)) {
         this.ruleGroupData = decode(data);
       }

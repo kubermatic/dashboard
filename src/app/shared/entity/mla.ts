@@ -33,3 +33,9 @@ export enum RuleGroupType {
   Metrics = 'Metrics',
   Logs = 'Logs',
 }
+
+export class AdminRuleGroup {
+  seed: string;
+  data: string;
+  type: RuleGroupType;
+}

@@ -119,13 +119,12 @@ export class MLAService {
     const id = `${seed}`;
 
     if (!this._adminRuleGroups$.get(id)) {
-      const _adminRuleGroups$ = merge(this._ruleGroupsRefresh$, this._refreshTimer$)
+      const _adminRuleGroups$ = merge(this._adminRuleGroupsRefresh$, this._refreshTimer$)
         .pipe(switchMap(_ => this._getAdminRuleGroups(seed)))
         .pipe(shareReplay({refCount: true, bufferSize: 1}));
 
       this._adminRuleGroups$.set(id, _adminRuleGroups$);
     }
-
     return this._adminRuleGroups$.get(id);
   }
 

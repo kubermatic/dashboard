@@ -12,16 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit, OnChanges, ViewChild, SimpleChanges} from '@angular/core';
+import {Component, OnDestroy, OnInit, OnChanges, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {NotificationService} from '@core/services/notification';
+import {DatacenterService} from '@core/services/datacenter';
 import {MLAService} from '@core/services/mla';
 import {UserService} from '@core/services/user';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
-import {RuleGroup, RuleGroupType} from '@shared/entity/mla';
+import {RuleGroup, RuleGroupType, AdminRuleGroup} from '@shared/entity/mla';
 import {MLAUtils} from '@shared/utils/mla-utils';
 import {UserSettings} from '@shared/entity/settings';
 import _ from 'lodash';
@@ -35,14 +36,14 @@ import {Mode, AdminRuleGroupDialog} from './rule-group-dialog/component';
   templateUrl: 'template.html',
 })
 export class AdminSettingsRuleGroupsComponent implements OnInit, OnChanges, OnDestroy {
-  ruleGroups: RuleGroup[];
-  dataSource = new MatTableDataSource<RuleGroup>();
-  displayedColumns: string[] = ['name', 'type', 'actions'];
+  dataSource = new MatTableDataSource<AdminRuleGroup>();
+  displayedColumns: string[] = ['name', 'type', 'seed', 'actions'];
   seeds: string[] = [];
   seedFilter: string;
   typeFilter: string;
   settings: UserSettings;
   ruleGroupTypes = Object.values(RuleGroupType);
+  adminRuleGroups: AdminRuleGroup[] = [];
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -53,11 +54,12 @@ export class AdminSettingsRuleGroupsComponent implements OnInit, OnChanges, OnDe
     private readonly _matDialog: MatDialog,
     private readonly _mlaService: MLAService,
     private readonly _userService: UserService,
-    private readonly _notificationService: NotificationService
+    private readonly _notificationService: NotificationService,
+    private readonly _datacenterService: DatacenterService
   ) {}
 
   ngOnInit(): void {
-    this.dataSource.data = this.ruleGroups || [];
+    this.dataSource.data = this.adminRuleGroups || [];
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     this.sort.active = 'name';
@@ -68,12 +70,34 @@ export class AdminSettingsRuleGroupsComponent implements OnInit, OnChanges, OnDe
       this.paginator.pageSize = settings.itemsPerPage;
       this.dataSource.paginator = this.paginator; // Force refresh.
     });
+
+    this._datacenterService.seeds.pipe(takeUntil(this._unsubscribe)).subscribe(seeds => {
+      this.seeds = seeds;
+      this._getAdminRuleGroups();
+    });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.ruleGroups) {
-      this.dataSource.data = this.ruleGroups;
-    }
+  private _getAdminRuleGroups(): void {
+    this.adminRuleGroups = [];
+
+    this.seeds.forEach(seed => {
+      this._mlaService
+        .adminRuleGroups(seed)
+        .pipe(take(1))
+        .subscribe((ruleGroups: RuleGroup[]) => {
+          ruleGroups.forEach(group => {
+            this.adminRuleGroups.push({
+              seed: seed,
+              type: group.type,
+              data: group.data,
+            });
+          });
+          this.dataSource.data = this.adminRuleGroups;
+        });
+    });
+  }
+
+  ngOnChanges(): void {
     this.filter();
   }
 
@@ -84,15 +108,15 @@ export class AdminSettingsRuleGroupsComponent implements OnInit, OnChanges, OnDe
 
   isPaginatorVisible(): boolean {
     return (
-      this.ruleGroups &&
-      this.ruleGroups.length > 0 &&
+      this.adminRuleGroups &&
+      this.adminRuleGroups.length > 0 &&
       this.paginator &&
-      this.ruleGroups.length > this.paginator.pageSize
+      this.adminRuleGroups.length > this.paginator.pageSize
     );
   }
 
   hasNoData(): boolean {
-    return _.isEmpty(this.ruleGroups);
+    return _.isEmpty(this.adminRuleGroups);
   }
 
   getName(data: string): string {
@@ -100,17 +124,19 @@ export class AdminSettingsRuleGroupsComponent implements OnInit, OnChanges, OnDe
   }
 
   filter(): void {
-    if (!_.isEmpty(this.ruleGroups)) {
-      this.dataSource.data = this.ruleGroups.filter(ruleGroup => {
-        if (this.typeFilter) {
-          this.typeFilter ? ruleGroup.type === this.typeFilter : true;
-        }
+    this.dataSource.data = this.adminRuleGroups.filter(adminRuleGroup => {
+      let isVisible = true;
 
-        if (this.seedFilter) {
-          this.seedFilter ? ruleGroup.type === this.seedFilter : true;
-        }
-      });
-    }
+      if (this.typeFilter) {
+        isVisible = isVisible && adminRuleGroup.type === this.typeFilter;
+      }
+
+      if (this.seedFilter) {
+        isVisible = isVisible && adminRuleGroup.seed === this.seedFilter;
+      }
+
+      return isVisible;
+    });
   }
 
   add(): void {
@@ -119,33 +145,35 @@ export class AdminSettingsRuleGroupsComponent implements OnInit, OnChanges, OnDe
         title: 'Create Rule Group',
         mode: Mode.Add,
         confirmLabel: 'Create',
+        seeds: this.seeds,
       },
     };
 
     this._matDialog.open(AdminRuleGroupDialog, dialogConfig);
   }
 
-  edit(ruleGroup: RuleGroup): void {
+  edit(adminRuleGroup: AdminRuleGroup): void {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Edit Rule Group',
         mode: Mode.Edit,
-        ruleGroup: ruleGroup,
+        adminRuleGroup: adminRuleGroup,
         confirmLabel: 'Edit',
+        seeds: this.seeds,
       },
     };
 
     this._matDialog.open(AdminRuleGroupDialog, dialogConfig);
   }
 
-  delete(seedName: string, ruleGroup: RuleGroup): void {
-    const ruleGroupName = this.getName(ruleGroup.data);
+  delete(adminRuleGroup: AdminRuleGroup): void {
+    const ruleGroupName = this.getName(adminRuleGroup.data);
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,
       data: {
         title: 'Delete Rule Group',
-        message: `Delete <b>${ruleGroupName}</b> recording and alerting rule group permanently?`,
+        message: `Delete <b>${ruleGroupName}</b> rule group of <b>${adminRuleGroup.seed}</b> seed permanently?`,
         confirmLabel: 'Delete',
       },
     };
@@ -154,11 +182,11 @@ export class AdminSettingsRuleGroupsComponent implements OnInit, OnChanges, OnDe
       .open(ConfirmationDialogComponent, dialogConfig)
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
-      .pipe(switchMap(_ => this._mlaService.deleteAdminRuleGroup(seedName, ruleGroupName)))
+      .pipe(switchMap(_ => this._mlaService.deleteAdminRuleGroup(adminRuleGroup.seed, ruleGroupName)))
       .pipe(take(1))
       .subscribe(_ => {
         this._notificationService.success(`The Rule Group ${ruleGroupName} was deleted`);
-        this._mlaService.refreshRuleGroups();
+        this._mlaService.refreshAdminRuleGroups();
       });
   }
 }
