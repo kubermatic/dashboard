@@ -74,6 +74,10 @@ limitations under the License.
             <span class="km-provider-logo km-provider-logo-{{provider}}"></span>
           </div>
         </km-property>
+        <km-property *ngIf="provider === Provider.GKE">
+          <div key>Zone</div>
+          <div value>{{cluster?.cloud?.gke?.zone}}</div>
+        </km-property>
         <km-property>
           <div key>Created</div>
           <div value>

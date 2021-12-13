@@ -37,6 +37,7 @@ import {ExternalCluster, ExternalClusterProvider} from '@shared/entity/external-
   styleUrls: ['./style.scss'],
 })
 export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
+  readonly Provider = ExternalClusterProvider;
   private readonly _refreshTime = 10;
   private readonly _metricsRefreshTime = 5;
   projectId: string;
