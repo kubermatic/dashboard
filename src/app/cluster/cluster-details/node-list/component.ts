@@ -146,10 +146,6 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
     this.dataSource.data = data;
   }
 
-  getVersionHeadline(type: string, isKubelet: boolean): string {
-    return Cluster.getVersionHeadline(type, isKubelet);
-  }
-
   canDelete(): boolean {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'nodes', Permission.Delete);
   }

@@ -29,7 +29,7 @@ import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {merge, Subject, timer} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
-import {ExternalCluster} from '@shared/entity/external-cluster-model';
+import {ExternalCluster, ExternalClusterProvider} from '@shared/entity/external-cluster-model';
 
 @Component({
   selector: 'km-cluster-details',
@@ -41,6 +41,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   private readonly _metricsRefreshTime = 5;
   projectId: string;
   cluster: ExternalCluster;
+  provider: ExternalClusterProvider;
   nodes: Node[] = [];
   metrics: ClusterMetrics;
   nodesMetrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
@@ -75,7 +76,10 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
     merge(this._refreshTimer, this._clusterRefresh)
       .pipe(switchMap(_ => this._clusterService.externalCluster(this.projectId, clusterId)))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(cluster => (this.cluster = cluster));
+      .subscribe(cluster => {
+        this.cluster = cluster;
+        this.provider = ExternalCluster.getProvider(cluster.cloud);
+      });
 
     this._metricsRefreshTimer
       .pipe(switchMap(_ => this._clusterService.externalClusterMetrics(this.projectId, clusterId)))

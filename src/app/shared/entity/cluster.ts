@@ -58,14 +58,6 @@ export class Cluster {
     }
   }
 
-  static getVersionHeadline(type: string, isKubelet: boolean): string {
-    if (type === 'kubernetes') {
-      return isKubelet ? 'kubelet Version' : 'Control Plane Version';
-    }
-
-    return '';
-  }
-
   // for now keep in sync with
   // https://github.com/kubermatic/kubermatic/blob/master/pkg/webhook/cluster/validation/validation.go#L50-L52
   static getCNIVersions(cniPluginType: string): string[] {

@@ -25,7 +25,20 @@ export class ExternalCluster {
   id?: string;
   name: string;
   labels?: object;
-  cloudSpec: ExternalCloudSpec;
+  spec: ExternalClusterSpec;
+  cloud: ExternalCloudSpec;
+  status: ExternalClusterStatus;
+
+  static getProvider(cloud: ExternalCloudSpec): ExternalClusterProvider {
+    const providers = Object.keys(cloud);
+    return providers.length > 0
+      ? (providers.pop().toLowerCase() as ExternalClusterProvider)
+      : ExternalClusterProvider.Custom;
+  }
+}
+
+export class ExternalClusterSpec {
+  version: string;
 }
 
 export class ExternalCloudSpec {
@@ -54,6 +67,18 @@ export class GKECloudSpec {
   name: string;
   serviceAccount?: string;
   zone?: string;
+}
+
+export enum ExternalClusterState {
+  Provisioning = 'PROVISIONING',
+  Running = 'RUNNING',
+  Reconciling = 'RECONCILING',
+  Deleting = 'DELETING',
+}
+
+export class ExternalClusterStatus {
+  state: ExternalClusterState;
+  statusMessage: string;
 }
 
 export class AKSCluster {

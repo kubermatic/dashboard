@@ -177,10 +177,6 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
     return this.projectID;
   }
 
-  getVersionHeadline(type: string, isKubelet: boolean): string {
-    return Cluster.getVersionHeadline(type, isKubelet);
-  }
-
   goBackToCluster(): void {
     this._router.navigate(['/projects/' + this.projectID + '/clusters/' + this._clusterName]);
   }

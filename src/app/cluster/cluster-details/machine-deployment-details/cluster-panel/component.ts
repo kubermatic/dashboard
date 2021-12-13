@@ -29,10 +29,6 @@ export class ClusterPanelComponent {
 
   constructor(private readonly _router: Router) {}
 
-  getVersionHeadline(type: string, isKubelet: boolean): string {
-    return Cluster.getVersionHeadline(type, isKubelet);
-  }
-
   navigate(): void {
     this._router.navigate(['/projects/' + this.projectID + '/clusters/' + this.cluster.id]);
   }

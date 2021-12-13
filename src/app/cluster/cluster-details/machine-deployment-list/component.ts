@@ -96,10 +96,6 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
     return getOperatingSystem(md.spec.template);
   }
 
-  getVersionHeadline(type: string, isKubelet: boolean): string {
-    return Cluster.getVersionHeadline(type, isKubelet);
-  }
-
   goToDetails(md: MachineDeployment): void {
     this._router.navigate(['/projects/' + this.projectID + '/clusters/' + this.cluster.id + /md/ + md.id]);
   }
