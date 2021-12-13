@@ -20,7 +20,6 @@ import {filter, take, takeUntil} from 'rxjs/operators';
 import {NotificationService} from '@core/services/notification';
 import {Router} from '@angular/router';
 import {ExternalClusterProvider} from '@shared/entity/external-cluster';
-import {ClusterService} from '@core/services/cluster';
 import {Subject} from 'rxjs';
 
 export enum Step {
@@ -46,7 +45,6 @@ export class AddExternalClusterDialogComponent implements OnInit, OnDestroy {
     private readonly _matDialogRef: MatDialogRef<AddExternalClusterDialogComponent>,
     private readonly _router: Router,
     private readonly _notificationService: NotificationService,
-    private readonly _clusterService: ClusterService,
     readonly externalClusterService: ExternalClusterService
   ) {}
 
@@ -105,8 +103,8 @@ export class AddExternalClusterDialogComponent implements OnInit, OnDestroy {
 
   add(): void {
     this._creating = true;
-    this._clusterService
-      .addExternalCluster(this.projectId, this.externalClusterService.externalCluster)
+    this.externalClusterService
+      .import(this.projectId, this.externalClusterService.externalCluster)
       .pipe(take(1))
       .subscribe({
         next: cluster => {

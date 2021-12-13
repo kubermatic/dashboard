@@ -49,10 +49,13 @@ limitations under the License.
 </mat-horizontal-stepper>
 
 <mat-dialog-actions>
+  <i *ngIf="externalClusterService.error"
+     [matTooltip]="externalClusterService.error"
+     class="km-icon-error km-pointer"></i>
   <mat-spinner fxFlexAlign="center"
-               [diameter]="30"
+               [diameter]="25"
                color="accent"
-               *ngIf="creating"></mat-spinner>
+               *ngIf="creating || externalClusterService.isValidating"></mat-spinner>
   <button mat-flat-button
           type="button"
           (click)="next()"

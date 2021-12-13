@@ -13,12 +13,19 @@
 // limitations under the License.
 
 import {Injectable} from '@angular/core';
-import {ExternalCluster, ExternalClusterProvider, GKECluster} from '@shared/entity/external-cluster';
+import {
+  AKSCluster,
+  EKSCluster,
+  ExternalCluster,
+  ExternalClusterProvider,
+  GKECluster,
+} from '@shared/entity/external-cluster';
 import {BehaviorSubject, Observable, of} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {environment} from '@environments/environment';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {PresetList} from '@shared/entity/preset';
+import {Cluster} from '@shared/entity/cluster';
 
 @Injectable({providedIn: 'root'})
 export class ExternalClusterService {
@@ -28,15 +35,95 @@ export class ExternalClusterService {
   private _provider: ExternalClusterProvider;
   private _externalCluster: ExternalCluster = ExternalCluster.new();
   private _preset: string;
+  private _error: string;
+  private _isValidating = false;
   private _credentialsStepValidity = false;
   private _clusterStepValidity = false;
   private _newRestRoot: string = environment.newRestRoot;
 
   constructor(private readonly _http: HttpClient) {}
 
+  import(projectID: string, model: ExternalCluster): Observable<Cluster> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters`;
+    const headers = this._preset ? new HttpHeaders({Credential: this._preset}) : undefined;
+    return this._http.post<Cluster>(url, model, {headers: headers});
+  }
+
   getPresets(provider: ExternalClusterProvider): Observable<PresetList> {
     const url = `${this._newRestRoot}/providers/${provider}/presets?disabled=false`;
     return this._http.get<PresetList>(url);
+  }
+
+  validateAKSCredentials(
+    tenantID: string,
+    subscriptionID: string,
+    clientID: string,
+    clientSecret: string
+  ): Observable<any> {
+    const url = `${this._newRestRoot}/providers/aks/validatecredentials`;
+    const headers = new HttpHeaders({
+      TenantID: tenantID,
+      SubscriptionID: subscriptionID,
+      ClientID: clientID,
+      ClientSecret: clientSecret,
+    });
+    return this._http.get(url, {headers: headers});
+  }
+
+  getAKSClusters(projectID: string): Observable<AKSCluster[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/providers/aks/clusters`;
+    return this._http
+      .get<AKSCluster[]>(url, {headers: this._getAKSHeaders()})
+      .pipe(catchError(() => of<AKSCluster[]>()));
+  }
+
+  private _getAKSHeaders(): HttpHeaders {
+    if (this._preset) {
+      return new HttpHeaders({Credential: this._preset});
+    }
+
+    return new HttpHeaders({
+      TenantID: this._externalCluster.cloud.aks.tenantID,
+      SubscriptionID: this._externalCluster.cloud.aks.subscriptionID,
+      ClientID: this._externalCluster.cloud.aks.clientID,
+      ClientSecret: this._externalCluster.cloud.aks.clientSecret,
+      ResourceGroup: this._externalCluster.cloud.aks.resourceGroup,
+    });
+  }
+
+  validateEKSCredentials(accessKeyID: string, secretAccessKey: string, region: string): Observable<any> {
+    const url = `${this._newRestRoot}/providers/eks/validatecredentials`;
+    const headers = new HttpHeaders({
+      AccessKeyID: accessKeyID,
+      SecretAccessKey: secretAccessKey,
+      Region: region,
+    });
+    return this._http.get(url, {headers: headers});
+  }
+
+  getEKSClusters(projectID: string): Observable<EKSCluster[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/providers/eks/clusters`;
+    return this._http
+      .get<EKSCluster[]>(url, {headers: this._getEKSHeaders()})
+      .pipe(catchError(() => of<EKSCluster[]>()));
+  }
+
+  private _getEKSHeaders(): HttpHeaders {
+    if (this._preset) {
+      return new HttpHeaders({Credential: this._preset});
+    }
+
+    return new HttpHeaders({
+      AccessKeyID: this._externalCluster.cloud.eks.accessKeyID,
+      SecretAccessKey: this._externalCluster.cloud.eks.secretAccessKey,
+      Region: this._externalCluster.cloud.eks.region,
+    });
+  }
+
+  validateGKECredentials(serviceAccount: string): Observable<any> {
+    const url = `${this._newRestRoot}/providers/gke/validatecredentials`;
+    const headers = new HttpHeaders({ServiceAccount: serviceAccount});
+    return this._http.get(url, {headers: headers});
   }
 
   getGKEClusters(projectID: string): Observable<GKECluster[]> {
@@ -84,6 +171,22 @@ export class ExternalClusterService {
     this.presetStatusChanges.next(isPresetEnabled);
   }
 
+  get error(): string {
+    return this._error;
+  }
+
+  set error(error: string) {
+    this._error = error;
+  }
+
+  get isValidating(): boolean {
+    return this._isValidating;
+  }
+
+  set isValidating(isValidating: boolean) {
+    this._isValidating = isValidating;
+  }
+
   get isCredentialsStepValid(): boolean {
     return this._credentialsStepValidity;
   }
@@ -102,7 +205,11 @@ export class ExternalClusterService {
 
   reset(): void {
     this.provider = undefined;
+    this.preset = undefined;
+    this.isPresetEnabled = false;
     this.externalCluster = ExternalCluster.new();
+    this.error = undefined;
+    this.isValidating = false;
     this.credentialsStepValidity = false;
     this.clusterStepValidity = false;
   }

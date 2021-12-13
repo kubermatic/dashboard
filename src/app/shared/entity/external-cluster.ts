@@ -30,13 +30,42 @@ export class ExternalCluster {
 }
 
 export class ExternalClusterCloudSpec {
+  aks?: AKSCloudSpec;
+  eks?: EKSCloudSpec;
   gke?: GKECloudSpec;
+}
+
+export class AKSCloudSpec {
+  name: string;
+  tenantID?: string;
+  subscriptionID?: string;
+  clientID?: string;
+  clientSecret?: string;
+  resourceGroup?: string;
+}
+
+export class EKSCloudSpec {
+  name: string;
+  accessKeyID?: string;
+  secretAccessKey?: string;
+  region?: string;
 }
 
 export class GKECloudSpec {
   name: string;
   serviceAccount?: string;
   zone?: string;
+}
+
+export class AKSCluster {
+  name: string;
+  imported: boolean;
+}
+
+export class EKSCluster {
+  name: string;
+  region: string;
+  imported: boolean;
 }
 
 export class GKECluster {

@@ -19,14 +19,16 @@ import {ExternalClusterService} from '@shared/components/add-external-cluster-di
 import {Observable, of, Subject} from 'rxjs';
 
 export enum Controls {
-  ServiceAccount = 'serviceAccount',
+  AccessKeyID = 'accessKeyID',
+  SecretAccessKey = 'secretAccessKey',
+  Region = 'region',
 }
 
 @Component({
-  selector: 'km-gke-credentials',
+  selector: 'km-eks-credentials',
   templateUrl: './template.html',
 })
-export class GKECredentialsComponent implements OnInit, OnDestroy {
+export class EKSCredentialsComponent implements OnInit, OnDestroy {
   form: FormGroup;
   readonly Controls = Controls;
   private readonly _unsubscribe = new Subject<void>();
@@ -37,16 +39,22 @@ export class GKECredentialsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.form = this._builder.group({
-      [Controls.ServiceAccount]: this._builder.control('', {
-        validators: [Validators.required],
-        asyncValidators: [this._serviceAccountValidator.bind(this)],
-      }),
-    });
+    this.form = this._builder.group(
+      {
+        [Controls.AccessKeyID]: this._builder.control('', [Validators.required]),
+        [Controls.SecretAccessKey]: this._builder.control('', [Validators.required]),
+        [Controls.Region]: this._builder.control('', [Validators.required]),
+      },
+      {asyncValidators: [this._credentialsValidator.bind(this)]}
+    );
 
-    this.form.statusChanges
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => (this._externalClusterService.credentialsStepValidity = this.form.valid));
+    this.form.statusChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
+      this._externalClusterService.isValidating = this.form.pending;
+      this._externalClusterService.credentialsStepValidity = this.form.valid;
+      this._externalClusterService.error = this.form.hasError('invalidCredentials')
+        ? 'Provided predentials are invalid.'
+        : undefined;
+    });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
       this._update();
@@ -63,15 +71,17 @@ export class GKECredentialsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  private _serviceAccountValidator(control: AbstractControl): Observable<ValidationErrors | null> {
-    const serviceAccount = control.value.toString();
-    if (!serviceAccount) {
+  private _credentialsValidator(control: AbstractControl): Observable<ValidationErrors | null> {
+    const accessKeyID = control.get(Controls.AccessKeyID).value;
+    const secretAccessKey = control.get(Controls.SecretAccessKey).value;
+    const region = control.get(Controls.Region).value;
+    if (!accessKeyID || !secretAccessKey || !region) {
       return of(null);
     }
 
-    return this._externalClusterService.validateGKECredentials(serviceAccount).pipe(
+    return this._externalClusterService.validateEKSCredentials(accessKeyID, secretAccessKey, region).pipe(
       take(1),
-      catchError(() => of({invalidServiceAccount: true}))
+      catchError(() => of({invalidCredentials: true}))
     );
   }
 
@@ -79,9 +89,11 @@ export class GKECredentialsComponent implements OnInit, OnDestroy {
     this._externalClusterService.externalCluster = {
       name: '',
       cloud: {
-        gke: {
+        eks: {
           name: '',
-          serviceAccount: this.form.get(Controls.ServiceAccount).value,
+          accessKeyID: this.form.get(Controls.AccessKeyID).value,
+          secretAccessKey: this.form.get(Controls.SecretAccessKey).value,
+          region: this.form.get(Controls.Region).value,
         },
       },
     };

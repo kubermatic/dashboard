@@ -19,14 +19,18 @@ import {ExternalClusterService} from '@shared/components/add-external-cluster-di
 import {Observable, of, Subject} from 'rxjs';
 
 export enum Controls {
-  ServiceAccount = 'serviceAccount',
+  TenantID = 'tenantID',
+  SubscriptionID = 'subscriptionID',
+  ClientID = 'clientID',
+  ClientSecret = 'clientSecret',
+  ResourceGroup = 'resourceGroup',
 }
 
 @Component({
-  selector: 'km-gke-credentials',
+  selector: 'km-aks-credentials',
   templateUrl: './template.html',
 })
-export class GKECredentialsComponent implements OnInit, OnDestroy {
+export class AKSCredentialsComponent implements OnInit, OnDestroy {
   form: FormGroup;
   readonly Controls = Controls;
   private readonly _unsubscribe = new Subject<void>();
@@ -37,16 +41,24 @@ export class GKECredentialsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.form = this._builder.group({
-      [Controls.ServiceAccount]: this._builder.control('', {
-        validators: [Validators.required],
-        asyncValidators: [this._serviceAccountValidator.bind(this)],
-      }),
-    });
+    this.form = this._builder.group(
+      {
+        [Controls.TenantID]: this._builder.control('', [Validators.required]),
+        [Controls.SubscriptionID]: this._builder.control('', [Validators.required]),
+        [Controls.ClientID]: this._builder.control('', [Validators.required]),
+        [Controls.ClientSecret]: this._builder.control('', [Validators.required]),
+        [Controls.ResourceGroup]: this._builder.control('', [Validators.required]),
+      },
+      {asyncValidators: [this._credentialsValidator.bind(this)]}
+    );
 
-    this.form.statusChanges
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => (this._externalClusterService.credentialsStepValidity = this.form.valid));
+    this.form.statusChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
+      this._externalClusterService.isValidating = this.form.pending;
+      this._externalClusterService.credentialsStepValidity = this.form.valid;
+      this._externalClusterService.error = this.form.hasError('invalidCredentials')
+        ? 'Provided predentials are invalid.'
+        : undefined;
+    });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
       this._update();
@@ -63,15 +75,18 @@ export class GKECredentialsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  private _serviceAccountValidator(control: AbstractControl): Observable<ValidationErrors | null> {
-    const serviceAccount = control.value.toString();
-    if (!serviceAccount) {
+  private _credentialsValidator(control: AbstractControl): Observable<ValidationErrors | null> {
+    const tenantID = control.get(Controls.TenantID).value;
+    const subscriptionID = control.get(Controls.SubscriptionID).value;
+    const clientID = control.get(Controls.ClientID).value;
+    const clientSecret = control.get(Controls.ClientSecret).value;
+    if (!tenantID || !subscriptionID || !clientID || !clientSecret) {
       return of(null);
     }
 
-    return this._externalClusterService.validateGKECredentials(serviceAccount).pipe(
+    return this._externalClusterService.validateAKSCredentials(tenantID, subscriptionID, clientID, clientSecret).pipe(
       take(1),
-      catchError(() => of({invalidServiceAccount: true}))
+      catchError(() => of({invalidCredentials: true}))
     );
   }
 
@@ -79,9 +94,13 @@ export class GKECredentialsComponent implements OnInit, OnDestroy {
     this._externalClusterService.externalCluster = {
       name: '',
       cloud: {
-        gke: {
+        aks: {
           name: '',
-          serviceAccount: this.form.get(Controls.ServiceAccount).value,
+          tenantID: this.form.get(Controls.TenantID).value,
+          subscriptionID: this.form.get(Controls.SubscriptionID).value,
+          clientID: this.form.get(Controls.ClientID).value,
+          clientSecret: this.form.get(Controls.ClientSecret).value,
+          resourceGroup: this.form.get(Controls.ResourceGroup).value,
         },
       },
     };
