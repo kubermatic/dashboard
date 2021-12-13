@@ -20,16 +20,15 @@ export enum ExternalClusterProvider {
 }
 
 export class ExternalCluster {
+  creationTimestamp?: Date;
+  deletionTimestamp?: Date;
+  id?: string;
   name: string;
-  kubeconfig?: string;
-  cloud?: ExternalClusterCloudSpec;
-
-  static new(): ExternalCluster {
-    return {name: ''};
-  }
+  labels?: object;
+  cloudSpec: ExternalCloudSpec;
 }
 
-export class ExternalClusterCloudSpec {
+export class ExternalCloudSpec {
   aks?: AKSCloudSpec;
   eks?: EKSCloudSpec;
   gke?: GKECloudSpec;
@@ -72,4 +71,14 @@ export class GKECluster {
   name: string;
   zone: string;
   imported: boolean;
+}
+
+export class ExternalClusterModel {
+  name: string;
+  kubeconfig?: string;
+  cloud?: ExternalCloudSpec;
+
+  static new(): ExternalClusterModel {
+    return {name: ''};
+  }
 }

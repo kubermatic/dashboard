@@ -16,10 +16,10 @@ import {Injectable} from '@angular/core';
 import {
   AKSCluster,
   EKSCluster,
-  ExternalCluster,
+  ExternalClusterModel,
   ExternalClusterProvider,
   GKECluster,
-} from '@shared/entity/external-cluster';
+} from '@shared/entity/external-cluster-model';
 import {BehaviorSubject, Observable, of} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {environment} from '@environments/environment';
@@ -33,7 +33,7 @@ export class ExternalClusterService {
   presetChanges = new BehaviorSubject<string>(undefined);
   presetStatusChanges = new BehaviorSubject<boolean>(false);
   private _provider: ExternalClusterProvider;
-  private _externalCluster: ExternalCluster = ExternalCluster.new();
+  private _externalCluster: ExternalClusterModel = ExternalClusterModel.new();
   private _preset: string;
   private _error: string;
   private _isValidating = false;
@@ -43,7 +43,7 @@ export class ExternalClusterService {
 
   constructor(private readonly _http: HttpClient) {}
 
-  import(projectID: string, model: ExternalCluster): Observable<Cluster> {
+  import(projectID: string, model: ExternalClusterModel): Observable<Cluster> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters`;
     const headers = this._preset ? new HttpHeaders({Credential: this._preset}) : undefined;
     return this._http.post<Cluster>(url, model, {headers: headers});
@@ -150,11 +150,11 @@ export class ExternalClusterService {
     this.providerChanges.next(this._provider);
   }
 
-  get externalCluster(): ExternalCluster {
+  get externalCluster(): ExternalClusterModel {
     return this._externalCluster;
   }
 
-  set externalCluster(externalCluster: ExternalCluster) {
+  set externalCluster(externalCluster: ExternalClusterModel) {
     this._externalCluster = externalCluster;
   }
 
@@ -207,7 +207,7 @@ export class ExternalClusterService {
     this.provider = undefined;
     this.preset = undefined;
     this.isPresetEnabled = false;
-    this.externalCluster = ExternalCluster.new();
+    this.externalCluster = ExternalClusterModel.new();
     this.error = undefined;
     this.isValidating = false;
     this.credentialsStepValidity = false;

@@ -21,7 +21,6 @@ import {NotificationService} from '@core/services/notification';
 import {PathParam} from '@core/services/params';
 import {UserService} from '@core/services/user';
 import {EditClusterConnectionDialogComponent} from '@shared/components/external-cluster-data-dialog/component';
-import {Cluster} from '@shared/entity/cluster';
 import {Event} from '@shared/entity/event';
 import {Member} from '@shared/entity/member';
 import {ClusterMetrics, NodeMetrics} from '@shared/entity/metrics';
@@ -30,6 +29,7 @@ import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {merge, Subject, timer} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
+import {ExternalCluster} from '@shared/entity/external-cluster-model';
 
 @Component({
   selector: 'km-cluster-details',
@@ -40,7 +40,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   private readonly _refreshTime = 10;
   private readonly _metricsRefreshTime = 5;
   projectId: string;
-  cluster: Cluster;
+  cluster: ExternalCluster;
   nodes: Node[] = [];
   metrics: ClusterMetrics;
   nodesMetrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();

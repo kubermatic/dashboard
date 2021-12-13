@@ -44,6 +44,7 @@ import {EMPTY, forkJoin, Observable, of, onErrorResumeNext, Subject} from 'rxjs'
 import {catchError, distinctUntilChanged, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ClusterDeleteConfirmationComponent} from '../cluster-details/cluster-delete-confirmation/component';
 import {AddExternalClusterDialogComponent} from '@shared/components/add-external-cluster-dialog/component';
+import {ExternalCluster} from '@shared/entity/external-cluster-model';
 
 @Component({
   selector: 'km-cluster-list',
@@ -263,7 +264,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     modal.componentInstance.projectID = this._selectedProject.id;
   }
 
-  disconnectClusterDialog(cluster: Cluster, event: Event): void {
+  disconnectClusterDialog(cluster: ExternalCluster, event: Event): void {
     event.stopPropagation();
 
     this._clusterService.showDisconnectClusterDialog(cluster, this._selectedProject.id).subscribe(_ => {
