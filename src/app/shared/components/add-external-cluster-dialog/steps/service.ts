@@ -87,7 +87,6 @@ export class ExternalClusterService {
       SubscriptionID: this._externalCluster.cloud.aks.subscriptionID,
       ClientID: this._externalCluster.cloud.aks.clientID,
       ClientSecret: this._externalCluster.cloud.aks.clientSecret,
-      ResourceGroup: this._externalCluster.cloud.aks.resourceGroup,
     });
   }
 

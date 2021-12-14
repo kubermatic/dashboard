@@ -23,7 +23,6 @@ export enum Controls {
   SubscriptionID = 'subscriptionID',
   ClientID = 'clientID',
   ClientSecret = 'clientSecret',
-  ResourceGroup = 'resourceGroup',
 }
 
 @Component({
@@ -47,7 +46,6 @@ export class AKSCredentialsComponent implements OnInit, OnDestroy {
         [Controls.SubscriptionID]: this._builder.control('', [Validators.required]),
         [Controls.ClientID]: this._builder.control('', [Validators.required]),
         [Controls.ClientSecret]: this._builder.control('', [Validators.required]),
-        [Controls.ResourceGroup]: this._builder.control('', [Validators.required]),
       },
       {asyncValidators: [this._credentialsValidator.bind(this)]}
     );
@@ -100,7 +98,6 @@ export class AKSCredentialsComponent implements OnInit, OnDestroy {
           subscriptionID: this.form.get(Controls.SubscriptionID).value,
           clientID: this.form.get(Controls.ClientID).value,
           clientSecret: this.form.get(Controls.ClientSecret).value,
-          resourceGroup: this.form.get(Controls.ResourceGroup).value,
         },
       },
     };

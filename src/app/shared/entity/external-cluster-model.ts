@@ -83,6 +83,7 @@ export class ExternalClusterStatus {
 
 export class AKSCluster {
   name: string;
+  resourceGroup: string;
   imported: boolean;
 }
 
