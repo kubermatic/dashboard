@@ -106,6 +106,7 @@ export class AWSPresetSpec extends PresetProviderSpec {
 export class EKSPresetSpec extends PresetProviderSpec {
   accessKeyID: string;
   secretAccessKey: string;
+  region: string;
 }
 
 export class AzurePresetSpec extends PresetProviderSpec {

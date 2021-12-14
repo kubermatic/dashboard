@@ -41,4 +41,16 @@ limitations under the License.
       Secret Access Key is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>Region</mat-label>
+    <input matInput
+           [formControlName]="Controls.Region"
+           [name]="Controls.Region"
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.get(Controls.Region).hasError('required')">
+      Region is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
 </form>
