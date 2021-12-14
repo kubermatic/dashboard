@@ -13,8 +13,10 @@
 // limitations under the License.
 
 import {Component, Input, OnInit} from '@angular/core';
+import {MatDialogRef} from '@angular/material/dialog';
 import {ClusterService} from '@core/services/cluster';
-import {Cluster, CloudSpec, ProviderSettingsPatch} from '@shared/entity/cluster';
+import {NotificationService} from '@core/services/notification';
+import {CloudSpec, Cluster, ClusterPatch, ProviderSettingsPatch} from '@shared/entity/cluster';
 import {NodeProvider, NodeProviderConstants} from '@shared/model/NodeProviderConstants';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -25,14 +27,22 @@ import {takeUntil} from 'rxjs/operators';
 })
 export class EditProviderSettingsComponent implements OnInit {
   private _unsubscribe = new Subject<void>();
-
-  @Input() cluster: Cluster;
-  providerSettingsPatch: ProviderSettingsPatch = {
+  private providerSettingsPatch: ProviderSettingsPatch = {
     isValid: false,
     cloudSpecPatch: {},
   };
+  @Input() cluster: Cluster;
+  @Input() projectID: string;
 
-  constructor(private readonly _clusterService: ClusterService) {}
+  get canSave(): boolean {
+    return this.providerSettingsPatch.isValid;
+  }
+
+  constructor(
+    private readonly _clusterService: ClusterService,
+    private readonly _notificationService: NotificationService,
+    private readonly _matDialogRef: MatDialogRef<EditProviderSettingsComponent>
+  ) {}
 
   ngOnInit(): void {
     this._clusterService.providerSettingsPatchChanges$
@@ -44,5 +54,19 @@ export class EditProviderSettingsComponent implements OnInit {
     const provider = Cluster.getProvider(cloud),
       nodeProvider = Object.keys(NodeProvider)[(Object.values(NodeProvider) as string[]).indexOf(provider)];
     return NodeProviderConstants.displayName(NodeProvider[nodeProvider]);
+  }
+
+  onSettingsSave(): void {
+    const patch: ClusterPatch = {
+      spec: {
+        cloud: this.providerSettingsPatch.cloudSpecPatch,
+      },
+    };
+
+    this._clusterService.patch(this.projectID, this.cluster.id, patch).subscribe(cluster => {
+      this._matDialogRef.close(cluster);
+      this._clusterService.onClusterUpdate.next();
+      this._notificationService.success(`The ${this.cluster.name} cluster was updated`);
+    });
   }
 }

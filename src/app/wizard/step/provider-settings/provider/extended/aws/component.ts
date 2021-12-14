@@ -121,6 +121,18 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
   }
 
   hasRequiredCredentials(): boolean {
+    if (
+      !!this._clusterSpecService.cluster.spec.cloud.aws.assumeRoleARN ||
+      !!this._clusterSpecService.cluster.spec.cloud.aws.assumeRoleExternalID
+    ) {
+      return (
+        !!this._clusterSpecService.cluster.spec.cloud.aws.accessKeyId &&
+        !!this._clusterSpecService.cluster.spec.cloud.aws.secretAccessKey &&
+        !!this._clusterSpecService.cluster.spec.cloud.aws.assumeRoleExternalID &&
+        !!this._clusterSpecService.cluster.spec.cloud.aws.assumeRoleARN
+      );
+    }
+
     return (
       !!this._clusterSpecService.cluster.spec.cloud.aws.accessKeyId &&
       !!this._clusterSpecService.cluster.spec.cloud.aws.secretAccessKey
@@ -132,6 +144,8 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
       .provider(NodeProvider.AWS)
       .accessKeyID(this._clusterSpecService.cluster.spec.cloud.aws.accessKeyId)
       .secretAccessKey(this._clusterSpecService.cluster.spec.cloud.aws.secretAccessKey)
+      .assumeRoleARN(this._clusterSpecService.cluster.spec.cloud.aws.assumeRoleARN)
+      .assumeRoleExternalID(this._clusterSpecService.cluster.spec.cloud.aws.assumeRoleExternalID)
       .securityGroups(this._clusterSpecService.datacenter, () => this._setIsLoadingSecurityGroup(true))
       .pipe(
         map(securityGroups => _.sortBy(securityGroups, sg => sg.toLowerCase())),

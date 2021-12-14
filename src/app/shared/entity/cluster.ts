@@ -122,6 +122,8 @@ export class AlibabaCloudSpec {
 export class AWSCloudSpec {
   accessKeyId: string;
   secretAccessKey: string;
+  assumeRoleARN: string;
+  assumeRoleExternalID: string;
   vpcId: string;
   routeTableId: string;
   securityGroupID: string;

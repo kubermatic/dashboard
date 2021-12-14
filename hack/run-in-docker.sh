@@ -27,5 +27,6 @@ docker run \
   -w /code \
   --net=host \
   -ti \
+  -e NG_CLI_ANALYTICS=false \
   ${IMAGE_NAME} \
   /bin/bash -c "${CMD}"

@@ -151,6 +151,8 @@ export function fakeAWSCluster(): Cluster {
         aws: {
           accessKeyId: 'aaaaaaaaaaaa',
           secretAccessKey: 'bbbbbbbbbbbb',
+          assumeRoleARN: '',
+          assumeRoleExternalID: '',
           securityGroupID: '',
           vpcId: '',
           routeTableId: '',
