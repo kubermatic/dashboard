@@ -20,16 +20,28 @@ export enum ExternalClusterProvider {
 }
 
 export class ExternalCluster {
+  creationTimestamp?: Date;
+  deletionTimestamp?: Date;
+  id?: string;
   name: string;
-  kubeconfig?: string;
-  cloud?: ExternalClusterCloudSpec;
+  labels?: object;
+  spec: ExternalClusterSpec;
+  cloud: ExternalCloudSpec;
+  status: ExternalClusterStatus;
 
-  static new(): ExternalCluster {
-    return {name: ''};
+  static getProvider(cloud: ExternalCloudSpec): ExternalClusterProvider {
+    const providers = Object.keys(cloud);
+    return providers.length > 0
+      ? (providers.pop().toLowerCase() as ExternalClusterProvider)
+      : ExternalClusterProvider.Custom;
   }
 }
 
-export class ExternalClusterCloudSpec {
+export class ExternalClusterSpec {
+  version: string;
+}
+
+export class ExternalCloudSpec {
   aks?: AKSCloudSpec;
   eks?: EKSCloudSpec;
   gke?: GKECloudSpec;
@@ -57,6 +69,18 @@ export class GKECloudSpec {
   zone?: string;
 }
 
+export enum ExternalClusterState {
+  Provisioning = 'PROVISIONING',
+  Running = 'RUNNING',
+  Reconciling = 'RECONCILING',
+  Deleting = 'DELETING',
+}
+
+export class ExternalClusterStatus {
+  state: ExternalClusterState;
+  statusMessage: string;
+}
+
 export class AKSCluster {
   name: string;
   imported: boolean;
@@ -72,4 +96,14 @@ export class GKECluster {
   name: string;
   zone: string;
   imported: boolean;
+}
+
+export class ExternalClusterModel {
+  name: string;
+  kubeconfig?: string;
+  cloud?: ExternalCloudSpec;
+
+  static new(): ExternalClusterModel {
+    return {name: ''};
+  }
 }

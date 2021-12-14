@@ -27,6 +27,12 @@
   margin-top: -6px;
 }
 
+.km-provider-logo {
+  max-height: unset;
+  max-width: unset;
+  min-width: 120px;
+}
+
 .km-provider-menu {
   align-items: center;
   display: flex;

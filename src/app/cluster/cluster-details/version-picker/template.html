@@ -27,7 +27,7 @@ limitations under the License.
 
     <div class="km-version-picker-type"
          fxLayoutAlign="center center">
-      <i class="km-icon-{{cluster.type}}"></i>
+      <i class="km-icon-kubernetes"></i>
       <i *ngIf="hasAvailableUpdates()"
          matTooltip="Updates available."
          class="km-icon-update-available"></i>
@@ -38,7 +38,7 @@ limitations under the License.
     </div>
 
     <mat-form-field>
-      <mat-label>{{getVersionHeadline(cluster.type, false)}}</mat-label>
+      <mat-label>Control Plane Version</mat-label>
       <mat-select [ngModel]="cluster.spec.version"
                   disabled
                   disableOptionCentering>

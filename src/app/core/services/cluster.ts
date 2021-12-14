@@ -32,7 +32,7 @@ import {SSHKey} from '@shared/entity/ssh-key';
 import {CreateClusterModel} from '@shared/model/CreateClusterModel';
 import {combineLatest, merge, Observable, of, Subject, timer} from 'rxjs';
 import {catchError, filter, map, shareReplay, startWith, switchMap, switchMapTo, take} from 'rxjs/operators';
-import {ExternalCluster} from '@shared/entity/external-cluster';
+import {ExternalCluster, ExternalClusterModel} from '@shared/entity/external-cluster-model';
 
 @Injectable()
 export class ClusterService {
@@ -96,7 +96,7 @@ export class ClusterService {
     return this._cluster$.get(id);
   }
 
-  externalCluster(projectID: string, clusterID: string): Observable<Cluster> {
+  externalCluster(projectID: string, clusterID: string): Observable<ExternalCluster> {
     return merge(this.onClusterUpdate, this._refreshTimer$)
       .pipe(switchMapTo(this._getExternalCluster(projectID, clusterID)))
       .pipe(shareReplay({refCount: true, bufferSize: 1}));
@@ -119,7 +119,7 @@ export class ClusterService {
     return this._http.patch<Cluster>(url, patch);
   }
 
-  updateExternalCluster(projectID: string, clusterID: string, model: ExternalCluster): Observable<Cluster> {
+  updateExternalCluster(projectID: string, clusterID: string, model: ExternalClusterModel): Observable<Cluster> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}`;
     return this._http.put<Cluster>(url, model);
   }
@@ -135,7 +135,7 @@ export class ClusterService {
     return this._http.delete(url, {headers: this._headers});
   }
 
-  showDisconnectClusterDialog(cluster: Cluster, projectID: string): Observable<any> {
+  showDisconnectClusterDialog(cluster: ExternalCluster, projectID: string): Observable<any> {
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,
@@ -290,8 +290,8 @@ export class ClusterService {
     return this._http.get<Cluster>(url).pipe(catchError(() => of<Cluster>()));
   }
 
-  private _getExternalCluster(projectID: string, clusterID: string): Observable<Cluster> {
+  private _getExternalCluster(projectID: string, clusterID: string): Observable<ExternalCluster> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}`;
-    return this._http.get<Cluster>(url).pipe(catchError(() => of<Cluster>()));
+    return this._http.get<ExternalCluster>(url).pipe(catchError(() => of<ExternalCluster>()));
   }
 }

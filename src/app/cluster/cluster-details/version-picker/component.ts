@@ -88,10 +88,6 @@ export class VersionPickerComponent implements OnInit, OnChanges {
     return this._eolService.cluster.isAfter(this.cluster.spec.version);
   }
 
-  getVersionHeadline(type: string, isKubelet: boolean): string {
-    return Cluster.getVersionHeadline(type, isKubelet);
-  }
-
   isEnabled(): boolean {
     return this.isClusterRunning && (this.updatesAvailable || this.downgradesAvailable);
   }

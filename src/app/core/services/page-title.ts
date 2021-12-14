@@ -24,6 +24,7 @@ import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {Observable, of} from 'rxjs';
 import {switchMap, take, tap} from 'rxjs/operators';
 import {Auth} from './auth/service';
+import {ExternalCluster} from '@shared/entity/external-cluster-model';
 
 @Injectable()
 export class PageTitleService {
@@ -92,7 +93,7 @@ export class PageTitleService {
     return titleString;
   }
 
-  private _clusterObservable(): Observable<Cluster> {
+  private _clusterObservable(): Observable<Cluster> | Observable<ExternalCluster> {
     const projectId = this._params.get(PathParam.ProjectID);
     const clusterId = this._params.get(PathParam.ClusterID);
     const isExternal = this._params.getCurrentUrl().includes('/external/');

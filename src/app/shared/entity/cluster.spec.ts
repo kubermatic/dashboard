@@ -18,9 +18,9 @@ import {
   fakeAzureCluster,
   fakeBringyourownCluster,
   fakeDigitaloceanCluster,
+  fakeEquinixCluster,
   fakeHetznerCluster,
   fakeOpenstackCluster,
-  fakeEquinixCluster,
   fakeVSphereCluster,
 } from '@app/testing/fake-data/cluster';
 
@@ -38,10 +38,5 @@ describe('ClusterEntity', () => {
     expect(Cluster.getProvider(fakeAzureCluster().spec.cloud)).toBe(Provider.Azure);
     expect(Cluster.getProvider(fakeEquinixCluster().spec.cloud)).toBe(Provider.Equinix);
     expect(Cluster.getProvider(fakeAlibabaCluster().spec.cloud)).toBe(Provider.Alibaba);
-  });
-
-  it('should get correct version headline', () => {
-    expect(Cluster.getVersionHeadline('kubernetes', false)).toBe('Control Plane Version');
-    expect(Cluster.getVersionHeadline('kubernetes', true)).toBe('kubelet Version');
   });
 });

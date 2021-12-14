@@ -16,7 +16,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {takeUntil} from 'rxjs/operators';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
-import {ExternalClusterProvider} from '@shared/entity/external-cluster';
+import {ExternalClusterProvider} from '@shared/entity/external-cluster-model';
 import {Subject} from 'rxjs';
 
 enum Controls {
