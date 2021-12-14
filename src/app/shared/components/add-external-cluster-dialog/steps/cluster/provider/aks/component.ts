@@ -31,7 +31,7 @@ export class AKSClusterComponent implements OnInit, OnDestroy {
   isInitialized = false;
   clusters: AKSCluster[] = [];
   dataSource = new MatTableDataSource<AKSCluster>();
-  columns: string[] = ['name', 'import'];
+  columns: string[] = ['name', 'resourceGroup', 'import'];
   @ViewChild(MatPaginator, {static: true}) private readonly _paginator: MatPaginator;
   private _selected: AKSCluster;
   private _unsubscribe = new Subject<void>();
@@ -82,5 +82,6 @@ export class AKSClusterComponent implements OnInit, OnDestroy {
 
     this._externalClusterService.externalCluster.name = this._selected.name;
     this._externalClusterService.externalCluster.cloud.aks.name = this._selected.name;
+    this._externalClusterService.externalCluster.cloud.aks.resourceGroup = this._selected.resourceGroup;
   }
 }
