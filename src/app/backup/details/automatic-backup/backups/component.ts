@@ -44,6 +44,7 @@ export class BackupListComponent implements OnInit, OnChanges, OnDestroy {
   @Input('backups') private readonly _backups: BackupStatus[] = [];
   @Input('projectID') private readonly _projectID: string;
   @Input('clusterID') private readonly _clusterID: string;
+  @Input('destination') private readonly _destination: string;
   dataSource = new MatTableDataSource<BackupStatus>();
 
   get columns(): string[] {
@@ -99,6 +100,7 @@ export class BackupListComponent implements OnInit, OnChanges, OnDestroy {
         projectID: this._projectID,
         clusterID: this._clusterID,
         backupName: backup.backupName,
+        destination: this._destination,
       } as RestoreSnapshotDialogConfig,
     };
 
