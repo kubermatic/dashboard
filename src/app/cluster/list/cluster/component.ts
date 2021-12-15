@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -34,12 +34,11 @@ import {Health} from '@shared/entity/health';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
-import {AdminSettings} from '@shared/entity/settings';
 import {GroupConfig} from '@shared/model/Config';
 import {ClusterHealthStatus} from '@shared/utils/health-status/cluster-health-status';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import _ from 'lodash';
-import {EMPTY, forkJoin, Observable, of, onErrorResumeNext, Subject} from 'rxjs';
+import {EMPTY, forkJoin, of, onErrorResumeNext, Subject} from 'rxjs';
 import {catchError, distinctUntilChanged, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ClusterDeleteConfirmationComponent} from '../../cluster-details/cluster-delete-confirmation/component';
 
@@ -54,7 +53,6 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   nodeDC: Datacenter[] = [];
   health: Health[] = [];
   machineDeployments: MachineDeployment[][] = [];
-  provider = [];
   displayedColumns: string[] = ['status', 'name', 'labels', 'provider', 'region', 'created', 'actions'];
   dataSource = new MatTableDataSource<Cluster>();
   searchQuery: string;
@@ -66,10 +64,6 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   private _currentGroupConfig: GroupConfig;
   private _etcdRestores: EtcdRestore[] = [];
   private _projectChange$ = new Subject<void>();
-
-  get adminSettings$(): Observable<AdminSettings> {
-    return this._settingsService.adminSettings;
-  }
 
   constructor(
     private readonly _clusterService: ClusterService,
@@ -154,13 +148,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   selectTemplate(): void {
-    const dialogConfig: MatDialogConfig = {
-      data: {
-        projectID: this._selectedProject.id,
-      },
-    };
-
-    this._matDialog.open(SelectClusterTemplateDialogComponent, dialogConfig);
+    this._matDialog.open(SelectClusterTemplateDialogComponent, {data: {projectID: this._selectedProject.id}});
   }
 
   ngOnChanges(): void {
