@@ -141,7 +141,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.AuditPolicyPreset]: new FormControl(''),
       [Controls.UserSSHKeyAgent]: new FormControl(true),
       [Controls.OPAIntegration]: new FormControl(false),
-      [Controls.Konnectivity]: new FormControl(false),
+      [Controls.Konnectivity]: new FormControl(true),
       [Controls.MLALogging]: new FormControl(false),
       [Controls.MLAMonitoring]: new FormControl(false),
       [Controls.AdmissionPlugins]: new FormControl([]),
@@ -342,6 +342,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     const cniPluginType = this.controlValue(Controls.CNIPlugin);
     const cniPluginVersion = this.controlValue(Controls.CNIPluginVersion);
     const cniPlugin = cniPluginType ? {type: cniPluginType, version: cniPluginVersion} : null;
+    const konnectivity = this.isKonnectivityEnabled ? this.controlValue(Controls.Konnectivity) : null;
+
     return {
       name: this.controlValue(Controls.Name),
       type: ClusterType.Kubernetes,
@@ -364,7 +366,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           proxyMode: this.controlValue(Controls.ProxyMode),
           pods: {cidrBlocks: pods ? [pods] : []},
           services: {cidrBlocks: services ? [services] : []},
-          konnectivityEnabled: this.controlValue(Controls.Konnectivity),
+          konnectivityEnabled: konnectivity,
         },
         cniPlugin: cniPlugin,
       } as ClusterSpec,
