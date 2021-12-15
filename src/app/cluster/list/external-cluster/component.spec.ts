@@ -18,28 +18,25 @@ import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
-import {fakeAWSCluster} from '@app/testing/fake-data/cluster';
-import {fakeHealth} from '@app/testing/fake-data/health';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
 import {ApiMockService, asyncData} from '@app/testing/services/api-mock';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock';
 import {AuthMockService} from '@app/testing/services/auth-mock';
-import {DatacenterMockService} from '@app/testing/services/datacenter-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';
 import {SettingsMockService} from '@app/testing/services/settings-mock';
 import {UserMockService} from '@app/testing/services/user-mock';
 import {ApiService} from '@core/services/api';
 import {Auth} from '@core/services/auth/service';
 import {ClusterService} from '@core/services/cluster';
-import {DatacenterService} from '@core/services/datacenter';
 import {EndOfLifeService} from '@core/services/eol';
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
 import {ExternalClusterListComponent} from '@app/cluster/list/external-cluster/component';
+import {fakeCustomExternalCluster} from '@app/testing/fake-data/external-cluster';
 
-describe('ClusterListComponent', () => {
+describe('ExternalClusterListComponent', () => {
   let fixture: ComponentFixture<ExternalClusterListComponent>;
   let component: ExternalClusterListComponent;
   let getClustersSpy;
@@ -48,14 +45,10 @@ describe('ClusterListComponent', () => {
   beforeEach(
     waitForAsync(() => {
       const clusterServiceMock = {
-        clusters: jest.fn(),
-        health: jest.fn(),
-        refreshClusters: () => {},
-        restores: jest.fn(),
+        externalClusters: jest.fn(),
+        refreshExternalClusters: () => {},
       };
-      getClustersSpy = clusterServiceMock.clusters.mockReturnValue(asyncData([fakeAWSCluster()]));
-      clusterServiceMock.health.mockReturnValue(asyncData([fakeHealth()]));
-      clusterServiceMock.restores.mockReturnValue(asyncData([]));
+      getClustersSpy = clusterServiceMock.externalClusters.mockReturnValue(asyncData([fakeCustomExternalCluster()]));
 
       TestBed.configureTestingModule({
         imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
@@ -68,7 +61,6 @@ describe('ClusterListComponent', () => {
           {provide: UserService, useClass: UserMockService},
           {provide: Router, useClass: RouterStub},
           {provide: AppConfigService, useClass: AppConfigMockService},
-          {provide: DatacenterService, useClass: DatacenterMockService},
           {provide: ProjectService, useClass: ProjectMockService},
           {provide: SettingsService, useClass: SettingsMockService},
           EndOfLifeService,
@@ -95,7 +87,7 @@ describe('ClusterListComponent', () => {
     fixture.detectChanges();
     tick(1);
 
-    const expectedCluster = fakeAWSCluster();
+    const expectedCluster = fakeCustomExternalCluster();
     expectedCluster.creationTimestamp = expect.any(Date);
 
     expect(getClustersSpy).toHaveBeenCalled();

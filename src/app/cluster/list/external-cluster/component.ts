@@ -90,7 +90,7 @@ export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestro
 
     this._settingsService.adminSettings
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this._clusterService.refreshClusters());
+      .subscribe(_ => this._clusterService.refreshExternalClusters());
 
     this._projectChange$
       .pipe(switchMap(_ => this._userService.getCurrentUserGroup(this._selectedProject.id)))
