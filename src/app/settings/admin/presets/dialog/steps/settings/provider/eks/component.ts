@@ -22,6 +22,7 @@ import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 export enum Controls {
   AccessKeyID = 'accessKeyID',
   SecretAccessKey = 'secretAccessKey',
+  Region = 'region',
 }
 
 @Component({
@@ -51,6 +52,7 @@ export class EKSSettingsComponent extends BaseFormValidator implements OnInit, O
     this.form = this._builder.group({
       [Controls.AccessKeyID]: this._builder.control('', Validators.required),
       [Controls.SecretAccessKey]: this._builder.control('', Validators.required),
+      [Controls.Region]: this._builder.control('', Validators.required),
     });
 
     this.form.valueChanges
@@ -73,6 +75,7 @@ export class EKSSettingsComponent extends BaseFormValidator implements OnInit, O
     this._presetDialogService.preset.spec.eks = {
       accessKeyID: this.form.get(Controls.AccessKeyID).value,
       secretAccessKey: this.form.get(Controls.SecretAccessKey).value,
+      region: this.form.get(Controls.Region).value,
     };
   }
 }
