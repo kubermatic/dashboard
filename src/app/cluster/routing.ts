@@ -14,6 +14,7 @@
 
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
+import {ExternalMachineDeploymentDetailsComponent} from '@app/cluster/external-cluster-details/external-machine-deployment-details/component';
 import {AuthGuard, AuthzGuard} from '@core/services/auth/guard';
 import {ClusterDetailsComponent} from './cluster-details/component';
 import {MachineDeploymentDetailsComponent} from './cluster-details/machine-deployment-details/component';
@@ -39,6 +40,11 @@ const routes: Routes = [
   {
     path: ':clusterName/md/:machineDeploymentID',
     component: MachineDeploymentDetailsComponent,
+    canActivate: [AuthGuard, AuthzGuard],
+  },
+  {
+    path: 'external/:clusterName/md/:machineDeploymentID',
+    component: ExternalMachineDeploymentDetailsComponent,
     canActivate: [AuthGuard, AuthzGuard],
   },
 ];

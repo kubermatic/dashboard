@@ -22,14 +22,14 @@ import {PathParam} from '@core/services/params';
 import {UserService} from '@core/services/user';
 import {EditClusterConnectionDialogComponent} from '@shared/components/external-cluster-data-dialog/component';
 import {Event} from '@shared/entity/event';
+import {ExternalCluster, ExternalClusterProvider} from '@shared/entity/external-cluster-model';
+import {ExternalMachineDeployment} from '@shared/entity/machine-deployment';
 import {Member} from '@shared/entity/member';
 import {ClusterMetrics, NodeMetrics} from '@shared/entity/metrics';
-import {Node} from '@shared/entity/node';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
-import {merge, Subject, timer} from 'rxjs';
+import {Subject, timer} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
-import {ExternalCluster, ExternalClusterProvider} from '@shared/entity/external-cluster-model';
 
 @Component({
   selector: 'km-cluster-details',
@@ -43,13 +43,12 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   projectId: string;
   cluster: ExternalCluster;
   provider: ExternalClusterProvider;
-  nodes: Node[] = [];
+  machineDeployments: ExternalMachineDeployment[] = [];
   metrics: ClusterMetrics;
   nodesMetrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
   events: Event[] = [];
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
-  private _clusterRefresh: Subject<void> = new Subject<void>();
   private _metricsRefreshTimer = timer(0, this._appConfigService.getRefreshTimeBase() * this._metricsRefreshTime);
   private _refreshTimer = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
   private _unsubscribe: Subject<void> = new Subject<void>();
@@ -74,8 +73,8 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
       .getCurrentUserGroup(this.projectId)
       .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
-    merge(this._refreshTimer, this._clusterRefresh)
-      .pipe(switchMap(_ => this._clusterService.externalCluster(this.projectId, clusterId)))
+    this._clusterService
+      .externalCluster(this.projectId, clusterId)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(cluster => {
         this.cluster = cluster;
@@ -97,14 +96,19 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
       });
 
     this._refreshTimer
-      .pipe(switchMap(_ => this._clusterService.externalClusterNodes(this.projectId, clusterId)))
+      .pipe(switchMap(_ => this._clusterService.externalMachineDeployments(this.projectId, clusterId)))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(nodes => (this.nodes = nodes));
+      .subscribe(machineDeployments => (this.machineDeployments = machineDeployments));
 
-    this._refreshTimer
-      .pipe(switchMap(_ => this._clusterService.externalClusterEvents(this.projectId, clusterId)))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(events => (this.events = events));
+    // this._refreshTimer
+    //   .pipe(switchMap(_ => this._clusterService.externalClusterNodes(this.projectId, clusterId)))
+    //   .pipe(takeUntil(this._unsubscribe))
+    //   .subscribe(nodes => (this.nodes = nodes));
+    //
+    // this._refreshTimer
+    //   .pipe(switchMap(_ => this._clusterService.externalClusterEvents(this.projectId, clusterId)))
+    //   .pipe(takeUntil(this._unsubscribe))
+    //   .subscribe(events => (this.events = events));
   }
 
   ngOnDestroy(): void {
@@ -127,7 +131,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
       .pipe(switchMap(model => this._clusterService.updateExternalCluster(this.projectId, this.cluster.id, model)))
       .pipe(take(1))
       .subscribe(_ => {
-        this._clusterRefresh.next();
+        this._clusterService.onClusterUpdate.next();
         this._notificationService.success(`The ${this.cluster.name} cluster was updated`);
       });
   }

@@ -21,7 +21,7 @@ import {ProjectService} from '@core/services/project';
 import {Cluster} from '@shared/entity/cluster';
 import {getViewDisplayName, View, ViewDisplayName} from '@shared/entity/common';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
-import {Observable, of} from 'rxjs';
+import {iif, Observable, of} from 'rxjs';
 import {switchMap, take, tap} from 'rxjs/operators';
 import {Auth} from './auth/service';
 import {ExternalCluster} from '@shared/entity/external-cluster-model';
@@ -110,9 +110,16 @@ export class PageTitleService {
     const projectId = this._params.get(PathParam.ProjectID);
     const clusterId = this._params.get(PathParam.ClusterID);
     const machineDeploymentId = this._params.get(PathParam.MachineDeploymentID);
+    const isExternal = this._params.getCurrentUrl().includes('/external/');
 
-    return projectId && clusterId && machineDeploymentId
-      ? this._apiService.getMachineDeployment(machineDeploymentId, clusterId, projectId)
-      : of(null);
+    if (!projectId || !clusterId || !machineDeploymentId) {
+      return of(null);
+    }
+
+    return iif(
+      () => isExternal,
+      this._clusterService.externalMachineDeployment(projectId, clusterId, machineDeploymentId),
+      this._apiService.getMachineDeployment(machineDeploymentId, clusterId, projectId)
+    );
   }
 }

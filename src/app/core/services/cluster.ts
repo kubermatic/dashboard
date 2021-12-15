@@ -26,6 +26,7 @@ import {EtcdRestore} from '@shared/entity/backup';
 import {Cluster, ClusterPatch, Finalizer, MasterVersion, ProviderSettingsPatch} from '@shared/entity/cluster';
 import {Event} from '@shared/entity/event';
 import {Health} from '@shared/entity/health';
+import {ExternalMachineDeployment} from '@shared/entity/machine-deployment';
 import {ClusterMetrics, NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
 import {SSHKey} from '@shared/entity/ssh-key';
@@ -191,6 +192,20 @@ export class ClusterService {
   externalClusterNodes(projectID: string, clusterID: string): Observable<Node[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/nodes`;
     return this._http.get<Node[]>(url).pipe(catchError(() => of<Node[]>()));
+  }
+
+  externalMachineDeployments(projectID: string, clusterID: string): Observable<ExternalMachineDeployment[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/machinedeployments`;
+    return this._http.get<ExternalMachineDeployment[]>(url).pipe(catchError(() => of<ExternalMachineDeployment[]>()));
+  }
+
+  externalMachineDeployment(
+    projectID: string,
+    clusterID: string,
+    machineDeploymentID: string
+  ): Observable<ExternalMachineDeployment> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/machinedeployments/${machineDeploymentID}`;
+    return this._http.get<ExternalMachineDeployment>(url).pipe(catchError(() => of<ExternalMachineDeployment>()));
   }
 
   health(projectID: string, clusterID: string): Observable<Health> {

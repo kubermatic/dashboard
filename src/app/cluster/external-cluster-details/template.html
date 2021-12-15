@@ -123,9 +123,14 @@ limitations under the License.
     </mat-card-content>
   </mat-card>
 
-  <km-external-node-list [nodes]="nodes"
-                         [nodesMetrics]="nodesMetrics"
-                         [projectID]="projectId"></km-external-node-list>
+  <km-external-machine-deployment-list [cluster]="cluster"
+                                       [machineDeployments]="machineDeployments"
+                                       [projectID]="projectId"
+                                       [isClusterRunning]="true"></km-external-machine-deployment-list>
+
+  <!--  <km-external-node-list [nodes]="nodes"-->
+  <!--                         [nodesMetrics]="nodesMetrics"-->
+  <!--                         [projectID]="projectId"></km-external-node-list>-->
 
   <km-event-card [events]="events"></km-event-card>
 
