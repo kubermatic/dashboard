@@ -22,7 +22,7 @@ limitations under the License.
     <button mat-flat-button
             type="button"
             fxLayoutAlign="center center"
-            [disabled]="!canAdd()"
+            [disabled]="!can(Permission.Create)"
             (click)="selectTemplate()">
       <i class="km-icon-mask km-icon-add"></i>
       <span>Create Clusters from Template</span>
@@ -31,7 +31,7 @@ limitations under the License.
             mat-flat-button
             type="button"
             fxLayoutAlign="center center"
-            [disabled]="!canAdd()"
+            [disabled]="!can(Permission.Create)"
             (click)="loadWizard()">
       <i class="km-icon-mask km-icon-add"></i>
       <span>Create Cluster</span>
@@ -44,7 +44,7 @@ limitations under the License.
              mat-table
              matSort
              [dataSource]="dataSource"
-             [trackBy]="trackByClusterID">
+             [trackBy]="trackBy">
         <ng-container matColumnDef="status">
           <th mat-header-cell
               *matHeaderCellDef
@@ -145,7 +145,7 @@ limitations under the License.
                           [attr.id]="'km-delete-cluster-' + element.name"
                           matTooltip="Delete Cluster"
                           (click)="deleteClusterDialog(element, $event)"
-                          [disabled]="!canDelete() || isRestoring(element.id)">
+                          [disabled]="!can(Permission.Delete) || isRestoring(element.id)">
                     <i class="km-icon-mask km-icon-delete"></i>
                   </button>
                 </ng-container>

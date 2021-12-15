@@ -21,9 +21,8 @@ limitations under the License.
     <div fxFlex></div>
     <button id="km-add-external-cluster-btn"
             mat-flat-button
-            color="alternative"
             *ngIf="(adminSettings$ | async).enableExternalClusterImport"
-            [disabled]="!canAdd()"
+            [disabled]="!can(Permission.Create)"
             (click)="addExternalCluster()">
       <i class="km-icon-mask km-icon-add"></i>
       <span>Add External Cluster</span>
@@ -36,16 +35,16 @@ limitations under the License.
              mat-table
              matSort
              [dataSource]="dataSource"
-             [trackBy]="trackByClusterID">
+             [trackBy]="trackBy">
         <ng-container matColumnDef="status">
           <th mat-header-cell
               *matHeaderCellDef
               class="km-header-cell"></th>
           <td mat-cell
               *matCellDef="let element">
-            <!--          <i [matTooltip]="getHealthStatus(element).message"-->
-            <!--             [ngClass]="getHealthStatus(element).color"-->
-            <!--             class="km-vertical-center"></i>-->
+            <i [matTooltip]="getStatus(element.status.state)"
+               [ngClass]="getStatusColor(element.status.state)"
+               class="km-vertical-center"></i>
           </td>
         </ng-container>
 
@@ -83,8 +82,8 @@ limitations under the License.
           </th>
           <td mat-cell
               *matCellDef="let element">
-          <span *ngIf="!element.isExternal && !!element.spec.cloud"
-                class="km-provider-logo km-provider-logo-{{getProvider(element.spec.cloud)}}"></span>
+          <span *ngIf="!!element.cloud"
+                class="km-provider-logo km-provider-logo-{{getProvider(element.cloud)}}"></span>
           </td>
         </ng-container>
 
@@ -118,7 +117,7 @@ limitations under the License.
                   <button mat-icon-button
                           matTooltip="Disconnect Cluster"
                           (click)="disconnectClusterDialog(element, $event)"
-                          [disabled]="!canDelete()">
+                          [disabled]="!can(Permission.Delete)">
                     <i class="km-icon-mask km-icon-disconnect"></i>
                   </button>
                 </ng-container>

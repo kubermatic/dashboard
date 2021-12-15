@@ -48,6 +48,7 @@ import {ClusterDeleteConfirmationComponent} from '../../cluster-details/cluster-
   styleUrls: ['./style.scss'],
 })
 export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
+  readonly Permission = Permission;
   clusters: Cluster[] = [];
   isInitialized = false;
   nodeDC: Datacenter[] = [];
@@ -147,10 +148,6 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe();
   }
 
-  selectTemplate(): void {
-    this._matDialog.open(SelectClusterTemplateDialogComponent, {data: {projectID: this._selectedProject.id}});
-  }
-
   ngOnChanges(): void {
     this.dataSource.data = this.clusters;
   }
@@ -162,6 +159,10 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
 
   onSearch(query: string): void {
     this.dataSource.filter = query;
+  }
+
+  selectTemplate(): void {
+    this._matDialog.open(SelectClusterTemplateDialogComponent, {data: {projectID: this._selectedProject.id}});
   }
 
   private _filter(cluster: Cluster, query: string): boolean {
@@ -204,12 +205,8 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     return ClusterHealthStatus.getHealthStatus(cluster, this.health[cluster.id]);
   }
 
-  canAdd(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, Permission.Create);
-  }
-
-  canDelete(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, Permission.Delete);
+  can(permission: Permission): boolean {
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, permission);
   }
 
   loadWizard(): void {
@@ -236,7 +233,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     return !_.isEmpty(this.clusters) && this.paginator && this.clusters.length > this.paginator.pageSize;
   }
 
-  trackByClusterID(cluster: Cluster): string {
+  trackBy(cluster: Cluster): string {
     return cluster.id;
   }
 

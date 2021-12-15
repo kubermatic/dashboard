@@ -34,7 +34,7 @@ import _ from 'lodash';
 import {Observable, Subject} from 'rxjs';
 import {distinctUntilChanged, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {AddExternalClusterDialogComponent} from '@shared/components/add-external-cluster-dialog/component';
-import {ExternalCloudSpec, ExternalCluster} from '@shared/entity/external-cluster-model';
+import {ExternalCloudSpec, ExternalCluster, ExternalClusterState} from '@shared/entity/external-cluster';
 
 @Component({
   selector: 'km-external-cluster-list',
@@ -42,6 +42,7 @@ import {ExternalCloudSpec, ExternalCluster} from '@shared/entity/external-cluste
   styleUrls: ['./style.scss'],
 })
 export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestroy {
+  readonly Permission = Permission;
   clusters: ExternalCluster[] = [];
   isInitialized = false;
   displayedColumns: string[] = ['status', 'name', 'labels', 'provider', 'created', 'actions'];
@@ -104,7 +105,7 @@ export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestro
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(clusters => {
         this.clusters = clusters;
-        this.dataSource.data = this.clusters;
+        this.dataSource.data = clusters;
         this.isInitialized = true;
       });
   }
@@ -149,12 +150,8 @@ export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestro
     return ExternalCluster.getProvider(cluster.cloud).includes(query);
   }
 
-  canAdd(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, Permission.Create);
-  }
-
-  canDelete(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, Permission.Delete);
+  can(permission: Permission): boolean {
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, permission);
   }
 
   addExternalCluster(): void {
@@ -170,6 +167,14 @@ export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestro
     return ExternalCluster.getProvider(cloud);
   }
 
+  getStatus(state: ExternalClusterState): string {
+    return _.capitalize(state);
+  }
+
+  getStatusColor(state: ExternalClusterState): string {
+    return ExternalCluster.getStatusColor(state);
+  }
+
   disconnectClusterDialog(cluster: ExternalCluster, event: Event): void {
     event.stopPropagation();
 
@@ -182,8 +187,8 @@ export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestro
     return !_.isEmpty(this.clusters) && this.paginator && this.clusters.length > this.paginator.pageSize;
   }
 
-  trackByClusterID(cluster: ExternalCluster): string {
-    return cluster.id;
+  trackBy(cluster: ExternalCluster): string {
+    return `${cluster.name}${cluster.creationTimestamp}`;
   }
 
   isEmpty(arr: any): boolean {

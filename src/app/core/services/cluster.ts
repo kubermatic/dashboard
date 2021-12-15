@@ -31,8 +31,8 @@ import {Node} from '@shared/entity/node';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {CreateClusterModel} from '@shared/model/CreateClusterModel';
 import {merge, Observable, of, Subject, timer} from 'rxjs';
-import {catchError, filter, shareReplay, startWith, switchMap, switchMapTo, take} from 'rxjs/operators';
-import {ExternalCluster, ExternalClusterModel} from '@shared/entity/external-cluster-model';
+import {catchError, filter, shareReplay, switchMap, switchMapTo, take} from 'rxjs/operators';
+import {ExternalCluster, ExternalClusterModel} from '@shared/entity/external-cluster';
 
 @Injectable()
 export class ClusterService {
@@ -295,10 +295,7 @@ export class ClusterService {
 
   private _getExternalClusters(projectID: string): Observable<ExternalCluster[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters`;
-    return this._http
-      .get<ExternalCluster[]>(url)
-      .pipe(catchError(() => of<ExternalCluster[]>()))
-      .pipe(startWith([]));
+    return this._http.get<ExternalCluster[]>(url).pipe(catchError(() => of<ExternalCluster[]>()));
   }
 
   private _getCluster(projectID: string, clusterID: string): Observable<Cluster> {

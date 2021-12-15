@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {ExternalClusterProvider} from '@shared/entity/external-cluster-model';
+import {ExternalClusterProvider} from '@shared/entity/external-cluster';
 import {takeUntil} from 'rxjs/operators';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
 import {Subject} from 'rxjs';
