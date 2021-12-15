@@ -35,6 +35,14 @@ export class ExternalCluster {
       ? (providers.pop().toLowerCase() as ExternalClusterProvider)
       : ExternalClusterProvider.Custom;
   }
+
+  static isExternalCluster(cloud?: ExternalCloudSpec): boolean {
+    if (!cloud) {
+      return false;
+    }
+
+    return this.getProvider(cloud) !== ExternalClusterProvider.Custom;
+  }
 }
 
 export class ExternalClusterSpec {

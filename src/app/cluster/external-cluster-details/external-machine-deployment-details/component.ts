@@ -13,23 +13,18 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
-import {ApiService} from '@core/services/api';
 import {ClusterService} from '@core/services/cluster';
 import {PathParam} from '@core/services/params';
-import {UserService} from '@core/services/user';
 import {Datacenter} from '@shared/entity/datacenter';
 import {Event} from '@shared/entity/event';
 import {ExternalCluster} from '@shared/entity/external-cluster-model';
-import {ExternalMachineDeployment, MachineDeployment} from '@shared/entity/machine-deployment';
-import {Member} from '@shared/entity/member';
+import {ExternalMachineDeployment} from '@shared/entity/machine-deployment';
 import {NodeMetrics} from '@shared/entity/metrics';
-import {getOperatingSystem, getOperatingSystemLogoClass, Node} from '@shared/entity/node';
-import {GroupConfig} from '@shared/model/Config';
-import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
-import {Subject, timer} from 'rxjs';
-import {take, takeUntil} from 'rxjs/operators';
+import {Node} from '@shared/entity/node';
+import {forkJoin, Subject, timer} from 'rxjs';
+import {switchMap, take, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-external-machine-deployment-details',
@@ -38,12 +33,11 @@ import {take, takeUntil} from 'rxjs/operators';
 })
 export class ExternalMachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   private readonly _refreshTime = 10; // in seconds
+  private readonly _unsubscribe: Subject<void> = new Subject<void>();
   private _machineDeploymentID: string;
   private _isMachineDeploymentLoaded = false;
-  private _unsubscribe: Subject<void> = new Subject<void>();
   private _clusterID: string;
-  private _user: Member;
-  private _currentGroupConfig: GroupConfig;
+  private _isClusterLoaded = false;
   machineDeployment: ExternalMachineDeployment;
   nodes: Node[] = [];
   events: Event[] = [];
@@ -51,16 +45,11 @@ export class ExternalMachineDeploymentDetailsComponent implements OnInit, OnDest
   cluster: ExternalCluster;
   clusterProvider: string;
   datacenter: Datacenter;
-  system: string;
-  systemLogoClass: string;
   projectID: string;
 
   constructor(
     private readonly _activatedRoute: ActivatedRoute,
-    private readonly _router: Router,
-    private readonly _apiService: ApiService,
     private readonly _appConfig: AppConfigService,
-    private readonly _userService: UserService,
     private readonly _clusterService: ClusterService
   ) {}
 
@@ -69,134 +58,42 @@ export class ExternalMachineDeploymentDetailsComponent implements OnInit, OnDest
     this._machineDeploymentID = this._activatedRoute.snapshot.paramMap.get(PathParam.MachineDeploymentID);
     this.projectID = this._activatedRoute.snapshot.paramMap.get(PathParam.ProjectID);
 
-    this._userService.currentUser.pipe(take(1)).subscribe(user => (this._user = user));
-
-    this._userService
-      .getCurrentUserGroup(this.projectID)
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
-
     timer(0, this._refreshTime * this._appConfig.getRefreshTimeBase())
+      .pipe(
+        switchMap(_ =>
+          forkJoin([
+            this._clusterService.externalMachineDeployment(this.projectID, this._clusterID, this._machineDeploymentID),
+            this._clusterService.externalClusterNodes(this.projectID, this._clusterID),
+            this._clusterService.externalClusterEvents(this.projectID, this._clusterID),
+            this._clusterService.externalClusterNodesMetrics(this.projectID, this._clusterID),
+          ])
+        )
+      )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(() => {
-        this.loadMachineDeployment();
-        // this.loadNodes();
-        // this.loadNodesEvents();
-        // this.loadNodesMetrics();
-      });
-
-    this.loadCluster();
-  }
-
-  loadMachineDeployment(): void {
-    this._clusterService
-      .externalMachineDeployment(this.projectID, this._clusterID, this._machineDeploymentID)
-      .pipe(take(1))
-      .subscribe((md: MachineDeployment) => {
-        this.machineDeployment = md;
-        this.system = getOperatingSystem(this.machineDeployment.spec.template);
-        this.systemLogoClass = getOperatingSystemLogoClass(this.machineDeployment.spec.template);
+      .subscribe(([md, nodes, nodeEvents, nodeMetrics]) => {
         this._isMachineDeploymentLoaded = true;
+        this.machineDeployment = md;
+        this.nodes = nodes;
+        this.events = nodeEvents;
+        this._storeNodeMetrics(nodeMetrics);
       });
-  }
 
-  loadNodes(): void {
-    this._apiService
-      .getMachineDeploymentNodes(this._machineDeploymentID, this._clusterID, this.projectID)
+    this._clusterService
+      .externalCluster(this.projectID, this._clusterID)
       .pipe(take(1))
-      .subscribe(n => {
-        this.nodes = n;
-        // this._areNodesLoaded = true;
+      .subscribe(c => {
+        this.cluster = c;
+        this.clusterProvider = ExternalCluster.getProvider(this.cluster.cloud);
+        this._isClusterLoaded = true;
       });
-  }
-
-  loadNodesEvents(): void {
-    this._apiService
-      .getMachineDeploymentNodesEvents(this._machineDeploymentID, this._clusterID, this.projectID)
-      .pipe(take(1))
-      .subscribe(e => {
-        this.events = e;
-        // this._areNodesEventsLoaded = true;
-      });
-  }
-
-  loadNodesMetrics(): void {
-    this._apiService
-      .getMachineDeploymentNodesMetrics(this._machineDeploymentID, this._clusterID, this.projectID)
-      .pipe(take(1))
-      .subscribe(metrics => this._storeNodeMetrics(metrics));
-  }
-
-  loadCluster(): void {
-    // this._clusterService
-    //   .externalCluster(this.projectID, this._clusterName)
-    //   .pipe(take(1))
-    //   .subscribe(c => {
-    //     this.cluster = c;
-    //     this.clusterProvider = Cluster.getProvider(this.cluster.spec.cloud);
-    //     this._isClusterLoaded = true;
-    //     this.loadDatacenter();
-    //   });
-  }
-
-  loadDatacenter(): void {
-    // this._datacenterService
-    //   .getDatacenter(this.cluster.spec.cloud.dc)
-    //   .pipe(take(1))
-    //   .subscribe(d => {
-    //     this.datacenter = d;
-    //     this._isDatacenterLoaded = true;
-    //   });
   }
 
   isInitialized(): boolean {
-    return this._isMachineDeploymentLoaded;
+    return this._isMachineDeploymentLoaded && this._isClusterLoaded;
   }
 
   getProjectID(): string {
     return this.projectID;
-  }
-
-  goBackToCluster(): void {
-    this._router.navigate(['/projects/' + this.projectID + '/clusters/' + this._clusterID]);
-  }
-
-  isEditEnabled(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'machineDeployments', Permission.Edit);
-  }
-
-  showRestartDialog(): void {
-    // this._nodeService
-    //   .showMachineDeploymentRestartDialog(this.machineDeployment, this.cluster, this.projectID)
-    //   .subscribe(_ => {});
-  }
-
-  showEditDialog(): void {
-    // this._nodeService
-    //   .showMachineDeploymentEditDialog(this.machineDeployment, this.cluster, this.projectID)
-    //   .pipe(take(1))
-    //   .subscribe(
-    //     _ => {
-    //       this.loadMachineDeployment();
-    //       this.loadNodes();
-    //       this._notificationService.success(`The ${this.machineDeployment.name} machine deployment was updated`);
-    //     },
-    //     _ => this._notificationService.error('There was an error during machine deployment edition.')
-    //   );
-  }
-
-  isDeleteEnabled(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'machineDeployments', Permission.Delete);
-  }
-
-  showDeleteDialog(): void {
-    // this._nodeService
-    //   .showMachineDeploymentDeleteDialog(this.machineDeployment, this.cluster, this.projectID, undefined)
-    //   .subscribe(isConfirmed => {
-    //     if (isConfirmed) {
-    //       this.goBackToCluster();
-    //     }
-    //   });
   }
 
   ngOnDestroy(): void {

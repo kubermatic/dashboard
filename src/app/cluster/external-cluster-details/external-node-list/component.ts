@@ -17,7 +17,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {UserService} from '@core/services/user';
-import {Cluster} from '@shared/entity/cluster';
+import {ExternalCluster} from '@shared/entity/external-cluster-model';
 import {NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
 import {NodeHealthStatus} from '@shared/utils/health-status/node-health-status';
@@ -32,7 +32,7 @@ import {takeUntil} from 'rxjs/operators';
   styleUrls: ['style.scss'],
 })
 export class ExternalNodeListComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() cluster: Cluster;
+  @Input() cluster: ExternalCluster;
   @Input() nodes: Node[] = [];
   @Input() nodesMetrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
   @Input() projectID: string;

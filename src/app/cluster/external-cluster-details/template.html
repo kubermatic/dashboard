@@ -45,14 +45,6 @@ limitations under the License.
         <span class="km-label-primary">External</span>
       </mat-card-title>
       <div fxFlex></div>
-      <div fxLayout="row">
-        <button mat-icon-button
-                color="tertiary"
-                (click)="edit()"
-                [disabled]="!isEditEnabled()">
-          <i class="km-icon-mask km-icon-edit"></i>
-        </button>
-      </div>
     </mat-card-header>
 
     <mat-card-content class="km-row">
@@ -69,8 +61,7 @@ limitations under the License.
           </div>
         </km-property>
         <km-property>
-          <div value
-               class="km-provider-logo-value">
+          <div value>
             <span class="km-provider-logo km-provider-logo-{{provider}}"></span>
           </div>
         </km-property>
@@ -127,10 +118,6 @@ limitations under the License.
                                        [machineDeployments]="machineDeployments"
                                        [projectID]="projectId"
                                        [isClusterRunning]="true"></km-external-machine-deployment-list>
-
-  <!--  <km-external-node-list [nodes]="nodes"-->
-  <!--                         [nodesMetrics]="nodesMetrics"-->
-  <!--                         [projectID]="projectId"></km-external-node-list>-->
 
   <km-event-card [events]="events"></km-event-card>
 

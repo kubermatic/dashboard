@@ -17,9 +17,10 @@ import {MatDialog} from '@angular/material/dialog';
 import {ClusterService} from '@core/services/cluster';
 import {EndOfLifeService} from '@core/services/eol';
 import {Cluster, MasterVersion} from '@shared/entity/cluster';
+import {ExternalCluster} from '@shared/entity/external-cluster-model';
+import {take} from 'rxjs/operators';
 import {gt, lt} from 'semver';
 import {ChangeClusterVersionComponent} from '../change-cluster-version/component';
-import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'km-version-picker',
@@ -27,7 +28,7 @@ import {take} from 'rxjs/operators';
   styleUrls: ['./style.scss'],
 })
 export class VersionPickerComponent implements OnInit, OnChanges {
-  @Input() cluster: Cluster;
+  @Input() cluster: Cluster | ExternalCluster;
   @Input() isClusterRunning = false;
   @Input() upgrades: MasterVersion[] = [];
   versionsList: string[] = [];

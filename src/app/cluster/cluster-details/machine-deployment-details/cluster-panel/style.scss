@@ -16,6 +16,10 @@
 @use 'variables';
 
 .km-cluster-panel {
+  button {
+    margin-right: 20px;
+  }
+
   .mat-icon-button {
     @include mixins.size(45px);
 
@@ -28,7 +32,7 @@
     @include mixins.size(28px);
 
     filter: grayscale(100%);
-    margin: 5px 20px;
+    margin: 5px 20px 5px 0;
   }
 
   km-property {
