@@ -14,10 +14,6 @@
 
 @use 'src/assets/css/mixins';
 
-.container {
-  padding-top: 20px;
-}
-
 @include mixins.breakpoint('small') {
   .btn-text-default {
     display: none;

@@ -12,28 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'src/assets/css/mixins';
-
-@include mixins.breakpoint('small') {
-  .btn-text-default {
-    display: none;
-  }
-}
-
-.km-provider-logo {
-  background-position: left;
-  margin: 0 8px 0 0;
-  max-width: 150px;
-  min-width: 70px;
-}
-
-.km-provider-logo-digitalocean,
-.km-provider-logo-openstack {
-  max-height: 20px;
-  min-height: 20px;
-}
-
-.km-provider-logo-hetzner {
-  max-height: 16px;
-  min-height: 16px;
+.container {
+  padding-top: 20px;
 }

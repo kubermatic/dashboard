@@ -14,11 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<mat-tab-group animationDuration="0ms">
-  <mat-tab label="Clusters">
-    <km-cluster-list></km-cluster-list>
-  </mat-tab>
-  <mat-tab label="External Clusters">
-    <km-external-cluster-list></km-external-cluster-list>
-  </mat-tab>
-</mat-tab-group>
+<ng-container [ngSwitch]="areExternalClustersEnabled">
+  <mat-tab-group *ngSwitchCase="true"
+                 animationDuration="0ms">
+    <mat-tab label="Clusters">
+      <div class="container">
+        <km-cluster-list></km-cluster-list>
+      </div>
+    </mat-tab>
+    <mat-tab label="External Clusters">
+      <div class="container">
+        <km-external-cluster-list></km-external-cluster-list>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+
+  <km-cluster-list *ngSwitchCase="false"></km-cluster-list>
+</ng-container>
+

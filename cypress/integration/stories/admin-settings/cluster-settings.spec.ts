@@ -70,7 +70,8 @@ describe('Admin Settings - Cluster Related Settings Story', () => {
   });
 
   it('should make sure connect cluster button is visible', () => {
-    ProjectsPage.getConnectClusterBtn().should(Condition.Exist);
+    ClustersPage.getExternalClustersTab().should(Condition.Exist).click();
+    ClustersPage.getConnectClusterBtn().should(Condition.Exist);
   });
 
   it('should go to wizard', () => {
@@ -163,8 +164,8 @@ describe('Admin Settings - Cluster Related Settings Story', () => {
     ProjectsPage.selectProject(projectName);
   });
 
-  it('should make sure connect cluster button is not visible', () => {
-    ProjectsPage.getConnectClusterBtn().should(Condition.NotExist);
+  it('should make sure external clusters are not available', () => {
+    ClustersPage.getExternalClustersTab().should(Condition.NotExist);
   });
 
   it('should go to cluster details page', () => {

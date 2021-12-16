@@ -27,11 +27,10 @@ import {UserService} from '@core/services/user';
 import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
-import {AdminSettings} from '@shared/entity/settings';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import _ from 'lodash';
-import {Observable, Subject} from 'rxjs';
+import {Subject} from 'rxjs';
 import {distinctUntilChanged, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {AddExternalClusterDialogComponent} from '@shared/components/add-external-cluster-dialog/component';
 import {ExternalCloudSpec, ExternalCluster, ExternalClusterState} from '@shared/entity/external-cluster';
@@ -55,10 +54,6 @@ export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestro
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
   private _projectChange$ = new Subject<void>();
-
-  get adminSettings$(): Observable<AdminSettings> {
-    return this._settingsService.adminSettings;
-  }
 
   constructor(
     private readonly _clusterService: ClusterService,

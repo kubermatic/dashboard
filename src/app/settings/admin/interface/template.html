@@ -64,12 +64,13 @@ limitations under the License.
              class="entry-label">
           <span>Enable External Clusters</span>
           <div class="km-icon-info km-pointer"
-               matTooltip="Enable/Disable &quot;Connect Cluster&quot; button on the cluster list and allow/block access to the connect cluster feature through the API."></div>
+               matTooltip="Enables external clusters in the UI and allows access to them through the API."></div>
         </div>
         <mat-checkbox [(ngModel)]="settings.enableExternalClusterImport"
                       (change)="onSettingsChange()"
                       id="km-enable-external-clusters-setting"></mat-checkbox>
-        <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableExternalClusterImport, apiSettings.enableExternalClusterImport)"></km-spinner-with-confirmation>
+        <km-spinner-with-confirmation
+          [isSaved]="isEqual(settings.enableExternalClusterImport, apiSettings.enableExternalClusterImport)"></km-spinner-with-confirmation>
       </div>
 
       <div fxLayout="row">
@@ -83,7 +84,8 @@ limitations under the License.
         <mat-checkbox [(ngModel)]="settings.enableDashboard"
                       (change)="onSettingsChange()"
                       id="km-enable-kubernetes-dashboard-setting"></mat-checkbox>
-        <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableDashboard, apiSettings.enableDashboard)"></km-spinner-with-confirmation>
+        <km-spinner-with-confirmation
+          [isSaved]="isEqual(settings.enableDashboard, apiSettings.enableDashboard)"></km-spinner-with-confirmation>
       </div>
 
       <div fxLayout="row">
@@ -97,7 +99,8 @@ limitations under the License.
         <mat-checkbox [(ngModel)]="settings.enableOIDCKubeconfig"
                       (change)="onSettingsChange()"
                       id="km-enable-oidc-setting"></mat-checkbox>
-        <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableOIDCKubeconfig, apiSettings.enableOIDCKubeconfig)"></km-spinner-with-confirmation>
+        <km-spinner-with-confirmation
+          [isSaved]="isEqual(settings.enableOIDCKubeconfig, apiSettings.enableOIDCKubeconfig)"></km-spinner-with-confirmation>
       </div>
     </div>
   </mat-card-content>
