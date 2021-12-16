@@ -97,7 +97,8 @@ limitations under the License.
         <mat-menu #menu="matMenu"
                   class="km-provider-edit-settings">
           <button mat-menu-item
-                  (click)="editCluster()">
+                  (click)="editCluster()"
+                  [disabled]="!isClusterRunning || !isEditEnabled()">>
             <span>Edit Cluster</span>
           </button>
           <button mat-menu-item
