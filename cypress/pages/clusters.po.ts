@@ -25,6 +25,11 @@ export enum ProviderMenuOption {
 }
 
 export class ClustersPage {
+  // TODO: Use our own ID once https://github.com/angular/components/issues/4136 will be fixed.
+  static getExternalClustersTab(): Cypress.Chainable {
+    return cy.get('#mat-tab-label-0-1');
+  }
+
   static getAddClusterBtn(): Cypress.Chainable {
     return cy.get('#km-add-cluster-top-btn');
   }
