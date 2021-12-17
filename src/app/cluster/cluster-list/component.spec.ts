@@ -73,6 +73,7 @@ describe('ClusterListComponent', () => {
           {provide: SettingsService, useClass: SettingsMockService},
           EndOfLifeService,
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

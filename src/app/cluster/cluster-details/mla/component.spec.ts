@@ -35,6 +35,7 @@ describe('MLAComponent', () => {
         imports: [...modules],
         declarations: [MLAComponent],
         providers: [],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

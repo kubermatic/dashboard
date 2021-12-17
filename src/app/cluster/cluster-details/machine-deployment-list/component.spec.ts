@@ -63,6 +63,7 @@ describe('MachineDeploymentListComponent', () => {
           {provide: SettingsService, useClass: SettingsMockService},
           GoogleAnalyticsService,
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

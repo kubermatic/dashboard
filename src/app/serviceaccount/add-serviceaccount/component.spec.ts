@@ -48,6 +48,7 @@ describe('AddServiceAccountComponent', () => {
           {provide: ProjectService, useClass: ProjectMockService},
           NotificationService,
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

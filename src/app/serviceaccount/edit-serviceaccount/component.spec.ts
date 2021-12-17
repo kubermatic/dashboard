@@ -45,6 +45,7 @@ describe('EditServiceAccountComponent', () => {
           {provide: ApiService, useValue: apiMock},
           NotificationService,
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

@@ -60,6 +60,7 @@ describe('ConstraintsComponent', () => {
           MatDialog,
           NotificationService,
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

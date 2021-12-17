@@ -43,6 +43,7 @@ describe('ViolationDetailsComponent', () => {
         imports: [...modules],
         declarations: [ViolationDetailsComponent],
         providers: [{provide: OPAService, useValue: opaMock}],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

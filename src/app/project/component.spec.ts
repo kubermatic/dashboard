@@ -68,6 +68,7 @@ describe('ProjectComponent', () => {
           GoogleAnalyticsService,
           CookieService,
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

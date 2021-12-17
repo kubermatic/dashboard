@@ -64,6 +64,7 @@ describe('ChangeClusterVersionComponent', () => {
           NotificationService,
           EndOfLifeService,
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

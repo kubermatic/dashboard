@@ -44,6 +44,7 @@ describe('NodeService', () => {
         {provide: MatDialog, useClass: MatDialogMock},
         NotificationService,
       ],
+      teardown: {destroyAfterEach: false},
     });
   });
 

@@ -43,6 +43,7 @@ describe('DashboardComponent', () => {
         {provide: DatacenterService, useClass: DatacenterMockService},
         {provide: ActivatedRoute, useClass: ActivatedRouteStub},
       ],
+      teardown: {destroyAfterEach: false},
     }).compileComponents();
   });
 
