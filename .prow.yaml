@@ -21,13 +21,13 @@ presubmits:
       preset-goproxy: "true"
     spec:
       containers:
-      - image: quay.io/kubermatic-labs/boilerplate:v0.2.0
-        command:
-        - ./hack/verify-boilerplate.sh
-        resources:
-          requests:
-            memory: 256Mi
-            cpu: 100m
+        - image: quay.io/kubermatic-labs/boilerplate:v0.2.0
+          command:
+            - ./hack/verify-boilerplate.sh
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 100m
 
   - name: pre-dashboard-go-mod-verify
     run_if_changed: "^(go.sum|go.mod)$|\\.(go)$"
@@ -69,7 +69,7 @@ presubmits:
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     spec:
       containers:
-        - image: quay.io/kubermatic/chrome-headless:v0.11
+        - image: quay.io/kubermatic/chrome-headless:v0.12
           command:
             - make
             - test-headless
@@ -207,7 +207,7 @@ presubmits:
       preset-minio: "true"
     spec:
       containers:
-        - image: quay.io/kubermatic/e2e-cypress:v1.2.0
+        - image: quay.io/kubermatic/chrome-headless:v0.12
           imagePullPolicy: Always
           command:
             - make
@@ -235,7 +235,7 @@ presubmits:
       preset-minio: "true"
     spec:
       containers:
-        - image: quay.io/kubermatic/e2e-cypress:v1.2.0
+        - image: quay.io/kubermatic/chrome-headless:v0.12
           imagePullPolicy: Always
           command:
             - make
