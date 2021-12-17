@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-TAG=v0.12
+TAG=v1.0.0
 
 set -euo pipefail
 
