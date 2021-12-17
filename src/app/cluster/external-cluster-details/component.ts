@@ -99,16 +99,6 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
       .pipe(switchMap(_ => this._clusterService.externalMachineDeployments(this.projectId, clusterId)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(machineDeployments => (this.machineDeployments = machineDeployments));
-
-    // this._refreshTimer
-    //   .pipe(switchMap(_ => this._clusterService.externalClusterNodes(this.projectId, clusterId)))
-    //   .pipe(takeUntil(this._unsubscribe))
-    //   .subscribe(nodes => (this.nodes = nodes));
-    //
-    // this._refreshTimer
-    //   .pipe(switchMap(_ => this._clusterService.externalClusterEvents(this.projectId, clusterId)))
-    //   .pipe(takeUntil(this._unsubscribe))
-    //   .subscribe(events => (this.events = events));
   }
 
   ngOnDestroy(): void {
