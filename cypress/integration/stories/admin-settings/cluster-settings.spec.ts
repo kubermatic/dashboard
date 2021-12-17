@@ -75,6 +75,7 @@ describe('Admin Settings - Cluster Related Settings Story', () => {
   });
 
   it('should go to wizard', () => {
+    ClustersPage.getClustersTab().should(Condition.Exist).click();
     ClustersPage.openWizard();
   });
 
