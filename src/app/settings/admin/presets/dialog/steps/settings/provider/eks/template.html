@@ -21,7 +21,7 @@ limitations under the License.
     <input matInput
            [formControlName]="Controls.AccessKeyID"
            [name]="Controls.AccessKeyID"
-           type="text"
+           type="password"
            autocomplete="off"
            required>
     <mat-error *ngIf="form.get(Controls.AccessKeyID).hasError('required')">
@@ -39,6 +39,18 @@ limitations under the License.
            required>
     <mat-error *ngIf="form.get(Controls.SecretAccessKey).hasError('required')">
       Secret Access Key is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>Region</mat-label>
+    <input matInput
+           [formControlName]="Controls.Region"
+           [name]="Controls.Region"
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.get(Controls.Region).hasError('required')">
+      Region is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
 </form>

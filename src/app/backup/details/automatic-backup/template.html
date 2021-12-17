@@ -76,5 +76,6 @@ limitations under the License.
 
   <km-backup-list [backups]="backup.status.lastBackups"
                   [projectID]="selectedProject.id"
-                  [clusterID]="backup.spec.clusterId"></km-backup-list>
+                  [clusterID]="backup.spec.clusterId"
+                  [destination]="backup.spec.destination"></km-backup-list>
 </ng-container>

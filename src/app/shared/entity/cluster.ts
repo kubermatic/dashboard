@@ -65,7 +65,7 @@ export class Cluster {
       case CNIPlugin.Canal:
         return ['v3.8', 'v3.19', 'v3.20'];
       case CNIPlugin.Cilium:
-        return ['v1.10'];
+        return ['v1.11'];
       default:
         return [];
     }
