@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM quay.io/kubermatic/build:go-1.17-node-16-kind-0.11-1 AS kkpbuild
+FROM quay.io/kubermatic/build:go-1.17-node-16-kind-0.11-5 AS kkpbuild
 
-FROM cypress/browsers:node14.17.0-chrome88-ff89
+FROM cypress/browsers:node16.5.0-chrome94-ff93
 LABEL maintainer="support@kubermatic.com"
 
-ENV GO_VERSION="1.17.1"
+ENV GO_VERSION="1.17.5"
 
 COPY --from=kkpbuild /usr/local/bin/mc /usr/local/bin/mc
 COPY --from=kkpbuild /root/.bashrc /root/.bashrc

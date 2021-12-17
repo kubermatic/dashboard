@@ -18,7 +18,7 @@ set -e
 
 cd $(dirname $0)
 
-image="quay.io/kubermatic/e2e-kind-cypress:v1.9.0"
+image="quay.io/kubermatic/e2e-kind-cypress:v1.10.0"
 
 docker build --no-cache --pull -t "$image" .
 docker push "$image"
