@@ -58,9 +58,9 @@ $colors-dark: (
 $colors-dark-palette: mat.$blue-palette;
 $colors-dark-palette: map.merge($colors-dark-palette, (500: #0072b0));
 $theme-dark: mat.define-dark-theme(
-    mat.define-palette($colors-dark-palette),
-    mat.define-palette(mat.$light-blue-palette),
-    mat.define-palette(mat.$pink-palette),
+  mat.define-palette($colors-dark-palette),
+  mat.define-palette(mat.$light-blue-palette),
+  mat.define-palette(mat.$pink-palette),
 );
 $background: map.get($theme-dark, background);
 $background: map.merge($background, (background: #000));
