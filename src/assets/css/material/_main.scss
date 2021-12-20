@@ -613,17 +613,25 @@ button {
 }
 
 .mat-checkbox {
-  .mat-checkbox-inner-container {
-    margin-right: 15px;
-
-    .mat-checkbox-frame {
-      border-radius: variables.$border-radius;
-    }
+  &:hover {
+    cursor: default;
   }
 
-  .mat-checkbox-label {
-    display: flex;
-    flex-direction: row;
+  .mat-checkbox-layout {
+    cursor: pointer;
+
+    .mat-checkbox-inner-container {
+      margin-right: 15px;
+
+      .mat-checkbox-frame {
+        border-radius: variables.$border-radius;
+      }
+    }
+
+    .mat-checkbox-label {
+      display: flex;
+      flex-direction: row;
+    }
   }
 
   &.km-disable-ripple {
