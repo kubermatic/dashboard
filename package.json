@@ -70,7 +70,7 @@
     "ngx-custom-validators": "11.0.1",
     "ngx-filter-pipe": "2.1.2",
     "ngx-monaco-editor": "12.0.0",
-    "postcss": "8.3.11",
+    "postcss": "8.4.5",
     "postcss-scss": "4.0.2",
     "rxjs": "7.4.0",
     "rxjs-compat": "6.6.7",
