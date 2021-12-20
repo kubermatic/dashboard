@@ -21,13 +21,13 @@ presubmits:
       preset-goproxy: "true"
     spec:
       containers:
-      - image: quay.io/kubermatic-labs/boilerplate:v0.2.0
-        command:
-        - ./hack/verify-boilerplate.sh
-        resources:
-          requests:
-            memory: 256Mi
-            cpu: 100m
+        - image: quay.io/kubermatic-labs/boilerplate:v0.2.0
+          command:
+            - ./hack/verify-boilerplate.sh
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 100m
 
   - name: pre-dashboard-go-mod-verify
     run_if_changed: "^(go.sum|go.mod)$|\\.(go)$"
@@ -89,6 +89,7 @@ presubmits:
 
   - name: pre-dashboard-test-full-e2e
     run_if_changed: "^(cypress|hack/e2e)/"
+    optional: true
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     extra_refs:
@@ -144,6 +145,7 @@ presubmits:
 
   - name: pre-dashboard-test-full-e2e-ce
     run_if_changed: "^(cypress|hack/e2e)/"
+    optional: true
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     extra_refs:
