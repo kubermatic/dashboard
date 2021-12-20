@@ -21,7 +21,7 @@
 
     .mat-icon-button {
       &:hover {
-        background-color: color.adjust(map.get($colors, text), $alpha: -0.75%);
+        background-color: color.adjust(map.get($colors, text), $alpha: -0.75);
       }
 
       i {

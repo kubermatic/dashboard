@@ -92,10 +92,6 @@ export class ExternalMachineDeploymentDetailsComponent implements OnInit, OnDest
     return this._isMachineDeploymentLoaded && this._isClusterLoaded;
   }
 
-  getProjectID(): string {
-    return this.projectID;
-  }
-
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();

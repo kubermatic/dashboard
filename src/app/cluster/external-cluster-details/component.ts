@@ -26,9 +26,10 @@ import {ExternalCluster, ExternalClusterProvider} from '@shared/entity/external-
 import {ExternalMachineDeployment} from '@shared/entity/machine-deployment';
 import {Member} from '@shared/entity/member';
 import {ClusterMetrics, NodeMetrics} from '@shared/entity/metrics';
+import {Node} from '@shared/entity/node';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
-import {Subject, timer} from 'rxjs';
+import {forkJoin, Subject, timer} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 
 @Component({
@@ -37,21 +38,22 @@ import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
   styleUrls: ['./style.scss'],
 })
 export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
-  readonly Provider = ExternalClusterProvider;
   private readonly _refreshTime = 10;
   private readonly _metricsRefreshTime = 5;
-  projectId: string;
-  cluster: ExternalCluster;
-  provider: ExternalClusterProvider;
-  machineDeployments: ExternalMachineDeployment[] = [];
-  metrics: ClusterMetrics;
-  nodesMetrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
-  events: Event[] = [];
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
   private _metricsRefreshTimer = timer(0, this._appConfigService.getRefreshTimeBase() * this._metricsRefreshTime);
   private _refreshTimer = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
   private _unsubscribe: Subject<void> = new Subject<void>();
+  readonly Provider = ExternalClusterProvider;
+  projectID: string;
+  cluster: ExternalCluster;
+  provider: ExternalClusterProvider;
+  machineDeployments: ExternalMachineDeployment[] = [];
+  clusterMetrics: ClusterMetrics;
+  nodes: Node[] = [];
+  nodesMetrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
+  events: Event[] = [];
 
   constructor(
     private readonly _activatedRoute: ActivatedRoute,
@@ -64,17 +66,17 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.projectId = this._activatedRoute.snapshot.paramMap.get(PathParam.ProjectID);
-    const clusterId = this._activatedRoute.snapshot.paramMap.get(PathParam.ClusterID);
+    this.projectID = this._activatedRoute.snapshot.paramMap.get(PathParam.ProjectID);
+    const clusterID = this._activatedRoute.snapshot.paramMap.get(PathParam.ClusterID);
 
     this._userService.currentUser.pipe(take(1)).subscribe(user => (this._user = user));
 
     this._userService
-      .getCurrentUserGroup(this.projectId)
+      .getCurrentUserGroup(this.projectID)
       .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
     this._clusterService
-      .externalCluster(this.projectId, clusterId)
+      .externalCluster(this.projectID, clusterID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(cluster => {
         this.cluster = cluster;
@@ -82,23 +84,30 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
       });
 
     this._metricsRefreshTimer
-      .pipe(switchMap(_ => this._clusterService.externalClusterMetrics(this.projectId, clusterId)))
+      .pipe(switchMap(_ => this._clusterService.externalClusterMetrics(this.projectID, clusterID)))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(metrics => (this.metrics = metrics));
+      .subscribe(metrics => (this.clusterMetrics = metrics));
 
-    this._metricsRefreshTimer
-      .pipe(switchMap(_ => this._clusterService.externalClusterNodesMetrics(this.projectId, clusterId)))
+    this._refreshTimer
+      .pipe(switchMap(_ => this._clusterService.externalMachineDeployments(this.projectID, clusterID)))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(metrics => {
+      .subscribe(machineDeployments => (this.machineDeployments = machineDeployments));
+
+    this._refreshTimer
+      .pipe(
+        switchMap(_ =>
+          forkJoin([
+            this._clusterService.externalClusterNodes(this.projectID, clusterID),
+            this._clusterService.externalClusterNodesMetrics(this.projectID, clusterID),
+          ])
+        )
+      )
+      .subscribe(([nodes, metrics]) => {
+        this.nodes = nodes;
         const map = new Map<string, NodeMetrics>();
         metrics.forEach(m => map.set(m.name, m));
         this.nodesMetrics = map;
       });
-
-    this._refreshTimer
-      .pipe(switchMap(_ => this._clusterService.externalMachineDeployments(this.projectId, clusterId)))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(machineDeployments => (this.machineDeployments = machineDeployments));
   }
 
   ngOnDestroy(): void {
@@ -112,13 +121,13 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
 
   edit(): void {
     const dialog = this._matDialog.open(EditClusterConnectionDialogComponent);
-    dialog.componentInstance.projectId = this.projectId;
+    dialog.componentInstance.projectId = this.projectID;
     dialog.componentInstance.name = this.cluster.name;
 
     dialog
       .afterClosed()
       .pipe(filter(model => !!model))
-      .pipe(switchMap(model => this._clusterService.updateExternalCluster(this.projectId, this.cluster.id, model)))
+      .pipe(switchMap(model => this._clusterService.updateExternalCluster(this.projectID, this.cluster.id, model)))
       .pipe(take(1))
       .subscribe(_ => {
         this._clusterService.onClusterUpdate.next();
@@ -131,8 +140,8 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   disconnect(): void {
-    this._clusterService.showDisconnectClusterDialog(this.cluster, this.projectId).subscribe(_ => {
-      this._router.navigate(['/projects/' + this.projectId + '/clusters']);
+    this._clusterService.showDisconnectClusterDialog(this.cluster, this.projectID).subscribe(_ => {
+      this._router.navigate(['/projects/' + this.projectID + '/clusters']);
       this._notificationService.success(`The ${this.cluster.name} cluster was disconnected`);
     });
   }

@@ -60,7 +60,7 @@ limitations under the License.
             {{cluster?.id}}
           </div>
         </km-property>
-        <km-property>
+        <km-property *ngIf="provider !== Provider.Custom">
           <div value>
             <span class="km-provider-logo km-provider-logo-{{provider}}"></span>
           </div>
@@ -92,32 +92,39 @@ limitations under the License.
       </div>
 
       <div class="km-content-wrap"
-           *ngIf="metrics">
+           *ngIf="clusterMetrics">
         <km-property-usage name="Nodes CPU Usage"
                            unit="millicores"
-                           [used]="metrics?.nodes?.cpuTotalMillicores"
-                           [total]="metrics?.nodes?.cpuAvailableMillicores"></km-property-usage>
+                           [used]="clusterMetrics?.nodes?.cpuTotalMillicores"
+                           [total]="clusterMetrics?.nodes?.cpuAvailableMillicores"></km-property-usage>
 
         <km-property-usage name="Nodes Memory Usage"
                            unit="MiB"
-                           [used]="metrics?.nodes?.memoryTotalBytes"
-                           [total]="metrics?.nodes?.memoryAvailableBytes"></km-property-usage>
+                           [used]="clusterMetrics?.nodes?.memoryTotalBytes"
+                           [total]="clusterMetrics?.nodes?.memoryAvailableBytes"></km-property-usage>
 
         <km-property-usage name="Control Plane CPU Usage"
                            unit="millicores"
-                           [used]="metrics?.controlPlane?.cpuTotalMillicores"></km-property-usage>
+                           [used]="clusterMetrics?.controlPlane?.cpuTotalMillicores"></km-property-usage>
 
         <km-property-usage name="Control Plane Memory Usage"
                            unit="MiB"
-                           [used]="metrics?.controlPlane?.memoryTotalBytes"></km-property-usage>
+                           [used]="clusterMetrics?.controlPlane?.memoryTotalBytes"></km-property-usage>
       </div>
     </mat-card-content>
   </mat-card>
 
-  <km-external-machine-deployment-list [cluster]="cluster"
+  <km-external-machine-deployment-list *ngIf="provider !== Provider.Custom"
+                                       [cluster]="cluster"
                                        [machineDeployments]="machineDeployments"
-                                       [projectID]="projectId"
+                                       [projectID]="projectID"
                                        [isClusterRunning]="true"></km-external-machine-deployment-list>
+
+  <km-external-node-list *ngIf="provider === Provider.Custom"
+                         [cluster]="cluster"
+                         [nodes]="nodes"
+                         [nodesMetrics]="nodesMetrics"
+                         [projectID]="projectID"></km-external-node-list>
 
   <km-event-card [events]="events"></km-event-card>
 
