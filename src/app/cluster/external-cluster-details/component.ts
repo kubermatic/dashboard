@@ -73,6 +73,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
 
     this._userService
       .getCurrentUserGroup(this.projectID)
+      .pipe(takeUntil(this._unsubscribe))
       .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
     this._clusterService
@@ -102,6 +103,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
           ])
         )
       )
+      .pipe(takeUntil(this._unsubscribe))
       .subscribe(([nodes, metrics]) => {
         this.nodes = nodes;
         const map = new Map<string, NodeMetrics>();
