@@ -58,19 +58,6 @@ export class Cluster {
     }
   }
 
-  // for now keep in sync with
-  // https://github.com/kubermatic/kubermatic/blob/master/pkg/webhook/cluster/validation/validation.go#L50-L52
-  static getCNIVersions(cniPluginType: string): string[] {
-    switch (cniPluginType) {
-      case CNIPlugin.Canal:
-        return ['v3.8', 'v3.19', 'v3.20'];
-      case CNIPlugin.Cilium:
-        return ['v1.11'];
-      default:
-        return [];
-    }
-  }
-
   static newEmptyClusterEntity(): Cluster {
     return {
       spec: {
@@ -240,6 +227,11 @@ export class CNIPluginConfig {
 export class NetworkRanges {
   cidrBlocks: string[];
   clusterNetwork?: ClusterNetwork;
+}
+
+export class CNIPluginVersions {
+  cniPluginType: string;
+  versions: string[];
 }
 
 export enum ProxyMode {

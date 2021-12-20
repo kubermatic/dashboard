@@ -25,6 +25,7 @@ import {coerce, lt} from 'semver';
 })
 export class CNIVersionComponent implements OnInit {
   @Input() cluster: Cluster;
+  @Input() cniVersions: string[] = [];
   @Input() isClusterRunning = false;
   upgradeAvailable = false;
   versions: string[] = [];
@@ -32,8 +33,15 @@ export class CNIVersionComponent implements OnInit {
   constructor(private readonly _matDialog: MatDialog) {}
 
   ngOnInit(): void {
-    const cniVersions = Cluster.getCNIVersions(this.cluster.spec.cniPlugin.type);
-    cniVersions.forEach(version => {
+    this.processData();
+  }
+
+  ngOnChanges(): void {
+    this.processData();
+  }
+
+  processData(): void {
+    this.cniVersions.forEach(version => {
       const isUpgrade = lt(coerce(this.cluster.spec.cniPlugin.version), coerce(version));
       this.upgradeAvailable = this.upgradeAvailable ? true : isUpgrade;
       if (isUpgrade) {

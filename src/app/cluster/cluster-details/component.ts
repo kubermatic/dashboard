@@ -31,6 +31,7 @@ import {Addon} from '@shared/entity/addon';
 import {
   Cluster,
   CNIPlugin,
+  CNIPluginVersions,
   ExternalCCMMigrationStatus,
   getClusterProvider,
   getExternalCCMMigrationStatusMessage,
@@ -60,6 +61,7 @@ import {EditSSHKeysComponent} from './edit-sshkeys/component';
 import {RevokeTokenComponent} from './revoke-token/component';
 import {ShareKubeconfigComponent} from './share-kubeconfig/component';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
+import {coerce, compare} from 'semver';
 
 @Component({
   selector: 'km-cluster-details',
@@ -85,6 +87,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   events: Event[] = [];
   addons: Addon[] = [];
   upgrades: MasterVersion[] = [];
+  cniVersions: string[] = [];
   constraints: Constraint[] = [];
   gatekeeperConfig: GatekeeperConfig;
   alertmanagerConfig: AlertmanagerConfig;
@@ -158,8 +161,11 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           const reload$ = []
             .concat(
               this._canReloadVersions()
-                ? this._clusterService.upgrades(this.projectID, this.cluster.id)
-                : of([] as MasterVersion[])
+                ? [
+                    this._clusterService.upgrades(this.projectID, this.cluster.id),
+                    this._clusterService.cniVersions(this.projectID, this.cluster.id),
+                  ]
+                : [of([] as MasterVersion[]), of({} as CNIPluginVersions)]
             )
             .concat(
               this.isClusterRunning
@@ -188,6 +194,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                 : [of([] as Constraint[]), of({} as GatekeeperConfig)]
             ) as [
             Observable<MasterVersion[]>,
+            Observable<CNIPluginVersions>,
             Observable<Addon[]>,
             Observable<Node[]>,
             Observable<MachineDeployment[]>,
@@ -205,6 +212,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       .subscribe({
         next: ([
           upgrades,
+          cniVersions,
           addons,
           nodes,
           machineDeployments,
@@ -215,6 +223,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           gatekeeperConfig,
         ]: [
           MasterVersion[],
+          CNIPluginVersions,
           Addon[],
           Node[],
           MachineDeployment[],
@@ -231,6 +240,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.alertmanagerConfig = alertmanagerConfig;
           this.ruleGroups = ruleGroups;
           this.upgrades = _.isEmpty(upgrades) ? [] : upgrades;
+          this.cniVersions = _.isEmpty(cniVersions)
+            ? []
+            : cniVersions.versions.sort((a, b) => compare(coerce(a), coerce(b)));
           this.constraints = constraints;
           this.gatekeeperConfig = gatekeeperConfig;
         },

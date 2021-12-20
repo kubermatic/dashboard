@@ -23,7 +23,14 @@ import {LabelFormComponent} from '@shared/components/label-form/component';
 import {TaintFormComponent} from '@shared/components/taint-form/component';
 import {Addon} from '@shared/entity/addon';
 import {EtcdRestore} from '@shared/entity/backup';
-import {Cluster, ClusterPatch, Finalizer, MasterVersion, ProviderSettingsPatch} from '@shared/entity/cluster';
+import {
+  Cluster,
+  ClusterPatch,
+  Finalizer,
+  MasterVersion,
+  ProviderSettingsPatch,
+  CNIPluginVersions,
+} from '@shared/entity/cluster';
 import {Event} from '@shared/entity/event';
 import {Health} from '@shared/entity/health';
 import {ClusterMetrics, NodeMetrics} from '@shared/entity/metrics';
@@ -161,6 +168,13 @@ export class ClusterService {
         return of<MasterVersion[]>([]).pipe(catchError(() => of<MasterVersion[]>([])));
       })
     );
+  }
+
+  cniVersions(projectID: string, clusterID: string): Observable<CNIPluginVersions> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/cniversions`;
+    return this._http
+      .get<CNIPluginVersions>(url)
+      .pipe(catchError(() => of<CNIPluginVersions>({} as CNIPluginVersions)));
   }
 
   metrics(projectID: string, clusterID: string): Observable<ClusterMetrics> {
