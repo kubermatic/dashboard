@@ -100,7 +100,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control(this._nodeDataService.nodeData.name, [
-        Validators.pattern('[a-zA-Z0-9-]*'),
+        Validators.pattern('[a-z0-9]+[a-z0-9-]*[a-z0-9]+'),
       ]),
       [Controls.Count]: this._builder.control(0),
       [Controls.DynamicConfig]: this._builder.control(this._nodeDataService.nodeData.dynamicConfig),

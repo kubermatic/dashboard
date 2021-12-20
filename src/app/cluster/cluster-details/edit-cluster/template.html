@@ -37,7 +37,7 @@ limitations under the License.
           Name must be at least {{form.get(Controls.Name).getError('minlength').requiredLength}} characters.
         </mat-error>
         <mat-error *ngIf="form.get(Controls.Name).hasError('pattern')">
-          Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -).
+          Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash.
         </mat-error>
       </mat-form-field>
 

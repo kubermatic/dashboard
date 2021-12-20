@@ -105,7 +105,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       [Controls.Name]: new FormControl(this.cluster.name, [
         Validators.required,
         Validators.minLength(this._nameMinLen),
-        Validators.pattern('[a-zA-Z0-9-]*'),
+        Validators.pattern('[a-z0-9]+[a-z0-9-]*[a-z0-9]+'),
       ]),
       [Controls.ContainerRuntime]: new FormControl(this.cluster.spec.containerRuntime || ContainerRuntime.Containerd, [
         Validators.required,
