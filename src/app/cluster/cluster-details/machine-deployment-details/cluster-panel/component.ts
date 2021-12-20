@@ -14,6 +14,7 @@
 
 import {Component, Input} from '@angular/core';
 import {Router} from '@angular/router';
+import {ParamsService} from '@core/services/params';
 import {Cluster} from '@shared/entity/cluster';
 import {Datacenter} from '@shared/entity/datacenter';
 import {ExternalCluster} from '@shared/entity/external-cluster-model';
@@ -30,7 +31,7 @@ export class ClusterPanelComponent {
   @Input() projectID: string;
 
   private get _isExternalCluster(): boolean {
-    return ExternalCluster.isExternalCluster((this.cluster as ExternalCluster).cloud);
+    return this._params.getCurrentUrl().includes('/external/');
   }
 
   get region(): string {
@@ -45,7 +46,7 @@ export class ClusterPanelComponent {
     return `${this.datacenter.spec.country} (${this.datacenter.spec.location})`;
   }
 
-  constructor(private readonly _router: Router) {}
+  constructor(private readonly _router: Router, private readonly _params: ParamsService) {}
 
   navigate(): void {
     if (this._isExternalCluster) {
