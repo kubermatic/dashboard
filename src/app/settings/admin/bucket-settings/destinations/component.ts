@@ -16,10 +16,11 @@ import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import {BackupService} from '@core/services/backup';
 import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
 import {ConfirmationDialogComponent, ConfirmationDialogConfig} from '@shared/components/confirmation-dialog/component';
-import {AdminSeed, BackupDestination, Destinations} from '@shared/entity/datacenter';
+import {AdminSeed, BackupDestination} from '@shared/entity/datacenter';
 import {DestinationDialog, Mode} from './destination-dialog/component';
 import {EditCredentialsDialog} from './edit-credentials-dialog/component';
 import {filter, switchMap, take} from 'rxjs/operators';
@@ -38,6 +39,7 @@ export class DestinationsComponent implements OnInit {
 
   constructor(
     private readonly _datacenterService: DatacenterService,
+    private readonly _backupService: BackupService,
     private readonly _matDialog: MatDialog,
     private readonly _notificationService: NotificationService
   ) {}
@@ -125,17 +127,11 @@ export class DestinationsComponent implements OnInit {
       } as ConfirmationDialogConfig,
     };
 
-    const destinations: Destinations = this.seed.spec.etcdBackupRestore.destinations;
-    delete destinations[destination.destinationName];
-
-    const configuration: AdminSeed = this.seed;
-    configuration.spec.etcdBackupRestore.destinations = destinations;
-
     this._matDialog
       .open(ConfirmationDialogComponent, dialogConfig)
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
-      .pipe(switchMap(_ => this._datacenterService.patchAdminSeed(configuration.name, configuration)))
+      .pipe(switchMap(_ => this._backupService.deleteBackupDestination(this.seed.name, destination.destinationName)))
       .pipe(take(1))
       .subscribe(_ => {
         this._notificationService.success(`The destination ${destination.destinationName} was deleted`);

@@ -28,6 +28,7 @@ enum Type {
 @Injectable()
 export class BackupService {
   private readonly _refreshTime = 10; // in seconds
+  private _restRoot: string = environment.restRoot;
   private _newRestRoot: string = environment.newRestRoot;
   private _headers: HttpHeaders = new HttpHeaders();
   private _automaticBackups$ = new Map<string, Observable<EtcdBackupConfig[]>>();
@@ -136,5 +137,10 @@ export class BackupService {
   private _getBackup(projectID: string, clusterID: string, backupName: string): Observable<EtcdBackupConfig> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/etcdbackupconfigs/${backupName}`;
     return this._http.get<EtcdBackupConfig>(url, {headers: this._headers});
+  }
+
+  deleteBackupDestination(seed: string, destination: string): Observable<any> {
+    const url = `${this._restRoot}/admin/seeds/${seed}/backupdestinations/${destination}`;
+    return this._http.delete(url);
   }
 }
