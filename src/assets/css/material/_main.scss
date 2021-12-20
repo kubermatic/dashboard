@@ -498,7 +498,7 @@ button {
   &.mat-icon-button {
     @include mixins.size(45px);
 
-    border-radius: variables.$border-radius !important;
+    border-radius: variables.$border-radius;
 
     &[disabled] {
       * {
