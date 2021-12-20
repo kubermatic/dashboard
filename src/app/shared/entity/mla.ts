@@ -23,6 +23,7 @@ export class AlertmanagerSpec {
 export class RuleGroup {
   data: string;
   type: RuleGroupType;
+  isDefault?: boolean;
 }
 
 export class RuleGroupName {
