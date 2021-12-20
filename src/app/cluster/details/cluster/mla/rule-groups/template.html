@@ -79,7 +79,7 @@ limitations under the License.
            fxLayoutGap="8px">
         <span>{{getName(element.data)}}</span>
         <span *ngIf="element.isDefault"
-              class="km-label-primary">Admin Rule Group</span>
+              class="km-label-primary admin-label">Admin Rule Group</span>
       </div>
     </td>
   </ng-container>
@@ -103,11 +103,13 @@ limitations under the License.
       <div class="km-table-actions"
            fxLayoutAlign="end">
         <button mat-icon-button
-                (click)="edit(element, $event)">
+                (click)="edit(element, $event)"
+                [disabled]="element.isDefault">
           <i class="km-icon-mask km-icon-edit"></i>
         </button>
         <button mat-icon-button
-                (click)="delete(element, $event)">
+                (click)="delete(element, $event)"
+                [disabled]="element.isDefault">
           <i class="km-icon-mask km-icon-delete"></i>
         </button>
       </div>
@@ -119,7 +121,7 @@ limitations under the License.
       *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row
       *matRowDef="let row; columns: displayedColumns"
-      class="km-mat-row km-pointer"
+      class="km-mat-row"
       [attr.id]="row.name"></tr>
 </table>
 
