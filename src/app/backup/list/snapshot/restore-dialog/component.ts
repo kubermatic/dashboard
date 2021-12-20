@@ -23,6 +23,7 @@ export interface RestoreSnapshotDialogConfig {
   backupName: string;
   clusterID: string;
   projectID: string;
+  destination: string;
 }
 
 @Component({
@@ -53,6 +54,7 @@ export class RestoreSnapshotDialogComponent {
       spec: {
         backupName: this.config.backupName,
         clusterId: this.config.clusterID,
+        destination: this.config.destination,
       } as EtcdRestoreSpec,
     } as EtcdRestore;
   }
