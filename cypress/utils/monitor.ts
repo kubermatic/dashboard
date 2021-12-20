@@ -19,6 +19,7 @@ export enum RequestType {
   POST = 'POST',
   PUT = 'PUT',
   PATCH = 'PATCH',
+  DELETE = 'DELETE',
 }
 
 export enum ResponseType {

@@ -34,6 +34,7 @@ export default async (on, config) => {
   } else {
     // TODO: Remove it after fixing flaky tests.
     ignored = [
+      '**/integration/providers/anexia.spec.ts',
       '**/integration/providers/equinix.spec.ts',
       '**/integration/providers/vsphere.spec.ts',
       '**/integration/stories/opa.spec.ts',

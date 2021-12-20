@@ -20,29 +20,10 @@ limitations under the License.
   <div fxFlex></div>
   <button id="km-add-external-cluster-btn"
           mat-flat-button
-          color="alternative"
-          *ngIf="(adminSettings$ | async).enableExternalClusterImport"
-          [disabled]="!canAdd()"
+          [disabled]="!can(Permission.Create)"
           (click)="addExternalCluster()">
     <i class="km-icon-mask km-icon-add"></i>
     <span>Add External Cluster</span>
-  </button>
-  <button mat-flat-button
-          type="button"
-          fxLayoutAlign="center center"
-          [disabled]="!canAdd()"
-          (click)="selectTemplate()">
-    <i class="km-icon-mask km-icon-add"></i>
-    <span>Create Clusters from Template</span>
-  </button>
-  <button id="km-add-cluster-top-btn"
-          mat-flat-button
-          type="button"
-          fxLayoutAlign="center center"
-          [disabled]="!canAdd()"
-          (click)="loadWizard()">
-    <i class="km-icon-mask km-icon-add"></i>
-    <span>Create Cluster</span>
   </button>
 </div>
 
@@ -52,16 +33,15 @@ limitations under the License.
            mat-table
            matSort
            [dataSource]="dataSource"
-           [trackBy]="trackByClusterID">
+           [trackBy]="trackBy">
       <ng-container matColumnDef="status">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell"></th>
         <td mat-cell
             *matCellDef="let element">
-          <i *ngIf="!element.isExternal"
-             [matTooltip]="getHealthStatus(element).message"
-             [ngClass]="getHealthStatus(element).color"
+          <i [matTooltip]="getStatus(element.status.state)"
+             [ngClass]="getStatusColor(element.status.state)"
              class="km-vertical-center"></i>
         </td>
       </ng-container>
@@ -76,14 +56,7 @@ limitations under the License.
             *matCellDef="let element"
             [attr.id]="'km-clusters-' + element.name">
           <div fxLayoutAlign=" center"
-               fxLayoutGap="8px">
-            <span>{{element.name}}</span>
-            <div *ngIf="isRestoring(element.id)"
-                 class="km-update-available-badge">
-              Restoring
-            </div>
-            <span *ngIf="element.isExternal"
-                  class="km-label-primary">External</span>
+               fxLayoutGap="8px">{{element.name}}
           </div>
         </td>
       </ng-container>
@@ -107,21 +80,8 @@ limitations under the License.
         </th>
         <td mat-cell
             *matCellDef="let element">
-          <span *ngIf="!element.isExternal && !!element.spec.cloud"
-                class="km-provider-logo km-provider-logo-{{getProvider(element.spec.cloud)}}"></span>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="region">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell">Region
-        </th>
-        <td mat-cell
-            *matCellDef="let element">
-          <ng-container *ngIf="!element.isExternal && !!nodeDC[element.id]">
-            {{nodeDC[element.id].spec.country}} ({{nodeDC[element.id].spec.location}})
-          </ng-container>
+          <span *ngIf="!!element.cloud"
+                class="km-provider-logo km-provider-logo-{{getProvider(element.cloud)}}"></span>
         </td>
       </ng-container>
 
@@ -152,19 +112,10 @@ limitations under the License.
               </ng-container>
 
               <ng-container *ngSwitchCase="false">
-                <button *ngIf="!element.isExternal"
-                        mat-icon-button
-                        [attr.id]="'km-delete-cluster-' + element.name"
-                        matTooltip="Delete Cluster"
-                        (click)="deleteClusterDialog(element, $event)"
-                        [disabled]="!canDelete() || isRestoring(element.id)">
-                  <i class="km-icon-mask km-icon-delete"></i>
-                </button>
-                <button *ngIf="element.isExternal"
-                        mat-icon-button
+                <button mat-icon-button
                         matTooltip="Disconnect Cluster"
                         (click)="disconnectClusterDialog(element, $event)"
-                        [disabled]="!canDelete()">
+                        [disabled]="!can(Permission.Delete)">
                   <i class="km-icon-mask km-icon-disconnect"></i>
                 </button>
               </ng-container>
@@ -178,19 +129,18 @@ limitations under the License.
           *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row
           *matRowDef="let row; columns: displayedColumns"
-          [ngClass]="!isRestoring(row.id) ? 'km-mat-row km-pointer' : ''"
-          [matTooltip]="isRestoring(row.id) ? 'Access to this cluster is disabled due to pending restore process' : ''"
-          (click)="!isRestoring(row.id) ? navigateToCluster(row) : null"></tr>
+          class="km-mat-row km-pointer"
+          (click)="navigateToCluster(row)"></tr>
     </table>
 
     <div class="km-row km-empty-list-msg"
          *ngIf="isInitialized && isEmpty(clusters)">
-      No clusters available.
+      No external clusters available.
     </div>
 
     <div class="km-row km-empty-list-msg"
          *ngIf="isInitialized && !isEmpty(clusters) && isEmpty(dataSource.filteredData)">
-      No clusters found.
+      No external clusters found.
     </div>
 
     <div class="km-row"

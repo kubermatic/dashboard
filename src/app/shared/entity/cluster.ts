@@ -42,7 +42,6 @@ export class Cluster {
   labels?: object;
   inheritedLabels?: object;
   credential?: string;
-  isExternal?: boolean = false;
 
   static getProvider(cloud: CloudSpec): string {
     const providers = Object.keys(cloud);

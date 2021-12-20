@@ -24,7 +24,7 @@ import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {Observable, of} from 'rxjs';
 import {switchMap, take, tap} from 'rxjs/operators';
 import {Auth} from './auth/service';
-import {ExternalCluster} from '@shared/entity/external-cluster-model';
+import {ExternalCluster} from '@shared/entity/external-cluster';
 
 @Injectable()
 export class PageTitleService {
