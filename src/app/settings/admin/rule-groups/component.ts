@@ -48,6 +48,7 @@ export class AdminSettingsRuleGroupsComponent implements OnInit, OnChanges, OnDe
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
+  private _ruleGroupsMap = new Map<string, RuleGroup[]>();
   private _unsubscribe = new Subject<void>();
 
   constructor(
@@ -73,28 +74,9 @@ export class AdminSettingsRuleGroupsComponent implements OnInit, OnChanges, OnDe
 
     this._datacenterService.seeds.pipe(takeUntil(this._unsubscribe)).subscribe(seeds => {
       this.seeds = seeds;
-      this._getAdminRuleGroups();
     });
-  }
 
-  private _getAdminRuleGroups(): void {
-    this.adminRuleGroups = [];
-
-    this.seeds.forEach(seed => {
-      this._mlaService
-        .adminRuleGroups(seed)
-        .pipe(take(1))
-        .subscribe((ruleGroups: RuleGroup[]) => {
-          ruleGroups.forEach(group => {
-            this.adminRuleGroups.push({
-              seed: seed,
-              type: group.type,
-              data: group.data,
-            });
-          });
-          this.dataSource.data = this.adminRuleGroups;
-        });
-    });
+    this._getAdminRuleGroups();
   }
 
   ngOnChanges(): void {
@@ -188,5 +170,32 @@ export class AdminSettingsRuleGroupsComponent implements OnInit, OnChanges, OnDe
         this._notificationService.success(`The Rule Group ${ruleGroupName} was deleted`);
         this._mlaService.refreshAdminRuleGroups();
       });
+  }
+
+  private _getAdminRuleGroups(): void {
+    this.seeds.forEach(seed => {
+      this._mlaService
+        .adminRuleGroups(seed)
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe((ruleGroups: RuleGroup[]) => {
+          this._ruleGroupsMap.set(seed, ruleGroups);
+          this._mapToArray();
+        });
+    });
+  }
+
+  private _mapToArray(): void {
+    const tempAdminRuleGroups: AdminRuleGroup[] = [];
+    for (const [k, v] of this._ruleGroupsMap) {
+      for (const i of v) {
+        tempAdminRuleGroups.push({
+          seed: k,
+          type: i.type,
+          data: i.data,
+        });
+      }
+    }
+    this.adminRuleGroups = tempAdminRuleGroups;
+    this.dataSource.data = this.adminRuleGroups;
   }
 }
