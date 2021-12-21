@@ -61,10 +61,12 @@ import {RuleGroupsComponent} from './cluster-details/mla/rule-groups/component';
 import {RuleGroupDialog} from './cluster-details/mla/rule-groups/rule-group-dialog/component';
 import {ShareKubeconfigComponent} from './cluster-details/share-kubeconfig/component';
 import {VersionPickerComponent} from './cluster-details/version-picker/component';
-import {ClusterListComponent} from './cluster-list/component';
+import {ClusterListComponent} from './list/cluster/component';
 import {ExternalClusterDetailsComponent} from './external-cluster-details/component';
 import {ExternalNodeListComponent} from './external-cluster-details/external-node-list/component';
 import {ClusterRoutingModule} from './routing';
+import {ExternalClusterListComponent} from '@app/cluster/list/external-cluster/component';
+import {ClustersComponent} from '@app/cluster/list/component';
 
 const components: any[] = [
   ClusterDetailsComponent,
@@ -112,6 +114,8 @@ const components: any[] = [
   MLAComponent,
   CNIVersionComponent,
   CNIVersionDialog,
+  ExternalClusterListComponent,
+  ClustersComponent,
 ];
 
 const dialogs: any[] = [AddMachineNetworkComponent];

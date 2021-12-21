@@ -22,7 +22,7 @@ import {PathParam} from '@core/services/params';
 import {UserService} from '@core/services/user';
 import {EditClusterConnectionDialogComponent} from '@shared/components/external-cluster-data-dialog/component';
 import {Event} from '@shared/entity/event';
-import {ExternalCluster, ExternalClusterProvider} from '@shared/entity/external-cluster-model';
+import {ExternalCluster, ExternalClusterProvider} from '@shared/entity/external-cluster';
 import {ExternalMachineDeployment} from '@shared/entity/machine-deployment';
 import {Member} from '@shared/entity/member';
 import {ClusterMetrics, NodeMetrics} from '@shared/entity/metrics';

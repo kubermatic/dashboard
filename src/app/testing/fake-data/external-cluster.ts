@@ -12,6 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-.km-code-block {
-  word-break: break-all;
+import {ExternalCluster, ExternalClusterState} from '@shared/entity/external-cluster';
+
+export function fakeCustomExternalCluster(): ExternalCluster {
+  return {
+    creationTimestamp: new Date(),
+    id: '4k6txp5sq',
+    name: 'nifty-haibt',
+    spec: {
+      version: '1.8.5',
+    },
+    status: {
+      state: ExternalClusterState.Running,
+      statusMessage: 'Running',
+    },
+    cloud: {},
+  };
 }

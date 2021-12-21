@@ -18,13 +18,13 @@ import {ExternalMachineDeploymentDetailsComponent} from '@app/cluster/external-c
 import {AuthGuard, AuthzGuard} from '@core/services/auth/guard';
 import {ClusterDetailsComponent} from './cluster-details/component';
 import {MachineDeploymentDetailsComponent} from './cluster-details/machine-deployment-details/component';
-import {ClusterListComponent} from './cluster-list/component';
 import {ExternalClusterDetailsComponent} from './external-cluster-details/component';
+import {ClustersComponent} from '@app/cluster/list/component';
 
 const routes: Routes = [
   {
     path: '',
-    component: ClusterListComponent,
+    component: ClustersComponent,
     canActivate: [AuthGuard, AuthzGuard],
   },
   {

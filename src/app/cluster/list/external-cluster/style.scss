@@ -12,6 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-.km-code-block {
-  word-break: break-all;
+@use 'mixins';
+
+@include mixins.breakpoint('small') {
+  .btn-text-default {
+    display: none;
+  }
+}
+
+.km-provider-logo {
+  background-position: left;
+  margin: 0 8px 0 0;
+  max-width: 150px;
+  min-width: 70px;
 }
