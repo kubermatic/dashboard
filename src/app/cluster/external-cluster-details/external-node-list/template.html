@@ -22,7 +22,8 @@ limitations under the License.
            mat-table
            multiTemplateDataRows
            matSort
-           [dataSource]="dataSource">
+           [dataSource]="dataSource"
+           [hidden]="isLoadingData()">
 
       <ng-container matColumnDef="stateArrow">
         <th mat-header-cell
