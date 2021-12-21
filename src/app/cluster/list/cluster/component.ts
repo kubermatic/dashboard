@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -21,7 +21,6 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ApiService} from '@core/services/api';
 import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
-import {NotificationService} from '@core/services/notification';
 import {PathParam} from '@core/services/params';
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
@@ -35,16 +34,13 @@ import {Health} from '@shared/entity/health';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
-import {AdminSettings} from '@shared/entity/settings';
 import {GroupConfig} from '@shared/model/Config';
 import {ClusterHealthStatus} from '@shared/utils/health-status/cluster-health-status';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import _ from 'lodash';
-import {EMPTY, forkJoin, Observable, of, onErrorResumeNext, Subject} from 'rxjs';
+import {EMPTY, forkJoin, of, onErrorResumeNext, Subject} from 'rxjs';
 import {catchError, distinctUntilChanged, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import {ClusterDeleteConfirmationComponent} from '../cluster-details/cluster-delete-confirmation/component';
-import {AddExternalClusterDialogComponent} from '@shared/components/add-external-cluster-dialog/component';
-import {ExternalCluster} from '@shared/entity/external-cluster-model';
+import {ClusterDeleteConfirmationComponent} from '../../cluster-details/cluster-delete-confirmation/component';
 
 @Component({
   selector: 'km-cluster-list',
@@ -52,12 +48,12 @@ import {ExternalCluster} from '@shared/entity/external-cluster-model';
   styleUrls: ['./style.scss'],
 })
 export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
+  readonly Permission = Permission;
   clusters: Cluster[] = [];
   isInitialized = false;
   nodeDC: Datacenter[] = [];
   health: Health[] = [];
   machineDeployments: MachineDeployment[][] = [];
-  provider = [];
   displayedColumns: string[] = ['status', 'name', 'labels', 'provider', 'region', 'created', 'actions'];
   dataSource = new MatTableDataSource<Cluster>();
   searchQuery: string;
@@ -70,10 +66,6 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   private _etcdRestores: EtcdRestore[] = [];
   private _projectChange$ = new Subject<void>();
 
-  get adminSettings$(): Observable<AdminSettings> {
-    return this._settingsService.adminSettings;
-  }
-
   constructor(
     private readonly _clusterService: ClusterService,
     private readonly _projectService: ProjectService,
@@ -83,7 +75,6 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _activeRoute: ActivatedRoute,
     private readonly _matDialog: MatDialog,
     private readonly _apiService: ApiService,
-    private readonly _notificationService: NotificationService,
     private readonly _settingsService: SettingsService
   ) {}
 
@@ -130,43 +121,31 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
           this.isInitialized = true;
 
           return forkJoin(
-            clusters
-              .filter(cluster => !cluster.isExternal)
-              .map(cluster => {
-                return (
-                  this._datacenterService
-                    .getDatacenter(cluster.spec.cloud.dc)
-                    .pipe(tap(datacenter => (this.nodeDC[cluster.id] = datacenter)))
-                    .pipe(switchMap(_ => this._clusterService.health(this._selectedProject.id, cluster.id)))
-                    // We need to resume on error, otherwise subscription will be canceled and clusters will stop
-                    // refreshing.
-                    .pipe(catchError(() => onErrorResumeNext(EMPTY)))
-                    .pipe(tap(health => (this.health[cluster.id] = health)))
-                    .pipe(
-                      switchMap(_ =>
-                        Health.allHealthy(this.health[cluster.id])
-                          ? this._apiService.getMachineDeployments(cluster.id, this._selectedProject.id)
-                          : of([])
-                      )
+            clusters.map(cluster => {
+              return (
+                this._datacenterService
+                  .getDatacenter(cluster.spec.cloud.dc)
+                  .pipe(tap(datacenter => (this.nodeDC[cluster.id] = datacenter)))
+                  .pipe(switchMap(_ => this._clusterService.health(this._selectedProject.id, cluster.id)))
+                  // We need to resume on error, otherwise subscription will be canceled and clusters will stop
+                  // refreshing.
+                  .pipe(catchError(() => onErrorResumeNext(EMPTY)))
+                  .pipe(tap(health => (this.health[cluster.id] = health)))
+                  .pipe(
+                    switchMap(_ =>
+                      Health.allHealthy(this.health[cluster.id])
+                        ? this._apiService.getMachineDeployments(cluster.id, this._selectedProject.id)
+                        : of([])
                     )
-                    .pipe(tap(machineDeployments => (this.machineDeployments[cluster.id] = machineDeployments)))
-                );
-              })
+                  )
+                  .pipe(tap(machineDeployments => (this.machineDeployments[cluster.id] = machineDeployments)))
+              );
+            })
           );
         })
       )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe();
-  }
-
-  selectTemplate(): void {
-    const dialogConfig: MatDialogConfig = {
-      data: {
-        projectID: this._selectedProject.id,
-      },
-    };
-
-    this._matDialog.open(SelectClusterTemplateDialogComponent, dialogConfig);
   }
 
   ngOnChanges(): void {
@@ -180,6 +159,10 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
 
   onSearch(query: string): void {
     this.dataSource.filter = query;
+  }
+
+  selectTemplate(): void {
+    this._matDialog.open(SelectClusterTemplateDialogComponent, {data: {projectID: this._selectedProject.id}});
   }
 
   private _filter(cluster: Cluster, query: string): boolean {
@@ -205,11 +188,6 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
       }
     }
 
-    // Following checks are only for internal clusters.
-    if (cluster.isExternal) {
-      return false;
-    }
-
     // Check provider.
     if (Cluster.getProvider(cluster.spec.cloud).includes(query)) {
       return true;
@@ -227,29 +205,16 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     return ClusterHealthStatus.getHealthStatus(cluster, this.health[cluster.id]);
   }
 
-  canAdd(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, Permission.Create);
-  }
-
-  canDelete(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, Permission.Delete);
+  can(permission: Permission): boolean {
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, permission);
   }
 
   loadWizard(): void {
     this._router.navigate([`/projects/${this._selectedProject.id}/wizard`]);
   }
 
-  addExternalCluster(): void {
-    const dialog = this._matDialog.open(AddExternalClusterDialogComponent);
-    dialog.componentInstance.projectId = this._selectedProject.id;
-  }
-
   navigateToCluster(cluster: Cluster): void {
-    if (cluster.isExternal) {
-      this._router.navigate([`/projects/${this._selectedProject.id}/clusters/external/${cluster.id}`]);
-    } else {
-      this._router.navigate([`/projects/${this._selectedProject.id}/clusters/${cluster.id}`]);
-    }
+    this._router.navigate([`/projects/${this._selectedProject.id}/clusters/${cluster.id}`]);
   }
 
   getProvider(cloud: CloudSpec): string {
@@ -264,19 +229,11 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     modal.componentInstance.projectID = this._selectedProject.id;
   }
 
-  disconnectClusterDialog(cluster: ExternalCluster, event: Event): void {
-    event.stopPropagation();
-
-    this._clusterService.showDisconnectClusterDialog(cluster, this._selectedProject.id).subscribe(_ => {
-      this._notificationService.success(`The ${cluster.name} cluster was disconnected`);
-    });
-  }
-
   isPaginatorVisible(): boolean {
     return !_.isEmpty(this.clusters) && this.paginator && this.clusters.length > this.paginator.pageSize;
   }
 
-  trackByClusterID(cluster: Cluster): string {
+  trackBy(cluster: Cluster): string {
     return cluster.id;
   }
 

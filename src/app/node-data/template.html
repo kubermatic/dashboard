@@ -47,7 +47,7 @@ limitations under the License.
       </button>
       <mat-hint *ngIf="!dialogEditMode">Leave this field blank to use automatic name generation.</mat-hint>
       <mat-error *ngIf="form.get(Controls.Name).hasError( 'pattern')">
-        Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -).
+        Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash.
       </mat-error>
     </mat-form-field>
 

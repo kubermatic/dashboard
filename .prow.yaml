@@ -89,6 +89,7 @@ presubmits:
 
   - name: pre-dashboard-test-full-e2e
     run_if_changed: "^(cypress|hack/e2e)/"
+    optional: true
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     extra_refs:
@@ -144,6 +145,7 @@ presubmits:
 
   - name: pre-dashboard-test-full-e2e-ce
     run_if_changed: "^(cypress|hack/e2e)/"
+    optional: true
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     extra_refs:

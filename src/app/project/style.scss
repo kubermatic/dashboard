@@ -66,6 +66,12 @@ $project-card-width: 330px;
     margin-top: 20px;
     padding: 0;
 
+    button {
+      &.mat-icon-button {
+        @include mixins.size(40px);
+      }
+    }
+
     &:hover {
       box-shadow: variables.$border-box-shadow-hover;
 
