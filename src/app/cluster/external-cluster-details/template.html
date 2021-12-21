@@ -37,7 +37,11 @@ limitations under the License.
       <mat-card-title fxFlex
                       fxLayout="row"
                       fxLayoutAlign=" center"
-                      class="km-cluster-name">
+                      class="km-cluster-name"
+                      fxLayoutGap="20px">
+        <i [matTooltip]="getStatus()"
+           [ngClass]="getStatusColor()"
+           class="km-cluster-health"></i>
         <span ngxClipboard
               [cbContent]="cluster.name"
               matTooltip="Click to copy"

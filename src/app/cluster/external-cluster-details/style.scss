@@ -13,14 +13,24 @@
 // limitations under the License.
 
 @use 'mixins';
+@use 'variables';
 
 .km-cluster-detail-actions .mat-icon-button i {
   @include mixins.size(24px);
 }
 
-.km-cluster-name {
-  font-weight: 500;
-  padding-right: 8px;
+.mat-card-header {
+  .mat-card-title {
+    &.km-cluster-name {
+      font-weight: 500;
+      padding: 0;
+
+      .km-cluster-health {
+        font-size: variables.$font-size-subhead;
+        margin: 2px 20px 0 -5px;
+      }
+    }
+  }
 }
 
 .km-cluster-type {
@@ -36,18 +46,6 @@
 .km-provider-menu {
   align-items: center;
   display: flex;
-}
-
-.mat-card-header {
-  .mat-card-title {
-    &.km-cluster-name {
-      padding: 0 0 0 30px;
-    }
-
-    &.additional-margin {
-      padding-left: 30px;
-    }
-  }
 }
 
 .mat-icon.km-icon-edit {
