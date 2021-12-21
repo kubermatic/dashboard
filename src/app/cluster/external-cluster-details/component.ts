@@ -30,7 +30,6 @@ import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {merge, Subject, timer} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {ExternalCluster, ExternalClusterProvider} from '@shared/entity/external-cluster';
-import _ from 'lodash';
 
 @Component({
   selector: 'km-cluster-details',
@@ -114,11 +113,11 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   getStatus(): string {
-    return _.capitalize(this.cluster?.status?.state);
+    return ExternalCluster.getStatusMessage(this.cluster);
   }
 
   getStatusColor(): string {
-    return ExternalCluster.getStatusColor(this.cluster?.status?.state);
+    return ExternalCluster.getStatusColor(this.cluster);
   }
 
   isEditEnabled(): boolean {

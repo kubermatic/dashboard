@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import {HealthStatusColor} from '@shared/utils/health-status/health-status';
+import _ from 'lodash';
 
 export enum ExternalClusterProvider {
   Custom = 'custom',
@@ -38,8 +39,13 @@ export class ExternalCluster {
       : ExternalClusterProvider.Custom;
   }
 
-  static getStatusColor(state: ExternalClusterState): string {
-    switch (state) {
+  static getStatusMessage(cluster: ExternalCluster): string {
+    const state = _.capitalize(cluster?.status?.state);
+    return cluster?.status?.statusMessage ? `${state}: ${cluster?.status.statusMessage}` : state;
+  }
+
+  static getStatusColor(cluster: ExternalCluster): string {
+    switch (cluster?.status?.state) {
       case ExternalClusterState.Running:
         return HealthStatusColor.Green;
       case ExternalClusterState.Provisioning:
