@@ -98,9 +98,7 @@ limitations under the License.
                        [(labels)]="podNodeSelectorAdmissionPluginConfig"
                        formControlName="podNodeSelectorAdmissionPluginConfig"
                        fxFlex="100"></km-label-form>
-        <div class="event-rate-limit-config"
-             title="Event Rate Limit Configuration"
-             *ngIf="isPluginEnabled(admissionPlugin.EventRateLimit)">
+        <div *ngIf="isPluginEnabled(admissionPlugin.EventRateLimit)">
           <km-wizard-cluster-event-rate-limit [formControl]="form.get(Controls.EventRateLimitConfig)"></km-wizard-cluster-event-rate-limit>
         </div>
       </div>

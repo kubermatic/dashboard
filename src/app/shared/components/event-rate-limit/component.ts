@@ -68,7 +68,7 @@ export class EventRateLimitComponent extends BaseFormValidator implements OnInit
         Validators.required,
         Validators.minLength(this._minValue),
       ]),
-      [Controls.LimitType]: new FormControl(this._defaltLimitType),
+      [Controls.LimitType]: new FormControl({value: this._defaltLimitType, disabled: true}),
     });
 
     merge(
