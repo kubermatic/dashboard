@@ -19,6 +19,7 @@ describe('LoaderInterceptorService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [LoaderInterceptor],
+      teardown: {destroyAfterEach: false},
     });
   });
 

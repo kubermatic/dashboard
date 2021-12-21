@@ -73,6 +73,7 @@ describe('SSHKeyComponent', () => {
           GoogleAnalyticsService,
           NotificationService,
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

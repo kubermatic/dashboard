@@ -53,6 +53,7 @@ describe('AddBindingComponent', () => {
           {provide: RBACService, useValue: rbacMock},
           {provide: MatDialogRef, useClass: MatDialogRefMock},
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

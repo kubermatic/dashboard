@@ -57,6 +57,7 @@ describe('NodeComponent', () => {
           GoogleAnalyticsService,
           NotificationService,
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

@@ -53,6 +53,7 @@ describe('ConstraintTemplatesComponent', () => {
           MatDialog,
           NotificationService,
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

@@ -70,6 +70,7 @@ describe('MemberComponent', () => {
           GoogleAnalyticsService,
           NotificationService,
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

@@ -78,6 +78,7 @@ describe('VersionPickerComponent', () => {
           GoogleAnalyticsService,
           EndOfLifeService,
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

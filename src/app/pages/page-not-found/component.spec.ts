@@ -40,6 +40,7 @@ describe('PageNotFoundComponent', () => {
         {provide: Router, useClass: RouterStub},
         {provide: Auth, useClass: AuthMockService},
       ],
+      teardown: {destroyAfterEach: false},
     }).compileComponents();
   });
 

@@ -36,6 +36,7 @@ describe('ErrorNotificationsInterceptorService', () => {
     TestBed.configureTestingModule({
       imports: [...modules],
       providers: [ErrorNotificationsInterceptor],
+      teardown: {destroyAfterEach: false},
     });
   });
 

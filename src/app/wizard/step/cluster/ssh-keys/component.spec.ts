@@ -54,6 +54,7 @@ describe('ClusterSSHKeys', () => {
           {provide: AppConfigService, useClass: AppConfigMockService},
           {provide: Router, useClass: RouterStub},
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

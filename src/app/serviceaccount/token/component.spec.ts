@@ -68,6 +68,7 @@ describe('ServiceAccountTokenComponent', () => {
           GoogleAnalyticsService,
           NotificationService,
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

@@ -35,6 +35,7 @@ describe('SettingsService', () => {
         {provide: AppConfigService, useClass: AppConfigMockService},
         {provide: Auth, useClass: AuthMockService},
       ],
+      teardown: {destroyAfterEach: false},
     });
     settingsService = TestBed.inject(SettingsService);
   });

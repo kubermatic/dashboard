@@ -12,11 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM quay.io/kubermatic/build:go-1.17-node-16-kind-0.11-1
+FROM quay.io/kubermatic/build:go-1.17-node-16-kind-0.11-5
+
 LABEL maintainer="support@kubermatic.com"
 
-# Install Google Chrome
+# Install Google Chrome and dependencies required by Cypress.
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
     sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && \
-    apt-get update && \
-    apt-get install -y google-chrome-stable
+    apt-get update -qq && \
+    apt-get install -y \
+      google-chrome-stable \
+      libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
+
+# Install Docker.
+RUN curl -sSL https://get.docker.com/ | sh

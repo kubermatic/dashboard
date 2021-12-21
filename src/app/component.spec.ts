@@ -66,6 +66,7 @@ describe('KubermaticComponent', () => {
         AuthGuard,
         GoogleAnalyticsService,
       ],
+      teardown: {destroyAfterEach: false},
     }).compileComponents();
   });
 

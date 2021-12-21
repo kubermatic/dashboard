@@ -57,6 +57,7 @@ describe('AlertmanagerConfigComponent', () => {
           MatDialog,
           NotificationService,
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );
