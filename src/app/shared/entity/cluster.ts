@@ -62,7 +62,7 @@ export class Cluster {
   static getCNIVersions(cniPluginType: string): string[] {
     switch (cniPluginType) {
       case CNIPlugin.Canal:
-        return ['v3.8', 'v3.19', 'v3.20'];
+        return ['v3.19', 'v3.20', 'v3.21'];
       case CNIPlugin.Cilium:
         return ['v1.11'];
       default:
