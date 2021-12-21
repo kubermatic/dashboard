@@ -17,7 +17,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {UserService} from '@core/services/user';
-import {ExternalCluster} from '@shared/entity/external-cluster-model';
+import {ExternalCluster} from '@shared/entity/external-cluster';
 import {NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
 import {NodeHealthStatus} from '@shared/utils/health-status/node-health-status';

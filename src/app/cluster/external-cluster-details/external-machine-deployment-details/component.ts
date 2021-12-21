@@ -19,7 +19,7 @@ import {ClusterService} from '@core/services/cluster';
 import {PathParam} from '@core/services/params';
 import {Datacenter} from '@shared/entity/datacenter';
 import {Event} from '@shared/entity/event';
-import {ExternalCluster} from '@shared/entity/external-cluster-model';
+import {ExternalCluster} from '@shared/entity/external-cluster';
 import {ExternalMachineDeployment} from '@shared/entity/machine-deployment';
 import {NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';

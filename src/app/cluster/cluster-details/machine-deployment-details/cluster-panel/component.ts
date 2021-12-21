@@ -17,7 +17,7 @@ import {Router} from '@angular/router';
 import {ParamsService} from '@core/services/params';
 import {Cluster} from '@shared/entity/cluster';
 import {Datacenter} from '@shared/entity/datacenter';
-import {ExternalCluster} from '@shared/entity/external-cluster-model';
+import {ExternalCluster} from '@shared/entity/external-cluster';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 
 @Component({

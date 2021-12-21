@@ -17,7 +17,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
 import {UserService} from '@core/services/user';
-import {ExternalCluster} from '@shared/entity/external-cluster-model';
+import {ExternalCluster} from '@shared/entity/external-cluster';
 import {ExternalMachineDeployment} from '@shared/entity/machine-deployment';
 import {getOperatingSystem} from '@shared/entity/node';
 import _ from 'lodash';

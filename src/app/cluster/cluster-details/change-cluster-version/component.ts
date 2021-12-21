@@ -20,7 +20,7 @@ import {EndOfLifeService} from '@core/services/eol';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {Cluster, ClusterPatch} from '@shared/entity/cluster';
-import {ExternalCluster} from '@shared/entity/external-cluster-model';
+import {ExternalCluster} from '@shared/entity/external-cluster';
 import {Project} from '@shared/entity/project';
 import {Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';

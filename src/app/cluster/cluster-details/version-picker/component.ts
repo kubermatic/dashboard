@@ -17,7 +17,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {ClusterService} from '@core/services/cluster';
 import {EndOfLifeService} from '@core/services/eol';
 import {Cluster, MasterVersion} from '@shared/entity/cluster';
-import {ExternalCluster} from '@shared/entity/external-cluster-model';
+import {ExternalCluster} from '@shared/entity/external-cluster';
 import {take} from 'rxjs/operators';
 import {gt, lt} from 'semver';
 import {ChangeClusterVersionComponent} from '../change-cluster-version/component';
