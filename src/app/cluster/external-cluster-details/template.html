@@ -129,7 +129,8 @@ limitations under the License.
 
   <km-external-node-list [nodes]="nodes"
                          [nodesMetrics]="nodesMetrics"
-                         [projectID]="projectId"></km-external-node-list>
+                         [projectID]="projectId"
+                         [isClusterRunning]="cluster?.status?.state === ExternalClusterState.Running"></km-external-node-list>
 
   <km-event-card [events]="events"></km-event-card>
 

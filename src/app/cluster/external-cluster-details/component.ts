@@ -29,7 +29,7 @@ import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {merge, Subject, timer} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
-import {ExternalCluster, ExternalClusterProvider} from '@shared/entity/external-cluster';
+import {ExternalCluster, ExternalClusterProvider, ExternalClusterState} from '@shared/entity/external-cluster';
 
 @Component({
   selector: 'km-cluster-details',
@@ -38,6 +38,7 @@ import {ExternalCluster, ExternalClusterProvider} from '@shared/entity/external-
 })
 export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   readonly Provider = ExternalClusterProvider;
+  readonly ExternalClusterState = ExternalClusterState;
   private readonly _refreshTime = 10;
   private readonly _metricsRefreshTime = 5;
   projectId: string;
