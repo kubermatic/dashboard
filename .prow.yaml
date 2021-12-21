@@ -219,7 +219,7 @@ presubmits:
               memory: 6Gi
               cpu: 4
             limits:
-              memory: 7Gi
+              memory: 8Gi
               cpu: 4
           env:
             - name: NO_COLOR
@@ -247,7 +247,7 @@ presubmits:
               memory: 6Gi
               cpu: 4
             limits:
-              memory: 7Gi
+              memory: 8Gi
               cpu: 4
           env:
             - name: KUBERMATIC_EDITION

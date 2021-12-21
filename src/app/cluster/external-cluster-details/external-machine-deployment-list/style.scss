@@ -12,30 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'mixins';
 @use 'variables';
 
-.km-cluster-panel {
-  button {
-    margin-right: 20px;
-  }
-
-  .mat-icon-button {
-    @include mixins.size(45px);
-
-    i {
-      @include mixins.size(16px, $force: true);
+.mat-card {
+  .mat-card-header {
+    .mat-card-title {
+      padding-left: 30px;
     }
   }
+}
 
-  .cluster-type-icon {
-    @include mixins.size(28px);
+.km-machine-deployment-health {
+  text-align: center;
+  vertical-align: middle;
+}
 
-    filter: grayscale(100%);
-    margin: 5px 20px 5px 0;
-  }
-
-  km-property {
-    margin-top: -5px;
-  }
+.km-table-actions,
+.km-machine-deployment-action {
+  align-self: center;
+  height: 48px;
+  vertical-align: middle;
 }
