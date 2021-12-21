@@ -46,7 +46,9 @@ export class ExternalCluster {
       case ExternalClusterState.Reconciling:
         return HealthStatusColor.Orange;
       case ExternalClusterState.Deleting:
+      case ExternalClusterState.Error:
         return HealthStatusColor.Red;
+      case ExternalClusterState.Unknown:
       default:
         return HealthStatusColor.Unknown;
     }
@@ -90,6 +92,8 @@ export enum ExternalClusterState {
   Running = 'RUNNING',
   Reconciling = 'RECONCILING',
   Deleting = 'DELETING',
+  Error = 'ERROR',
+  Unknown = 'UNKNOWN',
 }
 
 export class ExternalClusterStatus {
