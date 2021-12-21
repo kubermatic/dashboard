@@ -22,14 +22,15 @@ import {PathParam} from '@core/services/params';
 import {UserService} from '@core/services/user';
 import {EditClusterConnectionDialogComponent} from '@shared/components/external-cluster-data-dialog/component';
 import {Event} from '@shared/entity/event';
+import {ExternalCluster, ExternalClusterProvider} from '@shared/entity/external-cluster';
+import {ExternalMachineDeployment} from '@shared/entity/machine-deployment';
 import {Member} from '@shared/entity/member';
 import {ClusterMetrics, NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
-import {merge, Subject, timer} from 'rxjs';
+import {forkJoin, Subject, timer} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
-import {ExternalCluster, ExternalClusterProvider} from '@shared/entity/external-cluster';
 
 @Component({
   selector: 'km-cluster-details',
@@ -37,22 +38,22 @@ import {ExternalCluster, ExternalClusterProvider} from '@shared/entity/external-
   styleUrls: ['./style.scss'],
 })
 export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
-  readonly Provider = ExternalClusterProvider;
   private readonly _refreshTime = 10;
   private readonly _metricsRefreshTime = 5;
-  projectId: string;
-  cluster: ExternalCluster;
-  provider: ExternalClusterProvider;
-  nodes: Node[] = [];
-  metrics: ClusterMetrics;
-  nodesMetrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
-  events: Event[] = [];
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
-  private _clusterRefresh: Subject<void> = new Subject<void>();
   private _metricsRefreshTimer = timer(0, this._appConfigService.getRefreshTimeBase() * this._metricsRefreshTime);
   private _refreshTimer = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
   private _unsubscribe: Subject<void> = new Subject<void>();
+  readonly Provider = ExternalClusterProvider;
+  projectID: string;
+  cluster: ExternalCluster;
+  provider: ExternalClusterProvider;
+  machineDeployments: ExternalMachineDeployment[] = [];
+  clusterMetrics: ClusterMetrics;
+  nodes: Node[] = [];
+  nodesMetrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
+  events: Event[] = [];
 
   constructor(
     private readonly _activatedRoute: ActivatedRoute,
@@ -65,17 +66,18 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.projectId = this._activatedRoute.snapshot.paramMap.get(PathParam.ProjectID);
-    const clusterId = this._activatedRoute.snapshot.paramMap.get(PathParam.ClusterID);
+    this.projectID = this._activatedRoute.snapshot.paramMap.get(PathParam.ProjectID);
+    const clusterID = this._activatedRoute.snapshot.paramMap.get(PathParam.ClusterID);
 
     this._userService.currentUser.pipe(take(1)).subscribe(user => (this._user = user));
 
     this._userService
-      .getCurrentUserGroup(this.projectId)
+      .getCurrentUserGroup(this.projectID)
+      .pipe(takeUntil(this._unsubscribe))
       .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
-    merge(this._refreshTimer, this._clusterRefresh)
-      .pipe(switchMap(_ => this._clusterService.externalCluster(this.projectId, clusterId)))
+    this._clusterService
+      .externalCluster(this.projectID, clusterID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(cluster => {
         this.cluster = cluster;
@@ -83,28 +85,31 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
       });
 
     this._metricsRefreshTimer
-      .pipe(switchMap(_ => this._clusterService.externalClusterMetrics(this.projectId, clusterId)))
+      .pipe(switchMap(_ => this._clusterService.externalClusterMetrics(this.projectID, clusterID)))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(metrics => (this.metrics = metrics));
+      .subscribe(metrics => (this.clusterMetrics = metrics));
 
-    this._metricsRefreshTimer
-      .pipe(switchMap(_ => this._clusterService.externalClusterNodesMetrics(this.projectId, clusterId)))
+    this._refreshTimer
+      .pipe(switchMap(_ => this._clusterService.externalMachineDeployments(this.projectID, clusterID)))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(metrics => {
+      .subscribe(machineDeployments => (this.machineDeployments = machineDeployments));
+
+    this._refreshTimer
+      .pipe(
+        switchMap(_ =>
+          forkJoin([
+            this._clusterService.externalClusterNodes(this.projectID, clusterID),
+            this._clusterService.externalClusterNodesMetrics(this.projectID, clusterID),
+          ])
+        )
+      )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(([nodes, metrics]) => {
+        this.nodes = nodes;
         const map = new Map<string, NodeMetrics>();
         metrics.forEach(m => map.set(m.name, m));
         this.nodesMetrics = map;
       });
-
-    this._refreshTimer
-      .pipe(switchMap(_ => this._clusterService.externalClusterNodes(this.projectId, clusterId)))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(nodes => (this.nodes = nodes));
-
-    this._refreshTimer
-      .pipe(switchMap(_ => this._clusterService.externalClusterEvents(this.projectId, clusterId)))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(events => (this.events = events));
   }
 
   ngOnDestroy(): void {
@@ -118,16 +123,16 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
 
   edit(): void {
     const dialog = this._matDialog.open(EditClusterConnectionDialogComponent);
-    dialog.componentInstance.projectId = this.projectId;
+    dialog.componentInstance.projectId = this.projectID;
     dialog.componentInstance.name = this.cluster.name;
 
     dialog
       .afterClosed()
       .pipe(filter(model => !!model))
-      .pipe(switchMap(model => this._clusterService.updateExternalCluster(this.projectId, this.cluster.id, model)))
+      .pipe(switchMap(model => this._clusterService.updateExternalCluster(this.projectID, this.cluster.id, model)))
       .pipe(take(1))
       .subscribe(_ => {
-        this._clusterRefresh.next();
+        this._clusterService.onClusterUpdate.next();
         this._notificationService.success(`The ${this.cluster.name} cluster was updated`);
       });
   }
@@ -137,8 +142,8 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   disconnect(): void {
-    this._clusterService.showDisconnectClusterDialog(this.cluster, this.projectId).subscribe(_ => {
-      this._router.navigate(['/projects/' + this.projectId + '/clusters']);
+    this._clusterService.showDisconnectClusterDialog(this.cluster, this.projectID).subscribe(_ => {
+      this._router.navigate(['/projects/' + this.projectID + '/clusters']);
       this._notificationService.success(`The ${this.cluster.name} cluster was disconnected`);
     });
   }

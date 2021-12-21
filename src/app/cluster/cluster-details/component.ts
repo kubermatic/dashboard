@@ -38,6 +38,7 @@ import {
 } from '@shared/entity/cluster';
 import {View} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
+import {Node} from '@shared/entity/node';
 import {Event} from '@shared/entity/event';
 import {Health, HealthState} from '@shared/entity/health';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
