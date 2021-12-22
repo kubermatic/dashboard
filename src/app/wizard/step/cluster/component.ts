@@ -50,6 +50,7 @@ import {StepBase} from '../base';
 import * as semver from 'semver';
 import {CIDR_PATTERN_VALIDATOR} from '@shared/validators/others';
 import {FeatureGateService} from '@core/services/feature-gate';
+import {coerce, compare} from 'semver';
 
 enum Controls {
   Name = 'name',
@@ -170,6 +171,14 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.updateValueAndValidity();
     });
 
+    this._api
+      .getCNIPluginVersions(this.form.get(Controls.CNIPlugin).value)
+      .pipe(take(1))
+      .subscribe(versions => {
+        this.cniPluginVersions = versions.versions.sort((a, b) => compare(coerce(a), coerce(b)));
+        this._setDefaultCNIVersion();
+      });
+
     this._clusterSpecService.datacenterChanges
       .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
       .pipe(
@@ -218,10 +227,14 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .subscribe(() => (this._clusterSpecService.admissionPlugins = this.form.get(Controls.AdmissionPlugins).value));
 
     this.control(Controls.CNIPlugin)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => {
+      .valueChanges.pipe(filter(value => !!value))
+      .pipe(switchMap(() => this._api.getCNIPluginVersions(this.form.get(Controls.CNIPlugin).value)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(cniVersions => {
         this.updateCNIPluginOptions();
         this.form.get(Controls.CNIPluginVersion).setValue('');
+        this.cniPluginVersions = cniVersions.versions.sort((a, b) => compare(coerce(a), coerce(b)));
+        this._setDefaultCNIVersion();
       });
 
     merge(
@@ -302,14 +315,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     return this.form.get(Controls.CNIPlugin).value !== CNIPlugin.None;
   }
 
-  getCNIPluginVersions(): string[] {
-    this.cniPluginVersions = Cluster.getCNIVersions(this.form.get(Controls.CNIPlugin).value);
-    if (this.cniPluginVersions.length > 0 && !this.form.get(Controls.CNIPluginVersion).value) {
-      this.form.get(Controls.CNIPluginVersion).setValue(this.cniPluginVersions[this.cniPluginVersions.length - 1]);
-    }
-    return this.cniPluginVersions;
-  }
-
   private _enforce(control: Controls, isEnforced: boolean): void {
     if (isEnforced) {
       this.form.get(control).setValue(true);
@@ -333,6 +338,12 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       if (version.default) {
         this.control(Controls.Version).setValue(version.version);
       }
+    }
+  }
+
+  private _setDefaultCNIVersion(): void {
+    if (this.cniPluginVersions.length > 0 && !this.form.get(Controls.CNIPluginVersion).value) {
+      this.form.get(Controls.CNIPluginVersion).setValue(this.cniPluginVersions[this.cniPluginVersions.length - 1]);
     }
   }
 

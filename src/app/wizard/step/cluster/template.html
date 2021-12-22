@@ -80,7 +80,7 @@ limitations under the License.
             <mat-select [formControlName]="Controls.CNIPluginVersion"
                         class="km-select-ellipsis"
                         disableOptionCentering>
-              <mat-option *ngFor="let version of getCNIPluginVersions()"
+              <mat-option *ngFor="let version of cniPluginVersions"
                           [value]="version">
                 {{version}}
               </mat-option>
