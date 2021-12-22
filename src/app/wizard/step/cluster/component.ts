@@ -237,6 +237,15 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         this._setDefaultCNIVersion();
       });
 
+    this.control(Controls.Konnectivity)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(value => {
+        if (!value && this.form.get(Controls.ProxyMode).value === 'ebpf') {
+          this.form.get(Controls.ProxyMode).setValue('');
+        }
+        this.updateCNIPluginOptions();
+      });
+
     merge(
       this.form.get(Controls.Name).valueChanges,
       this.form.get(Controls.Version).valueChanges,
@@ -296,7 +305,11 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   }
 
   updateCNIPluginOptions() {
-    if (this.controlValue(Controls.CNIPlugin) === CNIPlugin.Cilium) {
+    if (
+      this.controlValue(Controls.CNIPlugin) === CNIPlugin.Cilium &&
+      !!this.isKonnectivityEnabled &&
+      !!this.controlValue(Controls.Konnectivity)
+    ) {
       this.availableProxyModes = ['ipvs', 'iptables', 'ebpf'];
     } else {
       this.availableProxyModes = ['ipvs', 'iptables'];
