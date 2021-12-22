@@ -204,6 +204,7 @@ export class ClusterSpec {
   usePodNodeSelectorAdmissionPlugin?: boolean;
   admissionPlugins?: string[];
   enableUserSSHKeyAgent?: boolean;
+  enableOperatingSystemManager?: boolean;
   podNodeSelectorAdmissionPluginConfig?: object;
   mla?: MLASettings;
   containerRuntime?: ContainerRuntime;
