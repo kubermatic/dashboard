@@ -24,7 +24,7 @@ import {SharedModule} from '@shared/module';
 import {MachineNetworksModule} from '../machine-networks/module';
 import {AlertmanagerConfigComponent} from './details/cluster/mla/alertmanager-config/component';
 import {AlertmanagerConfigDialog} from './details/cluster/mla/alertmanager-config/alertmanager-config-dialog/component';
-import {ChangeClusterVersionComponent} from './details/cluster/change-cluster-version/component';
+import {VersionChangeDialogComponent} from './details/shared/version-change-dialog/component';
 import {ClusterDeleteConfirmationComponent} from './details/cluster/cluster-delete-confirmation/component';
 import {ClusterSecretsComponent} from './details/cluster/cluster-secrets/component';
 import {ClusterDetailsComponent} from './details/cluster/component';
@@ -60,7 +60,7 @@ import {RevokeTokenComponent} from './details/cluster/revoke-token/component';
 import {RuleGroupsComponent} from './details/cluster/mla/rule-groups/component';
 import {RuleGroupDialog} from './details/cluster/mla/rule-groups/rule-group-dialog/component';
 import {ShareKubeconfigComponent} from './details/cluster/share-kubeconfig/component';
-import {VersionPickerComponent} from './details/cluster/version-picker/component';
+import {VersionPickerComponent} from './details/shared/version-picker/component';
 import {ClusterListComponent} from './list/cluster/component';
 import {ExternalClusterDetailsComponent} from './details/external-cluster/component';
 import {ExternalNodeListComponent} from './details/external-cluster/external-node-list/component';
@@ -81,7 +81,7 @@ const components: any[] = [
   MachineNetworksDisplayComponent,
   RBACComponent,
   ClusterDeleteConfirmationComponent,
-  ChangeClusterVersionComponent,
+  VersionChangeDialogComponent,
   ClusterSecretsComponent,
   EditClusterComponent,
   RevokeTokenComponent,

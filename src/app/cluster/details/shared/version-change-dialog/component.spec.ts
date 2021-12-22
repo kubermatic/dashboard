@@ -31,13 +31,13 @@ import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {SharedModule} from '@shared/module';
 import {of} from 'rxjs';
-import {ChangeClusterVersionComponent} from './component';
+import {VersionChangeDialogComponent} from './component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
 describe('ChangeClusterVersionComponent', () => {
-  let fixture: ComponentFixture<ChangeClusterVersionComponent>;
-  let component: ChangeClusterVersionComponent;
+  let fixture: ComponentFixture<VersionChangeDialogComponent>;
+  let component: VersionChangeDialogComponent;
   let patchClusterSpy;
   let upgradeClusterMachineDeploymentsSpy;
 
@@ -52,7 +52,7 @@ describe('ChangeClusterVersionComponent', () => {
 
       TestBed.configureTestingModule({
         imports: [...modules],
-        declarations: [ChangeClusterVersionComponent],
+        declarations: [VersionChangeDialogComponent],
         providers: [
           {provide: MAT_DIALOG_DATA, useValue: {clusterName: 'clustername'}},
           {provide: MatDialogRef, useClass: MatDialogRefMock},
@@ -71,7 +71,7 @@ describe('ChangeClusterVersionComponent', () => {
 
   beforeEach(
     waitForAsync(() => {
-      fixture = TestBed.createComponent(ChangeClusterVersionComponent);
+      fixture = TestBed.createComponent(VersionChangeDialogComponent);
       component = fixture.componentInstance;
     })
   );

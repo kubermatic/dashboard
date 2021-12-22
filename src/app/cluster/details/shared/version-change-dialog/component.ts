@@ -26,11 +26,11 @@ import {Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 
 @Component({
-  selector: 'km-change-cluster-version',
+  selector: 'km-version-change-dialog',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
+export class VersionChangeDialogComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster | ExternalCluster;
   controlPlaneVersions: string[] = [];
   selectedVersion: string;
@@ -41,7 +41,7 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
   constructor(
     private readonly _clusterService: ClusterService,
     private readonly _projectService: ProjectService,
-    private readonly _dialogRef: MatDialogRef<ChangeClusterVersionComponent>,
+    private readonly _dialogRef: MatDialogRef<VersionChangeDialogComponent>,
     private readonly _notificationService: NotificationService,
     private readonly _eolService: EndOfLifeService,
     private readonly _googleAnalyticsService: GoogleAnalyticsService

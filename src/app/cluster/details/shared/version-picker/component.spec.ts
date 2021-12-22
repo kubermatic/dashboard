@@ -40,10 +40,10 @@ import {NodeService} from '@core/services/node';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
-import {ClusterSecretsComponent} from '../cluster-secrets/component';
-import {MachineDeploymentListComponent} from '../machine-deployment-list/component';
-import {MachineNetworksDisplayComponent} from '../machine-networks-display/component';
-import {NodeListComponent} from '../node-list/component';
+import {ClusterSecretsComponent} from '../../cluster/cluster-secrets/component';
+import {MachineDeploymentListComponent} from '../../cluster/machine-deployment-list/component';
+import {MachineNetworksDisplayComponent} from '../../cluster/machine-networks-display/component';
+import {NodeListComponent} from '../../cluster/node-list/component';
 
 import {VersionPickerComponent} from './component';
 

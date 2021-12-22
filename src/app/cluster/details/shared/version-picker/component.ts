@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnChanges, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ClusterService} from '@core/services/cluster';
 import {EndOfLifeService} from '@core/services/eol';
@@ -20,7 +20,7 @@ import {Cluster, MasterVersion} from '@shared/entity/cluster';
 import {ExternalCluster} from '@shared/entity/external-cluster';
 import {take} from 'rxjs/operators';
 import {gt, lt} from 'semver';
-import {ChangeClusterVersionComponent} from '../change-cluster-version/component';
+import {VersionChangeDialogComponent} from '../version-change-dialog/component';
 
 @Component({
   selector: 'km-version-picker',
@@ -47,7 +47,7 @@ export class VersionPickerComponent implements OnInit, OnChanges {
     this.processData();
   }
 
-  ngOnChanges(_: SimpleChanges): void {
+  ngOnChanges(): void {
     this.processData();
   }
 
@@ -95,7 +95,7 @@ export class VersionPickerComponent implements OnInit, OnChanges {
 
   changeClusterVersionDialog(): void {
     if (this.isEnabled()) {
-      const modal = this._matDialog.open(ChangeClusterVersionComponent);
+      const modal = this._matDialog.open(VersionChangeDialogComponent);
       modal.componentInstance.cluster = this.cluster;
       modal.componentInstance.controlPlaneVersions = this.versionsList;
       modal

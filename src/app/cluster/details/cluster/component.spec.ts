@@ -56,7 +56,7 @@ import {MachineNetworksDisplayComponent} from './machine-networks-display/compon
 import {MLAComponent} from './mla/component';
 import {NodeListComponent} from './node-list/component';
 import {RBACComponent} from './rbac/component';
-import {VersionPickerComponent} from './version-picker/component';
+import {VersionPickerComponent} from '../shared/version-picker/component';
 import {nodesFake} from '@app/testing/fake-data/node';
 
 describe('ClusterDetailsComponent', () => {
