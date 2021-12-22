@@ -22,7 +22,7 @@ import {PathParam} from '@core/services/params';
 import {UserService} from '@core/services/user';
 import {EditClusterConnectionDialogComponent} from '@shared/components/external-cluster-data-dialog/component';
 import {Event} from '@shared/entity/event';
-import {ExternalCluster, ExternalClusterProvider} from '@shared/entity/external-cluster';
+import {ExternalCluster, ExternalClusterProvider, ExternalClusterState} from '@shared/entity/external-cluster';
 import {ExternalMachineDeployment} from '@shared/entity/machine-deployment';
 import {Member} from '@shared/entity/member';
 import {ClusterMetrics, NodeMetrics} from '@shared/entity/metrics';
@@ -31,7 +31,6 @@ import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {forkJoin, Subject, timer} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
-import {ExternalCluster, ExternalClusterProvider, ExternalClusterState} from '@shared/entity/external-cluster';
 
 @Component({
   selector: 'km-cluster-details',
@@ -48,7 +47,6 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   private _metricsRefreshTimer = timer(0, this._appConfigService.getRefreshTimeBase() * this._metricsRefreshTime);
   private _refreshTimer = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
   private _unsubscribe: Subject<void> = new Subject<void>();
-  readonly Provider = ExternalClusterProvider;
   projectID: string;
   cluster: ExternalCluster;
   provider: ExternalClusterProvider;
