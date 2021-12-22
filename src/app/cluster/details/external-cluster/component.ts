@@ -31,6 +31,7 @@ import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {forkJoin, Subject, timer} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
+import {MasterVersion} from '@shared/entity/cluster';
 
 @Component({
   selector: 'km-cluster',
@@ -55,6 +56,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   nodes: Node[] = [];
   nodesMetrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
   events: Event[] = [];
+  upgrades: MasterVersion[] = [];
 
   constructor(
     private readonly _activatedRoute: ActivatedRoute,
@@ -102,14 +104,16 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
             this._clusterService.externalClusterNodes(this.projectID, clusterID),
             this._clusterService.externalClusterNodesMetrics(this.projectID, clusterID),
             this._clusterService.externalClusterEvents(this.projectID, clusterID),
+            this._clusterService.externalClusterUpgrades(this.projectID, clusterID),
           ])
         )
       )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(([nodes, metrics, events]) => {
+      .subscribe(([nodes, metrics, events, upgrades]) => {
         this.nodes = nodes;
         this.nodesMetrics = new Map<string, NodeMetrics>(metrics.map(m => [m.name, m]));
         this.events = events;
+        this.upgrades = upgrades;
       });
   }
 

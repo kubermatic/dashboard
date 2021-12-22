@@ -26,10 +26,10 @@ import {EtcdRestore} from '@shared/entity/backup';
 import {
   Cluster,
   ClusterPatch,
+  CNIPluginVersions,
   Finalizer,
   MasterVersion,
   ProviderSettingsPatch,
-  CNIPluginVersions,
 } from '@shared/entity/cluster';
 import {Event} from '@shared/entity/event';
 import {Health} from '@shared/entity/health';
@@ -180,11 +180,12 @@ export class ClusterService {
 
   upgrades(projectID: string, clusterID: string): Observable<MasterVersion[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/upgrades`;
-    return this._http.get<MasterVersion[]>(url).pipe(
-      catchError(() => {
-        return of<MasterVersion[]>([]).pipe(catchError(() => of<MasterVersion[]>([])));
-      })
-    );
+    return this._http.get<MasterVersion[]>(url).pipe(catchError(() => of<MasterVersion[]>([])));
+  }
+
+  externalClusterUpgrades(projectID: string, clusterID: string): Observable<MasterVersion[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/upgrades`;
+    return this._http.get<MasterVersion[]>(url).pipe(catchError(() => of<MasterVersion[]>([])));
   }
 
   cniVersions(projectID: string, clusterID: string): Observable<CNIPluginVersions> {
