@@ -167,7 +167,7 @@ export class ClustersPage {
   }
 
   static getTabCard(title: string): Cypress.Chainable {
-    return cy.get('#km-cluster-details-tab-card').find('div.mat-tab-label-content').contains(title);
+    return cy.get('#km-cluster-tab-card').find('div.mat-tab-label-content').contains(title);
   }
 
   static getAddConstraintBtn(): Cypress.Chainable {

@@ -14,11 +14,11 @@
 
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {ExternalMachineDeploymentDetailsComponent} from '@app/cluster/external-cluster-details/external-machine-deployment-details/component';
+import {ExternalMachineDeploymentDetailsComponent} from '@app/cluster/details/external-cluster/external-machine-deployment-details/component';
 import {AuthGuard, AuthzGuard} from '@core/services/auth/guard';
-import {ClusterDetailsComponent} from './cluster-details/component';
-import {MachineDeploymentDetailsComponent} from './cluster-details/machine-deployment-details/component';
-import {ExternalClusterDetailsComponent} from './external-cluster-details/component';
+import {ClusterDetailsComponent} from './details/cluster/component';
+import {MachineDeploymentDetailsComponent} from './details/cluster/machine-deployment-details/component';
+import {ExternalClusterDetailsComponent} from './details/external-cluster/component';
 import {ClustersComponent} from '@app/cluster/list/component';
 
 const routes: Routes = [
