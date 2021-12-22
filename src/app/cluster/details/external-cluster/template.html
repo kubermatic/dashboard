@@ -54,7 +54,8 @@ limitations under the License.
     <mat-card-content class="km-row">
       <div class="km-content-wrap">
         <km-version-picker [cluster]="cluster"
-                           [isClusterRunning]="isClusterRunning()"></km-version-picker>
+                           [isClusterRunning]="isClusterRunning()"
+                           [upgrades]="upgrades"></km-version-picker>
         <km-property>
           <div key>Cluster ID</div>
           <div value
