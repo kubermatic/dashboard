@@ -86,7 +86,7 @@ export class MLAService {
 
   private _getRuleGroups(projectId: string, clusterId: string): Observable<RuleGroup[]> {
     const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/rulegroups`;
-    return this._http.get<RuleGroup[]>(url).pipe(catchError(() => of<RuleGroup[]>()));
+    return this._http.get<RuleGroup[]>(url).pipe(catchError(() => of<RuleGroup[]>([])));
   }
 
   refreshRuleGroups(): void {

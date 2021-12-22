@@ -66,6 +66,7 @@ describe('RuleGroupDialog', () => {
           NotificationService,
           {provide: NGX_MONACO_EDITOR_CONFIG, useValue: {onMonacoLoad: () => (monaco = (window as any).monaco)}},
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

@@ -55,6 +55,7 @@ describe('MachineNetworksComponent', () => {
           {provide: NODE_DATA_CONFIG, useValue: NodeDataMode.Wizard},
           {provide: DatacenterService, useClass: DatacenterMockService},
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

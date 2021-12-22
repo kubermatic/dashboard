@@ -65,6 +65,7 @@ describe('EditProviderSettingsComponent', () => {
         {provide: NotificationService, useClass: NotificationMockService},
         {provide: MatDialogRef, useClass: MatDialogRefMock},
       ],
+      teardown: {destroyAfterEach: false},
     }).compileComponents();
   });
 

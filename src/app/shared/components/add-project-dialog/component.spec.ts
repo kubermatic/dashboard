@@ -48,6 +48,7 @@ describe('AddProjectDialogComponent', () => {
           {provide: ProjectService, useClass: ProjectMockService},
           {provide: Router, useClass: RouterStub},
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

@@ -33,6 +33,10 @@ export class ExternalCluster {
   status: ExternalClusterStatus;
 
   static getProvider(cloud: ExternalCloudSpec): ExternalClusterProvider {
+    if (!cloud) {
+      return ExternalClusterProvider.Custom;
+    }
+
     const providers = Object.keys(cloud);
     return providers.length > 0
       ? (providers.pop().toLowerCase() as ExternalClusterProvider)

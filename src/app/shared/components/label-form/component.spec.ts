@@ -26,6 +26,7 @@ describe('LabelFormComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
+      teardown: {destroyAfterEach: false},
     }).compileComponents();
   });
 

@@ -26,6 +26,7 @@ describe('openstack provider service', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [Openstack, {provide: NodeProvider, useValue: NodeProvider.OPENSTACK}],
+      teardown: {destroyAfterEach: false},
     });
     service = TestBed.inject(Openstack);
     httpMock = TestBed.inject(HttpTestingController);

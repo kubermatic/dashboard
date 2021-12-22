@@ -69,8 +69,7 @@ limitations under the License.
         <mat-checkbox [(ngModel)]="settings.enableExternalClusterImport"
                       (change)="onSettingsChange()"
                       id="km-enable-external-clusters-setting"></mat-checkbox>
-        <km-spinner-with-confirmation
-          [isSaved]="isEqual(settings.enableExternalClusterImport, apiSettings.enableExternalClusterImport)"></km-spinner-with-confirmation>
+        <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableExternalClusterImport, apiSettings.enableExternalClusterImport)"></km-spinner-with-confirmation>
       </div>
 
       <div fxLayout="row">
@@ -84,8 +83,7 @@ limitations under the License.
         <mat-checkbox [(ngModel)]="settings.enableDashboard"
                       (change)="onSettingsChange()"
                       id="km-enable-kubernetes-dashboard-setting"></mat-checkbox>
-        <km-spinner-with-confirmation
-          [isSaved]="isEqual(settings.enableDashboard, apiSettings.enableDashboard)"></km-spinner-with-confirmation>
+        <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableDashboard, apiSettings.enableDashboard)"></km-spinner-with-confirmation>
       </div>
 
       <div fxLayout="row">
@@ -99,8 +97,7 @@ limitations under the License.
         <mat-checkbox [(ngModel)]="settings.enableOIDCKubeconfig"
                       (change)="onSettingsChange()"
                       id="km-enable-oidc-setting"></mat-checkbox>
-        <km-spinner-with-confirmation
-          [isSaved]="isEqual(settings.enableOIDCKubeconfig, apiSettings.enableOIDCKubeconfig)"></km-spinner-with-confirmation>
+        <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableOIDCKubeconfig, apiSettings.enableOIDCKubeconfig)"></km-spinner-with-confirmation>
       </div>
     </div>
   </mat-card-content>

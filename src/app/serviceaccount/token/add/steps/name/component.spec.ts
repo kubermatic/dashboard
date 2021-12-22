@@ -44,6 +44,7 @@ describe('ServiceAccountTokenNameStepComponent', () => {
           {provide: Router, useClass: RouterStub},
           {provide: ProjectService, useClass: ProjectMockService},
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

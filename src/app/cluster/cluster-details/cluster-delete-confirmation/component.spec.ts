@@ -57,6 +57,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
         {provide: SettingsService, useClass: SettingsMockService},
         NotificationService,
       ],
+      teardown: {destroyAfterEach: false},
     }).compileComponents();
   });
 

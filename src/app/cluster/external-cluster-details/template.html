@@ -49,14 +49,6 @@ limitations under the License.
         <span class="km-label-primary">External</span>
       </mat-card-title>
       <div fxFlex></div>
-      <div fxLayout="row">
-        <button mat-icon-button
-                color="tertiary"
-                (click)="edit()"
-                [disabled]="!isEditEnabled()">
-          <i class="km-icon-mask km-icon-edit"></i>
-        </button>
-      </div>
     </mat-card-header>
 
     <mat-card-content class="km-row">
@@ -72,9 +64,8 @@ limitations under the License.
             {{cluster?.id}}
           </div>
         </km-property>
-        <km-property>
-          <div value
-               class="km-provider-logo-value">
+        <km-property *ngIf="provider !== Provider.Custom">
+          <div value>
             <span class="km-provider-logo km-provider-logo-{{provider}}"></span>
           </div>
         </km-property>
@@ -105,31 +96,39 @@ limitations under the License.
       </div>
 
       <div class="km-content-wrap"
-           *ngIf="metrics">
+           *ngIf="clusterMetrics">
         <km-property-usage name="Nodes CPU Usage"
                            unit="millicores"
-                           [used]="metrics?.nodes?.cpuTotalMillicores"
-                           [total]="metrics?.nodes?.cpuAvailableMillicores"></km-property-usage>
+                           [used]="clusterMetrics?.nodes?.cpuTotalMillicores"
+                           [total]="clusterMetrics?.nodes?.cpuAvailableMillicores"></km-property-usage>
 
         <km-property-usage name="Nodes Memory Usage"
                            unit="MiB"
-                           [used]="metrics?.nodes?.memoryTotalBytes"
-                           [total]="metrics?.nodes?.memoryAvailableBytes"></km-property-usage>
+                           [used]="clusterMetrics?.nodes?.memoryTotalBytes"
+                           [total]="clusterMetrics?.nodes?.memoryAvailableBytes"></km-property-usage>
 
         <km-property-usage name="Control Plane CPU Usage"
                            unit="millicores"
-                           [used]="metrics?.controlPlane?.cpuTotalMillicores"></km-property-usage>
+                           [used]="clusterMetrics?.controlPlane?.cpuTotalMillicores"></km-property-usage>
 
         <km-property-usage name="Control Plane Memory Usage"
                            unit="MiB"
-                           [used]="metrics?.controlPlane?.memoryTotalBytes"></km-property-usage>
+                           [used]="clusterMetrics?.controlPlane?.memoryTotalBytes"></km-property-usage>
       </div>
     </mat-card-content>
   </mat-card>
 
-  <km-external-node-list [nodes]="nodes"
+  <km-external-machine-deployment-list *ngIf="provider !== Provider.Custom"
+                                       [cluster]="cluster"
+                                       [machineDeployments]="machineDeployments"
+                                       [projectID]="projectID"
+                                       [isClusterRunning]="true"></km-external-machine-deployment-list>
+
+  <km-external-node-list *ngIf="provider === Provider.Custom"
+                         [cluster]="cluster"
+                         [nodes]="nodes"
                          [nodesMetrics]="nodesMetrics"
-                         [projectID]="projectId"
+                         [projectID]="projectID"
                          [isClusterRunning]="cluster?.status?.state === ExternalClusterState.Running"></km-external-node-list>
 
   <km-event-card [events]="events"></km-event-card>

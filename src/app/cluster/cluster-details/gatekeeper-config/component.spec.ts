@@ -47,6 +47,7 @@ describe('GatekeeperConfigComponent', () => {
         imports: [...modules],
         declarations: [GatekeeperConfigComponent],
         providers: [{provide: OPAService, useValue: opaMock}, MatDialog, NotificationService],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );
