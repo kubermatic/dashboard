@@ -70,6 +70,7 @@ describe('SidenavComponent', () => {
         },
         MatDialog,
       ],
+      teardown: {destroyAfterEach: false},
     }).compileComponents();
   });
 

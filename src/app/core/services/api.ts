@@ -78,7 +78,7 @@ export class ApiService {
 
   getMachineDeployments(cluster: string, projectID: string): Observable<MachineDeployment[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments`;
-    return this._http.get<MachineDeployment[]>(url).pipe(catchError(() => of<MachineDeployment[]>()));
+    return this._http.get<MachineDeployment[]>(url).pipe(catchError(() => of<MachineDeployment[]>([])));
   }
 
   getMachineDeployment(mdId: string, cluster: string, projectID: string): Observable<MachineDeployment> {

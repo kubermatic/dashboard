@@ -46,6 +46,7 @@ describe('AddMachineNetworkComponent', () => {
           {provide: MatDialogRef, useClass: MatDialogRefMock},
           NotificationService,
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

@@ -28,6 +28,7 @@ describe('TagListComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [...modules],
+      teardown: {destroyAfterEach: false},
     }).compileComponents();
   });
 

@@ -87,6 +87,7 @@ describe('MachineDeploymentDetailsComponent', () => {
           GoogleAnalyticsService,
           NotificationService,
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

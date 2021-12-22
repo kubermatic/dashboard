@@ -37,6 +37,7 @@ describe('FrontpageComponent', () => {
       imports: [...modules],
       declarations: [FrontpageComponent],
       providers: [{provide: Router, useClass: RouterStub}, {provide: Auth, useClass: AuthMockService}, CookieService],
+      teardown: {destroyAfterEach: false},
     }).compileComponents();
   });
 

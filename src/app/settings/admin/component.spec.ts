@@ -73,6 +73,7 @@ describe('AdminSettingsComponent', () => {
         HistoryService,
         NotificationService,
       ],
+      teardown: {destroyAfterEach: false},
     }).compileComponents();
   });
 

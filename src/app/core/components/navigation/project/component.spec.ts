@@ -73,6 +73,7 @@ describe('ProjectSelectorComponent', () => {
         },
         MatDialog,
       ],
+      teardown: {destroyAfterEach: false},
     }).compileComponents();
   });
 

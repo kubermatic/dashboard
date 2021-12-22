@@ -98,6 +98,7 @@ describe('EditClusterComponent', () => {
           {provide: FeatureGateService, useClass: FeatureGatesMockService},
           {provide: Router, useClass: RouterStub},
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

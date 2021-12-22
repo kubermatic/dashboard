@@ -54,6 +54,7 @@ describe('RuleGroupsComponent', () => {
           MatDialog,
           NotificationService,
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

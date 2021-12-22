@@ -15,7 +15,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {iif, merge, Observable, of, Subject, timer} from 'rxjs';
-import {map, shareReplay, switchMap, take} from 'rxjs/operators';
+import {catchError, map, shareReplay, switchMap, take} from 'rxjs/operators';
 import {environment} from '@environments/environment';
 import {AdminSeed, CreateDatacenterModel, Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {AppConfigService} from '@app/config.service';
@@ -63,7 +63,7 @@ export class DatacenterService {
 
   private _getDatacenters(): Observable<Datacenter[]> {
     const url = `${this._restRoot}/dc`;
-    return this._httpClient.get<Datacenter[]>(url);
+    return this._httpClient.get<Datacenter[]>(url).pipe(catchError(() => of<Datacenter[]>([])));
   }
 
   refreshDatacenters(): void {
@@ -116,7 +116,7 @@ export class DatacenterService {
 
   private _getSeedSettings(seedName: string): Observable<SeedSettings> {
     const url = `${this._newRestRoot}/seeds/${seedName}/settings`;
-    return this._httpClient.get<SeedSettings>(url);
+    return this._httpClient.get<SeedSettings>(url).pipe(catchError(() => of<SeedSettings>({} as SeedSettings)));
   }
 
   // only admins can call following endpoints
@@ -132,7 +132,7 @@ export class DatacenterService {
 
   private _getAdminSeeds(): Observable<AdminSeed[]> {
     const url = `${this._restRoot}/admin/seeds`;
-    return this._httpClient.get<AdminSeed[]>(url);
+    return this._httpClient.get<AdminSeed[]>(url).pipe(catchError(() => of<AdminSeed[]>([])));
   }
 
   refreshAdminSeeds(): void {

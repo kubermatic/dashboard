@@ -22,7 +22,7 @@ import {environment} from '@environments/environment';
 import {Project} from '@shared/entity/project';
 import {ProjectUtils} from '@shared/utils/project-utils/project-utils';
 import {EMPTY, merge, Observable, of, Subject, timer} from 'rxjs';
-import {catchError, map, shareReplay, switchMap, switchMapTo, take} from 'rxjs/operators';
+import {catchError, map, shareReplay, switchMap} from 'rxjs/operators';
 
 @Injectable()
 export class ProjectService {
@@ -47,6 +47,7 @@ export class ProjectService {
     private readonly _http: HttpClient
   ) {
     this._displayAll = this._userService.defaultUserSettings.displayAllProjectsForAdmin;
+    this._params.onParamChange.subscribe(_ => this.onProjectsUpdate.next());
   }
 
   get projects(): Observable<Project[]> {
@@ -69,11 +70,9 @@ export class ProjectService {
 
   get selectedProject(): Observable<Project> {
     if (!this._project$) {
-      this._project$ = merge(this._params.onParamChange, this.projects.pipe(take(1)))
-        .pipe(switchMapTo(this.projects))
+      this._project$ = this.projects
         .pipe(map(projects => projects.find(project => project.id === this._selectedProjectID)))
-        .pipe(switchMap(project => (project ? of(project) : this._getProject(this._selectedProjectID))))
-        .pipe(shareReplay({refCount: true, bufferSize: 1}));
+        .pipe(switchMap(project => (project ? of(project) : this._getProject(this._selectedProjectID))));
     }
 
     return this._project$;

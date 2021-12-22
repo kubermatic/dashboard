@@ -56,6 +56,7 @@ describe('MachineNetworkStepComponent', () => {
           {provide: Auth, useClass: AuthMockService},
           {provide: NODE_DATA_CONFIG, useValue: NodeDataMode.Wizard},
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

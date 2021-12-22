@@ -44,6 +44,10 @@ describe('External Cluster Story', () => {
     ProjectsPage.selectProject(projectName);
   });
 
+  it('should open external clusters tab', () => {
+    ClustersPage.getExternalClustersTab().click();
+  });
+
   it('should open connect cluster dialog', () => {
     ClustersPage.getConnectClusterBtn().click();
   });
