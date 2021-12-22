@@ -33,7 +33,7 @@ import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {distinctUntilChanged, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {AddExternalClusterDialogComponent} from '@shared/components/add-external-cluster-dialog/component';
-import {ExternalCloudSpec, ExternalCluster, ExternalClusterState} from '@shared/entity/external-cluster';
+import {ExternalCloudSpec, ExternalCluster} from '@shared/entity/external-cluster';
 
 @Component({
   selector: 'km-external-cluster-list',
@@ -162,12 +162,12 @@ export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestro
     return ExternalCluster.getProvider(cloud);
   }
 
-  getStatus(state: ExternalClusterState): string {
-    return _.capitalize(state);
+  getStatus(cluster: ExternalCluster): string {
+    return ExternalCluster.getStatusMessage(cluster);
   }
 
-  getStatusColor(state: ExternalClusterState): string {
-    return ExternalCluster.getStatusColor(state);
+  getStatusColor(cluster: ExternalCluster): string {
+    return ExternalCluster.getStatusColor(cluster);
   }
 
   disconnectClusterDialog(cluster: ExternalCluster, event: Event): void {

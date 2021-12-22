@@ -22,8 +22,7 @@ import {PathParam} from '@core/services/params';
 import {UserService} from '@core/services/user';
 import {EditClusterConnectionDialogComponent} from '@shared/components/external-cluster-data-dialog/component';
 import {Event} from '@shared/entity/event';
-import {ExternalCluster, ExternalClusterProvider} from '@shared/entity/external-cluster';
-import {ExternalMachineDeployment} from '@shared/entity/machine-deployment';
+import {ExternalCluster, ExternalClusterProvider, ExternalClusterState} from '@shared/entity/external-cluster';
 import {Member} from '@shared/entity/member';
 import {ClusterMetrics, NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
@@ -31,6 +30,7 @@ import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {forkJoin, Subject, timer} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
+import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 
 @Component({
   selector: 'km-cluster-details',
@@ -38,6 +38,8 @@ import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
   styleUrls: ['./style.scss'],
 })
 export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
+  readonly Provider = ExternalClusterProvider;
+  readonly ExternalClusterState = ExternalClusterState;
   private readonly _refreshTime = 10;
   private readonly _metricsRefreshTime = 5;
   private _user: Member;
@@ -45,7 +47,6 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   private _metricsRefreshTimer = timer(0, this._appConfigService.getRefreshTimeBase() * this._metricsRefreshTime);
   private _refreshTimer = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
   private _unsubscribe: Subject<void> = new Subject<void>();
-  readonly Provider = ExternalClusterProvider;
   projectID: string;
   cluster: ExternalCluster;
   provider: ExternalClusterProvider;
@@ -100,21 +101,31 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
           forkJoin([
             this._clusterService.externalClusterNodes(this.projectID, clusterID),
             this._clusterService.externalClusterNodesMetrics(this.projectID, clusterID),
+            this._clusterService.externalClusterEvents(this.projectID, clusterID),
           ])
         )
       )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(([nodes, metrics]) => {
+      .subscribe(([nodes, metrics, events]) => {
         this.nodes = nodes;
         const map = new Map<string, NodeMetrics>();
         metrics.forEach(m => map.set(m.name, m));
         this.nodesMetrics = map;
+        this.events = events;
       });
   }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  getStatus(): string {
+    return ExternalCluster.getStatusMessage(this.cluster);
+  }
+
+  getStatusColor(): string {
+    return ExternalCluster.getStatusColor(this.cluster);
   }
 
   isEditEnabled(): boolean {

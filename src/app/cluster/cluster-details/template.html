@@ -80,7 +80,7 @@ limitations under the License.
                       class="km-cluster-name">
         <i [matTooltip]="!!clusterHealthStatus ? clusterHealthStatus.message : ''"
            [ngClass]="!!clusterHealthStatus ? clusterHealthStatus.color : ''"
-           class="km-cluster-health"></i>
+           class="km-cluster-health km-pointer"></i>
         <span ngxClipboard
               [cbContent]="cluster.name"
               matTooltip="Click to copy"
@@ -319,8 +319,7 @@ limitations under the License.
     <km-node-list [cluster]="cluster"
                   [nodes]="nodes"
                   [projectID]="projectID"
-                  [clusterHealthStatus]="clusterHealthStatus"
-                  [isClusterRunning]="isClusterAPIRunning"></km-node-list>
+                  [clusterHealthStatus]="clusterHealthStatus"></km-node-list>
   </div>
 
   <km-tab-card id="km-cluster-details-tab-card">

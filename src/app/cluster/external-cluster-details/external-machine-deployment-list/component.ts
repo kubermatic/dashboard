@@ -18,11 +18,11 @@ import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
 import {UserService} from '@core/services/user';
 import {ExternalCluster} from '@shared/entity/external-cluster';
-import {ExternalMachineDeployment} from '@shared/entity/machine-deployment';
 import {getOperatingSystem} from '@shared/entity/node';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 
 @Component({
   selector: 'km-external-machine-deployment-list',
@@ -59,6 +59,14 @@ export class ExternalMachineDeploymentListComponent implements OnInit, OnChanges
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  getStatusColor(md: ExternalMachineDeployment): string {
+    return ExternalMachineDeployment.getStatusColor(md);
+  }
+
+  getStatusMessage(md: ExternalMachineDeployment): string {
+    return ExternalMachineDeployment.getStatusMessage(md);
   }
 
   getOperatingSystem(md: ExternalMachineDeployment): string {

@@ -37,7 +37,11 @@ limitations under the License.
       <mat-card-title fxFlex
                       fxLayout="row"
                       fxLayoutAlign=" center"
-                      class="km-cluster-name">
+                      class="km-cluster-name"
+                      fxLayoutGap="20px">
+        <i [matTooltip]="getStatus()"
+           [ngClass]="getStatusColor()"
+           class="km-cluster-health km-pointer"></i>
         <span ngxClipboard
               [cbContent]="cluster.name"
               matTooltip="Click to copy"
@@ -124,7 +128,8 @@ limitations under the License.
                          [cluster]="cluster"
                          [nodes]="nodes"
                          [nodesMetrics]="nodesMetrics"
-                         [projectID]="projectID"></km-external-node-list>
+                         [projectID]="projectID"
+                         [isClusterRunning]="cluster?.status?.state === ExternalClusterState.Running"></km-external-node-list>
 
   <km-event-card [events]="events"></km-event-card>
 

@@ -63,7 +63,6 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() projectID: string;
   @Output() deleteNode = new EventEmitter<Node>();
   @Input() clusterHealthStatus: ClusterHealthStatus;
-  @Input() isClusterRunning: boolean;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;

@@ -36,6 +36,7 @@ export class ExternalNodeListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() nodes: Node[] = [];
   @Input() nodesMetrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
   @Input() projectID: string;
+  @Input() isClusterRunning = false;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   isShowNodeItem = [];
@@ -67,6 +68,14 @@ export class ExternalNodeListComponent implements OnInit, OnChanges, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  isLoadingData(): boolean {
+    return _.isEmpty(this.nodes) && !this.isClusterRunning;
+  }
+
+  hasNoData(): boolean {
+    return _.isEmpty(this.nodes) && this.isClusterRunning;
   }
 
   getNodeHealthStatus(n: Node): object {

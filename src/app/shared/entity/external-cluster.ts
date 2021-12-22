@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import {HealthStatusColor} from '@shared/utils/health-status/health-status';
+import _ from 'lodash';
 
 export enum ExternalClusterProvider {
   Custom = 'custom',
@@ -42,23 +43,22 @@ export class ExternalCluster {
       : ExternalClusterProvider.Custom;
   }
 
-  static isExternalCluster(cloud?: ExternalCloudSpec): boolean {
-    if (!cloud) {
-      return false;
-    }
-
-    return this.getProvider(cloud) !== ExternalClusterProvider.Custom;
+  static getStatusMessage(cluster: ExternalCluster): string {
+    const state = _.capitalize(cluster?.status?.state);
+    return cluster?.status?.statusMessage ? `${state}: ${cluster?.status.statusMessage}` : state;
   }
 
-  static getStatusColor(state: ExternalClusterState): string {
-    switch (state) {
+  static getStatusColor(cluster: ExternalCluster): string {
+    switch (cluster?.status?.state) {
       case ExternalClusterState.Running:
         return HealthStatusColor.Green;
       case ExternalClusterState.Provisioning:
       case ExternalClusterState.Reconciling:
         return HealthStatusColor.Orange;
       case ExternalClusterState.Deleting:
+      case ExternalClusterState.Error:
         return HealthStatusColor.Red;
+      case ExternalClusterState.Unknown:
       default:
         return HealthStatusColor.Unknown;
     }
@@ -102,6 +102,8 @@ export enum ExternalClusterState {
   Running = 'RUNNING',
   Reconciling = 'RECONCILING',
   Deleting = 'DELETING',
+  Error = 'ERROR',
+  Unknown = 'UNKNOWN',
 }
 
 export class ExternalClusterStatus {
