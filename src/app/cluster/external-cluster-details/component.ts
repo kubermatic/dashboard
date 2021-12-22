@@ -101,15 +101,17 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
           forkJoin([
             this._clusterService.externalClusterNodes(this.projectID, clusterID),
             this._clusterService.externalClusterNodesMetrics(this.projectID, clusterID),
+            this._clusterService.externalClusterEvents(this.projectID, clusterID),
           ])
         )
       )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(([nodes, metrics]) => {
+      .subscribe(([nodes, metrics, events]) => {
         this.nodes = nodes;
         const map = new Map<string, NodeMetrics>();
         metrics.forEach(m => map.set(m.name, m));
         this.nodesMetrics = map;
+        this.events = events;
       });
   }
 
