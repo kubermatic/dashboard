@@ -33,18 +33,18 @@ export class CNIVersionComponent implements OnInit {
   constructor(private readonly _matDialog: MatDialog) {}
 
   ngOnInit(): void {
-    this.processData();
+    this._checkForCNIVersionUpgrades();
   }
 
   ngOnChanges(): void {
-    this.processData();
+    this._checkForCNIVersionUpgrades();
   }
 
-  processData(): void {
+  private _checkForCNIVersionUpgrades(): void {
     this.cniVersions.forEach(version => {
       const isUpgrade = lt(coerce(this.cluster.spec.cniPlugin.version), coerce(version));
       this.upgradeAvailable = this.upgradeAvailable ? true : isUpgrade;
-      if (isUpgrade) {
+      if (isUpgrade && !this.versions.includes(version)) {
         this.versions.push(version);
       }
     });
