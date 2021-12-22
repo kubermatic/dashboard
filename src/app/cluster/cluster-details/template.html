@@ -250,6 +250,11 @@ limitations under the License.
                              *ngIf="!!cluster.spec.usePodNodeSelectorAdmissionPlugin">
         </km-property-boolean>
 
+        <km-property-boolean label="Event Rate Limit"
+                             [value]="cluster.spec.useEventRateLimitAdmissionPlugin"
+                             *ngIf="!!cluster.spec.useEventRateLimitAdmissionPlugin">
+        </km-property-boolean>
+
         <km-property *ngIf="cluster.spec.admissionPlugins">
           <div key>Enabled Admission Plugins</div>
           <div value>

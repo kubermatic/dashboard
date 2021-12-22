@@ -19,6 +19,7 @@ import {Cluster} from '../../entity/cluster';
 export enum AdmissionPlugin {
   PodSecurityPolicy = 'PodSecurityPolicy',
   PodNodeSelector = 'PodNodeSelector',
+  EventRateLimit = 'EventRateLimit',
 }
 
 export class AdmissionPluginUtils {

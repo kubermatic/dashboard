@@ -121,6 +121,22 @@ limitations under the License.
           <km-labels [labels]="cluster.spec.podNodeSelectorAdmissionPluginConfig"></km-labels>
         </div>
       </km-property>
+
+      <!-- Event Rate Limit Configuration -->
+      <ng-container *ngIf="cluster.spec.eventRateLimitConfig">
+        <km-property>
+          <div key>Event Rate Limit Config</div>
+          <div value
+               fxLayout="row"
+               fxLayoutGap="10px"
+               class="event-rate-limit" >
+            <div><span class="km-text-muted">Limit Type:</span> Namespace</div>
+            <div><span class="km-text-muted">QPS:</span> {{cluster.spec.eventRateLimitConfig.namespace.qps}}</div>
+            <div><span class="km-text-muted">Burst:</span> {{cluster.spec.eventRateLimitConfig.namespace.burst}}</div>
+            <div><span class="km-text-muted">Cache Size:</span> {{cluster.spec.eventRateLimitConfig.namespace.cacheSize}}</div>
+          </div>
+        </km-property>
+      </ng-container>
       <km-property-boolean label="Audit Logging"
                            [value]="cluster.spec.auditLogging?.enabled">
       </km-property-boolean>

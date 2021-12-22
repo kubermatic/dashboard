@@ -202,6 +202,8 @@ export class ClusterSpec {
   version?: string;
   usePodSecurityPolicyAdmissionPlugin?: boolean;
   usePodNodeSelectorAdmissionPlugin?: boolean;
+  useEventRateLimitAdmissionPlugin?: boolean;
+  eventRateLimitConfig?: EventRateLimitConfig;
   admissionPlugins?: string[];
   enableUserSSHKeyAgent?: boolean;
   enableOperatingSystemManager?: boolean;
@@ -210,6 +212,16 @@ export class ClusterSpec {
   containerRuntime?: ContainerRuntime;
   clusterNetwork?: ClusterNetwork;
   cniPlugin?: CNIPluginConfig;
+}
+
+export class EventRateLimitConfig {
+  namespace: EventRateLimitConfigItem;
+}
+
+export class EventRateLimitConfigItem {
+  qps: number;
+  burst: number;
+  cacheSize: number;
 }
 
 export class ClusterNetwork {
@@ -322,6 +334,8 @@ export class ClusterSpecPatch {
   version?: string;
   usePodSecurityPolicyAdmissionPlugin?: boolean;
   usePodNodeSelectorAdmissionPlugin?: boolean;
+  useEventRateLimitAdmissionPlugin?: boolean;
+  eventRateLimitConfig?: EventRateLimitConfig;
   admissionPlugins?: string[];
   opaIntegration?: OPAIntegration;
   clusterNetwork?: ClusterNetwork;

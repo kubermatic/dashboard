@@ -38,6 +38,7 @@ import {Subject} from 'rxjs';
 import {startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import * as semver from 'semver';
 import {FeatureGateService} from '@core/services/feature-gate';
+import {EventRateLimitConfig} from '@shared/entity/cluster';
 
 enum Controls {
   Name = 'name',
@@ -47,6 +48,7 @@ enum Controls {
   Labels = 'labels',
   AdmissionPlugins = 'admissionPlugins',
   PodNodeSelectorAdmissionPluginConfig = 'podNodeSelectorAdmissionPluginConfig',
+  EventRateLimitConfig = 'eventRateLimitConfig',
   OPAIntegration = 'opaIntegration',
   Konnectivity = 'konnectivity',
   MLALogging = 'loggingEnabled',
@@ -67,6 +69,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   form: FormGroup;
   labels: object;
   podNodeSelectorAdmissionPluginConfig: object;
+  eventRateLimitConfig: EventRateLimitConfig;
   admissionPlugins: string[] = [];
   isKonnectivityEnabled = false;
   providerSettingsPatch: ProviderSettingsPatch = {
@@ -100,6 +103,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
 
     this.labels = _.cloneDeep(this.cluster.labels);
     this.podNodeSelectorAdmissionPluginConfig = _.cloneDeep(this.cluster.spec.podNodeSelectorAdmissionPluginConfig);
+    this.eventRateLimitConfig = _.cloneDeep(this.cluster.spec.eventRateLimitConfig);
 
     this.form = this._builder.group({
       [Controls.Name]: new FormControl(this.cluster.name, [
@@ -124,6 +128,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       [Controls.MLAMonitoring]: new FormControl(!!this.cluster.spec.mla && this.cluster.spec.mla.monitoringEnabled),
       [Controls.AdmissionPlugins]: new FormControl(this.cluster.spec.admissionPlugins),
       [Controls.PodNodeSelectorAdmissionPluginConfig]: new FormControl(''),
+      [Controls.EventRateLimitConfig]: new FormControl(this.eventRateLimitConfig?.namespace),
       [Controls.Labels]: new FormControl(''),
     });
 
@@ -199,6 +204,14 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       const value = AdmissionPluginUtils.updateSelectedPluginArray(
         this.form.get(Controls.AdmissionPlugins),
         AdmissionPlugin.PodSecurityPolicy
+      );
+      this.form.get(Controls.AdmissionPlugins).setValue(value);
+    }
+
+    if (this.cluster.spec.useEventRateLimitAdmissionPlugin) {
+      const value = AdmissionPluginUtils.updateSelectedPluginArray(
+        this.form.get(Controls.AdmissionPlugins),
+        AdmissionPlugin.EventRateLimit
       );
       this.form.get(Controls.AdmissionPlugins).setValue(value);
     }
@@ -283,8 +296,12 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         },
         usePodNodeSelectorAdmissionPlugin: null,
         usePodSecurityPolicyAdmissionPlugin: null,
+        useEventRateLimitAdmissionPlugin: null,
         admissionPlugins: this.form.get(Controls.AdmissionPlugins).value,
         podNodeSelectorAdmissionPluginConfig: this.podNodeSelectorAdmissionPluginConfig,
+        eventRateLimitConfig: {
+          namespace: this.form.get(Controls.EventRateLimitConfig).value,
+        },
         containerRuntime: this.form.get(Controls.ContainerRuntime).value,
       },
     };

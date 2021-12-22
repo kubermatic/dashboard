@@ -50,6 +50,7 @@ import {KubevirtProviderSettingsComponent} from '../edit-provider-settings/kubev
 import {OpenstackProviderSettingsComponent} from '../edit-provider-settings/openstack-provider-settings/component';
 import {EquinixProviderSettingsComponent} from '../edit-provider-settings/equinix-provider-settings/component';
 import {VSphereProviderSettingsComponent} from '../edit-provider-settings/vsphere-provider-settings/component';
+import {EventRateLimitComponent} from '@shared/components/event-rate-limit/component';
 import {EditClusterComponent} from './component';
 import {FeatureGateService} from '@core/services/feature-gate';
 import {FeatureGatesMockService} from '@app/testing/services/feature-gate-mock';
@@ -76,6 +77,7 @@ describe('EditClusterComponent', () => {
         declarations: [
           EditClusterComponent,
           EditProviderSettingsComponent,
+          EventRateLimitComponent,
           AWSProviderSettingsComponent,
           DigitaloceanProviderSettingsComponent,
           HetznerProviderSettingsComponent,
