@@ -35,7 +35,8 @@ limitations under the License.
     </button>
   </div>
   <div fxFlex></div>
-  <div fxLayout="row">
+  <div fxLayout="row"
+       fxLayoutAlign=" center">
     <a [href]="getLinkURL(Type.Alertmanager)"
        target="_blank"
        mat-flat-button
@@ -56,5 +57,8 @@ limitations under the License.
       <i class="km-icon-mask km-icon-external-link"></i>
       <span>Open Grafana UI</span>
     </a>
+    <i *ngIf="displayGrafanaWarning()"
+       matTooltip="{{getTextForWarning()}}"
+       class="km-icon-warning addon-disabled-icon"></i>
   </div>
 </div>

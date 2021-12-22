@@ -20,6 +20,7 @@ import {NotificationService} from '@core/services/notification';
 import {MLAService} from '@core/services/mla';
 import {SettingsService} from '@core/services/settings';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
+import {Addon} from '@shared/entity/addon';
 import {Cluster} from '@shared/entity/cluster';
 import {SeedSettings} from '@shared/entity/datacenter';
 import {AlertmanagerConfig} from '@shared/entity/mla';
@@ -34,6 +35,11 @@ export enum Type {
   Grafana = 'Grafana',
 }
 
+export enum AddonType {
+  NodeExporter = 'node-exporter',
+  KubeStateMetrics = 'kube-state-metrics',
+}
+
 @Component({
   selector: 'km-alertmanager-config',
   templateUrl: './template.html',
@@ -45,6 +51,7 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
   @Input() projectID: string;
   @Input() isClusterRunning: boolean;
   @Input() alertmanagerConfig: AlertmanagerConfig;
+  @Input() addons: Addon[] = [];
 
   private _settings: AdminSettings;
   private _seedSettings: SeedSettings;
@@ -113,6 +120,36 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
       default:
         return '';
     }
+  }
+
+  displayGrafanaWarning(): boolean {
+    return (
+      this.shouldDisplayLink(Type.Grafana) &&
+      (!this._isAddonEnabled(AddonType.NodeExporter) || !this._isAddonEnabled(AddonType.KubeStateMetrics))
+    );
+  }
+
+  private _isAddonEnabled(addon: AddonType): boolean {
+    return this.addons.find(a => a.id === addon) ? true : false;
+  }
+
+  getTextForWarning(): string {
+    const nodeExporterEnabled = this._isAddonEnabled(AddonType.NodeExporter);
+    const kubeStateMetricsEnabled = this._isAddonEnabled(AddonType.KubeStateMetrics);
+
+    if (!nodeExporterEnabled && !kubeStateMetricsEnabled) {
+      return 'Please enable the node-exporter addon to see node-related stats and the kube-state-metrics addon to see all k8s workload stats in Grafana dashboards';
+    }
+
+    if (!nodeExporterEnabled) {
+      return 'Please enable the node-exporter addon to see node-related stats in Grafana dashboards';
+    }
+
+    if (!kubeStateMetricsEnabled) {
+      return 'Please enable the kube-state-metrics addon to see all k8s workload stats in Grafana dashboards';
+    }
+
+    return '';
   }
 
   edit(): void {
