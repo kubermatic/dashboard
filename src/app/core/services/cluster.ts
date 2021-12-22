@@ -26,7 +26,6 @@ import {EtcdRestore} from '@shared/entity/backup';
 import {Cluster, ClusterPatch, Finalizer, MasterVersion, ProviderSettingsPatch} from '@shared/entity/cluster';
 import {Event} from '@shared/entity/event';
 import {Health} from '@shared/entity/health';
-import {ExternalMachineDeployment} from '@shared/entity/machine-deployment';
 import {ClusterMetrics, NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
 import {SSHKey} from '@shared/entity/ssh-key';
@@ -34,6 +33,7 @@ import {CreateClusterModel} from '@shared/model/CreateClusterModel';
 import {merge, Observable, of, Subject, timer} from 'rxjs';
 import {catchError, filter, shareReplay, switchMap, switchMapTo, take} from 'rxjs/operators';
 import {ExternalCluster, ExternalClusterModel} from '@shared/entity/external-cluster';
+import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 
 @Injectable()
 export class ClusterService {

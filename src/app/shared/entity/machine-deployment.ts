@@ -23,43 +23,6 @@ export class MachineDeployment {
   status?: MachineDeploymentStatus;
 }
 
-class GKENodePoolAutoscaling {
-  autoprovisioned?: boolean;
-  enabled?: boolean;
-  maxNodeCount?: number;
-  minNodeCount?: number;
-}
-
-class GKENodeConfig {
-  diskSizeGb?: number;
-  diskType?: string;
-  imageType?: string;
-  localSsdCount?: number;
-  machineType?: string;
-  labels?: Map<string, string>;
-}
-
-class GKENodeManagement {
-  autoRepair?: boolean;
-  autoUpgrade?: boolean;
-}
-
-class GKEMachineDeploymentCloudSpec {
-  autoscaling?: GKENodePoolAutoscaling;
-  config?: GKENodeConfig;
-  management?: GKENodeManagement;
-  locations?: string[];
-  string;
-}
-
-class ExternalMachineDeploymentCloudSpec {
-  gke?: GKEMachineDeploymentCloudSpec;
-}
-
-export class ExternalMachineDeployment extends MachineDeployment {
-  cloud?: ExternalMachineDeploymentCloudSpec;
-}
-
 export class MachineDeploymentSpec {
   replicas: number;
   template: NodeSpec;

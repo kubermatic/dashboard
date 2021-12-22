@@ -20,11 +20,11 @@ import {PathParam} from '@core/services/params';
 import {Datacenter} from '@shared/entity/datacenter';
 import {Event} from '@shared/entity/event';
 import {ExternalCluster} from '@shared/entity/external-cluster';
-import {ExternalMachineDeployment} from '@shared/entity/machine-deployment';
 import {NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
 import {forkJoin, Subject, timer} from 'rxjs';
 import {switchMap, take, takeUntil} from 'rxjs/operators';
+import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 
 @Component({
   selector: 'km-external-machine-deployment-details',
@@ -95,6 +95,10 @@ export class ExternalMachineDeploymentDetailsComponent implements OnInit, OnDest
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  getStatusColor(): string {
+    return ExternalMachineDeployment.getStatusColor(this.machineDeployment);
   }
 
   private _storeNodeMetrics(metrics: NodeMetrics[]): void {

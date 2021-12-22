@@ -23,7 +23,6 @@ import {UserService} from '@core/services/user';
 import {EditClusterConnectionDialogComponent} from '@shared/components/external-cluster-data-dialog/component';
 import {Event} from '@shared/entity/event';
 import {ExternalCluster, ExternalClusterProvider, ExternalClusterState} from '@shared/entity/external-cluster';
-import {ExternalMachineDeployment} from '@shared/entity/machine-deployment';
 import {Member} from '@shared/entity/member';
 import {ClusterMetrics, NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
@@ -31,6 +30,7 @@ import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {forkJoin, Subject, timer} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
+import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 
 @Component({
   selector: 'km-cluster-details',

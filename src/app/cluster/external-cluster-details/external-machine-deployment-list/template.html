@@ -31,7 +31,8 @@ limitations under the License.
             class="km-header-cell"></th>
         <td mat-cell
             *matCellDef="let element">
-          <!-- TODO: add status handling -->
+          <i class="km-machine-deployment-health km-icon-circle"
+             [ngClass]="getStatusColor(element)"></i>
         </td>
       </ng-container>
 

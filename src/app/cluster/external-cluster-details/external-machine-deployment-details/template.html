@@ -21,7 +21,8 @@ limitations under the License.
   <mat-card>
     <mat-card-header>
       <mat-card-title class="km-machine-deployment-name">
-        <i class="km-machine-deployment-health km-icon-circle km-unknown-bg"></i>
+        <i class="km-machine-deployment-health km-icon-circle"
+           [ngClass]="getStatusColor()"></i>
         <span ngxClipboard
               [cbContent]="machineDeployment.name"
               matTooltip="Click to copy"
