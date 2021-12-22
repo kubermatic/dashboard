@@ -120,6 +120,10 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
+  isClusterRunning(): boolean {
+    return this.cluster?.status?.state === ExternalClusterState.Running;
+  }
+
   getStatus(): string {
     return ExternalCluster.getStatusMessage(this.cluster);
   }
