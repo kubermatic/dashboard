@@ -32,7 +32,8 @@ limitations under the License.
         <td mat-cell
             *matCellDef="let element">
           <i class="km-machine-deployment-health km-icon-circle"
-             [ngClass]="getStatusColor(element)"></i>
+             [ngClass]="getStatusColor(element)"
+             [matTooltip]="getStatusMessage(element)"></i>
         </td>
       </ng-container>
 

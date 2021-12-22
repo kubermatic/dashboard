@@ -101,6 +101,10 @@ export class ExternalMachineDeploymentDetailsComponent implements OnInit, OnDest
     return ExternalMachineDeployment.getStatusColor(this.machineDeployment);
   }
 
+  getStatusMessage(): string {
+    return ExternalMachineDeployment.getStatusMessage(this.machineDeployment);
+  }
+
   private _storeNodeMetrics(metrics: NodeMetrics[]): void {
     const map = new Map<string, NodeMetrics>();
     metrics.forEach(m => map.set(m.name, m));

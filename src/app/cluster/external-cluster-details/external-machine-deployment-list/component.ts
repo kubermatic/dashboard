@@ -65,6 +65,10 @@ export class ExternalMachineDeploymentListComponent implements OnInit, OnChanges
     return ExternalMachineDeployment.getStatusColor(md);
   }
 
+  getStatusMessage(md: ExternalMachineDeployment): string {
+    return ExternalMachineDeployment.getStatusMessage(md);
+  }
+
   getOperatingSystem(md: ExternalMachineDeployment): string {
     return getOperatingSystem(md.spec.template);
   }
