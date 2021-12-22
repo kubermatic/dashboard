@@ -24,7 +24,7 @@ limitations under the License.
               fxLayoutAlign="center center"
               kmThrottleClick
               (throttleClick)="disconnect()"
-              [disabled]="!isDisconnectEnabled()">
+              [disabled]="!canDisconnect()">
         <i class="km-icon-mask km-icon-disconnect"></i>
         <span>Disconnect</span>
       </button>

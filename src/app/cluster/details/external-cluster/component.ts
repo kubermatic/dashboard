@@ -108,9 +108,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(([nodes, metrics, events]) => {
         this.nodes = nodes;
-        const map = new Map<string, NodeMetrics>();
-        metrics.forEach(m => map.set(m.name, m));
-        this.nodesMetrics = map;
+        this.nodesMetrics = new Map<string, NodeMetrics>(metrics.map(m => [m.name, m]));
         this.events = events;
       });
   }
@@ -132,7 +130,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
     return ExternalCluster.getStatusColor(this.cluster);
   }
 
-  isEditEnabled(): boolean {
+  canEdit(): boolean {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'cluster', Permission.Edit);
   }
 
@@ -152,7 +150,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
       });
   }
 
-  isDisconnectEnabled(): boolean {
+  canDisconnect(): boolean {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'cluster', Permission.Delete);
   }
 
