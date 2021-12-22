@@ -50,6 +50,7 @@ import {StepBase} from '../base';
 import * as semver from 'semver';
 import {CIDR_PATTERN_VALIDATOR} from '@shared/validators/others';
 import {FeatureGateService} from '@core/services/feature-gate';
+import {coerce, compare} from 'semver';
 
 enum Controls {
   Name = 'name',
@@ -134,7 +135,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.Name]: new FormControl('', [
         Validators.required,
         Validators.minLength(this._minNameLength),
-        Validators.pattern('[a-zA-Z0-9-]*'),
+        Validators.pattern('[a-z0-9]+[a-z0-9-]*[a-z0-9]+'),
       ]),
       [Controls.Version]: new FormControl('', [Validators.required]),
       [Controls.ContainerRuntime]: new FormControl(ContainerRuntime.Containerd, [Validators.required]),
@@ -142,7 +143,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.AuditPolicyPreset]: new FormControl(''),
       [Controls.UserSSHKeyAgent]: new FormControl(true),
       [Controls.OPAIntegration]: new FormControl(false),
-      [Controls.Konnectivity]: new FormControl(false),
+      [Controls.Konnectivity]: new FormControl(true),
       [Controls.MLALogging]: new FormControl(false),
       [Controls.MLAMonitoring]: new FormControl(false),
       [Controls.AdmissionPlugins]: new FormControl([]),
@@ -171,6 +172,14 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       }
       this.form.updateValueAndValidity();
     });
+
+    this._api
+      .getCNIPluginVersions(this.form.get(Controls.CNIPlugin).value)
+      .pipe(take(1))
+      .subscribe(versions => {
+        this.cniPluginVersions = versions.versions.sort((a, b) => compare(coerce(a), coerce(b)));
+        this._setDefaultCNIVersion();
+      });
 
     this._clusterSpecService.datacenterChanges
       .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
@@ -220,10 +229,14 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .subscribe(() => (this._clusterSpecService.admissionPlugins = this.form.get(Controls.AdmissionPlugins).value));
 
     this.control(Controls.CNIPlugin)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => {
+      .valueChanges.pipe(filter(value => !!value))
+      .pipe(switchMap(() => this._api.getCNIPluginVersions(this.form.get(Controls.CNIPlugin).value)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(cniVersions => {
         this.updateCNIPluginOptions();
         this.form.get(Controls.CNIPluginVersion).setValue('');
+        this.cniPluginVersions = cniVersions.versions.sort((a, b) => compare(coerce(a), coerce(b)));
+        this._setDefaultCNIVersion();
       });
 
     merge(
@@ -304,14 +317,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     return this.form.get(Controls.CNIPlugin).value !== CNIPlugin.None;
   }
 
-  getCNIPluginVersions(): string[] {
-    this.cniPluginVersions = Cluster.getCNIVersions(this.form.get(Controls.CNIPlugin).value);
-    if (this.cniPluginVersions.length > 0 && !this.form.get(Controls.CNIPluginVersion).value) {
-      this.form.get(Controls.CNIPluginVersion).setValue(this.cniPluginVersions[this.cniPluginVersions.length - 1]);
-    }
-    return this.cniPluginVersions;
-  }
-
   private _enforce(control: Controls, isEnforced: boolean): void {
     if (isEnforced) {
       this.form.get(control).setValue(true);
@@ -338,12 +343,20 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     }
   }
 
+  private _setDefaultCNIVersion(): void {
+    if (this.cniPluginVersions.length > 0 && !this.form.get(Controls.CNIPluginVersion).value) {
+      this.form.get(Controls.CNIPluginVersion).setValue(this.cniPluginVersions[this.cniPluginVersions.length - 1]);
+    }
+  }
+
   private _getClusterEntity(): Cluster {
     const pods = this.controlValue(Controls.PodsCIDR);
     const services = this.controlValue(Controls.ServicesCIDR);
     const cniPluginType = this.controlValue(Controls.CNIPlugin);
     const cniPluginVersion = this.controlValue(Controls.CNIPluginVersion);
     const cniPlugin = cniPluginType ? {type: cniPluginType, version: cniPluginVersion} : null;
+    const konnectivity = this.isKonnectivityEnabled ? this.controlValue(Controls.Konnectivity) : null;
+
     return {
       name: this.controlValue(Controls.Name),
       type: ClusterType.Kubernetes,
@@ -366,7 +379,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           proxyMode: this.controlValue(Controls.ProxyMode),
           pods: {cidrBlocks: pods ? [pods] : []},
           services: {cidrBlocks: services ? [services] : []},
-          konnectivityEnabled: this.controlValue(Controls.Konnectivity),
+          konnectivityEnabled: konnectivity,
         },
         cniPlugin: cniPlugin,
       } as ClusterSpec,

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {HealthStatusColor} from '@shared/utils/health-status/health-status';
+
 export enum ExternalClusterProvider {
   Custom = 'custom',
   AKS = 'aks',
@@ -30,10 +32,36 @@ export class ExternalCluster {
   status: ExternalClusterStatus;
 
   static getProvider(cloud: ExternalCloudSpec): ExternalClusterProvider {
+    if (!cloud) {
+      return ExternalClusterProvider.Custom;
+    }
+
     const providers = Object.keys(cloud);
     return providers.length > 0
       ? (providers.pop().toLowerCase() as ExternalClusterProvider)
       : ExternalClusterProvider.Custom;
+  }
+
+  static isExternalCluster(cloud?: ExternalCloudSpec): boolean {
+    if (!cloud) {
+      return false;
+    }
+
+    return this.getProvider(cloud) !== ExternalClusterProvider.Custom;
+  }
+
+  static getStatusColor(state: ExternalClusterState): string {
+    switch (state) {
+      case ExternalClusterState.Running:
+        return HealthStatusColor.Green;
+      case ExternalClusterState.Provisioning:
+      case ExternalClusterState.Reconciling:
+        return HealthStatusColor.Orange;
+      case ExternalClusterState.Deleting:
+        return HealthStatusColor.Red;
+      default:
+        return HealthStatusColor.Unknown;
+    }
   }
 }
 

@@ -131,7 +131,8 @@ limitations under the License.
 
         <km-cni-version *ngIf="isHavingCNI()"
                         [cluster]="cluster"
-                        [isClusterRunning]="isClusterAPIRunning"></km-cni-version>
+                        [isClusterRunning]="isClusterAPIRunning"
+                        [cniVersions]="cniVersions"></km-cni-version>
 
         <km-property>
           <div key>Cluster ID</div>

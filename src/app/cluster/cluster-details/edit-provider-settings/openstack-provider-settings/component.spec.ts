@@ -61,6 +61,7 @@ describe('OpenstackProviderSettingsComponent', () => {
         {provide: ApiService, useClass: ApiMockService},
         {provide: MatDialogRef, useClass: MatDialogRefMock},
       ],
+      teardown: {destroyAfterEach: false},
     }).compileComponents();
   });
 

@@ -61,6 +61,7 @@ describe('AddSshKeyDialogComponent', () => {
         GoogleAnalyticsService,
         NotificationService,
       ],
+      teardown: {destroyAfterEach: false},
     }).compileComponents();
   });
 

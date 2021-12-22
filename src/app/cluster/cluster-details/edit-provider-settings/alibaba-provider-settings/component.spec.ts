@@ -58,6 +58,7 @@ describe('AlibabaProviderSettingsComponent', () => {
         {provide: ClusterService, useClass: ClusterMockService},
         {provide: MatDialogRef, useClass: MatDialogRefMock},
       ],
+      teardown: {destroyAfterEach: false},
     }).compileComponents();
   });
 

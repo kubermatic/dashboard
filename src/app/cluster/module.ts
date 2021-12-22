@@ -15,6 +15,8 @@
 import {NgModule} from '@angular/core';
 import {AddMachineNetworkComponent} from '@app/cluster/cluster-details/add-machine-network/component';
 import {AnexiaProviderSettingsComponent} from '@app/cluster/cluster-details/edit-provider-settings/anexia-provider-settings/component';
+import {ExternalMachineDeploymentDetailsComponent} from '@app/cluster/external-cluster-details/external-machine-deployment-details/component';
+import {ExternalMachineDeploymentListComponent} from '@app/cluster/external-cluster-details/external-machine-deployment-list/component';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '@app/node-data/config';
 import {NodeDataModule} from '@app/node-data/module';
 import {NodeService} from '@core/services/node';
@@ -59,15 +61,19 @@ import {RuleGroupsComponent} from './cluster-details/mla/rule-groups/component';
 import {RuleGroupDialog} from './cluster-details/mla/rule-groups/rule-group-dialog/component';
 import {ShareKubeconfigComponent} from './cluster-details/share-kubeconfig/component';
 import {VersionPickerComponent} from './cluster-details/version-picker/component';
-import {ClusterListComponent} from './cluster-list/component';
+import {ClusterListComponent} from './list/cluster/component';
 import {ExternalClusterDetailsComponent} from './external-cluster-details/component';
 import {ExternalNodeListComponent} from './external-cluster-details/external-node-list/component';
 import {ClusterRoutingModule} from './routing';
+import {ExternalClusterListComponent} from '@app/cluster/list/external-cluster/component';
+import {ClustersComponent} from '@app/cluster/list/component';
 
 const components: any[] = [
   ClusterDetailsComponent,
   ExternalClusterDetailsComponent,
   ExternalNodeListComponent,
+  ExternalMachineDeploymentListComponent,
+  ExternalMachineDeploymentDetailsComponent,
   NodeListComponent,
   MachineDeploymentListComponent,
   MachineDeploymentDetailsComponent,
@@ -108,6 +114,8 @@ const components: any[] = [
   MLAComponent,
   CNIVersionComponent,
   CNIVersionDialog,
+  ExternalClusterListComponent,
+  ClustersComponent,
 ];
 
 const dialogs: any[] = [AddMachineNetworkComponent];

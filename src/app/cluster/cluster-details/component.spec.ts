@@ -50,8 +50,10 @@ import {SharedModule} from '@shared/module';
 import {of} from 'rxjs';
 import {ClusterDetailsComponent} from './component';
 import {ClusterSecretsComponent} from './cluster-secrets/component';
+import {CNIVersionComponent} from './cni-version/component';
 import {MachineDeploymentListComponent} from './machine-deployment-list/component';
 import {MachineNetworksDisplayComponent} from './machine-networks-display/component';
+import {MLAComponent} from './mla/component';
 import {NodeListComponent} from './node-list/component';
 import {RBACComponent} from './rbac/component';
 import {VersionPickerComponent} from './version-picker/component';
@@ -93,6 +95,8 @@ describe('ClusterDetailsComponent', () => {
           MachineNetworksDisplayComponent,
           VersionPickerComponent,
           RBACComponent,
+          CNIVersionComponent,
+          MLAComponent,
         ],
         providers: [
           {provide: ApiService, useClass: ApiMockService},
@@ -114,6 +118,7 @@ describe('ClusterDetailsComponent', () => {
           GoogleAnalyticsService,
           NotificationService,
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

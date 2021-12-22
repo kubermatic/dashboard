@@ -43,6 +43,7 @@ describe('EditProjectComponent', () => {
           {provide: MatDialogRef, useClass: MatDialogRefMock},
           {provide: ApiService, useValue: apiMock},
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

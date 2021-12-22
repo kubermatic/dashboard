@@ -19,7 +19,7 @@ import {environment} from '@environments/environment';
 import {LabelFormComponent} from '@shared/components/label-form/component';
 import {TaintFormComponent} from '@shared/components/taint-form/component';
 import {AddonConfig} from '@shared/entity/addon';
-import {Cluster, MasterVersion, Token} from '@shared/entity/cluster';
+import {Cluster, MasterVersion, Token, CNIPlugin, CNIPluginVersions} from '@shared/entity/cluster';
 import {Event} from '@shared/entity/event';
 import {MachineDeployment, MachineDeploymentPatch} from '@shared/entity/machine-deployment';
 import {CreateMember, Member} from '@shared/entity/member';
@@ -78,7 +78,7 @@ export class ApiService {
 
   getMachineDeployments(cluster: string, projectID: string): Observable<MachineDeployment[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments`;
-    return this._http.get<MachineDeployment[]>(url).pipe(catchError(() => of<MachineDeployment[]>()));
+    return this._http.get<MachineDeployment[]>(url).pipe(catchError(() => of<MachineDeployment[]>([])));
   }
 
   getMachineDeployment(mdId: string, cluster: string, projectID: string): Observable<MachineDeployment> {
@@ -257,6 +257,11 @@ export class ApiService {
   getAdmissionPlugins(version: string): Observable<string[]> {
     const url = `${this._restRoot}/admission/plugins/${version}`;
     return this._http.get<string[]>(url);
+  }
+
+  getCNIPluginVersions(cniPlugin: CNIPlugin): Observable<CNIPluginVersions> {
+    const url = `${this._newRestRoot}/cni/${cniPlugin}/versions`;
+    return this._http.get<CNIPluginVersions>(url);
   }
 
   getAzureSizes(projectId: string, cluster: string): Observable<AzureSizes[]> {

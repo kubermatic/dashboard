@@ -19,7 +19,7 @@ import {
   ExternalClusterModel,
   ExternalClusterProvider,
   GKECluster,
-} from '@shared/entity/external-cluster-model';
+} from '@shared/entity/external-cluster';
 import {BehaviorSubject, Observable, of} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {environment} from '@environments/environment';

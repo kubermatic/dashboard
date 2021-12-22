@@ -19,7 +19,7 @@ import {MatStepper} from '@angular/material/stepper';
 import {filter, take, takeUntil} from 'rxjs/operators';
 import {NotificationService} from '@core/services/notification';
 import {Router} from '@angular/router';
-import {ExternalClusterProvider} from '@shared/entity/external-cluster-model';
+import {ExternalClusterProvider} from '@shared/entity/external-cluster';
 import {Subject} from 'rxjs';
 
 export enum Step {

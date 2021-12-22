@@ -14,7 +14,7 @@
 
 import {Injectable} from '@angular/core';
 import {Addon} from '@shared/entity/addon';
-import {Cluster, ClusterPatch, MasterVersion, ProviderSettingsPatch} from '@shared/entity/cluster';
+import {Cluster, ClusterPatch, MasterVersion, ProviderSettingsPatch, CNIPluginVersions} from '@shared/entity/cluster';
 import {Event} from '@shared/entity/event';
 import {Health} from '@shared/entity/health';
 import {ClusterMetrics} from '@shared/entity/metrics';
@@ -87,6 +87,10 @@ export class ClusterMockService {
 
   upgrades(_cluster: string): Observable<MasterVersion[]> {
     return asyncData([]);
+  }
+
+  cniVersions(_projectID: string, _clusterID: string): Observable<CNIPluginVersions> {
+    return asyncData(null);
   }
 
   nodes(_projectID: string, _clusterId: string, _datacenter: string): Observable<Node[]> {

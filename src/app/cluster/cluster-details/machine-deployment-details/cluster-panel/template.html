@@ -25,27 +25,27 @@ limitations under the License.
   </button>
 
   <span class="cluster-type-icon">
-    <i class="km-icon-{{cluster.type}}"></i>
+    <i class="km-icon-kubernetes"></i>
   </span>
 
   <km-property>
     <div key>Cluster</div>
     <div value
-         id="km-cluster-panel-name">{{cluster.name}}</div>
+         id="km-cluster-panel-name">{{cluster?.name}}</div>
   </km-property>
 
   <km-property>
     <div key>Control Plane Version</div>
-    <div value>{{cluster.spec.version}}</div>
+    <div value>{{cluster?.spec.version}}</div>
   </km-property>
 
   <km-property>
     <div key>Cluster ID</div>
-    <div value>{{cluster.id}}</div>
+    <div value>{{cluster?.id}}</div>
   </km-property>
 
-  <km-property *ngIf="datacenter?.spec?.provider !== 'bringyourown'">
+  <km-property *ngIf="!!region">
     <div key>Region</div>
-    <div value>{{datacenter?.spec?.country}} ({{datacenter?.spec?.location}})</div>
+    <div value>{{region}}</div>
   </km-property>
 </div>

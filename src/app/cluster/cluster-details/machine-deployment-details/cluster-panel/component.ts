@@ -14,8 +14,11 @@
 
 import {Component, Input} from '@angular/core';
 import {Router} from '@angular/router';
+import {ParamsService} from '@core/services/params';
 import {Cluster} from '@shared/entity/cluster';
 import {Datacenter} from '@shared/entity/datacenter';
+import {ExternalCluster} from '@shared/entity/external-cluster';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
 
 @Component({
   selector: 'km-cluster-panel',
@@ -23,13 +26,34 @@ import {Datacenter} from '@shared/entity/datacenter';
   styleUrls: ['./style.scss'],
 })
 export class ClusterPanelComponent {
-  @Input() cluster: Cluster;
+  @Input() cluster: Cluster | ExternalCluster;
   @Input() datacenter: Datacenter;
   @Input() projectID: string;
 
-  constructor(private readonly _router: Router) {}
+  private get _isExternalCluster(): boolean {
+    return this._params.getCurrentUrl().includes('/external/');
+  }
+
+  get region(): string {
+    if (
+      !this.datacenter?.spec?.country ||
+      !this.datacenter?.spec?.location ||
+      this.datacenter?.spec?.provider === NodeProvider.BRINGYOUROWN
+    ) {
+      return undefined;
+    }
+
+    return `${this.datacenter.spec.country} (${this.datacenter.spec.location})`;
+  }
+
+  constructor(private readonly _router: Router, private readonly _params: ParamsService) {}
 
   navigate(): void {
+    if (this._isExternalCluster) {
+      this._router.navigate(['/projects/' + this.projectID + '/clusters/external/' + this.cluster.id]);
+      return;
+    }
+
     this._router.navigate(['/projects/' + this.projectID + '/clusters/' + this.cluster.id]);
   }
 }

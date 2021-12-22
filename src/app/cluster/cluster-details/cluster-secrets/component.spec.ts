@@ -54,6 +54,7 @@ describe('ClusterSecretsComponent', () => {
           {provide: UserService, useClass: UserMockService},
           MatDialog,
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );
