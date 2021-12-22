@@ -55,7 +55,7 @@
     .mat-form-field {
       font-size: variables.$font-size-subhead;
       margin-top: 20px;
-      width: 160px;
+      max-width: 160px;
     }
   }
 
