@@ -130,7 +130,7 @@ limitations under the License.
                                        [cluster]="cluster"
                                        [machineDeployments]="machineDeployments"
                                        [projectID]="projectID"
-                                       [isClusterRunning]="true"></km-external-machine-deployment-list>
+                                       [isClusterRunning]="isClusterRunning()"></km-external-machine-deployment-list>
 
   <km-external-node-list *ngIf="provider === Provider.Custom"
                          [cluster]="cluster"
@@ -140,11 +140,9 @@ limitations under the License.
                          [isClusterRunning]="isClusterRunning()"></km-external-node-list>
 
   <km-event-card [events]="events"></km-event-card>
-
 </ng-container>
 
-<div *ngIf="!cluster">
-  <mat-spinner [diameter]="25"
-               color="accent"
-               class="km-spinner"></mat-spinner>
-</div>
+<mat-spinner [diameter]="25"
+             *ngIf="!cluster"
+             color="accent"
+             class="km-spinner"></mat-spinner>
