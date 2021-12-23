@@ -54,7 +54,7 @@
     "@fontsource/roboto": "4.5.1",
     "@fontsource/roboto-mono": "4.5.0",
     "@fontsource/ubuntu": "4.5.0",
-    "core-js": "3.20.0",
+    "core-js": "3.20.1",
     "country-code-lookup": "0.0.20",
     "flag-icon-css": "4.1.7",
     "git-describe": "4.1.0",
