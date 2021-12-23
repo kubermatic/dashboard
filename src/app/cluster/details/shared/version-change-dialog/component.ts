@@ -74,17 +74,6 @@ export class VersionChangeDialogComponent implements OnInit, OnDestroy {
       : this._clusterService.patch(this.project.id, this.cluster.id, this._getPatch());
   }
 
-  private _upgradeMachineDeployments(): void {
-    this._clusterService
-      .upgradeMachineDeployments(this.project.id, this.cluster.id, this.selectedVersion)
-      .pipe(take(1))
-      .subscribe(() => {
-        this._notificationService.success(
-          `The machine deployments from the ${this.cluster.name} cluster are being updated to the ${this.selectedVersion} version`
-        );
-      });
-  }
-
   changeVersion(): void {
     this._patch()
       .pipe(take(1))
@@ -96,11 +85,22 @@ export class VersionChangeDialogComponent implements OnInit, OnDestroy {
         this._googleAnalyticsService.emitEvent('clusterOverview', 'clusterVersionChanged');
 
         if (!this.isClusterExternal && this.isMachineDeploymentUpgradeEnabled) {
-          this._upgradeMachineDeployments();
+          this.upgradeMachineDeployments();
         }
       });
 
     this._dialogRef.close(true);
+  }
+
+  upgradeMachineDeployments(): void {
+    this._clusterService
+      .upgradeMachineDeployments(this.project.id, this.cluster.id, this.selectedVersion)
+      .pipe(take(1))
+      .subscribe(() => {
+        this._notificationService.success(
+          `The machine deployments from the ${this.cluster.name} cluster are being updated to the ${this.selectedVersion} version`
+        );
+      });
   }
 
   isClusterDeprecated(): boolean {
