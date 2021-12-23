@@ -308,7 +308,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     if (
       this.controlValue(Controls.CNIPlugin) === CNIPlugin.Cilium &&
       this.isKonnectivityEnabled &&
-      this.controlValue(Controls.Konnectivity)
+      !!this.controlValue(Controls.Konnectivity)
     ) {
       this.availableProxyModes = [ProxyMode.ipvs, ProxyMode.iptables, ProxyMode.ebpf];
     } else {
