@@ -20,23 +20,35 @@ limitations under the License.
     <i class="km-icon-update-available-arrow"></i>
     <span>Update Available</span>
   </div>
-
   <km-cluster-type-eol [version]="cluster.spec?.version"
                        type="badge"></km-cluster-type-eol>
 </km-dialog-title>
 <mat-dialog-content>
   <p class="km-dialog-context-description">Change Control Plane Version of <b>{{cluster.name}}</b> cluster</p>
-  <mat-form-field>
-    <mat-label>Control Plane Version</mat-label>
-    <mat-select [(ngModel)]="selectedVersion"
-                panelClass="km-add-dialog-dropdown"
-                disableOptionCentering>
-      <mat-option *ngFor="let version of versions"
-                  [value]="version">
-        {{version}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+  <ng-container [ngSwitch]="hasVersionOptions">
+    <mat-form-field *ngSwitchCase="true">
+      <mat-label>Control Plane Version</mat-label>
+      <mat-select [(ngModel)]="selectedVersion"
+                  panelClass="km-add-dialog-dropdown"
+                  disableOptionCentering>
+        <mat-option *ngFor="let version of versions"
+                    [value]="version">
+          {{version}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field *ngSwitchCase="false">
+      <mat-label>Control Plane Version</mat-label>
+      <input [(ngModel)]="selectedVersion"
+             matInput
+             type="text"
+             autocomplete="off"
+             required
+             cdkFocusInitial>
+    </mat-form-field>
+  </ng-container>
+
   <div class="checkbox-wrapper">
     <mat-checkbox *ngIf="!isClusterExternal"
                   [(ngModel)]="isMachineDeploymentUpgradeEnabled">

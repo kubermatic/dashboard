@@ -92,7 +92,7 @@ export class VersionPickerComponent implements OnInit, OnChanges {
   }
 
   isEnabled(): boolean {
-    return this.isClusterRunning && (this.updatesAvailable || this.downgradesAvailable);
+    return this.isClusterRunning && (this.updatesAvailable || this.downgradesAvailable || !this.hasUpgradeOptions);
   }
 
   openVersionChangeDialog(): void {
