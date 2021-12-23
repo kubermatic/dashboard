@@ -74,9 +74,8 @@ export class AdminSettingsRuleGroupsComponent implements OnInit, OnChanges, OnDe
 
     this._datacenterService.seeds.pipe(takeUntil(this._unsubscribe)).subscribe(seeds => {
       this.seeds = seeds;
+      this._getAdminRuleGroups();
     });
-
-    this._getAdminRuleGroups();
   }
 
   ngOnChanges(): void {
