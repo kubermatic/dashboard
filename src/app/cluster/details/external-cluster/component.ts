@@ -34,7 +34,7 @@ import {ExternalMachineDeployment} from '@shared/entity/external-machine-deploym
 import {MasterVersion} from '@shared/entity/cluster';
 
 @Component({
-  selector: 'km-cluster',
+  selector: 'km-external-cluster-details',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })

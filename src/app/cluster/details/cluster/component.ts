@@ -65,7 +65,7 @@ import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialo
 import {coerce, compare} from 'semver';
 
 @Component({
-  selector: 'km-cluster',
+  selector: 'km-cluster-details',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
