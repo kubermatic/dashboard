@@ -31,6 +31,7 @@ export class VersionPickerComponent implements OnInit, OnChanges {
   @Input() cluster: Cluster | ExternalCluster;
   @Input() isClusterRunning = false;
   @Input() upgrades: MasterVersion[] = [];
+  @Input() isExternal = false;
   versionsList: string[] = [];
   updatesAvailable = false;
   downgradesAvailable = false;
@@ -62,7 +63,7 @@ export class VersionPickerComponent implements OnInit, OnChanges {
       const isDowngrade = gt(this.cluster.spec.version, upgrade.version);
 
       if (upgrade.restrictedByKubeletVersion === true) {
-        this.someUpgradesRestrictedByKubeletVersion = isUpgrade;
+        this.someUpgradesRestrictedByKubeletVersion = this.someUpgradesRestrictedByKubeletVersion || isUpgrade;
         return; // Skip all restricted versions.
       }
 
@@ -82,18 +83,18 @@ export class VersionPickerComponent implements OnInit, OnChanges {
   }
 
   isClusterBeforeEOL(): boolean {
-    return this._eolService.cluster.isBefore(this.cluster.spec.version);
+    return !this.isExternal && this._eolService.cluster.isBefore(this.cluster.spec.version);
   }
 
   isClusterAfterEOL(): boolean {
-    return this._eolService.cluster.isAfter(this.cluster.spec.version);
+    return !this.isExternal && this._eolService.cluster.isAfter(this.cluster.spec.version);
   }
 
   isEnabled(): boolean {
     return this.isClusterRunning && (this.updatesAvailable || this.downgradesAvailable);
   }
 
-  changeClusterVersionDialog(): void {
+  openVersionChangeDialog(): void {
     if (this.isEnabled()) {
       const modal = this._matDialog.open(VersionChangeDialogComponent);
       modal.componentInstance.cluster = this.cluster;
@@ -111,8 +112,9 @@ export class VersionPickerComponent implements OnInit, OnChanges {
 
   private _isClusterDeprecated(): boolean {
     return (
-      this._eolService.cluster.isAfter(this.cluster.spec.version) ||
-      this._eolService.cluster.isBefore(this.cluster.spec.version)
+      !this.isExternal &&
+      (this._eolService.cluster.isAfter(this.cluster.spec.version) ||
+        this._eolService.cluster.isBefore(this.cluster.spec.version))
     );
   }
 }

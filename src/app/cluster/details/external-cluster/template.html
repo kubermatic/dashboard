@@ -55,7 +55,8 @@ limitations under the License.
       <div class="km-content-wrap">
         <km-version-picker [cluster]="cluster"
                            [isClusterRunning]="isClusterRunning()"
-                           [upgrades]="canEdit() ? upgrades : []"></km-version-picker>
+                           [upgrades]="canEdit() ? upgrades : []"
+                           isExternal></km-version-picker>
         <km-property>
           <div key>Cluster ID</div>
           <div value
