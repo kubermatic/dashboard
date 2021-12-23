@@ -212,6 +212,10 @@ limitations under the License.
                            [formControlName]="Controls.PodNodeSelectorAdmissionPluginConfig"
                            (labelsChange)="onPodNodeSelectorAdmissionPluginConfigChange($event)"
                            fxFlex="100"></km-label-form>
+            <div *ngIf="isPluginEnabled(admissionPlugin.EventRateLimit)">
+              <km-wizard-cluster-event-rate-limit [formControl]="form.get(Controls.EventRateLimitConfig)"></km-wizard-cluster-event-rate-limit>
+            </div>
+
           </div>
 
           <div fxLayout="column"
@@ -273,6 +277,13 @@ limitations under the License.
               <i *ngIf="isEnforced(Controls.MLAMonitoring)"
                  class="km-icon-info km-pointer"
                  matTooltip="User Cluster Monitoring is enforced by your admin."></i>
+            </mat-checkbox>
+
+            <mat-checkbox [formControlName]="Controls.OperatingSystemManager">
+              Operating System Manager
+              <span class="km-label-primary">Experimental</span>
+              <i class="km-icon-info km-pointer"
+                 matTooltip="Enable to use OSM for creating and managing the configuration that are needed to configure worker nodes. This is an experimental feature and usage in production environment is not recommended."></i>
             </mat-checkbox>
 
             <km-label-form title="Labels"

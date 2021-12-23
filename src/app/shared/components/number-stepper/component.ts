@@ -189,15 +189,15 @@ export class NumberStepperComponent implements AfterViewInit, OnDestroy, Control
     }
 
     if (this._model?.hasError(Error.Max)) {
-      errors[Error.Max] = `Maximum acceptable value is ${this.max}.`;
+      errors[Error.Max] = `Maximum is ${this.max}.`;
     }
 
     if (this._model?.hasError(Error.Min)) {
-      errors[Error.Min] = `Minimum acceptable value is ${this.min}.`;
+      errors[Error.Min] = `Minimum is ${this.min}.`;
     }
 
     if (this._model?.hasError(Error.Pattern)) {
-      errors[Error.Pattern] = 'Expected provided number to be an integer.';
+      errors[Error.Pattern] = 'Whole number expected.';
     }
 
     return errors;

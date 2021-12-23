@@ -211,6 +211,10 @@ limitations under the License.
                              [value]="cluster.spec.enableUserSSHKeyAgent">
         </km-property-boolean>
 
+        <km-property-boolean label="Operating System Manager"
+                             [value]="cluster.spec.enableOperatingSystemManager">
+        </km-property-boolean>
+
         <km-property-boolean label="OPA Integration"
                              [value]="isOPAEnabled()"
                              id="km-opa-info">
@@ -244,6 +248,11 @@ limitations under the License.
         <km-property-boolean label="Pod Node Selector"
                              [value]="cluster.spec.usePodNodeSelectorAdmissionPlugin"
                              *ngIf="!!cluster.spec.usePodNodeSelectorAdmissionPlugin">
+        </km-property-boolean>
+
+        <km-property-boolean label="Event Rate Limit"
+                             [value]="cluster.spec.useEventRateLimitAdmissionPlugin"
+                             *ngIf="!!cluster.spec.useEventRateLimitAdmissionPlugin">
         </km-property-boolean>
 
         <km-property *ngIf="cluster.spec.admissionPlugins">
