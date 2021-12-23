@@ -28,7 +28,7 @@ import {ClusterMetrics, NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
-import {forkJoin, Subject, timer} from 'rxjs';
+import {forkJoin, of, Subject, timer} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 import {MasterVersion} from '@shared/entity/cluster';
@@ -104,7 +104,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
             this._clusterService.externalClusterNodes(this.projectID, clusterID),
             this._clusterService.externalClusterNodesMetrics(this.projectID, clusterID),
             this._clusterService.externalClusterEvents(this.projectID, clusterID),
-            this._clusterService.externalClusterUpgrades(this.projectID, clusterID),
+            this.hasUpgrades() ? this._clusterService.externalClusterUpgrades(this.projectID, clusterID) : of([]),
           ])
         )
       )
@@ -124,6 +124,10 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
 
   isClusterRunning(): boolean {
     return this.cluster?.status?.state === ExternalClusterState.Running;
+  }
+
+  hasUpgrades(): boolean {
+    return this.isClusterRunning() && this.provider !== ExternalClusterProvider.EKS;
   }
 
   getStatus(): string {
