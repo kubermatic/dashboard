@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'src/assets/css/mixins';
-@use 'src/assets/css/variables';
+@use 'mixins';
+@use 'variables';
 
 .km-cluster-detail-actions .mat-icon-button i {
   @include mixins.size(24px);

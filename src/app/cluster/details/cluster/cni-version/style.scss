@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'src/assets/css/variables';
-@use 'src/assets/css/mixins';
+@use 'variables';
+@use 'mixins';
 
 .cni-version-container {
   margin: 0 30px 0 0;
