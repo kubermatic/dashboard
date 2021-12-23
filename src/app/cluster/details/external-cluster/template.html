@@ -56,7 +56,8 @@ limitations under the License.
         <km-version-picker [cluster]="cluster"
                            [isClusterRunning]="isClusterRunning()"
                            [upgrades]="canEdit() ? upgrades : []"
-                           isExternal></km-version-picker>
+                           [hasUpgradeOptions]="provider !== Provider.EKS"
+                           [isClusterExternal]="true"></km-version-picker>
         <km-property>
           <div key>Cluster ID</div>
           <div value

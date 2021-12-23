@@ -20,19 +20,20 @@ import {EndOfLifeService} from '@core/services/eol';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {Cluster, ClusterPatch} from '@shared/entity/cluster';
-import {ExternalCluster} from '@shared/entity/external-cluster';
+import {ExternalCluster, ExternalClusterPatch} from '@shared/entity/external-cluster';
 import {Project} from '@shared/entity/project';
-import {Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-version-change-dialog',
   templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
 })
 export class VersionChangeDialogComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster | ExternalCluster;
-  controlPlaneVersions: string[] = [];
+  @Input() versions: string[] = [];
+  @Input() hasVersionOptions = true;
+  @Input() isClusterExternal = false;
   selectedVersion: string;
   project: Project;
   isMachineDeploymentUpgradeEnabled = false;
@@ -48,8 +49,8 @@ export class VersionChangeDialogComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    if (this.controlPlaneVersions.length > 0) {
-      this.selectedVersion = this.controlPlaneVersions[this.controlPlaneVersions.length - 1];
+    if (this.versions.length > 0) {
+      this.selectedVersion = this.versions[this.versions.length - 1];
     }
 
     this._projectService.selectedProject
@@ -58,28 +59,22 @@ export class VersionChangeDialogComponent implements OnInit, OnDestroy {
     this._googleAnalyticsService.emitEvent('clusterOverview', 'clusterVersionChangeDialogOpened');
   }
 
-  changeVersion(): void {
-    const patch: ClusterPatch = {
-      spec: {
-        version: this.selectedVersion,
-      },
-    };
-
-    this._clusterService.patch(this.project.id, this.cluster.id, patch).subscribe(() => {
-      this._notificationService.success(
-        `The ${this.cluster.name} cluster is being updated to the ${this.selectedVersion} version`
-      );
-      this._googleAnalyticsService.emitEvent('clusterOverview', 'clusterVersionChanged');
-
-      if (this.isMachineDeploymentUpgradeEnabled) {
-        this.upgradeMachineDeployments();
-      }
-    });
-
-    this._dialogRef.close(true);
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
-  upgradeMachineDeployments(): void {
+  private _getPatch(): ClusterPatch | ExternalClusterPatch {
+    return {spec: {version: this.selectedVersion}};
+  }
+
+  private _patch(): Observable<Cluster | ExternalCluster> {
+    return this.isClusterExternal
+      ? this._clusterService.patchExternalCluster(this.project.id, this.cluster.id, this._getPatch())
+      : this._clusterService.patch(this.project.id, this.cluster.id, this._getPatch());
+  }
+
+  private _upgradeMachineDeployments(): void {
     this._clusterService
       .upgradeMachineDeployments(this.project.id, this.cluster.id, this.selectedVersion)
       .pipe(take(1))
@@ -90,15 +85,28 @@ export class VersionChangeDialogComponent implements OnInit, OnDestroy {
       });
   }
 
+  changeVersion(): void {
+    this._patch()
+      .pipe(take(1))
+      .subscribe(() => {
+        this._notificationService.success(
+          `The ${this.cluster.name} cluster is being updated to the ${this.selectedVersion} version`
+        );
+
+        this._googleAnalyticsService.emitEvent('clusterOverview', 'clusterVersionChanged');
+
+        if (!this.isClusterExternal && this.isMachineDeploymentUpgradeEnabled) {
+          this._upgradeMachineDeployments();
+        }
+      });
+
+    this._dialogRef.close(true);
+  }
+
   isClusterDeprecated(): boolean {
     return (
       this._eolService.cluster.isAfter(this.cluster.spec.version) ||
       this._eolService.cluster.isBefore(this.cluster.spec.version)
     );
-  }
-
-  ngOnDestroy(): void {
-    this._unsubscribe.next();
-    this._unsubscribe.complete();
   }
 }

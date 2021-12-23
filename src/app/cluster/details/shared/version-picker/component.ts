@@ -31,7 +31,8 @@ export class VersionPickerComponent implements OnInit, OnChanges {
   @Input() cluster: Cluster | ExternalCluster;
   @Input() isClusterRunning = false;
   @Input() upgrades: MasterVersion[] = [];
-  @Input() isExternal = false;
+  @Input() hasUpgradeOptions = true;
+  @Input() isClusterExternal = false;
   versionsList: string[] = [];
   updatesAvailable = false;
   downgradesAvailable = false;
@@ -67,8 +68,8 @@ export class VersionPickerComponent implements OnInit, OnChanges {
         return; // Skip all restricted versions.
       }
 
-      this.updatesAvailable = this.updatesAvailable ? true : isUpgrade;
-      this.downgradesAvailable = this.downgradesAvailable ? true : isDowngrade;
+      this.updatesAvailable = this.updatesAvailable || isUpgrade;
+      this.downgradesAvailable = this.downgradesAvailable || isDowngrade;
 
       if (this.versionsList.indexOf(upgrade.version) < 0) {
         this.versionsList.push(upgrade.version);
@@ -83,11 +84,11 @@ export class VersionPickerComponent implements OnInit, OnChanges {
   }
 
   isClusterBeforeEOL(): boolean {
-    return !this.isExternal && this._eolService.cluster.isBefore(this.cluster.spec.version);
+    return !this.isClusterExternal && this._eolService.cluster.isBefore(this.cluster.spec.version);
   }
 
   isClusterAfterEOL(): boolean {
-    return !this.isExternal && this._eolService.cluster.isAfter(this.cluster.spec.version);
+    return !this.isClusterExternal && this._eolService.cluster.isAfter(this.cluster.spec.version);
   }
 
   isEnabled(): boolean {
@@ -98,7 +99,9 @@ export class VersionPickerComponent implements OnInit, OnChanges {
     if (this.isEnabled()) {
       const modal = this._matDialog.open(VersionChangeDialogComponent);
       modal.componentInstance.cluster = this.cluster;
-      modal.componentInstance.controlPlaneVersions = this.versionsList;
+      modal.componentInstance.isClusterExternal = this.isClusterExternal;
+      modal.componentInstance.versions = this.versionsList;
+      modal.componentInstance.hasVersionOptions = this.hasUpgradeOptions;
       modal
         .afterClosed()
         .pipe(take(1))
@@ -112,7 +115,7 @@ export class VersionPickerComponent implements OnInit, OnChanges {
 
   private _isClusterDeprecated(): boolean {
     return (
-      !this.isExternal &&
+      !this.isClusterExternal &&
       (this._eolService.cluster.isAfter(this.cluster.spec.version) ||
         this._eolService.cluster.isBefore(this.cluster.spec.version))
     );

@@ -87,7 +87,7 @@ describe('ChangeClusterVersionComponent', () => {
     component.selectedVersion = 'new version';
     // copy object here since this test modifies the global fake cluster object which impacts other tests otherwise
     component.cluster = JSON.parse(JSON.stringify(fakeDigitaloceanCluster()));
-    component.controlPlaneVersions = ['1.9.5'];
+    component.versions = ['1.9.5'];
 
     fixture.detectChanges();
     component.changeVersion();

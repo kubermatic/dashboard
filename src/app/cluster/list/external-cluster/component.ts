@@ -33,7 +33,7 @@ import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {distinctUntilChanged, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {AddExternalClusterDialogComponent} from '@shared/components/add-external-cluster-dialog/component';
-import {ExternalCloudSpec, ExternalCluster} from '@shared/entity/external-cluster';
+import {ExternalCloudSpec, ExternalCluster, ExternalClusterProvider} from '@shared/entity/external-cluster';
 
 @Component({
   selector: 'km-external-cluster-list',
@@ -42,6 +42,7 @@ import {ExternalCloudSpec, ExternalCluster} from '@shared/entity/external-cluste
 })
 export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestroy {
   readonly Permission = Permission;
+  readonly Provider = ExternalClusterProvider;
   clusters: ExternalCluster[] = [];
   isInitialized = false;
   displayedColumns: string[] = ['status', 'name', 'labels', 'provider', 'created', 'actions'];

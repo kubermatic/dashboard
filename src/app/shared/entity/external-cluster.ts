@@ -111,6 +111,14 @@ export class ExternalClusterStatus {
   statusMessage: string;
 }
 
+export class ExternalClusterPatch {
+  spec?: ExternalClusterSpecPatch;
+}
+
+export class ExternalClusterSpecPatch {
+  version?: string;
+}
+
 export class AKSCluster {
   name: string;
   resourceGroup: string;

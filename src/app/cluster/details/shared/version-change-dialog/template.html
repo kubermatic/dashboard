@@ -26,20 +26,20 @@ limitations under the License.
 </km-dialog-title>
 <mat-dialog-content>
   <p class="km-dialog-context-description">Change Control Plane Version of <b>{{cluster.name}}</b> cluster</p>
-
   <mat-form-field>
     <mat-label>Control Plane Version</mat-label>
     <mat-select [(ngModel)]="selectedVersion"
                 panelClass="km-add-dialog-dropdown"
                 disableOptionCentering>
-      <mat-option *ngFor="let version of controlPlaneVersions"
+      <mat-option *ngFor="let version of versions"
                   [value]="version">
         {{version}}
       </mat-option>
     </mat-select>
   </mat-form-field>
   <div class="checkbox-wrapper">
-    <mat-checkbox [(ngModel)]="isMachineDeploymentUpgradeEnabled">
+    <mat-checkbox *ngIf="!isClusterExternal"
+                  [(ngModel)]="isMachineDeploymentUpgradeEnabled">
       Upgrade Machine Deployments
     </mat-checkbox>
   </div>

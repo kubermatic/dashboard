@@ -39,7 +39,7 @@ import {SSHKey} from '@shared/entity/ssh-key';
 import {CreateClusterModel} from '@shared/model/CreateClusterModel';
 import {merge, Observable, of, Subject, timer} from 'rxjs';
 import {catchError, filter, shareReplay, switchMap, switchMapTo, take} from 'rxjs/operators';
-import {ExternalCluster, ExternalClusterModel} from '@shared/entity/external-cluster';
+import {ExternalCluster, ExternalClusterModel, ExternalClusterPatch} from '@shared/entity/external-cluster';
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 
 @Injectable()
@@ -141,6 +141,11 @@ export class ClusterService {
   patch(projectID: string, clusterID: string, patch: ClusterPatch): Observable<Cluster> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}`;
     return this._http.patch<Cluster>(url, patch);
+  }
+
+  patchExternalCluster(projectID: string, clusterID: string, patch: ExternalClusterPatch): Observable<ExternalCluster> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}`;
+    return this._http.patch<ExternalCluster>(url, patch);
   }
 
   updateExternalCluster(projectID: string, clusterID: string, model: ExternalClusterModel): Observable<Cluster> {
