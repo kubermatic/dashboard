@@ -58,7 +58,7 @@ limitations under the License.
       <span>Open Grafana UI</span>
     </a>
     <i *ngIf="displayGrafanaWarning()"
-       matTooltip="{{getTextForWarning()}}"
+       matTooltip="{{getAddonsEnabledWarningText()}} {{getAddonsAvailableWarningText()}}"
        class="km-icon-warning addon-disabled-icon"></i>
   </div>
 </div>
