@@ -103,7 +103,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   proxyMode = ProxyMode;
   cniPlugin = CNIPlugin;
   cniPluginVersions: string[] = [];
-  availableProxyModes = ['ipvs', 'iptables'];
+  availableProxyModes = [ProxyMode.ipvs, ProxyMode.iptables];
   isKonnectivityEnabled = false;
   readonly Controls = Controls;
   readonly AuditPolicyPreset = AuditPolicyPreset;
@@ -240,7 +240,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     this.control(Controls.Konnectivity)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe(value => {
-        if (!value && this.form.get(Controls.ProxyMode).value === 'ebpf') {
+        if (!value && this.form.get(Controls.ProxyMode).value === ProxyMode.ebpf) {
           this.form.get(Controls.ProxyMode).setValue('');
         }
         this.updateCNIPluginOptions();
@@ -310,9 +310,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       !!this.isKonnectivityEnabled &&
       !!this.controlValue(Controls.Konnectivity)
     ) {
-      this.availableProxyModes = ['ipvs', 'iptables', 'ebpf'];
+      this.availableProxyModes = [ProxyMode.ipvs, ProxyMode.iptables, ProxyMode.ebpf];
     } else {
-      this.availableProxyModes = ['ipvs', 'iptables'];
+      this.availableProxyModes = [ProxyMode.ipvs, ProxyMode.iptables];
     }
   }
 
