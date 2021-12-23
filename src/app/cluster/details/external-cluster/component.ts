@@ -28,12 +28,13 @@ import {ClusterMetrics, NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
-import {forkJoin, Subject, timer} from 'rxjs';
+import {forkJoin, of, Subject, timer} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
+import {MasterVersion} from '@shared/entity/cluster';
 
 @Component({
-  selector: 'km-cluster-details',
+  selector: 'km-external-cluster-details',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
@@ -55,6 +56,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   nodes: Node[] = [];
   nodesMetrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
   events: Event[] = [];
+  upgrades: MasterVersion[] = [];
 
   constructor(
     private readonly _activatedRoute: ActivatedRoute,
@@ -102,22 +104,30 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
             this._clusterService.externalClusterNodes(this.projectID, clusterID),
             this._clusterService.externalClusterNodesMetrics(this.projectID, clusterID),
             this._clusterService.externalClusterEvents(this.projectID, clusterID),
+            this.hasUpgrades() ? this._clusterService.externalClusterUpgrades(this.projectID, clusterID) : of([]),
           ])
         )
       )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(([nodes, metrics, events]) => {
+      .subscribe(([nodes, metrics, events, upgrades]) => {
         this.nodes = nodes;
-        const map = new Map<string, NodeMetrics>();
-        metrics.forEach(m => map.set(m.name, m));
-        this.nodesMetrics = map;
+        this.nodesMetrics = new Map<string, NodeMetrics>(metrics.map(m => [m.name, m]));
         this.events = events;
+        this.upgrades = upgrades;
       });
   }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  isClusterRunning(): boolean {
+    return this.cluster?.status?.state === ExternalClusterState.Running;
+  }
+
+  hasUpgrades(): boolean {
+    return this.isClusterRunning() && this.provider !== ExternalClusterProvider.EKS;
   }
 
   getStatus(): string {
@@ -128,7 +138,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
     return ExternalCluster.getStatusColor(this.cluster);
   }
 
-  isEditEnabled(): boolean {
+  canEdit(): boolean {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'cluster', Permission.Edit);
   }
 
@@ -148,7 +158,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
       });
   }
 
-  isDisconnectEnabled(): boolean {
+  canDisconnect(): boolean {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'cluster', Permission.Delete);
   }
 

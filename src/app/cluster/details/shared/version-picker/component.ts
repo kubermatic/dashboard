@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnChanges, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ClusterService} from '@core/services/cluster';
 import {EndOfLifeService} from '@core/services/eol';
@@ -20,7 +20,7 @@ import {Cluster, MasterVersion} from '@shared/entity/cluster';
 import {ExternalCluster} from '@shared/entity/external-cluster';
 import {take} from 'rxjs/operators';
 import {gt, lt} from 'semver';
-import {ChangeClusterVersionComponent} from '../change-cluster-version/component';
+import {VersionChangeDialogComponent} from '../version-change-dialog/component';
 
 @Component({
   selector: 'km-version-picker',
@@ -31,6 +31,8 @@ export class VersionPickerComponent implements OnInit, OnChanges {
   @Input() cluster: Cluster | ExternalCluster;
   @Input() isClusterRunning = false;
   @Input() upgrades: MasterVersion[] = [];
+  @Input() hasUpgradeOptions = true;
+  @Input() isClusterExternal = false;
   versionsList: string[] = [];
   updatesAvailable = false;
   downgradesAvailable = false;
@@ -47,7 +49,7 @@ export class VersionPickerComponent implements OnInit, OnChanges {
     this.processData();
   }
 
-  ngOnChanges(_: SimpleChanges): void {
+  ngOnChanges(): void {
     this.processData();
   }
 
@@ -62,12 +64,12 @@ export class VersionPickerComponent implements OnInit, OnChanges {
       const isDowngrade = gt(this.cluster.spec.version, upgrade.version);
 
       if (upgrade.restrictedByKubeletVersion === true) {
-        this.someUpgradesRestrictedByKubeletVersion = isUpgrade;
+        this.someUpgradesRestrictedByKubeletVersion = this.someUpgradesRestrictedByKubeletVersion || isUpgrade;
         return; // Skip all restricted versions.
       }
 
-      this.updatesAvailable = this.updatesAvailable ? true : isUpgrade;
-      this.downgradesAvailable = this.downgradesAvailable ? true : isDowngrade;
+      this.updatesAvailable = this.updatesAvailable || isUpgrade;
+      this.downgradesAvailable = this.downgradesAvailable || isDowngrade;
 
       if (this.versionsList.indexOf(upgrade.version) < 0) {
         this.versionsList.push(upgrade.version);
@@ -82,22 +84,24 @@ export class VersionPickerComponent implements OnInit, OnChanges {
   }
 
   isClusterBeforeEOL(): boolean {
-    return this._eolService.cluster.isBefore(this.cluster.spec.version);
+    return !this.isClusterExternal && this._eolService.cluster.isBefore(this.cluster.spec.version);
   }
 
   isClusterAfterEOL(): boolean {
-    return this._eolService.cluster.isAfter(this.cluster.spec.version);
+    return !this.isClusterExternal && this._eolService.cluster.isAfter(this.cluster.spec.version);
   }
 
   isEnabled(): boolean {
-    return this.isClusterRunning && (this.updatesAvailable || this.downgradesAvailable);
+    return this.isClusterRunning && (this.updatesAvailable || this.downgradesAvailable || !this.hasUpgradeOptions);
   }
 
-  changeClusterVersionDialog(): void {
+  openVersionChangeDialog(): void {
     if (this.isEnabled()) {
-      const modal = this._matDialog.open(ChangeClusterVersionComponent);
+      const modal = this._matDialog.open(VersionChangeDialogComponent);
       modal.componentInstance.cluster = this.cluster;
-      modal.componentInstance.controlPlaneVersions = this.versionsList;
+      modal.componentInstance.isClusterExternal = this.isClusterExternal;
+      modal.componentInstance.versions = this.versionsList;
+      modal.componentInstance.hasVersionOptions = this.hasUpgradeOptions;
       modal
         .afterClosed()
         .pipe(take(1))
@@ -111,8 +115,9 @@ export class VersionPickerComponent implements OnInit, OnChanges {
 
   private _isClusterDeprecated(): boolean {
     return (
-      this._eolService.cluster.isAfter(this.cluster.spec.version) ||
-      this._eolService.cluster.isBefore(this.cluster.spec.version)
+      !this.isClusterExternal &&
+      (this._eolService.cluster.isAfter(this.cluster.spec.version) ||
+        this._eolService.cluster.isBefore(this.cluster.spec.version))
     );
   }
 }

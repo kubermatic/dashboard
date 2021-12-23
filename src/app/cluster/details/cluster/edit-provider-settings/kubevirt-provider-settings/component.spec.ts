@@ -16,10 +16,8 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {ApiMockService} from '@app/testing/services/api-mock';
 import {ClusterMockService} from '@app/testing/services/cluster-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
-import {ApiService} from '@core/services/api';
 import {ClusterService} from '@core/services/cluster';
 import {SharedModule} from '@shared/module';
 import {AlibabaProviderSettingsComponent} from '../alibaba-provider-settings/component';
@@ -29,16 +27,16 @@ import {DigitaloceanProviderSettingsComponent} from '../digitalocean-provider-se
 import {EditProviderSettingsComponent} from '../component';
 import {GCPProviderSettingsComponent} from '../gcp-provider-settings/component';
 import {HetznerProviderSettingsComponent} from '../hetzner-provider-settings/component';
-import {KubevirtProviderSettingsComponent} from '../kubevirt-provider-settings/component';
+import {KubevirtProviderSettingsComponent} from './component';
 import {OpenstackProviderSettingsComponent} from '../openstack-provider-settings/component';
 import {EquinixProviderSettingsComponent} from '../equinix-provider-settings/component';
 import {VSphereProviderSettingsComponent} from '../vsphere-provider-settings/component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
-describe('OpenstackProviderSettingsComponent', () => {
-  let fixture: ComponentFixture<OpenstackProviderSettingsComponent>;
-  let component: OpenstackProviderSettingsComponent;
+describe('KubevirtProviderSettingsComponent', () => {
+  let fixture: ComponentFixture<KubevirtProviderSettingsComponent>;
+  let component: KubevirtProviderSettingsComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -58,7 +56,6 @@ describe('OpenstackProviderSettingsComponent', () => {
       ],
       providers: [
         {provide: ClusterService, useClass: ClusterMockService},
-        {provide: ApiService, useClass: ApiMockService},
         {provide: MatDialogRef, useClass: MatDialogRefMock},
       ],
       teardown: {destroyAfterEach: false},
@@ -66,12 +63,12 @@ describe('OpenstackProviderSettingsComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OpenstackProviderSettingsComponent);
+    fixture = TestBed.createComponent(KubevirtProviderSettingsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should initialize', () => {
+  it('should create the kubevirt provider settings cmp', () => {
     expect(component).toBeTruthy();
   });
 

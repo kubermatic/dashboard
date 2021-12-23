@@ -15,7 +15,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
-import {EditProviderSettingsComponent} from '@app/cluster/cluster-details/edit-provider-settings/component';
+import {EditProviderSettingsComponent} from '@app/cluster/details/cluster/edit-provider-settings/component';
 import {AppConfigService} from '@app/config.service';
 import {ApiService} from '@core/services/api';
 import {ClusterService} from '@core/services/cluster';

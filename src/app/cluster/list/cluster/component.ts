@@ -40,7 +40,7 @@ import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import _ from 'lodash';
 import {EMPTY, forkJoin, of, onErrorResumeNext, Subject} from 'rxjs';
 import {catchError, distinctUntilChanged, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import {ClusterDeleteConfirmationComponent} from '../../cluster-details/cluster-delete-confirmation/component';
+import {ClusterDeleteConfirmationComponent} from '../../details/cluster/cluster-delete-confirmation/component';
 
 @Component({
   selector: 'km-cluster-list',

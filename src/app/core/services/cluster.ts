@@ -26,10 +26,10 @@ import {EtcdRestore} from '@shared/entity/backup';
 import {
   Cluster,
   ClusterPatch,
+  CNIPluginVersions,
   Finalizer,
   MasterVersion,
   ProviderSettingsPatch,
-  CNIPluginVersions,
 } from '@shared/entity/cluster';
 import {Event} from '@shared/entity/event';
 import {Health} from '@shared/entity/health';
@@ -39,7 +39,7 @@ import {SSHKey} from '@shared/entity/ssh-key';
 import {CreateClusterModel} from '@shared/model/CreateClusterModel';
 import {merge, Observable, of, Subject, timer} from 'rxjs';
 import {catchError, filter, shareReplay, switchMap, switchMapTo, take} from 'rxjs/operators';
-import {ExternalCluster, ExternalClusterModel} from '@shared/entity/external-cluster';
+import {ExternalCluster, ExternalClusterModel, ExternalClusterPatch} from '@shared/entity/external-cluster';
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 
 @Injectable()
@@ -143,6 +143,11 @@ export class ClusterService {
     return this._http.patch<Cluster>(url, patch);
   }
 
+  patchExternalCluster(projectID: string, clusterID: string, patch: ExternalClusterPatch): Observable<ExternalCluster> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}`;
+    return this._http.patch<ExternalCluster>(url, patch);
+  }
+
   updateExternalCluster(projectID: string, clusterID: string, model: ExternalClusterModel): Observable<Cluster> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}`;
     return this._http.put<Cluster>(url, model);
@@ -180,11 +185,12 @@ export class ClusterService {
 
   upgrades(projectID: string, clusterID: string): Observable<MasterVersion[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/upgrades`;
-    return this._http.get<MasterVersion[]>(url).pipe(
-      catchError(() => {
-        return of<MasterVersion[]>([]).pipe(catchError(() => of<MasterVersion[]>([])));
-      })
-    );
+    return this._http.get<MasterVersion[]>(url).pipe(catchError(() => of<MasterVersion[]>([])));
+  }
+
+  externalClusterUpgrades(projectID: string, clusterID: string): Observable<MasterVersion[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/upgrades`;
+    return this._http.get<MasterVersion[]>(url).pipe(catchError(() => of<MasterVersion[]>([])));
   }
 
   cniVersions(projectID: string, clusterID: string): Observable<CNIPluginVersions> {

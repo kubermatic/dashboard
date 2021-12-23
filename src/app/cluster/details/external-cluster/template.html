@@ -24,7 +24,7 @@ limitations under the License.
               fxLayoutAlign="center center"
               kmThrottleClick
               (throttleClick)="disconnect()"
-              [disabled]="!isDisconnectEnabled()">
+              [disabled]="!canDisconnect()">
         <i class="km-icon-mask km-icon-disconnect"></i>
         <span>Disconnect</span>
       </button>
@@ -53,7 +53,11 @@ limitations under the License.
 
     <mat-card-content class="km-row">
       <div class="km-content-wrap">
-        <km-version-picker [cluster]="cluster"></km-version-picker>
+        <km-version-picker [cluster]="cluster"
+                           [isClusterRunning]="isClusterRunning()"
+                           [upgrades]="canEdit() ? upgrades : []"
+                           [hasUpgradeOptions]="hasUpgrades()"
+                           [isClusterExternal]="true"></km-version-picker>
         <km-property>
           <div key>Cluster ID</div>
           <div value
@@ -100,20 +104,24 @@ limitations under the License.
         <km-property-usage name="Nodes CPU Usage"
                            unit="millicores"
                            [used]="clusterMetrics?.nodes?.cpuTotalMillicores"
-                           [total]="clusterMetrics?.nodes?.cpuAvailableMillicores"></km-property-usage>
+                           [total]="clusterMetrics?.nodes?.cpuAvailableMillicores"
+                           *ngIf="clusterMetrics?.nodes?.cpuTotalMillicores"></km-property-usage>
 
         <km-property-usage name="Nodes Memory Usage"
                            unit="MiB"
                            [used]="clusterMetrics?.nodes?.memoryTotalBytes"
-                           [total]="clusterMetrics?.nodes?.memoryAvailableBytes"></km-property-usage>
+                           [total]="clusterMetrics?.nodes?.memoryAvailableBytes"
+                           *ngIf="clusterMetrics?.nodes?.memoryTotalBytes"></km-property-usage>
 
         <km-property-usage name="Control Plane CPU Usage"
                            unit="millicores"
-                           [used]="clusterMetrics?.controlPlane?.cpuTotalMillicores"></km-property-usage>
+                           [used]="clusterMetrics?.controlPlane?.cpuTotalMillicores"
+                           *ngIf="clusterMetrics?.controlPlane?.cpuTotalMillicores"></km-property-usage>
 
         <km-property-usage name="Control Plane Memory Usage"
                            unit="MiB"
-                           [used]="clusterMetrics?.controlPlane?.memoryTotalBytes"></km-property-usage>
+                           [used]="clusterMetrics?.controlPlane?.memoryTotalBytes"
+                           *ngIf="clusterMetrics?.controlPlane?.memoryTotalBytes"></km-property-usage>
       </div>
     </mat-card-content>
   </mat-card>
@@ -122,21 +130,19 @@ limitations under the License.
                                        [cluster]="cluster"
                                        [machineDeployments]="machineDeployments"
                                        [projectID]="projectID"
-                                       [isClusterRunning]="true"></km-external-machine-deployment-list>
+                                       [isClusterRunning]="isClusterRunning()"></km-external-machine-deployment-list>
 
   <km-external-node-list *ngIf="provider === Provider.Custom"
                          [cluster]="cluster"
                          [nodes]="nodes"
                          [nodesMetrics]="nodesMetrics"
                          [projectID]="projectID"
-                         [isClusterRunning]="cluster?.status?.state === ExternalClusterState.Running"></km-external-node-list>
+                         [isClusterRunning]="isClusterRunning()"></km-external-node-list>
 
   <km-event-card [events]="events"></km-event-card>
-
 </ng-container>
 
-<div *ngIf="!cluster">
-  <mat-spinner [diameter]="25"
-               color="accent"
-               class="km-spinner"></mat-spinner>
-</div>
+<mat-spinner [diameter]="25"
+             *ngIf="!cluster"
+             color="accent"
+             class="km-spinner"></mat-spinner>
