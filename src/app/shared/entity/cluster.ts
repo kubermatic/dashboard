@@ -249,6 +249,7 @@ export class CNIPluginVersions {
 export enum ProxyMode {
   ipvs = 'ipvs',
   iptables = 'iptables',
+  ebpf = 'ebpf',
 }
 
 export enum CNIPlugin {
