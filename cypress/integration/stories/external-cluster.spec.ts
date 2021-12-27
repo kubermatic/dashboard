@@ -61,15 +61,7 @@ describe('External Cluster Story', () => {
   });
 
   it('should enter kubeconfig', () => {
-    ClustersPage.getConnectClusterKubeconfigTextarea()
-      .click({force: true})
-      .then($element => {
-        const subString = Config.kubeconfig().substr(0, Config.kubeconfig().length - 1);
-        const lastChar = Config.kubeconfig().slice(-1);
-        $element.text(subString);
-        $element.val(subString);
-        cy.get($element).type(lastChar);
-      });
+    ClustersPage.getConnectClusterKubeconfigTextarea().click({force: true}).paste(Config.kubeconfig());
   });
 
   it('should connect cluster', () => {
