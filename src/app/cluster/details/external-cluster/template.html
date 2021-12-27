@@ -57,7 +57,8 @@ limitations under the License.
                            [isClusterRunning]="isClusterRunning()"
                            [upgrades]="canEdit() ? upgrades : []"
                            [hasUpgradeOptions]="hasUpgrades()"
-                           [isClusterExternal]="true"></km-version-picker>
+                           [isClusterExternal]="true"
+                           *ngIf="cluster?.spec?.version"></km-version-picker>
         <km-property>
           <div key>Cluster ID</div>
           <div value
