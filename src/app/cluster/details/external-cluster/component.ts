@@ -28,8 +28,8 @@ import {ClusterMetrics, NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
-import {forkJoin, of, Subject, timer} from 'rxjs';
-import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
+import {combineLatest, of, Subject, timer} from 'rxjs';
+import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 import {MasterVersion} from '@shared/entity/cluster';
 
@@ -79,41 +79,43 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
-    this._clusterService
-      .externalCluster(this.projectID, clusterID)
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(cluster => {
-        this.cluster = cluster;
-        this.provider = ExternalCluster.getProvider(cluster.cloud);
+    this._refreshTimer
+      .pipe(
+        switchMap(_ => this._clusterService.externalCluster(this.projectID, clusterID)),
+        tap(cluster => {
+          this.cluster = cluster;
+          this.provider = ExternalCluster.getProvider(cluster.cloud);
+        }),
+        switchMap(_ =>
+          combineLatest([
+            this._clusterService.externalMachineDeployments(this.projectID, clusterID),
+            this._clusterService.externalClusterNodes(this.projectID, clusterID),
+            this._clusterService.externalClusterEvents(this.projectID, clusterID),
+            this.hasUpgrades() ? this._clusterService.externalClusterUpgrades(this.projectID, clusterID) : of([]),
+          ])
+        ),
+        takeUntil(this._unsubscribe)
+      )
+      .subscribe(([machineDeployments, nodes, events, upgrades]) => {
+        this.machineDeployments = machineDeployments;
+        this.nodes = nodes;
+        this.events = events;
+        this.upgrades = upgrades;
       });
 
     this._metricsRefreshTimer
-      .pipe(switchMap(_ => this._clusterService.externalClusterMetrics(this.projectID, clusterID)))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(metrics => (this.clusterMetrics = metrics));
-
-    this._refreshTimer
-      .pipe(switchMap(_ => this._clusterService.externalMachineDeployments(this.projectID, clusterID)))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(machineDeployments => (this.machineDeployments = machineDeployments));
-
-    this._refreshTimer
       .pipe(
         switchMap(_ =>
-          forkJoin([
-            this._clusterService.externalClusterNodes(this.projectID, clusterID),
+          combineLatest([
+            this._clusterService.externalClusterMetrics(this.projectID, clusterID),
             this._clusterService.externalClusterNodesMetrics(this.projectID, clusterID),
-            this._clusterService.externalClusterEvents(this.projectID, clusterID),
-            this.hasUpgrades() ? this._clusterService.externalClusterUpgrades(this.projectID, clusterID) : of([]),
           ])
         )
       )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(([nodes, metrics, events, upgrades]) => {
-        this.nodes = nodes;
-        this.nodesMetrics = new Map<string, NodeMetrics>(metrics.map(m => [m.name, m]));
-        this.events = events;
-        this.upgrades = upgrades;
+      .subscribe(([clusterMetrics, nodeMetrics]) => {
+        this.clusterMetrics = clusterMetrics;
+        this.nodesMetrics = new Map<string, NodeMetrics>(nodeMetrics.map(m => [m.name, m]));
       });
   }
 
