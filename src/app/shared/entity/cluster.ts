@@ -14,6 +14,40 @@
 
 import {NodeProvider} from '../model/NodeProviderConstants';
 
+export enum Provider {
+  Alibaba = 'alibaba',
+  Anexia = 'anexia',
+  AWS = 'aws',
+  Azure = 'azure',
+  kubeAdm = 'bringyourown',
+  Digitalocean = 'digitalocean',
+  GCP = 'gcp',
+  Hetzner = 'hetzner',
+  KubeVirt = 'kubevirt',
+  OpenStack = 'openstack',
+  Equinix = 'packet',
+  VSphere = 'vsphere',
+}
+
+const PROVIDER_DISPLAY_NAMES = new Map<Provider, string>([
+  [Provider.Alibaba, 'Alibaba'],
+  [Provider.Anexia, 'Anexia'],
+  [Provider.AWS, 'AWS'],
+  [Provider.Azure, 'Azure'],
+  [Provider.kubeAdm, 'kubeAdm'],
+  [Provider.Digitalocean, 'DigitalOcean'],
+  [Provider.GCP, 'Google Cloud'],
+  [Provider.Hetzner, 'Hetzner'],
+  [Provider.KubeVirt, 'KubeVirt'],
+  [Provider.OpenStack, 'Openstack'],
+  [Provider.Equinix, 'Equinix Metal'],
+  [Provider.VSphere, 'VSphere'],
+]);
+
+export function getProviderDisplayName(provider: Provider): string {
+  return PROVIDER_DISPLAY_NAMES.get(provider);
+}
+
 export const enum Finalizer {
   DeleteVolumes = 'DeleteVolumes',
   DeleteLoadBalancers = 'DeleteLoadBalancers',
@@ -43,18 +77,14 @@ export class Cluster {
   inheritedLabels?: object;
   credential?: string;
 
-  static getProvider(cloud: CloudSpec): string {
-    const providers = Object.keys(cloud);
-    return providers.length > 0 ? providers.pop().toLowerCase() : '';
+  static getProvider(cluster: Cluster): Provider {
+    return Object.values(Provider)
+      .filter(provider => cluster.spec.cloud[provider])
+      .pop();
   }
 
-  static getDisplayType(cluster: Cluster): string {
-    switch (cluster.type) {
-      case ClusterType.Kubernetes:
-        return 'Kubernetes';
-      default:
-        return '';
-    }
+  static getProviderDisplayName(cluster: Cluster): string {
+    return getProviderDisplayName(Cluster.getProvider(cluster));
   }
 
   static newEmptyClusterEntity(): Cluster {
@@ -64,14 +94,6 @@ export class Cluster {
       } as ClusterSpec,
     } as Cluster;
   }
-}
-
-export function getClusterProvider(cluster: Cluster): NodeProvider {
-  const clusterProviders = Object.values(NodeProvider)
-    .map(provider => (cluster.spec.cloud[provider] ? provider : undefined))
-    .filter(p => p !== undefined);
-
-  return clusterProviders.length > 0 ? clusterProviders[0] : NodeProvider.NONE;
 }
 
 export class CloudSpec {

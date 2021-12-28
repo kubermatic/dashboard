@@ -16,8 +16,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {ClusterService} from '@core/services/cluster';
 import {NotificationService} from '@core/services/notification';
-import {CloudSpec, Cluster, ClusterPatch, ProviderSettingsPatch} from '@shared/entity/cluster';
-import {NodeProvider, NodeProviderConstants} from '@shared/model/NodeProviderConstants';
+import {Cluster, ClusterPatch, ProviderSettingsPatch} from '@shared/entity/cluster';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
@@ -50,10 +49,8 @@ export class EditProviderSettingsComponent implements OnInit {
       .subscribe(patch => (this.providerSettingsPatch = patch));
   }
 
-  providerDisplayName(cloud: CloudSpec): string {
-    const provider = Cluster.getProvider(cloud),
-      nodeProvider = Object.keys(NodeProvider)[(Object.values(NodeProvider) as string[]).indexOf(provider)];
-    return NodeProviderConstants.displayName(NodeProvider[nodeProvider]);
+  providerDisplayName(cluster: Cluster): string {
+    return Cluster.getProviderDisplayName(cluster);
   }
 
   onSettingsSave(): void {

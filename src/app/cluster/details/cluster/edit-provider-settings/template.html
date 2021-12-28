@@ -19,7 +19,7 @@ limitations under the License.
 
   <mat-dialog-content>
     <p class="km-dialog-context-description">
-      Edit {{providerDisplayName(cluster.spec.cloud)}} provider settings of <b>{{cluster.name}}</b> cluster
+      Edit {{providerDisplayName(cluster)}} provider settings of <b>{{cluster.name}}</b> cluster
     </p>
 
     <km-anexia-provider-settings *ngIf="!!cluster.spec.cloud.anexia"></km-anexia-provider-settings>

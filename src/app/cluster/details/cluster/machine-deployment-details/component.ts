@@ -147,7 +147,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(c => {
         this.cluster = c;
-        this.clusterProvider = Cluster.getProvider(this.cluster.spec.cloud);
+        this.clusterProvider = Cluster.getProvider(this.cluster);
         this._isClusterLoaded = true;
         this.loadDatacenter();
       });
