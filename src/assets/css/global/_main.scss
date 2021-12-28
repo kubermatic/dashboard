@@ -386,6 +386,18 @@ hr {
   }
 }
 
+.cni-version {
+  &.disabled {
+    mat-form-field.mat-primary {
+      .mat-select-arrow-wrapper {
+        .mat-select-arrow {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
 .km-number-stepper-input {
   &.mat-form-field {
     &:not(.message) {
