@@ -70,14 +70,7 @@ export class KubeletVersionNodeDataComponent extends BaseFormValidator implement
 
     this._datacenterService
       .getDatacenter(this._clusterSpecService.cluster.spec.cloud.dc)
-      .pipe(
-        switchMap(_ =>
-          this._clusterService.nodeUpgrades(
-            this._clusterSpecService.cluster.spec.version,
-            this._clusterSpecService.clusterType
-          )
-        )
-      )
+      .pipe(switchMap(_ => this._clusterService.nodeUpgrades(this._clusterSpecService.cluster.spec.version)))
       .pipe(take(1))
       .subscribe(this._setDefaultVersion.bind(this));
 

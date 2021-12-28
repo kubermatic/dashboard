@@ -27,6 +27,7 @@ import {
   Cluster,
   ClusterPatch,
   CNIPluginVersions,
+  CreateClusterModel,
   Finalizer,
   MasterVersion,
   ProviderSettingsPatch,
@@ -36,7 +37,6 @@ import {Health} from '@shared/entity/health';
 import {ClusterMetrics, NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
 import {SSHKey} from '@shared/entity/ssh-key';
-import {CreateClusterModel} from '@shared/model/CreateClusterModel';
 import {merge, Observable, of, Subject, timer} from 'rxjs';
 import {catchError, filter, shareReplay, switchMap, switchMapTo, take} from 'rxjs/operators';
 import {ExternalCluster, ExternalClusterModel, ExternalClusterPatch} from '@shared/entity/external-cluster';
@@ -266,13 +266,9 @@ export class ClusterService {
     return this._http.delete(url);
   }
 
-  nodeUpgrades(controlPlaneVersion: string, type: string): Observable<MasterVersion[]> {
-    const url = `${this._restRoot}/upgrades/node?control_plane_version=${controlPlaneVersion}&type=${type}`;
-    return this._http.get<MasterVersion[]>(url).pipe(
-      catchError(() => {
-        return of<MasterVersion[]>([]);
-      })
-    );
+  nodeUpgrades(controlPlaneVersion: string): Observable<MasterVersion[]> {
+    const url = `${this._restRoot}/upgrades/node?control_plane_version=${controlPlaneVersion}`;
+    return this._http.get<MasterVersion[]>(url).pipe(catchError(() => of<MasterVersion[]>([])));
   }
 
   sshKeys(projectID: string, clusterID: string): Observable<SSHKey[]> {

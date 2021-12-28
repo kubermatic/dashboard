@@ -20,14 +20,14 @@ import {CreateMember, Member} from '@shared/entity/member';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {Node} from '@shared/entity/node';
 import {
-  ServiceAccountModel,
   ServiceAccount,
+  ServiceAccountModel,
   ServiceAccountToken,
   ServiceAccountTokenPatch,
 } from '@shared/entity/service-account';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {fakeDigitaloceanSizes, fakeEquinixSizes} from '../fake-data/add-node-modal';
-import {fakeAlibabaInstanceTypes, fakeAlibabaZones, fakeAlibabaVSwitches} from '../fake-data/alibaba';
+import {fakeAlibabaInstanceTypes, fakeAlibabaVSwitches, fakeAlibabaZones} from '../fake-data/alibaba';
 import {fakeAnexiaTemplates, fakeAnexiaVlans} from '../fake-data/anexia';
 import {masterVersionsFake} from '../fake-data/cluster-spec';
 import {fakeToken} from '../fake-data/cluster';
@@ -42,9 +42,9 @@ import {
 } from '../fake-data/serviceaccount';
 import {fakeSSHKeys} from '../fake-data/sshkey';
 import {fakeVSphereNetworks} from '../fake-data/vsphere';
-import {EditProject, Project} from '@shared/entity/project';
+import {Project, ProjectModel} from '@shared/entity/project';
 import {VSphereNetwork} from '@shared/entity/provider/vsphere';
-import {AlibabaInstanceType, AlibabaZone, AlibabaVSwitch} from '@shared/entity/provider/alibaba';
+import {AlibabaInstanceType, AlibabaVSwitch, AlibabaZone} from '@shared/entity/provider/alibaba';
 import {AnexiaTemplate, AnexiaVlan} from '@shared/entity/provider/anexia';
 import {EquinixSize} from '@shared/entity/provider/equinix';
 import {GCPDiskType, GCPMachineSize, GCPNetwork, GCPSubnetwork, GCPZone} from '@shared/entity/provider/gcp';
@@ -99,7 +99,7 @@ export class ApiMockService {
     return of(this.project);
   }
 
-  editProject(_projectID: string, _editProjectEntity: EditProject): Observable<any> {
+  editProject(_projectID: string, _editProjectEntity: ProjectModel): Observable<any> {
     return of(this.project);
   }
 

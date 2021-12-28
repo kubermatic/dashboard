@@ -34,7 +34,7 @@ import {ClusterTemplateService} from '@core/services/cluster-templates';
 import {ClusterTemplate, ClusterTemplateScope} from '@shared/entity/cluster-template';
 import {Datacenter} from '@shared/entity/datacenter';
 import {DatacenterService} from '@core/services/datacenter';
-import {CloudSpec, Cluster} from '@shared/entity/cluster';
+import {Cluster} from '@shared/entity/cluster';
 import {ClusterFromTemplateDialogComponent} from '@shared/components/cluster-from-template/component';
 
 @Component({
@@ -148,8 +148,8 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
     return !this.isEmpty() && this.paginator && this.templates.length > this.paginator.pageSize;
   }
 
-  getProvider(cloud: CloudSpec): string {
-    return Cluster.getProvider(cloud);
+  getProvider(cluster: Cluster): string {
+    return Cluster.getProvider(cluster);
   }
 
   canCreate(): boolean {

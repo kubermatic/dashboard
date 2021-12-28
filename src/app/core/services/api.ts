@@ -19,13 +19,13 @@ import {environment} from '@environments/environment';
 import {LabelFormComponent} from '@shared/components/label-form/component';
 import {TaintFormComponent} from '@shared/components/taint-form/component';
 import {AddonConfig} from '@shared/entity/addon';
-import {Cluster, MasterVersion, Token, CNIPlugin, CNIPluginVersions} from '@shared/entity/cluster';
+import {Cluster, CNIPlugin, CNIPluginVersions, MasterVersion, Token} from '@shared/entity/cluster';
 import {Event} from '@shared/entity/event';
 import {MachineDeployment, MachineDeploymentPatch} from '@shared/entity/machine-deployment';
 import {CreateMember, Member} from '@shared/entity/member';
 import {NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
-import {EditProject, Project} from '@shared/entity/project';
+import {Project, ProjectModel} from '@shared/entity/project';
 import {AlibabaInstanceType, AlibabaVSwitch, AlibabaZone} from '@shared/entity/provider/alibaba';
 import {AnexiaTemplate, AnexiaVlan} from '@shared/entity/provider/anexia';
 import {AWSSize, AWSSubnet} from '@shared/entity/provider/aws';
@@ -43,7 +43,6 @@ import {
   ServiceAccountTokenPatch,
 } from '@shared/entity/service-account';
 import {SSHKey} from '@shared/entity/ssh-key';
-import {CreateProjectModel} from '@shared/model/CreateProjectModel';
 import {Observable, of, timer} from 'rxjs';
 import {catchError, shareReplay, switchMap} from 'rxjs/operators';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
@@ -121,14 +120,14 @@ export class ApiService {
     return this._http.post(url, {});
   }
 
-  createProject(createProjectModel: CreateProjectModel): Observable<Project> {
+  createProject(model: ProjectModel): Observable<Project> {
     const url = `${this._restRoot}/projects`;
-    return this._http.post<Project>(url, createProjectModel);
+    return this._http.post<Project>(url, model);
   }
 
-  editProject(projectID: string, editProjectEntity: EditProject): Observable<any> {
+  editProject(projectID: string, model: ProjectModel): Observable<any> {
     const url = `${this._restRoot}/projects/${projectID}`;
-    return this._http.put(url, editProjectEntity);
+    return this._http.put(url, model);
   }
 
   getSSHKeys(projectID: string): Observable<SSHKey[]> {

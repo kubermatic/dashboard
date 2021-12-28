@@ -14,13 +14,19 @@
 
 import {Injectable} from '@angular/core';
 import {Addon} from '@shared/entity/addon';
-import {Cluster, ClusterPatch, MasterVersion, ProviderSettingsPatch, CNIPluginVersions} from '@shared/entity/cluster';
+import {
+  Cluster,
+  ClusterPatch,
+  CNIPluginVersions,
+  CreateClusterModel,
+  MasterVersion,
+  ProviderSettingsPatch,
+} from '@shared/entity/cluster';
 import {Event} from '@shared/entity/event';
 import {Health} from '@shared/entity/health';
 import {ClusterMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
 import {SSHKey} from '@shared/entity/ssh-key';
-import {CreateClusterModel} from '@shared/model/CreateClusterModel';
 import {defer, Observable, of, Subject} from 'rxjs';
 import {async} from 'rxjs-compat/scheduler/async';
 import {fakeClusters, fakeDigitaloceanCluster} from '../fake-data/cluster';

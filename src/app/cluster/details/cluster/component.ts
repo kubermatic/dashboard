@@ -33,9 +33,9 @@ import {
   CNIPlugin,
   CNIPluginVersions,
   ExternalCCMMigrationStatus,
-  getClusterProvider,
   getExternalCCMMigrationStatusMessage,
   MasterVersion,
+  Provider,
 } from '@shared/entity/cluster';
 import {View} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
@@ -49,7 +49,6 @@ import {AlertmanagerConfig, RuleGroup} from '@shared/entity/mla';
 import {Constraint, GatekeeperConfig} from '@shared/entity/opa';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {Config, GroupConfig} from '@shared/model/Config';
-import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
 import {ClusterHealthStatus} from '@shared/utils/health-status/cluster-health-status';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
@@ -385,7 +384,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   isLoaded(): boolean {
-    return this.cluster && (getClusterProvider(this.cluster) === NodeProvider.BRINGYOUROWN || !!this.nodeDc);
+    return this.cluster && (Cluster.getProvider(this.cluster) === Provider.kubeAdm || !!this.nodeDc);
   }
 
   isEditEnabled(): boolean {

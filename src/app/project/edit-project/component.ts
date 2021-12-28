@@ -18,7 +18,7 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {ApiService} from '@core/services/api';
 import {NotificationService} from '@core/services/notification';
 import {ResourceType} from '@shared/entity/common';
-import {EditProject, Project} from '@shared/entity/project';
+import {Project, ProjectModel} from '@shared/entity/project';
 import {AsyncValidators} from '@shared/validators/async-label-form.validator';
 import _ from 'lodash';
 
@@ -52,7 +52,7 @@ export class EditProjectComponent implements OnInit {
       return;
     }
 
-    const project: EditProject = {
+    const project: ProjectModel = {
       name: this.form.controls.name.value,
       labels: this.labels,
     };

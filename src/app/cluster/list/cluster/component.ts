@@ -27,7 +27,7 @@ import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {SelectClusterTemplateDialogComponent} from '@shared/components/select-cluster-template/component';
 import {EtcdRestore, EtcdRestorePhase} from '@shared/entity/backup';
-import {CloudSpec, Cluster} from '@shared/entity/cluster';
+import {Cluster} from '@shared/entity/cluster';
 import {View} from '@shared/entity/common';
 import {Datacenter} from '@shared/entity/datacenter';
 import {Health} from '@shared/entity/health';
@@ -189,7 +189,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     // Check provider.
-    if (Cluster.getProvider(cluster.spec.cloud).includes(query)) {
+    if (Cluster.getProvider(cluster).includes(query)) {
       return true;
     }
 
@@ -217,8 +217,8 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     this._router.navigate([`/projects/${this._selectedProject.id}/clusters/${cluster.id}`]);
   }
 
-  getProvider(cloud: CloudSpec): string {
-    return Cluster.getProvider(cloud);
+  getProvider(cluster: Cluster): string {
+    return Cluster.getProvider(cluster);
   }
 
   deleteClusterDialog(cluster: Cluster, event: Event): void {
