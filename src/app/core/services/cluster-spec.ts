@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {EventEmitter, Injectable} from '@angular/core';
-import {CloudSpec, Cluster, ClusterType, EventRateLimitConfig} from '@shared/entity/cluster';
+import {CloudSpec, Cluster, EventRateLimitConfig} from '@shared/entity/cluster';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import _ from 'lodash';
@@ -24,7 +24,6 @@ export class ClusterSpecService {
   readonly datacenterChanges = new EventEmitter<string>();
   readonly sshKeyChanges = new EventEmitter<SSHKey[]>();
   readonly clusterChanges = new EventEmitter<Cluster>();
-  readonly clusterTypeChanges = new EventEmitter<ClusterType>();
 
   private _cluster: Cluster = Cluster.newEmptyClusterEntity();
 
@@ -122,15 +121,6 @@ export class ClusterSpecService {
   set admissionPlugins(plugins: string[]) {
     this._cluster.spec.admissionPlugins = plugins;
     this.clusterChanges.emit(this._cluster);
-  }
-
-  get clusterType(): ClusterType {
-    return this._cluster.type;
-  }
-
-  set clusterType(type: ClusterType) {
-    this._cluster.type = type;
-    this.clusterTypeChanges.emit(type);
   }
 
   get eventRateLimitConfig(): EventRateLimitConfig {

@@ -266,13 +266,9 @@ export class ClusterService {
     return this._http.delete(url);
   }
 
-  nodeUpgrades(controlPlaneVersion: string, type: string): Observable<MasterVersion[]> {
-    const url = `${this._restRoot}/upgrades/node?control_plane_version=${controlPlaneVersion}&type=${type}`;
-    return this._http.get<MasterVersion[]>(url).pipe(
-      catchError(() => {
-        return of<MasterVersion[]>([]);
-      })
-    );
+  nodeUpgrades(controlPlaneVersion: string): Observable<MasterVersion[]> {
+    const url = `${this._restRoot}/upgrades/node?control_plane_version=${controlPlaneVersion}`;
+    return this._http.get<MasterVersion[]>(url).pipe(catchError(() => of<MasterVersion[]>([])));
   }
 
   sshKeys(projectID: string, clusterID: string): Observable<SSHKey[]> {

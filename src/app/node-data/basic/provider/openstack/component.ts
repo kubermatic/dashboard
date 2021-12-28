@@ -163,12 +163,6 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
         this._enforceFloatingIP(dc.spec.openstack.enforce_floating_ip);
       });
 
-    merge(this._clusterSpecService.clusterTypeChanges, of(this._clusterSpecService.clusterType))
-      .pipe(filter(clusterType => !!clusterType))
-      .pipe(filter(_ => !!this._images))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this._setDefaultImage(OperatingSystem.Ubuntu));
-
     this._nodeDataService.operatingSystemChanges
       .pipe(filter(_ => !!this._images))
       .pipe(takeUntil(this._unsubscribe))

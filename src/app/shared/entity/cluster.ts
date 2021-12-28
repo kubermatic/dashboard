@@ -55,7 +55,6 @@ export const enum Finalizer {
 
 export enum ClusterType {
   Kubernetes = 'kubernetes',
-  Empty = '',
 }
 
 export enum ContainerRuntime {

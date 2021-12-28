@@ -126,7 +126,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     this._init();
     this._nodeDataService.nodeData = this._getNodeData();
 
-    merge(this._clusterSpecService.clusterTypeChanges, this._clusterSpecService.providerChanges)
+    this._clusterSpecService.providerChanges
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS()));
 
