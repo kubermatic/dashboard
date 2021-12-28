@@ -37,7 +37,7 @@ export class OwnerProjects {
   id: string;
 }
 
-export class EditProject {
+export class ProjectModel {
   name: string;
   labels?: object;
 }

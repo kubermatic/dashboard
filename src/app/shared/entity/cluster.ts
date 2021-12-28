@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import {NodeProvider} from '../model/NodeProviderConstants';
+import {MachineDeployment} from '@shared/entity/machine-deployment';
 
 export enum Provider {
   Alibaba = 'alibaba',
@@ -539,3 +540,16 @@ export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
 export const AVAILABLE_EQUINIX_BILLING_CYCLES = ['hourly', 'daily'];
 
 export const AZURE_LOADBALANCER_SKUS = ['basic', 'standard'];
+
+export class CreateClusterModel {
+  cluster: ClusterModel;
+  nodeDeployment?: MachineDeployment;
+}
+
+class ClusterModel {
+  name: string;
+  spec: ClusterSpec;
+  labels?: object;
+  type: string;
+  credential?: string;
+}
