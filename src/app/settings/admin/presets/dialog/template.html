@@ -60,14 +60,6 @@ limitations under the License.
                  *ngIf="creating"></mat-spinner>
     <button mat-flat-button
             type="button"
-            color="tertiary"
-            (click)="stepper.previous()"
-            *ngIf="!first">
-      <i class="km-icon-mask km-icon-back"></i>
-      <span>Back</span>
-    </button>
-    <button mat-flat-button
-            type="button"
             id="km-settings-preset-next-btn"
             (click)="stepper.next()"
             [disabled]="invalid"
