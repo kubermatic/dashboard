@@ -21,7 +21,7 @@ import {NotificationService} from '@core/services/notification';
 import {PresetsService} from '@core/services/wizard/presets';
 import {Preset} from '@shared/entity/preset';
 import {Subject} from 'rxjs';
-import {take} from 'rxjs/operators';
+import {filter, take, takeUntil} from 'rxjs/operators';
 
 export interface PresetDialogData {
   title: string;
@@ -111,6 +111,11 @@ export class PresetDialogComponent implements OnInit, OnDestroy {
     const controls = {};
     this.steps.forEach(step => (controls[step] = this._formBuilder.control('')));
     this.form = this._formBuilder.group(controls);
+
+    this._presetDialogService.providerChanges
+      .pipe(filter(provider => !!provider))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => this._stepper.next());
   }
 
   ngOnDestroy(): void {

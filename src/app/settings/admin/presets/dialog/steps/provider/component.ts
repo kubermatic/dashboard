@@ -86,6 +86,9 @@ export class PresetProviderStepComponent extends BaseFormValidator implements On
     this.form
       .get(Controls.Provider)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(provider => (this._presetDialogService.provider = provider));
+      .subscribe(provider => {
+        this.form.updateValueAndValidity();
+        this._presetDialogService.provider = provider;
+      });
   }
 }
