@@ -15,6 +15,20 @@ limitations under the License.
 -->
 
 <div fxLayout="column">
+  <div fxLayout="row wrap">
+    <km-property>
+      <div key>Preset Name</div>
+      <div value>{{preset.metadata.name}}</div>
+    </km-property>
+    <km-property *ngIf="preset?.spec?.requiredEmailDomain">
+      <div key>Restrict Preset Group to Domain</div>
+      <div value>{{preset.spec.requiredEmailDomain}}</div>
+    </km-property>
+    <km-property-boolean *ngIf="!preset?.spec?.enabled"
+                         [value]="!preset.spec.enabled"
+                         label="Hide upon creation"></km-property-boolean>
+  </div>
+
   <div class="km-provider-logo km-provider-logo-{{provider}}"></div>
 
   <form [formGroup]="form"
