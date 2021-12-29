@@ -16,16 +16,16 @@ import {Condition} from '../utils/condition';
 import {Endpoint} from '../utils/endpoint';
 import {Group} from '../utils/member';
 import {Mocks} from '../utils/mocks';
-import {RequestType, ResponseType, TrafficMonitor, ResponseCheck} from '../utils/monitor';
+import {RequestType, ResponseCheck, ResponseType, TrafficMonitor} from '../utils/monitor';
 import {View} from '../utils/view';
 
 export class ServiceAccountsPage {
   static getAddServiceAccountBtn(): Cypress.Chainable {
-    return cy.get('#km-add-serviceaccount-top-btn');
+    return cy.get('#km-create-dialog-top-btn');
   }
 
   static getAddServiceAccountNameInput(): Cypress.Chainable {
-    return cy.get('#km-add-serviceaccount-dialog-name-input');
+    return cy.get('#km-create-dialog-dialog-name-input');
   }
 
   static getMemberDialogGroup(group: Group): Cypress.Chainable {
@@ -33,7 +33,7 @@ export class ServiceAccountsPage {
   }
 
   static getAddServiceAccountSaveBtn(): Cypress.Chainable {
-    return cy.get('#km-add-serviceaccount-dialog-add-btn');
+    return cy.get('#km-create-dialog-dialog-add-btn');
   }
 
   static getDeleteServiceAccountBtn(name: string): Cypress.Chainable {
@@ -45,7 +45,7 @@ export class ServiceAccountsPage {
   }
 
   static getAddTokenBtn(): Cypress.Chainable {
-    return cy.get('#km-add-serviceaccount-token');
+    return cy.get('#km-create-dialog-token');
   }
 
   static getAddTokenNameInput(): Cypress.Chainable {

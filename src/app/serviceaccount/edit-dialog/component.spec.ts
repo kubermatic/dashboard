@@ -20,32 +20,29 @@ import {fakeProject} from '@app/testing/fake-data/project';
 import {fakeServiceAccount} from '@app/testing/fake-data/serviceaccount';
 import {asyncData} from '@app/testing/services/api-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
-import {ProjectMockService} from '@app/testing/services/project-mock';
 import {CoreModule} from '@core/module';
 import {ApiService} from '@core/services/api';
 import {NotificationService} from '@core/services/notification';
-import {ProjectService} from '@core/services/project';
 import {SharedModule} from '@shared/module';
-import {AddServiceAccountComponent} from './component';
+import {EditServiceAccountDialogComponent} from './component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
 
-describe('AddServiceAccountComponent', () => {
-  let fixture: ComponentFixture<AddServiceAccountComponent>;
-  let component: AddServiceAccountComponent;
-  let createServiceAccountSpy;
+describe('EditServiceAccountDialogComponent', () => {
+  let fixture: ComponentFixture<EditServiceAccountDialogComponent>;
+  let component: EditServiceAccountDialogComponent;
+  let editServiceAccountSpy;
 
   beforeEach(
     waitForAsync(() => {
-      const apiMock = {createServiceAccount: jest.fn()};
-      createServiceAccountSpy = apiMock.createServiceAccount.mockReturnValue(asyncData(fakeServiceAccount()));
+      const apiMock = {editServiceAccount: jest.fn()};
+      editServiceAccountSpy = apiMock.editServiceAccount.mockReturnValue(asyncData(fakeServiceAccount()));
 
       TestBed.configureTestingModule({
         imports: [...modules],
         providers: [
           {provide: MatDialogRef, useClass: MatDialogRefMock},
           {provide: ApiService, useValue: apiMock},
-          {provide: ProjectService, useClass: ProjectMockService},
           NotificationService,
         ],
         teardown: {destroyAfterEach: false},
@@ -55,40 +52,32 @@ describe('AddServiceAccountComponent', () => {
 
   beforeEach(
     waitForAsync(() => {
-      fixture = TestBed.createComponent(AddServiceAccountComponent);
+      fixture = TestBed.createComponent(EditServiceAccountDialogComponent);
       component = fixture.componentInstance;
+      component.project = fakeProject();
+      component.serviceaccount = fakeServiceAccount();
       fixture.detectChanges();
     })
   );
 
   it(
-    'should create the add service account component',
+    'should create the edit service account component',
     waitForAsync(() => {
       expect(component).toBeTruthy();
     })
   );
 
-  it('form invalid after creating', () => {
-    expect(component.addServiceAccountForm.valid).toBeFalsy();
+  it('should have valid form after creating', () => {
+    expect(component.form.valid).toBeTruthy();
   });
 
-  it('should have required fields', () => {
-    expect(component.addServiceAccountForm.valid).toBeFalsy();
-    expect(component.addServiceAccountForm.controls.name.valid).toBeFalsy();
-    expect(component.addServiceAccountForm.controls.name.hasError('required')).toBeTruthy();
-
-    component.addServiceAccountForm.controls.name.patchValue('test-service-account');
-    expect(component.addServiceAccountForm.controls.name.hasError('required')).toBeFalsy();
-  });
-
-  it('should call addServiceAccount method', fakeAsync(() => {
-    component.project = fakeProject();
-    component.addServiceAccountForm.controls.name.patchValue('test-service-account');
-    component.addServiceAccountForm.controls.group.patchValue('editors');
-    component.addServiceAccount();
+  it('should call editServiceAccount method', fakeAsync(() => {
+    component.form.controls.name.patchValue('test-service-account');
+    component.form.controls.group.patchValue('editors');
+    component.edit();
     tick();
     flush();
 
-    expect(createServiceAccountSpy).toHaveBeenCalled();
+    expect(editServiceAccountSpy).toHaveBeenCalled();
   }));
 });

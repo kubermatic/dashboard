@@ -31,8 +31,8 @@ import {MemberUtils} from '@shared/utils/member-utils/member-utils';
 import _ from 'lodash';
 import {EMPTY, merge, of, Subject, timer} from 'rxjs';
 import {catchError, filter, switchMap, switchMapTo, take, takeUntil} from 'rxjs/operators';
-import {AddServiceAccountComponent} from './add-serviceaccount/component';
-import {EditServiceAccountComponent} from './edit-serviceaccount/component';
+import {CreateServiceAccountDialogComponent} from './create-dialog/component';
+import {EditServiceAccountDialogComponent} from './edit-dialog/component';
 
 @Component({
   selector: 'km-serviceaccount',
@@ -147,7 +147,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   addServiceAccount(): void {
-    const modal = this._matDialog.open(AddServiceAccountComponent);
+    const modal = this._matDialog.open(CreateServiceAccountDialogComponent);
     modal.componentInstance.project = this._selectedProject;
 
     modal
@@ -162,7 +162,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
 
   editServiceAccount(serviceAccount: ServiceAccount, event: Event): void {
     event.stopPropagation();
-    const modal = this._matDialog.open(EditServiceAccountComponent);
+    const modal = this._matDialog.open(EditServiceAccountDialogComponent);
     modal.componentInstance.project = this._selectedProject;
     modal.componentInstance.serviceaccount = serviceAccount;
     modal

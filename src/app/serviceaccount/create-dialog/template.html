@@ -13,28 +13,24 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<div id="km-edit-serviceaccount-dialog">
-  <km-dialog-title>Edit Service Account</km-dialog-title>
+<div id="km-add-serviceaccount-dialog">
+  <km-dialog-title>Create Service Account</km-dialog-title>
   <mat-dialog-content>
-    <p class="km-dialog-context-description">Edit <b>{{serviceaccount.name}}</b> service account of <b>{{project.name}}</b> project</p>
-
-    <form [formGroup]="editServiceAccountForm"
-          fxLayout="column"
-          (submit)="editServiceAccount()"
-          id="edit-service-account-form">
+    <form [formGroup]="form"
+          fxLayout="column">
       <mat-form-field fxFlex>
-        <mat-label>Name*</mat-label>
-        <input id="km-edit-serviceaccount-dialog-input"
+        <mat-label>Name</mat-label>
+        <input id="km-add-serviceaccount-dialog-name-input"
                matInput
                formControlName="name"
-               type="text"
+               type="name"
                autocomplete="off"
+               required
                cdkFocusInitial>
-        <mat-error *ngIf="editServiceAccountForm.controls.name.hasError('required')">
+        <mat-error *ngIf="form.controls.name.hasError('required')">
           Name is <strong>required</strong>.
         </mat-error>
       </mat-form-field>
-
       <label class="km-radio-group-label">Select a Group</label>
       <mat-radio-group formControlName="group"
                        fxFlex
@@ -65,15 +61,14 @@ limitations under the License.
     </form>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <button id="km-edit-serviceaccount-dialog-edit-btn"
+    <button id="km-add-serviceaccount-dialog-add-btn"
             mat-flat-button
             type="submit"
             kmThrottleClick
-            (throttleClick)="editServiceAccount()"
-            form="edit-service-account-form"
-            [disabled]="!editServiceAccountForm.valid">
-      <i class="km-icon-mask km-icon-edit w-24"></i>
-      <span>Edit Service Account</span>
+            (throttleClick)="create()"
+            [disabled]="!form.valid">
+      <i class="km-icon-mask km-icon-add"></i>
+      <span>Create Service Account</span>
     </button>
   </mat-dialog-actions>
 </div>

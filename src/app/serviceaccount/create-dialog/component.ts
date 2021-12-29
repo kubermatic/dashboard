@@ -22,43 +22,39 @@ import {ServiceAccountModel} from '@shared/entity/service-account';
 import {take} from 'rxjs/operators';
 
 @Component({
-  selector: 'km-add-serviceaccount',
+  selector: 'km-create-service-account-dialog',
   templateUrl: './template.html',
 })
-export class AddServiceAccountComponent implements OnInit {
+export class CreateServiceAccountDialogComponent implements OnInit {
   @Input() project: Project;
-  addServiceAccountForm: FormGroup;
+  form: FormGroup;
 
   constructor(
     private readonly _apiService: ApiService,
-    private readonly _matDialogRef: MatDialogRef<AddServiceAccountComponent>,
+    private readonly _matDialogRef: MatDialogRef<CreateServiceAccountDialogComponent>,
     private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
-    this.addServiceAccountForm = new FormGroup({
+    this.form = new FormGroup({
       name: new FormControl('', [Validators.required]),
       group: new FormControl('editors', [Validators.required]),
     });
   }
 
-  addServiceAccount(): void {
-    if (!this.addServiceAccountForm.valid) {
-      return;
-    }
-
-    const createServiceAccount: ServiceAccountModel = {
-      name: this.addServiceAccountForm.controls.name.value,
-      group: this.addServiceAccountForm.controls.group.value,
+  create(): void {
+    const model: ServiceAccountModel = {
+      name: this.form.controls.name.value,
+      group: this.form.controls.group.value,
     };
 
     this._apiService
-      .createServiceAccount(this.project.id, createServiceAccount)
+      .createServiceAccount(this.project.id, model)
       .pipe(take(1))
       .subscribe(() => {
         this._matDialogRef.close(true);
         this._notificationService.success(
-          `The ${createServiceAccount.name} service account was added to the ${this.project.name} project`
+          `The ${model.name} service account was created in the ${this.project.name} project`
         );
       });
   }

@@ -49,8 +49,8 @@ import {SharedModule} from '@shared/module';
 import {COOKIE, COOKIE_DI_TOKEN} from '../config';
 import {AddMemberComponent} from '../member/add-member/component';
 import {EditMemberComponent} from '../member/edit-member/component';
-import {AddServiceAccountComponent} from '../serviceaccount/add-serviceaccount/component';
-import {EditServiceAccountComponent} from '../serviceaccount/edit-serviceaccount/component';
+import {CreateServiceAccountDialogComponent} from '../serviceaccount/create-dialog/component';
+import {EditServiceAccountDialogComponent} from '../serviceaccount/edit-dialog/component';
 import {FooterComponent} from './components/footer/component';
 import {NavigationComponent} from './components/navigation/component';
 import {ProjectSelectorComponent} from './components/navigation/project/component';
@@ -75,8 +75,8 @@ const components: any[] = [
   NavigationComponent,
   AddMemberComponent,
   EditMemberComponent,
-  AddServiceAccountComponent,
-  EditServiceAccountComponent,
+  CreateServiceAccountDialogComponent,
+  EditServiceAccountDialogComponent,
   FooterComponent,
   NotificationPanelComponent,
   UserPanelComponent,

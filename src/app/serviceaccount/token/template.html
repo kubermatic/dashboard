@@ -91,7 +91,7 @@ limitations under the License.
             </button>
 
             <button mat-icon-button
-                    [attr.id]="'km-edit-serviceaccount-token-' + element?.name"
+                    [attr.id]="'km-edit-dialog-token-' + element?.name"
                     matTooltip="Edit Service Account Token"
                     (click)="editToken(element)"
                     [disabled]="!isEnabled('edit')">

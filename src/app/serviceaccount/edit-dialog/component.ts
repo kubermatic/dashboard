@@ -22,38 +22,34 @@ import {ServiceAccount} from '@shared/entity/service-account';
 import {take} from 'rxjs/operators';
 
 @Component({
-  selector: 'km-edit-serviceaccount',
+  selector: 'km-edit-dialog',
   templateUrl: './template.html',
 })
-export class EditServiceAccountComponent implements OnInit {
+export class EditServiceAccountDialogComponent implements OnInit {
   @Input() project: Project;
   @Input() serviceaccount: ServiceAccount;
-  editServiceAccountForm: FormGroup;
+  form: FormGroup;
 
   constructor(
     private readonly _apiService: ApiService,
-    private readonly _matDialogRef: MatDialogRef<EditServiceAccountComponent>,
+    private readonly _matDialogRef: MatDialogRef<EditServiceAccountDialogComponent>,
     private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
-    this.editServiceAccountForm = new FormGroup({
+    this.form = new FormGroup({
       name: new FormControl(this.serviceaccount.name, [Validators.required]),
       group: new FormControl(this.serviceaccount.group.replace(/(-[\w\d]+$)/, ''), [Validators.required]),
     });
   }
 
-  editServiceAccount(): void {
-    if (!this.editServiceAccountForm) {
-      return;
-    }
-
+  edit(): void {
     const editServiceAccount: ServiceAccount = {
       id: this.serviceaccount.id,
-      name: this.editServiceAccountForm.controls.name.value,
+      name: this.form.controls.name.value,
       creationTimestamp: this.serviceaccount.creationTimestamp,
       deletionTimestamp: this.serviceaccount.deletionTimestamp,
-      group: this.editServiceAccountForm.controls.group.value,
+      group: this.form.controls.group.value,
       status: this.serviceaccount.id,
     };
 
