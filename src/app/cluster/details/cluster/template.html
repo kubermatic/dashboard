@@ -175,28 +175,6 @@ limitations under the License.
                              label="Assign Availability Set"
                              [value]="cluster.spec.cloud.azure.assignAvailabilitySet"></km-property-boolean>
 
-        <km-property-boolean label="User SSH Key Agent"
-                             [value]="cluster.spec.enableUserSSHKeyAgent">
-        </km-property-boolean>
-
-        <km-property-boolean label="Operating System Manager"
-                             [value]="cluster.spec.enableOperatingSystemManager">
-        </km-property-boolean>
-
-        <km-property-boolean label="OPA Integration"
-                             [value]="cluster.spec.opaIntegration?.enabled"
-                             id="km-opa-info">
-        </km-property-boolean>
-
-        <km-property-boolean label="User Cluster Logging"
-                             [value]="cluster.spec.mla?.loggingEnabled"
-                             *ngIf="isMLAEnabledInSeed()">
-        </km-property-boolean>
-
-        <km-property-boolean label="User Cluster Monitoring"
-                             [value]="cluster.spec.mla?.monitoringEnabled"
-                             *ngIf="isMLAEnabledInSeed()">
-        </km-property-boolean>
 
         <km-property-boolean label="Audit Logging"
                              *ngIf="cluster.spec.auditLogging?.enabled"
@@ -306,6 +284,25 @@ limitations under the License.
                 <span>{{getExternalCCMMigrationStatus()}}</span>
               </div>
             </km-property>
+            <km-property-boolean label="User SSH Key Agent"
+                                 [value]="cluster.spec.enableUserSSHKeyAgent">
+            </km-property-boolean>
+
+            <km-property-boolean label="Operating System Manager"
+                                 [value]="cluster.spec.enableOperatingSystemManager">
+            </km-property-boolean>
+            <km-property-boolean label="OPA Integration"
+                                 [value]="cluster.spec.opaIntegration?.enabled"
+                                 id="km-opa-info">
+            </km-property-boolean>
+            <km-property-boolean label="User Cluster Logging"
+                                 [value]="cluster.spec.mla?.loggingEnabled"
+                                 *ngIf="isMLAEnabledInSeed()">
+            </km-property-boolean>
+            <km-property-boolean label="User Cluster Monitoring"
+                                 [value]="cluster.spec.mla?.monitoringEnabled"
+                                 *ngIf="isMLAEnabledInSeed()">
+            </km-property-boolean>
           </div>
           <!-- Health statuses -->
           <div fxLayout="row wrap">

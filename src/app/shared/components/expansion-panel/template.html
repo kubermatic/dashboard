@@ -20,9 +20,11 @@ limitations under the License.
        (click)="isExpanded = !isExpanded"
        [ngSwitch]="isExpanded">
     <div fxLayoutAlign="center center"
+         fxLayoutGap="4px"
          class="label">
       <div *ngSwitchCase="true">{{collapseLabel}}</div>
       <div *ngSwitchCase="false">{{expandLabel}}</div>
+      <i class="km-icon-mask km-icon-arrow-{{isExpanded ? 'up' : 'down'}}"></i>
     </div>
   </div>
   <div *ngIf="isExpanded"
