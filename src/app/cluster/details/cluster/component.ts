@@ -187,7 +187,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                 : [of([]), of([] as RuleGroup[])]
             )
             .concat(
-              this.isClusterRunning && this.isOPARunning && this.isOPAEnabled()
+              this.isClusterRunning && this.isOPARunning && this.cluster.spec.opaIntegration?.enabled
                 ? [
                     this._opaService.constraints(this.projectID, this.cluster.id),
                     this._opaService.gatekeeperConfig(this.projectID, this.cluster.id),
@@ -476,10 +476,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   isRBACEnabled(): boolean {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'rbac', Permission.View);
-  }
-
-  isOPAEnabled(): boolean {
-    return !!this.cluster.spec.opaIntegration && this.cluster.spec.opaIntegration.enabled;
   }
 
   isMLAEnabledInSeed(): boolean {
