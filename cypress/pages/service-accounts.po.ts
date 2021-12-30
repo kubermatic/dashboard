@@ -45,7 +45,7 @@ export class ServiceAccountsPage {
   }
 
   static getAddTokenBtn(): Cypress.Chainable {
-    return cy.get('#km-create-dialog-token');
+    return cy.get('#km-add-serviceaccount-token');
   }
 
   static getAddTokenNameInput(): Cypress.Chainable {
