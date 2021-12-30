@@ -25,7 +25,8 @@ limitations under the License.
       <div *ngSwitchCase="false">{{expandLabel}}</div>
     </div>
   </div>
-  <div *ngIf="isExpanded">
+  <div *ngIf="isExpanded"
+       @shrinkGrow>
     <ng-content></ng-content>
   </div>
 </div>
