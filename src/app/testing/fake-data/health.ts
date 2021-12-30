@@ -16,36 +16,36 @@ import {Health, HealthState} from '@shared/entity/health';
 
 export function fakeHealth(): Health {
   return {
-    apiserver: HealthState.up,
-    controller: HealthState.up,
-    etcd: HealthState.up,
-    machineController: HealthState.up,
-    scheduler: HealthState.up,
-    cloudProviderInfrastructure: HealthState.up,
-    userClusterControllerManager: HealthState.up,
+    apiserver: HealthState.Up,
+    controller: HealthState.Up,
+    etcd: HealthState.Up,
+    machineController: HealthState.Up,
+    scheduler: HealthState.Up,
+    cloudProviderInfrastructure: HealthState.Up,
+    userClusterControllerManager: HealthState.Up,
   };
 }
 
 export function fakeHealthProvisioning(): Health {
   return {
-    apiserver: HealthState.up,
-    controller: HealthState.up,
-    etcd: HealthState.provisioning,
-    machineController: HealthState.up,
-    scheduler: HealthState.provisioning,
-    cloudProviderInfrastructure: HealthState.down,
-    userClusterControllerManager: HealthState.provisioning,
+    apiserver: HealthState.Up,
+    controller: HealthState.Up,
+    etcd: HealthState.Provisioning,
+    machineController: HealthState.Up,
+    scheduler: HealthState.Provisioning,
+    cloudProviderInfrastructure: HealthState.Down,
+    userClusterControllerManager: HealthState.Provisioning,
   };
 }
 
 export function fakeHealthFailed(): Health {
   return {
-    apiserver: HealthState.down,
-    controller: HealthState.down,
-    etcd: HealthState.down,
-    machineController: HealthState.down,
-    scheduler: HealthState.down,
-    cloudProviderInfrastructure: HealthState.down,
-    userClusterControllerManager: HealthState.down,
+    apiserver: HealthState.Down,
+    controller: HealthState.Down,
+    etcd: HealthState.Down,
+    machineController: HealthState.Down,
+    scheduler: HealthState.Down,
+    cloudProviderInfrastructure: HealthState.Down,
+    userClusterControllerManager: HealthState.Down,
   };
 }

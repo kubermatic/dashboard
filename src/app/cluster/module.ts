@@ -26,7 +26,6 @@ import {AlertmanagerConfigComponent} from './details/cluster/mla/alertmanager-co
 import {AlertmanagerConfigDialog} from './details/cluster/mla/alertmanager-config/alertmanager-config-dialog/component';
 import {VersionChangeDialogComponent} from './details/shared/version-change-dialog/component';
 import {ClusterDeleteConfirmationComponent} from './details/cluster/cluster-delete-confirmation/component';
-import {ClusterSecretsComponent} from './details/cluster/cluster-secrets/component';
 import {ClusterDetailsComponent} from './details/cluster/component';
 import {CNIVersionComponent} from './details/cluster/cni-version/component';
 import {CNIVersionDialog} from './details/cluster/cni-version/cni-version-dialog/component';
@@ -82,7 +81,6 @@ const components: any[] = [
   RBACComponent,
   ClusterDeleteConfirmationComponent,
   VersionChangeDialogComponent,
-  ClusterSecretsComponent,
   EditClusterComponent,
   RevokeTokenComponent,
   EditProviderSettingsComponent,

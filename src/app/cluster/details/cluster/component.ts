@@ -41,7 +41,7 @@ import {View} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {Node} from '@shared/entity/node';
 import {Event} from '@shared/entity/event';
-import {Health, HealthState} from '@shared/entity/health';
+import {Health, HealthState, HealthType} from '@shared/entity/health';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {Member} from '@shared/entity/member';
 import {ClusterMetrics} from '@shared/entity/metrics';
@@ -79,7 +79,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   isClusterRunning = false;
   isClusterAPIRunning = false;
   isOPARunning = false;
-  clusterHealthStatus: ClusterHealthStatus;
+  healthStatus: ClusterHealthStatus;
   health: Health;
   config: Config = {share_kubeconfig: false};
   projectID: string;
@@ -92,6 +92,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   gatekeeperConfig: GatekeeperConfig;
   alertmanagerConfig: AlertmanagerConfig;
   ruleGroups: RuleGroup[];
+  readonly HealthType = HealthType;
   private _unsubscribe: Subject<void> = new Subject<void>();
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
@@ -153,7 +154,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this._seedSettings = seedSettings;
           this.isClusterAPIRunning = ClusterHealthStatus.isClusterAPIRunning(this.cluster, health);
           this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, health);
-          this.clusterHealthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, health);
+          this.healthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, health);
           this.isOPARunning = ClusterHealthStatus.isOPARunning(this.cluster, health);
 
           // Conditionally create an array of observables to use for 'combineLatest' operator.
