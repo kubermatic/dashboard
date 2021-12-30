@@ -146,7 +146,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
       });
   }
 
-  addServiceAccount(): void {
+  createServiceAccount(): void {
     const modal = this._matDialog.open(CreateServiceAccountDialogComponent);
     modal.componentInstance.project = this._selectedProject;
 
