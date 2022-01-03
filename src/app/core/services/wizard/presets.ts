@@ -15,7 +15,7 @@
 import {HttpClient} from '@angular/common/http';
 import {EventEmitter, Injectable} from '@angular/core';
 import {environment} from '@environments/environment';
-import {CreatePresetReq, Preset, PresetList, UpdatePresetStatusReq} from '@shared/entity/preset';
+import {Preset, PresetList, PresetModel, UpdatePresetStatusReq} from '@shared/entity/preset';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Observable} from 'rxjs';
 import {Alibaba} from './provider/alibaba';
@@ -109,12 +109,12 @@ export class PresetsService {
     return this._http.put<Preset>(url, status);
   }
 
-  create(preset: CreatePresetReq): Observable<Preset> {
+  create(preset: PresetModel): Observable<Preset> {
     const url = `${environment.newRestRoot}/providers/${preset.spec.provider()}/presets`;
     return this._http.post<Preset>(url, preset);
   }
 
-  update(preset: CreatePresetReq): Observable<Preset> {
+  update(preset: PresetModel): Observable<Preset> {
     const url = `${environment.newRestRoot}/providers/${preset.spec.provider()}/presets`;
     return this._http.put<Preset>(url, preset);
   }

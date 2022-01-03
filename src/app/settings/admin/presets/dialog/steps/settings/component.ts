@@ -22,6 +22,7 @@ import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge} from 'rxjs';
 import {distinctUntilChanged, map, switchMap, takeUntil} from 'rxjs/operators';
 import {AutocompleteInitialState} from '@shared/components/autocomplete/component';
+import {PresetModel} from '@shared/entity/preset';
 
 enum Controls {
   Settings = 'settings',
@@ -50,6 +51,7 @@ export class PresetSettingsStepComponent extends BaseFormValidator implements On
   provider: NodeProvider;
   datacenters: string[] = [];
   isLoadingDatacenters = true;
+  preset: PresetModel;
 
   readonly Providers = NodeProvider;
   readonly Controls = Controls;
@@ -63,6 +65,8 @@ export class PresetSettingsStepComponent extends BaseFormValidator implements On
   }
 
   ngOnInit(): void {
+    this.preset = this._presetDialogService.preset;
+
     this.form = this._builder.group({
       [Controls.Settings]: this._builder.control(''),
       [Controls.Datacenter]: this._builder.control(''),

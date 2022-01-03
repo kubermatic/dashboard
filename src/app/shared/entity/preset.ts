@@ -43,7 +43,7 @@ export class UpdatePresetStatusReq {
   enabled: boolean;
 }
 
-export class CreatePresetReq {
+export class PresetModel {
   metadata: Metadata;
   spec: CreatePresetSpec;
 

@@ -61,7 +61,6 @@ describe('Admin Settings - Presets Story', () => {
 
     // Select provider
     AdminSettings.ProviderPresetsPage.getAddPresetDialogProviderBtn(Provider.Digitalocean).click();
-    AdminSettings.ProviderPresetsPage.getAddPresetDialogNextBtn().click();
 
     AdminSettings.ProviderPresetsPage.getAddPresetDialogDigitaloceanTokenInput()
       .type(token)
