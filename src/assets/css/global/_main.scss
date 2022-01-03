@@ -131,23 +131,6 @@ hr {
   }
 }
 
-.km-card-expansion-panel {
-  font-size: variables.$font-size-subhead;
-  line-height: 48px;
-  margin: 0 60px;
-  padding: 8px 0;
-
-  & > div {
-    cursor: default;
-    margin-right: 48px;
-
-    & > span {
-      margin-right: 16px;
-      margin-top: 2px;
-    }
-  }
-}
-
 .km-table-with-frame {
   tr:last-child td:last-child {
     border-bottom-right-radius: variables.$border-radius;

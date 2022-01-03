@@ -12,6 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-:host {
-  margin-top: 8px;
+import {Component, Input} from '@angular/core';
+import {shrinkGrow} from '@shared/animations/grow';
+
+@Component({
+  selector: 'km-expansion-panel',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+  animations: [shrinkGrow],
+})
+export class ExpansionPanelComponent {
+  @Input() expandLabel = 'Show more';
+  @Input() collapseLabel = 'Show less';
+  isExpanded = false;
 }

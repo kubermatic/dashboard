@@ -110,6 +110,8 @@ import {EKSCredentialsComponent} from '@shared/components/add-external-cluster-d
 import {EKSClusterComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/eks/component';
 import {AKSCredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/aks/component';
 import {AKSClusterComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/aks/component';
+import {ExpansionPanelComponent} from '@shared/components/expansion-panel/component';
+import {PropertyHealthComponent} from '@shared/components/property-health/component';
 
 const modules: any[] = [
   CommonModule,
@@ -212,6 +214,8 @@ const components: any[] = [
   GKEClusterComponent,
   EKSClusterComponent,
   CredentialsPresetsComponent,
+  ExpansionPanelComponent,
+  PropertyHealthComponent,
 ];
 
 const directives: any[] = [AutofocusDirective, ThrottleClickDirective, OptionDirective];

@@ -49,7 +49,6 @@ import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
 import {of} from 'rxjs';
 import {ClusterDetailsComponent} from './component';
-import {ClusterSecretsComponent} from './cluster-secrets/component';
 import {CNIVersionComponent} from './cni-version/component';
 import {MachineDeploymentListComponent} from './machine-deployment-list/component';
 import {MachineNetworksDisplayComponent} from './machine-networks-display/component';
@@ -89,7 +88,6 @@ describe('ClusterDetailsComponent', () => {
         imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
         declarations: [
           ClusterDetailsComponent,
-          ClusterSecretsComponent,
           NodeListComponent,
           MachineDeploymentListComponent,
           MachineNetworksDisplayComponent,
