@@ -15,7 +15,7 @@ limitations under the License.
 -->
 <km-dialog-title>
   <span>Change Control Plane Version</span>
-  <div *ngIf="!isClusterDeprecated()"
+  <div *ngIf="!isClusterDeprecated() && hasVersionOptions"
        class="km-update-available-badge">
     <i class="km-icon-update-available-arrow"></i>
     <span>Update Available</span>
