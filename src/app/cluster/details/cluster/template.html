@@ -122,8 +122,8 @@ limitations under the License.
         </mat-menu>
       </div>
     </mat-card-header>
-    <mat-card-content class="km-row">
 
+    <mat-card-content class="km-row">
       <div class="km-content-wrap">
         <km-version-picker [cluster]="cluster"
                            [isClusterRunning]="isClusterAPIRunning"
@@ -133,7 +133,6 @@ limitations under the License.
                         [cluster]="cluster"
                         [isClusterRunning]="isClusterAPIRunning"
                         [cniVersions]="cniVersions"></km-cni-version>
-
         <km-property>
           <div key>Cluster ID</div>
           <div value
@@ -144,53 +143,24 @@ limitations under the License.
             {{cluster?.id}}
           </div>
         </km-property>
-
         <km-property>
           <div key>Seed</div>
           <div value>{{seed}}</div>
         </km-property>
-
-        <km-property *ngIf="cluster.spec.containerRuntime">
-          <div key>Container Runtime</div>
-          <div value>{{cluster.spec.containerRuntime}}</div>
-        </km-property>
-
-        <km-property-boolean label="Konnectivity"
-                             [value]="cluster.spec.clusterNetwork?.konnectivityEnabled">
-        </km-property-boolean>
-
         <km-property *ngIf="nodeDc?.spec?.provider !== 'bringyourown'">
           <div key>Region</div>
           <div value>{{nodeDc?.spec?.country}} ({{nodeDc?.spec?.location}})</div>
         </km-property>
-
         <km-property>
           <div value
                class="km-provider-logo-value">
             <span class="km-provider-logo km-provider-logo-{{getProvider(nodeDc?.spec?.provider)}}"></span>
           </div>
         </km-property>
-
-        <km-property-boolean *ngIf="cluster?.spec?.cloud?.azure"
-                             label="Assign Availability Set"
-                             [value]="cluster.spec.cloud.azure.assignAvailabilitySet"></km-property-boolean>
-
-
-        <km-property-boolean label="Audit Logging"
-                             *ngIf="cluster.spec.auditLogging?.enabled"
-                             [value]="cluster.spec.auditLogging.enabled">
-        </km-property-boolean>
-
-        <km-property *ngIf="cluster.spec.auditLogging?.enabled">
-          <div key>Audit Policy Preset</div>
-          <div value>{{cluster.spec.auditLogging.policyPreset || 'custom'}}</div>
-        </km-property>
-
         <km-property-boolean label="Pod Security Policy"
                              [value]="cluster.spec.usePodSecurityPolicyAdmissionPlugin"
                              *ngIf="!!cluster.spec.usePodSecurityPolicyAdmissionPlugin">
         </km-property-boolean>
-
         <km-property-boolean label="Pod Node Selector"
                              [value]="cluster.spec.usePodNodeSelectorAdmissionPlugin"
                              *ngIf="!!cluster.spec.usePodNodeSelectorAdmissionPlugin">
@@ -200,20 +170,17 @@ limitations under the License.
                              [value]="cluster.spec.useEventRateLimitAdmissionPlugin"
                              *ngIf="cluster.spec.useEventRateLimitAdmissionPlugin">
         </km-property-boolean>
-
         <km-property>
           <div value>
             <km-ssh-key-list [sshKeys]="sshKeys"></km-ssh-key-list>
           </div>
         </km-property>
-
         <km-property>
           <div key>Created</div>
           <div value>
             <km-relative-time [date]="cluster.creationTimestamp"></km-relative-time>
           </div>
         </km-property>
-
         <km-property *ngIf="cluster.labels">
           <div key>Labels</div>
           <div value>
@@ -221,10 +188,6 @@ limitations under the License.
                        emptyMessage="No assigned labels"></km-labels>
           </div>
         </km-property>
-      </div>
-
-      <div class="km-content-wrap"
-           *ngIf="metrics">
         <km-property-usage *ngIf="metrics?.nodes?.cpuTotalMillicores"
                            name="Nodes CPU Usage"
                            unit="millicores"
@@ -253,21 +216,13 @@ limitations under the License.
         <div class="km-content-wrap">
           <!-- Properties -->
           <div fxLayout="row wrap">
+            <km-property *ngIf="cluster.spec.containerRuntime">
+              <div key>Container Runtime</div>
+              <div value>{{cluster.spec.containerRuntime}}</div>
+            </km-property>
             <km-property *ngIf="cluster.spec.admissionPlugins">
               <div key>Enabled Admission Plugins</div>
               <div value>{{getAdmissionPlugins()}}</div>
-            </km-property>
-            <km-property *ngIf="cluster.spec.clusterNetwork?.pods?.cidrBlocks">
-              <div key>Pods CIDR</div>
-              <div value>{{cluster.spec.clusterNetwork.pods.cidrBlocks.join(', ')}}</div>
-            </km-property>
-            <km-property *ngIf="cluster.spec.clusterNetwork?.services?.cidrBlocks">
-              <div key>Services CIDR</div>
-              <div value>{{cluster.spec.clusterNetwork.services.cidrBlocks.join(', ')}}</div>
-            </km-property>
-            <km-property *ngIf="cluster.spec.clusterNetwork?.proxyMode">
-              <div key>Proxy Mode</div>
-              <div value>{{cluster.spec.clusterNetwork.proxyMode}}</div>
             </km-property>
             <km-property *ngIf="cluster?.status?.externalCCMMigration">
               <div key>External CCM</div>
@@ -284,12 +239,34 @@ limitations under the License.
                 <span>{{getExternalCCMMigrationStatus()}}</span>
               </div>
             </km-property>
+            <km-property *ngIf="cluster.spec.auditLogging?.enabled">
+              <div key>Audit Policy Preset</div>
+              <div value>{{cluster.spec.auditLogging.policyPreset || 'custom'}}</div>
+            </km-property>
+            <km-property *ngIf="cluster.spec.clusterNetwork?.pods?.cidrBlocks">
+              <div key>Pods CIDR</div>
+              <div value>{{cluster.spec.clusterNetwork.pods.cidrBlocks.join(', ')}}</div>
+            </km-property>
+            <km-property *ngIf="cluster.spec.clusterNetwork?.services?.cidrBlocks">
+              <div key>Services CIDR</div>
+              <div value>{{cluster.spec.clusterNetwork.services.cidrBlocks.join(', ')}}</div>
+            </km-property>
+            <km-property *ngIf="cluster.spec.clusterNetwork?.proxyMode">
+              <div key>Proxy Mode</div>
+              <div value>{{cluster.spec.clusterNetwork.proxyMode}}</div>
+            </km-property>
+            <km-property-boolean label="Konnectivity"
+                                 [value]="cluster.spec.clusterNetwork?.konnectivityEnabled">
+            </km-property-boolean>
             <km-property-boolean label="User SSH Key Agent"
                                  [value]="cluster.spec.enableUserSSHKeyAgent">
             </km-property-boolean>
-
             <km-property-boolean label="Operating System Manager"
                                  [value]="cluster.spec.enableOperatingSystemManager">
+            </km-property-boolean>
+            <km-property-boolean label="Audit Logging"
+                                 *ngIf="cluster.spec.auditLogging?.enabled"
+                                 [value]="cluster.spec.auditLogging.enabled">
             </km-property-boolean>
             <km-property-boolean label="OPA Integration"
                                  [value]="cluster.spec.opaIntegration?.enabled"
@@ -303,6 +280,9 @@ limitations under the License.
                                  [value]="cluster.spec.mla?.monitoringEnabled"
                                  *ngIf="isMLAEnabledInSeed()">
             </km-property-boolean>
+            <km-property-boolean *ngIf="cluster?.spec?.cloud?.azure"
+                                 label="Assign Availability Set"
+                                 [value]="cluster.spec.cloud.azure.assignAvailabilitySet"></km-property-boolean>
           </div>
           <!-- Health statuses -->
           <div fxLayout="row wrap">
