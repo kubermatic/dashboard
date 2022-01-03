@@ -28,7 +28,7 @@ import {ClusterMetrics, NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
-import {combineLatest, forkJoin, of, Subject, timer} from 'rxjs';
+import {forkJoin, of, Subject, timer} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 import {MasterVersion} from '@shared/entity/cluster';
@@ -113,7 +113,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
     this._metricsRefreshTimer
       .pipe(
         switchMap(_ =>
-          combineLatest([
+          forkJoin([
             this._clusterService.externalClusterMetrics(this.projectID, clusterID),
             this._clusterService.externalClusterNodesMetrics(this.projectID, clusterID),
           ])
