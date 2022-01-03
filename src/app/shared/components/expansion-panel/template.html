@@ -15,16 +15,17 @@ limitations under the License.
 -->
 
 <div fxLayout="column">
-  <div fxFlex
-       class="bar"
+  <div class="bar"
        (click)="isExpanded = !isExpanded"
        [ngSwitch]="isExpanded">
     <div fxLayoutAlign="center center"
          fxLayoutGap="4px"
-         class="label">
+         class="label km-text-muted">
+      <hr fxFlex>
       <div *ngSwitchCase="true">{{collapseLabel}}</div>
       <div *ngSwitchCase="false">{{expandLabel}}</div>
       <i class="km-icon-mask km-icon-arrow-{{isExpanded ? 'up' : 'down'}}"></i>
+      <hr fxFlex>
     </div>
   </div>
   <div *ngIf="isExpanded"
