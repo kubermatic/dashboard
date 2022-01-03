@@ -28,7 +28,7 @@ import {ClusterMetrics, NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
-import {combineLatest, of, Subject, timer} from 'rxjs';
+import {forkJoin, of, Subject, timer} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 import {MasterVersion} from '@shared/entity/cluster';
@@ -87,26 +87,33 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
           this.provider = ExternalCluster.getProvider(cluster.cloud);
         }),
         switchMap(_ =>
-          combineLatest([
+          this.hasUpgrades() ? this._clusterService.externalClusterUpgrades(this.projectID, clusterID) : of([])
+        ),
+        takeUntil(this._unsubscribe)
+      )
+      .subscribe(upgrades => (this.upgrades = upgrades));
+
+    this._refreshTimer
+      .pipe(
+        switchMap(_ =>
+          forkJoin([
             this._clusterService.externalMachineDeployments(this.projectID, clusterID),
             this._clusterService.externalClusterNodes(this.projectID, clusterID),
             this._clusterService.externalClusterEvents(this.projectID, clusterID),
-            this.hasUpgrades() ? this._clusterService.externalClusterUpgrades(this.projectID, clusterID) : of([]),
           ])
         ),
         takeUntil(this._unsubscribe)
       )
-      .subscribe(([machineDeployments, nodes, events, upgrades]) => {
+      .subscribe(([machineDeployments, nodes, events]) => {
         this.machineDeployments = machineDeployments;
         this.nodes = nodes;
         this.events = events;
-        this.upgrades = upgrades;
       });
 
     this._metricsRefreshTimer
       .pipe(
         switchMap(_ =>
-          combineLatest([
+          forkJoin([
             this._clusterService.externalClusterMetrics(this.projectID, clusterID),
             this._clusterService.externalClusterNodesMetrics(this.projectID, clusterID),
           ])
