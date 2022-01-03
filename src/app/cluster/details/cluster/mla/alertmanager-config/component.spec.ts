@@ -20,9 +20,11 @@ import {DialogTestModule, NoopConfirmDialogComponent} from '@app/testing/compone
 import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
 import {fakeAlertmanagerConfig} from '@app/testing/fake-data/mla';
 import {fakeProject} from '@app/testing/fake-data/project';
+import {ApiMockService} from '@app/testing/services/api-mock';
 import {DatacenterMockService} from '@app/testing/services/datacenter-mock';
 import {SettingsMockService} from '@app/testing/services/settings-mock';
 import {CoreModule} from '@core/module';
+import {ApiService} from '@core/services/api';
 import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
 import {MLAService} from '@core/services/mla';
@@ -54,6 +56,7 @@ describe('AlertmanagerConfigComponent', () => {
           {provide: MLAService, useValue: mlaMock},
           {provide: SettingsService, useClass: SettingsMockService},
           {provide: DatacenterService, useClass: DatacenterMockService},
+          {provide: ApiService, useClass: ApiMockService},
           MatDialog,
           NotificationService,
         ],

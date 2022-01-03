@@ -15,11 +15,13 @@
 import {Component, Input, OnDestroy, OnInit, Inject} from '@angular/core';
 import {DOCUMENT} from '@angular/common';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {ApiService} from '@core/services/api';
 import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
 import {MLAService} from '@core/services/mla';
 import {SettingsService} from '@core/services/settings';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
+import {Addon} from '@shared/entity/addon';
 import {Cluster} from '@shared/entity/cluster';
 import {SeedSettings} from '@shared/entity/datacenter';
 import {AlertmanagerConfig} from '@shared/entity/mla';
@@ -34,6 +36,11 @@ export enum Type {
   Grafana = 'Grafana',
 }
 
+export enum AddonType {
+  NodeExporter = 'node-exporter',
+  KubeStateMetrics = 'kube-state-metrics',
+}
+
 @Component({
   selector: 'km-alertmanager-config',
   templateUrl: './template.html',
@@ -45,6 +52,9 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
   @Input() projectID: string;
   @Input() isClusterRunning: boolean;
   @Input() alertmanagerConfig: AlertmanagerConfig;
+  @Input() addons: Addon[] = [];
+
+  accessibleAddons: string[] = [];
 
   private _settings: AdminSettings;
   private _seedSettings: SeedSettings;
@@ -57,6 +67,7 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
     private readonly _notificationService: NotificationService,
     private readonly _settingsService: SettingsService,
     private readonly _datacenterService: DatacenterService,
+    private readonly _apiService: ApiService,
     @Inject(DOCUMENT) private readonly _document: Document
   ) {}
 
@@ -72,6 +83,11 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
       .pipe(switchMap(_ => this._datacenterService.seedSettings(this._seed)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(seedSettings => (this._seedSettings = seedSettings));
+
+    this._apiService
+      .getAccessibleAddons()
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(accessibleAddons => (this.accessibleAddons = accessibleAddons));
   }
 
   ngOnDestroy(): void {
@@ -113,6 +129,59 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
       default:
         return '';
     }
+  }
+
+  displayGrafanaWarning(): boolean {
+    return (
+      this.shouldDisplayLink(Type.Grafana) &&
+      (!this._isAddonEnabled(AddonType.NodeExporter) || !this._isAddonEnabled(AddonType.KubeStateMetrics))
+    );
+  }
+
+  private _isAddonEnabled(addon: AddonType): boolean {
+    return this.addons.find(a => a.id === addon) ? true : false;
+  }
+
+  private _isAddonAvailable(addon: AddonType): boolean {
+    return this.accessibleAddons.find(a => a === addon) ? true : false;
+  }
+
+  getAddonsEnabledWarningText(): string {
+    const nodeExporterEnabled = this._isAddonEnabled(AddonType.NodeExporter);
+    const kubeStateMetricsEnabled = this._isAddonEnabled(AddonType.KubeStateMetrics);
+
+    if (!nodeExporterEnabled && !kubeStateMetricsEnabled) {
+      return 'Please enable the node-exporter addon to see node-related stats and the kube-state-metrics addon to see all k8s workload stats in Grafana dashboards';
+    }
+
+    if (!nodeExporterEnabled) {
+      return 'Please enable the node-exporter addon to see node-related stats in Grafana dashboards';
+    }
+
+    if (!kubeStateMetricsEnabled) {
+      return 'Please enable the kube-state-metrics addon to see all k8s workload stats in Grafana dashboards';
+    }
+
+    return '';
+  }
+
+  getAddonsAvailableWarningText(): string {
+    const nodeExporterAvailable = this._isAddonAvailable(AddonType.NodeExporter);
+    const kubeStateMetricsAvailable = this._isAddonAvailable(AddonType.KubeStateMetrics);
+
+    if (!nodeExporterAvailable && !kubeStateMetricsAvailable) {
+      return 'NOTE: The node-exporter and the kube-state-metrics addon are not available for installation in this cluster yet. Please contact your administrator for setting it up.';
+    }
+
+    if (!nodeExporterAvailable) {
+      return 'NOTE: The node-exporter addon is not available for installation in this cluster yet. Please contact your administrator for setting it up.';
+    }
+
+    if (!kubeStateMetricsAvailable) {
+      return 'NOTE: The kube-state-metrics addon is not available for installation in this cluster yet. Please contact your administrator for setting it up.';
+    }
+
+    return '';
   }
 
   edit(): void {

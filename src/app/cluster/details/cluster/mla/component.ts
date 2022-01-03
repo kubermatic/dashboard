@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import {Component, Input} from '@angular/core';
+import {Addon} from '@shared/entity/addon';
 import {Cluster} from '@shared/entity/cluster';
 import {AlertmanagerConfig, RuleGroup} from '@shared/entity/mla';
 import _ from 'lodash';
@@ -27,6 +28,7 @@ export class MLAComponent {
   @Input() isClusterRunning: boolean;
   @Input() alertmanagerConfig: AlertmanagerConfig;
   @Input() ruleGroups: RuleGroup[];
+  @Input() addons: Addon[];
 
   isLoadingData(): boolean {
     return _.isEmpty(this.alertmanagerConfig) && _.isEmpty(this.ruleGroups) && !this.isClusterRunning;
