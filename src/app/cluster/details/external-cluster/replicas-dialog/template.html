@@ -1,0 +1,47 @@
+<!--
+Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<km-dialog-title>
+  <div>Update Number of Replicas</div>
+</km-dialog-title>
+<mat-dialog-content>
+  <p class="km-dialog-context-description">
+    Update number of <b>{{data.machineDeployment.name}}</b> machine deployment replicas
+  </p>
+  <form [formGroup]="form"
+        id="replicas-form"
+        fxLayout="column">
+    <km-number-stepper [formControlName]="control.Replicas"
+                       mode="errors"
+                       label="Replicas"
+                       min="1"
+                       focus
+                       required>
+    </km-number-stepper>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-flat-button
+          kmThrottleClick
+          (throttleClick)="save()"
+          type="submit"
+          form="replicas-form"
+          fxLayoutAlign="center center"
+          [disabled]="form.invalid">
+    <i class="km-icon-mask km-icon-add"></i>
+    <span>Update Number of Replicas</span>
+  </button>
+</mat-dialog-actions>
