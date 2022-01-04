@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
-import {FormGroup} from '@angular/forms';
+import {FormControl, FormGroup} from '@angular/forms';
 
 class ReplicasDialogData {
   projectID: string;
@@ -30,9 +30,8 @@ enum Control {
 @Component({
   selector: 'km-replicas-dialog',
   templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
 })
-export class ReplicasDialogComponent {
+export class ReplicasDialogComponent implements OnInit {
   readonly control = Control;
   form: FormGroup;
 
@@ -40,6 +39,10 @@ export class ReplicasDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: ReplicasDialogData,
     private readonly _dialogRef: MatDialogRef<ReplicasDialogComponent>
   ) {}
+
+  ngOnInit() {
+    this.form = new FormGroup({[Control.Replicas]: new FormControl(this.data.machineDeployment.spec.replicas)});
+  }
 
   save(): void {
     this._dialogRef.close();

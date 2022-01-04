@@ -128,6 +128,15 @@ limitations under the License.
                              class="km-spinner"
                              color="accent"></mat-spinner>
               </ng-container>
+              <ng-container *ngSwitchCase="false">
+                <button mat-icon-button
+                        class="km-machine-deployment-action"
+                        matTooltip="Update number of replicas"
+                        (click)="updateReplicas(element); $event.stopPropagation()"
+                        [disabled]="!isEditEnabled()">
+                  <i class="km-icon-mask km-icon-edit"></i>
+                </button>
+              </ng-container>
             </ng-container>
           </div>
         </td>
