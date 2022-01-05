@@ -98,7 +98,6 @@ export class NodeService {
   ): Observable<MachineDeployment> {
     const dialogRef = this._matDialog.open(NodeDataDialogComponent, {
       data: {
-        existingNodesCount: md.spec.replicas,
         initialClusterData: cluster,
         initialNodeData: {
           count: md.spec.replicas,

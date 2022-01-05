@@ -76,7 +76,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   @Input() provider: NodeProvider;
   // Used only when in dialog mode.
   @Input() showExtended = false;
-  @Input() existingNodesCount = 0;
   labels: object = {};
   taints: Taint[] = [];
   dialogEditMode = false;
