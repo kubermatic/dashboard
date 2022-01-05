@@ -34,7 +34,7 @@ limitations under the License.
         <button mat-icon-button
                 color="tertiary"
                 matTooltip="Update number of replicas"
-                (click)="updateReplicas(); $event.stopPropagation()"
+                (click)="updateReplicas()"
                 [disabled]="!isEditEnabled()">
           <i class="km-icon-mask km-icon-edit"></i>
         </button>
