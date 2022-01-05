@@ -36,6 +36,12 @@ export enum NodeProvider {
 
 export const EXTERNAL_NODE_PROVIDERS = [NodeProvider.AKS, NodeProvider.EKS, NodeProvider.GKE];
 
+export const INTERNAL_NODE_PROVIDERS = Object.values(NodeProvider).filter(
+  provider => !!provider && !EXTERNAL_NODE_PROVIDERS.includes(provider)
+);
+
+export const NODE_PROVIDERS = [...INTERNAL_NODE_PROVIDERS, ...EXTERNAL_NODE_PROVIDERS];
+
 export enum OperatingSystem {
   Ubuntu = 'ubuntu',
   CentOS = 'centos',
