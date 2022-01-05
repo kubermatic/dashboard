@@ -27,7 +27,7 @@ enum Controls {
   Provider = 'provider',
 }
 
-const UNSUPPORTED_PROVIDERS = [NodeProvider.BRINGYOUROWN, NodeProvider.BAREMETAL];
+const UNSUPPORTED_PROVIDERS = [NodeProvider.BRINGYOUROWN];
 
 @Component({
   selector: 'km-preset-provider-step',

@@ -356,10 +356,6 @@
   @include mixins.provider-image('/assets/images/clouds/azure.svg', 24px);
 }
 
-.km-provider-logo-baremetal {
-  @include mixins.provider-image('/assets/images/clouds/baremetal.png', 30px);
-}
-
 .km-provider-logo-bringyourown {
   @include mixins.provider-image('/assets/images/clouds/bringyourown.svg', 30px);
 }
