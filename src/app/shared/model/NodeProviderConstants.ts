@@ -22,7 +22,6 @@ export enum NodeProvider {
   AZURE = 'azure',
   DIGITALOCEAN = 'digitalocean',
   EKS = 'eks',
-  BAREMETAL = 'baremetal',
   BRINGYOUROWN = 'bringyourown',
   GCP = 'gcp',
   GKE = 'gke',
@@ -35,6 +34,12 @@ export enum NodeProvider {
 }
 
 export const EXTERNAL_NODE_PROVIDERS = [NodeProvider.AKS, NodeProvider.EKS, NodeProvider.GKE];
+
+export const INTERNAL_NODE_PROVIDERS = Object.values(NodeProvider).filter(
+  provider => !!provider && !EXTERNAL_NODE_PROVIDERS.includes(provider)
+);
+
+export const NODE_PROVIDERS = [...INTERNAL_NODE_PROVIDERS, ...EXTERNAL_NODE_PROVIDERS];
 
 export enum OperatingSystem {
   Ubuntu = 'ubuntu',
@@ -50,7 +55,6 @@ export namespace NodeProviderConstants {
     [NodeProvider.ANEXIA, 'Anexia'],
     [NodeProvider.AWS, 'AWS'],
     [NodeProvider.AZURE, 'Azure'],
-    [NodeProvider.BAREMETAL, 'Bare-metal'],
     [NodeProvider.BRINGYOUROWN, 'BringYourOwn'],
     [NodeProvider.DIGITALOCEAN, 'DigitalOcean'],
     [NodeProvider.GCP, 'Google Cloud'],

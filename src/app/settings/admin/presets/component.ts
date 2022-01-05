@@ -26,7 +26,12 @@ import {UserService} from '@core/services/user';
 import {PresetsService} from '@core/services/wizard/presets';
 import {Datacenter} from '@shared/entity/datacenter';
 import {Preset, PresetList} from '@shared/entity/preset';
-import {EXTERNAL_NODE_PROVIDERS, NodeProvider, NodeProviderConstants} from '@shared/model/NodeProviderConstants';
+import {
+  EXTERNAL_NODE_PROVIDERS,
+  NODE_PROVIDERS,
+  NodeProvider,
+  NodeProviderConstants,
+} from '@shared/model/NodeProviderConstants';
 import {merge, Observable, of, Subject} from 'rxjs';
 import {switchMap, take, takeUntil} from 'rxjs/operators';
 
@@ -48,7 +53,7 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
   displayedColumns: string[] = Object.values(Column);
   datacenters: Datacenter[] = [];
   datacenterFilter: string;
-  providers: NodeProvider[] = Object.values(NodeProvider).filter(provider => !!provider);
+  readonly providers = NODE_PROVIDERS;
   providerFilter: NodeProvider;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;

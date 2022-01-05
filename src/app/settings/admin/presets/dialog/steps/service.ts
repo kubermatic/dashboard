@@ -48,6 +48,6 @@ export class PresetDialogService {
 
   // Presets cannot be created for those providers
   get unsupportedProviders(): NodeProvider[] {
-    return [NodeProvider.BAREMETAL, NodeProvider.BRINGYOUROWN, NodeProvider.NONE];
+    return [NodeProvider.BRINGYOUROWN, NodeProvider.NONE];
   }
 }

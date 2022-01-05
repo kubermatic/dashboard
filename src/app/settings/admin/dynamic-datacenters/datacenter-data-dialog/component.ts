@@ -19,7 +19,7 @@ import {MatChipInputEvent} from '@angular/material/chips';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DatacenterService} from '@core/services/datacenter';
 import {Datacenter} from '@shared/entity/datacenter';
-import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {INTERNAL_NODE_PROVIDERS} from '@shared/model/NodeProviderConstants';
 import {getIconClassForButton} from '@shared/utils/common-utils';
 import * as countryCodeLookup from 'country-code-lookup';
 import * as y from 'js-yaml';
@@ -56,7 +56,7 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
   readonly controls = Controls;
   readonly separatorKeyCodes: number[] = [ENTER, COMMA];
   readonly countryCodes: string[] = countryCodeLookup.countries.map(country => country.iso2);
-  readonly providers: NodeProvider[] = Object.values(NodeProvider).filter(provider => !!provider);
+  readonly providers = INTERNAL_NODE_PROVIDERS;
   seeds: string[] = [];
   form: FormGroup;
   requiredEmailDomains: string[] = [];

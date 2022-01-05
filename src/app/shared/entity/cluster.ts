@@ -103,7 +103,6 @@ export class CloudSpec {
   bringyourown?: BringYourOwnCloudSpec;
   openstack?: OpenstackCloudSpec;
   packet?: EquinixCloudSpec;
-  baremetal?: BareMetalCloudSpec;
   vsphere?: VSphereCloudSpec;
   hetzner?: HetznerCloudSpec;
   azure?: AzureCloudSpec;
@@ -144,10 +143,6 @@ export class AzureCloudSpec {
   vnet: string;
   loadBalancerSKU: string;
   assignAvailabilitySet: boolean;
-}
-
-export class BareMetalCloudSpec {
-  name: string;
 }
 
 export class BringYourOwnCloudSpec {}
@@ -468,10 +463,6 @@ export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
       return {
         token: '',
       } as DigitaloceanCloudSpec;
-    case NodeProvider.BAREMETAL:
-      return {
-        name: '',
-      } as BareMetalCloudSpec;
     case NodeProvider.OPENSTACK:
       return {
         username: '',
