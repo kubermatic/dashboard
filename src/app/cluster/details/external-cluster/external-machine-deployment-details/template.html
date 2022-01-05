@@ -29,6 +29,16 @@ limitations under the License.
               matTooltip="Click to copy"
               class="km-copy">{{machineDeployment.name}}</span>
       </mat-card-title>
+      <div fxFlex></div>
+      <div fxLayout="row">
+        <button mat-icon-button
+                color="tertiary"
+                matTooltip="Update number of replicas"
+                (click)="updateReplicas(); $event.stopPropagation()"
+                [disabled]="!isEditEnabled()">
+          <i class="km-icon-mask km-icon-edit"></i>
+        </button>
+      </div>
 
     </mat-card-header>
     <mat-card-content class="km-row">

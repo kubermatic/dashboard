@@ -25,6 +25,12 @@ import {Node} from '@shared/entity/node';
 import {forkJoin, Subject, timer} from 'rxjs';
 import {switchMap, take, takeUntil} from 'rxjs/operators';
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
+import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {ReplicasDialogComponent} from '@app/cluster/details/external-cluster/replicas-dialog/component';
+import {UserService} from '@core/services/user';
+import {Member} from '@shared/entity/member';
+import {GroupConfig} from '@shared/model/Config';
 
 @Component({
   selector: 'km-external-machine-deployment-details',
@@ -38,6 +44,8 @@ export class ExternalMachineDeploymentDetailsComponent implements OnInit, OnDest
   private _isMachineDeploymentLoaded = false;
   private _clusterID: string;
   private _isClusterLoaded = false;
+  private _user: Member;
+  private _currentGroupConfig: GroupConfig;
   machineDeployment: ExternalMachineDeployment;
   nodes: Node[] = [];
   events: Event[] = [];
@@ -49,7 +57,9 @@ export class ExternalMachineDeploymentDetailsComponent implements OnInit, OnDest
 
   constructor(
     private readonly _activatedRoute: ActivatedRoute,
+    private readonly _matDialog: MatDialog,
     private readonly _appConfig: AppConfigService,
+    private readonly _userService: UserService,
     private readonly _clusterService: ClusterService
   ) {}
 
@@ -57,6 +67,12 @@ export class ExternalMachineDeploymentDetailsComponent implements OnInit, OnDest
     this._clusterID = this._activatedRoute.snapshot.paramMap.get(PathParam.ClusterID);
     this._machineDeploymentID = this._activatedRoute.snapshot.paramMap.get(PathParam.MachineDeploymentID);
     this.projectID = this._activatedRoute.snapshot.paramMap.get(PathParam.ProjectID);
+
+    this._userService.currentUser.pipe(take(1)).subscribe(user => (this._user = user));
+
+    this._userService
+      .getCurrentUserGroup(this.projectID)
+      .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
     timer(0, this._refreshTime * this._appConfig.getRefreshTimeBase())
       .pipe(
@@ -109,5 +125,22 @@ export class ExternalMachineDeploymentDetailsComponent implements OnInit, OnDest
     const map = new Map<string, NodeMetrics>();
     metrics.forEach(m => map.set(m.name, m));
     this.metrics = map;
+  }
+
+  isEditEnabled(): boolean {
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'machineDeployments', Permission.Edit);
+  }
+
+  updateReplicas(): void {
+    const dialogConfig: MatDialogConfig = {
+      disableClose: false,
+      hasBackdrop: true,
+      data: {
+        projectID: this.projectID,
+        clusterID: this.cluster.id,
+        machineDeployment: this.machineDeployment,
+      },
+    };
+    this._matDialog.open(ReplicasDialogComponent, dialogConfig);
   }
 }
