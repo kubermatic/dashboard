@@ -14,6 +14,7 @@
 
 import {NgModule} from '@angular/core';
 import {PreloadingStrategy, Route, RouterModule, Routes} from '@angular/router';
+import {AdminGuard} from '@core/services/auth/guard';
 import {Observable, of} from 'rxjs';
 import {DashboardComponent} from './dashboard/component';
 
@@ -69,6 +70,7 @@ function createRouting(): Routes {
         {
           path: 'settings',
           loadChildren: () => import('./settings/admin/module').then(m => m.AdminSettingsModule),
+          canActivate: [AdminGuard],
         },
         {
           path: '',

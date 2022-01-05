@@ -20,7 +20,7 @@ import {RouterModule} from '@angular/router';
 import {ChangelogDialog} from '@core/components/changelog/dialog';
 import {HelpPanelComponent} from '@core/components/help-panel/component';
 import {ApiService} from '@core/services/api';
-import {AuthGuard, AuthzGuard} from '@core/services/auth/guard';
+import {AdminGuard, AuthGuard, AuthzGuard} from '@core/services/auth/guard';
 import {Auth} from '@core/services/auth/service';
 import {BackupService} from '@core/services/backup';
 import {ChangelogManagerService} from '@core/services/changelog-manager';
@@ -88,6 +88,7 @@ const services: any[] = [
   Auth,
   AuthGuard,
   AuthzGuard,
+  AdminGuard,
   DatacenterService,
   StepsService,
   NameGeneratorService,
