@@ -14,8 +14,11 @@
 
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
+import {ExternalMachineDeployment, ExternalMachineDeploymentPatch} from '@shared/entity/external-machine-deployment';
 import {FormControl, FormGroup} from '@angular/forms';
+import {ClusterService} from '@core/services/cluster';
+import {take} from 'rxjs/operators';
+import {NotificationService} from '@core/services/notification';
 
 class ReplicasDialogData {
   projectID: string;
@@ -37,7 +40,9 @@ export class ReplicasDialogComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: ReplicasDialogData,
-    private readonly _dialogRef: MatDialogRef<ReplicasDialogComponent>
+    private readonly _dialogRef: MatDialogRef<ReplicasDialogComponent>,
+    private readonly _notificationService: NotificationService,
+    private readonly _clusterService: ClusterService
   ) {}
 
   ngOnInit() {
@@ -45,6 +50,13 @@ export class ReplicasDialogComponent implements OnInit {
   }
 
   save(): void {
-    this._dialogRef.close();
+    const patch: ExternalMachineDeploymentPatch = {spec: {replicas: this.form.get(Control.Replicas).value}};
+    this._clusterService
+      .patchExternalMachineDeployment(this.data.projectID, this.data.clusterID, this.data.machineDeployment.id, patch)
+      .pipe(take(1))
+      .subscribe(md => {
+        this._notificationService.success(`Number of ${md.name} machine deployment replicas was updated`);
+        this._dialogRef.close();
+      });
   }
 }

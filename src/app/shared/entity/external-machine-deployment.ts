@@ -69,3 +69,11 @@ class GKENodeManagement {
   autoRepair?: boolean;
   autoUpgrade?: boolean;
 }
+
+export class ExternalMachineDeploymentPatch {
+  spec?: ExternalMachineDeploymentSpecPatch;
+}
+
+class ExternalMachineDeploymentSpecPatch {
+  replicas?: number;
+}
