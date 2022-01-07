@@ -76,7 +76,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   @Input() provider: NodeProvider;
   // Used only when in dialog mode.
   @Input() showExtended = false;
-  @Input() existingNodesCount = 0;
   labels: object = {};
   taints: Taint[] = [];
   dialogEditMode = false;
@@ -102,7 +101,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       [Controls.Name]: this._builder.control(this._nodeDataService.nodeData.name, [
         Validators.pattern('[a-z0-9]+[a-z0-9-]*[a-z0-9]+'),
       ]),
-      [Controls.Count]: this._builder.control(0),
+      [Controls.Count]: this._builder.control(this._nodeDataService.nodeData.count),
       [Controls.DynamicConfig]: this._builder.control(this._nodeDataService.nodeData.dynamicConfig),
       [Controls.OperatingSystem]: this._builder.control(this._getDefaultOS(), [Validators.required]),
       [Controls.UpgradeOnBoot]: this._builder.control(false),
