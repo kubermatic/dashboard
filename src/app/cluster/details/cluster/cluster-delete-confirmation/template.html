@@ -26,8 +26,9 @@ limitations under the License.
       cluster permanently?
     </p>
     <mat-form-field>
-      <mat-label>Cluster Name*</mat-label>
+      <mat-label>Cluster Name</mat-label>
       <input id="km-delete-cluster-dialog-input"
+             required
              matInput
              type="text"
              title="Cluster name"
@@ -39,13 +40,16 @@ limitations under the License.
     <div class="km-delete-cluster-checkbox"
          [matTooltip]="getCheckboxTooltip()">
       <mat-checkbox formControlName="clusterLBCleanupCheckbox"
-                    id="km-delete-cluster-lb-cleanup">Cleanup connected Load Balancers</mat-checkbox>
+                    id="km-delete-cluster-lb-cleanup">Cleanup connected Load Balancers
+      </mat-checkbox>
     </div>
 
     <div class="km-delete-cluster-checkbox"
          [matTooltip]="getCheckboxTooltip()">
       <mat-checkbox formControlName="clusterVolumeCleanupCheckbox"
-                    id="km-delete-cluster-volume-cleanup">Cleanup connected volumes (dynamically provisioned PVs and PVCs)</mat-checkbox>
+                    id="km-delete-cluster-volume-cleanup">Cleanup connected volumes (dynamically provisioned PVs and
+        PVCs)
+      </mat-checkbox>
     </div>
 
     <div class="km-dialog-warning"

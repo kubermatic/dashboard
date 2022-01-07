@@ -23,9 +23,10 @@ limitations under the License.
           (submit)="editCluster()"
           id="edit-cluster-form">
       <mat-form-field fxFlex>
-        <mat-label>Name*</mat-label>
+        <mat-label>Name</mat-label>
         <input id="km-edit-cluster-dialog-input"
                matInput
+               required
                [formControlName]="Controls.Name"
                type="text"
                autocomplete="off"
