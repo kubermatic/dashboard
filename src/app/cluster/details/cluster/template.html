@@ -329,7 +329,8 @@ limitations under the License.
   <km-machine-deployment-list [cluster]="cluster"
                               [machineDeployments]="machineDeployments"
                               [projectID]="projectID"
-                              [isClusterRunning]="isClusterRunning"></km-machine-deployment-list>
+                              [isClusterRunning]="isClusterRunning"
+                              [isInitialized]="areMachineDeploymentsInitialized"></km-machine-deployment-list>
 
   <div *ngIf="nodes.length > 0">
     <km-node-list [cluster]="cluster"
