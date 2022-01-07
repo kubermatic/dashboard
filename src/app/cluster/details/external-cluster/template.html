@@ -131,14 +131,16 @@ limitations under the License.
                                        [cluster]="cluster"
                                        [machineDeployments]="machineDeployments"
                                        [projectID]="projectID"
-                                       [isClusterRunning]="isRunning()"></km-external-machine-deployment-list>
+                                       [isClusterRunning]="isRunning()"
+                                       [isInitialized]="areMachineDeploymentsInitialized"></km-external-machine-deployment-list>
 
   <km-external-node-list *ngIf="provider === Provider.Custom"
                          [cluster]="cluster"
                          [nodes]="nodes"
                          [nodesMetrics]="nodesMetrics"
                          [projectID]="projectID"
-                         [isClusterRunning]="isRunning()"></km-external-node-list>
+                         [isClusterRunning]="isRunning()"
+                         [isInitialized]="areNodesInitialized"></km-external-node-list>
 
   <km-event-card [events]="events"></km-event-card>
 </ng-container>

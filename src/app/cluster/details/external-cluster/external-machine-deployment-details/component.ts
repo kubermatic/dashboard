@@ -48,6 +48,7 @@ export class ExternalMachineDeploymentDetailsComponent implements OnInit, OnDest
   private _currentGroupConfig: GroupConfig;
   machineDeployment: ExternalMachineDeployment;
   nodes: Node[] = [];
+  areNodesInitialized = false;
   events: Event[] = [];
   metrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
   cluster: ExternalCluster;
@@ -90,6 +91,7 @@ export class ExternalMachineDeploymentDetailsComponent implements OnInit, OnDest
         this._isMachineDeploymentLoaded = true;
         this.machineDeployment = md;
         this.nodes = nodes;
+        this.areNodesInitialized = true;
         this.events = nodeEvents;
         this._storeNodeMetrics(nodeMetrics);
       });

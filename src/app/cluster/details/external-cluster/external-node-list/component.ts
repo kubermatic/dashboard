@@ -37,6 +37,7 @@ export class ExternalNodeListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() nodesMetrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
   @Input() projectID: string;
   @Input() isClusterRunning = false;
+  @Input() isInitialized = false;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   isShowNodeItem = [];
@@ -71,11 +72,11 @@ export class ExternalNodeListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isLoadingData(): boolean {
-    return _.isEmpty(this.nodes) && !this.isClusterRunning;
+    return (_.isEmpty(this.nodes) && !this.isClusterRunning) || !this.isInitialized;
   }
 
   hasNoData(): boolean {
-    return _.isEmpty(this.nodes) && this.isClusterRunning;
+    return _.isEmpty(this.nodes) && this.isClusterRunning && this.isInitialized;
   }
 
   getNodeHealthStatus(n: Node): object {

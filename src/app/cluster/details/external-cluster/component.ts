@@ -52,8 +52,10 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   cluster: ExternalCluster;
   provider: ExternalClusterProvider;
   machineDeployments: ExternalMachineDeployment[] = [];
+  areMachineDeploymentsInitialized = false;
   clusterMetrics: ClusterMetrics;
   nodes: Node[] = [];
+  areNodesInitialized = false;
   nodesMetrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
   events: Event[] = [];
   upgrades: MasterVersion[] = [];
@@ -98,7 +100,9 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
       .subscribe(([upgrades, nodes, machineDeployments]) => {
         this.upgrades = upgrades;
         this.nodes = nodes;
+        this.areNodesInitialized = true;
         this.machineDeployments = machineDeployments;
+        this.areMachineDeploymentsInitialized = true;
       });
 
     this._refreshTimer
