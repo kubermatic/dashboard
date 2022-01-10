@@ -54,7 +54,7 @@ export class AKSCredentialsComponent implements OnInit, OnDestroy {
       this._externalClusterService.isValidating = this.form.pending;
       this._externalClusterService.credentialsStepValidity = this.form.valid;
       this._externalClusterService.error = this.form.hasError('invalidCredentials')
-        ? 'Provided predentials are invalid.'
+        ? 'Provided credentials are invalid.'
         : undefined;
     });
 
