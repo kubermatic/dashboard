@@ -12,23 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit, OnChanges, ViewChild} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
-import {NotificationService} from '@core/services/notification';
 import {DatacenterService} from '@core/services/datacenter';
 import {MLAService} from '@core/services/mla';
+import {NotificationService} from '@core/services/notification';
 import {UserService} from '@core/services/user';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
-import {RuleGroup, RuleGroupType, AdminRuleGroup} from '@shared/entity/mla';
-import {MLAUtils} from '@shared/utils/mla-utils';
+import {AdminRuleGroup, RuleGroup, RuleGroupType} from '@shared/entity/mla';
 import {UserSettings} from '@shared/entity/settings';
+import {MLAUtils} from '@shared/utils/mla-utils';
 import _ from 'lodash';
-import {Subject} from 'rxjs';
-import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
-import {Mode, AdminRuleGroupDialog} from './rule-group-dialog/component';
+import {combineLatest, Observable, Subject} from 'rxjs';
+import {filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {AdminRuleGroupDialog, Mode} from './rule-group-dialog/component';
 
 @Component({
   selector: 'km-admin-settings-rule-groups',
@@ -48,7 +48,6 @@ export class AdminSettingsRuleGroupsComponent implements OnInit, OnChanges, OnDe
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  private _ruleGroupsMap = new Map<string, RuleGroup[]>();
   private _unsubscribe = new Subject<void>();
 
   constructor(
@@ -72,10 +71,27 @@ export class AdminSettingsRuleGroupsComponent implements OnInit, OnChanges, OnDe
       this.dataSource.paginator = this.paginator; // Force refresh.
     });
 
-    this._datacenterService.seeds.pipe(takeUntil(this._unsubscribe)).subscribe(seeds => {
-      this.seeds = seeds;
-      this._getAdminRuleGroups();
-    });
+    this._datacenterService.seeds
+      .pipe(tap(seeds => (this.seeds = seeds)))
+      .pipe(
+        switchMap(seeds =>
+          combineLatest([
+            ...seeds.map<Observable<[string, RuleGroup[]]>>(seed =>
+              this._mlaService.adminRuleGroups(seed).pipe(map(ruleGroup => [seed, ruleGroup]))
+            ),
+          ])
+        )
+      )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(ruleGroupTuples => {
+        this.adminRuleGroups = ruleGroupTuples
+          .map(tuple => tuple[1].map<[string, RuleGroup]>(ruleGroup => [tuple[0], ruleGroup]))
+          .flatMap(tuples =>
+            tuples.map(tuple => ({seed: tuple[0], data: tuple[1].data, type: tuple[1].type} as AdminRuleGroup))
+          );
+
+        this.dataSource.data = this.adminRuleGroups;
+      });
   }
 
   ngOnChanges(): void {
@@ -169,32 +185,5 @@ export class AdminSettingsRuleGroupsComponent implements OnInit, OnChanges, OnDe
         this._notificationService.success(`The Rule Group ${ruleGroupName} was deleted`);
         this._mlaService.refreshAdminRuleGroups();
       });
-  }
-
-  private _getAdminRuleGroups(): void {
-    this.seeds.forEach(seed => {
-      this._mlaService
-        .adminRuleGroups(seed)
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe((ruleGroups: RuleGroup[]) => {
-          this._ruleGroupsMap.set(seed, ruleGroups);
-          this._mapToArray();
-        });
-    });
-  }
-
-  private _mapToArray(): void {
-    const tempAdminRuleGroups: AdminRuleGroup[] = [];
-    for (const [k, v] of this._ruleGroupsMap) {
-      for (const i of v) {
-        tempAdminRuleGroups.push({
-          seed: k,
-          type: i.type,
-          data: i.data,
-        });
-      }
-    }
-    this.adminRuleGroups = tempAdminRuleGroups;
-    this.dataSource.data = this.adminRuleGroups;
   }
 }
