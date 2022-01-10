@@ -101,6 +101,8 @@ export enum ExternalClusterState {
   Provisioning = 'PROVISIONING',
   Running = 'RUNNING',
   Reconciling = 'RECONCILING',
+  Stopping = 'STOPPING',
+  Stopped = 'STOPPED',
   Deleting = 'DELETING',
   Error = 'ERROR',
   Unknown = 'UNKNOWN',

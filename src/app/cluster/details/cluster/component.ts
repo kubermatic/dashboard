@@ -76,6 +76,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   sshKeys: SSHKey[] = [];
   nodes: Node[] = [];
   machineDeployments: MachineDeployment[];
+  areMachineDeploymentsInitialized = false;
   isClusterRunning = false;
   isClusterAPIRunning = false;
   isOPARunning = false;
@@ -237,6 +238,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.addons = addons;
           this.nodes = nodes;
           this.machineDeployments = machineDeployments;
+          this.areMachineDeploymentsInitialized = true;
           this.metrics = metrics;
           this.alertmanagerConfig = alertmanagerConfig;
           this.ruleGroups = ruleGroups;

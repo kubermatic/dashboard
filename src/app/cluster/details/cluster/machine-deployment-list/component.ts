@@ -41,6 +41,7 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
   @Input() machineDeployments: MachineDeployment[] = [];
   @Input() projectID: string;
   @Input() isClusterRunning: boolean;
+  @Input() isInitialized = false;
   @Output() changeMachineDeployment = new EventEmitter<MachineDeployment>();
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   dataSource = new MatTableDataSource<MachineDeployment>();
@@ -140,10 +141,10 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
   }
 
   isLoadingData(): boolean {
-    return _.isEmpty(this.machineDeployments) && !this.isClusterRunning;
+    return (_.isEmpty(this.machineDeployments) && !this.isClusterRunning) || !this.isInitialized;
   }
 
   hasNoData(): boolean {
-    return _.isEmpty(this.machineDeployments) && this.isClusterRunning;
+    return _.isEmpty(this.machineDeployments) && this.isClusterRunning && this.isInitialized;
   }
 }

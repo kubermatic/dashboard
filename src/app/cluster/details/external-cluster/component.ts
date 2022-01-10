@@ -52,8 +52,10 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   cluster: ExternalCluster;
   provider: ExternalClusterProvider;
   machineDeployments: ExternalMachineDeployment[] = [];
+  areMachineDeploymentsInitialized = false;
   clusterMetrics: ClusterMetrics;
   nodes: Node[] = [];
+  areNodesInitialized = false;
   nodesMetrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
   events: Event[] = [];
   upgrades: MasterVersion[] = [];
@@ -87,28 +89,28 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
           this.provider = ExternalCluster.getProvider(cluster.cloud);
         }),
         switchMap(_ =>
-          this.hasUpgrades() ? this._clusterService.externalClusterUpgrades(this.projectID, clusterID) : of([])
-        ),
-        takeUntil(this._unsubscribe)
-      )
-      .subscribe(upgrades => (this.upgrades = upgrades));
-
-    this._refreshTimer
-      .pipe(
-        switchMap(_ =>
           forkJoin([
-            this._clusterService.externalMachineDeployments(this.projectID, clusterID),
-            this._clusterService.externalClusterNodes(this.projectID, clusterID),
-            this._clusterService.externalClusterEvents(this.projectID, clusterID),
+            this.hasUpgrades() ? this._clusterService.externalClusterUpgrades(this.projectID, clusterID) : of([]),
+            this.isRunning() ? this._clusterService.externalClusterNodes(this.projectID, clusterID) : of([]),
+            this.isRunning() ? this._clusterService.externalMachineDeployments(this.projectID, clusterID) : of([]),
           ])
         ),
         takeUntil(this._unsubscribe)
       )
-      .subscribe(([machineDeployments, nodes, events]) => {
-        this.machineDeployments = machineDeployments;
+      .subscribe(([upgrades, nodes, machineDeployments]) => {
+        this.upgrades = upgrades;
         this.nodes = nodes;
-        this.events = events;
+        this.areNodesInitialized = true;
+        this.machineDeployments = machineDeployments;
+        this.areMachineDeploymentsInitialized = true;
       });
+
+    this._refreshTimer
+      .pipe(
+        switchMap(_ => this._clusterService.externalClusterEvents(this.projectID, clusterID)),
+        takeUntil(this._unsubscribe)
+      )
+      .subscribe(events => (this.events = events));
 
     this._metricsRefreshTimer
       .pipe(
@@ -131,12 +133,12 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  isClusterRunning(): boolean {
+  isRunning(): boolean {
     return this.cluster?.status?.state === ExternalClusterState.Running;
   }
 
   hasUpgrades(): boolean {
-    return this.isClusterRunning() && this.provider !== ExternalClusterProvider.EKS;
+    return this.isRunning() && this.provider !== ExternalClusterProvider.EKS;
   }
 
   getStatus(): string {

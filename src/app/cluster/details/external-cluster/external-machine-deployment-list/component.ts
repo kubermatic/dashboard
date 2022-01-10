@@ -42,6 +42,7 @@ export class ExternalMachineDeploymentListComponent implements OnInit, OnChanges
   @Input() machineDeployments: ExternalMachineDeployment[] = [];
   @Input() projectID: string;
   @Input() isClusterRunning: boolean;
+  @Input() isInitialized = false;
   @Output() machineDeploymentChange$ = new EventEmitter<ExternalMachineDeployment>();
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   dataSource = new MatTableDataSource<ExternalMachineDeployment>();
@@ -101,11 +102,11 @@ export class ExternalMachineDeploymentListComponent implements OnInit, OnChanges
   }
 
   isLoadingData(): boolean {
-    return _.isEmpty(this.machineDeployments) && !this.isClusterRunning;
+    return (_.isEmpty(this.machineDeployments) && !this.isClusterRunning) || !this.isInitialized;
   }
 
   hasNoData(): boolean {
-    return _.isEmpty(this.machineDeployments) && this.isClusterRunning;
+    return _.isEmpty(this.machineDeployments) && this.isClusterRunning && this.isInitialized;
   }
 
   isEditEnabled(): boolean {
