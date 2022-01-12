@@ -21,6 +21,7 @@ import {NotificationService} from '@core/services/notification';
 import {SettingsService} from '@core/services/settings';
 import {Cluster, Finalizer} from '@shared/entity/cluster';
 import {AdminSettings} from '@shared/entity/settings';
+import {ClipboardService} from 'ngx-clipboard';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
@@ -44,6 +45,7 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck, OnDe
     private readonly _settingsService: SettingsService,
     private readonly _dialogRef: MatDialogRef<ClusterDeleteConfirmationComponent>,
     private readonly _googleAnalyticsService: GoogleAnalyticsService,
+    private readonly _clipboardService: ClipboardService,
     private readonly _notificationService: NotificationService
   ) {}
 
@@ -112,5 +114,9 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck, OnDe
         this._clusterService.refreshClusters();
       });
     this._dialogRef.close(true);
+  }
+
+  copy(clipboard: string): void {
+    this._clipboardService.copy(clipboard);
   }
 }
