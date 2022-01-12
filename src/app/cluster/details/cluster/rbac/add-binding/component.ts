@@ -130,24 +130,24 @@ export class AddBindingComponent implements OnInit, OnDestroy {
     }
 
     if (roleLength) {
-      return 'Role*';
+      return 'Role';
     } else if (!roleLength) {
       return 'No Roles available';
     }
-    return 'Role*';
+    return 'Role';
   }
 
   getNamespaceFormState(): string {
     const roleLength = this.roles ? this.roles.length : 0;
 
     if (this.form.get(Controls.Role).value !== '') {
-      return 'Namespace*';
+      return 'Namespace';
     } else if (this.form.get(Controls.Role).value === '' && !!roleLength) {
       return 'Please select a Role first';
     } else if (!roleLength) {
       return 'No Namespaces available';
     }
-    return 'Namespace*';
+    return 'Namespace';
   }
 
   checkNamespaceState(): void {

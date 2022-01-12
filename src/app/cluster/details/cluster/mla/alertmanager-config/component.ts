@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy, OnInit, Inject} from '@angular/core';
+import {Component, Inject, Input, OnDestroy, OnInit} from '@angular/core';
 import {DOCUMENT} from '@angular/common';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ApiService} from '@core/services/api';
@@ -26,7 +26,6 @@ import {Cluster} from '@shared/entity/cluster';
 import {SeedSettings} from '@shared/entity/datacenter';
 import {AlertmanagerConfig} from '@shared/entity/mla';
 import {AdminSettings} from '@shared/entity/settings';
-import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {AlertmanagerConfigDialog} from './alertmanager-config-dialog/component';
@@ -204,7 +203,7 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Reset Alertmanager Config',
-        message: 'Reset Alertmanager Config of <b>${this.cluster.name}</b> cluster to default?',
+        message: `Reset Alertmanager Config of <b>${this.cluster.name}</b> cluster to default?`,
         confirmLabel: 'Reset',
       },
     };
