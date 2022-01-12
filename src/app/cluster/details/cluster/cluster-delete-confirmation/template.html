@@ -19,8 +19,7 @@ limitations under the License.
         (submit)="deleteCluster()"
         id="km-delete-cluster-dialog">
     <p>Delete
-      <b ngxClipboard
-         [cbContent]="cluster.name"
+      <b (click)="copy(cluster.name)"
          matTooltip="Click to copy"
          class="km-copy">{{cluster.name}}</b>
       cluster permanently?
