@@ -71,7 +71,8 @@ limitations under the License.
       </div>
 
       <!-- Load the theming module -->
-      <router-outlet name="theming"></router-outlet>
+      <router-outlet *ngIf="isEnterpriseEdition"
+                     name="theming"></router-outlet>
 
       <div fxLayout="row">
         <div class="entry-label"

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
+import {isEnterpriseEdition} from '@app/dynamic/common';
 import {Context} from '@shared/components/tab-card/component';
 import {DynamicTabComponent} from '@shared/components/tab-card/dynamic-tab/component';
 import {DynamicTab} from '@shared/model/dynamic-tab';
@@ -31,6 +32,10 @@ export class AdminSettingsOPAComponent implements OnDestroy {
 
   get dynamicTabs(): DynamicTabComponent[] {
     return [...this._dynamicTabs];
+  }
+
+  get isEnterpriseEdition(): boolean {
+    return isEnterpriseEdition();
   }
 
   onActivate(component: DynamicTab): void {

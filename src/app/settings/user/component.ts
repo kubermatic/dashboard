@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
+import {isEnterpriseEdition} from '@app/dynamic/common';
 import {HistoryService} from '@core/services/history';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
@@ -49,6 +50,10 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
     private readonly _notificationService: NotificationService,
     private readonly _projectService: ProjectService
   ) {}
+
+  get isEnterpriseEdition(): boolean {
+    return isEnterpriseEdition();
+  }
 
   ngOnInit(): void {
     this._userService.currentUser.pipe(take(1)).subscribe(user => (this.user = user));
