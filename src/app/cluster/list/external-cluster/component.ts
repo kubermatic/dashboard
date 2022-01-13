@@ -33,7 +33,12 @@ import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {distinctUntilChanged, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {AddExternalClusterDialogComponent} from '@shared/components/add-external-cluster-dialog/component';
-import {ExternalCloudSpec, ExternalCluster, ExternalClusterProvider} from '@shared/entity/external-cluster';
+import {
+  ExternalCloudSpec,
+  ExternalCluster,
+  ExternalClusterProvider,
+  ExternalClusterState,
+} from '@shared/entity/external-cluster';
 
 @Component({
   selector: 'km-external-cluster-list',
@@ -155,8 +160,17 @@ export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestro
     dialog.componentInstance.projectId = this._selectedProject.id;
   }
 
+  canAccess(cluster: ExternalCluster): boolean {
+    return (
+      this.getProvider(cluster.cloud) !== ExternalClusterProvider.Custom ||
+      cluster.status.state !== ExternalClusterState.Error
+    );
+  }
+
   navigateToCluster(cluster: ExternalCluster): void {
-    this._router.navigate([`/projects/${this._selectedProject.id}/clusters/external/${cluster.id}`]);
+    if (this.canAccess(cluster)) {
+      this._router.navigate([`/projects/${this._selectedProject.id}/clusters/external/${cluster.id}`]);
+    }
   }
 
   getProvider(cloud: ExternalCloudSpec): string {
