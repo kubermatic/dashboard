@@ -100,12 +100,6 @@ export class NotificationPanelComponent implements OnInit, OnDestroy {
       : this.notifications.filter(n => this._filter === n.type).length;
   }
 
-  getUnreadNotificationCount(): number {
-    return this._filter === undefined
-      ? this.notifications.filter(n => n.unread).length
-      : this.notifications.filter(n => this._filter === n.type && n.unread).length;
-  }
-
   getNotificationIconClass(type: NotificationType): string {
     switch (type) {
       case NotificationType.success:
