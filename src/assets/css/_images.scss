@@ -267,7 +267,7 @@
 }
 
 .km-icon-warning-event {
-  @include mixins.mask-image('/assets/images/icons/warning-event.svg#16', 16px, $color: #f7b500);
+  @include mixins.mask-image('/assets/images/icons/warning-event.svg', 16px, $color: #f7b500);
 }
 
 .km-icon-disabled {
