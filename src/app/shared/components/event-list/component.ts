@@ -18,7 +18,6 @@ import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {UserService} from '@core/services/user';
 import {Event} from '@shared/entity/event';
-import {HealthStatusColor} from '@shared/utils/health-status/health-status';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
@@ -72,11 +71,11 @@ export class EventListComponent implements OnInit, OnChanges, OnDestroy {
   getTypeIcon(event: Event): string {
     switch (event.type) {
       case 'Normal':
-        return HealthStatusColor.Green;
+        return 'km-icon-running';
       case 'Warning':
-        return HealthStatusColor.Orange;
+        return 'km-icon-warning-event';
       default:
-        return 'km-icon-mask km-icon-circle';
+        return 'km-icon-circle';
     }
   }
 
