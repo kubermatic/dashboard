@@ -62,7 +62,7 @@ limitations under the License.
           <td mat-cell
               *matCellDef="let element">
             <i [matTooltip]="element.status"
-               [ngClass]="getProjectStateIconClass(element)"
+               [ngClass]="getStatusIcon(element)"
                class="km-health-state"></i>
           </td>
         </ng-container>
@@ -71,7 +71,8 @@ limitations under the License.
           <th mat-header-cell
               *matHeaderCellDef
               class="km-header-cell p-20"
-              mat-sort-header="name">Name</th>
+              mat-sort-header="name">Name
+          </th>
           <td mat-cell
               *matCellDef="let element"
               [attr.id]="'km-project-name-' + element.name">{{element.name}}</td>
@@ -80,7 +81,8 @@ limitations under the License.
         <ng-container matColumnDef="labels">
           <th mat-header-cell
               *matHeaderCellDef
-              class="km-header-cell p-20">Labels</th>
+              class="km-header-cell p-20">Labels
+          </th>
           <td mat-cell
               *matCellDef="let element">
             <km-labels [labels]="element.labels"
@@ -92,7 +94,8 @@ limitations under the License.
           <th mat-header-cell
               *matHeaderCellDef
               class="km-header-cell p-15"
-              mat-sort-header="id">ID</th>
+              mat-sort-header="id">ID
+          </th>
           <td mat-cell
               *matCellDef="let element">{{element.id}}</td>
         </ng-container>
@@ -101,7 +104,8 @@ limitations under the License.
           <th mat-header-cell
               mat-sort-header="role"
               *matHeaderCellDef
-              class="km-header-cell p-15">Role</th>
+              class="km-header-cell p-15">Role
+          </th>
           <td mat-cell
               *matCellDef="let element">
             <span *ngIf="!!getRole(element.id)">{{getRole(element.id)}}</span>
@@ -114,7 +118,8 @@ limitations under the License.
           <th mat-header-cell
               mat-sort-header="clusters"
               *matHeaderCellDef
-              class="km-header-cell p-10">Clusters</th>
+              class="km-header-cell p-10">Clusters
+          </th>
           <td mat-cell
               *matCellDef="let element">{{element.clustersNumber ? element.clustersNumber : 0}}</td>
         </ng-container>
@@ -122,7 +127,8 @@ limitations under the License.
         <ng-container matColumnDef="owners">
           <th mat-header-cell
               *matHeaderCellDef
-              class="km-header-cell p-20">Owners</th>
+              class="km-header-cell p-20">Owners
+          </th>
           <td mat-cell
               *matCellDef="let element"
               class="km-project-item-owner">
@@ -217,7 +223,7 @@ limitations under the License.
       <mat-card-header>
         <i mat-card-avatar
            [matTooltip]="project.status"
-           [ngClass]="getProjectStateIconClass(project)"
+           [ngClass]="getStatusIcon(project)"
            class="km-health-state km-project-cards-status"
            fxFlexAlign=" center"></i>
         <mat-card-title [matTooltip]="getProjectTooltip(project.name)"

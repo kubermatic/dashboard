@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {HealthStatusColor} from '@shared/utils/health-status/health-status';
+
 export class Project {
   creationTimestamp: Date;
   deletionTimestamp?: Date;
@@ -19,20 +21,37 @@ export class Project {
   name: string;
   status: string;
   labels?: object;
-  owners: ProjectOwners[];
+  owners: ProjectOwner[];
   clustersNumber?: number;
+
+  static isActive(project: Project): boolean {
+    return project?.status === 'Active';
+  }
+
+  static getStatusIcon(project: Project): string {
+    switch (project?.status) {
+      case 'Active':
+        return HealthStatusColor.Green;
+      case 'Inactive':
+        return HealthStatusColor.Grey;
+      case 'Terminating':
+        return HealthStatusColor.Red;
+      default:
+        return '';
+    }
+  }
 }
 
-export class ProjectOwners {
+export class ProjectOwner {
   creationTimestamp?: Date;
   deletionTimestamp?: Date;
   email: string;
   id?: string;
   name: string;
-  projects?: OwnerProjects[];
+  projects?: OwnedProject[];
 }
 
-export class OwnerProjects {
+export class OwnedProject {
   group: string;
   id: string;
 }

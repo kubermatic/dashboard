@@ -33,7 +33,7 @@ export class PropertyHealthComponent {
       case HealthState.Provisioning:
         return HealthStatusColor.Orange;
       default:
-        return HealthStatusColor.Unknown;
+        return HealthStatusColor.Grey;
     }
   }
 

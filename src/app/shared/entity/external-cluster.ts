@@ -60,7 +60,7 @@ export class ExternalCluster {
         return HealthStatusColor.Red;
       case ExternalClusterState.Unknown:
       default:
-        return HealthStatusColor.Unknown;
+        return HealthStatusColor.Grey;
     }
   }
 }
