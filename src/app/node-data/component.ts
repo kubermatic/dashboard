@@ -189,7 +189,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
         return this.isProvider(
           NodeProvider.AWS,
           NodeProvider.AZURE,
-          NodeProvider.GCP,
           NodeProvider.KUBEVIRT,
           NodeProvider.OPENSTACK,
           NodeProvider.VSPHERE
