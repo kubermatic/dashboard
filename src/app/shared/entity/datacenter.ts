@@ -162,6 +162,7 @@ export class MeteringCredentials {
 
 export class EtcdBackupRestore {
   destinations: Destinations;
+  defaultDestination?: string;
 }
 
 export class Destinations {

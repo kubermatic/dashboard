@@ -41,11 +41,13 @@ export enum Controls {
   DestinationName = 'destinationName',
   Bucket = 'bucketName',
   Endpoint = 'endpoint',
+  Default = 'default',
 }
 
 @Component({
   selector: 'km-destination-dialog',
   templateUrl: './template.html',
+  styleUrls: ['style.scss'],
 })
 export class DestinationDialog implements OnInit, OnDestroy {
   readonly Controls = Controls;
@@ -61,6 +63,10 @@ export class DestinationDialog implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: DestinationDialogData
   ) {}
 
+  get currentDefault(): string {
+    return this.data?.seed?.spec?.etcdBackupRestore?.defaultDestination;
+  }
+
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.DestinationName]: this._builder.control(
@@ -73,6 +79,9 @@ export class DestinationDialog implements OnInit, OnDestroy {
       [Controls.Endpoint]: this._builder.control(this.data.mode === Mode.Edit ? this.data.destination.endpoint : '', [
         Validators.required,
       ]),
+      [Controls.Default]: this._builder.control(
+        this.data.mode === Mode.Edit && this.currentDefault === this.data.destination.destinationName
+      ),
     });
   }
 
@@ -96,6 +105,10 @@ export class DestinationDialog implements OnInit, OnDestroy {
 
     const configuration: AdminSeed = this.data.seed;
     configuration.spec.etcdBackupRestore.destinations = destination;
+
+    if (this.form.get(Controls.Default).value) {
+      configuration.spec.etcdBackupRestore.defaultDestination = this.form.get(Controls.DestinationName).value;
+    }
 
     this._datacenterService.patchAdminSeed(configuration.name, configuration).subscribe(_ => {
       this._matDialogRef.close();
