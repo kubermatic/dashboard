@@ -27,6 +27,7 @@ import {DatacenterService} from '@core/services/datacenter';
 import {NameGeneratorService} from '@core/services/name-generator';
 import {NodeDataService} from '@core/services/node-data/service';
 import {SettingsService} from '@core/services/settings';
+import {ContainerRuntime} from '@shared/entity/cluster';
 import {Datacenter} from '@shared/entity/datacenter';
 import {OperatingSystemSpec, Taint} from '@shared/entity/node';
 import {NodeProvider, NodeProviderConstants, OperatingSystem} from '@shared/model/NodeProviderConstants';
@@ -179,12 +180,15 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     // Enable OS per-provider basis
     switch (os) {
       case OperatingSystem.SLES:
-        return this.isProvider(NodeProvider.AWS);
+        // SLES only supports docker as container runtime
+        return (
+          this._clusterSpecService.cluster.spec.containerRuntime === ContainerRuntime.Docker &&
+          this.isProvider(NodeProvider.AWS)
+        );
       case OperatingSystem.RHEL:
         return this.isProvider(
           NodeProvider.AWS,
           NodeProvider.AZURE,
-          NodeProvider.GCP,
           NodeProvider.KUBEVIRT,
           NodeProvider.OPENSTACK,
           NodeProvider.VSPHERE
