@@ -18,6 +18,7 @@
 @import 'material/theme';
 @import 'global/theme';
 @import 'component';
+
 @include mat.core;
 
 @mixin theme($theme, $colors) {

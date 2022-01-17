@@ -58,9 +58,9 @@ $colors-dark: (
 $colors-dark-palette: mat.$blue-palette;
 $colors-dark-palette: map.merge($colors-dark-palette, (500: #0072b0));
 $theme-dark: mat.define-dark-theme(
-  mat.define-palette($colors-dark-palette),
-  mat.define-palette(mat.$light-blue-palette),
-  mat.define-palette(mat.$pink-palette),
+    mat.define-palette($colors-dark-palette),
+    mat.define-palette(mat.$light-blue-palette),
+    mat.define-palette(mat.$pink-palette),
 );
 $background: map.get($theme-dark, background);
 $background: map.merge($background, (background: #000));
@@ -73,7 +73,7 @@ $foreground: map.get($theme-dark, foreground);
 $foreground: map.merge($foreground, (text: rgb(255 255 255 / 85%)));
 $foreground: map.merge($foreground, (secondary-text: #b8b8b8));
 $foreground: map.merge($foreground, (disabled-text: #636363));
-$foreground: map.merge($foreground, (disabled-checkbox: #3b3b3c));
+$foreground: map.merge($foreground, (disabled-checkbox: #7e868f));
 $foreground: map.merge($foreground, (disabled: #313132));
 $foreground: map.merge($foreground, (divider: #464647));
 $theme-dark: map.merge($theme-dark, (foreground: $foreground));
