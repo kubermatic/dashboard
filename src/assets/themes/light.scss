@@ -54,9 +54,9 @@ $colors-light: (
 $colors-light-palette: mat.$blue-palette;
 $colors-light-palette: map.merge($colors-light-palette, (500: #00517d));
 $theme-light: mat.define-light-theme(
-    mat.define-palette($colors-light-palette),
-    mat.define-palette(mat.$light-blue-palette),
-    mat.define-palette(mat.$pink-palette),
+  mat.define-palette($colors-light-palette),
+  mat.define-palette(mat.$light-blue-palette),
+  mat.define-palette(mat.$pink-palette),
 );
 $background: map.get($theme-light, background);
 $background: map.merge($background, (background: #edeff0));
