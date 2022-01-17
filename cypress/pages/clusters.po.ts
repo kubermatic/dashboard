@@ -134,10 +134,6 @@ export class ClustersPage {
     return this.getSSHKeysTableRow(sshKeyName).find('button i.km-icon-delete');
   }
 
-  static getSSHKeysAddDropdown(): Cypress.Chainable {
-    return cy.get('.km-edit-sshkeys-dropdown').should(Condition.NotHaveClass, 'mat-form-field-disabled');
-  }
-
   static getSSHKeysDropdownOption(name: string): Cypress.Chainable {
     return cy.get('.km-add-dialog-dropdown').find('mat-option').contains('span', name);
   }

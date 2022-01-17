@@ -17,9 +17,8 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
-import {AdminSeed, BackupDestination, Destinations, DestinationDetails} from '@shared/entity/datacenter';
+import {AdminSeed, BackupDestination, DestinationDetails, Destinations} from '@shared/entity/datacenter';
 import {getIconClassForButton} from '@shared/utils/common-utils';
-import _ from 'lodash';
 import {Subject} from 'rxjs';
 
 export interface DestinationDialogData {

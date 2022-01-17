@@ -138,11 +138,11 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
   }
 
   private _isAddonEnabled(addon: AddonType): boolean {
-    return this.addons.find(a => a.id === addon) ? true : false;
+    return !!this.addons.find(a => a.id === addon);
   }
 
   private _isAddonAvailable(addon: AddonType): boolean {
-    return this.accessibleAddons.find(a => a === addon) ? true : false;
+    return !!this.accessibleAddons.find(a => a === addon);
   }
 
   getAddonsEnabledWarningText(): string {
