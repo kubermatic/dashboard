@@ -23,7 +23,7 @@ import {UserService} from '@core/services/user';
 import {Cluster} from '@shared/entity/cluster';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {Member} from '@shared/entity/member';
-import {getOperatingSystem} from '@shared/entity/node';
+import {getOperatingSystem, getOperatingSystemLogoClass} from '@shared/entity/node';
 import {GroupConfig} from '@shared/model/Config';
 import {MachineDeploymentHealthStatus} from '@shared/utils/health-status/machine-deployment-health-status';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
@@ -95,6 +95,10 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
 
   getOperatingSystem(md: MachineDeployment): string {
     return getOperatingSystem(md.spec.template);
+  }
+
+  getOperatingSystemLogoClass(md: MachineDeployment): string {
+    return `km-os-image-${getOperatingSystemLogoClass(md.spec.template)}`;
   }
 
   goToDetails(md: MachineDeployment): void {
