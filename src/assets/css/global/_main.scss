@@ -343,6 +343,10 @@ hr {
     .mat-form-field-outline-start {
       border-radius: 0;
     }
+
+    .mat-form-field-wrapper {
+      padding-bottom: 2px;
+    }
   }
 
   &.km-version-picker-enabled {
@@ -449,10 +453,12 @@ km-dashboard {
 }
 
 .km-label-primary {
+  align-self: center;
   border-radius: variables.$border-radius;
   border-style: solid;
   border-width: 1px;
   font-size: variables.$font-size-body;
+  height: 22px;
   line-height: 12px;
   margin: 4px 0;
   max-width: 120px;

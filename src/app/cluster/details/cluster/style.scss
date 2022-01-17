@@ -69,3 +69,26 @@
     min-width: 40px;
   }
 }
+
+.cluster-info-container {
+  padding: 0 60px;
+
+  > div {
+    padding-bottom: 42px;
+  }
+
+  .container-spacing {
+    > :not(:first-child) {
+      margin-bottom: 8px;
+    }
+
+    .section-header {
+      font-size: variables.$font-size-subhead-lg;
+      margin-bottom: 14px;
+    }
+
+    .km-label-primary {
+      margin-left: -20px;
+    }
+  }
+}
