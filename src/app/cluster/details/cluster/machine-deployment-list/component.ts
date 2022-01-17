@@ -57,8 +57,7 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
     private readonly _projectService: ProjectService,
     private readonly _userService: UserService,
     private readonly _notificationService: NotificationService
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.dataSource.data = this.machineDeployments ? this.machineDeployments : [];
@@ -113,8 +112,7 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
   showRestartDialog(md: MachineDeployment): void {
     this._nodeService
       .showMachineDeploymentRestartDialog(md, this.cluster, this.projectID, this.changeMachineDeployment)
-      .subscribe(() => {
-      });
+      .subscribe(() => {});
   }
 
   showEditDialog(md: MachineDeployment): void {
@@ -137,8 +135,7 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
   showDeleteDialog(md: MachineDeployment): void {
     this._nodeService
       .showMachineDeploymentDeleteDialog(md, this.cluster, this.projectID, this.changeMachineDeployment)
-      .subscribe(() => {
-      });
+      .subscribe(() => {});
   }
 
   isPaginatorVisible(): boolean {
