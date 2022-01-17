@@ -13,7 +13,7 @@
 // limitations under the License.
 
 export default {
-  preset: 'jest-preset-angular/presets/defaults',
+  preset: 'jest-preset-angular',
   roots: ['src'],
   setupFilesAfterEnv: ['<rootDir>/src/test.base.ts'],
   globals: {
