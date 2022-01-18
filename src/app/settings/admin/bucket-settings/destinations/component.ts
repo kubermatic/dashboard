@@ -78,10 +78,7 @@ export class DestinationsComponent implements OnInit {
   }
 
   isDefault(name: string): boolean {
-    return (
-      this.seed?.spec?.etcdBackupRestore?.defaultDestination &&
-      this.seed.spec.etcdBackupRestore.defaultDestination === name
-    );
+    return this.seed?.spec?.etcdBackupRestore?.defaultDestination === name;
   }
 
   addDestination(): void {
