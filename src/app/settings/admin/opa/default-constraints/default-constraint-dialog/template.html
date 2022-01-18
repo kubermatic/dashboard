@@ -19,7 +19,8 @@ limitations under the License.
      class="km-dialog-context-description">Edit <b>{{data.defaultConstraint.name}}</b> default constraint</p>
   <form [formGroup]="form"
         fxLayout="column">
-    <mat-form-field fxFlex>
+    <mat-form-field fxFlex
+                    *ngIf="data.mode === Mode.Add">
       <mat-label>Constraint Name</mat-label>
       <input required
              matInput

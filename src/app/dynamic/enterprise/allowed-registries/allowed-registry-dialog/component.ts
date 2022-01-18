@@ -53,6 +53,7 @@ export enum Controls {
 })
 export class AllowedRegistryDialog implements OnInit, OnDestroy {
   readonly controls = Controls;
+  readonly Mode = Mode;
   form: FormGroup;
   private readonly _unsubscribe = new Subject<void>();
 
