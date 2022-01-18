@@ -289,13 +289,13 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   isEnforced(control: Controls): boolean {
     switch (control) {
       case Controls.AuditLogging:
-        return this._datacenterSpec?.spec.enforceAuditLogging;
+        return !!this._datacenterSpec?.spec?.enforceAuditLogging;
       case Controls.OPAIntegration:
-        return this._settings?.opaOptions.enforced;
+        return !!this._settings?.opaOptions?.enforced;
       case Controls.MLALogging:
-        return this._settings?.mlaOptions.loggingEnforced;
+        return !!this._settings?.mlaOptions?.loggingEnforced;
       case Controls.MLAMonitoring:
-        return this._settings?.mlaOptions.monitoringEnforced;
+        return !!this._settings?.mlaOptions?.monitoringEnforced;
       default:
         return false;
     }
