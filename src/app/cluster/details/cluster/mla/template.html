@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<ng-container *ngIf="!isLoadingData()">
+<ng-container *ngIf="isClusterRunning">
   <km-alertmanager-config [alertmanagerConfig]="alertmanagerConfig"
                           [cluster]="cluster"
                           [projectID]="projectID"
