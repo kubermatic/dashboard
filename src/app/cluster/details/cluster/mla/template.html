@@ -27,4 +27,4 @@ limitations under the License.
                   [isClusterRunning]="isClusterRunning"></km-rule-groups>
 </ng-container>
 
-<km-loader *ngIf="isLoadingData()"></km-loader>
+<km-loader *ngIf="!isClusterRunning"></km-loader>

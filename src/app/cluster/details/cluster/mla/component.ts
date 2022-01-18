@@ -29,8 +29,4 @@ export class MLAComponent {
   @Input() alertmanagerConfig: AlertmanagerConfig;
   @Input() ruleGroups: RuleGroup[];
   @Input() addons: Addon[];
-
-  isLoadingData(): boolean {
-    return !this.isClusterRunning;
-  }
 }
