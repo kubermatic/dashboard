@@ -27,7 +27,8 @@ END OF TERMS AND CONDITIONS
 
   <form [formGroup]="form"
         fxLayout="column">
-    <mat-form-field fxFlex>
+    <mat-form-field fxFlex
+                    *ngIf="data.mode === Mode.Add">
       <mat-label>Name</mat-label>
       <input required
              matInput

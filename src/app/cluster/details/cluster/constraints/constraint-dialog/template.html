@@ -20,7 +20,8 @@ limitations under the License.
 
   <form [formGroup]="form"
         fxLayout="column">
-    <mat-form-field fxFlex>
+    <mat-form-field fxFlex
+                    *ngIf="data.mode === Mode.Add">
       <mat-label>Constraint Name</mat-label>
       <input required
              matInput

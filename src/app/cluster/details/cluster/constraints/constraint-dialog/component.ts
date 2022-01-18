@@ -54,6 +54,7 @@ export enum Controls {
 })
 export class ConstraintDialog implements OnInit, OnDestroy {
   readonly Controls = Controls;
+  readonly Mode = Mode;
   form: FormGroup;
   spec = '';
   constraintTemplates: ConstraintTemplate[] = [];
@@ -73,7 +74,10 @@ export class ConstraintDialog implements OnInit, OnDestroy {
         Validators.required,
       ]),
       [Controls.ConstraintTemplate]: this._builder.control(
-        this.data.mode === Mode.Edit ? this.data.constraint.spec.constraintType : '',
+        {
+          value: this.data.mode === Mode.Edit ? this.data.constraint.spec.constraintType : '',
+          disabled: this.data.mode === Mode.Edit,
+        },
         [Validators.required]
       ),
     });
