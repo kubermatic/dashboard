@@ -31,6 +31,6 @@ export class MLAComponent {
   @Input() addons: Addon[];
 
   isLoadingData(): boolean {
-    return _.isEmpty(this.alertmanagerConfig) || _.isEmpty(this.ruleGroups) || !this.isClusterRunning;
+    return !this.isClusterRunning;
   }
 }
