@@ -29,15 +29,15 @@ import {NameGeneratorService} from '@core/services/name-generator';
 import {SettingsService} from '@core/services/settings';
 import {WizardService} from '@core/services/wizard/wizard';
 import {
+  AuditPolicyPreset,
   Cluster,
   ClusterSpec,
   ClusterType,
+  CNIPlugin,
   ContainerRuntime,
   END_OF_DOCKER_SUPPORT_VERSION,
   MasterVersion,
   ProxyMode,
-  CNIPlugin,
-  AuditPolicyPreset,
 } from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
@@ -48,9 +48,9 @@ import {combineLatest, merge} from 'rxjs';
 import {filter, startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {StepBase} from '../base';
 import * as semver from 'semver';
+import {coerce, compare} from 'semver';
 import {CIDR_PATTERN_VALIDATOR} from '@shared/validators/others';
 import {FeatureGateService} from '@core/services/feature-gate';
-import {coerce, compare} from 'semver';
 
 enum Controls {
   Name = 'name',
@@ -289,13 +289,13 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   isEnforced(control: Controls): boolean {
     switch (control) {
       case Controls.AuditLogging:
-        return !!this._datacenterSpec && this._datacenterSpec.spec.enforceAuditLogging;
+        return !!this._datacenterSpec?.spec?.enforceAuditLogging;
       case Controls.OPAIntegration:
-        return !!this._settings && this._settings.opaOptions.enforced;
+        return !!this._settings?.opaOptions?.enforced;
       case Controls.MLALogging:
-        return !!this._settings && this._settings.mlaOptions.loggingEnforced;
+        return !!this._settings?.mlaOptions?.loggingEnforced;
       case Controls.MLAMonitoring:
-        return !!this._settings && this._settings.mlaOptions.monitoringEnforced;
+        return !!this._settings?.mlaOptions?.monitoringEnforced;
       default:
         return false;
     }

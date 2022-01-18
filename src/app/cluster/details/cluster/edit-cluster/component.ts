@@ -26,6 +26,7 @@ import {
   ClusterPatch,
   ContainerRuntime,
   END_OF_DOCKER_SUPPORT_VERSION,
+  EventRateLimitConfig,
   ProviderSettingsPatch,
 } from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
@@ -38,7 +39,6 @@ import {Subject} from 'rxjs';
 import {startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import * as semver from 'semver';
 import {FeatureGateService} from '@core/services/feature-gate';
-import {EventRateLimitConfig} from '@shared/entity/cluster';
 
 enum Controls {
   Name = 'name',
@@ -253,11 +253,11 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   isEnforced(control: Controls): boolean {
     switch (control) {
       case Controls.OPAIntegration:
-        return !!this._settings && this._settings.opaOptions.enforced;
+        return !!this._settings?.opaOptions?.enforced;
       case Controls.MLALogging:
-        return !!this._settings && this._settings.mlaOptions.loggingEnforced;
+        return !!this._settings?.mlaOptions?.loggingEnforced;
       case Controls.MLAMonitoring:
-        return !!this._settings && this._settings.mlaOptions.monitoringEnforced;
+        return !!this._settings?.mlaOptions?.monitoringEnforced;
       default:
         return false;
     }
