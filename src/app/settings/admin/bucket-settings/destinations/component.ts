@@ -77,6 +77,10 @@ export class DestinationsComponent implements OnInit {
     return !!destination?.credentials;
   }
 
+  isDefault(name: string): boolean {
+    return this.seed?.spec?.etcdBackupRestore?.defaultDestination === name;
+  }
+
   addDestination(): void {
     const dialogConfig: MatDialogConfig = {
       data: {

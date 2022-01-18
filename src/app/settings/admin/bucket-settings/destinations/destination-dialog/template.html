@@ -46,6 +46,14 @@ limitations under the License.
              autocomplete="off"
              required>
     </mat-form-field>
+
+    <mat-checkbox [formControlName]="Controls.Default"
+                  class="default-checkbox">
+      <span>Use as default for automatically generated etcd backups</span>
+      <i *ngIf="currentDefault"
+         class="km-icon-info km-pointer has-default-info-icon"
+         matTooltip="Will overwrite the current default: {{currentDefault}}"></i>
+    </mat-checkbox>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
