@@ -148,7 +148,9 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
           this.form.get(Controls.AssumeRoleExternalID).setValidators(Validators.required);
         } else {
           this.form.get(Controls.AssumeRoleARN).clearValidators();
+          this.form.get(Controls.AssumeRoleARN).setValue(null);
           this.form.get(Controls.AssumeRoleExternalID).clearValidators();
+          this.form.get(Controls.AssumeRoleExternalID).setValue(null);
         }
 
         this.form.get(Controls.AssumeRoleARN).updateValueAndValidity();
