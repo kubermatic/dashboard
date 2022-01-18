@@ -14,18 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <div fxLayout="column">
-  <div class="label km-text-muted"
-       fxLayout="row"
-       fxLayoutAlign="space-between center">
-    <span>{{name}}</span>
-    <span *ngIf="total && used">{{used}}/{{total}} {{unit}}</span>
-  </div>
-  <div class="value km-text">
-    <mat-progress-bar *ngIf="total && used"
-                      class="km-property-usage-bar"
-                      mode="determinate"
-                      [value]="getPercentage()"
-                      [matTooltip]="getTooltip()"></mat-progress-bar>
-    <div *ngIf="!total && used">{{used}} {{unit}}</div>
-  </div>
+  <km-property>
+    <div key>
+      <span fxFlex>{{name}}</span>
+      <span *ngIf="total && used">{{used}}/{{total}} {{unit}}</span>
+    </div>
+    <div value>
+      <mat-progress-bar *ngIf="total && used"
+                        class="km-property-usage-bar"
+                        mode="determinate"
+                        [value]="getPercentage()"
+                        [matTooltip]="getTooltip()"></mat-progress-bar>
+      <div *ngIf="!total && used">{{used}} {{unit}}</div>
+    </div>
+  </km-property>
 </div>

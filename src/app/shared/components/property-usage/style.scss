@@ -15,27 +15,9 @@
 @use 'mixins';
 @use 'variables';
 
-:host {
-  cursor: default;
-  margin: 6px 50px 6px 0;
+.km-property-usage-bar {
+  @include mixins.size(280px, 6px, true);
 
-  .label {
-    font-size: variables.$font-size-caption;
-    line-height: 14px;
-    margin-bottom: 4px;
-  }
-
-  .value {
-    font-size: variables.$font-size-subhead;
-    line-height: 24px;
-    margin-bottom: 8px;
-    word-break: break-all;
-
-    .km-property-usage-bar {
-      @include mixins.size(280px, 6px, true);
-
-      border-radius: variables.$border-radius;
-      margin: 10px 0;
-    }
-  }
+  border-radius: variables.$border-radius;
+  margin: 8px 0;
 }

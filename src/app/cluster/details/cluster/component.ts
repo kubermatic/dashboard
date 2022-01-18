@@ -49,7 +49,7 @@ import {AlertmanagerConfig, RuleGroup} from '@shared/entity/mla';
 import {Constraint, GatekeeperConfig} from '@shared/entity/opa';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {Config, GroupConfig} from '@shared/model/Config';
-import {AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
+import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
 import {ClusterHealthStatus} from '@shared/utils/health-status/cluster-health-status';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import _ from 'lodash';
@@ -98,6 +98,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
   private _seedSettings: SeedSettings;
+
+  get admissionPlugins(): string[] {
+    return Object.keys(AdmissionPlugin);
+  }
 
   constructor(
     private readonly _route: ActivatedRoute,
@@ -503,8 +507,12 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     );
   }
 
-  getAdmissionPlugins(): string {
-    return AdmissionPluginUtils.getJoinedPluginNames(this.cluster.spec.admissionPlugins);
+  isAdmissionPluginEnabled(plugin: string): boolean {
+    return this.cluster?.spec?.admissionPlugins?.includes(plugin) || false;
+  }
+
+  getAdmissionPluginName(plugin: string): string {
+    return AdmissionPluginUtils.getPluginName(plugin);
   }
 
   isHavingCNI(): boolean {

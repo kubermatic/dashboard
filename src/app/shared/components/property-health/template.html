@@ -14,10 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<km-property [matTooltip]="message">
+<km-property fxFlex>
   <div value
        fxLayoutAlign=" center"
-       fxLayoutGap="8px">
+       fxLayoutGap="8px"
+       [matTooltip]="message">
     <i [class]="icon"></i>
     <span>{{label}}</span>
   </div>

@@ -250,6 +250,10 @@
   .km-label-primary {
     border-color: map.get($colors, primary);
     color: map.get($colors, text);
+
+    &.secondary {
+      border-color: map.get($colors, divider);
+    }
   }
 
   .km-search-input {

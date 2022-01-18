@@ -15,9 +15,10 @@ limitations under the License.
 -->
 
 <div [ngClass]="margin === Margin.Default ? 'container' : ''">
-  <div fxLayout="column"
-       fxLayoutAlign="end start">
+  <div fxFlex
+       fxLayout="column">
     <div class="label km-text-muted">
+      <div *ngIf="mode === Mode.Value"></div>
       <ng-content select="[key]"></ng-content>
     </div>
     <div class="value km-text">
