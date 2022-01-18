@@ -94,8 +94,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     private readonly _notificationService: NotificationService,
     private readonly _settingsService: SettingsService,
     private readonly _featureGatesService: FeatureGateService
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this._featureGatesService.featureGates
