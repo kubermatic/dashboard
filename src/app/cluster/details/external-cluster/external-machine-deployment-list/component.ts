@@ -115,8 +115,6 @@ export class ExternalMachineDeploymentListComponent implements OnInit, OnChanges
 
   updateReplicas(md: ExternalMachineDeployment): void {
     const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
       data: {
         projectID: this.projectID,
         clusterID: this.cluster.id,

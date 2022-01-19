@@ -116,8 +116,6 @@ export class GatekeeperConfigComponent implements OnChanges, OnDestroy {
 
   delete(): void {
     const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
       data: {
         title: 'Delete Gatekeeper Config',
         message: `Delete OPA gatekeeper config of <b>${this.cluster.name}</b> cluster permanently?`,

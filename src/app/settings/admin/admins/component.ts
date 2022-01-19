@@ -82,8 +82,6 @@ export class AdminsComponent implements OnInit, OnChanges {
 
   delete(admin: Admin): void {
     const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
       data: {
         title: 'Remove Administrator',
         message: `Remove <b>${admin.name}</b> from administrators?`,

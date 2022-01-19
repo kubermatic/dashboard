@@ -199,8 +199,6 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
 
   reset(): void {
     const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
       data: {
         title: 'Reset Alertmanager Config',
         message: `Reset Alertmanager Config of <b>${this.cluster.name}</b> cluster to default?`,

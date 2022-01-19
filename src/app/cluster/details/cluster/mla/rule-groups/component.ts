@@ -142,8 +142,6 @@ export class RuleGroupsComponent implements OnInit, OnChanges, OnDestroy {
   delete(ruleGroup: RuleGroup): void {
     const ruleGroupName = this.getName(ruleGroup.data);
     const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
       data: {
         title: 'Delete Rule Group',
         message: `Delete <b>${ruleGroupName}</b> recording and alerting rule group of <b>${this.cluster.name}</b> cluster permanently?`,

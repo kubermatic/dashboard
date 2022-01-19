@@ -119,8 +119,6 @@ export class NodeService {
     changeEventEmitter: EventEmitter<MachineDeployment>
   ): Observable<boolean> {
     const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
       data: {
         title: 'Delete Machine Deployment',
         message: `Delete <b>${md.name}</b> machine deployment of <b>${cluster.name}</b> cluster permanently?`,
@@ -167,8 +165,6 @@ export class NodeService {
     changeEventEmitter: EventEmitter<MachineDeployment> = undefined
   ): Observable<boolean> {
     const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
       data: {
         title: 'Restart Machine Deployment',
         message: `Perform rolling restart of <b>${md.name}</b> machine deployment of <b>${cluster.name}</b> cluster?`,

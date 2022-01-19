@@ -368,8 +368,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     }
 
     const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
       data: {
         title: 'External CCM Migration',
         message: `Start external CCM migration procedure of ${this.cluster.name} cluster?`,
