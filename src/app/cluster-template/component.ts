@@ -66,7 +66,8 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _matDialog: MatDialog,
     private readonly _userService: UserService,
     private readonly _notificationService: NotificationService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this._setupList();
@@ -198,7 +199,7 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(take(1))
       .subscribe(() => {
         this._refresh.next();
-        this._notificationService.success(`Deleted the ${template.name} cluster template`);
+        this._notificationService.success(`Deleting the ${template.name} cluster template`);
       });
   }
 
