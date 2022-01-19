@@ -65,19 +65,9 @@
   }
 
   .km-changelog-link-card {
-    background-color: #edeff0;
-    border-radius: 8px;
-
     &:hover {
-      i {
-        background-color: map.get($colors, primary-hover);
-      }
-
-      .km-changelog-link-caption {
-        > span {
-          color: map.get($colors, text-secondary);
-        }
-      }
+      background-color: map.get($colors, project-selector-hover);
+      border-radius: 8px;
     }
   }
 
