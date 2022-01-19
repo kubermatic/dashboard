@@ -117,8 +117,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     private readonly _opaService: OPAService,
     private readonly _mlaService: MLAService,
     readonly settings: SettingsService
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.config = this._appConfigService.getConfig();
@@ -169,35 +168,35 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             .concat(
               this._canReloadVersions()
                 ? [
-                  this._clusterService.upgrades(this.projectID, this.cluster.id),
-                  this._clusterService.cniVersions(this.projectID, this.cluster.id),
-                ]
+                    this._clusterService.upgrades(this.projectID, this.cluster.id),
+                    this._clusterService.cniVersions(this.projectID, this.cluster.id),
+                  ]
                 : [of([] as MasterVersion[]), of({} as CNIPluginVersions)]
             )
             .concat(
               this.isClusterRunning
                 ? [
-                  this._clusterService.addons(this.projectID, this.cluster.id),
-                  this._clusterService.nodes(this.projectID, this.cluster.id),
-                  this._api.getMachineDeployments(this.cluster.id, this.projectID),
-                  this._clusterService.metrics(this.projectID, this.cluster.id),
-                ]
+                    this._clusterService.addons(this.projectID, this.cluster.id),
+                    this._clusterService.nodes(this.projectID, this.cluster.id),
+                    this._api.getMachineDeployments(this.cluster.id, this.projectID),
+                    this._clusterService.metrics(this.projectID, this.cluster.id),
+                  ]
                 : [of([] as Addon[]), of([] as Node[]), of([] as MachineDeployment[]), of({} as ClusterMetrics)]
             )
             .concat(
               this.isClusterRunning && this.isMLAEnabled()
                 ? [
-                  this._mlaService.alertmanagerConfig(this.projectID, this.cluster.id),
-                  this._mlaService.ruleGroups(this.projectID, this.cluster.id),
-                ]
+                    this._mlaService.alertmanagerConfig(this.projectID, this.cluster.id),
+                    this._mlaService.ruleGroups(this.projectID, this.cluster.id),
+                  ]
                 : [of([]), of([] as RuleGroup[])]
             )
             .concat(
               this.isClusterRunning && this.isOPARunning && this.cluster.spec.opaIntegration?.enabled
                 ? [
-                  this._opaService.constraints(this.projectID, this.cluster.id),
-                  this._opaService.gatekeeperConfig(this.projectID, this.cluster.id),
-                ]
+                    this._opaService.constraints(this.projectID, this.cluster.id),
+                    this._opaService.gatekeeperConfig(this.projectID, this.cluster.id),
+                  ]
                 : [of([] as Constraint[]), of({} as GatekeeperConfig)]
             ) as [
             Observable<MasterVersion[]>,
@@ -218,17 +217,17 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe({
         next: ([
-                 upgrades,
-                 cniVersions,
-                 addons,
-                 nodes,
-                 machineDeployments,
-                 metrics,
-                 alertmanagerConfig,
-                 ruleGroups,
-                 constraints,
-                 gatekeeperConfig,
-               ]: [
+          upgrades,
+          cniVersions,
+          addons,
+          nodes,
+          machineDeployments,
+          metrics,
+          alertmanagerConfig,
+          ruleGroups,
+          constraints,
+          gatekeeperConfig,
+        ]: [
           MasterVersion[],
           CNIPluginVersions,
           Addon[],
