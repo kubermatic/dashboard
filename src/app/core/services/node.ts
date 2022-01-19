@@ -132,15 +132,13 @@ export class NodeService {
       .pipe(
         mergeMap((isConfirmed: boolean): Observable<boolean> => {
           if (isConfirmed) {
-            return this._apiService
-              .deleteMachineDeployment(cluster.id, md, projectID)
-              .pipe(take(1))
-              .pipe(
-                catchError(() => {
-                  this._notificationService.error(`Could not delete the ${md.name} machine deployment`);
-                  return of(false);
-                })
-              );
+            return this._apiService.deleteMachineDeployment(cluster.id, md, projectID).pipe(
+              catchError(() => {
+                this._notificationService.error(`Could not delete the ${md.name} machine deployment`);
+                return of(false);
+              }),
+              take(1)
+            );
           }
           return of(false);
         })
@@ -148,14 +146,14 @@ export class NodeService {
       .pipe(
         mergeMap((data: any): Observable<boolean> => {
           if (data) {
-            this._notificationService.success(`The ${md.name} machine deployment was deleted`);
+            this._notificationService.success(`Deleting the ${md.name} machine deployment`);
             changeEventEmitter?.emit(md);
             return of(true);
           }
           return of(false);
-        })
-      )
-      .pipe(take(1));
+        }),
+        take(1)
+      );
   }
 
   showMachineDeploymentRestartDialog(
@@ -179,18 +177,18 @@ export class NodeService {
         mergeMap((isConfirmed: boolean): Observable<boolean> => {
           if (isConfirmed) {
             return this._apiService.restartMachineDeployment(cluster.id, md, projectID).pipe(
-              take(1),
               catchError(() => {
                 this._notificationService.error(`Could not restart the ${md.name} machine deployment`);
                 return of(false);
-              })
+              }),
+              take(1)
             );
           }
           return of(false);
         }),
         mergeMap((data: any): Observable<boolean> => {
           if (data) {
-            this._notificationService.success(`Started restart of the ${md.name} machine deployment`);
+            this._notificationService.success(`Restarting the ${md.name} machine deployment`);
             changeEventEmitter?.emit(md);
             return of(true);
           }
