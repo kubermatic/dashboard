@@ -152,8 +152,8 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .pipe(switchMap(_ => this._backupService.delete(this._selectedProject.id, backup.spec.clusterId, backup.id)))
       .subscribe(_ => {
-        this._notificationService.success(`Successfully deleted automatic backup ${backup.name}`);
         this._backupService.refreshAutomaticBackups();
+        this._notificationService.success(`Deleted the ${backup.name} automatic backup`);
       });
   }
 

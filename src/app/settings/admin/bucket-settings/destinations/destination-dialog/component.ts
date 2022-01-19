@@ -119,9 +119,9 @@ export class DestinationDialog implements OnInit, OnDestroy {
   private _notificationMessage(): string {
     switch (this.data.mode) {
       case Mode.Add:
-        return 'Destination was successfully added';
+        return 'Destination was added';
       case Mode.Edit:
-        return 'Destination was successfully edited';
+        return 'Destination was edited';
     }
   }
 }

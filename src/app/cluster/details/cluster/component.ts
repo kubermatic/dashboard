@@ -288,7 +288,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(
         _ => this._clusterService.onClusterUpdate.next(),
-        _ => this._notificationService.error('There was an error during machine deployment creation.')
+        _ => this._notificationService.error('Could not create the machine deployment')
       );
   }
 
@@ -382,9 +382,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       .pipe(switchMap(_ => this._clusterService.startExternalCCMMigration(this.projectID, this.cluster.id)))
       .pipe(take(1))
       .subscribe(_ =>
-        this._notificationService.success(
-          `External CCM migration procedure of ${this.cluster.name} cluster has started`
-        )
+        this._notificationService.success(`Started external CCM migration procedure of ${this.cluster.name} cluster`)
       );
   }
 
@@ -443,7 +441,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
         this.reloadAddons();
-        this._notificationService.success(`The ${addon.name} addon was added to the ${this.cluster.name} cluster`);
+        this._notificationService.success(`Added the ${addon.name} addon to the ${this.cluster.name} cluster`);
       });
   }
 
@@ -454,7 +452,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
         this.reloadAddons();
-        this._notificationService.success(`The ${addon.name} addon was updated`);
+        this._notificationService.success(`Updated the ${addon.name} addon`);
       });
   }
 
@@ -465,7 +463,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
         this.reloadAddons();
-        this._notificationService.success(`The ${addon.name} addon was removed from the ${this.cluster.name} cluster`);
+        this._notificationService.success(`Deleted the ${addon.name} addon from the ${this.cluster.name} cluster`);
       });
   }
 

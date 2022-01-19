@@ -116,8 +116,8 @@ export class RestoreListComponent implements OnInit, OnDestroy {
       } as ConfirmationDialogConfig,
     };
 
-    const dialog = this._matDialog.open(ConfirmationDialogComponent, config);
-    dialog
+    this._matDialog
+      .open(ConfirmationDialogComponent, config)
       .afterClosed()
       .pipe(filter(confirmed => confirmed))
       .pipe(take(1))
@@ -127,7 +127,7 @@ export class RestoreListComponent implements OnInit, OnDestroy {
         )
       )
       .subscribe(_ => {
-        this._notificationService.success(`Successfully deleted restore object ${restore.name}`);
+        this._notificationService.success(`Deleted restore object ${restore.name}`);
       });
   }
 }

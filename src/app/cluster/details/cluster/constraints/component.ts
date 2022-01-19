@@ -183,8 +183,8 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(switchMap(_ => this._opaService.deleteConstraint(this.projectID, this.cluster.id, constraint.name)))
       .pipe(take(1))
       .subscribe(_ => {
-        this._notificationService.success(`The constraint ${constraint.name} was deleted`);
         this._opaService.refreshConstraint();
+        this._notificationService.success(`Deleted the ${constraint.name} constraint`);
       });
   }
 }

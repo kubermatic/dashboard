@@ -110,8 +110,8 @@ export class GatekeeperConfigDialog implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(_ => {
         this._matDialogRef.close(true);
-        this._notificationService.success('The Gatekeeper Config was created');
         this._opaService.refreshGatekeeperConfig();
+        this._notificationService.success('Created the Gatekeeper config');
       });
   }
 
@@ -121,8 +121,8 @@ export class GatekeeperConfigDialog implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(_ => {
         this._matDialogRef.close(true);
-        this._notificationService.success('The Gatekeeper Config was updated');
         this._opaService.refreshGatekeeperConfig();
+        this._notificationService.success('Updated the Gatekeeper config');
       });
   }
 }

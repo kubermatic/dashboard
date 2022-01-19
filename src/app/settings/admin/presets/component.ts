@@ -225,7 +225,7 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
       .subscribe(_ => {
         const idx = this.presets.findIndex(p => p.name === name);
         this.presets[idx].enabled = enabled;
-        this._notificationService.success(`${enabled ? 'Enabled' : 'Disabled'} preset ${name}.`);
+        this._notificationService.success(`${enabled ? 'Enabled' : 'Disabled'} ${name} preset`);
       });
   }
 

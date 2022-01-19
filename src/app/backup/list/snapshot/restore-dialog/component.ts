@@ -44,7 +44,7 @@ export class RestoreSnapshotDialogComponent {
       .restore(this.config.projectID, this.config.clusterID, this._toEtcdRestore())
       .pipe(take(1))
       .subscribe(_ => {
-        this._notificationService.success(`Successfully started restore process from backup ${this.config.backupName}`);
+        this._notificationService.success(`Started restore process from the ${this.config.backupName} backup`);
         this._dialogRef.close(true);
       });
   }

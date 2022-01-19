@@ -198,7 +198,7 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(take(1))
       .subscribe(() => {
         this._refresh.next();
-        this._notificationService.success(`The ${template.name} cluster template was removed`);
+        this._notificationService.success(`Deleted the ${template.name} cluster template`);
       });
   }
 

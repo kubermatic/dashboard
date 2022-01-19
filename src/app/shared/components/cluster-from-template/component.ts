@@ -75,11 +75,11 @@ export class ClusterFromTemplateDialogComponent implements OnInit {
       .createInstances(replicas, this.data.projectID, this.data.template.id)
       .pipe(take(1))
       .subscribe(_ => {
-        this._notificationService.success(
-          `Successfully created ${replicas} instance${replicas > 1 ? 's' : ''} from ${this.data.template.name} template`
-        );
         this.dialogRef.close();
         this._router.navigate([`/projects/${this.data.projectID}/clusters`]);
+        this._notificationService.success(
+          `Created ${replicas} instance${replicas > 1 ? 's' : ''} from ${this.data.template.name} template`
+        );
       });
   }
 }

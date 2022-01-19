@@ -68,7 +68,7 @@ export class CNIVersionDialog implements OnInit, OnDestroy {
 
     this._clusterService.patch(this.project.id, this.data.cluster.id, patch).subscribe(() => {
       this._notificationService.success(
-        `The ${this.data.cluster.name} cluster is being updated to the ${this.selectedCNIVersion} cni version`
+        `The ${this.data.cluster.name} cluster is being updated to the ${this.selectedCNIVersion} CNI version`
       );
       this._clusterService.onClusterUpdate.next();
       this._matDialogRef.close(true);

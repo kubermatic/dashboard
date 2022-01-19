@@ -88,7 +88,7 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck, OnDe
   }
 
   showWarning(): boolean {
-    return this.settings && !this.settings.cleanupOptions.Enforced;
+    return !this.settings?.cleanupOptions.Enforced;
   }
 
   onChange(event: any): void {
@@ -103,16 +103,18 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck, OnDe
     if (!this.inputNameMatches()) {
       return;
     }
+
     this._clusterService
       .delete(this.projectID, this.cluster.id, {
         [Finalizer.DeleteLoadBalancers]: !!this.deleteForm.controls.clusterLBCleanupCheckbox.value,
         [Finalizer.DeleteVolumes]: !!this.deleteForm.controls.clusterVolumeCleanupCheckbox.value,
       })
       .subscribe(() => {
-        this._notificationService.success(`The ${this.cluster.name} is being deleted`);
-        this._googleAnalyticsService.emitEvent('clusterOverview', 'clusterDeleted');
         this._clusterService.refreshClusters();
+        this._googleAnalyticsService.emitEvent('clusterOverview', 'clusterDeleted');
+        this._notificationService.success(`Deleting the ${this.cluster.name} cluster`);
       });
+
     this._dialogRef.close(true);
   }
 
