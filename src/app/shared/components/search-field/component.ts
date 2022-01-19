@@ -24,9 +24,7 @@ export class SearchFieldComponent implements OnInit {
   formGroup: FormGroup;
 
   ngOnInit() {
-    this.formGroup = new FormGroup({
-      query: new FormControl(''),
-    });
+    this.formGroup = new FormGroup({query: new FormControl('')});
   }
 
   onChange(query: string) {

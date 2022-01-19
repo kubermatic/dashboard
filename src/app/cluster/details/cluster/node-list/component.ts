@@ -187,10 +187,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getInfo(node: Node): string {
-    if (node.spec.cloud.aws) {
-      return node.name;
-    }
-    return node.id.replace('machine-', '');
+    return node.spec.cloud.aws ? node.name : node.id.replace('machine-', '');
   }
 
   getNodeName(node: Node): string {
