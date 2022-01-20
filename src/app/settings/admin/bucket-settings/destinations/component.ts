@@ -42,7 +42,8 @@ export class DestinationsComponent implements OnInit {
     private readonly _backupService: BackupService,
     private readonly _matDialog: MatDialog,
     private readonly _notificationService: NotificationService
-  ) {}
+  ) {
+  }
 
   get oldBucket(): string {
     return this.seed?.spec?.backupRestore ? this.seed.spec.backupRestore.s3BucketName : '';
@@ -127,7 +128,7 @@ export class DestinationsComponent implements OnInit {
         title: 'Delete Destination',
         message: `Delete <b>${destination.destinationName}</b> destination permanently?`,
         warning: 'Associated backups and snapshots will not be usable after deleting this destination.',
-        confirmLabel: 'Delete',
+        confirmLabel: 'Delete Destination',
       } as ConfirmationDialogConfig,
     };
 
