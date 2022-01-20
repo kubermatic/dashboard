@@ -287,7 +287,7 @@ limitations under the License.
                                  [value]="isAdmissionPluginEnabled(plugin)">
             </km-property-boolean>
 
-            <km-property *ngIf="cluster?.spec?.eventRateLimitConfig">
+            <km-property *ngIf="cluster?.spec?.eventRateLimitConfig?.namespace">
               <div key>Event Rate Limit Config</div>
               <div value
                    fxLayout="row wrap"
@@ -322,9 +322,9 @@ limitations under the License.
 
             <div fxLayout="row">
               <km-property-boolean label="Audit Logging"
-                                   [value]="cluster.spec.auditLogging.enabled">
+                                   [value]="cluster.spec.auditLogging?.enabled">
               </km-property-boolean>
-              <span *ngIf="cluster.spec.auditLogging.enabled"
+              <span *ngIf="cluster.spec.auditLogging?.enabled"
                     class="km-label-primary secondary">{{cluster.spec.auditLogging.policyPreset || 'custom'}}</span>
             </div>
 
