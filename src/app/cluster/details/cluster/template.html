@@ -163,13 +163,15 @@ limitations under the License.
           <div key>Container Runtime</div>
           <div value>{{cluster.spec.containerRuntime}}</div>
         </km-property>
-        <km-property mode="value">
+        <km-property>
+          <div key>Provider</div>
           <div value
                class="km-provider-logo-value">
             <span class="km-provider-logo km-provider-logo-{{getProvider(nodeDc?.spec?.provider)}}"></span>
           </div>
         </km-property>
-        <km-property mode="value">
+        <km-property>
+          <div key>SSH Keys</div>
           <div value>
             <km-ssh-key-list [sshKeys]="sshKeys"></km-ssh-key-list>
           </div>
