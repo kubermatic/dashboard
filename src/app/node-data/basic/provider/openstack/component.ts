@@ -279,7 +279,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   private _setDefaultImage(os: OperatingSystem): void {
     let defaultImage = this._getDefaultImage(os);
 
-    if (this._defaultImage.length === 0) {
+    if (_.isEmpty(this._defaultImage)) {
       this._defaultImage = defaultImage;
     }
 
