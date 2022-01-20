@@ -81,6 +81,7 @@ enum AvailabilityZoneState {
 })
 export class OpenstackBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy, AfterViewInit {
   private _defaultImage = '';
+  private _defaultOS: OperatingSystem;
   private _images: DatacenterOperatingSystemOptions;
   private readonly _instanceReadyCheckPeriodDefault = 5; // seconds
   private readonly _instanceReadyCheckTimeoutDefault = 120; // seconds
@@ -220,6 +221,9 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
       this.form.get(Controls.InstanceReadyCheckPeriod).setValue(instanceReadyCheckPeriod);
       this.form.get(Controls.InstanceReadyCheckTimeout).setValue(instanceReadyCheckTimeout);
 
+      this._defaultOS = this._nodeDataService.operatingSystem;
+      this._defaultImage = this._nodeDataService.nodeData.spec.cloud.openstack.image;
+
       this._cdr.detectChanges();
     }
   }
@@ -273,28 +277,35 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   }
 
   private _setDefaultImage(os: OperatingSystem): void {
-    switch (os) {
-      case OperatingSystem.CentOS:
-        this._defaultImage = this._images.centos;
-        break;
-      case OperatingSystem.Ubuntu:
-        this._defaultImage = this._images.ubuntu;
-        break;
-      case OperatingSystem.SLES:
-        this._defaultImage = this._images.sles;
-        break;
-      case OperatingSystem.RHEL:
-        this._defaultImage = this._images.rhel;
-        break;
-      case OperatingSystem.Flatcar:
-        this._defaultImage = this._images.flatcar;
-        break;
-      default:
-        this._defaultImage = this._images.ubuntu;
+    let defaultImage = this._getDefaultImage(os);
+
+    if (this._defaultImage.length === 0) {
+      this._defaultImage = defaultImage;
     }
 
-    this.form.get(Controls.Image).setValue(this._defaultImage);
+    if (os === this._defaultOS) {
+      defaultImage = this._defaultImage;
+    }
+
+    this.form.get(Controls.Image).setValue(defaultImage);
     this._cdr.detectChanges();
+  }
+
+  private _getDefaultImage(os: OperatingSystem): string {
+    switch (os) {
+      case OperatingSystem.CentOS:
+        return this._images.centos;
+      case OperatingSystem.Ubuntu:
+        return this._images.ubuntu;
+      case OperatingSystem.SLES:
+        return this._images.sles;
+      case OperatingSystem.RHEL:
+        return this._images.rhel;
+      case OperatingSystem.Flatcar:
+        return this._images.flatcar;
+      default:
+        return this._images.ubuntu;
+    }
   }
 
   private _enforceFloatingIP(isEnforced: boolean): void {
