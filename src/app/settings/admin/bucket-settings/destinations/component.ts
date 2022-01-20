@@ -42,8 +42,7 @@ export class DestinationsComponent implements OnInit {
     private readonly _backupService: BackupService,
     private readonly _matDialog: MatDialog,
     private readonly _notificationService: NotificationService
-  ) {
-  }
+  ) {}
 
   get oldBucket(): string {
     return this.seed?.spec?.backupRestore ? this.seed.spec.backupRestore.s3BucketName : '';
@@ -87,7 +86,6 @@ export class DestinationsComponent implements OnInit {
       data: {
         title: 'Add Destination',
         mode: Mode.Add,
-        confirmLabel: 'Add',
         seed: this.seed,
       },
     };
@@ -100,7 +98,6 @@ export class DestinationsComponent implements OnInit {
       data: {
         title: 'Edit Destination',
         mode: Mode.Edit,
-        confirmLabel: 'Edit',
         seed: this.seed,
         destination: destination,
       },
