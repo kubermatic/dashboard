@@ -13,15 +13,16 @@
 // limitations under the License.
 
 import {Component, Input} from '@angular/core';
+import {LabelFormComponent} from '@shared/components/label-form/component';
 import {Cluster} from '@shared/entity/cluster';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
+import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {getOperatingSystem, getOperatingSystemLogoClass} from '@shared/entity/node';
+import {SSHKey} from '@shared/entity/ssh-key';
 import {getIpCount} from '@shared/functions/get-ip-count';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import _ from 'lodash';
-import {MachineDeployment} from '@shared/entity/machine-deployment';
-import {LabelFormComponent} from '@shared/components/label-form/component';
 import {AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
+import _ from 'lodash';
 
 @Component({
   selector: 'km-cluster-summary',
@@ -29,12 +30,17 @@ import {AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admissi
   styleUrls: ['./style.scss'],
 })
 export class ClusterSummaryComponent {
+  private _sshKeys: SSHKey[] = [];
   @Input() cluster: Cluster;
   @Input() machineDeployment: MachineDeployment;
   @Input() datacenter: Datacenter;
   @Input() seedSettings: SeedSettings;
-  @Input() sshKeys: string[] = [];
   @Input() flipLayout = false;
+
+  @Input()
+  set sshKeys(keys: string[]) {
+    this._sshKeys = keys?.map(key => ({name: key} as SSHKey));
+  }
 
   get provider(): NodeProvider {
     const providers = Object.values(NodeProvider)
@@ -66,6 +72,10 @@ export class ClusterSummaryComponent {
   get hasIPLeft(): boolean {
     const ipCount = getIpCount(this.cluster.spec.machineNetworks);
     return ipCount > 0 ? ipCount < this.machineDeployment.spec.replicas : false;
+  }
+
+  getSSHKeys(): SSHKey[] {
+    return this._sshKeys;
   }
 
   displaySettings(): boolean {
