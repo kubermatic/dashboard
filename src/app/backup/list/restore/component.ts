@@ -127,7 +127,7 @@ export class RestoreListComponent implements OnInit, OnDestroy {
         )
       )
       .subscribe(_ => {
-        this._notificationService.success(`Deleted restore object ${restore.name}`);
+        this._notificationService.success(`Deleted the ${restore.name} restore object`);
       });
   }
 }

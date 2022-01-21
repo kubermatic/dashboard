@@ -42,7 +42,7 @@ export class DeleteSnapshotDialogComponent {
       .delete(this.config.projectID, this.config.snapshot.spec.clusterId, this.config.snapshot.id)
       .pipe(take(1))
       .subscribe(_ => {
-        this._notificationService.success(`Deleted snapshot ${this.config.snapshot.name}`);
+        this._notificationService.success(`Deleted the ${this.config.snapshot.name} snapshot`);
         this._dialogRef.close(true);
       });
   }
