@@ -28,6 +28,7 @@ import {take, takeUntil} from 'rxjs/operators';
 @Component({
   selector: 'km-version-change-dialog',
   templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class VersionChangeDialogComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster | ExternalCluster;
@@ -46,7 +47,8 @@ export class VersionChangeDialogComponent implements OnInit, OnDestroy {
     private readonly _notificationService: NotificationService,
     private readonly _eolService: EndOfLifeService,
     private readonly _googleAnalyticsService: GoogleAnalyticsService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     if (this.versions.length > 0) {
