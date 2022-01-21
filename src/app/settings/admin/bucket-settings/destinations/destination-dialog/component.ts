@@ -85,10 +85,6 @@ export class DestinationDialog implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  getIconClass(): string {
-    return getIconClassForButton(this.data.confirmLabel);
-  }
-
   displayOverwriteWarning(): boolean {
     return !this._isDefault() && this.form.get(Controls.Default).value && !!this.currentDefault;
   }
