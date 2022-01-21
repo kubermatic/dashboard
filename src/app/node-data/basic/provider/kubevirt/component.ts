@@ -47,7 +47,7 @@ enum Controls {
   ],
 })
 export class KubeVirtBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy, AfterViewChecked {
-  private readonly _sizeSuffixPattern = /^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$/;
+  private readonly _memorySizePattern = /^([0-9.]+)(Gi|Mi)$/;
 
   readonly Controls = Controls;
 
@@ -60,14 +60,14 @@ export class KubeVirtBasicNodeDataComponent extends BaseFormValidator implements
       [Controls.CPUs]: this._builder.control('1', Validators.required),
       [Controls.Memory]: this._builder.control('2Gi', [
         Validators.required,
-        Validators.pattern(this._sizeSuffixPattern),
+        Validators.pattern(this._memorySizePattern),
       ]),
-      [Controls.Namespace]: this._builder.control('', Validators.required),
+      [Controls.Namespace]: this._builder.control('kube-system', Validators.required),
       [Controls.SourceURL]: this._builder.control('', Validators.required),
       [Controls.StorageClassName]: this._builder.control('', Validators.required),
       [Controls.PVCSize]: this._builder.control('10Gi', [
         Validators.required,
-        Validators.pattern(this._sizeSuffixPattern),
+        Validators.pattern(this._memorySizePattern),
       ]),
     });
 
