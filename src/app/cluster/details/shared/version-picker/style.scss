@@ -30,15 +30,16 @@
 
       border-radius: variables.$border-radius 0 0 variables.$border-radius;
       border-style: solid;
-      border-width: 2px 0 2px 2px;
+      border-width: 1px 0 1px 1px;
       padding: 8px;
       position: relative;
       top: -1px;
+      transition: all 120ms ease-in-out;
 
       i {
         @include mixins.size(30px);
 
-        margin: 0;
+        margin: 0 auto;
       }
 
       .km-icon-update-available,
@@ -46,9 +47,8 @@
       .km-icon-error {
         @include mixins.size(16px);
 
+        margin: 0 0 12px 22px;
         position: absolute;
-        right: 4px;
-        top: 6px;
       }
     }
 
@@ -61,8 +61,7 @@
   .km-version-picker-enabled {
     &:hover {
       .km-version-picker-type {
-        border-style: solid;
-        transition: all 0.5s ease;
+        border-width: 2px 0 2px 2px;
       }
     }
   }
