@@ -29,7 +29,6 @@ describe('KubeVirt Provider', () => {
   const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
   const clusterName = Mocks.enabled() ? 'test-cluster' : _.uniqueId('test-cluster-');
   const initialMachineDeploymentReplicas = '0';
-  const namespace = 'kube-system';
   const sourceURL = 'http://10.102.236.197/ubuntu.img';
   const storageClassName = 'kubermatic-fast';
 
@@ -68,7 +67,6 @@ describe('KubeVirt Provider', () => {
       .clear()
       .type(initialMachineDeploymentReplicas)
       .should(Condition.HaveValue, initialMachineDeploymentReplicas);
-    WizardPage.kubeVirt.getNamespaceInput().type(namespace).should(Condition.HaveValue, namespace);
     WizardPage.kubeVirt.getSourceURLInput().type(sourceURL).should(Condition.HaveValue, sourceURL);
     WizardPage.kubeVirt.getStorageClassNameInput().type(storageClassName).should(Condition.HaveValue, storageClassName);
     WizardPage.getNextBtn(WizardStep.NodeSettings).should(Condition.BeEnabled).click({force: true});
