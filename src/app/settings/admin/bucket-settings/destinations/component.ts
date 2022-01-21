@@ -119,8 +119,6 @@ export class DestinationsComponent implements OnInit {
 
   deleteDestination(destination: BackupDestination): void {
     const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
       data: {
         title: 'Delete Destination',
         message: `Delete <b>${destination.destinationName}</b> destination permanently?`,

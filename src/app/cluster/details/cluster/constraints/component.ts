@@ -169,8 +169,6 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
   delete(constraint: Constraint, event: Event): void {
     event.stopPropagation();
     const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
       data: {
         title: 'Delete Constraint',
         message: `Delete <b>${constraint.name}</b> OPA constraint of <b>${this.cluster.name}</b> cluster permanently?`,
@@ -185,8 +183,8 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(switchMap(_ => this._opaService.deleteConstraint(this.projectID, this.cluster.id, constraint.name)))
       .pipe(take(1))
       .subscribe(_ => {
-        this._notificationService.success(`The constraint ${constraint.name} was deleted`);
         this._opaService.refreshConstraint();
+        this._notificationService.success(`Deleted the ${constraint.name} constraint`);
       });
   }
 }

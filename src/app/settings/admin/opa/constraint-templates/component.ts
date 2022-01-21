@@ -124,8 +124,6 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
 
   delete(constraintTemplate: ConstraintTemplate): void {
     const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
       data: {
         title: 'Delete Constraint Template',
         message: `Delete <b>${constraintTemplate.name}</b> constraint template permanently?`,

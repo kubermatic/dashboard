@@ -50,7 +50,9 @@ export class AddMachineNetworkComponent {
       } as ClusterPatch)
       .pipe(take(1))
       .subscribe(res => {
-        this._notificationService.success(`The machine network(s) for the ${this.cluster.name} cluster were added`);
+        this._notificationService.success(
+          `Added machine network${this.machineNetworks.length > 1 ? 's' : ''} for the ${this.cluster.name} cluster`
+        );
         this._dialogRef.close(res);
       });
   }

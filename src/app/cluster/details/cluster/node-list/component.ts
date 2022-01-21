@@ -67,10 +67,6 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  config: MatDialogConfig = {
-    disableClose: false,
-    hasBackdrop: true,
-  };
   isShowNodeItem = [];
   dataSource = new MatTableDataSource<Node>();
 
@@ -152,8 +148,6 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   deleteNodeDialog(node: Node, event: Event): void {
     event.stopPropagation();
     const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
       data: {
         title: 'Delete Node',
         message: `Delete <b>${node.name}</b> node of <b>${this.mdName}</b> machine deployment of <b>${this.cluster.name}</b> cluster permanently?`,
@@ -193,10 +187,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getInfo(node: Node): string {
-    if (node.spec.cloud.aws) {
-      return node.name;
-    }
-    return node.id.replace('machine-', '');
+    return node.spec.cloud.aws ? node.name : node.id.replace('machine-', '');
   }
 
   getNodeName(node: Node): string {

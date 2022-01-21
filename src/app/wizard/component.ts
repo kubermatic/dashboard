@@ -197,6 +197,6 @@ export class WizardComponent implements OnInit, OnDestroy {
       .afterClosed()
       .pipe(filter(ct => !!ct))
       .pipe(take(1))
-      .subscribe(ct => this._notificationService.success(`The ${ct.name} cluster template was saved`));
+      .subscribe(ct => this._notificationService.success(`Saved the ${ct.name} cluster template`));
   }
 }

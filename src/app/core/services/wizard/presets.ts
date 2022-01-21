@@ -86,7 +86,7 @@ export class PresetsService {
       case NodeProvider.ANEXIA:
         return new Anexia(this._http, NodeProvider.ANEXIA);
       default:
-        throw new Error(`Provider ${provider} not supported.`);
+        throw new Error(`Provider ${provider} not supported`);
     }
   }
 

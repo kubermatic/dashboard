@@ -28,8 +28,4 @@ export enum ChipType {
 export class ChipComponent {
   @Input() text: string;
   @Input() type: 'info' | 'warning' | 'error' = ChipType.Info;
-
-  get typeClass(): string {
-    return `km-${this.type}-bg`;
-  }
 }
