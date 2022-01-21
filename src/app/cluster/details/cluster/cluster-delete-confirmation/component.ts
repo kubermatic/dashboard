@@ -47,7 +47,8 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck, OnDe
     private readonly _googleAnalyticsService: GoogleAnalyticsService,
     private readonly _clipboardService: ClipboardService,
     private readonly _notificationService: NotificationService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.deleteForm = new FormGroup({
@@ -88,7 +89,7 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck, OnDe
   }
 
   showWarning(): boolean {
-    return this.settings && !this.settings.cleanupOptions.Enforced;
+    return !this.settings?.cleanupOptions.Enforced && (!this.deleteForm.controls.clusterLBCleanupCheckbox.value || !this.deleteForm.controls.clusterVolumeCleanupCheckbox.value);
   }
 
   onChange(event: any): void {
