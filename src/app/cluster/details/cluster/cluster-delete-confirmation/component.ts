@@ -88,7 +88,11 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck, OnDe
   }
 
   showWarning(): boolean {
-    return !this.settings?.cleanupOptions.Enforced;
+    return (
+      !this.settings?.cleanupOptions.Enforced &&
+      (!this.deleteForm.controls.clusterLBCleanupCheckbox.value ||
+        !this.deleteForm.controls.clusterVolumeCleanupCheckbox.value)
+    );
   }
 
   onChange(event: any): void {

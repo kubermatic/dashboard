@@ -55,7 +55,7 @@ export function getIconClassForButton(type: string): string {
       return 'km-icon-mask km-icon-check i-24';
     case 'Regenerate':
     case 'Restart':
-      return 'km-icon-mask km-icon-regenerate w-24';
+      return 'km-icon-mask km-icon-regenerate i-24';
     case 'Reset':
       return 'km-icon-mask km-icon-reset w-24';
     case 'Disconnect':

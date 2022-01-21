@@ -15,7 +15,12 @@
 @use 'variables';
 
 .bar {
-  margin: 15px 0;
+  margin: 15px 0 5px;
+  transition: all 250ms ease-in-out;
+
+  &.expanded {
+    margin: 15px 0 25px;
+  }
 
   .label {
     cursor: pointer;

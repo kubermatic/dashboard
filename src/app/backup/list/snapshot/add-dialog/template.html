@@ -50,7 +50,8 @@ limitations under the License.
                        class="property-label"
                        fxFlex="25">
             <div key
-                 class="property-key">Seed</div>
+                 class="property-key">Seed
+            </div>
             <div value>{{seed}}</div>
           </km-property>
 
@@ -70,7 +71,8 @@ limitations under the License.
                        class="no-destinations"
                        fxFlex="75">
             <div key
-                 class="property-key">Destination *</div>
+                 class="property-key">Destination *
+            </div>
             <div value>
               <a class="km-pointer"
                  *ngIf="isAdmin"
@@ -90,7 +92,8 @@ limitations under the License.
             kmThrottleClick
             (throttleClick)="save()"
             [disabled]="form.invalid">
-      Add Snapshot
+      <i class="km-icon-mask km-icon-add"></i>
+      <span>Add Snapshot</span>
     </button>
   </mat-dialog-actions>
 </div>

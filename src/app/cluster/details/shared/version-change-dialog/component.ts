@@ -28,6 +28,7 @@ import {take, takeUntil} from 'rxjs/operators';
 @Component({
   selector: 'km-version-change-dialog',
   templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class VersionChangeDialogComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster | ExternalCluster;

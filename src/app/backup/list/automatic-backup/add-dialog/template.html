@@ -50,7 +50,8 @@ limitations under the License.
                        class="property-label"
                        fxFlex="25">
             <div key
-                 class="property-key">Seed</div>
+                 class="property-key">Seed
+            </div>
             <div value>{{seed}}</div>
           </km-property>
 
@@ -70,7 +71,8 @@ limitations under the License.
                        class="no-destinations"
                        fxFlex="75">
             <div key
-                 class="property-key">Destination *</div>
+                 class="property-key">Destination *
+            </div>
             <div value>
               <a class="km-pointer"
                  *ngIf="isAdmin"
@@ -93,14 +95,16 @@ limitations under the License.
 
         <mat-radio-button [value]="ScheduleOption.Weekly">
           <div class="km-radio-button-title">Weekly</div>
-          <div class="km-radio-button-description">Create backups every week at 22:00 on Monday and keep the backups for 4
+          <div class="km-radio-button-description">Create backups every week at 22:00 on Monday and keep the backups for
+            4
             weeks.
           </div>
         </mat-radio-button>
 
         <mat-radio-button [value]="ScheduleOption.Monthly">
           <div class="km-radio-button-title">Monthly</div>
-          <div class="km-radio-button-description">Create backups every month at 22:00 on 1st day of the month and keep the backups for 3
+          <div class="km-radio-button-description">Create backups every month at 22:00 on 1st day of the month and keep
+            the backups for 3
             months.
           </div>
         </mat-radio-button>
@@ -124,7 +128,8 @@ limitations under the License.
                  type="text"
                  matInput
                  required>
-          <mat-hint>Cron expression that describes how often a backup should be created. Must match the criteria specified
+          <mat-hint>
+            Cron expression that describes how often a backup should be created. Must match the criteria specified
             <a href="https://pkg.go.dev/github.com/robfig/cron?utm_source=godoc"
                target="_blank">here</a>.
           </mat-hint>
@@ -146,7 +151,8 @@ limitations under the License.
             kmThrottleClick
             (throttleClick)="save()"
             [disabled]="form.invalid">
-      Add Automatic Backup
+      <i class="km-icon-mask km-icon-add"></i>
+      <span>Add Automatic Backup</span>
     </button>
   </mat-dialog-actions>
 </div>
