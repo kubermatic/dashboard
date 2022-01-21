@@ -199,9 +199,9 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
         _ => {
           this.loadMachineDeployment();
           this.loadNodes();
-          this._notificationService.success(`The ${this.machineDeployment.name} machine deployment was updated`);
+          this._notificationService.success(`Updated the ${this.machineDeployment.name} machine deployment`);
         },
-        _ => this._notificationService.error('There was an error during machine deployment edition.')
+        _ => this._notificationService.error(`Could not edit the ${this.machineDeployment.name} machine deployment`)
       );
   }
 

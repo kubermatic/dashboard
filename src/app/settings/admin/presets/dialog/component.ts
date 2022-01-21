@@ -143,7 +143,7 @@ export class PresetDialogComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(_ => {
         this._dialogRef.close(true);
-        this._notificationService.success(`Preset ${this._presetDialogService.preset.metadata.name} has been created.`);
+        this._notificationService.success(`Created the ${this._presetDialogService.preset.metadata.name} preset`);
       });
   }
 
@@ -154,7 +154,7 @@ export class PresetDialogComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(preset => {
         this._dialogRef.close(true);
-        this._notificationService.success(`Preset ${preset.name} has been updated.`);
+        this._notificationService.success(`Updated the ${preset.name} preset`);
       });
   }
 }

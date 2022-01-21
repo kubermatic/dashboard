@@ -123,8 +123,6 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
   deleteSSHKey(sshKey: SSHKey): void {
     sshKey.deletionTimestamp = new Date();
     const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
       data: {
         title: 'Remove SSH Key',
         message: `Remove <b>${sshKey.name}</b>

@@ -165,8 +165,8 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
       config.data.warning = 'This is a default addon. It will be automatically restored after deletion.';
     }
 
-    const dialog = this._matDialog.open(ConfirmationDialogComponent, config);
-    dialog
+    this._matDialog
+      .open(ConfirmationDialogComponent, config)
       .afterClosed()
       .pipe(take(1))
       .subscribe(isConfirmed => {

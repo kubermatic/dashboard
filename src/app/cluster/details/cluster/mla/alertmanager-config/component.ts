@@ -199,11 +199,9 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
 
   reset(): void {
     const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
       data: {
         title: 'Reset Alertmanager Config',
-        message: `Reset Alertmanager Config of <b>${this.cluster.name}</b> cluster to default?`,
+        message: `Reset Alertmanager config of <b>${this.cluster.name}</b> cluster to default?`,
         confirmLabel: 'Reset',
       },
     };
@@ -215,7 +213,7 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
       .pipe(switchMap(_ => this._mlaService.resetAlertmanagerConfig(this.projectID, this.cluster.id)))
       .pipe(take(1))
       .subscribe(_ => {
-        this._notificationService.success('The Alertmanager Config was reset');
+        this._notificationService.success('The Alertmanager config was reset to default');
         this._mlaService.refreshAlertmanagerConfig();
       });
   }

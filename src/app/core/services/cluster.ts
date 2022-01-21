@@ -166,8 +166,6 @@ export class ClusterService {
 
   showDisconnectClusterDialog(cluster: ExternalCluster, projectID: string): Observable<any> {
     const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
       data: {
         title: 'Disconnect Cluster',
         message: `Are you sure you want to disconnect ${cluster.name} cluster?`,

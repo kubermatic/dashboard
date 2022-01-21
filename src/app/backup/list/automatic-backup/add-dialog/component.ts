@@ -152,8 +152,8 @@ export class AddAutomaticBackupDialogComponent implements OnInit, OnDestroy {
       .create(this._config.projectID, this._selectedClusterID, this._toEtcdBackupConfig())
       .pipe(take(1))
       .subscribe(_ => {
-        this._notificationService.success(`Successfully created automatic backup ${this._toEtcdBackupConfig().name}`);
         this._dialogRef.close(true);
+        this._notificationService.success(`Created the ${this._toEtcdBackupConfig().name} automatic backup`);
       });
   }
 

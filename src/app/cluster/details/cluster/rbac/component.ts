@@ -139,8 +139,6 @@ export class RBACComponent implements OnInit, OnDestroy {
     event.stopPropagation();
 
     const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
       data: {
         title: 'Delete Binding',
         message: `Delete binding for ${element.kind.toLowerCase()} <b>${element.name}</b> of <b>${
@@ -177,8 +175,6 @@ export class RBACComponent implements OnInit, OnDestroy {
     event.stopPropagation();
 
     const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
       data: {
         title: 'Delete Binding',
         message: `Delete binding for ${element.kind.toLowerCase()} <b>${element.name}</b> of <b>${

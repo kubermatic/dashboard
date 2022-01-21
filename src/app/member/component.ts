@@ -179,8 +179,6 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
 
   deleteMember(member: Member): void {
     const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
       data: {
         title: 'Remove Member',
         message: `Remove <b>${member.name}</b> from <b>${this._selectedProject.name}</b> project?`,

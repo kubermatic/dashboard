@@ -178,8 +178,6 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
   deleteServiceAccount(serviceAccount: ServiceAccount, event: Event): void {
     event.stopPropagation();
     const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
       data: {
         title: 'Delete Service Account',
         message: `Delete <b>${serviceAccount.name}</b> service account of <b>${this._selectedProject.name}</b> project permanently?`,

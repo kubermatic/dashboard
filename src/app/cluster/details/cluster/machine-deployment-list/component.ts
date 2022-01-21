@@ -124,7 +124,7 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
           this._notificationService.success(`The ${md.name} machine deployment was updated`);
           this.changeMachineDeployment.emit(md);
         },
-        _ => this._notificationService.error('There was an error during machine deployment edition.')
+        _ => this._notificationService.error(`Could not edit the ${md.name} machine deployment`)
       );
   }
 

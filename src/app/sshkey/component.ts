@@ -150,8 +150,6 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
   deleteSshKey(sshKey: SSHKey, event: Event): void {
     event.stopPropagation();
     const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
       data: {
         dialogId: 'km-delete-sshkey-dialog',
         title: 'Delete SSH Key',

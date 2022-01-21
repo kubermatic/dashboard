@@ -25,7 +25,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatOptionModule, MatRippleModule} from '@angular/material/core';
-import {MatDialogModule} from '@angular/material/dialog';
+import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule} from '@angular/material/dialog';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -223,7 +223,16 @@ const directives: any[] = [AutofocusDirective, ThrottleClickDirective, OptionDir
 @NgModule({
   imports: [...modules],
   declarations: [...components, ...directives],
-  providers: [DecimalPipe],
+  providers: [
+    DecimalPipe,
+    {
+      provide: MAT_DIALOG_DEFAULT_OPTIONS,
+      useValue: {
+        disableClose: false,
+        hasBackdrop: true,
+      },
+    },
+  ],
   exports: [...modules, ...components, ...directives],
 })
 export class SharedModule {}

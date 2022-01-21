@@ -105,7 +105,7 @@ export class AddSnapshotDialogComponent implements OnInit, OnDestroy {
       .create(this._config.projectID, this._selectedClusterID(), this._toEtcdBackupConfig())
       .pipe(take(1))
       .subscribe(_ => {
-        this._notificationService.success(`Successfully created snapshot ${this._toEtcdBackupConfig().name}`);
+        this._notificationService.success(`Created the ${this._toEtcdBackupConfig().name} snapshot`);
         this._dialogRef.close(true);
       });
   }
