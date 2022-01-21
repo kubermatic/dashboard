@@ -17,14 +17,14 @@ limitations under the License.
      title="Event Rate Limit Configuration">
   <mat-card-header class="km-no-padding">
     <mat-card-title>Event Rate Limit Configuration
-    <i class="km-icon-info km-pointer"
-        matTooltip="Limit requests to API Server to protect it from being flooded. Namespace is the only supported limit type at the moment. Hence, limits are applied per each namespace."></i>
+      <i class="km-icon-info km-pointer"
+         matTooltip="Limit requests to API Server to protect it from being flooded. Namespace is the only supported limit type at the moment. Hence, limits are applied per each namespace."></i>
     </mat-card-title>
   </mat-card-header>
   <form fxLayout="row"
         fxLayoutGap="8px"
         [formGroup]="form">
-      <mat-form-field class="km-dropdown-with-suffix">
+    <mat-form-field class="km-dropdown-with-suffix">
       <mat-label>Limit Type</mat-label>
       <mat-select [formControlName]="Controls.LimitType"
                   title="Namespace is the only supported limit type"

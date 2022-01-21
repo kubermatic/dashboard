@@ -86,7 +86,6 @@ export class DestinationsComponent implements OnInit {
       data: {
         title: 'Add Destination',
         mode: Mode.Add,
-        confirmLabel: 'Add',
         seed: this.seed,
       },
     };
@@ -99,7 +98,6 @@ export class DestinationsComponent implements OnInit {
       data: {
         title: 'Edit Destination',
         mode: Mode.Edit,
-        confirmLabel: 'Edit',
         seed: this.seed,
         destination: destination,
       },
@@ -127,7 +125,7 @@ export class DestinationsComponent implements OnInit {
         title: 'Delete Destination',
         message: `Delete <b>${destination.destinationName}</b> destination permanently?`,
         warning: 'Associated backups and snapshots will not be usable after deleting this destination.',
-        confirmLabel: 'Delete',
+        confirmLabel: 'Delete Destination',
       } as ConfirmationDialogConfig,
     };
 

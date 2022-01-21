@@ -90,6 +90,12 @@ limitations under the License.
         <div key>Services CIDR</div>
         <div value>{{cluster.spec.clusterNetwork.services.cidrBlocks.join(', ')}}</div>
       </km-property>
+      <km-property>
+        <div key>SSH Keys</div>
+        <div value>
+          <km-ssh-key-list [sshKeys]="getSSHKeys()"></km-ssh-key-list>
+        </div>
+      </km-property>
       <km-property-boolean label="Konnectivity"
                            [value]="cluster.spec.clusterNetwork?.konnectivityEnabled">
       </km-property-boolean>
@@ -129,7 +135,7 @@ limitations under the License.
           <div value
                fxLayout="row"
                fxLayoutGap="10px"
-               class="event-rate-limit" >
+               class="event-rate-limit">
             <div><span class="km-text-muted">Limit Type:</span> Namespace</div>
             <div><span class="km-text-muted">QPS:</span> {{cluster.spec.eventRateLimitConfig.namespace.qps}}</div>
             <div><span class="km-text-muted">Burst:</span> {{cluster.spec.eventRateLimitConfig.namespace.burst}}</div>
@@ -181,13 +187,6 @@ limitations under the License.
                            label="Disable system auto-update"
                            [value]="machineDeployment.spec.template.operatingSystem.flatcar.disableAutoUpdate">
       </km-property-boolean>
-      <div fxLayout="row"
-           fxLayoutAlign=" center"
-           fxLayoutGap="10px"
-           *ngIf="sshKeys && sshKeys.length">
-        <i class="km-icon-key"></i>
-        <span>{{sshKeys.join(', ')}}</span>
-      </div>
     </div>
   </div>
 

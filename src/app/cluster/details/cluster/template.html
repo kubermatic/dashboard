@@ -163,13 +163,15 @@ limitations under the License.
           <div key>Container Runtime</div>
           <div value>{{cluster.spec.containerRuntime}}</div>
         </km-property>
-        <km-property mode="value">
+        <km-property>
+          <div key>Provider</div>
           <div value
                class="km-provider-logo-value">
             <span class="km-provider-logo km-provider-logo-{{getProvider(nodeDc?.spec?.provider)}}"></span>
           </div>
         </km-property>
-        <km-property mode="value">
+        <km-property>
+          <div key>SSH Keys</div>
           <div value>
             <km-ssh-key-list [sshKeys]="sshKeys"></km-ssh-key-list>
           </div>
@@ -287,7 +289,7 @@ limitations under the License.
                                  [value]="isAdmissionPluginEnabled(plugin)">
             </km-property-boolean>
 
-            <km-property *ngIf="cluster?.spec?.eventRateLimitConfig">
+            <km-property *ngIf="cluster?.spec?.eventRateLimitConfig?.namespace">
               <div key>Event Rate Limit Config</div>
               <div value
                    fxLayout="row wrap"
@@ -322,9 +324,9 @@ limitations under the License.
 
             <div fxLayout="row">
               <km-property-boolean label="Audit Logging"
-                                   [value]="cluster.spec.auditLogging.enabled">
+                                   [value]="cluster.spec.auditLogging?.enabled">
               </km-property-boolean>
-              <span *ngIf="cluster.spec.auditLogging.enabled"
+              <span *ngIf="cluster.spec.auditLogging?.enabled"
                     class="km-label-primary secondary">{{cluster.spec.auditLogging.policyPreset || 'custom'}}</span>
             </div>
 

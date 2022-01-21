@@ -73,7 +73,13 @@ limitations under the License.
           kmThrottleClick
           (throttleClick)="save()"
           [disabled]="!form.valid">
-    <i [ngClass]="getIconClass()"></i>
-    <span>{{data.confirmLabel}} Destination</span>
+    <ng-container *ngIf="data.mode === Mode.Add">
+      <i class="km-icon-mask km-icon-add"></i>
+      <span>Add Destination</span>
+    </ng-container>
+    <ng-container *ngIf="data.mode === Mode.Edit">
+      <i class="km-icon-mask km-icon-save"></i>
+      <span>Save Changes</span>
+    </ng-container>
   </button>
 </mat-dialog-actions>

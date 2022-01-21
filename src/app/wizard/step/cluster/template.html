@@ -213,8 +213,7 @@ limitations under the License.
                            (labelsChange)="onPodNodeSelectorAdmissionPluginConfigChange($event)"
                            fxFlex="100"></km-label-form>
             <div *ngIf="isPluginEnabled(admissionPlugin.EventRateLimit)">
-              <km-wizard-cluster-event-rate-limit
-                [formControl]="form.get(Controls.EventRateLimitConfig)"></km-wizard-cluster-event-rate-limit>
+              <km-wizard-cluster-event-rate-limit [formControl]="form.get(Controls.EventRateLimitConfig)"></km-wizard-cluster-event-rate-limit>
             </div>
 
           </div>

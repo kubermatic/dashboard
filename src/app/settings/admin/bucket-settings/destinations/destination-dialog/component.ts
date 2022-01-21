@@ -18,13 +18,11 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
 import {AdminSeed, BackupDestination, DestinationDetails, Destinations} from '@shared/entity/datacenter';
-import {getIconClassForButton} from '@shared/utils/common-utils';
 import {Subject} from 'rxjs';
 
 export interface DestinationDialogData {
   title: string;
   mode: Mode;
-  confirmLabel: string;
   seed: AdminSeed;
 
   // Destination has to be specified only if dialog is used in the edit mode.
