@@ -111,17 +111,12 @@ export class DestinationDialog implements OnInit, OnDestroy {
 
     this._datacenterService.patchAdminSeed(configuration.name, configuration).subscribe(_ => {
       this._matDialogRef.close();
-      this._notificationService.success(this._notificationMessage());
+      this._notificationService.success(
+        `${this.data.mode === Mode.Add ? 'Added' : ' Created'} the ${
+          this.form.get(Controls.DestinationName).value
+        } destination`
+      );
       this._datacenterService.refreshAdminSeeds();
     });
-  }
-
-  private _notificationMessage(): string {
-    switch (this.data.mode) {
-      case Mode.Add:
-        return 'Destination was added';
-      case Mode.Edit:
-        return 'Destination was edited';
-    }
   }
 }
