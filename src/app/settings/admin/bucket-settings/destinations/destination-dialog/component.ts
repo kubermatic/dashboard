@@ -18,13 +18,11 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
 import {AdminSeed, BackupDestination, DestinationDetails, Destinations} from '@shared/entity/datacenter';
-import {getIconClassForButton} from '@shared/utils/common-utils';
 import {Subject} from 'rxjs';
 
 export interface DestinationDialogData {
   title: string;
   mode: Mode;
-  confirmLabel: string;
   seed: AdminSeed;
 
   // Destination has to be specified only if dialog is used in the edit mode.
@@ -78,9 +76,7 @@ export class DestinationDialog implements OnInit, OnDestroy {
       [Controls.Endpoint]: this._builder.control(this.data.mode === Mode.Edit ? this.data.destination.endpoint : '', [
         Validators.required,
       ]),
-      [Controls.Default]: this._builder.control(
-        this.data.mode === Mode.Edit && this.currentDefault === this.data.destination.destinationName
-      ),
+      [Controls.Default]: this._builder.control(this.data.mode === Mode.Edit && this._isDefault()),
     });
   }
 
@@ -89,8 +85,12 @@ export class DestinationDialog implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  getIconClass(): string {
-    return getIconClassForButton(this.data.confirmLabel);
+  displayOverwriteWarning(): boolean {
+    return !this._isDefault() && this.form.get(Controls.Default).value && !!this.currentDefault;
+  }
+
+  displayDeleteWarning(): boolean {
+    return this._isDefault() && !this.form.get(Controls.Default).value;
   }
 
   save(): void {
@@ -109,6 +109,10 @@ export class DestinationDialog implements OnInit, OnDestroy {
       configuration.spec.etcdBackupRestore.defaultDestination = this.form.get(Controls.DestinationName).value;
     }
 
+    if (this._isDefault() && !this.form.get(Controls.Default).value) {
+      configuration.spec.etcdBackupRestore.defaultDestination = '';
+    }
+
     this._datacenterService.patchAdminSeed(configuration.name, configuration).subscribe(_ => {
       this._matDialogRef.close();
       this._notificationService.success(
@@ -118,5 +122,9 @@ export class DestinationDialog implements OnInit, OnDestroy {
       );
       this._datacenterService.refreshAdminSeeds();
     });
+  }
+
+  private _isDefault(): boolean {
+    return !!this.currentDefault && this.currentDefault === this.data?.destination?.destinationName;
   }
 }

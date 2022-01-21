@@ -49,11 +49,22 @@ limitations under the License.
 
     <mat-checkbox [formControlName]="Controls.Default"
                   class="default-checkbox">
-      <span>Use as default for automatically generated etcd backups</span>
-      <i *ngIf="currentDefault"
-         class="km-icon-info km-pointer has-default-info-icon"
-         matTooltip="Will overwrite the current default: {{currentDefault}}"></i>
+      <span>Use as default for admin enforced backups for each cluster in the seed</span>
     </mat-checkbox>
+
+    <div class="km-dialog-warning"
+         *ngIf="displayOverwriteWarning()"
+         fxLayoutAlign=" start">
+      <i class="km-icon-error km-warning-bg"></i>
+      <div>Upon saving this setting, every new default backup will be created with this destination instead of "{{currentDefault}}", over time existing backups will be replaced by backups that use the new destination</div>
+    </div>
+
+    <div class="km-dialog-warning"
+         *ngIf="displayDeleteWarning()"
+         fxLayoutAlign=" start">
+      <i class="km-icon-error"></i>
+      <div>Disabling the default destination results in the termination of all default backups (Tip: to retain existing backups you can overwrite the default destination instead)</div>
+    </div>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
@@ -62,7 +73,13 @@ limitations under the License.
           kmThrottleClick
           (throttleClick)="save()"
           [disabled]="!form.valid">
-    <i [ngClass]="getIconClass()"></i>
-    <span>{{data.confirmLabel}} Destination</span>
+    <ng-container *ngIf="data.mode === Mode.Add">
+      <i class="km-icon-mask km-icon-add"></i>
+      <span>Add Destination</span>
+    </ng-container>
+    <ng-container *ngIf="data.mode === Mode.Edit">
+      <i class="km-icon-mask km-icon-save"></i>
+      <span>Save Changes</span>
+    </ng-container>
   </button>
 </mat-dialog-actions>
