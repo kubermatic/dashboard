@@ -47,8 +47,7 @@ export class VersionChangeDialogComponent implements OnInit, OnDestroy {
     private readonly _notificationService: NotificationService,
     private readonly _eolService: EndOfLifeService,
     private readonly _googleAnalyticsService: GoogleAnalyticsService
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     if (this.versions.length > 0) {
