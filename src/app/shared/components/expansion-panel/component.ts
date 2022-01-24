@@ -24,5 +24,5 @@ import {shrinkGrow} from '@shared/animations/grow';
 export class ExpansionPanelComponent {
   @Input() expandLabel = 'Show more';
   @Input() collapseLabel = 'Show less';
-  isExpanded = false;
+  @Input() expanded = false;
 }
