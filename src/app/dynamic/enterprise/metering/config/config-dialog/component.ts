@@ -77,12 +77,17 @@ export class MeteringConfigurationDialog implements OnInit, OnDestroy {
     this._meteringService
       .saveConfiguration(this._toMeteringConfiguration())
       .pipe(take(1))
-      .subscribe(_ => {
-        this._notificationService.success('Updated metering configuration');
-        this._matDialogRef.close(true);
-        this._meteringService.onConfigurationChange$.next();
-        this.saving = false;
-      });
+      .subscribe(
+        _ => {
+          this._notificationService.success('Updated metering configuration');
+          this._matDialogRef.close(true);
+          this._meteringService.onConfigurationChange$.next();
+          this.saving = false;
+        },
+        () => {
+          this.saving = false;
+        }
+      );
   }
 
   private _toMeteringConfiguration(): MeteringConfiguration {

@@ -74,12 +74,17 @@ export class MeteringCredentialsDialog implements OnInit, OnDestroy {
     this._meteringService
       .saveCredentials(this._toMeteringCredentials())
       .pipe(take(1))
-      .subscribe(_ => {
-        this._notificationService.success('Updated metering credentials');
-        this._matDialogRef.close(true);
-        this._meteringService.onCredentialsChange$.next();
-        this.saving = false;
-      });
+      .subscribe(
+        _ => {
+          this._notificationService.success('Updated metering credentials');
+          this._matDialogRef.close(true);
+          this._meteringService.onCredentialsChange$.next();
+          this.saving = false;
+        },
+        () => {
+          this.saving = false;
+        }
+      );
   }
 
   private _toMeteringCredentials(): MeteringCredentials {
