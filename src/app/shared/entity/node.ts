@@ -305,6 +305,13 @@ export function getDefaultNodeProviderSpec(provider: string): object {
         memory: 2048,
         diskSize: 20,
       } as AnexiaNodeSpec;
+    case NodeProvider.KUBEVIRT:
+      return {
+        cpus: '1',
+        memory: '2Gi',
+        pvcSize: '10Gi',
+        namespace: 'kube-system',
+      } as KubeVirtNodeSpec;
   }
   return {};
 }
