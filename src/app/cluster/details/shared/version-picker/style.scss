@@ -64,6 +64,10 @@
     .mat-form-field {
       font-size: variables.$font-size-subhead;
       max-width: 140px;
+
+      &.cluster-external {
+        max-width: 200px;
+      }
     }
   }
 

@@ -30,7 +30,7 @@ limitations under the License.
       <i class="km-icon-kubernetes"></i>
     </div>
 
-    <mat-form-field>
+    <mat-form-field [ngClass]="isClusterExternal ? 'cluster-external' : ''">
       <mat-label>Control Plane</mat-label>
       <mat-select [ngModel]="cluster.spec.version"
                   disabled
