@@ -41,20 +41,33 @@
 
         margin: 0 auto;
       }
+    }
 
-      .km-icon-update-available,
-      .km-icon-warning,
-      .km-icon-error {
-        @include mixins.size(16px);
+    .update-available-icon {
+      @include mixins.size(16px);
 
-        margin: 0 0 12px 22px;
-        position: absolute;
-      }
+      position: absolute;
+      right: 28px;
+      top: -9px;
+    }
+
+    .warning-icon,
+    .error-icon {
+      @include mixins.size(16px);
+
+      margin-right: 0;
+      position: absolute;
+      right: 28px;
+      top: -13px;
     }
 
     .mat-form-field {
       font-size: variables.$font-size-subhead;
-      max-width: 180px;
+      max-width: 140px;
+
+      &.cluster-external {
+        max-width: 200px;
+      }
     }
   }
 
