@@ -99,10 +99,13 @@ export class DestinationDialog implements OnInit, OnDestroy {
       [Controls.Endpoint]: this.form.get(Controls.Endpoint).value,
     };
 
-    const destination: Destinations = this.data.seed.spec.etcdBackupRestore.destinations;
+    const destination: Destinations = this.data.seed.spec.etcdBackupRestore?.destinations || {};
     destination[this.form.get(Controls.DestinationName).value] = destinationDetails;
 
     const configuration: AdminSeed = this.data.seed;
+    if (!configuration.spec.etcdBackupRestore) {
+      configuration.spec['etcdBackupRestore'] = {destinations: {}};
+    }
     configuration.spec.etcdBackupRestore.destinations = destination;
 
     if (this.form.get(Controls.Default).value) {
