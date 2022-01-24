@@ -104,7 +104,7 @@ export class DestinationDialog implements OnInit, OnDestroy {
 
     const configuration: AdminSeed = this.data.seed;
     if (!configuration.spec.etcdBackupRestore) {
-      configuration.spec['etcdBackupRestore'] = {destinations: {}};
+      configuration.spec.etcdBackupRestore = {destinations: {}};
     }
     configuration.spec.etcdBackupRestore.destinations = destination;
 
