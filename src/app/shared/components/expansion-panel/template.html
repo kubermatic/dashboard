@@ -17,7 +17,7 @@ limitations under the License.
 <div fxLayout="column">
   <div class="bar"
        [ngClass]="expanded ? 'expanded' : ''"
-       (click)="expanded = !expanded"
+       (click)="onClick()"
        [ngSwitch]="expanded">
     <div fxLayoutAlign="center center"
          fxLayoutGap="4px"

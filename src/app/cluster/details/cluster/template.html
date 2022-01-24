@@ -201,7 +201,7 @@ limitations under the License.
 
       <km-expansion-panel expandLabel="SHOW ADDITIONAL CLUSTER INFORMATION"
                           collapseLabel="HIDE ADDITIONAL CLUSTER INFORMATION"
-                          [expanded]="!isClusterRunning && areMachineDeploymentsInitialized">
+                          [expanded]="onExpandChange$ | async">
         <div fxLayout="row wrap"
              class="cluster-info-container">
           <div fxFlex="33"
