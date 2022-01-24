@@ -34,13 +34,6 @@ import {GCPDiskType, GCPMachineSize, GCPZone} from '@shared/entity/provider/gcp'
 import {HetznerTypes} from '@shared/entity/provider/hetzner';
 import {OpenstackAvailabilityZone, OpenstackFlavor} from '@shared/entity/provider/openstack';
 import {EquinixSize} from '@shared/entity/provider/equinix';
-import {
-  CreateTokenEntity,
-  ServiceAccount,
-  ServiceAccountModel,
-  ServiceAccountToken,
-  ServiceAccountTokenPatch,
-} from '@shared/entity/service-account';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {Observable, of, timer} from 'rxjs';
 import {catchError, shareReplay, switchMap} from 'rxjs/operators';
@@ -280,68 +273,6 @@ export class ApiService {
 
   deleteMembers(projectID: string, member: Member): Observable<any> {
     const url = `${this._restRoot}/projects/${projectID}/users/${member.id}`;
-    return this._http.delete(url);
-  }
-
-  getServiceAccounts(projectID: string): Observable<ServiceAccount[]> {
-    const url = `${this._restRoot}/projects/${projectID}/serviceaccounts`;
-    return this._http.get<ServiceAccount[]>(url);
-  }
-
-  createServiceAccount(projectID: string, serviceaccount: ServiceAccountModel): Observable<ServiceAccount> {
-    const url = `${this._restRoot}/projects/${projectID}/serviceaccounts`;
-    return this._http.post<ServiceAccount>(url, serviceaccount);
-  }
-
-  editServiceAccount(projectID: string, serviceaccount: ServiceAccount): Observable<ServiceAccount> {
-    const url = `${this._restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}`;
-    return this._http.put<ServiceAccount>(url, serviceaccount);
-  }
-
-  deleteServiceAccount(projectID: string, serviceaccount: ServiceAccount): Observable<any> {
-    const url = `${this._restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}`;
-    return this._http.delete(url);
-  }
-
-  getServiceAccountTokens(projectID: string, serviceaccount: ServiceAccount): Observable<ServiceAccountToken[]> {
-    const url = `${this._restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}/tokens`;
-    return this._http.get<ServiceAccountToken[]>(url);
-  }
-
-  createServiceAccountToken(
-    projectID: string,
-    serviceaccount: ServiceAccount,
-    token: CreateTokenEntity
-  ): Observable<ServiceAccountToken> {
-    const url = `${this._restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}/tokens`;
-    return this._http.post<ServiceAccountToken>(url, token);
-  }
-
-  regenerateServiceAccountToken(
-    projectID: string,
-    serviceaccount: ServiceAccount,
-    token: ServiceAccountToken
-  ): Observable<ServiceAccountToken> {
-    const url = `${this._restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}/tokens/${token.id}`;
-    return this._http.put<ServiceAccountToken>(url, token);
-  }
-
-  patchServiceAccountToken(
-    projectID: string,
-    serviceaccount: ServiceAccount,
-    token: ServiceAccountToken,
-    patchToken: ServiceAccountTokenPatch
-  ): Observable<ServiceAccountToken> {
-    const url = `${this._restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}/tokens/${token.id}`;
-    return this._http.patch<ServiceAccountToken>(url, patchToken);
-  }
-
-  deleteServiceAccountToken(
-    projectID: string,
-    serviceaccount: ServiceAccount,
-    token: ServiceAccountToken
-  ): Observable<any> {
-    const url = `${this._restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}/tokens/${token.id}`;
     return this._http.delete(url);
   }
 

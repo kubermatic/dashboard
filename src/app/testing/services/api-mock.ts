@@ -19,12 +19,6 @@ import {Cluster, MasterVersion, Token} from '@shared/entity/cluster';
 import {CreateMember, Member} from '@shared/entity/member';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {Node} from '@shared/entity/node';
-import {
-  ServiceAccount,
-  ServiceAccountModel,
-  ServiceAccountToken,
-  ServiceAccountTokenPatch,
-} from '@shared/entity/service-account';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {fakeDigitaloceanSizes, fakeEquinixSizes} from '../fake-data/add-node-modal';
 import {fakeAlibabaInstanceTypes, fakeAlibabaVSwitches, fakeAlibabaZones} from '../fake-data/alibaba';
@@ -33,12 +27,6 @@ import {masterVersionsFake} from '../fake-data/cluster-spec';
 import {fakeToken} from '../fake-data/cluster';
 import {fakeMember, fakeMembers} from '../fake-data/member';
 import {machineDeploymentsFake, nodesFake} from '../fake-data/node';
-import {
-  fakeServiceAccount,
-  fakeServiceAccounts,
-  fakeServiceAccountToken,
-  fakeServiceAccountTokens,
-} from '../fake-data/serviceaccount';
 import {fakeSSHKeys} from '../fake-data/sshkey';
 import {fakeVSphereNetworks} from '../fake-data/vsphere';
 import {VSphereNetwork} from '@shared/entity/provider/vsphere';
@@ -56,10 +44,6 @@ export class ApiMockService {
   token: Token = fakeToken();
   member: Member = fakeMember();
   members: Member[] = fakeMembers();
-  serviceAccount: ServiceAccount = fakeServiceAccount();
-  serviceAccounts: ServiceAccount[] = fakeServiceAccounts();
-  serviceAccountToken: ServiceAccountToken = fakeServiceAccountToken();
-  serviceAccountTokens: ServiceAccountToken[] = fakeServiceAccountTokens();
   vsphereNetworks: VSphereNetwork[] = fakeVSphereNetworks();
 
   get addonConfigs(): Observable<any> {
@@ -131,65 +115,8 @@ export class ApiMockService {
     return of(null);
   }
 
-  getServiceAccounts(_projectID: string): Observable<ServiceAccount[]> {
-    return of(this.serviceAccounts);
-  }
-
-  createServiceAccount(_projectID: string, _serviceAccount: ServiceAccountModel): Observable<ServiceAccount> {
-    return of(this.serviceAccount);
-  }
-
-  editServiceAccount(_projectID: string, _serviceAccount: ServiceAccount): Observable<ServiceAccount> {
-    return of(this.serviceAccount);
-  }
-
-  deleteServiceAccount(_projectID: string, _serviceAccount: ServiceAccount): Observable<any> {
-    return of(null);
-  }
-
   getVSphereNetworks(_username: string, _password: string, _datacenterName: string): Observable<VSphereNetwork[]> {
     return of(this.vsphereNetworks);
-  }
-
-  getServiceAccountTokens(_projectID: string, _serviceaccount: ServiceAccount): Observable<ServiceAccountToken[]> {
-    return of(this.serviceAccountTokens);
-  }
-
-  createServiceAccountToken(_projectID: string, _serviceaccount: ServiceAccount): Observable<ServiceAccountToken> {
-    return of(this.serviceAccountToken);
-  }
-
-  editServiceAccountToken(
-    _projectID: string,
-    _serviceAccount: ServiceAccount,
-    _token: ServiceAccountToken
-  ): Observable<ServiceAccountToken> {
-    return of(this.serviceAccountToken);
-  }
-
-  regenerateServiceAccountToken(
-    _projectID: string,
-    _serviceaccount: ServiceAccount,
-    _token: ServiceAccountToken
-  ): Observable<ServiceAccountToken> {
-    return of(this.serviceAccountToken);
-  }
-
-  patchServiceAccountToken(
-    _projectID: string,
-    _serviceaccount: ServiceAccount,
-    _token: ServiceAccountToken,
-    _patchToken: ServiceAccountTokenPatch
-  ): Observable<ServiceAccountToken> {
-    return of(this.serviceAccountToken);
-  }
-
-  deleteServiceAccountToken(
-    _projectID: string,
-    _serviceaccount: ServiceAccount,
-    _token: ServiceAccountToken
-  ): Observable<any> {
-    return of(null);
   }
 
   getDigitaloceanSizes(): Observable<DigitaloceanSizes> {

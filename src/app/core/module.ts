@@ -59,6 +59,7 @@ import {SidenavComponent} from './components/sidenav/component';
 import {UserPanelComponent} from './components/user-panel/component';
 import {AuthInterceptor, CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor} from './interceptors';
 import {ClusterTemplateService} from '@core/services/cluster-templates';
+import {ServiceAccountService} from '@core/services/service-account';
 
 const modules: any[] = [
   CommonModule,
@@ -114,6 +115,7 @@ const services: any[] = [
   BackupService,
   MeteringService,
   BackupService,
+  ServiceAccountService,
 ];
 
 const interceptors: any[] = [

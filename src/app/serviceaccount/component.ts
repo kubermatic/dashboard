@@ -19,7 +19,6 @@ import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {ApiService} from '@core/services/api';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
@@ -33,6 +32,7 @@ import {EMPTY, merge, of, Subject, timer} from 'rxjs';
 import {catchError, filter, switchMap, switchMapTo, take, takeUntil} from 'rxjs/operators';
 import {CreateServiceAccountDialogComponent} from './create-dialog/component';
 import {EditServiceAccountDialogComponent} from './edit-dialog/component';
+import {ServiceAccountService} from '@core/services/service-account';
 
 @Component({
   selector: 'km-serviceaccount',
@@ -59,7 +59,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
   private _currentGroupConfig: GroupConfig;
 
   constructor(
-    private readonly _apiService: ApiService,
+    private readonly _serviceAccountService: ServiceAccountService,
     private readonly _projectService: ProjectService,
     private readonly _userService: UserService,
     private readonly _googleAnalyticsService: GoogleAnalyticsService,
@@ -91,8 +91,8 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(
         switchMap(userGroup => {
           this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup);
-          return this._apiService
-            .getServiceAccounts(this._selectedProject.id)
+          return this._serviceAccountService
+            .get(this._selectedProject.id)
             .pipe(catchError(() => of<ServiceAccount[]>([])));
         })
       )
@@ -136,7 +136,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(
         switchMap(() =>
           this.tokenList[serviceaccount.id]
-            ? this._apiService.getServiceAccountTokens(this._selectedProject.id, serviceaccount)
+            ? this._serviceAccountService.getTokens(this._selectedProject.id, serviceaccount)
             : EMPTY
         )
       )
@@ -185,13 +185,11 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
       },
     };
 
-    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
-    this._googleAnalyticsService.emitEvent('serviceAccountOverview', 'deleteServiceAccountOpened');
-
-    dialogRef
+    this._matDialog
+      .open(ConfirmationDialogComponent, dialogConfig)
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
-      .pipe(switchMap(_ => this._apiService.deleteServiceAccount(this._selectedProject.id, serviceAccount)))
+      .pipe(switchMap(_ => this._serviceAccountService.delete(this._selectedProject.id, serviceAccount)))
       .pipe(take(1))
       .subscribe(() => {
         delete this.tokenList[serviceAccount.id];
@@ -201,6 +199,8 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
         );
         this._googleAnalyticsService.emitEvent('serviceAccountOverview', 'ServiceAccountDeleted');
       });
+
+    this._googleAnalyticsService.emitEvent('serviceAccountOverview', 'deleteServiceAccountOpened');
   }
 
   isPaginatorVisible(): boolean {
