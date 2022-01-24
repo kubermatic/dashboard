@@ -25,7 +25,6 @@ import {MachineDeployment, MachineDeploymentPatch} from '@shared/entity/machine-
 import {CreateMember, Member} from '@shared/entity/member';
 import {NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
-import {Project, ProjectModel} from '@shared/entity/project';
 import {AlibabaInstanceType, AlibabaVSwitch, AlibabaZone} from '@shared/entity/provider/alibaba';
 import {AnexiaTemplate, AnexiaVlan} from '@shared/entity/provider/anexia';
 import {AWSSize, AWSSubnet} from '@shared/entity/provider/aws';
@@ -118,16 +117,6 @@ export class ApiService {
   restartMachineDeployment(cluster: string, md: MachineDeployment, projectID: string): Observable<any> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments/${md.id}/restart`;
     return this._http.post(url, {});
-  }
-
-  createProject(model: ProjectModel): Observable<Project> {
-    const url = `${this._restRoot}/projects`;
-    return this._http.post<Project>(url, model);
-  }
-
-  editProject(projectID: string, model: ProjectModel): Observable<any> {
-    const url = `${this._restRoot}/projects/${projectID}`;
-    return this._http.put(url, model);
   }
 
   getSSHKeys(projectID: string): Observable<SSHKey[]> {

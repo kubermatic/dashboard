@@ -33,7 +33,6 @@ import {masterVersionsFake} from '../fake-data/cluster-spec';
 import {fakeToken} from '../fake-data/cluster';
 import {fakeMember, fakeMembers} from '../fake-data/member';
 import {machineDeploymentsFake, nodesFake} from '../fake-data/node';
-import {fakeProject, fakeProjects} from '../fake-data/project';
 import {
   fakeServiceAccount,
   fakeServiceAccounts,
@@ -42,7 +41,6 @@ import {
 } from '../fake-data/serviceaccount';
 import {fakeSSHKeys} from '../fake-data/sshkey';
 import {fakeVSphereNetworks} from '../fake-data/vsphere';
-import {Project, ProjectModel} from '@shared/entity/project';
 import {VSphereNetwork} from '@shared/entity/provider/vsphere';
 import {AlibabaInstanceType, AlibabaVSwitch, AlibabaZone} from '@shared/entity/provider/alibaba';
 import {AnexiaTemplate, AnexiaVlan} from '@shared/entity/provider/anexia';
@@ -52,8 +50,6 @@ import {DigitaloceanSizes} from '@shared/entity/provider/digitalocean';
 
 @Injectable()
 export class ApiMockService {
-  project: Project = fakeProject();
-  projects: Project[] = fakeProjects();
   sshKeys: SSHKey[] = fakeSSHKeys();
   nodes: Node[] = nodesFake();
   masterVersions: MasterVersion[] = masterVersionsFake();
@@ -89,22 +85,6 @@ export class ApiMockService {
 
   getMachineDeploymentNodesEvents(_mdId: string, _cluster: string, _dc: string, _projectID: string): Observable<any[]> {
     return of([]);
-  }
-
-  getProjects(): Observable<Project[]> {
-    return of(this.projects);
-  }
-
-  createProject(): Observable<Project> {
-    return of(this.project);
-  }
-
-  editProject(_projectID: string, _editProjectEntity: ProjectModel): Observable<any> {
-    return of(this.project);
-  }
-
-  deleteProject(_projectID: string): Observable<any> {
-    return of(null);
   }
 
   getSSHKeys(): Observable<SSHKey[]> {

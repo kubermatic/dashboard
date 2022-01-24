@@ -19,7 +19,7 @@ import {AppConfigService} from '@app/config.service';
 import {ParamsService, PathParam} from '@core/services/params';
 import {UserService} from '@core/services/user';
 import {environment} from '@environments/environment';
-import {Project} from '@shared/entity/project';
+import {Project, ProjectModel} from '@shared/entity/project';
 import {EMPTY, merge, Observable, of, Subject, timer} from 'rxjs';
 import {catchError, map, shareReplay, switchMap} from 'rxjs/operators';
 
@@ -75,6 +75,16 @@ export class ProjectService {
     }
 
     return this._project$;
+  }
+
+  create(model: ProjectModel): Observable<Project> {
+    const url = `${this._restRoot}/projects`;
+    return this._http.post<Project>(url, model);
+  }
+
+  edit(projectID: string, model: ProjectModel): Observable<Project> {
+    const url = `${this._restRoot}/projects/${projectID}`;
+    return this._http.put<Project>(url, model);
   }
 
   delete(projectID: string): Observable<Project> {
