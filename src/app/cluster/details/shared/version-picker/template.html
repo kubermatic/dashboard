@@ -28,13 +28,6 @@ limitations under the License.
     <div class="km-version-picker-type"
          fxLayoutAlign="center center">
       <i class="km-icon-kubernetes"></i>
-      <i *ngIf="hasAvailableUpdates()"
-         matTooltip="Updates available"
-         class="km-icon-update-available"></i>
-      <i *ngIf="isClusterBeforeEOL()"
-         class="km-icon-warning"></i>
-      <i *ngIf="isClusterAfterEOL()"
-         class="km-icon-error"></i>
     </div>
 
     <mat-form-field>
@@ -46,6 +39,16 @@ limitations under the License.
           {{cluster.spec.version}}
         </mat-option>
       </mat-select>
+      <i *ngIf="hasAvailableUpdates()"
+         matSuffix
+         matTooltip="Updates available"
+         class="km-icon-update-available update-available-icon"></i>
+      <i *ngIf="isClusterBeforeEOL()"
+         matSuffix
+         class="km-icon-warning warning-icon"></i>
+      <i *ngIf="isClusterAfterEOL()"
+         matSuffix
+         class="km-icon-error error-icon"></i>
     </mat-form-field>
 
   </div>
