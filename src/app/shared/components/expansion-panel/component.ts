@@ -22,7 +22,27 @@ import {shrinkGrow} from '@shared/animations/grow';
   animations: [shrinkGrow],
 })
 export class ExpansionPanelComponent {
+  private _initialized = false;
   @Input() expandLabel = 'Show more';
   @Input() collapseLabel = 'Show less';
-  isExpanded = false;
+
+  private _expanded = false;
+
+  get expanded(): boolean {
+    return this._expanded;
+  }
+
+  @Input()
+  set expanded(expanded: boolean) {
+    if (this._initialized || expanded === null || expanded === undefined) {
+      return;
+    }
+
+    this._expanded = expanded;
+    this._initialized = true;
+  }
+
+  onClick(): void {
+    this._expanded = !this._expanded;
+  }
 }
