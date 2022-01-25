@@ -21,7 +21,6 @@ import {environment} from '@environments/environment';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {LabelFormComponent} from '@shared/components/label-form/component';
 import {TaintFormComponent} from '@shared/components/taint-form/component';
-import {Addon} from '@shared/entity/addon';
 import {EtcdRestore} from '@shared/entity/backup';
 import {
   Cluster,
@@ -291,26 +290,6 @@ export class ClusterService {
 
   deleteSSHKey(projectID: string, clusterID: string, sshKeyID: string): Observable<any> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/sshkeys/${sshKeyID}`;
-    return this._http.delete(url);
-  }
-
-  addons(projectID: string, cluster: string): Observable<Addon[]> {
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/addons`;
-    return this._http.get<Addon[]>(url).pipe(catchError(() => of<Addon[]>([])));
-  }
-
-  createAddon(addon: Addon, projectID: string, cluster: string): Observable<Addon> {
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/addons`;
-    return this._http.post<Addon>(url, addon);
-  }
-
-  editAddon(addon: Addon, projectID: string, cluster: string): Observable<Addon> {
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/addons/${addon.name}`;
-    return this._http.patch<Addon>(url, addon);
-  }
-
-  deleteAddon(addonID: string, projectID: string, cluster: string): Observable<any> {
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/addons/${addonID}`;
     return this._http.delete(url);
   }
 

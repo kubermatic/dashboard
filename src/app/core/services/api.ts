@@ -14,11 +14,9 @@
 
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {AppConfigService} from '@app/config.service';
 import {environment} from '@environments/environment';
 import {LabelFormComponent} from '@shared/components/label-form/component';
 import {TaintFormComponent} from '@shared/components/taint-form/component';
-import {AddonConfig} from '@shared/entity/addon';
 import {Cluster, CNIPlugin, CNIPluginVersions, MasterVersion, Token} from '@shared/entity/cluster';
 import {Event} from '@shared/entity/event';
 import {MachineDeployment, MachineDeploymentPatch} from '@shared/entity/machine-deployment';
@@ -34,29 +32,17 @@ import {HetznerTypes} from '@shared/entity/provider/hetzner';
 import {OpenstackAvailabilityZone, OpenstackFlavor} from '@shared/entity/provider/openstack';
 import {EquinixSize} from '@shared/entity/provider/equinix';
 import {SSHKey} from '@shared/entity/ssh-key';
-import {Observable, of, timer} from 'rxjs';
-import {catchError, shareReplay, switchMap} from 'rxjs/operators';
+import {Observable, of} from 'rxjs';
+import {catchError} from 'rxjs/operators';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 
 @Injectable()
 export class ApiService {
-  private readonly _refreshTime = 30; // in seconds
   private _location: string = window.location.protocol + '//' + window.location.host;
   private _restRoot: string = environment.restRoot;
   private _newRestRoot: string = environment.newRestRoot;
-  private _addonConfigs$: Observable<any>;
-  private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * this._refreshTime);
 
-  constructor(private readonly _http: HttpClient, private readonly _appConfig: AppConfigService) {}
-
-  get addonConfigs(): Observable<AddonConfig[]> {
-    if (!this._addonConfigs$) {
-      this._addonConfigs$ = this._refreshTimer$
-        .pipe(switchMap(() => this._http.get(`${this._restRoot}/addonconfigs`)))
-        .pipe(shareReplay({refCount: true, bufferSize: 1}));
-    }
-    return this._addonConfigs$;
-  }
+  constructor(private readonly _http: HttpClient) {}
 
   createMachineDeployment(md: MachineDeployment, clusterID: string, projectID: string): Observable<MachineDeployment> {
     md.spec.template.labels = LabelFormComponent.filterNullifiedKeys(md.spec.template.labels);
@@ -253,11 +239,6 @@ export class ApiService {
     const url = `${this._newRestRoot}/projects/${projectId}/clusters/${cluster}/providers/azure/availabilityzones`;
     const headers = new HttpHeaders().set('SKUName', size);
     return this._http.get<AzureZones>(url, {headers});
-  }
-
-  getAccessibleAddons(): Observable<string[]> {
-    const url = `${this._restRoot}/addons`;
-    return this._http.get<string[]>(url);
   }
 
   getSwaggerJson(): Observable<any> {
