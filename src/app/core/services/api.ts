@@ -12,19 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {environment} from '@environments/environment';
 import {Cluster, CNIPlugin, CNIPluginVersions, MasterVersion, Token} from '@shared/entity/cluster';
-import {AlibabaInstanceType, AlibabaVSwitch, AlibabaZone} from '@shared/entity/provider/alibaba';
-import {AnexiaTemplate, AnexiaVlan} from '@shared/entity/provider/anexia';
-import {AWSSize, AWSSubnet} from '@shared/entity/provider/aws';
-import {AzureSizes, AzureZones} from '@shared/entity/provider/azure';
-import {DigitaloceanSizes} from '@shared/entity/provider/digitalocean';
-import {GCPDiskType, GCPMachineSize, GCPZone} from '@shared/entity/provider/gcp';
-import {HetznerTypes} from '@shared/entity/provider/hetzner';
-import {OpenstackAvailabilityZone, OpenstackFlavor} from '@shared/entity/provider/openstack';
-import {EquinixSize} from '@shared/entity/provider/equinix';
 import {Observable} from 'rxjs';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 
@@ -36,50 +27,6 @@ export class ApiService {
 
   constructor(private readonly _http: HttpClient) {}
 
-  getDigitaloceanSizes(projectId: string, clusterId: string): Observable<DigitaloceanSizes> {
-    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/digitalocean/sizes`;
-    return this._http.get<DigitaloceanSizes>(url);
-  }
-
-  getHetznerTypes(projectId: string, clusterId: string): Observable<HetznerTypes> {
-    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/hetzner/sizes`;
-    return this._http.get<HetznerTypes>(url);
-  }
-
-  getEquinixSizes(projectId: string, clusterId: string): Observable<EquinixSize[]> {
-    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/packet/sizes`;
-    return this._http.get<EquinixSize[]>(url);
-  }
-
-  getAlibabaInstanceTypes(projectId: string, clusterId: string, region: string): Observable<AlibabaInstanceType[]> {
-    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/alibaba/instancetypes`;
-    const headers = new HttpHeaders().set('Region', region);
-    return this._http.get<AlibabaInstanceType[]>(url, {headers});
-  }
-
-  getAlibabaZones(projectId: string, clusterId: string, region: string): Observable<AlibabaZone[]> {
-    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/alibaba/zones`;
-    const headers = new HttpHeaders().set('Region', region);
-    return this._http.get<AlibabaZone[]>(url, {headers});
-  }
-
-  getAlibabaVSwitches(projectId: string, clusterId: string, region: string): Observable<AlibabaVSwitch[]> {
-    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/alibaba/vswitches`;
-    const headers = new HttpHeaders().set('Region', region);
-    return this._http.get<AlibabaVSwitch[]>(url, {headers});
-  }
-
-  getAnexiaVlans(projectId: string, clusterId: string): Observable<AnexiaVlan[]> {
-    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/anexia/vlans`;
-    return this._http.get<AnexiaVlan[]>(url);
-  }
-
-  getAnexiaTemplates(projectId: string, clusterId: string, location: string): Observable<AnexiaTemplate[]> {
-    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/anexia/templates`;
-    const headers = new HttpHeaders().set('Location', location);
-    return this._http.get<AnexiaTemplate[]>(url, {headers});
-  }
-
   editToken(cluster: Cluster, projectID: string, token: Token): Observable<Token> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster.id}/token`;
     return this._http.put<Token>(url, token);
@@ -88,43 +35,6 @@ export class ApiService {
   editViewerToken(cluster: Cluster, projectID: string, token: Token): Observable<Token> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster.id}/viewertoken`;
     return this._http.put<Token>(url, token);
-  }
-
-  getAWSSubnets(projectId: string, clusterId: string): Observable<AWSSubnet[]> {
-    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/aws/subnets`;
-    return this._http.get<AWSSubnet[]>(url);
-  }
-
-  getAWSSizes(projectId: string, clusterId: string): Observable<AWSSize[]> {
-    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/aws/sizes`;
-    return this._http.get<AWSSize[]>(url);
-  }
-
-  getGCPZones(projectId: string, clusterId: string): Observable<GCPZone[]> {
-    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/gcp/zones`;
-    return this._http.get<GCPZone[]>(url);
-  }
-
-  getGCPSizes(zone: string, projectId: string, clusterId: string): Observable<GCPMachineSize[]> {
-    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/gcp/sizes`;
-    const headers = new HttpHeaders().set('Zone', zone);
-    return this._http.get<GCPMachineSize[]>(url, {headers});
-  }
-
-  getGCPDiskTypes(zone: string, projectId: string, clusterId: string): Observable<GCPDiskType[]> {
-    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/gcp/disktypes`;
-    const headers = new HttpHeaders().set('Zone', zone);
-    return this._http.get<GCPDiskType[]>(url, {headers});
-  }
-
-  getOpenStackFlavors(projectId: string, cluster: string): Observable<OpenstackFlavor[]> {
-    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${cluster}/providers/openstack/sizes`;
-    return this._http.get<OpenstackFlavor[]>(url);
-  }
-
-  getOpenStackAvailabilityZones(projectId: string, cluster: string): Observable<OpenstackAvailabilityZone[]> {
-    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${cluster}/providers/openstack/availabilityzones`;
-    return this._http.get<OpenstackAvailabilityZone[]>(url);
   }
 
   getKubeconfigURL(projectID: string, clusterID: string): string {
@@ -152,17 +62,6 @@ export class ApiService {
   getCNIPluginVersions(cniPlugin: CNIPlugin): Observable<CNIPluginVersions> {
     const url = `${this._newRestRoot}/cni/${cniPlugin}/versions`;
     return this._http.get<CNIPluginVersions>(url);
-  }
-
-  getAzureSizes(projectId: string, cluster: string): Observable<AzureSizes[]> {
-    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${cluster}/providers/azure/sizes`;
-    return this._http.get<AzureSizes[]>(url);
-  }
-
-  getAzureAvailabilityZones(projectId: string, cluster: string, size: string): Observable<AzureZones> {
-    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${cluster}/providers/azure/availabilityzones`;
-    const headers = new HttpHeaders().set('SKUName', size);
-    return this._http.get<AzureZones>(url, {headers});
   }
 
   getSwaggerJson(): Observable<any> {
