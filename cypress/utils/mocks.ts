@@ -148,6 +148,7 @@ export class Mocks {
     {m: RequestType.GET, p: Endpoint.Hetzner.Sizes, r: {fixture: 'hetzner/sizes.json'}},
     {m: RequestType.GET, p: Endpoint.OpenStack.AvailabilityZones, r: {fixture: 'openstack/availabilityzones.json'}},
     {m: RequestType.GET, p: Endpoint.OpenStack.Sizes, r: {fixture: 'openstack/sizes.json'}},
+    {m: RequestType.GET, p: Endpoint.Changelog, r: {}},
   ];
 
   static enabled(): boolean {
