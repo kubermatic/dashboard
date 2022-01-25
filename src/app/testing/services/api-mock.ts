@@ -16,7 +16,6 @@ import {Injectable} from '@angular/core';
 import {defer, Observable, of} from 'rxjs';
 import {async} from 'rxjs-compat/scheduler/async';
 import {Cluster, MasterVersion, Token} from '@shared/entity/cluster';
-import {CreateMember, Member} from '@shared/entity/member';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {Node} from '@shared/entity/node';
 import {SSHKey} from '@shared/entity/ssh-key';
@@ -25,7 +24,6 @@ import {fakeAlibabaInstanceTypes, fakeAlibabaVSwitches, fakeAlibabaZones} from '
 import {fakeAnexiaTemplates, fakeAnexiaVlans} from '../fake-data/anexia';
 import {masterVersionsFake} from '../fake-data/cluster-spec';
 import {fakeToken} from '../fake-data/cluster';
-import {fakeMember, fakeMembers} from '../fake-data/member';
 import {machineDeploymentsFake, nodesFake} from '../fake-data/node';
 import {fakeSSHKeys} from '../fake-data/sshkey';
 import {fakeVSphereNetworks} from '../fake-data/vsphere';
@@ -42,8 +40,6 @@ export class ApiMockService {
   nodes: Node[] = nodesFake();
   masterVersions: MasterVersion[] = masterVersionsFake();
   token: Token = fakeToken();
-  member: Member = fakeMember();
-  members: Member[] = fakeMembers();
   vsphereNetworks: VSphereNetwork[] = fakeVSphereNetworks();
 
   get addonConfigs(): Observable<any> {
@@ -97,22 +93,6 @@ export class ApiMockService {
 
   getMasterVersions(): Observable<MasterVersion[]> {
     return of(this.masterVersions);
-  }
-
-  getMembers(_projectID: string): Observable<Member[]> {
-    return of(this.members);
-  }
-
-  createMembers(_projectID: string, _member: CreateMember): Observable<Member> {
-    return of(this.member);
-  }
-
-  editMembers(_projectID: string, _member: Member): Observable<Member> {
-    return of(this.member);
-  }
-
-  deleteMembers(_projectID: string, _member: Member): Observable<any> {
-    return of(null);
   }
 
   getVSphereNetworks(_username: string, _password: string, _datacenterName: string): Observable<VSphereNetwork[]> {

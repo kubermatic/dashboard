@@ -22,7 +22,6 @@ import {AddonConfig} from '@shared/entity/addon';
 import {Cluster, CNIPlugin, CNIPluginVersions, MasterVersion, Token} from '@shared/entity/cluster';
 import {Event} from '@shared/entity/event';
 import {MachineDeployment, MachineDeploymentPatch} from '@shared/entity/machine-deployment';
-import {CreateMember, Member} from '@shared/entity/member';
 import {NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
 import {AlibabaInstanceType, AlibabaVSwitch, AlibabaZone} from '@shared/entity/provider/alibaba';
@@ -254,26 +253,6 @@ export class ApiService {
     const url = `${this._newRestRoot}/projects/${projectId}/clusters/${cluster}/providers/azure/availabilityzones`;
     const headers = new HttpHeaders().set('SKUName', size);
     return this._http.get<AzureZones>(url, {headers});
-  }
-
-  getMembers(projectID: string): Observable<Member[]> {
-    const url = `${this._restRoot}/projects/${projectID}/users`;
-    return this._http.get<Member[]>(url);
-  }
-
-  createMembers(projectID: string, member: CreateMember): Observable<Member> {
-    const url = `${this._restRoot}/projects/${projectID}/users`;
-    return this._http.post<Member>(url, member);
-  }
-
-  editMembers(projectID: string, member: Member): Observable<Member> {
-    const url = `${this._restRoot}/projects/${projectID}/users/${member.id}`;
-    return this._http.put<Member>(url, member);
-  }
-
-  deleteMembers(projectID: string, member: Member): Observable<any> {
-    const url = `${this._restRoot}/projects/${projectID}/users/${member.id}`;
-    return this._http.delete(url);
   }
 
   getAccessibleAddons(): Observable<string[]> {
