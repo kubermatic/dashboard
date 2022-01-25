@@ -31,7 +31,6 @@ import {GCPDiskType, GCPMachineSize, GCPZone} from '@shared/entity/provider/gcp'
 import {HetznerTypes} from '@shared/entity/provider/hetzner';
 import {OpenstackAvailabilityZone, OpenstackFlavor} from '@shared/entity/provider/openstack';
 import {EquinixSize} from '@shared/entity/provider/equinix';
-import {SSHKey} from '@shared/entity/ssh-key';
 import {Observable, of} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
@@ -95,21 +94,6 @@ export class ApiService {
   restartMachineDeployment(cluster: string, md: MachineDeployment, projectID: string): Observable<any> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments/${md.id}/restart`;
     return this._http.post(url, {});
-  }
-
-  getSSHKeys(projectID: string): Observable<SSHKey[]> {
-    const url = `${this._restRoot}/projects/${projectID}/sshkeys`;
-    return this._http.get<SSHKey[]>(url);
-  }
-
-  deleteSSHKey(sshkeyID: string, projectID: string): Observable<any> {
-    const url = `${this._restRoot}/projects/${projectID}/sshkeys/${sshkeyID}`;
-    return this._http.delete(url);
-  }
-
-  addSSHKey(sshKey: SSHKey, projectID: string): Observable<SSHKey> {
-    const url = `${this._restRoot}/projects/${projectID}/sshkeys`;
-    return this._http.post<SSHKey>(url, sshKey);
   }
 
   getDigitaloceanSizes(projectId: string, clusterId: string): Observable<DigitaloceanSizes> {

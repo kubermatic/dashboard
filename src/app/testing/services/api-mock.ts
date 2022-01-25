@@ -25,7 +25,6 @@ import {fakeAnexiaTemplates, fakeAnexiaVlans} from '../fake-data/anexia';
 import {masterVersionsFake} from '../fake-data/cluster-spec';
 import {fakeToken} from '../fake-data/cluster';
 import {machineDeploymentsFake, nodesFake} from '../fake-data/node';
-import {fakeSSHKeys} from '../fake-data/sshkey';
 import {fakeVSphereNetworks} from '../fake-data/vsphere';
 import {VSphereNetwork} from '@shared/entity/provider/vsphere';
 import {AlibabaInstanceType, AlibabaVSwitch, AlibabaZone} from '@shared/entity/provider/alibaba';
@@ -36,7 +35,6 @@ import {DigitaloceanSizes} from '@shared/entity/provider/digitalocean';
 
 @Injectable()
 export class ApiMockService {
-  sshKeys: SSHKey[] = fakeSSHKeys();
   nodes: Node[] = nodesFake();
   masterVersions: MasterVersion[] = masterVersionsFake();
   token: Token = fakeToken();
@@ -65,10 +63,6 @@ export class ApiMockService {
 
   getMachineDeploymentNodesEvents(_mdId: string, _cluster: string, _dc: string, _projectID: string): Observable<any[]> {
     return of([]);
-  }
-
-  getSSHKeys(): Observable<SSHKey[]> {
-    return of(this.sshKeys);
   }
 
   deleteSSHKey(_fingerprint: string): Observable<any> {

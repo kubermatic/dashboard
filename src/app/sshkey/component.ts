@@ -19,7 +19,6 @@ import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {ApiService} from '@core/services/api';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
@@ -34,6 +33,7 @@ import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import _ from 'lodash';
 import {Subject, timer} from 'rxjs';
 import {filter, retry, switchMap, take, takeUntil} from 'rxjs/operators';
+import {SSHKeyService} from '@core/services/ssh-key';
 
 @Component({
   selector: 'km-sshkey',
@@ -60,7 +60,7 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
   private _unsubscribe: Subject<void> = new Subject<void>();
 
   constructor(
-    private readonly _api: ApiService,
+    private readonly _sshKeyService: SSHKeyService,
     private readonly _userService: UserService,
     private readonly _appConfigService: AppConfigService,
     public dialog: MatDialog,
@@ -119,8 +119,8 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
 
   refreshSSHKeys(): void {
     const retries = 3;
-    this._api
-      .getSSHKeys(this.project.id)
+    this._sshKeyService
+      .list(this.project.id)
       .pipe(retry(retries))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(res => {
@@ -165,7 +165,7 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
     dialogRef
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
-      .pipe(switchMap(_ => this._api.deleteSSHKey(sshKey.id, this.project.id)))
+      .pipe(switchMap(_ => this._sshKeyService.delete(sshKey.id, this.project.id)))
       .pipe(take(1))
       .subscribe(() => {
         this._notificationService.success(`The ${sshKey.name} SSH key was removed from the ${this.project.id} project`);
