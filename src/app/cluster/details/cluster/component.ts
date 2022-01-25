@@ -62,6 +62,7 @@ import {RevokeTokenComponent} from './revoke-token/component';
 import {ShareKubeconfigComponent} from './share-kubeconfig/component';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {coerce, compare} from 'semver';
+import {AddonService} from '@core/services/addon';
 
 @Component({
   selector: 'km-cluster-details',
@@ -107,6 +108,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     private readonly _route: ActivatedRoute,
     private readonly _router: Router,
     private readonly _clusterService: ClusterService,
+    private readonly _addonService: AddonService,
     private readonly _matDialog: MatDialog,
     private readonly _datacenterService: DatacenterService,
     private readonly _appConfigService: AppConfigService,
@@ -176,7 +178,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             .concat(
               this.isClusterRunning
                 ? [
-                    this._clusterService.addons(this.projectID, this.cluster.id),
+                    this._addonService.list(this.projectID, this.cluster.id),
                     this._clusterService.nodes(this.projectID, this.cluster.id),
                     this._api.getMachineDeployments(this.cluster.id, this.projectID),
                     this._clusterService.metrics(this.projectID, this.cluster.id),
@@ -435,8 +437,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   handleAddonCreation(addon: Addon): void {
-    this._clusterService
-      .createAddon(addon, this.projectID, this.cluster.id)
+    this._addonService
+      .create(addon, this.projectID, this.cluster.id)
       .pipe(take(1))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
@@ -446,8 +448,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   handleAddonEdition(addon: Addon): void {
-    this._clusterService
-      .editAddon(addon, this.projectID, this.cluster.id)
+    this._addonService
+      .patch(addon, this.projectID, this.cluster.id)
       .pipe(take(1))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
@@ -457,8 +459,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   handleAddonDeletion(addon: Addon): void {
-    this._clusterService
-      .deleteAddon(addon.id, this.projectID, this.cluster.id)
+    this._addonService
+      .delete(addon.id, this.projectID, this.cluster.id)
       .pipe(take(1))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
@@ -469,8 +471,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   reloadAddons(): void {
     if (this.projectID && this.cluster) {
-      this._clusterService
-        .addons(this.projectID, this.cluster.id)
+      this._addonService
+        .list(this.projectID, this.cluster.id)
         .pipe(take(1))
         .subscribe(addons => (this.addons = addons));
     }

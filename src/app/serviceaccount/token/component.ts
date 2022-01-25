@@ -22,7 +22,6 @@ import {
   ServiceAccountTokenDialogData,
   ServiceAccountTokenDialogMode,
 } from '@app/serviceaccount/token/add/component';
-import {ApiService} from '@core/services/api';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
@@ -31,6 +30,7 @@ import {Project} from '@shared/entity/project';
 import {ServiceAccount, ServiceAccountToken} from '@shared/entity/service-account';
 import {GroupConfig} from '@shared/model/Config';
 import {filter, switchMap, take} from 'rxjs/operators';
+import {ServiceAccountService} from '@core/services/service-account';
 
 @Component({
   selector: 'km-serviceaccount-token',
@@ -48,7 +48,7 @@ export class ServiceAccountTokenComponent implements OnInit {
   private _currentGroupConfig: GroupConfig;
 
   constructor(
-    private readonly _apiService: ApiService,
+    private readonly _serviceAccountService: ServiceAccountService,
     private readonly _projectService: ProjectService,
     private readonly _userService: UserService,
     private readonly _googleAnalyticsService: GoogleAnalyticsService,
@@ -135,7 +135,7 @@ export class ServiceAccountTokenComponent implements OnInit {
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
       .pipe(
-        switchMap(_ => this._apiService.deleteServiceAccountToken(this._selectedProject.id, this.serviceaccount, token))
+        switchMap(_ => this._serviceAccountService.deleteToken(this._selectedProject.id, this.serviceaccount, token))
       )
       .pipe(take(1))
       .subscribe(() => {
