@@ -18,7 +18,6 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ApiService} from '@core/services/api';
 import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
 import {PathParam} from '@core/services/params';
@@ -41,6 +40,7 @@ import _ from 'lodash';
 import {EMPTY, forkJoin, of, onErrorResumeNext, Subject} from 'rxjs';
 import {catchError, distinctUntilChanged, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ClusterDeleteConfirmationComponent} from '../../details/cluster/cluster-delete-confirmation/component';
+import {MachineDeploymentService} from '@core/services/machine-deployment';
 
 @Component({
   selector: 'km-cluster-list',
@@ -74,7 +74,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _datacenterService: DatacenterService,
     private readonly _activeRoute: ActivatedRoute,
     private readonly _matDialog: MatDialog,
-    private readonly _apiService: ApiService,
+    private readonly _machineDeploymentService: MachineDeploymentService,
     private readonly _settingsService: SettingsService
   ) {}
 
@@ -134,7 +134,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
                   .pipe(
                     switchMap(_ =>
                       Health.allHealthy(this.health[cluster.id])
-                        ? this._apiService.getMachineDeployments(cluster.id, this._selectedProject.id)
+                        ? this._machineDeploymentService.list(cluster.id, this._selectedProject.id)
                         : of([])
                     )
                   )

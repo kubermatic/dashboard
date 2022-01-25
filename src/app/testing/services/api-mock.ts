@@ -16,15 +16,13 @@ import {Injectable} from '@angular/core';
 import {defer, Observable, of} from 'rxjs';
 import {async} from 'rxjs-compat/scheduler/async';
 import {Cluster, MasterVersion, Token} from '@shared/entity/cluster';
-import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {Node} from '@shared/entity/node';
-import {SSHKey} from '@shared/entity/ssh-key';
 import {fakeDigitaloceanSizes, fakeEquinixSizes} from '../fake-data/add-node-modal';
 import {fakeAlibabaInstanceTypes, fakeAlibabaVSwitches, fakeAlibabaZones} from '../fake-data/alibaba';
 import {fakeAnexiaTemplates, fakeAnexiaVlans} from '../fake-data/anexia';
 import {masterVersionsFake} from '../fake-data/cluster-spec';
 import {fakeToken} from '../fake-data/cluster';
-import {machineDeploymentsFake, nodesFake} from '../fake-data/node';
+import {nodesFake} from '../fake-data/node';
 import {fakeVSphereNetworks} from '../fake-data/vsphere';
 import {VSphereNetwork} from '@shared/entity/provider/vsphere';
 import {AlibabaInstanceType, AlibabaVSwitch, AlibabaZone} from '@shared/entity/provider/alibaba';
@@ -39,39 +37,6 @@ export class ApiMockService {
   masterVersions: MasterVersion[] = masterVersionsFake();
   token: Token = fakeToken();
   vsphereNetworks: VSphereNetwork[] = fakeVSphereNetworks();
-
-  get addonConfigs(): Observable<any> {
-    return of([]);
-  }
-
-  getAccessibleAddons(): Observable<string[]> {
-    return of([]);
-  }
-
-  getMachineDeployments(_cluster: string, _dc: string, _projectID: string): Observable<MachineDeployment[]> {
-    return of(machineDeploymentsFake());
-  }
-
-  deleteMachineDeployment(
-    _cluster: string,
-    _machineDeployment: string,
-    _dc: string,
-    _project: string
-  ): Observable<any> {
-    return of({});
-  }
-
-  getMachineDeploymentNodesEvents(_mdId: string, _cluster: string, _dc: string, _projectID: string): Observable<any[]> {
-    return of([]);
-  }
-
-  deleteSSHKey(_fingerprint: string): Observable<any> {
-    return of(null);
-  }
-
-  addSSHKey(_sshKey: SSHKey): Observable<SSHKey> {
-    return of(null);
-  }
 
   getToken(_cluster: Cluster, _dc: string, _projectID: string): Observable<Token> {
     return of(this.token);

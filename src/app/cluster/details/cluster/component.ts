@@ -63,6 +63,7 @@ import {ShareKubeconfigComponent} from './share-kubeconfig/component';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {coerce, compare} from 'semver';
 import {AddonService} from '@core/services/addon';
+import {MachineDeploymentService} from '@core/services/machine-deployment';
 
 @Component({
   selector: 'km-cluster-details',
@@ -108,6 +109,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     private readonly _route: ActivatedRoute,
     private readonly _router: Router,
     private readonly _clusterService: ClusterService,
+    private readonly _machineDeploymentService: MachineDeploymentService,
     private readonly _addonService: AddonService,
     private readonly _matDialog: MatDialog,
     private readonly _datacenterService: DatacenterService,
@@ -180,7 +182,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                 ? [
                     this._addonService.list(this.projectID, this.cluster.id),
                     this._clusterService.nodes(this.projectID, this.cluster.id),
-                    this._api.getMachineDeployments(this.cluster.id, this.projectID),
+                    this._machineDeploymentService.list(this.cluster.id, this.projectID),
                     this._clusterService.metrics(this.projectID, this.cluster.id),
                   ]
                 : [of([] as Addon[]), of([] as Node[]), of([] as MachineDeployment[]), of({} as ClusterMetrics)]

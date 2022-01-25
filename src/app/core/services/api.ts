@@ -15,13 +15,7 @@
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {environment} from '@environments/environment';
-import {LabelFormComponent} from '@shared/components/label-form/component';
-import {TaintFormComponent} from '@shared/components/taint-form/component';
 import {Cluster, CNIPlugin, CNIPluginVersions, MasterVersion, Token} from '@shared/entity/cluster';
-import {Event} from '@shared/entity/event';
-import {MachineDeployment, MachineDeploymentPatch} from '@shared/entity/machine-deployment';
-import {NodeMetrics} from '@shared/entity/metrics';
-import {Node} from '@shared/entity/node';
 import {AlibabaInstanceType, AlibabaVSwitch, AlibabaZone} from '@shared/entity/provider/alibaba';
 import {AnexiaTemplate, AnexiaVlan} from '@shared/entity/provider/anexia';
 import {AWSSize, AWSSubnet} from '@shared/entity/provider/aws';
@@ -31,8 +25,7 @@ import {GCPDiskType, GCPMachineSize, GCPZone} from '@shared/entity/provider/gcp'
 import {HetznerTypes} from '@shared/entity/provider/hetzner';
 import {OpenstackAvailabilityZone, OpenstackFlavor} from '@shared/entity/provider/openstack';
 import {EquinixSize} from '@shared/entity/provider/equinix';
-import {Observable, of} from 'rxjs';
-import {catchError} from 'rxjs/operators';
+import {Observable} from 'rxjs';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 
 @Injectable()
@@ -42,59 +35,6 @@ export class ApiService {
   private _newRestRoot: string = environment.newRestRoot;
 
   constructor(private readonly _http: HttpClient) {}
-
-  createMachineDeployment(md: MachineDeployment, clusterID: string, projectID: string): Observable<MachineDeployment> {
-    md.spec.template.labels = LabelFormComponent.filterNullifiedKeys(md.spec.template.labels);
-    md.spec.template.taints = TaintFormComponent.filterNullifiedTaints(md.spec.template.taints);
-
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/machinedeployments`;
-    return this._http.post<MachineDeployment>(url, md);
-  }
-
-  getMachineDeployments(cluster: string, projectID: string): Observable<MachineDeployment[]> {
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments`;
-    return this._http.get<MachineDeployment[]>(url).pipe(catchError(() => of<MachineDeployment[]>([])));
-  }
-
-  getMachineDeployment(mdId: string, cluster: string, projectID: string): Observable<MachineDeployment> {
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments/${mdId}`;
-    return this._http.get<MachineDeployment>(url);
-  }
-
-  getMachineDeploymentNodes(mdId: string, cluster: string, projectID: string): Observable<Node[]> {
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments/${mdId}/nodes`;
-    return this._http.get<Node[]>(url);
-  }
-
-  getMachineDeploymentNodesMetrics(mdId: string, cluster: string, projectID: string): Observable<NodeMetrics[]> {
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments/${mdId}/nodes/metrics`;
-    return this._http.get<NodeMetrics[]>(url);
-  }
-
-  getMachineDeploymentNodesEvents(mdId: string, cluster: string, projectID: string): Observable<Event[]> {
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments/${mdId}/nodes/events`;
-    return this._http.get<Event[]>(url);
-  }
-
-  patchMachineDeployment(
-    patch: MachineDeploymentPatch,
-    machineDeploymentId: string,
-    clusterId: string,
-    projectID: string
-  ): Observable<MachineDeployment> {
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterId}/machinedeployments/${machineDeploymentId}`;
-    return this._http.patch<MachineDeployment>(url, patch);
-  }
-
-  deleteMachineDeployment(cluster: string, md: MachineDeployment, projectID: string): Observable<any> {
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments/${md.id}`;
-    return this._http.delete(url);
-  }
-
-  restartMachineDeployment(cluster: string, md: MachineDeployment, projectID: string): Observable<any> {
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments/${md.id}/restart`;
-    return this._http.post(url, {});
-  }
 
   getDigitaloceanSizes(projectId: string, clusterId: string): Observable<DigitaloceanSizes> {
     const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/providers/digitalocean/sizes`;

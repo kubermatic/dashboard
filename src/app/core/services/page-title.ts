@@ -14,7 +14,6 @@
 
 import {Injectable} from '@angular/core';
 import {Title} from '@angular/platform-browser';
-import {ApiService} from '@core/services/api';
 import {ClusterService} from '@core/services/cluster';
 import {ParamsService, PathParam} from '@core/services/params';
 import {ProjectService} from '@core/services/project';
@@ -25,6 +24,7 @@ import {iif, Observable, of} from 'rxjs';
 import {switchMap, take, tap} from 'rxjs/operators';
 import {Auth} from './auth/service';
 import {ExternalCluster} from '@shared/entity/external-cluster';
+import {MachineDeploymentService} from '@core/services/machine-deployment';
 
 @Injectable()
 export class PageTitleService {
@@ -37,7 +37,7 @@ export class PageTitleService {
     private readonly _params: ParamsService,
     private readonly _projectService: ProjectService,
     private readonly _clusterService: ClusterService,
-    private readonly _apiService: ApiService,
+    private readonly _machineDeploymentService: MachineDeploymentService,
     private readonly _auth: Auth
   ) {}
 
@@ -119,7 +119,7 @@ export class PageTitleService {
     return iif(
       () => isExternal,
       this._clusterService.externalMachineDeployment(projectId, clusterId, machineDeploymentId),
-      this._apiService.getMachineDeployment(machineDeploymentId, clusterId, projectId)
+      this._machineDeploymentService.get(machineDeploymentId, clusterId, projectId)
     );
   }
 }
