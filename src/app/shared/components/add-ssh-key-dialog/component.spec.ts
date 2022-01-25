@@ -25,12 +25,11 @@ import {Router} from '@angular/router';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {fakeProject} from '@app/testing/fake-data/project';
 import {RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
-import {ApiMockService} from '@app/testing/services/api-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';
-import {ApiService} from '@core/services/api';
 import {NotificationService} from '@core/services/notification';
 import {AddSshKeyDialogComponent} from './component';
+import {SSHKeyService} from '@core/services/ssh-key';
 
 const modules: any[] = [
   BrowserModule,
@@ -56,8 +55,8 @@ describe('AddSshKeyDialogComponent', () => {
       imports: [...modules],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},
-        {provide: ApiService, useClass: ApiMockService},
         {provide: Router, useClass: RouterStub},
+        SSHKeyService,
         GoogleAnalyticsService,
         NotificationService,
       ],

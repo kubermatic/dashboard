@@ -27,7 +27,6 @@ import {AppConfigMockService} from '@app/testing/services/app-config-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';
 import {UserMockService} from '@app/testing/services/user-mock';
 import {CoreModule} from '@core/module';
-import {ApiService} from '@core/services/api';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
@@ -35,6 +34,7 @@ import {SharedModule} from '@shared/module';
 import {of} from 'rxjs';
 import {ServiceAccountModule} from '../module';
 import {ServiceAccountTokenComponent} from './component';
+import {ServiceAccountService} from '@core/services/service-account';
 
 describe('ServiceAccountTokenComponent', () => {
   let fixture: ComponentFixture<ServiceAccountTokenComponent>;
@@ -60,10 +60,10 @@ describe('ServiceAccountTokenComponent', () => {
         ],
         providers: [
           {provide: Router, useClass: RouterStub},
-          {provide: ApiService, useValue: apiMock},
           {provide: ProjectService, useClass: ProjectMockService},
           {provide: AppConfigService, useClass: AppConfigMockService},
           {provide: UserService, useClass: UserMockService},
+          ServiceAccountService,
           MatDialog,
           GoogleAnalyticsService,
           NotificationService,

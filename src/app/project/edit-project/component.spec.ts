@@ -17,13 +17,13 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {fakeProject} from '@app/testing/fake-data/project';
-import {asyncData} from '@app/testing/services/api-mock';
-import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
+=import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';
-import {ApiService} from '@core/services/api';
 import {SharedModule} from '@shared/module';
 import {ProjectModule} from '../module';
 import {EditProjectComponent} from './component';
+import {ProjectService} from "@core/services/project";
+import { asyncData } from '@app/testing/services/cluster-mock';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, ProjectModule];
 
@@ -34,14 +34,14 @@ describe('EditProjectComponent', () => {
 
   beforeEach(
     waitForAsync(() => {
-      const apiMock = {editProject: jest.fn()};
-      editProjectSpy = apiMock.editProject.mockReturnValue(asyncData(fakeProject()));
+      const projectServiceMock = {edit: jest.fn()};
+      editProjectSpy = projectServiceMock.edit.mockReturnValue(asyncData(fakeProject()));
 
       TestBed.configureTestingModule({
         imports: [...modules],
         providers: [
           {provide: MatDialogRef, useClass: MatDialogRefMock},
-          {provide: ApiService, useValue: apiMock},
+          {provide: ProjectService, useValue: projectServiceMock},
         ],
         teardown: {destroyAfterEach: false},
       }).compileComponents();

@@ -13,19 +13,18 @@
 // limitations under the License.
 
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
-import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {fakeAlertmanagerConfig} from '@app/testing/fake-data/mla';
 import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
 import {fakeProject} from '@app/testing/fake-data/project';
-import {asyncData} from '@app/testing/services/api-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';
 import {NotificationService} from '@core/services/notification';
 import {MLAService} from '@core/services/mla';
 import {SharedModule} from '@shared/module';
-import {NGX_MONACO_EDITOR_CONFIG, MonacoEditorModule} from 'ngx-monaco-editor';
+import {MonacoEditorModule, NGX_MONACO_EDITOR_CONFIG} from 'ngx-monaco-editor';
 import {AlertmanagerConfigDialog} from './component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule];
@@ -43,7 +42,6 @@ describe('AlertmanagerConfigDialog', () => {
         putAlertmanagerConfig: jest.fn(),
         refreshAlertmanagerConfig: () => {},
       };
-      putAlertmanagerConfigSpy = mlaMock.putAlertmanagerConfig.mockReturnValue(asyncData(fakeAlertmanagerConfig()));
 
       TestBed.configureTestingModule({
         imports: [...modules],

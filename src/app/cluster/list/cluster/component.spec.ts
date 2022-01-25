@@ -21,14 +21,13 @@ import {AppConfigService} from '@app/config.service';
 import {fakeAWSCluster} from '@app/testing/fake-data/cluster';
 import {fakeHealth} from '@app/testing/fake-data/health';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
-import {ApiMockService, asyncData} from '@app/testing/services/api-mock';
+import {asyncData} from '@app/testing/services/api-mock';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock';
 import {AuthMockService} from '@app/testing/services/auth-mock';
 import {DatacenterMockService} from '@app/testing/services/datacenter-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';
 import {SettingsMockService} from '@app/testing/services/settings-mock';
 import {UserMockService} from '@app/testing/services/user-mock';
-import {ApiService} from '@core/services/api';
 import {Auth} from '@core/services/auth/service';
 import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
@@ -61,7 +60,6 @@ describe('ClusterListComponent', () => {
         imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
         declarations: [ClusterListComponent],
         providers: [
-          {provide: ApiService, useValue: ApiMockService},
           {provide: ClusterService, useValue: clusterServiceMock},
           {provide: Auth, useClass: AuthMockService},
           {provide: ActivatedRoute, useClass: ActivatedRouteStub},

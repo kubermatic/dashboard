@@ -21,9 +21,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
-import {fakeBindings, fakeClusterBindings} from '@app/testing/fake-data/rbac';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
-import {ApiMockService, asyncData} from '@app/testing/services/api-mock';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock';
 import {AuthMockService} from '@app/testing/services/auth-mock';
 import {ClusterMockService} from '@app/testing/services/cluster-mock';
@@ -34,7 +32,6 @@ import {NodeMockService} from '@app/testing/services/node-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';
 import {SettingsMockService} from '@app/testing/services/settings-mock';
 import {UserMockService} from '@app/testing/services/user-mock';
-import {ApiService} from '@core/services/api';
 import {Auth} from '@core/services/auth/service';
 import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
@@ -71,8 +68,6 @@ describe('ClusterDetailsComponent', () => {
         deleteClusterBinding: jest.fn(),
         deleteBinding: jest.fn(),
       };
-      rbacMock.getClusterBindings.mockReturnValue(asyncData([fakeClusterBindings()]));
-      rbacMock.getBindings.mockReturnValue(asyncData([fakeBindings()]));
       rbacMock.deleteClusterBinding.mockReturnValue(of(null));
       rbacMock.deleteBinding.mockReturnValue(of(null));
 
@@ -97,7 +92,6 @@ describe('ClusterDetailsComponent', () => {
           MLAComponent,
         ],
         providers: [
-          {provide: ApiService, useClass: ApiMockService},
           {provide: ClusterService, useClass: ClusterMockService},
           {provide: DatacenterService, useClass: DatacenterMockService},
           {provide: Auth, useClass: AuthMockService},

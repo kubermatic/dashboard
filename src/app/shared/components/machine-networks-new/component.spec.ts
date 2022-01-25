@@ -19,13 +19,11 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterTestingModule} from '@angular/router/testing';
 import {AppConfigService} from '@app/config.service';
 import {NODE_DATA_CONFIG, NodeDataMode} from '@app/node-data/config';
-import {ApiMockService} from '@app/testing/services/api-mock';
 import {DatacenterMockService} from '@app/testing/services/datacenter-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {NodeDataService} from '@core/services/node-data/service';
 import {WizardService} from '@core/services/wizard/wizard';
-import {ApiService} from '@core/services/api';
 import {DatacenterService} from '@core/services/datacenter';
 import {ParamsService} from '@core/services/params';
 import {ProjectService} from '@core/services/project';
@@ -51,7 +49,6 @@ describe('MachineNetworksComponent', () => {
           PresetsService,
           WizardService,
           {provide: ProjectService, useValue: ProjectMockService},
-          {provide: ApiService, useValue: ApiMockService},
           {provide: NODE_DATA_CONFIG, useValue: NodeDataMode.Wizard},
           {provide: DatacenterService, useClass: DatacenterMockService},
         ],

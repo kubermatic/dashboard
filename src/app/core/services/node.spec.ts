@@ -20,9 +20,7 @@ import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
 import {machineDeploymentsFake} from '@app/testing/fake-data/node';
 import {fakeProject} from '@app/testing/fake-data/project';
-import {ApiMockService} from '@app/testing/services/api-mock';
 import {CoreModule} from '@core/module';
-import {ApiService} from '@core/services/api';
 import {NotificationService} from '@core/services/notification';
 import {of} from 'rxjs';
 import {NodeService} from './node';
@@ -40,7 +38,6 @@ describe('NodeService', () => {
       providers: [
         NodeService,
         GoogleAnalyticsService,
-        {provide: ApiService, useClass: ApiMockService},
         {provide: MatDialog, useClass: MatDialogMock},
         NotificationService,
       ],

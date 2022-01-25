@@ -24,18 +24,15 @@ import {DialogTestModule, NoopConfirmDialogComponent} from '@app/testing/compone
 import {fakeProject} from '@app/testing/fake-data/project';
 import {fakeSSHKeys} from '@app/testing/fake-data/sshkey';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
-import {asyncData} from '@app/testing/services/api-mock';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';
 import {SettingsMockService} from '@app/testing/services/settings-mock';
 import {UserMockService} from '@app/testing/services/user-mock';
-import {ApiService} from '@core/services/api';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
-import {of} from 'rxjs';
 import {SSHKeyComponent} from './component';
 
 describe('SSHKeyComponent', () => {
@@ -47,10 +44,6 @@ describe('SSHKeyComponent', () => {
 
   beforeEach(
     waitForAsync(() => {
-      const apiMock = {getSSHKeys: jest.fn(), deleteSSHKey: jest.fn()};
-      apiMock.getSSHKeys.mockReturnValue(asyncData(fakeSSHKeys()));
-      deleteSSHKeySpy = apiMock.deleteSSHKey.mockReturnValue(of(null));
-
       TestBed.configureTestingModule({
         imports: [
           BrowserModule,
@@ -63,7 +56,6 @@ describe('SSHKeyComponent', () => {
         declarations: [SSHKeyComponent],
         providers: [
           {provide: Router, useClass: RouterStub},
-          {provide: ApiService, useValue: apiMock},
           {provide: UserService, useClass: UserMockService},
           {provide: AppConfigService, useClass: AppConfigMockService},
           {provide: ActivatedRoute, useClass: ActivatedRouteStub},

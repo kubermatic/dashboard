@@ -25,7 +25,6 @@ import {fakeDigitaloceanDatacenter} from '@app/testing/fake-data/datacenter';
 import {machineDeploymentsFake, nodesFake} from '@app/testing/fake-data/node';
 import {fakeProject} from '@app/testing/fake-data/project';
 import {ActivatedRouteStub, RouterStub} from '@app/testing/router-stubs';
-import {asyncData} from '@app/testing/services/api-mock';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock';
 import {AuthMockService} from '@app/testing/services/auth-mock';
 import {ClusterMockService} from '@app/testing/services/cluster-mock';
@@ -33,7 +32,6 @@ import {NodeMockService} from '@app/testing/services/node-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';
 import {SettingsMockService} from '@app/testing/services/settings-mock';
 import {UserMockService} from '@app/testing/services/user-mock';
-import {ApiService} from '@core/services/api';
 import {Auth} from '@core/services/auth/service';
 import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
@@ -52,28 +50,16 @@ describe('MachineDeploymentDetailsComponent', () => {
   let fixture: ComponentFixture<MachineDeploymentDetailsComponent>;
   let component: MachineDeploymentDetailsComponent;
   let activatedRoute: ActivatedRouteStub;
-
-  let apiMock;
   let dcMock;
 
   beforeEach(
     waitForAsync(() => {
-      apiMock = {
-        getMachineDeploymentNodes: jest.fn(),
-        getMachineDeployment: jest.fn(),
-        getMachineDeploymentNodesEvents: jest.fn(),
-      };
-      apiMock.getMachineDeployment.mockReturnValue(asyncData(machineDeploymentsFake()[0]));
-      apiMock.getMachineDeploymentNodes.mockReturnValue(asyncData(nodesFake()));
-      apiMock.getMachineDeploymentNodesEvents.mockReturnValue(asyncData([]));
       dcMock = {getDatacenter: jest.fn()};
-      dcMock.getDatacenter.mockReturnValue(asyncData(fakeDigitaloceanDatacenter()));
 
       TestBed.configureTestingModule({
         imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
         declarations: [MachineDeploymentDetailsComponent, NodeListComponent, ClusterPanelComponent],
         providers: [
-          {provide: ApiService, useValue: apiMock},
           {provide: ClusterService, useClass: ClusterMockService},
           {provide: DatacenterService, useValue: dcMock},
           {provide: ProjectService, useClass: ProjectMockService},
@@ -113,7 +99,6 @@ describe('MachineDeploymentDetailsComponent', () => {
     };
 
     fixture.detectChanges();
-    fixture.debugElement.injector.get(ApiService);
   });
 
   it('should initialize', () => {

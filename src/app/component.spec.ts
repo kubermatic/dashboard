@@ -18,7 +18,6 @@ import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterTestingModule} from '@angular/router/testing';
 import {CoreModule} from '@core/module';
-import {ApiService} from '@core/services/api';
 import {AuthGuard} from '@core/services/auth/guard';
 import {Auth} from '@core/services/auth/service';
 import {DatacenterService} from '@core/services/datacenter';
@@ -28,7 +27,6 @@ import {SharedModule} from '@shared/module';
 import {KubermaticComponent} from './component';
 import {AppConfigService} from './config.service';
 import {GoogleAnalyticsService} from './google-analytics.service';
-import {ApiMockService} from './testing/services/api-mock';
 import {AppConfigMockService} from './testing/services/app-config-mock';
 import {AuthMockService} from './testing/services/auth-mock';
 import {DatacenterMockService} from './testing/services/datacenter-mock';
@@ -58,7 +56,6 @@ describe('KubermaticComponent', () => {
       declarations: [...components],
       providers: [
         {provide: Auth, useClass: AuthMockService},
-        {provide: ApiService, useClass: ApiMockService},
         {provide: ProjectService, useClass: ProjectMockService},
         {provide: DatacenterService, useClass: DatacenterMockService},
         {provide: UserService, useClass: UserMockService},

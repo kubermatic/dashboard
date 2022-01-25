@@ -19,10 +19,8 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppConfigService} from '@app/config.service';
 import {NODE_DATA_CONFIG, NodeDataMode} from '@app/node-data/config';
-import {ApiMockService} from '@app/testing/services/api-mock';
 import {AuthMockService} from '@app/testing/services/auth-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';
-import {ApiService} from '@core/services/api';
 import {Auth} from '@core/services/auth/service';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
@@ -52,7 +50,6 @@ describe('MachineNetworkStepComponent', () => {
           DatacenterService,
           AppConfigService,
           {provide: ProjectService, useValue: ProjectMockService},
-          {provide: ApiService, useValue: ApiMockService},
           {provide: Auth, useClass: AuthMockService},
           {provide: NODE_DATA_CONFIG, useValue: NodeDataMode.Wizard},
         ],

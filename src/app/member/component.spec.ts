@@ -23,12 +23,11 @@ import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {DialogTestModule, NoopConfirmDialogComponent} from '@app/testing/components/noop-confirmation-dialog.component';
 import {fakeMembers} from '@app/testing/fake-data/member';
 import {RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
-import {asyncData} from '@app/testing/services/api-mock';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock';
+import {asyncData} from '@app/testing/services/cluster-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';
 import {SettingsMockService} from '@app/testing/services/settings-mock';
 import {UserMockService} from '@app/testing/services/user-mock';
-import {ApiService} from '@core/services/api';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
@@ -61,7 +60,6 @@ describe('MemberComponent', () => {
         declarations: [MemberComponent],
         providers: [
           {provide: Router, useClass: RouterStub},
-          {provide: ApiService, useValue: apiMock},
           {provide: ProjectService, useClass: ProjectMockService},
           {provide: UserService, useClass: UserMockService},
           {provide: AppConfigService, useClass: AppConfigMockService},
