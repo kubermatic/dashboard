@@ -2,7 +2,7 @@
   "name": "kubermatic-dashboard",
   "private": true,
   "type": "module",
-  "version": "v2.19.0-alpha.11",
+  "version": "v2.19.0",
   "description": "Kubermatic Dashboard",
   "repository": "https://github.com/kubermatic/dashboard",
   "license": "proprietary",
@@ -75,7 +75,7 @@
     "rxjs": "7.5.1",
     "rxjs-compat": "6.6.7",
     "semver": "7.3.5",
-    "swagger-ui": "4.1.3",
+    "swagger-ui": "4.3.0",
     "zone.js": "0.11.4"
   },
   "devDependencies": {
