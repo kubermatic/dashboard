@@ -14,7 +14,6 @@
 
 import {NodeDataMode} from '@app/node-data/config';
 import {NodeDataService} from '@core/services/node-data/service';
-import {ApiService} from '@core/services/api';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {ProjectService} from '@core/services/project';
@@ -23,7 +22,8 @@ import {Cluster} from '@shared/entity/cluster';
 import {AzureSizes, AzureZones} from '@shared/entity/provider/azure';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
-import {catchError, filter, take, switchMap, tap, debounceTime} from 'rxjs/operators';
+import {catchError, debounceTime, filter, switchMap, take, tap} from 'rxjs/operators';
+import {AzureService} from '@core/services/provider/azure';
 
 export class NodeDataAzureProvider {
   private readonly _debounce = 500;
@@ -32,7 +32,7 @@ export class NodeDataAzureProvider {
     private readonly _nodeDataService: NodeDataService,
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _presetService: PresetsService,
-    private readonly _apiService: ApiService,
+    private readonly _azureService: AzureService,
     private readonly _projectService: ProjectService,
     private readonly _datacenterService: DatacenterService
   ) {}
@@ -82,7 +82,7 @@ export class NodeDataAzureProvider {
           .pipe(debounceTime(this._debounce))
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
-          .pipe(switchMap(_ => this._apiService.getAzureSizes(selectedProject, this._clusterSpecService.cluster.id)))
+          .pipe(switchMap(_ => this._azureService.getSizes(selectedProject, this._clusterSpecService.cluster.id)))
           .pipe(
             catchError(_ => {
               if (onError) {
@@ -145,7 +145,7 @@ export class NodeDataAzureProvider {
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(
             switchMap(_ =>
-              this._apiService.getAzureAvailabilityZones(
+              this._azureService.getAvailabilityZones(
                 selectedProject,
                 this._clusterSpecService.cluster.id,
                 this._nodeDataService.nodeData.spec.cloud.azure.size

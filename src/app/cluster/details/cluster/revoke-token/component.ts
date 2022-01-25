@@ -14,7 +14,6 @@
 
 import {Component, Input, OnInit} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
-import {ApiService} from '@core/services/api';
 import {NotificationService} from '@core/services/notification';
 import {UserService} from '@core/services/user';
 import {Cluster} from '@shared/entity/cluster';
@@ -23,6 +22,7 @@ import {Member} from '@shared/entity/member';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {take} from 'rxjs/operators';
+import {ClusterService} from '@core/services/cluster';
 
 @Component({
   selector: 'km-revoke-token',
@@ -41,7 +41,7 @@ export class RevokeTokenComponent implements OnInit {
     private readonly _matDialogRef: MatDialogRef<RevokeTokenComponent>,
     private readonly _notificationService: NotificationService,
     private readonly _userService: UserService,
-    private readonly _apiService: ApiService
+    private readonly _clusterService: ClusterService
   ) {}
 
   ngOnInit(): void {
@@ -58,14 +58,14 @@ export class RevokeTokenComponent implements OnInit {
 
   revokeToken(): void {
     if (this.revokeAdminToken) {
-      this._apiService.editToken(this.cluster, this.projectID, {token: ''}).subscribe(res => {
+      this._clusterService.editToken(this.cluster, this.projectID, {token: ''}).subscribe(res => {
         this._notificationService.success(`The admin token for the ${this.cluster.name} cluster was revoked`);
         this._matDialogRef.close(res);
       });
     }
 
     if (this.revokeViewerToken) {
-      this._apiService.editViewerToken(this.cluster, this.projectID, {token: ''}).subscribe(res => {
+      this._clusterService.editViewerToken(this.cluster, this.projectID, {token: ''}).subscribe(res => {
         this._notificationService.success(`The viewer token for the ${this.cluster.name} cluster was revoked`);
         this._matDialogRef.close(res);
       });

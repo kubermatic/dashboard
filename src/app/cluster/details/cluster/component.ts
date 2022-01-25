@@ -17,7 +17,6 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EditProviderSettingsComponent} from '@app/cluster/details/cluster/edit-provider-settings/component';
 import {AppConfigService} from '@app/config.service';
-import {ApiService} from '@core/services/api';
 import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
 import {MLAService} from '@core/services/mla';
@@ -116,7 +115,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     private readonly _appConfigService: AppConfigService,
     private readonly _node: NodeService,
     private readonly _userService: UserService,
-    private readonly _api: ApiService,
     private readonly _notificationService: NotificationService,
     private readonly _opaService: OPAService,
     private readonly _mlaService: MLAService,
@@ -334,16 +332,18 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         iif(
           () => settings.enableOIDCKubeconfig,
           this._userService.currentUser.pipe(
-            map((user: Member) => this._api.getShareKubeconfigURL(this.projectID, this.seed, this.cluster.id, user.id))
+            map((user: Member) =>
+              this._clusterService.getShareKubeconfigURL(this.projectID, this.seed, this.cluster.id, user.id)
+            )
           ),
-          of(this._api.getKubeconfigURL(this.projectID, this.cluster.id))
+          of(this._clusterService.getKubeconfigURL(this.projectID, this.cluster.id))
         )
       )
     );
   }
 
   getProxyURL(): string {
-    return this._api.getDashboardProxyURL(this.projectID, this.cluster.id);
+    return this._clusterService.getDashboardProxyURL(this.projectID, this.cluster.id);
   }
 
   getExternalCCMMigrationStatus(): string {

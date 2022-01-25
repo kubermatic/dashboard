@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import {NodeDataMode} from '@app/node-data/config';
-import {ApiService} from '@core/services/api';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {ProjectService} from '@core/services/project';
@@ -21,8 +20,9 @@ import {PresetsService} from '@core/services/wizard/presets';
 import {AWSSize, AWSSubnet} from '@shared/entity/provider/aws';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
-import {catchError, filter, take, switchMap, tap, debounceTime} from 'rxjs/operators';
+import {catchError, debounceTime, filter, switchMap, take, tap} from 'rxjs/operators';
 import {NodeDataService} from '../service';
+import {AWSService} from '@core/services/provider/aws';
 
 export class NodeDataAWSProvider {
   private readonly _debounce = 500;
@@ -31,7 +31,7 @@ export class NodeDataAWSProvider {
     private readonly _nodeDataService: NodeDataService,
     private readonly _clusterDataService: ClusterSpecService,
     private readonly _presetService: PresetsService,
-    private readonly _apiService: ApiService,
+    private readonly _awsService: AWSService,
     private readonly _projectService: ProjectService,
     private readonly _datacenterService: DatacenterService
   ) {}
@@ -69,7 +69,7 @@ export class NodeDataAWSProvider {
           .pipe(debounceTime(this._debounce))
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
-          .pipe(switchMap(_ => this._apiService.getAWSSizes(selectedProject, this._clusterDataService.cluster.id)))
+          .pipe(switchMap(_ => this._awsService.getSizes(selectedProject, this._clusterDataService.cluster.id)))
           .pipe(
             catchError(_ => {
               if (onError) {
@@ -118,7 +118,7 @@ export class NodeDataAWSProvider {
           .pipe(debounceTime(this._debounce))
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
-          .pipe(switchMap(_ => this._apiService.getAWSSubnets(selectedProject, this._clusterDataService.cluster.id)))
+          .pipe(switchMap(_ => this._awsService.getSubnets(selectedProject, this._clusterDataService.cluster.id)))
           .pipe(
             catchError(_ => {
               if (onError) {

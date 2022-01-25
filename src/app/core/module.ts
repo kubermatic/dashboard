@@ -19,7 +19,6 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
 import {ChangelogDialog} from '@core/components/changelog/dialog';
 import {HelpPanelComponent} from '@core/components/help-panel/component';
-import {ApiService} from '@core/services/api';
 import {AdminGuard, AuthGuard, AuthzGuard} from '@core/services/auth/guard';
 import {Auth} from '@core/services/auth/service';
 import {BackupService} from '@core/services/backup';
@@ -93,7 +92,6 @@ const services: any[] = [
   DatacenterService,
   StepsService,
   NameGeneratorService,
-  ApiService,
   ClusterService,
   ParamsService,
   LabelService,
