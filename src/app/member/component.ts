@@ -49,7 +49,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  private readonly _refreshTime = 10; // in seconds
+  private readonly _refreshTime = 10;
   private _unsubscribe = new Subject<void>();
   private _membersUpdate = new Subject<void>();
   private _currentGroupConfig: GroupConfig;

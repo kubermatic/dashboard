@@ -52,7 +52,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  private readonly _refreshTime = 10; // in seconds
+  private readonly _refreshTime = 10;
   private _unsubscribe: Subject<void> = new Subject<void>();
   private _serviceAccountUpdate: Subject<void> = new Subject<void>();
   private _selectedProject = {} as Project;

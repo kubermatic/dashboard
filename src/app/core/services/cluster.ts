@@ -46,7 +46,7 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
 
 @Injectable()
 export class ClusterService {
-  private readonly _refreshTime = 10; // in seconds
+  private readonly _refreshTime = 10;
   private _providerSettingsPatch = new Subject<ProviderSettingsPatch>();
   private _restRoot: string = environment.restRoot;
   private _newRestRoot: string = environment.newRestRoot;

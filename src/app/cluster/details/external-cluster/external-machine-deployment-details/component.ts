@@ -38,7 +38,7 @@ import {GroupConfig} from '@shared/model/Config';
   styleUrls: ['./style.scss'],
 })
 export class ExternalMachineDeploymentDetailsComponent implements OnInit, OnDestroy {
-  private readonly _refreshTime = 10; // in seconds
+  private readonly _refreshTime = 10;
   private readonly _unsubscribe: Subject<void> = new Subject<void>();
   private _machineDeploymentID: string;
   private _isMachineDeploymentLoaded = false;

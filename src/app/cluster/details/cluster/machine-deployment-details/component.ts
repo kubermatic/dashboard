@@ -53,7 +53,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   systemLogoClass: string;
   projectID: string;
 
-  private readonly _refreshTime = 10; // in seconds
+  private readonly _refreshTime = 10;
   private _machineDeploymentID: string;
   private _isMachineDeploymentLoaded = false;
   private _areNodesLoaded = false;

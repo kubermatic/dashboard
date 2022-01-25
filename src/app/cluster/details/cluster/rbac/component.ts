@@ -42,7 +42,7 @@ export class RBACComponent implements OnInit, OnDestroy {
   clusterBindingsDisplayedColumns: string[] = ['kind', 'name', 'clusterRole', 'actions'];
   bindingsDataSource = new MatTableDataSource<SimpleBinding>();
   bindingsDisplayedColumns: string[] = ['kind', 'name', 'clusterRole', 'namespace', 'actions'];
-  private readonly _refreshTime = 30; // In seconds.
+  private readonly _refreshTime = 30;
   private readonly _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
   private _refresh = new Subject<void>();
   private _unsubscribe = new Subject<void>();
