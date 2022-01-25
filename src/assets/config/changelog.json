@@ -1,1 +1,150 @@
-{}
+{
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/release/v2.19/CHANGELOG.md#kubermatic-219",
+  "entries": [
+    {
+      "category": "action-required",
+      "description": "When upgrading from older KKP versions, additional flag '--migrate-nginx-ingress' is required to perform upgrade of nginx-ingress-controller. Ingress will be briefly unavailable during this process.",
+      "links": [
+        {
+          "url": "https://docs.kubermatic.com/kubermatic/v2.19/tutorials_howtos/upgrading/upgrade_from_2.18_to_2.19/",
+          "caption": "Tutorial"
+        }
+      ]
+    },
+    {
+      "category": "action-required",
+      "description": "Configuration for cert-manager will now be included under key 'cert-manager' in values.yaml file (changed from 'certManager')",
+      "links": [
+        {
+          "url": "https://docs.kubermatic.com/kubermatic/v2.19/tutorials_howtos/upgrading/upgrade_from_2.18_to_2.19/",
+          "caption": "Tutorial"
+        }
+      ]
+    },
+    {
+      "category": "action-required",
+      "description": "Is it now possible to configure multiple backup destinations, therefore the current implementation of backup buckets will be deprecated soon. Migrate the configuration to a destination to keep using it in the future. It is reachable via the UI 'Admin Panel' -> 'Backup Destinations'",
+      "links": [
+        {
+          "url": "https://docs.kubermatic.com/kubermatic/v2.19/tutorials_howtos/administration/admin_panel/backup_buckets/",
+          "caption": "Tutorial"
+        }
+      ]
+    },
+    {
+      "category": "action-required",
+      "description": "The chart will no longer configure ClusterIssuers. Refer to the documentation of cert-manager for configuration guide.",
+      "links": [
+        {
+          "url": "https://cert-manager.io/docs/configuration",
+          "caption": "Guide"
+        }
+      ]
+    },
+    {
+      "category": "action-required",
+      "description": "Set the default Service Accounts automountServiceAccountToken property to false for all KKP provided namespaces and kube-system"
+    },
+    {
+      "category": "action-required",
+      "description": "The old Docker repository at 'quay.io/kubermatic/api' will not receive new images anymore, please use 'quay.io/kubermatic/kubermatic' (CE) or 'quay.io/kubermatic/kubermatic-ee' (EE) instead"
+    },
+    {
+      "category": "action-required",
+      "description": "The '-dynamic-datacenters' flag has now been removed as a flag. Support for handling a 'datacenters.yaml' has been removed also."
+    },
+    {
+      "category": "added",
+      "description": "Added support for the external cluster management",
+      "links": [
+        {
+          "url": "https://docs.kubermatic.com/kubermatic/v2.19/tutorials_howtos/external_clusters/",
+          "caption": "Tutorial"
+        }
+      ]
+    },
+    {
+      "category": "added",
+      "description": "Added experimental support for the Operating System Manager",
+      "links": [
+        {
+          "url": "https://github.com/kubermatic/operating-system-manager",
+          "caption": "GitHub"
+        }
+      ]
+    },
+    {
+      "category": "added",
+      "description": "Added support for AWS AssumeRole when creating the AWS cluster",
+      "links": [
+        {
+          "url": "https://docs.kubermatic.com/kubermatic/v2.19/tutorials_howtos/aws_assume_role/",
+          "caption": "Tutorial"
+        }
+      ]
+    },
+    {
+      "category": "added",
+      "description": "Added support for alerts grouping to the Alertmanager"
+    },
+    {
+      "category": "added",
+      "description": "Added support for the Cilium CNI with the integrated Hubble addon"
+    },
+    {
+      "category": "added",
+      "description": "Added support for the CNI type 'none' to allow users to manage their user cluster CNI on their own"
+    },
+    {
+      "category": "added",
+      "description": "Added support for the Konnectivity",
+      "links": [
+        {
+          "url": "https://docs.kubermatic.com/kubermatic/v2.19/tutorials_howtos/networking/cni_cluster_network/#konnectivity",
+          "caption": "Tutorial"
+        }
+      ]
+    },
+    {
+      "category": "added",
+      "description": "Added support for the 'EventRateLimit' admission plugin",
+      "links": [
+        {
+          "url": "https://docs.kubermatic.com/kubermatic/v2.19/tutorials_howtos/admission_plugins/",
+          "caption": "Tutorial"
+        }
+      ]
+    },
+    {
+      "category": "added",
+      "description": "Extended the audit policy settings. User can now choose from one of the pre-defined configurations: metadata, minimal, recommended, custom.",
+      "links": [
+        {
+          "url": "https://docs.kubermatic.com/kubermatic/v2.19/tutorials_howtos/audit_logging/",
+          "caption": "Tutorial"
+        }
+      ]
+    },
+    {
+      "category": "added",
+      "description": "Redesigned the cluster details information"
+    },
+    {
+      "category": "fixed",
+      "description": "Fixed an issue with EtcdBackupConfigs from multiple clusters having the same ID, which was causing a bug in the UI"
+    },
+    {
+      "category": "fixed",
+      "description": "Fixed missing validation for GCE datacenter zone_suffixes"
+    },
+    {
+      "category": "fixed",
+      "description": "Fixed high resource usage during metering startup"
+    },
+    {
+      "category": "fixed",
+      "description": "Fixed disabling metering not having any effect"
+    }
+  ]
+}
+
