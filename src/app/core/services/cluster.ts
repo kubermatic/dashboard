@@ -25,11 +25,13 @@ import {EtcdRestore} from '@shared/entity/backup';
 import {
   Cluster,
   ClusterPatch,
+  CNIPlugin,
   CNIPluginVersions,
   CreateClusterModel,
   Finalizer,
   MasterVersion,
   ProviderSettingsPatch,
+  Token,
 } from '@shared/entity/cluster';
 import {Event} from '@shared/entity/event';
 import {Health} from '@shared/entity/health';
@@ -40,6 +42,7 @@ import {merge, Observable, of, Subject, timer} from 'rxjs';
 import {catchError, filter, shareReplay, switchMap, switchMapTo, take} from 'rxjs/operators';
 import {ExternalCluster, ExternalClusterModel, ExternalClusterPatch} from '@shared/entity/external-cluster';
 import {ExternalMachineDeployment, ExternalMachineDeploymentPatch} from '@shared/entity/external-machine-deployment';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
 
 @Injectable()
 export class ClusterService {
@@ -55,6 +58,7 @@ export class ClusterService {
   private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * this._refreshTime);
   private _onClustersUpdate = new Subject<void>();
   private _onExternalClustersUpdate = new Subject<void>();
+  private _location: string = window.location.protocol + '//' + window.location.host;
   providerSettingsPatchChanges$ = this._providerSettingsPatch.asObservable();
   onClusterUpdate = new Subject<void>();
   onExternalClusterUpdate = new Subject<void>();
@@ -217,6 +221,28 @@ export class ClusterService {
     return this._http.get<Event[]>(url).pipe(catchError(() => of<Event[]>([])));
   }
 
+  editToken(cluster: Cluster, projectID: string, token: Token): Observable<Token> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster.id}/token`;
+    return this._http.put<Token>(url, token);
+  }
+
+  editViewerToken(cluster: Cluster, projectID: string, token: Token): Observable<Token> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster.id}/viewertoken`;
+    return this._http.put<Token>(url, token);
+  }
+
+  getKubeconfigURL(projectID: string, clusterID: string): string {
+    return `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/kubeconfig`;
+  }
+
+  getDashboardProxyURL(projectID: string, clusterID: string): string {
+    return `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/dashboard/proxy`;
+  }
+
+  getShareKubeconfigURL(projectID: string, seed: string, clusterID: string, userID: string): string {
+    return `${this._location}/${this._restRoot}/kubeconfig?project_id=${projectID}&datacenter=${seed}&cluster_id=${clusterID}&user_id=${userID}`;
+  }
+
   externalClusterEvents(projectID: string, clusterID: string): Observable<Event[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/events`;
     return this._http.get<Event[]>(url).pipe(catchError(() => of<Event[]>()));
@@ -301,6 +327,21 @@ export class ClusterService {
   restores(projectID: string): Observable<EtcdRestore[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/etcdrestores`;
     return this._http.get<EtcdRestore[]>(url);
+  }
+
+  getMasterVersions(provider: NodeProvider): Observable<MasterVersion[]> {
+    const url = `${this._newRestRoot}/providers/${provider}/versions`;
+    return this._http.get<MasterVersion[]>(url);
+  }
+
+  getAdmissionPlugins(version: string): Observable<string[]> {
+    const url = `${this._restRoot}/admission/plugins/${version}`;
+    return this._http.get<string[]>(url);
+  }
+
+  getCNIPluginVersions(cniPlugin: CNIPlugin): Observable<CNIPluginVersions> {
+    const url = `${this._newRestRoot}/cni/${cniPlugin}/versions`;
+    return this._http.get<CNIPluginVersions>(url);
   }
 
   private _deleteExternalCluster(projectID: string, clusterID: string): Observable<any> {
