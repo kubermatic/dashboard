@@ -23,7 +23,7 @@ import {take, takeUntil} from 'rxjs/operators';
 import {ConfirmationDialogComponent} from '../confirmation-dialog/component';
 import {EditAddonDialogComponent} from './edit-addon-dialog/component';
 import {InstallAddonDialogComponent} from './install-addon-dialog/component';
-import {AddonService} from "@core/services/addon";
+import {AddonService} from '@core/services/addon';
 
 @Component({
   selector: 'km-addon-list',
@@ -55,13 +55,10 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this._addonService
-      .accessibleAddons
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(accessibleAddons => {
-        this.accessibleAddons = accessibleAddons;
-        this._updateInstallableAddons();
-      });
+    this._addonService.accessibleAddons.pipe(takeUntil(this._unsubscribe)).subscribe(accessibleAddons => {
+      this.accessibleAddons = accessibleAddons;
+      this._updateInstallableAddons();
+    });
 
     this._addonService.addonConfigs.pipe(takeUntil(this._unsubscribe)).subscribe(addonConfigs => {
       const map = new Map();
