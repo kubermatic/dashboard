@@ -27,11 +27,10 @@ import {takeUntil} from 'rxjs/operators';
   styleUrls: ['./style.scss'],
 })
 export class EventListComponent implements OnInit, OnChanges, OnDestroy {
+  private _unsubscribe = new Subject<void>();
   @Input() events: Event[] = [];
-
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-
   dataSource = new MatTableDataSource<Event>();
   displayedColumns: string[] = [
     'status',
@@ -41,7 +40,6 @@ export class EventListComponent implements OnInit, OnChanges, OnDestroy {
     'count',
     'lastTimestamp',
   ];
-  private _unsubscribe = new Subject<void>();
 
   constructor(private readonly _userService: UserService) {}
 
@@ -60,7 +58,7 @@ export class EventListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(): void {
-    this.dataSource.data = this.events;
+    this.dataSource.data = this._group(this.events);
   }
 
   ngOnDestroy(): void {
@@ -85,5 +83,40 @@ export class EventListComponent implements OnInit, OnChanges, OnDestroy {
 
   isPaginatorVisible(): boolean {
     return this.hasEvents() && this.paginator && this.events.length >= this.paginator.pageSize;
+  }
+
+  private _hash(event: Event): number {
+    const s = event.message + event.type + event.involvedObject?.name || '';
+    const shift = 5;
+    let hash = 0;
+
+    if (s.length === 0) {
+      return hash;
+    }
+
+    for (let i = 0; i < s.length; i++) {
+      const char = s.charCodeAt(i);
+      hash = (hash << shift) - hash + char;
+      hash = hash & hash;
+    }
+
+    return hash;
+  }
+
+  private _group(events: Event[]): Event[] {
+    const map = new Map<number, Event>();
+
+    events.forEach(event => {
+      const hash = this._hash(event);
+      if (map.has(hash)) {
+        const ev = event;
+        ev.count += map.get(hash).count;
+        map.set(hash, ev);
+      }
+
+      map.set(hash, event);
+    });
+
+    return Array.from(map.values());
   }
 }

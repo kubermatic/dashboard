@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EditProviderSettingsComponent} from '@app/cluster/details/cluster/edit-provider-settings/component';
@@ -26,6 +26,7 @@ import {OPAService} from '@core/services/opa';
 import {PathParam} from '@core/services/params';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Addon} from '@shared/entity/addon';
 import {
   Cluster,
@@ -38,13 +39,13 @@ import {
 } from '@shared/entity/cluster';
 import {View} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
-import {Node} from '@shared/entity/node';
 import {Event} from '@shared/entity/event';
 import {Health, HealthState, HealthType} from '@shared/entity/health';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {Member} from '@shared/entity/member';
 import {ClusterMetrics} from '@shared/entity/metrics';
 import {AlertmanagerConfig, RuleGroup} from '@shared/entity/mla';
+import {Node} from '@shared/entity/node';
 import {Constraint, GatekeeperConfig} from '@shared/entity/opa';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {Config, GroupConfig} from '@shared/model/Config';
@@ -54,15 +55,12 @@ import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import _ from 'lodash';
 import {combineLatest, iif, Observable, of, Subject} from 'rxjs';
 import {filter, map, switchMap, take, takeUntil} from 'rxjs/operators';
+import {coerce, compare} from 'semver';
 import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation/component';
 import {EditClusterComponent} from './edit-cluster/component';
 import {EditSSHKeysComponent} from './edit-sshkeys/component';
 import {RevokeTokenComponent} from './revoke-token/component';
 import {ShareKubeconfigComponent} from './share-kubeconfig/component';
-import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
-import {coerce, compare} from 'semver';
-import {AddonService} from '@core/services/addon';
-import {MachineDeploymentService} from '@core/services/machine-deployment';
 
 @Component({
   selector: 'km-cluster-details',
@@ -70,6 +68,13 @@ import {MachineDeploymentService} from '@core/services/machine-deployment';
   styleUrls: ['./style.scss'],
 })
 export class ClusterDetailsComponent implements OnInit, OnDestroy {
+  private _unsubscribe: Subject<void> = new Subject<void>();
+  private _user: Member;
+  private _currentGroupConfig: GroupConfig;
+  private _seedSettings: SeedSettings;
+
+  readonly HealthType = HealthType;
+
   externalCCMMigrationStatus = ExternalCCMMigrationStatus;
   cluster: Cluster;
   nodeDc: Datacenter;
@@ -94,11 +99,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   gatekeeperConfig: GatekeeperConfig;
   alertmanagerConfig: AlertmanagerConfig;
   ruleGroups: RuleGroup[];
-  readonly HealthType = HealthType;
-  private _unsubscribe: Subject<void> = new Subject<void>();
-  private _user: Member;
-  private _currentGroupConfig: GroupConfig;
-  private _seedSettings: SeedSettings;
+  onExpandChange$ = new EventEmitter<boolean>();
 
   get admissionPlugins(): string[] {
     return Object.keys(AdmissionPlugin);
@@ -254,6 +255,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             : cniVersions.versions.sort((a, b) => compare(coerce(a), coerce(b)));
           this.constraints = constraints;
           this.gatekeeperConfig = gatekeeperConfig;
+          this.onExpandChange$.next(!this.isClusterRunning);
         },
         error: error => {
           const errorCodeNotFound = 404;
@@ -262,15 +264,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           }
         },
       });
-  }
-
-  private _canReloadVersions(): boolean {
-    return (
-      this.cluster &&
-      this.health &&
-      HealthState.isUp(this.health.apiserver) &&
-      HealthState.isUp(this.health.machineController)
-    );
   }
 
   getProvider(provider: string): string {
@@ -517,5 +510,14 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   isHavingCNI(): boolean {
     return !!this.cluster?.spec?.cniPlugin && this.cluster?.spec?.cniPlugin?.type !== CNIPlugin.None;
+  }
+
+  private _canReloadVersions(): boolean {
+    return (
+      this.cluster &&
+      this.health &&
+      HealthState.isUp(this.health.apiserver) &&
+      HealthState.isUp(this.health.machineController)
+    );
   }
 }
