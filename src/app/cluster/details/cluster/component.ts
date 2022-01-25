@@ -438,7 +438,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   handleAddonCreation(addon: Addon): void {
     this._addonService
-      .create(addon, this.projectID, this.cluster.id)
+      .add(addon, this.projectID, this.cluster.id)
       .pipe(take(1))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {

@@ -31,13 +31,13 @@ export class AddonService {
   constructor(private readonly _appConfigService: AppConfigService, private readonly _httpClient: HttpClient) {}
 
   /**
-   * Deploys addon in a cluster.
+   * Adds addon into a cluster.
    *
-   * @param addon     addon to deploy
+   * @param addon     addon
    * @param projectID ID of a project
    * @param clusterID ID of a cluster
    */
-  create(addon: Addon, projectID: string, clusterID: string): Observable<Addon> {
+  add(addon: Addon, projectID: string, clusterID: string): Observable<Addon> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/addons`;
     return this._httpClient.post<Addon>(url, addon);
   }
