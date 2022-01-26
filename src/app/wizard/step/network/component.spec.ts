@@ -32,6 +32,14 @@ import {SharedModule} from '@shared/module';
 import {MachineNetworkStepComponent} from './component';
 import {AlibabaService} from '@core/services/provider/alibaba';
 import {MachineDeploymentService} from '@core/services/machine-deployment';
+import {AnexiaService} from '@core/services/provider/anexia';
+import {AWSService} from '@core/services/provider/aws';
+import {AzureService} from '@core/services/provider/azure';
+import {GCPService} from '@core/services/provider/gcp';
+import {HetznerService} from '@core/services/provider/hetzner';
+import {DigitalOceanService} from '@core/services/provider/digitalocean';
+import {OpenStackService} from '@core/services/provider/openstack';
+import {EquinixService} from '@core/services/provider/equinix';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule];
 
@@ -52,6 +60,14 @@ describe('MachineNetworkStepComponent', () => {
           DatacenterService,
           AppConfigService,
           AlibabaService,
+          AnexiaService,
+          AWSService,
+          AzureService,
+          DigitalOceanService,
+          EquinixService,
+          GCPService,
+          HetznerService,
+          OpenStackService,
           MachineDeploymentService,
           {provide: ProjectService, useValue: ProjectMockService},
           {provide: Auth, useClass: AuthMockService},

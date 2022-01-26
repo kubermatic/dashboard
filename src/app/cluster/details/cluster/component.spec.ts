@@ -54,6 +54,8 @@ import {NodeListComponent} from './node-list/component';
 import {RBACComponent} from './rbac/component';
 import {VersionPickerComponent} from '../shared/version-picker/component';
 import {nodesFake} from '@app/testing/fake-data/node';
+import {MachineDeploymentService} from '@core/services/machine-deployment';
+import {AddonService} from '@core/services/addon';
 
 describe('ClusterDetailsComponent', () => {
   let fixture: ComponentFixture<ClusterDetailsComponent>;
@@ -107,6 +109,8 @@ describe('ClusterDetailsComponent', () => {
           {provide: MLAService, useValue: mlaMock},
           {provide: MatDialogRef, useClass: MatDialogRefMock},
           {provide: MatDialog, useClass: MatDialogMock},
+          AddonService,
+          MachineDeploymentService,
           GoogleAnalyticsService,
           NotificationService,
         ],

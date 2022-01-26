@@ -45,6 +45,7 @@ import {MachineDeploymentHealthStatus} from '@shared/utils/health-status/machine
 import {NodeListComponent} from '../node-list/component';
 import {ClusterPanelComponent} from './cluster-panel/component';
 import {MachineDeploymentDetailsComponent} from './component';
+import {MachineDeploymentService} from '@core/services/machine-deployment';
 
 describe('MachineDeploymentDetailsComponent', () => {
   let fixture: ComponentFixture<MachineDeploymentDetailsComponent>;
@@ -70,6 +71,7 @@ describe('MachineDeploymentDetailsComponent', () => {
           {provide: AppConfigService, useClass: AppConfigMockService},
           {provide: NodeService, useClass: NodeMockService},
           {provide: SettingsService, useClass: SettingsMockService},
+          MachineDeploymentService,
           GoogleAnalyticsService,
           NotificationService,
         ],

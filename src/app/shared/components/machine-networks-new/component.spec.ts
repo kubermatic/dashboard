@@ -30,6 +30,15 @@ import {ProjectService} from '@core/services/project';
 import {PresetsService} from '@core/services/wizard/presets';
 import {SharedModule} from '@shared/module';
 import {MachineNetworkComponent} from './component';
+import {AlibabaService} from '@core/services/provider/alibaba';
+import {AnexiaService} from '@core/services/provider/anexia';
+import {AWSService} from '@core/services/provider/aws';
+import {AzureService} from '@core/services/provider/azure';
+import {DigitalOceanService} from '@core/services/provider/digitalocean';
+import {EquinixService} from '@core/services/provider/equinix';
+import {GCPService} from '@core/services/provider/gcp';
+import {HetznerService} from '@core/services/provider/hetzner';
+import {OpenStackService} from '@core/services/provider/openstack';
 
 const modules: any[] = [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule];
 
@@ -48,6 +57,15 @@ describe('MachineNetworksComponent', () => {
           ParamsService,
           PresetsService,
           WizardService,
+          AlibabaService,
+          AnexiaService,
+          AWSService,
+          AzureService,
+          DigitalOceanService,
+          EquinixService,
+          GCPService,
+          HetznerService,
+          OpenStackService,
           {provide: ProjectService, useValue: ProjectMockService},
           {provide: NODE_DATA_CONFIG, useValue: NodeDataMode.Wizard},
           {provide: DatacenterService, useClass: DatacenterMockService},
