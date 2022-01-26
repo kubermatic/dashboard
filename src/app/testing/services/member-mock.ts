@@ -32,6 +32,6 @@ export class MemberServiceMock {
   }
 
   delete(_projectID: string, _member: Member): Observable<any> {
-    return of();
+    return of(null);
   }
 }

@@ -24,6 +24,8 @@ import {CoreModule} from '@core/module';
 import {NotificationService} from '@core/services/notification';
 import {of} from 'rxjs';
 import {NodeService} from './node';
+import {MachineDeploymentServiceMock} from '@app/testing/services/machine-deployment-mock';
+import {MachineDeploymentService} from './machine-deployment';
 
 class MatDialogMock {
   open(): any {
@@ -39,6 +41,7 @@ describe('NodeService', () => {
         NodeService,
         GoogleAnalyticsService,
         {provide: MatDialog, useClass: MatDialogMock},
+        {provide: MachineDeploymentService, useClass: MachineDeploymentServiceMock},
         NotificationService,
       ],
       teardown: {destroyAfterEach: false},

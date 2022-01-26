@@ -32,6 +32,12 @@ import {of} from 'rxjs';
 import {AlertmanagerConfigComponent} from './component';
 import {AppConfigService} from '@app/config.service';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock';
+import {Router} from '@angular/router';
+import {RouterStub} from '@app/testing/router-stubs';
+import {UserService} from '@core/services/user';
+import {UserMockService} from '@app/testing/services/user-mock';
+import {AddonService} from '@core/services/addon';
+import {AddonServiceMock} from '@app/testing/services/addon-mock';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, DialogTestModule];
 
@@ -57,6 +63,9 @@ describe('AlertmanagerConfigComponent', () => {
           {provide: SettingsService, useClass: SettingsMockService},
           {provide: DatacenterService, useClass: DatacenterMockService},
           {provide: AppConfigService, useClass: AppConfigMockService},
+          {provide: Router, useClass: RouterStub},
+          {provide: UserService, useClass: UserMockService},
+          {provide: AddonService, useClass: AddonServiceMock},
           MatDialog,
           NotificationService,
         ],

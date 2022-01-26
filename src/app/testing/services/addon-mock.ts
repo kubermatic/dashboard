@@ -13,21 +13,20 @@
 // limitations under the License.
 
 import {Injectable} from '@angular/core';
-import {SSHKey} from '@shared/entity/ssh-key';
 import {Observable, of} from 'rxjs';
-import {fakeSSHKeys} from '@app/testing/fake-data/sshkey';
+import {Addon} from '@shared/entity/addon';
 
 @Injectable()
-export class SSHKeyMockService {
-  add(_sshKey: SSHKey, _projectID: string): Observable<SSHKey> {
-    return of(fakeSSHKeys()[0]);
+export class AddonServiceMock {
+  list(_projectID: string, _clusterID: string): Observable<Addon[]> {
+    return of([]);
   }
 
-  list(_projectID: string): Observable<SSHKey[]> {
-    return of(fakeSSHKeys());
+  get addonConfigs(): Observable<any> {
+    return of([]);
   }
 
-  delete(_sshkeyID: string, _projectID: string): Observable<any> {
-    return of(null);
+  get accessibleAddons(): Observable<string[]> {
+    return of([]);
   }
 }

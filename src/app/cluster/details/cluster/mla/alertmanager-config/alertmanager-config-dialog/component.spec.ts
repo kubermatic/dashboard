@@ -26,6 +26,7 @@ import {MLAService} from '@core/services/mla';
 import {SharedModule} from '@shared/module';
 import {MonacoEditorModule, NGX_MONACO_EDITOR_CONFIG} from 'ngx-monaco-editor';
 import {AlertmanagerConfigDialog} from './component';
+import {asyncData} from '@app/testing/services/cluster-mock';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule];
 
@@ -42,6 +43,7 @@ describe('AlertmanagerConfigDialog', () => {
         putAlertmanagerConfig: jest.fn(),
         refreshAlertmanagerConfig: () => {},
       };
+      putAlertmanagerConfigSpy = mlaMock.putAlertmanagerConfig.mockReturnValue(asyncData(fakeAlertmanagerConfig()));
 
       TestBed.configureTestingModule({
         imports: [...modules],
