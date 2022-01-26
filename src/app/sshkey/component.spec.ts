@@ -34,6 +34,7 @@ import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
 import {SSHKeyComponent} from './component';
+import {SSHKeyService} from '@core/services/ssh-key';
 
 describe('SSHKeyComponent', () => {
   let fixture: ComponentFixture<SSHKeyComponent>;
@@ -64,6 +65,7 @@ describe('SSHKeyComponent', () => {
           MatDialog,
           GoogleAnalyticsService,
           NotificationService,
+          SSHKeyService,
         ],
         teardown: {destroyAfterEach: false},
       }).compileComponents();

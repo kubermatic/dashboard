@@ -21,9 +21,9 @@ import {AppConfigService} from '@app/config.service';
 import {fakeAWSCluster} from '@app/testing/fake-data/cluster';
 import {fakeHealth} from '@app/testing/fake-data/health';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
-import {asyncData} from '@app/testing/services/api-mock';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock';
 import {AuthMockService} from '@app/testing/services/auth-mock';
+import {asyncData} from '@app/testing/services/cluster-mock';
 import {DatacenterMockService} from '@app/testing/services/datacenter-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';
 import {SettingsMockService} from '@app/testing/services/settings-mock';
@@ -37,6 +37,7 @@ import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
 import {ClusterListComponent} from './component';
+import {MachineDeploymentService} from '@core/services/machine-deployment';
 
 describe('ClusterListComponent', () => {
   let fixture: ComponentFixture<ClusterListComponent>;
@@ -70,6 +71,7 @@ describe('ClusterListComponent', () => {
           {provide: ProjectService, useClass: ProjectMockService},
           {provide: SettingsService, useClass: SettingsMockService},
           EndOfLifeService,
+          MachineDeploymentService,
         ],
         teardown: {destroyAfterEach: false},
       }).compileComponents();

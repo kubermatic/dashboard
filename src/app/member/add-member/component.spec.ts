@@ -18,7 +18,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {fakeMember} from '@app/testing/fake-data/member';
 import {fakeProject} from '@app/testing/fake-data/project';
-import {asyncData} from '@app/testing/services/api-mock';
+import {asyncData} from '@app/testing/services/cluster-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';
 import {NotificationService} from '@core/services/notification';

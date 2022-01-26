@@ -27,6 +27,7 @@ import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
 import {EditSSHKeysComponent} from './component';
 import {SSHKeyService} from '@core/services/ssh-key';
+import {SSHKeyMockService} from '@app/testing/services/ssh-key-mock';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
@@ -43,7 +44,7 @@ describe('EditSSHKeysComponent', () => {
           {provide: ClusterService, useClass: ClusterMockService},
           {provide: UserService, useClass: UserMockService},
           {provide: AppConfigService, useClass: AppConfigMockService},
-          SSHKeyService,
+          {provide: SSHKeyService, useClass: SSHKeyMockService},
           MatDialog,
           GoogleAnalyticsService,
           NotificationService,

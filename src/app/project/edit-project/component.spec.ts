@@ -17,13 +17,13 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {fakeProject} from '@app/testing/fake-data/project';
-=import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
+import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';
 import {SharedModule} from '@shared/module';
 import {ProjectModule} from '../module';
 import {EditProjectComponent} from './component';
-import {ProjectService} from "@core/services/project";
-import { asyncData } from '@app/testing/services/cluster-mock';
+import {ProjectService} from '@core/services/project';
+import {asyncData} from '@app/testing/services/cluster-mock';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, ProjectModule];
 

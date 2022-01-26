@@ -30,6 +30,8 @@ import {PresetsService} from '@core/services/wizard/presets';
 import {WizardService} from '@core/services/wizard/wizard';
 import {SharedModule} from '@shared/module';
 import {MachineNetworkStepComponent} from './component';
+import {AlibabaService} from '@core/services/provider/alibaba';
+import {MachineDeploymentService} from '@core/services/machine-deployment';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule];
 
@@ -49,6 +51,8 @@ describe('MachineNetworkStepComponent', () => {
           PresetsService,
           DatacenterService,
           AppConfigService,
+          AlibabaService,
+          MachineDeploymentService,
           {provide: ProjectService, useValue: ProjectMockService},
           {provide: Auth, useClass: AuthMockService},
           {provide: NODE_DATA_CONFIG, useValue: NodeDataMode.Wizard},

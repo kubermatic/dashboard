@@ -30,6 +30,7 @@ import {CoreModule} from '@core/module';
 import {NotificationService} from '@core/services/notification';
 import {AddSshKeyDialogComponent} from './component';
 import {SSHKeyService} from '@core/services/ssh-key';
+import {SSHKeyMockService} from '@app/testing/services/ssh-key-mock';
 
 const modules: any[] = [
   BrowserModule,
@@ -56,7 +57,7 @@ describe('AddSshKeyDialogComponent', () => {
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},
         {provide: Router, useClass: RouterStub},
-        SSHKeyService,
+        {provide: SSHKeyService, useClass: SSHKeyMockService},
         GoogleAnalyticsService,
         NotificationService,
       ],
