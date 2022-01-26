@@ -30,6 +30,8 @@ import {SettingsService} from '@core/services/settings';
 import {SharedModule} from '@shared/module';
 import {of} from 'rxjs';
 import {AlertmanagerConfigComponent} from './component';
+import {AppConfigService} from '@app/config.service';
+import {AppConfigMockService} from '@app/testing/services/app-config-mock';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, DialogTestModule];
 
@@ -54,6 +56,7 @@ describe('AlertmanagerConfigComponent', () => {
           {provide: MLAService, useValue: mlaMock},
           {provide: SettingsService, useClass: SettingsMockService},
           {provide: DatacenterService, useClass: DatacenterMockService},
+          {provide: AppConfigService, useClass: AppConfigMockService},
           MatDialog,
           NotificationService,
         ],

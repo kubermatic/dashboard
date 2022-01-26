@@ -34,6 +34,7 @@ import {SharedModule} from '@shared/module';
 import {ServiceAccountModule} from '../module';
 import {ServiceAccountTokenComponent} from './component';
 import {ServiceAccountService} from '@core/services/service-account';
+import {ServiceAccountMockService} from '@app/testing/services/service-account-mock';
 
 describe('ServiceAccountTokenComponent', () => {
   let fixture: ComponentFixture<ServiceAccountTokenComponent>;
@@ -58,7 +59,7 @@ describe('ServiceAccountTokenComponent', () => {
           {provide: ProjectService, useClass: ProjectMockService},
           {provide: AppConfigService, useClass: AppConfigMockService},
           {provide: UserService, useClass: UserMockService},
-          ServiceAccountService,
+          {provide: ServiceAccountService, useClass: ServiceAccountMockService},
           MatDialog,
           GoogleAnalyticsService,
           NotificationService,
@@ -85,7 +86,7 @@ describe('ServiceAccountTokenComponent', () => {
   });
 
   it('should open delete service account token dialog & call deleteServiceAccountToken()', fakeAsync(() => {
-    const spy = jest.spyOn(fixture.debugElement.injector.get(ServiceAccountService) as any, 'delete');
+    const spy = jest.spyOn(fixture.debugElement.injector.get(ServiceAccountService) as any, 'deleteToken');
 
     const waitTime = 15000;
     component.deleteToken(fakeServiceAccountTokens()[0]);
