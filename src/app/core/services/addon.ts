@@ -56,7 +56,7 @@ export class AddonService {
   /**
    * Patches addon in a cluster.
    *
-   * @param addon     patched addon
+   * @param addon     addon
    * @param projectID ID of a project
    * @param clusterID ID of a cluster
    */

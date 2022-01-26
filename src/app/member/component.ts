@@ -91,7 +91,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
     merge(timer(0, this._refreshTime * this._appConfig.getRefreshTimeBase()), this._membersUpdate)
-      .pipe(switchMap(() => (this._selectedProject ? this._memberService.get(this._selectedProject.id) : EMPTY)))
+      .pipe(switchMap(() => (this._selectedProject ? this._memberService.list(this._selectedProject.id) : EMPTY)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(members => {
         this.members = members;
@@ -186,13 +186,13 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
       },
     };
 
-    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
     this._googleAnalyticsService.emitEvent('memberOverview', 'deleteMemberOpened');
 
-    dialogRef
+    this._matDialog
+      .open(ConfirmationDialogComponent, dialogConfig)
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
-      .pipe(switchMap(_ => this._memberService.delete(this._selectedProject.id, member)))
+      .pipe(switchMap(_ => this._memberService.remove(member, this._selectedProject.id)))
       .pipe(take(1))
       .subscribe(() => {
         this._notificationService.success(

@@ -16,7 +16,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
-import {CreateMember, Member} from '@shared/entity/member';
+import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {MemberService} from '@core/services/member';
 
@@ -46,19 +46,17 @@ export class AddMemberComponent implements OnInit {
       return;
     }
 
-    const createMember: CreateMember = {
-      email: this.addMemberForm.controls.email.value,
-      projects: [
+    this._memberService
+      .add(
         {
-          group: this.addMemberForm.controls.group.value,
-          id: this.project.id,
+          email: this.addMemberForm.controls.email.value,
+          projects: [{group: this.addMemberForm.controls.group.value, id: this.project.id}],
         },
-      ],
-    };
-
-    this._memberService.create(this.project.id, createMember).subscribe((member: Member) => {
-      this._matDialogRef.close(member);
-      this._notificationService.success(`The ${member.email} member was added to the ${this.project.name} project`);
-    });
+        this.project.id
+      )
+      .subscribe((member: Member) => {
+        this._matDialogRef.close(member);
+        this._notificationService.success(`The ${member.email} member was added to the ${this.project.name} project`);
+      });
   }
 }

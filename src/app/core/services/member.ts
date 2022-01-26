@@ -16,7 +16,7 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {environment} from '@environments/environment';
 import {Observable} from 'rxjs';
-import {CreateMember, Member} from '@shared/entity/member';
+import {Member, MemberModel} from '@shared/entity/member';
 
 @Injectable()
 export class MemberService {
@@ -24,22 +24,45 @@ export class MemberService {
 
   constructor(private readonly _httpClient: HttpClient) {}
 
-  get(projectID: string): Observable<Member[]> {
+  /**
+   * Adds member into a project.
+   *
+   * @param model     member model
+   * @param projectID ID of a project
+   */
+  add(model: MemberModel, projectID: string): Observable<Member> {
+    const url = `${this._restRoot}/projects/${projectID}/users`;
+    return this._httpClient.post<Member>(url, model);
+  }
+
+  /**
+   * Lists members of a project.
+   *
+   * @param projectID ID of a project
+   */
+  list(projectID: string): Observable<Member[]> {
     const url = `${this._restRoot}/projects/${projectID}/users`;
     return this._httpClient.get<Member[]>(url);
   }
 
-  create(projectID: string, member: CreateMember): Observable<Member> {
-    const url = `${this._restRoot}/projects/${projectID}/users`;
-    return this._httpClient.post<Member>(url, member);
-  }
-
-  edit(projectID: string, member: Member): Observable<Member> {
+  /**
+   * Edits member in a project.
+   *
+   * @param member    member
+   * @param projectID ID of a project
+   */
+  edit(member: Member, projectID: string): Observable<Member> {
     const url = `${this._restRoot}/projects/${projectID}/users/${member.id}`;
     return this._httpClient.put<Member>(url, member);
   }
 
-  delete(projectID: string, member: Member): Observable<any> {
+  /**
+   * Removes member from a project.
+   *
+   * @param member    member
+   * @param projectID ID of a project
+   */
+  remove(member: Member, projectID: string): Observable<any> {
     const url = `${this._restRoot}/projects/${projectID}/users/${member.id}`;
     return this._httpClient.delete(url);
   }

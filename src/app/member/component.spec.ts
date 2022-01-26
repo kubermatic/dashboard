@@ -82,7 +82,7 @@ describe('MemberComponent', () => {
   });
 
   it('should open delete member confirmation dialog & call delete()', fakeAsync(() => {
-    const spy = jest.spyOn(fixture.debugElement.injector.get(MemberService) as any, 'delete');
+    const spy = jest.spyOn(fixture.debugElement.injector.get(MemberService) as any, 'remove');
 
     const waitTime = 15000;
     component.deleteMember(fakeMembers()[0]);

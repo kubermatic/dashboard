@@ -47,23 +47,21 @@ export class EditMemberComponent implements OnInit {
       return;
     }
 
-    const editMember: Member = {
-      id: this.member.id,
-      name: this.member.name,
-      email: this.member.email,
-      creationTimestamp: this.member.creationTimestamp,
-      deletionTimestamp: this.member.deletionTimestamp,
-      projects: [
+    this._memberService
+      .edit(
         {
-          group: this.form.controls.group.value,
-          id: this.project.id,
+          id: this.member.id,
+          name: this.member.name,
+          email: this.member.email,
+          creationTimestamp: this.member.creationTimestamp,
+          deletionTimestamp: this.member.deletionTimestamp,
+          projects: [{group: this.form.controls.group.value, id: this.project.id}],
         },
-      ],
-    };
-
-    this._memberService.edit(this.project.id, editMember).subscribe(() => {
-      this._matDialogRef.close(true);
-      this._notificationService.success(`The ${this.member.name} member was updated`);
-    });
+        this.project.id
+      )
+      .subscribe(() => {
+        this._matDialogRef.close(true);
+        this._notificationService.success(`The ${this.member.name} member was updated`);
+      });
   }
 }

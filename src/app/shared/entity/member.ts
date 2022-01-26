@@ -31,7 +31,7 @@ export class MemberProject {
   id: string;
 }
 
-export class CreateMember {
+export class MemberModel {
   email: string;
   projects: MemberProject[];
 }

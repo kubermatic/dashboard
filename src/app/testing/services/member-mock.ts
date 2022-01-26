@@ -15,23 +15,23 @@
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {fakeMembers} from '@app/testing/fake-data/member';
-import {CreateMember, Member} from '@shared/entity/member';
+import {Member, MemberModel} from '@shared/entity/member';
 
 @Injectable()
 export class MemberServiceMock {
-  get(_projectID: string): Observable<Member[]> {
+  add(_member: MemberModel, _projectID: string): Observable<Member> {
+    return of(fakeMembers()[0]);
+  }
+
+  list(_projectID: string): Observable<Member[]> {
     return of(fakeMembers());
   }
 
-  create(_projectID: string, _member: CreateMember): Observable<Member> {
+  edit(_member: Member, _projectID: string): Observable<Member> {
     return of(fakeMembers()[0]);
   }
 
-  edit(_projectID: string, _member: Member): Observable<Member> {
-    return of(fakeMembers()[0]);
-  }
-
-  delete(_projectID: string, _member: Member): Observable<any> {
+  remove(_member: Member, _projectID: string): Observable<any> {
     return of(null);
   }
 }

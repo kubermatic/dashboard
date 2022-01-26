@@ -82,7 +82,7 @@ describe('AddProjectComponent', () => {
   });
 
   it('should call addMember method', fakeAsync(() => {
-    const spy = jest.spyOn(fixture.debugElement.injector.get(MemberService) as any, 'create');
+    const spy = jest.spyOn(fixture.debugElement.injector.get(MemberService) as any, 'add');
 
     component.project = fakeProject();
     component.addMemberForm.controls.email.patchValue('john@doe.com');
