@@ -35,13 +35,13 @@ import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
 import {SSHKeyComponent} from './component';
 import {SSHKeyService} from '@core/services/ssh-key';
+import {SSHKeyMockService} from '@app/testing/services/ssh-key-mock';
 
 describe('SSHKeyComponent', () => {
   let fixture: ComponentFixture<SSHKeyComponent>;
   let noop: ComponentFixture<NoopConfirmDialogComponent>;
   let component: SSHKeyComponent;
   let activatedRoute: ActivatedRouteStub;
-  let deleteSSHKeySpy;
 
   beforeEach(
     waitForAsync(() => {
@@ -62,10 +62,10 @@ describe('SSHKeyComponent', () => {
           {provide: ActivatedRoute, useClass: ActivatedRouteStub},
           {provide: ProjectService, useClass: ProjectMockService},
           {provide: SettingsService, useClass: SettingsMockService},
+          {provide: SSHKeyService, useClass: SSHKeyMockService},
           MatDialog,
           GoogleAnalyticsService,
           NotificationService,
-          SSHKeyService,
         ],
         teardown: {destroyAfterEach: false},
       }).compileComponents();
@@ -89,6 +89,8 @@ describe('SSHKeyComponent', () => {
   });
 
   it('should open delete ssh key confirmation dialog & call deleteSSHKey()', fakeAsync(() => {
+    const spy = jest.spyOn(fixture.debugElement.injector.get(SSHKeyService) as any, 'delete');
+
     const waitTime = 15000;
     component.project = fakeProject();
     component.sshKeys = fakeSSHKeys();
@@ -112,7 +114,7 @@ describe('SSHKeyComponent', () => {
     fixture.detectChanges();
     tick(waitTime);
 
-    expect(deleteSSHKeySpy).toHaveBeenCalled();
+    expect(spy).toHaveBeenCalled();
     fixture.destroy();
     flush();
   }));

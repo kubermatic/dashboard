@@ -26,6 +26,7 @@ import {OPAService} from '@core/services/opa';
 import {SharedModule} from '@shared/module';
 import {MonacoEditorModule, NGX_MONACO_EDITOR_CONFIG} from 'ngx-monaco-editor';
 import {GatekeeperConfigDialog, Mode} from './component';
+import {asyncData} from '@app/testing/services/cluster-mock';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule];
 
@@ -44,6 +45,8 @@ describe('GatekeeperConfigDialog', () => {
         patchGatekeeperConfig: jest.fn(),
         refreshGatekeeperConfig: () => {},
       };
+      createGatekeeperConfigSpy = opaMock.createGatekeeperConfig.mockReturnValue(asyncData(fakeGatekeeperConfig()));
+      patchGatekeeperConfigSpy = opaMock.patchGatekeeperConfig.mockReturnValue(asyncData(fakeGatekeeperConfig()));
 
       TestBed.configureTestingModule({
         imports: [...modules],

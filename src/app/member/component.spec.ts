@@ -24,7 +24,6 @@ import {DialogTestModule, NoopConfirmDialogComponent} from '@app/testing/compone
 import {fakeMembers} from '@app/testing/fake-data/member';
 import {RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock';
-import {asyncData} from '@app/testing/services/cluster-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';
 import {SettingsMockService} from '@app/testing/services/settings-mock';
 import {UserMockService} from '@app/testing/services/user-mock';
@@ -33,21 +32,17 @@ import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
-import {of} from 'rxjs';
 import {MemberComponent} from './component';
+import {MemberService} from '@core/services/member';
+import {MemberServiceMock} from '@app/testing/services/member-mock';
 
 describe('MemberComponent', () => {
   let fixture: ComponentFixture<MemberComponent>;
   let noop: ComponentFixture<NoopConfirmDialogComponent>;
   let component: MemberComponent;
-  let deleteMembersSpy;
 
   beforeEach(
     waitForAsync(() => {
-      const apiMock = {getMembers: jest.fn(), deleteMembers: jest.fn()};
-      apiMock.getMembers.mockReturnValue(asyncData(fakeMembers()));
-      deleteMembersSpy = apiMock.deleteMembers.mockReturnValue(of(null));
-
       TestBed.configureTestingModule({
         imports: [
           BrowserModule,
@@ -64,6 +59,7 @@ describe('MemberComponent', () => {
           {provide: UserService, useClass: UserMockService},
           {provide: AppConfigService, useClass: AppConfigMockService},
           {provide: SettingsService, useClass: SettingsMockService},
+          {provide: MemberService, useClass: MemberServiceMock},
           MatDialog,
           GoogleAnalyticsService,
           NotificationService,
@@ -85,7 +81,9 @@ describe('MemberComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should open delete member confirmation dialog & call deleteMembers()', fakeAsync(() => {
+  it('should open delete member confirmation dialog & call delete()', fakeAsync(() => {
+    const spy = jest.spyOn(fixture.debugElement.injector.get(MemberService) as any, 'delete');
+
     const waitTime = 15000;
     component.deleteMember(fakeMembers()[0]);
     noop.detectChanges();
@@ -103,7 +101,7 @@ describe('MemberComponent', () => {
     fixture.detectChanges();
     tick(waitTime);
 
-    expect(deleteMembersSpy).toHaveBeenCalled();
+    expect(spy).toHaveBeenCalled();
     fixture.destroy();
     flush();
   }));

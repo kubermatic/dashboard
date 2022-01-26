@@ -31,7 +31,6 @@ import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
-import {of} from 'rxjs';
 import {ServiceAccountModule} from '../module';
 import {ServiceAccountTokenComponent} from './component';
 import {ServiceAccountService} from '@core/services/service-account';
@@ -41,13 +40,9 @@ describe('ServiceAccountTokenComponent', () => {
   let noop: ComponentFixture<NoopConfirmDialogComponent>;
   let noopToken: ComponentFixture<NoopTokenDialogComponent>;
   let component: ServiceAccountTokenComponent;
-  let deleteServiceAccountTokenSpy;
 
   beforeEach(
     waitForAsync(() => {
-      const apiMock = {deleteServiceAccountToken: jest.fn()};
-      deleteServiceAccountTokenSpy = apiMock.deleteServiceAccountToken.mockReturnValue(of(null));
-
       TestBed.configureTestingModule({
         imports: [
           BrowserModule,
@@ -90,6 +85,8 @@ describe('ServiceAccountTokenComponent', () => {
   });
 
   it('should open delete service account token dialog & call deleteServiceAccountToken()', fakeAsync(() => {
+    const spy = jest.spyOn(fixture.debugElement.injector.get(ServiceAccountService) as any, 'delete');
+
     const waitTime = 15000;
     component.deleteToken(fakeServiceAccountTokens()[0]);
     noop.detectChanges();
@@ -108,7 +105,7 @@ describe('ServiceAccountTokenComponent', () => {
     fixture.detectChanges();
     tick(waitTime);
 
-    expect(deleteServiceAccountTokenSpy).toHaveBeenCalled();
+    expect(spy).toHaveBeenCalled();
     fixture.destroy();
     flush();
   }));
