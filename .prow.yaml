@@ -96,8 +96,8 @@ presubmits:
       # Kubermatic repo is required as we need to have access to the helm files used to deploy it.
       - org: kubermatic
         repo: kubermatic
-        base_ref: master
-        clone_uri: "ssh://git@github.com/kubermatic/kubermatic.git"
+        base_ref: crd-migration-use-new-apis
+        clone_uri: "ssh://git@github.com/xrstf/kubermatic.git"
     labels:
       preset-alibaba: "true"
       preset-anexia: "true"
@@ -152,8 +152,8 @@ presubmits:
       # Kubermatic repo is required as we need to have access to the helm files used to deploy it.
       - org: kubermatic
         repo: kubermatic
-        base_ref: master
-        clone_uri: "ssh://git@github.com/kubermatic/kubermatic.git"
+        base_ref: crd-migration-use-new-apis
+        clone_uri: "ssh://git@github.com/xrstf/kubermatic.git"
     labels:
       preset-alibaba: "true"
       preset-anexia: "true"
