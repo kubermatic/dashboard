@@ -14,7 +14,6 @@
 
 import {Inject, Injectable} from '@angular/core';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '@app/node-data/config';
-import {ApiService} from '@core/services/api';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {ProjectService} from '@core/services/project';
@@ -33,6 +32,15 @@ import {NodeDataGCPProvider} from './provider/gcp';
 import {NodeDataHetznerProvider} from './provider/hetzner';
 import {NodeDataOpenstackProvider} from './provider/openstack';
 import {NodeDataEquinixProvider} from './provider/equinix';
+import {AWSService} from '@core/services/provider/aws';
+import {AlibabaService} from '@core/services/provider/alibaba';
+import {AnexiaService} from '@core/services/provider/anexia';
+import {AzureService} from '@core/services/provider/azure';
+import {DigitalOceanService} from '@core/services/provider/digitalocean';
+import {EquinixService} from '@core/services/provider/equinix';
+import {GCPService} from '@core/services/provider/gcp';
+import {HetznerService} from '@core/services/provider/hetzner';
+import {OpenStackService} from '@core/services/provider/openstack';
 
 @Injectable()
 export class NodeDataService {
@@ -47,7 +55,15 @@ export class NodeDataService {
     private readonly _presetService: PresetsService,
     private readonly _datacenterService: DatacenterService,
     private readonly _clusterSpecService: ClusterSpecService,
-    private readonly _apiService: ApiService,
+    private readonly _alibabaService: AlibabaService,
+    private readonly _anexiaService: AnexiaService,
+    private readonly _awsService: AWSService,
+    private readonly _azureService: AzureService,
+    private readonly _digitalOceanService: DigitalOceanService,
+    private readonly _equinixService: EquinixService,
+    private readonly _gcpService: GCPService,
+    private readonly _hetznerService: HetznerService,
+    private readonly _openStackService: OpenStackService,
     private readonly _projectService: ProjectService
   ) {
     this._config = config;
@@ -108,7 +124,7 @@ export class NodeDataService {
     this._clusterSpecService,
     this._presetService,
     this._datacenterService,
-    this._apiService,
+    this._alibabaService,
     this._projectService
   );
   readonly anexia = new NodeDataAnexiaProvider(
@@ -116,14 +132,14 @@ export class NodeDataService {
     this._clusterSpecService,
     this._presetService,
     this._datacenterService,
-    this._apiService,
+    this._anexiaService,
     this._projectService
   );
   readonly aws = new NodeDataAWSProvider(
     this,
     this._clusterSpecService,
     this._presetService,
-    this._apiService,
+    this._awsService,
     this._projectService,
     this._datacenterService
   );
@@ -131,7 +147,7 @@ export class NodeDataService {
     this,
     this._clusterSpecService,
     this._presetService,
-    this._apiService,
+    this._azureService,
     this._projectService,
     this._datacenterService
   );
@@ -139,35 +155,35 @@ export class NodeDataService {
     this,
     this._clusterSpecService,
     this._presetService,
-    this._apiService,
+    this._digitalOceanService,
     this._projectService
   );
   readonly hetzner = new NodeDataHetznerProvider(
     this,
     this._clusterSpecService,
     this._presetService,
-    this._apiService,
+    this._hetznerService,
     this._projectService
   );
   readonly equinix = new NodeDataEquinixProvider(
     this,
     this._clusterSpecService,
     this._presetService,
-    this._apiService,
+    this._equinixService,
     this._projectService
   );
   readonly gcp = new NodeDataGCPProvider(
     this,
     this._clusterSpecService,
     this._presetService,
-    this._apiService,
+    this._gcpService,
     this._projectService
   );
   readonly openstack = new NodeDataOpenstackProvider(
     this,
     this._clusterSpecService,
     this._presetService,
-    this._apiService,
+    this._openStackService,
     this._projectService
   );
 }

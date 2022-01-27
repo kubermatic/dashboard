@@ -21,13 +21,11 @@ import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {fakeProjects} from '@app/testing/fake-data/project';
 import {RouterTestingModule} from '@app/testing/router-stubs';
-import {ApiMockService} from '@app/testing/services/api-mock';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock';
 import {AuthMockService} from '@app/testing/services/auth-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';
 import {UserMockService} from '@app/testing/services/user-mock';
 import {NotificationPanelComponent} from '@core/components/notification-panel/component';
-import {ApiService} from '@core/services/api';
 import {Auth} from '@core/services/auth/service';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
@@ -58,7 +56,6 @@ describe('ProjectSelectorComponent', () => {
         }),
       ],
       providers: [
-        {provide: ApiService, useValue: ApiMockService},
         {provide: ProjectService, useClass: ProjectMockService},
         {provide: UserService, useClass: UserMockService},
         {provide: AppConfigService, useClass: AppConfigMockService},

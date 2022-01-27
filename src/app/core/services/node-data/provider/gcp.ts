@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import {NodeDataMode} from '@app/node-data/config';
-import {ApiService} from '@core/services/api';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {ProjectService} from '@core/services/project';
 import {PresetsService} from '@core/services/wizard/presets';
@@ -21,8 +20,9 @@ import {Cluster} from '@shared/entity/cluster';
 import {GCPDiskType, GCPMachineSize, GCPZone} from '@shared/entity/provider/gcp';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
-import {catchError, filter, take, switchMap, tap, debounceTime} from 'rxjs/operators';
+import {catchError, debounceTime, filter, switchMap, take, tap} from 'rxjs/operators';
 import {NodeDataService} from '../service';
+import {GCPService} from '@core/services/provider/gcp';
 
 export class NodeDataGCPProvider {
   private readonly _debounce = 500;
@@ -31,7 +31,7 @@ export class NodeDataGCPProvider {
     private readonly _nodeDataService: NodeDataService,
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _presetService: PresetsService,
-    private readonly _apiService: ApiService,
+    private readonly _gcpService: GCPService,
     private readonly _projectService: ProjectService
   ) {}
 
@@ -80,7 +80,7 @@ export class NodeDataGCPProvider {
           .pipe(debounceTime(this._debounce))
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
-          .pipe(switchMap(_ => this._apiService.getGCPZones(selectedProject, this._clusterSpecService.cluster.id)))
+          .pipe(switchMap(_ => this._gcpService.getZones(selectedProject, this._clusterSpecService.cluster.id)))
           .pipe(
             catchError(_ => {
               if (onError) {
@@ -122,7 +122,7 @@ export class NodeDataGCPProvider {
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(
             switchMap(_ =>
-              this._apiService.getGCPDiskTypes(
+              this._gcpService.getDiskTypes(
                 this._nodeDataService.nodeData.spec.cloud.gcp.zone,
                 selectedProject,
                 this._clusterSpecService.cluster.id
@@ -170,7 +170,7 @@ export class NodeDataGCPProvider {
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(
             switchMap(_ =>
-              this._apiService.getGCPSizes(
+              this._gcpService.getSizes(
                 this._nodeDataService.nodeData.spec.cloud.gcp.zone,
                 selectedProject,
                 this._clusterSpecService.cluster.id

@@ -1,0 +1,85 @@
+// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {environment} from '@environments/environment';
+import {Observable, of} from 'rxjs';
+import {catchError} from 'rxjs/operators';
+import {MachineDeployment, MachineDeploymentPatch} from '@shared/entity/machine-deployment';
+import {LabelFormComponent} from '@shared/components/label-form/component';
+import {TaintFormComponent} from '@shared/components/taint-form/component';
+import {Node} from '@shared/entity/node';
+import {NodeMetrics} from '@shared/entity/metrics';
+import {Event} from '@shared/entity/event';
+
+@Injectable()
+export class MachineDeploymentService {
+  private readonly _restRoot: string = environment.newRestRoot;
+
+  constructor(private readonly _httpClient: HttpClient) {}
+
+  create(md: MachineDeployment, clusterID: string, projectID: string): Observable<MachineDeployment> {
+    md.spec.template.labels = LabelFormComponent.filterNullifiedKeys(md.spec.template.labels);
+    md.spec.template.taints = TaintFormComponent.filterNullifiedTaints(md.spec.template.taints);
+
+    const url = `${this._restRoot}/projects/${projectID}/clusters/${clusterID}/machinedeployments`;
+    return this._httpClient.post<MachineDeployment>(url, md);
+  }
+
+  list(cluster: string, projectID: string): Observable<MachineDeployment[]> {
+    const url = `${this._restRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments`;
+    return this._httpClient.get<MachineDeployment[]>(url).pipe(catchError(() => of<MachineDeployment[]>([])));
+  }
+
+  get(mdId: string, cluster: string, projectID: string): Observable<MachineDeployment> {
+    const url = `${this._restRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments/${mdId}`;
+    return this._httpClient.get<MachineDeployment>(url);
+  }
+
+  patch(
+    patch: MachineDeploymentPatch,
+    mdID: string,
+    clusterId: string,
+    projectID: string
+  ): Observable<MachineDeployment> {
+    const url = `${this._restRoot}/projects/${projectID}/clusters/${clusterId}/machinedeployments/${mdID}`;
+    return this._httpClient.patch<MachineDeployment>(url, patch);
+  }
+
+  restart(cluster: string, md: MachineDeployment, projectID: string): Observable<any> {
+    const url = `${this._restRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments/${md.id}/restart`;
+    return this._httpClient.post(url, {});
+  }
+
+  delete(cluster: string, md: MachineDeployment, projectID: string): Observable<any> {
+    const url = `${this._restRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments/${md.id}`;
+    return this._httpClient.delete(url);
+  }
+
+  getNodes(mdId: string, cluster: string, projectID: string): Observable<Node[]> {
+    const url = `${this._restRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments/${mdId}/nodes`;
+    return this._httpClient.get<Node[]>(url);
+  }
+
+  getNodesMetrics(mdId: string, cluster: string, projectID: string): Observable<NodeMetrics[]> {
+    const url = `${this._restRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments/${mdId}/nodes/metrics`;
+    return this._httpClient.get<NodeMetrics[]>(url);
+  }
+
+  getNodesEvents(mdId: string, cluster: string, projectID: string): Observable<Event[]> {
+    const url = `${this._restRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments/${mdId}/nodes/events`;
+    return this._httpClient.get<Event[]>(url);
+  }
+}

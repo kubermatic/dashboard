@@ -15,7 +15,6 @@
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
-import {ApiService} from '@core/services/api';
 import {Addon, AddonConfig, getAddonLogoData, hasAddonLogoData} from '@shared/entity/addon';
 import {Cluster} from '@shared/entity/cluster';
 import _ from 'lodash';
@@ -24,6 +23,7 @@ import {take, takeUntil} from 'rxjs/operators';
 import {ConfirmationDialogComponent} from '../confirmation-dialog/component';
 import {EditAddonDialogComponent} from './edit-addon-dialog/component';
 import {InstallAddonDialogComponent} from './install-addon-dialog/component';
+import {AddonService} from '@core/services/addon';
 
 @Component({
   selector: 'km-addon-list',
@@ -49,21 +49,18 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
   private _unsubscribe: Subject<void> = new Subject<void>();
 
   constructor(
-    private readonly _apiService: ApiService,
+    private readonly _addonService: AddonService,
     private readonly _matDialog: MatDialog,
     private readonly _domSanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
-    this._apiService
-      .getAccessibleAddons()
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(accessibleAddons => {
-        this.accessibleAddons = accessibleAddons;
-        this._updateInstallableAddons();
-      });
+    this._addonService.accessibleAddons.pipe(takeUntil(this._unsubscribe)).subscribe(accessibleAddons => {
+      this.accessibleAddons = accessibleAddons;
+      this._updateInstallableAddons();
+    });
 
-    this._apiService.addonConfigs.pipe(takeUntil(this._unsubscribe)).subscribe(addonConfigs => {
+    this._addonService.addonConfigs.pipe(takeUntil(this._unsubscribe)).subscribe(addonConfigs => {
       const map = new Map();
       addonConfigs.forEach(addonConfig => map.set(addonConfig.name, addonConfig));
       this.addonConfigs = map;

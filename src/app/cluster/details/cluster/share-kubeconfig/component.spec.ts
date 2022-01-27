@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {HttpClientModule} from '@angular/common/http';
-import {waitForAsync, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -21,12 +21,13 @@ import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
 import {fakeProject} from '@app/testing/fake-data/project';
 import {RouterTestingModule} from '@app/testing/router-stubs';
 import {UserMockService} from '@app/testing/services/user-mock';
-import {ApiService} from '@core/services/api';
 import {Auth} from '@core/services/auth/service';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
 import {ShareKubeconfigComponent} from './component';
-import {ApiMockService} from '@app/testing/services/api-mock';
+import {ClusterService} from '@core/services/cluster';
+import {AppConfigService} from '@app/config.service';
+import {AppConfigMockService} from '@app/testing/services/app-config-mock';
 
 describe('ShareKubeconfigComponent', () => {
   let component: ShareKubeconfigComponent;
@@ -39,7 +40,6 @@ describe('ShareKubeconfigComponent', () => {
         imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
         declarations: [ShareKubeconfigComponent],
         providers: [
-          {provide: ApiService, useClass: ApiMockService},
           {provide: Auth, useValue: authMock},
           {provide: UserService, useClass: UserMockService},
           {
@@ -47,6 +47,8 @@ describe('ShareKubeconfigComponent', () => {
             useValue: {cluster: fakeDigitaloceanCluster()},
           },
           {provide: MatDialogRef, useValue: {}},
+          {provide: AppConfigService, useClass: AppConfigMockService},
+          ClusterService,
         ],
         teardown: {destroyAfterEach: false},
       }).compileComponents();

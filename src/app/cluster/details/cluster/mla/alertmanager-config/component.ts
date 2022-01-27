@@ -15,7 +15,6 @@
 import {Component, Inject, Input, OnDestroy, OnInit} from '@angular/core';
 import {DOCUMENT} from '@angular/common';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {ApiService} from '@core/services/api';
 import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
 import {MLAService} from '@core/services/mla';
@@ -29,6 +28,7 @@ import {AdminSettings} from '@shared/entity/settings';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {AlertmanagerConfigDialog} from './alertmanager-config-dialog/component';
+import {AddonService} from '@core/services/addon';
 
 export enum Type {
   Alertmanager = 'Alertmanager',
@@ -66,7 +66,7 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
     private readonly _notificationService: NotificationService,
     private readonly _settingsService: SettingsService,
     private readonly _datacenterService: DatacenterService,
-    private readonly _apiService: ApiService,
+    private readonly _addonService: AddonService,
     @Inject(DOCUMENT) private readonly _document: Document
   ) {}
 
@@ -83,8 +83,7 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(seedSettings => (this._seedSettings = seedSettings));
 
-    this._apiService
-      .getAccessibleAddons()
+    this._addonService.accessibleAddons
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(accessibleAddons => (this.accessibleAddons = accessibleAddons));
   }

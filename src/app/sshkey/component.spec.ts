@@ -24,33 +24,27 @@ import {DialogTestModule, NoopConfirmDialogComponent} from '@app/testing/compone
 import {fakeProject} from '@app/testing/fake-data/project';
 import {fakeSSHKeys} from '@app/testing/fake-data/sshkey';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
-import {asyncData} from '@app/testing/services/api-mock';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';
 import {SettingsMockService} from '@app/testing/services/settings-mock';
 import {UserMockService} from '@app/testing/services/user-mock';
-import {ApiService} from '@core/services/api';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
-import {of} from 'rxjs';
 import {SSHKeyComponent} from './component';
+import {SSHKeyService} from '@core/services/ssh-key';
+import {SSHKeyMockService} from '@app/testing/services/ssh-key-mock';
 
 describe('SSHKeyComponent', () => {
   let fixture: ComponentFixture<SSHKeyComponent>;
   let noop: ComponentFixture<NoopConfirmDialogComponent>;
   let component: SSHKeyComponent;
   let activatedRoute: ActivatedRouteStub;
-  let deleteSSHKeySpy;
 
   beforeEach(
     waitForAsync(() => {
-      const apiMock = {getSSHKeys: jest.fn(), deleteSSHKey: jest.fn()};
-      apiMock.getSSHKeys.mockReturnValue(asyncData(fakeSSHKeys()));
-      deleteSSHKeySpy = apiMock.deleteSSHKey.mockReturnValue(of(null));
-
       TestBed.configureTestingModule({
         imports: [
           BrowserModule,
@@ -63,12 +57,12 @@ describe('SSHKeyComponent', () => {
         declarations: [SSHKeyComponent],
         providers: [
           {provide: Router, useClass: RouterStub},
-          {provide: ApiService, useValue: apiMock},
           {provide: UserService, useClass: UserMockService},
           {provide: AppConfigService, useClass: AppConfigMockService},
           {provide: ActivatedRoute, useClass: ActivatedRouteStub},
           {provide: ProjectService, useClass: ProjectMockService},
           {provide: SettingsService, useClass: SettingsMockService},
+          {provide: SSHKeyService, useClass: SSHKeyMockService},
           MatDialog,
           GoogleAnalyticsService,
           NotificationService,
@@ -95,6 +89,8 @@ describe('SSHKeyComponent', () => {
   });
 
   it('should open delete ssh key confirmation dialog & call deleteSSHKey()', fakeAsync(() => {
+    const spy = jest.spyOn(fixture.debugElement.injector.get(SSHKeyService) as any, 'delete');
+
     const waitTime = 15000;
     component.project = fakeProject();
     component.sshKeys = fakeSSHKeys();
@@ -118,7 +114,7 @@ describe('SSHKeyComponent', () => {
     fixture.detectChanges();
     tick(waitTime);
 
-    expect(deleteSSHKeySpy).toHaveBeenCalled();
+    expect(spy).toHaveBeenCalled();
     fixture.destroy();
     flush();
   }));

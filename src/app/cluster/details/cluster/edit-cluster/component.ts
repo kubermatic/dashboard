@@ -15,7 +15,6 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-import {ApiService} from '@core/services/api';
 import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
@@ -88,7 +87,6 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _clusterService: ClusterService,
-    private readonly _apiService: ApiService,
     private readonly _datacenterService: DatacenterService,
     private readonly _matDialogRef: MatDialogRef<EditClusterComponent>,
     private readonly _notificationService: NotificationService,
@@ -173,7 +171,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(seedSettings => (this._seedSettings = seedSettings));
 
-    this._apiService
+    this._clusterService
       .getAdmissionPlugins(this.cluster.spec.version)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(plugins => (this.admissionPlugins = plugins));

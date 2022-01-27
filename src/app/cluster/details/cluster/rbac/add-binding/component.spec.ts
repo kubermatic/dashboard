@@ -19,7 +19,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
 import {fakeProject} from '@app/testing/fake-data/project';
 import {fakeBinding, fakeClusterBinding, fakeClusterRoleNames, fakeRoleNames} from '@app/testing/fake-data/rbac';
-import {asyncData} from '@app/testing/services/api-mock';
+import {asyncData} from '@app/testing/services/cluster-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';
 import {RBACService} from '@core/services/rbac';

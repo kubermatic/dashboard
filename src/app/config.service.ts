@@ -19,6 +19,7 @@ import {environment} from '@environments/environment';
 import {VersionInfo} from '@shared/entity/version-info';
 import {Config, EndOfLife, UserGroupConfig} from '@shared/model/Config';
 import {tap} from 'rxjs/operators';
+import {Observable} from 'rxjs';
 
 @Injectable()
 export class AppConfigService {
@@ -99,5 +100,10 @@ export class AppConfigService {
 
   getEndOfLifeConfig(): EndOfLife {
     return this._appConfig.end_of_life ? this._appConfig.end_of_life : {};
+  }
+
+  getSwaggerJson(): Observable<any> {
+    const url = '/api/swagger.json';
+    return this._http.get(url);
   }
 }

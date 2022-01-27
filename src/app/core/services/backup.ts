@@ -27,18 +27,17 @@ enum Type {
 
 @Injectable()
 export class BackupService {
-  private readonly _refreshTime = 10; // in seconds
+  private readonly _refreshTime = 10;
   private _restRoot: string = environment.restRoot;
   private _newRestRoot: string = environment.newRestRoot;
   private _headers: HttpHeaders = new HttpHeaders();
   private _automaticBackups$ = new Map<string, Observable<EtcdBackupConfig[]>>();
   private _snapshots$ = new Map<string, Observable<EtcdBackupConfig[]>>();
   private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * this._refreshTime);
-
   readonly onAutomaticBackupsUpdate = new Subject<void>();
   readonly onSnapshotsUpdate = new Subject<void>();
 
-  constructor(private readonly _appConfig: AppConfigService, private readonly _http: HttpClient) {} // private readonly _appConfig: AppConfigService // private readonly _http: HttpClient, // private readonly _matDialog: MatDialog,
+  constructor(private readonly _appConfig: AppConfigService, private readonly _http: HttpClient) {}
 
   list(projectID: string, isSnapshot = false): Observable<EtcdBackupConfig[]> {
     if (isSnapshot) {

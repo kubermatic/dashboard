@@ -15,7 +15,6 @@
 import {ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
-import {ApiService} from '@core/services/api';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
 
@@ -30,6 +29,7 @@ import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {SSHKeyService} from '@core/services/ssh-key';
 
 enum Controls {
   Keys = 'keys',
@@ -61,7 +61,7 @@ export class ClusterSSHKeysComponent extends BaseFormValidator implements OnInit
   constructor(
     private readonly _projectService: ProjectService,
     private readonly _userService: UserService,
-    private readonly _apiService: ApiService,
+    private readonly _sshKeyService: SSHKeyService,
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _dialog: MatDialog,
     private readonly _builder: FormBuilder,
@@ -91,7 +91,7 @@ export class ClusterSSHKeysComponent extends BaseFormValidator implements OnInit
       .pipe(tap(project => (this._project = project)))
       .pipe(switchMap(_ => this._userService.getCurrentUserGroup(this._project.id)))
       .pipe(tap(group => (this._groupConfig = this._userService.getCurrentUserGroupConfig(group))))
-      .pipe(switchMap(_ => this._apiService.getSSHKeys(this._project.id)))
+      .pipe(switchMap(_ => this._sshKeyService.list(this._project.id)))
       .pipe(take(1))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(sshKeys => (this.keys = sshKeys));

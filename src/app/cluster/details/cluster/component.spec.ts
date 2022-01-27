@@ -21,9 +21,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
-import {fakeBindings, fakeClusterBindings} from '@app/testing/fake-data/rbac';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
-import {ApiMockService, asyncData} from '@app/testing/services/api-mock';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock';
 import {AuthMockService} from '@app/testing/services/auth-mock';
 import {ClusterMockService} from '@app/testing/services/cluster-mock';
@@ -34,7 +32,6 @@ import {NodeMockService} from '@app/testing/services/node-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';
 import {SettingsMockService} from '@app/testing/services/settings-mock';
 import {UserMockService} from '@app/testing/services/user-mock';
-import {ApiService} from '@core/services/api';
 import {Auth} from '@core/services/auth/service';
 import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
@@ -57,6 +54,10 @@ import {NodeListComponent} from './node-list/component';
 import {RBACComponent} from './rbac/component';
 import {VersionPickerComponent} from '../shared/version-picker/component';
 import {nodesFake} from '@app/testing/fake-data/node';
+import {MachineDeploymentService} from '@core/services/machine-deployment';
+import {AddonService} from '@core/services/addon';
+import {MachineDeploymentServiceMock} from '@app/testing/services/machine-deployment-mock';
+import {AddonServiceMock} from '@app/testing/services/addon-mock';
 
 describe('ClusterDetailsComponent', () => {
   let fixture: ComponentFixture<ClusterDetailsComponent>;
@@ -71,8 +72,6 @@ describe('ClusterDetailsComponent', () => {
         deleteClusterBinding: jest.fn(),
         deleteBinding: jest.fn(),
       };
-      rbacMock.getClusterBindings.mockReturnValue(asyncData([fakeClusterBindings()]));
-      rbacMock.getBindings.mockReturnValue(asyncData([fakeBindings()]));
       rbacMock.deleteClusterBinding.mockReturnValue(of(null));
       rbacMock.deleteBinding.mockReturnValue(of(null));
 
@@ -97,7 +96,6 @@ describe('ClusterDetailsComponent', () => {
           MLAComponent,
         ],
         providers: [
-          {provide: ApiService, useClass: ApiMockService},
           {provide: ClusterService, useClass: ClusterMockService},
           {provide: DatacenterService, useClass: DatacenterMockService},
           {provide: Auth, useClass: AuthMockService},
@@ -113,6 +111,8 @@ describe('ClusterDetailsComponent', () => {
           {provide: MLAService, useValue: mlaMock},
           {provide: MatDialogRef, useClass: MatDialogRefMock},
           {provide: MatDialog, useClass: MatDialogMock},
+          {provide: MachineDeploymentService, useClass: MachineDeploymentServiceMock},
+          {provide: AddonService, useClass: AddonServiceMock},
           GoogleAnalyticsService,
           NotificationService,
         ],

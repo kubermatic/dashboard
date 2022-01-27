@@ -13,15 +13,15 @@
 // limitations under the License.
 
 import {NodeDataMode} from '@app/node-data/config';
-import {ApiService} from '@core/services/api';
 import {ProjectService} from '@core/services/project';
 import {PresetsService} from '@core/services/wizard/presets';
 import {HetznerTypes} from '@shared/entity/provider/hetzner';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
-import {catchError, filter, take, switchMap, tap, debounceTime} from 'rxjs/operators';
+import {catchError, debounceTime, filter, switchMap, take, tap} from 'rxjs/operators';
 import {NodeDataService} from '../service';
+import {HetznerService} from '@core/services/provider/hetzner';
 
 export class NodeDataHetznerProvider {
   private readonly _debounce = 500;
@@ -30,7 +30,7 @@ export class NodeDataHetznerProvider {
     private readonly _nodeDataService: NodeDataService,
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _presetService: PresetsService,
-    private readonly _apiService: ApiService,
+    private readonly _hetznerService: HetznerService,
     private readonly _projectService: ProjectService
   ) {}
 
@@ -64,7 +64,7 @@ export class NodeDataHetznerProvider {
           .pipe(debounceTime(this._debounce))
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
-          .pipe(switchMap(_ => this._apiService.getHetznerTypes(selectedProject, this._clusterSpecService.cluster.id)))
+          .pipe(switchMap(_ => this._hetznerService.getTypes(selectedProject, this._clusterSpecService.cluster.id)))
           .pipe(
             catchError(_ => {
               if (onError) {

@@ -16,10 +16,8 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {ApiMockService} from '@app/testing/services/api-mock';
 import {ClusterMockService} from '@app/testing/services/cluster-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
-import {ApiService} from '@core/services/api';
 import {ClusterService} from '@core/services/cluster';
 import {SharedModule} from '@shared/module';
 import {AlibabaProviderSettingsComponent} from '../alibaba-provider-settings/component';
@@ -58,7 +56,6 @@ describe('EquinixProviderSettingsComponent', () => {
         AlibabaProviderSettingsComponent,
       ],
       providers: [
-        {provide: ApiService, useClass: ApiMockService},
         {provide: ClusterService, useClass: ClusterMockService},
         {provide: MatDialogRef, useClass: MatDialogRefMock},
       ],

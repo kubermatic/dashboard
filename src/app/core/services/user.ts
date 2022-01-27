@@ -31,7 +31,7 @@ export class UserService {
   private readonly wsRoot = environment.wsRoot;
   private readonly _currentUser$ = new BehaviorSubject<Member>(undefined);
   private readonly _currentUserSettings$ = new BehaviorSubject<UserSettings>(DEFAULT_USER_SETTINGS);
-  private readonly _refreshTime = 3; // in seconds
+  private readonly _refreshTime = 3;
   private readonly _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
 
   constructor(

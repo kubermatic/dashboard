@@ -23,7 +23,6 @@ import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
 import {ActivatedRouteStub, RouterStub} from '@app/testing/router-stubs';
-import {ApiMockService} from '@app/testing/services/api-mock';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock';
 import {AuthMockService} from '@app/testing/services/auth-mock';
 import {ClusterMockService} from '@app/testing/services/cluster-mock';
@@ -31,7 +30,6 @@ import {DatacenterMockService} from '@app/testing/services/datacenter-mock';
 import {NodeMockService} from '@app/testing/services/node-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';
 import {UserMockService} from '@app/testing/services/user-mock';
-import {ApiService} from '@core/services/api';
 import {Auth} from '@core/services/auth/service';
 import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
@@ -62,7 +60,6 @@ describe('VersionPickerComponent', () => {
           MachineNetworksDisplayComponent,
         ],
         providers: [
-          {provide: ApiService, useClass: ApiMockService},
           {provide: ClusterService, useClass: ClusterMockService},
           {provide: DatacenterService, useClass: DatacenterMockService},
           {provide: Auth, useClass: AuthMockService},

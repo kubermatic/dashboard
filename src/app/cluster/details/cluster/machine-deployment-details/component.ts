@@ -15,7 +15,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
-import {ApiService} from '@core/services/api';
 import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
 import {NodeService} from '@core/services/node';
@@ -34,6 +33,7 @@ import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {Subject, timer} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 import {PathParam} from '@core/services/params';
+import {MachineDeploymentService} from '@core/services/machine-deployment';
 
 @Component({
   selector: 'km-machine-deployment-details',
@@ -53,7 +53,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   systemLogoClass: string;
   projectID: string;
 
-  private readonly _refreshTime = 10; // in seconds
+  private readonly _refreshTime = 10;
   private _machineDeploymentID: string;
   private _isMachineDeploymentLoaded = false;
   private _areNodesLoaded = false;
@@ -68,7 +68,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private readonly _activatedRoute: ActivatedRoute,
     private readonly _router: Router,
-    private readonly _apiService: ApiService,
+    private readonly _machineDeploymentService: MachineDeploymentService,
     private readonly _datacenterService: DatacenterService,
     private readonly _nodeService: NodeService,
     private readonly _appConfig: AppConfigService,
@@ -102,8 +102,8 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   }
 
   loadMachineDeployment(): void {
-    this._apiService
-      .getMachineDeployment(this._machineDeploymentID, this._clusterName, this.projectID)
+    this._machineDeploymentService
+      .get(this._machineDeploymentID, this._clusterName, this.projectID)
       .pipe(take(1))
       .subscribe((md: MachineDeployment) => {
         this.machineDeployment = md;
@@ -115,8 +115,8 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   }
 
   loadNodes(): void {
-    this._apiService
-      .getMachineDeploymentNodes(this._machineDeploymentID, this._clusterName, this.projectID)
+    this._machineDeploymentService
+      .getNodes(this._machineDeploymentID, this._clusterName, this.projectID)
       .pipe(take(1))
       .subscribe(n => {
         this.nodes = n;
@@ -125,8 +125,8 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   }
 
   loadNodesEvents(): void {
-    this._apiService
-      .getMachineDeploymentNodesEvents(this._machineDeploymentID, this._clusterName, this.projectID)
+    this._machineDeploymentService
+      .getNodesEvents(this._machineDeploymentID, this._clusterName, this.projectID)
       .pipe(take(1))
       .subscribe(e => {
         this.events = e;
@@ -135,8 +135,8 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   }
 
   loadNodesMetrics(): void {
-    this._apiService
-      .getMachineDeploymentNodesMetrics(this._machineDeploymentID, this._clusterName, this.projectID)
+    this._machineDeploymentService
+      .getNodesMetrics(this._machineDeploymentID, this._clusterName, this.projectID)
       .pipe(take(1))
       .subscribe(metrics => this._storeNodeMetrics(metrics));
   }
