@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -24,7 +24,10 @@ import {PathParam} from '@core/services/params';
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
-import {SelectClusterTemplateDialogComponent} from '@shared/components/select-cluster-template/component';
+import {
+  AddClusterFromTemplateDialogComponent,
+  AddClusterFromTemplateDialogData,
+} from '@shared/components/add-cluster-from-template-dialog/component';
 import {EtcdRestore, EtcdRestorePhase} from '@shared/entity/backup';
 import {Cluster} from '@shared/entity/cluster';
 import {View} from '@shared/entity/common';
@@ -179,7 +182,13 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   selectTemplate(): void {
-    this._matDialog.open(SelectClusterTemplateDialogComponent, {data: {projectID: this._selectedProject.id}});
+    const config: MatDialogConfig = {
+      data: {
+        projectId: this._selectedProject.id,
+      } as AddClusterFromTemplateDialogData,
+    };
+
+    this._matDialog.open(AddClusterFromTemplateDialogComponent, config);
   }
 
   getHealthStatus(cluster: Cluster): HealthStatus {

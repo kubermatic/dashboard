@@ -35,7 +35,7 @@ import {ClusterTemplate, ClusterTemplateScope} from '@shared/entity/cluster-temp
 import {Datacenter} from '@shared/entity/datacenter';
 import {DatacenterService} from '@core/services/datacenter';
 import {Cluster} from '@shared/entity/cluster';
-import {ClusterFromTemplateDialogComponent} from '@shared/components/cluster-from-template/component';
+import {ClusterFromTemplateDialogComponent} from '@shared/components/cluster-from-template/dialog/component';
 
 @Component({
   selector: 'km-cluster-template',

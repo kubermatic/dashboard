@@ -14,7 +14,7 @@
 
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {merge, Observable, of, Subject, timer} from 'rxjs';
+import {BehaviorSubject, merge, Observable, of, Subject, timer} from 'rxjs';
 import {catchError, shareReplay, switchMapTo} from 'rxjs/operators';
 
 import {environment} from '@environments/environment';
@@ -24,6 +24,12 @@ import {AppConfigService} from '@app/config.service';
 @Injectable()
 export class ClusterTemplateService {
   private readonly _refreshTime = 10;
+  templateChanges = new BehaviorSubject<ClusterTemplate>(undefined);
+  replicasChanges = new BehaviorSubject<number>(undefined);
+  private _template: ClusterTemplate;
+  private _templateStepValidity = false;
+  private _replicas: number;
+  private _clusterStepValidity = false;
   private _newRestRoot: string = environment.newRestRoot;
   private _templates$ = new Map<string, Observable<ClusterTemplate[]>>();
   private _template$ = new Map<string, Observable<ClusterTemplate>>();
@@ -84,5 +90,46 @@ export class ClusterTemplateService {
   createInstances(replicas: number, projectID: string, templateID: string): Observable<any> {
     const url = `${this._newRestRoot}/projects/${projectID}/clustertemplates/${templateID}/instances`;
     return this._http.post<any>(url, {replicas: replicas} as CreateTemplateInstances);
+  }
+
+  get template(): ClusterTemplate {
+    return this._template;
+  }
+
+  set template(template: ClusterTemplate) {
+    this._template = template;
+    this.templateChanges.next(this._template);
+  }
+
+  get replicas(): number {
+    return this._replicas;
+  }
+
+  set replicas(replicas: number) {
+    this._replicas = replicas;
+    this.replicasChanges.next(this._replicas);
+  }
+
+  get isTemplateStepValid(): boolean {
+    return this._templateStepValidity;
+  }
+
+  set templateStepValidity(valid: boolean) {
+    this._templateStepValidity = valid;
+  }
+
+  get isClusterStepValid(): boolean {
+    return this._clusterStepValidity;
+  }
+
+  set clusterStepValidity(valid: boolean) {
+    this._clusterStepValidity = valid;
+  }
+
+  reset(): void {
+    this.template = undefined;
+    this.replicas = 1;
+    this.templateStepValidity = false;
+    this.clusterStepValidity = false;
   }
 }

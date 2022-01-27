@@ -1,0 +1,82 @@
+<!--
+Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<km-dialog-title>Create Cluster from Template</km-dialog-title>
+
+<mat-horizontal-stepper class="km-stepper-in-dialog"
+                        linear
+                        disableRipple
+                        [@.disabled]="true"
+                        #stepper>
+  <ng-template matStepperIcon="edit">
+    <i class="km-icon-done"></i>
+  </ng-template>
+
+  <mat-step *ngIf="isAvailable(step.Template)"
+            fxFlex="100%">
+    <ng-template matStepLabel>{{step.Template}}</ng-template>
+    <ng-template matStepContent>
+      <km-select-cluster-template [projectId]="data.projectId"></km-select-cluster-template>
+    </ng-template>
+  </mat-step>
+
+  <mat-step *ngIf="isAvailable(step.Cluster)"
+            fxFlex="100%">
+    <ng-template matStepLabel>{{step.Cluster}}</ng-template>
+    <ng-template matStepContent>
+      <km-cluster-from-template-content [projectId]="data.projectId"
+                                        [template]="template"
+                                        [showDetails]="showDetails"></km-cluster-from-template-content>
+    </ng-template>
+  </mat-step>
+</mat-horizontal-stepper>
+
+<mat-dialog-actions>
+  <div *ngIf="active === step.Cluster"
+       (click)="showDetails = !showDetails"
+       class="km-pointer km-expand-button"
+       fxLayoutAlign="center center"
+       fxLayoutGap="8px"
+       fxFlex="100">
+    <hr fxFlex />
+    <span>{{showDetails ? 'Hide' : 'Show'}} cluster template details</span>
+    <i class="km-muted-bg"
+       [ngClass]="showDetails ? 'km-icon-mask km-icon-arrow-up' : 'km-icon-mask km-icon-arrow-down'"></i>
+    <hr fxFlex />
+  </div>
+  <mat-spinner fxFlexAlign="center"
+               [diameter]="25"
+               color="accent"
+               *ngIf="creating"></mat-spinner>
+  <button mat-flat-button
+          type="button"
+          (click)="next()"
+          [disabled]="invalid"
+          *ngIf="active === step.Template && !last">
+    <i class="km-icon-mask km-icon-next"></i>
+    <span>Next</span>
+  </button>
+  <button mat-flat-button
+          type="button"
+          [disabled]="creating || invalid"
+          *ngIf="last"
+          kmThrottleClick
+          (throttleClick)="add()"
+          id="cluster-from-template-add-btn">
+    <i class="km-icon-mask km-icon-add"></i>
+    <span>Create Cluster</span>
+  </button>
+</mat-dialog-actions>

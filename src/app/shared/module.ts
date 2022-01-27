@@ -49,15 +49,17 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {NotificationComponent} from '@core/components/notification/component';
+import {AddClusterFromTemplateDialogComponent} from '@shared/components/add-cluster-from-template-dialog/component';
+import {SelectClusterTemplateComponent} from '@shared/components/add-cluster-from-template-dialog/steps/template/component';
 import {AutocompleteComponent} from '@shared/components/autocomplete/component';
 import {CIDRFormComponent} from '@shared/components/cidr-form/component';
-import {ClusterFromTemplateDialogComponent} from '@shared/components/cluster-from-template/component';
+import {ClusterFromTemplateContentComponent} from '@shared/components/cluster-from-template/content/component';
+import {ClusterFromTemplateDialogComponent} from '@shared/components/cluster-from-template/dialog/component';
 import {ClusterSummaryComponent} from '@shared/components/cluster-summary/component';
 import {EventCardComponent} from '@shared/components/event-card/component';
 import {NumberStepperComponent} from '@shared/components/number-stepper/component';
 import {EventRateLimitComponent} from '@shared/components/event-rate-limit/component';
 import {SaveClusterTemplateDialogComponent} from '@shared/components/save-cluster-template/component';
-import {SelectClusterTemplateDialogComponent} from '@shared/components/select-cluster-template/component';
 import {TabCardComponent} from '@shared/components/tab-card/component';
 import {DynamicTabComponent} from '@shared/components/tab-card/dynamic-tab/component';
 import {TabComponent} from '@shared/components/tab-card/tab/component';
@@ -198,9 +200,9 @@ const components: any[] = [
   AutocompleteComponent,
   LinkLocationPipe,
   ClusterSummaryComponent,
+  ClusterFromTemplateContentComponent,
   ClusterFromTemplateDialogComponent,
   SaveClusterTemplateDialogComponent,
-  SelectClusterTemplateDialogComponent,
   SizeFormatterPipe,
   NumberStepperComponent,
   ProviderStepComponent,
@@ -216,6 +218,8 @@ const components: any[] = [
   CredentialsPresetsComponent,
   ExpansionPanelComponent,
   PropertyHealthComponent,
+  AddClusterFromTemplateDialogComponent,
+  SelectClusterTemplateComponent,
 ];
 
 const directives: any[] = [AutofocusDirective, ThrottleClickDirective, OptionDirective];
