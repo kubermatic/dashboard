@@ -71,6 +71,7 @@ import {HetznerService} from '@core/services/provider/hetzner';
 import {OpenStackService} from '@core/services/provider/openstack';
 import {AddonService} from '@core/services/addon';
 import {MemberService} from '@core/services/member';
+import {SSHKeyService} from '@core/services/ssh-key';
 
 const modules: any[] = [
   CommonModule,
@@ -138,6 +139,7 @@ const services: any[] = [
   OpenStackService,
   AddonService,
   MemberService,
+  SSHKeyService,
 ];
 
 const interceptors: any[] = [
