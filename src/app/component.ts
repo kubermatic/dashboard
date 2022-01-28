@@ -29,7 +29,7 @@ import {AppConfigService} from './config.service';
 import {GoogleAnalyticsService} from './google-analytics.service';
 
 // A list of regular expressions that match our views on which main side menu should not be displayed
-const PAGES_WITHOUT_MENU = ['/projects$', '/account$', '/settings', '/rest-api$', '/terms-of-services$', '/404$'];
+const PAGES_WITHOUT_MENU = ['/projects$', '/account$', '/settings', '/rest-api$', '/terms-of-service$', '/404$'];
 // A list of regular expressions that match our views on which we use a secondary side menu.
 const PAGES_WITH_SECONDARY_MENU = ['/settings'];
 
