@@ -62,7 +62,7 @@ describe('EditSSHKeysComponent', () => {
   );
 
   it(
-    'should create the edit sshkeys components',
+    'should create the edit sshkeys component',
     waitForAsync(() => {
       expect(component).toBeTruthy();
     })

@@ -46,7 +46,7 @@ describe('EventRateLimitComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create event-rate-limit components', () => {
+  it('should create event-rate-limit component', () => {
     expect(component).toBeTruthy();
   });
 });

@@ -62,7 +62,7 @@ describe('CreateServiceAccountDialogComponent', () => {
   );
 
   it(
-    'should create the components',
+    'should create the component',
     waitForAsync(() => {
       expect(component).toBeTruthy();
     })

@@ -79,7 +79,7 @@ describe('ConstraintsComponent', () => {
   );
 
   it(
-    'should create the constraints components',
+    'should create the constraints component',
     waitForAsync(() => {
       expect(component).toBeTruthy();
     })

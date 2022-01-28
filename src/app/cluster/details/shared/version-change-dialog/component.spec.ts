@@ -77,7 +77,7 @@ describe('ChangeClusterVersionComponent', () => {
   );
 
   it(
-    'should create the change cluster version components',
+    'should create the change cluster version component',
     waitForAsync(() => {
       expect(component).toBeTruthy();
     })

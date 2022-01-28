@@ -69,7 +69,7 @@ describe('ConstraintTemplatesComponent', () => {
   );
 
   it(
-    'should create the constraint templates components',
+    'should create the constraint templates component',
     waitForAsync(() => {
       expect(component).toBeTruthy();
     })

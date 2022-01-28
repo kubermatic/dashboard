@@ -62,7 +62,7 @@ describe('ViolationDetailsComponent', () => {
   );
 
   it(
-    'should create the violation details components',
+    'should create the violation details component',
     waitForAsync(() => {
       expect(component).toBeTruthy();
     })

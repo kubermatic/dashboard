@@ -53,7 +53,7 @@ describe('MLAComponent', () => {
     })
   );
 
-  it('should create the mla components', fakeAsync(() => {
+  it('should create the mla component', fakeAsync(() => {
     expect(component).toBeTruthy();
   }));
 });

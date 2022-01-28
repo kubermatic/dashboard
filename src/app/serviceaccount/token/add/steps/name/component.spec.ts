@@ -55,7 +55,7 @@ describe('ServiceAccountTokenNameStepComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create the components', () => {
+  it('should create the component', () => {
     expect(component).toBeTruthy();
   });
 });

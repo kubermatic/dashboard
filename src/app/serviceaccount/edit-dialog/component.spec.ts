@@ -61,7 +61,7 @@ describe('EditServiceAccountDialogComponent', () => {
   );
 
   it(
-    'should create the edit service account components',
+    'should create the edit service account component',
     waitForAsync(() => {
       expect(component).toBeTruthy();
     })

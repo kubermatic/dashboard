@@ -116,7 +116,7 @@ describe('EditClusterComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create the edit cluster components', () => {
+  it('should create the edit cluster component', () => {
     expect(component).toBeTruthy();
   });
 

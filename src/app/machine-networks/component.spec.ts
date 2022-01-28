@@ -48,7 +48,7 @@ describe('MachineNetworksComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create the machine network components', () => {
+  it('should create the machine network component', () => {
     expect(component).toBeTruthy();
   });
 

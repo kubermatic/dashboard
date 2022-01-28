@@ -87,7 +87,7 @@ describe('AlertmanagerConfigComponent', () => {
     })
   );
 
-  it('should create the alertmanager config components', fakeAsync(() => {
+  it('should create the alertmanager config component', fakeAsync(() => {
     expect(component).toBeTruthy();
   }));
 

@@ -65,7 +65,7 @@ describe('GatekeeperConfigComponent', () => {
     })
   );
 
-  it('should create the gatekeeper config components', fakeAsync(() => {
+  it('should create the gatekeeper config component', fakeAsync(() => {
     expect(component).toBeTruthy();
   }));
 

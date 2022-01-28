@@ -72,7 +72,7 @@ describe('RuleGroupsComponent', () => {
     })
   );
 
-  it('should create the rule group components', fakeAsync(() => {
+  it('should create the rule group component', fakeAsync(() => {
     expect(component).toBeTruthy();
   }));
 
