@@ -18,6 +18,7 @@ import {View} from '../../../utils/view';
 import {AdminSettings} from '../../../pages/admin-settings.po';
 import {HelpPanel} from '../../../pages/help-panel.po';
 import {Config} from '../../../utils/config';
+import {Mocks} from '../../../utils/mocks';
 
 describe('Admin Settings - Custom Links Story', () => {
   const linkLocation = 'Footer';
@@ -26,8 +27,14 @@ describe('Admin Settings - Custom Links Story', () => {
   const demoInfo = 'Demo system';
   const termsOfService = 'Terms of Service';
 
+  beforeEach(() => {
+    if (Mocks.enabled()) {
+      Mocks.register();
+    }
+  });
+
   it('should login', () => {
-    login(Config.adminEmail());
+    login(Config.adminEmail(), Config.password(), true);
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -36,28 +43,58 @@ describe('Admin Settings - Custom Links Story', () => {
   });
 
   it('should add custom link', () => {
-    AdminSettings.InterfacePage.getLastCustomLinkLocationInput().click();
-    AdminSettings.InterfacePage.getLastCustomLinkLocationInput().get('mat-option').contains(linkLocation).click();
-    AdminSettings.InterfacePage.getLastCustomLinkLabelInput().type(linkLabel).should(Condition.HaveValue, linkLabel);
-    AdminSettings.InterfacePage.getLastCustomLinkURLInput().type(linkURL).should(Condition.HaveValue, linkURL);
-    AdminSettings.waitForSave();
+    if (Mocks.enabled()) {
+      Mocks.adminSettings.customLinks.push({
+        label: linkLabel,
+        url: linkURL,
+        icon: '',
+        location: linkLocation.toLowerCase(),
+      });
+    } else {
+      AdminSettings.InterfacePage.getLastCustomLinkLocationInput().click();
+      AdminSettings.InterfacePage.getLastCustomLinkLocationInput().get('mat-option').contains(linkLocation).click();
+      AdminSettings.InterfacePage.getLastCustomLinkLabelInput().type(linkLabel).should(Condition.HaveValue, linkLabel);
+      AdminSettings.InterfacePage.getLastCustomLinkURLInput().type(linkURL).should(Condition.HaveValue, linkURL);
+      AdminSettings.waitForSave();
+    }
   });
 
-  it('should make sure that API documentation display is enabled', () => {
-    AdminSettings.InterfacePage.getApiDocsCheckbox().click();
-    AdminSettings.waitForSave();
+  it('should enable API documentation checkbox', () => {
+    if (Mocks.enabled()) {
+      Mocks.adminSettings.displayAPIDocs = true;
+    } else {
+      AdminSettings.InterfacePage.getApiDocsCheckbox().click();
+      AdminSettings.waitForSave();
+    }
+  });
+
+  it('should verify that API documentation display is enabled', () => {
     AdminSettings.InterfacePage.getApiDocsCheckbox().find('input').should(Condition.BeChecked);
   });
 
-  it('should make sure that terms of service display is enabled', () => {
-    AdminSettings.InterfacePage.getTermsOfServiceCheckbox().click();
-    AdminSettings.waitForSave();
+  it('should enable terms of service checkbox', () => {
+    if (Mocks.enabled()) {
+      Mocks.adminSettings.displayTermsOfService = true;
+    } else {
+      AdminSettings.InterfacePage.getTermsOfServiceCheckbox().click();
+      AdminSettings.waitForSave();
+    }
+  });
+
+  it('should verify that terms of service display is enabled', () => {
     AdminSettings.InterfacePage.getTermsOfServiceCheckbox().find('input').should(Condition.BeChecked);
   });
 
-  it('should make sure that demo information display is enabled', () => {
-    AdminSettings.InterfacePage.getDemoInfoCheckbox().click();
-    AdminSettings.waitForSave();
+  it('should enable demo information checkbox', () => {
+    if (Mocks.enabled()) {
+      Mocks.adminSettings.displayDemoInfo = true;
+    } else {
+      AdminSettings.InterfacePage.getDemoInfoCheckbox().click();
+      AdminSettings.waitForSave();
+    }
+  });
+
+  it('should verify that demo information display is enabled', () => {
     AdminSettings.InterfacePage.getDemoInfoCheckbox().find('input').should(Condition.BeChecked);
   });
 
@@ -79,25 +116,50 @@ describe('Admin Settings - Custom Links Story', () => {
   });
 
   it('should delete custom link', () => {
-    AdminSettings.InterfacePage.getSecondLastCustomLinkDeleteButton().should(Condition.NotBe, 'disabled').click();
-    AdminSettings.waitForSave();
+    if (Mocks.enabled()) {
+      Mocks.adminSettings.customLinks = [];
+    } else {
+      AdminSettings.InterfacePage.getSecondLastCustomLinkDeleteButton().should(Condition.NotBe, 'disabled').click();
+      AdminSettings.waitForSave();
+    }
   });
 
-  it('should make sure that API documentation display is disabled', () => {
-    AdminSettings.InterfacePage.getApiDocsCheckbox().click();
-    AdminSettings.waitForSave();
+  it('should disable API documentation checkbox', () => {
+    if (Mocks.enabled()) {
+      Mocks.adminSettings.displayAPIDocs = false;
+    } else {
+      AdminSettings.InterfacePage.getApiDocsCheckbox().click();
+      AdminSettings.waitForSave();
+    }
+  });
+
+  it('should verify that API documentation display is disabled', () => {
     AdminSettings.InterfacePage.getApiDocsCheckbox().find('input').should(Condition.NotBeChecked);
   });
 
-  it('should make sure that terms of service display is disabled', () => {
-    AdminSettings.InterfacePage.getTermsOfServiceCheckbox().click();
-    AdminSettings.waitForSave();
+  it('should disable terms of service checkbox', () => {
+    if (Mocks.enabled()) {
+      Mocks.adminSettings.displayTermsOfService = false;
+    } else {
+      AdminSettings.InterfacePage.getTermsOfServiceCheckbox().click();
+      AdminSettings.waitForSave();
+    }
+  });
+
+  it('should veryfy that terms of service display is disabled', () => {
     AdminSettings.InterfacePage.getTermsOfServiceCheckbox().find('input').should(Condition.NotBeChecked);
   });
 
-  it('should make sure that demo information display is disabled', () => {
-    AdminSettings.InterfacePage.getDemoInfoCheckbox().click();
-    AdminSettings.waitForSave();
+  it('should disable demo information checkbox', () => {
+    if (Mocks.enabled()) {
+      Mocks.adminSettings.displayDemoInfo = false;
+    } else {
+      AdminSettings.InterfacePage.getDemoInfoCheckbox().click();
+      AdminSettings.waitForSave();
+    }
+  });
+
+  it('should verify that demo information display is disabled', () => {
     AdminSettings.InterfacePage.getDemoInfoCheckbox().find('input').should(Condition.NotBeChecked);
   });
 

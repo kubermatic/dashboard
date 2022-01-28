@@ -12,7 +12,9 @@
     "oidc": {},
     "enableUserSSHKeyAgent": true,
     "auditLogging": {},
-    "opaIntegration": {},
+    "opaIntegration": {
+      "enabled": true
+    },
     "mla": {
       "monitoringEnabled": true,
       "loggingEnabled": true

@@ -46,14 +46,14 @@ export class Mocks {
   static adminSettings: any = {
     customLinks: [],
     cleanupOptions: {
-      Enabled: true,
+      Enabled: false,
       Enforced: false,
     },
     defaultNodeCount: 1,
     clusterTypeOptions: 0,
-    displayDemoInfo: true,
-    displayAPIDocs: true,
-    displayTermsOfService: true,
+    displayDemoInfo: false,
+    displayAPIDocs: false,
+    displayTermsOfService: false,
     enableDashboard: true,
     enableOIDCKubeconfig: false,
     userProjectsLimit: 0,
@@ -80,8 +80,45 @@ export class Mocks {
     },
   };
 
+  static defaultAdmin: any = {
+    email: Config.adminEmail(),
+    name: Config.adminEmail().split('@')[0],
+    isAdmin: true,
+  };
+
+  static secondAdmin: any = {
+    email: Config.userEmail(),
+    name: Config.userEmail().split('@')[0],
+    isAdmin: true,
+  };
+
+  static administrators: any = [Mocks.defaultAdmin];
+
+  static gatekeeperConfig: any = {};
+
+  static defaultGatekeeperConfig: any = {
+    spec: {
+      sync: {
+        syncOnly: [
+          {
+            version: 'v1',
+            kind: 'Namespace',
+          },
+          {
+            version: 'v1',
+            kind: 'Pod',
+          },
+        ],
+      },
+      validation: {},
+      readiness: {},
+    },
+  };
+
   private static _defaults: Mock[] = [
     {m: RequestType.GET, p: Endpoint.CurrentUser, r: Mocks.currentUser},
+    {m: RequestType.GET, p: Endpoint.Administrators, r: Mocks.administrators},
+    {m: RequestType.POST, p: Endpoint.Administrators, r: Mocks.defaultAdmin},
     {m: RequestType.GET, p: Endpoint.AdminSettings, r: Mocks.adminSettings},
     {m: RequestType.GET, p: Endpoint.Seeds, r: ['test-seed']},
     {m: RequestType.GET, p: Endpoint.SeedSettings, r: {fixture: 'seed-settings.json'}},
@@ -148,6 +185,12 @@ export class Mocks {
     {m: RequestType.GET, p: Endpoint.Hetzner.Sizes, r: {fixture: 'hetzner/sizes.json'}},
     {m: RequestType.GET, p: Endpoint.OpenStack.AvailabilityZones, r: {fixture: 'openstack/availabilityzones.json'}},
     {m: RequestType.GET, p: Endpoint.OpenStack.Sizes, r: {fixture: 'openstack/sizes.json'}},
+    {m: RequestType.POST, p: Endpoint.ConstraintTemplates, r: {fixture: 'constrainttemplate.json'}},
+    {m: RequestType.GET, p: Endpoint.ConstraintTemplates, r: {fixture: 'constrainttemplates.json'}},
+    {m: RequestType.GET, p: Endpoint.Constraints, r: {fixture: 'constraints.json'}},
+    {m: RequestType.POST, p: Endpoint.Constraints, r: {fixture: 'constraint.json'}},
+    {m: RequestType.GET, p: Endpoint.GatekeeperConfig, r: Mocks.gatekeeperConfig},
+    {m: RequestType.POST, p: Endpoint.GatekeeperConfig, r: Mocks.defaultGatekeeperConfig},
   ];
 
   static enabled(): boolean {

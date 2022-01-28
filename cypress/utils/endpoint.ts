@@ -106,7 +106,12 @@ export namespace Endpoint {
   export const SSHKey = '**/api/**/projects/*/sshkeys/*';
   export const Administrators = '**/admin';
   export const ConstraintTemplates = '**/constrainttemplates';
-  export const Constraints = '**/constraints';
+  export const ConstraintTemplate = '**/constrainttemplates/*';
+  export const DefaultConstraints = '**/constraints';
+  export const DefaultConstraint = '**/constraints/*';
+  export const Constraints = '**/api/*/projects/*/clusters/*/constraints';
+  export const Constraint = '**/api/*/projects/*/clusters/*/constraints/*';
+  export const GatekeeperConfig = '**/api/*/projects/*/clusters/*/gatekeeper/config';
   export const AdmissionPlugins = '**/api/**/admission/plugins/*';
   export const Versions = '**/providers/*/versions';
 }
