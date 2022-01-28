@@ -17,14 +17,14 @@ import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {fakeDigitaloceanCluster} from '../../../test/data/cluster';
-import {machineDeploymentsFake} from '../../../test/data/node';
-import {fakeProject} from '../../../test/data/project';
+import {fakeDigitaloceanCluster} from '@test/data/cluster';
+import {machineDeploymentsFake} from '@test/data/node';
+import {fakeProject} from '@test/data/project';
 import {CoreModule} from '@core/module';
 import {NotificationService} from '@core/services/notification';
 import {of} from 'rxjs';
 import {NodeService} from './node';
-import {MachineDeploymentServiceMock} from '../../../test/services/machine-deployment-mock';
+import {MachineDeploymentServiceMock} from '@test/services/machine-deployment-mock';
 import {MachineDeploymentService} from './machine-deployment';
 
 class MatDialogMock {

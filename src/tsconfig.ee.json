@@ -17,6 +17,6 @@
     "test*.ts",
     "environments/environment.*.ts",
     "**/*.spec.ts",
-    "**/testing/**"
+    "test/**.ts"
   ]
 }

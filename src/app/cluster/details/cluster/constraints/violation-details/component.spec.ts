@@ -15,9 +15,9 @@
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {fakeDigitaloceanCluster} from '../../../../../../test/data/cluster';
-import {fakeConstraints, fakeViolations} from '../../../../../../test/data/opa';
-import {fakeProject} from '../../../../../../test/data/project';
+import {fakeDigitaloceanCluster} from '@test/data/cluster';
+import {fakeConstraints, fakeViolations} from '@test/data/opa';
+import {fakeProject} from '@test/data/project';
 import {CoreModule} from '@core/module';
 import {OPAService} from '@core/services/opa';
 import {SharedModule} from '@shared/module';
@@ -34,7 +34,8 @@ describe('ViolationDetailsComponent', () => {
       const opaMock = {
         saveViolationPageIndex: jest.fn(),
         getViolationPageIndex: jest.fn(),
-        refreshConstraint: () => {},
+        refreshConstraint: () => {
+        },
       };
       opaMock.saveViolationPageIndex.mockReturnValue(null);
       opaMock.getViolationPageIndex.mockReturnValue(0);

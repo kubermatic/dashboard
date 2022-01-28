@@ -22,7 +22,7 @@ import {
   fakeHetznerCluster,
   fakeOpenstackCluster,
   fakeVSphereCluster,
-} from '../../../test/data/cluster';
+} from '@test/data/cluster';
 
 import {Cluster, Provider} from './cluster';
 

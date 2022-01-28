@@ -17,7 +17,7 @@ import {
   fakeClusterWithMachineNetwork,
   fakeGatewayInCidr,
   fakeGatewayNotInCidr,
-} from '../../../test/data/cluster-with-machine-networks';
+} from '@test/data/cluster-with-machine-networks';
 import {NoIpsLeftValidator} from './no-ips-left.validator';
 
 describe('NoIPsLeftwValidator', () => {

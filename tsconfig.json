@@ -5,11 +5,24 @@
     "outDir": "dist/out-tsc/app",
     "baseUrl": "src",
     "paths": {
-      "@shared/*": ["app/shared/*"],
-      "@core/*": ["app/core/*"],
-      "@app/*": ["app/*"],
-      "@assets/*": ["assets/*"],
-      "@environments/*": ["environments/*"]
+      "@app/*": [
+        "app/*"
+      ],
+      "@core/*": [
+        "app/core/*"
+      ],
+      "@shared/*": [
+        "app/shared/*"
+      ],
+      "@assets/*": [
+        "assets/*"
+      ],
+      "@environments/*": [
+        "environments/*"
+      ],
+      "@test/*": [
+        "test/*"
+      ]
     },
     "moduleResolution": "Node",
     "module": "ES2020",

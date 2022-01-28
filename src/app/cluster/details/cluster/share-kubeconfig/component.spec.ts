@@ -17,17 +17,17 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {fakeDigitaloceanCluster} from '../../../../../test/data/cluster';
-import {fakeProject} from '../../../../../test/data/project';
-import {RouterTestingModule} from '../../../../../test/services/router-stubs';
-import {UserMockService} from '../../../../../test/services/user-mock';
+import {fakeDigitaloceanCluster} from '@test/data/cluster';
+import {fakeProject} from '@test/data/project';
+import {RouterTestingModule} from '@test/services/router-stubs';
+import {UserMockService} from '@test/services/user-mock';
 import {Auth} from '@core/services/auth/service';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
 import {ShareKubeconfigComponent} from './component';
 import {ClusterService} from '@core/services/cluster';
 import {AppConfigService} from '@app/config.service';
-import {AppConfigMockService} from '../../../../../test/services/app-config-mock';
+import {AppConfigMockService} from '@test/services/app-config-mock';
 
 describe('ShareKubeconfigComponent', () => {
   let component: ShareKubeconfigComponent;

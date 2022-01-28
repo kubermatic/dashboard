@@ -19,11 +19,11 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
   DialogTestModule,
   NoopConfirmDialogComponent,
-} from '../../../../../../test/components/noop-confirmation-dialog.component';
-import {fakeDigitaloceanCluster} from '../../../../../../test/data/cluster';
-import {fakeRuleGroups} from '../../../../../../test/data/mla';
-import {fakeProject} from '../../../../../../test/data/project';
-import {UserMockService} from '../../../../../../test/services/user-mock';
+} from '@test/components/noop-confirmation-dialog.component';
+import {fakeDigitaloceanCluster} from '@test/data/cluster';
+import {fakeRuleGroups} from '@test/data/mla';
+import {fakeProject} from '@test/data/project';
+import {UserMockService} from '@test/services/user-mock';
 import {CoreModule} from '@core/module';
 import {NotificationService} from '@core/services/notification';
 import {MLAService} from '@core/services/mla';
@@ -44,7 +44,8 @@ describe('RuleGroupsComponent', () => {
     waitForAsync(() => {
       const mlaMock = {
         deleteRuleGroup: jest.fn(),
-        refreshRuleGroups: () => {},
+        refreshRuleGroups: () => {
+        },
       };
       deleteRuleGroupSpy = mlaMock.deleteRuleGroup.mockReturnValue(of(null));
 

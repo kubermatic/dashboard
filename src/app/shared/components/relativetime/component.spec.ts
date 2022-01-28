@@ -16,11 +16,11 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatDialogRefMock} from '../../../../test/services/mat-dialog-ref-mock';
+import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
 import {SharedModule} from '@shared/module';
 import {RelativeTimeComponent} from './component';
 import {AppConfigService} from '@app/config.service';
-import {AppConfigMockService} from '../../../../test/services/app-config-mock';
+import {AppConfigMockService} from '@test/services/app-config-mock';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 

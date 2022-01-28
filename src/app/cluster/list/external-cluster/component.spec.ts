@@ -18,12 +18,12 @@ import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
-import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../../../../test/services/router-stubs';
-import {AppConfigMockService} from '../../../../test/services/app-config-mock';
-import {AuthMockService} from '../../../../test/services/auth-mock';
-import {ProjectMockService} from '../../../../test/services/project-mock';
-import {SettingsMockService} from '../../../../test/services/settings-mock';
-import {UserMockService} from '../../../../test/services/user-mock';
+import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '@test/services/router-stubs';
+import {AppConfigMockService} from '@test/services/app-config-mock';
+import {AuthMockService} from '@test/services/auth-mock';
+import {ProjectMockService} from '@test/services/project-mock';
+import {SettingsMockService} from '@test/services/settings-mock';
+import {UserMockService} from '@test/services/user-mock';
 import {Auth} from '@core/services/auth/service';
 import {ClusterService} from '@core/services/cluster';
 import {EndOfLifeService} from '@core/services/eol';
@@ -32,7 +32,7 @@ import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
 import {ExternalClusterListComponent} from '@app/cluster/list/external-cluster/component';
-import {fakeCustomExternalCluster} from '../../../../test/data/external-cluster';
+import {fakeCustomExternalCluster} from '@test/data/external-cluster';
 import {defer, of} from 'rxjs';
 import {async} from 'rxjs-compat/scheduler/async';
 
@@ -46,7 +46,8 @@ describe('ExternalClusterListComponent', () => {
     waitForAsync(() => {
       const clusterServiceMock = {
         externalClusters: jest.fn(),
-        refreshExternalClusters: () => {},
+        refreshExternalClusters: () => {
+        },
       };
       getClustersSpy = clusterServiceMock.externalClusters.mockReturnValue(
         defer(() => of([fakeCustomExternalCluster()], async))

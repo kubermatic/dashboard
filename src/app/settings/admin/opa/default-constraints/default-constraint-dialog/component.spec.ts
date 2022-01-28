@@ -16,9 +16,9 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {fakeConstraints, fakeConstraintTemplates} from '../../../../../../test/data/opa';
-import {asyncData} from '../../../../../../test/services/cluster-mock';
-import {MatDialogRefMock} from '../../../../../../test/services/mat-dialog-ref-mock';
+import {fakeConstraints, fakeConstraintTemplates} from '@test/data/opa';
+import {asyncData} from '@test/services/cluster-mock';
+import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';
 import {NotificationService} from '@core/services/notification';
 import {OPAService} from '@core/services/opa';
@@ -43,7 +43,8 @@ describe('DefaultConstraintDialog', () => {
         createDefaultConstraint: jest.fn(),
         patchDefaultConstraint: jest.fn(),
         constraintTemplates: of(fakeConstraintTemplates()),
-        refreshConstraint: () => {},
+        refreshConstraint: () => {
+        },
       };
       createDefaultConstraintSpy = opaMock.createDefaultConstraint.mockReturnValue(asyncData(fakeConstraints()[0]));
       patchDefaultConstraintSpy = opaMock.patchDefaultConstraint.mockReturnValue(asyncData(fakeConstraints()[0]));

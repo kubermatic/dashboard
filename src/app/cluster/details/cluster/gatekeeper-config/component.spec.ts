@@ -12,17 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ComponentFixture, fakeAsync, TestBed, waitForAsync, tick, flush} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {
-  DialogTestModule,
-  NoopConfirmDialogComponent,
-} from '../../../../../test/components/noop-confirmation-dialog.component';
-import {fakeDigitaloceanCluster} from '../../../../../test/data/cluster';
-import {fakeGatekeeperConfig} from '../../../../../test/data/opa';
-import {fakeProject} from '../../../../../test/data/project';
+import {DialogTestModule, NoopConfirmDialogComponent} from '@test/components/noop-confirmation-dialog.component';
+import {fakeDigitaloceanCluster} from '@test/data/cluster';
+import {fakeGatekeeperConfig} from '@test/data/opa';
+import {fakeProject} from '@test/data/project';
 import {CoreModule} from '@core/module';
 import {NotificationService} from '@core/services/notification';
 import {OPAService} from '@core/services/opa';

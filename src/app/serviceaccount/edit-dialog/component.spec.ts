@@ -16,15 +16,15 @@ import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {fakeProject} from '../../../test/data/project';
-import {fakeServiceAccount} from '../../../test/data/serviceaccount';
-import {MatDialogRefMock} from '../../../test/services/mat-dialog-ref-mock';
+import {fakeProject} from '@test/data/project';
+import {fakeServiceAccount} from '@test/data/serviceaccount';
+import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';
 import {NotificationService} from '@core/services/notification';
 import {SharedModule} from '@shared/module';
 import {EditServiceAccountDialogComponent} from './component';
 import {ServiceAccountService} from '@core/services/service-account';
-import {asyncData} from '../../../test/services/cluster-mock';
+import {asyncData} from '@test/services/cluster-mock';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
 

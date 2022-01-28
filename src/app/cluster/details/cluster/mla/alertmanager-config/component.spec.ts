@@ -16,15 +16,12 @@ import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {
-  DialogTestModule,
-  NoopConfirmDialogComponent,
-} from '../../../../../../test/components/noop-confirmation-dialog.component';
-import {fakeDigitaloceanCluster} from '../../../../../../test/data/cluster';
-import {fakeAlertmanagerConfig} from '../../../../../../test/data/mla';
-import {fakeProject} from '../../../../../../test/data/project';
-import {DatacenterMockService} from '../../../../../../test/services/datacenter-mock';
-import {SettingsMockService} from '../../../../../../test/services/settings-mock';
+import {DialogTestModule, NoopConfirmDialogComponent} from '@test/components/noop-confirmation-dialog.component';
+import {fakeDigitaloceanCluster} from '@test/data/cluster';
+import {fakeAlertmanagerConfig} from '@test/data/mla';
+import {fakeProject} from '@test/data/project';
+import {DatacenterMockService} from '@test/services/datacenter-mock';
+import {SettingsMockService} from '@test/services/settings-mock';
 import {CoreModule} from '@core/module';
 import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
@@ -34,13 +31,13 @@ import {SharedModule} from '@shared/module';
 import {of} from 'rxjs';
 import {AlertmanagerConfigComponent} from './component';
 import {AppConfigService} from '@app/config.service';
-import {AppConfigMockService} from '../../../../../../test/services/app-config-mock';
+import {AppConfigMockService} from '@test/services/app-config-mock';
 import {Router} from '@angular/router';
-import {RouterStub} from '../../../../../../test/services/router-stubs';
+import {RouterStub} from '@test/services/router-stubs';
 import {UserService} from '@core/services/user';
-import {UserMockService} from '../../../../../../test/services/user-mock';
+import {UserMockService} from '@test/services/user-mock';
 import {AddonService} from '@core/services/addon';
-import {AddonServiceMock} from '../../../../../../test/services/addon-mock';
+import {AddonServiceMock} from '@test/services/addon-mock';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, DialogTestModule];
 

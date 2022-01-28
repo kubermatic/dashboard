@@ -23,14 +23,14 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {fakeProject} from '../../../../test/data/project';
-import {RouterStub, RouterTestingModule} from '../../../../test/services/router-stubs';
-import {MatDialogRefMock} from '../../../../test/services/mat-dialog-ref-mock';
+import {fakeProject} from '@test/data/project';
+import {RouterStub, RouterTestingModule} from '@test/services/router-stubs';
+import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';
 import {NotificationService} from '@core/services/notification';
 import {AddSshKeyDialogComponent} from './component';
 import {SSHKeyService} from '@core/services/ssh-key';
-import {SSHKeyMockService} from '../../../../test/services/ssh-key-mock';
+import {SSHKeyMockService} from '@test/services/ssh-key-mock';
 
 const modules: any[] = [
   BrowserModule,

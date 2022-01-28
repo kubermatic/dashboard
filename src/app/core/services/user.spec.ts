@@ -20,10 +20,10 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SharedModule} from '@shared/module';
 import {AppConfigService} from '@app/config.service';
 import {COOKIE, COOKIE_DI_TOKEN} from '@app/config';
-import {fakeUserGroupConfig} from '../../../test/data/user-group-config';
-import {RouterTestingModule} from '../../../test/services/router-stubs';
-import {AppConfigMockService} from '../../../test/services/app-config-mock';
-import {AuthMockService} from '../../../test/services/auth-mock';
+import {fakeUserGroupConfig} from '@test/data/user-group-config';
+import {RouterTestingModule} from '@test/services/router-stubs';
+import {AppConfigMockService} from '@test/services/app-config-mock';
+import {AuthMockService} from '@test/services/auth-mock';
 import {Auth} from './auth/service';
 import {TokenService} from './token';
 
