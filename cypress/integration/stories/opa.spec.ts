@@ -37,7 +37,7 @@ describe('OPA Story', () => {
   const constraintName = 'e2e-test-constraint';
   const constraintSpec = 'constraint.spec.yaml';
   const gatekeeperConfig = 'gatekeeperconfig.yaml';
-  
+
   beforeEach(() => {
     if (Mocks.enabled()) {
       Mocks.register(Provider.Digitalocean);

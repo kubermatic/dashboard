@@ -32,7 +32,7 @@ describe('Admin Settings - Opa Integration Story', () => {
       Mocks.register();
     }
   });
-  
+
   it('should login', () => {
     login(Config.adminEmail(), Config.password(), true);
     cy.url().should(Condition.Include, View.Projects.Default);
