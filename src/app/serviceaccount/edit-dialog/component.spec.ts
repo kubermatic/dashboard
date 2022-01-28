@@ -72,7 +72,7 @@ describe('EditServiceAccountDialogComponent', () => {
   });
 
   it('should call editServiceAccount method', fakeAsync(() => {
-    component.form.controls.name.patchValue('test-services-account');
+    component.form.controls.name.patchValue('test-service-account');
     component.form.controls.group.patchValue('editors');
     component.edit();
     tick();

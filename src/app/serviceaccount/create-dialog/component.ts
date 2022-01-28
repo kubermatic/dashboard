@@ -22,7 +22,7 @@ import {take} from 'rxjs/operators';
 import {ServiceAccountService} from '@core/services/service-account';
 
 @Component({
-  selector: 'km-create-services-account-dialog',
+  selector: 'km-create-service-account-dialog',
   templateUrl: './template.html',
 })
 export class CreateServiceAccountDialogComponent implements OnInit {

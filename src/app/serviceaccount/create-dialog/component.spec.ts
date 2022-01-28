@@ -77,13 +77,13 @@ describe('CreateServiceAccountDialogComponent', () => {
     expect(component.form.controls.name.valid).toBeFalsy();
     expect(component.form.controls.name.hasError('required')).toBeTruthy();
 
-    component.form.controls.name.patchValue('test-services-account');
+    component.form.controls.name.patchValue('test-service-account');
     expect(component.form.controls.name.hasError('required')).toBeFalsy();
   });
 
   it('should call addServiceAccount method', fakeAsync(() => {
     component.project = fakeProject();
-    component.form.controls.name.patchValue('test-services-account');
+    component.form.controls.name.patchValue('test-service-account');
     component.form.controls.group.patchValue('editors');
     component.create();
     tick();

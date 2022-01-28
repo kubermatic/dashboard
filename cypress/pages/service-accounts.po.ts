@@ -79,7 +79,7 @@ export class ServiceAccountsPage {
   }
 
   static visit(): void {
-    cy.get('#km-nav-item-services-accounts')
+    cy.get('#km-nav-item-service-accounts')
       .click()
       .then(() => {
         this.waitForRefresh();
