@@ -57,8 +57,8 @@ export class EditProjectComponent implements OnInit {
       labels: this.labels,
     };
 
-    // Remove nullified labels as project uses PUT endpoint, not PATCH, and labels components returns patch object.
-    // TODO: Make the labels components customizable so it can return patch (current implementation)
+    // Remove nullified labels as project uses PUT endpoint, not PATCH, and labels component returns patch object.
+    // TODO: Make the labels component customizable so it can return patch (current implementation)
     //  or entity (without nullified labels).
     // TODO: Implement and use PATCH endpoint for project edits.
     for (const label in project.labels) {

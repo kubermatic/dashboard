@@ -89,7 +89,7 @@ export class KubeletVersionNodeDataComponent extends BaseFormValidator implement
     this.versions = upgrades.map(upgrade => upgrade.version);
     const clusterVersion = this._clusterSpecService.cluster.spec.version;
 
-    // First try to pre-select value that was passed to the components
+    // First try to pre-select value that was passed to the component
     if (this.versions.includes(this.selected)) {
       this.form.get(Controls.Kubelet).setValue(this.selected);
       return;

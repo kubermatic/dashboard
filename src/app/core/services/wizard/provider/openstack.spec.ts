@@ -18,7 +18,7 @@ import {Openstack} from '@core/services/wizard/provider/openstack';
 import {OpenstackAvailabilityZone, OpenstackNetwork, OpenstackSecurityGroup} from '@shared/entity/provider/openstack';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 
-describe('openstack provider services', () => {
+describe('openstack provider service', () => {
   let service: Openstack;
   let httpMock: HttpTestingController;
 

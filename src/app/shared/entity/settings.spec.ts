@@ -15,32 +15,32 @@
 import {CustomLink, CustomLinkIcon} from './settings';
 
 describe('Settings', () => {
-  it('should correctly assign default custom link icon to unknown services', () => {
+  it('should correctly assign default custom link icon to unknown service', () => {
     const link: CustomLink = {label: 'Unknown Service', url: 'www.unknown.com'};
     expect(CustomLink.getIcon(link)).toBe(CustomLinkIcon.Default);
   });
 
-  it('should correctly assign default custom link icon to unknown services', () => {
+  it('should correctly assign default custom link icon to unknown service', () => {
     const link: CustomLink = {label: '', url: ''};
     expect(CustomLink.getIcon(link)).toBe(CustomLinkIcon.Default);
   });
 
-  it('should correctly assign custom link icon to known services based on label or URL', () => {
+  it('should correctly assign custom link icon to known service based on label or URL', () => {
     const link: CustomLink = {label: 'Twitter', url: 'www.twitter.com'};
     expect(CustomLink.getIcon(link)).toBe(CustomLinkIcon.Twitter);
   });
 
-  it('should correctly assign custom link icon to known services based on label', () => {
+  it('should correctly assign custom link icon to known service based on label', () => {
     const link: CustomLink = {label: 'Slack', url: '192.168.1.1:8080'};
     expect(CustomLink.getIcon(link)).toBe(CustomLinkIcon.Slack);
   });
 
-  it('should correctly assign custom link icon to known services based on URL', () => {
+  it('should correctly assign custom link icon to known service based on URL', () => {
     const link: CustomLink = {label: 'Repository', url: 'www.github.com'};
     expect(CustomLink.getIcon(link)).toBe(CustomLinkIcon.GitHub);
   });
 
-  it('should correctly assign default custom link icon to unknown services if specified icon is empty', () => {
+  it('should correctly assign default custom link icon to unknown service if specified icon is empty', () => {
     const link: CustomLink = {
       label: 'Unknown Service',
       url: 'www.unknown.com',
