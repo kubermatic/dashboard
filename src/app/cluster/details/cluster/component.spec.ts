@@ -58,6 +58,7 @@ import {MachineDeploymentService} from '@core/services/machine-deployment';
 import {AddonService} from '@core/services/addon';
 import {MachineDeploymentServiceMock} from '@app/testing/services/machine-deployment-mock';
 import {AddonServiceMock} from '@app/testing/services/addon-mock';
+import {EndOfLifeService} from '@core/services/eol';
 
 describe('ClusterDetailsComponent', () => {
   let fixture: ComponentFixture<ClusterDetailsComponent>;
@@ -113,6 +114,7 @@ describe('ClusterDetailsComponent', () => {
           {provide: MatDialog, useClass: MatDialogMock},
           {provide: MachineDeploymentService, useClass: MachineDeploymentServiceMock},
           {provide: AddonService, useClass: AddonServiceMock},
+          EndOfLifeService,
           GoogleAnalyticsService,
           NotificationService,
         ],
