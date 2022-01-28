@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ComponentFixture, fakeAsync, TestBed, waitForAsync, tick, flush} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -20,11 +20,9 @@ import {DialogTestModule, NoopConfirmDialogComponent} from '@app/testing/compone
 import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
 import {fakeAlertmanagerConfig} from '@app/testing/fake-data/mla';
 import {fakeProject} from '@app/testing/fake-data/project';
-import {ApiMockService} from '@app/testing/services/api-mock';
 import {DatacenterMockService} from '@app/testing/services/datacenter-mock';
 import {SettingsMockService} from '@app/testing/services/settings-mock';
 import {CoreModule} from '@core/module';
-import {ApiService} from '@core/services/api';
 import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
 import {MLAService} from '@core/services/mla';
@@ -32,6 +30,14 @@ import {SettingsService} from '@core/services/settings';
 import {SharedModule} from '@shared/module';
 import {of} from 'rxjs';
 import {AlertmanagerConfigComponent} from './component';
+import {AppConfigService} from '@app/config.service';
+import {AppConfigMockService} from '@app/testing/services/app-config-mock';
+import {Router} from '@angular/router';
+import {RouterStub} from '@app/testing/router-stubs';
+import {UserService} from '@core/services/user';
+import {UserMockService} from '@app/testing/services/user-mock';
+import {AddonService} from '@core/services/addon';
+import {AddonServiceMock} from '@app/testing/services/addon-mock';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, DialogTestModule];
 
@@ -56,7 +62,10 @@ describe('AlertmanagerConfigComponent', () => {
           {provide: MLAService, useValue: mlaMock},
           {provide: SettingsService, useClass: SettingsMockService},
           {provide: DatacenterService, useClass: DatacenterMockService},
-          {provide: ApiService, useClass: ApiMockService},
+          {provide: AppConfigService, useClass: AppConfigMockService},
+          {provide: Router, useClass: RouterStub},
+          {provide: UserService, useClass: UserMockService},
+          {provide: AddonService, useClass: AddonServiceMock},
           MatDialog,
           NotificationService,
         ],

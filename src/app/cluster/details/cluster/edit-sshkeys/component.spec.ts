@@ -18,16 +18,16 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {ApiMockService} from '@app/testing/services/api-mock';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock';
 import {ClusterMockService} from '@app/testing/services/cluster-mock';
 import {UserMockService} from '@app/testing/services/user-mock';
-import {ApiService} from '@core/services/api';
 import {ClusterService} from '@core/services/cluster';
 import {NotificationService} from '@core/services/notification';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
 import {EditSSHKeysComponent} from './component';
+import {SSHKeyService} from '@core/services/ssh-key';
+import {SSHKeyMockService} from '@app/testing/services/ssh-key-mock';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
@@ -44,7 +44,7 @@ describe('EditSSHKeysComponent', () => {
           {provide: ClusterService, useClass: ClusterMockService},
           {provide: UserService, useClass: UserMockService},
           {provide: AppConfigService, useClass: AppConfigMockService},
-          {provide: ApiService, useClass: ApiMockService},
+          {provide: SSHKeyService, useClass: SSHKeyMockService},
           MatDialog,
           GoogleAnalyticsService,
           NotificationService,

@@ -24,14 +24,12 @@ import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
 import {fakeDigitaloceanDatacenter} from '@app/testing/fake-data/datacenter';
 import {fakeProject} from '@app/testing/fake-data/project';
 import {RouterStub} from '@app/testing/router-stubs';
-import {ApiMockService, asyncData} from '@app/testing/services/api-mock';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock';
 import {DatacenterMockService} from '@app/testing/services/datacenter-mock';
 import {SettingsMockService} from '@app/testing/services/settings-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {UserMockService} from '@app/testing/services/user-mock';
 import {CoreModule} from '@core/module';
-import {ApiService} from '@core/services/api';
 import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
 import {UserService} from '@core/services/user';
@@ -54,6 +52,7 @@ import {EventRateLimitComponent} from '@shared/components/event-rate-limit/compo
 import {EditClusterComponent} from './component';
 import {FeatureGateService} from '@core/services/feature-gate';
 import {FeatureGatesMockService} from '@app/testing/services/feature-gate-mock';
+import {asyncData} from '@app/testing/services/cluster-mock';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
 
@@ -69,8 +68,10 @@ describe('EditClusterComponent', () => {
         changeProviderSettingsPatch: jest.fn(),
         providerSettingsPatchChanges$: new EventEmitter<ProviderSettingsPatch>(),
         onClusterUpdate: new Subject<void>(),
+        getAdmissionPlugins: jest.fn(),
       };
       editClusterSpy = clusterServiceMock.patch.mockReturnValue(asyncData(fakeDigitaloceanCluster()));
+      clusterServiceMock.getAdmissionPlugins.mockReturnValue(asyncData([]));
 
       TestBed.configureTestingModule({
         imports: [...modules],
@@ -93,7 +94,6 @@ describe('EditClusterComponent', () => {
           {provide: DatacenterService, useClass: DatacenterMockService},
           {provide: MatDialogRef, useClass: MatDialogRefMock},
           {provide: ClusterService, useValue: clusterServiceMock},
-          {provide: ApiService, useClass: ApiMockService},
           {provide: AppConfigService, useClass: AppConfigMockService},
           {provide: UserService, useClass: UserMockService},
           {provide: SettingsService, useClass: SettingsMockService},

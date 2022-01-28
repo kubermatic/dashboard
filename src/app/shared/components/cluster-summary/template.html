@@ -60,7 +60,7 @@ limitations under the License.
         <div key>Container Runtime</div>
         <div value>{{cluster.spec.containerRuntime}}</div>
       </km-property>
-      <km-property>
+      <km-property *ngIf="operatingSystem">
         <div key>Operating System</div>
         <div value
              fxLayout="row"

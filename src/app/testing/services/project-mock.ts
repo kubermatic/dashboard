@@ -14,13 +14,17 @@
 
 import {EventEmitter, Injectable} from '@angular/core';
 import {Observable, of, Subject} from 'rxjs';
-import {Project} from '@shared/entity/project';
+import {Project, ProjectModel} from '@shared/entity/project';
 import {fakeProject, fakeProjects} from '../fake-data/project';
 
 @Injectable()
 export class ProjectMockService {
   onProjectChange = new EventEmitter<Project>();
   onProjectsUpdate = new Subject<void>();
+
+  create(_model: ProjectModel): Observable<Project> {
+    return of(fakeProject());
+  }
 
   get selectedProject(): Observable<Project> {
     return of(fakeProject());

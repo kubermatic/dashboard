@@ -22,7 +22,6 @@ import {
   Validator,
   Validators,
 } from '@angular/forms';
-import {ApiService} from '@core/services/api';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {NameGeneratorService} from '@core/services/name-generator';
@@ -51,6 +50,7 @@ import * as semver from 'semver';
 import {coerce, compare} from 'semver';
 import {CIDR_PATTERN_VALIDATOR} from '@shared/validators/others';
 import {FeatureGateService} from '@core/services/feature-gate';
+import {ClusterService} from '@core/services/cluster';
 
 enum Controls {
   Name = 'name',
@@ -116,7 +116,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
   constructor(
     private readonly _builder: FormBuilder,
-    private readonly _api: ApiService,
+    private readonly _clusterService: ClusterService,
     private readonly _nameGenerator: NameGeneratorService,
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _datacenterService: DatacenterService,
@@ -175,7 +175,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.updateValueAndValidity();
     });
 
-    this._api
+    this._clusterService
       .getCNIPluginVersions(this.form.get(Controls.CNIPlugin).value)
       .pipe(take(1))
       .subscribe(versions => {
@@ -197,7 +197,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .subscribe((seedSettings: SeedSettings) => (this._seedSettings = seedSettings));
 
     this._clusterSpecService.providerChanges
-      .pipe(switchMap(provider => this._api.getMasterVersions(provider)))
+      .pipe(switchMap(provider => this._clusterService.getMasterVersions(provider)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setDefaultVersion.bind(this));
 
@@ -222,7 +222,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
     this.control(Controls.Version)
       .valueChanges.pipe(filter(value => !!value))
-      .pipe(switchMap(() => this._api.getAdmissionPlugins(this.form.get(Controls.Version).value)))
+      .pipe(switchMap(() => this._clusterService.getAdmissionPlugins(this.form.get(Controls.Version).value)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(plugins => (this.admissionPlugins = plugins.map(p => AdmissionPlugin[p]).filter(p => !!p)));
 
@@ -232,7 +232,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
     this.control(Controls.CNIPlugin)
       .valueChanges.pipe(filter(value => !!value))
-      .pipe(switchMap(() => this._api.getCNIPluginVersions(this.form.get(Controls.CNIPlugin).value)))
+      .pipe(switchMap(() => this._clusterService.getCNIPluginVersions(this.form.get(Controls.CNIPlugin).value)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(cniVersions => {
         this.updateCNIPluginOptions();

@@ -15,11 +15,11 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-import {ApiService} from '@core/services/api';
 import {NotificationService} from '@core/services/notification';
 import {Project} from '@shared/entity/project';
 import {ServiceAccountModel} from '@shared/entity/service-account';
 import {take} from 'rxjs/operators';
+import {ServiceAccountService} from '@core/services/service-account';
 
 @Component({
   selector: 'km-create-service-account-dialog',
@@ -30,7 +30,7 @@ export class CreateServiceAccountDialogComponent implements OnInit {
   form: FormGroup;
 
   constructor(
-    private readonly _apiService: ApiService,
+    private readonly _serviceAccountService: ServiceAccountService,
     private readonly _matDialogRef: MatDialogRef<CreateServiceAccountDialogComponent>,
     private readonly _notificationService: NotificationService
   ) {}
@@ -48,8 +48,8 @@ export class CreateServiceAccountDialogComponent implements OnInit {
       group: this.form.controls.group.value,
     };
 
-    this._apiService
-      .createServiceAccount(this.project.id, model)
+    this._serviceAccountService
+      .create(this.project.id, model)
       .pipe(take(1))
       .subscribe(() => {
         this._matDialogRef.close(true);

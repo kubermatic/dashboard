@@ -32,8 +32,8 @@ export class SettingsService {
   private readonly _newRestRoot = environment.newRestRoot;
   private readonly _wsRoot = environment.wsRoot;
   private readonly _adminSettings$ = new BehaviorSubject(DEFAULT_ADMIN_SETTINGS);
-  private readonly _refreshTime = 5; // in seconds
-  private readonly _retryDelayTime = 3; // in seconds
+  private readonly _refreshTime = 5;
+  private readonly _retryDelayTime = 3;
   private _adminSettingsWatch$: Observable<AdminSettings>;
   private _admins$: Observable<Admin[]>;
   private _adminsRefresh$ = new Subject<void>();

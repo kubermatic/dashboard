@@ -15,7 +15,6 @@
 import {EventEmitter, Injectable, Injector} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {DialogDataInput, DialogDataOutput, NodeDataDialogComponent} from '@app/node-data/dialog/component';
-import {ApiService} from '@core/services/api';
 import {NotificationService} from '@core/services/notification';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Cluster} from '@shared/entity/cluster';
@@ -23,6 +22,7 @@ import {MachineDeployment, MachineDeploymentPatch} from '@shared/entity/machine-
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {Observable, of} from 'rxjs';
 import {catchError, filter, mergeMap, switchMap, take} from 'rxjs/operators';
+import {MachineDeploymentService} from '@core/services/machine-deployment';
 
 @Injectable()
 export class NodeService {
@@ -60,7 +60,7 @@ export class NodeService {
   }
 
   constructor(
-    private readonly _apiService: ApiService,
+    private readonly _machineDeploymentService: MachineDeploymentService,
     private readonly _matDialog: MatDialog,
     private readonly _inj: Injector
   ) {
@@ -68,7 +68,7 @@ export class NodeService {
   }
 
   createMachineDeployment(nodeData: NodeData, projectID: string, clusterID: string): Observable<MachineDeployment> {
-    return this._apiService.createMachineDeployment(
+    return this._machineDeploymentService.create(
       NodeService._getMachineDeploymentEntity(nodeData),
       clusterID,
       projectID
@@ -107,7 +107,7 @@ export class NodeService {
     return dialogRef.afterClosed().pipe(
       filter(data => !!data),
       switchMap(data =>
-        this._apiService.patchMachineDeployment(NodeService._createPatch(data), md.id, cluster.id, projectID)
+        this._machineDeploymentService.patch(NodeService._createPatch(data), md.id, cluster.id, projectID)
       )
     );
   }
@@ -132,7 +132,7 @@ export class NodeService {
       .pipe(
         mergeMap((isConfirmed: boolean): Observable<boolean> => {
           if (isConfirmed) {
-            return this._apiService.deleteMachineDeployment(cluster.id, md, projectID).pipe(
+            return this._machineDeploymentService.delete(cluster.id, md, projectID).pipe(
               catchError(() => {
                 this._notificationService.error(`Could not delete the ${md.name} machine deployment`);
                 return of(false);
@@ -176,7 +176,7 @@ export class NodeService {
       .pipe(
         mergeMap((isConfirmed: boolean): Observable<boolean> => {
           if (isConfirmed) {
-            return this._apiService.restartMachineDeployment(cluster.id, md, projectID).pipe(
+            return this._machineDeploymentService.restart(cluster.id, md, projectID).pipe(
               catchError(() => {
                 this._notificationService.error(`Could not restart the ${md.name} machine deployment`);
                 return of(false);

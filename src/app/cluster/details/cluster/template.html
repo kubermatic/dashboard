@@ -200,7 +200,8 @@ limitations under the License.
       </div>
 
       <km-expansion-panel expandLabel="SHOW ADDITIONAL CLUSTER INFORMATION"
-                          collapseLabel="HIDE ADDITIONAL CLUSTER INFORMATION">
+                          collapseLabel="HIDE ADDITIONAL CLUSTER INFORMATION"
+                          [expanded]="onExpandChange$ | async">
         <div fxLayout="row wrap"
              class="cluster-info-container">
           <div fxFlex="33"

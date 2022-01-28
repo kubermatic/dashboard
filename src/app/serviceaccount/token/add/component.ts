@@ -18,7 +18,6 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MatStepper} from '@angular/material/stepper';
 import {SafeUrl} from '@angular/platform-browser';
 import {ServiceAccountTokenDialogService} from '@app/serviceaccount/token/add/steps/service';
-import {ApiService} from '@core/services/api';
 import {NotificationService} from '@core/services/notification';
 import {
   CreateTokenEntity,
@@ -28,6 +27,7 @@ import {
 } from '@shared/entity/service-account';
 import {getIconClassForButton} from '@shared/utils/common-utils';
 import {take} from 'rxjs/operators';
+import {ServiceAccountService} from '@core/services/service-account';
 
 enum StepRegistry {
   Name = 'Choose a Name',
@@ -70,8 +70,8 @@ export class ServiceAccountTokenDialog implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private readonly _data: ServiceAccountTokenDialogData,
+    private readonly _serviceAccountService: ServiceAccountService,
     private readonly _dialogRef: MatDialogRef<ServiceAccountTokenDialog>,
-    private readonly _apiService: ApiService,
     private readonly _notificationService: NotificationService,
     private readonly _tokenDialogService: ServiceAccountTokenDialogService,
     private readonly _builder: FormBuilder
@@ -134,8 +134,8 @@ export class ServiceAccountTokenDialog implements OnInit {
       name: this._tokenDialogService.tokenName,
     };
 
-    this._apiService
-      .createServiceAccountToken(this._data.projectID, this._data.serviceAccount, entity)
+    this._serviceAccountService
+      .createToken(this._data.projectID, this._data.serviceAccount, entity)
       .pipe(take(1))
       .subscribe(
         token => {
@@ -159,8 +159,8 @@ export class ServiceAccountTokenDialog implements OnInit {
       name: this._tokenDialogService.tokenName,
     };
 
-    this._apiService
-      .patchServiceAccountToken(this._data.projectID, this._data.serviceAccount, this._data.token, patch)
+    this._serviceAccountService
+      .patchToken(this._data.projectID, this._data.serviceAccount, this._data.token, patch)
       .pipe(take(1))
       .subscribe(
         _ => {
@@ -178,8 +178,8 @@ export class ServiceAccountTokenDialog implements OnInit {
     this.updating = true;
     this._tokenDialogService.tokenName = this._data.token.name;
 
-    this._apiService
-      .regenerateServiceAccountToken(this._data.projectID, this._data.serviceAccount, this._data.token)
+    this._serviceAccountService
+      .regenerateToken(this._data.projectID, this._data.serviceAccount, this._data.token)
       .pipe(take(1))
       .subscribe(
         token => {

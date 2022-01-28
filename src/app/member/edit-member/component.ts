@@ -15,11 +15,11 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-import {ApiService} from '@core/services/api';
 import {NotificationService} from '@core/services/notification';
 import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {MemberUtils} from '@shared/utils/member-utils/member-utils';
+import {MemberService} from '@core/services/member';
 
 @Component({
   selector: 'km-edit-member',
@@ -31,7 +31,7 @@ export class EditMemberComponent implements OnInit {
   form: FormGroup;
 
   constructor(
-    private readonly _apiService: ApiService,
+    private readonly _memberService: MemberService,
     private readonly _matDialogRef: MatDialogRef<EditMemberComponent>,
     private readonly _notificationService: NotificationService
   ) {}
@@ -47,23 +47,21 @@ export class EditMemberComponent implements OnInit {
       return;
     }
 
-    const editMember: Member = {
-      id: this.member.id,
-      name: this.member.name,
-      email: this.member.email,
-      creationTimestamp: this.member.creationTimestamp,
-      deletionTimestamp: this.member.deletionTimestamp,
-      projects: [
+    this._memberService
+      .edit(
         {
-          group: this.form.controls.group.value,
-          id: this.project.id,
+          id: this.member.id,
+          name: this.member.name,
+          email: this.member.email,
+          creationTimestamp: this.member.creationTimestamp,
+          deletionTimestamp: this.member.deletionTimestamp,
+          projects: [{group: this.form.controls.group.value, id: this.project.id}],
         },
-      ],
-    };
-
-    this._apiService.editMembers(this.project.id, editMember).subscribe(() => {
-      this._matDialogRef.close(true);
-      this._notificationService.success(`The ${this.member.name} member was updated`);
-    });
+        this.project.id
+      )
+      .subscribe(() => {
+        this._matDialogRef.close(true);
+        this._notificationService.success(`The ${this.member.name} member was updated`);
+      });
   }
 }

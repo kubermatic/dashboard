@@ -19,13 +19,11 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
-import {ApiMockService, asyncData} from '@app/testing/services/api-mock';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock';
 import {AuthMockService} from '@app/testing/services/auth-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';
 import {SettingsMockService} from '@app/testing/services/settings-mock';
 import {UserMockService} from '@app/testing/services/user-mock';
-import {ApiService} from '@core/services/api';
 import {Auth} from '@core/services/auth/service';
 import {ClusterService} from '@core/services/cluster';
 import {EndOfLifeService} from '@core/services/eol';
@@ -35,6 +33,8 @@ import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
 import {ExternalClusterListComponent} from '@app/cluster/list/external-cluster/component';
 import {fakeCustomExternalCluster} from '@app/testing/fake-data/external-cluster';
+import {defer, of} from 'rxjs';
+import {async} from 'rxjs-compat/scheduler/async';
 
 describe('ExternalClusterListComponent', () => {
   let fixture: ComponentFixture<ExternalClusterListComponent>;
@@ -48,13 +48,14 @@ describe('ExternalClusterListComponent', () => {
         externalClusters: jest.fn(),
         refreshExternalClusters: () => {},
       };
-      getClustersSpy = clusterServiceMock.externalClusters.mockReturnValue(asyncData([fakeCustomExternalCluster()]));
+      getClustersSpy = clusterServiceMock.externalClusters.mockReturnValue(
+        defer(() => of([fakeCustomExternalCluster()], async))
+      );
 
       TestBed.configureTestingModule({
         imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
         declarations: [ExternalClusterListComponent],
         providers: [
-          {provide: ApiService, useValue: ApiMockService},
           {provide: ClusterService, useValue: clusterServiceMock},
           {provide: Auth, useClass: AuthMockService},
           {provide: ActivatedRoute, useClass: ActivatedRouteStub},

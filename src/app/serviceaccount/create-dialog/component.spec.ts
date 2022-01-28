@@ -17,16 +17,16 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {fakeProject} from '@app/testing/fake-data/project';
-import {fakeServiceAccount} from '@app/testing/fake-data/serviceaccount';
-import {asyncData} from '@app/testing/services/api-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';
 import {CoreModule} from '@core/module';
-import {ApiService} from '@core/services/api';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {SharedModule} from '@shared/module';
 import {CreateServiceAccountDialogComponent} from './component';
+import {ServiceAccountService} from '@core/services/service-account';
+import {asyncData} from '@app/testing/services/cluster-mock';
+import {fakeServiceAccount} from '@app/testing/fake-data/serviceaccount';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
 
@@ -37,14 +37,14 @@ describe('CreateServiceAccountDialogComponent', () => {
 
   beforeEach(
     waitForAsync(() => {
-      const apiMock = {createServiceAccount: jest.fn()};
-      createServiceAccountSpy = apiMock.createServiceAccount.mockReturnValue(asyncData(fakeServiceAccount()));
+      const saMock = {create: jest.fn()};
+      createServiceAccountSpy = saMock.create.mockReturnValue(asyncData(fakeServiceAccount()));
 
       TestBed.configureTestingModule({
         imports: [...modules],
         providers: [
           {provide: MatDialogRef, useClass: MatDialogRefMock},
-          {provide: ApiService, useValue: apiMock},
+          {provide: ServiceAccountService, useValue: saMock},
           {provide: ProjectService, useClass: ProjectMockService},
           NotificationService,
         ],

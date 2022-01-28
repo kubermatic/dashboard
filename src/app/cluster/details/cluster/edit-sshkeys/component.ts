@@ -17,7 +17,6 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {AppConfigService} from '@app/config.service';
-import {ApiService} from '@core/services/api';
 import {ClusterService} from '@core/services/cluster';
 import {NotificationService} from '@core/services/notification';
 import {UserService} from '@core/services/user';
@@ -32,6 +31,7 @@ import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import _ from 'lodash';
 import {EMPTY, merge, Observer, Subject, timer} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {SSHKeyService} from '@core/services/ssh-key';
 
 @Component({
   selector: 'km-edit-sshkeys',
@@ -69,7 +69,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
     private readonly _appConfig: AppConfigService,
     private readonly _dialog: MatDialog,
     private readonly _clusterService: ClusterService,
-    private readonly _apiService: ApiService,
+    private readonly _sshKeyService: SSHKeyService,
     private readonly _notificationService: NotificationService
   ) {}
 
@@ -93,7 +93,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
       });
 
     merge(timer(0, this._refreshTime * this._appConfig.getRefreshTimeBase()), this._sshKeysUpdate)
-      .pipe(switchMap(_ => this._apiService.getSSHKeys(this.projectID)))
+      .pipe(switchMap(_ => this._sshKeyService.list(this.projectID)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(sshkeys => (this.projectSSHKeys = sshkeys));
   }

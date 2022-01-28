@@ -15,11 +15,11 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-import {ApiService} from '@core/services/api';
 import {NotificationService} from '@core/services/notification';
 import {Project} from '@shared/entity/project';
 import {ServiceAccount} from '@shared/entity/service-account';
 import {take} from 'rxjs/operators';
+import {ServiceAccountService} from '@core/services/service-account';
 
 @Component({
   selector: 'km-edit-dialog',
@@ -31,7 +31,7 @@ export class EditServiceAccountDialogComponent implements OnInit {
   form: FormGroup;
 
   constructor(
-    private readonly _apiService: ApiService,
+    private readonly _serviceAccountService: ServiceAccountService,
     private readonly _matDialogRef: MatDialogRef<EditServiceAccountDialogComponent>,
     private readonly _notificationService: NotificationService
   ) {}
@@ -53,8 +53,8 @@ export class EditServiceAccountDialogComponent implements OnInit {
       status: this.serviceaccount.id,
     };
 
-    this._apiService
-      .editServiceAccount(this.project.id, editServiceAccount)
+    this._serviceAccountService
+      .edit(this.project.id, editServiceAccount)
       .pipe(take(1))
       .subscribe(() => {
         this._matDialogRef.close(true);

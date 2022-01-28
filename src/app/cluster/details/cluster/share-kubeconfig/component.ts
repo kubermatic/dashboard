@@ -13,11 +13,11 @@
 // limitations under the License.
 
 import {Component, Input, OnInit} from '@angular/core';
-import {ApiService} from '@core/services/api';
 import {Auth} from '@core/services/auth/service';
 import {UserService} from '@core/services/user';
 import {Cluster} from '@shared/entity/cluster';
 import {take} from 'rxjs/operators';
+import {ClusterService} from '@core/services/cluster';
 
 @Component({
   selector: 'km-share-kubeconfig',
@@ -32,7 +32,7 @@ export class ShareKubeconfigComponent implements OnInit {
   kubeconfigLink: string;
 
   constructor(
-    private readonly _api: ApiService,
+    private readonly _clusterService: ClusterService,
     private readonly _auth: Auth,
     private readonly _userService: UserService
   ) {}
@@ -41,7 +41,12 @@ export class ShareKubeconfigComponent implements OnInit {
     if (this._auth.authenticated()) {
       this._userService.currentUser.pipe(take(1)).subscribe(user => {
         this.userID = user.id;
-        this.kubeconfigLink = this._api.getShareKubeconfigURL(this.projectID, this.seed, this.cluster.id, this.userID);
+        this.kubeconfigLink = this._clusterService.getShareKubeconfigURL(
+          this.projectID,
+          this.seed,
+          this.cluster.id,
+          this.userID
+        );
       });
     }
   }

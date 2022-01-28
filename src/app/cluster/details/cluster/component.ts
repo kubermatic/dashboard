@@ -12,14 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EditProviderSettingsComponent} from '@app/cluster/details/cluster/edit-provider-settings/component';
 import {AppConfigService} from '@app/config.service';
-import {ApiService} from '@core/services/api';
+import {AddonService} from '@core/services/addon';
 import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
+import {MachineDeploymentService} from '@core/services/machine-deployment';
 import {MLAService} from '@core/services/mla';
 import {NodeService} from '@core/services/node';
 import {NotificationService} from '@core/services/notification';
@@ -27,6 +28,7 @@ import {OPAService} from '@core/services/opa';
 import {PathParam} from '@core/services/params';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Addon} from '@shared/entity/addon';
 import {
   Cluster,
@@ -39,13 +41,13 @@ import {
 } from '@shared/entity/cluster';
 import {View} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
-import {Node} from '@shared/entity/node';
 import {Event} from '@shared/entity/event';
 import {Health, HealthState, HealthType} from '@shared/entity/health';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {Member} from '@shared/entity/member';
 import {ClusterMetrics} from '@shared/entity/metrics';
 import {AlertmanagerConfig, RuleGroup} from '@shared/entity/mla';
+import {Node} from '@shared/entity/node';
 import {Constraint, GatekeeperConfig} from '@shared/entity/opa';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {Config, GroupConfig} from '@shared/model/Config';
@@ -55,13 +57,12 @@ import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import _ from 'lodash';
 import {combineLatest, iif, Observable, of, Subject} from 'rxjs';
 import {filter, map, switchMap, take, takeUntil} from 'rxjs/operators';
+import {coerce, compare} from 'semver';
 import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation/component';
 import {EditClusterComponent} from './edit-cluster/component';
 import {EditSSHKeysComponent} from './edit-sshkeys/component';
 import {RevokeTokenComponent} from './revoke-token/component';
 import {ShareKubeconfigComponent} from './share-kubeconfig/component';
-import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
-import {coerce, compare} from 'semver';
 
 @Component({
   selector: 'km-cluster-details',
@@ -69,6 +70,13 @@ import {coerce, compare} from 'semver';
   styleUrls: ['./style.scss'],
 })
 export class ClusterDetailsComponent implements OnInit, OnDestroy {
+  private _unsubscribe: Subject<void> = new Subject<void>();
+  private _user: Member;
+  private _currentGroupConfig: GroupConfig;
+  private _seedSettings: SeedSettings;
+
+  readonly HealthType = HealthType;
+
   externalCCMMigrationStatus = ExternalCCMMigrationStatus;
   cluster: Cluster;
   nodeDc: Datacenter;
@@ -93,11 +101,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   gatekeeperConfig: GatekeeperConfig;
   alertmanagerConfig: AlertmanagerConfig;
   ruleGroups: RuleGroup[];
-  readonly HealthType = HealthType;
-  private _unsubscribe: Subject<void> = new Subject<void>();
-  private _user: Member;
-  private _currentGroupConfig: GroupConfig;
-  private _seedSettings: SeedSettings;
+  onExpandChange$ = new EventEmitter<boolean>();
 
   get admissionPlugins(): string[] {
     return Object.keys(AdmissionPlugin);
@@ -107,12 +111,13 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     private readonly _route: ActivatedRoute,
     private readonly _router: Router,
     private readonly _clusterService: ClusterService,
+    private readonly _machineDeploymentService: MachineDeploymentService,
+    private readonly _addonService: AddonService,
     private readonly _matDialog: MatDialog,
     private readonly _datacenterService: DatacenterService,
     private readonly _appConfigService: AppConfigService,
     private readonly _node: NodeService,
     private readonly _userService: UserService,
-    private readonly _api: ApiService,
     private readonly _notificationService: NotificationService,
     private readonly _opaService: OPAService,
     private readonly _mlaService: MLAService,
@@ -176,9 +181,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             .concat(
               this.isClusterRunning
                 ? [
-                    this._clusterService.addons(this.projectID, this.cluster.id),
+                    this._addonService.list(this.projectID, this.cluster.id),
                     this._clusterService.nodes(this.projectID, this.cluster.id),
-                    this._api.getMachineDeployments(this.cluster.id, this.projectID),
+                    this._machineDeploymentService.list(this.cluster.id, this.projectID),
                     this._clusterService.metrics(this.projectID, this.cluster.id),
                   ]
                 : [of([] as Addon[]), of([] as Node[]), of([] as MachineDeployment[]), of({} as ClusterMetrics)]
@@ -252,6 +257,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             : cniVersions.versions.sort((a, b) => compare(coerce(a), coerce(b)));
           this.constraints = constraints;
           this.gatekeeperConfig = gatekeeperConfig;
+          this.onExpandChange$.next(!this.isClusterRunning);
         },
         error: error => {
           const errorCodeNotFound = 404;
@@ -260,15 +266,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           }
         },
       });
-  }
-
-  private _canReloadVersions(): boolean {
-    return (
-      this.cluster &&
-      this.health &&
-      HealthState.isUp(this.health.apiserver) &&
-      HealthState.isUp(this.health.machineController)
-    );
   }
 
   getProvider(provider: string): string {
@@ -330,16 +327,18 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         iif(
           () => settings.enableOIDCKubeconfig,
           this._userService.currentUser.pipe(
-            map((user: Member) => this._api.getShareKubeconfigURL(this.projectID, this.seed, this.cluster.id, user.id))
+            map((user: Member) =>
+              this._clusterService.getShareKubeconfigURL(this.projectID, this.seed, this.cluster.id, user.id)
+            )
           ),
-          of(this._api.getKubeconfigURL(this.projectID, this.cluster.id))
+          of(this._clusterService.getKubeconfigURL(this.projectID, this.cluster.id))
         )
       )
     );
   }
 
   getProxyURL(): string {
-    return this._api.getDashboardProxyURL(this.projectID, this.cluster.id);
+    return this._clusterService.getDashboardProxyURL(this.projectID, this.cluster.id);
   }
 
   getExternalCCMMigrationStatus(): string {
@@ -435,8 +434,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   handleAddonCreation(addon: Addon): void {
-    this._clusterService
-      .createAddon(addon, this.projectID, this.cluster.id)
+    this._addonService
+      .add(addon, this.projectID, this.cluster.id)
       .pipe(take(1))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
@@ -446,8 +445,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   handleAddonEdition(addon: Addon): void {
-    this._clusterService
-      .editAddon(addon, this.projectID, this.cluster.id)
+    this._addonService
+      .patch(addon, this.projectID, this.cluster.id)
       .pipe(take(1))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
@@ -457,8 +456,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   handleAddonDeletion(addon: Addon): void {
-    this._clusterService
-      .deleteAddon(addon.id, this.projectID, this.cluster.id)
+    this._addonService
+      .delete(addon.id, this.projectID, this.cluster.id)
       .pipe(take(1))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
@@ -469,8 +468,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   reloadAddons(): void {
     if (this.projectID && this.cluster) {
-      this._clusterService
-        .addons(this.projectID, this.cluster.id)
+      this._addonService
+        .list(this.projectID, this.cluster.id)
         .pipe(take(1))
         .subscribe(addons => (this.addons = addons));
     }
@@ -513,5 +512,14 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   isHavingCNI(): boolean {
     return !!this.cluster?.spec?.cniPlugin && this.cluster?.spec?.cniPlugin?.type !== CNIPlugin.None;
+  }
+
+  private _canReloadVersions(): boolean {
+    return (
+      this.cluster &&
+      this.health &&
+      HealthState.isUp(this.health.apiserver) &&
+      HealthState.isUp(this.health.machineController)
+    );
   }
 }

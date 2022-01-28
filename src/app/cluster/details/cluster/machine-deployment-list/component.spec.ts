@@ -20,13 +20,11 @@ import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {RouterStub} from '@app/testing/router-stubs';
-import {ApiMockService} from '@app/testing/services/api-mock';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock';
 import {NodeMockService} from '@app/testing/services/node-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';
 import {SettingsMockService} from '@app/testing/services/settings-mock';
 import {UserMockService} from '@app/testing/services/user-mock';
-import {ApiService} from '@core/services/api';
 import {NodeService} from '@core/services/node';
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
@@ -53,7 +51,6 @@ describe('MachineDeploymentListComponent', () => {
         imports: [...modules],
         declarations: [MachineDeploymentListComponent],
         providers: [
-          {provide: ApiService, useClass: ApiMockService},
           {provide: NodeService, useClass: NodeMockService},
           {provide: UserService, useClass: UserMockService},
           {provide: AppConfigService, useClass: AppConfigMockService},
