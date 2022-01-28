@@ -53,7 +53,7 @@ describe('Service Accounts Story', () => {
     ServiceAccountsPage.addServiceAccount(serviceAccountName, Group.Editor);
   });
 
-  it('should open token panel for created services account', () => {
+  it('should open token panel for created service account', () => {
     ServiceAccountsPage.getTableRow(serviceAccountName).click();
   });
 
@@ -61,11 +61,11 @@ describe('Service Accounts Story', () => {
     ServiceAccountsPage.addToken(tokenName);
   });
 
-  it('should close token panel for created services account', () => {
+  it('should close token panel for created service account', () => {
     ServiceAccountsPage.getTableRow(serviceAccountName).click();
   });
 
-  it('should delete services account', () => {
+  it('should delete service account', () => {
     ServiceAccountsPage.deleteServiceAccount(serviceAccountName);
   });
 

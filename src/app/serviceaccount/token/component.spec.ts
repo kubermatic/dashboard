@@ -85,7 +85,7 @@ describe('ServiceAccountTokenComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should open delete services account token dialog & call deleteServiceAccountToken()', fakeAsync(() => {
+  it('should open delete service account token dialog & call deleteToken()', fakeAsync(() => {
     const spy = jest.spyOn(fixture.debugElement.injector.get(ServiceAccountService) as any, 'deleteToken');
 
     const waitTime = 15000;
