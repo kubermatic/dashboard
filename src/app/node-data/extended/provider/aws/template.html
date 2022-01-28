@@ -33,15 +33,14 @@ limitations under the License.
        @pushDown
        fxLayout="column"
        fxLayoutGap="16px">
-    <mat-form-field fxFlex>
-      <mat-label>Spot Instance Max Price (in USD)</mat-label>
-      <input [formControlName]="Controls.SpotInstanceMaxPrice"
-             type="number"
-             autocomplete="off"
-             matInput>
-      <mat-hint>Maximum price you are willing to pay per instance hour. Your instance runs when your maximum price is greater than the Spot Instance price.</mat-hint>
-      <mat-error>Spot Instance Max Price has to be bigger than 0.</mat-error>
-    </mat-form-field>
+    <km-number-stepper [formControlName]="Controls.SpotInstanceMaxPrice"
+                       mode="errors"
+                       label="Spot Instance Max Price (in USD)"
+                       hint="Maximum price you are willing to pay per instance hour. Your instance runs when your maximum price is greater than the Spot Instance price."
+                       type="decimal"
+                       min="0.0001"
+                       step="0.01">
+    </km-number-stepper>
 
     <mat-checkbox [id]="Controls.SpotInstancePersistentRequest"
                   [formControlName]="Controls.SpotInstancePersistentRequest">

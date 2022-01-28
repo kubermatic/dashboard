@@ -13,13 +13,13 @@
 // limitations under the License.
 
 import {EventEmitter, Injectable} from '@angular/core';
-import {CreatePresetReq} from '@shared/entity/preset';
+import {PresetModel} from '@shared/entity/preset';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 
 @Injectable({providedIn: 'root'})
 export class PresetDialogService {
   providerChanges = new EventEmitter<NodeProvider>();
-  preset: CreatePresetReq = new CreatePresetReq();
+  preset: PresetModel = new PresetModel();
 
   private _provider: NodeProvider;
   // Settings step child form validation status has to be shared through the service
@@ -48,6 +48,6 @@ export class PresetDialogService {
 
   // Presets cannot be created for those providers
   get unsupportedProviders(): NodeProvider[] {
-    return [NodeProvider.BAREMETAL, NodeProvider.BRINGYOUROWN, NodeProvider.NONE];
+    return [NodeProvider.BRINGYOUROWN, NodeProvider.NONE];
   }
 }

@@ -43,6 +43,47 @@ limitations under the License.
         <mat-hint>The name of the created automatic backup.</mat-hint>
       </mat-form-field>
 
+      <ng-container *ngIf="hasClusterInput()">
+        <div fxLayout="row"
+             fxLayoutGap="8px">
+          <km-property margin="none"
+                       class="property-label"
+                       fxFlex="25">
+            <div key
+                 class="property-key">Seed
+            </div>
+            <div value>{{seed}}</div>
+          </km-property>
+
+          <mat-form-field *ngIf="destinations.length > 0"
+                          fxFlex="75">
+            <mat-label>Destination</mat-label>
+            <mat-select [formControlName]="Controls.Destination"
+                        disableOptionCentering
+                        required>
+              <mat-option *ngFor="let destination of destinations"
+                          [value]="destination">{{destination}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <km-property margin="none"
+                       *ngIf="destinations.length === 0"
+                       class="no-destinations"
+                       fxFlex="75">
+            <div key
+                 class="property-key">Destination *
+            </div>
+            <div value>
+              <a class="km-pointer"
+                 *ngIf="isAdmin"
+                 (click)="goToBackupDestinations()">Configure a destination for this seed</a>
+              <span *ngIf="!isAdmin">Contact your Administrator to configure a destination</span>
+            </div>
+          </km-property>
+
+        </div>
+      </ng-container>
+
       <mat-radio-group [formControlName]="Controls.Group"
                        fxLayout="column"
                        fxLayoutGap="20px">
@@ -54,14 +95,16 @@ limitations under the License.
 
         <mat-radio-button [value]="ScheduleOption.Weekly">
           <div class="km-radio-button-title">Weekly</div>
-          <div class="km-radio-button-description">Create backups every week at 22:00 on Monday and keep the backups for 4
+          <div class="km-radio-button-description">Create backups every week at 22:00 on Monday and keep the backups for
+            4
             weeks.
           </div>
         </mat-radio-button>
 
         <mat-radio-button [value]="ScheduleOption.Monthly">
           <div class="km-radio-button-title">Monthly</div>
-          <div class="km-radio-button-description">Create backups every month at 22:00 on 1st day of the month and keep the backups for 3
+          <div class="km-radio-button-description">Create backups every month at 22:00 on 1st day of the month and keep
+            the backups for 3
             months.
           </div>
         </mat-radio-button>
@@ -85,21 +128,20 @@ limitations under the License.
                  type="text"
                  matInput
                  required>
-          <mat-hint>Cron expression that describes how often a backup should be created. Must match the criteria specified
+          <mat-hint>
+            Cron expression that describes how often a backup should be created. Must match the criteria specified
             <a href="https://pkg.go.dev/github.com/robfig/cron?utm_source=godoc"
                target="_blank">here</a>.
           </mat-hint>
         </mat-form-field>
 
-        <mat-form-field>
-          <mat-label>Number of Backups to Keep</mat-label>
-          <input [formControlName]="Controls.Keep"
-                 type="number"
-                 min="1"
-                 matInput
-                 required>
-          <mat-hint>How many backups should be kept before deleting the oldest ones.</mat-hint>
-        </mat-form-field>
+        <km-number-stepper [formControlName]="Controls.Keep"
+                           mode="errors"
+                           label="Number of Backups to Keep"
+                           hint="How many backups should be kept before deleting the oldest ones."
+                           min="1"
+                           required>
+        </km-number-stepper>
       </div>
     </form>
   </mat-dialog-content>
@@ -109,7 +151,8 @@ limitations under the License.
             kmThrottleClick
             (throttleClick)="save()"
             [disabled]="form.invalid">
-      Add Automatic Backup
+      <i class="km-icon-mask km-icon-add"></i>
+      <span>Add Automatic Backup</span>
     </button>
   </mat-dialog-actions>
 </div>

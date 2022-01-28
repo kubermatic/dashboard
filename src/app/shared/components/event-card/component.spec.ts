@@ -30,6 +30,7 @@ describe('EventCardComponent', () => {
     TestBed.configureTestingModule({
       imports: [...modules],
       providers: [{provide: UserService, useClass: UserMockService}],
+      teardown: {destroyAfterEach: false},
     }).compileComponents();
   });
 

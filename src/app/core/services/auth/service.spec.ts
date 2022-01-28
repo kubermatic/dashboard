@@ -39,6 +39,7 @@ describe('Auth', () => {
         PreviousRouteService,
         {provide: AppConfigService, useClass: AppConfigMockService},
       ],
+      teardown: {destroyAfterEach: false},
     }).compileComponents();
   });
 

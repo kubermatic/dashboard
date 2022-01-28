@@ -27,17 +27,17 @@ enum Type {
 
 @Injectable()
 export class BackupService {
-  private readonly _refreshTime = 10; // in seconds
+  private readonly _refreshTime = 10;
+  private _restRoot: string = environment.restRoot;
   private _newRestRoot: string = environment.newRestRoot;
   private _headers: HttpHeaders = new HttpHeaders();
   private _automaticBackups$ = new Map<string, Observable<EtcdBackupConfig[]>>();
   private _snapshots$ = new Map<string, Observable<EtcdBackupConfig[]>>();
   private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * this._refreshTime);
-
   readonly onAutomaticBackupsUpdate = new Subject<void>();
   readonly onSnapshotsUpdate = new Subject<void>();
 
-  constructor(private readonly _appConfig: AppConfigService, private readonly _http: HttpClient) {} // private readonly _appConfig: AppConfigService // private readonly _http: HttpClient, // private readonly _matDialog: MatDialog,
+  constructor(private readonly _appConfig: AppConfigService, private readonly _http: HttpClient) {}
 
   list(projectID: string, isSnapshot = false): Observable<EtcdBackupConfig[]> {
     if (isSnapshot) {
@@ -96,6 +96,11 @@ export class BackupService {
     return this._http.put(url, credentials);
   }
 
+  getDestinations(projectID: string, clusterID: string): Observable<string[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/backupdestinations`;
+    return this._http.get<string[]>(url);
+  }
+
   private _listAutomaticBackups(projectID: string): Observable<EtcdBackupConfig[]> {
     if (!this._automaticBackups$.get(projectID)) {
       const backups$: Observable<EtcdBackupConfig[]> = merge(this.onAutomaticBackupsUpdate, this._refreshTimer$)
@@ -131,5 +136,10 @@ export class BackupService {
   private _getBackup(projectID: string, clusterID: string, backupName: string): Observable<EtcdBackupConfig> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/etcdbackupconfigs/${backupName}`;
     return this._http.get<EtcdBackupConfig>(url, {headers: this._headers});
+  }
+
+  deleteBackupDestination(seed: string, destination: string): Observable<any> {
+    const url = `${this._restRoot}/admin/seeds/${seed}/backupdestinations/${destination}`;
+    return this._http.delete(url);
   }
 }

@@ -15,7 +15,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-import {ExternalClusterModel} from '../../model/ExternalClusterModel';
+import {ExternalClusterModel} from '@shared/entity/external-cluster';
 
 export enum Controls {
   Name = 'name',
@@ -25,24 +25,17 @@ export enum Controls {
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class ExternalClusterDataDialogComponent implements OnInit {
-  @Input() editMode = false;
+export class EditClusterConnectionDialogComponent implements OnInit {
   @Input() name = '';
   @Input() projectId: string;
   controls = Controls;
   form: FormGroup;
   kubeconfig = '';
 
-  constructor(private readonly _matDialogRef: MatDialogRef<ExternalClusterDataDialogComponent>) {}
+  constructor(private readonly _matDialogRef: MatDialogRef<EditClusterConnectionDialogComponent>) {}
 
   ngOnInit(): void {
-    this.form = new FormGroup({
-      name: new FormControl(this.name, [Validators.required]),
-    });
-  }
-
-  getLabel(): string {
-    return this.editMode ? 'Edit Cluster Connection' : 'Connect Cluster';
+    this.form = new FormGroup({name: new FormControl(this.name, [Validators.required])});
   }
 
   handler(): void {

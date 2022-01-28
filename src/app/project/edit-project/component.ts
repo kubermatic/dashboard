@@ -15,12 +15,12 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
-import {ApiService} from '@core/services/api';
 import {NotificationService} from '@core/services/notification';
 import {ResourceType} from '@shared/entity/common';
-import {EditProject, Project} from '@shared/entity/project';
+import {Project, ProjectModel} from '@shared/entity/project';
 import {AsyncValidators} from '@shared/validators/async-label-form.validator';
 import _ from 'lodash';
+import {ProjectService} from '@core/services/project';
 
 @Component({
   selector: 'km-edit-project',
@@ -33,8 +33,8 @@ export class EditProjectComponent implements OnInit {
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Project)];
 
   constructor(
-    private api: ApiService,
-    private dialogRef: MatDialogRef<EditProjectComponent>,
+    private readonly _projectService: ProjectService,
+    private readonly _matDialogRef: MatDialogRef<EditProjectComponent>,
     private readonly _notificationService: NotificationService
   ) {}
 
@@ -52,7 +52,7 @@ export class EditProjectComponent implements OnInit {
       return;
     }
 
-    const project: EditProject = {
+    const project: ProjectModel = {
       name: this.form.controls.name.value,
       labels: this.labels,
     };
@@ -67,8 +67,8 @@ export class EditProjectComponent implements OnInit {
       }
     }
 
-    this.api.editProject(this.project.id, project).subscribe(project => {
-      this.dialogRef.close(project);
+    this._projectService.edit(this.project.id, project).subscribe(project => {
+      this._matDialogRef.close(project);
       this._notificationService.success(`The ${this.project.name} project was updated`);
     });
   }

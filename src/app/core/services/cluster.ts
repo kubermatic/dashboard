@@ -21,33 +21,47 @@ import {environment} from '@environments/environment';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {LabelFormComponent} from '@shared/components/label-form/component';
 import {TaintFormComponent} from '@shared/components/taint-form/component';
-import {Addon} from '@shared/entity/addon';
 import {EtcdRestore} from '@shared/entity/backup';
-import {Cluster, ClusterPatch, Finalizer, MasterVersion, ProviderSettingsPatch} from '@shared/entity/cluster';
+import {
+  Cluster,
+  ClusterPatch,
+  CNIPlugin,
+  CNIPluginVersions,
+  CreateClusterModel,
+  Finalizer,
+  MasterVersion,
+  ProviderSettingsPatch,
+  Token,
+} from '@shared/entity/cluster';
 import {Event} from '@shared/entity/event';
 import {Health} from '@shared/entity/health';
 import {ClusterMetrics, NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
 import {SSHKey} from '@shared/entity/ssh-key';
-import {CreateClusterModel} from '@shared/model/CreateClusterModel';
-import {ExternalClusterModel} from '@shared/model/ExternalClusterModel';
-import {combineLatest, merge, Observable, of, Subject, timer} from 'rxjs';
-import {catchError, filter, map, shareReplay, startWith, switchMap, switchMapTo, take} from 'rxjs/operators';
+import {merge, Observable, of, Subject, timer} from 'rxjs';
+import {catchError, filter, shareReplay, switchMap, switchMapTo, take} from 'rxjs/operators';
+import {ExternalCluster, ExternalClusterModel, ExternalClusterPatch} from '@shared/entity/external-cluster';
+import {ExternalMachineDeployment, ExternalMachineDeploymentPatch} from '@shared/entity/external-machine-deployment';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
 
 @Injectable()
 export class ClusterService {
-  private readonly _refreshTime = 10; // in seconds
+  private readonly _refreshTime = 10;
   private _providerSettingsPatch = new Subject<ProviderSettingsPatch>();
   private _restRoot: string = environment.restRoot;
   private _newRestRoot: string = environment.newRestRoot;
   private _headers: HttpHeaders = new HttpHeaders();
   private _clusters$ = new Map<string, Observable<Cluster[]>>();
+  private _externalClusters$ = new Map<string, Observable<ExternalCluster[]>>();
   private _cluster$ = new Map<string, Observable<Cluster>>();
+  private _externalCluster$ = new Map<string, Observable<ExternalCluster>>();
   private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * this._refreshTime);
   private _onClustersUpdate = new Subject<void>();
-
+  private _onExternalClustersUpdate = new Subject<void>();
+  private _location: string = window.location.protocol + '//' + window.location.host;
   providerSettingsPatchChanges$ = this._providerSettingsPatch.asObservable();
   onClusterUpdate = new Subject<void>();
+  onExternalClusterUpdate = new Subject<void>();
 
   constructor(
     private readonly _matDialog: MatDialog,
@@ -61,25 +75,38 @@ export class ClusterService {
 
   clusters(projectID: string): Observable<Cluster[]> {
     if (!this._clusters$.get(projectID)) {
-      const clusters$ = merge(this._onClustersUpdate, this._refreshTimer$)
-        .pipe(switchMapTo(combineLatest([this._getClusters(projectID), this._getExternalClusters(projectID)])))
-        .pipe(
-          map(([clusters, externalClusters]) => {
-            externalClusters.forEach(c => (c.isExternal = true));
-            return [...clusters, ...externalClusters];
-          })
-        )
-        .pipe(shareReplay({refCount: true, bufferSize: 1}));
+      const clusters$ = merge(this._onClustersUpdate, this._refreshTimer$).pipe(
+        switchMapTo(this._getClusters(projectID)),
+        shareReplay({refCount: true, bufferSize: 1})
+      );
       this._clusters$.set(projectID, clusters$);
     }
 
     return this._clusters$.get(projectID);
   }
 
+  externalClusters(projectID: string): Observable<ExternalCluster[]> {
+    if (!this._externalClusters$.get(projectID)) {
+      const externalClusters$ = merge(this._onExternalClustersUpdate, this._refreshTimer$).pipe(
+        switchMapTo(this._getExternalClusters(projectID)),
+        shareReplay({refCount: true, bufferSize: 1})
+      );
+      this._externalClusters$.set(projectID, externalClusters$);
+    }
+
+    return this._externalClusters$.get(projectID);
+  }
+
   refreshClusters(): void {
     this._onClustersUpdate.next();
     this._clusters$.clear();
     this._cluster$.clear();
+  }
+
+  refreshExternalClusters(): void {
+    this._onExternalClustersUpdate.next();
+    this._externalClusters$.clear();
+    this._externalCluster$.clear();
   }
 
   cluster(projectID: string, clusterID: string): Observable<Cluster> {
@@ -96,8 +123,8 @@ export class ClusterService {
     return this._cluster$.get(id);
   }
 
-  externalCluster(projectID: string, clusterID: string): Observable<Cluster> {
-    return merge(this.onClusterUpdate, this._refreshTimer$)
+  externalCluster(projectID: string, clusterID: string): Observable<ExternalCluster> {
+    return merge(this.onExternalClusterUpdate, this._refreshTimer$)
       .pipe(switchMapTo(this._getExternalCluster(projectID, clusterID)))
       .pipe(shareReplay({refCount: true, bufferSize: 1}));
   }
@@ -114,14 +141,14 @@ export class ClusterService {
     return this._http.post<Cluster>(url, createClusterModel);
   }
 
-  addExternalCluster(projectID: string, model: ExternalClusterModel): Observable<Cluster> {
-    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters`;
-    return this._http.post<Cluster>(url, model);
-  }
-
   patch(projectID: string, clusterID: string, patch: ClusterPatch): Observable<Cluster> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}`;
     return this._http.patch<Cluster>(url, patch);
+  }
+
+  patchExternalCluster(projectID: string, clusterID: string, patch: ExternalClusterPatch): Observable<ExternalCluster> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}`;
+    return this._http.patch<ExternalCluster>(url, patch);
   }
 
   updateExternalCluster(projectID: string, clusterID: string, model: ExternalClusterModel): Observable<Cluster> {
@@ -140,10 +167,8 @@ export class ClusterService {
     return this._http.delete(url, {headers: this._headers});
   }
 
-  showDisconnectClusterDialog(cluster: Cluster, projectID: string): Observable<any> {
+  showDisconnectClusterDialog(cluster: ExternalCluster, projectID: string): Observable<any> {
     const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
       data: {
         title: 'Disconnect Cluster',
         message: `Are you sure you want to disconnect ${cluster.name} cluster?`,
@@ -161,11 +186,19 @@ export class ClusterService {
 
   upgrades(projectID: string, clusterID: string): Observable<MasterVersion[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/upgrades`;
-    return this._http.get<MasterVersion[]>(url).pipe(
-      catchError(() => {
-        return of<MasterVersion[]>([]).pipe(catchError(() => of<MasterVersion[]>([])));
-      })
-    );
+    return this._http.get<MasterVersion[]>(url).pipe(catchError(() => of<MasterVersion[]>([])));
+  }
+
+  externalClusterUpgrades(projectID: string, clusterID: string): Observable<MasterVersion[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/upgrades`;
+    return this._http.get<MasterVersion[]>(url).pipe(catchError(() => of<MasterVersion[]>([])));
+  }
+
+  cniVersions(projectID: string, clusterID: string): Observable<CNIPluginVersions> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/cniversions`;
+    return this._http
+      .get<CNIPluginVersions>(url)
+      .pipe(catchError(() => of<CNIPluginVersions>({} as CNIPluginVersions)));
   }
 
   metrics(projectID: string, clusterID: string): Observable<ClusterMetrics> {
@@ -185,7 +218,29 @@ export class ClusterService {
 
   events(projectID: string, clusterID: string): Observable<Event[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/events`;
-    return this._http.get<Event[]>(url).pipe(catchError(() => of<Event[]>()));
+    return this._http.get<Event[]>(url).pipe(catchError(() => of<Event[]>([])));
+  }
+
+  editToken(cluster: Cluster, projectID: string, token: Token): Observable<Token> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster.id}/token`;
+    return this._http.put<Token>(url, token);
+  }
+
+  editViewerToken(cluster: Cluster, projectID: string, token: Token): Observable<Token> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster.id}/viewertoken`;
+    return this._http.put<Token>(url, token);
+  }
+
+  getKubeconfigURL(projectID: string, clusterID: string): string {
+    return `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/kubeconfig`;
+  }
+
+  getDashboardProxyURL(projectID: string, clusterID: string): string {
+    return `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/dashboard/proxy`;
+  }
+
+  getShareKubeconfigURL(projectID: string, seed: string, clusterID: string, userID: string): string {
+    return `${this._location}/${this._restRoot}/kubeconfig?project_id=${projectID}&datacenter=${seed}&cluster_id=${clusterID}&user_id=${userID}`;
   }
 
   externalClusterEvents(projectID: string, clusterID: string): Observable<Event[]> {
@@ -198,9 +253,35 @@ export class ClusterService {
     return this._http.get<Node[]>(url).pipe(catchError(() => of<Node[]>()));
   }
 
+  externalMachineDeployments(projectID: string, clusterID: string): Observable<ExternalMachineDeployment[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/machinedeployments`;
+    return this._http.get<ExternalMachineDeployment[]>(url).pipe(catchError(() => of<ExternalMachineDeployment[]>()));
+  }
+
+  externalMachineDeployment(
+    projectID: string,
+    clusterID: string,
+    machineDeploymentID: string
+  ): Observable<ExternalMachineDeployment> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/machinedeployments/${machineDeploymentID}`;
+    return this._http
+      .get<ExternalMachineDeployment>(url)
+      .pipe(catchError(() => of<ExternalMachineDeployment>({} as ExternalMachineDeployment)));
+  }
+
+  patchExternalMachineDeployment(
+    projectID: string,
+    clusterID: string,
+    machineDeploymentID: string,
+    patch: ExternalMachineDeploymentPatch
+  ): Observable<ExternalMachineDeployment> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/machinedeployments/${machineDeploymentID}`;
+    return this._http.patch<ExternalMachineDeployment>(url, patch);
+  }
+
   health(projectID: string, clusterID: string): Observable<Health> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/health`;
-    return this._http.get<Health>(url).pipe(catchError(() => of<Health>()));
+    return this._http.get<Health>(url).pipe(catchError(() => of<Health>({} as Health)));
   }
 
   upgradeMachineDeployments(projectID: string, clusterID: string, version: string): Observable<any> {
@@ -210,7 +291,7 @@ export class ClusterService {
 
   nodes(projectID: string, clusterID: string): Observable<Node[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/nodes?hideInitialConditions=true`;
-    return this._http.get<Node[]>(url).pipe(catchError(() => of<Node[]>()));
+    return this._http.get<Node[]>(url).pipe(catchError(() => of<Node[]>([])));
   }
 
   deleteNode(projectID: string, clusterID: string, nodeID: string): Observable<any> {
@@ -218,18 +299,14 @@ export class ClusterService {
     return this._http.delete(url);
   }
 
-  nodeUpgrades(controlPlaneVersion: string, type: string): Observable<MasterVersion[]> {
-    const url = `${this._restRoot}/upgrades/node?control_plane_version=${controlPlaneVersion}&type=${type}`;
-    return this._http.get<MasterVersion[]>(url).pipe(
-      catchError(() => {
-        return of<MasterVersion[]>([]);
-      })
-    );
+  nodeUpgrades(controlPlaneVersion: string): Observable<MasterVersion[]> {
+    const url = `${this._restRoot}/upgrades/node?control_plane_version=${controlPlaneVersion}`;
+    return this._http.get<MasterVersion[]>(url).pipe(catchError(() => of<MasterVersion[]>([])));
   }
 
   sshKeys(projectID: string, clusterID: string): Observable<SSHKey[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/sshkeys`;
-    return this._http.get<SSHKey[]>(url).pipe(catchError(() => of<SSHKey[]>()));
+    return this._http.get<SSHKey[]>(url).pipe(catchError(() => of<SSHKey[]>([])));
   }
 
   createSSHKey(projectID: string, clusterID: string, sshKeyID: string): Observable<any> {
@@ -239,26 +316,6 @@ export class ClusterService {
 
   deleteSSHKey(projectID: string, clusterID: string, sshKeyID: string): Observable<any> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/sshkeys/${sshKeyID}`;
-    return this._http.delete(url);
-  }
-
-  addons(projectID: string, cluster: string): Observable<Addon[]> {
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/addons`;
-    return this._http.get<Addon[]>(url);
-  }
-
-  createAddon(addon: Addon, projectID: string, cluster: string): Observable<Addon> {
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/addons`;
-    return this._http.post<Addon>(url, addon);
-  }
-
-  editAddon(addon: Addon, projectID: string, cluster: string): Observable<Addon> {
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/addons/${addon.name}`;
-    return this._http.patch<Addon>(url, addon);
-  }
-
-  deleteAddon(addonID: string, projectID: string, cluster: string): Observable<any> {
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/addons/${addonID}`;
     return this._http.delete(url);
   }
 
@@ -272,6 +329,21 @@ export class ClusterService {
     return this._http.get<EtcdRestore[]>(url);
   }
 
+  getMasterVersions(provider: NodeProvider): Observable<MasterVersion[]> {
+    const url = `${this._newRestRoot}/providers/${provider}/versions`;
+    return this._http.get<MasterVersion[]>(url);
+  }
+
+  getAdmissionPlugins(version: string): Observable<string[]> {
+    const url = `${this._restRoot}/admission/plugins/${version}`;
+    return this._http.get<string[]>(url);
+  }
+
+  getCNIPluginVersions(cniPlugin: CNIPlugin): Observable<CNIPluginVersions> {
+    const url = `${this._newRestRoot}/cni/${cniPlugin}/versions`;
+    return this._http.get<CNIPluginVersions>(url);
+  }
+
   private _deleteExternalCluster(projectID: string, clusterID: string): Observable<any> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}`;
     return this._http.delete(url);
@@ -282,12 +354,9 @@ export class ClusterService {
     return this._http.get<Cluster[]>(url).pipe(catchError(() => of<Cluster[]>()));
   }
 
-  private _getExternalClusters(projectID: string): Observable<Cluster[]> {
+  private _getExternalClusters(projectID: string): Observable<ExternalCluster[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters`;
-    return this._http
-      .get<Cluster[]>(url)
-      .pipe(catchError(() => of<Cluster[]>()))
-      .pipe(startWith([]));
+    return this._http.get<ExternalCluster[]>(url).pipe(catchError(() => of<ExternalCluster[]>()));
   }
 
   private _getCluster(projectID: string, clusterID: string): Observable<Cluster> {
@@ -295,8 +364,8 @@ export class ClusterService {
     return this._http.get<Cluster>(url).pipe(catchError(() => of<Cluster>()));
   }
 
-  private _getExternalCluster(projectID: string, clusterID: string): Observable<Cluster> {
+  private _getExternalCluster(projectID: string, clusterID: string): Observable<ExternalCluster> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}`;
-    return this._http.get<Cluster>(url).pipe(catchError(() => of<Cluster>()));
+    return this._http.get<ExternalCluster>(url).pipe(catchError(() => of<ExternalCluster>()));
   }
 }

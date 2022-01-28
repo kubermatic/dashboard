@@ -134,6 +134,7 @@ export class Mocks {
     {m: RequestType.GET, p: Endpoint.ExternalClusters, r: []},
     {m: RequestType.POST, p: Endpoint.ExternalClusters, r: {fixture: 'external-cluster.json'}},
     {m: RequestType.GET, p: Endpoint.ExternalCluster, r: {fixture: 'external-cluster.json'}},
+    {m: RequestType.DELETE, p: Endpoint.ExternalCluster, r: {fixture: 'external-cluster.json'}},
     {m: RequestType.GET, p: Endpoint.ExternalClusterNodes, r: []},
     {m: RequestType.GET, p: Endpoint.ExternalClusterMetrics, r: []},
     {m: RequestType.GET, p: Endpoint.ExternalClusterNodesMetrics, r: []},
@@ -190,6 +191,7 @@ export class Mocks {
     {m: RequestType.POST, p: Endpoint.Constraints, r: {fixture: 'constraint.json'}},
     {m: RequestType.GET, p: Endpoint.GatekeeperConfig, r: Mocks.gatekeeperConfig},
     {m: RequestType.POST, p: Endpoint.GatekeeperConfig, r: Mocks.defaultGatekeeperConfig},
+    {m: RequestType.GET, p: Endpoint.Changelog, r: {}},
   ];
 
   static enabled(): boolean {
@@ -198,22 +200,19 @@ export class Mocks {
 
   static register(provider?: Provider): void {
     Mocks._registerDefaultMocks();
-
-    if (provider) {
-      Mocks._registerProviderMocks(provider);
-    }
+    Mocks._registerProviderMocks(provider);
   }
 
   private static _registerDefaultMocks(): void {
     this._defaults.forEach(mock => this._intercept(mock.m, mock.p, mock.r));
   }
 
-  private static _registerProviderMocks(provider: Provider): void {
-    this._intercept(RequestType.POST, Endpoint.Clusters, {fixture: `${provider}/cluster.json`});
-    this._intercept(RequestType.GET, Endpoint.Clusters, {fixture: `${provider}/clusters.json`});
-    this._intercept(RequestType.GET, Endpoint.Cluster, {fixture: `${provider}/cluster.json`});
-    this._intercept(RequestType.GET, Endpoint.MachineDeployments, {fixture: `${provider}/machinedeployments.json`});
-    this._intercept(RequestType.GET, Endpoint.MachineDeployment, {fixture: `${provider}/machinedeployment.json`});
+  private static _registerProviderMocks(p?: Provider): void {
+    this._intercept(RequestType.POST, Endpoint.Clusters, p ? {fixture: `${p}/cluster.json`} : {});
+    this._intercept(RequestType.GET, Endpoint.Clusters, p ? {fixture: `${p}/clusters.json`} : []);
+    this._intercept(RequestType.GET, Endpoint.Cluster, p ? {fixture: `${p}/cluster.json`} : {});
+    this._intercept(RequestType.GET, Endpoint.MachineDeployments, p ? {fixture: `${p}/machinedeployments.json`} : []);
+    this._intercept(RequestType.GET, Endpoint.MachineDeployment, p ? {fixture: `${p}/machinedeployment.json`} : {});
   }
 
   private static _intercept(method: RequestType, path: string, response?: RouteHandler): void {

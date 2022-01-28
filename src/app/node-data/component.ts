@@ -27,12 +27,12 @@ import {DatacenterService} from '@core/services/datacenter';
 import {NameGeneratorService} from '@core/services/name-generator';
 import {NodeDataService} from '@core/services/node-data/service';
 import {SettingsService} from '@core/services/settings';
+import {ContainerRuntime} from '@shared/entity/cluster';
 import {Datacenter} from '@shared/entity/datacenter';
 import {OperatingSystemSpec, Taint} from '@shared/entity/node';
 import {NodeProvider, NodeProviderConstants, OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {NoIpsLeftValidator} from '@shared/validators/no-ips-left.validator';
 import {merge, of} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
@@ -70,17 +70,16 @@ enum Controls {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  private _datacenterSpec: Datacenter;
   readonly NodeProvider = NodeProvider;
   readonly Controls = Controls;
   readonly OperatingSystem = OperatingSystem;
   @Input() provider: NodeProvider;
   // Used only when in dialog mode.
   @Input() showExtended = false;
-  @Input() existingNodesCount = 0;
   labels: object = {};
   taints: Taint[] = [];
   dialogEditMode = false;
-  private _datacenterSpec: Datacenter;
 
   get providerDisplayName(): string {
     return NodeProviderConstants.displayName(this.provider);
@@ -101,13 +100,9 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control(this._nodeDataService.nodeData.name, [
-        Validators.pattern('[a-zA-Z0-9-]*'),
+        Validators.pattern('[a-z0-9]+[a-z0-9-]*[a-z0-9]+'),
       ]),
-      [Controls.Count]: this._builder.control(this._nodeDataService.nodeData.count, [
-        Validators.required,
-        Validators.min(0),
-        NoIpsLeftValidator(this._clusterSpecService.cluster.spec.machineNetworks, this.existingNodesCount),
-      ]),
+      [Controls.Count]: this._builder.control(this._nodeDataService.nodeData.count),
       [Controls.DynamicConfig]: this._builder.control(this._nodeDataService.nodeData.dynamicConfig),
       [Controls.OperatingSystem]: this._builder.control(this._getDefaultOS(), [Validators.required]),
       [Controls.UpgradeOnBoot]: this._builder.control(false),
@@ -131,7 +126,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     this._init();
     this._nodeDataService.nodeData = this._getNodeData();
 
-    merge(this._clusterSpecService.clusterTypeChanges, this._clusterSpecService.providerChanges)
+    this._clusterSpecService.providerChanges
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS()));
 
@@ -185,12 +180,15 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     // Enable OS per-provider basis
     switch (os) {
       case OperatingSystem.SLES:
-        return this.isProvider(NodeProvider.AWS);
+        // SLES only supports docker as container runtime
+        return (
+          this._clusterSpecService.cluster.spec.containerRuntime === ContainerRuntime.Docker &&
+          this.isProvider(NodeProvider.AWS)
+        );
       case OperatingSystem.RHEL:
         return this.isProvider(
           NodeProvider.AWS,
           NodeProvider.AZURE,
-          NodeProvider.GCP,
           NodeProvider.KUBEVIRT,
           NodeProvider.OPENSTACK,
           NodeProvider.VSPHERE

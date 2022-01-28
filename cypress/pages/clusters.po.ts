@@ -25,12 +25,25 @@ export enum ProviderMenuOption {
 }
 
 export class ClustersPage {
+  // TODO: Use our own IDs once https://github.com/angular/components/issues/4136 will be fixed.
+  static getClustersTab(): Cypress.Chainable {
+    return cy.get('#mat-tab-label-0-0');
+  }
+
+  static getExternalClustersTab(): Cypress.Chainable {
+    return cy.get('#mat-tab-label-0-1');
+  }
+
   static getAddClusterBtn(): Cypress.Chainable {
     return cy.get('#km-add-cluster-top-btn');
   }
 
   static getConnectClusterBtn(): Cypress.Chainable {
-    return cy.get('#km-connect-cluster-top-btn');
+    return cy.get('#km-add-external-cluster-btn');
+  }
+
+  static getExternalClusterAnyProviderBtn(): Cypress.Chainable {
+    return cy.get('#external-cluster-any-provider-btn');
   }
 
   static getConnectClusterNameInput(): Cypress.Chainable {
@@ -38,7 +51,7 @@ export class ClustersPage {
   }
 
   static getConnectClusterSaveBtn(): Cypress.Chainable {
-    return cy.get('#external-cluster-confirm-btn');
+    return cy.get('#external-cluster-add-btn');
   }
 
   static getPrimaryLabel(): Cypress.Chainable {
@@ -119,10 +132,6 @@ export class ClustersPage {
 
   static getSSHKeysTableRemoveButton(sshKeyName: string): Cypress.Chainable {
     return this.getSSHKeysTableRow(sshKeyName).find('button i.km-icon-delete');
-  }
-
-  static getSSHKeysAddDropdown(): Cypress.Chainable {
-    return cy.get('.km-edit-sshkeys-dropdown').should(Condition.NotHaveClass, 'mat-form-field-disabled');
   }
 
   static getSSHKeysDropdownOption(name: string): Cypress.Chainable {

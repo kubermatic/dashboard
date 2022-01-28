@@ -16,14 +16,16 @@ limitations under the License.
 <div id="km-edit-project-dialog">
   <km-dialog-title>Edit Project</km-dialog-title>
   <mat-dialog-content>
+    <p class="km-dialog-context-description">Edit <strong>{{project.name}}</strong> project</p>
     <form [formGroup]="form"
           fxLayout="column"
           (submit)="editProject()"
           id="edit-project-form">
       <mat-form-field fxFlex>
-        <mat-label>Name*</mat-label>
+        <mat-label>Name</mat-label>
         <input id="km-edit-project-dialog-input"
                matInput
+               required
                formControlName="name"
                type="text"
                autocomplete="off"
@@ -46,8 +48,8 @@ limitations under the License.
             (throttleClick)="editProject()"
             form="edit-project-form"
             [disabled]="!form.valid">
-      <i class="km-icon-mask km-icon-edit w-24"></i>
-      <span>Edit Project</span>
+      <i class="km-icon-mask km-icon-save"></i>
+      <span>Save Changes</span>
     </button>
   </mat-dialog-actions>
 </div>

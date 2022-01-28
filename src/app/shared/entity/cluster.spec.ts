@@ -18,30 +18,24 @@ import {
   fakeAzureCluster,
   fakeBringyourownCluster,
   fakeDigitaloceanCluster,
+  fakeEquinixCluster,
   fakeHetznerCluster,
   fakeOpenstackCluster,
-  fakeEquinixCluster,
   fakeVSphereCluster,
 } from '@app/testing/fake-data/cluster';
 
-import {Cluster} from './cluster';
-import {Provider} from '../../../../cypress/utils/provider';
+import {Cluster, Provider} from './cluster';
 
 describe('ClusterEntity', () => {
   it('should get correct provider', () => {
-    expect(Cluster.getProvider(fakeDigitaloceanCluster().spec.cloud)).toBe(Provider.Digitalocean);
-    expect(Cluster.getProvider(fakeAWSCluster().spec.cloud)).toBe(Provider.AWS);
-    expect(Cluster.getProvider(fakeOpenstackCluster().spec.cloud)).toBe(Provider.OpenStack);
-    expect(Cluster.getProvider(fakeBringyourownCluster().spec.cloud)).toBe(Provider.kubeAdm);
-    expect(Cluster.getProvider(fakeHetznerCluster().spec.cloud)).toBe(Provider.Hetzner);
-    expect(Cluster.getProvider(fakeVSphereCluster().spec.cloud)).toBe(Provider.VSphere);
-    expect(Cluster.getProvider(fakeAzureCluster().spec.cloud)).toBe(Provider.Azure);
-    expect(Cluster.getProvider(fakeEquinixCluster().spec.cloud)).toBe(Provider.Equinix);
-    expect(Cluster.getProvider(fakeAlibabaCluster().spec.cloud)).toBe(Provider.Alibaba);
-  });
-
-  it('should get correct version headline', () => {
-    expect(Cluster.getVersionHeadline('kubernetes', false)).toBe('Master Version');
-    expect(Cluster.getVersionHeadline('kubernetes', true)).toBe('kubelet Version');
+    expect(Cluster.getProvider(fakeDigitaloceanCluster())).toBe(Provider.Digitalocean);
+    expect(Cluster.getProvider(fakeAWSCluster())).toBe(Provider.AWS);
+    expect(Cluster.getProvider(fakeOpenstackCluster())).toBe(Provider.OpenStack);
+    expect(Cluster.getProvider(fakeBringyourownCluster())).toBe(Provider.kubeAdm);
+    expect(Cluster.getProvider(fakeHetznerCluster())).toBe(Provider.Hetzner);
+    expect(Cluster.getProvider(fakeVSphereCluster())).toBe(Provider.VSphere);
+    expect(Cluster.getProvider(fakeAzureCluster())).toBe(Provider.Azure);
+    expect(Cluster.getProvider(fakeEquinixCluster())).toBe(Provider.Equinix);
+    expect(Cluster.getProvider(fakeAlibabaCluster())).toBe(Provider.Alibaba);
   });
 });

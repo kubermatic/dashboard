@@ -19,10 +19,8 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppConfigService} from '@app/config.service';
 import {NODE_DATA_CONFIG, NodeDataMode} from '@app/node-data/config';
-import {ApiMockService} from '@app/testing/services/api-mock';
 import {AuthMockService} from '@app/testing/services/auth-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';
-import {ApiService} from '@core/services/api';
 import {Auth} from '@core/services/auth/service';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
@@ -32,6 +30,16 @@ import {PresetsService} from '@core/services/wizard/presets';
 import {WizardService} from '@core/services/wizard/wizard';
 import {SharedModule} from '@shared/module';
 import {MachineNetworkStepComponent} from './component';
+import {AlibabaService} from '@core/services/provider/alibaba';
+import {MachineDeploymentService} from '@core/services/machine-deployment';
+import {AnexiaService} from '@core/services/provider/anexia';
+import {AWSService} from '@core/services/provider/aws';
+import {AzureService} from '@core/services/provider/azure';
+import {GCPService} from '@core/services/provider/gcp';
+import {HetznerService} from '@core/services/provider/hetzner';
+import {DigitalOceanService} from '@core/services/provider/digitalocean';
+import {OpenStackService} from '@core/services/provider/openstack';
+import {EquinixService} from '@core/services/provider/equinix';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule];
 
@@ -51,11 +59,21 @@ describe('MachineNetworkStepComponent', () => {
           PresetsService,
           DatacenterService,
           AppConfigService,
+          AlibabaService,
+          AnexiaService,
+          AWSService,
+          AzureService,
+          DigitalOceanService,
+          EquinixService,
+          GCPService,
+          HetznerService,
+          OpenStackService,
+          MachineDeploymentService,
           {provide: ProjectService, useValue: ProjectMockService},
-          {provide: ApiService, useValue: ApiMockService},
           {provide: Auth, useClass: AuthMockService},
           {provide: NODE_DATA_CONFIG, useValue: NodeDataMode.Wizard},
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

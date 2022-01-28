@@ -38,8 +38,6 @@ enum Controls {
 }
 
 export interface DialogDataInput {
-  existingNodesCount: number;
-
   // If provided, data will be reused to pre-fill fields.
   initialClusterData?: Cluster;
   initialNodeData?: NodeData;
@@ -80,8 +78,12 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
     return this._clusterSpecService.provider;
   }
 
-  get existingNodesCount(): number {
-    return this._data.existingNodesCount;
+  get clusterName(): string {
+    return this._data.initialClusterData.name;
+  }
+
+  get machineDeploymentName(): string {
+    return this._data.initialNodeData.name;
   }
 
   constructor(

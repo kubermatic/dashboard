@@ -27,27 +27,23 @@ import {AppConfigMockService} from '@app/testing/services/app-config-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';
 import {UserMockService} from '@app/testing/services/user-mock';
 import {CoreModule} from '@core/module';
-import {ApiService} from '@core/services/api';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
-import {of} from 'rxjs';
 import {ServiceAccountModule} from '../module';
 import {ServiceAccountTokenComponent} from './component';
+import {ServiceAccountService} from '@core/services/service-account';
+import {ServiceAccountMockService} from '@app/testing/services/service-account-mock';
 
 describe('ServiceAccountTokenComponent', () => {
   let fixture: ComponentFixture<ServiceAccountTokenComponent>;
   let noop: ComponentFixture<NoopConfirmDialogComponent>;
   let noopToken: ComponentFixture<NoopTokenDialogComponent>;
   let component: ServiceAccountTokenComponent;
-  let deleteServiceAccountTokenSpy;
 
   beforeEach(
     waitForAsync(() => {
-      const apiMock = {deleteServiceAccountToken: jest.fn()};
-      deleteServiceAccountTokenSpy = apiMock.deleteServiceAccountToken.mockReturnValue(of(null));
-
       TestBed.configureTestingModule({
         imports: [
           BrowserModule,
@@ -60,14 +56,15 @@ describe('ServiceAccountTokenComponent', () => {
         ],
         providers: [
           {provide: Router, useClass: RouterStub},
-          {provide: ApiService, useValue: apiMock},
           {provide: ProjectService, useClass: ProjectMockService},
           {provide: AppConfigService, useClass: AppConfigMockService},
           {provide: UserService, useClass: UserMockService},
+          {provide: ServiceAccountService, useClass: ServiceAccountMockService},
           MatDialog,
           GoogleAnalyticsService,
           NotificationService,
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );
@@ -89,6 +86,8 @@ describe('ServiceAccountTokenComponent', () => {
   });
 
   it('should open delete service account token dialog & call deleteServiceAccountToken()', fakeAsync(() => {
+    const spy = jest.spyOn(fixture.debugElement.injector.get(ServiceAccountService) as any, 'deleteToken');
+
     const waitTime = 15000;
     component.deleteToken(fakeServiceAccountTokens()[0]);
     noop.detectChanges();
@@ -107,7 +106,7 @@ describe('ServiceAccountTokenComponent', () => {
     fixture.detectChanges();
     tick(waitTime);
 
-    expect(deleteServiceAccountTokenSpy).toHaveBeenCalled();
+    expect(spy).toHaveBeenCalled();
     fixture.destroy();
     flush();
   }));

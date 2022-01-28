@@ -19,6 +19,11 @@ enum Margin {
   None = 'none',
 }
 
+enum Mode {
+  Default = 'default',
+  Value = 'value',
+}
+
 @Component({
   selector: 'km-property',
   templateUrl: './template.html',
@@ -26,5 +31,7 @@ enum Margin {
 })
 export class PropertyComponent {
   readonly Margin = Margin;
+  readonly Mode = Mode;
   @Input() margin = Margin.Default;
+  @Input() mode = Mode.Default;
 }

@@ -22,21 +22,21 @@ import {
   Validator,
   Validators,
 } from '@angular/forms';
-import {ApiService} from '@core/services/api';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {NameGeneratorService} from '@core/services/name-generator';
 import {SettingsService} from '@core/services/settings';
 import {WizardService} from '@core/services/wizard/wizard';
 import {
+  AuditPolicyPreset,
   Cluster,
   ClusterSpec,
   ClusterType,
+  CNIPlugin,
   ContainerRuntime,
   END_OF_DOCKER_SUPPORT_VERSION,
   MasterVersion,
   ProxyMode,
-  CNIPlugin,
 } from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
@@ -47,8 +47,10 @@ import {combineLatest, merge} from 'rxjs';
 import {filter, startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {StepBase} from '../base';
 import * as semver from 'semver';
+import {coerce, compare} from 'semver';
 import {CIDR_PATTERN_VALIDATOR} from '@shared/validators/others';
 import {FeatureGateService} from '@core/services/feature-gate';
+import {ClusterService} from '@core/services/cluster';
 
 enum Controls {
   Name = 'name',
@@ -56,11 +58,14 @@ enum Controls {
   ContainerRuntime = 'containerRuntime',
   Type = 'type',
   AuditLogging = 'auditLogging',
+  AuditPolicyPreset = 'auditPolicyPreset',
   UserSSHKeyAgent = 'userSshKeyAgent',
+  OperatingSystemManager = 'enableOperatingSystemManager',
   Labels = 'labels',
   AdmissionPlugins = 'admissionPlugins',
   SSHKeys = 'sshKeys',
   PodNodeSelectorAdmissionPluginConfig = 'podNodeSelectorAdmissionPluginConfig',
+  EventRateLimitConfig = 'eventRateLimitConfig',
   OPAIntegration = 'opaIntegration',
   Konnectivity = 'konnectivity',
   MLALogging = 'loggingEnabled',
@@ -69,6 +74,7 @@ enum Controls {
   PodsCIDR = 'podsCIDR',
   ServicesCIDR = 'servicesCIDR',
   CNIPlugin = 'cniPlugin',
+  CNIPluginVersion = 'cniPluginVersion',
 }
 
 @Component({
@@ -98,9 +104,11 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
   proxyMode = ProxyMode;
   cniPlugin = CNIPlugin;
-  availableProxyModes = ['ipvs', 'iptables'];
+  cniPluginVersions: string[] = [];
+  availableProxyModes = [ProxyMode.ipvs, ProxyMode.iptables];
   isKonnectivityEnabled = false;
   readonly Controls = Controls;
+  readonly AuditPolicyPreset = AuditPolicyPreset;
   private _datacenterSpec: Datacenter;
   private _seedSettings: SeedSettings;
   private _settings: AdminSettings;
@@ -108,7 +116,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
   constructor(
     private readonly _builder: FormBuilder,
-    private readonly _api: ApiService,
+    private readonly _clusterService: ClusterService,
     private readonly _nameGenerator: NameGeneratorService,
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _datacenterService: DatacenterService,
@@ -128,24 +136,28 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.Name]: new FormControl('', [
         Validators.required,
         Validators.minLength(this._minNameLength),
-        Validators.pattern('[a-zA-Z0-9-]*'),
+        Validators.pattern('[a-z0-9]+[a-z0-9-]*[a-z0-9]+'),
       ]),
       [Controls.Version]: new FormControl('', [Validators.required]),
       [Controls.ContainerRuntime]: new FormControl(ContainerRuntime.Containerd, [Validators.required]),
       [Controls.AuditLogging]: new FormControl(false),
+      [Controls.AuditPolicyPreset]: new FormControl(''),
       [Controls.UserSSHKeyAgent]: new FormControl(true),
+      [Controls.OperatingSystemManager]: new FormControl(false),
       [Controls.OPAIntegration]: new FormControl(false),
-      [Controls.Konnectivity]: new FormControl(false),
+      [Controls.Konnectivity]: new FormControl(true),
       [Controls.MLALogging]: new FormControl(false),
       [Controls.MLAMonitoring]: new FormControl(false),
       [Controls.AdmissionPlugins]: new FormControl([]),
       [Controls.PodNodeSelectorAdmissionPluginConfig]: new FormControl(''),
+      [Controls.EventRateLimitConfig]: this._builder.control(''),
       [Controls.Labels]: new FormControl(''),
       [Controls.SSHKeys]: this._builder.control(''),
       [Controls.ProxyMode]: this._builder.control(''),
       [Controls.PodsCIDR]: new FormControl('', [CIDR_PATTERN_VALIDATOR]),
       [Controls.ServicesCIDR]: new FormControl('', [CIDR_PATTERN_VALIDATOR]),
-      [Controls.CNIPlugin]: new FormControl(''),
+      [Controls.CNIPlugin]: new FormControl(CNIPlugin.Canal),
+      [Controls.CNIPluginVersion]: new FormControl(''),
     });
 
     this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
@@ -163,6 +175,14 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.updateValueAndValidity();
     });
 
+    this._clusterService
+      .getCNIPluginVersions(this.form.get(Controls.CNIPlugin).value)
+      .pipe(take(1))
+      .subscribe(versions => {
+        this.cniPluginVersions = versions.versions.sort((a, b) => compare(coerce(a), coerce(b)));
+        this._setDefaultCNIVersion();
+      });
+
     this._clusterSpecService.datacenterChanges
       .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
       .pipe(
@@ -177,7 +197,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .subscribe((seedSettings: SeedSettings) => (this._seedSettings = seedSettings));
 
     this._clusterSpecService.providerChanges
-      .pipe(switchMap(provider => this._api.getMasterVersions(provider)))
+      .pipe(switchMap(provider => this._clusterService.getMasterVersions(provider)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setDefaultVersion.bind(this));
 
@@ -202,7 +222,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
     this.control(Controls.Version)
       .valueChanges.pipe(filter(value => !!value))
-      .pipe(switchMap(() => this._api.getAdmissionPlugins(this.form.get(Controls.Version).value)))
+      .pipe(switchMap(() => this._clusterService.getAdmissionPlugins(this.form.get(Controls.Version).value)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(plugins => (this.admissionPlugins = plugins.map(p => AdmissionPlugin[p]).filter(p => !!p)));
 
@@ -211,14 +231,32 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .subscribe(() => (this._clusterSpecService.admissionPlugins = this.form.get(Controls.AdmissionPlugins).value));
 
     this.control(Controls.CNIPlugin)
+      .valueChanges.pipe(filter(value => !!value))
+      .pipe(switchMap(() => this._clusterService.getCNIPluginVersions(this.form.get(Controls.CNIPlugin).value)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(cniVersions => {
+        this.updateCNIPluginOptions();
+        this.form.get(Controls.CNIPluginVersion).setValue('');
+        this.cniPluginVersions = cniVersions.versions.sort((a, b) => compare(coerce(a), coerce(b)));
+        this._setDefaultCNIVersion();
+      });
+
+    this.control(Controls.Konnectivity)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this.updateCNIPluginOptions());
+      .subscribe(value => {
+        if (!value && this.form.get(Controls.ProxyMode).value === ProxyMode.ebpf) {
+          this.form.get(Controls.ProxyMode).setValue('');
+        }
+        this.updateCNIPluginOptions();
+      });
 
     merge(
       this.form.get(Controls.Name).valueChanges,
       this.form.get(Controls.Version).valueChanges,
       this.form.get(Controls.AuditLogging).valueChanges,
+      this.form.get(Controls.AuditPolicyPreset).valueChanges,
       this.form.get(Controls.UserSSHKeyAgent).valueChanges,
+      this.form.get(Controls.OperatingSystemManager).valueChanges,
       this.form.get(Controls.OPAIntegration).valueChanges,
       this.form.get(Controls.Konnectivity).valueChanges,
       this.form.get(Controls.MLALogging).valueChanges,
@@ -227,7 +265,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.ProxyMode).valueChanges,
       this.form.get(Controls.PodsCIDR).valueChanges,
       this.form.get(Controls.ServicesCIDR).valueChanges,
-      this.form.get(Controls.CNIPlugin).valueChanges
+      this.form.get(Controls.CNIPlugin).valueChanges,
+      this.form.get(Controls.CNIPluginVersion).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
@@ -250,13 +289,13 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   isEnforced(control: Controls): boolean {
     switch (control) {
       case Controls.AuditLogging:
-        return !!this._datacenterSpec && this._datacenterSpec.spec.enforceAuditLogging;
+        return !!this._datacenterSpec?.spec?.enforceAuditLogging;
       case Controls.OPAIntegration:
-        return !!this._settings && this._settings.opaOptions.enforced;
+        return !!this._settings?.opaOptions?.enforced;
       case Controls.MLALogging:
-        return !!this._settings && this._settings.mlaOptions.loggingEnforced;
+        return !!this._settings?.mlaOptions?.loggingEnforced;
       case Controls.MLAMonitoring:
-        return !!this._settings && this._settings.mlaOptions.monitoringEnforced;
+        return !!this._settings?.mlaOptions?.monitoringEnforced;
       default:
         return false;
     }
@@ -271,10 +310,14 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   }
 
   updateCNIPluginOptions() {
-    if (this.controlValue(Controls.CNIPlugin) === CNIPlugin.Cilium) {
-      this.availableProxyModes = ['ipvs', 'iptables', 'ebpf'];
+    if (
+      this.controlValue(Controls.CNIPlugin) === CNIPlugin.Cilium &&
+      this.isKonnectivityEnabled &&
+      !!this.controlValue(Controls.Konnectivity)
+    ) {
+      this.availableProxyModes = [ProxyMode.ipvs, ProxyMode.iptables, ProxyMode.ebpf];
     } else {
-      this.availableProxyModes = ['ipvs', 'iptables'];
+      this.availableProxyModes = [ProxyMode.ipvs, ProxyMode.iptables];
     }
   }
 
@@ -284,6 +327,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
   isMLAEnabled(): boolean {
     return !!this._seedSettings && !!this._seedSettings.mla && !!this._seedSettings.mla.user_cluster_mla_enabled;
+  }
+
+  hasCNIPluginType(): boolean {
+    return this.form.get(Controls.CNIPlugin).value !== CNIPlugin.None;
   }
 
   private _enforce(control: Controls, isEnforced: boolean): void {
@@ -312,11 +359,20 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     }
   }
 
+  private _setDefaultCNIVersion(): void {
+    if (this.cniPluginVersions.length > 0 && !this.form.get(Controls.CNIPluginVersion).value) {
+      this.form.get(Controls.CNIPluginVersion).setValue(this.cniPluginVersions[this.cniPluginVersions.length - 1]);
+    }
+  }
+
   private _getClusterEntity(): Cluster {
     const pods = this.controlValue(Controls.PodsCIDR);
     const services = this.controlValue(Controls.ServicesCIDR);
     const cniPluginType = this.controlValue(Controls.CNIPlugin);
-    const cniPlugin = cniPluginType ? {type: cniPluginType} : null;
+    const cniPluginVersion = this.controlValue(Controls.CNIPluginVersion);
+    const cniPlugin = cniPluginType ? {type: cniPluginType, version: cniPluginVersion} : null;
+    const konnectivity = this.isKonnectivityEnabled ? this.controlValue(Controls.Konnectivity) : null;
+
     return {
       name: this.controlValue(Controls.Name),
       type: ClusterType.Kubernetes,
@@ -324,6 +380,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         version: this.controlValue(Controls.Version),
         auditLogging: {
           enabled: this.controlValue(Controls.AuditLogging),
+          policyPreset: this.controlValue(Controls.AuditPolicyPreset),
         },
         opaIntegration: {
           enabled: this.controlValue(Controls.OPAIntegration),
@@ -333,12 +390,13 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           monitoringEnabled: this.controlValue(Controls.MLAMonitoring),
         },
         enableUserSSHKeyAgent: this.controlValue(Controls.UserSSHKeyAgent),
+        enableOperatingSystemManager: this.controlValue(Controls.OperatingSystemManager),
         containerRuntime: this.controlValue(Controls.ContainerRuntime),
         clusterNetwork: {
           proxyMode: this.controlValue(Controls.ProxyMode),
           pods: {cidrBlocks: pods ? [pods] : []},
           services: {cidrBlocks: services ? [services] : []},
-          konnectivityEnabled: this.controlValue(Controls.Konnectivity),
+          konnectivityEnabled: konnectivity,
         },
         cniPlugin: cniPlugin,
       } as ClusterSpec,

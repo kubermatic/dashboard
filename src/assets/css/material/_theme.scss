@@ -358,10 +358,8 @@
     background-color: map.get($colors, primary);
   }
 
-  .mat-checkbox-disabled {
-    .mat-checkbox-background {
-      background-color: map.get($colors, checkbox-disabled);
-    }
+  .mat-checkbox-disabled .mat-checkbox-inner-container .mat-checkbox-background {
+    background-color: map.get($colors, checkbox-disabled);
   }
 
   .mat-checkbox-frame {

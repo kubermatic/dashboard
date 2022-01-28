@@ -13,6 +13,41 @@
 // limitations under the License.
 
 import {NodeProvider} from '../model/NodeProviderConstants';
+import {MachineDeployment} from '@shared/entity/machine-deployment';
+
+export enum Provider {
+  Alibaba = 'alibaba',
+  Anexia = 'anexia',
+  AWS = 'aws',
+  Azure = 'azure',
+  kubeAdm = 'bringyourown',
+  Digitalocean = 'digitalocean',
+  GCP = 'gcp',
+  Hetzner = 'hetzner',
+  KubeVirt = 'kubevirt',
+  OpenStack = 'openstack',
+  Equinix = 'packet',
+  VSphere = 'vsphere',
+}
+
+const PROVIDER_DISPLAY_NAMES = new Map<Provider, string>([
+  [Provider.Alibaba, 'Alibaba'],
+  [Provider.Anexia, 'Anexia'],
+  [Provider.AWS, 'AWS'],
+  [Provider.Azure, 'Azure'],
+  [Provider.kubeAdm, 'kubeAdm'],
+  [Provider.Digitalocean, 'DigitalOcean'],
+  [Provider.GCP, 'Google Cloud'],
+  [Provider.Hetzner, 'Hetzner'],
+  [Provider.KubeVirt, 'KubeVirt'],
+  [Provider.OpenStack, 'Openstack'],
+  [Provider.Equinix, 'Equinix Metal'],
+  [Provider.VSphere, 'VSphere'],
+]);
+
+export function getProviderDisplayName(provider: Provider): string {
+  return PROVIDER_DISPLAY_NAMES.get(provider);
+}
 
 export const enum Finalizer {
   DeleteVolumes = 'DeleteVolumes',
@@ -21,7 +56,6 @@ export const enum Finalizer {
 
 export enum ClusterType {
   Kubernetes = 'kubernetes',
-  Empty = '',
 }
 
 export enum ContainerRuntime {
@@ -29,7 +63,7 @@ export enum ContainerRuntime {
   Docker = 'docker',
 }
 
-export const END_OF_DOCKER_SUPPORT_VERSION = '1.22.0';
+export const END_OF_DOCKER_SUPPORT_VERSION = '1.24.0';
 
 export class Cluster {
   creationTimestamp?: Date;
@@ -42,28 +76,15 @@ export class Cluster {
   labels?: object;
   inheritedLabels?: object;
   credential?: string;
-  isExternal?: boolean = false;
 
-  static getProvider(cloud: CloudSpec): string {
-    const providers = Object.keys(cloud);
-    return providers.length > 0 ? providers.pop().toLowerCase() : '';
+  static getProvider(cluster: Cluster): Provider {
+    return Object.values(Provider)
+      .filter(provider => cluster.spec.cloud[provider])
+      .pop();
   }
 
-  static getDisplayType(cluster: Cluster): string {
-    switch (cluster.type) {
-      case ClusterType.Kubernetes:
-        return 'Kubernetes';
-      default:
-        return '';
-    }
-  }
-
-  static getVersionHeadline(type: string, isKubelet: boolean): string {
-    if (type === 'kubernetes') {
-      return isKubelet ? 'kubelet Version' : 'Master Version';
-    }
-
-    return '';
+  static getProviderDisplayName(cluster: Cluster): string {
+    return getProviderDisplayName(Cluster.getProvider(cluster));
   }
 
   static newEmptyClusterEntity(): Cluster {
@@ -75,14 +96,6 @@ export class Cluster {
   }
 }
 
-export function getClusterProvider(cluster: Cluster): NodeProvider {
-  const clusterProviders = Object.values(NodeProvider)
-    .map(provider => (cluster.spec.cloud[provider] ? provider : undefined))
-    .filter(p => p !== undefined);
-
-  return clusterProviders.length > 0 ? clusterProviders[0] : NodeProvider.NONE;
-}
-
 export class CloudSpec {
   dc: string;
   digitalocean?: DigitaloceanCloudSpec;
@@ -90,7 +103,6 @@ export class CloudSpec {
   bringyourown?: BringYourOwnCloudSpec;
   openstack?: OpenstackCloudSpec;
   packet?: EquinixCloudSpec;
-  baremetal?: BareMetalCloudSpec;
   vsphere?: VSphereCloudSpec;
   hetzner?: HetznerCloudSpec;
   azure?: AzureCloudSpec;
@@ -109,6 +121,8 @@ export class AlibabaCloudSpec {
 export class AWSCloudSpec {
   accessKeyId: string;
   secretAccessKey: string;
+  assumeRoleARN: string;
+  assumeRoleExternalID: string;
   vpcId: string;
   routeTableId: string;
   securityGroupID: string;
@@ -129,10 +143,6 @@ export class AzureCloudSpec {
   vnet: string;
   loadBalancerSKU: string;
   assignAvailabilitySet: boolean;
-}
-
-export class BareMetalCloudSpec {
-  name: string;
 }
 
 export class BringYourOwnCloudSpec {}
@@ -170,8 +180,8 @@ export class OpenstackCloudSpec {
   applicationCredentialSecret?: string;
   username: string;
   password: string;
-  tenant: string;
-  tenantID: string;
+  project: string;
+  projectID: string;
   domain: string;
   network: string;
   securityGroups: string;
@@ -209,13 +219,26 @@ export class ClusterSpec {
   version?: string;
   usePodSecurityPolicyAdmissionPlugin?: boolean;
   usePodNodeSelectorAdmissionPlugin?: boolean;
+  useEventRateLimitAdmissionPlugin?: boolean;
+  eventRateLimitConfig?: EventRateLimitConfig;
   admissionPlugins?: string[];
   enableUserSSHKeyAgent?: boolean;
+  enableOperatingSystemManager?: boolean;
   podNodeSelectorAdmissionPluginConfig?: object;
   mla?: MLASettings;
   containerRuntime?: ContainerRuntime;
   clusterNetwork?: ClusterNetwork;
   cniPlugin?: CNIPluginConfig;
+}
+
+export class EventRateLimitConfig {
+  namespace: EventRateLimitConfigItem;
+}
+
+export class EventRateLimitConfigItem {
+  qps: number;
+  burst: number;
+  cacheSize: number;
 }
 
 export class ClusterNetwork {
@@ -227,6 +250,7 @@ export class ClusterNetwork {
 
 export class CNIPluginConfig {
   type: string;
+  version: string;
 }
 
 export class NetworkRanges {
@@ -234,18 +258,33 @@ export class NetworkRanges {
   clusterNetwork?: ClusterNetwork;
 }
 
+export class CNIPluginVersions {
+  cniPluginType: string;
+  versions: string[];
+}
+
 export enum ProxyMode {
   ipvs = 'ipvs',
   iptables = 'iptables',
+  ebpf = 'ebpf',
 }
 
 export enum CNIPlugin {
   Canal = 'canal',
   Cilium = 'cilium',
+  None = 'none',
+}
+
+export enum AuditPolicyPreset {
+  Custom = '',
+  Metadata = 'metadata',
+  Recommended = 'recommended',
+  Minimal = 'minimal',
 }
 
 export class AuditLoggingSettings {
   enabled?: boolean;
+  policyPreset?: AuditPolicyPreset;
 }
 
 export class OPAIntegration {
@@ -313,6 +352,8 @@ export class ClusterSpecPatch {
   version?: string;
   usePodSecurityPolicyAdmissionPlugin?: boolean;
   usePodNodeSelectorAdmissionPlugin?: boolean;
+  useEventRateLimitAdmissionPlugin?: boolean;
+  eventRateLimitConfig?: EventRateLimitConfig;
   admissionPlugins?: string[];
   opaIntegration?: OPAIntegration;
   clusterNetwork?: ClusterNetwork;
@@ -321,6 +362,11 @@ export class ClusterSpecPatch {
   machineNetworks?: MachineNetwork[];
   mla?: MLASettings;
   containerRuntime?: ContainerRuntime;
+  cniPlugin?: CNIPluginConfigPatch;
+}
+
+export class CNIPluginConfigPatch {
+  version: string;
 }
 
 export class CloudSpecPatch {
@@ -417,10 +463,6 @@ export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
       return {
         token: '',
       } as DigitaloceanCloudSpec;
-    case NodeProvider.BAREMETAL:
-      return {
-        name: '',
-      } as BareMetalCloudSpec;
     case NodeProvider.OPENSTACK:
       return {
         username: '',
@@ -429,8 +471,8 @@ export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
         securityGroups: '',
         network: '',
         domain: '',
-        tenant: '',
-        tenantID: '',
+        project: '',
+        projectID: '',
         subnetID: '',
       } as OpenstackCloudSpec;
     case NodeProvider.BRINGYOUROWN:
@@ -489,3 +531,16 @@ export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
 export const AVAILABLE_EQUINIX_BILLING_CYCLES = ['hourly', 'daily'];
 
 export const AZURE_LOADBALANCER_SKUS = ['basic', 'standard'];
+
+export class CreateClusterModel {
+  cluster: ClusterModel;
+  nodeDeployment?: MachineDeployment;
+}
+
+class ClusterModel {
+  name: string;
+  spec: ClusterSpec;
+  labels?: object;
+  type: string;
+  credential?: string;
+}

@@ -35,6 +35,7 @@ describe('MachineNetworksComponent', () => {
         imports: [...modules],
         declarations: [MachineNetworksComponent],
         providers: [WizardService],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

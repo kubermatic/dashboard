@@ -238,8 +238,8 @@ spec:
     domain: ${OS_DOMAIN}
     floatingIpPool: ${OS_FLOATING_IP_POOL}
     password: ${OS_PASSWORD}
-    tenant: ${OS_TENANT_NAME}
-    tenantID: ${OS_TENANT_ID}
+    project: ${OS_TENANT_NAME}
+    projectID: ${OS_TENANT_ID}
     username: ${OS_USERNAME}
 EOF
 retry 2 kubectl apply -f preset-openstack.yaml

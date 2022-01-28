@@ -14,6 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <km-dialog-title>{{title}}</km-dialog-title>
+
+<p class="km-dialog-context-description"
+   [innerHTML]="description"></p>
+
 <mat-horizontal-stepper id="km-preset-dialog-stepper"
                         class="km-stepper-in-dialog"
                         linear
@@ -54,14 +58,6 @@ limitations under the License.
                  [diameter]="30"
                  color="accent"
                  *ngIf="creating"></mat-spinner>
-    <button mat-flat-button
-            type="button"
-            color="tertiary"
-            (click)="stepper.previous()"
-            *ngIf="!first">
-      <i class="km-icon-mask km-icon-back"></i>
-      <span>Back</span>
-    </button>
     <button mat-flat-button
             type="button"
             id="km-settings-preset-next-btn"

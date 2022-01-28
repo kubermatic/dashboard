@@ -16,14 +16,14 @@ limitations under the License.
 <div fxLayout>
   <div fxFlex
        align="right">
-    <button id="km-add-serviceaccount-top-btn"
+    <button id="km-create-serviceaccount-top-btn"
             fxLayoutAlign="center center"
             mat-flat-button
             type="button"
-            (click)="addServiceAccount()"
+            (click)="createServiceAccount()"
             [disabled]="!isEnabled('create')">
       <i class="km-icon-mask km-icon-add"></i>
-      <span>Add Service Account</span>
+      <span>Create Service Account</span>
     </button>
   </div>
 </div>
@@ -50,7 +50,8 @@ limitations under the License.
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell"
-            mat-sort-header>Name</th>
+            mat-sort-header>Name
+        </th>
         <td mat-cell
             *matCellDef="let element"
             [attr.id]="'km-serviceaccount-name-' + element.name">{{element.name}}</td>
@@ -60,7 +61,8 @@ limitations under the License.
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell"
-            mat-sort-header>Group</th>
+            mat-sort-header>Group
+        </th>
         <td mat-cell
             *matCellDef="let element">{{getGroupDisplayName(element.group)}}</td>
       </ng-container>
@@ -69,7 +71,8 @@ limitations under the License.
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell"
-            mat-sort-header>Created</th>
+            mat-sort-header>Created
+        </th>
         <td mat-cell
             *matCellDef="let element">
           <km-relative-time [date]="element.creationTimestamp"></km-relative-time>
@@ -93,7 +96,7 @@ limitations under the License.
 
               <ng-container *ngSwitchCase="false">
                 <button mat-icon-button
-                        [attr.id]="'km-edit-serviceaccount-' + element?.name"
+                        [attr.id]="'km-edit-dialog-' + element?.name"
                         matTooltip="Edit Service Account"
                         (click)="editServiceAccount(element, $event)"
                         [disabled]="!isEnabled('edit')">

@@ -18,13 +18,13 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {fakeMember} from '@app/testing/fake-data/member';
 import {fakeProject} from '@app/testing/fake-data/project';
-import {asyncData} from '@app/testing/services/api-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';
-import {ApiService} from '@core/services/api';
 import {NotificationService} from '@core/services/notification';
 import {SharedModule} from '@shared/module';
 import {EditMemberComponent} from './component';
+import {MemberService} from '@core/services/member';
+import {asyncData} from '@app/testing/services/cluster-mock';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
 
@@ -35,16 +35,17 @@ describe('EditMemberComponent', () => {
 
   beforeEach(
     waitForAsync(() => {
-      const apiMock = {editMembers: jest.fn()};
-      editMemberSpy = apiMock.editMembers.mockReturnValue(asyncData(fakeMember()));
+      const memberServiceMock = {edit: jest.fn()};
+      editMemberSpy = memberServiceMock.edit.mockReturnValue(asyncData(fakeMember()));
 
       TestBed.configureTestingModule({
         imports: [...modules],
         providers: [
           {provide: MatDialogRef, useClass: MatDialogRefMock},
-          {provide: ApiService, useValue: apiMock},
+          {provide: MemberService, useValue: memberServiceMock},
           NotificationService,
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

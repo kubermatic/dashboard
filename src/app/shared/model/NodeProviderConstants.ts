@@ -15,14 +15,16 @@
 import {NodeSpec} from '../entity/node';
 
 export enum NodeProvider {
+  AKS = 'aks',
   ALIBABA = 'alibaba',
   ANEXIA = 'anexia',
   AWS = 'aws',
   AZURE = 'azure',
   DIGITALOCEAN = 'digitalocean',
-  BAREMETAL = 'baremetal',
+  EKS = 'eks',
   BRINGYOUROWN = 'bringyourown',
   GCP = 'gcp',
+  GKE = 'gke',
   HETZNER = 'hetzner',
   OPENSTACK = 'openstack',
   EQUINIX = 'packet',
@@ -30,6 +32,14 @@ export enum NodeProvider {
   VSPHERE = 'vsphere',
   NONE = '',
 }
+
+export const EXTERNAL_NODE_PROVIDERS = [NodeProvider.AKS, NodeProvider.EKS, NodeProvider.GKE];
+
+export const INTERNAL_NODE_PROVIDERS = Object.values(NodeProvider).filter(
+  provider => !!provider && !EXTERNAL_NODE_PROVIDERS.includes(provider)
+);
+
+export const NODE_PROVIDERS = [...INTERNAL_NODE_PROVIDERS, ...EXTERNAL_NODE_PROVIDERS];
 
 export enum OperatingSystem {
   Ubuntu = 'ubuntu',
@@ -45,7 +55,6 @@ export namespace NodeProviderConstants {
     [NodeProvider.ANEXIA, 'Anexia'],
     [NodeProvider.AWS, 'AWS'],
     [NodeProvider.AZURE, 'Azure'],
-    [NodeProvider.BAREMETAL, 'Bare-metal'],
     [NodeProvider.BRINGYOUROWN, 'BringYourOwn'],
     [NodeProvider.DIGITALOCEAN, 'DigitalOcean'],
     [NodeProvider.GCP, 'Google Cloud'],

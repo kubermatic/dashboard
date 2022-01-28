@@ -51,6 +51,11 @@ limitations under the License.
       </km-property>
 
       <km-property>
+        <div key>Destination</div>
+        <div value>{{backup.spec?.destination}}</div>
+      </km-property>
+
+      <km-property>
         <div key>Schedule</div>
         <div value>{{backup.spec?.schedule}}</div>
       </km-property>
@@ -71,5 +76,6 @@ limitations under the License.
 
   <km-backup-list [backups]="backup.status.lastBackups"
                   [projectID]="selectedProject.id"
-                  [clusterID]="backup.spec.clusterId"></km-backup-list>
+                  [clusterID]="backup.spec.clusterId"
+                  [destination]="backup.spec.destination"></km-backup-list>
 </ng-container>

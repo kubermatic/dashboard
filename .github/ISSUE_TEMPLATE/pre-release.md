@@ -21,13 +21,12 @@ Every assignee should mark their name next to the checks or groups they're willi
 ### Admin Settings
 - [ ] Check if admin settings are available to administrators only
 - [ ] Check using two browser windows if default and interface settings are successfully saved and loaded
-- [ ] Check initial machine deployment replicas
-- [ ] Check user project limit
-- [ ] Check resource quota
-- [ ] Check cleanup on cluster deletion
+- [ ] Check "Default and Limits" options
+- [ ] Check "Interface" options
+- [ ] Check "Accounts" list information
+- [ ] Check "Backup destinations" configuration and usage
 - [ ] Check operations like create, list, update and delete of dynamic datacenters
-- [ ] Check operations like create, list, update and delete of presets
-- [ ] Check operations like create, list, update and delete of constraint templates
+- [ ] Check operations like create, list, update and delete of provider presets
 - [ ] Check operations like create, list and delete of administrators
 
 ### Metering
@@ -62,7 +61,13 @@ Every assignee should mark their name next to the checks or groups they're willi
 - [ ] Check RBAC management from cluster details
 - [ ] Check addon management from cluster details
 - [ ] Check connection to Kubernetes Dashboard from cluster details
-- [ ] Check external cluster connection, details and disconnection
+
+### External Clusters
+- [ ] Check external cluster Import/Connect functionality for all supported providers
+- [ ] Check external cluster details and machine deployment details
+- [ ] Check cluster version upgrades (for the supported providers)
+- [ ] Check machine deployment scaling
+- [ ] Check external cluster disconnect functionality
 
 ### Cluster Templates
 - [ ] Check creation of cluster templates with SSH key in the project scope and verify it was saved 
@@ -137,10 +142,6 @@ Every assignee should mark their name next to the checks or groups they're willi
   - [ ] Check machine deployment scaling
   - [ ] Check machine deployment deletion
   - [ ] Check cluster deletion
-- [ ] kubeadm
-  - [ ] Check cluster creation with SSH key assigned
-  - [ ] Check cluster version upgrades
-  - [ ] Check cluster deletion
 - [ ] KubeVirt
   - [ ] Check cluster creation with SSH key assigned
   - [ ] Check initial machine deployment creation
@@ -171,3 +172,4 @@ Every assignee should mark their name next to the checks or groups they're willi
 - [ ] Check the API documentation
 - [ ] Check the terms of service
 - [ ] Check if all provider logos are up-to-date
+- [ ] Visual checks of any UI related issues (padding, colors, overlapping elements, etc.)

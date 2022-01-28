@@ -35,6 +35,9 @@ import {SharedModule} from '@shared/module';
 import {AdminSettingsComponent} from './component';
 import {DatacenterDataDialogComponent} from './dynamic-datacenters/datacenter-data-dialog/component';
 import {AdminSettingsRoutingModule} from './routing';
+import {GKESettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/gke/component';
+import {EKSSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/eks/component';
+import {AKSSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/aks/component';
 
 @NgModule({
   imports: [SharedModule, AdminSettingsRoutingModule],
@@ -47,12 +50,15 @@ import {AdminSettingsRoutingModule} from './routing';
     PresetStepComponent,
     PresetProviderStepComponent,
     PresetSettingsStepComponent,
+    AKSSettingsComponent,
     AlibabaSettingsComponent,
     AnexiaSettingsComponent,
     AWSSettingsComponent,
     AzureSettingsComponent,
     DigitaloceanSettingsComponent,
+    EKSSettingsComponent,
     GCPSettingsComponent,
+    GKESettingsComponent,
     HetznerSettingsComponent,
     KubevirtSettingsComponent,
     OpenstackSettingsComponent,

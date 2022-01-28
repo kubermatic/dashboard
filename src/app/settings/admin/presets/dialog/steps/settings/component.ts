@@ -17,10 +17,12 @@ import {FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular
 import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
 import {DatacenterService} from '@core/services/datacenter';
 import {Datacenter} from '@shared/entity/datacenter';
-import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {EXTERNAL_NODE_PROVIDERS, NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge} from 'rxjs';
 import {distinctUntilChanged, map, switchMap, takeUntil} from 'rxjs/operators';
+import {AutocompleteInitialState} from '@shared/components/autocomplete/component';
+import {PresetModel} from '@shared/entity/preset';
 
 enum Controls {
   Settings = 'settings',
@@ -49,6 +51,7 @@ export class PresetSettingsStepComponent extends BaseFormValidator implements On
   provider: NodeProvider;
   datacenters: string[] = [];
   isLoadingDatacenters = true;
+  preset: PresetModel;
 
   readonly Providers = NodeProvider;
   readonly Controls = Controls;
@@ -62,6 +65,8 @@ export class PresetSettingsStepComponent extends BaseFormValidator implements On
   }
 
   ngOnInit(): void {
+    this.preset = this._presetDialogService.preset;
+
     this.form = this._builder.group({
       [Controls.Settings]: this._builder.control(''),
       [Controls.Datacenter]: this._builder.control(''),
@@ -71,6 +76,8 @@ export class PresetSettingsStepComponent extends BaseFormValidator implements On
       this.provider = provider;
       this.form.removeControl(Controls.Settings);
       this.form.addControl(Controls.Settings, this._builder.control(''));
+      this.form.get(Controls.Datacenter).setValue(AutocompleteInitialState);
+      this.form.updateValueAndValidity();
     });
 
     this._presetDialogService.providerChanges
@@ -101,5 +108,9 @@ export class PresetSettingsStepComponent extends BaseFormValidator implements On
     this._presetDialogService.preset.spec[this._presetDialogService.provider].datacenter = this.form.get(
       Controls.Datacenter
     ).value;
+  }
+
+  isExternal(): boolean {
+    return EXTERNAL_NODE_PROVIDERS.includes(this.provider);
   }
 }

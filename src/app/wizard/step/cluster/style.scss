@@ -18,26 +18,12 @@
 $toggle-width: 150px;
 $toggle-height: 45px;
 
-.km-cluster-spec-type {
-  margin-right: 20px;
-  max-width: $toggle-width * 2 + 8px;
-  min-width: $toggle-width * 2 + 8px;
-
-  .mat-button-toggle {
-    @include mixins.size($toggle-width, $toggle-height, true);
-
-    border-radius: unset;
-    border-width: 2px;
-    margin: 4px 0 0;
-
-    &:hover {
-      transition: all 0.5s ease;
-    }
-  }
-}
-
 .km-icon-info {
   margin: 4px 8px;
+}
+
+.km-label-primary {
+  margin: 0 3px;
 }
 
 km-label-form:not(.pod-node-selector-config) {
@@ -47,4 +33,55 @@ km-label-form:not(.pod-node-selector-config) {
 km-wizard-cluster-ssh-keys {
   display: block;
   margin-top: 22px;
+}
+
+mat-button-toggle-group[group='auditLogging'] {
+  margin: 0 10px;
+
+  mat-button-toggle {
+    margin: 0 0 0 -1px;
+    max-height: 28px;
+    min-height: 28px;
+    min-width: unset;
+
+    &.mat-button-toggle-checked {
+      z-index: 1;
+    }
+
+    &:not(:first-of-type),
+    &:not(:last-of-type) {
+      border-radius: 0;
+    }
+
+    &:first-of-type {
+      border-radius: variables.$border-radius 0 0 variables.$border-radius;
+      margin: 0;
+    }
+
+    &:last-of-type {
+      border-radius: 0 variables.$border-radius variables.$border-radius 0;
+    }
+  }
+}
+
+mat-button-toggle-group[group='cniPluginTypeGroup'] {
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+
+  .mat-button-toggle {
+    max-height: 45px;
+    max-width: 170px;
+    min-height: 45px;
+    min-width: 120px;
+
+    i {
+      filter: grayscale(100%);
+    }
+
+    &.mat-button-toggle-checked {
+      i {
+        filter: none;
+      }
+    }
+  }
 }

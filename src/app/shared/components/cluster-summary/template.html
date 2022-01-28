@@ -60,7 +60,7 @@ limitations under the License.
         <div key>Container Runtime</div>
         <div value>{{cluster.spec.containerRuntime}}</div>
       </km-property>
-      <km-property>
+      <km-property *ngIf="operatingSystem">
         <div key>Operating System</div>
         <div value
              fxLayout="row"
@@ -74,6 +74,10 @@ limitations under the License.
         <div key>CNI Plugin</div>
         <div value>{{cluster.spec.cniPlugin.type}}</div>
       </km-property>
+      <km-property *ngIf="cluster.spec.cniPlugin?.version">
+        <div key>CNI Plugin Version</div>
+        <div value>{{cluster.spec.cniPlugin.version}}</div>
+      </km-property>
       <km-property *ngIf="cluster.spec.clusterNetwork?.proxyMode">
         <div key>Proxy Mode</div>
         <div value>{{cluster.spec.clusterNetwork.proxyMode}}</div>
@@ -85,6 +89,12 @@ limitations under the License.
       <km-property *ngIf="cluster.spec.clusterNetwork?.services?.cidrBlocks?.length > 0">
         <div key>Services CIDR</div>
         <div value>{{cluster.spec.clusterNetwork.services.cidrBlocks.join(', ')}}</div>
+      </km-property>
+      <km-property>
+        <div key>SSH Keys</div>
+        <div value>
+          <km-ssh-key-list [sshKeys]="getSSHKeys()"></km-ssh-key-list>
+        </div>
       </km-property>
       <km-property-boolean label="Konnectivity"
                            [value]="cluster.spec.clusterNetwork?.konnectivityEnabled">
@@ -117,11 +127,34 @@ limitations under the License.
           <km-labels [labels]="cluster.spec.podNodeSelectorAdmissionPluginConfig"></km-labels>
         </div>
       </km-property>
+
+      <!-- Event Rate Limit Configuration -->
+      <ng-container *ngIf="cluster.spec.eventRateLimitConfig">
+        <km-property>
+          <div key>Event Rate Limit Config</div>
+          <div value
+               fxLayout="row"
+               fxLayoutGap="10px"
+               class="event-rate-limit">
+            <div><span class="km-text-muted">Limit Type:</span> Namespace</div>
+            <div><span class="km-text-muted">QPS:</span> {{cluster.spec.eventRateLimitConfig.namespace.qps}}</div>
+            <div><span class="km-text-muted">Burst:</span> {{cluster.spec.eventRateLimitConfig.namespace.burst}}</div>
+            <div><span class="km-text-muted">Cache Size:</span> {{cluster.spec.eventRateLimitConfig.namespace.cacheSize}}</div>
+          </div>
+        </km-property>
+      </ng-container>
       <km-property-boolean label="Audit Logging"
                            [value]="cluster.spec.auditLogging?.enabled">
       </km-property-boolean>
+      <km-property *ngIf="cluster.spec.auditLogging?.enabled">
+        <div key>Audit Policy Preset</div>
+        <div value>{{cluster.spec.auditLogging.policyPreset || 'custom'}}</div>
+      </km-property>
       <km-property-boolean label="User SSH Key Agent"
                            [value]="cluster.spec.enableUserSSHKeyAgent">
+      </km-property-boolean>
+      <km-property-boolean label="Operating System Manager"
+                           [value]="cluster.spec.enableOperatingSystemManager">
       </km-property-boolean>
       <km-property-boolean label="OPA Integration"
                            [value]="cluster.spec.opaIntegration?.enabled">
@@ -154,13 +187,6 @@ limitations under the License.
                            label="Disable system auto-update"
                            [value]="machineDeployment.spec.template.operatingSystem.flatcar.disableAutoUpdate">
       </km-property-boolean>
-      <div fxLayout="row"
-           fxLayoutAlign=" center"
-           fxLayoutGap="10px"
-           *ngIf="sshKeys && sshKeys.length">
-        <i class="km-icon-key"></i>
-        <span>{{sshKeys.join(', ')}}</span>
-      </div>
     </div>
   </div>
 
@@ -268,13 +294,13 @@ limitations under the License.
             <div key>Username</div>
             <div value>{{cluster.spec.cloud?.openstack.username}}</div>
           </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.openstack.tenant">
+          <km-property *ngIf="cluster.spec.cloud?.openstack.project">
             <div key>Project</div>
-            <div value>{{cluster.spec.cloud?.openstack.tenant}}</div>
+            <div value>{{cluster.spec.cloud?.openstack.project}}</div>
           </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.openstack.tenantID">
+          <km-property *ngIf="cluster.spec.cloud?.openstack.projectID">
             <div key>Project ID</div>
-            <div value>{{cluster.spec.cloud?.openstack.tenantID}}</div>
+            <div value>{{cluster.spec.cloud?.openstack.projectID}}</div>
           </km-property>
           <km-property *ngIf="cluster.spec.cloud?.openstack.network">
             <div key>Network Name</div>
@@ -423,7 +449,7 @@ limitations under the License.
             </km-property>
             <km-property *ngIf="machineDeployment.spec.template.cloud?.aws?.spotInstanceMaxPrice > 0">
               <div key>Spot Instance Max Price</div>
-              <div value>{{machineDeployment.spec.template.cloud.aws.spotInstanceMaxPrice | currency:'USD'}}</div>
+              <div value>{{machineDeployment.spec.template.cloud.aws.spotInstanceMaxPrice | currency:'USD':'symbol':'1.0-4'}}</div>
             </km-property>
           </ng-container>
 

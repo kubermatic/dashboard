@@ -47,24 +47,17 @@ limitations under the License.
       </button>
       <mat-hint *ngIf="!dialogEditMode">Leave this field blank to use automatic name generation.</mat-hint>
       <mat-error *ngIf="form.get(Controls.Name).hasError( 'pattern')">
-        Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -).
+        Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash.
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>Replicas</mat-label>
-      <input [formControlName]="Controls.Count"
-             id="km-node-count-input"
-             matInput
-             type="number"
-             min="0"
-             autocomplete="off"
-             required>
-      <mat-error *ngIf="form.get(Controls.Count).hasError('required')">Number of replicas is required.</mat-error>
-      <mat-error *ngIf="form.get(Controls.Count).hasError('ipsMissing')">
-        Not enough IPs left. Reduce number of replicas or add more machine networks.
-      </mat-error>
-    </mat-form-field>
+    <km-number-stepper [formControlName]="Controls.Count"
+                       id="km-node-count-input"
+                       mode="errors"
+                       label="Replicas"
+                       min="0"
+                       required>
+    </km-number-stepper>
 
     <km-node-data-kubelet-version *ngIf="isDialogView()"
                                   [formControl]="form.get(Controls.Kubelet)"></km-node-data-kubelet-version>

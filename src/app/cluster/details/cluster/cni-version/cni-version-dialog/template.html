@@ -1,0 +1,51 @@
+<!--
+Copyright 2021 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<km-dialog-title>
+  <span>Change CNI Plugin Version</span>
+  <div *ngIf="upgradeAvailable()"
+       class="km-update-available-badge">
+    <i class="km-icon-update-available-arrow"></i>
+    <span>Update Available</span>
+  </div>
+</km-dialog-title>
+<mat-dialog-content>
+  <p class="km-dialog-context-description">Change CNI Plugin Version of <b>{{data.cluster.name}}</b> cluster</p>
+
+  <div fxLayout="row"
+       fxLayoutGap="20px">
+    <i class="km-cni-image-{{data.cluster.spec.cniPlugin.type}}"></i>
+    <mat-form-field>
+      <mat-label>CNI Plugin Version</mat-label>
+      <mat-select [(ngModel)]="selectedCNIVersion"
+                  panelClass="km-add-dialog-dropdown"
+                  disableOptionCentering>
+        <mat-option *ngFor="let version of data.cniVersions"
+                    [value]="version">
+          {{version}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-flat-button
+          kmThrottleClick
+          (throttleClick)="changeCNIVersion()">
+    <i class="km-icon-mask km-icon-check i-24"></i>
+    <span>Change CNI Version</span>
+  </button>
+</mat-dialog-actions>

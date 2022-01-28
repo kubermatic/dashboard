@@ -100,11 +100,6 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._setDefaultTemplate());
 
-    this._clusterSpecService.clusterTypeChanges
-      .pipe(filter(_ => !!this._templates))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this._setDefaultTemplate());
-
     this._nodeDataService.operatingSystemChanges
       .pipe(filter(_ => !!this._templates))
       .pipe(takeUntil(this._unsubscribe))

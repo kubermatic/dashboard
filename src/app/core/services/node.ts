@@ -15,7 +15,6 @@
 import {EventEmitter, Injectable, Injector} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {DialogDataInput, DialogDataOutput, NodeDataDialogComponent} from '@app/node-data/dialog/component';
-import {ApiService} from '@core/services/api';
 import {NotificationService} from '@core/services/notification';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Cluster} from '@shared/entity/cluster';
@@ -23,6 +22,7 @@ import {MachineDeployment, MachineDeploymentPatch} from '@shared/entity/machine-
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {Observable, of} from 'rxjs';
 import {catchError, filter, mergeMap, switchMap, take} from 'rxjs/operators';
+import {MachineDeploymentService} from '@core/services/machine-deployment';
 
 @Injectable()
 export class NodeService {
@@ -60,7 +60,7 @@ export class NodeService {
   }
 
   constructor(
-    private readonly _apiService: ApiService,
+    private readonly _machineDeploymentService: MachineDeploymentService,
     private readonly _matDialog: MatDialog,
     private readonly _inj: Injector
   ) {
@@ -68,7 +68,7 @@ export class NodeService {
   }
 
   createMachineDeployment(nodeData: NodeData, projectID: string, clusterID: string): Observable<MachineDeployment> {
-    return this._apiService.createMachineDeployment(
+    return this._machineDeploymentService.create(
       NodeService._getMachineDeploymentEntity(nodeData),
       clusterID,
       projectID
@@ -76,19 +76,15 @@ export class NodeService {
   }
 
   showMachineDeploymentCreateDialog(cluster: Cluster, projectID: string): Observable<MachineDeployment> {
-    const dialogRef = this._matDialog.open<NodeDataDialogComponent, DialogDataInput, DialogDataOutput>(
-      NodeDataDialogComponent,
-      {
-        data: {
-          initialClusterData: cluster,
-        } as DialogDataInput,
-      }
-    );
-
-    return dialogRef
+    return this._matDialog
+      .open<NodeDataDialogComponent, DialogDataInput, DialogDataOutput>(NodeDataDialogComponent, {
+        data: {initialClusterData: cluster} as DialogDataInput,
+      })
       .afterClosed()
-      .pipe(filter(data => !!data))
-      .pipe(switchMap(data => this.createMachineDeployment(data.nodeData, projectID, cluster.id)));
+      .pipe(
+        filter(data => !!data),
+        switchMap(data => this.createMachineDeployment(data.nodeData, projectID, cluster.id))
+      );
   }
 
   showMachineDeploymentEditDialog(
@@ -98,7 +94,6 @@ export class NodeService {
   ): Observable<MachineDeployment> {
     const dialogRef = this._matDialog.open(NodeDataDialogComponent, {
       data: {
-        existingNodesCount: md.spec.replicas,
         initialClusterData: cluster,
         initialNodeData: {
           count: md.spec.replicas,
@@ -109,48 +104,41 @@ export class NodeService {
       },
     });
 
-    return dialogRef
-      .afterClosed()
-      .pipe(filter(data => !!data))
-      .pipe(
-        switchMap(data =>
-          this._apiService.patchMachineDeployment(NodeService._createPatch(data), md.id, cluster.id, projectID)
-        )
-      );
+    return dialogRef.afterClosed().pipe(
+      filter(data => !!data),
+      switchMap(data =>
+        this._machineDeploymentService.patch(NodeService._createPatch(data), md.id, cluster.id, projectID)
+      )
+    );
   }
 
   showMachineDeploymentDeleteDialog(
     md: MachineDeployment,
-    clusterID: string,
+    cluster: Cluster,
     projectID: string,
     changeEventEmitter: EventEmitter<MachineDeployment>
   ): Observable<boolean> {
     const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
       data: {
         title: 'Delete Machine Deployment',
-        message: `Delete ${md.name} machine deployment permanently?`,
+        message: `Delete <b>${md.name}</b> machine deployment of <b>${cluster.name}</b> cluster permanently?`,
         confirmLabel: 'Delete',
       },
     };
 
-    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
-
-    return dialogRef
+    return this._matDialog
+      .open(ConfirmationDialogComponent, dialogConfig)
       .afterClosed()
       .pipe(
         mergeMap((isConfirmed: boolean): Observable<boolean> => {
           if (isConfirmed) {
-            return this._apiService
-              .deleteMachineDeployment(clusterID, md, projectID)
-              .pipe(take(1))
-              .pipe(
-                catchError(() => {
-                  this._notificationService.error(`Could not remove the ${md.name} machine deployment`);
-                  return of(false);
-                })
-              );
+            return this._machineDeploymentService.delete(cluster.id, md, projectID).pipe(
+              catchError(() => {
+                this._notificationService.error(`Could not delete the ${md.name} machine deployment`);
+                return of(false);
+              }),
+              take(1)
+            );
           }
           return of(false);
         })
@@ -158,68 +146,55 @@ export class NodeService {
       .pipe(
         mergeMap((data: any): Observable<boolean> => {
           if (data) {
-            this._notificationService.success(`The ${md.name} machine deployment was removed`);
-            if (changeEventEmitter) {
-              changeEventEmitter.emit(md);
-            }
+            this._notificationService.success(`Deleting the ${md.name} machine deployment`);
+            changeEventEmitter?.emit(md);
             return of(true);
           }
           return of(false);
-        })
-      )
-      .pipe(take(1));
+        }),
+        take(1)
+      );
   }
 
   showMachineDeploymentRestartDialog(
     md: MachineDeployment,
-    clusterID: string,
+    cluster: Cluster,
     projectID: string,
     changeEventEmitter: EventEmitter<MachineDeployment> = undefined
   ): Observable<boolean> {
     const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
       data: {
         title: 'Restart Machine Deployment',
-        message: `Start rolling restart of ${md.name} machine deployment?`,
+        message: `Perform rolling restart of <b>${md.name}</b> machine deployment of <b>${cluster.name}</b> cluster?`,
         confirmLabel: 'Restart',
       },
     };
 
-    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
-
-    return dialogRef
+    return this._matDialog
+      .open(ConfirmationDialogComponent, dialogConfig)
       .afterClosed()
       .pipe(
         mergeMap((isConfirmed: boolean): Observable<boolean> => {
           if (isConfirmed) {
-            return this._apiService
-              .restartMachineDeployment(clusterID, md, projectID)
-              .pipe(take(1))
-              .pipe(
-                catchError(() => {
-                  this._notificationService.error(
-                    `Could not start rolling restart of the ${md.name} machine deployment`
-                  );
-                  return of(false);
-                })
-              );
+            return this._machineDeploymentService.restart(cluster.id, md, projectID).pipe(
+              catchError(() => {
+                this._notificationService.error(`Could not restart the ${md.name} machine deployment`);
+                return of(false);
+              }),
+              take(1)
+            );
           }
           return of(false);
-        })
-      )
-      .pipe(
+        }),
         mergeMap((data: any): Observable<boolean> => {
           if (data) {
-            this._notificationService.success(`The rolling restart of ${md.name} machine deployment was started`);
-            if (changeEventEmitter) {
-              changeEventEmitter.emit(md);
-            }
+            this._notificationService.success(`Restarting the ${md.name} machine deployment`);
+            changeEventEmitter?.emit(md);
             return of(true);
           }
           return of(false);
-        })
-      )
-      .pipe(take(1));
+        }),
+        take(1)
+      );
   }
 }

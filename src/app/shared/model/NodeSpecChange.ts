@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {CentosSpec, NodeCloudSpec, NodeSpec, RHELSpec, SLESSpec, UbuntuSpec, FlatcarSpec} from '../entity/node';
+import {NodeCloudSpec, NodeSpec} from '../entity/node';
 
 export class NodeData {
   name?: string;
@@ -31,17 +31,4 @@ export class NodeData {
       } as NodeSpec,
     } as NodeData;
   }
-}
-
-export class NodeProviderData {
-  spec?: NodeCloudSpec;
-  valid?: boolean;
-}
-
-export class NodeOperatingSystemData {
-  ubuntu?: UbuntuSpec;
-  centos?: CentosSpec;
-  sles?: SLESSpec;
-  rhel?: RHELSpec;
-  flatcar?: FlatcarSpec;
 }

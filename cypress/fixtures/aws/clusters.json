@@ -34,6 +34,10 @@
         "dnsDomain": "cluster.local",
         "proxyMode": "ipvs",
         "nodeLocalDNSCacheEnabled": true
+      },
+      "cniPlugin": {
+        "type": "canal",
+        "version": "v3.20"
       }
     },
     "status": {

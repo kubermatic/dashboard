@@ -266,6 +266,10 @@
   @include mixins.mask-image('/assets/images/icons/spinner.svg', 16px);
 }
 
+.km-icon-warning-event {
+  @include mixins.mask-image('/assets/images/icons/warning-event.svg', 16px, $color: #f7b500);
+}
+
 .km-icon-disabled {
   @include mixins.mask-image('/assets/images/icons/close.svg', 16px, $color: #7e868f);
 }
@@ -356,10 +360,6 @@
   @include mixins.provider-image('/assets/images/clouds/azure.svg', 24px);
 }
 
-.km-provider-logo-baremetal {
-  @include mixins.provider-image('/assets/images/clouds/baremetal.png', 30px);
-}
-
 .km-provider-logo-bringyourown {
   @include mixins.provider-image('/assets/images/clouds/bringyourown.svg', 30px);
 }
@@ -396,6 +396,18 @@
   @include mixins.provider-image('/assets/images/clouds/anexia.svg', 24px);
 }
 
+.km-provider-logo-gke {
+  @include mixins.provider-image('/assets/images/clouds/gke.svg', 30px);
+}
+
+.km-provider-logo-aks {
+  @include mixins.provider-image('/assets/images/clouds/aks.svg', 30px);
+}
+
+.km-provider-logo-eks {
+  @include mixins.provider-image('/assets/images/clouds/eks.svg', 30px);
+}
+
 .km-os-image-centos {
   @include mixins.background-image('/assets/images/os/centos.svg', 24px);
 }
@@ -422,6 +434,14 @@
 
 .km-os-image-flatcar {
   @include mixins.background-image('/assets/images/os/flatcar.svg', 24px);
+}
+
+.km-cni-image-canal {
+  @include mixins.background-image('/assets/images/cni/canal.svg', 50px);
+}
+
+.km-cni-image-cilium {
+  @include mixins.background-image('/assets/images/cni/cilium.svg', 80px);
 }
 
 @for $i from 1 through 50 {

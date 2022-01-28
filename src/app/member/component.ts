@@ -19,7 +19,6 @@ import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {ApiService} from '@core/services/api';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
@@ -34,6 +33,7 @@ import {EMPTY, merge, Subject, timer} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {AddMemberComponent} from './add-member/component';
 import {EditMemberComponent} from './edit-member/component';
+import {MemberService} from '@core/services/member';
 
 @Component({
   selector: 'km-member',
@@ -49,14 +49,14 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  private readonly _refreshTime = 10; // in seconds
+  private readonly _refreshTime = 10;
   private _unsubscribe = new Subject<void>();
   private _membersUpdate = new Subject<void>();
   private _currentGroupConfig: GroupConfig;
   private _selectedProject: Project;
 
   constructor(
-    private readonly _apiService: ApiService,
+    private readonly _memberService: MemberService,
     private readonly _projectService: ProjectService,
     private readonly _matDialog: MatDialog,
     private readonly _userService: UserService,
@@ -91,7 +91,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
     merge(timer(0, this._refreshTime * this._appConfig.getRefreshTimeBase()), this._membersUpdate)
-      .pipe(switchMap(() => (this._selectedProject ? this._apiService.getMembers(this._selectedProject.id) : EMPTY)))
+      .pipe(switchMap(() => (this._selectedProject ? this._memberService.list(this._selectedProject.id) : EMPTY)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(members => {
         this.members = members;
@@ -174,27 +174,25 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
   getDeleteTooltip(member: Member): string {
     return this.currentUser && member && this.currentUser.email === member.email
       ? 'You cannot edit your own data and permissions'
-      : 'Delete member';
+      : 'Remove member';
   }
 
   deleteMember(member: Member): void {
     const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
       data: {
-        title: 'Delete Member',
-        message: `Delete ${member.name} member from the ${this._selectedProject.name} project?`,
-        confirmLabel: 'Delete',
+        title: 'Remove Member',
+        message: `Remove <b>${member.name}</b> from <b>${this._selectedProject.name}</b> project?`,
+        confirmLabel: 'Remove',
       },
     };
 
-    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
     this._googleAnalyticsService.emitEvent('memberOverview', 'deleteMemberOpened');
 
-    dialogRef
+    this._matDialog
+      .open(ConfirmationDialogComponent, dialogConfig)
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
-      .pipe(switchMap(_ => this._apiService.deleteMembers(this._selectedProject.id, member)))
+      .pipe(switchMap(_ => this._memberService.remove(member, this._selectedProject.id)))
       .pipe(take(1))
       .subscribe(() => {
         this._notificationService.success(

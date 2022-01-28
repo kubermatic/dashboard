@@ -26,6 +26,7 @@ import {
   hasAddonFormData,
   AddonFormSpec,
 } from '@shared/entity/addon';
+import {Cluster} from '@shared/entity/cluster';
 
 export enum Controls {
   ContinuouslyReconcile = 'continuouslyReconcile',
@@ -40,6 +41,7 @@ export class EditAddonDialogComponent implements OnInit {
   readonly Controls = Controls;
 
   @Input() addon: Addon;
+  @Input() cluster: Cluster;
   @Input() addonConfig: AddonConfig;
   form: FormGroup;
   formBasic: FormGroup;

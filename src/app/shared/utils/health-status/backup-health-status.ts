@@ -23,10 +23,10 @@ export class BackupHealthStatus extends HealthStatus {
     } else if (condition.status === 'True') {
       return new BackupHealthStatus(HealthStatusMessage.Running, HealthStatusColor.Green);
     } else if (condition.status === 'False') {
-      return new BackupHealthStatus(HealthStatusMessage.Disabled, HealthStatusColor.Unknown);
+      return new BackupHealthStatus(HealthStatusMessage.Disabled, HealthStatusColor.Grey);
     }
 
-    return new BackupHealthStatus(HealthStatusMessage.Unknown, HealthStatusColor.Unknown);
+    return new BackupHealthStatus(HealthStatusMessage.Unknown, HealthStatusColor.Grey);
   }
 
   constructor(message: HealthStatusMessage, color: HealthStatusColor) {

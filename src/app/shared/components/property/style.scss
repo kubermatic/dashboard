@@ -14,20 +14,23 @@
 
 @use 'variables';
 
-.container {
-  margin: 6px 50px 6px 0;
+:host {
+  display: flex;
+}
 
-  .label {
+.container {
+  margin: 6px 30px 6px 0;
+
+  .label:not(:empty) {
     font-size: variables.$font-size-caption;
     line-height: 14px;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
     min-height: 14px;
   }
 
   .value {
     font-size: variables.$font-size-subhead;
     line-height: 24px;
-    margin-bottom: 8px;
     min-height: 24px;
     word-break: break-all;
   }

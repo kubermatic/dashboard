@@ -1,0 +1,59 @@
+<!--
+Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<div class="km-version-picker-container"
+     fxFlex
+     fxFlexAlign="row"
+     fxLayoutAlign="center center"
+     fxLayoutGap="6px">
+
+  <div class="km-version-picker"
+       [ngClass]="{'km-version-picker-enabled': isEnabled(), 'km-version-picker-disabled': !isEnabled()}"
+       fxFlex
+       fxLayoutAlign="center center"
+       (click)="openVersionChangeDialog()">
+
+    <div class="km-version-picker-type"
+         fxLayoutAlign="center center">
+      <i class="km-icon-kubernetes"></i>
+    </div>
+
+    <mat-form-field [ngClass]="isClusterExternal ? 'cluster-external' : ''">
+      <mat-label>Control Plane</mat-label>
+      <mat-select [ngModel]="cluster.spec.version"
+                  disabled
+                  disableOptionCentering>
+        <mat-option [value]="cluster.spec.version">
+          {{cluster.spec.version}}
+        </mat-option>
+      </mat-select>
+      <i *ngIf="hasAvailableUpdates()"
+         matSuffix
+         matTooltip="Updates available"
+         class="km-icon-update-available update-available-icon"></i>
+      <i *ngIf="isClusterBeforeEOL()"
+         matSuffix
+         class="km-icon-warning warning-icon"></i>
+      <i *ngIf="isClusterAfterEOL()"
+         matSuffix
+         class="km-icon-error error-icon"></i>
+    </mat-form-field>
+
+  </div>
+
+  <i *ngIf="someUpgradesRestrictedByKubeletVersion"
+     matTooltip="Some Kubernetes versions are not available due to incompatible nodes running in the cluster. Upgrade or recreate your nodes before you can upgrade your cluster to the latest version."
+     class="km-icon-error"></i>
+</div>

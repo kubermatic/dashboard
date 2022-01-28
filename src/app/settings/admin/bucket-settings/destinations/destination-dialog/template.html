@@ -1,0 +1,85 @@
+<!--
+Copyright 2021 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<km-dialog-title>{{data.title}}</km-dialog-title>
+<mat-dialog-content>
+  <p *ngIf="data.mode === Mode.Edit"
+     class="km-dialog-context-description">Edit <b>{{data.destination.destinationName}}</b> destination</p>
+  <form [formGroup]="form"
+        fxLayout="column">
+    <mat-form-field fxFlex
+                    *ngIf="data.mode === Mode.Add">
+      <mat-label>Destination Name</mat-label>
+      <input matInput
+             [formControlName]="Controls.DestinationName"
+             type="text"
+             autocomplete="off"
+             required>
+    </mat-form-field>
+
+    <mat-form-field fxFlex>
+      <mat-label>Bucket</mat-label>
+      <input matInput
+             [formControlName]="Controls.Bucket"
+             type="text"
+             autocomplete="off"
+             required>
+    </mat-form-field>
+
+    <mat-form-field fxFlex>
+      <mat-label>Endpoint</mat-label>
+      <input matInput
+             [formControlName]="Controls.Endpoint"
+             type="text"
+             autocomplete="off"
+             required>
+    </mat-form-field>
+
+    <mat-checkbox [formControlName]="Controls.Default"
+                  class="default-checkbox">
+      <span>Use as default for admin enforced backups for each cluster in the seed</span>
+    </mat-checkbox>
+
+    <div class="km-dialog-warning"
+         *ngIf="displayOverwriteWarning()"
+         fxLayoutAlign=" start">
+      <i class="km-icon-error km-warning-bg"></i>
+      <div>Upon saving this setting, every new default backup will be created with this destination instead of "{{currentDefault}}", over time existing backups will be replaced by backups that use the new destination</div>
+    </div>
+
+    <div class="km-dialog-warning"
+         *ngIf="displayDeleteWarning()"
+         fxLayoutAlign=" start">
+      <i class="km-icon-error"></i>
+      <div>Disabling the default destination results in the termination of all default backups (Tip: to retain existing backups you can overwrite the default destination instead)</div>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button id="km-destination-dialog-btn"
+          mat-flat-button
+          kmThrottleClick
+          (throttleClick)="save()"
+          [disabled]="!form.valid">
+    <ng-container *ngIf="data.mode === Mode.Add">
+      <i class="km-icon-mask km-icon-add"></i>
+      <span>Add Destination</span>
+    </ng-container>
+    <ng-container *ngIf="data.mode === Mode.Edit">
+      <i class="km-icon-mask km-icon-save"></i>
+      <span>Save Changes</span>
+    </ng-container>
+  </button>
+</mat-dialog-actions>

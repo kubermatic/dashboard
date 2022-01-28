@@ -22,7 +22,7 @@ import {NotificationService} from '@core/services/notification';
 import {UserService} from '@core/services/user';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {CreateDatacenterModel, Datacenter} from '@shared/entity/datacenter';
-import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {INTERNAL_NODE_PROVIDERS, NodeProvider} from '@shared/model/NodeProviderConstants';
 import * as countryCodeLookup from 'country-code-lookup';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
@@ -44,7 +44,7 @@ export class DynamicDatacentersComponent implements OnInit, OnDestroy, OnChanges
   seedFilter: string;
   countries: string[] = [];
   countryFilter: string;
-  providers: NodeProvider[] = Object.values(NodeProvider).filter(provider => !!provider);
+  readonly providers = INTERNAL_NODE_PROVIDERS;
   providerFilter: NodeProvider;
   private _unsubscribe = new Subject<void>();
 
@@ -200,7 +200,7 @@ export class DynamicDatacentersComponent implements OnInit, OnDestroy, OnChanges
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Delete Datacenter',
-        message: `Are you sure you want to delete the ${datacenter.metadata.name} datacenter?`,
+        message: `Delete <b>${datacenter.metadata.name}</b> datacenter permanently?`,
         confirmLabel: 'Delete',
       },
     };

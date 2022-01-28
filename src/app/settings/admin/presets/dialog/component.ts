@@ -21,13 +21,16 @@ import {NotificationService} from '@core/services/notification';
 import {PresetsService} from '@core/services/wizard/presets';
 import {Preset} from '@shared/entity/preset';
 import {Subject} from 'rxjs';
-import {take} from 'rxjs/operators';
+import {filter, take, takeUntil} from 'rxjs/operators';
 
 export interface PresetDialogData {
   title: string;
   mode: Mode;
   steps: StepRegistry[];
   preset: Preset;
+  descriptionPreset?: string;
+  descriptionProvider?: string;
+  descriptionSettings?: string;
 }
 
 export enum Mode {
@@ -91,10 +94,28 @@ export class PresetDialogComponent implements OnInit, OnDestroy {
     );
   }
 
+  get description(): string {
+    switch (this.active) {
+      case StepRegistry.Preset:
+        return this.data.descriptionPreset;
+      case StepRegistry.Provider:
+        return this.data.descriptionProvider;
+      case StepRegistry.Settings:
+        return this.data.descriptionSettings;
+      default:
+        return '';
+    }
+  }
+
   ngOnInit(): void {
     const controls = {};
     this.steps.forEach(step => (controls[step] = this._formBuilder.control('')));
     this.form = this._formBuilder.group(controls);
+
+    this._presetDialogService.providerChanges
+      .pipe(filter(provider => !!provider))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => this._stepper.next());
   }
 
   ngOnDestroy(): void {
@@ -122,7 +143,7 @@ export class PresetDialogComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(_ => {
         this._dialogRef.close(true);
-        this._notificationService.success(`Preset ${this._presetDialogService.preset.metadata.name} has been created.`);
+        this._notificationService.success(`Created the ${this._presetDialogService.preset.metadata.name} preset`);
       });
   }
 
@@ -133,7 +154,7 @@ export class PresetDialogComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(preset => {
         this._dialogRef.close(true);
-        this._notificationService.success(`Preset ${preset.name} has been updated.`);
+        this._notificationService.success(`Updated the ${preset.name} preset`);
       });
   }
 }

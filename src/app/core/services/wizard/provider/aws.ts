@@ -47,6 +47,20 @@ export class AWS extends Provider {
     return this;
   }
 
+  assumeRoleARN(assumeRoleARN: string): AWS {
+    if (assumeRoleARN) {
+      this._headers = this._headers.set(AWS.Header.AssumeRoleARN, assumeRoleARN);
+    }
+    return this;
+  }
+
+  assumeRoleExternalID(assumeRoleExternalID: string): AWS {
+    if (assumeRoleExternalID) {
+      this._headers = this._headers.set(AWS.Header.AssumeRoleExternalID, assumeRoleExternalID);
+    }
+    return this;
+  }
+
   region(region: string): AWS {
     if (region) {
       this._headers = this._headers.set(AWS.Header.Region, region);
@@ -62,6 +76,15 @@ export class AWS extends Provider {
   }
 
   vpcs(seed: string, onLoadingCb: () => void = null): Observable<AWSVPC[]> {
+    if (this._headers.has(AWS.Header.AssumeRoleARN) || this._headers.has(AWS.Header.AssumeRoleExternalID)) {
+      this._setRequiredHeaders(
+        AWS.Header.AccessKeyID,
+        AWS.Header.SecretAccessKey,
+        AWS.Header.AssumeRoleARN,
+        AWS.Header.AssumeRoleExternalID
+      );
+    }
+
     if (!this._hasRequiredHeaders() || !seed) {
       return EMPTY;
     }
@@ -77,6 +100,15 @@ export class AWS extends Provider {
   }
 
   securityGroups(dc: string, onLoadingCb: () => void = null): Observable<string[]> {
+    if (this._headers.has(AWS.Header.AssumeRoleARN) || this._headers.has(AWS.Header.AssumeRoleExternalID)) {
+      this._setRequiredHeaders(
+        AWS.Header.AccessKeyID,
+        AWS.Header.SecretAccessKey,
+        AWS.Header.AssumeRoleARN,
+        AWS.Header.AssumeRoleExternalID
+      );
+    }
+
     if (!this._hasRequiredHeaders() || !dc) {
       return EMPTY;
     }
@@ -92,7 +124,13 @@ export class AWS extends Provider {
   }
 
   subnets(seed: string, onLoadingCb: () => void = null): Observable<AWSSubnet[]> {
-    this._setRequiredHeaders(AWS.Header.AccessKeyID, AWS.Header.SecretAccessKey, AWS.Header.VPC);
+    this._setRequiredHeaders(
+      AWS.Header.AccessKeyID,
+      AWS.Header.SecretAccessKey,
+      AWS.Header.VPC,
+      AWS.Header.AssumeRoleARN,
+      AWS.Header.AssumeRoleExternalID
+    );
     if (!this._hasRequiredHeaders() || !seed) {
       return EMPTY;
     }
@@ -123,6 +161,8 @@ export namespace AWS {
   export enum Header {
     AccessKeyID = 'AccessKeyID',
     SecretAccessKey = 'SecretAccessKey',
+    AssumeRoleARN = 'AssumeRoleARN',
+    AssumeRoleExternalID = 'AssumeRoleExternalID',
     VPC = 'VPC',
     Region = 'Region',
   }

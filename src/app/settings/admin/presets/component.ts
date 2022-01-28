@@ -26,7 +26,12 @@ import {UserService} from '@core/services/user';
 import {PresetsService} from '@core/services/wizard/presets';
 import {Datacenter} from '@shared/entity/datacenter';
 import {Preset, PresetList} from '@shared/entity/preset';
-import {NodeProvider, NodeProviderConstants} from '@shared/model/NodeProviderConstants';
+import {
+  EXTERNAL_NODE_PROVIDERS,
+  NODE_PROVIDERS,
+  NodeProvider,
+  NodeProviderConstants,
+} from '@shared/model/NodeProviderConstants';
 import {merge, Observable, of, Subject} from 'rxjs';
 import {switchMap, take, takeUntil} from 'rxjs/operators';
 
@@ -48,7 +53,7 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
   displayedColumns: string[] = Object.values(Column);
   datacenters: Datacenter[] = [];
   datacenterFilter: string;
-  providers: NodeProvider[] = Object.values(NodeProvider).filter(provider => !!provider);
+  readonly providers = NODE_PROVIDERS;
   providerFilter: NodeProvider;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -106,10 +111,10 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
 
     this._datacenterService.datacenters.pipe(takeUntil(this._unsubscribe)).subscribe(datacenters => {
       this.datacenters = datacenters;
-      const uniqueProviders = new Set<NodeProvider>(
+      const configuredProviders = new Set<NodeProvider>(
         this.datacenters.map(dc => NodeProviderConstants.newNodeProvider(dc.spec.provider))
       );
-      this._supportedProviders = Array.from(uniqueProviders);
+      this._supportedProviders = [...configuredProviders, ...EXTERNAL_NODE_PROVIDERS];
     });
 
     this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
@@ -180,6 +185,8 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
         steps: ['Provider', 'Settings'],
         mode: Mode.Add,
         preset: preset,
+        descriptionProvider: `Add provider to <b>${preset.name}</b> preset`,
+        descriptionSettings: `Specify provider settings for <b>${preset.name}</b> provider preset`,
       } as PresetDialogData,
     };
 
@@ -197,6 +204,8 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
       data: {
         title: 'Edit Preset Provider',
         steps: ['Provider', 'Settings'],
+        descriptionProvider: `Choose a provider of <b>${preset.name}</b> provider preset to edit`,
+        descriptionSettings: `Edit provider settings of <b>${preset.name}</b> provider preset`,
         mode: Mode.Edit,
         preset: preset,
       } as PresetDialogData,
@@ -216,7 +225,7 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
       .subscribe(_ => {
         const idx = this.presets.findIndex(p => p.name === name);
         this.presets[idx].enabled = enabled;
-        this._notificationService.success(`${enabled ? 'Enabled' : 'Disabled'} preset ${name}.`);
+        this._notificationService.success(`${enabled ? 'Enabled' : 'Disabled'} the ${name} preset`);
       });
   }
 

@@ -38,11 +38,10 @@ import {UserService} from '@core/services/user';
 import {AddProjectDialogComponent} from '@shared/components/add-project-dialog/component';
 import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
-import {Project, ProjectOwners} from '@shared/entity/project';
+import {Project, ProjectOwner} from '@shared/entity/project';
 import {UserSettings} from '@shared/entity/settings';
 import {objectDiff} from '@shared/utils/common-utils';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
-import {ProjectUtils} from '@shared/utils/project-utils/project-utils';
 import _ from 'lodash';
 import {CookieService} from 'ngx-cookie-service';
 import {Subject} from 'rxjs';
@@ -78,6 +77,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   paginator: MatPaginator;
+
   @ViewChild(MatPaginator)
   set matPaginator(mp: MatPaginator) {
     this.paginator = mp;
@@ -92,6 +92,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   sort: MatSort;
+
   @ViewChild(MatSort)
   set matSort(ms: MatSort) {
     this.sort = ms;
@@ -327,7 +328,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  getOwnerNameArray(owners: ProjectOwners[]): string[] {
+  getOwnerNameArray(owners: ProjectOwner[]): string[] {
     const ownerNameArray = [];
     for (const i in owners) {
       if (Object.prototype.hasOwnProperty.call(owners, i)) {
@@ -337,27 +338,27 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     return ownerNameArray;
   }
 
-  getOwnerString(owners: ProjectOwners[]): string {
+  getOwnerString(owners: ProjectOwner[]): string {
     return this.getOwnerNameArray(owners).join(', ');
   }
 
-  getOwners(owners: ProjectOwners[]): string {
+  getOwners(owners: ProjectOwner[]): string {
     return this.isMoreOwners(owners)
       ? this.getOwnerString(owners).substring(0, this._maxOwnersLen)
       : this.getOwnerString(owners);
   }
 
-  isMoreOwners(owners: ProjectOwners[]): boolean {
+  isMoreOwners(owners: ProjectOwner[]): boolean {
     return this.getOwnerString(owners).length > this._maxOwnersLen;
   }
 
-  getMoreOwnersCount(owners: ProjectOwners[]): number {
+  getMoreOwnersCount(owners: ProjectOwner[]): number {
     return this.isMoreOwners(owners)
       ? owners.length - this.getOwnerString(owners).substring(0, this._maxOwnersLen).split(', ').length
       : 0;
   }
 
-  getMoreOwners(owners: ProjectOwners[]): string {
+  getMoreOwners(owners: ProjectOwner[]): string {
     // truncatedLength = number of displayed owner names
     const truncatedLength = this.getOwnerString(owners).substring(0, this._maxOwnersLen).split(', ').length;
     // count = length of original owner names that are displayed
@@ -415,11 +416,11 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isProjectActive(project: Project): boolean {
-    return ProjectUtils.isProjectActive(project);
+    return Project.isActive(project);
   }
 
-  getProjectStateIconClass(project: Project): string {
-    return ProjectUtils.getStateIconClass(project.status);
+  getStatusIcon(project: Project): string {
+    return Project.getStatusIcon(project);
   }
 
   isProjectCreationRestricted(): boolean {

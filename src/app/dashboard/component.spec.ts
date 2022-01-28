@@ -12,16 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {waitForAsync, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
-import {ApiService} from '@core/services/api';
 import {Auth} from '@core/services/auth/service';
 import {DatacenterService} from '@core/services/datacenter';
 import {ActivatedRouteStub, RouterStub} from '@app/testing/router-stubs';
-import {ApiMockService} from '@app/testing/services/api-mock';
 import {AuthMockService} from '@app/testing/services/auth-mock';
 import {DatacenterMockService} from '@app/testing/services/datacenter-mock';
 import {DashboardComponent} from './component';
@@ -39,10 +37,10 @@ describe('DashboardComponent', () => {
       providers: [
         {provide: Router, useClass: RouterStub},
         {provide: Auth, useClass: AuthMockService},
-        {provide: ApiService, useClass: ApiMockService},
         {provide: DatacenterService, useClass: DatacenterMockService},
         {provide: ActivatedRoute, useClass: ActivatedRouteStub},
       ],
+      teardown: {destroyAfterEach: false},
     }).compileComponents();
   });
 

@@ -20,12 +20,12 @@ import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
 import {machineDeploymentsFake} from '@app/testing/fake-data/node';
 import {fakeProject} from '@app/testing/fake-data/project';
-import {ApiMockService} from '@app/testing/services/api-mock';
 import {CoreModule} from '@core/module';
-import {ApiService} from '@core/services/api';
 import {NotificationService} from '@core/services/notification';
 import {of} from 'rxjs';
 import {NodeService} from './node';
+import {MachineDeploymentServiceMock} from '@app/testing/services/machine-deployment-mock';
+import {MachineDeploymentService} from './machine-deployment';
 
 class MatDialogMock {
   open(): any {
@@ -40,10 +40,11 @@ describe('NodeService', () => {
       providers: [
         NodeService,
         GoogleAnalyticsService,
-        {provide: ApiService, useClass: ApiMockService},
         {provide: MatDialog, useClass: MatDialogMock},
+        {provide: MachineDeploymentService, useClass: MachineDeploymentServiceMock},
         NotificationService,
       ],
+      teardown: {destroyAfterEach: false},
     });
   });
 
@@ -54,12 +55,12 @@ describe('NodeService', () => {
   it('should resolve with true value', fakeAsync(
     inject([NodeService], (service: NodeService) => {
       const md = machineDeploymentsFake()[0];
-      const clusterID = fakeDigitaloceanCluster().id;
+      const cluster = fakeDigitaloceanCluster();
       const projectID = fakeProject().id;
       let isConfirmed = false;
 
       service
-        .showMachineDeploymentDeleteDialog(md, clusterID, projectID, null)
+        .showMachineDeploymentDeleteDialog(md, cluster, projectID, null)
         .subscribe(confirmed => (isConfirmed = confirmed));
       tick();
       flush();

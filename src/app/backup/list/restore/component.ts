@@ -50,7 +50,7 @@ export class RestoreListComponent implements OnInit, OnDestroy {
   }
 
   get columns(): string[] {
-    return ['name', 'phase', 'clusterID', 'backupName', 'actions'];
+    return ['name', 'phase', 'clusterID', 'backupName', 'destination', 'actions'];
   }
 
   get isEmpty(): boolean {
@@ -111,13 +111,13 @@ export class RestoreListComponent implements OnInit, OnDestroy {
     const config: MatDialogConfig = {
       data: {
         title: 'Delete Restore Object',
-        message: `Delete "${restore.name}" restore object permanently?`,
+        message: `Delete <b>${restore.name}</b> restore object permanently?`,
         confirmLabel: 'Delete',
       } as ConfirmationDialogConfig,
     };
 
-    const dialog = this._matDialog.open(ConfirmationDialogComponent, config);
-    dialog
+    this._matDialog
+      .open(ConfirmationDialogComponent, config)
       .afterClosed()
       .pipe(filter(confirmed => confirmed))
       .pipe(take(1))
@@ -127,7 +127,7 @@ export class RestoreListComponent implements OnInit, OnDestroy {
         )
       )
       .subscribe(_ => {
-        this._notificationService.success(`Successfully deleted restore object ${restore.name}`);
+        this._notificationService.success(`Deleted the ${restore.name} restore object`);
       });
   }
 }

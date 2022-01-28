@@ -1,0 +1,48 @@
+<!--
+Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<div id="km-edit-cluster-dialog">
+  <km-dialog-title>Provider Settings</km-dialog-title>
+
+  <mat-dialog-content>
+    <p class="km-dialog-context-description">
+      Edit {{providerDisplayName(cluster)}} provider settings of <b>{{cluster.name}}</b> cluster
+    </p>
+
+    <km-anexia-provider-settings *ngIf="!!cluster.spec.cloud.anexia"></km-anexia-provider-settings>
+    <km-alibaba-provider-settings *ngIf="!!cluster.spec.cloud.alibaba"></km-alibaba-provider-settings>
+    <km-aws-provider-settings *ngIf="!!cluster.spec.cloud.aws"></km-aws-provider-settings>
+    <km-digitalocean-provider-settings *ngIf="!!cluster.spec.cloud.digitalocean"></km-digitalocean-provider-settings>
+    <km-hetzner-provider-settings *ngIf="!!cluster.spec.cloud.hetzner"></km-hetzner-provider-settings>
+    <km-openstack-provider-settings *ngIf="!!cluster.spec.cloud.openstack"></km-openstack-provider-settings>
+    <km-vsphere-provider-settings *ngIf="!!cluster.spec.cloud.vsphere"></km-vsphere-provider-settings>
+    <km-azure-provider-settings *ngIf="!!cluster.spec.cloud.azure"></km-azure-provider-settings>
+    <km-equinix-provider-settings *ngIf="!!cluster.spec.cloud.packet"
+                                  [billingCycle]="cluster.spec.cloud.packet.billingCycle"></km-equinix-provider-settings>
+    <km-gcp-provider-settings *ngIf="!!cluster.spec.cloud.gcp"></km-gcp-provider-settings>
+    <km-kubevirt-provider-settings *ngIf="!!cluster.spec.cloud.kubevirt"></km-kubevirt-provider-settings>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button id="km-edit-cluster-dialog-edit-btn"
+            mat-flat-button
+            (click)="onSettingsSave()"
+            [disabled]="!canSave">
+      <i class="km-icon-mask km-icon-save"></i>
+      <span>Save Settings</span>
+    </button>
+  </mat-dialog-actions>
+</div>

@@ -48,7 +48,7 @@ limitations under the License.
           Name must be at least {{ control(Controls.Name).getError('minlength').requiredLength }} characters.
         </mat-error>
         <mat-error *ngIf="form.get(Controls.Name).hasError('pattern')">
-          Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -).
+          Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash.
         </mat-error>
       </mat-form-field>
 
@@ -57,15 +57,36 @@ limitations under the License.
       </mat-card-header>
       <div fxLayout="column"
            fxLayoutGap="8px">
-        <mat-form-field class="km-dropdown-with-suffix">
-          <mat-label>CNI Plugin</mat-label>
-          <mat-select [formControlName]="Controls.CNIPlugin"
-                      class="km-select-ellipsis"
-                      disableOptionCentering>
-            <mat-option [value]="cniPlugin.Canal">Canal</mat-option>
-            <mat-option [value]="cniPlugin.Cilium">Cilium</mat-option>
-          </mat-select>
-        </mat-form-field>
+
+        <div class="cni-plugin"
+             fxLayout="column">
+          <mat-button-toggle-group group="cniPluginTypeGroup"
+                                   [formControlName]="Controls.CNIPlugin">
+            <mat-button-toggle [value]="cniPlugin.Canal">
+              <i class="km-cni-image-canal"></i>
+            </mat-button-toggle>
+            <mat-button-toggle [value]="cniPlugin.Cilium">
+              <i class="km-cni-image-cilium"></i>
+            </mat-button-toggle>
+            <mat-button-toggle [value]="cniPlugin.None">
+              None
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+
+          <mat-form-field fxFlex
+                          class="km-dropdown-with-suffix"
+                          *ngIf="hasCNIPluginType()">
+            <mat-label>CNI Plugin Version</mat-label>
+            <mat-select [formControlName]="Controls.CNIPluginVersion"
+                        class="km-select-ellipsis"
+                        disableOptionCentering>
+              <mat-option *ngFor="let version of cniPluginVersions"
+                          [value]="version">
+                {{version}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
 
         <mat-form-field class="km-dropdown-with-suffix">
           <mat-label>Proxy Mode</mat-label>
@@ -118,7 +139,7 @@ limitations under the License.
              fxLayout="row">
           <mat-form-field fxFlex
                           class="km-dropdown-with-suffix">
-            <mat-label>Version</mat-label>
+            <mat-label>Control Plane Version</mat-label>
             <mat-select [formControlName]="Controls.Version"
                         class="km-select-ellipsis"
                         disableOptionCentering
@@ -191,18 +212,42 @@ limitations under the License.
                            [formControlName]="Controls.PodNodeSelectorAdmissionPluginConfig"
                            (labelsChange)="onPodNodeSelectorAdmissionPluginConfigChange($event)"
                            fxFlex="100"></km-label-form>
+            <div *ngIf="isPluginEnabled(admissionPlugin.EventRateLimit)">
+              <km-wizard-cluster-event-rate-limit [formControl]="form.get(Controls.EventRateLimitConfig)"></km-wizard-cluster-event-rate-limit>
+            </div>
+
           </div>
 
           <div fxLayout="column"
                fxFlex="100"
                fxLayoutGap="10px">
 
-            <mat-checkbox [formControlName]="Controls.AuditLogging">
-              Audit Logging
+            <div fxLayoutAlign=" center">
+              <mat-checkbox [formControlName]="Controls.AuditLogging">Audit Logging</mat-checkbox>
+              <mat-button-toggle-group *ngIf="!!controlValue(Controls.AuditLogging)"
+                                       [formControlName]="Controls.AuditPolicyPreset"
+                                       group="auditLogging">
+                <mat-button-toggle [value]="AuditPolicyPreset.Custom"
+                                   matTooltip="Sets up cluster with a metadata audit policy that can be edited after the cluster has been created.">
+                  custom
+                </mat-button-toggle>
+                <mat-button-toggle [value]="AuditPolicyPreset.Metadata"
+                                   matTooltip="Logs metadata for all requests received by the Kubernetes API.">
+                  metadata
+                </mat-button-toggle>
+                <mat-button-toggle [value]="AuditPolicyPreset.Minimal"
+                                   matTooltip="Logs extended information about key security concerns like workload modifications and access to sensitive information.">
+                  minimal
+                </mat-button-toggle>
+                <mat-button-toggle [value]="AuditPolicyPreset.Recommended"
+                                   matTooltip="Logs extended information about key security concerns and metadata for all other requests. Recommended for best security coverage.">
+                  recommended
+                </mat-button-toggle>
+              </mat-button-toggle-group>
               <i *ngIf="isEnforced(Controls.AuditLogging)"
                  class="km-icon-info km-pointer"
                  matTooltip="Audit Logging is enforced by your admin in the chosen datacenter."></i>
-            </mat-checkbox>
+            </div>
 
             <mat-checkbox [formControlName]="Controls.UserSSHKeyAgent">
               User SSH Key Agent
@@ -215,7 +260,7 @@ limitations under the License.
               OPA Integration
               <i *ngIf="isEnforced(Controls.OPAIntegration)"
                  class="km-icon-info km-pointer"
-                 matTooltip="OPA Integration is enforced by your admin."></i>
+                 matTooltip="OPA Integration is {{form.get(Controls.OPAIntegration).value ? 'enforced' : 'disabled'}} by your admin."></i>
             </mat-checkbox>
 
             <mat-checkbox [formControlName]="Controls.MLALogging"
@@ -232,6 +277,13 @@ limitations under the License.
               <i *ngIf="isEnforced(Controls.MLAMonitoring)"
                  class="km-icon-info km-pointer"
                  matTooltip="User Cluster Monitoring is enforced by your admin."></i>
+            </mat-checkbox>
+
+            <mat-checkbox [formControlName]="Controls.OperatingSystemManager">
+              Operating System Manager
+              <span class="km-label-primary">Experimental</span>
+              <i class="km-icon-info km-pointer"
+                 matTooltip="Enable to use OSM for creating and managing the configuration that are needed to configure worker nodes. This is an experimental feature and usage in production environment is not recommended."></i>
             </mat-checkbox>
 
             <km-label-form title="Labels"

@@ -17,9 +17,10 @@ limitations under the License.
 <form [formGroup]="form">
   <km-dialog-title>{{mode}} Machine Deployment</km-dialog-title>
   <mat-dialog-content class="km-add-node-outer">
+    <p *ngIf="mode === 'Edit'"
+       class="km-dialog-context-description">Edit <b>{{machineDeploymentName}}</b> machine deployment of <b>{{clusterName}}</b> cluster</p>
     <km-node-data [provider]="provider"
                   [showExtended]="isExtended"
-                  [existingNodesCount]="existingNodesCount"
                   [formControl]="form.get(Control.NodeData)">
     </km-node-data>
   </mat-dialog-content>

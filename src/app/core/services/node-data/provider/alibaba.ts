@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import {NodeDataMode} from '@app/node-data/config';
-import {ApiService} from '@core/services/api';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {ProjectService} from '@core/services/project';
@@ -24,6 +23,7 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, switchMap, take, tap} from 'rxjs/operators';
 import {NodeDataService} from '../service';
+import {AlibabaService} from '@core/services/provider/alibaba';
 
 export class NodeDataAlibabaProvider {
   private readonly _debounce = 500;
@@ -33,7 +33,7 @@ export class NodeDataAlibabaProvider {
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _presetService: PresetsService,
     private readonly _datacenterService: DatacenterService,
-    private readonly _apiService: ApiService,
+    private readonly _alibabaService: AlibabaService,
     private readonly _projectService: ProjectService
   ) {}
 
@@ -88,7 +88,7 @@ export class NodeDataAlibabaProvider {
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(
             switchMap(dc =>
-              this._apiService.getAlibabaInstanceTypes(
+              this._alibabaService.getInstanceTypes(
                 selectedProject,
                 this._clusterSpecService.cluster.id,
                 dc.spec.alibaba.region
@@ -150,7 +150,7 @@ export class NodeDataAlibabaProvider {
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(
             switchMap(dc =>
-              this._apiService.getAlibabaZones(
+              this._alibabaService.getZones(
                 selectedProject,
                 this._clusterSpecService.cluster.id,
                 dc.spec.alibaba.region
@@ -212,7 +212,7 @@ export class NodeDataAlibabaProvider {
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(
             switchMap(dc =>
-              this._apiService.getAlibabaVSwitches(
+              this._alibabaService.getVSwitches(
                 selectedProject,
                 this._clusterSpecService.cluster.id,
                 dc.spec.alibaba.region

@@ -15,29 +15,25 @@ limitations under the License.
 -->
 
 <main>
-  <div>
-    <km-navigation [showMenuSwitchAndProjectSelector]="showMenuSwitchAndProjectSelector"></km-navigation>
-    <mat-sidenav-container autosize>
-      <mat-sidenav #sidenav
-                   opened="false"
-                   disableClose="true"
-                   mode="side"
-                   *ngIf="auth.authenticated()">
-        <km-sidenav></km-sidenav>
-      </mat-sidenav>
-      <div class="km-main"
-           fxFlex
-           fxLayout="column">
-        <div fxFlex>
-
-          <router-outlet></router-outlet>
-        </div>
-        <km-footer *ngIf="!!settings"
-                   [version]="version"
-                   [settings]="settings"
-                   [customLinks]="customLinks"
-                   [authenticated]="auth.authenticated()"></km-footer>
-      </div>
-    </mat-sidenav-container>
-  </div>
+  <km-navigation [showMenuSwitchAndProjectSelector]="showMenuSwitchAndProjectSelector"></km-navigation>
+  <mat-sidenav-container autosize>
+    <mat-sidenav #sidenav
+                 opened="false"
+                 disableClose="true"
+                 mode="side"
+                 *ngIf="auth.authenticated()">
+      <km-sidenav></km-sidenav>
+    </mat-sidenav>
+    <div class="km-main"
+         fxFlex
+         fxLayout="column">
+      <router-outlet></router-outlet>
+      <km-footer *ngIf="!!settings"
+                 [ngClass]="hasSecondarySidenav ? 'footer-sm' : ''"
+                 [version]="version"
+                 [settings]="settings"
+                 [customLinks]="customLinks"
+                 [authenticated]="auth.authenticated()"></km-footer>
+    </div>
+  </mat-sidenav-container>
 </main>

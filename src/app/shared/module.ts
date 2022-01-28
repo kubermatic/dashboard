@@ -25,7 +25,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatOptionModule, MatRippleModule} from '@angular/material/core';
-import {MatDialogModule} from '@angular/material/dialog';
+import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule} from '@angular/material/dialog';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -54,6 +54,8 @@ import {CIDRFormComponent} from '@shared/components/cidr-form/component';
 import {ClusterFromTemplateDialogComponent} from '@shared/components/cluster-from-template/component';
 import {ClusterSummaryComponent} from '@shared/components/cluster-summary/component';
 import {EventCardComponent} from '@shared/components/event-card/component';
+import {NumberStepperComponent} from '@shared/components/number-stepper/component';
+import {EventRateLimitComponent} from '@shared/components/event-rate-limit/component';
 import {SaveClusterTemplateDialogComponent} from '@shared/components/save-cluster-template/component';
 import {SelectClusterTemplateDialogComponent} from '@shared/components/select-cluster-template/component';
 import {TabCardComponent} from '@shared/components/tab-card/component';
@@ -77,7 +79,7 @@ import {DialogTitleComponent} from './components/dialog-title/component';
 import {EditorComponent} from './components/editor/component';
 import {ClusterTypeEOLComponent} from './components/eol/component';
 import {EventListComponent} from './components/event-list/component';
-import {ExternalClusterDataDialogComponent} from './components/external-cluster-data-dialog/component';
+import {EditClusterConnectionDialogComponent} from './components/external-cluster-data-dialog/component';
 import {InitialsCircleComponent} from './components/initials-circle/component';
 import {LabelFormComponent} from './components/label-form/component';
 import {LabelsComponent} from './components/labels/component';
@@ -96,6 +98,20 @@ import {TaintsComponent} from './components/taints/component';
 import {AutofocusDirective} from './directives/autofocus/directive';
 import {ThrottleClickDirective} from './directives/throttle-click';
 import {RelativeTimePipe} from './pipes/relativetime';
+import {AddExternalClusterDialogComponent} from '@shared/components/add-external-cluster-dialog/component';
+import {ProviderStepComponent} from '@shared/components/add-external-cluster-dialog/steps/provider/component';
+import {CredentialsStepComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/component';
+import {CustomCredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/custom/component';
+import {GKECredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/gke/component';
+import {GKEClusterComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/gke/component';
+import {ClusterStepComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/component';
+import {CredentialsPresetsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/preset/component';
+import {EKSCredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/eks/component';
+import {EKSClusterComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/eks/component';
+import {AKSCredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/aks/component';
+import {AKSClusterComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/aks/component';
+import {ExpansionPanelComponent} from '@shared/components/expansion-panel/component';
+import {PropertyHealthComponent} from '@shared/components/property-health/component';
 
 const modules: any[] = [
   CommonModule,
@@ -170,8 +186,10 @@ const components: any[] = [
   AddSshKeyDialogComponent,
   ConfirmationDialogComponent,
   InstallAddonDialogComponent,
+  EventRateLimitComponent,
   EditAddonDialogComponent,
-  ExternalClusterDataDialogComponent,
+  AddExternalClusterDialogComponent,
+  EditClusterConnectionDialogComponent,
   LoaderComponent,
   SearchFieldComponent,
   TabCardComponent,
@@ -184,6 +202,20 @@ const components: any[] = [
   SaveClusterTemplateDialogComponent,
   SelectClusterTemplateDialogComponent,
   SizeFormatterPipe,
+  NumberStepperComponent,
+  ProviderStepComponent,
+  CredentialsStepComponent,
+  CustomCredentialsComponent,
+  AKSCredentialsComponent,
+  EKSCredentialsComponent,
+  GKECredentialsComponent,
+  ClusterStepComponent,
+  AKSClusterComponent,
+  GKEClusterComponent,
+  EKSClusterComponent,
+  CredentialsPresetsComponent,
+  ExpansionPanelComponent,
+  PropertyHealthComponent,
 ];
 
 const directives: any[] = [AutofocusDirective, ThrottleClickDirective, OptionDirective];
@@ -191,7 +223,16 @@ const directives: any[] = [AutofocusDirective, ThrottleClickDirective, OptionDir
 @NgModule({
   imports: [...modules],
   declarations: [...components, ...directives],
-  providers: [DecimalPipe],
+  providers: [
+    DecimalPipe,
+    {
+      provide: MAT_DIALOG_DEFAULT_OPTIONS,
+      useValue: {
+        disableClose: false,
+        hasBackdrop: true,
+      },
+    },
+  ],
   exports: [...modules, ...components, ...directives],
 })
 export class SharedModule {}

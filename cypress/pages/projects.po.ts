@@ -48,10 +48,6 @@ export class ProjectsPage {
     return cy.get('#km-close-dialog-btn');
   }
 
-  static getConnectClusterBtn(): Cypress.Chainable {
-    return cy.get('#km-connect-cluster-top-btn');
-  }
-
   // Utils.
 
   static waitForRefresh(): void {

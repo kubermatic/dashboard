@@ -1,0 +1,75 @@
+<!--
+Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<km-dialog-title>Edit Service Account</km-dialog-title>
+<mat-dialog-content>
+  <p class="km-dialog-context-description">Edit <b>{{serviceaccount.name}}</b> service account of
+    <b>{{project.name}}</b> project
+  </p>
+
+  <form [formGroup]="form"
+        fxLayout="column">
+    <mat-form-field fxFlex>
+      <mat-label>Name</mat-label>
+      <input matInput
+             formControlName="name"
+             type="text"
+             autocomplete="off"
+             required
+             cdkFocusInitial>
+      <mat-error *ngIf="form.controls.name.hasError('required')">
+        Name is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <label class="km-radio-group-label">Select a Group</label>
+    <mat-radio-group formControlName="group"
+                     fxFlex
+                     fxLayout="column"
+                     class="km-radio-group">
+      <mat-radio-button value="projectmanagers"
+                        class="km-radio-button">
+        <div class="km-radio-button-title">Project Manager</div>
+        <div class="km-radio-button-description">
+          Manage the project, members and service accounts, no access to clusters
+        </div>
+      </mat-radio-button>
+      <mat-radio-button value="editors"
+                        class="km-radio-button">
+        <div class="km-radio-button-title">Editor</div>
+        <div class="km-radio-button-description">
+          Write access and management of clusters, nodes and SSH keys
+        </div>
+      </mat-radio-button>
+      <mat-radio-button value="viewers"
+                        class="km-radio-button">
+        <div class="km-radio-button-title">Viewer</div>
+        <div class="km-radio-button-description">
+          Read-only access, can only view existing resources
+        </div>
+      </mat-radio-button>
+    </mat-radio-group>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-flat-button
+          kmThrottleClick
+          (throttleClick)="edit()"
+          [disabled]="!form.valid">
+    <i class="km-icon-mask km-icon-edit w-24"></i>
+    <span>Edit Service Account</span>
+  </button>
+</mat-dialog-actions>

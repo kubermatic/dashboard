@@ -23,6 +23,7 @@ export interface RestoreSnapshotDialogConfig {
   backupName: string;
   clusterID: string;
   projectID: string;
+  destination: string;
 }
 
 @Component({
@@ -43,7 +44,7 @@ export class RestoreSnapshotDialogComponent {
       .restore(this.config.projectID, this.config.clusterID, this._toEtcdRestore())
       .pipe(take(1))
       .subscribe(_ => {
-        this._notificationService.success(`Successfully started restore process from backup ${this.config.backupName}`);
+        this._notificationService.success(`Started restore process from the ${this.config.backupName} backup`);
         this._dialogRef.close(true);
       });
   }
@@ -53,6 +54,7 @@ export class RestoreSnapshotDialogComponent {
       spec: {
         backupName: this.config.backupName,
         clusterId: this.config.clusterID,
+        destination: this.config.destination,
       } as EtcdRestoreSpec,
     } as EtcdRestore;
   }

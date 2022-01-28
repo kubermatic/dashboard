@@ -42,6 +42,7 @@ describe('ServiceAccountTokenDialog', () => {
           } as ServiceAccountTokenDialogData,
         },
       ],
+      teardown: {destroyAfterEach: false},
     }).compileComponents();
 
     fixture = TestBed.createComponent(ServiceAccountTokenDialog);

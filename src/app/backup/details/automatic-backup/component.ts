@@ -114,7 +114,7 @@ export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
     const config: MatDialogConfig = {
       data: {
         title: 'Delete Automatic Backup',
-        message: `Delete "${backup.name}" automatic backup permanently?`,
+        message: `Delete <b>${backup.name}</b> automatic backup of <b>${this.selectedProject.name}</b> project and all its associated backups permanently?`,
         confirmLabel: 'Delete',
       } as ConfirmationDialogConfig,
     };

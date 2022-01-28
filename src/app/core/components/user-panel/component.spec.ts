@@ -48,6 +48,7 @@ describe('UserPanelComponent', () => {
         {provide: Auth, useClass: AuthMockService},
         {provide: SettingsService, useClass: SettingsMockService},
       ],
+      teardown: {destroyAfterEach: false},
     }).compileComponents();
   });
 

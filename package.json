@@ -2,7 +2,7 @@
   "name": "kubermatic-dashboard",
   "private": true,
   "type": "module",
-  "version": "v2.18.0",
+  "version": "v2.19.0",
   "description": "Kubermatic Dashboard",
   "repository": "https://github.com/kubermatic/dashboard",
   "license": "proprietary",
@@ -38,25 +38,25 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@angular/animations": "12.2.13",
-    "@angular/cdk": "12.2.13",
-    "@angular/common": "12.2.13",
-    "@angular/compiler": "12.2.13",
-    "@angular/core": "12.2.13",
-    "@angular/flex-layout": "12.0.0-beta.35",
-    "@angular/forms": "12.2.13",
-    "@angular/localize": "12.2.13",
-    "@angular/material": "12.2.13",
-    "@angular/platform-browser": "12.2.13",
-    "@angular/platform-browser-dynamic": "12.2.13",
-    "@angular/router": "12.2.13",
+    "@angular/animations": "13.1.1",
+    "@angular/cdk": "13.1.1",
+    "@angular/common": "13.1.1",
+    "@angular/compiler": "13.1.1",
+    "@angular/core": "13.1.1",
+    "@angular/flex-layout": "13.0.0-beta.36",
+    "@angular/forms": "13.1.1",
+    "@angular/localize": "13.1.1",
+    "@angular/material": "13.1.1",
+    "@angular/platform-browser": "13.1.1",
+    "@angular/platform-browser-dynamic": "13.1.1",
+    "@angular/router": "13.1.1",
     "@fontsource/inconsolata": "4.5.0",
     "@fontsource/roboto": "4.5.1",
     "@fontsource/roboto-mono": "4.5.0",
     "@fontsource/ubuntu": "4.5.0",
-    "core-js": "3.19.1",
-    "country-code-lookup": "0.0.19",
-    "flag-icon-css": "3.5.0",
+    "core-js": "3.20.1",
+    "country-code-lookup": "0.0.20",
+    "flag-icon-css": "4.1.7",
     "git-describe": "4.1.0",
     "jquery": "3.6.0",
     "js-base64": "3.7.2",
@@ -64,57 +64,61 @@
     "lodash": "4.17.21",
     "modern-normalize": "1.1.0",
     "moment": "2.29.1",
-    "monaco-editor": "0.30.1",
-    "ngx-clipboard": "14.0.1",
-    "ngx-cookie-service": "12.0.3",
+    "monaco-editor": "0.31.1",
+    "ngx-clipboard": "15.0.1",
+    "ngx-cookie-service": "13.1.2",
     "ngx-custom-validators": "11.0.1",
     "ngx-filter-pipe": "2.1.2",
     "ngx-monaco-editor": "12.0.0",
-    "postcss": "8.3.11",
+    "postcss": "8.4.5",
     "postcss-scss": "4.0.2",
-    "rxjs": "7.4.0",
+    "rxjs": "7.5.1",
     "rxjs-compat": "6.6.7",
     "semver": "7.3.5",
-    "swagger-ui": "4.1.0",
+    "swagger-ui": "4.1.3",
     "zone.js": "0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "12.2.13",
-    "@angular/cli": "12.2.13",
-    "@angular/compiler-cli": "12.2.13",
+    "@angular-devkit/build-angular": "13.1.2",
+    "@angular/cli": "13.1.2",
+    "@angular/compiler-cli": "13.1.1",
     "@bahmutov/add-typescript-to-cypress": "2.1.2",
-    "@cypress/webpack-preprocessor": "5.10.0",
-    "@jest/globals": "27.3.1",
-    "@types/jest": "27.0.2",
-    "@types/js-yaml": "4.0.4",
-    "@types/lodash": "4.14.176",
-    "@types/node": "16.11.7",
+    "@cypress/webpack-preprocessor": "5.11.0",
+    "@jest/globals": "27.4.4",
+    "@types/jest": "27.4.0",
+    "@types/js-yaml": "4.0.5",
+    "@types/lodash": "4.14.178",
+    "@types/node": "17.0.5",
+    "@typescript-eslint/eslint-plugin": "5.9.1",
+    "@typescript-eslint/parser": "5.9.1",
     "browserlist": "1.0.1",
-    "cypress": "8.7.0",
-    "cypress-fail-fast": "3.2.0",
+    "cypress": "9.2.0",
+    "cypress-fail-fast": "3.3.0",
     "del": "6.0.0",
-    "eslint-plugin-compat": "3.13.0",
-    "eslint-plugin-rxjs": "4.0.2",
+    "eslint": "8.6.0",
+    "eslint-plugin-compat": "4.0.0",
+    "eslint-plugin-prettier": "4.0.0",
+    "eslint-plugin-rxjs": "5.0.1",
     "gts": "3.1.0",
     "husky": "7.0.4",
-    "jest": "27.3.1",
-    "jest-preset-angular": "10.1.0",
+    "jest": "27.4.5",
+    "jest-preset-angular": "11.0.1",
     "js-beautify": "1.14.0",
     "license-compliance": "1.2.2",
-    "lint-staged": "11.2.6",
+    "lint-staged": "12.2.1",
     "ng2-mock-component": "0.2.0",
     "start-server-and-test": "1.14.0",
-    "stylelint": "14.0.1",
-    "stylelint-config-standard-scss": "2.0.1",
+    "stylelint": "14.2.0",
+    "stylelint-config-standard-scss": "3.0.0",
     "stylelint-no-unsupported-browser-features": "5.0.2",
     "stylelint-order": "5.0.0",
-    "ts-jest": "27.0.7",
+    "ts-jest": "27.1.2",
     "ts-node": "10.4.0",
     "tslib": "2.3.1",
-    "typescript": "4.3.5"
+    "typescript": "4.5.4"
   },
   "engines": {
-    "node": ">=16.0.0 <17.0.0"
+    "node": ">=16.0.0 <17.4.0"
   },
   "browserslist": [
     "last 2 chrome versions",
@@ -131,16 +135,18 @@
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
       "ecmaVersion": 2020,
-      "project": "./tsconfig.json",
+      "project": [
+        "src/tsconfig.ce.json",
+        "src/tsconfig.ee.json",
+        "src/tsconfig.spec.json",
+        "cypress/tsconfig.e2e.json"
+      ],
       "sourceType": "module"
     },
     "extends": [
       "./node_modules/gts/",
       "plugin:compat/recommended"
     ],
-    "env": {
-      "browser": true
-    },
     "plugins": [
       "rxjs"
     ],
@@ -190,32 +196,6 @@
         15
       ]
     },
-    "overrides": [
-      {
-        "files": [
-          "cypress/**/*.ts"
-        ],
-        "parser": "@typescript-eslint/parser",
-        "parserOptions": {
-          "ecmaVersion": 2020,
-          "project": "./cypress/tsconfig.e2e.json",
-          "sourceType": "module"
-        },
-        "env": {
-          "browser": true,
-          "jest": true
-        }
-      },
-      {
-        "files": [
-          "src/**/*.spec.ts"
-        ],
-        "env": {
-          "browser": true,
-          "jest": true
-        }
-      }
-    ],
     "ignorePatterns": [
       "**/*.js"
     ]
@@ -223,7 +203,9 @@
   "eslintIgnore": [
     "dist/*",
     "node_modules/*",
-    "src/assets/*"
+    "src/environments/environment.e2e*.ts",
+    "src/environments/environment.prod*.ts",
+    "src/app/dynamic/module-registry.ce.ts"
   ],
   "lint-staged": {
     "src/**/*.ts": [

@@ -212,16 +212,16 @@ export class OpenstackProviderExtendedDefaultCredentialsComponent
     );
   }
 
-  private _hasTenant(): boolean {
+  private _hasProject(): boolean {
     return (
       !!this._clusterSpecService.cluster.spec.cloud.openstack &&
-      (!!this._clusterSpecService.cluster.spec.cloud.openstack.tenant ||
-        !!this._clusterSpecService.cluster.spec.cloud.openstack.tenantID)
+      (!!this._clusterSpecService.cluster.spec.cloud.openstack.project ||
+        !!this._clusterSpecService.cluster.spec.cloud.openstack.projectID)
     );
   }
 
   private _hasRequiredCredentials(): boolean {
-    return this._hasBasicCredentials() && this._hasTenant();
+    return this._hasBasicCredentials() && this._hasProject();
   }
 
   private _canLoadSubnet(): boolean {
@@ -234,8 +234,8 @@ export class OpenstackProviderExtendedDefaultCredentialsComponent
       .domain(this._clusterSpecService.cluster.spec.cloud.openstack.domain)
       .username(this._clusterSpecService.cluster.spec.cloud.openstack.username)
       .password(this._clusterSpecService.cluster.spec.cloud.openstack.password)
-      .tenant(this._clusterSpecService.cluster.spec.cloud.openstack.tenant)
-      .tenantID(this._clusterSpecService.cluster.spec.cloud.openstack.tenantID)
+      .project(this._clusterSpecService.cluster.spec.cloud.openstack.project)
+      .projectID(this._clusterSpecService.cluster.spec.cloud.openstack.projectID)
       .datacenter(this._clusterSpecService.cluster.spec.cloud.dc)
       .securityGroups(this._onSecurityGroupLoading.bind(this))
       .pipe(map(securityGroups => _.sortBy(securityGroups, sg => sg.name.toLowerCase())))
@@ -267,8 +267,8 @@ export class OpenstackProviderExtendedDefaultCredentialsComponent
       .username(this._clusterSpecService.cluster.spec.cloud.openstack.username)
       .password(this._clusterSpecService.cluster.spec.cloud.openstack.password)
       .datacenter(this._clusterSpecService.cluster.spec.cloud.dc)
-      .tenant(this._clusterSpecService.cluster.spec.cloud.openstack.tenant)
-      .tenantID(this._clusterSpecService.cluster.spec.cloud.openstack.tenantID)
+      .project(this._clusterSpecService.cluster.spec.cloud.openstack.project)
+      .projectID(this._clusterSpecService.cluster.spec.cloud.openstack.projectID)
       .networks(this._onNetworkLoading.bind(this))
       .pipe(map(networks => _.sortBy(networks, n => n.name.toLowerCase())))
       .pipe(
@@ -298,8 +298,8 @@ export class OpenstackProviderExtendedDefaultCredentialsComponent
       .domain(this._clusterSpecService.cluster.spec.cloud.openstack.domain)
       .username(this._clusterSpecService.cluster.spec.cloud.openstack.username)
       .password(this._clusterSpecService.cluster.spec.cloud.openstack.password)
-      .tenant(this._clusterSpecService.cluster.spec.cloud.openstack.tenant)
-      .tenantID(this._clusterSpecService.cluster.spec.cloud.openstack.tenantID)
+      .project(this._clusterSpecService.cluster.spec.cloud.openstack.project)
+      .projectID(this._clusterSpecService.cluster.spec.cloud.openstack.projectID)
       .datacenter(this._clusterSpecService.cluster.spec.cloud.dc)
       .subnets(this._clusterSpecService.cluster.spec.cloud.openstack.network, this._onSubnetIDLoading.bind(this))
       .pipe(map(subnetIDs => _.sortBy(subnetIDs, s => s.name.toLowerCase())))

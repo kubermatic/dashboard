@@ -15,8 +15,14 @@
 @use 'mixins';
 @use 'variables';
 
+:host {
+  align-items: flex-end;
+  display: flex;
+  flex: 1 1 auto;
+}
+
 footer {
-  @include mixins.size(100%, variables.$toolbar-height);
+  @include mixins.size(100%, variables.$footer-height);
 
   padding: 8px 28px 20px;
   z-index: 999;

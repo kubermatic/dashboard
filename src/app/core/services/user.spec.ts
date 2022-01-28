@@ -42,6 +42,7 @@ describe('Service: UserService', () => {
         {provide: Auth, useClass: AuthMockService},
         {provide: AppConfigService, useClass: AppConfigMockService},
       ],
+      teardown: {destroyAfterEach: false},
     });
     userService = TestBed.inject(UserService);
   });

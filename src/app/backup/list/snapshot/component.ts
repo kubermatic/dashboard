@@ -56,7 +56,7 @@ export class SnapshotListComponent implements OnInit, OnDestroy {
   }
 
   get columns(): string[] {
-    return ['status', 'name', 'cluster', 'created', 'actions'];
+    return ['status', 'name', 'cluster', 'destination', 'created', 'actions'];
   }
 
   get isEmpty(): boolean {

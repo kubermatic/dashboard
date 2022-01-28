@@ -114,4 +114,5 @@ export namespace Endpoint {
   export const GatekeeperConfig = '**/api/*/projects/*/clusters/*/gatekeeper/config';
   export const AdmissionPlugins = '**/api/**/admission/plugins/*';
   export const Versions = '**/providers/*/versions';
+  export const Changelog = '**/changelog.json';
 }

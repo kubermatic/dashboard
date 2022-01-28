@@ -44,8 +44,16 @@ describe('External Cluster Story', () => {
     ProjectsPage.selectProject(projectName);
   });
 
+  it('should open external clusters tab', () => {
+    ClustersPage.getExternalClustersTab().click();
+  });
+
   it('should open connect cluster dialog', () => {
     ClustersPage.getConnectClusterBtn().click();
+  });
+
+  it('should select any provider', () => {
+    ClustersPage.getExternalClusterAnyProviderBtn().click();
   });
 
   it('should enter name', () => {
@@ -53,15 +61,7 @@ describe('External Cluster Story', () => {
   });
 
   it('should enter kubeconfig', () => {
-    ClustersPage.getConnectClusterKubeconfigTextarea()
-      .click({force: true})
-      .then($element => {
-        const subString = Config.kubeconfig().substr(0, Config.kubeconfig().length - 1);
-        const lastChar = Config.kubeconfig().slice(-1);
-        $element.text(subString);
-        $element.val(subString);
-        cy.get($element).type(lastChar);
-      });
+    ClustersPage.getConnectClusterKubeconfigTextarea().click({force: true}).paste(Config.kubeconfig());
   });
 
   it('should connect cluster', () => {

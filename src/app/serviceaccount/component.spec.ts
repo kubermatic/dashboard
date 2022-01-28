@@ -22,12 +22,11 @@ import {ServiceAccountModule} from '@app/serviceaccount/module';
 import {DialogTestModule, NoopConfirmDialogComponent} from '@app/testing/components/noop-confirmation-dialog.component';
 import {fakeServiceAccounts, fakeServiceAccountTokens} from '@app/testing/fake-data/serviceaccount';
 import {RouterStub} from '@app/testing/router-stubs';
-import {asyncData} from '@app/testing/services/api-mock';
 import {AppConfigMockService} from '@app/testing/services/app-config-mock';
+import {asyncData} from '@app/testing/services/cluster-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';
 import {SettingsMockService} from '@app/testing/services/settings-mock';
 import {UserMockService} from '@app/testing/services/user-mock';
-import {ApiService} from '@core/services/api';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
@@ -36,6 +35,7 @@ import {SharedModule} from '@shared/module';
 import {of} from 'rxjs';
 import {AppConfigService} from '../config.service';
 import {ServiceAccountComponent} from './component';
+import {ServiceAccountService} from '@core/services/service-account';
 
 describe('ServiceAccountComponent', () => {
   let fixture: ComponentFixture<ServiceAccountComponent>;
@@ -45,20 +45,20 @@ describe('ServiceAccountComponent', () => {
 
   beforeEach(
     waitForAsync(() => {
-      const apiMock = {
-        getServiceAccounts: jest.fn(),
-        getServiceAccountTokens: jest.fn(),
-        deleteServiceAccount: jest.fn(),
+      const saMock = {
+        get: jest.fn(),
+        getTokens: jest.fn(),
+        delete: jest.fn(),
       };
-      apiMock.getServiceAccounts.mockReturnValue(asyncData(fakeServiceAccounts()));
-      apiMock.getServiceAccountTokens.mockReturnValue(asyncData(fakeServiceAccountTokens()));
-      deleteServiceAccountSpy = apiMock.deleteServiceAccount.mockReturnValue(of(null));
+      saMock.get.mockReturnValue(asyncData(fakeServiceAccounts()));
+      saMock.getTokens.mockReturnValue(asyncData(fakeServiceAccountTokens()));
+      deleteServiceAccountSpy = saMock.delete.mockReturnValue(of(null));
 
       TestBed.configureTestingModule({
         imports: [BrowserModule, BrowserAnimationsModule, SharedModule, ServiceAccountModule, DialogTestModule],
         providers: [
           {provide: Router, useClass: RouterStub},
-          {provide: ApiService, useValue: apiMock},
+          {provide: ServiceAccountService, useValue: saMock},
           {provide: ProjectService, useClass: ProjectMockService},
           {provide: UserService, useClass: UserMockService},
           {provide: AppConfigService, useClass: AppConfigMockService},
@@ -67,6 +67,7 @@ describe('ServiceAccountComponent', () => {
           GoogleAnalyticsService,
           NotificationService,
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );

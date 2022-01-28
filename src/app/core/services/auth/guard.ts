@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
+import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
 import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
@@ -21,6 +21,17 @@ import {from, Observable} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {UserService} from '../user';
 import {Auth} from './service';
+
+@Injectable()
+export class AdminGuard implements CanActivate {
+  constructor(private readonly _userService: UserService, private readonly _router: Router) {}
+
+  canActivate(_route: ActivatedRouteSnapshot, _state: RouterStateSnapshot): Observable<boolean | UrlTree> {
+    return this._userService.currentUser.pipe(
+      map(user => (user.isAdmin ? true : this._router.parseUrl(View.Projects)))
+    );
+  }
+}
 
 @Injectable()
 export class AuthGuard implements CanActivate {

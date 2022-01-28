@@ -16,39 +16,35 @@ import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {fakeMember} from '@app/testing/fake-data/member';
 import {fakeProject} from '@app/testing/fake-data/project';
-import {asyncData} from '@app/testing/services/api-mock';
 import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
 import {ProjectMockService} from '@app/testing/services/project-mock';
-import {ApiService} from '@core/services/api';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {SharedModule} from '@shared/module';
 import {Group} from '@shared/utils/member-utils/member-utils';
 import {AddMemberComponent} from './component';
+import {MemberService} from '@core/services/member';
+import {MemberServiceMock} from '@app/testing/services/member-mock';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
 describe('AddProjectComponent', () => {
   let fixture: ComponentFixture<AddMemberComponent>;
   let component: AddMemberComponent;
-  let createMembersSpy;
 
   beforeEach(
     waitForAsync(() => {
-      const apiMock = {createMembers: jest.fn()};
-      createMembersSpy = apiMock.createMembers.mockReturnValue(asyncData(fakeMember()));
-
       TestBed.configureTestingModule({
         imports: [...modules],
         declarations: [AddMemberComponent],
         providers: [
           {provide: MatDialogRef, useClass: MatDialogRefMock},
-          {provide: ApiService, useValue: apiMock},
           {provide: ProjectService, useClass: ProjectMockService},
+          {provide: MemberService, useClass: MemberServiceMock},
           NotificationService,
         ],
+        teardown: {destroyAfterEach: false},
       }).compileComponents();
     })
   );
@@ -86,6 +82,8 @@ describe('AddProjectComponent', () => {
   });
 
   it('should call addMember method', fakeAsync(() => {
+    const spy = jest.spyOn(fixture.debugElement.injector.get(MemberService) as any, 'add');
+
     component.project = fakeProject();
     component.addMemberForm.controls.email.patchValue('john@doe.com');
     component.addMemberForm.controls.group.patchValue('editors');
@@ -93,6 +91,6 @@ describe('AddProjectComponent', () => {
     tick();
     flush();
 
-    expect(createMembersSpy).toHaveBeenCalled();
+    expect(spy).toHaveBeenCalled();
   }));
 });

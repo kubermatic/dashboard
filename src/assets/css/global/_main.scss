@@ -131,23 +131,6 @@ hr {
   }
 }
 
-.km-card-expansion-panel {
-  font-size: variables.$font-size-subhead;
-  line-height: 48px;
-  margin: 0 60px;
-  padding: 8px 0;
-
-  & > div {
-    cursor: default;
-    margin-right: 48px;
-
-    & > span {
-      margin-right: 16px;
-      margin-top: 2px;
-    }
-  }
-}
-
 .km-table-with-frame {
   tr:last-child td:last-child {
     border-bottom-right-radius: variables.$border-radius;
@@ -355,11 +338,14 @@ hr {
 
     .mat-form-field-infix {
       padding: 9px 0;
-      width: 120px;
     }
 
     .mat-form-field-outline-start {
       border-radius: 0;
+    }
+
+    .mat-form-field-wrapper {
+      padding-bottom: 2px;
     }
   }
 
@@ -383,6 +369,37 @@ hr {
           display: none;
         }
       }
+    }
+  }
+}
+
+.cni-version {
+  &.disabled {
+    mat-form-field.mat-primary {
+      .mat-select-arrow-wrapper {
+        .mat-select-arrow {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+.km-number-stepper-input {
+  &.mat-form-field {
+    &:not(.message) {
+      .mat-form-field-wrapper {
+        padding-bottom: 0;
+      }
+    }
+
+    .mat-form-field-infix {
+      width: 100%;
+    }
+
+    .mat-form-field-outline-start,
+    .mat-form-field-outline-end {
+      border-radius: 0;
     }
   }
 }
@@ -436,10 +453,12 @@ km-dashboard {
 }
 
 .km-label-primary {
+  align-self: center;
   border-radius: variables.$border-radius;
   border-style: solid;
   border-width: 1px;
   font-size: variables.$font-size-body;
+  height: 22px;
   line-height: 12px;
   margin: 4px 0;
   max-width: 120px;
@@ -546,5 +565,42 @@ km-dashboard {
   .mat-form-field-wrapper {
     margin-bottom: 2px;
     padding: 0;
+  }
+}
+
+km-cni-version {
+  .mat-form-field {
+    .mat-form-field-flex {
+      height: 49px;
+    }
+
+    .mat-form-field-infix {
+      width: 120px;
+    }
+
+    .mat-form-field-outline-start {
+      border-radius: 0;
+    }
+  }
+
+  .enabled:hover {
+    * {
+      cursor: pointer;
+    }
+
+    .mat-form-field-outline-thick {
+      opacity: 100%;
+      transition: all 0.5s ease;
+    }
+  }
+
+  .disabled {
+    mat-form-field.mat-primary {
+      .mat-select-arrow-wrapper {
+        .mat-select-arrow {
+          display: none;
+        }
+      }
+    }
   }
 }

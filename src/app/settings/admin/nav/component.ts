@@ -33,7 +33,6 @@ export class AdminSidenavComponent implements OnInit, OnDestroy {
   customLinks: CustomLink[] = [];
   settings: UserSettings;
   currentUser: Member;
-  screenWidth = 0;
 
   private _unsubscribe = new Subject<void>();
 

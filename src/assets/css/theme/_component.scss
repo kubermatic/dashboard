@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@import 'src/app/cluster/cluster-details/constraints/theme';
-@import 'src/app/cluster/cluster-details/machine-deployment-details/cluster-panel/theme';
-@import 'src/app/cluster/cluster-details/version-picker/theme';
+@import 'src/app/cluster/details/cluster/cni-version/theme';
+@import 'src/app/cluster/details/cluster/constraints/theme';
+@import 'src/app/cluster/details/cluster/machine-deployment-details/cluster-panel/theme';
+@import 'src/app/cluster/details/shared/version-picker/theme';
 @import 'src/app/core/components/footer/theme';
 @import 'src/app/core/components/navigation/project/theme';
 @import 'src/app/core/components/navigation/theme';
@@ -28,12 +29,13 @@
 @import 'src/app/shared/components/addon-list/theme';
 @import 'src/app/shared/components/editor/theme';
 @import 'src/app/shared/components/property-usage/theme';
-@import 'src/app/wizard/step/cluster/theme';
+@import 'src/app/shared/components/number-stepper/theme';
 @import 'src/app/shared/components/eol/theme';
 @import 'src/app/shared/components/cluster-summary/theme';
 @import 'src/app/shared/components/chip/theme';
 @import 'src/app/shared/components/tab-card/theme';
-@import 'src/app/cluster/cluster-details/rbac/add-binding/theme';
+@import 'src/app/cluster/details/cluster/rbac/add-binding/theme';
+@import 'src/app/settings/admin/bucket-settings/destinations/theme';
 @import 'src/app/settings/admin/presets/theme';
 @import 'src/app/settings/admin/presets/edit-dialog/theme';
 @import 'src/app/settings/admin/nav/theme';
@@ -54,7 +56,6 @@
   @include theme-install-addon-dialog-component($colors);
   @include theme-sidenav-component($colors);
   @include theme-version-picker-component($colors);
-  @include theme-wizard-cluster-step-component($colors);
   @include theme-cluster-summary-component($colors);
   @include theme-eol-component($colors);
   @include theme-chip-component($colors);
@@ -66,4 +67,7 @@
   @include theme-admin-sidenav-component($colors);
   @include theme-wizard-openstack-provider-basic($colors);
   @include theme-constraints-component($colors);
+  @include theme-number-stepper-component($colors);
+  @include theme-admin-backup-destinations-component($colors);
+  @include theme-cni-version-component($colors);
 }

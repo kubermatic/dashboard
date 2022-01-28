@@ -16,14 +16,12 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column"
       fxLayoutGap="8px">
-  <mat-form-field fxFlex>
-    <mat-label>Disk Size</mat-label>
-    <input [formControlName]="Controls.DiskSize"
-           matInput
-           type="number"
-           autocomplete="off"
-           required>
-  </mat-form-field>
+  <km-number-stepper [formControlName]="Controls.DiskSize"
+                     mode="errors"
+                     label="Disk Size"
+                     min="1"
+                     required>
+  </km-number-stepper>
 
   <km-combobox #zonesCombobox
                [required]="true"

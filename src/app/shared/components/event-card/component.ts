@@ -14,7 +14,6 @@
 
 import {Component, Input} from '@angular/core';
 import {Event} from '@shared/entity/event';
-import {HealthStatusColor} from '@shared/utils/health-status/health-status';
 
 @Component({
   selector: 'km-event-card',
@@ -34,11 +33,11 @@ export class EventCardComponent {
     this.isShowEvents = !this.isShowEvents;
   }
 
-  getTypeIconForEvents(): string {
+  getTypeIcon(): string {
     if (this.events.filter(event => event.type === 'Warning').length > 0) {
-      return HealthStatusColor.Orange;
+      return 'km-icon-warning-event';
     } else if (this.events.filter(event => event.type === 'Normal').length > 0) {
-      return HealthStatusColor.Green;
+      return 'km-icon-running';
     }
     return '';
   }

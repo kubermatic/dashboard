@@ -1,0 +1,151 @@
+<!--
+Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<ng-container *ngIf="cluster">
+  <div fxLayout
+       class="km-cluster-detail-actions">
+    <div fxFlex
+         fxLayoutAlign="end center">
+      <button id="km-delete-cluster-btn"
+              mat-flat-button
+              color="tertiary"
+              fxLayoutAlign="center center"
+              kmThrottleClick
+              (throttleClick)="disconnect()"
+              [disabled]="!canDisconnect()">
+        <i class="km-icon-mask km-icon-disconnect"></i>
+        <span>Disconnect</span>
+      </button>
+      <div fxFlex></div>
+    </div>
+  </div>
+
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title fxFlex
+                      fxLayout="row"
+                      fxLayoutAlign=" center"
+                      class="km-cluster-name"
+                      fxLayoutGap="20px">
+        <i [matTooltip]="getStatus()"
+           [ngClass]="getStatusColor()"
+           class="km-cluster-health km-pointer"></i>
+        <span ngxClipboard
+              [cbContent]="cluster.name"
+              matTooltip="Click to copy"
+              class="km-cluster-name km-copy">{{cluster.name}}</span>
+        <span class="km-label-primary">External</span>
+      </mat-card-title>
+      <div fxFlex></div>
+    </mat-card-header>
+
+    <mat-card-content class="km-row">
+      <div class="km-content-wrap">
+        <km-version-picker [cluster]="cluster"
+                           [isClusterRunning]="isRunning()"
+                           [upgrades]="canEdit() ? upgrades : []"
+                           [hasUpgradeOptions]="hasUpgrades()"
+                           [isClusterExternal]="true"
+                           *ngIf="cluster?.spec?.version"></km-version-picker>
+        <km-property>
+          <div key>Cluster ID</div>
+          <div value
+               ngxClipboard
+               [cbContent]="cluster?.id"
+               matTooltip="Click to copy"
+               class="km-copy">
+            {{cluster?.id}}
+          </div>
+        </km-property>
+        <km-property *ngIf="provider !== Provider.Custom">
+          <div value>
+            <span class="km-provider-logo km-provider-logo-{{provider}}"></span>
+          </div>
+        </km-property>
+        <km-property *ngIf="provider === Provider.AKS">
+          <div key>Resource Group</div>
+          <div value>{{cluster?.cloud?.aks?.resourceGroup}}</div>
+        </km-property>
+        <km-property *ngIf="provider === Provider.EKS">
+          <div key>Region</div>
+          <div value>{{cluster?.cloud?.eks?.region}}</div>
+        </km-property>
+        <km-property *ngIf="provider === Provider.GKE">
+          <div key>Zone</div>
+          <div value>{{cluster?.cloud?.gke?.zone}}</div>
+        </km-property>
+        <km-property>
+          <div key>Created</div>
+          <div value>
+            <km-relative-time [date]="cluster.creationTimestamp"></km-relative-time>
+          </div>
+        </km-property>
+        <km-property *ngIf="cluster.labels">
+          <div key>Labels</div>
+          <div value>
+            <km-labels [labels]="cluster.labels"></km-labels>
+          </div>
+        </km-property>
+      </div>
+
+      <div class="km-content-wrap"
+           *ngIf="clusterMetrics">
+        <km-property-usage name="Nodes CPU Usage"
+                           unit="millicores"
+                           [used]="clusterMetrics?.nodes?.cpuTotalMillicores"
+                           [total]="clusterMetrics?.nodes?.cpuAvailableMillicores"
+                           *ngIf="clusterMetrics?.nodes?.cpuTotalMillicores"></km-property-usage>
+
+        <km-property-usage name="Nodes Memory Usage"
+                           unit="MiB"
+                           [used]="clusterMetrics?.nodes?.memoryTotalBytes"
+                           [total]="clusterMetrics?.nodes?.memoryAvailableBytes"
+                           *ngIf="clusterMetrics?.nodes?.memoryTotalBytes"></km-property-usage>
+
+        <km-property-usage name="Control Plane CPU Usage"
+                           unit="millicores"
+                           [used]="clusterMetrics?.controlPlane?.cpuTotalMillicores"
+                           *ngIf="clusterMetrics?.controlPlane?.cpuTotalMillicores"></km-property-usage>
+
+        <km-property-usage name="Control Plane Memory Usage"
+                           unit="MiB"
+                           [used]="clusterMetrics?.controlPlane?.memoryTotalBytes"
+                           *ngIf="clusterMetrics?.controlPlane?.memoryTotalBytes"></km-property-usage>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <km-external-machine-deployment-list *ngIf="provider !== Provider.Custom"
+                                       [cluster]="cluster"
+                                       [machineDeployments]="machineDeployments"
+                                       [projectID]="projectID"
+                                       [isClusterRunning]="isRunning()"
+                                       [isInitialized]="areMachineDeploymentsInitialized"></km-external-machine-deployment-list>
+
+  <km-external-node-list *ngIf="provider === Provider.Custom"
+                         [cluster]="cluster"
+                         [nodes]="nodes"
+                         [nodesMetrics]="nodesMetrics"
+                         [projectID]="projectID"
+                         [isClusterRunning]="isRunning()"
+                         [isInitialized]="areNodesInitialized"></km-external-node-list>
+
+  <km-event-card [events]="events"></km-event-card>
+</ng-container>
+
+<mat-spinner [diameter]="25"
+             *ngIf="!cluster"
+             color="accent"
+             class="km-spinner"></mat-spinner>

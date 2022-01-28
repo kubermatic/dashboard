@@ -1,0 +1,96 @@
+<!--
+Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<form [formGroup]="form"
+      fxLayout="column"
+      fxLayoutGap="8px">
+  <mat-form-field fxFlex>
+    <mat-label>Access Key ID</mat-label>
+    <input matInput
+           [formControlName]="Control.AccessKeyID"
+           [name]="Control.AccessKeyID"
+           type="password"
+           autocomplete="off"
+           required>
+    <mat-hint>AWS Access Key with write access is required. You can create one&nbsp;<a target="_blank"
+         rel="noopener"
+         href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">here</a>.
+    </mat-hint>
+    <mat-error *ngIf="form.get(Control.AccessKeyID).hasError('required')">
+      Access key ID is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>Secret Access Key</mat-label>
+    <input matInput
+           [formControlName]="Control.SecretAccessKey"
+           [name]="Control.SecretAccessKey"
+           type="password"
+           autocomplete="off"
+           required>
+    <mat-hint>
+      AWS Secret Access Key with write access is required. You can create one&nbsp;<a target="_blank"
+         rel="noopener"
+         href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">here</a>.
+    </mat-hint>
+    <mat-error *ngIf="form.get(Control.SecretAccessKey).hasError('required')">
+      Secret Access Key is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-checkbox [formControlName]="Control.UseAssumeRole">Enable Assume Role</mat-checkbox>
+
+  <ng-container *ngIf="isAssumeRoleEnabled">
+    <mat-form-field fxFlex>
+      <mat-label>AssumeRole ARN</mat-label>
+      <input matInput
+             [formControlName]="Control.AssumeRoleARN"
+             [name]="Control.AssumeRoleARN"
+             type="password"
+             autocomplete="off"
+             required>
+      <mat-hint>
+        Specify to use an assumed role to run the user cluster.
+        More information can be found&nbsp;<a target="_blank"
+           rel="noopener"
+           href="https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html">here</a>.
+      </mat-hint>
+      <mat-error *ngIf="form.get(Control.AssumeRoleARN).hasError('required')">
+        AssumeRole ARN is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field fxFlex>
+      <mat-label>AssumeRole External ID</mat-label>
+      <input matInput
+             [formControlName]="Control.AssumeRoleExternalID"
+             [name]="Control.AssumeRoleExternalID"
+             type="password"
+             autocomplete="off"
+             required>
+      <mat-hint>
+        Specify to use an external ID in combination with the assumed role.
+        More information can be found&nbsp;<a target="_blank"
+           rel="noopener"
+           href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user_externalid.html">here</a>.
+      </mat-hint>
+      <mat-error *ngIf="form.get(Control.AssumeRoleExternalID).hasError('required')">
+        AssumeRole External ID is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+  </ng-container>
+</form>

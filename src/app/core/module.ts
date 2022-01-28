@@ -19,8 +19,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
 import {ChangelogDialog} from '@core/components/changelog/dialog';
 import {HelpPanelComponent} from '@core/components/help-panel/component';
-import {ApiService} from '@core/services/api';
-import {AuthGuard, AuthzGuard} from '@core/services/auth/guard';
+import {AdminGuard, AuthGuard, AuthzGuard} from '@core/services/auth/guard';
 import {Auth} from '@core/services/auth/service';
 import {BackupService} from '@core/services/backup';
 import {ChangelogManagerService} from '@core/services/changelog-manager';
@@ -49,8 +48,8 @@ import {SharedModule} from '@shared/module';
 import {COOKIE, COOKIE_DI_TOKEN} from '../config';
 import {AddMemberComponent} from '../member/add-member/component';
 import {EditMemberComponent} from '../member/edit-member/component';
-import {AddServiceAccountComponent} from '../serviceaccount/add-serviceaccount/component';
-import {EditServiceAccountComponent} from '../serviceaccount/edit-serviceaccount/component';
+import {CreateServiceAccountDialogComponent} from '../serviceaccount/create-dialog/component';
+import {EditServiceAccountDialogComponent} from '../serviceaccount/edit-dialog/component';
 import {FooterComponent} from './components/footer/component';
 import {NavigationComponent} from './components/navigation/component';
 import {ProjectSelectorComponent} from './components/navigation/project/component';
@@ -59,6 +58,20 @@ import {SidenavComponent} from './components/sidenav/component';
 import {UserPanelComponent} from './components/user-panel/component';
 import {AuthInterceptor, CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor} from './interceptors';
 import {ClusterTemplateService} from '@core/services/cluster-templates';
+import {ServiceAccountService} from '@core/services/service-account';
+import {MachineDeploymentService} from '@core/services/machine-deployment';
+import {AlibabaService} from '@core/services/provider/alibaba';
+import {AnexiaService} from '@core/services/provider/anexia';
+import {AWSService} from '@core/services/provider/aws';
+import {AzureService} from '@core/services/provider/azure';
+import {DigitalOceanService} from '@core/services/provider/digitalocean';
+import {EquinixService} from '@core/services/provider/equinix';
+import {GCPService} from '@core/services/provider/gcp';
+import {HetznerService} from '@core/services/provider/hetzner';
+import {OpenStackService} from '@core/services/provider/openstack';
+import {AddonService} from '@core/services/addon';
+import {MemberService} from '@core/services/member';
+import {SSHKeyService} from '@core/services/ssh-key';
 
 const modules: any[] = [
   CommonModule,
@@ -75,8 +88,8 @@ const components: any[] = [
   NavigationComponent,
   AddMemberComponent,
   EditMemberComponent,
-  AddServiceAccountComponent,
-  EditServiceAccountComponent,
+  CreateServiceAccountDialogComponent,
+  EditServiceAccountDialogComponent,
   FooterComponent,
   NotificationPanelComponent,
   UserPanelComponent,
@@ -88,10 +101,10 @@ const services: any[] = [
   Auth,
   AuthGuard,
   AuthzGuard,
+  AdminGuard,
   DatacenterService,
   StepsService,
   NameGeneratorService,
-  ApiService,
   ClusterService,
   ParamsService,
   LabelService,
@@ -113,6 +126,20 @@ const services: any[] = [
   BackupService,
   MeteringService,
   BackupService,
+  ServiceAccountService,
+  MachineDeploymentService,
+  AlibabaService,
+  AnexiaService,
+  AWSService,
+  AzureService,
+  DigitalOceanService,
+  EquinixService,
+  GCPService,
+  HetznerService,
+  OpenStackService,
+  AddonService,
+  MemberService,
+  SSHKeyService,
 ];
 
 const interceptors: any[] = [

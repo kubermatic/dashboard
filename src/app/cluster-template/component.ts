@@ -34,7 +34,7 @@ import {ClusterTemplateService} from '@core/services/cluster-templates';
 import {ClusterTemplate, ClusterTemplateScope} from '@shared/entity/cluster-template';
 import {Datacenter} from '@shared/entity/datacenter';
 import {DatacenterService} from '@core/services/datacenter';
-import {CloudSpec, Cluster} from '@shared/entity/cluster';
+import {Cluster} from '@shared/entity/cluster';
 import {ClusterFromTemplateDialogComponent} from '@shared/components/cluster-from-template/component';
 
 @Component({
@@ -148,8 +148,8 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
     return !this.isEmpty() && this.paginator && this.templates.length > this.paginator.pageSize;
   }
 
-  getProvider(cloud: CloudSpec): string {
-    return Cluster.getProvider(cloud);
+  getProvider(cluster: Cluster): string {
+    return Cluster.getProvider(cluster);
   }
 
   canCreate(): boolean {
@@ -183,11 +183,9 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
 
   delete(template: ClusterTemplate): void {
     const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
       data: {
         title: 'Delete Cluster Template',
-        message: `Delete ${template.name} cluster template?`,
+        message: `Delete <b>${template.name}</b> cluster template permanently? All clusters created using this template will persist.`,
         confirmLabel: 'Delete',
       },
     };
@@ -200,7 +198,7 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(take(1))
       .subscribe(() => {
         this._refresh.next();
-        this._notificationService.success(`The ${template.name} cluster template was removed`);
+        this._notificationService.success(`Deleting the ${template.name} cluster template`);
       });
   }
 

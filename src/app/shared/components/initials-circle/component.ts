@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {ProjectOwners} from '../../entity/project';
+import {ProjectOwner} from '../../entity/project';
 
 @Component({
   selector: 'km-initials-circle',
@@ -21,7 +21,7 @@ import {ProjectOwners} from '../../entity/project';
   styleUrls: ['./style.scss'],
 })
 export class InitialsCircleComponent implements OnInit, OnChanges {
-  @Input() owners: ProjectOwners[];
+  @Input() owners: ProjectOwner[];
   @Input() limit: number;
 
   shortNames: string[] = [];

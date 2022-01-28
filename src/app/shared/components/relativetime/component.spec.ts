@@ -36,6 +36,7 @@ describe('RelativeTimeComponent', () => {
         {provide: MatDialogRef, useClass: MatDialogRefMock},
         {provide: MAT_DIALOG_DATA, useValue: {}},
       ],
+      teardown: {destroyAfterEach: false},
     }).compileComponents();
   });
 

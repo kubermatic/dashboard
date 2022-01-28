@@ -33,18 +33,19 @@ limitations under the License.
   <mat-divider></mat-divider>
   <mat-card-content fxLayout="row wrap"
                     fxLayoutGap="20px grid">
-    <div *ngIf="!!user"
+    <div *ngIf="user"
          fxLayout="row"
          fxFlex="50"
          fxLayoutGap="30px">
       <div class="km-icon-mask km-user"></div>
-      <div>
+      <div fxLayout="column"
+           fxLayoutGap="10px">
         <div class="user-name">{{user.name}}</div>
         <div class="user-email">{{user.email}}</div>
       </div>
     </div>
 
-    <div *ngIf="!!settings"
+    <div *ngIf="settings"
          class="km-account-settings"
          fxFlex="50"
          fxLayout="column">
@@ -52,7 +53,8 @@ limitations under the License.
 
       <div fxLayout="row">
         <div class="entry-label"
-             fxLayoutAlign=" center">Items per page</div>
+             fxLayoutAlign=" center">Items per page
+        </div>
         <mat-form-field class="input sm">
           <mat-select disableOptionCentering
                       id="km-items-per-page-select"
@@ -85,7 +87,8 @@ limitations under the License.
                       (selectionChange)="onSettingsChange()"
                       [placeholder]="hasDefaultProject()">
             <mat-option value=""
-                        class="km-text-muted">None</mat-option>
+                        class="km-text-muted">None
+            </mat-option>
             <mat-option *ngFor="let project of projects"
                         [value]="project.id">
               {{project.name}}

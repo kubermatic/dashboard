@@ -57,7 +57,7 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
   }
 
   get columns(): string[] {
-    return ['status', 'name', 'cluster', 'schedule', 'keep', 'created', 'actions'];
+    return ['status', 'name', 'cluster', 'destination', 'schedule', 'keep', 'created', 'actions'];
   }
 
   get isEmpty(): boolean {
@@ -140,7 +140,7 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
     const config: MatDialogConfig = {
       data: {
         title: 'Delete Automatic Backup',
-        message: `Delete "${backup.name}" automatic backup permanently?`,
+        message: `Delete <b>${backup.name}</b> automatic backup of <b>${this._selectedProject.name}</b> project and all its associated backups permanently?`,
         confirmLabel: 'Delete',
       } as ConfirmationDialogConfig,
     };
@@ -152,8 +152,8 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .pipe(switchMap(_ => this._backupService.delete(this._selectedProject.id, backup.spec.clusterId, backup.id)))
       .subscribe(_ => {
-        this._notificationService.success(`Successfully deleted automatic backup ${backup.name}`);
         this._backupService.refreshAutomaticBackups();
+        this._notificationService.success(`Deleted the ${backup.name} automatic backup`);
       });
   }
 

@@ -42,6 +42,48 @@ limitations under the License.
                required>
         <mat-hint>The name of the created automatic backup.</mat-hint>
       </mat-form-field>
+
+      <ng-container *ngIf="hasClusterInput()">
+        <div fxLayout="row"
+             fxLayoutGap="8px">
+          <km-property margin="none"
+                       class="property-label"
+                       fxFlex="25">
+            <div key
+                 class="property-key">Seed
+            </div>
+            <div value>{{seed}}</div>
+          </km-property>
+
+          <mat-form-field *ngIf="destinations.length > 0"
+                          fxFlex="75">
+            <mat-label>Destination</mat-label>
+            <mat-select [formControlName]="Controls.Destination"
+                        disableOptionCentering
+                        required>
+              <mat-option *ngFor="let destination of destinations"
+                          [value]="destination">{{destination}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <km-property margin="none"
+                       *ngIf="destinations.length === 0"
+                       class="no-destinations"
+                       fxFlex="75">
+            <div key
+                 class="property-key">Destination *
+            </div>
+            <div value>
+              <a class="km-pointer"
+                 *ngIf="isAdmin"
+                 (click)="goToBackupDestinations()">Configure a destination for this seed</a>
+              <span *ngIf="!isAdmin">Contact your Administrator to configure a destination</span>
+            </div>
+          </km-property>
+
+        </div>
+      </ng-container>
+
     </form>
   </mat-dialog-content>
 
@@ -50,7 +92,8 @@ limitations under the License.
             kmThrottleClick
             (throttleClick)="save()"
             [disabled]="form.invalid">
-      Add Snapshot
+      <i class="km-icon-mask km-icon-add"></i>
+      <span>Add Snapshot</span>
     </button>
   </mat-dialog-actions>
 </div>

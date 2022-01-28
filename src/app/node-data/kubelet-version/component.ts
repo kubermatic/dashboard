@@ -18,11 +18,11 @@ import {ClusterService} from '@core/services/cluster';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {NodeDataService} from '@core/services/node-data/service';
-import {Cluster, ClusterType, MasterVersion} from '@shared/entity/cluster';
+import {MasterVersion} from '@shared/entity/cluster';
 import {NodeSpec} from '@shared/entity/node';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {take, switchMap, takeUntil} from 'rxjs/operators';
+import {switchMap, take, takeUntil} from 'rxjs/operators';
 
 enum Controls {
   Kubelet = 'kubelet',
@@ -45,17 +45,11 @@ enum Controls {
   ],
 })
 export class KubeletVersionNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  private _clusterType: ClusterType;
-
   readonly Controls = Controls;
 
   @Input() selected: string;
 
   versions: string[] = [];
-
-  get versionHeadline(): string {
-    return Cluster.getVersionHeadline(this._clusterType, true);
-  }
 
   constructor(
     private readonly _clusterSpecService: ClusterSpecService,
@@ -68,7 +62,6 @@ export class KubeletVersionNodeDataComponent extends BaseFormValidator implement
   }
 
   ngOnInit(): void {
-    this._clusterType = this._clusterSpecService.clusterType;
     this.selected = this._nodeDataService.nodeData.spec.versions.kubelet;
 
     this.form = this._builder.group({
@@ -77,14 +70,7 @@ export class KubeletVersionNodeDataComponent extends BaseFormValidator implement
 
     this._datacenterService
       .getDatacenter(this._clusterSpecService.cluster.spec.cloud.dc)
-      .pipe(
-        switchMap(_ =>
-          this._clusterService.nodeUpgrades(
-            this._clusterSpecService.cluster.spec.version,
-            this._clusterSpecService.clusterType
-          )
-        )
-      )
+      .pipe(switchMap(_ => this._clusterService.nodeUpgrades(this._clusterSpecService.cluster.spec.version)))
       .pipe(take(1))
       .subscribe(this._setDefaultVersion.bind(this));
 

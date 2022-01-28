@@ -164,19 +164,14 @@ limitations under the License.
                fxLayoutAlign=" center"
                class="entry-label">Machine Deployment
           </div>
-          <mat-form-field class="input km-no-padding">
-            <mat-label>Initial Replicas</mat-label>
-            <input matInput
-                   required
-                   type="number"
-                   min="0"
-                   max="50"
-                   autocomplete="off"
-                   id="km-initial-replicas-setting"
-                   [(ngModel)]="settings.defaultNodeCount"
-                   (keyup)="onSettingsChange()"
-                   (change)="onSettingsChange()">
-          </mat-form-field>
+          <km-number-stepper [(ngModel)]="settings.defaultNodeCount"
+                             (ngModelChange)="onSettingsChange()"
+                             id="km-initial-replicas-setting"
+                             label="Initial Replicas"
+                             min="0"
+                             max="50"
+                             required>
+          </km-number-stepper>
           <km-spinner-with-confirmation [isSaved]="isEqual(settings.defaultNodeCount, apiSettings.defaultNodeCount)"></km-spinner-with-confirmation>
         </div>
 
@@ -215,19 +210,15 @@ limitations under the License.
                         [(ngModel)]="settings.restrictProjectCreation"
                         (change)="onSettingsChange()">Restrict Project Creation to Administrators
           </mat-checkbox>
-          <mat-form-field class="input km-no-padding">
-            <mat-label>User Projects Limit</mat-label>
-            <input matInput
-                   required
-                   type="number"
-                   min="0"
-                   autocomplete="off"
-                   id="km-project-limit-setting"
-                   [disabled]="settings.restrictProjectCreation"
-                   [(ngModel)]="settings.userProjectsLimit"
-                   (change)="onSettingsChange()">
-          </mat-form-field>
-          <km-spinner-with-confirmation [isSaved]="isEqual(settings.userProjectsLimit, apiSettings.userProjectsLimit)"></km-spinner-with-confirmation>
+          <km-number-stepper [disabled]="settings.restrictProjectCreation"
+                             [(ngModel)]="settings.userProjectsLimit"
+                             (ngModelChange)="onSettingsChange()"
+                             id="km-project-limit-setting"
+                             label="User Projects Limit"
+                             min="0"
+                             required>
+          </km-number-stepper>
+          <km-spinner-with-confirmation [isSaved]="isEqual(settings.userProjectsLimit, apiSettings.userProjectsLimit) && isEqual(settings.restrictProjectCreation, apiSettings.restrictProjectCreation)"></km-spinner-with-confirmation>
         </div>
 
         <div fxLayout="row">
@@ -239,58 +230,45 @@ limitations under the License.
                  matTooltip="Filters out machine sizes that do not meet specified conditions"></div>
           </div>
 
-          <mat-form-field class="input km-no-padding">
-            <mat-label>Min CPU</mat-label>
-            <input matInput
-                   required
-                   type="number"
-                   min="0"
-                   autocomplete="off"
-                   id="km-cpu-resource-quota-setting"
-                   [(ngModel)]="settings.machineDeploymentVMResourceQuota.minCPU"
-                   (change)="onSettingsChange()">
-          </mat-form-field>
+          <div fxLayout="row wrap"
+               fxLayoutGap="16px">
+            <km-number-stepper [(ngModel)]="settings.machineDeploymentVMResourceQuota.minCPU"
+                               (ngModelChange)="onSettingsChange()"
+                               id="km-cpu-resource-quota-setting"
+                               label="Min CPU"
+                               min="0"
+                               required>
+            </km-number-stepper>
 
-          <mat-form-field class="input km-no-padding">
-            <mat-label>Max CPU</mat-label>
-            <input matInput
-                   required
-                   type="number"
-                   min="0"
-                   autocomplete="off"
-                   [(ngModel)]="settings.machineDeploymentVMResourceQuota.maxCPU"
-                   (change)="onSettingsChange()">
-          </mat-form-field>
+            <km-number-stepper [(ngModel)]="settings.machineDeploymentVMResourceQuota.maxCPU"
+                               (ngModelChange)="onSettingsChange()"
+                               label="Max CPU"
+                               min="0"
+                               required>
+            </km-number-stepper>
 
-          <mat-form-field class="input km-no-padding">
-            <mat-label>Min RAM</mat-label>
-            <input matInput
-                   required
-                   type="number"
-                   min="0"
-                   autocomplete="off"
-                   id="km-ram-resource-quota-setting"
-                   [(ngModel)]="settings.machineDeploymentVMResourceQuota.minRAM"
-                   (change)="onSettingsChange()">
-          </mat-form-field>
+            <km-number-stepper [(ngModel)]="settings.machineDeploymentVMResourceQuota.minRAM"
+                               (ngModelChange)="onSettingsChange()"
+                               id="km-ram-resource-quota-setting"
+                               label="Min RAM"
+                               min="0"
+                               required>
+            </km-number-stepper>
 
-          <mat-form-field class="input km-no-padding">
-            <mat-label>Max RAM</mat-label>
-            <input matInput
-                   required
-                   type="number"
-                   min="0"
-                   autocomplete="off"
-                   [(ngModel)]="settings.machineDeploymentVMResourceQuota.maxRAM"
-                   (change)="onSettingsChange()">
-          </mat-form-field>
+            <km-number-stepper [(ngModel)]="settings.machineDeploymentVMResourceQuota.maxRAM"
+                               (ngModelChange)="onSettingsChange()"
+                               label="Max RAM"
+                               min="0"
+                               required>
+            </km-number-stepper>
 
-          <mat-checkbox fxLayoutAlign=" center"
-                        [(ngModel)]="settings.machineDeploymentVMResourceQuota.enableGPU"
-                        (change)="onSettingsChange()">Enable GPU
-          </mat-checkbox>
+            <mat-checkbox fxLayoutAlign=" center"
+                          [(ngModel)]="settings.machineDeploymentVMResourceQuota.enableGPU"
+                          (change)="onSettingsChange()">Enable GPU
+            </mat-checkbox>
 
-          <km-spinner-with-confirmation [isSaved]="isEqual(settings.machineDeploymentVMResourceQuota, apiSettings.machineDeploymentVMResourceQuota)"></km-spinner-with-confirmation>
+            <km-spinner-with-confirmation [isSaved]="isEqual(settings.machineDeploymentVMResourceQuota, apiSettings.machineDeploymentVMResourceQuota)"></km-spinner-with-confirmation>
+          </div>
         </div>
 
       </div>

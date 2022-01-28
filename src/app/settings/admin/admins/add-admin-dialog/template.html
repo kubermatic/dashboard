@@ -20,8 +20,9 @@ limitations under the License.
         (submit)="add()"
         id="add-admin-form">
     <mat-form-field fxFlex>
-      <mat-label>Email*</mat-label>
+      <mat-label>Email</mat-label>
       <input matInput
+             required
              formControlName="email"
              id="km-add-admin-dialog-email-input"
              type="text"
@@ -41,7 +42,7 @@ limitations under the License.
           form="add-admin-form"
           id="km-add-admin-dialog-save-btn"
           [disabled]="!form.valid">
-    <i class="km-icon-mask km-icon-save"></i>
-    <span>Save Admin</span>
+    <i class="km-icon-mask km-icon-add"></i>
+    <span>Add Administrator</span>
   </button>
 </mat-dialog-actions>
