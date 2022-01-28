@@ -24,7 +24,7 @@ export default async (on, config) => {
 
   if (isAPIMocked) {
     // TODO: Remove it after configuring mocks.
-    ignored = [];
+    ignored = ['**/integration/stories/opa.spec.ts'];
   } else {
     // TODO: Remove it after fixing flaky tests.
     ignored = [
