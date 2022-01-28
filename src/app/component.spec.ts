@@ -43,8 +43,6 @@ const modules: any[] = [
   CoreModule,
 ];
 
-const components: any[] = [KubermaticComponent];
-
 describe('KubermaticComponent', () => {
   let fixture: ComponentFixture<KubermaticComponent>;
   let component: KubermaticComponent;
@@ -53,7 +51,7 @@ describe('KubermaticComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [...modules],
-      declarations: [...components],
+      declarations: [KubermaticComponent],
       providers: [
         {provide: Auth, useClass: AuthMockService},
         {provide: ProjectService, useClass: ProjectMockService},

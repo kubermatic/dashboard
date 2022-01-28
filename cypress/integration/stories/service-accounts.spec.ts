@@ -45,11 +45,11 @@ describe('Service Accounts Story', () => {
     ProjectsPage.selectProject(projectName);
   });
 
-  it('should go to the services accounts page', () => {
+  it('should go to the service accounts page', () => {
     ServiceAccountsPage.visit();
   });
 
-  it('should create new services account', () => {
+  it('should create new service account', () => {
     ServiceAccountsPage.addServiceAccount(serviceAccountName, Group.Editor);
   });
 
@@ -69,7 +69,7 @@ describe('Service Accounts Story', () => {
     ServiceAccountsPage.deleteServiceAccount(serviceAccountName);
   });
 
-  it('should verify that there are no services accounts', () => {
+  it('should verify that there are no service accounts', () => {
     ServiceAccountsPage.verifyNoServiceAccounts();
   });
 

@@ -16,23 +16,23 @@ dex:
   replicas: 1
   ingress:
     scheme: http
-    # this the the services name inside the kind cluster, so that the Kubermatic pods can find Dex to validate our token
+    # this the the service name inside the kind cluster, so that the Kubermatic pods can find Dex to validate our token
     host: dex.oauth:5556
     path: "/dex"
     class: non-existent
   clients:
-  - id: kubermatic
-    name: Kubermatic
-    secret: BDZleMTgqON5kiJybIBZM4Si
-    RedirectURIs:
-    - http://localhost:8000
-    - http://localhost:8000/projects
+    - id: kubermatic
+      name: Kubermatic
+      secret: BDZleMTgqON5kiJybIBZM4Si
+      RedirectURIs:
+        - http://localhost:8000
+        - http://localhost:8000/projects
   staticPasswords:
-  - email: "roxy@kubermatic.com"
-    hash: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"
-    username: "roxy"
-    userID: "08a8684b-db88-4b73-90a9-3cd1661f5466"
-  - email: "roxy2@kubermatic.com"
-    hash: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"
-    username: "roxy2"
-    userID: "08a8684b-db88-4b73-90a9-3cd1661f5467"
+    - email: "roxy@kubermatic.com"
+      hash: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"
+      username: "roxy"
+      userID: "08a8684b-db88-4b73-90a9-3cd1661f5466"
+    - email: "roxy2@kubermatic.com"
+      hash: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"
+      username: "roxy2"
+      userID: "08a8684b-db88-4b73-90a9-3cd1661f5467"

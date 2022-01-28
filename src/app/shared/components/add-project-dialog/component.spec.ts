@@ -56,7 +56,7 @@ describe('AddProjectDialogComponent', () => {
   );
 
   it(
-    'should create the add project components',
+    'should create the component',
     waitForAsync(() => {
       expect(component).toBeTruthy();
     })

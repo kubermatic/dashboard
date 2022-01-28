@@ -81,7 +81,7 @@ describe('ServiceAccountComponent', () => {
     fixture.debugElement.injector.get(Router);
   });
 
-  it('should create services accounts cmp', () => {
+  it('should create service accounts cmp', () => {
     expect(component).toBeTruthy();
   });
 
@@ -89,7 +89,7 @@ describe('ServiceAccountComponent', () => {
     expect(component.getGroupDisplayName('editors')).toBe('Editor');
   });
 
-  it('should open delete services account confirmation dialog & call deleteServiceAccount()', fakeAsync(() => {
+  it('should open delete service account confirmation dialog & call deleteServiceAccount()', fakeAsync(() => {
     const waitTime = 15000;
     const event = new MouseEvent('click');
     component.deleteServiceAccount(fakeServiceAccounts()[0], event);
