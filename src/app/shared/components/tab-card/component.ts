@@ -50,7 +50,7 @@ export class TabCardComponent implements AfterContentInit, OnDestroy {
   constructor(private readonly _cdr: ChangeDetectorRef) {}
 
   ngAfterContentInit(): void {
-    // Watch for tab changes and update the component.
+    // Watch for tab changes and update the components.
     this.inputTabs.changes.pipe(startWith(true)).pipe(takeUntil(this._unsubscribe)).subscribe(this._init.bind(this));
   }
 

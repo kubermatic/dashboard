@@ -14,7 +14,7 @@
 
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
-import {fakeMembers} from '@app/testing/fake-data/member';
+import {fakeMembers} from '../data/member';
 import {Member, MemberModel} from '@shared/entity/member';
 
 @Injectable()

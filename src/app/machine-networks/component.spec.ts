@@ -17,8 +17,8 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {FormArray} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {fakeClusterWithMachineNetwork} from '@app/testing/fake-data/cluster-with-machine-networks';
-import {RouterTestingModule} from '@app/testing/router-stubs';
+import {fakeClusterWithMachineNetwork} from '../../test/data/cluster-with-machine-networks';
+import {RouterTestingModule} from '../../test/services/router-stubs';
 import {WizardService} from '@core/services/wizard/wizard';
 import {SharedModule} from '@shared/module';
 import {MachineNetworksComponent} from './component';
@@ -48,7 +48,7 @@ describe('MachineNetworksComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create the machine network component', () => {
+  it('should create the machine network components', () => {
     expect(component).toBeTruthy();
   });
 

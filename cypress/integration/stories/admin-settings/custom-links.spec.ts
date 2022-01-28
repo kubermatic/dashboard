@@ -49,7 +49,7 @@ describe('Admin Settings - Custom Links Story', () => {
     AdminSettings.InterfacePage.getApiDocsCheckbox().find('input').should(Condition.BeChecked);
   });
 
-  it('should make sure that terms of service display is enabled', () => {
+  it('should make sure that terms of services display is enabled', () => {
     AdminSettings.InterfacePage.getTermsOfServiceCheckbox().click();
     AdminSettings.waitForSave();
     AdminSettings.InterfacePage.getTermsOfServiceCheckbox().find('input').should(Condition.BeChecked);
@@ -70,7 +70,7 @@ describe('Admin Settings - Custom Links Story', () => {
     HelpPanel.getAPIDocsBtn().should(Condition.Exist);
   });
 
-  it('should check if footer contains terms of service', () => {
+  it('should check if footer contains terms of services', () => {
     AdminSettings.getFooter().should(Condition.Contain, termsOfService);
   });
 
@@ -89,7 +89,7 @@ describe('Admin Settings - Custom Links Story', () => {
     AdminSettings.InterfacePage.getApiDocsCheckbox().find('input').should(Condition.NotBeChecked);
   });
 
-  it('should make sure that terms of service display is disabled', () => {
+  it('should make sure that terms of services display is disabled', () => {
     AdminSettings.InterfacePage.getTermsOfServiceCheckbox().click();
     AdminSettings.waitForSave();
     AdminSettings.InterfacePage.getTermsOfServiceCheckbox().find('input').should(Condition.NotBeChecked);
@@ -105,7 +105,7 @@ describe('Admin Settings - Custom Links Story', () => {
     AdminSettings.getFooterCustomIcon(linkURL).should(Condition.NotExist);
   });
 
-  it('should check if footer does not contain terms of service', () => {
+  it('should check if footer does not contain terms of services', () => {
     AdminSettings.getFooter().should(Condition.NotContain, termsOfService);
   });
 

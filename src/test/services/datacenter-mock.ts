@@ -16,7 +16,7 @@ import {Injectable} from '@angular/core';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {find} from 'lodash';
 import {Observable, of} from 'rxjs';
-import {fakeNodeDatacenters, fakeSeedSettings} from '../fake-data/datacenter';
+import {fakeNodeDatacenters, fakeSeedSettings} from '../data/datacenter';
 
 @Injectable()
 export class DatacenterMockService {

@@ -16,7 +16,7 @@ import {Injectable} from '@angular/core';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {Observable, of} from 'rxjs';
 import {Node} from '@shared/entity/node';
-import {machineDeploymentsFake, nodesFake} from '../fake-data/node';
+import {machineDeploymentsFake, nodesFake} from '../data/node';
 
 @Injectable()
 export class MachineDeploymentServiceMock {

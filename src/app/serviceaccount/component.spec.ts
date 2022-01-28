@@ -19,14 +19,14 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {ServiceAccountModule} from '@app/serviceaccount/module';
-import {DialogTestModule, NoopConfirmDialogComponent} from '@app/testing/components/noop-confirmation-dialog.component';
-import {fakeServiceAccounts, fakeServiceAccountTokens} from '@app/testing/fake-data/serviceaccount';
-import {RouterStub} from '@app/testing/router-stubs';
-import {AppConfigMockService} from '@app/testing/services/app-config-mock';
-import {asyncData} from '@app/testing/services/cluster-mock';
-import {ProjectMockService} from '@app/testing/services/project-mock';
-import {SettingsMockService} from '@app/testing/services/settings-mock';
-import {UserMockService} from '@app/testing/services/user-mock';
+import {DialogTestModule, NoopConfirmDialogComponent} from '../../test/components/noop-confirmation-dialog.component';
+import {fakeServiceAccounts, fakeServiceAccountTokens} from '../../test/data/serviceaccount';
+import {RouterStub} from '../../test/services/router-stubs';
+import {AppConfigMockService} from '../../test/services/app-config-mock';
+import {asyncData} from '../../test/services/cluster-mock';
+import {ProjectMockService} from '../../test/services/project-mock';
+import {SettingsMockService} from '../../test/services/settings-mock';
+import {UserMockService} from '../../test/services/user-mock';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
@@ -81,7 +81,7 @@ describe('ServiceAccountComponent', () => {
     fixture.debugElement.injector.get(Router);
   });
 
-  it('should create service accounts cmp', () => {
+  it('should create services accounts cmp', () => {
     expect(component).toBeTruthy();
   });
 
@@ -89,7 +89,7 @@ describe('ServiceAccountComponent', () => {
     expect(component.getGroupDisplayName('editors')).toBe('Editor');
   });
 
-  it('should open delete service account confirmation dialog & call deleteServiceAccount()', fakeAsync(() => {
+  it('should open delete services account confirmation dialog & call deleteServiceAccount()', fakeAsync(() => {
     const waitTime = 15000;
     const event = new MouseEvent('click');
     component.deleteServiceAccount(fakeServiceAccounts()[0], event);

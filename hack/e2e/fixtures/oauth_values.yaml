@@ -16,7 +16,7 @@ dex:
   replicas: 1
   ingress:
     scheme: http
-    # this the the service name inside the kind cluster, so that the Kubermatic pods can find Dex to validate our token
+    # this the the services name inside the kind cluster, so that the Kubermatic pods can find Dex to validate our token
     host: dex.oauth:5556
     path: "/dex"
     class: non-existent

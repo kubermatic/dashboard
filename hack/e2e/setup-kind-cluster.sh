@@ -85,7 +85,7 @@ EOF
 kubectl --namespace local-path-storage rollout restart deployment/local-path-provisioner
 
 # Start cluster exposer, which will expose services from within kind as
-# a NodePort service on the host
+# a NodePort services on the host
 echodate "Starting cluster exposer"
 
 CGO_ENABLED=0 go build --tags "$KUBERMATIC_EDITION" -v -o /tmp/clusterexposer ./pkg/test/clusterexposer/cmd

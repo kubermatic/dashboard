@@ -22,7 +22,7 @@ export class PresetDialogService {
   preset: PresetModel = new PresetModel();
 
   private _provider: NodeProvider;
-  // Settings step child form validation status has to be shared through the service
+  // Settings step child form validation status has to be shared through the services
   // with the preset dialog wizard as dynamically created child forms using CVA are
   // not added to the parent form until user manually enters something into the child form.
   // This is just a workaround. Can be refactored if better suited solution is found.

@@ -20,7 +20,7 @@ import {
   fakeServiceAccounts,
   fakeServiceAccountToken,
   fakeServiceAccountTokens,
-} from '@app/testing/fake-data/serviceaccount';
+} from '../data/serviceaccount';
 import {
   ServiceAccount,
   ServiceAccountModel,

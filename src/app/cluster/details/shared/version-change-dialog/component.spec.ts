@@ -19,12 +19,12 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
-import {fakeProject} from '@app/testing/fake-data/project';
-import {RouterStub} from '@app/testing/router-stubs';
-import {AppConfigMockService} from '@app/testing/services/app-config-mock';
-import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
-import {ProjectMockService} from '@app/testing/services/project-mock';
+import {fakeDigitaloceanCluster} from '../../../../../test/data/cluster';
+import {fakeProject} from '../../../../../test/data/project';
+import {RouterStub} from '../../../../../test/services/router-stubs';
+import {AppConfigMockService} from '../../../../../test/services/app-config-mock';
+import {MatDialogRefMock} from '../../../../../test/services/mat-dialog-ref-mock';
+import {ProjectMockService} from '../../../../../test/services/project-mock';
 import {ClusterService} from '@core/services/cluster';
 import {EndOfLifeService} from '@core/services/eol';
 import {NotificationService} from '@core/services/notification';
@@ -77,7 +77,7 @@ describe('ChangeClusterVersionComponent', () => {
   );
 
   it(
-    'should create the change cluster version component',
+    'should create the change cluster version components',
     waitForAsync(() => {
       expect(component).toBeTruthy();
     })

@@ -12,29 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {EventEmitter, Injectable} from '@angular/core';
-import {Observable, of, Subject} from 'rxjs';
-import {Project, ProjectModel} from '@shared/entity/project';
-import {fakeProject, fakeProjects} from '../fake-data/project';
+import {Injectable} from '@angular/core';
+import {SSHKey} from '@shared/entity/ssh-key';
+import {Observable, of} from 'rxjs';
+import {fakeSSHKeys} from '../data/sshkey';
 
 @Injectable()
-export class ProjectMockService {
-  onProjectChange = new EventEmitter<Project>();
-  onProjectsUpdate = new Subject<void>();
-
-  create(_model: ProjectModel): Observable<Project> {
-    return of(fakeProject());
+export class SSHKeyMockService {
+  add(_sshKey: SSHKey, _projectID: string): Observable<SSHKey> {
+    return of(fakeSSHKeys()[0]);
   }
 
-  get selectedProject(): Observable<Project> {
-    return of(fakeProject());
+  list(_projectID: string): Observable<SSHKey[]> {
+    return of(fakeSSHKeys());
   }
 
-  get projects(): Observable<Project[]> {
-    return of(fakeProjects());
-  }
-
-  delete(_projectID: string): Observable<any> {
+  delete(_sshkeyID: string, _projectID: string): Observable<any> {
     return of(null);
   }
 }

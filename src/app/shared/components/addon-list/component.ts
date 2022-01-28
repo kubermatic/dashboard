@@ -37,7 +37,7 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() canEdit = true;
 
   // Usage of event emitters allows to handle edits and deletions in multiple ways in different places.
-  // Thanks to them this component can be used inside wizard (performing actions on a local addons array)
+  // Thanks to them this components can be used inside wizard (performing actions on a local addons array)
   // and also in the cluster view (calling API endpoints to perform any action).
   @Output() addAddon = new EventEmitter<Addon>();
   @Output() editAddon = new EventEmitter<Addon>();

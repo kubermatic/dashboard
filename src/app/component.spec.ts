@@ -27,11 +27,11 @@ import {SharedModule} from '@shared/module';
 import {KubermaticComponent} from './component';
 import {AppConfigService} from './config.service';
 import {GoogleAnalyticsService} from './google-analytics.service';
-import {AppConfigMockService} from './testing/services/app-config-mock';
-import {AuthMockService} from './testing/services/auth-mock';
-import {DatacenterMockService} from './testing/services/datacenter-mock';
-import {ProjectMockService} from './testing/services/project-mock';
-import {UserMockService} from './testing/services/user-mock';
+import {AppConfigMockService} from '../test/services/app-config-mock';
+import {AuthMockService} from '../test/services/auth-mock';
+import {DatacenterMockService} from '../test/services/datacenter-mock';
+import {ProjectMockService} from '../test/services/project-mock';
+import {UserMockService} from '../test/services/user-mock';
 
 const modules: any[] = [
   BrowserModule,

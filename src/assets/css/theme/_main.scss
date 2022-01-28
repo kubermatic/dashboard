@@ -49,6 +49,6 @@
   // Register global theming rules.
   @include theme-global($merged-colors);
 
-  // Register component-level themes.
+  // Register components-level themes.
   @include theme-components($merged-colors);
 }

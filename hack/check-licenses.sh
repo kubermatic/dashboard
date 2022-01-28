@@ -21,7 +21,7 @@ ALLOWED_LICENSES="MIT;ISC;BSD-2-Clause;BSD-2-Clause-FreeBSD;BSD-3-Clause;Apache-
 # A list of dependencies excluded from license check. Should be validated manually before excluding
 # them from the check.
 # UNKNOWN license:
-#   - emitter-component (dependency of swagger-ui)
+#   - emitter-components (dependency of swagger-ui)
 #   - btoa (dependency of swagger-ui)
 # CC0-1.0 license:
 #   - encode-3986 (dependency of swagger-ui)

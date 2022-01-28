@@ -16,17 +16,17 @@ import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {fakeProject} from '@app/testing/fake-data/project';
-import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
-import {ProjectMockService} from '@app/testing/services/project-mock';
+import {fakeProject} from '../../../test/data/project';
+import {MatDialogRefMock} from '../../../test/services/mat-dialog-ref-mock';
+import {ProjectMockService} from '../../../test/services/project-mock';
 import {CoreModule} from '@core/module';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {SharedModule} from '@shared/module';
 import {CreateServiceAccountDialogComponent} from './component';
 import {ServiceAccountService} from '@core/services/service-account';
-import {asyncData} from '@app/testing/services/cluster-mock';
-import {fakeServiceAccount} from '@app/testing/fake-data/serviceaccount';
+import {asyncData} from '../../../test/services/cluster-mock';
+import {fakeServiceAccount} from '../../../test/data/serviceaccount';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
 
@@ -62,7 +62,7 @@ describe('CreateServiceAccountDialogComponent', () => {
   );
 
   it(
-    'should create the component',
+    'should create the components',
     waitForAsync(() => {
       expect(component).toBeTruthy();
     })
@@ -77,13 +77,13 @@ describe('CreateServiceAccountDialogComponent', () => {
     expect(component.form.controls.name.valid).toBeFalsy();
     expect(component.form.controls.name.hasError('required')).toBeTruthy();
 
-    component.form.controls.name.patchValue('test-service-account');
+    component.form.controls.name.patchValue('test-services-account');
     expect(component.form.controls.name.hasError('required')).toBeFalsy();
   });
 
   it('should call addServiceAccount method', fakeAsync(() => {
     component.project = fakeProject();
-    component.form.controls.name.patchValue('test-service-account');
+    component.form.controls.name.patchValue('test-services-account');
     component.form.controls.group.patchValue('editors');
     component.create();
     tick();

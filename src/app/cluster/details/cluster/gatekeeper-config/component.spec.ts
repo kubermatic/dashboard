@@ -16,10 +16,13 @@ import {ComponentFixture, fakeAsync, TestBed, waitForAsync, tick, flush} from '@
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {DialogTestModule, NoopConfirmDialogComponent} from '@app/testing/components/noop-confirmation-dialog.component';
-import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
-import {fakeGatekeeperConfig} from '@app/testing/fake-data/opa';
-import {fakeProject} from '@app/testing/fake-data/project';
+import {
+  DialogTestModule,
+  NoopConfirmDialogComponent,
+} from '../../../../../test/components/noop-confirmation-dialog.component';
+import {fakeDigitaloceanCluster} from '../../../../../test/data/cluster';
+import {fakeGatekeeperConfig} from '../../../../../test/data/opa';
+import {fakeProject} from '../../../../../test/data/project';
 import {CoreModule} from '@core/module';
 import {NotificationService} from '@core/services/notification';
 import {OPAService} from '@core/services/opa';
@@ -65,7 +68,7 @@ describe('GatekeeperConfigComponent', () => {
     })
   );
 
-  it('should create the gatekeeper config component', fakeAsync(() => {
+  it('should create the gatekeeper config components', fakeAsync(() => {
     expect(component).toBeTruthy();
   }));
 

@@ -27,7 +27,7 @@ const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'terms-of-service',
+    path: 'terms-of-services',
     component: TermsOfServiceComponent,
   },
   {

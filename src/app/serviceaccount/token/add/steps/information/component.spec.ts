@@ -18,9 +18,9 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
-import {fakeServiceAccountToken} from '@app/testing/fake-data/serviceaccount';
-import {RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
-import {ProjectMockService} from '@app/testing/services/project-mock';
+import {fakeServiceAccountToken} from '../../../../../../test/data/serviceaccount';
+import {RouterStub, RouterTestingModule} from '../../../../../../test/services/router-stubs';
+import {ProjectMockService} from '../../../../../../test/services/project-mock';
 import {ProjectService} from '@core/services/project';
 import {SharedModule} from '@shared/module';
 import {ServiceAccountTokenInformationStepComponent} from './component';
@@ -56,7 +56,7 @@ describe('ServiceAccountTokenInformationStepComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create the component', () => {
+  it('should create the components', () => {
     expect(component).toBeTruthy();
   });
 });

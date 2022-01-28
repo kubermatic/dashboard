@@ -51,17 +51,5 @@ export function fakeProjects(): Project[] {
 }
 
 export function fakeProject(): Project {
-  return {
-    creationTimestamp: new Date(),
-    id: '123ab4cd5e',
-    name: 'new-project-1',
-    status: 'Active',
-    owners: [
-      {
-        creationTimestamp: new Date(),
-        name: 'John Doe',
-        email: 'john.doe@example.com',
-      },
-    ],
-  };
+  return fakeProjects()[0];
 }

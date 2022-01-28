@@ -231,7 +231,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   private _setSizes(sizes: AWSSize[]): void {
     this._sizes = sizes.sort((a, b) => compare(a.price, b.price));
 
-    // If node data service contains defaults (i.e. in the edit dialog) then set size and architecture based on that.
+    // If node data services contains defaults (i.e. in the edit dialog) then set size and architecture based on that.
     if (!this.selectedSize && this._nodeDataService.nodeData.spec.cloud.aws.instanceType) {
       const matchingSize = this._sizes.find(
         size => size.name === this._nodeDataService.nodeData.spec.cloud.aws.instanceType

@@ -16,9 +16,12 @@ import {ComponentFixture, TestBed, waitForAsync, tick, flush, fakeAsync} from '@
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {DialogTestModule, NoopConfirmDialogComponent} from '@app/testing/components/noop-confirmation-dialog.component';
-import {fakeConstraintTemplates} from '@app/testing/fake-data/opa';
-import {UserMockService} from '@app/testing/services/user-mock';
+import {
+  DialogTestModule,
+  NoopConfirmDialogComponent,
+} from '../../../../../test/components/noop-confirmation-dialog.component';
+import {fakeConstraintTemplates} from '../../../../../test/data/opa';
+import {UserMockService} from '../../../../../test/services/user-mock';
 import {CoreModule} from '@core/module';
 import {NotificationService} from '@core/services/notification';
 import {UserService} from '@core/services/user';
@@ -69,7 +72,7 @@ describe('ConstraintTemplatesComponent', () => {
   );
 
   it(
-    'should create the constraint templates component',
+    'should create the constraint templates components',
     waitForAsync(() => {
       expect(component).toBeTruthy();
     })

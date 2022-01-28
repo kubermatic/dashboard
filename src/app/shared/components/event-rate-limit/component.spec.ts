@@ -17,7 +17,7 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {AuthMockService} from '@app/testing/services/auth-mock';
+import {AuthMockService} from '../../../../test/services/auth-mock';
 import {Auth} from '@core/services/auth/service';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {WizardService} from '@core/services/wizard/wizard';
@@ -46,7 +46,7 @@ describe('EventRateLimitComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create event-rate-limit component', () => {
+  it('should create event-rate-limit components', () => {
     expect(component).toBeTruthy();
   });
 });

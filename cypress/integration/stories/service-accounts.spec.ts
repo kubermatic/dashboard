@@ -45,15 +45,15 @@ describe('Service Accounts Story', () => {
     ProjectsPage.selectProject(projectName);
   });
 
-  it('should go to the service accounts page', () => {
+  it('should go to the services accounts page', () => {
     ServiceAccountsPage.visit();
   });
 
-  it('should create new service account', () => {
+  it('should create new services account', () => {
     ServiceAccountsPage.addServiceAccount(serviceAccountName, Group.Editor);
   });
 
-  it('should open token panel for created service account', () => {
+  it('should open token panel for created services account', () => {
     ServiceAccountsPage.getTableRow(serviceAccountName).click();
   });
 
@@ -61,15 +61,15 @@ describe('Service Accounts Story', () => {
     ServiceAccountsPage.addToken(tokenName);
   });
 
-  it('should close token panel for created service account', () => {
+  it('should close token panel for created services account', () => {
     ServiceAccountsPage.getTableRow(serviceAccountName).click();
   });
 
-  it('should delete service account', () => {
+  it('should delete services account', () => {
     ServiceAccountsPage.deleteServiceAccount(serviceAccountName);
   });
 
-  it('should verify that there are no service accounts', () => {
+  it('should verify that there are no services accounts', () => {
     ServiceAccountsPage.verifyNoServiceAccounts();
   });
 

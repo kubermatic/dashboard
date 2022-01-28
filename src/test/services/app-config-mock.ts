@@ -16,7 +16,7 @@ import {Injectable} from '@angular/core';
 import {CustomLink} from '@shared/entity/settings';
 import {VersionInfo} from '@shared/entity/version-info';
 import {Config, EndOfLife, UserGroupConfig} from '@shared/model/Config';
-import {fakeUserGroupConfig} from '../fake-data/user-group-config';
+import {fakeUserGroupConfig} from '../data/user-group-config';
 
 @Injectable()
 export class AppConfigMockService {

@@ -19,13 +19,13 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {DialogTestModule, NoopConfirmDialogComponent} from '@app/testing/components/noop-confirmation-dialog.component';
-import {NoopTokenDialogComponent, TokenDialogTestModule} from '@app/testing/components/noop-token-dialog.component';
-import {fakeServiceAccount, fakeServiceAccountTokens} from '@app/testing/fake-data/serviceaccount';
-import {RouterStub} from '@app/testing/router-stubs';
-import {AppConfigMockService} from '@app/testing/services/app-config-mock';
-import {ProjectMockService} from '@app/testing/services/project-mock';
-import {UserMockService} from '@app/testing/services/user-mock';
+import {DialogTestModule, NoopConfirmDialogComponent} from '../../../test/components/noop-confirmation-dialog.component';
+import {NoopTokenDialogComponent, TokenDialogTestModule} from '../../../test/components/noop-token-dialog.component';
+import {fakeServiceAccount, fakeServiceAccountTokens} from '../../../test/data/serviceaccount';
+import {RouterStub} from '../../../test/services/router-stubs';
+import {AppConfigMockService} from '../../../test/services/app-config-mock';
+import {ProjectMockService} from '../../../test/services/project-mock';
+import {UserMockService} from '../../../test/services/user-mock';
 import {CoreModule} from '@core/module';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
@@ -34,7 +34,7 @@ import {SharedModule} from '@shared/module';
 import {ServiceAccountModule} from '../module';
 import {ServiceAccountTokenComponent} from './component';
 import {ServiceAccountService} from '@core/services/service-account';
-import {ServiceAccountMockService} from '@app/testing/services/service-account-mock';
+import {ServiceAccountMockService} from '../../../test/services/service-account-mock';
 
 describe('ServiceAccountTokenComponent', () => {
   let fixture: ComponentFixture<ServiceAccountTokenComponent>;
@@ -85,7 +85,7 @@ describe('ServiceAccountTokenComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should open delete service account token dialog & call deleteServiceAccountToken()', fakeAsync(() => {
+  it('should open delete services account token dialog & call deleteServiceAccountToken()', fakeAsync(() => {
     const spy = jest.spyOn(fixture.debugElement.injector.get(ServiceAccountService) as any, 'deleteToken');
 
     const waitTime = 15000;
