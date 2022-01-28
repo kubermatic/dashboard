@@ -146,30 +146,6 @@ export function fakeVSphereDatacenter(): Datacenter {
   };
 }
 
-export function fakeAlibabaDatacenter(): Datacenter {
-  return {
-    metadata: {
-      name: 'alibaba-eu-central-1a',
-      selfLink: '',
-      uid: '',
-      creationTimestamp: new Date(),
-      labels: new Map(),
-      annotations: new Map(),
-    },
-    spec: {
-      seed: 'europe-west3-c',
-      country: 'DE',
-      alibaba: {
-        region: 'alibaba-eu-central-1',
-      },
-      location: 'Frankfurt',
-      provider: 'alibaba',
-      enforceAuditLogging: false,
-      enforcePodSecurityPolicy: false,
-    },
-  };
-}
-
 export function fakeNodeDatacenters(): Datacenter[] {
   return [
     fakeDigitaloceanDatacenter(),

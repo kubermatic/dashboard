@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Cluster, ClusterType, ExternalCCMMigrationStatus, Token} from '@shared/entity/cluster';
+import {Cluster, ClusterType, ExternalCCMMigrationStatus} from '@shared/entity/cluster';
 
 export function fakeDigitaloceanCluster(): Cluster {
   return {
@@ -49,31 +49,6 @@ export function fakeEquinixCluster(): Cluster {
           apiKey: '123',
           projectID: '1',
           billingCycle: 'hourly',
-        },
-      },
-      version: '1.8.5',
-    },
-    status: {
-      url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
-      version: '1.8.5',
-      externalCCMMigration: ExternalCCMMigrationStatus.Unsupported,
-    },
-    type: ClusterType.Kubernetes,
-  };
-}
-
-export function fakeGCPCluster(): Cluster {
-  return {
-    creationTimestamp: new Date(),
-    id: '4k6txp5sq',
-    name: 'nifty-haibt',
-    spec: {
-      cloud: {
-        dc: 'gcp-westeurope',
-        gcp: {
-          serviceAccount: 'test-service-account',
-          network: 'test-network',
-          subnetwork: 'test-subnetwork',
         },
       },
       version: '1.8.5',
@@ -278,12 +253,6 @@ export function fakeAlibabaCluster(): Cluster {
       externalCCMMigration: ExternalCCMMigrationStatus.Unsupported,
     },
     type: ClusterType.Kubernetes,
-  };
-}
-
-export function fakeToken(): Token {
-  return {
-    token: 'test-token',
   };
 }
 

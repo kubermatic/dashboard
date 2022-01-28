@@ -65,19 +65,3 @@ export function fakeProject(): Project {
     ],
   };
 }
-
-export function fakeInactiveProject(): Project {
-  return {
-    creationTimestamp: new Date(),
-    id: '345ab6cd7e',
-    name: 'new-project-3',
-    status: 'Inactive',
-    owners: [
-      {
-        creationTimestamp: new Date(),
-        name: 'John Doe',
-        email: 'john.doe@example.com',
-      },
-    ],
-  };
-}
