@@ -50,8 +50,7 @@ describe('ClusterListComponent', () => {
       const clusterServiceMock = {
         clusters: jest.fn(),
         health: jest.fn(),
-        refreshClusters: () => {
-        },
+        refreshClusters: () => {},
         restores: jest.fn(),
       };
       getClustersSpy = clusterServiceMock.clusters.mockReturnValue(asyncData([fakeAWSCluster()]));

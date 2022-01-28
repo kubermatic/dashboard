@@ -43,8 +43,7 @@ describe('DefaultConstraintDialog', () => {
         createDefaultConstraint: jest.fn(),
         patchDefaultConstraint: jest.fn(),
         constraintTemplates: of(fakeConstraintTemplates()),
-        refreshConstraint: () => {
-        },
+        refreshConstraint: () => {},
       };
       createDefaultConstraintSpy = opaMock.createDefaultConstraint.mockReturnValue(asyncData(fakeConstraints()[0]));
       patchDefaultConstraintSpy = opaMock.patchDefaultConstraint.mockReturnValue(asyncData(fakeConstraints()[0]));

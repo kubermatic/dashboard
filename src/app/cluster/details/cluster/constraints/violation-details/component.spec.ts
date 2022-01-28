@@ -34,8 +34,7 @@ describe('ViolationDetailsComponent', () => {
       const opaMock = {
         saveViolationPageIndex: jest.fn(),
         getViolationPageIndex: jest.fn(),
-        refreshConstraint: () => {
-        },
+        refreshConstraint: () => {},
       };
       opaMock.saveViolationPageIndex.mockReturnValue(null);
       opaMock.getViolationPageIndex.mockReturnValue(0);

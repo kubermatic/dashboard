@@ -46,8 +46,7 @@ describe('ExternalClusterListComponent', () => {
     waitForAsync(() => {
       const clusterServiceMock = {
         externalClusters: jest.fn(),
-        refreshExternalClusters: () => {
-        },
+        refreshExternalClusters: () => {},
       };
       getClustersSpy = clusterServiceMock.externalClusters.mockReturnValue(
         defer(() => of([fakeCustomExternalCluster()], async))
