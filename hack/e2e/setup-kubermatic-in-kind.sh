@@ -182,6 +182,7 @@ spec:
     subscriptionID: ${AZURE_E2E_TESTS_SUBSCRIPTION_ID}
     clientID: ${AZURE_E2E_TESTS_CLIENT_ID}
     clientSecret: ${AZURE_E2E_TESTS_CLIENT_SECRET}
+    loadBalancerSKU: "standard"
 EOF
 retry 2 kubectl apply -f preset-azure.yaml
 
@@ -238,8 +239,10 @@ spec:
     domain: ${OS_DOMAIN}
     floatingIPPool: ${OS_FLOATING_IP_POOL}
     password: ${OS_PASSWORD}
-    project: ${OS_TENANT_NAME}
-    projectID: ${OS_TENANT_ID}
+    # quotes are important, so empty values do not lead
+    # to nil values and cause validation errors
+    project: "${OS_TENANT_NAME}"
+    projectID: "${OS_TENANT_ID}"
     username: ${OS_USERNAME}
 EOF
 retry 2 kubectl apply -f preset-openstack.yaml
