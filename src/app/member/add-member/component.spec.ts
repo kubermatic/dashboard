@@ -16,16 +16,16 @@ import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {fakeProject} from '@app/testing/fake-data/project';
-import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
-import {ProjectMockService} from '@app/testing/services/project-mock';
+import {fakeProject} from '@test/data/project';
+import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
+import {ProjectMockService} from '@test/services/project-mock';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {SharedModule} from '@shared/module';
 import {Group} from '@shared/utils/member-utils/member-utils';
 import {AddMemberComponent} from './component';
 import {MemberService} from '@core/services/member';
-import {MemberServiceMock} from '@app/testing/services/member-mock';
+import {MemberServiceMock} from '@test/services/member-mock';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
@@ -58,7 +58,7 @@ describe('AddProjectComponent', () => {
   );
 
   it(
-    'should create the add member component',
+    'should create the component',
     waitForAsync(() => {
       expect(component).toBeTruthy();
     })

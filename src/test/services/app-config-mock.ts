@@ -16,16 +16,19 @@ import {Injectable} from '@angular/core';
 import {CustomLink} from '@shared/entity/settings';
 import {VersionInfo} from '@shared/entity/version-info';
 import {Config, EndOfLife, UserGroupConfig} from '@shared/model/Config';
-import {fakeAppConfig} from '../fake-data/app-config';
-import {fakeUserGroupConfig} from '../fake-data/user-group-config';
-import {fakeVersionInfo} from '../fake-data/version-info';
+import {fakeUserGroupConfig} from '../data/user-group-config';
 
 @Injectable()
 export class AppConfigMockService {
   private readonly _refreshTimeBase = 200;
 
   getConfig(): Config {
-    return fakeAppConfig();
+    return {
+      share_kubeconfig: false,
+      openstack: {
+        wizard_use_default_user: false,
+      },
+    };
   }
 
   getUserGroupConfig(): UserGroupConfig {
@@ -33,7 +36,16 @@ export class AppConfigMockService {
   }
 
   getGitVersion(): VersionInfo {
-    return fakeVersionInfo();
+    return {
+      dirty: true,
+      distance: 10,
+      hash: '1234abcd',
+      raw: 'v1.0.0',
+      semverString: 'v1.0.0',
+      humanReadable: 'v1.0.0',
+      suffix: '',
+      tag: 'v1.0.0',
+    } as VersionInfo;
   }
 
   getCustomLinks(): CustomLink[] {

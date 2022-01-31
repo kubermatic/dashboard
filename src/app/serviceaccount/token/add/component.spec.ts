@@ -16,8 +16,8 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {AppConfigService} from '@app/config.service';
 import {ServiceAccountModule} from '@app/serviceaccount/module';
-import {AppConfigMockService} from '@app/testing/services/app-config-mock';
-import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
+import {AppConfigMockService} from '@test/services/app-config-mock';
+import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';
 import {ServiceAccountTokenDialog, ServiceAccountTokenDialogData, ServiceAccountTokenDialogMode} from './component';
 

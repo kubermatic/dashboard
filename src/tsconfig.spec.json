@@ -6,13 +6,13 @@
     "module": "CommonJS",
     "target": "ES2015",
     "types": [
-      "jest",
+      "jest"
     ]
   },
   "include": [
+    "test/**.ts",
     "**/*.spec.ts",
     "**/*.d.ts",
-    "**/testing/**/*.ts",
     "test*.ts",
     "environments/environment.ts"
   ]

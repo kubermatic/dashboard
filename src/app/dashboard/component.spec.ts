@@ -19,9 +19,9 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import {Auth} from '@core/services/auth/service';
 import {DatacenterService} from '@core/services/datacenter';
-import {ActivatedRouteStub, RouterStub} from '@app/testing/router-stubs';
-import {AuthMockService} from '@app/testing/services/auth-mock';
-import {DatacenterMockService} from '@app/testing/services/datacenter-mock';
+import {ActivatedRouteStub, RouterStub} from '@test/services/router-stubs';
+import {AuthMockService} from '@test/services/auth-mock';
+import {DatacenterMockService} from '@test/services/datacenter-mock';
 import {DashboardComponent} from './component';
 
 const modules: any[] = [BrowserModule, RouterTestingModule, BrowserAnimationsModule];

@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {fakeMember} from '@app/testing/fake-data/member';
-import {fakeProject} from '@app/testing/fake-data/project';
+import {fakeMember} from '@test/data/member';
+import {fakeProject} from '@test/data/project';
 import {MemberUtils} from './member-utils';
 
 describe('MemberUtils', () => {

@@ -12,24 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {MasterVersion} from '@shared/entity/cluster';
+import {Injectable} from '@angular/core';
+import {SSHKey} from '@shared/entity/ssh-key';
+import {Observable, of} from 'rxjs';
+import {fakeSSHKeys} from '../data/sshkey';
 
-export function masterVersionsFake(): MasterVersion[] {
-  return [
-    {version: '1.8.0'},
-    {version: '1.8.1'},
-    {version: '1.8.2'},
-    {version: '1.8.3'},
-    {version: '1.8.4'},
-    {version: '1.8.5'},
-    {version: '1.8.6'},
-    {version: '1.8.7'},
-    {version: '1.8.8'},
-    {version: '1.8.9'},
-    {version: '1.8.10'},
-    {version: '1.8.11'},
-    {version: '1.8.12'},
-    {version: '1.8.13'},
-    {version: '1.9.0'},
-  ];
+@Injectable()
+export class SSHKeyMockService {
+  add(_sshKey: SSHKey, _projectID: string): Observable<SSHKey> {
+    return of(fakeSSHKeys()[0]);
+  }
+
+  list(_projectID: string): Observable<SSHKey[]> {
+    return of(fakeSSHKeys());
+  }
+
+  delete(_sshkeyID: string, _projectID: string): Observable<any> {
+    return of(null);
+  }
 }

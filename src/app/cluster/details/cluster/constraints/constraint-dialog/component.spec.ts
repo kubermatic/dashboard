@@ -16,10 +16,10 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {fakeConstraints, fakeConstraintTemplates} from '@app/testing/fake-data/opa';
-import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
-import {fakeProject} from '@app/testing/fake-data/project';
-import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
+import {fakeConstraints, fakeConstraintTemplates} from '@test/data/opa';
+import {fakeDigitaloceanCluster} from '@test/data/cluster';
+import {fakeProject} from '@test/data/project';
+import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';
 import {NotificationService} from '@core/services/notification';
 import {OPAService} from '@core/services/opa';
@@ -27,7 +27,7 @@ import {SharedModule} from '@shared/module';
 import {MonacoEditorModule, NGX_MONACO_EDITOR_CONFIG} from 'ngx-monaco-editor';
 import {of} from 'rxjs';
 import {ConstraintDialog, Mode} from './component';
-import {asyncData} from '@app/testing/services/cluster-mock';
+import {asyncData} from '@test/services/cluster-mock';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule];
 

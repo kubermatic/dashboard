@@ -19,19 +19,19 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
-import {RouterStub} from '@app/testing/router-stubs';
-import {ActivatedRouteMock} from '@app/testing/services/activate-route-mock';
-import {AppConfigMockService} from '@app/testing/services/app-config-mock';
-import {ProjectMockService} from '@app/testing/services/project-mock';
-import {UserMockService} from '@app/testing/services/user-mock';
+import {RouterStub} from '@test/services/router-stubs';
+import {ActivatedRouteMock} from '@test/services/activate-route-mock';
+import {AppConfigMockService} from '@test/services/app-config-mock';
+import {ProjectMockService} from '@test/services/project-mock';
+import {UserMockService} from '@test/services/user-mock';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
 import {ClusterSSHKeysComponent} from './component';
 import {SSHKeyService} from '@core/services/ssh-key';
-import {asyncData} from '@app/testing/services/cluster-mock';
-import {fakeSSHKeys} from '@app/testing/fake-data/sshkey';
+import {asyncData} from '@test/services/cluster-mock';
+import {fakeSSHKeys} from '@test/data/sshkey';
 
 describe('ClusterSSHKeys', () => {
   let fixture: ComponentFixture<ClusterSSHKeysComponent>;

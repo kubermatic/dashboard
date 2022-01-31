@@ -16,11 +16,11 @@ import {ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, waitForAsync
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
-import {fakeProject} from '@app/testing/fake-data/project';
-import {fakeBinding, fakeClusterBinding, fakeClusterRoleNames, fakeRoleNames} from '@app/testing/fake-data/rbac';
-import {asyncData} from '@app/testing/services/cluster-mock';
-import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
+import {fakeDigitaloceanCluster} from '@test/data/cluster';
+import {fakeProject} from '@test/data/project';
+import {fakeBinding, fakeClusterBinding, fakeClusterRoleNames, fakeRoleNames} from '@test/data/rbac';
+import {asyncData} from '@test/services/cluster-mock';
+import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';
 import {RBACService} from '@core/services/rbac';
 import {SharedModule} from '@shared/module';

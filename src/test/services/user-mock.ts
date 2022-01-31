@@ -17,8 +17,8 @@ import {Member} from '@shared/entity/member';
 import {UserSettings} from '@shared/entity/settings';
 import {GroupConfig} from '@shared/model/Config';
 import {Observable, of} from 'rxjs';
-import {fakeMember} from '../fake-data/member';
-import {fakeUserGroupConfig} from '../fake-data/user-group-config';
+import {fakeMember} from '../data/member';
+import {fakeUserGroupConfig} from '../data/user-group-config';
 import {DEFAULT_USER_SETTINGS_MOCK} from './settings-mock';
 
 @Injectable()

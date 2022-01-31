@@ -16,11 +16,11 @@ import {ComponentFixture, fakeAsync, TestBed, waitForAsync, tick, flush} from '@
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {DialogTestModule, NoopConfirmDialogComponent} from '@app/testing/components/noop-confirmation-dialog.component';
-import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
-import {fakeRuleGroups} from '@app/testing/fake-data/mla';
-import {fakeProject} from '@app/testing/fake-data/project';
-import {UserMockService} from '@app/testing/services/user-mock';
+import {DialogTestModule, NoopConfirmDialogComponent} from '@test/components/noop-confirmation-dialog.component';
+import {fakeDigitaloceanCluster} from '@test/data/cluster';
+import {fakeRuleGroups} from '@test/data/mla';
+import {fakeProject} from '@test/data/project';
+import {UserMockService} from '@test/services/user-mock';
 import {CoreModule} from '@core/module';
 import {NotificationService} from '@core/services/notification';
 import {MLAService} from '@core/services/mla';

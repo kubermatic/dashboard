@@ -27,11 +27,11 @@ import {SharedModule} from '@shared/module';
 import {KubermaticComponent} from './component';
 import {AppConfigService} from './config.service';
 import {GoogleAnalyticsService} from './google-analytics.service';
-import {AppConfigMockService} from './testing/services/app-config-mock';
-import {AuthMockService} from './testing/services/auth-mock';
-import {DatacenterMockService} from './testing/services/datacenter-mock';
-import {ProjectMockService} from './testing/services/project-mock';
-import {UserMockService} from './testing/services/user-mock';
+import {AppConfigMockService} from '@test/services/app-config-mock';
+import {AuthMockService} from '@test/services/auth-mock';
+import {DatacenterMockService} from '@test/services/datacenter-mock';
+import {ProjectMockService} from '@test/services/project-mock';
+import {UserMockService} from '@test/services/user-mock';
 
 const modules: any[] = [
   BrowserModule,
@@ -43,8 +43,6 @@ const modules: any[] = [
   CoreModule,
 ];
 
-const components: any[] = [KubermaticComponent];
-
 describe('KubermaticComponent', () => {
   let fixture: ComponentFixture<KubermaticComponent>;
   let component: KubermaticComponent;
@@ -53,7 +51,7 @@ describe('KubermaticComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [...modules],
-      declarations: [...components],
+      declarations: [KubermaticComponent],
       providers: [
         {provide: Auth, useClass: AuthMockService},
         {provide: ProjectService, useClass: ProjectMockService},

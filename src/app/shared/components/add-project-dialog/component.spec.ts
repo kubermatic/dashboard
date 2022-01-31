@@ -17,9 +17,9 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
-import {RouterStub} from '@app/testing/router-stubs';
-import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
-import {ProjectMockService} from '@app/testing/services/project-mock';
+import {RouterStub} from '@test/services/router-stubs';
+import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
+import {ProjectMockService} from '@test/services/project-mock';
 import {CoreModule} from '@core/module';
 import {ProjectService} from '@core/services/project';
 import {SharedModule} from '@shared/module';
@@ -56,7 +56,7 @@ describe('AddProjectDialogComponent', () => {
   );
 
   it(
-    'should create the add project component',
+    'should create the component',
     waitForAsync(() => {
       expect(component).toBeTruthy();
     })

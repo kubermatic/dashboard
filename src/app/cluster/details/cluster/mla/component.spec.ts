@@ -15,10 +15,10 @@
 import {ComponentFixture, fakeAsync, TestBed, waitForAsync} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {DialogTestModule} from '@app/testing/components/noop-confirmation-dialog.component';
-import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
-import {fakeAlertmanagerConfig, fakeRuleGroups} from '@app/testing/fake-data/mla';
-import {fakeProject} from '@app/testing/fake-data/project';
+import {DialogTestModule} from '@test/components/noop-confirmation-dialog.component';
+import {fakeDigitaloceanCluster} from '@test/data/cluster';
+import {fakeAlertmanagerConfig, fakeRuleGroups} from '@test/data/mla';
+import {fakeProject} from '@test/data/project';
 import {CoreModule} from '@core/module';
 import {SharedModule} from '@shared/module';
 import {MLAComponent} from './component';

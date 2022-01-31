@@ -19,16 +19,16 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
-import {doPatchCloudSpecFake} from '@app/testing/fake-data/cloud-spec';
-import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
-import {fakeDigitaloceanDatacenter} from '@app/testing/fake-data/datacenter';
-import {fakeProject} from '@app/testing/fake-data/project';
-import {RouterStub} from '@app/testing/router-stubs';
-import {AppConfigMockService} from '@app/testing/services/app-config-mock';
-import {DatacenterMockService} from '@app/testing/services/datacenter-mock';
-import {SettingsMockService} from '@app/testing/services/settings-mock';
-import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
-import {UserMockService} from '@app/testing/services/user-mock';
+import {doPatchCloudSpecFake} from '@test/data/cloud-spec';
+import {fakeDigitaloceanCluster} from '@test/data/cluster';
+import {fakeDigitaloceanDatacenter} from '@test/data/datacenter';
+import {fakeProject} from '@test/data/project';
+import {RouterStub} from '@test/services/router-stubs';
+import {AppConfigMockService} from '@test/services/app-config-mock';
+import {DatacenterMockService} from '@test/services/datacenter-mock';
+import {SettingsMockService} from '@test/services/settings-mock';
+import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
+import {UserMockService} from '@test/services/user-mock';
 import {CoreModule} from '@core/module';
 import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
@@ -51,8 +51,8 @@ import {VSphereProviderSettingsComponent} from '../edit-provider-settings/vspher
 import {EventRateLimitComponent} from '@shared/components/event-rate-limit/component';
 import {EditClusterComponent} from './component';
 import {FeatureGateService} from '@core/services/feature-gate';
-import {FeatureGatesMockService} from '@app/testing/services/feature-gate-mock';
-import {asyncData} from '@app/testing/services/cluster-mock';
+import {FeatureGatesMockService} from '@test/services/feature-gate-mock';
+import {asyncData} from '@test/services/cluster-mock';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
 

@@ -20,18 +20,18 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
-import {fakeDigitaloceanCluster} from '@app/testing/fake-data/cluster';
-import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '@app/testing/router-stubs';
-import {AppConfigMockService} from '@app/testing/services/app-config-mock';
-import {AuthMockService} from '@app/testing/services/auth-mock';
-import {ClusterMockService} from '@app/testing/services/cluster-mock';
-import {DatacenterMockService} from '@app/testing/services/datacenter-mock';
-import {MatDialogMock} from '@app/testing/services/mat-dialog-mock';
-import {MatDialogRefMock} from '@app/testing/services/mat-dialog-ref-mock';
-import {NodeMockService} from '@app/testing/services/node-mock';
-import {ProjectMockService} from '@app/testing/services/project-mock';
-import {SettingsMockService} from '@app/testing/services/settings-mock';
-import {UserMockService} from '@app/testing/services/user-mock';
+import {fakeDigitaloceanCluster} from '@test/data/cluster';
+import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '@test/services/router-stubs';
+import {AppConfigMockService} from '@test/services/app-config-mock';
+import {AuthMockService} from '@test/services/auth-mock';
+import {ClusterMockService} from '@test/services/cluster-mock';
+import {DatacenterMockService} from '@test/services/datacenter-mock';
+import {MatDialogMock} from '@test/services/mat-dialog-mock';
+import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
+import {NodeMockService} from '@test/services/node-mock';
+import {ProjectMockService} from '@test/services/project-mock';
+import {SettingsMockService} from '@test/services/settings-mock';
+import {UserMockService} from '@test/services/user-mock';
 import {Auth} from '@core/services/auth/service';
 import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
@@ -53,11 +53,12 @@ import {MLAComponent} from './mla/component';
 import {NodeListComponent} from './node-list/component';
 import {RBACComponent} from './rbac/component';
 import {VersionPickerComponent} from '../shared/version-picker/component';
-import {nodesFake} from '@app/testing/fake-data/node';
+import {nodesFake} from '@test/data/node';
 import {MachineDeploymentService} from '@core/services/machine-deployment';
 import {AddonService} from '@core/services/addon';
-import {MachineDeploymentServiceMock} from '@app/testing/services/machine-deployment-mock';
-import {AddonServiceMock} from '@app/testing/services/addon-mock';
+import {MachineDeploymentServiceMock} from '@test/services/machine-deployment-mock';
+import {AddonServiceMock} from '@test/services/addon-mock';
+import {EndOfLifeService} from '@core/services/eol';
 
 describe('ClusterDetailsComponent', () => {
   let fixture: ComponentFixture<ClusterDetailsComponent>;
@@ -113,6 +114,7 @@ describe('ClusterDetailsComponent', () => {
           {provide: MatDialog, useClass: MatDialogMock},
           {provide: MachineDeploymentService, useClass: MachineDeploymentServiceMock},
           {provide: AddonService, useClass: AddonServiceMock},
+          EndOfLifeService,
           GoogleAnalyticsService,
           NotificationService,
         ],
