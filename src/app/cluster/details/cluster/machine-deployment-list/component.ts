@@ -25,11 +25,11 @@ import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {Member} from '@shared/entity/member';
 import {getOperatingSystem, getOperatingSystemLogoClass} from '@shared/entity/node';
 import {GroupConfig} from '@shared/model/Config';
-import {MachineDeploymentHealthStatus} from '@shared/utils/health-status/machine-deployment-health-status';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {switchMap, take, takeUntil} from 'rxjs/operators';
+import {getMachineDeploymentHealthStatus, HealthStatus} from '@shared/utils/health-status';
 
 @Component({
   selector: 'km-machine-deployment-list',
@@ -89,8 +89,8 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
     this._unsubscribe.complete();
   }
 
-  getHealthStatus(md: MachineDeployment): MachineDeploymentHealthStatus {
-    return MachineDeploymentHealthStatus.getHealthStatus(md);
+  getHealthStatus(md: MachineDeployment): HealthStatus {
+    return getMachineDeploymentHealthStatus(md);
   }
 
   getOperatingSystem(md: MachineDeployment): string {

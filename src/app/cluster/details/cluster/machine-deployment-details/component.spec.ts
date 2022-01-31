@@ -41,11 +41,11 @@ import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
-import {MachineDeploymentHealthStatus} from '@shared/utils/health-status/machine-deployment-health-status';
 import {NodeListComponent} from '../node-list/component';
 import {ClusterPanelComponent} from './cluster-panel/component';
 import {MachineDeploymentDetailsComponent} from './component';
 import {MachineDeploymentService} from '@core/services/machine-deployment';
+import {getMachineDeploymentHealthStatus} from '@shared/utils/health-status';
 
 describe('MachineDeploymentDetailsComponent', () => {
   let fixture: ComponentFixture<MachineDeploymentDetailsComponent>;
@@ -85,9 +85,7 @@ describe('MachineDeploymentDetailsComponent', () => {
     component = fixture.componentInstance;
 
     component.machineDeployment = machineDeploymentsFake()[0];
-    component.machineDeploymentHealthStatus = MachineDeploymentHealthStatus.getHealthStatus(
-      component.machineDeployment
-    );
+    component.machineDeploymentHealthStatus = getMachineDeploymentHealthStatus(component.machineDeployment);
     component.nodes = nodesFake();
     component.cluster = fakeDigitaloceanCluster();
     component.datacenter = fakeDigitaloceanDatacenter();

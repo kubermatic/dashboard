@@ -15,6 +15,7 @@
 import {Cluster} from '@shared/entity/cluster';
 import {Health, HealthState} from '@shared/entity/health';
 import {Node} from '@shared/entity/node';
+import {MachineDeployment} from '@shared/entity/machine-deployment';
 
 export enum StatusIcon {
   Running = 'km-icon-circle km-success-bg',
@@ -61,6 +62,17 @@ export function getNodeHealthStatus(n: Node): HealthStatus {
     return new HealthStatus('Failed', StatusIcon.Error);
   } else if (n.status.nodeInfo.kubeletVersion) {
     return new HealthStatus('Running', StatusIcon.Running);
+  }
+  return new HealthStatus('Provisioning', StatusIcon.Pending);
+}
+
+export function getMachineDeploymentHealthStatus(md: MachineDeployment): HealthStatus {
+  if (md.deletionTimestamp) {
+    return new HealthStatus('Deleting', StatusIcon.Error);
+  } else if (md.status && md.status.availableReplicas === md.spec.replicas) {
+    return new HealthStatus('Running', StatusIcon.Running);
+  } else if (md.status && md.status.updatedReplicas !== md.spec.replicas) {
+    return new HealthStatus('Updating', StatusIcon.Pending);
   }
   return new HealthStatus('Provisioning', StatusIcon.Pending);
 }

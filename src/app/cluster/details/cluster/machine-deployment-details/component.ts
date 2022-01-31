@@ -28,12 +28,12 @@ import {Member} from '@shared/entity/member';
 import {NodeMetrics} from '@shared/entity/metrics';
 import {getOperatingSystem, getOperatingSystemLogoClass, Node} from '@shared/entity/node';
 import {GroupConfig} from '@shared/model/Config';
-import {MachineDeploymentHealthStatus} from '@shared/utils/health-status/machine-deployment-health-status';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {Subject, timer} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 import {PathParam} from '@core/services/params';
 import {MachineDeploymentService} from '@core/services/machine-deployment';
+import {getMachineDeploymentHealthStatus, HealthStatus} from '@shared/utils/health-status';
 
 @Component({
   selector: 'km-machine-deployment-details',
@@ -42,7 +42,7 @@ import {MachineDeploymentService} from '@core/services/machine-deployment';
 })
 export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   machineDeployment: MachineDeployment;
-  machineDeploymentHealthStatus: MachineDeploymentHealthStatus;
+  machineDeploymentHealthStatus: HealthStatus;
   nodes: Node[] = [];
   events: Event[] = [];
   metrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
@@ -109,7 +109,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
         this.machineDeployment = md;
         this.system = getOperatingSystem(this.machineDeployment.spec.template);
         this.systemLogoClass = getOperatingSystemLogoClass(this.machineDeployment.spec.template);
-        this.machineDeploymentHealthStatus = MachineDeploymentHealthStatus.getHealthStatus(this.machineDeployment);
+        this.machineDeploymentHealthStatus = getMachineDeploymentHealthStatus(this.machineDeployment);
         this._isMachineDeploymentLoaded = true;
       });
   }
