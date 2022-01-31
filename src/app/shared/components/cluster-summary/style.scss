@@ -15,30 +15,35 @@
 @use 'variables';
 @use 'mixins';
 
-:host {
-  counter-reset: section-number;
+$steps: 5;
+
+@mixin counter-x {
+  @for $i from 1 through $steps {
+    .counter-#{$i} {
+      &:before {
+        @include mixins.size(22px);
+
+        align-items: center;
+        border-radius: 50%;
+        border-style: solid;
+        border-width: 1px;
+        content: '#{$i}';
+        display: inline-flex;
+        font-size: variables.$font-size-body;
+        justify-content: center;
+        margin-right: 12px;
+      }
+    }
+  }
 }
 
 .km-wizard-summary {
   .header {
     font-size: variables.$font-size-subhead-lg;
     margin-bottom: 16px;
-
-    &::before {
-      @include mixins.size(22px);
-
-      align-items: center;
-      border-radius: 50%;
-      border-style: solid;
-      border-width: 1px;
-      content: counter(section-number);
-      counter-increment: section-number;
-      display: inline-flex;
-      font-size: variables.$font-size-body;
-      justify-content: center;
-      margin-right: 12px;
-    }
   }
+
+  @include counter-x;
 }
 
 .km-os-image {

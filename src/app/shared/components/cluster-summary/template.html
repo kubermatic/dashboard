@@ -21,7 +21,7 @@ limitations under the License.
   <div [fxFlex]="flipLayout ? '100%' : '50%'"
        fxLayout="column"
        class="step">
-    <div class="header">Provider</div>
+    <div class="header counter-1">Provider</div>
     <div class="properties"
          [fxLayoutAlign]="flipLayout ? ' center' : ''"
          [fxLayout]="flipLayout ? 'row wrap' : 'column'">
@@ -41,7 +41,7 @@ limitations under the License.
        [fxFlex]="flipLayout ? '100%' : '50%'"
        fxLayout="column"
        class="step">
-    <div class="header">Settings</div>
+    <div class="header counter-3">Settings</div>
     <div class="properties"
          [fxLayoutAlign]="flipLayout ? ' center' : ''"
          [fxLayout]="flipLayout ? 'row wrap' : 'column'">
@@ -218,7 +218,7 @@ limitations under the License.
   <div [fxFlex]="flipLayout ? '100%' : '50%'"
        fxLayout="column"
        [ngClass]="flipLayout ? '' : 'step'">
-    <div class="header">Cluster</div>
+    <div class="header counter-2">Cluster</div>
     <div fxFlex
          class="info-container"
          [fxLayout]="flipLayout ? 'row wrap' : 'row wrap'">
@@ -371,7 +371,7 @@ limitations under the License.
        fxLayout="column"
        class="step">
     <ng-container *ngIf="!cluster.spec.cloud?.bringyourown">
-      <div class="header">Initial Nodes</div>
+      <div class="header counter-4">Initial Nodes</div>
       <div fxFlex
            class="info-container"
            [fxLayout]="flipLayout ? 'row wrap' : 'row wrap'">
