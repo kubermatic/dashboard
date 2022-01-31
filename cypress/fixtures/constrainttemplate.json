@@ -1,0 +1,34 @@
+{
+  "name": "k8srequiredlabels",
+  "spec": {
+    "crd": {
+      "spec": {
+        "names": {
+          "kind": "K8sRequiredLabels"
+        },
+        "validation": {
+          "openAPIV3Schema": {
+            "properties": {
+              "labels": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "targets": [
+      {
+        "target": "admission.k8s.gatekeeper.sh",
+        "rego": "package k8srequiredlabels\nviolation[{\"msg\": msg, \"details\": {\"missing_labels\": missing}}] {\n  provided := {label | input.review.object.metadata.labels[label]}\n  required := {label | label := input.parameters.labels[_]}\n  missing := required - provided\n  count(missing) \u003e 0\n  msg := sprintf(\"you must provide labels: %v\", [missing])\n}\n"
+      }
+    ],
+    "selector": {
+      "labelSelector": {}
+    }
+  },
+  "status": {}
+}

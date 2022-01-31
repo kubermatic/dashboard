@@ -13,8 +13,10 @@
 // limitations under the License.
 
 import {Condition} from '../utils/condition';
+import {Config} from '../utils/config';
 import {Endpoint} from '../utils/endpoint';
-import {RequestType, TrafficMonitor} from '../utils/monitor';
+import {Mocks} from '../utils/mocks';
+import {RequestType, ResponseCheck, ResponseType, TrafficMonitor} from '../utils/monitor';
 import {Provider} from '../utils/provider';
 import {View} from '../utils/view';
 import {UserPanel} from './user-panel.po';
@@ -50,6 +52,32 @@ class AdministratorsPage {
       .click()
       .then(() => this.getNavItem().click())
       .then(() => this.verifyUrl());
+  }
+
+  addAdmin(email: string): void {
+    if (Mocks.enabled()) {
+      switch (email) {
+        case Config.adminEmail():
+          Mocks.administrators.push(Mocks.defaultAdmin);
+          break;
+        case Config.userEmail():
+          Mocks.administrators.push(Mocks.secondAdmin);
+          break;
+      }
+    } else {
+      AdminSettings.AdministratorsPage.getAddAdminBtn().click();
+      AdminSettings.AdministratorsPage.getAddAdminDialogEmailInput().type(email).should(Condition.HaveValue, email);
+      AdminSettings.AdministratorsPage.getAddAdminDialogSaveBtn().click();
+    }
+  }
+
+  verifyAdminCount(count: number): void {
+    const retries = 15;
+    TrafficMonitor.newTrafficMonitor()
+      .method(RequestType.GET)
+      .url(Endpoint.Administrators)
+      .retry(retries)
+      .expect(new ResponseCheck(ResponseType.LIST).elements(count));
   }
 }
 
@@ -247,30 +275,6 @@ class ProviderPresetsPage {
     return cy.get('#km-settings-preset-digitalocean-token');
   }
 
-  static getOPAConstraintTemplatesTab(): Cypress.Chainable {
-    return cy.get('#mat-tab-label-0-3');
-  }
-
-  static getAddConstraintTemplateBtn(): Cypress.Chainable {
-    return cy.get('#km-add-constraint-template-btn');
-  }
-
-  static getAddConstraintTemplateSpecTextarea(): Cypress.Chainable {
-    return cy.get('.monaco-editor textarea:first');
-  }
-
-  static getConstraintTemplateDialogSaveBtn(): Cypress.Chainable {
-    return cy.get('#km-constraint-template-dialog-btn');
-  }
-
-  static getDeleteConstraintTemplateBtn(name: string): Cypress.Chainable {
-    return cy.get(`#km-constraint-template-delete-btn-${name}`);
-  }
-
-  static getConstraintTemplatesTable(): Cypress.Chainable {
-    return cy.get('km-constraint-templates-list tbody');
-  }
-
   // Utils.
   getNavItem(): Cypress.Chainable {
     return cy.get('#km-nav-item-presets');
@@ -312,6 +316,10 @@ class OPAPage {
 
   getNavItem(): Cypress.Chainable {
     return cy.get('#km-nav-item-opa');
+  }
+
+  getTabCard(title: string): Cypress.Chainable {
+    return cy.get('#km-admin-opa-card').find('div.mat-tab-label-content').contains(title);
   }
 
   verifyUrl(): void {

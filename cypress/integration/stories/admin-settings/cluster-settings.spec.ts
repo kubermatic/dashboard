@@ -21,6 +21,7 @@ import {login, logout} from '../../../utils/auth';
 import {Condition} from '../../../utils/condition';
 import {Endpoint} from '../../../utils/endpoint';
 import {Config} from '../../../utils/config';
+import {Mocks} from '../../../utils/mocks';
 import {RequestType, TrafficMonitor} from '../../../utils/monitor';
 import {Preset} from '../../../utils/preset';
 import {Datacenter, Provider} from '../../../utils/provider';
@@ -28,13 +29,20 @@ import {View} from '../../../utils/view';
 import {WizardStep} from '../../../utils/wizard';
 
 describe('Admin Settings - Cluster Related Settings Story', () => {
-  const projectName = _.uniqueId('e2e-test-project-');
-  const clusterName = _.uniqueId('e2e-test-cluster-');
-  const initialMachineDeploymentName = _.uniqueId('e2e-test-md-');
+  const preset = Mocks.enabled() ? Preset.Mock : Preset.Digitalocean;
+  const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('e2e-test-project-');
+  const clusterName = Mocks.enabled() ? 'test-cluster' : _.uniqueId('e2e-test-cluster-');
+  const initialMachineDeploymentName = Mocks.enabled() ? 'test-md' : _.uniqueId('e2e-test-md-');
   const initialMachineDeploymentReplicas = '1';
 
+  beforeEach(() => {
+    if (Mocks.enabled()) {
+      Mocks.register(Provider.Digitalocean);
+    }
+  });
+
   it('should login', () => {
-    login(Config.adminEmail());
+    login(Config.adminEmail(), Config.password(), true);
     cy.url().should(Condition.Include, View.Projects.Default);
   });
 
@@ -85,7 +93,7 @@ describe('Admin Settings - Cluster Related Settings Story', () => {
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
     WizardPage.getCustomPresetsCombobox().click();
-    WizardPage.getPreset(Preset.Digitalocean).click();
+    WizardPage.getPreset(preset).click();
     WizardPage.getNextBtn(WizardStep.ProviderSettings).click({force: true});
     WizardPage.getNodeNameInput()
       .type(initialMachineDeploymentName)
@@ -97,7 +105,7 @@ describe('Admin Settings - Cluster Related Settings Story', () => {
     WizardPage.getNextBtn(WizardStep.NodeSettings).should(Condition.BeEnabled).click({force: true});
     WizardPage.getCreateBtn().click({force: true});
 
-    cy.url().should(Condition.Contain, View.Clusters.Default);
+    ClustersPage.verifyUrl();
   });
 
   it('should check if cluster was created', () => {
@@ -135,11 +143,16 @@ describe('Admin Settings - Cluster Related Settings Story', () => {
   });
 
   it('should make sure settings have default values', () => {
-    AdminSettings.DefaultsAndLimitsPage.getCleanupEnableCheckbox().click();
-    AdminSettings.waitForSave();
+    if (Mocks.enabled()) {
+      Mocks.adminSettings.cleanupOptions.Enabled = true;
+      Mocks.adminSettings.cleanupOptions.Enforced = true;
+    } else {
+      AdminSettings.DefaultsAndLimitsPage.getCleanupEnableCheckbox().click();
+      AdminSettings.waitForSave();
 
-    AdminSettings.DefaultsAndLimitsPage.getCleanupEnforceCheckbox().click();
-    AdminSettings.waitForSave();
+      AdminSettings.DefaultsAndLimitsPage.getCleanupEnforceCheckbox().click();
+      AdminSettings.waitForSave();
+    }
   });
 
   it('should go to the admin settings - interface page', () => {
@@ -147,14 +160,20 @@ describe('Admin Settings - Cluster Related Settings Story', () => {
   });
 
   it('should make sure settings have default values', () => {
-    AdminSettings.InterfacePage.getEnableKubernetesDashboardCheckbox().click();
-    AdminSettings.waitForSave();
+    if (Mocks.enabled()) {
+      Mocks.adminSettings.enableDashboard = false;
+      Mocks.adminSettings.enableOIDCKubeconfig = true;
+      Mocks.adminSettings.enableExternalClusterImport = false;
+    } else {
+      AdminSettings.InterfacePage.getEnableKubernetesDashboardCheckbox().click();
+      AdminSettings.waitForSave();
 
-    AdminSettings.InterfacePage.getEnableOIDCCheckbox().click();
-    AdminSettings.waitForSave();
+      AdminSettings.InterfacePage.getEnableOIDCCheckbox().click();
+      AdminSettings.waitForSave();
 
-    AdminSettings.InterfacePage.getEnableExternalClustersCheckbox().click();
-    AdminSettings.waitForSave();
+      AdminSettings.InterfacePage.getEnableExternalClustersCheckbox().click();
+      AdminSettings.waitForSave();
+    }
   });
 
   it('should go to projects view', () => {
@@ -194,11 +213,16 @@ describe('Admin Settings - Cluster Related Settings Story', () => {
   });
 
   it('should make sure settings have default values', () => {
-    AdminSettings.DefaultsAndLimitsPage.getCleanupEnableCheckbox().click();
-    AdminSettings.waitForSave();
+    if (Mocks.enabled()) {
+      Mocks.adminSettings.cleanupOptions.Enabled = false;
+      Mocks.adminSettings.cleanupOptions.Enforced = false;
+    } else {
+      AdminSettings.DefaultsAndLimitsPage.getCleanupEnableCheckbox().click();
+      AdminSettings.waitForSave();
 
-    AdminSettings.DefaultsAndLimitsPage.getCleanupEnforceCheckbox().click();
-    AdminSettings.waitForSave();
+      AdminSettings.DefaultsAndLimitsPage.getCleanupEnforceCheckbox().click();
+      AdminSettings.waitForSave();
+    }
   });
 
   it('should go to the admin settings - interface page', () => {
@@ -206,14 +230,20 @@ describe('Admin Settings - Cluster Related Settings Story', () => {
   });
 
   it('should make sure settings have default values', () => {
-    AdminSettings.InterfacePage.getEnableKubernetesDashboardCheckbox().click();
-    AdminSettings.waitForSave();
+    if (Mocks.enabled()) {
+      Mocks.adminSettings.enableDashboard = true;
+      Mocks.adminSettings.enableOIDCKubeconfig = false;
+      Mocks.adminSettings.enableExternalClusterImport = true;
+    } else {
+      AdminSettings.InterfacePage.getEnableKubernetesDashboardCheckbox().click();
+      AdminSettings.waitForSave();
 
-    AdminSettings.InterfacePage.getEnableOIDCCheckbox().click();
-    AdminSettings.waitForSave();
+      AdminSettings.InterfacePage.getEnableOIDCCheckbox().click();
+      AdminSettings.waitForSave();
 
-    AdminSettings.InterfacePage.getEnableExternalClustersCheckbox().click();
-    AdminSettings.waitForSave();
+      AdminSettings.InterfacePage.getEnableExternalClustersCheckbox().click();
+      AdminSettings.waitForSave();
+    }
   });
 
   it('should go to the projects page', () => {
@@ -222,6 +252,9 @@ describe('Admin Settings - Cluster Related Settings Story', () => {
 
   it('should delete the project', () => {
     ProjectsPage.deleteProject(projectName);
+  });
+
+  it('should verify that there are no projects', () => {
     ProjectsPage.verifyNoProjects();
   });
 

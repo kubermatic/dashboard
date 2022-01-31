@@ -5,5 +5,7 @@
   "machineController": 1,
   "etcd": 1,
   "cloudProviderInfrastructure": 1,
-  "userClusterControllerManager": 1
+  "userClusterControllerManager": 1,
+  "gatekeeperAudit": 1,
+  "gatekeeperController": 1
 }
