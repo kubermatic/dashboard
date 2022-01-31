@@ -27,13 +27,13 @@ import {Member} from '@shared/entity/member';
 import {NodeMetrics} from '@shared/entity/metrics';
 import {getOperatingSystem, getOperatingSystemLogoClass, Node} from '@shared/entity/node';
 import {GroupConfig} from '@shared/model/Config';
-import {NodeHealthStatus} from '@shared/utils/health-status/node-health-status';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {NodeUtils} from '@shared/utils/node-utils/node-utils';
 import _ from 'lodash';
 import * as semver from 'semver';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
+import {getNodeHealthStatus, HealthStatus} from '@shared/utils/health-status';
 
 enum Column {
   stateArrow = 'stateArrow',
@@ -168,8 +168,8 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
       });
   }
 
-  getNodeHealthStatus(n: Node): NodeHealthStatus {
-    return NodeHealthStatus.getHealthStatus(n);
+  getNodeHealthStatus(n: Node): HealthStatus {
+    return getNodeHealthStatus(n);
   }
 
   getFormattedNodeMemory(memory: string): string {

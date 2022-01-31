@@ -14,11 +14,13 @@
 
 import {Cluster} from '@shared/entity/cluster';
 import {Health, HealthState} from '@shared/entity/health';
+import {Node} from '@shared/entity/node';
 
 export enum StatusIcon {
   Running = 'km-icon-circle km-success-bg',
   Pending = 'km-icon-circle km-warning-bg', // TODO
   Error = 'km-icon-error',
+  Unkown = 'km-icon-circle km-unknown-bg', // TODO
 }
 
 export class HealthStatus {
@@ -35,7 +37,7 @@ export function getClusterHealthStatus(c: Cluster, h: Health): HealthStatus {
   if (c.deletionTimestamp) {
     return new HealthStatus('Deleting', StatusIcon.Error);
   } else if (isClusterRunning(c, h)) {
-    return new HealthStatus('Running', StatusIcon.Error);
+    return new HealthStatus('Running', StatusIcon.Running);
   }
   return new HealthStatus('Provisioning', StatusIcon.Pending);
 }
@@ -50,4 +52,15 @@ export function isClusterAPIRunning(c: Cluster, h: Health): boolean {
 
 export function isOPARunning(c: Cluster, h: Health): boolean {
   return !!h && HealthState.isUp(h.gatekeeperAudit) && HealthState.isUp(h.gatekeeperController) && !c.deletionTimestamp;
+}
+
+export function getNodeHealthStatus(n: Node): HealthStatus {
+  if (n.deletionTimestamp) {
+    return new HealthStatus('Deleting', StatusIcon.Error);
+  } else if (n.status.errorMessage) {
+    return new HealthStatus('Failed', StatusIcon.Error);
+  } else if (n.status.nodeInfo.kubeletVersion) {
+    return new HealthStatus('Running', StatusIcon.Running);
+  }
+  return new HealthStatus('Provisioning', StatusIcon.Pending);
 }
