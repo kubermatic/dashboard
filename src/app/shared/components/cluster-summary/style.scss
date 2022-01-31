@@ -20,8 +20,6 @@
 }
 
 .km-wizard-summary {
-  row-gap: 20px;
-
   .header {
     font-size: variables.$font-size-subhead-lg;
     margin-bottom: 16px;
@@ -39,12 +37,6 @@
       font-size: variables.$font-size-body;
       justify-content: center;
       margin-right: 12px;
-    }
-  }
-
-  .properties {
-    .network-id {
-      margin-bottom: 16px;
     }
   }
 }
@@ -68,8 +60,43 @@
   &.km-provider-logo-anexia {
     margin-left: -15px;
   }
+
+  &.km-provider-logo-aws {
+    width: auto;
+  }
+
+  &.km-provider-logo-vsphere {
+    width: 90px;
+  }
 }
 
 .event-rate-limit {
   font-size: 14px;
+}
+
+.info-container {
+  padding: 0;
+
+  > div {
+    padding-bottom: 24px;
+  }
+
+  .container-spacing {
+    > :not(:first-child) {
+      margin-bottom: 8px;
+    }
+
+    .section-header {
+      font-size: variables.$font-size-subhead-lg;
+      margin-bottom: 14px;
+    }
+
+    .km-label-primary {
+      margin-left: -20px;
+    }
+  }
+}
+
+.step {
+  padding-bottom: 24px;
 }

@@ -37,7 +37,7 @@ import {GroupConfig} from '@shared/model/Config';
 import {ClusterHealthStatus} from '@shared/utils/health-status/cluster-health-status';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import _ from 'lodash';
-import {combineLatest, EMPTY, of, onErrorResumeNext, Subject} from 'rxjs';
+import {combineLatest, EMPTY, iif, of, onErrorResumeNext, Subject} from 'rxjs';
 import {catchError, distinctUntilChanged, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ClusterDeleteConfirmationComponent} from '../../details/cluster/cluster-delete-confirmation/component';
 import {MachineDeploymentService} from '@core/services/machine-deployment';
@@ -118,25 +118,29 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(tap(clusters => (this.clusters = clusters)))
       .pipe(
         switchMap(clusters =>
-          combineLatest([
-            ...clusters.map(cluster =>
-              combineLatest([
-                of(cluster),
-                this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(take(1)),
-                this._clusterService
-                  .health(this._selectedProject.id, cluster.id)
-                  .pipe(catchError(() => onErrorResumeNext(EMPTY)))
-                  .pipe(tap(health => (this.health[cluster.id] = health)))
-                  .pipe(
-                    switchMap(_ =>
-                      Health.allHealthy(this.health[cluster.id])
-                        ? this._machineDeploymentService.list(cluster.id, this._selectedProject.id)
-                        : of([])
-                    )
-                  ),
-              ])
-            ),
-          ]).pipe(take(1))
+          iif(
+            () => clusters.length > 0,
+            combineLatest([
+              ...clusters.map(cluster =>
+                combineLatest([
+                  of(cluster),
+                  this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(take(1)),
+                  this._clusterService
+                    .health(this._selectedProject.id, cluster.id)
+                    .pipe(catchError(() => onErrorResumeNext(EMPTY)))
+                    .pipe(tap(health => (this.health[cluster.id] = health)))
+                    .pipe(
+                      switchMap(_ =>
+                        Health.allHealthy(this.health[cluster.id])
+                          ? this._apiService.getMachineDeployments(cluster.id, this._selectedProject.id)
+                          : of([])
+                      )
+                    ),
+                ])
+              ),
+            ]).pipe(take(1)),
+            of([])
+          )
         )
       )
       .pipe(takeUntil(this._unsubscribe))
