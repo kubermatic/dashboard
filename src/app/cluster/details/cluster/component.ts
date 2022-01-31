@@ -52,7 +52,6 @@ import {Constraint, GatekeeperConfig} from '@shared/entity/opa';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {Config, GroupConfig} from '@shared/model/Config';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
-import {ClusterHealthStatus} from '@shared/utils/health-status/cluster-health-status';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import _ from 'lodash';
 import {combineLatest, iif, Observable, of, Subject} from 'rxjs';
@@ -63,6 +62,13 @@ import {EditClusterComponent} from './edit-cluster/component';
 import {EditSSHKeysComponent} from './edit-sshkeys/component';
 import {RevokeTokenComponent} from './revoke-token/component';
 import {ShareKubeconfigComponent} from './share-kubeconfig/component';
+import {
+  getClusterHealthStatus,
+  HealthStatus,
+  isClusterAPIRunning,
+  isClusterRunning,
+  isOPARunning,
+} from '@shared/utils/health-status';
 
 @Component({
   selector: 'km-cluster-details',
@@ -88,7 +94,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   isClusterRunning = false;
   isClusterAPIRunning = false;
   isOPARunning = false;
-  healthStatus: ClusterHealthStatus;
+  healthStatus: HealthStatus;
   health: Health;
   config: Config = {share_kubeconfig: false};
   projectID: string;
@@ -162,10 +168,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.health = health;
           this.events = events;
           this._seedSettings = seedSettings;
-          this.isClusterAPIRunning = ClusterHealthStatus.isClusterAPIRunning(this.cluster, health);
-          this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, health);
-          this.healthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, health);
-          this.isOPARunning = ClusterHealthStatus.isOPARunning(this.cluster, health);
+          this.isClusterAPIRunning = isClusterAPIRunning(this.cluster, health);
+          this.isClusterRunning = isClusterRunning(this.cluster, health);
+          this.healthStatus = getClusterHealthStatus(this.cluster, health);
+          this.isOPARunning = isOPARunning(this.cluster, health);
 
           // Conditionally create an array of observables to use for 'combineLatest' operator.
           // In case real observable should not be returned, observable emitting empty array will be added to the array.

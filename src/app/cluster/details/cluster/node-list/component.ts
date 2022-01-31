@@ -27,7 +27,6 @@ import {Member} from '@shared/entity/member';
 import {NodeMetrics} from '@shared/entity/metrics';
 import {getOperatingSystem, getOperatingSystemLogoClass, Node} from '@shared/entity/node';
 import {GroupConfig} from '@shared/model/Config';
-import {ClusterHealthStatus} from '@shared/utils/health-status/cluster-health-status';
 import {NodeHealthStatus} from '@shared/utils/health-status/node-health-status';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {NodeUtils} from '@shared/utils/node-utils/node-utils';
@@ -62,7 +61,6 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() nodesMetrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
   @Input() projectID: string;
   @Output() deleteNode = new EventEmitter<Node>();
-  @Input() clusterHealthStatus: ClusterHealthStatus;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;

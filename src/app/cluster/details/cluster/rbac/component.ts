@@ -25,9 +25,9 @@ import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {AddBindingComponent} from './add-binding/component';
 import {combineLatest, iif, merge, of, Subject, timer} from 'rxjs';
 import {ClusterService} from '@core/services/cluster';
-import {ClusterHealthStatus} from '@shared/utils/health-status/cluster-health-status';
 import {Health} from '@shared/entity/health';
 import {AppConfigService} from '@app/config.service';
+import {isClusterRunning} from '@shared/utils/health-status';
 
 @Component({
   selector: 'km-rbac',
@@ -59,7 +59,7 @@ export class RBACComponent implements OnInit, OnDestroy {
     merge(this._refreshTimer$, this._refresh)
       .pipe(
         switchMap(_ => this._clusterService.health(this.projectID, this.cluster.id)),
-        tap((health: Health) => (this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, health))),
+        tap((health: Health) => (this.isClusterRunning = isClusterRunning(this.cluster, health))),
         switchMap(_ =>
           combineLatest([
             iif(

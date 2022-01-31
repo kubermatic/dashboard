@@ -79,7 +79,7 @@ limitations under the License.
                       fxLayoutAlign=" center"
                       class="km-cluster-name">
         <i [matTooltip]="!!healthStatus ? healthStatus.message : ''"
-           [ngClass]="!!healthStatus ? healthStatus.color : ''"
+           [ngClass]="!!healthStatus ? healthStatus.icon : ''"
            class="km-cluster-health km-pointer"></i>
         <span ngxClipboard
               [cbContent]="cluster.name"
@@ -299,7 +299,8 @@ limitations under the License.
                 <div><span class="km-text-muted">QPS:</span> {{cluster.spec.eventRateLimitConfig.namespace.qps}}</div>
                 <div><span class="km-text-muted">Burst:</span> {{cluster.spec.eventRateLimitConfig.namespace.burst}}
                 </div>
-                <div><span class="km-text-muted">Cache Size:</span> {{cluster.spec.eventRateLimitConfig.namespace.cacheSize}}
+                <div><span
+                  class="km-text-muted">Cache Size:</span> {{cluster.spec.eventRateLimitConfig.namespace.cacheSize}}
                 </div>
               </div>
             </km-property>
@@ -382,8 +383,7 @@ limitations under the License.
   <div *ngIf="nodes.length > 0">
     <km-node-list [cluster]="cluster"
                   [nodes]="nodes"
-                  [projectID]="projectID"
-                  [clusterHealthStatus]="healthStatus"></km-node-list>
+                  [projectID]="projectID"></km-node-list>
   </div>
 
   <km-tab-card id="km-cluster-details-tab-card">

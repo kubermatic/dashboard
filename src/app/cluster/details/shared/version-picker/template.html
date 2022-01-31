@@ -48,12 +48,12 @@ limitations under the License.
          class="km-icon-warning warning-icon"></i>
       <i *ngIf="isClusterAfterEOL()"
          matSuffix
-         class="km-icon-error error-icon"></i>
+         class="km-icon-warning-red error-icon"></i>
     </mat-form-field>
 
   </div>
 
   <i *ngIf="someUpgradesRestrictedByKubeletVersion"
      matTooltip="Some Kubernetes versions are not available due to incompatible nodes running in the cluster. Upgrade or recreate your nodes before you can upgrade your cluster to the latest version."
-     class="km-icon-error"></i>
+     class="km-icon-warning-red"></i>
 </div>
