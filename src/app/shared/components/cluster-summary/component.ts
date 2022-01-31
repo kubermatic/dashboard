@@ -21,7 +21,7 @@ import {getOperatingSystem, getOperatingSystemLogoClass} from '@shared/entity/no
 import {SSHKey} from '@shared/entity/ssh-key';
 import {getIpCount} from '@shared/functions/get-ip-count';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
+import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
 import _ from 'lodash';
 
 @Component({
@@ -49,8 +49,8 @@ export class ClusterSummaryComponent {
     return providers.length > 0 ? providers[0] : NodeProvider.NONE;
   }
 
-  get admissionPlugins(): string {
-    return AdmissionPluginUtils.getJoinedPluginNames(this.cluster.spec.admissionPlugins);
+  get admissionPlugins(): string[] {
+    return Object.keys(AdmissionPlugin);
   }
 
   get hasAdmissionPlugins(): boolean {
@@ -74,6 +74,18 @@ export class ClusterSummaryComponent {
     return ipCount > 0 ? ipCount < this.machineDeployment.spec.replicas : false;
   }
 
+  get hasNetworkConfiguration(): boolean {
+    return !_.isEmpty(this.cluster.spec?.cniPlugin) || !_.isEmpty(this.cluster.spec?.clusterNetwork);
+  }
+
+  isAdmissionPluginEnabled(plugin: string): boolean {
+    return this.cluster?.spec?.admissionPlugins?.includes(plugin) || false;
+  }
+
+  getAdmissionPluginName(plugin: string): string {
+    return AdmissionPluginUtils.getPluginName(plugin);
+  }
+
   getSSHKeys(): SSHKey[] {
     return this._sshKeys;
   }
@@ -84,28 +96,6 @@ export class ClusterSummaryComponent {
 
   displayTags(tags: object): boolean {
     return !!tags && !_.isEmpty(Object.keys(LabelFormComponent.filterNullifiedKeys(tags)));
-  }
-
-  displayNoProviderTags(): boolean {
-    const provider = this.provider;
-    switch (provider) {
-      case NodeProvider.AWS:
-      case NodeProvider.OPENSTACK:
-      case NodeProvider.AZURE:
-        return !this.displayTags(this.machineDeployment.spec.template.cloud[provider].tags);
-      case NodeProvider.ALIBABA:
-        return !this.displayTags(this.machineDeployment.spec.template.cloud[provider].labels);
-      case NodeProvider.DIGITALOCEAN:
-      case NodeProvider.GCP:
-      case NodeProvider.EQUINIX:
-        return (
-          this.machineDeployment.spec.template.cloud[provider] &&
-          this.machineDeployment.spec.template.cloud[provider].tags &&
-          _.isEmpty(this.machineDeployment.spec.template.cloud[provider].tags)
-        );
-    }
-
-    return false;
   }
 
   private _hasProviderOptions(provider: NodeProvider): boolean {
