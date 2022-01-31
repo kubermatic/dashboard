@@ -21,7 +21,7 @@ mat-dialog-content .km-dialog-warning {
 mat-dialog-actions {
   min-height: unset;
 
-  .km-icon-warning-red {
+  .km-icon-warning {
     @include mixins.size(25px, $force: true);
 
     background-size: 15px;

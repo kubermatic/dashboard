@@ -131,21 +131,9 @@
   margin: 4px 14px 4px 0;
 }
 
-.km-icon-warning-red {
-  @include mixins.background-image('/assets/images/icons/warning.svg', 16px);
-
-  background-color: #eb5757;
-  background-size: 12px;
-  border-radius: 50%;
-  margin: 4px 14px 4px 0;
-}
-
 .km-icon-warning {
-  @include mixins.background-image('/assets/images/icons/warning.svg', 16px);
+  @include mixins.background-image('/assets/images/icons/triangle.svg', 22px);
 
-  background-color: #f7b500 !important;
-  background-size: 12px !important;
-  border-radius: 50%;
   margin: 4px 14px 4px 0;
 }
 

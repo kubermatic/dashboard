@@ -80,7 +80,7 @@ limitations under the License.
              fxLayout="row"
              fxLayoutAlign=" center"
              fxLayoutGap="16px">
-          <i class="km-icon-warning-red km-warning km-pointer"></i>
+          <i class="km-icon-warning km-warning km-pointer"></i>
           <p fxFlex="95">An active Pod Security Policy means that a lot of Pod specifications, Operators and Helm
             charts will not work out of the box.</p>
         </div>
@@ -100,7 +100,8 @@ limitations under the License.
                        formControlName="podNodeSelectorAdmissionPluginConfig"
                        fxFlex="100"></km-label-form>
         <div *ngIf="isPluginEnabled(admissionPlugin.EventRateLimit)">
-          <km-wizard-cluster-event-rate-limit [formControl]="form.get(Controls.EventRateLimitConfig)"></km-wizard-cluster-event-rate-limit>
+          <km-wizard-cluster-event-rate-limit
+            [formControl]="form.get(Controls.EventRateLimitConfig)"></km-wizard-cluster-event-rate-limit>
         </div>
       </div>
 
