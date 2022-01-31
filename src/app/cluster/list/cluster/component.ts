@@ -40,7 +40,7 @@ import {EMPTY, forkJoin, of, onErrorResumeNext, Subject} from 'rxjs';
 import {catchError, distinctUntilChanged, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ClusterDeleteConfirmationComponent} from '../../details/cluster/cluster-delete-confirmation/component';
 import {MachineDeploymentService} from '@core/services/machine-deployment';
-import {getClusterHealthStatus, HealthStatus} from '@shared/utils/health-status';
+import {getClusterHealthStatus, HealthStatusUtils} from '@shared/utils/health-status-utils';
 
 @Component({
   selector: 'km-cluster-list',
@@ -201,7 +201,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     );
   }
 
-  getHealthStatus(cluster: Cluster): HealthStatus {
+  getHealthStatus(cluster: Cluster): HealthStatusUtils {
     return getClusterHealthStatus(cluster, this.health[cluster.id]);
   }
 

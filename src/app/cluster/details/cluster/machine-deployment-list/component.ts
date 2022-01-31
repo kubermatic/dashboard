@@ -29,7 +29,7 @@ import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {switchMap, take, takeUntil} from 'rxjs/operators';
-import {getMachineDeploymentHealthStatus, HealthStatus} from '@shared/utils/health-status';
+import {getMachineDeploymentHealthStatus, HealthStatusUtils} from '@shared/utils/health-status-utils';
 
 @Component({
   selector: 'km-machine-deployment-list',
@@ -89,7 +89,7 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
     this._unsubscribe.complete();
   }
 
-  getHealthStatus(md: MachineDeployment): HealthStatus {
+  getHealthStatus(md: MachineDeployment): HealthStatusUtils {
     return getMachineDeploymentHealthStatus(md);
   }
 

@@ -33,7 +33,7 @@ import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
-import {getBackupHealthStatus, HealthStatus} from '@shared/utils/health-status';
+import {getBackupHealthStatus, HealthStatusUtils} from '@shared/utils/health-status-utils';
 
 @Component({
   selector: 'km-snapshot-list',
@@ -120,7 +120,7 @@ export class SnapshotListComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  getStatus(backup: EtcdBackupConfig): HealthStatus {
+  getStatus(backup: EtcdBackupConfig): HealthStatusUtils {
     let condition = {} as EtcdBackupConfigCondition;
     if (backup.status?.conditions?.length === 1) {
       condition = backup.status.conditions[0];

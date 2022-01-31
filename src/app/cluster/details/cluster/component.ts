@@ -64,11 +64,11 @@ import {RevokeTokenComponent} from './revoke-token/component';
 import {ShareKubeconfigComponent} from './share-kubeconfig/component';
 import {
   getClusterHealthStatus,
-  HealthStatus,
+  HealthStatusUtils,
   isClusterAPIRunning,
   isClusterRunning,
   isOPARunning,
-} from '@shared/utils/health-status';
+} from '@shared/utils/health-status-utils';
 
 @Component({
   selector: 'km-cluster-details',
@@ -94,7 +94,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   isClusterRunning = false;
   isClusterAPIRunning = false;
   isOPARunning = false;
-  healthStatus: HealthStatus;
+  healthStatus: HealthStatusUtils;
   health: Health;
   config: Config = {share_kubeconfig: false};
   projectID: string;

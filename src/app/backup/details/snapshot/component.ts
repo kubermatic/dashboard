@@ -35,7 +35,7 @@ import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {Subject} from 'rxjs';
 import {filter, map, switchMap, take, takeUntil} from 'rxjs/operators';
-import {getBackupHealthStatus, HealthStatus} from '@shared/utils/health-status';
+import {getBackupHealthStatus, HealthStatusUtils} from '@shared/utils/health-status-utils';
 
 @Component({
   selector: 'km-snapshot-details',
@@ -103,7 +103,7 @@ export class SnapshotDetailsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  getStatus(backup: EtcdBackupConfig): HealthStatus {
+  getStatus(backup: EtcdBackupConfig): HealthStatusUtils {
     const condition =
       backup.status?.conditions?.find(
         condition => condition.type === EtcdBackupConfigConditionType.EtcdBackupConfigConditionSchedulingActive

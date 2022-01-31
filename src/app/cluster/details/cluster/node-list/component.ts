@@ -33,7 +33,7 @@ import _ from 'lodash';
 import * as semver from 'semver';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
-import {getNodeHealthStatus, HealthStatus} from '@shared/utils/health-status';
+import {getNodeHealthStatus, HealthStatusUtils} from '@shared/utils/health-status-utils';
 
 enum Column {
   stateArrow = 'stateArrow',
@@ -168,7 +168,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
       });
   }
 
-  getNodeHealthStatus(n: Node): HealthStatus {
+  getNodeHealthStatus(n: Node): HealthStatusUtils {
     return getNodeHealthStatus(n);
   }
 

@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import _ from 'lodash';
-import {StatusIcon} from '@shared/utils/health-status';
+import {StatusIcon} from '@shared/utils/health-status-utils';
 
 export enum ExternalClusterProvider {
   Custom = 'custom',

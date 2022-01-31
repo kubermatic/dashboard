@@ -24,7 +24,7 @@ import {NodeUtils} from '@shared/utils/node-utils/node-utils';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {getNodeHealthStatus, HealthStatus} from '@shared/utils/health-status';
+import {getNodeHealthStatus, HealthStatusUtils} from '@shared/utils/health-status-utils';
 
 @Component({
   selector: 'km-external-node-list',
@@ -79,7 +79,7 @@ export class ExternalNodeListComponent implements OnInit, OnChanges, OnDestroy {
     return _.isEmpty(this.nodes) && this.isClusterRunning && this.isInitialized;
   }
 
-  getNodeHealthStatus(n: Node): HealthStatus {
+  getNodeHealthStatus(n: Node): HealthStatusUtils {
     return getNodeHealthStatus(n);
   }
 

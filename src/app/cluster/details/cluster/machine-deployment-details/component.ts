@@ -33,7 +33,7 @@ import {Subject, timer} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 import {PathParam} from '@core/services/params';
 import {MachineDeploymentService} from '@core/services/machine-deployment';
-import {getMachineDeploymentHealthStatus, HealthStatus} from '@shared/utils/health-status';
+import {getMachineDeploymentHealthStatus, HealthStatusUtils} from '@shared/utils/health-status-utils';
 
 @Component({
   selector: 'km-machine-deployment-details',
@@ -42,7 +42,7 @@ import {getMachineDeploymentHealthStatus, HealthStatus} from '@shared/utils/heal
 })
 export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   machineDeployment: MachineDeployment;
-  machineDeploymentHealthStatus: HealthStatus;
+  machineDeploymentHealthStatus: HealthStatusUtils;
   nodes: Node[] = [];
   events: Event[] = [];
   metrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();

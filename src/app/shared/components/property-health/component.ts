@@ -14,7 +14,7 @@
 
 import {Component, Input} from '@angular/core';
 import {HealthState} from '@shared/entity/health';
-import {StatusIcon} from '@shared/utils/health-status';
+import {StatusIcon} from '@shared/utils/health-status-utils';
 
 @Component({
   selector: 'km-property-health',

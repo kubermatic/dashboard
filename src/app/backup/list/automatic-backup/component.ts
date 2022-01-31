@@ -34,7 +34,7 @@ import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
-import {getBackupHealthStatus, HealthStatus} from '@shared/utils/health-status';
+import {getBackupHealthStatus, HealthStatusUtils} from '@shared/utils/health-status-utils';
 
 @Component({
   selector: 'km-automatic-backup-list',
@@ -126,7 +126,7 @@ export class AutomaticBackupListComponent implements OnInit, OnDestroy {
     return backup.spec.schedule ? (backup.spec.keep ? backup.spec.keep : 'Default') : '-';
   }
 
-  getStatus(backup: EtcdBackupConfig): HealthStatus {
+  getStatus(backup: EtcdBackupConfig): HealthStatusUtils {
     const condition =
       backup.status.conditions?.find(
         condition => condition.type === EtcdBackupConfigConditionType.EtcdBackupConfigConditionSchedulingActive

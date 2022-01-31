@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {StatusIcon} from '@shared/utils/health-status';
+import {StatusIcon} from '@shared/utils/health-status-utils';
 
 export class Project {
   creationTimestamp: Date;

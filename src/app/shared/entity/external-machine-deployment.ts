@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {MachineDeployment} from '@shared/entity/machine-deployment';
-import {StatusIcon} from '@shared/utils/health-status';
+import {StatusIcon} from '@shared/utils/health-status-utils';
 
 export class ExternalMachineDeployment extends MachineDeployment {
   cloud?: ExternalMachineDeploymentCloudSpec;
