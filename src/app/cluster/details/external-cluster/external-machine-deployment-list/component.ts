@@ -80,7 +80,7 @@ export class ExternalMachineDeploymentListComponent implements OnInit, OnChanges
   }
 
   getStatusColor(md: ExternalMachineDeployment): string {
-    return ExternalMachineDeployment.getStatusColor(md);
+    return ExternalMachineDeployment.getStatusIcon(md);
   }
 
   getStatusMessage(md: ExternalMachineDeployment): string {

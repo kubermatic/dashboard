@@ -182,7 +182,7 @@ export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestro
   }
 
   getStatusColor(cluster: ExternalCluster): string {
-    return ExternalCluster.getStatusColor(cluster);
+    return ExternalCluster.getStatusIcon(cluster);
   }
 
   disconnectClusterDialog(cluster: ExternalCluster, event: Event): void {

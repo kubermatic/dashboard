@@ -146,7 +146,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   getStatusColor(): string {
-    return ExternalCluster.getStatusColor(this.cluster);
+    return ExternalCluster.getStatusIcon(this.cluster);
   }
 
   canEdit(): boolean {

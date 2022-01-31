@@ -30,11 +30,10 @@ import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {GroupConfig} from '@shared/model/Config';
-import {BackupHealthStatus} from '@shared/utils/health-status/backup-health-status';
-import {HealthStatus} from '@shared/utils/health-status/health-status';
 import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
+import {getBackupHealthStatus, HealthStatus} from '@shared/utils/health-status';
 
 @Component({
   selector: 'km-snapshot-list',
@@ -127,7 +126,7 @@ export class SnapshotListComponent implements OnInit, OnDestroy {
       condition = backup.status.conditions[0];
     }
 
-    return BackupHealthStatus.getHealthStatus(backup, condition);
+    return getBackupHealthStatus(backup, condition);
   }
 
   delete(backup: EtcdBackupConfig): void {

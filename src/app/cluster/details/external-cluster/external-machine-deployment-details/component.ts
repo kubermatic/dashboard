@@ -116,7 +116,7 @@ export class ExternalMachineDeploymentDetailsComponent implements OnInit, OnDest
   }
 
   getStatusColor(): string {
-    return ExternalMachineDeployment.getStatusColor(this.machineDeployment);
+    return ExternalMachineDeployment.getStatusIcon(this.machineDeployment);
   }
 
   getStatusMessage(): string {

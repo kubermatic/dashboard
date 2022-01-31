@@ -16,11 +16,13 @@ import {Cluster} from '@shared/entity/cluster';
 import {Health, HealthState} from '@shared/entity/health';
 import {Node} from '@shared/entity/node';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
+import {EtcdBackupConfig, EtcdBackupConfigCondition} from '@shared/entity/backup';
 
 export enum StatusIcon {
   Running = 'km-icon-circle km-success-bg',
   Pending = 'km-icon-circle km-warning-bg', // TODO
   Error = 'km-icon-error',
+  Disabled = 'km-icon-circle km-unknown-bg', // TODO
   Unkown = 'km-icon-circle km-unknown-bg', // TODO
 }
 
@@ -75,4 +77,15 @@ export function getMachineDeploymentHealthStatus(md: MachineDeployment): HealthS
     return new HealthStatus('Updating', StatusIcon.Pending);
   }
   return new HealthStatus('Provisioning', StatusIcon.Pending);
+}
+
+export function getBackupHealthStatus(backup: EtcdBackupConfig, condition: EtcdBackupConfigCondition): HealthStatus {
+  if (backup.deletionTimestamp) {
+    return new HealthStatus('Deleting', StatusIcon.Error);
+  } else if (condition.status === 'True') {
+    return new HealthStatus('Running', StatusIcon.Running);
+  } else if (condition.status === 'False') {
+    return new HealthStatus('Disabled', StatusIcon.Disabled);
+  }
+  return new HealthStatus('Unknown', StatusIcon.Unkown);
 }
