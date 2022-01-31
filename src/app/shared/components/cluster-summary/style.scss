@@ -20,7 +20,7 @@ $steps: 5;
 @mixin counter-x {
   @for $i from 1 through $steps {
     .counter-#{$i} {
-      &:before {
+      &::before {
         @include mixins.size(22px);
 
         align-items: center;
@@ -38,12 +38,12 @@ $steps: 5;
 }
 
 .km-wizard-summary {
+  @include counter-x;
+
   .header {
     font-size: variables.$font-size-subhead-lg;
     margin-bottom: 16px;
   }
-
-  @include counter-x;
 }
 
 .km-os-image {
