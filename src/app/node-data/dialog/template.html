@@ -19,7 +19,8 @@ limitations under the License.
   <mat-dialog-content class="km-add-node-outer">
     <p *ngIf="mode === 'Edit'"
        class="km-dialog-context-description">Edit <b>{{machineDeploymentName}}</b> machine deployment of
-      <b>{{clusterName}}</b> cluster</p>
+      <b>{{clusterName}}</b> cluster
+    </p>
     <km-node-data [provider]="provider"
                   [showExtended]="isExtended"
                   [formControl]="form.get(Control.NodeData)">
