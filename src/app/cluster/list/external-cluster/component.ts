@@ -105,8 +105,8 @@ export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestro
       .pipe(switchMap(project => this._clusterService.externalClusters(project.id)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(clusters => {
-        this.clusters = clusters;
-        this.dataSource.data = clusters;
+        this.clusters = clusters.sort((a, b) => a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
+        this.dataSource.data = this.clusters;
         this.isInitialized = true;
       });
   }
