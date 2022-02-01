@@ -22,8 +22,8 @@ export enum StatusIcon {
   Running = 'km-icon-running',
   Pending = 'km-icon-pending',
   Error = 'km-icon-error',
-  Disabled = 'km-icon-circle km-unknown-bg', // TODO
-  Unkown = 'km-icon-circle km-unknown-bg', // TODO
+  Disabled = 'km-icon-disabled',
+  Unkown = 'km-icon-unknown',
 }
 
 export class HealthStatusUtils {

@@ -144,6 +144,12 @@
   margin: 4px 14px 4px 0;
 }
 
+.km-icon-unknown {
+  @include mixins.background-image('/assets/images/icons/circle-empty.svg', 16px);
+
+  margin: 4px 14px 4px 0;
+}
+
 .km-icon-warning {
   @include mixins.background-image('/assets/images/icons/triangle.svg', 22px);
 
