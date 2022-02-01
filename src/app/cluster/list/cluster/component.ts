@@ -36,7 +36,7 @@ import {Project} from '@shared/entity/project';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
-import {EMPTY, forkJoin, of, onErrorResumeNext, Subject} from 'rxjs';
+import {combineLatest, EMPTY, iif, of, onErrorResumeNext, Subject} from 'rxjs';
 import {catchError, distinctUntilChanged, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ClusterDeleteConfirmationComponent} from '../../details/cluster/cluster-delete-confirmation/component';
 import {MachineDeploymentService} from '@core/services/machine-deployment';
@@ -48,6 +48,12 @@ import {getClusterHealthStatus, HealthStatus} from '@shared/utils/health-status'
   styleUrls: ['./style.scss'],
 })
 export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
+  private _unsubscribe: Subject<void> = new Subject<void>();
+  private _selectedProject = {} as Project;
+  private _user: Member;
+  private _currentGroupConfig: GroupConfig;
+  private _etcdRestores: EtcdRestore[] = [];
+  private _projectChange$ = new Subject<void>();
   readonly Permission = Permission;
   clusters: Cluster[] = [];
   isInitialized = false;
@@ -59,12 +65,6 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   searchQuery: string;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  private _unsubscribe: Subject<void> = new Subject<void>();
-  private _selectedProject = {} as Project;
-  private _user: Member;
-  private _currentGroupConfig: GroupConfig;
-  private _etcdRestores: EtcdRestore[] = [];
-  private _projectChange$ = new Subject<void>();
 
   constructor(
     private readonly _clusterService: ClusterService,
@@ -100,52 +100,69 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(_ => this._clusterService.refreshClusters());
 
     this._projectChange$
-      .pipe(switchMap(_ => this._userService.getCurrentUserGroup(this._selectedProject.id)))
+      .pipe(
+        switchMap(_ =>
+          combineLatest([
+            this._userService.getCurrentUserGroup(this._selectedProject.id),
+            this._clusterService.restores(this._selectedProject.id),
+          ])
+        )
+      )
+      .pipe(
+        tap(([userGroup, restores]) => {
+          this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup);
+          this._etcdRestores = restores;
+        })
+      )
+      .pipe(switchMap(_ => this._clusterService.clusters(this._selectedProject.id)))
+      .pipe(tap(clusters => (this.clusters = clusters)))
+      .pipe(
+        switchMap(clusters =>
+          iif(
+            () => clusters.length > 0,
+            combineLatest([
+              ...clusters.map(cluster =>
+                combineLatest([
+                  of(cluster),
+                  this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(take(1)),
+                  this._clusterService
+                    .health(this._selectedProject.id, cluster.id)
+                    .pipe(catchError(() => onErrorResumeNext(EMPTY)))
+                    .pipe(tap(health => (this.health[cluster.id] = health)))
+                    .pipe(
+                      switchMap(_ =>
+                        Health.allHealthy(this.health[cluster.id])
+                          ? this._machineDeploymentService.list(cluster.id, this._selectedProject.id)
+                          : of([])
+                      )
+                    ),
+                ])
+              ),
+            ]).pipe(take(1)),
+            of([])
+          )
+        )
+      )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
+      .subscribe(groups => {
+        groups.forEach(group => {
+          const cluster = group[0];
+          const datacenter = group[1];
+          const machineDeployments = group[2];
 
-    this._projectChange$
-      .pipe(switchMap(_ => this._clusterService.restores(this._selectedProject.id)))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(restores => (this._etcdRestores = restores));
+          this.nodeDC[cluster.id] = datacenter;
+          this.machineDeployments[cluster.id] = machineDeployments;
+        });
+
+        this.dataSource.data = this.clusters;
+        this.isInitialized = true;
+      });
 
     this._projectService.selectedProject
       // Do not allow project refresh to fire clusters refresh unless project has been changed.
       .pipe(distinctUntilChanged((p: Project, q: Project) => p.id === q.id))
-      .pipe(tap(this._onProjectChange.bind(this)))
-      .pipe(switchMap(project => this._clusterService.clusters(project.id)))
-      .pipe(
-        switchMap((clusters: Cluster[]) => {
-          this.clusters = clusters;
-          this.dataSource.data = this.clusters;
-          this.isInitialized = true;
-
-          return forkJoin(
-            clusters.map(cluster => {
-              return (
-                this._datacenterService
-                  .getDatacenter(cluster.spec.cloud.dc)
-                  .pipe(tap(datacenter => (this.nodeDC[cluster.id] = datacenter)))
-                  .pipe(switchMap(_ => this._clusterService.health(this._selectedProject.id, cluster.id)))
-                  // We need to resume on error, otherwise subscription will be canceled and clusters will stop
-                  // refreshing.
-                  .pipe(catchError(() => onErrorResumeNext(EMPTY)))
-                  .pipe(tap(health => (this.health[cluster.id] = health)))
-                  .pipe(
-                    switchMap(_ =>
-                      Health.allHealthy(this.health[cluster.id])
-                        ? this._machineDeploymentService.list(cluster.id, this._selectedProject.id)
-                        : of([])
-                    )
-                  )
-                  .pipe(tap(machineDeployments => (this.machineDeployments[cluster.id] = machineDeployments)))
-              );
-            })
-          );
-        })
-      )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe();
+      .subscribe(this._onProjectChange.bind(this));
   }
 
   ngOnChanges(): void {
@@ -163,42 +180,6 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
 
   selectTemplate(): void {
     this._matDialog.open(SelectClusterTemplateDialogComponent, {data: {projectID: this._selectedProject.id}});
-  }
-
-  private _filter(cluster: Cluster, query: string): boolean {
-    query = query.toLowerCase();
-
-    // Check name.
-    if (cluster.name.toLowerCase().includes(query)) {
-      return true;
-    }
-
-    // Check labels.
-    if (cluster.labels) {
-      let hasMatchingLabel = false;
-      Object.keys(cluster.labels).forEach(key => {
-        const value = cluster.labels[key];
-        if (key.toLowerCase().includes(query) || value.toLowerCase().includes(query)) {
-          hasMatchingLabel = true;
-          return;
-        }
-      });
-      if (hasMatchingLabel) {
-        return true;
-      }
-    }
-
-    // Check provider.
-    if (Cluster.getProvider(cluster).includes(query)) {
-      return true;
-    }
-
-    // Check region.
-    const datacenter = this.nodeDC[cluster.id];
-    return (
-      !!datacenter &&
-      (datacenter.spec.country.toLowerCase().includes(query) || datacenter.spec.location.toLowerCase().includes(query))
-    );
   }
 
   getHealthStatus(cluster: Cluster): HealthStatus {
@@ -249,6 +230,42 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
             restore.status.phase === EtcdRestorePhase.Started || restore.status.phase === EtcdRestorePhase.StsRebuilding
         )
       : false;
+  }
+
+  private _filter(cluster: Cluster, query: string): boolean {
+    query = query.toLowerCase();
+
+    // Check name.
+    if (cluster.name.toLowerCase().includes(query)) {
+      return true;
+    }
+
+    // Check labels.
+    if (cluster.labels) {
+      let hasMatchingLabel = false;
+      Object.keys(cluster.labels).forEach(key => {
+        const value = cluster.labels[key];
+        if (key.toLowerCase().includes(query) || value.toLowerCase().includes(query)) {
+          hasMatchingLabel = true;
+          return;
+        }
+      });
+      if (hasMatchingLabel) {
+        return true;
+      }
+    }
+
+    // Check provider.
+    if (Cluster.getProvider(cluster).includes(query)) {
+      return true;
+    }
+
+    // Check region.
+    const datacenter = this.nodeDC[cluster.id];
+    return (
+      !!datacenter &&
+      (datacenter.spec.country.toLowerCase().includes(query) || datacenter.spec.location.toLowerCase().includes(query))
+    );
   }
 
   private _onProjectChange(project: Project): void {

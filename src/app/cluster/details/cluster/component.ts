@@ -139,6 +139,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
     this._userService
       .getCurrentUserGroup(this.projectID)
+      .pipe(takeUntil(this._unsubscribe))
       .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
     this._clusterService
@@ -172,6 +173,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.isClusterRunning = isClusterRunning(this.cluster, health);
           this.healthStatus = getClusterHealthStatus(this.cluster, health);
           this.isOPARunning = isOPARunning(this.cluster, health);
+          this.onExpandChange$.next(!this.isClusterRunning);
 
           // Conditionally create an array of observables to use for 'combineLatest' operator.
           // In case real observable should not be returned, observable emitting empty array will be added to the array.
@@ -263,7 +265,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             : cniVersions.versions.sort((a, b) => compare(coerce(a), coerce(b)));
           this.constraints = constraints;
           this.gatekeeperConfig = gatekeeperConfig;
-          this.onExpandChange$.next(!this.isClusterRunning);
         },
         error: error => {
           const errorCodeNotFound = 404;

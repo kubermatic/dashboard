@@ -151,7 +151,7 @@ export class VSphereProviderExtendedComponent extends BaseFormValidator implemen
       .get(Controls.Datastore)
       .valueChanges.pipe(filter(_ => !this._presets.preset))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(val => this._enable(!val, Controls.DatastoreCluster));
+      .subscribe((val: {main: string}) => this._enable(!val.main, Controls.DatastoreCluster));
 
     this.form
       .get(Controls.DatastoreCluster)

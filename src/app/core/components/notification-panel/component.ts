@@ -105,7 +105,7 @@ export class NotificationPanelComponent implements OnInit, OnDestroy {
       case NotificationType.success:
         return 'km-icon-check i-12';
       case NotificationType.error:
-        return 'km-icon-warning';
+        return 'km-icon-error';
       default:
         return '';
     }
