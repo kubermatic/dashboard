@@ -53,7 +53,7 @@ limitations under the License.
         *matCellDef="let element">
       <ng-container [ngSwitch]="element.imported">
         <i *ngSwitchCase="true"
-           class="km-icon-running"></i>
+           class="km-icon-success"></i>
         <mat-radio-button *ngSwitchCase="false"
                           [checked]="isSelected(element)"
                           (change)="select(element)"></mat-radio-button>

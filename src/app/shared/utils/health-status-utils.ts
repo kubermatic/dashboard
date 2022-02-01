@@ -19,8 +19,8 @@ import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {EtcdBackupConfig, EtcdBackupConfigCondition} from '@shared/entity/backup';
 
 export enum StatusIcon {
-  Running = 'km-icon-circle km-success-bg',
-  Pending = 'km-icon-circle km-warning-bg', // TODO
+  Running = 'km-icon-running',
+  Pending = 'km-icon-pending',
   Error = 'km-icon-error',
   Disabled = 'km-icon-circle km-unknown-bg', // TODO
   Unkown = 'km-icon-circle km-unknown-bg', // TODO

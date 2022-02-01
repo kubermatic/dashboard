@@ -125,7 +125,7 @@ describe('OPA Story', () => {
   });
 
   it('should verify that opa is enabled', () => {
-    ClustersPage.getOPAInfoElement().find('i').should(Condition.HaveClass, 'km-icon-running');
+    ClustersPage.getOPAInfoElement().find('i').should(Condition.HaveClass, 'km-icon-success');
   });
 
   it('should verify that the opa constraints tab is visible', () => {
