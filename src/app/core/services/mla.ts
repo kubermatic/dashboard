@@ -100,13 +100,8 @@ export class MLAService {
     return this._http.post<RuleGroup>(url, ruleGroup);
   }
 
-  editRuleGroup(
-    projectId: string,
-    clusterId: string,
-    ruleGroup: RuleGroup,
-    ruleGroupName: string
-  ): Observable<RuleGroup> {
-    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/rulegroups/${ruleGroupName}`;
+  editRuleGroup(projectId: string, clusterId: string, ruleGroup: RuleGroup): Observable<RuleGroup> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/rulegroups/${ruleGroup.name}`;
     return this._http.put<RuleGroup>(url, ruleGroup);
   }
 
@@ -142,8 +137,8 @@ export class MLAService {
     return this._http.post<RuleGroup>(url, ruleGroup);
   }
 
-  editAdminRuleGroup(seedName: string, ruleGroup: RuleGroup, ruleGroupName: string): Observable<RuleGroup> {
-    const url = `${this._newRestRoot}/seeds/${seedName}/rulegroups/${ruleGroupName}`;
+  editAdminRuleGroup(seedName: string, ruleGroup: RuleGroup): Observable<RuleGroup> {
+    const url = `${this._newRestRoot}/seeds/${seedName}/rulegroups/${ruleGroup.name}`;
     return this._http.put<RuleGroup>(url, ruleGroup);
   }
 

@@ -16,7 +16,7 @@ limitations under the License.
 <km-dialog-title>{{data.title}}</km-dialog-title>
 <mat-dialog-content>
   <p class="km-dialog-context-description"
-     *ngIf="data.mode === Mode.Edit">Edit rule group of <b>{{data.adminRuleGroup.seed}}</b> seed</p>
+     *ngIf="data.mode === Mode.Edit">Edit <b>{{data.adminRuleGroup.name}}</b> rule group of <b>{{data.adminRuleGroup.seed}}</b> seed</p>
   <form [formGroup]="form"
         fxLayout="column">
     <mat-form-field fxFlex

@@ -94,13 +94,15 @@ export class RuleGroupDialog implements OnInit, OnDestroy {
       case Mode.Add:
         return 'Create recording and alerting rule group';
       case Mode.Edit:
-        return `Edit recording and alerting rule group of <b>${this.data.cluster.name}</b> cluster`;
+        return `Edit <b>${this.data.ruleGroup.name}</b> recording and alerting rule group of <b>${this.data.cluster.name}</b> cluster`;
     }
   }
 
   save(): void {
-    const ruleGroupName = this.data.mode === Mode.Edit ? MLAUtils.getRuleGroupName(this.data.ruleGroup.data) : '';
+    const ruleGroupName =
+      this.data.mode === Mode.Edit ? this.data.ruleGroup.name : MLAUtils.getRuleGroupName(this._getRuleGroupData());
     const ruleGroup: RuleGroup = {
+      name: ruleGroupName,
       data: this._getRuleGroupData(),
       type: this.form.get(Controls.Type).value,
     };
@@ -109,7 +111,7 @@ export class RuleGroupDialog implements OnInit, OnDestroy {
       case Mode.Add:
         return this._create(ruleGroup);
       case Mode.Edit:
-        return this._edit(ruleGroup, ruleGroupName);
+        return this._edit(ruleGroup);
     }
   }
 
@@ -117,21 +119,20 @@ export class RuleGroupDialog implements OnInit, OnDestroy {
     this._mlaService
       .createRuleGroup(this.data.projectId, this.data.cluster.id, ruleGroup)
       .pipe(take(1))
-      .subscribe((result: RuleGroup) => {
+      .subscribe(_ => {
         this._matDialogRef.close(true);
-        const ruleGroupName = MLAUtils.getRuleGroupName(result.data);
-        this._notificationService.success(`The Rule Group ${ruleGroupName} was created`);
+        this._notificationService.success(`The Rule Group ${ruleGroup.name} was created`);
         this._mlaService.refreshRuleGroups();
       });
   }
 
-  private _edit(ruleGroup: RuleGroup, ruleGroupName: string): void {
+  private _edit(ruleGroup: RuleGroup): void {
     this._mlaService
-      .editRuleGroup(this.data.projectId, this.data.cluster.id, ruleGroup, ruleGroupName)
+      .editRuleGroup(this.data.projectId, this.data.cluster.id, ruleGroup)
       .pipe(take(1))
       .subscribe(_ => {
         this._matDialogRef.close(true);
-        this._notificationService.success(`The Rule Group ${ruleGroupName} was updated`);
+        this._notificationService.success(`The Rule Group ${ruleGroup.name} was updated`);
         this._mlaService.refreshRuleGroups();
       });
   }

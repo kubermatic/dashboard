@@ -93,12 +93,16 @@ export class AdminRuleGroupDialog implements OnInit, OnDestroy {
   }
 
   getDescription(): string {
-    return `Edit rule group of <b>this.data.adminRuleGroup.seed</b> seed`;
+    return `Edit <b>this.data.adminRuleGroup.name</b> rule group of <b>this.data.adminRuleGroup.seed</b> seed`;
   }
 
   save(): void {
-    const ruleGroupName = this.data.mode === Mode.Edit ? MLAUtils.getRuleGroupName(this.data.adminRuleGroup.data) : '';
+    const ruleGroupName =
+      this.data.mode === Mode.Edit
+        ? this.data.adminRuleGroup.name
+        : MLAUtils.getRuleGroupName(this._getRuleGroupData());
     const ruleGroup: RuleGroup = {
+      name: ruleGroupName,
       data: this._getRuleGroupData(),
       type: this.form.get(Controls.Type).value,
     };
@@ -107,7 +111,7 @@ export class AdminRuleGroupDialog implements OnInit, OnDestroy {
       case Mode.Add:
         return this._create(ruleGroup, this.form.get(Controls.Seed).value);
       case Mode.Edit:
-        return this._edit(ruleGroup, ruleGroupName, this.form.get(Controls.Seed).value);
+        return this._edit(ruleGroup, this.form.get(Controls.Seed).value);
     }
   }
 
@@ -115,21 +119,20 @@ export class AdminRuleGroupDialog implements OnInit, OnDestroy {
     this._mlaService
       .createAdminRuleGroup(seed, ruleGroup)
       .pipe(take(1))
-      .subscribe((result: RuleGroup) => {
+      .subscribe(_ => {
         this._matDialogRef.close(true);
-        const ruleGroupName = MLAUtils.getRuleGroupName(result.data);
-        this._notificationService.success(`The Rule Group ${ruleGroupName} was created`);
+        this._notificationService.success(`The Rule Group ${ruleGroup.name} was created`);
         this._mlaService.refreshAdminRuleGroups();
       });
   }
 
-  private _edit(ruleGroup: RuleGroup, ruleGroupName: string, seed: string): void {
+  private _edit(ruleGroup: RuleGroup, seed: string): void {
     this._mlaService
-      .editAdminRuleGroup(seed, ruleGroup, ruleGroupName)
+      .editAdminRuleGroup(seed, ruleGroup)
       .pipe(take(1))
       .subscribe(_ => {
         this._matDialogRef.close(true);
-        this._notificationService.success(`The Rule Group ${ruleGroupName} was updated`);
+        this._notificationService.success(`The Rule Group ${ruleGroup.name} was updated`);
         this._mlaService.refreshAdminRuleGroups();
       });
   }

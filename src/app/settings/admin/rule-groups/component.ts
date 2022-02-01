@@ -24,7 +24,6 @@ import {UserService} from '@core/services/user';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {AdminRuleGroup, RuleGroup, RuleGroupType} from '@shared/entity/mla';
 import {UserSettings} from '@shared/entity/settings';
-import {MLAUtils} from '@shared/utils/mla-utils';
 import _ from 'lodash';
 import {combineLatest, Observable, Subject} from 'rxjs';
 import {filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
@@ -87,7 +86,10 @@ export class AdminSettingsRuleGroupsComponent implements OnInit, OnChanges, OnDe
         this.adminRuleGroups = ruleGroupTuples
           .map(tuple => tuple[1].map<[string, RuleGroup]>(ruleGroup => [tuple[0], ruleGroup]))
           .flatMap(tuples =>
-            tuples.map(tuple => ({seed: tuple[0], data: tuple[1].data, type: tuple[1].type} as AdminRuleGroup))
+            tuples.map(
+              tuple =>
+                ({seed: tuple[0], name: tuple[1].name, data: tuple[1].data, type: tuple[1].type} as AdminRuleGroup)
+            )
           );
 
         this.dataSource.data = this.adminRuleGroups;
@@ -114,10 +116,6 @@ export class AdminSettingsRuleGroupsComponent implements OnInit, OnChanges, OnDe
 
   hasNoData(): boolean {
     return _.isEmpty(this.adminRuleGroups);
-  }
-
-  getName(data: string): string {
-    return MLAUtils.getRuleGroupName(data);
   }
 
   filter(): void {
@@ -164,13 +162,12 @@ export class AdminSettingsRuleGroupsComponent implements OnInit, OnChanges, OnDe
   }
 
   delete(adminRuleGroup: AdminRuleGroup): void {
-    const ruleGroupName = this.getName(adminRuleGroup.data);
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,
       data: {
         title: 'Delete Rule Group',
-        message: `Delete <b>${ruleGroupName}</b> rule group of <b>${adminRuleGroup.seed}</b> seed permanently?`,
+        message: `Delete <b>${adminRuleGroup.name}</b> rule group of <b>${adminRuleGroup.seed}</b> seed permanently?`,
         confirmLabel: 'Delete',
       },
     };
@@ -179,10 +176,10 @@ export class AdminSettingsRuleGroupsComponent implements OnInit, OnChanges, OnDe
       .open(ConfirmationDialogComponent, dialogConfig)
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
-      .pipe(switchMap(_ => this._mlaService.deleteAdminRuleGroup(adminRuleGroup.seed, ruleGroupName)))
+      .pipe(switchMap(_ => this._mlaService.deleteAdminRuleGroup(adminRuleGroup.seed, adminRuleGroup.name)))
       .pipe(take(1))
       .subscribe(_ => {
-        this._notificationService.success(`The Rule Group ${ruleGroupName} was deleted`);
+        this._notificationService.success(`The Rule Group ${adminRuleGroup.name} was deleted`);
         this._mlaService.refreshAdminRuleGroups();
       });
   }

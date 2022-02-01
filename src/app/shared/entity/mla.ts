@@ -21,6 +21,7 @@ export class AlertmanagerSpec {
 }
 
 export class RuleGroup {
+  name: string;
   data: string;
   type: RuleGroupType;
   isDefault?: boolean;
@@ -37,6 +38,7 @@ export enum RuleGroupType {
 
 export class AdminRuleGroup {
   seed: string;
+  name: string;
   data: string;
   type: RuleGroupType;
 }
