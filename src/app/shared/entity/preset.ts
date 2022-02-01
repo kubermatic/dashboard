@@ -65,6 +65,7 @@ export class CreatePresetSpec {
   gke?: GKEPresetSpec;
   hetzner?: HetznerPresetSpec;
   kubevirt?: KubevirtPresetSpec;
+  nutanix?: NutanixPresetSpec;
   openstack?: OpenstackPresetSpec;
   packet?: EquinixPresetSpec;
   vsphere?: VSpherePresetSpec;
@@ -151,6 +152,14 @@ export class HetznerPresetSpec extends PresetProviderSpec {
 
 export class KubevirtPresetSpec extends PresetProviderSpec {
   kubeconfig: string;
+}
+
+export class NutanixPresetSpec extends PresetProviderSpec {
+  clusterName?: string;
+  projectName?: string;
+  proxyURL: string;
+  username: string;
+  password: string;
 }
 
 export class OpenstackPresetSpec extends PresetProviderSpec {

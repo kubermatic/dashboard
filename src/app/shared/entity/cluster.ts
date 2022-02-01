@@ -111,6 +111,7 @@ export class CloudSpec {
   fake?: FakeCloudSpec;
   gcp?: GCPCloudSpec;
   kubevirt?: KubeVirtCloudSpec;
+  nutanix?: NutanixCloudSpec;
   alibaba?: AlibabaCloudSpec;
   anexia?: AnexiaCloudSpec;
 }
@@ -174,6 +175,14 @@ export class HetznerCloudSpec {
 
 export class KubeVirtCloudSpec {
   kubeconfig: string;
+}
+
+export class NutanixCloudSpec {
+  clusterName: string;
+  projectName?: string;
+  proxyURL?: string;
+  username?: string;
+  password?: string;
 }
 
 export class OpenstackCloudSpec {
