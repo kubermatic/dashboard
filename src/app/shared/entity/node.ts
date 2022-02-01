@@ -56,6 +56,7 @@ export class NodeCloudSpec {
   azure?: AzureNodeSpec;
   gcp?: GCPNodeSpec;
   kubevirt?: KubeVirtNodeSpec;
+  nutanix?: NutanixNodeSpec;
   alibaba?: AlibabaNodeSpec;
   anexia?: AnexiaNodeSpec;
 }
@@ -217,6 +218,17 @@ export class OpenstackNodeSpec {
 export class EquinixNodeSpec {
   instanceType: string;
   tags: string[];
+}
+
+export class NutanixNodeSpec {
+  subnetName: string;
+  imageName: string;
+  categories: object;
+  cpus: number;
+  cpuCores: number;
+  cpuPassthrough: boolean;
+  memoryMB: number;
+  diskSize: number;
 }
 
 export class VSphereNodeSpec {
