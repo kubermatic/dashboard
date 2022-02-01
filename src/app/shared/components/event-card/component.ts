@@ -37,7 +37,7 @@ export class EventCardComponent {
     if (this.events.filter(event => event.type === 'Warning').length > 0) {
       return 'km-icon-warning-event';
     } else if (this.events.filter(event => event.type === 'Normal').length > 0) {
-      return 'km-icon-success';
+      return 'km-icon-check';
     }
     return '';
   }

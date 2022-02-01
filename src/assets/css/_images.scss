@@ -59,7 +59,7 @@
 }
 
 .km-icon-check {
-  @include mixins.mask-image('/assets/images/icons/check.svg#16', 16px);
+  @include mixins.mask-image('/assets/images/icons/check.svg#16', 16px, $color: #1dc67f);
 
   &.i-12 {
     @include mixins.mask-image('/assets/images/icons/check.svg#16', 12px);
@@ -268,10 +268,6 @@
 
 .km-icon-reset {
   @include mixins.mask-image('/assets/images/icons/reset.svg', 18px);
-}
-
-.km-icon-success {
-  @include mixins.mask-image('/assets/images/icons/check.svg#16', 16px, $color: #1dc67f);
 }
 
 .km-icon-failed {

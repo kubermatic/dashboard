@@ -69,7 +69,7 @@ export class EventListComponent implements OnInit, OnChanges, OnDestroy {
   getTypeIcon(event: Event): string {
     switch (event.type) {
       case 'Normal':
-        return 'km-icon-success';
+        return 'km-icon-check';
       case 'Warning':
         return 'km-icon-warning-event';
       default:
