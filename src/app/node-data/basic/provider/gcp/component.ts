@@ -32,7 +32,7 @@ import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {GCPNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {GCPDiskType, GCPMachineSize, GCPZone} from '@shared/entity/provider/gcp';
 import {NodeData} from '@shared/model/NodeSpecChange';
-import {compare} from '@shared/utils/common-utils';
+import {compare} from '@shared/utils/common';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 
 enum Controls {

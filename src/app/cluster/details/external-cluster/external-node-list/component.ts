@@ -20,11 +20,11 @@ import {UserService} from '@core/services/user';
 import {ExternalCluster} from '@shared/entity/external-cluster';
 import {NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
-import {NodeUtils} from '@shared/utils/node-utils/node-utils';
+import {NodeUtils} from '@shared/utils/node';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {getNodeHealthStatus, HealthStatusUtils} from '@shared/utils/health-status-utils';
+import {getNodeHealthStatus, HealthStatus} from '@shared/utils/health-status';
 
 @Component({
   selector: 'km-external-node-list',
@@ -79,7 +79,7 @@ export class ExternalNodeListComponent implements OnInit, OnChanges, OnDestroy {
     return _.isEmpty(this.nodes) && this.isClusterRunning && this.isInitialized;
   }
 
-  getNodeHealthStatus(n: Node): HealthStatusUtils {
+  getNodeHealthStatus(n: Node): HealthStatus {
     return getNodeHealthStatus(n);
   }
 

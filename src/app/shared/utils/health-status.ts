@@ -26,7 +26,7 @@ export enum StatusIcon {
   Unkown = 'km-icon-unknown',
 }
 
-export class HealthStatusUtils {
+export class HealthStatus {
   message: string;
   icon: StatusIcon;
 
@@ -36,13 +36,13 @@ export class HealthStatusUtils {
   }
 }
 
-export function getClusterHealthStatus(c: Cluster, h: Health): HealthStatusUtils {
+export function getClusterHealthStatus(c: Cluster, h: Health): HealthStatus {
   if (c.deletionTimestamp) {
-    return new HealthStatusUtils('Deleting', StatusIcon.Error);
+    return new HealthStatus('Deleting', StatusIcon.Error);
   } else if (isClusterRunning(c, h)) {
-    return new HealthStatusUtils('Running', StatusIcon.Running);
+    return new HealthStatus('Running', StatusIcon.Running);
   }
-  return new HealthStatusUtils('Provisioning', StatusIcon.Pending);
+  return new HealthStatus('Provisioning', StatusIcon.Pending);
 }
 
 export function isClusterRunning(c: Cluster, h: Health): boolean {
@@ -57,38 +57,35 @@ export function isOPARunning(c: Cluster, h: Health): boolean {
   return !!h && HealthState.isUp(h.gatekeeperAudit) && HealthState.isUp(h.gatekeeperController) && !c.deletionTimestamp;
 }
 
-export function getNodeHealthStatus(n: Node): HealthStatusUtils {
+export function getNodeHealthStatus(n: Node): HealthStatus {
   if (n.deletionTimestamp) {
-    return new HealthStatusUtils('Deleting', StatusIcon.Error);
+    return new HealthStatus('Deleting', StatusIcon.Error);
   } else if (n.status.errorMessage) {
-    return new HealthStatusUtils('Failed', StatusIcon.Error);
+    return new HealthStatus('Failed', StatusIcon.Error);
   } else if (n.status.nodeInfo.kubeletVersion) {
-    return new HealthStatusUtils('Running', StatusIcon.Running);
+    return new HealthStatus('Running', StatusIcon.Running);
   }
-  return new HealthStatusUtils('Provisioning', StatusIcon.Pending);
+  return new HealthStatus('Provisioning', StatusIcon.Pending);
 }
 
-export function getMachineDeploymentHealthStatus(md: MachineDeployment): HealthStatusUtils {
+export function getMachineDeploymentHealthStatus(md: MachineDeployment): HealthStatus {
   if (md.deletionTimestamp) {
-    return new HealthStatusUtils('Deleting', StatusIcon.Error);
+    return new HealthStatus('Deleting', StatusIcon.Error);
   } else if (md.status && md.status.availableReplicas === md.spec.replicas) {
-    return new HealthStatusUtils('Running', StatusIcon.Running);
+    return new HealthStatus('Running', StatusIcon.Running);
   } else if (md.status && md.status.updatedReplicas !== md.spec.replicas) {
-    return new HealthStatusUtils('Updating', StatusIcon.Pending);
+    return new HealthStatus('Updating', StatusIcon.Pending);
   }
-  return new HealthStatusUtils('Provisioning', StatusIcon.Pending);
+  return new HealthStatus('Provisioning', StatusIcon.Pending);
 }
 
-export function getBackupHealthStatus(
-  backup: EtcdBackupConfig,
-  condition: EtcdBackupConfigCondition
-): HealthStatusUtils {
+export function getBackupHealthStatus(backup: EtcdBackupConfig, condition: EtcdBackupConfigCondition): HealthStatus {
   if (backup.deletionTimestamp) {
-    return new HealthStatusUtils('Deleting', StatusIcon.Error);
+    return new HealthStatus('Deleting', StatusIcon.Error);
   } else if (condition.status === 'True') {
-    return new HealthStatusUtils('Running', StatusIcon.Running);
+    return new HealthStatus('Running', StatusIcon.Running);
   } else if (condition.status === 'False') {
-    return new HealthStatusUtils('Disabled', StatusIcon.Disabled);
+    return new HealthStatus('Disabled', StatusIcon.Disabled);
   }
-  return new HealthStatusUtils('Unknown', StatusIcon.Unkown);
+  return new HealthStatus('Unknown', StatusIcon.Unkown);
 }

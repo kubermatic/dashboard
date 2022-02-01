@@ -51,8 +51,8 @@ import {Node} from '@shared/entity/node';
 import {Constraint, GatekeeperConfig} from '@shared/entity/opa';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {Config, GroupConfig} from '@shared/model/Config';
-import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin-utils/admission-plugin-utils';
-import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
+import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
+import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
 import {combineLatest, iif, Observable, of, Subject} from 'rxjs';
 import {filter, map, switchMap, take, takeUntil} from 'rxjs/operators';
@@ -64,11 +64,11 @@ import {RevokeTokenComponent} from './revoke-token/component';
 import {ShareKubeconfigComponent} from './share-kubeconfig/component';
 import {
   getClusterHealthStatus,
-  HealthStatusUtils,
+  HealthStatus,
   isClusterAPIRunning,
   isClusterRunning,
   isOPARunning,
-} from '@shared/utils/health-status-utils';
+} from '@shared/utils/health-status';
 
 @Component({
   selector: 'km-cluster-details',
@@ -94,7 +94,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   isClusterRunning = false;
   isClusterAPIRunning = false;
   isOPARunning = false;
-  healthStatus: HealthStatusUtils;
+  healthStatus: HealthStatus;
   health: Health;
   config: Config = {share_kubeconfig: false};
   projectID: string;

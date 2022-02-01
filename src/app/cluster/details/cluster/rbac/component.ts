@@ -27,7 +27,7 @@ import {combineLatest, iif, merge, of, Subject, timer} from 'rxjs';
 import {ClusterService} from '@core/services/cluster';
 import {Health} from '@shared/entity/health';
 import {AppConfigService} from '@app/config.service';
-import {isClusterRunning} from '@shared/utils/health-status-utils';
+import {isClusterRunning} from '@shared/utils/health-status';
 
 @Component({
   selector: 'km-rbac',

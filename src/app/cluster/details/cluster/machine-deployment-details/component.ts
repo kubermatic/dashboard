@@ -28,12 +28,12 @@ import {Member} from '@shared/entity/member';
 import {NodeMetrics} from '@shared/entity/metrics';
 import {getOperatingSystem, getOperatingSystemLogoClass, Node} from '@shared/entity/node';
 import {GroupConfig} from '@shared/model/Config';
-import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
+import {MemberUtils, Permission} from '@shared/utils/member';
 import {Subject, timer} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 import {PathParam} from '@core/services/params';
 import {MachineDeploymentService} from '@core/services/machine-deployment';
-import {getMachineDeploymentHealthStatus, HealthStatusUtils} from '@shared/utils/health-status-utils';
+import {getMachineDeploymentHealthStatus, HealthStatus} from '@shared/utils/health-status';
 
 @Component({
   selector: 'km-machine-deployment-details',
@@ -42,7 +42,7 @@ import {getMachineDeploymentHealthStatus, HealthStatusUtils} from '@shared/utils
 })
 export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
   machineDeployment: MachineDeployment;
-  machineDeploymentHealthStatus: HealthStatusUtils;
+  machineDeploymentHealthStatus: HealthStatus;
   nodes: Node[] = [];
   events: Event[] = [];
   metrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();

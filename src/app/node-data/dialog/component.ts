@@ -24,7 +24,7 @@ import {Cluster} from '@shared/entity/cluster';
 import {getDefaultNodeProviderSpec} from '@shared/entity/node';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
-import {objectDiff, getIconClassForButton} from '@shared/utils/common-utils';
+import {objectDiff, getIconClassForButton} from '@shared/utils/common';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {NodeDataMode} from '../config';
 
