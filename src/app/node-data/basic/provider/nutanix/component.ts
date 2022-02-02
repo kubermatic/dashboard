@@ -12,7 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {AfterViewInit, ChangeDetectionStrategy, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {
+  AfterViewChecked,
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  forwardRef,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {NodeDataService} from '@core/services/node-data/service';
 import {merge} from 'rxjs';
@@ -49,7 +57,10 @@ enum Controls {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NutanixBasicNodeDataComponent extends BaseFormValidator implements OnInit, AfterViewInit, OnDestroy {
+export class NutanixBasicNodeDataComponent
+  extends BaseFormValidator
+  implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy
+{
   readonly Controls = Controls;
 
   constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
@@ -84,6 +95,10 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
+  }
+
+  ngAfterViewChecked(): void {
+    this.form.updateValueAndValidity();
   }
 
   ngOnDestroy(): void {
