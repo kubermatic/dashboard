@@ -28,7 +28,7 @@ import {Project} from '@shared/entity/project';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import {Subject} from 'rxjs';
-import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
+import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 @Component({
   selector: 'km-restore-list',
@@ -38,6 +38,7 @@ import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 export class RestoreListComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator, {static: true}) private readonly _paginator: MatPaginator;
   private readonly _unsubscribe = new Subject<void>();
+  private readonly _onChange = new Subject<void>();
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
   private _selectedProject = {} as Project;
@@ -84,17 +85,17 @@ export class RestoreListComponent implements OnInit, OnDestroy {
     });
 
     this._projectService.selectedProject
-      .pipe(
-        switchMap(project => {
-          this._selectedProject = project;
-          return this._userService.getCurrentUserGroup(project.id);
-        })
-      )
+      .pipe(tap(project => (this._selectedProject = project)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => this._onChange.next());
+
+    this._onChange
+      .pipe(switchMap(_ => this._userService.getCurrentUserGroup(this._selectedProject.id).pipe(take(1))))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
 
-    this._projectService.selectedProject
-      .pipe(switchMap(project => this._backupService.restoreList(project.id)))
+    this._onChange
+      .pipe(switchMap(_ => this._backupService.restoreList(this._selectedProject.id)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(restores => {
         this._restores = restores;
@@ -127,7 +128,8 @@ export class RestoreListComponent implements OnInit, OnDestroy {
         )
       )
       .subscribe(_ => {
-        this._notificationService.success(`Deleted the ${restore.name} restore object`);
+        this._notificationService.success(`Deleting the ${restore.name} restore object`);
+        this._onChange.next();
       });
   }
 }

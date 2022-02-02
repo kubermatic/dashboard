@@ -110,7 +110,7 @@ export class AddExternalClusterDialogComponent implements OnInit, OnDestroy {
         next: cluster => {
           this._creating = false;
           this._matDialogRef.close();
-          this._notificationService.success(`The ${cluster.name} cluster was added`);
+          this._notificationService.success(`Added the ${cluster.name} cluster`);
           this._router.navigate([`/projects/${this.projectId}/clusters/external/${cluster.id}`]);
         },
         error: () => (this._creating = false),

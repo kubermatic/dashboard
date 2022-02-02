@@ -17,25 +17,25 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import {Router} from '@angular/router';
+import {ClusterTemplateService} from '@core/services/cluster-templates';
+import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
+import {ClusterFromTemplateDialogComponent} from '@shared/components/cluster-from-template/dialog/component';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
+import {Cluster} from '@shared/entity/cluster';
+import {ClusterTemplate, ClusterTemplateScope} from '@shared/entity/cluster-template';
 import {View} from '@shared/entity/common';
+import {Datacenter} from '@shared/entity/datacenter';
 import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
-import {distinctUntilChanged, filter, switchMap, take, takeUntil} from 'rxjs/operators';
-import {Router} from '@angular/router';
-import {ClusterTemplateService} from '@core/services/cluster-templates';
-import {ClusterTemplate, ClusterTemplateScope} from '@shared/entity/cluster-template';
-import {Datacenter} from '@shared/entity/datacenter';
-import {DatacenterService} from '@core/services/datacenter';
-import {Cluster} from '@shared/entity/cluster';
-import {ClusterFromTemplateDialogComponent} from '@shared/components/cluster-from-template/dialog/component';
+import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 @Component({
   selector: 'km-cluster-template',
@@ -56,7 +56,7 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
   private _currentGroupConfig: GroupConfig;
   private _selectedProject: Project;
   private _unsubscribe = new Subject<void>();
-  private _refresh = new Subject<void>();
+  private _onChange = new Subject<void>();
 
   constructor(
     private readonly _ctService: ClusterTemplateService,
@@ -72,6 +72,7 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
     this._setupList();
     this._loadUser();
     this._loadProject();
+    this._loadUserGroup();
     this._loadTemplates();
   }
 
@@ -103,21 +104,21 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
 
   private _loadProject(): void {
     this._projectService.selectedProject
-      .pipe(
-        switchMap(project => {
-          this._selectedProject = project;
-          this._refresh.next();
-          return this._userService.getCurrentUserGroup(project.id);
-        })
-      )
-      .pipe(take(1))
+      .pipe(tap(project => (this._selectedProject = project)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => this._onChange.next());
+  }
+
+  private _loadUserGroup(): void {
+    this._onChange
+      .pipe(switchMap(_ => this._userService.getCurrentUserGroup(this._selectedProject.id).pipe(take(1))))
+      .pipe(takeUntil(this._unsubscribe))
       .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
   }
 
   private _loadTemplates(): void {
-    this._projectService.selectedProject
-      .pipe(distinctUntilChanged((p: Project, q: Project) => p.id === q.id))
-      .pipe(switchMap(project => this._ctService.list(project.id)))
+    this._onChange
+      .pipe(switchMap(_ => this._ctService.list(this._selectedProject.id)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(templates => {
         this.templates = templates;
@@ -197,7 +198,7 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(switchMap(_ => this._ctService.delete(this._selectedProject.id, template.id)))
       .pipe(take(1))
       .subscribe(() => {
-        this._refresh.next();
+        this._onChange.next();
         this._notificationService.success(`Deleting the ${template.name} cluster template`);
       });
   }

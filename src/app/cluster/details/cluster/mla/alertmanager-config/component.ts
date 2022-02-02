@@ -212,7 +212,7 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
       .pipe(switchMap(_ => this._mlaService.resetAlertmanagerConfig(this.projectID, this.cluster.id)))
       .pipe(take(1))
       .subscribe(_ => {
-        this._notificationService.success('The Alertmanager config was reset to default');
+        this._notificationService.success('Reset the Alertmanager config to the default value');
         this._mlaService.refreshAlertmanagerConfig();
       });
   }

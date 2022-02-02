@@ -54,7 +54,7 @@ export class CreateServiceAccountDialogComponent implements OnInit {
       .subscribe(() => {
         this._matDialogRef.close(true);
         this._notificationService.success(
-          `The ${model.name} service account was created in the ${this.project.name} project`
+          `Created the ${model.name} service account in the ${this.project.name} project`
         );
       });
   }

@@ -140,7 +140,7 @@ export class ServiceAccountTokenComponent implements OnInit {
       .pipe(take(1))
       .subscribe(() => {
         this._notificationService.success(
-          `The ${token.name} token was removed from the ${this.serviceaccount.name} service account`
+          `Removed the ${token.name} token from the ${this.serviceaccount.name} service account`
         );
         this._googleAnalyticsService.emitEvent('serviceAccountTokenOverview', 'ServiceAccountTokenDeleted');
       });
