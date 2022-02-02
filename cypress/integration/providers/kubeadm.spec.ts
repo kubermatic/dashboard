@@ -71,7 +71,7 @@ describe('kubeAdm Provider', () => {
 
   it('should wait for the cluster to be ready', () => {
     ClustersPage.getClusterName().should(Condition.Contain, clusterName);
-    ClustersPage.getClusterStatus().should(Condition.HaveClass, 'km-success-bg');
+    ClustersPage.getClusterStatus().should(Condition.HaveClass, 'km-icon-running');
   });
 
   it('should delete created cluster', () => {

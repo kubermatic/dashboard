@@ -27,7 +27,7 @@ import {PresetsService} from '@core/services/wizard/presets';
 import {AzureNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {AzureSizes, AzureZones} from '@shared/entity/provider/azure';
 import {NodeData} from '@shared/model/NodeSpecChange';
-import {compare} from '@shared/utils/common-utils';
+import {compare} from '@shared/utils/common';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
 import {merge, Observable} from 'rxjs';

@@ -22,7 +22,7 @@ import {ProjectMockService} from '@test/services/project-mock';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {SharedModule} from '@shared/module';
-import {Group} from '@shared/utils/member-utils/member-utils';
+import {Group} from '@shared/utils/member';
 import {AddMemberComponent} from './component';
 import {MemberService} from '@core/services/member';
 import {MemberServiceMock} from '@test/services/member-mock';

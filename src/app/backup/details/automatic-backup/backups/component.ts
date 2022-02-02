@@ -27,7 +27,7 @@ import {BackupStatus, BackupStatusPhaseCompleted} from '@shared/entity/backup';
 import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
 import {GroupConfig} from '@shared/model/Config';
-import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
+import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';

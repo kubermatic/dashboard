@@ -42,7 +42,7 @@ limitations under the License.
         <td mat-cell
             *matCellDef="let element">
           <i [matTooltip]="getNodeHealthStatus(element).message"
-             [ngClass]="getNodeHealthStatus(element).color"></i>
+             [ngClass]="getNodeHealthStatus(element).icon"></i>
         </td>
       </ng-container>
 
@@ -68,7 +68,7 @@ limitations under the License.
           </ng-container>
           <ng-container *ngIf="element.status.errorMessage">
             <i [matTooltip]="element.status.errorMessage"
-               class="km-icon-error"></i>
+               class="km-icon-warning"></i>
           </ng-container>
         </td>
       </ng-container>

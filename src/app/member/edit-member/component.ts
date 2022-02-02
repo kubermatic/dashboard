@@ -18,7 +18,7 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
 import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
-import {MemberUtils} from '@shared/utils/member-utils/member-utils';
+import {MemberUtils} from '@shared/utils/member';
 import {MemberService} from '@core/services/member';
 
 @Component({

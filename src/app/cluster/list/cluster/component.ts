@@ -34,13 +34,13 @@ import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {GroupConfig} from '@shared/model/Config';
-import {ClusterHealthStatus} from '@shared/utils/health-status/cluster-health-status';
-import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
+import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
 import {combineLatest, EMPTY, iif, of, onErrorResumeNext, Subject} from 'rxjs';
 import {catchError, distinctUntilChanged, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ClusterDeleteConfirmationComponent} from '../../details/cluster/cluster-delete-confirmation/component';
 import {MachineDeploymentService} from '@core/services/machine-deployment';
+import {getClusterHealthStatus, HealthStatus} from '@shared/utils/health-status';
 
 @Component({
   selector: 'km-cluster-list',
@@ -182,8 +182,8 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     this._matDialog.open(SelectClusterTemplateDialogComponent, {data: {projectID: this._selectedProject.id}});
   }
 
-  getHealthStatus(cluster: Cluster): ClusterHealthStatus {
-    return ClusterHealthStatus.getHealthStatus(cluster, this.health[cluster.id]);
+  getHealthStatus(cluster: Cluster): HealthStatus {
+    return getClusterHealthStatus(cluster, this.health[cluster.id]);
   }
 
   can(permission: Permission): boolean {

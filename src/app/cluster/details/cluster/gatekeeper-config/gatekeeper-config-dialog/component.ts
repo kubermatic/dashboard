@@ -18,7 +18,7 @@ import {OPAService} from '@core/services/opa';
 import {NotificationService} from '@core/services/notification';
 import {Cluster} from '@shared/entity/cluster';
 import {GatekeeperConfig, GatekeeperConfigSpec} from '@shared/entity/opa';
-import {getIconClassForButton} from '@shared/utils/common-utils';
+import {getIconClassForButton} from '@shared/utils/common';
 import * as y from 'js-yaml';
 import _ from 'lodash';
 import {Subject} from 'rxjs';

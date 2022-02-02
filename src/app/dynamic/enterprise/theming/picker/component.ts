@@ -25,7 +25,7 @@ import {ThemeService} from '@app/dynamic/enterprise/theming/services/theme';
 import {UserService} from '@core/services/user';
 import {UserSettings} from '@shared/entity/settings';
 import {Theme} from '@shared/model/Config';
-import {objectDiff} from '@shared/utils/common-utils';
+import {objectDiff} from '@shared/utils/common';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, take, switchMap, takeUntil} from 'rxjs/operators';

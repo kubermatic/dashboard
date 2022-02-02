@@ -24,7 +24,7 @@ import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {CustomLink, UserSettings} from '@shared/entity/settings';
 import {GroupConfig} from '@shared/model/Config';
-import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
+import {MemberUtils, Permission} from '@shared/utils/member';
 import {BehaviorSubject, merge, Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 

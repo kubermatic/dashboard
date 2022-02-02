@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Member} from '../../entity/member';
-import {GroupConfig} from '../../model/Config';
+import {Member} from '../entity/member';
+import {GroupConfig} from '../model/Config';
 
 export enum Permission {
   View = 'view',
