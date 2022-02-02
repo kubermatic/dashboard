@@ -51,6 +51,7 @@ import {HetznerProviderExtendedComponent} from './step/provider-settings/provide
 import {OpenstackProviderExtendedComponent} from './step/provider-settings/provider/extended/openstack/component';
 import {VSphereProviderExtendedComponent} from './step/provider-settings/provider/extended/vsphere/component';
 import {SummaryStepComponent} from './step/summary/component';
+import {NutanixProviderBasicComponent} from '@app/wizard/step/provider-settings/provider/basic/nutanix/component';
 
 const components: any[] = [
   WizardComponent,
@@ -85,6 +86,7 @@ const components: any[] = [
   AnexiaProviderBasicComponent,
   NodeSettingsStepComponent,
   ClusterSSHKeysComponent,
+  NutanixProviderBasicComponent,
 ];
 
 @NgModule({

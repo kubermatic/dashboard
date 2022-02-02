@@ -63,7 +63,7 @@ export class NutanixProviderBasicComponent extends BaseFormValidator implements 
     });
 
     this.form.valueChanges
-      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.HETZNER))
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.NUTANIX))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
         this._presets.enablePresets(Object.values(Controls).every(control => !this.form.get(control).value))
