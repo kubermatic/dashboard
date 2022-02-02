@@ -29,7 +29,7 @@ import {takeUntil} from 'rxjs/operators';
 import {NodeCloudSpec, NodeSpec, EquinixNodeSpec} from '@shared/entity/node';
 import {EquinixSize} from '@shared/entity/provider/equinix';
 import {NodeData} from '@shared/model/NodeSpecChange';
-import {compare} from '@shared/utils/common-utils';
+import {compare} from '@shared/utils/common';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 
 enum Controls {

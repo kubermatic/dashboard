@@ -14,7 +14,7 @@
 
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {getIconClassForButton} from '@shared/utils/common-utils';
+import {getIconClassForButton} from '@shared/utils/common';
 
 export interface ConfirmationDialogConfig {
   title: string;

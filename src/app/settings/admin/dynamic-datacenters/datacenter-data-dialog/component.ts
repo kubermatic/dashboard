@@ -20,7 +20,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DatacenterService} from '@core/services/datacenter';
 import {Datacenter} from '@shared/entity/datacenter';
 import {INTERNAL_NODE_PROVIDERS} from '@shared/model/NodeProviderConstants';
-import {getIconClassForButton} from '@shared/utils/common-utils';
+import {getIconClassForButton} from '@shared/utils/common';
 import * as countryCodeLookup from 'country-code-lookup';
 import * as y from 'js-yaml';
 import _ from 'lodash';

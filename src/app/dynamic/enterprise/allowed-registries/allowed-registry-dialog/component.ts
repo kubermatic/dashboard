@@ -22,7 +22,7 @@ import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
-import {getIconClassForButton} from '@shared/utils/common-utils';
+import {getIconClassForButton} from '@shared/utils/common';
 import {Subject} from 'rxjs';
 import {take} from 'rxjs/operators';
 import {AllowedRegistry} from '../entity';

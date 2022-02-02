@@ -26,7 +26,7 @@ import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialo
 import {Project} from '@shared/entity/project';
 import {ServiceAccount} from '@shared/entity/service-account';
 import {GroupConfig} from '@shared/model/Config';
-import {MemberUtils} from '@shared/utils/member-utils/member-utils';
+import {MemberUtils} from '@shared/utils/member';
 import _ from 'lodash';
 import {EMPTY, merge, of, Subject, timer} from 'rxjs';
 import {catchError, filter, switchMap, switchMapTo, take, takeUntil} from 'rxjs/operators';

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Node} from '../../entity/node';
+import {Node} from '../entity/node';
 
 export class NodeUtils {
   static getFormattedNodeMemory(memory: string): string {

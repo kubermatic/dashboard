@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy, OnInit, OnChanges, ViewChild, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -23,7 +23,7 @@ import {UserService} from '@core/services/user';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Cluster} from '@shared/entity/cluster';
 import {RuleGroup, RuleGroupType} from '@shared/entity/mla';
-import {MLAUtils} from '@shared/utils/mla-utils';
+import {MLAUtils} from '@shared/utils/mla';
 import {UserSettings} from '@shared/entity/settings';
 import _ from 'lodash';
 import {Subject} from 'rxjs';

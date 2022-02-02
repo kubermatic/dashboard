@@ -19,7 +19,7 @@ import {DatacenterService} from '@core/services/datacenter';
 import {PresetsService} from '@core/services/wizard/presets';
 import {CloudSpec, Cluster, ClusterSpec, HetznerCloudSpec} from '@shared/entity/cluster';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {isObjectEmpty} from '@shared/utils/common-utils';
+import {isObjectEmpty} from '@shared/utils/common';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge} from 'rxjs';
 import {distinctUntilChanged, filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';

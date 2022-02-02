@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {HealthStatusColor} from '@shared/utils/health-status/health-status';
+import {StatusIcon} from '@shared/utils/health-status';
 
 export class Project {
   creationTimestamp: Date;
@@ -31,11 +31,11 @@ export class Project {
   static getStatusIcon(project: Project): string {
     switch (project?.status) {
       case 'Active':
-        return HealthStatusColor.Green;
+        return StatusIcon.Running;
       case 'Inactive':
-        return HealthStatusColor.Grey;
+        return StatusIcon.Disabled;
       case 'Terminating':
-        return HealthStatusColor.Red;
+        return StatusIcon.Error;
       default:
         return '';
     }

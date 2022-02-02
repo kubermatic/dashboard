@@ -14,7 +14,7 @@
 
 import {fakeMember} from '@test/data/member';
 import {fakeProject} from '@test/data/project';
-import {MemberUtils} from './member-utils';
+import {MemberUtils} from './member';
 
 describe('MemberUtils', () => {
   it('should get group in project', () => {

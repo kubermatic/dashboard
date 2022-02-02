@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {HealthStatusColor} from '@shared/utils/health-status/health-status';
 import _ from 'lodash';
+import {StatusIcon} from '@shared/utils/health-status';
 
 export enum ExternalClusterProvider {
   Custom = 'custom',
@@ -48,19 +48,19 @@ export class ExternalCluster {
     return cluster?.status?.statusMessage ? `${state}: ${cluster?.status.statusMessage}` : state;
   }
 
-  static getStatusColor(cluster: ExternalCluster): string {
+  static getStatusIcon(cluster: ExternalCluster): string {
     switch (cluster?.status?.state) {
       case ExternalClusterState.Running:
-        return HealthStatusColor.Green;
+        return StatusIcon.Running;
       case ExternalClusterState.Provisioning:
       case ExternalClusterState.Reconciling:
-        return HealthStatusColor.Orange;
+        return StatusIcon.Pending;
       case ExternalClusterState.Deleting:
       case ExternalClusterState.Error:
-        return HealthStatusColor.Red;
+        return StatusIcon.Error;
       case ExternalClusterState.Unknown:
       default:
-        return HealthStatusColor.Grey;
+        return StatusIcon.Unkown;
     }
   }
 }

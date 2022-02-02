@@ -18,7 +18,9 @@ limitations under the License.
   <km-dialog-title>{{mode}} Machine Deployment</km-dialog-title>
   <mat-dialog-content class="km-add-node-outer">
     <p *ngIf="mode === 'Edit'"
-       class="km-dialog-context-description">Edit <b>{{machineDeploymentName}}</b> machine deployment of <b>{{clusterName}}</b> cluster</p>
+       class="km-dialog-context-description">Edit <b>{{machineDeploymentName}}</b> machine deployment of
+      <b>{{clusterName}}</b> cluster
+    </p>
     <km-node-data [provider]="provider"
                   [showExtended]="isExtended"
                   [formControl]="form.get(Control.NodeData)">
@@ -34,7 +36,7 @@ limitations under the License.
     </button>
     <div fxFlex></div>
     <i *ngIf="isRecreationWarningVisible"
-       class="km-icon-error km-warning-bg"
+       class="km-icon-warning km-warning-bg"
        matTooltip="You have changed node specification. All nodes will be recreated.">
     </i>
     <button mat-flat-button

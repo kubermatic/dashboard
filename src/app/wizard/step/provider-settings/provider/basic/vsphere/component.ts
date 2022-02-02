@@ -18,7 +18,7 @@ import {ClusterSpecService} from '@core/services/cluster-spec';
 import {PresetsService} from '@core/services/wizard/presets';
 import {CloudSpec, Cluster, ClusterSpec, VSphereCloudSpec} from '@shared/entity/cluster';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {isObjectEmpty} from '@shared/utils/common-utils';
+import {isObjectEmpty} from '@shared/utils/common';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge} from 'rxjs';
 import {distinctUntilChanged, filter, takeUntil} from 'rxjs/operators';

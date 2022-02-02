@@ -25,7 +25,7 @@ import {
   ServiceAccountToken,
   ServiceAccountTokenPatch,
 } from '@shared/entity/service-account';
-import {getIconClassForButton} from '@shared/utils/common-utils';
+import {getIconClassForButton} from '@shared/utils/common';
 import {take} from 'rxjs/operators';
 import {ServiceAccountService} from '@core/services/service-account';
 

@@ -125,7 +125,7 @@ describe('OPA Story', () => {
   });
 
   it('should verify that opa is enabled', () => {
-    ClustersPage.getOPAInfoElement().find('i').should(Condition.HaveClass, 'km-icon-running');
+    ClustersPage.getOPAInfoElement().find('i').should(Condition.HaveClass, 'km-icon-check');
   });
 
   it('should verify that the opa constraints tab is visible', () => {
@@ -138,7 +138,7 @@ describe('OPA Story', () => {
 
   it('should wait for initial machine deployment to be created', () => {
     ClustersPage.getMachineDeploymentList().should(Condition.Contain, initialMachineDeploymentName);
-    ClustersPage.getMachineDeploymentList().find('i').should(Condition.HaveClass, 'km-success-bg');
+    ClustersPage.getMachineDeploymentList().find('i').should(Condition.HaveClass, 'km-icon-running');
   });
 
   it('should switch to opa constraint tab', () => {
