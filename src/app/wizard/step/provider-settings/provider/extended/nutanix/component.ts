@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {ChangeDetectionStrategy, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {PresetsService} from '@core/services/wizard/presets';
 import {CloudSpec, Cluster, ClusterSpec, NutanixCloudSpec} from '@shared/entity/cluster';
@@ -24,7 +24,6 @@ import {merge} from 'rxjs';
 import {distinctUntilChanged, filter, takeUntil} from 'rxjs/operators';
 
 enum Controls {
-  ClusterName = 'clusterName',
   ProjectName = 'projectName',
 }
 
@@ -59,7 +58,6 @@ export class NutanixProviderExtendedComponent extends BaseFormValidator implemen
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.ClusterName]: this._builder.control('', [Validators.required]),
       [Controls.ProjectName]: this._builder.control(''),
     });
 
@@ -68,8 +66,9 @@ export class NutanixProviderExtendedComponent extends BaseFormValidator implemen
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._presets.enablePresets(isObjectEmpty(this._clusterSpecService.cluster.spec.cloud.nutanix)));
 
-    merge(this.form.get(Controls.ClusterName).valueChanges, this.form.get(Controls.ProjectName).valueChanges)
-      .pipe(distinctUntilChanged())
+    this.form
+      .get(Controls.ProjectName)
+      .valueChanges.pipe(distinctUntilChanged())
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getCluster()));
 
@@ -103,7 +102,6 @@ export class NutanixProviderExtendedComponent extends BaseFormValidator implemen
       spec: {
         cloud: {
           nutanix: {
-            clusterName: this.form.get(Controls.ClusterName).value,
             projectName: this.form.get(Controls.ProjectName).value,
           } as NutanixCloudSpec,
         } as CloudSpec,

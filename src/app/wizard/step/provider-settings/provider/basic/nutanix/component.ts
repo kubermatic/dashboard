@@ -26,6 +26,7 @@ export enum Controls {
   Username = 'username',
   Password = 'password',
   ProxyURL = 'proxyURL',
+  ClusterName = 'clusterName',
 }
 
 @Component({
@@ -60,6 +61,7 @@ export class NutanixProviderBasicComponent extends BaseFormValidator implements 
       [Controls.Username]: this._builder.control('', [Validators.required]),
       [Controls.Password]: this._builder.control('', [Validators.required]),
       [Controls.ProxyURL]: this._builder.control('', [Validators.required]),
+      [Controls.ClusterName]: this._builder.control('', [Validators.required]),
     });
 
     this.form.valueChanges
@@ -76,7 +78,8 @@ export class NutanixProviderBasicComponent extends BaseFormValidator implements 
     merge(
       this.form.get(Controls.Username).valueChanges,
       this.form.get(Controls.Password).valueChanges,
-      this.form.get(Controls.ProxyURL).valueChanges
+      this.form.get(Controls.ProxyURL).valueChanges,
+      this.form.get(Controls.ClusterName).valueChanges
     )
       .pipe(distinctUntilChanged())
       .pipe(takeUntil(this._unsubscribe))
@@ -110,6 +113,7 @@ export class NutanixProviderBasicComponent extends BaseFormValidator implements 
             username: this.form.get(Controls.Username).value,
             password: this.form.get(Controls.Password).value,
             proxyURL: this.form.get(Controls.ProxyURL).value,
+            clusterName: this.form.get(Controls.ClusterName).value,
           } as NutanixCloudSpec,
         } as CloudSpec,
       } as ClusterSpec,

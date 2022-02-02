@@ -50,4 +50,16 @@ limitations under the License.
       Proxy URL is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
+  <mat-form-field fxFlex>
+    <mat-label>Cluster Name</mat-label>
+    <input matInput
+           [formControlName]="Controls.ClusterName"
+           [name]="Controls.ClusterName"
+           type="text"
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.get(Controls.ClusterName).hasError('required')">
+      Cluster name is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
 </form>
