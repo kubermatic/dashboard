@@ -106,12 +106,7 @@ export class AdminSettingsRuleGroupsComponent implements OnInit, OnChanges, OnDe
   }
 
   isPaginatorVisible(): boolean {
-    return (
-      this.adminRuleGroups &&
-      this.adminRuleGroups.length > 0 &&
-      this.paginator &&
-      this.adminRuleGroups.length > this.paginator.pageSize
-    );
+    return this.adminRuleGroups?.length > this.paginator?.pageSize;
   }
 
   hasNoData(): boolean {
