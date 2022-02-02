@@ -23,6 +23,6 @@ export class PropertyBooleanComponent {
   @Input() value: boolean;
 
   getIcon(): string {
-    return this.value ? 'km-icon-running' : 'km-icon-disabled';
+    return this.value ? 'km-icon-check' : 'km-icon-disabled';
   }
 }

@@ -28,7 +28,7 @@ import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {GroupConfig} from '@shared/model/Config';
-import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
+import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {distinctUntilChanged, switchMap, take, takeUntil, tap} from 'rxjs/operators';
@@ -105,8 +105,8 @@ export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestro
       .pipe(switchMap(project => this._clusterService.externalClusters(project.id)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(clusters => {
-        this.clusters = clusters;
-        this.dataSource.data = clusters;
+        this.clusters = clusters.sort((a, b) => a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
+        this.dataSource.data = this.clusters;
         this.isInitialized = true;
       });
   }
@@ -182,7 +182,7 @@ export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestro
   }
 
   getStatusColor(cluster: ExternalCluster): string {
-    return ExternalCluster.getStatusColor(cluster);
+    return ExternalCluster.getStatusIcon(cluster);
   }
 
   disconnectClusterDialog(cluster: ExternalCluster, event: Event): void {

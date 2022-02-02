@@ -13,27 +13,27 @@
 // limitations under the License.
 
 import {MachineDeployment} from '@shared/entity/machine-deployment';
-import {HealthStatusColor, HealthStatusMessage} from '@shared/utils/health-status/health-status';
+import {StatusIcon} from '@shared/utils/health-status';
 
 export class ExternalMachineDeployment extends MachineDeployment {
   cloud?: ExternalMachineDeploymentCloudSpec;
 
-  static getStatusColor(md: ExternalMachineDeployment): string {
+  static getStatusIcon(md: ExternalMachineDeployment): StatusIcon {
     if (md?.deletionTimestamp) {
-      return HealthStatusColor.Red;
+      return StatusIcon.Error;
     } else if (md?.status?.readyReplicas === md?.status?.replicas) {
-      return HealthStatusColor.Green;
+      return StatusIcon.Running;
     }
-    return HealthStatusColor.Orange;
+    return StatusIcon.Pending;
   }
 
   static getStatusMessage(md: ExternalMachineDeployment): string {
     if (md?.deletionTimestamp) {
-      return HealthStatusMessage.Deleting;
+      return 'Deleting';
     } else if (md?.status?.readyReplicas === md?.status?.replicas) {
-      return HealthStatusMessage.Running;
+      return 'Running';
     }
-    return HealthStatusMessage.Provisioning;
+    return 'Provisioning';
   }
 }
 

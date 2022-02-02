@@ -22,7 +22,7 @@ limitations under the License.
     <mat-card-header>
       <mat-card-title class="km-machine-deployment-name">
         <i [matTooltip]="machineDeploymentHealthStatus.message"
-           [ngClass]="machineDeploymentHealthStatus.color"
+           [ngClass]="machineDeploymentHealthStatus.icon"
            class="km-machine-deployment-health"></i>
         <span ngxClipboard
               [cbContent]="machineDeployment.name"
@@ -165,8 +165,7 @@ limitations under the License.
                 [nodes]="nodes"
                 [nodesMetrics]="metrics"
                 (deleteNode)="loadNodes()"
-                [projectID]="getProjectID()"
-                [clusterHealthStatus]="{css: 'km-status-running'}"></km-node-list>
+                [projectID]="getProjectID()"></km-node-list>
 
   <km-event-card [events]="events"></km-event-card>
 

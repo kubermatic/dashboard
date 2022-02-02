@@ -30,7 +30,7 @@ import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {CloudSpec, Cluster, ClusterSpec, VSphereCloudSpec} from '@shared/entity/cluster';
 import {VSphereFolder, VSphereNetwork} from '@shared/entity/provider/vsphere';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {isObjectEmpty} from '@shared/utils/common-utils';
+import {isObjectEmpty} from '@shared/utils/common';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 
 import _ from 'lodash';

@@ -20,7 +20,7 @@ import {UserService} from '@core/services/user';
 import {pushToSide} from '@shared/animations/push';
 import {UserSettings} from '@shared/entity/settings';
 import {Changelog, ChangelogCategory, ChangelogEntry} from '@shared/model/changelog';
-import {compare} from '@shared/utils/common-utils';
+import {compare} from '@shared/utils/common';
 import {take} from 'rxjs/operators';
 
 @Component({

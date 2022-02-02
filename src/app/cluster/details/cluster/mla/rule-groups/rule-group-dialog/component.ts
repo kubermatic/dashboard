@@ -19,10 +19,10 @@ import {MLAService} from '@core/services/mla';
 import {NotificationService} from '@core/services/notification';
 import {Cluster} from '@shared/entity/cluster';
 import {RuleGroup, RuleGroupType} from '@shared/entity/mla';
-import {getIconClassForButton} from '@shared/utils/common-utils';
-import {MLAUtils} from '@shared/utils/mla-utils';
+import {getIconClassForButton} from '@shared/utils/common';
+import {MLAUtils} from '@shared/utils/mla';
 import _ from 'lodash';
-import {encode, decode} from 'js-base64';
+import {decode, encode} from 'js-base64';
 import {Subject} from 'rxjs';
 import {take} from 'rxjs/operators';
 

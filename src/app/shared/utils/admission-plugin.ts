@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {AbstractControl} from '@angular/forms';
-import {Datacenter} from '../../entity/datacenter';
+import {Datacenter} from '../entity/datacenter';
 
 export enum AdmissionPlugin {
   PodSecurityPolicy = 'PodSecurityPolicy',

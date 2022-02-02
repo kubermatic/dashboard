@@ -14,7 +14,7 @@
 
 import {Component, Input} from '@angular/core';
 import {HealthState} from '@shared/entity/health';
-import {HealthStatusColor, HealthStatusMessage} from '@shared/utils/health-status/health-status';
+import {StatusIcon} from '@shared/utils/health-status';
 
 @Component({
   selector: 'km-property-health',
@@ -24,29 +24,29 @@ export class PropertyHealthComponent {
   @Input() label: string;
   @Input() healthState: HealthState;
 
-  get icon(): HealthStatusColor {
+  get icon(): StatusIcon {
     switch (this.healthState) {
       case HealthState.Up:
-        return HealthStatusColor.Green;
+        return StatusIcon.Running;
       case HealthState.Down:
-        return HealthStatusColor.Red;
+        return StatusIcon.Error;
       case HealthState.Provisioning:
-        return HealthStatusColor.Orange;
+        return StatusIcon.Pending;
       default:
-        return HealthStatusColor.Grey;
+        return StatusIcon.Unkown;
     }
   }
 
-  get message(): HealthStatusMessage {
+  get message(): string {
     switch (this.healthState) {
       case HealthState.Up:
-        return HealthStatusMessage.Running;
+        return 'Running';
       case HealthState.Down:
-        return HealthStatusMessage.Failed;
+        return 'Failed';
       case HealthState.Provisioning:
-        return HealthStatusMessage.Provisioning;
+        return 'Provisioning';
       default:
-        return HealthStatusMessage.Unknown;
+        return 'Unknown';
     }
   }
 }

@@ -30,7 +30,7 @@ import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {AlibabaInstanceType, AlibabaVSwitch, AlibabaZone} from '@shared/entity/provider/alibaba';
 import {NodeData} from '@shared/model/NodeSpecChange';
-import {compare} from '@shared/utils/common-utils';
+import {compare} from '@shared/utils/common';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
 import {merge, Observable} from 'rxjs';

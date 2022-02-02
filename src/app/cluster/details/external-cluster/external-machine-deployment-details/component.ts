@@ -25,7 +25,7 @@ import {Node} from '@shared/entity/node';
 import {forkJoin, Subject, timer} from 'rxjs';
 import {switchMap, take, takeUntil} from 'rxjs/operators';
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
-import {MemberUtils, Permission} from '@shared/utils/member-utils/member-utils';
+import {MemberUtils, Permission} from '@shared/utils/member';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ReplicasDialogComponent} from '@app/cluster/details/external-cluster/replicas-dialog/component';
 import {UserService} from '@core/services/user';
@@ -116,7 +116,7 @@ export class ExternalMachineDeploymentDetailsComponent implements OnInit, OnDest
   }
 
   getStatusColor(): string {
-    return ExternalMachineDeployment.getStatusColor(this.machineDeployment);
+    return ExternalMachineDeployment.getStatusIcon(this.machineDeployment);
   }
 
   getStatusMessage(): string {
