@@ -16,7 +16,7 @@
 
 @mixin theme-notification-component($colors) {
   km-notification {
-    background: map.get($colors, background-card);
+    background: map.get($colors, background-app-bar);
     color: map.get($colors, text);
 
     .type {
