@@ -205,20 +205,23 @@ limitations under the License.
             <div class="km-icon-info km-pointer"
                  matTooltip="Set limit to zero to allow unlimited project creation for users. It does not affect administrators."></div>
           </div>
-          <mat-checkbox fxLayoutAlign=" center"
-                        id="km-project-admin-only-setting"
-                        [(ngModel)]="settings.restrictProjectCreation"
-                        (change)="onSettingsChange()">Restrict Project Creation to Administrators
-          </mat-checkbox>
-          <km-number-stepper [disabled]="settings.restrictProjectCreation"
-                             [(ngModel)]="settings.userProjectsLimit"
-                             (ngModelChange)="onSettingsChange()"
-                             id="km-project-limit-setting"
-                             label="User Projects Limit"
-                             min="0"
-                             required>
-          </km-number-stepper>
-          <km-spinner-with-confirmation [isSaved]="isEqual(settings.userProjectsLimit, apiSettings.userProjectsLimit) && isEqual(settings.restrictProjectCreation, apiSettings.restrictProjectCreation)"></km-spinner-with-confirmation>
+          <div fxLayout="row wrap"
+               fxLayoutGap="16px">
+            <km-number-stepper [disabled]="settings.restrictProjectCreation"
+                               [(ngModel)]="settings.userProjectsLimit"
+                               (ngModelChange)="onSettingsChange()"
+                               id="km-project-limit-setting"
+                               label="User Projects Limit"
+                               min="0"
+                               required>
+            </km-number-stepper>
+            <mat-checkbox fxLayoutAlign=" center"
+                          id="km-project-admin-only-setting"
+                          [(ngModel)]="settings.restrictProjectCreation"
+                          (change)="onSettingsChange()">Restrict Project Creation to Administrators
+            </mat-checkbox>
+            <km-spinner-with-confirmation [isSaved]="isEqual(settings.userProjectsLimit, apiSettings.userProjectsLimit) && isEqual(settings.restrictProjectCreation, apiSettings.restrictProjectCreation)"></km-spinner-with-confirmation>
+          </div>
         </div>
 
         <div fxLayout="row">
