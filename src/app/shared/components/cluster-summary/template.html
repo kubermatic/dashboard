@@ -180,6 +180,26 @@ limitations under the License.
           </km-property>
         </ng-container>
 
+        <!-- Nutanix -->
+        <ng-container *ngIf="cluster.spec.cloud?.nutanix">
+          <km-property>
+            <div key>Username</div>
+            <div value>{{cluster.spec.cloud.nutanix.username}}</div>
+          </km-property>
+          <km-property>
+            <div key>Proxy URL</div>
+            <div value>{{cluster.spec.cloud.nutanix.proxyURL}}</div>
+          </km-property>
+          <km-property>
+            <div key>Cluster Name</div>
+            <div value>{{cluster.spec.cloud.nutanix.clusterName}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud.nutanix.projectName">
+            <div key>Project Name</div>
+            <div value>{{cluster.spec.cloud.nutanix.projectName}}</div>
+          </km-property>
+        </ng-container>
+
         <!-- vSphere -->
         <ng-container *ngIf="cluster.spec.cloud?.vsphere">
           <km-property>
@@ -350,7 +370,8 @@ limitations under the License.
             <div><span class="km-text-muted">QPS:</span> {{cluster.spec.eventRateLimitConfig.namespace.qps}}</div>
             <div><span class="km-text-muted">Burst:</span> {{cluster.spec.eventRateLimitConfig.namespace.burst}}
             </div>
-            <div><span class="km-text-muted">Cache Size:</span> {{cluster.spec.eventRateLimitConfig.namespace.cacheSize}}
+            <div><span
+              class="km-text-muted">Cache Size:</span> {{cluster.spec.eventRateLimitConfig.namespace.cacheSize}}
             </div>
           </div>
         </km-property>
@@ -502,7 +523,8 @@ limitations under the License.
               </km-property>
               <km-property *ngIf="machineDeployment.spec.template.cloud?.aws?.spotInstanceMaxPrice > 0">
                 <div key>Spot Instance Max Price</div>
-                <div value>{{machineDeployment.spec.template.cloud.aws.spotInstanceMaxPrice | currency:'USD':'symbol':'1.0-4'}}</div>
+                <div
+                  value>{{machineDeployment.spec.template.cloud.aws.spotInstanceMaxPrice | currency:'USD':'symbol':'1.0-4'}}</div>
               </km-property>
             </ng-container>
 
@@ -512,7 +534,8 @@ limitations under the License.
                 <div key>Node Size</div>
                 <div value>{{machineDeployment.spec.template.cloud?.azure.size}}</div>
               </km-property>
-              <km-property *ngIf="!cluster.spec.cloud.azure.assignAvailabilitySet && machineDeployment.spec.template.cloud?.azure.zones">
+              <km-property
+                *ngIf="!cluster.spec.cloud.azure.assignAvailabilitySet && machineDeployment.spec.template.cloud?.azure.zones">
                 <div key>Zones</div>
                 <div value>{{machineDeployment.spec.template.cloud?.azure.zones}}</div>
               </km-property>
@@ -607,6 +630,38 @@ limitations under the License.
               </km-property>
             </ng-container>
 
+            <!-- Nutanix Nodes -->
+            <ng-container *ngIf="cluster.spec.cloud?.nutanix">
+              <km-property>
+                <div key>Image Name</div>
+                <div value>{{machineDeployment.spec.template.cloud.nutanix.imageName}}</div>
+              </km-property>
+              <km-property>
+                <div key>Subnet Name</div>
+                <div value>{{machineDeployment.spec.template.cloud.nutanix.subnetName}}</div>
+              </km-property>
+              <km-property>
+                <div key>CPUs</div>
+                <div value>{{machineDeployment.spec.template.cloud.nutanix.cpus}}</div>
+              </km-property>
+              <km-property>
+                <div key>CPU Cores</div>
+                <div value>{{machineDeployment.spec.template.cloud.nutanix.cpuCores}}</div>
+              </km-property>
+              <km-property-boolean *ngIf="machineDeployment.spec.template.cloud.nutanix.cpuPassthrough"
+                                   label="CPU Passthrough"
+                                   [value]="machineDeployment.spec.template.cloud.nutanix.cpuPassthrough">
+              </km-property-boolean>
+              <km-property>
+                <div key>Memory</div>
+                <div value>{{machineDeployment.spec.template.cloud.nutanix.memoryMB}} MB</div>
+              </km-property>
+              <km-property>
+                <div key>Disk Size</div>
+                <div value>{{machineDeployment.spec.template.cloud.nutanix.diskSize}} GB</div>
+              </km-property>
+            </ng-container>
+
             <!-- Openstack Nodes -->
             <ng-container *ngIf="cluster.spec.cloud?.openstack">
               <km-property>
@@ -697,9 +752,10 @@ limitations under the License.
                                    label="Spot Instance"
                                    [value]="machineDeployment.spec.template.cloud?.aws?.isSpotInstance">
               </km-property-boolean>
-              <km-property-boolean *ngIf="machineDeployment.spec.template.cloud?.aws?.spotInstancePersistentRequest !== undefined"
-                                   label="Spot Instance Persistent Request"
-                                   [value]="machineDeployment.spec.template.cloud.aws.spotInstancePersistentRequest">
+              <km-property-boolean
+                *ngIf="machineDeployment.spec.template.cloud?.aws?.spotInstancePersistentRequest !== undefined"
+                label="Spot Instance Persistent Request"
+                [value]="machineDeployment.spec.template.cloud.aws.spotInstancePersistentRequest">
               </km-property-boolean>
               <km-property-boolean *ngIf="machineDeployment.spec.template.cloud?.aws?.assignPublicIP !== undefined"
                                    label="Assign Public IP"
