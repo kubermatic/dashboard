@@ -48,6 +48,7 @@ import {GCPExtendedNodeDataComponent} from './extended/provider/gcp/component';
 import {OpenstackExtendedNodeDataComponent} from './extended/provider/openstack/component';
 import {EquinixExtendedNodeDataComponent} from './extended/provider/equinix/component';
 import {KubeletVersionNodeDataComponent} from './kubelet-version/component';
+import {NutanixBasicNodeDataComponent} from '@app/node-data/basic/provider/nutanix/component';
 
 const components = [
   AlibabaBasicNodeDataComponent,
@@ -73,6 +74,7 @@ const components = [
   ExtendedNodeDataComponent,
   KubeletVersionNodeDataComponent,
   NodeDataDialogComponent,
+  NutanixBasicNodeDataComponent,
 ];
 
 const services = [NodeDataService];
