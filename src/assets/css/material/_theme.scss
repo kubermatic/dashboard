@@ -401,7 +401,7 @@
   // Tab group.
   .mat-tab-group {
     .mat-tab-header {
-      border-bottom: 1px solid map.get($colors, sidenav-divider);
+      border-bottom: 1px solid map.get($colors, tab-divider);
     }
   }
 }
