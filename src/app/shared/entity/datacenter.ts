@@ -30,7 +30,7 @@ export class DatacenterSpec {
   country: string;
   location: string;
   provider: string;
-  requiredEmailDomains?: string[];
+  requiredEmails?: string[];
   enforceAuditLogging: boolean;
   enforcePodSecurityPolicy: boolean;
   digitalocean?: DigitaloceanDatacenterSpec;

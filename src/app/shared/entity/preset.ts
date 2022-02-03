@@ -69,7 +69,7 @@ export class CreatePresetSpec {
   packet?: EquinixPresetSpec;
   vsphere?: VSpherePresetSpec;
 
-  requiredEmailDomain?: string;
+  requiredEmails?: string[];
   enabled?: boolean;
 
   provider(): NodeProvider {
