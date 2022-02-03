@@ -21,8 +21,10 @@ export class AlertmanagerSpec {
 }
 
 export class RuleGroup {
+  name: string;
   data: string;
   type: RuleGroupType;
+  isDefault?: boolean;
 }
 
 export class RuleGroupName {
@@ -32,4 +34,11 @@ export class RuleGroupName {
 export enum RuleGroupType {
   Metrics = 'Metrics',
   Logs = 'Logs',
+}
+
+export class AdminRuleGroup {
+  seed: string;
+  name: string;
+  data: string;
+  type: RuleGroupType;
 }

@@ -66,6 +66,10 @@ const routes: Routes = [
         loadChildren: () => DynamicModule.Metering,
         data: {preload: true},
       },
+      {
+        path: 'rulegroups',
+        loadChildren: () => import('./rule-groups/module').then(m => m.AdminSettingsRuleGroupsModule),
+      },
     ],
   },
 ];

@@ -26,10 +26,12 @@ export function fakeAlertmanagerConfig(): AlertmanagerConfig {
 export function fakeRuleGroups(): RuleGroup[] {
   return [
     {
+      name: 'example',
       data: 'bmFtZTogZXhhbXBsZQpydWxlczoKICAtIGFsZXJ0OiBIaWdoVGhyb3VnaHB1dExvZ1N0cmVhbXMKICAgIGV4cHI6IHN1bSBieShjb250YWluZXIpKHJhdGUoe2pvYj1+Imt1YmUtc3lzdGVtLy4qIn1bMW1dKSkgPiA1MAogICAgZm9yOiAxbQ==',
       type: RuleGroupType.Logs,
     },
     {
+      name: 'example2',
       data: 'bmFtZTogZXhhbXBsZTIKcnVsZXM6CiAgLSBhbGVydDogSGlnaFRocm91Z2hwdXRMb2dTdHJlYW1zCiAgICBleHByOiBzdW0gYnkoY29udGFpbmVyKShyYXRlKHtqb2I9fiJrdWJlLXN5c3RlbS8uKiJ9WzFtXSkpID4gNTAKICAgIGZvcjogMW0=',
       type: RuleGroupType.Metrics,
     },
