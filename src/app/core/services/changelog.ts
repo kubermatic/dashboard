@@ -14,6 +14,8 @@
 
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {ChangelogDialog} from '@core/components/changelog/dialog';
 import {environment} from '@environments/environment';
 import {Changelog} from '@shared/model/changelog';
 import {of} from 'rxjs';
@@ -28,7 +30,7 @@ export class ChangelogService {
     return _.isEmpty(this._changelog) ? undefined : this._changelog;
   }
 
-  constructor(private readonly _http: HttpClient) {}
+  constructor(private readonly _http: HttpClient, private readonly _matDialog: MatDialog) {}
 
   init(): void {
     this._http
@@ -36,5 +38,12 @@ export class ChangelogService {
       .pipe(take(1))
       .pipe(catchError(_ => of({} as Changelog)))
       .subscribe(changelog => (this._changelog = changelog));
+  }
+
+  open(): void {
+    this._matDialog.open(ChangelogDialog, {
+      panelClass: 'km-changelog-dialog',
+      disableClose: true,
+    });
   }
 }

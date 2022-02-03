@@ -100,6 +100,11 @@
     background-color: map.get($colors, background-hover);
   }
 
+  .km-new-bg {
+    background-color: map.get($colors, secondary);
+    border: 2px solid map.get($colors, background-app-bar);
+  }
+
   .km-border {
     border: 1px solid map.get($colors, divider);
   }

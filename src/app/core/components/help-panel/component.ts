@@ -14,11 +14,12 @@
 
 import {Component, ElementRef, HostListener, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {ChangelogManagerService} from '@core/services/changelog-manager';
+import {AppConfigService} from '@app/config.service';
 import {ChangelogService} from '@core/services/changelog';
 import {SettingsService} from '@core/services/settings';
+import {UserService} from '@core/services/user';
 import {slideOut} from '@shared/animations/slide';
-import {AdminSettings, CustomLinkLocation} from '@shared/entity/settings';
+import {AdminSettings, CustomLinkLocation, UserSettings} from '@shared/entity/settings';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
@@ -30,20 +31,26 @@ import {takeUntil} from 'rxjs/operators';
 })
 export class HelpPanelComponent implements OnInit {
   settings: AdminSettings;
+  lastSeenChangelogVersion: string;
 
   private _isOpen = false;
   private _unsubscribe = new Subject<void>();
 
   constructor(
     private readonly _elementRef: ElementRef,
-    private readonly _changelogManagerService: ChangelogManagerService,
     private readonly _changelogService: ChangelogService,
     private readonly _settingsService: SettingsService,
+    private readonly _userService: UserService,
+    private readonly _config: AppConfigService,
     private readonly _router: Router
   ) {}
 
   ngOnInit(): void {
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(s => (this.settings = s));
+
+    this._userService.currentUserSettings
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe((settings: UserSettings) => (this.lastSeenChangelogVersion = settings.lastSeenChangelogVersion || ''));
   }
 
   @HostListener('document:click', ['$event'])
@@ -66,12 +73,16 @@ export class HelpPanelComponent implements OnInit {
   }
 
   openChangelog(): void {
-    this._changelogManagerService.open();
+    this._changelogService.open();
     this._isOpen = false;
   }
 
   hasChangelog(): boolean {
     return !!this._changelogService.changelog;
+  }
+
+  hasNewChangelog(): boolean {
+    return this.lastSeenChangelogVersion !== this._config.getGitVersion().humanReadable;
   }
 
   goToAPIDocs(): void {
