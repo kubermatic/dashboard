@@ -84,7 +84,7 @@ export class PresetProviderSpec {
 }
 
 export class AlibabaPresetSpec extends PresetProviderSpec {
-  accessKeyId: string;
+  accessKeyID: string;
   accessKeySecret: string;
 }
 
@@ -162,7 +162,7 @@ export class OpenstackPresetSpec extends PresetProviderSpec {
 
   network?: string;
   securityGroups?: string;
-  floatingIpPool?: string;
+  floatingIPPool?: string;
   routerID?: string;
   subnetID?: string;
 }

@@ -43,9 +43,9 @@ export class Health {
 }
 
 export enum HealthState {
-  Down = 0,
-  Up = 1,
-  Provisioning = 2,
+  Down = 'HealthStatusDown',
+  Up = 'HealthStatusUp',
+  Provisioning = 'HealthStatusProvisioning',
 }
 
 export enum HealthType {

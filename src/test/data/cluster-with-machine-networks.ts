@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Cluster, ClusterType, ExternalCCMMigrationStatus} from '@shared/entity/cluster';
+import {Cluster, ExternalCCMMigrationStatus} from '@shared/entity/cluster';
 
 // fakeClusterWithMachineNetwork could contain 6 IPs
 export function fakeClusterWithMachineNetwork(): Cluster {
@@ -33,6 +33,7 @@ export function fakeClusterWithMachineNetwork(): Cluster {
             password: 'bar',
           },
         },
+        providerName: 'vsphere',
       },
       version: '1.8.5',
       machineNetworks: [
@@ -48,7 +49,6 @@ export function fakeClusterWithMachineNetwork(): Cluster {
       version: '1.8.5',
       externalCCMMigration: ExternalCCMMigrationStatus.NotNeeded,
     },
-    type: ClusterType.Kubernetes,
   };
 }
 
@@ -71,6 +71,7 @@ export function fakeGatewayInCidr(): Cluster {
             password: 'bar',
           },
         },
+        providerName: 'vsphere',
       },
       version: '1.8.5',
       machineNetworks: [
@@ -86,7 +87,6 @@ export function fakeGatewayInCidr(): Cluster {
       version: '1.8.5',
       externalCCMMigration: ExternalCCMMigrationStatus.NotNeeded,
     },
-    type: ClusterType.Kubernetes,
   };
 }
 
@@ -109,6 +109,7 @@ export function fakeGatewayNotInCidr(): Cluster {
             password: 'bar',
           },
         },
+        providerName: 'vsphere',
       },
       version: '1.8.5',
       machineNetworks: [
@@ -124,6 +125,5 @@ export function fakeGatewayNotInCidr(): Cluster {
       version: '1.8.5',
       externalCCMMigration: ExternalCCMMigrationStatus.NotNeeded,
     },
-    type: ClusterType.Kubernetes,
   };
 }

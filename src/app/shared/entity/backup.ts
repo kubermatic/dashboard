@@ -128,6 +128,6 @@ export class S3Credentials {
 }
 
 export class S3BackupCredentials {
-  accessKeyId: string;
+  accessKeyID: string;
   secretAccessKey: string;
 }

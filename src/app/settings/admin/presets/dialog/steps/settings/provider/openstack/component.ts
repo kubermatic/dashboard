@@ -28,7 +28,7 @@ export enum Controls {
   Domain = 'domain',
   Network = 'network',
   SecurityGroups = 'securityGroups',
-  FloatingIpPool = 'floatingIpPool',
+  FloatingIPPool = 'floatingIPPool',
   RouterID = 'routerID',
   SubnetID = 'subnetID',
 }
@@ -65,7 +65,7 @@ export class OpenstackSettingsComponent extends BaseFormValidator implements OnI
       [Controls.Domain]: this._builder.control('', Validators.required),
       [Controls.Network]: this._builder.control(''),
       [Controls.SecurityGroups]: this._builder.control(''),
-      [Controls.FloatingIpPool]: this._builder.control(''),
+      [Controls.FloatingIPPool]: this._builder.control(''),
       [Controls.RouterID]: this._builder.control(''),
       [Controls.SubnetID]: this._builder.control(''),
     });
@@ -95,7 +95,7 @@ export class OpenstackSettingsComponent extends BaseFormValidator implements OnI
       domain: this.form.get(Controls.Domain).value,
       network: this.form.get(Controls.Network).value,
       securityGroups: this.form.get(Controls.SecurityGroups).value,
-      floatingIpPool: this.form.get(Controls.FloatingIpPool).value,
+      floatingIPPool: this.form.get(Controls.FloatingIPPool).value,
       routerID: this.form.get(Controls.RouterID).value,
       subnetID: this.form.get(Controls.SubnetID).value,
     } as OpenstackPresetSpec;

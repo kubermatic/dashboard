@@ -23,7 +23,7 @@ import {merge} from 'rxjs';
 import {distinctUntilChanged, filter, takeUntil} from 'rxjs/operators';
 
 export enum Controls {
-  AccessKeyID = 'accessKeyId',
+  AccessKeyID = 'accessKeyID',
   AccessKeySecret = 'secretAccessKey',
 }
 

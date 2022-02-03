@@ -28,7 +28,7 @@ import {DatacenterService} from '@core/services/datacenter';
 import {PresetsService} from '@core/services/wizard/presets';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {CloudSpec, Cluster, ClusterSpec, OpenstackCloudSpec} from '@shared/entity/cluster';
-import {OpenstackFloatingIpPool} from '@shared/entity/provider/openstack';
+import {OpenstackFloatingIPPool} from '@shared/entity/provider/openstack';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
@@ -81,7 +81,7 @@ export class OpenstackProviderBasicAppCredentialsComponent extends BaseFormValid
   private readonly _floatingIPPoolCombobox: FilteredComboboxComponent;
   readonly Controls = Controls;
   isPresetSelected = false;
-  floatingIPPools: OpenstackFloatingIpPool[] = [];
+  floatingIPPools: OpenstackFloatingIPPool[] = [];
   floatingIPPoolsLabel = FloatingIPPoolState.Empty;
 
   constructor(
@@ -134,7 +134,7 @@ export class OpenstackProviderBasicAppCredentialsComponent extends BaseFormValid
       .pipe(tap(_ => this._clearFloatingIPPool()))
       .pipe(switchMap(_ => this._floatingIPPoolListObservable()))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe((floatingIPPools: OpenstackFloatingIpPool[]) => {
+      .subscribe((floatingIPPools: OpenstackFloatingIPPool[]) => {
         this.floatingIPPools = floatingIPPools;
 
         if (!_.isEmpty(this.floatingIPPools)) {
@@ -150,7 +150,7 @@ export class OpenstackProviderBasicAppCredentialsComponent extends BaseFormValid
     )
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
       .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterSpecService.datacenter).pipe(take(1))))
-      .pipe(tap(dc => (this._isFloatingPoolIPEnforced = dc.spec.openstack.enforce_floating_ip)))
+      .pipe(tap(dc => (this._isFloatingPoolIPEnforced = dc.spec.openstack.enforceFloatingIP)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.form.reset());
 
@@ -172,7 +172,7 @@ export class OpenstackProviderBasicAppCredentialsComponent extends BaseFormValid
   }
 
   onFloatingIPPoolChange(floatingIPPool: string): void {
-    this._clusterSpecService.cluster.spec.cloud.openstack.floatingIpPool = floatingIPPool;
+    this._clusterSpecService.cluster.spec.cloud.openstack.floatingIPPool = floatingIPPool;
   }
 
   getHint(control: Controls): string {
@@ -202,7 +202,7 @@ export class OpenstackProviderBasicAppCredentialsComponent extends BaseFormValid
     );
   }
 
-  private _floatingIPPoolListObservable(): Observable<OpenstackFloatingIpPool[]> {
+  private _floatingIPPoolListObservable(): Observable<OpenstackFloatingIPPool[]> {
     return this._presets
       .provider(NodeProvider.OPENSTACK)
       .applicationCredentialID(this.form.get(Controls.ApplicationCredentialID).value)

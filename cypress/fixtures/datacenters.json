@@ -205,7 +205,7 @@
       "location": "Germany - dbl1",
       "provider": "openstack",
       "openstack": {
-        "auth_url": "https://api.cloud.test.net:5000/v3",
+        "authURL": "https://api.cloud.test.net:5000/v3",
         "availabilityZone": "dbl1",
         "region": "dbl",
         "ignoreVolumeAZ": false,

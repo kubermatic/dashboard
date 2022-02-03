@@ -56,7 +56,7 @@ export class DatacenterOperatingSystemOptions {
 }
 
 export class AnexiaDatacenterSpec {
-  location_id: string;
+  locationID: string;
 }
 
 export class AlibabaDatacenterSpec {
@@ -80,7 +80,7 @@ export class DigitaloceanDatacenterSpec {
 export class GCPDatacenterSpec {
   region: string;
   regional: boolean;
-  zone_suffixes: string[];
+  zoneSuffixes: string[];
 }
 
 export class HetznerDatacenterSpec {
@@ -92,11 +92,11 @@ export class HetznerDatacenterSpec {
 export class KubeVirtDatacenterSpec {}
 
 export class OpenStackDatacenterSpec {
-  availability_zone: string;
-  auth_url: string;
+  availabilityZone: string;
+  authURL: string;
   region: string;
   images: DatacenterOperatingSystemOptions;
-  enforce_floating_ip: boolean;
+  enforceFloatingIP: boolean;
 }
 
 export class EquinixDatacenterSpec {
@@ -127,7 +127,7 @@ export class MeteringConfiguration {
 }
 
 export class MLA {
-  user_cluster_mla_enabled: boolean;
+  userClusterMLAEnabled: boolean;
 }
 
 export class AdminSeed {

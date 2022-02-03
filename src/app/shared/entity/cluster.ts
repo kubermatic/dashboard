@@ -54,10 +54,6 @@ export const enum Finalizer {
   DeleteLoadBalancers = 'DeleteLoadBalancers',
 }
 
-export enum ClusterType {
-  Kubernetes = 'kubernetes',
-}
-
 export enum ContainerRuntime {
   Containerd = 'containerd',
   Docker = 'docker',
@@ -72,7 +68,6 @@ export class Cluster {
   name: string;
   spec: ClusterSpec;
   status?: Status;
-  type: ClusterType;
   labels?: object;
   inheritedLabels?: object;
   credential?: string;
@@ -98,6 +93,7 @@ export class Cluster {
 
 export class CloudSpec {
   dc: string;
+  providerName: string;
   digitalocean?: DigitaloceanCloudSpec;
   aws?: AWSCloudSpec;
   bringyourown?: BringYourOwnCloudSpec;
@@ -119,12 +115,12 @@ export class AlibabaCloudSpec {
 }
 
 export class AWSCloudSpec {
-  accessKeyId: string;
+  accessKeyID: string;
   secretAccessKey: string;
   assumeRoleARN: string;
   assumeRoleExternalID: string;
-  vpcId: string;
-  routeTableId: string;
+  vpcID: string;
+  routeTableID: string;
   securityGroupID: string;
   instanceProfileName: string;
   roleARN: string;
@@ -185,7 +181,7 @@ export class OpenstackCloudSpec {
   domain: string;
   network: string;
   securityGroups: string;
-  floatingIpPool: string;
+  floatingIPPool: string;
   subnetID: string;
 }
 
@@ -411,7 +407,7 @@ export class HetznerCloudSpecPatch {
 }
 
 export class AWSCloudSpecPatch {
-  accessKeyId?: string;
+  accessKeyID?: string;
   secretAccessKey?: string;
 }
 
@@ -451,10 +447,10 @@ export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
   switch (provider) {
     case NodeProvider.AWS:
       return {
-        accessKeyId: '',
+        accessKeyID: '',
         secretAccessKey: '',
-        routeTableId: '',
-        vpcId: '',
+        routeTableID: '',
+        vpcID: '',
         securityGroupID: '',
         instanceProfileName: '',
         roleARN: '',
@@ -467,7 +463,7 @@ export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
       return {
         username: '',
         password: '',
-        floatingIpPool: '',
+        floatingIPPool: '',
         securityGroups: '',
         network: '',
         domain: '',
@@ -541,6 +537,5 @@ class ClusterModel {
   name: string;
   spec: ClusterSpec;
   labels?: object;
-  type: string;
   credential?: string;
 }

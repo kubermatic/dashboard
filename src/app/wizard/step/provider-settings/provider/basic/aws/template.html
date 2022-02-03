@@ -55,14 +55,14 @@ limitations under the License.
                [required]="true"
                [grouped]="false"
                [isDisabled]="isPresetSelected"
-               [options]="vpcIds"
+               [options]="vpcIDs"
                [selected]="selectedVPC"
                [hint]="getHint(Controls.VPCID)"
                [formControlName]="Controls.VPCID"
                [label]="vpcLabel"
                (changed)="onVPCChange($event)"
                inputLabel="Select VPC..."
-               filterBy="vpcId">
+               filterBy="vpcID">
     <div *option="let vpc">
       {{vpc.displayName}}
     </div>

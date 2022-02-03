@@ -24,8 +24,8 @@ export const DEFAULT_USER_SETTINGS_MOCK: UserSettings = {
 
 export const DEFAULT_ADMIN_SETTINGS_MOCK: AdminSettings = {
   cleanupOptions: {
-    Enforced: false,
-    Enabled: false,
+    enforced: false,
+    enabled: false,
   },
   customLinks: [],
   defaultNodeCount: 1,

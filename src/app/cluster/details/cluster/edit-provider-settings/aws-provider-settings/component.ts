@@ -90,7 +90,7 @@ export class AWSProviderSettingsComponent implements OnInit, OnDestroy {
     return {
       cloudSpecPatch: {
         aws: {
-          accessKeyId: this.form.get(Control.AccessKeyID).value,
+          accessKeyID: this.form.get(Control.AccessKeyID).value,
           secretAccessKey: this.form.get(Control.SecretAccessKey).value,
         },
       },

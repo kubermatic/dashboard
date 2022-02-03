@@ -36,7 +36,7 @@ import {catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, 
 export enum Controls {
   AccessKeyID = 'accessKeyID',
   AccessKeySecret = 'accessKeySecret',
-  VPCID = 'vpcId',
+  VPCID = 'vpcID',
   AssumeRoleARN = 'assumeRoleARN',
   AssumeRoleExternalID = 'assumeRoleID',
   UseAssumeRole = 'useAssumeRole',
@@ -69,7 +69,7 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
   private readonly _debounceTime = 500;
   readonly Controls = Controls;
   isPresetSelected = false;
-  vpcIds: AWSVPC[] = [];
+  vpcIDs: AWSVPC[] = [];
   selectedVPC = '';
   vpcLabel = VPCState.Empty;
 
@@ -170,8 +170,8 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
     return '';
   }
 
-  onVPCChange(vpcId: string): void {
-    this._clusterSpecService.cluster.spec.cloud.aws.vpcId = vpcId;
+  onVPCChange(vpcID: string): void {
+    this._clusterSpecService.cluster.spec.cloud.aws.vpcID = vpcID;
   }
 
   ngOnDestroy(): void {
@@ -182,7 +182,7 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
   private _hasRequiredCredentials(): boolean {
     return (
       !!this._clusterSpecService.cluster.spec.cloud.aws &&
-      !!this._clusterSpecService.cluster.spec.cloud.aws.accessKeyId &&
+      !!this._clusterSpecService.cluster.spec.cloud.aws.accessKeyID &&
       !!this._clusterSpecService.cluster.spec.cloud.aws.secretAccessKey
     );
   }
@@ -221,7 +221,7 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
   }
 
   private _clearVPC(): void {
-    this.vpcIds = [];
+    this.vpcIDs = [];
     this.selectedVPC = '';
     this.vpcLabel = VPCState.Empty;
     this._vpcCombobox.reset();
@@ -229,10 +229,10 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
   }
 
   private _setDefaultVPC(vpcs: AWSVPC[]): void {
-    this.vpcIds = vpcs;
-    const defaultVPC = this.vpcIds.find(vpc => vpc.isDefault);
-    this.selectedVPC = defaultVPC ? defaultVPC.vpcId : undefined;
-    this.vpcLabel = !_.isEmpty(this.vpcIds) ? VPCState.Ready : VPCState.Empty;
+    this.vpcIDs = vpcs;
+    const defaultVPC = this.vpcIDs.find(vpc => vpc.isDefault);
+    this.selectedVPC = defaultVPC ? defaultVPC.vpcID : undefined;
+    this.vpcLabel = !_.isEmpty(this.vpcIDs) ? VPCState.Ready : VPCState.Empty;
     this._cdr.detectChanges();
   }
 
@@ -241,7 +241,7 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
       spec: {
         cloud: {
           aws: {
-            accessKeyId: this.form.get(Controls.AccessKeyID).value,
+            accessKeyID: this.form.get(Controls.AccessKeyID).value,
             secretAccessKey: this.form.get(Controls.AccessKeySecret).value,
             assumeRoleARN: this.form.get(Controls.AssumeRoleARN).value,
             assumeRoleExternalID: this.form.get(Controls.AssumeRoleExternalID).value,

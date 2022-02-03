@@ -57,13 +57,13 @@ limitations under the License.
             <div key>Security Group ID</div>
             <div value>{{cluster.spec.cloud?.aws?.securityGroupID}}</div>
           </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.aws?.vpcId">
+          <km-property *ngIf="cluster.spec.cloud?.aws?.vpcID">
             <div key>VPC ID</div>
-            <div value>{{cluster.spec.cloud?.aws?.vpcId}}</div>
+            <div value>{{cluster.spec.cloud?.aws?.vpcID}}</div>
           </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.aws?.routeTableId">
+          <km-property *ngIf="cluster.spec.cloud?.aws?.routeTableID">
             <div key>Route Table ID</div>
-            <div value>{{cluster.spec.cloud?.aws?.routeTableId}}</div>
+            <div value>{{cluster.spec.cloud?.aws?.routeTableID}}</div>
           </km-property>
           <km-property *ngIf="cluster.spec.cloud?.aws?.instanceProfileName">
             <div key>Instance Profile Name</div>
@@ -158,9 +158,9 @@ limitations under the License.
             <div key>Security Groups</div>
             <div value>{{cluster.spec.cloud?.openstack.securityGroups}}</div>
           </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.openstack.floatingIpPool">
+          <km-property *ngIf="cluster.spec.cloud?.openstack.floatingIPPool">
             <div key>Floating IP Pool</div>
-            <div value>{{cluster.spec.cloud?.openstack.floatingIpPool}}</div>
+            <div value>{{cluster.spec.cloud?.openstack.floatingIPPool}}</div>
           </km-property>
           <km-property *ngIf="cluster.spec.cloud?.openstack.subnetID">
             <div key>Subnet ID</div>
