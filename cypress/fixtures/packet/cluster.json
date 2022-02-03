@@ -6,7 +6,8 @@
   "spec": {
     "cloud": {
       "dc": "test-equinix-dc",
-      "packet": {}
+      "packet": {},
+      "providerName": "packet"
     },
     "version": "1.21.5",
     "oidc": {},

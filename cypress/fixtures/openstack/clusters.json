@@ -13,7 +13,8 @@
           "securityGroups": "",
           "routerID": "",
           "subnetID": ""
-        }
+        },
+        "providerName": "openstack"
       },
       "version": "1.21.5",
       "oidc": {},

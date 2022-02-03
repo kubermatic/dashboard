@@ -6,7 +6,8 @@
   "spec": {
     "cloud": {
       "dc": "test-hetzner-dc",
-      "hetzner": {}
+      "hetzner": {},
+      "providerName": "hetzner"
     },
     "version": "1.21.5",
     "oidc": {},

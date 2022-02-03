@@ -1,6 +1,6 @@
 {
   "mla": {
-    "user_cluster_mla_enabled": true
+    "userClusterMLAEnabled": true
   },
   "metering": {
     "enabled": true,
