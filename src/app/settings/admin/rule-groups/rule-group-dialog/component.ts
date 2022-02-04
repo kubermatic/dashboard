@@ -17,24 +17,22 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MLAService} from '@core/services/mla';
 import {NotificationService} from '@core/services/notification';
-import {Cluster} from '@shared/entity/cluster';
-import {RuleGroup, RuleGroupType} from '@shared/entity/mla';
+import {AdminRuleGroup, RuleGroup, RuleGroupType} from '@shared/entity/mla';
 import {getIconClassForButton} from '@shared/utils/common';
 import {MLAUtils} from '@shared/utils/mla';
 import _ from 'lodash';
-import {decode, encode} from 'js-base64';
+import {encode, decode} from 'js-base64';
 import {Subject} from 'rxjs';
 import {take} from 'rxjs/operators';
 
 export interface RuleGroupDialogData {
   title: string;
-  projectId: string;
-  cluster: Cluster;
   mode: Mode;
   confirmLabel: string;
+  seeds: string[];
 
   // Rule Group has to be specified only if dialog is used in the edit mode.
-  ruleGroup?: RuleGroup;
+  adminRuleGroup?: AdminRuleGroup;
 }
 
 export enum Mode {
@@ -44,6 +42,7 @@ export enum Mode {
 
 export enum Controls {
   Type = 'type',
+  Seed = 'seed',
 }
 
 @Component({
@@ -51,15 +50,16 @@ export enum Controls {
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class RuleGroupDialog implements OnInit, OnDestroy {
+export class AdminRuleGroupDialog implements OnInit, OnDestroy {
   readonly Controls = Controls;
+  readonly Mode = Mode;
   form: FormGroup;
   ruleGroupData = '';
   ruleGroupTypes = Object.values(RuleGroupType);
   private readonly _unsubscribe = new Subject<void>();
 
   constructor(
-    private readonly _matDialogRef: MatDialogRef<RuleGroupDialog>,
+    private readonly _matDialogRef: MatDialogRef<AdminRuleGroupDialog>,
     private readonly _mlaService: MLAService,
     private readonly _notificationService: NotificationService,
     private readonly _builder: FormBuilder,
@@ -68,7 +68,10 @@ export class RuleGroupDialog implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Type]: this._builder.control(this.data.mode === Mode.Edit ? this.data.ruleGroup.type : '', [
+      [Controls.Type]: this._builder.control(this.data.mode === Mode.Edit ? this.data.adminRuleGroup.type : '', [
+        Validators.required,
+      ]),
+      [Controls.Seed]: this._builder.control(this.data.mode === Mode.Edit ? this.data.adminRuleGroup.seed : '', [
         Validators.required,
       ]),
     });
@@ -90,17 +93,14 @@ export class RuleGroupDialog implements OnInit, OnDestroy {
   }
 
   getDescription(): string {
-    switch (this.data.mode) {
-      case Mode.Add:
-        return 'Create recording and alerting rule group';
-      case Mode.Edit:
-        return `Edit <b>${this.data.ruleGroup.name}</b> recording and alerting rule group of <b>${this.data.cluster.name}</b> cluster`;
-    }
+    return `Edit <b>this.data.adminRuleGroup.name</b> rule group of <b>this.data.adminRuleGroup.seed</b> seed`;
   }
 
   save(): void {
     const ruleGroupName =
-      this.data.mode === Mode.Edit ? this.data.ruleGroup.name : MLAUtils.getRuleGroupName(this._getRuleGroupData());
+      this.data.mode === Mode.Edit
+        ? this.data.adminRuleGroup.name
+        : MLAUtils.getRuleGroupName(this._getRuleGroupData());
     const ruleGroup: RuleGroup = {
       name: ruleGroupName,
       data: this._getRuleGroupData(),
@@ -109,37 +109,37 @@ export class RuleGroupDialog implements OnInit, OnDestroy {
 
     switch (this.data.mode) {
       case Mode.Add:
-        return this._create(ruleGroup);
+        return this._create(ruleGroup, this.form.get(Controls.Seed).value);
       case Mode.Edit:
-        return this._edit(ruleGroup);
+        return this._edit(ruleGroup, this.form.get(Controls.Seed).value);
     }
   }
 
-  private _create(ruleGroup: RuleGroup): void {
+  private _create(ruleGroup: RuleGroup, seed: string): void {
     this._mlaService
-      .createRuleGroup(this.data.projectId, this.data.cluster.id, ruleGroup)
+      .createAdminRuleGroup(seed, ruleGroup)
       .pipe(take(1))
       .subscribe(_ => {
         this._matDialogRef.close(true);
         this._notificationService.success(`The Rule Group ${ruleGroup.name} was created`);
-        this._mlaService.refreshRuleGroups();
+        this._mlaService.refreshAdminRuleGroups();
       });
   }
 
-  private _edit(ruleGroup: RuleGroup): void {
+  private _edit(ruleGroup: RuleGroup, seed: string): void {
     this._mlaService
-      .editRuleGroup(this.data.projectId, this.data.cluster.id, ruleGroup)
+      .editAdminRuleGroup(seed, ruleGroup)
       .pipe(take(1))
       .subscribe(_ => {
         this._matDialogRef.close(true);
         this._notificationService.success(`The Rule Group ${ruleGroup.name} was updated`);
-        this._mlaService.refreshRuleGroups();
+        this._mlaService.refreshAdminRuleGroups();
       });
   }
 
   private _initProviderConfigEditor(): void {
     if (this.data.mode === Mode.Edit) {
-      const data = this.data.ruleGroup.data;
+      const data = this.data.adminRuleGroup.data;
       if (!_.isEmpty(data)) {
         this.ruleGroupData = decode(data);
       }

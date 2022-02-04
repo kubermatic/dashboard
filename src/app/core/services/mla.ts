@@ -30,6 +30,8 @@ export class MLAService {
   private _alertmanagerConfigRefresh$ = new Subject<void>();
   private _ruleGroups$ = new Map<string, Observable<RuleGroup[]>>();
   private _ruleGroupsRefresh$ = new Subject<void>();
+  private _adminRuleGroups$ = new Map<string, Observable<RuleGroup[]>>();
+  private _adminRuleGroupsRefresh$ = new Subject<void>();
 
   constructor(private readonly _http: HttpClient, private readonly _appConfigService: AppConfigService) {}
 
@@ -98,18 +100,50 @@ export class MLAService {
     return this._http.post<RuleGroup>(url, ruleGroup);
   }
 
-  editRuleGroup(
-    projectId: string,
-    clusterId: string,
-    ruleGroup: RuleGroup,
-    ruleGroupName: string
-  ): Observable<RuleGroup> {
-    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/rulegroups/${ruleGroupName}`;
+  editRuleGroup(projectId: string, clusterId: string, ruleGroup: RuleGroup): Observable<RuleGroup> {
+    const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/rulegroups/${ruleGroup.name}`;
     return this._http.put<RuleGroup>(url, ruleGroup);
   }
 
   deleteRuleGroup(projectId: string, clusterId: string, ruleGroupName: string): Observable<any> {
     const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/rulegroups/${ruleGroupName}`;
+    return this._http.delete(url);
+  }
+
+  adminRuleGroups(seed: string): Observable<RuleGroup[]> {
+    const id = `${seed}`;
+
+    if (!this._adminRuleGroups$.get(id)) {
+      const _adminRuleGroups$ = merge(this._adminRuleGroupsRefresh$, this._refreshTimer$)
+        .pipe(switchMap(_ => this._getAdminRuleGroups(seed)))
+        .pipe(shareReplay({refCount: true, bufferSize: 1}));
+
+      this._adminRuleGroups$.set(id, _adminRuleGroups$);
+    }
+    return this._adminRuleGroups$.get(id);
+  }
+
+  private _getAdminRuleGroups(seedName: string): Observable<RuleGroup[]> {
+    const url = `${this._newRestRoot}/seeds/${seedName}/rulegroups`;
+    return this._http.get<RuleGroup[]>(url).pipe(catchError(() => of<RuleGroup[]>()));
+  }
+
+  refreshAdminRuleGroups(): void {
+    this._adminRuleGroupsRefresh$.next();
+  }
+
+  createAdminRuleGroup(seedName: string, ruleGroup: RuleGroup): Observable<RuleGroup> {
+    const url = `${this._newRestRoot}/seeds/${seedName}/rulegroups`;
+    return this._http.post<RuleGroup>(url, ruleGroup);
+  }
+
+  editAdminRuleGroup(seedName: string, ruleGroup: RuleGroup): Observable<RuleGroup> {
+    const url = `${this._newRestRoot}/seeds/${seedName}/rulegroups/${ruleGroup.name}`;
+    return this._http.put<RuleGroup>(url, ruleGroup);
+  }
+
+  deleteAdminRuleGroup(seedName: string, ruleGroupName: string): Observable<any> {
+    const url = `${this._newRestRoot}/seeds/${seedName}/rulegroups/${ruleGroupName}`;
     return this._http.delete(url);
   }
 }

@@ -1,4 +1,4 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2021 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,28 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-.header {
-  padding: 0 30px;
-}
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {AdminSettingsRuleGroupsComponent} from '@app/settings/admin/rule-groups/component';
 
-.filters {
-  margin-top: -16px;
+const routes: Routes = [
+  {
+    path: '',
+    component: AdminSettingsRuleGroupsComponent,
+  },
+];
 
-  .filter-title {
-    margin: -20px 8px 0 0;
-  }
-
-  .mat-form-field {
-    width: 280px;
-  }
-}
-
-h3 {
-  font-weight: normal;
-  margin: 40px 0;
-  padding: 0 30px;
-}
-
-.admin-label {
-  max-width: 125px;
-}
+@NgModule({imports: [RouterModule.forChild(routes)], exports: [RouterModule]})
+export class AdminSettingsRuleGroupsRoutingModule {}

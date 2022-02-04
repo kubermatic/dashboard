@@ -23,7 +23,6 @@ import {UserService} from '@core/services/user';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Cluster} from '@shared/entity/cluster';
 import {RuleGroup, RuleGroupType} from '@shared/entity/mla';
-import {MLAUtils} from '@shared/utils/mla';
 import {UserSettings} from '@shared/entity/settings';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
@@ -98,10 +97,6 @@ export class RuleGroupsComponent implements OnInit, OnChanges, OnDestroy {
     return _.isEmpty(this.ruleGroups) && this.isClusterRunning;
   }
 
-  getName(data: string): string {
-    return MLAUtils.getRuleGroupName(data);
-  }
-
   filter(): void {
     if (!_.isEmpty(this.ruleGroups)) {
       this.dataSource.data = this.ruleGroups.filter(ruleGroup =>
@@ -140,11 +135,10 @@ export class RuleGroupsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   delete(ruleGroup: RuleGroup): void {
-    const ruleGroupName = this.getName(ruleGroup.data);
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Delete Rule Group',
-        message: `Delete <b>${ruleGroupName}</b> recording and alerting rule group of <b>${this.cluster.name}</b> cluster permanently?`,
+        message: `Delete <b>${ruleGroup.name}</b> recording and alerting rule group of <b>${this.cluster.name}</b> cluster permanently?`,
         confirmLabel: 'Delete',
       },
     };
@@ -153,10 +147,10 @@ export class RuleGroupsComponent implements OnInit, OnChanges, OnDestroy {
       .open(ConfirmationDialogComponent, dialogConfig)
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
-      .pipe(switchMap(_ => this._mlaService.deleteRuleGroup(this.projectID, this.cluster.id, ruleGroupName)))
+      .pipe(switchMap(_ => this._mlaService.deleteRuleGroup(this.projectID, this.cluster.id, ruleGroup.name)))
       .pipe(take(1))
       .subscribe(_ => {
-        this._notificationService.success(`The Rule Group ${ruleGroupName} was deleted`);
+        this._notificationService.success(`The Rule Group ${ruleGroup.name} was deleted`);
         this._mlaService.refreshRuleGroups();
       });
   }
