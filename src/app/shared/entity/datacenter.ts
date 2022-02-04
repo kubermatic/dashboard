@@ -96,7 +96,7 @@ export class NutanixDatacenterSpec {
   endpoint: string;
   port?: number;
   allow_insecure: number;
-  images: object;
+  images: DatacenterOperatingSystemOptions;
 }
 
 export class OpenStackDatacenterSpec {
