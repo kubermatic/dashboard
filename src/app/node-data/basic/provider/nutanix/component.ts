@@ -101,7 +101,6 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
     merge(this._clusterSpecService.datacenterChanges, of(this._clusterSpecService.datacenter))
       .pipe(filter(dc => !!dc))
       .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
-      .pipe(tap(dc => console.log(dc)))
       .pipe(tap(dc => (this._images = dc.spec?.nutanix?.images)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._setDefaultImage(OperatingSystem.Ubuntu));

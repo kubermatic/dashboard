@@ -324,6 +324,13 @@ export function getDefaultNodeProviderSpec(provider: string): object {
         pvcSize: '10Gi',
         namespace: 'kube-system',
       } as KubeVirtNodeSpec;
+    case NodeProvider.NUTANIX:
+      return {
+        cpus: 2,
+        cpuCores: 1,
+        memoryMB: 2048,
+        diskSize: 20,
+      } as NutanixNodeSpec;
   }
   return {};
 }
