@@ -319,11 +319,11 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     if (
       !!this.settings &&
       !!this.projects &&
-      !!this.settings.selectedProjectId &&
+      !!this.settings.selectedProjectID &&
       this._previousRouteService.getPreviousUrl() === '/' &&
       this._previousRouteService.getHistory().length === 1
     ) {
-      const defaultProject = this.projects.find(x => x.id === this.settings.selectedProjectId);
+      const defaultProject = this.projects.find(x => x.id === this.settings.selectedProjectID);
       this.selectProject(defaultProject);
     }
   }

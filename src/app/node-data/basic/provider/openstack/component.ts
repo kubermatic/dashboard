@@ -161,7 +161,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(dc => {
         this._setDefaultImage(OperatingSystem.Ubuntu);
-        this._enforceFloatingIP(dc.spec.openstack.enforce_floating_ip);
+        this._enforceFloatingIP(dc.spec.openstack.enforceFloatingIP);
       });
 
     this._nodeDataService.operatingSystemChanges
@@ -317,7 +317,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
     if (
       !this._nodeDataService.isInWizardMode() &&
-      !this._clusterSpecService.cluster.spec.cloud.openstack.floatingIpPool
+      !this._clusterSpecService.cluster.spec.cloud.openstack.floatingIPPool
     ) {
       this.form.get(Controls.UseFloatingIP).setValue(false);
       this.form.get(Controls.UseFloatingIP).disable();

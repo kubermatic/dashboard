@@ -20,9 +20,9 @@ limitations under the License.
       <div key>Preset Name</div>
       <div value>{{preset.metadata.name}}</div>
     </km-property>
-    <km-property *ngIf="preset?.spec?.requiredEmailDomain">
-      <div key>Restrict Preset Group to Domain</div>
-      <div value>{{preset.spec.requiredEmailDomain}}</div>
+    <km-property *ngIf="preset?.spec?.requiredEmails">
+      <div key>Restrict Preset Group to Domain(s)</div>
+      <div value>{{preset.spec.requiredEmails}}</div>
     </km-property>
     <km-property-boolean *ngIf="!preset?.spec?.enabled"
                          [value]="!preset.spec.enabled"

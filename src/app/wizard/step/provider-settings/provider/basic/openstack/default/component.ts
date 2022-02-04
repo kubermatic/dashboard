@@ -30,7 +30,7 @@ import {DatacenterService} from '@core/services/datacenter';
 import {PresetsService} from '@core/services/wizard/presets';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {CloudSpec, Cluster, ClusterSpec, OpenstackCloudSpec} from '@shared/entity/cluster';
-import {OpenstackFloatingIpPool, OpenstackTenant} from '@shared/entity/provider/openstack';
+import {OpenstackFloatingIPPool, OpenstackTenant} from '@shared/entity/provider/openstack';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
@@ -93,7 +93,7 @@ export class OpenstackProviderBasicDefaultCredentialsComponent extends BaseFormV
   isPresetSelected = false;
   projects: OpenstackTenant[] = [];
   projectsLabel = ProjectState.Empty;
-  floatingIPPools: OpenstackFloatingIpPool[] = [];
+  floatingIPPools: OpenstackFloatingIPPool[] = [];
   floatingIPPoolsLabel = FloatingIPPoolState.Empty;
 
   constructor(
@@ -141,7 +141,7 @@ export class OpenstackProviderBasicDefaultCredentialsComponent extends BaseFormV
     )
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
       .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterSpecService.datacenter).pipe(take(1))))
-      .pipe(tap(dc => (this._isFloatingPoolIPEnforced = dc.spec.openstack.enforce_floating_ip)))
+      .pipe(tap(dc => (this._isFloatingPoolIPEnforced = dc.spec.openstack.enforceFloatingIP)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._formReset.bind(this));
 
@@ -181,7 +181,7 @@ export class OpenstackProviderBasicDefaultCredentialsComponent extends BaseFormV
       .pipe(tap(_ => this._clearFloatingIPPool()))
       .pipe(switchMap(_ => this._floatingIPPoolListObservable()))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe((floatingIPPools: OpenstackFloatingIpPool[]) => {
+      .subscribe((floatingIPPools: OpenstackFloatingIPPool[]) => {
         this.floatingIPPools = floatingIPPools;
 
         if (!_.isEmpty(this.floatingIPPools)) {
@@ -225,7 +225,7 @@ export class OpenstackProviderBasicDefaultCredentialsComponent extends BaseFormV
   }
 
   onFloatingIPPoolChange(floatingIPPool: string): void {
-    this._clusterSpecService.cluster.spec.cloud.openstack.floatingIpPool = floatingIPPool;
+    this._clusterSpecService.cluster.spec.cloud.openstack.floatingIPPool = floatingIPPool;
   }
 
   getHint(control: Controls): string {
@@ -321,7 +321,7 @@ export class OpenstackProviderBasicDefaultCredentialsComponent extends BaseFormV
     this._cdr.detectChanges();
   }
 
-  private _floatingIPPoolListObservable(): Observable<OpenstackFloatingIpPool[]> {
+  private _floatingIPPoolListObservable(): Observable<OpenstackFloatingIPPool[]> {
     return this._presets
       .provider(NodeProvider.OPENSTACK)
       .domain(this._clusterSpecService.cluster.spec.cloud.openstack.domain)

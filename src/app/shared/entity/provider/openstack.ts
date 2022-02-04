@@ -33,7 +33,7 @@ export class OpenstackNetwork {
   external: boolean;
 }
 
-export class OpenstackFloatingIpPool {
+export class OpenstackFloatingIPPool {
   id: string;
   name: string;
   external: boolean;

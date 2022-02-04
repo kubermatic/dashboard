@@ -57,9 +57,9 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck, OnDe
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.settings = settings;
-      this.deleteForm.controls.clusterLBCleanupCheckbox.setValue(this.settings.cleanupOptions.Enabled);
-      this.deleteForm.controls.clusterVolumeCleanupCheckbox.setValue(this.settings.cleanupOptions.Enabled);
-      if (this.settings.cleanupOptions.Enforced) {
+      this.deleteForm.controls.clusterLBCleanupCheckbox.setValue(this.settings.cleanupOptions.enabled);
+      this.deleteForm.controls.clusterVolumeCleanupCheckbox.setValue(this.settings.cleanupOptions.enabled);
+      if (this.settings.cleanupOptions.enforced) {
         this.deleteForm.controls.clusterLBCleanupCheckbox.disable();
         this.deleteForm.controls.clusterVolumeCleanupCheckbox.disable();
       } else {
@@ -73,7 +73,7 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck, OnDe
   }
 
   getCheckboxTooltip(): string {
-    return this.settings && this.settings.cleanupOptions.Enforced
+    return this.settings && this.settings.cleanupOptions.enforced
       ? 'These settings are enforced by the admin and cannot be changed.'
       : '';
   }
@@ -89,7 +89,7 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck, OnDe
 
   showWarning(): boolean {
     return (
-      !this.settings?.cleanupOptions.Enforced &&
+      !this.settings?.cleanupOptions.enforced &&
       (!this.deleteForm.controls.clusterLBCleanupCheckbox.value ||
         !this.deleteForm.controls.clusterVolumeCleanupCheckbox.value)
     );

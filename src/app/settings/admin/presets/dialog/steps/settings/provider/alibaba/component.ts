@@ -21,7 +21,7 @@ import {merge, of} from 'rxjs';
 import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 
 enum Controls {
-  AccessKeyID = 'accessKeyId',
+  AccessKeyID = 'accessKeyID',
   AccessKeySecret = 'secretAccessKey',
 }
 
@@ -72,7 +72,7 @@ export class AlibabaSettingsComponent extends BaseFormValidator implements OnIni
 
   private _update(): void {
     this._presetDialogService.preset.spec.alibaba = {
-      accessKeyId: this.form.get(Controls.AccessKeyID).value,
+      accessKeyID: this.form.get(Controls.AccessKeyID).value,
       accessKeySecret: this.form.get(Controls.AccessKeySecret).value,
     } as AlibabaPresetSpec;
   }

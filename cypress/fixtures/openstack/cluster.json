@@ -7,12 +7,13 @@
     "cloud": {
       "dc": "test-openstack-dc",
       "openstack": {
-        "floatingIpPool": "ext-net",
+        "floatingIPPool": "ext-net",
         "network": "",
         "securityGroups": "",
         "routerID": "",
         "subnetID": ""
-      }
+      },
+      "providerName": "openstack"
     },
     "version": "1.21.5",
     "oidc": {},

@@ -66,7 +66,7 @@ export class ClusterSummaryComponent {
   }
 
   get isMLAEnabled(): boolean {
-    return !!this.seedSettings && !!this.seedSettings.mla && !!this.seedSettings.mla.user_cluster_mla_enabled;
+    return !!this.seedSettings && !!this.seedSettings.mla && !!this.seedSettings.mla.userClusterMLAEnabled;
   }
 
   get hasIPLeft(): boolean {

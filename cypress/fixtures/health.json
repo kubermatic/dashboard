@@ -1,11 +1,11 @@
 {
-  "apiserver": 1,
-  "scheduler": 1,
-  "controller": 1,
-  "machineController": 1,
-  "etcd": 1,
-  "cloudProviderInfrastructure": 1,
-  "userClusterControllerManager": 1,
-  "gatekeeperAudit": 1,
-  "gatekeeperController": 1
+  "apiserver": "HealthStatusUp",
+  "scheduler": "HealthStatusUp",
+  "controller": "HealthStatusUp",
+  "machineController": "HealthStatusUp",
+  "etcd": "HealthStatusUp",
+  "cloudProviderInfrastructure": "HealthStatusUp",
+  "userClusterControllerManager": "HealthStatusUp",
+  "gatekeeperAudit": "HealthStatusUp",
+  "gatekeeperController": "HealthStatusUp"
 }

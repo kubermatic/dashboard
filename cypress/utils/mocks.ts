@@ -39,18 +39,17 @@ export class Mocks {
     userSettings: {
       itemsPerPage: 5,
       lastSeenChangelogVersion: 'v9.0.0',
-      selectedProjectId: '',
+      selectedProjectID: '',
     },
   };
 
   static adminSettings: any = {
     customLinks: [],
     cleanupOptions: {
-      Enabled: false,
-      Enforced: false,
+      enabled: false,
+      enforced: false,
     },
     defaultNodeCount: 1,
-    clusterTypeOptions: 0,
     displayDemoInfo: false,
     displayAPIDocs: false,
     displayTermsOfService: false,

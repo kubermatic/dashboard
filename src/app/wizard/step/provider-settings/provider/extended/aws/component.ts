@@ -26,7 +26,7 @@ import {AutocompleteControls, AutocompleteInitialState} from '@shared/components
 
 enum Controls {
   SecurityGroup = 'securityGroup',
-  RouteTableID = 'routeTableId',
+  RouteTableID = 'routeTableID',
   InstanceProfileName = 'instanceProfileName',
   RoleARN = 'roleARN',
 }
@@ -126,7 +126,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
       !!this._clusterSpecService.cluster.spec.cloud.aws.assumeRoleExternalID
     ) {
       return (
-        !!this._clusterSpecService.cluster.spec.cloud.aws.accessKeyId &&
+        !!this._clusterSpecService.cluster.spec.cloud.aws.accessKeyID &&
         !!this._clusterSpecService.cluster.spec.cloud.aws.secretAccessKey &&
         !!this._clusterSpecService.cluster.spec.cloud.aws.assumeRoleExternalID &&
         !!this._clusterSpecService.cluster.spec.cloud.aws.assumeRoleARN
@@ -134,7 +134,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
     }
 
     return (
-      !!this._clusterSpecService.cluster.spec.cloud.aws.accessKeyId &&
+      !!this._clusterSpecService.cluster.spec.cloud.aws.accessKeyID &&
       !!this._clusterSpecService.cluster.spec.cloud.aws.secretAccessKey
     );
   }
@@ -142,7 +142,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
   private _securityGroupObservable(): Observable<string[]> {
     return this._presets
       .provider(NodeProvider.AWS)
-      .accessKeyID(this._clusterSpecService.cluster.spec.cloud.aws.accessKeyId)
+      .accessKeyID(this._clusterSpecService.cluster.spec.cloud.aws.accessKeyID)
       .secretAccessKey(this._clusterSpecService.cluster.spec.cloud.aws.secretAccessKey)
       .assumeRoleARN(this._clusterSpecService.cluster.spec.cloud.aws.assumeRoleARN)
       .assumeRoleExternalID(this._clusterSpecService.cluster.spec.cloud.aws.assumeRoleExternalID)
@@ -184,7 +184,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
           aws: {
             instanceProfileName: this.form.get(Controls.InstanceProfileName).value,
             roleARN: this.form.get(Controls.RoleARN).value,
-            routeTableId: this.form.get(Controls.RouteTableID).value,
+            routeTableID: this.form.get(Controls.RouteTableID).value,
           } as AWSCloudSpec,
         } as CloudSpec,
       } as ClusterSpec,

@@ -93,7 +93,7 @@ export class NodeDataAnexiaProvider {
           .pipe(debounceTime(this._debounce))
           .pipe(tap(c => (cluster = c)))
           .pipe(switchMap(_ => this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(take(1))))
-          .pipe(tap(dc => (location = dc?.spec.anexia.location_id)))
+          .pipe(tap(dc => (location = dc?.spec.anexia.locationID)))
           .pipe(filter(_ => location?.length > 0))
           .pipe(
             switchMap(_ =>
@@ -126,7 +126,7 @@ export class NodeDataAnexiaProvider {
               this._anexiaService.getTemplates(
                 selectedProject,
                 this._clusterSpecService.cluster.id,
-                dc.spec.anexia.location_id
+                dc.spec.anexia.locationID
               )
             )
           )

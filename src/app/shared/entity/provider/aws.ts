@@ -32,7 +32,7 @@ export class AWSTags {
 }
 
 export class AWSVPC {
-  vpcId: string;
+  vpcID: string;
   name: string;
   cidrBlock: string;
   cidrBlockAssociationSet: AWSCidrBlockSet[];
@@ -45,7 +45,7 @@ export class AWSVPC {
   tags: AWSTags[];
 
   get displayName(): string {
-    return this.name !== '' ? `${this.name} (${this.vpcId})` : this.vpcId;
+    return this.name !== '' ? `${this.name} (${this.vpcID})` : this.vpcID;
   }
 }
 
