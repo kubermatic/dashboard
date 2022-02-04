@@ -155,11 +155,12 @@ export class KubevirtPresetSpec extends PresetProviderSpec {
 }
 
 export class NutanixPresetSpec extends PresetProviderSpec {
-  clusterName?: string;
-  projectName?: string;
   proxyURL: string;
   username: string;
   password: string;
+
+  clusterName?: string;
+  projectName?: string;
 }
 
 export class OpenstackPresetSpec extends PresetProviderSpec {

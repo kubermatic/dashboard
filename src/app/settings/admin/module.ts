@@ -38,6 +38,7 @@ import {AdminSettingsRoutingModule} from './routing';
 import {GKESettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/gke/component';
 import {EKSSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/eks/component';
 import {AKSSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/aks/component';
+import {NutanixSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/nutanix/component';
 
 @NgModule({
   imports: [SharedModule, AdminSettingsRoutingModule],
@@ -64,6 +65,7 @@ import {AKSSettingsComponent} from '@app/settings/admin/presets/dialog/steps/set
     OpenstackSettingsComponent,
     EquinixSettingsComponent,
     VSphereSettingsComponent,
+    NutanixSettingsComponent,
   ],
   providers: [PresetDialogService],
 })

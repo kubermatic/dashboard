@@ -16,7 +16,7 @@ limitations under the License.
 
 <div fxLayout="column">
   <div fxLayout="row wrap">
-    <km-property>
+    <km-property *ngIf="preset.metadata?.name">
       <div key>Preset Name</div>
       <div value>{{preset.metadata.name}}</div>
     </km-property>
@@ -74,6 +74,9 @@ limitations under the License.
       <km-equinix-settings *ngSwitchCase="Providers.EQUINIX"
                            [formControl]="form.get(Controls.Settings)">
       </km-equinix-settings>
+      <km-nutanix-settings *ngSwitchCase="Providers.NUTANIX"
+                           [formControl]="form.get(Controls.Settings)">
+      </km-nutanix-settings>
       <km-vsphere-settings *ngSwitchCase="Providers.VSPHERE"
                            [formControl]="form.get(Controls.Settings)">
       </km-vsphere-settings>
