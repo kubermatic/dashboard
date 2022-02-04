@@ -379,6 +379,7 @@ export class CNIPluginConfigPatch {
 export class CloudSpecPatch {
   anexia?: AnexiaCloudSpecPatch;
   digitalocean?: DigitaloceanCloudSpecPatch;
+  nutanix?: NutanixCloudSpecPatch;
   aws?: AWSCloudSpecPatch;
   openstack?: OpenstackCloudSpecPatch;
   packet?: EquinixCloudSpecPatch;
@@ -411,6 +412,14 @@ export class EquinixCloudSpecPatch {
   apiKey?: string;
   projectID?: string;
   billingCycle?: string;
+}
+
+export class NutanixCloudSpecPatch {
+  username: string;
+  password: string;
+  proxyURL?: string;
+  clusterName?: string;
+  projectName?: string;
 }
 
 export class HetznerCloudSpecPatch {

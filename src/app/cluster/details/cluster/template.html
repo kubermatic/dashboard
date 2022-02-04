@@ -78,8 +78,8 @@ limitations under the License.
                       fxLayout="row"
                       fxLayoutAlign=" center"
                       class="km-cluster-name">
-        <i [matTooltip]="!!healthStatus ? healthStatus.message : ''"
-           [ngClass]="!!healthStatus ? healthStatus.icon : ''"
+        <i [matTooltip]="healthStatus?.message"
+           [ngClass]="healthStatus?.icon"
            class="km-cluster-health km-pointer"></i>
         <span ngxClipboard
               [cbContent]="cluster.name"

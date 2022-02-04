@@ -67,6 +67,7 @@ import {ClusterRoutingModule} from './routing';
 import {ExternalClusterListComponent} from '@app/cluster/list/external-cluster/component';
 import {ClustersComponent} from '@app/cluster/list/component';
 import {ReplicasDialogComponent} from '@app/cluster/details/external-cluster/replicas-dialog/component';
+import {NutanixProviderSettingsComponent} from '@app/cluster/details/cluster/edit-provider-settings/nutanix-provider-settings/component';
 
 const components: any[] = [
   ClusterDetailsComponent,
@@ -86,6 +87,7 @@ const components: any[] = [
   RevokeTokenComponent,
   EditProviderSettingsComponent,
   AWSProviderSettingsComponent,
+  NutanixProviderSettingsComponent,
   AnexiaProviderSettingsComponent,
   DigitaloceanProviderSettingsComponent,
   HetznerProviderSettingsComponent,
