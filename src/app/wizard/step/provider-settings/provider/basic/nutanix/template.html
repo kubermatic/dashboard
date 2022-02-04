@@ -44,11 +44,7 @@ limitations under the License.
     <input matInput
            [formControlName]="Controls.ProxyURL"
            [name]="Controls.ProxyURL"
-           autocomplete="off"
-           required>
-    <mat-error *ngIf="form.get(Controls.ProxyURL).hasError('required')">
-      Proxy URL is <strong>required</strong>.
-    </mat-error>
+           autocomplete="off">
   </mat-form-field>
   <mat-form-field fxFlex>
     <mat-label>Cluster Name</mat-label>
