@@ -155,39 +155,40 @@ echodate "Finished exposing components"
 
 echodate "Creating UI AWS preset..."
 cat <<EOF > preset-aws.yaml
-apiVersion: kubermatic.k8s.io/v1
+apiVersion: kubermatic.k8c.io/v1
 kind: Preset
 metadata:
   name: e2e-aws
   namespace: kubermatic
 spec:
   aws:
-    accessKeyId: ${AWS_E2E_TESTS_KEY_ID}
+    accessKeyID: ${AWS_E2E_TESTS_KEY_ID}
     secretAccessKey: ${AWS_E2E_TESTS_SECRET}
     datacenter: ${AWS_E2E_TESTS_DATACENTER}
-    vpcId: ${AWS_E2E_TESTS_VPC_ID}
+    vpcID: ${AWS_E2E_TESTS_VPC_ID}
 EOF
 retry 2 kubectl apply -f preset-aws.yaml
 
 echodate "Creating UI Azure preset..."
 cat <<EOF > preset-azure.yaml
-apiVersion: kubermatic.k8s.io/v1
+apiVersion: kubermatic.k8c.io/v1
 kind: Preset
 metadata:
   name: e2e-azure
   namespace: kubermatic
 spec:
   azure:
-    tenantId: ${AZURE_E2E_TESTS_TENANT_ID}
-    subscriptionId: ${AZURE_E2E_TESTS_SUBSCRIPTION_ID}
-    clientId: ${AZURE_E2E_TESTS_CLIENT_ID}
+    tenantID: ${AZURE_E2E_TESTS_TENANT_ID}
+    subscriptionID: ${AZURE_E2E_TESTS_SUBSCRIPTION_ID}
+    clientID: ${AZURE_E2E_TESTS_CLIENT_ID}
     clientSecret: ${AZURE_E2E_TESTS_CLIENT_SECRET}
+    loadBalancerSKU: "standard"
 EOF
 retry 2 kubectl apply -f preset-azure.yaml
 
 echodate "Creating UI DigitalOcean preset..."
 cat <<EOF > preset-digitalocean.yaml
-apiVersion: kubermatic.k8s.io/v1
+apiVersion: kubermatic.k8c.io/v1
 kind: Preset
 metadata:
   name: e2e-digitalocean
@@ -200,7 +201,7 @@ retry 2 kubectl apply -f preset-digitalocean.yaml
 
 echodate "Creating UI GCP preset..."
 cat <<EOF > preset-gcp.yaml
-apiVersion: kubermatic.k8s.io/v1
+apiVersion: kubermatic.k8c.io/v1
 kind: Preset
 metadata:
   name: e2e-gcp
@@ -213,7 +214,7 @@ retry 2 kubectl apply -f preset-gcp.yaml
 
 echodate "Creating UI KubeVirt preset..."
 cat <<EOF > preset-kubevirt.yaml
-apiVersion: kubermatic.k8s.io/v1
+apiVersion: kubermatic.k8c.io/v1
 kind: Preset
 metadata:
   name: e2e-kubevirt
@@ -227,7 +228,7 @@ retry 2 kubectl apply -f preset-kubevirt.yaml
 
 echodate "Creating UI OpenStack preset..."
 cat <<EOF > preset-openstack.yaml
-apiVersion: kubermatic.k8s.io/v1
+apiVersion: kubermatic.k8c.io/v1
 kind: Preset
 metadata:
   name: e2e-openstack
@@ -236,17 +237,19 @@ spec:
   openstack:
     datacenter: ${OS_DATACENTER}
     domain: ${OS_DOMAIN}
-    floatingIpPool: ${OS_FLOATING_IP_POOL}
+    floatingIPPool: ${OS_FLOATING_IP_POOL}
     password: ${OS_PASSWORD}
-    project: ${OS_TENANT_NAME}
-    projectID: ${OS_TENANT_ID}
+    # quotes are important, so empty values do not lead
+    # to nil values and cause validation errors
+    project: "${OS_TENANT_NAME}"
+    projectID: "${OS_TENANT_ID}"
     username: ${OS_USERNAME}
 EOF
 retry 2 kubectl apply -f preset-openstack.yaml
 
 echodate "Creating UI Equinix Metal preset..."
 cat <<EOF > preset-equinix.yaml
-apiVersion: kubermatic.k8s.io/v1
+apiVersion: kubermatic.k8c.io/v1
 kind: Preset
 metadata:
   name: e2e-equinix
@@ -254,13 +257,13 @@ metadata:
 spec:
   packet:
     apiKey: ${PACKET_API_KEY}
-    projectId: ${PACKET_PROJECT_ID}
+    projectID: ${PACKET_PROJECT_ID}
 EOF
 retry 2 kubectl apply -f preset-equinix.yaml
 
 echodate "Creating UI Anexia preset..."
 cat <<EOF > preset-anexia.yaml
-apiVersion: kubermatic.k8s.io/v1
+apiVersion: kubermatic.k8c.io/v1
 kind: Preset
 metadata:
   name: e2e-anexia
@@ -273,7 +276,7 @@ retry 2 kubectl apply -f preset-anexia.yaml
 
 echodate "Creating UI Hetzner preset..."
 cat <<EOF > preset-hetzner.yaml
-apiVersion: kubermatic.k8s.io/v1
+apiVersion: kubermatic.k8c.io/v1
 kind: Preset
 metadata:
   name: e2e-hetzner
@@ -286,7 +289,7 @@ retry 2 kubectl apply -f preset-hetzner.yaml
 
 echodate "Creating UI VSPhere preset..."
 cat <<EOF > preset-vsphere.yaml
-apiVersion: kubermatic.k8s.io/v1
+apiVersion: kubermatic.k8c.io/v1
 kind: Preset
 metadata:
   name: e2e-vsphere
@@ -300,14 +303,14 @@ retry 2 kubectl apply -f preset-vsphere.yaml
 
 echodate "Creating UI Alibaba preset..."
 cat <<EOF > preset-alibaba.yaml
-apiVersion: kubermatic.k8s.io/v1
+apiVersion: kubermatic.k8c.io/v1
 kind: Preset
 metadata:
   name: e2e-alibaba
   namespace: kubermatic
 spec:
   alibaba:
-    accessKeyId: ${ALIBABA_ACCESS_KEY_ID}
+    accessKeyID: ${ALIBABA_ACCESS_KEY_ID}
     accessKeySecret: ${ALIBABA_ACCESS_KEY_SECRET}
 EOF
 retry 2 kubectl apply -f preset-alibaba.yaml

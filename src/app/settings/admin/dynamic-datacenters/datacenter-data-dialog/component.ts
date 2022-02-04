@@ -42,7 +42,7 @@ export enum Controls {
   Seed = 'seed',
   Country = 'country',
   Location = 'location',
-  RequiredEmailDomains = 'requiredEmailDomains',
+  RequiredEmails = 'requiredEmails',
   EnforcePodSecurityPolicy = 'enforcePodSecurityPolicy',
   EnforceAuditLogging = 'enforceAuditLogging',
 }
@@ -59,7 +59,7 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
   readonly providers = INTERNAL_NODE_PROVIDERS;
   seeds: string[] = [];
   form: FormGroup;
-  requiredEmailDomains: string[] = [];
+  requiredEmails: string[] = [];
   providerConfig = '';
   private _unsubscribe = new Subject<void>();
 
@@ -84,14 +84,14 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
       ),
       country: new FormControl(this.data.isEditing ? this.data.datacenter.spec.country : '', [Validators.required]),
       location: new FormControl(this.data.isEditing ? this.data.datacenter.spec.location : '', [Validators.required]),
-      requiredEmailDomains: new FormControl(),
+      requiredEmails: new FormControl(),
       enforcePodSecurityPolicy: new FormControl(
         this.data.isEditing && this.data.datacenter.spec.enforcePodSecurityPolicy
       ),
       enforceAuditLogging: new FormControl(this.data.isEditing && this.data.datacenter.spec.enforceAuditLogging),
     });
 
-    this._initRequiredEmailDomainsInput();
+    this._initRequiredEmailsInput();
     this._initProviderConfigEditor();
   }
 
@@ -104,11 +104,11 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
     return getIconClassForButton(this.data.confirmLabel);
   }
 
-  private _initRequiredEmailDomainsInput(): void {
-    if (this.data.isEditing && !_.isEmpty(this.data.datacenter.spec.requiredEmailDomains)) {
-      this.requiredEmailDomains = this.data.datacenter.spec.requiredEmailDomains;
+  private _initRequiredEmailsInput(): void {
+    if (this.data.isEditing && !_.isEmpty(this.data.datacenter.spec.requiredEmails)) {
+      this.requiredEmails = this.data.datacenter.spec.requiredEmails;
     } else {
-      this.requiredEmailDomains = [];
+      this.requiredEmails = [];
     }
   }
 
@@ -135,7 +135,7 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
     const value = event.value;
 
     if ((value || '').trim()) {
-      this.requiredEmailDomains.push(value.trim());
+      this.requiredEmails.push(value.trim());
     }
 
     if (input) {
@@ -144,10 +144,10 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
   }
 
   removeDomain(domain: string): void {
-    const index = this.requiredEmailDomains.indexOf(domain);
+    const index = this.requiredEmails.indexOf(domain);
 
     if (index >= 0) {
-      this.requiredEmailDomains.splice(index, 1);
+      this.requiredEmails.splice(index, 1);
     }
   }
 
@@ -166,7 +166,7 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
         seed: this.form.get(Controls.Seed).value,
         country: this.form.get(Controls.Country).value,
         location: this.form.get(Controls.Location).value,
-        requiredEmailDomains: this.requiredEmailDomains,
+        requiredEmails: this.requiredEmails,
         enforcePodSecurityPolicy: this.form.get(Controls.EnforcePodSecurityPolicy).value,
         enforceAuditLogging: this.form.get(Controls.EnforceAuditLogging).value,
       },

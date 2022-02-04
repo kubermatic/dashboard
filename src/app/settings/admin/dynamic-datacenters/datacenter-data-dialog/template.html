@@ -115,10 +115,10 @@ limitations under the License.
     </mat-form-field>
 
     <mat-form-field class="domain-input">
-      <mat-label>Required Email Domains</mat-label>
+      <mat-label>Required Emails</mat-label>
       <mat-chip-list #chipList
                      class="km-chip-list-with-input">
-        <mat-chip *ngFor="let domain of requiredEmailDomains"
+        <mat-chip *ngFor="let domain of requiredEmails"
                   removable
                   (removed)="removeDomain(domain)"
                   [selectable]="false">
@@ -126,7 +126,7 @@ limitations under the License.
           <i matChipRemove
              class="km-icon-mask km-icon-remove"></i>
         </mat-chip>
-        <input [formControlName]="controls.RequiredEmailDomains"
+        <input [formControlName]="controls.RequiredEmails"
                matChipInputAddOnBlur
                [matChipInputFor]="chipList"
                [matChipInputSeparatorKeyCodes]="separatorKeyCodes"

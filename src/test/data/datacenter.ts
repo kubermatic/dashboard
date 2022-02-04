@@ -76,8 +76,8 @@ export function fakeOpenstackDatacenter(): Datacenter {
       seed: 'europe-west3-c',
       country: 'DE',
       openstack: {
-        auth_url: 'kubermatic.com',
-        availability_zone: 'az1',
+        authURL: 'kubermatic.com',
+        availabilityZone: 'az1',
         region: '',
         images: {
           centos: '',
@@ -85,7 +85,7 @@ export function fakeOpenstackDatacenter(): Datacenter {
           sles: '',
           rhel: '',
         },
-        enforce_floating_ip: false,
+        enforceFloatingIP: false,
       },
       location: 'Frankfurt',
       provider: 'openstack',
@@ -157,5 +157,5 @@ export function fakeNodeDatacenters(): Datacenter[] {
 }
 
 export function fakeSeedSettings(): SeedSettings {
-  return {mla: {user_cluster_mla_enabled: true}, metering: {} as MeteringConfiguration};
+  return {mla: {userClusterMLAEnabled: true}, metering: {} as MeteringConfiguration};
 }

@@ -31,7 +31,6 @@ import {
   AuditPolicyPreset,
   Cluster,
   ClusterSpec,
-  ClusterType,
   CNIPlugin,
   ContainerRuntime,
   END_OF_DOCKER_SUPPORT_VERSION,
@@ -326,7 +325,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   }
 
   isMLAEnabled(): boolean {
-    return !!this._seedSettings && !!this._seedSettings.mla && !!this._seedSettings.mla.user_cluster_mla_enabled;
+    return !!this._seedSettings && !!this._seedSettings.mla && !!this._seedSettings.mla.userClusterMLAEnabled;
   }
 
   hasCNIPluginType(): boolean {
@@ -375,7 +374,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
     return {
       name: this.controlValue(Controls.Name),
-      type: ClusterType.Kubernetes,
       spec: {
         version: this.controlValue(Controls.Version),
         auditLogging: {

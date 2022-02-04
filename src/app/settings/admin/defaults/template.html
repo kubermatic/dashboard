@@ -39,12 +39,12 @@ limitations under the License.
           </div>
           <div fxFlexAlign=" center"
                fxLayout="row">
-            <mat-checkbox [(ngModel)]="settings.cleanupOptions.Enabled"
+            <mat-checkbox [(ngModel)]="settings.cleanupOptions.enabled"
                           (change)="onSettingsChange()"
                           id="km-cleanup-enable-setting"
                           fxFlexAlign=" center">Enable by Default
             </mat-checkbox>
-            <mat-checkbox [(ngModel)]="settings.cleanupOptions.Enforced"
+            <mat-checkbox [(ngModel)]="settings.cleanupOptions.enforced"
                           (change)="onSettingsChange()"
                           id="km-cleanup-enforce-setting"
                           fxFlexAlign=" center">Enforce Default

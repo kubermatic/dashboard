@@ -100,10 +100,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   checkUrl(url: string): boolean {
-    const selectedProjectId = this._selectedProject.id;
+    const selectedProjectID = this._selectedProject.id;
     const urlArray = this._router.routerState.snapshot.url.split('/');
     return (
-      !!urlArray.find(x => x === selectedProjectId) &&
+      !!urlArray.find(x => x === selectedProjectID) &&
       (!!urlArray.find(x => x === url) || (url === View.Clusters && !!urlArray.find(x => x === View.Wizard)))
     );
   }

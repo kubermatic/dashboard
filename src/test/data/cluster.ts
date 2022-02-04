@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Cluster, ClusterType, ExternalCCMMigrationStatus} from '@shared/entity/cluster';
+import {Cluster, ExternalCCMMigrationStatus} from '@shared/entity/cluster';
 
 export function fakeDigitaloceanCluster(): Cluster {
   return {
@@ -25,6 +25,7 @@ export function fakeDigitaloceanCluster(): Cluster {
         digitalocean: {
           token: 'token',
         },
+        providerName: 'digitalocean',
       },
       version: '1.8.5',
     },
@@ -33,7 +34,6 @@ export function fakeDigitaloceanCluster(): Cluster {
       version: '1.8.5',
       externalCCMMigration: ExternalCCMMigrationStatus.Unsupported,
     },
-    type: ClusterType.Kubernetes,
   };
 }
 
@@ -50,6 +50,7 @@ export function fakeEquinixCluster(): Cluster {
           projectID: '1',
           billingCycle: 'hourly',
         },
+        providerName: 'packet',
       },
       version: '1.8.5',
     },
@@ -58,7 +59,6 @@ export function fakeEquinixCluster(): Cluster {
       version: '1.8.5',
       externalCCMMigration: ExternalCCMMigrationStatus.Unsupported,
     },
-    type: ClusterType.Kubernetes,
   };
 }
 
@@ -73,6 +73,7 @@ export function fakeHetznerCluster(): Cluster {
         hetzner: {
           token: 'pixH4QgO2nbVY1Xoo8yVN0RPN2d3CBQYPKcPrfd1BWwFsWrKMsdUKyos7wYAa6hQ',
         },
+        providerName: 'digitalocean',
       },
       version: '1.8.5',
     },
@@ -81,7 +82,6 @@ export function fakeHetznerCluster(): Cluster {
       version: '1.8.5',
       externalCCMMigration: ExternalCCMMigrationStatus.NotNeeded,
     },
-    type: ClusterType.Kubernetes,
   };
 }
 
@@ -103,6 +103,7 @@ export function fakeVSphereCluster(): Cluster {
             password: 'bar',
           },
         },
+        providerName: 'vsphere',
       },
       version: '1.8.5',
     },
@@ -111,7 +112,6 @@ export function fakeVSphereCluster(): Cluster {
       version: '1.8.5',
       externalCCMMigration: ExternalCCMMigrationStatus.Unsupported,
     },
-    type: ClusterType.Kubernetes,
   };
 }
 
@@ -124,16 +124,17 @@ export function fakeAWSCluster(): Cluster {
       cloud: {
         dc: 'aws-fra1',
         aws: {
-          accessKeyId: 'aaaaaaaaaaaa',
+          accessKeyID: 'aaaaaaaaaaaa',
           secretAccessKey: 'bbbbbbbbbbbb',
           assumeRoleARN: '',
           assumeRoleExternalID: '',
           securityGroupID: '',
-          vpcId: '',
-          routeTableId: '',
+          vpcID: '',
+          routeTableID: '',
           instanceProfileName: '',
           roleARN: '',
         },
+        providerName: 'aws',
       },
       version: '1.9.6',
     },
@@ -142,7 +143,6 @@ export function fakeAWSCluster(): Cluster {
       version: '1.9.6',
       externalCCMMigration: ExternalCCMMigrationStatus.Unsupported,
     },
-    type: ClusterType.Kubernetes,
   };
 }
 
@@ -157,7 +157,7 @@ export function fakeOpenstackCluster(): Cluster {
         openstack: {
           username: 'test-username',
           password: 'test-password',
-          floatingIpPool: 'test-floating-ip-pool',
+          floatingIPPool: 'test-floating-ip-pool',
           securityGroups: 'test-security-group',
           network: 'test-network',
           domain: 'test-domain',
@@ -165,6 +165,7 @@ export function fakeOpenstackCluster(): Cluster {
           projectID: '',
           subnetID: 'test-subnet-id',
         },
+        providerName: 'openstack',
       },
       version: '1.9.6',
     },
@@ -173,7 +174,6 @@ export function fakeOpenstackCluster(): Cluster {
       version: '1.9.6',
       externalCCMMigration: ExternalCCMMigrationStatus.Unsupported,
     },
-    type: ClusterType.Kubernetes,
   };
 }
 
@@ -199,6 +199,7 @@ export function fakeAzureCluster(): Cluster {
           loadBalancerSKU: 'basic',
           assignAvailabilitySet: true,
         },
+        providerName: 'azure',
       },
       version: '1.8.5',
     },
@@ -207,7 +208,6 @@ export function fakeAzureCluster(): Cluster {
       version: '1.8.5',
       externalCCMMigration: ExternalCCMMigrationStatus.Unsupported,
     },
-    type: ClusterType.Kubernetes,
   };
 }
 
@@ -220,6 +220,7 @@ export function fakeBringyourownCluster(): Cluster {
       cloud: {
         dc: 'do-fra1',
         bringyourown: {},
+        providerName: 'bringyourown',
       },
       version: '1.8.5',
     },
@@ -228,7 +229,6 @@ export function fakeBringyourownCluster(): Cluster {
       version: '1.8.5',
       externalCCMMigration: ExternalCCMMigrationStatus.Unsupported,
     },
-    type: ClusterType.Kubernetes,
   };
 }
 
@@ -244,6 +244,7 @@ export function fakeAlibabaCluster(): Cluster {
           accessKeyID: 'ali-access-key-id',
           accessKeySecret: 'ali-access-key-secret',
         },
+        providerName: 'alibaba',
       },
       version: '1.9.6',
     },
@@ -252,7 +253,6 @@ export function fakeAlibabaCluster(): Cluster {
       version: '1.9.6',
       externalCCMMigration: ExternalCCMMigrationStatus.Unsupported,
     },
-    type: ClusterType.Kubernetes,
   };
 }
 

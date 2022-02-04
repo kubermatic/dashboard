@@ -71,7 +71,7 @@ describe('User Settings Story', () => {
 
   it(`should set ${projectName} as default project`, () => {
     if (Mocks.enabled()) {
-      Mocks.currentUser.userSettings.selectedProjectId = 'fn9234fn1d';
+      Mocks.currentUser.userSettings.selectedProjectID = 'fn9234fn1d';
     } else {
       UserSettingsPage.getDefaultProjectInput().click();
       UserSettingsPage.getDefaultProjectInput().get('mat-option').contains(projectName).click();
@@ -108,7 +108,7 @@ describe('User Settings Story', () => {
 
   it('should set default items per page', () => {
     if (Mocks.enabled()) {
-      Mocks.currentUser.userSettings.selectedProjectId = '';
+      Mocks.currentUser.userSettings.selectedProjectID = '';
     } else {
       UserSettingsPage.getItemsPerPageInput().click();
       UserSettingsPage.getItemsPerPageInput().get('mat-option').contains('10').click();

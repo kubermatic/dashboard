@@ -83,7 +83,7 @@ limitations under the License.
         <mat-form-field class="input">
           <mat-select disableOptionCentering
                       id="km-default-project-select"
-                      [(ngModel)]="settings.selectedProjectId"
+                      [(ngModel)]="settings.selectedProjectID"
                       (selectionChange)="onSettingsChange()"
                       [placeholder]="hasDefaultProject()">
             <mat-option value=""
@@ -95,7 +95,7 @@ limitations under the License.
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <km-spinner-with-confirmation [isSaved]="isEqual(settings.selectedProjectId, apiSettings.selectedProjectId)"
+        <km-spinner-with-confirmation [isSaved]="isEqual(settings.selectedProjectID, apiSettings.selectedProjectID)"
                                       fxFlexAlign=" center"></km-spinner-with-confirmation>
       </div>
     </div>

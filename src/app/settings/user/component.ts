@@ -97,12 +97,12 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
   }
 
   hasDefaultProject(): string {
-    return this.settings.selectedProjectId ? '' : 'None';
+    return this.settings.selectedProjectID ? '' : 'None';
   }
 
   private _checkDefaultProject(): void {
-    if (!!this.settings.selectedProjectId && !this.projectIds.includes(this.settings.selectedProjectId)) {
-      this.settings.selectedProjectId = '';
+    if (!!this.settings.selectedProjectID && !this.projectIds.includes(this.settings.selectedProjectID)) {
+      this.settings.selectedProjectID = '';
       this.onSettingsChange();
     }
   }

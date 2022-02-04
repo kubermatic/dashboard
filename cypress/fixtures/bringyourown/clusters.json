@@ -7,7 +7,8 @@
     "spec": {
       "cloud": {
         "dc": "byo-europe-west3-c",
-        "bringyourown": {}
+        "bringyourown": {},
+        "providerName": "bringyourown"
       },
       "version": "1.21.5",
       "oidc": {},

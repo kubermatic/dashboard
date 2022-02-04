@@ -16,7 +16,7 @@ import _ from 'lodash';
 
 export class UserSettings {
   selectedTheme?: string;
-  selectedProjectId?: string;
+  selectedProjectID?: string;
   itemsPerPage?: number;
   selectProjectTableView?: boolean;
   collapseSidenav?: boolean;
@@ -52,8 +52,8 @@ export class MachineDeploymentVMResourceQuota {
 }
 
 export class CleanupOptions {
-  Enabled: boolean;
-  Enforced: boolean;
+  enabled: boolean;
+  enforced: boolean;
 }
 
 export class OpaOptions {
@@ -128,8 +128,8 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
 
 export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
   cleanupOptions: {
-    Enforced: false,
-    Enabled: false,
+    enforced: false,
+    enabled: false,
   },
   userProjectsLimit: 0,
   customLinks: [],

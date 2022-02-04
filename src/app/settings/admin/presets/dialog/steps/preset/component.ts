@@ -68,7 +68,7 @@ export class PresetStepComponent extends BaseFormValidator implements OnInit {
 
   private _update(): void {
     this._presetDialogService.preset.metadata.name = this.form.get(Controls.Name).value;
-    this._presetDialogService.preset.spec.requiredEmailDomain = this.form.get(Controls.Domain).value;
+    this._presetDialogService.preset.spec.requiredEmails = this.form.get(Controls.Domain).value;
     this._presetDialogService.preset.spec.enabled = !this.form.get(Controls.Disable).value;
   }
 }

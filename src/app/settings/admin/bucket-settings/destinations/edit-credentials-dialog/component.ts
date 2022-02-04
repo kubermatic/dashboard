@@ -27,7 +27,7 @@ export interface EditCredentialsDialogConfig {
 
 enum Controls {
   SecretAccessKey = 'secretAccessKey',
-  AccessKey = 'accessKeyId',
+  AccessKey = 'accessKeyID',
 }
 
 @Component({

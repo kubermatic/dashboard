@@ -26,7 +26,7 @@
       "location": "Vienna",
       "provider": "anexia",
       "anexia": {
-        "location_id": "52b5f6b2fd3a4a7eaaedf1a7c019e9ea"
+        "locationID": "52b5f6b2fd3a4a7eaaedf1a7c019e9ea"
       },
       "node": {},
       "enforceAuditLogging": false,
@@ -126,7 +126,7 @@
       "provider": "gcp",
       "gcp": {
         "region": "europe-west3",
-        "zone_suffixes": [
+        "zoneSuffixes": [
           "c"
         ]
       },
@@ -164,8 +164,8 @@
       "location": "Frankfurt",
       "provider": "kubevirt",
       "kubevirt": {
-        "dns_policy": "None",
-        "dns_config": {
+        "dnsPolicy": "None",
+        "dnsConfig": {
           "nameservers": [
             "8.8.8.8"
           ]
@@ -205,12 +205,12 @@
       "location": "Germany - dbl1",
       "provider": "openstack",
       "openstack": {
-        "auth_url": "https://api.cloud.test.net:5000/v3",
-        "availability_zone": "dbl1",
+        "authURL": "https://api.cloud.test.net:5000/v3",
+        "availabilityZone": "dbl1",
         "region": "dbl",
-        "ignore_volume_az": false,
-        "enforce_floating_ip": true,
-        "dns_servers": [
+        "ignoreVolumeAZ": false,
+        "enforceFloatingIP": true,
+        "dnsServers": [
           "68.123.44.116",
           "68.123.44.117"
         ],
@@ -219,14 +219,14 @@
           "coreos": "kubermatic-e2e-coreos",
           "ubuntu": "kubermatic-e2e-ubuntu"
         },
-        "manage_security_groups": null,
-        "use_octavia": null,
-        "trust_device_path": null,
-        "node_size_requirements": {
-          "minimum_vcpus": 0,
-          "minimum_memory": 0
+        "manageSecurityGroups": null,
+        "useOctavia": null,
+        "trustDevicePath": null,
+        "nodeSizeRequirements": {
+          "minimumVCPUs": 0,
+          "minimumMemory": 0
         },
-        "enabled_flavors": null
+        "enabledFlavors": null
       },
       "node": {},
       "enforceAuditLogging": false,
@@ -244,12 +244,12 @@
       "provider": "vsphere",
       "vsphere": {
         "endpoint": "https://vcenter.test.com",
-        "allow_insecure": false,
+        "allowInsecure": false,
         "datastore": "exsi-nas",
         "datacenter": "dc-1",
         "cluster": "cl-1",
-        "storage_policy": "",
-        "root_path": "/dc-1/vm/test",
+        "storageSolicy": "",
+        "rootPath": "/dc-1/vm/test",
         "templates": {
           "centos": "machine-controller-e2e-centos",
           "coreos": "machine-controller-e2e-coreos",

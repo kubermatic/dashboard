@@ -70,7 +70,7 @@ export class CreatePresetSpec {
   packet?: EquinixPresetSpec;
   vsphere?: VSpherePresetSpec;
 
-  requiredEmailDomain?: string;
+  requiredEmails?: string[];
   enabled?: boolean;
 
   provider(): NodeProvider {
@@ -85,7 +85,7 @@ export class PresetProviderSpec {
 }
 
 export class AlibabaPresetSpec extends PresetProviderSpec {
-  accessKeyId: string;
+  accessKeyID: string;
   accessKeySecret: string;
 }
 
@@ -172,7 +172,7 @@ export class OpenstackPresetSpec extends PresetProviderSpec {
 
   network?: string;
   securityGroups?: string;
-  floatingIpPool?: string;
+  floatingIPPool?: string;
   routerID?: string;
   subnetID?: string;
 }
