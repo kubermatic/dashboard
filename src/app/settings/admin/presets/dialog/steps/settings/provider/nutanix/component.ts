@@ -55,8 +55,8 @@ export class NutanixSettingsComponent extends BaseFormValidator implements OnIni
     this.form = this._builder.group({
       [Controls.Username]: this._builder.control('', Validators.required),
       [Controls.Password]: this._builder.control('', Validators.required),
-      [Controls.ProxyURL]: this._builder.control('', Validators.required),
-      [Controls.ClusterName]: this._builder.control(''),
+      [Controls.ProxyURL]: this._builder.control(''),
+      [Controls.ClusterName]: this._builder.control('', Validators.required),
       [Controls.ProjectName]: this._builder.control(''),
     });
 
