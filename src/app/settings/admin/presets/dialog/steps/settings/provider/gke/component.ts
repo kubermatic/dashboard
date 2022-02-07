@@ -16,6 +16,7 @@ import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
+import {encode, isValid} from 'js-base64';
 import {merge, of} from 'rxjs';
 import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 
@@ -68,6 +69,9 @@ export class GKESettingsComponent extends BaseFormValidator implements OnInit, O
   }
 
   private _update(): void {
-    this._presetDialogService.preset.spec.gke = {serviceAccount: this.form.get(Controls.ServiceAccount).value};
+    const serviceAccountValue = isValid(this.form.get(Controls.ServiceAccount).value)
+      ? this.form.get(Controls.ServiceAccount).value
+      : encode(this.form.get(Controls.ServiceAccount).value);
+    this._presetDialogService.preset.spec.gke = {serviceAccount: serviceAccountValue};
   }
 }

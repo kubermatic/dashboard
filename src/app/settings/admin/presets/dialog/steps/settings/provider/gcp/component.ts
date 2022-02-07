@@ -17,6 +17,7 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angula
 import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
 import {GCPPresetSpec} from '@shared/entity/preset';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
+import {encode, isValid} from 'js-base64';
 import {merge, of} from 'rxjs';
 import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 
@@ -73,8 +74,11 @@ export class GCPSettingsComponent extends BaseFormValidator implements OnInit, O
   }
 
   private _update(): void {
+    const serviceAccountValue = isValid(this.form.get(Controls.ServiceAccount).value)
+      ? this.form.get(Controls.ServiceAccount).value
+      : encode(this.form.get(Controls.ServiceAccount).value);
     this._presetDialogService.preset.spec.gcp = {
-      serviceAccount: this.form.get(Controls.ServiceAccount).value,
+      serviceAccount: serviceAccountValue,
       network: this.form.get(Controls.Network).value,
       subnetwork: this.form.get(Controls.Subnetwork).value,
     } as GCPPresetSpec;

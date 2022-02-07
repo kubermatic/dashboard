@@ -19,6 +19,7 @@ import {PresetsService} from '@core/services/wizard/presets';
 import {CloudSpec, Cluster, ClusterSpec, GCPCloudSpec} from '@shared/entity/cluster';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
+import {encode, isValid} from 'js-base64';
 import {merge} from 'rxjs';
 import {distinctUntilChanged, filter, takeUntil} from 'rxjs/operators';
 
@@ -98,11 +99,14 @@ export class GCPProviderBasicComponent extends BaseFormValidator implements OnIn
   }
 
   private _getClusterEntity(): Cluster {
+    const serviceAccountValue = isValid(this.form.get(Controls.ServiceAccount).value)
+      ? this.form.get(Controls.ServiceAccount).value
+      : encode(this.form.get(Controls.ServiceAccount).value);
     return {
       spec: {
         cloud: {
           gcp: {
-            serviceAccount: this.form.get(Controls.ServiceAccount).value,
+            serviceAccount: serviceAccountValue,
           } as GCPCloudSpec,
         } as CloudSpec,
       } as ClusterSpec,
