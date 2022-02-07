@@ -28,11 +28,12 @@ import {NodeCloudSpec, NodeSpec, NutanixNodeSpec} from '@shared/entity/node';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {DatacenterOperatingSystemOptions} from '@shared/entity/datacenter';
-import {merge, of} from 'rxjs';
+import {merge, Observable, of} from 'rxjs';
 import {OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import _ from 'lodash';
+import {NutanixSubnet} from '@shared/entity/provider/nutanix';
 
 enum Controls {
   ImageName = 'imageName',
@@ -43,6 +44,12 @@ enum Controls {
   MemoryMB = 'memoryMB',
   DiskSize = 'diskSize',
   Categories = 'categories',
+}
+
+enum SubnetState {
+  Ready = 'Subnet',
+  Loading = 'Loading...',
+  Empty = 'No subnets available',
 }
 
 @Component({
@@ -63,10 +70,13 @@ enum Controls {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NutanixBasicNodeDataComponent extends BaseFormValidator implements OnInit, AfterViewChecked, OnDestroy {
+  readonly Controls = Controls;
   private _images: DatacenterOperatingSystemOptions;
   private _defaultImage = '';
   private _defaultOS: OperatingSystem;
-  readonly Controls = Controls;
+  private _subnets: NutanixSubnet[] = [];
+  selectedSubnet = '';
+  subnetLabel = SubnetState.Empty;
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -109,6 +119,8 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
       .pipe(filter(_ => !!this._images))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setDefaultImage.bind(this));
+
+    this._subnetsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSubnet.bind(this));
   }
 
   ngAfterViewChecked(): void {
@@ -118,6 +130,55 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  getSubnets(): NutanixSubnet[] {
+    return this._subnets;
+  }
+
+  subnetsDisplayName(subnetName: string): string {
+    const subnet = this._subnets.find(size => size.name === subnetName);
+    if (!subnet) {
+      return subnetName;
+    }
+
+    return `${subnet.name} (${subnet.type})`;
+  }
+
+  onSubnetChange(subnet: string): void {
+    this._nodeDataService.nodeData.spec.cloud.nutanix.subnetName = subnet;
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
+  }
+
+  private get _subnetsObservable(): Observable<NutanixSubnet[]> {
+    return this._nodeDataService.nutanix.subnets(this._clearSubnet.bind(this), this._onSubnetLoading.bind(this));
+  }
+
+  private _onSubnetLoading(): void {
+    this._clearSubnet();
+    this.subnetLabel = SubnetState.Loading;
+    this._cdr.detectChanges();
+  }
+
+  private _clearSubnet(): void {
+    this.selectedSubnet = '';
+    this._subnets = [];
+    this.subnetLabel = SubnetState.Empty;
+    this._cdr.detectChanges();
+  }
+
+  private _setDefaultSubnet(subnets: NutanixSubnet[]): void {
+    this._subnets = subnets;
+    this.selectedSubnet = this._nodeDataService.nodeData.spec.cloud.nutanix
+      ? this._nodeDataService.nodeData.spec.cloud.nutanix.subnetName
+      : '';
+
+    if (!this.selectedSubnet && this._subnets && !_.isEmpty(this._subnets)) {
+      this.selectedSubnet = this._subnets[0].name;
+    }
+
+    this.subnetLabel = this.selectedSubnet ? SubnetState.Ready : SubnetState.Empty;
+    this._cdr.detectChanges();
   }
 
   private _setDefaultImage(os: OperatingSystem): void {

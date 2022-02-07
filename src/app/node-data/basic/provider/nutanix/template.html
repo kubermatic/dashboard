@@ -25,14 +25,17 @@ limitations under the License.
            required>
   </mat-form-field>
 
-  <mat-form-field fxFlex>
-    <mat-label>Subnet Name</mat-label>
-    <input [formControlName]="Controls.SubnetName"
-           matInput
-           type="text"
-           autocomplete="off"
-           required>
-  </mat-form-field>
+  <km-combobox [required]="true"
+               [selected]="selectedSubnet"
+               [valueFormatter]="subnetsDisplayName.bind(this)"
+               [optionsGetter]="getSubnets.bind(this)"
+               [formControlName]="Controls.SubnetName"
+               (changed)="onSubnetChange($event)"
+               [label]="subnetLabel"
+               inputLabel="Select subnet..."
+               filterBy="name">
+    <div *option="let subnet">{{subnet.name}} ({{subnet.type}})</div>
+  </km-combobox>
 
   <km-number-stepper [formControlName]="Controls.CPUs"
                      mode="errors"
