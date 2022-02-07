@@ -18,13 +18,13 @@ limitations under the License.
       fxLayoutGap="8px">
   <mat-form-field fxFlex>
     <mat-label>Service Account</mat-label>
-    <input [formControlName]="Controls.ServiceAccoount"
-           [name]="Controls.ServiceAccoount"
-           matInput
-           type="password"
-           autocomplete="off"
-           required>
-    <mat-error *ngIf="form.get(Controls.ServiceAccoount).hasError('required')">
+    <textarea matInput
+              rows="3"
+              required
+              [formControlName]="Controls.ServiceAccount"
+              [name]="Controls.ServiceAccount"
+              autocomplete="off"></textarea>
+    <mat-error *ngIf="form.get(Controls.ServiceAccount).hasError('required')">
       Service Account is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
