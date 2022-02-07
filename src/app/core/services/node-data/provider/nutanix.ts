@@ -47,8 +47,10 @@ export class NodeDataNutanixProvider {
                 .username(cluster.spec.cloud.nutanix.username)
                 .password(cluster.spec.cloud.nutanix.password)
                 .proxyURL(cluster.spec.cloud.nutanix.proxyURL)
+                .clusterName(cluster.spec.cloud.nutanix.clusterName)
+                .projectName(cluster.spec.cloud.nutanix.projectName)
                 .credential(this._presetService.preset)
-                .subnets(onLoadingCb)
+                .subnets(cluster.spec.cloud.dc, onLoadingCb)
                 .pipe(
                   catchError(_ => {
                     if (onError) {
