@@ -144,8 +144,8 @@ describe('Admin Settings - Cluster Related Settings Story', () => {
 
   it('should make sure settings have default values', () => {
     if (Mocks.enabled()) {
-      Mocks.adminSettings.cleanupOptions.Enabled = true;
-      Mocks.adminSettings.cleanupOptions.Enforced = true;
+      Mocks.adminSettings.cleanupOptions.enabled = true;
+      Mocks.adminSettings.cleanupOptions.enforced = true;
     } else {
       AdminSettings.DefaultsAndLimitsPage.getCleanupEnableCheckbox().click();
       AdminSettings.waitForSave();
@@ -214,8 +214,8 @@ describe('Admin Settings - Cluster Related Settings Story', () => {
 
   it('should make sure settings have default values', () => {
     if (Mocks.enabled()) {
-      Mocks.adminSettings.cleanupOptions.Enabled = false;
-      Mocks.adminSettings.cleanupOptions.Enforced = false;
+      Mocks.adminSettings.cleanupOptions.enabled = false;
+      Mocks.adminSettings.cleanupOptions.enforced = false;
     } else {
       AdminSettings.DefaultsAndLimitsPage.getCleanupEnableCheckbox().click();
       AdminSettings.waitForSave();
