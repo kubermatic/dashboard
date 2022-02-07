@@ -16,12 +16,14 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column"
       fxLayoutGap="8px">
-  <mat-form-field fxFlex>
-    <mat-label>Project Name</mat-label>
-    <input matInput
-           [formControlName]="Controls.ProjectName"
-           [name]="Controls.ProjectName"
-           type="text"
-           autocomplete="off">
-  </mat-form-field>
+  <km-combobox #projectCombobox
+               [isDisabled]="isPresetSelected"
+               [options]="projects"
+               [hint]="getHint(Controls.ProjectName)"
+               [formControlName]="Controls.ProjectName"
+               [label]="projectLabel"
+               inputLabel="Select project..."
+               filterBy="name">
+    <div *option="let project">{{project.name}}</div>
+  </km-combobox>
 </form>

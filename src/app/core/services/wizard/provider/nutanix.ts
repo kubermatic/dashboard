@@ -16,48 +16,46 @@ import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Provider} from './provider';
-import {NutanixSubnet} from '@shared/entity/provider/nutanix';
+import {NutanixProject, NutanixSubnet} from '@shared/entity/provider/nutanix';
 
 export class Nutanix extends Provider {
   constructor(http: HttpClient, provider: NodeProvider) {
     super(http, provider);
 
-    this._setRequiredHeaders(Hetzner.Header.Username);
-    this._setRequiredHeaders(Hetzner.Header.Password);
-    this._setRequiredHeaders(Hetzner.Header.ClusterName);
+    this._setRequiredHeaders(Nutanix.Header.Username, Nutanix.Header.Password);
   }
 
   username(username: string): Nutanix {
     if (username) {
-      this._headers = this._headers.set(Hetzner.Header.Username, username);
+      this._headers = this._headers.set(Nutanix.Header.Username, username);
     }
     return this;
   }
 
   password(password: string): Nutanix {
     if (password) {
-      this._headers = this._headers.set(Hetzner.Header.Password, password);
+      this._headers = this._headers.set(Nutanix.Header.Password, password);
     }
     return this;
   }
 
   proxyURL(proxyURL: string): Nutanix {
     if (proxyURL) {
-      this._headers = this._headers.set(Hetzner.Header.ProxyURL, proxyURL);
+      this._headers = this._headers.set(Nutanix.Header.ProxyURL, proxyURL);
     }
     return this;
   }
 
   clusterName(clusterName: string): Nutanix {
     if (clusterName) {
-      this._headers = this._headers.set(Hetzner.Header.ClusterName, clusterName);
+      this._headers = this._headers.set(Nutanix.Header.ClusterName, clusterName);
     }
     return this;
   }
 
   projectName(projectName: string): Nutanix {
     if (projectName) {
-      this._headers = this._headers.set(Hetzner.Header.ProjectName, projectName);
+      this._headers = this._headers.set(Nutanix.Header.ProjectName, projectName);
     }
     return this;
   }
@@ -67,7 +65,23 @@ export class Nutanix extends Provider {
     return this;
   }
 
+  projects(seed: string, onLoadingCb: () => void = null): Observable<NutanixProject[]> {
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
+    console.log(this._headers);
+
+    const url = `${this._newRestRoot}/providers/${this._provider}/${seed}/projects`;
+    return this._http.get<NutanixProject[]>(url, {headers: this._headers});
+  }
+
   subnets(seed: string, onLoadingCb: () => void = null): Observable<NutanixSubnet[]> {
+    this._setRequiredHeaders(Nutanix.Header.Username, Nutanix.Header.Password, Nutanix.Header.ClusterName);
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
@@ -81,12 +95,12 @@ export class Nutanix extends Provider {
   }
 }
 
-export namespace Hetzner {
+export namespace Nutanix {
   export enum Header {
-    Username = 'Username',
-    Password = 'Password',
+    Username = 'NutanixUsername',
+    Password = 'NutanixPassword',
     ProxyURL = 'ProxyURL',
-    ClusterName = 'ClusterName',
-    ProjectName = 'ProjectName',
+    ClusterName = 'NutanixCluster',
+    ProjectName = 'NutanixProject',
   }
 }

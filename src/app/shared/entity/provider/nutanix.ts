@@ -17,3 +17,11 @@ export class NutanixSubnet {
   type: string;
   vlanID?: number;
 }
+
+export class NutanixCluster {
+  name: string;
+}
+
+export class NutanixProject {
+  name: string;
+}
