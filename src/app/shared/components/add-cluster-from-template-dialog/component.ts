@@ -34,7 +34,6 @@ export class AddClusterFromTemplateDialogData {
 @Component({
   selector: 'km-add-cluster-from-template-dialog',
   templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
 })
 export class AddClusterFromTemplateDialogComponent implements OnInit, OnDestroy {
   showDetails = false;

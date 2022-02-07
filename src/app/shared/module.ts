@@ -53,7 +53,7 @@ import {AddClusterFromTemplateDialogComponent} from '@shared/components/add-clus
 import {SelectClusterTemplateComponent} from '@shared/components/add-cluster-from-template-dialog/steps/template/component';
 import {AutocompleteComponent} from '@shared/components/autocomplete/component';
 import {CIDRFormComponent} from '@shared/components/cidr-form/component';
-import {ClusterFromTemplateContentComponent} from '@shared/components/cluster-from-template/content/component';
+import {ClusterFromTemplateComponent} from '@shared/components/cluster-from-template/content/component';
 import {ClusterFromTemplateDialogComponent} from '@shared/components/cluster-from-template/dialog/component';
 import {ClusterSummaryComponent} from '@shared/components/cluster-summary/component';
 import {EventCardComponent} from '@shared/components/event-card/component';
@@ -200,7 +200,7 @@ const components: any[] = [
   AutocompleteComponent,
   LinkLocationPipe,
   ClusterSummaryComponent,
-  ClusterFromTemplateContentComponent,
+  ClusterFromTemplateComponent,
   ClusterFromTemplateDialogComponent,
   SaveClusterTemplateDialogComponent,
   SizeFormatterPipe,

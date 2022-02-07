@@ -32,7 +32,7 @@ enum Control {
   styleUrls: ['./style.scss'],
   animations: [shrinkGrow],
 })
-export class ClusterFromTemplateContentComponent implements OnInit, OnDestroy {
+export class ClusterFromTemplateComponent implements OnInit, OnDestroy {
   @Input() template: ClusterTemplate;
   @Input() projectId: string;
   @Input() showDetails = false;
