@@ -25,12 +25,12 @@ import {
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {NodeDataService} from '@core/services/node-data/service';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import {NodeCloudSpec, NodeSpec, NutanixNodeSpec} from '@shared/entity/node';
+import {getDefaultNodeProviderSpec, NodeCloudSpec, NodeSpec, NutanixNodeSpec} from '@shared/entity/node';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {DatacenterOperatingSystemOptions} from '@shared/entity/datacenter';
 import {merge, Observable, of} from 'rxjs';
-import {OperatingSystem} from '@shared/model/NodeProviderConstants';
+import {NodeProvider, OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import _ from 'lodash';
@@ -94,14 +94,19 @@ export class NutanixBasicNodeDataComponent
 
   ngOnInit(): void {
     const values = this._nodeDataService.nodeData.spec.cloud.nutanix;
+    const defaults = getDefaultNodeProviderSpec(NodeProvider.NUTANIX) as NutanixNodeSpec;
     this.form = this._builder.group({
-      [Controls.ImageName]: this._builder.control(values ? values.imageName : '', [Validators.required]),
-      [Controls.SubnetName]: this._builder.control(values ? values.subnetName : '', [Validators.required]),
-      [Controls.CPUs]: this._builder.control(values ? values.cpus : 2, [Validators.required]),
-      [Controls.CPUCores]: this._builder.control(values ? values.cpuCores : 1, [Validators.required]),
-      [Controls.CPUPassthrough]: this._builder.control(values ? values.cpuPassthrough : false),
-      [Controls.MemoryMB]: this._builder.control(values ? values.memoryMB : 2048, [Validators.required]),
-      [Controls.DiskSize]: this._builder.control(values ? values.diskSize : 20, [Validators.required]),
+      [Controls.ImageName]: this._builder.control(values ? values.imageName : defaults.imageName, [
+        Validators.required,
+      ]),
+      [Controls.SubnetName]: this._builder.control(values ? values.subnetName : defaults.subnetName, [
+        Validators.required,
+      ]),
+      [Controls.CPUs]: this._builder.control(values ? values.cpus : defaults.cpus, [Validators.required]),
+      [Controls.CPUCores]: this._builder.control(values ? values.cpuCores : defaults.cpuCores, [Validators.required]),
+      [Controls.CPUPassthrough]: this._builder.control(values ? values.cpuPassthrough : defaults.cpuPassthrough),
+      [Controls.MemoryMB]: this._builder.control(values ? values.memoryMB : defaults.memoryMB, [Validators.required]),
+      [Controls.DiskSize]: this._builder.control(values ? values.diskSize : defaults.diskSize, [Validators.required]),
     });
 
     this._nodeDataService.nodeData = this._getNodeData();

@@ -326,8 +326,11 @@ export function getDefaultNodeProviderSpec(provider: string): object {
       } as KubeVirtNodeSpec;
     case NodeProvider.NUTANIX:
       return {
+        imageName: '',
+        subnetName: '',
         cpus: 2,
         cpuCores: 1,
+        cpuPassthrough: false,
         memoryMB: 2048,
         diskSize: 20,
       } as NutanixNodeSpec;
