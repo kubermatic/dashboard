@@ -24,12 +24,11 @@ import {
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {PresetsService} from '@core/services/wizard/presets';
-import {CloudSpec, Cluster, ClusterSpec, NutanixCloudSpec} from '@shared/entity/cluster';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {isObjectEmpty} from '@shared/utils/common';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
-import {catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {catchError, debounceTime, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {NutanixProject} from '@shared/entity/provider/nutanix';
 import _ from 'lodash';
@@ -89,12 +88,6 @@ export class NutanixProviderExtendedComponent extends BaseFormValidator implemen
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._presets.enablePresets(isObjectEmpty(this._clusterSpecService.cluster.spec.cloud.nutanix)));
 
-    this.form
-      .get(Controls.ProjectName)
-      .valueChanges.pipe(distinctUntilChanged())
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => (this._clusterSpecService.cluster = this._getCluster()));
-
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset =>
       Object.values(Controls).forEach(control => {
         this.isPresetSelected = !!preset;
@@ -133,6 +126,10 @@ export class NutanixProviderExtendedComponent extends BaseFormValidator implemen
       case Controls.ProjectName:
         return this._hasRequiredCredentials() ? '' : 'Please enter your credentials first.';
     }
+  }
+
+  onProjectChange(projectName: string): void {
+    this._clusterSpecService.cluster.spec.cloud.nutanix.projectName = projectName;
   }
 
   private _onProjectLoading(): void {
@@ -185,17 +182,5 @@ export class NutanixProviderExtendedComponent extends BaseFormValidator implemen
     if (!enable && this.form.get(name).enabled) {
       this.form.get(name).disable();
     }
-  }
-
-  private _getCluster(): Cluster {
-    return {
-      spec: {
-        cloud: {
-          nutanix: {
-            projectName: this.form.get(Controls.ProjectName).value,
-          } as NutanixCloudSpec,
-        } as CloudSpec,
-      } as ClusterSpec,
-    } as Cluster;
   }
 }

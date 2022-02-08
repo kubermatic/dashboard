@@ -21,6 +21,7 @@ limitations under the License.
                [options]="projects"
                [hint]="getHint(Controls.ProjectName)"
                [formControlName]="Controls.ProjectName"
+               (changed)="onProjectChange($event)"
                [label]="projectLabel"
                inputLabel="Select project..."
                filterBy="name">
