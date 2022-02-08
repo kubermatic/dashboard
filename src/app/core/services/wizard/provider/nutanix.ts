@@ -41,7 +41,7 @@ export class Nutanix extends Provider {
 
   proxyURL(proxyURL: string): Nutanix {
     if (proxyURL) {
-      this._headers = this._headers.set(Nutanix.Header.ProxyURL, proxyURL);
+      this._headers = this._headers.set(Nutanix.Header.NutanixProxyURL, proxyURL);
     }
     return this;
   }
@@ -101,8 +101,8 @@ export namespace Nutanix {
   export enum Header {
     NutanixUsername = 'NutanixUsername',
     NutanixPassword = 'NutanixPassword',
-    ProxyURL = 'ProxyURL',
-    NutanixCluster = 'NutanixCluster',
+    NutanixProxyURL = 'NutanixProxyURL',
     NutanixProject = 'NutanixProject',
+    NutanixCluster = 'NutanixCluster',
   }
 }
