@@ -25,15 +25,15 @@ limitations under the License.
            required>
   </mat-form-field>
 
-  <km-combobox [required]="true"
-               [selected]="selectedSubnet"
+  <km-combobox [selected]="selectedSubnet"
+               [options]="getSubnets()"
                [valueFormatter]="subnetsDisplayName.bind(this)"
-               [optionsGetter]="getSubnets.bind(this)"
                [formControlName]="Controls.SubnetName"
                (changed)="onSubnetChange($event)"
                [label]="subnetLabel"
                inputLabel="Select subnet..."
-               filterBy="name">
+               filterBy="name"
+               required>
     <div *option="let subnet">{{subnet.name}} ({{subnet.type}})</div>
   </km-combobox>
 
