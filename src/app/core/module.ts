@@ -22,7 +22,6 @@ import {HelpPanelComponent} from '@core/components/help-panel/component';
 import {AdminGuard, AuthGuard, AuthzGuard} from '@core/services/auth/guard';
 import {Auth} from '@core/services/auth/service';
 import {BackupService} from '@core/services/backup';
-import {ChangelogManagerService} from '@core/services/changelog-manager';
 import {ChangelogService} from '@core/services/changelog';
 import {ClusterService} from '@core/services/cluster';
 import {ClusterSpecService} from '@core/services/cluster-spec';
@@ -119,7 +118,6 @@ const services: any[] = [
   PageTitleService,
   OPAService,
   ChangelogService,
-  ChangelogManagerService,
   ClusterSpecService,
   EndOfLifeService,
   MLAService,

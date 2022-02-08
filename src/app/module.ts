@@ -19,7 +19,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule, NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
 import {CoreModule} from '@core/module';
-import {ChangelogManagerService} from '@core/services/changelog-manager';
 import {ChangelogService} from '@core/services/changelog';
 import {DatacenterService} from '@core/services/datacenter';
 import {HistoryService} from '@core/services/history';
@@ -41,15 +40,13 @@ const appInitializerFn = (
   historyService: HistoryService,
   userService: UserService,
   datacenterService: DatacenterService,
-  changelogService: ChangelogService,
-  changelogListenerService: ChangelogManagerService
+  changelogService: ChangelogService
 ): Function => {
   return () => {
     historyService.init();
     userService.init();
     datacenterService.init();
     changelogService.init();
-    changelogListenerService.init();
     return appConfigService
       .loadAppConfig()
       .then(() => appConfigService.loadUserGroupConfig())
@@ -78,14 +75,7 @@ const appearance: MatFormFieldDefaultOptions = {
       provide: APP_INITIALIZER,
       useFactory: appInitializerFn,
       multi: true,
-      deps: [
-        AppConfigService,
-        HistoryService,
-        UserService,
-        DatacenterService,
-        ChangelogService,
-        ChangelogManagerService,
-      ],
+      deps: [AppConfigService, HistoryService, UserService, DatacenterService, ChangelogService],
     },
     {
       provide: MAT_TOOLTIP_DEFAULT_OPTIONS,

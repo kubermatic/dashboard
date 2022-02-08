@@ -15,7 +15,8 @@ limitations under the License.
 -->
 
 <div fxLayout="column">
-  <div fxLayout="row wrap">
+  <div fxLayout="row wrap"
+       class="info-container">
     <km-property *ngIf="preset.metadata?.name">
       <div key>Preset Name</div>
       <div value>{{preset.metadata.name}}</div>
@@ -27,9 +28,9 @@ limitations under the License.
     <km-property-boolean *ngIf="!preset?.spec?.enabled"
                          [value]="!preset.spec.enabled"
                          label="Hide upon creation"></km-property-boolean>
+    <div fxFlex
+         class="km-provider-logo km-provider-logo-{{provider}}"></div>
   </div>
-
-  <div class="km-provider-logo km-provider-logo-{{provider}}"></div>
 
   <form [formGroup]="form"
         fxFlex="100%"

@@ -328,6 +328,10 @@
   @include mixins.mask-image('/assets/images/icons/moon.svg', 24px);
 }
 
+.km-icon-sparkles {
+  @include mixins.mask-image('/assets/images/icons/sparkles.svg', 24px, $color: #00c9c9);
+}
+
 .km-icon-kubernetes {
   @include mixins.background-image('/assets/images/icons/kubernetes.svg', 30px);
 }

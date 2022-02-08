@@ -17,6 +17,18 @@
 
 .root-button {
   @include mixins.toolbar-button(3);
+
+  .km-icon-help {
+    margin-right: 0;
+  }
+
+  .km-icon-circle {
+    @include mixins.size(16px, $force: true);
+
+    border-radius: 250px;
+    margin-left: -12px;
+    margin-top: -4px;
+  }
 }
 
 .panel {
