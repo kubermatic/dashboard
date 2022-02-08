@@ -14,6 +14,7 @@
 
 import {
   AfterViewChecked,
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -69,7 +70,10 @@ enum SubnetState {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NutanixBasicNodeDataComponent extends BaseFormValidator implements OnInit, AfterViewChecked, OnDestroy {
+export class NutanixBasicNodeDataComponent
+  extends BaseFormValidator
+  implements OnInit, AfterViewChecked, AfterViewInit, OnDestroy
+{
   readonly Controls = Controls;
   private _images: DatacenterOperatingSystemOptions;
   private _defaultImage = '';
@@ -101,9 +105,6 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
     });
 
     this._nodeDataService.nodeData = this._getNodeData();
-    this.form.valueChanges
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
 
     this._defaultOS = this._nodeDataService.operatingSystem;
     this._defaultImage = this._nodeDataService.nodeData.spec.cloud.nutanix.imageName;
@@ -119,12 +120,25 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
       .pipe(filter(_ => !!this._images))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setDefaultImage.bind(this));
-
-    this._subnetsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSubnet.bind(this));
   }
 
   ngAfterViewChecked(): void {
     this.form.updateValueAndValidity();
+  }
+
+  ngAfterViewInit(): void {
+    this._subnetsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSubnet.bind(this));
+
+    merge(
+      this.form.get(Controls.ImageName).valueChanges,
+      this.form.get(Controls.CPUs).valueChanges,
+      this.form.get(Controls.CPUCores).valueChanges,
+      this.form.get(Controls.CPUPassthrough).valueChanges,
+      this.form.get(Controls.MemoryMB).valueChanges,
+      this.form.get(Controls.DiskSize).valueChanges
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
   }
 
   ngOnDestroy(): void {
@@ -219,7 +233,6 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
         cloud: {
           nutanix: {
             imageName: this.form.get(Controls.ImageName).value,
-            subnetName: this.form.get(Controls.SubnetName).value,
             cpus: this.form.get(Controls.CPUs).value,
             cpuCores: this.form.get(Controls.CPUCores).value,
             cpuPassthrough: !!this.form.get(Controls.CPUPassthrough).value,

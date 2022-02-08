@@ -22,19 +22,19 @@ export class Nutanix extends Provider {
   constructor(http: HttpClient, provider: NodeProvider) {
     super(http, provider);
 
-    this._setRequiredHeaders(Nutanix.Header.Username, Nutanix.Header.Password);
+    this._setRequiredHeaders(Nutanix.Header.NutanixUsername, Nutanix.Header.NutanixPassword);
   }
 
   username(username: string): Nutanix {
     if (username) {
-      this._headers = this._headers.set(Nutanix.Header.Username, username);
+      this._headers = this._headers.set(Nutanix.Header.NutanixUsername, username);
     }
     return this;
   }
 
   password(password: string): Nutanix {
     if (password) {
-      this._headers = this._headers.set(Nutanix.Header.Password, password);
+      this._headers = this._headers.set(Nutanix.Header.NutanixPassword, password);
     }
     return this;
   }
@@ -48,14 +48,14 @@ export class Nutanix extends Provider {
 
   clusterName(clusterName: string): Nutanix {
     if (clusterName) {
-      this._headers = this._headers.set(Nutanix.Header.ClusterName, clusterName);
+      this._headers = this._headers.set(Nutanix.Header.NutanixCluster, clusterName);
     }
     return this;
   }
 
   projectName(projectName: string): Nutanix {
     if (projectName) {
-      this._headers = this._headers.set(Nutanix.Header.ProjectName, projectName);
+      this._headers = this._headers.set(Nutanix.Header.NutanixProject, projectName);
     }
     return this;
   }
@@ -74,14 +74,16 @@ export class Nutanix extends Provider {
       onLoadingCb();
     }
 
-    console.log(this._headers);
-
     const url = `${this._newRestRoot}/providers/${this._provider}/${seed}/projects`;
     return this._http.get<NutanixProject[]>(url, {headers: this._headers});
   }
 
   subnets(seed: string, onLoadingCb: () => void = null): Observable<NutanixSubnet[]> {
-    this._setRequiredHeaders(Nutanix.Header.Username, Nutanix.Header.Password, Nutanix.Header.ClusterName);
+    this._setRequiredHeaders(
+      Nutanix.Header.NutanixUsername,
+      Nutanix.Header.NutanixPassword,
+      Nutanix.Header.NutanixCluster
+    );
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
@@ -97,10 +99,10 @@ export class Nutanix extends Provider {
 
 export namespace Nutanix {
   export enum Header {
-    Username = 'NutanixUsername',
-    Password = 'NutanixPassword',
+    NutanixUsername = 'NutanixUsername',
+    NutanixPassword = 'NutanixPassword',
     ProxyURL = 'ProxyURL',
-    ClusterName = 'NutanixCluster',
-    ProjectName = 'NutanixProject',
+    NutanixCluster = 'NutanixCluster',
+    NutanixProject = 'NutanixProject',
   }
 }
