@@ -14,11 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<km-dialog-title>
-  <div>Create Clusters from Template</div>
-</km-dialog-title>
-<mat-dialog-content>
-  <p class="km-dialog-context-description">Create Clusters from <b>{{data.template.name}}</b> template</p>
+<div fxLayout="column"
+     class="content-wrapper">
+  <p class="km-dialog-context-description">Create Clusters from <b>{{template.name}}</b> template</p>
   <form [formGroup]="form"
         fxLayout="column"
         id="create-template-instance-form">
@@ -30,36 +28,12 @@ limitations under the License.
                        required>
     </km-number-stepper>
   </form>
-  <km-cluster-summary [cluster]="data.template.cluster"
-                      [machineDeployment]="data.template.nodeDeployment"
+  <km-cluster-summary [cluster]="template.cluster"
+                      [machineDeployment]="template.nodeDeployment"
                       [sshKeys]="sshKeys"
                       [datacenter]="datacenter"
                       [seedSettings]="seedSettings"
                       [flipLayout]="true"
                       *ngIf="showDetails"
                       @shrinkGrow></km-cluster-summary>
-</mat-dialog-content>
-<mat-dialog-actions>
-  <div (click)="showDetails = !showDetails"
-       class="km-pointer km-expand-button"
-       fxLayoutAlign="center center"
-       fxLayoutGap="8px"
-       fxFlex="100">
-    <hr fxFlex />
-    <span>{{showDetails ? 'Hide' : 'Show'}} cluster template details</span>
-    <i class="km-muted-bg"
-       [ngClass]="showDetails ? 'km-icon-mask km-icon-arrow-up' : 'km-icon-mask km-icon-arrow-down'"></i>
-    <hr fxFlex />
-  </div>
-  <button mat-flat-button
-          kmThrottleClick
-          (throttleClick)="create()"
-          type="submit"
-          id="km-create-template-instance-btn"
-          form="create-template-instance-form"
-          fxLayoutAlign="center center"
-          [disabled]="form.invalid">
-    <i class="km-icon-mask km-icon-add"></i>
-    <span>Create Clusters</span>
-  </button>
-</mat-dialog-actions>
+</div>

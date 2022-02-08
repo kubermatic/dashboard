@@ -1,0 +1,74 @@
+// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {Router} from '@angular/router';
+import {ClusterTemplateService} from '@core/services/cluster-templates';
+import {NotificationService} from '@core/services/notification';
+import {ClusterTemplate} from '@shared/entity/cluster-template';
+import {Subject} from 'rxjs';
+import {filter, take, takeUntil} from 'rxjs/operators';
+
+class ClusterFromTemplateDialogData {
+  template: ClusterTemplate;
+  projectID: string;
+}
+
+@Component({
+  selector: 'km-cluster-from-template-dialog',
+  templateUrl: './template.html',
+})
+export class ClusterFromTemplateDialogComponent implements OnInit, OnDestroy {
+  showDetails = false;
+  replicas: number;
+  private readonly _unsubscribe = new Subject<void>();
+
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: ClusterFromTemplateDialogData,
+    public dialogRef: MatDialogRef<ClusterFromTemplateDialogComponent>,
+    private readonly _router: Router,
+    private readonly _clusterTemplateService: ClusterTemplateService,
+    private readonly _notificationService: NotificationService
+  ) {}
+
+  ngOnInit(): void {
+    this._clusterTemplateService.replicasChanges
+      .pipe(filter(replicas => !!replicas))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(replicas => (this.replicas = replicas));
+  }
+
+  ngOnDestroy() {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
+  }
+
+  get isValid(): boolean {
+    return this._clusterTemplateService.isClusterStepValid;
+  }
+
+  create(): void {
+    this._clusterTemplateService
+      .createInstances(this.replicas, this.data.projectID, this.data.template.id)
+      .pipe(take(1))
+      .subscribe(_ => {
+        this.dialogRef.close();
+        this._router.navigate([`/projects/${this.data.projectID}/clusters`]);
+        this._notificationService.success(
+          `Created ${this.replicas} instance${this.replicas > 1 ? 's' : ''} from ${this.data.template.name} template`
+        );
+      });
+  }
+}
