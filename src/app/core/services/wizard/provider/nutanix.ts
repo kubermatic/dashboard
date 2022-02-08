@@ -84,7 +84,7 @@ export class Nutanix extends Provider {
       Nutanix.Header.NutanixPassword,
       Nutanix.Header.NutanixCluster
     );
-    if (!this._hasRequiredHeaders()) {
+    if (!this._hasRequiredHeaders() || !seed) {
       return EMPTY;
     }
 
