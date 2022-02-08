@@ -17,7 +17,7 @@ limitations under the License.
 <div fxLayout="column">
   <div fxLayout="row wrap"
        class="info-container">
-    <km-property>
+    <km-property *ngIf="mode === Mode.Create">
       <div key>Preset Name</div>
       <div value>{{preset.metadata.name}}</div>
     </km-property>
