@@ -123,7 +123,7 @@ limitations under the License.
             [attr.colspan]="displayedColumns.length">
           <div class="km-serviceaccount-token-wrapper">
             <km-serviceaccount-token [serviceaccount]="element"
-                                     [serviceaccountTokens]="getTokenList(element.id)"
+                                     [serviceaccountTokens]="getTokens(element.id)"
                                      [isInitializing]="isTokenInitializing(element.id)"
                                      (onUpdate)="onTokenChange(element.id)"></km-serviceaccount-token>
           </div>

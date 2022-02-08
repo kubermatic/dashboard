@@ -135,7 +135,11 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
     return this._tokenMap.get(id)?.initializing;
   }
 
-  getTokenList(id: string): ServiceAccountToken[] {
+  getTokenList(id: string): TokenList {
+    return this._tokenMap.get(id);
+  }
+
+  getTokens(id: string): ServiceAccountToken[] {
     return this._tokenMap.get(id)?.tokens;
   }
 
@@ -213,19 +217,16 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
       this._tokenMap.set(serviceAccount.id, new TokenList());
     }
 
-    this._tokenMap.get(serviceAccount.id).visible = true;
-    const tokenList = this._tokenMap.get(serviceAccount.id);
+    this.getTokenList(serviceAccount.id).visible = true;
     merge(
       timer(0, this._refreshTime * this._appConfig.getRefreshTimeBase()),
       this._tokenMap.get(serviceAccount.id).onChange
     )
-      .pipe(takeUntil(tokenList.unsubscribe))
+      .pipe(takeUntil(this.getTokenList(serviceAccount.id).unsubscribe))
       .pipe(switchMap(() => this._serviceAccountService.getTokens(this._selectedProject.id, serviceAccount)))
       .subscribe(tokens => {
-        tokenList.tokens = tokens;
-        tokenList.initializing = false;
-
-        this._tokenMap.set(serviceAccount.id, tokenList);
+        this.getTokenList(serviceAccount.id).tokens = tokens;
+        this.getTokenList(serviceAccount.id).initializing = false;
       });
   }
 
