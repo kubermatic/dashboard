@@ -136,6 +136,7 @@ export class NutanixProviderBasicComponent extends BaseFormValidator implements 
 
   onClusterChange(clusterName: string): void {
     this._clusterSpecService.cluster.spec.cloud.nutanix.clusterName = clusterName;
+    this._clusterSpecService.clusterChanges.next(this._clusterSpecService.cluster);
   }
 
   private _onClusterLoading(): void {
@@ -150,7 +151,7 @@ export class NutanixProviderBasicComponent extends BaseFormValidator implements 
       .username(this._clusterSpecService.cluster.spec.cloud.nutanix.username)
       .password(this._clusterSpecService.cluster.spec.cloud.nutanix.password)
       .proxyURL(this._clusterSpecService.cluster.spec.cloud.nutanix.proxyURL)
-      .projects(this._clusterSpecService.cluster.spec.cloud.dc, this._onClusterLoading.bind(this))
+      .clusters(this._clusterSpecService.cluster.spec.cloud.dc, this._onClusterLoading.bind(this))
       .pipe(map(projects => _.sortBy(projects, p => p.name.toLowerCase())))
       .pipe(
         catchError(() => {

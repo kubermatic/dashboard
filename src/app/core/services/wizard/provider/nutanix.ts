@@ -16,7 +16,7 @@ import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Provider} from './provider';
-import {NutanixProject, NutanixSubnet} from '@shared/entity/provider/nutanix';
+import {NutanixCluster, NutanixProject, NutanixSubnet} from '@shared/entity/provider/nutanix';
 
 export class Nutanix extends Provider {
   constructor(http: HttpClient, provider: NodeProvider) {
@@ -63,6 +63,19 @@ export class Nutanix extends Provider {
   credential(credential: string): Nutanix {
     super._credential(credential);
     return this;
+  }
+
+  clusters(seed: string, onLoadingCb: () => void = null): Observable<NutanixCluster[]> {
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
+    const url = `${this._newRestRoot}/providers/${this._provider}/${seed}/clusters`;
+    return this._http.get<NutanixCluster[]>(url, {headers: this._headers});
   }
 
   projects(seed: string, onLoadingCb: () => void = null): Observable<NutanixProject[]> {
