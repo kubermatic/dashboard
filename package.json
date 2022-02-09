@@ -80,7 +80,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "13.1.2",
-    "@angular/cli": "13.1.2",
+    "@angular/cli": "13.2.2",
     "@angular/compiler-cli": "13.1.1",
     "@bahmutov/add-typescript-to-cypress": "2.1.2",
     "@cypress/webpack-preprocessor": "5.11.0",
