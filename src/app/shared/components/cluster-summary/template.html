@@ -645,10 +645,6 @@ limitations under the License.
                 <div key>Cores per CPU</div>
                 <div value>{{machineDeployment.spec.template.cloud.nutanix.cpuCores}}</div>
               </km-property>
-              <km-property-boolean *ngIf="machineDeployment.spec.template.cloud.nutanix.cpuPassthrough"
-                                   label="CPU Passthrough"
-                                   [value]="machineDeployment.spec.template.cloud.nutanix.cpuPassthrough">
-              </km-property-boolean>
               <km-property>
                 <div key>Memory</div>
                 <div value>{{machineDeployment.spec.template.cloud.nutanix.memoryMB}} MB</div>
@@ -658,6 +654,10 @@ limitations under the License.
                 <div value>{{machineDeployment.spec.template.cloud.nutanix.diskSize}} GB</div>
               </km-property>
             </ng-container>
+            <km-property-boolean *ngIf="machineDeployment.spec.template.cloud.nutanix.cpuPassthrough"
+                                 label="CPU Passthrough"
+                                 [value]="machineDeployment.spec.template.cloud.nutanix.cpuPassthrough">
+            </km-property-boolean>
 
             <!-- Openstack Nodes -->
             <ng-container *ngIf="cluster.spec.cloud?.openstack">
