@@ -15,11 +15,11 @@
 @use 'variables';
 @use 'mixins';
 
-.km-button-navigation {
+.button-navigation {
   margin-top: 30px;
 }
 
-.km-wizard-step {
+.wizard-step {
   cursor: default;
   font-size: variables.$font-size-subhead;
   font-weight: 400;
@@ -28,18 +28,6 @@
   padding-top: 8px;
   user-select: none;
 
-  .km-wizard-step-number {
-    @include mixins.size(24px);
-
-    align-items: center;
-    border-radius: 50%;
-    display: inline-flex;
-    font-size: variables.$font-size-body;
-    font-weight: normal;
-    justify-content: center;
-    margin-right: 14px;
-  }
-
   &.active {
     font-weight: 500;
   }
@@ -47,11 +35,6 @@
   &.completed {
     cursor: pointer;
   }
-}
-
-.km-wizard-step-divider {
-  height: 1px;
-  margin: 20px 20px 0 8px;
 }
 
 mat-card {

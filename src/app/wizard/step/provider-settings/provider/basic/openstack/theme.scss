@@ -15,7 +15,7 @@
 @use 'sass:map';
 
 @mixin theme-wizard-openstack-provider-basic($colors) {
-  .km-wizard-openstack-button-toggle-group {
+  .wizard-openstack-button-toggle-group {
     &.mat-button-toggle-group {
       .mat-button-toggle {
         &:not(.mat-button-toggle-checked) {
