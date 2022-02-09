@@ -15,17 +15,17 @@
 @use 'mixins';
 @use 'variables';
 
-.km-cluster-detail-actions .mat-icon-button i {
+.cluster-detail-actions .mat-icon-button i {
   @include mixins.size(24px);
 }
 
 .mat-card-header {
   .mat-card-title {
-    &.km-cluster-name {
+    &.cluster-name {
       font-weight: 500;
       padding: 0;
 
-      .km-cluster-health {
+      .cluster-health {
         font-size: variables.$font-size-subhead;
         margin: 2px 20px 0 -5px;
       }
@@ -33,20 +33,11 @@
   }
 }
 
-.km-cluster-type {
-  margin-top: -6px;
-}
-
 .km-provider-logo {
   margin-top: -10px;
   max-height: unset;
   max-width: unset;
   min-width: 120px;
-}
-
-.km-provider-menu {
-  align-items: center;
-  display: flex;
 }
 
 .mat-icon.km-icon-edit {

@@ -22,7 +22,7 @@
   }
 }
 
-.km-node-ip-addresses {
+.node-ip-addresses {
   display: block;
   line-height: 20px;
 }
@@ -31,17 +31,13 @@ i.km-icon-info {
   margin-left: 5px;
 }
 
-.mat-column-name,
-.km-node-info {
+.mat-column-name {
   align-items: center;
   display: flex;
-}
-
-.mat-column-name {
   height: 50px;
 }
 
-.km-node-details {
+.node-details {
   box-shadow: variables.$border-box-shadow-inset;
   padding: variables.$item-details-padding;
 

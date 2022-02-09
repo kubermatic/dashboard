@@ -17,7 +17,7 @@ limitations under the License.
      fxLayout="column">
   <div fxFlex
        fxLayoutAlign="end center"
-       class="km-cluster-detail-actions">
+       class="cluster-detail-actions">
     <button id="km-delete-cluster-btn"
             mat-flat-button
             color="tertiary"
@@ -77,17 +77,17 @@ limitations under the License.
       <mat-card-title fxFlex
                       fxLayout="row"
                       fxLayoutAlign=" center"
-                      class="km-cluster-name">
+                      class="cluster-name">
         <i [matTooltip]="!!healthStatus ? healthStatus.message : ''"
            [ngClass]="!!healthStatus ? healthStatus.icon : ''"
-           class="km-cluster-health km-pointer"></i>
+           class="cluster-health km-pointer"></i>
         <span ngxClipboard
               [cbContent]="cluster.name"
               matTooltip="Click to copy"
-              class="km-cluster-name km-copy">{{cluster.name}}</span>
+              class="cluster-name km-copy">{{cluster.name}}</span>
       </mat-card-title>
       <div fxFlex></div>
-      <div class="km-provider-menu">
+      <div class="provider-menu">
         <button mat-icon-button
                 color="tertiary"
                 class="km-provider-menu-btn"
@@ -162,7 +162,7 @@ limitations under the License.
         <km-property>
           <div key>Provider</div>
           <div value
-               class="km-provider-logo-value">
+               class="provider-logo-value">
             <span class="km-provider-logo km-provider-logo-{{getProvider(nodeDc?.spec?.provider)}}"></span>
           </div>
         </km-property>

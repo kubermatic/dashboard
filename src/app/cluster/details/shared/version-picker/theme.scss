@@ -15,13 +15,13 @@
 @use 'sass:map';
 
 @mixin theme-version-picker-component($colors) {
-  .km-version-picker-container {
+  .version-picker-container {
     .km-version-picker {
       .mat-form-field-outline {
         color: map.get($colors, divider);
       }
 
-      .km-version-picker-type {
+      .version-picker-type {
         border-color: map.get($colors, divider);
       }
 
@@ -37,7 +37,7 @@
     }
 
     .km-version-picker-enabled:hover {
-      .km-version-picker-type {
+      .version-picker-type {
         border-color: map.get($colors, secondary);
       }
 
