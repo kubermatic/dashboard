@@ -235,6 +235,10 @@ export class ClusterService {
     return `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/kubeconfig`;
   }
 
+  getExternalKubeconfigURL(projectID: string, clusterID: string): string {
+    return `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/kubeconfig`;
+  }
+
   getDashboardProxyURL(projectID: string, clusterID: string): string {
     return `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/dashboard/proxy`;
   }
