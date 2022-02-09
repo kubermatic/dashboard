@@ -59,7 +59,7 @@ export class TabCardComponent implements AfterContentInit, OnDestroy {
   }
 
   getClass(): string {
-    return 'km-tab-card ' + this.context;
+    return 'tab-card ' + this.context;
   }
 
   private _init(): void {

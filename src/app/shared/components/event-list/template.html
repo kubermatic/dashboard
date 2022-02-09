@@ -36,7 +36,7 @@ limitations under the License.
         class="km-header-cell">Message
     </th>
     <td mat-cell
-        class="km-events-long-text"
+        class="events-long-text"
         *matCellDef="let element">{{element.message}}</td>
   </ng-container>
 
@@ -47,7 +47,7 @@ limitations under the License.
         class="km-header-cell">Resource ID
     </th>
     <td mat-cell
-        class="km-events-long-text"
+        class="events-long-text"
         *matCellDef="let element">{{element.involvedObject.name}}</td>
   </ng-container>
 
@@ -58,7 +58,7 @@ limitations under the License.
         class="km-header-cell">Type
     </th>
     <td mat-cell
-        class="km-events-long-text"
+        class="events-long-text"
         *matCellDef="let element">{{element.involvedObject.type}}</td>
   </ng-container>
 
@@ -79,7 +79,7 @@ limitations under the License.
         class="km-header-cell">Occurred
     </th>
     <td mat-cell
-        class="km-events-long-text km-events-timestamp"
+        class="events-long-text events-timestamp"
         *matCellDef="let element">
       <km-relative-time [date]="element.lastTimestamp"></km-relative-time>
     </td>

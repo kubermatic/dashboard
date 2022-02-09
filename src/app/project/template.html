@@ -19,12 +19,12 @@ limitations under the License.
   <km-search-field (queryChange)="onSearch($event)"></km-search-field>
   <div fxFlex></div>
   <mat-slide-toggle *ngIf="isAdmin"
-                    class="km-all-projects-toggle"
+                    class="all-projects-toggle"
                     labelPosition="before"
                     [ngModel]="settings.displayAllProjectsForAdmin"
                     (toggleChange)="changeProjectVisibility()">Show All Projects
   </mat-slide-toggle>
-  <mat-button-toggle-group class="km-project-view-switch"
+  <mat-button-toggle-group class="project-view-switch"
                            group="projectsView"
                            (change)="changeView()">
     <mat-button-toggle value="projectscard"
@@ -200,7 +200,7 @@ limitations under the License.
       <div class="km-row"
            *ngIf="isInitializing">
         <mat-spinner color="accent"
-                     class="km-projects-spinner"
+                     class="projects-spinner"
                      [diameter]="25"></mat-spinner>
       </div>
 
@@ -213,7 +213,7 @@ limitations under the License.
 
 <!-- Cards View -->
 <div *ngIf="showCards">
-  <div class="km-project-cards-view"
+  <div class="project-cards-view"
        fxFlex
        fxLayout="row"
        fxLayoutGap="20px">
@@ -224,7 +224,7 @@ limitations under the License.
         <i mat-card-avatar
            [matTooltip]="project.status"
            [ngClass]="getStatusIcon(project)"
-           class="km-health-state km-project-cards-status"
+           class="km-health-state project-cards-status"
            fxFlexAlign=" center"></i>
         <mat-card-title [matTooltip]="getProjectTooltip(project.name)"
                         [attr.id]="'km-project-name-' + project.name">

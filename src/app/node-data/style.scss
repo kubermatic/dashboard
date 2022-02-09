@@ -14,7 +14,7 @@
 
 @use 'variables';
 
-div.km-os-options {
+div.os-options {
   line-height: 30px;
   margin: 0 0 10px;
 }
@@ -53,7 +53,7 @@ mat-button-toggle-group[group='operatingSystemGroup'] {
   background-color: transparent;
 }
 
-.km-provider-options {
+.provider-options {
   font-size: variables.$font-size-card-title;
   font-weight: normal;
   margin: 16px 0 22px;

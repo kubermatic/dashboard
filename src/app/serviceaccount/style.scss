@@ -20,7 +20,7 @@ td {
       &.km-serviceaccount-token {
         padding: 0;
 
-        .km-serviceaccount-token-wrapper {
+        .serviceaccount-token-wrapper {
           box-shadow: variables.$border-box-shadow-inset;
           padding: variables.$item-details-padding;
         }
