@@ -15,11 +15,11 @@
 @use 'sass:map';
 
 @mixin theme-eol-component($colors) {
-  .km-warning-border {
+  .warning-border {
     border-color: map.get($colors, indicator-orange);
   }
 
-  .km-error-border {
+  .error-border {
     border-color: map.get($colors, indicator-red);
   }
 }
