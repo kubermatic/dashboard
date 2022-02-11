@@ -55,7 +55,7 @@ export class ReplicasDialogComponent implements OnInit {
       .patchExternalMachineDeployment(this.data.projectID, this.data.clusterID, this.data.machineDeployment.id, patch)
       .pipe(take(1))
       .subscribe(md => {
-        this._notificationService.success(`Number of ${md.name} machine deployment replicas is getting updated`);
+        this._notificationService.success(`Updated the number of ${md.name} machine deployment replicas`);
         this._dialogRef.close();
       });
   }

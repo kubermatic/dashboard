@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -41,6 +41,7 @@ export class ServiceAccountTokenComponent implements OnInit {
   @Input() serviceaccount: ServiceAccount;
   @Input() serviceaccountTokens: ServiceAccountToken[];
   @Input() isInitializing: boolean;
+  @Output() onUpdate = new EventEmitter<void>();
   displayedColumns: string[] = ['name', 'expiry', 'creationDate', 'actions'];
   dataSource = new MatTableDataSource<ServiceAccountToken>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -90,7 +91,11 @@ export class ServiceAccountTokenComponent implements OnInit {
       } as ServiceAccountTokenDialogData,
     };
 
-    this._matDialog.open(ServiceAccountTokenDialog, config);
+    this._matDialog
+      .open(ServiceAccountTokenDialog, config)
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(() => this.onUpdate.next());
   }
 
   regenerateToken(token: ServiceAccountToken): void {
@@ -140,9 +145,10 @@ export class ServiceAccountTokenComponent implements OnInit {
       .pipe(take(1))
       .subscribe(() => {
         this._notificationService.success(
-          `The ${token.name} token was removed from the ${this.serviceaccount.name} service account`
+          `Removed the ${token.name} token from the ${this.serviceaccount.name} service account`
         );
         this._googleAnalyticsService.emitEvent('serviceAccountTokenOverview', 'ServiceAccountTokenDeleted');
+        this.onUpdate.next();
       });
   }
 }
