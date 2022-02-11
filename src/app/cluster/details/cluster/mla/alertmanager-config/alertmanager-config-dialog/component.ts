@@ -94,7 +94,7 @@ export class AlertmanagerConfigDialog implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(_ => {
         this._matDialogRef.close(true);
-        this._notificationService.success('The Alertmanager Config was updated');
+        this._notificationService.success('Updated the Alertmanager Config');
         this._mlaService.refreshAlertmanagerConfig();
       });
   }

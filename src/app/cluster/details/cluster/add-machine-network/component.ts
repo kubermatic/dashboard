@@ -51,7 +51,7 @@ export class AddMachineNetworkComponent {
       .pipe(take(1))
       .subscribe(res => {
         this._notificationService.success(
-          `Added machine network${this.machineNetworks.length > 1 ? 's' : ''} for the ${this.cluster.name} cluster`
+          `Added the machine network${this.machineNetworks.length > 1 ? 's' : ''} for the ${this.cluster.name} cluster`
         );
         this._dialogRef.close(res);
       });

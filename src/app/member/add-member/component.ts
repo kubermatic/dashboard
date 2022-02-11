@@ -56,7 +56,7 @@ export class AddMemberComponent implements OnInit {
       )
       .subscribe((member: Member) => {
         this._matDialogRef.close(member);
-        this._notificationService.success(`The ${member.email} member was added to the ${this.project.name} project`);
+        this._notificationService.success(`Added the ${member.email} member to the ${this.project.name} project`);
       });
   }
 }

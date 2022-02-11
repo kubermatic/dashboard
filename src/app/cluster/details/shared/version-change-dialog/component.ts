@@ -80,7 +80,7 @@ export class VersionChangeDialogComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(() => {
         this._notificationService.success(
-          `The ${this.cluster.name} cluster is being updated to the ${this.selectedVersion} version`
+          `Updating the ${this.cluster.name} cluster to the ${this.selectedVersion} version`
         );
 
         this._googleAnalyticsService.emitEvent('clusterOverview', 'clusterVersionChanged');
@@ -99,7 +99,7 @@ export class VersionChangeDialogComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(() => {
         this._notificationService.success(
-          `The machine deployments from the ${this.cluster.name} cluster are being updated to the ${this.selectedVersion} version`
+          `Updating the machine deployments version to the ${this.selectedVersion} for the ${this.cluster.name} cluster`
         );
       });
   }

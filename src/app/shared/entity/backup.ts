@@ -94,8 +94,9 @@ type BackupStatusPhase = string;
 export const BackupStatusPhaseCompleted = 'Completed';
 
 export class EtcdRestore {
+  creationTimestamp?: Date;
+  deletionTimestamp?: Date;
   name?: string;
-
   spec: EtcdRestoreSpec;
   status: EtcdRestoreStatus;
 }
