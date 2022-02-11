@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, OnInit} from '@angular/core';
+import {Component, forwardRef, OnInit, Input} from '@angular/core';
 import {FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
 import {DatacenterService} from '@core/services/datacenter';
@@ -23,6 +23,7 @@ import {merge} from 'rxjs';
 import {distinctUntilChanged, map, switchMap, takeUntil} from 'rxjs/operators';
 import {AutocompleteInitialState} from '@shared/components/autocomplete/component';
 import {PresetModel} from '@shared/entity/preset';
+import {Mode} from '@app/settings/admin/presets/dialog/component';
 
 enum Controls {
   Settings = 'settings',
@@ -47,6 +48,7 @@ enum Controls {
   ],
 })
 export class PresetSettingsStepComponent extends BaseFormValidator implements OnInit {
+  @Input() mode: Mode;
   form: FormGroup;
   provider: NodeProvider;
   datacenters: string[] = [];
@@ -55,6 +57,7 @@ export class PresetSettingsStepComponent extends BaseFormValidator implements On
 
   readonly Providers = NodeProvider;
   readonly Controls = Controls;
+  readonly Mode = Mode;
 
   constructor(
     private readonly _builder: FormBuilder,

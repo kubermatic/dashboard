@@ -17,9 +17,8 @@
 
 .km-provider-logo {
   background-position: left;
-  margin: 15px 0 20px;
-  max-height: 15px;
-  max-width: unset;
+  margin: 15px 30px 10px 0;
+  max-height: 20px;
   min-height: 20px;
 }
 
@@ -29,5 +28,6 @@
 }
 
 .info-container {
+  align-items: end;
   margin-bottom: 30px;
 }
