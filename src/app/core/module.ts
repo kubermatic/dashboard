@@ -71,6 +71,7 @@ import {OpenStackService} from '@core/services/provider/openstack';
 import {AddonService} from '@core/services/addon';
 import {MemberService} from '@core/services/member';
 import {SSHKeyService} from '@core/services/ssh-key';
+import {KubeVirtService} from '@core/services/provider/kubevirt';
 
 const modules: any[] = [
   CommonModule,
@@ -131,6 +132,7 @@ const services: any[] = [
   AWSService,
   AzureService,
   DigitalOceanService,
+  KubeVirtService,
   EquinixService,
   GCPService,
   HetznerService,

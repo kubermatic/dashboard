@@ -16,81 +16,77 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column"
       fxLayoutGap="8px">
+  <div fxLayout="row"
+       fxLayoutGap="8px">
+    <km-combobox [selected]="selectedFlavor"
+                 [valueFormatter]="flavorDisplayName.bind(this)"
+                 [optionsGetter]="getFlavors.bind(this)"
+                 [formControlName]="Controls.VMFlavor"
+                 (changed)="onFlavorChange($event)"
+                 [label]="flavorLabel"
+                 inputLabel="Select VM flavor..."
+                 fxFlex>
+      <div *option="let flavor">{{flavor}}</div>
+    </km-combobox>
+    <button mat-flat-button
+            type="button"
+            color="tertiary"
+            [disabled]="!selectedFlavor">
+      <i class="km-icon-mask km-icon-search"></i>
+      <span>View</span>
+    </button>
+  </div>
+
   <km-number-stepper [formControlName]="Controls.CPUs"
                      mode="errors"
                      label="Number of CPUs"
                      min="1"
+                     [disabled]="!!selectedFlavor"
                      required>
   </km-number-stepper>
 
+  <km-number-stepper [formControlName]="Controls.Memory"
+                     mode="errors"
+                     label="Memory (MB)"
+                     min="1000"
+                     step="100"
+                     [disabled]="!!selectedFlavor"
+                     required>
+  </km-number-stepper>
+
+  <mat-card-header class="km-no-padding">
+    <mat-card-title>Primary Disk</mat-card-title>
+  </mat-card-header>
+
   <mat-form-field fxFlex>
-    <mat-label>Memory</mat-label>
+    <mat-label>Operating System Image</mat-label>
     <input matInput
            required
-           [formControlName]="Controls.Memory"
+           [id]="Controls.OperatingSystemImage"
+           [formControlName]="Controls.OperatingSystemImage"
            type="text"
            autocomplete="off">
-    <mat-error *ngIf="form.get(Controls.Memory).hasError('required')">
-      Memory is <strong>required</strong>.
-    </mat-error>
-    <mat-error *ngIf="form.get(Controls.Memory).hasError('pattern')">
-      Wrong format, use values like 3Gi and 2Mi.
+    <mat-hint>Use URL or namespace/PVC name format.</mat-hint>
+    <mat-error *ngIf="form.get(Controls.OperatingSystemImage).hasError('required')">
+      Operating system image is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field fxFlex>
-    <mat-label>Namespace</mat-label>
-    <input matInput
-           required
-           [id]="Controls.Namespace"
-           [formControlName]="Controls.Namespace"
-           type="text"
-           autocomplete="off">
-    <mat-hint>Namespace where node will be provisioned.</mat-hint>
-    <mat-error *ngIf="form.get(Controls.Namespace).hasError('required')">
-      Namespace is <strong>required</strong>.
-    </mat-error>
-  </mat-form-field>
+  <km-combobox [selected]="selectedFlavor"
+               [valueFormatter]="flavorDisplayName.bind(this)"
+               [optionsGetter]="getFlavors.bind(this)"
+               [formControlName]="Controls.StorageClass"
+               (changed)="onFlavorChange($event)"
+               [label]="flavorLabel"
+               inputLabel="Select storage class...">
+    <div *option="let flavor">{{flavor}}</div>
+  </km-combobox>
 
-  <mat-form-field fxFlex>
-    <mat-label>PVC Size</mat-label>
-    <input matInput
-           required
-           [formControlName]="Controls.PVCSize"
-           type="text"
-           autocomplete="off">
-    <mat-error *ngIf="form.get(Controls.PVCSize).hasError('required')">
-      PVC Size is <strong>required</strong>.
-    </mat-error>
-    <mat-error *ngIf="form.get(Controls.PVCSize).hasError('pattern')">
-      Wrong format, use values like 3Gi and 2Mi.
-    </mat-error>
-  </mat-form-field>
-
-  <mat-form-field fxFlex>
-    <mat-label>Source URL</mat-label>
-    <input matInput
-           required
-           [id]="Controls.SourceURL"
-           [formControlName]="Controls.SourceURL"
-           type="text"
-           autocomplete="off">
-    <mat-hint>URL from which the imported image will be downloaded.</mat-hint>
-    <mat-error *ngIf="form.get(Controls.SourceURL).hasError('required')">
-      Source URL is <strong>required</strong>.
-    </mat-error>
-  </mat-form-field>
-
-  <mat-form-field fxFlex>
-    <mat-label>Storage Class Name</mat-label>
-    <input matInput
-           required
-           [id]="Controls.StorageClassName"
-           [formControlName]="Controls.StorageClassName"
-           type="text"
-           autocomplete="off">
-    <mat-error *ngIf="form.get(Controls.StorageClassName).hasError('required')">
-      Storage Class Name is <strong>required</strong>.
-    </mat-error>
-  </mat-form-field>
+  <km-number-stepper [formControlName]="Controls.PVCSize"
+                     mode="errors"
+                     label="Size (GB)"
+                     min="10"
+                     step="10"
+                     required>
+  </km-number-stepper>
 </form>

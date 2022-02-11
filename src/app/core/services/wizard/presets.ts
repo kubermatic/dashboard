@@ -29,6 +29,7 @@ import {Openstack} from './provider/openstack';
 import {Equinix} from './provider/equinix';
 import {Provider} from './provider/provider';
 import {VSphere} from './provider/vsphere';
+import {KubeVirt} from '@core/services/wizard/provider/kubevirt';
 
 @Injectable()
 export class PresetsService {
@@ -58,6 +59,7 @@ export class PresetsService {
   provider(provider: NodeProvider.DIGITALOCEAN): Digitalocean;
   provider(provider: NodeProvider.GCP): GCP;
   provider(provider: NodeProvider.HETZNER): Hetzner;
+  provider(provider: NodeProvider.KUBEVIRT): KubeVirt;
   provider(provider: NodeProvider.OPENSTACK): Openstack;
   provider(provider: NodeProvider.EQUINIX): Equinix;
   provider(provider: NodeProvider.VSPHERE): VSphere;
@@ -75,6 +77,8 @@ export class PresetsService {
         return new GCP(this._http, NodeProvider.GCP);
       case NodeProvider.HETZNER:
         return new Hetzner(this._http, NodeProvider.HETZNER);
+      case NodeProvider.KUBEVIRT:
+        return new Hetzner(this._http, NodeProvider.KUBEVIRT);
       case NodeProvider.OPENSTACK:
         return new Openstack(this._http, NodeProvider.OPENSTACK);
       case NodeProvider.EQUINIX:

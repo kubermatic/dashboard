@@ -22,11 +22,11 @@ import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 
 enum Controls {
+  VMFlavor = 'vmFlavor',
   CPUs = 'cpus',
   Memory = 'memory',
-  Namespace = 'namespace',
-  SourceURL = 'sourceURL',
-  StorageClassName = 'storageClassName',
+  OperatingSystemImage = 'sourceURL',
+  StorageClass = 'storageClassName',
   PVCSize = 'pvcSize',
 }
 
@@ -47,9 +47,9 @@ enum Controls {
   ],
 })
 export class KubeVirtBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy, AfterViewChecked {
-  private readonly _memorySizePattern = /^([0-9.]+)(Gi|Mi)$/;
-
   readonly Controls = Controls;
+  selectedFlavor = '';
+  flavorLabel = 'VM Flavor';
 
   constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
     super();
@@ -57,18 +57,12 @@ export class KubeVirtBasicNodeDataComponent extends BaseFormValidator implements
 
   ngOnInit(): void {
     this.form = this._builder.group({
+      [Controls.VMFlavor]: this._builder.control(''),
       [Controls.CPUs]: this._builder.control('1', Validators.required),
-      [Controls.Memory]: this._builder.control('2Gi', [
-        Validators.required,
-        Validators.pattern(this._memorySizePattern),
-      ]),
-      [Controls.Namespace]: this._builder.control('kube-system', Validators.required),
-      [Controls.SourceURL]: this._builder.control('', Validators.required),
-      [Controls.StorageClassName]: this._builder.control('', Validators.required),
-      [Controls.PVCSize]: this._builder.control('10Gi', [
-        Validators.required,
-        Validators.pattern(this._memorySizePattern),
-      ]),
+      [Controls.Memory]: this._builder.control('2Gi', Validators.required),
+      [Controls.OperatingSystemImage]: this._builder.control('', Validators.required),
+      [Controls.StorageClass]: this._builder.control('', Validators.required),
+      [Controls.PVCSize]: this._builder.control('10Gi', Validators.required),
     });
 
     this._init();
@@ -77,9 +71,8 @@ export class KubeVirtBasicNodeDataComponent extends BaseFormValidator implements
     merge(
       this.form.get(Controls.CPUs).valueChanges,
       this.form.get(Controls.Memory).valueChanges,
-      this.form.get(Controls.Namespace).valueChanges,
-      this.form.get(Controls.SourceURL).valueChanges,
-      this.form.get(Controls.StorageClassName).valueChanges,
+      this.form.get(Controls.OperatingSystemImage).valueChanges,
+      this.form.get(Controls.StorageClass).valueChanges,
       this.form.get(Controls.PVCSize).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
@@ -96,14 +89,25 @@ export class KubeVirtBasicNodeDataComponent extends BaseFormValidator implements
     this._unsubscribe.complete();
   }
 
+  getFlavors(): string[] {
+    return ['test', 'xyz'];
+  }
+
+  flavorDisplayName(flavor: string): string {
+    return flavor;
+  }
+
+  onFlavorChange(_: string): void {}
+
   private _init(): void {
     if (this._nodeDataService.nodeData.spec.cloud.kubevirt) {
-      this.form.get(Controls.Namespace).setValue(this._nodeDataService.nodeData.spec.cloud.kubevirt.namespace);
       this.form.get(Controls.PVCSize).setValue(this._nodeDataService.nodeData.spec.cloud.kubevirt.pvcSize);
       this.form
-        .get(Controls.StorageClassName)
+        .get(Controls.StorageClass)
         .setValue(this._nodeDataService.nodeData.spec.cloud.kubevirt.storageClassName);
-      this.form.get(Controls.SourceURL).setValue(this._nodeDataService.nodeData.spec.cloud.kubevirt.sourceURL);
+      this.form
+        .get(Controls.OperatingSystemImage)
+        .setValue(this._nodeDataService.nodeData.spec.cloud.kubevirt.sourceURL);
       this.form.get(Controls.Memory).setValue(this._nodeDataService.nodeData.spec.cloud.kubevirt.memory);
       this.form.get(Controls.CPUs).setValue(this._nodeDataService.nodeData.spec.cloud.kubevirt.cpus);
     }
@@ -116,9 +120,8 @@ export class KubeVirtBasicNodeDataComponent extends BaseFormValidator implements
           kubevirt: {
             cpus: `${this.form.get(Controls.CPUs).value}`,
             memory: this.form.get(Controls.Memory).value,
-            namespace: this.form.get(Controls.Namespace).value,
-            sourceURL: this.form.get(Controls.SourceURL).value,
-            storageClassName: this.form.get(Controls.StorageClassName).value,
+            sourceURL: this.form.get(Controls.OperatingSystemImage).value,
+            storageClassName: this.form.get(Controls.StorageClass).value,
             pvcSize: this.form.get(Controls.PVCSize).value,
           },
         } as NodeCloudSpec,
