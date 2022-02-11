@@ -64,7 +64,6 @@ presubmits:
               memory: 5Gi
 
   - name: pre-dashboard-test-unit
-    run_if_changed: "^src/"
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     spec:
