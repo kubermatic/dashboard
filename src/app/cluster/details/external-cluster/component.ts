@@ -137,6 +137,10 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
     return this.cluster?.status?.state === ExternalClusterState.Running;
   }
 
+  downloadKubeconfig(): void {
+    window.open(this._clusterService.getExternalKubeconfigURL(this.projectID, this.cluster.id), '_blank');
+  }
+
   hasUpgrades(): boolean {
     return this.isRunning() && this.provider !== ExternalClusterProvider.EKS;
   }
