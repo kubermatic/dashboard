@@ -99,17 +99,23 @@ export class GCPProviderBasicComponent extends BaseFormValidator implements OnIn
   }
 
   private _getClusterEntity(): Cluster {
-    const serviceAccountValue = isValid(this.form.get(Controls.ServiceAccount).value)
-      ? this.form.get(Controls.ServiceAccount).value
-      : encode(this.form.get(Controls.ServiceAccount).value);
     return {
       spec: {
         cloud: {
           gcp: {
-            serviceAccount: serviceAccountValue,
+            serviceAccount: this._serviceAccountValue,
           } as GCPCloudSpec,
         } as CloudSpec,
       } as ClusterSpec,
     } as Cluster;
+  }
+
+  private get _serviceAccountValue(): string {
+    let serviceAccountValue = this.form.get(Controls.ServiceAccount).value;
+    if (!!serviceAccountValue && !isValid(this.form.get(Controls.ServiceAccount).value)) {
+      serviceAccountValue = encode(this.form.get(Controls.ServiceAccount).value);
+    }
+
+    return serviceAccountValue;
   }
 }

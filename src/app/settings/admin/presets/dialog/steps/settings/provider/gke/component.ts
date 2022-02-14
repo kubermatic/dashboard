@@ -69,9 +69,15 @@ export class GKESettingsComponent extends BaseFormValidator implements OnInit, O
   }
 
   private _update(): void {
-    const serviceAccountValue = isValid(this.form.get(Controls.ServiceAccount).value)
-      ? this.form.get(Controls.ServiceAccount).value
-      : encode(this.form.get(Controls.ServiceAccount).value);
-    this._presetDialogService.preset.spec.gke = {serviceAccount: serviceAccountValue};
+    this._presetDialogService.preset.spec.gke = {serviceAccount: this._serviceAccountValue};
+  }
+
+  private get _serviceAccountValue(): string {
+    let serviceAccountValue = this.form.get(Controls.ServiceAccount).value;
+    if (!!serviceAccountValue && !isValid(this.form.get(Controls.ServiceAccount).value)) {
+      serviceAccountValue = encode(this.form.get(Controls.ServiceAccount).value);
+    }
+
+    return serviceAccountValue;
   }
 }

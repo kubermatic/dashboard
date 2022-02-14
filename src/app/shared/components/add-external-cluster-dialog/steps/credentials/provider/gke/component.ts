@@ -77,16 +77,12 @@ export class GKECredentialsComponent implements OnInit, OnDestroy {
   }
 
   private _update(): void {
-    const serviceAccountValue = isValid(this.form.get(Controls.ServiceAccount).value)
-      ? this.form.get(Controls.ServiceAccount).value
-      : encode(this.form.get(Controls.ServiceAccount).value);
-
     this._externalClusterService.externalCluster = {
       name: '',
       cloud: {
         gke: {
           name: '',
-          serviceAccount: serviceAccountValue,
+          serviceAccount: this._serviceAccountValue,
         },
       },
     };
@@ -100,5 +96,14 @@ export class GKECredentialsComponent implements OnInit, OnDestroy {
     if (!enable && this.form.get(name).enabled) {
       this.form.get(name).disable();
     }
+  }
+
+  private get _serviceAccountValue(): string {
+    let serviceAccountValue = this.form.get(Controls.ServiceAccount).value;
+    if (!!serviceAccountValue && !isValid(this.form.get(Controls.ServiceAccount).value)) {
+      serviceAccountValue = encode(this.form.get(Controls.ServiceAccount).value);
+    }
+
+    return serviceAccountValue;
   }
 }
