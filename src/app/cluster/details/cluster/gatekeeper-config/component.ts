@@ -130,7 +130,7 @@ export class GatekeeperConfigComponent implements OnChanges, OnDestroy {
       .pipe(switchMap(_ => this._opaService.deleteGatekeeperConfig(this.projectID, this.cluster.id)))
       .pipe(take(1))
       .subscribe(_ => {
-        this._notificationService.success('Deleted the Gatekeeper config');
+        this._notificationService.success('Deleting the Gatekeeper config');
         this._opaService.refreshGatekeeperConfig();
       });
   }

@@ -139,7 +139,7 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
       .pipe(switchMap(_ => this._opaService.deleteConstraintTemplate(constraintTemplate.name)))
       .pipe(take(1))
       .subscribe(_ => {
-        this._notificationService.success(`The constraint template ${constraintTemplate.name} was deleted`);
+        this._notificationService.success(`Deleting the ${constraintTemplate.name} constraint template`);
         this._opaService.refreshConstraintTemplates();
       });
   }

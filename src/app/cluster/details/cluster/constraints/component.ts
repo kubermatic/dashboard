@@ -184,7 +184,7 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(take(1))
       .subscribe(_ => {
         this._opaService.refreshConstraint();
-        this._notificationService.success(`Deleted the ${constraint.name} constraint`);
+        this._notificationService.success(`Deleting the ${constraint.name} constraint`);
       });
   }
 }

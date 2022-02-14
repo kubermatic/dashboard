@@ -168,7 +168,7 @@ export class SSHKeyComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(switchMap(_ => this._sshKeyService.delete(sshKey.id, this.project.id)))
       .pipe(take(1))
       .subscribe(() => {
-        this._notificationService.success(`The ${sshKey.name} SSH key was removed from the ${this.project.id} project`);
+        this._notificationService.success(`Removed the ${sshKey.name} SSH key from the ${this.project.id} project`);
         this._googleAnalyticsService.emitEvent('sshKeyOverview', 'SshKeyDeleted');
       });
   }

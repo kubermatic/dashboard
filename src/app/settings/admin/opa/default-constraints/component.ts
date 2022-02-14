@@ -132,7 +132,7 @@ export class DefaultConstraintComponent implements OnInit, OnChanges, OnDestroy 
       .patchDefaultConstraint(constraint.name, patch)
       .pipe(take(1))
       .subscribe(result => {
-        this._notificationService.success(`The default constraint ${result.name} was updated`);
+        this._notificationService.success(`Updated the ${result.name} default constraint`);
         this._opaService.refreshConstraint();
       });
   }
@@ -178,7 +178,7 @@ export class DefaultConstraintComponent implements OnInit, OnChanges, OnDestroy 
       .pipe(switchMap(_ => this._opaService.deleteDefaultConstraint(defaultConstraint.name)))
       .pipe(take(1))
       .subscribe(_ => {
-        this._notificationService.success(`The default constraint ${defaultConstraint.name} was deleted`);
+        this._notificationService.success(`Deleting the ${defaultConstraint.name} default constraint`);
         this._opaService.refreshDefaultConstraints();
       });
   }

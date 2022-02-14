@@ -59,14 +59,14 @@ export class RevokeTokenComponent implements OnInit {
   revokeToken(): void {
     if (this.revokeAdminToken) {
       this._clusterService.editToken(this.cluster, this.projectID, {token: ''}).subscribe(res => {
-        this._notificationService.success(`The admin token for the ${this.cluster.name} cluster was revoked`);
+        this._notificationService.success(`Revoked the admin token from the ${this.cluster.name} cluster`);
         this._matDialogRef.close(res);
       });
     }
 
     if (this.revokeViewerToken) {
       this._clusterService.editViewerToken(this.cluster, this.projectID, {token: ''}).subscribe(res => {
-        this._notificationService.success(`The viewer token for the ${this.cluster.name} cluster was revoked`);
+        this._notificationService.success(`Revoked the viewer token from the ${this.cluster.name} cluster`);
         this._matDialogRef.close(res);
       });
     }

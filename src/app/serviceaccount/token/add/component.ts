@@ -140,7 +140,7 @@ export class ServiceAccountTokenDialog implements OnInit {
       .subscribe(
         token => {
           this._notificationService.success(
-            `The ${token.name} token was added to the ${this._data.serviceAccount.name} service account`
+            `Added the ${token.name} token to the ${this._data.serviceAccount.name} service account`
           );
 
           this._tokenDialogService.token = token.token;
@@ -164,7 +164,7 @@ export class ServiceAccountTokenDialog implements OnInit {
       .pipe(take(1))
       .subscribe(
         _ => {
-          this._notificationService.success(`The ${this._data.token.name} token was updated`);
+          this._notificationService.success(`Updated the ${this._data.token.name} token`);
           this._dialogRef.close();
         },
         _ => {},
@@ -183,7 +183,7 @@ export class ServiceAccountTokenDialog implements OnInit {
       .pipe(take(1))
       .subscribe(
         token => {
-          this._notificationService.success(`The ${this._data.token.name} token was regenerated`);
+          this._notificationService.success(`Regenerated the ${this._data.token.name} token`);
           this._tokenDialogService.token = token.token;
         },
         _ => {},

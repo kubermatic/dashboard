@@ -46,7 +46,7 @@ export class EditPresetDialogComponent {
         const idx = this.data.preset.providers.findIndex(p => p.name === provider);
         this.data.preset.providers[idx].enabled = enabled;
         this._notificationService.success(
-          `${enabled ? 'Enabled' : 'Disabled'} ${provider} provider for preset ${this.data.preset.name}`
+          `${enabled ? 'Enabled' : 'Disabled'} the ${provider} provider for the preset ${this.data.preset.name}`
         );
       });
   }
