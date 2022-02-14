@@ -54,7 +54,6 @@ limitations under the License.
 
     </mat-card-header>
     <mat-card-content class="km-row">
-
       <div class="km-content-wrap">
         <km-property>
           <div key>kubelet Version</div>
@@ -77,18 +76,6 @@ limitations under the License.
           <div key>Paused</div>
           <div value>{{machineDeployment.spec.paused}}</div>
         </km-property>
-
-        <ng-container *ngIf="machineDeployment.spec.template.cloud.aws">
-          <km-property>
-            <div key>Subnet ID</div>
-            <div value>{{machineDeployment.spec.template.cloud.aws.subnetID}}</div>
-          </km-property>
-          <km-property>
-            <div key>Availability Zone</div>
-            <div value>{{machineDeployment.spec.template.cloud.aws.availabilityZone}}</div>
-          </km-property>
-        </ng-container>
-
         <km-property>
           <div value
                class="km-provider-logo-value">
@@ -108,6 +95,49 @@ limitations under the License.
             </km-chip>
           </div>
         </km-property>
+
+        <ng-container *ngIf="machineDeployment.spec.template.cloud.aws">
+          <km-property>
+            <div key>Subnet ID</div>
+            <div value>{{machineDeployment.spec.template.cloud.aws.subnetID}}</div>
+          </km-property>
+          <km-property>
+            <div key>Availability Zone</div>
+            <div value>{{machineDeployment.spec.template.cloud.aws.availabilityZone}}</div>
+          </km-property>
+        </ng-container>
+
+        <ng-container *ngIf="machineDeployment.spec.template.cloud.nutanix">
+          <km-property>
+            <div key>Image Name</div>
+            <div value>{{machineDeployment.spec.template.cloud.nutanix.imageName}}</div>
+          </km-property>
+          <km-property>
+            <div key>Subnet Name</div>
+            <div value>{{machineDeployment.spec.template.cloud.nutanix.subnetName}}</div>
+          </km-property>
+          <km-property>
+            <div key>CPUs</div>
+            <div value>{{machineDeployment.spec.template.cloud.nutanix.cpus}}</div>
+          </km-property>
+          <km-property>
+            <div key>Cores per CPU</div>
+            <div value>{{machineDeployment.spec.template.cloud.nutanix.cpuCores}}</div>
+          </km-property>
+          <km-property-boolean *ngIf="machineDeployment.spec.template.cloud.nutanix.cpuPassthrough"
+                               label="CPU Passthrough"
+                               [value]="machineDeployment.spec.template.cloud.nutanix.cpuPassthrough">
+          </km-property-boolean>
+          <km-property>
+            <div key>Memory</div>
+            <div value>{{machineDeployment.spec.template.cloud.nutanix.memoryMB}} MB</div>
+          </km-property>
+          <km-property>
+            <div key>Disk Size</div>
+            <div value>{{machineDeployment.spec.template.cloud.nutanix.diskSize}} GB</div>
+          </km-property>
+        </ng-container>
+
         <km-property>
           <div key>Created</div>
           <div value>

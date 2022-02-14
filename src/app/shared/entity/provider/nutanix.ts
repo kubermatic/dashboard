@@ -12,33 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'mixins';
-
-@include mixins.breakpoint('small') {
-  .btn-text-default {
-    display: none;
-  }
+export class NutanixSubnet {
+  name: string;
+  type: string;
+  vlanID?: number;
 }
 
-.mat-column-provider {
-  width: 160px;
+export class NutanixCluster {
+  name: string;
 }
 
-.km-provider-logo {
-  background-position: left;
-  margin: 0 8px 0 0;
-  max-width: 150px;
-  min-width: 70px;
-}
-
-.km-provider-logo-digitalocean,
-.km-provider-logo-openstack {
-  max-height: 20px;
-  min-height: 20px;
-}
-
-.km-provider-logo-hetzner,
-.km-provider-logo-nutanix {
-  max-height: 16px;
-  min-height: 16px;
+export class NutanixProject {
+  name: string;
 }

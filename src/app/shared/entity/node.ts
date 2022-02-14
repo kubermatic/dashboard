@@ -56,6 +56,7 @@ export class NodeCloudSpec {
   azure?: AzureNodeSpec;
   gcp?: GCPNodeSpec;
   kubevirt?: KubeVirtNodeSpec;
+  nutanix?: NutanixNodeSpec;
   alibaba?: AlibabaNodeSpec;
   anexia?: AnexiaNodeSpec;
 }
@@ -219,6 +220,17 @@ export class EquinixNodeSpec {
   tags: string[];
 }
 
+export class NutanixNodeSpec {
+  subnetName: string;
+  imageName: string;
+  categories: object;
+  cpus: number;
+  cpuCores: number;
+  cpuPassthrough: boolean;
+  memoryMB: number;
+  diskSize: number;
+}
+
 export class VSphereNodeSpec {
   cpus: number;
   memory: number;
@@ -312,6 +324,16 @@ export function getDefaultNodeProviderSpec(provider: string): object {
         pvcSize: '10Gi',
         namespace: 'kube-system',
       } as KubeVirtNodeSpec;
+    case NodeProvider.NUTANIX:
+      return {
+        imageName: '',
+        subnetName: '',
+        cpus: 2,
+        cpuCores: 1,
+        cpuPassthrough: false,
+        memoryMB: 2048,
+        diskSize: 20,
+      } as NutanixNodeSpec;
   }
   return {};
 }
