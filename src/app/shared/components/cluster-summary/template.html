@@ -180,6 +180,26 @@ limitations under the License.
           </km-property>
         </ng-container>
 
+        <!-- Nutanix -->
+        <ng-container *ngIf="cluster.spec.cloud?.nutanix">
+          <km-property>
+            <div key>Username</div>
+            <div value>{{cluster.spec.cloud.nutanix.username}}</div>
+          </km-property>
+          <km-property>
+            <div key>Proxy URL</div>
+            <div value>{{cluster.spec.cloud.nutanix.proxyURL}}</div>
+          </km-property>
+          <km-property>
+            <div key>Cluster Name</div>
+            <div value>{{cluster.spec.cloud.nutanix.clusterName}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud.nutanix.projectName">
+            <div key>Project Name</div>
+            <div value>{{cluster.spec.cloud.nutanix.projectName}}</div>
+          </km-property>
+        </ng-container>
+
         <!-- vSphere -->
         <ng-container *ngIf="cluster.spec.cloud?.vsphere">
           <km-property>
@@ -606,6 +626,38 @@ limitations under the License.
                 <div value>{{machineDeployment.spec.template.cloud?.kubevirt.namespace}}</div>
               </km-property>
             </ng-container>
+
+            <!-- Nutanix Nodes -->
+            <ng-container *ngIf="cluster.spec.cloud?.nutanix">
+              <km-property>
+                <div key>Image Name</div>
+                <div value>{{machineDeployment.spec.template.cloud.nutanix.imageName}}</div>
+              </km-property>
+              <km-property>
+                <div key>Subnet Name</div>
+                <div value>{{machineDeployment.spec.template.cloud.nutanix.subnetName}}</div>
+              </km-property>
+              <km-property>
+                <div key>CPUs</div>
+                <div value>{{machineDeployment.spec.template.cloud.nutanix.cpus}}</div>
+              </km-property>
+              <km-property>
+                <div key>Cores per CPU</div>
+                <div value>{{machineDeployment.spec.template.cloud.nutanix.cpuCores}}</div>
+              </km-property>
+              <km-property>
+                <div key>Memory</div>
+                <div value>{{machineDeployment.spec.template.cloud.nutanix.memoryMB}} MB</div>
+              </km-property>
+              <km-property>
+                <div key>Disk Size</div>
+                <div value>{{machineDeployment.spec.template.cloud.nutanix.diskSize}} GB</div>
+              </km-property>
+            </ng-container>
+            <km-property-boolean *ngIf="machineDeployment.spec.template.cloud.nutanix?.cpuPassthrough"
+                                 label="CPU Passthrough"
+                                 [value]="machineDeployment.spec.template.cloud.nutanix.cpuPassthrough">
+            </km-property-boolean>
 
             <!-- Openstack Nodes -->
             <ng-container *ngIf="cluster.spec.cloud?.openstack">

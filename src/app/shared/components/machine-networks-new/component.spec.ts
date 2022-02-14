@@ -39,6 +39,7 @@ import {EquinixService} from '@core/services/provider/equinix';
 import {GCPService} from '@core/services/provider/gcp';
 import {HetznerService} from '@core/services/provider/hetzner';
 import {OpenStackService} from '@core/services/provider/openstack';
+import {NutanixService} from '@app/core/services/provider/nutanix';
 
 const modules: any[] = [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule];
 
@@ -66,6 +67,7 @@ describe('MachineNetworksComponent', () => {
           GCPService,
           HetznerService,
           OpenStackService,
+          NutanixService,
           {provide: ProjectService, useValue: ProjectMockService},
           {provide: NODE_DATA_CONFIG, useValue: NodeDataMode.Wizard},
           {provide: DatacenterService, useClass: DatacenterMockService},

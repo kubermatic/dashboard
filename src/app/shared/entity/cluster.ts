@@ -25,6 +25,7 @@ export enum Provider {
   GCP = 'gcp',
   Hetzner = 'hetzner',
   KubeVirt = 'kubevirt',
+  Nutanix = 'nutanix',
   OpenStack = 'openstack',
   Equinix = 'packet',
   VSphere = 'vsphere',
@@ -40,6 +41,7 @@ const PROVIDER_DISPLAY_NAMES = new Map<Provider, string>([
   [Provider.GCP, 'Google Cloud'],
   [Provider.Hetzner, 'Hetzner'],
   [Provider.KubeVirt, 'KubeVirt'],
+  [Provider.Nutanix, 'Nutanix'],
   [Provider.OpenStack, 'Openstack'],
   [Provider.Equinix, 'Equinix Metal'],
   [Provider.VSphere, 'VSphere'],
@@ -105,6 +107,7 @@ export class CloudSpec {
   fake?: FakeCloudSpec;
   gcp?: GCPCloudSpec;
   kubevirt?: KubeVirtCloudSpec;
+  nutanix?: NutanixCloudSpec;
   alibaba?: AlibabaCloudSpec;
   anexia?: AnexiaCloudSpec;
 }
@@ -168,6 +171,14 @@ export class HetznerCloudSpec {
 
 export class KubeVirtCloudSpec {
   kubeconfig: string;
+}
+
+export class NutanixCloudSpec {
+  clusterName: string;
+  projectName?: string;
+  proxyURL?: string;
+  username?: string;
+  password?: string;
 }
 
 export class OpenstackCloudSpec {
@@ -368,6 +379,7 @@ export class CNIPluginConfigPatch {
 export class CloudSpecPatch {
   anexia?: AnexiaCloudSpecPatch;
   digitalocean?: DigitaloceanCloudSpecPatch;
+  nutanix?: NutanixCloudSpecPatch;
   aws?: AWSCloudSpecPatch;
   openstack?: OpenstackCloudSpecPatch;
   packet?: EquinixCloudSpecPatch;
@@ -400,6 +412,14 @@ export class EquinixCloudSpecPatch {
   apiKey?: string;
   projectID?: string;
   billingCycle?: string;
+}
+
+export class NutanixCloudSpecPatch {
+  username: string;
+  password: string;
+  proxyURL?: string;
+  clusterName?: string;
+  projectName?: string;
 }
 
 export class HetznerCloudSpecPatch {

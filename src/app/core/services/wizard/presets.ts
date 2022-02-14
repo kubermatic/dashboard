@@ -29,6 +29,7 @@ import {Openstack} from './provider/openstack';
 import {Equinix} from './provider/equinix';
 import {Provider} from './provider/provider';
 import {VSphere} from './provider/vsphere';
+import {Nutanix} from '@core/services/wizard/provider/nutanix';
 
 @Injectable()
 export class PresetsService {
@@ -63,6 +64,7 @@ export class PresetsService {
   provider(provider: NodeProvider.VSPHERE): VSphere;
   provider(provider: NodeProvider.ALIBABA): Alibaba;
   provider(provider: NodeProvider.ANEXIA): Anexia;
+  provider(provider: NodeProvider.NUTANIX): Nutanix;
   provider(provider: NodeProvider): Provider {
     switch (provider) {
       case NodeProvider.AWS:
@@ -85,6 +87,8 @@ export class PresetsService {
         return new Alibaba(this._http, NodeProvider.ALIBABA);
       case NodeProvider.ANEXIA:
         return new Anexia(this._http, NodeProvider.ANEXIA);
+      case NodeProvider.NUTANIX:
+        return new Nutanix(this._http, NodeProvider.NUTANIX);
       default:
         throw new Error(`Provider ${provider} not supported`);
     }

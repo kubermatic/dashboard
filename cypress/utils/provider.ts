@@ -22,6 +22,7 @@ export enum Provider {
   GCP = 'gcp',
   Hetzner = 'hetzner',
   KubeVirt = 'kubevirt',
+  Nutanix = 'nutanix',
   OpenStack = 'openstack',
   Equinix = 'packet',
   VSphere = 'vsphere',

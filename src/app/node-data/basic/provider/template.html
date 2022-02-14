@@ -30,6 +30,9 @@ limitations under the License.
   <km-kubevirt-basic-node-data *ngSwitchCase="Provider.KUBEVIRT"
                                [formControl]="form.get(Control.ProviderBasic)">
   </km-kubevirt-basic-node-data>
+  <km-nutanix-basic-node-data *ngSwitchCase="Provider.NUTANIX"
+                              [formControl]="form.get(Control.ProviderBasic)">
+  </km-nutanix-basic-node-data>
   <km-hetzner-basic-node-data *ngSwitchCase="Provider.HETZNER"
                               [formControl]="form.get(Control.ProviderBasic)">
   </km-hetzner-basic-node-data>
