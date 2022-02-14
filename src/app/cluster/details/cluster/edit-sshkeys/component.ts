@@ -140,9 +140,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
       .pipe(switchMap(_ => this._clusterService.deleteSSHKey(this.projectID, this.cluster.id, sshKey.id)))
       .pipe(take(1))
       .subscribe(() => {
-        this._notificationService.success(
-          `The ${sshKey.name} SSH key was removed from the ${this.cluster.name} cluster`
-        );
+        this._notificationService.success(`Removed the ${sshKey.name} SSH key from the ${this.cluster.name} cluster`);
         this._sshKeysUpdate.next();
       });
   }

@@ -21,18 +21,26 @@ import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
+import {ServiceAccountService} from '@core/services/service-account';
 import {UserService} from '@core/services/user';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Project} from '@shared/entity/project';
-import {ServiceAccount} from '@shared/entity/service-account';
+import {ServiceAccount, ServiceAccountToken} from '@shared/entity/service-account';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils} from '@shared/utils/member';
 import _ from 'lodash';
-import {EMPTY, merge, of, Subject, timer} from 'rxjs';
+import {merge, of, Subject, timer} from 'rxjs';
 import {catchError, filter, switchMap, switchMapTo, take, takeUntil} from 'rxjs/operators';
 import {CreateServiceAccountDialogComponent} from './create-dialog/component';
 import {EditServiceAccountDialogComponent} from './edit-dialog/component';
-import {ServiceAccountService} from '@core/services/service-account';
+
+class TokenList {
+  initializing = true;
+  visible = false;
+  tokens: ServiceAccountToken[] = [];
+  unsubscribe = new Subject<void>();
+  onChange = new Subject<void>();
+}
 
 @Component({
   selector: 'km-serviceaccount',
@@ -42,21 +50,19 @@ import {ServiceAccountService} from '@core/services/service-account';
 export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
   isInitializing = true;
   serviceAccounts: ServiceAccount[] = [];
-  isShowToken = [];
-  tokenList = [];
-  isTokenInitializing = [];
   displayedColumns: string[] = ['stateArrow', 'name', 'group', 'creationDate', 'actions'];
-  toggledColumns: string[] = ['token'];
+  toggleableColumns: string[] = ['token'];
   dataSource = new MatTableDataSource<ServiceAccount>();
-
   @ViewChild(MatSort, {static: true}) sort: MatSort;
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   private readonly _refreshTime = 10;
+
   private _unsubscribe: Subject<void> = new Subject<void>();
   private _serviceAccountUpdate: Subject<void> = new Subject<void>();
   private _selectedProject = {} as Project;
   private _currentGroupConfig: GroupConfig;
+  private _tokenMap = new Map<string, TokenList>();
 
   constructor(
     private readonly _serviceAccountService: ServiceAccountService,
@@ -121,29 +127,28 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
     return !this._currentGroupConfig || this._currentGroupConfig.serviceaccounts[action];
   }
 
-  toggleToken(element: ServiceAccount): void {
-    this.isShowToken[element.id] = !this.isShowToken[element.id];
-    if (this.isShowToken) {
-      this.getTokenList(element);
-      this.isTokenInitializing[element.id] = true;
-    }
+  isTokenVisible(id: string): boolean {
+    return this._tokenMap.has(id);
   }
 
-  getTokenList(serviceaccount: ServiceAccount): void {
-    this.tokenList[serviceaccount.id] = [];
-    timer(0, this._refreshTime * this._appConfig.getRefreshTimeBase())
-      .pipe(takeUntil(this._unsubscribe))
-      .pipe(
-        switchMap(() =>
-          this.tokenList[serviceaccount.id]
-            ? this._serviceAccountService.getTokens(this._selectedProject.id, serviceaccount)
-            : EMPTY
-        )
-      )
-      .subscribe(tokens => {
-        this.tokenList[serviceaccount.id] = tokens;
-        this.isTokenInitializing[serviceaccount.id] = false;
-      });
+  isTokenInitializing(id: string): boolean {
+    return this._tokenMap.get(id)?.initializing;
+  }
+
+  getTokenList(id: string): TokenList {
+    return this._tokenMap.get(id);
+  }
+
+  getTokens(id: string): ServiceAccountToken[] {
+    return this._tokenMap.get(id)?.tokens;
+  }
+
+  toggleToken(serviceAccount: ServiceAccount): void {
+    this.isTokenVisible(serviceAccount.id) ? this._hideToken(serviceAccount) : this._showToken(serviceAccount);
+  }
+
+  onTokenChange(id: string): void {
+    this._tokenMap.get(id).onChange.next();
   }
 
   createServiceAccount(): void {
@@ -192,10 +197,10 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(switchMap(_ => this._serviceAccountService.delete(this._selectedProject.id, serviceAccount)))
       .pipe(take(1))
       .subscribe(() => {
-        delete this.tokenList[serviceAccount.id];
+        this._hideToken(serviceAccount);
         this._serviceAccountUpdate.next();
         this._notificationService.success(
-          `The ${serviceAccount.name} service account was removed from the ${this._selectedProject.name} project`
+          `Removed the ${serviceAccount.name} service account from the ${this._selectedProject.name} project`
         );
         this._googleAnalyticsService.emitEvent('serviceAccountOverview', 'ServiceAccountDeleted');
       });
@@ -205,5 +210,33 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
 
   isPaginatorVisible(): boolean {
     return !_.isEmpty(this.serviceAccounts) && this.paginator && this.serviceAccounts.length > this.paginator.pageSize;
+  }
+
+  private _loadTokens(serviceAccount: ServiceAccount): void {
+    if (!this._tokenMap.has(serviceAccount.id)) {
+      this._tokenMap.set(serviceAccount.id, new TokenList());
+    }
+
+    this.getTokenList(serviceAccount.id).visible = true;
+    merge(
+      timer(0, this._refreshTime * this._appConfig.getRefreshTimeBase()),
+      this._tokenMap.get(serviceAccount.id).onChange
+    )
+      .pipe(takeUntil(this.getTokenList(serviceAccount.id).unsubscribe))
+      .pipe(switchMap(() => this._serviceAccountService.getTokens(this._selectedProject.id, serviceAccount)))
+      .subscribe(tokens => {
+        this.getTokenList(serviceAccount.id).tokens = tokens;
+        this.getTokenList(serviceAccount.id).initializing = false;
+      });
+  }
+
+  private _showToken(serviceAccount: ServiceAccount): void {
+    this._loadTokens(serviceAccount);
+  }
+
+  private _hideToken(serviceAccount: ServiceAccount): void {
+    this._tokenMap.get(serviceAccount.id)?.unsubscribe.next();
+    this._tokenMap.get(serviceAccount.id)?.unsubscribe.complete();
+    this._tokenMap.delete(serviceAccount.id);
   }
 }

@@ -162,7 +162,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(switchMap(_ => this._clusterService.deleteNode(this.projectID, this.cluster.id, node.id)))
       .pipe(take(1))
       .subscribe(() => {
-        this._notificationService.success(`The ${node.name} node was removed from the ${this.cluster.name} cluster`);
+        this._notificationService.success(`Removing the ${node.name} node from the ${this.cluster.name} cluster`);
         this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeleted');
         this.deleteNode.emit(node);
       });

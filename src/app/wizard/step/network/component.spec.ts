@@ -40,6 +40,7 @@ import {HetznerService} from '@core/services/provider/hetzner';
 import {DigitalOceanService} from '@core/services/provider/digitalocean';
 import {OpenStackService} from '@core/services/provider/openstack';
 import {EquinixService} from '@core/services/provider/equinix';
+import {NutanixService} from '@app/core/services/provider/nutanix';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule];
 
@@ -68,6 +69,7 @@ describe('MachineNetworkStepComponent', () => {
           GCPService,
           HetznerService,
           OpenStackService,
+          NutanixService,
           MachineDeploymentService,
           {provide: ProjectService, useValue: ProjectMockService},
           {provide: Auth, useClass: AuthMockService},

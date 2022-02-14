@@ -121,7 +121,7 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
       .pipe(take(1))
       .subscribe(
         _ => {
-          this._notificationService.success(`The ${md.name} machine deployment was updated`);
+          this._notificationService.success(`Updated the ${md.name} machine deployment`);
           this.changeMachineDeployment.emit(md);
         },
         _ => this._notificationService.error(`Could not edit the ${md.name} machine deployment`)

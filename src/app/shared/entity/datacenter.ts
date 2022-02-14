@@ -43,6 +43,7 @@ export class DatacenterSpec {
   azure?: AzureDatacenterSpec;
   gcp?: GCPDatacenterSpec;
   kubevirt?: KubeVirtDatacenterSpec;
+  nutanix?: NutanixDatacenterSpec;
   alibaba?: AlibabaDatacenterSpec;
   anexia?: AnexiaDatacenterSpec;
 }
@@ -90,6 +91,13 @@ export class HetznerDatacenterSpec {
 }
 
 export class KubeVirtDatacenterSpec {}
+
+export class NutanixDatacenterSpec {
+  endpoint: string;
+  port?: number;
+  allow_insecure: number;
+  images: DatacenterOperatingSystemOptions;
+}
 
 export class OpenStackDatacenterSpec {
   availabilityZone: string;

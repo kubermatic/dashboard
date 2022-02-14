@@ -119,7 +119,7 @@ export class ConstraintTemplateDialog implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(result => {
         this._matDialogRef.close(true);
-        this._notificationService.success(`The constraint template ${result.name} was created`);
+        this._notificationService.success(`Created the ${result.name} constraint template`);
         this._opaService.refreshConstraintTemplates();
       });
   }
@@ -130,7 +130,7 @@ export class ConstraintTemplateDialog implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(result => {
         this._matDialogRef.close(true);
-        this._notificationService.success(`The constraint template ${result.name} was updated`);
+        this._notificationService.success(`Updated the ${result.name} constraint template`);
         this._opaService.refreshConstraintTemplates();
       });
   }

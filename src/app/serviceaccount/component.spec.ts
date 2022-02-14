@@ -76,7 +76,6 @@ describe('ServiceAccountComponent', () => {
     fixture = TestBed.createComponent(ServiceAccountComponent);
     component = fixture.componentInstance;
     noop = TestBed.createComponent(NoopConfirmDialogComponent);
-    component.tokenList = fakeServiceAccountTokens();
     fixture.detectChanges();
     fixture.debugElement.injector.get(Router);
   });

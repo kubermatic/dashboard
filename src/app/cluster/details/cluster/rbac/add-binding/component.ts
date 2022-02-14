@@ -193,7 +193,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(binding => {
         this._matDialogRef.close(binding);
-        this._notificationService.success(`The ${bindingName} binding was added`);
+        this._notificationService.success(`Added the ${bindingName} cluster binding`);
       });
   }
 
@@ -220,7 +220,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(binding => {
         this._matDialogRef.close(binding);
-        this._notificationService.success(`The ${bindingName} binding was added`);
+        this._notificationService.success(`Added the ${bindingName} binding`);
       });
   }
 }

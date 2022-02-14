@@ -42,7 +42,7 @@ limitations under the License.
             class="km-header-cell"></th>
         <td mat-cell
             *matCellDef="let element">
-          <i [ngClass]="isShowToken[element.id] ? 'km-icon-mask km-icon-arrow-up' : 'km-icon-mask km-icon-arrow-down'"></i>
+          <i [ngClass]="isTokenVisible(element.id) ? 'km-icon-mask km-icon-arrow-up' : 'km-icon-mask km-icon-arrow-down'"></i>
         </td>
       </ng-container>
 
@@ -123,8 +123,9 @@ limitations under the License.
             [attr.colspan]="displayedColumns.length">
           <div class="serviceaccount-token-wrapper">
             <km-serviceaccount-token [serviceaccount]="element"
-                                     [serviceaccountTokens]="tokenList[element.id]"
-                                     [isInitializing]="isTokenInitializing[element.id]"></km-serviceaccount-token>
+                                     [serviceaccountTokens]="getTokens(element.id)"
+                                     [isInitializing]="isTokenInitializing(element.id)"
+                                     (onUpdate)="onTokenChange(element.id)"></km-serviceaccount-token>
           </div>
         </td>
       </ng-container>
@@ -137,8 +138,8 @@ limitations under the License.
           class="km-mat-row km-pointer"
           (click)="toggleToken(row)"></tr>
       <tr mat-row
-          *matRowDef="let row; let i=index; columns: toggledColumns;"
-          [ngClass]="isShowToken[row.id] ? '' : 'km-hidden'"
+          *matRowDef="let row; let i=index; columns: toggleableColumns;"
+          [ngClass]="isTokenVisible(row.id) ? '' : 'km-hidden'"
           class="km-mat-row"></tr>
     </table>
 

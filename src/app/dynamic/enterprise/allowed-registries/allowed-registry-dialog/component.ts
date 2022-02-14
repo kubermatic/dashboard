@@ -108,7 +108,7 @@ export class AllowedRegistryDialog implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(result => {
         this._matDialogRef.close(true);
-        this._notificationService.success(`The allowed registry ${result.name} was created`);
+        this._notificationService.success(`Created the ${result.name} allowed registry`);
         this._allowedRegistriesService.refreshAllowedRegistries();
       });
   }
@@ -119,7 +119,7 @@ export class AllowedRegistryDialog implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(result => {
         this._matDialogRef.close(true);
-        this._notificationService.success(`The allowed registry ${result.name} was updated`);
+        this._notificationService.success(`Updated the ${result.name} allowed registry`);
         this._allowedRegistriesService.refreshAllowedRegistries();
       });
   }

@@ -49,7 +49,7 @@ export class InterfaceComponent implements OnInit, OnDestroy {
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       if (!_.isEqual(settings, this.apiSettings)) {
         if (this.apiSettings && !_.isEqual(this.apiSettings, this._settingsService.defaultAdminSettings)) {
-          this._notificationService.success('The settings update was applied');
+          this._notificationService.success('Updated the admin settings');
         }
         this._applySettings(settings);
       }

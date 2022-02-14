@@ -392,6 +392,10 @@
   @include mixins.provider-image('/assets/images/clouds/hetzner.svg', 30px);
 }
 
+.km-provider-logo-nutanix {
+  @include mixins.provider-image('/assets/images/clouds/nutanix.svg', 30px);
+}
+
 .km-provider-logo-openstack {
   @include mixins.provider-image('/assets/images/clouds/openstack.svg', 30px);
 }

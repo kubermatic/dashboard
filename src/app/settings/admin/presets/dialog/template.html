@@ -48,7 +48,8 @@ limitations under the License.
             [stepControl]="form.get(stepRegistry.Settings)"
             [label]="stepRegistry.Settings"
             fxFlex="100%">
-    <km-preset-settings-step [formControl]="form.get(stepRegistry.Settings)"></km-preset-settings-step>
+    <km-preset-settings-step [formControl]="form.get(stepRegistry.Settings)"
+                             [mode]="data.mode"></km-preset-settings-step>
   </mat-step>
 </mat-horizontal-stepper>
 
