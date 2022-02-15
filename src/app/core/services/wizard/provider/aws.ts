@@ -124,13 +124,16 @@ export class AWS extends Provider {
   }
 
   subnets(seed: string, onLoadingCb: () => void = null): Observable<AWSSubnet[]> {
-    this._setRequiredHeaders(
-      AWS.Header.AccessKeyID,
-      AWS.Header.SecretAccessKey,
-      AWS.Header.VPC,
-      AWS.Header.AssumeRoleARN,
-      AWS.Header.AssumeRoleExternalID
-    );
+    if (this._headers.has(AWS.Header.AssumeRoleARN) || this._headers.has(AWS.Header.AssumeRoleExternalID)) {
+      this._setRequiredHeaders(
+        AWS.Header.AccessKeyID,
+        AWS.Header.SecretAccessKey,
+        AWS.Header.VPC,
+        AWS.Header.AssumeRoleARN,
+        AWS.Header.AssumeRoleExternalID
+      );
+    }
+
     if (!this._hasRequiredHeaders() || !seed) {
       return EMPTY;
     }
