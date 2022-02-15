@@ -1,0 +1,46 @@
+[
+    {
+        "id": "test-md",
+        "name": "test-md",
+        "annotations": {
+            "machinedeployment.clusters.k8s.io/revision": "1"
+        },
+        "creationTimestamp": "2022-02-15T08:04:38Z",
+        "spec": {
+            "template": {
+                "cloud": {
+                    "nutanix": {
+                        "subnetName": "Primary",
+                        "imageName": "machine-controller-e2e-ubuntu",
+                        "categories": {
+                            "KKPCluster": "kubernetes-vnf854s4fc",
+                            "KKPProject": "v8p2nvbnk7"
+                        },
+                        "cpus": 2,
+                        "cpuCores": 1,
+                        "cpuPassthrough": false,
+                        "memoryMB": 2048,
+                        "diskSize": 20
+                    }
+                },
+                "operatingSystem": {
+                    "ubuntu": {
+                        "distUpgradeOnBoot": false
+                    }
+                },
+                "versions": {
+                    "kubelet": "1.21.8"
+                },
+                "labels": {
+                    "system/cluster": "vnf854s4fc",
+                    "system/project": "v8p2nvbnk7"
+                }
+            },
+            "paused": false,
+            "dynamicConfig": false
+        },
+        "status": {
+            "observedGeneration": 1
+        }
+    }
+]

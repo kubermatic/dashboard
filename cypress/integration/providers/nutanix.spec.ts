@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 import {ClustersPage} from '../../pages/clusters.po';
 import {ProjectsPage} from '../../pages/projects.po';
 import {WizardPage} from '../../pages/wizard.po';
@@ -24,15 +25,15 @@ import {WizardStep} from '../../utils/wizard';
 import _ from 'lodash';
 import {Mocks} from '../../utils/mocks';
 
-describe('Alibaba Provider', () => {
-  const preset = Mocks.enabled() ? Preset.Mock : Preset.Alibaba;
-  const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
-  const clusterName = Mocks.enabled() ? 'test-cluster' : _.uniqueId('test-cluster-');
-  const initialMachineDeploymentReplicas = '0';
+describe('Nutanix Provider', ()=>{
+const preset = Mocks.enabled() ? Preset.Mock:Preset.Nutanix;
+const projectName = Mocks.enabled() ? 'test-project' :  _.uniqueId('test-project-');
+const clusterName = Mocks.enabled() ? 'test-cluster' :  _.uniqueId('test-cluster-');
+const initialMachineDeploymentReplicas = '0';
 
-  beforeEach(() => {
+beforeEach(() => {
     if (Mocks.enabled()) {
-      Mocks.register(Provider.Alibaba);
+      Mocks.register(Provider.Nutanix);
     }
   });
 
@@ -54,9 +55,10 @@ describe('Alibaba Provider', () => {
     ClustersPage.openWizard();
   });
 
+
   it('should create a new cluster', () => {
-    WizardPage.getProviderBtn(Provider.Alibaba).click();
-    WizardPage.getDatacenterBtn(Datacenter.Alibaba.Frankfurt).click();
+    WizardPage.getProviderBtn(Provider.Nutanix).click();
+    WizardPage.getDatacenterBtn(Datacenter.Nutanix.Hamburg).click();
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
     WizardPage.getCustomPresetsCombobox().click();
@@ -109,4 +111,5 @@ describe('Alibaba Provider', () => {
   it('should logout', () => {
     logout();
   });
-});
+
+})
