@@ -51,6 +51,8 @@ export class KubeVirtBasicNodeDataComponent extends BaseFormValidator implements
   readonly Controls = Controls;
   selectedFlavor = '';
   flavorLabel = 'VM Flavor';
+  storageClass = '';
+  storageClassLabel = 'Storage Class';
 
   constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
     super();
@@ -99,6 +101,16 @@ export class KubeVirtBasicNodeDataComponent extends BaseFormValidator implements
   }
 
   onFlavorChange(_: string): void {}
+
+  getStorageClasses(): string[] {
+    return ['test', 'xyz'];
+  }
+
+  storageClassDisplayName(flavor: string): string {
+    return flavor;
+  }
+
+  onStorageClassChange(_: string): void {}
 
   private _init(): void {
     if (this._nodeDataService.nodeData.spec.cloud.kubevirt) {
