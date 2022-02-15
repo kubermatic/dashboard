@@ -50,6 +50,7 @@ import {coerce, compare} from 'semver';
 import {CIDR_PATTERN_VALIDATOR} from '@shared/validators/others';
 import {FeatureGateService} from '@core/services/feature-gate';
 import {ClusterService} from '@core/services/cluster';
+import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
 
 enum Controls {
   Name = 'name',
@@ -135,7 +136,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.Name]: new FormControl('', [
         Validators.required,
         Validators.minLength(this._minNameLength),
-        Validators.pattern('[a-z0-9]+[a-z0-9-]*[a-z0-9]+'),
+        KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,
       ]),
       [Controls.Version]: new FormControl('', [Validators.required]),
       [Controls.ContainerRuntime]: new FormControl(ContainerRuntime.Containerd, [Validators.required]),

@@ -1,4 +1,4 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,59 +12,76 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ChangeDetectionStrategy, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {ChangeDetectionStrategy, Component, forwardRef, Input, OnDestroy, OnInit} from '@angular/core';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {MatButtonToggleChange} from '@angular/material/button-toggle';
+import {
+  CredentialsType,
+  OpenstackCredentialsTypeService,
+} from '@app/wizard/step/provider-settings/provider/extended/openstack/service';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {PresetsService} from '@core/services/wizard/presets';
-import {CloudSpec, Cluster, ClusterSpec, OpenstackCloudSpec} from '@shared/entity/cluster';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {merge} from 'rxjs';
-import {distinctUntilChanged, filter, takeUntil} from 'rxjs/operators';
+import {filter, takeUntil} from 'rxjs/operators';
 
 enum Controls {
-  Domain = 'domain',
   Credentials = 'credentials',
 }
 
 @Component({
-  selector: 'km-wizard-openstack-provider-basic',
+  selector: 'km-openstack-credentials',
   templateUrl: './template.html',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => OpenstackProviderBasicComponent),
+      useExisting: forwardRef(() => OpenstackCredentialsComponent),
       multi: true,
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => OpenstackProviderBasicComponent),
+      useExisting: forwardRef(() => OpenstackCredentialsComponent),
       multi: true,
     },
   ],
+  styleUrls: ['style.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OpenstackProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  private readonly _domains: string[] = ['Default'];
+export class OpenstackCredentialsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
+  readonly CredentialsType = CredentialsType;
   isPresetSelected = false;
-  domains = this._domains.map(type => ({name: type}));
+
+  private _verifyCredentials: boolean;
+  @Input()
+  get verifyCredentials() {
+    return this._verifyCredentials;
+  }
+  set verifyCredentials(value: any) {
+    this._verifyCredentials = this.coerceBooleanProperty(value);
+  }
+
+  private coerceBooleanProperty(value: any): boolean {
+    return value !== null && `${value}` !== 'false';
+  }
+
+  get credentialsType(): CredentialsType {
+    return this._credentialsTypeService.credentialsType;
+  }
 
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _presets: PresetsService,
     private readonly _clusterSpecService: ClusterSpecService,
+    private readonly _credentialsTypeService: OpenstackCredentialsTypeService
   ) {
     super('Openstack Provider Basic');
   }
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Domain]: this._builder.control('', Validators.required),
       [Controls.Credentials]: this._builder.control(''),
     });
-
-    this._init();
 
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset =>
       Object.values(Controls).forEach(control => {
@@ -81,10 +98,6 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
           Object.values(this._clusterSpecService.cluster.spec.cloud.openstack).every(value => !value)
         )
       );
-
-    merge(this.form.get(Controls.Domain).valueChanges.pipe(distinctUntilChanged()))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
   }
 
   ngOnDestroy(): void {
@@ -92,8 +105,9 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
     this._unsubscribe.complete();
   }
 
-  private _init(): void {
-    this._clusterSpecService.cluster = this._getClusterEntity();
+  changeView(event: MatButtonToggleChange): void {
+    this._credentialsTypeService.credentialsType = event.value;
+    this.form.get(Controls.Credentials).reset();
   }
 
   private _enable(enable: boolean, name: string): void {
@@ -104,17 +118,5 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
     if (!enable && this.form.get(name).enabled) {
       this.form.get(name).disable();
     }
-  }
-
-  private _getClusterEntity(): Cluster {
-    return {
-      spec: {
-        cloud: {
-          openstack: {
-            domain: this.form.get(Controls.Domain).value,
-          } as OpenstackCloudSpec,
-        } as CloudSpec,
-      } as ClusterSpec,
-    } as Cluster;
   }
 }

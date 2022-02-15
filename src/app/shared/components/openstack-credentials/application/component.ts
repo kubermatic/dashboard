@@ -17,6 +17,7 @@ import {
   ChangeDetectorRef,
   Component,
   forwardRef,
+  Input,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -58,27 +59,30 @@ enum FloatingIPPoolState {
 }
 
 @Component({
-  selector: 'km-wizard-openstack-provider-basic-app-credentials',
+  selector: 'km-openstack-application-credentials',
   templateUrl: './template.html',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => OpenstackProviderBasicAppCredentialsComponent),
+      useExisting: forwardRef(() => OpenstackApplicationCredentialsComponent),
       multi: true,
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => OpenstackProviderBasicAppCredentialsComponent),
+      useExisting: forwardRef(() => OpenstackApplicationCredentialsComponent),
       multi: true,
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OpenstackProviderBasicAppCredentialsComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class OpenstackApplicationCredentialsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private readonly _debounceTime = 250;
   private _isFloatingPoolIPEnforced = false;
   @ViewChild('floatingIPPoolCombobox')
   private readonly _floatingIPPoolCombobox: FilteredComboboxComponent;
+
+  @Input() verifyCredentials: boolean;
+
   readonly Controls = Controls;
   isPresetSelected = false;
   floatingIPPools: OpenstackFloatingIPPool[] = [];
@@ -99,8 +103,25 @@ export class OpenstackProviderBasicAppCredentialsComponent extends BaseFormValid
     this.form = this._builder.group({
       [Controls.ApplicationCredentialID]: this._builder.control('', Validators.required),
       [Controls.ApplicationCredentialSecret]: this._builder.control('', Validators.required),
-      [Controls.FloatingIPPool]: this._builder.control('', Validators.required),
+      [Controls.FloatingIPPool]: this._builder.control(''),
     });
+
+    merge(
+      this.form.get(Controls.ApplicationCredentialID).valueChanges.pipe(distinctUntilChanged()),
+      this.form.get(Controls.ApplicationCredentialSecret).valueChanges.pipe(distinctUntilChanged())
+    )
+      .pipe(debounceTime(this._debounceTime))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
+
+    // Look-up for presets and floating IP pool is only required when we want to populate fields based on either the
+    // enabled preset or the provided credentials
+    if (!this.verifyCredentials) {
+      this.form.reset();
+      return;
+    }
+
+    this.form.get(Controls.FloatingIPPool).setValidators(Validators.required);
 
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset =>
       Object.values(Controls).forEach(control => {
@@ -117,14 +138,6 @@ export class OpenstackProviderBasicAppCredentialsComponent extends BaseFormValid
           Object.values(this._clusterSpecService.cluster.spec.cloud.openstack).every(value => !value)
         )
       );
-
-    merge(
-      this.form.get(Controls.ApplicationCredentialID).valueChanges.pipe(distinctUntilChanged()),
-      this.form.get(Controls.ApplicationCredentialSecret).valueChanges.pipe(distinctUntilChanged())
-    )
-      .pipe(debounceTime(this._debounceTime))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
 
     merge(
       this.form.get(Controls.ApplicationCredentialID).valueChanges.pipe(distinctUntilChanged()),
@@ -153,7 +166,6 @@ export class OpenstackProviderBasicAppCredentialsComponent extends BaseFormValid
       .pipe(tap(dc => (this._isFloatingPoolIPEnforced = dc.spec.openstack.enforceFloatingIP)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.form.reset());
-
     this.form.reset();
   }
 

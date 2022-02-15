@@ -28,6 +28,12 @@ limitations under the License.
            title="name"
            autocomplete="off"
            required>
+    <mat-error *ngIf="form.get(controls.Name).hasError('required')">
+      Preset Name is <strong>required</strong>.
+    </mat-error>
+    <mat-error *ngIf="form.get(controls.Name).hasError('pattern')">
+      Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash.
+    </mat-error>
   </mat-form-field>
 
   <div class="optional-section">Optional Settings</div>
