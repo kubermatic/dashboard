@@ -80,7 +80,7 @@ export class PresetsService {
       case NodeProvider.HETZNER:
         return new Hetzner(this._http, NodeProvider.HETZNER);
       case NodeProvider.KUBEVIRT:
-        return new Hetzner(this._http, NodeProvider.KUBEVIRT);
+        return new KubeVirt(this._http, NodeProvider.KUBEVIRT);
       case NodeProvider.OPENSTACK:
         return new Openstack(this._http, NodeProvider.OPENSTACK);
       case NodeProvider.EQUINIX:

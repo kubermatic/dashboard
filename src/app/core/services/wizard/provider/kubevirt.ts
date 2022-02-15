@@ -46,7 +46,7 @@ export class KubeVirt extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._restRoot}/providers/${this._provider}/vmflavors`;
+    const url = `${this._newRestRoot}/providers/${this._provider}/vmflavors`;
     return this._http.get<KubeVirtVMInstancePreset[]>(url, {headers: this._headers});
   }
 
@@ -59,7 +59,7 @@ export class KubeVirt extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._restRoot}/providers/${this._provider}/storageclasses`;
+    const url = `${this._newRestRoot}/providers/${this._provider}/storageclasses`;
     return this._http.get<KubeVirtStorageClass[]>(url, {headers: this._headers});
   }
 }
