@@ -46,3 +46,6 @@ cypress/videos
 cypress/plugins/index.js
 cypress/plugins/cy-ts-preprocessor.js
 cypress/tsconfig.json
+
+# VsCode
+.vscode/settings.json

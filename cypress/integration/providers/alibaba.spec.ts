@@ -36,7 +36,6 @@ describe('Alibaba Provider', () => {
     }
   });
 
-
   it('should login', () => {
     login();
     cy.url().should(Condition.Include, View.Projects.Default);

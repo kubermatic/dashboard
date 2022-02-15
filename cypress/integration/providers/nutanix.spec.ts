@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 import {ClustersPage} from '../../pages/clusters.po';
 import {ProjectsPage} from '../../pages/projects.po';
 import {WizardPage} from '../../pages/wizard.po';
@@ -25,18 +24,17 @@ import {WizardStep} from '../../utils/wizard';
 import _ from 'lodash';
 import {Mocks} from '../../utils/mocks';
 
-describe('Nutanix Provider', ()=>{
-const preset = Mocks.enabled() ? Preset.Mock:Preset.Nutanix;
-const projectName = Mocks.enabled() ? 'test-project' :  _.uniqueId('test-project-');
-const clusterName = Mocks.enabled() ? 'test-cluster' :  _.uniqueId('test-cluster-');
-const initialMachineDeploymentReplicas = '0';
+describe('Nutanix Provider', () => {
+  const preset = Mocks.enabled() ? Preset.Mock : Preset.Nutanix;
+  const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
+  const clusterName = Mocks.enabled() ? 'test-cluster' : _.uniqueId('test-cluster-');
+  const initialMachineDeploymentReplicas = '0';
 
-beforeEach(() => {
+  beforeEach(() => {
     if (Mocks.enabled()) {
       Mocks.register(Provider.Nutanix);
     }
   });
-
 
   it('should login', () => {
     login();
@@ -54,7 +52,6 @@ beforeEach(() => {
   it('should go to wizard', () => {
     ClustersPage.openWizard();
   });
-
 
   it('should create a new cluster', () => {
     WizardPage.getProviderBtn(Provider.Nutanix).click();
@@ -111,5 +108,4 @@ beforeEach(() => {
   it('should logout', () => {
     logout();
   });
-
-})
+});
