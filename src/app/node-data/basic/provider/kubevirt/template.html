@@ -73,14 +73,15 @@ limitations under the License.
     </mat-error>
   </mat-form-field>
 
-  <km-combobox [selected]="storageClass"
-               [valueFormatter]="storageClassDisplayName.bind(this)"
-               [optionsGetter]="getStorageClasses.bind(this)"
+  <km-combobox #storageClassCombobox
+               [selected]="selectedStorageClass"
+               [options]="storageClasses"
                [formControlName]="Controls.StorageClass"
                (changed)="onStorageClassChange($event)"
                [label]="storageClassLabel"
-               inputLabel="Select storage class...">
-    <div *option="let storageClass">{{storageClass}}</div>
+               inputLabel="Select storage class..."
+               filterBy="name">
+    <div *option="let storageClass">{{storageClass.name}}</div>
   </km-combobox>
 
   <km-number-stepper [formControlName]="Controls.PVCSize"

@@ -12,14 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {AfterViewChecked, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {
+  AfterViewChecked,
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  forwardRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {NodeDataService} from '@core/services/node-data/service';
-import {merge} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {merge, Observable} from 'rxjs';
+import {map, takeUntil} from 'rxjs/operators';
 import {NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
+import _ from 'lodash';
+import {KubeVirtStorageClass} from '@shared/entity/provider/kubevirt';
+import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 
 enum Controls {
   VMFlavor = 'vmFlavor',
@@ -28,6 +40,12 @@ enum Controls {
   OperatingSystemImage = 'sourceURL',
   StorageClass = 'storageClassName',
   PVCSize = 'pvcSize',
+}
+
+enum StorageClassState {
+  Ready = 'Storage Class',
+  Loading = 'Loading...',
+  Empty = 'No Storage Classes Available',
 }
 
 @Component({
@@ -47,14 +65,24 @@ enum Controls {
     },
   ],
 })
-export class KubeVirtBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy, AfterViewChecked {
+export class KubeVirtBasicNodeDataComponent
+  extends BaseFormValidator
+  implements OnInit, OnDestroy, AfterViewChecked, AfterViewInit
+{
+  @ViewChild('storageClassCombobox')
+  private _storageClassCombobox: FilteredComboboxComponent;
   readonly Controls = Controls;
   selectedFlavor = '';
   flavorLabel = 'VM Flavor';
-  storageClass = '';
+  storageClasses: KubeVirtStorageClass[] = [];
+  selectedStorageClass = '';
   storageClassLabel = 'Storage Class';
 
-  constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
+  constructor(
+    private readonly _builder: FormBuilder,
+    private readonly _nodeDataService: NodeDataService,
+    private readonly _cdr: ChangeDetectorRef
+  ) {
     super();
   }
 
@@ -87,6 +115,12 @@ export class KubeVirtBasicNodeDataComponent extends BaseFormValidator implements
     this.form.updateValueAndValidity();
   }
 
+  ngAfterViewInit(): void {
+    this._storageClassesObservable
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(this._setDefaultStorageClass.bind(this));
+  }
+
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
@@ -102,15 +136,39 @@ export class KubeVirtBasicNodeDataComponent extends BaseFormValidator implements
 
   onFlavorChange(_: string): void {}
 
-  getStorageClasses(): string[] {
-    return ['test', 'xyz'];
-  }
-
-  storageClassDisplayName(flavor: string): string {
-    return flavor;
-  }
-
   onStorageClassChange(_: string): void {}
+
+  private get _storageClassesObservable(): Observable<KubeVirtStorageClass[]> {
+    return this._nodeDataService.kubeVirt
+      .storageClasses(this._clearStorageClass.bind(this), this._onStorageClassLoading.bind(this))
+      .pipe(map(storageClasses => _.sortBy(storageClasses, sc => sc.name.toLowerCase())));
+  }
+
+  private _clearStorageClass(): void {
+    this.storageClasses = [];
+    this.selectedStorageClass = '';
+    this.storageClassLabel = StorageClassState.Empty;
+    this._storageClassCombobox.reset();
+    this._cdr.detectChanges();
+  }
+
+  private _onStorageClassLoading(): void {
+    this._clearStorageClass();
+    this.storageClassLabel = StorageClassState.Loading;
+    this._cdr.detectChanges();
+  }
+
+  private _setDefaultStorageClass(storageClasses: KubeVirtStorageClass[]): void {
+    this.storageClasses = storageClasses;
+    this.selectedStorageClass = this._nodeDataService.nodeData.spec.cloud.kubevirt.storageClassName;
+
+    if (!this.selectedStorageClass && !_.isEmpty(this.storageClasses)) {
+      this.selectedStorageClass = this.storageClasses[0].name;
+    }
+
+    this.storageClassLabel = this.selectedStorageClass ? StorageClassState.Ready : StorageClassState.Empty;
+    this._cdr.detectChanges();
+  }
 
   private _init(): void {
     if (this._nodeDataService.nodeData.spec.cloud.kubevirt) {
