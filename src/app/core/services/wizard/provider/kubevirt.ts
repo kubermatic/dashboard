@@ -16,7 +16,7 @@ import {HttpClient} from '@angular/common/http';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {EMPTY, Observable} from 'rxjs';
 import {Provider} from './provider';
-import {KubeVirtVMInstancePreset} from '@shared/entity/provider/kubevirt';
+import {KubeVirtStorageClass, KubeVirtVMInstancePreset} from '@shared/entity/provider/kubevirt';
 
 export class KubeVirt extends Provider {
   constructor(http: HttpClient, provider: NodeProvider) {
@@ -48,6 +48,19 @@ export class KubeVirt extends Provider {
 
     const url = `${this._restRoot}/providers/${this._provider}/vmflavors`;
     return this._http.get<KubeVirtVMInstancePreset[]>(url, {headers: this._headers});
+  }
+
+  storageClass(onLoadingCb: () => void = null): Observable<KubeVirtStorageClass[]> {
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
+    const url = `${this._restRoot}/providers/${this._provider}/storageclasses`;
+    return this._http.get<KubeVirtStorageClass[]>(url, {headers: this._headers});
   }
 }
 

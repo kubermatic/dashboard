@@ -20,7 +20,7 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, switchMap, take, tap} from 'rxjs/operators';
 import {NodeDataService} from '../service';
-import {KubeVirtVMInstancePreset} from '@shared/entity/provider/kubevirt';
+import {KubeVirtStorageClass, KubeVirtVMInstancePreset} from '@shared/entity/provider/kubevirt';
 import {KubeVirtService} from '@core/services/provider/kubevirt';
 
 export class NodeDataKubeVirtProvider {
@@ -65,6 +65,53 @@ export class NodeDataKubeVirtProvider {
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(switchMap(_ => this._kubeVirtSerice.getVMFlavors(selectedProject, this._clusterSpecService.cluster.id)))
+          .pipe(
+            catchError(_ => {
+              if (onError) {
+                onError();
+              }
+
+              return onErrorResumeNext(of([]));
+            })
+          )
+          .pipe(take(1));
+      }
+    }
+  }
+
+  storageClasses(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<KubeVirtStorageClass[]> {
+    switch (this._nodeDataService.mode) {
+      case NodeDataMode.Wizard:
+        return this._clusterSpecService.clusterChanges
+          .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.KUBEVIRT))
+          .pipe(debounceTime(this._debounce))
+          .pipe(
+            switchMap(cluster =>
+              this._presetService
+                .provider(NodeProvider.KUBEVIRT)
+                .kubeconfig(cluster.spec.cloud.kubevirt.kubeconfig)
+                .credential(this._presetService.preset)
+                .storageClass(onLoadingCb)
+                .pipe(
+                  catchError(_ => {
+                    if (onError) {
+                      onError();
+                    }
+
+                    return onErrorResumeNext(of([]));
+                  })
+                )
+            )
+          );
+      case NodeDataMode.Dialog: {
+        let selectedProject: string;
+        return this._projectService.selectedProject
+          .pipe(debounceTime(this._debounce))
+          .pipe(tap(project => (selectedProject = project.id)))
+          .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
+          .pipe(
+            switchMap(_ => this._kubeVirtSerice.getStorageClasses(selectedProject, this._clusterSpecService.cluster.id))
+          )
           .pipe(
             catchError(_ => {
               if (onError) {

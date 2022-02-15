@@ -33,6 +33,7 @@ enum Controls {
 @Component({
   selector: 'km-kubevirt-basic-node-data',
   templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

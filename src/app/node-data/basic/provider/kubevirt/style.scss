@@ -12,16 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export class KubeVirtVMInstancePreset {
-  name: string;
-  spec?: KubeVirtVMInstancePresetSpec;
-}
-
-export class KubeVirtVMInstancePresetSpec {
-  selector: object;
-  domain?: object;
-}
-
-export class KubeVirtStorageClass {
-  name: string;
+.view-flavor-button {
+  margin-top: 4px;
 }
