@@ -15,7 +15,7 @@
 @use 'sass:map';
 
 @mixin theme-changelog-component($colors) {
-  .km-changelog-category {
+  .changelog-category {
     .mat-chip {
       &.mat-standard-chip {
         color: white;
@@ -51,27 +51,27 @@
     }
   }
 
-  .km-changelog-external-link-icon,
-  .km-changelog-link-caption {
+  .changelog-external-link-icon,
+  .changelog-link-caption {
     > i {
       background-color: map.get($colors, primary);
     }
   }
 
-  .km-changelog-link-caption {
+  .changelog-link-caption {
     > span {
       color: map.get($colors, text);
     }
   }
 
-  .km-changelog-link-card {
+  .changelog-link-card {
     &:hover {
       background-color: map.get($colors, project-selector-hover);
       border-radius: 8px;
     }
   }
 
-  .km-changelog-link-button {
+  .changelog-link-button {
     i {
       background-color: white;
     }

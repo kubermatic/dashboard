@@ -20,15 +20,11 @@ $view-switch-width: 50px;
 $project-card-height: 200px;
 $project-card-width: 330px;
 
-.km-projects-spinner {
+.projects-spinner {
   margin: 20px auto;
 }
 
-.km-health-status {
-  text-align: center;
-}
-
-.km-project-view-switch {
+.project-view-switch {
   .mat-button-toggle {
     @include mixins.size($view-switch-width, $view-switch-height, true);
 
@@ -47,7 +43,7 @@ $project-card-width: 330px;
   }
 }
 
-.km-project-cards-view {
+.project-cards-view {
   flex-wrap: wrap;
 
   button {
@@ -107,7 +103,7 @@ $project-card-width: 330px;
     }
   }
 
-  .km-project-cards-status {
+  .project-cards-status {
     @include mixins.size(27px, auto);
 
     align-items: center;
@@ -120,6 +116,6 @@ $project-card-width: 330px;
   }
 }
 
-.km-all-projects-toggle {
+.all-projects-toggle {
   padding-right: 16px;
 }

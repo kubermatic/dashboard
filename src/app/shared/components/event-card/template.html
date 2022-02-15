@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<mat-card [ngClass]="{'km-toggled-events': isShowEvents}">
+<mat-card [ngClass]="{'toggled-events': isShowEvents}">
   <mat-card-header (click)="toggleEvents()">
     <mat-card-title>
       <i class="km-icon-mask"
@@ -21,7 +21,7 @@ limitations under the License.
       <span>Events</span>
     </mat-card-title>
     <div fxFlex></div>
-    <span class="km-events-title">
+    <span class="events-title">
       <i [ngClass]="getTypeIcon()"></i>
       {{events.length}} event<ng-container *ngIf="events.length !== 1">s</ng-container>
     </span>

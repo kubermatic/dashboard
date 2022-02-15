@@ -14,7 +14,7 @@
 
 export class MachineDeploymentDetailsPage {
   static getMachineDeploymentNameElement(): Cypress.Chainable {
-    return cy.get('.km-machine-deployment-name');
+    return cy.get('.machine-deployment-name');
   }
 
   static getMachineDeploymentClusterNameElement(): Cypress.Chainable {

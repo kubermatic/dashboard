@@ -50,8 +50,8 @@ limitations under the License.
                            (click)="next()">
           <span class="flag-icon flag-icon-{{ datacenter.spec.country.toLowerCase() }}">
           </span>
-          <div class="km-location">
-            <span [ngClass]="{'km-country-prefix': !!getZone(datacenter)}">{{getLocation(datacenter)}}</span>
+          <div class="location">
+            <span [ngClass]="{'country-prefix': !!getZone(datacenter)}">{{getLocation(datacenter)}}</span>
             <span>{{getZone(datacenter)}}</span>
           </div>
         </mat-button-toggle>

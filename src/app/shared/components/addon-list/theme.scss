@@ -15,8 +15,8 @@
 @use 'sass:map';
 
 @mixin theme-addon-list-component($colors) {
-  .km-addon-container {
-    .km-addon-menu {
+  .addon-container {
+    .addon-menu {
       border-left: 1px solid map.get($colors, divider);
 
       &:hover {

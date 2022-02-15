@@ -15,7 +15,7 @@ limitations under the License.
 -->
 <ng-container *ngIf="cluster">
   <div fxLayout
-       class="km-cluster-detail-actions">
+       class="cluster-detail-actions">
     <div fxFlex
          fxLayoutAlign="end center">
       <button id="km-delete-cluster-btn"
@@ -47,15 +47,15 @@ limitations under the License.
       <mat-card-title fxFlex
                       fxLayout="row"
                       fxLayoutAlign=" center"
-                      class="km-cluster-name"
+                      class="cluster-name"
                       fxLayoutGap="20px">
         <i [matTooltip]="getStatus()"
            [ngClass]="getStatusColor()"
-           class="km-cluster-health km-pointer"></i>
+           class="cluster-health km-pointer"></i>
         <span ngxClipboard
               [cbContent]="cluster.name"
               matTooltip="Click to copy"
-              class="km-cluster-name km-copy">{{cluster.name}}</span>
+              class="cluster-name km-copy">{{cluster.name}}</span>
         <span class="km-label-primary">External</span>
       </mat-card-title>
       <div fxFlex></div>

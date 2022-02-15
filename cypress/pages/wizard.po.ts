@@ -82,7 +82,7 @@ export class WizardPage {
   }
 
   static getDatacenterBtn(datacenterName: string): Cypress.Chainable {
-    return cy.get('button').contains('.km-location', datacenterName);
+    return cy.get('button').contains('.location', datacenterName);
   }
 
   static getCustomPresetsCombobox(): Cypress.Chainable {

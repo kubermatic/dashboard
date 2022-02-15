@@ -107,15 +107,15 @@ export class ClustersPage {
   }
 
   static getClusterName(): Cypress.Chainable {
-    return cy.get('.km-cluster-name');
+    return cy.get('.cluster-name');
   }
 
   static getClusterStatus(): Cypress.Chainable {
-    return cy.get('.km-cluster-name').find('i.km-cluster-health');
+    return cy.get('.cluster-name').find('i.cluster-health');
   }
 
   static getProviderMenuButton(): Cypress.Chainable {
-    return cy.get('.km-provider-menu-btn');
+    return cy.get('.provider-menu-btn');
   }
 
   static getProviderMenuOption(option: ProviderMenuOption): Cypress.Chainable {
@@ -123,7 +123,7 @@ export class ClustersPage {
   }
 
   static getSSHKeysTable(): Cypress.Chainable {
-    return cy.get('.km-content-edit-sshkeys').find('tbody');
+    return cy.get('.content-edit-sshkeys').find('tbody');
   }
 
   static getSSHKeysTableRow(sshKeyName: string): Cypress.Chainable {
