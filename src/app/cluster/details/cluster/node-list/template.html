@@ -90,7 +90,7 @@ limitations under the License.
         </th>
         <td mat-cell
             *matCellDef="let element">
-          <span class="km-node-ip-addresses"
+          <span class="node-ip-addresses"
                 *ngIf="!!element.status.addresses && !!getAddresses(element).InternalIP">
             Int.IP:
             <span class="km-copy"
@@ -99,7 +99,7 @@ limitations under the License.
                   ngxClipboard
                   matTooltip="click to copy">{{getAddresses(element).InternalIP}}</span>
           </span>
-          <span class="km-node-ip-addresses"
+          <span class="node-ip-addresses"
                 *ngIf="!!element.status.addresses && !!getAddresses(element).ExternalIP">
             Ext.IP:
             <span class="km-copy"
@@ -155,7 +155,7 @@ limitations under the License.
       <ng-container [matColumnDef]="toggleableColumn.nodeDetails">
         <td mat-cell
             *matCellDef="let element"
-            class="km-node-details"
+            class="node-details"
             [attr.colspan]="displayedColumns.length">
           <mat-card-content fxLayout="row wrap"
                             class="km-row">
@@ -222,7 +222,7 @@ limitations under the License.
 
             <km-property *ngIf="element.spec.sshUserName">
               <div key
-                   class="km-node-info"
+                   class="node-info"
                    matTooltip="Use this username if you need to connect to your nodes via SSH.">
                 SSH Key Username
                 <i class="km-icon-info km-pointer"></i>

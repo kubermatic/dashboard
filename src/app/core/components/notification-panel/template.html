@@ -59,7 +59,7 @@ limitations under the License.
              fxLayout="row"
              *ngIf="isVisible(notification)">
           <div fxLayoutAlign="center"
-               [ngClass]="notification.type === NotificationType.success ? 'km-notification-success-bg' : ''">
+               [ngClass]="notification.type === NotificationType.success ? 'notification-success-bg' : ''">
             <i class="notification-icon"
                [ngClass]="getNotificationIconClass(notification.type)"></i>
           </div>

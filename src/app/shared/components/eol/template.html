@@ -30,7 +30,7 @@ limitations under the License.
 
   <div *ngIf="type === displayType.Badge"
        class="km-update-available-badge"
-       [ngClass]="isBefore() ? 'km-warning-border' : 'km-error-border'">
+       [ngClass]="isBefore() ? 'warning-border' : 'error-border'">
     <i class="km-badge-icon"
        [ngClass]="isBefore() ? 'km-icon-failed km-warning-bg' : 'km-icon-failed'"></i>
     <span *ngIf="isAfter()"

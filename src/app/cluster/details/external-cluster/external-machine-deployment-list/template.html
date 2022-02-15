@@ -31,7 +31,7 @@ limitations under the License.
             class="km-header-cell"></th>
         <td mat-cell
             *matCellDef="let element">
-          <i class="km-machine-deployment-health km-icon-circle"
+          <i class="machine-deployment-health km-icon-circle"
              [ngClass]="getStatusColor(element)"
              [matTooltip]="getStatusMessage(element)"></i>
         </td>
@@ -130,7 +130,7 @@ limitations under the License.
               </ng-container>
               <ng-container *ngSwitchCase="false">
                 <button mat-icon-button
-                        class="km-machine-deployment-action"
+                        class="machine-deployment-action"
                         matTooltip="Update number of replicas"
                         (click)="updateReplicas(element); $event.stopPropagation()"
                         [disabled]="!isEditEnabled()">

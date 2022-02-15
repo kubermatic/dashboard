@@ -20,10 +20,10 @@ limitations under the License.
 
   <mat-card>
     <mat-card-header>
-      <mat-card-title class="km-machine-deployment-name">
+      <mat-card-title class="machine-deployment-name">
         <i [matTooltip]="machineDeploymentHealthStatus.message"
            [ngClass]="machineDeploymentHealthStatus.icon"
-           class="km-machine-deployment-health"></i>
+           class="machine-deployment-health"></i>
         <span ngxClipboard
               [cbContent]="machineDeployment.name"
               matTooltip="Click to copy"
@@ -78,7 +78,7 @@ limitations under the License.
         </km-property>
         <km-property>
           <div value
-               class="km-provider-logo-value">
+               class="provider-logo-value">
             <span class="km-provider-logo km-provider-logo-{{clusterProvider}}"></span>
           </div>
         </km-property>

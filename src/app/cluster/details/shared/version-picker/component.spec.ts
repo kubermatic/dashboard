@@ -92,7 +92,7 @@ describe('VersionPickerComponent', () => {
     };
 
     fixture.debugElement.query(By.css('.km-spinner'));
-    fixture.debugElement.query(By.css('.km-cluster-detail-actions'));
+    fixture.debugElement.query(By.css('.cluster-detail-actions'));
   });
 
   it(

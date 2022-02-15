@@ -19,7 +19,7 @@ header {
   height: variables.$toolbar-height;
 }
 
-.km-navbar {
+.navbar {
   @include mixins.size(100%, variables.$toolbar-height);
 
   padding-left: 10px;

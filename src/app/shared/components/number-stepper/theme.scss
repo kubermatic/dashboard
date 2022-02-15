@@ -15,7 +15,7 @@
 @use 'sass:map';
 
 @mixin theme-number-stepper-component($colors) {
-  .km-stepper-button {
+  .stepper-button {
     background-color: map.get($colors, divider);
   }
 }

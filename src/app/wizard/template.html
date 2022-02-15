@@ -30,7 +30,7 @@ limitations under the License.
         <ng-template matStepLabel>{{step.name}}</ng-template>
         <div [ngSwitch]="step.name"
              id="{{step.id}}-step"
-             class="km-wizard-step">
+             class="wizard-step">
           <ng-container *ngSwitchCase="stepRegistry.Provider">
             <km-wizard-provider-step [formControl]="form.get(stepRegistry.Provider)"></km-wizard-provider-step>
           </ng-container>
@@ -56,7 +56,7 @@ limitations under the License.
           </ng-container>
         </div>
 
-        <div class="km-button-navigation"
+        <div class="button-navigation"
              id="{{step.id}}-nav">
           <a fxLayoutAlign="center center"
              mat-flat-button

@@ -15,7 +15,7 @@
 @use 'sass:map';
 
 @mixin theme-property-usage-component($colors) {
-  .km-property-usage-bar {
+  .property-usage-bar {
     .mat-progress-bar-buffer {
       background-color: map.get($colors, divider);
     }

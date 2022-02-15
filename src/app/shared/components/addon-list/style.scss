@@ -15,7 +15,7 @@
 @use 'variables';
 @use 'mixins';
 
-.km-addon-container {
+.addon-container {
   @include mixins.size(250px, 64px);
 
   border-radius: variables.$border-radius;
@@ -28,7 +28,7 @@
     opacity: 80%;
   }
 
-  .km-addon-menu {
+  .addon-menu {
     border-radius: 0 5px 5px 0;
     cursor: pointer;
     height: 62px;
