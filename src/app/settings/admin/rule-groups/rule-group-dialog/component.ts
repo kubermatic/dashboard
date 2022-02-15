@@ -92,10 +92,6 @@ export class AdminRuleGroupDialog implements OnInit, OnDestroy {
     return getIconClassForButton(this.data.confirmLabel);
   }
 
-  getDescription(): string {
-    return `Edit <b>this.data.adminRuleGroup.name</b> rule group of <b>this.data.adminRuleGroup.seed</b> seed`;
-  }
-
   save(): void {
     const ruleGroupName =
       this.data.mode === Mode.Edit

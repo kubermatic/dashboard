@@ -164,12 +164,15 @@ export class NutanixPresetSpec extends PresetProviderSpec {
 }
 
 export class OpenstackPresetSpec extends PresetProviderSpec {
-  username: string;
-  password: string;
-  project: string;
-  projectID: string;
-  domain: string;
+  username?: string;
+  password?: string;
+  project?: string;
+  projectID?: string;
 
+  applicationCredentialID?: string;
+  applicationCredentialSecret?: string;
+
+  domain: string;
   network?: string;
   securityGroups?: string;
   floatingIPPool?: string;

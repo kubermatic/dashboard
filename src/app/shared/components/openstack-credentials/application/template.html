@@ -17,62 +17,32 @@ limitations under the License.
       fxLayout="column"
       fxLayoutGap="8px">
   <mat-form-field fxFlex>
-    <mat-label>Username</mat-label>
-    <input [formControlName]="Controls.Username"
-           [name]="Controls.Username"
+    <mat-label>Application Credential ID</mat-label>
+    <input [formControlName]="Controls.ApplicationCredentialID"
+           [name]="Controls.ApplicationCredentialID"
            matInput
            autocomplete="off"
            required>
-    <mat-error *ngIf="form.get(Controls.Username).hasError('required')">
-      Username is <strong>required</strong>.
+    <mat-error *ngIf="form.get(Controls.ApplicationCredentialID).hasError('required')">
+      Application Credential ID is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
 
   <mat-form-field fxFlex>
-    <mat-label>Password</mat-label>
-    <input [formControlName]="Controls.Password"
-           [name]="Controls.Password"
+    <mat-label>Application Credential Secret</mat-label>
+    <input [formControlName]="Controls.ApplicationCredentialSecret"
+           [name]="Controls.ApplicationCredentialSecret"
            matInput
            type="password"
            autocomplete="off"
            required>
-    <mat-error *ngIf="form.get(Controls.Password).hasError('required')">
-      Password is <strong>required</strong>.
-    </mat-error>
-  </mat-form-field>
-
-  <mat-form-field fxFlex>
-    <mat-label>{{projectsLabel}}</mat-label>
-    <input matInput
-           [formControlName]="Controls.Project"
-           [name]="Controls.Project"
-           [matAutocomplete]="autoProject"
-           [required]="isRequired(Controls.Project)">
-    <mat-autocomplete #autoProject="matAutocomplete">
-      <mat-option *ngFor="let project of projects"
-                  [value]="project.name">
-        {{project.name}}
-      </mat-option>
-    </mat-autocomplete>
-    <mat-hint>{{getHint(Controls.Project)}}</mat-hint>
-    <mat-error *ngIf="form.get(Controls.Project).hasError('required')">
-      The Project is <strong>required</strong>.
-    </mat-error>
-  </mat-form-field>
-
-  <mat-form-field fxFlex>
-    <mat-label>Project ID</mat-label>
-    <input [formControlName]="Controls.ProjectID"
-           [name]="Controls.ProjectID"
-           [required]="isRequired(Controls.ProjectID)"
-           matInput
-           autocomplete="off">
-    <mat-error *ngIf="form.get(Controls.ProjectID).hasError('required')">
-      Project ID is <strong>required</strong>.
+    <mat-error *ngIf="form.get(Controls.ApplicationCredentialSecret).hasError('required')">
+      Application Credential Secret is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
 
   <km-combobox #floatingIPPoolCombobox
+               *ngIf="verifyCredentials"
                [required]="isRequired(Controls.FloatingIPPool)"
                [grouped]="false"
                [isDisabled]="isPresetSelected"

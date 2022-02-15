@@ -17,6 +17,7 @@ import {
   ChangeDetectorRef,
   Component,
   forwardRef,
+  Input,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -68,27 +69,30 @@ enum ProjectState {
 }
 
 @Component({
-  selector: 'km-wizard-openstack-provider-basic-default-credentials',
+  selector: 'km-openstack-default-credentials',
   templateUrl: './template.html',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => OpenstackProviderBasicDefaultCredentialsComponent),
+      useExisting: forwardRef(() => OpenstackDefaultCredentialsComponent),
       multi: true,
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => OpenstackProviderBasicDefaultCredentialsComponent),
+      useExisting: forwardRef(() => OpenstackDefaultCredentialsComponent),
       multi: true,
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OpenstackProviderBasicDefaultCredentialsComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class OpenstackDefaultCredentialsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private readonly _debounceTime = 500;
   private _isFloatingPoolIPEnforced = false;
   @ViewChild('floatingIPPoolCombobox')
   private readonly _floatingIPPoolCombobox: FilteredComboboxComponent;
+
+  @Input() verifyCredentials: boolean;
+
   readonly Controls = Controls;
   isPresetSelected = false;
   projects: OpenstackTenant[] = [];
@@ -115,8 +119,26 @@ export class OpenstackProviderBasicDefaultCredentialsComponent extends BaseFormV
       [Controls.Password]: this._builder.control('', Validators.required),
       [Controls.Project]: this._builder.control('', Validators.required),
       [Controls.ProjectID]: this._builder.control('', Validators.required),
-      [Controls.FloatingIPPool]: this._builder.control('', Validators.required),
+      [Controls.FloatingIPPool]: this._builder.control(''),
     });
+
+    merge(
+      this.form.get(Controls.Username).valueChanges.pipe(distinctUntilChanged()),
+      this.form.get(Controls.Password).valueChanges.pipe(distinctUntilChanged()),
+      this.form.get(Controls.Project).valueChanges.pipe(distinctUntilChanged()),
+      this.form.get(Controls.ProjectID).valueChanges.pipe(distinctUntilChanged())
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
+
+    // Look-up for presets and floating IP pool is only required when we want to populate fields based on either the
+    // enabled preset or the provided credentials
+    if (!this.verifyCredentials) {
+      this.form.reset();
+      return;
+    }
+
+    this.form.get(Controls.FloatingIPPool).setValidators(Validators.required);
 
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset =>
       Object.values(Controls).forEach(control => {
@@ -144,15 +166,6 @@ export class OpenstackProviderBasicDefaultCredentialsComponent extends BaseFormV
       .pipe(tap(dc => (this._isFloatingPoolIPEnforced = dc.spec.openstack.enforceFloatingIP)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._formReset.bind(this));
-
-    merge(
-      this.form.get(Controls.Username).valueChanges.pipe(distinctUntilChanged()),
-      this.form.get(Controls.Password).valueChanges.pipe(distinctUntilChanged()),
-      this.form.get(Controls.Project).valueChanges.pipe(distinctUntilChanged()),
-      this.form.get(Controls.ProjectID).valueChanges.pipe(distinctUntilChanged())
-    )
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
 
     merge(
       this.form.get(Controls.Username).valueChanges.pipe(distinctUntilChanged()),
