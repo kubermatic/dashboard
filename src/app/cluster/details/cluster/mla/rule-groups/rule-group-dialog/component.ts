@@ -121,7 +121,7 @@ export class RuleGroupDialog implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(_ => {
         this._matDialogRef.close(true);
-        this._notificationService.success(`The Rule Group ${ruleGroup.name} was created`);
+        this._notificationService.success(`Created the ${ruleGroup.name} Rule Group`);
         this._mlaService.refreshRuleGroups();
       });
   }
@@ -132,7 +132,7 @@ export class RuleGroupDialog implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(_ => {
         this._matDialogRef.close(true);
-        this._notificationService.success(`The Rule Group ${ruleGroup.name} was updated`);
+        this._notificationService.success(`Updated the ${ruleGroup.name} Rule Group`);
         this._mlaService.refreshRuleGroups();
       });
   }

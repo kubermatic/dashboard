@@ -41,6 +41,8 @@ import {EquinixService} from '@core/services/provider/equinix';
 import {GCPService} from '@core/services/provider/gcp';
 import {HetznerService} from '@core/services/provider/hetzner';
 import {OpenStackService} from '@core/services/provider/openstack';
+import {NodeDataNutanixProvider} from './provider/nutanix';
+import {NutanixService} from '@core/services/provider/nutanix';
 import {NodeDataKubeVirtProvider} from '@core/services/node-data/provider/kubevirt';
 import {KubeVirtService} from '@core/services/provider/kubevirt';
 
@@ -66,6 +68,7 @@ export class NodeDataService {
     private readonly _equinixService: EquinixService,
     private readonly _gcpService: GCPService,
     private readonly _hetznerService: HetznerService,
+    private readonly _nutanixService: NutanixService,
     private readonly _openStackService: OpenStackService,
     private readonly _projectService: ProjectService
   ) {
@@ -173,6 +176,13 @@ export class NodeDataService {
     this._clusterSpecService,
     this._presetService,
     this._hetznerService,
+    this._projectService
+  );
+  readonly nutanix = new NodeDataNutanixProvider(
+    this,
+    this._clusterSpecService,
+    this._presetService,
+    this._nutanixService,
     this._projectService
   );
   readonly equinix = new NodeDataEquinixProvider(

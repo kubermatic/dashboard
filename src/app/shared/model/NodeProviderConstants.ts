@@ -29,6 +29,7 @@ export enum NodeProvider {
   OPENSTACK = 'openstack',
   EQUINIX = 'packet',
   KUBEVIRT = 'kubevirt',
+  NUTANIX = 'nutanix',
   VSPHERE = 'vsphere',
   NONE = '',
 }

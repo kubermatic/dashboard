@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
 import {PresetsService} from '@core/services/wizard/presets';
 import {Preset} from '@shared/entity/preset';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {Subject} from 'rxjs';
 import {take} from 'rxjs/operators';
 
 export interface EditPresetDialogData {
@@ -30,23 +29,14 @@ export interface EditPresetDialogData {
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class EditPresetDialogComponent implements OnInit, OnDestroy {
+export class EditPresetDialogComponent {
   creating = false;
-
-  private _unsubscribe = new Subject<void>();
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: EditPresetDialogData,
     private readonly _presetsService: PresetsService,
     private readonly _notificationService: NotificationService
   ) {}
-
-  ngOnInit(): void {}
-
-  ngOnDestroy(): void {
-    this._unsubscribe.next();
-    this._unsubscribe.complete();
-  }
 
   save(provider: NodeProvider, enabled: boolean): void {
     this._presetsService
@@ -56,7 +46,7 @@ export class EditPresetDialogComponent implements OnInit, OnDestroy {
         const idx = this.data.preset.providers.findIndex(p => p.name === provider);
         this.data.preset.providers[idx].enabled = enabled;
         this._notificationService.success(
-          `${enabled ? 'Enabled' : 'Disabled'} ${provider} provider for preset ${this.data.preset.name}`
+          `${enabled ? 'Enabled' : 'Disabled'} the ${provider} provider for the preset ${this.data.preset.name}`
         );
       });
   }

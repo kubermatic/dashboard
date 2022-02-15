@@ -150,7 +150,7 @@ export class RuleGroupsComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(switchMap(_ => this._mlaService.deleteRuleGroup(this.projectID, this.cluster.id, ruleGroup.name)))
       .pipe(take(1))
       .subscribe(_ => {
-        this._notificationService.success(`The Rule Group ${ruleGroup.name} was deleted`);
+        this._notificationService.success(`Deleting the ${ruleGroup.name} Rule Group`);
         this._mlaService.refreshRuleGroups();
       });
   }

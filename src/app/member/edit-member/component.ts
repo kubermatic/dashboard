@@ -61,7 +61,7 @@ export class EditMemberComponent implements OnInit {
       )
       .subscribe(() => {
         this._matDialogRef.close(true);
-        this._notificationService.success(`The ${this.member.name} member was updated`);
+        this._notificationService.success(`Updated the ${this.member.name} member`);
       });
   }
 }

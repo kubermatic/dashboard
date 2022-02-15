@@ -49,7 +49,7 @@ export class AddProjectDialogComponent implements OnInit {
 
     this._projectService.create({name: this.form.controls.name.value, labels: this.labels}).subscribe(project => {
       this._matDialogRef.close(project);
-      this._notificationService.success(`The ${project.name} project was added`);
+      this._notificationService.success(`Added the ${project.name} project`);
     });
   }
 }

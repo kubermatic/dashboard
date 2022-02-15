@@ -56,7 +56,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
     this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       if (!_.isEqual(settings, this.apiSettings)) {
         if (this.apiSettings) {
-          this._notificationService.success('An external settings update was applied');
+          this._notificationService.success('Updated the user settings');
         }
         this.apiSettings = settings;
         this.settings = _.cloneDeep(this.apiSettings);

@@ -72,6 +72,7 @@ import {AddonService} from '@core/services/addon';
 import {MemberService} from '@core/services/member';
 import {SSHKeyService} from '@core/services/ssh-key';
 import {KubeVirtService} from '@core/services/provider/kubevirt';
+import {NutanixService} from '@core/services/provider/nutanix';
 
 const modules: any[] = [
   CommonModule,
@@ -140,6 +141,7 @@ const services: any[] = [
   AddonService,
   MemberService,
   SSHKeyService,
+  NutanixService,
 ];
 
 const interceptors: any[] = [

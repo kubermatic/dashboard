@@ -69,7 +69,7 @@ export class EditProjectComponent implements OnInit {
 
     this._projectService.edit(this.project.id, project).subscribe(project => {
       this._matDialogRef.close(project);
-      this._notificationService.success(`The ${this.project.name} project was updated`);
+      this._notificationService.success(`Updated the ${this.project.name} project`);
     });
   }
 }

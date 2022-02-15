@@ -104,6 +104,12 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
 
     this._projectChange$
       .pipe(
+        tap(_ => {
+          this.dataSource.data = [];
+          this.isInitialized = false;
+        })
+      )
+      .pipe(
         switchMap(_ =>
           combineLatest([
             this._userService.getCurrentUserGroup(this._selectedProject.id),

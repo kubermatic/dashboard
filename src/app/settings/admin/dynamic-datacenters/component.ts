@@ -163,7 +163,7 @@ export class DynamicDatacentersComponent implements OnInit, OnDestroy, OnChanges
       .createDatacenter(model)
       .pipe(take(1))
       .subscribe(datacenter => {
-        this._notificationService.success(`The ${datacenter.metadata.name} datacenter was created`);
+        this._notificationService.success(`Created the ${datacenter.metadata.name} datacenter`);
         this._datacenterService.refreshDatacenters();
       });
   }
@@ -191,7 +191,7 @@ export class DynamicDatacentersComponent implements OnInit, OnDestroy, OnChanges
       .patchDatacenter(original.spec.seed, original.metadata.name, edited)
       .pipe(take(1))
       .subscribe(datacenter => {
-        this._notificationService.success(`The ${datacenter.metadata.name} datacenter was updated`);
+        this._notificationService.success(`Updated the ${datacenter.metadata.name} datacenter`);
         this._datacenterService.refreshDatacenters();
       });
   }
@@ -212,7 +212,7 @@ export class DynamicDatacentersComponent implements OnInit, OnDestroy, OnChanges
       .pipe(switchMap(_ => this._datacenterService.deleteDatacenter(datacenter)))
       .pipe(take(1))
       .subscribe(_ => {
-        this._notificationService.success(`The ${datacenter.metadata.name} datacenter was deleted`);
+        this._notificationService.success(`Deleting the ${datacenter.metadata.name} datacenter`);
         this._datacenterService.refreshDatacenters();
       });
   }

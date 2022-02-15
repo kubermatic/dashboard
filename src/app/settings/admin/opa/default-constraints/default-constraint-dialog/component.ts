@@ -117,7 +117,7 @@ export class DefaultConstraintDialog implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(result => {
         this._matDialogRef.close(true);
-        this._notificationService.success(`The default constraint ${result.name} was created`);
+        this._notificationService.success(`Created the ${result.name} default constraint`);
         this._opaService.refreshConstraint();
       });
   }
@@ -128,7 +128,7 @@ export class DefaultConstraintDialog implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(result => {
         this._matDialogRef.close(true);
-        this._notificationService.success(`The default constraint ${result.name} was updated`);
+        this._notificationService.success(`Updated the ${result.name} default constraint`);
         this._opaService.refreshConstraint();
       });
   }
