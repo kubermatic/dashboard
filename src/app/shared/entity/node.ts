@@ -196,6 +196,7 @@ export class HetznerNodeSpec {
 }
 
 export class KubeVirtNodeSpec {
+  vmFlavor: string;
   cpus: string;
   memory: string;
   namespace: string;

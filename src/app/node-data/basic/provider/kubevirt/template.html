@@ -18,15 +18,16 @@ limitations under the License.
       fxLayoutGap="8px">
   <div fxLayout="row"
        fxLayoutGap="8px">
-    <km-combobox [selected]="selectedFlavor"
-                 [valueFormatter]="flavorDisplayName.bind(this)"
-                 [optionsGetter]="getFlavors.bind(this)"
+    <km-combobox #flavorCombobox
+                 [selected]="selectedFlavor"
+                 [options]="flavors"
                  [formControlName]="Controls.VMFlavor"
                  (changed)="onFlavorChange($event)"
                  [label]="flavorLabel"
                  inputLabel="Select VM flavor..."
+                 filterBy="name"
                  fxFlex>
-      <div *option="let flavor">{{flavor}}</div>
+      <div *option="let flavor">{{flavor.name}}</div>
     </km-combobox>
     <button mat-flat-button
             type="button"

@@ -30,7 +30,7 @@ import {NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
-import {KubeVirtStorageClass} from '@shared/entity/provider/kubevirt';
+import {KubeVirtStorageClass, KubeVirtVMInstancePreset} from '@shared/entity/provider/kubevirt';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 
 enum Controls {
@@ -40,6 +40,12 @@ enum Controls {
   OperatingSystemImage = 'sourceURL',
   StorageClass = 'storageClassName',
   PVCSize = 'pvcSize',
+}
+
+enum FlavorsState {
+  Ready = 'VM Flavor',
+  Loading = 'Loading...',
+  Empty = 'No VM Flavors Available',
 }
 
 enum StorageClassState {
@@ -69,14 +75,17 @@ export class KubeVirtBasicNodeDataComponent
   extends BaseFormValidator
   implements OnInit, OnDestroy, AfterViewChecked, AfterViewInit
 {
+  @ViewChild('flavorCombobox')
+  private _flavorCombobox: FilteredComboboxComponent;
   @ViewChild('storageClassCombobox')
   private _storageClassCombobox: FilteredComboboxComponent;
   readonly Controls = Controls;
+  flavors: KubeVirtVMInstancePreset[] = [];
   selectedFlavor = '';
-  flavorLabel = 'VM Flavor';
+  flavorLabel = FlavorsState.Empty;
   storageClasses: KubeVirtStorageClass[] = [];
   selectedStorageClass = '';
-  storageClassLabel = 'Storage Class';
+  storageClassLabel = StorageClassState.Empty;
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -116,6 +125,8 @@ export class KubeVirtBasicNodeDataComponent
   }
 
   ngAfterViewInit(): void {
+    this._flavorsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultFlavor.bind(this));
+
     this._storageClassesObservable
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setDefaultStorageClass.bind(this));
@@ -126,15 +137,39 @@ export class KubeVirtBasicNodeDataComponent
     this._unsubscribe.complete();
   }
 
-  getFlavors(): string[] {
-    return ['test', 'xyz'];
-  }
-
-  flavorDisplayName(flavor: string): string {
-    return flavor;
-  }
-
   onFlavorChange(_: string): void {}
+
+  private get _flavorsObservable(): Observable<KubeVirtVMInstancePreset[]> {
+    return this._nodeDataService.kubeVirt
+      .vmFlavors(this._clearFlavor.bind(this), this._onFlavorLoading.bind(this))
+      .pipe(map(flavors => _.sortBy(flavors, f => f.name.toLowerCase())));
+  }
+
+  private _clearFlavor(): void {
+    this.flavors = [];
+    this.selectedFlavor = '';
+    this.flavorLabel = FlavorsState.Empty;
+    this._flavorCombobox.reset();
+    this._cdr.detectChanges();
+  }
+
+  private _onFlavorLoading(): void {
+    this._clearFlavor();
+    this.flavorLabel = FlavorsState.Loading;
+    this._cdr.detectChanges();
+  }
+
+  private _setDefaultFlavor(flavors: KubeVirtVMInstancePreset[]): void {
+    this.flavors = flavors;
+    this.selectedFlavor = this._nodeDataService.nodeData.spec.cloud.kubevirt.vmFlavor;
+
+    if (!this.selectedFlavor && !_.isEmpty(this.flavors)) {
+      this.selectedFlavor = this.flavors[0].name;
+    }
+
+    this.flavorLabel = this.selectedFlavor ? FlavorsState.Ready : FlavorsState.Empty;
+    this._cdr.detectChanges();
+  }
 
   onStorageClassChange(_: string): void {}
 
