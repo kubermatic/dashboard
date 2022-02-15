@@ -74,8 +74,8 @@ export class GKESettingsComponent extends BaseFormValidator implements OnInit, O
 
   private get _serviceAccountValue(): string {
     let serviceAccountValue = this.form.get(Controls.ServiceAccount).value;
-    if (!!serviceAccountValue && !isValid(this.form.get(Controls.ServiceAccount).value)) {
-      serviceAccountValue = encode(this.form.get(Controls.ServiceAccount).value);
+    if (!!serviceAccountValue && !isValid(serviceAccountValue)) {
+      serviceAccountValue = encode(serviceAccountValue);
     }
 
     return serviceAccountValue;
