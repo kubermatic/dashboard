@@ -79,6 +79,16 @@ spec:
       spec:
         azure:
           location: "westeurope"
+    nutanix-hamburg:
+      location: Hamburg
+      country: DE
+      spec:
+        nutanix:
+          allowInsecure: true
+          endpoint: 10.20.128.43
+          images:
+            centos: machine-controller-e2e-centos
+            ubuntu: machine-controller-e2e-ubuntu
     gcp-westeurope:
       location: "Europe West (Germany)"
       country: DE
