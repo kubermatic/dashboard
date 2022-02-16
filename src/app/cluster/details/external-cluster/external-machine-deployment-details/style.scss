@@ -19,7 +19,7 @@
     align-items: baseline;
 
     .mat-card-title {
-      &.km-machine-deployment-name {
+      &.machine-deployment-name {
         font-size: variables.$font-size-card-title;
         font-weight: 500;
         margin: 2px 20px 0 -22px;
@@ -29,7 +29,7 @@
         }
 
         i {
-          &.km-machine-deployment-health {
+          &.machine-deployment-health {
             text-align: center;
             vertical-align: middle;
           }

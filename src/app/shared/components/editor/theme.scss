@@ -16,7 +16,7 @@
 @use 'variables';
 
 @mixin theme-editor-component($colors) {
-  .km-editor {
+  .editor {
     .header {
       color: map.get($colors, text-secondary);
 

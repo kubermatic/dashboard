@@ -19,27 +19,27 @@
   margin: 0 30px;
 }
 
-.km-cluster-detail-actions .mat-icon-button i {
+.cluster-detail-actions .mat-icon-button i {
   @include mixins.size(24px);
 }
 
-.km-cluster-name {
+.cluster-name {
   font-weight: 500;
   padding-right: 8px;
 }
 
-.km-provider-menu {
+.provider-menu {
   align-items: center;
   display: flex;
 }
 
 .mat-card-header {
   .mat-card-title {
-    &.km-cluster-name {
+    &.cluster-name {
       padding-bottom: 0;
       padding-top: 0;
 
-      .km-cluster-health {
+      .cluster-health {
         font-size: variables.$font-size-subhead;
         margin: 2px 20px 0 -5px;
       }
@@ -55,7 +55,7 @@
   @include mixins.size(18px);
 }
 
-.km-provider-logo-value {
+.provider-logo-value {
   align-items: center;
   display: flex;
   height: 24px;

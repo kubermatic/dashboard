@@ -19,7 +19,7 @@ mat-card-header {
   padding: 0;
 }
 
-.km-toggled-events {
+.toggled-events {
   padding-bottom: 8px;
 
   mat-card-header {
@@ -28,21 +28,21 @@ mat-card-header {
 }
 
 .mat-card {
-  &:not(.km-toggled-events) {
+  &:not(.toggled-events) {
     .mat-card-header {
       .mat-card-title {
         margin: 0;
         padding: 8px 0;
       }
 
-      .km-events-title {
+      .events-title {
         padding: 8px 0;
       }
     }
   }
 }
 
-.km-events-title {
+.events-title {
   font-size: variables.$font-size-subhead;
   line-height: 20px;
   padding: 8px 30px 16px 0;

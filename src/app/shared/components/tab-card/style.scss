@@ -15,7 +15,7 @@
 @use 'mixins';
 @use 'variables';
 
-.km-tab-card.tab-cards {
+.tab-card.tab-cards {
   margin: 0 (- variables.$content-padding);
 
   .mat-tab-header {
@@ -53,7 +53,7 @@
   }
 }
 
-.km-tab-card.tab-navigation {
+.tab-card.tab-navigation {
   .mat-tab-label-container {
     .mat-tab-label {
       font-size: variables.$font-size-subhead;

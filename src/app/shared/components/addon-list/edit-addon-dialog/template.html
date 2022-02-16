@@ -23,7 +23,7 @@ limitations under the License.
        [alt]="addon.name">
   <div *ngIf="!hasLogo()">{{addon.name}}</div>
   <div *ngIf="!!addonConfig?.spec?.description"
-       class="km-install-addon-dialog-option-desc">
+       class="install-addon-dialog-option-desc">
     {{addonConfig.spec.description}}
   </div>
   <form [formGroup]="form">

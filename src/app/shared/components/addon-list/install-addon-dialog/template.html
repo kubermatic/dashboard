@@ -28,7 +28,7 @@ limitations under the License.
               fxFlex="100%">
       <div *ngFor="let installableAddon of installableAddons"
            (click)="select(installableAddon)"
-           class="km-install-addon-option">
+           class="install-addon-option">
         <img class="km-addon-logo"
              *ngIf="hasLogo(installableAddon)"
              [src]="getAddonLogo(installableAddon)"

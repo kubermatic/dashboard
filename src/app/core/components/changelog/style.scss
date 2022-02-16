@@ -34,7 +34,7 @@
   padding-bottom: 30px;
 }
 
-.km-changelog-category {
+.changelog-category {
   &:not(:first-of-type) {
     padding-top: 30px;
   }
@@ -73,11 +73,11 @@
   }
 }
 
-.km-changelog-link-card {
+.changelog-link-card {
   margin: 5px 8px 10px 15px;
 }
 
-.km-changelog-external-link-icon {
+.changelog-external-link-icon {
   @include card-border;
 
   border-bottom-left-radius: 8px;
@@ -90,7 +90,7 @@
   }
 }
 
-.km-changelog-link-caption {
+.changelog-link-caption {
   @include card-border;
 
   border-bottom-right-radius: 8px;
@@ -100,7 +100,7 @@
   padding: 2px 6px 2px 0;
 }
 
-.km-changelog-link-button {
+.changelog-link-button {
   i {
     margin-right: 6px;
   }

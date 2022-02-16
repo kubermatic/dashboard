@@ -16,7 +16,7 @@
 @use 'variables';
 
 @mixin theme-tab-card-component($colors) {
-  .km-tab-card {
+  .tab-card {
     .mat-tab-header {
       border-bottom: 1px solid map.get($colors, tab-divider);
 
@@ -26,7 +26,7 @@
     }
   }
 
-  .km-tab-card.tab-cards {
+  .tab-card.tab-cards {
     .mat-tab-header {
       .mat-tab-label-container {
         .mat-tab-label:hover:not(.mat-tab-label-active) {

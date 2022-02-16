@@ -31,7 +31,7 @@ limitations under the License.
 
   <mat-dialog-content class="km-changelog-content-container">
     <div *ngFor="let category of categories"
-         class="km-changelog-category">
+         class="changelog-category">
       <mat-chip-list>
         <mat-chip [ngClass]="'km-' + category">{{toDisplayName(category) | uppercase}}</mat-chip>
       </mat-chip-list>
@@ -50,14 +50,14 @@ limitations under the License.
              target="_blank"
              rel="noopener"
              fxLayout="row"
-             class="km-changelog-link-card">
-            <span class="km-changelog-external-link-icon"
+             class="changelog-link-card">
+            <span class="changelog-external-link-icon"
                   fxFlex="0 0 auto"
                   fxLayoutAlign=" center">
               <i class="km-icon-external-link"></i>
             </span>
 
-            <span class="km-changelog-link-caption"
+            <span class="changelog-link-caption"
                   fxFlex
                   fxLayoutAlign=" center">
               <span>{{link.caption}}</span>
@@ -75,7 +75,7 @@ limitations under the License.
     <a *ngIf="changelogURL"
        [href]="changelogURL"
        mat-flat-button
-       class="km-changelog-link-button"
+       class="changelog-link-button"
        color="alternative"
        target="_blank"
        rel="noopener">

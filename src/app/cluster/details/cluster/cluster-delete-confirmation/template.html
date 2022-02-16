@@ -36,14 +36,14 @@ limitations under the License.
              #clusterNameInput>
     </mat-form-field>
 
-    <div class="km-delete-cluster-checkbox"
+    <div class="delete-cluster-checkbox"
          [matTooltip]="getCheckboxTooltip()">
       <mat-checkbox formControlName="clusterLBCleanupCheckbox"
                     id="km-delete-cluster-lb-cleanup">Cleanup connected Load Balancers
       </mat-checkbox>
     </div>
 
-    <div class="km-delete-cluster-checkbox"
+    <div class="delete-cluster-checkbox"
          [matTooltip]="getCheckboxTooltip()">
       <mat-checkbox formControlName="clusterVolumeCleanupCheckbox"
                     id="km-delete-cluster-volume-cleanup">Cleanup connected volumes (dynamically provisioned PVs and

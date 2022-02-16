@@ -14,14 +14,10 @@
 
 @use 'variables';
 
-.km-wizard-openstack-button-toggle-group {
+.wizard-openstack-button-toggle-group {
   &.mat-button-toggle-group {
     border-radius: variables.$border-radius;
     margin-bottom: 0;
-
-    &.km-toggle-subject-type {
-      margin-left: 30px;
-    }
 
     .mat-button-toggle {
       border-radius: 0;

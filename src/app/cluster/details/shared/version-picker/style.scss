@@ -15,7 +15,7 @@
 @use 'variables';
 @use 'mixins';
 
-.km-version-picker-container {
+.version-picker-container {
   margin: 6px 30px 6px 0;
 
   .km-version-picker {
@@ -25,7 +25,7 @@
       cursor: default;
     }
 
-    .km-version-picker-type {
+    .version-picker-type {
       @include mixins.size(52px, 45px);
 
       border-radius: variables.$border-radius 0 0 variables.$border-radius;
@@ -73,7 +73,7 @@
 
   .km-version-picker-enabled {
     &:hover {
-      .km-version-picker-type {
+      .version-picker-type {
         border-width: 2px 0 2px 2px;
       }
     }

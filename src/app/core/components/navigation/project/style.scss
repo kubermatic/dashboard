@@ -14,11 +14,11 @@
 
 @use 'variables';
 
-.km-project-selector {
+.project-selector {
   height: variables.$toolbar-height - 2px;
 }
 
-.km-projects-container {
+.projects-container {
   border-radius: variables.$border-radius;
   margin: 0 20px;
   padding: 10px 15px;

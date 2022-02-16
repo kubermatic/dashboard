@@ -33,7 +33,7 @@ limitations under the License.
             *matCellDef="let element">
           <i [matTooltip]="getHealthStatus(element).message"
              [ngClass]="getHealthStatus(element).icon"
-             class="km-machine-deployment-health"></i>
+             class="machine-deployment-health"></i>
         </td>
       </ng-container>
 
@@ -153,7 +153,7 @@ limitations under the License.
 
               <ng-container *ngSwitchCase="false">
                 <button mat-icon-button
-                        class="km-machine-deployment-action"
+                        class="machine-deployment-action"
                         matTooltip="Restart Machine Deployment"
                         (click)="showRestartDialog(element); $event.stopPropagation()"
                         [disabled]="!isEditEnabled()">
@@ -161,7 +161,7 @@ limitations under the License.
                 </button>
 
                 <button mat-icon-button
-                        class="km-machine-deployment-action"
+                        class="machine-deployment-action"
                         matTooltip="Edit Machine Deployment"
                         (click)="showEditDialog(element); $event.stopPropagation()"
                         [disabled]="!isEditEnabled()">
@@ -169,7 +169,7 @@ limitations under the License.
                 </button>
 
                 <button mat-icon-button
-                        class="km-machine-deployment-action"
+                        class="machine-deployment-action"
                         matTooltip="Delete Machine Deployment"
                         (click)="showDeleteDialog(element); $event.stopPropagation()"
                         [disabled]="!isDeleteEnabled()">

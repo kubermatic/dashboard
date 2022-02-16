@@ -15,7 +15,7 @@
 @use 'sass:map';
 
 @mixin theme-install-addon-dialog-component($colors) {
-  .km-install-addon-option {
+  .install-addon-option {
     box-shadow: 0 0 0 1px map.get($colors, divider);
 
     &:hover {
