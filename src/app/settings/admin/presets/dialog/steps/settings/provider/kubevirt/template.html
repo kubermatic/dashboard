@@ -18,12 +18,12 @@ limitations under the License.
       fxLayoutGap="16px">
   <mat-form-field fxFlex>
     <mat-label>Kubeconfig</mat-label>
-    <input matInput
-           [formControlName]="Controls.Kubeconfig"
-           [name]="Controls.Kubeconfig"
-           type="password"
-           autocomplete="off"
-           required>
+    <textarea matInput
+              rows="3"
+              required
+              [formControlName]="Controls.Kubeconfig"
+              [name]="Controls.Kubeconfig"
+              autocomplete="off"></textarea>
     <mat-error *ngIf="form.get(Controls.Kubeconfig).hasError('required')">
       Kubeconfig is <strong>required</strong>.
     </mat-error>

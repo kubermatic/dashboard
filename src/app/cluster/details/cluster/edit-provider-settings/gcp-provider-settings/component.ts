@@ -16,6 +16,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {ClusterService} from '@core/services/cluster';
 import {ProviderSettingsPatch} from '@shared/entity/cluster';
+import {encode, isValid} from 'js-base64';
 import {Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
 
@@ -54,10 +55,13 @@ export class GCPProviderSettingsComponent implements OnInit, OnDestroy {
   }
 
   private _getProviderSettingsPatch(): ProviderSettingsPatch {
+    const serviceAccountValue = isValid(this.form.get(Control.ServiceAccount).value)
+      ? this.form.get(Control.ServiceAccount).value
+      : encode(this.form.get(Control.ServiceAccount).value);
     return {
       cloudSpecPatch: {
         gcp: {
-          serviceAccount: this.form.get(Control.ServiceAccount).value,
+          serviceAccount: serviceAccountValue,
         },
       },
       isValid: this.form.valid,
