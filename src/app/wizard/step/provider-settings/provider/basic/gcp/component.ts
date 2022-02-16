@@ -19,11 +19,12 @@ import {PresetsService} from '@core/services/wizard/presets';
 import {CloudSpec, Cluster, ClusterSpec, GCPCloudSpec} from '@shared/entity/cluster';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
+import {encode, isValid} from 'js-base64';
 import {merge} from 'rxjs';
 import {distinctUntilChanged, filter, takeUntil} from 'rxjs/operators';
 
 export enum Controls {
-  ServiceAccoount = 'serviceAccount',
+  ServiceAccount = 'serviceAccount',
 }
 
 @Component({
@@ -55,7 +56,7 @@ export class GCPProviderBasicComponent extends BaseFormValidator implements OnIn
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.ServiceAccoount]: this._builder.control('', Validators.required),
+      [Controls.ServiceAccount]: this._builder.control('', Validators.required),
     });
 
     this._presets.presetChanges
@@ -76,7 +77,7 @@ export class GCPProviderBasicComponent extends BaseFormValidator implements OnIn
       .subscribe(_ => this.form.reset());
 
     this.form
-      .get(Controls.ServiceAccoount)
+      .get(Controls.ServiceAccount)
       .valueChanges.pipe(distinctUntilChanged())
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
@@ -102,10 +103,19 @@ export class GCPProviderBasicComponent extends BaseFormValidator implements OnIn
       spec: {
         cloud: {
           gcp: {
-            serviceAccount: this.form.get(Controls.ServiceAccoount).value,
+            serviceAccount: this._serviceAccountValue,
           } as GCPCloudSpec,
         } as CloudSpec,
       } as ClusterSpec,
     } as Cluster;
+  }
+
+  private get _serviceAccountValue(): string {
+    let serviceAccountValue = this.form.get(Controls.ServiceAccount).value;
+    if (!!serviceAccountValue && !isValid(serviceAccountValue)) {
+      serviceAccountValue = encode(serviceAccountValue);
+    }
+
+    return serviceAccountValue;
   }
 }
