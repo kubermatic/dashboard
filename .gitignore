@@ -17,10 +17,6 @@
 *.launch
 .settings/
 .vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
 
 # Misc.
 /.sass-cache
@@ -46,6 +42,3 @@ cypress/videos
 cypress/plugins/index.js
 cypress/plugins/cy-ts-preprocessor.js
 cypress/tsconfig.json
-
-# VsCode
-.vscode/settings.json
