@@ -29,6 +29,10 @@ export namespace Endpoint {
     Subnets = '**/api/**/aws/*/subnets',
   }
 
+  export enum Nutanix {
+    Subnets = '**/api/**/nutanix/*/subnets',
+  }
+
   export enum Azure {
     Sizes = '**/api/**/azure/sizes',
   }
