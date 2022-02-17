@@ -47,6 +47,10 @@
         {
           "name": "anexia",
           "enabled": true
+        },
+        {
+          "name": "nutanix",
+          "enabled": true
         }
       ]
     },

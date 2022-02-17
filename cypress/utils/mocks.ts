@@ -175,6 +175,7 @@ export class Mocks {
     {m: RequestType.GET, p: Endpoint.Anexia.VLANs, r: {fixture: 'anexia/vlans.json'}},
     {m: RequestType.GET, p: Endpoint.AWS.Sizes, r: {fixture: 'aws/sizes.json'}},
     {m: RequestType.GET, p: Endpoint.AWS.Subnets, r: {fixture: 'aws/subnets.json'}},
+    {m: RequestType.GET, p: Endpoint.Nutanix.Subnets, r: {fixture: 'nutanix/subnets.json'}},
     {m: RequestType.GET, p: Endpoint.Azure.Sizes, r: {fixture: 'azure/sizes.json'}},
     {m: RequestType.GET, p: Endpoint.Digitalocean.Sizes, r: {fixture: 'digitalocean/sizes.json'}},
     {m: RequestType.GET, p: Endpoint.GCP.DiskTypes, r: {fixture: 'gcp/disktypes.json'}},

@@ -260,5 +260,27 @@
       "enforceAuditLogging": false,
       "enforcePodSecurityPolicy": false
     }
+  },
+  {
+    "metadata": {
+      "name": "test-nutanix-dc"
+    },
+    "spec": {
+      "seed": "test-seed",
+      "country": "DE",
+      "location": "Hamburg",
+      "provider": "nutanix",
+      "nutanix": {
+        "endpoint": "10.20.128.43",
+        "allowInsecure": true,
+        "images": {
+          "centos": "machine-controller-e2e-centos",
+          "ubuntu": "machine-controller-e2e-ubuntu"
+        }
+      },
+      "node": {},
+      "enforceAuditLogging": false,
+      "enforcePodSecurityPolicy": false
+    }
   }
 ]

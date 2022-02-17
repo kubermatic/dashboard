@@ -66,6 +66,9 @@ export namespace Datacenter {
     Frankfurt = 'Frankfurt',
   }
 
+  export enum Nutanix {
+    Hamburg = 'Hamburg',
+  }
   export enum Openstack {
     Syseleven = 'dbl1',
   }
