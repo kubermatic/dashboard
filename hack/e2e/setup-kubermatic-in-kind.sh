@@ -27,6 +27,8 @@ if [[ ${TARGET_BRANCH} == release* ]]; then
     TAG_VERSION=latest
   fi
   export KUBERMATIC_VERSION=${TAG_VERSION}
+  # Switch to the same target branch in the kubermatic/kubermatic repo
+  ! git checkout "${TARGET_BRANCH}"
 fi
 
 REPOSUFFIX=""
