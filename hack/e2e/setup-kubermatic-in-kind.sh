@@ -73,7 +73,7 @@ fi
 # Build binaries and load the Docker images into the kind cluster
 echodate "Building binaries for $KUBERMATIC_VERSION"
 TEST_NAME="Build Kubermatic binaries"
-KUBERMATICDOCKERTAG=latest UIDOCKERTAG=latest make kubermatic-installer
+KUBERMATICDOCKERTAG=$KUBERMATIC_VERSION UIDOCKERTAG=latest make kubermatic-installer
 
 TEST_NAME="Deploy Kubermatic"
 echodate "Deploying Kubermatic [${KUBERMATIC_VERSION}]..."
