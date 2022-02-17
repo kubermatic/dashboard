@@ -28,7 +28,9 @@ if [[ ${TARGET_BRANCH} == release* ]]; then
   fi
   export KUBERMATIC_VERSION=${TAG_VERSION}
   # Try to switch to the same target branch in the kubermatic/kubermatic repo
+  git remote -v
   git fetch
+  git show-ref
   ! git checkout "${TARGET_BRANCH}"
 fi
 
