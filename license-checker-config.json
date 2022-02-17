@@ -23,6 +23,7 @@
         "append": "-->"
       }
     },
-    "trailingWhitespace": "TRIM",
-    "regexIdentifier": "##"
+    "regexIdentifier": "##",
+    "trailingWhitespace": "TRIM"
   }
+  
