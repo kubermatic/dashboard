@@ -65,7 +65,7 @@ presubmits:
       # Kubermatic repo is required as we need to have access to the helm files used to deploy it.
       - org: kubermatic
         repo: kubermatic
-        base_ref: master
+        base_ref: "release/v2.18"
         clone_uri: "ssh://git@github.com/kubermatic/kubermatic.git"
     labels:
       preset-alibaba: "true"
@@ -118,7 +118,7 @@ presubmits:
       # Kubermatic repo is required as we need to have access to the helm files used to deploy it.
       - org: kubermatic
         repo: kubermatic
-        base_ref: master
+        base_ref: "release/v2.18"
         clone_uri: "ssh://git@github.com/kubermatic/kubermatic.git"
     labels:
       preset-alibaba: "true"
