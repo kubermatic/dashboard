@@ -16,7 +16,7 @@
 @use 'sass:map';
 
 @mixin theme-cluster-panel-component($colors) {
-  .km-cluster-panel {
+  .cluster-panel {
     color: map.get($colors, text);
 
     .mat-icon-button {

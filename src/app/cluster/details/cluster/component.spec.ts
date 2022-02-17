@@ -131,7 +131,7 @@ describe('ClusterDetailsComponent', () => {
     activatedRoute.testParamMap = {clusterName: '4k6txp5sq'};
 
     fixture.debugElement.query(By.css('.km-spinner'));
-    fixture.debugElement.query(By.css('.km-cluster-detail-actions'));
+    fixture.debugElement.query(By.css('.cluster-detail-actions'));
   });
 
   it('should initialize', () => {

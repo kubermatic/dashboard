@@ -22,7 +22,7 @@
   }
 }
 
-.km-node-ip-addresses {
+.node-ip-addresses {
   display: block;
   line-height: 20px;
 }
@@ -33,7 +33,7 @@ i.km-icon-warning {
 }
 
 .mat-column-name,
-.km-node-info {
+.node-info {
   align-items: center;
   display: flex;
 }
@@ -42,7 +42,7 @@ i.km-icon-warning {
   height: 50px;
 }
 
-.km-node-details {
+.node-details {
   box-shadow: variables.$border-box-shadow-inset;
   padding: variables.$item-details-padding;
 
@@ -50,10 +50,6 @@ i.km-icon-warning {
     border: none;
     margin-top: 15px;
   }
-}
-
-.km-mat-card-code-block {
-  margin-top: 20px;
 }
 
 .mat-card-content {

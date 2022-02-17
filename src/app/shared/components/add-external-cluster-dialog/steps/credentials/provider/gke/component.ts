@@ -14,8 +14,9 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
-import {catchError, take, takeUntil} from 'rxjs/operators';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
+import {encode, isValid} from 'js-base64';
+import {catchError, take, takeUntil} from 'rxjs/operators';
 import {Observable, of, Subject} from 'rxjs';
 
 export enum Controls {
@@ -81,7 +82,7 @@ export class GKECredentialsComponent implements OnInit, OnDestroy {
       cloud: {
         gke: {
           name: '',
-          serviceAccount: this.form.get(Controls.ServiceAccount).value,
+          serviceAccount: this._serviceAccountValue,
         },
       },
     };
@@ -95,5 +96,14 @@ export class GKECredentialsComponent implements OnInit, OnDestroy {
     if (!enable && this.form.get(name).enabled) {
       this.form.get(name).disable();
     }
+  }
+
+  private get _serviceAccountValue(): string {
+    let serviceAccountValue = this.form.get(Controls.ServiceAccount).value;
+    if (!!serviceAccountValue && !isValid(serviceAccountValue)) {
+      serviceAccountValue = encode(serviceAccountValue);
+    }
+
+    return serviceAccountValue;
   }
 }

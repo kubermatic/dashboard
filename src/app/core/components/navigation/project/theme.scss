@@ -15,7 +15,7 @@
 @use 'sass:map';
 
 @mixin theme-project-selector-component($colors) {
-  .km-projects-container {
+  .projects-container {
     i {
       background-color: map.get($colors, text);
     }

@@ -32,7 +32,7 @@ limitations under the License.
      fxLayoutGap="10px">
   <div *ngFor="let addon of addons"
        fxLayoutAlign="center center"
-       class="km-addon-container km-border">
+       class="addon-container km-border">
     <div fxFlex
          fxLayoutAlign="center center">
       <span *ngIf="!hasLogo(addon.name)"
@@ -45,7 +45,7 @@ limitations under the License.
     </div>
     <div [matMenuTriggerFor]="menu"
          fxLayoutAlign="center center"
-         class="km-addon-menu">
+         class="addon-menu">
       <i class="km-icon-mask km-icon-points-menu"></i>
     </div>
     <mat-menu #menu="matMenu">

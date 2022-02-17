@@ -15,7 +15,7 @@ limitations under the License.
 -->
 
 <button mat-icon-button
-        class="km-stepper-button left"
+        class="stepper-button left"
         [disabled]="disabled"
         (click)="onDecrease()">
   -
@@ -39,7 +39,7 @@ limitations under the License.
   <mat-hint *ngIf="(mode === 'hint' || mode === 'all') && !!hint">{{hint}}</mat-hint>
 </mat-form-field>
 <button mat-icon-button
-        class="km-stepper-button right"
+        class="stepper-button right"
         [disabled]="disabled"
         (click)="onIncrease()">
   +

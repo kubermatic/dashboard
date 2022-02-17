@@ -15,7 +15,7 @@
 @use 'mixins';
 @use 'variables';
 
-.km-property-usage-bar {
+.property-usage-bar {
   @include mixins.size(280px, 6px, true);
 
   border-radius: variables.$border-radius;

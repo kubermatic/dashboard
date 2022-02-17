@@ -76,7 +76,7 @@ limitations under the License.
         </th>
         <td mat-cell
             *matCellDef="let element">
-          <span class="km-node-ip-addresses"
+          <span class="node-ip-addresses"
                 *ngIf="!!element.status.addresses && !!getAddresses(element).InternalIP">
             Int.IP:
             <span class="km-copy"
@@ -85,7 +85,7 @@ limitations under the License.
                   ngxClipboard
                   matTooltip="click to copy">{{getAddresses(element).InternalIP}}</span>
           </span>
-          <span class="km-node-ip-addresses"
+          <span class="node-ip-addresses"
                 *ngIf="!!element.status.addresses && !!getAddresses(element).ExternalIP">
             Ext.IP:
             <span class="km-copy"
@@ -112,7 +112,7 @@ limitations under the License.
       <ng-container matColumnDef="nodeDetails">
         <td mat-cell
             *matCellDef="let element"
-            class="km-node-details"
+            class="node-details"
             [attr.colspan]="displayedColumns.length">
           <mat-card-content fxLayout="row wrap"
                             class="km-row">
