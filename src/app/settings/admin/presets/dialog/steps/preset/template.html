@@ -30,17 +30,32 @@ limitations under the License.
   </mat-form-field>
 
   <div class="optional-section">Optional Settings</div>
-
-  <mat-form-field fxFlex>
-    <mat-label>Restrict Preset Group to Domain</mat-label>
-    <input matInput
-           [formControlName]="controls.Domain"
-           [pattern]="domainRegex"
-           type="text"
-           title="domain"
-           autocomplete="off">
-    <mat-error *ngIf="form.get(controls.Domain).hasError( 'pattern')">
+  <mat-form-field class="domains-chip-list"
+                  fxFlex>
+    <mat-label>Restrict Preset Group to Domains</mat-label>
+    <mat-chip-list #chipList
+                   aria-label="Domains"
+                   class="km-chip-list-with-input"
+                   [formControlName]="controls.Domains">
+      <mat-chip *ngFor="let domain of domains.value"
+                removable
+                [selectable]="false"
+                (removed)="remove(domain)">
+        {{domain}}
+        <i matChipRemove
+           class="km-icon-mask km-icon-remove"></i>
+      </mat-chip>
+      <input [matChipInputFor]="chipList"
+             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+             [matChipInputAddOnBlur]="true"
+             (matChipInputTokenEnd)="add($event)">
+    </mat-chip-list>
+    <mat-hint>Use commas, space or enter key as the separators.</mat-hint>
+    <mat-error *ngIf="domains.hasError('invalidDomain')">
       Input has to be a valid domain.
+    </mat-error>
+    <mat-error *ngIf="domains.hasError('alreadyExists')">
+      Value already exists.
     </mat-error>
   </mat-form-field>
 
