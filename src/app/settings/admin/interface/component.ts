@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
+import {FeatureGateService} from '@app/core/services/feature-gate';
 import {NotificationService} from '@core/services/notification';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
@@ -37,14 +38,21 @@ export class InterfaceComponent implements OnInit, OnDestroy {
   private _settingsChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
 
+  isOIDCKubeCfgEndpointEnabled = false;
+
   constructor(
     private readonly _userService: UserService,
     private readonly _settingsService: SettingsService,
-    private readonly _notificationService: NotificationService
+    private readonly _notificationService: NotificationService,
+    private readonly _featureGatesService: FeatureGateService
   ) {}
 
   ngOnInit(): void {
     this._userService.currentUser.pipe(take(1)).subscribe(user => (this.user = user));
+
+    this._featureGatesService.featureGates
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(featureGates => (this.isOIDCKubeCfgEndpointEnabled = !!featureGates?.OIDCKubeCfgEndpoint));
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       if (!_.isEqual(settings, this.apiSettings)) {

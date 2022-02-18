@@ -92,10 +92,12 @@ limitations under the License.
              class="entry-label">
           <span>Enable OIDC Kubeconfig</span>
           <div class="km-icon-info km-pointer"
-               matTooltip="Use OIDC provider as a proxy for kubeconfig download."></div>
+               matTooltip="Use OIDC provider as a proxy for kubeconfig download. Requires OIDCKubeCfgEndpoint feature gate to be enabled."></div>
         </div>
         <mat-checkbox [(ngModel)]="settings.enableOIDCKubeconfig"
+                      [disabled]="!isOIDCKubeCfgEndpointEnabled"
                       (change)="onSettingsChange()"
+                      [matTooltip]="!isOIDCKubeCfgEndpointEnabled ? 'OIDCKubeCfgEndpoint feature gates needs to enabled.' : null"
                       id="km-enable-oidc-setting"></mat-checkbox>
         <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableOIDCKubeconfig, apiSettings.enableOIDCKubeconfig)"></km-spinner-with-confirmation>
       </div>
