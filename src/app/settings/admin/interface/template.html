@@ -95,8 +95,19 @@ limitations under the License.
                matTooltip="Use OIDC provider as a proxy for kubeconfig download."></div>
         </div>
         <mat-checkbox [(ngModel)]="settings.enableOIDCKubeconfig"
+                      [disabled]="!isOIDCKubeCfgEndpointEnabled"
                       (change)="onSettingsChange()"
-                      id="km-enable-oidc-setting"></mat-checkbox>
+                      id="km-enable-oidc-setting">
+          <mat-hint *ngIf="!isOIDCKubeCfgEndpointEnabled">This feature is disabled. Visit the
+            <a
+              href="https://docs.kubermatic.com/kubermatic/master/tutorials_howtos/oidc_provider_configuration/share-_clusters_via_delegated_oidc_authentication/"
+              target="_blank"
+              rel="noopener noreferrer">
+              documentation
+            </a>
+            to learn more.
+          </mat-hint>
+        </mat-checkbox>
         <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableOIDCKubeconfig, apiSettings.enableOIDCKubeconfig)"></km-spinner-with-confirmation>
       </div>
     </div>
