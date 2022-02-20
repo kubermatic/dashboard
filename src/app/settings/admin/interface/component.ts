@@ -52,7 +52,7 @@ export class InterfaceComponent implements OnInit, OnDestroy {
 
     this._featureGatesService.featureGates
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(featureGates => (this.isOIDCKubeCfgEndpointEnabled = !!featureGates?.OIDCKubeCfgEndpoint));
+      .subscribe(featureGates => (this.isOIDCKubeCfgEndpointEnabled = !!featureGates?.oidcKubeCfgEndpoint));
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       if (!_.isEqual(settings, this.apiSettings)) {

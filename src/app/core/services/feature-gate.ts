@@ -21,7 +21,7 @@ import {catchError, shareReplay, switchMap} from 'rxjs/operators';
 
 export interface FeatureGates {
   konnectivityService?: boolean;
-  OIDCKubeCfgEndpoint?: boolean;
+  oidcKubeCfgEndpoint?: boolean;
 }
 
 @Injectable({
