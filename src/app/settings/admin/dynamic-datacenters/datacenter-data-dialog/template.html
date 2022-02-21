@@ -114,26 +114,17 @@ limitations under the License.
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="domain-input">
-      <mat-label>Required Emails</mat-label>
-      <mat-chip-list #chipList
-                     class="km-chip-list-with-input">
-        <mat-chip *ngFor="let domain of requiredEmails"
-                  removable
-                  (removed)="removeDomain(domain)"
-                  [selectable]="false">
-          {{domain}}
-          <i matChipRemove
-             class="km-icon-mask km-icon-remove"></i>
-        </mat-chip>
-        <input [formControlName]="controls.RequiredEmails"
-               matChipInputAddOnBlur
-               [matChipInputFor]="chipList"
-               [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
-               (matChipInputTokenEnd)="addDomain($event)">
-      </mat-chip-list>
-      <mat-hint>Use commas or enter key as the separators.</mat-hint>
-    </mat-form-field>
+    <km-tag-list class="domain-input"
+                label="Required Emails"
+                description="Use commas, space or enter key as the separators."
+                [tags]="requiredEmails"
+                (tagsChange)="onRequiredEmailsChange($event)"
+                [formControlName]="controls.RequiredEmails"
+                [separatorKeysCodes]="separatorKeysCodes"
+                [validationPattern]="domainRegex"
+                [validationPatternError]="'Input has to be a valid domain like kubermatic.com'"
+                fxFlex>
+    </km-tag-list>
 
     <mat-checkbox [formControlName]="controls.EnforcePodSecurityPolicy">Enforce Pod Security Policy</mat-checkbox>
     <mat-checkbox [formControlName]="controls.EnforceAuditLogging">Enforce Audit Logging</mat-checkbox>

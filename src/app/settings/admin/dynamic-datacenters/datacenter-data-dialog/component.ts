@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import {COMMA, ENTER, SPACE} from '@angular/cdk/keycodes';
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatChipInputEvent} from '@angular/material/chips';
@@ -54,7 +54,10 @@ export enum Controls {
 })
 export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
   readonly controls = Controls;
-  readonly separatorKeyCodes: number[] = [ENTER, COMMA];
+
+  readonly domainRegex = '^(?!-)[A-Za-z0-9-]+([\\-.][a-z0-9]+)*\\.[A-Za-z]{2,6}$';
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA, SPACE];
+
   readonly countryCodes: string[] = countryCodeLookup.countries.map(country => country.iso2);
   readonly providers = INTERNAL_NODE_PROVIDERS;
   seeds: string[] = [];
@@ -84,7 +87,7 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
       ),
       country: new FormControl(this.data.isEditing ? this.data.datacenter.spec.country : '', [Validators.required]),
       location: new FormControl(this.data.isEditing ? this.data.datacenter.spec.location : '', [Validators.required]),
-      requiredEmails: new FormControl(),
+      requiredEmails: new FormControl([]),
       enforcePodSecurityPolicy: new FormControl(
         this.data.isEditing && this.data.datacenter.spec.enforcePodSecurityPolicy
       ),
@@ -102,6 +105,12 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
 
   getIconClass(): string {
     return getIconClassForButton(this.data.confirmLabel);
+  }
+
+  onRequiredEmailsChange(requiredEmails: string[]): void {
+    this.requiredEmails = requiredEmails;
+    this.form.get(Controls.RequiredEmails).setValue(this.requiredEmails);
+    this.form.get(Controls.RequiredEmails).updateValueAndValidity();
   }
 
   private _initRequiredEmailsInput(): void {
