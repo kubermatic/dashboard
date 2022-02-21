@@ -13,13 +13,12 @@
 // limitations under the License.
 
 import {NgModule} from '@angular/core';
-import {MatChipsModule} from '@angular/material/chips';
 import {PresetListComponent} from '@app/settings/admin/presets/component';
 import {AdminSettingsPresetsRoutingModule} from '@app/settings/admin/presets/routing';
 import {SharedModule} from '@shared/module';
 
 @NgModule({
-  imports: [SharedModule, AdminSettingsPresetsRoutingModule, MatChipsModule],
+  imports: [SharedModule, AdminSettingsPresetsRoutingModule],
   declarations: [PresetListComponent],
 })
 export class AdminSettingsPresetsModule {}
