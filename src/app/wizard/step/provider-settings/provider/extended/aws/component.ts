@@ -23,15 +23,12 @@ import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import _ from 'lodash';
 import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
-import {CIDR_PATTERN_VALIDATOR} from '@app/shared/validators/others';
-import {CIDR_ALLOW_ALL} from '@app/shared/constants/constants';
 
 enum Controls {
   SecurityGroup = 'securityGroup',
   RouteTableID = 'routeTableID',
   InstanceProfileName = 'instanceProfileName',
   RoleARN = 'roleARN',
-  NodePortsAllowedIPRange = 'nodePortsAllowedIPRange',
 }
 
 @Component({
@@ -72,10 +69,6 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
       [Controls.RouteTableID]: this._builder.control('', Validators.pattern('rtb-(\\w{8}|\\w{17})')),
       [Controls.InstanceProfileName]: this._builder.control(''),
       [Controls.RoleARN]: this._builder.control(''),
-      [Controls.NodePortsAllowedIPRange]: this._builder.control(CIDR_ALLOW_ALL, [
-        Validators.required,
-        CIDR_PATTERN_VALIDATOR,
-      ]),
     });
 
     this._presets.presetChanges
@@ -107,8 +100,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
     merge(
       this.form.get(Controls.RouteTableID).valueChanges,
       this.form.get(Controls.InstanceProfileName).valueChanges,
-      this.form.get(Controls.RoleARN).valueChanges,
-      this.form.get(Controls.NodePortsAllowedIPRange).valueChanges
+      this.form.get(Controls.RoleARN).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
@@ -193,7 +185,6 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
             instanceProfileName: this.form.get(Controls.InstanceProfileName).value,
             roleARN: this.form.get(Controls.RoleARN).value,
             routeTableID: this.form.get(Controls.RouteTableID).value,
-            nodePortsAllowedIPRange: this.form.get(Controls.NodePortsAllowedIPRange).value,
           } as AWSCloudSpec,
         } as CloudSpec,
       } as ClusterSpec,

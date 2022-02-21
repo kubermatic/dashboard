@@ -13,15 +13,18 @@
 // limitations under the License.
 
 import {Component, forwardRef, Input, OnInit} from '@angular/core';
-import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {merge} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
+import {CIDR_ALLOW_ALL} from '@app/shared/constants/constants';
+import {CIDR_PATTERN_VALIDATOR} from '@app/shared/validators/others';
 
 enum Controls {
   ProviderExtended = 'providerExtended',
+  NodePortsAllowedIPRange = 'nodePortsAllowedIPRange',
 }
 
 @Component({
@@ -47,6 +50,10 @@ export class ProviderExtendedComponent extends BaseFormValidator implements OnIn
   readonly Providers = NodeProvider;
   readonly Controls = Controls;
 
+  // This is only supported on AWS, Azure, GCP, and Openstack
+  supportsAllowedIPRangeOverride =
+    this.Providers.AWS || this.Providers.AZURE || this.Providers.GCP || this.Providers.OPENSTACK;
+
   constructor(private readonly _builder: FormBuilder, private readonly _clusterSpecService: ClusterSpecService) {
     super('Provider Extended');
   }
@@ -54,6 +61,10 @@ export class ProviderExtendedComponent extends BaseFormValidator implements OnIn
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.ProviderExtended]: this._builder.control(''),
+      [Controls.NodePortsAllowedIPRange]: this._builder.control(CIDR_ALLOW_ALL, [
+        Validators.required,
+        CIDR_PATTERN_VALIDATOR,
+      ]),
     });
 
     merge(this._clusterSpecService.providerChanges, this._clusterSpecService.datacenterChanges)
@@ -62,5 +73,22 @@ export class ProviderExtendedComponent extends BaseFormValidator implements OnIn
         this.form.removeControl(Controls.ProviderExtended);
         this.form.addControl(Controls.ProviderExtended, this._builder.control(''));
       });
+
+    this.form
+      .get(Controls.NodePortsAllowedIPRange)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(this._onNodePortsAllowedIPRangeChange.bind(this));
+  }
+
+  private _onNodePortsAllowedIPRangeChange(value: string): void {
+    if (this.Providers.AWS) {
+      this._clusterSpecService.cluster.spec.cloud.aws.nodePortsAllowedIPRange = value;
+    } else if (this.Providers.AZURE) {
+      this._clusterSpecService.cluster.spec.cloud.azure.nodePortsAllowedIPRange = value;
+    } else if (this.Providers.GCP) {
+      this._clusterSpecService.cluster.spec.cloud.gcp.nodePortsAllowedIPRange = value;
+    } else if (this.Providers.OPENSTACK) {
+      this._clusterSpecService.cluster.spec.cloud.openstack.nodePortsAllowedIPRange = value;
+    }
   }
 }

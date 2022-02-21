@@ -22,9 +22,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {CIDR_ALLOW_ALL} from '@app/shared/constants/constants';
-import {CIDR_PATTERN_VALIDATOR} from '@app/shared/validators/others';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {PresetsService} from '@core/services/wizard/presets';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
@@ -38,7 +36,6 @@ import {catchError, debounceTime, filter, map, switchMap, takeUntil, tap} from '
 enum Controls {
   Network = 'network',
   SubNetwork = 'subNetwork',
-  NodePortsAllowedIPRange = 'nodePortsAllowedIPRange',
 }
 
 enum NetworkState {
@@ -97,16 +94,7 @@ export class GCPProviderExtendedComponent extends BaseFormValidator implements O
     this.form = this._builder.group({
       [Controls.Network]: this._builder.control(''),
       [Controls.SubNetwork]: this._builder.control(''),
-      [Controls.NodePortsAllowedIPRange]: this._builder.control(CIDR_ALLOW_ALL, [
-        Validators.required,
-        CIDR_PATTERN_VALIDATOR,
-      ]),
     });
-
-    this.form
-      .get(Controls.NodePortsAllowedIPRange)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(this._onNodePortsAllowedIPRangeChange.bind(this));
 
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset =>
       Object.values(Controls).forEach(control => {
@@ -163,16 +151,11 @@ export class GCPProviderExtendedComponent extends BaseFormValidator implements O
       case Controls.SubNetwork:
         return this._hasRequiredCredentials() ? '' : 'Please enter your credentials first.';
     }
-    return null;
   }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
-  }
-
-  private _onNodePortsAllowedIPRangeChange(value: string): void {
-    this._clusterSpecService.cluster.spec.cloud.gcp.nodePortsAllowedIPRange = value;
   }
 
   private _hasRequiredCredentials(): boolean {

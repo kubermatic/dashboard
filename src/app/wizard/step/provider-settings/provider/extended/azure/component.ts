@@ -13,9 +13,7 @@
 // limitations under the License.
 
 import {ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {CIDR_ALLOW_ALL} from '@app/shared/constants/constants';
-import {CIDR_PATTERN_VALIDATOR} from '@app/shared/validators/others';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {PresetsService} from '@core/services/wizard/presets';
@@ -37,7 +35,6 @@ enum Controls {
   VNet = 'vnet',
   LoadBalancerSKU = 'loadBalancerSKU',
   AssignAvailabilitySet = 'assignAvailabilitySet',
-  NodePortsAllowedIPRange = 'nodePortsAllowedIPRange',
 }
 
 @Component({
@@ -91,10 +88,6 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
       [Controls.VNet]: this._builder.control(''),
       [Controls.LoadBalancerSKU]: this._builder.control(''),
       [Controls.AssignAvailabilitySet]: this._builder.control(true),
-      [Controls.NodePortsAllowedIPRange]: this._builder.control(CIDR_ALLOW_ALL, [
-        Validators.required,
-        CIDR_PATTERN_VALIDATOR,
-      ]),
     });
 
     const resourceGroupChanges = merge(
@@ -125,7 +118,6 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
         // TODO: This causes reset of all default values set in the init stage. It should be fixed.
         this.form.reset();
         this.form.get(Controls.AssignAvailabilitySet).setValue(true);
-        this.form.get(Controls.NodePortsAllowedIPRange).setValue(CIDR_ALLOW_ALL);
       });
 
     this._clusterSpecService.clusterChanges
@@ -241,8 +233,7 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
 
     merge(
       this.form.get(Controls.LoadBalancerSKU).valueChanges,
-      this.form.get(Controls.AssignAvailabilitySet).valueChanges,
-      this.form.get(Controls.NodePortsAllowedIPRange).valueChanges
+      this.form.get(Controls.AssignAvailabilitySet).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
@@ -487,7 +478,6 @@ export class AzureProviderExtendedComponent extends BaseFormValidator implements
           azure: {
             loadBalancerSKU: this.form.get(Controls.LoadBalancerSKU).value,
             assignAvailabilitySet: this.form.get(Controls.AssignAvailabilitySet).value,
-            nodePortsAllowedIPRange: this.form.get(Controls.NodePortsAllowedIPRange).value,
           } as AzureCloudSpec,
         } as CloudSpec,
       } as ClusterSpec,

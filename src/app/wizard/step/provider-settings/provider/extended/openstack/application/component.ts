@@ -22,9 +22,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {CIDR_ALLOW_ALL} from '@app/shared/constants/constants';
-import {CIDR_PATTERN_VALIDATOR} from '@app/shared/validators/others';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {OpenstackCredentialsTypeService} from '@app/wizard/step/provider-settings/provider/extended/openstack/service';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {PresetsService} from '@core/services/wizard/presets';
@@ -40,7 +38,6 @@ enum Controls {
   SecurityGroup = 'securityGroup',
   Network = 'network',
   SubnetID = 'subnetID',
-  NodePortsAllowedIPRange = 'nodePortsAllowedIPRange',
 }
 
 enum SecurityGroupState {
@@ -112,10 +109,6 @@ export class OpenstackProviderExtendedAppCredentialsComponent
       [Controls.SecurityGroup]: this._builder.control(''),
       [Controls.Network]: this._builder.control(''),
       [Controls.SubnetID]: this._builder.control(''),
-      [Controls.NodePortsAllowedIPRange]: this._builder.control(CIDR_ALLOW_ALL, [
-        Validators.required,
-        CIDR_PATTERN_VALIDATOR,
-      ]),
     });
 
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset =>
@@ -124,11 +117,6 @@ export class OpenstackProviderExtendedAppCredentialsComponent
         this._enable(!this.isPresetSelected, control);
       })
     );
-
-    this.form
-      .get(Controls.NodePortsAllowedIPRange)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(this._onNodePortsAllowedIPRangeChange.bind(this));
 
     this._credentialsTypeService.credentialsTypeChanges
       .pipe(takeUntil(this._unsubscribe))
@@ -194,10 +182,6 @@ export class OpenstackProviderExtendedAppCredentialsComponent
   subnetIDDisplayName(id: string): string {
     const subnetID = this.subnetIDs.find(subnetID => subnetID.id === id);
     return subnetID ? `${subnetID.name} (${subnetID.id})` : '';
-  }
-
-  private _onNodePortsAllowedIPRangeChange(value: string): void {
-    this._clusterSpecService.cluster.spec.cloud.openstack.nodePortsAllowedIPRange = value;
   }
 
   private _loadSecurityGroups(securityGroups: OpenstackSecurityGroup[]): void {
