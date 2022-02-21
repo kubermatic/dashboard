@@ -59,4 +59,16 @@ limitations under the License.
            autocomplete="off">
     <mat-hint>Specify to use it to talk with the AWS API, otherwise a new role will be used.</mat-hint>
   </mat-form-field>
+  <mat-form-field fxFlex>
+    <mat-label>Allowed IP range for NodePorts</mat-label>
+    <input matInput
+           [formControlName]="Controls.NodePortsAllowedIPRange"
+           [name]="Controls.NodePortsAllowedIPRange"
+           type="text"
+           autocomplete="off">
+    <mat-hint>IP address range that is allowed to access NodePorts </mat-hint>
+    <mat-error *ngIf="form.get(Controls.NodePortsAllowedIPRange).hasError( 'pattern')">
+      Invalid value, use CIDR notation like 192.168.1.0/24.
+    </mat-error>
+  </mat-form-field>
 </form>

@@ -127,6 +127,7 @@ export class AWSCloudSpec {
   securityGroupID: string;
   instanceProfileName: string;
   roleARN: string;
+  nodePortsAllowedIPRange: string;
 }
 
 export class AzureCloudSpec {
@@ -142,6 +143,7 @@ export class AzureCloudSpec {
   vnet: string;
   loadBalancerSKU: string;
   assignAvailabilitySet: boolean;
+  nodePortsAllowedIPRange: string;
 }
 
 export class BringYourOwnCloudSpec {}
@@ -162,6 +164,7 @@ export class GCPCloudSpec {
   network: string;
   serviceAccount: string;
   subnetwork: string;
+  nodePortsAllowedIPRange: string;
 }
 
 export class HetznerCloudSpec {
@@ -194,6 +197,7 @@ export class OpenstackCloudSpec {
   securityGroups: string;
   floatingIPPool: string;
   subnetID: string;
+  nodePortsAllowedIPRange: string;
 }
 
 export class EquinixCloudSpec {
