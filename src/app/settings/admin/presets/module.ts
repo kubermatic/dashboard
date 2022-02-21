@@ -13,22 +13,13 @@
 // limitations under the License.
 
 import {NgModule} from '@angular/core';
-import {MatChipsModule, MAT_CHIPS_DEFAULT_OPTIONS} from '@angular/material/chips';
+import {MatChipsModule} from '@angular/material/chips';
 import {PresetListComponent} from '@app/settings/admin/presets/component';
 import {AdminSettingsPresetsRoutingModule} from '@app/settings/admin/presets/routing';
 import {SharedModule} from '@shared/module';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
 
 @NgModule({
   imports: [SharedModule, AdminSettingsPresetsRoutingModule, MatChipsModule],
   declarations: [PresetListComponent],
-  providers: [
-    {
-      provide: MAT_CHIPS_DEFAULT_OPTIONS,
-      useValue: {
-        separatorKeyCodes: [ENTER, COMMA],
-      },
-    },
-  ],
 })
 export class AdminSettingsPresetsModule {}
