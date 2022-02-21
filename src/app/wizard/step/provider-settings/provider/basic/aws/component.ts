@@ -112,7 +112,9 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
         this._presets.enablePresets(
-          Object.values(this._clusterSpecService.cluster.spec.cloud.aws).every(value => !value)
+          Object.keys(this._clusterSpecService.cluster.spec.cloud.aws)
+            .filter(key => key !== 'nodePortsAllowedIPRange')
+            .every(key => !this._clusterSpecService.cluster.spec.cloud.aws[key])
         )
       );
 

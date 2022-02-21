@@ -68,7 +68,9 @@ export class GCPProviderBasicComponent extends BaseFormValidator implements OnIn
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
         this._presets.enablePresets(
-          Object.values(this._clusterSpecService.cluster.spec.cloud.gcp).every(value => !value)
+          Object.keys(this._clusterSpecService.cluster.spec.cloud.gcp)
+            .filter(key => key !== 'nodePortsAllowedIPRange')
+            .every(key => !this._clusterSpecService.cluster.spec.cloud.gcp[key])
         )
       );
 

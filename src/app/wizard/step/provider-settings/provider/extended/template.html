@@ -46,15 +46,18 @@ limitations under the License.
 
   <ng-container *ngIf="supportsAllowedIPRangeOverride">
     <mat-form-field fxFlex>
-    <mat-label>Allowed IP range for NodePorts</mat-label>
+    <mat-label>Allowed IP Range for NodePorts</mat-label>
     <input matInput
            [formControlName]="Controls.NodePortsAllowedIPRange"
            [name]="Controls.NodePortsAllowedIPRange"
            type="text"
            autocomplete="off">
     <mat-hint>IP address range that is allowed to access NodePorts </mat-hint>
-    <mat-error *ngIf="form.get(Controls.NodePortsAllowedIPRange).hasError( 'pattern')">
+    <mat-error *ngIf="form.get(Controls.NodePortsAllowedIPRange).hasError('pattern')">
       Invalid value, use CIDR notation like 192.168.1.0/24.
+    </mat-error>
+    <mat-error *ngIf="form.get(Controls.NodePortsAllowedIPRange).hasError('required')">
+      Allowed IP Range for NodePorts is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
   </ng-container>

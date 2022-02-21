@@ -170,7 +170,7 @@ export class OpenstackProviderExtendedAppCredentialsComponent
       case Controls.SubnetID:
         return this._canLoadSubnet() ? '' : 'Please enter your credentials and network first.';
       default:
-        return null;
+        return '';
     }
   }
 

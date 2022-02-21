@@ -108,7 +108,9 @@ export class GCPProviderExtendedComponent extends BaseFormValidator implements O
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
         this._presets.enablePresets(
-          Object.values(this._clusterSpecService.cluster.spec.cloud.gcp).every(value => !value)
+          Object.keys(this._clusterSpecService.cluster.spec.cloud.gcp)
+            .filter(key => key !== 'nodePortsAllowedIPRange')
+            .every(key => !this._clusterSpecService.cluster.spec.cloud.gcp[key])
         )
       );
 
@@ -150,6 +152,8 @@ export class GCPProviderExtendedComponent extends BaseFormValidator implements O
       case Controls.Network:
       case Controls.SubNetwork:
         return this._hasRequiredCredentials() ? '' : 'Please enter your credentials first.';
+      default:
+        return '';
     }
   }
 

@@ -71,6 +71,7 @@ export class AzureProviderBasicComponent extends BaseFormValidator implements On
         this._presets.enablePresets(
           Object.keys(this._clusterSpecService.cluster.spec.cloud.azure)
             .filter(key => key !== 'assignAvailabilitySet')
+            .filter(key => key !== 'nodePortsAllowedIPRange')
             .every(key => !this._clusterSpecService.cluster.spec.cloud.azure[key])
         );
       });

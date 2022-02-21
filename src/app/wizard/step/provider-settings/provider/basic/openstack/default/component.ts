@@ -130,7 +130,9 @@ export class OpenstackProviderBasicDefaultCredentialsComponent extends BaseFormV
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
         this._presets.enablePresets(
-          Object.values(this._clusterSpecService.cluster.spec.cloud.openstack).every(value => !value)
+          Object.keys(this._clusterSpecService.cluster.spec.cloud.openstack)
+            .filter(key => key !== 'nodePortsAllowedIPRange')
+            .every(key => !this._clusterSpecService.cluster.spec.cloud.openstack[key])
         )
       );
 

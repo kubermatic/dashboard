@@ -232,6 +232,25 @@ limitations under the License.
           </km-property>
         </ng-container>
       </ng-container>
+
+      <!-- Node Ports Allowed IP Range -->
+      <km-property *ngIf="cluster.spec.cloud?.aws?.nodePortsAllowedIPRange">
+        <div key>Allowed IP Range for NodePorts</div>
+        <div value>{{cluster.spec.cloud?.aws?.nodePortsAllowedIPRange}}</div>
+      </km-property>
+      <km-property *ngIf="cluster.spec.cloud?.azure?.nodePortsAllowedIPRange">
+        <div key>Allowed IP Range for NodePorts</div>
+        <div value>{{cluster.spec.cloud?.azure?.nodePortsAllowedIPRange}}</div>
+      </km-property>
+      <km-property *ngIf="cluster.spec.cloud?.openstack?.nodePortsAllowedIPRange">
+        <div key>Allowed IP Range for NodePorts</div>
+        <div value>{{cluster.spec.cloud?.openstack?.nodePortsAllowedIPRange}}</div>
+      </km-property>
+      <km-property *ngIf="cluster.spec.cloud?.gcp?.nodePortsAllowedIPRange">
+        <div key>Allowed IP Range for NodePorts</div>
+        <div value>{{cluster.spec.cloud?.gcp?.nodePortsAllowedIPRange}}</div>
+      </km-property>
+
     </div>
   </div>
 
