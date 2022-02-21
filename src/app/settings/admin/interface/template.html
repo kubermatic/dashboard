@@ -97,7 +97,7 @@ limitations under the License.
         <mat-checkbox [(ngModel)]="settings.enableOIDCKubeconfig"
                       [disabled]="!isOIDCKubeCfgEndpointEnabled"
                       (change)="onSettingsChange()"
-                      [matTooltip]="!isOIDCKubeCfgEndpointEnabled ? 'OIDCKubeCfgEndpoint feature gates needs to enabled.' : null"
+                      [matTooltip]="!isOIDCKubeCfgEndpointEnabled ? 'OIDCKubeCfgEndpoint feature gates needs to enabled in KubermaticConfiguration.' : null"
                       id="km-enable-oidc-setting"></mat-checkbox>
         <km-spinner-with-confirmation [isSaved]="isEqual(settings.enableOIDCKubeconfig, apiSettings.enableOIDCKubeconfig)"></km-spinner-with-confirmation>
       </div>
