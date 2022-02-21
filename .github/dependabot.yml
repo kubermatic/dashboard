@@ -21,7 +21,6 @@ updates:
     assignees:
       - maciaszczykm
       - floreks
-      - kgroschoff
     labels:
       - dependencies
       - release-note-none
