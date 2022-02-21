@@ -42,8 +42,8 @@ limitations under the License.
                 [selectable]="false"
                 (removed)="remove(domain)">
         {{domain}}
-        <i matChipRemove
-           class="km-icon-mask km-icon-remove"></i>
+        <mat-icon matChipRemove
+           class="km-icon-mask km-icon-remove"></mat-icon>
       </mat-chip>
       <input [matChipInputFor]="chipList"
              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
