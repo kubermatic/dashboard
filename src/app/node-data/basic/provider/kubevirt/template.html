@@ -64,12 +64,12 @@ limitations under the License.
     <mat-label>Operating System Image</mat-label>
     <input matInput
            required
-           [id]="Controls.OperatingSystemImage"
-           [formControlName]="Controls.OperatingSystemImage"
+           [id]="Controls.PrimaryDiskOSImage"
+           [formControlName]="Controls.PrimaryDiskOSImage"
            type="text"
            autocomplete="off">
     <mat-hint>Use URL or namespace/PVC name format.</mat-hint>
-    <mat-error *ngIf="form.get(Controls.OperatingSystemImage).hasError('required')">
+    <mat-error *ngIf="form.get(Controls.PrimaryDiskOSImage).hasError('required')">
       Operating system image is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
@@ -77,7 +77,7 @@ limitations under the License.
   <km-combobox #storageClassCombobox
                [selected]="selectedStorageClass"
                [options]="storageClasses"
-               [formControlName]="Controls.StorageClass"
+               [formControlName]="Controls.PrimaryDiskStorageClassName"
                (changed)="onStorageClassChange($event)"
                [label]="storageClassLabel"
                inputLabel="Select storage class..."
@@ -85,11 +85,26 @@ limitations under the License.
     <div *option="let storageClass">{{storageClass.name}}</div>
   </km-combobox>
 
-  <km-number-stepper [formControlName]="Controls.PVCSize"
+  <km-number-stepper [formControlName]="Controls.PrimaryDiskSize"
                      mode="errors"
                      label="Size (GB)"
                      min="10"
                      step="10"
                      required>
   </km-number-stepper>
+
+  <mat-card-header class="km-no-padding">
+    <mat-card-title>Secondary Disks</mat-card-title>
+  </mat-card-header>
+
+ <div *ngFor="let secondaryDisks of secondaryDisksFormArray.controls"
+      [formGroupName]="secondaryDisks">
+   <!-- TODO -->
+   <km-number-stepper [formControlName]="secondaryDiskControl"
+                      mode="errors"
+                      label="Size (GB)"
+                      min="10"
+                      step="10">
+   </km-number-stepper>
+ </div>
 </form>

@@ -196,13 +196,20 @@ export class HetznerNodeSpec {
 }
 
 export class KubeVirtNodeSpec {
-  vmFlavor: string;
+  name: string;
+  flavorName: string;
+  flavorProfile: string;
   cpus: string;
   memory: string;
-  namespace: string;
-  sourceURL: string;
+  primaryDiskOSImage: string;
+  primaryDiskStorageClassName: string;
+  primaryDiskSize: string;
+  secondaryDisks?: KubeVirtSecondaryDisk[];
+}
+
+export class KubeVirtSecondaryDisk {
+  size: string;
   storageClassName: string;
-  pvcSize: string;
 }
 
 export class OpenstackNodeSpec {
@@ -320,10 +327,9 @@ export function getDefaultNodeProviderSpec(provider: string): object {
       } as AnexiaNodeSpec;
     case NodeProvider.KUBEVIRT:
       return {
-        cpus: '1',
+        cpus: '2',
         memory: '2Gi',
-        pvcSize: '10Gi',
-        namespace: 'kube-system',
+        primaryDiskSize: '10Gi',
       } as KubeVirtNodeSpec;
     case NodeProvider.NUTANIX:
       return {
