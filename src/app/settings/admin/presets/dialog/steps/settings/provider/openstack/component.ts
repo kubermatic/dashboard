@@ -15,7 +15,6 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
-import {CredentialsType} from '@app/wizard/step/provider-settings/provider/extended/openstack/service';
 import {OpenstackPresetSpec} from '@shared/entity/preset';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge, of} from 'rxjs';
@@ -91,15 +90,13 @@ export class OpenstackSettingsComponent extends BaseFormValidator implements OnI
       subnetID: this.form.get(Controls.SubnetID).value,
     } as OpenstackPresetSpec;
 
-    const credentialsType = this._determineCredentials();
-
     // User can only specify credentials for a single credential type i.e. either default or application
-    if (credentialsType === CredentialsType.Default) {
+    if (this._hasDefaultCredentials()) {
       preset.username = this.form.get(Controls.Credentials).value.credentials.username;
       preset.password = this.form.get(Controls.Credentials).value.credentials.password;
       preset.project = this.form.get(Controls.Credentials).value.credentials.project;
       preset.projectID = this.form.get(Controls.Credentials).value.credentials.projectID;
-    } else if (credentialsType === CredentialsType.Application) {
+    } else if (this._hasApplicationCredentials()) {
       preset.applicationCredentialID = this.form.get(Controls.Credentials).value.credentials.applicationCredentialID;
       preset.applicationCredentialSecret = this.form.get(
         Controls.Credentials
@@ -108,23 +105,13 @@ export class OpenstackSettingsComponent extends BaseFormValidator implements OnI
     this._presetDialogService.preset.spec.openstack = preset;
   }
 
-  private _determineCredentials(): CredentialsType {
-    if (!this.form.get(Controls.Credentials).value || !this.form.get(Controls.Credentials).value.credentials) {
-      return null;
-    }
-
-    return this._hasApplicationCredentials(this.form.get(Controls.Credentials).value.credentials)
-      ? CredentialsType.Application
-      : this._hasDefaultCredentials(this.form.get(Controls.Credentials).value.credentials)
-      ? CredentialsType.Default
-      : null;
+  private _hasApplicationCredentials(): boolean {
+    const creds = this.form.get(Controls.Credentials).value.credentials;
+    return !!creds && !!creds.applicationCredentialID && !!creds.applicationCredentialSecret;
   }
 
-  private _hasApplicationCredentials(creds: any): boolean {
-    return !!creds.applicationCredentialID && !!creds.applicationCredentialSecret;
-  }
-
-  private _hasDefaultCredentials(creds: any): boolean {
-    return !!creds.username && !!creds.password && (!!creds.project || !!creds.projectID);
+  private _hasDefaultCredentials(): boolean {
+    const creds = this.form.get(Controls.Credentials).value.credentials;
+    return !!creds && !!creds.username && !!creds.password && (!!creds.project || !!creds.projectID);
   }
 }
