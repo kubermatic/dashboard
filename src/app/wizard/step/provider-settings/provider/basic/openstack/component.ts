@@ -53,7 +53,7 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _presets: PresetsService,
-    private readonly _clusterSpecService: ClusterSpecService,
+    private readonly _clusterSpecService: ClusterSpecService
   ) {
     super('Openstack Provider Basic');
   }
