@@ -231,7 +231,7 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
   private _setDefaultVPC(vpcs: AWSVPC[]): void {
     this.vpcIDs = vpcs;
     const defaultVPC = this.vpcIDs.find(vpc => vpc.isDefault);
-    this.selectedVPC = defaultVPC ? defaultVPC.vpcID : undefined;
+    this.selectedVPC = defaultVPC ? defaultVPC.vpcId : undefined;
     this.vpcLabel = !_.isEmpty(this.vpcIDs) ? VPCState.Ready : VPCState.Empty;
     this._cdr.detectChanges();
   }

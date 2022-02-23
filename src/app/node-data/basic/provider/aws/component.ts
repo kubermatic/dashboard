@@ -255,6 +255,8 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
 
   private _setDefaultSubnet(subnets: AWSSubnet[]): void {
     if (subnets.length === 0) {
+      this.subnetLabel = SubnetState.Empty;
+      this._cdr.detectChanges();
       return;
     }
 
