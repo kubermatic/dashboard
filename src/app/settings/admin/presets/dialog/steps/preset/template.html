@@ -16,7 +16,8 @@ limitations under the License.
 
 <form [formGroup]="form"
       fxFlex="100%"
-      fxLayout="column">
+      fxLayout="column"
+      fxLayoutGap="8px">
   <div class="spacing">Create a Preset with a single provider and add the other providers later.</div>
   <mat-form-field fxFlex>
     <mat-label>Preset Name</mat-label>
@@ -30,17 +31,16 @@ limitations under the License.
   </mat-form-field>
 
   <div class="optional-section">Optional Settings</div>
-  <km-tag-list label="Restrict Preset Group to Domains"
-               placeholder="Domains..."
-               description="Use commas, space or enter key as the separators."
-               [tags]="domains"
-               (tagsChange)="onDomainsChange($event)"
-               [formControlName]="controls.Domains"
-               [separatorKeysCodes]="separatorKeysCodes"
-               [validationPattern]="domainRegex"
-               [validationPatternError]="'Input has to be a valid domain like kubermatic.com'"
-               fxFlex>
-  </km-tag-list>
+  <km-chip-list label="Restrict Preset Group to Domains"
+                placeholder="Domains..."
+                description="Use commas, space or enter key as the separators."
+                [tags]="domains"
+                (onChange)="onDomainsChange($event)"
+                [formControlName]="controls.Domains"
+                [kmPattern]="domainRegex"
+                kmPatternError="Input has to be a valid domain like kubermatic.com"
+                fxFlex>
+  </km-chip-list>
 
   <mat-checkbox [formControlName]="controls.Disable"
                 class="km-disable-ripple">

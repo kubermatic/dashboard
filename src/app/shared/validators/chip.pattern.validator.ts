@@ -12,18 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'variables';
-@use 'mixins';
+import {AbstractControl, ValidationErrors, Validator} from '@angular/forms';
+import _ from 'lodash';
 
-.optional-section {
-  font-size: variables.$font-size-subhead-lg;
-  padding: 0 0 12px;
-}
+export class ChipPatternValidator implements Validator {
+  readonly _pattern: RegExp;
 
-.tooltip {
-  margin-left: 4px;
-}
+  constructor(pattern: string) {
+    this._pattern = new RegExp(pattern);
+  }
 
-.spacing {
-  padding-bottom: 12px;
+  validate(control: AbstractControl): ValidationErrors | null {
+    if (!_.isArray(control.value)) {
+      return null;
+    }
+
+    const value = control.value as [];
+    return value.every(v => this._pattern.test(v)) ? null : this._error();
+  }
+
+  private _error(): ValidationErrors {
+    return {
+      pattern: {
+        valid: false,
+      },
+    };
+  }
 }

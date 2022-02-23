@@ -19,7 +19,8 @@ limitations under the License.
      class="km-dialog-context-description">Edit <b>{{data.datacenter.metadata.name}}</b> datacenter</p>
 
   <form [formGroup]="form"
-        fxLayout="column">
+        fxLayout="column"
+        fxLayoutGap="8px">
     <mat-form-field fxFlex>
       <mat-label>Name</mat-label>
       <input required
@@ -114,17 +115,15 @@ limitations under the License.
       </mat-error>
     </mat-form-field>
 
-    <km-tag-list class="domain-input"
-                label="Required Emails"
-                description="Use commas, space or enter key as the separators."
-                [tags]="requiredEmails"
-                (tagsChange)="onRequiredEmailsChange($event)"
-                [formControlName]="controls.RequiredEmails"
-                [separatorKeysCodes]="separatorKeysCodes"
-                [validationPattern]="domainRegex"
-                [validationPatternError]="'Input has to be a valid domain like kubermatic.com'"
-                fxFlex>
-    </km-tag-list>
+    <km-chip-list label="Required Emails"
+                  description="Use commas, space or enter key as the separators."
+                  [tags]="requiredEmails"
+                  (onChange)="onRequiredEmailsChange($event)"
+                  [formControlName]="controls.RequiredEmails"
+                  [kmPattern]="domainRegex"
+                  kmPatternError="Input has to be a valid domain like kubermatic.com"
+                  fxFlex>
+    </km-chip-list>
 
     <mat-checkbox [formControlName]="controls.EnforcePodSecurityPolicy">Enforce Pod Security Policy</mat-checkbox>
     <mat-checkbox [formControlName]="controls.EnforceAuditLogging">Enforce Audit Logging</mat-checkbox>
