@@ -109,17 +109,16 @@ limitations under the License.
     <div *ngFor="let control of secondaryDisksFormArray.controls; let i = index"
          [formGroupName]="i">
       <div fxFlex
-      fxLayoutGap="10px">
-        <mat-form-field fxFlex>
-          <mat-label>Storage Class</mat-label>
-          <input matInput
-                 [name]="Controls.SecondaryDiskStorageClass"
-                 [formControlName]="Controls.SecondaryDiskStorageClass"
-          (keyup)="onSecondaryDiskChange()">
-          <mat-error *ngIf="control.get(Controls.SecondaryDiskStorageClass).errors?.required">
-            Storage Class is required.
-          </mat-error>
-        </mat-form-field>
+           fxLayoutGap="10px">
+        <km-combobox [options]="storageClasses"
+                     [formControlName]="Controls.SecondaryDiskStorageClass"
+                     [label]="storageClassLabel"
+                     inputLabel="Select storage class..."
+                     filterBy="name"
+                     required
+                     fxFlex>
+          <div *option="let storageClass">{{storageClass.name}}</div>
+        </km-combobox>
         <km-number-stepper [formControlName]="Controls.SecondaryDiskSize"
                            mode="errors"
                            label="Size (GB)"
