@@ -17,13 +17,13 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {SharedModule} from '@shared/module';
-import {TagListComponent} from './component';
+import {ChipListComponent} from './component';
 
 const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
 
 describe('TagListComponent', () => {
-  let fixture: ComponentFixture<TagListComponent>;
-  let component: TagListComponent;
+  let fixture: ComponentFixture<ChipListComponent>;
+  let component: ChipListComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -33,7 +33,7 @@ describe('TagListComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TagListComponent);
+    fixture = TestBed.createComponent(ChipListComponent);
     component = fixture.componentInstance;
   });
 

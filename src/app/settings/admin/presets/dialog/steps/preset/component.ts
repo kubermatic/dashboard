@@ -13,12 +13,11 @@
 // limitations under the License.
 
 import {Component, forwardRef, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {ENTER, COMMA, SPACE} from '@angular/cdk/keycodes';
 
 enum Controls {
   Name = 'name',
@@ -46,7 +45,6 @@ enum Controls {
 export class PresetStepComponent extends BaseFormValidator implements OnInit {
   readonly controls = Controls;
   readonly domainRegex = '^(?!-)[A-Za-z0-9-]+([\\-.][a-z0-9]+)*\\.[A-Za-z]{2,6}$';
-  readonly separatorKeysCodes: number[] = [ENTER, COMMA, SPACE];
 
   domains: string[] = [];
 
@@ -56,9 +54,9 @@ export class PresetStepComponent extends BaseFormValidator implements OnInit {
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Name]: new FormControl('', [Validators.required]),
-      [Controls.Domains]: new FormControl([]),
-      [Controls.Disable]: new FormControl(''),
+      [Controls.Name]: this._builder.control('', [Validators.required]),
+      [Controls.Domains]: this._builder.control(''),
+      [Controls.Disable]: this._builder.control(''),
     });
 
     merge(
@@ -72,13 +70,12 @@ export class PresetStepComponent extends BaseFormValidator implements OnInit {
 
   onDomainsChange(domains: string[]): void {
     this.domains = domains;
-    this.form.get(Controls.Domains).setValue(this.domains);
     this.form.get(Controls.Domains).updateValueAndValidity();
+    this._presetDialogService.preset.spec.requiredEmails = this.domains;
   }
 
   private _update(): void {
     this._presetDialogService.preset.metadata.name = this.form.get(Controls.Name).value;
-    this._presetDialogService.preset.spec.requiredEmails = this.form.get(Controls.Domains).value;
     this._presetDialogService.preset.spec.enabled = !this.form.get(Controls.Disable).value;
   }
 }
