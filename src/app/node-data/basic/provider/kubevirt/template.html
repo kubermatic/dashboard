@@ -20,7 +20,7 @@ limitations under the License.
        fxLayoutGap="8px">
     <km-combobox #flavorCombobox
                  [selected]="selectedFlavor"
-                 [options]="flavors"
+                 [optionsGetter]="getFlavors.bind(this)"
                  [formControlName]="Controls.VMFlavor"
                  (changed)="onFlavorChange($event)"
                  [label]="flavorLabel"

@@ -14,12 +14,8 @@
 
 export class KubeVirtVMInstancePreset {
   name: string;
-  spec?: KubeVirtVMInstancePresetSpec;
-}
-
-export class KubeVirtVMInstancePresetSpec {
-  selector: object;
-  domain?: object;
+  namespace: string;
+  spec: string;
 }
 
 export class KubeVirtStorageClass {

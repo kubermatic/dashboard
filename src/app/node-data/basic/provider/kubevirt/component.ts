@@ -155,6 +155,10 @@ export class KubeVirtBasicNodeDataComponent
     );
   }
 
+  getFlavors(): KubeVirtVMInstancePreset[] {
+    return this.flavors;
+  }
+
   onFlavorChange(flavor: string): void {
     if (_.isString(flavor) && !_.isEmpty(flavor)) {
       this.form.get(Controls.CPUs).disable();
