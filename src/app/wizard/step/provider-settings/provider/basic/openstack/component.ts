@@ -12,19 +12,40 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ChangeDetectionStrategy, Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  forwardRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {OpenstackCredentialsTypeService} from '@app/wizard/step/provider-settings/provider/extended/openstack/service';
 import {ClusterSpecService} from '@core/services/cluster-spec';
+import {DatacenterService} from '@core/services/datacenter';
 import {PresetsService} from '@core/services/wizard/presets';
+import {FilteredComboboxComponent} from '@shared/components/combobox/component';
+import {OpenstackCredentials} from '@shared/components/openstack-credentials/component';
 import {CloudSpec, Cluster, ClusterSpec, OpenstackCloudSpec} from '@shared/entity/cluster';
+import {OpenstackFloatingIPPool} from '@shared/entity/provider/openstack';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {merge} from 'rxjs';
-import {distinctUntilChanged, filter, takeUntil} from 'rxjs/operators';
+import _ from 'lodash';
+import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
+import {catchError, distinctUntilChanged, filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 enum Controls {
   Domain = 'domain',
   Credentials = 'credentials',
+  FloatingIPPool = 'floatingIPPool',
+}
+
+enum FloatingIPPoolState {
+  Ready = 'Floating IP Pool',
+  Loading = 'Loading...',
+  Empty = 'No Floating IP Pools Available',
 }
 
 @Component({
@@ -46,6 +67,11 @@ enum Controls {
 })
 export class OpenstackProviderBasicComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private readonly _domains: string[] = ['Default'];
+  private _isFloatingPoolIPEnforced = false;
+  @ViewChild('floatingIPPoolCombobox')
+  private readonly _floatingIPPoolCombobox: FilteredComboboxComponent;
+  floatingIPPools: OpenstackFloatingIPPool[] = [];
+  floatingIPPoolsLabel = FloatingIPPoolState.Empty;
   readonly Controls = Controls;
   isPresetSelected = false;
   domains = this._domains.map(type => ({name: type}));
@@ -53,7 +79,10 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _presets: PresetsService,
-    private readonly _clusterSpecService: ClusterSpecService
+    private readonly _clusterSpecService: ClusterSpecService,
+    private readonly _datacenterService: DatacenterService,
+    private readonly _credentialsTypeService: OpenstackCredentialsTypeService,
+    private readonly _cdr: ChangeDetectorRef
   ) {
     super('Openstack Provider Basic');
   }
@@ -62,6 +91,7 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
     this.form = this._builder.group({
       [Controls.Domain]: this._builder.control('', Validators.required),
       [Controls.Credentials]: this._builder.control(''),
+      [Controls.FloatingIPPool]: this._builder.control('', Validators.required),
     });
 
     this._init();
@@ -85,11 +115,106 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
     merge(this.form.get(Controls.Domain).valueChanges.pipe(distinctUntilChanged()))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
+
+    merge(
+      this._clusterSpecService.providerChanges,
+      this._clusterSpecService.datacenterChanges,
+      this._credentialsTypeService.credentialsTypeChanges
+    )
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
+      .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterSpecService.datacenter).pipe(take(1))))
+      .pipe(tap(dc => (this._isFloatingPoolIPEnforced = dc.spec.openstack.enforceFloatingIP)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => this.form.reset());
   }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  isRequired(control: Controls): boolean {
+    switch (control) {
+      case Controls.FloatingIPPool:
+        return this._isFloatingPoolIPEnforced;
+      default:
+        return true;
+    }
+  }
+
+  onFloatingIPPoolChange(floatingIPPool: string): void {
+    this._clusterSpecService.cluster.spec.cloud.openstack.floatingIPPool = floatingIPPool;
+  }
+
+  getHint(control: Controls): string {
+    switch (control) {
+      case Controls.FloatingIPPool:
+        return this._hasRequiredCredentials() ? '' : 'Please enter your credentials first.';
+    }
+
+    return '';
+  }
+
+  onCredentialsChange(credentials: OpenstackCredentials): void {
+    this._clearFloatingIPPool();
+    this._floatingIPPoolListObservable(credentials)
+      .pipe(take(1))
+      .subscribe((floatingIPPools: OpenstackFloatingIPPool[]) => {
+        this.floatingIPPools = floatingIPPools;
+
+        if (!_.isEmpty(this.floatingIPPools)) {
+          this.floatingIPPoolsLabel = FloatingIPPoolState.Ready;
+          this._cdr.detectChanges();
+        }
+      });
+  }
+
+  private _hasRequiredCredentials(): boolean {
+    return (
+      (!!this._clusterSpecService.cluster.spec.cloud.openstack?.applicationCredentialID &&
+        !!this._clusterSpecService.cluster.spec.cloud.openstack?.applicationCredentialSecret) ||
+      (!!this._clusterSpecService.cluster.spec.cloud.openstack?.username &&
+        !!this._clusterSpecService.cluster.spec.cloud.openstack?.password)
+    );
+  }
+
+  private _floatingIPPoolListObservable(credentials: OpenstackCredentials): Observable<OpenstackFloatingIPPool[]> {
+    return this._presets
+      .provider(NodeProvider.OPENSTACK)
+      .domain(this._clusterSpecService.cluster.spec.cloud.openstack.domain)
+      .applicationCredentialID(credentials?.applicationCredentialID)
+      .applicationCredentialPassword(credentials?.applicationCredentialSecret)
+      .username(credentials?.username)
+      .password(credentials?.password)
+      .project(credentials?.project)
+      .projectID(credentials?.projectID)
+      .datacenter(this._clusterSpecService.cluster.spec.cloud.dc)
+      .networks(this._onFloatingIPPoolLoading.bind(this))
+      .pipe(
+        map(networks => {
+          const filteredNetworks = networks.filter(network => network.external === true);
+          return _.sortBy(filteredNetworks, n => n.name.toLowerCase());
+        })
+      )
+      .pipe(
+        catchError(() => {
+          this._clearFloatingIPPool();
+          return onErrorResumeNext(EMPTY);
+        })
+      );
+  }
+
+  private _clearFloatingIPPool(): void {
+    this.floatingIPPools = [];
+    this._floatingIPPoolCombobox.reset();
+    this.floatingIPPoolsLabel = FloatingIPPoolState.Empty;
+    this._cdr.detectChanges();
+  }
+
+  private _onFloatingIPPoolLoading(): void {
+    this._clearFloatingIPPool();
+    this.floatingIPPoolsLabel = FloatingIPPoolState.Loading;
+    this._cdr.detectChanges();
   }
 
   private _init(): void {

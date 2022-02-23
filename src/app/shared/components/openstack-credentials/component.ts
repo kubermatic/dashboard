@@ -1,4 +1,4 @@
-// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,7 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ChangeDetectionStrategy, Component, forwardRef, Input, OnDestroy, OnInit} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  forwardRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {MatButtonToggleChange} from '@angular/material/button-toggle';
 import {
@@ -23,10 +32,25 @@ import {ClusterSpecService} from '@core/services/cluster-spec';
 import {PresetsService} from '@core/services/wizard/presets';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {filter, takeUntil} from 'rxjs/operators';
+import {debounceTime, filter, takeUntil, tap} from 'rxjs/operators';
 
 enum Controls {
   Credentials = 'credentials',
+}
+
+export interface OpenstackCredentials {
+  username: string;
+  password: string;
+  project: string;
+  projectID: string;
+  applicationCredentialID: string;
+  applicationCredentialSecret: string;
+  floatingIPPool: string;
+}
+
+export enum Mode {
+  Wizard,
+  PresetCreation,
 }
 
 @Component({
@@ -48,22 +72,16 @@ enum Controls {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpenstackCredentialsComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  private readonly _debounceTime = 500;
   readonly Controls = Controls;
   readonly CredentialsType = CredentialsType;
   isPresetSelected = false;
 
-  private _verifyCredentials: boolean;
   @Input()
-  get verifyCredentials() {
-    return this._verifyCredentials;
-  }
-  set verifyCredentials(value: any) {
-    this._verifyCredentials = this.coerceBooleanProperty(value);
-  }
+  mode: Mode = Mode.Wizard;
 
-  private coerceBooleanProperty(value: any): boolean {
-    return value !== null && `${value}` !== 'false';
-  }
+  @Output()
+  readonly onChange = new EventEmitter<OpenstackCredentials>();
 
   get credentialsType(): CredentialsType {
     return this._credentialsTypeService.credentialsType;
@@ -90,7 +108,10 @@ export class OpenstackCredentialsComponent extends BaseFormValidator implements 
       })
     );
 
-    this.form.valueChanges
+    this.form
+      .get(Controls.Credentials)
+      .valueChanges.pipe(debounceTime(this._debounceTime))
+      .pipe(tap(value => this.onChange.next(value)))
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>

@@ -35,5 +35,22 @@ limitations under the License.
     </mat-error>
   </mat-form-field>
 
-  <km-openstack-credentials [formControl]="form.get(Controls.Credentials)" verifyCredentials></km-openstack-credentials>
+  <km-openstack-credentials [formControl]="form.get(Controls.Credentials)"
+                            (onChange)="onCredentialsChange($event)"></km-openstack-credentials>
+
+  <km-combobox #floatingIPPoolCombobox
+               [required]="isRequired(Controls.FloatingIPPool)"
+               [grouped]="false"
+               [isDisabled]="isPresetSelected"
+               [options]="floatingIPPools"
+               [hint]="getHint(Controls.FloatingIPPool)"
+               [formControlName]="Controls.FloatingIPPool"
+               (changed)="onFloatingIPPoolChange($event)"
+               [label]="floatingIPPoolsLabel"
+               inputLabel="Select Floating IP Pool..."
+               filterBy="name">
+    <div *option="let floatingIPPool">
+      {{floatingIPPool.name}}
+    </div>
+  </km-combobox>
 </form>

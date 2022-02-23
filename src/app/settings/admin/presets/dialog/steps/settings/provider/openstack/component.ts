@@ -15,6 +15,7 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
+import {Mode, OpenstackCredentials} from '@shared/components/openstack-credentials/component';
 import {OpenstackPresetSpec} from '@shared/entity/preset';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge, of} from 'rxjs';
@@ -48,6 +49,7 @@ export enum Controls {
 })
 export class OpenstackSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
+  readonly Modes = Mode;
 
   constructor(private readonly _builder: FormBuilder, private readonly _presetDialogService: PresetDialogService) {
     super();
@@ -81,7 +83,8 @@ export class OpenstackSettingsComponent extends BaseFormValidator implements OnI
   }
 
   private _update(): void {
-    const preset = {
+    this._presetDialogService.preset.spec.openstack = {
+      ...this._presetDialogService.preset.spec.openstack,
       domain: this.form.get(Controls.Domain).value,
       network: this.form.get(Controls.Network).value,
       securityGroups: this.form.get(Controls.SecurityGroups).value,
@@ -89,29 +92,17 @@ export class OpenstackSettingsComponent extends BaseFormValidator implements OnI
       routerID: this.form.get(Controls.RouterID).value,
       subnetID: this.form.get(Controls.SubnetID).value,
     } as OpenstackPresetSpec;
-
-    // User can only specify credentials for a single credential type i.e. either default or application
-    if (this._hasDefaultCredentials()) {
-      preset.username = this.form.get(Controls.Credentials).value.credentials.username;
-      preset.password = this.form.get(Controls.Credentials).value.credentials.password;
-      preset.project = this.form.get(Controls.Credentials).value.credentials.project;
-      preset.projectID = this.form.get(Controls.Credentials).value.credentials.projectID;
-    } else if (this._hasApplicationCredentials()) {
-      preset.applicationCredentialID = this.form.get(Controls.Credentials).value.credentials.applicationCredentialID;
-      preset.applicationCredentialSecret = this.form.get(
-        Controls.Credentials
-      ).value.credentials.applicationCredentialSecret;
-    }
-    this._presetDialogService.preset.spec.openstack = preset;
   }
 
-  private _hasApplicationCredentials(): boolean {
-    const creds = this.form.get(Controls.Credentials).value.credentials;
-    return !!creds && !!creds.applicationCredentialID && !!creds.applicationCredentialSecret;
-  }
-
-  private _hasDefaultCredentials(): boolean {
-    const creds = this.form.get(Controls.Credentials).value.credentials;
-    return !!creds && !!creds.username && !!creds.password && (!!creds.project || !!creds.projectID);
+  onCredentialsChange(credentials: OpenstackCredentials): void {
+    this._presetDialogService.preset.spec.openstack = {
+      ...this._presetDialogService.preset.spec.openstack,
+      username: credentials?.username,
+      password: credentials?.password,
+      project: credentials?.project,
+      projectID: credentials?.projectID,
+      applicationCredentialID: credentials?.applicationCredentialID,
+      applicationCredentialSecret: credentials?.applicationCredentialSecret,
+    } as OpenstackPresetSpec;
   }
 }
