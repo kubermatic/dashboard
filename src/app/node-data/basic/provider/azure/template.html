@@ -57,12 +57,13 @@ limitations under the License.
   <km-number-stepper [formControlName]="Controls.OSDiskSize"
                      mode="errors"
                      label="OS Disk Size in GB"
-                     hint="Leave 0 to use default value.">
+                     min="30"
+                     hint="Leave 30 to use default value.">
   </km-number-stepper>
 
   <km-number-stepper [formControlName]="Controls.DataDiskSize"
                      mode="errors"
                      label="Data Disk Size in GB"
-                     hint="Leave 0 to use default value.">
+                     hint="Leave 30 to use default value.">
   </km-number-stepper>
 </form>
