@@ -14,18 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-  <km-dialog-title>Virtual Machine Flavor Details</km-dialog-title>
-  <mat-dialog-content fxLayout="column" fxLayoutGap="10px">
-    <div fxLayout="row">
-      <km-property>
-        <div key>Name</div>
-        <div value>{{flavor.name}}</div>
-      </km-property>
-      <km-property>
-        <div key>Namespace</div>
-        <div value>{{flavor.namespace}}</div>
-      </km-property>
-    </div>
-    <div class="block-title km-text-muted">Spec</div>
-    <div class="km-code-block">{{spec | json}}</div>
-  </mat-dialog-content>
+<km-dialog-title>Virtual Machine Flavor Details</km-dialog-title>
+<mat-dialog-content fxLayout="column"
+                    fxLayoutGap="10px">
+  <div fxLayout="row">
+    <km-property>
+      <div key>Name</div>
+      <div value>{{flavor.name}}</div>
+    </km-property>
+    <km-property>
+      <div key>Namespace</div>
+      <div value>{{flavor.namespace}}</div>
+    </km-property>
+  </div>
+  <div class="block-title km-text-muted">Spec</div>
+  <div class="km-code-block">{{spec | json}}</div>
+</mat-dialog-content>
