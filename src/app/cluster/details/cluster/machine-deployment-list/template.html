@@ -206,12 +206,12 @@ limitations under the License.
     <ol *ngIf="!!cluster.spec.cloud.bringyourown"
         class="kubeadm-manual">
       <li>
-        Install kubeadm on you local system and the worker node,
+        Install kubeadm on a control plane and the worker node,
         <a href="https://kubernetes.io/docs/setup/independent/install-kubeadm/"
            target="_blank">learn how.</a>
       </li>
       <li>
-        <div>Create a token for the new node on your local system:</div>
+        <div>Create a token for the new node on a control plane:</div>
         <div class="km-code-block">kubeadm token --kubeconfig kubeconfig create --print-join-command</div>
       </li>
       <li>
