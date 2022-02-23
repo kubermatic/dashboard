@@ -41,8 +41,8 @@ enum Controls {
   PrimaryDiskStorageClassName = 'primaryDiskStorageClassName',
   PrimaryDiskSize = 'primaryDiskSize',
   SecondaryDisks = 'secondaryDisks',
-  SecondaryDiskStorageClass = 'secondaryDisks',
-  SecondaryDiskSize = 'secondaryDisks',
+  SecondaryDiskStorageClass = 'secondaryDiskStorageClass',
+  SecondaryDiskSize = 'secondaryDiskSize',
 }
 
 enum FlavorsState {
@@ -102,11 +102,11 @@ export class KubeVirtBasicNodeDataComponent
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.VMFlavor]: this._builder.control(''),
-      [Controls.CPUs]: this._builder.control('1', Validators.required),
-      [Controls.Memory]: this._builder.control('2Gi', Validators.required),
+      [Controls.CPUs]: this._builder.control('2', Validators.required),
+      [Controls.Memory]: this._builder.control('2048', Validators.required),
       [Controls.PrimaryDiskOSImage]: this._builder.control('', Validators.required),
       [Controls.PrimaryDiskStorageClassName]: this._builder.control('', Validators.required),
-      [Controls.PrimaryDiskSize]: this._builder.control('10Gi', Validators.required),
+      [Controls.PrimaryDiskSize]: this._builder.control('10', Validators.required),
       [Controls.SecondaryDisks]: this._builder.array([]),
     });
 
@@ -146,15 +146,13 @@ export class KubeVirtBasicNodeDataComponent
     return this.form.get(Controls.SecondaryDisks) as FormArray;
   }
 
-  private _addSecondaryDisk(storageClass = '', size = ''): void {
-    if (this.secondaryDisksFormArray.length < this.maxSecondaryDisks) {
-      this.secondaryDisksFormArray.push(
-        this._builder.group({
-          [Controls.SecondaryDiskStorageClass]: this._builder.control(size),
-          [Controls.SecondaryDiskSize]: this._builder.control(storageClass),
-        })
-      );
-    }
+  addSecondaryDisk(storageClass = '', size = '10'): void {
+    this.secondaryDisksFormArray.push(
+      this._builder.group({
+        [Controls.SecondaryDiskStorageClass]: this._builder.control(storageClass, Validators.required),
+        [Controls.SecondaryDiskSize]: this._builder.control(size, Validators.required),
+      })
+    );
   }
 
   onFlavorChange(_: string): void {}
@@ -239,8 +237,6 @@ export class KubeVirtBasicNodeDataComponent
       this.form
         .get(Controls.PrimaryDiskOSImage)
         .setValue(this._nodeDataService.nodeData.spec.cloud.kubevirt.primaryDiskOSImage);
-    } else {
-      this._addSecondaryDisk();
     }
   }
 

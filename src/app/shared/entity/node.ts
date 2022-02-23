@@ -328,8 +328,8 @@ export function getDefaultNodeProviderSpec(provider: string): object {
     case NodeProvider.KUBEVIRT:
       return {
         cpus: '2',
-        memory: '2Gi',
-        primaryDiskSize: '10Gi',
+        memory: '2048',
+        primaryDiskSize: '10',
       } as KubeVirtNodeSpec;
     case NodeProvider.NUTANIX:
       return {

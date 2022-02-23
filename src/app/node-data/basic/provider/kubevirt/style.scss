@@ -12,6 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use "variables";
+
 .view-flavor-button {
   margin-top: 4px;
+}
+
+.add-secondary-disk-button {
+  margin-top: -12px;
+}
+
+.no-secondary-disks-msg {
+  font-size: variables.$font-size-body;
+  padding-bottom: 15px;
 }
