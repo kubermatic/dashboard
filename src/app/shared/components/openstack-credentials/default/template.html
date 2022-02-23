@@ -1,5 +1,5 @@
 <!--
-Copyright 2022 The Kubermatic Kubernetes Platform contributors.
+Copyright 2020 The Kubermatic Kubernetes Platform contributors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -41,39 +41,24 @@ limitations under the License.
     </mat-error>
   </mat-form-field>
 
-  <ng-container *ngIf="verifyCredentials">
-    <mat-form-field fxFlex>
-      <mat-label>{{projectsLabel}}</mat-label>
-      <input matInput
-             [formControlName]="Controls.Project"
-             [name]="Controls.Project"
-             [matAutocomplete]="autoProject"
-             [required]="isRequired(Controls.Project)">
-      <mat-autocomplete #autoProject="matAutocomplete">
-        <mat-option *ngFor="let project of projects"
-                    [value]="project.name">
-          {{project.name}}
-        </mat-option>
-      </mat-autocomplete>
-      <mat-hint>{{getHint(Controls.Project)}}</mat-hint>
-      <mat-error *ngIf="form.get(Controls.Project).hasError('required')">
-        The Project is <strong>required</strong>.
-      </mat-error>
-    </mat-form-field>
-  </ng-container>
-  <ng-container *ngIf="!verifyCredentials">
-    <mat-form-field fxFlex>
-      <mat-label>Project</mat-label>
-      <input matInput
-             [formControlName]="Controls.Project"
-             [name]="Controls.Project"
-             type="text"
-             autocomplete="off">
-      <mat-error *ngIf="form.get(Controls.Project).hasError('required')">
-        Project is <strong>required</strong>.
-      </mat-error>
-    </mat-form-field>
-  </ng-container>
+  <mat-form-field fxFlex>
+    <mat-label>{{projectsLabel}}</mat-label>
+    <input matInput
+           [formControlName]="Controls.Project"
+           [name]="Controls.Project"
+           [matAutocomplete]="autoProject"
+           [required]="isRequired(Controls.Project)">
+    <mat-autocomplete #autoProject="matAutocomplete">
+      <mat-option *ngFor="let project of projects"
+                  [value]="project.name">
+        {{project.name}}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-hint *ngIf="mode === Modes.Wizard">{{getHint(Controls.Project)}}</mat-hint>
+    <mat-error *ngIf="form.get(Controls.Project).hasError('required')">
+      The Project is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
 
   <mat-form-field fxFlex>
     <mat-label>Project ID</mat-label>
@@ -86,21 +71,4 @@ limitations under the License.
       Project ID is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
-
-  <km-combobox #floatingIPPoolCombobox
-               *ngIf="verifyCredentials"
-               [required]="isRequired(Controls.FloatingIPPool)"
-               [grouped]="false"
-               [isDisabled]="isPresetSelected"
-               [options]="floatingIPPools"
-               [hint]="getHint(Controls.FloatingIPPool)"
-               [formControlName]="Controls.FloatingIPPool"
-               (changed)="onFloatingIPPoolChange($event)"
-               [label]="floatingIPPoolsLabel"
-               inputLabel="Select Floating IP Pool..."
-               filterBy="name">
-    <div *option="let floatingIPPool">
-      {{floatingIPPool.name}}
-    </div>
-  </km-combobox>
 </form>
