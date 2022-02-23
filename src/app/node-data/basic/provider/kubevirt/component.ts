@@ -24,7 +24,7 @@ import {
 } from '@angular/core';
 import {FormArray, FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {NodeDataService} from '@core/services/node-data/service';
-import {merge, Observable} from 'rxjs';
+import {Observable} from 'rxjs';
 import {map, takeUntil} from 'rxjs/operators';
 import {KubeVirtNodeSpec, KubeVirtSecondaryDisk, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {NodeData} from '@shared/model/NodeSpecChange';
@@ -32,6 +32,8 @@ import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
 import {KubeVirtStorageClass, KubeVirtVMInstancePreset} from '@shared/entity/provider/kubevirt';
 import {ComboboxControls, FilteredComboboxComponent} from '@shared/components/combobox/component';
+import {MatDialog} from '@angular/material/dialog';
+import {FlavorDetailsDialogComponent} from '@app/node-data/basic/provider/kubevirt/flavor-details/component';
 
 enum Controls {
   VMFlavor = 'vmFlavor',
@@ -94,7 +96,8 @@ export class KubeVirtBasicNodeDataComponent
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
-    private readonly _cdr: ChangeDetectorRef
+    private readonly _cdr: ChangeDetectorRef,
+    private readonly _matDialog: MatDialog
   ) {
     super();
   }
@@ -113,13 +116,7 @@ export class KubeVirtBasicNodeDataComponent
     this._init();
     this._nodeDataService.nodeData = this._getNodeData();
 
-    merge(
-      this.form.get(Controls.CPUs).valueChanges,
-      this.form.get(Controls.Memory).valueChanges,
-      this.form.get(Controls.PrimaryDiskOSImage).valueChanges,
-      this.form.get(Controls.PrimaryDiskStorageClassName).valueChanges,
-      this.form.get(Controls.PrimaryDiskSize).valueChanges
-    )
+    this.form.valueChanges
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
   }
@@ -155,11 +152,11 @@ export class KubeVirtBasicNodeDataComponent
     );
   }
 
-  getFlavors(): KubeVirtVMInstancePreset[] {
-    return this.flavors;
-  }
-
   onFlavorChange(flavor: string): void {
+    this.selectedFlavor = flavor;
+    this._nodeDataService.nodeData.spec.cloud.kubevirt.flavorName = flavor;
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
+
     if (_.isString(flavor) && !_.isEmpty(flavor)) {
       this.form.get(Controls.CPUs).disable();
       this.form.get(Controls.Memory).disable();
@@ -167,6 +164,12 @@ export class KubeVirtBasicNodeDataComponent
       this.form.get(Controls.CPUs).enable();
       this.form.get(Controls.Memory).enable();
     }
+  }
+
+  viewFlavor(): void {
+    this._matDialog.open(FlavorDetailsDialogComponent, {
+      data: {flavor: this.flavors.find(f => f.name === this.selectedFlavor)},
+    });
   }
 
   private get _flavorsObservable(): Observable<KubeVirtVMInstancePreset[]> {
@@ -201,7 +204,10 @@ export class KubeVirtBasicNodeDataComponent
     this._cdr.detectChanges();
   }
 
-  onStorageClassChange(_: string): void {}
+  onStorageClassChange(storageClass: string): void {
+    this._nodeDataService.nodeData.spec.cloud.kubevirt.primaryDiskStorageClassName = storageClass;
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
+  }
 
   private get _storageClassesObservable(): Observable<KubeVirtStorageClass[]> {
     return this._nodeDataService.kubeVirt
@@ -237,15 +243,11 @@ export class KubeVirtBasicNodeDataComponent
 
   private _init(): void {
     if (this._nodeDataService.nodeData.spec.cloud.kubevirt) {
-      this.form.get(Controls.VMFlavor).setValue(this._nodeDataService.nodeData.spec.cloud.kubevirt.flavorName);
       this.form.get(Controls.Memory).setValue(this._nodeDataService.nodeData.spec.cloud.kubevirt.memory);
       this.form.get(Controls.CPUs).setValue(this._nodeDataService.nodeData.spec.cloud.kubevirt.cpus);
       this.form
         .get(Controls.PrimaryDiskSize)
         .setValue(this._nodeDataService.nodeData.spec.cloud.kubevirt.primaryDiskSize);
-      this.form
-        .get(Controls.PrimaryDiskStorageClassName)
-        .setValue(this._nodeDataService.nodeData.spec.cloud.kubevirt.primaryDiskStorageClassName);
       this.form
         .get(Controls.PrimaryDiskOSImage)
         .setValue(this._nodeDataService.nodeData.spec.cloud.kubevirt.primaryDiskOSImage);
@@ -257,7 +259,7 @@ export class KubeVirtBasicNodeDataComponent
       spec: {
         cloud: {
           kubevirt: {
-            flavorName: this.form.get(Controls.VMFlavor).value,
+            flavorName: this.form.get(Controls.VMFlavor).value[ComboboxControls.Select],
             cpus: `${this.form.get(Controls.CPUs).value}`,
             memory: this.form.get(Controls.Memory).value,
             primaryDiskOSImage: this.form.get(Controls.PrimaryDiskOSImage).value,

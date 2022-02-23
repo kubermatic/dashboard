@@ -197,6 +197,9 @@ export class HetznerNodeSpec {
 
 export class KubeVirtNodeSpec {
   name: string;
+
+  // At the moment KubeVirt VM flavors are stored only in the default namespace so their names are unique.
+  // It is going to be adjusted in the future.
   flavorName: string;
   flavorProfile: string;
   cpus: string;
@@ -327,6 +330,7 @@ export function getDefaultNodeProviderSpec(provider: string): object {
       } as AnexiaNodeSpec;
     case NodeProvider.KUBEVIRT:
       return {
+        flavorName: '',
         cpus: '2',
         memory: '2048',
         primaryDiskSize: '10',

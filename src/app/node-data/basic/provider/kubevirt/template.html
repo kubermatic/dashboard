@@ -19,8 +19,10 @@ limitations under the License.
   <div fxLayout="row"
        fxLayoutGap="8px">
     <km-combobox #flavorCombobox
+                 [required]="true"
+                 [grouped]="false"
                  [selected]="selectedFlavor"
-                 [optionsGetter]="getFlavors.bind(this)"
+                 [options]="flavors"
                  [formControlName]="Controls.VMFlavor"
                  (changed)="onFlavorChange($event)"
                  [label]="flavorLabel"
@@ -33,6 +35,7 @@ limitations under the License.
             type="button"
             color="tertiary"
             class="view-flavor-button"
+            (click)="viewFlavor()"
             [disabled]="!selectedFlavor">
       <i class="km-icon-mask km-icon-search"></i>
       <span>View</span>
@@ -81,7 +84,8 @@ limitations under the License.
                (changed)="onStorageClassChange($event)"
                [label]="storageClassLabel"
                inputLabel="Select storage class..."
-               filterBy="name">
+               filterBy="name"
+               required>
     <div *option="let storageClass">{{storageClass.name}}</div>
   </km-combobox>
 
@@ -140,4 +144,6 @@ limitations under the License.
        class="no-secondary-disks-msg km-text-muted">
     No secondary disks configured. Use the add button above to configure up to three disks.
   </div>
+
+  {{form.valid}}
 </form>
