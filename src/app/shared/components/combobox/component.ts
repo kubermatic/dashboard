@@ -32,7 +32,7 @@ import {distinctUntilChanged, skipWhile, takeUntil} from 'rxjs/operators';
 import {BaseFormValidator} from '../../validators/base-form.validator';
 import {OptionDirective} from './directive';
 
-enum Controls {
+export enum ComboboxControls {
   Select = 'select',
 }
 
@@ -73,7 +73,7 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
   @Output() changed = new EventEmitter<string | string[]>();
   @ContentChild(OptionDirective, {read: TemplateRef}) optionTemplate;
   filterByInput: object = {};
-  readonly controls = Controls;
+  readonly controls = ComboboxControls;
   @ViewChild('input', {static: true}) private readonly _inputEl: ElementRef;
   @ViewChild('select', {static: true}) private readonly _matSelect: MatSelect;
 
@@ -83,7 +83,7 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Select]: this._builder.control('', this.required ? Validators.required : []),
+      [ComboboxControls.Select]: this._builder.control('', this.required ? Validators.required : []),
     });
 
     this._updateFormState();
@@ -93,11 +93,11 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
     }
 
     this.form
-      .get(Controls.Select)
+      .get(ComboboxControls.Select)
       .valueChanges.pipe(skipWhile(value => !value))
       .pipe(distinctUntilChanged())
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this.changed.emit(this.form.get(Controls.Select).value));
+      .subscribe(_ => this.changed.emit(this.form.get(ComboboxControls.Select).value));
   }
 
   private _updateFormState(): void {
@@ -105,7 +105,7 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
       return;
     }
 
-    this.form.get(Controls.Select).setValue(this.selected);
+    this.form.get(ComboboxControls.Select).setValue(this.selected);
 
     if (this.isDisabled) {
       this.form.disable();
@@ -125,7 +125,7 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
 
   reset(): void {
     this.selected = null;
-    this.form.get(Controls.Select).setValue(this.selected);
+    this.form.get(ComboboxControls.Select).setValue(this.selected);
   }
 
   hasOptions(): boolean {
@@ -142,6 +142,6 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
   }
 
   writeValue(value: string | string[]) {
-    this.form.get(Controls.Select).setValue(value, {emitEvent: false});
+    this.form.get(ComboboxControls.Select).setValue(value, {emitEvent: false});
   }
 }

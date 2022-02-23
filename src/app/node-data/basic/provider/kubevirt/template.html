@@ -43,7 +43,7 @@ limitations under the License.
                      mode="errors"
                      label="Number of CPUs"
                      min="1"
-                     [disabled]="!!selectedFlavor"
+                     [disabled]="form.get(Controls.CPUs).disabled"
                      required>
   </km-number-stepper>
 
@@ -52,7 +52,7 @@ limitations under the License.
                      label="Memory (MB)"
                      min="1000"
                      step="100"
-                     [disabled]="!!selectedFlavor"
+                     [disabled]="form.get(Controls.Memory).disabled"
                      required>
   </km-number-stepper>
 

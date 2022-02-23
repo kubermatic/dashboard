@@ -26,12 +26,12 @@ import {FormArray, FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} fr
 import {NodeDataService} from '@core/services/node-data/service';
 import {merge, Observable} from 'rxjs';
 import {map, takeUntil} from 'rxjs/operators';
-import {KubeVirtNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
+import {KubeVirtNodeSpec, KubeVirtSecondaryDisk, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
 import {KubeVirtStorageClass, KubeVirtVMInstancePreset} from '@shared/entity/provider/kubevirt';
-import {FilteredComboboxComponent} from '@shared/components/combobox/component';
+import {ComboboxControls, FilteredComboboxComponent} from '@shared/components/combobox/component';
 
 enum Controls {
   VMFlavor = 'vmFlavor',
@@ -155,7 +155,15 @@ export class KubeVirtBasicNodeDataComponent
     );
   }
 
-  onFlavorChange(_: string): void {}
+  onFlavorChange(flavor: string): void {
+    if (_.isString(flavor) && !_.isEmpty(flavor)) {
+      this.form.get(Controls.CPUs).disable();
+      this.form.get(Controls.Memory).disable();
+    } else {
+      this.form.get(Controls.CPUs).enable();
+      this.form.get(Controls.Memory).enable();
+    }
+  }
 
   private get _flavorsObservable(): Observable<KubeVirtVMInstancePreset[]> {
     return this._nodeDataService.kubeVirt
@@ -251,9 +259,19 @@ export class KubeVirtBasicNodeDataComponent
             primaryDiskOSImage: this.form.get(Controls.PrimaryDiskOSImage).value,
             primaryDiskStorageClassName: this.form.get(Controls.PrimaryDiskStorageClassName).value,
             primaryDiskSize: this.form.get(Controls.PrimaryDiskSize).value,
+            secondaryDisks: this._getSecondaryDisksData(),
           } as KubeVirtNodeSpec,
         } as NodeCloudSpec,
       } as NodeSpec,
     } as NodeData;
+  }
+
+  private _getSecondaryDisksData(): KubeVirtSecondaryDisk[] {
+    return this.secondaryDisksFormArray.controls.map(secondaryDiskFormGroup => {
+      return {
+        storageClassName: secondaryDiskFormGroup.get(Controls.SecondaryDiskStorageClass).value[ComboboxControls.Select],
+        size: `${secondaryDiskFormGroup.get(Controls.SecondaryDiskSize).value}Gi`,
+      };
+    });
   }
 }
