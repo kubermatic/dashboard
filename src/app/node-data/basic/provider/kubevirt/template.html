@@ -19,7 +19,7 @@ limitations under the License.
   <div fxLayout="row"
        fxLayoutGap="8px">
     <km-combobox #flavorCombobox
-                 [required]="true"
+                 [required]="false"
                  [grouped]="false"
                  [selected]="selectedFlavor"
                  [options]="flavors"
@@ -44,7 +44,7 @@ limitations under the License.
 
   <km-number-stepper [formControlName]="Controls.CPUs"
                      mode="errors"
-                     label="Number of CPUs"
+                     label="CPUs"
                      min="1"
                      [disabled]="form.get(Controls.CPUs).disabled"
                      required>
@@ -144,6 +144,4 @@ limitations under the License.
        class="no-secondary-disks-msg km-text-muted">
     No secondary disks configured. Use the add button above to configure up to three disks.
   </div>
-
-  {{form.valid}}
 </form>
