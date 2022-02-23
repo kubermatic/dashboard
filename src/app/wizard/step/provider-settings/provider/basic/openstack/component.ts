@@ -123,7 +123,7 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
     )
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
       .pipe(switchMap(_ => this._datacenterService.getDatacenter(this._clusterSpecService.datacenter).pipe(take(1))))
-      .pipe(tap(dc => (this._isFloatingPoolIPEnforced = dc.spec.openstack.enforceFloatingIP)))
+      .pipe(tap(dc => (this._isFloatingPoolIPEnforced = dc?.spec.openstack.enforceFloatingIP)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.form.reset());
   }

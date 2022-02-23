@@ -138,9 +138,13 @@ limitations under the License.
             <div key>Domain</div>
             <div value>{{cluster.spec.cloud?.openstack.domain}}</div>
           </km-property>
-          <km-property>
+          <km-property *ngIf="cluster.spec.cloud?.openstack.username">
             <div key>Username</div>
             <div value>{{cluster.spec.cloud?.openstack.username}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud?.openstack.applicationCredentialID">
+            <div key>Application Credential ID</div>
+            <div value>{{cluster.spec.cloud?.openstack.applicationCredentialID}}</div>
           </km-property>
           <km-property *ngIf="cluster.spec.cloud?.openstack.project">
             <div key>Project</div>
