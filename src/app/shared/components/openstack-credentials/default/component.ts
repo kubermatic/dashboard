@@ -84,9 +84,7 @@ export class OpenstackDefaultCredentialsComponent extends BaseFormValidator impl
   isPresetSelected = false;
   projects: OpenstackTenant[] = [];
   projectsLabel = ProjectState.Empty;
-
-  @Input()
-  mode: Mode;
+  @Input() mode: Mode;
 
   constructor(
     private readonly _builder: FormBuilder,
