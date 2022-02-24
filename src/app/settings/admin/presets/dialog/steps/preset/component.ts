@@ -18,6 +18,7 @@ import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/serv
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
 
 enum Controls {
   Name = 'name',
@@ -52,7 +53,7 @@ export class PresetStepComponent extends BaseFormValidator implements OnInit {
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Name]: new FormControl('', [Validators.required]),
+      [Controls.Name]: new FormControl('', [Validators.required, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR]),
       [Controls.Domain]: new FormControl(''),
       [Controls.Disable]: new FormControl(''),
     });

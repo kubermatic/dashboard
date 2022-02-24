@@ -15,59 +15,13 @@ limitations under the License.
 -->
 <form [formGroup]="form"
       fxLayout="column"
-      fxLayoutGap="16px">
-  <mat-form-field fxFlex>
-    <mat-label>Username</mat-label>
-    <input matInput
-           [formControlName]="Controls.Username"
-           [name]="Controls.Username"
-           type="text"
-           autocomplete="off"
-           required>
-    <mat-error *ngIf="form.get(Controls.Username).hasError('required')">
-      Username is <strong>required</strong>.
-    </mat-error>
-  </mat-form-field>
+      fxLayoutGap="8px">
 
-  <mat-form-field fxFlex>
-    <mat-label>Password</mat-label>
-    <input matInput
-           [formControlName]="Controls.Password"
-           [name]="Controls.Password"
-           type="password"
-           autocomplete="off"
-           required>
-    <mat-error *ngIf="form.get(Controls.Password).hasError('required')">
-      Username is <strong>required</strong>.
-    </mat-error>
-  </mat-form-field>
+  <km-openstack-credentials [formControl]="form.get(Controls.Credentials)"
+                            (onChange)="onCredentialsChange($event)"
+                            [mode]="Modes.PresetCreation"></km-openstack-credentials>
 
-  <mat-form-field fxFlex>
-    <mat-label>Project</mat-label>
-    <input matInput
-           [formControlName]="Controls.Project"
-           [name]="Controls.Project"
-           type="text"
-           autocomplete="off"
-           required>
-    <mat-error *ngIf="form.get(Controls.Project).hasError('required')">
-      Project is <strong>required</strong>.
-    </mat-error>
-  </mat-form-field>
-
-  <mat-form-field fxFlex>
-    <mat-label>Project ID</mat-label>
-    <input matInput
-           [formControlName]="Controls.ProjectID"
-           [name]="Controls.ProjectID"
-           type="text"
-           autocomplete="off"
-           required>
-    <mat-error *ngIf="form.get(Controls.ProjectID).hasError('required')">
-      Project ID is <strong>required</strong>.
-    </mat-error>
-  </mat-form-field>
-
+  <div>OpenStack Configuration</div>
   <mat-form-field fxFlex>
     <mat-label>Domain</mat-label>
     <input matInput
