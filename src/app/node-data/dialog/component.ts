@@ -50,7 +50,6 @@ export interface DialogDataOutput {
 @Component({
   selector: 'km-node-data-dialog',
   templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
