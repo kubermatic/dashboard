@@ -15,8 +15,8 @@
 @use 'variables';
 
 .edit-cluster-form {
-  height: 60vh;
   margin-bottom: 30px;
+  max-height: 60vh;
 }
 
 km-label-form:not(.pod-node-selector-config) {

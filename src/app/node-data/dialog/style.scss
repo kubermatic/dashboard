@@ -13,9 +13,9 @@
 // limitations under the License.
 
 form {
-  height: 90vh;
+  max-height: 90vh;
 
   mat-dialog-content {
-    height: 70vh;
+    max-height: 70vh;
   }
 }
