@@ -112,7 +112,7 @@ import {RelativeTimeComponent} from './components/relativetime/component';
 import {SearchFieldComponent} from './components/search-field/component';
 import {SpinnerWithConfirmationComponent} from './components/spinner-with-confirmation/component';
 import {SSHKeyListComponent} from './components/ssh-key-list/component';
-import {TagListComponent} from './components/tag-list/component';
+import {ChipListComponent} from './components/chip-list/component';
 import {TaintFormComponent} from './components/taint-form/component';
 import {TaintsComponent} from './components/taints/component';
 import {AutofocusDirective} from './directives/autofocus/directive';
@@ -180,7 +180,7 @@ const components: any[] = [
   AddonsListComponent,
   SpinnerWithConfirmationComponent,
   InitialsCircleComponent,
-  TagListComponent,
+  ChipListComponent,
   NotificationComponent,
   PropertyUsageComponent,
   FilteredComboboxComponent,

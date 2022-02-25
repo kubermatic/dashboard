@@ -12,18 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'variables';
-@use 'mixins';
+import {AbstractControl, ValidationErrors, Validator} from '@angular/forms';
+import _ from 'lodash';
 
-.optional-section {
-  font-size: variables.$font-size-subhead-lg;
-  padding: 0 0 12px;
-}
+export class UniqueValidator implements Validator {
+  validate(control: AbstractControl): ValidationErrors | null {
+    if (!_.isArray(control.value)) {
+      return null;
+    }
 
-.tooltip {
-  margin-left: 4px;
-}
+    const value = control.value as [];
+    const unique = new Set(value);
 
-.spacing {
-  padding-bottom: 12px;
+    return unique.size === value.length ? null : this._error();
+  }
+
+  private _error(): ValidationErrors {
+    return {
+      unique: {
+        valid: false,
+      },
+    };
+  }
 }

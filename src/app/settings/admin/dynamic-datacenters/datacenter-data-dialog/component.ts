@@ -12,10 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {MatChipInputEvent} from '@angular/material/chips';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DatacenterService} from '@core/services/datacenter';
 import {Datacenter} from '@shared/entity/datacenter';
@@ -53,15 +51,15 @@ export enum Controls {
   styleUrls: ['./style.scss'],
 })
 export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
+  private _unsubscribe = new Subject<void>();
   readonly controls = Controls;
-  readonly separatorKeyCodes: number[] = [ENTER, COMMA];
+  readonly domainRegex = '^(?!-)[A-Za-z0-9-]+([\\-.][a-z0-9]+)*\\.[A-Za-z]{2,6}$';
   readonly countryCodes: string[] = countryCodeLookup.countries.map(country => country.iso2);
   readonly providers = INTERNAL_NODE_PROVIDERS;
   seeds: string[] = [];
   form: FormGroup;
   requiredEmails: string[] = [];
   providerConfig = '';
-  private _unsubscribe = new Subject<void>();
 
   constructor(
     public _matDialogRef: MatDialogRef<DatacenterDataDialogComponent>,
@@ -84,7 +82,7 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
       ),
       country: new FormControl(this.data.isEditing ? this.data.datacenter.spec.country : '', [Validators.required]),
       location: new FormControl(this.data.isEditing ? this.data.datacenter.spec.location : '', [Validators.required]),
-      requiredEmails: new FormControl(),
+      requiredEmails: new FormControl([]),
       enforcePodSecurityPolicy: new FormControl(
         this.data.isEditing && this.data.datacenter.spec.enforcePodSecurityPolicy
       ),
@@ -104,21 +102,9 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
     return getIconClassForButton(this.data.confirmLabel);
   }
 
-  private _initRequiredEmailsInput(): void {
-    if (this.data.isEditing && !_.isEmpty(this.data.datacenter.spec.requiredEmails)) {
-      this.requiredEmails = this.data.datacenter.spec.requiredEmails;
-    } else {
-      this.requiredEmails = [];
-    }
-  }
-
-  private _initProviderConfigEditor(): void {
-    if (this.data.isEditing && this.data.datacenter.spec.provider) {
-      const spec = this.data.datacenter.spec[this.data.datacenter.spec.provider];
-      if (!_.isEmpty(spec)) {
-        this.providerConfig = y.dump(spec);
-      }
-    }
+  onRequiredEmailsChange(requiredEmails: string[]): void {
+    this.requiredEmails = requiredEmails;
+    this.form.get(Controls.RequiredEmails).updateValueAndValidity();
   }
 
   getCountryName(code: string): string {
@@ -128,32 +114,6 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
 
     const country = countryCodeLookup.byIso(code);
     return country ? country.country : code;
-  }
-
-  addDomain(event: MatChipInputEvent): void {
-    const input = event.input;
-    const value = event.value;
-
-    if ((value || '').trim()) {
-      this.requiredEmails.push(value.trim());
-    }
-
-    if (input) {
-      input.value = '';
-    }
-  }
-
-  removeDomain(domain: string): void {
-    const index = this.requiredEmails.indexOf(domain);
-
-    if (index >= 0) {
-      this.requiredEmails.splice(index, 1);
-    }
-  }
-
-  private _getProviderConfig(): any {
-    const raw = y.load(this.providerConfig);
-    return !_.isEmpty(raw) ? raw : {};
   }
 
   save(): void {
@@ -180,5 +140,27 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
     }
 
     this._matDialogRef.close(datacenter);
+  }
+
+  private _initRequiredEmailsInput(): void {
+    if (this.data.isEditing && !_.isEmpty(this.data.datacenter.spec.requiredEmails)) {
+      this.requiredEmails = this.data.datacenter.spec.requiredEmails;
+    } else {
+      this.requiredEmails = [];
+    }
+  }
+
+  private _initProviderConfigEditor(): void {
+    if (this.data.isEditing && this.data.datacenter.spec.provider) {
+      const spec = this.data.datacenter.spec[this.data.datacenter.spec.provider];
+      if (!_.isEmpty(spec)) {
+        this.providerConfig = y.dump(spec);
+      }
+    }
+  }
+
+  private _getProviderConfig(): any {
+    const raw = y.load(this.providerConfig);
+    return !_.isEmpty(raw) ? raw : {};
   }
 }
