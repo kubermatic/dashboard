@@ -35,6 +35,7 @@ import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge, of} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
 
 enum Controls {
   Name = 'name',
@@ -100,7 +101,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control(this._nodeDataService.nodeData.name, [
-        Validators.pattern('[a-z0-9]+[a-z0-9-]*[a-z0-9]+'),
+        KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,
       ]),
       [Controls.Count]: this._builder.control(this._nodeDataService.nodeData.count),
       [Controls.DynamicConfig]: this._builder.control(this._nodeDataService.nodeData.dynamicConfig),

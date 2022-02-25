@@ -13,8 +13,6 @@
 // limitations under the License.
 
 import {NgModule} from '@angular/core';
-import {OpenstackProviderBasicAppCredentialsComponent} from '@app/wizard/step/provider-settings/provider/basic/openstack/application/component';
-import {OpenstackProviderBasicDefaultCredentialsComponent} from '@app/wizard/step/provider-settings/provider/basic/openstack/default/component';
 import {OpenstackProviderExtendedAppCredentialsComponent} from '@app/wizard/step/provider-settings/provider/extended/openstack/application/component';
 import {OpenstackProviderExtendedDefaultCredentialsComponent} from '@app/wizard/step/provider-settings/provider/extended/openstack/default/component';
 import {OpenstackCredentialsTypeService} from '@app/wizard/step/provider-settings/provider/extended/openstack/service';
@@ -70,8 +68,6 @@ const components: any[] = [
   HetznerProviderExtendedComponent,
   KubeVirtProviderBasicComponent,
   OpenstackProviderBasicComponent,
-  OpenstackProviderBasicDefaultCredentialsComponent,
-  OpenstackProviderBasicAppCredentialsComponent,
   OpenstackProviderExtendedComponent,
   OpenstackProviderExtendedDefaultCredentialsComponent,
   OpenstackProviderExtendedAppCredentialsComponent,

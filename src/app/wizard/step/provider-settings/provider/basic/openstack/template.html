@@ -35,25 +35,22 @@ limitations under the License.
     </mat-error>
   </mat-form-field>
 
-  <mat-button-toggle-group class="wizard-openstack-button-toggle-group"
-                           group="bindingType"
-                           [disabled]="isPresetSelected"
-                           (change)="changeView($event)">
-    <mat-button-toggle [value]="CredentialsType.Default"
-                       [checked]="credentialsType === CredentialsType.Default">
-      User Credentials
-    </mat-button-toggle>
-    <mat-button-toggle [value]="CredentialsType.Application"
-                       [checked]="credentialsType === CredentialsType.Application">
-      Application Credentials
-    </mat-button-toggle>
-  </mat-button-toggle-group>
+  <km-openstack-credentials [formControl]="form.get(Controls.Credentials)"
+                            (onChange)="onCredentialsChange($event)"></km-openstack-credentials>
 
-  <ng-container *ngIf="credentialsType === CredentialsType.Default">
-    <km-wizard-openstack-provider-basic-default-credentials [formControl]="form.get(Controls.Credentials)"></km-wizard-openstack-provider-basic-default-credentials>
-  </ng-container>
-
-  <ng-container *ngIf="credentialsType === CredentialsType.Application">
-    <km-wizard-openstack-provider-basic-app-credentials [formControl]="form.get(Controls.Credentials)"></km-wizard-openstack-provider-basic-app-credentials>
-  </ng-container>
+  <km-combobox #floatingIPPoolCombobox
+               [required]="isRequired(Controls.FloatingIPPool)"
+               [grouped]="false"
+               [isDisabled]="isPresetSelected"
+               [options]="floatingIPPools"
+               [hint]="getHint(Controls.FloatingIPPool)"
+               [formControlName]="Controls.FloatingIPPool"
+               (changed)="onFloatingIPPoolChange($event)"
+               [label]="floatingIPPoolsLabel"
+               inputLabel="Select Floating IP Pool..."
+               filterBy="name">
+    <div *option="let floatingIPPool">
+      {{floatingIPPool.name}}
+    </div>
+  </km-combobox>
 </form>

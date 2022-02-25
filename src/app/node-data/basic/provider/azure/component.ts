@@ -73,7 +73,7 @@ enum ZoneState {
 })
 export class AzureBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private _sizeChanges = new EventEmitter<boolean>();
-  private readonly _defaultDiskSize = 0;
+  private readonly _defaultDiskSize = 30;
 
   readonly Controls = Controls;
 

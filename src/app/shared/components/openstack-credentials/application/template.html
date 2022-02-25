@@ -40,20 +40,4 @@ limitations under the License.
       Application Credential Secret is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
-
-  <km-combobox #floatingIPPoolCombobox
-               [required]="isRequired(Controls.FloatingIPPool)"
-               [grouped]="false"
-               [isDisabled]="isPresetSelected"
-               [options]="floatingIPPools"
-               [hint]="getHint(Controls.FloatingIPPool)"
-               [formControlName]="Controls.FloatingIPPool"
-               (changed)="onFloatingIPPoolChange($event)"
-               [label]="floatingIPPoolsLabel"
-               inputLabel="Select Floating IP Pool..."
-               filterBy="name">
-    <div *option="let floatingIPPool">
-      {{floatingIPPool.name}}
-    </div>
-  </km-combobox>
 </form>

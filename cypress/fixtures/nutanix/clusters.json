@@ -40,9 +40,7 @@
             }
         },
         "status": {
-            "version": "1.21.8",
-            "url": "https://nqs54sdp8x.europe-west3-c.dev.kubermatic.io:32630",
-            "externalCCMMigration": "Unsupported"
+            "version": "1.21.8"
         }
     }
 ]
