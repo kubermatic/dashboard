@@ -74,9 +74,20 @@ limitations under the License.
             [disabled]="creating || invalid"
             *ngIf="last"
             kmThrottleClick
-            (throttleClick)="save()">
-      <i class="km-icon-mask km-icon-add"></i>
-      <span>Create</span>
+            (throttleClick)="save()"
+            [ngSwitch]="data.mode">
+      <ng-container *ngSwitchCase="mode.Create">
+        <i class="km-icon-mask km-icon-add"></i>
+        <span>Create</span>
+      </ng-container>
+      <ng-container *ngSwitchCase="mode.Add">
+        <i class="km-icon-mask km-icon-add"></i>
+        <span>Add</span>
+      </ng-container>
+      <ng-container *ngSwitchDefault>
+        <i class="km-icon-mask km-icon-edit"></i>
+        <span>Update</span>
+      </ng-container>
     </button>
   </div>
 </mat-dialog-actions>
