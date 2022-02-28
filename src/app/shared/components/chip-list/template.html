@@ -13,27 +13,36 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<mat-card-header class="km-no-padding">
+<mat-card-header *ngIf="title"
+                 class="km-no-padding">
   <mat-card-title>{{title}}</mat-card-title>
 </mat-card-header>
 <form [formGroup]="form">
   <mat-form-field class="km-node-tags">
+    <mat-label *ngIf="label">{{label}}</mat-label>
     <mat-chip-list #chipList
-                   class="km-chip-list-with-input">
+                   class="km-chip-list-with-input"
+                   [formControlName]="controls.Tags">
       <mat-chip *ngFor="let tag of tags"
-                [selectable]="selectable"
-                [removable]="removable"
+                [selectable]="false"
+                [removable]="true"
                 (removed)="removeTag(tag)">
         {{tag}}
         <i matChipRemove
            class="km-icon-mask km-icon-remove"></i>
       </mat-chip>
-      <input placeholder="Add tag..."
-             formControlName="tags"
+      <input [placeholder]="placeholder"
              [matChipInputFor]="chipList"
              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-             [matChipInputAddOnBlur]="addOnBlur"
+             [matChipInputAddOnBlur]="true"
              (matChipInputTokenEnd)="addTag($event)">
     </mat-chip-list>
+    <mat-hint>{{description}}</mat-hint>
+    <mat-error *ngIf="form.get(controls.Tags).hasError('unique')">
+      Value already exists.
+    </mat-error>
+    <mat-error *ngIf="form.get(controls.Tags).hasError('pattern')">
+      {{patternError}}
+    </mat-error>
   </mat-form-field>
 </form>

@@ -13,11 +13,23 @@
 // limitations under the License.
 
 import {ValidatorFn} from '@angular/forms';
+import {ChipPatternValidator} from '@shared/validators/chip.pattern.validator';
 import {LargerThanValidator} from '@shared/validators/larger-than.validator';
+import {UniqueValidator} from '@shared/validators/unique.validator';
 
 export class KmValidators {
   static largerThan(min: number, inclusive = false): ValidatorFn {
     const validator = new LargerThanValidator(min, inclusive);
+    return validator.validate.bind(validator);
+  }
+
+  static unique(): ValidatorFn {
+    const validator = new UniqueValidator();
+    return validator.validate.bind(validator);
+  }
+
+  static chipPattern(pattern: string): ValidatorFn {
+    const validator = new ChipPatternValidator(pattern);
     return validator.validate.bind(validator);
   }
 }
