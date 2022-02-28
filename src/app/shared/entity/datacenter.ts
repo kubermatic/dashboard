@@ -144,7 +144,6 @@ export class AdminSeed {
 }
 
 export class AdminSeedSpec {
-  backupRestore?: BackupRestoreConfiguration;
   country?: string;
   location?: string;
   kubeconfig?: object;
@@ -170,7 +169,7 @@ export class MeteringCredentials {
 
 export class EtcdBackupRestore {
   destinations: Destinations;
-  defaultDestination?: string;
+  defaultDestination: string;
 }
 
 export class Destinations {

@@ -12,19 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {Router} from '@angular/router';
 import {BackupService} from '@core/services/backup';
 import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
-import {UserService} from '@core/services/user';
 import {NotificationService} from '@core/services/notification';
+import {UserService} from '@core/services/user';
 import {EtcdBackupConfig, EtcdBackupConfigSpec} from '@shared/entity/backup';
 import {Cluster} from '@shared/entity/cluster';
-import {Subject} from 'rxjs';
-import {take, takeUntil} from 'rxjs/operators';
+import {EMPTY, iif, Subject} from 'rxjs';
+import {switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 export interface AddSnapshotDialogConfig {
   projectID: string;
@@ -39,7 +38,6 @@ enum Controls {
 @Component({
   selector: 'km-add-snapshot-dialog',
   templateUrl: './template.html',
-  styleUrls: ['style.scss'],
 })
 export class AddSnapshotDialogComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
@@ -49,6 +47,7 @@ export class AddSnapshotDialogComponent implements OnInit, OnDestroy {
   seed = '';
   isAdmin = false;
   form: FormGroup;
+  isLoadingDestinations = false;
 
   private _selectedClusterID(): string {
     return this.form.get(Controls.Cluster).value;
@@ -63,7 +62,7 @@ export class AddSnapshotDialogComponent implements OnInit, OnDestroy {
     private readonly _notificationService: NotificationService,
     private readonly _datacenterService: DatacenterService,
     private readonly _userService: UserService,
-    private readonly _router: Router
+    private readonly _cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -76,9 +75,12 @@ export class AddSnapshotDialogComponent implements OnInit, OnDestroy {
     this._clusterService
       .clusters(this._config.projectID)
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(clusters => (this.clusters = clusters));
+      .subscribe(clusters => {
+        this.clusters = clusters;
+        this._cdr.detectChanges();
+      });
 
-    this._userService.currentUser.subscribe(user => (this.isAdmin = user.isAdmin));
+    this._userService.currentUser.pipe(takeUntil(this._unsubscribe)).subscribe(user => (this.isAdmin = user.isAdmin));
 
     this.form
       .get(Controls.Cluster)
@@ -91,13 +93,8 @@ export class AddSnapshotDialogComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  hasClusterInput(): boolean {
-    return !!this.form.get(Controls.Cluster).value;
-  }
-
-  goToBackupDestinations(): void {
-    this._router.navigateByUrl('/settings/backupdestinations');
-    this._dialogRef.close(true);
+  hasDestinations(): boolean {
+    return this.destinations?.length > 0;
   }
 
   save(): void {
@@ -111,18 +108,24 @@ export class AddSnapshotDialogComponent implements OnInit, OnDestroy {
   }
 
   private _onClusterChange(clusterID: string) {
-    const matchingCluster = this.clusters.find(cluster => cluster.id === clusterID);
-    if (matchingCluster) {
-      this._datacenterService
-        .getDatacenter(matchingCluster.spec.cloud.dc)
-        .pipe(take(1))
-        .subscribe(dc => (this.seed = dc.spec.seed));
-    }
+    this.isLoadingDestinations = true;
+    const observer = {
+      next: dc => (this.seed = dc.spec.seed),
+      error: () => {},
+      complete: () => (this.isLoadingDestinations = false),
+    };
 
     this._backupService
       .getDestinations(this._config.projectID, clusterID)
+      .pipe(tap(destinations => (this.destinations = destinations)))
+      .pipe(
+        switchMap(_ => {
+          const cluster = this.clusters.find(c => c.id === clusterID);
+          return iif(() => cluster !== undefined, this._datacenterService.getDatacenter(cluster.spec.cloud.dc), EMPTY);
+        })
+      )
       .pipe(take(1))
-      .subscribe(destinations => (this.destinations = destinations));
+      .subscribe(observer);
   }
 
   private _toEtcdBackupConfig(): EtcdBackupConfig {

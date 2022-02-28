@@ -76,7 +76,10 @@ export class DestinationDialog implements OnInit, OnDestroy {
       [Controls.Endpoint]: this._builder.control(this.data.mode === Mode.Edit ? this.data.destination.endpoint : '', [
         Validators.required,
       ]),
-      [Controls.Default]: this._builder.control(this.data.mode === Mode.Edit && this._isDefault()),
+      [Controls.Default]: this._builder.control({
+        value: this._isDefault(),
+        disabled: this._shouldDisableDefaultDestination(),
+      }),
     });
   }
 
@@ -85,12 +88,8 @@ export class DestinationDialog implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  displayOverwriteWarning(): boolean {
-    return !this._isDefault() && this.form.get(Controls.Default).value && !!this.currentDefault;
-  }
-
-  displayDeleteWarning(): boolean {
-    return this._isDefault() && !this.form.get(Controls.Default).value;
+  shouldDisplayWarning(): boolean {
+    return !this._isDefault() && !!this.form.get(Controls.Default).value;
   }
 
   save(): void {
@@ -104,8 +103,9 @@ export class DestinationDialog implements OnInit, OnDestroy {
 
     const configuration: AdminSeed = this.data.seed;
     if (!configuration.spec.etcdBackupRestore) {
-      configuration.spec.etcdBackupRestore = {destinations: {}};
+      configuration.spec.etcdBackupRestore = {destinations: {}, defaultDestination: ''};
     }
+
     configuration.spec.etcdBackupRestore.destinations = destination;
 
     if (this.form.get(Controls.Default).value) {
@@ -128,6 +128,14 @@ export class DestinationDialog implements OnInit, OnDestroy {
   }
 
   private _isDefault(): boolean {
-    return !!this.currentDefault && this.currentDefault === this.data?.destination?.destinationName;
+    return !this._hasDefaultDestination() || this.currentDefault === this.data?.destination?.destinationName;
+  }
+
+  private _hasDefaultDestination(): boolean {
+    return !!this.currentDefault;
+  }
+
+  private _shouldDisableDefaultDestination(): boolean {
+    return !this._hasDefaultDestination() || (this._isDefault() && !this.form?.get(Controls.Default).value);
   }
 }
