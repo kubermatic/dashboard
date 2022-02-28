@@ -44,14 +44,6 @@ export class DestinationsComponent implements OnInit {
     private readonly _notificationService: NotificationService
   ) {}
 
-  get oldBucket(): string {
-    return this.seed?.spec?.backupRestore ? this.seed.spec.backupRestore.s3BucketName : '';
-  }
-
-  get oldEndpoint(): string {
-    return this.seed?.spec?.backupRestore ? this.seed.spec.backupRestore.s3Endpoint : '';
-  }
-
   ngOnInit(): void {
     this._mapToArray();
 
@@ -67,10 +59,6 @@ export class DestinationsComponent implements OnInit {
 
   hasDestinations(): boolean {
     return !!this.seed?.spec?.etcdBackupRestore?.destinations;
-  }
-
-  displayWarning(): boolean {
-    return !!this._hasOldData() && !this.hasDestinations();
   }
 
   hasCredentials(destination: BackupDestination): boolean {
@@ -150,9 +138,5 @@ export class DestinationsComponent implements OnInit {
         });
       }
     }
-  }
-
-  private _hasOldData(): boolean {
-    return !!this.seed?.spec?.backupRestore?.s3BucketName || !!this.seed?.spec?.backupRestore?.s3Endpoint;
   }
 }
