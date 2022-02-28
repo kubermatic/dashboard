@@ -41,7 +41,7 @@ enum Controls {
 })
 export class GCPExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   labels: object;
-  tags: string[];
+  tags: string[] = [];
 
   readonly Controls = Controls;
 
