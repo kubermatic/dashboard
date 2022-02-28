@@ -51,6 +51,7 @@ enum StepRegistry {
 })
 export class PresetDialogComponent implements OnInit, OnDestroy {
   readonly stepRegistry = StepRegistry;
+  readonly mode = Mode;
 
   form: FormGroup;
   creating = false;
