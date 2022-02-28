@@ -21,7 +21,7 @@ limitations under the License.
   <mat-card>
     <mat-card-header>
       <mat-card-title class="machine-deployment-name">
-        <i class="machine-deployment-health km-icon-circle km-pointer"
+        <i class="machine-deployment-health km-pointer"
            [ngClass]="getStatusColor()"
            [matTooltip]="getStatusMessage()"></i>
         <span ngxClipboard
@@ -135,21 +135,18 @@ limitations under the License.
         </ng-container>
       </div>
 
-      <mat-divider></mat-divider>
+      <mat-divider *ngIf="machineDeployment?.cloud?.gke?.management"></mat-divider>
 
       <div class="km-content-wrap">
-        <ng-container *ngIf="!!machineDeployment?.cloud?.gke">
-          <ng-container *ngIf="!!machineDeployment.cloud.gke?.management">
-            <km-property-boolean *ngIf="machineDeployment.cloud.gke.management.autoUpgrade !== undefined"
-                                 label="Auto-Upgrade"
-                                 [value]="machineDeployment.cloud.gke.management.autoUpgrade">
-            </km-property-boolean>
-
-            <km-property-boolean *ngIf="machineDeployment.cloud.gke.management.autoRepair !== undefined"
-                                 label="Auto-Repair"
-                                 [value]="machineDeployment.cloud.gke.management.autoRepair">
-            </km-property-boolean>
-          </ng-container>
+        <ng-container *ngIf="!!machineDeployment.cloud.gke?.management">
+          <km-property-boolean *ngIf="machineDeployment.cloud.gke.management.autoUpgrade !== undefined"
+                               label="Auto-Upgrade"
+                               [value]="machineDeployment.cloud.gke.management.autoUpgrade">
+          </km-property-boolean>
+          <km-property-boolean *ngIf="machineDeployment.cloud.gke.management.autoRepair !== undefined"
+                               label="Auto-Repair"
+                               [value]="machineDeployment.cloud.gke.management.autoRepair">
+          </km-property-boolean>
         </ng-container>
       </div>
     </mat-card-content>
