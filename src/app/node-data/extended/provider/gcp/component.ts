@@ -64,7 +64,7 @@ export class GCPExtendedNodeDataComponent extends BaseFormValidator implements O
   }
 
   onTagsChange(tags: string[]): void {
-    this.tags = tags;
+    this.tags = tags || [];
     this._nodeDataService.gcp.tags = tags;
   }
 
