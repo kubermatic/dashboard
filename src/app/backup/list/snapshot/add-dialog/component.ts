@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ChangeDetectorRef, Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BackupService} from '@core/services/backup';
@@ -61,8 +61,7 @@ export class AddSnapshotDialogComponent implements OnInit, OnDestroy {
     private readonly _builder: FormBuilder,
     private readonly _notificationService: NotificationService,
     private readonly _datacenterService: DatacenterService,
-    private readonly _userService: UserService,
-    private readonly _cdr: ChangeDetectorRef
+    private readonly _userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -75,10 +74,7 @@ export class AddSnapshotDialogComponent implements OnInit, OnDestroy {
     this._clusterService
       .clusters(this._config.projectID)
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(clusters => {
-        this.clusters = clusters;
-        this._cdr.detectChanges();
-      });
+      .subscribe(clusters => (this.clusters = clusters));
 
     this._userService.currentUser.pipe(takeUntil(this._unsubscribe)).subscribe(user => (this.isAdmin = user.isAdmin));
 
