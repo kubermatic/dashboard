@@ -21,7 +21,7 @@ import {Admin, Member} from '@shared/entity/member';
 import {Report} from '@shared/entity/metering';
 import {AdminSettings, CustomLink, DEFAULT_ADMIN_SETTINGS} from '@shared/entity/settings';
 import {BehaviorSubject, EMPTY, iif, merge, Observable, of, Subject, timer} from 'rxjs';
-import {catchError, delay, retryWhen, shareReplay, switchMap, tap} from 'rxjs/operators';
+import {catchError, delay, map, retryWhen, shareReplay, switchMap, tap} from 'rxjs/operators';
 import {webSocket} from 'rxjs/webSocket';
 
 @Injectable({
@@ -103,7 +103,9 @@ export class SettingsService {
 
   patchAdminSettings(patch: any): Observable<AdminSettings> {
     const url = `${this._restRoot}/admin/settings`;
-    return this._httpClient.patch<AdminSettings>(url, patch);
+    return this._httpClient
+      .patch<AdminSettings>(url, patch)
+      .pipe(map(settings => this._defaultAdminSettings(settings)));
   }
 
   get customLinks(): Observable<CustomLink[]> {

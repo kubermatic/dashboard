@@ -101,7 +101,9 @@ export class UserService {
 
   patchCurrentUserSettings(patch: UserSettings): Observable<UserSettings> {
     const url = `${this.restRoot}/me/settings`;
-    return this._httpClient.patch<UserSettings>(url, patch);
+    return this._httpClient
+      .patch<UserSettings>(url, patch)
+      .pipe(map(userSettings => this._defaultUserSettings(userSettings)));
   }
 
   getCurrentUserGroup(projectID: string): Observable<string> {
