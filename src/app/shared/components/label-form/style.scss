@@ -14,6 +14,8 @@
 
 @use 'variables';
 
-.delete-button {
-  margin-top: 7px;
+.mat-icon-button {
+  &.delete-button {
+    margin: 4px 0 0;
+  }
 }
