@@ -36,7 +36,7 @@ export class EtcdBackupConfigSpec {
   // Keep is the number of backups to keep around before deleting the oldest one
   // If not set, defaults to DefaultKeptBackupsCount. Only used if Schedule is set.
   keep?: number;
-  destination?: string;
+  destination: string;
 }
 
 export class EtcdBackupConfigStatus {
@@ -105,7 +105,7 @@ export class EtcdRestoreSpec {
   clusterId: string;
   backupName: string;
   backupDownloadCredentialsSecret?: string;
-  destination?: string;
+  destination: string;
 }
 
 export class EtcdRestoreStatus {
