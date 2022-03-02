@@ -15,3 +15,6 @@
 import {Validators} from '@angular/forms';
 
 export const CIDR_PATTERN_VALIDATOR = Validators.pattern(/^((\d{1,3}\.){3}\d{1,3}\/([0-9]|[1-2][0-9]|3[0-2]))$/);
+export const KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR = Validators.pattern(
+  '^(?=.{1,63}$)[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
+);
