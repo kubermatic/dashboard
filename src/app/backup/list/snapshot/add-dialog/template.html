@@ -43,46 +43,37 @@ limitations under the License.
         <mat-hint>The name of the created automatic backup.</mat-hint>
       </mat-form-field>
 
-      <ng-container *ngIf="hasClusterInput()">
-        <div fxLayout="row"
-             fxLayoutGap="8px">
-          <km-property margin="none"
-                       class="property-label"
-                       fxFlex="25">
-            <div key
-                 class="property-key">Seed
-            </div>
-            <div value>{{seed}}</div>
-          </km-property>
+      <div *ngIf="!!this.form.get(Controls.Cluster).value && !this.isLoadingDestinations"
+           fxLayout="column"
+           fxLayoutGap="10px">
+        <km-property>
+          <div key>Seed</div>
+          <div value>{{seed}}</div>
+        </km-property>
 
-          <mat-form-field *ngIf="destinations.length > 0"
-                          fxFlex="75">
-            <mat-label>Destination</mat-label>
-            <mat-select [formControlName]="Controls.Destination"
-                        disableOptionCentering
-                        required>
-              <mat-option *ngFor="let destination of destinations"
-                          [value]="destination">{{destination}}</mat-option>
-            </mat-select>
-          </mat-form-field>
+        <mat-form-field>
+          <mat-label *ngIf="hasDestinations()">Destination</mat-label>
+          <mat-label *ngIf="!hasDestinations()">No destinations available</mat-label>
+          <mat-select [formControlName]="Controls.Destination"
+                      disableOptionCentering
+                      required>
+            <mat-option *ngFor="let destination of destinations"
+                        [value]="destination">{{destination}}</mat-option>
+          </mat-select>
+          <mat-hint *ngIf="isAdmin && !hasDestinations()">
+            <a class="km-pointer"
+               href="/settings/backupdestinations"
+               target="_blank">Configure a destination for this seed.</a>
+          </mat-hint>
+          <mat-hint *ngIf="!isAdmin && !hasDestinations()">Contact your Administrator to configure a destination.
+          </mat-hint>
+          <mat-hint *ngIf="hasDestinations()">The list of existing destinations for the selected cluster seed.
+          </mat-hint>
+        </mat-form-field>
+      </div>
 
-          <km-property margin="none"
-                       *ngIf="destinations.length === 0"
-                       class="no-destinations"
-                       fxFlex="75">
-            <div key
-                 class="property-key">Destination *
-            </div>
-            <div value>
-              <a class="km-pointer"
-                 *ngIf="isAdmin"
-                 (click)="goToBackupDestinations()">Configure a destination for this seed</a>
-              <span *ngIf="!isAdmin">Contact your Administrator to configure a destination</span>
-            </div>
-          </km-property>
-
-        </div>
-      </ng-container>
+      <mat-spinner *ngIf="this.isLoadingDestinations"
+                   [diameter]="25"></mat-spinner>
 
     </form>
   </mat-dialog-content>

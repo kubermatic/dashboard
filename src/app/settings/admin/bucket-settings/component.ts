@@ -80,10 +80,6 @@ export class BucketSettingsComponent implements OnInit, OnDestroy, AfterViewInit
     this._unsubscribe.complete();
   }
 
-  displayWarning(seed: AdminSeed): boolean {
-    return !!this._hasOldData(seed) && !this._hasDestinations(seed);
-  }
-
   toggleDestinations(element: any): void {
     this.isShowDestinations[element.name] = !this.isShowDestinations[element.name];
   }
@@ -97,20 +93,6 @@ export class BucketSettingsComponent implements OnInit, OnDestroy, AfterViewInit
 
   isPaginatorVisible(): boolean {
     return this._seeds && this._seeds.length > 0 && this.paginator && this._seeds.length > this.paginator.pageSize;
-  }
-
-  // hasOldData() is used to verify, if a user has configured
-  // backupRestore.s3BucketName or backupRestore.s3Endpoint
-  // in kubermatic 2.18. Starting with 2.19 the recommended way
-  // is to use backup destinations.
-  // This check can be removed within one of the following versions,
-  // but not sure yet in which version exactly.
-  private _hasOldData(seed: AdminSeed): boolean {
-    return !!seed?.spec?.backupRestore?.s3BucketName || !!seed?.spec?.backupRestore?.s3Endpoint;
-  }
-
-  private _hasDestinations(seed): boolean {
-    return !!seed?.spec?.etcdBackupRestore && !_.isEmpty(seed.spec.etcdBackupRestore.destinations);
   }
 
   private _sortByName(direction: SortDirection): void {

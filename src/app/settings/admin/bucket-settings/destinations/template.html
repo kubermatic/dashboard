@@ -14,14 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div *ngIf="displayWarning()"
-     class="depricated-warning"
-     fxLayout="row"
-     fxLayoutGap="20px">
-  <i class="km-icon-mask km-icon-warning"></i>
-  <span>KKP version 2.19 makes it possible to configure multiple destinations. This seed had Bucket <b>{{oldBucket}}</b> and Endpoint <b>{{oldEndpoint}}</b> configured and these settings are still useable for this release. Migrate the configuration to a destination to keep using it in the future.</span>
-</div>
-
 <div fxLayout="row">
   <div fxFlex></div>
   <button mat-flat-button
@@ -111,6 +103,7 @@ limitations under the License.
 
         <button mat-icon-button
                 matTooltip="Delete Destination"
+                [disabled]="isDefault(element.destinationName)"
                 (click)="deleteDestination(element)">
           <i class="km-icon-mask km-icon-delete"></i>
         </button>
