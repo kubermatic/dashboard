@@ -58,4 +58,46 @@ limitations under the License.
                required>
     <div *option="let cluster">{{cluster.name}}</div>
   </km-combobox>
+
+  <mat-card-header class="km-no-padding">
+    <mat-card-title>Prism Element Settings</mat-card-title>
+  </mat-card-header>
+  <mat-form-field fxFlex>
+    <mat-label>Username</mat-label>
+    <input matInput
+           [formControlName]="Controls.PrismElementUsername"
+           [name]="Controls.PrismElementUsername"
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.get(Controls.PrismElementUsername).hasError('required')">
+      Username is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field fxFlex>
+    <mat-label>Password</mat-label>
+    <input matInput
+           [formControlName]="Controls.PrismElementPassword"
+           [name]="Controls.PrismElementPassword"
+           type="password"
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.get(Controls.PrismElementPassword).hasError('required')">
+      Password is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field fxFlex>
+    <mat-label>Endpoint</mat-label>
+    <input matInput
+           [formControlName]="Controls.PrismElementEndpoint"
+           [name]="Controls.PrismElementEndpoint"
+           autocomplete="off">
+  </mat-form-field>
+  <km-number-stepper [formControlName]="Controls.PrismElementPort"
+                     [disabled]="form.get(Controls.PrismElementPort).disabled"
+                     mode="hint"
+                     hint="Leave empty to use the default value. Check the documentation for more information."
+                     label="Port"
+                     min="0"
+                     max="65535">
+  </km-number-stepper>
 </form>

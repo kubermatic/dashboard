@@ -179,6 +179,17 @@ export class NutanixCloudSpec {
   proxyURL?: string;
   username?: string;
   password?: string;
+  csi?: NutanixCSIConfig;
+}
+
+export class NutanixCSIConfig {
+  username: string;
+  password: string;
+  endpoint: string;
+  port?: number;
+  storageContainer?: string;
+  fstype?: string;
+  ssSegmentedIscsiNetwork?: boolean;
 }
 
 export class OpenstackCloudSpec {
