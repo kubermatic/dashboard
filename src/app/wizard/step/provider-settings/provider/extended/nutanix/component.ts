@@ -69,6 +69,9 @@ export class NutanixProviderExtendedComponent extends BaseFormValidator implemen
   private readonly _projectCombobox: FilteredComboboxComponent;
   private readonly _debounceTime = 500;
   readonly Controls = Controls;
+  private _username = '';
+  private _password = '';
+  private _proxyURL = '';
   projects: NutanixProject[] = [];
   projectLabel = ProjectState.Empty;
   isPresetSelected = false;
@@ -127,6 +130,7 @@ export class NutanixProviderExtendedComponent extends BaseFormValidator implemen
         })
       )
       .pipe(filter(_ => this._hasRequiredCredentials()))
+      .pipe(filter(cluster => this._areCredentialsChanged(cluster)))
       .pipe(switchMap(_ => this._projectListObservable()))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._loadProjects.bind(this));
@@ -135,6 +139,26 @@ export class NutanixProviderExtendedComponent extends BaseFormValidator implemen
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  private _areCredentialsChanged(cluster: Cluster): boolean {
+    let credentialsChanged = false;
+    if (cluster.spec.cloud.nutanix.username !== this._username) {
+      this._username = cluster.spec.cloud.nutanix.username;
+      credentialsChanged = true;
+    }
+
+    if (cluster.spec.cloud.nutanix.password !== this._password) {
+      this._password = cluster.spec.cloud.nutanix.password;
+      credentialsChanged = true;
+    }
+
+    if (cluster.spec.cloud.nutanix.proxyURL !== this._proxyURL) {
+      this._proxyURL = cluster.spec.cloud.nutanix.proxyURL;
+      credentialsChanged = true;
+    }
+
+    return credentialsChanged;
   }
 
   getHint(control: Controls): string {
