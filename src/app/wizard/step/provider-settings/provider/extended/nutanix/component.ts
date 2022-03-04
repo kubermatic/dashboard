@@ -117,7 +117,7 @@ export class NutanixProviderExtendedComponent extends BaseFormValidator implemen
     merge(this._clusterSpecService.providerChanges, this._clusterSpecService.datacenterChanges)
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.NUTANIX))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this.form.get(Controls.ProjectName).reset());
+      .subscribe(_ => this.form.reset());
 
     this._clusterSpecService.clusterChanges
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.NUTANIX))
