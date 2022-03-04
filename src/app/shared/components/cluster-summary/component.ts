@@ -36,6 +36,7 @@ export class ClusterSummaryComponent {
   @Input() datacenter: Datacenter;
   @Input() seedSettings: SeedSettings;
   @Input() flipLayout = false;
+  @Input() showNumbering = true;
 
   @Input()
   set sshKeys(keys: string[]) {

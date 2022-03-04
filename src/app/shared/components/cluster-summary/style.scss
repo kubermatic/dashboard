@@ -46,6 +46,13 @@ $steps: 5;
   }
 }
 
+.km-wizard-dialog-summary {
+  .header {
+    font-size: variables.$font-size-subhead-lg;
+    margin-bottom: 16px;
+  }
+}
+
 .km-os-image {
   @include mixins.size(28px);
 }
