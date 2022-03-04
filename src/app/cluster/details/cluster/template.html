@@ -341,7 +341,7 @@ limitations under the License.
             </km-property-boolean>
 
             <km-property-boolean label="External CCM/CSI"
-                                 [value]="cluster.status.externalCCMMigration === 'NotNeeded'">
+                                 [value]="cluster.status.externalCCMMigration === externalCCMMigrationStatus.NotNeeded">
             </km-property-boolean>
 
             <km-property *ngIf="cluster?.status?.externalCCMMigration">
