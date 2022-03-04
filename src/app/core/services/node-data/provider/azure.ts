@@ -13,17 +13,17 @@
 // limitations under the License.
 
 import {NodeDataMode} from '@app/node-data/config';
-import {NodeDataService} from '@core/services/node-data/service';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
+import {NodeDataService} from '@core/services/node-data/service';
 import {ProjectService} from '@core/services/project';
+import {AzureService} from '@core/services/provider/azure';
 import {PresetsService} from '@core/services/wizard/presets';
 import {Cluster} from '@shared/entity/cluster';
 import {AzureSizes, AzureZones} from '@shared/entity/provider/azure';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, switchMap, take, tap} from 'rxjs/operators';
-import {AzureService} from '@core/services/provider/azure';
 
 export class NodeDataAzureProvider {
   private readonly _debounce = 500;
@@ -79,7 +79,7 @@ export class NodeDataAzureProvider {
       case NodeDataMode.Dialog: {
         let selectedProject: string;
         return this._projectService.selectedProject
-          .pipe(debounceTime(this._debounce))
+          .pipe(take(1))
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(switchMap(_ => this._azureService.getSizes(selectedProject, this._clusterSpecService.cluster.id)))
@@ -91,8 +91,7 @@ export class NodeDataAzureProvider {
 
               return onErrorResumeNext(of([]));
             })
-          )
-          .pipe(take(1));
+          );
       }
     }
   }
