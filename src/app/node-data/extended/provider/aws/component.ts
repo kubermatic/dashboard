@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {NodeDataService} from '@core/services/node-data/service';
 import {pushDown} from '@shared/animations/push';
 import {NodeCloudSpec, NodeSpec} from '@shared/entity/node';
@@ -87,6 +87,19 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
+
+    this.form
+      .get(Controls.IsSpotInstance)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(checked => {
+        checked
+          ? this.form
+              .get(Controls.SpotInstanceMaxPrice)
+              .setValidators([KmValidators.largerThan(0), Validators.required])
+          : this.form.get(Controls.SpotInstanceMaxPrice).setValidators(KmValidators.largerThan(0));
+        this.form.get(Controls.SpotInstanceMaxPrice).setValue(undefined);
+        this.form.get(Controls.SpotInstanceMaxPrice).updateValueAndValidity();
+      });
   }
 
   onTagsChange(tags: object): void {
