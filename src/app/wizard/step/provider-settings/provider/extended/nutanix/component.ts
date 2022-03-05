@@ -28,13 +28,17 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {isObjectEmpty} from '@shared/utils/common';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
-import {catchError, debounceTime, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {NutanixProject} from '@shared/entity/provider/nutanix';
 import _ from 'lodash';
+import {CloudSpec, Cluster, ClusterSpec, NutanixCloudSpec, NutanixCSIConfig} from '@shared/entity/cluster';
 
 enum Controls {
   ProjectName = 'projectName',
+  StorageContainer = 'storageContainer',
+  Fstype = 'fstype',
+  SsSegmentedIscsiNetwork = 'ssSegmentedIscsiNetwork',
 }
 
 enum ProjectState {
@@ -65,6 +69,9 @@ export class NutanixProviderExtendedComponent extends BaseFormValidator implemen
   private readonly _projectCombobox: FilteredComboboxComponent;
   private readonly _debounceTime = 500;
   readonly Controls = Controls;
+  private _username = '';
+  private _password = '';
+  private _proxyURL = '';
   projects: NutanixProject[] = [];
   projectLabel = ProjectState.Empty;
   isPresetSelected = false;
@@ -81,6 +88,9 @@ export class NutanixProviderExtendedComponent extends BaseFormValidator implemen
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.ProjectName]: this._builder.control(''),
+      [Controls.StorageContainer]: this._builder.control(''),
+      [Controls.Fstype]: this._builder.control(''),
+      [Controls.SsSegmentedIscsiNetwork]: this._builder.control(false),
     });
 
     this.form.valueChanges
@@ -94,6 +104,15 @@ export class NutanixProviderExtendedComponent extends BaseFormValidator implemen
         this._enable(!this.isPresetSelected, control);
       })
     );
+
+    merge(
+      this.form.get(Controls.StorageContainer).valueChanges,
+      this.form.get(Controls.Fstype).valueChanges,
+      this.form.get(Controls.SsSegmentedIscsiNetwork).valueChanges
+    )
+      .pipe(distinctUntilChanged())
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
 
     merge(this._clusterSpecService.providerChanges, this._clusterSpecService.datacenterChanges)
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.NUTANIX))
@@ -111,6 +130,7 @@ export class NutanixProviderExtendedComponent extends BaseFormValidator implemen
         })
       )
       .pipe(filter(_ => this._hasRequiredCredentials()))
+      .pipe(filter(cluster => this._areCredentialsChanged(cluster)))
       .pipe(switchMap(_ => this._projectListObservable()))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._loadProjects.bind(this));
@@ -121,10 +141,32 @@ export class NutanixProviderExtendedComponent extends BaseFormValidator implemen
     this._unsubscribe.complete();
   }
 
+  private _areCredentialsChanged(cluster: Cluster): boolean {
+    let credentialsChanged = false;
+    if (cluster.spec.cloud.nutanix.username !== this._username) {
+      this._username = cluster.spec.cloud.nutanix.username;
+      credentialsChanged = true;
+    }
+
+    if (cluster.spec.cloud.nutanix.password !== this._password) {
+      this._password = cluster.spec.cloud.nutanix.password;
+      credentialsChanged = true;
+    }
+
+    if (cluster.spec.cloud.nutanix.proxyURL !== this._proxyURL) {
+      this._proxyURL = cluster.spec.cloud.nutanix.proxyURL;
+      credentialsChanged = true;
+    }
+
+    return credentialsChanged;
+  }
+
   getHint(control: Controls): string {
     switch (control) {
       case Controls.ProjectName:
         return this._hasRequiredCredentials() ? '' : 'Please enter your credentials first.';
+      default:
+        return '';
     }
   }
 
@@ -182,5 +224,21 @@ export class NutanixProviderExtendedComponent extends BaseFormValidator implemen
     if (!enable && this.form.get(name).enabled) {
       this.form.get(name).disable();
     }
+  }
+
+  private _getClusterEntity(): Cluster {
+    return {
+      spec: {
+        cloud: {
+          nutanix: {
+            csi: {
+              storageContainer: this.form.get(Controls.StorageContainer).value,
+              fstype: this.form.get(Controls.Fstype).value,
+              ssSegmentedIscsiNetwork: this.form.get(Controls.SsSegmentedIscsiNetwork).value,
+            } as NutanixCSIConfig,
+          } as NutanixCloudSpec,
+        } as CloudSpec,
+      } as ClusterSpec,
+    } as Cluster;
   }
 }

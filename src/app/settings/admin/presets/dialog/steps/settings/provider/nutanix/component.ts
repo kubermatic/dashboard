@@ -26,6 +26,10 @@ export enum Controls {
   ProxyURL = 'proxyURL',
   ClusterName = 'clusterName',
   ProjectName = 'projectName',
+  CSIUsername = 'csiUsername',
+  CSIPassword = 'csiPassword',
+  CSIEndpoint = 'csiEndpoint',
+  CSIPort = 'csiPort',
 }
 
 @Component({
@@ -58,6 +62,10 @@ export class NutanixSettingsComponent extends BaseFormValidator implements OnIni
       [Controls.ProxyURL]: this._builder.control(''),
       [Controls.ClusterName]: this._builder.control('', Validators.required),
       [Controls.ProjectName]: this._builder.control(''),
+      [Controls.CSIUsername]: this._builder.control('', Validators.required),
+      [Controls.CSIPassword]: this._builder.control('', Validators.required),
+      [Controls.CSIEndpoint]: this._builder.control('', Validators.required),
+      [Controls.CSIPort]: this._builder.control(undefined),
     });
 
     this.form.valueChanges
@@ -83,6 +91,10 @@ export class NutanixSettingsComponent extends BaseFormValidator implements OnIni
       proxyURL: this.form.get(Controls.ProxyURL).value,
       clusterName: this.form.get(Controls.ClusterName).value,
       projectName: this.form.get(Controls.ProjectName).value,
+      csiUsername: this.form.get(Controls.CSIUsername).value,
+      csiPassword: this.form.get(Controls.CSIPassword).value,
+      csiEndpoint: this.form.get(Controls.CSIEndpoint).value,
+      csiPort: this.form.get(Controls.CSIPort).value,
     } as NutanixPresetSpec;
   }
 }
