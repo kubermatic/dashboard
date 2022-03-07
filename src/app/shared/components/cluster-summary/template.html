@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div [ngClass]="showNumbering ? 'km-wizard-summary' : 'km-wizard-dialog-summary'"
+<div class="summary"
+     [ngClass]="{'summary-with-number' : showNumbering}"
      fxFlex
      [fxLayout]="flipLayout ? 'column' : 'row wrap'"
      fxLayout.lt-md="column">

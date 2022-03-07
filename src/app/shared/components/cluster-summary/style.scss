@@ -37,20 +37,15 @@ $steps: 5;
   }
 }
 
-.km-wizard-summary {
-  @include counter-x;
-
+.summary {
   .header {
     font-size: variables.$font-size-subhead-lg;
     margin-bottom: 16px;
   }
 }
 
-.km-wizard-dialog-summary {
-  .header {
-    font-size: variables.$font-size-subhead-lg;
-    margin-bottom: 16px;
-  }
+.summary-with-number {
+  @include counter-x;
 }
 
 .km-os-image {
