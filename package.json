@@ -110,7 +110,7 @@
     "lint-staged": "12.3.3",
     "ng2-mock-component": "0.2.0",
     "start-server-and-test": "1.14.0",
-    "stylelint": "14.4.0",
+    "stylelint": "14.5.3",
     "stylelint-config-standard-scss": "3.0.0",
     "stylelint-no-unsupported-browser-features": "5.0.2",
     "stylelint-order": "5.0.0",
