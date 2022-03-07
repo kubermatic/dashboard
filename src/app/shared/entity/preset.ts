@@ -74,7 +74,10 @@ export class CreatePresetSpec {
   enabled?: boolean;
 
   provider(): NodeProvider {
-    const providerKey = Object.keys(this).find(key => !_.isEmpty(this[key]) && _.isObject(this[key]));
+    const providerKey = Object.keys(this).find(
+      key => !_.isEmpty(this[key]) && _.isObject(this[key]) && !_.isArray(this[key])
+    );
+
     return providerKey ? NodeProviderConstants.newNodeProvider(providerKey) : NodeProvider.NONE;
   }
 }
