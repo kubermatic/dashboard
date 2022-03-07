@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {NodeProvider} from '../model/NodeProviderConstants';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
 
 export enum Provider {
@@ -179,6 +178,17 @@ export class NutanixCloudSpec {
   proxyURL?: string;
   username?: string;
   password?: string;
+  csi?: NutanixCSIConfig;
+}
+
+export class NutanixCSIConfig {
+  username: string;
+  password: string;
+  endpoint: string;
+  port?: number;
+  storageContainer?: string;
+  fstype?: string;
+  ssSegmentedIscsiNetwork?: boolean;
 }
 
 export class OpenstackCloudSpec {
@@ -461,87 +471,6 @@ export class AlibabaCloudSpecPatch {
 export class ProviderSettingsPatch {
   cloudSpecPatch: CloudSpecPatch;
   isValid: boolean;
-}
-
-export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
-  switch (provider) {
-    case NodeProvider.AWS:
-      return {
-        accessKeyID: '',
-        secretAccessKey: '',
-        routeTableID: '',
-        vpcID: '',
-        securityGroupID: '',
-        instanceProfileName: '',
-        roleARN: '',
-      } as AWSCloudSpec;
-    case NodeProvider.DIGITALOCEAN:
-      return {
-        token: '',
-      } as DigitaloceanCloudSpec;
-    case NodeProvider.OPENSTACK:
-      return {
-        username: '',
-        password: '',
-        floatingIPPool: '',
-        securityGroups: '',
-        network: '',
-        domain: '',
-        project: '',
-        projectID: '',
-        subnetID: '',
-      } as OpenstackCloudSpec;
-    case NodeProvider.BRINGYOUROWN:
-      return {} as BringYourOwnCloudSpec;
-    case NodeProvider.VSPHERE:
-      return {
-        username: '',
-        password: '',
-        vmNetName: '',
-        folder: '',
-        infraManagementUser: {
-          username: '',
-          password: '',
-        },
-      } as VSphereCloudSpec;
-    case NodeProvider.HETZNER:
-      return {
-        token: '',
-      } as HetznerCloudSpec;
-    case NodeProvider.AZURE:
-      return {
-        clientID: '',
-        clientSecret: '',
-        resourceGroup: '',
-        routeTable: '',
-        securityGroup: '',
-        subnet: '',
-        subscriptionID: '',
-        tenantID: '',
-        vnet: '',
-        loadBalancerSKU: '',
-      } as AzureCloudSpec;
-    case NodeProvider.EQUINIX:
-      return {} as EquinixCloudSpec;
-    case NodeProvider.KUBEVIRT:
-      return {kubeconfig: ''} as KubeVirtCloudSpec;
-    case NodeProvider.GCP:
-      return {
-        network: '',
-        serviceAccount: '',
-        subnetwork: '',
-      } as GCPCloudSpec;
-    case NodeProvider.ALIBABA:
-      return {
-        accessKeyID: '',
-        accessKeySecret: '',
-      } as AlibabaCloudSpec;
-    case NodeProvider.ANEXIA:
-      return {
-        token: '',
-      };
-  }
-  return {};
 }
 
 export const AVAILABLE_EQUINIX_BILLING_CYCLES = ['hourly', 'daily'];

@@ -161,6 +161,11 @@ export class NutanixPresetSpec extends PresetProviderSpec {
 
   clusterName?: string;
   projectName?: string;
+
+  csiUsername?: string;
+  csiPassword?: string;
+  csiEndpoint?: string;
+  csiPort?: string;
 }
 
 export class OpenstackPresetSpec extends PresetProviderSpec {

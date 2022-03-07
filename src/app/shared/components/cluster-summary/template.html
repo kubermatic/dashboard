@@ -190,7 +190,7 @@ limitations under the License.
             <div key>Username</div>
             <div value>{{cluster.spec.cloud.nutanix.username}}</div>
           </km-property>
-          <km-property>
+          <km-property *ngIf="cluster.spec.cloud.nutanix.proxyURL">
             <div key>Proxy URL</div>
             <div value>{{cluster.spec.cloud.nutanix.proxyURL}}</div>
           </km-property>
@@ -202,6 +202,32 @@ limitations under the License.
             <div key>Project Name</div>
             <div value>{{cluster.spec.cloud.nutanix.projectName}}</div>
           </km-property>
+          <ng-container *ngIf="cluster.spec.cloud?.nutanix?.csi">
+            <km-property>
+              <div key>Prism Element Username</div>
+              <div value>{{cluster.spec.cloud.nutanix.csi.username}}</div>
+            </km-property>
+            <km-property>
+              <div key>Prism Element Endpoint</div>
+              <div value>{{cluster.spec.cloud.nutanix.csi.endpoint}}</div>
+            </km-property>
+            <km-property *ngIf="cluster.spec.cloud.nutanix.csi.port !== undefined">
+              <div key>Prism Element Port</div>
+              <div value>{{cluster.spec.cloud.nutanix.csi.port}}</div>
+            </km-property>
+            <km-property *ngIf="cluster.spec.cloud.nutanix.csi.storageContainer">
+              <div key>Prism Element Storage Container</div>
+              <div value>{{cluster.spec.cloud.nutanix.csi.storageContainer}}</div>
+            </km-property>
+            <km-property *ngIf="cluster.spec.cloud.nutanix.csi.fstype">
+              <div key>Prism Element Storage Fstype</div>
+              <div value>{{cluster.spec.cloud.nutanix.csi.fstype}}</div>
+            </km-property>
+            <km-property-boolean *ngIf="cluster.spec.cloud.nutanix.csi.ssSegmentedIscsiNetwork !== undefined"
+                                 label="Segmented Iscsi Network"
+                                 [value]="cluster.spec.cloud.nutanix.csi.ssSegmentedIscsiNetwork">
+            </km-property-boolean>
+          </ng-container>
         </ng-container>
 
         <!-- vSphere -->
