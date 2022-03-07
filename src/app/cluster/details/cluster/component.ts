@@ -487,7 +487,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   isMLAEnabledInSeed(): boolean {
-    return !!this._seedSettings && !!this._seedSettings.mla && !!this._seedSettings.mla.userClusterMLAEnabled;
+    return this._seedSettings?.mla?.user_cluster_mla_enabled;
   }
 
   isMLAEnabled(): boolean {

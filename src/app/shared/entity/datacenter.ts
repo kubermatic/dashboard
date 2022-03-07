@@ -135,7 +135,7 @@ export class MeteringConfiguration {
 }
 
 export class MLA {
-  userClusterMLAEnabled: boolean;
+  user_cluster_mla_enabled: boolean;
 }
 
 export class AdminSeed {
