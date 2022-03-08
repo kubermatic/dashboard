@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Project} from '@shared/entity/project';
+import {Project, ProjectStatus} from '@shared/entity/project';
 
 export function fakeProjects(): Project[] {
   return [
@@ -20,7 +20,7 @@ export function fakeProjects(): Project[] {
       creationTimestamp: new Date(),
       id: '123ab4cd5e',
       name: 'new-project-1',
-      status: 'Active',
+      status: ProjectStatus.Active,
       owners: [
         {
           creationTimestamp: new Date(),
@@ -33,7 +33,7 @@ export function fakeProjects(): Project[] {
       creationTimestamp: new Date(),
       id: '234ab5cd6e',
       name: 'new-project-2',
-      status: 'Active',
+      status: ProjectStatus.Active,
       owners: [
         {
           creationTimestamp: new Date(),
