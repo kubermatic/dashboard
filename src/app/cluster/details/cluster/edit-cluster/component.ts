@@ -264,7 +264,6 @@ export class EditClusterComponent implements OnInit, OnDestroy {
 
   private _enforce(control: Controls, isEnforced: boolean): void {
     if (isEnforced) {
-      this.form.get(control).setValue(true);
       this.form.get(control).disable();
     }
   }
