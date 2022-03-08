@@ -64,6 +64,7 @@ export namespace NodeProviderConstants {
     [NodeProvider.OPENSTACK, 'Openstack'],
     [NodeProvider.EQUINIX, 'Equinix Metal'],
     [NodeProvider.VSPHERE, 'VSphere'],
+    [NodeProvider.NUTANIX, 'Nutanix'],
   ]);
 
   export function displayName(provider: NodeProvider): string {

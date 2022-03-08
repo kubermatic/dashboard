@@ -14,12 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<button mat-icon-button
-        class="stepper-button left"
-        [disabled]="disabled"
-        (click)="onDecrease()">
-  -
-</button>
 <mat-form-field class="km-number-stepper-input"
                 [ngClass]="mode === 'hint' || mode === 'errors' || mode === 'all' ? 'message' : ''">
   <mat-label *ngIf="!!label">{{label}}</mat-label>
@@ -38,6 +32,12 @@ limitations under the License.
   <mat-error *ngFor="let message of errors">{{message}}</mat-error>
   <mat-hint *ngIf="(mode === 'hint' || mode === 'all') && !!hint">{{hint}}</mat-hint>
 </mat-form-field>
+<button mat-icon-button
+        class="stepper-button left"
+        [disabled]="disabled"
+        (click)="onDecrease()">
+  -
+</button>
 <button mat-icon-button
         class="stepper-button right"
         [disabled]="disabled"
