@@ -14,27 +14,29 @@
 
 import {StatusIcon} from '@shared/utils/health-status';
 
+export enum ProjectStatus {
+  Active = 'Active',
+  Inactive = 'Inactive',
+  Terminating = 'Terminating',
+}
+
 export class Project {
   creationTimestamp: Date;
   deletionTimestamp?: Date;
   id: string;
   name: string;
-  status: string;
+  status: ProjectStatus;
   labels?: object;
   owners: ProjectOwner[];
   clustersNumber?: number;
 
-  static isActive(project: Project): boolean {
-    return project?.status === 'Active';
-  }
-
   static getStatusIcon(project: Project): string {
     switch (project?.status) {
-      case 'Active':
+      case ProjectStatus.Active:
         return StatusIcon.Running;
-      case 'Inactive':
+      case ProjectStatus.Inactive:
         return StatusIcon.Disabled;
-      case 'Terminating':
+      case ProjectStatus.Terminating:
         return StatusIcon.Error;
       default:
         return '';

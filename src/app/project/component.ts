@@ -38,7 +38,7 @@ import {UserService} from '@core/services/user';
 import {AddProjectDialogComponent} from '@shared/components/add-project-dialog/component';
 import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
-import {Project, ProjectOwner} from '@shared/entity/project';
+import {Project, ProjectOwner, ProjectStatus} from '@shared/entity/project';
 import {UserSettings} from '@shared/entity/settings';
 import {objectDiff} from '@shared/utils/common';
 import {MemberUtils, Permission} from '@shared/utils/member';
@@ -416,7 +416,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isProjectActive(project: Project): boolean {
-    return Project.isActive(project);
+    return project?.status === ProjectStatus.Active;
   }
 
   getStatusIcon(project: Project): string {
@@ -441,11 +441,13 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isEditEnabled(project: Project): boolean {
-    return MemberUtils.hasPermission(
-      this.currentUser,
-      this._userService.getCurrentUserGroupConfig(MemberUtils.getGroupInProject(this.currentUser, project.id)),
-      View.Projects,
-      Permission.Edit
+    return (
+      MemberUtils.hasPermission(
+        this.currentUser,
+        this._userService.getCurrentUserGroupConfig(MemberUtils.getGroupInProject(this.currentUser, project.id)),
+        View.Projects,
+        Permission.Edit
+      ) && project.status !== ProjectStatus.Terminating
     );
   }
 
@@ -464,11 +466,13 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isDeleteEnabled(project: Project): boolean {
-    return MemberUtils.hasPermission(
-      this.currentUser,
-      this._userService.getCurrentUserGroupConfig(MemberUtils.getGroupInProject(this.currentUser, project.id)),
-      View.Projects,
-      Permission.Delete
+    return (
+      MemberUtils.hasPermission(
+        this.currentUser,
+        this._userService.getCurrentUserGroupConfig(MemberUtils.getGroupInProject(this.currentUser, project.id)),
+        View.Projects,
+        Permission.Delete
+      ) && project.status !== ProjectStatus.Terminating
     );
   }
 
