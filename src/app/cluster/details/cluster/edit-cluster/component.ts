@@ -242,7 +242,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   }
 
   isMLAEnabled(): boolean {
-    return !!this._seedSettings && !!this._seedSettings.mla && !!this._seedSettings.mla.userClusterMLAEnabled;
+    return this._seedSettings?.mla?.user_cluster_mla_enabled;
   }
 
   isPodSecurityPolicyEnforced(): boolean {
