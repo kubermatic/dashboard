@@ -219,7 +219,8 @@ limitations under the License.
        fxLayoutGap="20px">
 
     <mat-card *ngFor="let project of dataSource.filteredData"
-              (click)="selectProject(project)">
+              (click)="selectProject(project)"
+              [ngClass]="{'active-project-card': isProjectActive(project)}">
       <mat-card-header>
         <i mat-card-avatar
            [matTooltip]="project.status"
