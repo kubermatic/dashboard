@@ -19,7 +19,7 @@ import {AppConfigService} from '@app/config.service';
 import {ParamsService, PathParam} from '@core/services/params';
 import {UserService} from '@core/services/user';
 import {environment} from '@environments/environment';
-import {Project, ProjectModel} from '@shared/entity/project';
+import {Project, ProjectModel, ProjectStatus} from '@shared/entity/project';
 import {EMPTY, merge, Observable, of, Subject, timer} from 'rxjs';
 import {catchError, map, shareReplay, switchMap} from 'rxjs/operators';
 
@@ -93,7 +93,7 @@ export class ProjectService {
   }
 
   selectProject(project: Project): Promise<boolean> {
-    if (Project.isActive(project)) {
+    if (project?.status === ProjectStatus.Active) {
       this.onProjectChange.emit(project);
       return this._router.navigate([`/projects/${project.id}/clusters`]);
     }
