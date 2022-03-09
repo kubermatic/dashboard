@@ -53,7 +53,7 @@
     "@angular/router": "13.2.2",
     "@fontsource/inconsolata": "4.5.1",
     "@fontsource/roboto": "4.5.3",
-    "@fontsource/roboto-mono": "4.5.2",
+    "@fontsource/roboto-mono": "4.5.3",
     "@fontsource/ubuntu": "4.5.3",
     "core-js": "3.21.0",
     "country-code-lookup": "0.0.20",
