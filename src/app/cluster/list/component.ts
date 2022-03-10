@@ -15,6 +15,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subject} from 'rxjs';
 import {SettingsService} from '@core/services/settings';
+import {ClusterService} from '@core/services/cluster';
 import {map, takeUntil} from 'rxjs/operators';
 
 @Component({
@@ -26,7 +27,9 @@ export class ClustersComponent implements OnInit, OnDestroy {
   private _unsubscribe: Subject<void> = new Subject<void>();
   areExternalClustersEnabled = false;
 
-  constructor(private readonly _settingsService: SettingsService) {}
+  constructor(private readonly _settingsService: SettingsService, private readonly _clusterService: ClusterService) {}
+
+  clusterIndex = this._clusterService.clusterIndex;
 
   ngOnInit(): void {
     this._settingsService.adminSettings

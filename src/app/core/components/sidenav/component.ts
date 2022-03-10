@@ -18,6 +18,7 @@ import {Router} from '@angular/router';
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
+import {ClusterService} from '@core/services/cluster';
 import {environment} from '@environments/environment';
 import {getViewDisplayName, View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
@@ -52,7 +53,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
     private _router: Router,
     private readonly _projectService: ProjectService,
     private readonly _userService: UserService,
-    private readonly _settingsService: SettingsService
+    private readonly _settingsService: SettingsService,
+    private readonly _clusterService: ClusterService
   ) {}
 
   ngOnInit(): void {
@@ -109,6 +111,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   getRouterLink(view: View): string {
+    this._clusterService.changeIndexClusterList(0);
     return `/projects/${this._selectedProject.id}/${view}`;
   }
 
