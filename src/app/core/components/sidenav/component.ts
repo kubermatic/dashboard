@@ -111,8 +111,11 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   getRouterLink(view: View): string {
-    this._clusterService.changeIndexClusterList(0);
     return `/projects/${this._selectedProject.id}/${view}`;
+  }
+
+  getClusterIndex() {
+    this._clusterService.changeIndexClusterList(0);
   }
 
   getTooltip(view: View): string {
