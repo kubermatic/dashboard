@@ -335,7 +335,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
   private _enforce(control: Controls, isEnforced: boolean): void {
     if (isEnforced) {
-      this.form.get(control).setValue(true);
       this.form.get(control).disable();
     }
   }
