@@ -17,7 +17,7 @@ limitations under the License.
 <ng-container [ngSwitch]="areExternalClustersEnabled">
   <mat-tab-group *ngSwitchCase="true"
                  animationDuration="0ms"
-                 [selectedIndex]="clusterIndex? 1 : 0">
+                 [selectedIndex]="clusterIndex">
     <mat-tab label="Clusters">
       <div class="container">
         <km-cluster-list></km-cluster-list>
