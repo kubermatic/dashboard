@@ -62,7 +62,6 @@ export class ClusterService {
   providerSettingsPatchChanges$ = this._providerSettingsPatch.asObservable();
   onClusterUpdate = new Subject<void>();
   onExternalClusterUpdate = new Subject<void>();
-  public clusterIndex = 0;
 
   constructor(
     private readonly _matDialog: MatDialog,
@@ -183,10 +182,6 @@ export class ClusterService {
       .pipe(filter(isConfirmed => isConfirmed))
       .pipe(switchMap(_ => this._deleteExternalCluster(projectID, cluster.id)))
       .pipe(take(1));
-  }
-
-  changeIndexClusterList(indexNum: number) {
-    this.clusterIndex = indexNum;
   }
 
   upgrades(projectID: string, clusterID: string): Observable<MasterVersion[]> {

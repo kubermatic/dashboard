@@ -15,8 +15,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subject} from 'rxjs';
 import {SettingsService} from '@core/services/settings';
-import {ClusterService} from '@core/services/cluster';
 import {map, takeUntil} from 'rxjs/operators';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'km-clusters',
@@ -27,11 +27,15 @@ export class ClustersComponent implements OnInit, OnDestroy {
   private _unsubscribe: Subject<void> = new Subject<void>();
   areExternalClustersEnabled = false;
 
-  constructor(private readonly _settingsService: SettingsService, private readonly _clusterService: ClusterService) {}
+  constructor(private readonly _settingsService: SettingsService, private route: ActivatedRoute) {}
 
-  clusterIndex = this._clusterService.clusterIndex;
+  clusterIndex = '';
 
   ngOnInit(): void {
+    this.route.fragment.subscribe((fragment: string) => {
+      this.clusterIndex = fragment;
+    });
+
     this._settingsService.adminSettings
       .pipe(
         map(settings => settings.enableExternalClusterImport),
