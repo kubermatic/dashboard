@@ -17,7 +17,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ClusterService} from '@core/services/cluster';
 import {AVAILABLE_EQUINIX_BILLING_CYCLES, ProviderSettingsPatch} from '@shared/entity/cluster';
 import {merge, Subject} from 'rxjs';
-import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 
 enum Control {
   ApiKey = 'apiKey',
@@ -33,7 +33,6 @@ export class EquinixProviderSettingsComponent implements OnInit, OnDestroy {
   private readonly _billingCycleMaxLen = 64;
   private readonly _apiKeyMaxLen = 64;
   private readonly _projectIDMaxLen = 64;
-  private readonly _debounceTime = 500;
   private readonly _unsubscribe = new Subject<void>();
   readonly Control = Control;
   @Input() billingCycle: string;
@@ -60,7 +59,6 @@ export class EquinixProviderSettingsComponent implements OnInit, OnDestroy {
       this.form.get(Control.BillingCycle).valueChanges
     )
       .pipe(distinctUntilChanged())
-      .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._clusterService.changeProviderSettingsPatch(this._getProviderSettingsPatch()));
   }
