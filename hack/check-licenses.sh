@@ -29,7 +29,9 @@ ALLOWED_LICENSES="MIT;ISC;BSD-2-Clause;BSD-2-Clause-FreeBSD;BSD-3-Clause;Apache-
 #   - zenscroll (dependency of swagger-ui)
 # Python-2.0 license:
 #   - argparse (dependency of js-yaml)
-EXCLUDED_PACKAGES="emitter-component;btoa;encode-3986;zenscroll;argparse"
+# CC-BY-4.0 license:
+#   - caniuse-lite (dependency of multiple dependencies)
+EXCLUDED_PACKAGES="emitter-component;btoa;encode-3986;zenscroll;argparse;caniuse-lite"
 
 LICENSE_CHECK_OUTPUT=$(npx license-compliance --production --allow ${ALLOWED_LICENSES} -e ${EXCLUDED_PACKAGES} -r detailed)
 

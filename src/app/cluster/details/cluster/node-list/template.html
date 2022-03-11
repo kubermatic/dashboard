@@ -142,7 +142,7 @@ limitations under the License.
                 <button mat-icon-button
                         [attr.id]="'km-delete-node-' + element.name"
                         matTooltip="Delete Node"
-                        (click)="deleteNodeDialog(element, $event)"
+                        (click)="deleteNodeDialog(element); $event.stopPropagation()"
                         [disabled]="!canDelete()">
                   <i class="km-icon-delete"></i>
                 </button>

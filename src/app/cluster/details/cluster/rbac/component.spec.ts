@@ -15,7 +15,7 @@
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {fakeDigitaloceanCluster} from '@test/data/cluster';
@@ -32,7 +32,7 @@ import {AppConfigService} from '@app/config.service';
 import {AppConfigMockService} from '@test/services/app-config-mock';
 import {fakeBindings, fakeClusterBindings, fakeSimpleBindings, fakeSimpleClusterBindings} from '@test/data/rbac';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
+const modules: any[] = [BrowserModule, NoopAnimationsModule, SharedModule];
 
 describe('RBACComponent', () => {
   let fixture: ComponentFixture<RBACComponent>;
