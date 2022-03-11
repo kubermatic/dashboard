@@ -179,8 +179,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
 
   disconnect(): void {
     this._clusterService.showDisconnectClusterDialog(this.cluster, this.projectID).subscribe(_ => {
-      this._router.navigate(['/projects/' + this.projectID + '/clusters']);
-      this._clusterService.changeIndexClusterList(1);
+      this._router.navigate(['/projects/' + this.projectID + '/clusters'], {fragment: 'externalCluster'});
       this._notificationService.success(`Disconnected the ${this.cluster.name} cluster`);
     });
   }
