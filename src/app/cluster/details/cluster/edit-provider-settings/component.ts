@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {ClusterService} from '@core/services/cluster';
 import {NotificationService} from '@core/services/notification';
@@ -24,7 +24,7 @@ import {takeUntil} from 'rxjs/operators';
   selector: 'km-edit-provider-settings',
   templateUrl: './template.html',
 })
-export class EditProviderSettingsComponent implements OnInit {
+export class EditProviderSettingsComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();
   private providerSettingsPatch: ProviderSettingsPatch = {
     isValid: false,
@@ -47,6 +47,11 @@ export class EditProviderSettingsComponent implements OnInit {
     this._clusterService.providerSettingsPatchChanges$
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(patch => (this.providerSettingsPatch = patch));
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   providerDisplayName(cluster: Cluster): string {

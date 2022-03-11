@@ -17,7 +17,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ClusterService} from '@core/services/cluster';
 import {ProviderSettingsPatch} from '@shared/entity/cluster';
 import {Subject} from 'rxjs';
-import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 
 export enum Controls {
   Username = 'username',
@@ -32,7 +32,6 @@ export enum Controls {
   templateUrl: './template.html',
 })
 export class NutanixProviderSettingsComponent implements OnInit, OnDestroy {
-  private readonly _debounceTime = 500;
   private readonly _unsubscribe = new Subject<void>();
   readonly Controls = Controls;
   form: FormGroup;
@@ -50,7 +49,6 @@ export class NutanixProviderSettingsComponent implements OnInit, OnDestroy {
 
     this.form.valueChanges
       .pipe(distinctUntilChanged())
-      .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._clusterService.changeProviderSettingsPatch(this._getProviderSettingsPatch()));
   }

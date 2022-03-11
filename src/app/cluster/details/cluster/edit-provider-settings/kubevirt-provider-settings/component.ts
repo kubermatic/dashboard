@@ -17,7 +17,7 @@ import {AbstractControl, FormBuilder, FormGroup} from '@angular/forms';
 import {ClusterService} from '@core/services/cluster';
 import {ProviderSettingsPatch} from '@shared/entity/cluster';
 import {Subject} from 'rxjs';
-import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 
 enum Control {
   Kubeconfig = 'kubeconfig',
@@ -28,7 +28,6 @@ enum Control {
   templateUrl: './template.html',
 })
 export class KubevirtProviderSettingsComponent implements OnInit, OnDestroy {
-  private readonly _debounceTime = 500;
   private readonly _unsubscribe = new Subject<void>();
   readonly Control = Control;
   form: FormGroup;
@@ -47,7 +46,6 @@ export class KubevirtProviderSettingsComponent implements OnInit, OnDestroy {
     this.form
       .get(Control.Kubeconfig)
       .valueChanges.pipe(distinctUntilChanged())
-      .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._clusterService.changeProviderSettingsPatch(this._getProviderSettingsPatch()));
   }
