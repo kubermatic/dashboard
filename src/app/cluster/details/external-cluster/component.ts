@@ -32,7 +32,7 @@ import {forkJoin, of, Subject, timer} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 import {MasterVersion} from '@shared/entity/cluster';
-import {clusterTab} from '@app/cluster/list/component';
+import {ClusterListTab} from '@app/cluster/list/component';
 
 @Component({
   selector: 'km-external-cluster-details',
@@ -180,7 +180,9 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
 
   disconnect(): void {
     this._clusterService.showDisconnectClusterDialog(this.cluster, this.projectID).subscribe(_ => {
-      this._router.navigate(['/projects/' + this.projectID + '/clusters'], {fragment: `${clusterTab.externalCluster}`});
+      this._router.navigate(['/projects/' + this.projectID + '/clusters'], {
+        fragment: `${ClusterListTab.ExternalCluster}`,
+      });
       this._notificationService.success(`Disconnected the ${this.cluster.name} cluster`);
     });
   }
