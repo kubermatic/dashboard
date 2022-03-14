@@ -13,19 +13,16 @@
 // limitations under the License.
 
 import {Injectable} from '@angular/core';
-import {
-  AKSCluster,
-  EKSCluster,
-  ExternalClusterModel,
-  ExternalClusterProvider,
-  GKECluster,
-} from '@shared/entity/external-cluster';
+import {ExternalClusterModel, ExternalClusterProvider} from '@shared/entity/external-cluster';
 import {BehaviorSubject, Observable, of} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {environment} from '@environments/environment';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {PresetList} from '@shared/entity/preset';
 import {Cluster} from '@shared/entity/cluster';
+import {AKSCluster} from '@app/shared/entity/provider/aks';
+import {EKSCluster} from '@app/shared/entity/provider/eks';
+import {GKECluster} from '@app/shared/entity/provider/gke';
 
 @Injectable({providedIn: 'root'})
 export class ExternalClusterService {
