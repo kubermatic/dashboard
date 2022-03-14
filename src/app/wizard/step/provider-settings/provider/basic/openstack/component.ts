@@ -107,9 +107,7 @@ export class OpenstackProviderBasicComponent extends BaseFormValidator implement
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
-        this._presets.enablePresets(
-          Object.values(this._clusterSpecService.cluster.spec.cloud.openstack).every(value => !value)
-        )
+        this._presets.enablePresets(OpenstackCloudSpec.isEmpty(this._clusterSpecService.cluster.spec.cloud.openstack))
       );
 
     merge(this.form.get(Controls.Domain).valueChanges.pipe(distinctUntilChanged()))

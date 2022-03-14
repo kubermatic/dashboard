@@ -67,13 +67,9 @@ export class AzureProviderBasicComponent extends BaseFormValidator implements On
     this.form.valueChanges
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.AZURE))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => {
-        this._presets.enablePresets(
-          Object.keys(this._clusterSpecService.cluster.spec.cloud.azure)
-            .filter(key => key !== 'assignAvailabilitySet')
-            .every(key => !this._clusterSpecService.cluster.spec.cloud.azure[key])
-        );
-      });
+      .subscribe(_ =>
+        this._presets.enablePresets(AzureCloudSpec.isEmpty(this._clusterSpecService.cluster.spec.cloud.azure))
+      );
 
     this._presets.presetChanges
       .pipe(takeUntil(this._unsubscribe))

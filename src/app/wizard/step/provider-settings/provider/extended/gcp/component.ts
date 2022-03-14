@@ -26,6 +26,7 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {PresetsService} from '@core/services/wizard/presets';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
+import {GCPCloudSpec} from '@shared/entity/cluster';
 import {GCPNetwork, GCPSubnetwork} from '@shared/entity/provider/gcp';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
@@ -107,9 +108,7 @@ export class GCPProviderExtendedComponent extends BaseFormValidator implements O
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.GCP))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
-        this._presets.enablePresets(
-          Object.values(this._clusterSpecService.cluster.spec.cloud.gcp).every(value => !value)
-        )
+        this._presets.enablePresets(GCPCloudSpec.isEmpty(this._clusterSpecService.cluster.spec.cloud.gcp))
       );
 
     this._clusterSpecService.clusterChanges
