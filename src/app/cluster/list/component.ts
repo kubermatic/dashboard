@@ -18,9 +18,9 @@ import {SettingsService} from '@core/services/settings';
 import {map, takeUntil} from 'rxjs/operators';
 import {ActivatedRoute} from '@angular/router';
 
-export enum clusterTab {
-  cluster,
-  externalCluster,
+export enum ClusterListTab {
+  Cluster,
+  ExternalCluster,
 }
 
 @Component({
