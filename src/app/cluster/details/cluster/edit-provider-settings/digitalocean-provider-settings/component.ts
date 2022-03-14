@@ -17,7 +17,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ClusterService} from '@core/services/cluster';
 import {ProviderSettingsPatch} from '@shared/entity/cluster';
 import {Subject} from 'rxjs';
-import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 
 enum Control {
   Token = 'token',
@@ -28,7 +28,6 @@ enum Control {
   templateUrl: './template.html',
 })
 export class DigitaloceanProviderSettingsComponent implements OnInit, OnDestroy {
-  private readonly _debounceTime = 500;
   private readonly _tokenLength = 64;
   private readonly _unsubscribe = new Subject<void>();
   readonly Control = Control;
@@ -48,7 +47,6 @@ export class DigitaloceanProviderSettingsComponent implements OnInit, OnDestroy 
     this.form
       .get(Control.Token)
       .valueChanges.pipe(distinctUntilChanged())
-      .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._clusterService.changeProviderSettingsPatch(this._getProviderSettingsPatch()));
   }

@@ -17,7 +17,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ClusterService} from '@core/services/cluster';
 import {ProviderSettingsPatch} from '@shared/entity/cluster';
 import {merge, Subject} from 'rxjs';
-import {debounceTime, distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 
 enum Control {
   InfraManagementUsername = 'infraManagementUsername',
@@ -31,7 +31,6 @@ enum Control {
   templateUrl: './template.html',
 })
 export class VSphereProviderSettingsComponent implements OnInit, OnDestroy {
-  private readonly _debounceTime = 500;
   private readonly _unsubscribe = new Subject<void>();
   readonly Control = Control;
   form: FormGroup;
@@ -53,7 +52,6 @@ export class VSphereProviderSettingsComponent implements OnInit, OnDestroy {
       this.form.get(Control.Password).valueChanges
     )
       .pipe(distinctUntilChanged())
-      .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._clusterService.changeProviderSettingsPatch(this._getProviderSettingsPatch()));
   }

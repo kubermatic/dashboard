@@ -17,7 +17,7 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 import {ClusterService} from '@core/services/cluster';
 import {ProviderSettingsPatch} from '@shared/entity/cluster';
 import {merge, Subject} from 'rxjs';
-import {debounceTime, takeUntil} from 'rxjs/operators';
+import {takeUntil} from 'rxjs/operators';
 
 enum Control {
   ClientID = 'clientID',
@@ -31,7 +31,6 @@ enum Control {
   templateUrl: './template.html',
 })
 export class AzureProviderSettingsComponent implements OnInit, OnDestroy {
-  private readonly _debounceTime = 500;
   private readonly _unsubscribe = new Subject<void>();
   readonly Control = Control;
   form: FormGroup;
@@ -52,7 +51,6 @@ export class AzureProviderSettingsComponent implements OnInit, OnDestroy {
       this.form.get(Control.SubscriptionID).valueChanges,
       this.form.get(Control.TenantID).valueChanges
     )
-      .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._clusterService.changeProviderSettingsPatch(this._getProviderSettingsPatch()));
   }

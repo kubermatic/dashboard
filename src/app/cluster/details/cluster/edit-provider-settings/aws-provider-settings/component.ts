@@ -17,7 +17,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ClusterService} from '@core/services/cluster';
 import {ProviderSettingsPatch} from '@shared/entity/cluster';
 import {merge, Subject} from 'rxjs';
-import {debounceTime, takeUntil} from 'rxjs/operators';
+import {takeUntil} from 'rxjs/operators';
 
 enum Control {
   AccessKeyID = 'accessKeyID',
@@ -32,7 +32,6 @@ enum Control {
   templateUrl: './template.html',
 })
 export class AWSProviderSettingsComponent implements OnInit, OnDestroy {
-  private readonly _debounceTime = 500;
   private readonly _unsubscribe = new Subject<void>();
   readonly Control = Control;
   form: FormGroup;
@@ -58,7 +57,6 @@ export class AWSProviderSettingsComponent implements OnInit, OnDestroy {
       this.form.get(Control.AssumeRoleARN).valueChanges,
       this.form.get(Control.AssumeRoleExternalID).valueChanges
     )
-      .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._clusterService.changeProviderSettingsPatch(this._getProviderSettingsPatch()));
 
