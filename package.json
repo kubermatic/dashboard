@@ -66,7 +66,7 @@
     "modern-normalize": "1.1.0",
     "moment": "2.29.1",
     "monaco-editor": "0.32.1",
-    "ngx-clipboard": "15.0.1",
+    "ngx-clipboard": "15.1.0",
     "ngx-cookie-service": "13.1.2",
     "ngx-custom-validators": "11.0.1",
     "ngx-filter-pipe": "2.1.2",
