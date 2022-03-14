@@ -31,10 +31,9 @@ export enum ClusterListTab {
 export class ClustersComponent implements OnInit, OnDestroy {
   private _unsubscribe: Subject<void> = new Subject<void>();
   areExternalClustersEnabled = false;
+  clusterIndex = this._route.snapshot.fragment;
 
-  constructor(private readonly _settingsService: SettingsService, private route: ActivatedRoute) {}
-
-  clusterIndex = this.route.snapshot.fragment;
+  constructor(private readonly _settingsService: SettingsService, private readonly _route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this._settingsService.adminSettings
