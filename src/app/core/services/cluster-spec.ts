@@ -24,6 +24,7 @@ export class ClusterSpecService {
   readonly datacenterChanges = new EventEmitter<string>();
   readonly sshKeyChanges = new EventEmitter<SSHKey[]>();
   readonly clusterChanges = new EventEmitter<Cluster>();
+  readonly providerSpecChanges = new EventEmitter<void>();
 
   private _cluster: Cluster = Cluster.newEmptyClusterEntity();
 

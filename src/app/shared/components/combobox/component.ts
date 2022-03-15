@@ -126,6 +126,7 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
   reset(): void {
     this.selected = null;
     this.form.get(Controls.Select).setValue(this.selected);
+    this.changed.emit(this.selected);
   }
 
   hasOptions(): boolean {
