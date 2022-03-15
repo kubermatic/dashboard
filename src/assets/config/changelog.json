@@ -10,7 +10,7 @@
       "description": "Secret name for S3 credentials updated to \"kubermatic-s3-credentials\". In case the \"s3-credentials\" secret was manually created instead of using the \"minio\" chart, new secret \"kubermatic-s3-credentials\" must be created."
     },
     {
-      "category": "added",
+      "category": "changed",
       "description": "Migrated API group \"kubermatic.k8s.io\" to \"kubermatic.k8c.io\""
     },
     {
@@ -34,8 +34,16 @@
       "description": "Added Nutanix CSI support"
     },
     {
+      "category": "added",
+      "description": "Added allowed IP range for NodePorts support to the GCP, Azure, AWS and Openstack providers"
+    },
+    {
       "category": "changed",
       "description": "Redesigned the cluster summary step"
+    },
+    {
+      "category": "changed",
+      "description": "Updated default OS disk size for the Azure provider to 64GB when RHEL is selected"
     },
     {
       "category": "fixed",
