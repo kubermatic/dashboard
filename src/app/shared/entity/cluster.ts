@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import {MachineDeployment} from '@shared/entity/machine-deployment';
+import _ from 'lodash';
 
 export enum Provider {
   Alibaba = 'alibaba',
@@ -111,12 +112,20 @@ export class CloudSpec {
   anexia?: AnexiaCloudSpec;
 }
 
+export class ExtraCloudSpecOptions {
+  constructor(public nodePortsAllowedIPRange?: string) {}
+
+  static new(spec: AWSCloudSpec | GCPCloudSpec | AzureCloudSpec | OpenstackCloudSpec): ExtraCloudSpecOptions {
+    return new ExtraCloudSpecOptions(spec.nodePortsAllowedIPRange);
+  }
+}
+
 export class AlibabaCloudSpec {
   accessKeyID: string;
   accessKeySecret: string;
 }
 
-export class AWSCloudSpec {
+export class AWSCloudSpec extends ExtraCloudSpecOptions {
   accessKeyID: string;
   secretAccessKey: string;
   assumeRoleARN: string;
@@ -126,9 +135,13 @@ export class AWSCloudSpec {
   securityGroupID: string;
   instanceProfileName: string;
   roleARN: string;
+
+  static isEmpty(spec: AWSCloudSpec): boolean {
+    return _.difference(Object.keys(spec), Object.keys(ExtraCloudSpecOptions.new(spec))).every(key => !spec[key]);
+  }
 }
 
-export class AzureCloudSpec {
+export class AzureCloudSpec extends ExtraCloudSpecOptions {
   clientID: string;
   clientSecret: string;
   resourceGroup: string;
@@ -141,6 +154,13 @@ export class AzureCloudSpec {
   vnet: string;
   loadBalancerSKU: string;
   assignAvailabilitySet: boolean;
+
+  static isEmpty(spec: AzureCloudSpec): boolean {
+    const optionalFields = ['assignAvailabilitySet'];
+    return _.difference(Object.keys(spec), [...Object.keys(ExtraCloudSpecOptions.new(spec)), ...optionalFields]).every(
+      key => !spec[key]
+    );
+  }
 }
 
 export class BringYourOwnCloudSpec {}
@@ -157,10 +177,14 @@ export class FakeCloudSpec {
   token: string;
 }
 
-export class GCPCloudSpec {
+export class GCPCloudSpec extends ExtraCloudSpecOptions {
   network: string;
   serviceAccount: string;
   subnetwork: string;
+
+  static isEmpty(spec: GCPCloudSpec): boolean {
+    return _.difference(Object.keys(spec), Object.keys(ExtraCloudSpecOptions.new(spec))).every(key => !spec[key]);
+  }
 }
 
 export class HetznerCloudSpec {
@@ -191,7 +215,7 @@ export class NutanixCSIConfig {
   ssSegmentedIscsiNetwork?: boolean;
 }
 
-export class OpenstackCloudSpec {
+export class OpenstackCloudSpec extends ExtraCloudSpecOptions {
   useToken?: boolean;
   applicationCredentialID?: string;
   applicationCredentialSecret?: string;
@@ -204,6 +228,10 @@ export class OpenstackCloudSpec {
   securityGroups: string;
   floatingIPPool: string;
   subnetID: string;
+
+  static isEmpty(spec: OpenstackCloudSpec): boolean {
+    return _.difference(Object.keys(spec), Object.keys(ExtraCloudSpecOptions.new(spec))).every(key => !spec[key]);
+  }
 }
 
 export class EquinixCloudSpec {

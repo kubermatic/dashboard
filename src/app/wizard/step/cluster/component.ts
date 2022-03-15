@@ -16,14 +16,16 @@ import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
-  FormControl,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   Validator,
   Validators,
 } from '@angular/forms';
+import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
+import {ClusterService} from '@core/services/cluster';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
+import {FeatureGateService} from '@core/services/feature-gate';
 import {NameGeneratorService} from '@core/services/name-generator';
 import {SettingsService} from '@core/services/settings';
 import {WizardService} from '@core/services/wizard/wizard';
@@ -34,23 +36,22 @@ import {
   CNIPlugin,
   ContainerRuntime,
   END_OF_DOCKER_SUPPORT_VERSION,
+  ExtraCloudSpecOptions,
   MasterVersion,
   ProxyMode,
 } from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {AdminSettings} from '@shared/entity/settings';
+import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
 import {AsyncValidators} from '@shared/validators/async-label-form.validator';
+import {CIDR_PATTERN_VALIDATOR} from '@shared/validators/others';
 import {combineLatest, merge} from 'rxjs';
 import {filter, startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import {StepBase} from '../base';
 import * as semver from 'semver';
 import {coerce, compare} from 'semver';
-import {CIDR_PATTERN_VALIDATOR} from '@shared/validators/others';
-import {FeatureGateService} from '@core/services/feature-gate';
-import {ClusterService} from '@core/services/cluster';
-import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
+import {StepBase} from '../base';
 
 enum Controls {
   Name = 'name',
@@ -75,6 +76,7 @@ enum Controls {
   ServicesCIDR = 'servicesCIDR',
   CNIPlugin = 'cniPlugin',
   CNIPluginVersion = 'cniPluginVersion',
+  AllowedIPRange = 'allowedIPRange',
 }
 
 @Component({
@@ -113,6 +115,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   private _seedSettings: SeedSettings;
   private _settings: AdminSettings;
   private readonly _minNameLength = 5;
+  private readonly _defaultAllowedIPRange = '0.0.0.0/0';
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -133,31 +136,32 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .subscribe(featureGates => (this.isKonnectivityEnabled = !!featureGates?.konnectivityService));
 
     this.form = this._builder.group({
-      [Controls.Name]: new FormControl('', [
+      [Controls.Name]: this._builder.control('', [
         Validators.required,
         Validators.minLength(this._minNameLength),
         KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,
       ]),
-      [Controls.Version]: new FormControl('', [Validators.required]),
-      [Controls.ContainerRuntime]: new FormControl(ContainerRuntime.Containerd, [Validators.required]),
-      [Controls.AuditLogging]: new FormControl(false),
-      [Controls.AuditPolicyPreset]: new FormControl(''),
-      [Controls.UserSSHKeyAgent]: new FormControl(true),
-      [Controls.OperatingSystemManager]: new FormControl(false),
-      [Controls.OPAIntegration]: new FormControl(false),
-      [Controls.Konnectivity]: new FormControl(true),
-      [Controls.MLALogging]: new FormControl(false),
-      [Controls.MLAMonitoring]: new FormControl(false),
-      [Controls.AdmissionPlugins]: new FormControl([]),
-      [Controls.PodNodeSelectorAdmissionPluginConfig]: new FormControl(''),
+      [Controls.Version]: this._builder.control('', [Validators.required]),
+      [Controls.ContainerRuntime]: this._builder.control(ContainerRuntime.Containerd, [Validators.required]),
+      [Controls.AuditLogging]: this._builder.control(false),
+      [Controls.AuditPolicyPreset]: this._builder.control(''),
+      [Controls.UserSSHKeyAgent]: this._builder.control(true),
+      [Controls.OperatingSystemManager]: this._builder.control(false),
+      [Controls.OPAIntegration]: this._builder.control(false),
+      [Controls.Konnectivity]: this._builder.control(true),
+      [Controls.MLALogging]: this._builder.control(false),
+      [Controls.MLAMonitoring]: this._builder.control(false),
+      [Controls.AdmissionPlugins]: this._builder.control([]),
+      [Controls.PodNodeSelectorAdmissionPluginConfig]: this._builder.control(''),
       [Controls.EventRateLimitConfig]: this._builder.control(''),
-      [Controls.Labels]: new FormControl(''),
+      [Controls.Labels]: this._builder.control(''),
       [Controls.SSHKeys]: this._builder.control(''),
       [Controls.ProxyMode]: this._builder.control(''),
-      [Controls.PodsCIDR]: new FormControl('', [CIDR_PATTERN_VALIDATOR]),
-      [Controls.ServicesCIDR]: new FormControl('', [CIDR_PATTERN_VALIDATOR]),
-      [Controls.CNIPlugin]: new FormControl(CNIPlugin.Canal),
-      [Controls.CNIPluginVersion]: new FormControl(''),
+      [Controls.PodsCIDR]: this._builder.control('', [CIDR_PATTERN_VALIDATOR]),
+      [Controls.ServicesCIDR]: this._builder.control('', [CIDR_PATTERN_VALIDATOR]),
+      [Controls.CNIPlugin]: this._builder.control(CNIPlugin.Canal),
+      [Controls.CNIPluginVersion]: this._builder.control(''),
+      [Controls.AllowedIPRange]: this._builder.control(this._defaultAllowedIPRange, [CIDR_PATTERN_VALIDATOR]),
     });
 
     this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
@@ -197,6 +201,13 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .subscribe((seedSettings: SeedSettings) => (this._seedSettings = seedSettings));
 
     this._clusterSpecService.providerChanges
+      .pipe(
+        tap(_ =>
+          this.isAllowedIPRangeSupported()
+            ? (this._getExtraCloudSpecOptions().nodePortsAllowedIPRange = this._defaultAllowedIPRange)
+            : null
+        )
+      )
       .pipe(switchMap(provider => this._clusterService.getMasterVersions(provider)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setDefaultVersion.bind(this));
@@ -249,6 +260,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         }
         this.updateCNIPluginOptions();
       });
+
+    merge(this.control(Controls.AllowedIPRange).valueChanges)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(ipRange => (this._getExtraCloudSpecOptions().nodePortsAllowedIPRange = ipRange));
 
     merge(
       this.form.get(Controls.Name).valueChanges,
@@ -333,6 +348,12 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     return this.form.get(Controls.CNIPlugin).value !== CNIPlugin.None;
   }
 
+  isAllowedIPRangeSupported(): boolean {
+    return [NodeProvider.AZURE, NodeProvider.GCP, NodeProvider.OPENSTACK, NodeProvider.AWS].includes(
+      this._clusterSpecService.provider
+    );
+  }
+
   private _enforce(control: Controls, isEnforced: boolean): void {
     if (isEnforced) {
       this.form.get(control).disable();
@@ -362,6 +383,12 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     if (this.cniPluginVersions.length > 0 && !this.form.get(Controls.CNIPluginVersion).value) {
       this.form.get(Controls.CNIPluginVersion).setValue(this.cniPluginVersions[this.cniPluginVersions.length - 1]);
     }
+  }
+
+  private _getExtraCloudSpecOptions(): ExtraCloudSpecOptions {
+    return (
+      this._clusterSpecService.cluster?.spec?.cloud[this._clusterSpecService.provider] || ({} as ExtraCloudSpecOptions)
+    );
   }
 
   private _getClusterEntity(): Cluster {
