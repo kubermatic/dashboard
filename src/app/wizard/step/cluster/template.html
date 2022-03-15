@@ -119,6 +119,16 @@ limitations under the License.
             Invalid pattern. Use CIDR notation, i.e. 192.168.1.0/24.
           </mat-error>
         </mat-form-field>
+        <mat-form-field *ngIf="isAllowedIPRangeSupported()">
+          <mat-label>Allowed IP Range for NodePorts</mat-label>
+          <input matInput
+                 [formControlName]="Controls.AllowedIPRange"
+                 type="text"
+                 autocomplete="off">
+          <mat-error *ngIf="form.get(Controls.AllowedIPRange).hasError('pattern')">
+            Invalid pattern. Use CIDR notation, i.e. 192.168.1.0/24.
+          </mat-error>
+        </mat-form-field>
         <mat-checkbox *ngIf="isKonnectivityEnabled"
                       [formControlName]="Controls.Konnectivity">
           Konnectivity

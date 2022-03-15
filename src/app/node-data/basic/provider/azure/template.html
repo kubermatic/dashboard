@@ -55,14 +55,14 @@ limitations under the License.
   </mat-form-field>
 
   <km-number-stepper [formControlName]="Controls.OSDiskSize"
-                     mode="errors"
+                     mode="all"
                      label="OS Disk Size in GB"
                      min="30"
-                     hint="Leave 30 to use default value.">
+                     hint="Leave {{this.defaultOSDiskSize()}} to use default value.">
   </km-number-stepper>
 
   <km-number-stepper [formControlName]="Controls.DataDiskSize"
-                     mode="errors"
+                     mode="all"
                      label="Data Disk Size in GB"
                      hint="Leave 30 to use default value.">
   </km-number-stepper>

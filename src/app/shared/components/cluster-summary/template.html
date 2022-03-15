@@ -337,6 +337,26 @@ limitations under the License.
           <div value>{{cluster.spec.clusterNetwork.services.cidrBlocks.join(', ')}}</div>
         </km-property>
 
+        <km-property *ngIf="cluster.spec.cloud?.aws?.nodePortsAllowedIPRange">
+          <div key>Allowed IP Range for NodePorts</div>
+          <div value>{{cluster.spec.cloud.aws.nodePortsAllowedIPRange}}</div>
+        </km-property>
+
+        <km-property *ngIf="cluster.spec.cloud?.azure?.nodePortsAllowedIPRange">
+          <div key>Allowed IP Range for NodePorts</div>
+          <div value>{{cluster.spec.cloud.azure.nodePortsAllowedIPRange}}</div>
+        </km-property>
+
+        <km-property *ngIf="cluster.spec.cloud?.gcp?.nodePortsAllowedIPRange">
+          <div key>Allowed IP Range for NodePorts</div>
+          <div value>{{cluster.spec.cloud.gcp.nodePortsAllowedIPRange}}</div>
+        </km-property>
+
+        <km-property *ngIf="cluster.spec.cloud?.openstack?.nodePortsAllowedIPRange">
+          <div key>Allowed IP Range for NodePorts</div>
+          <div value>{{cluster.spec.cloud.openstack.nodePortsAllowedIPRange}}</div>
+        </km-property>
+
         <km-property-boolean *ngIf="cluster.spec.clusterNetwork?.konnectivityEnabled"
                              label="Konnectivity"
                              [value]="cluster.spec.clusterNetwork?.konnectivityEnabled">
