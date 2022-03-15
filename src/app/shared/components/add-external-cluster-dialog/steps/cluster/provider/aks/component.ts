@@ -16,10 +16,10 @@ import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
-import {AKSCluster} from '@shared/entity/external-cluster';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
 import {UserService} from '@core/services/user';
+import {AKSCluster} from '@app/shared/entity/provider/aks';
 
 @Component({
   selector: 'km-aks-cluster',

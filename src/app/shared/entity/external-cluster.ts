@@ -14,6 +14,9 @@
 
 import _ from 'lodash';
 import {StatusIcon} from '@shared/utils/health-status';
+import {GKECloudSpec} from './provider/gke';
+import {EKSCloudSpec} from './provider/eks';
+import {AKSCloudSpec} from './provider/aks';
 
 export enum ExternalClusterProvider {
   Custom = 'custom',
@@ -75,28 +78,6 @@ export class ExternalCloudSpec {
   gke?: GKECloudSpec;
 }
 
-export class AKSCloudSpec {
-  name: string;
-  tenantID?: string;
-  subscriptionID?: string;
-  clientID?: string;
-  clientSecret?: string;
-  resourceGroup?: string;
-}
-
-export class EKSCloudSpec {
-  name: string;
-  accessKeyID?: string;
-  secretAccessKey?: string;
-  region?: string;
-}
-
-export class GKECloudSpec {
-  name: string;
-  serviceAccount?: string;
-  zone?: string;
-}
-
 export enum ExternalClusterState {
   Provisioning = 'PROVISIONING',
   Running = 'RUNNING',
@@ -119,24 +100,6 @@ export class ExternalClusterPatch {
 
 export class ExternalClusterSpecPatch {
   version?: string;
-}
-
-export class AKSCluster {
-  name: string;
-  resourceGroup: string;
-  imported: boolean;
-}
-
-export class EKSCluster {
-  name: string;
-  region: string;
-  imported: boolean;
-}
-
-export class GKECluster {
-  name: string;
-  zone: string;
-  imported: boolean;
 }
 
 export class ExternalClusterModel {
