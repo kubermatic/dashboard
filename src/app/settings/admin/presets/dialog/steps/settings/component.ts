@@ -12,17 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, Input, OnInit} from '@angular/core';
+import {Component, forwardRef, OnInit, Input} from '@angular/core';
 import {FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {Mode} from '@app/settings/admin/presets/dialog/component';
 import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
 import {DatacenterService} from '@core/services/datacenter';
-import {AutocompleteControls, AutocompleteInitialState} from '@shared/components/autocomplete/component';
 import {Datacenter} from '@shared/entity/datacenter';
-import {PresetModel} from '@shared/entity/preset';
 import {EXTERNAL_NODE_PROVIDERS, NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {distinctUntilChanged, filter, map, switchMap, takeUntil} from 'rxjs/operators';
+import {merge} from 'rxjs';
+import {distinctUntilChanged, map, switchMap, takeUntil} from 'rxjs/operators';
+import {AutocompleteInitialState} from '@shared/components/autocomplete/component';
+import {PresetModel} from '@shared/entity/preset';
+import {Mode} from '@app/settings/admin/presets/dialog/component';
 
 enum Controls {
   Settings = 'settings',
@@ -96,21 +97,20 @@ export class PresetSettingsStepComponent extends BaseFormValidator implements On
         },
       });
 
-    this.form
-      .get(Controls.Datacenter)
-      .valueChanges.pipe(distinctUntilChanged())
-      .pipe(filter(form => !!form))
-      .pipe(map(form => form[AutocompleteControls.Main]))
+    merge(this.form.get(Controls.Datacenter).valueChanges)
+      .pipe(distinctUntilChanged())
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(datacenter => this._update(datacenter));
+      .subscribe(_ => this._update());
   }
 
   private _filterByProvider(datacenters: Datacenter[]): string[] {
     return datacenters.filter(dc => dc.spec.provider === this.provider).map(dc => dc.metadata.name);
   }
 
-  private _update(datacenter: string): void {
-    this._presetDialogService.preset.spec[this._presetDialogService.provider].datacenter = datacenter;
+  private _update(): void {
+    this._presetDialogService.preset.spec[this._presetDialogService.provider].datacenter = this.form.get(
+      Controls.Datacenter
+    ).value;
   }
 
   isExternal(): boolean {
