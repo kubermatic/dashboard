@@ -205,7 +205,7 @@ export class NutanixCloudSpec {
   password?: string;
   csi?: NutanixCSIConfig;
 
-  // Following check skips setting storage class settings to allow using them and preset at the same time.
+  // Following check skips storage class settings to allow using them and preset at the same time.
   // See also: NutanixProviderExtendedComponent._alwaysEnabledControls
   static isEmpty(spec: NutanixCloudSpec): boolean {
     return (
