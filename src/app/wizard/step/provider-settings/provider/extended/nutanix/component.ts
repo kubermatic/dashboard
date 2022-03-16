@@ -38,7 +38,6 @@ enum Controls {
   ProjectName = 'projectName',
   StorageContainer = 'storageContainer',
   Fstype = 'fstype',
-  SsSegmentedIscsiNetwork = 'ssSegmentedIscsiNetwork',
 }
 
 enum ProjectState {
@@ -65,10 +64,15 @@ enum ProjectState {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NutanixProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  // Following fields will not be blocked when preset is selected and vice versa.
+  // It allows setting storage class settings when the preset is used as it does not contain these fields.
+  // See also: NutanixCloudSpec.isEmpty
+  readonly _alwaysEnabledControls = [Controls.Fstype, Controls.StorageContainer];
   @ViewChild('projectCombobox')
   private readonly _projectCombobox: FilteredComboboxComponent;
   private readonly _debounceTime = 500;
   readonly Controls = Controls;
+  readonly fstypes = ['xfs', 'ext4'];
   private _username = '';
   private _password = '';
   private _proxyURL = '';
@@ -90,26 +94,27 @@ export class NutanixProviderExtendedComponent extends BaseFormValidator implemen
       [Controls.ProjectName]: this._builder.control(''),
       [Controls.StorageContainer]: this._builder.control(''),
       [Controls.Fstype]: this._builder.control(''),
-      [Controls.SsSegmentedIscsiNetwork]: this._builder.control(false),
     });
 
-    this.form.valueChanges
+    merge(
+      Object.values(Controls)
+        .filter(control => !this._alwaysEnabledControls.includes(control))
+        .map(control => this.form.get(control).valueChanges)
+    )
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.NUTANIX))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._presets.enablePresets(isObjectEmpty(this._clusterSpecService.cluster.spec.cloud.nutanix)));
 
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset =>
-      Object.values(Controls).forEach(control => {
-        this.isPresetSelected = !!preset;
-        this._enable(!this.isPresetSelected, control);
-      })
+      Object.values(Controls)
+        .filter(control => !this._alwaysEnabledControls.includes(control))
+        .forEach(control => {
+          this.isPresetSelected = !!preset;
+          this._enable(!this.isPresetSelected, control);
+        })
     );
 
-    merge(
-      this.form.get(Controls.StorageContainer).valueChanges,
-      this.form.get(Controls.Fstype).valueChanges,
-      this.form.get(Controls.SsSegmentedIscsiNetwork).valueChanges
-    )
+    merge(this.form.get(Controls.StorageContainer).valueChanges, this.form.get(Controls.Fstype).valueChanges)
       .pipe(distinctUntilChanged())
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
@@ -235,7 +240,6 @@ export class NutanixProviderExtendedComponent extends BaseFormValidator implemen
             csi: {
               storageContainer: this.form.get(Controls.StorageContainer).value,
               fstype: this.form.get(Controls.Fstype).value,
-              ssSegmentedIscsiNetwork: this.form.get(Controls.SsSegmentedIscsiNetwork).value,
             } as NutanixCSIConfig,
           } as NutanixCloudSpec,
         } as CloudSpec,

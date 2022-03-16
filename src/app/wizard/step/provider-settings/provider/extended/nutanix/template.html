@@ -38,19 +38,17 @@ limitations under the License.
            [name]="Controls.StorageContainer"
            type="text"
            autocomplete="off">
-    <mat-hint>Leave empty to use the default value. Check the documentation for more information.</mat-hint>
+    <mat-hint>Leave empty to use SelfServiceContainer.</mat-hint>
   </mat-form-field>
   <mat-form-field fxFlex>
     <mat-label>Fstype</mat-label>
-    <input matInput
-           [formControlName]="Controls.Fstype"
-           [name]="Controls.Fstype"
-           type="text"
-           autocomplete="off">
-    <mat-hint>Leave empty to use the default value. Check the documentation for more information.</mat-hint>
+    <mat-select [formControlName]="Controls.Fstype"
+                disableOptionCentering>
+      <mat-option *ngFor="let fstype of fstypes"
+                  [value]="fstype">
+        {{fstype}}
+      </mat-option>
+    </mat-select>
+    <mat-hint>Leave empty to use xfs.</mat-hint>
   </mat-form-field>
-  <mat-checkbox [formControlName]="Controls.SsSegmentedIscsiNetwork"
-                [name]="Controls.SsSegmentedIscsiNetwork">
-    Segmented Iscsi Network
-  </mat-checkbox>
 </form>
