@@ -24,7 +24,6 @@ import {catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, 
 import {NutanixCluster, NutanixProject} from '@shared/entity/provider/nutanix';
 import _ from 'lodash';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
-import {isObjectEmpty} from '@shared/utils/common';
 
 export enum Controls {
   Username = 'username',
@@ -92,7 +91,9 @@ export class NutanixProviderBasicComponent extends BaseFormValidator implements 
     this.form.valueChanges
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.NUTANIX))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => this._presets.enablePresets(isObjectEmpty(this._clusterSpecService.cluster.spec.cloud.nutanix)));
+      .subscribe(() =>
+        this._presets.enablePresets(NutanixCloudSpec.isEmpty(this._clusterSpecService.cluster.spec.cloud.nutanix))
+      );
 
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset =>
       Object.values(Controls).forEach(control => {
