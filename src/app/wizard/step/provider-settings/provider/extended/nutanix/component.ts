@@ -66,6 +66,7 @@ enum ProjectState {
 export class NutanixProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
   // Following fields will not be blocked when preset is selected and vice versa.
   // It allows setting storage class settings when the preset is used as it does not contain these fields.
+  // See also: NutanixCloudSpec.isEmpty
   readonly _alwaysEnabledControls = [Controls.Fstype, Controls.StorageContainer];
   @ViewChild('projectCombobox')
   private readonly _projectCombobox: FilteredComboboxComponent;

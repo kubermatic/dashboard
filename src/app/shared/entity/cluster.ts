@@ -14,6 +14,7 @@
 
 import {MachineDeployment} from '@shared/entity/machine-deployment';
 import _ from 'lodash';
+import {isObjectEmpty} from '@shared/utils/common';
 
 export enum Provider {
   Alibaba = 'alibaba',
@@ -203,6 +204,15 @@ export class NutanixCloudSpec {
   username?: string;
   password?: string;
   csi?: NutanixCSIConfig;
+
+  // Following check skips setting storage class settings to allow using them and preset at the same time.
+  // See also: NutanixProviderExtendedComponent._alwaysEnabledControls
+  static isEmpty(spec: NutanixCloudSpec): boolean {
+    return (
+      isObjectEmpty(_.omitBy(spec, (_, key) => key === 'csi')) &&
+      isObjectEmpty(_.omitBy(spec.csi, (_, key) => key === 'fstype' || key === 'storageContainer'))
+    );
+  }
 }
 
 export class NutanixCSIConfig {
