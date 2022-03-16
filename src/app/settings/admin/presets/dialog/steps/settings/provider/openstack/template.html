@@ -19,7 +19,6 @@ limitations under the License.
 
   <km-openstack-credentials [formControl]="form.get(Controls.Credentials)"
                             (onChange)="onCredentialsChange($event)"
-                            (onCredentialsTypeChange)="onCredentialsTypeChange($event)"
                             [mode]="Modes.PresetCreation"></km-openstack-credentials>
 
   <div>OpenStack Configuration</div>
@@ -30,7 +29,7 @@ limitations under the License.
            [name]="Controls.Domain"
            type="text"
            autocomplete="off"
-           [required]="isDomainRequired()">
+           required>
     <mat-error *ngIf="form.get(Controls.Domain).hasError('required')">
       Domain is <strong>required</strong>.
     </mat-error>
