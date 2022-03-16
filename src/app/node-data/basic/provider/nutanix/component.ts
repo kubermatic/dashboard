@@ -14,7 +14,6 @@
 
 import {
   AfterViewChecked,
-  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -70,10 +69,7 @@ enum SubnetState {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NutanixBasicNodeDataComponent
-  extends BaseFormValidator
-  implements OnInit, AfterViewChecked, AfterViewInit, OnDestroy
-{
+export class NutanixBasicNodeDataComponent extends BaseFormValidator implements OnInit, AfterViewChecked, OnDestroy {
   readonly Controls = Controls;
   private _images: DatacenterOperatingSystemOptions;
   private _defaultImage = '';
@@ -111,6 +107,8 @@ export class NutanixBasicNodeDataComponent
 
     this._nodeDataService.nodeData = this._getNodeData();
 
+    this._subnetsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSubnet.bind(this));
+
     this._defaultOS = this._nodeDataService.operatingSystem;
     this._defaultImage = this._nodeDataService.nodeData.spec.cloud.nutanix.imageName;
 
@@ -125,14 +123,6 @@ export class NutanixBasicNodeDataComponent
       .pipe(filter(_ => !!this._images))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setDefaultImage.bind(this));
-  }
-
-  ngAfterViewChecked(): void {
-    this.form.updateValueAndValidity();
-  }
-
-  ngAfterViewInit(): void {
-    this._subnetsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSubnet.bind(this));
 
     merge(
       this.form.get(Controls.ImageName).valueChanges,
@@ -144,6 +134,10 @@ export class NutanixBasicNodeDataComponent
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
+  }
+
+  ngAfterViewChecked(): void {
+    this.form.updateValueAndValidity();
   }
 
   ngOnDestroy(): void {

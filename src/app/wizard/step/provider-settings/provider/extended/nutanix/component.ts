@@ -172,6 +172,7 @@ export class NutanixProviderExtendedComponent extends BaseFormValidator implemen
 
   onProjectChange(projectName: string): void {
     this._clusterSpecService.cluster.spec.cloud.nutanix.projectName = projectName;
+    this._clusterSpecService.providerSpecChanges.emit();
   }
 
   private _onProjectLoading(): void {

@@ -17,8 +17,8 @@ import {ProjectService} from '@core/services/project';
 import {PresetsService} from '@core/services/wizard/presets';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {ClusterSpecService} from '@core/services/cluster-spec';
-import {Observable, of, onErrorResumeNext} from 'rxjs';
-import {catchError, debounceTime, filter, switchMap, take, tap} from 'rxjs/operators';
+import {merge, Observable, of, onErrorResumeNext} from 'rxjs';
+import {catchError, debounceTime, filter, map, switchMap, take, tap} from 'rxjs/operators';
 import {NodeDataService} from '../service';
 import {NutanixService} from '@core/services/provider/nutanix';
 import {NutanixSubnet} from '@shared/entity/provider/nutanix';
@@ -37,9 +37,10 @@ export class NodeDataNutanixProvider {
   subnets(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<NutanixSubnet[]> {
     switch (this._nodeDataService.mode) {
       case NodeDataMode.Wizard:
-        return this._clusterSpecService.clusterChanges
+        return merge(this._clusterSpecService.clusterChanges, this._clusterSpecService.providerSpecChanges)
           .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.NUTANIX))
           .pipe(debounceTime(this._debounce))
+          .pipe(map(() => this._clusterSpecService.cluster))
           .pipe(
             switchMap(cluster =>
               this._presetService
