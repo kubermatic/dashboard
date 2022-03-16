@@ -64,6 +64,9 @@ enum ProjectState {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NutanixProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  // Following fields will not be blocked when preset is selected and vice versa.
+  // It allows setting storage class settings when the preset is used as it does not contain these fields.
+  readonly _alwaysEnabledControls = [Controls.Fstype, Controls.StorageContainer];
   @ViewChild('projectCombobox')
   private readonly _projectCombobox: FilteredComboboxComponent;
   private readonly _debounceTime = 500;
@@ -92,21 +95,18 @@ export class NutanixProviderExtendedComponent extends BaseFormValidator implemen
       [Controls.Fstype]: this._builder.control(''),
     });
 
-    // We watch only for changes of project name, not the whole form,
-    // to allow setting storage class settings when preset is used.
-    this.form
-      .get(Controls.ProjectName)
-      .valueChanges.pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.NUTANIX))
+    merge(
+      Object.values(Controls)
+        .filter(control => !this._alwaysEnabledControls.includes(control))
+        .map(control => this.form.get(control).valueChanges)
+    )
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.NUTANIX))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._presets.enablePresets(isObjectEmpty(this._clusterSpecService.cluster.spec.cloud.nutanix)));
 
-    // We do not block following controls when preset is selected.
-    // It allows users setting storage class settings when
-    // the preset is used as it doesn't contain these fields.
-    const alwaysEnabledControls = [Controls.Fstype, Controls.StorageContainer];
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset =>
       Object.values(Controls)
-        .filter(control => !alwaysEnabledControls.includes(control))
+        .filter(control => !this._alwaysEnabledControls.includes(control))
         .forEach(control => {
           this.isPresetSelected = !!preset;
           this._enable(!this.isPresetSelected, control);
