@@ -68,6 +68,7 @@ export class NutanixProviderExtendedComponent extends BaseFormValidator implemen
   private readonly _projectCombobox: FilteredComboboxComponent;
   private readonly _debounceTime = 500;
   readonly Controls = Controls;
+  readonly fstypes = ['xfs', 'ext4'];
   private _username = '';
   private _password = '';
   private _proxyURL = '';
