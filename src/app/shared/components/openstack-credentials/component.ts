@@ -84,6 +84,9 @@ export class OpenstackCredentialsComponent extends BaseFormValidator implements 
   @Output()
   readonly onChange = new EventEmitter<OpenstackCredentials>();
 
+  @Output()
+  readonly onCredentialsTypeChange = new EventEmitter<CredentialsType>();
+
   get credentialsType(): CredentialsType {
     return this._credentialsTypeService.credentialsType;
   }
@@ -127,6 +130,7 @@ export class OpenstackCredentialsComponent extends BaseFormValidator implements 
 
   changeView(event: MatButtonToggleChange): void {
     this._credentialsTypeService.credentialsType = event.value;
+    this.onCredentialsTypeChange.emit(event.value);
     this.form.get(Controls.Credentials).reset();
   }
 
