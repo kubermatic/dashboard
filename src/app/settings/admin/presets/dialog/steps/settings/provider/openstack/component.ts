@@ -15,6 +15,7 @@
 import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
+import {CredentialsType} from '@app/wizard/step/provider-settings/provider/extended/openstack/service';
 import {Mode, OpenstackCredentials} from '@shared/components/openstack-credentials/component';
 import {OpenstackPresetSpec} from '@shared/entity/preset';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
@@ -48,6 +49,7 @@ export enum Controls {
   ],
 })
 export class OpenstackSettingsComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  private credentialsType = CredentialsType.Default;
   readonly Controls = Controls;
   readonly Modes = Mode;
 
@@ -82,18 +84,6 @@ export class OpenstackSettingsComponent extends BaseFormValidator implements OnI
     delete this._presetDialogService.preset.spec.openstack;
   }
 
-  private _update(): void {
-    this._presetDialogService.preset.spec.openstack = {
-      ...this._presetDialogService.preset.spec.openstack,
-      domain: this.form.get(Controls.Domain).value,
-      network: this.form.get(Controls.Network).value,
-      securityGroups: this.form.get(Controls.SecurityGroups).value,
-      floatingIPPool: this.form.get(Controls.FloatingIPPool).value,
-      routerID: this.form.get(Controls.RouterID).value,
-      subnetID: this.form.get(Controls.SubnetID).value,
-    } as OpenstackPresetSpec;
-  }
-
   onCredentialsChange(credentials: OpenstackCredentials): void {
     this._presetDialogService.preset.spec.openstack = {
       ...this._presetDialogService.preset.spec.openstack,
@@ -103,6 +93,31 @@ export class OpenstackSettingsComponent extends BaseFormValidator implements OnI
       projectID: credentials?.projectID,
       applicationCredentialID: credentials?.applicationCredentialID,
       applicationCredentialSecret: credentials?.applicationCredentialSecret,
+    } as OpenstackPresetSpec;
+  }
+
+  onCredentialsTypeChange(credentialsType: CredentialsType): void {
+    this.credentialsType = credentialsType;
+    credentialsType === CredentialsType.Application
+      ? this.form.get(Controls.Domain).clearValidators()
+      : this.form.get(Controls.Domain).setValidators(Validators.required);
+
+    this.form.get(Controls.Domain).updateValueAndValidity();
+  }
+
+  isDomainRequired(): boolean {
+    return this.credentialsType === CredentialsType.Default;
+  }
+
+  private _update(): void {
+    this._presetDialogService.preset.spec.openstack = {
+      ...this._presetDialogService.preset.spec.openstack,
+      domain: this.form.get(Controls.Domain).value,
+      network: this.form.get(Controls.Network).value,
+      securityGroups: this.form.get(Controls.SecurityGroups).value,
+      floatingIPPool: this.form.get(Controls.FloatingIPPool).value,
+      routerID: this.form.get(Controls.RouterID).value,
+      subnetID: this.form.get(Controls.SubnetID).value,
     } as OpenstackPresetSpec;
   }
 }
