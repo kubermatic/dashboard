@@ -223,10 +223,6 @@ limitations under the License.
               <div key>Prism Element Storage Fstype</div>
               <div value>{{cluster.spec.cloud.nutanix.csi.fstype}}</div>
             </km-property>
-            <km-property-boolean *ngIf="cluster.spec.cloud.nutanix.csi.ssSegmentedIscsiNetwork !== undefined"
-                                 label="Segmented Iscsi Network"
-                                 [value]="cluster.spec.cloud.nutanix.csi.ssSegmentedIscsiNetwork">
-            </km-property-boolean>
           </ng-container>
         </ng-container>
 

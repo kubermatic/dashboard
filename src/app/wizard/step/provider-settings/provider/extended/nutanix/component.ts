@@ -38,7 +38,6 @@ enum Controls {
   ProjectName = 'projectName',
   StorageContainer = 'storageContainer',
   Fstype = 'fstype',
-  SsSegmentedIscsiNetwork = 'ssSegmentedIscsiNetwork',
 }
 
 enum ProjectState {
@@ -90,7 +89,6 @@ export class NutanixProviderExtendedComponent extends BaseFormValidator implemen
       [Controls.ProjectName]: this._builder.control(''),
       [Controls.StorageContainer]: this._builder.control(''),
       [Controls.Fstype]: this._builder.control(''),
-      [Controls.SsSegmentedIscsiNetwork]: this._builder.control(false),
     });
 
     this.form.valueChanges
@@ -105,11 +103,7 @@ export class NutanixProviderExtendedComponent extends BaseFormValidator implemen
       })
     );
 
-    merge(
-      this.form.get(Controls.StorageContainer).valueChanges,
-      this.form.get(Controls.Fstype).valueChanges,
-      this.form.get(Controls.SsSegmentedIscsiNetwork).valueChanges
-    )
+    merge(this.form.get(Controls.StorageContainer).valueChanges, this.form.get(Controls.Fstype).valueChanges)
       .pipe(distinctUntilChanged())
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
@@ -235,7 +229,6 @@ export class NutanixProviderExtendedComponent extends BaseFormValidator implemen
             csi: {
               storageContainer: this.form.get(Controls.StorageContainer).value,
               fstype: this.form.get(Controls.Fstype).value,
-              ssSegmentedIscsiNetwork: this.form.get(Controls.SsSegmentedIscsiNetwork).value,
             } as NutanixCSIConfig,
           } as NutanixCloudSpec,
         } as CloudSpec,
