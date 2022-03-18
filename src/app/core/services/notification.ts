@@ -37,7 +37,7 @@ export class NotificationService {
     panelClass: 'km-notification',
   };
 
-  private readonly _notificationPopDelay = 250; // in ms
+  private readonly _notificationPopDelay = 250;
   private readonly _snackBarQueue = new BehaviorSubject<Notification[]>([]);
   private readonly _notificationHistory = new BehaviorSubject<Notification[]>([]);
 

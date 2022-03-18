@@ -19,7 +19,7 @@ import {Cookie, COOKIE_DI_TOKEN} from '@app/config';
 
 @Injectable()
 export class TokenService {
-  private readonly _baseTime = 1000; // in ms
+  private readonly _baseTime = 1000;
 
   constructor(
     private readonly _cookieService: CookieService,
@@ -28,11 +28,7 @@ export class TokenService {
 
   hasExpired(): boolean {
     const token = this._cookieService.get(this._cookie.token);
-    if (token) {
-      const tokenExp = this.decodeToken(token);
-      return moment().isBefore(moment(tokenExp.exp * this._baseTime));
-    }
-    return false;
+    return token ? moment().isBefore(moment(this.decodeToken(token).exp * this._baseTime)) : false;
   }
 
   decodeToken(token: string): any {
