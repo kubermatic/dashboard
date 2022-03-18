@@ -15,6 +15,7 @@ limitations under the License.
 -->
 
 <div class="km-wizard-summary"
+     [ngClass]="{'summary-with-number' : showNumbering}"
      fxFlex
      [fxLayout]="flipLayout ? 'column' : 'row wrap'"
      fxLayout.lt-md="column">
