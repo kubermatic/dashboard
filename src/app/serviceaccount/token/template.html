@@ -43,7 +43,7 @@ limitations under the License.
       <div fxLayoutAlign=" center"
            fxLayoutGap="8px">
         <span>{{element.name}}</span>
-        <div *ngIf="isInvalid(element)"
+        <div *ngIf="element.invalidated"
              class="km-icon-warning"
              matTooltip="This token is no longer valid. Please regenerate or delete it."></div>
       </div>
@@ -102,7 +102,7 @@ limitations under the License.
                     [attr.id]="'km-edit-dialog-token-' + element?.name"
                     matTooltip="Edit Service Account Token"
                     (click)="editToken(element)"
-                    [disabled]="!isEnabled('edit') || isInvalid(element)">
+                    [disabled]="!isEnabled('edit') || element.invalidated">
               <i class="km-icon-mask km-icon-edit"></i>
             </button>
 
