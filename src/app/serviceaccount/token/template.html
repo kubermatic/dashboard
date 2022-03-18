@@ -39,7 +39,15 @@ limitations under the License.
         mat-sort-header>Token Name
     </th>
     <td mat-cell
-        *matCellDef="let element">{{element.name}}</td>
+        *matCellDef="let element">
+      <div fxLayoutAlign=" center"
+           fxLayoutGap="8px">
+        <span>{{element.name}}</span>
+        <div *ngIf="isInvalid(element)"
+             class="km-icon-warning"
+             matTooltip="This token is no longer valid. Please regenerate or delete it."></div>
+      </div>
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="expiry">
@@ -94,7 +102,7 @@ limitations under the License.
                     [attr.id]="'km-edit-dialog-token-' + element?.name"
                     matTooltip="Edit Service Account Token"
                     (click)="editToken(element)"
-                    [disabled]="!isEnabled('edit')">
+                    [disabled]="!isEnabled('edit') || isInvalid(element)">
               <i class="km-icon-mask km-icon-edit"></i>
             </button>
 

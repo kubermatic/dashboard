@@ -151,4 +151,8 @@ export class ServiceAccountTokenComponent implements OnInit {
         this.onUpdate.next();
       });
   }
+
+  isInvalid(token: ServiceAccountToken): boolean {
+    return token.invalidated;
+  }
 }

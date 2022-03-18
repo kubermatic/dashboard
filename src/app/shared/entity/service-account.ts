@@ -33,6 +33,7 @@ export class ServiceAccountToken {
   id: string;
   name: string;
   token?: string;
+  invalidated?: boolean;
 }
 
 export class CreateTokenEntity {
