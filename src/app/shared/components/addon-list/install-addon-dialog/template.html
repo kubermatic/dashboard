@@ -99,12 +99,15 @@ limitations under the License.
   <button mat-flat-button
           color="tertiary"
           (click)="goBack()">
-    Back
+    <i class="km-icon-mask km-icon-arrow-left"></i>
+    <span>Back</span>
   </button>
+  <div fxFlex></div>
   <button mat-flat-button
           [disabled]="!form.valid"
           kmThrottleClick
           (throttleClick)="install()">
-    Install
+    <i class="km-icon-mask km-icon-add"></i>
+    <span>Install Addon</span>
   </button>
 </mat-dialog-actions>
