@@ -108,12 +108,6 @@ $theme-dark: map.merge($theme-dark, (foreground: $foreground));
   filter: none;
 }
 
-.km-provider-logo-vsphere {
-  @include mixins.provider-image('/assets/images/clouds/vsphere-dark.svg', 30px);
-
-  filter: none;
-}
-
 .km-icon-info {
   @include mixins.background-image('/assets/images/icons/info-dark.svg', 16px);
 
