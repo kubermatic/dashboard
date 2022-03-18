@@ -93,7 +93,7 @@
     "@typescript-eslint/eslint-plugin": "5.14.0",
     "@typescript-eslint/parser": "5.14.0",
     "browserlist": "1.0.1",
-    "cypress": "9.5.1",
+    "cypress": "9.5.2",
     "cypress-fail-fast": "3.4.1",
     "del": "6.0.0",
     "eslint": "8.10.0",
