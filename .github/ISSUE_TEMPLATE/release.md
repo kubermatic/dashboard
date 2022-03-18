@@ -1,7 +1,7 @@
 ---
 name: Release
 title: "[vX.XX] Release Procedure"
-assignees: floreks, maciaszczykm, kgroschoff
+assignees: floreks, maciaszczykm
 about: The list of steps that should be executed prior to the official release
 labels: sig/ui, sig/release
 ---
