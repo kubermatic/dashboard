@@ -19,7 +19,7 @@ import {Cookie, COOKIE_DI_TOKEN} from '@app/config';
 
 @Injectable()
 export class TokenService {
-  private readonly _baseTime = 1000; // in ms
+  private readonly _baseTime = 1000;
 
   constructor(
     private readonly _cookieService: CookieService,
@@ -28,11 +28,7 @@ export class TokenService {
 
   hasExpired(): boolean {
     const token = this._cookieService.get(this._cookie.token);
-    if (token) {
-      const tokenExp = this.decodeToken(token);
-      return moment().isBefore(moment(tokenExp.exp * this._baseTime));
-    }
-    return false;
+    return token ? moment().isBefore(moment(this.decodeToken(token).exp * this._baseTime)) : false;
   }
 
   decodeToken(token: string): any {
@@ -54,20 +50,16 @@ export class TokenService {
   private _urlBase64Decode(str: string): string {
     let output = str.replace(/-/g, '+').replace(/_/g, '/');
     switch (output.length % 4) {
-      case 0: {
+      case 0:
         break;
-      }
-      case 2: {
+      case 2:
         output += '==';
         break;
-      }
-      case 3: {
+      case 3:
         output += '=';
         break;
-      }
-      default: {
+      default:
         throw new Error('Illegal base64url string!');
-      }
     }
     return decodeURIComponent(window.atob(output));
   }

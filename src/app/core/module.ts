@@ -42,7 +42,6 @@ import {SettingsService} from '@core/services/settings';
 import {ThemeInformerService} from '@core/services/theme-informer';
 import {TokenService} from '@core/services/token';
 import {PresetsService} from '@core/services/wizard/presets';
-import {StepsService} from '@core/services/wizard/steps';
 import {SharedModule} from '@shared/module';
 import {COOKIE, COOKIE_DI_TOKEN} from '../config';
 import {AddMemberComponent} from '../member/add-member/component';
@@ -103,7 +102,6 @@ const services: any[] = [
   AuthzGuard,
   AdminGuard,
   DatacenterService,
-  StepsService,
   NameGeneratorService,
   ClusterService,
   ParamsService,
