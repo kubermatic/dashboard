@@ -203,6 +203,7 @@ presubmits:
 
   - name: pre-dashboard-test-e2e
     skip_if_only_changed: "^(containers|docs)/|\\.(md)$"
+    optional: true
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     labels:
@@ -231,6 +232,7 @@ presubmits:
 
   - name: pre-dashboard-test-e2e-ce
     skip_if_only_changed: "^(containers|docs)/|\\.(md)$"
+    optional: true
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     labels:
