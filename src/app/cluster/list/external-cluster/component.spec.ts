@@ -42,33 +42,31 @@ describe('ExternalClusterListComponent', () => {
   let getClustersSpy;
   let activatedRoute: ActivatedRouteStub;
 
-  beforeEach(
-    waitForAsync(() => {
-      const clusterServiceMock = {
-        externalClusters: jest.fn(),
-        refreshExternalClusters: () => {},
-      };
-      getClustersSpy = clusterServiceMock.externalClusters.mockReturnValue(
-        defer(() => of([fakeCustomExternalCluster()], async))
-      );
+  beforeEach(waitForAsync(() => {
+    const clusterServiceMock = {
+      externalClusters: jest.fn(),
+      refreshExternalClusters: () => {},
+    };
+    getClustersSpy = clusterServiceMock.externalClusters.mockReturnValue(
+      defer(() => of([fakeCustomExternalCluster()], async))
+    );
 
-      TestBed.configureTestingModule({
-        imports: [BrowserModule, HttpClientModule, NoopAnimationsModule, RouterTestingModule, SharedModule],
-        declarations: [ExternalClusterListComponent],
-        providers: [
-          {provide: ClusterService, useValue: clusterServiceMock},
-          {provide: Auth, useClass: AuthMockService},
-          {provide: ActivatedRoute, useClass: ActivatedRouteStub},
-          {provide: UserService, useClass: UserMockService},
-          {provide: Router, useClass: RouterStub},
-          {provide: AppConfigService, useClass: AppConfigMockService},
-          {provide: ProjectService, useClass: ProjectMockService},
-          {provide: SettingsService, useClass: SettingsMockService},
-          EndOfLifeService,
-        ],
-      }).compileComponents();
-    })
-  );
+    TestBed.configureTestingModule({
+      imports: [BrowserModule, HttpClientModule, NoopAnimationsModule, RouterTestingModule, SharedModule],
+      declarations: [ExternalClusterListComponent],
+      providers: [
+        {provide: ClusterService, useValue: clusterServiceMock},
+        {provide: Auth, useClass: AuthMockService},
+        {provide: ActivatedRoute, useClass: ActivatedRouteStub},
+        {provide: UserService, useClass: UserMockService},
+        {provide: Router, useClass: RouterStub},
+        {provide: AppConfigService, useClass: AppConfigMockService},
+        {provide: ProjectService, useClass: ProjectMockService},
+        {provide: SettingsService, useClass: SettingsMockService},
+        EndOfLifeService,
+      ],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ExternalClusterListComponent);
