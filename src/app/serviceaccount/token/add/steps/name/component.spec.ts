@@ -31,23 +31,21 @@ describe('ServiceAccountTokenNameStepComponent', () => {
   let component: ServiceAccountTokenNameStepComponent;
   let fixture: ComponentFixture<ServiceAccountTokenNameStepComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [...modules],
-        providers: [
-          {
-            provide: MAT_DIALOG_DATA,
-            useValue: {serviceaccountToken: fakeServiceAccountToken()},
-          },
-          {provide: MatDialogRef, useValue: {}},
-          {provide: Router, useClass: RouterStub},
-          {provide: ProjectService, useClass: ProjectMockService},
-        ],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      providers: [
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: {serviceaccountToken: fakeServiceAccountToken()},
+        },
+        {provide: MatDialogRef, useValue: {}},
+        {provide: Router, useClass: RouterStub},
+        {provide: ProjectService, useClass: ProjectMockService},
+      ],
+      teardown: {destroyAfterEach: false},
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ServiceAccountTokenNameStepComponent);
