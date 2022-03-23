@@ -36,6 +36,7 @@ import 'zone.js';
 // eslint-disable-next-line
 (window as any).global = window;
 
-// Add global to process. Required by the 'swagger-ui'.
+// Required by 'swagger-ui'.
 // eslint-disable-next-line
 (window as any).process = {browser: true, env: {}};
+(window as any).Buffer = (window as any).Buffer || require('buffer').Buffer;
