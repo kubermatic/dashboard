@@ -259,6 +259,17 @@ export class ClustersPage {
     cy.get('div').should(Condition.Contain, 'No clusters available.');
   }
 
+  static verifyNoExternalClusters(): void {
+    if (Mocks.enabled()) {
+      cy.intercept({method: RequestType.GET, path: Endpoint.Clusters}, []);
+    }
+
+    this.waitForRefresh();
+    this.verifyUrl();
+
+    cy.get('div').should(Condition.Contain, 'No external clusters available.');
+  }
+
   static verifyClustersCount(count: number): void {
     this.waitForRefresh();
     this.verifyUrl();
