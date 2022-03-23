@@ -17,5 +17,9 @@
 @mixin theme-number-stepper-component($colors) {
   .stepper-button {
     background-color: map.get($colors, divider);
+
+    &.left {
+      border-right: 1px solid map.get($colors, option-background-hover);
+    }
   }
 }
