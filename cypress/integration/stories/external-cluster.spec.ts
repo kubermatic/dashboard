@@ -80,7 +80,7 @@ describe('External Cluster Story', () => {
 
   it('should verify that there are no clusters', () => {
     ClustersPage.visit();
-    ClustersPage.verifyNoClusters();
+    ClustersPage.verifyNoExternalClusters();
   });
 
   it('should go to the projects page', () => {
