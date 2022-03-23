@@ -261,7 +261,7 @@ export class ClustersPage {
 
   static verifyNoExternalClusters(): void {
     if (Mocks.enabled()) {
-      cy.intercept({method: RequestType.GET, path: Endpoint.Clusters}, []);
+      cy.intercept({method: RequestType.GET, path: Endpoint.ExternalClusters}, []);
     }
 
     this.waitForRefresh();
