@@ -79,14 +79,14 @@ export class ExternalCloudSpec {
 }
 
 export enum ExternalClusterState {
-  Provisioning = 'PROVISIONING',
-  Running = 'RUNNING',
-  Reconciling = 'RECONCILING',
-  Stopping = 'STOPPING',
-  Stopped = 'STOPPED',
-  Deleting = 'DELETING',
-  Error = 'ERROR',
-  Unknown = 'UNKNOWN',
+  Provisioning = 'Provisioning',
+  Running = 'Running',
+  Reconciling = 'Reconciling',
+  Stopping = 'Stopping',
+  Stopped = 'Stopped',
+  Deleting = 'Deleting',
+  Error = 'Error',
+  Unknown = 'Unknown',
 }
 
 export class ExternalClusterStatus {
