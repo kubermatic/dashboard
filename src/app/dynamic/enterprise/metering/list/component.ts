@@ -40,8 +40,8 @@ export class MeteringListComponent implements OnInit, OnChanges, AfterViewInit {
   private _configChanged$ = new Subject<MeteringConfiguration>();
   reports: Report[] = [];
   dataSource = new MatTableDataSource<Report>();
-  readonly displayedColumns: string[] = ['name', 'size', 'modified', 'actions'];
-  @ViewChild(MatSort) sort: MatSort;
+  readonly displayedColumns: string[] = ['name', 'size', 'lastModified', 'actions'];
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @Input() config: MeteringConfiguration;
 
@@ -63,6 +63,9 @@ export class MeteringListComponent implements OnInit, OnChanges, AfterViewInit {
 
   ngOnInit() {
     this.dataSource.data = this.reports;
+    this.dataSource.sort = this.sort;
+    this.sort.active = 'lastModified';
+    this.sort.direction = 'desc';
 
     merge(this._configChanged$, of(this.config))
       .pipe(filter(config => config.enabled))
