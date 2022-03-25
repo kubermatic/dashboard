@@ -1,4 +1,4 @@
-export interface ProjectState {
+export interface ProjectStrategy {
   onCreate(): void;
   onDelete(): void;
 }

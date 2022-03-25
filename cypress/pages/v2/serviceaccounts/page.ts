@@ -1,11 +1,11 @@
 import {Group} from '../../../utils/member';
 import {Page, PageOptions} from '../types';
-import {ServiceAccountStateFactory, ServiceAccountTokenStateFactory} from './state/factory';
-import {ServiceAccountState, ServiceAccountTokenState} from './state/types';
+import {ServiceAccountStrategyFactory, ServiceAccountTokenStrategyFactory} from './strategy/factory';
+import {ServiceAccountStrategy, ServiceAccountTokenStrategy} from './strategy/types';
 
 export class ServiceAccounts extends PageOptions implements Page {
-  private readonly _state: ServiceAccountState;
-  private readonly _tokenState: ServiceAccountTokenState;
+  private readonly _strategy: ServiceAccountStrategy;
+  private readonly _tokenStrategy: ServiceAccountTokenStrategy;
 
   readonly Buttons = new Buttons();
   readonly Elements = new Elements();
@@ -13,8 +13,8 @@ export class ServiceAccounts extends PageOptions implements Page {
   constructor(isAPIMocked: boolean) {
     super();
 
-    this._state = ServiceAccountStateFactory.new(isAPIMocked);
-    this._tokenState = ServiceAccountTokenStateFactory.new(isAPIMocked);
+    this._strategy = ServiceAccountStrategyFactory.new(isAPIMocked);
+    this._tokenStrategy = ServiceAccountTokenStrategyFactory.new(isAPIMocked);
   }
 
   static getName(): string {
@@ -33,19 +33,19 @@ export class ServiceAccounts extends PageOptions implements Page {
     this.Buttons.openDialog.click();
     this.Elements.createDialogNameInput.type(name);
     this.Elements.createDialogGroupSelect(group).click();
-    this.Buttons.createDialogConfirm.click().then(_ => this._state.onCreate());
+    this.Buttons.createDialogConfirm.click().then(_ => this._strategy.onCreate());
   }
 
   delete(name: string): void {
     this.Buttons.deleteDialog(name).click();
-    this.Buttons.deleteDialogConfirm.click().then(_ => this._state.onDelete());
+    this.Buttons.deleteDialogConfirm.click().then(_ => this._strategy.onDelete());
   }
 
   addToken(name: string): void {
     this.Buttons.openTokenDialog.click();
     this.Elements.addTokenDialogNameInput.type(name);
     this.Buttons.addToken.click();
-    this.Buttons.gotIt.click().then(_ => this._tokenState.onCreate());
+    this.Buttons.gotIt.click().then(_ => this._tokenStrategy.onCreate());
   }
 }
 

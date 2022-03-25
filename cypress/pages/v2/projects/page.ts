@@ -2,12 +2,12 @@ import _ from 'lodash';
 import {Config} from '../../../utils/config';
 import {View} from '../../../utils/view';
 import {Page, PageOptions} from '../types';
-import {ProjectStateFactory} from './state/factory';
-import {ProjectState} from './state/types';
+import {ProjectStrategyFactory} from './strategy/factory';
+import {ProjectStrategy} from './strategy/types';
 
 export class Projects extends PageOptions implements Page {
   private static _projectName: string;
-  private readonly _state: ProjectState;
+  private readonly _strategy: ProjectStrategy;
 
   readonly Buttons = new Buttons();
   readonly Elements = new Elements();
@@ -15,7 +15,7 @@ export class Projects extends PageOptions implements Page {
   constructor(isAPIMocked: boolean) {
     super();
 
-    this._state = ProjectStateFactory.new(isAPIMocked);
+    this._strategy = ProjectStrategyFactory.new(isAPIMocked);
   }
 
   static getName(): string {
@@ -34,7 +34,7 @@ export class Projects extends PageOptions implements Page {
   create(name: string): void {
     this.Buttons.openDialog.click();
     this.Elements.addDialogInput.type(name);
-    this.Buttons.addDialogConfirm.click().then(_ => this._state.onCreate());
+    this.Buttons.addDialogConfirm.click().then(_ => this._strategy.onCreate());
   }
 
   select(name: string): void {
@@ -44,7 +44,7 @@ export class Projects extends PageOptions implements Page {
   delete(name: string): void {
     this.Buttons.deleteDialog(name).click();
     this.Buttons.deleteDialogInput.type(name);
-    this.Buttons.deleteDialogConfirm.click().then(_ => this._state.onDelete());
+    this.Buttons.deleteDialogConfirm.click().then(_ => this._strategy.onDelete());
   }
 }
 
