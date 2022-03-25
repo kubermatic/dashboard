@@ -15,7 +15,6 @@ export class MockedProjectState implements ProjectState {
   }
 
   onDelete(): void {
-    console.log('on project delete');
     MockedProjectState._activeFixture = MockedProjectState._fixtureEmptyArrayPath;
   }
 
