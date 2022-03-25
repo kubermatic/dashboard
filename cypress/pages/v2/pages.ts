@@ -8,15 +8,15 @@ import {ServiceAccounts} from './serviceaccounts/page';
 export class Pages {
   private static readonly _isAPIMocked = Config.isAPIMocked();
 
-  static root(): RootPage {
+  static get Root(): RootPage {
     return new RootPage(this._isAPIMocked);
   }
 
-  static projects(): Projects {
+  static get Projects(): Projects {
     return new Projects(this._isAPIMocked);
   }
 
-  static serviceAccounts(): ServiceAccounts {
+  static get ServiceAccounts(): ServiceAccounts {
     return new ServiceAccounts(this._isAPIMocked);
   }
 

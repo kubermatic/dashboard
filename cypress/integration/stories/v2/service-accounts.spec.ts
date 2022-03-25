@@ -25,63 +25,64 @@ describe('Service Accounts Story', () => {
   const tokenName = 'test-token';
 
   it('should login', () => {
-    Pages.root().login();
+    Pages.Root.login();
+    Pages.Projects.visit();
     Pages.expect(View.Projects.Default);
   });
 
   it('should create a new project', () => {
-    Pages.projects().create(projectName);
-    Pages.projects().Elements.projectItem(projectName).should(Condition.Exist);
+    Pages.Projects.create(projectName);
+    Pages.Projects.Elements.projectItem(projectName).should(Condition.Exist);
   });
 
   it('should select project', () => {
-    Pages.projects().select(projectName);
+    Pages.Projects.select(projectName);
     Pages.expect(View.Clusters.Default);
   });
 
   it('should go to the service accounts page', () => {
-    Pages.serviceAccounts().visit();
+    Pages.ServiceAccounts.visit();
     Pages.expect(View.ServiceAccounts.Default);
   });
 
   it('should create new service account', () => {
-    Pages.serviceAccounts().create(serviceAccountName, Group.Editor);
-    Pages.serviceAccounts().Buttons.tableRow(serviceAccountName).should(Condition.Exist);
-    Pages.serviceAccounts().Buttons.tokenTable.should(Condition.NotBeVisible);
+    Pages.ServiceAccounts.create(serviceAccountName, Group.Editor);
+    Pages.ServiceAccounts.Buttons.tableRow(serviceAccountName).should(Condition.Exist);
+    Pages.ServiceAccounts.Buttons.tokenTable.should(Condition.NotBeVisible);
   });
 
   it('should open token panel for created service account', () => {
-    Pages.serviceAccounts().Buttons.tableRow(serviceAccountName).parent().click();
-    Pages.serviceAccounts().Buttons.tokenTable.should(Condition.BeVisible);
-    Pages.serviceAccounts().Buttons.tokenTableRow(tokenName).should(Condition.NotExist);
+    Pages.ServiceAccounts.Buttons.tableRow(serviceAccountName).parent().click();
+    Pages.ServiceAccounts.Buttons.tokenTable.should(Condition.BeVisible);
+    Pages.ServiceAccounts.Buttons.tokenTableRow(tokenName).should(Condition.NotExist);
   });
 
   it('should add token', () => {
-    Pages.serviceAccounts().addToken(tokenName);
-    Pages.serviceAccounts().Buttons.tokenTableRow(tokenName).should(Condition.Exist);
+    Pages.ServiceAccounts.addToken(tokenName);
+    Pages.ServiceAccounts.Buttons.tokenTableRow(tokenName).should(Condition.Exist);
   });
 
   it('should close token panel for created service account', () => {
-    Pages.serviceAccounts().Buttons.tableRow(serviceAccountName).parent().click();
-    Pages.serviceAccounts().Buttons.tokenTable.should(Condition.NotBeVisible);
+    Pages.ServiceAccounts.Buttons.tableRow(serviceAccountName).parent().click();
+    Pages.ServiceAccounts.Buttons.tokenTable.should(Condition.NotBeVisible);
   });
 
   it('should delete service account', () => {
-    Pages.serviceAccounts().delete(serviceAccountName);
-    Pages.serviceAccounts().Buttons.tableRow(serviceAccountName).should(Condition.NotExist);
+    Pages.ServiceAccounts.delete(serviceAccountName);
+    Pages.ServiceAccounts.Buttons.tableRow(serviceAccountName).should(Condition.NotExist);
   });
 
   it('should go to the projects page', () => {
-    Pages.projects().visit();
+    Pages.Projects.visit();
     Pages.expect(View.Projects.Default);
   });
 
   it('should delete the project', () => {
-    Pages.projects().delete(projectName);
-    Pages.projects().Elements.projectItem(projectName).should(Condition.NotExist);
+    Pages.Projects.delete(projectName);
+    Pages.Projects.Elements.projectItem(projectName).should(Condition.NotExist);
   });
 
   it('should logout', () => {
-    Pages.root().logout();
+    Pages.Root.logout();
   });
 });

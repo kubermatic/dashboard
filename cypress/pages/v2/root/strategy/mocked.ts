@@ -1,5 +1,4 @@
 import {Mocks} from '../../../../utils/mocks';
-import {Pages} from '../../pages';
 import {LoginStrategy} from './types';
 
 export class MockedLoginStrategy implements LoginStrategy {
@@ -9,7 +8,6 @@ export class MockedLoginStrategy implements LoginStrategy {
     Mocks.currentUser.isAdmin = isAdmin;
 
     this._mockAuthCookies();
-    Pages.projects().visit();
   }
 
   private _mockAuthCookies(): void {
