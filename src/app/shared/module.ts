@@ -118,6 +118,7 @@ import {TaintsComponent} from './components/taints/component';
 import {AutofocusDirective} from './directives/autofocus/directive';
 import {ThrottleClickDirective} from './directives/throttle-click';
 import {RelativeTimePipe} from './pipes/relativetime';
+import {ButtonComponent} from '@shared/components/button/component';
 
 const modules: any[] = [
   CommonModule,
@@ -227,6 +228,7 @@ const components: any[] = [
   OpenstackCredentialsComponent,
   OpenstackDefaultCredentialsComponent,
   OpenstackApplicationCredentialsComponent,
+  ButtonComponent,
 ];
 
 const directives: any[] = [AutofocusDirective, ThrottleClickDirective, OptionDirective];

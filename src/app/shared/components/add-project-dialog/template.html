@@ -40,15 +40,11 @@ limitations under the License.
     </form>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <button id="km-add-project-dialog-save"
-            mat-flat-button
-            type="submit"
-            kmThrottleClick
-            (throttleClick)="addProject()"
-            form="add-project-form"
-            [disabled]="!form.valid">
-      <i class="km-icon-mask km-icon-save"></i>
-      <span>Save Project</span>
-    </button>
+    <km-button id="km-add-project-dialog-save"
+               icon="km-icon-save"
+               label="Save Project"
+               (click)="addProject()"
+               [disabled]="!form.valid">
+    </km-button>
   </mat-dialog-actions>
 </div>
