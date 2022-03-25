@@ -18,9 +18,9 @@ limitations under the License.
         type="button"
         fxLayout="row"
         (click)="onClick()"
-        [disabled]="disabled || loading">
+        [disabled]="this.disabled || this.loading">
   <i *ngIf="icon"
-     [ngClass]="iconClass"
+     [ngClass]="this.loading ? 'km-icon-pending' : this.icon"
      class="km-icon-mask"></i>
   <span>{{label}}</span>
 </button>

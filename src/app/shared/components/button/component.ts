@@ -12,26 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Subject} from 'rxjs';
+import {throttleTime} from 'rxjs/operators';
 
 @Component({
   selector: 'km-button',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class ButtonComponent {
+export class ButtonComponent implements OnInit, OnDestroy {
   @Input() icon: string;
   @Input() label: string;
   @Input() disabled = false;
   @Input() loading = false;
-  @Output() click = new EventEmitter<void>();
+  @Output() throttleClick = new EventEmitter<void>();
+  private _clicks = new Subject<void>();
+  private readonly _throttleTime = 1000;
 
-  get iconClass(): string {
-    return this.loading ? 'km-icon-pending' : this.icon;
+  ngOnInit(): void {
+    this._clicks.pipe(throttleTime(this._throttleTime)).subscribe(_ => this.throttleClick.emit());
+  }
+
+  ngOnDestroy(): void {
+    this._clicks.complete();
   }
 
   onClick(): void {
     this.loading = true;
-    this.click.next();
+    this._clicks.next();
   }
 }
