@@ -55,7 +55,12 @@ enum Wizard {
   Default = 'wizard',
 }
 
+enum Login {
+  Default = '/',
+}
+
 export class View {
+  static readonly Login = Login;
   static readonly Clusters = Clusters;
   static readonly ClusterTemplates = ClusterTemplates;
   static readonly Projects = Projects;

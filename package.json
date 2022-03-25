@@ -20,7 +20,7 @@
     "test": "jest",
     "test:ci": "jest --coverage -i",
     "test:watch": "jest --watch",
-    "cy": "cypress run --record false -b chrome -e KUBERMATIC_EDITION=\"${KUBERMATIC_EDITION:=ee}\",MOCKS=\"${CYPRESS_MOCKS:='false'}\"",
+    "cy": "cypress run --record false -b chrome --spec \"cypress/integration/stories/v2/service-accounts.spec.ts\" -e KUBERMATIC_EDITION=\"${KUBERMATIC_EDITION:=ee}\",MOCKS=\"${CYPRESS_MOCKS:='false'}\"",
     "e2e": "start-server-and-test start:e2e http-get://localhost:8000 cy",
     "e2e:local": "start-server-and-test start:e2e:local http-get://localhost:8000 cy",
     "e2e:mock": "start-server-and-test start:e2e:mock http-get://localhost:8000 cy",
