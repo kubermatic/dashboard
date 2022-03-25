@@ -44,6 +44,7 @@ limitations under the License.
                icon="km-icon-save"
                label="Save Project"
                (throttleClick)="addProject()"
+               [(loading)]="adding"
                [disabled]="!form.valid">
     </km-button>
   </mat-dialog-actions>

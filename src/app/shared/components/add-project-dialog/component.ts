@@ -28,6 +28,7 @@ export class AddProjectDialogComponent implements OnInit {
   form: FormGroup;
   labels: object;
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Project)];
+  adding = false;
 
   constructor(
     private readonly _projectService: ProjectService,
@@ -47,9 +48,15 @@ export class AddProjectDialogComponent implements OnInit {
       return;
     }
 
-    this._projectService.create({name: this.form.controls.name.value, labels: this.labels}).subscribe(project => {
-      this._matDialogRef.close(project);
-      this._notificationService.success(`Added the ${project.name} project`);
-    });
+    this._projectService.create({name: this.form.controls.name.value, labels: this.labels}).subscribe(
+      project => {
+        this.adding = false;
+        this._matDialogRef.close(project);
+        this._notificationService.success(`Added the ${project.name} project`);
+      },
+      () => {
+        this.adding = false;
+      }
+    );
   }
 }

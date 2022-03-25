@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {Subject} from 'rxjs';
 import {throttleTime} from 'rxjs/operators';
 
@@ -20,12 +20,14 @@ import {throttleTime} from 'rxjs/operators';
   selector: 'km-button',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ButtonComponent implements OnInit, OnDestroy {
   @Input() icon: string;
   @Input() label: string;
   @Input() disabled = false;
   @Input() loading = false;
+  @Output() loadingChange = new EventEmitter<boolean>();
   @Output() throttleClick = new EventEmitter<void>();
   private _clicks = new Subject<void>();
   private readonly _throttleTime = 1000;
@@ -39,7 +41,7 @@ export class ButtonComponent implements OnInit, OnDestroy {
   }
 
   onClick(): void {
-    this.loading = true;
+    this.loadingChange.next(true);
     this._clicks.next();
   }
 }
