@@ -43,7 +43,7 @@ export class CreateServiceAccountDialogComponent implements OnInit {
     });
   }
 
-  get observable(): Observable<any> {
+  get observable(): Observable<ServiceAccount> {
     return this._serviceAccountService
       .create(this.project.id, {
         name: this.form.controls.name.value,
