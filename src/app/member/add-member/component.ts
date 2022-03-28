@@ -19,6 +19,7 @@ import {NotificationService} from '@core/services/notification';
 import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {MemberService} from '@core/services/member';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'km-add-member',
@@ -26,7 +27,7 @@ import {MemberService} from '@core/services/member';
 })
 export class AddMemberComponent implements OnInit {
   @Input() project: Project;
-  addMemberForm: FormGroup;
+  form: FormGroup;
 
   constructor(
     private readonly _memberService: MemberService,
@@ -35,28 +36,24 @@ export class AddMemberComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.addMemberForm = new FormGroup({
+    this.form = new FormGroup({
       email: new FormControl('', [Validators.required]),
       group: new FormControl('', [Validators.required]),
     });
   }
 
-  addMember(): void {
-    if (!this.addMemberForm.valid) {
-      return;
-    }
+  get observable(): Observable<Member> {
+    return this._memberService.add(
+      {
+        email: this.form.controls.email.value,
+        projects: [{group: this.form.controls.group.value, id: this.project.id}],
+      },
+      this.project.id
+    );
+  }
 
-    this._memberService
-      .add(
-        {
-          email: this.addMemberForm.controls.email.value,
-          projects: [{group: this.addMemberForm.controls.group.value, id: this.project.id}],
-        },
-        this.project.id
-      )
-      .subscribe((member: Member) => {
-        this._matDialogRef.close(member);
-        this._notificationService.success(`Added the ${member.email} member to the ${this.project.name} project`);
-      });
+  onNext(member: Member): void {
+    this._matDialogRef.close(member);
+    this._notificationService.success(`Added the ${member.email} member to the ${this.project.name} project`);
   }
 }
