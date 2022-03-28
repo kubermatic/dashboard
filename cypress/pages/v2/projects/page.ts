@@ -7,7 +7,7 @@ import {ProjectStrategy} from './strategy/types';
 
 export class Projects extends PageOptions implements Page {
   private static _projectName: string;
-  private readonly _strategy: ProjectStrategy;
+  private readonly _strategy: ProjectStrategy | undefined;
 
   readonly Buttons = new Buttons();
   readonly Elements = new Elements();
@@ -34,7 +34,7 @@ export class Projects extends PageOptions implements Page {
   create(name: string): void {
     this.Buttons.openDialog.click();
     this.Elements.addDialogInput.type(name);
-    this.Buttons.addDialogConfirm.click().then(_ => this._strategy.onCreate());
+    this.Buttons.addDialogConfirm.click().then(_ => this._strategy?.onCreate());
   }
 
   select(name: string): void {
@@ -44,7 +44,7 @@ export class Projects extends PageOptions implements Page {
   delete(name: string): void {
     this.Buttons.deleteDialog(name).click();
     this.Buttons.deleteDialogInput.type(name);
-    this.Buttons.deleteDialogConfirm.click().then(_ => this._strategy.onDelete());
+    this.Buttons.deleteDialogConfirm.click().then(_ => this._strategy?.onDelete());
   }
 }
 

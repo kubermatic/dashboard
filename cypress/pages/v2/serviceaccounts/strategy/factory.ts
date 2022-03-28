@@ -1,15 +1,14 @@
 import {MockedServiceAccountStrategy, MockedServiceAccountTokenStrategy} from './mocked';
-import {RealServiceAccountStrategy, RealServiceAccountTokenStrategy} from './real';
 import {ServiceAccountStrategy, ServiceAccountTokenStrategy} from './types';
 
 export class ServiceAccountStrategyFactory {
-  static new(isAPIMocked: boolean): ServiceAccountStrategy {
-    return isAPIMocked ? new MockedServiceAccountStrategy() : new RealServiceAccountStrategy();
+  static new(isAPIMocked: boolean): ServiceAccountStrategy | undefined {
+    return isAPIMocked ? new MockedServiceAccountStrategy() : undefined;
   }
 }
 
 export class ServiceAccountTokenStrategyFactory {
-  static new(isAPIMocked: boolean): ServiceAccountTokenStrategy {
-    return isAPIMocked ? new MockedServiceAccountTokenStrategy() : new RealServiceAccountTokenStrategy();
+  static new(isAPIMocked: boolean): ServiceAccountTokenStrategy | undefined {
+    return isAPIMocked ? new MockedServiceAccountTokenStrategy() : undefined;
   }
 }

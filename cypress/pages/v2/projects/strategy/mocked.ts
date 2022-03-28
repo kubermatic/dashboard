@@ -19,8 +19,6 @@ export class MockedProjectStrategy implements ProjectStrategy {
   }
 
   private _init(): void {
-    cy.intercept(Endpoint.Projects, req => {
-      req.reply({fixture: MockedProjectStrategy._activeFixture});
-    });
+    cy.intercept(Endpoint.Projects, req => req.reply({fixture: MockedProjectStrategy._activeFixture}));
   }
 }

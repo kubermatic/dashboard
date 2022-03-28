@@ -4,8 +4,8 @@ import {ServiceAccountStrategyFactory, ServiceAccountTokenStrategyFactory} from 
 import {ServiceAccountStrategy, ServiceAccountTokenStrategy} from './strategy/types';
 
 export class ServiceAccounts extends PageOptions implements Page {
-  private readonly _strategy: ServiceAccountStrategy;
-  private readonly _tokenStrategy: ServiceAccountTokenStrategy;
+  private readonly _strategy: ServiceAccountStrategy | undefined;
+  private readonly _tokenStrategy: ServiceAccountTokenStrategy | undefined;
 
   readonly Buttons = new Buttons();
   readonly Elements = new Elements();
@@ -33,19 +33,19 @@ export class ServiceAccounts extends PageOptions implements Page {
     this.Buttons.openDialog.click();
     this.Elements.createDialogNameInput.type(name);
     this.Elements.createDialogGroupSelect(group).click();
-    this.Buttons.createDialogConfirm.click().then(_ => this._strategy.onCreate());
+    this.Buttons.createDialogConfirm.click().then(_ => this._strategy?.onCreate());
   }
 
   delete(name: string): void {
     this.Buttons.deleteDialog(name).click();
-    this.Buttons.deleteDialogConfirm.click().then(_ => this._strategy.onDelete());
+    this.Buttons.deleteDialogConfirm.click().then(_ => this._strategy?.onDelete());
   }
 
   addToken(name: string): void {
     this.Buttons.openTokenDialog.click();
     this.Elements.addTokenDialogNameInput.type(name);
     this.Buttons.addToken.click();
-    this.Buttons.gotIt.click().then(_ => this._tokenStrategy.onCreate());
+    this.Buttons.gotIt.click().then(_ => this._tokenStrategy?.onCreate());
   }
 }
 
