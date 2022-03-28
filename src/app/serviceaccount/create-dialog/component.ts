@@ -17,9 +17,10 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
 import {Project} from '@shared/entity/project';
-import {ServiceAccountModel} from '@shared/entity/service-account';
+import {ServiceAccount} from '@shared/entity/service-account';
 import {take} from 'rxjs/operators';
 import {ServiceAccountService} from '@core/services/service-account';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'km-create-service-account-dialog',
@@ -42,20 +43,17 @@ export class CreateServiceAccountDialogComponent implements OnInit {
     });
   }
 
-  create(): void {
-    const model: ServiceAccountModel = {
-      name: this.form.controls.name.value,
-      group: this.form.controls.group.value,
-    };
+  get observable(): Observable<any> {
+    return this._serviceAccountService
+      .create(this.project.id, {
+        name: this.form.controls.name.value,
+        group: this.form.controls.group.value,
+      })
+      .pipe(take(1));
+  }
 
-    this._serviceAccountService
-      .create(this.project.id, model)
-      .pipe(take(1))
-      .subscribe(() => {
-        this._matDialogRef.close(true);
-        this._notificationService.success(
-          `Created the ${model.name} service account in the ${this.project.name} project`
-        );
-      });
+  onNext(sa: ServiceAccount): void {
+    this._matDialogRef.close(true);
+    this._notificationService.success(`Created the ${sa.name} service account in the ${this.project.name} project`);
   }
 }
