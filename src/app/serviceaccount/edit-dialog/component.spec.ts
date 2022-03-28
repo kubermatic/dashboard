@@ -33,32 +33,39 @@ describe('EditServiceAccountDialogComponent', () => {
   let component: EditServiceAccountDialogComponent;
   let editServiceAccountSpy;
 
-  beforeEach(waitForAsync(() => {
-    const saMock = {edit: jest.fn()};
-    editServiceAccountSpy = saMock.edit.mockReturnValue(asyncData(fakeServiceAccount()));
+  beforeEach(
+    waitForAsync(() => {
+      const saMock = {edit: jest.fn()};
+      editServiceAccountSpy = saMock.edit.mockReturnValue(asyncData(fakeServiceAccount()));
 
-    TestBed.configureTestingModule({
-      imports: [...modules],
-      providers: [
-        {provide: MatDialogRef, useClass: MatDialogRefMock},
-        {provide: ServiceAccountService, useValue: saMock},
-        NotificationService,
-      ],
-      teardown: {destroyAfterEach: false},
-    }).compileComponents();
-  }));
+      TestBed.configureTestingModule({
+        imports: [...modules],
+        providers: [
+          {provide: MatDialogRef, useClass: MatDialogRefMock},
+          {provide: ServiceAccountService, useValue: saMock},
+          NotificationService,
+        ],
+        teardown: {destroyAfterEach: false},
+      }).compileComponents();
+    })
+  );
 
-  beforeEach(waitForAsync(() => {
-    fixture = TestBed.createComponent(EditServiceAccountDialogComponent);
-    component = fixture.componentInstance;
-    component.project = fakeProject();
-    component.serviceaccount = fakeServiceAccount();
-    fixture.detectChanges();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      fixture = TestBed.createComponent(EditServiceAccountDialogComponent);
+      component = fixture.componentInstance;
+      component.project = fakeProject();
+      component.serviceaccount = fakeServiceAccount();
+      fixture.detectChanges();
+    })
+  );
 
-  it('should create the edit service account component', waitForAsync(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should create the edit service account component',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 
   it('should have valid form after creating', () => {
     expect(component.form.valid).toBeTruthy();

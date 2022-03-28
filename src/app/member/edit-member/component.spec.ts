@@ -33,32 +33,39 @@ describe('EditMemberComponent', () => {
   let component: EditMemberComponent;
   let editMemberSpy;
 
-  beforeEach(waitForAsync(() => {
-    const memberServiceMock = {edit: jest.fn()};
-    editMemberSpy = memberServiceMock.edit.mockReturnValue(asyncData(fakeMember()));
+  beforeEach(
+    waitForAsync(() => {
+      const memberServiceMock = {edit: jest.fn()};
+      editMemberSpy = memberServiceMock.edit.mockReturnValue(asyncData(fakeMember()));
 
-    TestBed.configureTestingModule({
-      imports: [...modules],
-      providers: [
-        {provide: MatDialogRef, useClass: MatDialogRefMock},
-        {provide: MemberService, useValue: memberServiceMock},
-        NotificationService,
-      ],
-      teardown: {destroyAfterEach: false},
-    }).compileComponents();
-  }));
+      TestBed.configureTestingModule({
+        imports: [...modules],
+        providers: [
+          {provide: MatDialogRef, useClass: MatDialogRefMock},
+          {provide: MemberService, useValue: memberServiceMock},
+          NotificationService,
+        ],
+        teardown: {destroyAfterEach: false},
+      }).compileComponents();
+    })
+  );
 
-  beforeEach(waitForAsync(() => {
-    fixture = TestBed.createComponent(EditMemberComponent);
-    component = fixture.componentInstance;
-    component.project = fakeProject();
-    component.member = fakeMember();
-    fixture.detectChanges();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      fixture = TestBed.createComponent(EditMemberComponent);
+      component = fixture.componentInstance;
+      component.project = fakeProject();
+      component.member = fakeMember();
+      fixture.detectChanges();
+    })
+  );
 
-  it('should initialize', waitForAsync(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should initialize',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 
   it('should have valid form defaults', () => {
     expect(component.form.valid).toBeTruthy();
