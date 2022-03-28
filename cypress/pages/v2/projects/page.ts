@@ -53,6 +53,10 @@ class Elements extends PageOptions {
     return this._get(`#km-project-name-${name}`);
   }
 
+  projectItemIcon(name: string, status: string): Cypress.Chainable {
+    return this._get(`#km-project-name-${name}`).parent().find(`i.km-icon-${status}`);
+  }
+
   get edition(): Cypress.Chainable {
     return this._get('#km-edition');
   }
