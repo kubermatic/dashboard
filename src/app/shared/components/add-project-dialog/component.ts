@@ -19,6 +19,9 @@ import {NotificationService} from '@core/services/notification';
 import {ResourceType} from '@shared/entity/common';
 import {AsyncValidators} from '@shared/validators/async-label-form.validator';
 import {ProjectService} from '@core/services/project';
+import {Observable} from 'rxjs';
+import {Project} from '@shared/entity/project';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'km-add-project-dialog',
@@ -43,20 +46,12 @@ export class AddProjectDialogComponent implements OnInit {
     });
   }
 
-  addProject(): void {
-    if (!this.form.valid) {
-      return;
-    }
+  get observable(): Observable<Project> {
+    return this._projectService.create({name: this.form.controls.name.value, labels: this.labels}).pipe(take(1));
+  }
 
-    this._projectService.create({name: this.form.controls.name.value, labels: this.labels}).subscribe(
-      project => {
-        this.adding = false;
-        this._matDialogRef.close(project);
-        this._notificationService.success(`Added the ${project.name} project`);
-      },
-      () => {
-        this.adding = false;
-      }
-    );
+  onNext(project: Project): void {
+    this._matDialogRef.close(project);
+    this._notificationService.success(`Added the ${project.name} project`);
   }
 }

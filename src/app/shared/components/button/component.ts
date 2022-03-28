@@ -13,8 +13,8 @@
 // limitations under the License.
 
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {Subject} from 'rxjs';
-import {throttleTime} from 'rxjs/operators';
+import {Observable, Subject} from 'rxjs';
+import {tap, throttleTime} from 'rxjs/operators';
 
 @Component({
   selector: 'km-button',
@@ -25,15 +25,16 @@ import {throttleTime} from 'rxjs/operators';
 export class ButtonComponent implements OnInit, OnDestroy {
   @Input() icon: string;
   @Input() label: string;
+  @Input() observable: Observable<any>;
   @Input() disabled = false;
-  @Input() loading = false;
-  @Output() loadingChange = new EventEmitter<boolean>();
-  @Output() throttleClick = new EventEmitter<void>();
+  @Output() next = new EventEmitter<any>();
+  @Output() error = new EventEmitter<any>();
+  loading = false;
   private _clicks = new Subject<void>();
   private readonly _throttleTime = 1000;
 
   ngOnInit(): void {
-    this._clicks.pipe(throttleTime(this._throttleTime)).subscribe(_ => this.throttleClick.emit());
+    this._clicks.pipe(throttleTime(this._throttleTime)).subscribe(_ => this._subscribe());
   }
 
   ngOnDestroy(): void {
@@ -41,7 +42,14 @@ export class ButtonComponent implements OnInit, OnDestroy {
   }
 
   onClick(): void {
-    this.loadingChange.next(true);
+    this.loading = true;
     this._clicks.next();
+  }
+
+  private _subscribe(): void {
+    this.observable.pipe(tap(() => (this.loading = false))).subscribe({
+      next: result => this.next.emit(result),
+      error: err => this.error.next(err),
+    });
   }
 }
