@@ -22,13 +22,13 @@ import {tap, throttleTime} from 'rxjs/operators';
   styleUrls: ['./style.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ButtonComponent implements OnInit, OnDestroy {
+export class ButtonComponent<T> implements OnInit, OnDestroy {
   @Input() icon: string;
   @Input() label: string;
-  @Input() observable: Observable<any>;
+  @Input() observable: Observable<T>;
   @Input() disabled = false;
-  @Output() next = new EventEmitter<any>();
-  @Output() error = new EventEmitter<any>();
+  @Output() next = new EventEmitter<T>();
+  @Output() error = new EventEmitter<void>();
   loading = false;
   private _clicks = new Subject<void>();
   private readonly _throttleTime = 1000;
@@ -49,7 +49,7 @@ export class ButtonComponent implements OnInit, OnDestroy {
   private _subscribe(): void {
     this.observable.pipe(tap(() => (this.loading = false))).subscribe({
       next: result => this.next.emit(result),
-      error: err => this.error.next(err),
+      error: _ => this.error.next(),
     });
   }
 }

@@ -59,7 +59,7 @@ describe('AddProjectDialogComponent', () => {
     const spy = jest.spyOn(fixture.debugElement.injector.get(ProjectService) as any, 'create');
 
     component.form.controls.name.patchValue('test');
-    component.addProject();
+    component.observable.subscribe();
 
     tick();
     flush();

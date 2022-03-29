@@ -15,19 +15,18 @@ limitations under the License.
 -->
 <km-dialog-title>{{title}}</km-dialog-title>
 <mat-dialog-content>
-  <form [formGroup]="addSSHKeyForm"
-        (submit)="addSSHKey()"
+  <form [formGroup]="form"
         id="add-ssh-key-form">
     <mat-form-field class="km-ssh-key-input">
       <mat-label>Name</mat-label>
       <input id="name"
              matInput
              required
-             formControlName="name"
+             [formControlName]="controls.Name"
              type="text"
              autocomplete="off"
              cdkFocusInitial>
-      <mat-error *ngIf="addSSHKeyForm.controls.name.hasError('required')">
+      <mat-error *ngIf="form.get(controls.Name).hasError('required')">
         Name is <strong>required</strong>.
       </mat-error>
     </mat-form-field>
@@ -37,28 +36,25 @@ limitations under the License.
       <textarea id="key"
                 matInput
                 required
-                formControlName="key"
+                [formControlName]="controls.Key"
                 type="text"
                 class="form-control"
                 (change)="onNewKeyTextChanged()"></textarea>
-      <mat-error *ngIf="addSSHKeyForm.controls.key.hasError('required')">
+      <mat-error *ngIf="form.get(controls.Key).hasError('required')">
         Key is <strong>required</strong>.
       </mat-error>
-      <mat-error *ngIf="addSSHKeyForm.controls.key.hasError('validSSHKey')">
+      <mat-error *ngIf="form.get(controls.Key).hasError('validSSHKey')">
         SSH Key has invalid form. Use OpenSSH format.
       </mat-error>
     </mat-form-field>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button id="km-add-ssh-key-dialog-save"
-          type="submit"
-          kmThrottleClick
-          (throttleClick)="addSSHKey()"
-          mat-flat-button
-          form="add-ssh-key-form"
-          [disabled]="!addSSHKeyForm.valid">
-    <i class="km-icon-mask km-icon-add"></i>
-    <span>Add SSH Key</span>
-  </button>
+  <km-button id="km-add-ssh-key-dialog-save"
+             icon="km-icon-add"
+             label="Add SSH Key"
+             [disabled]="!form.valid"
+             [observable]="observable"
+             (next)="onNext($event)">
+  </km-button>
 </mat-dialog-actions>
