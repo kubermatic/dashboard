@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {AfterViewInit, Directive, ElementRef} from '@angular/core';
+import {Directive, ElementRef, OnInit} from '@angular/core';
 
 @Directive({
   selector: '[kmAutofocusDialog]',
 })
-export class AutofocusDirectiveDialog implements AfterViewInit {
+export class AutofocusDirectiveDialog implements OnInit {
   constructor(private readonly _el: ElementRef) {}
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     this._el.nativeElement.focus();
   }
 }
