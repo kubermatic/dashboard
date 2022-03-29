@@ -40,6 +40,7 @@ export class Mocks {
       itemsPerPage: 5,
       lastSeenChangelogVersion: 'v9.0.0',
       selectedProjectID: '',
+      selectProjectTableView: true,
     },
   };
 
