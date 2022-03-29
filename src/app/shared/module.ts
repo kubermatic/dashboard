@@ -230,13 +230,7 @@ const components: any[] = [
   OpenstackApplicationCredentialsComponent,
 ];
 
-const directives: any[] = [
-  AutofocusDirective,
-  AutofocusDirectiveDialog,
-  ThrottleClickDirective,
-  ThrottleClickDirective,
-  OptionDirective,
-];
+const directives: any[] = [AutofocusDirective, AutofocusDirectiveDialog, ThrottleClickDirective, OptionDirective];
 
 @NgModule({
   imports: [...modules],
