@@ -19,7 +19,6 @@ import {catchError} from 'rxjs/operators';
 import {environment} from '@environments/environment';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {PresetList} from '@shared/entity/preset';
-import {Cluster} from '@shared/entity/cluster';
 import {AKSCluster} from '@app/shared/entity/provider/aks';
 import {EKSCluster} from '@app/shared/entity/provider/eks';
 import {GKECluster} from '@app/shared/entity/provider/gke';
