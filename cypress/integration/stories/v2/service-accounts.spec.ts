@@ -80,6 +80,7 @@ describe('Service Accounts Story', () => {
   });
 
   it('should delete the project', () => {
+    Pages.Projects.Elements.projectItem(projectName).should(Condition.Exist);
     Pages.Projects.delete(projectName);
     Pages.Projects.Elements.projectItem(projectName).should(Condition.NotExist);
   });
