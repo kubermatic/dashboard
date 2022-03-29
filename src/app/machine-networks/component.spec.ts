@@ -29,14 +29,16 @@ describe('MachineNetworksComponent', () => {
   let component: MachineNetworksComponent;
   let fixture: ComponentFixture<MachineNetworksComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      imports: [...modules],
-      declarations: [MachineNetworksComponent],
-      providers: [WizardService],
-      teardown: {destroyAfterEach: false},
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [...modules],
+        declarations: [MachineNetworksComponent],
+        providers: [WizardService],
+        teardown: {destroyAfterEach: false},
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MachineNetworksComponent);
