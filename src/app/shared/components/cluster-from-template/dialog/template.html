@@ -34,15 +34,10 @@ limitations under the License.
        [ngClass]="showDetails ? 'km-icon-mask km-icon-arrow-up' : 'km-icon-mask km-icon-arrow-down'"></i>
     <hr fxFlex />
   </div>
-  <button mat-flat-button
-          kmThrottleClick
-          (throttleClick)="create()"
-          type="submit"
-          id="km-create-template-instance-btn"
-          form="create-template-instance-form"
-          fxLayoutAlign="center center"
-          [disabled]="!isValid">
-    <i class="km-icon-mask km-icon-add"></i>
-    <span>Create Clusters</span>
-  </button>
+  <km-button id="km-create-template-instance-btn"
+             icon="km-icon-add"
+             label="Create Clusters"
+             [disabled]="!valid"
+             [observable]="observable"
+             (next)="onNext()">
 </mat-dialog-actions>
