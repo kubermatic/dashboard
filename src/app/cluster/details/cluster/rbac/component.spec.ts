@@ -38,29 +38,31 @@ describe('RBACComponent', () => {
   let fixture: ComponentFixture<RBACComponent>;
   let component: RBACComponent;
 
-  beforeEach(waitForAsync(() => {
-    const rbacMock = {
-      deleteClusterBinding: jest.fn(),
-      deleteBinding: jest.fn(),
-    };
-    rbacMock.deleteClusterBinding.mockReturnValue(of(null));
-    rbacMock.deleteBinding.mockReturnValue(of(null));
+  beforeEach(
+    waitForAsync(() => {
+      const rbacMock = {
+        deleteClusterBinding: jest.fn(),
+        deleteBinding: jest.fn(),
+      };
+      rbacMock.deleteClusterBinding.mockReturnValue(of(null));
+      rbacMock.deleteBinding.mockReturnValue(of(null));
 
-    TestBed.configureTestingModule({
-      imports: [...modules],
-      declarations: [RBACComponent],
-      providers: [
-        {provide: RBACService, useValue: rbacMock},
-        {provide: Router, useClass: RouterStub},
-        {provide: ClusterService, useClass: ClusterMockService},
-        {provide: AppConfigService, useClass: AppConfigMockService},
-        MatDialog,
-        GoogleAnalyticsService,
-        NotificationService,
-      ],
-      teardown: {destroyAfterEach: false},
-    }).compileComponents();
-  }));
+      TestBed.configureTestingModule({
+        imports: [...modules],
+        declarations: [RBACComponent],
+        providers: [
+          {provide: RBACService, useValue: rbacMock},
+          {provide: Router, useClass: RouterStub},
+          {provide: ClusterService, useClass: ClusterMockService},
+          {provide: AppConfigService, useClass: AppConfigMockService},
+          MatDialog,
+          GoogleAnalyticsService,
+          NotificationService,
+        ],
+        teardown: {destroyAfterEach: false},
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RBACComponent);
@@ -70,9 +72,12 @@ describe('RBACComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create the rbac cmp', waitForAsync(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should create the rbac cmp',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 
   it('should create simple cluster binding for rbac', () => {
     const simpleClusterBindings = component.createSimpleClusterBinding(fakeClusterBindings());
