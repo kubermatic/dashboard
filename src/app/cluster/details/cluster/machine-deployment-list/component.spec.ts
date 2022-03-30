@@ -43,7 +43,6 @@ describe('MachineDeploymentListComponent', () => {
   let fixture: ComponentFixture<MachineDeploymentListComponent>;
   let component: MachineDeploymentListComponent;
 
-<<<<<<< HEAD
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
@@ -61,37 +60,13 @@ describe('MachineDeploymentListComponent', () => {
       teardown: {destroyAfterEach: false},
     }).compileComponents();
   }));
-=======
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [...modules],
-        declarations: [MachineDeploymentListComponent],
-        providers: [
-          {provide: NodeService, useClass: NodeMockService},
-          {provide: UserService, useClass: UserMockService},
-          {provide: AppConfigService, useClass: AppConfigMockService},
-          {provide: ProjectService, useClass: ProjectMockService},
-          {provide: MatDialog, useClass: MatDialogMock},
-          {provide: Router, useClass: RouterStub},
-          {provide: SettingsService, useClass: SettingsMockService},
-          GoogleAnalyticsService,
-        ],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
->>>>>>> fix
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MachineDeploymentListComponent);
     component = fixture.componentInstance;
   });
 
-  it(
-    'should create the cluster details cmp',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should create the cluster details cmp', waitForAsync(() => {
+    expect(component).toBeTruthy();
+  }));
 });

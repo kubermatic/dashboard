@@ -28,7 +28,6 @@ describe('EventRateLimitComponent', () => {
   let fixture: ComponentFixture<EventRateLimitComponent>;
   let component: EventRateLimitComponent;
 
-<<<<<<< HEAD
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule],
@@ -36,17 +35,6 @@ describe('EventRateLimitComponent', () => {
       providers: [WizardService, ClusterSpecService, {provide: Auth, useClass: AuthMockService}],
     }).compileComponents();
   }));
-=======
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [...modules],
-        declarations: [EventRateLimitComponent],
-        providers: [WizardService, ClusterSpecService, {provide: Auth, useClass: AuthMockService}],
-      }).compileComponents();
-    })
-  );
->>>>>>> fix
 
   beforeEach(() => {
     fixture = TestBed.createComponent(EventRateLimitComponent);

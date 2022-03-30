@@ -39,16 +39,14 @@ describe('ChangeClusterVersionComponent', () => {
   let patchClusterSpy: jest.Mock;
   let upgradeClusterMachineDeploymentsSpy: jest.Mock;
 
-  beforeEach(
-    waitForAsync(() => {
-      const clusterServiceMock = {
-        patch: jest.fn(),
-        upgradeMachineDeployments: jest.fn(),
-      };
-      patchClusterSpy = clusterServiceMock.patch.mockReturnValue(of(fakeDigitaloceanCluster()));
-      upgradeClusterMachineDeploymentsSpy = clusterServiceMock.upgradeMachineDeployments.mockReturnValue(of(null));
+  beforeEach(waitForAsync(() => {
+    const clusterServiceMock = {
+      patch: jest.fn(),
+      upgradeMachineDeployments: jest.fn(),
+    };
+    patchClusterSpy = clusterServiceMock.patch.mockReturnValue(of(fakeDigitaloceanCluster()));
+    upgradeClusterMachineDeploymentsSpy = clusterServiceMock.upgradeMachineDeployments.mockReturnValue(of(null));
 
-<<<<<<< HEAD
     TestBed.configureTestingModule({
       imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
       declarations: [VersionChangeDialogComponent],
@@ -66,40 +64,15 @@ describe('ChangeClusterVersionComponent', () => {
       teardown: {destroyAfterEach: false},
     }).compileComponents();
   }));
-=======
-      TestBed.configureTestingModule({
-        imports: [...modules],
-        declarations: [VersionChangeDialogComponent],
-        providers: [
-          {provide: MAT_DIALOG_DATA, useValue: {clusterName: 'clustername'}},
-          {provide: MatDialogRef, useClass: MatDialogRefMock},
-          {provide: ClusterService, useValue: clusterServiceMock},
-          {provide: ProjectService, useClass: ProjectMockService},
-          {provide: Router, useClass: RouterStub},
-          {provide: AppConfigService, useClass: AppConfigMockService},
-          GoogleAnalyticsService,
-          NotificationService,
-          EndOfLifeService,
-        ],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
->>>>>>> fix
 
-  beforeEach(
-    waitForAsync(() => {
-      fixture = TestBed.createComponent(VersionChangeDialogComponent);
-      component = fixture.componentInstance;
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    fixture = TestBed.createComponent(VersionChangeDialogComponent);
+    component = fixture.componentInstance;
+  }));
 
-  it(
-    'should create the change cluster version component',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should create the change cluster version component', waitForAsync(() => {
+    expect(component).toBeTruthy();
+  }));
 
   xit('should call patchCluster method from api', fakeAsync(() => {
     component.selectedVersion = 'new version';

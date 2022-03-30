@@ -27,7 +27,6 @@ describe('MachineNetworksComponent', () => {
   let component: MachineNetworksComponent;
   let fixture: ComponentFixture<MachineNetworksComponent>;
 
-<<<<<<< HEAD
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
@@ -36,18 +35,6 @@ describe('MachineNetworksComponent', () => {
       teardown: {destroyAfterEach: false},
     }).compileComponents();
   }));
-=======
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [...modules],
-        declarations: [MachineNetworksComponent],
-        providers: [WizardService],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
->>>>>>> fix
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MachineNetworksComponent);
