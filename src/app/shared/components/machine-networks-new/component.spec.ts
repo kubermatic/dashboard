@@ -45,6 +45,7 @@ describe('MachineNetworksComponent', () => {
   let component: MachineNetworkComponent;
   let fixture: ComponentFixture<MachineNetworkComponent>;
 
+<<<<<<< HEAD
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
@@ -72,6 +73,37 @@ describe('MachineNetworksComponent', () => {
       teardown: {destroyAfterEach: false},
     }).compileComponents();
   }));
+=======
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [...modules],
+        providers: [
+          AppConfigService,
+          ClusterSpecService,
+          NodeDataService,
+          ParamsService,
+          PresetsService,
+          WizardService,
+          AlibabaService,
+          AnexiaService,
+          AWSService,
+          AzureService,
+          DigitalOceanService,
+          EquinixService,
+          GCPService,
+          HetznerService,
+          OpenStackService,
+          NutanixService,
+          {provide: ProjectService, useValue: ProjectMockService},
+          {provide: NODE_DATA_CONFIG, useValue: NodeDataMode.Wizard},
+          {provide: DatacenterService, useClass: DatacenterMockService},
+        ],
+        teardown: {destroyAfterEach: false},
+      }).compileComponents();
+    })
+  );
+>>>>>>> fix
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MachineNetworkComponent);

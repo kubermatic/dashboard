@@ -36,6 +36,7 @@ describe('GatekeeperConfigDialog', () => {
   let createGatekeeperConfigSpy: jest.Mock;
   let patchGatekeeperConfigSpy: jest.Mock;
 
+<<<<<<< HEAD
   beforeEach(waitForAsync(() => {
     const opaMock = {
       createGatekeeperConfig: jest.fn(),
@@ -59,14 +60,41 @@ describe('GatekeeperConfigDialog', () => {
             cluster: {},
             mode: '',
             confirmLabel: '',
+=======
+  beforeEach(
+    waitForAsync(() => {
+      const opaMock = {
+        createGatekeeperConfig: jest.fn(),
+        patchGatekeeperConfig: jest.fn(),
+        refreshGatekeeperConfig: () => {},
+      };
+      createGatekeeperConfigSpy = opaMock.createGatekeeperConfig.mockReturnValue(asyncData(fakeGatekeeperConfig()));
+      patchGatekeeperConfigSpy = opaMock.patchGatekeeperConfig.mockReturnValue(asyncData(fakeGatekeeperConfig()));
+
+      TestBed.configureTestingModule({
+        imports: [...modules],
+        declarations: [GatekeeperConfigDialog],
+        providers: [
+          {provide: MatDialogRef, useClass: MatDialogRefMock},
+          {provide: OPAService, useValue: opaMock},
+          {
+            provide: MAT_DIALOG_DATA,
+            useValue: {
+              title: '',
+              projectId: '',
+              cluster: {},
+              mode: '',
+              confirmLabel: '',
+            },
+>>>>>>> fix
           },
-        },
-        NotificationService,
-        {provide: NGX_MONACO_EDITOR_CONFIG, useValue: {onMonacoLoad: () => (monaco = (window as any).monaco)}},
-      ],
-      teardown: {destroyAfterEach: false},
-    }).compileComponents();
-  }));
+          NotificationService,
+          {provide: NGX_MONACO_EDITOR_CONFIG, useValue: {onMonacoLoad: () => (monaco = (window as any).monaco)}},
+        ],
+        teardown: {destroyAfterEach: false},
+      }).compileComponents();
+    })
+  );
 
   describe('Add Gatekeeper Config Dialog', () => {
     beforeEach(() => {
@@ -84,9 +112,12 @@ describe('GatekeeperConfigDialog', () => {
       fixture.detectChanges();
     });
 
-    it('should create the add gatekeeper config dialog', waitForAsync(() => {
-      expect(component).toBeTruthy();
-    }));
+    it(
+      'should create the add gatekeeper config dialog',
+      waitForAsync(() => {
+        expect(component).toBeTruthy();
+      })
+    );
 
     it('should have correct title: add', () => {
       expect(document.body.querySelector('km-dialog-title').textContent).toBe('Add Gatekeeper Config');
@@ -120,9 +151,12 @@ describe('GatekeeperConfigDialog', () => {
       fixture.detectChanges();
     });
 
-    it('should create the edit gatekeeper config dialog', waitForAsync(() => {
-      expect(component).toBeTruthy();
-    }));
+    it(
+      'should create the edit gatekeeper config dialog',
+      waitForAsync(() => {
+        expect(component).toBeTruthy();
+      })
+    );
 
     it('should have correct title: edit', () => {
       expect(document.body.querySelector('km-dialog-title').textContent).toContain('Edit Gatekeeper Config');

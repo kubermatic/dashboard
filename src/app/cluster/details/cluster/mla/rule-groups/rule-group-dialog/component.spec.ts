@@ -36,6 +36,7 @@ describe('RuleGroupDialog', () => {
   let editRuleGroupSpy: jest.Mock;
   let createRuleGroupSpy: jest.Mock;
 
+<<<<<<< HEAD
   beforeEach(waitForAsync(() => {
     const mlaMock = {
       createRuleGroup: jest.fn(),
@@ -58,14 +59,40 @@ describe('RuleGroupDialog', () => {
             projectId: '',
             cluster: {},
             confirmLabel: '',
+=======
+  beforeEach(
+    waitForAsync(() => {
+      const mlaMock = {
+        createRuleGroup: jest.fn(),
+        editRuleGroup: jest.fn(),
+        refreshRuleGroups: () => {},
+      };
+      editRuleGroupSpy = mlaMock.editRuleGroup.mockReturnValue(asyncData(fakeRuleGroups()[0]));
+      createRuleGroupSpy = mlaMock.createRuleGroup.mockReturnValue(asyncData(fakeRuleGroups()[0]));
+
+      TestBed.configureTestingModule({
+        imports: [...modules],
+        declarations: [RuleGroupDialog],
+        providers: [
+          {provide: MatDialogRef, useClass: MatDialogRefMock},
+          {provide: MLAService, useValue: mlaMock},
+          {
+            provide: MAT_DIALOG_DATA,
+            useValue: {
+              title: '',
+              projectId: '',
+              cluster: {},
+              confirmLabel: '',
+            },
+>>>>>>> fix
           },
-        },
-        NotificationService,
-        {provide: NGX_MONACO_EDITOR_CONFIG, useValue: {onMonacoLoad: () => (monaco = (window as any).monaco)}},
-      ],
-      teardown: {destroyAfterEach: false},
-    }).compileComponents();
-  }));
+          NotificationService,
+          {provide: NGX_MONACO_EDITOR_CONFIG, useValue: {onMonacoLoad: () => (monaco = (window as any).monaco)}},
+        ],
+        teardown: {destroyAfterEach: false},
+      }).compileComponents();
+    })
+  );
 
   describe('Add Rule Group Dialog', () => {
     beforeEach(() => {
@@ -83,9 +110,12 @@ describe('RuleGroupDialog', () => {
       fixture.detectChanges();
     });
 
-    it('should create the add rule group dialog', waitForAsync(() => {
-      expect(component).toBeTruthy();
-    }));
+    it(
+      'should create the add rule group dialog',
+      waitForAsync(() => {
+        expect(component).toBeTruthy();
+      })
+    );
 
     it('should have correct title: add', () => {
       expect(document.body.querySelector('km-dialog-title').textContent).toContain('Add Rule Group');
@@ -118,9 +148,12 @@ describe('RuleGroupDialog', () => {
       fixture.detectChanges();
     });
 
-    it('should create the edit rule group dialog', waitForAsync(() => {
-      expect(component).toBeTruthy();
-    }));
+    it(
+      'should create the edit rule group dialog',
+      waitForAsync(() => {
+        expect(component).toBeTruthy();
+      })
+    );
 
     it('should have correct title: edit', () => {
       expect(document.body.querySelector('km-dialog-title').textContent).toContain('Edit Rule Group');
