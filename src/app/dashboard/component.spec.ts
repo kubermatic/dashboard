@@ -49,10 +49,7 @@ describe('DashboardComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it(
-    'should create the cmp',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should create the cmp', waitForAsync(() => {
+    expect(component).toBeTruthy();
+  }));
 });

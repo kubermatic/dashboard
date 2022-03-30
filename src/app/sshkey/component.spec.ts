@@ -43,34 +43,32 @@ describe('SSHKeyComponent', () => {
   let component: SSHKeyComponent;
   let activatedRoute: ActivatedRouteStub;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [
-          BrowserModule,
-          BrowserAnimationsModule,
-          RouterTestingModule,
-          SharedModule,
-          MatTabsModule,
-          DialogTestModule,
-        ],
-        declarations: [SSHKeyComponent],
-        providers: [
-          {provide: Router, useClass: RouterStub},
-          {provide: UserService, useClass: UserMockService},
-          {provide: AppConfigService, useClass: AppConfigMockService},
-          {provide: ActivatedRoute, useClass: ActivatedRouteStub},
-          {provide: ProjectService, useClass: ProjectMockService},
-          {provide: SettingsService, useClass: SettingsMockService},
-          {provide: SSHKeyService, useClass: SSHKeyMockService},
-          MatDialog,
-          GoogleAnalyticsService,
-          NotificationService,
-        ],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        RouterTestingModule,
+        SharedModule,
+        MatTabsModule,
+        DialogTestModule,
+      ],
+      declarations: [SSHKeyComponent],
+      providers: [
+        {provide: Router, useClass: RouterStub},
+        {provide: UserService, useClass: UserMockService},
+        {provide: AppConfigService, useClass: AppConfigMockService},
+        {provide: ActivatedRoute, useClass: ActivatedRouteStub},
+        {provide: ProjectService, useClass: ProjectMockService},
+        {provide: SettingsService, useClass: SettingsMockService},
+        {provide: SSHKeyService, useClass: SSHKeyMockService},
+        MatDialog,
+        GoogleAnalyticsService,
+        NotificationService,
+      ],
+      teardown: {destroyAfterEach: false},
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SSHKeyComponent);
