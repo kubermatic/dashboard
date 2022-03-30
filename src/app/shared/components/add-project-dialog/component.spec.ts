@@ -29,6 +29,7 @@ describe('AddProjectDialogComponent', () => {
   let fixture: ComponentFixture<AddProjectDialogComponent>;
   let component: AddProjectDialogComponent;
 
+<<<<<<< HEAD
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],
@@ -40,18 +41,38 @@ describe('AddProjectDialogComponent', () => {
       teardown: {destroyAfterEach: false},
     }).compileComponents();
   }));
+=======
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [...modules],
+        providers: [
+          {provide: MatDialogRef, useClass: MatDialogRefMock},
+          {provide: ProjectService, useClass: ProjectMockService},
+          {provide: Router, useClass: RouterStub},
+        ],
+        teardown: {destroyAfterEach: false},
+      }).compileComponents();
+    })
+  );
+>>>>>>> fix
 
-  beforeEach(waitForAsync(() => {
-    fixture = TestBed.createComponent(AddProjectDialogComponent);
-    component = fixture.componentInstance;
-    component.labels = {};
-    component.asyncLabelValidators = [];
-    fixture.detectChanges();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      fixture = TestBed.createComponent(AddProjectDialogComponent);
+      component = fixture.componentInstance;
+      component.labels = {};
+      component.asyncLabelValidators = [];
+      fixture.detectChanges();
+    })
+  );
 
-  it('should create the component', waitForAsync(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should create the component',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 
   it('should call createProject method', fakeAsync(() => {
     const spy = jest.spyOn(fixture.debugElement.injector.get(ProjectService) as any, 'create');

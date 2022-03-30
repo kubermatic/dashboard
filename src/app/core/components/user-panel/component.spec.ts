@@ -55,9 +55,12 @@ describe('UserPanelComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it('should initialize', waitForAsync(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should initialize',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 
   it('should tell Router to navigate when user logout', inject([Router], (router: Router) => {
     authService = fixture.debugElement.injector.get(Auth) as any;
@@ -70,11 +73,14 @@ describe('UserPanelComponent', () => {
     expect(spyLogOut).toHaveBeenCalled();
   }));
 
-  it('should not display user information after logout', waitForAsync(() => {
-    fixture.detectChanges();
-    expect(component.user).toBeDefined();
+  it(
+    'should not display user information after logout',
+    waitForAsync(() => {
+      fixture.detectChanges();
+      expect(component.user).toBeDefined();
 
-    component.logout();
-    expect(component.user).not.toBeDefined();
-  }));
+      component.logout();
+      expect(component.user).not.toBeDefined();
+    })
+  );
 });

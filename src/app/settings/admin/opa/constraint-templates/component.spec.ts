@@ -33,14 +33,16 @@ describe('ConstraintTemplatesComponent', () => {
   let component: ConstraintTemplatesComponent;
   let deleteConstraintTemplateSpy: jest.Mock;
 
-  beforeEach(waitForAsync(() => {
-    const opaMock = {
-      deleteConstraintTemplate: jest.fn(),
-      constraintTemplates: of(fakeConstraintTemplates()),
-      refreshConstraintTemplates: () => {},
-    };
-    deleteConstraintTemplateSpy = opaMock.deleteConstraintTemplate.mockReturnValue(of(null));
+  beforeEach(
+    waitForAsync(() => {
+      const opaMock = {
+        deleteConstraintTemplate: jest.fn(),
+        constraintTemplates: of(fakeConstraintTemplates()),
+        refreshConstraintTemplates: () => {},
+      };
+      deleteConstraintTemplateSpy = opaMock.deleteConstraintTemplate.mockReturnValue(of(null));
 
+<<<<<<< HEAD
     TestBed.configureTestingModule({
       imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, DialogTestModule],
       declarations: [ConstraintTemplatesComponent],
@@ -53,18 +55,38 @@ describe('ConstraintTemplatesComponent', () => {
       teardown: {destroyAfterEach: false},
     }).compileComponents();
   }));
+=======
+      TestBed.configureTestingModule({
+        imports: [...modules],
+        declarations: [ConstraintTemplatesComponent],
+        providers: [
+          {provide: UserService, useClass: UserMockService},
+          {provide: OPAService, useValue: opaMock},
+          MatDialog,
+          NotificationService,
+        ],
+        teardown: {destroyAfterEach: false},
+      }).compileComponents();
+    })
+  );
+>>>>>>> fix
 
-  beforeEach(waitForAsync(() => {
-    fixture = TestBed.createComponent(ConstraintTemplatesComponent);
-    component = fixture.componentInstance;
-    noop = TestBed.createComponent(NoopConfirmDialogComponent);
-    component.constraintTemplates = fakeConstraintTemplates();
-    fixture.detectChanges();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      fixture = TestBed.createComponent(ConstraintTemplatesComponent);
+      component = fixture.componentInstance;
+      noop = TestBed.createComponent(NoopConfirmDialogComponent);
+      component.constraintTemplates = fakeConstraintTemplates();
+      fixture.detectChanges();
+    })
+  );
 
-  it('should create the constraint templates component', waitForAsync(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should create the constraint templates component',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 
   it('should open the delete constraint template confirmation dialog & call delete()', fakeAsync(() => {
     const waitTime = 15000;
