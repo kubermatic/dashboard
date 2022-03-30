@@ -45,31 +45,33 @@ describe('ProjectComponent', () => {
   let component: ProjectComponent;
   let noop: ComponentFixture<NoopProjectDeleteDialogComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        RouterTestingModule,
-        ProjectModule,
-        SharedModule,
-        CoreModule,
-        DialogTestModule,
-      ],
-      providers: [
-        {provide: Router, useClass: RouterStub},
-        {provide: ProjectService, useClass: ProjectMockService},
-        {provide: UserService, useClass: UserMockService},
-        {provide: AppConfigService, useClass: AppConfigMockService},
-        {provide: DatacenterService, useClass: DatacenterMockService},
-        {provide: SettingsService, useClass: SettingsMockService},
-        MatDialog,
-        GoogleAnalyticsService,
-        CookieService,
-      ],
-      teardown: {destroyAfterEach: false},
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [
+          BrowserModule,
+          BrowserAnimationsModule,
+          RouterTestingModule,
+          ProjectModule,
+          SharedModule,
+          CoreModule,
+          DialogTestModule,
+        ],
+        providers: [
+          {provide: Router, useClass: RouterStub},
+          {provide: ProjectService, useClass: ProjectMockService},
+          {provide: UserService, useClass: UserMockService},
+          {provide: AppConfigService, useClass: AppConfigMockService},
+          {provide: DatacenterService, useClass: DatacenterMockService},
+          {provide: SettingsService, useClass: SettingsMockService},
+          MatDialog,
+          GoogleAnalyticsService,
+          CookieService,
+        ],
+        teardown: {destroyAfterEach: false},
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ProjectComponent);

@@ -82,9 +82,12 @@ describe('SidenavComponent', () => {
     links = linkDes.map(de => de.injector.get(RouterLinkStubDirective) as RouterLinkStubDirective);
   });
 
-  it('should initialize', waitForAsync(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should initialize',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 
   it('should get RouterLinks from template', () => {
     const expectedLinks = 7;
