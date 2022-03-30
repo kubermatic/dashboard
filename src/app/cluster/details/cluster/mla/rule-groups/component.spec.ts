@@ -35,15 +35,13 @@ describe('RuleGroupsComponent', () => {
   let component: RuleGroupsComponent;
   let deleteRuleGroupSpy: jest.Mock;
 
-  beforeEach(
-    waitForAsync(() => {
-      const mlaMock = {
-        deleteRuleGroup: jest.fn(),
-        refreshRuleGroups: () => {},
-      };
-      deleteRuleGroupSpy = mlaMock.deleteRuleGroup.mockReturnValue(of(null));
+  beforeEach(waitForAsync(() => {
+    const mlaMock = {
+      deleteRuleGroup: jest.fn(),
+      refreshRuleGroups: () => {},
+    };
+    deleteRuleGroupSpy = mlaMock.deleteRuleGroup.mockReturnValue(of(null));
 
-<<<<<<< HEAD
     TestBed.configureTestingModule({
       imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, DialogTestModule],
       declarations: [RuleGroupsComponent],
@@ -56,34 +54,17 @@ describe('RuleGroupsComponent', () => {
       teardown: {destroyAfterEach: false},
     }).compileComponents();
   }));
-=======
-      TestBed.configureTestingModule({
-        imports: [...modules],
-        declarations: [RuleGroupsComponent],
-        providers: [
-          {provide: MLAService, useValue: mlaMock},
-          {provide: UserService, useClass: UserMockService},
-          MatDialog,
-          NotificationService,
-        ],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
->>>>>>> fix
 
-  beforeEach(
-    waitForAsync(() => {
-      fixture = TestBed.createComponent(RuleGroupsComponent);
-      component = fixture.componentInstance;
-      noop = TestBed.createComponent(NoopConfirmDialogComponent);
-      component.cluster = fakeDigitaloceanCluster();
-      component.projectID = fakeProject().id;
-      component.ruleGroups = fakeRuleGroups();
-      component.isClusterRunning = true;
-      fixture.detectChanges();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    fixture = TestBed.createComponent(RuleGroupsComponent);
+    component = fixture.componentInstance;
+    noop = TestBed.createComponent(NoopConfirmDialogComponent);
+    component.cluster = fakeDigitaloceanCluster();
+    component.projectID = fakeProject().id;
+    component.ruleGroups = fakeRuleGroups();
+    component.isClusterRunning = true;
+    fixture.detectChanges();
+  }));
 
   it('should create the rule group component', fakeAsync(() => {
     expect(component).toBeTruthy();

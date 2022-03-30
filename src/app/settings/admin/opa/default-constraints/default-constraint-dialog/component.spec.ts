@@ -35,7 +35,6 @@ describe('DefaultConstraintDialog', () => {
   let createDefaultConstraintSpy: jest.Mock;
   let patchDefaultConstraintSpy: jest.Mock;
 
-<<<<<<< HEAD
   beforeEach(waitForAsync(() => {
     const opaMock = {
       createDefaultConstraint: jest.fn(),
@@ -58,40 +57,14 @@ describe('DefaultConstraintDialog', () => {
             title: '',
             mode: '',
             confirmLabel: '',
-=======
-  beforeEach(
-    waitForAsync(() => {
-      const opaMock = {
-        createDefaultConstraint: jest.fn(),
-        patchDefaultConstraint: jest.fn(),
-        constraintTemplates: of(fakeConstraintTemplates()),
-        refreshConstraint: () => {},
-      };
-      createDefaultConstraintSpy = opaMock.createDefaultConstraint.mockReturnValue(asyncData(fakeConstraints()[0]));
-      patchDefaultConstraintSpy = opaMock.patchDefaultConstraint.mockReturnValue(asyncData(fakeConstraints()[0]));
-
-      TestBed.configureTestingModule({
-        imports: [...modules],
-        declarations: [DefaultConstraintDialog],
-        providers: [
-          {provide: MatDialogRef, useClass: MatDialogRefMock},
-          {provide: OPAService, useValue: opaMock},
-          {
-            provide: MAT_DIALOG_DATA,
-            useValue: {
-              title: '',
-              mode: '',
-              confirmLabel: '',
-            },
->>>>>>> fix
           },
-          NotificationService,
-          {provide: NGX_MONACO_EDITOR_CONFIG, useValue: {onMonacoLoad: () => (monaco = (window as any).monaco)}},
-        ],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
+        },
+        NotificationService,
+        {provide: NGX_MONACO_EDITOR_CONFIG, useValue: {onMonacoLoad: () => (monaco = (window as any).monaco)}},
+      ],
+      teardown: {destroyAfterEach: false},
+    }).compileComponents();
+  }));
 
   describe('Add Default Constraint Dialog', () => {
     beforeEach(() => {
@@ -107,12 +80,9 @@ describe('DefaultConstraintDialog', () => {
       fixture.detectChanges();
     });
 
-    it(
-      'should create the add default constraint dialog',
-      waitForAsync(() => {
-        expect(component).toBeTruthy();
-      })
-    );
+    it('should create the add default constraint dialog', waitForAsync(() => {
+      expect(component).toBeTruthy();
+    }));
 
     it('should have correct title: add', () => {
       expect(document.body.querySelector('km-dialog-title').textContent).toBe('Add Default Constraint');
@@ -144,12 +114,9 @@ describe('DefaultConstraintDialog', () => {
       fixture.detectChanges();
     });
 
-    it(
-      'should create the edit default constraint dialog',
-      waitForAsync(() => {
-        expect(component).toBeTruthy();
-      })
-    );
+    it('should create the edit default constraint dialog', waitForAsync(() => {
+      expect(component).toBeTruthy();
+    }));
 
     it('should have correct title: edit', () => {
       expect(document.body.querySelector('km-dialog-title').textContent).toContain('Edit Default Constraint');

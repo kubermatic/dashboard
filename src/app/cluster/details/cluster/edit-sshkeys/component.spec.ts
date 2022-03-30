@@ -33,7 +33,6 @@ describe('EditSSHKeysComponent', () => {
   let fixture: ComponentFixture<EditSSHKeysComponent>;
   let component: EditSSHKeysComponent;
 
-<<<<<<< HEAD
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
@@ -50,38 +49,13 @@ describe('EditSSHKeysComponent', () => {
       teardown: {destroyAfterEach: false},
     }).compileComponents();
   }));
-=======
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [...modules],
-        declarations: [EditSSHKeysComponent],
-        providers: [
-          {provide: ClusterService, useClass: ClusterMockService},
-          {provide: UserService, useClass: UserMockService},
-          {provide: AppConfigService, useClass: AppConfigMockService},
-          {provide: SSHKeyService, useClass: SSHKeyMockService},
-          MatDialog,
-          GoogleAnalyticsService,
-          NotificationService,
-        ],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
->>>>>>> fix
 
-  beforeEach(
-    waitForAsync(() => {
-      fixture = TestBed.createComponent(EditSSHKeysComponent);
-      component = fixture.componentInstance;
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    fixture = TestBed.createComponent(EditSSHKeysComponent);
+    component = fixture.componentInstance;
+  }));
 
-  it(
-    'should create the edit sshkeys component',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should create the edit sshkeys component', waitForAsync(() => {
+    expect(component).toBeTruthy();
+  }));
 });

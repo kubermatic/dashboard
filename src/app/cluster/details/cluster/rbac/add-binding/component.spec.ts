@@ -30,21 +30,19 @@ describe('AddBindingComponent', () => {
   let fixture: ComponentFixture<AddBindingComponent>;
   let component: AddBindingComponent;
 
-  beforeEach(
-    waitForAsync(() => {
-      const rbacMock = {
-        getClusterRoleNames: jest.fn(),
-        getRoleNames: jest.fn(),
-        createClusterBinding: jest.fn(),
-        createBinding: jest.fn(),
-      };
+  beforeEach(waitForAsync(() => {
+    const rbacMock = {
+      getClusterRoleNames: jest.fn(),
+      getRoleNames: jest.fn(),
+      createClusterBinding: jest.fn(),
+      createBinding: jest.fn(),
+    };
 
-      rbacMock.getClusterRoleNames.mockReturnValue(asyncData(fakeClusterRoleNames()));
-      rbacMock.getRoleNames.mockReturnValue(asyncData(fakeRoleNames()));
-      rbacMock.createClusterBinding.mockReturnValue(asyncData(fakeClusterBinding()));
-      rbacMock.createBinding.mockReturnValue(asyncData(fakeBinding()));
+    rbacMock.getClusterRoleNames.mockReturnValue(asyncData(fakeClusterRoleNames()));
+    rbacMock.getRoleNames.mockReturnValue(asyncData(fakeRoleNames()));
+    rbacMock.createClusterBinding.mockReturnValue(asyncData(fakeClusterBinding()));
+    rbacMock.createBinding.mockReturnValue(asyncData(fakeBinding()));
 
-<<<<<<< HEAD
     TestBed.configureTestingModule({
       imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],
       declarations: [AddBindingComponent],
@@ -55,36 +53,18 @@ describe('AddBindingComponent', () => {
       teardown: {destroyAfterEach: false},
     }).compileComponents();
   }));
-=======
-      TestBed.configureTestingModule({
-        imports: [...modules],
-        declarations: [AddBindingComponent],
-        providers: [
-          {provide: RBACService, useValue: rbacMock},
-          {provide: MatDialogRef, useClass: MatDialogRefMock},
-        ],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
->>>>>>> fix
 
-  beforeEach(
-    waitForAsync(() => {
-      fixture = TestBed.createComponent(AddBindingComponent);
-      component = fixture.componentInstance;
-      component.cluster = fakeDigitaloceanCluster();
-      component.projectID = fakeProject().id;
-      fixture.detectChanges();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    fixture = TestBed.createComponent(AddBindingComponent);
+    component = fixture.componentInstance;
+    component.cluster = fakeDigitaloceanCluster();
+    component.projectID = fakeProject().id;
+    fixture.detectChanges();
+  }));
 
-  it(
-    'should create the rbac add binding cmp',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should create the rbac add binding cmp', waitForAsync(() => {
+    expect(component).toBeTruthy();
+  }));
 
   it('cluster form should be validated correctly', fakeAsync(() => {
     component.bindingType = 'cluster';
