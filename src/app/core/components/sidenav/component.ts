@@ -112,10 +112,6 @@ export class SidenavComponent implements OnInit, OnDestroy {
     return `/projects/${this._selectedProject.id}/${view}`;
   }
 
-  getClusterIndex() {
-    this._clusterService.changeIndexClusterList(0);
-  }
-
   getTooltip(view: View): string {
     let tooltip = this.isSidenavCollapsed() ? getViewDisplayName(view) : '';
     if (!MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, view, Permission.View)) {
