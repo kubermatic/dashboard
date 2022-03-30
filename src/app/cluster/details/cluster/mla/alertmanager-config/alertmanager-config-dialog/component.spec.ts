@@ -35,15 +35,13 @@ describe('AlertmanagerConfigDialog', () => {
   let component: AlertmanagerConfigDialog;
   let putAlertmanagerConfigSpy: jest.Mock;
 
-  beforeEach(
-    waitForAsync(() => {
-      const mlaMock = {
-        putAlertmanagerConfig: jest.fn(),
-        refreshAlertmanagerConfig: () => {},
-      };
-      putAlertmanagerConfigSpy = mlaMock.putAlertmanagerConfig.mockReturnValue(asyncData(fakeAlertmanagerConfig()));
+  beforeEach(waitForAsync(() => {
+    const mlaMock = {
+      putAlertmanagerConfig: jest.fn(),
+      refreshAlertmanagerConfig: () => {},
+    };
+    putAlertmanagerConfigSpy = mlaMock.putAlertmanagerConfig.mockReturnValue(asyncData(fakeAlertmanagerConfig()));
 
-<<<<<<< HEAD
     TestBed.configureTestingModule({
       imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule],
       declarations: [AlertmanagerConfigDialog],
@@ -57,30 +55,14 @@ describe('AlertmanagerConfigDialog', () => {
             projectId: '',
             cluster: {},
             confirmLabel: '',
-=======
-      TestBed.configureTestingModule({
-        imports: [...modules],
-        declarations: [AlertmanagerConfigDialog],
-        providers: [
-          {provide: MatDialogRef, useClass: MatDialogRefMock},
-          {provide: MLAService, useValue: mlaMock},
-          {
-            provide: MAT_DIALOG_DATA,
-            useValue: {
-              title: '',
-              projectId: '',
-              cluster: {},
-              confirmLabel: '',
-            },
->>>>>>> fix
           },
-          NotificationService,
-          {provide: NGX_MONACO_EDITOR_CONFIG, useValue: {onMonacoLoad: () => (monaco = (window as any).monaco)}},
-        ],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
+        },
+        NotificationService,
+        {provide: NGX_MONACO_EDITOR_CONFIG, useValue: {onMonacoLoad: () => (monaco = (window as any).monaco)}},
+      ],
+      teardown: {destroyAfterEach: false},
+    }).compileComponents();
+  }));
 
   describe('Edit Alertmanager Config Dialog', () => {
     beforeEach(() => {
@@ -97,12 +79,9 @@ describe('AlertmanagerConfigDialog', () => {
       fixture.detectChanges();
     });
 
-    it(
-      'should create the edit alertmanager config dialog',
-      waitForAsync(() => {
-        expect(component).toBeTruthy();
-      })
-    );
+    it('should create the edit alertmanager config dialog', waitForAsync(() => {
+      expect(component).toBeTruthy();
+    }));
 
     it('should have correct title: edit', () => {
       expect(document.body.querySelector('km-dialog-title').textContent).toContain('Edit Alertmanager Config');
