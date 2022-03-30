@@ -33,9 +33,10 @@ describe('CreateServiceAccountDialogComponent', () => {
   let component: CreateServiceAccountDialogComponent;
   let createServiceAccountSpy: jest.Mock;
 
-  beforeEach(waitForAsync(() => {
-    const saMock = {create: jest.fn()};
-    createServiceAccountSpy = saMock.create.mockReturnValue(asyncData(fakeServiceAccount()));
+  beforeEach(
+    waitForAsync(() => {
+      const saMock = {create: jest.fn()};
+      createServiceAccountSpy = saMock.create.mockReturnValue(asyncData(fakeServiceAccount()));
 
     TestBed.configureTestingModule({
       imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],
@@ -54,9 +55,12 @@ describe('CreateServiceAccountDialogComponent', () => {
     fixture.detectChanges();
   }));
 
-  it('should create the component', waitForAsync(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should create the component',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 
   it('form invalid after creating', () => {
     expect(component.form.valid).toBeFalsy();
