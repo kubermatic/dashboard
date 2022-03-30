@@ -33,27 +33,25 @@ describe('ShareKubeconfigComponent', () => {
   let component: ShareKubeconfigComponent;
   let fixture: ComponentFixture<ShareKubeconfigComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      const authMock = {authenticated: jest.fn()};
-      TestBed.configureTestingModule({
-        imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
-        declarations: [ShareKubeconfigComponent],
-        providers: [
-          {provide: Auth, useValue: authMock},
-          {provide: UserService, useClass: UserMockService},
-          {
-            provide: MAT_DIALOG_DATA,
-            useValue: {cluster: fakeDigitaloceanCluster()},
-          },
-          {provide: MatDialogRef, useValue: {}},
-          {provide: AppConfigService, useClass: AppConfigMockService},
-          ClusterService,
-        ],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    const authMock = {authenticated: jest.fn()};
+    TestBed.configureTestingModule({
+      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
+      declarations: [ShareKubeconfigComponent],
+      providers: [
+        {provide: Auth, useValue: authMock},
+        {provide: UserService, useClass: UserMockService},
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: {cluster: fakeDigitaloceanCluster()},
+        },
+        {provide: MatDialogRef, useValue: {}},
+        {provide: AppConfigService, useClass: AppConfigMockService},
+        ClusterService,
+      ],
+      teardown: {destroyAfterEach: false},
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ShareKubeconfigComponent);

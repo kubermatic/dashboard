@@ -45,10 +45,7 @@ describe('RelativeTimeComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it(
-    'should initialize',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should initialize', waitForAsync(() => {
+    expect(component).toBeTruthy();
+  }));
 });

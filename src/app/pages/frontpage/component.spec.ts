@@ -49,12 +49,9 @@ describe('FrontpageComponent', () => {
     router = fixture.debugElement.injector.get(Router);
   });
 
-  it(
-    'should create the cmp',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should create the cmp', waitForAsync(() => {
+    expect(component).toBeTruthy();
+  }));
 
   it('should navigate to clusters list if authenticated', () => {
     const spyNavigate = jest.spyOn(router, 'navigate');

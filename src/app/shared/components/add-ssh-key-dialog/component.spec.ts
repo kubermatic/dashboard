@@ -73,12 +73,9 @@ describe('AddSshKeyDialogComponent', () => {
     dialogRef = fixture.debugElement.injector.get(MatDialogRef) as MatDialogRef<AddSshKeyDialogComponent>;
   });
 
-  it(
-    'should create the add node modal cmp',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should create the add node modal cmp', waitForAsync(() => {
+    expect(component).toBeTruthy();
+  }));
 
   it('form invalid when empty', () => {
     expect(component.addSSHKeyForm.valid).toBeFalsy();
