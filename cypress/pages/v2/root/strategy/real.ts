@@ -1,4 +1,4 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,21 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export enum Condition {
-  BeEnabled = 'be.enabled',
-  BeDisabled = 'be.disabled',
-  BeChecked = 'be.checked',
-  BeVisible = 'be.visible',
-  Contain = 'contain',
-  Exist = 'exist',
-  HaveClass = 'have.class',
-  HaveLength = 'have.length',
-  HaveValue = 'have.value',
-  Include = 'include',
-  NotBe = 'not.be',
-  NotBeChecked = 'not.be.checked',
-  NotBeVisible = 'not.be.visible',
-  NotContain = 'not.contain',
-  NotExist = 'not.exist',
-  NotHaveClass = 'not.have.class',
+import {Pages} from '../../pages';
+import {RootPage} from '../page';
+import {LoginStrategy} from './types';
+
+export class RealLoginStrategy implements LoginStrategy {
+  constructor(private readonly _context: RootPage) {}
+
+  login(email: string, password: string): void {
+    this._context.visit();
+    this._context.Buttons.login.click();
+    Pages.Dex.login(email, password);
+  }
+
+  logout(): void {
+    this._context.UserPanel.open.click();
+    this._context.UserPanel.logout.click();
+  }
 }

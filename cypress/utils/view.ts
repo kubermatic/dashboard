@@ -55,7 +55,12 @@ enum Wizard {
   Default = 'wizard',
 }
 
+enum Root {
+  Default = '/',
+}
+
 export class View {
+  static readonly Root = Root;
   static readonly Clusters = Clusters;
   static readonly ClusterTemplates = ClusterTemplates;
   static readonly Projects = Projects;

@@ -24,6 +24,6 @@
       "append": "-->"
     }
   },
-  "regexIdentifier": "##",
+  "regexIdentifier": "#!#",
   "trailingWhitespace": "TRIM"
 }

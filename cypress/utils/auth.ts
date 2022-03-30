@@ -79,7 +79,7 @@ function mockAuthCookies(): void {
   const header = {alg: 'RS256', typ: 'JWT'};
   const payload = {
     iss: 'http://dex.oauth:5556/dex/auth',
-    sub: btoa(Math.random().toString(radix).slice(slice)),
+    sub: window.btoa(Math.random().toString(radix).slice(slice)),
     aud: 'kubermatic',
     exp: Date.now() + day,
     iat: Date.now(),
@@ -90,7 +90,11 @@ function mockAuthCookies(): void {
   };
   const signature = Math.random().toString(radix).slice(slice);
   const token =
-    btoa(JSON.stringify(header)) + '.' + btoa(JSON.stringify(payload)) + '.' + btoa(JSON.stringify(signature));
+    window.btoa(JSON.stringify(header)) +
+    '.' +
+    window.btoa(JSON.stringify(payload)) +
+    '.' +
+    window.btoa(JSON.stringify(signature));
 
   cy.setCookie('token', token);
   cy.setCookie('nonce', nonce);
