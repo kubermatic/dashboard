@@ -35,12 +35,13 @@ describe('AlertmanagerConfigDialog', () => {
   let component: AlertmanagerConfigDialog;
   let putAlertmanagerConfigSpy: jest.Mock;
 
-  beforeEach(waitForAsync(() => {
-    const mlaMock = {
-      putAlertmanagerConfig: jest.fn(),
-      refreshAlertmanagerConfig: () => {},
-    };
-    putAlertmanagerConfigSpy = mlaMock.putAlertmanagerConfig.mockReturnValue(asyncData(fakeAlertmanagerConfig()));
+  beforeEach(
+    waitForAsync(() => {
+      const mlaMock = {
+        putAlertmanagerConfig: jest.fn(),
+        refreshAlertmanagerConfig: () => {},
+      };
+      putAlertmanagerConfigSpy = mlaMock.putAlertmanagerConfig.mockReturnValue(asyncData(fakeAlertmanagerConfig()));
 
     TestBed.configureTestingModule({
       imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule],
@@ -56,13 +57,13 @@ describe('AlertmanagerConfigDialog', () => {
             cluster: {},
             confirmLabel: '',
           },
-        },
-        NotificationService,
-        {provide: NGX_MONACO_EDITOR_CONFIG, useValue: {onMonacoLoad: () => (monaco = (window as any).monaco)}},
-      ],
-      teardown: {destroyAfterEach: false},
-    }).compileComponents();
-  }));
+          NotificationService,
+          {provide: NGX_MONACO_EDITOR_CONFIG, useValue: {onMonacoLoad: () => (monaco = (window as any).monaco)}},
+        ],
+        teardown: {destroyAfterEach: false},
+      }).compileComponents();
+    })
+  );
 
   describe('Edit Alertmanager Config Dialog', () => {
     beforeEach(() => {
@@ -79,9 +80,12 @@ describe('AlertmanagerConfigDialog', () => {
       fixture.detectChanges();
     });
 
-    it('should create the edit alertmanager config dialog', waitForAsync(() => {
-      expect(component).toBeTruthy();
-    }));
+    it(
+      'should create the edit alertmanager config dialog',
+      waitForAsync(() => {
+        expect(component).toBeTruthy();
+      })
+    );
 
     it('should have correct title: edit', () => {
       expect(document.body.querySelector('km-dialog-title').textContent).toContain('Edit Alertmanager Config');

@@ -56,13 +56,13 @@ describe('ConstraintTemplateDialog', () => {
             mode: '',
             confirmLabel: '',
           },
-        },
-        NotificationService,
-        {provide: NGX_MONACO_EDITOR_CONFIG, useValue: {onMonacoLoad: () => (monaco = (window as any).monaco)}},
-      ],
-      teardown: {destroyAfterEach: false},
-    }).compileComponents();
-  }));
+          NotificationService,
+          {provide: NGX_MONACO_EDITOR_CONFIG, useValue: {onMonacoLoad: () => (monaco = (window as any).monaco)}},
+        ],
+        teardown: {destroyAfterEach: false},
+      }).compileComponents();
+    })
+  );
 
   describe('Add Constraint Template Dialog', () => {
     beforeEach(() => {
@@ -78,9 +78,12 @@ describe('ConstraintTemplateDialog', () => {
       fixture.detectChanges();
     });
 
-    it('should create the add constraint template dialog', waitForAsync(() => {
-      expect(component).toBeTruthy();
-    }));
+    it(
+      'should create the add constraint template dialog',
+      waitForAsync(() => {
+        expect(component).toBeTruthy();
+      })
+    );
 
     it('should have correct title: add', () => {
       expect(document.body.querySelector('km-dialog-title').textContent).toBe('Add Constraint Template');
@@ -112,9 +115,12 @@ describe('ConstraintTemplateDialog', () => {
       fixture.detectChanges();
     });
 
-    it('should create the edit constraint template dialog', waitForAsync(() => {
-      expect(component).toBeTruthy();
-    }));
+    it(
+      'should create the edit constraint template dialog',
+      waitForAsync(() => {
+        expect(component).toBeTruthy();
+      })
+    );
 
     it('should have correct title: edit', () => {
       expect(document.body.querySelector('km-dialog-title').textContent).toContain('Edit Constraint Template');

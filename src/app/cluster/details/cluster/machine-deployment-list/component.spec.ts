@@ -66,7 +66,10 @@ describe('MachineDeploymentListComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it('should create the cluster details cmp', waitForAsync(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should create the cluster details cmp',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 });
