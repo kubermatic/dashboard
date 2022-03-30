@@ -36,13 +36,14 @@ describe('RBACComponent', () => {
   let fixture: ComponentFixture<RBACComponent>;
   let component: RBACComponent;
 
-  beforeEach(waitForAsync(() => {
-    const rbacMock = {
-      deleteClusterBinding: jest.fn(),
-      deleteBinding: jest.fn(),
-    };
-    rbacMock.deleteClusterBinding.mockReturnValue(of(null));
-    rbacMock.deleteBinding.mockReturnValue(of(null));
+  beforeEach(
+    waitForAsync(() => {
+      const rbacMock = {
+        deleteClusterBinding: jest.fn(),
+        deleteBinding: jest.fn(),
+      };
+      rbacMock.deleteClusterBinding.mockReturnValue(of(null));
+      rbacMock.deleteBinding.mockReturnValue(of(null));
 
     TestBed.configureTestingModule({
       imports: [BrowserModule, NoopAnimationsModule, SharedModule],
@@ -68,9 +69,12 @@ describe('RBACComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create the rbac cmp', waitForAsync(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should create the rbac cmp',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 
   it('should create simple cluster binding for rbac', () => {
     const simpleClusterBindings = component.createSimpleClusterBinding(fakeClusterBindings());

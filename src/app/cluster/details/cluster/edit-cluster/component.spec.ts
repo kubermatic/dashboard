@@ -59,16 +59,17 @@ describe('EditClusterComponent', () => {
   let component: EditClusterComponent;
   let editClusterSpy: jest.Mock;
 
-  beforeEach(waitForAsync(() => {
-    const clusterServiceMock = {
-      patch: jest.fn(),
-      changeProviderSettingsPatch: jest.fn(),
-      providerSettingsPatchChanges$: new EventEmitter<ProviderSettingsPatch>(),
-      onClusterUpdate: new Subject<void>(),
-      getAdmissionPlugins: jest.fn(),
-    };
-    editClusterSpy = clusterServiceMock.patch.mockReturnValue(asyncData(fakeDigitaloceanCluster()));
-    clusterServiceMock.getAdmissionPlugins.mockReturnValue(asyncData([]));
+  beforeEach(
+    waitForAsync(() => {
+      const clusterServiceMock = {
+        patch: jest.fn(),
+        changeProviderSettingsPatch: jest.fn(),
+        providerSettingsPatchChanges$: new EventEmitter<ProviderSettingsPatch>(),
+        onClusterUpdate: new Subject<void>(),
+        getAdmissionPlugins: jest.fn(),
+      };
+      editClusterSpy = clusterServiceMock.patch.mockReturnValue(asyncData(fakeDigitaloceanCluster()));
+      clusterServiceMock.getAdmissionPlugins.mockReturnValue(asyncData([]));
 
     TestBed.configureTestingModule({
       imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],

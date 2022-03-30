@@ -52,9 +52,12 @@ describe('AddProjectComponent', () => {
     fixture.detectChanges();
   }));
 
-  it('should create the component', waitForAsync(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should create the component',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 
   it('form invalid after creating', () => {
     expect(component.form.valid).toBeFalsy();
