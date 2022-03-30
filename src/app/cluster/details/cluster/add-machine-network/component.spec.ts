@@ -33,6 +33,7 @@ describe('AddMachineNetworkComponent', () => {
   let component: AddMachineNetworkComponent;
   let fixture: ComponentFixture<AddMachineNetworkComponent>;
 
+<<<<<<< HEAD
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
@@ -46,6 +47,23 @@ describe('AddMachineNetworkComponent', () => {
       teardown: {destroyAfterEach: false},
     }).compileComponents();
   }));
+=======
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [...modules],
+        declarations: [AddMachineNetworkComponent, MachineNetworksComponent],
+        providers: [
+          WizardService,
+          {provide: ClusterService, useClass: ClusterMockService},
+          {provide: MatDialogRef, useClass: MatDialogRefMock},
+          NotificationService,
+        ],
+        teardown: {destroyAfterEach: false},
+      }).compileComponents();
+    })
+  );
+>>>>>>> fix
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AddMachineNetworkComponent);

@@ -67,9 +67,12 @@ describe('ClusterDeleteConfirmationComponent', () => {
     fixture.debugElement.injector.get(Router);
   });
 
-  it('should initialize', waitForAsync(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should initialize',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 
   it('should able add button', () => {
     component.projectID = fakeProject().id;

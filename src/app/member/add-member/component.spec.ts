@@ -31,6 +31,7 @@ describe('AddProjectComponent', () => {
   let fixture: ComponentFixture<AddMemberComponent>;
   let component: AddMemberComponent;
 
+<<<<<<< HEAD
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
@@ -44,17 +45,47 @@ describe('AddProjectComponent', () => {
       teardown: {destroyAfterEach: false},
     }).compileComponents();
   }));
+=======
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [...modules],
+        declarations: [AddMemberComponent],
+        providers: [
+          {provide: MatDialogRef, useClass: MatDialogRefMock},
+          {provide: ProjectService, useClass: ProjectMockService},
+          {provide: MemberService, useClass: MemberServiceMock},
+          NotificationService,
+        ],
+        teardown: {destroyAfterEach: false},
+      }).compileComponents();
+    })
+  );
+>>>>>>> fix
 
+<<<<<<< HEAD
   beforeEach(waitForAsync(() => {
     fixture = TestBed.createComponent(AddMemberComponent);
     component = fixture.componentInstance;
     component.project = fakeProject();
     fixture.detectChanges();
   }));
+=======
+  beforeEach(
+    waitForAsync(() => {
+      fixture = TestBed.createComponent(AddMemberComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    })
+  );
+>>>>>>> fix
 
-  it('should create the component', waitForAsync(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should create the component',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 
   it('form invalid after creating', () => {
     expect(component.form.valid).toBeFalsy();

@@ -27,6 +27,7 @@ describe('MLAComponent', () => {
   let fixture: ComponentFixture<MLAComponent>;
   let component: MLAComponent;
 
+<<<<<<< HEAD
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, DialogTestModule],
@@ -35,17 +36,31 @@ describe('MLAComponent', () => {
       teardown: {destroyAfterEach: false},
     }).compileComponents();
   }));
+=======
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [...modules],
+        declarations: [MLAComponent],
+        providers: [],
+        teardown: {destroyAfterEach: false},
+      }).compileComponents();
+    })
+  );
+>>>>>>> fix
 
-  beforeEach(waitForAsync(() => {
-    fixture = TestBed.createComponent(MLAComponent);
-    component = fixture.componentInstance;
-    component.cluster = fakeDigitaloceanCluster();
-    component.projectID = fakeProject().id;
-    component.alertmanagerConfig = fakeAlertmanagerConfig();
-    component.ruleGroups = fakeRuleGroups();
-    component.isClusterRunning = true;
-    fixture.detectChanges();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      fixture = TestBed.createComponent(MLAComponent);
+      component = fixture.componentInstance;
+      component.cluster = fakeDigitaloceanCluster();
+      component.projectID = fakeProject().id;
+      component.alertmanagerConfig = fakeAlertmanagerConfig();
+      component.ruleGroups = fakeRuleGroups();
+      component.isClusterRunning = true;
+      fixture.detectChanges();
+    })
+  );
 
   it('should create the mla component', fakeAsync(() => {
     expect(component).toBeTruthy();

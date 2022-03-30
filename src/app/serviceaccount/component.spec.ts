@@ -43,32 +43,34 @@ describe('ServiceAccountComponent', () => {
   let component: ServiceAccountComponent;
   let deleteServiceAccountSpy;
 
-  beforeEach(waitForAsync(() => {
-    const saMock = {
-      get: jest.fn(),
-      getTokens: jest.fn(),
-      delete: jest.fn(),
-    };
-    saMock.get.mockReturnValue(asyncData(fakeServiceAccounts()));
-    saMock.getTokens.mockReturnValue(asyncData(fakeServiceAccountTokens()));
-    deleteServiceAccountSpy = saMock.delete.mockReturnValue(of(null));
+  beforeEach(
+    waitForAsync(() => {
+      const saMock = {
+        get: jest.fn(),
+        getTokens: jest.fn(),
+        delete: jest.fn(),
+      };
+      saMock.get.mockReturnValue(asyncData(fakeServiceAccounts()));
+      saMock.getTokens.mockReturnValue(asyncData(fakeServiceAccountTokens()));
+      deleteServiceAccountSpy = saMock.delete.mockReturnValue(of(null));
 
-    TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, ServiceAccountModule, DialogTestModule],
-      providers: [
-        {provide: Router, useClass: RouterStub},
-        {provide: ServiceAccountService, useValue: saMock},
-        {provide: ProjectService, useClass: ProjectMockService},
-        {provide: UserService, useClass: UserMockService},
-        {provide: AppConfigService, useClass: AppConfigMockService},
-        {provide: SettingsService, useClass: SettingsMockService},
-        MatDialog,
-        GoogleAnalyticsService,
-        NotificationService,
-      ],
-      teardown: {destroyAfterEach: false},
-    }).compileComponents();
-  }));
+      TestBed.configureTestingModule({
+        imports: [BrowserModule, BrowserAnimationsModule, SharedModule, ServiceAccountModule, DialogTestModule],
+        providers: [
+          {provide: Router, useClass: RouterStub},
+          {provide: ServiceAccountService, useValue: saMock},
+          {provide: ProjectService, useClass: ProjectMockService},
+          {provide: UserService, useClass: UserMockService},
+          {provide: AppConfigService, useClass: AppConfigMockService},
+          {provide: SettingsService, useClass: SettingsMockService},
+          MatDialog,
+          GoogleAnalyticsService,
+          NotificationService,
+        ],
+        teardown: {destroyAfterEach: false},
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ServiceAccountComponent);

@@ -65,61 +65,63 @@ describe('ClusterDetailsComponent', () => {
   let component: ClusterDetailsComponent;
   let activatedRoute: ActivatedRouteStub;
 
-  beforeEach(waitForAsync(() => {
-    const rbacMock = {
-      getClusterBindings: jest.fn(),
-      getBindings: jest.fn(),
-      deleteClusterBinding: jest.fn(),
-      deleteBinding: jest.fn(),
-    };
-    rbacMock.deleteClusterBinding.mockReturnValue(of(null));
-    rbacMock.deleteBinding.mockReturnValue(of(null));
+  beforeEach(
+    waitForAsync(() => {
+      const rbacMock = {
+        getClusterBindings: jest.fn(),
+        getBindings: jest.fn(),
+        deleteClusterBinding: jest.fn(),
+        deleteBinding: jest.fn(),
+      };
+      rbacMock.deleteClusterBinding.mockReturnValue(of(null));
+      rbacMock.deleteBinding.mockReturnValue(of(null));
 
-    const opaMock = {constraints: jest.fn(), gatekeeperConfig: jest.fn()};
-    opaMock.constraints.mockReturnValue(of([]));
-    opaMock.gatekeeperConfig.mockReturnValue(of(null));
+      const opaMock = {constraints: jest.fn(), gatekeeperConfig: jest.fn()};
+      opaMock.constraints.mockReturnValue(of([]));
+      opaMock.gatekeeperConfig.mockReturnValue(of(null));
 
-    const mlaMock = {alertmanagerConfig: jest.fn(), ruleGroups: jest.fn()};
-    mlaMock.alertmanagerConfig.mockReturnValue(of(null));
-    mlaMock.ruleGroups.mockReturnValue(of(null));
+      const mlaMock = {alertmanagerConfig: jest.fn(), ruleGroups: jest.fn()};
+      mlaMock.alertmanagerConfig.mockReturnValue(of(null));
+      mlaMock.ruleGroups.mockReturnValue(of(null));
 
-    TestBed.configureTestingModule({
-      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
-      declarations: [
-        ClusterDetailsComponent,
-        NodeListComponent,
-        MachineDeploymentListComponent,
-        MachineNetworksDisplayComponent,
-        VersionPickerComponent,
-        RBACComponent,
-        CNIVersionComponent,
-        MLAComponent,
-      ],
-      providers: [
-        {provide: ClusterService, useClass: ClusterMockService},
-        {provide: DatacenterService, useClass: DatacenterMockService},
-        {provide: Auth, useClass: AuthMockService},
-        {provide: Router, useClass: RouterStub},
-        {provide: ActivatedRoute, useClass: ActivatedRouteStub},
-        {provide: UserService, useClass: UserMockService},
-        {provide: AppConfigService, useClass: AppConfigMockService},
-        {provide: NodeService, useClass: NodeMockService},
-        {provide: ProjectService, useClass: ProjectMockService},
-        {provide: SettingsService, useClass: SettingsMockService},
-        {provide: RBACService, useValue: rbacMock},
-        {provide: OPAService, useValue: opaMock},
-        {provide: MLAService, useValue: mlaMock},
-        {provide: MatDialogRef, useClass: MatDialogRefMock},
-        {provide: MatDialog, useClass: MatDialogMock},
-        {provide: MachineDeploymentService, useClass: MachineDeploymentServiceMock},
-        {provide: AddonService, useClass: AddonServiceMock},
-        EndOfLifeService,
-        GoogleAnalyticsService,
-        NotificationService,
-      ],
-      teardown: {destroyAfterEach: false},
-    }).compileComponents();
-  }));
+      TestBed.configureTestingModule({
+        imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
+        declarations: [
+          ClusterDetailsComponent,
+          NodeListComponent,
+          MachineDeploymentListComponent,
+          MachineNetworksDisplayComponent,
+          VersionPickerComponent,
+          RBACComponent,
+          CNIVersionComponent,
+          MLAComponent,
+        ],
+        providers: [
+          {provide: ClusterService, useClass: ClusterMockService},
+          {provide: DatacenterService, useClass: DatacenterMockService},
+          {provide: Auth, useClass: AuthMockService},
+          {provide: Router, useClass: RouterStub},
+          {provide: ActivatedRoute, useClass: ActivatedRouteStub},
+          {provide: UserService, useClass: UserMockService},
+          {provide: AppConfigService, useClass: AppConfigMockService},
+          {provide: NodeService, useClass: NodeMockService},
+          {provide: ProjectService, useClass: ProjectMockService},
+          {provide: SettingsService, useClass: SettingsMockService},
+          {provide: RBACService, useValue: rbacMock},
+          {provide: OPAService, useValue: opaMock},
+          {provide: MLAService, useValue: mlaMock},
+          {provide: MatDialogRef, useClass: MatDialogRefMock},
+          {provide: MatDialog, useClass: MatDialogMock},
+          {provide: MachineDeploymentService, useClass: MachineDeploymentServiceMock},
+          {provide: AddonService, useClass: AddonServiceMock},
+          EndOfLifeService,
+          GoogleAnalyticsService,
+          NotificationService,
+        ],
+        teardown: {destroyAfterEach: false},
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ClusterDetailsComponent);
