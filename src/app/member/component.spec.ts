@@ -41,33 +41,31 @@ describe('MemberComponent', () => {
   let noop: ComponentFixture<NoopConfirmDialogComponent>;
   let component: MemberComponent;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [
-          BrowserModule,
-          BrowserAnimationsModule,
-          RouterTestingModule,
-          SharedModule,
-          MatTabsModule,
-          DialogTestModule,
-        ],
-        declarations: [MemberComponent],
-        providers: [
-          {provide: Router, useClass: RouterStub},
-          {provide: ProjectService, useClass: ProjectMockService},
-          {provide: UserService, useClass: UserMockService},
-          {provide: AppConfigService, useClass: AppConfigMockService},
-          {provide: SettingsService, useClass: SettingsMockService},
-          {provide: MemberService, useClass: MemberServiceMock},
-          MatDialog,
-          GoogleAnalyticsService,
-          NotificationService,
-        ],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        RouterTestingModule,
+        SharedModule,
+        MatTabsModule,
+        DialogTestModule,
+      ],
+      declarations: [MemberComponent],
+      providers: [
+        {provide: Router, useClass: RouterStub},
+        {provide: ProjectService, useClass: ProjectMockService},
+        {provide: UserService, useClass: UserMockService},
+        {provide: AppConfigService, useClass: AppConfigMockService},
+        {provide: SettingsService, useClass: SettingsMockService},
+        {provide: MemberService, useClass: MemberServiceMock},
+        MatDialog,
+        GoogleAnalyticsService,
+        NotificationService,
+      ],
+      teardown: {destroyAfterEach: false},
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MemberComponent);

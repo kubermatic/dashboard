@@ -32,39 +32,32 @@ describe('EditProjectComponent', () => {
   let component: EditProjectComponent;
   let editProjectSpy;
 
-  beforeEach(
-    waitForAsync(() => {
-      const projectServiceMock = {edit: jest.fn()};
-      editProjectSpy = projectServiceMock.edit.mockReturnValue(asyncData(fakeProject()));
+  beforeEach(waitForAsync(() => {
+    const projectServiceMock = {edit: jest.fn()};
+    editProjectSpy = projectServiceMock.edit.mockReturnValue(asyncData(fakeProject()));
 
-      TestBed.configureTestingModule({
-        imports: [...modules],
-        providers: [
-          {provide: MatDialogRef, useClass: MatDialogRefMock},
-          {provide: ProjectService, useValue: projectServiceMock},
-        ],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
+    TestBed.configureTestingModule({
+      imports: [...modules],
+      providers: [
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+        {provide: ProjectService, useValue: projectServiceMock},
+      ],
+      teardown: {destroyAfterEach: false},
+    }).compileComponents();
+  }));
 
-  beforeEach(
-    waitForAsync(() => {
-      fixture = TestBed.createComponent(EditProjectComponent);
-      component = fixture.componentInstance;
-      component.project = fakeProject();
-      component.labels = {};
-      component.asyncLabelValidators = [];
-      fixture.detectChanges();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    fixture = TestBed.createComponent(EditProjectComponent);
+    component = fixture.componentInstance;
+    component.project = fakeProject();
+    component.labels = {};
+    component.asyncLabelValidators = [];
+    fixture.detectChanges();
+  }));
 
-  it(
-    'should initialize',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should initialize', waitForAsync(() => {
+    expect(component).toBeTruthy();
+  }));
 
   it('should have valid form after creating', () => {
     expect(component.form.valid).toBeTruthy();
