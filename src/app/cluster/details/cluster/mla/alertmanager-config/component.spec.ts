@@ -47,41 +47,45 @@ describe('AlertmanagerConfigComponent', () => {
   let component: AlertmanagerConfigComponent;
   let resetAlertmanagerConfigSpy;
 
-  beforeEach(waitForAsync(() => {
-    const mlaMock = {
-      resetAlertmanagerConfig: jest.fn(),
-      refreshAlertmanagerConfig: () => {},
-    };
-    resetAlertmanagerConfigSpy = mlaMock.resetAlertmanagerConfig.mockReturnValue(of(null));
+  beforeEach(
+    waitForAsync(() => {
+      const mlaMock = {
+        resetAlertmanagerConfig: jest.fn(),
+        refreshAlertmanagerConfig: () => {},
+      };
+      resetAlertmanagerConfigSpy = mlaMock.resetAlertmanagerConfig.mockReturnValue(of(null));
 
-    TestBed.configureTestingModule({
-      imports: [...modules],
-      declarations: [AlertmanagerConfigComponent],
-      providers: [
-        {provide: MLAService, useValue: mlaMock},
-        {provide: SettingsService, useClass: SettingsMockService},
-        {provide: DatacenterService, useClass: DatacenterMockService},
-        {provide: AppConfigService, useClass: AppConfigMockService},
-        {provide: Router, useClass: RouterStub},
-        {provide: UserService, useClass: UserMockService},
-        {provide: AddonService, useClass: AddonServiceMock},
-        MatDialog,
-        NotificationService,
-      ],
-      teardown: {destroyAfterEach: false},
-    }).compileComponents();
-  }));
+      TestBed.configureTestingModule({
+        imports: [...modules],
+        declarations: [AlertmanagerConfigComponent],
+        providers: [
+          {provide: MLAService, useValue: mlaMock},
+          {provide: SettingsService, useClass: SettingsMockService},
+          {provide: DatacenterService, useClass: DatacenterMockService},
+          {provide: AppConfigService, useClass: AppConfigMockService},
+          {provide: Router, useClass: RouterStub},
+          {provide: UserService, useClass: UserMockService},
+          {provide: AddonService, useClass: AddonServiceMock},
+          MatDialog,
+          NotificationService,
+        ],
+        teardown: {destroyAfterEach: false},
+      }).compileComponents();
+    })
+  );
 
-  beforeEach(waitForAsync(() => {
-    fixture = TestBed.createComponent(AlertmanagerConfigComponent);
-    component = fixture.componentInstance;
-    noop = TestBed.createComponent(NoopConfirmDialogComponent);
-    component.cluster = fakeDigitaloceanCluster();
-    component.projectID = fakeProject().id;
-    component.alertmanagerConfig = fakeAlertmanagerConfig();
-    component.isClusterRunning = true;
-    fixture.detectChanges();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      fixture = TestBed.createComponent(AlertmanagerConfigComponent);
+      component = fixture.componentInstance;
+      noop = TestBed.createComponent(NoopConfirmDialogComponent);
+      component.cluster = fakeDigitaloceanCluster();
+      component.projectID = fakeProject().id;
+      component.alertmanagerConfig = fakeAlertmanagerConfig();
+      component.isClusterRunning = true;
+      fixture.detectChanges();
+    })
+  );
 
   it('should create the alertmanager config component', fakeAsync(() => {
     expect(component).toBeTruthy();
