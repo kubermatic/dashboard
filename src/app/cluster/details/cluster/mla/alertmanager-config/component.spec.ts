@@ -45,12 +45,13 @@ describe('AlertmanagerConfigComponent', () => {
   let component: AlertmanagerConfigComponent;
   let resetAlertmanagerConfigSpy: jest.Mock;
 
-  beforeEach(waitForAsync(() => {
-    const mlaMock = {
-      resetAlertmanagerConfig: jest.fn(),
-      refreshAlertmanagerConfig: () => {},
-    };
-    resetAlertmanagerConfigSpy = mlaMock.resetAlertmanagerConfig.mockReturnValue(of(null));
+  beforeEach(
+    waitForAsync(() => {
+      const mlaMock = {
+        resetAlertmanagerConfig: jest.fn(),
+        refreshAlertmanagerConfig: () => {},
+      };
+      resetAlertmanagerConfigSpy = mlaMock.resetAlertmanagerConfig.mockReturnValue(of(null));
 
     TestBed.configureTestingModule({
       imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, DialogTestModule],
@@ -70,16 +71,18 @@ describe('AlertmanagerConfigComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach(waitForAsync(() => {
-    fixture = TestBed.createComponent(AlertmanagerConfigComponent);
-    component = fixture.componentInstance;
-    noop = TestBed.createComponent(NoopConfirmDialogComponent);
-    component.cluster = fakeDigitaloceanCluster();
-    component.projectID = fakeProject().id;
-    component.alertmanagerConfig = fakeAlertmanagerConfig();
-    component.isClusterRunning = true;
-    fixture.detectChanges();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      fixture = TestBed.createComponent(AlertmanagerConfigComponent);
+      component = fixture.componentInstance;
+      noop = TestBed.createComponent(NoopConfirmDialogComponent);
+      component.cluster = fakeDigitaloceanCluster();
+      component.projectID = fakeProject().id;
+      component.alertmanagerConfig = fakeAlertmanagerConfig();
+      component.isClusterRunning = true;
+      fixture.detectChanges();
+    })
+  );
 
   it('should create the alertmanager config component', fakeAsync(() => {
     expect(component).toBeTruthy();

@@ -41,17 +41,22 @@ describe('AddProjectDialogComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach(waitForAsync(() => {
-    fixture = TestBed.createComponent(AddProjectDialogComponent);
-    component = fixture.componentInstance;
-    component.labels = {};
-    component.asyncLabelValidators = [];
-    fixture.detectChanges();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      fixture = TestBed.createComponent(AddProjectDialogComponent);
+      component = fixture.componentInstance;
+      component.labels = {};
+      component.asyncLabelValidators = [];
+      fixture.detectChanges();
+    })
+  );
 
-  it('should create the component', waitForAsync(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should create the component',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 
   it('should call createProject method', fakeAsync(() => {
     const spy = jest.spyOn(fixture.debugElement.injector.get(ProjectService) as any, 'create');

@@ -50,12 +50,17 @@ describe('EditSSHKeysComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach(waitForAsync(() => {
-    fixture = TestBed.createComponent(EditSSHKeysComponent);
-    component = fixture.componentInstance;
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      fixture = TestBed.createComponent(EditSSHKeysComponent);
+      component = fixture.componentInstance;
+    })
+  );
 
-  it('should create the edit sshkeys component', waitForAsync(() => {
-    expect(component).toBeTruthy();
-  }));
+  it(
+    'should create the edit sshkeys component',
+    waitForAsync(() => {
+      expect(component).toBeTruthy();
+    })
+  );
 });
