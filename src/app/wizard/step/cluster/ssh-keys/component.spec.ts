@@ -37,25 +37,27 @@ describe('ClusterSSHKeys', () => {
   let fixture: ComponentFixture<ClusterSSHKeysComponent>;
   let component: ClusterSSHKeysComponent;
 
-  beforeEach(waitForAsync(() => {
-    const sshKeyServiceMock = {list: jest.fn()};
-    sshKeyServiceMock.list.mockReturnValue(asyncData(fakeSSHKeys()));
+  beforeEach(
+    waitForAsync(() => {
+      const sshKeyServiceMock = {list: jest.fn()};
+      sshKeyServiceMock.list.mockReturnValue(asyncData(fakeSSHKeys()));
 
-    TestBed.configureTestingModule({
-      imports: [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule],
-      declarations: [ClusterSSHKeysComponent],
-      providers: [
-        ClusterSpecService,
-        {provide: ActivatedRoute, useClass: ActivatedRouteMock},
-        {provide: SSHKeyService, useValue: sshKeyServiceMock},
-        {provide: ProjectService, useClass: ProjectMockService},
-        {provide: UserService, useClass: UserMockService},
-        {provide: AppConfigService, useClass: AppConfigMockService},
-        {provide: Router, useClass: RouterStub},
-      ],
-      teardown: {destroyAfterEach: false},
-    }).compileComponents();
-  }));
+      TestBed.configureTestingModule({
+        imports: [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule],
+        declarations: [ClusterSSHKeysComponent],
+        providers: [
+          ClusterSpecService,
+          {provide: ActivatedRoute, useClass: ActivatedRouteMock},
+          {provide: SSHKeyService, useValue: sshKeyServiceMock},
+          {provide: ProjectService, useClass: ProjectMockService},
+          {provide: UserService, useClass: UserMockService},
+          {provide: AppConfigService, useClass: AppConfigMockService},
+          {provide: Router, useClass: RouterStub},
+        ],
+        teardown: {destroyAfterEach: false},
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ClusterSSHKeysComponent);

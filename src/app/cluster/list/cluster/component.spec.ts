@@ -45,36 +45,38 @@ describe('ClusterListComponent', () => {
   let getClustersSpy;
   let activatedRoute: ActivatedRouteStub;
 
-  beforeEach(waitForAsync(() => {
-    const clusterServiceMock = {
-      clusters: jest.fn(),
-      health: jest.fn(),
-      refreshClusters: () => {},
-      restores: jest.fn(),
-    };
-    getClustersSpy = clusterServiceMock.clusters.mockReturnValue(asyncData([fakeAWSCluster()]));
-    clusterServiceMock.health.mockReturnValue(asyncData([fakeHealth()]));
-    clusterServiceMock.restores.mockReturnValue(asyncData([]));
+  beforeEach(
+    waitForAsync(() => {
+      const clusterServiceMock = {
+        clusters: jest.fn(),
+        health: jest.fn(),
+        refreshClusters: () => {},
+        restores: jest.fn(),
+      };
+      getClustersSpy = clusterServiceMock.clusters.mockReturnValue(asyncData([fakeAWSCluster()]));
+      clusterServiceMock.health.mockReturnValue(asyncData([fakeHealth()]));
+      clusterServiceMock.restores.mockReturnValue(asyncData([]));
 
-    TestBed.configureTestingModule({
-      imports: [BrowserModule, HttpClientModule, NoopAnimationsModule, RouterTestingModule, SharedModule],
-      declarations: [ClusterListComponent],
-      providers: [
-        {provide: ClusterService, useValue: clusterServiceMock},
-        {provide: Auth, useClass: AuthMockService},
-        {provide: ActivatedRoute, useClass: ActivatedRouteStub},
-        {provide: UserService, useClass: UserMockService},
-        {provide: Router, useClass: RouterStub},
-        {provide: AppConfigService, useClass: AppConfigMockService},
-        {provide: DatacenterService, useClass: DatacenterMockService},
-        {provide: ProjectService, useClass: ProjectMockService},
-        {provide: SettingsService, useClass: SettingsMockService},
-        EndOfLifeService,
-        MachineDeploymentService,
-      ],
-      teardown: {destroyAfterEach: false},
-    }).compileComponents();
-  }));
+      TestBed.configureTestingModule({
+        imports: [BrowserModule, HttpClientModule, NoopAnimationsModule, RouterTestingModule, SharedModule],
+        declarations: [ClusterListComponent],
+        providers: [
+          {provide: ClusterService, useValue: clusterServiceMock},
+          {provide: Auth, useClass: AuthMockService},
+          {provide: ActivatedRoute, useClass: ActivatedRouteStub},
+          {provide: UserService, useClass: UserMockService},
+          {provide: Router, useClass: RouterStub},
+          {provide: AppConfigService, useClass: AppConfigMockService},
+          {provide: DatacenterService, useClass: DatacenterMockService},
+          {provide: ProjectService, useClass: ProjectMockService},
+          {provide: SettingsService, useClass: SettingsMockService},
+          EndOfLifeService,
+          MachineDeploymentService,
+        ],
+        teardown: {destroyAfterEach: false},
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ClusterListComponent);
