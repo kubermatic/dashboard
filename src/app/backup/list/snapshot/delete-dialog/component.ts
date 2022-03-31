@@ -18,6 +18,7 @@ import {BackupService} from '@core/services/backup';
 import {NotificationService} from '@core/services/notification';
 import {EtcdBackupConfig} from '@shared/entity/backup';
 import {take} from 'rxjs/operators';
+import {Observable} from "rxjs";
 
 export interface DeleteSnapshotDialogConfig {
   snapshot: EtcdBackupConfig;
@@ -37,13 +38,14 @@ export class DeleteSnapshotDialogComponent {
     private readonly _notificationService: NotificationService
   ) {}
 
-  delete(): void {
-    this._backupService
+  get observable(): Observable<any> {
+    return this._backupService
       .delete(this.config.projectID, this.config.snapshot.spec.clusterId, this.config.snapshot.id)
-      .pipe(take(1))
-      .subscribe(_ => {
-        this._notificationService.success(`Deleting the ${this.config.snapshot.name} snapshot`);
-        this._dialogRef.close(true);
-      });
+      .pipe(take(1));
+  }
+
+  onNext(): void {
+    this._notificationService.success(`Deleting the ${this.config.snapshot.name} snapshot`);
+    this._dialogRef.close(true);
   }
 }
