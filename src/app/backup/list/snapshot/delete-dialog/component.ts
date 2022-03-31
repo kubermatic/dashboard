@@ -18,7 +18,7 @@ import {BackupService} from '@core/services/backup';
 import {NotificationService} from '@core/services/notification';
 import {EtcdBackupConfig} from '@shared/entity/backup';
 import {take} from 'rxjs/operators';
-import {Observable} from "rxjs";
+import {Observable} from 'rxjs';
 
 export interface DeleteSnapshotDialogConfig {
   snapshot: EtcdBackupConfig;
