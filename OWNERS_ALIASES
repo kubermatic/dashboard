@@ -2,12 +2,6 @@
 # To change team associations, update the GitHub teams via https://github.com/kubermatic/access.
 
 aliases:
-  sig-api:
-    - floreks
-    - lsviben
-    - maciaszczykm
-    - pkprzekwas
-    - zreigz
   sig-ui:
     - maciaszczykm
     - floreks
