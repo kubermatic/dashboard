@@ -12,23 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Config} from '../../utils/config';
+import {Page, PageOptions} from '../../types';
 
-export interface Page {
-  visit(...params: string[]): void;
+export class ClusterList extends PageOptions implements Page {
+  // private readonly _strategy: ProjectStrategy | undefined;
+
+  readonly Buttons = new Buttons();
+  readonly Elements = new Elements();
+
+  constructor(isAPIMocked: boolean) {
+    super();
+
+    // this._strategy = ProjectStrategyFactory.new(isAPIMocked);
+  }
+
+  visit(): void {
+    this.Buttons.nav.click();
+  }
+
+  select(name: string): void {}
+
+  delete(name: string): void {}
 }
 
-export abstract class PageOptions {
-  protected _get(selector: string, timeout = this._elementLoadTimeout): Cypress.Chainable {
-    return cy.get(selector, {timeout});
-  }
+class Elements extends PageOptions {}
 
-  protected _contains(match: string): Cypress.Chainable {
-    return cy.contains(match, {timeout: this._elementLoadTimeout});
+class Buttons extends PageOptions {
+  get nav(): Cypress.Chainable {
+    return this._get('#km-nav-item-clusters');
   }
-
-  constructor(
-    protected readonly _elementLoadTimeout = Config.defaultElementLoadTimeout,
-    protected readonly _pageLoadTimeout = Config.defaultPageLoadTimeout
-  ) {}
 }

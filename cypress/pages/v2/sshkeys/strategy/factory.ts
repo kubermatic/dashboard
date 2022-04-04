@@ -12,23 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Config} from '../../utils/config';
+import {MockedSSHKeyStrategy} from './mocked';
+import {SSHKeyStrategy} from './types';
 
-export interface Page {
-  visit(...params: string[]): void;
-}
-
-export abstract class PageOptions {
-  protected _get(selector: string, timeout = this._elementLoadTimeout): Cypress.Chainable {
-    return cy.get(selector, {timeout});
+export class SSHKeyStrategyFactory {
+  static new(isAPIMocked: boolean): SSHKeyStrategy | undefined {
+    return isAPIMocked ? new MockedSSHKeyStrategy() : undefined;
   }
-
-  protected _contains(match: string): Cypress.Chainable {
-    return cy.contains(match, {timeout: this._elementLoadTimeout});
-  }
-
-  constructor(
-    protected readonly _elementLoadTimeout = Config.defaultElementLoadTimeout,
-    protected readonly _pageLoadTimeout = Config.defaultPageLoadTimeout
-  ) {}
 }

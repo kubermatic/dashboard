@@ -40,7 +40,7 @@ export class ServiceAccounts extends PageOptions implements Page {
   }
 
   visit(): void {
-    this.Elements.navButton.click();
+    this.Buttons.nav.click();
   }
 
   create(name: string, group: Group): void {
@@ -64,10 +64,6 @@ export class ServiceAccounts extends PageOptions implements Page {
 }
 
 class Elements extends PageOptions {
-  get navButton(): Cypress.Chainable {
-    return this._get('#km-nav-item-service-accounts');
-  }
-
   get createDialogNameInput(): Cypress.Chainable {
     return this._get('#km-create-serviceaccount-dialog-name-input');
   }
@@ -82,6 +78,10 @@ class Elements extends PageOptions {
 }
 
 class Buttons extends PageOptions {
+  get nav(): Cypress.Chainable {
+    return this._get('#km-nav-item-service-accounts');
+  }
+
   get addToken(): Cypress.Chainable {
     return this._get('#km-serviceaccount-token-dialog-update-btn');
   }

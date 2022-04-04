@@ -15,10 +15,13 @@
 import {Condition} from '../../utils/condition';
 import {Config} from '../../utils/config';
 import {View} from '../../utils/view';
+import {Clusters} from './clusters/proxy';
 import {DexPage} from './dex/page';
 import {Projects} from './projects/page';
 import {RootPage} from './root/page';
 import {ServiceAccounts} from './serviceaccounts/page';
+import {SSHKeys} from './sshkeys/page';
+import {Wizard} from './wizard/page';
 
 export class Pages {
   private static readonly _isAPIMocked = Config.isAPIMocked();
@@ -37,6 +40,18 @@ export class Pages {
 
   static get ServiceAccounts(): ServiceAccounts {
     return new ServiceAccounts(this._isAPIMocked);
+  }
+
+  static get Clusters(): Clusters {
+    return new Clusters(this._isAPIMocked);
+  }
+
+  static get SSHKeys(): SSHKeys {
+    return new SSHKeys(this._isAPIMocked);
+  }
+
+  static get Wizard(): Wizard {
+    return new Wizard(this._isAPIMocked);
   }
 
   static expect(view: View): void {
