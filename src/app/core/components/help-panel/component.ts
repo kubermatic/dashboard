@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, ElementRef, HostListener, OnInit} from '@angular/core';
+import {Component, ElementRef, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {ChangelogService} from '@core/services/changelog';
@@ -29,7 +29,7 @@ import {takeUntil} from 'rxjs/operators';
   styleUrls: ['./style.scss'],
   animations: [slideOut],
 })
-export class HelpPanelComponent implements OnInit {
+export class HelpPanelComponent implements OnInit, OnDestroy {
   settings: AdminSettings;
   lastSeenChangelogVersion: string;
 
@@ -51,6 +51,11 @@ export class HelpPanelComponent implements OnInit {
     this._userService.currentUserSettings
       .pipe(takeUntil(this._unsubscribe))
       .subscribe((settings: UserSettings) => (this.lastSeenChangelogVersion = settings.lastSeenChangelogVersion || ''));
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   @HostListener('document:click', ['$event'])

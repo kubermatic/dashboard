@@ -28,11 +28,10 @@ limitations under the License.
   </mat-dialog-content>
 
   <mat-dialog-actions>
-    <button mat-flat-button
-            kmThrottleClick
-            (throttleClick)="delete()">
-      <i class="km-icon-mask km-icon-delete"></i>
-      <span>Delete Snapshot</span>
-    </button>
+    <km-button icon="km-icon-delete"
+               label="Delete Snapshot"
+               [observable]="getObservable()"
+               (next)="onNext()">
+    </km-button>
   </mat-dialog-actions>
 </div>

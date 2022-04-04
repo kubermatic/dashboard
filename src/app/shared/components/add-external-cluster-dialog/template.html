@@ -55,7 +55,7 @@ limitations under the License.
   <mat-spinner fxFlexAlign="center"
                [diameter]="25"
                color="accent"
-               *ngIf="creating || externalClusterService.isValidating"></mat-spinner>
+               *ngIf="externalClusterService.isValidating"></mat-spinner>
   <button mat-flat-button
           type="button"
           (click)="next()"
@@ -64,18 +64,12 @@ limitations under the License.
     <i class="km-icon-mask km-icon-next"></i>
     <span>Next</span>
   </button>
-  <button mat-flat-button
-          type="button"
-          [disabled]="creating || invalid"
-          *ngIf="last"
-          kmThrottleClick
-          (throttleClick)="add()"
-          id="external-cluster-add-btn">
-    <i class="km-icon-mask km-icon-add"></i>
-    <ng-container [ngSwitch]="externalClusterService.provider">
-      <span *ngSwitchCase="provider.Custom">Add External Cluster</span>
-      <span *ngSwitchDefault>Import Cluster</span>
-    </ng-container>
-    <span></span>
-  </button>
+  <km-button *ngIf="last"
+             id="external-cluster-add-btn"
+             icon="km-icon-add"
+             [label]="label"
+             [disabled]="invalid"
+             [observable]="getObservable()"
+             (next)="onNext($event)">
+  </km-button>
 </mat-dialog-actions>
