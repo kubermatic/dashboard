@@ -94,7 +94,7 @@ export class AddExternalClusterDialogComponent implements OnInit, OnDestroy {
     }
   }
 
-  get observable(): Observable<ExternalCluster> {
+  getObservable(): Observable<ExternalCluster> {
     return this.externalClusterService
       .import(this.projectId, this.externalClusterService.externalCluster)
       .pipe(take(1));

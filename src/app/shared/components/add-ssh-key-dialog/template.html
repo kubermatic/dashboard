@@ -54,7 +54,7 @@ limitations under the License.
              icon="km-icon-add"
              label="Add SSH Key"
              [disabled]="!form.valid"
-             [observable]="observable"
+             [observable]="getObservable()"
              (next)="onNext($event)">
   </km-button>
 </mat-dialog-actions>

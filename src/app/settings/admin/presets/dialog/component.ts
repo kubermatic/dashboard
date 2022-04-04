@@ -133,7 +133,7 @@ export class PresetDialogComponent implements OnInit, OnDestroy {
     }
   }
 
-  get observable(): Observable<Preset> {
+  getObservable(): Observable<Preset> {
     switch (this.data.mode) {
       case Mode.Create:
         return this._presetService.create(this._presetDialogService.preset).pipe(take(1));

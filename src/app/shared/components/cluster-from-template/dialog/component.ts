@@ -59,7 +59,7 @@ export class ClusterFromTemplateDialogComponent implements OnInit, OnDestroy {
     return this._clusterTemplateService.isClusterStepValid;
   }
 
-  get observable(): Observable<any> {
+  getObservable(): Observable<any> {
     return this._clusterTemplateService
       .createInstances(this.replicas, this.data.projectID, this.data.template.id)
       .pipe(take(1));

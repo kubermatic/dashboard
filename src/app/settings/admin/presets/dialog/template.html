@@ -74,7 +74,7 @@ limitations under the License.
                [icon]="icon"
                [label]="label"
                [disabled]="creating || invalid"
-               [observable]="observable"
+               [observable]="getObservable()"
                (next)="onNext($event)">
     </km-button>
   </div>

@@ -46,7 +46,7 @@ export class AddProjectDialogComponent implements OnInit {
     });
   }
 
-  get observable(): Observable<Project> {
+  getObservable(): Observable<Project> {
     return this._projectService.create({name: this.form.controls.name.value, labels: this.labels}).pipe(take(1));
   }
 

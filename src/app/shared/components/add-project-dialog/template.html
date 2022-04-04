@@ -43,7 +43,7 @@ limitations under the License.
                icon="km-icon-save"
                label="Save Project"
                [disabled]="!form.valid"
-               [observable]="observable"
+               [observable]="getObservable()"
                (next)="onNext($event)">
     </km-button>
   </mat-dialog-actions>

@@ -70,7 +70,7 @@ limitations under the License.
              icon="km-icon-add"
              label="Create Cluster"
              [disabled]="invalid"
-             [observable]="observable"
+             [observable]="getObservable()"
              (next)="onNext()">
   </km-button>
 </mat-dialog-actions>

@@ -89,7 +89,7 @@ export class AddClusterFromTemplateDialogComponent implements OnInit, OnDestroy 
     }
   }
 
-  get observable(): Observable<any> {
+  getObservable(): Observable<any> {
     return this._clusterTemplateService
       .createInstances(this.replicas, this.data.projectId, this.template.id)
       .pipe(take(1));

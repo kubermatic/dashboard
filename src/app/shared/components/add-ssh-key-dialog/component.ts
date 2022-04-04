@@ -54,7 +54,7 @@ export class AddSshKeyDialogComponent implements OnInit {
     this.googleAnalyticsService.emitEvent('addSshKey', 'addSshKeyDialogOpened');
   }
 
-  get observable(): Observable<SSHKey> {
+  getObservable(): Observable<SSHKey> {
     return this._sshKeyService.add(
       new SSHKey(this.form.get(Controls.Name).value, null, this.form.get(Controls.Key).value),
       this.projectID

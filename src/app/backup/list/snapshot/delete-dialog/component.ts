@@ -38,7 +38,7 @@ export class DeleteSnapshotDialogComponent {
     private readonly _notificationService: NotificationService
   ) {}
 
-  get observable(): Observable<any> {
+  getObservable(): Observable<any> {
     return this._backupService
       .delete(this.config.projectID, this.config.snapshot.spec.clusterId, this.config.snapshot.id)
       .pipe(take(1));

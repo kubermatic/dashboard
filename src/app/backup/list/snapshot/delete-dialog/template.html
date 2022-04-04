@@ -30,7 +30,7 @@ limitations under the License.
   <mat-dialog-actions>
     <km-button icon="km-icon-delete"
                label="Delete Snapshot"
-               [observable]="observable"
+               [observable]="getObservable()"
                (next)="onNext()">
     </km-button>
   </mat-dialog-actions>

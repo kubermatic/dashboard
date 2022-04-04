@@ -42,7 +42,7 @@ export class AddMemberComponent implements OnInit {
     });
   }
 
-  get observable(): Observable<Member> {
+  getObservable(): Observable<Member> {
     return this._memberService.add(
       {
         email: this.form.controls.email.value,
