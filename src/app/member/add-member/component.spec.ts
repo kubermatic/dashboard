@@ -80,7 +80,7 @@ describe('AddProjectComponent', () => {
 
     component.form.controls.email.patchValue('john@doe.com');
     component.form.controls.group.patchValue('editors');
-    component.observable.subscribe();
+    component.getObservable().subscribe();
     tick();
     flush();
 

@@ -76,7 +76,7 @@ describe('CreateServiceAccountDialogComponent', () => {
   it('should call addServiceAccount method', fakeAsync(() => {
     component.form.controls.name.patchValue('test-service-account');
     component.form.controls.group.patchValue('editors');
-    component.observable.subscribe();
+    component.getObservable().subscribe();
     tick();
     flush();
 
