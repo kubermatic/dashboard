@@ -116,7 +116,6 @@ import {ChipListComponent} from './components/chip-list/component';
 import {TaintFormComponent} from './components/taint-form/component';
 import {TaintsComponent} from './components/taints/component';
 import {AutofocusDirective} from './directives/autofocus/directive';
-import {AutofocusDirectiveDialog} from './directives/autofocus/directive-autofoocusDiallog';
 import {ThrottleClickDirective} from './directives/throttle-click';
 import {RelativeTimePipe} from './pipes/relativetime';
 
@@ -230,7 +229,7 @@ const components: any[] = [
   OpenstackApplicationCredentialsComponent,
 ];
 
-const directives: any[] = [AutofocusDirective, AutofocusDirectiveDialog, ThrottleClickDirective, OptionDirective];
+const directives: any[] = [AutofocusDirective, ThrottleClickDirective, OptionDirective];
 
 @NgModule({
   imports: [...modules],

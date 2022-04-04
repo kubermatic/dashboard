@@ -27,15 +27,15 @@ export class AutofocusDirective implements AfterViewInit, OnDestroy {
   constructor(private readonly _el: ElementRef) {}
 
   ngAfterViewInit(): void {
-    if (!this.opened) {
-      throw new Error('[opened] event binding is undefined');
+    if (this.opened) {
+      this.opened.pipe(takeUntil(this._unsubscribe)).subscribe(opened => {
+        if (opened) {
+          setTimeout(() => this._el.nativeElement.focus());
+        }
+      });
+    } else {
+      setTimeout(() => this._el.nativeElement.focus());
     }
-
-    this.opened.pipe(takeUntil(this._unsubscribe)).subscribe(opened => {
-      if (opened) {
-        setTimeout(() => this._el.nativeElement.focus());
-      }
-    });
   }
 
   ngOnDestroy(): void {
