@@ -22,8 +22,8 @@ import {SettingsService} from '@core/services/settings';
 import {Cluster, Finalizer} from '@shared/entity/cluster';
 import {AdminSettings} from '@shared/entity/settings';
 import {ClipboardService} from 'ngx-clipboard';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {Observable, Subject} from 'rxjs';
+import {take, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'km-cluster-delete-confirmation',
@@ -87,6 +87,22 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck, OnDe
     this._unsubscribe.complete();
   }
 
+  getObservable(): Observable<any> {
+    return this._clusterService
+      .delete(this.projectID, this.cluster.id, {
+        [Finalizer.DeleteLoadBalancers]: !!this.deleteForm.controls.clusterLBCleanupCheckbox.value,
+        [Finalizer.DeleteVolumes]: !!this.deleteForm.controls.clusterVolumeCleanupCheckbox.value,
+      })
+      .pipe(take(1));
+  }
+
+  onNext(): void {
+    this._dialogRef.close(true);
+    this._clusterService.refreshClusters();
+    this._googleAnalyticsService.emitEvent('clusterOverview', 'clusterDeleted');
+    this._notificationService.success(`Deleting the ${this.cluster.name} cluster`);
+  }
+
   showWarning(): boolean {
     return (
       !this.settings?.cleanupOptions.enforced &&
@@ -97,29 +113,6 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck, OnDe
 
   onChange(event: any): void {
     this.inputName = event.target.value;
-  }
-
-  inputNameMatches(): boolean {
-    return this.inputName === this.cluster.name;
-  }
-
-  deleteCluster(): void {
-    if (!this.inputNameMatches()) {
-      return;
-    }
-
-    this._clusterService
-      .delete(this.projectID, this.cluster.id, {
-        [Finalizer.DeleteLoadBalancers]: !!this.deleteForm.controls.clusterLBCleanupCheckbox.value,
-        [Finalizer.DeleteVolumes]: !!this.deleteForm.controls.clusterVolumeCleanupCheckbox.value,
-      })
-      .subscribe(() => {
-        this._clusterService.refreshClusters();
-        this._googleAnalyticsService.emitEvent('clusterOverview', 'clusterDeleted');
-        this._notificationService.success(`Deleting the ${this.cluster.name} cluster`);
-      });
-
-    this._dialogRef.close(true);
   }
 
   copy(clipboard: string): void {

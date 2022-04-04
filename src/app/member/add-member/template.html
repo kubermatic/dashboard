@@ -16,9 +16,8 @@ limitations under the License.
 <div id="km-add-member-dialog">
   <km-dialog-title>Add Member</km-dialog-title>
   <mat-dialog-content>
-    <form [formGroup]="addMemberForm"
+    <form [formGroup]="form"
           fxLayout="column"
-          (submit)="addMember()"
           id="add-member-form">
       <mat-form-field fxFlex>
         <mat-label>Email</mat-label>
@@ -59,15 +58,12 @@ limitations under the License.
   </mat-dialog-content>
 
   <mat-dialog-actions>
-    <button id="km-add-member-dialog-add-btn"
-            mat-flat-button
-            type="submit"
-            kmThrottleClick
-            (throttleClick)="addMember()"
-            form="add-member-form"
-            [disabled]="!addMemberForm.valid">
-      <i class="km-icon-mask km-icon-add"></i>
-      <span>Add Member</span>
-    </button>
+    <km-button id="km-add-member-dialog-add-btn"
+               icon="km-icon-add"
+               label="Add Member"
+               [disabled]="!form.valid"
+               [observable]="getObservable()"
+               (next)="onNext($event)">
+    </km-button>
   </mat-dialog-actions>
 </div>

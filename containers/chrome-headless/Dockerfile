@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM quay.io/kubermatic/build:go-1.17-node-16-kind-0.11-7
+FROM quay.io/kubermatic/build:go-1.17-node-16-kind-0.12-8
 
 LABEL maintainer="support@kubermatic.com"
 
@@ -23,6 +23,3 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
     apt-get install -y \
       google-chrome-stable \
       libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
-
-# Install Docker.
-RUN curl -sSL https://get.docker.com/ | sh

@@ -20,26 +20,27 @@ import {configuration} from './cy-ts-preprocessor';
 export default async (on, config) => {
   const isAPIMocked = config.env.MOCKS === 'true' || config.env.MOCKS === true;
   const isEnterpriseEdition = config.env.KUBERMATIC_EDITION === 'ee';
-  let ignored: string[];
+  // TODO: Update once more tests are rewritten
+  const ignored: string[] = ['**/!(service-accounts.spec.ts)'];
 
-  if (isAPIMocked) {
-    // TODO: Remove it after configuring mocks.
-    ignored = ['**/integration/stories/opa.spec.ts'];
-  } else {
-    // TODO: Remove it after fixing flaky tests.
-    ignored = [
-      '**/integration/providers/anexia.spec.ts',
-      '**/integration/providers/equinix.spec.ts',
-      '**/integration/providers/vsphere.spec.ts',
-      '**/integration/stories/opa.spec.ts',
-      '**/integration/stories/admin-settings/administrators.spec.ts',
-    ];
-  }
+  // if (isAPIMocked) {
+  //   // TODO: Remove it after configuring mocks.
+  //   ignored = ['**/integration/stories/opa.spec.ts'];
+  // } else {
+  //   // TODO: Remove it after fixing flaky tests.
+  //   ignored = [
+  //     '**/integration/providers/anexia.spec.ts',
+  //     '**/integration/providers/equinix.spec.ts',
+  //     '**/integration/providers/vsphere.spec.ts',
+  //     '**/integration/stories/opa.spec.ts',
+  //     '**/integration/stories/admin-settings/administrators.spec.ts',
+  //   ];
+  // }
 
   // Do not test providers in both editions.
-  if (!isEnterpriseEdition) {
-    ignored = ['**/integration/providers/**', ...ignored];
-  }
+  // if (!isEnterpriseEdition) {
+  //   ignored = ['**/integration/providers/**', ...ignored];
+  // }
 
   /* eslint-disable no-console */
   console.log('mocks: ' + isAPIMocked);

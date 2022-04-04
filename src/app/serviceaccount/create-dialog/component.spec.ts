@@ -49,11 +49,10 @@ describe('CreateServiceAccountDialogComponent', () => {
       ],
       teardown: {destroyAfterEach: false},
     }).compileComponents();
-  }));
 
-  beforeEach(waitForAsync(() => {
     fixture = TestBed.createComponent(CreateServiceAccountDialogComponent);
     component = fixture.componentInstance;
+    component.project = fakeProject();
     fixture.detectChanges();
   }));
 
@@ -75,10 +74,9 @@ describe('CreateServiceAccountDialogComponent', () => {
   });
 
   it('should call addServiceAccount method', fakeAsync(() => {
-    component.project = fakeProject();
     component.form.controls.name.patchValue('test-service-account');
     component.form.controls.group.patchValue('editors');
-    component.create();
+    component.getObservable().subscribe();
     tick();
     flush();
 

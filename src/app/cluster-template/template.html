@@ -102,15 +102,13 @@ limitations under the License.
                 <button mat-icon-button
                         [attr.id]="'km-template-instance-' + element.name"
                         matTooltip="Create Cluster from Template"
-                        kmThrottleClick
-                        (throttleClick)="createCluster(element)"
+                        (click)="createCluster(element)"
                         [disabled]="!canCreateCluster()">
                   <i class="km-icon-mask km-icon-cluster-from-template"></i>
                 </button>
                 <button mat-icon-button
                         matTooltip="Delete Cluster Template"
-                        kmThrottleClick
-                        (throttleClick)="delete(element)"
+                        (click)="delete(element)"
                         [disabled]="!canDelete(element)">
                   <i class="km-icon-mask km-icon-delete"></i>
                 </button>

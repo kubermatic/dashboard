@@ -85,7 +85,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
 
     inputElement.dispatchEvent(new Event('blur'));
 
-    expect(component.inputNameMatches()).toBeTruthy();
+    expect(component.inputName === component.cluster.name).toBeTruthy();
   });
 
   it('should call deleteCluster method', fakeAsync(() => {
@@ -96,7 +96,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
     fixture.detectChanges();
     const spyDeleteCluster = jest.spyOn(clusterService, 'delete').mockReturnValue(of(null));
 
-    component.deleteCluster();
+    component.getObservable().subscribe();
     tick();
     flush();
 

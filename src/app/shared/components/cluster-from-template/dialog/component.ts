@@ -18,7 +18,7 @@ import {Router} from '@angular/router';
 import {ClusterTemplateService} from '@core/services/cluster-templates';
 import {NotificationService} from '@core/services/notification';
 import {ClusterTemplate} from '@shared/entity/cluster-template';
-import {Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {filter, take, takeUntil} from 'rxjs/operators';
 
 class ClusterFromTemplateDialogData {
@@ -55,20 +55,21 @@ export class ClusterFromTemplateDialogComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  get isValid(): boolean {
+  get valid(): boolean {
     return this._clusterTemplateService.isClusterStepValid;
   }
 
-  create(): void {
-    this._clusterTemplateService
+  getObservable(): Observable<any> {
+    return this._clusterTemplateService
       .createInstances(this.replicas, this.data.projectID, this.data.template.id)
-      .pipe(take(1))
-      .subscribe(_ => {
-        this.dialogRef.close();
-        this._router.navigate([`/projects/${this.data.projectID}/clusters`]);
-        this._notificationService.success(
-          `Created ${this.replicas} instance${this.replicas > 1 ? 's' : ''} from ${this.data.template.name} template`
-        );
-      });
+      .pipe(take(1));
+  }
+
+  onNext(): void {
+    this.dialogRef.close();
+    this._router.navigate([`/projects/${this.data.projectID}/clusters`]);
+    this._notificationService.success(
+      `Created ${this.replicas} instance${this.replicas > 1 ? 's' : ''} from ${this.data.template.name} template`
+    );
   }
 }
