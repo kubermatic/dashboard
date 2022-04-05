@@ -41,7 +41,7 @@ export class Pages {
   }
 
   static get UserSettings(): UserSettings {
-    return new UserSettings(this._isAPIMocked);
+    return new UserSettings();
   }
 
   static expect(view: View): void {
