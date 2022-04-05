@@ -12,29 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Endpoint} from '../../../../utils/endpoint';
-import {SSHKeyStrategy} from './types';
+import {Endpoint} from '../../../../../utils/endpoint';
+import {ClusterDetailStrategy} from './types';
 
-export class MockedSSHKeyStrategy implements SSHKeyStrategy {
-  private static readonly _fixturePath = 'ssh-keys.json';
+export class MockedClusterDetailStrategy implements ClusterDetailStrategy {
+  private static readonly _fixturePath = 'clusters.json';
   private static readonly _fixtureEmptyArrayPath = 'empty-array.json';
-  private static _activeFixture = MockedSSHKeyStrategy._fixtureEmptyArrayPath;
+  private static _activeFixture = MockedClusterDetailStrategy._fixtureEmptyArrayPath;
 
   constructor() {
     this._init();
   }
 
   onCreate(): void {
-    MockedSSHKeyStrategy._activeFixture = MockedSSHKeyStrategy._fixturePath;
+    MockedClusterDetailStrategy._activeFixture = MockedClusterDetailStrategy._fixturePath;
   }
 
   onDelete(): void {
-    MockedSSHKeyStrategy._activeFixture = MockedSSHKeyStrategy._fixtureEmptyArrayPath;
+    MockedClusterDetailStrategy._activeFixture = MockedClusterDetailStrategy._fixtureEmptyArrayPath;
   }
 
   private _init(): void {
-    cy.intercept(Endpoint.SSHKeys, req => {
-      req.reply({fixture: MockedSSHKeyStrategy._activeFixture});
-    });
+    cy.intercept(Endpoint.Clusters, req => req.reply({fixture: MockedClusterDetailStrategy._activeFixture}));
   }
 }

@@ -14,17 +14,18 @@
 
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {iif, merge, Observable, of, Subject, timer} from 'rxjs';
-import {catchError, map, shareReplay, switchMap, take} from 'rxjs/operators';
+import {AppConfigService} from '@app/config.service';
 import {environment} from '@environments/environment';
 import {AdminSeed, CreateDatacenterModel, Datacenter, SeedSettings} from '@shared/entity/datacenter';
-import {AppConfigService} from '@app/config.service';
-import {Auth} from './auth/service';
 import _ from 'lodash';
+import {iif, merge, Observable, of, Subject, timer} from 'rxjs';
+import {catchError, map, retry, shareReplay, switchMap, take} from 'rxjs/operators';
+import {Auth} from './auth/service';
 
 @Injectable()
 export class DatacenterService {
   private readonly _refreshTime = 60;
+  private readonly _retryTime = 5;
   private _restRoot: string = environment.restRoot;
   private _newRestRoot: string = environment.newRestRoot;
   private _datacenters$: Observable<Datacenter[]>;
@@ -47,12 +48,14 @@ export class DatacenterService {
     this._datacenters$ = merge(this._datacentersRefresh$, this._refreshTimer$)
       .pipe(switchMap(() => iif(() => this._auth.authenticated(), this._getDatacenters(), of([]))))
       .pipe(map(datacenters => _.sortBy(datacenters, d => d.metadata.name.toLowerCase())))
+      .pipe(retry({delay: this._retryTime * this._appConfigService.getRefreshTimeBase(), count: this._retryTime}))
       .pipe(shareReplay(1));
     this._datacenters$.pipe(take(1)).subscribe(_ => {});
 
     this._seeds$ = merge(this._seedsRefresh$, this._refreshTimer$)
       .pipe(switchMap(() => iif(() => this._auth.authenticated(), this._getSeeds(), of([]))))
       .pipe(map((seeds: string[]) => _.sortBy(seeds, s => s.toLowerCase())))
+      .pipe(retry({delay: this._retryTime * this._appConfigService.getRefreshTimeBase(), count: this._retryTime}))
       .pipe(shareReplay(1));
     this._seeds$.pipe(take(1)).subscribe(_ => {});
   }

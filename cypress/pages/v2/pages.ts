@@ -27,34 +27,60 @@ export class Pages {
   private static readonly _isAPIMocked = Config.isAPIMocked();
 
   static get Root(): RootPage {
+    this._build();
     return new RootPage(this._isAPIMocked);
   }
 
   static get Dex(): DexPage {
+    this._build();
     return new DexPage();
   }
 
   static get Projects(): Projects {
+    this._build();
     return new Projects(this._isAPIMocked);
   }
 
   static get ServiceAccounts(): ServiceAccounts {
+    this._build();
     return new ServiceAccounts(this._isAPIMocked);
   }
 
   static get Clusters(): Clusters {
+    this._build();
     return new Clusters(this._isAPIMocked);
   }
 
   static get SSHKeys(): SSHKeys {
+    this._build();
     return new SSHKeys(this._isAPIMocked);
   }
 
   static get Wizard(): Wizard {
+    this._build();
     return new Wizard(this._isAPIMocked);
   }
 
   static expect(view: View): void {
     cy.url().should(Condition.Include, view);
+  }
+
+  /**
+   * This method is enforcing the intercept registration
+   * in order to "remember" the state of previous "it"
+   * changes.
+   *
+   * @private
+   */
+  private static _build(): Pages {
+    new RootPage(this._isAPIMocked);
+    new DexPage();
+    new Projects(this._isAPIMocked);
+    new ServiceAccounts(this._isAPIMocked);
+    new Clusters(this._isAPIMocked);
+    new SSHKeys(this._isAPIMocked);
+    new Wizard(this._isAPIMocked);
+
+    return this;
   }
 }

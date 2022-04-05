@@ -33,6 +33,8 @@ describe('Service Accounts Story', () => {
   it('should create a new project', () => {
     Pages.Projects.create(projectName);
     Pages.Projects.Elements.projectItem(projectName).should(Condition.Exist);
+
+    // TODO: extract icon statuses to enum
     Pages.Projects.Elements.projectItemIcon(projectName, 'disabled').should(Condition.NotExist);
     Pages.Projects.Elements.projectItemIcon(projectName, 'running').should(Condition.Exist);
   });

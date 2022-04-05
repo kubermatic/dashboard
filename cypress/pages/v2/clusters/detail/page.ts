@@ -12,23 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {ProviderMenuOption} from '../../../clusters.po';
 import {Page, PageOptions} from '../../types';
 
 export class ClusterDetail extends PageOptions implements Page {
-  // private readonly _strategy: ProjectStrategy | undefined;
+  // private readonly _strategy: ClusterDetailStrategy | undefined;
 
   readonly Buttons = new Buttons();
   readonly Elements = new Elements();
 
-  constructor(isAPIMocked: boolean) {
+  constructor(_: boolean) {
     super();
 
-    // this._strategy = ProjectStrategyFactory.new(isAPIMocked);
+    // this._strategy = ClusterDetailStrategyFactory.new(isAPIMocked);
   }
 
   visit(): void {}
 
-  delete(name: string): void {}
+  // delete(name: string): void {}
 }
 
 class Elements extends PageOptions {}
@@ -36,5 +37,21 @@ class Elements extends PageOptions {}
 class Buttons extends PageOptions {
   get providerMenu(): Cypress.Chainable {
     return cy.get('.provider-menu-btn');
+  }
+
+  providerMenuOption(option: ProviderMenuOption): Cypress.Chainable {
+    return cy.get('.km-provider-edit-settings').contains('span', option).parent();
+  }
+
+  deleteSSHKey(name: string): Cypress.Chainable {
+    return cy.get(`#km-delete-sshkey-${name}`);
+  }
+
+  get deleteSSHKeyConfirm(): Cypress.Chainable {
+    return cy.get('#km-confirmation-dialog-confirm-btn');
+  }
+
+  get manageSSHKeyCloseButton(): Cypress.Chainable {
+    return cy.get('#km-close-dialog-btn');
   }
 }

@@ -13,9 +13,10 @@
 // limitations under the License.
 
 import {Page, PageOptions} from '../../types';
+import {ClusterListStrategyFactory} from './strategy/factory';
 
 export class ClusterList extends PageOptions implements Page {
-  // private readonly _strategy: ProjectStrategy | undefined;
+  // private readonly _strategy: ClusterListStrategy | undefined;
 
   readonly Buttons = new Buttons();
   readonly Elements = new Elements();
@@ -23,16 +24,16 @@ export class ClusterList extends PageOptions implements Page {
   constructor(isAPIMocked: boolean) {
     super();
 
-    // this._strategy = ProjectStrategyFactory.new(isAPIMocked);
+    ClusterListStrategyFactory.new(isAPIMocked);
   }
 
   visit(): void {
     this.Buttons.nav.click();
   }
 
-  select(name: string): void {}
+  // select(name: string): void {}
 
-  delete(name: string): void {}
+  // delete(name: string): void {}
 }
 
 class Elements extends PageOptions {}

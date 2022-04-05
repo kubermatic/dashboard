@@ -164,7 +164,7 @@ export class Mocks {
     // {m: RequestType.POST, p: Endpoint.ServiceAccountTokens, r: {fixture: 'token.json'}},
     // {m: RequestType.GET, p: Endpoint.ServiceAccountTokens, r: {fixture: 'tokens.json'}},
     {m: RequestType.POST, p: Endpoint.SSHKeys, r: {fixture: 'ssh-key.json'}},
-    {m: RequestType.GET, p: Endpoint.SSHKeys, r: {fixture: 'ssh-keys.json'}},
+    // {m: RequestType.GET, p: Endpoint.SSHKeys, r: {fixture: 'ssh-keys.json'}},
     {m: RequestType.GET, p: Endpoint.EtcdRestores, r: []},
     {m: RequestType.GET, p: Endpoint.AlertmanagerConfig, r: {spec: {config: ''}}},
     {m: RequestType.GET, p: Endpoint.AdmissionPlugins, r: []},

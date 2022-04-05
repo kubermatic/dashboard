@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {SSHKeysPage} from '../../../pages/ssh-keys.po';
+import {ProviderMenuOption} from '../../../pages/clusters.po';
 import {Clusters} from '../../../pages/v2/clusters/proxy';
 import {Pages} from '../../../pages/v2/pages';
 import {Projects} from '../../../pages/v2/projects/page';
@@ -68,36 +68,34 @@ describe('SSH Key Management Story', () => {
 
   it('should remove the ssh key from the cluster', () => {
     Pages.Clusters.Details.Buttons.providerMenu.click();
+    Pages.Clusters.Details.Buttons.providerMenuOption(ProviderMenuOption.ManageSSHKeys).click();
+    Pages.Clusters.Details.Buttons.deleteSSHKey(sshKeyName).click();
+    Pages.Clusters.Details.Buttons.deleteSSHKeyConfirm.click();
+    Pages.Clusters.Details.Buttons.manageSSHKeyCloseButton.click();
 
-    ClustersPage.getProviderMenuOption(ProviderMenuOption.ManageSSHKeys).click();
-    ClustersPage.getSSHKeysTableRemoveButton(sshKeyName).click();
-    ClustersPage.getDeleteDialogConfirmButton().click();
-    ClustersPage.getDialogCloseButton().click();
+    // TODO: add assertion
   });
 
   it('should delete the ssh key', () => {
-    SSHKeysPage.visit();
-    SSHKeysPage.getDeleteSSHKeyButton(sshKeyName).click({force: true});
-    SSHKeysPage.getDeleteSSHKeyConfirmationButton().click({force: true});
-  });
+    Pages.SSHKeys.visit();
+    Pages.SSHKeys.Buttons.deleteSSHKey(sshKeyName).click();
+    Pages.SSHKeys.Buttons.deleteSSHKeyConfirm.click();
 
-  it('should verify that there are no projects', () => {
-    SSHKeysPage.verifyNoSSHKeys();
+    // TODO: add assertion
   });
 
   it('should go to the projects page', () => {
-    ProjectsPage.visit();
+    Pages.Projects.visit();
+    Pages.expect(View.Projects.Default);
   });
 
   it('should delete the project', () => {
-    ProjectsPage.deleteProject(projectName);
-  });
-
-  it('should verify that there are no projects', () => {
-    ProjectsPage.verifyNoProjects();
+    Pages.Projects.Elements.projectItem(projectName).should(Condition.Exist);
+    Pages.Projects.delete(projectName);
+    Pages.Projects.Elements.projectItem(projectName).should(Condition.NotExist);
   });
 
   it('should logout', () => {
-    logout();
+    Pages.Root.logout();
   });
 });

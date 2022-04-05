@@ -29,7 +29,7 @@ export class SSHKeys extends PageOptions implements Page {
   }
 
   static getName(): string {
-    return 'test-sshkey';
+    return 'test-ssh-key';
   }
 
   static get publicKey(): string {
@@ -48,7 +48,7 @@ export class SSHKeys extends PageOptions implements Page {
   create(name: string, publicKey: string): void {
     this.Buttons.createDialog.click();
     this.Elements.createDialogInput.type(name);
-    this.Elements.createDialogTextarea.click().parent(publicKey);
+    this.Elements.createDialogTextarea.type(publicKey);
     this.Buttons.creatDialogConfirm.click().then(_ => this._strategy?.onCreate());
   }
 
@@ -80,5 +80,13 @@ class Buttons extends PageOptions {
 
   tableRow(name: string): Cypress.Chainable {
     return this._contains(name);
+  }
+
+  deleteSSHKey(name: string): Cypress.Chainable {
+    return cy.get(`#km-delete-sshkey-${name}`);
+  }
+
+  get deleteSSHKeyConfirm(): Cypress.Chainable {
+    return cy.get('#km-confirmation-dialog-confirm-btn');
   }
 }

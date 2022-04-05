@@ -15,9 +15,11 @@
 import {Datacenter, Provider} from '../../../utils/provider';
 import {WizardStep} from '../../../utils/wizard';
 import {Page, PageOptions} from '../types';
+import {WizardStrategyFactory} from './strategy/factory';
+import {WizardStrategy} from './strategy/types';
 
 export class Wizard extends PageOptions implements Page {
-  // private readonly _strategy: ProjectStrategy | undefined;
+  private readonly _strategy: WizardStrategy | undefined;
 
   readonly Buttons = new Buttons();
   readonly Elements = new Elements();
@@ -25,7 +27,7 @@ export class Wizard extends PageOptions implements Page {
   constructor(isAPIMocked: boolean) {
     super();
 
-    // this._strategy = ProjectStrategyFactory.new(isAPIMocked);
+    this._strategy = WizardStrategyFactory.new(isAPIMocked);
   }
 
   visit(): void {
@@ -33,14 +35,16 @@ export class Wizard extends PageOptions implements Page {
   }
 
   create(name: string, provider: Provider, datacenter: Datacenter, sshKeyName: string): void {
-    this.Buttons.provider(provider).click();
+    this.Buttons.provider(provider)
+      .click()
+      .then(_ => this._strategy?.onProviderChange(provider));
     this.Buttons.datacenter(datacenter).click();
     this.Elements.clusterNameInput.type(name);
     this.Buttons.sshKeysSelect.click();
     this.Buttons.sshKeysSelectOption(sshKeyName).click();
     this.Buttons.overlayContainer.click();
     this.Buttons.nextStep(WizardStep.Cluster).click();
-    this.Buttons.create.click();
+    this.Buttons.create.click({force: true}).then(_ => this._strategy?.onCreate());
   }
 }
 
