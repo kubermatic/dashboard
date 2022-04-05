@@ -28,7 +28,7 @@ limitations under the License.
                autocomplete="off"
                required
                kmAutofocus>
-        <mat-error *ngIf="addMemberForm.controls.email.hasError('required')">
+        <mat-error *ngIf="form.controls.email.hasError('required')">
           Email is <strong>required</strong>.
         </mat-error>
       </mat-form-field>

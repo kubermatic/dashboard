@@ -26,7 +26,7 @@ limitations under the License.
              type="text"
              autocomplete="off"
              kmAutofocus>
-      <mat-error *ngIf="addSSHKeyForm.controls.name.hasError('required')">
+      <mat-error *ngIf="form.controls.name.hasError('required')">
         Name is <strong>required</strong>.
       </mat-error>
     </mat-form-field>
