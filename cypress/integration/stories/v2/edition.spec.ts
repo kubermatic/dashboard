@@ -12,41 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ProjectsPage} from '../../pages/projects.po';
-import {UserSettingsPage} from '../../pages/user-settings.po';
-import {login, logout} from '../../utils/auth';
-import {Condition} from '../../utils/condition';
-import {View} from '../../utils/view';
-import {Mocks} from '../../utils/mocks';
-import {Config} from '../../utils/config';
+import {Condition} from '../../../utils/condition';
+import {View} from '../../../utils/view';
+import {Config} from '../../../utils/config';
+import {Pages} from '../../../pages/v2/pages';
 
 describe('Edition Story', () => {
   const editionName = Config.isEnterpriseEdition() ? 'Enterprise Edition' : 'Community Edition';
 
-  beforeEach(() => {
-    if (Mocks.enabled()) {
-      Mocks.register();
-    }
-  });
-
   it('should login', () => {
-    login();
-    cy.url().should(Condition.Include, View.Projects.Default);
+    Pages.Root.login();
+    Pages.Projects.visit();
+    Pages.expect(View.Projects.Default);
   });
 
   it(`should check if footer contains "${editionName}" text`, () => {
-    ProjectsPage.getAppEdition().should(Condition.Contain, editionName);
+    Pages.Projects.Elements.edition.should(Condition.Contain, editionName);
   });
 
   it('should go to the user settings', () => {
-    UserSettingsPage.visit();
+    Pages.UserSettings.visit();
+    Pages.expect(View.Account.Default);
   });
 
   it(`should check if theme picker is ${Config.isEnterpriseEdition() ? 'available' : 'not available'}`, () => {
-    UserSettingsPage.getThemePicker().should(Config.isEnterpriseEdition() ? Condition.Exist : Condition.NotExist);
+    Pages.UserSettings.Elements.themePicker.should(Config.isEnterpriseEdition() ? Condition.Exist : Condition.NotExist);
   });
 
   it('should logout', () => {
-    logout();
+    Pages.Root.logout();
   });
 });

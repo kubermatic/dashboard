@@ -19,6 +19,7 @@ import {DexPage} from './dex/page';
 import {Projects} from './projects/page';
 import {RootPage} from './root/page';
 import {ServiceAccounts} from './serviceaccounts/page';
+import {UserSettings} from './usersettings/page';
 
 export class Pages {
   private static readonly _isAPIMocked = Config.isAPIMocked();
@@ -37,6 +38,10 @@ export class Pages {
 
   static get ServiceAccounts(): ServiceAccounts {
     return new ServiceAccounts(this._isAPIMocked);
+  }
+
+  static get UserSettings(): UserSettings {
+    return new UserSettings(this._isAPIMocked);
   }
 
   static expect(view: View): void {
