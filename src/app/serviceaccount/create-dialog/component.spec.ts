@@ -35,12 +35,10 @@ describe('CreateServiceAccountDialogComponent', () => {
   let component: CreateServiceAccountDialogComponent;
   let createServiceAccountSpy;
 
-  beforeEach(
-    waitForAsync(() => {
-      const saMock = {create: jest.fn()};
-      createServiceAccountSpy = saMock.create.mockReturnValue(asyncData(fakeServiceAccount()));
+  beforeEach(waitForAsync(() => {
+    const saMock = {create: jest.fn()};
+    createServiceAccountSpy = saMock.create.mockReturnValue(asyncData(fakeServiceAccount()));
 
-<<<<<<< HEAD
     TestBed.configureTestingModule({
       imports: [...modules],
       providers: [
@@ -57,35 +55,10 @@ describe('CreateServiceAccountDialogComponent', () => {
     component.project = fakeProject();
     fixture.detectChanges();
   }));
-=======
-      TestBed.configureTestingModule({
-        imports: [...modules],
-        providers: [
-          {provide: MatDialogRef, useClass: MatDialogRefMock},
-          {provide: ServiceAccountService, useValue: saMock},
-          {provide: ProjectService, useClass: ProjectMockService},
-          NotificationService,
-        ],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
 
-  beforeEach(
-    waitForAsync(() => {
-      fixture = TestBed.createComponent(CreateServiceAccountDialogComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-    })
-  );
->>>>>>> fix
-
-  it(
-    'should create the component',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should create the component', waitForAsync(() => {
+    expect(component).toBeTruthy();
+  }));
 
   it('form invalid after creating', () => {
     expect(component.form.valid).toBeFalsy();

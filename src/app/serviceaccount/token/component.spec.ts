@@ -42,32 +42,30 @@ describe('ServiceAccountTokenComponent', () => {
   let noopToken: ComponentFixture<NoopTokenDialogComponent>;
   let component: ServiceAccountTokenComponent;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [
-          BrowserModule,
-          BrowserAnimationsModule,
-          SharedModule,
-          CoreModule,
-          ServiceAccountModule,
-          DialogTestModule,
-          TokenDialogTestModule,
-        ],
-        providers: [
-          {provide: Router, useClass: RouterStub},
-          {provide: ProjectService, useClass: ProjectMockService},
-          {provide: AppConfigService, useClass: AppConfigMockService},
-          {provide: UserService, useClass: UserMockService},
-          {provide: ServiceAccountService, useClass: ServiceAccountMockService},
-          MatDialog,
-          GoogleAnalyticsService,
-          NotificationService,
-        ],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        SharedModule,
+        CoreModule,
+        ServiceAccountModule,
+        DialogTestModule,
+        TokenDialogTestModule,
+      ],
+      providers: [
+        {provide: Router, useClass: RouterStub},
+        {provide: ProjectService, useClass: ProjectMockService},
+        {provide: AppConfigService, useClass: AppConfigMockService},
+        {provide: UserService, useClass: UserMockService},
+        {provide: ServiceAccountService, useClass: ServiceAccountMockService},
+        MatDialog,
+        GoogleAnalyticsService,
+        NotificationService,
+      ],
+      teardown: {destroyAfterEach: false},
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ServiceAccountTokenComponent);
