@@ -83,6 +83,8 @@ KUBERMATICDOCKERTAG=latest UIDOCKERTAG=latest make kubermatic-installer
 TEST_NAME="Deploy Kubermatic"
 echodate "Deploying Kubermatic [${KUBERMATIC_VERSION}]..."
 
+copy_crds_to_chart
+
 ./_build/kubermatic-installer deploy --disable-telemetry \
   --storageclass copy-default \
   --config "$KUBERMATIC_CONFIG" \
