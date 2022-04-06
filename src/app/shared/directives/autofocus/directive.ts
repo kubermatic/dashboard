@@ -14,7 +14,7 @@
 
 import {AfterViewInit, Directive, ElementRef, EventEmitter, Input, OnDestroy} from '@angular/core';
 import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {takeUntil, filter} from 'rxjs/operators';
 
 @Directive({
   selector: '[kmAutofocus]',
@@ -27,19 +27,22 @@ export class AutofocusDirective implements AfterViewInit, OnDestroy {
   constructor(private readonly _el: ElementRef) {}
 
   ngAfterViewInit(): void {
-    if (!this.opened) {
-      throw new Error('[opened] event binding is undefined');
+    if (this.opened) {
+      this.opened
+        .pipe(filter(open => open))
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(this._focus.bind(this));
+    } else {
+      this._focus();
     }
-
-    this.opened.pipe(takeUntil(this._unsubscribe)).subscribe(opened => {
-      if (opened) {
-        setTimeout(() => this._el.nativeElement.focus());
-      }
-    });
   }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  private _focus(): void {
+    setTimeout(() => this._el.nativeElement.focus());
   }
 }
