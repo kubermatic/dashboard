@@ -54,7 +54,7 @@ describe('Members Story', () => {
   });
 
   it('should login as a second user', () => {
-    Pages.Root.login(Config.adminEmail());
+    Pages.Root.login(Config.adminEmail(), Config.password(), true);
     Pages.Projects.visit();
     Pages.expect(View.Projects.Default);
   });
