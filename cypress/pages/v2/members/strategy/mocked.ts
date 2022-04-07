@@ -16,7 +16,7 @@ import {Endpoint} from '../../../../utils/endpoint';
 import {MembersStrategy} from './types';
 
 export class MockedMembersStrategy implements MembersStrategy {
-  private static readonly _fixturePath = 'service-accounts.json';
+  private static readonly _fixturePath = 'members.json';
   private static readonly _fixtureEmptyArrayPath = 'empty-array.json';
   private static _activeFixture = MockedMembersStrategy._fixtureEmptyArrayPath;
 

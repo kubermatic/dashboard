@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import _ from 'lodash';
-
 export class Config {
   static readonly defaultPageLoadTimeout = 20000;
   static readonly defaultElementLoadTimeout = 20000;
