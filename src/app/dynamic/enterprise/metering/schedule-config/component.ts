@@ -18,27 +18,17 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {MeteringComponent} from '@app/dynamic/enterprise/metering/component';
-import {MeteringConfigComponent} from '@app/dynamic/enterprise/metering/config/component';
-import {MeteringScheduleConfigComponent} from '@app/dynamic/enterprise/metering/schedule-config/component';
-import {MeteringConfigurationDialog} from '@app/dynamic/enterprise/metering/config/config-dialog/component';
-import {MeteringCredentialsDialog} from '@app/dynamic/enterprise/metering/config/credentials-dialog/component';
-import {MeteringListComponent} from '@app/dynamic/enterprise/metering/list/component';
-import {SharedModule} from '@shared/module';
+import {Component, Input} from '@angular/core';
+import {MeteringReportConfiguration} from '@shared/entity/datacenter';
 
-const routes: Routes = [{path: '', component: MeteringComponent}];
-
-@NgModule({
-  imports: [SharedModule, RouterModule.forChild(routes)],
-  declarations: [
-    MeteringComponent,
-    MeteringListComponent,
-    MeteringConfigComponent,
-    MeteringScheduleConfigComponent,
-    MeteringConfigurationDialog,
-    MeteringCredentialsDialog,
-  ],
+@Component({
+  selector: 'km-metering-schedule-config',
+  templateUrl: 'template.html',
 })
-export class MeteringModule {}
+export class MeteringScheduleConfigComponent {
+  @Input() schedules: MeteringReportConfiguration[];
+
+  constructor() {}
+
+  addMeteringSchedule() {}
+}

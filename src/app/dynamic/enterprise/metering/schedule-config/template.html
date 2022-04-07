@@ -20,14 +20,19 @@
 END OF TERMS AND CONDITIONS
 -->
 
-<ng-container *ngIf="!isLoading">
-  <km-metering-config [config]="config"></km-metering-config>
-  <km-metering-schedule-config [schedules]="schedules"></km-metering-schedule-config>
-  <km-metering-list [config]="config"></km-metering-list>
-</ng-container>
-
-<ng-container *ngIf="isLoading">
-  <mat-spinner [diameter]="50"
-               class="km-spinner"
-               color="accent"></mat-spinner>
-</ng-container>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title fxFlex
+                    fxLayout="row"
+                    fxLayoutAlign=" center">
+      <div fxFlex>Schedules</div>
+      <button mat-flat-button
+              color="quaternary"
+              fxLayoutAlign="center center"
+              (click)="addMeteringSchedule()">
+        <i class="km-icon-mask km-icon-edit"></i>
+        <span>Add Schedule</span>
+      </button>
+    </mat-card-title>
+  </mat-card-header>
+</mat-card>

@@ -20,10 +20,12 @@
 
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {DatacenterService} from '@core/services/datacenter';
-import {MeteringConfiguration} from '@shared/entity/datacenter';
-import {Subject} from 'rxjs';
-import {filter, map, switchMap, takeUntil} from 'rxjs/operators';
+import {MeteringConfiguration, MeteringReportConfiguration} from '@shared/entity/datacenter';
+import {Observable, of, Subject} from 'rxjs';
+import {catchError, filter, map, mergeMap, switchMap, takeUntil} from 'rxjs/operators';
 import {MeteringService} from './service/metering';
+import {environment} from '@environments/environment';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'km-metering',
@@ -31,13 +33,16 @@ import {MeteringService} from './service/metering';
 })
 export class MeteringComponent implements OnInit {
   private readonly _unsubscribe = new Subject<void>();
+  private _restRoot: string = environment.restRoot;
   config: MeteringConfiguration;
+  schedules: MeteringReportConfiguration[];
   isLoading = true;
 
   constructor(
     private readonly _dcService: DatacenterService,
     private readonly _meteringService: MeteringService,
-    private readonly _cdr: ChangeDetectorRef
+    private readonly _cdr: ChangeDetectorRef,
+    private readonly _httpClient: HttpClient
   ) {}
 
   ngOnInit(): void {
@@ -45,16 +50,20 @@ export class MeteringComponent implements OnInit {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._dcService.refreshSeedSettings());
 
-    this._dcService.seeds
+    const meteringConfig$ = this._dcService.seeds
       .pipe(map(seeds => (seeds.length > 0 ? seeds[0] : null)))
       .pipe(filter(seed => seed !== null))
       .pipe(switchMap(seed => this._dcService.seedSettings(seed)))
-      .pipe(map(settings => settings.metering))
+      .pipe(map(settings => settings.metering));
+
+    meteringConfig$
+      .pipe(mergeMap(config => this._getSchedules().pipe(map(schedules => ({config, schedules})))))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe({
-        next: config => {
+        next: ({config, schedules}) => {
           this.isLoading = false;
           this.config = config;
+          this.schedules = schedules;
           this._cdr.detectChanges();
         },
         error: _ => {
@@ -62,5 +71,12 @@ export class MeteringComponent implements OnInit {
           this._cdr.detectChanges();
         },
       });
+  }
+
+  private _getSchedules(): Observable<MeteringReportConfiguration[]> {
+    const url = `${this._restRoot}/admin/metering/configurations/reports`;
+    return this._httpClient
+      .get<MeteringReportConfiguration[]>(url)
+      .pipe(catchError(() => of<MeteringReportConfiguration[]>({} as MeteringReportConfiguration[])));
   }
 }
