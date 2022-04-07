@@ -1,4 +1,4 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,8 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export enum Group {
-  Owner = 'Owner',
-  Editor = 'Editor',
-  Viewer = 'Viewer',
+import {MockedMembersStrategy} from './mocked';
+import {MembersStrategy} from './types';
+
+export class MembersStrategyFactory {
+  static new(isAPIMocked: boolean): MembersStrategy | undefined {
+    return isAPIMocked ? new MockedMembersStrategy() : undefined;
+  }
 }

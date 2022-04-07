@@ -20,6 +20,7 @@ import {Projects} from './projects/page';
 import {RootPage} from './root/page';
 import {ServiceAccounts} from './serviceaccounts/page';
 import {UserSettings} from './usersettings/page';
+import {Members} from './members/page';
 
 export class Pages {
   private static readonly _isAPIMocked = Config.isAPIMocked();
@@ -34,6 +35,10 @@ export class Pages {
 
   static get Projects(): Projects {
     return new Projects(this._isAPIMocked);
+  }
+
+  static get Members(): Members {
+    return new Members(this._isAPIMocked);
   }
 
   static get ServiceAccounts(): ServiceAccounts {
