@@ -23,7 +23,7 @@ describe('Members Story', () => {
   const projectName = Projects.getName();
 
   it('should login as a first user', () => {
-    Pages.Root.login();
+    Pages.Root.login(Config.adminEmail(), Config.password(), true);
     Pages.Projects.visit();
     Pages.expect(View.Projects.Default);
   });
@@ -46,7 +46,7 @@ describe('Members Story', () => {
   });
 
   it('should add a new member', () => {
-    Pages.Members.add(Config.adminEmail(), Group.Editor);
+    Pages.Members.add(Config.userEmail(), Group.Editor);
   });
 
   it('should logout', () => {
@@ -54,7 +54,7 @@ describe('Members Story', () => {
   });
 
   it('should login as a second user', () => {
-    Pages.Root.login(Config.adminEmail(), Config.password(), true);
+    Pages.Root.login();
     Pages.Projects.visit();
     Pages.expect(View.Projects.Default);
   });
@@ -76,8 +76,8 @@ describe('Members Story', () => {
   });
 
   it('should delete first user from project', () => {
-    Pages.Members.delete(Config.userEmail());
-    Pages.Members.Buttons.tableRow(Config.userEmail()).should(Condition.NotExist);
+    Pages.Members.delete(Config.adminEmail());
+    Pages.Members.Buttons.tableRow(Config.adminEmail()).should(Condition.NotExist);
   });
 
   it('should go to the projects page', () => {
