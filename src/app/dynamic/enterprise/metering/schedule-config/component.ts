@@ -18,8 +18,10 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {Component, Input} from '@angular/core';
+import {Component, Input, ViewChild} from '@angular/core';
 import {MeteringReportConfiguration} from '@shared/entity/datacenter';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatSort} from '@angular/material/sort';
 
 @Component({
   selector: 'km-metering-schedule-config',
@@ -27,8 +29,18 @@ import {MeteringReportConfiguration} from '@shared/entity/datacenter';
 })
 export class MeteringScheduleConfigComponent {
   @Input() schedules: MeteringReportConfiguration[];
+  readonly displayedColumns: string[] = ['name', 'schedule', 'interval'];
+  dataSource = new MatTableDataSource<MeteringReportConfiguration>();
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor() {}
 
-  addMeteringSchedule() {}
+  ngOnInit() {
+    this.dataSource.data = this.schedules;
+    this.dataSource.sort = this.sort;
+  }
+
+  addMeteringSchedule() {
+    this.dataSource.data = this.schedules;
+  }
 }
