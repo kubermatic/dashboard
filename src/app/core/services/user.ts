@@ -15,7 +15,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, EMPTY, iif, Observable, of, timer} from 'rxjs';
-import {catchError, delay, filter, take, map, retryWhen, switchMap, tap, shareReplay} from 'rxjs/operators';
+import {catchError, delay, filter, take, map, retryWhen, switchMap, shareReplay} from 'rxjs/operators';
 import {environment} from '@environments/environment';
 import {AppConfigService} from '@app/config.service';
 import {Member} from '@shared/entity/member';
@@ -64,15 +64,7 @@ export class UserService {
   private _getCurrentUserWebSocket(): Observable<Member> {
     return webSocket<Member>(`${this.wsRoot}/me`)
       .asObservable()
-      .pipe(
-        retryWhen(errors =>
-          errors.pipe(
-            // eslint-disable-next-line no-console
-            tap(console.debug),
-            delay(this._appConfigService.getRefreshTimeBase() * this._refreshTime)
-          )
-        )
-      );
+      .pipe(retryWhen(errors => errors.pipe(delay(this._appConfigService.getRefreshTimeBase() * this._refreshTime))));
   }
 
   get currentUser(): Observable<Member> {
