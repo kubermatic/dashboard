@@ -90,15 +90,7 @@ export class SettingsService {
   }
 
   private _defaultAdminSettings(settings: AdminSettings): AdminSettings {
-    if (!settings) {
-      return DEFAULT_ADMIN_SETTINGS;
-    }
-
-    Object.keys(DEFAULT_ADMIN_SETTINGS).forEach(key => {
-      settings[key] = settings[key] === undefined ? DEFAULT_ADMIN_SETTINGS[key] : settings[key];
-    });
-
-    return settings;
+    return {...DEFAULT_ADMIN_SETTINGS, ...settings};
   }
 
   patchAdminSettings(patch: any): Observable<AdminSettings> {

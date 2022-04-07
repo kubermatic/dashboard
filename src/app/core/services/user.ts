@@ -84,15 +84,7 @@ export class UserService {
   }
 
   private _defaultUserSettings(settings: UserSettings): UserSettings {
-    if (!settings) {
-      return DEFAULT_USER_SETTINGS;
-    }
-
-    Object.keys(DEFAULT_USER_SETTINGS).forEach(key => {
-      settings[key] = settings[key] || DEFAULT_USER_SETTINGS[key];
-    });
-
-    return settings;
+    return {...DEFAULT_USER_SETTINGS, ...settings};
   }
 
   get defaultUserSettings(): UserSettings {
