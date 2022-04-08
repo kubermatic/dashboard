@@ -52,7 +52,7 @@ import {SummaryStepComponent} from './step/summary/component';
 import {NutanixProviderBasicComponent} from '@app/wizard/step/provider-settings/provider/basic/nutanix/component';
 import {NutanixProviderExtendedComponent} from '@app/wizard/step/provider-settings/provider/extended/nutanix/component';
 
-const components: any[] = [
+const components = [
   WizardComponent,
   PresetsComponent,
   ClusterStepComponent,

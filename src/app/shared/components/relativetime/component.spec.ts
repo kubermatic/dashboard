@@ -22,15 +22,13 @@ import {RelativeTimeComponent} from './component';
 import {AppConfigService} from '@app/config.service';
 import {AppConfigMockService} from '@test/services/app-config-mock';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
-
 describe('RelativeTimeComponent', () => {
   let fixture: ComponentFixture<RelativeTimeComponent>;
   let component: RelativeTimeComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
       providers: [
         {provide: AppConfigService, useClass: AppConfigMockService},
         {provide: MatDialogRef, useClass: MatDialogRefMock},

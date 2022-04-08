@@ -27,13 +27,11 @@ import {SharedModule} from '@shared/module';
 import {of} from 'rxjs';
 import {ConstraintTemplatesComponent} from './component';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, DialogTestModule];
-
 describe('ConstraintTemplatesComponent', () => {
   let fixture: ComponentFixture<ConstraintTemplatesComponent>;
   let noop: ComponentFixture<NoopConfirmDialogComponent>;
   let component: ConstraintTemplatesComponent;
-  let deleteConstraintTemplateSpy;
+  let deleteConstraintTemplateSpy: jest.Mock;
 
   beforeEach(waitForAsync(() => {
     const opaMock = {
@@ -44,7 +42,7 @@ describe('ConstraintTemplatesComponent', () => {
     deleteConstraintTemplateSpy = opaMock.deleteConstraintTemplate.mockReturnValue(of(null));
 
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, DialogTestModule],
       declarations: [ConstraintTemplatesComponent],
       providers: [
         {provide: UserService, useClass: UserMockService},

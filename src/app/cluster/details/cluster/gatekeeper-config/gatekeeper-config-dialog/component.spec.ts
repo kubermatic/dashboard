@@ -28,15 +28,13 @@ import {MonacoEditorModule, NGX_MONACO_EDITOR_CONFIG} from 'ngx-monaco-editor';
 import {GatekeeperConfigDialog, Mode} from './component';
 import {asyncData} from '@test/services/cluster-mock';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule];
-
 declare let monaco: any;
 
 describe('GatekeeperConfigDialog', () => {
   let fixture: ComponentFixture<GatekeeperConfigDialog>;
   let component: GatekeeperConfigDialog;
-  let createGatekeeperConfigSpy;
-  let patchGatekeeperConfigSpy;
+  let createGatekeeperConfigSpy: jest.Mock;
+  let patchGatekeeperConfigSpy: jest.Mock;
 
   beforeEach(waitForAsync(() => {
     const opaMock = {
@@ -48,7 +46,7 @@ describe('GatekeeperConfigDialog', () => {
     patchGatekeeperConfigSpy = opaMock.patchGatekeeperConfig.mockReturnValue(asyncData(fakeGatekeeperConfig()));
 
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule],
       declarations: [GatekeeperConfigDialog],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},

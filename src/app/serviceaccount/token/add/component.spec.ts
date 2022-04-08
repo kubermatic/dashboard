@@ -21,15 +21,13 @@ import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';
 import {ServiceAccountTokenDialog, ServiceAccountTokenDialogData, ServiceAccountTokenDialogMode} from './component';
 
-const modules: any[] = [CoreModule, ServiceAccountModule];
-
 describe('ServiceAccountTokenDialog', () => {
   let fixture: ComponentFixture<ServiceAccountTokenDialog>;
   let component: ServiceAccountTokenDialog;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [CoreModule, ServiceAccountModule],
       providers: [
         {provide: AppConfigService, useClass: AppConfigMockService},
         {provide: MatDialogRef, useClass: MatDialogRefMock},

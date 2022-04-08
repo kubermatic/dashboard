@@ -39,13 +39,11 @@ import {UserMockService} from '@test/services/user-mock';
 import {AddonService} from '@core/services/addon';
 import {AddonServiceMock} from '@test/services/addon-mock';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, DialogTestModule];
-
 describe('AlertmanagerConfigComponent', () => {
   let fixture: ComponentFixture<AlertmanagerConfigComponent>;
   let noop: ComponentFixture<NoopConfirmDialogComponent>;
   let component: AlertmanagerConfigComponent;
-  let resetAlertmanagerConfigSpy;
+  let resetAlertmanagerConfigSpy: jest.Mock;
 
   beforeEach(waitForAsync(() => {
     const mlaMock = {
@@ -55,7 +53,7 @@ describe('AlertmanagerConfigComponent', () => {
     resetAlertmanagerConfigSpy = mlaMock.resetAlertmanagerConfig.mockReturnValue(of(null));
 
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, DialogTestModule],
       declarations: [AlertmanagerConfigComponent],
       providers: [
         {provide: MLAService, useValue: mlaMock},

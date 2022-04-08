@@ -23,15 +23,13 @@ import {CoreModule} from '@core/module';
 import {SharedModule} from '@shared/module';
 import {MLAComponent} from './component';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, DialogTestModule];
-
 describe('MLAComponent', () => {
   let fixture: ComponentFixture<MLAComponent>;
   let component: MLAComponent;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, DialogTestModule],
       declarations: [MLAComponent],
       providers: [],
       teardown: {destroyAfterEach: false},
