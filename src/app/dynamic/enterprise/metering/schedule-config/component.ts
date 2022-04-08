@@ -22,6 +22,9 @@ import {Component, Input, ViewChild} from '@angular/core';
 import {MeteringReportConfiguration} from '@shared/entity/datacenter';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
+import {MatDialog} from '@angular/material/dialog';
+import {filter, take} from 'rxjs';
+import {MeteringScheduleConfigDialog} from './schedule-config-dialog/component';
 
 @Component({
   selector: 'km-metering-schedule-config',
@@ -33,14 +36,20 @@ export class MeteringScheduleConfigComponent {
   dataSource = new MatTableDataSource<MeteringReportConfiguration>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-  constructor() {}
+  constructor(private readonly _matDialog: MatDialog) {}
 
   ngOnInit() {
     this.dataSource.data = this.schedules;
+
     this.dataSource.sort = this.sort;
   }
 
   addMeteringSchedule() {
-    this.dataSource.data = this.schedules;
+    const dialog = this._matDialog.open(MeteringScheduleConfigDialog);
+    dialog
+      .afterClosed()
+      .pipe(filter(confirmed => confirmed))
+      .pipe(take(1))
+      .subscribe();
   }
 }
