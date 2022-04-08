@@ -1,0 +1,28 @@
+extends:
+  - stylelint-config-standard-scss
+plugins:
+  - stylelint-no-unsupported-browser-features
+  - stylelint-order
+rules:
+  alpha-value-notation: percentage
+  no-descending-specificity:
+  selector-pseudo-element-no-unknown: true
+  order/order:
+    - dollar-variables
+    - type: at-rule
+      name: extend
+    - type: at-rule
+      name: include
+    - declarations
+    - type: at-rule
+      name: include
+      hasBlock: true
+    - at-rules
+    - rules
+  order/properties-alphabetical-order: true
+  plugin/no-unsupported-browser-features:
+    - true
+    - severity: warning
+  scss/comment-no-empty:
+  string-quotes: single
+

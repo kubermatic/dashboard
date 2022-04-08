@@ -1,0 +1,54 @@
+parser: "@typescript-eslint/parser"
+parserOptions:
+  ecmaVersion: 2020
+  project:
+    - src/tsconfig.ce.json
+    - src/tsconfig.ee.json
+    - src/tsconfig.spec.json
+    - cypress/tsconfig.e2e.json
+  sourceType: module
+extends:
+  - "./node_modules/gts/"
+  - plugin:compat/recommended
+plugins:
+  - rxjs
+rules:
+  "@typescript-eslint/ban-ts-comment": off
+  "@typescript-eslint/no-namespace": off
+  "@typescript-eslint/no-unused-vars": off
+  "@typescript-eslint/no-explicit-any": off
+  "@typescript-eslint/no-magic-numbers":
+    - error
+    - ignore:
+        - -1
+        - 0
+        - 1
+      ignoreArrayIndexes: true
+      ignoreReadonlyClassProperties: true
+      ignoreEnums: true
+  node/no-unpublished-import: off
+  node/no-extraneous-require: error
+  node/no-unpublished-require: error
+  rxjs/no-ignored-observable: error
+  rxjs/no-nested-subscribe: error
+  rxjs/no-unbound-methods: error
+  rxjs/no-unsafe-takeuntil: error
+  rxjs/ban-operators:
+    - error
+    - first: use take(1) instead
+  no-undef: off
+  no-inner-declarations: off
+  no-redeclare: off
+  no-magic-numbers: off
+  eol-last: error
+  no-console: error
+  no-prototype-builtins: error
+  no-extra-boolean-cast: error
+  no-else-return: error
+  prefer-rest-params: error
+  complexity:
+    - error
+    - 15
+ignorePatterns:
+  - "**/*.js"
+

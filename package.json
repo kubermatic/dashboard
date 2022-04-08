@@ -1,12 +1,14 @@
 {
   "name": "kubermatic-dashboard",
-  "private": true,
-  "type": "module",
-  "version": "2.20.0",
   "description": "Kubermatic Dashboard",
-  "repository": "https://github.com/kubermatic/dashboard",
+  "version": "2.20.0",
+  "type": "module",
   "license": "proprietary",
-  "angular-cli": {},
+  "repository": "https://github.com/kubermatic/dashboard",
+  "private": true,
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "scripts": {
     "start": "npm run vi && ng s -c=default-\"${KUBERMATIC_EDITION:=ee}\" --host \"${KUBERMATIC_HOST:=localhost}\"",
     "start:local": "npm run vi && ng s -c=default-\"${KUBERMATIC_EDITION:=ee}\" --proxy-config=proxy-local.conf.cjs --host \"${KUBERMATIC_HOST:=localhost}\"",
@@ -31,12 +33,23 @@
     "fix": "npm run fix:ts && npm run fix:scss && npm run fix:html && npm run fix:license",
     "fix:ts": "gts fix",
     "fix:scss": "stylelint \"src/**/*.scss\" --fix",
-    "fix:html": "js-beautify --end-with-newline --indent-size=2 --wrap-attributes=force-aligned --replace -f \"src/**/*.html\"",
+    "fix:html": "html-beautify --replace -f \"src/**/*.html\"",
     "fix:license": "license-check-and-add add -r 2022",
     "clean": "gts clean",
     "vi": "node version.js",
     "postinstall": "ngcc && rm cypress/**/*.js && rm cypress/tsconfig.json",
     "prepare": "husky install"
+  },
+  "lint-staged": {
+    "src/**/*.ts": [
+      "gts fix"
+    ],
+    "src/**/*.scss": [
+      "stylelint --fix"
+    ],
+    "src/**/*.html": [
+      "html-beautify --replace -f "
+    ]
   },
   "dependencies": {
     "@angular/animations": "13.3.0",
@@ -120,148 +133,5 @@
     "ts-node": "10.7.0",
     "tslib": "2.3.1",
     "typescript": "4.6.2"
-  },
-  "engines": {
-    "node": ">=16.0.0"
-  },
-  "browserslist": [
-    "last 2 chrome versions",
-    "last 2 and_chr versions",
-    "last 2 edge versions",
-    "last 2 firefox versions",
-    "last 2 and_ff versions",
-    "last 2 safari versions",
-    "last 2 ios_saf versions",
-    "last 2 android versions",
-    "not dead"
-  ],
-  "eslintConfig": {
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-      "ecmaVersion": 2020,
-      "project": [
-        "src/tsconfig.ce.json",
-        "src/tsconfig.ee.json",
-        "src/tsconfig.spec.json",
-        "cypress/tsconfig.e2e.json"
-      ],
-      "sourceType": "module"
-    },
-    "extends": [
-      "./node_modules/gts/",
-      "plugin:compat/recommended"
-    ],
-    "plugins": [
-      "rxjs"
-    ],
-    "rules": {
-      "@typescript-eslint/ban-ts-comment": "off",
-      "@typescript-eslint/no-namespace": "off",
-      "@typescript-eslint/no-unused-vars": "off",
-      "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/no-magic-numbers": [
-        "error",
-        {
-          "ignore": [
-            -1,
-            0,
-            1
-          ],
-          "ignoreArrayIndexes": true,
-          "ignoreReadonlyClassProperties": true,
-          "ignoreEnums": true
-        }
-      ],
-      "node/no-unpublished-import": "off",
-      "node/no-extraneous-require": "error",
-      "node/no-unpublished-require": "error",
-      "rxjs/no-ignored-observable": "error",
-      "rxjs/no-nested-subscribe": "error",
-      "rxjs/no-unbound-methods": "error",
-      "rxjs/no-unsafe-takeuntil": "error",
-      "rxjs/ban-operators": [
-        "error",
-        {
-          "first": "use take(1) instead"
-        }
-      ],
-      "no-undef": "off",
-      "no-inner-declarations": "off",
-      "no-redeclare": "off",
-      "no-magic-numbers": "off",
-      "eol-last": "error",
-      "no-console": "error",
-      "no-prototype-builtins": "error",
-      "no-extra-boolean-cast": "error",
-      "no-else-return": "error",
-      "prefer-rest-params": "error",
-      "complexity": [
-        "error",
-        15
-      ]
-    },
-    "ignorePatterns": [
-      "**/*.js"
-    ]
-  },
-  "eslintIgnore": [
-    "dist/*",
-    "node_modules/*",
-    "src/environments/environment.e2e*.ts",
-    "src/environments/environment.prod*.ts",
-    "src/app/dynamic/module-registry.ce.ts"
-  ],
-  "lint-staged": {
-    "src/**/*.ts": [
-      "gts fix"
-    ],
-    "src/**/*.scss": [
-      "stylelint --fix"
-    ],
-    "src/**/*.html": [
-      "js-beautify --end-with-newline --indent-size=2 --wrap-attributes=force-aligned --replace -f "
-    ]
-  },
-  "stylelint": {
-    "extends": [
-      "stylelint-config-standard-scss"
-    ],
-    "plugins": [
-      "stylelint-no-unsupported-browser-features",
-      "stylelint-order"
-    ],
-    "rules": {
-      "alpha-value-notation": "percentage",
-      "no-descending-specificity": null,
-      "selector-pseudo-element-no-unknown": true,
-      "order/order": [
-        "dollar-variables",
-        {
-          "type": "at-rule",
-          "name": "extend"
-        },
-        {
-          "type": "at-rule",
-          "name": "include"
-        },
-        "declarations",
-        {
-          "type": "at-rule",
-          "name": "include",
-          "hasBlock": true
-        },
-        "at-rules",
-        "rules"
-      ],
-      "order/properties-alphabetical-order": true,
-      "plugin/no-unsupported-browser-features": [
-        true,
-        {
-          "severity": "warning"
-        }
-      ],
-      "scss/comment-no-empty": null,
-      "string-quotes": "single"
-    }
   }
 }
