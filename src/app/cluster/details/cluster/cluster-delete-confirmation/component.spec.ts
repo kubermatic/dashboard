@@ -36,8 +36,6 @@ import {SharedModule} from '@shared/module';
 import {of} from 'rxjs';
 import {ClusterDeleteConfirmationComponent} from './component';
 
-const modules: any[] = [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule];
-
 describe('ClusterDeleteConfirmationComponent', () => {
   let fixture: ComponentFixture<ClusterDeleteConfirmationComponent>;
   let component: ClusterDeleteConfirmationComponent;
@@ -45,7 +43,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
       declarations: [ClusterDeleteConfirmationComponent],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},

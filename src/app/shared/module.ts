@@ -120,7 +120,7 @@ import {ThrottleClickDirective} from './directives/throttle-click';
 import {RelativeTimePipe} from './pipes/relativetime';
 import {ButtonComponent} from '@shared/components/button/component';
 
-const modules: any[] = [
+const modules = [
   CommonModule,
   FormsModule,
   ReactiveFormsModule,
@@ -164,7 +164,7 @@ const modules: any[] = [
   MonacoEditorModule,
 ];
 
-const components: any[] = [
+const components = [
   PropertyBooleanComponent,
   DialogTitleComponent,
   PropertyComponent,
@@ -231,7 +231,7 @@ const components: any[] = [
   ButtonComponent,
 ];
 
-const directives: any[] = [AutofocusDirective, ThrottleClickDirective, OptionDirective];
+const directives = [AutofocusDirective, ThrottleClickDirective, OptionDirective];
 
 @NgModule({
   imports: [...modules],

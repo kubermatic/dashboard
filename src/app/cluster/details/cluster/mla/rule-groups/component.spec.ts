@@ -29,13 +29,11 @@ import {SharedModule} from '@shared/module';
 import {of} from 'rxjs';
 import {RuleGroupsComponent} from './component';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, DialogTestModule];
-
 describe('RuleGroupsComponent', () => {
   let fixture: ComponentFixture<RuleGroupsComponent>;
   let noop: ComponentFixture<NoopConfirmDialogComponent>;
   let component: RuleGroupsComponent;
-  let deleteRuleGroupSpy;
+  let deleteRuleGroupSpy: jest.Mock;
 
   beforeEach(waitForAsync(() => {
     const mlaMock = {
@@ -45,7 +43,7 @@ describe('RuleGroupsComponent', () => {
     deleteRuleGroupSpy = mlaMock.deleteRuleGroup.mockReturnValue(of(null));
 
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, DialogTestModule],
       declarations: [RuleGroupsComponent],
       providers: [
         {provide: MLAService, useValue: mlaMock},

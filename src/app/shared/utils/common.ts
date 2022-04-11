@@ -22,7 +22,7 @@ export function objectDiff(object: any, base: any): any {
   });
 }
 
-function comparator(baseValue, value): boolean {
+function comparator(baseValue: any, value: any): boolean {
   if (_.isArray(baseValue) && _.isArray(value)) {
     return _.isEqual(baseValue.sort(), value.sort());
   }

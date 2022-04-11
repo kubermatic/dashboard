@@ -30,8 +30,6 @@ import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
 import {UserPanelComponent} from './component';
 
-const modules: any[] = [BrowserModule, HttpClientModule, RouterTestingModule, BrowserAnimationsModule, SharedModule];
-
 describe('UserPanelComponent', () => {
   let fixture: ComponentFixture<UserPanelComponent>;
   let component: UserPanelComponent;
@@ -39,7 +37,7 @@ describe('UserPanelComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, HttpClientModule, RouterTestingModule, BrowserAnimationsModule, SharedModule],
       declarations: [UserPanelComponent],
       providers: [
         MatDialog,

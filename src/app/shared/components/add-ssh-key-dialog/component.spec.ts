@@ -13,12 +13,7 @@
 // limitations under the License.
 
 import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MatDialogModule, MatDialogRef} from '@angular/material/dialog';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
@@ -32,20 +27,7 @@ import {AddSshKeyDialogComponent} from './component';
 import {SSHKeyService} from '@core/services/ssh-key';
 import {SSHKeyMockService} from '@test/services/ssh-key-mock';
 import {click} from '@test/utils/click-handler';
-
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  RouterTestingModule,
-  ReactiveFormsModule,
-  FormsModule,
-  MatDialogModule,
-  MatFormFieldModule,
-  MatToolbarModule,
-  MatInputModule,
-  MatSnackBarModule,
-  CoreModule,
-];
+import {SharedModule} from '@shared/module';
 
 describe('AddSshKeyDialogComponent', () => {
   let fixture: ComponentFixture<AddSshKeyDialogComponent>;
@@ -54,7 +36,7 @@ describe('AddSshKeyDialogComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, RouterTestingModule, SharedModule, CoreModule],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},
         {provide: Router, useClass: RouterStub},

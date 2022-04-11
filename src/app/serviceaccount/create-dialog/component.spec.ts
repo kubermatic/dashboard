@@ -28,19 +28,17 @@ import {ServiceAccountService} from '@core/services/service-account';
 import {asyncData} from '@test/services/cluster-mock';
 import {fakeServiceAccount} from '@test/data/serviceaccount';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
-
 describe('CreateServiceAccountDialogComponent', () => {
   let fixture: ComponentFixture<CreateServiceAccountDialogComponent>;
   let component: CreateServiceAccountDialogComponent;
-  let createServiceAccountSpy;
+  let createServiceAccountSpy: jest.Mock;
 
   beforeEach(waitForAsync(() => {
     const saMock = {create: jest.fn()};
     createServiceAccountSpy = saMock.create.mockReturnValue(asyncData(fakeServiceAccount()));
 
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},
         {provide: ServiceAccountService, useValue: saMock},

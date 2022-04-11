@@ -24,15 +24,13 @@ import {AuthMockService} from '@test/services/auth-mock';
 import {DatacenterMockService} from '@test/services/datacenter-mock';
 import {DashboardComponent} from './component';
 
-const modules: any[] = [BrowserModule, RouterTestingModule, BrowserAnimationsModule];
-
 describe('DashboardComponent', () => {
   let fixture: ComponentFixture<DashboardComponent>;
   let component: DashboardComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, RouterTestingModule, BrowserAnimationsModule],
       declarations: [DashboardComponent],
       providers: [
         {provide: Router, useClass: RouterStub},
