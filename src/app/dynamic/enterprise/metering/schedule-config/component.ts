@@ -24,6 +24,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {MatDialog} from '@angular/material/dialog';
 import {filter, take} from 'rxjs';
+import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
 import {MeteringScheduleConfigDialog} from './schedule-config-dialog/component';
 
 @Component({
@@ -32,11 +33,11 @@ import {MeteringScheduleConfigDialog} from './schedule-config-dialog/component';
 })
 export class MeteringScheduleConfigComponent {
   @Input() schedules: MeteringReportConfiguration[];
-  readonly displayedColumns: string[] = ['name', 'schedule', 'interval'];
+  readonly displayedColumns: string[] = ['name', 'schedule', 'interval', 'actions'];
   dataSource = new MatTableDataSource<MeteringReportConfiguration>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-  constructor(private readonly _matDialog: MatDialog) {}
+  constructor(private readonly _meteringService: MeteringService, private readonly _matDialog: MatDialog) {}
 
   ngOnInit() {
     this.dataSource.data = this.schedules;
@@ -44,12 +45,23 @@ export class MeteringScheduleConfigComponent {
     this.dataSource.sort = this.sort;
   }
 
-  addMeteringSchedule() {
+  create() {
     const dialog = this._matDialog.open(MeteringScheduleConfigDialog);
     dialog
       .afterClosed()
       .pipe(filter(confirmed => confirmed))
       .pipe(take(1))
       .subscribe();
+  }
+
+  remove(name: string) {
+    this._meteringService
+      .deleteScheduleConfiguration(name)
+      .pipe(take(1))
+      .subscribe(() => this._meteringService.onScheduleConfigurationChange$.next());
+  }
+
+  canDelete(_name: string): boolean {
+    return true;
   }
 }

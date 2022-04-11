@@ -116,13 +116,13 @@ export class MeteringScheduleConfigDialog implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  save(): void {
+  add(): void {
     this._meteringService
-      .saveScheduleConfiguration(this._toMeteringScheduleConfiguration())
+      .addScheduleConfiguration(this._toMeteringScheduleConfiguration())
       .pipe(take(1))
       .subscribe(() => {
         this._matDialogRef.close(true);
-        this._meteringService.onConfigurationChange$.next();
+        this._meteringService.onScheduleConfigurationChange$.next();
       });
   }
 
