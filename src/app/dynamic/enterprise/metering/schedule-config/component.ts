@@ -41,8 +41,11 @@ export class MeteringScheduleConfigComponent {
 
   ngOnInit() {
     this.dataSource.data = this.schedules;
-
     this.dataSource.sort = this.sort;
+  }
+
+  ngOnChanges() {
+    this.dataSource.data = this.schedules;
   }
 
   create() {

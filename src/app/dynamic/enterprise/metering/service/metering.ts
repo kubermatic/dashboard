@@ -23,7 +23,7 @@ import {Injectable} from '@angular/core';
 import {AppConfigService} from '@app/config.service';
 import {environment} from '@environments/environment';
 import {MeteringConfiguration, MeteringCredentials, MeteringReportConfiguration} from '@shared/entity/datacenter';
-import {catchError, merge, Observable, of, shareReplay, Subject, switchMap, tap, timer} from 'rxjs';
+import {catchError, merge, Observable, of, shareReplay, Subject, switchMap, timer} from 'rxjs';
 
 @Injectable()
 export class MeteringService {
