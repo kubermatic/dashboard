@@ -70,12 +70,12 @@ limitations under the License.
            fxLayoutGap="20px">
         <mat-form-field>
           <mat-label>Cron Expression</mat-label>
-          <input [formControlName]="controls.Cron"
+          <input [formControlName]="controls.Schedule"
                  type="text"
                  matInput
                  required>
           <mat-hint>
-            Cron expression that describes how often a backup should be created. Must match the criteria specified
+            Cron expression that describes how often a report should be created. Must match the criteria specified
             <a href="https://pkg.go.dev/github.com/robfig/cron?utm_source=godoc"
                target="_blank">here</a>.
           </mat-hint>
@@ -84,7 +84,7 @@ limitations under the License.
         <km-number-stepper [formControlName]="controls.Interval"
                            mode="errors"
                            label="Interval in days"
-                           hint="How many days should be taken into calculation."
+                           hint="How many days should be taken into calculation of reports."
                            min="1"
                            required>
         </km-number-stepper>

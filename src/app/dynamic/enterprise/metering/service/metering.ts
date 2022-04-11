@@ -22,7 +22,7 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 
 import {environment} from '@environments/environment';
-import {MeteringConfiguration, MeteringCredentials} from '@shared/entity/datacenter';
+import {MeteringConfiguration, MeteringCredentials, MeteringReportConfiguration} from '@shared/entity/datacenter';
 import {Observable, Subject} from 'rxjs';
 
 @Injectable()
@@ -32,6 +32,11 @@ export class MeteringService {
   readonly onCredentialsChange$ = new Subject<void>();
 
   constructor(private readonly _http: HttpClient) {}
+
+  saveScheduleConfiguration(configuration: MeteringReportConfiguration): Observable<any> {
+    const url = `${this._restRoot}/admin/metering/configurations/reports/${configuration.name}`;
+    return this._http.post(url, {schedule: configuration.schedule, interval: configuration.interval});
+  }
 
   saveConfiguration(configuration: MeteringConfiguration): Observable<any> {
     const url = `${this._restRoot}/admin/metering/configurations`;
