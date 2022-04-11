@@ -159,11 +159,11 @@ export class Mocks {
     {m: RequestType.POST, p: Endpoint.Members, r: {fixture: 'member.json'}},
     {m: RequestType.GET, p: Endpoint.Members, r: {fixture: 'members.json'}},
     // {m: RequestType.POST, p: Endpoint.ServiceAccounts, r: {fixture: 'service-account.json'}},
-    {m: RequestType.GET, p: Endpoint.ServiceAccount, r: {fixture: 'service-account.json'}},
+    // {m: RequestType.GET, p: Endpoint.ServiceAccount, r: {fixture: 'service-account.json'}},
     // {m: RequestType.GET, p: Endpoint.ServiceAccounts, r: {fixture: 'service-accounts.json'}},
     // {m: RequestType.POST, p: Endpoint.ServiceAccountTokens, r: {fixture: 'token.json'}},
     // {m: RequestType.GET, p: Endpoint.ServiceAccountTokens, r: {fixture: 'tokens.json'}},
-    {m: RequestType.POST, p: Endpoint.SSHKeys, r: {fixture: 'ssh-key.json'}},
+    // {m: RequestType.POST, p: Endpoint.SSHKeys, r: {fixture: 'ssh-key.json'}},
     // {m: RequestType.GET, p: Endpoint.SSHKeys, r: {fixture: 'ssh-keys.json'}},
     {m: RequestType.GET, p: Endpoint.EtcdRestores, r: []},
     {m: RequestType.GET, p: Endpoint.AlertmanagerConfig, r: {spec: {config: ''}}},
@@ -209,9 +209,9 @@ export class Mocks {
   }
 
   private static _registerProviderMocks(p?: Provider): void {
-    this._intercept(RequestType.POST, Endpoint.Clusters, p ? {fixture: `${p}/cluster.json`} : {});
-    this._intercept(RequestType.GET, Endpoint.Clusters, p ? {fixture: `${p}/clusters.json`} : []);
-    this._intercept(RequestType.GET, Endpoint.Cluster, p ? {fixture: `${p}/cluster.json`} : {});
+    // this._intercept(RequestType.POST, Endpoint.Clusters, p ? {fixture: `${p}/cluster.json`} : {});
+    // this._intercept(RequestType.GET, Endpoint.Clusters, p ? {fixture: `${p}/clusters.json`} : []);
+    // this._intercept(RequestType.GET, Endpoint.Cluster, p ? {fixture: `${p}/cluster.json`} : {});
     this._intercept(RequestType.GET, Endpoint.MachineDeployments, p ? {fixture: `${p}/machinedeployments.json`} : []);
     this._intercept(RequestType.GET, Endpoint.MachineDeployment, p ? {fixture: `${p}/machinedeployment.json`} : {});
   }

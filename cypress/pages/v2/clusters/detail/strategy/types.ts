@@ -13,6 +13,7 @@
 // limitations under the License.
 
 export interface ClusterDetailStrategy {
+  onSSHKeyDelete(): void;
   onCreate(): void;
   onDelete(): void;
 }

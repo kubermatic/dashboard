@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ProviderMenuOption} from '../../../pages/clusters.po';
 import {Clusters} from '../../../pages/v2/clusters/proxy';
 import {Pages} from '../../../pages/v2/pages';
 import {Projects} from '../../../pages/v2/projects/page';
@@ -64,24 +63,18 @@ describe('SSH Key Management Story', () => {
     Pages.Wizard.visit();
     Pages.Wizard.create(clusterName, Provider.kubeAdm, BringYourOwn.Frankfurt, sshKeyName);
     Pages.expect(View.Clusters.Default);
+    Pages.Clusters.Details.Elements.sshKeys(sshKeyName).should(Condition.Exist);
   });
 
   it('should remove the ssh key from the cluster', () => {
-    Pages.Clusters.Details.Buttons.providerMenu.click();
-    Pages.Clusters.Details.Buttons.providerMenuOption(ProviderMenuOption.ManageSSHKeys).click();
-    Pages.Clusters.Details.Buttons.deleteSSHKey(sshKeyName).click();
-    Pages.Clusters.Details.Buttons.deleteSSHKeyConfirm.click();
-    Pages.Clusters.Details.Buttons.manageSSHKeyCloseButton.click();
-
-    // TODO: add assertion
+    Pages.Clusters.Details.removeSSHKey(sshKeyName);
+    Pages.Clusters.Details.Elements.sshKeys().should(Condition.Exist);
   });
 
   it('should delete the ssh key', () => {
     Pages.SSHKeys.visit();
-    Pages.SSHKeys.Buttons.deleteSSHKey(sshKeyName).click();
-    Pages.SSHKeys.Buttons.deleteSSHKeyConfirm.click();
-
-    // TODO: add assertion
+    Pages.SSHKeys.delete(sshKeyName);
+    Pages.SSHKeys.Elements.sshKey(sshKeyName).should(Condition.NotExist);
   });
 
   it('should go to the projects page', () => {

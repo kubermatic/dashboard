@@ -52,10 +52,17 @@ export class SSHKeys extends PageOptions implements Page {
     this.Buttons.creatDialogConfirm.click().then(_ => this._strategy?.onCreate());
   }
 
-  delete(): void {}
+  delete(name: string): void {
+    this.Buttons.deleteSSHKey(name).click();
+    this.Buttons.deleteSSHKeyConfirm.click().then(_ => this._strategy?.onDelete());
+  }
 }
 
 class Elements extends PageOptions {
+  sshKey(name: string): Cypress.Chainable {
+    return this._contains(name);
+  }
+
   get createDialogInput(): Cypress.Chainable {
     return this._get('#name');
   }

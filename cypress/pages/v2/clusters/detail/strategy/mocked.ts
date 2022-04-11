@@ -16,23 +16,36 @@ import {Endpoint} from '../../../../../utils/endpoint';
 import {ClusterDetailStrategy} from './types';
 
 export class MockedClusterDetailStrategy implements ClusterDetailStrategy {
-  private static readonly _fixturePath = 'clusters.json';
+  private static readonly _sshKeysFixturePath = 'ssh-keys.json';
+  private static readonly _sshKeyFixturePath = 'ssh-key.json';
   private static readonly _fixtureEmptyArrayPath = 'empty-array.json';
-  private static _activeFixture = MockedClusterDetailStrategy._fixtureEmptyArrayPath;
+  private static readonly _fixtureEmptyObjectPath = 'empty-object.json';
+  private static _sshKeysActiveFixture = MockedClusterDetailStrategy._sshKeysFixturePath;
+  private static _sshKeyActiveFixture = MockedClusterDetailStrategy._sshKeyFixturePath;
 
   constructor() {
     this._init();
   }
 
   onCreate(): void {
-    MockedClusterDetailStrategy._activeFixture = MockedClusterDetailStrategy._fixturePath;
+    MockedClusterDetailStrategy._sshKeysActiveFixture = MockedClusterDetailStrategy._sshKeysFixturePath;
+    MockedClusterDetailStrategy._sshKeyActiveFixture = MockedClusterDetailStrategy._sshKeyFixturePath;
   }
 
   onDelete(): void {
-    MockedClusterDetailStrategy._activeFixture = MockedClusterDetailStrategy._fixtureEmptyArrayPath;
+    this.onSSHKeyDelete();
+  }
+
+  onSSHKeyDelete(): void {
+    MockedClusterDetailStrategy._sshKeysActiveFixture = MockedClusterDetailStrategy._fixtureEmptyArrayPath;
+    MockedClusterDetailStrategy._sshKeyActiveFixture = MockedClusterDetailStrategy._fixtureEmptyObjectPath;
   }
 
   private _init(): void {
-    cy.intercept(Endpoint.Clusters, req => req.reply({fixture: MockedClusterDetailStrategy._activeFixture}));
+    cy.intercept(Endpoint.ClusterSSHKeys, req =>
+      req.reply({fixture: MockedClusterDetailStrategy._sshKeysActiveFixture})
+    );
+
+    cy.intercept(Endpoint.ClusterSSHKey, req => req.reply({fixture: MockedClusterDetailStrategy._sshKeyActiveFixture}));
   }
 }

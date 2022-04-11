@@ -14,44 +14,62 @@
 
 import {ProviderMenuOption} from '../../../clusters.po';
 import {Page, PageOptions} from '../../types';
+import {ClusterDetailStrategyFactory} from './strategy/factory';
+import {ClusterDetailStrategy} from './strategy/types';
 
 export class ClusterDetail extends PageOptions implements Page {
-  // private readonly _strategy: ClusterDetailStrategy | undefined;
+  private readonly _strategy: ClusterDetailStrategy | undefined;
 
   readonly Buttons = new Buttons();
   readonly Elements = new Elements();
 
-  constructor(_: boolean) {
+  constructor(isAPIMocked: boolean) {
     super();
 
-    // this._strategy = ClusterDetailStrategyFactory.new(isAPIMocked);
+    this._strategy = ClusterDetailStrategyFactory.new(isAPIMocked);
   }
 
   visit(): void {}
 
-  // delete(name: string): void {}
+  removeSSHKey(name: string): void {
+    this.Buttons.providerMenu.click();
+    this.Buttons.providerMenuOption(ProviderMenuOption.ManageSSHKeys).click();
+    this.Buttons.deleteSSHKey(name)
+      .click()
+      .then(_ => this._strategy?.onSSHKeyDelete());
+    this.Buttons.deleteSSHKeyConfirm.click();
+    this.Buttons.manageSSHKeyCloseButton.click();
+  }
 }
 
-class Elements extends PageOptions {}
+class Elements extends PageOptions {
+  sshKeys(...names: string[]): Cypress.Chainable {
+    if (!names || names.length === 0) {
+      names = ['No assigned keys'];
+    }
+
+    return this._contains(names.join(', '));
+  }
+}
 
 class Buttons extends PageOptions {
   get providerMenu(): Cypress.Chainable {
-    return cy.get('.provider-menu-btn');
+    return this._get('.provider-menu-btn');
   }
 
   providerMenuOption(option: ProviderMenuOption): Cypress.Chainable {
-    return cy.get('.km-provider-edit-settings').contains('span', option).parent();
+    return this._get('.km-provider-edit-settings').contains('span', option).parent();
   }
 
   deleteSSHKey(name: string): Cypress.Chainable {
-    return cy.get(`#km-delete-sshkey-${name}`);
+    return this._get(`#km-delete-sshkey-${name}`);
   }
 
   get deleteSSHKeyConfirm(): Cypress.Chainable {
-    return cy.get('#km-confirmation-dialog-confirm-btn');
+    return this._get('#km-confirmation-dialog-confirm-btn');
   }
 
   get manageSSHKeyCloseButton(): Cypress.Chainable {
-    return cy.get('#km-close-dialog-btn');
+    return this._get('#km-close-dialog-btn');
   }
 }
