@@ -78,7 +78,7 @@ class Buttons extends PageOptions {
   }
 
   deleteDialog(email: string): Cypress.Chainable {
-    return this._get(`#km-delete-member-${email}`);
+    return this._get(`#km-delete-member-${CSS.escape(email)}`);
   }
 
   tableRow(name: string): Cypress.Chainable {
