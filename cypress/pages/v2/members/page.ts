@@ -40,8 +40,8 @@ export class Members extends PageOptions implements Page {
     this.Buttons.addDialogConfirm.click().then(_ => this._strategy?.onCreate());
   }
 
-  delete(name: string): void {
-    this.Buttons.deleteDialog(name).click();
+  delete(email: string): void {
+    this.Buttons.deleteDialog(email).click();
     this.Buttons.deleteDialogConfirm.click().then(_ => this._strategy?.onDelete());
   }
 }
@@ -77,8 +77,8 @@ class Buttons extends PageOptions {
     return this._get('tbody');
   }
 
-  deleteDialog(name: string): Cypress.Chainable {
-    return this.tableRow(name).parent().find('button i.km-icon-delete');
+  deleteDialog(email: string): Cypress.Chainable {
+    return this._get(`#km-delete-member-${email}`);
   }
 
   tableRow(name: string): Cypress.Chainable {
