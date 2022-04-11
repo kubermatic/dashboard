@@ -83,10 +83,10 @@ class Buttons extends PageOptions {
   }
 
   deleteSSHKey(name: string): Cypress.Chainable {
-    return cy.get(`#km-delete-sshkey-${name}`);
+    return this._get(`#km-delete-sshkey-${name}`);
   }
 
   get deleteSSHKeyConfirm(): Cypress.Chainable {
-    return cy.get('#km-confirmation-dialog-confirm-btn');
+    return this._get('#km-confirmation-dialog-confirm-btn');
   }
 }
