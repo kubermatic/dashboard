@@ -43,8 +43,10 @@ export class Wizard extends PageOptions implements Page {
     this.Buttons.sshKeysSelect.click();
     this.Buttons.sshKeysSelectOption(sshKeyName).click();
     this.Buttons.overlayContainer.click();
-    this.Buttons.nextStep(WizardStep.Cluster).click();
-    this.Buttons.create.click({force: true}).then(_ => this._strategy?.onCreate());
+    this.Buttons.nextStep(WizardStep.Cluster)
+      .click()
+      .then(_ => this._strategy?.onCreate());
+    this.Buttons.create.click({force: true});
   }
 }
 
