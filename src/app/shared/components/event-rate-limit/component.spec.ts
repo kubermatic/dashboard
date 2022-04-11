@@ -24,15 +24,13 @@ import {WizardService} from '@core/services/wizard/wizard';
 import {SharedModule} from '@shared/module';
 import {EventRateLimitComponent} from './component';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule];
-
 describe('EventRateLimitComponent', () => {
   let fixture: ComponentFixture<EventRateLimitComponent>;
   let component: EventRateLimitComponent;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule],
       declarations: [EventRateLimitComponent],
       providers: [WizardService, ClusterSpecService, {provide: Auth, useClass: AuthMockService}],
     }).compileComponents();

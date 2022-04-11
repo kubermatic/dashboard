@@ -22,6 +22,8 @@ import {RootPage} from './root/page';
 import {ServiceAccounts} from './serviceaccounts/page';
 import {SSHKeys} from './sshkeys/page';
 import {Wizard} from './wizard/page';
+import {UserSettings} from './usersettings/page';
+import {Members} from './members/page';
 
 export class Pages {
   private static readonly _isAPIMocked = Config.isAPIMocked();
@@ -39,6 +41,11 @@ export class Pages {
   static get Projects(): Projects {
     this._build();
     return new Projects(this._isAPIMocked);
+  }
+
+  static get Members(): Members {
+    this._build();
+    return new Members(this._isAPIMocked);
   }
 
   static get ServiceAccounts(): ServiceAccounts {
@@ -59,6 +66,11 @@ export class Pages {
   static get Wizard(): Wizard {
     this._build();
     return new Wizard(this._isAPIMocked);
+  }
+
+  static get UserSettings(): UserSettings {
+    this._build();
+    return new UserSettings();
   }
 
   static expect(view: View): void {

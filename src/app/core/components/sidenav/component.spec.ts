@@ -36,8 +36,6 @@ import {MockComponent} from 'ng2-mock-component';
 import {SidenavComponent} from './component';
 import {View} from '@shared/entity/common';
 
-const modules: any[] = [BrowserModule, RouterTestingModule, HttpClientModule, BrowserAnimationsModule, SharedModule];
-
 describe('SidenavComponent', () => {
   let fixture: ComponentFixture<SidenavComponent>;
   let component: SidenavComponent;
@@ -46,7 +44,7 @@ describe('SidenavComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, RouterTestingModule, HttpClientModule, BrowserAnimationsModule, SharedModule],
       declarations: [
         ProjectSelectorComponent,
         SidenavComponent,

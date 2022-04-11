@@ -42,15 +42,13 @@ import {OpenStackService} from '@core/services/provider/openstack';
 import {EquinixService} from '@core/services/provider/equinix';
 import {NutanixService} from '@app/core/services/provider/nutanix';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule];
-
 describe('MachineNetworkStepComponent', () => {
   let fixture: ComponentFixture<MachineNetworkStepComponent>;
   let component: MachineNetworkStepComponent;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule],
       declarations: [MachineNetworkStepComponent],
       providers: [
         WizardService,

@@ -29,15 +29,13 @@ import {EditSSHKeysComponent} from './component';
 import {SSHKeyService} from '@core/services/ssh-key';
 import {SSHKeyMockService} from '@test/services/ssh-key-mock';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
-
 describe('EditSSHKeysComponent', () => {
   let fixture: ComponentFixture<EditSSHKeysComponent>;
   let component: EditSSHKeysComponent;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
       declarations: [EditSSHKeysComponent],
       providers: [
         {provide: ClusterService, useClass: ClusterMockService},

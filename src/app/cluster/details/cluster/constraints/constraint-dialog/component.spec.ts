@@ -29,15 +29,13 @@ import {of} from 'rxjs';
 import {ConstraintDialog, Mode} from './component';
 import {asyncData} from '@test/services/cluster-mock';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule];
-
 declare let monaco: any;
 
 describe('ConstraintDialog', () => {
   let fixture: ComponentFixture<ConstraintDialog>;
   let component: ConstraintDialog;
-  let createConstraintSpy;
-  let patchConstraintSpy;
+  let createConstraintSpy: jest.Mock;
+  let patchConstraintSpy: jest.Mock;
 
   beforeEach(waitForAsync(() => {
     const opaMock = {
@@ -50,7 +48,7 @@ describe('ConstraintDialog', () => {
     patchConstraintSpy = opaMock.patchConstraint.mockReturnValue(asyncData(fakeConstraints()[0]));
 
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule],
       declarations: [ConstraintDialog],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},
