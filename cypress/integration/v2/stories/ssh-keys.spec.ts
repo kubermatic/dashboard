@@ -71,6 +71,12 @@ describe('SSH Key Management Story', () => {
     Pages.Clusters.Details.Elements.sshKeys().should(Condition.Exist);
   });
 
+  it('should delete the cluster', () => {
+    Pages.Clusters.Details.delete(clusterName);
+    Pages.Root.Elements.spinner.should(Condition.NotExist);
+    Pages.Clusters.List.Elements.clusterItem(clusterName).should(Condition.NotExist);
+  });
+
   it('should delete the ssh key', () => {
     Pages.SSHKeys.visit();
     Pages.SSHKeys.delete(sshKeyName);

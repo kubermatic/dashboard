@@ -27,10 +27,18 @@ export class ClusterList extends PageOptions implements Page {
   }
 }
 
-class Elements extends PageOptions {}
+class Elements extends PageOptions {
+  clusterItem(name: string): Cypress.Chainable {
+    return this._get(`#km-clusters-${CSS.escape(name)}`);
+  }
+}
 
 class Buttons extends PageOptions {
   get nav(): Cypress.Chainable {
     return this._get('#km-nav-item-clusters');
+  }
+
+  deleteDialog(name: string): Cypress.Chainable {
+    return this._get(`#km-delete-cluster-${CSS.escape(name)}`);
   }
 }

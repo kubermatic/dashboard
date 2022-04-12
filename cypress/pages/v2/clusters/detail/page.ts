@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import {ProviderMenuOption} from '../../../clusters.po';
+import {Pages} from '../../pages';
 import {Page, PageOptions} from '../../types';
 import {ClusterDetailStrategyFactory} from './strategy/factory';
 import {ClusterDetailStrategy} from './strategy/types';
@@ -30,6 +31,12 @@ export class ClusterDetail extends PageOptions implements Page {
   }
 
   visit(): void {}
+
+  delete(name: string): void {
+    this.Buttons.deleteCluster.click();
+    this.Elements.deleteDialogInput.type(name);
+    this.Buttons.deleteClusterConfirm.click().then(_ => Pages.Wizard.onDelete());
+  }
 
   removeSSHKey(name: string): void {
     this.Buttons.providerMenu.click();
@@ -49,6 +56,10 @@ class Elements extends PageOptions {
     }
 
     return this._contains(names.join(', '));
+  }
+
+  get deleteDialogInput(): Cypress.Chainable {
+    return this._get('#km-delete-cluster-dialog-input');
   }
 }
 
@@ -71,5 +82,13 @@ class Buttons extends PageOptions {
 
   get manageSSHKeyCloseButton(): Cypress.Chainable {
     return this._get('#km-close-dialog-btn');
+  }
+
+  get deleteCluster(): Cypress.Chainable {
+    return this._get('#km-delete-cluster-btn');
+  }
+
+  get deleteClusterConfirm(): Cypress.Chainable {
+    return this._get('#km-delete-cluster-dialog-delete-btn');
   }
 }

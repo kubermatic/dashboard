@@ -48,6 +48,10 @@ export class Wizard extends PageOptions implements Page {
     this.Buttons.nextStep(WizardStep.Cluster).click();
     this.Buttons.create.click({force: true});
   }
+
+  onDelete(): void {
+    this._strategy?.onDelete();
+  }
 }
 
 class Elements extends PageOptions {
