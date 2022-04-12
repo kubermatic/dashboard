@@ -56,7 +56,7 @@ export class ServiceAccounts extends PageOptions implements Page {
   }
 
   addToken(name: string): void {
-    this.Buttons.openTokenDialog.click();
+    this.Buttons.openTokenDialog.click({force: true});
     this.Elements.addTokenDialogNameInput.type(name);
     this.Buttons.addToken.click();
     this.Buttons.gotIt.click().then(_ => this._tokenStrategy?.onCreate());
