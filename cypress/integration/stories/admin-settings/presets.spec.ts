@@ -22,7 +22,7 @@ import {Condition} from '../../../utils/condition';
 import {Config} from '../../../utils/config';
 import {Mocks} from '../../../utils/mocks';
 import {Preset} from '../../../utils/preset';
-import {Datacenter, Provider} from '../../../utils/provider';
+import {Digitalocean, Provider} from '../../../utils/provider';
 import {View} from '../../../utils/view';
 import {WizardStep} from '../../../utils/wizard';
 
@@ -82,7 +82,7 @@ describe('Admin Settings - Presets Story', () => {
 
   it('should make sure created preset is available', () => {
     WizardPage.getProviderBtn(Provider.Digitalocean).click();
-    WizardPage.getDatacenterBtn(Datacenter.Digitalocean.Frankfurt).click();
+    WizardPage.getDatacenterBtn(Digitalocean.Frankfurt).click();
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
     WizardPage.getCustomPresetsCombobox().click();

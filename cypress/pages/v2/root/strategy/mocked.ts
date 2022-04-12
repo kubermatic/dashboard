@@ -12,14 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {Endpoint} from '../../../../utils/endpoint';
 import {Mocks} from '../../../../utils/mocks';
 import {LoginStrategy} from './types';
 
 export class MockedLoginStrategy implements LoginStrategy {
+  private static _userFixture = {
+    id: 'user-j9e03',
+    name: 'roxy',
+    creationTimestamp: new Date(),
+    isAdmin: false,
+    email: 'roxy@kubermatic.io',
+    projects: [
+      {
+        id: 'fn9234fn1d',
+        group: 'owners',
+      },
+    ],
+    userSettings: {
+      itemsPerPage: 5,
+      lastSeenChangelogVersion: 'v9.0.0',
+      selectedProjectID: '',
+      selectProjectTableView: true,
+    },
+  };
+
+  constructor() {
+    this._init();
+  }
+
   login(email: string, _: string, isAdmin: boolean): void {
-    Mocks.currentUser.email = email;
-    Mocks.currentUser.name = email.split('@')[0];
-    Mocks.currentUser.isAdmin = isAdmin;
+    MockedLoginStrategy._userFixture.email = email;
+    MockedLoginStrategy._userFixture.name = email.split('@')[0];
+    MockedLoginStrategy._userFixture.isAdmin = isAdmin;
 
     this._mockAuthCookies();
   }
@@ -57,5 +82,9 @@ export class MockedLoginStrategy implements LoginStrategy {
   logout(): void {
     cy.clearCookies();
     cy.visit('/');
+  }
+
+  private _init(): void {
+    cy.intercept(Endpoint.CurrentUser, req => req.reply({body: MockedLoginStrategy._userFixture}));
   }
 }

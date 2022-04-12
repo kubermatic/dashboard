@@ -21,7 +21,7 @@ import {login, logout} from '../../../utils/auth';
 import {Condition} from '../../../utils/condition';
 import {Config} from '../../../utils/config';
 import {Mocks} from '../../../utils/mocks';
-import {Datacenter, Provider} from '../../../utils/provider';
+import {Digitalocean, Provider} from '../../../utils/provider';
 import {View} from '../../../utils/view';
 
 describe('Admin Settings - Opa Integration Story', () => {
@@ -68,7 +68,7 @@ describe('Admin Settings - Opa Integration Story', () => {
 
   it('should make sure opa integration in wizard is enabled and not checked', () => {
     WizardPage.getProviderBtn(Provider.Digitalocean).click();
-    WizardPage.getDatacenterBtn(Datacenter.Digitalocean.Frankfurt).click();
+    WizardPage.getDatacenterBtn(Digitalocean.Frankfurt).click();
     WizardPage.getOPAIntegrationCheckbox().find('input').should(Condition.BeEnabled);
     WizardPage.getOPAIntegrationCheckbox().find('input').should(Condition.NotBeChecked);
   });
@@ -104,7 +104,7 @@ describe('Admin Settings - Opa Integration Story', () => {
 
   it('should make sure opa integration in wizard is enabled and checked', () => {
     WizardPage.getProviderBtn(Provider.Digitalocean).click();
-    WizardPage.getDatacenterBtn(Datacenter.Digitalocean.Frankfurt).click();
+    WizardPage.getDatacenterBtn(Digitalocean.Frankfurt).click();
     WizardPage.getOPAIntegrationCheckbox().find('input').should(Condition.BeEnabled);
     WizardPage.getOPAIntegrationCheckbox().find('input').should(Condition.BeChecked);
   });
@@ -140,7 +140,7 @@ describe('Admin Settings - Opa Integration Story', () => {
 
   it('should make sure opa integration in wizard is disabled and checked', () => {
     WizardPage.getProviderBtn(Provider.Digitalocean).click();
-    WizardPage.getDatacenterBtn(Datacenter.Digitalocean.Frankfurt).click();
+    WizardPage.getDatacenterBtn(Digitalocean.Frankfurt).click();
     WizardPage.getOPAIntegrationCheckbox().find('input').should(Condition.BeDisabled);
     WizardPage.getOPAIntegrationCheckbox().find('input').should(Condition.BeChecked);
   });
@@ -176,7 +176,7 @@ describe('Admin Settings - Opa Integration Story', () => {
 
   it('should make sure opa integration in wizard is disabled and not checked', () => {
     WizardPage.getProviderBtn(Provider.Digitalocean).click();
-    WizardPage.getDatacenterBtn(Datacenter.Digitalocean.Frankfurt).click();
+    WizardPage.getDatacenterBtn(Digitalocean.Frankfurt).click();
     WizardPage.getOPAIntegrationCheckbox().find('input').should(Condition.BeDisabled);
     WizardPage.getOPAIntegrationCheckbox().find('input').should(Condition.NotBeChecked);
   });

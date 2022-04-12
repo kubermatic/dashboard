@@ -20,7 +20,7 @@ import {WizardPage} from '../../pages/wizard.po';
 import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
 import {Mocks} from '../../utils/mocks';
-import {Datacenter, Provider} from '../../utils/provider';
+import {BringYourOwn, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 
@@ -55,7 +55,7 @@ describe('Cluster Templates Story', () => {
 
   it('should fill the wizard', () => {
     WizardPage.getProviderBtn(Provider.kubeAdm).click();
-    WizardPage.getDatacenterBtn(Datacenter.BringYourOwn.Frankfurt).click();
+    WizardPage.getDatacenterBtn(BringYourOwn.Frankfurt).click();
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
   });
