@@ -53,7 +53,7 @@ export class SSHKeys extends PageOptions implements Page {
   }
 
   delete(name: string): void {
-    this.Buttons.deleteSSHKey(name).click();
+    this.Buttons.deleteSSHKey(name).click({force: true});
     this.Buttons.deleteSSHKeyConfirm.click().then(_ => this._strategy?.onDelete());
   }
 }
