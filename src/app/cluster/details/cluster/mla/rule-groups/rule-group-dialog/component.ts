@@ -23,7 +23,7 @@ import {getIconClassForButton} from '@shared/utils/common';
 import {MLAUtils} from '@shared/utils/mla';
 import _ from 'lodash';
 import {decode, encode} from 'js-base64';
-import {Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {take} from 'rxjs/operators';
 
 export interface RuleGroupDialogData {
@@ -98,7 +98,7 @@ export class RuleGroupDialog implements OnInit, OnDestroy {
     }
   }
 
-  save(): void {
+  getObservable(): Observable<RuleGroup> {
     const ruleGroupName =
       this.data.mode === Mode.Edit ? this.data.ruleGroup.name : MLAUtils.getRuleGroupName(this._getRuleGroupData());
     const ruleGroup: RuleGroup = {
@@ -115,26 +115,24 @@ export class RuleGroupDialog implements OnInit, OnDestroy {
     }
   }
 
-  private _create(ruleGroup: RuleGroup): void {
-    this._mlaService
-      .createRuleGroup(this.data.projectId, this.data.cluster.id, ruleGroup)
-      .pipe(take(1))
-      .subscribe(_ => {
-        this._matDialogRef.close(true);
-        this._notificationService.success(`Created the ${ruleGroup.name} Rule Group`);
-        this._mlaService.refreshRuleGroups();
-      });
+  private _create(ruleGroup: RuleGroup): Observable<RuleGroup> {
+    return this._mlaService.createRuleGroup(this.data.projectId, this.data.cluster.id, ruleGroup).pipe(take(1));
   }
 
-  private _edit(ruleGroup: RuleGroup): void {
-    this._mlaService
-      .editRuleGroup(this.data.projectId, this.data.cluster.id, ruleGroup)
-      .pipe(take(1))
-      .subscribe(_ => {
-        this._matDialogRef.close(true);
+  onNext(ruleGroup: RuleGroup): void {
+    this._matDialogRef.close(true);
+    switch (this.data.mode) {
+      case Mode.Add:
+        this._notificationService.success(`Created the ${ruleGroup.name} Rule Group`);
+        break;
+      case Mode.Edit:
         this._notificationService.success(`Updated the ${ruleGroup.name} Rule Group`);
-        this._mlaService.refreshRuleGroups();
-      });
+    }
+    this._mlaService.refreshRuleGroups();
+  }
+
+  private _edit(ruleGroup: RuleGroup): Observable<RuleGroup> {
+    return this._mlaService.editRuleGroup(this.data.projectId, this.data.cluster.id, ruleGroup).pipe(take(1));
   }
 
   private _initProviderConfigEditor(): void {

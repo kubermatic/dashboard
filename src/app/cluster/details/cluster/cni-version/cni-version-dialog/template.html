@@ -42,10 +42,9 @@ limitations under the License.
 
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-flat-button
-          kmThrottleClick
-          (throttleClick)="changeCNIVersion()">
-    <i class="km-icon-mask km-icon-check i-24"></i>
-    <span>Change CNI Version</span>
-  </button>
+  <km-button icon="km-icon-check i-24"
+             label="Change CNI Version"
+             [observable]="getObservable()"
+             (next)="onNext()">
+  </km-button>
 </mat-dialog-actions>

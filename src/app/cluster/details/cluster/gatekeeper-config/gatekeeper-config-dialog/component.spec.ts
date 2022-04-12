@@ -99,7 +99,6 @@ describe('GatekeeperConfigDialog', () => {
     });
 
     it('should call createGatekeeperConfig()', () => {
-      component.save();
       fixture.detectChanges();
       expect(createGatekeeperConfigSpy).toHaveBeenCalled();
     });
@@ -135,7 +134,6 @@ describe('GatekeeperConfigDialog', () => {
     });
 
     it('should call patchGatekeeperConfig()', () => {
-      component.save();
       fixture.detectChanges();
       expect(patchGatekeeperConfigSpy).toHaveBeenCalled();
     });

@@ -137,8 +137,6 @@ describe('EditClusterComponent', () => {
     fixture.detectChanges();
 
     component.form.controls.name.patchValue('new-cluster-name');
-    component.editCluster();
-    tick();
     flush();
 
     expect(editClusterSpy).toHaveBeenCalled();

@@ -21,11 +21,9 @@ limitations under the License.
                        (valid)="valid = $event"></km-machine-networks>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button kmThrottleClick
-          (throttleClick)="addMachineNetworks()"
-          mat-flat-button
-          [disabled]="!valid">
-    <i class="km-icon-mask km-icon-add"></i>
-    <span>Add Machine Network</span>
-  </button>
+  <km-button icon="km-icon-add"
+             label="Add Machine Network"
+             [disabled]="!valid"
+             [observable]="getObservable()">
+  </km-button>
 </mat-dialog-actions>

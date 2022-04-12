@@ -40,16 +40,12 @@ limitations under the License.
       <i class="km-icon-mask km-icon-share"></i>
       <span>Share</span>
     </button>
-    <button color="alternative"
-            fxLayoutAlign="center center"
-            mat-flat-button
-            type="button"
-            kmThrottleClick
-            (throttleClick)="downloadKubeconfig()"
-            [disabled]="!isClusterRunning">
-      <i class="km-icon-mask km-icon-download"></i>
-      <span>Get Kubeconfig</span>
-    </button>
+    <km-button icon="km-icon-download"
+               label="Get Kubeconfig"
+               [disabled]="!isClusterRunning"
+               [observable]="getObservable()"
+               (next)="onNext($event)">
+    </km-button>
     <button fxLayoutAlign="center center"
             mat-flat-button
             type="button"

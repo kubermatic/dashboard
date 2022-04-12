@@ -22,7 +22,7 @@ import {NotificationService} from '@core/services/notification';
 import {UserService} from '@core/services/user';
 import {EtcdBackupConfig, EtcdBackupConfigSpec} from '@shared/entity/backup';
 import {Cluster} from '@shared/entity/cluster';
-import {EMPTY, iif, Subject} from 'rxjs';
+import {EMPTY, iif, Observable, Subject} from 'rxjs';
 import {switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 export interface AddAutomaticBackupDialogConfig {
@@ -145,14 +145,15 @@ export class AddAutomaticBackupDialogComponent implements OnInit, OnDestroy {
       .subscribe(this._onClusterChange.bind(this));
   }
 
-  save(): void {
-    this._backupService
+  getObservable(): Observable<any> {
+    return this._backupService
       .create(this._config.projectID, this._selectedClusterID, this._toEtcdBackupConfig())
-      .pipe(take(1))
-      .subscribe(_ => {
-        this._dialogRef.close(true);
-        this._notificationService.success(`Created the ${this._toEtcdBackupConfig().name} automatic backup`);
-      });
+      .pipe(take(1));
+  }
+
+  onNext(): void {
+    this._dialogRef.close(true);
+    this._notificationService.success(`Created the ${this._toEtcdBackupConfig().name} automatic backup`);
   }
 
   ngOnDestroy(): void {

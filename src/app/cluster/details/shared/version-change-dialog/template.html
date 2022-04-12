@@ -57,11 +57,10 @@ limitations under the License.
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-flat-button
-          kmThrottleClick
-          (throttleClick)="changeVersion()"
-          [disabled]="!selectedVersion">
-    <i class="km-icon-mask km-icon-check i-24"></i>
-    <span>Change Version</span>
-  </button>
+  <km-button icon=" km-icon-check"
+             label="Change Version bjjnjnn"
+             [disabled]="!selectedVersion"
+             [observable]="getObservable()"
+             (next)="onNext()">
+  </km-button>
 </mat-dialog-actions>

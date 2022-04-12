@@ -83,11 +83,9 @@ describe('ChangeClusterVersionComponent', () => {
     component.versions = ['1.9.5'];
 
     fixture.detectChanges();
-    component.changeVersion();
-    tick();
     flush();
 
-    expect(patchClusterSpy).toHaveBeenCalledTimes(1);
+    expect(patchClusterSpy).toHaveBeenCalled();
   }));
 
   it('should call upgradeClusterMachineDeployments method', fakeAsync(() => {

@@ -101,7 +101,6 @@ describe('ConstraintDialog', () => {
     });
 
     it('should call createConstraint()', () => {
-      component.save();
       fixture.detectChanges();
       expect(createConstraintSpy).toHaveBeenCalled();
     });
@@ -137,7 +136,6 @@ describe('ConstraintDialog', () => {
     });
 
     it('should call patchConstraint()', () => {
-      component.save();
       fixture.detectChanges();
       expect(patchConstraintSpy).toHaveBeenCalled();
     });
