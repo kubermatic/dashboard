@@ -26,6 +26,7 @@ import {Auth} from './auth/service';
 export class DatacenterService {
   private readonly _refreshTime = 60;
   private readonly _retryTime = 5;
+  private readonly _maxRetries = 5;
   private _restRoot: string = environment.restRoot;
   private _newRestRoot: string = environment.newRestRoot;
   private _datacenters$: Observable<Datacenter[]>;
@@ -48,14 +49,14 @@ export class DatacenterService {
     this._datacenters$ = merge(this._datacentersRefresh$, this._refreshTimer$)
       .pipe(switchMap(() => iif(() => this._auth.authenticated(), this._getDatacenters(), of([]))))
       .pipe(map(datacenters => _.sortBy(datacenters, d => d.metadata.name.toLowerCase())))
-      .pipe(retry({delay: this._retryTime * this._appConfigService.getRefreshTimeBase(), count: this._retryTime}))
+      .pipe(retry({delay: this._retryTime * this._appConfigService.getRefreshTimeBase(), count: this._maxRetries}))
       .pipe(shareReplay(1));
     this._datacenters$.pipe(take(1)).subscribe(_ => {});
 
     this._seeds$ = merge(this._seedsRefresh$, this._refreshTimer$)
       .pipe(switchMap(() => iif(() => this._auth.authenticated(), this._getSeeds(), of([]))))
       .pipe(map((seeds: string[]) => _.sortBy(seeds, s => s.toLowerCase())))
-      .pipe(retry({delay: this._retryTime * this._appConfigService.getRefreshTimeBase(), count: this._retryTime}))
+      .pipe(retry({delay: this._retryTime * this._appConfigService.getRefreshTimeBase(), count: this._maxRetries}))
       .pipe(shareReplay(1));
     this._seeds$.pipe(take(1)).subscribe(_ => {});
   }
