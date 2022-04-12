@@ -18,12 +18,16 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MatDialogRef} from '@angular/material/dialog';
+import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
 import {MeteringReportConfiguration} from '@app/shared/entity/datacenter';
 import {Subject, take, takeUntil} from 'rxjs';
+
+export interface MeteringScheduleAddDialogConfig {
+  title: string;
+}
 
 enum Controls {
   Name = 'name',
@@ -55,7 +59,7 @@ enum DefaultScheduleInterval {
   selector: 'km-add-schedule-config-dialog',
   templateUrl: './template.html',
 })
-export class MeteringScheduleConfigDialog implements OnInit, OnDestroy {
+export class MeteringScheduleAddDialog implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   readonly controls = Controls;
   readonly ScheduleOption = DefaultScheduleOption;
@@ -93,8 +97,9 @@ export class MeteringScheduleConfigDialog implements OnInit, OnDestroy {
 
   constructor(
     private readonly _meteringService: MeteringService,
-    private readonly _matDialogRef: MatDialogRef<MeteringScheduleConfigDialog>,
-    private readonly _builder: FormBuilder
+    private readonly _matDialogRef: MatDialogRef<MeteringScheduleAddDialog>,
+    private readonly _builder: FormBuilder,
+    @Inject(MAT_DIALOG_DATA) public data: MeteringScheduleAddDialogConfig
   ) {}
 
   ngOnInit(): void {

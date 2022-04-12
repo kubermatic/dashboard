@@ -15,7 +15,7 @@ limitations under the License.
 -->
 <div id="km-add-schedule-config-dialog">
   <km-dialog-title>
-    <div>Add Schedule Configuration</div>
+    <div>{{data.title}}</div>
   </km-dialog-title>
 
   <mat-dialog-content>
@@ -37,36 +37,7 @@ limitations under the License.
         </mat-error>
       </mat-form-field>
 
-      <mat-radio-group [formControlName]="controls.Group"
-                       fxLayout="column"
-                       fxLayoutGap="20px">
-        <mat-radio-button [value]="ScheduleOption.Daily">
-          <div class="km-radio-button-title">Daily</div>
-          <div class="km-radio-button-description">Create report every day at 22:00</div>
-        </mat-radio-button>
-
-        <mat-radio-button [value]="ScheduleOption.Weekly">
-          <div class="km-radio-button-title">Weekly</div>
-          <div class="km-radio-button-description">Create report every week at 22:00 on Monday</div>
-        </mat-radio-button>
-
-        <mat-radio-button [value]="ScheduleOption.Monthly">
-          <div class="km-radio-button-title">Monthly</div>
-          <div class="km-radio-button-description">Create report every month at 22:00 on 1st day of the month</div>
-        </mat-radio-button>
-
-        <mat-radio-button [value]="ScheduleOption.Custom">
-          <div fxFlex
-               fxLayout="column">
-            <div class="km-radio-button-title">Custom Intervals</div>
-            <div class="km-radio-button-description">Set a custom backup time and how many backups should be kept.
-            </div>
-          </div>
-        </mat-radio-button>
-      </mat-radio-group>
-
-      <div *ngIf="form.get(controls.Group).value === ScheduleOption.Custom"
-           fxLayout="column"
+      <div fxLayout="column"
            fxLayoutGap="20px">
         <mat-form-field>
           <mat-label>Cron Expression</mat-label>
@@ -95,10 +66,10 @@ limitations under the License.
   <mat-dialog-actions>
     <button mat-flat-button
             kmThrottleClick
-            (throttleClick)="add()"
+            (throttleClick)="edit()"
             [disabled]="form.invalid">
       <i class="km-icon-mask km-icon-add"></i>
-      <span>Add Schedule</span>
+      <span>Update Schedule</span>
     </button>
   </mat-dialog-actions>
 </div>

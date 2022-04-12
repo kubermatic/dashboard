@@ -22,10 +22,13 @@ import {Component, Input, ViewChild} from '@angular/core';
 import {MeteringReportConfiguration} from '@shared/entity/datacenter';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
-import {MatDialog} from '@angular/material/dialog';
-import {filter, take} from 'rxjs';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {filter, switchMap, take} from 'rxjs';
 import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
-import {MeteringScheduleConfigDialog} from './schedule-config-dialog/component';
+import {MeteringScheduleAddDialog} from '@app/dynamic/enterprise/metering/schedule-config/add-dialog/component';
+import {MeteringScheduleEditDialog} from '@app/dynamic/enterprise/metering/schedule-config/edit-dialog/component';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
+import {NotificationService} from '@core/services/notification';
 
 @Component({
   selector: 'km-metering-schedule-config',
@@ -37,7 +40,11 @@ export class MeteringScheduleConfigComponent {
   dataSource = new MatTableDataSource<MeteringReportConfiguration>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-  constructor(private readonly _meteringService: MeteringService, private readonly _matDialog: MatDialog) {}
+  constructor(
+    private readonly _meteringService: MeteringService,
+    private readonly _matDialog: MatDialog,
+    private readonly _notificationService: NotificationService
+  ) {}
 
   ngOnInit() {
     this.dataSource.data = this.schedules;
@@ -49,7 +56,29 @@ export class MeteringScheduleConfigComponent {
   }
 
   create() {
-    const dialog = this._matDialog.open(MeteringScheduleConfigDialog);
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        title: 'Add Schedule Configuration',
+      },
+    };
+    const dialog = this._matDialog.open(MeteringScheduleAddDialog, dialogConfig);
+    dialog
+      .afterClosed()
+      .pipe(filter(confirmed => confirmed))
+      .pipe(take(1))
+      .subscribe();
+  }
+
+  edit(config: MeteringReportConfiguration) {
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        title: 'Add Schedule Configuration',
+        scheduleName: config.name,
+        schedule: config.schedule,
+        interval: config.interval,
+      },
+    };
+    const dialog = this._matDialog.open(MeteringScheduleEditDialog, dialogConfig);
     dialog
       .afterClosed()
       .pipe(filter(confirmed => confirmed))
@@ -58,10 +87,24 @@ export class MeteringScheduleConfigComponent {
   }
 
   remove(name: string) {
-    this._meteringService
-      .deleteScheduleConfiguration(name)
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        title: 'Delete Schedule Configuration',
+        message: `Delete <b>${name}</b> schedule permanently?`,
+        confirmLabel: 'Delete',
+        warning: 'Deleting this will NOT remove reports related to it.',
+      },
+    };
+    this._matDialog
+      .open(ConfirmationDialogComponent, dialogConfig)
+      .afterClosed()
+      .pipe(filter(isConfirmed => isConfirmed))
+      .pipe(switchMap(_ => this._meteringService.deleteScheduleConfiguration(name)))
       .pipe(take(1))
-      .subscribe(() => this._meteringService.onScheduleConfigurationChange$.next());
+      .subscribe(() => {
+        this._meteringService.onScheduleConfigurationChange$.next();
+        this._notificationService.success(`Deleting the ${name} configuration`);
+      });
   }
 
   canDelete(_name: string): boolean {

@@ -82,6 +82,10 @@ END OF TERMS AND CONDITIONS
           <div class="km-table-actions"
                fxLayoutAlign="end">
             <button mat-icon-button
+                    (click)="edit(element)">
+              <i class="km-icon-mask km-icon-edit"></i>
+            </button>
+            <button mat-icon-button
                     kmThrottleClick
                     (throttleClick)="remove(element.name)"
                     [disabled]="!canDelete(element.name)">
