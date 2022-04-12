@@ -12,11 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Project} from '@shared/entity/project';
+import {ProjectService} from '@core/services/project';
+import {takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'km-project-overview',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
 })
-export class ProjectOverviewComponent {}
+export class ProjectOverviewComponent implements OnInit, OnDestroy {
+  project: Project;
+  private _unsubscribe = new Subject<void>();
+
+  constructor(private readonly _projectService: ProjectService) {}
+
+  ngOnInit(): void {
+    this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe)).subscribe(p => (this.project = p));
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
+  }
+}

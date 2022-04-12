@@ -15,32 +15,33 @@ limitations under the License.
 -->
 
 <mat-card>
-  <mat-card-content>
-    <km-property>
+  <mat-card-content fxLayout="row wrap"
+                    fxLayoutGap="20px grid">
+    <km-property fxFlex>
       <div key>Project</div>
-      <div value>...</div>
+      <div value>{{project?.name}}</div>
     </km-property>
-    <km-property>
+    <km-property fxFlex>
       <div key>Clusters</div>
       <div value>...</div>
     </km-property>
-    <km-property>
+    <km-property fxFlex>
       <div key>Cluster Templates</div>
       <div value>...</div>
     </km-property>
-    <km-property>
+    <km-property fxFlex>
       <div key>Backups</div>
       <div value>...</div>
     </km-property>
-    <km-property>
+    <km-property fxFlex>
       <div key>SSH Keys</div>
       <div value>...</div>
     </km-property>
-    <km-property>
+    <km-property fxFlex>
       <div key>Members</div>
       <div value>...</div>
     </km-property>
-    <km-property>
+    <km-property fxFlex>
       <div key>Service Accounts</div>
       <div value>...</div>
     </km-property>
