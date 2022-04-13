@@ -72,16 +72,7 @@ import {MemberService} from '@core/services/member';
 import {SSHKeyService} from '@core/services/ssh-key';
 import {NutanixService} from '@core/services/provider/nutanix';
 
-const modules: any[] = [
-  CommonModule,
-  HttpClientModule,
-  RouterModule,
-  SharedModule,
-  GlobalModule,
-  BrowserAnimationsModule,
-];
-
-const components: any[] = [
+const components = [
   SidenavComponent,
   ProjectSelectorComponent,
   NavigationComponent,
@@ -96,7 +87,7 @@ const components: any[] = [
   HelpPanelComponent,
 ];
 
-const services: any[] = [
+const services = [
   Auth,
   AuthGuard,
   AuthzGuard,
@@ -140,7 +131,7 @@ const services: any[] = [
   NutanixService,
 ];
 
-const interceptors: any[] = [
+const interceptors = [
   {
     provide: HTTP_INTERCEPTORS,
     useClass: ErrorNotificationsInterceptor,
@@ -164,7 +155,7 @@ const interceptors: any[] = [
 ];
 
 @NgModule({
-  imports: [...modules],
+  imports: [CommonModule, HttpClientModule, RouterModule, SharedModule, GlobalModule, BrowserAnimationsModule],
   declarations: [...components],
   providers: [...services, ...interceptors, {provide: COOKIE_DI_TOKEN, useValue: COOKIE}],
   exports: [...components],

@@ -15,7 +15,7 @@
 import {Config} from '../../utils/config';
 
 export interface Page {
-  visit(): void;
+  visit(...params: string[]): void;
 }
 
 export abstract class PageOptions {

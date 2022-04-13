@@ -32,15 +32,13 @@ import {OpenstackProviderSettingsComponent} from './component';
 import {EquinixProviderSettingsComponent} from '../equinix-provider-settings/component';
 import {VSphereProviderSettingsComponent} from '../vsphere-provider-settings/component';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
-
 describe('OpenstackProviderSettingsComponent', () => {
   let fixture: ComponentFixture<OpenstackProviderSettingsComponent>;
   let component: OpenstackProviderSettingsComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
       declarations: [
         EditProviderSettingsComponent,
         AWSProviderSettingsComponent,

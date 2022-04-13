@@ -21,7 +21,7 @@ import {Admin, Member} from '@shared/entity/member';
 import {Report} from '@shared/entity/metering';
 import {AdminSettings, CustomLink, DEFAULT_ADMIN_SETTINGS} from '@shared/entity/settings';
 import {BehaviorSubject, EMPTY, iif, merge, Observable, of, Subject, timer} from 'rxjs';
-import {catchError, delay, map, retryWhen, shareReplay, switchMap, tap} from 'rxjs/operators';
+import {catchError, delay, map, retryWhen, shareReplay, switchMap} from 'rxjs/operators';
 import {webSocket} from 'rxjs/webSocket';
 
 @Injectable({
@@ -33,7 +33,7 @@ export class SettingsService {
   private readonly _wsRoot = environment.wsRoot;
   private readonly _adminSettings$ = new BehaviorSubject(DEFAULT_ADMIN_SETTINGS);
   private readonly _refreshTime = 5;
-  private readonly _retryDelayTime = 3;
+  private readonly _retryTime = 3;
   private _adminSettingsWatch$: Observable<AdminSettings>;
   private _admins$: Observable<Admin[]>;
   private _adminsRefresh$ = new Subject<void>();
@@ -67,15 +67,7 @@ export class SettingsService {
   private _getAdminSettingsWebSocket(): Observable<AdminSettings> {
     return webSocket<AdminSettings>(`${this._wsRoot}/admin/settings`)
       .asObservable()
-      .pipe(
-        retryWhen(errors =>
-          errors.pipe(
-            // eslint-disable-next-line no-console
-            tap(console.debug),
-            delay(this._appConfigService.getRefreshTimeBase() * this._retryDelayTime)
-          )
-        )
-      );
+      .pipe(retryWhen(errors => errors.pipe(delay(this._appConfigService.getRefreshTimeBase() * this._retryTime))));
   }
 
   private _getAdminSettings(): Observable<AdminSettings> {
@@ -91,15 +83,7 @@ export class SettingsService {
   }
 
   private _defaultAdminSettings(settings: AdminSettings): AdminSettings {
-    if (!settings) {
-      return DEFAULT_ADMIN_SETTINGS;
-    }
-
-    Object.keys(DEFAULT_ADMIN_SETTINGS).forEach(key => {
-      settings[key] = settings[key] === undefined ? DEFAULT_ADMIN_SETTINGS[key] : settings[key];
-    });
-
-    return settings;
+    return {...DEFAULT_ADMIN_SETTINGS, ...settings};
   }
 
   patchAdminSettings(patch: any): Observable<AdminSettings> {

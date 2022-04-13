@@ -21,20 +21,17 @@ import {SharedModule} from '@shared/module';
 import {CoreModule} from '@core/module';
 import {ErrorNotificationsInterceptor} from '@core/interceptors';
 
-const modules: any[] = [
-  BrowserModule,
-  HttpClientModule,
-  RouterTestingModule,
-  RouterTestingModule,
-  BrowserAnimationsModule,
-  SharedModule,
-  CoreModule,
-];
-
 describe('ErrorNotificationsInterceptorService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [
+        BrowserModule,
+        HttpClientModule,
+        RouterTestingModule,
+        BrowserAnimationsModule,
+        SharedModule,
+        CoreModule,
+      ],
       providers: [ErrorNotificationsInterceptor],
       teardown: {destroyAfterEach: false},
     });

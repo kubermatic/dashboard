@@ -22,6 +22,7 @@ export class RootPage extends PageOptions implements Page {
   private readonly _loginStrategy: LoginStrategy;
 
   readonly UserPanel = new UserPanel();
+  readonly Elements = new Elements();
   readonly Buttons = new Buttons();
 
   constructor(isAPIMocked: boolean) {
@@ -58,6 +59,12 @@ class UserPanel extends PageOptions {
 
   get adminSetttings(): Cypress.Chainable {
     return cy.get('#km-navbar-admin-settings-btn');
+  }
+}
+
+class Elements extends PageOptions {
+  get spinner(): Cypress.Chainable {
+    return this._get('.km-spinner');
   }
 }
 

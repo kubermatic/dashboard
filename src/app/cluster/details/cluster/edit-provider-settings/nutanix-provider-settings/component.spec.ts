@@ -33,15 +33,13 @@ import {VSphereProviderSettingsComponent} from '../vsphere-provider-settings/com
 import {NutanixProviderSettingsComponent} from './component';
 import {GCPProviderSettingsComponent} from '../gcp-provider-settings/component';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
-
 describe('GCPProviderSettingsComponent', () => {
   let fixture: ComponentFixture<NutanixProviderSettingsComponent>;
   let component: NutanixProviderSettingsComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
       declarations: [
         EditProviderSettingsComponent,
         GCPProviderSettingsComponent,

@@ -26,8 +26,6 @@ import {RBACService} from '@core/services/rbac';
 import {SharedModule} from '@shared/module';
 import {AddBindingComponent} from './component';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
-
 describe('AddBindingComponent', () => {
   let fixture: ComponentFixture<AddBindingComponent>;
   let component: AddBindingComponent;
@@ -46,7 +44,7 @@ describe('AddBindingComponent', () => {
     rbacMock.createBinding.mockReturnValue(asyncData(fakeBinding()));
 
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],
       declarations: [AddBindingComponent],
       providers: [
         {provide: RBACService, useValue: rbacMock},

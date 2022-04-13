@@ -54,12 +54,10 @@ import {FeatureGateService} from '@core/services/feature-gate';
 import {FeatureGatesMockService} from '@test/services/feature-gate-mock';
 import {asyncData} from '@test/services/cluster-mock';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
-
 describe('EditClusterComponent', () => {
   let fixture: ComponentFixture<EditClusterComponent>;
   let component: EditClusterComponent;
-  let editClusterSpy;
+  let editClusterSpy: jest.Mock;
 
   beforeEach(waitForAsync(() => {
     const clusterServiceMock = {
@@ -73,7 +71,7 @@ describe('EditClusterComponent', () => {
     clusterServiceMock.getAdmissionPlugins.mockReturnValue(asyncData([]));
 
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],
       declarations: [
         EditClusterComponent,
         EditProviderSettingsComponent,

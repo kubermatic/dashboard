@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import _ from 'lodash';
 import {ClustersPage} from '../../pages/clusters.po';
 import {ProjectsPage} from '../../pages/projects.po';
 import {WizardPage} from '../../pages/wizard.po';
 import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
+import {Mocks} from '../../utils/mocks';
 import {Preset} from '../../utils/preset';
-import {Datacenter, Provider} from '../../utils/provider';
+import {Azure, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
-import _ from 'lodash';
-import {Mocks} from '../../utils/mocks';
 
 describe('Azure Provider', () => {
   const preset = Mocks.enabled() ? Preset.Mock : Preset.Azure;
@@ -55,7 +55,7 @@ describe('Azure Provider', () => {
 
   it('should create a new cluster', () => {
     WizardPage.getProviderBtn(Provider.Azure).click();
-    WizardPage.getDatacenterBtn(Datacenter.Azure.WestEurope).click();
+    WizardPage.getDatacenterBtn(Azure.WestEurope).click();
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
     WizardPage.getCustomPresetsCombobox().click();
