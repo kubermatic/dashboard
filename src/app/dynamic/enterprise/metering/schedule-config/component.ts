@@ -29,6 +29,7 @@ import {MeteringScheduleAddDialog} from '@app/dynamic/enterprise/metering/schedu
 import {MeteringScheduleEditDialog} from '@app/dynamic/enterprise/metering/schedule-config/edit-dialog/component';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {NotificationService} from '@core/services/notification';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'km-metering-schedule-config',
@@ -43,6 +44,7 @@ export class MeteringScheduleConfigComponent {
   constructor(
     private readonly _meteringService: MeteringService,
     private readonly _matDialog: MatDialog,
+    private readonly _router: Router,
     private readonly _notificationService: NotificationService
   ) {}
 
@@ -53,6 +55,10 @@ export class MeteringScheduleConfigComponent {
 
   ngOnChanges() {
     this.dataSource.data = this.schedules;
+  }
+
+  goToDetails(config: MeteringReportConfiguration) {
+    this._router.navigate([`/settings/metering/schedule/${config.name}`]);
   }
 
   create() {

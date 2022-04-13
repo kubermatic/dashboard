@@ -19,31 +19,30 @@
 // END OF TERMS AND CONDITIONS
 
 import {DOCUMENT} from '@angular/common';
-import {AfterViewInit, Component, Inject, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import {ActivatedRoute} from '@angular/router';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
-import {MeteringConfiguration} from '@shared/entity/datacenter';
 import {Report} from '@shared/entity/metering';
-import {merge, of, Subject} from 'rxjs';
-import {filter, switchMap, takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
-  selector: 'km-metering-list',
+  selector: 'km-metering-reports-list',
   templateUrl: './template.html',
 })
-export class MeteringListComponent implements OnInit, OnChanges, AfterViewInit {
+export class MeteringReportListComponent implements OnInit, AfterViewInit {
   private readonly _unsubscribe = new Subject<void>();
   private _fetchingReport = '';
-  private _configChanged$ = new Subject<MeteringConfiguration>();
+  scheduleName: string;
   reports: Report[] = [];
   dataSource = new MatTableDataSource<Report>();
   readonly displayedColumns: string[] = ['name', 'size', 'lastModified', 'actions'];
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @Input() config: MeteringConfiguration;
 
   private _isLoading = true;
 
@@ -51,13 +50,10 @@ export class MeteringListComponent implements OnInit, OnChanges, AfterViewInit {
     return this._isLoading;
   }
 
-  get enabled(): boolean {
-    return this.config.enabled && !!this.config.storageSize && !!this.config.storageClassName;
-  }
-
   constructor(
     private readonly _settingsService: SettingsService,
     private readonly _userService: UserService,
+    private readonly _route: ActivatedRoute,
     @Inject(DOCUMENT) private readonly _document: Document
   ) {}
 
@@ -67,21 +63,16 @@ export class MeteringListComponent implements OnInit, OnChanges, AfterViewInit {
     this.sort.active = 'lastModified';
     this.sort.direction = 'desc';
 
-    merge(this._configChanged$, of(this.config))
-      .pipe(filter(config => config.enabled))
-      .pipe(switchMap(_ => this._settingsService.reports))
+    this.scheduleName = this._route.snapshot.params.scheduleId;
+
+    this._settingsService
+      .reports(this.scheduleName)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(reports => {
         this.reports = reports;
         this.dataSource.data = this.reports;
         this._isLoading = false;
       });
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.config) {
-      this._configChanged$.next(changes.config.currentValue as MeteringConfiguration);
-    }
   }
 
   ngAfterViewInit(): void {
@@ -125,5 +116,11 @@ export class MeteringListComponent implements OnInit, OnChanges, AfterViewInit {
 
   isPaginatorVisible(): boolean {
     return this.reports && this.reports.length > 0 && this.paginator && this.reports.length > this.paginator.pageSize;
+  }
+
+  prettifyReportName(name: string): string {
+    const afterSplit = name.split('/');
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    return afterSplit.length === 2 ? afterSplit[1] : afterSplit[0];
   }
 }

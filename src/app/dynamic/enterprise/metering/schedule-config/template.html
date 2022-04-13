@@ -99,8 +99,9 @@ END OF TERMS AND CONDITIONS
           class="km-header-row"
           *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row
-          *matRowDef="let row; columns: displayedColumns"
-          class="km-mat-row"></tr>
+          *matRowDef="let element; columns: displayedColumns"
+          class="km-mat-row km-pointer"
+          (click)="goToDetails(element)"></tr>
     </table>
 
   </mat-card-content>

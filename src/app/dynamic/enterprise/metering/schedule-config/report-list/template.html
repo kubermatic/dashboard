@@ -29,14 +29,7 @@ END OF TERMS AND CONDITIONS
     </mat-card-title>
   </mat-card-header>
   <mat-card-content fxLayout="column">
-    <div *ngIf="!enabled"
-         fxFlex
-         fxLayoutAlign="center center">
-      Enable and configure metering to get regular usage reports
-    </div>
-
-    <table [hidden]="!config.enabled"
-           class="km-table"
+    <table class="km-table"
            mat-table
            matSort
            matSortActive="name"
@@ -49,7 +42,7 @@ END OF TERMS AND CONDITIONS
             mat-sort-header>Name
         </th>
         <td mat-cell
-            *matCellDef="let element">{{element.name}}</td>
+            *matCellDef="let element">{{prettifyReportName(element.name)}}</td>
       </ng-container>
 
       <ng-container matColumnDef="size">
@@ -107,7 +100,7 @@ END OF TERMS AND CONDITIONS
           class="km-mat-row"></tr>
     </table>
 
-    <ng-container *ngIf="isLoading && enabled">
+    <ng-container *ngIf="isLoading">
       <div class="km-row">
         <mat-spinner color="accent"
                      class="km-spinner"
@@ -115,7 +108,7 @@ END OF TERMS AND CONDITIONS
       </div>
     </ng-container>
 
-    <div [hidden]="!isPaginatorVisible() || !enabled">
+    <div [hidden]="!isPaginatorVisible()">
       <mat-paginator showFirstLastButtons></mat-paginator>
     </div>
   </mat-card-content>

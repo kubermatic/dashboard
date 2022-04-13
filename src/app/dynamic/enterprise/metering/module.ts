@@ -26,23 +26,34 @@ import {MeteringScheduleConfigComponent} from '@app/dynamic/enterprise/metering/
 import {MeteringConfigurationDialog} from '@app/dynamic/enterprise/metering/config/config-dialog/component';
 import {MeteringCredentialsDialog} from '@app/dynamic/enterprise/metering/config/credentials-dialog/component';
 import {MeteringScheduleAddDialog} from '@app/dynamic/enterprise/metering/schedule-config/add-dialog/component';
-import {MeteringScheduleEditDialog} from './schedule-config/edit-dialog/component';
-import {MeteringListComponent} from '@app/dynamic/enterprise/metering/list/component';
+import {MeteringScheduleEditDialog} from '@app/dynamic/enterprise/metering/schedule-config/edit-dialog/component';
+import {MeteringReportListComponent} from '@app/dynamic/enterprise/metering/schedule-config/report-list/component';
 import {SharedModule} from '@shared/module';
+import {AuthGuard, AuthzGuard} from '@core/services/auth/guard';
 
-const routes: Routes = [{path: '', component: MeteringComponent}];
+const routes: Routes = [
+  {
+    path: '',
+    component: MeteringComponent,
+  },
+  {
+    path: 'schedule/:scheduleId',
+    component: MeteringReportListComponent,
+    canActivate: [AuthGuard, AuthzGuard],
+  },
+];
 
 @NgModule({
   imports: [SharedModule, RouterModule.forChild(routes)],
   declarations: [
     MeteringComponent,
-    MeteringListComponent,
     MeteringConfigComponent,
     MeteringScheduleConfigComponent,
     MeteringConfigurationDialog,
     MeteringCredentialsDialog,
     MeteringScheduleAddDialog,
     MeteringScheduleEditDialog,
+    MeteringReportListComponent,
   ],
 })
 export class MeteringModule {}
