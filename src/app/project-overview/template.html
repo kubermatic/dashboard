@@ -14,71 +14,106 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<mat-card>
-  <mat-card-content fxLayout="row wrap"
-                    fxLayoutGap="20px grid">
-    <div fxLayoutAlign=" center"
-         fxLayoutGap="15px"
-         fxFlex>
-      <i class="km-icon-..."></i>
-      <km-property>
-        <div key>Project</div>
-        <div value>{{project?.name}}</div>
-      </km-property>
+<div fxLayout="column"
+     fxLayoutGap="20px">
+  <mat-card>
+    <mat-card-content fxLayout="row wrap"
+                      fxLayoutGap="20px grid">
+      <div fxLayoutAlign=" center"
+           fxLayoutGap="15px"
+           fxFlex>
+        <i class="km-icon-..."></i>
+        <km-property>
+          <div key>Project</div>
+          <div value>{{project?.name}}</div>
+        </km-property>
+      </div>
+      <div fxLayoutAlign=" center"
+           fxLayoutGap="15px"
+           fxFlex>
+        <i class="km-icon-cluster"></i>
+        <km-property>
+          <div key>Clusters</div>
+          <div value>...</div>
+        </km-property>
+      </div>
+      <div fxLayoutAlign=" center"
+           fxLayoutGap="15px"
+           fxFlex>
+        <i class="km-icon-cluster-template"></i>
+        <km-property>
+          <div key>Cluster Templates</div>
+          <div value>...</div>
+        </km-property>
+      </div>
+      <div fxLayoutAlign=" center"
+           fxLayoutGap="15px"
+           fxFlex>
+        <i class="km-icon-backup"></i>
+        <km-property>
+          <div key>Backups</div>
+          <div value>...</div>
+        </km-property>
+      </div>
+      <div fxLayoutAlign=" center"
+           fxLayoutGap="15px"
+           fxFlex>
+        <i class="km-icon-key"></i>
+        <km-property>
+          <div key>SSH Keys</div>
+          <div value>...</div>
+        </km-property>
+      </div>
+      <div fxLayoutAlign=" center"
+           fxLayoutGap="15px"
+           fxFlex>
+        <i class="km-icon-member"></i>
+        <km-property>
+          <div key>Members</div>
+          <div value>...</div>
+        </km-property>
+      </div>
+      <div fxLayoutAlign=" center"
+           fxLayoutGap="15px"
+           fxFlex>
+        <i class="km-icon-serviceaccount"></i>
+        <km-property>
+          <div key>Service Accounts</div>
+          <div value>...</div>
+        </km-property>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <div fxLayout="row"
+       fxLayoutGap="20px">
+    <div fxLayout="column"
+         fxLayoutGap="20px"
+         fxFlex="50">
+      <mat-card>
+        <mat-card-content>
+          ...
+        </mat-card-content>
+      </mat-card>
     </div>
-    <div fxLayoutAlign=" center"
-         fxLayoutGap="15px"
-         fxFlex>
-      <i class="km-icon-cluster"></i>
-      <km-property>
-        <div key>Clusters</div>
-        <div value>...</div>
-      </km-property>
+    <div fxLayout="column"
+         fxLayoutGap="20px"
+         fxFlex="50">
+      <mat-card>
+        <mat-card-content>
+          ...
+        </mat-card-content>
+      </mat-card>
+      <mat-card>
+        <mat-card-content>
+          ...
+        </mat-card-content>
+      </mat-card>
+      <mat-card>
+        <mat-card-content>
+          ...
+        </mat-card-content>
+      </mat-card>
     </div>
-    <div fxLayoutAlign=" center"
-         fxLayoutGap="15px"
-         fxFlex>
-      <i class="km-icon-cluster-template"></i>
-      <km-property>
-        <div key>Cluster Templates</div>
-        <div value>...</div>
-      </km-property>
-    </div>
-    <div fxLayoutAlign=" center"
-         fxLayoutGap="15px"
-         fxFlex>
-      <i class="km-icon-backup"></i>
-      <km-property>
-        <div key>Backups</div>
-        <div value>...</div>
-      </km-property>
-    </div>
-    <div fxLayoutAlign=" center"
-         fxLayoutGap="15px"
-         fxFlex>
-      <i class="km-icon-key"></i>
-      <km-property>
-        <div key>SSH Keys</div>
-        <div value>...</div>
-      </km-property>
-    </div>
-    <div fxLayoutAlign=" center"
-         fxLayoutGap="15px"
-         fxFlex>
-      <i class="km-icon-member"></i>
-      <km-property>
-        <div key>Members</div>
-        <div value>...</div>
-      </km-property>
-    </div>
-    <div fxLayoutAlign=" center"
-         fxLayoutGap="15px"
-         fxFlex>
-      <i class="km-icon-serviceaccount"></i>
-      <km-property>
-        <div key>Service Accounts</div>
-        <div value>...</div>
-      </km-property>
-    </div>
-  </mat-card-content>
-</mat-card>
+  </div>
+</div>
