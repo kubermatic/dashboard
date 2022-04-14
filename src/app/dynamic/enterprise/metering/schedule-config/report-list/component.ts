@@ -98,7 +98,7 @@ export class MeteringReportListComponent implements OnInit {
     this._fetchingReport = report.name;
 
     this._settingsService
-      .reportDownload(report.name)
+      .reportDownload(report.name, this.scheduleName)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe({
         next: url => {
@@ -114,9 +114,7 @@ export class MeteringReportListComponent implements OnInit {
     return this.reports && this.reports.length > 0 && this.paginator && this.reports.length > this.paginator.pageSize;
   }
 
-  prettifyReportName(name: string): string {
-    const afterSplit = name.split('/');
-    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-    return afterSplit.length === 2 ? afterSplit[1] : afterSplit[0];
+  trimSchedulePrefix(fullName: string): string {
+    return fullName.replace(`${this.scheduleName}/`, '');
   }
 }

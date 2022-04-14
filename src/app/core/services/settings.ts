@@ -168,8 +168,13 @@ export class SettingsService {
     return this._httpClient.get<Report[]>(url, {params: {configuration_name: scheduleName}});
   }
 
-  reportDownload(reportName: string): Observable<string> {
-    const url = `${this._restRoot}/admin/metering/reports/${reportName}`;
-    return this._httpClient.get<string>(url);
+  reportDownload(reportPath: string, scheduleName?: string): Observable<string> {
+    const options = {};
+    if (scheduleName) {
+      reportPath = reportPath.replace(`${scheduleName}/`, '');
+      options['parms'] = {params: {configuration_name: scheduleName}};
+    }
+    const url = `${this._restRoot}/admin/metering/reports/${reportPath}`;
+    return this._httpClient.get<string>(url, options);
   }
 }
