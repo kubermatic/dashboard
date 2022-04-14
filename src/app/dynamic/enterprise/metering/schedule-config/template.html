@@ -82,12 +82,13 @@ END OF TERMS AND CONDITIONS
           <div class="km-table-actions"
                fxLayoutAlign="end">
             <button mat-icon-button
-                    (click)="edit(element)">
+                    matTooltip="Update Schedule Configuration"
+                    (click)="edit(element); $event.stopPropagation()">
               <i class="km-icon-mask km-icon-edit"></i>
             </button>
             <button mat-icon-button
-                    kmThrottleClick
-                    (throttleClick)="remove(element.name)">
+                    matTooltip="Delete Schedule Configuration"
+                    (click)="remove(element.name); $event.stopPropagation()">
               <i class="km-icon-delete"></i>
             </button>
           </div>

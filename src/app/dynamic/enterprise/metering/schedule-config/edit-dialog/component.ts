@@ -24,7 +24,7 @@ import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {NotificationService} from '@app/core/services/notification';
 import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
 import {MeteringReportConfiguration} from '@app/shared/entity/datacenter';
-import {Subject, take} from 'rxjs';
+import {Observable, Subject, take} from 'rxjs';
 
 export interface MeteringScheduleEditDialogConfig {
   title: string;
@@ -69,15 +69,14 @@ export class MeteringScheduleEditDialog implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  edit(): void {
-    this._meteringService
-      .updateScheduleConfiguration(this._toMeteringScheduleConfiguration())
-      .pipe(take(1))
-      .subscribe(() => {
-        this._notificationService.success('Updated schedule configuration');
-        this._matDialogRef.close(true);
-        this._meteringService.onScheduleConfigurationChange$.next();
-      });
+  getObservable(): Observable<any> {
+    return this._meteringService.updateScheduleConfiguration(this._toMeteringScheduleConfiguration()).pipe(take(1));
+  }
+
+  onNext(): void {
+    this._notificationService.success('Updated schedule configuration');
+    this._matDialogRef.close(true);
+    this._meteringService.onScheduleConfigurationChange$.next();
   }
 
   private _toMeteringScheduleConfiguration(): MeteringReportConfiguration {

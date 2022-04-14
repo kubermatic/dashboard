@@ -33,7 +33,7 @@ limitations under the License.
                autocomplete="off"
                cdkFocusInitial>
         <mat-error *ngIf="form.get(controls.Name).hasError('required')">
-          Schedule Name is <strong>required</strong>.
+          Schedule name is <strong>required</strong>.
         </mat-error>
       </mat-form-field>
 
@@ -92,12 +92,10 @@ limitations under the License.
   </mat-dialog-content>
 
   <mat-dialog-actions>
-    <button mat-flat-button
-            kmThrottleClick
-            (throttleClick)="add()"
-            [disabled]="form.invalid">
-      <i class="km-icon-mask km-icon-add"></i>
-      <span>Add Schedule</span>
-    </button>
+    <km-button icon="km-icon-add"
+               label="Create Schedule"
+               [observable]="getObservable()"
+               (next)="onNext()">
+    </km-button>
   </mat-dialog-actions>
 </div>

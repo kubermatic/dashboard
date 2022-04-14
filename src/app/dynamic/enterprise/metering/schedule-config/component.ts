@@ -67,8 +67,8 @@ export class MeteringScheduleConfigComponent {
         title: 'Add Schedule Configuration',
       },
     };
-    const dialog = this._matDialog.open(MeteringScheduleAddDialog, dialogConfig);
-    dialog
+    this._matDialog
+      .open(MeteringScheduleAddDialog, dialogConfig)
       .afterClosed()
       .pipe(filter(confirmed => confirmed))
       .pipe(take(1))
@@ -84,8 +84,8 @@ export class MeteringScheduleConfigComponent {
         interval: config.interval,
       },
     };
-    const dialog = this._matDialog.open(MeteringScheduleEditDialog, dialogConfig);
-    dialog
+    this._matDialog
+      .open(MeteringScheduleEditDialog, dialogConfig)
       .afterClosed()
       .pipe(filter(confirmed => confirmed))
       .pipe(take(1))
@@ -111,9 +111,5 @@ export class MeteringScheduleConfigComponent {
         this._meteringService.onScheduleConfigurationChange$.next();
         this._notificationService.success(`Deleting the ${name} configuration`);
       });
-  }
-
-  canDelete(_name: string): boolean {
-    return true;
   }
 }

@@ -24,7 +24,7 @@ import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {NotificationService} from '@app/core/services/notification';
 import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
 import {MeteringReportConfiguration} from '@app/shared/entity/datacenter';
-import {Subject, take, takeUntil} from 'rxjs';
+import {Observable, Subject, take, takeUntil} from 'rxjs';
 
 export interface MeteringScheduleAddDialogConfig {
   title: string;
@@ -123,30 +123,21 @@ export class MeteringScheduleAddDialog implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  add(): void {
-    this._meteringService
-      .addScheduleConfiguration(this._toMeteringScheduleConfiguration())
-      .pipe(take(1))
-      .subscribe(() => {
-        this._notificationService.success('Added schedule configuration');
-        this._matDialogRef.close(true);
-        this._meteringService.onScheduleConfigurationChange$.next();
-      });
+  getObservable(): Observable<any> {
+    return this._meteringService.addScheduleConfiguration(this._toMeteringScheduleConfiguration()).pipe(take(1));
   }
 
-  private _onCustomScheduleChange(schedule: DefaultScheduleOption) {
-    switch (schedule) {
-      case DefaultScheduleOption.Custom:
-        this._updateFieldValidation(true);
-        break;
-      case DefaultScheduleOption.Daily:
-      case DefaultScheduleOption.Monthly:
-      case DefaultScheduleOption.Weekly:
-        this._updateFieldValidation(false);
-    }
+  onNext(): void {
+    this._notificationService.success('Added schedule configuration');
+    this._matDialogRef.close(true);
+    this._meteringService.onScheduleConfigurationChange$.next();
   }
 
-  private _updateFieldValidation(required: boolean) {
+  private _onCustomScheduleChange(schedule: DefaultScheduleOption): void {
+    this._updateFieldValidation(schedule === DefaultScheduleOption.Custom);
+  }
+
+  private _updateFieldValidation(required: boolean): void {
     if (required) {
       this.form.get(Controls.Schedule).setValidators(Validators.required);
       this.form.get(Controls.Interval).setValidators([Validators.required, Validators.min(1)]);

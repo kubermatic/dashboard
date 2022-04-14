@@ -64,12 +64,11 @@ limitations under the License.
   </mat-dialog-content>
 
   <mat-dialog-actions>
-    <button mat-flat-button
-            kmThrottleClick
-            (throttleClick)="edit()"
-            [disabled]="form.invalid">
-      <i class="km-icon-mask km-icon-add"></i>
-      <span>Update Schedule</span>
-    </button>
+    <km-button icon="km-icon-add"
+               label="Update Schedule"
+               [observable]="getObservable()"
+               (next)="onNext()"
+               [disabled]="form.invalid">
+    </km-button>
   </mat-dialog-actions>
 </div>
