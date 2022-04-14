@@ -21,6 +21,7 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {NotificationService} from '@app/core/services/notification';
 import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
 import {MeteringReportConfiguration} from '@app/shared/entity/datacenter';
 import {Subject, take, takeUntil} from 'rxjs';
@@ -44,9 +45,9 @@ enum DefaultScheduleOption {
 }
 
 enum DefaultSchedule {
-  Daily = '0 22 * * *',
-  Weekly = '0 22 * * 1',
-  Monthly = '0 22 1 * *',
+  Daily = '0 1 * * *',
+  Weekly = '0 1 * * 6',
+  Monthly = '0 1 1 * *',
 }
 
 enum DefaultScheduleInterval {
@@ -99,6 +100,7 @@ export class MeteringScheduleAddDialog implements OnInit, OnDestroy {
     private readonly _meteringService: MeteringService,
     private readonly _matDialogRef: MatDialogRef<MeteringScheduleAddDialog>,
     private readonly _builder: FormBuilder,
+    private readonly _notificationService: NotificationService,
     @Inject(MAT_DIALOG_DATA) public data: MeteringScheduleAddDialogConfig
   ) {}
 
@@ -126,6 +128,7 @@ export class MeteringScheduleAddDialog implements OnInit, OnDestroy {
       .addScheduleConfiguration(this._toMeteringScheduleConfiguration())
       .pipe(take(1))
       .subscribe(() => {
+        this._notificationService.success('Added schedule configuration');
         this._matDialogRef.close(true);
         this._meteringService.onScheduleConfigurationChange$.next();
       });

@@ -19,7 +19,7 @@
 // END OF TERMS AND CONDITIONS
 
 import {DOCUMENT} from '@angular/common';
-import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -34,7 +34,7 @@ import {takeUntil} from 'rxjs/operators';
   selector: 'km-metering-reports-list',
   templateUrl: './template.html',
 })
-export class MeteringReportListComponent implements OnInit, AfterViewInit {
+export class MeteringReportListComponent implements OnInit {
   private readonly _unsubscribe = new Subject<void>();
   private _fetchingReport = '';
   scheduleName: string;
@@ -42,7 +42,7 @@ export class MeteringReportListComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource<Report>();
   readonly displayedColumns: string[] = ['name', 'size', 'lastModified', 'actions'];
   @ViewChild(MatSort, {static: true}) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   private _isLoading = true;
 
@@ -60,6 +60,7 @@ export class MeteringReportListComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.dataSource.data = this.reports;
     this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
     this.sort.active = 'lastModified';
     this.sort.direction = 'desc';
 
@@ -73,14 +74,9 @@ export class MeteringReportListComponent implements OnInit, AfterViewInit {
         this.dataSource.data = this.reports;
         this._isLoading = false;
       });
-  }
-
-  ngAfterViewInit(): void {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
 
     this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      this.paginator.pageSize = settings.itemsPerPage;
+      this.dataSource.paginator.pageSize = settings.itemsPerPage;
       this.dataSource.paginator = this.paginator; // Force refresh.
     });
   }

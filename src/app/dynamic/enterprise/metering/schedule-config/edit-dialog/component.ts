@@ -21,6 +21,7 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {NotificationService} from '@app/core/services/notification';
 import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
 import {MeteringReportConfiguration} from '@app/shared/entity/datacenter';
 import {Subject, take} from 'rxjs';
@@ -51,6 +52,7 @@ export class MeteringScheduleEditDialog implements OnInit, OnDestroy {
     private readonly _meteringService: MeteringService,
     private readonly _matDialogRef: MatDialogRef<MeteringScheduleEditDialog>,
     private readonly _builder: FormBuilder,
+    private readonly _notificationService: NotificationService,
     @Inject(MAT_DIALOG_DATA) public data: MeteringScheduleEditDialogConfig
   ) {}
 
@@ -72,6 +74,7 @@ export class MeteringScheduleEditDialog implements OnInit, OnDestroy {
       .updateScheduleConfiguration(this._toMeteringScheduleConfiguration())
       .pipe(take(1))
       .subscribe(() => {
+        this._notificationService.success('Updated schedule configuration');
         this._matDialogRef.close(true);
         this._meteringService.onScheduleConfigurationChange$.next();
       });
