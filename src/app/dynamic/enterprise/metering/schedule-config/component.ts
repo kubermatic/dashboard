@@ -18,7 +18,7 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {Component, Input, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {MeteringReportConfiguration} from '@shared/entity/datacenter';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
@@ -35,7 +35,7 @@ import {Router} from '@angular/router';
   selector: 'km-metering-schedule-config',
   templateUrl: 'template.html',
 })
-export class MeteringScheduleConfigComponent {
+export class MeteringScheduleConfigComponent implements OnInit {
   @Input() schedules: MeteringReportConfiguration[];
   readonly displayedColumns: string[] = ['name', 'schedule', 'interval', 'actions'];
   dataSource = new MatTableDataSource<MeteringReportConfiguration>();
@@ -48,20 +48,20 @@ export class MeteringScheduleConfigComponent {
     private readonly _notificationService: NotificationService
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.dataSource.data = this.schedules;
     this.dataSource.sort = this.sort;
   }
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     this.dataSource.data = this.schedules;
   }
 
-  goToDetails(config: MeteringReportConfiguration) {
+  goToDetails(config: MeteringReportConfiguration): void {
     this._router.navigate([`/settings/metering/schedule/${config.name}`]);
   }
 
-  create() {
+  create(): void {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Add Schedule Configuration',
@@ -75,7 +75,7 @@ export class MeteringScheduleConfigComponent {
       .subscribe();
   }
 
-  edit(config: MeteringReportConfiguration) {
+  edit(config: MeteringReportConfiguration): void {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Add Schedule Configuration',
@@ -92,7 +92,7 @@ export class MeteringScheduleConfigComponent {
       .subscribe();
   }
 
-  remove(name: string) {
+  remove(name: string): void {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Delete Schedule Configuration',
