@@ -12,15 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {NgModule} from '@angular/core';
-import {SharedModule} from '@shared/module';
-import {ProjectOverviewComponent} from './component';
-import {ProjectOverviewRoutingModule} from './routing';
-import {OwnersMembersComponent} from '@app/project-overview/owners-members/component';
+.mat-card {
+  margin-top: 0;
 
-@NgModule({
-  imports: [SharedModule, ProjectOverviewRoutingModule],
-  declarations: [ProjectOverviewComponent, OwnersMembersComponent],
-  exports: [ProjectOverviewComponent],
-})
-export class ProjectOverviewModule {}
+  .mat-card-content {
+    padding: 0 30px;
+  }
+}

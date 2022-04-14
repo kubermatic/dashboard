@@ -15,8 +15,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Project} from '@shared/entity/project';
 import {ProjectService} from '@core/services/project';
-import {takeUntil} from 'rxjs/operators';
-import {Subject} from 'rxjs';
+import {switchMap, takeUntil} from 'rxjs/operators';
+import {EMPTY, merge, Subject, timer} from 'rxjs';
+import {Member} from '@shared/entity/member';
+import {MemberService} from '@core/services/member';
+import {AppConfigService} from "@app/config.service";
 
 @Component({
   selector: 'km-project-overview',
@@ -25,12 +28,27 @@ import {Subject} from 'rxjs';
 })
 export class ProjectOverviewComponent implements OnInit, OnDestroy {
   project: Project;
+  members: Member[] = [];
+  private _projectChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
+  private readonly _refreshTime = 10;
 
-  constructor(private readonly _projectService: ProjectService) {}
+  constructor(
+    private readonly _projectService: ProjectService,
+    private readonly _memberService: MemberService,
+    private readonly _appConfigService: AppConfigService
+  ) {}
 
   ngOnInit(): void {
-    this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe)).subscribe(p => (this.project = p));
+    this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe)).subscribe(p => {
+      this.project = p;
+      this._projectChange.next();
+    });
+
+    merge(timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()), this._projectChange)
+      .pipe(switchMap(() => (this.project ? this._memberService.list(this.project.id) : EMPTY)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(members => (this.members = members));
   }
 
   ngOnDestroy(): void {

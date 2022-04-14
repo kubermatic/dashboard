@@ -12,15 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {NgModule} from '@angular/core';
-import {SharedModule} from '@shared/module';
-import {ProjectOverviewComponent} from './component';
-import {ProjectOverviewRoutingModule} from './routing';
-import {OwnersMembersComponent} from '@app/project-overview/owners-members/component';
+import {Component, Input} from '@angular/core';
+import {Project} from '@shared/entity/project';
+import {Member} from '@shared/entity/member';
 
-@NgModule({
-  imports: [SharedModule, ProjectOverviewRoutingModule],
-  declarations: [ProjectOverviewComponent, OwnersMembersComponent],
-  exports: [ProjectOverviewComponent],
+@Component({
+  selector: 'km-owners-members',
+  templateUrl: 'template.html',
+  styleUrls: ['style.scss'],
 })
-export class ProjectOverviewModule {}
+export class OwnersMembersComponent {
+  @Input() project: Project;
+  @Input() members: Member[] = [];
+
+  get ownerNames(): string {
+    return this.project?.owners.map(owner => owner.name).join(', ');
+  }
+
+  get memberNames(): string {
+    return this.members
+      .filter(member => this.ownerNames.indexOf(member.name))
+      .map(member => member.name)
+      .join(', ');
+  }
+}
