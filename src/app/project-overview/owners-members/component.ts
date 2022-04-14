@@ -30,9 +30,7 @@ export class OwnersMembersComponent {
   }
 
   get memberNames(): string {
-    return this.members
-      .filter(member => this.ownerNames.indexOf(member.name))
-      .map(member => member.name)
-      .join(', ');
+    const members = this.members.filter(member => this.ownerNames.indexOf(member.name));
+    return members.length ? members.map(member => member.name).join(', ') : '-';
   }
 }
