@@ -26,11 +26,11 @@ export class OwnersMembersComponent {
   @Input() members: Member[] = [];
 
   get ownerNames(): string {
-    return this.project?.owners.map(owner => owner.name).join(', ');
+    return this.project?.owners.map(owner => owner.name).sort().join(', ');
   }
 
   get memberNames(): string {
     const members = this.members.filter(member => this.ownerNames.indexOf(member.name));
-    return members.length ? members.map(member => member.name).join(', ') : '-';
+    return members.length ? members.map(member => member.name).sort().join(', ') : '-';
   }
 }
