@@ -41,7 +41,6 @@ export class SettingsService {
   private _usersRefresh$ = new Subject<void>();
   private _customLinks$: Observable<CustomLink[]>;
   private _customLinksRefresh$ = new Subject<void>();
-  // private _reports$: Observable<Report[]>;
   private _reports$ = new Map<string, Observable<Report[]>>();
   private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
 
