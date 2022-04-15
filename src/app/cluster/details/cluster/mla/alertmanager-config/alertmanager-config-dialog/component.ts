@@ -67,17 +67,6 @@ export class AlertmanagerConfigDialog implements OnInit, OnDestroy {
     return getIconClassForButton(this.data.confirmLabel);
   }
 
-  // save(): void {
-  //   const alertmanagerConfig: AlertmanagerConfig = {
-  //     spec: {
-  //       config: this._getSpec(),
-  //     },
-  //   };
-  //   console.log(this.data);
-
-  //   this._edit(alertmanagerConfig);
-  // }
-
   getObservable(): Observable<AlertmanagerConfig> {
     const alertmanagerConfig: AlertmanagerConfig = {
       spec: {
@@ -105,16 +94,4 @@ export class AlertmanagerConfigDialog implements OnInit, OnDestroy {
   private _getSpec(): string {
     return encode(this.spec);
   }
-
-  // private _edit(alertmanagerConfig: AlertmanagerConfig): void {
-  //   console.log(this.data);
-  //   this._mlaService
-  //     .putAlertmanagerConfig(this.data.projectId, this.data.cluster.id, alertmanagerConfig)
-  //     .pipe(take(1))
-  //     .subscribe(_ => {
-  //       this._matDialogRef.close(true);
-  //       this._notificationService.success('Updated the Alertmanager Config');
-  //       this._mlaService.refreshAlertmanagerConfig();
-  //     });
-  // }
 }

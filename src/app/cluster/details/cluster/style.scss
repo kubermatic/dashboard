@@ -23,6 +23,10 @@
   @include mixins.size(24px);
 }
 
+km-button {
+  margin-left: 10px;
+}
+
 .cluster-name {
   font-weight: 500;
   padding-right: 8px;
