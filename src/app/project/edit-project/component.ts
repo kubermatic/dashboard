@@ -21,6 +21,7 @@ import {Project, ProjectModel} from '@shared/entity/project';
 import {AsyncValidators} from '@shared/validators/async-label-form.validator';
 import _ from 'lodash';
 import {ProjectService} from '@core/services/project';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'km-edit-project',
@@ -47,29 +48,23 @@ export class EditProjectComponent implements OnInit {
     });
   }
 
-  editProject(): void {
-    if (!this.form.valid) {
-      return;
-    }
-
+  getObservable(): Observable<Project> {
     const project: ProjectModel = {
       name: this.form.controls.name.value,
       labels: this.labels,
     };
 
-    // Remove nullified labels as project uses PUT endpoint, not PATCH, and labels component returns patch object.
-    // TODO: Make the labels component customizable so it can return patch (current implementation)
-    //  or entity (without nullified labels).
-    // TODO: Implement and use PATCH endpoint for project edits.
     for (const label in project.labels) {
       if (Object.prototype.hasOwnProperty.call(project.labels, label) && project.labels[label] === null) {
         delete project.labels[label];
       }
     }
 
-    this._projectService.edit(this.project.id, project).subscribe(project => {
-      this._matDialogRef.close(project);
-      this._notificationService.success(`Updated the ${this.project.name} project`);
-    });
+    return this._projectService.edit(this.project.id, project);
+  }
+
+  onNext(project: Project): void {
+    this._matDialogRef.close(project);
+    this._notificationService.success(`Updated the ${this.project.name} project`);
   }
 }

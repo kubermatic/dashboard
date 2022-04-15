@@ -24,6 +24,7 @@ limitations under the License.
   <km-button icon="km-icon-add"
              label="Add Machine Network"
              [disabled]="!valid"
-             [observable]="getObservable()">
+             [observable]="getObservable()"
+             (next)="onNext($event)">
   </km-button>
 </mat-dialog-actions>

@@ -40,7 +40,7 @@ export class RestoreSnapshotDialogComponent {
     private readonly _notificationService: NotificationService
   ) {}
 
-  getObservable(): Observable<any> {
+  getObservable(): Observable<Object> {
     return this._backupService
       .restore(this.config.projectID, this.config.clusterID, this._toEtcdRestore())
       .pipe(take(1));

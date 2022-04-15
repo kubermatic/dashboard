@@ -25,8 +25,10 @@ import {tap, throttleTime} from 'rxjs/operators';
 export class ButtonComponent<T> implements OnInit, OnDestroy {
   @Input() icon: string;
   @Input() label: string;
+  @Input() color: string;
   @Input() observable: Observable<T>;
   @Input() disabled = false;
+  @Input() iconButton: string;
   @Output() next = new EventEmitter<T>();
   @Output() error = new EventEmitter<void>();
   loading = false;
@@ -34,7 +36,9 @@ export class ButtonComponent<T> implements OnInit, OnDestroy {
   private readonly _throttleTime = 1000;
 
   ngOnInit(): void {
-    this._clicks.pipe(throttleTime(this._throttleTime)).subscribe(_ => this._subscribe());
+    this._clicks.pipe(throttleTime(this._throttleTime)).subscribe(_ => {
+      this._subscribe();
+    });
   }
 
   ngOnDestroy(): void {
@@ -48,8 +52,13 @@ export class ButtonComponent<T> implements OnInit, OnDestroy {
 
   private _subscribe(): void {
     this.observable.pipe(tap(() => (this.loading = false))).subscribe({
-      next: result => this.next.emit(result),
-      error: _ => this.error.next(),
+      next: result => {
+        this.next.emit(result);
+      },
+      error: _ => {
+        this.error.next();
+        this.loading = false;
+      },
     });
   }
 }

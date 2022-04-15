@@ -91,7 +91,7 @@ export class BackupService {
     return this._http.post(url, {enable});
   }
 
-  updateBackupCredentials(seedName: string, credentials: BackupCredentials): Observable<any> {
+  updateBackupCredentials(seedName: string, credentials: BackupCredentials): Observable<Object> {
     const url = `${this._newRestRoot}/seeds/${seedName}/backupcredentials`;
     return this._http.put(url, credentials);
   }

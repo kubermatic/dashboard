@@ -63,18 +63,11 @@ limitations under the License.
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button id="km-destination-dialog-btn"
-          mat-flat-button
-          kmThrottleClick
-          (throttleClick)="save()"
-          [disabled]="!form.valid">
-    <ng-container *ngIf="data.mode === Mode.Add">
-      <i class="km-icon-mask km-icon-add"></i>
-      <span>Add Destination</span>
-    </ng-container>
-    <ng-container *ngIf="data.mode === Mode.Edit">
-      <i class="km-icon-mask km-icon-save"></i>
-      <span>Save Changes</span>
-    </ng-container>
-  </button>
+  <km-button id="km-destination-dialog-btn"
+             [icon]="icon()"
+             [label]="label()"
+             [disabled]="!form.valid"
+             [observable]="getObservable()"
+             (next)="onNext()">
+  </km-button>
 </mat-dialog-actions>

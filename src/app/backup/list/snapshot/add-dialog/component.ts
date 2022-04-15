@@ -93,7 +93,7 @@ export class AddSnapshotDialogComponent implements OnInit, OnDestroy {
     return this.destinations?.length > 0;
   }
 
-  getObservable(): Observable<any> {
+  getObservable(): Observable<Object> {
     return this._backupService
       .create(this._config.projectID, this._selectedClusterID(), this._toEtcdBackupConfig())
       .pipe(take(1));

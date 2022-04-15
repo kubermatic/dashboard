@@ -41,12 +41,11 @@ limitations under the License.
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-flat-button
-          id="km-edit-credentials-dialog-save-btn"
-          kmThrottleClick
-          (throttleClick)="edit()"
-          [disabled]="!form.valid">
-    <i class="km-icon-mask km-icon-save"></i>
-    <span>Save Credentials</span>
-  </button>
+  <km-button id="km-edit-credentials-dialog-save-btn"
+             icon="km-icon-save"
+             label="Save Credentials"
+             [disabled]="!form.valid"
+             [observable]="getObservable()"
+             (next)="onNext()">
+  </km-button>
 </mat-dialog-actions>

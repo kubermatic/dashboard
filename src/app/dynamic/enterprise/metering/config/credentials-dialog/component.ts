@@ -25,7 +25,7 @@ import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering
 import {NotificationService} from '@core/services/notification';
 import {pushToSide} from '@shared/animations/push';
 import {MeteringCredentials} from '@shared/entity/datacenter';
-import {Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {take} from 'rxjs/operators';
 
 enum Controls {
@@ -68,23 +68,15 @@ export class MeteringCredentialsDialog implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  save(): void {
-    this.saving = true;
+  getObservable(): Observable<Object> {
+    return this._meteringService.saveCredentials(this._toMeteringCredentials()).pipe(take(1));
+  }
 
-    this._meteringService
-      .saveCredentials(this._toMeteringCredentials())
-      .pipe(take(1))
-      .subscribe(
-        _ => {
-          this._notificationService.success('Updated metering credentials');
-          this._matDialogRef.close(true);
-          this._meteringService.onCredentialsChange$.next();
-          this.saving = false;
-        },
-        () => {
-          this.saving = false;
-        }
-      );
+  onNext(): void {
+    this._notificationService.success('Updated metering credentials');
+    this._matDialogRef.close(true);
+    this._meteringService.onCredentialsChange$.next();
+    this.saving = false;
   }
 
   private _toMeteringCredentials(): MeteringCredentials {

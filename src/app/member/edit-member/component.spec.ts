@@ -75,7 +75,6 @@ describe('EditMemberComponent', () => {
 
   it('should call editMember method', fakeAsync(() => {
     component.form.controls.group.patchValue('editor');
-    component.editMember();
     tick();
     flush();
 

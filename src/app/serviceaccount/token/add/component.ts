@@ -28,6 +28,7 @@ import {
 import {getIconClassForButton} from '@shared/utils/common';
 import {take} from 'rxjs/operators';
 import {ServiceAccountService} from '@core/services/service-account';
+import {Observable} from 'rxjs';
 
 enum StepRegistry {
   Name = 'Choose a Name',
@@ -112,66 +113,57 @@ export class ServiceAccountTokenDialog implements OnInit {
     }
   }
 
-  update(): void {
-    this.updating = true;
-
-    switch (this._data.mode) {
-      case ServiceAccountTokenDialogMode.Create:
-        this._create();
-        return;
-      case ServiceAccountTokenDialogMode.Edit:
-        this._edit();
-        return;
-    }
-  }
-
   getIconClass(): string {
     return getIconClassForButton(this._data.mode);
   }
 
-  private _create(): void {
+  getObservable(): Observable<ServiceAccountToken> | void {
+    switch (this._data.mode) {
+      case ServiceAccountTokenDialogMode.Create:
+        return this._create();
+      case ServiceAccountTokenDialogMode.Edit:
+        return this._edit();
+    }
+  }
+
+  onNext(token: ServiceAccountToken): void {
+    this.updating = true;
+
+    switch (this._data.mode) {
+      case ServiceAccountTokenDialogMode.Create:
+        this._notificationService.success(
+          `Added the ${token.name} token to the ${this._data.serviceAccount.name} service account`
+        );
+        this._tokenDialogService.token = token.token;
+        this.created = true;
+        this._stepper.next();
+        this.updating = false;
+        break;
+      case ServiceAccountTokenDialogMode.Edit:
+        this._notificationService.success(`Updated the ${this._data.token.name} token`);
+        this._dialogRef.close();
+        this.updating = false;
+    }
+  }
+
+  private _create(): Observable<ServiceAccountToken> {
     const entity: CreateTokenEntity = {
       name: this._tokenDialogService.tokenName,
     };
 
-    this._serviceAccountService
+    return this._serviceAccountService
       .createToken(this._data.projectID, this._data.serviceAccount, entity)
-      .pipe(take(1))
-      .subscribe(
-        token => {
-          this._notificationService.success(
-            `Added the ${token.name} token to the ${this._data.serviceAccount.name} service account`
-          );
-
-          this._tokenDialogService.token = token.token;
-          this.created = true;
-          this._stepper.next();
-        },
-        _ => {},
-        (): void => {
-          this.updating = false;
-        }
-      );
+      .pipe(take(1));
   }
 
-  private _edit(): void {
+  private _edit(): Observable<ServiceAccountToken> {
     const patch: ServiceAccountTokenPatch = {
       name: this._tokenDialogService.tokenName,
     };
 
-    this._serviceAccountService
+    return this._serviceAccountService
       .patchToken(this._data.projectID, this._data.serviceAccount, this._data.token, patch)
-      .pipe(take(1))
-      .subscribe(
-        _ => {
-          this._notificationService.success(`Updated the ${this._data.token.name} token`);
-          this._dialogRef.close();
-        },
-        _ => {},
-        (): void => {
-          this.updating = false;
-        }
-      );
+      .pipe(take(1));
   }
 
   private _regenerate(): void {

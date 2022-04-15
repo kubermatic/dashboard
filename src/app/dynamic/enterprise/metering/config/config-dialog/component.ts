@@ -25,7 +25,7 @@ import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering
 import {NotificationService} from '@core/services/notification';
 import {pushToSide} from '@shared/animations/push';
 import {MeteringConfiguration} from '@shared/entity/datacenter';
-import {Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {take} from 'rxjs/operators';
 
 export interface MeteringConfigurationDialogConfig {
@@ -71,23 +71,15 @@ export class MeteringConfigurationDialog implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  save(): void {
-    this.saving = true;
+  getObservable(): Observable<Object> {
+    return this._meteringService.saveConfiguration(this._toMeteringConfiguration()).pipe(take(1));
+  }
 
-    this._meteringService
-      .saveConfiguration(this._toMeteringConfiguration())
-      .pipe(take(1))
-      .subscribe(
-        _ => {
-          this._notificationService.success('Updated metering configuration');
-          this._matDialogRef.close(true);
-          this._meteringService.onConfigurationChange$.next();
-          this.saving = false;
-        },
-        () => {
-          this.saving = false;
-        }
-      );
+  onNext(): void {
+    this._notificationService.success('Updated metering configuration');
+    this._matDialogRef.close(true);
+    this._meteringService.onConfigurationChange$.next();
+    this.saving = false;
   }
 
   private _toMeteringConfiguration(): MeteringConfiguration {

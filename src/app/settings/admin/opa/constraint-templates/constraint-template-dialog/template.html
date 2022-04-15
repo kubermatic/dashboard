@@ -22,12 +22,11 @@ limitations under the License.
              header="YAML"></km-editor>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button id="km-constraint-template-dialog-btn"
-          mat-flat-button
-          kmThrottleClick
-          (throttleClick)="save()"
-          [disabled]="!isValid()">
-    <i [ngClass]="getIconClass()"></i>
-    <span>{{data.confirmLabel}} Constraint Template</span>
-  </button>
+  <km-button id="km-constraint-template-dialog-btn"
+             [icon]="getIconClass()"
+             [label]="data.confirmLabel+' Constraint Template'"
+             [disabled]="!isValid()"
+             [observable]="getObservable()"
+             (next)="onNext($event)">
+  </km-button>
 </mat-dialog-actions>

@@ -19,6 +19,7 @@ import {BackupService} from '@core/services/backup';
 import {NotificationService} from '@core/services/notification';
 import {BackupCredentials} from '@shared/entity/backup';
 import {AdminSeed, BackupDestination} from '@shared/entity/datacenter';
+import {Observable} from 'rxjs';
 
 export interface EditCredentialsDialogConfig {
   seed: AdminSeed;
@@ -54,7 +55,7 @@ export class EditCredentialsDialog implements OnInit {
     });
   }
 
-  edit(): void {
+  getObservable(): Observable<Object> {
     const credentials: BackupCredentials = {
       backup_credentials: {
         destination: this.data.destination.destinationName,
@@ -65,9 +66,11 @@ export class EditCredentialsDialog implements OnInit {
       },
     };
 
-    this._backupService.updateBackupCredentials(this.data.seed.name, credentials).subscribe(_ => {
-      this._matDialogRef.close();
-      this._notificationService.success('Updated backup credentials');
-    });
+    return this._backupService.updateBackupCredentials(this.data.seed.name, credentials);
+  }
+
+  onNext(): void {
+    this._matDialogRef.close();
+    this._notificationService.success('Updated backup credentials');
   }
 }

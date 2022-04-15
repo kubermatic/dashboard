@@ -19,7 +19,6 @@ import {OPAService} from '@core/services/opa';
 import {NotificationService} from '@core/services/notification';
 import {Cluster} from '@shared/entity/cluster';
 import {Constraint, ConstraintTemplate, ConstraintSpec} from '@shared/entity/opa';
-// import {getIconClassForButton} from '@shared/utils/common';
 import * as y from 'js-yaml';
 import _ from 'lodash';
 import {Observable, Subject} from 'rxjs';
@@ -133,14 +132,12 @@ export class ConstraintDialog implements OnInit, OnDestroy {
   }
 
   onNext(constraint: Constraint): void {
+    this._matDialogRef.close(true);
+    this._opaService.refreshConstraint();
     switch (this.data.mode) {
       case Mode.Add:
-        this._matDialogRef.close(true);
-        this._opaService.refreshConstraint();
         return this._notificationService.success(`Created the ${constraint.name} constraint`);
       case Mode.Edit:
-        this._matDialogRef.close(true);
-        this._opaService.refreshConstraint();
         return this._notificationService.success(`Updated the ${constraint.name} constraint`);
     }
   }

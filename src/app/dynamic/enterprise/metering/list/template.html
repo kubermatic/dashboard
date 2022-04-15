@@ -89,12 +89,12 @@ END OF TERMS AND CONDITIONS
                            [diameter]="25"></mat-spinner>
             </ng-container>
 
-            <button mat-icon-button
-                    kmThrottleClick
-                    (throttleClick)="download(element)"
-                    [disabled]="!canDownload(element)">
-              <i class="km-icon-mask km-icon-download"></i>
-            </button>
+            <km-button iconButton="true"
+                       icon="km-icon-download"
+                       [disabled]="!canDownload(element)"
+                       [observable]="getObservable(element)"
+                       (next)="onNext($event)">
+            </km-button>
           </div>
         </td>
       </ng-container>

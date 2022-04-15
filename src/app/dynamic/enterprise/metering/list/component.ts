@@ -27,7 +27,7 @@ import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {MeteringConfiguration} from '@shared/entity/datacenter';
 import {Report} from '@shared/entity/metering';
-import {merge, of, Subject} from 'rxjs';
+import {merge, Observable, of, Subject} from 'rxjs';
 import {filter, switchMap, takeUntil} from 'rxjs/operators';
 
 @Component({
@@ -121,6 +121,14 @@ export class MeteringListComponent implements OnInit, OnChanges, AfterViewInit {
         complete: () => (this._fetchingReport = ''),
         error: _ => (this._fetchingReport = ''),
       });
+  }
+
+  getObservable(report: Report): Observable<string> {
+    return this._settingsService.reportDownload(report.name).pipe(takeUntil(this._unsubscribe));
+  }
+
+  onNext(url: string): void {
+    this._document.defaultView?.open(url, '_blank');
   }
 
   isPaginatorVisible(): boolean {

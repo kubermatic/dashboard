@@ -18,6 +18,7 @@ import {NotificationService} from '@core/services/notification';
 import {PresetsService} from '@core/services/wizard/presets';
 import {Preset} from '@shared/entity/preset';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {Observable} from 'rxjs';
 import {take} from 'rxjs/operators';
 
 export interface EditPresetDialogData {
@@ -38,16 +39,15 @@ export class EditPresetDialogComponent {
     private readonly _notificationService: NotificationService
   ) {}
 
-  save(provider: NodeProvider, enabled: boolean): void {
-    this._presetsService
-      .updateStatus(this.data.preset.name, {enabled: enabled}, provider)
-      .pipe(take(1))
-      .subscribe(_ => {
-        const idx = this.data.preset.providers.findIndex(p => p.name === provider);
-        this.data.preset.providers[idx].enabled = enabled;
-        this._notificationService.success(
-          `${enabled ? 'Enabled' : 'Disabled'} the ${provider} provider for the preset ${this.data.preset.name}`
-        );
-      });
+  getObservable(provider: NodeProvider, enabled: boolean): Observable<Preset> {
+    return this._presetsService.updateStatus(this.data.preset.name, {enabled: enabled}, provider).pipe(take(1));
+  }
+
+  onNext(provider: NodeProvider, enabled: boolean): void {
+    const idx = this.data.preset.providers.findIndex(p => p.name === provider);
+    this.data.preset.providers[idx].enabled = enabled;
+    this._notificationService.success(
+      `${enabled ? 'Enabled' : 'Disabled'} the ${provider} provider for the preset ${this.data.preset.name}`
+    );
   }
 }

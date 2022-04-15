@@ -14,7 +14,7 @@
 
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {MLAService} from '@core/services/mla';
 import {NotificationService} from '@core/services/notification';
 import {AdminRuleGroup, RuleGroup, RuleGroupType} from '@shared/entity/mla';
@@ -22,7 +22,7 @@ import {getIconClassForButton} from '@shared/utils/common';
 import {MLAUtils} from '@shared/utils/mla';
 import _ from 'lodash';
 import {encode, decode} from 'js-base64';
-import {Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {take} from 'rxjs/operators';
 
 export interface RuleGroupDialogData {
@@ -92,7 +92,7 @@ export class AdminRuleGroupDialog implements OnInit, OnDestroy {
     return getIconClassForButton(this.data.confirmLabel);
   }
 
-  save(): void {
+  getObservable(): Observable<RuleGroup> {
     const ruleGroupName =
       this.data.mode === Mode.Edit
         ? this.data.adminRuleGroup.name
@@ -111,26 +111,24 @@ export class AdminRuleGroupDialog implements OnInit, OnDestroy {
     }
   }
 
-  private _create(ruleGroup: RuleGroup, seed: string): void {
-    this._mlaService
-      .createAdminRuleGroup(seed, ruleGroup)
-      .pipe(take(1))
-      .subscribe(_ => {
-        this._matDialogRef.close(true);
+  onNext(ruleGroup: RuleGroup): void {
+    this._matDialogRef.close(true);
+    switch (this.data.mode) {
+      case Mode.Add:
         this._notificationService.success(`The Rule Group ${ruleGroup.name} was created`);
-        this._mlaService.refreshAdminRuleGroups();
-      });
+        break;
+      case Mode.Edit:
+        this._notificationService.success(`The Rule Group ${ruleGroup.name} was updated`);
+    }
+    this._mlaService.refreshAdminRuleGroups();
   }
 
-  private _edit(ruleGroup: RuleGroup, seed: string): void {
-    this._mlaService
-      .editAdminRuleGroup(seed, ruleGroup)
-      .pipe(take(1))
-      .subscribe(_ => {
-        this._matDialogRef.close(true);
-        this._notificationService.success(`The Rule Group ${ruleGroup.name} was updated`);
-        this._mlaService.refreshAdminRuleGroups();
-      });
+  private _create(ruleGroup: RuleGroup, seed: string): Observable<RuleGroup> {
+    return this._mlaService.createAdminRuleGroup(seed, ruleGroup).pipe(take(1));
+  }
+
+  private _edit(ruleGroup: RuleGroup, seed: string): Observable<RuleGroup> {
+    return this._mlaService.editAdminRuleGroup(seed, ruleGroup).pipe(take(1));
   }
 
   private _initProviderConfigEditor(): void {

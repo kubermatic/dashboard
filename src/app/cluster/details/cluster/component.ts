@@ -318,7 +318,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     modal.componentInstance.projectID = this.projectID;
   }
 
-  getObservable(): Observable<any> {
+  getObservable(): Observable<string> {
     return this.getDownloadURL().pipe(take(1));
   }
 

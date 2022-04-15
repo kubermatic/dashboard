@@ -75,7 +75,6 @@ describe('EditProjectComponent', () => {
 
   it('should call editProject method', fakeAsync(() => {
     component.form.controls.name.patchValue('new-project-name');
-    component.editProject();
     tick();
     flush();
 
