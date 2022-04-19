@@ -31,10 +31,9 @@ describe('EditServiceAccountDialogComponent', () => {
   let component: EditServiceAccountDialogComponent;
   let editServiceAccountSpy: jest.Mock;
 
-  beforeEach(
-    waitForAsync(() => {
-      const saMock = {edit: jest.fn()};
-      editServiceAccountSpy = saMock.edit.mockReturnValue(asyncData(fakeServiceAccount()));
+  beforeEach(waitForAsync(() => {
+    const saMock = {edit: jest.fn()};
+    editServiceAccountSpy = saMock.edit.mockReturnValue(asyncData(fakeServiceAccount()));
 
     TestBed.configureTestingModule({
       imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],
@@ -47,22 +46,17 @@ describe('EditServiceAccountDialogComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach(
-    waitForAsync(() => {
-      fixture = TestBed.createComponent(EditServiceAccountDialogComponent);
-      component = fixture.componentInstance;
-      component.project = fakeProject();
-      component.serviceaccount = fakeServiceAccount();
-      fixture.detectChanges();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    fixture = TestBed.createComponent(EditServiceAccountDialogComponent);
+    component = fixture.componentInstance;
+    component.project = fakeProject();
+    component.serviceaccount = fakeServiceAccount();
+    fixture.detectChanges();
+  }));
 
-  it(
-    'should create the edit service account component',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should create the edit service account component', waitForAsync(() => {
+    expect(component).toBeTruthy();
+  }));
 
   it('should have valid form after creating', () => {
     expect(component.form.valid).toBeTruthy();

@@ -42,23 +42,21 @@ describe('NodeComponent', () => {
   let component: NodeListComponent;
   let clusterService: ClusterService;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [BrowserModule, NoopAnimationsModule, SharedModule],
-        declarations: [NodeListComponent],
-        providers: [
-          {provide: ClusterService, useClass: ClusterMockService},
-          {provide: MatDialog, useClass: MatDialogMock},
-          {provide: SettingsService, useClass: SettingsMockService},
-          {provide: UserService, useClass: UserMockService},
-          GoogleAnalyticsService,
-          NotificationService,
-        ],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule],
+      declarations: [NodeListComponent],
+      providers: [
+        {provide: ClusterService, useClass: ClusterMockService},
+        {provide: MatDialog, useClass: MatDialogMock},
+        {provide: SettingsService, useClass: SettingsMockService},
+        {provide: UserService, useClass: UserMockService},
+        GoogleAnalyticsService,
+        NotificationService,
+      ],
+      teardown: {destroyAfterEach: false},
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(NodeListComponent);
@@ -66,12 +64,9 @@ describe('NodeComponent', () => {
     clusterService = fixture.debugElement.injector.get(ClusterService);
   });
 
-  it(
-    'should create the cluster details cmp',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should create the cluster details cmp', waitForAsync(() => {
+    expect(component).toBeTruthy();
+  }));
 
   it('should call deleteNode', fakeAsync(() => {
     component.cluster = fakeDigitaloceanCluster();
