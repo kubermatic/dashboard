@@ -23,6 +23,7 @@ import {AppConfigService} from '@app/config.service';
 import {ClusterService} from '@core/services/cluster';
 import {ExternalCluster} from '@shared/entity/external-cluster';
 import {SettingsService} from '@core/services/settings';
+import {Cluster} from "@shared/entity/cluster";
 
 @Component({
   selector: 'km-project-overview',
@@ -31,6 +32,7 @@ import {SettingsService} from '@core/services/settings';
 })
 export class ProjectOverviewComponent implements OnInit, OnDestroy {
   project: Project;
+  clusters: Cluster[] = [];
   externalClusters: ExternalCluster[] = [];
   externalClustersEnabled = false;
   members: Member[] = [];
@@ -58,6 +60,13 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
         takeUntil(this._unsubscribe)
       )
       .subscribe(externalClustersEnabled => (this.externalClustersEnabled = externalClustersEnabled));
+
+    merge(timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()), this._projectChange)
+      .pipe(
+        switchMap(() => (this.project ? this._clusterService.clusters(this.project.id) : EMPTY)),
+        takeUntil(this._unsubscribe)
+      )
+      .subscribe(clusters => (this.clusters = clusters));
 
     merge(timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()), this._projectChange)
       .pipe(
