@@ -30,6 +30,8 @@ export class ClustersOverviewComponent implements OnInit, OnChanges {
   @Input() externalClustersEnabled = false;
   clusterColumns: string[] = ['name'];
   clusterDataSource = new MatTableDataSource<Cluster>();
+  externalClusterColumns: string[] = ['name'];
+  externalClusterDataSource = new MatTableDataSource<ExternalCluster>();
   projectID = this._activeRoute.snapshot.paramMap.get(PathParam.ProjectID);
   private readonly _maxElements = 10;
 
@@ -37,15 +39,24 @@ export class ClustersOverviewComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.clusterDataSource.data = this.clustersTop;
+    this.externalClusterDataSource.data = this.externalClustersTop;
   }
 
   ngOnChanges(): void {
     this.clusterDataSource.data = this.clustersTop;
+    this.externalClusterDataSource.data = this.externalClustersTop;
   }
 
   get clustersTop(): Cluster[] {
     return _.take(
       _.sortBy(this.clusters, c => c.name.toLowerCase()),
+      this._maxElements
+    );
+  }
+
+  get externalClustersTop(): ExternalCluster[] {
+    return _.take(
+      _.sortBy(this.externalClusters, c => c.name.toLowerCase()),
       this._maxElements
     );
   }
@@ -56,5 +67,13 @@ export class ClustersOverviewComponent implements OnInit, OnChanges {
 
   clusterNavigate(cluster: Cluster): void {
     this._router.navigate([`/projects/${this.projectID}/clusters/${cluster.id}`]);
+  }
+
+  externalClusterTrackBy(cluster: ExternalCluster): string {
+    return cluster.id;
+  }
+
+  externalClusterNavigate(cluster: ExternalCluster): void {
+    this._router.navigate([`/projects/${this.projectID}/clusters/external/${cluster.id}`]);
   }
 }
