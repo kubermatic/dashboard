@@ -56,11 +56,10 @@ END OF TERMS AND CONDITIONS
              target="_blank">here</a>.
         </mat-hint>
       </mat-form-field>
-
       <km-number-stepper [formControlName]="controls.Interval"
                          mode="errors"
-                         label="Interval"
-                         hint="Scope of the report (in days)."
+                         label="Report Scope"
+                         hint="Range of days captured in each report."
                          min="1"
                          required>
       </km-number-stepper>

@@ -108,8 +108,8 @@ export class MeteringScheduleAddDialog implements OnInit, OnDestroy {
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control('', Validators.required),
       [Controls.Group]: this._builder.control(DefaultScheduleOption.Daily, Validators.required),
-      [Controls.Schedule]: this._builder.control(''),
-      [Controls.Interval]: this._builder.control('', Validators.min(1)),
+      [Controls.Schedule]: this._builder.control('0 0 * * *'),
+      [Controls.Interval]: this._builder.control('1', Validators.min(1)),
     });
 
     this.form
