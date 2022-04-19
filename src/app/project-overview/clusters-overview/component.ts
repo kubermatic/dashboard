@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, ViewEncapsulation} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {ExternalCluster} from '@shared/entity/external-cluster';
 import {Cluster} from '@shared/entity/cluster';
 
@@ -20,7 +20,6 @@ import {Cluster} from '@shared/entity/cluster';
   selector: 'km-clusters-overview',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
-  encapsulation: ViewEncapsulation.None,
 })
 export class ClustersOverviewComponent {
   @Input() clusters: Cluster[] = [];

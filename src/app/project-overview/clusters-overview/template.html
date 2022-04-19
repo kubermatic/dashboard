@@ -16,10 +16,10 @@ limitations under the License.
 
 <km-tab-card>
   <km-tab label="Clusters">
-    {{clusters | json}}
+    <div class="tab-content">{{clusters | json}}</div>
   </km-tab>
   <km-tab label="External Clusters"
           *ngIf="externalClustersEnabled">
-    {{externalClusters | json}}
+    <div class="tab-content">{{externalClusters | json}}</div>
   </km-tab>
 </km-tab-card>
