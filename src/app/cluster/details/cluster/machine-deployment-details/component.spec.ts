@@ -53,32 +53,30 @@ describe('MachineDeploymentDetailsComponent', () => {
   let activatedRoute: ActivatedRouteStub;
   let dcMock;
 
-  beforeEach(
-    waitForAsync(() => {
-      dcMock = {getDatacenter: jest.fn()};
+  beforeEach(waitForAsync(() => {
+    dcMock = {getDatacenter: jest.fn()};
 
-      TestBed.configureTestingModule({
-        imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
-        declarations: [MachineDeploymentDetailsComponent, NodeListComponent, ClusterPanelComponent],
-        providers: [
-          {provide: ClusterService, useClass: ClusterMockService},
-          {provide: DatacenterService, useValue: dcMock},
-          {provide: ProjectService, useClass: ProjectMockService},
-          {provide: Auth, useClass: AuthMockService},
-          {provide: Router, useClass: RouterStub},
-          {provide: ActivatedRoute, useClass: ActivatedRouteStub},
-          {provide: UserService, useClass: UserMockService},
-          {provide: AppConfigService, useClass: AppConfigMockService},
-          {provide: NodeService, useClass: NodeMockService},
-          {provide: SettingsService, useClass: SettingsMockService},
-          MachineDeploymentService,
-          GoogleAnalyticsService,
-          NotificationService,
-        ],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
+    TestBed.configureTestingModule({
+      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
+      declarations: [MachineDeploymentDetailsComponent, NodeListComponent, ClusterPanelComponent],
+      providers: [
+        {provide: ClusterService, useClass: ClusterMockService},
+        {provide: DatacenterService, useValue: dcMock},
+        {provide: ProjectService, useClass: ProjectMockService},
+        {provide: Auth, useClass: AuthMockService},
+        {provide: Router, useClass: RouterStub},
+        {provide: ActivatedRoute, useClass: ActivatedRouteStub},
+        {provide: UserService, useClass: UserMockService},
+        {provide: AppConfigService, useClass: AppConfigMockService},
+        {provide: NodeService, useClass: NodeMockService},
+        {provide: SettingsService, useClass: SettingsMockService},
+        MachineDeploymentService,
+        GoogleAnalyticsService,
+        NotificationService,
+      ],
+      teardown: {destroyAfterEach: false},
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MachineDeploymentDetailsComponent);

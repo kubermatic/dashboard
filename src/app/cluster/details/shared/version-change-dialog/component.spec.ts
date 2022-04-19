@@ -39,14 +39,13 @@ describe('ChangeClusterVersionComponent', () => {
   let patchClusterSpy: jest.Mock;
   let upgradeClusterMachineDeploymentsSpy: jest.Mock;
 
-  beforeEach(
-    waitForAsync(() => {
-      const clusterServiceMock = {
-        patch: jest.fn(),
-        upgradeMachineDeployments: jest.fn(),
-      };
-      patchClusterSpy = clusterServiceMock.patch.mockReturnValue(of(fakeDigitaloceanCluster()));
-      upgradeClusterMachineDeploymentsSpy = clusterServiceMock.upgradeMachineDeployments.mockReturnValue(of(null));
+  beforeEach(waitForAsync(() => {
+    const clusterServiceMock = {
+      patch: jest.fn(),
+      upgradeMachineDeployments: jest.fn(),
+    };
+    patchClusterSpy = clusterServiceMock.patch.mockReturnValue(of(fakeDigitaloceanCluster()));
+    upgradeClusterMachineDeploymentsSpy = clusterServiceMock.upgradeMachineDeployments.mockReturnValue(of(null));
 
     TestBed.configureTestingModule({
       imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
@@ -66,19 +65,14 @@ describe('ChangeClusterVersionComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach(
-    waitForAsync(() => {
-      fixture = TestBed.createComponent(VersionChangeDialogComponent);
-      component = fixture.componentInstance;
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    fixture = TestBed.createComponent(VersionChangeDialogComponent);
+    component = fixture.componentInstance;
+  }));
 
-  it(
-    'should create the change cluster version component',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should create the change cluster version component', waitForAsync(() => {
+    expect(component).toBeTruthy();
+  }));
 
   it('should call patchCluster method from api', fakeAsync(() => {
     component.selectedVersion = 'new version';

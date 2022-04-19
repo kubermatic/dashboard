@@ -26,42 +26,35 @@ describe('ViolationDetailsComponent', () => {
   let fixture: ComponentFixture<ViolationDetailsComponent>;
   let component: ViolationDetailsComponent;
 
-  beforeEach(
-    waitForAsync(() => {
-      const opaMock = {
-        saveViolationPageIndex: jest.fn(),
-        getViolationPageIndex: jest.fn(),
-        refreshConstraint: () => {},
-      };
-      opaMock.saveViolationPageIndex.mockReturnValue(null);
-      opaMock.getViolationPageIndex.mockReturnValue(0);
+  beforeEach(waitForAsync(() => {
+    const opaMock = {
+      saveViolationPageIndex: jest.fn(),
+      getViolationPageIndex: jest.fn(),
+      refreshConstraint: () => {},
+    };
+    opaMock.saveViolationPageIndex.mockReturnValue(null);
+    opaMock.getViolationPageIndex.mockReturnValue(0);
 
-      TestBed.configureTestingModule({
-        imports: [BrowserModule, NoopAnimationsModule, SharedModule],
-        declarations: [ViolationDetailsComponent],
-        providers: [{provide: OPAService, useValue: opaMock}],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
+    TestBed.configureTestingModule({
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule],
+      declarations: [ViolationDetailsComponent],
+      providers: [{provide: OPAService, useValue: opaMock}],
+      teardown: {destroyAfterEach: false},
+    }).compileComponents();
+  }));
 
-  beforeEach(
-    waitForAsync(() => {
-      fixture = TestBed.createComponent(ViolationDetailsComponent);
-      component = fixture.componentInstance;
-      component.violations = fakeViolations();
-      component.settings = {itemsPerPage: 10};
-      component.constraintName = fakeConstraints()[0].name;
-      component.projectId = fakeProject().id;
-      component.clusterId = fakeDigitaloceanCluster().id;
-      fixture.detectChanges();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    fixture = TestBed.createComponent(ViolationDetailsComponent);
+    component = fixture.componentInstance;
+    component.violations = fakeViolations();
+    component.settings = {itemsPerPage: 10};
+    component.constraintName = fakeConstraints()[0].name;
+    component.projectId = fakeProject().id;
+    component.clusterId = fakeDigitaloceanCluster().id;
+    fixture.detectChanges();
+  }));
 
-  it(
-    'should create the violation details component',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should create the violation details component', waitForAsync(() => {
+    expect(component).toBeTruthy();
+  }));
 });

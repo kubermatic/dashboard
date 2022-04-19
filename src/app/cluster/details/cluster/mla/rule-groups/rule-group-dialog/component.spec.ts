@@ -59,13 +59,13 @@ describe('RuleGroupDialog', () => {
             cluster: {},
             confirmLabel: '',
           },
-          NotificationService,
-          {provide: NGX_MONACO_EDITOR_CONFIG, useValue: {onMonacoLoad: () => (monaco = (window as any).monaco)}},
-        ],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
+        },
+        NotificationService,
+        {provide: NGX_MONACO_EDITOR_CONFIG, useValue: {onMonacoLoad: () => (monaco = (window as any).monaco)}},
+      ],
+      teardown: {destroyAfterEach: false},
+    }).compileComponents();
+  }));
 
   describe('Add Rule Group Dialog', () => {
     beforeEach(() => {
@@ -83,12 +83,9 @@ describe('RuleGroupDialog', () => {
       fixture.detectChanges();
     });
 
-    it(
-      'should create the add rule group dialog',
-      waitForAsync(() => {
-        expect(component).toBeTruthy();
-      })
-    );
+    it('should create the add rule group dialog', waitForAsync(() => {
+      expect(component).toBeTruthy();
+    }));
 
     it('should have correct title: add', () => {
       expect(document.body.querySelector('km-dialog-title').textContent).toContain('Add Rule Group');
@@ -121,12 +118,9 @@ describe('RuleGroupDialog', () => {
       fixture.detectChanges();
     });
 
-    it(
-      'should create the edit rule group dialog',
-      waitForAsync(() => {
-        expect(component).toBeTruthy();
-      })
-    );
+    it('should create the edit rule group dialog', waitForAsync(() => {
+      expect(component).toBeTruthy();
+    }));
 
     it('should have correct title: edit', () => {
       expect(document.body.querySelector('km-dialog-title').textContent).toContain('Edit Rule Group');
