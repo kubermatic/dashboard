@@ -77,12 +77,9 @@ describe('ProjectSelectorComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it(
-    'should initialize',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should initialize', waitForAsync(() => {
+    expect(component).toBeTruthy();
+  }));
 
   it('should correctly compare projects basing on their IDs', () => {
     const a: Project = fakeProjects()[0];
