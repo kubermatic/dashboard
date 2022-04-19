@@ -68,12 +68,7 @@ export class MeteringScheduleConfigComponent implements OnInit {
         title: 'Add Schedule Configuration',
       },
     };
-    this._matDialog
-      .open(MeteringScheduleAddDialog, dialogConfig)
-      .afterClosed()
-      .pipe(filter(confirmed => confirmed))
-      .pipe(take(1))
-      .subscribe();
+    this._matDialog.open(MeteringScheduleAddDialog, dialogConfig);
   }
 
   edit(config: MeteringReportConfiguration): void {
@@ -85,12 +80,7 @@ export class MeteringScheduleConfigComponent implements OnInit {
         interval: config.interval,
       },
     };
-    this._matDialog
-      .open(MeteringScheduleEditDialog, dialogConfig)
-      .afterClosed()
-      .pipe(filter(confirmed => confirmed))
-      .pipe(take(1))
-      .subscribe();
+    this._matDialog.open(MeteringScheduleEditDialog, dialogConfig);
   }
 
   remove(name: string): void {

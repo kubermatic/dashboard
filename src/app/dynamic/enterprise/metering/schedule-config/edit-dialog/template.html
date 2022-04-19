@@ -19,62 +19,60 @@
 
 END OF TERMS AND CONDITIONS
 -->
-<div>
-  <km-dialog-title>
-    <div>{{data.title}}</div>
-  </km-dialog-title>
 
-  <mat-dialog-content>
-    <form [formGroup]="form"
-          fxFlex
-          fxLayout="column"
-          fxLayoutGap="10px">
+<km-dialog-title>
+  <div>{{data.title}}</div>
+</km-dialog-title>
 
-      <mat-form-field fxFlex>
-        <mat-label>Schedule Name</mat-label>
-        <input required
-               matInput
-               [formControlName]="controls.Name"
+<mat-dialog-content>
+  <form [formGroup]="form"
+        fxLayout="column"
+        fxLayoutGap="10px">
+
+    <mat-form-field fxFlex>
+      <mat-label>Schedule Name</mat-label>
+      <input required
+             matInput
+             [formControlName]="controls.Name"
+             type="text"
+             autocomplete="off"
+             cdkFocusInitial>
+      <mat-error *ngIf="form.get(controls.Name).hasError('required')">
+        Schedule name is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <div fxLayout="column"
+         fxLayoutGap="20px">
+      <mat-form-field>
+        <mat-label>Cron Expression</mat-label>
+        <input [formControlName]="controls.Schedule"
                type="text"
-               autocomplete="off"
-               cdkFocusInitial>
-        <mat-error *ngIf="form.get(controls.Name).hasError('required')">
-          Schedule name is <strong>required</strong>.
-        </mat-error>
+               matInput
+               required>
+        <mat-hint>
+          Cron expression that describes how often a report should be created. Must match the criteria specified
+          <a href="https://pkg.go.dev/github.com/robfig/cron?utm_source=godoc"
+             target="_blank">here</a>.
+        </mat-hint>
       </mat-form-field>
 
-      <div fxLayout="column"
-           fxLayoutGap="20px">
-        <mat-form-field>
-          <mat-label>Cron Expression</mat-label>
-          <input [formControlName]="controls.Schedule"
-                 type="text"
-                 matInput
-                 required>
-          <mat-hint>
-            Cron expression that describes how often a report should be created. Must match the criteria specified
-            <a href="https://pkg.go.dev/github.com/robfig/cron?utm_source=godoc"
-               target="_blank">here</a>.
-          </mat-hint>
-        </mat-form-field>
+      <km-number-stepper [formControlName]="controls.Interval"
+                         mode="errors"
+                         label="Interval"
+                         hint="Scope of the report (in days)."
+                         min="1"
+                         required>
+      </km-number-stepper>
+    </div>
+  </form>
+</mat-dialog-content>
 
-        <km-number-stepper [formControlName]="controls.Interval"
-                           mode="errors"
-                           label="Interval"
-                           hint="Scope of the report (in days)."
-                           min="1"
-                           required>
-        </km-number-stepper>
-      </div>
-    </form>
-  </mat-dialog-content>
-
-  <mat-dialog-actions>
-    <km-button icon="km-icon-add"
-               label="Update Schedule"
-               [observable]="getObservable()"
-               (next)="onNext()"
-               [disabled]="form.invalid">
-    </km-button>
-  </mat-dialog-actions>
-</div>
+<mat-dialog-actions>
+  <km-button icon="km-icon-add"
+             label="Update Schedule"
+             [observable]="getObservable()"
+             (next)="onNext()"
+             [disabled]="form.invalid">
+  </km-button>
+</mat-dialog-actions>
