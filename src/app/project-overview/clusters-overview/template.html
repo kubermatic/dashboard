@@ -16,7 +16,30 @@ limitations under the License.
 
 <km-tab-card>
   <km-tab label="Clusters">
-    <div class="tab-content">{{clusters | json}}</div>
+    <table class="km-table"
+           mat-table
+           [dataSource]="clusterDataSource"
+           [trackBy]="clusterTrackBy">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-50">Name
+        </th>
+        <td mat-cell
+            *matCellDef="let element">
+          <div fxLayoutAlign=" center"
+               fxLayoutGap="8px">
+            {{element.name}}
+          </div>
+        </td>
+      </ng-container>
+      <tr mat-header-row
+          class="km-header-row"
+          *matHeaderRowDef="clusterColumns"></tr>
+      <tr mat-row
+          *matRowDef="let row; columns: clusterColumns"
+          (click)="clusterNavigate(row)"></tr>
+    </table>
   </km-tab>
   <km-tab label="External Clusters"
           *ngIf="externalClustersEnabled">

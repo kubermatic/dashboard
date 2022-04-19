@@ -12,17 +12,49 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {ExternalCluster} from '@shared/entity/external-cluster';
 import {Cluster} from '@shared/entity/cluster';
+import {MatTableDataSource} from '@angular/material/table';
+import {ActivatedRoute, Router} from '@angular/router';
+import {PathParam} from '@core/services/params';
+import _ from 'lodash';
 
 @Component({
   selector: 'km-clusters-overview',
   templateUrl: 'template.html',
-  styleUrls: ['style.scss'],
 })
-export class ClustersOverviewComponent {
+export class ClustersOverviewComponent implements OnInit, OnChanges {
   @Input() clusters: Cluster[] = [];
   @Input() externalClusters: ExternalCluster[] = [];
   @Input() externalClustersEnabled = false;
+  clusterColumns: string[] = ['name'];
+  clusterDataSource = new MatTableDataSource<Cluster>();
+  projectID = this._activeRoute.snapshot.paramMap.get(PathParam.ProjectID);
+  private readonly _maxElements = 10;
+
+  constructor(private readonly _router: Router, private readonly _activeRoute: ActivatedRoute) {}
+
+  ngOnInit(): void {
+    this.clusterDataSource.data = this.clustersTop;
+  }
+
+  ngOnChanges(): void {
+    this.clusterDataSource.data = this.clustersTop;
+  }
+
+  get clustersTop(): Cluster[] {
+    return _.take(
+      _.sortBy(this.clusters, c => c.name.toLowerCase()),
+      this._maxElements
+    );
+  }
+
+  clusterTrackBy(cluster: Cluster): string {
+    return cluster.id;
+  }
+
+  clusterNavigate(cluster: Cluster): void {
+    this._router.navigate([`/projects/${this.projectID}/clusters/${cluster.id}`]);
+  }
 }
