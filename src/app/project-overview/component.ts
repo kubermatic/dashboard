@@ -23,7 +23,7 @@ import {AppConfigService} from '@app/config.service';
 import {ClusterService} from '@core/services/cluster';
 import {ExternalCluster} from '@shared/entity/external-cluster';
 import {SettingsService} from '@core/services/settings';
-import {Cluster} from "@shared/entity/cluster";
+import {Cluster} from '@shared/entity/cluster';
 
 @Component({
   selector: 'km-project-overview',
