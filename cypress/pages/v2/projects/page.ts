@@ -47,8 +47,8 @@ export class Projects extends PageOptions implements Page {
 
   create(name: string): void {
     this.Buttons.openDialog.click();
-    this.Elements.addDialogInput.type(name);
-    this.Buttons.addDialogConfirm.click().then(_ => this._strategy?.onCreate());
+    this.Elements.addDialogInput.type(name).then(_ => this._strategy?.onCreate());
+    this.Buttons.addDialogConfirm.click();
   }
 
   select(name: string): void {
@@ -67,6 +67,15 @@ class Elements extends PageOptions {
     return this._get(`#km-project-name-${name}`);
   }
 
+  /**
+   *  This method will only find the expected icon if it already exists on the page.
+   *  It will not retry and wait. Instead, you should add assertions to make sure that previous
+   *  icon does not exist anymore and then make assertion to expect that this one exists.
+   *
+   *  Example:
+   *   Pages.Projects.Elements.projectItemIcon(projectName, 'disabled').should(Condition.NotExist);
+   *   Pages.Projects.Elements.projectItemIcon(projectName, 'running').should(Condition.Exist);
+   **/
   projectItemIcon(name: string, status: string): Cypress.Chainable {
     return this._get(`#km-project-name-${name}`).parent().find(`i.km-icon-${status}`);
   }
