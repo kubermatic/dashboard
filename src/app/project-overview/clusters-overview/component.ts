@@ -12,16 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {NgModule} from '@angular/core';
-import {SharedModule} from '@shared/module';
-import {ProjectOverviewComponent} from './component';
-import {ProjectOverviewRoutingModule} from './routing';
-import {MembersOverviewComponent} from '@app/project-overview/members-overview/component';
-import {ClustersOverviewComponent} from '@app/project-overview/clusters-overview/component';
+import {Component, Input, ViewEncapsulation} from '@angular/core';
+import {ExternalCluster} from '@shared/entity/external-cluster';
+import {Cluster} from '@shared/entity/cluster';
 
-@NgModule({
-  imports: [SharedModule, ProjectOverviewRoutingModule],
-  declarations: [ProjectOverviewComponent, MembersOverviewComponent, ClustersOverviewComponent],
-  exports: [ProjectOverviewComponent],
+@Component({
+  selector: 'km-clusters-overview',
+  templateUrl: 'template.html',
+  styleUrls: ['style.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
-export class ProjectOverviewModule {}
+export class ClustersOverviewComponent {
+  @Input() clusters: Cluster[] = [];
+  @Input() externalClusters: ExternalCluster[] = [];
+  @Input() externalClustersEnabled = false;
+}

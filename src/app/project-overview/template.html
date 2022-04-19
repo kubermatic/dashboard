@@ -90,11 +90,8 @@ limitations under the License.
     <div fxLayout="column"
          fxLayoutGap="20px"
          fxFlex="50">
-      <mat-card>
-        <mat-card-content>
-          ...
-        </mat-card-content>
-      </mat-card>
+      <km-clusters-overview [externalClusters]="externalClusters"
+                            [externalClustersEnabled]="externalClustersEnabled"></km-clusters-overview>
     </div>
     <div fxLayout="column"
          fxLayoutGap="20px"
@@ -112,8 +109,8 @@ limitations under the License.
           ...
         </mat-card-content>
       </mat-card>
-      <km-owners-members [project]="project"
-      [members]="members"></km-owners-members>
+      <km-members-overview [project]="project"
+                           [members]="members"></km-members-overview>
     </div>
   </div>
 </div>

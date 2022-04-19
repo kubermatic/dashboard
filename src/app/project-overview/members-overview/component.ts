@@ -17,11 +17,11 @@ import {Project} from '@shared/entity/project';
 import {Member} from '@shared/entity/member';
 
 @Component({
-  selector: 'km-owners-members',
+  selector: 'km-members-overview',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
 })
-export class OwnersMembersComponent {
+export class MembersOverviewComponent {
   @Input() project: Project;
   @Input() members: Member[] = [];
 
