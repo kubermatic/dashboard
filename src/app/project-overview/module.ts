@@ -18,10 +18,16 @@ import {ProjectOverviewComponent} from './component';
 import {ProjectOverviewRoutingModule} from './routing';
 import {MembersOverviewComponent} from '@app/project-overview/members-overview/component';
 import {ClustersOverviewComponent} from '@app/project-overview/clusters-overview/component';
+import {ProvidersOverviewComponent} from '@app/project-overview/providers-overview/component';
 
 @NgModule({
   imports: [SharedModule, ProjectOverviewRoutingModule],
-  declarations: [ProjectOverviewComponent, MembersOverviewComponent, ClustersOverviewComponent],
+  declarations: [
+    ProjectOverviewComponent,
+    MembersOverviewComponent,
+    ClustersOverviewComponent,
+    ProvidersOverviewComponent,
+  ],
   exports: [ProjectOverviewComponent],
 })
 export class ProjectOverviewModule {}

@@ -119,6 +119,7 @@ import {AutofocusDirective} from './directives/autofocus/directive';
 import {ThrottleClickDirective} from './directives/throttle-click';
 import {RelativeTimePipe} from './pipes/relativetime';
 import {ButtonComponent} from '@shared/components/button/component';
+import {NgxChartsModule} from '@swimlane/ngx-charts';
 
 const modules = [
   CommonModule,
@@ -162,6 +163,7 @@ const modules = [
   ScrollingModule,
   FilterPipeModule,
   MonacoEditorModule,
+  NgxChartsModule,
 ];
 
 const components = [
