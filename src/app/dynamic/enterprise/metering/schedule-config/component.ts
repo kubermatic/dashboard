@@ -34,6 +34,7 @@ import {Router} from '@angular/router';
 @Component({
   selector: 'km-metering-schedule-config',
   templateUrl: 'template.html',
+  styleUrls: ['style.scss'],
 })
 export class MeteringScheduleConfigComponent implements OnInit {
   @Input() schedules: MeteringReportConfiguration[];
@@ -57,8 +58,8 @@ export class MeteringScheduleConfigComponent implements OnInit {
     this.dataSource.data = this.schedules;
   }
 
-  goToDetails(config: MeteringReportConfiguration): void {
-    this._router.navigate([`/settings/metering/schedule/${config.name}`]);
+  goToDetails(configName: string): void {
+    this._router.navigate([`/settings/metering/schedule/${configName}`]);
   }
 
   create(): void {

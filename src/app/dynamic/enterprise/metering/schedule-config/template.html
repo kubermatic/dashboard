@@ -30,8 +30,8 @@ END OF TERMS AND CONDITIONS
               color="quaternary"
               fxLayoutAlign="center center"
               (click)="create()">
-        <i class="km-icon-mask km-icon-edit"></i>
-        <span>Add New Schedule</span>
+        <i class="km-icon-mask km-icon-add"></i>
+        <span>Create Schedule</span>
       </button>
     </mat-card-title>
   </mat-card-header>
@@ -101,7 +101,7 @@ END OF TERMS AND CONDITIONS
       <tr mat-row
           *matRowDef="let element; columns: displayedColumns"
           class="km-mat-row km-pointer"
-          (click)="goToDetails(element)"></tr>
+          (click)="goToDetails(element.name)"></tr>
     </table>
 
   </mat-card-content>

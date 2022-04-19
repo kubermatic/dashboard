@@ -23,37 +23,48 @@ import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {SettingsService} from '@core/services/settings';
-import {UserService} from '@core/services/user';
-import {Report} from '@shared/entity/metering';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
+import {UserService} from '@core/services/user';
+import {Report} from '@shared/entity/metering';
 
 @Component({
   selector: 'km-metering-reports-list',
   templateUrl: './template.html',
+  styleUrls: ['style.scss'],
 })
 export class MeteringReportListComponent implements OnInit {
   private readonly _unsubscribe = new Subject<void>();
   private _fetchingReport = '';
   scheduleName: string;
+  schedule: string;
+  interval: number;
   reports: Report[] = [];
   dataSource = new MatTableDataSource<Report>();
   readonly displayedColumns: string[] = ['name', 'size', 'lastModified', 'actions'];
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  private _isLoading = true;
+  private _isLoadingReports = true;
+  private _isLoadingConfig = true;
 
-  get isLoading(): boolean {
-    return this._isLoading;
+  get isLoadingReports(): boolean {
+    return this._isLoadingReports;
+  }
+
+  get isLoadingConfig(): boolean {
+    return this._isLoadingConfig;
   }
 
   constructor(
     private readonly _settingsService: SettingsService,
+    private readonly _meteringService: MeteringService,
     private readonly _userService: UserService,
     private readonly _route: ActivatedRoute,
+    private readonly _router: Router,
     @Inject(DOCUMENT) private readonly _document: Document
   ) {}
 
@@ -66,13 +77,20 @@ export class MeteringReportListComponent implements OnInit {
 
     this.scheduleName = this._route.snapshot.params.scheduleId;
 
+    this._meteringService.getScheduleConfiguration(this.scheduleName).subscribe(config => {
+      this.scheduleName = config.name;
+      this.schedule = config.schedule;
+      this.interval = config.interval;
+      this._isLoadingConfig = false;
+    });
+
     this._settingsService
       .reports(this.scheduleName)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(reports => {
         this.reports = reports;
         this.dataSource.data = this.reports;
-        this._isLoading = false;
+        this._isLoadingReports = false;
       });
 
     this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
@@ -92,6 +110,10 @@ export class MeteringReportListComponent implements OnInit {
 
   isFetchingReport(report: Report): boolean {
     return this._fetchingReport === report.name;
+  }
+
+  goBack(): void {
+    this._router.navigate(['/settings/metering']);
   }
 
   download(report: Report): void {
