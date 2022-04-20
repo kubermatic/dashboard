@@ -24,6 +24,10 @@ export class DatacenterMockService {
     return of(fakeNodeDatacenters());
   }
 
+  get seeds(): Observable<string[]> {
+    return of(['europe-west3-c']);
+  }
+
   getDatacenter(dcName: string): Observable<Datacenter> {
     const dc = find(fakeNodeDatacenters(), ['metadata.name', dcName]);
     return of(dc);

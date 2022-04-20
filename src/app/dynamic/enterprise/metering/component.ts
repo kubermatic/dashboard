@@ -33,7 +33,6 @@ export class MeteringComponent implements OnInit {
   private readonly _unsubscribe = new Subject<void>();
   config: MeteringConfiguration;
   schedules: MeteringReportConfiguration[];
-  isLoading = true;
 
   constructor(
     private readonly _dcService: DatacenterService,
@@ -61,15 +60,17 @@ export class MeteringComponent implements OnInit {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe({
         next: ({meteringConfig, schedulesConfig}) => {
-          this.isLoading = false;
           this.config = meteringConfig;
           this.schedules = schedulesConfig;
           this._cdr.detectChanges();
         },
         error: _ => {
-          this.isLoading = false;
           this._cdr.detectChanges();
         },
       });
+  }
+
+  isLoading(): boolean {
+    return !(this.config && this.schedules);
   }
 }
