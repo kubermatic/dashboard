@@ -55,7 +55,7 @@ export class EditCredentialsDialog implements OnInit {
     });
   }
 
-  getObservable(): Observable<Object> {
+  getObservable(): Observable<void> {
     const credentials: BackupCredentials = {
       backup_credentials: {
         destination: this.data.destination.destinationName,

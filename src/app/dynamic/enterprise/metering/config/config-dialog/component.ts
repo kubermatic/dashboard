@@ -71,7 +71,7 @@ export class MeteringConfigurationDialog implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  getObservable(): Observable<Object> {
+  getObservable(): Observable<void> {
     return this._meteringService.saveConfiguration(this._toMeteringConfiguration()).pipe(take(1));
   }
 

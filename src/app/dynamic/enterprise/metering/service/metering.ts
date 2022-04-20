@@ -33,13 +33,13 @@ export class MeteringService {
 
   constructor(private readonly _http: HttpClient) {}
 
-  saveConfiguration(configuration: MeteringConfiguration): Observable<Object> {
+  saveConfiguration(configuration: MeteringConfiguration): Observable<void> {
     const url = `${this._restRoot}/admin/metering/configurations`;
-    return this._http.put(url, configuration);
+    return this._http.put<void>(url, configuration);
   }
 
-  saveCredentials(credentials: MeteringCredentials): Observable<Object> {
+  saveCredentials(credentials: MeteringCredentials): Observable<void> {
     const url = `${this._restRoot}/admin/metering/credentials`;
-    return this._http.put(url, credentials);
+    return this._http.put<void>(url, credentials);
   }
 }

@@ -68,7 +68,7 @@ export class MeteringCredentialsDialog implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  getObservable(): Observable<Object> {
+  getObservable(): Observable<void> {
     return this._meteringService.saveCredentials(this._toMeteringCredentials()).pipe(take(1));
   }
 

@@ -61,9 +61,9 @@ export class BackupService {
     this._snapshots$.clear();
   }
 
-  delete(projectID: string, clusterID: string, backupID: string): Observable<any> {
+  delete(projectID: string, clusterID: string, backupID: string): Observable<void> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/etcdbackupconfigs/${backupID}`;
-    return this._http.delete(url, {headers: this._headers});
+    return this._http.delete<void>(url, {headers: this._headers});
   }
 
   create(projectID: string, clusterID: string, backup: EtcdBackupConfig): Observable<any> {
@@ -91,9 +91,9 @@ export class BackupService {
     return this._http.post(url, {enable});
   }
 
-  updateBackupCredentials(seedName: string, credentials: BackupCredentials): Observable<Object> {
+  updateBackupCredentials(seedName: string, credentials: BackupCredentials): Observable<void> {
     const url = `${this._newRestRoot}/seeds/${seedName}/backupcredentials`;
-    return this._http.put(url, credentials);
+    return this._http.put<void>(url, credentials);
   }
 
   getDestinations(projectID: string, clusterID: string): Observable<string[]> {

@@ -16,7 +16,7 @@ import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {BackupService} from '@core/services/backup';
 import {NotificationService} from '@core/services/notification';
-import {EtcdRestore, EtcdRestoreSpec} from '@shared/entity/backup';
+import {EtcdBackupConfig, EtcdRestore, EtcdRestoreSpec} from '@shared/entity/backup';
 import {Observable} from 'rxjs';
 import {take} from 'rxjs/operators';
 
@@ -40,7 +40,7 @@ export class RestoreSnapshotDialogComponent {
     private readonly _notificationService: NotificationService
   ) {}
 
-  getObservable(): Observable<Object> {
+  getObservable(): Observable<EtcdBackupConfig> {
     return this._backupService
       .restore(this.config.projectID, this.config.clusterID, this._toEtcdRestore())
       .pipe(take(1));

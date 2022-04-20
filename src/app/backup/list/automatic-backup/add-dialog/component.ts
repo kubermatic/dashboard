@@ -145,7 +145,7 @@ export class AddAutomaticBackupDialogComponent implements OnInit, OnDestroy {
       .subscribe(this._onClusterChange.bind(this));
   }
 
-  getObservable(): Observable<Object> {
+  getObservable(): Observable<EtcdBackupConfig> {
     return this._backupService
       .create(this._config.projectID, this._selectedClusterID, this._toEtcdBackupConfig())
       .pipe(take(1));
