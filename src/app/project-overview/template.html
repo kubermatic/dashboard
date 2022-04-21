@@ -43,7 +43,7 @@ limitations under the License.
         <i class="km-icon-cluster-template"></i>
         <km-property>
           <div key>Cluster Templates</div>
-          <div value>...</div>
+          <div value>{{clusterTemplates.length}}</div>
         </km-property>
       </div>
       <div fxLayoutAlign=" center"
@@ -61,7 +61,7 @@ limitations under the License.
         <i class="km-icon-key"></i>
         <km-property>
           <div key>SSH Keys</div>
-          <div value>...</div>
+          <div value>{{sshKeys.length}}</div>
         </km-property>
       </div>
       <div fxLayoutAlign=" center"
@@ -79,7 +79,7 @@ limitations under the License.
         <i class="km-icon-serviceaccount"></i>
         <km-property>
           <div key>Service Accounts</div>
-          <div value>...</div>
+          <div value>{{serviceAccounts.length}}</div>
         </km-property>
       </div>
     </mat-card-content>
@@ -97,14 +97,6 @@ limitations under the License.
     <div fxLayout="column"
          fxLayoutGap="20px"
          fxFlex="50">
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>Project Quota</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          ...
-        </mat-card-content>
-      </mat-card>
       <km-providers-overview [clusters]="clusters"></km-providers-overview>
       <km-members-overview [project]="project"
                            [members]="members"></km-members-overview>

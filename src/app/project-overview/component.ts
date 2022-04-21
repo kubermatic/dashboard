@@ -24,6 +24,12 @@ import {ClusterService} from '@core/services/cluster';
 import {ExternalCluster} from '@shared/entity/external-cluster';
 import {SettingsService} from '@core/services/settings';
 import {Cluster} from '@shared/entity/cluster';
+import {ServiceAccount} from '@shared/entity/service-account';
+import {ServiceAccountService} from '@core/services/service-account';
+import {SSHKey} from '@shared/entity/ssh-key';
+import {SSHKeyService} from '@core/services/ssh-key';
+import {ClusterTemplateService} from '@core/services/cluster-templates';
+import {ClusterTemplate} from '@shared/entity/cluster-template';
 
 @Component({
   selector: 'km-project-overview',
@@ -35,7 +41,10 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   clusters: Cluster[] = [];
   externalClusters: ExternalCluster[] = [];
   externalClustersEnabled = false;
+  clusterTemplates: ClusterTemplate[] = [];
+  sshKeys: SSHKey[] = [];
   members: Member[] = [];
+  serviceAccounts: ServiceAccount[] = [];
   private _projectChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
   private readonly _refreshTime = 10;
@@ -43,31 +52,56 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   constructor(
     private readonly _projectService: ProjectService,
     private readonly _clusterService: ClusterService,
+    private readonly _clusterTemplateService: ClusterTemplateService,
+    private readonly _sshKeyService: SSHKeyService,
     private readonly _memberService: MemberService,
+    private readonly _serviceAccountService: ServiceAccountService,
     private readonly _settingsService: SettingsService,
     private readonly _appConfigService: AppConfigService
   ) {}
 
   ngOnInit(): void {
+    this._loadProject();
+    this._loadAdminSettings();
+    this._loadClusters();
+    this._loadExternalClusters();
+    this._loadClusterTemplates();
+    this._loadSSHKeys();
+    this._loadMembers();
+    this._loadServiceAccounts();
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
+  }
+
+  private _loadProject(): void {
     this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe)).subscribe(p => {
       this.project = p;
       this._projectChange.next();
     });
+  }
 
+  private _loadAdminSettings(): void {
     this._settingsService.adminSettings
       .pipe(
         map(settings => settings.enableExternalClusterImport),
         takeUntil(this._unsubscribe)
       )
       .subscribe(externalClustersEnabled => (this.externalClustersEnabled = externalClustersEnabled));
+  }
 
+  private _loadClusters(): void {
     merge(timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()), this._projectChange)
       .pipe(
         switchMap(() => (this.project ? this._clusterService.clusters(this.project.id) : EMPTY)),
         takeUntil(this._unsubscribe)
       )
       .subscribe(clusters => (this.clusters = clusters));
+  }
 
+  private _loadExternalClusters(): void {
     merge(timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()), this._projectChange)
       .pipe(
         switchMap(() =>
@@ -76,15 +110,35 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
         takeUntil(this._unsubscribe)
       )
       .subscribe(externalClusters => (this.externalClusters = externalClusters));
+  }
 
+  private _loadClusterTemplates(): void {
+    merge(timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()), this._projectChange)
+      .pipe(
+        switchMap(() => (this.project ? this._clusterTemplateService.list(this.project.id) : EMPTY)),
+        takeUntil(this._unsubscribe)
+      )
+      .subscribe(clusterTemplates => (this.clusterTemplates = clusterTemplates));
+  }
+
+  private _loadSSHKeys(): void {
+    merge(timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()), this._projectChange)
+      .pipe(switchMap(() => (this.project ? this._sshKeyService.list(this.project.id) : EMPTY)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(sshKeys => (this.sshKeys = sshKeys));
+  }
+
+  private _loadMembers(): void {
     merge(timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()), this._projectChange)
       .pipe(switchMap(() => (this.project ? this._memberService.list(this.project.id) : EMPTY)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(members => (this.members = members));
   }
 
-  ngOnDestroy(): void {
-    this._unsubscribe.next();
-    this._unsubscribe.complete();
+  private _loadServiceAccounts(): void {
+    merge(timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()), this._projectChange)
+      .pipe(switchMap(() => (this.project ? this._serviceAccountService.get(this.project.id) : EMPTY)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(serviceAccounts => (this.serviceAccounts = serviceAccounts));
   }
 }
