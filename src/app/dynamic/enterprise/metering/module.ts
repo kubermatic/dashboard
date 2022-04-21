@@ -29,7 +29,6 @@ import {MeteringScheduleAddDialog} from '@app/dynamic/enterprise/metering/schedu
 import {MeteringScheduleEditDialog} from '@app/dynamic/enterprise/metering/schedule-config/edit-dialog/component';
 import {MeteringReportListComponent} from '@app/dynamic/enterprise/metering/schedule-config/report-list/component';
 import {SharedModule} from '@shared/module';
-import {AuthGuard, AuthzGuard} from '@core/services/auth/guard';
 
 const routes: Routes = [
   {
@@ -39,7 +38,6 @@ const routes: Routes = [
   {
     path: 'schedule/:scheduleId',
     component: MeteringReportListComponent,
-    canActivate: [AuthGuard, AuthzGuard],
   },
 ];
 

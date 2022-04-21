@@ -77,12 +77,15 @@ export class MeteringReportListComponent implements OnInit {
 
     this.scheduleName = this._route.snapshot.params.scheduleId;
 
-    this._meteringService.getScheduleConfiguration(this.scheduleName).subscribe(config => {
-      this.scheduleName = config.name;
-      this.schedule = config.schedule;
-      this.interval = config.interval;
-      this._isLoadingConfig = false;
-    });
+    this._meteringService
+      .getScheduleConfiguration(this.scheduleName)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(config => {
+        this.scheduleName = config.name;
+        this.schedule = config.schedule;
+        this.interval = config.interval;
+        this._isLoadingConfig = false;
+      });
 
     this._settingsService
       .reports(this.scheduleName)
