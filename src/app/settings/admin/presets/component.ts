@@ -48,12 +48,13 @@ enum Column {
   styleUrls: ['./style.scss'],
 })
 export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
+  readonly providers = NODE_PROVIDERS;
+
   presets: Preset[] = [];
   dataSource = new MatTableDataSource<Preset>();
   displayedColumns: string[] = Object.values(Column);
   datacenters: Datacenter[] = [];
   datacenterFilter: string;
-  readonly providers = NODE_PROVIDERS;
   providerFilter: NodeProvider;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
