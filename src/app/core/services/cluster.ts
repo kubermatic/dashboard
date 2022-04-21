@@ -39,10 +39,13 @@ import {ClusterMetrics, NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {merge, Observable, of, Subject, timer} from 'rxjs';
-import {catchError, filter, shareReplay, switchMap, switchMapTo, take} from 'rxjs/operators';
+import {catchError, filter, shareReplay, switchMapTo} from 'rxjs/operators';
 import {ExternalCluster, ExternalClusterModel, ExternalClusterPatch} from '@shared/entity/external-cluster';
 import {ExternalMachineDeployment, ExternalMachineDeploymentPatch} from '@shared/entity/external-machine-deployment';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import {NotificationService} from './notification';
+import {Router} from '@angular/router';
+import {ClusterListTab} from '@app/cluster/list/component';
 
 @Injectable()
 export class ClusterService {
@@ -66,7 +69,9 @@ export class ClusterService {
   constructor(
     private readonly _matDialog: MatDialog,
     private readonly _http: HttpClient,
-    private readonly _appConfig: AppConfigService
+    private readonly _appConfig: AppConfigService,
+    private readonly _notificationService: NotificationService,
+    private readonly _router: Router
   ) {}
 
   changeProviderSettingsPatch(patch: ProviderSettingsPatch): void {
@@ -167,21 +172,30 @@ export class ClusterService {
     return this._http.delete(url, {headers: this._headers});
   }
 
-  showDisconnectClusterDialog(cluster: ExternalCluster, projectID: string): Observable<any> {
+  showDisconnectClusterDialog(cluster: ExternalCluster, projectID: string): void {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Disconnect Cluster',
         message: `Are you sure you want to disconnect ${cluster.name} cluster?`,
         confirmLabel: 'Disconnect',
+        throttelButton: true,
+        observable: this._deleteExternalCluster(projectID, cluster.id),
+        // next: this._router.navigate(['/projects/' + projectID + '/clusters'], {
+        //     fragment: `${ClusterListTab.ExternalCluster}`,
+        //   }).finally(() => this._notificationService.success(`Disconnected the ${cluster.name} cluster`))
       },
     };
 
-    return this._matDialog
+    this._matDialog
       .open(ConfirmationDialogComponent, dialogConfig)
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
-      .pipe(switchMap(_ => this._deleteExternalCluster(projectID, cluster.id)))
-      .pipe(take(1));
+      .subscribe(_ => {
+        this._router.navigate(['/projects/' + projectID + '/clusters'], {
+          fragment: `${ClusterListTab.ExternalCluster}`,
+        });
+        this._notificationService.success(`Disconnected the ${cluster.name} cluster`);
+      });
   }
 
   upgrades(projectID: string, clusterID: string): Observable<MasterVersion[]> {
@@ -348,9 +362,9 @@ export class ClusterService {
     return this._http.get<CNIPluginVersions>(url);
   }
 
-  private _deleteExternalCluster(projectID: string, clusterID: string): Observable<any> {
+  private _deleteExternalCluster(projectID: string, clusterID: string): Observable<void> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}`;
-    return this._http.delete(url);
+    return this._http.delete<void>(url);
   }
 
   private _getClusters(projectID: string): Observable<Cluster[]> {

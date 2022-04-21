@@ -15,6 +15,7 @@
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {getIconClassForButton} from '@shared/utils/common';
+import {Observable} from 'rxjs';
 
 export interface ConfirmationDialogConfig {
   title: string;
@@ -26,6 +27,9 @@ export interface ConfirmationDialogConfig {
   compareName?: string;
   inputPlaceholder?: string;
   inputTitle?: string;
+  throttelButton?: boolean;
+  observable?: Observable<any>;
+  next?: void;
 }
 
 @Component({

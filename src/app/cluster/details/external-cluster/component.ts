@@ -14,7 +14,7 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {ClusterService} from '@core/services/cluster';
 import {NotificationService} from '@core/services/notification';
@@ -32,7 +32,6 @@ import {forkJoin, of, Subject, timer} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 import {MasterVersion} from '@shared/entity/cluster';
-import {ClusterListTab} from '@app/cluster/list/component';
 
 @Component({
   selector: 'km-external-cluster-details',
@@ -63,7 +62,6 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly _activatedRoute: ActivatedRoute,
-    private readonly _router: Router,
     private readonly _matDialog: MatDialog,
     private readonly _clusterService: ClusterService,
     private readonly _userService: UserService,
@@ -179,11 +177,6 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   disconnect(): void {
-    this._clusterService.showDisconnectClusterDialog(this.cluster, this.projectID).subscribe(_ => {
-      this._router.navigate(['/projects/' + this.projectID + '/clusters'], {
-        fragment: `${ClusterListTab.ExternalCluster}`,
-      });
-      this._notificationService.success(`Disconnected the ${this.cluster.name} cluster`);
-    });
+    this._clusterService.showDisconnectClusterDialog(this.cluster, this.projectID);
   }
 }

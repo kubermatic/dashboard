@@ -22,8 +22,7 @@ limitations under the License.
               mat-flat-button
               color="tertiary"
               fxLayoutAlign="center center"
-              kmThrottleClick
-              (throttleClick)="disconnect()"
+              (click)="disconnect()"
               [disabled]="!canDisconnect()">
         <i class="km-icon-mask km-icon-disconnect"></i>
         <span>Disconnect</span>
