@@ -91,10 +91,11 @@ export class PresetsComponent extends BaseFormValidator implements OnInit, OnDes
     this._clusterSpecService.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this.reset());
 
     this._clusterSpecService.datacenterChanges
-      .pipe(switchMap(dc => this._presets.presets(false, this._clusterSpecService.provider, dc)))
+      .pipe(switchMap(dc => this._presets.presets(true, this._clusterSpecService.provider, dc)))
       .pipe(map(presetList => new SimplePresetList(...presetList.items.map(preset => preset.name))))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(presetList => {
+        debugger;
         this.reset();
         this.presetsLoaded = presetList.names ? !_.isEmpty(presetList.names) : false;
         this._state = this.presetsLoaded ? PresetsState.Ready : PresetsState.Empty;

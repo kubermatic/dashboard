@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
+import _ from 'lodash';
 import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
@@ -25,19 +25,21 @@ import {NotificationService} from '@core/services/notification';
 import {UserService} from '@core/services/user';
 import {PresetsService} from '@core/services/wizard/presets';
 import {Datacenter} from '@shared/entity/datacenter';
-import {Preset, PresetList} from '@shared/entity/preset';
+import {Preset, PresetList, PresetStat} from '@shared/entity/preset';
 import {
   EXTERNAL_NODE_PROVIDERS,
   NODE_PROVIDERS,
   NodeProvider,
   NodeProviderConstants,
 } from '@shared/model/NodeProviderConstants';
-import {merge, Observable, of, Subject} from 'rxjs';
-import {switchMap, take, takeUntil} from 'rxjs/operators';
+import {forkJoin, merge, Observable, of, Subject} from 'rxjs';
+import {map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 enum Column {
   Name = 'name',
   Providers = 'providers',
+  AssociatedCluster = 'associatedClusters',
+  AssociatedClusterTemplates = 'associatedClusterTemplates',
   Show = 'show',
   Actions = 'actions',
 }
@@ -56,6 +58,7 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
   datacenters: Datacenter[] = [];
   datacenterFilter: string;
   providerFilter: NodeProvider;
+  isBusyCounter = 0;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -103,11 +106,33 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
     };
 
     merge(of(true), this._presetsChanged)
-      .pipe(switchMap(_ => this._presets$))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(presetList => {
-        this.presets = presetList.items;
+      .pipe(
+        switchMap(_ => this._presets$),
+        tap(presetList => {
+          this.presets = presetList.items;
+        }),
+        switchMap(_ => {
+          const presetStats$ = [];
+          this.presets.forEach((preset: Preset) => {
+            presetStats$.push(this._presetService.getPresetStatsBy(preset.name));
+          });
+          this.isBusyCounter++;
+          return forkJoin(presetStats$);
+        }),
+        map((stats: PresetStat[]) => {
+          const updatePresets = _.cloneDeep(this.presets);
+          updatePresets.forEach((preset: Preset, index: number) => {
+            preset.associatedClusters = stats[index].associatedClusters;
+            preset.associatedClusterTemplates = stats[index].associatedClusterTemplates;
+          });
+          return updatePresets;
+        }),
+        takeUntil(this._unsubscribe)
+      )
+      .subscribe((presetsWithStatsData: Preset[]) => {
+        this.presets = presetsWithStatsData;
         this.dataSource.data = this.presets;
+        this.isBusyCounter--;
       });
 
     this._datacenterService.datacenters.pipe(takeUntil(this._unsubscribe)).subscribe(datacenters => {

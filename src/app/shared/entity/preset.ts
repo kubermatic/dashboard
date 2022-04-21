@@ -28,10 +28,17 @@ export class PresetList {
   items: Preset[];
 }
 
+export class PresetStat {
+  associatedClusters: number;
+  associatedClusterTemplates: number;
+}
+
 export class Preset {
   name: string;
   enabled: boolean;
   providers: PresetProvider[];
+  associatedClusters?: number;
+  associatedClusterTemplates?: number;
 }
 
 export class PresetProvider {
