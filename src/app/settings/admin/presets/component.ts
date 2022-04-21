@@ -11,7 +11,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import _ from 'lodash';
 import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
@@ -33,7 +32,7 @@ import {
   NodeProviderConstants,
 } from '@shared/model/NodeProviderConstants';
 import {forkJoin, merge, Observable, of, Subject} from 'rxjs';
-import {map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 enum Column {
   Name = 'name',
@@ -119,18 +118,13 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
           this.isBusyCounter++;
           return forkJoin(presetStats$);
         }),
-        map((stats: PresetStat[]) => {
-          const updatePresets = _.cloneDeep(this.presets);
-          updatePresets.forEach((preset: Preset, index: number) => {
-            preset.associatedClusters = stats[index].associatedClusters;
-            preset.associatedClusterTemplates = stats[index].associatedClusterTemplates;
-          });
-          return updatePresets;
-        }),
         takeUntil(this._unsubscribe)
       )
-      .subscribe((presetsWithStatsData: Preset[]) => {
-        this.presets = presetsWithStatsData;
+      .subscribe((stats: PresetStat[]) => {
+        this.presets.forEach((preset: Preset, idx: number) => {
+          preset.associatedClusters = stats[idx].associatedClusters;
+          preset.associatedClusterTemplates = stats[idx].associatedClusterTemplates;
+        });
         this.dataSource.data = this.presets;
         this.isBusyCounter--;
       });
