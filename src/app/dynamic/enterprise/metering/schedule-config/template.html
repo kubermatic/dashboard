@@ -26,7 +26,8 @@ END OF TERMS AND CONDITIONS
                     fxLayout="row"
                     fxLayoutAlign=" center">
       <div fxFlex>Schedules</div>
-      <button mat-flat-button
+      <button id="km-create-schedule-btn"
+              mat-flat-button
               color="quaternary"
               fxLayoutAlign="center center"
               (click)="create()">
@@ -95,12 +96,14 @@ END OF TERMS AND CONDITIONS
             *matCellDef="let element">
           <div class="km-table-actions"
                fxLayoutAlign="end">
-            <button mat-icon-button
+            <button id="km-update-schedule-btn"
+                    mat-icon-button
                     matTooltip="Update Schedule Configuration"
                     (click)="edit(element); $event.stopPropagation()">
               <i class="km-icon-mask km-icon-edit"></i>
             </button>
-            <button mat-icon-button
+            <button id="km-delete-schedule-btn"
+                    mat-icon-button
                     matTooltip="Delete Schedule Configuration"
                     (click)="remove(element.name); $event.stopPropagation()">
               <i class="km-icon-delete"></i>

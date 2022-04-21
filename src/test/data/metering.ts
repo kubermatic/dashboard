@@ -18,20 +18,12 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {MeteringConfiguration, MeteringReportConfiguration} from '@app/shared/entity/datacenter';
+import {MeteringReportConfiguration} from '@app/shared/entity/datacenter';
 
 export function fakeScheduleConfiguration(name: string): MeteringReportConfiguration {
   return {
     name,
     schedule: '0 1 * * *',
     interval: 7,
-  };
-}
-
-export function fakeMeteringConfiguration(): MeteringConfiguration {
-  return {
-    enabled: true,
-    storageClassName: 'test',
-    storageSize: '50Gi',
   };
 }
