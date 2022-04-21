@@ -121,21 +121,20 @@ limitations under the License.
       <ng-container matColumnDef="associatedClusters">
         <th *matHeaderCellDef
             class="km-header-cell p-20"
-            mat-header-cell>Associated Clusters
+            mat-header-cell>Linked Clusters
         </th>
-        <td *matCellDef="let element" class="km-text-center"
+        <td *matCellDef="let element"
             mat-cell>{{element.associatedClusters}}</td>
       </ng-container>
 
       <ng-container matColumnDef="associatedClusterTemplates">
         <th *matHeaderCellDef
-            class="km-header-cell km-text-center p-20"
-            mat-header-cell>Associated Clusters Templates
+            class="km-header-cell p-20"
+            mat-header-cell>Linked Templates
         </th>
-        <td *matCellDef="let element" class="km-text-center"
+        <td *matCellDef="let element"
             mat-cell>{{element.associatedClusterTemplates}}</td>
       </ng-container>
-
 
       <ng-container matColumnDef="providers">
         <th mat-header-cell
