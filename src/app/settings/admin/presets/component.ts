@@ -120,14 +120,20 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
         }),
         takeUntil(this._unsubscribe)
       )
-      .subscribe((stats: PresetStat[]) => {
-        this.presets.forEach((preset: Preset, idx: number) => {
-          preset.associatedClusters = stats[idx].associatedClusters;
-          preset.associatedClusterTemplates = stats[idx].associatedClusterTemplates;
-        });
-        this.dataSource.data = this.presets;
-        this.isBusyCounter--;
-      });
+      .subscribe(
+        (stats: PresetStat[]) => {
+          this.presets.forEach((preset: Preset, idx: number) => {
+            preset.associatedClusters = stats[idx].associatedClusters;
+            preset.associatedClusterTemplates = stats[idx].associatedClusterTemplates;
+          });
+          this.dataSource.data = this.presets;
+          this.isBusyCounter--;
+        },
+        _ => {
+          this._notificationService.error('Could not fetch Presets data');
+          this.isBusyCounter--;
+        }
+      );
 
     this._datacenterService.datacenters.pipe(takeUntil(this._unsubscribe)).subscribe(datacenters => {
       this.datacenters = datacenters;
