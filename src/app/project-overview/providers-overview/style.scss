@@ -14,4 +14,8 @@
 
 .chart-container {
   height: 250px;
+
+  &.empty {
+    height: 40px;
+  }
 }

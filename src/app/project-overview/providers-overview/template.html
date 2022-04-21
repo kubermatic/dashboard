@@ -20,14 +20,18 @@ limitations under the License.
   </km-tab>
   <km-tab label="Cluster Distribution">
     <div #chartContainer
-         class="chart-container">
-      <ngx-charts-pie-chart *ngIf="clusters.length"
+         [ngSwitch]="clusters.length > 0"
+         [ngClass]="{'empty': clusters.length < 1}"
+         class="chart-container"
+         fxLayoutAlign="center center">
+      <ngx-charts-pie-chart *ngSwitchCase="true"
                             [results]="clusterDistribution"
                             [animations]="false"
                             [labels]="true"
                             [doughnut]="true"
                             [view]="[chartContainer.offsetWidth, chartContainer.offsetHeight]">
       </ngx-charts-pie-chart>
+      <div *ngSwitchCase="false">No clusters available.</div>
     </div>
   </km-tab>
 </km-tab-card>
