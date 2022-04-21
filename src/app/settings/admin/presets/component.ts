@@ -108,7 +108,7 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
     merge(of(true), this._presetsChanged)
       .pipe(
         switchMap(_ => this._presets$),
-        tap(presetList => {
+        tap((presetList: PresetList) => {
           this.presets = presetList.items;
         }),
         switchMap(_ => {
