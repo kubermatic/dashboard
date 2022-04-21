@@ -121,7 +121,8 @@ END OF TERMS AND CONDITIONS
                            [diameter]="25"></mat-spinner>
             </ng-container>
 
-            <button mat-icon-button
+            <button id="km-download-report-button"
+                    mat-icon-button
                     kmThrottleClick
                     (throttleClick)="download(element)"
                     [disabled]="!canDownload(element)">
