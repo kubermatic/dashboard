@@ -24,7 +24,9 @@ limitations under the License.
       <ngx-charts-pie-chart *ngSwitchCase="true"
                             [results]="clusterDistribution"
                             [animations]="false"
+                            [customColors]="colors"
                             [labels]="true"
+                            [trimLabels]="false"
                             [doughnut]="true"
                             [view]="[chartContainer.offsetWidth, chartContainer.offsetHeight]">
       </ngx-charts-pie-chart>

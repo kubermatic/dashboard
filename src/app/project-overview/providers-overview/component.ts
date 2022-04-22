@@ -13,12 +13,17 @@
 // limitations under the License.
 
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
-import {Cluster} from '@shared/entity/cluster';
+import {Cluster, getProviderDisplayName, Provider} from '@shared/entity/cluster';
 import _ from 'lodash';
 
 class ChartData {
   name: string;
   value: number;
+}
+
+class ChartColorData {
+  name: string;
+  value: string;
 }
 
 @Component({
@@ -29,6 +34,21 @@ class ChartData {
 export class ProvidersOverviewComponent implements OnInit, OnChanges {
   @Input() clusters: Cluster[] = [];
   clusterDistribution: ChartData[] = [];
+  colors: ChartColorData[] = [
+    {name: getProviderDisplayName(Provider.Alibaba), value: '#444c53'},
+    {name: getProviderDisplayName(Provider.Anexia), value: '#023ca7'},
+    {name: getProviderDisplayName(Provider.AWS), value: '#ee8910'},
+    {name: getProviderDisplayName(Provider.Azure), value: '#008ad7'},
+    {name: getProviderDisplayName(Provider.kubeAdm), value: '#326ce5'},
+    {name: getProviderDisplayName(Provider.Digitalocean), value: '#008bcf'},
+    {name: getProviderDisplayName(Provider.GCP), value: '#32a350'},
+    {name: getProviderDisplayName(Provider.Hetzner), value: '#d50c2dff'},
+    {name: getProviderDisplayName(Provider.KubeVirt), value: '#00aab2'},
+    {name: getProviderDisplayName(Provider.Nutanix), value: '#b0d236'},
+    {name: getProviderDisplayName(Provider.OpenStack), value: '#e61742'},
+    {name: getProviderDisplayName(Provider.Equinix), value: '#e51d26'},
+    {name: getProviderDisplayName(Provider.VSphere), value: '#e5a900'},
+  ];
 
   ngOnInit(): void {
     this.clusterDistribution = this._clusterDistribution;
@@ -39,7 +59,7 @@ export class ProvidersOverviewComponent implements OnInit, OnChanges {
   }
 
   private get _clusterDistribution(): ChartData[] {
-    return Object.entries(_.countBy(this.clusters.map(c => Cluster.getProvider(c)))).map(([k, v]) => ({
+    return Object.entries(_.countBy(this.clusters.map(c => Cluster.getProviderDisplayName(c)))).map(([k, v]) => ({
       name: k,
       value: v,
     }));
