@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<km-tab-card>
+<km-tab-card [verticalMargin]="false">
   <km-tab label="Cluster Distribution">
     <div #chartContainer
          [ngSwitch]="clusters.length > 0"
