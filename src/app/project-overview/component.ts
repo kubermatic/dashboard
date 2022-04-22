@@ -15,8 +15,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Project} from '@shared/entity/project';
 import {ProjectService} from '@core/services/project';
-import {map, switchMap, takeUntil} from 'rxjs/operators';
-import {EMPTY, merge, Subject, timer} from 'rxjs';
+import {catchError, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {combineLatest, EMPTY, iif, merge, of, onErrorResumeNext, Subject, timer} from 'rxjs';
 import {Member} from '@shared/entity/member';
 import {MemberService} from '@core/services/member';
 import {AppConfigService} from '@app/config.service';
@@ -32,6 +32,7 @@ import {ClusterTemplateService} from '@core/services/cluster-templates';
 import {ClusterTemplate} from '@shared/entity/cluster-template';
 import {BackupService} from '@core/services/backup';
 import {EtcdBackupConfig} from '@shared/entity/backup';
+import {Health} from '@shared/entity/health';
 
 @Component({
   selector: 'km-project-overview',
@@ -41,6 +42,7 @@ import {EtcdBackupConfig} from '@shared/entity/backup';
 export class ProjectOverviewComponent implements OnInit, OnDestroy {
   project: Project;
   clusters: Cluster[] = [];
+  clusterHealth: Health[] = [];
   externalClusters: ExternalCluster[] = [];
   externalClustersEnabled = false;
   clusterTemplates: ClusterTemplate[] = [];
@@ -62,7 +64,8 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     private readonly _serviceAccountService: ServiceAccountService,
     private readonly _settingsService: SettingsService,
     private readonly _appConfigService: AppConfigService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this._loadProject();
@@ -101,9 +104,24 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     merge(timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()), this._projectChange)
       .pipe(
         switchMap(() => (this.project ? this._clusterService.clusters(this.project.id) : EMPTY)),
+        tap(clusters => (this.clusters = clusters)),
+        switchMap(clusters =>
+          iif(
+            () => clusters.length > 0,
+            combineLatest([
+              ...clusters.map(cluster =>
+                this._clusterService
+                  .health(this.project.id, cluster.id)
+                  .pipe(catchError(() => onErrorResumeNext(EMPTY)))
+                  .pipe(tap(health => (this.clusterHealth[cluster.id] = health)))
+              ),
+            ]).pipe(take(1)),
+            of([])
+          )
+        ),
         takeUntil(this._unsubscribe)
       )
-      .subscribe(clusters => (this.clusters = clusters));
+      .subscribe();
   }
 
   private _loadExternalClusters(): void {
