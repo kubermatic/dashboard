@@ -16,12 +16,12 @@ import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {ExternalCluster, ExternalClusterProvider, ExternalClusterState} from '@shared/entity/external-cluster';
 import {Cluster} from '@shared/entity/cluster';
 import {MatTableDataSource} from '@angular/material/table';
-import {ActivatedRoute, Router} from '@angular/router';
-import {PathParam} from '@core/services/params';
+import {Router} from '@angular/router';
 import _ from 'lodash';
 import {getClusterHealthStatus, HealthStatus} from '@shared/utils/health-status';
 import {Health} from '@shared/entity/health';
 import {ClusterListTab} from '@app/cluster/list/component';
+import {Project} from '@shared/entity/project';
 
 @Component({
   selector: 'km-clusters-overview',
@@ -29,6 +29,7 @@ import {ClusterListTab} from '@app/cluster/list/component';
   styleUrls: ['style.scss'],
 })
 export class ClustersOverviewComponent implements OnInit, OnChanges {
+  @Input() project: Project;
   @Input() clusters: Cluster[] = [];
   @Input() clusterHealth: Health[] = [];
   @Input() externalClusters: ExternalCluster[] = [];
@@ -37,10 +38,9 @@ export class ClustersOverviewComponent implements OnInit, OnChanges {
   clusterDataSource = new MatTableDataSource<Cluster>();
   externalClusterColumns: string[] = ['status', 'name'];
   externalClusterDataSource = new MatTableDataSource<ExternalCluster>();
-  projectID = this._activeRoute.snapshot.paramMap.get(PathParam.ProjectID);
   private readonly _maxElements = 10;
 
-  constructor(private readonly _router: Router, private readonly _activeRoute: ActivatedRoute) {}
+  constructor(private readonly _router: Router) {}
 
   ngOnInit(): void {
     this.clusterDataSource.data = this.clustersTop;
@@ -71,11 +71,11 @@ export class ClustersOverviewComponent implements OnInit, OnChanges {
   }
 
   clusterNavigate(cluster: Cluster): void {
-    this._router.navigate([`/projects/${this.projectID}/clusters/${cluster.id}`]);
+    this._router.navigate([`/projects/${this.project.id}/clusters/${cluster.id}`]);
   }
 
   clustersNavigate(): void {
-    this._router.navigate(['/projects/' + this.projectID + '/clusters']);
+    this._router.navigate(['/projects/' + this.project.id + '/clusters']);
   }
 
   getClusterHealthStatus(cluster: Cluster): HealthStatus {
@@ -87,11 +87,11 @@ export class ClustersOverviewComponent implements OnInit, OnChanges {
   }
 
   externalClusterNavigate(cluster: ExternalCluster): void {
-    this._router.navigate([`/projects/${this.projectID}/clusters/external/${cluster.id}`]);
+    this._router.navigate([`/projects/${this.project.id}/clusters/external/${cluster.id}`]);
   }
 
   externalClustersNavigate(): void {
-    this._router.navigate(['/projects/' + this.projectID + '/clusters'], {
+    this._router.navigate(['/projects/' + this.project.id + '/clusters'], {
       fragment: `${ClusterListTab.ExternalCluster}`,
     });
   }
