@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Datacenter, Provider} from '../../../utils/provider';
-import {WizardStep} from '../../../utils/wizard';
-import {Page, PageOptions} from '../types';
+import {Datacenter} from '@ctypes/datacenter';
+import {Page, PageOptions, WizardStrategy} from '@ctypes/pages';
+import {Provider} from '@ctypes/provider';
+import {WizardStep} from '@ctypes/wizard';
 import {WizardStrategyFactory} from './strategy/factory';
-import {WizardStrategy} from './strategy/types';
 
 export class Wizard extends PageOptions implements Page {
   private readonly _strategy: WizardStrategy | undefined;
@@ -35,22 +35,18 @@ export class Wizard extends PageOptions implements Page {
   }
 
   create(name: string, provider: Provider, datacenter: Datacenter, sshKeyName: string): void {
-    this.Buttons.provider(provider)
-      .click()
-      .then(_ => this._strategy?.onProviderChange(provider));
+    this.Buttons.provider(provider).click();
     this.Buttons.datacenter(datacenter)
       .click()
-      .then(_ => this._strategy?.onCreate());
+      .then(_ => this._strategy?.onCreate(provider));
     this.Elements.clusterNameInput.type(name);
     this.Buttons.sshKeysSelect.click();
-    this.Buttons.sshKeysSelectOption(sshKeyName).click();
+    this.Buttons.sshKeysSelectOption(sshKeyName)
+      .click()
+      .then(_ => this._strategy?.onSSHKeyAdd(provider));
     this.Buttons.overlayContainer.click();
     this.Buttons.nextStep(WizardStep.Cluster).click();
     this.Buttons.create.click({force: true});
-  }
-
-  onDelete(): void {
-    this._strategy?.onDelete();
   }
 }
 

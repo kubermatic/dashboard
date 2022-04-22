@@ -3,6 +3,10 @@
   "compilerOptions": {
     "strict": true,
     "baseUrl": ".",
+    "paths": {
+      "@ctypes/*": ["types/*"],
+      "@intercept/*": ["intercept/*"]
+    },
     "types": ["cypress"],
   },
   "include": [
@@ -12,5 +16,7 @@
     "utils/*.ts",
     "support/*.ts",
     "plugins/*.ts",
+    "intercept/*.ts",
+    "types/*.ts",
     "../node_modules/cypress"]
 }

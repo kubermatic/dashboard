@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ProviderMenuOption} from '../../../clusters.po';
-import {Pages} from '../../pages';
-import {Page, PageOptions} from '../../types';
+import {ClusterDetailStrategy, Page, PageOptions} from '@ctypes/pages';
+import {Provider} from '@ctypes/provider';
+import {ProviderMenuOption} from '../proxy';
 import {ClusterDetailStrategyFactory} from './strategy/factory';
-import {ClusterDetailStrategy} from './strategy/types';
 
 export class ClusterDetail extends PageOptions implements Page {
   private readonly _strategy: ClusterDetailStrategy | undefined;
@@ -32,18 +31,18 @@ export class ClusterDetail extends PageOptions implements Page {
 
   visit(): void {}
 
-  delete(name: string): void {
-    this.Buttons.deleteCluster.click();
+  delete(name: string, provider: Provider): void {
+    this.Buttons.deleteCluster.click().then(_ => this._strategy?.onDelete(provider));
     this.Elements.deleteDialogInput.type(name);
-    this.Buttons.deleteClusterConfirm.click().then(_ => Pages.Wizard.onDelete());
+    this.Buttons.deleteClusterConfirm.click();
   }
 
-  removeSSHKey(name: string): void {
+  removeSSHKey(name: string, provider: Provider): void {
     this.Buttons.providerMenu.click();
     this.Buttons.providerMenuOption(ProviderMenuOption.ManageSSHKeys).click();
     this.Buttons.deleteSSHKey(name)
       .click()
-      .then(_ => this._strategy?.onSSHKeyDelete());
+      .then(_ => this._strategy?.onSSHKeyDelete(provider));
     this.Buttons.deleteSSHKeyConfirm.click();
     this.Buttons.manageSSHKeyCloseButton.click();
   }

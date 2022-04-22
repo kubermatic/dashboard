@@ -17,6 +17,11 @@ import {Config} from '../../../utils/config';
 import {ClusterDetail} from './detail/page';
 import {ClusterList} from './list/page';
 
+export enum ProviderMenuOption {
+  EditCluster = 'Edit Cluster',
+  ManageSSHKeys = 'Manage SSH keys',
+}
+
 export class Clusters {
   private static _clusterName: string;
   private readonly _clusterList: ClusterList;

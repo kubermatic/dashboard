@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Endpoint} from '../../../../utils/endpoint';
-import {ServiceAccountStrategy, ServiceAccountTokenStrategy} from './types';
+import {Endpoints} from '@ctypes/endpoints';
+import {ServiceAccountStrategy, ServiceAccountTokenStrategy} from '@ctypes/pages';
 
 export class MockedServiceAccountStrategy implements ServiceAccountStrategy {
   private static readonly _fixturePath = 'service-accounts.json';
@@ -33,7 +33,7 @@ export class MockedServiceAccountStrategy implements ServiceAccountStrategy {
   }
 
   private _init(): void {
-    cy.intercept(Endpoint.ServiceAccounts, req => {
+    cy.intercept(Endpoints.Resource.ServiceAccount.List, req => {
       req.reply({fixture: MockedServiceAccountStrategy._activeFixture});
     });
   }
@@ -57,7 +57,7 @@ export class MockedServiceAccountTokenStrategy implements ServiceAccountTokenStr
   }
 
   private _init(): void {
-    cy.intercept(Endpoint.ServiceAccountTokens, req => {
+    cy.intercept(Endpoints.Resource.ServiceAccount.Tokens, req => {
       req.reply({fixture: MockedServiceAccountTokenStrategy._activeFixture});
     });
   }

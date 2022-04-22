@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Endpoint} from '../../../../utils/endpoint';
-import {SSHKeyStrategy} from './types';
+import {Endpoints} from '@ctypes/endpoints';
+import {SSHKeyStrategy} from '@ctypes/pages';
 
 export class MockedSSHKeyStrategy implements SSHKeyStrategy {
   private static readonly _fixturePath = 'ssh-keys.json';
@@ -33,7 +33,7 @@ export class MockedSSHKeyStrategy implements SSHKeyStrategy {
   }
 
   private _init(): void {
-    cy.intercept(Endpoint.SSHKeys, req => {
+    cy.intercept(Endpoints.Resource.SSHKey.List, req => {
       req.reply({fixture: MockedSSHKeyStrategy._activeFixture});
     });
   }

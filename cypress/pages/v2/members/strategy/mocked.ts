@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Endpoint} from '../../../../utils/endpoint';
-import {MembersStrategy} from './types';
+import {Endpoints} from '@ctypes/endpoints';
+import {MembersStrategy} from '@ctypes/pages';
 
 export class MockedMembersStrategy implements MembersStrategy {
   private static readonly _fixturePath = 'members.json';
@@ -33,7 +33,7 @@ export class MockedMembersStrategy implements MembersStrategy {
   }
 
   private _init(): void {
-    cy.intercept(Endpoint.Members, req => {
+    cy.intercept(Endpoints.Members, req => {
       req.reply({fixture: MockedMembersStrategy._activeFixture});
     });
   }

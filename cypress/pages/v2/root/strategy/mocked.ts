@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Endpoint} from '../../../../utils/endpoint';
+import {Endpoints} from '@ctypes/endpoints';
+import {LoginStrategy} from '@ctypes/pages';
 import {Mocks} from '../../../../utils/mocks';
-import {LoginStrategy} from './types';
 
 export class MockedLoginStrategy implements LoginStrategy {
   private static _userFixture = {
@@ -85,6 +85,6 @@ export class MockedLoginStrategy implements LoginStrategy {
   }
 
   private _init(): void {
-    cy.intercept(Endpoint.CurrentUser, req => req.reply({body: MockedLoginStrategy._userFixture}));
+    cy.intercept(Endpoints.User.Me, req => req.reply({body: MockedLoginStrategy._userFixture}));
   }
 }

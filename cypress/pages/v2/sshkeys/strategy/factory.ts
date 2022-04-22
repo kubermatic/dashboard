@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {SSHKeyStrategy} from '@ctypes/pages';
 import {MockedSSHKeyStrategy} from './mocked';
-import {SSHKeyStrategy} from './types';
 
 export class SSHKeyStrategyFactory {
   static new(isAPIMocked: boolean): SSHKeyStrategy | undefined {

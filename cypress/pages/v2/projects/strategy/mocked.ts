@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Endpoint} from '../../../../utils/endpoint';
-import {ProjectStrategy} from './types';
+import {Endpoints} from '@ctypes/endpoints';
+import {ProjectStrategy} from '@ctypes/pages';
 
 export class MockedProjectStrategy implements ProjectStrategy {
   private static readonly _fixturePath = 'projects.json';
@@ -33,6 +33,6 @@ export class MockedProjectStrategy implements ProjectStrategy {
   }
 
   private _init(): void {
-    cy.intercept(Endpoint.Projects, req => req.reply({fixture: MockedProjectStrategy._activeFixture}));
+    cy.intercept(Endpoints.Resource.Project.List, req => req.reply({fixture: MockedProjectStrategy._activeFixture}));
   }
 }

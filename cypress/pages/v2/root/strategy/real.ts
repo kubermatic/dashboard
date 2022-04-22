@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {LoginStrategy} from '@ctypes/pages';
 import {Pages} from '../../pages';
 import {RootPage} from '../page';
-import {LoginStrategy} from './types';
 
 export class RealLoginStrategy implements LoginStrategy {
   constructor(private readonly _context: RootPage) {}

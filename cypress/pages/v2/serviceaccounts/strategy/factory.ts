@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {ServiceAccountStrategy, ServiceAccountTokenStrategy} from '@ctypes/pages';
 import {MockedServiceAccountStrategy, MockedServiceAccountTokenStrategy} from './mocked';
-import {ServiceAccountStrategy, ServiceAccountTokenStrategy} from './types';
 
 export class ServiceAccountStrategyFactory {
   static new(isAPIMocked: boolean): ServiceAccountStrategy | undefined {

@@ -12,8 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import path from 'path';
+
 const webpackOptions = {
-  resolve: {extensions: ['.ts', '.js']},
+  resolve: {
+    extensions: ['.ts', '.js'],
+    alias: {
+      '@ctypes': path.resolve(__dirname, '../types'),
+      '@intercept': path.resolve(__dirname, '../intercept'),
+    },
+  },
   module: {
     rules: [
       {

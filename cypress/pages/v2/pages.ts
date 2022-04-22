@@ -12,18 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Condition} from '../../utils/condition';
+import {Condition} from '@ctypes/condition';
+import {View} from '@ctypes/view';
 import {Config} from '../../utils/config';
-import {View} from '../../utils/view';
-import {Clusters} from './clusters/proxy';
-import {DexPage} from './dex/page';
+import {Members} from './members/page';
 import {Projects} from './projects/page';
-import {RootPage} from './root/page';
 import {ServiceAccounts} from './serviceaccounts/page';
+import {RootPage} from './root/page';
+import {Clusters} from './clusters/proxy';
 import {SSHKeys} from './sshkeys/page';
 import {Wizard} from './wizard/page';
 import {UserSettings} from './usersettings/page';
-import {Members} from './members/page';
+import {DexPage} from './dex/page';
 
 export class Pages {
   private static readonly _isAPIMocked = Config.isAPIMocked();

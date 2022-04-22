@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {BringYourOwn} from '@ctypes/datacenter';
 import {Clusters} from '../../../pages/v2/clusters/proxy';
 import {Pages} from '../../../pages/v2/pages';
 import {Projects} from '../../../pages/v2/projects/page';
 import {SSHKeys} from '../../../pages/v2/sshkeys/page';
+import {Provider} from '@ctypes/provider';
 import {Condition} from '../../../utils/condition';
-import {BringYourOwn, Provider} from '../../../utils/provider';
 import {View} from '../../../utils/view';
 
 describe('SSH Key Management Story', () => {
@@ -61,18 +62,18 @@ describe('SSH Key Management Story', () => {
 
   it('should create the cluster with ssh key', () => {
     Pages.Wizard.visit();
-    Pages.Wizard.create(clusterName, Provider.kubeAdm, BringYourOwn.Frankfurt, sshKeyName);
+    Pages.Wizard.create(clusterName, Provider.kubeadm, BringYourOwn.Frankfurt, sshKeyName);
     Pages.expect(View.Clusters.Default);
     Pages.Clusters.Details.Elements.sshKeys(sshKeyName).should(Condition.Exist);
   });
 
   it('should remove the ssh key from the cluster', () => {
-    Pages.Clusters.Details.removeSSHKey(sshKeyName);
+    Pages.Clusters.Details.removeSSHKey(sshKeyName, Provider.kubeadm);
     Pages.Clusters.Details.Elements.sshKeys().should(Condition.Exist);
   });
 
   it('should delete the cluster', () => {
-    Pages.Clusters.Details.delete(clusterName);
+    Pages.Clusters.Details.delete(clusterName, Provider.kubeadm);
     Pages.Root.Elements.spinner.should(Condition.NotExist);
     Pages.Clusters.List.Elements.clusterItem(clusterName).should(Condition.NotExist);
   });

@@ -1,0 +1,15 @@
+export enum Provider {
+  Alibaba = 'alibaba',
+  Anexia = 'anexia',
+  AWS = 'aws',
+  Azure = 'azure',
+  kubeadm = 'bringyourown',
+  Digitalocean = 'digitalocean',
+  GCP = 'gcp',
+  Hetzner = 'hetzner',
+  KubeVirt = 'kubevirt',
+  Nutanix = 'nutanix',
+  OpenStack = 'openstack',
+  Equinix = 'packet',
+  VSphere = 'vsphere',
+}

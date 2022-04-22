@@ -14,15 +14,16 @@
 
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatStepper} from '@angular/material/stepper';
 import {Router} from '@angular/router';
-import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {ClusterService} from '@core/services/cluster';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {NodeDataService} from '@core/services/node-data/service';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {WizardService} from '@core/services/wizard/wizard';
+import {SaveClusterTemplateDialogComponent} from '@shared/components/save-cluster-template/component';
 import {Cluster, CreateClusterModel} from '@shared/entity/cluster';
 import {Project} from '@shared/entity/project';
 import {SSHKey} from '@shared/entity/ssh-key';
@@ -30,8 +31,6 @@ import {NodeData} from '@shared/model/NodeSpecChange';
 import {forkJoin, of, Subject, take} from 'rxjs';
 import {filter, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {StepRegistry, steps, WizardStep} from './config';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {SaveClusterTemplateDialogComponent} from '@shared/components/save-cluster-template/component';
 
 @Component({
   selector: 'km-wizard',
@@ -58,8 +57,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     private readonly _clusterService: ClusterService,
     private readonly _nodeDataService: NodeDataService,
     private readonly _matDialog: MatDialog,
-    private readonly _router: Router,
-    private readonly _googleAnalyticsService: GoogleAnalyticsService
+    private readonly _router: Router
   ) {}
 
   get steps(): WizardStep[] {
@@ -117,8 +115,7 @@ export class WizardComponent implements OnInit, OnDestroy {
       .create(this.project.id, createCluster)
       .pipe(
         tap(cluster => {
-          this._notificationService.success(`Created the ${createCluster.cluster.name} cluster`);
-          this._googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
+          this._notificationService.success(`Created the ${cluster.name} cluster`);
           createdCluster = cluster;
         })
       )
@@ -150,7 +147,6 @@ export class WizardComponent implements OnInit, OnDestroy {
         },
         error: () => {
           this._notificationService.error(`Could not create the ${createCluster.cluster.name} cluster`);
-          this._googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationFailed');
           this.creating = false;
         },
       });

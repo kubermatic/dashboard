@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {ClusterDetailStrategy} from '@ctypes/pages';
 import {MockedClusterDetailStrategy} from './mocked';
-import {ClusterDetailStrategy} from './types';
 
 export class ClusterDetailStrategyFactory {
   static new(isAPIMocked: boolean): ClusterDetailStrategy | undefined {

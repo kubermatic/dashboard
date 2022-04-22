@@ -12,9 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Page, PageOptions} from '../types';
+import {Page, PageOptions, SSHKeyStrategy} from '@ctypes/pages';
 import {SSHKeyStrategyFactory} from './strategy/factory';
-import {SSHKeyStrategy} from './strategy/types';
 
 export class SSHKeys extends PageOptions implements Page {
   private readonly _strategy: SSHKeyStrategy | undefined;

@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {LoginStrategy, Page, PageOptions} from '@ctypes/pages';
+import {View} from '@ctypes/view';
 import {Config} from '../../../utils/config';
-import {View} from '../../../utils/view';
-import {Page, PageOptions} from '../types';
 import {LoginStrategyFactory} from './strategy/factory';
-import {LoginStrategy} from './strategy/types';
 
 export class RootPage extends PageOptions implements Page {
   private readonly _loginStrategy: LoginStrategy;

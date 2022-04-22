@@ -12,40 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Endpoint} from '../../../../../utils/endpoint';
-import {ClusterDetailStrategy} from './types';
+import {ClusterDetailStrategy} from '@ctypes/pages';
+import {Provider} from '@ctypes/provider';
+import {Intercept} from '@intercept/intercept';
 
 export class MockedClusterDetailStrategy implements ClusterDetailStrategy {
-  private static readonly _sshKeysFixturePath = 'ssh-keys.json';
-  private static readonly _sshKeyFixturePath = 'ssh-key.json';
-  private static readonly _fixtureEmptyArrayPath = 'empty-array.json';
-  private static readonly _fixtureEmptyObjectPath = 'empty-object.json';
-  private static _sshKeysActiveFixture = MockedClusterDetailStrategy._sshKeysFixturePath;
-  private static _sshKeyActiveFixture = MockedClusterDetailStrategy._sshKeyFixturePath;
+  constructor() {}
 
-  constructor() {
-    this._init();
+  onCreate(provider: Provider): void {
+    Intercept.Clusters(provider).onCreate();
+    Intercept.Clusters(provider).onSSHKeyCreate();
   }
 
-  onCreate(): void {
-    MockedClusterDetailStrategy._sshKeysActiveFixture = MockedClusterDetailStrategy._sshKeysFixturePath;
-    MockedClusterDetailStrategy._sshKeyActiveFixture = MockedClusterDetailStrategy._sshKeyFixturePath;
+  onDelete(provider: Provider): void {
+    Intercept.Clusters(provider).onDelete();
   }
 
-  onDelete(): void {
-    this.onSSHKeyDelete();
-  }
-
-  onSSHKeyDelete(): void {
-    MockedClusterDetailStrategy._sshKeysActiveFixture = MockedClusterDetailStrategy._fixtureEmptyArrayPath;
-    MockedClusterDetailStrategy._sshKeyActiveFixture = MockedClusterDetailStrategy._fixtureEmptyObjectPath;
-  }
-
-  private _init(): void {
-    cy.intercept(Endpoint.ClusterSSHKeys, req =>
-      req.reply({fixture: MockedClusterDetailStrategy._sshKeysActiveFixture})
-    );
-
-    cy.intercept(Endpoint.ClusterSSHKey, req => req.reply({fixture: MockedClusterDetailStrategy._sshKeyActiveFixture}));
+  onSSHKeyDelete(provider: Provider): void {
+    Intercept.Clusters(provider).onSSHKeyDelete();
   }
 }

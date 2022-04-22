@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {ProjectStrategy} from '@ctypes/pages';
 import {MockedProjectStrategy} from './mocked';
-import {ProjectStrategy} from './types';
 
 export class ProjectStrategyFactory {
   static new(isAPIMocked: boolean): ProjectStrategy | undefined {
