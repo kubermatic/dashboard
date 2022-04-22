@@ -30,6 +30,8 @@ import {SSHKey} from '@shared/entity/ssh-key';
 import {SSHKeyService} from '@core/services/ssh-key';
 import {ClusterTemplateService} from '@core/services/cluster-templates';
 import {ClusterTemplate} from '@shared/entity/cluster-template';
+import {BackupService} from '@core/services/backup';
+import {EtcdBackupConfig} from '@shared/entity/backup';
 
 @Component({
   selector: 'km-project-overview',
@@ -42,17 +44,19 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   externalClusters: ExternalCluster[] = [];
   externalClustersEnabled = false;
   clusterTemplates: ClusterTemplate[] = [];
+  backups: EtcdBackupConfig[] = [];
   sshKeys: SSHKey[] = [];
   members: Member[] = [];
   serviceAccounts: ServiceAccount[] = [];
   private _projectChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
-  private readonly _refreshTime = 10;
+  private readonly _refreshTime = 15;
 
   constructor(
     private readonly _projectService: ProjectService,
     private readonly _clusterService: ClusterService,
     private readonly _clusterTemplateService: ClusterTemplateService,
+    private readonly _backupService: BackupService,
     private readonly _sshKeyService: SSHKeyService,
     private readonly _memberService: MemberService,
     private readonly _serviceAccountService: ServiceAccountService,
@@ -66,6 +70,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     this._loadClusters();
     this._loadExternalClusters();
     this._loadClusterTemplates();
+    this._loadBackups();
     this._loadSSHKeys();
     this._loadMembers();
     this._loadServiceAccounts();
@@ -119,6 +124,13 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
         takeUntil(this._unsubscribe)
       )
       .subscribe(clusterTemplates => (this.clusterTemplates = clusterTemplates));
+  }
+
+  private _loadBackups(): void {
+    merge(timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()), this._projectChange)
+      .pipe(switchMap(() => (this.project ? this._backupService.list(this.project.id) : EMPTY)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(backups => (this.backups = backups));
   }
 
   private _loadSSHKeys(): void {
