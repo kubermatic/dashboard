@@ -15,6 +15,11 @@
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {Cluster, getProviderDisplayName, Provider} from '@shared/entity/cluster';
 import _ from 'lodash';
+import {
+  ExternalCluster,
+  ExternalClusterProvider,
+  getExternalProviderDisplayName,
+} from '@shared/entity/external-cluster';
 
 class ChartData {
   name: string;
@@ -33,6 +38,7 @@ class ChartColorData {
 })
 export class ProvidersOverviewComponent implements OnInit, OnChanges {
   @Input() clusters: Cluster[] = [];
+  @Input() externalClusters: ExternalCluster[] = [];
   clusterDistribution: ChartData[] = [];
   colors: ChartColorData[] = [
     {name: getProviderDisplayName(Provider.Alibaba), value: '#444c53'},
@@ -48,6 +54,10 @@ export class ProvidersOverviewComponent implements OnInit, OnChanges {
     {name: getProviderDisplayName(Provider.OpenStack), value: '#e61742'},
     {name: getProviderDisplayName(Provider.Equinix), value: '#e51d26'},
     {name: getProviderDisplayName(Provider.VSphere), value: '#e5a900'},
+    {name: getExternalProviderDisplayName(ExternalClusterProvider.AKS), value: '#008ad7'},
+    {name: getExternalProviderDisplayName(ExternalClusterProvider.EKS), value: '#ee8910'},
+    {name: getExternalProviderDisplayName(ExternalClusterProvider.GKE), value: '#32a350'},
+    {name: getExternalProviderDisplayName(ExternalClusterProvider.Custom), value: '#006400'},
   ];
 
   ngOnInit(): void {
@@ -59,9 +69,20 @@ export class ProvidersOverviewComponent implements OnInit, OnChanges {
   }
 
   private get _clusterDistribution(): ChartData[] {
-    return Object.entries(_.countBy(this.clusters.map(c => Cluster.getProviderDisplayName(c)))).map(([k, v]) => ({
+    const clusterData = Object.entries(_.countBy(this.clusters.map(c => Cluster.getProviderDisplayName(c)))).map(
+      ([k, v]) => ({
+        name: k,
+        value: v,
+      })
+    );
+
+    const externalClusterData = Object.entries(
+      _.countBy(this.externalClusters.map(c => ExternalCluster.getProviderDisplayName(c.cloud)))
+    ).map(([k, v]) => ({
       name: k,
       value: v,
     }));
+
+    return [...clusterData, ...externalClusterData];
   }
 }
