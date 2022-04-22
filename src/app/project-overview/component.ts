@@ -64,8 +64,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     private readonly _serviceAccountService: ServiceAccountService,
     private readonly _settingsService: SettingsService,
     private readonly _appConfigService: AppConfigService
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this._loadProject();
