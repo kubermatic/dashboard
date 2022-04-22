@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
-import {ExternalCluster} from '@shared/entity/external-cluster';
+import {ExternalCluster, ExternalClusterProvider, ExternalClusterState} from '@shared/entity/external-cluster';
 import {Cluster} from '@shared/entity/cluster';
 import {MatTableDataSource} from '@angular/material/table';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -30,7 +30,7 @@ export class ClustersOverviewComponent implements OnInit, OnChanges {
   @Input() externalClustersEnabled = false;
   clusterColumns: string[] = ['name'];
   clusterDataSource = new MatTableDataSource<Cluster>();
-  externalClusterColumns: string[] = ['name'];
+  externalClusterColumns: string[] = ['status', 'name'];
   externalClusterDataSource = new MatTableDataSource<ExternalCluster>();
   projectID = this._activeRoute.snapshot.paramMap.get(PathParam.ProjectID);
   private readonly _maxElements = 10;
@@ -75,5 +75,20 @@ export class ClustersOverviewComponent implements OnInit, OnChanges {
 
   externalClusterNavigate(cluster: ExternalCluster): void {
     this._router.navigate([`/projects/${this.projectID}/clusters/external/${cluster.id}`]);
+  }
+
+  getExternalClusterStatus(cluster: ExternalCluster): string {
+    return ExternalCluster.getStatusMessage(cluster);
+  }
+
+  getExternalClusterStatusColor(cluster: ExternalCluster): string {
+    return ExternalCluster.getStatusIcon(cluster);
+  }
+
+  canAccessExternalCluster(cluster: ExternalCluster): boolean {
+    return (
+      ExternalCluster.getProvider(cluster.cloud) !== ExternalClusterProvider.Custom ||
+      cluster.status.state !== ExternalClusterState.Error
+    );
   }
 }

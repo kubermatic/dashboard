@@ -51,10 +51,21 @@ limitations under the License.
            mat-table
            [dataSource]="externalClusterDataSource"
            [trackBy]="externalClusterTrackBy">
+      <ng-container matColumnDef="status">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"></th>
+        <td mat-cell
+            *matCellDef="let cluster">
+          <i [matTooltip]="getExternalClusterStatus(cluster)"
+             [ngClass]="getExternalClusterStatusColor(cluster)"
+             class="km-vertical-center"></i>
+        </td>
+      </ng-container>
       <ng-container matColumnDef="name">
         <th mat-header-cell
             *matHeaderCellDef
-            class="km-header-cell p-50">Name
+            class="km-header-cell p-100">Name
         </th>
         <td mat-cell
             *matCellDef="let cluster">
@@ -69,6 +80,9 @@ limitations under the License.
           *matHeaderRowDef="externalClusterColumns"></tr>
       <tr mat-row
           *matRowDef="let cluster; columns: externalClusterColumns"
+          class="km-mat-row"
+          [ngClass]="{'km-pointer': canAccessExternalCluster(cluster)}"
+          [matTooltip]="canAccessExternalCluster(cluster) ? '' : 'Cluster cannot be accessed'"
           (click)="externalClusterNavigate(cluster)"></tr>
     </table>
     <div class="km-row km-empty-list-msg"
