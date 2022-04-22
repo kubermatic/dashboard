@@ -40,6 +40,10 @@ limitations under the License.
           *matRowDef="let cluster; columns: clusterColumns"
           (click)="clusterNavigate(cluster)"></tr>
     </table>
+    <div class="km-row km-empty-list-msg"
+         *ngIf="clusters.length < 1">
+      No clusters available.
+    </div>
   </km-tab>
   <km-tab label="External Clusters"
           *ngIf="externalClustersEnabled">
@@ -67,5 +71,9 @@ limitations under the License.
           *matRowDef="let cluster; columns: externalClusterColumns"
           (click)="externalClusterNavigate(cluster)"></tr>
     </table>
+    <div class="km-row km-empty-list-msg"
+         *ngIf="externalClusters.length < 1">
+      No clusters available.
+    </div>
   </km-tab>
 </km-tab-card>
