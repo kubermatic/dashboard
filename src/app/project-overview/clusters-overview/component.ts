@@ -19,6 +19,8 @@ import {MatTableDataSource} from '@angular/material/table';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PathParam} from '@core/services/params';
 import _ from 'lodash';
+import {getClusterHealthStatus, HealthStatus} from '@shared/utils/health-status';
+import {Health} from '@shared/entity/health';
 
 @Component({
   selector: 'km-clusters-overview',
@@ -26,9 +28,10 @@ import _ from 'lodash';
 })
 export class ClustersOverviewComponent implements OnInit, OnChanges {
   @Input() clusters: Cluster[] = [];
+  @Input() clusterHealth: Health[] = [];
   @Input() externalClusters: ExternalCluster[] = [];
   @Input() externalClustersEnabled = false;
-  clusterColumns: string[] = ['name'];
+  clusterColumns: string[] = ['status', 'name'];
   clusterDataSource = new MatTableDataSource<Cluster>();
   externalClusterColumns: string[] = ['status', 'name'];
   externalClusterDataSource = new MatTableDataSource<ExternalCluster>();
@@ -67,6 +70,10 @@ export class ClustersOverviewComponent implements OnInit, OnChanges {
 
   clusterNavigate(cluster: Cluster): void {
     this._router.navigate([`/projects/${this.projectID}/clusters/${cluster.id}`]);
+  }
+
+  getClusterHealthStatus(cluster: Cluster): HealthStatus {
+    return getClusterHealthStatus(cluster, this.clusterHealth[cluster.id]);
   }
 
   externalClusterTrackBy(cluster: ExternalCluster): string {
