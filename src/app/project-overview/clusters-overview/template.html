@@ -49,11 +49,21 @@ limitations under the License.
           *matHeaderRowDef="clusterColumns"></tr>
       <tr mat-row
           *matRowDef="let cluster; columns: clusterColumns"
+          class="km-mat-row km-pointer"
           (click)="clusterNavigate(cluster)"></tr>
     </table>
     <div class="km-row km-empty-list-msg"
          *ngIf="clusters.length < 1">
       No clusters available.
+    </div>
+    <div class="action-container"
+         fxFlex
+         fxLayoutAlign="end">
+      <button mat-flat-button
+              (click)="clustersNavigate()">
+        <i class="km-icon-mask km-icon-next"></i>
+        <span>Show All Clusters</span>
+      </button>
     </div>
   </km-tab>
   <km-tab label="External Clusters"
@@ -99,6 +109,15 @@ limitations under the License.
     <div class="km-row km-empty-list-msg"
          *ngIf="externalClusters.length < 1">
       No clusters available.
+    </div>
+    <div class="action-container"
+         fxFlex
+         fxLayoutAlign="end">
+      <button mat-flat-button
+              (click)="externalClustersNavigate()">
+        <i class="km-icon-mask km-icon-next"></i>
+        <span>Show All External Clusters</span>
+      </button>
     </div>
   </km-tab>
 </km-tab-card>

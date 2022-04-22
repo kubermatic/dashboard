@@ -21,10 +21,12 @@ import {PathParam} from '@core/services/params';
 import _ from 'lodash';
 import {getClusterHealthStatus, HealthStatus} from '@shared/utils/health-status';
 import {Health} from '@shared/entity/health';
+import {ClusterListTab} from '@app/cluster/list/component';
 
 @Component({
   selector: 'km-clusters-overview',
   templateUrl: 'template.html',
+  styleUrls: ['style.scss'],
 })
 export class ClustersOverviewComponent implements OnInit, OnChanges {
   @Input() clusters: Cluster[] = [];
@@ -72,6 +74,10 @@ export class ClustersOverviewComponent implements OnInit, OnChanges {
     this._router.navigate([`/projects/${this.projectID}/clusters/${cluster.id}`]);
   }
 
+  clustersNavigate(): void {
+    this._router.navigate(['/projects/' + this.projectID + '/clusters']);
+  }
+
   getClusterHealthStatus(cluster: Cluster): HealthStatus {
     return getClusterHealthStatus(cluster, this.clusterHealth[cluster.id]);
   }
@@ -82,6 +88,12 @@ export class ClustersOverviewComponent implements OnInit, OnChanges {
 
   externalClusterNavigate(cluster: ExternalCluster): void {
     this._router.navigate([`/projects/${this.projectID}/clusters/external/${cluster.id}`]);
+  }
+
+  externalClustersNavigate(): void {
+    this._router.navigate(['/projects/' + this.projectID + '/clusters'], {
+      fragment: `${ClusterListTab.ExternalCluster}`,
+    });
   }
 
   getExternalClusterStatus(cluster: ExternalCluster): string {
