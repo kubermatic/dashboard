@@ -22,7 +22,7 @@ limitations under the License.
       <div key>Name</div>
       <div value>{{flavor.name}}</div>
     </km-property>
-    <km-property>
+    <km-property *ngIf="flavor.namespace">
       <div key>Namespace</div>
       <div value>{{flavor.namespace}}</div>
     </km-property>

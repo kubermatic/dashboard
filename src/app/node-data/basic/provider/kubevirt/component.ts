@@ -263,7 +263,7 @@ export class KubeVirtBasicNodeDataComponent
             cpus: `${this.form.get(Controls.CPUs).value}`,
             memory: this.form.get(Controls.Memory).value,
             primaryDiskOSImage: this.form.get(Controls.PrimaryDiskOSImage).value,
-            primaryDiskStorageClassName: this.form.get(Controls.PrimaryDiskStorageClassName).value,
+            primaryDiskStorageClassName: this.form.get(Controls.PrimaryDiskStorageClassName).value[ComboboxControls.Select],
             primaryDiskSize: this.form.get(Controls.PrimaryDiskSize).value,
             secondaryDisks: this._getSecondaryDisksData(),
           } as KubeVirtNodeSpec,

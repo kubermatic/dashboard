@@ -648,29 +648,29 @@ limitations under the License.
 
             <!-- KubeVirt Nodes -->
             <ng-container *ngIf="cluster.spec.cloud?.kubevirt">
-              <km-property>
+              <km-property *ngIf="machineDeployment.spec.template.cloud?.kubevirt.cpus">
                 <div key>CPUs</div>
                 <div value>{{machineDeployment.spec.template.cloud?.kubevirt.cpus}}</div>
               </km-property>
-              <km-property>
+              <km-property *ngIf="machineDeployment.spec.template.cloud?.kubevirt.memory">
                 <div key>Memory</div>
                 <div value>{{machineDeployment.spec.template.cloud?.kubevirt.memory}}</div>
               </km-property>
-              <km-property>
-                <div key>PVC Size</div>
-                <div value>{{machineDeployment.spec.template.cloud?.kubevirt.pvcSize}}</div>
+              <km-property *ngIf="machineDeployment.spec.template.cloud?.kubevirt.flavorName">
+                <div key>VM Flavor</div>
+                <div value>{{machineDeployment.spec.template.cloud?.kubevirt.flavorName}}</div>
               </km-property>
               <km-property>
-                <div key>Storage Class Name</div>
-                <div value>{{machineDeployment.spec.template.cloud?.kubevirt.storageClassName}}</div>
+                <div key>Operating System Image</div>
+                <div value>{{machineDeployment.spec.template.cloud?.kubevirt.primaryDiskOSImage}}</div>
               </km-property>
               <km-property>
-                <div key>Source URL</div>
-                <div value>{{machineDeployment.spec.template.cloud?.kubevirt.sourceURL}}</div>
+                <div key>Storage Class</div>
+                <div value>{{machineDeployment.spec.template.cloud?.kubevirt.primaryDiskStorageClassName}}</div>
               </km-property>
               <km-property>
-                <div key>Namespace</div>
-                <div value>{{machineDeployment.spec.template.cloud?.kubevirt.namespace}}</div>
+                <div key>Size</div>
+                <div value>{{machineDeployment.spec.template.cloud?.kubevirt.primaryDiskSize}} GB</div>
               </km-property>
             </ng-container>
 
