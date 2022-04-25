@@ -16,7 +16,11 @@
 @use 'variables';
 
 .tab-card.tab-cards {
-  margin: 0 (- variables.$content-padding);
+  margin: - variables.$content-padding;
+
+  &.vertical-margin {
+    margin: 0 (- variables.$content-padding);
+  }
 
   .mat-tab-header {
     border-bottom: none;
