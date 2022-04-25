@@ -12,7 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, DoCheck, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {
+  Component,
+  DoCheck,
+  EventEmitter,
+  forwardRef,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 import {
   AbstractControl,
   AsyncValidator,
@@ -48,7 +59,7 @@ import {LabelFormValidators} from '../../validators/label-form.validators';
     },
   ],
 })
-export class LabelFormComponent implements OnInit, OnDestroy, ControlValueAccessor, AsyncValidator, DoCheck {
+export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, ControlValueAccessor, AsyncValidator, DoCheck {
   @Input() title = 'Labels';
   @Input() keyName = 'Key';
   @Input() valueName = 'Value';
@@ -82,6 +93,15 @@ export class LabelFormComponent implements OnInit, OnDestroy, ControlValueAccess
 
   private static _isFilled(label: AbstractControl): boolean {
     return label.get('key').value.length !== 0;
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes && changes.keyName) {
+      this.keyName = changes.keyName.currentValue;
+    }
+    if (changes && changes.valueName) {
+      this.valueName = changes.valueName.currentValue;
+    }
   }
 
   ngOnInit(): void {
