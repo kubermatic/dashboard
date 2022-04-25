@@ -247,6 +247,13 @@ export class VSphereNodeSpec {
   memory: number;
   template: string;
   diskSizeGB?: number;
+  tags?: VSphereTag[];
+}
+
+export class VSphereTag {
+  name: string;
+  description: string;
+  categoryID?: string; // Backend: CategoryID when empty the default category will be used.
 }
 
 export function getDefaultNodeProviderSpec(provider: string): object {
