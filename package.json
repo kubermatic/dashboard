@@ -69,6 +69,7 @@
     "@fontsource/roboto": "4.5.3",
     "@fontsource/roboto-mono": "4.5.3",
     "@fontsource/ubuntu": "4.5.4",
+    "@swimlane/ngx-charts": "20.1.0",
     "buffer": "6.0.3",
     "core-js": "3.21.1",
     "country-code-lookup": "0.0.20",

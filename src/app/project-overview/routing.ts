@@ -12,25 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'variables';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {AuthGuard, AuthzGuard} from '@core/services/auth/guard';
+import {ProjectOverviewComponent} from '@app/project-overview/component';
 
-:host {
-  display: flex;
-}
+const routes: Routes = [
+  {
+    path: '',
+    component: ProjectOverviewComponent,
+    canActivate: [AuthGuard, AuthzGuard],
+  },
+];
 
-.container {
-  margin: 6px 30px 6px 0;
-
-  .label:not(:empty) {
-    font-size: variables.$font-size-caption;
-    line-height: 14px;
-    min-height: 14px;
-  }
-
-  .value {
-    font-size: variables.$font-size-subhead;
-    line-height: 24px;
-    min-height: 24px;
-    word-break: break-all;
-  }
-}
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
+})
+export class ProjectOverviewRoutingModule {}

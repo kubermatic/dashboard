@@ -25,6 +25,17 @@ export enum ExternalClusterProvider {
   GKE = 'gke',
 }
 
+const PROVIDER_DISPLAY_NAMES = new Map<ExternalClusterProvider, string>([
+  [ExternalClusterProvider.AKS, 'AKS'],
+  [ExternalClusterProvider.EKS, 'EKS'],
+  [ExternalClusterProvider.GKE, 'GKE'],
+  [ExternalClusterProvider.Custom, 'Custom'],
+]);
+
+export function getExternalProviderDisplayName(provider: ExternalClusterProvider): string {
+  return PROVIDER_DISPLAY_NAMES.get(provider);
+}
+
 export class ExternalCluster {
   creationTimestamp?: Date;
   deletionTimestamp?: Date;
@@ -44,6 +55,10 @@ export class ExternalCluster {
     return providers.length > 0
       ? (providers.pop().toLowerCase() as ExternalClusterProvider)
       : ExternalClusterProvider.Custom;
+  }
+
+  static getProviderDisplayName(cloud: ExternalCloudSpec): string {
+    return getExternalProviderDisplayName(ExternalCluster.getProvider(cloud));
   }
 
   static getStatusMessage(cluster: ExternalCluster): string {

@@ -35,6 +35,10 @@ function createRouting(): Routes {
           loadChildren: () => import('./project/module').then(m => m.ProjectModule),
         },
         {
+          path: 'projects/:projectID/overview',
+          loadChildren: () => import('./project-overview/module').then(m => m.ProjectOverviewModule),
+        },
+        {
           path: 'projects/:projectID/wizard',
           loadChildren: () => import('./wizard/module').then(m => m.WizardModule),
         },
