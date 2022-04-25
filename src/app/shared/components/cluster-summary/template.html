@@ -670,11 +670,11 @@ limitations under the License.
               </km-property>
               <km-property>
                 <div key>Size</div>
-                <div value>{{machineDeployment.spec.template.cloud?.kubevirt.primaryDiskSize}} GB</div>
+                <div value>{{machineDeployment.spec.template.cloud?.kubevirt.primaryDiskSize}}</div>
               </km-property>
               <km-property *ngFor="let disk of machineDeployment.spec.template.cloud?.kubevirt?.secondaryDisks; let i = index;">
-                <div key>Secondary Disk #{{i + 1}}</div>
-                <div value>{{disk.storageClassName}}, {{disk.size}} GB</div>
+                <div key>Secondary Disk {{i + 1}}</div>
+                <div value>{{disk.storageClassName}}, {{disk.size}}</div>
               </km-property>
             </ng-container>
 
