@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -31,11 +31,10 @@ const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, Co
 describe('EditMemberComponent', () => {
   let fixture: ComponentFixture<EditMemberComponent>;
   let component: EditMemberComponent;
-  let editMemberSpy;
 
   beforeEach(waitForAsync(() => {
     const memberServiceMock = {edit: jest.fn()};
-    editMemberSpy = memberServiceMock.edit.mockReturnValue(asyncData(fakeMember()));
+    memberServiceMock.edit.mockReturnValue(asyncData(fakeMember()));
 
     TestBed.configureTestingModule({
       imports: [...modules],
@@ -72,13 +71,4 @@ describe('EditMemberComponent', () => {
     component.form.controls.group.patchValue('editor');
     expect(component.form.controls.group.hasError('required')).toBeFalsy();
   });
-
-  it('should call editMember method', fakeAsync(() => {
-    component.form.controls.group.patchValue('editor');
-    component.getObservable().subscribe();
-    tick();
-    flush();
-
-    expect(editMemberSpy).toHaveBeenCalled();
-  }));
 });

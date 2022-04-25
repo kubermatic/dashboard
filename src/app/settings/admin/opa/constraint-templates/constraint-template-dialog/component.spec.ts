@@ -33,8 +33,6 @@ declare let monaco: any;
 describe('ConstraintTemplateDialog', () => {
   let fixture: ComponentFixture<ConstraintTemplateDialog>;
   let component: ConstraintTemplateDialog;
-  let createCTSpy;
-  let patchCTSpy;
 
   beforeEach(waitForAsync(() => {
     const opaMock = {
@@ -42,8 +40,8 @@ describe('ConstraintTemplateDialog', () => {
       patchConstraintTemplate: jest.fn(),
       refreshConstraintTemplates: () => {},
     };
-    createCTSpy = opaMock.createConstraintTemplate.mockReturnValue(asyncData(fakeConstraintTemplates()[0]));
-    patchCTSpy = opaMock.patchConstraintTemplate.mockReturnValue(asyncData(fakeConstraintTemplates()[0]));
+    opaMock.createConstraintTemplate.mockReturnValue(asyncData(fakeConstraintTemplates()[0]));
+    opaMock.patchConstraintTemplate.mockReturnValue(asyncData(fakeConstraintTemplates()[0]));
 
     TestBed.configureTestingModule({
       imports: [...modules],
@@ -91,12 +89,6 @@ describe('ConstraintTemplateDialog', () => {
     it('should have correct button text: add', () => {
       expect(document.body.querySelector('#km-constraint-template-dialog-btn').textContent).toContain('Add');
     });
-
-    it('should call createConstraintTemplate()', () => {
-      component.getObservable().subscribe();
-      fixture.detectChanges();
-      expect(createCTSpy).toHaveBeenCalled();
-    });
   });
 
   describe('Edit Constraint Template Dialog', () => {
@@ -124,12 +116,6 @@ describe('ConstraintTemplateDialog', () => {
 
     it('should have correct button text: edit', () => {
       expect(document.body.querySelector('#km-constraint-template-dialog-btn').textContent).toContain('Edit');
-    });
-
-    it('should call patchConstraintTemplate()', () => {
-      component.getObservable().subscribe();
-      fixture.detectChanges();
-      expect(patchCTSpy).toHaveBeenCalled();
     });
   });
 });

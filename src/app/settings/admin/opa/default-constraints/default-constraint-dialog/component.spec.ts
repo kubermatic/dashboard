@@ -34,8 +34,6 @@ declare let monaco: any;
 describe('DefaultConstraintDialog', () => {
   let fixture: ComponentFixture<DefaultConstraintDialog>;
   let component: DefaultConstraintDialog;
-  let createDefaultConstraintSpy;
-  let patchDefaultConstraintSpy;
 
   beforeEach(waitForAsync(() => {
     const opaMock = {
@@ -44,8 +42,8 @@ describe('DefaultConstraintDialog', () => {
       constraintTemplates: of(fakeConstraintTemplates()),
       refreshConstraint: () => {},
     };
-    createDefaultConstraintSpy = opaMock.createDefaultConstraint.mockReturnValue(asyncData(fakeConstraints()[0]));
-    patchDefaultConstraintSpy = opaMock.patchDefaultConstraint.mockReturnValue(asyncData(fakeConstraints()[0]));
+    opaMock.createDefaultConstraint.mockReturnValue(asyncData(fakeConstraints()[0]));
+    opaMock.patchDefaultConstraint.mockReturnValue(asyncData(fakeConstraints()[0]));
 
     TestBed.configureTestingModule({
       imports: [...modules],
@@ -93,12 +91,6 @@ describe('DefaultConstraintDialog', () => {
     it('should have correct button text: add', () => {
       expect(document.body.querySelector('#km-default-constraint-dialog-btn').textContent).toContain('Add');
     });
-
-    it('should call createDefaultConstraint()', () => {
-      component.getObservable().subscribe();
-      fixture.detectChanges();
-      expect(createDefaultConstraintSpy).toHaveBeenCalled();
-    });
   });
 
   describe('Edit Default Constraint Dialog', () => {
@@ -126,12 +118,6 @@ describe('DefaultConstraintDialog', () => {
 
     it('should have correct button text: edit', () => {
       expect(document.body.querySelector('#km-default-constraint-dialog-btn').textContent).toContain('Edit');
-    });
-
-    it('should call patchDefaultConstraint()', () => {
-      component.getObservable().subscribe();
-      fixture.detectChanges();
-      expect(patchDefaultConstraintSpy).toHaveBeenCalled();
     });
   });
 });

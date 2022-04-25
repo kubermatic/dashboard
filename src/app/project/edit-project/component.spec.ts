@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -30,11 +30,10 @@ const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, Co
 describe('EditProjectComponent', () => {
   let fixture: ComponentFixture<EditProjectComponent>;
   let component: EditProjectComponent;
-  let editProjectSpy;
 
   beforeEach(waitForAsync(() => {
     const projectServiceMock = {edit: jest.fn()};
-    editProjectSpy = projectServiceMock.edit.mockReturnValue(asyncData(fakeProject()));
+    projectServiceMock.edit.mockReturnValue(asyncData(fakeProject()));
 
     TestBed.configureTestingModule({
       imports: [...modules],
@@ -72,13 +71,4 @@ describe('EditProjectComponent', () => {
     component.form.controls.name.patchValue('new-project-name');
     expect(component.form.controls.name.hasError('required')).toBeFalsy();
   });
-
-  it('should call editProject method', fakeAsync(() => {
-    component.form.controls.name.patchValue('new-project-name');
-    component.getObservable().subscribe();
-    tick();
-    flush();
-
-    expect(editProjectSpy).toHaveBeenCalled();
-  }));
 });

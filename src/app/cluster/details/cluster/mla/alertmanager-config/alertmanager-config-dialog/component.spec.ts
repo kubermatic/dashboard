@@ -35,14 +35,13 @@ declare let monaco: any;
 describe('AlertmanagerConfigDialog', () => {
   let fixture: ComponentFixture<AlertmanagerConfigDialog>;
   let component: AlertmanagerConfigDialog;
-  let putAlertmanagerConfigSpy;
 
   beforeEach(waitForAsync(() => {
     const mlaMock = {
       putAlertmanagerConfig: jest.fn(),
       refreshAlertmanagerConfig: () => {},
     };
-    putAlertmanagerConfigSpy = mlaMock.putAlertmanagerConfig.mockReturnValue(asyncData(fakeAlertmanagerConfig()));
+    mlaMock.putAlertmanagerConfig.mockReturnValue(asyncData(fakeAlertmanagerConfig()));
 
     TestBed.configureTestingModule({
       imports: [...modules],
@@ -91,12 +90,6 @@ describe('AlertmanagerConfigDialog', () => {
 
     it('should have correct button text: edit', () => {
       expect(document.body.querySelector('#km-alertmanager-config-dialog-btn').textContent).toContain('Edit');
-    });
-
-    it('should call patchAlertmanagerConfig()', () => {
-      component.getObservable().subscribe();
-      fixture.detectChanges();
-      expect(putAlertmanagerConfigSpy).toHaveBeenCalled();
     });
   });
 });

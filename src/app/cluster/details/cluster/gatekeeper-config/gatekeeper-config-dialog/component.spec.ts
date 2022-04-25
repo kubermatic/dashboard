@@ -35,8 +35,6 @@ declare let monaco: any;
 describe('GatekeeperConfigDialog', () => {
   let fixture: ComponentFixture<GatekeeperConfigDialog>;
   let component: GatekeeperConfigDialog;
-  let createGatekeeperConfigSpy;
-  let patchGatekeeperConfigSpy;
 
   beforeEach(waitForAsync(() => {
     const opaMock = {
@@ -44,8 +42,8 @@ describe('GatekeeperConfigDialog', () => {
       patchGatekeeperConfig: jest.fn(),
       refreshGatekeeperConfig: () => {},
     };
-    createGatekeeperConfigSpy = opaMock.createGatekeeperConfig.mockReturnValue(asyncData(fakeGatekeeperConfig()));
-    patchGatekeeperConfigSpy = opaMock.patchGatekeeperConfig.mockReturnValue(asyncData(fakeGatekeeperConfig()));
+    opaMock.createGatekeeperConfig.mockReturnValue(asyncData(fakeGatekeeperConfig()));
+    opaMock.patchGatekeeperConfig.mockReturnValue(asyncData(fakeGatekeeperConfig()));
 
     TestBed.configureTestingModule({
       imports: [...modules],
@@ -97,12 +95,6 @@ describe('GatekeeperConfigDialog', () => {
     it('should have correct button text: add', () => {
       expect(document.body.querySelector('#km-gatekeeper-config-dialog-btn').textContent).toContain('Add');
     });
-
-    it('should call createGatekeeperConfig()', () => {
-      component.getObservable().subscribe();
-      fixture.detectChanges();
-      expect(createGatekeeperConfigSpy).toHaveBeenCalled();
-    });
   });
 
   describe('Edit Gatekeeper Config Dialog', () => {
@@ -132,12 +124,6 @@ describe('GatekeeperConfigDialog', () => {
 
     it('should have correct button text: edit', () => {
       expect(document.body.querySelector('#km-gatekeeper-config-dialog-btn').textContent).toContain('Edit');
-    });
-
-    it('should call patchGatekeeperConfig()', () => {
-      component.getObservable().subscribe();
-      fixture.detectChanges();
-      expect(patchGatekeeperConfigSpy).toHaveBeenCalled();
     });
   });
 });

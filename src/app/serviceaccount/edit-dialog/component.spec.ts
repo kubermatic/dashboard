@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -31,11 +31,10 @@ const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, Co
 describe('EditServiceAccountDialogComponent', () => {
   let fixture: ComponentFixture<EditServiceAccountDialogComponent>;
   let component: EditServiceAccountDialogComponent;
-  let editServiceAccountSpy;
 
   beforeEach(waitForAsync(() => {
     const saMock = {edit: jest.fn()};
-    editServiceAccountSpy = saMock.edit.mockReturnValue(asyncData(fakeServiceAccount()));
+    saMock.edit.mockReturnValue(asyncData(fakeServiceAccount()));
 
     TestBed.configureTestingModule({
       imports: [...modules],
@@ -63,14 +62,4 @@ describe('EditServiceAccountDialogComponent', () => {
   it('should have valid form after creating', () => {
     expect(component.form.valid).toBeTruthy();
   });
-
-  it('should call editServiceAccount method', fakeAsync(() => {
-    component.form.controls.name.patchValue('test-service-account');
-    component.form.controls.group.patchValue('editors');
-    component.getObservable().subscribe();
-    tick();
-    flush();
-
-    expect(editServiceAccountSpy).toHaveBeenCalled();
-  }));
 });
