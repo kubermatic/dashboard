@@ -91,7 +91,7 @@ export class MeteringReportListComponent implements OnInit {
       .reports(this.scheduleName)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(reports => {
-        this.reports = reports;
+        this.reports = reports.map(r => ({...r, name: this.trimSchedulePrefix(r.name)}));
         this.dataSource.data = this.reports;
         this._isLoadingReports = false;
       });

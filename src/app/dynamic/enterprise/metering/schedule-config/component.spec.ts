@@ -19,24 +19,24 @@
 // END OF TERMS AND CONDITIONS
 
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {By} from '@angular/platform-browser';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterTestingModule} from '@angular/router/testing';
+import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
+import {ConfirmationDialogComponent} from '@app/shared/components/confirmation-dialog/component';
 import {SharedModule} from '@app/shared/module';
+import {fakeScheduleConfiguration} from '@test/data/metering';
 import {MeteringMockService} from '@test/services/metering-mock';
-import {MeteringScheduleConfigComponent} from './component';
+import {of} from 'rxjs';
 import {MeteringScheduleAddDialog} from './add-dialog/component';
+import {MeteringScheduleConfigComponent} from './component';
 import {MeteringScheduleEditDialog} from './edit-dialog/component';
 import {MeteringReportListComponent} from './report-list/component';
-import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
-import {By} from '@angular/platform-browser';
-import {MatDialog} from '@angular/material/dialog';
-import {fakeScheduleConfiguration} from '@test/data/metering';
-import {ConfirmationDialogComponent} from '@app/shared/components/confirmation-dialog/component';
-import {of} from 'rxjs';
 
 class MatDialogMock {
-  open(): any {
-    return {afterClosed: () => of(true)};
+  open(): Pick<MatDialogRef<MeteringScheduleEditDialog | MeteringScheduleAddDialog>, 'afterClosed'> {
+    return {afterClosed: () => of()};
   }
 }
 
@@ -82,7 +82,7 @@ describe('MeteringScheduleConfigComponent', () => {
     });
   });
 
-  it('should open update dialog on btn click', () => {
+  it('should open edit dialog on btn click', () => {
     const fakeSchedule = fakeScheduleConfiguration('km-weekly');
     component.schedules = [fakeSchedule];
     fixture.detectChanges();

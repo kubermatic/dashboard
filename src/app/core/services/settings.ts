@@ -167,8 +167,7 @@ export class SettingsService {
     return this._httpClient.get<Report[]>(url, {params: {configuration_name: scheduleName}});
   }
 
-  reportDownload(reportPath: string, scheduleName: string): Observable<string> {
-    const reportName = reportPath.replace(`${scheduleName}/`, '');
+  reportDownload(reportName: string, scheduleName: string): Observable<string> {
     const url = `${this._restRoot}/admin/metering/reports/${reportName}`;
     return this._httpClient.get<string>(url, {params: {configuration_name: scheduleName}});
   }

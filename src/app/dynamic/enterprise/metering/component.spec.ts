@@ -18,12 +18,14 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {By} from '@angular/platform-browser';
 import {ComponentFixture, fakeAsync, TestBed, waitForAsync} from '@angular/core/testing';
+import {By} from '@angular/platform-browser';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterTestingModule} from '@angular/router/testing';
 import {DatacenterService} from '@app/core/services/datacenter';
 import {SharedModule} from '@app/shared/module';
+import {fakeSeedSettings} from '@test/data/datacenter';
+import {fakeScheduleConfiguration} from '@test/data/metering';
 import {DatacenterMockService} from '@test/services/datacenter-mock';
 import {MeteringMockService} from '@test/services/metering-mock';
 import {MeteringComponent} from './component';
@@ -62,6 +64,7 @@ describe('MeteringComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(MeteringComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   it('should create metering component', () => {
@@ -69,8 +72,14 @@ describe('MeteringComponent', () => {
   });
 
   it('should render spinner for until missing data', fakeAsync(() => {
+    const spinnerBeforeDataLoaded = fixture.debugElement.query(By.css('.km-spinner'));
+    expect(spinnerBeforeDataLoaded).toBeTruthy();
+
+    component.schedules = [fakeScheduleConfiguration('fake-schedule')];
+    component.config = fakeSeedSettings().metering;
     fixture.detectChanges();
-    const spinner = fixture.debugElement.query(By.css('.km-spinner'));
-    expect(spinner).toBeTruthy();
+
+    const spinnerAfterDataLoaded = fixture.debugElement.query(By.css('.km-spinner'));
+    expect(spinnerAfterDataLoaded).toBeFalsy();
   }));
 });
