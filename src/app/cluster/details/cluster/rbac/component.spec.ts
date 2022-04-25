@@ -15,7 +15,7 @@
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {fakeDigitaloceanCluster} from '@test/data/cluster';
@@ -32,37 +32,33 @@ import {AppConfigService} from '@app/config.service';
 import {AppConfigMockService} from '@test/services/app-config-mock';
 import {fakeBindings, fakeClusterBindings, fakeSimpleBindings, fakeSimpleClusterBindings} from '@test/data/rbac';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
-
 describe('RBACComponent', () => {
   let fixture: ComponentFixture<RBACComponent>;
   let component: RBACComponent;
 
-  beforeEach(
-    waitForAsync(() => {
-      const rbacMock = {
-        deleteClusterBinding: jest.fn(),
-        deleteBinding: jest.fn(),
-      };
-      rbacMock.deleteClusterBinding.mockReturnValue(of(null));
-      rbacMock.deleteBinding.mockReturnValue(of(null));
+  beforeEach(waitForAsync(() => {
+    const rbacMock = {
+      deleteClusterBinding: jest.fn(),
+      deleteBinding: jest.fn(),
+    };
+    rbacMock.deleteClusterBinding.mockReturnValue(of(null));
+    rbacMock.deleteBinding.mockReturnValue(of(null));
 
-      TestBed.configureTestingModule({
-        imports: [...modules],
-        declarations: [RBACComponent],
-        providers: [
-          {provide: RBACService, useValue: rbacMock},
-          {provide: Router, useClass: RouterStub},
-          {provide: ClusterService, useClass: ClusterMockService},
-          {provide: AppConfigService, useClass: AppConfigMockService},
-          MatDialog,
-          GoogleAnalyticsService,
-          NotificationService,
-        ],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
+    TestBed.configureTestingModule({
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule],
+      declarations: [RBACComponent],
+      providers: [
+        {provide: RBACService, useValue: rbacMock},
+        {provide: Router, useClass: RouterStub},
+        {provide: ClusterService, useClass: ClusterMockService},
+        {provide: AppConfigService, useClass: AppConfigMockService},
+        MatDialog,
+        GoogleAnalyticsService,
+        NotificationService,
+      ],
+      teardown: {destroyAfterEach: false},
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RBACComponent);
@@ -72,12 +68,9 @@ describe('RBACComponent', () => {
     fixture.detectChanges();
   });
 
-  it(
-    'should create the rbac cmp',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should create the rbac cmp', waitForAsync(() => {
+    expect(component).toBeTruthy();
+  }));
 
   it('should create simple cluster binding for rbac', () => {
     const simpleClusterBindings = component.createSimpleClusterBinding(fakeClusterBindings());

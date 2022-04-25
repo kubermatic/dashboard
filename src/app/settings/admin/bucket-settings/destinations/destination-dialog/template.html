@@ -53,20 +53,11 @@ limitations under the License.
     </mat-checkbox>
 
     <div class="km-dialog-warning"
-         *ngIf="displayOverwriteWarning()"
-         fxLayoutAlign=" start">
-      <i class="km-icon-warning km-warning-bg"></i>
-      <div>Upon saving this setting, every new default backup will be created with this destination instead of
-        "{{currentDefault}}", over time existing backups will be replaced by backups that use the new destination
-      </div>
-    </div>
-
-    <div class="km-dialog-warning"
-         *ngIf="displayDeleteWarning()"
+         *ngIf="shouldDisplayWarning()"
          fxLayoutAlign=" start">
       <i class="km-icon-warning"></i>
-      <div>Disabling the default destination results in the termination of all default backups (Tip: to retain existing
-        backups you can overwrite the default destination instead)
+      <div>Upon saving this setting, every new default backup will be created with this destination instead of
+        "{{currentDefault}}", over time existing backups will be replaced by backups that use the new destination
       </div>
     </div>
   </form>

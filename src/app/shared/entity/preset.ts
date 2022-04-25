@@ -74,7 +74,10 @@ export class CreatePresetSpec {
   enabled?: boolean;
 
   provider(): NodeProvider {
-    const providerKey = Object.keys(this).find(key => !_.isEmpty(this[key]) && _.isObject(this[key]));
+    const providerKey = Object.keys(this).find(
+      key => !_.isEmpty(this[key]) && _.isObject(this[key]) && !_.isArray(this[key])
+    );
+
     return providerKey ? NodeProviderConstants.newNodeProvider(providerKey) : NodeProvider.NONE;
   }
 }
@@ -161,15 +164,23 @@ export class NutanixPresetSpec extends PresetProviderSpec {
 
   clusterName?: string;
   projectName?: string;
+
+  csiUsername?: string;
+  csiPassword?: string;
+  csiEndpoint?: string;
+  csiPort?: string;
 }
 
 export class OpenstackPresetSpec extends PresetProviderSpec {
-  username: string;
-  password: string;
-  project: string;
-  projectID: string;
-  domain: string;
+  username?: string;
+  password?: string;
+  project?: string;
+  projectID?: string;
 
+  applicationCredentialID?: string;
+  applicationCredentialSecret?: string;
+
+  domain: string;
   network?: string;
   securityGroups?: string;
   floatingIPPool?: string;

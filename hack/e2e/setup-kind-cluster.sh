@@ -24,11 +24,6 @@ export KUBERMATIC_EDITION="${KUBERMATIC_EDITION:-ce}"
 
 start_docker_daemon
 
-# Load kind image
-echodate "Loading kindest image"
-docker load --input /kindest.tar
-echodate "Loaded kindest image"
-
 # Create kind cluster
 TEST_NAME="Create kind cluster"
 echodate "Creating the kind cluster"

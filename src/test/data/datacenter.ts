@@ -157,5 +157,5 @@ export function fakeNodeDatacenters(): Datacenter[] {
 }
 
 export function fakeSeedSettings(): SeedSettings {
-  return {mla: {userClusterMLAEnabled: true}, metering: {} as MeteringConfiguration};
+  return {mla: {user_cluster_mla_enabled: true}, metering: {} as MeteringConfiguration};
 }

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import 'cypress-fail-fast';
+import {Mocks} from '../utils/mocks';
 import {paste, pasteFile} from './paste';
 
 before(() => {
@@ -21,6 +22,10 @@ before(() => {
 
 beforeEach(() => {
   Cypress.Cookies.preserveOnce('token', 'nonce');
+
+  if (Mocks.enabled()) {
+    Mocks.register();
+  }
 });
 
 declare global {

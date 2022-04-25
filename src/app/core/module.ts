@@ -42,7 +42,6 @@ import {SettingsService} from '@core/services/settings';
 import {ThemeInformerService} from '@core/services/theme-informer';
 import {TokenService} from '@core/services/token';
 import {PresetsService} from '@core/services/wizard/presets';
-import {StepsService} from '@core/services/wizard/steps';
 import {SharedModule} from '@shared/module';
 import {COOKIE, COOKIE_DI_TOKEN} from '../config';
 import {AddMemberComponent} from '../member/add-member/component';
@@ -74,16 +73,7 @@ import {SSHKeyService} from '@core/services/ssh-key';
 import {KubeVirtService} from '@core/services/provider/kubevirt';
 import {NutanixService} from '@core/services/provider/nutanix';
 
-const modules: any[] = [
-  CommonModule,
-  HttpClientModule,
-  RouterModule,
-  SharedModule,
-  GlobalModule,
-  BrowserAnimationsModule,
-];
-
-const components: any[] = [
+const components = [
   SidenavComponent,
   ProjectSelectorComponent,
   NavigationComponent,
@@ -98,13 +88,12 @@ const components: any[] = [
   HelpPanelComponent,
 ];
 
-const services: any[] = [
+const services = [
   Auth,
   AuthGuard,
   AuthzGuard,
   AdminGuard,
   DatacenterService,
-  StepsService,
   NameGeneratorService,
   ClusterService,
   ParamsService,
@@ -144,7 +133,7 @@ const services: any[] = [
   NutanixService,
 ];
 
-const interceptors: any[] = [
+const interceptors = [
   {
     provide: HTTP_INTERCEPTORS,
     useClass: ErrorNotificationsInterceptor,
@@ -168,7 +157,7 @@ const interceptors: any[] = [
 ];
 
 @NgModule({
-  imports: [...modules],
+  imports: [CommonModule, HttpClientModule, RouterModule, SharedModule, GlobalModule, BrowserAnimationsModule],
   declarations: [...components],
   providers: [...services, ...interceptors, {provide: COOKIE_DI_TOKEN, useValue: COOKIE}],
   exports: [...components],

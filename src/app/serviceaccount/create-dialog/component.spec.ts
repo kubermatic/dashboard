@@ -28,45 +28,35 @@ import {ServiceAccountService} from '@core/services/service-account';
 import {asyncData} from '@test/services/cluster-mock';
 import {fakeServiceAccount} from '@test/data/serviceaccount';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
-
 describe('CreateServiceAccountDialogComponent', () => {
   let fixture: ComponentFixture<CreateServiceAccountDialogComponent>;
   let component: CreateServiceAccountDialogComponent;
-  let createServiceAccountSpy;
+  let createServiceAccountSpy: jest.Mock;
 
-  beforeEach(
-    waitForAsync(() => {
-      const saMock = {create: jest.fn()};
-      createServiceAccountSpy = saMock.create.mockReturnValue(asyncData(fakeServiceAccount()));
+  beforeEach(waitForAsync(() => {
+    const saMock = {create: jest.fn()};
+    createServiceAccountSpy = saMock.create.mockReturnValue(asyncData(fakeServiceAccount()));
 
-      TestBed.configureTestingModule({
-        imports: [...modules],
-        providers: [
-          {provide: MatDialogRef, useClass: MatDialogRefMock},
-          {provide: ServiceAccountService, useValue: saMock},
-          {provide: ProjectService, useClass: ProjectMockService},
-          NotificationService,
-        ],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
+    TestBed.configureTestingModule({
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],
+      providers: [
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+        {provide: ServiceAccountService, useValue: saMock},
+        {provide: ProjectService, useClass: ProjectMockService},
+        NotificationService,
+      ],
+      teardown: {destroyAfterEach: false},
+    }).compileComponents();
 
-  beforeEach(
-    waitForAsync(() => {
-      fixture = TestBed.createComponent(CreateServiceAccountDialogComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-    })
-  );
+    fixture = TestBed.createComponent(CreateServiceAccountDialogComponent);
+    component = fixture.componentInstance;
+    component.project = fakeProject();
+    fixture.detectChanges();
+  }));
 
-  it(
-    'should create the component',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should create the component', waitForAsync(() => {
+    expect(component).toBeTruthy();
+  }));
 
   it('form invalid after creating', () => {
     expect(component.form.valid).toBeFalsy();
@@ -82,10 +72,9 @@ describe('CreateServiceAccountDialogComponent', () => {
   });
 
   it('should call addServiceAccount method', fakeAsync(() => {
-    component.project = fakeProject();
     component.form.controls.name.patchValue('test-service-account');
     component.form.controls.group.patchValue('editors');
-    component.create();
+    component.getObservable().subscribe();
     tick();
     flush();
 

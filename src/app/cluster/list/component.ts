@@ -16,6 +16,12 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subject} from 'rxjs';
 import {SettingsService} from '@core/services/settings';
 import {map, takeUntil} from 'rxjs/operators';
+import {ActivatedRoute} from '@angular/router';
+
+export enum ClusterListTab {
+  Cluster,
+  ExternalCluster,
+}
 
 @Component({
   selector: 'km-clusters',
@@ -25,8 +31,9 @@ import {map, takeUntil} from 'rxjs/operators';
 export class ClustersComponent implements OnInit, OnDestroy {
   private _unsubscribe: Subject<void> = new Subject<void>();
   areExternalClustersEnabled = false;
+  clusterIndex = this._route.snapshot.fragment;
 
-  constructor(private readonly _settingsService: SettingsService) {}
+  constructor(private readonly _settingsService: SettingsService, private readonly _route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this._settingsService.adminSettings

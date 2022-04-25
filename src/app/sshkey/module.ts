@@ -17,11 +17,9 @@ import {SharedModule} from '@shared/module';
 import {SSHKeyRoutingModule} from './routing';
 import {SSHKeyComponent} from './component';
 
-const components: any[] = [SSHKeyComponent];
-
 @NgModule({
   imports: [SharedModule, SSHKeyRoutingModule],
-  declarations: [...components],
-  exports: [...components],
+  declarations: [SSHKeyComponent],
+  exports: [SSHKeyComponent],
 })
 export class SSHKeyModule {}

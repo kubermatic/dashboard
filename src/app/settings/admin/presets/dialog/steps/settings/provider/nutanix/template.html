@@ -72,4 +72,49 @@ limitations under the License.
            type="text"
            autocomplete="off">
   </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>CSI Username</mat-label>
+    <input matInput
+           [formControlName]="Controls.CSIUsername"
+           [name]="Controls.CSIUsername"
+           type="text"
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.get(Controls.CSIUsername).hasError('required')">
+      CSI username is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>CSI Password</mat-label>
+    <input matInput
+           [formControlName]="Controls.CSIPassword"
+           [name]="Controls.CSIPassword"
+           type="password"
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.get(Controls.CSIPassword).hasError('required')">
+      CSI password is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>CSI Endpoint</mat-label>
+    <input matInput
+           [formControlName]="Controls.CSIEndpoint"
+           [name]="Controls.CSIEndpoint"
+           type="text"
+           autocomplete="off"
+           required>
+    <mat-error *ngIf="form.get(Controls.CSIEndpoint).hasError('required')">
+      CSI endpoint is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
+
+  <km-number-stepper [formControlName]="Controls.CSIPort"
+                     label="CSI Port"
+                     min="0"
+                     max="65535">
+  </km-number-stepper>
 </form>

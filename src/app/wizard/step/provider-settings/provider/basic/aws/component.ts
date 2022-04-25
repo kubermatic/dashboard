@@ -108,12 +108,9 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
 
     this.form.valueChanges
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.AWS))
-      .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ =>
-        this._presets.enablePresets(
-          Object.values(this._clusterSpecService.cluster.spec.cloud.aws).every(value => !value)
-        )
+        this._presets.enablePresets(AWSCloudSpec.isEmpty(this._clusterSpecService.cluster.spec.cloud.aws))
       );
 
     merge(this._clusterSpecService.providerChanges, this._clusterSpecService.datacenterChanges)
@@ -231,7 +228,7 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
   private _setDefaultVPC(vpcs: AWSVPC[]): void {
     this.vpcIDs = vpcs;
     const defaultVPC = this.vpcIDs.find(vpc => vpc.isDefault);
-    this.selectedVPC = defaultVPC ? defaultVPC.vpcID : undefined;
+    this.selectedVPC = defaultVPC ? defaultVPC.vpcId : undefined;
     this.vpcLabel = !_.isEmpty(this.vpcIDs) ? VPCState.Ready : VPCState.Empty;
     this._cdr.detectChanges();
   }

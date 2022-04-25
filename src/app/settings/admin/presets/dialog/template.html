@@ -68,15 +68,14 @@ limitations under the License.
       <i class="km-icon-mask km-icon-next"></i>
       <span>Next</span>
     </button>
-    <button mat-flat-button
-            type="button"
-            id="km-settings-preset-create-btn"
-            [disabled]="creating || invalid"
-            *ngIf="last"
-            kmThrottleClick
-            (throttleClick)="save()">
-      <i class="km-icon-mask km-icon-add"></i>
-      <span>Create</span>
-    </button>
+    <km-button *ngIf="last"
+               [ngSwitch]="data.mode"
+               id="km-settings-preset-create-btn"
+               [icon]="icon"
+               [label]="label"
+               [disabled]="creating || invalid"
+               [observable]="getObservable()"
+               (next)="onNext($event)">
+    </km-button>
   </div>
 </mat-dialog-actions>

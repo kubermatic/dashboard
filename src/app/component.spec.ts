@@ -33,16 +33,6 @@ import {DatacenterMockService} from '@test/services/datacenter-mock';
 import {ProjectMockService} from '@test/services/project-mock';
 import {UserMockService} from '@test/services/user-mock';
 
-const modules: any[] = [
-  BrowserModule,
-  HttpClientModule,
-  RouterTestingModule,
-  RouterTestingModule,
-  BrowserAnimationsModule,
-  SharedModule,
-  CoreModule,
-];
-
 describe('KubermaticComponent', () => {
   let fixture: ComponentFixture<KubermaticComponent>;
   let component: KubermaticComponent;
@@ -50,7 +40,14 @@ describe('KubermaticComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [
+        BrowserModule,
+        HttpClientModule,
+        RouterTestingModule,
+        BrowserAnimationsModule,
+        SharedModule,
+        CoreModule,
+      ],
       declarations: [KubermaticComponent],
       providers: [
         {provide: Auth, useClass: AuthMockService},

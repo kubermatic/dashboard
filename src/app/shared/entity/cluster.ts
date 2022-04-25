@@ -12,8 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {NodeProvider} from '../model/NodeProviderConstants';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
+import _ from 'lodash';
+import {isObjectEmpty} from '@shared/utils/common';
 
 export enum Provider {
   Alibaba = 'alibaba',
@@ -112,12 +113,20 @@ export class CloudSpec {
   anexia?: AnexiaCloudSpec;
 }
 
+export class ExtraCloudSpecOptions {
+  constructor(public nodePortsAllowedIPRange?: string) {}
+
+  static new(spec: AWSCloudSpec | GCPCloudSpec | AzureCloudSpec | OpenstackCloudSpec): ExtraCloudSpecOptions {
+    return new ExtraCloudSpecOptions(spec.nodePortsAllowedIPRange);
+  }
+}
+
 export class AlibabaCloudSpec {
   accessKeyID: string;
   accessKeySecret: string;
 }
 
-export class AWSCloudSpec {
+export class AWSCloudSpec extends ExtraCloudSpecOptions {
   accessKeyID: string;
   secretAccessKey: string;
   assumeRoleARN: string;
@@ -127,9 +136,13 @@ export class AWSCloudSpec {
   securityGroupID: string;
   instanceProfileName: string;
   roleARN: string;
+
+  static isEmpty(spec: AWSCloudSpec): boolean {
+    return _.difference(Object.keys(spec), Object.keys(ExtraCloudSpecOptions.new(spec))).every(key => !spec[key]);
+  }
 }
 
-export class AzureCloudSpec {
+export class AzureCloudSpec extends ExtraCloudSpecOptions {
   clientID: string;
   clientSecret: string;
   resourceGroup: string;
@@ -142,6 +155,13 @@ export class AzureCloudSpec {
   vnet: string;
   loadBalancerSKU: string;
   assignAvailabilitySet: boolean;
+
+  static isEmpty(spec: AzureCloudSpec): boolean {
+    const optionalFields = ['assignAvailabilitySet'];
+    return _.difference(Object.keys(spec), [...Object.keys(ExtraCloudSpecOptions.new(spec)), ...optionalFields]).every(
+      key => !spec[key]
+    );
+  }
 }
 
 export class BringYourOwnCloudSpec {}
@@ -158,10 +178,14 @@ export class FakeCloudSpec {
   token: string;
 }
 
-export class GCPCloudSpec {
+export class GCPCloudSpec extends ExtraCloudSpecOptions {
   network: string;
   serviceAccount: string;
   subnetwork: string;
+
+  static isEmpty(spec: GCPCloudSpec): boolean {
+    return _.difference(Object.keys(spec), Object.keys(ExtraCloudSpecOptions.new(spec))).every(key => !spec[key]);
+  }
 }
 
 export class HetznerCloudSpec {
@@ -179,9 +203,29 @@ export class NutanixCloudSpec {
   proxyURL?: string;
   username?: string;
   password?: string;
+  csi?: NutanixCSIConfig;
+
+  // Following check skips storage class settings to allow using them and preset at the same time.
+  // See also: NutanixProviderExtendedComponent._alwaysEnabledControls
+  static isEmpty(spec: NutanixCloudSpec): boolean {
+    return (
+      isObjectEmpty(_.omitBy(spec, (_, key) => key === 'csi')) &&
+      isObjectEmpty(_.omitBy(spec.csi, (_, key) => key === 'fstype' || key === 'storageContainer'))
+    );
+  }
 }
 
-export class OpenstackCloudSpec {
+export class NutanixCSIConfig {
+  username: string;
+  password: string;
+  endpoint: string;
+  port?: number;
+  storageContainer?: string;
+  fstype?: string;
+  ssSegmentedIscsiNetwork?: boolean;
+}
+
+export class OpenstackCloudSpec extends ExtraCloudSpecOptions {
   useToken?: boolean;
   applicationCredentialID?: string;
   applicationCredentialSecret?: string;
@@ -194,6 +238,10 @@ export class OpenstackCloudSpec {
   securityGroups: string;
   floatingIPPool: string;
   subnetID: string;
+
+  static isEmpty(spec: OpenstackCloudSpec): boolean {
+    return _.difference(Object.keys(spec), Object.keys(ExtraCloudSpecOptions.new(spec))).every(key => !spec[key]);
+  }
 }
 
 export class EquinixCloudSpec {
@@ -461,87 +509,6 @@ export class AlibabaCloudSpecPatch {
 export class ProviderSettingsPatch {
   cloudSpecPatch: CloudSpecPatch;
   isValid: boolean;
-}
-
-export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
-  switch (provider) {
-    case NodeProvider.AWS:
-      return {
-        accessKeyID: '',
-        secretAccessKey: '',
-        routeTableID: '',
-        vpcID: '',
-        securityGroupID: '',
-        instanceProfileName: '',
-        roleARN: '',
-      } as AWSCloudSpec;
-    case NodeProvider.DIGITALOCEAN:
-      return {
-        token: '',
-      } as DigitaloceanCloudSpec;
-    case NodeProvider.OPENSTACK:
-      return {
-        username: '',
-        password: '',
-        floatingIPPool: '',
-        securityGroups: '',
-        network: '',
-        domain: '',
-        project: '',
-        projectID: '',
-        subnetID: '',
-      } as OpenstackCloudSpec;
-    case NodeProvider.BRINGYOUROWN:
-      return {} as BringYourOwnCloudSpec;
-    case NodeProvider.VSPHERE:
-      return {
-        username: '',
-        password: '',
-        vmNetName: '',
-        folder: '',
-        infraManagementUser: {
-          username: '',
-          password: '',
-        },
-      } as VSphereCloudSpec;
-    case NodeProvider.HETZNER:
-      return {
-        token: '',
-      } as HetznerCloudSpec;
-    case NodeProvider.AZURE:
-      return {
-        clientID: '',
-        clientSecret: '',
-        resourceGroup: '',
-        routeTable: '',
-        securityGroup: '',
-        subnet: '',
-        subscriptionID: '',
-        tenantID: '',
-        vnet: '',
-        loadBalancerSKU: '',
-      } as AzureCloudSpec;
-    case NodeProvider.EQUINIX:
-      return {} as EquinixCloudSpec;
-    case NodeProvider.KUBEVIRT:
-      return {kubeconfig: ''} as KubeVirtCloudSpec;
-    case NodeProvider.GCP:
-      return {
-        network: '',
-        serviceAccount: '',
-        subnetwork: '',
-      } as GCPCloudSpec;
-    case NodeProvider.ALIBABA:
-      return {
-        accessKeyID: '',
-        accessKeySecret: '',
-      } as AlibabaCloudSpec;
-    case NodeProvider.ANEXIA:
-      return {
-        token: '',
-      };
-  }
-  return {};
 }
 
 export const AVAILABLE_EQUINIX_BILLING_CYCLES = ['hourly', 'daily'];

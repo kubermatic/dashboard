@@ -22,7 +22,7 @@ import {Condition} from '../../utils/condition';
 import {Config} from '../../utils/config';
 import {Mocks} from '../../utils/mocks';
 import {Preset} from '../../utils/preset';
-import {Datacenter, Provider} from '../../utils/provider';
+import {Digitalocean, Provider} from '../../utils/provider';
 import {View} from '../../utils/view';
 import {WizardStep} from '../../utils/wizard';
 
@@ -93,7 +93,7 @@ describe('OPA Story', () => {
 
   it('should create a new cluster with opa enabled', () => {
     WizardPage.getProviderBtn(Provider.Digitalocean).click();
-    WizardPage.getDatacenterBtn(Datacenter.Digitalocean.Frankfurt).click();
+    WizardPage.getDatacenterBtn(Digitalocean.Frankfurt).click();
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getOPAIntegrationCheckbox().should(Condition.Exist);
     WizardPage.getOPAIntegrationCheckbox().find('input').click({force: true});

@@ -16,8 +16,9 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column"
       fxLayoutGap="8px">
-  <km-tag-list title="Provider Tags"
-               [tags]="tags"
-               (tagsChange)="onTagsChange($event)"
-               [formControlName]="Controls.Tags"></km-tag-list>
+  <km-chip-list title="Provider Tags"
+                [tags]="tags"
+                placeholder="Add tag..."
+                (onChange)="onTagsChange($event)"
+                [formControlName]="Controls.Tags"></km-chip-list>
 </form>

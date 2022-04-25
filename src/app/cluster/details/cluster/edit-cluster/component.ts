@@ -38,6 +38,7 @@ import {Subject} from 'rxjs';
 import {startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import * as semver from 'semver';
 import {FeatureGateService} from '@core/services/feature-gate';
+import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
 
 enum Controls {
   Name = 'name',
@@ -107,7 +108,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       [Controls.Name]: new FormControl(this.cluster.name, [
         Validators.required,
         Validators.minLength(this._nameMinLen),
-        Validators.pattern('[a-z0-9]+[a-z0-9-]*[a-z0-9]+'),
+        KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,
       ]),
       [Controls.ContainerRuntime]: new FormControl(this.cluster.spec.containerRuntime || ContainerRuntime.Containerd, [
         Validators.required,
@@ -241,7 +242,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   }
 
   isMLAEnabled(): boolean {
-    return !!this._seedSettings && !!this._seedSettings.mla && !!this._seedSettings.mla.userClusterMLAEnabled;
+    return this._seedSettings?.mla?.user_cluster_mla_enabled;
   }
 
   isPodSecurityPolicyEnforced(): boolean {
@@ -263,7 +264,6 @@ export class EditClusterComponent implements OnInit, OnDestroy {
 
   private _enforce(control: Controls, isEnforced: boolean): void {
     if (isEnforced) {
-      this.form.get(control).setValue(true);
       this.form.get(control).disable();
     }
   }

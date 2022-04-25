@@ -22,17 +22,18 @@ import {
   OnInit,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {ClusterSpecService} from '@core/services/cluster-spec';
 import {NodeDataService} from '@core/services/node-data/service';
 import {PresetsService} from '@core/services/wizard/presets';
 import {AzureNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {AzureSizes, AzureZones} from '@shared/entity/provider/azure';
+import {OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {compare} from '@shared/utils/common';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
 import {merge, Observable} from 'rxjs';
 import {filter, switchMap, takeUntil, tap} from 'rxjs/operators';
-import {ClusterSpecService} from '@core/services/cluster-spec';
 
 enum Controls {
   Size = 'size',
@@ -73,7 +74,7 @@ enum ZoneState {
 })
 export class AzureBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   private _sizeChanges = new EventEmitter<boolean>();
-  private readonly _defaultDiskSize = 0;
+  private readonly _defaultDiskSize = 30;
 
   readonly Controls = Controls;
 
@@ -107,7 +108,7 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
       [Controls.Size]: this._builder.control('', Validators.required),
       [Controls.Zone]: this._builder.control(''),
       [Controls.ImageID]: this._builder.control(''),
-      [Controls.OSDiskSize]: this._builder.control(this._defaultDiskSize),
+      [Controls.OSDiskSize]: this._builder.control(this.defaultOSDiskSize()),
       [Controls.DataDiskSize]: this._builder.control(this._defaultDiskSize),
     });
 
@@ -117,6 +118,11 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
     this._sizesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSize.bind(this));
 
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(this._clearSize.bind(this));
+
+    this._nodeDataService.operatingSystemChanges
+      .pipe(tap(_ => this.form.get(Controls.OSDiskSize).setValue(this.defaultOSDiskSize())))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => this._cdr.detectChanges());
 
     this._sizeChanges
       .pipe(tap(_ => this._clearZone()))
@@ -176,6 +182,11 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
     return `${s.name} (${s.numberOfCores} vCPU,${gpu} ${s.memoryInMB} MB RAM)`;
   }
 
+  defaultOSDiskSize(): number {
+    const defaultDiskSizeRHEL = 64;
+    return this._nodeDataService.operatingSystem === OperatingSystem.RHEL ? defaultDiskSizeRHEL : this._defaultDiskSize;
+  }
+
   private _init(): void {
     if (this._nodeDataService.nodeData.spec.cloud.azure) {
       const selectedZones = this._nodeDataService.nodeData.spec.cloud.azure.zones;
@@ -184,7 +195,7 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
       this.form.get(Controls.ImageID).setValue(this._nodeDataService.nodeData.spec.cloud.azure.imageID);
       this.form
         .get(Controls.OSDiskSize)
-        .setValue(this._nodeDataService.nodeData.spec.cloud.azure.osDiskSize || this._defaultDiskSize);
+        .setValue(this._nodeDataService.nodeData.spec.cloud.azure.osDiskSize || this.defaultOSDiskSize());
       this.form
         .get(Controls.DataDiskSize)
         .setValue(this._nodeDataService.nodeData.spec.cloud.azure.dataDiskSize || this._defaultDiskSize);

@@ -48,7 +48,7 @@ enum Controls {
   ],
 })
 export class AWSProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
-  private readonly _debounceTime = 1000;
+  private readonly _debounceTime = 500;
   readonly Controls = Controls;
   isLoadingSecurityGroups = false;
   securityGroups: string[] = [];
@@ -79,9 +79,7 @@ export class AWSProviderExtendedComponent extends BaseFormValidator implements O
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.AWS))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
-        this._presets.enablePresets(
-          Object.values(this._clusterSpecService.cluster.spec.cloud.aws).every(value => !value)
-        );
+        this._presets.enablePresets(AWSCloudSpec.isEmpty(this._clusterSpecService.cluster.spec.cloud.aws));
       });
 
     this._clusterSpecService.clusterChanges

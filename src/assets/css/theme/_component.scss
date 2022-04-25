@@ -34,12 +34,12 @@
 @import 'src/app/shared/components/cluster-summary/theme';
 @import 'src/app/shared/components/chip/theme';
 @import 'src/app/shared/components/tab-card/theme';
+@import 'src/app/shared/components/openstack-credentials/theme';
 @import 'src/app/cluster/details/cluster/rbac/add-binding/theme';
 @import 'src/app/settings/admin/bucket-settings/destinations/theme';
 @import 'src/app/settings/admin/presets/theme';
 @import 'src/app/settings/admin/presets/edit-dialog/theme';
 @import 'src/app/settings/admin/nav/theme';
-@import 'src/app/wizard/step/provider-settings/provider/basic/openstack/theme';
 
 @mixin theme-components($colors) {
   @include theme-addon-list-component($colors);

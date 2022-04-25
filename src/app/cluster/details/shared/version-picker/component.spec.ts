@@ -49,34 +49,32 @@ describe('VersionPickerComponent', () => {
   let component: VersionPickerComponent;
   let activatedRoute: ActivatedRouteStub;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
-        declarations: [
-          VersionPickerComponent,
-          NodeListComponent,
-          MachineDeploymentListComponent,
-          MachineNetworksDisplayComponent,
-        ],
-        providers: [
-          {provide: ClusterService, useClass: ClusterMockService},
-          {provide: DatacenterService, useClass: DatacenterMockService},
-          {provide: Auth, useClass: AuthMockService},
-          {provide: Router, useClass: RouterStub},
-          {provide: ActivatedRoute, useClass: ActivatedRouteStub},
-          {provide: UserService, useClass: UserMockService},
-          {provide: AppConfigService, useClass: AppConfigMockService},
-          {provide: NodeService, useClass: NodeMockService},
-          {provide: ProjectService, useClass: ProjectMockService},
-          MatDialog,
-          GoogleAnalyticsService,
-          EndOfLifeService,
-        ],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
+      declarations: [
+        VersionPickerComponent,
+        NodeListComponent,
+        MachineDeploymentListComponent,
+        MachineNetworksDisplayComponent,
+      ],
+      providers: [
+        {provide: ClusterService, useClass: ClusterMockService},
+        {provide: DatacenterService, useClass: DatacenterMockService},
+        {provide: Auth, useClass: AuthMockService},
+        {provide: Router, useClass: RouterStub},
+        {provide: ActivatedRoute, useClass: ActivatedRouteStub},
+        {provide: UserService, useClass: UserMockService},
+        {provide: AppConfigService, useClass: AppConfigMockService},
+        {provide: NodeService, useClass: NodeMockService},
+        {provide: ProjectService, useClass: ProjectMockService},
+        MatDialog,
+        GoogleAnalyticsService,
+        EndOfLifeService,
+      ],
+      teardown: {destroyAfterEach: false},
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(VersionPickerComponent);
@@ -95,12 +93,9 @@ describe('VersionPickerComponent', () => {
     fixture.debugElement.query(By.css('.cluster-detail-actions'));
   });
 
-  it(
-    'should initialize',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should initialize', waitForAsync(() => {
+    expect(component).toBeTruthy();
+  }));
 
   it('should show upgrade link', fakeAsync(() => {
     component.upgrades = [

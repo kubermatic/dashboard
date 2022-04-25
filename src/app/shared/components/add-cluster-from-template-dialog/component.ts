@@ -19,7 +19,7 @@ import {Router} from '@angular/router';
 import {ClusterTemplateService} from '@core/services/cluster-templates';
 import {NotificationService} from '@core/services/notification';
 import {ClusterTemplate} from '@shared/entity/cluster-template';
-import {Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {filter, take, takeUntil} from 'rxjs/operators';
 
 export enum Step {
@@ -43,7 +43,6 @@ export class AddClusterFromTemplateDialogComponent implements OnInit, OnDestroy 
   readonly step = Step;
   @ViewChild('stepper', {static: true}) private readonly _stepper: MatStepper;
   private readonly _unsubscribe = new Subject<void>();
-  private _creating = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: AddClusterFromTemplateDialogData,
@@ -79,10 +78,6 @@ export class AddClusterFromTemplateDialogComponent implements OnInit, OnDestroy 
     return this._stepper.selectedIndex === this.steps.length - 1;
   }
 
-  get creating(): boolean {
-    return this._creating;
-  }
-
   get invalid(): boolean {
     switch (this.active) {
       case Step.Template:
@@ -94,29 +89,25 @@ export class AddClusterFromTemplateDialogComponent implements OnInit, OnDestroy 
     }
   }
 
+  getObservable(): Observable<any> {
+    return this._clusterTemplateService
+      .createInstances(this.replicas, this.data.projectId, this.template.id)
+      .pipe(take(1));
+  }
+
+  onNext() {
+    this._matDialogRef.close();
+    this._notificationService.success(
+      `Created ${this.replicas} instance${this.replicas > 1 ? 's' : ''} from ${this.template.name} template`
+    );
+    this._router.navigate([`/projects/${this.data.projectId}/clusters`]);
+  }
+
   isAvailable(step: Step): boolean {
     return this.steps.indexOf(step) > -1;
   }
 
   next(): void {
     this._stepper.next();
-  }
-
-  add(): void {
-    this._creating = true;
-    this._clusterTemplateService
-      .createInstances(this.replicas, this.data.projectId, this.template.id)
-      .pipe(take(1))
-      .subscribe({
-        next: _ => {
-          this._creating = false;
-          this._matDialogRef.close();
-          this._notificationService.success(
-            `Created ${this.replicas} instance${this.replicas > 1 ? 's' : ''} from ${this.template.name} template`
-          );
-          this._router.navigate([`/projects/${this.data.projectId}/clusters`]);
-        },
-        error: () => (this._creating = false),
-      });
   }
 }

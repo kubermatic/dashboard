@@ -36,8 +36,6 @@ import {SharedModule} from '@shared/module';
 import {of} from 'rxjs';
 import {ClusterDeleteConfirmationComponent} from './component';
 
-const modules: any[] = [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule];
-
 describe('ClusterDeleteConfirmationComponent', () => {
   let fixture: ComponentFixture<ClusterDeleteConfirmationComponent>;
   let component: ClusterDeleteConfirmationComponent;
@@ -45,7 +43,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
       declarations: [ClusterDeleteConfirmationComponent],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},
@@ -69,12 +67,9 @@ describe('ClusterDeleteConfirmationComponent', () => {
     fixture.debugElement.injector.get(Router);
   });
 
-  it(
-    'should initialize',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should initialize', waitForAsync(() => {
+    expect(component).toBeTruthy();
+  }));
 
   it('should able add button', () => {
     component.projectID = fakeProject().id;
@@ -88,7 +83,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
 
     inputElement.dispatchEvent(new Event('blur'));
 
-    expect(component.inputNameMatches()).toBeTruthy();
+    expect(component.inputName === component.cluster.name).toBeTruthy();
   });
 
   it('should call deleteCluster method', fakeAsync(() => {
@@ -99,7 +94,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
     fixture.detectChanges();
     const spyDeleteCluster = jest.spyOn(clusterService, 'delete').mockReturnValue(of(null));
 
-    component.deleteCluster();
+    component.getObservable().subscribe();
     tick();
     flush();
 

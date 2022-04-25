@@ -14,57 +14,47 @@
 
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {fakeDigitaloceanCluster} from '@test/data/cluster';
 import {fakeConstraints, fakeViolations} from '@test/data/opa';
 import {fakeProject} from '@test/data/project';
-import {CoreModule} from '@core/module';
 import {OPAService} from '@core/services/opa';
 import {SharedModule} from '@shared/module';
 import {ViolationDetailsComponent} from './component';
-
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
 
 describe('ViolationDetailsComponent', () => {
   let fixture: ComponentFixture<ViolationDetailsComponent>;
   let component: ViolationDetailsComponent;
 
-  beforeEach(
-    waitForAsync(() => {
-      const opaMock = {
-        saveViolationPageIndex: jest.fn(),
-        getViolationPageIndex: jest.fn(),
-        refreshConstraint: () => {},
-      };
-      opaMock.saveViolationPageIndex.mockReturnValue(null);
-      opaMock.getViolationPageIndex.mockReturnValue(0);
+  beforeEach(waitForAsync(() => {
+    const opaMock = {
+      saveViolationPageIndex: jest.fn(),
+      getViolationPageIndex: jest.fn(),
+      refreshConstraint: () => {},
+    };
+    opaMock.saveViolationPageIndex.mockReturnValue(null);
+    opaMock.getViolationPageIndex.mockReturnValue(0);
 
-      TestBed.configureTestingModule({
-        imports: [...modules],
-        declarations: [ViolationDetailsComponent],
-        providers: [{provide: OPAService, useValue: opaMock}],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
+    TestBed.configureTestingModule({
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule],
+      declarations: [ViolationDetailsComponent],
+      providers: [{provide: OPAService, useValue: opaMock}],
+      teardown: {destroyAfterEach: false},
+    }).compileComponents();
+  }));
 
-  beforeEach(
-    waitForAsync(() => {
-      fixture = TestBed.createComponent(ViolationDetailsComponent);
-      component = fixture.componentInstance;
-      component.violations = fakeViolations();
-      component.settings = {itemsPerPage: 10};
-      component.constraintName = fakeConstraints()[0].name;
-      component.projectId = fakeProject().id;
-      component.clusterId = fakeDigitaloceanCluster().id;
-      fixture.detectChanges();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    fixture = TestBed.createComponent(ViolationDetailsComponent);
+    component = fixture.componentInstance;
+    component.violations = fakeViolations();
+    component.settings = {itemsPerPage: 10};
+    component.constraintName = fakeConstraints()[0].name;
+    component.projectId = fakeProject().id;
+    component.clusterId = fakeDigitaloceanCluster().id;
+    fixture.detectChanges();
+  }));
 
-  it(
-    'should create the violation details component',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should create the violation details component', waitForAsync(() => {
+    expect(component).toBeTruthy();
+  }));
 });

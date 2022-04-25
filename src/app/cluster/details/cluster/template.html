@@ -340,8 +340,12 @@ limitations under the License.
                                  [value]="cluster.spec.enableUserSSHKeyAgent">
             </km-property-boolean>
 
+            <km-property-boolean label="External CCM/CSI"
+                                 [value]="cluster.status.externalCCMMigration === externalCCMMigrationStatus.NotNeeded">
+            </km-property-boolean>
+
             <km-property *ngIf="cluster?.status?.externalCCMMigration">
-              <div key>External CCM</div>
+              <div key>External CCM/CSI migration</div>
               <div value
                    fxLayoutAlign=" center"
                    fxLayoutGap="4px"

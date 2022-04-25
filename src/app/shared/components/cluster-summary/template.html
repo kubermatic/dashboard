@@ -15,6 +15,7 @@ limitations under the License.
 -->
 
 <div class="km-wizard-summary"
+     [ngClass]="{'summary-with-number' : showNumbering}"
      fxFlex
      [fxLayout]="flipLayout ? 'column' : 'row wrap'"
      fxLayout.lt-md="column">
@@ -138,9 +139,13 @@ limitations under the License.
             <div key>Domain</div>
             <div value>{{cluster.spec.cloud?.openstack.domain}}</div>
           </km-property>
-          <km-property>
+          <km-property *ngIf="cluster.spec.cloud?.openstack.username">
             <div key>Username</div>
             <div value>{{cluster.spec.cloud?.openstack.username}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud?.openstack.applicationCredentialID">
+            <div key>Application Credential ID</div>
+            <div value>{{cluster.spec.cloud.openstack.applicationCredentialID}}</div>
           </km-property>
           <km-property *ngIf="cluster.spec.cloud?.openstack.project">
             <div key>Project</div>
@@ -186,7 +191,7 @@ limitations under the License.
             <div key>Username</div>
             <div value>{{cluster.spec.cloud.nutanix.username}}</div>
           </km-property>
-          <km-property>
+          <km-property *ngIf="cluster.spec.cloud.nutanix.proxyURL">
             <div key>Proxy URL</div>
             <div value>{{cluster.spec.cloud.nutanix.proxyURL}}</div>
           </km-property>
@@ -198,6 +203,28 @@ limitations under the License.
             <div key>Project Name</div>
             <div value>{{cluster.spec.cloud.nutanix.projectName}}</div>
           </km-property>
+          <ng-container *ngIf="cluster.spec.cloud?.nutanix?.csi">
+            <km-property>
+              <div key>Prism Element Username</div>
+              <div value>{{cluster.spec.cloud.nutanix.csi.username}}</div>
+            </km-property>
+            <km-property>
+              <div key>Prism Element Endpoint</div>
+              <div value>{{cluster.spec.cloud.nutanix.csi.endpoint}}</div>
+            </km-property>
+            <km-property *ngIf="cluster.spec.cloud.nutanix.csi.port !== undefined">
+              <div key>Prism Element Port</div>
+              <div value>{{cluster.spec.cloud.nutanix.csi.port}}</div>
+            </km-property>
+            <km-property *ngIf="cluster.spec.cloud.nutanix.csi.storageContainer">
+              <div key>Prism Element Storage Container</div>
+              <div value>{{cluster.spec.cloud.nutanix.csi.storageContainer}}</div>
+            </km-property>
+            <km-property *ngIf="cluster.spec.cloud.nutanix.csi.fstype">
+              <div key>Prism Element Storage Fstype</div>
+              <div value>{{cluster.spec.cloud.nutanix.csi.fstype}}</div>
+            </km-property>
+          </ng-container>
         </ng-container>
 
         <!-- vSphere -->
@@ -305,6 +332,26 @@ limitations under the License.
         <km-property *ngIf="cluster.spec.clusterNetwork?.services?.cidrBlocks?.length > 0">
           <div key>Services CIDR</div>
           <div value>{{cluster.spec.clusterNetwork.services.cidrBlocks.join(', ')}}</div>
+        </km-property>
+
+        <km-property *ngIf="cluster.spec.cloud?.aws?.nodePortsAllowedIPRange">
+          <div key>Allowed IP Range for NodePorts</div>
+          <div value>{{cluster.spec.cloud.aws.nodePortsAllowedIPRange}}</div>
+        </km-property>
+
+        <km-property *ngIf="cluster.spec.cloud?.azure?.nodePortsAllowedIPRange">
+          <div key>Allowed IP Range for NodePorts</div>
+          <div value>{{cluster.spec.cloud.azure.nodePortsAllowedIPRange}}</div>
+        </km-property>
+
+        <km-property *ngIf="cluster.spec.cloud?.gcp?.nodePortsAllowedIPRange">
+          <div key>Allowed IP Range for NodePorts</div>
+          <div value>{{cluster.spec.cloud.gcp.nodePortsAllowedIPRange}}</div>
+        </km-property>
+
+        <km-property *ngIf="cluster.spec.cloud?.openstack?.nodePortsAllowedIPRange">
+          <div key>Allowed IP Range for NodePorts</div>
+          <div value>{{cluster.spec.cloud.openstack.nodePortsAllowedIPRange}}</div>
         </km-property>
 
         <km-property-boolean *ngIf="cluster.spec.clusterNetwork?.konnectivityEnabled"

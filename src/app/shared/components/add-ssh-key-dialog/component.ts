@@ -20,6 +20,12 @@ import {NotificationService} from '@core/services/notification';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {SSHKeyFormValidator} from '@shared/validators/ssh-key-form.validator';
 import {SSHKeyService} from '@core/services/ssh-key';
+import {Observable} from 'rxjs';
+
+enum Controls {
+  Name = 'name',
+  Key = 'key',
+}
 
 @Component({
   selector: 'km-add-ssh-key-dialog',
@@ -29,7 +35,8 @@ import {SSHKeyService} from '@core/services/ssh-key';
 export class AddSshKeyDialogComponent implements OnInit {
   @Input() projectID: string;
   @Input() title = 'Add SSH Key';
-  addSSHKeyForm: FormGroup;
+  form: FormGroup;
+  readonly controls = Controls;
 
   constructor(
     private _sshKeyService: SSHKeyService,
@@ -40,35 +47,30 @@ export class AddSshKeyDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.addSSHKeyForm = this.formBuilder.group({
-      name: ['', [Validators.required]],
-      key: ['', [Validators.required, SSHKeyFormValidator()]],
+    this.form = this.formBuilder.group({
+      [Controls.Name]: ['', [Validators.required]],
+      [Controls.Key]: ['', [Validators.required, SSHKeyFormValidator()]],
     });
     this.googleAnalyticsService.emitEvent('addSshKey', 'addSshKeyDialogOpened');
   }
 
-  addSSHKey(): void {
-    if (!this.addSSHKeyForm.valid) {
-      return;
-    }
+  getObservable(): Observable<SSHKey> {
+    return this._sshKeyService.add(
+      new SSHKey(this.form.get(Controls.Name).value, null, this.form.get(Controls.Key).value),
+      this.projectID
+    );
+  }
 
-    const name = this.addSSHKeyForm.controls['name'].value;
-    const key = this.addSSHKeyForm.controls['key'].value;
-
-    this._sshKeyService.add(new SSHKey(name, null, key), this.projectID).subscribe(result => {
-      this.dialogRef.close(result);
-      this.googleAnalyticsService.emitEvent('addSshKey', 'sshKeyAdded');
-      this._notificationService.success(`Added the ${name} SSH key`);
-    });
+  onNext(sshKey: SSHKey): void {
+    this.dialogRef.close(sshKey);
+    this.googleAnalyticsService.emitEvent('addSshKey', 'sshKeyAdded');
+    this._notificationService.success(`Added the ${sshKey.name} SSH key`);
   }
 
   onNewKeyTextChanged(): void {
-    const name = this.addSSHKeyForm.controls['name'].value;
-    const key = this.addSSHKeyForm.controls['key'].value;
-    const keyName = key.match(/^\S+ \S+ (.+)\n?$/);
-
-    if (keyName && keyName.length > 1 && '' === name) {
-      this.addSSHKeyForm.patchValue({name: keyName[1]});
+    const keyName = this.form.get(Controls.Key).value.match(/^\S+ \S+ (.+)\n?$/);
+    if (keyName && keyName.length > 1 && '' === this.form.get(Controls.Name).value) {
+      this.form.patchValue({name: keyName[1]});
     }
   }
 }

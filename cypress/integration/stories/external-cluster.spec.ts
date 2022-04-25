@@ -78,9 +78,9 @@ describe('External Cluster Story', () => {
     ClustersPage.getDisconnectConfirmBtn().click();
   });
 
-  it('should verify that there are no clusters', () => {
+  it('should verify that there are no external clusters', () => {
     ClustersPage.visit();
-    ClustersPage.verifyNoClusters();
+    ClustersPage.verifyNoExternalClusters();
   });
 
   it('should go to the projects page', () => {

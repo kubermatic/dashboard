@@ -26,46 +26,37 @@ import {EditServiceAccountDialogComponent} from './component';
 import {ServiceAccountService} from '@core/services/service-account';
 import {asyncData} from '@test/services/cluster-mock';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
-
 describe('EditServiceAccountDialogComponent', () => {
   let fixture: ComponentFixture<EditServiceAccountDialogComponent>;
   let component: EditServiceAccountDialogComponent;
-  let editServiceAccountSpy;
+  let editServiceAccountSpy: jest.Mock;
 
-  beforeEach(
-    waitForAsync(() => {
-      const saMock = {edit: jest.fn()};
-      editServiceAccountSpy = saMock.edit.mockReturnValue(asyncData(fakeServiceAccount()));
+  beforeEach(waitForAsync(() => {
+    const saMock = {edit: jest.fn()};
+    editServiceAccountSpy = saMock.edit.mockReturnValue(asyncData(fakeServiceAccount()));
 
-      TestBed.configureTestingModule({
-        imports: [...modules],
-        providers: [
-          {provide: MatDialogRef, useClass: MatDialogRefMock},
-          {provide: ServiceAccountService, useValue: saMock},
-          NotificationService,
-        ],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
+    TestBed.configureTestingModule({
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],
+      providers: [
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+        {provide: ServiceAccountService, useValue: saMock},
+        NotificationService,
+      ],
+      teardown: {destroyAfterEach: false},
+    }).compileComponents();
+  }));
 
-  beforeEach(
-    waitForAsync(() => {
-      fixture = TestBed.createComponent(EditServiceAccountDialogComponent);
-      component = fixture.componentInstance;
-      component.project = fakeProject();
-      component.serviceaccount = fakeServiceAccount();
-      fixture.detectChanges();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    fixture = TestBed.createComponent(EditServiceAccountDialogComponent);
+    component = fixture.componentInstance;
+    component.project = fakeProject();
+    component.serviceaccount = fakeServiceAccount();
+    fixture.detectChanges();
+  }));
 
-  it(
-    'should create the edit service account component',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should create the edit service account component', waitForAsync(() => {
+    expect(component).toBeTruthy();
+  }));
 
   it('should have valid form after creating', () => {
     expect(component.form.valid).toBeTruthy();

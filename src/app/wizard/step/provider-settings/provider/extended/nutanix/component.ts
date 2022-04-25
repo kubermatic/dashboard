@@ -28,13 +28,16 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {isObjectEmpty} from '@shared/utils/common';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
-import {catchError, debounceTime, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {NutanixProject} from '@shared/entity/provider/nutanix';
 import _ from 'lodash';
+import {CloudSpec, Cluster, ClusterSpec, NutanixCloudSpec, NutanixCSIConfig} from '@shared/entity/cluster';
 
 enum Controls {
   ProjectName = 'projectName',
+  StorageContainer = 'storageContainer',
+  Fstype = 'fstype',
 }
 
 enum ProjectState {
@@ -61,10 +64,18 @@ enum ProjectState {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NutanixProviderExtendedComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  // Following fields will not be blocked when preset is selected and vice versa.
+  // It allows setting storage class settings when the preset is used as it does not contain these fields.
+  // See also: NutanixCloudSpec.isEmpty
+  readonly _alwaysEnabledControls = [Controls.Fstype, Controls.StorageContainer];
   @ViewChild('projectCombobox')
   private readonly _projectCombobox: FilteredComboboxComponent;
   private readonly _debounceTime = 500;
   readonly Controls = Controls;
+  readonly fstypes = ['xfs', 'ext4'];
+  private _username = '';
+  private _password = '';
+  private _proxyURL = '';
   projects: NutanixProject[] = [];
   projectLabel = ProjectState.Empty;
   isPresetSelected = false;
@@ -81,19 +92,32 @@ export class NutanixProviderExtendedComponent extends BaseFormValidator implemen
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.ProjectName]: this._builder.control(''),
+      [Controls.StorageContainer]: this._builder.control(''),
+      [Controls.Fstype]: this._builder.control(''),
     });
 
-    this.form.valueChanges
+    merge(
+      Object.values(Controls)
+        .filter(control => !this._alwaysEnabledControls.includes(control))
+        .map(control => this.form.get(control).valueChanges)
+    )
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.NUTANIX))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._presets.enablePresets(isObjectEmpty(this._clusterSpecService.cluster.spec.cloud.nutanix)));
 
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset =>
-      Object.values(Controls).forEach(control => {
-        this.isPresetSelected = !!preset;
-        this._enable(!this.isPresetSelected, control);
-      })
+      Object.values(Controls)
+        .filter(control => !this._alwaysEnabledControls.includes(control))
+        .forEach(control => {
+          this.isPresetSelected = !!preset;
+          this._enable(!this.isPresetSelected, control);
+        })
     );
+
+    merge(this.form.get(Controls.StorageContainer).valueChanges, this.form.get(Controls.Fstype).valueChanges)
+      .pipe(distinctUntilChanged())
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
 
     merge(this._clusterSpecService.providerChanges, this._clusterSpecService.datacenterChanges)
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.NUTANIX))
@@ -111,6 +135,7 @@ export class NutanixProviderExtendedComponent extends BaseFormValidator implemen
         })
       )
       .pipe(filter(_ => this._hasRequiredCredentials()))
+      .pipe(filter(cluster => this._areCredentialsChanged(cluster)))
       .pipe(switchMap(_ => this._projectListObservable()))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._loadProjects.bind(this));
@@ -121,15 +146,38 @@ export class NutanixProviderExtendedComponent extends BaseFormValidator implemen
     this._unsubscribe.complete();
   }
 
+  private _areCredentialsChanged(cluster: Cluster): boolean {
+    let credentialsChanged = false;
+    if (cluster.spec.cloud.nutanix.username !== this._username) {
+      this._username = cluster.spec.cloud.nutanix.username;
+      credentialsChanged = true;
+    }
+
+    if (cluster.spec.cloud.nutanix.password !== this._password) {
+      this._password = cluster.spec.cloud.nutanix.password;
+      credentialsChanged = true;
+    }
+
+    if (cluster.spec.cloud.nutanix.proxyURL !== this._proxyURL) {
+      this._proxyURL = cluster.spec.cloud.nutanix.proxyURL;
+      credentialsChanged = true;
+    }
+
+    return credentialsChanged;
+  }
+
   getHint(control: Controls): string {
     switch (control) {
       case Controls.ProjectName:
         return this._hasRequiredCredentials() ? '' : 'Please enter your credentials first.';
+      default:
+        return '';
     }
   }
 
   onProjectChange(projectName: string): void {
     this._clusterSpecService.cluster.spec.cloud.nutanix.projectName = projectName;
+    this._clusterSpecService.providerSpecChanges.emit();
   }
 
   private _onProjectLoading(): void {
@@ -182,5 +230,20 @@ export class NutanixProviderExtendedComponent extends BaseFormValidator implemen
     if (!enable && this.form.get(name).enabled) {
       this.form.get(name).disable();
     }
+  }
+
+  private _getClusterEntity(): Cluster {
+    return {
+      spec: {
+        cloud: {
+          nutanix: {
+            csi: {
+              storageContainer: this.form.get(Controls.StorageContainer).value,
+              fstype: this.form.get(Controls.Fstype).value,
+            } as NutanixCSIConfig,
+          } as NutanixCloudSpec,
+        } as CloudSpec,
+      } as ClusterSpec,
+    } as Cluster;
   }
 }

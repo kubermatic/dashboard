@@ -16,7 +16,8 @@ limitations under the License.
 
 <form [formGroup]="form"
       fxFlex="100%"
-      fxLayout="column">
+      fxLayout="column"
+      fxLayoutGap="8px">
   <div class="spacing">Create a Preset with a single provider and add the other providers later.</div>
   <mat-form-field fxFlex>
     <mat-label>Preset Name</mat-label>
@@ -27,22 +28,25 @@ limitations under the License.
            title="name"
            autocomplete="off"
            required>
+    <mat-error *ngIf="form.get(controls.Name).hasError('required')">
+      Preset name is <strong>required</strong>.
+    </mat-error>
+    <mat-error *ngIf="form.get(controls.Name).hasError('pattern')">
+      Preset name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start or end with dash.
+    </mat-error>
   </mat-form-field>
 
   <div class="optional-section">Optional Settings</div>
-
-  <mat-form-field fxFlex>
-    <mat-label>Restrict Preset Group to Domain</mat-label>
-    <input matInput
-           [formControlName]="controls.Domain"
-           [pattern]="domainRegex"
-           type="text"
-           title="domain"
-           autocomplete="off">
-    <mat-error *ngIf="form.get(controls.Domain).hasError( 'pattern')">
-      Input has to be a valid domain.
-    </mat-error>
-  </mat-form-field>
+  <km-chip-list label="Restrict Preset Group to Domains"
+                placeholder="Domains..."
+                description="Use commas, space or enter key as the separators."
+                [tags]="domains"
+                (onChange)="onDomainsChange($event)"
+                [formControlName]="controls.Domains"
+                [kmPattern]="domainRegex"
+                kmPatternError="Input has to be a valid domain like kubermatic.com"
+                fxFlex>
+  </km-chip-list>
 
   <mat-checkbox [formControlName]="controls.Disable"
                 class="km-disable-ripple">

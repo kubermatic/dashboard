@@ -26,46 +26,37 @@ import {EditMemberComponent} from './component';
 import {MemberService} from '@core/services/member';
 import {asyncData} from '@test/services/cluster-mock';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
-
 describe('EditMemberComponent', () => {
   let fixture: ComponentFixture<EditMemberComponent>;
   let component: EditMemberComponent;
-  let editMemberSpy;
+  let editMemberSpy: jest.Mock;
 
-  beforeEach(
-    waitForAsync(() => {
-      const memberServiceMock = {edit: jest.fn()};
-      editMemberSpy = memberServiceMock.edit.mockReturnValue(asyncData(fakeMember()));
+  beforeEach(waitForAsync(() => {
+    const memberServiceMock = {edit: jest.fn()};
+    editMemberSpy = memberServiceMock.edit.mockReturnValue(asyncData(fakeMember()));
 
-      TestBed.configureTestingModule({
-        imports: [...modules],
-        providers: [
-          {provide: MatDialogRef, useClass: MatDialogRefMock},
-          {provide: MemberService, useValue: memberServiceMock},
-          NotificationService,
-        ],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
+    TestBed.configureTestingModule({
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],
+      providers: [
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+        {provide: MemberService, useValue: memberServiceMock},
+        NotificationService,
+      ],
+      teardown: {destroyAfterEach: false},
+    }).compileComponents();
+  }));
 
-  beforeEach(
-    waitForAsync(() => {
-      fixture = TestBed.createComponent(EditMemberComponent);
-      component = fixture.componentInstance;
-      component.project = fakeProject();
-      component.member = fakeMember();
-      fixture.detectChanges();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    fixture = TestBed.createComponent(EditMemberComponent);
+    component = fixture.componentInstance;
+    component.project = fakeProject();
+    component.member = fakeMember();
+    fixture.detectChanges();
+  }));
 
-  it(
-    'should initialize',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should initialize', waitForAsync(() => {
+    expect(component).toBeTruthy();
+  }));
 
   it('should have valid form defaults', () => {
     expect(component.form.valid).toBeTruthy();

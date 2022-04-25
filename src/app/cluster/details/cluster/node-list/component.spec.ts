@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, flush, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatDialog} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {fakeDigitaloceanCluster} from '@test/data/cluster';
 import {nodeAWSFake, nodeFake} from '@test/data/node';
@@ -37,30 +37,26 @@ class MatDialogMock {
   }
 }
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
-
 describe('NodeComponent', () => {
   let fixture: ComponentFixture<NodeListComponent>;
   let component: NodeListComponent;
   let clusterService: ClusterService;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [...modules],
-        declarations: [NodeListComponent],
-        providers: [
-          {provide: ClusterService, useClass: ClusterMockService},
-          {provide: MatDialog, useClass: MatDialogMock},
-          {provide: SettingsService, useClass: SettingsMockService},
-          {provide: UserService, useClass: UserMockService},
-          GoogleAnalyticsService,
-          NotificationService,
-        ],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule],
+      declarations: [NodeListComponent],
+      providers: [
+        {provide: ClusterService, useClass: ClusterMockService},
+        {provide: MatDialog, useClass: MatDialogMock},
+        {provide: SettingsService, useClass: SettingsMockService},
+        {provide: UserService, useClass: UserMockService},
+        GoogleAnalyticsService,
+        NotificationService,
+      ],
+      teardown: {destroyAfterEach: false},
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(NodeListComponent);
@@ -68,26 +64,20 @@ describe('NodeComponent', () => {
     clusterService = fixture.debugElement.injector.get(ClusterService);
   });
 
-  it(
-    'should create the cluster details cmp',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should create the cluster details cmp', waitForAsync(() => {
+    expect(component).toBeTruthy();
+  }));
 
   it('should call deleteNode', fakeAsync(() => {
     component.cluster = fakeDigitaloceanCluster();
     component.projectID = fakeProject().id;
-    const event = new MouseEvent('click');
 
-    fixture.detectChanges();
-    const spyDeleteClusterNode = jest.spyOn(clusterService, 'deleteNode').mockReturnValue(of(null));
+    const spy = jest.spyOn(clusterService, 'deleteNode').mockReturnValue(of(null));
 
-    component.deleteNodeDialog(nodeFake(), event);
-    tick();
+    component.deleteNodeDialog(nodeFake());
     flush();
 
-    expect(spyDeleteClusterNode).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalled();
   }));
 
   it('should get operating system name', () => {

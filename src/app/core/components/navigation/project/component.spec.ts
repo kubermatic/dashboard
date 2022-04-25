@@ -36,15 +36,13 @@ import {UserPanelComponent} from '../../user-panel/component';
 import {NavigationComponent} from '../component';
 import {ProjectSelectorComponent} from './component';
 
-const modules: any[] = [BrowserModule, RouterTestingModule, HttpClientModule, BrowserAnimationsModule, SharedModule];
-
 describe('ProjectSelectorComponent', () => {
   let fixture: ComponentFixture<ProjectSelectorComponent>;
   let component: ProjectSelectorComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, RouterTestingModule, HttpClientModule, BrowserAnimationsModule, SharedModule],
       declarations: [
         NavigationComponent,
         NotificationPanelComponent,
@@ -79,12 +77,9 @@ describe('ProjectSelectorComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it(
-    'should initialize',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should initialize', waitForAsync(() => {
+    expect(component).toBeTruthy();
+  }));
 
   it('should correctly compare projects basing on their IDs', () => {
     const a: Project = fakeProjects()[0];

@@ -20,7 +20,7 @@ import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/serv
 import {NotificationService} from '@core/services/notification';
 import {PresetsService} from '@core/services/wizard/presets';
 import {Preset} from '@shared/entity/preset';
-import {Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {filter, take, takeUntil} from 'rxjs/operators';
 
 export interface PresetDialogData {
@@ -51,6 +51,7 @@ enum StepRegistry {
 })
 export class PresetDialogComponent implements OnInit, OnDestroy {
   readonly stepRegistry = StepRegistry;
+  readonly mode = Mode;
 
   form: FormGroup;
   creating = false;
@@ -107,6 +108,55 @@ export class PresetDialogComponent implements OnInit, OnDestroy {
     }
   }
 
+  get label(): string {
+    switch (this.data.mode) {
+      case Mode.Create:
+        return 'Create';
+      case Mode.Add:
+        return 'Add';
+      case Mode.Edit:
+        return 'Edit';
+      default:
+        return '';
+    }
+  }
+
+  get icon(): string {
+    switch (this.data.mode) {
+      case Mode.Create:
+      case Mode.Add:
+        return 'km-icon-add';
+      case Mode.Edit:
+        return 'km-icon-edit';
+      default:
+        return '';
+    }
+  }
+
+  getObservable(): Observable<Preset> {
+    switch (this.data.mode) {
+      case Mode.Create:
+        return this._presetService.create(this._presetDialogService.preset).pipe(take(1));
+      case Mode.Add:
+      case Mode.Edit:
+        this._presetDialogService.preset.metadata.name = this.data.preset.name;
+        return this._presetService.update(this._presetDialogService.preset).pipe(take(1));
+    }
+  }
+
+  onNext(preset: Preset): void {
+    this._dialogRef.close(true);
+
+    switch (this.data.mode) {
+      case Mode.Create:
+        this._notificationService.success(`Created the ${this._presetDialogService.preset.metadata.name} preset`);
+        break;
+      case Mode.Add:
+      case Mode.Edit:
+        this._notificationService.success(`Updated the ${preset.name} preset`);
+    }
+  }
+
   ngOnInit(): void {
     const controls = {};
     this.steps.forEach(step => (controls[step] = this._formBuilder.control('')));
@@ -125,36 +175,5 @@ export class PresetDialogComponent implements OnInit, OnDestroy {
 
   isEnabled(step: StepRegistry): boolean {
     return this.steps.indexOf(step) > -1;
-  }
-
-  save(): void {
-    switch (this.data.mode) {
-      case Mode.Create:
-        return this._create();
-      case Mode.Add:
-      case Mode.Edit:
-        return this._update();
-    }
-  }
-
-  private _create(): void {
-    this._presetService
-      .create(this._presetDialogService.preset)
-      .pipe(take(1))
-      .subscribe(_ => {
-        this._dialogRef.close(true);
-        this._notificationService.success(`Created the ${this._presetDialogService.preset.metadata.name} preset`);
-      });
-  }
-
-  private _update(): void {
-    this._presetDialogService.preset.metadata.name = this.data.preset.name;
-    this._presetService
-      .update(this._presetDialogService.preset)
-      .pipe(take(1))
-      .subscribe(preset => {
-        this._dialogRef.close(true);
-        this._notificationService.success(`Updated the ${preset.name} preset`);
-      });
   }
 }

@@ -384,6 +384,10 @@
       div.km-chip-accent {
         background: transparent;
       }
+
+      .mat-chip-remove {
+        background-color: map.get($colors, text);
+      }
     }
   }
 

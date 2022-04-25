@@ -29,50 +29,46 @@ import {of} from 'rxjs';
 import {ConstraintDialog, Mode} from './component';
 import {asyncData} from '@test/services/cluster-mock';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule];
-
 declare let monaco: any;
 
 describe('ConstraintDialog', () => {
   let fixture: ComponentFixture<ConstraintDialog>;
   let component: ConstraintDialog;
-  let createConstraintSpy;
-  let patchConstraintSpy;
+  let createConstraintSpy: jest.Mock;
+  let patchConstraintSpy: jest.Mock;
 
-  beforeEach(
-    waitForAsync(() => {
-      const opaMock = {
-        createConstraint: jest.fn(),
-        patchConstraint: jest.fn(),
-        constraintTemplates: of(fakeConstraintTemplates()),
-        refreshConstraint: () => {},
-      };
-      createConstraintSpy = opaMock.createConstraint.mockReturnValue(asyncData(fakeConstraints()[0]));
-      patchConstraintSpy = opaMock.patchConstraint.mockReturnValue(asyncData(fakeConstraints()[0]));
+  beforeEach(waitForAsync(() => {
+    const opaMock = {
+      createConstraint: jest.fn(),
+      patchConstraint: jest.fn(),
+      constraintTemplates: of(fakeConstraintTemplates()),
+      refreshConstraint: () => {},
+    };
+    createConstraintSpy = opaMock.createConstraint.mockReturnValue(asyncData(fakeConstraints()[0]));
+    patchConstraintSpy = opaMock.patchConstraint.mockReturnValue(asyncData(fakeConstraints()[0]));
 
-      TestBed.configureTestingModule({
-        imports: [...modules],
-        declarations: [ConstraintDialog],
-        providers: [
-          {provide: MatDialogRef, useClass: MatDialogRefMock},
-          {provide: OPAService, useValue: opaMock},
-          {
-            provide: MAT_DIALOG_DATA,
-            useValue: {
-              title: '',
-              projectId: '',
-              cluster: {},
-              mode: '',
-              confirmLabel: '',
-            },
+    TestBed.configureTestingModule({
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule],
+      declarations: [ConstraintDialog],
+      providers: [
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+        {provide: OPAService, useValue: opaMock},
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: {
+            title: '',
+            projectId: '',
+            cluster: {},
+            mode: '',
+            confirmLabel: '',
           },
-          NotificationService,
-          {provide: NGX_MONACO_EDITOR_CONFIG, useValue: {onMonacoLoad: () => (monaco = (window as any).monaco)}},
-        ],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
+        },
+        NotificationService,
+        {provide: NGX_MONACO_EDITOR_CONFIG, useValue: {onMonacoLoad: () => (monaco = (window as any).monaco)}},
+      ],
+      teardown: {destroyAfterEach: false},
+    }).compileComponents();
+  }));
 
   describe('Add Constraint Dialog', () => {
     beforeEach(() => {
@@ -90,12 +86,9 @@ describe('ConstraintDialog', () => {
       fixture.detectChanges();
     });
 
-    it(
-      'should create the add constraint dialog',
-      waitForAsync(() => {
-        expect(component).toBeTruthy();
-      })
-    );
+    it('should create the add constraint dialog', waitForAsync(() => {
+      expect(component).toBeTruthy();
+    }));
 
     it('should have correct title: add', () => {
       expect(document.body.querySelector('km-dialog-title').textContent).toBe('Add Constraint');
@@ -129,12 +122,9 @@ describe('ConstraintDialog', () => {
       fixture.detectChanges();
     });
 
-    it(
-      'should create the edit constraint dialog',
-      waitForAsync(() => {
-        expect(component).toBeTruthy();
-      })
-    );
+    it('should create the edit constraint dialog', waitForAsync(() => {
+      expect(component).toBeTruthy();
+    }));
 
     it('should have correct title: edit', () => {
       expect(document.body.querySelector('km-dialog-title').textContent).toContain('Edit Constraint');

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Load `$localize` onto the global scope - used if i18n tags appear in Angular templates.
 import '@angular/localize/init';
 
 import 'core-js/es/array';
@@ -32,10 +31,6 @@ import 'core-js/es/symbol';
 
 import 'zone.js';
 
-// Add global to window, assigning the value of window itself.
-// eslint-disable-next-line
 (window as any).global = window;
-
-// Add global to process. Required by the 'swagger-ui'.
-// eslint-disable-next-line
 (window as any).process = {browser: true, env: {}};
+(window as any).Buffer = (window as any).Buffer || require('buffer').Buffer;

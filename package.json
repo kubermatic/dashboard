@@ -1,12 +1,14 @@
 {
   "name": "kubermatic-dashboard",
-  "private": true,
-  "type": "module",
-  "version": "v2.19.0",
   "description": "Kubermatic Dashboard",
-  "repository": "https://github.com/kubermatic/dashboard",
+  "version": "2.20.0",
+  "type": "module",
   "license": "proprietary",
-  "angular-cli": {},
+  "repository": "https://github.com/kubermatic/dashboard",
+  "private": true,
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "scripts": {
     "start": "npm run vi && ng s -c=default-\"${KUBERMATIC_EDITION:=ee}\" --host \"${KUBERMATIC_HOST:=localhost}\"",
     "start:local": "npm run vi && ng s -c=default-\"${KUBERMATIC_EDITION:=ee}\" --proxy-config=proxy-local.conf.cjs --host \"${KUBERMATIC_HOST:=localhost}\"",
@@ -14,7 +16,8 @@
     "start:prod:local": "npm run vi && ng s -c=production-\"${KUBERMATIC_EDITION:=ee}\" --proxy-config=proxy-local.conf.cjs",
     "start:e2e": "npm run vi && ng s -c=e2e-\"${KUBERMATIC_EDITION:=ee}\"",
     "start:e2e:local": "npm run vi && ng s -c=e2e-local-\"${KUBERMATIC_EDITION:=ee}\" --proxy-config=proxy-local.conf.cjs",
-    "start:e2e:mock": "npm run vi && ng s -c=e2e-mock-\"${KUBERMATIC_EDITION:=ee}\" --proxy-config=proxy-local.conf.cjs",
+    "start:e2e:mock": "concurrently \"npm run start:mock-server\" \"npm run vi && ng s -c=e2e-mock-\"${KUBERMATIC_EDITION:=ee}\" --proxy-config=proxy-local.conf.cjs\"",
+    "start:mock-server": "json-server --watch fixtures/db.json --routes fixtures/routes.json --port 8080 -q",
     "build": "npm run vi && ng b -c=production-\"${KUBERMATIC_EDITION:=ee}\"",
     "build:themes": "npm run build && ./hack/extract-themes.sh",
     "test": "jest",
@@ -28,33 +31,46 @@
     "check:ts": "gts lint",
     "check:scss": "stylelint \"src/**/*.scss\"",
     "check:dependency-licenses": "./hack/check-licenses.sh",
-    "fix": "npm run fix:ts && npm run fix:scss && npm run fix:html",
+    "fix": "npm run fix:ts && npm run fix:scss && npm run fix:html && npm run fix:license",
     "fix:ts": "gts fix",
     "fix:scss": "stylelint \"src/**/*.scss\" --fix",
-    "fix:html": "js-beautify --end-with-newline --indent-size=2 --wrap-attributes=force-aligned --replace -f \"src/**/*.html\"",
+    "fix:html": "html-beautify --replace -f \"src/**/*.html\"",
+    "fix:license": "license-check-and-add add -r 2022",
     "clean": "gts clean",
     "vi": "node version.js",
     "postinstall": "ngcc && rm cypress/**/*.js && rm cypress/tsconfig.json",
     "prepare": "husky install"
   },
+  "lint-staged": {
+    "src/**/*.ts": [
+      "gts fix"
+    ],
+    "src/**/*.scss": [
+      "stylelint --fix"
+    ],
+    "src/**/*.html": [
+      "html-beautify --replace -f "
+    ]
+  },
   "dependencies": {
-    "@angular/animations": "13.1.1",
-    "@angular/cdk": "13.2.1",
-    "@angular/common": "13.2.2",
-    "@angular/compiler": "13.2.2",
-    "@angular/core": "13.2.2",
+    "@angular/animations": "13.3.0",
+    "@angular/cdk": "13.3.0",
+    "@angular/common": "13.3.0",
+    "@angular/compiler": "13.3.0",
+    "@angular/core": "13.3.0",
     "@angular/flex-layout": "13.0.0-beta.38",
-    "@angular/forms": "13.2.2",
-    "@angular/localize": "13.2.2",
-    "@angular/material": "13.2.1",
-    "@angular/platform-browser": "13.2.2",
-    "@angular/platform-browser-dynamic": "13.2.2",
-    "@angular/router": "13.2.2",
-    "@fontsource/inconsolata": "4.5.1",
+    "@angular/forms": "13.3.0",
+    "@angular/localize": "13.3.0",
+    "@angular/material": "13.3.0",
+    "@angular/platform-browser": "13.3.0",
+    "@angular/platform-browser-dynamic": "13.3.0",
+    "@angular/router": "13.3.0",
+    "@fontsource/inconsolata": "4.5.2",
     "@fontsource/roboto": "4.5.3",
-    "@fontsource/roboto-mono": "4.5.2",
-    "@fontsource/ubuntu": "4.5.2",
-    "core-js": "3.21.0",
+    "@fontsource/roboto-mono": "4.5.3",
+    "@fontsource/ubuntu": "4.5.4",
+    "buffer": "6.0.3",
+    "core-js": "3.21.1",
     "country-code-lookup": "0.0.20",
     "flag-icon-css": "4.1.7",
     "git-describe": "4.1.0",
@@ -64,200 +80,58 @@
     "lodash": "4.17.21",
     "modern-normalize": "1.1.0",
     "moment": "2.29.1",
-    "monaco-editor": "0.32.1",
+    "monaco-editor": "0.33.0",
     "ngx-clipboard": "15.0.1",
     "ngx-cookie-service": "13.1.2",
-    "ngx-custom-validators": "11.0.1",
     "ngx-filter-pipe": "2.1.2",
     "ngx-monaco-editor": "12.0.0",
-    "postcss": "8.4.6",
-    "postcss-scss": "4.0.3",
-    "rxjs": "7.5.3",
+    "rxjs": "7.5.5",
     "rxjs-compat": "6.6.7",
     "semver": "7.3.5",
-    "swagger-ui": "4.5.0",
-    "zone.js": "0.11.4"
+    "swagger-ui": "4.6.2",
+    "zone.js": "0.11.5"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "13.2.2",
-    "@angular/cli": "13.2.2",
-    "@angular/compiler-cli": "13.2.2",
+    "@angular-devkit/build-angular": "13.3.0",
+    "@angular/cli": "13.3.0",
+    "@angular/compiler-cli": "13.3.0",
     "@bahmutov/add-typescript-to-cypress": "2.1.2",
     "@cypress/webpack-preprocessor": "5.11.1",
     "@jest/globals": "27.5.1",
-    "@types/jest": "27.4.0",
+    "@types/jest": "27.4.1",
     "@types/js-yaml": "4.0.5",
-    "@types/lodash": "4.14.178",
-    "@types/node": "17.0.16",
-    "@typescript-eslint/eslint-plugin": "5.11.0",
-    "@typescript-eslint/parser": "5.11.0",
+    "@types/lodash": "4.14.180",
+    "@types/node": "17.0.21",
+    "@typescript-eslint/eslint-plugin": "5.15.0",
+    "@typescript-eslint/parser": "5.15.0",
     "browserlist": "1.0.1",
-    "cypress": "9.4.1",
-    "cypress-fail-fast": "3.3.0",
+    "concurrently": "7.1.0",
+    "cypress": "9.5.2",
+    "cypress-fail-fast": "3.4.1",
     "del": "6.0.0",
-    "eslint": "8.8.0",
+    "eslint": "8.11.0",
     "eslint-plugin-compat": "4.0.2",
     "eslint-plugin-prettier": "4.0.0",
     "eslint-plugin-rxjs": "5.0.2",
     "gts": "3.1.0",
     "husky": "7.0.4",
     "jest": "27.5.1",
-    "jest-preset-angular": "11.1.0",
+    "jest-preset-angular": "11.1.1",
     "js-beautify": "1.14.0",
+    "json-server": "0.17.0",
+    "license-check-and-add": "4.0.3",
     "license-compliance": "1.2.3",
-    "lint-staged": "12.3.3",
+    "lint-staged": "12.3.7",
     "ng2-mock-component": "0.2.0",
     "start-server-and-test": "1.14.0",
-    "stylelint": "14.4.0",
+    "stream": "0.0.2",
+    "stylelint": "14.6.0",
     "stylelint-config-standard-scss": "3.0.0",
-    "stylelint-no-unsupported-browser-features": "5.0.2",
+    "stylelint-no-unsupported-browser-features": "5.0.3",
     "stylelint-order": "5.0.0",
     "ts-jest": "27.1.3",
-    "ts-node": "10.5.0",
+    "ts-node": "10.7.0",
     "tslib": "2.3.1",
-    "typescript": "4.5.5"
-  },
-  "engines": {
-    "node": ">=16.0.0 <17.4.0"
-  },
-  "browserslist": [
-    "last 2 chrome versions",
-    "last 2 and_chr versions",
-    "last 2 edge versions",
-    "last 2 firefox versions",
-    "last 2 and_ff versions",
-    "last 2 safari versions",
-    "last 2 ios_saf versions",
-    "last 2 android versions",
-    "not dead"
-  ],
-  "eslintConfig": {
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-      "ecmaVersion": 2020,
-      "project": [
-        "src/tsconfig.ce.json",
-        "src/tsconfig.ee.json",
-        "src/tsconfig.spec.json",
-        "cypress/tsconfig.e2e.json"
-      ],
-      "sourceType": "module"
-    },
-    "extends": [
-      "./node_modules/gts/",
-      "plugin:compat/recommended"
-    ],
-    "plugins": [
-      "rxjs"
-    ],
-    "rules": {
-      "@typescript-eslint/ban-ts-comment": "off",
-      "@typescript-eslint/no-namespace": "off",
-      "@typescript-eslint/no-unused-vars": "off",
-      "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/no-magic-numbers": [
-        "error",
-        {
-          "ignore": [
-            -1,
-            0,
-            1
-          ],
-          "ignoreArrayIndexes": true,
-          "ignoreReadonlyClassProperties": true,
-          "ignoreEnums": true
-        }
-      ],
-      "node/no-unpublished-import": "off",
-      "node/no-extraneous-require": "error",
-      "node/no-unpublished-require": "error",
-      "rxjs/no-ignored-observable": "error",
-      "rxjs/no-nested-subscribe": "error",
-      "rxjs/no-unbound-methods": "error",
-      "rxjs/no-unsafe-takeuntil": "error",
-      "rxjs/ban-operators": [
-        "error",
-        {
-          "first": "use take(1) instead"
-        }
-      ],
-      "no-undef": "off",
-      "no-inner-declarations": "off",
-      "no-redeclare": "off",
-      "no-magic-numbers": "off",
-      "eol-last": "error",
-      "no-console": "error",
-      "no-prototype-builtins": "error",
-      "no-extra-boolean-cast": "error",
-      "no-else-return": "error",
-      "prefer-rest-params": "error",
-      "complexity": [
-        "error",
-        15
-      ]
-    },
-    "ignorePatterns": [
-      "**/*.js"
-    ]
-  },
-  "eslintIgnore": [
-    "dist/*",
-    "node_modules/*",
-    "src/environments/environment.e2e*.ts",
-    "src/environments/environment.prod*.ts",
-    "src/app/dynamic/module-registry.ce.ts"
-  ],
-  "lint-staged": {
-    "src/**/*.ts": [
-      "gts fix"
-    ],
-    "src/**/*.scss": [
-      "stylelint --fix"
-    ],
-    "src/**/*.html": [
-      "js-beautify --end-with-newline --indent-size=2 --wrap-attributes=force-aligned --replace -f "
-    ]
-  },
-  "stylelint": {
-    "extends": [
-      "stylelint-config-standard-scss"
-    ],
-    "plugins": [
-      "stylelint-no-unsupported-browser-features",
-      "stylelint-order"
-    ],
-    "rules": {
-      "alpha-value-notation": "percentage",
-      "no-descending-specificity": null,
-      "selector-pseudo-element-no-unknown": true,
-      "order/order": [
-        "dollar-variables",
-        {
-          "type": "at-rule",
-          "name": "extend"
-        },
-        {
-          "type": "at-rule",
-          "name": "include"
-        },
-        "declarations",
-        {
-          "type": "at-rule",
-          "name": "include",
-          "hasBlock": true
-        },
-        "at-rules",
-        "rules"
-      ],
-      "order/properties-alphabetical-order": true,
-      "plugin/no-unsupported-browser-features": [
-        true,
-        {
-          "severity": "warning"
-        }
-      ],
-      "scss/comment-no-empty": null,
-      "string-quotes": "single"
-    }
+    "typescript": "4.6.2"
   }
 }

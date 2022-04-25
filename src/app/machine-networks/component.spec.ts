@@ -23,22 +23,18 @@ import {WizardService} from '@core/services/wizard/wizard';
 import {SharedModule} from '@shared/module';
 import {MachineNetworksComponent} from './component';
 
-const modules: any[] = [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule];
-
 describe('MachineNetworksComponent', () => {
   let component: MachineNetworksComponent;
   let fixture: ComponentFixture<MachineNetworksComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [...modules],
-        declarations: [MachineNetworksComponent],
-        providers: [WizardService],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
+      declarations: [MachineNetworksComponent],
+      providers: [WizardService],
+      teardown: {destroyAfterEach: false},
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MachineNetworksComponent);

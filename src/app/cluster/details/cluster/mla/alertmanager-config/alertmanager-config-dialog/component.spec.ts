@@ -28,45 +28,41 @@ import {MonacoEditorModule, NGX_MONACO_EDITOR_CONFIG} from 'ngx-monaco-editor';
 import {AlertmanagerConfigDialog} from './component';
 import {asyncData} from '@test/services/cluster-mock';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule];
-
 declare let monaco: any;
 
 describe('AlertmanagerConfigDialog', () => {
   let fixture: ComponentFixture<AlertmanagerConfigDialog>;
   let component: AlertmanagerConfigDialog;
-  let putAlertmanagerConfigSpy;
+  let putAlertmanagerConfigSpy: jest.Mock;
 
-  beforeEach(
-    waitForAsync(() => {
-      const mlaMock = {
-        putAlertmanagerConfig: jest.fn(),
-        refreshAlertmanagerConfig: () => {},
-      };
-      putAlertmanagerConfigSpy = mlaMock.putAlertmanagerConfig.mockReturnValue(asyncData(fakeAlertmanagerConfig()));
+  beforeEach(waitForAsync(() => {
+    const mlaMock = {
+      putAlertmanagerConfig: jest.fn(),
+      refreshAlertmanagerConfig: () => {},
+    };
+    putAlertmanagerConfigSpy = mlaMock.putAlertmanagerConfig.mockReturnValue(asyncData(fakeAlertmanagerConfig()));
 
-      TestBed.configureTestingModule({
-        imports: [...modules],
-        declarations: [AlertmanagerConfigDialog],
-        providers: [
-          {provide: MatDialogRef, useClass: MatDialogRefMock},
-          {provide: MLAService, useValue: mlaMock},
-          {
-            provide: MAT_DIALOG_DATA,
-            useValue: {
-              title: '',
-              projectId: '',
-              cluster: {},
-              confirmLabel: '',
-            },
+    TestBed.configureTestingModule({
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule],
+      declarations: [AlertmanagerConfigDialog],
+      providers: [
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+        {provide: MLAService, useValue: mlaMock},
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: {
+            title: '',
+            projectId: '',
+            cluster: {},
+            confirmLabel: '',
           },
-          NotificationService,
-          {provide: NGX_MONACO_EDITOR_CONFIG, useValue: {onMonacoLoad: () => (monaco = (window as any).monaco)}},
-        ],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
+        },
+        NotificationService,
+        {provide: NGX_MONACO_EDITOR_CONFIG, useValue: {onMonacoLoad: () => (monaco = (window as any).monaco)}},
+      ],
+      teardown: {destroyAfterEach: false},
+    }).compileComponents();
+  }));
 
   describe('Edit Alertmanager Config Dialog', () => {
     beforeEach(() => {
@@ -83,12 +79,9 @@ describe('AlertmanagerConfigDialog', () => {
       fixture.detectChanges();
     });
 
-    it(
-      'should create the edit alertmanager config dialog',
-      waitForAsync(() => {
-        expect(component).toBeTruthy();
-      })
-    );
+    it('should create the edit alertmanager config dialog', waitForAsync(() => {
+      expect(component).toBeTruthy();
+    }));
 
     it('should have correct title: edit', () => {
       expect(document.body.querySelector('km-dialog-title').textContent).toContain('Edit Alertmanager Config');

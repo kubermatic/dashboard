@@ -13,6 +13,9 @@
 // limitations under the License.
 
 export class Config {
+  static readonly defaultPageLoadTimeout = 20000;
+  static readonly defaultElementLoadTimeout = 20000;
+
   static isAPIMocked(): boolean {
     return Cypress.env('MOCKS') === 'true' || Cypress.env('MOCKS') === true;
   }
@@ -34,7 +37,7 @@ export class Config {
   }
 
   static kubeconfig(): string {
-    return Config.isAPIMocked() ? 'test-kubeconfig' : atob(Cypress.env('KUBECONFIG_ENCODED'));
+    return Config.isAPIMocked() ? 'test-kubeconfig' : window.atob(Cypress.env('KUBECONFIG_ENCODED'));
   }
 
   static seedName(): string {

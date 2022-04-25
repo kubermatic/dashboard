@@ -20,15 +20,13 @@ import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
 import {SharedModule} from '@shared/module';
 import {PropertyHealthComponent} from './component';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
-
 describe('PropertyHealthComponent', () => {
   let fixture: ComponentFixture<PropertyHealthComponent>;
   let component: PropertyHealthComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},
         {provide: MAT_DIALOG_DATA, useValue: {}},
@@ -42,10 +40,7 @@ describe('PropertyHealthComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it(
-    'should initialize',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should initialize', waitForAsync(() => {
+    expect(component).toBeTruthy();
+  }));
 });

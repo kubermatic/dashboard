@@ -30,60 +30,51 @@ import {of} from 'rxjs';
 import {ConstraintsComponent} from './component';
 import {ViolationDetailsComponent} from './violation-details/component';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, DialogTestModule];
-
 describe('ConstraintsComponent', () => {
   let fixture: ComponentFixture<ConstraintsComponent>;
   let noop: ComponentFixture<NoopConfirmDialogComponent>;
   let component: ConstraintsComponent;
-  let deleteConstraintSpy;
+  let deleteConstraintSpy: jest.Mock;
 
-  beforeEach(
-    waitForAsync(() => {
-      const opaMock = {
-        deleteConstraint: jest.fn(),
-        constraintTemplates: of(fakeConstraintTemplates()),
-        saveViolationPageIndex: jest.fn(),
-        getViolationPageIndex: jest.fn(),
-        refreshConstraint: () => {},
-      };
-      deleteConstraintSpy = opaMock.deleteConstraint.mockReturnValue(of(null));
-      opaMock.saveViolationPageIndex.mockReturnValue(null);
-      opaMock.getViolationPageIndex.mockReturnValue(0);
+  beforeEach(waitForAsync(() => {
+    const opaMock = {
+      deleteConstraint: jest.fn(),
+      constraintTemplates: of(fakeConstraintTemplates()),
+      saveViolationPageIndex: jest.fn(),
+      getViolationPageIndex: jest.fn(),
+      refreshConstraint: () => {},
+    };
+    deleteConstraintSpy = opaMock.deleteConstraint.mockReturnValue(of(null));
+    opaMock.saveViolationPageIndex.mockReturnValue(null);
+    opaMock.getViolationPageIndex.mockReturnValue(0);
 
-      TestBed.configureTestingModule({
-        imports: [...modules],
-        declarations: [ConstraintsComponent, ViolationDetailsComponent],
-        providers: [
-          {provide: UserService, useClass: UserMockService},
-          {provide: OPAService, useValue: opaMock},
-          MatDialog,
-          NotificationService,
-        ],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
+    TestBed.configureTestingModule({
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, DialogTestModule],
+      declarations: [ConstraintsComponent, ViolationDetailsComponent],
+      providers: [
+        {provide: UserService, useClass: UserMockService},
+        {provide: OPAService, useValue: opaMock},
+        MatDialog,
+        NotificationService,
+      ],
+      teardown: {destroyAfterEach: false},
+    }).compileComponents();
+  }));
 
-  beforeEach(
-    waitForAsync(() => {
-      fixture = TestBed.createComponent(ConstraintsComponent);
-      component = fixture.componentInstance;
-      noop = TestBed.createComponent(NoopConfirmDialogComponent);
-      component.cluster = fakeDigitaloceanCluster();
-      component.projectID = fakeProject().id;
-      component.constraints = fakeConstraints();
-      component.isClusterRunning = true;
-      fixture.detectChanges();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    fixture = TestBed.createComponent(ConstraintsComponent);
+    component = fixture.componentInstance;
+    noop = TestBed.createComponent(NoopConfirmDialogComponent);
+    component.cluster = fakeDigitaloceanCluster();
+    component.projectID = fakeProject().id;
+    component.constraints = fakeConstraints();
+    component.isClusterRunning = true;
+    fixture.detectChanges();
+  }));
 
-  it(
-    'should create the constraints component',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should create the constraints component', waitForAsync(() => {
+    expect(component).toBeTruthy();
+  }));
 
   it('should filter constraints by constraint template', fakeAsync(() => {
     component.constraintTemplateFilter = fakeConstraintTemplates()[0].spec.crd.spec.names.kind;

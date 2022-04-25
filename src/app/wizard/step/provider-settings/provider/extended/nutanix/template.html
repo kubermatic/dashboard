@@ -27,4 +27,28 @@ limitations under the License.
                filterBy="name">
     <div *option="let project">{{project.name}}</div>
   </km-combobox>
+
+  <mat-card-header class="km-no-padding">
+    <mat-card-title>Prism Element Storage Class Settings</mat-card-title>
+  </mat-card-header>
+  <mat-form-field fxFlex>
+    <mat-label>Storage Container</mat-label>
+    <input matInput
+           [formControlName]="Controls.StorageContainer"
+           [name]="Controls.StorageContainer"
+           type="text"
+           autocomplete="off">
+    <mat-hint>Leave empty to use SelfServiceContainer.</mat-hint>
+  </mat-form-field>
+  <mat-form-field fxFlex>
+    <mat-label>Fstype</mat-label>
+    <mat-select [formControlName]="Controls.Fstype"
+                disableOptionCentering>
+      <mat-option *ngFor="let fstype of fstypes"
+                  [value]="fstype">
+        {{fstype}}
+      </mat-option>
+    </mat-select>
+    <mat-hint>Leave empty to use xfs.</mat-hint>
+  </mat-form-field>
 </form>

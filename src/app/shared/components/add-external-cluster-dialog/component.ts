@@ -19,8 +19,8 @@ import {MatStepper} from '@angular/material/stepper';
 import {filter, take, takeUntil} from 'rxjs/operators';
 import {NotificationService} from '@core/services/notification';
 import {Router} from '@angular/router';
-import {ExternalClusterProvider} from '@shared/entity/external-cluster';
-import {Subject} from 'rxjs';
+import {ExternalCluster, ExternalClusterProvider} from '@shared/entity/external-cluster';
+import {Observable, Subject} from 'rxjs';
 
 export enum Step {
   Provider = 'Pick Provider',
@@ -39,7 +39,6 @@ export class AddExternalClusterDialogComponent implements OnInit, OnDestroy {
   readonly provider = ExternalClusterProvider;
   @ViewChild('stepper', {static: true}) private readonly _stepper: MatStepper;
   private readonly _unsubscribe = new Subject<void>();
-  private _creating = false;
 
   constructor(
     private readonly _matDialogRef: MatDialogRef<AddExternalClusterDialogComponent>,
@@ -68,16 +67,18 @@ export class AddExternalClusterDialogComponent implements OnInit, OnDestroy {
     this.externalClusterService.reset();
   }
 
+  get label(): string {
+    return this.externalClusterService.provider === ExternalClusterProvider.Custom
+      ? 'Add External Cluster'
+      : 'Import Cluster';
+  }
+
   get active(): string {
     return this.steps[this._stepper.selectedIndex];
   }
 
   get last(): boolean {
     return this._stepper.selectedIndex === this.steps.length - 1;
-  }
-
-  get creating(): boolean {
-    return this._creating;
   }
 
   get invalid(): boolean {
@@ -93,27 +94,23 @@ export class AddExternalClusterDialogComponent implements OnInit, OnDestroy {
     }
   }
 
+  getObservable(): Observable<ExternalCluster> {
+    return this.externalClusterService
+      .import(this.projectId, this.externalClusterService.externalCluster)
+      .pipe(take(1));
+  }
+
+  onNext(cluster: ExternalCluster): void {
+    this._matDialogRef.close();
+    this._notificationService.success(`Added the ${cluster.name} cluster`);
+    this._router.navigate([`/projects/${this.projectId}/clusters/external/${cluster.id}`]);
+  }
+
   isAvailable(step: Step): boolean {
     return this.steps.indexOf(step) > -1;
   }
 
   next(): void {
     this._stepper.next();
-  }
-
-  add(): void {
-    this._creating = true;
-    this.externalClusterService
-      .import(this.projectId, this.externalClusterService.externalCluster)
-      .pipe(take(1))
-      .subscribe({
-        next: cluster => {
-          this._creating = false;
-          this._matDialogRef.close();
-          this._notificationService.success(`Added the ${cluster.name} cluster`);
-          this._router.navigate([`/projects/${this.projectId}/clusters/external/${cluster.id}`]);
-        },
-        error: () => (this._creating = false),
-      });
   }
 }

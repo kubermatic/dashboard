@@ -24,8 +24,6 @@ import {SharedModule} from '@shared/module';
 import {CookieService} from 'ngx-cookie-service';
 import {FrontpageComponent} from './component';
 
-const modules: any[] = [BrowserModule, RouterTestingModule, BrowserAnimationsModule, SharedModule];
-
 describe('FrontpageComponent', () => {
   let fixture: ComponentFixture<FrontpageComponent>;
   let component: FrontpageComponent;
@@ -34,7 +32,7 @@ describe('FrontpageComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, RouterTestingModule, BrowserAnimationsModule, SharedModule],
       declarations: [FrontpageComponent],
       providers: [{provide: Router, useClass: RouterStub}, {provide: Auth, useClass: AuthMockService}, CookieService],
       teardown: {destroyAfterEach: false},
@@ -49,12 +47,9 @@ describe('FrontpageComponent', () => {
     router = fixture.debugElement.injector.get(Router);
   });
 
-  it(
-    'should create the cmp',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should create the cmp', waitForAsync(() => {
+    expect(component).toBeTruthy();
+  }));
 
   it('should navigate to clusters list if authenticated', () => {
     const spyNavigate = jest.spyOn(router, 'navigate');

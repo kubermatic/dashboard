@@ -27,23 +27,33 @@ import {RestoreSnapshotDialogComponent} from '@app/backup/list/snapshot/restore-
 import {SharedModule} from '@shared/module';
 import {BackupRoutingModule} from './routing';
 
-const components: any[] = [
-  BackupListComponent,
-  BackupsComponent,
-  AutomaticBackupListComponent,
-  AutomaticBackupDetailsComponent,
-  AddAutomaticBackupDialogComponent,
-  SnapshotListComponent,
-  AddSnapshotDialogComponent,
-  DeleteSnapshotDialogComponent,
-  RestoreSnapshotDialogComponent,
-  SnapshotDetailsComponent,
-  RestoreListComponent,
-];
-
 @NgModule({
   imports: [SharedModule, BackupRoutingModule],
-  declarations: [...components],
-  exports: [...components],
+  declarations: [
+    BackupListComponent,
+    BackupsComponent,
+    AutomaticBackupListComponent,
+    AutomaticBackupDetailsComponent,
+    AddAutomaticBackupDialogComponent,
+    SnapshotListComponent,
+    AddSnapshotDialogComponent,
+    DeleteSnapshotDialogComponent,
+    RestoreSnapshotDialogComponent,
+    SnapshotDetailsComponent,
+    RestoreListComponent,
+  ],
+  exports: [
+    BackupListComponent,
+    BackupsComponent,
+    AutomaticBackupListComponent,
+    AutomaticBackupDetailsComponent,
+    AddAutomaticBackupDialogComponent,
+    SnapshotListComponent,
+    AddSnapshotDialogComponent,
+    DeleteSnapshotDialogComponent,
+    RestoreSnapshotDialogComponent,
+    SnapshotDetailsComponent,
+    RestoreListComponent,
+  ],
 })
 export class BackupModule {}

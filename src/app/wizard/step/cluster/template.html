@@ -119,6 +119,16 @@ limitations under the License.
             Invalid pattern. Use CIDR notation, i.e. 192.168.1.0/24.
           </mat-error>
         </mat-form-field>
+        <mat-form-field *ngIf="isAllowedIPRangeSupported()">
+          <mat-label>Allowed IP Range for NodePorts</mat-label>
+          <input matInput
+                 [formControlName]="Controls.AllowedIPRange"
+                 type="text"
+                 autocomplete="off">
+          <mat-error *ngIf="form.get(Controls.AllowedIPRange).hasError('pattern')">
+            Invalid pattern. Use CIDR notation, i.e. 192.168.1.0/24.
+          </mat-error>
+        </mat-form-field>
         <mat-checkbox *ngIf="isKonnectivityEnabled"
                       [formControlName]="Controls.Konnectivity">
           Konnectivity
@@ -263,21 +273,21 @@ limitations under the License.
                  matTooltip="OPA Integration is {{form.get(Controls.OPAIntegration).value ? 'enforced' : 'disabled'}} by your admin."></i>
             </mat-checkbox>
 
-            <mat-checkbox [formControlName]="Controls.MLALogging"
-                          *ngIf="isMLAEnabled()">
-              User Cluster Logging
-              <i *ngIf="isEnforced(Controls.MLALogging)"
-                 class="km-icon-info km-pointer"
-                 matTooltip="User Cluster Logging is enforced by your admin."></i>
-            </mat-checkbox>
+            <ng-container *ngIf="isMLAEnabled">
+              <mat-checkbox [formControlName]="Controls.MLALogging">
+                User Cluster Logging
+                <i *ngIf="isEnforced(Controls.MLALogging)"
+                   class="km-icon-info km-pointer"
+                   matTooltip="User Cluster Logging is enforced by your admin."></i>
+              </mat-checkbox>
 
-            <mat-checkbox [formControlName]="Controls.MLAMonitoring"
-                          *ngIf="isMLAEnabled()">
-              User Cluster Monitoring
-              <i *ngIf="isEnforced(Controls.MLAMonitoring)"
-                 class="km-icon-info km-pointer"
-                 matTooltip="User Cluster Monitoring is enforced by your admin."></i>
-            </mat-checkbox>
+              <mat-checkbox [formControlName]="Controls.MLAMonitoring">
+                User Cluster Monitoring
+                <i *ngIf="isEnforced(Controls.MLAMonitoring)"
+                   class="km-icon-info km-pointer"
+                   matTooltip="User Cluster Monitoring is enforced by your admin."></i>
+              </mat-checkbox>
+            </ng-container>
 
             <mat-checkbox [formControlName]="Controls.OperatingSystemManager">
               Operating System Manager

@@ -36,6 +36,7 @@ export class ClusterSummaryComponent {
   @Input() datacenter: Datacenter;
   @Input() seedSettings: SeedSettings;
   @Input() flipLayout = false;
+  @Input() showNumbering = false;
 
   @Input()
   set sshKeys(keys: string[]) {
@@ -66,7 +67,7 @@ export class ClusterSummaryComponent {
   }
 
   get isMLAEnabled(): boolean {
-    return !!this.seedSettings && !!this.seedSettings.mla && !!this.seedSettings.mla.userClusterMLAEnabled;
+    return this.seedSettings?.mla?.user_cluster_mla_enabled;
   }
 
   get hasIPLeft(): boolean {

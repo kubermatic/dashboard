@@ -143,8 +143,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'nodes', Permission.Delete);
   }
 
-  deleteNodeDialog(node: Node, event: Event): void {
-    event.stopPropagation();
+  deleteNodeDialog(node: Node): void {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Delete Node',

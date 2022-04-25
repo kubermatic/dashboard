@@ -30,6 +30,10 @@ export enum Controls {
   Password = 'password',
   ProxyURL = 'proxyURL',
   ClusterName = 'clusterName',
+  PrismElementUsername = 'prismElementUsername',
+  PrismElementPassword = 'prismElementPassword',
+  PrismElementEndpoint = 'prismElementEndpoint',
+  PrismElementPort = 'prismElementPort',
 }
 
 enum ClusterState {
@@ -78,16 +82,17 @@ export class NutanixProviderBasicComponent extends BaseFormValidator implements 
       [Controls.Password]: this._builder.control('', Validators.required),
       [Controls.ProxyURL]: this._builder.control(''),
       [Controls.ClusterName]: this._builder.control('', Validators.required),
+      [Controls.PrismElementUsername]: this._builder.control('', Validators.required),
+      [Controls.PrismElementPassword]: this._builder.control('', Validators.required),
+      [Controls.PrismElementEndpoint]: this._builder.control('', Validators.required),
+      [Controls.PrismElementPort]: this._builder.control(undefined),
     });
 
     this.form.valueChanges
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.NUTANIX))
-      .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ =>
-        this._presets.enablePresets(
-          Object.values(this._clusterSpecService.cluster.spec.cloud.nutanix).every(value => !value)
-        )
+      .subscribe(() =>
+        this._presets.enablePresets(NutanixCloudSpec.isEmpty(this._clusterSpecService.cluster.spec.cloud.nutanix))
       );
 
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset =>
@@ -100,7 +105,11 @@ export class NutanixProviderBasicComponent extends BaseFormValidator implements 
     merge(
       this.form.get(Controls.Username).valueChanges,
       this.form.get(Controls.Password).valueChanges,
-      this.form.get(Controls.ProxyURL).valueChanges
+      this.form.get(Controls.ProxyURL).valueChanges,
+      this.form.get(Controls.PrismElementUsername).valueChanges,
+      this.form.get(Controls.PrismElementPassword).valueChanges,
+      this.form.get(Controls.PrismElementEndpoint).valueChanges,
+      this.form.get(Controls.PrismElementPort).valueChanges
     )
       .pipe(distinctUntilChanged())
       .pipe(takeUntil(this._unsubscribe))
@@ -202,6 +211,12 @@ export class NutanixProviderBasicComponent extends BaseFormValidator implements 
             username: this.form.get(Controls.Username).value,
             password: this.form.get(Controls.Password).value,
             proxyURL: this.form.get(Controls.ProxyURL).value,
+            csi: {
+              username: this.form.get(Controls.PrismElementUsername).value,
+              password: this.form.get(Controls.PrismElementPassword).value,
+              endpoint: this.form.get(Controls.PrismElementEndpoint).value,
+              port: this.form.get(Controls.PrismElementPort).value,
+            },
           } as NutanixCloudSpec,
         } as CloudSpec,
       } as ClusterSpec,

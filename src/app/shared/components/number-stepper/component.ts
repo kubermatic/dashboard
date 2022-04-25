@@ -118,6 +118,9 @@ export class NumberStepperComponent implements AfterViewInit, OnDestroy, Control
     if (!Number.isNaN(parsed) && parsed !== null && parsed !== undefined) {
       this._value = this.type === 'decimal' ? Number.parseFloat(parsed) : Number.parseInt(parsed);
       this._onChange(val);
+    } else if (!parsed) {
+      this._value = parsed;
+      this._onChange(val);
     }
   }
 

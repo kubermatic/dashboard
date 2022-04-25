@@ -39,6 +39,7 @@ limitations under the License.
                        hint="Maximum price you are willing to pay per instance hour. Your instance runs when your maximum price is greater than the Spot Instance price."
                        type="decimal"
                        min="0.0001"
+                       [required]="isSpotInstance"
                        step="0.01">
     </km-number-stepper>
 

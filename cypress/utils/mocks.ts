@@ -40,6 +40,7 @@ export class Mocks {
       itemsPerPage: 5,
       lastSeenChangelogVersion: 'v9.0.0',
       selectedProjectID: '',
+      selectProjectTableView: true,
     },
   };
 
@@ -115,20 +116,20 @@ export class Mocks {
   };
 
   private static _defaults: Mock[] = [
-    {m: RequestType.GET, p: Endpoint.CurrentUser, r: Mocks.currentUser},
+    // {m: RequestType.GET, p: Endpoint.CurrentUser, r: Mocks.currentUser},
     {m: RequestType.GET, p: Endpoint.Administrators, r: Mocks.administrators},
     {m: RequestType.POST, p: Endpoint.Administrators, r: Mocks.defaultAdmin},
     {m: RequestType.GET, p: Endpoint.AdminSettings, r: Mocks.adminSettings},
-    {m: RequestType.GET, p: Endpoint.Seeds, r: ['test-seed']},
+    // {m: RequestType.GET, p: Endpoint.Seeds, r: ['test-seed']},
     {m: RequestType.GET, p: Endpoint.SeedSettings, r: {fixture: 'seed-settings.json'}},
-    {m: RequestType.GET, p: Endpoint.Datacenters, r: {fixture: 'datacenters.json'}},
+    // {m: RequestType.GET, p: Endpoint.Datacenters, r: {fixture: 'datacenters.json'}},
     {m: RequestType.GET, p: Endpoint.Presets, r: {fixture: 'preset.json'}},
     {m: RequestType.GET, p: Endpoint.CustomLinks, r: []},
     {m: RequestType.GET, p: Endpoint.Addons, r: []},
     {m: RequestType.GET, p: Endpoint.AddonConfigs, r: []},
     {m: RequestType.GET, p: Endpoint.SystemLabels, r: {}},
-    {m: RequestType.POST, p: Endpoint.Projects, r: {fixture: 'project.json'}},
-    {m: RequestType.GET, p: Endpoint.Projects, r: {fixture: 'projects.json'}},
+    // {m: RequestType.POST, p: Endpoint.Projects, r: {fixture: 'project.json'}},
+    // {m: RequestType.GET, p: Endpoint.Projects, r: {fixture: 'projects.json'}},
     {m: RequestType.GET, p: Endpoint.Project, r: {fixture: 'project.json'}},
     {m: RequestType.GET, p: Endpoint.ExternalClusters, r: []},
     {m: RequestType.POST, p: Endpoint.ExternalClusters, r: {fixture: 'external-cluster.json'}},
@@ -155,15 +156,6 @@ export class Mocks {
     {m: RequestType.POST, p: Endpoint.ClusterTemplates, r: {}},
     {m: RequestType.GET, p: Endpoint.ClusterTemplates, r: {fixture: 'cluster-templates.json'}},
     {m: RequestType.POST, p: Endpoint.ClusterTemplateInstances, r: {}},
-    {m: RequestType.POST, p: Endpoint.Members, r: {fixture: 'member.json'}},
-    {m: RequestType.GET, p: Endpoint.Members, r: {fixture: 'members.json'}},
-    {m: RequestType.POST, p: Endpoint.ServiceAccounts, r: {fixture: 'service-account.json'}},
-    {m: RequestType.GET, p: Endpoint.ServiceAccount, r: {fixture: 'service-account.json'}},
-    {m: RequestType.GET, p: Endpoint.ServiceAccounts, r: {fixture: 'service-accounts.json'}},
-    {m: RequestType.POST, p: Endpoint.ServiceAccountTokens, r: {fixture: 'token.json'}},
-    {m: RequestType.GET, p: Endpoint.ServiceAccountTokens, r: {fixture: 'tokens.json'}},
-    {m: RequestType.POST, p: Endpoint.SSHKeys, r: {fixture: 'ssh-key.json'}},
-    {m: RequestType.GET, p: Endpoint.SSHKeys, r: {fixture: 'ssh-keys.json'}},
     {m: RequestType.GET, p: Endpoint.EtcdRestores, r: []},
     {m: RequestType.GET, p: Endpoint.AlertmanagerConfig, r: {spec: {config: ''}}},
     {m: RequestType.GET, p: Endpoint.AdmissionPlugins, r: []},
@@ -175,6 +167,7 @@ export class Mocks {
     {m: RequestType.GET, p: Endpoint.Anexia.VLANs, r: {fixture: 'anexia/vlans.json'}},
     {m: RequestType.GET, p: Endpoint.AWS.Sizes, r: {fixture: 'aws/sizes.json'}},
     {m: RequestType.GET, p: Endpoint.AWS.Subnets, r: {fixture: 'aws/subnets.json'}},
+    {m: RequestType.GET, p: Endpoint.Nutanix.Subnets, r: {fixture: 'nutanix/subnets.json'}},
     {m: RequestType.GET, p: Endpoint.Azure.Sizes, r: {fixture: 'azure/sizes.json'}},
     {m: RequestType.GET, p: Endpoint.Digitalocean.Sizes, r: {fixture: 'digitalocean/sizes.json'}},
     {m: RequestType.GET, p: Endpoint.GCP.DiskTypes, r: {fixture: 'gcp/disktypes.json'}},
@@ -207,9 +200,9 @@ export class Mocks {
   }
 
   private static _registerProviderMocks(p?: Provider): void {
-    this._intercept(RequestType.POST, Endpoint.Clusters, p ? {fixture: `${p}/cluster.json`} : {});
-    this._intercept(RequestType.GET, Endpoint.Clusters, p ? {fixture: `${p}/clusters.json`} : []);
-    this._intercept(RequestType.GET, Endpoint.Cluster, p ? {fixture: `${p}/cluster.json`} : {});
+    // this._intercept(RequestType.POST, Endpoint.Clusters, p ? {fixture: `${p}/cluster.json`} : {});
+    // this._intercept(RequestType.GET, Endpoint.Clusters, p ? {fixture: `${p}/clusters.json`} : []);
+    // this._intercept(RequestType.GET, Endpoint.Cluster, p ? {fixture: `${p}/cluster.json`} : {});
     this._intercept(RequestType.GET, Endpoint.MachineDeployments, p ? {fixture: `${p}/machinedeployments.json`} : []);
     this._intercept(RequestType.GET, Endpoint.MachineDeployment, p ? {fixture: `${p}/machinedeployment.json`} : {});
   }

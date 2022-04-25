@@ -27,14 +27,6 @@ export class HistoryService {
 
   constructor(private readonly _injector: Injector) {}
 
-  get previousURL(): string {
-    return this._previousStateUrl;
-  }
-
-  get currentURL(): string {
-    return this._currentStateUrl;
-  }
-
   init(): void {
     if (!this._router) {
       this._router = this._injector.get(Router);

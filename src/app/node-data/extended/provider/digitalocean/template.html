@@ -29,10 +29,11 @@ limitations under the License.
                 [formControlName]="Controls.IPv6"
                 fxFlex>IPv6</mat-checkbox>
 
-  <km-tag-list class="tag-list"
-               title="Provider Tags"
-               [tags]="tags"
-               (tagsChange)="onTagsChange($event)"
-               [formControlName]="Controls.Tags"
-               fxFlex></km-tag-list>
+  <km-chip-list class="tag-list"
+                title="Provider Tags"
+                [tags]="tags"
+                (onChange)="onTagsChange($event)"
+                [formControlName]="Controls.Tags"
+                placeholder="Add tag..."
+                fxFlex></km-chip-list>
 </form>

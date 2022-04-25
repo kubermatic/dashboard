@@ -54,56 +54,52 @@ import {FeatureGateService} from '@core/services/feature-gate';
 import {FeatureGatesMockService} from '@test/services/feature-gate-mock';
 import {asyncData} from '@test/services/cluster-mock';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
-
 describe('EditClusterComponent', () => {
   let fixture: ComponentFixture<EditClusterComponent>;
   let component: EditClusterComponent;
-  let editClusterSpy;
+  let editClusterSpy: jest.Mock;
 
-  beforeEach(
-    waitForAsync(() => {
-      const clusterServiceMock = {
-        patch: jest.fn(),
-        changeProviderSettingsPatch: jest.fn(),
-        providerSettingsPatchChanges$: new EventEmitter<ProviderSettingsPatch>(),
-        onClusterUpdate: new Subject<void>(),
-        getAdmissionPlugins: jest.fn(),
-      };
-      editClusterSpy = clusterServiceMock.patch.mockReturnValue(asyncData(fakeDigitaloceanCluster()));
-      clusterServiceMock.getAdmissionPlugins.mockReturnValue(asyncData([]));
+  beforeEach(waitForAsync(() => {
+    const clusterServiceMock = {
+      patch: jest.fn(),
+      changeProviderSettingsPatch: jest.fn(),
+      providerSettingsPatchChanges$: new EventEmitter<ProviderSettingsPatch>(),
+      onClusterUpdate: new Subject<void>(),
+      getAdmissionPlugins: jest.fn(),
+    };
+    editClusterSpy = clusterServiceMock.patch.mockReturnValue(asyncData(fakeDigitaloceanCluster()));
+    clusterServiceMock.getAdmissionPlugins.mockReturnValue(asyncData([]));
 
-      TestBed.configureTestingModule({
-        imports: [...modules],
-        declarations: [
-          EditClusterComponent,
-          EditProviderSettingsComponent,
-          EventRateLimitComponent,
-          AWSProviderSettingsComponent,
-          DigitaloceanProviderSettingsComponent,
-          HetznerProviderSettingsComponent,
-          OpenstackProviderSettingsComponent,
-          VSphereProviderSettingsComponent,
-          AzureProviderSettingsComponent,
-          EquinixProviderSettingsComponent,
-          GCPProviderSettingsComponent,
-          KubevirtProviderSettingsComponent,
-          AlibabaProviderSettingsComponent,
-        ],
-        providers: [
-          {provide: DatacenterService, useClass: DatacenterMockService},
-          {provide: MatDialogRef, useClass: MatDialogRefMock},
-          {provide: ClusterService, useValue: clusterServiceMock},
-          {provide: AppConfigService, useClass: AppConfigMockService},
-          {provide: UserService, useClass: UserMockService},
-          {provide: SettingsService, useClass: SettingsMockService},
-          {provide: FeatureGateService, useClass: FeatureGatesMockService},
-          {provide: Router, useClass: RouterStub},
-        ],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
+    TestBed.configureTestingModule({
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],
+      declarations: [
+        EditClusterComponent,
+        EditProviderSettingsComponent,
+        EventRateLimitComponent,
+        AWSProviderSettingsComponent,
+        DigitaloceanProviderSettingsComponent,
+        HetznerProviderSettingsComponent,
+        OpenstackProviderSettingsComponent,
+        VSphereProviderSettingsComponent,
+        AzureProviderSettingsComponent,
+        EquinixProviderSettingsComponent,
+        GCPProviderSettingsComponent,
+        KubevirtProviderSettingsComponent,
+        AlibabaProviderSettingsComponent,
+      ],
+      providers: [
+        {provide: DatacenterService, useClass: DatacenterMockService},
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+        {provide: ClusterService, useValue: clusterServiceMock},
+        {provide: AppConfigService, useClass: AppConfigMockService},
+        {provide: UserService, useClass: UserMockService},
+        {provide: SettingsService, useClass: SettingsMockService},
+        {provide: FeatureGateService, useClass: FeatureGatesMockService},
+        {provide: Router, useClass: RouterStub},
+      ],
+      teardown: {destroyAfterEach: false},
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(EditClusterComponent);

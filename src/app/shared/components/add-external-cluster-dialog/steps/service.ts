@@ -13,19 +13,15 @@
 // limitations under the License.
 
 import {Injectable} from '@angular/core';
-import {
-  AKSCluster,
-  EKSCluster,
-  ExternalClusterModel,
-  ExternalClusterProvider,
-  GKECluster,
-} from '@shared/entity/external-cluster';
+import {ExternalCluster, ExternalClusterModel, ExternalClusterProvider} from '@shared/entity/external-cluster';
 import {BehaviorSubject, Observable, of} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {environment} from '@environments/environment';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {PresetList} from '@shared/entity/preset';
-import {Cluster} from '@shared/entity/cluster';
+import {AKSCluster} from '@app/shared/entity/provider/aks';
+import {EKSCluster} from '@app/shared/entity/provider/eks';
+import {GKECluster} from '@app/shared/entity/provider/gke';
 
 @Injectable({providedIn: 'root'})
 export class ExternalClusterService {
@@ -43,10 +39,10 @@ export class ExternalClusterService {
 
   constructor(private readonly _http: HttpClient) {}
 
-  import(projectID: string, model: ExternalClusterModel): Observable<Cluster> {
+  import(projectID: string, model: ExternalClusterModel): Observable<ExternalCluster> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters`;
     const headers = this._preset ? new HttpHeaders({Credential: this._preset}) : undefined;
-    return this._http.post<Cluster>(url, model, {headers: headers});
+    return this._http.post<ExternalCluster>(url, model, {headers: headers});
   }
 
   getPresets(provider: ExternalClusterProvider): Observable<PresetList> {

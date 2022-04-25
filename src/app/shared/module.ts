@@ -25,7 +25,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatOptionModule, MatRippleModule} from '@angular/material/core';
-import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule} from '@angular/material/dialog';
+import {MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS} from '@angular/material/dialog';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -48,17 +48,32 @@ import {MatTableModule} from '@angular/material/table';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {OpenstackCredentialsTypeService} from '@app/wizard/step/provider-settings/provider/extended/openstack/service';
 import {NotificationComponent} from '@core/components/notification/component';
 import {AddClusterFromTemplateDialogComponent} from '@shared/components/add-cluster-from-template-dialog/component';
 import {SelectClusterTemplateComponent} from '@shared/components/add-cluster-from-template-dialog/steps/template/component';
+import {AddExternalClusterDialogComponent} from '@shared/components/add-external-cluster-dialog/component';
+import {ClusterStepComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/component';
+import {AKSClusterComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/aks/component';
+import {EKSClusterComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/eks/component';
+import {GKEClusterComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/gke/component';
+import {CredentialsStepComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/component';
+import {CredentialsPresetsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/preset/component';
+import {AKSCredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/aks/component';
+import {CustomCredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/custom/component';
+import {EKSCredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/eks/component';
+import {GKECredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/gke/component';
+import {ProviderStepComponent} from '@shared/components/add-external-cluster-dialog/steps/provider/component';
 import {AutocompleteComponent} from '@shared/components/autocomplete/component';
 import {CIDRFormComponent} from '@shared/components/cidr-form/component';
 import {ClusterFromTemplateComponent} from '@shared/components/cluster-from-template/content/component';
 import {ClusterFromTemplateDialogComponent} from '@shared/components/cluster-from-template/dialog/component';
 import {ClusterSummaryComponent} from '@shared/components/cluster-summary/component';
 import {EventCardComponent} from '@shared/components/event-card/component';
-import {NumberStepperComponent} from '@shared/components/number-stepper/component';
 import {EventRateLimitComponent} from '@shared/components/event-rate-limit/component';
+import {ExpansionPanelComponent} from '@shared/components/expansion-panel/component';
+import {NumberStepperComponent} from '@shared/components/number-stepper/component';
+import {PropertyHealthComponent} from '@shared/components/property-health/component';
 import {SaveClusterTemplateDialogComponent} from '@shared/components/save-cluster-template/component';
 import {TabCardComponent} from '@shared/components/tab-card/component';
 import {DynamicTabComponent} from '@shared/components/tab-card/dynamic-tab/component';
@@ -87,6 +102,9 @@ import {LabelFormComponent} from './components/label-form/component';
 import {LabelsComponent} from './components/labels/component';
 import {LoaderComponent} from './components/loader/component';
 import {MachineNetworkComponent} from './components/machine-networks-new/component';
+import {OpenstackApplicationCredentialsComponent} from './components/openstack-credentials/application/component';
+import {OpenstackCredentialsComponent} from './components/openstack-credentials/component';
+import {OpenstackDefaultCredentialsComponent} from './components/openstack-credentials/default/component';
 import {PropertyBooleanComponent} from './components/property-boolean/component';
 import {PropertyUsageComponent} from './components/property-usage/component';
 import {PropertyComponent} from './components/property/component';
@@ -94,28 +112,15 @@ import {RelativeTimeComponent} from './components/relativetime/component';
 import {SearchFieldComponent} from './components/search-field/component';
 import {SpinnerWithConfirmationComponent} from './components/spinner-with-confirmation/component';
 import {SSHKeyListComponent} from './components/ssh-key-list/component';
-import {TagListComponent} from './components/tag-list/component';
+import {ChipListComponent} from './components/chip-list/component';
 import {TaintFormComponent} from './components/taint-form/component';
 import {TaintsComponent} from './components/taints/component';
 import {AutofocusDirective} from './directives/autofocus/directive';
 import {ThrottleClickDirective} from './directives/throttle-click';
 import {RelativeTimePipe} from './pipes/relativetime';
-import {AddExternalClusterDialogComponent} from '@shared/components/add-external-cluster-dialog/component';
-import {ProviderStepComponent} from '@shared/components/add-external-cluster-dialog/steps/provider/component';
-import {CredentialsStepComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/component';
-import {CustomCredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/custom/component';
-import {GKECredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/gke/component';
-import {GKEClusterComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/gke/component';
-import {ClusterStepComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/component';
-import {CredentialsPresetsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/preset/component';
-import {EKSCredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/eks/component';
-import {EKSClusterComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/eks/component';
-import {AKSCredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/aks/component';
-import {AKSClusterComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/aks/component';
-import {ExpansionPanelComponent} from '@shared/components/expansion-panel/component';
-import {PropertyHealthComponent} from '@shared/components/property-health/component';
+import {ButtonComponent} from '@shared/components/button/component';
 
-const modules: any[] = [
+const modules = [
   CommonModule,
   FormsModule,
   ReactiveFormsModule,
@@ -159,7 +164,7 @@ const modules: any[] = [
   MonacoEditorModule,
 ];
 
-const components: any[] = [
+const components = [
   PropertyBooleanComponent,
   DialogTitleComponent,
   PropertyComponent,
@@ -176,7 +181,7 @@ const components: any[] = [
   AddonsListComponent,
   SpinnerWithConfirmationComponent,
   InitialsCircleComponent,
-  TagListComponent,
+  ChipListComponent,
   NotificationComponent,
   PropertyUsageComponent,
   FilteredComboboxComponent,
@@ -220,9 +225,13 @@ const components: any[] = [
   PropertyHealthComponent,
   AddClusterFromTemplateDialogComponent,
   SelectClusterTemplateComponent,
+  OpenstackCredentialsComponent,
+  OpenstackDefaultCredentialsComponent,
+  OpenstackApplicationCredentialsComponent,
+  ButtonComponent,
 ];
 
-const directives: any[] = [AutofocusDirective, ThrottleClickDirective, OptionDirective];
+const directives = [AutofocusDirective, ThrottleClickDirective, OptionDirective];
 
 @NgModule({
   imports: [...modules],
@@ -236,6 +245,7 @@ const directives: any[] = [AutofocusDirective, ThrottleClickDirective, OptionDir
         hasBackdrop: true,
       },
     },
+    OpenstackCredentialsTypeService,
   ],
   exports: [...modules, ...components, ...directives],
 })

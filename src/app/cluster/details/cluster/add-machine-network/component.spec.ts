@@ -29,27 +29,23 @@ import {NotificationService} from '@core/services/notification';
 import {SharedModule} from '@shared/module';
 import {AddMachineNetworkComponent} from './component';
 
-const modules: any[] = [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule];
-
 describe('AddMachineNetworkComponent', () => {
   let component: AddMachineNetworkComponent;
   let fixture: ComponentFixture<AddMachineNetworkComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [...modules],
-        declarations: [AddMachineNetworkComponent, MachineNetworksComponent],
-        providers: [
-          WizardService,
-          {provide: ClusterService, useClass: ClusterMockService},
-          {provide: MatDialogRef, useClass: MatDialogRefMock},
-          NotificationService,
-        ],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
+      declarations: [AddMachineNetworkComponent, MachineNetworksComponent],
+      providers: [
+        WizardService,
+        {provide: ClusterService, useClass: ClusterMockService},
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+        NotificationService,
+      ],
+      teardown: {destroyAfterEach: false},
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AddMachineNetworkComponent);

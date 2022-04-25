@@ -93,7 +93,7 @@ limitations under the License.
             </mat-checkbox>
             <mat-checkbox [(ngModel)]="settings.mlaOptions.loggingEnforced"
                           (change)="onSettingsChange()"
-                          fxFlexAlign=" center">Enforce
+                          fxFlexAlign=" center">Enforce Default
             </mat-checkbox>
             <km-spinner-with-confirmation [isSaved]="isMLALoggingEqual()"></km-spinner-with-confirmation>
           </div>
@@ -115,7 +115,7 @@ limitations under the License.
             </mat-checkbox>
             <mat-checkbox [(ngModel)]="settings.mlaOptions.monitoringEnforced"
                           (change)="onSettingsChange()"
-                          fxFlexAlign=" center">Enforce
+                          fxFlexAlign=" center">Enforce Default
             </mat-checkbox>
             <km-spinner-with-confirmation [isSaved]="isMLAMonitoringEqual()"></km-spinner-with-confirmation>
           </div>
@@ -203,7 +203,7 @@ limitations under the License.
                class="entry-label">
             <span>User Projects Limit</span>
             <div class="km-icon-info km-pointer"
-                 matTooltip="Set limit to zero to allow unlimited project creation for users. It does not affect administrators."></div>
+                 matTooltip="Limit the amount of projects users are allowed to create. Set the limit to 0 to allow unlimited project creation for users. This setting does not affect administrators."></div>
           </div>
           <div fxLayout="row wrap"
                fxLayoutGap="16px">
@@ -228,9 +228,9 @@ limitations under the License.
           <div fxFlex="16%"
                fxLayoutAlign=" center"
                class="entry-label">
-            <span>Resource quota</span>
+            <span>Resource Filter</span>
             <div class="km-icon-info km-pointer"
-                 matTooltip="Filters out machine sizes that do not meet specified conditions"></div>
+                 matTooltip="Hides machine sizes that do not meet the specified conditions in wizard and edit dialogs. Set limit to 0 for the respective limit to be disabled."></div>
           </div>
 
           <div fxLayout="row wrap"

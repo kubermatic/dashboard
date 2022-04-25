@@ -24,15 +24,13 @@ data:
 kind: Seed
 apiVersion: kubermatic.k8c.io/v1
 metadata:
-  name: __SEED_NAME__
+  name: "__SEED_NAME__"
   namespace: kubermatic
-  labels:
-    worker-name: "__BUILD_ID__"
 spec:
   country: Germany
   location: Hamburg
   kubeconfig:
-    name: __SEED_NAME__-kubeconfig
+    name: "__SEED_NAME__-kubeconfig"
     namespace: kubermatic
     fieldPath: kubeconfig
   datacenters:
@@ -53,6 +51,13 @@ spec:
       spec:
         aws:
           region: eu-central-1
+    hetzner-hel1:
+      location: Helsinki 1 DC 6
+      country: DE
+      spec:
+        hetzner:
+          datacenter: hel1-dc2
+          network: kubermatic-e2e
     hetzner-nbg1:
       location: Nuremberg 1 DC 3
       country: DE
@@ -65,14 +70,15 @@ spec:
       country: DE
       spec:
         vsphere:
-          endpoint: "https://vcenter.Kubermatic.io"
+          endpoint: "https://vcenter.qa.lab.kubermatic.io"
           datacenter: "dc-1"
-          datastore: "exsi-nas"
+          datastore: "HS-FreeNAS"
           cluster: "cl-1"
           rootPath: "/dc-1/vm/e2e-tests"
           templates:
             ubuntu: "machine-controller-e2e-ubuntu"
             centos: "machine-controller-e2e-centos"
+            coreos: "machine-controller-e2e-coreos"
     azure-westeurope:
       location: "Azure West europe"
       country: NL
@@ -86,14 +92,14 @@ spec:
         gcp:
           region: europe-west3
           zoneSuffixes:
-          - c
+            - c
     packet-ewr1:
       location: "Packet EWR1 (New York)"
       country: US
       spec:
         packet:
           facilities:
-          - ewr1
+            - ewr1
     do-ams3:
       location: Amsterdam
       country: NL
@@ -110,14 +116,10 @@ spec:
       location: Frankfurt
       country: DE
       spec:
-        kubevirt: {}
-    anexia-anx04:
-      country: AT
-      location: Vienna
-      node: { }
-      spec:
-        anexia:
-          locationID: b164595577114876af7662092da89f76
+        kubevirt:
+          dnsConfig:
+            nameservers:
+              - 8.8.8.8
     syseleven-dbl1:
       country: DE
       location: Syseleven - dbl1
@@ -126,8 +128,8 @@ spec:
           authURL: https://api.cbk.cloud.syseleven.net:5000/v3
           availabilityZone: dbl1
           dnsServers:
-          - 37.123.105.116
-          - 37.123.105.117
+            - 37.123.105.116
+            - 37.123.105.117
           enforceFloatingIP: true
           ignoreVolumeAZ: false
           images:
@@ -138,3 +140,31 @@ spec:
             minimumMemory: 0
             minimumVCPUs: 0
           region: dbl
+    nutanix-ger:
+      country: DE
+      location: Hamburg
+      spec:
+        nutanix:
+          endpoint: "__NUTANIX_ENDPOINT__"
+          allowInsecure: true
+          images:
+            centos: machine-controller-e2e-centos
+            ubuntu: machine-controller-e2e-ubuntu
+    dc-to-delete:
+      location: Amsterdam
+      country: NL
+      spec:
+        digitalocean:
+          region: ams3
+    dc-to-update:
+      location: Amsterdam
+      country: NL
+      spec:
+        digitalocean:
+          region: ams3
+    dc-to-patch:
+      location: Amsterdam
+      country: NL
+      spec:
+        digitalocean:
+          region: ams3

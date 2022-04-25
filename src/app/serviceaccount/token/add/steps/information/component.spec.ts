@@ -25,29 +25,25 @@ import {ProjectService} from '@core/services/project';
 import {SharedModule} from '@shared/module';
 import {ServiceAccountTokenInformationStepComponent} from './component';
 
-const modules: any[] = [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule];
-
 describe('ServiceAccountTokenInformationStepComponent', () => {
   let component: ServiceAccountTokenInformationStepComponent;
   let fixture: ComponentFixture<ServiceAccountTokenInformationStepComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [...modules],
-        providers: [
-          {
-            provide: MAT_DIALOG_DATA,
-            useValue: {serviceaccountToken: fakeServiceAccountToken()},
-          },
-          {provide: MatDialogRef, useValue: {}},
-          {provide: Router, useClass: RouterStub},
-          {provide: ProjectService, useClass: ProjectMockService},
-        ],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
+      providers: [
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: {serviceaccountToken: fakeServiceAccountToken()},
+        },
+        {provide: MatDialogRef, useValue: {}},
+        {provide: Router, useClass: RouterStub},
+        {provide: ProjectService, useClass: ProjectMockService},
+      ],
+      teardown: {destroyAfterEach: false},
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ServiceAccountTokenInformationStepComponent);

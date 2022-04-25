@@ -28,15 +28,13 @@ import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
 import {FooterComponent} from './component';
 
-const modules: any[] = [BrowserModule, HttpClientModule, RouterTestingModule, BrowserAnimationsModule, SharedModule];
-
 describe('FooterComponent', () => {
   let fixture: ComponentFixture<FooterComponent>;
   let component: FooterComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, HttpClientModule, RouterTestingModule, BrowserAnimationsModule, SharedModule],
       declarations: [FooterComponent],
       providers: [
         {provide: UserService, useClass: UserMockService},
@@ -53,10 +51,7 @@ describe('FooterComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it(
-    'should initialize',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should initialize', waitForAsync(() => {
+    expect(component).toBeTruthy();
+  }));
 });

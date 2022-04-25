@@ -24,8 +24,6 @@ import {Auth} from '@core/services/auth/service';
 import {SharedModule} from '@shared/module';
 import {PageNotFoundComponent} from './component';
 
-const modules: any[] = [BrowserModule, RouterTestingModule, BrowserAnimationsModule, SharedModule];
-
 describe('PageNotFoundComponent', () => {
   let fixture: ComponentFixture<PageNotFoundComponent>;
   let component: PageNotFoundComponent;
@@ -34,7 +32,7 @@ describe('PageNotFoundComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, RouterTestingModule, BrowserAnimationsModule, SharedModule],
       declarations: [PageNotFoundComponent],
       providers: [
         {provide: Router, useClass: RouterStub},
@@ -52,12 +50,9 @@ describe('PageNotFoundComponent', () => {
     router = fixture.debugElement.injector.get(Router);
   });
 
-  it(
-    'should create the cmp',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should create the cmp', waitForAsync(() => {
+    expect(component).toBeTruthy();
+  }));
 
   it('should navigate to clusters list', () => {
     const spyNavigate = jest.spyOn(router, 'navigate');

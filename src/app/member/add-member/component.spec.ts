@@ -27,67 +27,58 @@ import {AddMemberComponent} from './component';
 import {MemberService} from '@core/services/member';
 import {MemberServiceMock} from '@test/services/member-mock';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
-
 describe('AddProjectComponent', () => {
   let fixture: ComponentFixture<AddMemberComponent>;
   let component: AddMemberComponent;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [...modules],
-        declarations: [AddMemberComponent],
-        providers: [
-          {provide: MatDialogRef, useClass: MatDialogRefMock},
-          {provide: ProjectService, useClass: ProjectMockService},
-          {provide: MemberService, useClass: MemberServiceMock},
-          NotificationService,
-        ],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
+      declarations: [AddMemberComponent],
+      providers: [
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+        {provide: ProjectService, useClass: ProjectMockService},
+        {provide: MemberService, useClass: MemberServiceMock},
+        NotificationService,
+      ],
+      teardown: {destroyAfterEach: false},
+    }).compileComponents();
+  }));
 
-  beforeEach(
-    waitForAsync(() => {
-      fixture = TestBed.createComponent(AddMemberComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    fixture = TestBed.createComponent(AddMemberComponent);
+    component = fixture.componentInstance;
+    component.project = fakeProject();
+    fixture.detectChanges();
+  }));
 
-  it(
-    'should create the component',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should create the component', waitForAsync(() => {
+    expect(component).toBeTruthy();
+  }));
 
   it('form invalid after creating', () => {
-    expect(component.addMemberForm.valid).toBeFalsy();
+    expect(component.form.valid).toBeFalsy();
   });
 
   it('should have required fields', () => {
-    expect(component.addMemberForm.valid).toBeFalsy();
-    expect(component.addMemberForm.controls.email.valid).toBeFalsy();
-    expect(component.addMemberForm.controls.email.hasError('required')).toBeTruthy();
-    expect(component.addMemberForm.controls.group.valid).toBeFalsy();
-    expect(component.addMemberForm.controls.group.hasError('required')).toBeTruthy();
+    expect(component.form.valid).toBeFalsy();
+    expect(component.form.controls.email.valid).toBeFalsy();
+    expect(component.form.controls.email.hasError('required')).toBeTruthy();
+    expect(component.form.controls.group.valid).toBeFalsy();
+    expect(component.form.controls.group.hasError('required')).toBeTruthy();
 
-    component.addMemberForm.controls.email.patchValue('john@doe.com');
-    expect(component.addMemberForm.controls.email.hasError('required')).toBeFalsy();
-    component.addMemberForm.controls.group.patchValue(Group.Editor);
-    expect(component.addMemberForm.controls.group.hasError('required')).toBeFalsy();
+    component.form.controls.email.patchValue('john@doe.com');
+    expect(component.form.controls.email.hasError('required')).toBeFalsy();
+    component.form.controls.group.patchValue(Group.Editor);
+    expect(component.form.controls.group.hasError('required')).toBeFalsy();
   });
 
   it('should call addMember method', fakeAsync(() => {
     const spy = jest.spyOn(fixture.debugElement.injector.get(MemberService) as any, 'add');
 
-    component.project = fakeProject();
-    component.addMemberForm.controls.email.patchValue('john@doe.com');
-    component.addMemberForm.controls.group.patchValue('editors');
-    component.addMember();
+    component.form.controls.email.patchValue('john@doe.com');
+    component.form.controls.group.patchValue('editors');
+    component.getObservable().subscribe();
     tick();
     flush();
 

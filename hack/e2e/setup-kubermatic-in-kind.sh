@@ -61,6 +61,26 @@ sed -i "s;__SERVICE_ACCOUNT_KEY__;$SERVICE_ACCOUNT_KEY;g" $KUBERMATIC_CONFIG
 sed -i "s;__IMAGE_PULL_SECRET__;$IMAGE_PULL_SECRET_INLINE;g" $KUBERMATIC_CONFIG
 sed -i "s;__KUBERMATIC_DOMAIN__;$KUBERMATIC_DOMAIN;g" $KUBERMATIC_CONFIG
 
+HELM_VALUES_FILE="$(mktemp)"
+cat << EOF > $HELM_VALUES_FILE
+kubermaticOperator:
+  image:
+    repository: "quay.io/kubermatic/kubermatic$REPOSUFFIX"
+    tag: "$KUBERMATIC_VERSION"
+
+minio:
+  credentials:
+    accessKey: test
+    secretKey: testtest
+
+nginx:
+  controller:
+    replicaCount: 1
+EOF
+
+# append custom Dex configuration
+cat hack/ci/testdata/oauth_values.yaml >> $HELM_VALUES_FILE
+
 # The alias makes it easier to access the port-forwarded Dex inside the Kind cluster;
 # the token issuer cannot be localhost:5556, because pods inside the cluster would not
 # find Dex anymore. As this script can be run multiple times in the same CI job,
@@ -83,23 +103,38 @@ KUBERMATICDOCKERTAG=latest UIDOCKERTAG=latest make kubermatic-installer
 TEST_NAME="Deploy Kubermatic"
 echodate "Deploying Kubermatic [${KUBERMATIC_VERSION}]..."
 
-./_build/kubermatic-installer deploy --disable-telemetry \
+copy_crds_to_chart
+
+./_build/kubermatic-installer deploy kubermatic-master --disable-telemetry \
   --storageclass copy-default \
   --config "$KUBERMATIC_CONFIG" \
   --helm-values "$HELM_VALUES_FILE"
 
 echodate "Finished installing Kubermatic"
-cd $REPO_ROOT
 
 echodate "Installing Seed..."
+
+# master&seed are the same cluster, but we still want to test that the
+# installer can setup the seed components. Effectively, in these tests
+# this is a NOP.
+./_build/kubermatic-installer deploy kubermatic-seed \
+  --storageclass copy-default \
+  --config "$KUBERMATIC_CONFIG" \
+  --helm-values "$HELM_VALUES_FILE"
+
 SEED_MANIFEST="$(mktemp)"
 SEED_KUBECONFIG="$(cat $KUBECONFIG | sed 's/127.0.0.1.*/kubernetes.default.svc.cluster.local./' | base64 -w0)"
 
+cd $REPO_ROOT
 cp hack/e2e/fixtures/seed.yaml $SEED_MANIFEST
 
 sed -i "s/__SEED_NAME__/$SEED_NAME/g" $SEED_MANIFEST
 sed -i "s/__BUILD_ID__/$BUILD_ID/g" $SEED_MANIFEST
 sed -i "s/__KUBECONFIG__/$SEED_KUBECONFIG/g" $SEED_MANIFEST
+
+if [[ ! -z "${NUTANIX_E2E_ENDPOINT:-}" ]]; then
+  sed -i "s/__NUTANIX_ENDPOINT__/$NUTANIX_E2E_ENDPOINT/g" $SEED_MANIFEST
+fi
 
 retry 8 kubectl apply -f $SEED_MANIFEST
 echodate "Finished installing Seed"

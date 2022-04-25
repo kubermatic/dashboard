@@ -27,43 +27,37 @@ import {SharedModule} from '@shared/module';
 import {of} from 'rxjs';
 import {GatekeeperConfigComponent} from './component';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, DialogTestModule];
-
 describe('GatekeeperConfigComponent', () => {
   let fixture: ComponentFixture<GatekeeperConfigComponent>;
   let noop: ComponentFixture<NoopConfirmDialogComponent>;
   let component: GatekeeperConfigComponent;
-  let deleteGatekeeperConfigSpy;
+  let deleteGatekeeperConfigSpy: jest.Mock;
 
-  beforeEach(
-    waitForAsync(() => {
-      const opaMock = {
-        deleteGatekeeperConfig: jest.fn(),
-        refreshGatekeeperConfig: () => {},
-      };
-      deleteGatekeeperConfigSpy = opaMock.deleteGatekeeperConfig.mockReturnValue(of(null));
+  beforeEach(waitForAsync(() => {
+    const opaMock = {
+      deleteGatekeeperConfig: jest.fn(),
+      refreshGatekeeperConfig: () => {},
+    };
+    deleteGatekeeperConfigSpy = opaMock.deleteGatekeeperConfig.mockReturnValue(of(null));
 
-      TestBed.configureTestingModule({
-        imports: [...modules],
-        declarations: [GatekeeperConfigComponent],
-        providers: [{provide: OPAService, useValue: opaMock}, MatDialog, NotificationService],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
+    TestBed.configureTestingModule({
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, DialogTestModule],
+      declarations: [GatekeeperConfigComponent],
+      providers: [{provide: OPAService, useValue: opaMock}, MatDialog, NotificationService],
+      teardown: {destroyAfterEach: false},
+    }).compileComponents();
+  }));
 
-  beforeEach(
-    waitForAsync(() => {
-      fixture = TestBed.createComponent(GatekeeperConfigComponent);
-      component = fixture.componentInstance;
-      noop = TestBed.createComponent(NoopConfirmDialogComponent);
-      component.cluster = fakeDigitaloceanCluster();
-      component.projectID = fakeProject().id;
-      component.gatekeeperConfig = fakeGatekeeperConfig();
-      component.isClusterRunning = true;
-      fixture.detectChanges();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    fixture = TestBed.createComponent(GatekeeperConfigComponent);
+    component = fixture.componentInstance;
+    noop = TestBed.createComponent(NoopConfirmDialogComponent);
+    component.cluster = fakeDigitaloceanCluster();
+    component.projectID = fakeProject().id;
+    component.gatekeeperConfig = fakeGatekeeperConfig();
+    component.isClusterRunning = true;
+    fixture.detectChanges();
+  }));
 
   it('should create the gatekeeper config component', fakeAsync(() => {
     expect(component).toBeTruthy();

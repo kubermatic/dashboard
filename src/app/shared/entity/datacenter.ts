@@ -135,7 +135,7 @@ export class MeteringConfiguration {
 }
 
 export class MLA {
-  userClusterMLAEnabled: boolean;
+  user_cluster_mla_enabled: boolean;
 }
 
 export class AdminSeed {
@@ -144,7 +144,6 @@ export class AdminSeed {
 }
 
 export class AdminSeedSpec {
-  backupRestore?: BackupRestoreConfiguration;
   country?: string;
   location?: string;
   kubeconfig?: object;
@@ -170,7 +169,7 @@ export class MeteringCredentials {
 
 export class EtcdBackupRestore {
   destinations: Destinations;
-  defaultDestination?: string;
+  defaultDestination: string;
 }
 
 export class Destinations {

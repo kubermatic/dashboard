@@ -25,48 +25,39 @@ import {ProjectService} from '@core/services/project';
 import {SharedModule} from '@shared/module';
 import {AddProjectDialogComponent} from './component';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
-
 describe('AddProjectDialogComponent', () => {
   let fixture: ComponentFixture<AddProjectDialogComponent>;
   let component: AddProjectDialogComponent;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [...modules],
-        providers: [
-          {provide: MatDialogRef, useClass: MatDialogRefMock},
-          {provide: ProjectService, useClass: ProjectMockService},
-          {provide: Router, useClass: RouterStub},
-        ],
-        teardown: {destroyAfterEach: false},
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],
+      providers: [
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+        {provide: ProjectService, useClass: ProjectMockService},
+        {provide: Router, useClass: RouterStub},
+      ],
+      teardown: {destroyAfterEach: false},
+    }).compileComponents();
+  }));
 
-  beforeEach(
-    waitForAsync(() => {
-      fixture = TestBed.createComponent(AddProjectDialogComponent);
-      component = fixture.componentInstance;
-      component.labels = {};
-      component.asyncLabelValidators = [];
-      fixture.detectChanges();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    fixture = TestBed.createComponent(AddProjectDialogComponent);
+    component = fixture.componentInstance;
+    component.labels = {};
+    component.asyncLabelValidators = [];
+    fixture.detectChanges();
+  }));
 
-  it(
-    'should create the component',
-    waitForAsync(() => {
-      expect(component).toBeTruthy();
-    })
-  );
+  it('should create the component', waitForAsync(() => {
+    expect(component).toBeTruthy();
+  }));
 
   it('should call createProject method', fakeAsync(() => {
     const spy = jest.spyOn(fixture.debugElement.injector.get(ProjectService) as any, 'create');
 
     component.form.controls.name.patchValue('test');
-    component.addProject();
+    component.getObservable().subscribe();
 
     tick();
     flush();
