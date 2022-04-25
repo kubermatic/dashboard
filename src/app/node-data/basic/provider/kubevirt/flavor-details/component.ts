@@ -33,7 +33,7 @@ export class FlavorDetailsDialogComponent {
     return this._data.flavor;
   }
 
-  get spec(): any {
+  get spec(): unknown {
     return JSON.parse(this.flavor.spec);
   }
 }
