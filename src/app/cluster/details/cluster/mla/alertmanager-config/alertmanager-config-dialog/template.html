@@ -15,7 +15,7 @@ limitations under the License.
 -->
 <km-dialog-title>{{data.title}}</km-dialog-title>
 <mat-dialog-content>
-  <p class="km-dialog-context-description">Edit alertmanager config of <b>{{data?.clusterId?.name}}</b> cluster</p>
+  <p class="km-dialog-context-description">Edit alertmanager config of <b>{{data?.cluster?.name}}</b> cluster</p>
   <div class="spec">Spec</div>
   <km-editor [(model)]="spec"
              header="YAML"></km-editor>

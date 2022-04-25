@@ -187,7 +187,7 @@ export class AlertmanagerConfigComponent implements OnInit, OnDestroy {
       data: {
         title: 'Edit Alertmanager Config',
         projectId: this.projectID,
-        clusterId: this.cluster,
+        cluster: this.cluster,
         alertmanagerConfig: this.alertmanagerConfig,
         confirmLabel: 'Edit',
       },

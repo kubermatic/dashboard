@@ -74,7 +74,7 @@ describe('AlertmanagerConfigDialog', () => {
       component.data = {
         title: 'Edit Alertmanager Config',
         projectId: fakeProject().id,
-        clusterId: fakeDigitaloceanCluster(),
+        cluster: fakeDigitaloceanCluster(),
         confirmLabel: 'Edit',
         alertmanagerConfig: fakeAlertmanagerConfig(),
       };
@@ -94,6 +94,7 @@ describe('AlertmanagerConfigDialog', () => {
     });
 
     it('should call patchAlertmanagerConfig()', () => {
+      component.getObservable().subscribe();
       fixture.detectChanges();
       expect(putAlertmanagerConfigSpy).toHaveBeenCalled();
     });

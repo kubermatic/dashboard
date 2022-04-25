@@ -83,12 +83,12 @@ export class GatekeeperConfigDialog implements OnInit, OnDestroy {
     return getIconClassForButton(this.data.confirmLabel);
   }
 
-  getObservable(): Observable<GatekeeperConfig | GatekeeperConfig> | void {
+  getObservable(): Observable<GatekeeperConfig> {
     const gatekeeperConfig: GatekeeperConfig = {
       spec: this._getSpec(),
     };
 
-    switch (this.data.confirmLabel) {
+    switch (this.data.mode) {
       case Mode.Add:
         return this._create(gatekeeperConfig);
       case Mode.Edit:

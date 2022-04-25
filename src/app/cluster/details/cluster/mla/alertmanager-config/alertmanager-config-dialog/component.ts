@@ -27,7 +27,7 @@ import {take} from 'rxjs/operators';
 export interface AlertmanagerConfigDialogData {
   title: string;
   projectId: string;
-  clusterId: Cluster;
+  cluster: Cluster;
   confirmLabel: string;
 
   // Alertmanager Config has to be specified only if dialog is used in the edit mode.
@@ -74,7 +74,7 @@ export class AlertmanagerConfigDialog implements OnInit, OnDestroy {
       },
     };
     return this._mlaService
-      .putAlertmanagerConfig(this.data.projectId, this.data.clusterId.id, alertmanagerConfig)
+      .putAlertmanagerConfig(this.data.projectId, this.data.cluster.id, alertmanagerConfig)
       .pipe(take(1));
   }
 
