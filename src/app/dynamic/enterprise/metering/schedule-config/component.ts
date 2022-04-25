@@ -74,7 +74,7 @@ export class MeteringScheduleConfigComponent implements OnInit {
   edit(config: MeteringReportConfiguration): void {
     const dialogConfig: MatDialogConfig = {
       data: {
-        title: 'Add Schedule Configuration',
+        title: 'Edit Schedule Configuration',
         scheduleName: config.name,
         schedule: config.schedule,
         interval: config.interval,

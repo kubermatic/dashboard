@@ -74,7 +74,7 @@ describe('MeteringReportListComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should list reports', () => {
+  it('should trigger report download', () => {
     const spySettingsSvc = jest.spyOn(settingsService, 'reportDownload');
     fixture.detectChanges();
     const downloadReportBtn = fixture.debugElement.query(By.css('#km-download-report-button'));

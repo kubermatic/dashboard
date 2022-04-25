@@ -13,8 +13,9 @@
 // limitations under the License.
 
 import {Injectable} from '@angular/core';
+import {MeteringReportConfiguration} from '@app/shared/entity/datacenter';
 import {fakeScheduleConfiguration} from '@test/data/metering';
-import {Observable, of, Subject} from 'rxjs';
+import {EMPTY, Observable, of, Subject} from 'rxjs';
 
 @Injectable()
 export class MeteringMockService {
@@ -22,5 +23,13 @@ export class MeteringMockService {
 
   getScheduleConfiguration(name: string): Observable<any> {
     return of(fakeScheduleConfiguration(name));
+  }
+
+  updateScheduleConfiguration(_: MeteringReportConfiguration): Observable<any> {
+    return EMPTY;
+  }
+
+  addScheduleConfiguration(_: MeteringReportConfiguration): Observable<any> {
+    return EMPTY;
   }
 }

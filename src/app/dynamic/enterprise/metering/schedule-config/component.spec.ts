@@ -91,7 +91,7 @@ describe('MeteringScheduleConfigComponent', () => {
     updateScheduleBtn.triggerEventHandler('click', {stopPropagation: () => null});
     expect(spyCreateDialog).toHaveBeenCalledWith(MeteringScheduleEditDialog, {
       data: {
-        title: 'Add Schedule Configuration',
+        title: 'Edit Schedule Configuration',
         scheduleName: fakeSchedule.name,
         schedule: fakeSchedule.schedule,
         interval: fakeSchedule.interval,

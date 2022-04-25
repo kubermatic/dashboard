@@ -74,8 +74,8 @@ export class MeteringScheduleEditDialog implements OnInit, OnDestroy {
   }
 
   onNext(): void {
-    this._notificationService.success('Updated schedule configuration');
     this._matDialogRef.close(true);
+    this._notificationService.success('Updated schedule configuration');
     this._meteringService.onScheduleConfigurationChange$.next();
   }
 
