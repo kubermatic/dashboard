@@ -91,7 +91,7 @@ export class MeteringReportListComponent implements OnInit {
       .reports(this.scheduleName)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(reports => {
-        this.reports = reports.map(r => ({...r, name: this.trimSchedulePrefix(r.name)}));
+        this.reports = reports.map(this._trimScheduleFromReportName.bind(this));
         this.dataSource.data = this.reports;
         this._isLoadingReports = false;
       });
@@ -139,7 +139,7 @@ export class MeteringReportListComponent implements OnInit {
     return this.reports && this.reports.length > 0 && this.paginator && this.reports.length > this.paginator.pageSize;
   }
 
-  trimSchedulePrefix(fullName: string): string {
-    return fullName.replace(`${this.scheduleName}/`, '');
+  private _trimScheduleFromReportName(report: Report): Report {
+    return {...report, name: report.name.replace(`${this.scheduleName}/`, '')};
   }
 }
