@@ -67,7 +67,7 @@
     "@angular/router": "13.3.0",
     "@fontsource/inconsolata": "4.5.2",
     "@fontsource/roboto": "4.5.3",
-    "@fontsource/roboto-mono": "4.5.3",
+    "@fontsource/roboto-mono": "4.5.7",
     "@fontsource/ubuntu": "4.5.4",
     "@swimlane/ngx-charts": "20.1.0",
     "buffer": "6.0.3",
