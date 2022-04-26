@@ -57,6 +57,17 @@ To automatically fix issues run `npm run fix` command.
 ## Running Unit Tests
 Run `npm test` to execute the unit tests via [Jest](https://jestjs.io/).
 
+#### Unit testing guideline
+- Base rendering test is a minimum for each new component.
+- Component tests should be located in the same directory as tested component and named `component.spec.ts`.
+- Try to cover any conditional renders in tests (e.g. displaying spinner while waiting for data).
+- If a component is expected to react on an action based on an event, try to cover that in tests.
+- Avoid testing too deep. Component's children should be tested separatly.
+- Avoid complex css queries, mark an element with an `id` instead.
+- Leverage coverage reports to find out which parts of your code are not tested.
+- For complex testing scenarios stick to e2e tests.
+- Do not overengineer your tests. Keep in mind that tests are code as well and we need to maintain them.
+
 ## Running End-to-end Tests
 #### Mocked Tests
 Mocked tests can be run locally without need to connect to the whole KKP.
