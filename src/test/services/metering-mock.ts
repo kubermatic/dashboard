@@ -13,27 +13,23 @@
 // limitations under the License.
 
 import {Injectable} from '@angular/core';
-import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
-import {find} from 'lodash';
-import {Observable, of} from 'rxjs';
-import {fakeNodeDatacenters, fakeSeedSettings} from '../data/datacenter';
+import {MeteringReportConfiguration} from '@app/shared/entity/datacenter';
+import {fakeScheduleConfiguration} from '@test/data/metering';
+import {EMPTY, Observable, of, Subject} from 'rxjs';
 
 @Injectable()
-export class DatacenterMockService {
-  get datacenters(): Observable<Datacenter[]> {
-    return of(fakeNodeDatacenters());
+export class MeteringMockService {
+  onConfigurationChange$ = new Subject<void>().asObservable();
+
+  getScheduleConfiguration(name: string): Observable<MeteringReportConfiguration> {
+    return of(fakeScheduleConfiguration(name));
   }
 
-  get seeds(): Observable<string[]> {
-    return of(['europe-west3-c']);
+  updateScheduleConfiguration(_: MeteringReportConfiguration): Observable<any> {
+    return EMPTY;
   }
 
-  getDatacenter(dcName: string): Observable<Datacenter> {
-    const dc = find(fakeNodeDatacenters(), ['metadata.name', dcName]);
-    return of(dc);
-  }
-
-  seedSettings(_seedName: string): Observable<SeedSettings> {
-    return of(fakeSeedSettings());
+  addScheduleConfiguration(_: MeteringReportConfiguration): Observable<any> {
+    return EMPTY;
   }
 }
