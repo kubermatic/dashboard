@@ -88,6 +88,7 @@ export class KubeVirtBasicNodeDataComponent
   readonly maxSecondaryDisks = 3;
   private readonly _defaultCPUs = 2;
   private readonly _defaultMemory = 2048;
+  private readonly _initialData = _.cloneDeep(this._nodeDataService.nodeData.spec.cloud.kubevirt);
   flavors: KubeVirtVMInstancePreset[] = [];
   selectedFlavor = '';
   flavorLabel = FlavorsState.Empty;
@@ -206,13 +207,8 @@ export class KubeVirtBasicNodeDataComponent
 
   private _setDefaultFlavor(flavors: KubeVirtVMInstancePreset[]): void {
     this.flavors = flavors;
-    this.selectedFlavor = this._nodeDataService.nodeData.spec.cloud.kubevirt.flavorName;
-
-    if (!this.selectedFlavor && !_.isEmpty(this.flavors)) {
-      this.selectedFlavor = this.flavors[0].name;
-    }
-
-    this.flavorLabel = this.selectedFlavor ? FlavorsState.Ready : FlavorsState.Empty;
+    this.selectedFlavor = this._initialData.flavorName;
+    this.flavorLabel = this.flavors ? FlavorsState.Ready : FlavorsState.Empty;
     this._cdr.detectChanges();
   }
 
@@ -243,7 +239,7 @@ export class KubeVirtBasicNodeDataComponent
 
   private _setDefaultStorageClass(storageClasses: KubeVirtStorageClass[]): void {
     this.storageClasses = storageClasses;
-    this.selectedStorageClass = this._nodeDataService.nodeData.spec.cloud.kubevirt.primaryDiskStorageClassName;
+    this.selectedStorageClass = this._initialData.primaryDiskStorageClassName;
 
     if (!this.selectedStorageClass && !_.isEmpty(this.storageClasses)) {
       this.selectedStorageClass = this.storageClasses[0].name;
@@ -254,15 +250,11 @@ export class KubeVirtBasicNodeDataComponent
   }
 
   private _init(): void {
-    if (this._nodeDataService.nodeData.spec.cloud.kubevirt) {
-      this.form.get(Controls.Memory).setValue(parseInt(this._nodeDataService.nodeData.spec.cloud.kubevirt.memory));
-      this.form.get(Controls.CPUs).setValue(parseInt(this._nodeDataService.nodeData.spec.cloud.kubevirt.cpus));
-      this.form
-        .get(Controls.PrimaryDiskSize)
-        .setValue(this._nodeDataService.nodeData.spec.cloud.kubevirt.primaryDiskSize);
-      this.form
-        .get(Controls.PrimaryDiskOSImage)
-        .setValue(this._nodeDataService.nodeData.spec.cloud.kubevirt.primaryDiskOSImage);
+    if (this._initialData) {
+      this.form.get(Controls.Memory).setValue(parseInt(this._initialData.memory) || this._defaultMemory);
+      this.form.get(Controls.CPUs).setValue(parseInt(this._initialData.cpus) || this._defaultCPUs);
+      this.form.get(Controls.PrimaryDiskSize).setValue(this._initialData.primaryDiskSize);
+      this.form.get(Controls.PrimaryDiskOSImage).setValue(this._initialData.primaryDiskOSImage);
     }
   }
 
