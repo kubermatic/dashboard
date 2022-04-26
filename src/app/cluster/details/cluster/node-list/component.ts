@@ -192,8 +192,13 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
     return node.id.replace('machine-', '');
   }
 
-  displayTags(tags: object): boolean {
-    return !!tags && Object.keys(tags).length > 0;
+  hasTags(tags: object | Array<any>): boolean {
+    if (Array.isArray(tags) && tags.length > 0) {
+      return true;
+    } else if (typeof tags === 'object') {
+      return !!tags && Object.keys(tags).length > 0;
+    }
+    return false;
   }
 
   // VSphere
