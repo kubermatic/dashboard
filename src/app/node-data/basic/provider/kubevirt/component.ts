@@ -86,6 +86,8 @@ export class KubeVirtBasicNodeDataComponent
   private _storageClassCombobox: FilteredComboboxComponent;
   readonly Controls = Controls;
   readonly maxSecondaryDisks = 3;
+  private readonly _defaultCPUs = 2;
+  private readonly _defaultMemory = 2048;
   flavors: KubeVirtVMInstancePreset[] = [];
   selectedFlavor = '';
   flavorLabel = FlavorsState.Empty;
@@ -105,8 +107,8 @@ export class KubeVirtBasicNodeDataComponent
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.VMFlavor]: this._builder.control(''),
-      [Controls.CPUs]: this._builder.control('2', Validators.required),
-      [Controls.Memory]: this._builder.control('2048', Validators.required),
+      [Controls.CPUs]: this._builder.control(this._defaultCPUs, Validators.required),
+      [Controls.Memory]: this._builder.control(this._defaultMemory, Validators.required),
       [Controls.PrimaryDiskOSImage]: this._builder.control('', Validators.required),
       [Controls.PrimaryDiskStorageClassName]: this._builder.control('', Validators.required),
       [Controls.PrimaryDiskSize]: this._builder.control('10', Validators.required),
@@ -158,12 +160,22 @@ export class KubeVirtBasicNodeDataComponent
     this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
 
     if (_.isString(flavor) && !_.isEmpty(flavor)) {
+      this.form.get(Controls.CPUs).setValue(null);
+      this.form.get(Controls.CPUs).setValidators([]);
       this.form.get(Controls.CPUs).disable();
+      this.form.get(Controls.Memory).setValue(null);
+      this.form.get(Controls.Memory).setValidators([]);
       this.form.get(Controls.Memory).disable();
     } else {
+      this.form.get(Controls.CPUs).setValue(this._defaultCPUs);
+      this.form.get(Controls.CPUs).setValidators(Validators.required);
       this.form.get(Controls.CPUs).enable();
+      this.form.get(Controls.Memory).setValue(this._defaultMemory);
+      this.form.get(Controls.Memory).setValidators(Validators.required);
       this.form.get(Controls.Memory).enable();
     }
+
+    this.form.updateValueAndValidity();
   }
 
   viewFlavor(): void {
@@ -243,8 +255,8 @@ export class KubeVirtBasicNodeDataComponent
 
   private _init(): void {
     if (this._nodeDataService.nodeData.spec.cloud.kubevirt) {
-      this.form.get(Controls.Memory).setValue(this._nodeDataService.nodeData.spec.cloud.kubevirt.memory);
-      this.form.get(Controls.CPUs).setValue(this._nodeDataService.nodeData.spec.cloud.kubevirt.cpus);
+      this.form.get(Controls.Memory).setValue(parseInt(this._nodeDataService.nodeData.spec.cloud.kubevirt.memory));
+      this.form.get(Controls.CPUs).setValue(parseInt(this._nodeDataService.nodeData.spec.cloud.kubevirt.cpus));
       this.form
         .get(Controls.PrimaryDiskSize)
         .setValue(this._nodeDataService.nodeData.spec.cloud.kubevirt.primaryDiskSize);
@@ -255,15 +267,21 @@ export class KubeVirtBasicNodeDataComponent
   }
 
   private _getNodeData(): NodeData {
+    const flavor = this.form.get(Controls.VMFlavor).value[ComboboxControls.Select];
+    const cpus = this.form.get(Controls.CPUs).value;
+    const memory = this.form.get(Controls.Memory).value;
+
     return {
       spec: {
         cloud: {
           kubevirt: {
-            flavorName: this.form.get(Controls.VMFlavor).value[ComboboxControls.Select],
-            cpus: `${this.form.get(Controls.CPUs).value}`,
-            memory: `${this.form.get(Controls.Memory).value}Mi`,
+            flavorName: flavor,
+            cpus: !flavor && cpus ? `${cpus}` : null,
+            memory: !flavor && memory ? `${memory}Mi` : null,
             primaryDiskOSImage: this.form.get(Controls.PrimaryDiskOSImage).value,
-            primaryDiskStorageClassName: this.form.get(Controls.PrimaryDiskStorageClassName).value[ComboboxControls.Select],
+            primaryDiskStorageClassName: this.form.get(Controls.PrimaryDiskStorageClassName).value[
+              ComboboxControls.Select
+            ],
             primaryDiskSize: `${this.form.get(Controls.PrimaryDiskSize).value}Gi`,
             secondaryDisks: this._getSecondaryDisksData(),
           } as KubeVirtNodeSpec,

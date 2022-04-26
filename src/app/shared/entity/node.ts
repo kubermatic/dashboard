@@ -200,10 +200,10 @@ export class KubeVirtNodeSpec {
 
   // At the moment KubeVirt VM flavors are stored only in the default namespace so their names are unique.
   // It is going to be adjusted in the future.
-  flavorName: string;
+  flavorName?: string;
   flavorProfile: string;
-  cpus: string;
-  memory: string;
+  cpus?: string;
+  memory?: string;
   primaryDiskOSImage: string;
   primaryDiskStorageClassName: string;
   primaryDiskSize: string;
@@ -330,9 +330,6 @@ export function getDefaultNodeProviderSpec(provider: string): object {
       } as AnexiaNodeSpec;
     case NodeProvider.KUBEVIRT:
       return {
-        flavorName: '',
-        cpus: '2',
-        memory: '2048',
         primaryDiskSize: '10',
       } as KubeVirtNodeSpec;
     case NodeProvider.NUTANIX:
