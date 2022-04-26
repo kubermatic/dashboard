@@ -23,6 +23,7 @@ import {getIpCount} from '@shared/functions/get-ip-count';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
 import _ from 'lodash';
+import {convertArrayToObject} from '@shared/utils/common';
 
 @Component({
   selector: 'km-cluster-summary',
@@ -100,15 +101,7 @@ export class ClusterSummaryComponent {
   }
 
   convertKeyDescriptionPairTagsIntoObject(tags: Array<{name: string; description: string}>): object {
-    if (tags && tags.length > 0) {
-      return tags.reduce((prevTag, nextTag) => {
-        return {
-          ...prevTag,
-          [nextTag.name]: nextTag.description,
-        };
-      }, {});
-    }
-    return {};
+    return convertArrayToObject(tags, 'name', 'description');
   }
 
   private _hasProviderOptions(provider: NodeProvider): boolean {

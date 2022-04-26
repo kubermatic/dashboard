@@ -403,6 +403,14 @@ limitations under the License.
                            emptyMessage="No assigned tags"></km-labels>
               </div>
             </km-property>
+
+            <km-property *ngIf="element.spec.cloud.vsphere && displayTags(element.spec.cloud.vsphere.tags)">
+              <div key>Tags</div>
+              <div value>
+                <km-labels [labels]="convertTagsIntoObject(element.spec.cloud.vsphere.tags)"
+                           emptyMessage="No assigned tags"></km-labels>
+              </div>
+            </km-property>
             <!-- End of tags.-->
 
             <!-- Boolean properties. -->

@@ -34,6 +34,7 @@ import * as semver from 'semver';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {getNodeHealthStatus, HealthStatus} from '@shared/utils/health-status';
+import {convertArrayToObject} from '@shared/utils/common';
 
 enum Column {
   stateArrow = 'stateArrow',
@@ -193,6 +194,11 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
 
   displayTags(tags: object): boolean {
     return !!tags && Object.keys(tags).length > 0;
+  }
+
+  // VSphere
+  convertTagsIntoObject(tags: Array<{name: string; description: string}>): object {
+    return convertArrayToObject(tags, 'name', 'description');
   }
 
   toggleNodeItem(element: Node): void {

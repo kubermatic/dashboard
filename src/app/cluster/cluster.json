@@ -1,0 +1,82 @@
+{
+  "cluster": {
+    "name": "vpshere-testing",
+    "spec": {
+      "cloud": {
+        "vsphere": {
+          "username": null,
+          "password": null,
+          "infraManagementUser": {
+            "username": null,
+            "password": null
+          },
+          "datastore": "",
+          "folder": null,
+          "vmNetName": null,
+          "datastoreCluster": "",
+          "resourcePool": ""
+        },
+        "dc": "vsphere-hamburg"
+      },
+      "version": "1.22.7",
+      "auditLogging": {
+        "enabled": false,
+        "policyPreset": ""
+      },
+      "opaIntegration": {},
+      "mla": {},
+      "enableUserSSHKeyAgent": true,
+      "enableOperatingSystemManager": false,
+      "containerRuntime": "containerd",
+      "clusterNetwork": {
+        "proxyMode": "",
+        "pods": {
+          "cidrBlocks": []
+        },
+        "services": {
+          "cidrBlocks": []
+        },
+        "konnectivityEnabled": true
+      },
+      "cniPlugin": {
+        "type": "canal",
+        "version": "v3.22"
+      }
+    },
+    "credential": "loodse"
+  },
+  "nodeDeployment": {
+    "name": null,
+    "spec": {
+      "template": {
+        "cloud": {
+          "vsphere": {
+            "template": "machine-controller-e2e-ubuntu",
+            "cpus": 2,
+            "memory": 4096,
+            "diskSizeGB": 10,
+            "tags": [
+              {
+                "name": "nt1",
+                "description": "dt1"
+              },
+              {
+                "name": "nt2",
+                "description": "dt2"
+              }
+            ]
+          }
+        },
+        "labels": {},
+        "taints": [],
+        "operatingSystem": {
+          "ubuntu": {
+            "distUpgradeOnBoot": false
+          }
+        }
+      },
+      "replicas": 1,
+      "dynamicConfig": null
+    }
+  }
+}
