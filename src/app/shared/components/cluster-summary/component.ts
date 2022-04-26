@@ -31,13 +31,14 @@ import {convertArrayToObject} from '@shared/utils/common';
   styleUrls: ['./style.scss'],
 })
 export class ClusterSummaryComponent {
-  private _sshKeys: SSHKey[] = [];
   @Input() cluster: Cluster;
   @Input() machineDeployment: MachineDeployment;
   @Input() datacenter: Datacenter;
   @Input() seedSettings: SeedSettings;
   @Input() flipLayout = false;
   @Input() showNumbering = false;
+
+  private _sshKeys: SSHKey[] = [];
 
   @Input()
   set sshKeys(keys: string[]) {
