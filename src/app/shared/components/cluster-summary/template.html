@@ -910,6 +910,15 @@ limitations under the License.
                 <km-labels [labels]="machineDeployment.spec.template.cloud.gcp.labels"></km-labels>
               </div>
             </km-property>
+
+            <!-- VSphere Tags -->
+            <km-property *ngIf="machineDeployment.spec.template.cloud?.vsphere?.tags.length>0">
+              <div key>Provider Tags</div>
+              <div value>
+                <km-labels [labels]="convertKeyDescriptionPairTagsIntoObject(machineDeployment.spec.template.cloud?.vsphere?.tags)"></km-labels>
+              </div>
+            </km-property>
+
           </ng-container>
         </div>
       </div>

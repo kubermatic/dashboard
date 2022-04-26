@@ -99,6 +99,18 @@ export class ClusterSummaryComponent {
     return !!tags && !_.isEmpty(Object.keys(LabelFormComponent.filterNullifiedKeys(tags)));
   }
 
+  convertKeyDescriptionPairTagsIntoObject(tags: Array<{name: string; description: string}>): object {
+    if (tags && tags.length > 0) {
+      return tags.reduce((prevTag, nextTag) => {
+        return {
+          ...prevTag,
+          [nextTag.name]: nextTag.description,
+        };
+      }, {});
+    }
+    return {};
+  }
+
   private _hasProviderOptions(provider: NodeProvider): boolean {
     return (
       this.provider === provider &&
