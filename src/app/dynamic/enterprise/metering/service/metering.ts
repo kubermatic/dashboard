@@ -56,9 +56,9 @@ export class MeteringService {
     return this._scheduleConfigurations;
   }
 
-  getScheduleConfiguration(name: string): Observable<any> {
+  getScheduleConfiguration(name: string): Observable<MeteringReportConfiguration> {
     const url = `${this._restRoot}/admin/metering/configurations/reports/${name}`;
-    return this._http.get(url);
+    return this._http.get<MeteringReportConfiguration>(url);
   }
 
   addScheduleConfiguration(configuration: MeteringReportConfiguration): Observable<any> {
@@ -76,7 +76,7 @@ export class MeteringService {
     return this._http.delete(url);
   }
 
-  private _getScheduleConfigurations(): Observable<any> {
+  private _getScheduleConfigurations(): Observable<MeteringReportConfiguration[]> {
     const url = `${this._restRoot}/admin/metering/configurations/reports`;
     return this._http
       .get<MeteringReportConfiguration[]>(url)

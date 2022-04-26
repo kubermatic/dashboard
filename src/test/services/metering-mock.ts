@@ -21,7 +21,7 @@ import {EMPTY, Observable, of, Subject} from 'rxjs';
 export class MeteringMockService {
   onConfigurationChange$ = new Subject<void>().asObservable();
 
-  getScheduleConfiguration(name: string): Observable<any> {
+  getScheduleConfiguration(name: string): Observable<MeteringReportConfiguration> {
     return of(fakeScheduleConfiguration(name));
   }
 
