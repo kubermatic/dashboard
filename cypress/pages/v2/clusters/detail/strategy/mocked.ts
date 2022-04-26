@@ -12,13 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ClusterDetailStrategy} from '@ctypes/pages';
-import {Provider} from '@ctypes/provider';
 import {Intercept} from '@intercept/intercept';
+import {ClusterDetailStrategy, Provider} from '@kmtypes';
 
 export class MockedClusterDetailStrategy implements ClusterDetailStrategy {
-  constructor() {}
-
   onCreate(provider: Provider): void {
     Intercept.Clusters(provider).onCreate();
     Intercept.Clusters(provider).onSSHKeyCreate();

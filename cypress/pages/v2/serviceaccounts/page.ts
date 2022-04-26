@@ -12,13 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Group} from '@ctypes/member';
-import {Page, PageOptions, ServiceAccountStrategy, ServiceAccountTokenStrategy} from '@ctypes/pages';
-import {ServiceAccountStrategyFactory, ServiceAccountTokenStrategyFactory} from './strategy/factory';
+import {Group, Page, PageOptions, ServiceAccountStrategy} from '@kmtypes';
+import {ServiceAccountStrategyFactory} from './strategy/factory';
 
 export class ServiceAccounts extends PageOptions implements Page {
   private readonly _strategy: ServiceAccountStrategy | undefined;
-  private readonly _tokenStrategy: ServiceAccountTokenStrategy | undefined;
 
   readonly Buttons = new Buttons();
   readonly Elements = new Elements();
@@ -27,7 +25,6 @@ export class ServiceAccounts extends PageOptions implements Page {
     super();
 
     this._strategy = ServiceAccountStrategyFactory.new(isAPIMocked);
-    this._tokenStrategy = ServiceAccountTokenStrategyFactory.new(isAPIMocked);
   }
 
   static getName(): string {
@@ -58,7 +55,7 @@ export class ServiceAccounts extends PageOptions implements Page {
     this.Buttons.openTokenDialog.click({force: true});
     this.Elements.addTokenDialogNameInput.type(name);
     this.Buttons.addToken.click();
-    this.Buttons.gotIt.click().then(_ => this._tokenStrategy?.onCreate());
+    this.Buttons.gotIt.click().then(_ => this._strategy?.onTokenCreate());
   }
 }
 

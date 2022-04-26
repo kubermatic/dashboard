@@ -12,53 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Endpoints} from '@ctypes/endpoints';
-import {ServiceAccountStrategy, ServiceAccountTokenStrategy} from '@ctypes/pages';
+import {Intercept} from '@intercept';
+import {ServiceAccountStrategy} from '@kmtypes';
 
 export class MockedServiceAccountStrategy implements ServiceAccountStrategy {
-  private static readonly _fixturePath = 'service-accounts.json';
-  private static readonly _fixtureEmptyArrayPath = 'empty-array.json';
-  private static _activeFixture = MockedServiceAccountStrategy._fixtureEmptyArrayPath;
-
-  constructor() {
-    this._init();
-  }
-
   onCreate(): void {
-    MockedServiceAccountStrategy._activeFixture = MockedServiceAccountStrategy._fixturePath;
+    Intercept.ServiceAccount().onCreate();
   }
 
   onDelete(): void {
-    MockedServiceAccountStrategy._activeFixture = MockedServiceAccountStrategy._fixtureEmptyArrayPath;
+    Intercept.ServiceAccount().onDelete();
   }
 
-  private _init(): void {
-    cy.intercept(Endpoints.Resource.ServiceAccount.List, req => {
-      req.reply({fixture: MockedServiceAccountStrategy._activeFixture});
-    });
-  }
-}
-
-export class MockedServiceAccountTokenStrategy implements ServiceAccountTokenStrategy {
-  private static readonly _fixturePath = 'tokens.json';
-  private static readonly _fixtureEmptyArrayPath = 'empty-array.json';
-  private static _activeFixture = MockedServiceAccountTokenStrategy._fixtureEmptyArrayPath;
-
-  constructor() {
-    this._init();
+  onTokenCreate(): void {
+    Intercept.ServiceAccount().onTokenCreate();
   }
 
-  onCreate(): void {
-    MockedServiceAccountTokenStrategy._activeFixture = MockedServiceAccountTokenStrategy._fixturePath;
-  }
-
-  onDelete(): void {
-    MockedServiceAccountTokenStrategy._activeFixture = MockedServiceAccountTokenStrategy._fixtureEmptyArrayPath;
-  }
-
-  private _init(): void {
-    cy.intercept(Endpoints.Resource.ServiceAccount.Tokens, req => {
-      req.reply({fixture: MockedServiceAccountTokenStrategy._activeFixture});
-    });
+  onTokenDelete(): void {
+    Intercept.ServiceAccount().onTokenDelete();
   }
 }

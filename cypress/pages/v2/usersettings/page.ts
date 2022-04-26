@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Page, PageOptions} from '@ctypes/pages';
+import {Page, PageOptions} from '@kmtypes';
 import {Pages} from '../pages';
 
 export class UserSettings extends PageOptions implements Page {

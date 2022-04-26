@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {MembersStrategy} from '@ctypes/pages';
+import {MembersStrategy} from '@kmtypes';
 import {MockedMembersStrategy} from './mocked';
 
 export class MembersStrategyFactory {

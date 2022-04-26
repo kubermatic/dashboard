@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {Config} from '@utils/config';
 import _ from 'lodash';
-import {Config} from '../../../utils/config';
 import {ClusterDetail} from './detail/page';
 import {ClusterList} from './list/page';
 

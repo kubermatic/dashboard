@@ -12,8 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ClusterDetailStrategy, Page, PageOptions} from '@ctypes/pages';
-import {Provider} from '@ctypes/provider';
+import {ClusterDetailStrategy, Page, PageOptions, Provider} from '@kmtypes';
 import {ProviderMenuOption} from '../proxy';
 import {ClusterDetailStrategyFactory} from './strategy/factory';
 

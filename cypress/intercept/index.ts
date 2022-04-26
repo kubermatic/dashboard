@@ -12,13 +12,4 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {LoginStrategy} from '@kmtypes';
-import {RootPage} from '../page';
-import {MockedLoginStrategy} from './mocked';
-import {RealLoginStrategy} from './real';
-
-export class LoginStrategyFactory {
-  static new(isAPIMocked: boolean, context: RootPage): LoginStrategy {
-    return isAPIMocked ? new MockedLoginStrategy() : new RealLoginStrategy(context);
-  }
-}
+export * from './intercept';

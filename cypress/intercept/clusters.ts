@@ -1,14 +1,24 @@
-import {Endpoints} from '@ctypes/endpoints';
-import {Fixtures} from '@ctypes/fixtures';
-import {RequestType} from '@ctypes/http';
-import {Intercept} from '@ctypes/intercept';
-import {Provider} from '@ctypes/provider';
+// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+import {Endpoints, Fixtures, Interceptor, Provider, RequestType} from '@kmtypes';
 
 export class Clusters {
   private static _sshKeyListFixture = Fixtures.EmptyArray;
   private static _sshKeyFixture = Fixtures.EmptyObject;
 
-  private readonly _provider: Intercept | undefined;
+  private readonly _provider: Interceptor | undefined;
 
   constructor(provider: Provider) {
     this._provider = ProviderFactory.new(provider);
@@ -42,7 +52,7 @@ export class Clusters {
 }
 
 class ProviderFactory {
-  static new(provider: Provider): Intercept {
+  static new(provider: Provider): Interceptor {
     switch (provider) {
       case Provider.Alibaba:
         return new Alibaba();
@@ -56,7 +66,7 @@ class ProviderFactory {
   }
 }
 
-abstract class ProviderBase implements Intercept {
+abstract class ProviderBase implements Interceptor {
   protected static _clusterListFixture: string = Fixtures.EmptyArray;
   protected static _clusterFixture: string = Fixtures.Provider.BringYourOwn.Cluster;
 

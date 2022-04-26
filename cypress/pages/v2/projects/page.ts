@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Page, PageOptions, ProjectStrategy} from '@ctypes/pages';
-import {View} from '@ctypes/view';
+import {Page, PageOptions, ProjectStrategy, View} from '@kmtypes';
+import {Config} from '@utils/config';
 import _ from 'lodash';
-import {Config} from '../../../utils/config';
 import {ProjectStrategyFactory} from './strategy/factory';
 
 export class Projects extends PageOptions implements Page {

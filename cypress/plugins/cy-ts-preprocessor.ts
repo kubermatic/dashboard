@@ -18,8 +18,10 @@ const webpackOptions = {
   resolve: {
     extensions: ['.ts', '.js'],
     alias: {
-      '@ctypes': path.resolve(__dirname, '../types'),
+      '@kmtypes': path.resolve(__dirname, '../types'),
       '@intercept': path.resolve(__dirname, '../intercept'),
+      '@pages': path.resolve(__dirname, '../pages'),
+      '@utils': path.resolve(__dirname, '../utils'),
     },
   },
   module: {

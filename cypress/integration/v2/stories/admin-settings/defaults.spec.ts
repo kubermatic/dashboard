@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Pages} from '../../../../pages/v2/pages';
-import {View} from '../../../../utils/view';
+import {View} from '@kmtypes';
+import {Pages} from '@pages/v2';
 
 describe('Admin Settings - Defaults Story', () => {
   it('should login', () => {

@@ -12,9 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {WizardStrategy} from '@ctypes/pages';
-import {Provider} from '@ctypes/provider';
 import {Intercept} from '@intercept/intercept';
+import {Provider, WizardStrategy} from '@kmtypes';
 
 export class MockedWizardStrategy implements WizardStrategy {
   onCreate(provider: Provider): void {

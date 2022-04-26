@@ -12,10 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Datacenter} from '@ctypes/datacenter';
-import {Page, PageOptions, WizardStrategy} from '@ctypes/pages';
-import {Provider} from '@ctypes/provider';
-import {WizardStep} from '@ctypes/wizard';
+import {Datacenter, Page, PageOptions, Provider, WizardStep, WizardStrategy} from '@kmtypes';
 import {WizardStrategyFactory} from './strategy/factory';
 
 export class Wizard extends PageOptions implements Page {

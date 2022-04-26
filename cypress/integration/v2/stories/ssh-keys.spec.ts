@@ -12,20 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {BringYourOwn} from '@ctypes/datacenter';
-import {Clusters} from '../../../pages/v2/clusters/proxy';
-import {Pages} from '../../../pages/v2/pages';
-import {Projects} from '../../../pages/v2/projects/page';
-import {SSHKeys} from '../../../pages/v2/sshkeys/page';
-import {Provider} from '@ctypes/provider';
-import {Condition} from '../../../utils/condition';
-import {View} from '../../../utils/view';
+import {Intercept} from '@intercept';
+import {BringYourOwn, Condition, Provider, View} from '@kmtypes';
+import {Clusters, Pages, Projects, SSHKeys} from '@pages/v2';
 
 describe('SSH Key Management Story', () => {
   const projectName = Projects.getName();
   const clusterName = Clusters.getName();
   const sshKeyName = SSHKeys.getName();
   const publicKey = SSHKeys.publicKey;
+
+  beforeEach(() => Intercept.init());
 
   it('should login', () => {
     Pages.Root.login();

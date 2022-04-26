@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {login, logout} from '../../../utils/auth';
-import {Condition} from '../../../utils/condition';
-import {View} from '../../../utils/view';
 import {AdminSettings} from '../../../pages/admin-settings.po';
 import {HelpPanel} from '../../../pages/help-panel.po';
+import {login, logout} from '../../../utils/auth';
+import {Condition} from '../../../utils/condition';
 import {Config} from '../../../utils/config';
 import {Mocks} from '../../../utils/mocks';
+import {View} from '../../../utils/view';
 
 describe('Admin Settings - Custom Links Story', () => {
   const linkLocation = 'Footer';

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Page, PageOptions, SSHKeyStrategy} from '@ctypes/pages';
+import {Page, PageOptions, SSHKeyStrategy} from '@kmtypes';
 import {SSHKeyStrategyFactory} from './strategy/factory';
 
 export class SSHKeys extends PageOptions implements Page {
@@ -45,15 +45,17 @@ export class SSHKeys extends PageOptions implements Page {
   }
 
   create(name: string, publicKey: string): void {
-    this.Buttons.createDialog.click();
+    this.Buttons.createDialog.click().then(_ => this._strategy?.onCreate());
     this.Elements.createDialogInput.type(name);
     this.Elements.createDialogTextarea.type(publicKey);
-    this.Buttons.creatDialogConfirm.click().then(_ => this._strategy?.onCreate());
+    this.Buttons.creatDialogConfirm.click();
   }
 
   delete(name: string): void {
-    this.Buttons.deleteSSHKey(name).click({force: true});
-    this.Buttons.deleteSSHKeyConfirm.click().then(_ => this._strategy?.onDelete());
+    this.Buttons.deleteSSHKey(name)
+      .click({force: true})
+      .then(_ => this._strategy?.onDelete());
+    this.Buttons.deleteSSHKeyConfirm.click();
   }
 }
 

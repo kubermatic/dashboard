@@ -12,9 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {LoginStrategy, Page, PageOptions} from '@ctypes/pages';
-import {View} from '@ctypes/view';
-import {Config} from '../../../utils/config';
+import {LoginStrategy, Page, PageOptions, View} from '@kmtypes';
+import {Config} from '@utils/config';
 import {LoginStrategyFactory} from './strategy/factory';
 
 export class RootPage extends PageOptions implements Page {

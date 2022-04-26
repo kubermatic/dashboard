@@ -12,8 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Group} from '@ctypes/member';
-import {MembersStrategy, Page, PageOptions} from '@ctypes/pages';
+import {Group, MembersStrategy, Page, PageOptions} from '@kmtypes';
 import {MembersStrategyFactory} from './strategy/factory';
 
 export class Members extends PageOptions implements Page {

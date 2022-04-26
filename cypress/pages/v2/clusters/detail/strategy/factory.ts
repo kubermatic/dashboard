@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ClusterDetailStrategy} from '@ctypes/pages';
+import {ClusterDetailStrategy} from '@kmtypes';
 import {MockedClusterDetailStrategy} from './mocked';
 
 export class ClusterDetailStrategyFactory {

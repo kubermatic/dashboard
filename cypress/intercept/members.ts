@@ -12,13 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {LoginStrategy} from '@kmtypes';
-import {RootPage} from '../page';
-import {MockedLoginStrategy} from './mocked';
-import {RealLoginStrategy} from './real';
+import {Endpoints, Fixtures} from '@kmtypes';
 
-export class LoginStrategyFactory {
-  static new(isAPIMocked: boolean, context: RootPage): LoginStrategy {
-    return isAPIMocked ? new MockedLoginStrategy() : new RealLoginStrategy(context);
+export class Members {
+  private static _memberListFixture = Fixtures.EmptyArray;
+
+  constructor() {
+    cy.intercept(Endpoints.Members, req => req.reply({fixture: Members._memberListFixture}));
+  }
+
+  onCreate(): void {
+    Members._memberListFixture = Fixtures.Members;
+  }
+
+  onDelete(): void {
+    Members._memberListFixture = Fixtures.EmptyArray;
   }
 }

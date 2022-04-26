@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {SSHKeyStrategy} from '@ctypes/pages';
+import {SSHKeyStrategy} from '@kmtypes';
 import {MockedSSHKeyStrategy} from './mocked';
 
 export class SSHKeyStrategyFactory {

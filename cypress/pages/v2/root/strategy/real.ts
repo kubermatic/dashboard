@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {LoginStrategy} from '@ctypes/pages';
-import {Pages} from '../../pages';
+import {LoginStrategy} from '@kmtypes';
+import {Pages} from '@pages/v2';
 import {RootPage} from '../page';
 
 export class RealLoginStrategy implements LoginStrategy {

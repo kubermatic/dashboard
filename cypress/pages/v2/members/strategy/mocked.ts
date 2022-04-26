@@ -12,29 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Endpoints} from '@ctypes/endpoints';
-import {MembersStrategy} from '@ctypes/pages';
+import {Intercept} from '@intercept';
+import {MembersStrategy} from '@kmtypes';
 
 export class MockedMembersStrategy implements MembersStrategy {
-  private static readonly _fixturePath = 'members.json';
-  private static readonly _fixtureEmptyArrayPath = 'empty-array.json';
-  private static _activeFixture = MockedMembersStrategy._fixtureEmptyArrayPath;
-
-  constructor() {
-    this._init();
-  }
-
   onCreate(): void {
-    MockedMembersStrategy._activeFixture = MockedMembersStrategy._fixturePath;
+    Intercept.Members().onCreate();
   }
 
   onDelete(): void {
-    MockedMembersStrategy._activeFixture = MockedMembersStrategy._fixtureEmptyArrayPath;
-  }
-
-  private _init(): void {
-    cy.intercept(Endpoints.Members, req => {
-      req.reply({fixture: MockedMembersStrategy._activeFixture});
-    });
+    Intercept.Members().onDelete();
   }
 }
