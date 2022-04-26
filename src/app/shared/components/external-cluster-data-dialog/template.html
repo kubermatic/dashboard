@@ -35,12 +35,11 @@ limitations under the License.
              header="Kubeconfig *"></km-editor>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-flat-button
-          id="external-cluster-confirm-btn"
-          kmThrottleClick
-          (throttleClick)="handler()"
-          [disabled]="!form.valid || !kubeconfig">
-    <i class="km-icon-mask km-icon-edit w-24"></i>
-    <span>Edit Cluster Connection</span>
-  </button>
+  <km-button id="external-cluster-confirm-btn"
+             icon="km-icon-edit"
+             label="Edit Cluster Connection mmmmmmmmmmmmmmmmmmmmm"
+             [disabled]="!form.valid || !kubeconfig"
+             [observable]="getObservable()"
+             (next)="onNext()">
+  </km-button>
 </mat-dialog-actions>

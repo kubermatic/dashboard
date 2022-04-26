@@ -15,15 +15,16 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {NotificationService} from '@core/services/notification';
 import {DatacenterService} from '@core/services/datacenter';
-import {Datacenter} from '@shared/entity/datacenter';
+import {CreateDatacenterModel, Datacenter} from '@shared/entity/datacenter';
 import {INTERNAL_NODE_PROVIDERS} from '@shared/model/NodeProviderConstants';
 import {getIconClassForButton} from '@shared/utils/common';
 import * as countryCodeLookup from 'country-code-lookup';
 import * as y from 'js-yaml';
 import _ from 'lodash';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {Observable, Subject} from 'rxjs';
+import {take, takeUntil} from 'rxjs/operators';
 
 export interface DatacenterDataDialogConfig {
   title: string;
@@ -45,6 +46,11 @@ export enum Controls {
   EnforceAuditLogging = 'enforceAuditLogging',
 }
 
+enum Title {
+  Add = 'Add Datacenter',
+  Edit = 'Edit Datacenter',
+}
+
 @Component({
   selector: 'km-add-admin-dialog',
   templateUrl: './template.html',
@@ -64,7 +70,8 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
   constructor(
     public _matDialogRef: MatDialogRef<DatacenterDataDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DatacenterDataDialogConfig,
-    private readonly _datacenterService: DatacenterService
+    private readonly _datacenterService: DatacenterService,
+    private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -116,7 +123,7 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
     return country ? country.country : code;
   }
 
-  save(): void {
+  getObservable(): Observable<Datacenter> | void {
     const datacenter: Datacenter = {
       metadata: {
         name: this.form.controls.name.value,
@@ -139,7 +146,32 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
       datacenter.spec[this.data.datacenter.spec.provider] = null;
     }
 
-    this._matDialogRef.close(datacenter);
+    const model: CreateDatacenterModel = {
+      name: datacenter.metadata.name,
+      spec: datacenter.spec,
+    };
+    switch (this.data.title) {
+      case Title.Add:
+        return this._datacenterService.createDatacenter(model).pipe(take(1));
+      case Title.Edit:
+        return this._datacenterService
+          .patchDatacenter(datacenter.spec.seed, datacenter.metadata.name, datacenter)
+          .pipe(take(1));
+    }
+  }
+
+  onNext(datacenter: Datacenter): void {
+    switch (this.data.title) {
+      case Title.Add:
+        this._notificationService.success(`Created the ${datacenter.metadata.name} datacenter`);
+        this._datacenterService.refreshDatacenters();
+        break;
+      case Title.Edit:
+        this._notificationService.success(`Updated the ${datacenter.metadata.name} datacenter`);
+        this._datacenterService.refreshDatacenters();
+        break;
+    }
+    this._matDialogRef.close();
   }
 
   private _initRequiredEmailsInput(): void {

@@ -17,7 +17,6 @@ import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {ClusterService} from '@core/services/cluster';
-import {NotificationService} from '@core/services/notification';
 import {PathParam} from '@core/services/params';
 import {UserService} from '@core/services/user';
 import {EditClusterConnectionDialogComponent} from '@shared/components/external-cluster-data-dialog/component';
@@ -29,7 +28,7 @@ import {Node} from '@shared/entity/node';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import {forkJoin, of, Subject, timer} from 'rxjs';
-import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 import {MasterVersion} from '@shared/entity/cluster';
 
@@ -65,7 +64,6 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
     private readonly _matDialog: MatDialog,
     private readonly _clusterService: ClusterService,
     private readonly _userService: UserService,
-    private readonly _notificationService: NotificationService,
     private readonly _appConfigService: AppConfigService
   ) {}
 
@@ -160,16 +158,6 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
     const dialog = this._matDialog.open(EditClusterConnectionDialogComponent);
     dialog.componentInstance.projectId = this.projectID;
     dialog.componentInstance.name = this.cluster.name;
-
-    dialog
-      .afterClosed()
-      .pipe(filter(model => !!model))
-      .pipe(switchMap(model => this._clusterService.updateExternalCluster(this.projectID, this.cluster.id, model)))
-      .pipe(take(1))
-      .subscribe(_ => {
-        this._clusterService.onClusterUpdate.next();
-        this._notificationService.success(`Updated the ${this.cluster.name} cluster`);
-      });
   }
 
   canDisconnect(): boolean {

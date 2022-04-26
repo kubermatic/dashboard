@@ -135,12 +135,10 @@ limitations under the License.
   <mat-hint>If not specified default configuration will be used.</mat-hint>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-flat-button
-          kmThrottleClick
-          (throttleClick)="save()"
-          id="km-add-dc-save-btn"
-          [disabled]="!form.valid">
-    <i [ngClass]="getIconClass()"></i>
-    <span>{{data.confirmLabel}} Datacenter</span>
-  </button>
+  <km-button [icon]="getIconClass()"
+             [label]="data.confirmLabel + ' Datacenter'"
+             [disabled]="form.invalid"
+             [observable]="getObservable()"
+             (next)="onNext($event)">
+  </km-button>
 </mat-dialog-actions>

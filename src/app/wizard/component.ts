@@ -25,10 +25,9 @@ import {ProjectService} from '@core/services/project';
 import {WizardService} from '@core/services/wizard/wizard';
 import {Cluster, CreateClusterModel} from '@shared/entity/cluster';
 import {Project} from '@shared/entity/project';
-import {SSHKey} from '@shared/entity/ssh-key';
 import {NodeData} from '@shared/model/NodeSpecChange';
-import {forkJoin, of, Subject, take} from 'rxjs';
-import {filter, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {Observable, Subject, take} from 'rxjs';
+import {filter, switchMap, takeUntil} from 'rxjs/operators';
 import {StepRegistry, steps, WizardStep} from './config';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {SaveClusterTemplateDialogComponent} from '@shared/components/save-cluster-template/component';
@@ -108,52 +107,34 @@ export class WizardComponent implements OnInit, OnDestroy {
     this._wizard.reset();
   }
 
-  create(): void {
-    this.creating = true;
-    let createdCluster: Cluster;
+  getObservable(): Observable<Cluster> {
     const createCluster = this._getCreateClusterModel(this._clusterSpecService.cluster, this._nodeDataService.nodeData);
-
-    this._clusterService
+    return this._clusterService
       .create(this.project.id, createCluster)
-      .pipe(
-        tap(cluster => {
-          this._notificationService.success(`Created the ${createCluster.cluster.name} cluster`);
-          this._googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
-          createdCluster = cluster;
-        })
-      )
-      .pipe(switchMap(_ => this._clusterService.cluster(this.project.id, createdCluster.id)))
-      .pipe(
-        switchMap(_ => {
-          this.creating = false;
+      .pipe(switchMap(cluster => this._clusterService.cluster(this.project.id, cluster.id)))
+      .pipe(takeUntil(this._unsubscribe));
+  }
 
-          if (this._clusterSpecService.sshKeys.length > 0) {
-            return forkJoin(
-              this._clusterSpecService.sshKeys.map(key =>
-                this._clusterService.createSSHKey(this.project.id, createdCluster.id, key.id)
-              )
-            );
-          }
-
-          return of([]);
-        })
-      )
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe({
-        next: (keys: SSHKey[]) => {
-          this._router.navigate([`/projects/${this.project.id}/clusters/${createdCluster.id}`]);
-          keys.forEach(key =>
-            this._notificationService.success(
-              `Added the ${key.name} SSH key to the cluster ${createCluster.cluster.name}`
-            )
+  onNext(cluster: Cluster): void {
+    this.creating = true;
+    if (cluster) {
+      this._notificationService.success(`Created the ${cluster.name} cluster`);
+      this._googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
+    } else {
+      this._notificationService.error(`Could not create the ${cluster.name} cluster`);
+      this._googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationFailed');
+      return;
+    }
+    if (this._clusterSpecService.sshKeys.length) {
+      this._clusterSpecService.sshKeys.map(key => {
+        this._clusterService
+          .createSSHKey(this.project.id, cluster.id, key.id)
+          .subscribe(_ =>
+            this._notificationService.success(`Added the ${key.name} SSH key to the cluster ${cluster.name}`)
           );
-        },
-        error: () => {
-          this._notificationService.error(`Could not create the ${createCluster.cluster.name} cluster`);
-          this._googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationFailed');
-          this.creating = false;
-        },
       });
+    }
+    this._router.navigate([`/projects/${this.project.id}/clusters/${cluster.id}`]);
   }
 
   private _getCreateClusterModel(cluster: Cluster, nodeData: NodeData): CreateClusterModel {

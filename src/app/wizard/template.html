@@ -102,17 +102,14 @@ limitations under the License.
             <i class="km-icon-mask km-icon-save"></i>
             <span>Save Cluster Template</span>
           </button>
-          <button id="km-wizard-create-btn"
-                  fxLayoutAlign="center center"
-                  mat-flat-button
-                  type="button"
-                  [disabled]="creating"
-                  *ngIf="last"
-                  kmThrottleClick
-                  (throttleClick)="create()">
-            <i class="km-icon-mask km-icon-add"></i>
-            <span>Create Cluster</span>
-          </button>
+          <km-button id="km-wizard-create-btn"
+                     *ngIf="last"
+                     icon="km-icon-add"
+                     label="Create Cluster"
+                     [disabled]="creating"
+                     [observable]="getObservable()"
+                     (next)="onNext($event)">
+          </km-button>
         </div>
       </mat-step>
     </mat-horizontal-stepper>
