@@ -136,7 +136,6 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
       NodeProvider.BRINGYOUROWN,
       NodeProvider.ANEXIA,
       NodeProvider.KUBEVIRT,
-      NodeProvider.VSPHERE,
     ];
     return !blacklist.includes(this._clusterSpecService.provider);
   }

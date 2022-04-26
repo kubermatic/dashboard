@@ -19,6 +19,7 @@ import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {Subject} from 'rxjs';
 import {VSphereTag} from '@shared/entity/node';
+import {convertArrayToObject} from '@shared/utils/common';
 
 enum Controls {
   Tags = 'tags',
@@ -44,7 +45,7 @@ export class VSphereExtendedNodeDataComponent extends BaseFormValidator implemen
   readonly controls = Controls;
   readonly _unsubscribe = new Subject<void>();
 
-  tags: VSphereTag[] | any;
+  tags: VSphereTag[] | object;
 
   constructor(private readonly _builder: FormBuilder, private readonly _nodeDataService: NodeDataService) {
     super();
@@ -64,25 +65,37 @@ export class VSphereExtendedNodeDataComponent extends BaseFormValidator implemen
     this._unsubscribe.complete();
   }
 
-  onTagsChange(tagsData: object): void {
+  onTagsChange(tagsData: object | Array<{name: string; description: string}>): void {
     const tags: VSphereTag[] = [];
 
-    for (const [key, value] of Object.entries(tagsData)) {
-      const newTag = new VSphereTag();
-      newTag.name = key;
-      newTag.description = value;
-      tags.push(newTag);
+    if (Array.isArray(tagsData) && tagsData.length > 0) {
+      //  Case: Machine Deployment dialog
+      this.tags = convertArrayToObject(tagsData, 'name', 'description');
+      this._nodeDataService.vsphere.tags = tagsData;
     }
-    this.tags = tags;
-    this._nodeDataService.vsphere.tags = tags;
+    else if (!Array.isArray(tagsData) && typeof tagsData === 'object') {
+      // Case: Create Cluster Wizard
+      for (const [key, value] of Object.entries(tagsData)) {
+        const newTag = new VSphereTag();
+        newTag.name = key;
+        newTag.description = value;
+        tags.push(newTag);
+      }
+      this.tags = tags;
+      this._nodeDataService.vsphere.tags = tags;
+    }
   }
 
   private _init(): void {
     const vSphereNodeCloudSpec = this.nodeData.spec.cloud.vsphere;
 
     if (vSphereNodeCloudSpec) {
-      const tags = vSphereNodeCloudSpec.tags || [];
-      this.onTagsChange(tags);
+      const tags = vSphereNodeCloudSpec.tags;
+      if (tags && tags.length > 0) {
+        this.onTagsChange(tags);
+      } else {
+        this.onTagsChange([]);
+      }
     }
   }
 
