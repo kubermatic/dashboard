@@ -27,15 +27,13 @@ import {AddMemberComponent} from './component';
 import {MemberService} from '@core/services/member';
 import {MemberServiceMock} from '@test/services/member-mock';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
-
 describe('AddProjectComponent', () => {
   let fixture: ComponentFixture<AddMemberComponent>;
   let component: AddMemberComponent;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
       declarations: [AddMemberComponent],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},

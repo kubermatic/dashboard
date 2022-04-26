@@ -20,15 +20,13 @@ import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
 import {EventCardComponent} from './component';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
-
 describe('EventCardComponent', () => {
   let fixture: ComponentFixture<EventCardComponent>;
   let component: EventCardComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
       providers: [{provide: UserService, useClass: UserMockService}],
       teardown: {destroyAfterEach: false},
     }).compileComponents();

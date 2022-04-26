@@ -26,8 +26,6 @@ import {EditServiceAccountDialogComponent} from './component';
 import {ServiceAccountService} from '@core/services/service-account';
 import {asyncData} from '@test/services/cluster-mock';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
-
 describe('EditServiceAccountDialogComponent', () => {
   let fixture: ComponentFixture<EditServiceAccountDialogComponent>;
   let component: EditServiceAccountDialogComponent;
@@ -37,7 +35,7 @@ describe('EditServiceAccountDialogComponent', () => {
     saMock.edit.mockReturnValue(asyncData(fakeServiceAccount()));
 
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},
         {provide: ServiceAccountService, useValue: saMock},

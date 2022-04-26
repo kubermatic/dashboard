@@ -27,8 +27,6 @@ import {MonacoEditorModule, NGX_MONACO_EDITOR_CONFIG} from 'ngx-monaco-editor';
 import {of} from 'rxjs';
 import {DefaultConstraintDialog, Mode} from './component';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule];
-
 declare let monaco: any;
 
 describe('DefaultConstraintDialog', () => {
@@ -46,7 +44,7 @@ describe('DefaultConstraintDialog', () => {
     opaMock.patchDefaultConstraint.mockReturnValue(asyncData(fakeConstraints()[0]));
 
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule],
       declarations: [DefaultConstraintDialog],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},

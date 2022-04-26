@@ -25,8 +25,6 @@ import {EditProjectComponent} from './component';
 import {ProjectService} from '@core/services/project';
 import {asyncData} from '@test/services/cluster-mock';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, ProjectModule];
-
 describe('EditProjectComponent', () => {
   let fixture: ComponentFixture<EditProjectComponent>;
   let component: EditProjectComponent;
@@ -36,7 +34,7 @@ describe('EditProjectComponent', () => {
     projectServiceMock.edit.mockReturnValue(asyncData(fakeProject()));
 
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, ProjectModule],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},
         {provide: ProjectService, useValue: projectServiceMock},

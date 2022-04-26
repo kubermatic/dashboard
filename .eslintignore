@@ -1,0 +1,5 @@
+dist/*
+node_modules/*
+src/environments/environment.e2e*.ts
+src/environments/environment.prod*.ts
+src/app/dynamic/module-registry.ce.ts

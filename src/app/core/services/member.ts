@@ -17,12 +17,16 @@ import {Injectable} from '@angular/core';
 import {environment} from '@environments/environment';
 import {Observable} from 'rxjs';
 import {Member, MemberModel} from '@shared/entity/member';
+import {retry} from 'rxjs/operators';
+import {AppConfigService} from '@app/config.service';
 
 @Injectable()
 export class MemberService {
-  private readonly _restRoot: string = environment.restRoot;
+  private readonly _restRoot = environment.restRoot;
+  private readonly _retryTime = 3;
+  private readonly _maxRetries = 5;
 
-  constructor(private readonly _httpClient: HttpClient) {}
+  constructor(private readonly _appConfigService: AppConfigService, private readonly _httpClient: HttpClient) {}
 
   /**
    * Adds member into a project.
@@ -42,7 +46,9 @@ export class MemberService {
    */
   list(projectID: string): Observable<Member[]> {
     const url = `${this._restRoot}/projects/${projectID}/users`;
-    return this._httpClient.get<Member[]>(url);
+    return this._httpClient
+      .get<Member[]>(url)
+      .pipe(retry({delay: this._retryTime * this._appConfigService.getRefreshTimeBase(), count: this._maxRetries}));
   }
 
   /**

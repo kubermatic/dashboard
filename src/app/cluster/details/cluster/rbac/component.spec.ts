@@ -32,8 +32,6 @@ import {AppConfigService} from '@app/config.service';
 import {AppConfigMockService} from '@test/services/app-config-mock';
 import {fakeBindings, fakeClusterBindings, fakeSimpleBindings, fakeSimpleClusterBindings} from '@test/data/rbac';
 
-const modules: any[] = [BrowserModule, NoopAnimationsModule, SharedModule];
-
 describe('RBACComponent', () => {
   let fixture: ComponentFixture<RBACComponent>;
   let component: RBACComponent;
@@ -47,7 +45,7 @@ describe('RBACComponent', () => {
     rbacMock.deleteBinding.mockReturnValue(of(null));
 
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule],
       declarations: [RBACComponent],
       providers: [
         {provide: RBACService, useValue: rbacMock},

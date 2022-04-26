@@ -119,8 +119,9 @@ import {AutofocusDirective} from './directives/autofocus/directive';
 import {ThrottleClickDirective} from './directives/throttle-click';
 import {RelativeTimePipe} from './pipes/relativetime';
 import {ButtonComponent} from '@shared/components/button/component';
+import {NgxChartsModule} from '@swimlane/ngx-charts';
 
-const modules: any[] = [
+const modules = [
   CommonModule,
   FormsModule,
   ReactiveFormsModule,
@@ -162,9 +163,10 @@ const modules: any[] = [
   ScrollingModule,
   FilterPipeModule,
   MonacoEditorModule,
+  NgxChartsModule,
 ];
 
-const components: any[] = [
+const components = [
   PropertyBooleanComponent,
   DialogTitleComponent,
   PropertyComponent,
@@ -231,7 +233,7 @@ const components: any[] = [
   ButtonComponent,
 ];
 
-const directives: any[] = [AutofocusDirective, ThrottleClickDirective, OptionDirective];
+const directives = [AutofocusDirective, ThrottleClickDirective, OptionDirective];
 
 @NgModule({
   imports: [...modules],

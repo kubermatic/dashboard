@@ -27,13 +27,11 @@ import {SharedModule} from '@shared/module';
 import {of} from 'rxjs';
 import {GatekeeperConfigComponent} from './component';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, DialogTestModule];
-
 describe('GatekeeperConfigComponent', () => {
   let fixture: ComponentFixture<GatekeeperConfigComponent>;
   let noop: ComponentFixture<NoopConfirmDialogComponent>;
   let component: GatekeeperConfigComponent;
-  let deleteGatekeeperConfigSpy;
+  let deleteGatekeeperConfigSpy: jest.Mock;
 
   beforeEach(waitForAsync(() => {
     const opaMock = {
@@ -43,7 +41,7 @@ describe('GatekeeperConfigComponent', () => {
     deleteGatekeeperConfigSpy = opaMock.deleteGatekeeperConfig.mockReturnValue(of(null));
 
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, DialogTestModule],
       declarations: [GatekeeperConfigComponent],
       providers: [{provide: OPAService, useValue: opaMock}, MatDialog, NotificationService],
       teardown: {destroyAfterEach: false},

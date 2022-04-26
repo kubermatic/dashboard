@@ -26,8 +26,6 @@ import {EditMemberComponent} from './component';
 import {MemberService} from '@core/services/member';
 import {asyncData} from '@test/services/cluster-mock';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
-
 describe('EditMemberComponent', () => {
   let fixture: ComponentFixture<EditMemberComponent>;
   let component: EditMemberComponent;
@@ -37,7 +35,7 @@ describe('EditMemberComponent', () => {
     memberServiceMock.edit.mockReturnValue(asyncData(fakeMember()));
 
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},
         {provide: MemberService, useValue: memberServiceMock},

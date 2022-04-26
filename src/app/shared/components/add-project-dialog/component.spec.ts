@@ -25,15 +25,13 @@ import {ProjectService} from '@core/services/project';
 import {SharedModule} from '@shared/module';
 import {AddProjectDialogComponent} from './component';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
-
 describe('AddProjectDialogComponent', () => {
   let fixture: ComponentFixture<AddProjectDialogComponent>;
   let component: AddProjectDialogComponent;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},
         {provide: ProjectService, useClass: ProjectMockService},

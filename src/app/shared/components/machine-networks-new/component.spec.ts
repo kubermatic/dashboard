@@ -41,15 +41,13 @@ import {HetznerService} from '@core/services/provider/hetzner';
 import {OpenStackService} from '@core/services/provider/openstack';
 import {NutanixService} from '@app/core/services/provider/nutanix';
 
-const modules: any[] = [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule];
-
 describe('MachineNetworksComponent', () => {
   let component: MachineNetworkComponent;
   let fixture: ComponentFixture<MachineNetworkComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
       providers: [
         AppConfigService,
         ClusterSpecService,

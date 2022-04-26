@@ -30,13 +30,11 @@ import {of} from 'rxjs';
 import {ConstraintsComponent} from './component';
 import {ViolationDetailsComponent} from './violation-details/component';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, DialogTestModule];
-
 describe('ConstraintsComponent', () => {
   let fixture: ComponentFixture<ConstraintsComponent>;
   let noop: ComponentFixture<NoopConfirmDialogComponent>;
   let component: ConstraintsComponent;
-  let deleteConstraintSpy;
+  let deleteConstraintSpy: jest.Mock;
 
   beforeEach(waitForAsync(() => {
     const opaMock = {
@@ -51,7 +49,7 @@ describe('ConstraintsComponent', () => {
     opaMock.getViolationPageIndex.mockReturnValue(0);
 
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, DialogTestModule],
       declarations: [ConstraintsComponent, ViolationDetailsComponent],
       providers: [
         {provide: UserService, useClass: UserMockService},

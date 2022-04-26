@@ -120,11 +120,9 @@ const components: any[] = [
   ReplicasDialogComponent,
 ];
 
-const dialogs: any[] = [AddMachineNetworkComponent];
-
 @NgModule({
   imports: [SharedModule, ClusterRoutingModule, MachineNetworksModule, NodeDataModule],
-  declarations: [...components, ...dialogs],
+  declarations: [...components, AddMachineNetworkComponent],
   exports: [...components],
   providers: [
     NodeService,
