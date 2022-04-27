@@ -20,8 +20,9 @@ import {Members} from './members/page';
 import {Projects} from './projects/page';
 import {RootPage} from './root/page';
 import {ServiceAccounts} from './serviceaccounts/page';
+import {AdminSettings} from './settings/admin/page';
+import {UserSettings} from './settings/user/page';
 import {SSHKeys} from './sshkeys/page';
-import {UserSettings} from './usersettings/page';
 import {Wizard} from './wizard/page';
 
 export class Pages {
@@ -61,6 +62,10 @@ export class Pages {
 
   static get UserSettings(): UserSettings {
     return new UserSettings();
+  }
+
+  static get AdminSettings(): AdminSettings {
+    return new AdminSettings();
   }
 
   static expect(view: View): void {

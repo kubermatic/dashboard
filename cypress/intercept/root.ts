@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import {Endpoints, Fixtures} from '@kmtypes';
-import {Mocks} from '@utils/mocks';
 
 export class Root {
   private static _userFixture = Fixtures.User;
@@ -43,7 +42,7 @@ export class Root {
       exp: Date.now() + day,
       iat: Date.now(),
       nonce: nonce,
-      email: Mocks.currentUser.email,
+      email: Root._userFixture.email,
       email_verified: true,
       name: 'roxy',
     };

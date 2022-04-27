@@ -26,7 +26,6 @@ enum Projects {
 }
 
 enum AdminSettings {
-  Default = 'settings',
   Administrators = 'settings/administrators',
   Interface = 'settings/interface',
   DefaultsAndLimits = 'settings/defaults',

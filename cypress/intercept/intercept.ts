@@ -19,6 +19,7 @@ import {Members} from './members';
 import {Projects} from './projects';
 import {Root} from './root';
 import {ServiceAccounts} from './serviceaccounts';
+import {AdminSettings} from './settings/admin';
 import {SSHKeys} from './sshkeys';
 
 export class Intercept {
@@ -30,6 +31,7 @@ export class Intercept {
       Intercept.Root();
       Intercept.Members();
       Intercept.Projects();
+      Intercept.AdminSettings();
     }
   }
 
@@ -55,5 +57,9 @@ export class Intercept {
 
   static Projects(): Projects {
     return new Projects();
+  }
+
+  static AdminSettings(): AdminSettings {
+    return new AdminSettings();
   }
 }

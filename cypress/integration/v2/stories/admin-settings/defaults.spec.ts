@@ -12,15 +12,270 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {View} from '@kmtypes';
-import {Pages} from '@pages/v2';
+import {Intercept} from '@intercept';
+import {Condition, View} from '@kmtypes';
+import {Pages, Projects} from '@pages/v2';
 
 describe('Admin Settings - Defaults Story', () => {
+  const projectName = Projects.getName();
+
+  beforeEach(() => Intercept.init());
+
   it('should login', () => {
-    Pages.Root.login();
+    Pages.Root.login(undefined, undefined, true);
     Pages.Projects.visit();
     Pages.expect(View.Projects.Default);
   });
 
-  it('should go to admin settings', () => {});
+  it('should create a new project', () => {
+    Pages.Projects.create(projectName);
+    Pages.Projects.Elements.projectItem(projectName).should(Condition.Exist);
+    Pages.Projects.Elements.projectItemIcon(projectName, 'disabled').should(Condition.NotExist);
+    Pages.Projects.Elements.projectItemIcon(projectName, 'running').should(Condition.Exist);
+  });
+
+  it('should go to admin settings - defaults and limits page', () => {
+    Pages.AdminSettings.visit();
+    Pages.expect(View.AdminSettings.DefaultsAndLimits);
+  });
+
+  it('should make sure settings have default values', () => {
+    Pages.AdminSettings.Elements.enableClusterCleanupCheckbox.find('input').should(Condition.NotBeChecked);
+    Pages.AdminSettings.Elements.enforceClusterCleanupCheckbox.find('input').should(Condition.NotBeChecked);
+  });
 });
+
+// describe('Admin Settings - Cluster Related Settings Story', () => {
+//   const preset = Mocks.enabled() ? Preset.Mock : Preset.Digitalocean;
+//   const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('e2e-test-project-');
+//   const clusterName = Mocks.enabled() ? 'test-cluster' : _.uniqueId('e2e-test-cluster-');
+//   const initialMachineDeploymentName = Mocks.enabled() ? 'test-md' : _.uniqueId('e2e-test-md-');
+//   const initialMachineDeploymentReplicas = '1';
+//
+//   beforeEach(() => {
+//     if (Mocks.enabled()) {
+//       Mocks.register(Provider.Digitalocean);
+//     }
+//   });
+//
+//   it('should login', () => {
+//     login(Config.adminEmail(), Config.password(), true);
+//     cy.url().should(Condition.Include, View.Projects.Default);
+//   });
+//
+//   it('should create a new project', () => {
+//     ProjectsPage.addProject(projectName);
+//   });
+//
+//   it('should go to the admin settings - defaults and limits page', () => {
+//     AdminSettings.DefaultsAndLimitsPage.visit();
+//   });
+//
+//   it('should make sure settings have default values', () => {
+//     AdminSettings.DefaultsAndLimitsPage.getCleanupEnableCheckbox().find('input').should(Condition.NotBeChecked);
+//     AdminSettings.DefaultsAndLimitsPage.getCleanupEnforceCheckbox().find('input').should(Condition.NotBeChecked);
+//   });
+//
+//   it('should go to the admin settings - interface page', () => {
+//     AdminSettings.InterfacePage.visit();
+//   });
+//
+//   it('should make sure settings have default values', () => {
+//     AdminSettings.InterfacePage.getEnableKubernetesDashboardCheckbox().find('input').should(Condition.BeChecked);
+//     AdminSettings.InterfacePage.getEnableOIDCCheckbox().find('input').should(Condition.NotBeChecked);
+//     AdminSettings.InterfacePage.getEnableExternalClustersCheckbox().find('input').should(Condition.BeChecked);
+//   });
+//
+//   it('should go to projects view', () => {
+//     ProjectsPage.visit();
+//   });
+//
+//   it('should select project', () => {
+//     ProjectsPage.selectProject(projectName);
+//   });
+//
+//   it('should make sure connect cluster button is visible', () => {
+//     ClustersPage.getExternalClustersTab().should(Condition.Exist).click();
+//     ClustersPage.getConnectClusterBtn().should(Condition.Exist);
+//   });
+//
+//   it('should go to wizard', () => {
+//     ClustersPage.getClustersTab().should(Condition.Exist).click();
+//     ClustersPage.openWizard();
+//   });
+//
+//   it('should create a new cluster', () => {
+//     WizardPage.getProviderBtn(Provider.Digitalocean).click();
+//     WizardPage.getDatacenterBtn(Digitalocean.Frankfurt).click();
+//     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
+//     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
+//     WizardPage.getCustomPresetsCombobox().click();
+//     WizardPage.getPreset(preset).click();
+//     WizardPage.getNextBtn(WizardStep.ProviderSettings).click({force: true});
+//     WizardPage.getNodeNameInput()
+//       .type(initialMachineDeploymentName)
+//       .should(Condition.HaveValue, initialMachineDeploymentName);
+//     WizardPage.getNodeCountInput()
+//       .clear()
+//       .type(initialMachineDeploymentReplicas)
+//       .should(Condition.HaveValue, initialMachineDeploymentReplicas);
+//     WizardPage.getNextBtn(WizardStep.NodeSettings).should(Condition.BeEnabled).click({force: true});
+//     WizardPage.getCreateBtn().click({force: true});
+//
+//     ClustersPage.verifyUrl();
+//   });
+//
+//   it('should check if cluster was created', () => {
+//     ClustersPage.visit();
+//     ClustersPage.getTable().should(Condition.Contain, clusterName);
+//   });
+//
+//   it('should go to cluster details page', () => {
+//     ClustersPage.getClusterItem(clusterName).click();
+//   });
+//
+//   it('should wait for initial machine deployment to be created', () => {
+//     TrafficMonitor.newTrafficMonitor().method(RequestType.GET).url(Endpoint.MachineDeployments).interceptAndWait();
+//     ClustersPage.getMachineDeploymentList().should(Condition.Contain, initialMachineDeploymentName);
+//   });
+//
+//   it('should make sure default admin settings work', () => {
+//     // Cleanup settings check
+//     ClustersPage.getDeleteClusterBtn().click();
+//     ClustersPage.getDeleteDialogCleanupLBCheckbox().find('input').should(Condition.NotBeChecked);
+//     ClustersPage.getDeleteDialogCleanupVolumeCheckbox().find('input').should(Condition.NotBeChecked);
+//     ClustersPage.getDialogCloseButton().click();
+//
+//     // Kubernetes Dashboard settings check
+//     ClustersPage.getOpenKubernetesDashboardButton().should(Condition.Exist);
+//
+//     // OIDC Kubeconfig settings check
+//     // Note: This is actually a workaround to simplify this check as it directly depends
+//     // on the OIDC kubeconfig setting. Make sure to have also `share_kubeconfig` set to true.
+//     ClustersPage.getShareKubeconfigButton().should(Condition.Exist);
+//   });
+//
+//   it('should go to the admin settings - defaults and limits page', () => {
+//     AdminSettings.DefaultsAndLimitsPage.visit();
+//   });
+//
+//   it('should make sure settings have default values', () => {
+//     if (Mocks.enabled()) {
+//       Mocks.adminSettings.cleanupOptions.enabled = true;
+//       Mocks.adminSettings.cleanupOptions.enforced = true;
+//     } else {
+//       AdminSettings.DefaultsAndLimitsPage.getCleanupEnableCheckbox().click();
+//       AdminSettings.waitForSave();
+//
+//       AdminSettings.DefaultsAndLimitsPage.getCleanupEnforceCheckbox().click();
+//       AdminSettings.waitForSave();
+//     }
+//   });
+//
+//   it('should go to the admin settings - interface page', () => {
+//     AdminSettings.InterfacePage.visit();
+//   });
+//
+//   it('should make sure settings have default values', () => {
+//     if (Mocks.enabled()) {
+//       Mocks.adminSettings.enableDashboard = false;
+//       Mocks.adminSettings.enableOIDCKubeconfig = true;
+//       Mocks.adminSettings.enableExternalClusterImport = false;
+//     } else {
+//       AdminSettings.InterfacePage.getEnableKubernetesDashboardCheckbox().click();
+//       AdminSettings.waitForSave();
+//
+//       AdminSettings.InterfacePage.getEnableOIDCCheckbox().click();
+//       AdminSettings.waitForSave();
+//
+//       AdminSettings.InterfacePage.getEnableExternalClustersCheckbox().click();
+//       AdminSettings.waitForSave();
+//     }
+//   });
+//
+//   it('should go to projects view', () => {
+//     ProjectsPage.visit();
+//   });
+//
+//   it('should select project', () => {
+//     ProjectsPage.selectProject(projectName);
+//   });
+//
+//   it('should make sure external clusters are not available', () => {
+//     ClustersPage.getExternalClustersTab().should(Condition.NotExist);
+//   });
+//
+//   it('should go to cluster details page', () => {
+//     ClustersPage.getClusterItem(clusterName).click();
+//   });
+//
+//   it('should make sure default admin settings work', () => {
+//     // Cleanup settings check
+//     ClustersPage.getDeleteClusterBtn().click();
+//     ClustersPage.getDeleteDialogCleanupLBCheckbox().find('input').should(Condition.BeChecked);
+//     ClustersPage.getDeleteDialogCleanupLBCheckbox().find('input').should(Condition.BeDisabled);
+//     ClustersPage.getDeleteDialogCleanupVolumeCheckbox().find('input').should(Condition.BeChecked);
+//     ClustersPage.getDeleteDialogCleanupVolumeCheckbox().find('input').should(Condition.BeDisabled);
+//     ClustersPage.getDialogCloseButton().click();
+//
+//     // Kubernetes Dashboard settings check
+//     ClustersPage.getOpenKubernetesDashboardButton().should(Condition.NotExist);
+//
+//     // OIDC Kubeconfig settings check
+//     ClustersPage.getShareKubeconfigButton().should(Condition.NotExist);
+//   });
+//
+//   it('should go to the admin settings - defaults and limits page', () => {
+//     AdminSettings.DefaultsAndLimitsPage.visit();
+//   });
+//
+//   it('should make sure settings have default values', () => {
+//     if (Mocks.enabled()) {
+//       Mocks.adminSettings.cleanupOptions.enabled = false;
+//       Mocks.adminSettings.cleanupOptions.enforced = false;
+//     } else {
+//       AdminSettings.DefaultsAndLimitsPage.getCleanupEnableCheckbox().click();
+//       AdminSettings.waitForSave();
+//
+//       AdminSettings.DefaultsAndLimitsPage.getCleanupEnforceCheckbox().click();
+//       AdminSettings.waitForSave();
+//     }
+//   });
+//
+//   it('should go to the admin settings - interface page', () => {
+//     AdminSettings.InterfacePage.visit();
+//   });
+//
+//   it('should make sure settings have default values', () => {
+//     if (Mocks.enabled()) {
+//       Mocks.adminSettings.enableDashboard = true;
+//       Mocks.adminSettings.enableOIDCKubeconfig = false;
+//       Mocks.adminSettings.enableExternalClusterImport = true;
+//     } else {
+//       AdminSettings.InterfacePage.getEnableKubernetesDashboardCheckbox().click();
+//       AdminSettings.waitForSave();
+//
+//       AdminSettings.InterfacePage.getEnableOIDCCheckbox().click();
+//       AdminSettings.waitForSave();
+//
+//       AdminSettings.InterfacePage.getEnableExternalClustersCheckbox().click();
+//       AdminSettings.waitForSave();
+//     }
+//   });
+//
+//   it('should go to the projects page', () => {
+//     ProjectsPage.visit();
+//   });
+//
+//   it('should delete the project', () => {
+//     ProjectsPage.deleteProject(projectName);
+//   });
+//
+//   it('should verify that there are no projects', () => {
+//     ProjectsPage.verifyNoProjects();
+//   });
+//
+//   it('should logout', () => {
+//     logout();
+//   });
+// });

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {DEFAULT_ADMIN_SETTINGS, DEFAULT_USER_SETTINGS} from '../../src/app/shared/entity/settings';
+
 enum Alibaba {
   ClusterList = 'alibaba/clusters.json',
   Cluster = 'alibaba/cluster.json',
@@ -138,6 +140,10 @@ const User = {
     selectProjectTableView: true,
   },
 };
+const Settings = {
+  User: DEFAULT_USER_SETTINGS,
+  Admin: DEFAULT_ADMIN_SETTINGS,
+};
 
-export const Fixtures = {Provider, Resource, EmptyArray, EmptyObject, User, Members};
+export const Fixtures = {Provider, Resource, EmptyArray, EmptyObject, User, Members, Settings};
 export type Fixtures = typeof Fixtures;

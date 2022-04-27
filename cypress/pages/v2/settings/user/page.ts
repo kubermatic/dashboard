@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Page, PageOptions} from '@kmtypes';
-import {Pages} from '../pages';
+import {Pages} from '@pages/v2';
 
 export class UserSettings extends PageOptions implements Page {
   readonly Elements = new Elements();
