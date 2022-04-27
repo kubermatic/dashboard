@@ -207,7 +207,7 @@ export class KubeVirtBasicNodeDataComponent
 
   private _setDefaultFlavor(flavors: KubeVirtVMInstancePreset[]): void {
     this.flavors = flavors;
-    this.selectedFlavor = this._initialData.flavorName;
+    this.selectedFlavor = this._initialData?.flavorName;
     this.flavorLabel = this.flavors ? FlavorsState.Ready : FlavorsState.Empty;
     this._cdr.detectChanges();
   }
@@ -239,7 +239,7 @@ export class KubeVirtBasicNodeDataComponent
 
   private _setDefaultStorageClass(storageClasses: KubeVirtStorageClass[]): void {
     this.storageClasses = storageClasses;
-    this.selectedStorageClass = this._initialData.primaryDiskStorageClassName;
+    this.selectedStorageClass = this._initialData?.primaryDiskStorageClassName;
 
     if (!this.selectedStorageClass && !_.isEmpty(this.storageClasses)) {
       this.selectedStorageClass = this.storageClasses[0].name;
