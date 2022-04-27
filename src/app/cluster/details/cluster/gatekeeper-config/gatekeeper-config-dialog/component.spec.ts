@@ -28,13 +28,13 @@ import {MonacoEditorModule, NGX_MONACO_EDITOR_CONFIG} from 'ngx-monaco-editor';
 import {GatekeeperConfigDialog, Mode} from './component';
 import {asyncData} from '@test/services/cluster-mock';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule];
-
 declare let monaco: any;
 
 describe('GatekeeperConfigDialog', () => {
   let fixture: ComponentFixture<GatekeeperConfigDialog>;
   let component: GatekeeperConfigDialog;
+  let createGatekeeperConfigSpy: jest.Mock;
+  let patchGatekeeperConfigSpy: jest.Mock;
 
   beforeEach(waitForAsync(() => {
     const opaMock = {
@@ -42,11 +42,11 @@ describe('GatekeeperConfigDialog', () => {
       patchGatekeeperConfig: jest.fn(),
       refreshGatekeeperConfig: () => {},
     };
-    opaMock.createGatekeeperConfig.mockReturnValue(asyncData(fakeGatekeeperConfig()));
-    opaMock.patchGatekeeperConfig.mockReturnValue(asyncData(fakeGatekeeperConfig()));
+    createGatekeeperConfigSpy = opaMock.createGatekeeperConfig.mockReturnValue(asyncData(fakeGatekeeperConfig()));
+    patchGatekeeperConfigSpy = opaMock.patchGatekeeperConfig.mockReturnValue(asyncData(fakeGatekeeperConfig()));
 
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule],
       declarations: [GatekeeperConfigDialog],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},
@@ -95,6 +95,12 @@ describe('GatekeeperConfigDialog', () => {
     it('should have correct button text: add', () => {
       expect(document.body.querySelector('#km-gatekeeper-config-dialog-btn').textContent).toContain('Add');
     });
+
+    xit('should call createGatekeeperConfig()', () => {
+      component.getObservable().subscribe();
+      fixture.detectChanges();
+      expect(createGatekeeperConfigSpy).toHaveBeenCalled();
+    });
   });
 
   describe('Edit Gatekeeper Config Dialog', () => {
@@ -124,6 +130,12 @@ describe('GatekeeperConfigDialog', () => {
 
     it('should have correct button text: edit', () => {
       expect(document.body.querySelector('#km-gatekeeper-config-dialog-btn').textContent).toContain('Edit');
+    });
+
+    xit('should call patchGatekeeperConfig()', () => {
+      component.getObservable().subscribe();
+      fixture.detectChanges();
+      expect(patchGatekeeperConfigSpy).toHaveBeenCalled();
     });
   });
 });

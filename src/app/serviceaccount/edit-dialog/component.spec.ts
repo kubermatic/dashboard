@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, flush, TestBed, tick, waitForAsync} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material/dialog';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -26,18 +26,17 @@ import {EditServiceAccountDialogComponent} from './component';
 import {ServiceAccountService} from '@core/services/service-account';
 import {asyncData} from '@test/services/cluster-mock';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule];
-
 describe('EditServiceAccountDialogComponent', () => {
   let fixture: ComponentFixture<EditServiceAccountDialogComponent>;
   let component: EditServiceAccountDialogComponent;
+  let editServiceAccountSpy: jest.Mock;
 
   beforeEach(waitForAsync(() => {
     const saMock = {edit: jest.fn()};
-    saMock.edit.mockReturnValue(asyncData(fakeServiceAccount()));
+    editServiceAccountSpy = saMock.edit.mockReturnValue(asyncData(fakeServiceAccount()));
 
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},
         {provide: ServiceAccountService, useValue: saMock},
@@ -62,4 +61,14 @@ describe('EditServiceAccountDialogComponent', () => {
   it('should have valid form after creating', () => {
     expect(component.form.valid).toBeTruthy();
   });
+
+  xit('should call editServiceAccount method', fakeAsync(() => {
+    component.form.controls.name.patchValue('test-service-account');
+    component.form.controls.group.patchValue('editors');
+    component.getObservable().subscribe();
+    tick();
+    flush();
+
+    expect(editServiceAccountSpy).toHaveBeenCalled();
+  }));
 });

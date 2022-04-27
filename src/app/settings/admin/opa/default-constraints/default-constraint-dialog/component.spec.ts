@@ -27,13 +27,13 @@ import {MonacoEditorModule, NGX_MONACO_EDITOR_CONFIG} from 'ngx-monaco-editor';
 import {of} from 'rxjs';
 import {DefaultConstraintDialog, Mode} from './component';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule];
-
 declare let monaco: any;
 
 describe('DefaultConstraintDialog', () => {
   let fixture: ComponentFixture<DefaultConstraintDialog>;
   let component: DefaultConstraintDialog;
+  let createDefaultConstraintSpy: jest.Mock;
+  let patchDefaultConstraintSpy: jest.Mock;
 
   beforeEach(waitForAsync(() => {
     const opaMock = {
@@ -42,11 +42,11 @@ describe('DefaultConstraintDialog', () => {
       constraintTemplates: of(fakeConstraintTemplates()),
       refreshConstraint: () => {},
     };
-    opaMock.createDefaultConstraint.mockReturnValue(asyncData(fakeConstraints()[0]));
-    opaMock.patchDefaultConstraint.mockReturnValue(asyncData(fakeConstraints()[0]));
+    createDefaultConstraintSpy = opaMock.createDefaultConstraint.mockReturnValue(asyncData(fakeConstraints()[0]));
+    patchDefaultConstraintSpy = opaMock.patchDefaultConstraint.mockReturnValue(asyncData(fakeConstraints()[0]));
 
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule],
       declarations: [DefaultConstraintDialog],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},
@@ -91,6 +91,12 @@ describe('DefaultConstraintDialog', () => {
     it('should have correct button text: add', () => {
       expect(document.body.querySelector('#km-default-constraint-dialog-btn').textContent).toContain('Add');
     });
+
+    xit('should call createDefaultConstraint()', () => {
+      component.getObservable().subscribe();
+      fixture.detectChanges();
+      expect(createDefaultConstraintSpy).toHaveBeenCalled();
+    });
   });
 
   describe('Edit Default Constraint Dialog', () => {
@@ -118,6 +124,12 @@ describe('DefaultConstraintDialog', () => {
 
     it('should have correct button text: edit', () => {
       expect(document.body.querySelector('#km-default-constraint-dialog-btn').textContent).toContain('Edit');
+    });
+
+    xit('should call patchDefaultConstraint()', () => {
+      component.getObservable().subscribe();
+      fixture.detectChanges();
+      expect(patchDefaultConstraintSpy).toHaveBeenCalled();
     });
   });
 });

@@ -26,13 +26,13 @@ import {SharedModule} from '@shared/module';
 import {MonacoEditorModule, NGX_MONACO_EDITOR_CONFIG} from 'ngx-monaco-editor';
 import {ConstraintTemplateDialog, Mode} from './component';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule];
-
 declare let monaco: any;
 
 describe('ConstraintTemplateDialog', () => {
   let fixture: ComponentFixture<ConstraintTemplateDialog>;
   let component: ConstraintTemplateDialog;
+  let createCTSpy: jest.Mock;
+  let patchCTSpy: jest.Mock;
 
   beforeEach(waitForAsync(() => {
     const opaMock = {
@@ -40,11 +40,11 @@ describe('ConstraintTemplateDialog', () => {
       patchConstraintTemplate: jest.fn(),
       refreshConstraintTemplates: () => {},
     };
-    opaMock.createConstraintTemplate.mockReturnValue(asyncData(fakeConstraintTemplates()[0]));
-    opaMock.patchConstraintTemplate.mockReturnValue(asyncData(fakeConstraintTemplates()[0]));
+    createCTSpy = opaMock.createConstraintTemplate.mockReturnValue(asyncData(fakeConstraintTemplates()[0]));
+    patchCTSpy = opaMock.patchConstraintTemplate.mockReturnValue(asyncData(fakeConstraintTemplates()[0]));
 
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule],
       declarations: [ConstraintTemplateDialog],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},
@@ -89,6 +89,12 @@ describe('ConstraintTemplateDialog', () => {
     it('should have correct button text: add', () => {
       expect(document.body.querySelector('#km-constraint-template-dialog-btn').textContent).toContain('Add');
     });
+
+    xit('should call createConstraintTemplate()', () => {
+      component.getObservable().subscribe();
+      fixture.detectChanges();
+      expect(createCTSpy).toHaveBeenCalled();
+    });
   });
 
   describe('Edit Constraint Template Dialog', () => {
@@ -116,6 +122,12 @@ describe('ConstraintTemplateDialog', () => {
 
     it('should have correct button text: edit', () => {
       expect(document.body.querySelector('#km-constraint-template-dialog-btn').textContent).toContain('Edit');
+    });
+
+    xit('should call patchConstraintTemplate()', () => {
+      component.getObservable().subscribe();
+      fixture.detectChanges();
+      expect(patchCTSpy).toHaveBeenCalled();
     });
   });
 });
