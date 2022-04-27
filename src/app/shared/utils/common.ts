@@ -65,17 +65,14 @@ export function getIconClassForButton(type: string): string {
   }
 }
 
-export function convertArrayToObject<T>(data: T[], keyName: string, valueName: string): object {
-  if (!Array.isArray(data)) {
+export function convertArrayToObject<T>(data: T[], keyName: string, valueName: string): T | object {
+  if (!Array.isArray(data) || data.length === 0) {
     return {};
   }
-  if (data && data.length > 0) {
-    return data.reduce((prev, next) => {
-      return {
-        ...prev,
-        [next[keyName]]: next[valueName],
-      };
-    }, {});
-  }
-  return {};
+  return data.reduce((prev, next) => {
+    return {
+      ...prev,
+      [next[keyName]]: next[valueName],
+    };
+  }, {});
 }

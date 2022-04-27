@@ -17,7 +17,7 @@ import {LabelFormComponent} from '@shared/components/label-form/component';
 import {Cluster} from '@shared/entity/cluster';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
-import {getOperatingSystem, getOperatingSystemLogoClass} from '@shared/entity/node';
+import {getOperatingSystem, getOperatingSystemLogoClass, VSphereTag} from '@shared/entity/node';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {getIpCount} from '@shared/functions/get-ip-count';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
@@ -101,7 +101,9 @@ export class ClusterSummaryComponent {
     return !!tags && !_.isEmpty(Object.keys(LabelFormComponent.filterNullifiedKeys(tags)));
   }
 
-  convertKeyDescriptionPairTagsIntoObject(tags: Array<{name: string; description: string}>): object {
+  // Note: VSphereNodeSpec has list of tags: VSphereTag which requires explicit
+  // conversion array into object form to pass onto `km-labels` component as Input
+  convertVSphereTagsIntoObject(tags: Array<VSphereTag>): VSphereTag | {} {
     return convertArrayToObject(tags, 'name', 'description');
   }
 

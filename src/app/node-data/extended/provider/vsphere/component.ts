@@ -71,7 +71,7 @@ export class VSphereExtendedNodeDataComponent extends BaseFormValidator implemen
 
     if (Array.isArray(tagsData) && tagsData.length > 0) {
       //  Case: Machine Deployment dialog
-      this.tags = convertArrayToObject(tagsData, 'name', 'description');
+      this.tags = convertArrayToObject<VSphereTag>(tagsData, 'name', 'description');
       this._nodeDataService.vsphere.tags = tagsData;
     } else if (!Array.isArray(tagsData) && typeof tagsData === 'object') {
       // Case: Create Cluster Wizard
