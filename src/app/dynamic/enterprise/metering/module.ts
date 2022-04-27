@@ -24,19 +24,12 @@ import {MeteringComponent} from '@app/dynamic/enterprise/metering/component';
 import {MeteringConfigComponent} from '@app/dynamic/enterprise/metering/config/component';
 import {MeteringConfigurationDialog} from '@app/dynamic/enterprise/metering/config/config-dialog/component';
 import {MeteringCredentialsDialog} from '@app/dynamic/enterprise/metering/config/credentials-dialog/component';
-import {MeteringListComponent} from '@app/dynamic/enterprise/metering/list/component';
 import {SharedModule} from '@shared/module';
 
 const routes: Routes = [{path: '', component: MeteringComponent}];
 
 @NgModule({
   imports: [SharedModule, RouterModule.forChild(routes)],
-  declarations: [
-    MeteringComponent,
-    MeteringListComponent,
-    MeteringConfigComponent,
-    MeteringConfigurationDialog,
-    MeteringCredentialsDialog,
-  ],
+  declarations: [MeteringComponent, MeteringConfigComponent, MeteringConfigurationDialog, MeteringCredentialsDialog],
 })
 export class MeteringModule {}
