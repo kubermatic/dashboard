@@ -29,7 +29,13 @@ import {NotificationService} from '@core/services/notification';
 import {SharedModule} from '@shared/module';
 import {AddMachineNetworkComponent} from './component';
 
-const modules: any[] = [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule];
+const modules: (BrowserModule | RouterTestingModule)[] = [
+  BrowserModule,
+  HttpClientModule,
+  BrowserAnimationsModule,
+  RouterTestingModule,
+  SharedModule,
+];
 
 describe('AddMachineNetworkComponent', () => {
   let component: AddMachineNetworkComponent;
