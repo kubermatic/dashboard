@@ -276,7 +276,7 @@ export class KubeVirtBasicNodeDataComponent
               ComboboxControls.Select
             ],
             primaryDiskSize: `${this.form.get(Controls.PrimaryDiskSize).value}Gi`,
-            secondaryDisks: secondaryDisks && secondaryDisks.length > 0 ? secondaryDisks : null,
+            secondaryDisks: secondaryDisks?.length ? secondaryDisks : null,
           } as KubeVirtNodeSpec,
         } as NodeCloudSpec,
       } as NodeSpec,
