@@ -25,18 +25,19 @@ END OF TERMS AND CONDITIONS
     <mat-card-title fxFlex
                     fxLayout="row"
                     fxLayoutAlign=" center">
-      <div fxFlex>Reports</div>
+      <div fxFlex>Schedules</div>
+      <button id="km-create-schedule-btn"
+              mat-flat-button
+              color="quaternary"
+              fxLayoutAlign="center center"
+              (click)="create()">
+        <i class="km-icon-mask km-icon-add"></i>
+        <span>Create Schedule</span>
+      </button>
     </mat-card-title>
   </mat-card-header>
   <mat-card-content fxLayout="column">
-    <div *ngIf="!enabled"
-         fxFlex
-         fxLayoutAlign="center center">
-      Enable and configure metering to get regular usage reports
-    </div>
-
-    <table [hidden]="!config.enabled"
-           class="km-table"
+    <table class="km-table"
            mat-table
            matSort
            matSortActive="name"
@@ -52,25 +53,38 @@ END OF TERMS AND CONDITIONS
             *matCellDef="let element">{{element.name}}</td>
       </ng-container>
 
-      <ng-container matColumnDef="size">
+      <ng-container matColumnDef="schedule">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell p-20"
-            mat-sort-header>Size
+            mat-sort-header>
+          <div fxLayout="row"
+               fxLayoutGap="4px"
+               fxLayoutAlign=" center">
+            <span>Schedule</span>
+            <div class="km-icon-info km-pointer tooltip"
+                 matTooltip="Cron expression that describes how often a report should be created."></div>
+          </div>
         </th>
         <td mat-cell
-            *matCellDef="let element">{{element.size | kmSize}}</td>
+            *matCellDef="let element">{{element.schedule}}</td>
       </ng-container>
 
-      <ng-container matColumnDef="lastModified">
+      <ng-container matColumnDef="interval">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell p-20"
-            mat-sort-header>Modified
+            mat-sort-header>
+          <div fxLayout="row"
+               fxLayoutGap="4px"
+               fxLayoutAlign=" center">
+            <span>Report Scope</span>
+            <div class="km-icon-info km-pointer tooltip"
+                 matTooltip="Range of days captured in each report."></div>
+          </div>
         </th>
         <td mat-cell
-            *matCellDef="let element">
-          <km-relative-time [date]="element.lastModified"></km-relative-time>
+            *matCellDef="let element">{{element.interval}}
         </td>
       </ng-container>
 
@@ -82,18 +96,17 @@ END OF TERMS AND CONDITIONS
             *matCellDef="let element">
           <div class="km-table-actions"
                fxLayoutAlign="end">
-            <ng-container *ngIf="isFetchingReport(element)">
-              <mat-spinner color="accent"
-                           class="km-spinner"
-                           fxFlexAlign=" center"
-                           [diameter]="25"></mat-spinner>
-            </ng-container>
-
-            <button mat-icon-button
-                    kmThrottleClick
-                    (throttleClick)="download(element)"
-                    [disabled]="!canDownload(element)">
-              <i class="km-icon-mask km-icon-download"></i>
+            <button id="km-update-schedule-btn"
+                    mat-icon-button
+                    matTooltip="Update Schedule Configuration"
+                    (click)="edit(element); $event.stopPropagation()">
+              <i class="km-icon-mask km-icon-edit"></i>
+            </button>
+            <button id="km-delete-schedule-btn"
+                    mat-icon-button
+                    matTooltip="Delete Schedule Configuration"
+                    (click)="remove(element.name); $event.stopPropagation()">
+              <i class="km-icon-delete"></i>
             </button>
           </div>
         </td>
@@ -103,20 +116,10 @@ END OF TERMS AND CONDITIONS
           class="km-header-row"
           *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row
-          *matRowDef="let row; columns: displayedColumns"
-          class="km-mat-row"></tr>
+          *matRowDef="let element; columns: displayedColumns"
+          class="km-mat-row km-pointer"
+          (click)="goToDetails(element.name)"></tr>
     </table>
 
-    <ng-container *ngIf="isLoading && enabled">
-      <div class="km-row">
-        <mat-spinner color="accent"
-                     class="km-spinner"
-                     [diameter]="25"></mat-spinner>
-      </div>
-    </ng-container>
-
-    <div [hidden]="!isPaginatorVisible() || !enabled">
-      <mat-paginator showFirstLastButtons></mat-paginator>
-    </div>
   </mat-card-content>
 </mat-card>

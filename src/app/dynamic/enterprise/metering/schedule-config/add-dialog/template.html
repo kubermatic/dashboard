@@ -1,0 +1,106 @@
+<!--
+               Kubermatic Enterprise Read-Only License
+                      Version 1.0 ("KERO-1.0”)
+                  Copyright © 2020 Kubermatic GmbH
+
+1. You may only view, read and display for studying purposes the source
+   code of the software licensed under this license, and, to the extent
+   explicitly provided under this license, the binary code.
+2. Any use of the software which exceeds the foregoing right, including,
+   without limitation, its execution, compilation, copying, modification
+   and distribution, is expressly prohibited.
+3. THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+   IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+   CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+   TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+   SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+END OF TERMS AND CONDITIONS
+-->
+<div>
+  <km-dialog-title>
+    <div>{{data.title}}</div>
+  </km-dialog-title>
+
+  <mat-dialog-content>
+    <form [formGroup]="form"
+          fxLayout="column"
+          fxLayoutGap="10px">
+
+      <mat-form-field fxFlex>
+        <mat-label>Schedule Name</mat-label>
+        <input required
+               matInput
+               [formControlName]="controls.Name"
+               type="text"
+               autocomplete="off"
+               cdkFocusInitial>
+        <mat-error *ngIf="form.get(controls.Name).hasError('required')">
+          Schedule name is <strong>required</strong>.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-radio-group [formControlName]="controls.Group"
+                       fxLayout="column"
+                       fxLayoutGap="20px">
+        <mat-radio-button [value]="ScheduleOption.Daily">
+          <div class="km-radio-button-title">Daily</div>
+          <div class="km-radio-button-description">Create report every day at 01:00</div>
+        </mat-radio-button>
+
+        <mat-radio-button [value]="ScheduleOption.Weekly">
+          <div class="km-radio-button-title">Weekly</div>
+          <div class="km-radio-button-description">Create report every week at 01:00 on Saturday</div>
+        </mat-radio-button>
+
+        <mat-radio-button [value]="ScheduleOption.Monthly">
+          <div class="km-radio-button-title">Monthly</div>
+          <div class="km-radio-button-description">Create report every month at 01:00 on 1st day of the month</div>
+        </mat-radio-button>
+
+        <mat-radio-button [value]="ScheduleOption.Custom">
+          <div fxFlex
+               fxLayout="column">
+            <div class="km-radio-button-title">Custom Configuration</div>
+            <div class="km-radio-button-description">Set a custom report schedule.</div>
+          </div>
+        </mat-radio-button>
+      </mat-radio-group>
+
+      <div *ngIf="form.get(controls.Group).value === ScheduleOption.Custom"
+           fxLayout="column"
+           fxLayoutGap="20px">
+        <mat-form-field>
+          <mat-label>Cron Expression</mat-label>
+          <input [formControlName]="controls.Schedule"
+                 type="text"
+                 matInput
+                 required>
+          <mat-hint>
+            Cron expression that describes how often a report should be created. Must match the criteria specified
+            <a href="https://pkg.go.dev/github.com/robfig/cron?utm_source=godoc"
+               target="_blank">here</a>.
+          </mat-hint>
+        </mat-form-field>
+
+        <km-number-stepper [formControlName]="controls.Interval"
+                           mode="errors"
+                           label="Report Scope"
+                           hint="Range of days captured in each report."
+                           min="1"
+                           required>
+        </km-number-stepper>
+      </div>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <km-button icon="km-icon-add"
+               label="Create Schedule"
+               [observable]="getObservable()"
+               (next)="onNext()">
+    </km-button>
+  </mat-dialog-actions>
+</div>

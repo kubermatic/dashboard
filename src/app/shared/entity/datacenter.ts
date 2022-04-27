@@ -134,6 +134,15 @@ export class MeteringConfiguration {
   storageSize: string;
 }
 
+export class MeteringReportConfiguration {
+  name: string;
+  // Schedule in Cron format, see https://en.wikipedia.org/wiki/Cron. Please take a note that Schedule is responsible
+  // only for setting the time when a report generation mechanism kicks off. The Interval MUST be set independently.
+  schedule: string;
+  // Interval defines the number of days consulted in the metering report.
+  interval: number;
+}
+
 export class MLA {
   user_cluster_mla_enabled: boolean;
 }
