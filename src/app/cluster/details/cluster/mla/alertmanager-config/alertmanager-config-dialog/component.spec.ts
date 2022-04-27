@@ -33,7 +33,7 @@ declare let monaco: any;
 describe('AlertmanagerConfigDialog', () => {
   let fixture: ComponentFixture<AlertmanagerConfigDialog>;
   let component: AlertmanagerConfigDialog;
-  let putAlertmanagerConfigSpy: jest.Mock;
+  let putAlertmanagerConfigSpy;
 
   beforeEach(waitForAsync(() => {
     const mlaMock = {

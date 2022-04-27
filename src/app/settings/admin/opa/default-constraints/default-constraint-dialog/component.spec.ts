@@ -32,8 +32,8 @@ declare let monaco: any;
 describe('DefaultConstraintDialog', () => {
   let fixture: ComponentFixture<DefaultConstraintDialog>;
   let component: DefaultConstraintDialog;
-  let createDefaultConstraintSpy: jest.Mock;
-  let patchDefaultConstraintSpy: jest.Mock;
+  let createDefaultConstraintSpy;
+  let patchDefaultConstraintSpy;
 
   beforeEach(waitForAsync(() => {
     const opaMock = {

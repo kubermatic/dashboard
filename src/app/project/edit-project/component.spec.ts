@@ -28,7 +28,7 @@ import {asyncData} from '@test/services/cluster-mock';
 describe('EditProjectComponent', () => {
   let fixture: ComponentFixture<EditProjectComponent>;
   let component: EditProjectComponent;
-  let editProjectSpy: jest.Mock;
+  let editProjectSpy;
 
   beforeEach(waitForAsync(() => {
     const projectServiceMock = {edit: jest.fn()};

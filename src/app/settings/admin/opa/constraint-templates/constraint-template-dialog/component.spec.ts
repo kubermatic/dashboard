@@ -31,8 +31,8 @@ declare let monaco: any;
 describe('ConstraintTemplateDialog', () => {
   let fixture: ComponentFixture<ConstraintTemplateDialog>;
   let component: ConstraintTemplateDialog;
-  let createCTSpy: jest.Mock;
-  let patchCTSpy: jest.Mock;
+  let createCTSpy;
+  let patchCTSpy;
 
   beforeEach(waitForAsync(() => {
     const opaMock = {

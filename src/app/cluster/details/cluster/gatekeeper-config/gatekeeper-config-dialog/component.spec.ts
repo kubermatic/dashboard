@@ -33,8 +33,8 @@ declare let monaco: any;
 describe('GatekeeperConfigDialog', () => {
   let fixture: ComponentFixture<GatekeeperConfigDialog>;
   let component: GatekeeperConfigDialog;
-  let createGatekeeperConfigSpy: jest.Mock;
-  let patchGatekeeperConfigSpy: jest.Mock;
+  let createGatekeeperConfigSpy;
+  let patchGatekeeperConfigSpy;
 
   beforeEach(waitForAsync(() => {
     const opaMock = {

@@ -29,7 +29,7 @@ import {asyncData} from '@test/services/cluster-mock';
 describe('EditServiceAccountDialogComponent', () => {
   let fixture: ComponentFixture<EditServiceAccountDialogComponent>;
   let component: EditServiceAccountDialogComponent;
-  let editServiceAccountSpy: jest.Mock;
+  let editServiceAccountSpy;
 
   beforeEach(waitForAsync(() => {
     const saMock = {edit: jest.fn()};
