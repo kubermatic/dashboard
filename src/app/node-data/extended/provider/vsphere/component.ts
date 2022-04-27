@@ -17,7 +17,6 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {NodeDataService} from '@core/services/node-data/service';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {Subject} from 'rxjs';
 import {VSphereTag} from '@shared/entity/node';
 import {convertArrayToObject} from '@shared/utils/common';
 
@@ -43,7 +42,6 @@ enum Controls {
 })
 export class VSphereExtendedNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly controls = Controls;
-  readonly _unsubscribe = new Subject<void>();
 
   tags: VSphereTag[] | object;
 
@@ -57,7 +55,10 @@ export class VSphereExtendedNodeDataComponent extends BaseFormValidator implemen
 
   ngOnInit(): void {
     this._init();
-    this._initFormGroupControl();
+
+    this.form = this._builder.group({
+      [Controls.Tags]: this._builder.control(''),
+    });
   }
 
   ngOnDestroy(): void {
@@ -72,8 +73,7 @@ export class VSphereExtendedNodeDataComponent extends BaseFormValidator implemen
       //  Case: Machine Deployment dialog
       this.tags = convertArrayToObject(tagsData, 'name', 'description');
       this._nodeDataService.vsphere.tags = tagsData;
-    }
-    else if (!Array.isArray(tagsData) && typeof tagsData === 'object') {
+    } else if (!Array.isArray(tagsData) && typeof tagsData === 'object') {
       // Case: Create Cluster Wizard
       for (const [key, value] of Object.entries(tagsData)) {
         const newTag = new VSphereTag();
@@ -97,11 +97,5 @@ export class VSphereExtendedNodeDataComponent extends BaseFormValidator implemen
         this.onTagsChange([]);
       }
     }
-  }
-
-  private _initFormGroupControl() {
-    this.form = this._builder.group({
-      [Controls.Tags]: this._builder.control(''),
-    });
   }
 }
