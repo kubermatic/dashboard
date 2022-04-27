@@ -15,7 +15,7 @@
 import {HttpClient} from '@angular/common/http';
 import {EventEmitter, Injectable} from '@angular/core';
 import {environment} from '@environments/environment';
-import {Preset, PresetList, PresetModel, UpdatePresetStatusReq} from '@shared/entity/preset';
+import {Preset, PresetList, PresetModel, PresetStat, UpdatePresetStatusReq} from '@shared/entity/preset';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Observable} from 'rxjs';
 import {Alibaba} from './provider/alibaba';
@@ -106,6 +106,11 @@ export class PresetsService {
 
     const url = `${environment.newRestRoot}/providers/${provider}/presets?datacenter=${datacenter}&disabled=${disabled}`;
     return this._http.get<PresetList>(url);
+  }
+
+  getPresetStatsBy(presetName: string): Observable<PresetStat> {
+    const url = `${environment.newRestRoot}/presets/${presetName}/stats`;
+    return this._http.get<PresetStat>(url);
   }
 
   updateStatus(
