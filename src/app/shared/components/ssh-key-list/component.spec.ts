@@ -20,15 +20,13 @@ import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
 import {SharedModule} from '@shared/module';
 import {SSHKeyListComponent} from './component';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
-
 describe('SSHKeyListComponent', () => {
   let fixture: ComponentFixture<SSHKeyListComponent>;
   let component: SSHKeyListComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},
         {provide: MAT_DIALOG_DATA, useValue: {}},

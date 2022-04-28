@@ -32,15 +32,13 @@ import {EquinixProviderSettingsComponent} from '../equinix-provider-settings/com
 import {VSphereProviderSettingsComponent} from '../vsphere-provider-settings/component';
 import {AlibabaProviderSettingsComponent} from './component';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
-
 describe('AlibabaProviderSettingsComponent', () => {
   let fixture: ComponentFixture<AlibabaProviderSettingsComponent>;
   let component: AlibabaProviderSettingsComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
       declarations: [
         EditProviderSettingsComponent,
         AWSProviderSettingsComponent,

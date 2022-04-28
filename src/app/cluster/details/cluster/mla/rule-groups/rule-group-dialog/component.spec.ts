@@ -28,15 +28,13 @@ import {MonacoEditorModule, NGX_MONACO_EDITOR_CONFIG} from 'ngx-monaco-editor';
 import {Mode, RuleGroupDialog} from './component';
 import {asyncData} from '@test/services/cluster-mock';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule];
-
 declare let monaco: any;
 
 describe('RuleGroupDialog', () => {
   let fixture: ComponentFixture<RuleGroupDialog>;
   let component: RuleGroupDialog;
-  let editRuleGroupSpy;
-  let createRuleGroupSpy;
+  let editRuleGroupSpy: jest.Mock;
+  let createRuleGroupSpy: jest.Mock;
 
   beforeEach(waitForAsync(() => {
     const mlaMock = {
@@ -48,7 +46,7 @@ describe('RuleGroupDialog', () => {
     createRuleGroupSpy = mlaMock.createRuleGroup.mockReturnValue(asyncData(fakeRuleGroups()[0]));
 
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule],
       declarations: [RuleGroupDialog],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},

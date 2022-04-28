@@ -20,12 +20,12 @@
 END OF TERMS AND CONDITIONS
 -->
 
-<ng-container *ngIf="!isLoading">
+<ng-container *ngIf="!isLoading()">
   <km-metering-config [config]="config"></km-metering-config>
-  <km-metering-list [config]="config"></km-metering-list>
+  <km-metering-schedule-config [schedules]="schedules"></km-metering-schedule-config>
 </ng-container>
 
-<ng-container *ngIf="isLoading">
+<ng-container *ngIf="isLoading()">
   <mat-spinner [diameter]="50"
                class="km-spinner"
                color="accent"></mat-spinner>

@@ -40,8 +40,7 @@ import {GCPService} from '@core/services/provider/gcp';
 import {HetznerService} from '@core/services/provider/hetzner';
 import {OpenStackService} from '@core/services/provider/openstack';
 import {NutanixService} from '@app/core/services/provider/nutanix';
-
-const modules: any[] = [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule];
+import {KubeVirtService} from '@core/services/provider/kubevirt';
 
 describe('MachineNetworksComponent', () => {
   let component: MachineNetworkComponent;
@@ -49,7 +48,7 @@ describe('MachineNetworksComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
       providers: [
         AppConfigService,
         ClusterSpecService,
@@ -67,6 +66,7 @@ describe('MachineNetworksComponent', () => {
         HetznerService,
         OpenStackService,
         NutanixService,
+        KubeVirtService,
         {provide: ProjectService, useValue: ProjectMockService},
         {provide: NODE_DATA_CONFIG, useValue: NodeDataMode.Wizard},
         {provide: DatacenterService, useClass: DatacenterMockService},

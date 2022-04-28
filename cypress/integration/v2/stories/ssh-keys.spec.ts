@@ -12,17 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {Clusters} from '../../../pages/v2/clusters/proxy';
 import {Pages} from '../../../pages/v2/pages';
 import {Projects} from '../../../pages/v2/projects/page';
-import {ServiceAccounts} from '../../../pages/v2/serviceaccounts/page';
+import {SSHKeys} from '../../../pages/v2/sshkeys/page';
 import {Condition} from '../../../utils/condition';
-import {Group} from '../../../utils/member';
+import {BringYourOwn, Provider} from '../../../utils/provider';
 import {View} from '../../../utils/view';
 
-describe('Service Accounts Story', () => {
+describe('SSH Key Management Story', () => {
   const projectName = Projects.getName();
-  const serviceAccountName = ServiceAccounts.getName();
-  const tokenName = 'test-token';
+  const clusterName = Clusters.getName();
+  const sshKeyName = SSHKeys.getName();
+  const publicKey = SSHKeys.publicKey;
 
   it('should login', () => {
     Pages.Root.login();
@@ -42,36 +44,43 @@ describe('Service Accounts Story', () => {
     Pages.expect(View.Clusters.Default);
   });
 
-  it('should go to the service accounts page', () => {
-    Pages.ServiceAccounts.visit();
-    Pages.expect(View.ServiceAccounts.Default);
+  it('should go to the ssh keys page', () => {
+    Pages.SSHKeys.visit();
+    Pages.expect(View.SSHKeys.Default);
   });
 
-  it('should create new service account', () => {
-    Pages.ServiceAccounts.create(serviceAccountName, Group.Editor);
-    Pages.ServiceAccounts.Buttons.tableRow(serviceAccountName).should(Condition.Exist);
-    Pages.ServiceAccounts.Buttons.tokenTable.should(Condition.NotBeVisible);
+  it('should create the ssh key', () => {
+    Pages.SSHKeys.create(sshKeyName, publicKey);
+    Pages.SSHKeys.Buttons.tableRow(sshKeyName).should(Condition.Exist);
   });
 
-  it('should open token panel for created service account', () => {
-    Pages.ServiceAccounts.Buttons.tableRow(serviceAccountName).parent().click();
-    Pages.ServiceAccounts.Buttons.tokenTable.should(Condition.BeVisible);
-    Pages.ServiceAccounts.Buttons.tokenTableRow(tokenName).should(Condition.NotExist);
+  it('should go to the clusters page', () => {
+    Pages.Clusters.List.visit();
+    Pages.expect(View.Clusters.Default);
   });
 
-  it('should add token', () => {
-    Pages.ServiceAccounts.addToken(tokenName);
-    Pages.ServiceAccounts.Buttons.tokenTableRow(tokenName).should(Condition.Exist);
+  it('should create the cluster with ssh key', () => {
+    Pages.Wizard.visit();
+    Pages.Wizard.create(clusterName, Provider.kubeAdm, BringYourOwn.Frankfurt, sshKeyName);
+    Pages.expect(View.Clusters.Default);
+    Pages.Clusters.Details.Elements.sshKeys(sshKeyName).should(Condition.Exist);
   });
 
-  it('should close token panel for created service account', () => {
-    Pages.ServiceAccounts.Buttons.tableRow(serviceAccountName).parent().click();
-    Pages.ServiceAccounts.Buttons.tokenTable.should(Condition.NotBeVisible);
+  it('should remove the ssh key from the cluster', () => {
+    Pages.Clusters.Details.removeSSHKey(sshKeyName);
+    Pages.Clusters.Details.Elements.sshKeys().should(Condition.Exist);
   });
 
-  it('should delete service account', () => {
-    Pages.ServiceAccounts.delete(serviceAccountName);
-    Pages.ServiceAccounts.Buttons.tableRow(serviceAccountName).should(Condition.NotExist);
+  it('should delete the cluster', () => {
+    Pages.Clusters.Details.delete(clusterName);
+    Pages.Root.Elements.spinner.should(Condition.NotExist);
+    Pages.Clusters.List.Elements.clusterItem(clusterName).should(Condition.NotExist);
+  });
+
+  it('should delete the ssh key', () => {
+    Pages.SSHKeys.visit();
+    Pages.SSHKeys.delete(sshKeyName);
+    Pages.SSHKeys.Elements.sshKey(sshKeyName).should(Condition.NotExist);
   });
 
   it('should go to the projects page', () => {

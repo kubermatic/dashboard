@@ -33,8 +33,6 @@ import {SharedModule} from '@shared/module';
 import {of} from 'rxjs';
 import {MachineDeploymentListComponent} from './component';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
-
 class MatDialogMock {
   open(): any {
     return {afterClosed: () => of([true])};
@@ -47,7 +45,7 @@ describe('MachineDeploymentListComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
       declarations: [MachineDeploymentListComponent],
       providers: [
         {provide: NodeService, useClass: NodeMockService},

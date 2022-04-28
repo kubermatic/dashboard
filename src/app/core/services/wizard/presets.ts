@@ -15,7 +15,7 @@
 import {HttpClient} from '@angular/common/http';
 import {EventEmitter, Injectable} from '@angular/core';
 import {environment} from '@environments/environment';
-import {Preset, PresetList, PresetModel, UpdatePresetStatusReq} from '@shared/entity/preset';
+import {Preset, PresetList, PresetModel, PresetStat, UpdatePresetStatusReq} from '@shared/entity/preset';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Observable} from 'rxjs';
 import {Alibaba} from './provider/alibaba';
@@ -29,6 +29,7 @@ import {Openstack} from './provider/openstack';
 import {Equinix} from './provider/equinix';
 import {Provider} from './provider/provider';
 import {VSphere} from './provider/vsphere';
+import {KubeVirt} from '@core/services/wizard/provider/kubevirt';
 import {Nutanix} from '@core/services/wizard/provider/nutanix';
 
 @Injectable()
@@ -59,6 +60,7 @@ export class PresetsService {
   provider(provider: NodeProvider.DIGITALOCEAN): Digitalocean;
   provider(provider: NodeProvider.GCP): GCP;
   provider(provider: NodeProvider.HETZNER): Hetzner;
+  provider(provider: NodeProvider.KUBEVIRT): KubeVirt;
   provider(provider: NodeProvider.OPENSTACK): Openstack;
   provider(provider: NodeProvider.EQUINIX): Equinix;
   provider(provider: NodeProvider.VSPHERE): VSphere;
@@ -77,6 +79,8 @@ export class PresetsService {
         return new GCP(this._http, NodeProvider.GCP);
       case NodeProvider.HETZNER:
         return new Hetzner(this._http, NodeProvider.HETZNER);
+      case NodeProvider.KUBEVIRT:
+        return new KubeVirt(this._http, NodeProvider.KUBEVIRT);
       case NodeProvider.OPENSTACK:
         return new Openstack(this._http, NodeProvider.OPENSTACK);
       case NodeProvider.EQUINIX:
@@ -102,6 +106,11 @@ export class PresetsService {
 
     const url = `${environment.newRestRoot}/providers/${provider}/presets?datacenter=${datacenter}&disabled=${disabled}`;
     return this._http.get<PresetList>(url);
+  }
+
+  getPresetStatsBy(presetName: string): Observable<PresetStat> {
+    const url = `${environment.newRestRoot}/presets/${presetName}/stats`;
+    return this._http.get<PresetStat>(url);
   }
 
   updateStatus(

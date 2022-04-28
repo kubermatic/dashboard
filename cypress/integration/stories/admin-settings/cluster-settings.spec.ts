@@ -19,12 +19,12 @@ import {ProjectsPage} from '../../../pages/projects.po';
 import {WizardPage} from '../../../pages/wizard.po';
 import {login, logout} from '../../../utils/auth';
 import {Condition} from '../../../utils/condition';
-import {Endpoint} from '../../../utils/endpoint';
 import {Config} from '../../../utils/config';
+import {Endpoint} from '../../../utils/endpoint';
 import {Mocks} from '../../../utils/mocks';
 import {RequestType, TrafficMonitor} from '../../../utils/monitor';
 import {Preset} from '../../../utils/preset';
-import {Datacenter, Provider} from '../../../utils/provider';
+import {Digitalocean, Provider} from '../../../utils/provider';
 import {View} from '../../../utils/view';
 import {WizardStep} from '../../../utils/wizard';
 
@@ -89,7 +89,7 @@ describe('Admin Settings - Cluster Related Settings Story', () => {
 
   it('should create a new cluster', () => {
     WizardPage.getProviderBtn(Provider.Digitalocean).click();
-    WizardPage.getDatacenterBtn(Datacenter.Digitalocean.Frankfurt).click();
+    WizardPage.getDatacenterBtn(Digitalocean.Frankfurt).click();
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
     WizardPage.getCustomPresetsCombobox().click();

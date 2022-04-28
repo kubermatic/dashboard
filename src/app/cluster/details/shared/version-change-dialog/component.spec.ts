@@ -33,13 +33,11 @@ import {SharedModule} from '@shared/module';
 import {of} from 'rxjs';
 import {VersionChangeDialogComponent} from './component';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
-
 describe('ChangeClusterVersionComponent', () => {
   let fixture: ComponentFixture<VersionChangeDialogComponent>;
   let component: VersionChangeDialogComponent;
-  let patchClusterSpy;
-  let upgradeClusterMachineDeploymentsSpy;
+  let patchClusterSpy: jest.Mock;
+  let upgradeClusterMachineDeploymentsSpy: jest.Mock;
 
   beforeEach(waitForAsync(() => {
     const clusterServiceMock = {
@@ -50,7 +48,7 @@ describe('ChangeClusterVersionComponent', () => {
     upgradeClusterMachineDeploymentsSpy = clusterServiceMock.upgradeMachineDeployments.mockReturnValue(of(null));
 
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
       declarations: [VersionChangeDialogComponent],
       providers: [
         {provide: MAT_DIALOG_DATA, useValue: {clusterName: 'clustername'}},

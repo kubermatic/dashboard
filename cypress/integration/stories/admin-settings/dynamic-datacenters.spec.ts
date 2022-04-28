@@ -12,25 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import _ from 'lodash';
+import {AdminSettings} from '../../../pages/admin-settings.po';
+import {ClustersPage} from '../../../pages/clusters.po';
+import {ProjectsPage} from '../../../pages/projects.po';
+import {WizardPage} from '../../../pages/wizard.po';
 import {login, logout} from '../../../utils/auth';
 import {Condition} from '../../../utils/condition';
-import {View} from '../../../utils/view';
-import {AdminSettings} from '../../../pages/admin-settings.po';
-import {ProjectsPage} from '../../../pages/projects.po';
-import _ from 'lodash';
-import {ClustersPage} from '../../../pages/clusters.po';
-import {Datacenter, Provider} from '../../../utils/provider';
-import {WizardPage} from '../../../pages/wizard.po';
-import {WizardStep} from '../../../utils/wizard';
 import {Config} from '../../../utils/config';
 import {Mocks} from '../../../utils/mocks';
+import {BringYourOwn, Provider} from '../../../utils/provider';
+import {View} from '../../../utils/view';
+import {WizardStep} from '../../../utils/wizard';
 
 describe('Admin Settings - Dynamic Datacenters Story', () => {
   const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');
   const clusterName = Mocks.enabled() ? 'test-cluster' : _.uniqueId('test-cluster-');
   const datacenterName = Mocks.enabled() ? 'a-test-datacenter' : _.uniqueId('a-test-datacenter-');
   const country = 'Germany';
-  const location = Datacenter.BringYourOwn.Hamburg;
+  const location = BringYourOwn.Hamburg;
 
   beforeEach(() => {
     if (Mocks.enabled()) {

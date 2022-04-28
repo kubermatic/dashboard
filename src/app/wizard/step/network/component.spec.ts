@@ -41,8 +41,7 @@ import {DigitalOceanService} from '@core/services/provider/digitalocean';
 import {OpenStackService} from '@core/services/provider/openstack';
 import {EquinixService} from '@core/services/provider/equinix';
 import {NutanixService} from '@app/core/services/provider/nutanix';
-
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule];
+import {KubeVirtService} from '@core/services/provider/kubevirt';
 
 describe('MachineNetworkStepComponent', () => {
   let fixture: ComponentFixture<MachineNetworkStepComponent>;
@@ -50,7 +49,7 @@ describe('MachineNetworkStepComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, ReactiveFormsModule, SharedModule, HttpClientModule],
       declarations: [MachineNetworkStepComponent],
       providers: [
         WizardService,
@@ -69,6 +68,7 @@ describe('MachineNetworkStepComponent', () => {
         HetznerService,
         OpenStackService,
         NutanixService,
+        KubeVirtService,
         MachineDeploymentService,
         {provide: ProjectService, useValue: ProjectMockService},
         {provide: Auth, useClass: AuthMockService},

@@ -116,13 +116,13 @@ export class Mocks {
   };
 
   private static _defaults: Mock[] = [
-    {m: RequestType.GET, p: Endpoint.CurrentUser, r: Mocks.currentUser},
+    // {m: RequestType.GET, p: Endpoint.CurrentUser, r: Mocks.currentUser},
     {m: RequestType.GET, p: Endpoint.Administrators, r: Mocks.administrators},
     {m: RequestType.POST, p: Endpoint.Administrators, r: Mocks.defaultAdmin},
     {m: RequestType.GET, p: Endpoint.AdminSettings, r: Mocks.adminSettings},
-    {m: RequestType.GET, p: Endpoint.Seeds, r: ['test-seed']},
+    // {m: RequestType.GET, p: Endpoint.Seeds, r: ['test-seed']},
     {m: RequestType.GET, p: Endpoint.SeedSettings, r: {fixture: 'seed-settings.json'}},
-    {m: RequestType.GET, p: Endpoint.Datacenters, r: {fixture: 'datacenters.json'}},
+    // {m: RequestType.GET, p: Endpoint.Datacenters, r: {fixture: 'datacenters.json'}},
     {m: RequestType.GET, p: Endpoint.Presets, r: {fixture: 'preset.json'}},
     {m: RequestType.GET, p: Endpoint.CustomLinks, r: []},
     {m: RequestType.GET, p: Endpoint.Addons, r: []},
@@ -156,15 +156,6 @@ export class Mocks {
     {m: RequestType.POST, p: Endpoint.ClusterTemplates, r: {}},
     {m: RequestType.GET, p: Endpoint.ClusterTemplates, r: {fixture: 'cluster-templates.json'}},
     {m: RequestType.POST, p: Endpoint.ClusterTemplateInstances, r: {}},
-    {m: RequestType.POST, p: Endpoint.Members, r: {fixture: 'member.json'}},
-    {m: RequestType.GET, p: Endpoint.Members, r: {fixture: 'members.json'}},
-    // {m: RequestType.POST, p: Endpoint.ServiceAccounts, r: {fixture: 'service-account.json'}},
-    {m: RequestType.GET, p: Endpoint.ServiceAccount, r: {fixture: 'service-account.json'}},
-    // {m: RequestType.GET, p: Endpoint.ServiceAccounts, r: {fixture: 'service-accounts.json'}},
-    // {m: RequestType.POST, p: Endpoint.ServiceAccountTokens, r: {fixture: 'token.json'}},
-    // {m: RequestType.GET, p: Endpoint.ServiceAccountTokens, r: {fixture: 'tokens.json'}},
-    {m: RequestType.POST, p: Endpoint.SSHKeys, r: {fixture: 'ssh-key.json'}},
-    {m: RequestType.GET, p: Endpoint.SSHKeys, r: {fixture: 'ssh-keys.json'}},
     {m: RequestType.GET, p: Endpoint.EtcdRestores, r: []},
     {m: RequestType.GET, p: Endpoint.AlertmanagerConfig, r: {spec: {config: ''}}},
     {m: RequestType.GET, p: Endpoint.AdmissionPlugins, r: []},
@@ -209,9 +200,9 @@ export class Mocks {
   }
 
   private static _registerProviderMocks(p?: Provider): void {
-    this._intercept(RequestType.POST, Endpoint.Clusters, p ? {fixture: `${p}/cluster.json`} : {});
-    this._intercept(RequestType.GET, Endpoint.Clusters, p ? {fixture: `${p}/clusters.json`} : []);
-    this._intercept(RequestType.GET, Endpoint.Cluster, p ? {fixture: `${p}/cluster.json`} : {});
+    // this._intercept(RequestType.POST, Endpoint.Clusters, p ? {fixture: `${p}/cluster.json`} : {});
+    // this._intercept(RequestType.GET, Endpoint.Clusters, p ? {fixture: `${p}/clusters.json`} : []);
+    // this._intercept(RequestType.GET, Endpoint.Cluster, p ? {fixture: `${p}/cluster.json`} : {});
     this._intercept(RequestType.GET, Endpoint.MachineDeployments, p ? {fixture: `${p}/machinedeployments.json`} : []);
     this._intercept(RequestType.GET, Endpoint.MachineDeployment, p ? {fixture: `${p}/machinedeployment.json`} : {});
   }

@@ -17,11 +17,18 @@ import failFast from 'cypress-fail-fast/plugin';
 import del from 'del';
 import {configuration} from './cy-ts-preprocessor';
 
+function runnableTestsRegex(...fileName: string[]): string {
+  return `**/!(${fileName.reduce((prevName, name) => `${prevName}|${name}`)})`;
+}
+
 export default async (on, config) => {
   const isAPIMocked = config.env.MOCKS === 'true' || config.env.MOCKS === true;
   const isEnterpriseEdition = config.env.KUBERMATIC_EDITION === 'ee';
   // TODO: Update once more tests are rewritten
-  const ignored: string[] = ['**/!(service-accounts.spec.ts)'];
+  // const ignored: string[] = ['**/!(service-accounts.spec.ts|ssh-keys.spec.ts)'];
+  const ignored: string[] = [
+    runnableTestsRegex('service-accounts.spec.ts', 'ssh-keys.spec.ts', 'edition.spec.ts', 'members.spec.ts'),
+  ];
 
   // if (isAPIMocked) {
   //   // TODO: Remove it after configuring mocks.
@@ -37,7 +44,7 @@ export default async (on, config) => {
   //   ];
   // }
 
-  // Do not test providers in both editions.
+  // Test providers only in enterprise edition.
   // if (!isEnterpriseEdition) {
   //   ignored = ['**/integration/providers/**', ...ignored];
   // }

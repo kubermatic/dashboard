@@ -20,15 +20,13 @@ import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
 import {SharedModule} from '@shared/module';
 import {PropertyUsageComponent} from './component';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
-
 describe('PropertyUsageComponent', () => {
   let fixture: ComponentFixture<PropertyUsageComponent>;
   let component: PropertyUsageComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},
         {provide: MAT_DIALOG_DATA, useValue: {}},

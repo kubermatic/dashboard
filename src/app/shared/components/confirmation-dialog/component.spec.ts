@@ -20,15 +20,13 @@ import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
 import {SharedModule} from '@shared/module';
 import {ConfirmationDialogComponent} from './component';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
-
 describe('ConfirmationDialogComponent', () => {
   let fixture: ComponentFixture<ConfirmationDialogComponent>;
   let component: ConfirmationDialogComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},
         {provide: MAT_DIALOG_DATA, useValue: {}},
