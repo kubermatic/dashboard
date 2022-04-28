@@ -59,7 +59,15 @@ describe('SSH Key Management Story', () => {
 
   it('should create the cluster with ssh key', () => {
     Pages.Wizard.visit();
-    Pages.Wizard.create(clusterName, Provider.kubeadm, BringYourOwn.Frankfurt, sshKeyName);
+    Pages.Wizard.create(
+      clusterName,
+      Provider.kubeadm,
+      BringYourOwn.Frankfurt,
+      undefined,
+      undefined,
+      undefined,
+      sshKeyName
+    );
     Pages.expect(View.Clusters.Default);
     Pages.Clusters.Details.Elements.sshKeys(sshKeyName).should(Condition.Exist);
   });

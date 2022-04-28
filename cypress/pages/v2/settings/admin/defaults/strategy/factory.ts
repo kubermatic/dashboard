@@ -12,18 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export enum Provider {
-  Alibaba = 'alibaba',
-  Anexia = 'anexia',
-  AWS = 'aws',
-  Azure = 'azure',
-  Digitalocean = 'digitalocean',
-  GCP = 'gcp',
-  Hetzner = 'hetzner',
-  KubeVirt = 'kubevirt',
-  OpenStack = 'openstack',
-  Equinix = 'packet',
-  VSphere = 'vsphere',
-  Nutanix = 'nutanix',
-  kubeadm = 'bringyourown',
+import {AdminSettingsDefaultsStrategy} from '@kmtypes';
+import {MockedAdminSettingsDefaultsStrategy} from './mocked';
+
+export class AdminSettingsDefaultsFactory {
+  static new(isAPIMocked: boolean): AdminSettingsDefaultsStrategy | undefined {
+    return isAPIMocked ? new MockedAdminSettingsDefaultsStrategy() : undefined;
+  }
 }

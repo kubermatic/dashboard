@@ -69,6 +69,8 @@ class ProviderFactory {
 abstract class ProviderBase implements Interceptor {
   protected static _clusterListFixture: string = Fixtures.EmptyArray;
   protected static _clusterFixture: string = Fixtures.Provider.BringYourOwn.Cluster;
+  protected static _machineDeploymentListFixture: string;
+  protected static _machineDeploymentFixture: string;
 
   protected constructor() {
     cy.intercept(RequestType.GET, Endpoints.Resource.Cluster.List, req =>
@@ -115,12 +117,24 @@ class BringYourOwn extends ProviderBase {
 }
 
 class Digitalocean extends ProviderBase {
+  private static _sizesFixture = Fixtures.Provider.Digitalocean.Sizes;
+
   constructor() {
     super();
+
+    cy.intercept(Endpoints.Provider.Digitalocean.Sizes, req => req.reply({fixture: Digitalocean._sizesFixture}));
+    cy.intercept(Endpoints.Resource.MachineDeployment.List, req =>
+      req.reply({fixture: Digitalocean._machineDeploymentListFixture})
+    );
+    cy.intercept(Endpoints.Resource.MachineDeployment.Detail, req =>
+      req.reply({fixture: Digitalocean._machineDeploymentFixture})
+    );
   }
 
   onCreate(): void {
     ProviderBase._clusterListFixture = Fixtures.Provider.Digitalocean.ClusterList;
     ProviderBase._clusterFixture = Fixtures.Provider.Digitalocean.Cluster;
+    ProviderBase._machineDeploymentListFixture = Fixtures.Provider.Digitalocean.MachineDeploymentList;
+    ProviderBase._machineDeploymentFixture = Fixtures.Provider.Digitalocean.MachineDeployment;
   }
 }

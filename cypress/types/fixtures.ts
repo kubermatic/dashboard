@@ -57,6 +57,7 @@ enum Digitalocean {
   Cluster = 'digitalocean/cluster.json',
   MachineDeploymentList = 'digitalocean/machinedeployments.json',
   MachineDeployment = 'digitalocean/machinedeployment.json',
+  Sizes = 'digitalocean/sizes.json',
 }
 
 enum Equinix {

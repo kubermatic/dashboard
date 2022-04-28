@@ -65,7 +65,7 @@ export class Pages {
   }
 
   static get AdminSettings(): AdminSettings {
-    return new AdminSettings();
+    return new AdminSettings(this._isAPIMocked);
   }
 
   static expect(view: View): void {

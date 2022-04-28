@@ -23,9 +23,9 @@ import {AdminSettings} from './settings/admin';
 import {SSHKeys} from './sshkeys';
 
 export class Intercept {
-  static init(): void {
+  static init(provider?: Provider): void {
     if (Config.isAPIMocked()) {
-      Intercept.Clusters(Provider.kubeadm);
+      Intercept.Clusters(provider ? provider : Provider.kubeadm);
       Intercept.SSHKeys();
       Intercept.ServiceAccount();
       Intercept.Root();

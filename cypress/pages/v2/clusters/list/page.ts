@@ -25,6 +25,10 @@ export class ClusterList extends PageOptions implements Page {
   visit(): void {
     this.Buttons.nav.click();
   }
+
+  select(clusterName: string): void {
+    this.Elements.clusterItem(clusterName).click();
+  }
 }
 
 class Elements extends PageOptions {
@@ -36,6 +40,18 @@ class Elements extends PageOptions {
 class Buttons extends PageOptions {
   get nav(): Cypress.Chainable {
     return this._get('#km-nav-item-clusters');
+  }
+
+  get externalClustersTab(): Cypress.Chainable {
+    return cy.get('#mat-tab-label-0-1');
+  }
+
+  get clustersTab(): Cypress.Chainable {
+    return cy.get('#mat-tab-label-0-0');
+  }
+
+  get addExternalCluster(): Cypress.Chainable {
+    return cy.get('#km-add-external-cluster-btn');
   }
 
   deleteDialog(name: string): Cypress.Chainable {

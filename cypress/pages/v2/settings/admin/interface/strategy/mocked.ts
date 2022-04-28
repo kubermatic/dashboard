@@ -12,18 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export enum Provider {
-  Alibaba = 'alibaba',
-  Anexia = 'anexia',
-  AWS = 'aws',
-  Azure = 'azure',
-  Digitalocean = 'digitalocean',
-  GCP = 'gcp',
-  Hetzner = 'hetzner',
-  KubeVirt = 'kubevirt',
-  OpenStack = 'openstack',
-  Equinix = 'packet',
-  VSphere = 'vsphere',
-  Nutanix = 'nutanix',
-  kubeadm = 'bringyourown',
+import {Intercept} from '@intercept';
+import {AdminSettingsInterfaceStrategy} from '@kmtypes';
+import {AdminSettings as SettingsSpec} from '../../../../../../../src/app/shared/entity/settings';
+
+export class MockedAdminSettingsInterfaceStrategy implements AdminSettingsInterfaceStrategy {
+  onSettingsChange(settings: Partial<SettingsSpec>): void {
+    Intercept.AdminSettings().onChange(settings);
+  }
 }

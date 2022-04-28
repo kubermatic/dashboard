@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Page, PageOptions, ProjectStrategy, View} from '@kmtypes';
+import {Condition, Page, PageOptions, ProjectStrategy, View} from '@kmtypes';
+import {Pages} from '@pages/v2';
 import {Config} from '@utils/config';
 import _ from 'lodash';
 import {ProjectStrategyFactory} from './strategy/factory';
@@ -43,6 +44,17 @@ export class Projects extends PageOptions implements Page {
     cy.visit(View.Projects.Default, {timeout: this._pageLoadTimeout});
   }
 
+  open(projectName: string): void {
+    this.visit();
+    Pages.expect(View.Projects.Default);
+
+    this.Elements.projectItem(projectName).should(Condition.Exist);
+    this.Elements.projectItemIcon(projectName, 'disabled').should(Condition.NotExist);
+    this.Elements.projectItemIcon(projectName, 'running').should(Condition.Exist);
+    this.select(projectName);
+    Pages.expect(View.Clusters.Default);
+  }
+
   create(name: string): void {
     this.Buttons.openDialog.click();
     this.Elements.addDialogInput.type(name).then(_ => this._strategy?.onCreate());
@@ -50,7 +62,7 @@ export class Projects extends PageOptions implements Page {
   }
 
   select(name: string): void {
-    this.Elements.projectItem(name).click();
+    this.Elements.projectItem(name).click({force: true});
   }
 
   delete(name: string): void {

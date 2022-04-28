@@ -24,6 +24,7 @@ export enum ProviderMenuOption {
 
 export class Clusters {
   private static _clusterName: string;
+  private static _machineDeploymentName: string;
   private readonly _clusterList: ClusterList;
   private readonly _clusterDetail: ClusterDetail;
 
@@ -47,5 +48,14 @@ export class Clusters {
     }
 
     return this._clusterName;
+  }
+
+  static get machineDeploymentName(): string {
+    if (!this._machineDeploymentName) {
+      const prefix = 'e2e-test-md';
+      this._machineDeploymentName = Config.isAPIMocked() ? prefix : _.uniqueId(`${prefix}-`);
+    }
+
+    return this._machineDeploymentName;
   }
 }

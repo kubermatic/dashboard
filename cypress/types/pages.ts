@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Config} from '../utils/config';
+import {Config} from '@utils/config';
+import {AdminSettings as SettingsSpec} from '../../src/app/shared/entity/settings';
 import {Provider} from './provider';
 
 export interface Page {
@@ -75,4 +76,12 @@ export interface SSHKeyStrategy {
 export interface WizardStrategy {
   onCreate(provider: Provider): void;
   onSSHKeyAdd(provider: Provider): void;
+}
+
+export interface AdminSettingsDefaultsStrategy {
+  onSettingsChange(settings: Partial<SettingsSpec>): void;
+}
+
+export interface AdminSettingsInterfaceStrategy {
+  onSettingsChange(settings: Partial<SettingsSpec>): void;
 }

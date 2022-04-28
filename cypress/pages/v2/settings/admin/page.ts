@@ -14,9 +14,20 @@
 
 import {Page, PageOptions} from '@kmtypes';
 import {Pages} from '@pages/v2';
+import {Interface} from './interface/page';
+import {Defaults} from './defaults/page';
 
 export class AdminSettings extends PageOptions implements Page {
   readonly Elements = new Elements();
+  readonly Defaults: Defaults;
+  readonly Interface: Interface;
+
+  constructor(isAPIMocked: boolean) {
+    super();
+
+    this.Defaults = new Defaults(isAPIMocked);
+    this.Interface = new Interface(isAPIMocked);
+  }
 
   visit(): void {
     Pages.Root.UserPanel.open.click();
@@ -24,44 +35,4 @@ export class AdminSettings extends PageOptions implements Page {
   }
 }
 
-class Elements extends PageOptions {
-  get enableClusterCleanupCheckbox(): Cypress.Chainable {
-    return cy.get('#km-cleanup-enable-setting');
-  }
-
-  get enforceClusterCleanupCheckbox(): Cypress.Chainable {
-    return cy.get('#km-cleanup-enforce-setting');
-  }
-
-  get opaEnableCheckbox(): Cypress.Chainable {
-    return cy.get('#km-opa-enable-setting');
-  }
-
-  get opaEnforceCheckbox(): Cypress.Chainable {
-    return cy.get('#km-opa-enforce-setting');
-  }
-
-  get initialReplicasInput(): Cypress.Chainable {
-    return cy.get('#km-initial-replicas-setting');
-  }
-
-  get minCPUResourceQuotaInput(): Cypress.Chainable {
-    return cy.get('#km-cpu-resource-quota-setting');
-  }
-
-  get minRAMResourceQuotaInput(): Cypress.Chainable {
-    return cy.get('#km-ram-resource-quota-setting');
-  }
-
-  get restrictProjectCreationToAdminsCheckbox(): Cypress.Chainable {
-    return cy.get('#km-project-admin-only-setting');
-  }
-
-  get projectLimitInput(): Cypress.Chainable {
-    return cy.get('#km-project-limit-setting');
-  }
-
-  get navItem(): Cypress.Chainable {
-    return cy.get('#km-nav-item-defaults');
-  }
-}
+class Elements extends PageOptions {}
