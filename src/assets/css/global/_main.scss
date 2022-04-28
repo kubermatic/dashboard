@@ -159,9 +159,10 @@ hr {
 }
 
 .km-provider-logo {
-  @include mixins.size(70px, 24px, true);
+  @include mixins.size(70px, 24px);
   @include mixins.size(100%);
 
+  background-position: left;
   display: block;
 }
 

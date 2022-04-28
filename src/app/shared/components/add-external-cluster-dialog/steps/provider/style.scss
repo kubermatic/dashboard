@@ -24,11 +24,6 @@ h3 {
   }
 }
 
-.km-provider-logo {
-  background-position: center;
-  min-width: 120px;
-}
-
 .mat-button-toggle {
   .mat-button-toggle-button {
     @include mixins.size(150px, 100%);

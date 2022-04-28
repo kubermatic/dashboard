@@ -366,66 +366,101 @@
 
 .km-provider-logo-alibaba {
   @include mixins.provider-image('/assets/images/clouds/alibaba.svg', 30px);
-}
 
-.km-provider-logo-aws {
-  @include mixins.provider-image('/assets/images/clouds/aws.svg', 24px);
-}
-
-.km-provider-logo-azure {
-  @include mixins.provider-image('/assets/images/clouds/azure.svg', 24px);
-}
-
-.km-provider-logo-bringyourown {
-  @include mixins.provider-image('/assets/images/clouds/bringyourown.svg', 30px);
-}
-
-.km-provider-logo-digitalocean {
-  @include mixins.provider-image('/assets/images/clouds/digitalocean.svg', 30px);
-}
-
-.km-provider-logo-gcp {
-  @include mixins.provider-image('/assets/images/clouds/gcp.svg', 30px);
-}
-
-.km-provider-logo-hetzner {
-  @include mixins.provider-image('/assets/images/clouds/hetzner.svg', 30px);
-}
-
-.km-provider-logo-nutanix {
-  @include mixins.provider-image('/assets/images/clouds/nutanix.svg', 30px);
-}
-
-.km-provider-logo-openstack {
-  @include mixins.provider-image('/assets/images/clouds/openstack.svg', 30px);
-}
-
-.km-provider-logo-packet {
-  @include mixins.provider-image('/assets/images/clouds/equinix.svg', 24px);
-}
-
-.km-provider-logo-kubevirt {
-  @include mixins.provider-image('/assets/images/clouds/kubevirt.svg', 30px);
-}
-
-.km-provider-logo-vsphere {
-  @include mixins.provider-image('/assets/images/clouds/vsphere.png', 24px);
+  max-width: 115px;
 }
 
 .km-provider-logo-anexia {
   @include mixins.provider-image('/assets/images/clouds/anexia.svg', 24px);
+
+  max-width: 95px;
+}
+
+.km-provider-logo-aws {
+  @include mixins.provider-image('/assets/images/clouds/aws.svg', 24px);
+
+  max-height: 20px;
+  max-width: 115px;
+}
+
+.km-provider-logo-azure {
+  @include mixins.provider-image('/assets/images/clouds/azure.svg', 24px);
+
+  max-height: 22px;
+  max-width: 95px;
+}
+
+.km-provider-logo-bringyourown {
+  @include mixins.provider-image('/assets/images/clouds/bringyourown.svg', 30px);
+
+  max-width: 95px;
+}
+
+.km-provider-logo-digitalocean {
+  @include mixins.provider-image('/assets/images/clouds/digitalocean.svg', 30px);
+
+  max-width: 110px;
+}
+
+.km-provider-logo-gcp {
+  @include mixins.provider-image('/assets/images/clouds/gcp.svg', 30px);
+
+  max-width: 115px;
+}
+
+.km-provider-logo-hetzner {
+  @include mixins.provider-image('/assets/images/clouds/hetzner.svg', 30px);
+
+  max-width: 95px;
+}
+
+.km-provider-logo-nutanix {
+  @include mixins.provider-image('/assets/images/clouds/nutanix.svg', 30px);
+
+  max-width: 95px;
+}
+
+.km-provider-logo-openstack {
+  @include mixins.provider-image('/assets/images/clouds/openstack.svg', 30px);
+
+  max-width: 95px;
+}
+
+.km-provider-logo-packet {
+  @include mixins.provider-image('/assets/images/clouds/equinix.svg', 24px);
+
+  max-width: 95px;
+}
+
+.km-provider-logo-kubevirt {
+  @include mixins.provider-image('/assets/images/clouds/kubevirt.svg', 30px);
+
+  max-width: 95px;
+}
+
+.km-provider-logo-vsphere {
+  @include mixins.provider-image('/assets/images/clouds/vsphere.png', 24px);
+
+  max-height: 26px;
+  max-width: 95px;
 }
 
 .km-provider-logo-gke {
   @include mixins.provider-image('/assets/images/clouds/gke.svg', 30px);
+
+  max-width: 130px;
 }
 
 .km-provider-logo-aks {
   @include mixins.provider-image('/assets/images/clouds/aks.svg', 30px);
+
+  max-width: 130px;
 }
 
 .km-provider-logo-eks {
   @include mixins.provider-image('/assets/images/clouds/eks.svg', 30px);
+
+  max-width: 130px;
 }
 
 .km-os-image-centos {
