@@ -23,16 +23,12 @@
   border-radius: variables.$border-radius;
   border-style: solid;
   border-width: 1px;
-  max-height: 200px;
+  max-height: 400px;
   overflow-y: auto;
 }
 
-.provider-logo-medium {
-  background-position: left;
-  margin: 0 16px 0 8px;
-  max-height: 22px;
-  max-width: 80px;
-  min-height: 22px;
+.provider-logo {
+  margin: 0 16px 0 16px;
 }
 
 .row {

@@ -158,14 +158,6 @@ hr {
   }
 }
 
-.km-provider-logo {
-  @include mixins.size(70px, 24px);
-  @include mixins.size(100%);
-
-  background-position: left;
-  display: block;
-}
-
 .km-icon-check,
 .km-icon-running,
 .km-icon-pending,
