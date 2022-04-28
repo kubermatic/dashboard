@@ -46,7 +46,7 @@ export class Wizard extends PageOptions implements Page {
     this.Buttons.sshKeysSelectOption(sshKeyName).click();
     this.Buttons.overlayContainer.click();
     this.Buttons.nextStep(WizardStep.Cluster).click();
-    this.Buttons.create.click({force: true});
+    this.Buttons.create.click({force: true, multiple: true});
   }
 
   onDelete(): void {
@@ -96,6 +96,6 @@ class Buttons extends PageOptions {
   }
 
   get create(): Cypress.Chainable {
-    return this._get('#km-wizard-create-btn');
+    return this._get('#km-wizard-create-btn > button');
   }
 }
