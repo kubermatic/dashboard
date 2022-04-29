@@ -32,17 +32,24 @@ export class Defaults extends PageOptions implements Page {
   }
 
   selectClusterCleanup(enabled: boolean, enforced: boolean): void {
-    this.Elements.enableClusterCleanupCheckbox
-      .click()
-      .then(_ => Pages.AdminSettings.Elements.iconCheck.should(Condition.BeVisible));
-    this.Elements.enforceClusterCleanupCheckbox.click().then(_ => {
+    this.Elements.enableClusterCleanupCheckbox.click().then(_ => {
+      this._strategy?.onSettingsChange({
+        cleanupOptions: {
+          enabled,
+          enforced: !enforced,
+        },
+      });
       Pages.AdminSettings.Elements.iconCheck.should(Condition.BeVisible);
+    });
+
+    this.Elements.enforceClusterCleanupCheckbox.click().then(_ => {
       this._strategy?.onSettingsChange({
         cleanupOptions: {
           enabled,
           enforced,
         },
       });
+      Pages.AdminSettings.Elements.iconCheck.should(Condition.BeVisible);
     });
   }
 }
