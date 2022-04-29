@@ -373,11 +373,11 @@
 }
 
 .km-provider-logo-aws {
-  @include mixins.provider-image('/assets/images/clouds/aws.svg', 40px, 23px);
+  @include mixins.provider-image('/assets/images/clouds/aws.svg', 36px, 20px);
 }
 
 .km-provider-logo-azure {
-  @include mixins.provider-image('/assets/images/clouds/azure.svg', 95px, 22px);
+  @include mixins.provider-image('/assets/images/clouds/azure.svg', 70px, 22px);
 }
 
 .km-provider-logo-bringyourown {
