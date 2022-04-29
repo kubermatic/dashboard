@@ -20,9 +20,9 @@
 
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {DatacenterService} from '@core/services/datacenter';
-import {MeteringConfiguration} from '@shared/entity/datacenter';
+import {MeteringConfiguration, MeteringReportConfiguration} from '@shared/entity/datacenter';
 import {Subject} from 'rxjs';
-import {filter, map, switchMap, takeUntil} from 'rxjs/operators';
+import {filter, map, mergeMap, switchMap, takeUntil} from 'rxjs/operators';
 import {MeteringService} from './service/metering';
 
 @Component({
@@ -32,7 +32,7 @@ import {MeteringService} from './service/metering';
 export class MeteringComponent implements OnInit {
   private readonly _unsubscribe = new Subject<void>();
   config: MeteringConfiguration;
-  isLoading = true;
+  schedules: MeteringReportConfiguration[];
 
   constructor(
     private readonly _dcService: DatacenterService,
@@ -50,17 +50,27 @@ export class MeteringComponent implements OnInit {
       .pipe(filter(seed => seed !== null))
       .pipe(switchMap(seed => this._dcService.seedSettings(seed)))
       .pipe(map(settings => settings.metering))
+      .pipe(
+        mergeMap(meteringConfig =>
+          this._meteringService
+            .scheduleConfigurations()
+            .pipe(map(schedulesConfig => ({meteringConfig, schedulesConfig})))
+        )
+      )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe({
-        next: config => {
-          this.isLoading = false;
-          this.config = config;
+        next: ({meteringConfig, schedulesConfig}) => {
+          this.config = meteringConfig;
+          this.schedules = schedulesConfig;
           this._cdr.detectChanges();
         },
         error: _ => {
-          this.isLoading = false;
           this._cdr.detectChanges();
         },
       });
+  }
+
+  isLoading(): boolean {
+    return !(this.config && this.schedules);
   }
 }

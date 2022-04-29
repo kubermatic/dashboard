@@ -27,15 +27,13 @@ import {MonacoEditorModule, NGX_MONACO_EDITOR_CONFIG} from 'ngx-monaco-editor';
 import {of} from 'rxjs';
 import {DefaultConstraintDialog, Mode} from './component';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule];
-
 declare let monaco: any;
 
 describe('DefaultConstraintDialog', () => {
   let fixture: ComponentFixture<DefaultConstraintDialog>;
   let component: DefaultConstraintDialog;
-  let createDefaultConstraintSpy;
-  let patchDefaultConstraintSpy;
+  let createDefaultConstraintSpy: jest.Mock;
+  let patchDefaultConstraintSpy: jest.Mock;
 
   beforeEach(waitForAsync(() => {
     const opaMock = {
@@ -48,7 +46,7 @@ describe('DefaultConstraintDialog', () => {
     patchDefaultConstraintSpy = opaMock.patchDefaultConstraint.mockReturnValue(asyncData(fakeConstraints()[0]));
 
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule],
       declarations: [DefaultConstraintDialog],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},

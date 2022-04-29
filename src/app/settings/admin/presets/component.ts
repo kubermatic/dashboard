@@ -11,7 +11,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
@@ -25,19 +24,21 @@ import {NotificationService} from '@core/services/notification';
 import {UserService} from '@core/services/user';
 import {PresetsService} from '@core/services/wizard/presets';
 import {Datacenter} from '@shared/entity/datacenter';
-import {Preset, PresetList} from '@shared/entity/preset';
+import {Preset, PresetList, PresetStat} from '@shared/entity/preset';
 import {
   EXTERNAL_NODE_PROVIDERS,
   NODE_PROVIDERS,
   NodeProvider,
   NodeProviderConstants,
 } from '@shared/model/NodeProviderConstants';
-import {merge, Observable, of, Subject} from 'rxjs';
-import {switchMap, take, takeUntil} from 'rxjs/operators';
+import {forkJoin, merge, Observable, of, Subject} from 'rxjs';
+import {switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 enum Column {
   Name = 'name',
   Providers = 'providers',
+  AssociatedCluster = 'associatedClusters',
+  AssociatedClusterTemplates = 'associatedClusterTemplates',
   Show = 'show',
   Actions = 'actions',
 }
@@ -48,13 +49,15 @@ enum Column {
   styleUrls: ['./style.scss'],
 })
 export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
+  readonly providers = NODE_PROVIDERS;
+
   presets: Preset[] = [];
   dataSource = new MatTableDataSource<Preset>();
   displayedColumns: string[] = Object.values(Column);
   datacenters: Datacenter[] = [];
   datacenterFilter: string;
-  readonly providers = NODE_PROVIDERS;
   providerFilter: NodeProvider;
+  isBusyCounter = 0;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -102,12 +105,35 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
     };
 
     merge(of(true), this._presetsChanged)
-      .pipe(switchMap(_ => this._presets$))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(presetList => {
-        this.presets = presetList.items;
-        this.dataSource.data = this.presets;
-      });
+      .pipe(
+        switchMap(_ => this._presets$),
+        tap((presetList: PresetList) => {
+          this.presets = presetList.items;
+        }),
+        switchMap(_ => {
+          const presetStats$ = [];
+          this.presets.forEach((preset: Preset) => {
+            presetStats$.push(this._presetService.getPresetStatsBy(preset.name));
+          });
+          this.isBusyCounter++;
+          return forkJoin(presetStats$);
+        }),
+        takeUntil(this._unsubscribe)
+      )
+      .subscribe(
+        (stats: PresetStat[]) => {
+          this.presets.forEach((preset: Preset, idx: number) => {
+            preset.associatedClusters = stats[idx].associatedClusters;
+            preset.associatedClusterTemplates = stats[idx].associatedClusterTemplates;
+          });
+          this.dataSource.data = this.presets;
+          this.isBusyCounter--;
+        },
+        _ => {
+          this._notificationService.error('Could not fetch Presets data');
+          this.isBusyCounter--;
+        }
+      );
 
     this._datacenterService.datacenters.pipe(takeUntil(this._unsubscribe)).subscribe(datacenters => {
       this.datacenters = datacenters;

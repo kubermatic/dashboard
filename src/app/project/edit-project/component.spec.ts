@@ -25,19 +25,17 @@ import {EditProjectComponent} from './component';
 import {ProjectService} from '@core/services/project';
 import {asyncData} from '@test/services/cluster-mock';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, ProjectModule];
-
 describe('EditProjectComponent', () => {
   let fixture: ComponentFixture<EditProjectComponent>;
   let component: EditProjectComponent;
-  let editProjectSpy;
+  let editProjectSpy: jest.Mock;
 
   beforeEach(waitForAsync(() => {
     const projectServiceMock = {edit: jest.fn()};
     editProjectSpy = projectServiceMock.edit.mockReturnValue(asyncData(fakeProject()));
 
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, ProjectModule],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},
         {provide: ProjectService, useValue: projectServiceMock},

@@ -21,7 +21,7 @@ import {Admin, Member} from '@shared/entity/member';
 import {Report} from '@shared/entity/metering';
 import {AdminSettings, CustomLink, DEFAULT_ADMIN_SETTINGS} from '@shared/entity/settings';
 import {BehaviorSubject, EMPTY, iif, merge, Observable, of, Subject, timer} from 'rxjs';
-import {catchError, delay, map, retryWhen, shareReplay, switchMap, tap} from 'rxjs/operators';
+import {catchError, delay, map, retryWhen, shareReplay, switchMap} from 'rxjs/operators';
 import {webSocket} from 'rxjs/webSocket';
 
 @Injectable({
@@ -33,7 +33,7 @@ export class SettingsService {
   private readonly _wsRoot = environment.wsRoot;
   private readonly _adminSettings$ = new BehaviorSubject(DEFAULT_ADMIN_SETTINGS);
   private readonly _refreshTime = 5;
-  private readonly _retryDelayTime = 3;
+  private readonly _retryTime = 3;
   private _adminSettingsWatch$: Observable<AdminSettings>;
   private _admins$: Observable<Admin[]>;
   private _adminsRefresh$ = new Subject<void>();
@@ -41,7 +41,7 @@ export class SettingsService {
   private _usersRefresh$ = new Subject<void>();
   private _customLinks$: Observable<CustomLink[]>;
   private _customLinksRefresh$ = new Subject<void>();
-  private _reports$: Observable<Report[]>;
+  private _reports$ = new Map<string, Observable<Report[]>>();
   private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
 
   constructor(
@@ -66,15 +66,7 @@ export class SettingsService {
   private _getAdminSettingsWebSocket(): Observable<AdminSettings> {
     return webSocket<AdminSettings>(`${this._wsRoot}/admin/settings`)
       .asObservable()
-      .pipe(
-        retryWhen(errors =>
-          errors.pipe(
-            // eslint-disable-next-line no-console
-            tap(console.debug),
-            delay(this._appConfigService.getRefreshTimeBase() * this._retryDelayTime)
-          )
-        )
-      );
+      .pipe(retryWhen(errors => errors.pipe(delay(this._appConfigService.getRefreshTimeBase() * this._retryTime))));
   }
 
   private _getAdminSettings(): Observable<AdminSettings> {
@@ -90,15 +82,7 @@ export class SettingsService {
   }
 
   private _defaultAdminSettings(settings: AdminSettings): AdminSettings {
-    if (!settings) {
-      return DEFAULT_ADMIN_SETTINGS;
-    }
-
-    Object.keys(DEFAULT_ADMIN_SETTINGS).forEach(key => {
-      settings[key] = settings[key] === undefined ? DEFAULT_ADMIN_SETTINGS[key] : settings[key];
-    });
-
-    return settings;
+    return {...DEFAULT_ADMIN_SETTINGS, ...settings};
   }
 
   patchAdminSettings(patch: any): Observable<AdminSettings> {
@@ -167,22 +151,24 @@ export class SettingsService {
     this._usersRefresh$.next();
   }
 
-  get reports(): Observable<Report[]> {
-    if (!this._reports$) {
-      this._reports$ = this._refreshTimer$
-        .pipe(switchMap(() => this._getReports()))
+  reports(scheduleName: string): Observable<Report[]> {
+    if (!this._reports$.get(scheduleName)) {
+      const reports$ = this._refreshTimer$
+        .pipe(switchMap(() => this._getReports(scheduleName)))
         .pipe(shareReplay({refCount: true, bufferSize: 1}));
+      this._reports$.set(scheduleName, reports$);
     }
-    return this._reports$;
+
+    return this._reports$.get(scheduleName);
   }
 
-  private _getReports(): Observable<Report[]> {
+  private _getReports(scheduleName: string): Observable<Report[]> {
     const url = `${this._restRoot}/admin/metering/reports`;
-    return this._httpClient.get<Report[]>(url);
+    return this._httpClient.get<Report[]>(url, {params: {configuration_name: scheduleName}});
   }
 
-  reportDownload(reportName: string): Observable<string> {
+  reportDownload(reportName: string, scheduleName: string): Observable<string> {
     const url = `${this._restRoot}/admin/metering/reports/${reportName}`;
-    return this._httpClient.get<string>(url);
+    return this._httpClient.get<string>(url, {params: {configuration_name: scheduleName}});
   }
 }

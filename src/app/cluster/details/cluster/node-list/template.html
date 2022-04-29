@@ -267,33 +267,39 @@ limitations under the License.
               <div value>{{element.spec.cloud.openstack.instanceReadyCheckTimeout}}</div>
             </km-property>
 
-            <km-property *ngIf="element.spec.cloud.kubevirt">
-              <div key>Number of CPUs</div>
-              <div value>{{element.spec.cloud.kubevirt.cpus}}</div>
-            </km-property>
-            <km-property *ngIf="element.spec.cloud.kubevirt">
-              <div key>Memory</div>
-              <div value>{{element.spec.cloud.kubevirt.memory}}</div>
-            </km-property>
-            <km-property *ngIf="element.spec.cloud.kubevirt">
-              <div key>PVC Size</div>
-              <div value>{{element.spec.cloud.kubevirt.pvcSize}}</div>
-            </km-property>
-            <km-property *ngIf="element.spec.cloud.kubevirt">
-              <div key>Storage Class Name</div>
-              <div value>{{element.spec.cloud.kubevirt.storageClassName}}</div>
-            </km-property>
-            <km-property *ngIf="element.spec.cloud.kubevirt">
-              <div key>Namespace</div>
-              <div value>{{element.spec.cloud.kubevirt.namespace}}</div>
-            </km-property>
-            <km-property *ngIf="element.spec.cloud.kubevirt">
-              <div key>Source URL</div>
-              <div value>{{element.spec.cloud.kubevirt.sourceURL}}</div>
-            </km-property>
+            <ng-container *ngIf="element.spec.cloud.kubevirt">
+              <km-property *ngIf="element.spec.cloud.kubevirt.cpus">
+                <div key>CPUs</div>
+                <div value>{{element.spec.cloud.kubevirt.cpus}}</div>
+              </km-property>
+              <km-property *ngIf="element.spec.cloud.kubevirt.memory">
+                <div key>Memory</div>
+                <div value>{{element.spec.cloud.kubevirt.memory}}</div>
+              </km-property>
+              <km-property *ngIf="element.spec.cloud.kubevirt.flavorName">
+                <div key>VM Flavor</div>
+                <div value>{{element.spec.cloud.kubevirt.flavorName}}</div>
+              </km-property>
+              <km-property>
+                <div key>Operating System Image</div>
+                <div value>{{element.spec.cloud.kubevirt.primaryDiskOSImage}}</div>
+              </km-property>
+              <km-property>
+                <div key>Storage Class</div>
+                <div value>{{element.spec.cloud.kubevirt.primaryDiskStorageClassName}}</div>
+              </km-property>
+              <km-property>
+                <div key>Size</div>
+                <div value>{{element.spec.cloud.kubevirt.primaryDiskSize}}</div>
+              </km-property>
+              <km-property *ngFor="let disk of element.spec.cloud.kubevirt?.secondaryDisks; let i = index;">
+                <div key>Secondary Disk {{i + 1}}</div>
+                <div value>{{disk.storageClassName}}, {{disk.size}}</div>
+              </km-property>
+            </ng-container>
 
             <km-property *ngIf="element.spec.cloud.vsphere">
-              <div key>Number of CPU's</div>
+              <div key>Number of CPUs</div>
               <div value>{{element.spec.cloud.vsphere.cpus}}</div>
             </km-property>
             <km-property *ngIf="element.spec.cloud.vsphere">

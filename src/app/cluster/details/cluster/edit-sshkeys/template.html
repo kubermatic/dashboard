@@ -61,6 +61,7 @@ limitations under the License.
 
             <ng-container *ngSwitchCase="false">
               <button mat-icon-button
+                      [attr.id]="'km-delete-sshkey-' + element.name"
                       matTooltip="Remove SSH key"
                       (click)="deleteSSHKey(element)"
                       [disabled]="!canDelete()">

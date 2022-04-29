@@ -17,11 +17,9 @@ import {SharedModule} from '@shared/module';
 import {ClusterTemplateRoutingModule} from './routing';
 import {ClusterTemplateComponent} from './component';
 
-const components: any[] = [ClusterTemplateComponent];
-
 @NgModule({
   imports: [SharedModule, ClusterTemplateRoutingModule],
-  declarations: [...components],
-  exports: [...components],
+  declarations: [ClusterTemplateComponent],
+  exports: [ClusterTemplateComponent],
 })
 export class ClusterTemplateModule {}

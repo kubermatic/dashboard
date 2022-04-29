@@ -21,15 +21,13 @@ import {Event} from '@shared/entity/event';
 import {SharedModule} from '@shared/module';
 import {EventListComponent} from './component';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule];
-
 describe('EventListComponent', () => {
   let fixture: ComponentFixture<EventListComponent>;
   let component: EventListComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
       providers: [{provide: UserService, useClass: UserMockService}],
       teardown: {destroyAfterEach: false},
     }).compileComponents();

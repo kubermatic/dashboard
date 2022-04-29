@@ -28,14 +28,12 @@ import {MonacoEditorModule, NGX_MONACO_EDITOR_CONFIG} from 'ngx-monaco-editor';
 import {AlertmanagerConfigDialog} from './component';
 import {asyncData} from '@test/services/cluster-mock';
 
-const modules: any[] = [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule];
-
 declare let monaco: any;
 
 describe('AlertmanagerConfigDialog', () => {
   let fixture: ComponentFixture<AlertmanagerConfigDialog>;
   let component: AlertmanagerConfigDialog;
-  let putAlertmanagerConfigSpy;
+  let putAlertmanagerConfigSpy: jest.Mock;
 
   beforeEach(waitForAsync(() => {
     const mlaMock = {
@@ -45,7 +43,7 @@ describe('AlertmanagerConfigDialog', () => {
     putAlertmanagerConfigSpy = mlaMock.putAlertmanagerConfig.mockReturnValue(asyncData(fakeAlertmanagerConfig()));
 
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule, MonacoEditorModule],
       declarations: [AlertmanagerConfigDialog],
       providers: [
         {provide: MatDialogRef, useClass: MatDialogRefMock},
