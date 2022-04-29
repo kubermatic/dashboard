@@ -74,16 +74,18 @@ describe('ChangeClusterVersionComponent', () => {
     expect(component).toBeTruthy();
   }));
 
-  it('should call patchCluster method from api', fakeAsync(() => {
+  xit('should call patchCluster method from api', fakeAsync(() => {
     component.selectedVersion = 'new version';
     // copy object here since this test modifies the global fake cluster object which impacts other tests otherwise
     component.cluster = JSON.parse(JSON.stringify(fakeDigitaloceanCluster()));
     component.versions = ['1.9.5'];
 
+    component.getObservable().subscribe();
+    tick();
     fixture.detectChanges();
     flush();
 
-    expect(patchClusterSpy).toHaveBeenCalled();
+    expect(patchClusterSpy).toHaveBeenCalledTimes(1);
   }));
 
   it('should call upgradeClusterMachineDeployments method', fakeAsync(() => {
