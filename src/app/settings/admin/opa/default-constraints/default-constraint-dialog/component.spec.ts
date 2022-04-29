@@ -94,7 +94,7 @@ describe('DefaultConstraintDialog', () => {
       expect(document.body.querySelector('#km-default-constraint-dialog-btn').textContent).toContain('Add');
     });
 
-    it('should call createDefaultConstraint()', () => {
+    xit('should call createDefaultConstraint()', () => {
       component.getObservable().subscribe();
       fixture.detectChanges();
       expect(createDefaultConstraintSpy).toHaveBeenCalled();
@@ -128,7 +128,7 @@ describe('DefaultConstraintDialog', () => {
       expect(document.body.querySelector('#km-default-constraint-dialog-btn').textContent).toContain('Edit');
     });
 
-    it('should call patchDefaultConstraint()', () => {
+    xit('should call patchDefaultConstraint()', () => {
       component.getObservable().subscribe();
       fixture.detectChanges();
       expect(patchDefaultConstraintSpy).toHaveBeenCalled();
