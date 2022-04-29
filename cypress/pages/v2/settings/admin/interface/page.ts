@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {AdminSettingsInterfaceStrategy, Page, PageOptions} from '@kmtypes';
+import {AdminSettingsInterfaceStrategy, Condition, Page, PageOptions} from '@kmtypes';
+import {Pages} from '@pages/v2';
 import {AdminSettingsInterfaceFactory} from './strategy/factory';
 
 export class Interface extends PageOptions implements Page {
@@ -31,27 +32,30 @@ export class Interface extends PageOptions implements Page {
   }
 
   selectEnableKubernetesDashboard(selected: boolean) {
-    this.Elements.enableKubernetesDashboardCheckbox.click().then(_ =>
+    this.Elements.enableKubernetesDashboardCheckbox.click().then(_ => {
+      Pages.AdminSettings.Elements.iconCheck.should(Condition.BeVisible);
       this._strategy?.onSettingsChange({
         enableDashboard: selected,
-      })
-    );
+      });
+    });
   }
 
   selectEnableOIDCKubeconfig(selected: boolean) {
-    this.Elements.enableOIDCCheckbox.click().then(_ =>
+    this.Elements.enableOIDCCheckbox.click().then(_ => {
+      Pages.AdminSettings.Elements.iconCheck.should(Condition.BeVisible);
       this._strategy?.onSettingsChange({
         enableOIDCKubeconfig: selected,
-      })
-    );
+      });
+    });
   }
 
   selectEnableExternalClusterImport(selected: boolean) {
-    this.Elements.enableExternalClustersCheckbox.click().then(_ =>
+    this.Elements.enableExternalClustersCheckbox.click().then(_ => {
+      Pages.AdminSettings.Elements.iconCheck.should(Condition.BeVisible);
       this._strategy?.onSettingsChange({
         enableExternalClusterImport: selected,
-      })
-    );
+      });
+    });
   }
 }
 

@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {AdminSettingsDefaultsStrategy, Page, PageOptions} from '@kmtypes';
+import {AdminSettingsDefaultsStrategy, Condition, Page, PageOptions} from '@kmtypes';
+import {Pages} from '@pages/v2';
 import {AdminSettingsDefaultsFactory} from '@pages/v2/settings/admin/defaults/strategy/factory';
 
 export class Defaults extends PageOptions implements Page {
@@ -31,15 +32,18 @@ export class Defaults extends PageOptions implements Page {
   }
 
   selectClusterCleanup(enabled: boolean, enforced: boolean): void {
-    this.Elements.enableClusterCleanupCheckbox.click();
-    this.Elements.enforceClusterCleanupCheckbox.click().then(_ =>
+    this.Elements.enableClusterCleanupCheckbox
+      .click()
+      .then(_ => Pages.AdminSettings.Elements.iconCheck.should(Condition.BeVisible));
+    this.Elements.enforceClusterCleanupCheckbox.click().then(_ => {
+      Pages.AdminSettings.Elements.iconCheck.should(Condition.BeVisible);
       this._strategy?.onSettingsChange({
         cleanupOptions: {
           enabled,
           enforced,
         },
-      })
-    );
+      });
+    });
   }
 }
 

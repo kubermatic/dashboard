@@ -35,4 +35,8 @@ export class AdminSettings extends PageOptions implements Page {
   }
 }
 
-class Elements extends PageOptions {}
+class Elements extends PageOptions {
+  get iconCheck(): Cypress.Chainable {
+    return this._get('.km-icon-check');
+  }
+}
