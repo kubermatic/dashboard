@@ -40,6 +40,7 @@ export class Defaults extends PageOptions implements Page {
         },
       });
       Pages.AdminSettings.Elements.iconCheck.should(Condition.BeVisible);
+      Pages.AdminSettings.Elements.iconCheck.should(Condition.NotBeVisible);
     });
 
     this.Elements.enforceClusterCleanupCheckbox.click().then(_ => {
@@ -50,6 +51,7 @@ export class Defaults extends PageOptions implements Page {
         },
       });
       Pages.AdminSettings.Elements.iconCheck.should(Condition.BeVisible);
+      Pages.AdminSettings.Elements.iconCheck.should(Condition.NotBeVisible);
     });
   }
 }

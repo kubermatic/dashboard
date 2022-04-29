@@ -33,28 +33,31 @@ export class Interface extends PageOptions implements Page {
 
   selectEnableKubernetesDashboard(selected: boolean) {
     this.Elements.enableKubernetesDashboardCheckbox.click().then(_ => {
-      Pages.AdminSettings.Elements.iconCheck.should(Condition.BeVisible);
       this._strategy?.onSettingsChange({
         enableDashboard: selected,
       });
+      Pages.AdminSettings.Elements.iconCheck.should(Condition.BeVisible);
+      Pages.AdminSettings.Elements.iconCheck.should(Condition.NotBeVisible);
     });
   }
 
   selectEnableOIDCKubeconfig(selected: boolean) {
     this.Elements.enableOIDCCheckbox.click().then(_ => {
-      Pages.AdminSettings.Elements.iconCheck.should(Condition.BeVisible);
       this._strategy?.onSettingsChange({
         enableOIDCKubeconfig: selected,
       });
+      Pages.AdminSettings.Elements.iconCheck.should(Condition.BeVisible);
+      Pages.AdminSettings.Elements.iconCheck.should(Condition.NotBeVisible);
     });
   }
 
   selectEnableExternalClusterImport(selected: boolean) {
     this.Elements.enableExternalClustersCheckbox.click().then(_ => {
-      Pages.AdminSettings.Elements.iconCheck.should(Condition.BeVisible);
       this._strategy?.onSettingsChange({
         enableExternalClusterImport: selected,
       });
+      Pages.AdminSettings.Elements.iconCheck.should(Condition.BeVisible);
+      Pages.AdminSettings.Elements.iconCheck.should(Condition.NotBeVisible);
     });
   }
 }
