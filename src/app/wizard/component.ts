@@ -109,6 +109,7 @@ export class WizardComponent implements OnInit, OnDestroy {
 
   getObservable(): Observable<Cluster> {
     const createCluster = this._getCreateClusterModel(this._clusterSpecService.cluster, this._nodeDataService.nodeData);
+
     return this._clusterService
       .create(this.project.id, createCluster)
       .pipe(switchMap(cluster => this._clusterService.cluster(this.project.id, cluster.id)))
@@ -117,14 +118,9 @@ export class WizardComponent implements OnInit, OnDestroy {
 
   onNext(cluster: Cluster): void {
     this.creating = true;
-    if (cluster) {
-      this._notificationService.success(`Created the ${cluster.name} cluster`);
-      this._googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
-    } else {
-      this._notificationService.error(`Could not create the ${cluster.name} cluster`);
-      this._googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationFailed');
-      return;
-    }
+    this._notificationService.success(`Created the ${cluster.name} cluster`);
+    this._googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
+
     if (this._clusterSpecService.sshKeys.length) {
       this._clusterSpecService.sshKeys.map(key => {
         this._clusterService

@@ -180,9 +180,6 @@ export class ClusterService {
         confirmLabel: 'Disconnect',
         throttelButton: true,
         observable: this._deleteExternalCluster(projectID, cluster.id),
-        // next: this._router.navigate(['/projects/' + projectID + '/clusters'], {
-        //     fragment: `${ClusterListTab.ExternalCluster}`,
-        //   }).finally(() => this._notificationService.success(`Disconnected the ${cluster.name} cluster`))
       },
     };
 
