@@ -57,7 +57,8 @@ class Elements extends PageOptions {
   }
 
   get machineDeploymentList(): Cypress.Chainable {
-    return this._get('km-machine-deployment-list');
+    const startTimeout = 600000;
+    return this._get('km-machine-deployment-list', startTimeout);
   }
 
   get deleteDialogInput(): Cypress.Chainable {
@@ -65,19 +66,19 @@ class Elements extends PageOptions {
   }
 
   get deleteDialogCleanupLBCheckbox(): Cypress.Chainable {
-    return cy.get('#km-delete-cluster-lb-cleanup');
+    return this._get('#km-delete-cluster-lb-cleanup');
   }
 
   get deleteDialogCleanupLBCheckboxInput(): Cypress.Chainable {
-    return cy.get('#km-delete-cluster-lb-cleanup input');
+    return this._get('#km-delete-cluster-lb-cleanup input');
   }
 
   get deleteDialogCleanupVolumeCheckbox(): Cypress.Chainable {
-    return cy.get('#km-delete-cluster-volume-cleanup');
+    return this._get('#km-delete-cluster-volume-cleanup');
   }
 
   get deleteDialogCleanupVolumeCheckboxInput(): Cypress.Chainable {
-    return cy.get('#km-delete-cluster-volume-cleanup input');
+    return this._get('#km-delete-cluster-volume-cleanup input');
   }
 }
 
@@ -111,14 +112,14 @@ class Buttons extends PageOptions {
   }
 
   get deleteClusterClose(): Cypress.Chainable {
-    return cy.get('#km-close-dialog-btn');
+    return this._get('#km-close-dialog-btn');
   }
 
   get openKubernetesDashboard(): Cypress.Chainable {
-    return cy.get('#km-open-kubernetes-dashboard-btn');
+    return this._get('#km-open-kubernetes-dashboard-btn');
   }
 
   get shareKubeconfig(): Cypress.Chainable {
-    return cy.get('#km-share-kubeconfig-btn');
+    return this._get('#km-share-kubeconfig-btn');
   }
 }

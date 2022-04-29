@@ -45,50 +45,50 @@ export class Defaults extends PageOptions implements Page {
 
 class Elements extends PageOptions {
   get enableClusterCleanupCheckbox(): Cypress.Chainable {
-    return cy.get('#km-cleanup-enable-setting');
+    return this._get('#km-cleanup-enable-setting');
   }
 
   get enableClusterCleanupCheckboxInput(): Cypress.Chainable {
-    return cy.get('#km-cleanup-enable-setting input');
+    return this._get('#km-cleanup-enable-setting input');
   }
 
   get enforceClusterCleanupCheckbox(): Cypress.Chainable {
-    return cy.get('#km-cleanup-enforce-setting');
+    return this._get('#km-cleanup-enforce-setting');
   }
 
   get enforceClusterCleanupCheckboxInput(): Cypress.Chainable {
-    return cy.get('#km-cleanup-enforce-setting input');
+    return this._get('#km-cleanup-enforce-setting input');
   }
 
   get opaEnableCheckbox(): Cypress.Chainable {
-    return cy.get('#km-opa-enable-setting');
+    return this._get('#km-opa-enable-setting');
   }
 
   get opaEnforceCheckbox(): Cypress.Chainable {
-    return cy.get('#km-opa-enforce-setting');
+    return this._get('#km-opa-enforce-setting');
   }
 
   get initialReplicasInput(): Cypress.Chainable {
-    return cy.get('#km-initial-replicas-setting');
+    return this._get('#km-initial-replicas-setting');
   }
 
   get minCPUResourceQuotaInput(): Cypress.Chainable {
-    return cy.get('#km-cpu-resource-quota-setting');
+    return this._get('#km-cpu-resource-quota-setting');
   }
 
   get minRAMResourceQuotaInput(): Cypress.Chainable {
-    return cy.get('#km-ram-resource-quota-setting');
+    return this._get('#km-ram-resource-quota-setting');
   }
 
   get restrictProjectCreationToAdminsCheckbox(): Cypress.Chainable {
-    return cy.get('#km-project-admin-only-setting');
+    return this._get('#km-project-admin-only-setting');
   }
 
   get projectLimitInput(): Cypress.Chainable {
-    return cy.get('#km-project-limit-setting');
+    return this._get('#km-project-limit-setting');
   }
 
   get navItem(): Cypress.Chainable {
-    return cy.get('#km-nav-item-defaults');
+    return this._get('#km-nav-item-defaults');
   }
 }

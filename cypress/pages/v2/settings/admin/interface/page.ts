@@ -60,59 +60,59 @@ class Elements extends PageOptions {
   private readonly _secondLastCustomLink = 'km-custom-links-form > form > div > div:nth-last-child(2)';
 
   get lastCustomLinkLabelInput(): Cypress.Chainable {
-    return cy.get(`${this._lastCustomLink} > mat-form-field:nth-child(1) input`);
+    return this._get(`${this._lastCustomLink} > mat-form-field:nth-child(1) input`);
   }
 
   get lastCustomLinkURLInput(): Cypress.Chainable {
-    return cy.get(`${this._lastCustomLink} > mat-form-field:nth-child(2) input`);
+    return this._get(`${this._lastCustomLink} > mat-form-field:nth-child(2) input`);
   }
 
   // It should be used before setting the label and the URL because otherwise the new inputs will be added to form.
   get lastCustomLinkLocationInput(): Cypress.Chainable {
-    return cy.get(`${this._lastCustomLink} > mat-form-field:nth-child(4)`);
+    return this._get(`${this._lastCustomLink} > mat-form-field:nth-child(4)`);
   }
 
   get secondLastCustomLinkDeleteButton(): Cypress.Chainable {
-    return cy.get(`${this._secondLastCustomLink} > button`);
+    return this._get(`${this._secondLastCustomLink} > button`);
   }
 
   get enableKubernetesDashboardCheckbox(): Cypress.Chainable {
-    return cy.get('#km-enable-kubernetes-dashboard-setting');
+    return this._get('#km-enable-kubernetes-dashboard-setting');
   }
 
   get enableKubernetesDashboardCheckboxInput(): Cypress.Chainable {
-    return cy.get('#km-enable-kubernetes-dashboard-setting input');
+    return this._get('#km-enable-kubernetes-dashboard-setting input');
   }
 
   get enableOIDCCheckbox(): Cypress.Chainable {
-    return cy.get('#km-enable-oidc-setting');
+    return this._get('#km-enable-oidc-setting');
   }
 
   get enableOIDCCheckboxInput(): Cypress.Chainable {
-    return cy.get('#km-enable-oidc-setting input');
+    return this._get('#km-enable-oidc-setting input');
   }
 
   get enableExternalClustersCheckbox(): Cypress.Chainable {
-    return cy.get('#km-enable-external-clusters-setting');
+    return this._get('#km-enable-external-clusters-setting');
   }
 
   get enableExternalClustersCheckboxInput(): Cypress.Chainable {
-    return cy.get('#km-enable-external-clusters-setting input');
+    return this._get('#km-enable-external-clusters-setting input');
   }
 
   get apiDocsCheckbox(): Cypress.Chainable {
-    return cy.get('#km-api-docs-setting');
+    return this._get('#km-api-docs-setting');
   }
 
   get termsOfServiceCheckbox(): Cypress.Chainable {
-    return cy.get('#km-tos-setting');
+    return this._get('#km-tos-setting');
   }
 
   get demoInfoCheckbox(): Cypress.Chainable {
-    return cy.get('#km-demo-info-setting');
+    return this._get('#km-demo-info-setting');
   }
 
   get navItem(): Cypress.Chainable {
-    return cy.get('#km-nav-item-interface');
+    return this._get('#km-nav-item-interface');
   }
 }

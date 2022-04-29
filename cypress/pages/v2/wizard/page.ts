@@ -90,11 +90,11 @@ class Elements extends PageOptions {
   }
 
   get nodeNameInput(): Cypress.Chainable {
-    return cy.get('#km-node-name-input');
+    return this._get('#km-node-name-input');
   }
 
   get nodeCountInput(): Cypress.Chainable {
-    return cy.get('#km-node-count-input');
+    return this._get('#km-node-count-input');
   }
 }
 

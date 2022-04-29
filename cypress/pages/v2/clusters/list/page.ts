@@ -43,15 +43,15 @@ class Buttons extends PageOptions {
   }
 
   get externalClustersTab(): Cypress.Chainable {
-    return cy.get('#mat-tab-label-0-1');
+    return this._get('#mat-tab-label-0-1');
   }
 
   get clustersTab(): Cypress.Chainable {
-    return cy.get('#mat-tab-label-0-0');
+    return this._get('#mat-tab-label-0-0');
   }
 
   get addExternalCluster(): Cypress.Chainable {
-    return cy.get('#km-add-external-cluster-btn');
+    return this._get('#km-add-external-cluster-btn');
   }
 
   deleteDialog(name: string): Cypress.Chainable {
