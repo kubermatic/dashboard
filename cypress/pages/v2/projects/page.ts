@@ -73,8 +73,8 @@ export class Projects extends PageOptions implements Page {
 }
 
 class Elements extends PageOptions {
-  projectItem(name: string): Cypress.Chainable {
-    return this._get(`#km-project-name-${name}`);
+  projectItem(name: string, timeout?: number): Cypress.Chainable {
+    return this._get(`#km-project-name-${name}`, timeout);
   }
 
   /**

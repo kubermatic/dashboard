@@ -151,7 +151,9 @@ describe('Admin Settings - Defaults Story', () => {
 
     Pages.Projects.Elements.projectItem(projectName).should(Condition.Exist);
     Pages.Projects.delete(projectName);
-    Pages.Projects.Elements.projectItem(projectName).should(Condition.NotExist);
+
+    const deletionTimeout = 60000;
+    Pages.Projects.Elements.projectItem(projectName, deletionTimeout).should(Condition.NotExist);
 
     Pages.Root.logout();
   });
