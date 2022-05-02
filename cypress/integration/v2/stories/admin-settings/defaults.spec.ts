@@ -16,6 +16,7 @@ import {Intercept} from '@intercept';
 import {Condition, Digitalocean, Provider, View} from '@kmtypes';
 import {Preset, ProviderPreset} from '@kmtypes/preset';
 import {Clusters, Pages, Projects} from '@pages/v2';
+import {Config} from '@utils/config';
 
 describe('Admin Settings - Defaults Story', () => {
   const projectName = Projects.getName();
@@ -27,7 +28,7 @@ describe('Admin Settings - Defaults Story', () => {
   beforeEach(() => Intercept.init(Provider.Digitalocean));
 
   it('should login', () => {
-    Pages.Root.login(undefined, undefined, true);
+    Pages.Root.login(Config.adminEmail(), Config.password(), true);
     Pages.Projects.visit();
     Pages.expect(View.Projects.Default);
   });
