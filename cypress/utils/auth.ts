@@ -14,11 +14,11 @@
 
 import {DexPage} from '../pages/dex.po';
 import {LoginPage} from '../pages/login.po';
-import {Condition} from './condition';
 import {ProjectsPage} from '../pages/projects.po';
 import {UserPanel} from '../pages/user-panel.po';
-import {Mocks} from './mocks';
+import {Condition} from './condition';
 import {Config} from './config';
+import {Mocks} from './mocks';
 
 /**
  * Authenticates the user using the login page or mocked authentication cookies if mocks are enabled.

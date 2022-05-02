@@ -12,11 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Config} from '../../../utils/config';
-import {View} from '../../../utils/view';
-import {Page, PageOptions} from '../types';
+import {LoginStrategy, Page, PageOptions, View} from '@kmtypes';
+import {Config} from '@utils/config';
 import {LoginStrategyFactory} from './strategy/factory';
-import {LoginStrategy} from './strategy/types';
 
 export class RootPage extends PageOptions implements Page {
   private readonly _loginStrategy: LoginStrategy;
@@ -46,19 +44,19 @@ export class RootPage extends PageOptions implements Page {
 
 class UserPanel extends PageOptions {
   get open(): Cypress.Chainable {
-    return cy.get('#km-navbar-user-menu');
+    return this._get('#km-navbar-user-menu');
   }
 
   get logout(): Cypress.Chainable {
-    return cy.get('#km-navbar-logout-btn');
+    return this._get('#km-navbar-logout-btn');
   }
 
   get userSettings(): Cypress.Chainable {
-    return cy.get('#km-navbar-user-settings-btn');
+    return this._get('#km-navbar-user-settings-btn');
   }
 
   get adminSetttings(): Cypress.Chainable {
-    return cy.get('#km-navbar-admin-settings-btn');
+    return this._get('#km-navbar-admin-settings-btn');
   }
 }
 
@@ -70,6 +68,6 @@ class Elements extends PageOptions {
 
 class Buttons extends PageOptions {
   get login(): Cypress.Chainable {
-    return cy.get('#login-button');
+    return this._get('#login-button');
   }
 }

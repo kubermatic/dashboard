@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {Condition, Page, PageOptions, ProjectStrategy, View} from '@kmtypes';
+import {Pages} from '@pages/v2';
+import {Config} from '@utils/config';
 import _ from 'lodash';
-import {Config} from '../../../utils/config';
-import {View} from '../../../utils/view';
-import {Page, PageOptions} from '../types';
 import {ProjectStrategyFactory} from './strategy/factory';
-import {ProjectStrategy} from './strategy/types';
 
 export class Projects extends PageOptions implements Page {
   private static _projectName: string;
@@ -45,6 +44,17 @@ export class Projects extends PageOptions implements Page {
     cy.visit(View.Projects.Default, {timeout: this._pageLoadTimeout});
   }
 
+  open(projectName: string): void {
+    this.visit();
+    Pages.expect(View.Projects.Default);
+
+    this.Elements.projectItem(projectName).should(Condition.Exist);
+    this.Elements.projectItemIcon(projectName, 'disabled').should(Condition.NotExist);
+    this.Elements.projectItemIcon(projectName, 'running').should(Condition.Exist);
+    this.select(projectName);
+    Pages.expect(View.Clusters.Default);
+  }
+
   create(name: string): void {
     this.Buttons.openDialog.click();
     this.Elements.addDialogInput.type(name).then(_ => this._strategy?.onCreate());
@@ -52,7 +62,7 @@ export class Projects extends PageOptions implements Page {
   }
 
   select(name: string): void {
-    this.Elements.projectItem(name).click();
+    this.Elements.projectItem(name).click({force: true});
   }
 
   delete(name: string): void {
@@ -63,8 +73,8 @@ export class Projects extends PageOptions implements Page {
 }
 
 class Elements extends PageOptions {
-  projectItem(name: string): Cypress.Chainable {
-    return this._get(`#km-project-name-${name}`);
+  projectItem(name: string, timeout?: number): Cypress.Chainable {
+    return this._get(`#km-project-name-${name}`, timeout);
   }
 
   /**

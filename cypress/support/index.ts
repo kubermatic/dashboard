@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import 'cypress-fail-fast';
-import {Mocks} from '../utils/mocks';
+import {Mocks} from '@utils/mocks';
 import {paste, pasteFile} from './paste';
 
 before(() => {

@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {AdminSettings} from '../../../pages/admin-settings.po';
 import {login, logout} from '../../../utils/auth';
 import {Condition} from '../../../utils/condition';
-import {View} from '../../../utils/view';
-import {AdminSettings} from '../../../pages/admin-settings.po';
 import {Config} from '../../../utils/config';
 import {Mocks} from '../../../utils/mocks';
+import {View} from '../../../utils/view';
 
 describe('Admin Settings - Administrators Story', () => {
   let adminsCount = 1;

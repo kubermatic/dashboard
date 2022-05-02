@@ -12,9 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Group} from '../../../utils/member';
-import {Page, PageOptions} from '../types';
-import {MembersStrategy} from './strategy/types';
+import {Group, MembersStrategy, Page, PageOptions} from '@kmtypes';
 import {MembersStrategyFactory} from './strategy/factory';
 
 export class Members extends PageOptions implements Page {
