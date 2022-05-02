@@ -21,6 +21,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {AppConfigService} from '@app/config.service';
+import {Report} from '@app/shared/entity/metering';
 import {environment} from '@environments/environment';
 import {MeteringConfiguration, MeteringCredentials, MeteringReportConfiguration} from '@shared/entity/datacenter';
 import {catchError, merge, Observable, of, shareReplay, Subject, switchMap, timer} from 'rxjs';
@@ -28,12 +29,15 @@ import {catchError, merge, Observable, of, shareReplay, Subject, switchMap, time
 @Injectable()
 export class MeteringService {
   private _restRoot: string = environment.restRoot;
-  readonly onConfigurationChange$ = new Subject<void>();
-  readonly onCredentialsChange$ = new Subject<void>();
-  readonly onScheduleConfigurationChange$ = new Subject<void>();
   private readonly _refreshTime = 10;
   private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * this._refreshTime);
   private _scheduleConfigurations: Observable<MeteringReportConfiguration[]>;
+  private _reports$ = new Map<string, Observable<Report[]>>();
+
+  readonly onConfigurationChange$ = new Subject<void>();
+  readonly onCredentialsChange$ = new Subject<void>();
+  readonly onScheduleConfigurationChange$ = new Subject<void>();
+  readonly onReportListChange$ = new Subject<void>();
 
   constructor(private readonly _http: HttpClient, private readonly _appConfig: AppConfigService) {}
 
@@ -74,6 +78,32 @@ export class MeteringService {
   deleteScheduleConfiguration(name: string): Observable<any> {
     const url = `${this._restRoot}/admin/metering/configurations/reports/${name}`;
     return this._http.delete(url);
+  }
+
+  reports(scheduleName: string): Observable<Report[]> {
+    if (!this._reports$.get(scheduleName)) {
+      const reports$ = merge(this.onReportListChange$, this._refreshTimer$)
+        .pipe(switchMap(() => this._getReports(scheduleName)))
+        .pipe(shareReplay({refCount: true, bufferSize: 1}));
+      this._reports$.set(scheduleName, reports$);
+    }
+
+    return this._reports$.get(scheduleName);
+  }
+
+  private _getReports(scheduleName: string): Observable<Report[]> {
+    const url = `${this._restRoot}/admin/metering/reports`;
+    return this._http.get<Report[]>(url, {params: {configuration_name: scheduleName}});
+  }
+
+  reportDownload(reportName: string, scheduleName: string): Observable<string> {
+    const url = `${this._restRoot}/admin/metering/reports/${reportName}`;
+    return this._http.get<string>(url, {params: {configuration_name: scheduleName}});
+  }
+
+  reportDelete(reportName: string, scheduleName: string): Observable<any> {
+    const url = `${this._restRoot}/admin/metering/reports/${reportName}`;
+    return this._http.delete(url, {params: {configuration_name: scheduleName}});
   }
 
   private _getScheduleConfigurations(): Observable<MeteringReportConfiguration[]> {

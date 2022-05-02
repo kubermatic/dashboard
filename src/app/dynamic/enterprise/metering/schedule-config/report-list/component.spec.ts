@@ -25,7 +25,6 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterTestingModule} from '@angular/router/testing';
 import {AppConfigService} from '@app/config.service';
 import {Auth} from '@app/core/services/auth/service';
-import {SettingsService} from '@app/core/services/settings';
 import {UserService} from '@app/core/services/user';
 import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
 import {SharedModule} from '@app/shared/module';
@@ -38,7 +37,7 @@ import {MeteringReportListComponent} from './component';
 describe('MeteringReportListComponent', () => {
   let component: MeteringReportListComponent;
   let fixture: ComponentFixture<MeteringReportListComponent>;
-  let settingsService: SettingsService;
+  let meteringService: MeteringService;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -67,7 +66,7 @@ describe('MeteringReportListComponent', () => {
         size: 5559,
       },
     ];
-    settingsService = fixture.debugElement.injector.get(SettingsService);
+    meteringService = fixture.debugElement.injector.get(MeteringService);
   });
 
   it('should create metering report list component', () => {
@@ -75,10 +74,10 @@ describe('MeteringReportListComponent', () => {
   });
 
   it('should trigger report download', () => {
-    const spySettingsSvc = jest.spyOn(settingsService, 'reportDownload');
+    const spyMeteringSvc = jest.spyOn(meteringService, 'reportDownload');
     fixture.detectChanges();
     const downloadReportBtn = fixture.debugElement.query(By.css('#km-download-report-button'));
     downloadReportBtn.triggerEventHandler('throttleClick', null);
-    expect(spySettingsSvc).toHaveBeenCalledWith(component.reports[0].name, component.scheduleName);
+    expect(spyMeteringSvc).toHaveBeenCalledWith(component.reports[0].name, component.scheduleName);
   });
 });
