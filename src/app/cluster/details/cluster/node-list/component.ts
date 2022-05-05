@@ -201,8 +201,9 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
     return false;
   }
 
-  // Note: VSphereNodeSpec has list of tags: VSphereTag which requires explicit
-  // conversion array into object form to pass onto `km-labels` component as Input
+  // Note:
+  // VSphereNodeSpec has list of tags of type VSphereTag which requires explicit
+  // conversion array into object form inorder to pass onto `km-labels` component as Input
   convertVSphereTagsIntoObject(tags: Array<VSphereTag>): VSphereTag | {} {
     return convertArrayToObject(tags, 'name', 'description');
   }
