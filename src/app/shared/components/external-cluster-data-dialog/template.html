@@ -38,7 +38,7 @@ limitations under the License.
   <km-button id="external-cluster-confirm-btn"
              icon="km-icon-edit"
              label="Edit Cluster Connection"
-             [disabled]="!form.valid || !kubeconfig"
+             [disabled]="form.invalid || !kubeconfig"
              [observable]="getObservable()"
              (next)="onNext()">
   </km-button>

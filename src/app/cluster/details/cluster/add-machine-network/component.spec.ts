@@ -29,21 +29,13 @@ import {NotificationService} from '@core/services/notification';
 import {SharedModule} from '@shared/module';
 import {AddMachineNetworkComponent} from './component';
 
-const modules: (BrowserModule | RouterTestingModule)[] = [
-  BrowserModule,
-  HttpClientModule,
-  BrowserAnimationsModule,
-  RouterTestingModule,
-  SharedModule,
-];
-
 describe('AddMachineNetworkComponent', () => {
   let component: AddMachineNetworkComponent;
   let fixture: ComponentFixture<AddMachineNetworkComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [...modules],
+      imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, RouterTestingModule, SharedModule],
       declarations: [AddMachineNetworkComponent, MachineNetworksComponent],
       providers: [
         WizardService,
