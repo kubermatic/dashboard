@@ -135,7 +135,7 @@ describe('EditClusterComponent', () => {
     fixture.detectChanges();
 
     component.form.controls.name.patchValue('new-cluster-name');
-    component.getObservable().subscribe();
+    // component.editCluster();
     tick();
     flush();
 

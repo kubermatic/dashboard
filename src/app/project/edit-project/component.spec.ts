@@ -73,7 +73,7 @@ describe('EditProjectComponent', () => {
 
   xit('should call editProject method', fakeAsync(() => {
     component.form.controls.name.patchValue('new-project-name');
-    component.getObservable().subscribe();
+    // component.editProject();
     tick();
     flush();
 

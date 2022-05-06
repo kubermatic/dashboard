@@ -91,7 +91,7 @@ describe('ConstraintTemplateDialog', () => {
     });
 
     xit('should call createConstraintTemplate()', () => {
-      component.getObservable().subscribe();
+      // component.save();
       fixture.detectChanges();
       expect(createCTSpy).toHaveBeenCalled();
     });
@@ -125,7 +125,7 @@ describe('ConstraintTemplateDialog', () => {
     });
 
     xit('should call patchConstraintTemplate()', () => {
-      component.getObservable().subscribe();
+      // component.save();
       fixture.detectChanges();
       expect(patchCTSpy).toHaveBeenCalled();
     });

@@ -96,7 +96,7 @@ describe('RuleGroupDialog', () => {
     });
 
     xit('should call createRuleGroup()', () => {
-      component.getObservable().subscribe();
+      // component.save();
       fixture.detectChanges();
       expect(createRuleGroupSpy).toHaveBeenCalled();
     });
@@ -131,7 +131,7 @@ describe('RuleGroupDialog', () => {
     });
 
     xit('should call editRuleGroup()', () => {
-      component.getObservable().subscribe();
+      // component.save();
       fixture.detectChanges();
       expect(editRuleGroupSpy).toHaveBeenCalled();
     });

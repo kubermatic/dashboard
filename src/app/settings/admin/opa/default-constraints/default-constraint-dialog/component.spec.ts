@@ -93,7 +93,7 @@ describe('DefaultConstraintDialog', () => {
     });
 
     xit('should call createDefaultConstraint()', () => {
-      component.getObservable().subscribe();
+      // component.save();
       fixture.detectChanges();
       expect(createDefaultConstraintSpy).toHaveBeenCalled();
     });
@@ -127,7 +127,7 @@ describe('DefaultConstraintDialog', () => {
     });
 
     xit('should call patchDefaultConstraint()', () => {
-      component.getObservable().subscribe();
+      // component.save();
       fixture.detectChanges();
       expect(patchDefaultConstraintSpy).toHaveBeenCalled();
     });

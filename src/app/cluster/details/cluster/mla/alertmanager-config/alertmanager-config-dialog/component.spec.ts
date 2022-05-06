@@ -92,7 +92,7 @@ describe('AlertmanagerConfigDialog', () => {
     });
 
     xit('should call patchAlertmanagerConfig()', () => {
-      component.getObservable().subscribe();
+      // component.save();
       fixture.detectChanges();
       expect(putAlertmanagerConfigSpy).toHaveBeenCalled();
     });

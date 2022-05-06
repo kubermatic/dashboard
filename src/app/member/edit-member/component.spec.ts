@@ -73,7 +73,7 @@ describe('EditMemberComponent', () => {
 
   xit('should call editMember method', fakeAsync(() => {
     component.form.controls.group.patchValue('editor');
-    component.getObservable().subscribe();
+    // component.editMember();
     tick();
     flush();
 

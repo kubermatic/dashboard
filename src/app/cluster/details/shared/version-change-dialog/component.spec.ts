@@ -80,9 +80,9 @@ describe('ChangeClusterVersionComponent', () => {
     component.cluster = JSON.parse(JSON.stringify(fakeDigitaloceanCluster()));
     component.versions = ['1.9.5'];
 
-    component.getObservable().subscribe();
-    tick();
     fixture.detectChanges();
+    // component.changeVersion();
+    tick();
     flush();
 
     expect(patchClusterSpy).toHaveBeenCalledTimes(1);
