@@ -12,13 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Condition} from '../../../utils/condition';
-import {View} from '../../../utils/view';
-import {Config} from '../../../utils/config';
-import {Pages} from '../../../pages/v2/pages';
+import {Intercept} from '@intercept';
+import {Condition, View} from '@kmtypes';
+import {Pages} from '@pages/v2';
+import {Config} from '@utils/config';
 
 describe('Edition Story', () => {
   const editionName = Config.isEnterpriseEdition() ? 'Enterprise Edition' : 'Community Edition';
+
+  beforeEach(() => Intercept.init());
 
   it('should login', () => {
     Pages.Root.login();

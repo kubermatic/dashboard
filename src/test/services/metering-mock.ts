@@ -14,6 +14,7 @@
 
 import {Injectable} from '@angular/core';
 import {MeteringReportConfiguration} from '@app/shared/entity/datacenter';
+import {Report} from '@app/shared/entity/metering';
 import {fakeScheduleConfiguration} from '@test/data/metering';
 import {EMPTY, Observable, of, Subject} from 'rxjs';
 
@@ -30,6 +31,14 @@ export class MeteringMockService {
   }
 
   addScheduleConfiguration(_: MeteringReportConfiguration): Observable<any> {
+    return EMPTY;
+  }
+
+  reports(_: string): Observable<Report[]> {
+    return EMPTY;
+  }
+
+  reportDownload(_1: string, _2: string): Observable<string> {
     return EMPTY;
   }
 }

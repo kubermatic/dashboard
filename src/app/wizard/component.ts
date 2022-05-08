@@ -14,6 +14,7 @@
 
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatStepper} from '@angular/material/stepper';
 import {Router} from '@angular/router';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
@@ -23,14 +24,13 @@ import {NodeDataService} from '@core/services/node-data/service';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {WizardService} from '@core/services/wizard/wizard';
+import {SaveClusterTemplateDialogComponent} from '@shared/components/save-cluster-template/component';
 import {Cluster, CreateClusterModel} from '@shared/entity/cluster';
 import {Project} from '@shared/entity/project';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {Observable, Subject, take} from 'rxjs';
 import {filter, switchMap, takeUntil} from 'rxjs/operators';
 import {StepRegistry, steps, WizardStep} from './config';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {SaveClusterTemplateDialogComponent} from '@shared/components/save-cluster-template/component';
 
 @Component({
   selector: 'km-wizard',

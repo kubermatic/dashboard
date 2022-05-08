@@ -12,7 +12,4 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export interface ProjectStrategy {
-  onCreate(): void;
-  onDelete(): void;
-}
+export * from './intercept';

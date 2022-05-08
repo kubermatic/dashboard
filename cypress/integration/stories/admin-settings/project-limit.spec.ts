@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import _ from 'lodash';
+import {AdminSettings} from '../../../pages/admin-settings.po';
+import {LoginPage} from '../../../pages/login.po';
+import {ProjectsPage} from '../../../pages/projects.po';
 import {login, logout} from '../../../utils/auth';
 import {Condition} from '../../../utils/condition';
-import {View} from '../../../utils/view';
-import {AdminSettings} from '../../../pages/admin-settings.po';
-import {ProjectsPage} from '../../../pages/projects.po';
-import _ from 'lodash';
-import {LoginPage} from '../../../pages/login.po';
 import {Config} from '../../../utils/config';
-import {Mocks} from '../../../utils/mocks';
 import {Endpoint} from '../../../utils/endpoint';
+import {Mocks} from '../../../utils/mocks';
 import {RequestType} from '../../../utils/monitor';
+import {View} from '../../../utils/view';
 
 describe('Admin Settings - Project Limit Story', () => {
   const firstProjectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');

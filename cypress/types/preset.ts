@@ -12,7 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export interface MembersStrategy {
-  onCreate(): void;
-  onDelete(): void;
+import {Config} from '@utils/config';
+
+export enum ProviderPreset {
+  Alibaba = 'e2e-alibaba',
+  Anexia = 'e2e-anexia',
+  AWS = 'e2e-aws',
+  Azure = 'e2e-azure',
+  Digitalocean = 'e2e-digitalocean',
+  GCP = 'e2e-gcp',
+  Hetzner = 'e2e-hetzner',
+  KubeVirt = 'e2e-kubevirt',
+  OpenStack = 'e2e-openstack',
+  Equinix = 'e2e-equinix',
+  VSphere = 'e2e-vsphere',
+  Nutanix = 'e2e-nutanix',
+  Mock = 'test',
+}
+
+export class Preset {
+  static getName(provider: ProviderPreset): ProviderPreset {
+    return Config.isAPIMocked() ? ProviderPreset.Mock : provider;
+  }
 }

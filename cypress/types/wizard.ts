@@ -12,7 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export interface LoginStrategy {
-  login(email: string, password: string, isAdmin: boolean): void;
-  logout(): void;
+export enum WizardStep {
+  Provider = 'provider',
+  Cluster = 'cluster',
+  ProviderSettings = 'settings',
+  NodeSettings = 'initial-nodes',
+  MachineNetwork = 'machine-network',
+  Summary = 'summary',
 }

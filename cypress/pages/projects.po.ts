@@ -14,10 +14,10 @@
 
 import {Condition} from '../utils/condition';
 import {Endpoint} from '../utils/endpoint';
+import {Mocks} from '../utils/mocks';
 import {MatchRule, RequestType, ResponseCheck, ResponseType, TrafficMonitor} from '../utils/monitor';
 import {View} from '../utils/view';
 import {ClustersPage} from './clusters.po';
-import {Mocks} from '../utils/mocks';
 
 export class ProjectsPage {
   static getProjectItem(projectName: string): Cypress.Chainable {
