@@ -562,17 +562,6 @@ button {
     font-weight: normal;
     height: 100%;
     justify-content: center;
-
-    .km-provider-logo {
-      max-width: 95px;
-    }
-
-    .km-provider-logo-aws,
-    .km-provider-logo-azure,
-    .km-provider-logo-vsphere,
-    .km-provider-logo-packet {
-      min-height: 24px;
-    }
   }
 
   .mat-button-toggle-button {

@@ -60,16 +60,13 @@ $steps: 5;
 
 .km-provider-logo {
   height: 30px;
+  margin-top: 2px;
   max-height: 30px;
   max-width: 100px;
   width: 100px;
 
   &.km-provider-logo-anexia {
     margin-left: -15px;
-  }
-
-  &.km-provider-logo-aws {
-    width: auto;
   }
 
   &.km-provider-logo-vsphere {

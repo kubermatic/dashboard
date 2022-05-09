@@ -22,17 +22,6 @@
 .km-provider-logo {
   background-position: left;
   margin: 8px 8px 0 0;
-  max-height: 28px;
-  max-width: 120px;
-  min-height: 28px;
-  min-width: 40px;
-
-  &.provider-logo-medium {
-    margin: unset;
-    max-height: 22px;
-    max-width: 80px;
-    min-height: 22px;
-  }
 
   &.provider-logo-small {
     margin: unset;

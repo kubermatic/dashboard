@@ -33,19 +33,7 @@
 .km-provider-logo {
   align-self: center;
   background-position: left;
-  margin: 8px 16px 0 0;
-  max-height: 28px;
-  max-width: 120px;
-  min-height: 28px;
-  min-width: 40px;
-
-  &.provider-logo-medium {
-    background-position: center;
-    margin: 0 16px 0 0;
-    max-height: 22px;
-    max-width: 80px;
-    min-height: 22px;
-  }
+  margin: 8px 16px 12px 0;
 
   &.provider-logo-small {
     margin: unset;
