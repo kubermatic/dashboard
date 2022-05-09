@@ -43,7 +43,6 @@ limitations under the License.
 
     <form [formGroup]="form"
           fxLayout="column"
-          (submit)="addBinding()"
           id="add-binding-form">
       <ng-container *ngIf="bindingType === 'cluster'">
         <mat-form-field fxFlex
@@ -149,15 +148,12 @@ limitations under the License.
     </form>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <button id="km-add-binding-dialog-add-btn"
-            mat-flat-button
-            type="submit"
-            kmThrottleClick
-            (throttleClick)="addBinding()"
-            form="add-binding-form"
-            [disabled]="!form.valid">
-      <i class="km-icon-mask km-icon-add"></i>
-      <span>Add Binding</span>
-    </button>
+    <km-button id="km-add-binding-dialog-add-btn"
+               icon="km-icon-add"
+               label="Add Binding"
+               [disabled]="!form.valid"
+               [observable]="getObservable()"
+               (next)="onNext($event)">
+    </km-button>
   </mat-dialog-actions>
 </div>

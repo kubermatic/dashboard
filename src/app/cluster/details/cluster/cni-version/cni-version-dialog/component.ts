@@ -19,7 +19,7 @@ import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {Cluster, ClusterPatch} from '@shared/entity/cluster';
 import {Project} from '@shared/entity/project';
-import {Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 export interface CNIVersionDialogConfig {
@@ -57,7 +57,7 @@ export class CNIVersionDialog implements OnInit, OnDestroy {
     return this.data.upgradeAvailable;
   }
 
-  changeCNIVersion(): void {
+  getObservable(): Observable<Cluster> {
     const patch: ClusterPatch = {
       spec: {
         cniPlugin: {
@@ -66,13 +66,15 @@ export class CNIVersionDialog implements OnInit, OnDestroy {
       },
     };
 
-    this._clusterService.patch(this.project.id, this.data.cluster.id, patch).subscribe(() => {
-      this._notificationService.success(
-        `Updating the CNI version to the ${this.selectedCNIVersion} for the ${this.data.cluster.name} cluster`
-      );
-      this._clusterService.onClusterUpdate.next();
-      this._matDialogRef.close(true);
-    });
+    return this._clusterService.patch(this.project.id, this.data.cluster.id, patch);
+  }
+
+  onNext(): void {
+    this._notificationService.success(
+      `Updating the CNI version to the ${this.selectedCNIVersion} for the ${this.data.cluster.name} cluster`
+    );
+    this._clusterService.onClusterUpdate.next();
+    this._matDialogRef.close(true);
   }
 
   ngOnDestroy(): void {

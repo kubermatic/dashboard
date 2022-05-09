@@ -17,8 +17,7 @@ limitations under the License.
 <mat-dialog-content>
   <p>Choose the token you wish to revoke for "<b>{{cluster.name}}</b>" cluster</p>
   <div class="options"
-       fxLayoutGap="30px"
-       (keydown.enter)="revokeToken()">
+       fxLayoutGap="30px">
     <mat-checkbox [disabled]="!isRevokeTokenEnabled"
                   [(ngModel)]="revokeAdminToken">
       Revoke Admin Token
@@ -30,11 +29,10 @@ limitations under the License.
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-flat-button
-          kmThrottleClick
-          (throttleClick)="revokeToken()"
-          [disabled]="!revokeAdminToken && !revokeViewerToken">
-    <i class="km-icon-mask km-icon-check i-24"></i>
-    <span>Revoke Token</span>
-  </button>
+  <km-button icon="km-icon-check"
+             label="Revoke Token"
+             [disabled]="!revokeAdminToken && !revokeViewerToken"
+             [observable]="getObservable()"
+             (next)="onNext($event)">
+  </km-button>
 </mat-dialog-actions>

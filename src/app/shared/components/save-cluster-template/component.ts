@@ -24,6 +24,7 @@ import {Member} from '@shared/entity/member';
 import {ClusterTemplateService} from '@core/services/cluster-templates';
 import {SSHKey} from '@shared/entity/ssh-key';
 import _ from 'lodash';
+import {Observable} from 'rxjs';
 
 class SaveClusterTemplateDialogData {
   cluster: Cluster;
@@ -67,11 +68,12 @@ export class SaveClusterTemplateDialogComponent implements OnInit {
     return this.form.get(Control.Scope).value !== ClusterTemplateScope.Project && !_.isEmpty(this.data.sshKeys);
   }
 
-  save(): void {
-    this._clusterTemplateService
-      .create(this._getClusterTemplate(), this.data.projectID)
-      .pipe(take(1))
-      .subscribe(ct => this.dialogRef.close(ct));
+  getObservable(): Observable<ClusterTemplate> {
+    return this._clusterTemplateService.create(this._getClusterTemplate(), this.data.projectID).pipe(take(1));
+  }
+
+  onNext(ct: ClusterTemplate): void {
+    this.dialogRef.close(ct);
   }
 
   private _getClusterTemplate(): ClusterTemplate {

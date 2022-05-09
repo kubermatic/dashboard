@@ -19,9 +19,9 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
 import {RBACService} from '@core/services/rbac';
 import {Cluster} from '@shared/entity/cluster';
-import {ClusterRoleName, CreateBinding, RoleName} from '@shared/entity/rbac';
+import {Binding, ClusterBinding, ClusterRoleName, CreateBinding, RoleName} from '@shared/entity/rbac';
 import _ from 'lodash';
-import {Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 
 export enum Controls {
@@ -168,48 +168,43 @@ export class AddBindingComponent implements OnInit, OnDestroy {
     return [];
   }
 
-  addBinding(): void {
-    if (!this.form.valid) {
-      return;
-    }
-
-    this.bindingType === 'cluster' ? this.addClusterBinding() : this.addNamespaceBinding();
+  getObservable(): Observable<ClusterBinding | Binding> {
+    return this.bindingType === 'cluster' ? this.addClusterBinding() : this.addNamespaceBinding();
   }
 
-  addClusterBinding(): void {
+  onNext(binding: ClusterBinding | Binding): void {
+    this._matDialogRef.close(binding);
+    this.bindingType === 'cluster'
+      ? this._notificationService.success(
+          `Added the ${binding.subjects[binding.subjects.length - 1].name} cluster binding`
+        )
+      : this._notificationService.success(`Added the ${binding.subjects[binding.subjects.length - 1].name} binding`);
+  }
+
+  addClusterBinding(): Observable<ClusterBinding> {
     const clusterBinding: CreateBinding = {};
-    let bindingName;
     if (this.form.controls.email.value) {
       clusterBinding.userEmail = this.form.controls.email.value;
-      bindingName = clusterBinding.userEmail;
     }
     if (this.form.controls.group.value) {
       clusterBinding.group = this.form.controls.group.value;
-      bindingName = clusterBinding.group;
     }
 
-    this._rbacService
+    return this._rbacService
       .createClusterBinding(this.cluster.id, this.projectID, this.form.controls.role.value, clusterBinding)
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(binding => {
-        this._matDialogRef.close(binding);
-        this._notificationService.success(`Added the ${bindingName} cluster binding`);
-      });
+      .pipe(takeUntil(this._unsubscribe));
   }
 
-  addNamespaceBinding(): void {
+  addNamespaceBinding(): Observable<Binding> {
     const namespaceBinding: CreateBinding = {};
-    let bindingName;
     if (this.form.controls.email.value) {
       namespaceBinding.userEmail = this.form.controls.email.value;
-      bindingName = namespaceBinding.userEmail;
     }
     if (this.form.controls.group.value) {
       namespaceBinding.group = this.form.controls.group.value;
-      bindingName = namespaceBinding.group;
     }
 
-    this._rbacService
+    return this._rbacService
       .createBinding(
         this.cluster.id,
         this.projectID,
@@ -217,10 +212,6 @@ export class AddBindingComponent implements OnInit, OnDestroy {
         this.form.controls.namespace.value,
         namespaceBinding
       )
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(binding => {
-        this._matDialogRef.close(binding);
-        this._notificationService.success(`Added the ${bindingName} binding`);
-      });
+      .pipe(takeUntil(this._unsubscribe));
   }
 }
