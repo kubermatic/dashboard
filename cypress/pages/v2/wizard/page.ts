@@ -63,7 +63,7 @@ export class Wizard extends PageOptions implements Page {
 
     // kubeadm does not have additional steps
     if (provider === Provider.kubeadm) {
-      this.Buttons.create.click({force: true, multiple: true});
+      this.Buttons.create.click({force: true});
       return;
     }
 
@@ -80,7 +80,7 @@ export class Wizard extends PageOptions implements Page {
     }
 
     this.Buttons.nextStep(WizardStep.NodeSettings).click();
-    this.Buttons.create.click({force: true, multiple: true});
+    this.Buttons.create.click({force: true});
   }
 }
 
@@ -148,6 +148,6 @@ class Buttons extends PageOptions {
   }
 
   get create(): Cypress.Chainable {
-    return this._get('#km-wizard-create-btn > button');
+    return this._get('#km-button-buttonClick');
   }
 }
