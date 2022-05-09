@@ -131,12 +131,7 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
 
   hasExtendedOptions(): boolean {
     // List of providers that do not have extended options right now.
-    const blacklist = [
-      NodeProvider.HETZNER,
-      NodeProvider.BRINGYOUROWN,
-      NodeProvider.ANEXIA,
-      NodeProvider.KUBEVIRT,
-    ];
+    const blacklist = [NodeProvider.HETZNER, NodeProvider.BRINGYOUROWN, NodeProvider.ANEXIA, NodeProvider.KUBEVIRT];
     return !blacklist.includes(this._clusterSpecService.provider);
   }
 
