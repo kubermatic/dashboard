@@ -12,7 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export interface ClusterListStrategy {
-  onCreate(): void;
-  onDelete(): void;
+import {Endpoints, Fixtures} from '@kmtypes';
+
+export class Members {
+  private static _memberListFixture = Fixtures.EmptyArray;
+
+  constructor() {
+    cy.intercept(Endpoints.Members, req => req.reply({fixture: Members._memberListFixture}));
+  }
+
+  onCreate(): void {
+    Members._memberListFixture = Fixtures.Members;
+  }
+
+  onDelete(): void {
+    Members._memberListFixture = Fixtures.EmptyArray;
+  }
 }

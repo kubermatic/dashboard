@@ -12,20 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Page, PageOptions} from '../types';
-import {Pages} from '../pages';
+import {Intercept} from '@intercept';
+import {AdminSettingsInterfaceStrategy} from '@kmtypes';
+import {AdminSettings as SettingsSpec} from '../../../../../../../src/app/shared/entity/settings';
 
-export class UserSettings extends PageOptions implements Page {
-  readonly Elements = new Elements();
-
-  visit(): void {
-    Pages.Root.UserPanel.open.click();
-    Pages.Root.UserPanel.userSettings.click();
-  }
-}
-
-class Elements extends PageOptions {
-  get themePicker(): Cypress.Chainable {
-    return this._get('#km-theme-picker');
+export class MockedAdminSettingsInterfaceStrategy implements AdminSettingsInterfaceStrategy {
+  onSettingsChange(settings: Partial<SettingsSpec>): void {
+    Intercept.AdminSettings().onChange(settings);
   }
 }

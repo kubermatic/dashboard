@@ -14,7 +14,7 @@
 
 import _ from 'lodash';
 
-export class UserSettings {
+export interface UserSettings {
   selectedTheme?: string;
   selectedProjectID?: string;
   itemsPerPage?: number;
@@ -24,7 +24,7 @@ export class UserSettings {
   lastSeenChangelogVersion?: string;
 }
 
-export class AdminSettings {
+export interface AdminSettings {
   cleanupOptions: CleanupOptions;
   customLinks: CustomLink[];
   defaultNodeCount: number;
@@ -43,7 +43,7 @@ export class AdminSettings {
   mlaGrafanaPrefix: string;
 }
 
-export class MachineDeploymentVMResourceQuota {
+export interface MachineDeploymentVMResourceQuota {
   minCPU: number;
   maxCPU: number;
   minRAM: number;
@@ -51,17 +51,17 @@ export class MachineDeploymentVMResourceQuota {
   enableGPU: boolean;
 }
 
-export class CleanupOptions {
+export interface CleanupOptions {
   enabled: boolean;
   enforced: boolean;
 }
 
-export class OpaOptions {
+export interface OpaOptions {
   enabled: boolean;
   enforced: boolean;
 }
 
-export class MLAOptions {
+export interface MLAOptions {
   loggingEnabled: boolean;
   loggingEnforced: boolean;
   monitoringEnabled: boolean;
@@ -69,13 +69,13 @@ export class MLAOptions {
 }
 
 export class CustomLink {
-  label: string;
-  url: string;
+  label = '';
+  url = '';
   icon?: CustomLinkIcon | string;
   location?: CustomLinkLocation;
 
   static getIcon(link: CustomLink): string {
-    return !_.isEmpty(link.icon) ? link.icon : CustomLink._findMatchingServiceIcon(link);
+    return !_.isEmpty(link.icon) ? link.icon! : CustomLink._findMatchingServiceIcon(link);
   }
 
   private static _findMatchingServiceIcon(link: CustomLink): CustomLinkIcon {

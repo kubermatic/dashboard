@@ -12,44 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Endpoint} from '../../../../utils/endpoint';
-import {Provider} from '../../../../utils/provider';
-import {WizardStrategy} from './types';
+import {Intercept} from '@intercept/intercept';
+import {Provider, WizardStrategy} from '@kmtypes';
 
 export class MockedWizardStrategy implements WizardStrategy {
-  private static _clustersFixturePath = '';
-  private static _clusterFixturePath = '';
-  private static readonly _fixtureEmptyArrayPath = 'empty-array.json';
-  private static readonly _fixtureEmptyObjectPath = 'empty-object.json';
-  private static _activeClustersFixture = MockedWizardStrategy._fixtureEmptyArrayPath;
-  private static _activeClusterFixture = MockedWizardStrategy._fixtureEmptyObjectPath;
-
-  constructor() {
-    this._init();
+  onCreate(provider: Provider): void {
+    Intercept.Clusters(provider).onCreate();
   }
 
-  onProviderChange(provider: Provider): void {
-    MockedWizardStrategy._clustersFixturePath = `${provider}/clusters.json`;
-    MockedWizardStrategy._clusterFixturePath = `${provider}/cluster.json`;
-  }
-
-  onCreate(): void {
-    MockedWizardStrategy._activeClustersFixture = MockedWizardStrategy._clustersFixturePath;
-    MockedWizardStrategy._activeClusterFixture = MockedWizardStrategy._clusterFixturePath;
-  }
-
-  onDelete(): void {
-    MockedWizardStrategy._activeClustersFixture = MockedWizardStrategy._fixtureEmptyArrayPath;
-    MockedWizardStrategy._activeClusterFixture = MockedWizardStrategy._fixtureEmptyObjectPath;
-  }
-
-  private _init(): void {
-    cy.intercept(Endpoint.Clusters, req => {
-      req.reply({fixture: MockedWizardStrategy._activeClustersFixture});
-    });
-
-    cy.intercept(Endpoint.Cluster, req => {
-      req.reply({fixture: MockedWizardStrategy._activeClusterFixture});
-    });
+  onSSHKeyAdd(provider: Provider): void {
+    Intercept.Clusters(provider).onSSHKeyCreate();
   }
 }

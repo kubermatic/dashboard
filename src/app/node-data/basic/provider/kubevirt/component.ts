@@ -207,7 +207,7 @@ export class KubeVirtBasicNodeDataComponent
 
   private _setDefaultFlavor(flavors: KubeVirtVMInstancePreset[]): void {
     this.flavors = flavors;
-    this.selectedFlavor = this._initialData.flavorName;
+    this.selectedFlavor = this._initialData?.flavorName;
     this.flavorLabel = this.flavors ? FlavorsState.Ready : FlavorsState.Empty;
     this._cdr.detectChanges();
   }
@@ -239,7 +239,7 @@ export class KubeVirtBasicNodeDataComponent
 
   private _setDefaultStorageClass(storageClasses: KubeVirtStorageClass[]): void {
     this.storageClasses = storageClasses;
-    this.selectedStorageClass = this._initialData.primaryDiskStorageClassName;
+    this.selectedStorageClass = this._initialData?.primaryDiskStorageClassName;
 
     if (!this.selectedStorageClass && !_.isEmpty(this.storageClasses)) {
       this.selectedStorageClass = this.storageClasses[0].name;
@@ -262,6 +262,7 @@ export class KubeVirtBasicNodeDataComponent
     const flavor = this.form.get(Controls.VMFlavor).value[ComboboxControls.Select];
     const cpus = this.form.get(Controls.CPUs).value;
     const memory = this.form.get(Controls.Memory).value;
+    const secondaryDisks = this._secondaryDisks;
 
     return {
       spec: {
@@ -275,14 +276,14 @@ export class KubeVirtBasicNodeDataComponent
               ComboboxControls.Select
             ],
             primaryDiskSize: `${this.form.get(Controls.PrimaryDiskSize).value}Gi`,
-            secondaryDisks: this._getSecondaryDisksData(),
+            secondaryDisks: secondaryDisks?.length ? secondaryDisks : null,
           } as KubeVirtNodeSpec,
         } as NodeCloudSpec,
       } as NodeSpec,
     } as NodeData;
   }
 
-  private _getSecondaryDisksData(): KubeVirtSecondaryDisk[] {
+  private get _secondaryDisks(): KubeVirtSecondaryDisk[] {
     return this.secondaryDisksFormArray.controls.map(secondaryDiskFormGroup => {
       return {
         storageClassName: secondaryDiskFormGroup.get(Controls.SecondaryDiskStorageClass).value[ComboboxControls.Select],

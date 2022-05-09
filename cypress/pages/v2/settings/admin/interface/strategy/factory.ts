@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export interface ServiceAccountStrategy {
-  onCreate(): void;
-  onDelete(): void;
-}
+import {AdminSettingsInterfaceStrategy} from '@kmtypes';
+import {MockedAdminSettingsInterfaceStrategy} from './mocked';
 
-export interface ServiceAccountTokenStrategy {
-  onCreate(): void;
-  onDelete(): void;
+export class AdminSettingsInterfaceFactory {
+  static new(isAPIMocked: boolean): AdminSettingsInterfaceStrategy | undefined {
+    return isAPIMocked ? new MockedAdminSettingsInterfaceStrategy() : undefined;
+  }
 }

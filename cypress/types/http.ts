@@ -12,8 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export interface ClusterDetailStrategy {
-  onSSHKeyDelete(): void;
-  onCreate(): void;
-  onDelete(): void;
+export enum RequestType {
+  GET = 'GET',
+  POST = 'POST',
+  PUT = 'PUT',
+  PATCH = 'PATCH',
+  DELETE = 'DELETE',
 }

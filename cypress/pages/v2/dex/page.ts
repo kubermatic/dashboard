@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {PageOptions} from '../types';
+import {PageOptions} from '@kmtypes';
 
 export class DexPage extends PageOptions {
   readonly Elements = new Elements();
@@ -37,25 +37,25 @@ export class DexPage extends PageOptions {
 
 class Elements extends PageOptions {
   get loginInput(): Cypress.Chainable {
-    return cy.get('input#login');
+    return this._get('input#login');
   }
 
   get passwordInput(): Cypress.Chainable {
-    return cy.get('input#password');
+    return this._get('input#password');
   }
 
   get loginPanel(): Cypress.Chainable {
-    return cy.get('.theme-form-row');
+    return this._get('.theme-form-row');
   }
 }
 
 class Buttons extends PageOptions {
   get login(): Cypress.Chainable {
-    return cy.get('button#submit-login');
+    return this._get('button#submit-login');
   }
 
   get loginWithEmail(): Cypress.Chainable {
-    return cy.get('.dex-btn-text').contains('Log in with Email');
+    return this._get('.dex-btn-text').contains('Log in with Email');
   }
 
   hasLoginWithEmailOption(element: any): boolean {

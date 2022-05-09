@@ -1,6 +1,6 @@
 {
-    "id": "test-md",
-    "name": "test-md",
+    "id": "e2e-test-md",
+    "name": "e2e-test-md",
     "annotations": {
         "machinedeployment.clusters.k8s.io/revision": "1"
     },

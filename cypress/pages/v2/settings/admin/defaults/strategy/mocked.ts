@@ -12,23 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Config} from '../../utils/config';
+import {Intercept} from '@intercept';
+import {AdminSettingsDefaultsStrategy} from '@kmtypes';
+import {AdminSettings as SettingsSpec} from '../../../../../../../src/app/shared/entity/settings';
 
-export interface Page {
-  visit(...params: string[]): void;
-}
-
-export abstract class PageOptions {
-  protected _get(selector: string, timeout = this._elementLoadTimeout): Cypress.Chainable {
-    return cy.get(selector, {timeout});
+export class MockedAdminSettingsDefaultsStrategy implements AdminSettingsDefaultsStrategy {
+  onSettingsChange(settings: Partial<SettingsSpec>): void {
+    Intercept.AdminSettings().onChange(settings);
   }
-
-  protected _contains(match: string): Cypress.Chainable {
-    return cy.contains(match, {timeout: this._elementLoadTimeout});
-  }
-
-  constructor(
-    protected readonly _elementLoadTimeout = Config.defaultElementLoadTimeout,
-    protected readonly _pageLoadTimeout = Config.defaultPageLoadTimeout
-  ) {}
 }

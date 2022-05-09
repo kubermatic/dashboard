@@ -12,11 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ProviderMenuOption} from '../../../clusters.po';
-import {Pages} from '../../pages';
-import {Page, PageOptions} from '../../types';
+import {ClusterDetailStrategy, Page, PageOptions, Provider} from '@kmtypes';
+import {ProviderMenuOption} from '../proxy';
 import {ClusterDetailStrategyFactory} from './strategy/factory';
-import {ClusterDetailStrategy} from './strategy/types';
 
 export class ClusterDetail extends PageOptions implements Page {
   private readonly _strategy: ClusterDetailStrategy | undefined;
@@ -32,18 +30,18 @@ export class ClusterDetail extends PageOptions implements Page {
 
   visit(): void {}
 
-  delete(name: string): void {
-    this.Buttons.deleteCluster.click();
+  delete(name: string, provider: Provider): void {
+    this.Buttons.deleteCluster.click().then(_ => this._strategy?.onDelete(provider));
     this.Elements.deleteDialogInput.type(name);
-    this.Buttons.deleteClusterConfirm.click().then(_ => Pages.Wizard.onDelete());
+    this.Buttons.deleteClusterConfirm.click();
   }
 
-  removeSSHKey(name: string): void {
+  removeSSHKey(name: string, provider: Provider): void {
     this.Buttons.providerMenu.click();
     this.Buttons.providerMenuOption(ProviderMenuOption.ManageSSHKeys).click();
     this.Buttons.deleteSSHKey(name)
       .click()
-      .then(_ => this._strategy?.onSSHKeyDelete());
+      .then(_ => this._strategy?.onSSHKeyDelete(provider));
     this.Buttons.deleteSSHKeyConfirm.click();
     this.Buttons.manageSSHKeyCloseButton.click();
   }
@@ -58,8 +56,29 @@ class Elements extends PageOptions {
     return this._contains(names.join(', '));
   }
 
+  get machineDeploymentList(): Cypress.Chainable {
+    const startTimeout = 600000;
+    return this._get('km-machine-deployment-list', startTimeout);
+  }
+
   get deleteDialogInput(): Cypress.Chainable {
     return this._get('#km-delete-cluster-dialog-input');
+  }
+
+  get deleteDialogCleanupLBCheckbox(): Cypress.Chainable {
+    return this._get('#km-delete-cluster-lb-cleanup');
+  }
+
+  get deleteDialogCleanupLBCheckboxInput(): Cypress.Chainable {
+    return this._get('#km-delete-cluster-lb-cleanup input');
+  }
+
+  get deleteDialogCleanupVolumeCheckbox(): Cypress.Chainable {
+    return this._get('#km-delete-cluster-volume-cleanup');
+  }
+
+  get deleteDialogCleanupVolumeCheckboxInput(): Cypress.Chainable {
+    return this._get('#km-delete-cluster-volume-cleanup input');
   }
 }
 
@@ -90,5 +109,17 @@ class Buttons extends PageOptions {
 
   get deleteClusterConfirm(): Cypress.Chainable {
     return this._get('#km-delete-cluster-dialog-delete-btn');
+  }
+
+  get deleteClusterClose(): Cypress.Chainable {
+    return this._get('#km-close-dialog-btn');
+  }
+
+  get openKubernetesDashboard(): Cypress.Chainable {
+    return this._get('#km-open-kubernetes-dashboard-btn');
+  }
+
+  get shareKubeconfig(): Cypress.Chainable {
+    return this._get('#km-share-kubeconfig-btn');
   }
 }

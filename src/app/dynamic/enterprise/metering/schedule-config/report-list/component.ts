@@ -24,12 +24,14 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {ActivatedRoute, Router} from '@angular/router';
-import {SettingsService} from '@core/services/settings';
 import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
 import {UserService} from '@core/services/user';
 import {Report} from '@shared/entity/metering';
+import {ConfirmationDialogComponent} from '@app/shared/components/confirmation-dialog/component';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {NotificationService} from '@app/core/services/notification';
 
 @Component({
   selector: 'km-metering-reports-list',
@@ -38,7 +40,7 @@ import {Report} from '@shared/entity/metering';
 })
 export class MeteringReportListComponent implements OnInit {
   private readonly _unsubscribe = new Subject<void>();
-  private _fetchingReport = '';
+  private _reportsInProgress = new Set<string>([]);
   scheduleName: string;
   schedule: string;
   interval: number;
@@ -60,11 +62,12 @@ export class MeteringReportListComponent implements OnInit {
   }
 
   constructor(
-    private readonly _settingsService: SettingsService,
     private readonly _meteringService: MeteringService,
     private readonly _userService: UserService,
+    private readonly _notificationService: NotificationService,
     private readonly _route: ActivatedRoute,
     private readonly _router: Router,
+    private readonly _matDialog: MatDialog,
     @Inject(DOCUMENT) private readonly _document: Document
   ) {}
 
@@ -87,7 +90,7 @@ export class MeteringReportListComponent implements OnInit {
         this._isLoadingConfig = false;
       });
 
-    this._settingsService
+    this._meteringService
       .reports(this.scheduleName)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(reports => {
@@ -107,31 +110,56 @@ export class MeteringReportListComponent implements OnInit {
     this._unsubscribe.complete();
   }
 
-  canDownload(_report: Report): boolean {
-    return true;
-  }
-
-  isFetchingReport(report: Report): boolean {
-    return this._fetchingReport === report.name;
+  isProcessingReport(report: Report): boolean {
+    return this._reportsInProgress.has(report.name);
   }
 
   goBack(): void {
     this._router.navigate(['/settings/metering']);
   }
 
-  download(report: Report): void {
-    this._fetchingReport = report.name;
+  download(reportName: string): void {
+    this._reportsInProgress.add(reportName);
 
-    this._settingsService
-      .reportDownload(report.name, this.scheduleName)
+    this._meteringService
+      .reportDownload(reportName, this.scheduleName)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe({
         next: url => {
-          this._fetchingReport = '';
+          this._reportsInProgress.delete(reportName);
           this._document.defaultView?.open(url, '_blank');
         },
-        complete: () => (this._fetchingReport = ''),
-        error: _ => (this._fetchingReport = ''),
+        complete: () => this._reportsInProgress.delete(reportName),
+        error: _ => this._reportsInProgress.delete(reportName),
+      });
+  }
+
+  remove(reportName: string): void {
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        title: 'Delete Metering Report',
+        message: `Do you want to delete <b>${reportName}</b> report permanently?`,
+        confirmLabel: 'Delete',
+        warning: 'This change is permanent.',
+      },
+    };
+    this._matDialog
+      .open(ConfirmationDialogComponent, dialogConfig)
+      .afterClosed()
+      .pipe(filter(isConfirmed => isConfirmed))
+      .pipe(
+        switchMap(_ => {
+          this._reportsInProgress.add(reportName);
+          return this._meteringService.reportDelete(reportName, this.scheduleName);
+        })
+      )
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this._meteringService.onReportListChange$.next();
+          this._notificationService.success(`Deleting the ${reportName} report`);
+        },
+        error: _ => this._reportsInProgress.delete(reportName),
       });
   }
 

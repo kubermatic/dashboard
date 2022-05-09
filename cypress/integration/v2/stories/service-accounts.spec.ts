@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Pages} from '../../../pages/v2/pages';
-import {Projects} from '../../../pages/v2/projects/page';
-import {ServiceAccounts} from '../../../pages/v2/serviceaccounts/page';
-import {Condition} from '../../../utils/condition';
-import {Group} from '../../../utils/member';
-import {View} from '../../../utils/view';
+import {Intercept} from '@intercept';
+import {Condition, Group, View} from '@kmtypes';
+import {Pages, Projects, ServiceAccounts} from '@pages/v2';
 
 describe('Service Accounts Story', () => {
   const projectName = Projects.getName();
   const serviceAccountName = ServiceAccounts.getName();
   const tokenName = 'test-token';
+
+  beforeEach(() => Intercept.init());
 
   it('should login', () => {
     Pages.Root.login();
