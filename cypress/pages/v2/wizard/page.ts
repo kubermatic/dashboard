@@ -63,7 +63,7 @@ export class Wizard extends PageOptions implements Page {
 
     // kubeadm does not have additional steps
     if (provider === Provider.kubeadm) {
-      this.Buttons.create.click({force: true});
+      this.Buttons.create.click({force: true, multiple: true});
       return;
     }
 
@@ -80,7 +80,7 @@ export class Wizard extends PageOptions implements Page {
     }
 
     this.Buttons.nextStep(WizardStep.NodeSettings).click();
-    this.Buttons.create.click({force: true});
+    this.Buttons.create.click({force: true, multiple: true});
   }
 }
 
