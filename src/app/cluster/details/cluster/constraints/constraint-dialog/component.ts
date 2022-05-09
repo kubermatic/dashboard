@@ -19,10 +19,9 @@ import {OPAService} from '@core/services/opa';
 import {NotificationService} from '@core/services/notification';
 import {Cluster} from '@shared/entity/cluster';
 import {Constraint, ConstraintTemplate, ConstraintSpec} from '@shared/entity/opa';
-import {getIconClassForButton} from '@shared/utils/common';
 import * as y from 'js-yaml';
 import _ from 'lodash';
-import {Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 
 export interface ConstraintDialogConfig {
@@ -96,11 +95,29 @@ export class ConstraintDialog implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  getIconClass(): string {
-    return getIconClassForButton(this.data.confirmLabel);
+  get label(): string {
+    switch (this.data.mode) {
+      case Mode.Add:
+        return 'Add Constraint';
+      case Mode.Edit:
+        return 'Edit Constraint';
+      default:
+        return '';
+    }
   }
 
-  save(): void {
+  get icon(): string {
+    switch (this.data.mode) {
+      case Mode.Add:
+        return 'km-icon-add';
+      case Mode.Edit:
+        return 'km-icon-edit';
+      default:
+        return '';
+    }
+  }
+
+  getObservable(): Observable<Constraint> {
     const constraint: Constraint = {
       name: this.form.get(Controls.Name).value,
       spec: this._getSpec(),
@@ -114,26 +131,25 @@ export class ConstraintDialog implements OnInit, OnDestroy {
     }
   }
 
-  private _create(constraint: Constraint): void {
-    this._opaService
-      .createConstraint(this.data.projectId, this.data.cluster.id, constraint)
-      .pipe(take(1))
-      .subscribe(result => {
-        this._matDialogRef.close(true);
-        this._notificationService.success(`Created the ${result.name} constraint`);
-        this._opaService.refreshConstraint();
-      });
+  onNext(constraint: Constraint): void {
+    this._matDialogRef.close(true);
+    this._opaService.refreshConstraint();
+    switch (this.data.mode) {
+      case Mode.Add:
+        return this._notificationService.success(`Created the ${constraint.name} constraint`);
+      case Mode.Edit:
+        return this._notificationService.success(`Updated the ${constraint.name} constraint`);
+    }
   }
 
-  private _edit(constraint: Constraint): void {
-    this._opaService
+  private _create(constraint: Constraint): Observable<Constraint> {
+    return this._opaService.createConstraint(this.data.projectId, this.data.cluster.id, constraint).pipe(take(1));
+  }
+
+  private _edit(constraint: Constraint): Observable<Constraint> {
+    return this._opaService
       .patchConstraint(this.data.projectId, this.data.cluster.id, this.data.constraint.name, constraint)
-      .pipe(take(1))
-      .subscribe(result => {
-        this._matDialogRef.close(true);
-        this._notificationService.success(`Updated the ${result.name} constraint`);
-        this._opaService.refreshConstraint();
-      });
+      .pipe(take(1));
   }
 
   private _initConstraintSpecEditor(): void {

@@ -19,7 +19,6 @@ limitations under the License.
     <p class="km-dialog-context-description">Edit <b>{{member.name}}</b> of <b>{{project.name}}</b> project</p>
     <form [formGroup]="form"
           fxLayout="column"
-          (submit)="editMember()"
           id="edit-member-form">
       <mat-form-field fxFlex>
         <mat-label>Name</mat-label>
@@ -59,15 +58,12 @@ limitations under the License.
     </form>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <button id="km-edit-member-dialog-edit-btn"
-            mat-flat-button
-            type="submit"
-            kmThrottleClick
-            (throttleClick)="editMember()"
-            form="edit-member-form"
-            [disabled]="!form.valid">
-      <i class="km-icon-mask km-icon-edit w-24"></i>
-      <span>Edit Member</span>
-    </button>
+    <km-button id="km-edit-member-dialog-edit-btn"
+               icon="km-icon-edit"
+               label="Edit Member"
+               [disabled]="!form.valid"
+               [observable]="getObservable()"
+               (next)="onNext()">
+    </km-button>
   </mat-dialog-actions>
 </div>

@@ -21,7 +21,7 @@ import {GatekeeperConfig, GatekeeperConfigSpec} from '@shared/entity/opa';
 import {getIconClassForButton} from '@shared/utils/common';
 import * as y from 'js-yaml';
 import _ from 'lodash';
-import {Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {take} from 'rxjs/operators';
 
 export interface GatekeeperConfigDialogData {
@@ -36,8 +36,8 @@ export interface GatekeeperConfigDialogData {
 }
 
 export enum Mode {
-  Add = 'add',
-  Edit = 'edit',
+  Add = 'Add',
+  Edit = 'Edit',
 }
 
 @Component({
@@ -69,11 +69,21 @@ export class GatekeeperConfigDialog implements OnInit, OnDestroy {
     return !_.isEmpty(this.spec);
   }
 
+  label(): string {
+    switch (this.data.mode) {
+      case Mode.Add:
+        return 'Add Gatekeeper Config';
+      case Mode.Edit:
+        return 'Edit Gatekeeper Config';
+      default:
+        return '';
+    }
+  }
   getIconClass(): string {
     return getIconClassForButton(this.data.confirmLabel);
   }
 
-  save(): void {
+  getObservable(): Observable<GatekeeperConfig> {
     const gatekeeperConfig: GatekeeperConfig = {
       spec: this._getSpec(),
     };
@@ -83,6 +93,19 @@ export class GatekeeperConfigDialog implements OnInit, OnDestroy {
         return this._create(gatekeeperConfig);
       case Mode.Edit:
         return this._edit(gatekeeperConfig);
+    }
+  }
+
+  onNext(): void {
+    this._matDialogRef.close(true);
+    this._opaService.refreshGatekeeperConfig();
+    switch (this.data.confirmLabel) {
+      case Mode.Add:
+        this._notificationService.success('Created the Gatekeeper config');
+        break;
+      case Mode.Edit:
+        this._notificationService.success('Updated the Gatekeeper config');
+        break;
     }
   }
 
@@ -104,25 +127,15 @@ export class GatekeeperConfigDialog implements OnInit, OnDestroy {
     return spec;
   }
 
-  private _create(gatekeeperConfig: GatekeeperConfig): void {
-    this._opaService
+  private _create(gatekeeperConfig: GatekeeperConfig): Observable<GatekeeperConfig> {
+    return this._opaService
       .createGatekeeperConfig(this.data.projectId, this.data.cluster.id, gatekeeperConfig)
-      .pipe(take(1))
-      .subscribe(_ => {
-        this._matDialogRef.close(true);
-        this._opaService.refreshGatekeeperConfig();
-        this._notificationService.success('Created the Gatekeeper config');
-      });
+      .pipe(take(1));
   }
 
-  private _edit(gatekeeperConfig: GatekeeperConfig): void {
-    this._opaService
+  private _edit(gatekeeperConfig: GatekeeperConfig): Observable<GatekeeperConfig> {
+    return this._opaService
       .patchGatekeeperConfig(this.data.projectId, this.data.cluster.id, gatekeeperConfig)
-      .pipe(take(1))
-      .subscribe(_ => {
-        this._matDialogRef.close(true);
-        this._opaService.refreshGatekeeperConfig();
-        this._notificationService.success('Updated the Gatekeeper config');
-      });
+      .pipe(take(1));
   }
 }

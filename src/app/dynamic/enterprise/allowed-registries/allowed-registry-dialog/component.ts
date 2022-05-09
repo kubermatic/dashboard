@@ -23,7 +23,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
 import {getIconClassForButton} from '@shared/utils/common';
-import {Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {take} from 'rxjs/operators';
 import {AllowedRegistry} from '../entity';
 import {AllowedRegistriesService} from '../service';
@@ -82,11 +82,15 @@ export class AllowedRegistryDialog implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
+  label(): string {
+    return this.data.confirmLabel + ' Allowed Registry';
+  }
+
   getIconClass(): string {
     return getIconClassForButton(this.data.confirmLabel);
   }
 
-  save(): void {
+  getObservable(): Observable<AllowedRegistry> {
     const allowedRegistry: AllowedRegistry = {
       name: this.form.get(Controls.Name).value,
       spec: {
@@ -102,25 +106,27 @@ export class AllowedRegistryDialog implements OnInit, OnDestroy {
     }
   }
 
-  private _create(allowedRegistry: AllowedRegistry): void {
-    this._allowedRegistriesService
-      .createAllowedRegistry(allowedRegistry)
-      .pipe(take(1))
-      .subscribe(result => {
+  onNext(allowedRegistry: AllowedRegistry): void {
+    switch (this.data.mode) {
+      case Mode.Add:
         this._matDialogRef.close(true);
-        this._notificationService.success(`Created the ${result.name} allowed registry`);
+        this._notificationService.success(`Created the ${allowedRegistry.name} allowed registry`);
         this._allowedRegistriesService.refreshAllowedRegistries();
-      });
+        break;
+      case Mode.Edit:
+        this._matDialogRef.close(true);
+        this._notificationService.success(`Updated the ${allowedRegistry.name} allowed registry`);
+        this._allowedRegistriesService.refreshAllowedRegistries();
+    }
   }
 
-  private _edit(allowedRegistry: AllowedRegistry): void {
-    this._allowedRegistriesService
+  private _create(allowedRegistry: AllowedRegistry): Observable<AllowedRegistry> {
+    return this._allowedRegistriesService.createAllowedRegistry(allowedRegistry).pipe(take(1));
+  }
+
+  private _edit(allowedRegistry: AllowedRegistry): Observable<AllowedRegistry> {
+    return this._allowedRegistriesService
       .patchAllowedRegistry(this.data.allowedRegistry.name, allowedRegistry)
-      .pipe(take(1))
-      .subscribe(result => {
-        this._matDialogRef.close(true);
-        this._notificationService.success(`Updated the ${result.name} allowed registry`);
-        this._allowedRegistriesService.refreshAllowedRegistries();
-      });
+      .pipe(take(1));
   }
 }

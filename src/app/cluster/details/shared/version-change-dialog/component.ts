@@ -75,21 +75,20 @@ export class VersionChangeDialogComponent implements OnInit, OnDestroy {
       : this._clusterService.patch(this.project.id, this.cluster.id, this._getPatch());
   }
 
-  changeVersion(): void {
-    this._patch()
-      .pipe(take(1))
-      .subscribe(() => {
-        this._notificationService.success(
-          `Updating the ${this.cluster.name} cluster to the ${this.selectedVersion} version`
-        );
+  getObservable(): Observable<Cluster | ExternalCluster> {
+    return this._patch().pipe(take(1));
+  }
 
-        this._googleAnalyticsService.emitEvent('clusterOverview', 'clusterVersionChanged');
+  onNext(): void {
+    this._notificationService.success(
+      `Updating the ${this.cluster.name} cluster to the ${this.selectedVersion} version`
+    );
 
-        if (!this.isClusterExternal && this.isMachineDeploymentUpgradeEnabled) {
-          this.upgradeMachineDeployments();
-        }
-      });
+    this._googleAnalyticsService.emitEvent('clusterOverview', 'clusterVersionChanged');
 
+    if (!this.isClusterExternal && this.isMachineDeploymentUpgradeEnabled) {
+      this.upgradeMachineDeployments();
+    }
     this._dialogRef.close(true);
   }
 

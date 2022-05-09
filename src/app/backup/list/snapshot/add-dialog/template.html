@@ -79,12 +79,11 @@ limitations under the License.
   </mat-dialog-content>
 
   <mat-dialog-actions>
-    <button mat-flat-button
-            kmThrottleClick
-            (throttleClick)="save()"
-            [disabled]="form.invalid">
-      <i class="km-icon-mask km-icon-add"></i>
-      <span>Add Snapshot</span>
-    </button>
+    <km-button icon="km-icon-add"
+               label="Add Snapshot"
+               [disabled]="form.invalid"
+               [observable]="getObservable()"
+               (next)="onNext()">
+    </km-button>
   </mat-dialog-actions>
 </div>

@@ -47,15 +47,14 @@ limitations under the License.
                  [diameter]="30"
                  color="accent"
                  *ngIf="updating"></mat-spinner>
-    <button *ngIf="first"
-            id="km-serviceaccount-token-dialog-update-btn"
-            mat-flat-button
-            [disabled]="updating || form.invalid"
-            kmThrottleClick
-            (throttleClick)="update()">
-      <i [ngClass]="getIconClass()"></i>
-      <span>{{mode}} Token</span>
-    </button>
+    <km-button *ngIf="first"
+               id="km-serviceaccount-token-dialog-update-btn"
+               [icon]="getIconClass()"
+               [label]="mode+' Token'"
+               [disabled]="updating || form.invalid"
+               [observable]="getObservable()"
+               (next)="onNext($event)">
+    </km-button>
 
     <a *ngIf="!first"
        [href]="downloadURL"
@@ -88,13 +87,12 @@ limitations under the License.
                  [diameter]="30"
                  color="accent"
                  *ngIf="updating"></mat-spinner>
-    <button mat-flat-button
-            [disabled]="updating || form.invalid"
-            kmThrottleClick
-            (throttleClick)="update()">
-      <i [ngClass]="getIconClass()"></i>
-      <span>{{mode}} Token</span>
-    </button>
+    <km-button [icon]="getIconClass()"
+               [label]="mode+' Token'"
+               [disabled]="updating || form.invalid"
+               [observable]="getObservable()"
+               (next)="onNext($event)">
+    </km-button>
   </mat-dialog-actions>
 </form>
 

@@ -20,6 +20,7 @@ import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {MemberUtils} from '@shared/utils/member';
 import {MemberService} from '@core/services/member';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'km-edit-member',
@@ -42,26 +43,22 @@ export class EditMemberComponent implements OnInit {
     });
   }
 
-  editMember(): void {
-    if (!this.form.valid) {
-      return;
-    }
+  getObservable(): Observable<Member> {
+    return this._memberService.edit(
+      {
+        id: this.member.id,
+        name: this.member.name,
+        email: this.member.email,
+        creationTimestamp: this.member.creationTimestamp,
+        deletionTimestamp: this.member.deletionTimestamp,
+        projects: [{group: this.form.controls.group.value, id: this.project.id}],
+      },
+      this.project.id
+    );
+  }
 
-    this._memberService
-      .edit(
-        {
-          id: this.member.id,
-          name: this.member.name,
-          email: this.member.email,
-          creationTimestamp: this.member.creationTimestamp,
-          deletionTimestamp: this.member.deletionTimestamp,
-          projects: [{group: this.form.controls.group.value, id: this.project.id}],
-        },
-        this.project.id
-      )
-      .subscribe(() => {
-        this._matDialogRef.close(true);
-        this._notificationService.success(`Updated the ${this.member.name} member`);
-      });
+  onNext(): void {
+    this._matDialogRef.close(true);
+    this._notificationService.success(`Updated the ${this.member.name} member`);
   }
 }

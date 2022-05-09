@@ -65,11 +65,10 @@ limitations under the License.
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-flat-button
-          kmThrottleClick
-          (throttleClick)="edit()"
-          [disabled]="!form.valid">
-    <i class="km-icon-mask km-icon-edit w-24"></i>
-    <span>Edit Service Account</span>
-  </button>
+  <km-button icon="km-icon-edit"
+             label="Edit Service Account"
+             [disabled]="!form.valid"
+             [observable]="getObservable()"
+             (next)="onNext()">
+  </km-button>
 </mat-dialog-actions>

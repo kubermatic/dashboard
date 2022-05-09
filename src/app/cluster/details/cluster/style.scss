@@ -23,6 +23,10 @@
   @include mixins.size(24px);
 }
 
+km-button {
+  margin-left: 10px;
+}
+
 .cluster-name {
   font-weight: 500;
   padding-right: 8px;
@@ -59,15 +63,6 @@
   align-items: center;
   display: flex;
   height: 24px;
-}
-
-.km-provider-logo {
-  margin-top: -4px;
-  min-width: 112px;
-
-  &.km-provider-logo-aws {
-    min-width: 40px;
-  }
 }
 
 .cluster-info-container {

@@ -21,6 +21,7 @@ import {Project, ProjectModel} from '@shared/entity/project';
 import {AsyncValidators} from '@shared/validators/async-label-form.validator';
 import _ from 'lodash';
 import {ProjectService} from '@core/services/project';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'km-edit-project',
@@ -47,11 +48,7 @@ export class EditProjectComponent implements OnInit {
     });
   }
 
-  editProject(): void {
-    if (!this.form.valid) {
-      return;
-    }
-
+  getObservable(): Observable<Project> {
     const project: ProjectModel = {
       name: this.form.controls.name.value,
       labels: this.labels,
@@ -67,9 +64,11 @@ export class EditProjectComponent implements OnInit {
       }
     }
 
-    this._projectService.edit(this.project.id, project).subscribe(project => {
-      this._matDialogRef.close(project);
-      this._notificationService.success(`Updated the ${this.project.name} project`);
-    });
+    return this._projectService.edit(this.project.id, project);
+  }
+
+  onNext(project: Project): void {
+    this._matDialogRef.close(project);
+    this._notificationService.success(`Updated the ${this.project.name} project`);
   }
 }

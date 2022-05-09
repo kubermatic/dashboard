@@ -21,7 +21,7 @@ import {AlertmanagerConfig} from '@shared/entity/mla';
 import {getIconClassForButton} from '@shared/utils/common';
 import _ from 'lodash';
 import {encode, decode} from 'js-base64';
-import {Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {take} from 'rxjs/operators';
 
 export interface AlertmanagerConfigDialogData {
@@ -67,14 +67,21 @@ export class AlertmanagerConfigDialog implements OnInit, OnDestroy {
     return getIconClassForButton(this.data.confirmLabel);
   }
 
-  save(): void {
+  getObservable(): Observable<AlertmanagerConfig> {
     const alertmanagerConfig: AlertmanagerConfig = {
       spec: {
         config: this._getSpec(),
       },
     };
+    return this._mlaService
+      .putAlertmanagerConfig(this.data.projectId, this.data.cluster.id, alertmanagerConfig)
+      .pipe(take(1));
+  }
 
-    this._edit(alertmanagerConfig);
+  onNext(): void {
+    this._matDialogRef.close(true);
+    this._notificationService.success('Updated the Alertmanager Config');
+    this._mlaService.refreshAlertmanagerConfig();
   }
 
   private _initProviderConfigEditor(): void {
@@ -86,16 +93,5 @@ export class AlertmanagerConfigDialog implements OnInit, OnDestroy {
 
   private _getSpec(): string {
     return encode(this.spec);
-  }
-
-  private _edit(alertmanagerConfig: AlertmanagerConfig): void {
-    this._mlaService
-      .putAlertmanagerConfig(this.data.projectId, this.data.cluster.id, alertmanagerConfig)
-      .pipe(take(1))
-      .subscribe(_ => {
-        this._matDialogRef.close(true);
-        this._notificationService.success('Updated the Alertmanager Config');
-        this._mlaService.refreshAlertmanagerConfig();
-      });
   }
 }

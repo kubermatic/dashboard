@@ -19,6 +19,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {ClusterService} from '@core/services/cluster';
 import {take} from 'rxjs/operators';
 import {NotificationService} from '@core/services/notification';
+import {Observable} from 'rxjs';
 
 class ReplicasDialogData {
   projectID: string;
@@ -49,14 +50,15 @@ export class ReplicasDialogComponent implements OnInit {
     this.form = new FormGroup({[Control.Replicas]: new FormControl(this.data.machineDeployment.spec.replicas)});
   }
 
-  save(): void {
+  getObservable(): Observable<ExternalMachineDeployment> {
     const patch: ExternalMachineDeploymentPatch = {spec: {replicas: this.form.get(Control.Replicas).value}};
-    this._clusterService
+    return this._clusterService
       .patchExternalMachineDeployment(this.data.projectID, this.data.clusterID, this.data.machineDeployment.id, patch)
-      .pipe(take(1))
-      .subscribe(md => {
-        this._notificationService.success(`Updated the number of ${md.name} machine deployment replicas`);
-        this._dialogRef.close();
-      });
+      .pipe(take(1));
+  }
+
+  onNext(emd: ExternalMachineDeployment): void {
+    this._notificationService.success(`Updated the number of ${emd.name} machine deployment replicas`);
+    this._dialogRef.close();
   }
 }

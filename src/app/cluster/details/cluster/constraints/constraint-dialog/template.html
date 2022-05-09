@@ -28,7 +28,7 @@ limitations under the License.
              [formControlName]="Controls.Name"
              type="text"
              autocomplete="off"
-             cdkFocusInitial
+             kmAutofocus
              id="km-constraint-name-input">
       <mat-error *ngIf="form.get(Controls.Name).hasError('required')">
         Constraint Name is <strong>required</strong>.
@@ -53,12 +53,11 @@ limitations under the License.
              header="YAML"></km-editor>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button id="km-constraint-dialog-btn"
-          mat-flat-button
-          kmThrottleClick
-          (throttleClick)="save()"
-          [disabled]="!form.valid">
-    <i [ngClass]="getIconClass()"></i>
-    <span>{{data.confirmLabel}} Constraint</span>
-  </button>
+  <km-button id="km-constraint-dialog-btn"
+             [icon]="icon"
+             [label]="label"
+             [disabled]="!form.valid"
+             [observable]="getObservable()"
+             (next)="onNext($event)">
+  </km-button>
 </mat-dialog-actions>

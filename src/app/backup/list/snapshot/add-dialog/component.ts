@@ -22,7 +22,7 @@ import {NotificationService} from '@core/services/notification';
 import {UserService} from '@core/services/user';
 import {EtcdBackupConfig, EtcdBackupConfigSpec} from '@shared/entity/backup';
 import {Cluster} from '@shared/entity/cluster';
-import {EMPTY, iif, Subject} from 'rxjs';
+import {EMPTY, iif, Observable, Subject} from 'rxjs';
 import {switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 export interface AddSnapshotDialogConfig {
@@ -93,14 +93,15 @@ export class AddSnapshotDialogComponent implements OnInit, OnDestroy {
     return this.destinations?.length > 0;
   }
 
-  save(): void {
-    this._backupService
+  getObservable(): Observable<EtcdBackupConfig> {
+    return this._backupService
       .create(this._config.projectID, this._selectedClusterID(), this._toEtcdBackupConfig())
-      .pipe(take(1))
-      .subscribe(_ => {
-        this._notificationService.success(`Created the ${this._toEtcdBackupConfig().name} snapshot`);
-        this._dialogRef.close(true);
-      });
+      .pipe(take(1));
+  }
+
+  onNext(): void {
+    this._notificationService.success(`Created the ${this._toEtcdBackupConfig().name} snapshot`);
+    this._dialogRef.close(true);
   }
 
   private _onClusterChange(clusterID: string) {

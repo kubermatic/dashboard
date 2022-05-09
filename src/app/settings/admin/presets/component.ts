@@ -31,6 +31,7 @@ import {
   NodeProvider,
   NodeProviderConstants,
 } from '@shared/model/NodeProviderConstants';
+import _ from 'lodash';
 import {forkJoin, merge, Observable, of, Subject} from 'rxjs';
 import {switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
@@ -50,6 +51,7 @@ enum Column {
 })
 export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
   readonly providers = NODE_PROVIDERS;
+  readonly displayedProviders = 5;
 
   presets: Preset[] = [];
   dataSource = new MatTableDataSource<Preset>();
@@ -257,5 +259,9 @@ export class PresetListComponent implements OnInit, OnDestroy, OnChanges {
 
   isPaginatorVisible(): boolean {
     return this.presets && this.presets.length > 0 && this.paginator && this.presets.length > this.paginator.pageSize;
+  }
+
+  getDisplayedProviders(providers: string[]): string[] {
+    return _.take(providers, this.displayedProviders);
   }
 }

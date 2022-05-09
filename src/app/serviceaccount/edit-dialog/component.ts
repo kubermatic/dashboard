@@ -20,6 +20,7 @@ import {Project} from '@shared/entity/project';
 import {ServiceAccount} from '@shared/entity/service-account';
 import {take} from 'rxjs/operators';
 import {ServiceAccountService} from '@core/services/service-account';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'km-edit-dialog',
@@ -43,7 +44,7 @@ export class EditServiceAccountDialogComponent implements OnInit {
     });
   }
 
-  edit(): void {
+  getObservable(): Observable<ServiceAccount> {
     const editServiceAccount: ServiceAccount = {
       id: this.serviceaccount.id,
       name: this.form.controls.name.value,
@@ -53,12 +54,11 @@ export class EditServiceAccountDialogComponent implements OnInit {
       status: this.serviceaccount.id,
     };
 
-    this._serviceAccountService
-      .edit(this.project.id, editServiceAccount)
-      .pipe(take(1))
-      .subscribe(() => {
-        this._matDialogRef.close(true);
-        this._notificationService.success(`Updated the ${this.serviceaccount.name} service account`);
-      });
+    return this._serviceAccountService.edit(this.project.id, editServiceAccount).pipe(take(1));
+  }
+
+  onNext(): void {
+    this._matDialogRef.close(true);
+    this._notificationService.success(`Updated the ${this.serviceaccount.name} service account`);
   }
 }
