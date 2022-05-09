@@ -24,6 +24,15 @@
   height: 100%;
 }
 
+ul {
+  padding-inline-start: 20px;
+
+  li {
+    line-height: 22px;
+    margin-top: 10px;
+  }
+}
+
 .header-title {
   font-size: variables.$font-size-card-title;
   padding-bottom: 8px;
@@ -38,23 +47,6 @@
   &:not(:first-of-type) {
     padding-top: 30px;
   }
-}
-
-.bullet {
-  &::before {
-    content: '\2B24';
-    font-size: 4px;
-    padding: 0 5px;
-    vertical-align: middle;
-  }
-}
-
-.entry {
-  padding-top: 10px;
-}
-
-.description {
-  line-height: 22px;
 }
 
 .actions {
