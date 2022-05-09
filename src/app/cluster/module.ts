@@ -73,6 +73,7 @@ import {ExternalClusterDeleteConfirmationComponent} from '@app/cluster/details/e
 import {UpdateExternalClusterMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/update-external-cluster-machine-deployment-dialog/component';
 import {ExternalClusterModule} from '@app/external-cluster-wizard/module';
 import {ExternalMachineDeploymentService} from '@app/core/services/external-machine-deployment';
+import {WebTerminalComponent} from '@app/cluster/details/cluster/web-terminal/component';
 
 const components: any[] = [
   ClusterDetailsComponent,
@@ -126,6 +127,7 @@ const components: any[] = [
   ExternalClusterListComponent,
   ClustersComponent,
   UpdateExternalClusterMachineDeploymentDialogComponent,
+  WebTerminalComponent,
 ];
 
 @NgModule({
