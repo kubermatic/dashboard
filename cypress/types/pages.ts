@@ -85,3 +85,7 @@ export interface AdminSettingsDefaultsStrategy {
 export interface AdminSettingsInterfaceStrategy {
   onSettingsChange(settings: Partial<SettingsSpec>): void;
 }
+
+export interface AdminSettingsDynamicDatacentersStrategy {
+  onDatacenterAdd(): void;
+}

@@ -95,6 +95,7 @@ enum Constraint {
 
 enum Datacenter {
   List = '**/api/*/dc',
+  Create = '**/api/*/seed/*/dc',
 }
 
 enum EtcdRestore {

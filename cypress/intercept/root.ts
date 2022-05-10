@@ -19,6 +19,7 @@ export class Root {
 
   constructor() {
     cy.intercept(Endpoints.User.Me, req => req.reply({body: Root._userFixture}));
+    cy.intercept(Endpoints.Resource.Seed.List, req => req.reply({fixture: Fixtures.Resource.Seed.List}));
   }
 
   login(email: string, _: string, isAdmin: boolean): void {

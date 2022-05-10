@@ -105,7 +105,7 @@
     },
     {
       "metadata": {
-        "name": "a-test-datacenter"
+        "name": "test-datacenter"
       },
       "spec": {
         "seed": "test-seed",
@@ -304,5 +304,7 @@
       }
     }
   ],
-  "seed": ["test-seed"]
+  "seed": [
+    "test-seed"
+  ]
 }

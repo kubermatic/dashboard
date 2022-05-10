@@ -12,17 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Endpoints, Fixtures} from '@kmtypes';
+import {Endpoints, Fixtures, RequestType} from '@kmtypes';
 import {AdminSettings as SettingsSpec} from '../../../src/app/shared/entity/settings';
 
 export class AdminSettings {
   private static _adminSettingsFixture = Fixtures.Settings.Admin;
+  private static _dynamicDatacentersFixture = Fixtures.EmptyArray;
 
   constructor() {
     cy.intercept(Endpoints.Administrator.Settings, req => req.reply({body: AdminSettings._adminSettingsFixture}));
+    cy.intercept(RequestType.GET, Endpoints.Resource.Datacenter.List, req =>
+      req.reply({fixture: AdminSettings._dynamicDatacentersFixture})
+    );
+    cy.intercept(RequestType.POST, Endpoints.Resource.Datacenter.Create, req =>
+      req.reply({fixture: Fixtures.Settings.Datacenter})
+    );
   }
 
   onChange(settings: Partial<SettingsSpec>): void {
     AdminSettings._adminSettingsFixture = {...AdminSettings._adminSettingsFixture, ...settings};
+  }
+
+  onDatacenterAdd(): void {
+    AdminSettings._dynamicDatacentersFixture = Fixtures.Settings.DatacenterList;
   }
 }
