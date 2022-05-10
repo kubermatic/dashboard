@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "name": "test-datacenter"
+    "name": "a-test-datacenter"
   },
   "spec": {
     "seed": "test-seed",

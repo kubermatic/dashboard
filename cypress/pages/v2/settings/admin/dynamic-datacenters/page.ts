@@ -24,7 +24,7 @@ export class DynamicDatacenters extends PageOptions implements Page {
 
   static getName(): string {
     if (!this._dcName) {
-      const prefix = 'test-datacenter';
+      const prefix = 'a-test-datacenter';
       this._dcName = Config.isAPIMocked() ? prefix : _.uniqueId(`${prefix}-`);
     }
 
