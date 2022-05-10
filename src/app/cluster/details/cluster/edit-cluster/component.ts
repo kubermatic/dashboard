@@ -34,7 +34,7 @@ import {AdminSettings} from '@shared/entity/settings';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
 import {AsyncValidators} from '@shared/validators/async-label-form.validator';
 import _ from 'lodash';
-import {Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import * as semver from 'semver';
 import {FeatureGateService} from '@core/services/feature-gate';
@@ -268,11 +268,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     }
   }
 
-  editCluster(): void {
-    if (!this.form.valid) {
-      return;
-    }
-
+  getObservable(): Observable<Cluster> {
     const patch: ClusterPatch = {
       name: this.form.get(Controls.Name).value,
       labels: this.labels,
@@ -303,12 +299,13 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         containerRuntime: this.form.get(Controls.ContainerRuntime).value,
       },
     };
+    return this._clusterService.patch(this.projectID, this.cluster.id, patch).pipe(take(1));
+  }
 
-    this._clusterService.patch(this.projectID, this.cluster.id, patch).subscribe(cluster => {
-      this._matDialogRef.close(cluster);
-      this._clusterService.onClusterUpdate.next();
-      this._notificationService.success(`Updated the ${this.cluster.name} cluster`);
-    });
+  onNext(cluster: Cluster): void {
+    this._matDialogRef.close(cluster);
+    this._clusterService.onClusterUpdate.next();
+    this._notificationService.success(`Updated the ${this.cluster.name} cluster`);
   }
 
   ngOnDestroy(): void {

@@ -60,12 +60,11 @@ END OF TERMS AND CONDITIONS
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button id="km-allowed-registry-dialog-btn"
-          mat-flat-button
-          kmThrottleClick
-          (throttleClick)="save()"
-          [disabled]="form.invalid">
-    <i [ngClass]="getIconClass()"></i>
-    <span>{{data.confirmLabel}} Allowed Registry</span>
-  </button>
+  <km-button id="km-allowed-registry-dialog-btn"
+             [icon]="getIconClass()"
+             [label]="label()"
+             [disabled]="form.invalid"
+             [observable]="getObservable()"
+             (next)="onNext($event)">
+  </km-button>
 </mat-dialog-actions>

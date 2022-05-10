@@ -34,14 +34,10 @@ limitations under the License.
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-flat-button
-          kmThrottleClick
-          (throttleClick)="save()"
-          type="submit"
-          form="replicas-form"
-          fxLayoutAlign="center center"
-          [disabled]="form.invalid">
-    <i class="km-icon-mask km-icon-check"></i>
-    <span>Update Number of Replicas</span>
-  </button>
+  <km-button icon="km-icon-check"
+             label="Update Number of Replicas"
+             [disabled]="form.invalid"
+             [observable]="getObservable()"
+             (next)="onNext($event)">
+  </km-button>
 </mat-dialog-actions>

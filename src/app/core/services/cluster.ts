@@ -167,7 +167,7 @@ export class ClusterService {
     return this._http.delete(url, {headers: this._headers});
   }
 
-  showDisconnectClusterDialog(cluster: ExternalCluster, projectID: string): Observable<any> {
+  showDisconnectClusterDialog(cluster: ExternalCluster, projectID: string): Observable<void> {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Disconnect Cluster',
@@ -348,9 +348,9 @@ export class ClusterService {
     return this._http.get<CNIPluginVersions>(url);
   }
 
-  private _deleteExternalCluster(projectID: string, clusterID: string): Observable<any> {
+  private _deleteExternalCluster(projectID: string, clusterID: string): Observable<void> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}`;
-    return this._http.delete(url);
+    return this._http.delete<void>(url);
   }
 
   private _getClusters(projectID: string): Observable<Cluster[]> {

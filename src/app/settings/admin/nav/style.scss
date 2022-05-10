@@ -22,7 +22,7 @@ $sidenav-item-margin: 10px;
   @include mixins.size(variables.$sidenav-width, 100%);
 
   overflow-y: auto;
-  padding-top: variables.$content-padding + variables.$toolbar-height;
+  padding: (variables.$content-padding + variables.$toolbar-height) 0 0 10px;
 
   .menu-item {
     height: $sidenav-item-height;

@@ -18,6 +18,7 @@ import {ClusterService} from '@core/services/cluster';
 import {NotificationService} from '@core/services/notification';
 import {Cluster, ClusterPatch, MachineNetwork} from '@shared/entity/cluster';
 import _ from 'lodash';
+import {Observable} from 'rxjs';
 import {take} from 'rxjs/operators';
 
 @Component({
@@ -37,23 +38,20 @@ export class AddMachineNetworkComponent {
     private readonly _notificationService: NotificationService
   ) {}
 
-  addMachineNetworks(): void {
-    if (_.isEmpty(this.machineNetworks)) {
-      return;
-    }
-
-    this._clusterService
+  getObservable(): Observable<Cluster> {
+    return this._clusterService
       .patch(this.projectID, this.cluster.id, {
         spec: {
           machineNetworks: this.machineNetworks,
         },
       } as ClusterPatch)
-      .pipe(take(1))
-      .subscribe(res => {
-        this._notificationService.success(
-          `Added the machine network${this.machineNetworks.length > 1 ? 's' : ''} for the ${this.cluster.name} cluster`
-        );
-        this._dialogRef.close(res);
-      });
+      .pipe(take(1));
+  }
+
+  onNext(cluster: Cluster): void {
+    this._notificationService.success(
+      `Added the machine network${this.machineNetworks.length > 1 ? 's' : ''} for the ${this.cluster.name} cluster`
+    );
+    this._dialogRef.close(cluster);
   }
 }

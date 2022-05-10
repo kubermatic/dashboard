@@ -21,7 +21,7 @@ import {Constraint, ConstraintTemplate, ConstraintSpec} from '@shared/entity/opa
 import {getIconClassForButton} from '@shared/utils/common';
 import * as y from 'js-yaml';
 import _ from 'lodash';
-import {Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 
 export interface DefaultConstraintDialogConfig {
@@ -97,7 +97,7 @@ export class DefaultConstraintDialog implements OnInit, OnDestroy {
     return getIconClassForButton(this.data.confirmLabel);
   }
 
-  save(): void {
+  getObservable(): Observable<Constraint> {
     const defaultConstraint: Constraint = {
       name: this.form.get(Controls.Name).value,
       spec: this._getSpec(),
@@ -111,26 +111,25 @@ export class DefaultConstraintDialog implements OnInit, OnDestroy {
     }
   }
 
-  private _create(defaultConstraint: Constraint): void {
-    this._opaService
-      .createDefaultConstraint(defaultConstraint)
-      .pipe(take(1))
-      .subscribe(result => {
-        this._matDialogRef.close(true);
-        this._notificationService.success(`Created the ${result.name} default constraint`);
-        this._opaService.refreshConstraint();
-      });
+  onNext(constraint: Constraint): void {
+    this._matDialogRef.close(true);
+
+    switch (this.data.mode) {
+      case Mode.Add:
+        this._notificationService.success(`Created the ${constraint.name} default constraint`);
+        break;
+      case Mode.Edit:
+        this._notificationService.success(`Updated the ${constraint.name} default constraint`);
+    }
+    this._opaService.refreshConstraint();
   }
 
-  private _edit(defaultConstraint: Constraint): void {
-    this._opaService
-      .patchDefaultConstraint(this.data.defaultConstraint.name, defaultConstraint)
-      .pipe(take(1))
-      .subscribe(result => {
-        this._matDialogRef.close(true);
-        this._notificationService.success(`Updated the ${result.name} default constraint`);
-        this._opaService.refreshConstraint();
-      });
+  private _create(defaultConstraint: Constraint): Observable<Constraint> {
+    return this._opaService.createDefaultConstraint(defaultConstraint).pipe(take(1));
+  }
+
+  private _edit(defaultConstraint: Constraint): Observable<Constraint> {
+    return this._opaService.patchDefaultConstraint(this.data.defaultConstraint.name, defaultConstraint).pipe(take(1));
   }
 
   private _initConstraintSpecEditor(): void {

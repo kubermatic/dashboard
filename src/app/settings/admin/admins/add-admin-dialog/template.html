@@ -17,7 +17,6 @@ limitations under the License.
 <mat-dialog-content>
   <form [formGroup]="form"
         fxLayout="column"
-        (submit)="add()"
         id="add-admin-form">
     <mat-form-field fxFlex>
       <mat-label>Email</mat-label>
@@ -35,14 +34,11 @@ limitations under the License.
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-flat-button
-          type="submit"
-          kmThrottleClick
-          (throttleClick)="add()"
-          form="add-admin-form"
-          id="km-add-admin-dialog-save-btn"
-          [disabled]="!form.valid">
-    <i class="km-icon-mask km-icon-add"></i>
-    <span>Add Administrator</span>
-  </button>
+  <km-button id="km-add-admin-dialog-save-btn"
+             icon="km-icon-add"
+             label="Add Administrator"
+             [disabled]="!form.valid"
+             [observable]="getObservable()"
+             (next)="onNext($event)">
+  </km-button>
 </mat-dialog-actions>

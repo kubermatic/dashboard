@@ -18,7 +18,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
 import {AdminSeed, BackupDestination, DestinationDetails, Destinations} from '@shared/entity/datacenter';
-import {Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 
 export interface DestinationDialogData {
   title: string;
@@ -88,11 +88,29 @@ export class DestinationDialog implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
+  label(): string {
+    switch (this.data.mode) {
+      case Mode.Add:
+        return 'Add Destination';
+      case Mode.Edit:
+        return 'Save Changes';
+    }
+  }
+
+  icon(): string {
+    switch (this.data.mode) {
+      case Mode.Add:
+        return 'km-icon-add';
+      case Mode.Edit:
+        return 'km-icon-save';
+    }
+  }
+
   shouldDisplayWarning(): boolean {
     return !this._isDefault() && !!this.form.get(Controls.Default).value;
   }
 
-  save(): void {
+  getObservable(): Observable<AdminSeed> {
     const destinationDetails: DestinationDetails = {
       [Controls.Bucket]: this.form.get(Controls.Bucket).value,
       [Controls.Endpoint]: this.form.get(Controls.Endpoint).value,
@@ -116,15 +134,17 @@ export class DestinationDialog implements OnInit, OnDestroy {
       configuration.spec.etcdBackupRestore.defaultDestination = '';
     }
 
-    this._datacenterService.patchAdminSeed(configuration.name, configuration).subscribe(_ => {
-      this._matDialogRef.close();
-      this._notificationService.success(
-        `${this.data.mode === Mode.Add ? 'Added' : ' Created'} the ${
-          this.form.get(Controls.DestinationName).value
-        } destination`
-      );
-      this._datacenterService.refreshAdminSeeds();
-    });
+    return this._datacenterService.patchAdminSeed(configuration.name, configuration);
+  }
+
+  onNext(): void {
+    this._matDialogRef.close();
+    this._notificationService.success(
+      `${this.data.mode === Mode.Add ? 'Added' : ' Created'} the ${
+        this.form.get(Controls.DestinationName).value
+      } destination`
+    );
+    this._datacenterService.refreshAdminSeeds();
   }
 
   private _isDefault(): boolean {

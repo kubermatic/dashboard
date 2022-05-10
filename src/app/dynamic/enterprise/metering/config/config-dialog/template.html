@@ -64,12 +64,10 @@ END OF TERMS AND CONDITIONS
                @pushToSide
                color="accent"
                class="spinner"></mat-spinner>
-
-  <button mat-flat-button
-          kmThrottleClick
-          (throttleClick)="save()"
-          [disabled]="form.invalid || saving">
-    <i class="km-icon-mask km-icon-save"></i>
-    <span>Save Configuration</span>
-  </button>
+  <km-button icon="km-icon-save"
+             label="Save Configuration"
+             [disabled]="form.invalid || saving"
+             [observable]="getObservable()"
+             (next)="onNext()">
+  </km-button>
 </mat-dialog-actions>

@@ -49,10 +49,9 @@ limitations under the License.
   </mat-dialog-content>
 
   <mat-dialog-actions>
-    <button mat-flat-button
-            kmThrottleClick
-            (throttleClick)="restore()">
-      Restore Cluster
-    </button>
+    <km-button label="Restore Cluster"
+               [observable]="getObservable()"
+               (next)="onNext()">
+    </km-button>
   </mat-dialog-actions>
 </div>
