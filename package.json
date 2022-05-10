@@ -116,7 +116,7 @@
     "eslint-plugin-rxjs": "5.0.2",
     "gts": "3.1.0",
     "husky": "8.0.0",
-    "jest": "28.1.0",
+    "jest": "27.5.1",
     "jest-preset-angular": "11.1.2",
     "js-beautify": "1.14.3",
     "json-server": "0.17.0",
