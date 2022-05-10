@@ -36,6 +36,7 @@
               ]
             },
             "styles": [
+              "node_modules/xterm/css/xterm.css",
               "src/assets/css/root.scss",
               {
                 "input": "src/assets/themes/light.scss",
