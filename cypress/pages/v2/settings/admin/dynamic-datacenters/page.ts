@@ -12,23 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {AdminSettingsDynamicDatacentersStrategy, Datacenter, Page, PageOptions, Provider} from '@kmtypes';
+import {Datacenter, Page, PageOptions, Provider} from '@kmtypes';
 import {Config} from '@utils/config';
 import _ from 'lodash';
-import {AdminSettingsDynamicDatacentersFactory} from './strategy/factory';
 
 export class DynamicDatacenters extends PageOptions implements Page {
   private static _dcName: string;
-  readonly _strategy: AdminSettingsDynamicDatacentersStrategy | undefined;
 
   readonly Elements = new Elements();
   readonly Buttons = new Buttons();
-
-  constructor(isAPIMocked: boolean) {
-    super();
-
-    this._strategy = AdminSettingsDynamicDatacentersFactory.new(isAPIMocked);
-  }
 
   static getName(): string {
     if (!this._dcName) {
@@ -44,7 +36,7 @@ export class DynamicDatacenters extends PageOptions implements Page {
   }
 
   create(name: string, provider: Provider, seedName: string, country: string, location: Datacenter): void {
-    this.Buttons.addDatacenter.click().then(_ => this._strategy?.onDatacenterAdd());
+    this.Buttons.addDatacenter.click();
     this.Elements.addDatacenterNameInput.type(name);
     this.Elements.selectAddDatacenterProvider(provider);
     this.Elements.selectAddDatacenterSeed(seedName);

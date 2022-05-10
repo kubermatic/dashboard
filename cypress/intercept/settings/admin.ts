@@ -17,7 +17,7 @@ import {AdminSettings as SettingsSpec} from '../../../src/app/shared/entity/sett
 
 export class AdminSettings {
   private static _adminSettingsFixture = Fixtures.Settings.Admin;
-  private static _dynamicDatacentersFixture = Fixtures.EmptyArray;
+  private static _dynamicDatacentersFixture = Fixtures.Settings.DatacenterList;
 
   constructor() {
     cy.intercept(Endpoints.Administrator.Settings, req => req.reply({body: AdminSettings._adminSettingsFixture}));
@@ -31,9 +31,5 @@ export class AdminSettings {
 
   onChange(settings: Partial<SettingsSpec>): void {
     AdminSettings._adminSettingsFixture = {...AdminSettings._adminSettingsFixture, ...settings};
-  }
-
-  onDatacenterAdd(): void {
-    AdminSettings._dynamicDatacentersFixture = Fixtures.Settings.DatacenterList;
   }
 }
