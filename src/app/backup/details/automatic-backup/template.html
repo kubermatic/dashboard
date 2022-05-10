@@ -23,6 +23,13 @@ limitations under the License.
 <ng-container *ngIf="isInitialized">
   <div fxLayout="row">
     <button mat-flat-button
+            color="tertiary"
+            (click)="goBack()"
+            fxLayoutAlign="center center"
+            matTooltip="Go back to the backup list">
+      <i class="km-icon-arrow-left"></i>
+    </button>
+    <button mat-flat-button
             type="button"
             color="tertiary"
             [attr.id]="'km-delete-backup-' + backup.name"

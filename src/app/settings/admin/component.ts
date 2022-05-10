@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {HistoryService} from '@core/services/history';
 import {NotificationService} from '@core/services/notification';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
@@ -41,7 +40,6 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
   constructor(
     private readonly _userService: UserService,
     private readonly _settingsService: SettingsService,
-    private readonly _historyService: HistoryService,
     private readonly _notificationService: NotificationService
   ) {}
 
@@ -73,10 +71,6 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
 
   onSettingsChange(): void {
     this._settingsChange.next();
-  }
-
-  goBack(): void {
-    this._historyService.goBack('/projects');
   }
 
   isEqual(a: any, b: any): boolean {

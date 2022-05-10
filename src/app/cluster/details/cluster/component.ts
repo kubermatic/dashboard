@@ -296,6 +296,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       );
   }
 
+  goBack(): void {
+    this._router.navigate(['/projects/' + this.projectID + '/clusters']);
+  }
+
   isDeleteEnabled(): boolean {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, Permission.Delete);
   }
@@ -308,7 +312,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       .afterClosed()
       .pipe(filter(deleted => deleted))
       .pipe(take(1))
-      .subscribe(_ => this._router.navigate(['/projects/' + this.projectID + '/clusters']));
+      .subscribe(_ => this.goBack());
   }
 
   shareConfigDialog(): void {

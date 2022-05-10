@@ -21,16 +21,7 @@ limitations under the License.
               class="drawer">
     <km-admin-sidenav></km-admin-sidenav>
   </mat-drawer>
-  <div class="content-padding"
-       fxLayout="column">
-    <button mat-flat-button
-            type="button"
-            fxFlexAlign="end"
-            fxLayoutAlign="center center"
-            (click)="goBack()">
-      <i class="km-icon-mask km-icon-back"></i>
-      <span>Go Back</span>
-    </button>
+  <div class="content">
     <router-outlet></router-outlet>
   </div>
 </mat-drawer-container>
