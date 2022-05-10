@@ -394,6 +394,10 @@
   @include mixins.mask-image('/assets/images/icons/restore.svg', 18px);
 }
 
+.km-icon-terminal {
+  @include mixins.mask-image('/assets/images/icons/terminal.svg', 18px);
+}
+
 .km-icon-quota {
   @include mixins.mask-image('/assets/images/icons/quota.svg', 24px);
 }
