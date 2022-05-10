@@ -12,15 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Datacenter, Page, PageOptions, Provider} from '@kmtypes';
+import {AdminSettingsDatacentersStrategy, Datacenter, Page, PageOptions, Provider} from '@kmtypes';
+import {AdminSettingsDatacentersFactory} from '@pages/v2/settings/admin/dynamic-datacenters/strategy/factory';
 import {Config} from '@utils/config';
 import _ from 'lodash';
 
 export class DynamicDatacenters extends PageOptions implements Page {
   private static _dcName: string;
+  private readonly _strategy: AdminSettingsDatacentersStrategy | undefined;
 
   readonly Elements = new Elements();
   readonly Buttons = new Buttons();
+
+  constructor(isAPIMocked: boolean) {
+    super();
+
+    this._strategy = AdminSettingsDatacentersFactory.new(isAPIMocked);
+  }
 
   static getName(): string {
     if (!this._dcName) {
@@ -44,6 +52,13 @@ export class DynamicDatacenters extends PageOptions implements Page {
     this.Elements.addDatacenterLocationInput.type(location);
     this.Buttons.addDatacenterSave.click();
   }
+
+  delete(name: string): void {
+    this.Buttons.deleteDatacenter(name)
+      .click()
+      .then(_ => this._strategy?.onDatacenterDelete());
+    this.Buttons.deleteDatacenterConfirm.click();
+  }
 }
 
 class Buttons extends PageOptions {
@@ -57,6 +72,10 @@ class Buttons extends PageOptions {
 
   deleteDatacenter(name: string): Cypress.Chainable {
     return this._get(`#km-datacenter-delete-btn-${name}`);
+  }
+
+  get deleteDatacenterConfirm(): Cypress.Chainable {
+    return this._get('#km-confirmation-dialog-confirm-btn');
   }
 }
 

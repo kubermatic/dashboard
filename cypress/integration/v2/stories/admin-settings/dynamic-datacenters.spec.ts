@@ -54,6 +54,11 @@ describe('Admin Settings - Dynamic Datacenters Story', () => {
     Pages.AdminSettings.DynamicDatacenters.Buttons.deleteDatacenter(datacenterName).should(Condition.Exist);
   });
 
+  it('should delete created datacenter', () => {
+    Pages.AdminSettings.DynamicDatacenters.delete(datacenterName);
+    Pages.AdminSettings.DynamicDatacenters.Buttons.deleteDatacenter(datacenterName).should(Condition.NotExist);
+  });
+
   it('should delete created project and logout', () => {
     Pages.Projects.visit();
     Pages.expect(View.Projects.Default);

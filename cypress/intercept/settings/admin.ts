@@ -27,9 +27,16 @@ export class AdminSettings {
     cy.intercept(RequestType.POST, Endpoints.Resource.Datacenter.Create, req =>
       req.reply({fixture: Fixtures.Settings.Datacenter})
     );
+    cy.intercept(RequestType.DELETE, Endpoints.Resource.Datacenter.Delete, req =>
+      req.reply({fixture: Fixtures.Settings.Datacenter})
+    );
   }
 
   onChange(settings: Partial<SettingsSpec>): void {
     AdminSettings._adminSettingsFixture = {...AdminSettings._adminSettingsFixture, ...settings};
+  }
+
+  onDatacenterDelete(): void {
+    AdminSettings._dynamicDatacentersFixture = Fixtures.EmptyArray;
   }
 }

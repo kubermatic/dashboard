@@ -29,7 +29,7 @@ export class AdminSettings extends PageOptions implements Page {
 
     this.Defaults = new Defaults(isAPIMocked);
     this.Interface = new Interface(isAPIMocked);
-    this.DynamicDatacenters = new DynamicDatacenters();
+    this.DynamicDatacenters = new DynamicDatacenters(isAPIMocked);
   }
 
   visit(): void {
