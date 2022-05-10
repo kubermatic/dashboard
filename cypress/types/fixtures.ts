@@ -115,7 +115,11 @@ enum Project {
   Detail = 'project.json',
 }
 
-const Resource = {SSHKey, ServiceAccount, Project};
+enum Seed {
+  List = 'seeds.json',
+}
+
+const Resource = {SSHKey, ServiceAccount, Project, Seed};
 
 type Resource = typeof Resource;
 
@@ -135,7 +139,7 @@ const User = {
     },
   ],
   userSettings: {
-    itemsPerPage: 5,
+    itemsPerPage: 10,
     lastSeenChangelogVersion: 'v9.0.0',
     selectedProjectID: '',
     selectProjectTableView: true,
@@ -144,6 +148,8 @@ const User = {
 const Settings = {
   User: DEFAULT_USER_SETTINGS,
   Admin: DEFAULT_ADMIN_SETTINGS,
+  DatacenterList: 'datacenters.json',
+  Datacenter: 'datacenter.json',
 };
 
 export const Fixtures = {Provider, Resource, EmptyArray, EmptyObject, User, Members, Settings};

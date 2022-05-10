@@ -32,7 +32,8 @@ export default async (on, config) => {
       'ssh-keys.spec.ts',
       'edition.spec.ts',
       'members.spec.ts',
-      'defaults.spec.ts'
+      'defaults.spec.ts',
+      'dynamic-datacenters.spec.ts'
     ),
   ];
 

@@ -32,6 +32,7 @@ describe('SSH Key Management Story', () => {
 
   it('should create a new project', () => {
     Pages.Projects.create(projectName);
+    Pages.Projects.Buttons.projectViewType('projectstable').should(Condition.Exist);
     Pages.Projects.Elements.projectItem(projectName).should(Condition.Exist);
     Pages.Projects.Elements.projectItemIcon(projectName, 'disabled').should(Condition.NotExist);
     Pages.Projects.Elements.projectItemIcon(projectName, 'running').should(Condition.Exist);

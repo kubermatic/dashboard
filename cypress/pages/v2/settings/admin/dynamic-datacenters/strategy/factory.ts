@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export * from './pages';
-export * from './projects/page';
-export * from './serviceaccounts/page';
-export * from './clusters/proxy';
-export * from './sshkeys/page';
-export * from './settings/admin/page';
-export * from './settings/admin/dynamic-datacenters/page';
+import {AdminSettingsDatacentersStrategy} from '@kmtypes';
+import {MockedAdminSettingsDatacentersStrategy} from './mocked';
+
+export class AdminSettingsDatacentersFactory {
+  static new(isAPIMocked: boolean): AdminSettingsDatacentersStrategy | undefined {
+    return isAPIMocked ? new MockedAdminSettingsDatacentersStrategy() : undefined;
+  }
+}

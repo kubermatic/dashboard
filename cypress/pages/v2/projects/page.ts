@@ -123,4 +123,8 @@ class Buttons extends PageOptions {
   get addDialogConfirm(): Cypress.Chainable {
     return this._get('#km-add-project-dialog-save');
   }
+
+  projectViewType(type: 'projectscard' | 'projectstable'): Cypress.Chainable {
+    return this._get(`mat-button-toggle[value=${type}].mat-button-toggle-checked`);
+  }
 }

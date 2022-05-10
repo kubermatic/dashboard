@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export * from './pages';
-export * from './projects/page';
-export * from './serviceaccounts/page';
-export * from './clusters/proxy';
-export * from './sshkeys/page';
-export * from './settings/admin/page';
-export * from './settings/admin/dynamic-datacenters/page';
+import {Intercept} from '@intercept';
+import {AdminSettingsDatacentersStrategy} from '@kmtypes';
+
+export class MockedAdminSettingsDatacentersStrategy implements AdminSettingsDatacentersStrategy {
+  onDatacenterDelete(): void {
+    Intercept.AdminSettings().onDatacenterDelete();
+  }
+}
