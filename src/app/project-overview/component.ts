@@ -102,7 +102,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   private _loadClusters(): void {
     merge(timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()), this._projectChange)
       .pipe(
-        switchMap(() => (this.project ? this._clusterService.clusters(this.project.id) : EMPTY)),
+        switchMap(() => (this.project ? this._clusterService.clusters(this.project.id, true) : EMPTY)),
         tap(clusters => (this.clusters = clusters)),
         switchMap(clusters =>
           iif(
