@@ -65,6 +65,8 @@ export class WebTerminalComponent implements OnInit, AfterViewInit {
       fontSize: 14,
       fontFamily: 'Consolas, "Courier New", monospace',
       cursorBlink: true,
+      convertEol: true,
+      rendererType: 'dom',
     });
 
     const containerElement = this.terminalRef.nativeElement;
