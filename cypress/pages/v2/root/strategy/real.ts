@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Pages} from '../../pages';
+import {LoginStrategy} from '@kmtypes';
+import {Pages} from '@pages/v2';
 import {RootPage} from '../page';
-import {LoginStrategy} from './types';
 
 export class RealLoginStrategy implements LoginStrategy {
   constructor(private readonly _context: RootPage) {}

@@ -196,12 +196,23 @@ export class HetznerNodeSpec {
 }
 
 export class KubeVirtNodeSpec {
-  cpus: string;
-  memory: string;
-  namespace: string;
-  sourceURL: string;
+  name: string;
+
+  // At the moment KubeVirt VM flavors are stored only in the default namespace so their names are unique.
+  // It is going to be adjusted in the future.
+  flavorName?: string;
+  flavorProfile: string;
+  cpus?: string;
+  memory?: string;
+  primaryDiskOSImage: string;
+  primaryDiskStorageClassName: string;
+  primaryDiskSize: string;
+  secondaryDisks?: KubeVirtSecondaryDisk[];
+}
+
+export class KubeVirtSecondaryDisk {
+  size: string;
   storageClassName: string;
-  pvcSize: string;
 }
 
 export class OpenstackNodeSpec {
@@ -319,10 +330,7 @@ export function getDefaultNodeProviderSpec(provider: string): object {
       } as AnexiaNodeSpec;
     case NodeProvider.KUBEVIRT:
       return {
-        cpus: '1',
-        memory: '2Gi',
-        pvcSize: '10Gi',
-        namespace: 'kube-system',
+        primaryDiskSize: '10',
       } as KubeVirtNodeSpec;
     case NodeProvider.NUTANIX:
       return {

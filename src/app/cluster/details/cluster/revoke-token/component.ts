@@ -16,13 +16,14 @@ import {Component, Input, OnInit} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
 import {UserService} from '@core/services/user';
-import {Cluster} from '@shared/entity/cluster';
+import {Cluster, Token} from '@shared/entity/cluster';
 import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import {take} from 'rxjs/operators';
 import {ClusterService} from '@core/services/cluster';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'km-revoke-token',
@@ -56,19 +57,24 @@ export class RevokeTokenComponent implements OnInit {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, Permission.Edit);
   }
 
-  revokeToken(): void {
+  getObservable(): Observable<Token> | void {
     if (this.revokeAdminToken) {
-      this._clusterService.editToken(this.cluster, this.projectID, {token: ''}).subscribe(res => {
-        this._notificationService.success(`Revoked the admin token from the ${this.cluster.name} cluster`);
-        this._matDialogRef.close(res);
-      });
+      return this._clusterService.editToken(this.cluster, this.projectID, {token: ''});
     }
 
     if (this.revokeViewerToken) {
-      this._clusterService.editViewerToken(this.cluster, this.projectID, {token: ''}).subscribe(res => {
-        this._notificationService.success(`Revoked the viewer token from the ${this.cluster.name} cluster`);
-        this._matDialogRef.close(res);
-      });
+      return this._clusterService.editViewerToken(this.cluster, this.projectID, {token: ''});
+    }
+  }
+
+  onNext(token: Token): void {
+    if (this.revokeAdminToken) {
+      this._notificationService.success(`Revoked the admin token from the ${this.cluster.name} cluster`);
+      this._matDialogRef.close(token);
+    }
+    if (this.revokeViewerToken) {
+      this._notificationService.success(`Revoked the viewer token from the ${this.cluster.name} cluster`);
+      this._matDialogRef.close(token);
     }
   }
 }

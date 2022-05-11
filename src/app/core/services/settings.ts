@@ -18,7 +18,6 @@ import {AppConfigService} from '@app/config.service';
 import {Auth} from '@core/services/auth/service';
 import {environment} from '@environments/environment';
 import {Admin, Member} from '@shared/entity/member';
-import {Report} from '@shared/entity/metering';
 import {AdminSettings, CustomLink, DEFAULT_ADMIN_SETTINGS} from '@shared/entity/settings';
 import {BehaviorSubject, EMPTY, iif, merge, Observable, of, Subject, timer} from 'rxjs';
 import {catchError, delay, map, retryWhen, shareReplay, switchMap} from 'rxjs/operators';
@@ -41,7 +40,6 @@ export class SettingsService {
   private _usersRefresh$ = new Subject<void>();
   private _customLinks$: Observable<CustomLink[]>;
   private _customLinksRefresh$ = new Subject<void>();
-  private _reports$: Observable<Report[]>;
   private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
 
   constructor(
@@ -149,24 +147,5 @@ export class SettingsService {
 
   refreshUsers(): void {
     this._usersRefresh$.next();
-  }
-
-  get reports(): Observable<Report[]> {
-    if (!this._reports$) {
-      this._reports$ = this._refreshTimer$
-        .pipe(switchMap(() => this._getReports()))
-        .pipe(shareReplay({refCount: true, bufferSize: 1}));
-    }
-    return this._reports$;
-  }
-
-  private _getReports(): Observable<Report[]> {
-    const url = `${this._restRoot}/admin/metering/reports`;
-    return this._httpClient.get<Report[]>(url);
-  }
-
-  reportDownload(reportName: string): Observable<string> {
-    const url = `${this._restRoot}/admin/metering/reports/${reportName}`;
-    return this._httpClient.get<string>(url);
   }
 }

@@ -18,6 +18,13 @@ limitations under the License.
   <div fxFlex
        fxLayoutAlign="end center"
        class="cluster-detail-actions">
+    <button mat-flat-button
+            color="tertiary"
+            (click)="goBack()"
+            fxLayoutAlign="center center"
+            matTooltip="Go back to the cluster list">
+      <i class="km-icon-arrow-left"></i>
+    </button>
     <button id="km-delete-cluster-btn"
             mat-flat-button
             color="tertiary"
@@ -40,16 +47,13 @@ limitations under the License.
       <i class="km-icon-mask km-icon-share"></i>
       <span>Share</span>
     </button>
-    <button color="alternative"
-            fxLayoutAlign="center center"
-            mat-flat-button
-            type="button"
-            kmThrottleClick
-            (throttleClick)="downloadKubeconfig()"
-            [disabled]="!isClusterRunning">
-      <i class="km-icon-mask km-icon-download"></i>
-      <span>Get Kubeconfig</span>
-    </button>
+    <km-button color="alternative"
+               icon="km-icon-download"
+               label="Get Kubeconfig"
+               [disabled]="!isClusterRunning"
+               [observable]="getObservable()"
+               (next)="onNext($event)">
+    </km-button>
     <button fxLayoutAlign="center center"
             mat-flat-button
             type="button"

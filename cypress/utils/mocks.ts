@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Provider} from './provider';
 import {RouteHandler} from 'cypress/types/net-stubbing';
+import {Config} from './config';
 import {Endpoint} from './endpoint';
 import {RequestType} from './monitor';
-import {Config} from './config';
+import {Provider} from './provider';
 
 interface Mock {
   m: RequestType;
@@ -119,7 +119,7 @@ export class Mocks {
     // {m: RequestType.GET, p: Endpoint.CurrentUser, r: Mocks.currentUser},
     {m: RequestType.GET, p: Endpoint.Administrators, r: Mocks.administrators},
     {m: RequestType.POST, p: Endpoint.Administrators, r: Mocks.defaultAdmin},
-    {m: RequestType.GET, p: Endpoint.AdminSettings, r: Mocks.adminSettings},
+    // {m: RequestType.GET, p: Endpoint.AdminSettings, r: Mocks.adminSettings},
     // {m: RequestType.GET, p: Endpoint.Seeds, r: ['test-seed']},
     {m: RequestType.GET, p: Endpoint.SeedSettings, r: {fixture: 'seed-settings.json'}},
     // {m: RequestType.GET, p: Endpoint.Datacenters, r: {fixture: 'datacenters.json'}},
@@ -130,7 +130,7 @@ export class Mocks {
     {m: RequestType.GET, p: Endpoint.SystemLabels, r: {}},
     // {m: RequestType.POST, p: Endpoint.Projects, r: {fixture: 'project.json'}},
     // {m: RequestType.GET, p: Endpoint.Projects, r: {fixture: 'projects.json'}},
-    {m: RequestType.GET, p: Endpoint.Project, r: {fixture: 'project.json'}},
+    // {m: RequestType.GET, p: Endpoint.Project, r: {fixture: 'project.json'}},
     {m: RequestType.GET, p: Endpoint.ExternalClusters, r: []},
     {m: RequestType.POST, p: Endpoint.ExternalClusters, r: {fixture: 'external-cluster.json'}},
     {m: RequestType.GET, p: Endpoint.ExternalCluster, r: {fixture: 'external-cluster.json'}},
@@ -148,8 +148,8 @@ export class Mocks {
     {m: RequestType.GET, p: Endpoint.ClusterRuleGroups, r: []},
     {m: RequestType.GET, p: Endpoint.ClusterAddons, r: []},
     {m: RequestType.GET, p: Endpoint.ClusterUpgrades, r: []},
-    {m: RequestType.GET, p: Endpoint.ClusterSSHKeys, r: {fixture: 'ssh-keys.json'}},
-    {m: RequestType.PUT, p: Endpoint.ClusterSSHKey, r: {fixture: 'ssh-key.json'}},
+    // {m: RequestType.GET, p: Endpoint.ClusterSSHKeys, r: {fixture: 'ssh-keys.json'}},
+    // {m: RequestType.PUT, p: Endpoint.ClusterSSHKey, r: {fixture: 'ssh-key.json'}},
     {m: RequestType.GET, p: Endpoint.MachineDeploymentNodes, r: []},
     {m: RequestType.GET, p: Endpoint.MachineDeploymentNodesEvents, r: []},
     {m: RequestType.GET, p: Endpoint.MachineDeploymentNodesMetrics, r: []},
@@ -160,23 +160,23 @@ export class Mocks {
     {m: RequestType.GET, p: Endpoint.AlertmanagerConfig, r: {spec: {config: ''}}},
     {m: RequestType.GET, p: Endpoint.AdmissionPlugins, r: []},
     {m: RequestType.GET, p: Endpoint.Versions, r: {fixture: 'versions.json'}},
-    {m: RequestType.GET, p: Endpoint.Alibaba.InstanceTypes, r: {fixture: 'alibaba/instancetypes.json'}},
-    {m: RequestType.GET, p: Endpoint.Alibaba.VSwitches, r: {fixture: 'alibaba/vswitches.json'}},
-    {m: RequestType.GET, p: Endpoint.Alibaba.Zones, r: {fixture: 'alibaba/zones.json'}},
-    {m: RequestType.GET, p: Endpoint.Anexia.Templates, r: {fixture: 'anexia/templates.json'}},
-    {m: RequestType.GET, p: Endpoint.Anexia.VLANs, r: {fixture: 'anexia/vlans.json'}},
-    {m: RequestType.GET, p: Endpoint.AWS.Sizes, r: {fixture: 'aws/sizes.json'}},
-    {m: RequestType.GET, p: Endpoint.AWS.Subnets, r: {fixture: 'aws/subnets.json'}},
-    {m: RequestType.GET, p: Endpoint.Nutanix.Subnets, r: {fixture: 'nutanix/subnets.json'}},
-    {m: RequestType.GET, p: Endpoint.Azure.Sizes, r: {fixture: 'azure/sizes.json'}},
-    {m: RequestType.GET, p: Endpoint.Digitalocean.Sizes, r: {fixture: 'digitalocean/sizes.json'}},
-    {m: RequestType.GET, p: Endpoint.GCP.DiskTypes, r: {fixture: 'gcp/disktypes.json'}},
-    {m: RequestType.GET, p: Endpoint.GCP.Sizes, r: {fixture: 'gcp/sizes.json'}},
-    {m: RequestType.GET, p: Endpoint.GCP.Zones, r: {fixture: 'gcp/zones.json'}},
-    {m: RequestType.GET, p: Endpoint.Equinix.Sizes, r: {fixture: 'packet/sizes.json'}},
-    {m: RequestType.GET, p: Endpoint.Hetzner.Sizes, r: {fixture: 'hetzner/sizes.json'}},
-    {m: RequestType.GET, p: Endpoint.OpenStack.AvailabilityZones, r: {fixture: 'openstack/availabilityzones.json'}},
-    {m: RequestType.GET, p: Endpoint.OpenStack.Sizes, r: {fixture: 'openstack/sizes.json'}},
+    // {m: RequestType.GET, p: Endpoint.Alibaba.InstanceTypes, r: {fixture: 'alibaba/instancetypes.json'}},
+    // {m: RequestType.GET, p: Endpoint.Alibaba.VSwitches, r: {fixture: 'alibaba/vswitches.json'}},
+    // {m: RequestType.GET, p: Endpoint.Alibaba.Zones, r: {fixture: 'alibaba/zones.json'}},
+    // {m: RequestType.GET, p: Endpoint.Anexia.Templates, r: {fixture: 'anexia/templates.json'}},
+    // {m: RequestType.GET, p: Endpoint.Anexia.VLANs, r: {fixture: 'anexia/vlans.json'}},
+    // {m: RequestType.GET, p: Endpoint.AWS.Sizes, r: {fixture: 'aws/sizes.json'}},
+    // {m: RequestType.GET, p: Endpoint.AWS.Subnets, r: {fixture: 'aws/subnets.json'}},
+    // {m: RequestType.GET, p: Endpoint.Nutanix.Subnets, r: {fixture: 'nutanix/subnets.json'}},
+    // {m: RequestType.GET, p: Endpoint.Azure.Sizes, r: {fixture: 'azure/sizes.json'}},
+    // {m: RequestType.GET, p: Endpoint.Digitalocean.Sizes, r: {fixture: 'digitalocean/sizes.json'}},
+    // {m: RequestType.GET, p: Endpoint.GCP.DiskTypes, r: {fixture: 'gcp/disktypes.json'}},
+    // {m: RequestType.GET, p: Endpoint.GCP.Sizes, r: {fixture: 'gcp/sizes.json'}},
+    // {m: RequestType.GET, p: Endpoint.GCP.Zones, r: {fixture: 'gcp/zones.json'}},
+    // {m: RequestType.GET, p: Endpoint.Equinix.Sizes, r: {fixture: 'packet/sizes.json'}},
+    // {m: RequestType.GET, p: Endpoint.Hetzner.Sizes, r: {fixture: 'hetzner/sizes.json'}},
+    // {m: RequestType.GET, p: Endpoint.OpenStack.AvailabilityZones, r: {fixture: 'openstack/availabilityzones.json'}},
+    // {m: RequestType.GET, p: Endpoint.OpenStack.Sizes, r: {fixture: 'openstack/sizes.json'}},
     {m: RequestType.POST, p: Endpoint.ConstraintTemplates, r: {fixture: 'constrainttemplate.json'}},
     {m: RequestType.GET, p: Endpoint.ConstraintTemplates, r: {fixture: 'constrainttemplates.json'}},
     {m: RequestType.GET, p: Endpoint.Constraints, r: {fixture: 'constraints.json'}},
@@ -190,22 +190,22 @@ export class Mocks {
     return Config.isAPIMocked();
   }
 
-  static register(provider?: Provider): void {
+  static register(_?: Provider): void {
     Mocks._registerDefaultMocks();
-    Mocks._registerProviderMocks(provider);
+    // Mocks._registerProviderMocks(provider);
   }
 
   private static _registerDefaultMocks(): void {
     this._defaults.forEach(mock => this._intercept(mock.m, mock.p, mock.r));
   }
 
-  private static _registerProviderMocks(p?: Provider): void {
-    // this._intercept(RequestType.POST, Endpoint.Clusters, p ? {fixture: `${p}/cluster.json`} : {});
-    // this._intercept(RequestType.GET, Endpoint.Clusters, p ? {fixture: `${p}/clusters.json`} : []);
-    // this._intercept(RequestType.GET, Endpoint.Cluster, p ? {fixture: `${p}/cluster.json`} : {});
-    this._intercept(RequestType.GET, Endpoint.MachineDeployments, p ? {fixture: `${p}/machinedeployments.json`} : []);
-    this._intercept(RequestType.GET, Endpoint.MachineDeployment, p ? {fixture: `${p}/machinedeployment.json`} : {});
-  }
+  // private static _registerProviderMocks(_?: Provider): void {
+  // this._intercept(RequestType.POST, Endpoint.Clusters, p ? {fixture: `${p}/cluster.json`} : {});
+  // this._intercept(RequestType.GET, Endpoint.Clusters, p ? {fixture: `${p}/clusters.json`} : []);
+  // this._intercept(RequestType.GET, Endpoint.Cluster, p ? {fixture: `${p}/cluster.json`} : {});
+  // this._intercept(RequestType.GET, Endpoint.MachineDeployments, p ? {fixture: `${p}/machinedeployments.json`} : []);
+  // this._intercept(RequestType.GET, Endpoint.MachineDeployment, p ? {fixture: `${p}/machinedeployment.json`} : {});
+  // }
 
   private static _intercept(method: RequestType, path: string, response?: RouteHandler): void {
     cy.intercept({method, path}, response).as(Mocks._alias(method, path));

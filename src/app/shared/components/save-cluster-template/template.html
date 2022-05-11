@@ -20,8 +20,7 @@ limitations under the License.
 <mat-dialog-content>
   <form [formGroup]="form"
         fxLayout="column"
-        id="save-template-form"
-        (submit)="save()">
+        id="save-template-form">
     <mat-form-field fxFlex>
       <mat-label>Name</mat-label>
       <input matInput
@@ -67,15 +66,11 @@ limitations under the License.
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-flat-button
-          id="km-save-template-confirm-btn"
-          type="submit"
-          kmThrottleClick
-          (throttleClick)="save()"
-          form="save-template-form"
-          fxLayoutAlign="center center"
-          [disabled]="!form.valid">
-    <i class="km-icon-mask km-icon-save"></i>
-    <span>Save Cluster Template</span>
-  </button>
+  <km-button id="km-save-template-confirm-btn"
+             icon="km-icon-save"
+             label="Save Cluster Template"
+             [disabled]="!form.valid"
+             [observable]="getObservable()"
+             (next)="onNext($event)">
+  </km-button>
 </mat-dialog-actions>

@@ -27,7 +27,14 @@ export default async (on, config) => {
   // TODO: Update once more tests are rewritten
   // const ignored: string[] = ['**/!(service-accounts.spec.ts|ssh-keys.spec.ts)'];
   const ignored: string[] = [
-    runnableTestsRegex('service-accounts.spec.ts', 'ssh-keys.spec.ts', 'edition.spec.ts', 'members.spec.ts'),
+    runnableTestsRegex(
+      'service-accounts.spec.ts',
+      'ssh-keys.spec.ts',
+      'edition.spec.ts',
+      'members.spec.ts',
+      'defaults.spec.ts',
+      'dynamic-datacenters.spec.ts'
+    ),
   ];
 
   // if (isAPIMocked) {

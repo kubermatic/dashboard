@@ -15,8 +15,10 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
+import {Admin} from '@app/shared/entity/member';
 import {NotificationService} from '@core/services/notification';
 import {SettingsService} from '@core/services/settings';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'km-add-admin-dialog',
@@ -37,19 +39,15 @@ export class AddAdminDialogComponent implements OnInit {
     });
   }
 
-  add(): void {
-    if (!this.form) {
-      return;
-    }
+  getObservable(): Observable<Admin> {
+    return this._settingsService.setAdmin({
+      email: this.form.controls.email.value,
+      isAdmin: true,
+    });
+  }
 
-    this._settingsService
-      .setAdmin({
-        email: this.form.controls.email.value,
-        isAdmin: true,
-      })
-      .subscribe(admin => {
-        this._matDialogRef.close(admin);
-        this._notificationService.success(`Added the ${admin.name} user to the admin group`);
-      });
+  onNext(admin: Admin): void {
+    this._matDialogRef.close(admin);
+    this._notificationService.success(`Added the ${admin.name} user to the admin group`);
   }
 }

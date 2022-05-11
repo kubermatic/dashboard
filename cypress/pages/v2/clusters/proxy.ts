@@ -12,13 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {Config} from '@utils/config';
 import _ from 'lodash';
-import {Config} from '../../../utils/config';
 import {ClusterDetail} from './detail/page';
 import {ClusterList} from './list/page';
 
+export enum ProviderMenuOption {
+  EditCluster = 'Edit Cluster',
+  ManageSSHKeys = 'Manage SSH keys',
+}
+
 export class Clusters {
   private static _clusterName: string;
+  private static _machineDeploymentName: string;
   private readonly _clusterList: ClusterList;
   private readonly _clusterDetail: ClusterDetail;
 
@@ -42,5 +48,14 @@ export class Clusters {
     }
 
     return this._clusterName;
+  }
+
+  static get machineDeploymentName(): string {
+    if (!this._machineDeploymentName) {
+      const prefix = 'e2e-test-md';
+      this._machineDeploymentName = Config.isAPIMocked() ? prefix : _.uniqueId(`${prefix}-`);
+    }
+
+    return this._machineDeploymentName;
   }
 }

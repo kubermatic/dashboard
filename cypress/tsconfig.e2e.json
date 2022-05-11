@@ -2,15 +2,18 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "strict": true,
-    "baseUrl": ".",
+    "baseUrl": "./",
+    "paths": {
+      "@kmtypes": ["types"],
+      "@kmtypes/*": ["types/*"],
+      "@intercept/*": ["intercept/*"],
+      "@intercept": ["intercept"],
+      "@pages/*": ["pages/*"],
+      "@utils/*": ["utils/*"]
+    },
     "types": ["cypress"],
   },
   "include": [
-    "integration/**/*.ts",
-    "fixtures/**/*.ts",
-    "pages/**/*.ts",
-    "utils/*.ts",
-    "support/*.ts",
-    "plugins/*.ts",
-    "../node_modules/cypress"]
+    "**/*.ts",
+  ]
 }

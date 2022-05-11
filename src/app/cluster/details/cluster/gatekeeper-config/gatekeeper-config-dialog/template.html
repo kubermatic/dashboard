@@ -15,19 +15,18 @@ limitations under the License.
 -->
 <km-dialog-title>{{data.title}}</km-dialog-title>
 <mat-dialog-content>
-  <p *ngIf="data.mode === 'edit'"
+  <p *ngIf="data.mode === 'Edit'"
      class="km-dialog-context-description">Edit OPA gatekeeper config of <b>{{data.cluster.name}}</b> cluster</p>
   <div class="spec">Spec</div>
   <km-editor [(model)]="spec"
              header="YAML"></km-editor>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button id="km-gatekeeper-config-dialog-btn"
-          mat-flat-button
-          kmThrottleClick
-          (throttleClick)="save()"
-          [disabled]="!isValid()">
-    <i [ngClass]="getIconClass()"></i>
-    <span>{{data.confirmLabel}} Gatekeeper Config</span>
-  </button>
+  <km-button id="km-gatekeeper-config-dialog-btn"
+             [icon]="getIconClass()"
+             [label]="label()"
+             [disabled]="!isValid()"
+             [observable]="getObservable()"
+             (next)="onNext()">
+  </km-button>
 </mat-dialog-actions>

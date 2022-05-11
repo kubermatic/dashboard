@@ -14,10 +14,10 @@
 
 import {Condition} from '../utils/condition';
 import {Endpoint} from '../utils/endpoint';
+import {Mocks} from '../utils/mocks';
 import {RequestType, ResponseCheck, ResponseType, TrafficMonitor} from '../utils/monitor';
 import {View} from '../utils/view';
 import {WizardPage} from './wizard.po';
-import {Mocks} from '../utils/mocks';
 
 export enum ProviderMenuOption {
   EditCluster = 'Edit Cluster',

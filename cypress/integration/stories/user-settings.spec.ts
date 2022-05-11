@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import _ from 'lodash';
+import {ProjectsPage} from '../../pages/projects.po';
+import {UserSettingsPage} from '../../pages/user-settings.po';
 import {login, logout} from '../../utils/auth';
 import {Condition} from '../../utils/condition';
-import {View} from '../../utils/view';
-import {UserSettingsPage} from '../../pages/user-settings.po';
-import {ProjectsPage} from '../../pages/projects.po';
-import _ from 'lodash';
-import {Mocks} from '../../utils/mocks';
 import {Config} from '../../utils/config';
+import {Mocks} from '../../utils/mocks';
+import {View} from '../../utils/view';
 
 describe('User Settings Story', () => {
   const projectName = Mocks.enabled() ? 'test-project' : _.uniqueId('test-project-');

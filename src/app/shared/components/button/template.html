@@ -14,7 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<button mat-flat-button
+<button *ngIf="!iconButton"
+        mat-flat-button
+        [color]="this.color"
         type="button"
         fxLayout="row"
         fxLayoutAlign="center center"
@@ -24,4 +26,16 @@ limitations under the License.
      [ngClass]="this.loading ? 'km-icon-pending' : this.icon"
      class="km-icon-mask"></i>
   <span>{{label}}</span>
+</button>
+<button *ngIf="iconButton"
+        mat-icon-button
+        [color]="this.color"
+        type="button"
+        fxLayout="row"
+        fxLayoutAlign="center center"
+        (click)="onClick()"
+        [disabled]="this.disabled || this.loading">
+  <i *ngIf="icon"
+     [ngClass]="this.loading ? 'km-icon-pending' : this.icon"
+     class="km-icon-mask"></i>
 </button>

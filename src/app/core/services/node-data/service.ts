@@ -43,6 +43,8 @@ import {HetznerService} from '@core/services/provider/hetzner';
 import {OpenStackService} from '@core/services/provider/openstack';
 import {NodeDataNutanixProvider} from './provider/nutanix';
 import {NutanixService} from '@core/services/provider/nutanix';
+import {NodeDataKubeVirtProvider} from '@core/services/node-data/provider/kubevirt';
+import {KubeVirtService} from '@core/services/provider/kubevirt';
 
 @Injectable()
 export class NodeDataService {
@@ -62,6 +64,7 @@ export class NodeDataService {
     private readonly _awsService: AWSService,
     private readonly _azureService: AzureService,
     private readonly _digitalOceanService: DigitalOceanService,
+    private readonly _kubeVirtService: KubeVirtService,
     private readonly _equinixService: EquinixService,
     private readonly _gcpService: GCPService,
     private readonly _hetznerService: HetznerService,
@@ -159,6 +162,13 @@ export class NodeDataService {
     this._clusterSpecService,
     this._presetService,
     this._digitalOceanService,
+    this._projectService
+  );
+  readonly kubeVirt = new NodeDataKubeVirtProvider(
+    this,
+    this._clusterSpecService,
+    this._presetService,
+    this._kubeVirtService,
     this._projectService
   );
   readonly hetzner = new NodeDataHetznerProvider(

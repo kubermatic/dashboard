@@ -53,6 +53,7 @@ $breakpoints: (
 @mixin provider-image($url, $width, $height: $width) {
   @include background-image($url, $width, $height);
 
+  background-position: left;
   display: block;
 }
 

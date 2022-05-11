@@ -22,6 +22,7 @@ import {Member} from '@shared/entity/member';
 import {CustomLink, UserSettings} from '@shared/entity/settings';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+import {HistoryService} from '@core/services/history';
 
 @Component({
   selector: 'km-admin-sidenav',
@@ -43,23 +44,24 @@ export class AdminSidenavComponent implements OnInit, OnDestroy {
   constructor(
     public dialog: MatDialog,
     private readonly _userService: UserService,
-    private readonly _settingsService: SettingsService
+    private readonly _settingsService: SettingsService,
+    private readonly _historyService: HistoryService
   ) {}
 
   ngOnInit(): void {
-    this._userService.currentUser.subscribe(user => (this.currentUser = user));
-
-    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      this.settings = settings;
-    });
-
+    this._userService.currentUser.pipe(takeUntil(this._unsubscribe)).subscribe(u => (this.currentUser = u));
+    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(s => (this.settings = s));
     this._settingsService.adminSettings
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(settings => (this.customLinks = settings.customLinks));
+      .subscribe(s => (this.customLinks = s.customLinks));
   }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  goBack(): void {
+    this._historyService.goBack('/projects');
   }
 }

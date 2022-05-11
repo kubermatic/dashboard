@@ -44,6 +44,7 @@ export class TabCardComponent implements AfterContentInit, OnDestroy {
   @ContentChildren(TabComponent) inputTabs: QueryList<TabComponent>;
   @Input() dynamicTabs: DynamicTabComponent[];
   @Input() context: Context = Context.Card;
+  @Input() verticalMargin = true;
   tabs: TabComponent[];
   private _unsubscribe = new Subject<void>();
 
@@ -59,7 +60,7 @@ export class TabCardComponent implements AfterContentInit, OnDestroy {
   }
 
   getClass(): string {
-    return 'tab-card ' + this.context;
+    return 'tab-card ' + this.context + (this.verticalMargin ? ' vertical-margin' : '');
   }
 
   private _init(): void {

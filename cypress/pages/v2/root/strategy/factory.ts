@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {LoginStrategy} from '@kmtypes';
 import {RootPage} from '../page';
 import {MockedLoginStrategy} from './mocked';
 import {RealLoginStrategy} from './real';
-import {LoginStrategy} from './types';
 
 export class LoginStrategyFactory {
   static new(isAPIMocked: boolean, context: RootPage): LoginStrategy {

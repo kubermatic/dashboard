@@ -20,7 +20,6 @@ limitations under the License.
     <form [formGroup]="form"
           fxLayout="column"
           class="edit-cluster-form"
-          (submit)="editCluster()"
           id="edit-cluster-form">
       <mat-form-field fxFlex>
         <mat-label>Name</mat-label>
@@ -167,15 +166,12 @@ limitations under the License.
     </form>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <button id="km-edit-cluster-dialog-edit-btn"
-            mat-flat-button
-            type="submit"
-            kmThrottleClick
-            (throttleClick)="editCluster()"
-            form="edit-cluster-form"
-            [disabled]="!form.valid || !providerSettingsPatch.isValid">
-      <i class="km-icon-mask km-icon-save"></i>
-      <span>Save Changes</span>
-    </button>
+    <km-button id="km-constraint-dialog-btn"
+               icon="km-icon-save"
+               label="Save Changes"
+               [disabled]="!form.valid || !providerSettingsPatch.isValid"
+               [observable]="getObservable()"
+               (next)="onNext($event)">
+    </km-button>
   </mat-dialog-actions>
 </div>

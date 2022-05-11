@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {MembersStrategy} from '@kmtypes';
 import {MockedMembersStrategy} from './mocked';
-import {MembersStrategy} from './types';
 
 export class MembersStrategyFactory {
   static new(isAPIMocked: boolean): MembersStrategy | undefined {

@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Condition} from '../../../utils/condition';
-import {Group} from '../../../utils/member';
-import {View} from '../../../utils/view';
-import {Config} from '../../../utils/config';
-import {Pages} from '../../../pages/v2/pages';
-import {Projects} from '../../../pages/v2/projects/page';
+import {Intercept} from '@intercept';
+import {Condition, Group, View} from '@kmtypes';
+import {Pages, Projects} from '@pages/v2';
+import {Config} from '@utils/config';
 
 describe('Members Story', () => {
   const projectName = Projects.getName();
+
+  beforeEach(() => Intercept.init());
 
   it('should login as a first user', () => {
     Pages.Root.login(Config.adminEmail(), Config.password(), true);
@@ -30,6 +30,7 @@ describe('Members Story', () => {
 
   it('should create a new project', () => {
     Pages.Projects.create(projectName);
+    Pages.Projects.Buttons.projectViewType('projectstable').should(Condition.Exist);
     Pages.Projects.Elements.projectItem(projectName).should(Condition.Exist);
     Pages.Projects.Elements.projectItemIcon(projectName, 'disabled').should(Condition.NotExist);
     Pages.Projects.Elements.projectItemIcon(projectName, 'running').should(Condition.Exist);

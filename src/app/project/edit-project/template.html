@@ -19,7 +19,6 @@ limitations under the License.
     <p class="km-dialog-context-description">Edit <strong>{{project.name}}</strong> project</p>
     <form [formGroup]="form"
           fxLayout="column"
-          (submit)="editProject()"
           id="edit-project-form">
       <mat-form-field fxFlex>
         <mat-label>Name</mat-label>
@@ -41,15 +40,12 @@ limitations under the License.
     </form>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <button id="km-edit-project-dialog-edit-btn"
-            mat-flat-button
-            type="submit"
-            kmThrottleClick
-            (throttleClick)="editProject()"
-            form="edit-project-form"
-            [disabled]="!form.valid">
-      <i class="km-icon-mask km-icon-save"></i>
-      <span>Save Changes</span>
-    </button>
+    <km-button id="km-edit-project-dialog-edit-btn"
+               icon="km-icon-save"
+               label="Save Changes"
+               [disabled]="!form.valid"
+               [observable]="getObservable()"
+               (next)="onNext($event)">
+    </km-button>
   </mat-dialog-actions>
 </div>

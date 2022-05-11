@@ -36,35 +36,31 @@ limitations under the License.
         <mat-chip [ngClass]="'km-' + category">{{toDisplayName(category) | uppercase}}</mat-chip>
       </mat-chip-list>
 
-      <div *ngFor="let entry of entries(category)"
-           fxLayout="column"
-           class="entry">
-        <div fxLayout="row">
-          <div class="bullet"></div>
-          <div class="description">{{entry.description}}</div>
+      <ul>
+        <div *ngFor="let entry of entries(category)"
+             fxLayout="column">
+          <li>{{entry.description}}</li>
+          <div fxLayout="row wrap">
+            <a *ngFor="let link of entry.links"
+               [href]="link.url"
+               target="_blank"
+               rel="noopener"
+               fxLayout="row"
+               class="changelog-link-card">
+              <span class="changelog-external-link-icon"
+                    fxFlex="0 0 auto"
+                    fxLayoutAlign=" center">
+                <i class="km-icon-external-link"></i>
+              </span>
+              <span class="changelog-link-caption"
+                    fxFlex
+                    fxLayoutAlign=" center">
+                <span>{{link.caption}}</span>
+              </span>
+            </a>
+          </div>
         </div>
-
-        <div fxLayout="row wrap">
-          <a *ngFor="let link of entry.links"
-             [href]="link.url"
-             target="_blank"
-             rel="noopener"
-             fxLayout="row"
-             class="changelog-link-card">
-            <span class="changelog-external-link-icon"
-                  fxFlex="0 0 auto"
-                  fxLayoutAlign=" center">
-              <i class="km-icon-external-link"></i>
-            </span>
-
-            <span class="changelog-link-caption"
-                  fxFlex
-                  fxLayoutAlign=" center">
-              <span>{{link.caption}}</span>
-            </span>
-          </a>
-        </div>
-      </div>
+      </ul>
     </div>
   </mat-dialog-content>
 

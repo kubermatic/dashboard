@@ -12,27 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Endpoint} from '../../../../../utils/endpoint';
-import {ClusterListStrategy} from './types';
+import {ClusterListStrategy} from '@kmtypes';
 
 export class MockedClusterListStrategy implements ClusterListStrategy {
-  private static readonly _fixturePath = 'clusters.json';
-  private static readonly _fixtureEmptyArrayPath = 'empty-array.json';
-  private static _activeFixture = MockedClusterListStrategy._fixtureEmptyArrayPath;
+  onCreate(): void {}
 
-  constructor() {
-    this._init();
-  }
-
-  onCreate(): void {
-    MockedClusterListStrategy._activeFixture = MockedClusterListStrategy._fixturePath;
-  }
-
-  onDelete(): void {
-    MockedClusterListStrategy._activeFixture = MockedClusterListStrategy._fixtureEmptyArrayPath;
-  }
-
-  private _init(): void {
-    cy.intercept(Endpoint.Clusters, req => req.reply({fixture: MockedClusterListStrategy._activeFixture}));
-  }
+  onDelete(): void {}
 }

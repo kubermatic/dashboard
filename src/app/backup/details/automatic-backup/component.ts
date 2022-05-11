@@ -99,6 +99,10 @@ export class AutomaticBackupDetailsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
+  goBack(): void {
+    this._router.navigate(['/projects/' + this.selectedProject.id + '/backups']);
+  }
+
   delete(backup: EtcdBackupConfig): void {
     const config: MatDialogConfig = {
       data: {

@@ -20,7 +20,7 @@ import {ConstraintTemplate, ConstraintTemplateSpec} from '@shared/entity/opa';
 import {getIconClassForButton} from '@shared/utils/common';
 import * as y from 'js-yaml';
 import _ from 'lodash';
-import {Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {take} from 'rxjs/operators';
 
 export interface ConstraintTemplateDialogConfig {
@@ -79,7 +79,7 @@ export class ConstraintTemplateDialog implements OnInit, OnDestroy {
     return this.data.constraintTemplate.spec.crd.spec.names.kind.toLowerCase();
   }
 
-  save(): void {
+  getObservable(): Observable<ConstraintTemplate> {
     const formSpec = this._getSpec();
 
     const constraintTemplate: ConstraintTemplate = {
@@ -93,6 +93,20 @@ export class ConstraintTemplateDialog implements OnInit, OnDestroy {
       case Mode.Edit:
         return this._edit(constraintTemplate);
     }
+  }
+
+  onNext(ct: ConstraintTemplate): void {
+    this._matDialogRef.close(true);
+
+    switch (this.data.mode) {
+      case Mode.Add:
+        this._notificationService.success(`Created the ${ct.name} constraint template`);
+        break;
+      case Mode.Edit:
+        this._notificationService.success(`Updated the ${ct.name} constraint template`);
+    }
+
+    this._opaService.refreshConstraintTemplates();
   }
 
   private _initProviderConfigEditor(): void {
@@ -113,25 +127,13 @@ export class ConstraintTemplateDialog implements OnInit, OnDestroy {
     return spec;
   }
 
-  private _create(constraintTemplate: ConstraintTemplate): void {
-    this._opaService
-      .createConstraintTemplate(constraintTemplate)
-      .pipe(take(1))
-      .subscribe(result => {
-        this._matDialogRef.close(true);
-        this._notificationService.success(`Created the ${result.name} constraint template`);
-        this._opaService.refreshConstraintTemplates();
-      });
+  private _create(constraintTemplate: ConstraintTemplate): Observable<ConstraintTemplate> {
+    return this._opaService.createConstraintTemplate(constraintTemplate).pipe(take(1));
   }
 
-  private _edit(constraintTemplate: ConstraintTemplate): void {
-    this._opaService
+  private _edit(constraintTemplate: ConstraintTemplate): Observable<ConstraintTemplate> {
+    return this._opaService
       .patchConstraintTemplate(this.data.constraintTemplate.name, constraintTemplate)
-      .pipe(take(1))
-      .subscribe(result => {
-        this._matDialogRef.close(true);
-        this._notificationService.success(`Updated the ${result.name} constraint template`);
-        this._opaService.refreshConstraintTemplates();
-      });
+      .pipe(take(1));
   }
 }

@@ -87,7 +87,7 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck, OnDe
     this._unsubscribe.complete();
   }
 
-  getObservable(): Observable<any> {
+  getObservable(): Observable<void> {
     return this._clusterService
       .delete(this.projectID, this.cluster.id, {
         [Finalizer.DeleteLoadBalancers]: !!this.deleteForm.controls.clusterLBCleanupCheckbox.value,
