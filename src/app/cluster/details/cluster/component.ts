@@ -114,6 +114,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   gatekeeperConfig: GatekeeperConfig;
   alertmanagerConfig: AlertmanagerConfig;
   ruleGroups: RuleGroup[];
+  showTerminal: boolean;
   onExpandChange$ = new EventEmitter<boolean>();
   isDualStackNetworkSelected: boolean;
 
@@ -140,7 +141,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     private readonly _mlaService: MLAService,
     private readonly _applicationService: ApplicationService,
     readonly settings: SettingsService
-  ) {}
+  ) {
+    this.showTerminal = false;
+  }
 
   ngOnInit(): void {
     this.config = this._appConfigService.getConfig();
@@ -571,6 +574,13 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     component.projectId = this.projectID;
     component.showQuotaWidgetDetails = true;
     component.showIcon = true;
+  }
+
+  toggleTerminal() {
+    if (!this.isClusterRunning) {
+      return;
+    }
+    this.showTerminal = !this.showTerminal;
   }
 
   private _canReloadVersions(): boolean {
