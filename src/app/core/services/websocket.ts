@@ -50,7 +50,7 @@ export class WebsocketService {
       url: url,
       openObserver: {
         // eslint-disable-next-line no-console
-        next: _ => console.log('[WebSocketService]: connection pk'),
+        next: _ => console.log('[WebSocketService]: connection ok'),
       },
       closeObserver: {
         next: () => {
