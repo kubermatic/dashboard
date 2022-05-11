@@ -1,6 +1,7 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Subject} from 'rxjs';
+import {debounce} from 'lodash';
 import {Terminal} from 'xterm';
 import {FitAddon} from 'xterm-addon-fit';
 import {WebsocketService} from '@core/services/websocket';
@@ -23,17 +24,14 @@ export class WebTerminalComponent implements OnInit, AfterViewInit {
   terminal: Terminal;
   projectId: string;
   clusterId: string;
-
   @ViewChild('terminal', {static: true}) terminalRef: ElementRef;
-  private readonly unsubscribe_ = new Subject<void>();
-
-  // private debouncedFit_: Function;
+  private debouncedFunc_: Function;
+  private readonly _unsubscribe = new Subject<void>();
 
   constructor(private readonly _activatedRoute: ActivatedRoute, private readonly websocketService: WebsocketService) {}
 
   ngOnInit(): void {
     this.initTerminal();
-
     this.initSubscriptions();
   }
 
@@ -42,13 +40,14 @@ export class WebTerminalComponent implements OnInit, AfterViewInit {
     this.clusterId = this._activatedRoute.snapshot.paramMap.get(PathParam.ClusterID);
 
     this.websocketService.messages$.subscribe((data: ITerminalFrame) => {
-      this.handleConnectionMessage(data);
+      this.handleWebSocketConnectionMessages(data);
     });
   }
 
   ngOnDestroy(): void {
-    this.unsubscribe_.next();
-    this.unsubscribe_.complete();
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
+    this.websocketService.close();
   }
 
   ngAfterViewInit(): void {
@@ -70,13 +69,18 @@ export class WebTerminalComponent implements OnInit, AfterViewInit {
     this.terminal.loadAddon(fitAddon);
     const containerElement = this.terminalRef.nativeElement;
     this.terminal.open(containerElement);
-    fitAddon.fit();
+
+    // Note: Fits the terminal to the containing element
+    this.debouncedFunc_ = debounce(() => {
+      fitAddon.fit();
+    }, 100);
+    this.debouncedFunc_();
 
     // Event listeners binding
     this.terminal.onData(this.onTerminalSendString.bind(this));
   }
 
-  private handleConnectionMessage(frame: ITerminalFrame): void {
+  private handleWebSocketConnectionMessages(frame: ITerminalFrame): void {
     if (frame.Op === Operations.stdout) {
       this.terminal.write(frame.Data);
     }
