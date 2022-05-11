@@ -241,6 +241,7 @@ limitations under the License.
               <div value>{{cluster.spec.clusterNetwork.proxyMode}}</div>
             </km-property>
             <km-property-boolean label="Konnectivity"
+                                 matTooltip="Konnectivity is a TCP level proxy service for control plane to cluster communication."
                                  [value]="cluster.spec.clusterNetwork?.konnectivityEnabled">
             </km-property-boolean>
           </div>
