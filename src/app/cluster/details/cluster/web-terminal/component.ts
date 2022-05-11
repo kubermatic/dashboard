@@ -1,7 +1,6 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Subject} from 'rxjs';
-import {debounce} from 'lodash';
 import {Terminal} from 'xterm';
 import {FitAddon} from 'xterm-addon-fit';
 import {WebsocketService} from '@core/services/websocket';
@@ -24,8 +23,8 @@ export class WebTerminalComponent implements OnInit, AfterViewInit {
   terminal: Terminal;
   projectId: string;
   clusterId: string;
-  @ViewChild('terminal', {static: true}) terminalRef: ElementRef;
-  private debouncedFunc_: Function;
+
+  @ViewChild('terminal', { static: true }) terminalRef: ElementRef;
   private readonly _unsubscribe = new Subject<void>();
 
   constructor(private readonly _activatedRoute: ActivatedRoute, private readonly websocketService: WebsocketService) {}
@@ -65,16 +64,11 @@ export class WebTerminalComponent implements OnInit, AfterViewInit {
       cursorBlink: true,
     });
 
-    const fitAddon = new FitAddon();
-    this.terminal.loadAddon(fitAddon);
     const containerElement = this.terminalRef.nativeElement;
     this.terminal.open(containerElement);
-
-    // Note: Fits the terminal to the containing element
-    this.debouncedFunc_ = debounce(() => {
-      fitAddon.fit();
-    }, 100);
-    this.debouncedFunc_();
+    const fitAddon = new FitAddon();
+    this.terminal.loadAddon(fitAddon);
+    fitAddon.fit();
 
     // Event listeners binding
     this.terminal.onData(this.onTerminalSendString.bind(this));
