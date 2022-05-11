@@ -1,8 +1,9 @@
-import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Subject} from 'rxjs';
 import {Terminal} from 'xterm';
 import {FitAddon} from 'xterm-addon-fit';
+import {Cluster} from '@shared/entity/cluster';
 import {WebsocketService} from '@core/services/websocket';
 import {PathParam} from '@core/services/params';
 import {ITerminalFrame} from '@shared/model/Terminal';
@@ -24,14 +25,16 @@ export class WebTerminalComponent implements OnInit, AfterViewInit {
   projectId: string;
   clusterId: string;
 
-  @ViewChild('terminal', { static: true }) terminalRef: ElementRef;
+  @Input() cluster: Cluster;
+
+  @ViewChild('terminal', {static: true}) terminalRef: ElementRef;
   private readonly _unsubscribe = new Subject<void>();
 
   constructor(private readonly _activatedRoute: ActivatedRoute, private readonly websocketService: WebsocketService) {}
 
   ngOnInit(): void {
-    this.initTerminal();
     this.initSubscriptions();
+    this.initTerminal();
   }
 
   initSubscriptions() {
@@ -66,6 +69,12 @@ export class WebTerminalComponent implements OnInit, AfterViewInit {
 
     const containerElement = this.terminalRef.nativeElement;
     this.terminal.open(containerElement);
+
+    const clusterName = this.cluster && this.cluster.name;
+    this.terminal.write('\x1b[1;3;36mWEB TERMINAL\x1b\r\n\n');
+    this.terminal.write('\x1b[1;3;32mWelcome to Cloud Shell\x1b\r\n\n');
+    this.terminal.write(`\x1b[1;3;31mCluster Connected to Project: ${clusterName}\x1b[0m $\n\n\r`);
+
     const fitAddon = new FitAddon();
     this.terminal.loadAddon(fitAddon);
     fitAddon.fit();
