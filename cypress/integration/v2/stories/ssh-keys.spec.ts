@@ -40,7 +40,7 @@ describe('SSH Key Management Story', () => {
 
   it('should select project', () => {
     Pages.Projects.select(projectName);
-    Pages.expect(View.Clusters.Default);
+    Pages.expect(View.Overview.Default);
   });
 
   it('should go to the ssh keys page', () => {

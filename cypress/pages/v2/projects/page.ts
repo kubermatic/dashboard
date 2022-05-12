@@ -52,7 +52,7 @@ export class Projects extends PageOptions implements Page {
     this.Elements.projectItemIcon(projectName, 'disabled').should(Condition.NotExist);
     this.Elements.projectItemIcon(projectName, 'running').should(Condition.Exist);
     this.select(projectName);
-    Pages.expect(View.Clusters.Default);
+    Pages.expect(View.Overview.Default);
   }
 
   create(name: string): void {

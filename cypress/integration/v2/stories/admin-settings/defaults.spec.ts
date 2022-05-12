@@ -62,6 +62,11 @@ describe('Admin Settings - Defaults Story', () => {
     Pages.Projects.open(projectName);
   });
 
+  it('should go to the clusters page', () => {
+    Pages.Clusters.List.visit();
+    Pages.expect(View.Clusters.Default);
+  });
+
   it('should make sure connect cluster button is visible', () => {
     Pages.Clusters.List.Buttons.externalClustersTab.should(Condition.Exist).click();
     Pages.Clusters.List.Buttons.addExternalCluster.should(Condition.Exist);
@@ -126,6 +131,8 @@ describe('Admin Settings - Defaults Story', () => {
 
   it('should go to clusters view and make sure external clusters are not available', () => {
     Pages.Projects.open(projectName);
+    Pages.Clusters.List.visit();
+    Pages.expect(View.Clusters.Default);
     Pages.Clusters.List.Buttons.externalClustersTab.should(Condition.NotExist);
   });
 
