@@ -60,6 +60,7 @@ describe('Admin Settings - Defaults Story', () => {
 
   it('should go to projects view and select project', () => {
     Pages.Projects.open(projectName);
+    Pages.expect(View.Overview.Default);
   });
 
   it('should go to the clusters page', () => {
@@ -131,6 +132,7 @@ describe('Admin Settings - Defaults Story', () => {
 
   it('should go to clusters view and make sure external clusters are not available', () => {
     Pages.Projects.open(projectName);
+    Pages.expect(View.Overview.Default);
     Pages.Clusters.List.visit();
     Pages.expect(View.Clusters.Default);
     Pages.Clusters.List.Buttons.externalClustersTab.should(Condition.NotExist);
