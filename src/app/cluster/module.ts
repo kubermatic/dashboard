@@ -74,6 +74,7 @@ import {UpdateExternalClusterMachineDeploymentDialogComponent} from '@app/cluste
 import {ExternalClusterModule} from '@app/external-cluster-wizard/module';
 import {ExternalMachineDeploymentService} from '@app/core/services/external-machine-deployment';
 import {WebTerminalComponent} from '@app/cluster/details/cluster/web-terminal/component';
+import {TerminalToolbarComponent} from '@app/cluster/details/cluster/web-terminal/terminal-toolbar/terminal-toolbar.component';
 
 const components: any[] = [
   ClusterDetailsComponent,
@@ -128,6 +129,7 @@ const components: any[] = [
   ClustersComponent,
   UpdateExternalClusterMachineDeploymentDialogComponent,
   WebTerminalComponent,
+  TerminalToolbarComponent,
 ];
 
 @NgModule({

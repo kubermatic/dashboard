@@ -1,0 +1,31 @@
+@use 'mixins';
+
+.toolbar-container {
+  height: 68px;
+  min-height: 48px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  color: rgba(95, 99, 104, 100);
+  background-color: white;
+  border: 1px solid dimgrey;
+  padding: 0 12px;
+  border-bottom: 1px solid #e8eaed;
+}
+
+.toolbar-text-cloud-shell {
+  font: 500 10px/16px Roboto, Helvetica Neue, sans-serif !important;
+  letter-spacing: .8px !important;
+  text-transform: uppercase;
+  padding: 6px 0 0 8px;
+}
+
+.toolbar-text-cloud-terminal {
+  letter-spacing: normal !important;
+  color: #3c4043;
+  padding: 0 8px 2px 8px;
+}
+
+.km-icon-terminal {
+  @include mixins.size(46px, 46px, true)
+}
