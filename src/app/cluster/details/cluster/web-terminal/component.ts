@@ -73,9 +73,9 @@ export class WebTerminalComponent implements OnInit, AfterViewInit {
     this.terminal.open(containerElement);
 
     const clusterName = this.cluster && this.cluster.name;
-    this.terminal.write('\x1b[1;3;36mWEB TERMINAL\x1b\r\n\n');
-    this.terminal.write('\x1b[1;3;32mWelcome to Cloud Shell\x1b\r\n\n');
-    this.terminal.write(`\x1b[1;3;31mCluster Connected to Project: ${clusterName}\x1b[0m $\n\n\r`);
+    this.terminal.write('\x1b[37mWEB TERMINAL\x1b\r\n\n');
+    this.terminal.write('\x1b[37mWelcome to Cloud Shell! Type "help" to get started.\r\n\n');
+    this.terminal.write(`\x1b[37mYour Cloud Platform project in this session is set to ${clusterName}.\n\n\r`);
 
     const fitAddon = new FitAddon();
     this.terminal.loadAddon(fitAddon);
