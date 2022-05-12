@@ -135,7 +135,7 @@ describe('Admin Settings - Defaults Story', () => {
     Pages.expect(View.Overview.Default);
     Pages.Clusters.List.visit();
     Pages.expect(View.Clusters.Default);
-    Pages.Clusters.List.Buttons.externalClustersTab.should(Condition.NotExist);
+    Pages.Clusters.List.Buttons.anyTab.should(Condition.NotExist);
   });
 
   it('should go to cluster details page and make sure admin settings are reflected', () => {
