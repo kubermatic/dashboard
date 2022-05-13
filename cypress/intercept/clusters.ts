@@ -76,7 +76,7 @@ abstract class ProviderBase implements Interceptor {
     cy.intercept(RequestType.GET, Endpoints.Resource.Cluster.List, req =>
       req.reply({fixture: ProviderBase._clusterListFixture})
     );
-    cy.intercept(RequestType.POST, Endpoints.Resource.Cluster.List, req =>
+    cy.intercept(RequestType.POST, Endpoints.Resource.Cluster.Create, req =>
       req.reply({fixture: ProviderBase._clusterFixture})
     );
     cy.intercept(Endpoints.Resource.Cluster.Detail, req => req.reply({fixture: ProviderBase._clusterFixture}));
