@@ -38,7 +38,7 @@ import {Router} from '@angular/router';
 })
 export class MeteringScheduleConfigComponent implements OnInit {
   @Input() schedules: MeteringReportConfiguration[];
-  readonly displayedColumns: string[] = ['name', 'schedule', 'interval', 'actions'];
+  readonly displayedColumns: string[] = ['name', 'retention', 'interval', 'schedule', 'actions'];
   dataSource = new MatTableDataSource<MeteringReportConfiguration>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
@@ -78,6 +78,7 @@ export class MeteringScheduleConfigComponent implements OnInit {
         scheduleName: config.name,
         schedule: config.schedule,
         interval: config.interval,
+        retention: config.retention,
       },
     };
     this._matDialog.open(MeteringScheduleEditDialog, dialogConfig);

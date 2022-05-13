@@ -44,6 +44,7 @@ export class MeteringReportListComponent implements OnInit {
   scheduleName: string;
   schedule: string;
   interval: number;
+  retention?: number;
   reports: Report[] = [];
   dataSource = new MatTableDataSource<Report>();
   readonly displayedColumns: string[] = ['name', 'size', 'lastModified', 'actions'];
@@ -87,6 +88,7 @@ export class MeteringReportListComponent implements OnInit {
         this.scheduleName = config.name;
         this.schedule = config.schedule;
         this.interval = config.interval;
+        this.retention = config.retention;
         this._isLoadingConfig = false;
       });
 

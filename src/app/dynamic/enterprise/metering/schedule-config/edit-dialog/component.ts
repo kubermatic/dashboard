@@ -31,12 +31,14 @@ export interface MeteringScheduleEditDialogConfig {
   scheduleName: string;
   schedule: string;
   interval: number;
+  retention: number;
 }
 
 enum Controls {
   Name = 'name',
   Schedule = 'schedule',
   Interval = 'interval',
+  Retention = 'retention',
 }
 
 @Component({
@@ -58,9 +60,9 @@ export class MeteringScheduleEditDialog implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Name]: this._builder.control(this.data.scheduleName, Validators.required),
-      [Controls.Schedule]: this._builder.control(this.data.schedule, Validators.required),
+      [Controls.Retention]: this._builder.control(this.data.retention, Validators.min(1)),
       [Controls.Interval]: this._builder.control(this.data.interval, [Validators.min(1), Validators.required]),
+      [Controls.Schedule]: this._builder.control(this.data.schedule, Validators.required),
     });
   }
 
@@ -81,9 +83,10 @@ export class MeteringScheduleEditDialog implements OnInit, OnDestroy {
 
   private _toMeteringScheduleConfiguration(): MeteringReportConfiguration {
     return {
-      name: this.form.get(Controls.Name).value,
+      name: this.data.scheduleName,
       schedule: this.form.get(Controls.Schedule).value,
       interval: this.form.get(Controls.Interval).value,
+      retention: this.form.get(Controls.Retention).value,
     };
   }
 }

@@ -42,15 +42,22 @@ END OF TERMS AND CONDITIONS
       <div class="content"
            fxLayout="row">
         <km-property>
-          <div key>
-            <span>Schedule</span>
+          <div key>Report Retention</div>
+          <div value>
+            {{ (retention) ? retention + ((retention === 1) ? ' day' : ' days') : 'unconstrained' }}
           </div>
-          <div value>{{schedule}}</div>
         </km-property>
 
         <km-property>
           <div key>Interval</div>
-          <div value>{{interval}} ({{interval===1 ? 'day' : 'days'}})</div>
+          <div value>{{interval}} {{interval===1 ? 'day' : 'days'}}</div>
+        </km-property>
+
+        <km-property>
+          <div key>
+            <span>Schedule</span>
+          </div>
+          <div value>{{schedule}}</div>
         </km-property>
       </div>
     </ng-container>

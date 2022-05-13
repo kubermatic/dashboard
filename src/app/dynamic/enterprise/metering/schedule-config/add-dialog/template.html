@@ -47,17 +47,23 @@ END OF TERMS AND CONDITIONS
                        fxLayoutGap="20px">
         <mat-radio-button [value]="ScheduleOption.Daily">
           <div class="km-radio-button-title">Daily</div>
-          <div class="km-radio-button-description">Create report every day at 01:00</div>
+          <div class="km-radio-button-description">
+            Create report every day at 01:00. The default report retention is set 30 days.
+          </div>
         </mat-radio-button>
 
         <mat-radio-button [value]="ScheduleOption.Weekly">
           <div class="km-radio-button-title">Weekly</div>
-          <div class="km-radio-button-description">Create report every week at 01:00 on Saturday</div>
+          <div class="km-radio-button-description">
+            Create report every week at 01:00 on Saturday. The default report retention is set to 90 days.
+          </div>
         </mat-radio-button>
 
         <mat-radio-button [value]="ScheduleOption.Monthly">
           <div class="km-radio-button-title">Monthly</div>
-          <div class="km-radio-button-description">Create report every month at 01:00 on 1st day of the month</div>
+          <div class="km-radio-button-description">
+            Create report every month at 01:00 on 1st day of the month. The default report retention is set to 365 days.
+          </div>
         </mat-radio-button>
 
         <mat-radio-button [value]="ScheduleOption.Custom">
@@ -72,6 +78,22 @@ END OF TERMS AND CONDITIONS
       <div *ngIf="form.get(controls.Group).value === ScheduleOption.Custom"
            fxLayout="column"
            fxLayoutGap="20px">
+
+        <km-number-stepper [formControlName]="controls.Retention"
+                           mode="errors"
+                           label="Report Retention (leave empty to keep reports forever)"
+                           hint="Defines how long reports should be kept. Leave empty to keep reports forever."
+                           min="1">
+        </km-number-stepper>
+
+        <km-number-stepper [formControlName]="controls.Interval"
+                           mode="errors"
+                           label="Report Scope"
+                           hint="Range of days captured in each report."
+                           min="1"
+                           required>
+        </km-number-stepper>
+
         <mat-form-field>
           <mat-label>Cron Expression</mat-label>
           <input [formControlName]="controls.Schedule"
@@ -84,14 +106,6 @@ END OF TERMS AND CONDITIONS
                target="_blank">here</a>.
           </mat-hint>
         </mat-form-field>
-
-        <km-number-stepper [formControlName]="controls.Interval"
-                           mode="errors"
-                           label="Report Scope"
-                           hint="Range of days captured in each report."
-                           min="1"
-                           required>
-        </km-number-stepper>
       </div>
     </form>
   </mat-dialog-content>

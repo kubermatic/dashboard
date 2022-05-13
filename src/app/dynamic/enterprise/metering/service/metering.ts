@@ -72,7 +72,11 @@ export class MeteringService {
 
   updateScheduleConfiguration(configuration: MeteringReportConfiguration): Observable<any> {
     const url = `${this._restRoot}/admin/metering/configurations/reports/${configuration.name}`;
-    return this._http.put(url, {schedule: configuration.schedule, interval: configuration.interval});
+    return this._http.put(url, {
+      schedule: configuration.schedule,
+      interval: configuration.interval,
+      retention: configuration.retention,
+    });
   }
 
   deleteScheduleConfiguration(name: string): Observable<any> {

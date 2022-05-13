@@ -141,6 +141,10 @@ export class MeteringReportConfiguration {
   schedule: string;
   // Interval defines the number of days consulted in the metering report.
   interval: number;
+  // Retention defines the number of days after which reports are queued for removal. The default value of "0" does not
+  // create any lifecycle rule which results in keeping reports forever. Please note that this functionality works only
+  // for object storage that supports an object lifecycle management mechanism.
+  retention?: number;
 }
 
 export class MLA {
