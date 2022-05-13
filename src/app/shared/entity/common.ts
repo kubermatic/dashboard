@@ -55,6 +55,7 @@ export enum View {
 
 // IMPORTANT: names in 'ViewDisplayName' have to be in sync with names in 'View'
 export enum ViewDisplayName {
+  Overview = 'Overview',
   Clusters = 'Clusters',
   ClusterTemplates = 'Cluster Templates',
   Projects = 'Projects',
