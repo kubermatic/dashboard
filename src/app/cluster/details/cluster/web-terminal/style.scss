@@ -1,0 +1,19 @@
+#terminal-container {
+  will-change: transform;
+  background-color: white;
+  border-top: 1px solid #333333;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 3px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  top: 114vh;
+  width: 100%;
+  z-index: 1000;
+  opacity: 1.08;
+  transition: transform 750ms ease-out 0s;
+  transform: translate(0px, -67vh);
+}

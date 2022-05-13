@@ -67,6 +67,10 @@ export class WebTerminalComponent implements OnInit, AfterViewInit {
       cursorBlink: true,
       convertEol: true,
       rendererType: 'dom',
+      theme: {
+        foreground: '#a7aaac',
+        background: '#2b3035'
+      }
     });
 
     const containerElement = this.terminalRef.nativeElement;

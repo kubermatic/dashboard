@@ -28,6 +28,12 @@ mat-sidenav-container {
   position: absolute;
   top: variables.$toolbar-height;
   width: 100%;
+
+  // Note:
+  // WebTerminal is hidden under z-index mat-sidenav
+  & mat-sidenav.mat-drawer.mat-drawer-side {
+    z-index: 1
+  }
 }
 
 .mat-input-wrapper {
