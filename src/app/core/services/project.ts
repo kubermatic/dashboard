@@ -95,7 +95,7 @@ export class ProjectService {
   selectProject(project: Project): Promise<boolean> {
     if (project?.status === ProjectStatus.Active) {
       this.onProjectChange.emit(project);
-      return this._router.navigate([`/projects/${project.id}/clusters`]);
+      return this._router.navigate([`/projects/${project.id}/overview`]);
     }
 
     return this._router.navigate(['/projects']);

@@ -74,6 +74,7 @@ export class Cluster {
   labels?: object;
   inheritedLabels?: object;
   credential?: string;
+  machineDeploymentCount?: number;
 
   static getProvider(cluster: Cluster): Provider {
     return Object.values(Provider)

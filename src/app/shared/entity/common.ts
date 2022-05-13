@@ -39,6 +39,7 @@ export type ResourceLabelMap = {
 };
 
 export enum View {
+  Overview = 'overview',
   Clusters = 'clusters',
   ClusterTemplates = 'clustertemplates',
   Projects = 'projects',
