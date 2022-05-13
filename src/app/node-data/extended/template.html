@@ -37,4 +37,8 @@ limitations under the License.
   <km-openstack-extended-node-data *ngSwitchCase="Provider.OPENSTACK"
                                    [formControl]="form.get(Control.ProviderExtended)">
   </km-openstack-extended-node-data>
+
+  <km-sphere-extended-node-data *ngSwitchCase="Provider.VSPHERE"
+                                [formControl]="form.get(Control.ProviderExtended)">
+  </km-sphere-extended-node-data>
 </form>

@@ -98,11 +98,11 @@ describe('NodeComponent', () => {
 
   it('should display tags', () => {
     const tags = {test: 'test', tag: 'tag'};
-    expect(component.displayTags(tags)).toBeTruthy();
+    expect(component.hasTags(tags)).toBeTruthy();
   });
 
   it('should not display tags', () => {
     const tags = {};
-    expect(component.displayTags(tags)).toBeFalsy();
+    expect(component.hasTags(tags)).toBeFalsy();
   });
 });

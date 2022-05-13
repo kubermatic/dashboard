@@ -43,6 +43,7 @@ import {ExtendedNodeDataComponent} from './extended/component';
 import {AlibabaExtendedNodeDataComponent} from './extended/provider/alibaba/component';
 import {AWSExtendedNodeDataComponent} from './extended/provider/aws/component';
 import {AzureExtendedNodeDataComponent} from './extended/provider/azure/component';
+import {VSphereExtendedNodeDataComponent} from './extended/provider/vsphere/component';
 import {DigitalOceanExtendedNodeDataComponent} from './extended/provider/digitalocean/component';
 import {GCPExtendedNodeDataComponent} from './extended/provider/gcp/component';
 import {OpenstackExtendedNodeDataComponent} from './extended/provider/openstack/component';
@@ -65,6 +66,7 @@ const components = [
   EquinixExtendedNodeDataComponent,
   AzureBasicNodeDataComponent,
   AzureExtendedNodeDataComponent,
+  VSphereExtendedNodeDataComponent,
   GCPBasicNodeDataComponent,
   GCPExtendedNodeDataComponent,
   OpenstackBasicNodeDataComponent,
