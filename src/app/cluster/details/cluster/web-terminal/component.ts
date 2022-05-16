@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Subject} from 'rxjs';
 import {Terminal} from 'xterm';
@@ -26,8 +26,10 @@ export class WebTerminalComponent implements OnInit, AfterViewInit {
   clusterId: string;
 
   @Input() cluster: Cluster;
+  @Output() closeTerminal = new EventEmitter<boolean>();
 
   @ViewChild('terminal', {static: true}) terminalRef: ElementRef;
+
   private readonly _unsubscribe = new Subject<void>();
 
   constructor(private readonly _activatedRoute: ActivatedRoute, private readonly websocketService: WebsocketService) {}
@@ -87,6 +89,10 @@ export class WebTerminalComponent implements OnInit, AfterViewInit {
 
     // Event listeners binding
     this.terminal.onData(this.onTerminalSendString.bind(this));
+  }
+
+  onClose($event: boolean) {
+    this.closeTerminal.emit($event);
   }
 
   private handleWebSocketConnectionMessages(frame: ITerminalFrame): void {

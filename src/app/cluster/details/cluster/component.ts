@@ -583,6 +583,12 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     this.showTerminal = !this.showTerminal;
   }
 
+  onCloseTerminal(isClosed: boolean) {
+    if (isClosed) {
+      this.toggleTerminal();
+    }
+  }
+
   private _canReloadVersions(): boolean {
     return (
       this.cluster &&

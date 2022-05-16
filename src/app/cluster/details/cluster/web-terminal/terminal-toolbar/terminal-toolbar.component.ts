@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'km-terminal-toolbar',
@@ -6,7 +6,13 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./terminal-toolbar.component.scss'],
 })
 export class TerminalToolbarComponent implements OnInit {
+  @Output() close = new EventEmitter<boolean>();
+
   constructor() {}
 
   ngOnInit(): void {}
+
+  onClose() {
+    this.close.emit(true);
+  }
 }

@@ -1,4 +1,5 @@
 <div id="terminal-container">
-  <km-terminal-toolbar></km-terminal-toolbar>
-  <div #terminal content></div>
+  <km-terminal-toolbar (close)="onClose($event)"></km-terminal-toolbar>
+  <div #terminal
+       content></div>
 </div>
