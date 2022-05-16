@@ -28,6 +28,8 @@ export class WebTerminalComponent implements OnInit, AfterViewInit {
   clusterId: string;
 
   @Input() cluster: Cluster;
+
+  @Output() openInNewTab = new EventEmitter<boolean>();
   @Output() closeTerminal = new EventEmitter<boolean>();
 
   @ViewChild('terminal', {static: true}) terminalRef: ElementRef;
@@ -106,6 +108,10 @@ export class WebTerminalComponent implements OnInit, AfterViewInit {
 
   onClose($event: boolean) {
     this.closeTerminal.emit($event);
+  }
+
+  onOpenInNewTab($event: boolean) {
+    this.openInNewTab.emit($event);
   }
 
   private handleWebSocketConnectionMessages(frame: ITerminalFrame): void {

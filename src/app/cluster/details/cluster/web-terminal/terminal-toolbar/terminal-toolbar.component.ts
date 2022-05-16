@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output,} from '@angular/core';
 
 @Component({
   selector: 'km-terminal-toolbar',
@@ -7,6 +7,7 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 })
 export class TerminalToolbarComponent implements OnInit {
   @Output() close = new EventEmitter<boolean>();
+  @Output() openInNewTab = new EventEmitter<boolean>();
 
   constructor() {}
 
@@ -14,5 +15,9 @@ export class TerminalToolbarComponent implements OnInit {
 
   onClose() {
     this.close.emit(true);
+  }
+
+  onOpenInNewTab() {
+    this.openInNewTab.next(true);
   }
 }

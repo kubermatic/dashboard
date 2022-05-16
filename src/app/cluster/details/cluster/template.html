@@ -508,5 +508,6 @@ limitations under the License.
 
 <ng-container *ngIf="showTerminal && cluster">
   <km-web-terminal [cluster]="cluster"
+                   (openInNewTab)="onOpenInNewTab($event)"
                    (closeTerminal)="onCloseTerminal($event)"></km-web-terminal>
 </ng-container>

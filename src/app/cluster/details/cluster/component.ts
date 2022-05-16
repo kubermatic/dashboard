@@ -589,6 +589,12 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
+  onOpenInNewTab(isOpenInNewTab: boolean) {
+    if (isOpenInNewTab) {
+      this._router.navigate(['terminal'], { relativeTo: this._route });
+    }
+  }
+
   private _canReloadVersions(): boolean {
     return (
       this.cluster &&
