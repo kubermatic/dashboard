@@ -1,6 +1,7 @@
 import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 import {Terminal} from 'xterm';
 import {FitAddon} from 'xterm-addon-fit';
 import {Cluster} from '@shared/entity/cluster';
@@ -46,9 +47,11 @@ export class WebTerminalComponent implements OnInit, AfterViewInit {
     this.projectId = this._activatedRoute.snapshot.paramMap.get(PathParam.ProjectID);
     this.clusterId = this._activatedRoute.snapshot.paramMap.get(PathParam.ClusterID);
 
-    this.websocketService.messages$.subscribe((data: ITerminalFrame) => {
-      this.handleWebSocketConnectionMessages(data);
-    });
+    this.websocketService.messages$
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe((data: ITerminalFrame) => {
+        this.handleWebSocketConnectionMessages(data);
+      });
 
     this.websocketService.getWebSocketOnConnectObservable$()
       .subscribe((isConnected: boolean) => {
