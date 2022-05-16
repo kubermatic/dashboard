@@ -7,6 +7,7 @@ import {Cluster} from '@shared/entity/cluster';
 import {WebsocketService} from '@core/services/websocket';
 import {PathParam} from '@core/services/params';
 import {ITerminalFrame} from '@shared/model/Terminal';
+import {NotificationService} from '@core/services/notification';
 
 enum Operations {
   stdout = 'stdout',
@@ -32,7 +33,9 @@ export class WebTerminalComponent implements OnInit, AfterViewInit {
 
   private readonly _unsubscribe = new Subject<void>();
 
-  constructor(private readonly _activatedRoute: ActivatedRoute, private readonly websocketService: WebsocketService) {}
+  constructor(private readonly _activatedRoute: ActivatedRoute,
+              private readonly _notificationService: NotificationService,
+              private readonly websocketService: WebsocketService) {}
 
   ngOnInit(): void {
     this.initSubscriptions();
@@ -46,6 +49,13 @@ export class WebTerminalComponent implements OnInit, AfterViewInit {
     this.websocketService.messages$.subscribe((data: ITerminalFrame) => {
       this.handleWebSocketConnectionMessages(data);
     });
+
+    this.websocketService.getWebSocketOnConnectObservable$()
+      .subscribe((isConnected: boolean) => {
+        if (isConnected) {
+          this._notificationService.success(`Successfully connected to cloud shell terminal`);
+        }
+      });
   }
 
   ngOnDestroy(): void {

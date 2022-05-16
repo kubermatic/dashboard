@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {webSocket, WebSocketSubject} from 'rxjs/webSocket';
 import {catchError, switchAll, tap} from 'rxjs/operators';
-import {EMPTY, Subject, throwError} from 'rxjs';
+import {BehaviorSubject, EMPTY, Observable, Subject, throwError} from 'rxjs';
 import {environment} from '@environments/environment';
 import {ITerminalFrame} from '@shared/model/Terminal';
 
@@ -12,6 +12,8 @@ export class WebsocketService {
   private readonly _wsRoot = environment.wsRoot;
 
   private _socket$: WebSocketSubject<any>;
+  private _onConnect: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private _onClose: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   private _messagesSubject$ = new Subject();
 
   public messages$ = this._messagesSubject$.pipe(
@@ -45,17 +47,31 @@ export class WebsocketService {
     this._socket$ = null;
   }
 
+  getWebSocketOnConnectObservable$(): Observable<boolean> {
+    return this._onConnect.asObservable();
+  }
+
+  // Todo: Will be used status toolbar for Reconnect functionality
+  getWebSocketOnCloseObservable$(): Observable<boolean> {
+    return this._onClose.asObservable();
+  }
+
+
   private getNewWebSocket(url) {
     return webSocket({
       url: url,
       openObserver: {
-        // eslint-disable-next-line no-console
-        next: _ => console.log('[WebSocketService]: connection ok'),
+        next: _ => {
+          // eslint-disable-next-line no-console
+          console.log('[WebSocketService]: connection ok');
+          this._onConnect.next(true);
+        },
       },
       closeObserver: {
         next: () => {
           // eslint-disable-next-line no-console
           console.log('[WebSocketService]: connection closed');
+          this._onClose.next(true);
         },
       },
     });
