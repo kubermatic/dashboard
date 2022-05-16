@@ -80,16 +80,16 @@ END OF TERMS AND CONDITIONS
            fxLayoutGap="20px">
 
         <km-number-stepper [formControlName]="controls.Retention"
-                           mode="errors"
-                           label="Report is deleted after (days)"
-                           hint="Defines how long reports should be kept. Leave empty to keep reports forever."
+                           mode="all"
+                           label="Report Retention"
+                           hint="Number of days each report is saved, leave the field empty to store reports forever."
                            min="1">
         </km-number-stepper>
 
         <km-number-stepper [formControlName]="controls.Interval"
-                           mode="errors"
+                           mode="all"
                            label="Report Scope"
-                           hint="Range of days captured in each report."
+                           hint="Number of days captured in each report."
                            min="1"
                            required>
         </km-number-stepper>
