@@ -48,21 +48,21 @@ END OF TERMS AND CONDITIONS
         <mat-radio-button [value]="ScheduleOption.Daily">
           <div class="km-radio-button-title">Daily</div>
           <div class="km-radio-button-description">
-            Create report every day at 01:00. The default report retention is set 30 days.
+            Create a report every day at 01:00. Each report will be saved for 30 days and then automatically deleted.
           </div>
         </mat-radio-button>
 
         <mat-radio-button [value]="ScheduleOption.Weekly">
           <div class="km-radio-button-title">Weekly</div>
           <div class="km-radio-button-description">
-            Create report every week at 01:00 on Saturday. The default report retention is set to 90 days.
+            Create a report every week at 01:00 on Saturday. Each report will be saved for 90 days and then automatically deleted.
           </div>
         </mat-radio-button>
 
         <mat-radio-button [value]="ScheduleOption.Monthly">
           <div class="km-radio-button-title">Monthly</div>
           <div class="km-radio-button-description">
-            Create report every month at 01:00 on 1st day of the month. The default report retention is set to 365 days.
+            Create a report every month at 01:00 on 1st day of the month. Each report will be saved for a year (365 days) and then automatically deleted.
           </div>
         </mat-radio-button>
 
@@ -81,7 +81,7 @@ END OF TERMS AND CONDITIONS
 
         <km-number-stepper [formControlName]="controls.Retention"
                            mode="errors"
-                           label="Report Retention (leave empty to keep reports forever)"
+                           label="Report is deleted after (days)"
                            hint="Defines how long reports should be kept. Leave empty to keep reports forever."
                            min="1">
         </km-number-stepper>
