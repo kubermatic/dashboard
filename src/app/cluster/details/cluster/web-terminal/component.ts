@@ -42,7 +42,6 @@ export class WebTerminalComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.initSubscriptions();
-    this.initTerminal();
   }
 
   initSubscriptions() {
@@ -70,6 +69,7 @@ export class WebTerminalComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.initTerminal();
     this.websocketService.connect(`projects/${this.projectId}/clusters/${this.clusterId}/terminal`);
   }
 
