@@ -15,9 +15,15 @@
   <div fxFlex
        fxLayout="row"
        fxLayoutAlign="end center">
+
+    <button mat-icon-button
+            matTooltip="Open in new tab"
+            (click)="onOpenInNewTab()">
+      <i class="km-icon-close km-icon-external-link"></i>
+    </button>
     <button mat-icon-button
             matTooltip="Close terminal"
-            (click)="onClose()">
+            (click)="onCloseTerminal()">
       <i class="km-icon-close km-pointer"></i>
     </button>
   </div>
