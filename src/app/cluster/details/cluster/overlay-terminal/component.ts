@@ -1,13 +1,13 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {Terminal} from 'xterm';
 import {Cluster} from '@shared/entity/cluster';
 
 @Component({
-  selector: 'km-web-terminal',
+  selector: 'km-overlay-terminal',
   templateUrl: './template.html',
-  styleUrls: [],
+  styleUrls: ['./style.scss'],
 })
-export class WebTerminalComponent implements OnInit {
+export class OverlayTerminalComponent {
   terminal: Terminal;
   projectId: string;
   clusterId: string;
@@ -15,11 +15,9 @@ export class WebTerminalComponent implements OnInit {
   @Input() cluster: Cluster;
   @Output() openInNewTab = new EventEmitter<boolean>();
   @Output() closeTerminal = new EventEmitter<boolean>();
+  @ViewChild('terminal', { static: true }) terminalRef: ElementRef;
 
   constructor() {}
-
-  ngOnInit(): void {
-  }
 
   onCloseTerminal($event: boolean) {
     this.closeTerminal.emit($event);
