@@ -78,10 +78,10 @@ export class ClusterService {
     this._providerSettingsPatch.next(patch);
   }
 
-  clusters(projectID: string): Observable<Cluster[]> {
+  clusters(projectID: string, showMachineDeploymentCount = false): Observable<Cluster[]> {
     if (!this._clusters$.get(projectID)) {
       const clusters$ = merge(this._onClustersUpdate, this._refreshTimer$).pipe(
-        switchMapTo(this._getClusters(projectID)),
+        switchMapTo(this._getClusters(projectID, showMachineDeploymentCount)),
         shareReplay({refCount: true, bufferSize: 1})
       );
       this._clusters$.set(projectID, clusters$);
@@ -364,8 +364,8 @@ export class ClusterService {
     return this._http.delete<void>(url);
   }
 
-  private _getClusters(projectID: string): Observable<Cluster[]> {
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters`;
+  private _getClusters(projectID: string, showMachineDeploymentCount = false): Observable<Cluster[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters?show_dm_count=${showMachineDeploymentCount}`;
     return this._http.get<Cluster[]>(url).pipe(catchError(() => of<Cluster[]>()));
   }
 

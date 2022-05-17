@@ -247,6 +247,12 @@ export class VSphereNodeSpec {
   memory: number;
   template: string;
   diskSizeGB?: number;
+  tags?: VSphereTag[];
+}
+
+export class VSphereTag {
+  name: string;
+  description: string;
 }
 
 export function getDefaultNodeProviderSpec(provider: string): object {

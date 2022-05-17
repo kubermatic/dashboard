@@ -48,7 +48,7 @@ export class ClusterPanelComponent {
 
   constructor(private readonly _router: Router, private readonly _params: ParamsService) {}
 
-  navigate(): void {
+  goBack(): void {
     if (this._isExternalCluster) {
       this._router.navigate(['/projects/' + this.projectID + '/clusters/external/' + this.cluster.id]);
       return;

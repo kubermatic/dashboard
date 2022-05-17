@@ -14,19 +14,22 @@
 
 import {Page, PageOptions} from '@kmtypes';
 import {Pages} from '@pages/v2';
-import {Interface} from './interface/page';
+import {DynamicDatacenters} from '@pages/v2/settings/admin/dynamic-datacenters/page';
 import {Defaults} from './defaults/page';
+import {Interface} from './interface/page';
 
 export class AdminSettings extends PageOptions implements Page {
   readonly Elements = new Elements();
   readonly Defaults: Defaults;
   readonly Interface: Interface;
+  readonly DynamicDatacenters: DynamicDatacenters;
 
   constructor(isAPIMocked: boolean) {
     super();
 
     this.Defaults = new Defaults(isAPIMocked);
     this.Interface = new Interface(isAPIMocked);
+    this.DynamicDatacenters = new DynamicDatacenters(isAPIMocked);
   }
 
   visit(): void {

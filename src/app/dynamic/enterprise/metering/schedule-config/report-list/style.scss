@@ -18,6 +18,12 @@
 //
 // END OF TERMS AND CONDITIONS
 
+@use 'variables';
+
+.action-button {
+  margin: variables.$content-padding 0;
+}
+
 .content {
   padding: 0 30px;
 }

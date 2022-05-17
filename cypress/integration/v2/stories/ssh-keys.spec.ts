@@ -32,6 +32,7 @@ describe('SSH Key Management Story', () => {
 
   it('should create a new project', () => {
     Pages.Projects.create(projectName);
+    Pages.Projects.Buttons.projectViewType('projectstable').should(Condition.Exist);
     Pages.Projects.Elements.projectItem(projectName).should(Condition.Exist);
     Pages.Projects.Elements.projectItemIcon(projectName, 'disabled').should(Condition.NotExist);
     Pages.Projects.Elements.projectItemIcon(projectName, 'running').should(Condition.Exist);
@@ -39,7 +40,7 @@ describe('SSH Key Management Story', () => {
 
   it('should select project', () => {
     Pages.Projects.select(projectName);
-    Pages.expect(View.Clusters.Default);
+    Pages.expect(View.Overview.Default);
   });
 
   it('should go to the ssh keys page', () => {

@@ -29,6 +29,10 @@ export abstract class PageOptions {
     return cy.contains(match, {timeout: this._elementLoadTimeout});
   }
 
+  protected _getContains(selector: string, match: string, timeout = this._elementLoadTimeout): Cypress.Chainable {
+    return cy.get(selector, {timeout}).contains(match, {timeout: this._elementLoadTimeout});
+  }
+
   constructor(
     protected readonly _elementLoadTimeout = Config.defaultElementLoadTimeout,
     protected readonly _pageLoadTimeout = Config.defaultPageLoadTimeout
@@ -84,4 +88,8 @@ export interface AdminSettingsDefaultsStrategy {
 
 export interface AdminSettingsInterfaceStrategy {
   onSettingsChange(settings: Partial<SettingsSpec>): void;
+}
+
+export interface AdminSettingsDatacentersStrategy {
+  onDatacenterDelete(): void;
 }

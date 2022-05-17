@@ -12,10 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export * from './pages';
-export * from './projects/page';
-export * from './serviceaccounts/page';
-export * from './clusters/proxy';
-export * from './sshkeys/page';
-export * from './settings/admin/page';
-export * from './settings/admin/dynamic-datacenters/page';
+import {NodeDataService} from '../service';
+import {VSphereTag} from '@shared/entity/node';
+
+export class NodeDataVSphereProvider {
+  constructor(private readonly _nodeDataService: NodeDataService) {}
+
+  set tags(tags: VSphereTag[]) {
+    delete this._nodeDataService.nodeData.spec.cloud.vsphere.tags;
+    this._nodeDataService.nodeData.spec.cloud.vsphere.tags = tags;
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
+  }
+}

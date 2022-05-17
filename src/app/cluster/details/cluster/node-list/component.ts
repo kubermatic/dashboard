@@ -25,7 +25,7 @@ import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialo
 import {Cluster} from '@shared/entity/cluster';
 import {Member} from '@shared/entity/member';
 import {NodeMetrics} from '@shared/entity/metrics';
-import {getOperatingSystem, getOperatingSystemLogoClass, Node} from '@shared/entity/node';
+import {getOperatingSystem, getOperatingSystemLogoClass, Node, VSphereTag} from '@shared/entity/node';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import {NodeUtils} from '@shared/utils/node';
@@ -34,6 +34,7 @@ import * as semver from 'semver';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {getNodeHealthStatus, HealthStatus} from '@shared/utils/health-status';
+import {convertArrayToObject} from '@shared/utils/common';
 
 enum Column {
   stateArrow = 'stateArrow',
@@ -191,8 +192,20 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
     return node.id.replace('machine-', '');
   }
 
-  displayTags(tags: object): boolean {
-    return !!tags && Object.keys(tags).length > 0;
+  hasTags(tags: object | Array<any>): boolean {
+    if (Array.isArray(tags) && tags.length > 0) {
+      return true;
+    } else if (typeof tags === 'object') {
+      return !!tags && Object.keys(tags).length > 0;
+    }
+    return false;
+  }
+
+  // Note:
+  // VSphereNodeSpec has list of tags of type VSphereTag which requires explicit
+  // conversion array into object form inorder to pass onto `km-labels` component as Input
+  convertVSphereTagsIntoObject(tags: Array<VSphereTag>): VSphereTag | {} {
+    return convertArrayToObject(tags, 'name', 'description');
   }
 
   toggleNodeItem(element: Node): void {

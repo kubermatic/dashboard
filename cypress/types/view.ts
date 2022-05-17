@@ -12,6 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+enum Overview {
+  Default = 'overview',
+}
+
 enum Clusters {
   Default = 'clusters',
   External = 'clusters/external',
@@ -60,6 +64,7 @@ enum Root {
 
 export class View {
   static readonly Root = Root;
+  static readonly Overview = Overview;
   static readonly Clusters = Clusters;
   static readonly ClusterTemplates = ClusterTemplates;
   static readonly Projects = Projects;

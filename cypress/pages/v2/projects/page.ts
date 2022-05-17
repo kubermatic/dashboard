@@ -52,7 +52,7 @@ export class Projects extends PageOptions implements Page {
     this.Elements.projectItemIcon(projectName, 'disabled').should(Condition.NotExist);
     this.Elements.projectItemIcon(projectName, 'running').should(Condition.Exist);
     this.select(projectName);
-    Pages.expect(View.Clusters.Default);
+    Pages.expect(View.Overview.Default);
   }
 
   create(name: string): void {
@@ -122,5 +122,9 @@ class Buttons extends PageOptions {
 
   get addDialogConfirm(): Cypress.Chainable {
     return this._get('#km-add-project-dialog-save');
+  }
+
+  projectViewType(type: 'projectscard' | 'projectstable'): Cypress.Chainable {
+    return this._get(`mat-button-toggle[value=${type}].mat-button-toggle-checked`);
   }
 }

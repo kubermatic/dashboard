@@ -34,7 +34,7 @@ export class ClustersOverviewComponent implements OnInit, OnChanges {
   @Input() clusterHealth: Health[] = [];
   @Input() externalClusters: ExternalCluster[] = [];
   @Input() externalClustersEnabled = false;
-  clusterColumns: string[] = ['status', 'name'];
+  clusterColumns: string[] = ['status', 'name', 'machineDeployments'];
   clusterDataSource = new MatTableDataSource<Cluster>();
   externalClusterColumns: string[] = ['status', 'name'];
   externalClusterDataSource = new MatTableDataSource<ExternalCluster>();

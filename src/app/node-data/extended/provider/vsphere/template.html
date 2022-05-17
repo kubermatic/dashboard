@@ -1,5 +1,5 @@
 <!--
-Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,14 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<mat-drawer-container autosize>
-  <mat-drawer opened="true"
-              disableClose="true"
-              mode="side"
-              class="drawer">
-    <km-admin-sidenav></km-admin-sidenav>
-  </mat-drawer>
-  <div class="content">
-    <router-outlet></router-outlet>
-  </div>
-</mat-drawer-container>
+<form [formGroup]="form"
+      fxLayout="column"
+      fxLayoutGap="8px">
+  <km-label-form title="Provider Tags"
+                 keyName="Name"
+                 valueName="Description"
+                 [labels]="tags"
+                 [formControlName]="controls.Tags"
+                 (labelsChange)="onTagsChange($event)"></km-label-form>
+</form>

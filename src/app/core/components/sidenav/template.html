@@ -17,6 +17,18 @@ limitations under the License.
 <div class="km-sidenav"
      fxLayout="column"
      [ngClass]="isSidenavCollapsed() ? 'collapse-sidenav' : ''">
+  <div [matTooltip]="getTooltip(view.Overview)"
+       [ngClass]="getMenuItemClass(view.Overview)"
+       class="menu-item">
+    <a id="km-nav-item-overview"
+       fxLayoutAlign=" center"
+       [routerLink]="getRouterLink(view.Overview)"
+       [ngClass]="getLinkClass(view.Overview)">
+      <i class="km-icon-projects-card"></i>
+      <span *ngIf="!isSidenavCollapsed()">Project Overview</span>
+    </a>
+  </div>
+
   <div [matTooltip]="getTooltip(view.Clusters)"
        [ngClass]="getMenuItemClass(view.Clusters)"
        class="menu-item">
@@ -110,7 +122,7 @@ limitations under the License.
     <a id="km-nav-item-projects"
        fxLayoutAlign="center center"
        routerLink="/projects">
-      <i class="km-icon-arrow-left"></i>
+      <i class="km-icon-mask km-icon-back"></i>
       <span *ngIf="!isSidenavCollapsed()">back to projects</span>
     </a>
   </div>

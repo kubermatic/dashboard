@@ -35,6 +35,7 @@ describe('Admin Settings - Defaults Story', () => {
 
   it('should create a new project', () => {
     Pages.Projects.create(projectName);
+    Pages.Projects.Buttons.projectViewType('projectstable').should(Condition.Exist);
     Pages.Projects.Elements.projectItem(projectName).should(Condition.Exist);
     Pages.Projects.Elements.projectItemIcon(projectName, 'disabled').should(Condition.NotExist);
     Pages.Projects.Elements.projectItemIcon(projectName, 'running').should(Condition.Exist);
@@ -59,6 +60,12 @@ describe('Admin Settings - Defaults Story', () => {
 
   it('should go to projects view and select project', () => {
     Pages.Projects.open(projectName);
+    Pages.expect(View.Overview.Default);
+  });
+
+  it('should go to the clusters page', () => {
+    Pages.Clusters.List.visit();
+    Pages.expect(View.Clusters.Default);
   });
 
   it('should make sure connect cluster button is visible', () => {
@@ -125,7 +132,10 @@ describe('Admin Settings - Defaults Story', () => {
 
   it('should go to clusters view and make sure external clusters are not available', () => {
     Pages.Projects.open(projectName);
-    Pages.Clusters.List.Buttons.externalClustersTab.should(Condition.NotExist);
+    Pages.expect(View.Overview.Default);
+    Pages.Clusters.List.visit();
+    Pages.expect(View.Clusters.Default);
+    Pages.Clusters.List.Buttons.anyTab.should(Condition.NotExist);
   });
 
   it('should go to cluster details page and make sure admin settings are reflected', () => {

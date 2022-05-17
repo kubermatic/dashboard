@@ -31,8 +31,8 @@ describe('Service Accounts Story', () => {
 
   it('should create a new project', () => {
     Pages.Projects.create(projectName);
+    Pages.Projects.Buttons.projectViewType('projectstable').should(Condition.Exist);
     Pages.Projects.Elements.projectItem(projectName).should(Condition.Exist);
-
     // TODO: extract icon statuses to enum
     Pages.Projects.Elements.projectItemIcon(projectName, 'disabled').should(Condition.NotExist);
     Pages.Projects.Elements.projectItemIcon(projectName, 'running').should(Condition.Exist);
@@ -40,7 +40,7 @@ describe('Service Accounts Story', () => {
 
   it('should select project', () => {
     Pages.Projects.select(projectName);
-    Pages.expect(View.Clusters.Default);
+    Pages.expect(View.Overview.Default);
   });
 
   it('should go to the service accounts page', () => {

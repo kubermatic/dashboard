@@ -64,3 +64,15 @@ export function getIconClassForButton(type: string): string {
       return '';
   }
 }
+
+export function convertArrayToObject<T>(data: T[], keyName: string, valueName: string): T | object {
+  if (!Array.isArray(data) || data.length === 0) {
+    return {};
+  }
+  return data.reduce((prev, next) => {
+    return {
+      ...prev,
+      [next[keyName]]: next[valueName],
+    };
+  }, {});
+}

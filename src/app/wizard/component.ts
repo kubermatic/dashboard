@@ -133,6 +133,24 @@ export class WizardComponent implements OnInit, OnDestroy {
     this._router.navigate([`/projects/${this.project.id}/clusters/${cluster.id}`]);
   }
 
+  onSaveClusterTemplate(): void {
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        cluster: this._clusterSpecService.cluster,
+        nodeData: this._nodeDataService.nodeData,
+        sshKeys: this._clusterSpecService.sshKeys,
+        projectID: this.project.id,
+      },
+    };
+
+    this._matDialog
+      .open(SaveClusterTemplateDialogComponent, dialogConfig)
+      .afterClosed()
+      .pipe(filter(ct => !!ct))
+      .pipe(take(1))
+      .subscribe(ct => this._notificationService.success(`Saved the ${ct.name} cluster template`));
+  }
+
   private _getCreateClusterModel(cluster: Cluster, nodeData: NodeData): CreateClusterModel {
     return {
       cluster: {
@@ -156,23 +174,5 @@ export class WizardComponent implements OnInit, OnDestroy {
     const controls = {};
     steps.forEach(step => (controls[step.name] = this._formBuilder.control('')));
     this.form = this._formBuilder.group(controls);
-  }
-
-  saveAsTemplate(): void {
-    const dialogConfig: MatDialogConfig = {
-      data: {
-        cluster: this._clusterSpecService.cluster,
-        nodeData: this._nodeDataService.nodeData,
-        sshKeys: this._clusterSpecService.sshKeys,
-        projectID: this.project.id,
-      },
-    };
-
-    this._matDialog
-      .open(SaveClusterTemplateDialogComponent, dialogConfig)
-      .afterClosed()
-      .pipe(filter(ct => !!ct))
-      .pipe(take(1))
-      .subscribe(ct => this._notificationService.success(`Saved the ${ct.name} cluster template`));
   }
 }

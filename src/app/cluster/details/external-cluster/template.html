@@ -18,6 +18,13 @@ limitations under the License.
        class="cluster-detail-actions">
     <div fxFlex
          fxLayoutAlign="end center">
+      <button mat-flat-button
+              color="tertiary"
+              (click)="goBack()"
+              fxLayoutAlign="center center"
+              matTooltip="Go back to the cluster list">
+        <i class="km-icon-arrow-left"></i>
+      </button>
       <button id="km-delete-cluster-btn"
               mat-flat-button
               color="tertiary"
