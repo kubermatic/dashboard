@@ -148,6 +148,6 @@ class Buttons extends PageOptions {
   }
 
   get create(): Cypress.Chainable {
-    return this._get('#km-button-buttonClick');
+    return this._get('#km-wizard-create-btn');
   }
 }

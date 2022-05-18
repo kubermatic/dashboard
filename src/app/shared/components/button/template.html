@@ -15,8 +15,8 @@ limitations under the License.
 -->
 
 <button *ngIf="!iconButton"
-        id="km-button-buttonClick"
         mat-flat-button
+        [id]="this.buttonId"
         [color]="this.color"
         type="button"
         fxLayout="row"
@@ -30,6 +30,7 @@ limitations under the License.
 </button>
 <button *ngIf="iconButton"
         mat-icon-button
+        [id]="this.id"
         [color]="this.color"
         type="button"
         fxLayout="row"
