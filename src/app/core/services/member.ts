@@ -68,8 +68,8 @@ export class MemberService {
    * @param member    member
    * @param projectID ID of a project
    */
-  remove(member: Member, projectID: string): Observable<any> {
+  remove(member: Member, projectID: string): Observable<Member> {
     const url = `${this._restRoot}/projects/${projectID}/users/${member.id}`;
-    return this._httpClient.delete(url);
+    return this._httpClient.delete<Member>(url);
   }
 }

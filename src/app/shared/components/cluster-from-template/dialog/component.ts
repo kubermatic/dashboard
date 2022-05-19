@@ -17,7 +17,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import {ClusterTemplateService} from '@core/services/cluster-templates';
 import {NotificationService} from '@core/services/notification';
-import {ClusterTemplate} from '@shared/entity/cluster-template';
+import {ClusterTemplate, ClusterTemplateInstance} from '@shared/entity/cluster-template';
 import {Observable, Subject} from 'rxjs';
 import {filter, take, takeUntil} from 'rxjs/operators';
 
@@ -59,7 +59,7 @@ export class ClusterFromTemplateDialogComponent implements OnInit, OnDestroy {
     return this._clusterTemplateService.isClusterStepValid;
   }
 
-  getObservable(): Observable<any> {
+  getObservable(): Observable<ClusterTemplateInstance> {
     return this._clusterTemplateService
       .createInstances(this.replicas, this.data.projectID, this.data.template.id)
       .pipe(take(1));
