@@ -56,12 +56,12 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();
   private _sshKeysUpdate = new Subject<void>();
 
-  private get _sshKeyUpdateObserver(): Observer<void> {
+  private get _sshKeyUpdateObserver(): Observer<SSHKey> {
     return {
       next: _ => this._sshKeysUpdate.next(),
       error: _ => this._sshKeysUpdate.next(),
       complete: _ => this._sshKeysUpdate.next(),
-    } as Observer<void>;
+    } as Observer<SSHKey>;
   }
 
   constructor(

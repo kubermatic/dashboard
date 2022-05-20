@@ -22,8 +22,8 @@ import {
   ClusterBinding,
   ClusterRoleName,
   CreateBinding,
-  KIND_GROUP,
-  KIND_USER,
+  DeleteBindingBody,
+  Kind,
   RoleName,
 } from '@shared/entity/rbac';
 
@@ -105,11 +105,11 @@ export class RBACService {
     return this._http.delete<Binding>(url, options);
   }
 
-  private _getDeleteBindingBody(kind: string, name: string): any {
-    const body: any = {};
-    if (kind === KIND_GROUP) {
+  private _getDeleteBindingBody(kind: string, name: string): DeleteBindingBody {
+    const body = {} as DeleteBindingBody;
+    if (kind === Kind.Group) {
       body.group = name;
-    } else if (kind === KIND_USER) {
+    } else if (kind === Kind.User) {
       body.userEmail = name;
     }
     return body;

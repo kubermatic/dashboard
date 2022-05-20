@@ -313,9 +313,9 @@ export class ClusterService {
     return this._http.get<SSHKey[]>(url).pipe(catchError(() => of<SSHKey[]>([])));
   }
 
-  createSSHKey(projectID: string, clusterID: string, sshKeyID: string): Observable<any> {
+  createSSHKey(projectID: string, clusterID: string, sshKeyID: string): Observable<SSHKey> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/sshkeys/${sshKeyID}`;
-    return this._http.put(url, null);
+    return this._http.put<SSHKey>(url, null);
   }
 
   deleteSSHKey(projectID: string, clusterID: string, sshKeyID: string): Observable<void> {
