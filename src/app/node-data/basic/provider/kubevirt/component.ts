@@ -200,7 +200,6 @@ export class KubeVirtBasicNodeDataComponent
   }
 
   private _onFlavorLoading(): void {
-    this._clearFlavor();
     this.flavorLabel = FlavorsState.Loading;
     this._cdr.detectChanges();
   }
@@ -232,7 +231,6 @@ export class KubeVirtBasicNodeDataComponent
   }
 
   private _onStorageClassLoading(): void {
-    this._clearStorageClass();
     this.storageClassLabel = StorageClassState.Loading;
     this._cdr.detectChanges();
   }

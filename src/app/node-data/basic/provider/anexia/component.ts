@@ -147,13 +147,11 @@ export class AnexiaBasicNodeDataComponent extends BaseFormValidator implements O
 
   private _onVlanLoading(): void {
     this.isLoadingVlans = true;
-    this._clearVlan();
     this._cdr.detectChanges();
   }
 
   private _onTemplateLoading(): void {
     this.isLoadingTemplates = true;
-    this._clearTemplate();
     this._cdr.detectChanges();
   }
 
