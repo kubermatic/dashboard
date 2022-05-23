@@ -84,7 +84,7 @@ export class ClusterSpecService {
         cloud: {} as CloudSpec,
       },
     } as Cluster;
-    this._cluster.spec.cloud[provider] = {};
+    this.cluster.spec.cloud[provider] = {};
 
     if (provider) {
       this.providerChanges.next(provider);
