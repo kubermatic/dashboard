@@ -26,6 +26,7 @@ limitations under the License.
     </button>
     <a class="km-header-logo"
        routerLink="projects"></a>
+    <h3>{{this.viewName()}}</h3>
     <km-project-selector *ngIf="isAuthenticated() && showMenuSwitchAndProjectSelector"
                          [showSidenav]="showSidenav"
                          class="project-selector"></km-project-selector>

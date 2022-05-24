@@ -18,5 +18,9 @@
   .navbar {
     background-color: map.get($colors, background-app-bar);
     box-shadow: map.get($colors, shadow);
+
+    h3 {
+      color: map.get($colors, text);
+    }
   }
 }

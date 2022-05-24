@@ -13,10 +13,17 @@
 // limitations under the License.
 
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 import {Auth} from '@core/services/auth/service';
 import {UserService} from '@core/services/user';
 import {merge, of, Subject} from 'rxjs';
 import {switchMapTo, take, takeUntil} from 'rxjs/operators';
+
+const enum ViewName {
+  Projects = 'Projects',
+  Account = 'User Settings',
+  Settings = 'Admin-Settings',
+}
 
 @Component({
   selector: 'km-navigation',
@@ -29,7 +36,11 @@ export class NavigationComponent implements OnInit, OnDestroy {
   @Input() showMenuSwitchAndProjectSelector: boolean;
   showSidenav = true;
 
-  constructor(private readonly _auth: Auth, private readonly _userService: UserService) {}
+  constructor(
+    private readonly _auth: Auth,
+    private readonly _userService: UserService,
+    private readonly _route: Router
+  ) {}
 
   ngOnInit(): void {
     merge(of(true), this._onSettingsChange)
@@ -54,5 +65,18 @@ export class NavigationComponent implements OnInit, OnDestroy {
       })
       .pipe(take(1))
       .subscribe(_ => this._onSettingsChange.next());
+  }
+
+  viewName(): string {
+    const currentView = this._route.url.split('/')[1];
+
+    switch (currentView) {
+      case 'account':
+        return ViewName.Account;
+      case 'settings':
+        return ViewName.Settings;
+      default:
+        return ViewName.Projects;
+    }
   }
 }

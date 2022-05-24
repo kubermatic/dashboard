@@ -27,10 +27,18 @@ header {
   z-index: 999;
 
   .km-header-logo {
+    border-right: solid #cad1d9 1pt;
     display: block;
     height: 30px;
     margin-left: variables.$content-padding - 10px;
+    margin-right: variables.$content-padding - 10px;
+    padding-right: 160pt;
     width: 200px;
+  }
+
+  h3 {
+    font-size: variables.$font-size-head -10pt;
+    font-weight: normal;
   }
 }
 
