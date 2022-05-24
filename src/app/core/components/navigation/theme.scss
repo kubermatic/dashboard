@@ -19,6 +19,10 @@
     background-color: map.get($colors, background-app-bar);
     box-shadow: map.get($colors, shadow);
 
+    .km-header-logo {
+      border-right: 1px solid map.get($colors, divider);
+    }
+
     h3 {
       color: map.get($colors, text);
     }
