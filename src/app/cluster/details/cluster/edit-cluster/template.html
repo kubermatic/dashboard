@@ -52,7 +52,7 @@ limitations under the License.
           <mat-option [value]="containerRuntime.Docker">docker</mat-option>
         </mat-select>
         <mat-error *ngIf="form.get(Controls.ContainerRuntime).hasError('dockerVersionCompatibility')">
-          Docker is not supported since v1.22.0.
+          Docker is not supported since v1.24.
         </mat-error>
       </mat-form-field>
 
