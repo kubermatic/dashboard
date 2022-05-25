@@ -43,11 +43,15 @@ class Buttons extends PageOptions {
   }
 
   get externalClustersTab(): Cypress.Chainable {
-    return this._get('#mat-tab-label-0-1');
+    return this._getContains('.mat-tab-label', 'External Clusters');
   }
 
   get clustersTab(): Cypress.Chainable {
-    return this._get('#mat-tab-label-0-0');
+    return this._getContains('.mat-tab-label', 'Clusters');
+  }
+
+  get anyTab(): Cypress.Chainable {
+    return this._get('.mat-tab-label');
   }
 
   get addExternalCluster(): Cypress.Chainable {

@@ -368,14 +368,14 @@ limitations under the License.
             <!-- End of other properties. -->
 
             <!-- Tags for all providers. -->
-            <km-property *ngIf="element.spec.cloud.aws && displayTags(element.spec.cloud.aws.tags)">
+            <km-property *ngIf="element.spec.cloud.aws && hasTags(element.spec.cloud.aws.tags)">
               <div key>Tags</div>
               <div value>
                 <km-labels [labels]="element.spec.cloud.aws.tags"
                            emptyMessage="No assigned tags"></km-labels>
               </div>
             </km-property>
-            <km-property *ngIf="element.spec.cloud.azure && displayTags(element.spec.cloud.azure.tags)">
+            <km-property *ngIf="element.spec.cloud.azure && hasTags(element.spec.cloud.azure.tags)">
               <div key>Tags</div>
               <div value>
                 <km-labels [labels]="element.spec.cloud.azure.tags"
@@ -396,10 +396,18 @@ limitations under the License.
                            emptyMessage="No assigned tags"></km-labels>
               </div>
             </km-property>
-            <km-property *ngIf="element.spec.cloud.openstack && displayTags(element.spec.cloud.openstack.tags)">
+            <km-property *ngIf="element.spec.cloud.openstack && hasTags(element.spec.cloud.openstack.tags)">
               <div key>Tags</div>
               <div value>
                 <km-labels [labels]="element.spec.cloud.openstack.tags"
+                           emptyMessage="No assigned tags"></km-labels>
+              </div>
+            </km-property>
+
+            <km-property *ngIf="element.spec.cloud.vsphere && hasTags(element.spec.cloud.vsphere.tags)">
+              <div key>Tags</div>
+              <div value>
+                <km-labels [labels]="convertVSphereTagsIntoObject(element.spec.cloud.vsphere.tags)"
                            emptyMessage="No assigned tags"></km-labels>
               </div>
             </km-property>

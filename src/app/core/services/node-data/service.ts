@@ -43,6 +43,7 @@ import {HetznerService} from '@core/services/provider/hetzner';
 import {OpenStackService} from '@core/services/provider/openstack';
 import {NodeDataNutanixProvider} from './provider/nutanix';
 import {NutanixService} from '@core/services/provider/nutanix';
+import {NodeDataVSphereProvider} from '@core/services/node-data/provider/vsphere';
 import {NodeDataKubeVirtProvider} from '@core/services/node-data/provider/kubevirt';
 import {KubeVirtService} from '@core/services/provider/kubevirt';
 
@@ -206,4 +207,5 @@ export class NodeDataService {
     this._openStackService,
     this._projectService
   );
+  readonly vsphere = new NodeDataVSphereProvider(this);
 }

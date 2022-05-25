@@ -50,10 +50,11 @@ enum Controls {
 })
 export class VSphereBasicNodeDataComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
+  private readonly _minMemory = 512;
   private readonly _defaultCPUCount = 2;
   private readonly _defaultMemory = 4096;
-  private readonly _minMemory = 512;
   private readonly _defaultDiskSize = 10;
+
   private _defaultTemplate = '';
   private _templates: DatacenterOperatingSystemOptions;
 

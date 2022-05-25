@@ -63,7 +63,8 @@ const Provider = {Alibaba, Anexia, AWS, Azure, Digitalocean, Equinix, GCP, Hetzn
 type Provider = typeof Provider;
 
 enum Cluster {
-  List = '**/api/*/projects/*/clusters',
+  Create = '**/api/*/projects/*/clusters',
+  List = '**/api/*/projects/*/clusters?show_dm_count=*',
   Detail = '**/api/*/projects/*/clusters/*',
   Health = '**/api/*/projects/*/clusters/*/health',
   Metrics = '**/api/*/projects/*/clusters/*/metrics',

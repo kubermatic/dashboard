@@ -241,6 +241,7 @@ limitations under the License.
               <div value>{{cluster.spec.clusterNetwork.proxyMode}}</div>
             </km-property>
             <km-property-boolean label="Konnectivity"
+                                 matTooltip="Konnectivity is a TCP level proxy service for control plane to cluster communication."
                                  [value]="cluster.spec.clusterNetwork?.konnectivityEnabled">
             </km-property-boolean>
           </div>
@@ -262,7 +263,8 @@ limitations under the License.
                                 [healthState]="health?.gatekeeperAudit"></km-property-health>
           </div>
 
-          <div fxFlex="33"
+          <div *ngIf="isMLAEnabledInSeed()"
+               fxFlex="33"
                class="container-spacing">
             <div class="section-header">MLA</div>
             <km-property-boolean *ngIf="!cluster?.spec?.mla?.monitoringEnabled"

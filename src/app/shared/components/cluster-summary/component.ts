@@ -17,12 +17,13 @@ import {LabelFormComponent} from '@shared/components/label-form/component';
 import {Cluster} from '@shared/entity/cluster';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
-import {getOperatingSystem, getOperatingSystemLogoClass} from '@shared/entity/node';
+import {getOperatingSystem, getOperatingSystemLogoClass, VSphereTag} from '@shared/entity/node';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {getIpCount} from '@shared/functions/get-ip-count';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
 import _ from 'lodash';
+import {convertArrayToObject} from '@shared/utils/common';
 
 @Component({
   selector: 'km-cluster-summary',
@@ -30,13 +31,14 @@ import _ from 'lodash';
   styleUrls: ['./style.scss'],
 })
 export class ClusterSummaryComponent {
-  private _sshKeys: SSHKey[] = [];
   @Input() cluster: Cluster;
   @Input() machineDeployment: MachineDeployment;
   @Input() datacenter: Datacenter;
   @Input() seedSettings: SeedSettings;
   @Input() flipLayout = false;
   @Input() showNumbering = false;
+
+  private _sshKeys: SSHKey[] = [];
 
   @Input()
   set sshKeys(keys: string[]) {
@@ -97,6 +99,12 @@ export class ClusterSummaryComponent {
 
   displayTags(tags: object): boolean {
     return !!tags && !_.isEmpty(Object.keys(LabelFormComponent.filterNullifiedKeys(tags)));
+  }
+
+  // Note: VSphereNodeSpec has list of tags: VSphereTag which requires explicit
+  // conversion array into object form to pass onto `km-labels` component as Input
+  convertVSphereTagsIntoObject(tags: Array<VSphereTag>): VSphereTag | {} {
+    return convertArrayToObject(tags, 'name', 'description');
   }
 
   private _hasProviderOptions(provider: NodeProvider): boolean {
