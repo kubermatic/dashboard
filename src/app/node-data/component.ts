@@ -233,6 +233,10 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     this._nodeDataService.taints = this.taints;
   }
 
+  kubeletVersion(): string {
+    return this._nodeDataService.nodeData.spec.versions?.kubelet || this._clusterSpecService.cluster.spec.version;
+  }
+
   private _init(): void {
     let upgradeOnBoot = false;
     let disableAutoUpdate = false;
