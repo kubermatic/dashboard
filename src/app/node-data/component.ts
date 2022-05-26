@@ -206,7 +206,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       case OperatingSystem.Ubuntu:
         return !this.isProvider(NodeProvider.ANEXIA);
       case OperatingSystem.CentOS:
-        return !this.isProvider(NodeProvider.ANEXIA, NodeProvider.GCP);
+        return !this.isProvider(NodeProvider.ANEXIA, NodeProvider.GCP, NodeProvider.HETZNER);
     }
   }
 
