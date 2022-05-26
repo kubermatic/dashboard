@@ -22,7 +22,7 @@ import {switchMapTo, take, takeUntil} from 'rxjs/operators';
 const enum ViewName {
   Projects = 'Projects',
   Account = 'User Settings',
-  Settings = 'Admin-Settings',
+  Settings = 'Admin Settings',
 }
 
 @Component({
