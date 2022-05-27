@@ -56,8 +56,8 @@ export class NavigationComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (event: NavigationEnd) => {
-          const currentRout = event.url.split('/')[1];
-          switch (currentRout) {
+          const currentRoute = event.url.split('/')[1];
+          switch (currentRoute) {
             case 'account':
               this.currentView = ViewName.Account;
               break;
