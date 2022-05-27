@@ -18,7 +18,7 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {DatacenterService} from '@core/services/datacenter';
 import {MeteringConfiguration, MeteringReportConfiguration} from '@shared/entity/datacenter';
 import {Subject} from 'rxjs';
@@ -29,7 +29,7 @@ import {MeteringService} from './service/metering';
   selector: 'km-metering',
   templateUrl: './template.html',
 })
-export class MeteringComponent implements OnInit {
+export class MeteringComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   config: MeteringConfiguration;
   schedules: MeteringReportConfiguration[];
