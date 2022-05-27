@@ -106,7 +106,7 @@
     "@typescript-eslint/eslint-plugin": "5.22.0",
     "@typescript-eslint/parser": "5.22.0",
     "browserlist": "1.0.1",
-    "concurrently": "7.1.0",
+    "concurrently": "7.2.1",
     "cypress": "9.7.0",
     "cypress-fail-fast": "3.4.1",
     "del": "6.0.0",
