@@ -12,8 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use 'mixins';
+
 .mat-card {
   margin-top: 0;
+
+  .mat-card-header {
+    .km-icon-arrow-down {
+      @include mixins.size(16px, $force: true);
+    }
+  }
 
   .mat-card-content {
     padding: 0 30px;
