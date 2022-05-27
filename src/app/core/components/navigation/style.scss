@@ -29,7 +29,7 @@ header {
   .km-header-logo {
     display: block;
     height: 30px;
-    margin: 0 variables.$content-padding - 10px;
+    margin: 0 (variables.$content-padding - 10px);
     padding-right: 160pt;
     width: 200px;
   }

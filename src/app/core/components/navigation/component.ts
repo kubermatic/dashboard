@@ -13,11 +13,11 @@
 // limitations under the License.
 
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
+import {NavigationEnd, Router} from '@angular/router';
 import {Auth} from '@core/services/auth/service';
 import {UserService} from '@core/services/user';
 import {merge, of, Subject} from 'rxjs';
-import {switchMapTo, take, takeUntil} from 'rxjs/operators';
+import {switchMapTo, take, takeUntil, filter} from 'rxjs/operators';
 
 const enum ViewName {
   Projects = 'Projects',
@@ -35,11 +35,12 @@ export class NavigationComponent implements OnInit, OnDestroy {
   private readonly _onSettingsChange = new Subject<void>();
   @Input() showMenuSwitchAndProjectSelector: boolean;
   showSidenav = true;
+  currentView: string;
 
   constructor(
     private readonly _auth: Auth,
     private readonly _userService: UserService,
-    private readonly _route: Router
+    private readonly _router: Router
   ) {}
 
   ngOnInit(): void {
@@ -47,6 +48,28 @@ export class NavigationComponent implements OnInit, OnDestroy {
       .pipe(switchMapTo(this._userService.currentUserSettings))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(settings => (this.showSidenav = !settings.collapseSidenav));
+
+    this._router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        takeUntil(this._unsubscribe)
+      )
+      .subscribe({
+        next: (event: NavigationEnd) => {
+          const currentRout = event.url.split('/')[1];
+          switch (currentRout) {
+            case 'account':
+              this.currentView = ViewName.Account;
+              break;
+            case 'settings':
+              this.currentView = ViewName.Settings;
+              break;
+            case 'projects':
+              this.currentView = ViewName.Projects;
+              break;
+          }
+        },
+      });
   }
 
   ngOnDestroy(): void {
@@ -65,18 +88,5 @@ export class NavigationComponent implements OnInit, OnDestroy {
       })
       .pipe(take(1))
       .subscribe(_ => this._onSettingsChange.next());
-  }
-
-  viewName(): string {
-    const currentView = this._route.url.split('/')[1];
-
-    switch (currentView) {
-      case 'account':
-        return ViewName.Account;
-      case 'settings':
-        return ViewName.Settings;
-      default:
-        return ViewName.Projects;
-    }
   }
 }
