@@ -58,14 +58,14 @@ export class MachineDeploymentService {
     return this._httpClient.patch<MachineDeployment>(url, patch);
   }
 
-  restart(cluster: string, md: MachineDeployment, projectID: string): Observable<any> {
+  restart(cluster: string, md: MachineDeployment, projectID: string): Observable<MachineDeployment> {
     const url = `${this._restRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments/${md.id}/restart`;
-    return this._httpClient.post(url, {});
+    return this._httpClient.post<MachineDeployment>(url, {});
   }
 
-  delete(cluster: string, md: MachineDeployment, projectID: string): Observable<any> {
+  delete(cluster: string, md: MachineDeployment, projectID: string): Observable<void> {
     const url = `${this._restRoot}/projects/${projectID}/clusters/${cluster}/machinedeployments/${md.id}`;
-    return this._httpClient.delete(url);
+    return this._httpClient.delete<void>(url);
   }
 
   getNodes(mdId: string, cluster: string, projectID: string): Observable<Node[]> {

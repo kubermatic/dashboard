@@ -18,7 +18,7 @@ import {MatStepper} from '@angular/material/stepper';
 import {Router} from '@angular/router';
 import {ClusterTemplateService} from '@core/services/cluster-templates';
 import {NotificationService} from '@core/services/notification';
-import {ClusterTemplate} from '@shared/entity/cluster-template';
+import {ClusterTemplate, ClusterTemplateInstance} from '@shared/entity/cluster-template';
 import {Observable, Subject} from 'rxjs';
 import {filter, take, takeUntil} from 'rxjs/operators';
 
@@ -89,7 +89,7 @@ export class AddClusterFromTemplateDialogComponent implements OnInit, OnDestroy 
     }
   }
 
-  getObservable(): Observable<any> {
+  getObservable(): Observable<ClusterTemplateInstance> {
     return this._clusterTemplateService
       .createInstances(this.replicas, this.data.projectId, this.template.id)
       .pipe(take(1));

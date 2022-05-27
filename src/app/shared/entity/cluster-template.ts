@@ -40,3 +40,15 @@ export enum ClusterTemplateScope {
 export class CreateTemplateInstances {
   replicas: number;
 }
+
+export class ClusterTemplateInstance {
+  name: string;
+  spec: ClusterTemplateInstanceSpec;
+}
+
+export class ClusterTemplateInstanceSpec {
+  clusterTemplateID: string;
+  clusterTemplateName: string;
+  projectID: string;
+  replicas: number;
+}
