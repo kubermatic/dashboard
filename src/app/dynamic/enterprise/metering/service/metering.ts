@@ -55,7 +55,7 @@ export class MeteringService {
     if (!this._scheduleConfigurations) {
       this._scheduleConfigurations = merge(this.onScheduleConfigurationChange$, this._refreshTimer$)
         .pipe(switchMap(_ => this._getScheduleConfigurations()))
-        .pipe(shareReplay(1));
+        .pipe(shareReplay({refCount: true, bufferSize: 1}));
     }
     return this._scheduleConfigurations;
   }
