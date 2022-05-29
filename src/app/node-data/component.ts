@@ -27,7 +27,7 @@ import {DatacenterService} from '@core/services/datacenter';
 import {NameGeneratorService} from '@core/services/name-generator';
 import {NodeDataService} from '@core/services/node-data/service';
 import {SettingsService} from '@core/services/settings';
-import {ContainerRuntime} from '@shared/entity/cluster';
+import {ContainerRuntime, END_OF_DYNAMIC_KUBELETCONFIG_SUPPORT_VERSION} from '@shared/entity/cluster';
 import {Datacenter} from '@shared/entity/datacenter';
 import {OperatingSystemSpec, Taint} from '@shared/entity/node';
 import {NodeProvider, NodeProviderConstants, OperatingSystem} from '@shared/model/NodeProviderConstants';
@@ -233,8 +233,8 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     this._nodeDataService.taints = this.taints;
   }
 
-  kubeletVersion(): string {
-    return this._nodeDataService.nodeData.spec.versions?.kubelet || this._clusterSpecService.cluster.spec.version;
+  kubeletVersion(): boolean {
+    return this._clusterSpecService.cluster.spec.version < END_OF_DYNAMIC_KUBELETCONFIG_SUPPORT_VERSION;
   }
 
   private _init(): void {

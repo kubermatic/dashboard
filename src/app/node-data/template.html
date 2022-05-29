@@ -148,7 +148,7 @@ limitations under the License.
           </mat-checkbox>
         </div>
 
-        <div *ngIf="kubeletVersion() < '1.24.0'"
+        <div *ngIf="kubeletVersion()"
              class="os-options">
           <mat-checkbox [id]="Controls.DynamicConfig"
                         [formControlName]="Controls.DynamicConfig">Dynamic kubelet config
