@@ -67,9 +67,9 @@ export class OPAService {
     return this._http.patch<ConstraintTemplate>(url, patch);
   }
 
-  deleteConstraintTemplate(ctName: string): Observable<any> {
+  deleteConstraintTemplate(ctName: string): Observable<void> {
     const url = `${this._newRestRoot}/constrainttemplates/${ctName}`;
-    return this._http.delete(url);
+    return this._http.delete<void>(url);
   }
 
   constraints(projectId: string, clusterId: string): Observable<Constraint[]> {
@@ -105,9 +105,9 @@ export class OPAService {
     return this._http.patch<Constraint>(url, patch);
   }
 
-  deleteConstraint(projectId: string, clusterId: string, name: string): Observable<any> {
+  deleteConstraint(projectId: string, clusterId: string, name: string): Observable<void> {
     const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/constraints/${name}`;
-    return this._http.delete(url);
+    return this._http.delete<void>(url);
   }
 
   get defaultConstraints(): Observable<Constraint[]> {
@@ -139,9 +139,9 @@ export class OPAService {
     return this._http.patch<Constraint>(url, patch);
   }
 
-  deleteDefaultConstraint(name: string): Observable<any> {
+  deleteDefaultConstraint(name: string): Observable<void> {
     const url = `${this._newRestRoot}/constraints/${name}`;
-    return this._http.delete(url);
+    return this._http.delete<void>(url);
   }
 
   gatekeeperConfig(projectId: string, clusterId: string): Observable<GatekeeperConfig> {
@@ -177,9 +177,9 @@ export class OPAService {
     return this._http.patch<GatekeeperConfig>(url, patch);
   }
 
-  deleteGatekeeperConfig(projectId: string, clusterId: string): Observable<any> {
+  deleteGatekeeperConfig(projectId: string, clusterId: string): Observable<void> {
     const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/gatekeeper/config`;
-    return this._http.delete(url);
+    return this._http.delete<void>(url);
   }
 
   getViolationPageIndex(projectId: string, clusterId: string, constraintName: string): number {

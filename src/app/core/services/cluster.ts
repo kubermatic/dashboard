@@ -161,7 +161,7 @@ export class ClusterService {
     return this._http.put<Cluster>(url, model);
   }
 
-  delete(projectID: string, clusterID: string, finalizers?: {[key in Finalizer]: boolean}): Observable<any> {
+  delete(projectID: string, clusterID: string, finalizers?: {[key in Finalizer]: boolean}): Observable<void> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}`;
     if (finalizers !== undefined) {
       for (const key of Object.keys(finalizers)) {
@@ -169,7 +169,7 @@ export class ClusterService {
       }
     }
 
-    return this._http.delete(url, {headers: this._headers});
+    return this._http.delete<void>(url, {headers: this._headers});
   }
 
   showDisconnectClusterDialog(cluster: ExternalCluster, projectID: string): void {
@@ -299,9 +299,9 @@ export class ClusterService {
     return this._http.get<Health>(url).pipe(catchError(() => of<Health>({} as Health)));
   }
 
-  upgradeMachineDeployments(projectID: string, clusterID: string, version: string): Observable<any> {
+  upgradeMachineDeployments(projectID: string, clusterID: string, version: string): Observable<void> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/nodes/upgrades`;
-    return this._http.put(url, {version} as MasterVersion);
+    return this._http.put<void>(url, {version} as MasterVersion);
   }
 
   nodes(projectID: string, clusterID: string): Observable<Node[]> {
@@ -309,9 +309,9 @@ export class ClusterService {
     return this._http.get<Node[]>(url).pipe(catchError(() => of<Node[]>([])));
   }
 
-  deleteNode(projectID: string, clusterID: string, nodeID: string): Observable<any> {
+  deleteNode(projectID: string, clusterID: string, nodeID: string): Observable<void> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/machinedeployments/nodes/${nodeID}`;
-    return this._http.delete(url);
+    return this._http.delete<void>(url);
   }
 
   nodeUpgrades(controlPlaneVersion: string): Observable<MasterVersion[]> {
@@ -329,14 +329,14 @@ export class ClusterService {
     return this._http.put<SSHKey>(url, null);
   }
 
-  deleteSSHKey(projectID: string, clusterID: string, sshKeyID: string): Observable<any> {
+  deleteSSHKey(projectID: string, clusterID: string, sshKeyID: string): Observable<void> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/sshkeys/${sshKeyID}`;
-    return this._http.delete(url);
+    return this._http.delete<void>(url);
   }
 
-  startExternalCCMMigration(projectID: string, cluster: string): Observable<any> {
+  startExternalCCMMigration(projectID: string, cluster: string): Observable<void> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${cluster}/externalccmmigration`;
-    return this._http.post<any>(url, {});
+    return this._http.post<void>(url, {});
   }
 
   restores(projectID: string): Observable<EtcdRestore[]> {

@@ -66,14 +66,14 @@ export class BackupService {
     return this._http.delete<void>(url, {headers: this._headers});
   }
 
-  create(projectID: string, clusterID: string, backup: EtcdBackupConfig): Observable<any> {
+  create(projectID: string, clusterID: string, backup: EtcdBackupConfig): Observable<EtcdBackupConfig> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/etcdbackupconfigs`;
-    return this._http.post(url, backup);
+    return this._http.post<EtcdBackupConfig>(url, backup);
   }
 
-  restore(projectID: string, clusterID: string, restore: EtcdRestore): Observable<any> {
+  restore(projectID: string, clusterID: string, restore: EtcdRestore): Observable<EtcdBackupConfig> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/etcdrestores`;
-    return this._http.post(url, restore);
+    return this._http.post<EtcdBackupConfig>(url, restore);
   }
 
   restoreList(projectID: string): Observable<EtcdRestore[]> {
@@ -81,14 +81,14 @@ export class BackupService {
     return this._http.get<EtcdRestore[]>(url);
   }
 
-  restoreDelete(projectID: string, clusterID: string, name: string): Observable<any> {
+  restoreDelete(projectID: string, clusterID: string, name: string): Observable<void> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/etcdrestores/${name}`;
-    return this._http.delete(url, {headers: this._headers});
+    return this._http.delete<void>(url, {headers: this._headers});
   }
 
-  enable(projectID: string, clusterID: string, enable: boolean): Observable<any> {
+  enable(projectID: string, clusterID: string, enable: boolean): Observable<EtcdBackupConfig> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/etcdbackupconfigs`;
-    return this._http.post(url, {enable});
+    return this._http.post<EtcdBackupConfig>(url, {enable});
   }
 
   updateBackupCredentials(seedName: string, credentials: BackupCredentials): Observable<void> {
@@ -138,8 +138,8 @@ export class BackupService {
     return this._http.get<EtcdBackupConfig>(url, {headers: this._headers});
   }
 
-  deleteBackupDestination(seed: string, destination: string): Observable<any> {
+  deleteBackupDestination(seed: string, destination: string): Observable<void> {
     const url = `${this._restRoot}/admin/seeds/${seed}/backupdestinations/${destination}`;
-    return this._http.delete(url);
+    return this._http.delete<void>(url);
   }
 }

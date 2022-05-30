@@ -263,7 +263,8 @@ limitations under the License.
                                 [healthState]="health?.gatekeeperAudit"></km-property-health>
           </div>
 
-          <div fxFlex="33"
+          <div *ngIf="isMLAEnabledInSeed()"
+               fxFlex="33"
                class="container-spacing">
             <div class="section-header">MLA</div>
             <km-property-boolean *ngIf="!cluster?.spec?.mla?.monitoringEnabled"

@@ -22,8 +22,8 @@ import {
   ClusterBinding,
   ClusterRoleName,
   CreateBinding,
-  KIND_GROUP,
-  KIND_USER,
+  DeleteBindingBody,
+  Kind,
   RoleName,
 } from '@shared/entity/rbac';
 
@@ -59,13 +59,13 @@ export class RBACService {
     roleID: string,
     kind: string,
     name: string
-  ): Observable<any> {
+  ): Observable<ClusterBinding> {
     const options = {
       headers: new HttpHeaders(),
       body: this._getDeleteBindingBody(kind, name),
     };
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/clusterroles/${roleID}/clusterbindings`;
-    return this._http.delete(url, options);
+    return this._http.delete<ClusterBinding>(url, options);
   }
 
   getRoleNames(clusterID: string, projectID: string): Observable<RoleName[]> {
@@ -96,20 +96,20 @@ export class RBACService {
     namespace: string,
     kind: string,
     name: string
-  ): Observable<any> {
+  ): Observable<Binding> {
     const options = {
       headers: new HttpHeaders(),
       body: this._getDeleteBindingBody(kind, name),
     };
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/roles/${namespace}/${roleID}/bindings`;
-    return this._http.delete(url, options);
+    return this._http.delete<Binding>(url, options);
   }
 
-  private _getDeleteBindingBody(kind: string, name: string): any {
-    const body: any = {};
-    if (kind === KIND_GROUP) {
+  private _getDeleteBindingBody(kind: string, name: string): DeleteBindingBody {
+    const body = {} as DeleteBindingBody;
+    if (kind === Kind.Group) {
       body.group = name;
-    } else if (kind === KIND_USER) {
+    } else if (kind === Kind.User) {
       body.userEmail = name;
     }
     return body;
