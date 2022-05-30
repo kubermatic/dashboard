@@ -66,7 +66,7 @@
     "@angular/platform-browser-dynamic": "13.3.6",
     "@angular/router": "13.3.6",
     "@fontsource/inconsolata": "4.5.6",
-    "@fontsource/roboto": "4.5.5",
+    "@fontsource/roboto": "4.5.7",
     "@fontsource/roboto-mono": "4.5.7",
     "@fontsource/ubuntu": "4.5.9",
     "@swimlane/ngx-charts": "20.1.0",
@@ -130,7 +130,7 @@
     "stylelint-config-standard-scss": "3.0.0",
     "stylelint-no-unsupported-browser-features": "5.0.3",
     "stylelint-order": "5.0.0",
-    "ts-jest": "28.0.2",
+    "ts-jest": "28.0.3",
     "ts-node": "10.7.0",
     "tslib": "2.4.0",
     "typescript": "4.6.4"
