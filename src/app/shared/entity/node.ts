@@ -381,7 +381,7 @@ export function getOperatingSystem(spec: NodeSpec): string {
   } else if (spec.operatingSystem.flatcar) {
     return 'Flatcar';
   } else if (spec.operatingSystem.rockylinux) {
-    return 'RockyLinux';
+    return 'Rocky Linux';
   }
   return '';
 }
