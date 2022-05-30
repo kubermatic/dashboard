@@ -85,7 +85,7 @@ END OF TERMS AND CONDITIONS
            matSortActive="name"
            matSortDirection="asc"
            [dataSource]="dataSource">
-      <ng-container matColumnDef="name">
+      <ng-container [matColumnDef]="column.name">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell p-60"
@@ -94,7 +94,7 @@ END OF TERMS AND CONDITIONS
             *matCellDef="let element">{{element.name}}</td>
       </ng-container>
 
-      <ng-container matColumnDef="size">
+      <ng-container [matColumnDef]="column.size">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell p-20"
@@ -103,7 +103,7 @@ END OF TERMS AND CONDITIONS
             *matCellDef="let element">{{element.size | kmSize}}</td>
       </ng-container>
 
-      <ng-container matColumnDef="lastModified">
+      <ng-container [matColumnDef]="column.lastModified">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell p-20"
@@ -114,7 +114,7 @@ END OF TERMS AND CONDITIONS
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="actions">
+      <ng-container [matColumnDef]="column.actions">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell"></th>

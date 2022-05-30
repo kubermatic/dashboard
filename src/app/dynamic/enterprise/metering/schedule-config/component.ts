@@ -31,6 +31,14 @@ import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialo
 import {NotificationService} from '@core/services/notification';
 import {Router} from '@angular/router';
 
+enum Column {
+  name = 'name',
+  retention = 'retention',
+  interval = 'interval',
+  schedule = 'schedule',
+  actions = 'actions',
+}
+
 @Component({
   selector: 'km-metering-schedule-config',
   templateUrl: 'template.html',
@@ -38,7 +46,10 @@ import {Router} from '@angular/router';
 })
 export class MeteringScheduleConfigComponent implements OnInit {
   @Input() schedules: MeteringReportConfiguration[];
-  readonly displayedColumns: string[] = ['name', 'retention', 'interval', 'schedule', 'actions'];
+
+  readonly column = Column;
+  readonly displayedColumns: string[] = Object.values(Column);
+
   dataSource = new MatTableDataSource<MeteringReportConfiguration>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 

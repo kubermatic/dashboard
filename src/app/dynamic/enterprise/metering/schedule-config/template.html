@@ -43,7 +43,7 @@ END OF TERMS AND CONDITIONS
            matSortActive="name"
            matSortDirection="asc"
            [dataSource]="dataSource">
-      <ng-container matColumnDef="name">
+      <ng-container [matColumnDef]="column.name">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell p-30"
@@ -53,7 +53,7 @@ END OF TERMS AND CONDITIONS
             *matCellDef="let element">{{element.name}}</td>
       </ng-container>
 
-      <ng-container matColumnDef="retention">
+      <ng-container [matColumnDef]="column.retention">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell p-20"
@@ -72,7 +72,7 @@ END OF TERMS AND CONDITIONS
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="interval">
+      <ng-container [matColumnDef]="column.interval">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell p-20"
@@ -90,7 +90,7 @@ END OF TERMS AND CONDITIONS
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="schedule">
+      <ng-container [matColumnDef]="column.schedule">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell p-20"
@@ -107,7 +107,7 @@ END OF TERMS AND CONDITIONS
             *matCellDef="let element">{{element.schedule}}</td>
       </ng-container>
 
-      <ng-container matColumnDef="actions">
+      <ng-container [matColumnDef]="column.actions">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell"></th>

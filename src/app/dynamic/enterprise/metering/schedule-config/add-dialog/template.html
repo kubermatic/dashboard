@@ -114,7 +114,8 @@ END OF TERMS AND CONDITIONS
     <km-button icon="km-icon-add"
                label="Create Schedule"
                [observable]="getObservable()"
-               (next)="onNext()">
+               (next)="onNext()"
+               [disabled]="form.invalid">
     </km-button>
   </mat-dialog-actions>
 </div>
