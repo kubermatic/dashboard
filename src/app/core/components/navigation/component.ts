@@ -21,8 +21,14 @@ import {switchMapTo, take, takeUntil, filter} from 'rxjs/operators';
 
 const enum ViewName {
   Projects = 'Projects',
-  Account = 'User Settings',
-  Settings = 'Admin Settings',
+  UserSettings = 'User Settings',
+  AdminSettings = 'Admin Settings',
+}
+
+const enum RoutePath {
+  Projects = 'projects',
+  Account = 'account',
+  Settings = 'settings',
 }
 
 @Component({
@@ -58,14 +64,14 @@ export class NavigationComponent implements OnInit, OnDestroy {
         next: (event: NavigationEnd) => {
           const currentRoute = event.url.split('/')[1];
           switch (currentRoute) {
-            case 'account':
-              this.currentView = ViewName.Account;
-              break;
-            case 'settings':
-              this.currentView = ViewName.Settings;
-              break;
-            case 'projects':
+            case RoutePath.Projects:
               this.currentView = ViewName.Projects;
+              break;
+            case RoutePath.Account:
+              this.currentView = ViewName.UserSettings;
+              break;
+            case RoutePath.Settings:
+              this.currentView = ViewName.AdminSettings;
               break;
           }
         },

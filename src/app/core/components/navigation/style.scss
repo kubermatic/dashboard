@@ -29,14 +29,14 @@ header {
   .km-header-logo {
     display: block;
     height: 30px;
-    margin: 0 (variables.$content-padding - 10px);
-    padding-right: 160pt;
-    width: 200px;
+    margin-left: variables.$content-padding - 10px;
+    width: 210px;
   }
 
-  .km-text {
+  .view-name {
     font-size: variables.$font-size-subhead-lg;
     font-weight: normal;
+    margin-left: 20px;
   }
 }
 
