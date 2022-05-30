@@ -207,6 +207,8 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
         return !this.isProvider(NodeProvider.ANEXIA);
       case OperatingSystem.CentOS:
         return !this.isProvider(NodeProvider.ANEXIA, NodeProvider.GCP, NodeProvider.HETZNER);
+      case OperatingSystem.RockyLinux:
+        return this.isProvider(NodeProvider.HETZNER);
     }
   }
 
@@ -242,6 +244,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       case OperatingSystem.CentOS:
       case OperatingSystem.SLES:
       case OperatingSystem.RHEL:
+      case OperatingSystem.RockyLinux:
         upgradeOnBoot =
           this._nodeDataService.operatingSystemSpec[this._nodeDataService.operatingSystem].distUpgradeOnBoot;
         break;
@@ -264,6 +267,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       case OperatingSystem.Ubuntu:
       case OperatingSystem.CentOS:
       case OperatingSystem.SLES:
+      case OperatingSystem.RockyLinux:
         return {
           [this.form.get(Controls.OperatingSystem).value]: {
             distUpgradeOnBoot: this.form.get(Controls.UpgradeOnBoot).value,
