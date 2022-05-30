@@ -85,5 +85,12 @@ export class SimpleBinding {
   kind: string;
 }
 
-export const KIND_GROUP = 'Group';
-export const KIND_USER = 'User';
+export class DeleteBindingBody {
+  group: string;
+  userEmail: string;
+}
+
+export enum Kind {
+  Group = 'Group',
+  User = 'User',
+}

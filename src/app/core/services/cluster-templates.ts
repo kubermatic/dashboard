@@ -18,7 +18,7 @@ import {BehaviorSubject, merge, Observable, of, Subject, timer} from 'rxjs';
 import {catchError, shareReplay, switchMapTo} from 'rxjs/operators';
 
 import {environment} from '@environments/environment';
-import {ClusterTemplate, CreateTemplateInstances} from '@shared/entity/cluster-template';
+import {ClusterTemplate, ClusterTemplateInstance, CreateTemplateInstances} from '@shared/entity/cluster-template';
 import {AppConfigService} from '@app/config.service';
 
 @Injectable()
@@ -82,14 +82,14 @@ export class ClusterTemplateService {
     return this._http.get<ClusterTemplate>(url);
   }
 
-  delete(projectID: string, templateID: string): Observable<any> {
+  delete(projectID: string, templateID: string): Observable<void> {
     const url = `${this._newRestRoot}/projects/${projectID}/clustertemplates/${templateID}`;
-    return this._http.delete<any>(url);
+    return this._http.delete<void>(url);
   }
 
-  createInstances(replicas: number, projectID: string, templateID: string): Observable<any> {
+  createInstances(replicas: number, projectID: string, templateID: string): Observable<ClusterTemplateInstance> {
     const url = `${this._newRestRoot}/projects/${projectID}/clustertemplates/${templateID}/instances`;
-    return this._http.post<any>(url, {replicas: replicas} as CreateTemplateInstances);
+    return this._http.post<ClusterTemplateInstance>(url, {replicas: replicas} as CreateTemplateInstances);
   }
 
   get template(): ClusterTemplate {

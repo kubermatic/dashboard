@@ -71,7 +71,11 @@ export function getNodeHealthStatus(n: Node): HealthStatus {
 export function getMachineDeploymentHealthStatus(md: MachineDeployment): HealthStatus {
   if (md.deletionTimestamp) {
     return new HealthStatus('Deleting', StatusIcon.Error);
-  } else if (md.status && md.status.availableReplicas === md.spec.replicas) {
+  } else if (
+    md.status &&
+    md.status.availableReplicas === md.spec.replicas &&
+    md.status.availableReplicas === md.status.updatedReplicas
+  ) {
     return new HealthStatus('Running', StatusIcon.Running);
   } else if (md.status && md.status.updatedReplicas !== md.spec.replicas) {
     return new HealthStatus('Updating', StatusIcon.Pending);

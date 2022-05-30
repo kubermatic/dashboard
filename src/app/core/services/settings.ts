@@ -83,7 +83,7 @@ export class SettingsService {
     return {...DEFAULT_ADMIN_SETTINGS, ...settings};
   }
 
-  patchAdminSettings(patch: any): Observable<AdminSettings> {
+  patchAdminSettings(patch: AdminSettings): Observable<AdminSettings> {
     const url = `${this._restRoot}/admin/settings`;
     return this._httpClient
       .patch<AdminSettings>(url, patch)

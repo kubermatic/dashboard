@@ -34,8 +34,8 @@ export class SSHKeyService {
     return this._httpClient.get<SSHKey[]>(url);
   }
 
-  delete(sshkeyID: string, projectID: string): Observable<any> {
+  delete(sshkeyID: string, projectID: string): Observable<void> {
     const url = `${this._restRoot}/projects/${projectID}/sshkeys/${sshkeyID}`;
-    return this._httpClient.delete(url);
+    return this._httpClient.delete<void>(url);
   }
 }
