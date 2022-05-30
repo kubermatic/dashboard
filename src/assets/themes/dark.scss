@@ -103,9 +103,13 @@ $theme-dark: map.merge($theme-dark, (foreground: $foreground));
 }
 
 .km-provider-logo-kubevirt {
-  @include mixins.provider-image('/assets/images/clouds/kubevirt-dark.svg', 30px);
+  @include mixins.provider-image('/assets/images/clouds/kubevirt-dark.svg', 95px, 30px);
 
   filter: none;
+}
+
+.km-cni-image-cilium {
+  @include mixins.background-image('/assets/images/cni/cilium-dark.svg', 80px);
 }
 
 .km-icon-info {

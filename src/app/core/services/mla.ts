@@ -67,9 +67,9 @@ export class MLAService {
     return this._http.put<AlertmanagerConfig>(url, config);
   }
 
-  resetAlertmanagerConfig(projectId: string, clusterId: string): Observable<any> {
+  resetAlertmanagerConfig(projectId: string, clusterId: string): Observable<void> {
     const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/alertmanager/config`;
-    return this._http.delete(url);
+    return this._http.delete<void>(url);
   }
 
   ruleGroups(projectId: string, clusterId: string): Observable<RuleGroup[]> {
@@ -105,9 +105,9 @@ export class MLAService {
     return this._http.put<RuleGroup>(url, ruleGroup);
   }
 
-  deleteRuleGroup(projectId: string, clusterId: string, ruleGroupName: string): Observable<any> {
+  deleteRuleGroup(projectId: string, clusterId: string, ruleGroupName: string): Observable<void> {
     const url = `${this._newRestRoot}/projects/${projectId}/clusters/${clusterId}/rulegroups/${ruleGroupName}`;
-    return this._http.delete(url);
+    return this._http.delete<void>(url);
   }
 
   adminRuleGroups(seed: string): Observable<RuleGroup[]> {
@@ -142,8 +142,8 @@ export class MLAService {
     return this._http.put<RuleGroup>(url, ruleGroup);
   }
 
-  deleteAdminRuleGroup(seedName: string, ruleGroupName: string): Observable<any> {
+  deleteAdminRuleGroup(seedName: string, ruleGroupName: string): Observable<void> {
     const url = `${this._newRestRoot}/seeds/${seedName}/rulegroups/${ruleGroupName}`;
-    return this._http.delete(url);
+    return this._http.delete<void>(url);
   }
 }

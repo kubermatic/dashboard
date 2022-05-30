@@ -26,7 +26,7 @@ export class AddonService {
   private readonly _newRestRoot: string = environment.newRestRoot;
   private readonly _refreshTime = 30;
   private readonly _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
-  private _addonConfigs$: Observable<any>;
+  private _addonConfigs$: Observable<AddonConfig[]>;
 
   constructor(private readonly _appConfigService: AppConfigService, private readonly _httpClient: HttpClient) {}
 
@@ -72,9 +72,9 @@ export class AddonService {
    * @param projectID ID of a project
    * @param clusterID ID of a cluster
    */
-  delete(addonID: string, projectID: string, clusterID: string): Observable<any> {
+  delete(addonID: string, projectID: string, clusterID: string): Observable<void> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/addons/${addonID}`;
-    return this._httpClient.delete(url);
+    return this._httpClient.delete<void>(url);
   }
 
   /**
@@ -91,7 +91,7 @@ export class AddonService {
   get addonConfigs(): Observable<AddonConfig[]> {
     if (!this._addonConfigs$) {
       this._addonConfigs$ = this._refreshTimer$
-        .pipe(switchMap(() => this._httpClient.get(`${this._restRoot}/addonconfigs`)))
+        .pipe(switchMap(() => this._httpClient.get<AddonConfig[]>(`${this._restRoot}/addonconfigs`)))
         .pipe(shareReplay({refCount: true, bufferSize: 1}));
     }
     return this._addonConfigs$;
