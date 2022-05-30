@@ -62,7 +62,7 @@ export class WizardPage {
   }
 
   static getCreateBtn(): Cypress.Chainable {
-    return cy.get('#km-button-buttonClick');
+    return cy.get('#km-wizard-create-btn');
   }
 
   static getCreateTemplateBtn(): Cypress.Chainable {

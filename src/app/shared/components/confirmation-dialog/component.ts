@@ -27,7 +27,7 @@ export interface ConfirmationDialogConfig {
   compareName?: string;
   inputPlaceholder?: string;
   inputTitle?: string;
-  throttelButton?: boolean;
+  throttleButton?: boolean;
   observable?: Observable<any>;
   next?: void;
 }

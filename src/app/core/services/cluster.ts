@@ -178,7 +178,7 @@ export class ClusterService {
         title: 'Disconnect Cluster',
         message: `Are you sure you want to disconnect ${cluster.name} cluster?`,
         confirmLabel: 'Disconnect',
-        throttelButton: true,
+        throttleButton: true,
         observable: this._deleteExternalCluster(projectID, cluster.id),
       },
     };
