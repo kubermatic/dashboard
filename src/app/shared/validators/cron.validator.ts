@@ -17,8 +17,8 @@ import {isValidCron} from 'cron-validator';
 
 export class CronExpressionValidator implements Validator {
   validate(control: AbstractControl): ValidationErrors | null {
-    const invalid = !isValidCron(control.value, {alias: true});
-    return invalid ? this._error() : null;
+    const isValid = isValidCron(control.value, {alias: true});
+    return isValid ? null : this._error();
   }
 
   private _error(): ValidationErrors {
