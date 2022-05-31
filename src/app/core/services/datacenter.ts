@@ -88,9 +88,9 @@ export class DatacenterService {
     return this._httpClient.patch<Datacenter>(url, patch);
   }
 
-  deleteDatacenter(datacenter: Datacenter): Observable<any> {
+  deleteDatacenter(datacenter: Datacenter): Observable<void> {
     const url = `${this._restRoot}/seed/${datacenter.spec.seed}/dc/${datacenter.metadata.name}`;
-    return this._httpClient.delete(url);
+    return this._httpClient.delete<void>(url);
   }
 
   get seeds(): Observable<string[]> {

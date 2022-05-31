@@ -45,9 +45,9 @@ export class ServiceAccountService {
     return this._httpClient.put<ServiceAccount>(url, sa);
   }
 
-  delete(projectID: string, sa: ServiceAccount): Observable<any> {
+  delete(projectID: string, sa: ServiceAccount): Observable<void> {
     const url = `${this._restRoot}/projects/${projectID}/serviceaccounts/${sa.id}`;
-    return this._httpClient.delete(url);
+    return this._httpClient.delete<void>(url);
   }
 
   getTokens(projectID: string, sa: ServiceAccount): Observable<ServiceAccountToken[]> {
@@ -75,8 +75,8 @@ export class ServiceAccountService {
     return this._httpClient.put<ServiceAccountToken>(url, token);
   }
 
-  deleteToken(projectID: string, sa: ServiceAccount, token: ServiceAccountToken): Observable<any> {
+  deleteToken(projectID: string, sa: ServiceAccount, token: ServiceAccountToken): Observable<void> {
     const url = `${this._restRoot}/projects/${projectID}/serviceaccounts/${sa.id}/tokens/${token.id}`;
-    return this._httpClient.delete(url);
+    return this._httpClient.delete<void>(url);
   }
 }

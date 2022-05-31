@@ -130,7 +130,7 @@ export class NodeService {
       .open(ConfirmationDialogComponent, dialogConfig)
       .afterClosed()
       .pipe(
-        mergeMap((isConfirmed: boolean): Observable<boolean> => {
+        mergeMap((isConfirmed: boolean): Observable<boolean | void> => {
           if (isConfirmed) {
             return this._machineDeploymentService.delete(cluster.id, md, projectID).pipe(
               catchError(() => {
@@ -144,7 +144,7 @@ export class NodeService {
         })
       )
       .pipe(
-        mergeMap((data: any): Observable<boolean> => {
+        mergeMap((data: boolean): Observable<boolean> => {
           if (data) {
             this._notificationService.success(`Deleting the ${md.name} machine deployment`);
             changeEventEmitter?.emit(md);
@@ -174,7 +174,7 @@ export class NodeService {
       .open(ConfirmationDialogComponent, dialogConfig)
       .afterClosed()
       .pipe(
-        mergeMap((isConfirmed: boolean): Observable<boolean> => {
+        mergeMap((isConfirmed: boolean): Observable<MachineDeployment | boolean> => {
           if (isConfirmed) {
             return this._machineDeploymentService.restart(cluster.id, md, projectID).pipe(
               catchError(() => {
@@ -186,7 +186,7 @@ export class NodeService {
           }
           return of(false);
         }),
-        mergeMap((data: any): Observable<boolean> => {
+        mergeMap((data: boolean): Observable<boolean> => {
           if (data) {
             this._notificationService.success(`Restarting the ${md.name} machine deployment`);
             changeEventEmitter?.emit(md);
