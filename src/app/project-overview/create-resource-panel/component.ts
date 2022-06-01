@@ -59,12 +59,16 @@ export class CreateResourcePanelComponent implements OnInit, OnDestroy {
 
   @HostListener('document:click', ['$event'])
   onOutsideClick(event: Event): void {
-    if (!this._elementRef.nativeElement.contains(event.target) && this.isOpen()) {
+    if (!this._elementRef.nativeElement.contains(event.target) && this.isOpen) {
       this.close();
     }
   }
 
-  isOpen(): boolean {
+  get canCreateCluster(): boolean {
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, Permission.Create);
+  }
+
+  get isOpen(): boolean {
     return this._isOpen;
   }
 
@@ -78,9 +82,5 @@ export class CreateResourcePanelComponent implements OnInit, OnDestroy {
 
   createCluster(): void {
     this._router.navigate([`/projects/${this.project.id}/wizard`]);
-  }
-
-  get canCreateCluster(): boolean {
-    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, Permission.Create);
   }
 }

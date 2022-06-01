@@ -21,13 +21,15 @@ limitations under the License.
   </button>
   <div class="panel"
        fxLayout="column"
-       *ngIf="isOpen()">
-    <div class="entry km-hover-bg"
+       *ngIf="isOpen">
+    <div class="entry"
+         [ngClass]="{'km-text-muted': !canCreateCluster, 'km-hover-bg km-pointer': canCreateCluster}"
          fxLayoutAlign=" center"
          fxLayoutGap="14px"
          matRipple
          (click)="createCluster()">
-      <i class="km-icon-mask km-icon-cluster"></i>
+      <i class="km-icon-mask km-icon-cluster"
+         [ngClass]="{'km-muted-bg': !canCreateCluster}"></i>
       <span>Cluster</span>
     </div>
     <div class="entry km-hover-bg"
