@@ -17,7 +17,6 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatStepper} from '@angular/material/stepper';
 import {Router} from '@angular/router';
-import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {ClusterService} from '@core/services/cluster';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {NodeDataService} from '@core/services/node-data/service';
@@ -57,8 +56,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     private readonly _clusterService: ClusterService,
     private readonly _nodeDataService: NodeDataService,
     private readonly _matDialog: MatDialog,
-    private readonly _router: Router,
-    private readonly _googleAnalyticsService: GoogleAnalyticsService
+    private readonly _router: Router
   ) {}
 
   get steps(): WizardStep[] {
@@ -119,7 +117,6 @@ export class WizardComponent implements OnInit, OnDestroy {
   onNext(cluster: Cluster): void {
     this.creating = true;
     this._notificationService.success(`Created the ${cluster.name} cluster`);
-    this._googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
 
     if (this._clusterSpecService.sshKeys.length) {
       this._clusterSpecService.sshKeys.map(key => {
