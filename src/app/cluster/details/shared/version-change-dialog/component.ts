@@ -16,6 +16,7 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {ClusterService} from '@core/services/cluster';
+import {MachineDeploymentService} from '@core/services/machine-deployment';
 import {EndOfLifeService} from '@core/services/eol';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
@@ -23,7 +24,8 @@ import {Cluster, ClusterPatch} from '@shared/entity/cluster';
 import {ExternalCluster, ExternalClusterPatch} from '@shared/entity/external-cluster';
 import {Project} from '@shared/entity/project';
 import {Observable, Subject} from 'rxjs';
-import {take, takeUntil} from 'rxjs/operators';
+import {take, takeUntil, map} from 'rxjs/operators';
+import {END_OF_DYNAMIC_KUBELETCONFIG_SUPPORT_VERSION} from '@shared/entity/cluster';
 
 @Component({
   selector: 'km-version-change-dialog',
@@ -39,10 +41,12 @@ export class VersionChangeDialogComponent implements OnInit, OnDestroy {
   project: Project;
   isMachineDeploymentUpgradeEnabled = false;
   private _unsubscribe = new Subject<void>();
+  nodesSupportDynamicKubeletConfig = '';
 
   constructor(
     private readonly _clusterService: ClusterService,
     private readonly _projectService: ProjectService,
+    private readonly _machineDeploymentService: MachineDeploymentService,
     private readonly _dialogRef: MatDialogRef<VersionChangeDialogComponent>,
     private readonly _notificationService: NotificationService,
     private readonly _eolService: EndOfLifeService,
@@ -58,6 +62,14 @@ export class VersionChangeDialogComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(project => (this.project = project));
     this._googleAnalyticsService.emitEvent('clusterOverview', 'clusterVersionChangeDialogOpened');
+
+    this._machineDeploymentService
+      .list(this.cluster.id, this.project.id)
+      .pipe(map(nodes => nodes.filter(node => node.spec.dynamicConfig)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(nodes => {
+        this.nodesSupportDynamicKubeletConfig = nodes.map(node => ` MD-${node.name}`).toString();
+      });
   }
 
   ngOnDestroy(): void {
@@ -90,6 +102,11 @@ export class VersionChangeDialogComponent implements OnInit, OnDestroy {
       this.upgradeMachineDeployments();
     }
     this._dialogRef.close(true);
+  }
+
+  isDynamicKubletConfigSupportedInUpgrade(): boolean {
+    const endSliceParameter = 4;
+    return this.selectedVersion.slice(0, endSliceParameter) < END_OF_DYNAMIC_KUBELETCONFIG_SUPPORT_VERSION;
   }
 
   upgradeMachineDeployments(): void {

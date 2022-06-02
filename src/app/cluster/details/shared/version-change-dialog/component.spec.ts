@@ -26,6 +26,8 @@ import {AppConfigMockService} from '@test/services/app-config-mock';
 import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
 import {ProjectMockService} from '@test/services/project-mock';
 import {ClusterService} from '@core/services/cluster';
+import {MachineDeploymentServiceMock} from '@test/services/machine-deployment-mock';
+import {MachineDeploymentService} from '@core/services/machine-deployment';
 import {EndOfLifeService} from '@core/services/eol';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
@@ -55,6 +57,7 @@ describe('ChangeClusterVersionComponent', () => {
         {provide: MatDialogRef, useClass: MatDialogRefMock},
         {provide: ClusterService, useValue: clusterServiceMock},
         {provide: ProjectService, useClass: ProjectMockService},
+        {provide: MachineDeploymentService, useClass: MachineDeploymentServiceMock},
         {provide: Router, useClass: RouterStub},
         {provide: AppConfigService, useClass: AppConfigMockService},
         GoogleAnalyticsService,

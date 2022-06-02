@@ -233,7 +233,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     this._nodeDataService.taints = this.taints;
   }
 
-  kubeletVersion(): boolean {
+  isDynamicKubletConfigSupported(): boolean {
     return this._clusterSpecService.cluster.spec.version < END_OF_DYNAMIC_KUBELETCONFIG_SUPPORT_VERSION;
   }
 
