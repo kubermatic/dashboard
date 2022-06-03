@@ -22,7 +22,7 @@ import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {DatacenterService} from '@core/services/datacenter';
 import {MeteringConfiguration, MeteringReportConfiguration} from '@shared/entity/datacenter';
 import {Subject} from 'rxjs';
-import {filter, map, pluck, switchMap, takeUntil} from 'rxjs/operators';
+import {filter, map, switchMap, takeUntil} from 'rxjs/operators';
 import {MeteringService} from './service/metering';
 
 @Component({
@@ -49,7 +49,7 @@ export class MeteringComponent implements OnInit, OnDestroy {
       .pipe(map(seeds => (seeds.length > 0 ? seeds[0] : null)))
       .pipe(filter(seed => seed !== null))
       .pipe(switchMap(seed => this._dcService.seedSettings(seed)))
-      .pipe(pluck('metering'))
+      .pipe(map(settings => settings.metering))
       .pipe(
         switchMap(meteringConfig =>
           this._meteringService
