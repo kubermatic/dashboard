@@ -20,6 +20,10 @@
       padding-left: 30px;
     }
   }
+
+  .health-status {
+    margin-top: 10px;
+  }
 }
 
 
@@ -30,12 +34,6 @@
 
 i.km-icon-info {
   margin-left: 5px;
-}
-
-.mat-column-name {
-  align-items: center;
-  display: flex;
-  height: 50px;
 }
 
 .node-details {
