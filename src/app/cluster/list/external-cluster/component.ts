@@ -19,7 +19,6 @@ import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ClusterService} from '@core/services/cluster';
-import {NotificationService} from '@core/services/notification';
 import {PathParam} from '@core/services/params';
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
@@ -68,7 +67,6 @@ export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestro
     private readonly _router: Router,
     private readonly _activeRoute: ActivatedRoute,
     private readonly _matDialog: MatDialog,
-    private readonly _notificationService: NotificationService,
     private readonly _settingsService: SettingsService
   ) {}
 
@@ -188,9 +186,7 @@ export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestro
   disconnectClusterDialog(cluster: ExternalCluster, event: Event): void {
     event.stopPropagation();
 
-    this._clusterService.showDisconnectClusterDialog(cluster, this._selectedProject.id).subscribe(_ => {
-      this._notificationService.success(`Disconnected the ${cluster.name} cluster`);
-    });
+    this._clusterService.showDisconnectClusterDialog(cluster, this._selectedProject.id);
   }
 
   isPaginatorVisible(): boolean {

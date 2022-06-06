@@ -34,16 +34,26 @@ limitations under the License.
              title={{data.inputTitle}}
              (blur)="onChange($event)"
              (keyup)="onChange($event)"
-             cdkFocusInitial>
+             kmAutofocus>
     </mat-form-field>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <button mat-flat-button
+    <button *ngIf="!data.throttleButton"
+            mat-flat-button
             [mat-dialog-close]="true"
             id="km-confirmation-dialog-confirm-btn"
             [disabled]="!inputNameMatches()">
       <i [ngClass]="getIconClass()"></i>
       <span>{{data.confirmLabel}}</span>
     </button>
+    <km-button *ngIf="data.throttleButton"
+               [mat-dialog-close]="true"
+               id="km-confirmation-dialog-confirm-btn"
+               [icon]="getIconClass()"
+               [label]="data.confirmLabel"
+               [disabled]="!inputNameMatches()"
+               [observable]="data.observable"
+               (next)="data.next">
+    </km-button>
   </mat-dialog-actions>
 </div>

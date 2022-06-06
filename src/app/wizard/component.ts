@@ -26,10 +26,9 @@ import {WizardService} from '@core/services/wizard/wizard';
 import {SaveClusterTemplateDialogComponent} from '@shared/components/save-cluster-template/component';
 import {Cluster, CreateClusterModel} from '@shared/entity/cluster';
 import {Project} from '@shared/entity/project';
-import {SSHKey} from '@shared/entity/ssh-key';
 import {NodeData} from '@shared/model/NodeSpecChange';
-import {forkJoin, of, Subject, take} from 'rxjs';
-import {filter, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {Observable, Subject, take} from 'rxjs';
+import {filter, switchMap, takeUntil} from 'rxjs/operators';
 import {StepRegistry, steps, WizardStep} from './config';
 
 @Component({
@@ -106,50 +105,29 @@ export class WizardComponent implements OnInit, OnDestroy {
     this._wizard.reset();
   }
 
-  onCreateCluster(): void {
-    this.creating = true;
-    let createdCluster: Cluster;
+  getObservable(): Observable<Cluster> {
     const createCluster = this._getCreateClusterModel(this._clusterSpecService.cluster, this._nodeDataService.nodeData);
 
-    this._clusterService
+    return this._clusterService
       .create(this.project.id, createCluster)
-      .pipe(
-        tap(cluster => {
-          this._notificationService.success(`Created the ${cluster.name} cluster`);
-          createdCluster = cluster;
-        })
-      )
-      .pipe(switchMap(_ => this._clusterService.cluster(this.project.id, createdCluster.id)))
-      .pipe(
-        switchMap(_ => {
-          this.creating = false;
+      .pipe(switchMap(cluster => this._clusterService.cluster(this.project.id, cluster.id)))
+      .pipe(takeUntil(this._unsubscribe));
+  }
 
-          if (this._clusterSpecService.sshKeys.length > 0) {
-            return forkJoin(
-              this._clusterSpecService.sshKeys.map(key =>
-                this._clusterService.createSSHKey(this.project.id, createdCluster.id, key.id)
-              )
-            );
-          }
+  onNext(cluster: Cluster): void {
+    this.creating = true;
+    this._notificationService.success(`Created the ${cluster.name} cluster`);
 
-          return of([]);
-        })
-      )
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe({
-        next: (keys: SSHKey[]) => {
-          this._router.navigate([`/projects/${this.project.id}/clusters/${createdCluster.id}`]);
-          keys.forEach(key =>
-            this._notificationService.success(
-              `Added the ${key.name} SSH key to the cluster ${createCluster.cluster.name}`
-            )
+    if (this._clusterSpecService.sshKeys.length) {
+      this._clusterSpecService.sshKeys.map(key => {
+        this._clusterService
+          .createSSHKey(this.project.id, cluster.id, key.id)
+          .subscribe(_ =>
+            this._notificationService.success(`Added the ${key.name} SSH key to the cluster ${cluster.name}`)
           );
-        },
-        error: () => {
-          this._notificationService.error(`Could not create the ${createCluster.cluster.name} cluster`);
-          this.creating = false;
-        },
       });
+    }
+    this._router.navigate([`/projects/${this.project.id}/clusters/${cluster.id}`]);
   }
 
   onSaveClusterTemplate(): void {
