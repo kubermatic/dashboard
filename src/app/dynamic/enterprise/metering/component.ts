@@ -18,18 +18,18 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {DatacenterService} from '@core/services/datacenter';
 import {MeteringConfiguration, MeteringReportConfiguration} from '@shared/entity/datacenter';
 import {Subject} from 'rxjs';
-import {filter, map, mergeMap, switchMap, takeUntil} from 'rxjs/operators';
+import {filter, map, switchMap, takeUntil} from 'rxjs/operators';
 import {MeteringService} from './service/metering';
 
 @Component({
   selector: 'km-metering',
   templateUrl: './template.html',
 })
-export class MeteringComponent implements OnInit {
+export class MeteringComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   config: MeteringConfiguration;
   schedules: MeteringReportConfiguration[];
@@ -51,7 +51,7 @@ export class MeteringComponent implements OnInit {
       .pipe(switchMap(seed => this._dcService.seedSettings(seed)))
       .pipe(map(settings => settings.metering))
       .pipe(
-        mergeMap(meteringConfig =>
+        switchMap(meteringConfig =>
           this._meteringService
             .scheduleConfigurations()
             .pipe(map(schedulesConfig => ({meteringConfig, schedulesConfig})))
@@ -68,6 +68,11 @@ export class MeteringComponent implements OnInit {
           this._cdr.detectChanges();
         },
       });
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   isLoading(): boolean {
