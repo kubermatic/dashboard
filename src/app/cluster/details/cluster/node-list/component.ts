@@ -25,7 +25,7 @@ import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialo
 import {Cluster} from '@shared/entity/cluster';
 import {Member} from '@shared/entity/member';
 import {NodeMetrics} from '@shared/entity/metrics';
-import {getOperatingSystem, getOperatingSystemLogoClass, Node, VSphereTag} from '@shared/entity/node';
+import {getOperatingSystem, getOperatingSystemLogoClass, Node, NodeIPAddress, VSphereTag} from '@shared/entity/node';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import {NodeUtils} from '@shared/utils/node';
@@ -176,7 +176,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
     return NodeUtils.getFormattedNodeMemory(memory);
   }
 
-  getAddresses(node: Node): object {
+  getAddresses(node: Node): NodeIPAddress {
     return NodeUtils.getAddresses(node);
   }
 

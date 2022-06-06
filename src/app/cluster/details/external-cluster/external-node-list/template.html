@@ -76,24 +76,35 @@ limitations under the License.
         </th>
         <td mat-cell
             *matCellDef="let element">
-          <span class="node-ip-addresses"
-                *ngIf="!!element.status.addresses && !!getAddresses(element).InternalIP">
-            Int.IP:
-            <span class="km-copy"
-                  [cbContent]="getAddresses(element).InternalIP"
-                  (click)="$event.stopPropagation()"
-                  ngxClipboard
-                  matTooltip="click to copy">{{getAddresses(element).InternalIP}}</span>
-          </span>
-          <span class="node-ip-addresses"
-                *ngIf="!!element.status.addresses && !!getAddresses(element).ExternalIP">
-            Ext.IP:
-            <span class="km-copy"
-                  [cbContent]="getAddresses(element).ExternalIP"
-                  (click)="$event.stopPropagation()"
-                  ngxClipboard
-                  matTooltip="click to copy">{{getAddresses(element).ExternalIP}}</span>
-          </span>
+          <ng-container *ngIf="element.status.addresses && getAddresses(element) as addresses">
+            <div fxLayout="column"
+                 fxLayoutGap="5px"
+                 [ngClass]="{'node-ip-addresses-spacing': (addresses.externalIP && addresses.internalIPs.length) || addresses.internalIPs.length > 1}">
+              <div *ngIf="!!addresses.internalIPs.length"
+                   fxLayout="row"
+                   fxLayoutAlign=" center"
+                   fxLayoutGap="5px">
+                <span>Int.IP:</span>
+                <div fxLayout="column">
+                  <span *ngFor="let internalIP of addresses.internalIPs"
+                        class="km-copy"
+                        [cbContent]="internalIP"
+                        (click)="$event.stopPropagation()"
+                        ngxClipboard
+                        matTooltip="click to copy">{{internalIP}}</span>
+                </div>
+              </div>
+              <div *ngIf="!!addresses.externalIP">
+                Ext.IP:
+                <span class="km-copy"
+                      [cbContent]="addresses.externalIP"
+                      (click)="$event.stopPropagation()"
+                      ngxClipboard
+                      matTooltip="click to copy">{{addresses.externalIP}}</span>
+              </div>
+
+            </div>
+          </ng-container>
         </td>
       </ng-container>
 
