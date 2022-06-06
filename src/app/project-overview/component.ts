@@ -104,7 +104,11 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   }
 
   private _loadClusters(): void {
-    merge(timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()), this._projectChange, this.clustersChange)
+    merge(
+      timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()),
+      this._projectChange,
+      this.clustersChange
+    )
       .pipe(
         switchMap(() => (this.project ? this._clusterService.clusters(this.project.id, true) : EMPTY)),
         tap(clusters => (this.clusters = clusters)),
@@ -128,7 +132,11 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   }
 
   private _loadExternalClusters(): void {
-    merge(timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()), this._projectChange, this.externalClustersChange)
+    merge(
+      timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()),
+      this._projectChange,
+      this.externalClustersChange
+    )
       .pipe(
         switchMap(() =>
           this.project && this.externalClustersEnabled ? this._clusterService.externalClusters(this.project.id) : EMPTY
@@ -139,7 +147,11 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   }
 
   private _loadClusterTemplates(): void {
-    merge(timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()), this._projectChange, this.clusterTemplatesChange)
+    merge(
+      timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()),
+      this._projectChange,
+      this.clusterTemplatesChange
+    )
       .pipe(
         switchMap(() => (this.project ? this._clusterTemplateService.list(this.project.id) : EMPTY)),
         takeUntil(this._unsubscribe)
@@ -148,7 +160,11 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   }
 
   private _loadBackups(): void {
-    merge(timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()), this._projectChange, this.backupsChange)
+    merge(
+      timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()),
+      this._projectChange,
+      this.backupsChange
+    )
       .pipe(switchMap(() => (this.project ? this._backupService.list(this.project.id) : EMPTY)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(backups => (this.backups = backups));
