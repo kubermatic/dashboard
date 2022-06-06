@@ -22,6 +22,17 @@ import {Member} from '@shared/entity/member';
 import {GroupConfig} from '@shared/model/Config';
 import {UserService} from '@core/services/user';
 import {Subject, take, takeUntil} from 'rxjs';
+import {MatDialog} from '@angular/material/dialog';
+import {
+  AddClusterFromTemplateDialogComponent,
+  AddClusterFromTemplateDialogData,
+} from '@shared/components/add-cluster-from-template-dialog/component';
+import {AddExternalClusterDialogComponent} from '@shared/components/add-external-cluster-dialog/component';
+import {
+  AddAutomaticBackupDialogComponent,
+  AddAutomaticBackupDialogConfig,
+} from '@app/backup/list/automatic-backup/add-dialog/component';
+import {AddSnapshotDialogComponent, AddSnapshotDialogConfig} from '@app/backup/list/snapshot/add-dialog/component';
 
 @Component({
   selector: 'km-create-resource-panel',
@@ -40,6 +51,7 @@ export class CreateResourcePanelComponent implements OnInit, OnDestroy {
   constructor(
     private readonly _elementRef: ElementRef,
     private readonly _router: Router,
+    private readonly _matDialog: MatDialog,
     private readonly _userService: UserService
   ) {}
 
@@ -88,13 +100,28 @@ export class CreateResourcePanelComponent implements OnInit, OnDestroy {
     this._router.navigate([`/projects/${this.project.id}/wizard`]);
   }
 
-  createClusterFromTemplate(): void {}
+  createClusterFromTemplate(): void {
+    this._matDialog.open(AddClusterFromTemplateDialogComponent, {
+      data: {projectId: this.project.id} as AddClusterFromTemplateDialogData,
+    });
+  }
 
-  createExternalCluster(): void {}
+  createExternalCluster(): void {
+    const dialog = this._matDialog.open(AddExternalClusterDialogComponent);
+    dialog.componentInstance.projectId = this.project.id;
+  }
 
-  createClusterTemplate(): void {}
+  createClusterTemplate(): void {
+    this._router.navigate([`/projects/${this.project.id}/wizard`]);
+  }
 
-  createAutomaticBackup(): void {}
+  createAutomaticBackup(): void {
+    this._matDialog.open(AddAutomaticBackupDialogComponent, {
+      data: {projectID: this.project.id} as AddAutomaticBackupDialogConfig,
+    });
+  }
 
-  createSnapshot(): void {}
+  createSnapshot(): void {
+    this._matDialog.open(AddSnapshotDialogComponent, {data: {projectID: this.project.id} as AddSnapshotDialogConfig});
+  }
 }
