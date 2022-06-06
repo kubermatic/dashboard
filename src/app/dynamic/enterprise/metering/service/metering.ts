@@ -55,7 +55,7 @@ export class MeteringService {
     if (!this._scheduleConfigurations) {
       this._scheduleConfigurations = merge(this.onScheduleConfigurationChange$, this._refreshTimer$)
         .pipe(switchMap(_ => this._getScheduleConfigurations()))
-        .pipe(shareReplay(1));
+        .pipe(shareReplay({refCount: true, bufferSize: 1}));
     }
     return this._scheduleConfigurations;
   }
@@ -67,12 +67,20 @@ export class MeteringService {
 
   addScheduleConfiguration(configuration: MeteringReportConfiguration): Observable<any> {
     const url = `${this._restRoot}/admin/metering/configurations/reports/${configuration.name}`;
-    return this._http.post(url, {schedule: configuration.schedule, interval: configuration.interval});
+    return this._http.post(url, {
+      schedule: configuration.schedule,
+      interval: configuration.interval,
+      retention: configuration.retention,
+    });
   }
 
   updateScheduleConfiguration(configuration: MeteringReportConfiguration): Observable<any> {
     const url = `${this._restRoot}/admin/metering/configurations/reports/${configuration.name}`;
-    return this._http.put(url, {schedule: configuration.schedule, interval: configuration.interval});
+    return this._http.put(url, {
+      schedule: configuration.schedule,
+      interval: configuration.interval,
+      retention: configuration.retention,
+    });
   }
 
   deleteScheduleConfiguration(name: string): Observable<any> {

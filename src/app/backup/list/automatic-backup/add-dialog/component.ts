@@ -15,6 +15,7 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {KmValidators} from '@app/shared/validators/validators';
 import {BackupService} from '@core/services/backup';
 import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
@@ -183,7 +184,7 @@ export class AddAutomaticBackupDialogComponent implements OnInit, OnDestroy {
 
   private _updateFieldValidation(required: boolean): void {
     if (required) {
-      this.form.get(Controls.Schedule).setValidators(Validators.required);
+      this.form.get(Controls.Schedule).setValidators([Validators.required, KmValidators.cronExpression()]);
       this.form.get(Controls.Keep).setValidators([Validators.required, Validators.min(1)]);
     } else {
       this.form.get(Controls.Schedule).clearValidators();

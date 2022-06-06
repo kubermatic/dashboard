@@ -24,6 +24,7 @@ import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {NotificationService} from '@app/core/services/notification';
 import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering';
 import {MeteringReportConfiguration} from '@app/shared/entity/datacenter';
+import {KmValidators} from '@app/shared/validators/validators';
 import {Observable, Subject, take, takeUntil} from 'rxjs';
 
 export interface MeteringScheduleAddDialogConfig {
@@ -35,6 +36,7 @@ enum Controls {
   Schedule = 'schedule',
   Group = 'group',
   Interval = 'interval',
+  Retention = 'retention',
 }
 
 enum DefaultScheduleOption {
@@ -56,6 +58,12 @@ enum DefaultScheduleInterval {
   Monthly = 30,
 }
 
+enum DefalutReportRetentionOption {
+  Daily = 30,
+  Weekly = 90,
+  Monthly = 365,
+}
+
 @Component({
   selector: 'km-add-schedule-config-dialog',
   templateUrl: './template.html',
@@ -68,6 +76,19 @@ export class MeteringScheduleAddDialog implements OnInit, OnDestroy {
 
   private get _group(): DefaultScheduleOption {
     return this.form.get(Controls.Group).value;
+  }
+
+  private get _retention(): number {
+    switch (this._group) {
+      case DefaultScheduleOption.Daily:
+        return DefalutReportRetentionOption.Daily;
+      case DefaultScheduleOption.Weekly:
+        return DefalutReportRetentionOption.Weekly;
+      case DefaultScheduleOption.Monthly:
+        return DefalutReportRetentionOption.Monthly;
+      case DefaultScheduleOption.Custom:
+        return this.form.get(Controls.Retention).value;
+    }
   }
 
   private get _schedule(): string {
@@ -108,8 +129,9 @@ export class MeteringScheduleAddDialog implements OnInit, OnDestroy {
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control('', Validators.required),
       [Controls.Group]: this._builder.control(DefaultScheduleOption.Daily, Validators.required),
-      [Controls.Schedule]: this._builder.control('0 0 * * *'),
+      [Controls.Schedule]: this._builder.control(DefaultSchedule.Daily),
       [Controls.Interval]: this._builder.control('1', Validators.min(1)),
+      [Controls.Retention]: this._builder.control(null, Validators.min(1)),
     });
 
     this.form
@@ -139,7 +161,7 @@ export class MeteringScheduleAddDialog implements OnInit, OnDestroy {
 
   private _updateFieldValidation(required: boolean): void {
     if (required) {
-      this.form.get(Controls.Schedule).setValidators(Validators.required);
+      this.form.get(Controls.Schedule).setValidators([Validators.required, KmValidators.cronExpression()]);
       this.form.get(Controls.Interval).setValidators([Validators.required, Validators.min(1)]);
     } else {
       this.form.get(Controls.Schedule).clearValidators();
@@ -155,6 +177,7 @@ export class MeteringScheduleAddDialog implements OnInit, OnDestroy {
       name: this.form.get(Controls.Name).value,
       schedule: this._schedule,
       interval: this._interval,
+      retention: this._retention,
     };
   }
 }

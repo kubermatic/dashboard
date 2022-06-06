@@ -33,6 +33,13 @@ import {ConfirmationDialogComponent} from '@app/shared/components/confirmation-d
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {NotificationService} from '@app/core/services/notification';
 
+enum Column {
+  name = 'name',
+  size = 'size',
+  lastModified = 'lastModified',
+  actions = 'actions',
+}
+
 @Component({
   selector: 'km-metering-reports-list',
   templateUrl: './template.html',
@@ -41,12 +48,17 @@ import {NotificationService} from '@app/core/services/notification';
 export class MeteringReportListComponent implements OnInit {
   private readonly _unsubscribe = new Subject<void>();
   private _reportsInProgress = new Set<string>([]);
+
   scheduleName: string;
   schedule: string;
   interval: number;
+  retention?: number;
   reports: Report[] = [];
+
+  readonly column = Column;
+  readonly displayedColumns: string[] = Object.values(Column);
+
   dataSource = new MatTableDataSource<Report>();
-  readonly displayedColumns: string[] = ['name', 'size', 'lastModified', 'actions'];
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
@@ -87,6 +99,7 @@ export class MeteringReportListComponent implements OnInit {
         this.scheduleName = config.name;
         this.schedule = config.schedule;
         this.interval = config.interval;
+        this.retention = config.retention;
         this._isLoadingConfig = false;
       });
 

@@ -15,7 +15,13 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
+import {ActivatedRoute} from '@angular/router';
+import {ClusterService} from '@app/core/services/cluster';
+import {NotificationService} from '@app/core/services/notification';
+import {PathParam} from '@app/core/services/params';
+import {Cluster} from '@app/shared/entity/cluster';
 import {ExternalClusterModel} from '@shared/entity/external-cluster';
+import {Observable} from 'rxjs';
 
 export enum Controls {
   Name = 'name',
@@ -31,19 +37,32 @@ export class EditClusterConnectionDialogComponent implements OnInit {
   controls = Controls;
   form: FormGroup;
   kubeconfig = '';
+  clusterID: string;
 
-  constructor(private readonly _matDialogRef: MatDialogRef<EditClusterConnectionDialogComponent>) {}
+  constructor(
+    private readonly _matDialogRef: MatDialogRef<EditClusterConnectionDialogComponent>,
+    private readonly _clusterService: ClusterService,
+    private readonly _activatedRoute: ActivatedRoute,
+    private readonly _notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({name: new FormControl(this.name, [Validators.required])});
+    this.clusterID = this._activatedRoute.snapshot.paramMap.get(PathParam.ClusterID);
   }
 
-  handler(): void {
+  getObservable(): Observable<Cluster> {
     const model: ExternalClusterModel = {
       name: this.form.get(Controls.Name).value,
       kubeconfig: btoa(this.kubeconfig),
     };
 
     this._matDialogRef.close(model);
+    return this._clusterService.updateExternalCluster(this.projectId, this.clusterID, model);
+  }
+
+  onNext(): void {
+    this._clusterService.onClusterUpdate.next();
+    this._notificationService.success(`Updated the ${this.name} cluster`);
   }
 }
