@@ -59,7 +59,11 @@ limitations under the License.
        fxLayoutAlign="center start"
        class="warning-container">
     <i class="km-icon-warning"></i>
-    <div class="km-text dynamic-kubelet-config-warning">Kubernetes version 1.24 and higher do not support dynamic kubelet configuration. On upgrade, dynamic kubelet configuration is going to be disabled on the machine deployments: <span class="km-text dynamic-kubelet-config-nodes">{{this.nodesSupportDynamicKubeletConfig}}</span></div>
+    <div class="km-text dynamic-kubelet-config-warning">
+      Kubernetes version 1.24 and higher do not support dynamic kubelet configuration.
+      On upgrade, dynamic kubelet configuration is going to be disabled on the machine deployments:
+      <span class="dynamic-kubelet-config-nodes">{{this.nodesSupportDynamicKubeletConfig}}</span>
+    </div>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>
