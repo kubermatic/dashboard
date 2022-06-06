@@ -50,6 +50,10 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   sshKeys: SSHKey[] = [];
   members: Member[] = [];
   serviceAccounts: ServiceAccount[] = [];
+  clustersChange = new Subject<void>();
+  externalClustersChange = new Subject<void>();
+  clusterTemplatesChange = new Subject<void>();
+  backupsChange = new Subject<void>();
   private _projectChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
   private readonly _refreshTime = 15;
@@ -100,7 +104,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   }
 
   private _loadClusters(): void {
-    merge(timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()), this._projectChange)
+    merge(timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()), this._projectChange, this.clustersChange)
       .pipe(
         switchMap(() => (this.project ? this._clusterService.clusters(this.project.id, true) : EMPTY)),
         tap(clusters => (this.clusters = clusters)),
@@ -124,7 +128,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   }
 
   private _loadExternalClusters(): void {
-    merge(timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()), this._projectChange)
+    merge(timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()), this._projectChange, this.externalClustersChange)
       .pipe(
         switchMap(() =>
           this.project && this.externalClustersEnabled ? this._clusterService.externalClusters(this.project.id) : EMPTY
@@ -135,7 +139,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   }
 
   private _loadClusterTemplates(): void {
-    merge(timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()), this._projectChange)
+    merge(timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()), this._projectChange, this.clusterTemplatesChange)
       .pipe(
         switchMap(() => (this.project ? this._clusterTemplateService.list(this.project.id) : EMPTY)),
         takeUntil(this._unsubscribe)
@@ -144,7 +148,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   }
 
   private _loadBackups(): void {
-    merge(timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()), this._projectChange)
+    merge(timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()), this._projectChange, this.backupsChange)
       .pipe(switchMap(() => (this.project ? this._backupService.list(this.project.id) : EMPTY)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(backups => (this.backups = backups));

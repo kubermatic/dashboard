@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, ElementRef, HostListener, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {slideOut} from '@shared/animations/slide';
 import {Router} from '@angular/router';
 import {Project} from '@shared/entity/project';
@@ -21,7 +21,7 @@ import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
 import {GroupConfig} from '@shared/model/Config';
 import {UserService} from '@core/services/user';
-import {Subject, take, takeUntil} from 'rxjs';
+import {filter, Subject, take, takeUntil} from 'rxjs';
 import {MatDialog} from '@angular/material/dialog';
 import {
   AddClusterFromTemplateDialogComponent,
@@ -42,6 +42,10 @@ import {AddSnapshotDialogComponent, AddSnapshotDialogConfig} from '@app/backup/l
 })
 export class CreateResourcePanelComponent implements OnInit, OnDestroy {
   @Input() project: Project;
+  @Output() refreshClusters = new EventEmitter<void>();
+  @Output() refreshExternalClusters = new EventEmitter<void>();
+  @Output() refreshClusterTemplates = new EventEmitter<void>();
+  @Output() refreshBackups = new EventEmitter<void>();
 
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
@@ -101,14 +105,26 @@ export class CreateResourcePanelComponent implements OnInit, OnDestroy {
   }
 
   createClusterFromTemplate(): void {
-    this._matDialog.open(AddClusterFromTemplateDialogComponent, {
+    this.close();
+    const dialog = this._matDialog.open(AddClusterFromTemplateDialogComponent, {
       data: {projectId: this.project.id} as AddClusterFromTemplateDialogData,
     });
+    dialog
+      .afterClosed()
+      .pipe(filter(confirmed => confirmed))
+      .pipe(take(1))
+      .subscribe(_ => this.refreshClusters.next());
   }
 
   createExternalCluster(): void {
+    this.close();
     const dialog = this._matDialog.open(AddExternalClusterDialogComponent);
     dialog.componentInstance.projectId = this.project.id;
+    dialog
+      .afterClosed()
+      .pipe(filter(confirmed => confirmed))
+      .pipe(take(1))
+      .subscribe(_ => this.refreshExternalClusters.next());
   }
 
   createClusterTemplate(): void {
@@ -116,12 +132,19 @@ export class CreateResourcePanelComponent implements OnInit, OnDestroy {
   }
 
   createAutomaticBackup(): void {
-    this._matDialog.open(AddAutomaticBackupDialogComponent, {
+    this.close();
+    const dialog = this._matDialog.open(AddAutomaticBackupDialogComponent, {
       data: {projectID: this.project.id} as AddAutomaticBackupDialogConfig,
     });
+    dialog
+      .afterClosed()
+      .pipe(filter(confirmed => confirmed))
+      .pipe(take(1))
+      .subscribe(_ => this.refreshBackups.next());
   }
 
   createSnapshot(): void {
+    this.close();
     this._matDialog.open(AddSnapshotDialogComponent, {data: {projectID: this.project.id} as AddSnapshotDialogConfig});
   }
 }

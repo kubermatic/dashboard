@@ -19,7 +19,12 @@ limitations under the License.
   <mat-card>
     <mat-card-header>
       <mat-card-title>Project Overview</mat-card-title>
-      <km-create-resource-panel [project]="project"></km-create-resource-panel>
+      <km-create-resource-panel [project]="project"
+                                (refreshClusters)="clustersChange.next()"
+                                (refreshExternalClusters)="externalClustersChange.next()"
+                                (refreshClusterTemplates)="clusterTemplatesChange.next()"
+                                (refreshBackups)="backupsChange.next()"
+      ></km-create-resource-panel>
     </mat-card-header>
     <mat-card-content fxLayout="row wrap"
                       fxLayoutGap="30px grid">
