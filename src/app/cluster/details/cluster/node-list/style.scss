@@ -36,16 +36,6 @@ i.km-icon-warning {
   margin-left: 5px;
 }
 
-.mat-column-name,
-.node-info {
-  align-items: center;
-  display: flex;
-}
-
-.mat-column-name {
-  height: 50px;
-}
-
 .node-details {
   box-shadow: variables.$border-box-shadow-inset;
   padding: variables.$item-details-padding;
