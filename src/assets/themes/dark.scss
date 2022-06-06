@@ -146,6 +146,13 @@ $theme-dark: map.merge($theme-dark, (foreground: $foreground));
   }
 }
 
+// Adjust chart styling.
+.ngx-charts {
+  text {
+    fill: #fff;
+  }
+}
+
 // Adjust Swagger styling.
 .km-swagger-container {
   .swagger-ui {

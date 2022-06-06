@@ -83,6 +83,6 @@ export class ProvidersOverviewComponent implements OnInit, OnChanges {
       value: v,
     }));
 
-    return [...clusterData, ...externalClusterData];
+    return [...clusterData, ...externalClusterData].sort((a, b) => a.name.localeCompare(b.name));
   }
 }
