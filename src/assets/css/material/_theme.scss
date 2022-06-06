@@ -408,4 +408,18 @@
       border-bottom: 1px solid map.get($colors, tab-divider);
     }
   }
+
+  // Checkbox
+  .mat-checkbox-disabled {
+    &.mat-checkbox-checked,
+    &.mat-checkbox-indeterminate {
+      .mat-checkbox-background {
+        background-color: map.get($colors, disabled-checkbox);
+      }
+    }
+
+    .mat-checkbox-label {
+      color: map.get($colors, text);
+    }
+  }
 }
