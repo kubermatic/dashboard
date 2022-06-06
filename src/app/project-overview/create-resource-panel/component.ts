@@ -68,6 +68,10 @@ export class CreateResourcePanelComponent implements OnInit, OnDestroy {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, Permission.Create);
   }
 
+  get canCreateBackups(): boolean {
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Backups, Permission.Create);
+  }
+
   get isOpen(): boolean {
     return this._isOpen;
   }
@@ -83,4 +87,14 @@ export class CreateResourcePanelComponent implements OnInit, OnDestroy {
   createCluster(): void {
     this._router.navigate([`/projects/${this.project.id}/wizard`]);
   }
+
+  createClusterFromTemplate(): void {}
+
+  createExternalCluster(): void {}
+
+  createClusterTemplate(): void {}
+
+  createAutomaticBackup(): void {}
+
+  createSnapshot(): void {}
 }

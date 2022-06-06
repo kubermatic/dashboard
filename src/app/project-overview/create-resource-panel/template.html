@@ -32,44 +32,54 @@ limitations under the License.
          [ngClass]="{'km-muted-bg': !canCreateCluster}"></i>
       <span>Cluster</span>
     </div>
-    <div class="entry km-hover-bg"
+    <div class="entry"
+         [ngClass]="{'km-text-muted': !canCreateCluster, 'km-hover-bg km-pointer': canCreateCluster}"
          fxLayoutAlign=" center"
          fxLayoutGap="14px"
          matRipple
-         (click)="close()">
-      <i class="km-icon-mask km-icon-cluster"></i>
+         (click)="createClusterFromTemplate()">
+      <i class="km-icon-mask km-icon-cluster"
+         [ngClass]="{'km-muted-bg': !canCreateCluster}"></i>
       <span>Cluster from Template</span>
     </div>
-    <div class="entry km-hover-bg"
+    <div class="entry"
+         [ngClass]="{'km-text-muted': !canCreateCluster, 'km-hover-bg km-pointer': canCreateCluster}"
          fxLayoutAlign=" center"
          fxLayoutGap="14px"
          matRipple
-         (click)="close()">
-      <i class="km-icon-mask km-icon-cluster"></i>
+         (click)="createExternalCluster()">
+      <i class="km-icon-mask km-icon-cluster"
+         [ngClass]="{'km-muted-bg': !canCreateCluster}"></i>
       <span>External Cluster</span>
     </div>
-    <div class="entry km-hover-bg"
+    <div class="entry"
+         [ngClass]="{'km-text-muted': !canCreateCluster, 'km-hover-bg km-pointer': canCreateCluster}"
          fxLayoutAlign=" center"
          fxLayoutGap="14px"
          matRipple
-         (click)="close()">
-      <i class="km-icon-mask km-icon-cluster-template"></i>
+         (click)="createClusterTemplate()">
+      <i class="km-icon-mask km-icon-cluster-template"
+         [ngClass]="{'km-muted-bg': !canCreateCluster}"></i>
       <span>Cluster Template</span>
     </div>
-    <div class="entry km-hover-bg"
+    <div class="entry"
+         [ngClass]="{'km-text-muted': !canCreateBackups, 'km-hover-bg km-pointer': canCreateBackups}"
          fxLayoutAlign=" center"
          fxLayoutGap="14px"
          matRipple
-         (click)="close()">
-      <i class="km-icon-mask km-icon-backup"></i>
+         (click)="createAutomaticBackup()">
+      <i class="km-icon-mask km-icon-backup"
+         [ngClass]="{'km-muted-bg': !canCreateBackups}"></i>
       <span>Automatic Backup</span>
     </div>
-    <div class="entry km-hover-bg"
+    <div class="entry"
+         [ngClass]="{'km-text-muted': !canCreateBackups, 'km-hover-bg km-pointer': canCreateBackups}"
          fxLayoutAlign=" center"
          fxLayoutGap="14px"
          matRipple
-         (click)="close()">
-      <i class="km-icon-mask km-icon-backup"></i>
+         (click)="createSnapshot()">
+      <i class="km-icon-mask km-icon-backup"
+         [ngClass]="{'km-muted-bg': !canCreateBackups}"></i>
       <span>Snapshot</span>
     </div>
   </div>
