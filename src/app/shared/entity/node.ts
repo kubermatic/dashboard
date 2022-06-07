@@ -125,6 +125,11 @@ export class NodeAddress {
   address: string;
 }
 
+export class NodeIPAddress {
+  internalIPs: string[] = [];
+  externalIP: string;
+}
+
 export class NodeSystemInfo {
   kernelVersion: string;
   kubeletVersion: string;
