@@ -83,7 +83,6 @@ limitations under the License.
                  [ngClass]="{'node-ip-addresses-spacing': (addresses.externalIP && addresses.internalIPs.length) || addresses.internalIPs.length > 1}">
               <div *ngIf="!!addresses.internalIPs.length"
                    fxLayout="row"
-                   fxLayoutAlign=" center"
                    fxLayoutGap="5px">
                 <span>Int. IP:</span>
                 <div fxLayout="column">
