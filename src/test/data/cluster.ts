@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Cluster, ExternalCCMMigrationStatus} from '@shared/entity/cluster';
+import {Cluster, CNIPlugin, ExternalCCMMigrationStatus, ProxyMode} from '@shared/entity/cluster';
 
 export function fakeDigitaloceanCluster(): Cluster {
   return {
@@ -28,6 +28,13 @@ export function fakeDigitaloceanCluster(): Cluster {
         providerName: 'digitalocean',
       },
       version: '1.8.5',
+      clusterNetwork: {
+        proxyMode: ProxyMode.iptables,
+      },
+      cniPlugin: {
+        type: CNIPlugin.Cilium,
+        version: '0',
+      },
     },
     status: {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
