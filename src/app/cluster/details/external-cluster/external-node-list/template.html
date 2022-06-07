@@ -85,7 +85,7 @@ limitations under the License.
                    fxLayout="row"
                    fxLayoutAlign=" center"
                    fxLayoutGap="5px">
-                <span>Int.IP:</span>
+                <span>Int. IP:</span>
                 <div fxLayout="column">
                   <span *ngFor="let internalIP of addresses.internalIPs"
                         class="km-copy"
@@ -96,7 +96,7 @@ limitations under the License.
                 </div>
               </div>
               <div *ngIf="!!addresses.externalIP">
-                Ext.IP:
+                Ext. IP:
                 <span class="km-copy"
                       [cbContent]="addresses.externalIP"
                       (click)="$event.stopPropagation()"
