@@ -419,7 +419,7 @@
     }
 
     .mat-checkbox-label {
-      color: map.get($colors, text);
+      color: inherit;
     }
   }
 }
