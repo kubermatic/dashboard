@@ -17,8 +17,8 @@ limitations under the License.
 <km-tab-card [verticalMargin]="false">
   <km-tab label="Cluster Distribution">
     <div #chartContainer
-         [ngSwitch]="clusters.length > 0"
-         [ngClass]="{'empty': clusters.length < 1}"
+         [ngSwitch]="clusters.length + externalClusters.length > 0"
+         [ngClass]="{'empty': clusters.length + externalClusters.length < 1}"
          class="chart-container"
          fxLayoutAlign="center center">
       <ngx-charts-pie-chart *ngSwitchCase="true"

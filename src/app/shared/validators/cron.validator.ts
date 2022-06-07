@@ -12,18 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'mixins';
+import {AbstractControl, ValidationErrors, Validator} from '@angular/forms';
+import {isValidCron} from 'cron-validator';
 
-.mat-card {
-  margin-top: 0;
-
-  .mat-card-header {
-    .km-icon-arrow-down {
-      @include mixins.size(16px, $force: true);
-    }
+export class CronExpressionValidator implements Validator {
+  validate(control: AbstractControl): ValidationErrors | null {
+    const isValid = isValidCron(control.value, {alias: true});
+    return isValid ? null : this._error();
   }
 
-  .mat-card-content {
-    padding: 0 30px;
+  private _error(): ValidationErrors {
+    return {
+      cronExpression: {
+        valid: false,
+      },
+    };
   }
 }

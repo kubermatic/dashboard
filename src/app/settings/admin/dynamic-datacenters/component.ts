@@ -21,7 +21,7 @@ import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
 import {UserService} from '@core/services/user';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
-import {CreateDatacenterModel, Datacenter} from '@shared/entity/datacenter';
+import {Datacenter} from '@shared/entity/datacenter';
 import {INTERNAL_NODE_PROVIDERS, NodeProvider} from '@shared/model/NodeProviderConstants';
 import * as countryCodeLookup from 'country-code-lookup';
 import _ from 'lodash';
@@ -145,27 +145,7 @@ export class DynamicDatacentersComponent implements OnInit, OnDestroy, OnChanges
       },
     };
 
-    this._matDialog
-      .open(DatacenterDataDialogComponent, dialogConfig)
-      .afterClosed()
-      .pipe(filter(datacenter => !!datacenter))
-      .pipe(take(1))
-      .subscribe((result: Datacenter) => this._add(result));
-  }
-
-  private _add(datacenter: Datacenter): void {
-    const model: CreateDatacenterModel = {
-      name: datacenter.metadata.name,
-      spec: datacenter.spec,
-    };
-
-    this._datacenterService
-      .createDatacenter(model)
-      .pipe(take(1))
-      .subscribe(datacenter => {
-        this._notificationService.success(`Created the ${datacenter.metadata.name} datacenter`);
-        this._datacenterService.refreshDatacenters();
-      });
+    this._matDialog.open(DatacenterDataDialogComponent, dialogConfig);
   }
 
   edit(datacenter: Datacenter): void {
@@ -178,22 +158,7 @@ export class DynamicDatacentersComponent implements OnInit, OnDestroy, OnChanges
       },
     };
 
-    this._matDialog
-      .open(DatacenterDataDialogComponent, dialogConfig)
-      .afterClosed()
-      .pipe(filter(datacenter => !!datacenter))
-      .pipe(take(1))
-      .subscribe((result: Datacenter) => this._edit(datacenter, result));
-  }
-
-  private _edit(original: Datacenter, edited: Datacenter): void {
-    this._datacenterService
-      .patchDatacenter(original.spec.seed, original.metadata.name, edited)
-      .pipe(take(1))
-      .subscribe(datacenter => {
-        this._notificationService.success(`Updated the ${datacenter.metadata.name} datacenter`);
-        this._datacenterService.refreshDatacenters();
-      });
+    this._matDialog.open(DatacenterDataDialogComponent, dialogConfig);
   }
 
   delete(datacenter: Datacenter): void {

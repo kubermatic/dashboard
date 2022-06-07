@@ -19,7 +19,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {fakeDigitaloceanCluster} from '@test/data/cluster';
 import {fakeProject} from '@test/data/project';
-import {RouterTestingModule} from '@test/services/router-stubs';
+import {Router, RouterStub, RouterTestingModule} from '@test/services/router-stubs';
 import {UserMockService} from '@test/services/user-mock';
 import {Auth} from '@core/services/auth/service';
 import {UserService} from '@core/services/user';
@@ -46,6 +46,7 @@ describe('ShareKubeconfigComponent', () => {
           useValue: {cluster: fakeDigitaloceanCluster()},
         },
         {provide: MatDialogRef, useValue: {}},
+        {provide: Router, useClass: RouterStub},
         {provide: AppConfigService, useClass: AppConfigMockService},
         ClusterService,
       ],
