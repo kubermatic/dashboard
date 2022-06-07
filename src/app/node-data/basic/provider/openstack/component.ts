@@ -303,6 +303,8 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
         return this._images.rhel;
       case OperatingSystem.Flatcar:
         return this._images.flatcar;
+      case OperatingSystem.RockyLinux:
+        return this._images.rockylinux;
       default:
         return this._images.ubuntu;
     }
