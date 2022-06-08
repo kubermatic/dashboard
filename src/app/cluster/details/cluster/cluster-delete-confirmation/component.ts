@@ -51,8 +51,8 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck, OnDe
 
   ngOnInit(): void {
     this.deleteForm = new FormGroup({
-      clusterLBCleanupCheckbox: new FormControl({value: false}),
-      clusterVolumeCleanupCheckbox: new FormControl({value: false}),
+      clusterLBCleanupCheckbox: new FormControl(false),
+      clusterVolumeCleanupCheckbox: new FormControl(false),
     });
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
