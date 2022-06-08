@@ -25,7 +25,7 @@ import {ExternalCluster, ExternalClusterPatch} from '@shared/entity/external-clu
 import {Project} from '@shared/entity/project';
 import {Observable, Subject} from 'rxjs';
 import {take, takeUntil, map} from 'rxjs/operators';
-import {END_OF_DYNAMIC_KUBELETCONFIG_SUPPORT_VERSION} from '@shared/entity/cluster';
+import {END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION} from '@shared/entity/cluster';
 
 @Component({
   selector: 'km-version-change-dialog',
@@ -42,6 +42,12 @@ export class VersionChangeDialogComponent implements OnInit, OnDestroy {
   isMachineDeploymentUpgradeEnabled = false;
   private _unsubscribe = new Subject<void>();
   nodesSupportDynamicKubeletConfig = '';
+  endOfDynamicKubeletConfigSupportVersion: string = END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION;
+
+  get isDynamicKubletConfigSupportedInUpgrade(): boolean {
+    const endSliceParameter = 4;
+    return this.selectedVersion.slice(0, endSliceParameter) < this.endOfDynamicKubeletConfigSupportVersion;
+  }
 
   constructor(
     private readonly _clusterService: ClusterService,
@@ -68,7 +74,7 @@ export class VersionChangeDialogComponent implements OnInit, OnDestroy {
       .pipe(map(nodes => nodes.filter(node => node.spec.dynamicConfig)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(nodes => {
-        this.nodesSupportDynamicKubeletConfig = nodes.map(node => ` MD-${node.name}`).toString();
+        this.nodesSupportDynamicKubeletConfig = nodes.map(node => ` MD-${node.name}`).join(', ');
       });
   }
 
@@ -102,11 +108,6 @@ export class VersionChangeDialogComponent implements OnInit, OnDestroy {
       this.upgradeMachineDeployments();
     }
     this._dialogRef.close(true);
-  }
-
-  isDynamicKubletConfigSupportedInUpgrade(): boolean {
-    const endSliceParameter = 4;
-    return this.selectedVersion.slice(0, endSliceParameter) < END_OF_DYNAMIC_KUBELETCONFIG_SUPPORT_VERSION;
   }
 
   upgradeMachineDeployments(): void {

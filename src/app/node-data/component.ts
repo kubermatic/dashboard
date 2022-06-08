@@ -27,7 +27,7 @@ import {DatacenterService} from '@core/services/datacenter';
 import {NameGeneratorService} from '@core/services/name-generator';
 import {NodeDataService} from '@core/services/node-data/service';
 import {SettingsService} from '@core/services/settings';
-import {ContainerRuntime, END_OF_DYNAMIC_KUBELETCONFIG_SUPPORT_VERSION} from '@shared/entity/cluster';
+import {ContainerRuntime, END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION} from '@shared/entity/cluster';
 import {Datacenter} from '@shared/entity/datacenter';
 import {OperatingSystemSpec, Taint} from '@shared/entity/node';
 import {NodeProvider, NodeProviderConstants, OperatingSystem} from '@shared/model/NodeProviderConstants';
@@ -81,9 +81,14 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   labels: object = {};
   taints: Taint[] = [];
   dialogEditMode = false;
+  endOfDynamicKubeletConfigSupportVersion: string = END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION;
 
   get providerDisplayName(): string {
     return NodeProviderConstants.displayName(this.provider);
+  }
+
+  get isDynamicKubletConfigSupported(): boolean {
+    return this._clusterSpecService.cluster.spec.version < this.endOfDynamicKubeletConfigSupportVersion;
   }
 
   constructor(
@@ -231,10 +236,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   onTaintsChange(taints: Taint[]): void {
     this.taints = taints;
     this._nodeDataService.taints = this.taints;
-  }
-
-  isDynamicKubletConfigSupported(): boolean {
-    return this._clusterSpecService.cluster.spec.version < END_OF_DYNAMIC_KUBELETCONFIG_SUPPORT_VERSION;
   }
 
   private _init(): void {

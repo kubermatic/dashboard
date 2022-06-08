@@ -64,7 +64,7 @@ export enum ContainerRuntime {
 
 export const END_OF_DOCKER_SUPPORT_VERSION = '1.24.0';
 
-export const END_OF_DYNAMIC_KUBELETCONFIG_SUPPORT_VERSION = '1.24';
+export const END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION = '1.24';
 
 export class Cluster {
   creationTimestamp?: Date;
