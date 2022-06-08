@@ -484,6 +484,10 @@ limitations under the License.
                                label="Upgrade system on the first boot"
                                [value]="machineDeployment.spec.template.operatingSystem.rhel.distUpgradeOnBoot">
           </km-property-boolean>
+          <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.rockylinux?.distUpgradeOnBoot"
+                               label="Upgrade system on the first boot"
+                               [value]="machineDeployment.spec.template.operatingSystem.rockylinux.distUpgradeOnBoot">
+          </km-property-boolean>
           <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.flatcar?.disableAutoUpdate"
                                label="Disable system auto-update"
                                [value]="machineDeployment.spec.template.operatingSystem.flatcar.disableAutoUpdate">
