@@ -26,6 +26,5 @@ updates:
     labels:
       - dependencies
       - release-note-none
-      - approved
       - ok-to-test
 
