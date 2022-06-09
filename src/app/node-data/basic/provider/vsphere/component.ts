@@ -135,6 +135,9 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
       case OperatingSystem.Flatcar:
         this._defaultTemplate = this._templates.flatcar;
         break;
+      case OperatingSystem.RockyLinux:
+        this._defaultTemplate = this._templates.rockylinux;
+        break;
       default:
         this._defaultTemplate = '';
     }
@@ -151,6 +154,8 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
       return OperatingSystem.SLES;
     } else if (this._templates.flatcar) {
       return OperatingSystem.Flatcar;
+    } else if (this._templates.rockylinux) {
+      return OperatingSystem.RockyLinux;
     }
     return undefined;
   }

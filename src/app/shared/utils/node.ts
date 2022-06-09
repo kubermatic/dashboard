@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Node} from '../entity/node';
+import {Node, NodeIPAddress} from '../entity/node';
 
 export class NodeUtils {
   static getFormattedNodeMemory(memory: string): string {
@@ -38,13 +38,13 @@ export class NodeUtils {
     return nodeCapacity ? `${nodeCapacity} ${prefixes[i - 1]}` : 'unknown';
   }
 
-  static getAddresses(node: Node): object {
-    const addresses = {};
+  static getAddresses(node: Node): NodeIPAddress {
+    const addresses = new NodeIPAddress();
     for (const i in node.status.addresses) {
       if (node.status.addresses[i].type === 'InternalIP') {
-        addresses['InternalIP'] = node.status.addresses[i].address;
+        addresses.internalIPs = [...addresses.internalIPs, node.status.addresses[i].address];
       } else if (node.status.addresses[i].type === 'ExternalIP') {
-        addresses['ExternalIP'] = node.status.addresses[i].address;
+        addresses.externalIP = node.status.addresses[i].address;
       }
     }
     return addresses;

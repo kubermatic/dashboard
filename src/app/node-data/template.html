@@ -97,6 +97,11 @@ limitations under the License.
           <i [ngClass]="rhelToggle.checked ? 'km-os-image-rhel' : 'km-os-image-rhel-gray'"></i>
           RHEL
         </mat-button-toggle>
+        <mat-button-toggle [value]="OperatingSystem.RockyLinux"
+                           *ngIf="isOperatingSystemSupported(OperatingSystem.RockyLinux)">
+          <i class="km-os-image-rockylinux"></i>
+          Rocky Linux
+        </mat-button-toggle>
       </mat-button-toggle-group>
 
       <!-- Options for RHEL -->
@@ -132,8 +137,8 @@ limitations under the License.
 
       <div fxLayout="row"
            fxLayoutGap="36px">
-        <!-- Options for Ubuntu, CenOS, SLES and RHEL -->
-        <div *ngIf="isOperatingSystemSelected(OperatingSystem.Ubuntu, OperatingSystem.CentOS, OperatingSystem.SLES, OperatingSystem.RHEL)"
+        <!-- Options for Ubuntu, CenOS, SLES and RHEL, Rocky Linux -->
+        <div *ngIf="isOperatingSystemSelected(OperatingSystem.Ubuntu, OperatingSystem.CentOS, OperatingSystem.SLES, OperatingSystem.RHEL, OperatingSystem.RockyLinux)"
              class="os-options">
           <mat-checkbox [id]="Controls.UpgradeOnBoot"
                         [formControlName]="Controls.UpgradeOnBoot">Upgrade system on first boot
