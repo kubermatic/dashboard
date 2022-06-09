@@ -18,6 +18,11 @@ updates:
     directory: "/"
     schedule:
       interval: daily
+    assignees:
+      - ahmadhamzh
+      - KhizerRehan
+      - Waseem826
+      - Talha-Jamil-TJ
     labels:
       - dependencies
       - release-note-none
