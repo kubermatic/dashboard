@@ -1,7 +1,6 @@
 ---
 name: Pre-Release
 title: "[vX.XX] Pre-Release Procedure"
-assignees: floreks, maciaszczykm
 about: The list of steps that should be executed prior to the release step list 
 labels: sig/ui, sig/release
 ---

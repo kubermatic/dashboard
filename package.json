@@ -7,8 +7,10 @@
   "repository": "https://github.com/kubermatic/dashboard",
   "private": true,
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=16.15.0",
+    "npm": ">=8.5.5"
   },
+  "engineStrict": true,
   "scripts": {
     "start": "npm run vi && ng s -c=default-\"${KUBERMATIC_EDITION:=ee}\" --host \"${KUBERMATIC_HOST:=localhost}\"",
     "start:local": "npm run vi && ng s -c=default-\"${KUBERMATIC_EDITION:=ee}\" --proxy-config=proxy-local.conf.cjs --host \"${KUBERMATIC_HOST:=localhost}\"",
