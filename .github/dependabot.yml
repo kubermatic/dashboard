@@ -19,8 +19,10 @@ updates:
     schedule:
       interval: daily
     assignees:
-      - maciaszczykm
-      - floreks
+      - ahmadhamzh
+      - KhizerRehan
+      - Waseem826
+      - Talha-Jamil-TJ
     labels:
       - dependencies
       - release-note-none
