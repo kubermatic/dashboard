@@ -39,6 +39,10 @@
       .scheme-container {
         background-color: transparent;
       }
+
+      input[type=text], input[type=email], input[type=number], input[type=password], input[type=search], input[type=tel], input[type=url] {
+        color: map.get($colors, swagger-ui-input-text-color);
+      }
     }
   }
 }
