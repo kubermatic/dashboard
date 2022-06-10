@@ -51,6 +51,7 @@ $colors-light: (
   tab-divider: #cad1d9,
   shadow: 0 4px 4px rgb(0 0 0 / 8%),
   shadow-dark: (0 2px 4px -1px rgb(0 0 0 / 20%), 0 4px 5px 0 rgb(0 0 0 / 14%), 0 1px 10px 0 rgb(0 0 0 / 12%)),
+  swagger-ui-input-text-color: #4d555c,
 );
 $colors-light-palette: mat.$blue-palette;
 $colors-light-palette: map.merge($colors-light-palette, (500: #00517d));
