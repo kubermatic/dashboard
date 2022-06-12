@@ -42,7 +42,7 @@ limitations under the License.
     </mat-step>
   </mat-horizontal-stepper>
 </form>
-<mat-dialog-actions>
+<mat-dialog-actions *ngIf="mode === modes.Create">
   <mat-spinner fxFlexAlign="center"
                [diameter]="30"
                color="accent"
@@ -55,7 +55,6 @@ limitations under the License.
              [observable]="getObservable()"
              (next)="onNext($event)">
   </km-button>
-
   <a *ngIf="!first"
      [href]="downloadURL"
      [download]="downloadTitle"
