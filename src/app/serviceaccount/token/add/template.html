@@ -41,42 +41,41 @@ limitations under the License.
       </km-serviceaccount-token-information-step>
     </mat-step>
   </mat-horizontal-stepper>
-
-  <mat-dialog-actions>
-    <mat-spinner fxFlexAlign="center"
-                 [diameter]="30"
-                 color="accent"
-                 *ngIf="updating"></mat-spinner>
-    <km-button *ngIf="first"
-               id="km-serviceaccount-token-dialog-update-btn"
-               [icon]="getIconClass()"
-               [label]="mode+' Token'"
-               [disabled]="updating || form.invalid"
-               [observable]="getObservable()"
-               (next)="onNext($event)">
-    </km-button>
-
-    <a *ngIf="!first"
-       [href]="downloadURL"
-       [download]="downloadTitle"
-       target="_blank"
-       rel="noopener">
-      <button mat-flat-button
-              color="alternative">
-        <i class="km-icon-download"></i>
-        Download Token
-      </button>
-    </a>
-
-    <button id="km-serviceaccount-token-dialog-confirm-btn"
-            mat-flat-button
-            mat-dialog-close
-            *ngIf="!first">
-      <i class="km-icon-mask km-icon-check i-24"></i>
-      <span>Got it</span>
-    </button>
-  </mat-dialog-actions>
 </form>
+<mat-dialog-actions>
+  <mat-spinner fxFlexAlign="center"
+               [diameter]="30"
+               color="accent"
+               *ngIf="updating"></mat-spinner>
+  <km-button *ngIf="first"
+             id="km-serviceaccount-token-dialog-update-btn"
+             [icon]="getIconClass()"
+             [label]="mode+' Token'"
+             [disabled]="updating || form.invalid"
+             [observable]="getObservable()"
+             (next)="onNext($event)">
+  </km-button>
+
+  <a *ngIf="!first"
+     [href]="downloadURL"
+     [download]="downloadTitle"
+     target="_blank"
+     rel="noopener">
+    <button mat-flat-button
+            color="alternative">
+      <i class="km-icon-download"></i>
+      Download Token
+    </button>
+  </a>
+
+  <button id="km-serviceaccount-token-dialog-confirm-btn"
+          mat-flat-button
+          mat-dialog-close
+          *ngIf="!first">
+    <i class="km-icon-mask km-icon-check i-24"></i>
+    <span>Got it</span>
+  </button>
+</mat-dialog-actions>
 
 <form *ngIf="mode === modes.Edit"
       (keydown.enter)="form.valid ? update() : null">
