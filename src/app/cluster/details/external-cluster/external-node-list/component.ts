@@ -19,7 +19,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {UserService} from '@core/services/user';
 import {ExternalCluster} from '@shared/entity/external-cluster';
 import {NodeMetrics} from '@shared/entity/metrics';
-import {Node} from '@shared/entity/node';
+import {Node, NodeIPAddress} from '@shared/entity/node';
 import {NodeUtils} from '@shared/utils/node';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
@@ -87,7 +87,7 @@ export class ExternalNodeListComponent implements OnInit, OnChanges, OnDestroy {
     return NodeUtils.getFormattedNodeMemory(memory);
   }
 
-  getAddresses(node: Node): object {
+  getAddresses(node: Node): NodeIPAddress {
     return NodeUtils.getAddresses(node);
   }
 

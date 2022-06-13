@@ -80,23 +80,19 @@ limitations under the License.
                        fxLayoutGap="20px">
         <mat-radio-button [value]="ScheduleOption.Daily">
           <div class="km-radio-button-title">Daily</div>
-          <div class="km-radio-button-description">Create backups every day at 22:00 and keep the backups for a week.
+          <div class="km-radio-button-description">Create a backup every day at 22:00 and save each backup for a week before it is automatically deleted.
           </div>
         </mat-radio-button>
 
         <mat-radio-button [value]="ScheduleOption.Weekly">
           <div class="km-radio-button-title">Weekly</div>
-          <div class="km-radio-button-description">Create backups every week at 22:00 on Monday and keep the backups for
-            4
-            weeks.
+          <div class="km-radio-button-description">Create a backup every week at 22:00 on Monday and save each backup for 4 weeks before it is automatically deleted.
           </div>
         </mat-radio-button>
 
         <mat-radio-button [value]="ScheduleOption.Monthly">
           <div class="km-radio-button-title">Monthly</div>
-          <div class="km-radio-button-description">Create backups every month at 22:00 on 1st day of the month and keep
-            the backups for 3
-            months.
+          <div class="km-radio-button-description">Create a backup every month at 22:00 on 1st day of the month and save each backup for 3 months before it is automatically deleted.
           </div>
         </mat-radio-button>
 
@@ -128,8 +124,8 @@ limitations under the License.
 
         <km-number-stepper [formControlName]="Controls.Keep"
                            mode="errors"
-                           label="Number of Backups to Keep"
-                           hint="How many backups should be kept before deleting the oldest ones."
+                           label="Number of Backups to Save"
+                           hint="How many backups should be saved before deleting the oldest ones."
                            min="1"
                            required>
         </km-number-stepper>

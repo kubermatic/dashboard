@@ -13,42 +13,13 @@
 // limitations under the License.
 
 @use 'variables';
+@use 'mixins';
 
-.mat-card {
-  .mat-card-header {
-    .mat-card-title {
-      padding-left: 30px;
-    }
-  }
+.panel {
+  margin-left: -70px;
+  width: 250px;
 
-  .health-status {
-    margin-top: 10px;
-  }
-}
-
-.node-ip-addresses-spacing {
-  margin-bottom: 10px;
-  margin-top: 10px;
-}
-
-i.km-icon-info,
-i.km-icon-warning {
-  margin-left: 5px;
-}
-
-.node-details {
-  box-shadow: variables.$border-box-shadow-inset;
-  padding: variables.$item-details-padding;
-
-  mat-card-content {
-    border: none;
-    margin-top: 15px;
-  }
-}
-
-.mat-card-content {
-  .km-row {
-    border-top: none;
-    padding: 0 30px;
+  .entry {
+    padding: 12px 20px;
   }
 }

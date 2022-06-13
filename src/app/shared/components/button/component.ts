@@ -26,6 +26,7 @@ export class ButtonComponent<T> implements OnInit, OnDestroy {
   @Input() icon: string;
   @Input() label: string;
   @Input() color: string;
+  @Input() buttonId: string;
   @Input() observable: Observable<T>;
   @Input() disabled = false;
   @Input() iconButton: string;

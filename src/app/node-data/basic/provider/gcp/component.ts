@@ -205,7 +205,6 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
   }
 
   private _onZoneLoading(): void {
-    this._clearZone();
     this.zoneLabel = ZoneState.Loading;
     this._cdr.detectChanges();
   }
@@ -232,7 +231,6 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
   }
 
   private _onDiskTypeLoading(): void {
-    this._clearDiskTypes();
     this.diskTypeLabel = DiskTypeState.Loading;
     this._cdr.detectChanges();
   }
@@ -261,7 +259,6 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
   }
 
   private _onMachineTypeLoading(): void {
-    this._clearMachineType();
     this.machineTypeLabel = MachineTypeState.Loading;
     this._cdr.detectChanges();
   }

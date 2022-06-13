@@ -1,0 +1,86 @@
+<!--
+Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<div class="km-panel">
+  <button mat-flat-button
+          (click)="toggle()">
+    <i class="km-icon-mask km-icon-arrow-down"></i>
+    <span>Create Resource</span>
+  </button>
+  <div class="panel"
+       fxLayout="column"
+       *ngIf="isOpen">
+    <div class="entry"
+         [ngClass]="{'km-text-muted': !canCreateCluster, 'km-hover-bg km-pointer': canCreateCluster}"
+         fxLayoutAlign=" center"
+         fxLayoutGap="14px"
+         matRipple
+         (click)="createCluster()">
+      <i class="km-icon-mask km-icon-cluster"
+         [ngClass]="{'km-muted-bg': !canCreateCluster}"></i>
+      <span>Cluster</span>
+    </div>
+    <div class="entry"
+         [ngClass]="{'km-text-muted': !canCreateCluster, 'km-hover-bg km-pointer': canCreateCluster}"
+         fxLayoutAlign=" center"
+         fxLayoutGap="14px"
+         matRipple
+         (click)="createClusterFromTemplate()">
+      <i class="km-icon-mask km-icon-cluster"
+         [ngClass]="{'km-muted-bg': !canCreateCluster}"></i>
+      <span>Cluster from Template</span>
+    </div>
+    <div class="entry"
+         [ngClass]="{'km-text-muted': !canCreateCluster, 'km-hover-bg km-pointer': canCreateCluster}"
+         fxLayoutAlign=" center"
+         fxLayoutGap="14px"
+         matRipple
+         (click)="createExternalCluster()">
+      <i class="km-icon-mask km-icon-cluster"
+         [ngClass]="{'km-muted-bg': !canCreateCluster}"></i>
+      <span>External Cluster</span>
+    </div>
+    <div class="entry"
+         [ngClass]="{'km-text-muted': !canCreateCluster, 'km-hover-bg km-pointer': canCreateCluster}"
+         fxLayoutAlign=" center"
+         fxLayoutGap="14px"
+         matRipple
+         (click)="createClusterTemplate()">
+      <i class="km-icon-mask km-icon-cluster-template"
+         [ngClass]="{'km-muted-bg': !canCreateCluster}"></i>
+      <span>Cluster Template</span>
+    </div>
+    <div class="entry"
+         [ngClass]="{'km-text-muted': !canCreateBackups, 'km-hover-bg km-pointer': canCreateBackups}"
+         fxLayoutAlign=" center"
+         fxLayoutGap="14px"
+         matRipple
+         (click)="createAutomaticBackup()">
+      <i class="km-icon-mask km-icon-backup"
+         [ngClass]="{'km-muted-bg': !canCreateBackups}"></i>
+      <span>Automatic Backup</span>
+    </div>
+    <div class="entry"
+         [ngClass]="{'km-text-muted': !canCreateBackups, 'km-hover-bg km-pointer': canCreateBackups}"
+         fxLayoutAlign=" center"
+         fxLayoutGap="14px"
+         matRipple
+         (click)="createSnapshot()">
+      <i class="km-icon-mask km-icon-backup"
+         [ngClass]="{'km-muted-bg': !canCreateBackups}"></i>
+      <span>Snapshot</span>
+    </div>
+  </div>
+</div>

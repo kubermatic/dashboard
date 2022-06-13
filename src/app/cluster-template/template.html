@@ -22,8 +22,7 @@ limitations under the License.
     <button fxLayoutAlign="center center"
             mat-flat-button
             type="button"
-            kmThrottleClick
-            (throttleClick)="create()"
+            (click)="create()"
             [disabled]="!canCreate()">
       <i class="km-icon-mask km-icon-add"></i>
       <span>Create Cluster Template</span>

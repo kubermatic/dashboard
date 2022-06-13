@@ -12,43 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'variables';
+import {AbstractControl, ValidationErrors, Validator} from '@angular/forms';
+import {isValidCron} from 'cron-validator';
 
-.mat-card {
-  .mat-card-header {
-    .mat-card-title {
-      padding-left: 30px;
-    }
+export class CronExpressionValidator implements Validator {
+  validate(control: AbstractControl): ValidationErrors | null {
+    const isValid = isValidCron(control.value, {alias: true});
+    return isValid ? null : this._error();
   }
 
-  .health-status {
-    margin-top: 10px;
-  }
-}
-
-.node-ip-addresses-spacing {
-  margin-bottom: 10px;
-  margin-top: 10px;
-}
-
-i.km-icon-info,
-i.km-icon-warning {
-  margin-left: 5px;
-}
-
-.node-details {
-  box-shadow: variables.$border-box-shadow-inset;
-  padding: variables.$item-details-padding;
-
-  mat-card-content {
-    border: none;
-    margin-top: 15px;
-  }
-}
-
-.mat-card-content {
-  .km-row {
-    border-top: none;
-    padding: 0 30px;
+  private _error(): ValidationErrors {
+    return {
+      cronExpression: {
+        valid: false,
+      },
+    };
   }
 }

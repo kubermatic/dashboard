@@ -67,6 +67,7 @@ export class OperatingSystemSpec {
   sles?: SLESSpec;
   rhel?: RHELSpec;
   flatcar?: FlatcarSpec;
+  rockylinux?: RockyLinuxSpec;
 
   static getOperatingSystem(spec: OperatingSystemSpec): OperatingSystem {
     return Object.keys(spec).find(key => spec[key] !== undefined) as OperatingSystem;
@@ -96,6 +97,10 @@ export class RHELSpec {
   rhsmOfflineToken?: string;
 }
 
+export class RockyLinuxSpec {
+  distUpgradeOnBoot: boolean;
+}
+
 export class NodeVersionInfo {
   kubelet?: string;
 }
@@ -118,6 +123,11 @@ export class NodeResources {
 export class NodeAddress {
   type: string;
   address: string;
+}
+
+export class NodeIPAddress {
+  internalIPs: string[] = [];
+  externalIP: string;
 }
 
 export class NodeSystemInfo {
@@ -375,6 +385,8 @@ export function getOperatingSystem(spec: NodeSpec): string {
     return 'RHEL';
   } else if (spec.operatingSystem.flatcar) {
     return 'Flatcar';
+  } else if (spec.operatingSystem.rockylinux) {
+    return 'Rocky Linux';
   }
   return '';
 }
@@ -390,6 +402,8 @@ export function getOperatingSystemLogoClass(spec: NodeSpec): string {
     return 'rhel';
   } else if (spec.operatingSystem.flatcar) {
     return 'flatcar';
+  } else if (spec.operatingSystem.rockylinux) {
+    return 'rockylinux';
   }
   return '';
 }

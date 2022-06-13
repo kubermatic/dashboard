@@ -19,6 +19,7 @@ import {ProjectOverviewRoutingModule} from './routing';
 import {MembersOverviewComponent} from '@app/project-overview/members-overview/component';
 import {ClustersOverviewComponent} from '@app/project-overview/clusters-overview/component';
 import {ProvidersOverviewComponent} from '@app/project-overview/providers-overview/component';
+import {CreateResourcePanelComponent} from '@app/project-overview/create-resource-panel/component';
 
 @NgModule({
   imports: [SharedModule, ProjectOverviewRoutingModule],
@@ -27,6 +28,7 @@ import {ProvidersOverviewComponent} from '@app/project-overview/providers-overvi
     MembersOverviewComponent,
     ClustersOverviewComponent,
     ProvidersOverviewComponent,
+    CreateResourcePanelComponent,
   ],
   exports: [ProjectOverviewComponent],
 })

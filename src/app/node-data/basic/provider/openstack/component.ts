@@ -237,7 +237,6 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   }
 
   private _onFlavorLoading(): void {
-    this._clearFlavor();
     this.flavorsLabel = FlavorState.Loading;
     this._cdr.detectChanges();
   }
@@ -262,7 +261,6 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   }
 
   private _onAvailabilityZoneLoading(): void {
-    this._clearAvailabilityZone();
     this.availabilityZonesLabel = AvailabilityZoneState.Loading;
     this._cdr.detectChanges();
   }
@@ -303,6 +301,8 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
         return this._images.rhel;
       case OperatingSystem.Flatcar:
         return this._images.flatcar;
+      case OperatingSystem.RockyLinux:
+        return this._images.rockylinux;
       default:
         return this._images.ubuntu;
     }
