@@ -63,7 +63,7 @@ import {AKSCredentialsComponent} from '@shared/components/add-external-cluster-d
 import {CustomCredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/custom/component';
 import {EKSCredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/eks/component';
 import {GKECredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/gke/component';
-import {ProviderStepComponent} from '@shared/components/add-external-cluster-dialog/steps/provider/component';
+import {ExternalClusterProviderStepComponent} from '@shared/components/add-external-cluster-dialog/steps/external-provider/component';
 import {AutocompleteComponent} from '@shared/components/autocomplete/component';
 import {CIDRFormComponent} from '@shared/components/cidr-form/component';
 import {ClusterFromTemplateComponent} from '@shared/components/cluster-from-template/content/component';
@@ -213,7 +213,7 @@ const components = [
   SaveClusterTemplateDialogComponent,
   SizeFormatterPipe,
   NumberStepperComponent,
-  ProviderStepComponent,
+  ExternalClusterProviderStepComponent,
   CredentialsStepComponent,
   CustomCredentialsComponent,
   AKSCredentialsComponent,

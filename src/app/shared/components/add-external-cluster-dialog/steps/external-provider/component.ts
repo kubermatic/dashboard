@@ -28,7 +28,7 @@ enum Controls {
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class ProviderStepComponent implements OnInit, OnDestroy {
+export class ExternalClusterProviderStepComponent implements OnInit, OnDestroy {
   form: FormGroup;
   readonly controls = Controls;
   readonly provider = ExternalClusterProvider;

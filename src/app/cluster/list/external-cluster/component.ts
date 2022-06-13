@@ -201,6 +201,10 @@ export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestro
     return _.isEmpty(arr);
   }
 
+  loadExternalWizard(): void {
+    this._router.navigate([`/projects/${this._selectedProject.id}/external-cluster-wizard`]);
+  }
+
   private _onProjectChange(project: Project): void {
     this._selectedProject = project;
     this._projectChange$.next();
