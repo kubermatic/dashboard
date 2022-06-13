@@ -47,7 +47,7 @@ limitations under the License.
                [diameter]="30"
                color="accent"
                *ngIf="updating"></mat-spinner>
-  <km-button *ngIf="first"
+  <km-button *ngIf="stepperFirstIndex"
              id="km-serviceaccount-token-dialog-update-btn"
              [icon]="getIconClass()"
              [label]="mode+' Token'"
@@ -55,25 +55,10 @@ limitations under the License.
              [observable]="getObservable()"
              (next)="onNext($event)">
   </km-button>
-  <a *ngIf="!first"
-     [href]="downloadURL"
-     [download]="downloadTitle"
-     target="_blank"
-     rel="noopener">
-    <button mat-flat-button
-            color="alternative">
-      <i class="km-icon-download"></i>
-      Download Token
-    </button>
-  </a>
 
-  <button id="km-serviceaccount-token-dialog-confirm-btn"
-          mat-flat-button
-          mat-dialog-close
-          *ngIf="!first">
-    <i class="km-icon-mask km-icon-check i-24"></i>
-    <span>Got it</span>
-  </button>
+  <ng-container *ngIf="!stepperFirstIndex">
+    <ng-container *ngTemplateOutlet="downloadButton; context: {btnId: 'km-serviceaccount-token-dialog-confirm-btn'}"></ng-container>
+  </ng-container>
 </mat-dialog-actions>
 
 <form *ngIf="mode === modes.Edit"
@@ -86,7 +71,7 @@ limitations under the License.
                  color="accent"
                  *ngIf="updating"></mat-spinner>
     <km-button [icon]="getIconClass()"
-               [label]="mode+' Token'"
+               [label]="mode+' Token edit'"
                [disabled]="updating || form.invalid"
                [observable]="getObservable()"
                (next)="onNext($event)">
@@ -105,22 +90,27 @@ limitations under the License.
     <km-serviceaccount-token-information-step [formControl]="form.get(controls.Information)"></km-serviceaccount-token-information-step>
 
     <mat-dialog-actions>
-      <a [href]="downloadURL"
-         [download]="downloadTitle"
-         target="_blank"
-         rel="noopener">
-        <button mat-flat-button
-                color="alternative">
-          <i class="km-icon-download"></i>
-          Download Token
-        </button>
-      </a>
-
-      <button mat-flat-button
-              mat-dialog-close>
-        <i class="km-icon-mask km-icon-check i-24"></i>
-        <span>Got It</span>
-      </button>
+      <ng-container *ngTemplateOutlet="downloadButton"></ng-container>
     </mat-dialog-actions>
   </ng-container>
 </ng-container>
+
+<ng-template #downloadButton
+             let-btnId="btnId">
+  <a [href]="downloadURL"
+     [download]="downloadTitle"
+     target="_blank"
+     rel="noopener">
+    <button mat-flat-button
+            color="alternative">
+      <i [ngClass]="class"></i>
+      Download Token
+    </button>
+  </a>
+  <button id={{btnId}}
+          mat-flat-button
+          mat-dialog-close>
+    <i class="km-icon-mask km-icon-check i-24"></i>
+    <span>Got it</span>
+  </button>
+</ng-template>

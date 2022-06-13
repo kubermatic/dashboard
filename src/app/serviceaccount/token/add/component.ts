@@ -31,7 +31,7 @@ import {ServiceAccountService} from '@core/services/service-account';
 import {Observable} from 'rxjs';
 
 enum StepRegistry {
-  Name = 'Choose a Name',
+  Name = 'CreateToken',
   Information = 'Token Information',
 }
 
@@ -85,7 +85,7 @@ export class ServiceAccountTokenDialog implements OnInit {
     }
   }
 
-  get first(): boolean {
+  get stepperFirstIndex(): boolean {
     return this._stepper ? this._stepper.selectedIndex === 0 : true;
   }
 
