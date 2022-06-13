@@ -351,7 +351,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   getProxyURL(): string {
-    return this._clusterService.getDashboardProxyURL(this.projectID, this.cluster.id, this._user.id);
+    return this._clusterService.getDashboardProxyURL(this.projectID, this.cluster.id);
   }
 
   getExternalCCMMigrationStatus(): string {
