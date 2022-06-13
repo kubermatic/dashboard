@@ -71,7 +71,7 @@ limitations under the License.
                  color="accent"
                  *ngIf="updating"></mat-spinner>
     <km-button [icon]="getIconClass()"
-               [label]="mode+' Token edit'"
+               [label]="mode+' Token'"
                [disabled]="updating || form.invalid"
                [observable]="getObservable()"
                (next)="onNext($event)">
