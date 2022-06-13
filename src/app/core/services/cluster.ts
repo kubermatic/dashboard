@@ -250,8 +250,8 @@ export class ClusterService {
     return `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/kubeconfig`;
   }
 
-  getDashboardProxyURL(projectID: string, clusterID: string): string {
-    return `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/dashboard/proxy`;
+  getDashboardProxyURL(projectID: string, clusterID: string, userID: string): string {
+    return `${this._newRestRoot}/dashboard/proxy?projectID=${projectID}&clusterID=${clusterID}&userID=${userID}`;
   }
 
   getShareKubeconfigURL(projectID: string, seed: string, clusterID: string, userID: string): string {
