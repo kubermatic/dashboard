@@ -191,6 +191,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           this._datacenterSpec = datacenter;
           this._enforce(Controls.AuditLogging, datacenter.spec.enforceAuditLogging);
           this._enforcePodSecurityPolicy(datacenter.spec.enforcePodSecurityPolicy);
+          this._setNetworkDefaults();
         })
       )
       .pipe(switchMap(_ => this._datacenterService.seedSettings(this._datacenterSpec.spec.seed)))
@@ -199,11 +200,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
     this._clusterSpecService.providerChanges
       .pipe(
-        tap(_ =>
-          this.isAllowedIPRangeSupported()
-            ? (this._getExtraCloudSpecOptions().nodePortsAllowedIPRange = this._defaultAllowedIPRange)
-            : null
-        )
+        // resetting so that `_setDefaultNetworkControls` can set the default value
+        tap(_ => this.form.get(Controls.AllowedIPRange).reset())
       )
       .pipe(switchMap(provider => this._clusterService.getMasterVersions(provider)))
       .pipe(takeUntil(this._unsubscribe))
@@ -392,6 +390,31 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     if (this.cniPluginVersions.length > 0 && !this.form.get(Controls.CNIPluginVersion).value) {
       this.form.get(Controls.CNIPluginVersion).setValue(this.cniPluginVersions[this.cniPluginVersions.length - 1]);
     }
+  }
+
+  private _setNetworkDefaults(): void {
+    this._clusterService
+      .getClusterNetworkDefaults(this._clusterSpecService.provider, this._clusterSpecService.datacenter)
+      .pipe(take(1))
+      .subscribe({
+        next: networkDefaults => {
+          if (networkDefaults.proxyMode && this.form.get(Controls.ProxyMode).pristine) {
+            this.form.get(Controls.ProxyMode).setValue(networkDefaults.proxyMode);
+          }
+          if (networkDefaults.ipv4?.podsCidr && this.form.get(Controls.PodsCIDR).pristine) {
+            this.form.get(Controls.PodsCIDR).setValue(networkDefaults.ipv4.podsCidr);
+          }
+          if (networkDefaults.ipv4?.servicesCidr && this.form.get(Controls.ServicesCIDR).pristine) {
+            this.form.get(Controls.ServicesCIDR).setValue(networkDefaults.ipv4.servicesCidr);
+          }
+          if (this.form.get(Controls.AllowedIPRange).pristine) {
+            const allowedIPRangeValue = this.isAllowedIPRangeSupported()
+              ? networkDefaults.ipv4?.nodePortsAllowedIPRange || this._defaultAllowedIPRange
+              : null;
+            this.form.get(Controls.AllowedIPRange).setValue(allowedIPRangeValue);
+          }
+        },
+      });
   }
 
   private _getExtraCloudSpecOptions(): ExtraCloudSpecOptions {
