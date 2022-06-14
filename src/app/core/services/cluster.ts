@@ -24,6 +24,7 @@ import {TaintFormComponent} from '@shared/components/taint-form/component';
 import {EtcdRestore} from '@shared/entity/backup';
 import {
   Cluster,
+  ClusterNetworkDefaults,
   ClusterPatch,
   CNIPlugin,
   CNIPluginVersions,
@@ -374,6 +375,11 @@ export class ClusterService {
   getMasterVersions(provider: NodeProvider): Observable<MasterVersion[]> {
     const url = `${this._newRestRoot}/providers/${provider}/versions`;
     return this._http.get<MasterVersion[]>(url);
+  }
+
+  getClusterNetworkDefaults(provider: NodeProvider, dc: string): Observable<ClusterNetworkDefaults> {
+    const url = `${this._newRestRoot}/providers/${provider}/dc/${dc}/networkdefaults`;
+    return this._http.get<ClusterNetworkDefaults>(url);
   }
 
   getAdmissionPlugins(version: string): Observable<string[]> {
