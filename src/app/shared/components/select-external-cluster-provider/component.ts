@@ -12,32 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
-import {ExternalClusterProvider} from '@shared/entity/external-cluster';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+import {ExternalClusterProvider} from '@shared/entity/external-cluster';
 
 enum Controls {
   Provider = 'provider',
 }
 
 @Component({
-  selector: 'km-external-cluster-provider-step',
+  selector: 'km-select-external-cluster-provider',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class ExternalClusterProviderStepComponent implements OnInit, OnDestroy {
-  readonly controls = Controls;
-  readonly provider = ExternalClusterProvider;
-  form: FormGroup;
+export class SelectExternalClusterProviderComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
+  readonly controls = Controls;
+  readonly externalProviders = [ExternalClusterProvider.AKS, ExternalClusterProvider.EKS, ExternalClusterProvider.GKE];
 
-  constructor(
-    private readonly _builder: FormBuilder,
-    private readonly _externalClusterService: ExternalClusterService
-  ) {}
+  form: FormGroup;
+  @Output() externalProvider = new EventEmitter<string>();
+
+  constructor(private readonly _builder: FormBuilder) {}
 
   ngOnInit(): void {
     this._initForm();
@@ -47,10 +45,6 @@ export class ExternalClusterProviderStepComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
-  }
-
-  onExternalProviderSelected(provider: ExternalClusterProvider) {
-    this._externalClusterService.provider = provider;
   }
 
   private _initForm() {
@@ -63,6 +57,6 @@ export class ExternalClusterProviderStepComponent implements OnInit, OnDestroy {
     this.form
       .get(Controls.Provider)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(provider => (this._externalClusterService.provider = provider));
+      .subscribe(provider => this.externalProvider.next(provider));
   }
 }

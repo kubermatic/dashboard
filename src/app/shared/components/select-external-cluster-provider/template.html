@@ -18,27 +18,11 @@ limitations under the License.
       fxFlex="100%"
       fxLayout="column">
   <mat-button-toggle-group group="providerGroup"
-                           [formControlName]="controls.Provider"
-                           fxLayout="row wrap">
-    <h3>Import</h3>
-
-    <!---------------------------->
-    <!-- Default AKS,EKS, GKE provider-->
-    <!---------------------------->
-    <km-select-external-cluster-provider (externalProvider)="onExternalProviderSelected($event)">
-    </km-select-external-cluster-provider>
-
-    <h3 fxLayoutGap="10px"
-        fxLayoutAlign=" center">
-      <div fxLayout="column">
-        <span>Connect</span>
-        <span class="tooltip">Connected clusters can only be viewed, not edited</span>
-      </div>
-    </h3>
-
-    <mat-button-toggle id="external-cluster-any-provider-btn"
-                       [value]="provider.Custom">
-      Any provider
+                           fxLayout="row wrap"
+                           [formControlName]="controls.Provider">
+    <mat-button-toggle *ngFor="let externalProvider of externalProviders"
+                       [value]="externalProvider">
+      <span class="km-provider-logo km-provider-logo-{{externalProvider}}"></span>
     </mat-button-toggle>
   </mat-button-toggle-group>
 </form>

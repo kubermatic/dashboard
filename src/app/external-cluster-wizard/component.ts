@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 
 @Component({
-  selector: 'kuberkmmatic-external-cluster-wizard',
+  selector: 'km-external-cluster-wizard',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })

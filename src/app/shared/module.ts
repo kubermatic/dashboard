@@ -25,7 +25,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatOptionModule, MatRippleModule} from '@angular/material/core';
-import {MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS} from '@angular/material/dialog';
+import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule} from '@angular/material/dialog';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -64,6 +64,7 @@ import {CustomCredentialsComponent} from '@shared/components/add-external-cluste
 import {EKSCredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/eks/component';
 import {GKECredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/gke/component';
 import {ExternalClusterProviderStepComponent} from '@shared/components/add-external-cluster-dialog/steps/external-provider/component';
+import {SelectExternalClusterProviderComponent} from '@shared/components/select-external-cluster-provider/component';
 import {AutocompleteComponent} from '@shared/components/autocomplete/component';
 import {CIDRFormComponent} from '@shared/components/cidr-form/component';
 import {ClusterFromTemplateComponent} from '@shared/components/cluster-from-template/content/component';
@@ -214,6 +215,7 @@ const components = [
   SizeFormatterPipe,
   NumberStepperComponent,
   ExternalClusterProviderStepComponent,
+  SelectExternalClusterProviderComponent,
   CredentialsStepComponent,
   CustomCredentialsComponent,
   AKSCredentialsComponent,
