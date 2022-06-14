@@ -123,10 +123,10 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         !!this.cluster.spec.opaIntegration && this.cluster.spec.opaIntegration.enabled
       ),
       [Controls.Konnectivity]: new FormControl({
-        value: !!this.cluster.spec.clusterNetwork && this.cluster.spec.clusterNetwork.konnectivityEnabled,
+        value: !!this.cluster.spec.clusterNetwork?.konnectivityEnabled,
         disabled:
-          this.cluster.spec.clusterNetwork.proxyMode === ProxyMode.ebpf &&
-          this.cluster.spec.cniPlugin.type === CNIPlugin.Cilium,
+          this.cluster.spec.clusterNetwork?.proxyMode === ProxyMode.ebpf &&
+          this.cluster.spec.cniPlugin?.type === CNIPlugin.Cilium,
       }),
       [Controls.MLALogging]: new FormControl(!!this.cluster.spec.mla && this.cluster.spec.mla.loggingEnabled),
       [Controls.MLAMonitoring]: new FormControl(!!this.cluster.spec.mla && this.cluster.spec.mla.monitoringEnabled),

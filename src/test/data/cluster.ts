@@ -33,7 +33,7 @@ export function fakeDigitaloceanCluster(): Cluster {
       },
       cniPlugin: {
         type: CNIPlugin.Cilium,
-        version: '0',
+        version: 'v1.11',
       },
     },
     status: {
