@@ -48,7 +48,7 @@ export enum OperatingSystem {
   SLES = 'sles',
   RHEL = 'rhel',
   Flatcar = 'flatcar',
-  RockyLinux = 'rockylinux',
+  RockyLinux = 'rockyLinux',
 }
 
 export namespace NodeProviderConstants {
