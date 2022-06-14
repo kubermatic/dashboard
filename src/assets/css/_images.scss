@@ -456,7 +456,7 @@
   @include mixins.background-image('/assets/images/os/flatcar.svg', 24px);
 }
 
-.km-os-image-rockylinux {
+.km-os-image-rockyLinux {
   @include mixins.background-image('/assets/images/os/rocky-linux.svg', 24px);
 }
 

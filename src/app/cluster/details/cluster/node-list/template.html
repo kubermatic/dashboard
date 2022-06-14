@@ -437,9 +437,9 @@ limitations under the License.
                                  label="Upgrade system on first boot"
                                  [value]="element.spec.operatingSystem.rhel.distUpgradeOnBoot">
             </km-property-boolean>
-            <km-property-boolean *ngIf="!!element.spec.operatingSystem.rockylinux"
+            <km-property-boolean *ngIf="!!element.spec.operatingSystem.rockyLinux"
                                  label="Upgrade system on first boot"
-                                 [value]="element.spec.operatingSystem.rockylinux.distUpgradeOnBoot">
+                                 [value]="element.spec.operatingSystem.rockyLinux.distUpgradeOnBoot">
             </km-property-boolean>
             <km-property-boolean *ngIf="element.spec.cloud.digitalocean"
                                  label="Backups"
