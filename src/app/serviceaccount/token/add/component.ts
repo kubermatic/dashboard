@@ -31,7 +31,7 @@ import {ServiceAccountService} from '@core/services/service-account';
 import {Observable} from 'rxjs';
 
 enum StepRegistry {
-  Name = 'CreateToken',
+  Name = 'Create Token',
   Information = 'Token Information',
 }
 
