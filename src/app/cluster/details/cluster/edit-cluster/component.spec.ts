@@ -154,7 +154,7 @@ describe('EditClusterComponent', () => {
       spec = component.cluster.spec;
     });
 
-    it('should disabled when cluster users Cilium CNI and ebpf proxy mode', () => {
+    it('should be disabled when cluster uses Cilium CNI and ebpf proxy mode', () => {
       setClusterAndRunNgOnInit({
         ...spec,
         clusterNetwork: {
@@ -170,7 +170,7 @@ describe('EditClusterComponent', () => {
       expect(component.form.get(component.Controls.Konnectivity).disabled).toBeTruthy();
     });
 
-    it('should not disabled when cluster users Cilium CNI and ipvs proxy mode', () => {
+    it('should not be disabled when cluster uses Cilium CNI and ipvs proxy mode', () => {
       setClusterAndRunNgOnInit({
         ...spec,
         clusterNetwork: {
@@ -186,7 +186,7 @@ describe('EditClusterComponent', () => {
       expect(component.form.get(component.Controls.Konnectivity).disabled).toBeFalsy();
     });
 
-    it('should not disabled when cluster users Cilium CNI and iptables proxy mode', () => {
+    it('should not be disabled when cluster uses Cilium CNI and iptables proxy mode', () => {
       setClusterAndRunNgOnInit({
         ...spec,
         clusterNetwork: {
@@ -202,7 +202,7 @@ describe('EditClusterComponent', () => {
       expect(component.form.get(component.Controls.Konnectivity).disabled).toBeFalsy();
     });
 
-    it('should not disabled when cluster use Canal CNI', () => {
+    it('should not be disabled when cluster uses Canal CNI', () => {
       setClusterAndRunNgOnInit({
         ...spec,
         cniPlugin: {
@@ -214,19 +214,7 @@ describe('EditClusterComponent', () => {
       expect(component.form.get(component.Controls.Konnectivity).disabled).toBeFalsy();
     });
 
-    it('should not disabled when cluster use Canal CNI', () => {
-      setClusterAndRunNgOnInit({
-        ...spec,
-        cniPlugin: {
-          ...spec.cniPlugin,
-          type: CNIPlugin.Canal,
-        },
-      });
-
-      expect(component.form.get(component.Controls.Konnectivity).disabled).toBeFalsy();
-    });
-
-    it("should not disabled when cluster don't use any CNI", () => {
+    it('should not be disabled when cluster does not use any CNI', () => {
       setClusterAndRunNgOnInit({
         ...spec,
         cniPlugin: {
