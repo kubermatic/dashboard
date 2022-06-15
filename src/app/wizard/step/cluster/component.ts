@@ -77,6 +77,7 @@ enum Controls {
   CNIPluginVersion = 'cniPluginVersion',
   AllowedIPRange = 'allowedIPRange',
   IPv4CIDRMaskSize = 'ipv4CIDRMaskSize',
+  NodeLocalDNSCache = 'nodeLocalDNSCache',
 }
 
 @Component({
@@ -161,6 +162,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.CNIPluginVersion]: this._builder.control(''),
       [Controls.AllowedIPRange]: this._builder.control(this._defaultAllowedIPRange, [CIDR_PATTERN_VALIDATOR]),
       [Controls.IPv4CIDRMaskSize]: this._builder.control(''),
+      [Controls.NodeLocalDNSCache]: this._builder.control(false),
     });
 
     this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
@@ -412,6 +414,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           if (networkDefaults.ipv4?.nodeCidrMaskSize) {
             this.form.get(Controls.IPv4CIDRMaskSize).setValue(networkDefaults.ipv4.nodeCidrMaskSize);
           }
+          this.form.get(Controls.NodeLocalDNSCache).setValue(!!networkDefaults.nodeLocalDNSCacheEnabled);
           if (this.form.get(Controls.AllowedIPRange).pristine) {
             const allowedIPRangeValue = this.isAllowedIPRangeSupported()
               ? networkDefaults.ipv4?.nodePortsAllowedIPRange || this._defaultAllowedIPRange
