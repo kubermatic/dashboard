@@ -175,7 +175,7 @@ limitations under the License.
       <input [formControlName]="Controls.OperatingSystemProfile"
              matInput
              type="text">
-      <mat-hint>Use this field to override the default operating system profile used for this machine deployment.</mat-hint>
+      <mat-hint *ngIf="!dialogEditMode">Use this field to override the default operating system profile used for this machine deployment.</mat-hint>
     </mat-form-field>
 
     <km-label-form [ngClass]="isDialogView() ? 'additional-margin' : ''"

@@ -129,6 +129,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
     if (this.dialogEditMode) {
       this.form.get(Controls.Name).disable();
+      this.form.get(Controls.OperatingSystemProfile).disable();
     }
 
     this._init();

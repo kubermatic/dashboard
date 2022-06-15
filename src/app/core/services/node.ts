@@ -97,6 +97,7 @@ export class NodeService {
       data: {
         initialClusterData: cluster,
         initialNodeData: {
+          operatingSystemProfile: md.annotations['k8c.io/operating-system-profile'],
           count: md.spec.replicas,
           name: md.name,
           spec: md.spec.template,
