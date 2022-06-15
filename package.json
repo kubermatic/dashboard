@@ -93,7 +93,7 @@
     "rxjs-compat": "6.6.7",
     "semver": "7.3.7",
     "swagger-ui": "4.8.1",
-    "zone.js": "0.11.5"
+    "zone.js": "0.11.6"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "14.0.2",
