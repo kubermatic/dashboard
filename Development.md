@@ -7,7 +7,7 @@ This document describes how to use and run the KKP Dashboard.
 This approach assumes that you have all required dependencies available on your local machine:
 - Node v14 - v16
 - NPM v6+
-- Go v1.17+ (required only by the production build)
+- Go v1.18 (required only by the production build)
 
 ## Preparation
 Install the application dependencies by running:
@@ -25,12 +25,12 @@ The easiest way to start the Dashboard is by running:
 npm start
 ```
 
-It will run a proxy for the API hosted at [dev.kubermatic.io](https://dev.kubermatic.io). 
+It will run a proxy for the API hosted at [dev.kubermatic.io](https://dev.kubermatic.io).
 It is always based on our latest `master` build, but be aware that it might be unstable.
 
 ### Using the Local API
 In order to start the KKP API locally, refer to the [Kubermatic](https://github.com/kubermatic/kubermatic) repository
-documentation. 
+documentation.
 
 Once you have started your local API, start the Dashboard by running:
 ```bash
@@ -94,7 +94,7 @@ We support two ways of running the NPM commands inside a docker container:
 
 ### Host-based
 This approach will mount a whole Dashboard directory in RW mode inside the docker container and
-the container will directly manipulate your files on the host machine. It will also share your host network with the container. 
+the container will directly manipulate your files on the host machine. It will also share your host network with the container.
 The advantage here is that you do not have to install required dependencies such as Node or NPM. Instead of running `npm` commands
 directly, simply run:
 
@@ -116,7 +116,7 @@ or if you want to start it against your local API run:
 This approach will first build a docker image and prepare all dependencies and whole environment inside the docker container.
 The container will expose the application on the default `8000` port, and it will be accessible at [localhost:8000](http://localhost:8000).
 It does not directly manipulate your host files, however the `src` directory is mounted inside the container in order to allow watching
-for source code changes and rebuilding the application on the fly. 
+for source code changes and rebuilding the application on the fly.
 
 Start Dashboard by running:
 ```bash
