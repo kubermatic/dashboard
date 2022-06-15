@@ -36,6 +36,7 @@ version:
 	@echo $(HUMAN_VERSION)
 
 install:
+	sleep 50000
 	@$(CC) ci --unsafe-perm
 
 check: install
