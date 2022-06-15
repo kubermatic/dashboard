@@ -15,6 +15,7 @@
 import {NodeCloudSpec, NodeSpec, NodeVersionInfo, OperatingSystemSpec, Taint} from './node';
 
 export class MachineDeployment {
+  annotations?: object;
   creationTimestamp?: Date;
   deletionTimestamp?: Date;
   id?: string;

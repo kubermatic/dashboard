@@ -50,6 +50,7 @@ enum Controls {
   ProviderBasic = 'providerBasic',
   ProviderExtended = 'providerExtended',
   Kubelet = 'kubelet',
+  OperatingSystemProfile = 'operating system profile',
 }
 
 @Component({
@@ -118,6 +119,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       [Controls.RhelOfflineToken]: this._builder.control(''),
       [Controls.ProviderBasic]: this._builder.control(''),
       [Controls.ProviderExtended]: this._builder.control(''),
+      [Controls.OperatingSystemProfile]: this._builder.control(this._nodeDataService.nodeData.operatingSystemProfile),
     });
 
     if (this.isDialogView()) {
@@ -151,7 +153,8 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     merge(
       this.form.get(Controls.Name).valueChanges,
       this.form.get(Controls.Count).valueChanges,
-      this.form.get(Controls.DynamicConfig).valueChanges
+      this.form.get(Controls.DynamicConfig).valueChanges,
+      this.form.get(Controls.OperatingSystemProfile).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
@@ -328,10 +331,14 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   }
 
   private _getNodeData(): NodeData {
-    return {
+    const nodeData: NodeData = {
       count: this.form.get(Controls.Count).value,
       name: this.form.get(Controls.Name).value,
       dynamicConfig: this.form.get(Controls.DynamicConfig).value,
-    } as NodeData;
+    };
+    if (this.form.get(Controls.OperatingSystemProfile).value) {
+      nodeData.operatingSystemProfile = this.form.get(Controls.OperatingSystemProfile).value;
+    }
+    return nodeData;
   }
 }

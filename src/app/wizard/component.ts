@@ -157,6 +157,9 @@ export class WizardComponent implements OnInit, OnDestroy {
         credential: cluster.credential,
       },
       nodeDeployment: {
+        annotations: {
+          'k8c.io/operating-system-profile': nodeData.operatingSystemProfile,
+        },
         name: nodeData.name,
         spec: {
           template: nodeData.spec,
