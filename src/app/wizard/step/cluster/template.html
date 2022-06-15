@@ -118,6 +118,12 @@ limitations under the License.
               Invalid pattern. Use CIDR notation, i.e. 192.168.1.0/24.
             </mat-error>
           </mat-form-field>
+          <km-number-stepper [formControlName]="Controls.IPv4CIDRMaskSize"
+                             mode="errors"
+                             min="0"
+                             max="128"
+                             label="Node CIDR Mask Size">
+          </km-number-stepper>
           <mat-form-field *ngIf="isAllowedIPRangeSupported()">
             <mat-label>Allowed IP Range for NodePorts</mat-label>
             <input matInput
