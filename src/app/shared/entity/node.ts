@@ -403,7 +403,7 @@ export function getOperatingSystemLogoClass(spec: NodeSpec): string {
   } else if (spec.operatingSystem.flatcar) {
     return 'flatcar';
   } else if (spec.operatingSystem.rockyLinux) {
-    return 'rockyLinux';
+    return 'rocky-linux';
   }
   return '';
 }
