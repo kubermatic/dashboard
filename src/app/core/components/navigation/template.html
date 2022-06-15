@@ -25,7 +25,9 @@ limitations under the License.
       <i class="km-icon-mask km-icon-collapse-menu"></i>
     </button>
     <a class="km-header-logo"
+       [ngClass]="{'km-header-logo-border': currentView}"
        routerLink="projects"></a>
+    <div class="km-text view-name">{{currentView}}</div>
     <km-project-selector *ngIf="isAuthenticated() && showMenuSwitchAndProjectSelector"
                          [showSidenav]="showSidenav"
                          class="project-selector"></km-project-selector>

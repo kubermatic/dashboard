@@ -30,7 +30,13 @@ header {
     display: block;
     height: 30px;
     margin-left: variables.$content-padding - 10px;
-    width: 200px;
+    width: 210px;
+  }
+
+  .view-name {
+    font-size: variables.$font-size-subhead-lg;
+    font-weight: normal;
+    margin-left: 20px;
   }
 }
 
