@@ -23,12 +23,16 @@ const enum ViewName {
   Projects = 'Projects',
   UserSettings = 'User Settings',
   AdminSettings = 'Admin Settings',
+  TermsOfServices = 'Terms of Service',
+  RestApi = 'API Docs',
 }
 
 const enum RoutePath {
   Projects = 'projects',
   Account = 'account',
   Settings = 'settings',
+  TermsOfServices = 'terms-of-service',
+  RestApi = 'rest-api',
 }
 
 @Component({
@@ -73,6 +77,14 @@ export class NavigationComponent implements OnInit, OnDestroy {
             case RoutePath.Settings:
               this.currentView = ViewName.AdminSettings;
               break;
+            case RoutePath.TermsOfServices:
+              this.currentView = ViewName.TermsOfServices;
+              break;
+            case RoutePath.RestApi:
+              this.currentView = ViewName.RestApi;
+              break;
+            default:
+              this.currentView = '';
           }
         },
       });
