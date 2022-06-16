@@ -32,6 +32,7 @@ import {WizardService} from '@core/services/wizard/wizard';
 import {
   AuditPolicyPreset,
   Cluster,
+  ClusterNetwork,
   ClusterSpec,
   CNIPlugin,
   ContainerRuntime,
@@ -465,12 +466,36 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   }
 
   private _getClusterEntity(): Cluster {
-    const pods = this.controlValue(Controls.IPv4PodsCIDR);
-    const services = this.controlValue(Controls.IPv4ServicesCIDR);
+    const ipv4Pods = this.controlValue(Controls.IPv4PodsCIDR);
+    const ipv4Services = this.controlValue(Controls.IPv4ServicesCIDR);
     const cniPluginType = this.controlValue(Controls.CNIPlugin);
     const cniPluginVersion = this.controlValue(Controls.CNIPluginVersion);
     const cniPlugin = cniPluginType ? {type: cniPluginType, version: cniPluginVersion} : null;
     const konnectivity = this.isKonnectivityEnabled ? this.controlValue(Controls.Konnectivity) : null;
+    const clusterNetwork = {
+      ipFamily: this.controlValue(Controls.IPFamily),
+      proxyMode: this.controlValue(Controls.ProxyMode),
+      pods: {cidrBlocks: ipv4Pods ? [ipv4Pods] : []},
+      services: {cidrBlocks: ipv4Services ? [ipv4Services] : []},
+      nodeCidrMaskSizeIPv4: this.controlValue(Controls.IPv4CIDRMaskSize),
+      nodeLocalDNSCacheEnabled: this.controlValue(Controls.NodeLocalDNSCache),
+      konnectivityEnabled: konnectivity,
+    } as ClusterNetwork;
+
+    if (this.isDualStackNetworkTypeSelected()) {
+      const ipv6Pods = this.controlValue(Controls.IPv6PodsCIDR);
+      if (ipv6Pods) {
+        clusterNetwork.pods.cidrBlocks = [...(ipv4Pods ? clusterNetwork.pods.cidrBlocks : ['']), ipv6Pods];
+      }
+      const ipv6Services = this.controlValue(Controls.IPv6ServicesCIDR);
+      if (ipv6Services) {
+        clusterNetwork.services.cidrBlocks = [
+          ...(ipv4Services ? clusterNetwork.services.cidrBlocks : ['']),
+          ipv6Services,
+        ];
+      }
+      clusterNetwork.nodeCidrMaskSizeIPv6 = this.controlValue(Controls.IPv6CIDRMaskSize);
+    }
 
     return {
       name: this.controlValue(Controls.Name),
@@ -490,12 +515,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         enableUserSSHKeyAgent: this.controlValue(Controls.UserSSHKeyAgent),
         enableOperatingSystemManager: this.controlValue(Controls.OperatingSystemManager),
         containerRuntime: this.controlValue(Controls.ContainerRuntime),
-        clusterNetwork: {
-          proxyMode: this.controlValue(Controls.ProxyMode),
-          pods: {cidrBlocks: pods ? [pods] : []},
-          services: {cidrBlocks: services ? [services] : []},
-          konnectivityEnabled: konnectivity,
-        },
+        clusterNetwork,
         cniPlugin: cniPlugin,
       } as ClusterSpec,
     } as Cluster;
