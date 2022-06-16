@@ -85,13 +85,12 @@ limitations under the License.
           </mat-form-field>
         </div>
 
-        <div>
-          <mat-radio-group fxLayoutGap="50px"
-                           [formControlName]="Controls.IPFamily">
-            <mat-radio-button [value]="NetworkType.IPv4">IPv4</mat-radio-button>
-            <mat-radio-button [value]="NetworkType.DualStack">IPv4 and IPv6 (Dual Stack)</mat-radio-button>
-          </mat-radio-group>
-        </div>
+        <mat-radio-group *ngIf="isDualStackAllowed"
+                         fxLayoutGap="50px"
+                         [formControlName]="Controls.IPFamily">
+          <mat-radio-button [value]="NetworkType.IPv4">IPv4</mat-radio-button>
+          <mat-radio-button [value]="NetworkType.DualStack">IPv4 and IPv6 (Dual Stack)</mat-radio-button>
+        </mat-radio-group>
 
         <km-expansion-panel expandLabel="ADVANCED NETWORK CONFIGURATION"
                             collapseLabel="ADVANCED NETWORK CONFIGURATION">

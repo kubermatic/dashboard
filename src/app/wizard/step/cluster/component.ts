@@ -123,6 +123,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   cniPluginVersions: string[] = [];
   availableProxyModes = [ProxyMode.ipvs, ProxyMode.iptables];
   isKonnectivityEnabled = false;
+  isDualStackAllowed = false;
   readonly Controls = Controls;
   readonly AuditPolicyPreset = AuditPolicyPreset;
   readonly NetworkType = NetworkType;
@@ -211,6 +212,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .pipe(
         tap((datacenter: Datacenter) => {
           this._datacenterSpec = datacenter;
+          this.isDualStackAllowed = !!datacenter.spec.ipv6Enabled;
           this._enforce(Controls.AuditLogging, datacenter.spec.enforceAuditLogging);
           this._enforcePodSecurityPolicy(datacenter.spec.enforcePodSecurityPolicy);
           this._setNetworkDefaults();
@@ -419,6 +421,11 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   }
 
   private _setNetworkDefaults(): void {
+    if (!this.isDualStackAllowed) {
+      this.control(Controls.IPFamily).reset();
+      this.control(Controls.IPFamily).setValue(NetworkType.IPv4);
+    }
+
     this._clusterService
       .getClusterNetworkDefaults(this._clusterSpecService.provider, this._clusterSpecService.datacenter)
       .pipe(take(1))
