@@ -104,20 +104,20 @@ limitations under the License.
               <mat-form-field fxFlex>
                 <mat-label>Pods CIDR</mat-label>
                 <input matInput
-                       [formControlName]="Controls.PodsCIDR"
+                       [formControlName]="Controls.IPv4PodsCIDR"
                        type="text"
                        autocomplete="off">
-                <mat-error *ngIf="form.get(Controls.PodsCIDR).hasError('pattern')">
+                <mat-error *ngIf="form.get(Controls.IPv4PodsCIDR).hasError('pattern')">
                   Invalid pattern. Use CIDR notation, i.e. 192.168.1.0/24.
                 </mat-error>
               </mat-form-field>
               <mat-form-field fxFlex>
                 <mat-label>Services CIDR</mat-label>
                 <input matInput
-                       [formControlName]="Controls.ServicesCIDR"
+                       [formControlName]="Controls.IPv4ServicesCIDR"
                        type="text"
                        autocomplete="off">
-                <mat-error *ngIf="form.get(Controls.ServicesCIDR).hasError('pattern')">
+                <mat-error *ngIf="form.get(Controls.IPv4ServicesCIDR).hasError('pattern')">
                   Invalid pattern. Use CIDR notation, i.e. 192.168.1.0/24.
                 </mat-error>
               </mat-form-field>
@@ -130,10 +130,10 @@ limitations under the License.
               <mat-form-field *ngIf="isAllowedIPRangeSupported()">
                 <mat-label>Allowed IP Range for NodePorts</mat-label>
                 <input matInput
-                       [formControlName]="Controls.AllowedIPRange"
+                       [formControlName]="Controls.IPv4AllowedIPRange"
                        type="text"
                        autocomplete="off">
-                <mat-error *ngIf="form.get(Controls.AllowedIPRange).hasError('pattern')">
+                <mat-error *ngIf="form.get(Controls.IPv4AllowedIPRange).hasError('pattern')">
                   Invalid pattern. Use CIDR notation, i.e. 192.168.1.0/24.
                 </mat-error>
               </mat-form-field>

@@ -72,13 +72,13 @@ enum Controls {
   MLALogging = 'loggingEnabled',
   MLAMonitoring = 'monitoringEnabled',
   ProxyMode = 'proxyMode',
-  PodsCIDR = 'podsCIDR',
+  IPv4PodsCIDR = 'ipv4PodsCIDR',
   IPv6PodsCIDR = 'ipv6PodsCIDR',
-  ServicesCIDR = 'servicesCIDR',
+  IPv4ServicesCIDR = 'ipv4ServicesCIDR',
   IPv6ServicesCIDR = 'ipv6ServicesCIDR',
   CNIPlugin = 'cniPlugin',
   CNIPluginVersion = 'cniPluginVersion',
-  AllowedIPRange = 'allowedIPRange',
+  IPv4AllowedIPRange = 'ipv4AllowedIPRange',
   IPv6AllowedIPRange = 'ipv6AllowedIPRange',
   IPv4CIDRMaskSize = 'ipv4CIDRMaskSize',
   IPv6CIDRMaskSize = 'ipv6CIDRMaskSize',
@@ -161,13 +161,13 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.Labels]: this._builder.control(''),
       [Controls.SSHKeys]: this._builder.control(''),
       [Controls.ProxyMode]: this._builder.control(''),
-      [Controls.PodsCIDR]: this._builder.control('', [CIDR_PATTERN_VALIDATOR]),
+      [Controls.IPv4PodsCIDR]: this._builder.control('', [CIDR_PATTERN_VALIDATOR]),
       [Controls.IPv6PodsCIDR]: this._builder.control('', [IPV6_CIDR_PATTERN_VALIDATOR]),
-      [Controls.ServicesCIDR]: this._builder.control('', [CIDR_PATTERN_VALIDATOR]),
+      [Controls.IPv4ServicesCIDR]: this._builder.control('', [CIDR_PATTERN_VALIDATOR]),
       [Controls.IPv6ServicesCIDR]: this._builder.control('', [IPV6_CIDR_PATTERN_VALIDATOR]),
       [Controls.CNIPlugin]: this._builder.control(CNIPlugin.Canal),
       [Controls.CNIPluginVersion]: this._builder.control(''),
-      [Controls.AllowedIPRange]: this._builder.control(this._defaultAllowedIPRange, [CIDR_PATTERN_VALIDATOR]),
+      [Controls.IPv4AllowedIPRange]: this._builder.control(this._defaultAllowedIPRange, [CIDR_PATTERN_VALIDATOR]),
       [Controls.IPv6AllowedIPRange]: this._builder.control('', [IPV6_CIDR_PATTERN_VALIDATOR]),
       [Controls.IPv4CIDRMaskSize]: this._builder.control(''),
       [Controls.IPv6CIDRMaskSize]: this._builder.control(''),
@@ -214,7 +214,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     this._clusterSpecService.providerChanges
       .pipe(
         // resetting so that `_setDefaultNetworkControls` can set the default value
-        tap(_ => this.form.get(Controls.AllowedIPRange).reset())
+        tap(_ => this.form.get(Controls.IPv4AllowedIPRange).reset())
       )
       .pipe(switchMap(provider => this._clusterService.getMasterVersions(provider)))
       .pipe(takeUntil(this._unsubscribe))
@@ -281,7 +281,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         }
       });
 
-    merge(this.control(Controls.AllowedIPRange).valueChanges)
+    merge(this.control(Controls.IPv4AllowedIPRange).valueChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(ipRange => (this._getExtraCloudSpecOptions().nodePortsAllowedIPRange = ipRange));
 
@@ -298,8 +298,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.MLAMonitoring).valueChanges,
       this.form.get(Controls.ContainerRuntime).valueChanges,
       this.form.get(Controls.ProxyMode).valueChanges,
-      this.form.get(Controls.PodsCIDR).valueChanges,
-      this.form.get(Controls.ServicesCIDR).valueChanges,
+      this.form.get(Controls.IPv4PodsCIDR).valueChanges,
+      this.form.get(Controls.IPv4ServicesCIDR).valueChanges,
       this.form.get(Controls.CNIPlugin).valueChanges,
       this.form.get(Controls.CNIPluginVersion).valueChanges
     )
@@ -414,11 +414,11 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           if (networkDefaults.proxyMode && this.form.get(Controls.ProxyMode).pristine) {
             this.form.get(Controls.ProxyMode).setValue(networkDefaults.proxyMode);
           }
-          if (networkDefaults.ipv4?.podsCidr && this.form.get(Controls.PodsCIDR).pristine) {
-            this.form.get(Controls.PodsCIDR).setValue(networkDefaults.ipv4.podsCidr);
+          if (networkDefaults.ipv4?.podsCidr && this.form.get(Controls.IPv4PodsCIDR).pristine) {
+            this.form.get(Controls.IPv4PodsCIDR).setValue(networkDefaults.ipv4.podsCidr);
           }
-          if (networkDefaults.ipv4?.servicesCidr && this.form.get(Controls.ServicesCIDR).pristine) {
-            this.form.get(Controls.ServicesCIDR).setValue(networkDefaults.ipv4.servicesCidr);
+          if (networkDefaults.ipv4?.servicesCidr && this.form.get(Controls.IPv4ServicesCIDR).pristine) {
+            this.form.get(Controls.IPv4ServicesCIDR).setValue(networkDefaults.ipv4.servicesCidr);
           }
           if (networkDefaults.ipv4?.nodeCidrMaskSize) {
             this.form.get(Controls.IPv4CIDRMaskSize).setValue(networkDefaults.ipv4.nodeCidrMaskSize);
@@ -435,11 +435,11 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           this.form.get(Controls.NodeLocalDNSCache).setValue(!!networkDefaults.nodeLocalDNSCacheEnabled);
           if (this.isAllowedIPRangeSupported()) {
             this.form
-              .get(Controls.AllowedIPRange)
+              .get(Controls.IPv4AllowedIPRange)
               .setValue(networkDefaults.ipv4?.nodePortsAllowedIPRange || this._defaultAllowedIPRange);
             this.form.get(Controls.IPv6AllowedIPRange).setValue(networkDefaults.ipv6?.nodePortsAllowedIPRange);
           } else {
-            this.form.get(Controls.AllowedIPRange).setValue(null);
+            this.form.get(Controls.IPv4AllowedIPRange).setValue(null);
             this.form.get(Controls.IPv6AllowedIPRange).setValue(null);
           }
         },
@@ -453,8 +453,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   }
 
   private _getClusterEntity(): Cluster {
-    const pods = this.controlValue(Controls.PodsCIDR);
-    const services = this.controlValue(Controls.ServicesCIDR);
+    const pods = this.controlValue(Controls.IPv4PodsCIDR);
+    const services = this.controlValue(Controls.IPv4ServicesCIDR);
     const cniPluginType = this.controlValue(Controls.CNIPlugin);
     const cniPluginVersion = this.controlValue(Controls.CNIPluginVersion);
     const cniPlugin = cniPluginType ? {type: cniPluginType, version: cniPluginVersion} : null;
