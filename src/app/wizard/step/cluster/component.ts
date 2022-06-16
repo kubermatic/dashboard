@@ -83,6 +83,12 @@ enum Controls {
   IPv4CIDRMaskSize = 'ipv4CIDRMaskSize',
   IPv6CIDRMaskSize = 'ipv6CIDRMaskSize',
   NodeLocalDNSCache = 'nodeLocalDNSCache',
+  IPFamily = 'ipFamily',
+}
+
+enum NetworkType {
+  IPv4 = 'ipv4;',
+  DualStack = 'ipv4+ipv6;',
 }
 
 @Component({
@@ -118,6 +124,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   isKonnectivityEnabled = false;
   readonly Controls = Controls;
   readonly AuditPolicyPreset = AuditPolicyPreset;
+  readonly NetworkType = NetworkType;
   private _datacenterSpec: Datacenter;
   private _seedSettings: SeedSettings;
   private _settings: AdminSettings;
@@ -160,6 +167,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.EventRateLimitConfig]: this._builder.control(''),
       [Controls.Labels]: this._builder.control(''),
       [Controls.SSHKeys]: this._builder.control(''),
+      [Controls.IPFamily]: this._builder.control(NetworkType.IPv4),
       [Controls.ProxyMode]: this._builder.control(''),
       [Controls.IPv4PodsCIDR]: this._builder.control('', [CIDR_PATTERN_VALIDATOR]),
       [Controls.IPv6PodsCIDR]: this._builder.control('', [IPV6_CIDR_PATTERN_VALIDATOR]),
@@ -372,6 +380,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     return [NodeProvider.AZURE, NodeProvider.GCP, NodeProvider.OPENSTACK, NodeProvider.AWS].includes(
       this._clusterSpecService.provider
     );
+  }
+
+  isDualStackNetworkTypeSelected(): boolean {
+    return this.form.get(Controls.IPFamily).value === NetworkType.DualStack;
   }
 
   private _enforce(control: Controls, isEnforced: boolean): void {
