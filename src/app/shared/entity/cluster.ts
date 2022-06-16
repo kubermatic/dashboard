@@ -300,9 +300,13 @@ export class EventRateLimitConfigItem {
 }
 
 export class ClusterNetwork {
+  ipFamily?: string;
   pods?: NetworkRanges;
   proxyMode?: ProxyMode;
   services?: NetworkRanges;
+  nodeCidrMaskSizeIPv4?: number;
+  nodeCidrMaskSizeIPv6?: number;
+  nodeLocalDNSCacheEnabled?: boolean;
   konnectivityEnabled?: boolean;
 }
 
