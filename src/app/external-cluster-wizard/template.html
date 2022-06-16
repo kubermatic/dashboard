@@ -1,17 +1,92 @@
+<!--
+Copyright 2022 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
 <mat-card fxFlex="100%">
-  <mat-horizontal-stepper linear disableRipple style="transition: none" #stepper>
+  <mat-horizontal-stepper linear
+                          disableRipple
+                          style="transition: none"
+                          #stepper>
     <ng-template matStepperIcon="edit">
       <i class="km-icon-done"></i>
     </ng-template>
 
-    <mat-step fxFlex="100%" style="transition: none">
-      <ng-template matStepLabel>Step-1</ng-template>
-    </mat-step>
-    <mat-step fxFlex="100%" style="transition: none">
-      <ng-template matStepLabel>Step-2</ng-template>
-    </mat-step>
-    <mat-step fxFlex="100%" style="transition: none">
-      <ng-template matStepLabel>Step-3</ng-template>
+    <mat-step *ngFor="let step of steps; index as i;"
+              fxFlex="100%"
+              style="transition: none">
+      <ng-template matStepLabel>{{step.name}}</ng-template>
+      <br />
+      <div [ngSwitch]="step.name"
+           id="{{step.id}}-step"
+           class="wizard-step">
+
+        <ng-container *ngSwitchCase="stepRegistry.Provider">
+          <km-select-external-cluster-provider (externalProvider)="onExternalProviderSelected($event)"></km-select-external-cluster-provider>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="stepRegistry.Credentials">
+          <km-external-cluster-credentials-step fxFlex="50%"></km-external-cluster-credentials-step>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="stepRegistry.ClusterDetails">
+          <km-external-cluster-step></km-external-cluster-step>
+        </ng-container>
+      </div>
+
+      <br />
+
+      <div class="button-navigation"
+           id="{{step.id}}-nav">
+        <a fxLayoutAlign="center center"
+           mat-flat-button
+           type="button"
+           color="tertiary"
+           (click)="onCancel()">
+          <i class="km-icon-mask km-icon-cancel"></i>
+          <span>Cancel</span>
+        </a>
+
+        <div fxFlex></div>
+        <!-- Todo: MatSpinner-->
+        <ng-container *ngIf="!stepperFirstIndex">
+          <button type="button"
+                  color="tertiary"
+                  fxLayoutAlign="center center"
+                  mat-flat-button
+                  matStepperPrevious>
+            <i class="km-icon-mask km-icon-back"></i>
+            <span>Back</span>
+          </button>
+
+          <button type="button"
+                  id="km-external-cluster-wizard-{{step.id}}-next-btn"
+                  fxLayoutAlign="center center"
+                  mat-flat-button
+                  matStepperNext>
+            <i class="km-icon-mask km-icon-next"></i>
+            <span>Next</span>
+          </button>
+        </ng-container>
+
+        <km-button *ngIf="stepperLastIndex"
+                   buttonId="km-external-cluster-wizard-create-btn"
+                   icon="km-icon-add"
+                   label="Create External Cluster"
+                   [observable]="getObservable()"
+                   (next)="onNext($event)">
+        </km-button>
+      </div>
     </mat-step>
   </mat-horizontal-stepper>
 </mat-card>

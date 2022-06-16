@@ -1,0 +1,103 @@
+<!--
+Copyright 2022 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<form [formGroup]="form"
+      [fxLayout]="isDialogView() ? 'column' : 'row'"
+      fxLayoutGap="30px"
+      fxLayout.md="column"
+      fxLayoutGap.md="30px"
+      fxLayout.sm="column"
+      fxLayoutGap.sm="30px"
+      fxLayout.xs="column"
+      fxLayoutGap.xs="30px">
+
+  <div [fxFlex]="isDialogView() ? '100%' : '50%'"
+       fxLayout="column"
+       fxLayoutGap="8px">
+
+    <!--Heading Show on Wizard-->
+    <mat-card-header *ngIf="!isDialogView()"
+                     class="km-no-padding">
+      <mat-card-title>Basic Settings</mat-card-title>
+    </mat-card-header>
+
+
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput
+             type="text"
+             autocomplete="off"
+             [formControlName]="Controls.Name">
+      <button *ngIf="!dialogEditMode"
+              mat-icon-button
+              type="button"
+              matSuffix
+              class="km-randomize-btn"
+              matTooltip="Generate name"
+              (click)="generateName()">
+        <i class="km-icon-randomize"></i>
+      </button>
+      <mat-hint>Enter a unique name for this cluster</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Kubernetes Version</mat-label>
+      <input [formControlName]="Controls.Version"
+             matInput
+             type="text"
+             autocomplete="off">
+
+      <mat-hint>
+        Provide kubernetes versions
+        <a href="https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html"
+           target="_blank">supported versions</a>.
+      </mat-hint>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Cluster service role</mat-label>
+      <input matInput
+             type="text"
+             autocomplete="off"
+             [formControlName]="Controls.RoleArn">
+      <mat-hint>Enter a unique name for your role, such as e.g eksClusterRole.</mat-hint>
+    </mat-form-field>
+  </div>
+
+  <div [fxFlex]="isDialogView() ? '100%' : '50%'"
+       fxLayout="column"
+       fxLayoutGap="8px">
+
+    <!--Wizard Heading:-->
+    <mat-card-header *ngIf="!isDialogView()"
+                     class="km-no-padding">
+      <mat-card-title>Networking</mat-card-title>
+    </mat-card-header>
+
+    <km-chip-list label="Subnet"
+                  placeholder="Select subnet ids..."
+                  description="Use commas, space or enter key as the separators."
+                  [formControlName]="Controls.SubnetIds"
+                  (onChange)="onSubnetIdsChange($event)">
+    </km-chip-list>
+
+    <km-chip-list label="Security Groups"
+                  placeholder="Select Security Group ids..."
+                  description="Use commas, space or enter key as the separators."
+                  [formControlName]="Controls.SecurityGroupsIds"
+                  (onChange)="onSecurityGroupIdsChange($event)">
+    </km-chip-list>
+  </div>
+</form>

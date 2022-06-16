@@ -15,7 +15,7 @@
 import _ from 'lodash';
 import {StatusIcon} from '@shared/utils/health-status';
 import {GKECloudSpec} from './provider/gke';
-import {EKSCloudSpec} from './provider/eks';
+import {EKSCloudSpec, EKSClusterSpec} from './provider/eks';
 import {AKSCloudSpec} from './provider/aks';
 
 export enum ExternalClusterProvider {
@@ -83,7 +83,8 @@ export class ExternalCluster {
   }
 }
 
-export class ExternalClusterSpec {
+class ExternalClusterSpec {
+  eksclusterSpec?: EKSClusterSpec;
   version: string;
 }
 
@@ -121,6 +122,7 @@ export class ExternalClusterModel {
   name: string;
   kubeconfig?: string;
   cloud?: ExternalCloudSpec;
+  spec?: ExternalClusterSpec;
 
   static new(): ExternalClusterModel {
     return {name: ''};

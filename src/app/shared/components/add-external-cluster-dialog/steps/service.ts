@@ -22,6 +22,7 @@ import {PresetList} from '@shared/entity/preset';
 import {AKSCluster} from '@app/shared/entity/provider/aks';
 import {EKSCluster} from '@app/shared/entity/provider/eks';
 import {GKECluster} from '@app/shared/entity/provider/gke';
+import {MasterVersion} from '@shared/entity/cluster';
 
 @Injectable({providedIn: 'root'})
 export class ExternalClusterService {
@@ -175,6 +176,16 @@ export class ExternalClusterService {
     this.isValidating = false;
     this.credentialsStepValidity = false;
     this.clusterStepValidity = false;
+  }
+
+  getMasterVersions(provider: ExternalClusterProvider): Observable<MasterVersion[]> {
+    const url = `${this._newRestRoot}/providers/${provider}/versions`;
+    return this._http.get<MasterVersion[]>(url);
+  }
+
+  createExternalCluster(projectID: string, externalClusterModel: ExternalClusterModel): Observable<any> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters`;
+    return this._http.post<ExternalCluster>(url, externalClusterModel, {headers: this._getEKSHeaders()});
   }
 
   private _getAKSHeaders(): HttpHeaders {

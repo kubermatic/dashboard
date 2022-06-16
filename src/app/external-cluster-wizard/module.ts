@@ -1,4 +1,4 @@
-// Copyright 2021 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,12 +14,15 @@
 
 import {NgModule} from '@angular/core';
 import {SharedModule} from '@shared/module';
-import {NodeDataConfig, NodeDataMode, NODE_DATA_CONFIG} from '../node-data/config';
+import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '../node-data/config';
+import {Routing} from './routing';
 import {NodeDataModule} from '../node-data/module';
 import {ExternalClusterWizardComponent} from './component';
-import {Routing} from './routing';
+import {ExternalClusterStepComponent} from '@app/external-cluster-wizard/steps/external-cluster/component';
+import {EKSExternalClusterComponent} from '@app/external-cluster-wizard/steps/external-cluster/provider/eks/component';
+import {ExternalClusterWizardService} from '@core/services/wizard/external-cluster-wizard';
 
-const components = [ExternalClusterWizardComponent];
+const components = [ExternalClusterWizardComponent, ExternalClusterStepComponent, EKSExternalClusterComponent];
 
 @NgModule({
   imports: [SharedModule, Routing, NodeDataModule],
@@ -29,6 +32,7 @@ const components = [ExternalClusterWizardComponent];
       provide: NODE_DATA_CONFIG,
       useValue: {mode: NodeDataMode.Wizard} as NodeDataConfig,
     },
+    ExternalClusterWizardService,
   ],
   exports: [...components],
 })
