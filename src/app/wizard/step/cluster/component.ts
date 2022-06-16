@@ -21,6 +21,7 @@ import {
   Validator,
   Validators,
 } from '@angular/forms';
+import {IPV6_CIDR_PATTERN_VALIDATOR} from '@app/shared/validators/others';
 import {ClusterService} from '@core/services/cluster';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
@@ -72,11 +73,15 @@ enum Controls {
   MLAMonitoring = 'monitoringEnabled',
   ProxyMode = 'proxyMode',
   PodsCIDR = 'podsCIDR',
+  IPv6PodsCIDR = 'ipv6PodsCIDR',
   ServicesCIDR = 'servicesCIDR',
+  IPv6ServicesCIDR = 'ipv6ServicesCIDR',
   CNIPlugin = 'cniPlugin',
   CNIPluginVersion = 'cniPluginVersion',
   AllowedIPRange = 'allowedIPRange',
+  IPv6AllowedIPRange = 'ipv6AllowedIPRange',
   IPv4CIDRMaskSize = 'ipv4CIDRMaskSize',
+  IPv6CIDRMaskSize = 'ipv6CIDRMaskSize',
   NodeLocalDNSCache = 'nodeLocalDNSCache',
 }
 
@@ -157,11 +162,15 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.SSHKeys]: this._builder.control(''),
       [Controls.ProxyMode]: this._builder.control(''),
       [Controls.PodsCIDR]: this._builder.control('', [CIDR_PATTERN_VALIDATOR]),
+      [Controls.IPv6PodsCIDR]: this._builder.control('', [IPV6_CIDR_PATTERN_VALIDATOR]),
       [Controls.ServicesCIDR]: this._builder.control('', [CIDR_PATTERN_VALIDATOR]),
+      [Controls.IPv6ServicesCIDR]: this._builder.control('', [IPV6_CIDR_PATTERN_VALIDATOR]),
       [Controls.CNIPlugin]: this._builder.control(CNIPlugin.Canal),
       [Controls.CNIPluginVersion]: this._builder.control(''),
       [Controls.AllowedIPRange]: this._builder.control(this._defaultAllowedIPRange, [CIDR_PATTERN_VALIDATOR]),
+      [Controls.IPv6AllowedIPRange]: this._builder.control('', [IPV6_CIDR_PATTERN_VALIDATOR]),
       [Controls.IPv4CIDRMaskSize]: this._builder.control(''),
+      [Controls.IPv6CIDRMaskSize]: this._builder.control(''),
       [Controls.NodeLocalDNSCache]: this._builder.control(false),
     });
 
@@ -414,12 +423,24 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           if (networkDefaults.ipv4?.nodeCidrMaskSize) {
             this.form.get(Controls.IPv4CIDRMaskSize).setValue(networkDefaults.ipv4.nodeCidrMaskSize);
           }
+          if (networkDefaults.ipv6?.podsCidr) {
+            this.form.get(Controls.IPv6PodsCIDR).setValue(networkDefaults.ipv6.podsCidr);
+          }
+          if (networkDefaults.ipv6?.servicesCidr) {
+            this.form.get(Controls.IPv6ServicesCIDR).setValue(networkDefaults.ipv6.servicesCidr);
+          }
+          if (networkDefaults.ipv6?.nodeCidrMaskSize) {
+            this.form.get(Controls.IPv6CIDRMaskSize).setValue(networkDefaults.ipv6.nodeCidrMaskSize);
+          }
           this.form.get(Controls.NodeLocalDNSCache).setValue(!!networkDefaults.nodeLocalDNSCacheEnabled);
-          if (this.form.get(Controls.AllowedIPRange).pristine) {
-            const allowedIPRangeValue = this.isAllowedIPRangeSupported()
-              ? networkDefaults.ipv4?.nodePortsAllowedIPRange || this._defaultAllowedIPRange
-              : null;
-            this.form.get(Controls.AllowedIPRange).setValue(allowedIPRangeValue);
+          if (this.isAllowedIPRangeSupported()) {
+            this.form
+              .get(Controls.AllowedIPRange)
+              .setValue(networkDefaults.ipv4?.nodePortsAllowedIPRange || this._defaultAllowedIPRange);
+            this.form.get(Controls.IPv6AllowedIPRange).setValue(networkDefaults.ipv6?.nodePortsAllowedIPRange);
+          } else {
+            this.form.get(Controls.AllowedIPRange).setValue(null);
+            this.form.get(Controls.IPv6AllowedIPRange).setValue(null);
           }
         },
       });
