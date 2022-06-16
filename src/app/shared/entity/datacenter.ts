@@ -54,7 +54,7 @@ export class DatacenterOperatingSystemOptions {
   sles?: string;
   rhel?: string;
   flatcar?: string;
-  rockylinux?: string;
+  rockyLinux?: string;
 }
 
 export class AnexiaDatacenterSpec {
