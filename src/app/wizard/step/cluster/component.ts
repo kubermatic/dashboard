@@ -48,6 +48,7 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
 import {AsyncValidators} from '@shared/validators/async-label-form.validator';
 import {CIDR_PATTERN_VALIDATOR} from '@shared/validators/others';
+import {KmValidators} from '@shared/validators/validators';
 import {combineLatest, merge} from 'rxjs';
 import {filter, startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import * as semver from 'semver';
@@ -171,13 +172,28 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.SSHKeys]: this._builder.control(''),
       [Controls.IPFamily]: this._builder.control(NetworkType.IPv4),
       [Controls.ProxyMode]: this._builder.control(''),
-      [Controls.IPv4PodsCIDR]: this._builder.control('', [CIDR_PATTERN_VALIDATOR]),
+      [Controls.IPv4PodsCIDR]: this._builder.control('', [
+        CIDR_PATTERN_VALIDATOR,
+        KmValidators.requiredIf(
+          () => this.isDualStackNetworkTypeSelected() && !!this.form.get(Controls.IPv6PodsCIDR).value
+        ),
+      ]),
       [Controls.IPv6PodsCIDR]: this._builder.control('', [IPV6_CIDR_PATTERN_VALIDATOR]),
-      [Controls.IPv4ServicesCIDR]: this._builder.control('', [CIDR_PATTERN_VALIDATOR]),
+      [Controls.IPv4ServicesCIDR]: this._builder.control('', [
+        CIDR_PATTERN_VALIDATOR,
+        KmValidators.requiredIf(
+          () => this.isDualStackNetworkTypeSelected() && !!this.form.get(Controls.IPv6ServicesCIDR).value
+        ),
+      ]),
       [Controls.IPv6ServicesCIDR]: this._builder.control('', [IPV6_CIDR_PATTERN_VALIDATOR]),
       [Controls.CNIPlugin]: this._builder.control(CNIPlugin.Canal),
       [Controls.CNIPluginVersion]: this._builder.control(''),
-      [Controls.IPv4AllowedIPRange]: this._builder.control(this._defaultAllowedIPRange, [CIDR_PATTERN_VALIDATOR]),
+      [Controls.IPv4AllowedIPRange]: this._builder.control(this._defaultAllowedIPRange, [
+        CIDR_PATTERN_VALIDATOR,
+        KmValidators.requiredIf(
+          () => this.isDualStackNetworkTypeSelected() && !!this.form.get(Controls.IPv6AllowedIPRange).value
+        ),
+      ]),
       [Controls.IPv6AllowedIPRange]: this._builder.control('', [IPV6_CIDR_PATTERN_VALIDATOR]),
       [Controls.IPv4CIDRMaskSize]: this._builder.control(''),
       [Controls.IPv6CIDRMaskSize]: this._builder.control(''),
@@ -295,6 +311,19 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     merge(this.control(Controls.IPv4AllowedIPRange).valueChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(ipRange => (this._getExtraCloudSpecOptions().nodePortsAllowedIPRange = ipRange));
+
+    merge(
+      this.control(Controls.IPFamily).valueChanges,
+      this.control(Controls.IPv6PodsCIDR).valueChanges,
+      this.control(Controls.IPv6ServicesCIDR).valueChanges,
+      this.control(Controls.IPv6AllowedIPRange).valueChanges
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        this.control(Controls.IPv4PodsCIDR).updateValueAndValidity();
+        this.control(Controls.IPv4ServicesCIDR).updateValueAndValidity();
+        this.control(Controls.IPv4AllowedIPRange).updateValueAndValidity();
+      });
 
     merge(
       this.form.get(Controls.Name).valueChanges,
