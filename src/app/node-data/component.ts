@@ -119,7 +119,9 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       [Controls.RhelOfflineToken]: this._builder.control(''),
       [Controls.ProviderBasic]: this._builder.control(''),
       [Controls.ProviderExtended]: this._builder.control(''),
-      [Controls.OperatingSystemProfile]: this._builder.control(this._nodeDataService.nodeData.operatingSystemProfile),
+      [Controls.OperatingSystemProfile]: this._builder.control(this._nodeDataService.nodeData.operatingSystemProfile, [
+        KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,
+      ]),
     });
 
     if (this.isDialogView()) {
@@ -332,14 +334,11 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   }
 
   private _getNodeData(): NodeData {
-    const nodeData: NodeData = {
+    return {
       count: this.form.get(Controls.Count).value,
       name: this.form.get(Controls.Name).value,
       dynamicConfig: this.form.get(Controls.DynamicConfig).value,
-    };
-    if (this.form.get(Controls.OperatingSystemProfile).value) {
-      nodeData.operatingSystemProfile = this.form.get(Controls.OperatingSystemProfile).value;
-    }
-    return nodeData;
+      operatingSystemProfile: this.form.get(Controls.OperatingSystemProfile).value,
+    } as NodeData;
   }
 }

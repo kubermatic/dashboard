@@ -149,7 +149,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   }
 
   private _getCreateClusterModel(cluster: Cluster, nodeData: NodeData): CreateClusterModel {
-    return {
+    const clusterModel: CreateClusterModel = {
       cluster: {
         name: cluster.name,
         labels: cluster.labels,
@@ -157,9 +157,6 @@ export class WizardComponent implements OnInit, OnDestroy {
         credential: cluster.credential,
       },
       nodeDeployment: {
-        annotations: {
-          'k8c.io/operating-system-profile': nodeData.operatingSystemProfile,
-        },
         name: nodeData.name,
         spec: {
           template: nodeData.spec,
@@ -168,6 +165,12 @@ export class WizardComponent implements OnInit, OnDestroy {
         },
       },
     };
+    if (nodeData.operatingSystemProfile) {
+      clusterModel.nodeDeployment.annotations = {
+        'k8c.io/operating-system-profile': nodeData.operatingSystemProfile,
+      };
+    }
+    return clusterModel;
   }
 
   private _initForm(steps: WizardStep[]): void {

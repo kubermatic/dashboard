@@ -29,7 +29,7 @@ export class NodeService {
   private readonly _notificationService: NotificationService;
 
   private static _getMachineDeploymentEntity(nodeData: NodeData): MachineDeployment {
-    return {
+    const machineDeployment: MachineDeployment = {
       name: nodeData.name,
       spec: {
         template: nodeData.spec,
@@ -37,6 +37,12 @@ export class NodeService {
         dynamicConfig: nodeData.dynamicConfig,
       },
     };
+    if (nodeData.operatingSystemProfile) {
+      machineDeployment.annotations = {
+        'k8c.io/operating-system-profile': nodeData.operatingSystemProfile,
+      };
+    }
+    return machineDeployment;
   }
 
   private static _createPatch(data: DialogDataOutput): MachineDeploymentPatch {
