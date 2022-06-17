@@ -468,28 +468,20 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .pipe(take(1))
       .subscribe({
         next: networkDefaults => {
-          if (networkDefaults.proxyMode && this.form.get(Controls.ProxyMode).pristine) {
-            this.form.get(Controls.ProxyMode).setValue(networkDefaults.proxyMode);
+          this.form.patchValue({
+            [Controls.ProxyMode]: networkDefaults.proxyMode,
+            [Controls.NodeLocalDNSCache]: networkDefaults.nodeLocalDNSCacheEnabled,
+            [Controls.IPv4PodsCIDR]: networkDefaults.ipv4?.podsCidr || '',
+            [Controls.IPv4ServicesCIDR]: networkDefaults.ipv4?.servicesCidr || '',
+            [Controls.IPv4CIDRMaskSize]: networkDefaults.ipv4?.nodeCidrMaskSize || '',
+          });
+          if (this.isDualStackAllowed) {
+            this.form.patchValue({
+              [Controls.IPv6PodsCIDR]: networkDefaults.ipv6?.podsCidr || '',
+              [Controls.IPv6ServicesCIDR]: networkDefaults.ipv6?.servicesCidr || '',
+              [Controls.IPv6CIDRMaskSize]: networkDefaults.ipv6?.nodeCidrMaskSize || '',
+            });
           }
-          if (networkDefaults.ipv4?.podsCidr && this.form.get(Controls.IPv4PodsCIDR).pristine) {
-            this.form.get(Controls.IPv4PodsCIDR).setValue(networkDefaults.ipv4.podsCidr);
-          }
-          if (networkDefaults.ipv4?.servicesCidr && this.form.get(Controls.IPv4ServicesCIDR).pristine) {
-            this.form.get(Controls.IPv4ServicesCIDR).setValue(networkDefaults.ipv4.servicesCidr);
-          }
-          if (networkDefaults.ipv4?.nodeCidrMaskSize) {
-            this.form.get(Controls.IPv4CIDRMaskSize).setValue(networkDefaults.ipv4.nodeCidrMaskSize);
-          }
-          if (networkDefaults.ipv6?.podsCidr) {
-            this.form.get(Controls.IPv6PodsCIDR).setValue(networkDefaults.ipv6.podsCidr);
-          }
-          if (networkDefaults.ipv6?.servicesCidr) {
-            this.form.get(Controls.IPv6ServicesCIDR).setValue(networkDefaults.ipv6.servicesCidr);
-          }
-          if (networkDefaults.ipv6?.nodeCidrMaskSize) {
-            this.form.get(Controls.IPv6CIDRMaskSize).setValue(networkDefaults.ipv6.nodeCidrMaskSize);
-          }
-          this.form.get(Controls.NodeLocalDNSCache).setValue(!!networkDefaults.nodeLocalDNSCacheEnabled);
           if (this.isAllowedIPRangeSupported()) {
             this.form
               .get(Controls.IPv4AllowedIPRange)
