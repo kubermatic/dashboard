@@ -89,8 +89,8 @@ enum Controls {
 }
 
 enum NetworkType {
-  IPv4 = 'ipv4;',
-  DualStack = 'ipv4+ipv6;',
+  IPv4 = 'ipv4',
+  DualStack = 'ipv4+ipv6',
 }
 
 @Component({
