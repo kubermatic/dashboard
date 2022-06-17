@@ -252,13 +252,21 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         this._setDefaultCNIVersion();
       });
 
+    this.control(Controls.Konnectivity)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        this.updateCNIPluginOptions();
+      });
+
     combineLatest([this.control(Controls.ProxyMode).valueChanges, this.control(Controls.CNIPlugin).valueChanges])
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(([proxyMode, cniPlugin]) => {
         const konnectivityControl = this.control(Controls.Konnectivity);
 
         if (proxyMode === ProxyMode.ebpf && cniPlugin === CNIPlugin.Cilium) {
-          if (!konnectivityControl.value) konnectivityControl.setValue(true);
+          if (!konnectivityControl.value) {
+            konnectivityControl.setValue(true);
+          }
           konnectivityControl.disable();
         } else if (konnectivityControl.disabled) {
           konnectivityControl.enable();
