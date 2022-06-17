@@ -12,6 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@use 'variables';
+
 .checkbox-wrapper {
   min-height: 35px;
+}
+
+.dynamic-kubelet-config-warning {
+  font-size: variables.$font-size-body;
 }
