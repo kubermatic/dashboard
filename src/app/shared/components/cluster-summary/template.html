@@ -334,24 +334,24 @@ limitations under the License.
           <div value>{{cluster.spec.clusterNetwork.services.cidrBlocks.join(', ')}}</div>
         </km-property>
 
-        <km-property *ngIf="cluster.spec.cloud?.aws?.nodePortsAllowedIPRange">
+        <km-property *ngIf="cluster.spec.cloud?.aws?.nodePortsAllowedIPRanges?.cidrBlocks?.length">
           <div key>Allowed IP Range for NodePorts</div>
-          <div value>{{cluster.spec.cloud.aws.nodePortsAllowedIPRange}}</div>
+          <div value>{{cluster.spec.cloud.aws.nodePortsAllowedIPRanges.cidrBlocks.join(', ')}}</div>
         </km-property>
 
-        <km-property *ngIf="cluster.spec.cloud?.azure?.nodePortsAllowedIPRange">
+        <km-property *ngIf="cluster.spec.cloud?.azure?.nodePortsAllowedIPRanges?.cidrBlocks?.length">
           <div key>Allowed IP Range for NodePorts</div>
-          <div value>{{cluster.spec.cloud.azure.nodePortsAllowedIPRange}}</div>
+          <div value>{{cluster.spec.cloud.azure.nodePortsAllowedIPRanges.cidrBlocks.join(', ')}}</div>
         </km-property>
 
-        <km-property *ngIf="cluster.spec.cloud?.gcp?.nodePortsAllowedIPRange">
+        <km-property *ngIf="cluster.spec.cloud?.gcp?.nodePortsAllowedIPRanges?.cidrBlocks?.length">
           <div key>Allowed IP Range for NodePorts</div>
-          <div value>{{cluster.spec.cloud.gcp.nodePortsAllowedIPRange}}</div>
+          <div value>{{cluster.spec.cloud.gcp.nodePortsAllowedIPRanges.cidrBlocks.join(', ')}}</div>
         </km-property>
 
-        <km-property *ngIf="cluster.spec.cloud?.openstack?.nodePortsAllowedIPRange">
+        <km-property *ngIf="cluster.spec.cloud?.openstack?.nodePortsAllowedIPRanges?.cidrBlocks?.length">
           <div key>Allowed IP Range for NodePorts</div>
-          <div value>{{cluster.spec.cloud.openstack.nodePortsAllowedIPRange}}</div>
+          <div value>{{cluster.spec.cloud.openstack.nodePortsAllowedIPRanges.cidrBlocks.join(', ')}}</div>
         </km-property>
 
         <km-property-boolean *ngIf="cluster.spec.clusterNetwork?.konnectivityEnabled"

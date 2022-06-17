@@ -117,10 +117,10 @@ export class CloudSpec {
 }
 
 export class ExtraCloudSpecOptions {
-  constructor(public nodePortsAllowedIPRange?: string) {}
+  constructor(public nodePortsAllowedIPRanges?: NetworkRanges) {}
 
   static new(spec: AWSCloudSpec | GCPCloudSpec | AzureCloudSpec | OpenstackCloudSpec): ExtraCloudSpecOptions {
-    return new ExtraCloudSpecOptions(spec.nodePortsAllowedIPRange);
+    return new ExtraCloudSpecOptions(spec.nodePortsAllowedIPRanges);
   }
 }
 
