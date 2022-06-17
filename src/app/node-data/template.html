@@ -170,12 +170,12 @@ limitations under the License.
                              [formControlName]="Controls.ProviderExtended"></km-extended-node-data>
     </div>
 
-    <mat-form-field>
+    <mat-form-field *ngIf="showOperatingSystemProfile">
       <mat-label>Operating System Profile</mat-label>
       <input [formControlName]="Controls.OperatingSystemProfile"
              matInput
              type="text">
-      <mat-hint *ngIf="!dialogEditMode">Use this field to override the default operating system profile used for this machine deployment.</mat-hint>
+      <mat-hint *ngIf="!dialogEditMode">leave this field blanc to use default operating system profile</mat-hint>
       <mat-error *ngIf="form.get(Controls.OperatingSystemProfile).hasError( 'pattern')">
         OSP can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash.
       </mat-error>

@@ -28,6 +28,7 @@ import {NameGeneratorService} from '@core/services/name-generator';
 import {NodeDataService} from '@core/services/node-data/service';
 import {SettingsService} from '@core/services/settings';
 import {ContainerRuntime, END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION} from '@shared/entity/cluster';
+import {FeatureGateService} from '@core/services/feature-gate';
 import {Datacenter} from '@shared/entity/datacenter';
 import {OperatingSystemSpec, Taint} from '@shared/entity/node';
 import {NodeProvider, NodeProviderConstants, OperatingSystem} from '@shared/model/NodeProviderConstants';
@@ -50,7 +51,7 @@ enum Controls {
   ProviderBasic = 'providerBasic',
   ProviderExtended = 'providerExtended',
   Kubelet = 'kubelet',
-  OperatingSystemProfile = 'operating system profile',
+  OperatingSystemProfile = 'operatingSystemProfile',
 }
 
 @Component({
@@ -81,6 +82,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   @Input() showExtended = false;
   labels: object = {};
   taints: Taint[] = [];
+  isKonnectivityEnabled: boolean;
   dialogEditMode = false;
   endOfDynamicKubeletConfigSupportVersion: string = END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION;
 
@@ -91,6 +93,10 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   get isDynamicKubletConfigSupported(): boolean {
     return this._clusterSpecService.cluster.spec.version < this.endOfDynamicKubeletConfigSupportVersion;
   }
+  
+  get showOperatingSystemProfile(): boolean {
+    return this._clusterSpecService.cluster.spec.enableOperatingSystemManager && this.isKonnectivityEnabled;
+  }
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -99,6 +105,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     private readonly _datacenterService: DatacenterService,
     private readonly _nodeDataService: NodeDataService,
     private readonly _settingsService: SettingsService,
+    private readonly __featureGatesService: FeatureGateService,
     private readonly _cdr: ChangeDetectorRef
   ) {
     super();
@@ -177,6 +184,10 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       const replicas = this.dialogEditMode ? this._nodeDataService.nodeData.count : settings.defaultNodeCount;
       this.form.get(Controls.Count).setValue(replicas);
     });
+
+    this.__featureGatesService.featureGates
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(featureGates => (this.isKonnectivityEnabled = featureGates?.konnectivityService));
   }
 
   ngOnDestroy(): void {

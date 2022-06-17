@@ -58,3 +58,5 @@ export class NodeSpecPatch {
   labels?: object;
   taints?: Taint[];
 }
+
+export const OPERATING_SYSTEM_PROFILE = 'k8c.io/operating-system-profile';

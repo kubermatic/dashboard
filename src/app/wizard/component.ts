@@ -26,6 +26,7 @@ import {WizardService} from '@core/services/wizard/wizard';
 import {SaveClusterTemplateDialogComponent} from '@shared/components/save-cluster-template/component';
 import {Cluster, CreateClusterModel} from '@shared/entity/cluster';
 import {Project} from '@shared/entity/project';
+import {OPERATING_SYSTEM_PROFILE} from '@shared/entity/machine-deployment';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {Observable, Subject, take} from 'rxjs';
 import {filter, switchMap, takeUntil} from 'rxjs/operators';
@@ -41,6 +42,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   form: FormGroup;
   project = {} as Project;
   creating = false;
+  operatingSystemProfile = OPERATING_SYSTEM_PROFILE;
   readonly stepRegistry = StepRegistry;
 
   @ViewChild('stepper', {static: true}) private readonly _stepper: MatStepper;
@@ -167,7 +169,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     };
     if (nodeData.operatingSystemProfile) {
       clusterModel.nodeDeployment.annotations = {
-        'k8c.io/operating-system-profile': nodeData.operatingSystemProfile,
+        [this.operatingSystemProfile]: nodeData.operatingSystemProfile,
       };
     }
     return clusterModel;
