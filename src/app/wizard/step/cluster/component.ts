@@ -534,15 +534,12 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
     if (this.isDualStackNetworkTypeSelected()) {
       const ipv6Pods = this.controlValue(Controls.IPv6PodsCIDR);
-      if (ipv6Pods) {
-        clusterNetwork.pods.cidrBlocks = [...(ipv4Pods ? clusterNetwork.pods.cidrBlocks : ['']), ipv6Pods];
+      if (ipv4Pods && ipv6Pods) {
+        clusterNetwork.pods.cidrBlocks = [...clusterNetwork.pods.cidrBlocks, ipv6Pods];
       }
       const ipv6Services = this.controlValue(Controls.IPv6ServicesCIDR);
-      if (ipv6Services) {
-        clusterNetwork.services.cidrBlocks = [
-          ...(ipv4Services ? clusterNetwork.services.cidrBlocks : ['']),
-          ipv6Services,
-        ];
+      if (ipv4Services && ipv6Services) {
+        clusterNetwork.services.cidrBlocks = [...clusterNetwork.services.cidrBlocks, ipv6Services];
       }
       clusterNetwork.nodeCidrMaskSizeIPv6 = this.controlValue(Controls.IPv6CIDRMaskSize);
     }
