@@ -331,7 +331,6 @@ export class CNIPluginConfig {
 
 export class NetworkRanges {
   cidrBlocks: string[];
-  clusterNetwork?: ClusterNetwork;
 }
 
 export class CNIPluginVersions {
