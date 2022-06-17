@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ValidatorFn} from '@angular/forms';
+import {ValidatorFn, Validators} from '@angular/forms';
 import {ChipPatternValidator} from '@shared/validators/chip.pattern.validator';
 import {LargerThanValidator} from '@shared/validators/larger-than.validator';
 import {UniqueValidator} from '@shared/validators/unique.validator';
@@ -37,5 +37,17 @@ export class KmValidators {
   static cronExpression(): ValidatorFn {
     const validator = new CronExpressionValidator();
     return validator.validate.bind(validator);
+  }
+
+  static requiredIf(predicate: () => boolean): ValidatorFn {
+    return formControl => {
+      if (!formControl.parent) {
+        return null;
+      }
+      if (predicate()) {
+        return Validators.required(formControl);
+      }
+      return null;
+    };
   }
 }
