@@ -343,6 +343,11 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.ProxyMode).valueChanges,
       this.form.get(Controls.IPv4PodsCIDR).valueChanges,
       this.form.get(Controls.IPv4ServicesCIDR).valueChanges,
+      this.form.get(Controls.IPv4CIDRMaskSize).valueChanges,
+      this.form.get(Controls.IPv6PodsCIDR).valueChanges,
+      this.form.get(Controls.IPv6ServicesCIDR).valueChanges,
+      this.form.get(Controls.IPv6CIDRMaskSize).valueChanges,
+      this.form.get(Controls.NodeLocalDNSCache).valueChanges,
       this.form.get(Controls.CNIPlugin).valueChanges,
       this.form.get(Controls.CNIPluginVersion).valueChanges
     )
