@@ -311,9 +311,23 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         }
       });
 
-    merge(this.control(Controls.IPv4AllowedIPRange).valueChanges)
+    merge(
+      this.control(Controls.IPv4AllowedIPRange).valueChanges,
+      this.control(Controls.IPv6AllowedIPRange).valueChanges
+    )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(ipRange => (this._getExtraCloudSpecOptions().nodePortsAllowedIPRange = ipRange));
+      .subscribe(_ => {
+        let cidrBlocks = [];
+        const ipv4AllowedIPRange = this.controlValue(Controls.IPv4AllowedIPRange);
+        if (ipv4AllowedIPRange) {
+          const ipv6AllowedIPRange = this.controlValue(Controls.IPv6AllowedIPRange);
+          cidrBlocks =
+            this.isDualStackNetworkTypeSelected() && ipv6AllowedIPRange
+              ? [ipv4AllowedIPRange, ipv6AllowedIPRange]
+              : [ipv4AllowedIPRange];
+        }
+        this._getExtraCloudSpecOptions().nodePortsAllowedIPRanges = {cidrBlocks};
+      });
 
     merge(
       this.control(Controls.IPFamily).valueChanges,
