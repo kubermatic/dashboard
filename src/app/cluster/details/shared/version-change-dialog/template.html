@@ -55,14 +55,14 @@ limitations under the License.
       Upgrade Machine Deployments
     </mat-checkbox>
   </div>
-  <div *ngIf="!isDynamicKubletConfigSupportedInUpgrade && this.nodesSupportDynamicKubeletConfig"
+  <div *ngIf="!isDynamicKubletConfigSupportedInUpgrade && nodesSupportDynamicKubeletConfig"
        fxLayoutAlign="center start"
        class="warning-container">
     <i class="km-icon-warning"></i>
     <div class="km-text dynamic-kubelet-config-warning">
       Kubernetes version {{endOfDynamicKubeletConfigSupportVersion}} and higher do not support dynamic kubelet configuration.
       On upgrade, dynamic kubelet configuration is going to be disabled on the machine deployments:
-      <span class="km-text-bolder">{{this.nodesSupportDynamicKubeletConfig}}</span>
+      <span class="km-text-bolder">{{nodesSupportDynamicKubeletConfig}}</span>
     </div>
   </div>
 </mat-dialog-content>

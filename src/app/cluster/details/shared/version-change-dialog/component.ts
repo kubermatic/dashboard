@@ -41,7 +41,7 @@ export class VersionChangeDialogComponent implements OnInit, OnDestroy {
   project: Project;
   isMachineDeploymentUpgradeEnabled = false;
   private _unsubscribe = new Subject<void>();
-  nodesSupportDynamicKubeletConfig = '';
+  protected nodesSupportDynamicKubeletConfig = '';
   endOfDynamicKubeletConfigSupportVersion: string = END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION;
 
   get isDynamicKubletConfigSupportedInUpgrade(): boolean {
