@@ -55,7 +55,7 @@ limitations under the License.
       Upgrade Machine Deployments
     </mat-checkbox>
   </div>
-  <div *ngIf="!isDynamicKubletConfigSupportedInUpgrade"
+  <div *ngIf="!isDynamicKubletConfigSupportedInUpgrade && this.nodesSupportDynamicKubeletConfig"
        fxLayoutAlign="center start"
        class="warning-container">
     <i class="km-icon-warning"></i>
