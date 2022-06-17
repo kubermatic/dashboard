@@ -241,7 +241,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     this._clusterSpecService.providerChanges
       .pipe(
         // resetting so that `_setDefaultNetworkControls` can set the default value
-        tap(_ => this.form.get(Controls.IPv4AllowedIPRange).reset())
+        tap(_ => {
+          this.form.get(Controls.IPv4AllowedIPRange).reset();
+          this.form.get(Controls.IPv6AllowedIPRange).reset();
+        })
       )
       .pipe(switchMap(provider => this._clusterService.getMasterVersions(provider)))
       .pipe(takeUntil(this._unsubscribe))
