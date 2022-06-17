@@ -23,7 +23,7 @@ import {NodeData} from '@shared/model/NodeSpecChange';
 import {Observable, of} from 'rxjs';
 import {catchError, filter, mergeMap, switchMap, take} from 'rxjs/operators';
 import {MachineDeploymentService} from '@core/services/machine-deployment';
-import {OPERATING_SYSTEM_PROFILE} from '@shared/entity/machine-deployment';
+import {OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deployment';
 
 @Injectable()
 export class NodeService {
@@ -40,7 +40,7 @@ export class NodeService {
     };
     if (nodeData.operatingSystemProfile) {
       machineDeployment.annotations = {
-        [OPERATING_SYSTEM_PROFILE]: nodeData.operatingSystemProfile,
+        [OPERATING_SYSTEM_PROFILE_ANNOTATION]: nodeData.operatingSystemProfile,
       };
     }
     return machineDeployment;
@@ -104,7 +104,7 @@ export class NodeService {
       data: {
         initialClusterData: cluster,
         initialNodeData: {
-          operatingSystemProfile: md.annotations[OPERATING_SYSTEM_PROFILE],
+          operatingSystemProfile: md.annotations[OPERATING_SYSTEM_PROFILE_ANNOTATION],
           count: md.spec.replicas,
           name: md.name,
           spec: md.spec.template,

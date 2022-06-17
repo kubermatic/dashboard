@@ -82,7 +82,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   @Input() showExtended = false;
   labels: object = {};
   taints: Taint[] = [];
-  isKonnectivityEnabled: boolean;
+  FeatureGateOperatingSystemMangerEnabled: boolean;
   dialogEditMode = false;
   endOfDynamicKubeletConfigSupportVersion: string = END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION;
 
@@ -91,7 +91,9 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   }
   
   get showOperatingSystemProfile(): boolean {
-    return this._clusterSpecService.cluster.spec.enableOperatingSystemManager && this.isKonnectivityEnabled;
+    return (
+      this._clusterSpecService.cluster.spec.enableOperatingSystemManager && this.FeatureGateOperatingSystemMangerEnabled
+    );
   }
 
   get isDynamicKubletConfigSupported(): boolean {
@@ -105,7 +107,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     private readonly _datacenterService: DatacenterService,
     private readonly _nodeDataService: NodeDataService,
     private readonly _settingsService: SettingsService,
-    private readonly __featureGatesService: FeatureGateService,
+    private readonly _featureGatesService: FeatureGateService,
     private readonly _cdr: ChangeDetectorRef
   ) {
     super();
@@ -185,9 +187,9 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       this.form.get(Controls.Count).setValue(replicas);
     });
 
-    this.__featureGatesService.featureGates
+    this._featureGatesService.featureGates
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(featureGates => (this.isKonnectivityEnabled = featureGates?.konnectivityService));
+      .subscribe(featureGates => (this.FeatureGateOperatingSystemMangerEnabled = featureGates.operatingSystemManager));
   }
 
   ngOnDestroy(): void {
