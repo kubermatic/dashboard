@@ -89,13 +89,13 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   get providerDisplayName(): string {
     return NodeProviderConstants.displayName(this.provider);
   }
-
-  get isDynamicKubletConfigSupported(): boolean {
-    return this._clusterSpecService.cluster.spec.version < this.endOfDynamicKubeletConfigSupportVersion;
-  }
   
   get showOperatingSystemProfile(): boolean {
     return this._clusterSpecService.cluster.spec.enableOperatingSystemManager && this.isKonnectivityEnabled;
+  }
+
+  get isDynamicKubletConfigSupported(): boolean {
+    return this._clusterSpecService.cluster.spec.version < this.endOfDynamicKubeletConfigSupportVersion;
   }
 
   constructor(
