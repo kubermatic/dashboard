@@ -26,9 +26,10 @@ limitations under the License.
     </mat-button-toggle>
     <h3 fxLayoutGap="10px"
         fxLayoutAlign=" center">
-      <span>Connect</span>
-      <i class="km-icon-info"></i>
-      <span class="tooltip">Connected clusters can only be viewed, not edited</span>
+      <div fxLayout="column">
+        <span>Connect</span>
+        <span class="tooltip">Connected clusters can only be viewed, not edited</span>
+      </div>
     </h3>
     <mat-button-toggle [value]="provider.Custom"
                        id="external-cluster-any-provider-btn">Any provider
