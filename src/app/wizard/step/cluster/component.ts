@@ -39,6 +39,7 @@ import {
   END_OF_DOCKER_SUPPORT_VERSION,
   ExtraCloudSpecOptions,
   MasterVersion,
+  IPFamily,
   ProxyMode,
 } from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
@@ -88,11 +89,6 @@ enum Controls {
   IPFamily = 'ipFamily',
 }
 
-enum NetworkType {
-  IPv4 = 'IPv4',
-  DualStack = 'IPv4+IPv6',
-}
-
 @Component({
   selector: 'km-wizard-cluster-step',
   templateUrl: './template.html',
@@ -127,7 +123,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   isDualStackAllowed = false;
   readonly Controls = Controls;
   readonly AuditPolicyPreset = AuditPolicyPreset;
-  readonly NetworkType = NetworkType;
+  readonly IPFamily = IPFamily;
   private _datacenterSpec: Datacenter;
   private _seedSettings: SeedSettings;
   private _settings: AdminSettings;
@@ -170,19 +166,19 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.EventRateLimitConfig]: this._builder.control(''),
       [Controls.Labels]: this._builder.control(''),
       [Controls.SSHKeys]: this._builder.control(''),
-      [Controls.IPFamily]: this._builder.control(NetworkType.IPv4),
+      [Controls.IPFamily]: this._builder.control(IPFamily.IPv4),
       [Controls.ProxyMode]: this._builder.control(''),
       [Controls.IPv4PodsCIDR]: this._builder.control('', [
         CIDR_PATTERN_VALIDATOR,
         KmValidators.requiredIf(
-          () => this.isDualStackNetworkTypeSelected() && !!this.form.get(Controls.IPv6PodsCIDR).value
+          () => this.isDualStackIPFamilySelected() && !!this.form.get(Controls.IPv6PodsCIDR).value
         ),
       ]),
       [Controls.IPv6PodsCIDR]: this._builder.control('', [IPV6_CIDR_PATTERN_VALIDATOR]),
       [Controls.IPv4ServicesCIDR]: this._builder.control('', [
         CIDR_PATTERN_VALIDATOR,
         KmValidators.requiredIf(
-          () => this.isDualStackNetworkTypeSelected() && !!this.form.get(Controls.IPv6ServicesCIDR).value
+          () => this.isDualStackIPFamilySelected() && !!this.form.get(Controls.IPv6ServicesCIDR).value
         ),
       ]),
       [Controls.IPv6ServicesCIDR]: this._builder.control('', [IPV6_CIDR_PATTERN_VALIDATOR]),
@@ -191,7 +187,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.IPv4AllowedIPRange]: this._builder.control(this._defaultAllowedIPRange, [
         CIDR_PATTERN_VALIDATOR,
         KmValidators.requiredIf(
-          () => this.isDualStackNetworkTypeSelected() && !!this.form.get(Controls.IPv6AllowedIPRange).value
+          () => this.isDualStackIPFamilySelected() && !!this.form.get(Controls.IPv6AllowedIPRange).value
         ),
       ]),
       [Controls.IPv6AllowedIPRange]: this._builder.control('', [IPV6_CIDR_PATTERN_VALIDATOR]),
@@ -322,7 +318,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         if (ipv4AllowedIPRange) {
           const ipv6AllowedIPRange = this.controlValue(Controls.IPv6AllowedIPRange);
           cidrBlocks =
-            this.isDualStackNetworkTypeSelected() && ipv6AllowedIPRange
+            this.isDualStackIPFamilySelected() && ipv6AllowedIPRange
               ? [ipv4AllowedIPRange, ipv6AllowedIPRange]
               : [ipv4AllowedIPRange];
         }
@@ -436,8 +432,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     );
   }
 
-  isDualStackNetworkTypeSelected(): boolean {
-    return this.form.get(Controls.IPFamily).value === NetworkType.DualStack;
+  isDualStackIPFamilySelected(): boolean {
+    return this.form.get(Controls.IPFamily).value === IPFamily.DualStack;
   }
 
   private _enforce(control: Controls, isEnforced: boolean): void {
@@ -474,7 +470,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   private _setNetworkDefaults(): void {
     if (!this.isDualStackAllowed) {
       this.control(Controls.IPFamily).reset();
-      this.control(Controls.IPFamily).setValue(NetworkType.IPv4);
+      this.control(Controls.IPFamily).setValue(IPFamily.IPv4);
     }
 
     this._clusterService
@@ -532,7 +528,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       konnectivityEnabled: konnectivity,
     } as ClusterNetwork;
 
-    if (this.isDualStackNetworkTypeSelected()) {
+    if (this.isDualStackIPFamilySelected()) {
       const ipv6Pods = this.controlValue(Controls.IPv6PodsCIDR);
       if (ipv4Pods && ipv6Pods) {
         clusterNetwork.pods.cidrBlocks = [...clusterNetwork.pods.cidrBlocks, ipv6Pods];

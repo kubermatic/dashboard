@@ -88,8 +88,8 @@ limitations under the License.
         <mat-radio-group *ngIf="isDualStackAllowed"
                          fxLayoutGap="50px"
                          [formControlName]="Controls.IPFamily">
-          <mat-radio-button [value]="NetworkType.IPv4">IPv4</mat-radio-button>
-          <mat-radio-button [value]="NetworkType.DualStack">IPv4 and IPv6 (Dual Stack)</mat-radio-button>
+          <mat-radio-button [value]="IPFamily.IPv4">IPv4</mat-radio-button>
+          <mat-radio-button [value]="IPFamily.DualStack">IPv4 and IPv6 (Dual Stack)</mat-radio-button>
         </mat-radio-group>
 
         <km-expansion-panel expandLabel="ADVANCED NETWORK CONFIGURATION"
@@ -106,8 +106,8 @@ limitations under the License.
             </mat-select>
           </mat-form-field>
           <div fxLayout="row" fxLayoutGap="50px" fxFlex="100">
-            <div fxLayout="column" [fxFlex]="isDualStackNetworkTypeSelected() ? '50' : '100'">
-              <h4 *ngIf="isDualStackNetworkTypeSelected()">IPv4</h4>
+            <div fxLayout="column" [fxFlex]="isDualStackIPFamilySelected() ? '50' : '100'">
+              <h4 *ngIf="isDualStackIPFamilySelected()">IPv4</h4>
               <mat-form-field fxFlex>
                 <mat-label>Pods CIDR</mat-label>
                 <input matInput
@@ -154,7 +154,7 @@ limitations under the License.
                 </mat-error>
               </mat-form-field>
             </div>
-            <div *ngIf="isDualStackNetworkTypeSelected()" fxLayout="column" fxFlex="50">
+            <div *ngIf="isDualStackIPFamilySelected()" fxLayout="column" fxFlex="50">
               <h4>IPv6</h4>
               <mat-form-field fxFlex>
                 <mat-label>Pods CIDR</mat-label>

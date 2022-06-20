@@ -350,6 +350,11 @@ export enum CNIPlugin {
   None = 'none',
 }
 
+export enum IPFamily {
+  IPv4 = 'IPv4',
+  DualStack = 'IPv4+IPv6',
+}
+
 export enum AuditPolicyPreset {
   Custom = '',
   Metadata = 'metadata',
