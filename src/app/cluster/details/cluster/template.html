@@ -227,13 +227,18 @@ limitations under the License.
 
           <div fxFlex="33"
                class="container-spacing">
-            <div fxFlex="100" fxLayout="column">
+            <div fxFlex="100"
+                 fxLayout="column">
               <div class="section-header">Networking</div>
               <km-property *ngIf="cluster.spec.clusterNetwork?.proxyMode">
                 <div key>Proxy Mode</div>
                 <div value>{{cluster.spec.clusterNetwork.proxyMode}}</div>
               </km-property>
-              <div fxFlex="100" fxLayout="column" fxLayout.gt-lg="row" fxLayoutGap="10px" fxLayoutGap.gt-lg="50px">
+              <div fxFlex="100"
+                   fxLayout="column"
+                   fxLayout.gt-lg="row"
+                   fxLayoutGap="10px"
+                   fxLayoutGap.gt-lg="50px">
                 <div fxLayout="column"
                      fxFlex="100"
                      [fxFlex.gt-lg]="cluster.spec.clusterNetwork?.ipFamily === IPFamily.DualStack ? '30' : '100'">
@@ -252,7 +257,9 @@ limitations under the License.
                   </km-property>
                 </div>
                 <div *ngIf="cluster.spec.clusterNetwork?.ipFamily === IPFamily.DualStack"
-                     fxLayout="column" fxFlex="100" fxFlex.gt-lg="70">
+                     fxLayout="column"
+                     fxFlex="100"
+                     fxFlex.gt-lg="70">
                   <h4>IPv6</h4>
                   <km-property *ngIf="cluster.spec.clusterNetwork?.pods?.cidrBlocks?.length > 1">
                     <div key>Pods CIDR</div>
