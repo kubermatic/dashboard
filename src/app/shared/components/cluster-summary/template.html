@@ -354,6 +354,11 @@ limitations under the License.
           <div value>{{cluster.spec.cloud.openstack.nodePortsAllowedIPRanges.cidrBlocks.join(', ')}}</div>
         </km-property>
 
+        <km-property-boolean *ngIf="cluster.spec.clusterNetwork?.nodeLocalDNSCacheEnabled"
+                             label="Node Local DNS Cache"
+                             [value]="cluster.spec.clusterNetwork?.nodeLocalDNSCacheEnabled">
+        </km-property-boolean>
+
         <km-property-boolean *ngIf="cluster.spec.clusterNetwork?.konnectivityEnabled"
                              label="Konnectivity"
                              [value]="cluster.spec.clusterNetwork?.konnectivityEnabled">
