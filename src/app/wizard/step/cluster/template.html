@@ -136,8 +136,8 @@ limitations under the License.
               </mat-form-field>
               <km-number-stepper [formControlName]="Controls.IPv4CIDRMaskSize"
                                  mode="errors"
-                                 min="0"
-                                 max="128"
+                                 min="1"
+                                 max="32"
                                  label="Node CIDR Mask Size">
               </km-number-stepper>
               <mat-form-field *ngIf="isAllowedIPRangeSupported()">
@@ -178,7 +178,7 @@ limitations under the License.
               </mat-form-field>
               <km-number-stepper [formControlName]="Controls.IPv6CIDRMaskSize"
                                  mode="errors"
-                                 min="0"
+                                 min="1"
                                  max="128"
                                  label="Node CIDR Mask Size">
               </km-number-stepper>
