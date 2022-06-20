@@ -233,7 +233,7 @@ limitations under the License.
                 <div key>Proxy Mode</div>
                 <div value>{{cluster.spec.clusterNetwork.proxyMode}}</div>
               </km-property>
-              <div fxLayout="column" fxLayout.gt-lg="row" fxLayoutGap.gt-lg="50px" fxFlex="100">
+              <div fxFlex="100" fxLayout="column" fxLayout.gt-lg="row" fxLayoutGap="10px" fxLayoutGap.gt-lg="50px">
                 <div fxLayout="column"
                      fxFlex="100"
                      [fxFlex.gt-lg]="cluster.spec.clusterNetwork?.ipFamily === IPFamily.DualStack ? '30' : '100'">
