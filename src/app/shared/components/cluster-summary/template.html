@@ -324,7 +324,7 @@ limitations under the License.
           <div value>{{cluster.spec.clusterNetwork.proxyMode}}</div>
         </km-property>
 
-        <h4 *ngIf="cluster.spec.clusterNetwork.ipFamily === IPFamily.DualStack">IPv4</h4>
+        <h4 *ngIf="cluster.spec.clusterNetwork?.ipFamily === IPFamily.DualStack">IPv4</h4>
 
         <km-property *ngIf="cluster.spec.clusterNetwork?.pods?.cidrBlocks?.length">
           <div key>Pods CIDR</div>
@@ -361,7 +361,7 @@ limitations under the License.
           <div value>{{cluster.spec.cloud.openstack.nodePortsAllowedIPRanges.cidrBlocks[0]}}</div>
         </km-property>
 
-        <ng-container *ngIf="cluster.spec.clusterNetwork.ipFamily === IPFamily.DualStack">
+        <ng-container *ngIf="cluster.spec.clusterNetwork?.ipFamily === IPFamily.DualStack">
           <h4>IPv6</h4>
           <km-property *ngIf="cluster.spec.clusterNetwork?.pods?.cidrBlocks?.length > 1">
             <div key>Pods CIDR</div>
