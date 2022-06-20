@@ -38,8 +38,8 @@ import {
   ContainerRuntime,
   END_OF_DOCKER_SUPPORT_VERSION,
   ExtraCloudSpecOptions,
-  MasterVersion,
   IPFamily,
+  MasterVersion,
   ProxyMode,
 } from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
@@ -235,13 +235,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .subscribe((seedSettings: SeedSettings) => (this._seedSettings = seedSettings));
 
     this._clusterSpecService.providerChanges
-      .pipe(
-        // resetting so that `_setDefaultNetworkControls` can set the default value
-        tap(_ => {
-          this.form.get(Controls.IPv4AllowedIPRange).reset();
-          this.form.get(Controls.IPv6AllowedIPRange).reset();
-        })
-      )
       .pipe(switchMap(provider => this._clusterService.getMasterVersions(provider)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setDefaultVersion.bind(this));
@@ -493,13 +486,16 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
             });
           }
           if (this.isAllowedIPRangeSupported()) {
-            this.form
-              .get(Controls.IPv4AllowedIPRange)
-              .setValue(networkDefaults.ipv4?.nodePortsAllowedIPRange || this._defaultAllowedIPRange);
-            this.form.get(Controls.IPv6AllowedIPRange).setValue(networkDefaults.ipv6?.nodePortsAllowedIPRange);
+            this.form.patchValue({
+              [Controls.IPv4AllowedIPRange]:
+                networkDefaults.ipv4?.nodePortsAllowedIPRange || this._defaultAllowedIPRange,
+              [Controls.IPv6AllowedIPRange]: networkDefaults.ipv6?.nodePortsAllowedIPRange || '',
+            });
           } else {
-            this.form.get(Controls.IPv4AllowedIPRange).setValue(null);
-            this.form.get(Controls.IPv6AllowedIPRange).setValue(null);
+            this.form.patchValue({
+              [Controls.IPv4AllowedIPRange]: null,
+              [Controls.IPv6AllowedIPRange]: null,
+            });
           }
         },
       });
