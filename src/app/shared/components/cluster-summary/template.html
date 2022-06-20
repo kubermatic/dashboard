@@ -336,6 +336,11 @@ limitations under the License.
           <div value>{{cluster.spec.clusterNetwork.services.cidrBlocks[0]}}</div>
         </km-property>
 
+        <km-property *ngIf="cluster.spec.clusterNetwork?.nodeCidrMaskSizeIPv4">
+          <div key>Node CIDR Mask Size</div>
+          <div value>{{cluster.spec.clusterNetwork.nodeCidrMaskSizeIPv4}}</div>
+        </km-property>
+
         <km-property *ngIf="cluster.spec.cloud?.aws?.nodePortsAllowedIPRanges?.cidrBlocks?.length">
           <div key>Allowed IP Range for NodePorts</div>
           <div value>{{cluster.spec.cloud.aws.nodePortsAllowedIPRanges.cidrBlocks[0]}}</div>
@@ -366,6 +371,11 @@ limitations under the License.
           <km-property *ngIf="cluster.spec.clusterNetwork?.services?.cidrBlocks?.length > 1">
             <div key>Services CIDR</div>
             <div value>{{cluster.spec.clusterNetwork.services.cidrBlocks[1]}}</div>
+          </km-property>
+
+          <km-property *ngIf="cluster.spec.clusterNetwork?.nodeCidrMaskSizeIPv6">
+            <div key>Node CIDR Mask Size</div>
+            <div value>{{cluster.spec.clusterNetwork.nodeCidrMaskSizeIPv6}}</div>
           </km-property>
 
           <km-property *ngIf="cluster.spec.cloud?.aws?.nodePortsAllowedIPRanges?.cidrBlocks?.length > 1">
