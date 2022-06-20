@@ -227,23 +227,55 @@ limitations under the License.
 
           <div fxFlex="33"
                class="container-spacing">
-            <div class="section-header">Networking</div>
-            <km-property *ngIf="cluster.spec.clusterNetwork?.pods?.cidrBlocks">
-              <div key>Pods CIDR</div>
-              <div value>{{cluster.spec.clusterNetwork.pods.cidrBlocks.join(', ')}}</div>
-            </km-property>
-            <km-property *ngIf="cluster.spec.clusterNetwork?.services?.cidrBlocks">
-              <div key>Services CIDR</div>
-              <div value>{{cluster.spec.clusterNetwork.services.cidrBlocks.join(', ')}}</div>
-            </km-property>
-            <km-property *ngIf="cluster.spec.clusterNetwork?.proxyMode">
-              <div key>Proxy Mode</div>
-              <div value>{{cluster.spec.clusterNetwork.proxyMode}}</div>
-            </km-property>
-            <km-property-boolean label="Konnectivity"
-                                 matTooltip="Konnectivity is a TCP level proxy service for control plane to cluster communication."
-                                 [value]="cluster.spec.clusterNetwork?.konnectivityEnabled">
-            </km-property-boolean>
+            <div fxFlex="100" fxLayout="column">
+              <div class="section-header">Networking</div>
+              <km-property *ngIf="cluster.spec.clusterNetwork?.proxyMode">
+                <div key>Proxy Mode</div>
+                <div value>{{cluster.spec.clusterNetwork.proxyMode}}</div>
+              </km-property>
+              <div fxLayout="column" fxLayout.gt-lg="row" fxLayoutGap.gt-lg="50px" fxFlex="100">
+                <div fxLayout="column"
+                     fxFlex="100"
+                     [fxFlex.gt-lg]="cluster.spec.clusterNetwork?.ipFamily === IPFamily.DualStack ? '30' : '100'">
+                  <h4 *ngIf="cluster.spec.clusterNetwork?.ipFamily === IPFamily.DualStack">IPv4</h4>
+                  <km-property *ngIf="cluster.spec.clusterNetwork?.pods?.cidrBlocks?.length">
+                    <div key>Pods CIDR</div>
+                    <div value>{{cluster.spec.clusterNetwork.pods.cidrBlocks[0]}}</div>
+                  </km-property>
+                  <km-property *ngIf="cluster.spec.clusterNetwork?.services?.cidrBlocks?.length">
+                    <div key>Services CIDR</div>
+                    <div value>{{cluster.spec.clusterNetwork.services.cidrBlocks[0]}}</div>
+                  </km-property>
+                  <km-property *ngIf="cluster.spec.clusterNetwork?.nodeCidrMaskSizeIPv4">
+                    <div key>Node CIDR Mask Size</div>
+                    <div value>{{cluster.spec.clusterNetwork.nodeCidrMaskSizeIPv4}}</div>
+                  </km-property>
+                </div>
+                <div *ngIf="cluster.spec.clusterNetwork?.ipFamily === IPFamily.DualStack"
+                     fxLayout="column" fxFlex="100" fxFlex.gt-lg="70">
+                  <h4>IPv6</h4>
+                  <km-property *ngIf="cluster.spec.clusterNetwork?.pods?.cidrBlocks?.length > 1">
+                    <div key>Pods CIDR</div>
+                    <div value>{{cluster.spec.clusterNetwork.pods.cidrBlocks[1]}}</div>
+                  </km-property>
+                  <km-property *ngIf="cluster.spec.clusterNetwork?.services?.cidrBlocks?.length > 1">
+                    <div key>Services CIDR</div>
+                    <div value>{{cluster.spec.clusterNetwork.services.cidrBlocks[1]}}</div>
+                  </km-property>
+                  <km-property *ngIf="cluster.spec.clusterNetwork?.nodeCidrMaskSizeIPv6">
+                    <div key>Node CIDR Mask Size</div>
+                    <div value>{{cluster.spec.clusterNetwork.nodeCidrMaskSizeIPv6}}</div>
+                  </km-property>
+                </div>
+              </div>
+              <km-property-boolean label="Node Local DNS Cache"
+                                   [value]="cluster.spec.clusterNetwork?.nodeLocalDNSCacheEnabled">
+              </km-property-boolean>
+              <km-property-boolean label="Konnectivity"
+                                   matTooltip="Konnectivity is a TCP level proxy service for control plane to cluster communication."
+                                   [value]="cluster.spec.clusterNetwork?.konnectivityEnabled">
+              </km-property-boolean>
+            </div>
           </div>
 
           <div fxFlex="33"

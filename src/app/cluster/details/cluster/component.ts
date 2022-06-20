@@ -36,6 +36,7 @@ import {
   CNIPluginVersions,
   ExternalCCMMigrationStatus,
   getExternalCCMMigrationStatusMessage,
+  IPFamily,
   MasterVersion,
   Provider,
 } from '@shared/entity/cluster';
@@ -82,6 +83,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   private _seedSettings: SeedSettings;
 
   readonly HealthType = HealthType;
+  readonly IPFamily = IPFamily;
 
   externalCCMMigrationStatus = ExternalCCMMigrationStatus;
   cluster: Cluster;
