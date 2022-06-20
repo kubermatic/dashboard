@@ -14,7 +14,7 @@
 
 import {Component, Input} from '@angular/core';
 import {LabelFormComponent} from '@shared/components/label-form/component';
-import {Cluster} from '@shared/entity/cluster';
+import {Cluster, IPFamily} from '@shared/entity/cluster';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {getOperatingSystem, getOperatingSystemLogoClass, VSphereTag} from '@shared/entity/node';
@@ -39,6 +39,8 @@ export class ClusterSummaryComponent {
   @Input() flipLayout = false;
   @Input() showNumbering = false;
   operatingSystemProfileAnnotation = OPERATING_SYSTEM_PROFILE_ANNOTATION;
+
+  readonly IPFamily = IPFamily;
 
   private _sshKeys: SSHKey[] = [];
 
