@@ -23,10 +23,12 @@ import {
   AuditPolicyPreset,
   Cluster,
   ClusterPatch,
+  CNIPlugin,
   ContainerRuntime,
   END_OF_DOCKER_SUPPORT_VERSION,
   EventRateLimitConfig,
   ProviderSettingsPatch,
+  ProxyMode,
 } from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
@@ -120,9 +122,12 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       [Controls.OPAIntegration]: new FormControl(
         !!this.cluster.spec.opaIntegration && this.cluster.spec.opaIntegration.enabled
       ),
-      [Controls.Konnectivity]: new FormControl(
-        !!this.cluster.spec.clusterNetwork && this.cluster.spec.clusterNetwork.konnectivityEnabled
-      ),
+      [Controls.Konnectivity]: new FormControl({
+        value: !!this.cluster.spec.clusterNetwork?.konnectivityEnabled,
+        disabled:
+          this.cluster.spec.clusterNetwork?.proxyMode === ProxyMode.ebpf &&
+          this.cluster.spec.cniPlugin?.type === CNIPlugin.Cilium,
+      }),
       [Controls.MLALogging]: new FormControl(!!this.cluster.spec.mla && this.cluster.spec.mla.loggingEnabled),
       [Controls.MLAMonitoring]: new FormControl(!!this.cluster.spec.mla && this.cluster.spec.mla.monitoringEnabled),
       [Controls.AdmissionPlugins]: new FormControl(this.cluster.spec.admissionPlugins),

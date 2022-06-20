@@ -104,7 +104,8 @@ limitations under the License.
       </div>
 
       <mat-checkbox *ngIf="isKonnectivityEnabled"
-                    [formControlName]="Controls.Konnectivity">
+                    [formControlName]="Controls.Konnectivity"
+                    [class.km-text-muted]="form.get(Controls.Konnectivity).disabled">
         Konnectivity
       </mat-checkbox>
 
