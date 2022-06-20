@@ -26,7 +26,7 @@ import {
 } from '@angular/forms';
 import {takeUntil} from 'rxjs/operators';
 import {Observable, of, Subject} from 'rxjs';
-import {CIDR_PATTERN_VALIDATOR} from '@shared/validators/others';
+import {IPV4_CIDR_PATTERN_VALIDATOR} from '@shared/validators/others';
 
 @Component({
   selector: 'km-cidr-form',
@@ -70,7 +70,7 @@ export class CIDRFormComponent implements OnInit, OnDestroy, ControlValueAccesso
   }
 
   private _addControl(cidr = ''): void {
-    this.controls.push(this._formBuilder.control(cidr, [CIDR_PATTERN_VALIDATOR]));
+    this.controls.push(this._formBuilder.control(cidr, [IPV4_CIDR_PATTERN_VALIDATOR]));
   }
 
   private _onChange(): void {

@@ -48,7 +48,7 @@ import {AdminSettings} from '@shared/entity/settings';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
 import {AsyncValidators} from '@shared/validators/async-label-form.validator';
-import {CIDR_PATTERN_VALIDATOR} from '@shared/validators/others';
+import {IPV4_CIDR_PATTERN_VALIDATOR} from '@shared/validators/others';
 import {KmValidators} from '@shared/validators/validators';
 import {combineLatest, merge} from 'rxjs';
 import {filter, startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
@@ -169,14 +169,14 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.IPFamily]: this._builder.control(IPFamily.IPv4),
       [Controls.ProxyMode]: this._builder.control(''),
       [Controls.IPv4PodsCIDR]: this._builder.control('', [
-        CIDR_PATTERN_VALIDATOR,
+        IPV4_CIDR_PATTERN_VALIDATOR,
         KmValidators.requiredIf(
           () => this.isDualStackIPFamilySelected() && !!this.form.get(Controls.IPv6PodsCIDR).value
         ),
       ]),
       [Controls.IPv6PodsCIDR]: this._builder.control('', [IPV6_CIDR_PATTERN_VALIDATOR]),
       [Controls.IPv4ServicesCIDR]: this._builder.control('', [
-        CIDR_PATTERN_VALIDATOR,
+        IPV4_CIDR_PATTERN_VALIDATOR,
         KmValidators.requiredIf(
           () => this.isDualStackIPFamilySelected() && !!this.form.get(Controls.IPv6ServicesCIDR).value
         ),
@@ -185,7 +185,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.CNIPlugin]: this._builder.control(CNIPlugin.Canal),
       [Controls.CNIPluginVersion]: this._builder.control(''),
       [Controls.IPv4AllowedIPRange]: this._builder.control(this._defaultAllowedIPRange, [
-        CIDR_PATTERN_VALIDATOR,
+        IPV4_CIDR_PATTERN_VALIDATOR,
         KmValidators.requiredIf(
           () => this.isDualStackIPFamilySelected() && !!this.form.get(Controls.IPv6AllowedIPRange).value
         ),
