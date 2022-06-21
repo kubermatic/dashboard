@@ -104,7 +104,7 @@ export class NodeService {
       data: {
         initialClusterData: cluster,
         initialNodeData: {
-          operatingSystemProfile: md.annotations[OPERATING_SYSTEM_PROFILE_ANNOTATION],
+          operatingSystemProfile: md.annotations?.[OPERATING_SYSTEM_PROFILE_ANNOTATION],
           count: md.spec.replicas,
           name: md.name,
           spec: md.spec.template,

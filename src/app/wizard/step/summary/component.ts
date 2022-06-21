@@ -22,6 +22,7 @@ import {SSHKey} from '@shared/entity/ssh-key';
 import {Subject} from 'rxjs';
 import {take, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
+import {OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deployment';
 
 @Component({
   selector: 'km-wizard-summary-step',
@@ -63,7 +64,7 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
 
   get machineDeployment(): MachineDeployment {
     const data = this._nodeDataService.nodeData;
-    return {
+    const md: MachineDeployment = {
       name: data.name,
       spec: {
         template: data.spec,
@@ -71,6 +72,12 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
         dynamicConfig: data.dynamicConfig,
       },
     };
+    if (data.operatingSystemProfile && this._clusterSpecService.cluster.spec.enableOperatingSystemManager) {
+      md.annotations = {
+        [OPERATING_SYSTEM_PROFILE_ANNOTATION]: data.operatingSystemProfile,
+      };
+    }
+    return md;
   }
 
   get sshKeys(): string[] {

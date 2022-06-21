@@ -468,6 +468,11 @@ limitations under the License.
             </div>
           </km-property>
 
+          <km-property *ngIf="operatingSystemProfile">
+            <div key>Operating System Profile</div>
+            <div value>{{operatingSystemProfile}}</div>
+          </km-property>
+
           <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.ubuntu?.distUpgradeOnBoot"
                                label="Upgrade system on the first boot"
                                [value]="machineDeployment.spec.template.operatingSystem.ubuntu.distUpgradeOnBoot">

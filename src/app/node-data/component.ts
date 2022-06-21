@@ -82,17 +82,18 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   @Input() showExtended = false;
   labels: object = {};
   taints: Taint[] = [];
-  FeatureGateOperatingSystemMangerEnabled: boolean;
+  featureGateOperatingSystemManagerEnabled: boolean;
   dialogEditMode = false;
   endOfDynamicKubeletConfigSupportVersion: string = END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION;
 
   get providerDisplayName(): string {
     return NodeProviderConstants.displayName(this.provider);
   }
-  
+
   get showOperatingSystemProfile(): boolean {
     return (
-      this._clusterSpecService.cluster.spec.enableOperatingSystemManager && this.FeatureGateOperatingSystemMangerEnabled
+      this._clusterSpecService.cluster.spec.enableOperatingSystemManager &&
+      this.featureGateOperatingSystemManagerEnabled
     );
   }
 
@@ -189,7 +190,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
     this._featureGatesService.featureGates
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(featureGates => (this.FeatureGateOperatingSystemMangerEnabled = featureGates.operatingSystemManager));
+      .subscribe(featureGates => (this.featureGateOperatingSystemManagerEnabled = featureGates.operatingSystemManager));
   }
 
   ngOnDestroy(): void {

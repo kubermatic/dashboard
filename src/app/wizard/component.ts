@@ -42,7 +42,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   form: FormGroup;
   project = {} as Project;
   creating = false;
-  operatingSystemProfile = OPERATING_SYSTEM_PROFILE_ANNOTATION;
+  operatingSystemProfileAnnotation = OPERATING_SYSTEM_PROFILE_ANNOTATION;
   readonly stepRegistry = StepRegistry;
 
   @ViewChild('stepper', {static: true}) private readonly _stepper: MatStepper;
@@ -167,9 +167,9 @@ export class WizardComponent implements OnInit, OnDestroy {
         },
       },
     };
-    if (nodeData.operatingSystemProfile) {
+    if (nodeData.operatingSystemProfile && cluster.spec.enableOperatingSystemManager) {
       clusterModel.nodeDeployment.annotations = {
-        [this.operatingSystemProfile]: nodeData.operatingSystemProfile,
+        [this.operatingSystemProfileAnnotation]: nodeData.operatingSystemProfile,
       };
     }
     return clusterModel;

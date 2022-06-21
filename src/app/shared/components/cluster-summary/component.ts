@@ -24,6 +24,7 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
 import _ from 'lodash';
 import {convertArrayToObject} from '@shared/utils/common';
+import {OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deployment';
 
 @Component({
   selector: 'km-cluster-summary',
@@ -37,6 +38,7 @@ export class ClusterSummaryComponent {
   @Input() seedSettings: SeedSettings;
   @Input() flipLayout = false;
   @Input() showNumbering = false;
+  operatingSystemProfileAnnotation = OPERATING_SYSTEM_PROFILE_ANNOTATION;
 
   private _sshKeys: SSHKey[] = [];
 
@@ -66,6 +68,10 @@ export class ClusterSummaryComponent {
 
   get operatingSystemLogoClass(): string {
     return getOperatingSystemLogoClass(this.machineDeployment.spec.template);
+  }
+
+  get operatingSystemProfile(): string {
+    return this.machineDeployment.annotations?.[this.operatingSystemProfileAnnotation];
   }
 
   get isMLAEnabled(): boolean {
