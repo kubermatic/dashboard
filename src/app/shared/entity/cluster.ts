@@ -311,10 +311,10 @@ export class ClusterNetwork {
 }
 
 export class ClusterNetworkDefaults {
-  ipv4: NetworkDefaultsIPFamily;
-  ipv6: NetworkDefaultsIPFamily;
-  nodeLocalDNSCacheEnabled: boolean;
-  proxyMode: ProxyMode;
+  ipv4?: NetworkDefaultsIPFamily;
+  ipv6?: NetworkDefaultsIPFamily;
+  nodeLocalDNSCacheEnabled?: boolean;
+  proxyMode?: ProxyMode;
 }
 
 export class NetworkDefaultsIPFamily {

@@ -476,13 +476,13 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
             [Controls.NodeLocalDNSCache]: networkDefaults.nodeLocalDNSCacheEnabled,
             [Controls.IPv4PodsCIDR]: networkDefaults.ipv4?.podsCidr || '',
             [Controls.IPv4ServicesCIDR]: networkDefaults.ipv4?.servicesCidr || '',
-            [Controls.IPv4CIDRMaskSize]: networkDefaults.ipv4?.nodeCidrMaskSize || '',
+            [Controls.IPv4CIDRMaskSize]: networkDefaults.ipv4?.nodeCidrMaskSize,
           });
           if (this.isDualStackAllowed) {
             this.form.patchValue({
               [Controls.IPv6PodsCIDR]: networkDefaults.ipv6?.podsCidr || '',
               [Controls.IPv6ServicesCIDR]: networkDefaults.ipv6?.servicesCidr || '',
-              [Controls.IPv6CIDRMaskSize]: networkDefaults.ipv6?.nodeCidrMaskSize || '',
+              [Controls.IPv6CIDRMaskSize]: networkDefaults.ipv6?.nodeCidrMaskSize,
             });
           }
           if (this.isAllowedIPRangeSupported()) {

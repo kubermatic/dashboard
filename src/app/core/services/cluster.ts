@@ -379,7 +379,7 @@ export class ClusterService {
 
   getClusterNetworkDefaults(provider: NodeProvider, dc: string): Observable<ClusterNetworkDefaults> {
     const url = `${this._newRestRoot}/providers/${provider}/dc/${dc}/networkdefaults`;
-    return this._http.get<ClusterNetworkDefaults>(url);
+    return this._http.get<ClusterNetworkDefaults>(url).pipe(catchError(_ => of<ClusterNetworkDefaults>({})));
   }
 
   getAdmissionPlugins(version: string): Observable<string[]> {
