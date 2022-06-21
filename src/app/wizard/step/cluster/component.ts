@@ -21,7 +21,6 @@ import {
   Validator,
   Validators,
 } from '@angular/forms';
-import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
 import {ClusterService} from '@core/services/cluster';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
@@ -139,7 +138,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.Name]: this._builder.control('', [
         Validators.required,
         Validators.minLength(this._minNameLength),
-        KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,
       ]),
       [Controls.Version]: this._builder.control('', [Validators.required]),
       [Controls.ContainerRuntime]: this._builder.control(ContainerRuntime.Containerd, [Validators.required]),
