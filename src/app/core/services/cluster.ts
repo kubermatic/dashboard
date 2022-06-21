@@ -227,6 +227,15 @@ export class ClusterService {
     return this._http.get<NodeMetrics[]>(url).pipe(catchError(() => of<NodeMetrics[]>([])));
   }
 
+  externalMachineDeploymentNodesMetrics(
+    projectID: string,
+    clusterID: string,
+    machineDeploymentID: string
+  ): Observable<NodeMetrics[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/machinedeployments/${machineDeploymentID}/nodes/metrics`;
+    return this._http.get<NodeMetrics[]>(url).pipe(catchError(() => of<NodeMetrics[]>([])));
+  }
+
   events(projectID: string, clusterID: string): Observable<Event[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/events`;
     return this._http.get<Event[]>(url).pipe(catchError(() => of<Event[]>([])));
@@ -263,6 +272,15 @@ export class ClusterService {
     return this._http.get<Event[]>(url).pipe(catchError(() => of<Event[]>()));
   }
 
+  externalMachineDeploymentNodesEvents(
+    projectID: string,
+    clusterID: string,
+    machineDeploymentID: string
+  ): Observable<Event[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/machinedeployments/${machineDeploymentID}/nodes/events`;
+    return this._http.get<Event[]>(url).pipe(catchError(() => of<Event[]>()));
+  }
+
   externalClusterNodes(projectID: string, clusterID: string): Observable<Node[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/nodes`;
     return this._http.get<Node[]>(url).pipe(catchError(() => of<Node[]>()));
@@ -282,6 +300,15 @@ export class ClusterService {
     return this._http
       .get<ExternalMachineDeployment>(url)
       .pipe(catchError(() => of<ExternalMachineDeployment>({} as ExternalMachineDeployment)));
+  }
+
+  externalMachineDeploymentNodes(
+    projectID: string,
+    clusterID: string,
+    machineDeploymentID: string
+  ): Observable<Node[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/machinedeployments/${machineDeploymentID}/nodes`;
+    return this._http.get<Node[]>(url).pipe(catchError(() => of<Node[]>()));
   }
 
   patchExternalMachineDeployment(

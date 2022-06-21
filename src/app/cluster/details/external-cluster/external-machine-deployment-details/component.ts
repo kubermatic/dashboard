@@ -80,9 +80,21 @@ export class ExternalMachineDeploymentDetailsComponent implements OnInit, OnDest
         switchMap(_ =>
           forkJoin([
             this._clusterService.externalMachineDeployment(this.projectID, this._clusterID, this._machineDeploymentID),
-            this._clusterService.externalClusterNodes(this.projectID, this._clusterID),
-            this._clusterService.externalClusterEvents(this.projectID, this._clusterID),
-            this._clusterService.externalClusterNodesMetrics(this.projectID, this._clusterID),
+            this._clusterService.externalMachineDeploymentNodes(
+              this.projectID,
+              this._clusterID,
+              this._machineDeploymentID
+            ),
+            this._clusterService.externalMachineDeploymentNodesEvents(
+              this.projectID,
+              this._clusterID,
+              this._machineDeploymentID
+            ),
+            this._clusterService.externalMachineDeploymentNodesMetrics(
+              this.projectID,
+              this._clusterID,
+              this._machineDeploymentID
+            ),
           ])
         )
       )
