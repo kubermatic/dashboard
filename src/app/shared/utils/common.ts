@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import _ from 'lodash';
+import {load as loadYAML} from 'js-yaml';
 
 export function objectDiff(object: any, base: any): any {
   return _.transform(object, (result, value, key) => {
@@ -75,4 +76,20 @@ export function convertArrayToObject<T>(data: T[], keyName: string, valueName: s
       [next[keyName]]: next[valueName],
     };
   }, {});
+}
+
+export function verifyYAML(data: string): boolean {
+  try {
+    return data && typeof loadYAML(data) === 'object';
+  } catch (_) {
+    return false;
+  }
+}
+
+export function verifyJSON(data: string): boolean {
+  try {
+    return data && !!JSON.parse(data);
+  } catch (_) {
+    return false;
+  }
 }

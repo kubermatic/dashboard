@@ -120,6 +120,7 @@ import {ThrottleClickDirective} from './directives/throttle-click';
 import {RelativeTimePipe} from './pipes/relativetime';
 import {ButtonComponent} from '@shared/components/button/component';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
+import {ValidateJsonOrYamlComponent} from '@shared/components/validate-json-or-yaml/component';
 
 const modules = [
   CommonModule,
@@ -231,6 +232,7 @@ const components = [
   OpenstackDefaultCredentialsComponent,
   OpenstackApplicationCredentialsComponent,
   ButtonComponent,
+  ValidateJsonOrYamlComponent,
 ];
 
 const directives = [AutofocusDirective, ThrottleClickDirective, OptionDirective];
