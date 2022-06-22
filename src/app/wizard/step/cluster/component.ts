@@ -21,7 +21,6 @@ import {
   Validator,
   Validators,
 } from '@angular/forms';
-import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
 import {ClusterService} from '@core/services/cluster';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
@@ -136,11 +135,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .subscribe(featureGates => (this.isKonnectivityEnabled = !!featureGates?.konnectivityService));
 
     this.form = this._builder.group({
-      [Controls.Name]: this._builder.control('', [
-        Validators.required,
-        Validators.minLength(this._minNameLength),
-        KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,
-      ]),
+      [Controls.Name]: this._builder.control('', [Validators.required, Validators.minLength(this._minNameLength)]),
       [Controls.Version]: this._builder.control('', [Validators.required]),
       [Controls.ContainerRuntime]: this._builder.control(ContainerRuntime.Containerd, [Validators.required]),
       [Controls.AuditLogging]: this._builder.control(false),
