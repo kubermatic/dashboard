@@ -135,10 +135,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .subscribe(featureGates => (this.isKonnectivityEnabled = !!featureGates?.konnectivityService));
 
     this.form = this._builder.group({
-      [Controls.Name]: this._builder.control('', [
-        Validators.required,
-        Validators.minLength(this._minNameLength),
-      ]),
+      [Controls.Name]: this._builder.control('', [Validators.required, Validators.minLength(this._minNameLength)]),
       [Controls.Version]: this._builder.control('', [Validators.required]),
       [Controls.ContainerRuntime]: this._builder.control(ContainerRuntime.Containerd, [Validators.required]),
       [Controls.AuditLogging]: this._builder.control(false),
