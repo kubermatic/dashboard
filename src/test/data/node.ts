@@ -26,7 +26,6 @@ export function nodeFake(): Node {
         digitalocean: {
           size: 's-1vcpu-1gb',
           backups: false,
-          ipv6: false,
           monitoring: false,
           tags: [],
         },
@@ -139,7 +138,6 @@ export function machineDeploymentsFake(): MachineDeployment[] {
             digitalocean: {
               size: '4gb',
               backups: null,
-              ipv6: null,
               monitoring: null,
               tags: null,
             },
@@ -169,7 +167,6 @@ export function machineDeploymentsFake(): MachineDeployment[] {
             digitalocean: {
               size: '2gb',
               backups: null,
-              ipv6: null,
               monitoring: null,
               tags: null,
             },
@@ -199,7 +196,6 @@ export function nodesFake(): Node[] {
           digitalocean: {
             size: '4gb',
             backups: null,
-            ipv6: null,
             monitoring: null,
             tags: null,
           },
@@ -253,7 +249,6 @@ export function nodesFake(): Node[] {
           digitalocean: {
             size: 's-1vcpu-1gb',
             backups: false,
-            ipv6: false,
             monitoring: false,
             tags: [],
           },

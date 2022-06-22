@@ -13,7 +13,6 @@
           "digitalocean": {
             "size": "s-2vcpu-2gb",
             "backups": false,
-            "ipv6": false,
             "monitoring": false,
             "tags": [
               "kubernetes",

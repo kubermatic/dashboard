@@ -831,10 +831,6 @@ limitations under the License.
                                    label="Monitoring"
                                    [value]="machineDeployment.spec.template.cloud?.digitalocean?.monitoring">
               </km-property-boolean>
-              <km-property-boolean *ngIf="machineDeployment.spec.template.cloud?.digitalocean?.ipv6"
-                                   label="IPv6"
-                                   [value]="machineDeployment.spec.template.cloud?.digitalocean?.ipv6">
-              </km-property-boolean>
             </ng-container>
 
             <!-- GCP Node Options -->
