@@ -26,6 +26,7 @@ import {WizardService} from '@core/services/wizard/wizard';
 import {SaveClusterTemplateDialogComponent} from '@shared/components/save-cluster-template/component';
 import {Cluster, CreateClusterModel} from '@shared/entity/cluster';
 import {Project} from '@shared/entity/project';
+import {OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deployment';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {Observable, Subject, take} from 'rxjs';
 import {filter, switchMap, takeUntil} from 'rxjs/operators';
@@ -41,6 +42,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   form: FormGroup;
   project = {} as Project;
   creating = false;
+  operatingSystemProfileAnnotation = OPERATING_SYSTEM_PROFILE_ANNOTATION;
   readonly stepRegistry = StepRegistry;
 
   @ViewChild('stepper', {static: true}) private readonly _stepper: MatStepper;
@@ -149,7 +151,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   }
 
   private _getCreateClusterModel(cluster: Cluster, nodeData: NodeData): CreateClusterModel {
-    return {
+    const clusterModel: CreateClusterModel = {
       cluster: {
         name: cluster.name,
         labels: cluster.labels,
@@ -165,6 +167,12 @@ export class WizardComponent implements OnInit, OnDestroy {
         },
       },
     };
+    if (nodeData.operatingSystemProfile && cluster.spec.enableOperatingSystemManager) {
+      clusterModel.nodeDeployment.annotations = {
+        [this.operatingSystemProfileAnnotation]: nodeData.operatingSystemProfile,
+      };
+    }
+    return clusterModel;
   }
 
   private _initForm(steps: WizardStep[]): void {

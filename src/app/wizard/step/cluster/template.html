@@ -287,7 +287,8 @@ limitations under the License.
               </mat-checkbox>
             </ng-container>
 
-            <mat-checkbox [formControlName]="Controls.OperatingSystemManager">
+            <mat-checkbox *ngIf="operatingSystemManagerFeatureEnabled"
+                          [formControlName]="Controls.OperatingSystemManager">
               Operating System Manager
               <span class="km-label-primary">Experimental</span>
               <i class="km-icon-info km-pointer"

@@ -23,13 +23,14 @@ import {NodeData} from '@shared/model/NodeSpecChange';
 import {Observable, of} from 'rxjs';
 import {catchError, filter, mergeMap, switchMap, take} from 'rxjs/operators';
 import {MachineDeploymentService} from '@core/services/machine-deployment';
+import {OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deployment';
 
 @Injectable()
 export class NodeService {
   private readonly _notificationService: NotificationService;
 
   private static _getMachineDeploymentEntity(nodeData: NodeData): MachineDeployment {
-    return {
+    const machineDeployment: MachineDeployment = {
       name: nodeData.name,
       spec: {
         template: nodeData.spec,
@@ -37,6 +38,12 @@ export class NodeService {
         dynamicConfig: nodeData.dynamicConfig,
       },
     };
+    if (nodeData.operatingSystemProfile) {
+      machineDeployment.annotations = {
+        [OPERATING_SYSTEM_PROFILE_ANNOTATION]: nodeData.operatingSystemProfile,
+      };
+    }
+    return machineDeployment;
   }
 
   private static _createPatch(data: DialogDataOutput): MachineDeploymentPatch {
@@ -97,6 +104,7 @@ export class NodeService {
       data: {
         initialClusterData: cluster,
         initialNodeData: {
+          operatingSystemProfile: md.annotations?.[OPERATING_SYSTEM_PROFILE_ANNOTATION],
           count: md.spec.replicas,
           name: md.name,
           spec: md.spec.template,

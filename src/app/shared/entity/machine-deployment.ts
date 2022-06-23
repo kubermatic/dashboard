@@ -15,6 +15,7 @@
 import {NodeCloudSpec, NodeSpec, NodeVersionInfo, OperatingSystemSpec, Taint} from './node';
 
 export class MachineDeployment {
+  annotations?: object;
   creationTimestamp?: Date;
   deletionTimestamp?: Date;
   id?: string;
@@ -57,3 +58,5 @@ export class NodeSpecPatch {
   labels?: object;
   taints?: Taint[];
 }
+
+export const OPERATING_SYSTEM_PROFILE_ANNOTATION = 'k8c.io/operating-system-profile';

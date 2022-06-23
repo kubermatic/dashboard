@@ -28,6 +28,7 @@ import {NameGeneratorService} from '@core/services/name-generator';
 import {NodeDataService} from '@core/services/node-data/service';
 import {SettingsService} from '@core/services/settings';
 import {ContainerRuntime, END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION} from '@shared/entity/cluster';
+import {FeatureGateService} from '@core/services/feature-gate';
 import {Datacenter} from '@shared/entity/datacenter';
 import {OperatingSystemSpec, Taint} from '@shared/entity/node';
 import {NodeProvider, NodeProviderConstants, OperatingSystem} from '@shared/model/NodeProviderConstants';
@@ -50,6 +51,7 @@ enum Controls {
   ProviderBasic = 'providerBasic',
   ProviderExtended = 'providerExtended',
   Kubelet = 'kubelet',
+  OperatingSystemProfile = 'operatingSystemProfile',
 }
 
 @Component({
@@ -80,11 +82,19 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   @Input() showExtended = false;
   labels: object = {};
   taints: Taint[] = [];
+  featureGateOperatingSystemManagerEnabled: boolean;
   dialogEditMode = false;
   endOfDynamicKubeletConfigSupportVersion: string = END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION;
 
   get providerDisplayName(): string {
     return NodeProviderConstants.displayName(this.provider);
+  }
+
+  get showOperatingSystemProfile(): boolean {
+    return (
+      this._clusterSpecService.cluster.spec.enableOperatingSystemManager &&
+      this.featureGateOperatingSystemManagerEnabled
+    );
   }
 
   get isDynamicKubletConfigSupported(): boolean {
@@ -98,6 +108,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     private readonly _datacenterService: DatacenterService,
     private readonly _nodeDataService: NodeDataService,
     private readonly _settingsService: SettingsService,
+    private readonly _featureGatesService: FeatureGateService,
     private readonly _cdr: ChangeDetectorRef
   ) {
     super();
@@ -118,6 +129,9 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       [Controls.RhelOfflineToken]: this._builder.control(''),
       [Controls.ProviderBasic]: this._builder.control(''),
       [Controls.ProviderExtended]: this._builder.control(''),
+      [Controls.OperatingSystemProfile]: this._builder.control(this._nodeDataService.nodeData.operatingSystemProfile, [
+        KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,
+      ]),
     });
 
     if (this.isDialogView()) {
@@ -127,6 +141,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
     if (this.dialogEditMode) {
       this.form.get(Controls.Name).disable();
+      this.form.get(Controls.OperatingSystemProfile).disable();
     }
 
     this._init();
@@ -151,7 +166,8 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     merge(
       this.form.get(Controls.Name).valueChanges,
       this.form.get(Controls.Count).valueChanges,
-      this.form.get(Controls.DynamicConfig).valueChanges
+      this.form.get(Controls.DynamicConfig).valueChanges,
+      this.form.get(Controls.OperatingSystemProfile).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
@@ -171,6 +187,10 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       const replicas = this.dialogEditMode ? this._nodeDataService.nodeData.count : settings.defaultNodeCount;
       this.form.get(Controls.Count).setValue(replicas);
     });
+
+    this._featureGatesService.featureGates
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(featureGates => (this.featureGateOperatingSystemManagerEnabled = featureGates.operatingSystemManager));
   }
 
   ngOnDestroy(): void {
@@ -332,6 +352,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       count: this.form.get(Controls.Count).value,
       name: this.form.get(Controls.Name).value,
       dynamicConfig: this.form.get(Controls.DynamicConfig).value,
+      operatingSystemProfile: this.form.get(Controls.OperatingSystemProfile).value,
     } as NodeData;
   }
 }
