@@ -102,7 +102,7 @@ export class KubeletVersionNodeDataComponent extends BaseFormValidator implement
     }
 
     // As a fallback simply use the newest version available
-    this.form.get(Controls.Kubelet).setValue(this.versions.pop());
+    this.form.get(Controls.Kubelet).setValue(this.versions[this.versions.length - 1]);
   }
 
   private _getNodeDataVersionInfo(version: string): NodeData {
