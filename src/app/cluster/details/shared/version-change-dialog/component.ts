@@ -46,7 +46,7 @@ export class VersionChangeDialogComponent implements OnInit, OnDestroy {
 
   get isDynamicKubletConfigSupportedInUpgrade(): boolean {
     const endSliceParameter = 4;
-    return this.selectedVersion.slice(0, endSliceParameter) < this.endOfDynamicKubeletConfigSupportVersion;
+    return this.selectedVersion?.slice(0, endSliceParameter) < this.endOfDynamicKubeletConfigSupportVersion;
   }
 
   constructor(
@@ -69,13 +69,15 @@ export class VersionChangeDialogComponent implements OnInit, OnDestroy {
       .subscribe(project => (this.project = project));
     this._googleAnalyticsService.emitEvent('clusterOverview', 'clusterVersionChangeDialogOpened');
 
-    this._machineDeploymentService
-      .list(this.cluster.id, this.project.id)
-      .pipe(map(nodes => nodes.filter(node => node.spec.dynamicConfig)))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(nodes => {
-        this.nodesSupportDynamicKubeletConfig = nodes.map(node => ` MD-${node.name}`).join(', ');
-      });
+    if (!this.isClusterExternal) {
+      this._machineDeploymentService
+        .list(this.cluster.id, this.project.id)
+        .pipe(map(nodes => nodes.filter(node => node.spec.dynamicConfig)))
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(nodes => {
+          this.nodesSupportDynamicKubeletConfig = nodes.map(node => ` MD-${node.name}`).join(', ');
+        });
+    }
   }
 
   ngOnDestroy(): void {
