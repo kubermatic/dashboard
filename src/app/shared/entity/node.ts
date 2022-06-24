@@ -184,7 +184,6 @@ export class AzureNodeSpec {
 export class DigitaloceanNodeSpec {
   size: string;
   backups: boolean;
-  ipv6: boolean;
   monitoring: boolean;
   tags: string[];
 }
@@ -281,7 +280,6 @@ export function getDefaultNodeProviderSpec(provider: string): object {
       return {
         size: '',
         backups: false,
-        ipv6: false,
         monitoring: false,
         tags: [],
       } as DigitaloceanNodeSpec;

@@ -23,7 +23,6 @@ import {BaseFormValidator} from '@shared/validators/base-form.validator';
 
 enum Controls {
   Backups = 'backups',
-  IPv6 = 'ipv6',
   Monitoring = 'monitoring',
   Tags = 'tags',
 }
@@ -61,7 +60,6 @@ export class DigitalOceanExtendedNodeDataComponent extends BaseFormValidator imp
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.Backups]: this._builder.control(false),
-      [Controls.IPv6]: this._builder.control(false),
       [Controls.Monitoring]: this._builder.control(false),
       [Controls.Tags]: this._builder.control(''),
     });
@@ -69,11 +67,7 @@ export class DigitalOceanExtendedNodeDataComponent extends BaseFormValidator imp
     this._init();
     this._nodeDataService.nodeData = this._getNodeData();
 
-    merge(
-      this.form.get(Controls.Backups).valueChanges,
-      this.form.get(Controls.IPv6).valueChanges,
-      this.form.get(Controls.Monitoring).valueChanges
-    )
+    merge(this.form.get(Controls.Backups).valueChanges, this.form.get(Controls.Monitoring).valueChanges)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
   }
@@ -89,7 +83,6 @@ export class DigitalOceanExtendedNodeDataComponent extends BaseFormValidator imp
         cloud: {
           digitalocean: {
             backups: this.form.get(Controls.Backups).value,
-            ipv6: this.form.get(Controls.IPv6).value,
             monitoring: this.form.get(Controls.Monitoring).value,
           },
         } as NodeCloudSpec,
@@ -107,7 +100,6 @@ export class DigitalOceanExtendedNodeDataComponent extends BaseFormValidator imp
       this.onTagsChange(this._nodeDataService.nodeData.spec.cloud.digitalocean.tags);
 
       this.form.get(Controls.Backups).setValue(this.nodeData.spec.cloud.digitalocean.backups);
-      this.form.get(Controls.IPv6).setValue(this.nodeData.spec.cloud.digitalocean.ipv6);
       this.form.get(Controls.Monitoring).setValue(this.nodeData.spec.cloud.digitalocean.monitoring);
     }
   }
