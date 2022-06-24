@@ -19,6 +19,7 @@ import {
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   Validator,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import {IPV6_CIDR_PATTERN_VALIDATOR} from '@app/shared/validators/others';
@@ -170,27 +171,30 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.ProxyMode]: this._builder.control(''),
       [Controls.IPv4PodsCIDR]: this._builder.control('', [
         IPV4_CIDR_PATTERN_VALIDATOR,
-        KmValidators.requiredIf(
-          () => this.isDualStackIPFamilySelected() && !!this.form.get(Controls.IPv6PodsCIDR).value
-        ),
+        this._dualStackRequiredIfValidator(Controls.IPv6PodsCIDR),
       ]),
-      [Controls.IPv6PodsCIDR]: this._builder.control('', [IPV6_CIDR_PATTERN_VALIDATOR]),
+      [Controls.IPv6PodsCIDR]: this._builder.control('', [
+        IPV6_CIDR_PATTERN_VALIDATOR,
+        this._dualStackRequiredIfValidator(Controls.IPv4PodsCIDR),
+      ]),
       [Controls.IPv4ServicesCIDR]: this._builder.control('', [
         IPV4_CIDR_PATTERN_VALIDATOR,
-        KmValidators.requiredIf(
-          () => this.isDualStackIPFamilySelected() && !!this.form.get(Controls.IPv6ServicesCIDR).value
-        ),
+        this._dualStackRequiredIfValidator(Controls.IPv6ServicesCIDR),
       ]),
-      [Controls.IPv6ServicesCIDR]: this._builder.control('', [IPV6_CIDR_PATTERN_VALIDATOR]),
+      [Controls.IPv6ServicesCIDR]: this._builder.control('', [
+        IPV6_CIDR_PATTERN_VALIDATOR,
+        this._dualStackRequiredIfValidator(Controls.IPv4ServicesCIDR),
+      ]),
       [Controls.CNIPlugin]: this._builder.control(CNIPlugin.Canal),
       [Controls.CNIPluginVersion]: this._builder.control(''),
       [Controls.IPv4AllowedIPRange]: this._builder.control(this._defaultAllowedIPRange, [
         IPV4_CIDR_PATTERN_VALIDATOR,
-        KmValidators.requiredIf(
-          () => this.isDualStackIPFamilySelected() && !!this.form.get(Controls.IPv6AllowedIPRange).value
-        ),
+        this._dualStackRequiredIfValidator(Controls.IPv6AllowedIPRange),
       ]),
-      [Controls.IPv6AllowedIPRange]: this._builder.control('', [IPV6_CIDR_PATTERN_VALIDATOR]),
+      [Controls.IPv6AllowedIPRange]: this._builder.control('', [
+        IPV6_CIDR_PATTERN_VALIDATOR,
+        this._dualStackRequiredIfValidator(Controls.IPv4AllowedIPRange),
+      ]),
       [Controls.IPv4CIDRMaskSize]: this._builder.control(''),
       [Controls.IPv6CIDRMaskSize]: this._builder.control(''),
       [Controls.NodeLocalDNSCache]: this._builder.control(false),
@@ -301,6 +305,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       });
 
     merge(
+      this.control(Controls.IPFamily).valueChanges,
       this.control(Controls.IPv4AllowedIPRange).valueChanges,
       this.control(Controls.IPv6AllowedIPRange).valueChanges
     )
@@ -318,18 +323,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         this._getExtraCloudSpecOptions().nodePortsAllowedIPRanges = {cidrBlocks};
       });
 
-    merge(
-      this.control(Controls.IPFamily).valueChanges,
-      this.control(Controls.IPv6PodsCIDR).valueChanges,
-      this.control(Controls.IPv6ServicesCIDR).valueChanges,
-      this.control(Controls.IPv6AllowedIPRange).valueChanges
-    )
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => {
-        this.control(Controls.IPv4PodsCIDR).updateValueAndValidity();
-        this.control(Controls.IPv4ServicesCIDR).updateValueAndValidity();
-        this.control(Controls.IPv4AllowedIPRange).updateValueAndValidity();
-      });
+    this._initDualStackControlsValueChangeListeners();
 
     merge(
       this.form.get(Controls.Name).valueChanges,
@@ -344,6 +338,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.MLAMonitoring).valueChanges,
       this.form.get(Controls.ContainerRuntime).valueChanges,
       this.form.get(Controls.ProxyMode).valueChanges,
+      this.form.get(Controls.IPFamily).valueChanges,
       this.form.get(Controls.IPv4PodsCIDR).valueChanges,
       this.form.get(Controls.IPv4ServicesCIDR).valueChanges,
       this.form.get(Controls.IPv4CIDRMaskSize).valueChanges,
@@ -427,6 +422,33 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
   isDualStackIPFamilySelected(): boolean {
     return this.form.get(Controls.IPFamily).value === IPFamily.DualStack;
+  }
+
+  private _dualStackRequiredIfValidator(control: Controls): ValidatorFn {
+    return KmValidators.requiredIf(() => this.isDualStackIPFamilySelected() && !!this.form.get(control).value);
+  }
+
+  private _initDualStackControlsValueChangeListeners(): void {
+    const ipv4Controls = [Controls.IPv4PodsCIDR, Controls.IPv4ServicesCIDR, Controls.IPv4AllowedIPRange];
+    const ipv6Controls = [Controls.IPv6PodsCIDR, Controls.IPv6ServicesCIDR, Controls.IPv6AllowedIPRange];
+
+    merge(
+      this.control(Controls.IPFamily).valueChanges,
+      ...ipv6Controls.map(control => this.control(control).valueChanges)
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        ipv4Controls.forEach(control => this.control(control).updateValueAndValidity({emitEvent: false}));
+      });
+
+    merge(
+      this.control(Controls.IPFamily).valueChanges,
+      ...ipv4Controls.map(control => this.control(control).valueChanges)
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        ipv6Controls.forEach(control => this.control(control).updateValueAndValidity({emitEvent: false}));
+      });
   }
 
   private _enforce(control: Controls, isEnforced: boolean): void {
@@ -534,6 +556,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         clusterNetwork.services.cidrBlocks = [...clusterNetwork.services.cidrBlocks, ipv6Services];
       }
       clusterNetwork.nodeCidrMaskSizeIPv6 = this.controlValue(Controls.IPv6CIDRMaskSize);
+    } else {
+      clusterNetwork.nodeCidrMaskSizeIPv6 = null;
     }
 
     return {

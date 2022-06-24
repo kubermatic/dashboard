@@ -241,8 +241,8 @@ limitations under the License.
                    fxLayoutGap.gt-lg="50px">
                 <div fxLayout="column"
                      fxFlex="100"
-                     [fxFlex.gt-lg]="cluster.spec.clusterNetwork?.ipFamily === IPFamily.DualStack ? '30' : '100'">
-                  <h4 *ngIf="cluster.spec.clusterNetwork?.ipFamily === IPFamily.DualStack">IPv4</h4>
+                     [fxFlex.gt-lg]="isDualStackNetworkSelected ? '30' : '100'">
+                  <h4 *ngIf="isDualStackNetworkSelected">IPv4</h4>
                   <km-property *ngIf="cluster.spec.clusterNetwork?.pods?.cidrBlocks?.length">
                     <div key>Pods CIDR</div>
                     <div value>{{cluster.spec.clusterNetwork.pods.cidrBlocks[0]}}</div>
@@ -256,7 +256,7 @@ limitations under the License.
                     <div value>{{cluster.spec.clusterNetwork.nodeCidrMaskSizeIPv4}}</div>
                   </km-property>
                 </div>
-                <div *ngIf="cluster.spec.clusterNetwork?.ipFamily === IPFamily.DualStack"
+                <div *ngIf="isDualStackNetworkSelected"
                      fxLayout="column"
                      fxFlex="100"
                      fxFlex.gt-lg="70">

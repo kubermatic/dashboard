@@ -110,6 +110,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   alertmanagerConfig: AlertmanagerConfig;
   ruleGroups: RuleGroup[];
   onExpandChange$ = new EventEmitter<boolean>();
+  isDualStackNetworkSelected: boolean;
 
   get admissionPlugins(): string[] {
     return Object.keys(AdmissionPlugin);
@@ -149,6 +150,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap(cluster => {
           this.cluster = cluster;
+          this.isDualStackNetworkSelected = Cluster.isDualStackNetworkSelected(cluster);
           return this._datacenterService.getDatacenter(cluster.spec.cloud.dc);
         })
       )

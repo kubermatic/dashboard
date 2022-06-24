@@ -151,7 +151,7 @@ limitations under the License.
                        type="text"
                        autocomplete="off">
                 <mat-error *ngIf="form.get(Controls.IPv4AllowedIPRange).hasError('required')">
-                  Allowed IP Range for NdoePorts is <strong>required</strong>
+                  Allowed IP Range for NodePorts is <strong>required</strong>
                 </mat-error>
                 <mat-error *ngIf="form.get(Controls.IPv4AllowedIPRange).hasError('pattern')">
                   Invalid pattern. Use CIDR notation, i.e. 192.168.1.0/24.
@@ -168,6 +168,9 @@ limitations under the License.
                        [formControlName]="Controls.IPv6PodsCIDR"
                        type="text"
                        autocomplete="off">
+                <mat-error *ngIf="form.get(Controls.IPv6PodsCIDR).hasError('required')">
+                  Pods CIDR is <strong>required</strong>
+                </mat-error>
                 <mat-error *ngIf="form.get(Controls.IPv6PodsCIDR).hasError('pattern')">
                   Invalid pattern. Use CIDR notation, i.e. 2002::1234:abcd:ffff:c0a8:101/64.
                 </mat-error>
@@ -178,6 +181,9 @@ limitations under the License.
                        [formControlName]="Controls.IPv6ServicesCIDR"
                        type="text"
                        autocomplete="off">
+                <mat-error *ngIf="form.get(Controls.IPv6ServicesCIDR).hasError('required')">
+                  Services CIDR is <strong>required</strong>
+                </mat-error>
                 <mat-error *ngIf="form.get(Controls.IPv6ServicesCIDR).hasError('pattern')">
                   Invalid pattern. Use CIDR notation, i.e. 2002::1234:abcd:ffff:c0a8:101/64.
                 </mat-error>
@@ -195,6 +201,9 @@ limitations under the License.
                        [formControlName]="Controls.IPv6AllowedIPRange"
                        type="text"
                        autocomplete="off">
+                <mat-error *ngIf="form.get(Controls.IPv6AllowedIPRange).hasError('required')">
+                  Allowed IP Range for NodePorts is <strong>required</strong>
+                </mat-error>
                 <mat-error *ngIf="form.get(Controls.IPv6AllowedIPRange).hasError('pattern')">
                   Invalid pattern. Use CIDR notation, i.e. 2002::1234:abcd:ffff:c0a8:101/64.
                 </mat-error>

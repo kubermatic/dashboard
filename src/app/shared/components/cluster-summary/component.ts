@@ -14,7 +14,7 @@
 
 import {Component, Input} from '@angular/core';
 import {LabelFormComponent} from '@shared/components/label-form/component';
-import {Cluster, IPFamily} from '@shared/entity/cluster';
+import {Cluster} from '@shared/entity/cluster';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {getOperatingSystem, getOperatingSystemLogoClass, VSphereTag} from '@shared/entity/node';
@@ -39,8 +39,6 @@ export class ClusterSummaryComponent {
   @Input() flipLayout = false;
   @Input() showNumbering = false;
   operatingSystemProfileAnnotation = OPERATING_SYSTEM_PROFILE_ANNOTATION;
-
-  readonly IPFamily = IPFamily;
 
   private _sshKeys: SSHKey[] = [];
 
@@ -87,6 +85,38 @@ export class ClusterSummaryComponent {
 
   get hasNetworkConfiguration(): boolean {
     return !_.isEmpty(this.cluster.spec?.cniPlugin) || !_.isEmpty(this.cluster.spec?.clusterNetwork);
+  }
+
+  get isDualStackNetworkSelected(): boolean {
+    return Cluster.isDualStackNetworkSelected(this.cluster);
+  }
+
+  get ipv4NodePortsAllowedIPRange(): string {
+    return this.cluster.spec.cloud[this.provider]?.nodePortsAllowedIPRanges?.cidrBlocks?.[0];
+  }
+
+  get ipv6NodePortsAllowedIPRange(): string {
+    return this.cluster.spec.cloud[this.provider]?.nodePortsAllowedIPRanges?.cidrBlocks?.[1];
+  }
+
+  get isIPv4NetworkConfigured(): boolean {
+    const clusterNetwork = this.cluster.spec.clusterNetwork;
+    return !!(
+      clusterNetwork?.pods?.cidrBlocks?.length ||
+      clusterNetwork?.services?.cidrBlocks?.length ||
+      clusterNetwork?.nodeCidrMaskSizeIPv4 ||
+      this.ipv4NodePortsAllowedIPRange
+    );
+  }
+
+  get isIPv6NetworkConfigured(): boolean {
+    const clusterNetwork = this.cluster.spec.clusterNetwork;
+    return !!(
+      clusterNetwork?.pods?.cidrBlocks?.length > 1 ||
+      clusterNetwork?.services?.cidrBlocks?.length > 1 ||
+      clusterNetwork?.nodeCidrMaskSizeIPv6 ||
+      this.ipv6NodePortsAllowedIPRange
+    );
   }
 
   isAdmissionPluginEnabled(plugin: string): boolean {

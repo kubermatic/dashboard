@@ -78,6 +78,10 @@ export class Cluster {
   credential?: string;
   machineDeploymentCount?: number;
 
+  static isDualStackNetworkSelected(cluster: Cluster) {
+    return cluster?.spec.clusterNetwork?.ipFamily === IPFamily.DualStack;
+  }
+
   static getProvider(cluster: Cluster): Provider {
     return Object.values(Provider)
       .filter(provider => cluster.spec.cloud[provider])
