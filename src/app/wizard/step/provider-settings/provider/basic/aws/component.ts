@@ -117,6 +117,13 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.form.reset());
 
+    this._clusterSpecService.clusterChanges
+      .pipe(map(cluster => cluster.spec.clusterNetwork?.ipFamily))
+      .pipe(distinctUntilChanged())
+      .pipe(switchMap(_ => this._vpcListObservable()))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(this._setDefaultVPC.bind(this));
+
     merge(
       this.form.get(Controls.AccessKeyID).valueChanges,
       this.form.get(Controls.AccessKeySecret).valueChanges,
@@ -168,6 +175,7 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
   }
 
   onVPCChange(vpcID: string): void {
+    this.selectedVPC = vpcID;
     this._clusterSpecService.cluster.spec.cloud.aws.vpcID = vpcID;
   }
 
@@ -202,6 +210,14 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
       .assumeRoleARN(this.form.get(Controls.AssumeRoleARN).value)
       .assumeRoleExternalID(this.form.get(Controls.AssumeRoleExternalID).value)
       .vpcs(this._clusterSpecService.datacenter, this._onVPCLoading.bind(this))
+      .pipe(
+        map(vpcs => {
+          if (!Cluster.isDualStackNetworkSelected(this._clusterSpecService.cluster)) {
+            return vpcs;
+          }
+          return vpcs.filter(vpc => !!vpc.ipv6CidrBlockAssociationSet?.length);
+        })
+      )
       .pipe(map(vpcs => _.sortBy(vpcs, v => v.name.toLowerCase())))
       .pipe(
         catchError(() => {
@@ -227,8 +243,13 @@ export class AWSProviderBasicComponent extends BaseFormValidator implements OnIn
 
   private _setDefaultVPC(vpcs: AWSVPC[]): void {
     this.vpcIDs = vpcs;
-    const defaultVPC = this.vpcIDs.find(vpc => vpc.isDefault);
-    this.selectedVPC = defaultVPC ? defaultVPC.vpcId : undefined;
+    if (this.selectedVPC && !vpcs.find(vpc => vpc.vpcId === this.selectedVPC)) {
+      this.selectedVPC = '';
+    }
+    if (!this.selectedVPC && vpcs.length) {
+      const defaultVPC = this.vpcIDs.find(vpc => vpc.isDefault);
+      this.selectedVPC = defaultVPC ? defaultVPC.vpcId : undefined;
+    }
     this.vpcLabel = !_.isEmpty(this.vpcIDs) ? VPCState.Ready : VPCState.Empty;
     this._cdr.detectChanges();
   }

@@ -186,6 +186,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   }
 
   onSubnetChange(subnet: string): void {
+    this.selectedSubnet = subnet;
     this._nodeDataService.nodeData.spec.cloud.aws.subnetID = subnet;
     this._nodeDataService.nodeData.spec.cloud.aws.availabilityZone = this._getAZFromSubnet(subnet);
     this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
@@ -263,6 +264,10 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     this._subnets = subnets;
     this._subnetMap = {};
     this.selectedSubnet = this._nodeDataService.nodeData.spec.cloud.aws.subnetID;
+
+    if (this._subnets.length && !this._subnets.find(subnet => subnet.id === this.selectedSubnet)) {
+      this.selectedSubnet = '';
+    }
 
     if (!this.selectedSubnet && this._subnets.length > 0) {
       const defaultSubnet = this._subnets.find(s => s.isDefaultSubnet);
