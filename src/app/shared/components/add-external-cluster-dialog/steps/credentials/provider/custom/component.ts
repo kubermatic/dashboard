@@ -17,6 +17,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {merge, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
+import {verifyYAML, verifyJSON} from '@shared/utils/common';
 
 export enum Controls {
   Name = 'name',
@@ -53,7 +54,8 @@ export class CustomCredentialsComponent implements OnInit, OnDestroy {
   }
 
   update(): void {
-    this._externalClusterService.credentialsStepValidity = this.form.valid && !!this.kubeconfig;
+    this._externalClusterService.credentialsStepValidity =
+      this.form.valid && (verifyYAML(this.kubeconfig) || verifyJSON(this.kubeconfig));
     this._externalClusterService.externalCluster = {
       name: this.form.get(Controls.Name).value,
       kubeconfig: btoa(this.kubeconfig),
