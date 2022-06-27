@@ -122,6 +122,7 @@ import {RelativeTimePipe} from './pipes/relativetime';
 import {ButtonComponent} from '@shared/components/button/component';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {ValidateJsonOrYamlComponent} from '@shared/components/validate-json-or-yaml/component';
+import {ChipAutocompleteComponent} from '@shared/components/chip-autocomplete/component';
 
 const modules = [
   CommonModule,
@@ -186,6 +187,7 @@ const components = [
   SpinnerWithConfirmationComponent,
   InitialsCircleComponent,
   ChipListComponent,
+  ChipAutocompleteComponent,
   NotificationComponent,
   PropertyUsageComponent,
   FilteredComboboxComponent,
