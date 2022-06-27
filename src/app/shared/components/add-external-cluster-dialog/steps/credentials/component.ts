@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {takeUntil} from 'rxjs/operators';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
@@ -29,11 +29,13 @@ enum Controls {
   styleUrls: ['./style.scss'],
 })
 export class CredentialsStepComponent implements OnInit, OnDestroy {
+  private readonly _unsubscribe = new Subject<void>();
+  readonly Controls = Controls;
+  readonly Provider = ExternalClusterProvider;
   form: FormGroup;
   provider: ExternalClusterProvider;
-  readonly Provider = ExternalClusterProvider;
-  readonly Controls = Controls;
-  private readonly _unsubscribe = new Subject<void>();
+  @Input() title: string;
+  @Input() hideLogo = false;
 
   constructor(private readonly _externalClusterService: ExternalClusterService) {}
 

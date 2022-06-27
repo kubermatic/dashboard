@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Injectable} from '@angular/core';
-import {ExternalCluster, ExternalClusterModel, ExternalClusterProvider} from '@shared/entity/external-cluster';
-import {BehaviorSubject, Observable, of} from 'rxjs';
-import {catchError} from 'rxjs/operators';
-import {environment} from '@environments/environment';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {PresetList} from '@shared/entity/preset';
+import {Injectable} from '@angular/core';
 import {AKSCluster} from '@app/shared/entity/provider/aks';
 import {EKSCluster} from '@app/shared/entity/provider/eks';
 import {GKECluster} from '@app/shared/entity/provider/gke';
-import {MasterVersion} from '@shared/entity/cluster';
+import {environment} from '@environments/environment';
+import {ExternalCluster, ExternalClusterModel, ExternalClusterProvider} from '@shared/entity/external-cluster';
+import {PresetList} from '@shared/entity/preset';
+import {BehaviorSubject, Observable, of} from 'rxjs';
+import {catchError} from 'rxjs/operators';
 
 @Injectable({providedIn: 'root'})
 export class ExternalClusterService {
@@ -37,6 +36,7 @@ export class ExternalClusterService {
   private _isValidating = false;
   private _credentialsStepValidity = false;
   private _clusterStepValidity = false;
+  private _isEKSExternalStepValid = false;
   private _newRestRoot: string = environment.newRestRoot;
 
   constructor(private readonly _http: HttpClient) {}
@@ -101,6 +101,14 @@ export class ExternalClusterService {
 
   set clusterStepValidity(valid: boolean) {
     this._clusterStepValidity = valid;
+  }
+
+  get isEKSExternalStepValid(): boolean {
+    return this._isEKSExternalStepValid;
+  }
+
+  set isEKSExternalStepValid(valid: boolean) {
+    this._isEKSExternalStepValid = valid;
   }
 
   import(projectID: string, model: ExternalClusterModel): Observable<ExternalCluster> {
@@ -178,14 +186,55 @@ export class ExternalClusterService {
     this.clusterStepValidity = false;
   }
 
-  getMasterVersions(provider: ExternalClusterProvider): Observable<MasterVersion[]> {
-    const url = `${this._newRestRoot}/providers/${provider}/versions`;
-    return this._http.get<MasterVersion[]>(url);
+  // methods for external-cluster creation:
+
+  getEKSVpcs() {
+    const url = `${this._newRestRoot}/providers/eks/vpcs`;
+    return this._http.get(url, {headers: this._getEKSHeaders()}).pipe(catchError(() => of<[]>()));
+  }
+
+  getEKSSubnetIds(vpcId: string): Observable<string[]> {
+    const url = `${this._newRestRoot}/providers/eks/subnets`;
+    const headers: HttpHeaders = this._getEKSHeadersOnCreateExternalCluster(vpcId);
+    return this._http.get<string[]>(url, {headers});
+  }
+
+  getEKSSecurityGroupIds(vpcId: string): Observable<string[]> {
+    const url = `${this._newRestRoot}/providers/eks/securitygroups`;
+    const headers: HttpHeaders = this._getEKSHeadersOnCreateExternalCluster(vpcId);
+    return this._http.get<string[]>(url, {headers});
   }
 
   createExternalCluster(projectID: string, externalClusterModel: ExternalClusterModel): Observable<any> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters`;
-    return this._http.post<ExternalCluster>(url, externalClusterModel, {headers: this._getEKSHeaders()});
+
+    let headers: HttpHeaders;
+    switch (this.provider) {
+      case ExternalClusterProvider.EKS:
+        headers = this._getEKSHeaders();
+        break;
+      default:
+        return undefined;
+    }
+
+    return this._http.post<ExternalCluster>(url, externalClusterModel, {headers});
+  }
+
+  private _getEKSHeadersOnCreateExternalCluster(vpcId: string): HttpHeaders {
+    let headers: HttpHeaders;
+
+    // Note: VpcId is required.
+    if (this._preset) {
+      headers = new HttpHeaders({Credential: this._preset, VpcId: vpcId});
+    } else {
+      headers = new HttpHeaders({
+        AccessKeyID: this._externalCluster.cloud.eks.accessKeyID,
+        SecretAccessKey: this._externalCluster.cloud.eks.secretAccessKey,
+        Region: this._externalCluster.cloud.eks.region,
+        VpcId: vpcId,
+      });
+    }
+    return headers;
   }
 
   private _getAKSHeaders(): HttpHeaders {

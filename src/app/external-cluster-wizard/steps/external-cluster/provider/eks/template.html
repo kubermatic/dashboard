@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <form [formGroup]="form"
-      [fxLayout]="isDialogView() ? 'column' : 'row'"
+      fxLayout="row"
       fxLayoutGap="30px"
       fxLayout.md="column"
       fxLayoutGap.md="30px"
@@ -23,25 +23,21 @@ limitations under the License.
       fxLayout.xs="column"
       fxLayoutGap.xs="30px">
 
-  <div [fxFlex]="isDialogView() ? '100%' : '50%'"
+  <div fxFlex="50%"
        fxLayout="column"
        fxLayoutGap="8px">
-
     <!--Heading Show on Wizard-->
-    <mat-card-header *ngIf="!isDialogView()"
-                     class="km-no-padding">
-      <mat-card-title>Basic Settings</mat-card-title>
+    <mat-card-header class="km-no-padding">
+      <mat-card-title>Cluster</mat-card-title>
     </mat-card-header>
-
 
     <mat-form-field>
       <mat-label>Name</mat-label>
       <input matInput
              type="text"
              autocomplete="off"
-             [formControlName]="Controls.Name">
-      <button *ngIf="!dialogEditMode"
-              mat-icon-button
+             [formControlName]="Controls.Name" />
+      <button mat-icon-button
               type="button"
               matSuffix
               class="km-randomize-btn"
@@ -57,10 +53,10 @@ limitations under the License.
       <input [formControlName]="Controls.Version"
              matInput
              type="text"
-             autocomplete="off">
+             autocomplete="off" />
 
       <mat-hint>
-        Provide kubernetes versions
+        Set the kubernetes version see list of
         <a href="https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html"
            target="_blank">supported versions</a>.
       </mat-hint>
@@ -71,33 +67,40 @@ limitations under the License.
       <input matInput
              type="text"
              autocomplete="off"
-             [formControlName]="Controls.RoleArn">
+             [formControlName]="Controls.RoleArn" />
       <mat-hint>Enter a unique name for your role, such as e.g eksClusterRole.</mat-hint>
     </mat-form-field>
   </div>
 
-  <div [fxFlex]="isDialogView() ? '100%' : '50%'"
+  <div fxFlex="50%"
        fxLayout="column"
        fxLayoutGap="8px">
 
-    <!--Wizard Heading:-->
-    <mat-card-header *ngIf="!isDialogView()"
-                     class="km-no-padding">
+    <mat-card-header class="km-no-padding">
       <mat-card-title>Networking</mat-card-title>
     </mat-card-header>
 
-    <km-chip-list label="Subnet"
-                  placeholder="Select subnet ids..."
-                  description="Use commas, space or enter key as the separators."
-                  [formControlName]="Controls.SubnetIds"
-                  (onChange)="onSubnetIdsChange($event)">
-    </km-chip-list>
 
-    <km-chip-list label="Security Groups"
-                  placeholder="Select Security Group ids..."
-                  description="Use commas, space or enter key as the separators."
-                  [formControlName]="Controls.SecurityGroupsIds"
-                  (onChange)="onSecurityGroupIdsChange($event)">
-    </km-chip-list>
+    <km-autocomplete label="VPC"
+                     emitValue="true"
+                     required="true"
+                     [isLoading]="isLoading"
+                     [options]="vpcs"
+                     [formControlName]="Controls.Vpcs">
+    </km-autocomplete>
+
+    <ng-container *ngIf="form.get(Controls.Vpcs).value?.main">
+      <km-chip-autocomplete label="Subnet"
+                            placeholder="Select Subnet ID's"
+                            [tags]="subnetIds"
+                            [required]="true"
+                            [formControlName]="Controls.SubnetIds"></km-chip-autocomplete>
+
+      <km-chip-autocomplete label="Security Groups"
+                            placeholder="Select SecurityGroup ID's"
+                            [tags]="securityGroupIds"
+                            [required]="true"
+                            [formControlName]="Controls.SecurityGroupsIds"></km-chip-autocomplete>
+    </ng-container>
   </div>
 </form>

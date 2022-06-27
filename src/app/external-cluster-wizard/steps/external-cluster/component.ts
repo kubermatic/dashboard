@@ -1,4 +1,4 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,17 +13,19 @@
 // limitations under the License.
 
 import {Component, forwardRef, Input, OnDestroy, OnInit} from '@angular/core';
-import {NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {ControlValueAccessor, FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator} from '@angular/forms';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
 import {ExternalClusterProvider} from '@shared/entity/external-cluster';
-import {Subject} from 'rxjs';
 import {filter, takeUntil} from 'rxjs/operators';
-import {MasterVersion} from '@shared/entity/cluster';
+import {StepBase} from '../../base';
+
+enum Controls {
+  EKSExternalCluster = 'EKSExternalCluster',
+}
 
 @Component({
   selector: 'km-external-cluster-step',
   templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -37,17 +39,25 @@ import {MasterVersion} from '@shared/entity/cluster';
     },
   ],
 })
-export class ExternalClusterStepComponent implements OnInit, OnDestroy {
-  readonly provider = ExternalClusterProvider;
-  masterVersions: MasterVersion[] = [];
+export class ExternalClusterStepComponent
+  extends StepBase
+  implements OnInit, OnDestroy, ControlValueAccessor, Validator
+{
+  readonly Controls = Controls;
+  readonly Provider = ExternalClusterProvider;
+
   selectedProvider: ExternalClusterProvider;
   @Input() projectID: string;
 
-  private _unsubscribe = new Subject<void>();
-
-  constructor(private readonly _externalClusterService: ExternalClusterService) {}
+  constructor(
+    private readonly _builder: FormBuilder,
+    private readonly _externalClusterService: ExternalClusterService
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
+    this._initForm();
     this._initSubscriptions();
   }
 
@@ -56,13 +66,10 @@ export class ExternalClusterStepComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  private _getVersions(provider: ExternalClusterProvider) {
-    this._externalClusterService
-      .getMasterVersions(provider)
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(versions => {
-        this.masterVersions = versions;
-      });
+  private _initForm() {
+    this.form = this._builder.group({
+      [Controls.EKSExternalCluster]: '',
+    });
   }
 
   private _initSubscriptions() {
@@ -71,7 +78,6 @@ export class ExternalClusterStepComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(provider => {
         this.selectedProvider = provider;
-        this._getVersions(provider);
       });
   }
 }

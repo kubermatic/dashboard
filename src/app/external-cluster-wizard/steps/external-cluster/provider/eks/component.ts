@@ -12,19 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, Validators} from '@angular/forms';
-import {takeUntil} from 'rxjs/operators';
+import {Component, forwardRef, Input, OnDestroy, OnInit} from '@angular/core';
+import {
+  ControlValueAccessor,
+  FormBuilder,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  Validator,
+  Validators,
+} from '@angular/forms';
 import {NameGeneratorService} from '@core/services/name-generator';
 import {NodeDataService} from '@core/services/node-data/service';
-import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
+import {forkJoin} from 'rxjs';
+import {finalize, takeUntil} from 'rxjs/operators';
+import {StepBase} from '@app/external-cluster-wizard/base';
 
 enum Controls {
   Name = 'name',
   Version = 'version',
   RoleArn = 'roleArn', // ClusterServiceRole
+  Vpcs = 'vpcs',
   SubnetIds = 'subnetIds',
   SecurityGroupsIds = 'securityGroupIds',
 }
@@ -32,13 +40,29 @@ enum Controls {
 @Component({
   selector: 'km-eks-external-cluster',
   templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => EKSExternalClusterComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => EKSExternalClusterComponent),
+      multi: true,
+    },
+  ],
 })
-export class EKSExternalClusterComponent extends BaseFormValidator implements OnInit, OnDestroy {
+export class EKSExternalClusterComponent
+  extends StepBase
+  implements OnInit, OnDestroy, ControlValueAccessor, Validator
+{
   readonly Controls = Controls;
-  dialogEditMode = false;
+  isLoading: boolean;
+  vpcs: string[] = [];
   subnetIds: string[] = [];
   securityGroupIds: string[] = [];
+  @Input() projectID: string;
   @Input() showExtended = false; // Used only when in dialog mode.
 
   constructor(
@@ -52,6 +76,7 @@ export class EKSExternalClusterComponent extends BaseFormValidator implements On
 
   ngOnInit(): void {
     this._initForm();
+    this._intiLookupValues();
     this._initSubscriptions();
   }
 
@@ -64,59 +89,93 @@ export class EKSExternalClusterComponent extends BaseFormValidator implements On
     this.form.get(Controls.Name).setValue(this._nameGenerator.generateName());
   }
 
-  isDialogView(): boolean {
-    // In the wizard we do not split extended and basic options.
-    return !this._nodeDataService.isInWizardMode();
-  }
-
-  onSubnetIdsChange(subnetIds: string[]): void {
-    this.subnetIds = subnetIds;
-    this.form.get(Controls.SubnetIds).updateValueAndValidity();
-  }
-
-  onSecurityGroupIdsChange(securityGroupIds: string[]): void {
-    this.securityGroupIds = securityGroupIds;
-    this.form.get(Controls.SecurityGroupsIds).updateValueAndValidity();
+  reset(): void {
+    this.subnetIds = [];
+    this.securityGroupIds = [];
   }
 
   private _initForm() {
     this.form = this._builder.group({
-      [Controls.Name]: this._builder.control(this._nodeDataService.nodeData.name, [
-        KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,
-      ]),
+      [Controls.Name]: this._builder.control(this._nodeDataService.nodeData.name),
       [Controls.RoleArn]: this._builder.control('', Validators.required),
       [Controls.Version]: this._builder.control(''),
-      [Controls.SubnetIds]: this._builder.control('', Validators.required),
-      [Controls.SecurityGroupsIds]: this._builder.control('', Validators.required),
+      [Controls.Vpcs]: this._builder.control('', Validators.required), // this will be used to show/hide subnets/security-groups dropdown
+      [Controls.SubnetIds]: this._builder.control([], Validators.required),
+      [Controls.SecurityGroupsIds]: this._builder.control([], Validators.required),
     });
+  }
+
+  private _intiLookupValues() {
+    this.isLoading = true;
+    this._externalClusterService
+      .getEKSVpcs()
+      .pipe(
+        takeUntil(this._unsubscribe),
+        finalize(() => (this.isLoading = false))
+      )
+      .subscribe((vpcs: any) => {
+        this.vpcs = vpcs.map(vpc => vpc.id);
+      });
   }
 
   private _initSubscriptions() {
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
       this._updateExternalClusterModel();
+      const isFormValid = this.form.valid;
+      if (isFormValid) {
+        this._externalClusterService.isEKSExternalStepValid = isFormValid;
+      }
+    });
+
+    // Note:
+    // Fetch Subnets/Security Groups based on selected VPC
+    this.form
+      .get(Controls.Vpcs)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        const vpc = this.form.get(Controls.Vpcs).value?.main;
+        if (!vpc) {
+          this.reset();
+        } else {
+          this._onVPCSelectionChange(vpc);
+        }
+      });
+  }
+
+  private _onVPCSelectionChange(vpc: string): void {
+    forkJoin([
+      this._externalClusterService.getEKSSubnetIds(vpc),
+      this._externalClusterService.getEKSSecurityGroupIds(vpc),
+    ]).subscribe((responses: [string[], string[]]) => {
+      if (responses[0]) {
+        this.subnetIds = responses[0];
+      }
+      if (responses[1]) {
+        this.securityGroupIds = responses[1];
+      }
     });
   }
 
   private _updateExternalClusterModel(): void {
     this._externalClusterService.externalCluster = {
       ...this._externalClusterService.externalCluster,
-      name: this.form.get(Controls.Name).value,
+      name: this.controlValue(Controls.Name),
       cloud: {
         eks: {
           ...this._externalClusterService.externalCluster.cloud.eks,
-          name: this.form.get(Controls.Name).value,
+          name: this.controlValue(Controls.Name),
         },
       },
       spec: {
         eksclusterSpec: {
-          roleArn: this.form.get(Controls.RoleArn).value,
-          version: this.form.get(Controls.Version).value,
+          roleArn: this.controlValue(Controls.RoleArn),
+          version: this.controlValue(Controls.Version),
           vpcConfigRequest: {
-            subnetIds: this.subnetIds,
-            securityGroupIds: this.securityGroupIds,
+            subnetIds: this.controlValue(Controls.SubnetIds),
+            securityGroupIds: this.controlValue(Controls.SecurityGroupsIds),
           },
         },
-        version: this.form.get(Controls.Version).value,
+        version: this.controlValue(Controls.Version),
       },
     };
   }

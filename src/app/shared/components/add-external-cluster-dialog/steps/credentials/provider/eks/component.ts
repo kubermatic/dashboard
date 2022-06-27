@@ -14,9 +14,9 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
-import {catchError, take, takeUntil} from 'rxjs/operators';
 import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
 import {Observable, of, Subject} from 'rxjs';
+import {catchError, take, takeUntil} from 'rxjs/operators';
 
 export enum Controls {
   AccessKeyID = 'accessKeyID',

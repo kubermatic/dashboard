@@ -13,19 +13,19 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {Router} from '@angular/router';
-import {FormGroup} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {MatStepper} from '@angular/material/stepper';
-import {Observable, Subject} from 'rxjs';
-import {filter, takeUntil} from 'rxjs/operators';
+import {Router} from '@angular/router';
 import {ClusterListTab} from '@app/cluster/list/component';
-import {ExternalWizardStep, StepRegistry, WizardSteps} from './config';
 import {ExternalCluster, ExternalClusterProvider} from '@app/shared/entity/external-cluster';
-import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
-import {ExternalClusterWizardService} from '@core/services/wizard/external-cluster-wizard';
-import {ProjectService} from '@core/services/project';
-import {Project} from '@shared/entity/project';
 import {NotificationService} from '@core/services/notification';
+import {ProjectService} from '@core/services/project';
+import {ExternalClusterWizardService} from '@core/services/wizard/external-cluster-wizard';
+import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
+import {Project} from '@shared/entity/project';
+import {Observable, Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {ExternalWizardStep, StepRegistry, WizardSteps} from './config';
 
 @Component({
   selector: 'km-external-cluster-wizard',
@@ -33,13 +33,14 @@ import {NotificationService} from '@core/services/notification';
   styleUrls: ['./style.scss'],
 })
 export class ExternalClusterWizardComponent implements OnInit, OnDestroy {
+  private readonly _unsubscribe = new Subject<void>();
   readonly stepRegistry = StepRegistry;
   form: FormGroup;
   project = {} as Project;
-  private readonly _unsubscribe = new Subject<void>();
   @ViewChild('stepper', {static: true}) private readonly _stepper: MatStepper;
 
   constructor(
+    private readonly _formBuilder: FormBuilder,
     private readonly _externalClusterService: ExternalClusterService,
     private readonly _wizard: ExternalClusterWizardService,
     private readonly _projectService: ProjectService,
@@ -63,31 +64,52 @@ export class ExternalClusterWizardComponent implements OnInit, OnDestroy {
     return this._stepper.selectedIndex === this.steps.length - 1;
   }
 
-  get invalid(): boolean {
-    return this.form.get(this.active.name).invalid;
+  get isInvalidStep(): boolean {
+    switch (this.active.name) {
+      case StepRegistry.Provider:
+        return !this._externalClusterService.provider;
+      case StepRegistry.Credentials:
+        return !this._externalClusterService.isCredentialsStepValid;
+      case StepRegistry.ExternalClusterDetails:
+        if (this.selectedProvider === ExternalClusterProvider.EKS) {
+          return !this._externalClusterService.isEKSExternalStepValid;
+        }
+        return false;
+      default:
+        return true;
+    }
+  }
+
+  get isPresetSelected(): boolean {
+    return !!this._externalClusterService.preset;
+  }
+
+  get isCredentialStepValid(): boolean {
+    return this._externalClusterService.isCredentialsStepValid;
+  }
+
+  get selectedProvider(): string {
+    return this._externalClusterService.provider;
   }
 
   ngOnInit(): void {
-    this._wizard.reset();
-
     // Init steps for wizard
     this._wizard.steps = WizardSteps;
     this._wizard.stepper = this._stepper;
+    this._initForm(this.steps);
     this._projectService.selectedProject
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(project => (this.project = project));
-
-    this._externalClusterService.providerChanges
-      .pipe(filter(provider => !!provider))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(() => {
-        this._stepper.next();
-      });
   }
 
   ngOnDestroy() {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+    this._externalClusterService.reset();
+  }
+
+  onNext(): void {
+    this._stepper.next();
   }
 
   onCancel() {
@@ -96,7 +118,7 @@ export class ExternalClusterWizardComponent implements OnInit, OnDestroy {
     });
   }
 
-  onExternalProviderSelected(provider: ExternalClusterProvider) {
+  onExternalProviderChanged(provider: ExternalClusterProvider) {
     this._externalClusterService.provider = provider;
   }
 
@@ -107,10 +129,16 @@ export class ExternalClusterWizardComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe));
   }
 
-  onNext(externalCluster: ExternalCluster): void {
+  onCreateSuccess(externalCluster: ExternalCluster): void {
     this._notificationService.success(`Created the ${externalCluster.name} external cluster`);
     this._router.navigate(['/projects/' + this.project.id + '/clusters'], {
       fragment: `${ClusterListTab.ExternalCluster}`,
     });
+  }
+
+  private _initForm(steps: ExternalWizardStep[]): void {
+    const controls = {};
+    steps.forEach(step => (controls[step.name] = this._formBuilder.control('')));
+    this.form = this._formBuilder.group(controls);
   }
 }

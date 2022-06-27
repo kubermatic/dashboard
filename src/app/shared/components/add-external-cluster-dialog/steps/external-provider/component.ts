@@ -49,7 +49,7 @@ export class ExternalClusterProviderStepComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  onExternalProviderSelected(provider: ExternalClusterProvider) {
+  onExternalProviderChanged(provider: ExternalClusterProvider) {
     this._externalClusterService.provider = provider;
   }
 

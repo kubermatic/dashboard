@@ -1,5 +1,5 @@
 <!--
-Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,21 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-
-<div fxLayout="row">
-  <mat-card-header class="km-no-padding"
-                   fxLayout="row"
-                   fxLayoutGap="30px">
-    <mat-card-title>
-      <div>Create External Cluster</div>
-    </mat-card-title>
-
-    <div class="km-provider-logo km-provider-logo-{{selectedProvider}}"></div>
-  </mat-card-header>
-</div>
-<br />
-
 <div [ngSwitch]="selectedProvider"
      fxLayout="column">
-  <km-eks-external-cluster *ngSwitchCase="provider.EKS"></km-eks-external-cluster>
+  <km-eks-external-cluster *ngSwitchCase="Provider.EKS"
+                           [formControl]="form.get(Controls.EKSExternalCluster)"></km-eks-external-cluster>
 </div>
