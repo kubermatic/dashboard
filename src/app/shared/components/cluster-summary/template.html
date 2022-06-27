@@ -319,45 +319,67 @@ limitations under the License.
           <div value>{{cluster.spec.cniPlugin.version}}</div>
         </km-property>
 
-        <km-property *ngIf="cluster.spec.clusterNetwork?.proxyMode">
-          <div key>Proxy Mode</div>
-          <div value>{{cluster.spec.clusterNetwork.proxyMode}}</div>
-        </km-property>
+        <ng-container *ngIf="cluster.spec.clusterNetwork">
+          <km-property *ngIf="cluster.spec.clusterNetwork?.proxyMode">
+            <div key>Proxy Mode</div>
+            <div value>{{cluster.spec.clusterNetwork.proxyMode}}</div>
+          </km-property>
 
-        <km-property *ngIf="cluster.spec.clusterNetwork?.pods?.cidrBlocks?.length > 0">
-          <div key>Pods CIDR</div>
-          <div value>{{cluster.spec.clusterNetwork.pods.cidrBlocks.join(', ')}}</div>
-        </km-property>
+          <h4 *ngIf="isDualStackNetworkSelected && isIPv4NetworkConfigured">IPv4</h4>
 
-        <km-property *ngIf="cluster.spec.clusterNetwork?.services?.cidrBlocks?.length > 0">
-          <div key>Services CIDR</div>
-          <div value>{{cluster.spec.clusterNetwork.services.cidrBlocks.join(', ')}}</div>
-        </km-property>
+          <km-property *ngIf="cluster.spec.clusterNetwork?.pods?.cidrBlocks?.length">
+            <div key>Pods CIDR</div>
+            <div value>{{cluster.spec.clusterNetwork.pods.cidrBlocks[0]}}</div>
+          </km-property>
 
-        <km-property *ngIf="cluster.spec.cloud?.aws?.nodePortsAllowedIPRange">
-          <div key>Allowed IP Range for NodePorts</div>
-          <div value>{{cluster.spec.cloud.aws.nodePortsAllowedIPRange}}</div>
-        </km-property>
+          <km-property *ngIf="cluster.spec.clusterNetwork?.services?.cidrBlocks?.length">
+            <div key>Services CIDR</div>
+            <div value>{{cluster.spec.clusterNetwork.services.cidrBlocks[0]}}</div>
+          </km-property>
 
-        <km-property *ngIf="cluster.spec.cloud?.azure?.nodePortsAllowedIPRange">
-          <div key>Allowed IP Range for NodePorts</div>
-          <div value>{{cluster.spec.cloud.azure.nodePortsAllowedIPRange}}</div>
-        </km-property>
+          <km-property *ngIf="cluster.spec.clusterNetwork?.nodeCidrMaskSizeIPv4">
+            <div key>Node CIDR Mask Size</div>
+            <div value>{{cluster.spec.clusterNetwork.nodeCidrMaskSizeIPv4}}</div>
+          </km-property>
 
-        <km-property *ngIf="cluster.spec.cloud?.gcp?.nodePortsAllowedIPRange">
-          <div key>Allowed IP Range for NodePorts</div>
-          <div value>{{cluster.spec.cloud.gcp.nodePortsAllowedIPRange}}</div>
-        </km-property>
+          <km-property *ngIf="ipv4NodePortsAllowedIPRange as allowedIPRange">
+            <div key>Allowed IP Range for NodePorts</div>
+            <div value>{{allowedIPRange}}</div>
+          </km-property>
 
-        <km-property *ngIf="cluster.spec.cloud?.openstack?.nodePortsAllowedIPRange">
-          <div key>Allowed IP Range for NodePorts</div>
-          <div value>{{cluster.spec.cloud.openstack.nodePortsAllowedIPRange}}</div>
-        </km-property>
+          <ng-container *ngIf="isDualStackNetworkSelected && isIPv6NetworkConfigured">
+            <h4>IPv6</h4>
+            <km-property *ngIf="cluster.spec.clusterNetwork?.pods?.cidrBlocks?.length > 1">
+              <div key>Pods CIDR</div>
+              <div value>{{cluster.spec.clusterNetwork.pods.cidrBlocks[1]}}</div>
+            </km-property>
 
-        <km-property-boolean *ngIf="cluster.spec.clusterNetwork?.konnectivityEnabled"
-                             label="Konnectivity"
-                             [value]="cluster.spec.clusterNetwork?.konnectivityEnabled">
-        </km-property-boolean>
+            <km-property *ngIf="cluster.spec.clusterNetwork?.services?.cidrBlocks?.length > 1">
+              <div key>Services CIDR</div>
+              <div value>{{cluster.spec.clusterNetwork.services.cidrBlocks[1]}}</div>
+            </km-property>
+
+            <km-property *ngIf="cluster.spec.clusterNetwork?.nodeCidrMaskSizeIPv6">
+              <div key>Node CIDR Mask Size</div>
+              <div value>{{cluster.spec.clusterNetwork.nodeCidrMaskSizeIPv6}}</div>
+            </km-property>
+
+            <km-property *ngIf="ipv6NodePortsAllowedIPRange as allowedIPRange">
+              <div key>Allowed IP Range for NodePorts</div>
+              <div value>{{allowedIPRange}}</div>
+            </km-property>
+          </ng-container>
+
+          <km-property-boolean *ngIf="cluster.spec.clusterNetwork?.nodeLocalDNSCacheEnabled"
+                               label="Node Local DNS Cache"
+                               [value]="cluster.spec.clusterNetwork?.nodeLocalDNSCacheEnabled">
+          </km-property-boolean>
+
+          <km-property-boolean *ngIf="cluster.spec.clusterNetwork?.konnectivityEnabled"
+                               label="Konnectivity"
+                               [value]="cluster.spec.clusterNetwork?.konnectivityEnabled">
+          </km-property-boolean>
+        </ng-container>
       </div>
 
       <div fxFlex="50%"

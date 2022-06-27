@@ -78,6 +78,10 @@ export class Cluster {
   credential?: string;
   machineDeploymentCount?: number;
 
+  static isDualStackNetworkSelected(cluster: Cluster) {
+    return cluster?.spec.clusterNetwork?.ipFamily === IPFamily.DualStack;
+  }
+
   static getProvider(cluster: Cluster): Provider {
     return Object.values(Provider)
       .filter(provider => cluster.spec.cloud[provider])
@@ -117,10 +121,10 @@ export class CloudSpec {
 }
 
 export class ExtraCloudSpecOptions {
-  constructor(public nodePortsAllowedIPRange?: string) {}
+  constructor(public nodePortsAllowedIPRanges?: NetworkRanges) {}
 
   static new(spec: AWSCloudSpec | GCPCloudSpec | AzureCloudSpec | OpenstackCloudSpec): ExtraCloudSpecOptions {
-    return new ExtraCloudSpecOptions(spec.nodePortsAllowedIPRange);
+    return new ExtraCloudSpecOptions(spec.nodePortsAllowedIPRanges);
   }
 }
 
@@ -300,10 +304,28 @@ export class EventRateLimitConfigItem {
 }
 
 export class ClusterNetwork {
+  ipFamily?: string;
   pods?: NetworkRanges;
   proxyMode?: ProxyMode;
   services?: NetworkRanges;
+  nodeCidrMaskSizeIPv4?: number;
+  nodeCidrMaskSizeIPv6?: number;
+  nodeLocalDNSCacheEnabled?: boolean;
   konnectivityEnabled?: boolean;
+}
+
+export class ClusterNetworkDefaults {
+  ipv4?: NetworkDefaultsIPFamily;
+  ipv6?: NetworkDefaultsIPFamily;
+  nodeLocalDNSCacheEnabled?: boolean;
+  proxyMode?: ProxyMode;
+}
+
+export class NetworkDefaultsIPFamily {
+  nodeCidrMaskSize: number;
+  nodePortsAllowedIPRange: string;
+  podsCidr: string;
+  servicesCidr: string;
 }
 
 export class CNIPluginConfig {
@@ -313,7 +335,6 @@ export class CNIPluginConfig {
 
 export class NetworkRanges {
   cidrBlocks: string[];
-  clusterNetwork?: ClusterNetwork;
 }
 
 export class CNIPluginVersions {
@@ -331,6 +352,11 @@ export enum CNIPlugin {
   Canal = 'canal',
   Cilium = 'cilium',
   None = 'none',
+}
+
+export enum IPFamily {
+  IPv4 = 'IPv4',
+  DualStack = 'IPv4+IPv6',
 }
 
 export enum AuditPolicyPreset {

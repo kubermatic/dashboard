@@ -87,6 +87,38 @@ export class ClusterSummaryComponent {
     return !_.isEmpty(this.cluster.spec?.cniPlugin) || !_.isEmpty(this.cluster.spec?.clusterNetwork);
   }
 
+  get isDualStackNetworkSelected(): boolean {
+    return Cluster.isDualStackNetworkSelected(this.cluster);
+  }
+
+  get ipv4NodePortsAllowedIPRange(): string {
+    return this.cluster.spec.cloud[this.provider]?.nodePortsAllowedIPRanges?.cidrBlocks?.[0];
+  }
+
+  get ipv6NodePortsAllowedIPRange(): string {
+    return this.cluster.spec.cloud[this.provider]?.nodePortsAllowedIPRanges?.cidrBlocks?.[1];
+  }
+
+  get isIPv4NetworkConfigured(): boolean {
+    const clusterNetwork = this.cluster.spec.clusterNetwork;
+    return !!(
+      clusterNetwork?.pods?.cidrBlocks?.length ||
+      clusterNetwork?.services?.cidrBlocks?.length ||
+      clusterNetwork?.nodeCidrMaskSizeIPv4 ||
+      this.ipv4NodePortsAllowedIPRange
+    );
+  }
+
+  get isIPv6NetworkConfigured(): boolean {
+    const clusterNetwork = this.cluster.spec.clusterNetwork;
+    return !!(
+      clusterNetwork?.pods?.cidrBlocks?.length > 1 ||
+      clusterNetwork?.services?.cidrBlocks?.length > 1 ||
+      clusterNetwork?.nodeCidrMaskSizeIPv6 ||
+      this.ipv6NodePortsAllowedIPRange
+    );
+  }
+
   isAdmissionPluginEnabled(plugin: string): boolean {
     return this.cluster?.spec?.admissionPlugins?.includes(plugin) || false;
   }

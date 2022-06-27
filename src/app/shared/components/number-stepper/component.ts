@@ -16,6 +16,7 @@ import {DecimalPipe} from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   forwardRef,
   HostBinding,
@@ -122,6 +123,7 @@ export class NumberStepperComponent implements AfterViewInit, OnDestroy, Control
       this._value = parsed;
       this._onChange(val);
     }
+    this._cdr.detectChanges();
   }
 
   get errors(): string[] {
@@ -136,7 +138,7 @@ export class NumberStepperComponent implements AfterViewInit, OnDestroy, Control
     return this.type === 'integer' ? this._integerPattern : '';
   }
 
-  constructor(private readonly _decimalPipe: DecimalPipe) {}
+  constructor(private readonly _decimalPipe: DecimalPipe, private readonly _cdr: ChangeDetectorRef) {}
 
   ngAfterViewInit(): void {
     this._model.statusChanges.subscribe(status => {

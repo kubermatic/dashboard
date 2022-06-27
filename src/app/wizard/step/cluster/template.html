@@ -85,52 +85,144 @@ limitations under the License.
           </mat-form-field>
         </div>
 
-        <mat-form-field class="km-dropdown-with-suffix">
-          <mat-label>Proxy Mode</mat-label>
-          <mat-select [formControlName]="Controls.ProxyMode"
-                      class="km-select-ellipsis"
-                      disableOptionCentering>
-            <mat-option *ngFor="let proxyMode of availableProxyModes"
-                        [value]="proxyMode">
-              {{proxyMode}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field fxFlex>
-          <mat-label>Pods CIDR</mat-label>
-          <input matInput
-                 [formControlName]="Controls.PodsCIDR"
-                 type="text"
-                 autocomplete="off">
-          <mat-error *ngIf="form.get(Controls.PodsCIDR).hasError('pattern')">
-            Invalid pattern. Use CIDR notation, i.e. 192.168.1.0/24.
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field fxFlex>
-          <mat-label>Services CIDR</mat-label>
-          <input matInput
-                 [formControlName]="Controls.ServicesCIDR"
-                 type="text"
-                 autocomplete="off">
-          <mat-error *ngIf="form.get(Controls.ServicesCIDR).hasError('pattern')">
-            Invalid pattern. Use CIDR notation, i.e. 192.168.1.0/24.
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field *ngIf="isAllowedIPRangeSupported()">
-          <mat-label>Allowed IP Range for NodePorts</mat-label>
-          <input matInput
-                 [formControlName]="Controls.AllowedIPRange"
-                 type="text"
-                 autocomplete="off">
-          <mat-error *ngIf="form.get(Controls.AllowedIPRange).hasError('pattern')">
-            Invalid pattern. Use CIDR notation, i.e. 192.168.1.0/24.
-          </mat-error>
-        </mat-form-field>
-        <mat-checkbox *ngIf="isKonnectivityEnabled"
-                      [formControlName]="Controls.Konnectivity"
-                      [class.km-text-muted]="control(Controls.Konnectivity).disabled">
-          Konnectivity
-        </mat-checkbox>
+        <mat-radio-group *ngIf="isDualStackAllowed"
+                         fxLayoutGap="50px"
+                         [formControlName]="Controls.IPFamily">
+          <mat-radio-button [value]="IPFamily.IPv4">IPv4</mat-radio-button>
+          <mat-radio-button [value]="IPFamily.DualStack">IPv4 and IPv6 (Dual Stack)</mat-radio-button>
+        </mat-radio-group>
+
+        <km-expansion-panel expandLabel="ADVANCED NETWORK CONFIGURATION"
+                            collapseLabel="ADVANCED NETWORK CONFIGURATION">
+          <mat-form-field class="km-dropdown-with-suffix">
+            <mat-label>Proxy Mode</mat-label>
+            <mat-select [formControlName]="Controls.ProxyMode"
+                        class="km-select-ellipsis"
+                        disableOptionCentering>
+              <mat-option *ngFor="let proxyMode of availableProxyModes"
+                          [value]="proxyMode">
+                {{proxyMode}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div fxLayout="row"
+               fxLayoutGap="50px"
+               fxFlex="100">
+            <div fxLayout="column"
+                 [fxFlex]="isDualStackIPFamilySelected() ? '50' : '100'">
+              <h4 *ngIf="isDualStackIPFamilySelected()">IPv4</h4>
+              <mat-form-field class="km-long-subscript">
+                <mat-label>Pods CIDR</mat-label>
+                <input matInput
+                       [formControlName]="Controls.IPv4PodsCIDR"
+                       type="text"
+                       autocomplete="off">
+                <mat-error *ngIf="form.get(Controls.IPv4PodsCIDR).hasError('required')">
+                  Pods CIDR is <strong>required</strong>
+                </mat-error>
+                <mat-error *ngIf="form.get(Controls.IPv4PodsCIDR).hasError('pattern')">
+                  Invalid pattern. Use CIDR notation, i.e. 192.168.1.0/24.
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field class="km-long-subscript">
+                <mat-label>Services CIDR</mat-label>
+                <input matInput
+                       [formControlName]="Controls.IPv4ServicesCIDR"
+                       type="text"
+                       autocomplete="off">
+                <mat-error *ngIf="form.get(Controls.IPv4ServicesCIDR).hasError('required')">
+                  Services CIDR is <strong>required</strong>
+                </mat-error>
+                <mat-error *ngIf="form.get(Controls.IPv4ServicesCIDR).hasError('pattern')">
+                  Invalid pattern. Use CIDR notation, i.e. 192.168.1.0/24.
+                </mat-error>
+              </mat-form-field>
+              <km-number-stepper [formControlName]="Controls.IPv4CIDRMaskSize"
+                                 mode="errors"
+                                 min="1"
+                                 max="32"
+                                 label="Node CIDR Mask Size">
+              </km-number-stepper>
+              <mat-form-field *ngIf="isAllowedIPRangeSupported()"
+                              class="km-long-subscript">
+                <mat-label>Allowed IP Range for NodePorts</mat-label>
+                <input matInput
+                       [formControlName]="Controls.IPv4AllowedIPRange"
+                       type="text"
+                       autocomplete="off">
+                <mat-error *ngIf="form.get(Controls.IPv4AllowedIPRange).hasError('required')">
+                  Allowed IP Range for NodePorts is <strong>required</strong>
+                </mat-error>
+                <mat-error *ngIf="form.get(Controls.IPv4AllowedIPRange).hasError('pattern')">
+                  Invalid pattern. Use CIDR notation, i.e. 192.168.1.0/24.
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div *ngIf="isDualStackIPFamilySelected()"
+                 fxLayout="column"
+                 fxFlex="50">
+              <h4>IPv6</h4>
+              <mat-form-field class="km-long-subscript">
+                <mat-label>Pods CIDR</mat-label>
+                <input matInput
+                       [formControlName]="Controls.IPv6PodsCIDR"
+                       type="text"
+                       autocomplete="off">
+                <mat-error *ngIf="form.get(Controls.IPv6PodsCIDR).hasError('required')">
+                  Pods CIDR is <strong>required</strong>
+                </mat-error>
+                <mat-error *ngIf="form.get(Controls.IPv6PodsCIDR).hasError('pattern')">
+                  Invalid pattern. Use CIDR notation, i.e. 2002::1234:abcd:ffff:c0a8:101/64.
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field class="km-long-subscript">
+                <mat-label>Services CIDR</mat-label>
+                <input matInput
+                       [formControlName]="Controls.IPv6ServicesCIDR"
+                       type="text"
+                       autocomplete="off">
+                <mat-error *ngIf="form.get(Controls.IPv6ServicesCIDR).hasError('required')">
+                  Services CIDR is <strong>required</strong>
+                </mat-error>
+                <mat-error *ngIf="form.get(Controls.IPv6ServicesCIDR).hasError('pattern')">
+                  Invalid pattern. Use CIDR notation, i.e. 2002::1234:abcd:ffff:c0a8:101/64.
+                </mat-error>
+              </mat-form-field>
+              <km-number-stepper [formControlName]="Controls.IPv6CIDRMaskSize"
+                                 mode="errors"
+                                 min="1"
+                                 max="128"
+                                 label="Node CIDR Mask Size">
+              </km-number-stepper>
+              <mat-form-field *ngIf="isAllowedIPRangeSupported()"
+                              class="km-long-subscript">
+                <mat-label>Allowed IP Range for NodePorts</mat-label>
+                <input matInput
+                       [formControlName]="Controls.IPv6AllowedIPRange"
+                       type="text"
+                       autocomplete="off">
+                <mat-error *ngIf="form.get(Controls.IPv6AllowedIPRange).hasError('required')">
+                  Allowed IP Range for NodePorts is <strong>required</strong>
+                </mat-error>
+                <mat-error *ngIf="form.get(Controls.IPv6AllowedIPRange).hasError('pattern')">
+                  Invalid pattern. Use CIDR notation, i.e. 2002::1234:abcd:ffff:c0a8:101/64.
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="column"
+               fxFlex="100"
+               fxLayoutGap="10px">
+            <mat-checkbox [formControlName]="Controls.NodeLocalDNSCache">
+              Node Local DNS Cache
+            </mat-checkbox>
+            <mat-checkbox *ngIf="isKonnectivityEnabled"
+                          [formControlName]="Controls.Konnectivity"
+                          [class.km-text-muted]="control(Controls.Konnectivity).disabled">
+              Konnectivity
+            </mat-checkbox>
+          </div>
+        </km-expansion-panel>
       </div>
 
       <km-wizard-cluster-ssh-keys [formControl]="form.get(Controls.SSHKeys)"></km-wizard-cluster-ssh-keys>

@@ -19,8 +19,10 @@ import {
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   Validator,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
+import {IPV6_CIDR_PATTERN_VALIDATOR} from '@app/shared/validators/others';
 import {ClusterService} from '@core/services/cluster';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
@@ -31,11 +33,13 @@ import {WizardService} from '@core/services/wizard/wizard';
 import {
   AuditPolicyPreset,
   Cluster,
+  ClusterNetwork,
   ClusterSpec,
   CNIPlugin,
   ContainerRuntime,
   END_OF_DOCKER_SUPPORT_VERSION,
   ExtraCloudSpecOptions,
+  IPFamily,
   MasterVersion,
   ProxyMode,
 } from '@shared/entity/cluster';
@@ -45,7 +49,8 @@ import {AdminSettings} from '@shared/entity/settings';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
 import {AsyncValidators} from '@shared/validators/async-label-form.validator';
-import {CIDR_PATTERN_VALIDATOR} from '@shared/validators/others';
+import {IPV4_CIDR_PATTERN_VALIDATOR} from '@shared/validators/others';
+import {KmValidators} from '@shared/validators/validators';
 import {combineLatest, merge} from 'rxjs';
 import {filter, startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import * as semver from 'semver';
@@ -71,11 +76,18 @@ enum Controls {
   MLALogging = 'loggingEnabled',
   MLAMonitoring = 'monitoringEnabled',
   ProxyMode = 'proxyMode',
-  PodsCIDR = 'podsCIDR',
-  ServicesCIDR = 'servicesCIDR',
+  IPv4PodsCIDR = 'ipv4PodsCIDR',
+  IPv6PodsCIDR = 'ipv6PodsCIDR',
+  IPv4ServicesCIDR = 'ipv4ServicesCIDR',
+  IPv6ServicesCIDR = 'ipv6ServicesCIDR',
   CNIPlugin = 'cniPlugin',
   CNIPluginVersion = 'cniPluginVersion',
-  AllowedIPRange = 'allowedIPRange',
+  IPv4AllowedIPRange = 'ipv4AllowedIPRange',
+  IPv6AllowedIPRange = 'ipv6AllowedIPRange',
+  IPv4CIDRMaskSize = 'ipv4CIDRMaskSize',
+  IPv6CIDRMaskSize = 'ipv6CIDRMaskSize',
+  NodeLocalDNSCache = 'nodeLocalDNSCache',
+  IPFamily = 'ipFamily',
 }
 
 @Component({
@@ -109,8 +121,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   cniPluginVersions: string[] = [];
   availableProxyModes = [ProxyMode.ipvs, ProxyMode.iptables];
   isKonnectivityEnabled = false;
+  isDualStackAllowed = false;
   readonly Controls = Controls;
   readonly AuditPolicyPreset = AuditPolicyPreset;
+  readonly IPFamily = IPFamily;
   private _datacenterSpec: Datacenter;
   private _seedSettings: SeedSettings;
   private _settings: AdminSettings;
@@ -153,12 +167,37 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.EventRateLimitConfig]: this._builder.control(''),
       [Controls.Labels]: this._builder.control(''),
       [Controls.SSHKeys]: this._builder.control(''),
+      [Controls.IPFamily]: this._builder.control(IPFamily.IPv4),
       [Controls.ProxyMode]: this._builder.control(''),
-      [Controls.PodsCIDR]: this._builder.control('', [CIDR_PATTERN_VALIDATOR]),
-      [Controls.ServicesCIDR]: this._builder.control('', [CIDR_PATTERN_VALIDATOR]),
+      [Controls.IPv4PodsCIDR]: this._builder.control('', [
+        IPV4_CIDR_PATTERN_VALIDATOR,
+        this._dualStackRequiredIfValidator(Controls.IPv6PodsCIDR),
+      ]),
+      [Controls.IPv6PodsCIDR]: this._builder.control('', [
+        IPV6_CIDR_PATTERN_VALIDATOR,
+        this._dualStackRequiredIfValidator(Controls.IPv4PodsCIDR),
+      ]),
+      [Controls.IPv4ServicesCIDR]: this._builder.control('', [
+        IPV4_CIDR_PATTERN_VALIDATOR,
+        this._dualStackRequiredIfValidator(Controls.IPv6ServicesCIDR),
+      ]),
+      [Controls.IPv6ServicesCIDR]: this._builder.control('', [
+        IPV6_CIDR_PATTERN_VALIDATOR,
+        this._dualStackRequiredIfValidator(Controls.IPv4ServicesCIDR),
+      ]),
       [Controls.CNIPlugin]: this._builder.control(CNIPlugin.Canal),
       [Controls.CNIPluginVersion]: this._builder.control(''),
-      [Controls.AllowedIPRange]: this._builder.control(this._defaultAllowedIPRange, [CIDR_PATTERN_VALIDATOR]),
+      [Controls.IPv4AllowedIPRange]: this._builder.control(this._defaultAllowedIPRange, [
+        IPV4_CIDR_PATTERN_VALIDATOR,
+        this._dualStackRequiredIfValidator(Controls.IPv6AllowedIPRange),
+      ]),
+      [Controls.IPv6AllowedIPRange]: this._builder.control('', [
+        IPV6_CIDR_PATTERN_VALIDATOR,
+        this._dualStackRequiredIfValidator(Controls.IPv4AllowedIPRange),
+      ]),
+      [Controls.IPv4CIDRMaskSize]: this._builder.control(''),
+      [Controls.IPv6CIDRMaskSize]: this._builder.control(''),
+      [Controls.NodeLocalDNSCache]: this._builder.control(false),
     });
 
     this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
@@ -189,8 +228,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .pipe(
         tap((datacenter: Datacenter) => {
           this._datacenterSpec = datacenter;
+          this.isDualStackAllowed = !!datacenter.spec.ipv6Enabled;
           this._enforce(Controls.AuditLogging, datacenter.spec.enforceAuditLogging);
           this._enforcePodSecurityPolicy(datacenter.spec.enforcePodSecurityPolicy);
+          this._setNetworkDefaults();
         })
       )
       .pipe(switchMap(_ => this._datacenterService.seedSettings(this._datacenterSpec.spec.seed)))
@@ -198,13 +239,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .subscribe((seedSettings: SeedSettings) => (this._seedSettings = seedSettings));
 
     this._clusterSpecService.providerChanges
-      .pipe(
-        tap(_ =>
-          this.isAllowedIPRangeSupported()
-            ? (this._getExtraCloudSpecOptions().nodePortsAllowedIPRange = this._defaultAllowedIPRange)
-            : null
-        )
-      )
       .pipe(switchMap(provider => this._clusterService.getMasterVersions(provider)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setDefaultVersion.bind(this));
@@ -270,9 +304,26 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         }
       });
 
-    merge(this.control(Controls.AllowedIPRange).valueChanges)
+    merge(
+      this.control(Controls.IPFamily).valueChanges,
+      this.control(Controls.IPv4AllowedIPRange).valueChanges,
+      this.control(Controls.IPv6AllowedIPRange).valueChanges
+    )
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(ipRange => (this._getExtraCloudSpecOptions().nodePortsAllowedIPRange = ipRange));
+      .subscribe(_ => {
+        let cidrBlocks = [];
+        const ipv4AllowedIPRange = this.controlValue(Controls.IPv4AllowedIPRange);
+        if (ipv4AllowedIPRange) {
+          const ipv6AllowedIPRange = this.controlValue(Controls.IPv6AllowedIPRange);
+          cidrBlocks =
+            this.isDualStackIPFamilySelected() && ipv6AllowedIPRange
+              ? [ipv4AllowedIPRange, ipv6AllowedIPRange]
+              : [ipv4AllowedIPRange];
+        }
+        this._getExtraCloudSpecOptions().nodePortsAllowedIPRanges = {cidrBlocks};
+      });
+
+    this._initDualStackControlsValueChangeListeners();
 
     merge(
       this.form.get(Controls.Name).valueChanges,
@@ -287,8 +338,14 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.MLAMonitoring).valueChanges,
       this.form.get(Controls.ContainerRuntime).valueChanges,
       this.form.get(Controls.ProxyMode).valueChanges,
-      this.form.get(Controls.PodsCIDR).valueChanges,
-      this.form.get(Controls.ServicesCIDR).valueChanges,
+      this.form.get(Controls.IPFamily).valueChanges,
+      this.form.get(Controls.IPv4PodsCIDR).valueChanges,
+      this.form.get(Controls.IPv4ServicesCIDR).valueChanges,
+      this.form.get(Controls.IPv4CIDRMaskSize).valueChanges,
+      this.form.get(Controls.IPv6PodsCIDR).valueChanges,
+      this.form.get(Controls.IPv6ServicesCIDR).valueChanges,
+      this.form.get(Controls.IPv6CIDRMaskSize).valueChanges,
+      this.form.get(Controls.NodeLocalDNSCache).valueChanges,
       this.form.get(Controls.CNIPlugin).valueChanges,
       this.form.get(Controls.CNIPluginVersion).valueChanges
     )
@@ -363,6 +420,37 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     );
   }
 
+  isDualStackIPFamilySelected(): boolean {
+    return this.form.get(Controls.IPFamily).value === IPFamily.DualStack;
+  }
+
+  private _dualStackRequiredIfValidator(control: Controls): ValidatorFn {
+    return KmValidators.requiredIf(() => this.isDualStackIPFamilySelected() && !!this.form.get(control).value);
+  }
+
+  private _initDualStackControlsValueChangeListeners(): void {
+    const ipv4Controls = [Controls.IPv4PodsCIDR, Controls.IPv4ServicesCIDR, Controls.IPv4AllowedIPRange];
+    const ipv6Controls = [Controls.IPv6PodsCIDR, Controls.IPv6ServicesCIDR, Controls.IPv6AllowedIPRange];
+
+    merge(
+      this.control(Controls.IPFamily).valueChanges,
+      ...ipv6Controls.map(control => this.control(control).valueChanges)
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        ipv4Controls.forEach(control => this.control(control).updateValueAndValidity({emitEvent: false}));
+      });
+
+    merge(
+      this.control(Controls.IPFamily).valueChanges,
+      ...ipv4Controls.map(control => this.control(control).valueChanges)
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        ipv6Controls.forEach(control => this.control(control).updateValueAndValidity({emitEvent: false}));
+      });
+  }
+
   private _enforce(control: Controls, isEnforced: boolean): void {
     if (isEnforced) {
       this.form.get(control).disable();
@@ -394,6 +482,47 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     }
   }
 
+  private _setNetworkDefaults(): void {
+    if (!this.isDualStackAllowed) {
+      this.control(Controls.IPFamily).reset();
+      this.control(Controls.IPFamily).setValue(IPFamily.IPv4);
+    }
+
+    this._clusterService
+      .getClusterNetworkDefaults(this._clusterSpecService.provider, this._clusterSpecService.datacenter)
+      .pipe(take(1))
+      .subscribe({
+        next: networkDefaults => {
+          this.form.patchValue({
+            [Controls.ProxyMode]: networkDefaults.proxyMode,
+            [Controls.NodeLocalDNSCache]: networkDefaults.nodeLocalDNSCacheEnabled,
+            [Controls.IPv4PodsCIDR]: networkDefaults.ipv4?.podsCidr || '',
+            [Controls.IPv4ServicesCIDR]: networkDefaults.ipv4?.servicesCidr || '',
+            [Controls.IPv4CIDRMaskSize]: networkDefaults.ipv4?.nodeCidrMaskSize,
+          });
+          if (this.isDualStackAllowed) {
+            this.form.patchValue({
+              [Controls.IPv6PodsCIDR]: networkDefaults.ipv6?.podsCidr || '',
+              [Controls.IPv6ServicesCIDR]: networkDefaults.ipv6?.servicesCidr || '',
+              [Controls.IPv6CIDRMaskSize]: networkDefaults.ipv6?.nodeCidrMaskSize,
+            });
+          }
+          if (this.isAllowedIPRangeSupported()) {
+            this.form.patchValue({
+              [Controls.IPv4AllowedIPRange]:
+                networkDefaults.ipv4?.nodePortsAllowedIPRange || this._defaultAllowedIPRange,
+              [Controls.IPv6AllowedIPRange]: networkDefaults.ipv6?.nodePortsAllowedIPRange || '',
+            });
+          } else {
+            this.form.patchValue({
+              [Controls.IPv4AllowedIPRange]: null,
+              [Controls.IPv6AllowedIPRange]: null,
+            });
+          }
+        },
+      });
+  }
+
   private _getExtraCloudSpecOptions(): ExtraCloudSpecOptions {
     return (
       this._clusterSpecService.cluster?.spec?.cloud[this._clusterSpecService.provider] || ({} as ExtraCloudSpecOptions)
@@ -401,12 +530,35 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   }
 
   private _getClusterEntity(): Cluster {
-    const pods = this.controlValue(Controls.PodsCIDR);
-    const services = this.controlValue(Controls.ServicesCIDR);
+    const ipv4Pods = this.controlValue(Controls.IPv4PodsCIDR);
+    const ipv4Services = this.controlValue(Controls.IPv4ServicesCIDR);
     const cniPluginType = this.controlValue(Controls.CNIPlugin);
     const cniPluginVersion = this.controlValue(Controls.CNIPluginVersion);
     const cniPlugin = cniPluginType ? {type: cniPluginType, version: cniPluginVersion} : null;
     const konnectivity = this.isKonnectivityEnabled ? this.controlValue(Controls.Konnectivity) : null;
+    const clusterNetwork = {
+      ipFamily: this.controlValue(Controls.IPFamily),
+      proxyMode: this.controlValue(Controls.ProxyMode),
+      pods: {cidrBlocks: ipv4Pods ? [ipv4Pods] : []},
+      services: {cidrBlocks: ipv4Services ? [ipv4Services] : []},
+      nodeCidrMaskSizeIPv4: this.controlValue(Controls.IPv4CIDRMaskSize),
+      nodeLocalDNSCacheEnabled: this.controlValue(Controls.NodeLocalDNSCache),
+      konnectivityEnabled: konnectivity,
+    } as ClusterNetwork;
+
+    if (this.isDualStackIPFamilySelected()) {
+      const ipv6Pods = this.controlValue(Controls.IPv6PodsCIDR);
+      if (ipv4Pods && ipv6Pods) {
+        clusterNetwork.pods.cidrBlocks = [...clusterNetwork.pods.cidrBlocks, ipv6Pods];
+      }
+      const ipv6Services = this.controlValue(Controls.IPv6ServicesCIDR);
+      if (ipv4Services && ipv6Services) {
+        clusterNetwork.services.cidrBlocks = [...clusterNetwork.services.cidrBlocks, ipv6Services];
+      }
+      clusterNetwork.nodeCidrMaskSizeIPv6 = this.controlValue(Controls.IPv6CIDRMaskSize);
+    } else {
+      clusterNetwork.nodeCidrMaskSizeIPv6 = null;
+    }
 
     return {
       name: this.controlValue(Controls.Name),
@@ -426,12 +578,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         enableUserSSHKeyAgent: this.controlValue(Controls.UserSSHKeyAgent),
         enableOperatingSystemManager: this.controlValue(Controls.OperatingSystemManager),
         containerRuntime: this.controlValue(Controls.ContainerRuntime),
-        clusterNetwork: {
-          proxyMode: this.controlValue(Controls.ProxyMode),
-          pods: {cidrBlocks: pods ? [pods] : []},
-          services: {cidrBlocks: services ? [services] : []},
-          konnectivityEnabled: konnectivity,
-        },
+        clusterNetwork,
         cniPlugin: cniPlugin,
       } as ClusterSpec,
     } as Cluster;

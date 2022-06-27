@@ -33,6 +33,7 @@ export class DatacenterSpec {
   requiredEmails?: string[];
   enforceAuditLogging: boolean;
   enforcePodSecurityPolicy: boolean;
+  ipv6Enabled?: boolean;
   digitalocean?: DigitaloceanDatacenterSpec;
   bringyourown?: BringYourOwnDatacenterSpec;
   aws?: AWSDatacenterSpec;
