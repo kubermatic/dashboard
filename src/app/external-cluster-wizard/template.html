@@ -43,7 +43,8 @@ limitations under the License.
            class="wizard-step">
 
         <ng-container *ngSwitchCase="stepRegistry.Provider">
-          <km-select-external-cluster-provider (externalProvider)="onExternalProviderChanged($event)"></km-select-external-cluster-provider>
+          <km-select-external-cluster-provider [externalProviders]="externalProviders"
+                                               (externalProvider)="onExternalProviderChanged($event)"></km-select-external-cluster-provider>
         </ng-container>
 
         <ng-container *ngSwitchCase="stepRegistry.Credentials">

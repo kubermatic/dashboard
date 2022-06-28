@@ -35,6 +35,7 @@ import {ExternalWizardStep, StepRegistry, WizardSteps} from './config';
 export class ExternalClusterWizardComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   readonly stepRegistry = StepRegistry;
+  readonly externalProviders = [ExternalClusterProvider.EKS];
   form: FormGroup;
   project = {} as Project;
   @ViewChild('stepper', {static: true}) private readonly _stepper: MatStepper;

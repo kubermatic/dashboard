@@ -31,6 +31,7 @@ enum Controls {
 export class ExternalClusterProviderStepComponent implements OnInit, OnDestroy {
   readonly controls = Controls;
   readonly provider = ExternalClusterProvider;
+  readonly externalProviders = [ExternalClusterProvider.AKS, ExternalClusterProvider.EKS, ExternalClusterProvider.GKE];
   form: FormGroup;
   private readonly _unsubscribe = new Subject<void>();
 
