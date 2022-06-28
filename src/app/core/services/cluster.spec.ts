@@ -24,7 +24,7 @@ import {AppConfigService} from '@app/config.service';
 import {environment} from '@environments/environment';
 
 import {fakeProject} from '@test/data/project';
-import {RequestType} from '@shared/types/request-type';
+import {RequestType} from '@test/types/request-type';
 import {machineDeploymentsFake} from '@test/data/node';
 import {fakeDigitaloceanCluster} from '@test/data/cluster';
 import {AppConfigMockService} from '@test/services/app-config-mock';
