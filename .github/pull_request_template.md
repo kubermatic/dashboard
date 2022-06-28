@@ -1,20 +1,18 @@
-### What this PR does / why we need it
+**What does this PR do / Why do we need it**:
 
-### Which issue(s) this PR fixes
-<!--
-Use one of the GitHub's keywords to link connected Issues/PRs.
-Keyword list: https://docs.github.com/en/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword
--->
+**Which issue(s) this PR fixes** :<!-- optional, in `fixes #<issue number>(, fixes #<issue_number>, ...)` format, will close the issue(s) when PR gets merged -->
 
-### Special notes for your reviewer
-<!-- Remove if not needed -->
+Fixes #
 
-### Release note
+**Special notes for your reviewer**:
+
+**Optional Release Note**:
 <!--
 Write your release note:
 1. Enter your extended release note in the below block. If the PR requires additional action from users switching to the new release, include the string "action required".
-2. If no release note is required, just leave "NONE".
+2. If no release note is required, just write "NONE".
 -->
 ```release-note
 NONE
 ```
+
