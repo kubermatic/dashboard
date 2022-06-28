@@ -233,7 +233,15 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       case OperatingSystem.CentOS:
         return !this.isProvider(NodeProvider.ANEXIA, NodeProvider.GCP);
       case OperatingSystem.RockyLinux:
-        return this.isProvider(NodeProvider.HETZNER);
+        return this.isProvider(
+          NodeProvider.HETZNER,
+          NodeProvider.AWS,
+          NodeProvider.AZURE,
+          NodeProvider.DIGITALOCEAN,
+          NodeProvider.VSPHERE,
+          NodeProvider.OPENSTACK,
+          NodeProvider.KUBEVIRT
+        );
     }
   }
 

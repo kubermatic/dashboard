@@ -135,6 +135,9 @@ export class VSphereBasicNodeDataComponent extends BaseFormValidator implements 
       case OperatingSystem.Flatcar:
         this._defaultTemplate = this._templates.flatcar;
         break;
+      case OperatingSystem.RHEL:
+        this._defaultTemplate = this._templates.rhel;
+        break;
       case OperatingSystem.RockyLinux:
         this._defaultTemplate = this._templates.rockyLinux;
         break;
