@@ -6,7 +6,7 @@ Fixes #
 
 **Special notes for your reviewer**:
 
-**Optional Release Note**:
+**Release Note**:
 <!--
 Write your release note:
 1. Enter your extended release note in the below block. If the PR requires additional action from users switching to the new release, include the string "action required".
