@@ -27,9 +27,14 @@ export class EKSCloudSpec {
 
 export class EKSClusterSpec {
   roleArn: string;
-  version: string;
+  version?: string;
   vpcConfigRequest: {
     securityGroupIds: string[];
     subnetIds: string[];
   };
+}
+
+export interface EKSVpc {
+  default: boolean;
+  id: string;
 }

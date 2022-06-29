@@ -12,8 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-[buttonid] {
-  margin-left: 10px;
+@use 'variables';
+@use 'mixins';
+
+.button-navigation {
+  margin-top: 30px;
+
+  button {
+    margin-left: 10px;
+  }
+
+  km-button {
+    margin-left: 10px;
+  }
+}
+
+.wizard-step {
+  cursor: default;
+  font-size: variables.$font-size-subhead;
+  font-weight: 400;
+  margin-bottom: 0;
+  margin-top: 0;
+  padding-top: 20px;
+  user-select: none;
+
+  &.active {
+    font-weight: 500;
+  }
+
+  &.completed {
+    cursor: pointer;
+  }
 }
 
 mat-card {

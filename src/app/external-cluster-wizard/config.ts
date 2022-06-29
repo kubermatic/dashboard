@@ -12,7 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export class ExternalWizardStep {
+export enum StepRegistry {
+  Provider = 'Provider',
+  Credentials = 'Credentials',
+  ExternalClusterDetails = 'External Cluster Details',
+}
+
+export class ExternalClusterWizardStep {
   name: string;
   enabled: boolean;
 
@@ -22,25 +28,16 @@ export class ExternalWizardStep {
   }
 
   get id(): string {
-    return this.name.toLowerCase().replace(' ', '-');
+    return this.name.toLowerCase().replace(/ /g, '-');
   }
 
-  static newWizardStep(name: string, enabled = true): ExternalWizardStep {
-    return new ExternalWizardStep(name, enabled);
+  static newWizardStep(name: string, enabled = true): ExternalClusterWizardStep {
+    return new ExternalClusterWizardStep(name, enabled);
   }
 }
 
-export enum StepRegistry {
-  Provider = 'Provider',
-  Credentials = 'Credentials',
-  ExternalClusterDetails = 'External Cluster Details',
-}
-
-/**
- * Define all possible steps here.
- */
-export const WizardSteps: ExternalWizardStep[] = [
-  ExternalWizardStep.newWizardStep(StepRegistry.Provider),
-  ExternalWizardStep.newWizardStep(StepRegistry.Credentials),
-  ExternalWizardStep.newWizardStep(StepRegistry.ExternalClusterDetails),
+export const WizardSteps: ExternalClusterWizardStep[] = [
+  ExternalClusterWizardStep.newWizardStep(StepRegistry.Provider),
+  ExternalClusterWizardStep.newWizardStep(StepRegistry.Credentials),
+  ExternalClusterWizardStep.newWizardStep(StepRegistry.ExternalClusterDetails),
 ];

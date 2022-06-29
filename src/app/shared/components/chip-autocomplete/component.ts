@@ -15,6 +15,7 @@
 import {COMMA, ENTER, SPACE} from '@angular/cdk/keycodes';
 import {
   Component,
+  ElementRef,
   EventEmitter,
   forwardRef,
   Input,
@@ -38,8 +39,9 @@ import {
 } from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatChipInputEvent} from '@angular/material/chips';
+import {KmValidators} from '@shared/validators/validators';
 import {Subject} from 'rxjs';
-import {map, startWith, takeUntil} from 'rxjs/operators';
+import {debounceTime, map, takeUntil} from 'rxjs/operators';
 
 enum Controls {
   Tags = 'tags',
@@ -68,36 +70,26 @@ enum Controls {
 })
 export class ChipAutocompleteComponent implements OnChanges, OnInit, OnDestroy, ControlValueAccessor, Validator {
   readonly Controls = Controls;
-
   form: FormGroup;
-  allTags: string[] = [];
   filteredTags: string[] = [];
   selectedTags: string[] = [];
   separatorKeysCodes: number[] = [ENTER, COMMA, SPACE];
-
   @Input() label: string;
   @Input() title: string;
   @Input() tags: string[] = [];
   @Input() description = 'Use comma, enter or space key as the separator.';
   @Input() placeholder = 'Select single or multiple values';
   @Input() required = false;
-
-  // Note: Event to emit selected values in order to use this component as independent component.
-  @Output() Change = new EventEmitter<string[]>();
-  @ViewChild('tagInput') tagInput: any;
-
+  @Output() change = new EventEmitter<string[]>();
+  @ViewChild('tagInput') tagInput: ElementRef;
+  private readonly _debounceTime = 250;
   private _unsubscribe = new Subject<void>();
 
   constructor(private readonly _builder: FormBuilder) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes && changes.tags) {
-      this.allTags = changes.tags.currentValue;
-      this.filteredTags = this.allTags;
-
-      if (this.allTags.length === 0) {
-        this.selectedTags = [];
-      }
+    if (changes?.tags) {
+      this.filteredTags = this._removeSelectedTagsFromList();
     }
   }
 
@@ -112,32 +104,23 @@ export class ChipAutocompleteComponent implements OnChanges, OnInit, OnDestroy, 
   }
 
   addTag(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
+    const value = event.value?.trim();
     if (value) {
       this.selectedTags.push(value);
     }
-    // Clear the input value
-    event.chipInput!.clear();
-    this._patchValue();
-    this.Change.emit(this.selectedTags);
+    event.chipInput?.clear();
+    this._valueUpdated();
   }
 
   removeTag(tag: string): void {
-    const index = this.selectedTags.indexOf(tag);
-    if (index >= 0) {
-      this.selectedTags.splice(index, 1);
-    }
-    this._patchValue();
-    this.filteredTags = this._removeSelectedTagsFromList();
-    this.Change.emit(this.selectedTags);
+    this.selectedTags = this.selectedTags.filter(selectedTag => selectedTag !== tag);
+    this._valueUpdated();
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
     this.selectedTags.push(event.option.viewValue);
     this.tagInput.nativeElement.value = '';
-    this._patchValue();
-    this.filteredTags = this._removeSelectedTagsFromList();
-    this.Change.emit(this.selectedTags);
+    this._valueUpdated();
   }
 
   validate(_: AbstractControl): ValidationErrors {
@@ -145,35 +128,46 @@ export class ChipAutocompleteComponent implements OnChanges, OnInit, OnDestroy, 
   }
 
   writeValue(tags: string[]): void {
-    if (tags && tags.length > 0) {
-      this.form.get(Controls.Tags).setValue(tags, {emitEvent: false});
-    }
+    this.form.get(Controls.Tags).setValue(tags, {emitEvent: false});
+    this.selectedTags = tags;
+    this._valueUpdated();
   }
 
-  registerOnChange(fn: any): void {
+  registerOnChange(fn: () => unknown): void {
     this.form.get(Controls.Tags).valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(fn);
   }
 
-  registerOnTouched(_: any): void {}
+  registerOnTouched(_: () => unknown): void {}
 
   private _initForm() {
     this.form = this._builder.group({
       [Controls.Filter]: this._builder.control(''),
-      [Controls.Tags]: this._builder.control(this.tags, this.required ? [Validators.required] : null),
+      [Controls.Tags]: this._builder.control(
+        [],
+        this.required ? [Validators.required, KmValidators.unique()] : [KmValidators.unique()]
+      ),
     });
   }
 
   private _initSubscriptions() {
     this.form
       .get(Controls.Filter)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .valueChanges.pipe(debounceTime(this._debounceTime))
+      .pipe(takeUntil(this._unsubscribe))
       .pipe(
-        startWith(''),
-        map((tag: string) => (tag ? this._filter(tag) : this.allTags.slice()))
+        map((tag: string) => {
+          return tag ? this._filter(tag) : this.tags.slice();
+        })
       )
       .subscribe(data => {
-        this.filteredTags = data;
+        this.filteredTags = this._removeSelectedTagsFromFilterList(data);
       });
+  }
+
+  private _valueUpdated() {
+    this._patchValue();
+    this.filteredTags = this._removeSelectedTagsFromList();
+    this.change.emit(this.selectedTags);
   }
 
   private _patchValue() {
@@ -185,10 +179,14 @@ export class ChipAutocompleteComponent implements OnChanges, OnInit, OnDestroy, 
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
-    return this.allTags.filter(tag => tag.toLowerCase().includes(filterValue));
+    return this.tags?.filter(tag => tag.toLowerCase().includes(filterValue)) || [];
+  }
+
+  private _removeSelectedTagsFromFilterList(tags: string[]): string[] {
+    return tags?.filter(tag => !this.selectedTags.includes(tag)) || [];
   }
 
   private _removeSelectedTagsFromList(): string[] {
-    return this.allTags.filter(tag => !this.selectedTags.includes(tag));
+    return this.tags?.filter(tag => !this.selectedTags.includes(tag)) || [];
   }
 }

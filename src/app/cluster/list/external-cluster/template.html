@@ -19,20 +19,20 @@ limitations under the License.
   <km-search-field (queryChange)="onSearch($event)"></km-search-field>
   <div fxFlex></div>
 
-  <button id="km-create-external-cluster-btn"
-          mat-flat-button
-          [disabled]="!can(Permission.Create)"
-          (click)="loadExternalWizard()">
-    <i class="km-icon-mask km-icon-add"></i>
-    <span>Create External Cluster</span>
-  </button>
-
   <button id="km-add-external-cluster-btn"
           mat-flat-button
           [disabled]="!can(Permission.Create)"
           (click)="addExternalCluster()">
     <i class="km-icon-mask km-icon-add"></i>
     <span>Import External Cluster</span>
+  </button>
+
+  <button id="km-create-external-cluster-btn"
+          mat-flat-button
+          [disabled]="!can(Permission.Create)"
+          (click)="openWizard()">
+    <i class="km-icon-mask km-icon-add"></i>
+    <span>Create External Cluster</span>
   </button>
 </div>
 

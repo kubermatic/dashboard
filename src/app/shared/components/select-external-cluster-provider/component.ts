@@ -1,4 +1,4 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -29,10 +29,10 @@ enum Controls {
 })
 export class SelectExternalClusterProviderComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
-  readonly controls = Controls;
+  readonly Controls = Controls;
   form: FormGroup;
-  @Input() externalProviders: ExternalClusterProvider[] = [];
-  @Output() externalProvider = new EventEmitter<string>();
+  @Input() providers: ExternalClusterProvider[] = [];
+  @Output() providerChange = new EventEmitter<string>();
 
   constructor(private readonly _builder: FormBuilder) {}
 
@@ -56,6 +56,6 @@ export class SelectExternalClusterProviderComponent implements OnInit, OnDestroy
     this.form
       .get(Controls.Provider)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(provider => this.externalProvider.next(provider));
+      .subscribe(provider => this.providerChange.emit(provider));
   }
 }

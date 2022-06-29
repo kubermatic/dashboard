@@ -22,11 +22,8 @@ limitations under the License.
                            fxLayout="row wrap">
     <h3>Import</h3>
 
-    <!---------------------------->
-    <!-- Default AKS,EKS, GKE provider-->
-    <!---------------------------->
-    <km-select-external-cluster-provider [externalProviders]="externalProviders"
-                                         (externalProvider)="onExternalProviderChanged($event)">
+    <km-select-external-cluster-provider [providers]="externalProviders"
+                                         (providerChange)="onProviderChanged($event)">
     </km-select-external-cluster-provider>
 
     <h3 fxLayoutGap="10px"

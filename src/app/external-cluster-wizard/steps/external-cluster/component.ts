@@ -14,10 +14,10 @@
 
 import {Component, forwardRef, Input, OnDestroy, OnInit} from '@angular/core';
 import {ControlValueAccessor, FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator} from '@angular/forms';
-import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
+import {ExternalClusterService} from '@core/services/external-cluster';
 import {ExternalClusterProvider} from '@shared/entity/external-cluster';
 import {filter, takeUntil} from 'rxjs/operators';
-import {StepBase} from '../../base';
+import {StepBase} from '../base';
 
 enum Controls {
   EKSExternalCluster = 'EKSExternalCluster',
@@ -68,7 +68,7 @@ export class ExternalClusterStepComponent
 
   private _initForm() {
     this.form = this._builder.group({
-      [Controls.EKSExternalCluster]: '',
+      [Controls.EKSExternalCluster]: this._builder.control(''),
     });
   }
 

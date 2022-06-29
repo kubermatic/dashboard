@@ -19,14 +19,12 @@ limitations under the License.
       fxLayout.md="column"
       fxLayoutGap.md="30px"
       fxLayout.sm="column"
-      fxLayoutGap.sm="30px"
-      fxLayout.xs="column"
-      fxLayoutGap.xs="30px">
+      fxLayoutGap.sm="30px">
 
   <div fxFlex="50%"
        fxLayout="column"
        fxLayoutGap="8px">
-    <!--Heading Show on Wizard-->
+
     <mat-card-header class="km-no-padding">
       <mat-card-title>Cluster</mat-card-title>
     </mat-card-header>
@@ -46,6 +44,9 @@ limitations under the License.
         <i class="km-icon-randomize"></i>
       </button>
       <mat-hint>Enter a unique name for this cluster</mat-hint>
+      <mat-error *ngIf="form.get(Controls.RoleArn).hasError('required')">
+        Name is <strong>required</strong>.
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field>
@@ -56,8 +57,9 @@ limitations under the License.
              autocomplete="off" />
 
       <mat-hint>
-        Set the kubernetes version see list of
+        Set the kubernetes version. See list of
         <a href="https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html"
+           rel="noopener noreferrer"
            target="_blank">supported versions</a>.
       </mat-hint>
     </mat-form-field>
@@ -68,7 +70,10 @@ limitations under the License.
              type="text"
              autocomplete="off"
              [formControlName]="Controls.RoleArn" />
-      <mat-hint>Enter a unique name for your role, such as e.g eksClusterRole.</mat-hint>
+      <mat-hint>Enter a unique name for your role.</mat-hint>
+      <mat-error *ngIf="form.get(Controls.RoleArn).hasError('required')">
+        Role is <strong>required</strong>.
+      </mat-error>
     </mat-form-field>
   </div>
 
@@ -82,22 +87,21 @@ limitations under the License.
 
 
     <km-autocomplete label="VPC"
-                     emitValue="true"
                      required="true"
-                     [isLoading]="isLoading"
+                     [isLoading]="isLoadingVpcs"
                      [options]="vpcs"
-                     [formControlName]="Controls.Vpcs">
+                     [formControlName]="Controls.Vpc">
     </km-autocomplete>
 
-    <ng-container *ngIf="form.get(Controls.Vpcs).value?.main">
+    <ng-container *ngIf="form.get(Controls.Vpc).value?.main">
       <km-chip-autocomplete label="Subnet"
-                            placeholder="Select Subnet ID's"
+                            placeholder="Select Subnet IDs"
                             [tags]="subnetIds"
                             [required]="true"
                             [formControlName]="Controls.SubnetIds"></km-chip-autocomplete>
 
       <km-chip-autocomplete label="Security Groups"
-                            placeholder="Select SecurityGroup ID's"
+                            placeholder="Select SecurityGroup IDs"
                             [tags]="securityGroupIds"
                             [required]="true"
                             [formControlName]="Controls.SecurityGroupsIds"></km-chip-autocomplete>

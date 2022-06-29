@@ -14,7 +14,7 @@
 
 import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
-import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
+import {ExternalClusterService} from '@core/services/external-cluster';
 import {MatStepper} from '@angular/material/stepper';
 import {filter, take, takeUntil} from 'rxjs/operators';
 import {NotificationService} from '@core/services/notification';

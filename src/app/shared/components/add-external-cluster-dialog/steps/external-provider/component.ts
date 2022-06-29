@@ -14,7 +14,7 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
+import {ExternalClusterService} from '@core/services/external-cluster';
 import {ExternalClusterProvider} from '@shared/entity/external-cluster';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -50,8 +50,8 @@ export class ExternalClusterProviderStepComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  onExternalProviderChanged(provider: ExternalClusterProvider) {
-    this._externalClusterService.provider = provider;
+  onProviderChanged(provider: ExternalClusterProvider) {
+    this.form.get(Controls.Provider).setValue(provider);
   }
 
   private _initForm() {

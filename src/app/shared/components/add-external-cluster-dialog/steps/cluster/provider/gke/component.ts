@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
+import {ExternalClusterService} from '@core/services/external-cluster';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {MatTableDataSource} from '@angular/material/table';
@@ -22,11 +22,11 @@ import {UserService} from '@core/services/user';
 import {GKECluster} from '@app/shared/entity/provider/gke';
 
 @Component({
-  selector: 'km-gke-cluster',
+  selector: 'km-gke-cluster-select',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class GKEClusterComponent implements OnInit, OnDestroy {
+export class GKEClusterSelectComponent implements OnInit, OnDestroy {
   @Input() projectID: string;
   isInitialized = false;
   clusters: GKECluster[] = [];

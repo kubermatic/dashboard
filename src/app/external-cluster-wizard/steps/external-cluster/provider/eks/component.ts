@@ -21,66 +21,65 @@ import {
   Validator,
   Validators,
 } from '@angular/forms';
+import {StepBase} from '@app/external-cluster-wizard/steps/base';
+import {ExternalClusterService} from '@core/services/external-cluster';
 import {NameGeneratorService} from '@core/services/name-generator';
-import {NodeDataService} from '@core/services/node-data/service';
-import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
+import {EKSVpc} from '@shared/entity/provider/eks';
 import {forkJoin} from 'rxjs';
-import {finalize, takeUntil} from 'rxjs/operators';
-import {StepBase} from '@app/external-cluster-wizard/base';
+import {debounceTime, finalize, takeUntil} from 'rxjs/operators';
 
 enum Controls {
   Name = 'name',
   Version = 'version',
-  RoleArn = 'roleArn', // ClusterServiceRole
-  Vpcs = 'vpcs',
+  RoleArn = 'roleArn',
+  Vpc = 'vpc',
   SubnetIds = 'subnetIds',
   SecurityGroupsIds = 'securityGroupIds',
 }
 
 @Component({
-  selector: 'km-eks-external-cluster',
+  selector: 'km-eks-cluster-settings',
   templateUrl: './template.html',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => EKSExternalClusterComponent),
+      useExisting: forwardRef(() => EKSClusterSettingsComponent),
       multi: true,
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => EKSExternalClusterComponent),
+      useExisting: forwardRef(() => EKSClusterSettingsComponent),
       multi: true,
     },
   ],
 })
-export class EKSExternalClusterComponent
+export class EKSClusterSettingsComponent
   extends StepBase
   implements OnInit, OnDestroy, ControlValueAccessor, Validator
 {
+  private readonly _debounceTime = 500;
   readonly Controls = Controls;
-  isLoading: boolean;
+  isLoadingVpcs: boolean;
   vpcs: string[] = [];
   subnetIds: string[] = [];
   securityGroupIds: string[] = [];
   @Input() projectID: string;
-  @Input() showExtended = false; // Used only when in dialog mode.
 
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _externalClusterService: ExternalClusterService,
-    private readonly _nameGenerator: NameGeneratorService,
-    private readonly _nodeDataService: NodeDataService
+    private readonly _nameGenerator: NameGeneratorService
   ) {
     super();
   }
 
   ngOnInit(): void {
     this._initForm();
-    this._intiLookupValues();
     this._initSubscriptions();
   }
 
   ngOnDestroy(): void {
+    this.reset();
     this._unsubscribe.next();
     this._unsubscribe.complete();
   }
@@ -89,70 +88,74 @@ export class EKSExternalClusterComponent
     this.form.get(Controls.Name).setValue(this._nameGenerator.generateName());
   }
 
-  reset(): void {
-    this.subnetIds = [];
-    this.securityGroupIds = [];
-  }
-
   private _initForm() {
     this.form = this._builder.group({
-      [Controls.Name]: this._builder.control(this._nodeDataService.nodeData.name),
+      [Controls.Name]: this._builder.control('', Validators.required),
       [Controls.RoleArn]: this._builder.control('', Validators.required),
-      [Controls.Version]: this._builder.control(''),
-      [Controls.Vpcs]: this._builder.control('', Validators.required), // this will be used to show/hide subnets/security-groups dropdown
+      [Controls.Version]: this._builder.control(null),
+      [Controls.Vpc]: this._builder.control(null, Validators.required),
       [Controls.SubnetIds]: this._builder.control([], Validators.required),
       [Controls.SecurityGroupsIds]: this._builder.control([], Validators.required),
     });
   }
 
-  private _intiLookupValues() {
-    this.isLoading = true;
+  private _initSubscriptions() {
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
+      this._updateExternalClusterModel();
+      this._externalClusterService.isClusterDetailsStepValid = this.form.valid;
+    });
+
+    this.form
+      .get(Controls.Vpc)
+      .valueChanges.pipe(debounceTime(this._debounceTime))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        const vpc = this.controlValue(Controls.Vpc)?.main;
+        if (vpc) {
+          this._onVPCSelectionChange(vpc);
+        }
+        this.control(Controls.SubnetIds).setValue([]);
+        this.control(Controls.SecurityGroupsIds).setValue([]);
+      });
+
+    this._externalClusterService.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
+      if (!preset) {
+        return;
+      }
+      this._getEKSVpcs();
+    });
+
+    this._externalClusterService
+      .getProviderCredentialChangesObservable()
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(isValid => {
+        if (!isValid) {
+          return;
+        }
+        this._getEKSVpcs();
+      });
+  }
+
+  private _getEKSVpcs() {
+    this.isLoadingVpcs = true;
     this._externalClusterService
       .getEKSVpcs()
       .pipe(
         takeUntil(this._unsubscribe),
-        finalize(() => (this.isLoading = false))
+        finalize(() => (this.isLoadingVpcs = false))
       )
-      .subscribe((vpcs: any) => {
+      .subscribe((vpcs: EKSVpc[]) => {
         this.vpcs = vpcs.map(vpc => vpc.id);
-      });
-  }
-
-  private _initSubscriptions() {
-    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
-      this._updateExternalClusterModel();
-      const isFormValid = this.form.valid;
-      if (isFormValid) {
-        this._externalClusterService.isEKSExternalStepValid = isFormValid;
-      }
-    });
-
-    // Note:
-    // Fetch Subnets/Security Groups based on selected VPC
-    this.form
-      .get(Controls.Vpcs)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => {
-        const vpc = this.form.get(Controls.Vpcs).value?.main;
-        if (!vpc) {
-          this.reset();
-        } else {
-          this._onVPCSelectionChange(vpc);
-        }
       });
   }
 
   private _onVPCSelectionChange(vpc: string): void {
     forkJoin([
-      this._externalClusterService.getEKSSubnetIds(vpc),
-      this._externalClusterService.getEKSSecurityGroupIds(vpc),
-    ]).subscribe((responses: [string[], string[]]) => {
-      if (responses[0]) {
-        this.subnetIds = responses[0];
-      }
-      if (responses[1]) {
-        this.securityGroupIds = responses[1];
-      }
+      this._externalClusterService.getEKSSubnets(vpc),
+      this._externalClusterService.getEKSSecurityGroups(vpc),
+    ]).subscribe(([subnetIds, securityGroupIds]) => {
+      this.subnetIds = subnetIds;
+      this.securityGroupIds = securityGroupIds;
     });
   }
 
@@ -162,7 +165,7 @@ export class EKSExternalClusterComponent
       name: this.controlValue(Controls.Name),
       cloud: {
         eks: {
-          ...this._externalClusterService.externalCluster.cloud.eks,
+          ...this._externalClusterService.externalCluster.cloud?.eks,
           name: this.controlValue(Controls.Name),
         },
       },

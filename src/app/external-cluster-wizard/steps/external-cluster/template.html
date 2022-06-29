@@ -15,6 +15,6 @@ limitations under the License.
 -->
 <div [ngSwitch]="selectedProvider"
      fxLayout="column">
-  <km-eks-external-cluster *ngSwitchCase="Provider.EKS"
-                           [formControl]="form.get(Controls.EKSExternalCluster)"></km-eks-external-cluster>
+  <km-eks-cluster-settings *ngSwitchCase="Provider.EKS"
+                           [formControl]="form.get(Controls.EKSExternalCluster)"></km-eks-cluster-settings>
 </div>

@@ -47,7 +47,11 @@ limitations under the License.
     <mat-hint>{{description}}</mat-hint>
 
     <mat-error *ngIf="form.get(Controls.Tags).hasError('required')">
-      Value is <strong>required</strong>.
+      <span>{{label}} is <strong>required</strong>.</span>
+    </mat-error>
+
+    <mat-error *ngIf="form.get(Controls.Tags).hasError('unique')">
+      <span>Values must be <strong>unique</strong>.</span>
     </mat-error>
   </mat-form-field>
 </form>

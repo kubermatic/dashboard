@@ -13,7 +13,6 @@
 // limitations under the License.
 
 @use 'variables';
-@use 'mixins';
 
 h3 {
   font-weight: normal;
@@ -23,15 +22,4 @@ h3 {
     font-size: variables.$font-size-body;
     margin-top: 5px;
   }
-}
-
-.mat-button-toggle {
-  .mat-button-toggle-button {
-    @include mixins.size(150px, 100%);
-  }
-}
-
-.mat-button-toggle-group[group='providerGroup'] {
-  margin-bottom: 0;
-  padding-bottom: variables.$content-padding;
 }

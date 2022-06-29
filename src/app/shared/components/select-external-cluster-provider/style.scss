@@ -13,13 +13,6 @@
 // limitations under the License.
 
 @use 'variables';
-@use 'mixins';
-
-.mat-button-toggle {
-  .mat-button-toggle-button {
-    @include mixins.size(150px, 100%);
-  }
-}
 
 .mat-button-toggle-group[group='providerGroup'] {
   margin-bottom: 0;

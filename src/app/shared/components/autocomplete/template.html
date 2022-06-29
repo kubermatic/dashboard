@@ -37,7 +37,11 @@ limitations under the License.
     </mat-hint>
 
     <!-- Errors -->
-    <mat-error *ngIf="form.get(controls.Main).hasError( 'pattern')">
+    <mat-error *ngIf="form.get(controls.Main).hasError('required')">
+      <span>{{label}} is <strong>required</strong>.</span>
+    </mat-error>
+
+    <mat-error *ngIf="form.get(controls.Main).hasError('pattern')">
       <span #patternRef>
         <ng-content select="[patternError]"></ng-content>
       </span>

@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, Validators} from '@angular/forms';
+import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {SimplePresetList} from '@shared/entity/preset';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
 import {filter, map, switchMap, takeUntil} from 'rxjs/operators';
-import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
+import {ExternalClusterService} from '@core/services/external-cluster';
 
 export enum Controls {
   Preset = 'name',
@@ -33,6 +33,18 @@ export enum PresetsState {
 @Component({
   selector: 'km-credentials-presets',
   templateUrl: './template.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => CredentialsPresetsComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => CredentialsPresetsComponent),
+      multi: true,
+    },
+  ],
 })
 export class CredentialsPresetsComponent extends BaseFormValidator implements OnInit, OnDestroy {
   presetList = new SimplePresetList();

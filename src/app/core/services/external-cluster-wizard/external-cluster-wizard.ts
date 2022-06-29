@@ -14,22 +14,17 @@
 
 import {Injectable} from '@angular/core';
 import {MatStepper} from '@angular/material/stepper';
-import {ExternalWizardStep} from '@app/external-cluster-wizard/config';
+import {Subject} from 'rxjs';
+import {ExternalClusterWizardStep} from '@app/external-cluster-wizard/config';
+import {ExternalClusterService} from '@core/services/external-cluster';
 
 @Injectable()
 export class ExternalClusterWizardService {
+  private _unsubscribe = new Subject<void>();
+  private _steps: ExternalClusterWizardStep[];
   private _stepper: MatStepper;
-  private _steps: ExternalWizardStep[];
 
-  constructor() {}
-
-  get steps(): ExternalWizardStep[] {
-    return this._steps;
-  }
-
-  set steps(steps: ExternalWizardStep[]) {
-    this._steps = steps;
-  }
+  constructor(private readonly _externalClusterService: ExternalClusterService) {}
 
   get stepper(): MatStepper {
     return this._stepper;
@@ -37,5 +32,20 @@ export class ExternalClusterWizardService {
 
   set stepper(stepper: MatStepper) {
     this._stepper = stepper;
+  }
+
+  get steps(): ExternalClusterWizardStep[] {
+    return this._steps;
+  }
+
+  set steps(steps: ExternalClusterWizardStep[]) {
+    this._steps = steps;
+  }
+
+  reset(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
+    this._externalClusterService.reset();
+    this._unsubscribe = new Subject<void>();
   }
 }

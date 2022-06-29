@@ -83,7 +83,7 @@ export class ExternalCluster {
   }
 }
 
-class ExternalClusterSpec {
+export class ExternalClusterSpec {
   eksclusterSpec?: EKSClusterSpec;
   version: string;
 }

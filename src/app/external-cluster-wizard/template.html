@@ -23,11 +23,10 @@ limitations under the License.
       </mat-card-title>
     </mat-card-header>
   </div>
-  <br />
 
   <mat-horizontal-stepper linear
                           disableRipple
-                          style="transition: none"
+                          class="km-transition-none"
                           #stepper>
     <ng-template matStepperIcon="edit">
       <i class="km-icon-done"></i>
@@ -35,20 +34,21 @@ limitations under the License.
 
     <mat-step *ngFor="let step of steps; index as i;"
               fxFlex="100%"
-              style="transition: none">
+              class="km-transition-none">
       <ng-template matStepLabel>{{step.name}}</ng-template>
-      <br />
+
       <div [ngSwitch]="step.name"
            id="{{step.id}}-step"
            class="wizard-step">
 
         <ng-container *ngSwitchCase="stepRegistry.Provider">
-          <km-select-external-cluster-provider [externalProviders]="externalProviders"
-                                               (externalProvider)="onExternalProviderChanged($event)"></km-select-external-cluster-provider>
+          <km-select-external-cluster-provider [providers]="externalProviders"
+                                               (providerChange)="onProviderChanged($event)"></km-select-external-cluster-provider>
         </ng-container>
 
         <ng-container *ngSwitchCase="stepRegistry.Credentials">
           <km-external-cluster-credentials-step fxFlex="50%"
+                                                fxFlex.sm="100%"
                                                 title="Settings"
                                                 [hideLogo]="true"></km-external-cluster-credentials-step>
         </ng-container>
@@ -59,8 +59,6 @@ limitations under the License.
           </ng-container>
         </ng-container>
       </div>
-
-      <br />
 
       <div class="button-navigation"
            id="{{step.id}}-nav">
@@ -74,7 +72,7 @@ limitations under the License.
         </a>
 
         <div fxFlex></div>
-        <!-- Todo: MatSpinner-->
+
         <button *ngIf="!stepperFirstIndex"
                 type="button"
                 color="tertiary"
@@ -85,25 +83,26 @@ limitations under the License.
           <span>Back</span>
         </button>
 
-        <button *ngIf="!stepperLastIndex"
-                type="button"
-                id="km-external-cluster-wizard-{{step.id}}-next-btn"
-                fxLayoutAlign="center center"
-                mat-flat-button
-                (click)="onNext()"
-                [disabled]="isInvalidStep">
-          <i class="km-icon-mask km-icon-next"></i>
-          <span>Next</span>
-        </button>
-
-        <km-button *ngIf="stepperLastIndex"
-                   buttonId="km-external-cluster-wizard-create-btn"
-                   icon="km-icon-add"
-                   label="Create External Cluster"
-                   [disabled]="isInvalidStep"
-                   [observable]="getObservable()"
-                   (next)="onCreateSuccess($event)">
-        </km-button>
+        <div *ngIf="!stepperLastIndex; else showCreateButton">
+          <button type="button"
+                  id="km-external-cluster-wizard-{{step.id}}-next-btn"
+                  fxLayoutAlign="center center"
+                  mat-flat-button
+                  (click)="onNext()"
+                  [disabled]="isInvalidStep">
+            <i class="km-icon-mask km-icon-next"></i>
+            <span>Next</span>
+          </button>
+        </div>
+        <ng-template #showCreateButton>
+          <km-button buttonId="km-external-cluster-wizard-create-btn"
+                     icon="km-icon-add"
+                     label="Create External Cluster"
+                     [disabled]="isInvalidStep"
+                     [observable]="getObservable()"
+                     (next)="onCreateSuccess($event)">
+          </km-button>
+        </ng-template>
       </div>
     </mat-step>
   </mat-horizontal-stepper>

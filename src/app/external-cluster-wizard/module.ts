@@ -19,10 +19,10 @@ import {Routing} from './routing';
 import {NodeDataModule} from '../node-data/module';
 import {ExternalClusterWizardComponent} from './component';
 import {ExternalClusterStepComponent} from '@app/external-cluster-wizard/steps/external-cluster/component';
-import {EKSExternalClusterComponent} from '@app/external-cluster-wizard/steps/external-cluster/provider/eks/component';
-import {ExternalClusterWizardService} from '@core/services/wizard/external-cluster-wizard';
+import {EKSClusterSettingsComponent} from '@app/external-cluster-wizard/steps/external-cluster/provider/eks/component';
+import {ExternalClusterWizardService} from '@core/services/external-cluster-wizard/external-cluster-wizard';
 
-const components = [ExternalClusterWizardComponent, ExternalClusterStepComponent, EKSExternalClusterComponent];
+const components = [ExternalClusterWizardComponent, ExternalClusterStepComponent, EKSClusterSettingsComponent];
 
 @NgModule({
   imports: [SharedModule, Routing, NodeDataModule],

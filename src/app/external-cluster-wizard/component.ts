@@ -20,12 +20,12 @@ import {ClusterListTab} from '@app/cluster/list/component';
 import {ExternalCluster, ExternalClusterProvider} from '@app/shared/entity/external-cluster';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
-import {ExternalClusterWizardService} from '@core/services/wizard/external-cluster-wizard';
-import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
+import {ExternalClusterWizardService} from '@core/services/external-cluster-wizard/external-cluster-wizard';
+import {ExternalClusterService} from '@core/services/external-cluster';
 import {Project} from '@shared/entity/project';
 import {Observable, Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
-import {ExternalWizardStep, StepRegistry, WizardSteps} from './config';
+import {filter, takeUntil} from 'rxjs/operators';
+import {ExternalClusterWizardStep, StepRegistry, WizardSteps} from './config';
 
 @Component({
   selector: 'km-external-cluster-wizard',
@@ -38,22 +38,23 @@ export class ExternalClusterWizardComponent implements OnInit, OnDestroy {
   readonly externalProviders = [ExternalClusterProvider.EKS];
   form: FormGroup;
   project = {} as Project;
+
   @ViewChild('stepper', {static: true}) private readonly _stepper: MatStepper;
 
   constructor(
-    private readonly _formBuilder: FormBuilder,
+    private readonly _builder: FormBuilder,
     private readonly _externalClusterService: ExternalClusterService,
     private readonly _wizard: ExternalClusterWizardService,
     private readonly _projectService: ProjectService,
     private readonly _notificationService: NotificationService,
-    private _router: Router
+    private readonly _router: Router
   ) {}
 
-  get steps(): ExternalWizardStep[] {
+  get steps(): ExternalClusterWizardStep[] {
     return this._wizard.steps.filter(step => step.enabled);
   }
 
-  get active(): ExternalWizardStep {
+  get active(): ExternalClusterWizardStep {
     return this.steps[this._stepper.selectedIndex];
   }
 
@@ -73,7 +74,7 @@ export class ExternalClusterWizardComponent implements OnInit, OnDestroy {
         return !this._externalClusterService.isCredentialsStepValid;
       case StepRegistry.ExternalClusterDetails:
         if (this.selectedProvider === ExternalClusterProvider.EKS) {
-          return !this._externalClusterService.isEKSExternalStepValid;
+          return !this._externalClusterService.isClusterDetailsStepValid;
         }
         return false;
       default:
@@ -94,36 +95,34 @@ export class ExternalClusterWizardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // Init steps for wizard
+    this._wizard.reset();
     this._wizard.steps = WizardSteps;
     this._wizard.stepper = this._stepper;
     this._initForm(this.steps);
-    this._projectService.selectedProject
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(project => (this.project = project));
+    this._initSubscriptions();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
-    this._externalClusterService.reset();
+    this._wizard.reset();
   }
 
   onNext(): void {
     this._stepper.next();
   }
 
-  onCancel() {
-    this._router.navigate(['/projects/' + this.project.id + '/clusters'], {
+  onCancel(): void {
+    this._router.navigate(['projects', this.project.id, 'clusters'], {
       fragment: `${ClusterListTab.ExternalCluster}`,
     });
   }
 
-  onExternalProviderChanged(provider: ExternalClusterProvider) {
+  onProviderChanged(provider: ExternalClusterProvider): void {
     this._externalClusterService.provider = provider;
   }
 
-  getObservable(): Observable<any> {
+  getObservable(): Observable<ExternalCluster> {
     const createExternalClusterModel = this._externalClusterService.externalCluster;
     return this._externalClusterService
       .createExternalCluster(this.project.id, createExternalClusterModel)
@@ -132,14 +131,27 @@ export class ExternalClusterWizardComponent implements OnInit, OnDestroy {
 
   onCreateSuccess(externalCluster: ExternalCluster): void {
     this._notificationService.success(`Created the ${externalCluster.name} external cluster`);
-    this._router.navigate(['/projects/' + this.project.id + '/clusters'], {
+    this._router.navigate(['projects', this.project.id, 'clusters'], {
       fragment: `${ClusterListTab.ExternalCluster}`,
     });
   }
 
-  private _initForm(steps: ExternalWizardStep[]): void {
+  private _initForm(steps: ExternalClusterWizardStep[]): void {
     const controls = {};
-    steps.forEach(step => (controls[step.name] = this._formBuilder.control('')));
-    this.form = this._formBuilder.group(controls);
+    steps.forEach(step => (controls[step.name] = this._builder.control('')));
+    this.form = this._builder.group(controls);
+  }
+
+  private _initSubscriptions() {
+    this._externalClusterService.providerChanges
+      .pipe(filter(provider => !!provider))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        this.onNext();
+      });
+
+    this._projectService.selectedProject
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(project => (this.project = project));
   }
 }

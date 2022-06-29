@@ -54,15 +54,15 @@ import {AddClusterFromTemplateDialogComponent} from '@shared/components/add-clus
 import {SelectClusterTemplateComponent} from '@shared/components/add-cluster-from-template-dialog/steps/template/component';
 import {AddExternalClusterDialogComponent} from '@shared/components/add-external-cluster-dialog/component';
 import {ClusterStepComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/component';
-import {AKSClusterComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/aks/component';
-import {EKSClusterComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/eks/component';
-import {GKEClusterComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/gke/component';
-import {CredentialsStepComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/component';
-import {CredentialsPresetsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/preset/component';
-import {AKSCredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/aks/component';
-import {CustomCredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/custom/component';
-import {EKSCredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/eks/component';
-import {GKECredentialsComponent} from '@shared/components/add-external-cluster-dialog/steps/credentials/provider/gke/component';
+import {AKSClusterSelectComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/aks/component';
+import {EKSClusterSelectComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/eks/component';
+import {GKEClusterSelectComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/gke/component';
+import {CredentialsStepComponent} from '@shared/components/external-cluster-credentials/component';
+import {CredentialsPresetsComponent} from '@shared/components/external-cluster-credentials/preset/component';
+import {AKSCredentialsComponent} from '@shared/components/external-cluster-credentials/provider/aks/component';
+import {CustomCredentialsComponent} from '@shared/components/external-cluster-credentials/provider/custom/component';
+import {EKSCredentialsComponent} from '@shared/components/external-cluster-credentials/provider/eks/component';
+import {GKECredentialsComponent} from '@shared/components/external-cluster-credentials/provider/gke/component';
 import {ExternalClusterProviderStepComponent} from '@shared/components/add-external-cluster-dialog/steps/external-provider/component';
 import {SelectExternalClusterProviderComponent} from '@shared/components/select-external-cluster-provider/component';
 import {AutocompleteComponent} from '@shared/components/autocomplete/component';
@@ -224,9 +224,9 @@ const components = [
   EKSCredentialsComponent,
   GKECredentialsComponent,
   ClusterStepComponent,
-  AKSClusterComponent,
-  GKEClusterComponent,
-  EKSClusterComponent,
+  AKSClusterSelectComponent,
+  GKEClusterSelectComponent,
+  EKSClusterSelectComponent,
   CredentialsPresetsComponent,
   ExpansionPanelComponent,
   PropertyHealthComponent,
