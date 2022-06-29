@@ -195,8 +195,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         IPV6_CIDR_PATTERN_VALIDATOR,
         this._dualStackRequiredIfValidator(Controls.IPv4AllowedIPRange),
       ]),
-      [Controls.IPv4CIDRMaskSize]: this._builder.control(''),
-      [Controls.IPv6CIDRMaskSize]: this._builder.control(''),
+      [Controls.IPv4CIDRMaskSize]: this._builder.control(null),
+      [Controls.IPv6CIDRMaskSize]: this._builder.control(null),
       [Controls.NodeLocalDNSCache]: this._builder.control(false),
     });
 
