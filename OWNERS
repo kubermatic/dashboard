@@ -1,11 +1,7 @@
 # See the OWNERS docs: https://git.k8s.io/community/contributors/guide/owners.md
 
 approvers:
-  - khizerrehan
-  - lsviben
-  - waseem826
+  - sig-ui
 
 reviewers:
-  - khizerrehan
-  - lsviben
-  - waseem826
+  - sig-ui
