@@ -416,6 +416,10 @@
   @include mixins.provider-image('/assets/images/clouds/vsphere.png', 95px, 26px);
 }
 
+.km-provider-logo-vmware-cloud-director {
+  @include mixins.provider-image('/assets/images/clouds/vmware-cloud-director.svg', 95px, 26px);
+}
+
 .km-provider-logo-gke {
   @include mixins.provider-image('/assets/images/clouds/gke.svg', 130px, 30px);
 }
