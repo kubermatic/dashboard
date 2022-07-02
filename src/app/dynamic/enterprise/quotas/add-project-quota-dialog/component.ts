@@ -18,16 +18,12 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {NgModule} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
-import {SharedModule} from '@shared/module';
-
-import {AddProjectQuotaDialogComponent} from './add-project-quota-dialog/component';
-import {QuotasRoutingModule} from './routing';
-import {QuotasComponent} from './component';
-
-@NgModule({
-  imports: [SharedModule, QuotasRoutingModule],
-  declarations: [QuotasComponent, AddProjectQuotaDialogComponent],
+@Component({
+  selector: 'km-add-admin-dialog',
+  templateUrl: './template.html',
 })
-export class QuotasModule {}
+export class AddProjectQuotaDialogComponent implements OnInit {
+  ngOnInit(): void {}
+}

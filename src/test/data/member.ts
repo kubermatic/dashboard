@@ -57,7 +57,7 @@ export function fakeMembers(): Member[] {
 
 export function fakeMember(): Member {
   return {
-    creationTimestamp: new Date(),
+    creationTimestamp: new Date(+'2022', +'07', +'23'),
     id: '123456',
     name: 'John Doe',
     email: 'john.doe@example.com',
