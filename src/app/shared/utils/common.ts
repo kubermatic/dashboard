@@ -93,3 +93,13 @@ export function verifyJSON(data: string): boolean {
     return false;
   }
 }
+
+export function getNumberFromString(text: string): number {
+  const numberToReturn = +text?.match(/\d+/g)?.[0];
+
+  if (Number.isNaN(numberToReturn)) {
+    return 0;
+  }
+
+  return numberToReturn;
+}
