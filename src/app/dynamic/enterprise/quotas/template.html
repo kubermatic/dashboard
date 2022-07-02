@@ -1,0 +1,126 @@
+<!--
+               Kubermatic Enterprise Read-Only License
+                      Version 1.0 ("KERO-1.0”)
+                  Copyright © 2022 Kubermatic GmbH
+
+1. You may only view, read and display for studying purposes the source
+   code of the software licensed under this license, and, to the extent
+   explicitly provided under this license, the binary code.
+2. Any use of the software which exceeds the foregoing right, including,
+   without limitation, its execution, compilation, copying, modification
+   and distribution, is expressly prohibited.
+3. THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+   IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+   CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+   TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+   SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+END OF TERMS AND CONDITIONS
+-->
+
+<mat-card>
+  <mat-card-header>
+    <mat-card-title fxFlex
+                    fxLayout="column"
+                    fxLayoutAlign="start"
+                    fxLayoutGap="32px">
+      <div fxFlex>Project Quotas</div>
+
+      <div fxLayout="row"
+           fxLayoutAlign="center center">
+        <div class="filters"
+             fxLayout="row"
+             fxLayoutAlign=" center"
+             fxLayoutGap="16px">
+          <km-search-field fxFlex
+                           class="search"
+                           (queryChange)="onSearch($event)"></km-search-field>
+        </div>
+        <div fxFlex></div>
+      </div>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <table id="quotas-table"
+           class="km-table"
+           mat-table
+           matSort
+           [hidden]="isLoading || !quotas.length"
+           [dataSource]="dataSource">
+      <ng-container [matColumnDef]="Column.ProjectId">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-40"
+            mat-sort-header>Project</th>
+        <td mat-cell
+            *matCellDef="let element">{{element?.name}}</td>
+      </ng-container>
+
+      <ng-container [matColumnDef]="Column.Memory">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-5"
+            mat-sort-header>RAM</th>
+        <td mat-cell
+            *matCellDef="let element">{{element?.quota?.memory}}</td>
+      </ng-container>
+
+      <ng-container [matColumnDef]="Column.CPU">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-5"
+            mat-sort-header>CPU</th>
+        <td mat-cell
+            *matCellDef="let element">{{element?.quota?.cpu}}</td>
+      </ng-container>
+
+      <ng-container [matColumnDef]="Column.Storage">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-5"
+            mat-sort-header>Disk</th>
+        <td mat-cell
+            *matCellDef="let element">{{element?.quota?.storage}}</td>
+      </ng-container>
+
+      <ng-container [matColumnDef]="Column.Spacer">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-10"
+            mat-sort-header></th>
+        <td mat-cell
+            *matCellDef="let element"></td>
+      </ng-container>
+
+      <tr mat-header-row
+          class="km-header-row"
+          *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          class="km-mat-row"></tr>
+    </table>
+
+    <ng-container *ngIf="isLoading">
+      <div class="km-row"
+           fxLayoutAlign="center center">
+        <mat-spinner id="quotas-loading-spinner"
+                     color="accent"
+                     class="km-spinner"
+                     [diameter]="25"></mat-spinner>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="!isLoading && !this.quotas.length">
+      <div id="quotas-not-found"
+           class="km-row"
+           fxLayoutAlign="center center">No quotas found</div>
+    </ng-container>
+
+    <div id="quotas-paginator"
+         [hidden]="quotas?.length < paginator?.pageSize">
+      <mat-paginator showFirstLastButtons></mat-paginator>
+    </div>
+  </mat-card-content>
+</mat-card>
