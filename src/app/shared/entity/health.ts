@@ -26,6 +26,8 @@ export class Health {
   alertmanagerConfig?: HealthState;
   logging?: HealthState;
   monitoring?: HealthState;
+  kubernetesDashboard?: HealthState;
+  operatingSystemManager?: HealthState;
 
   static allHealthy(health: Health): boolean {
     const supported = [
@@ -62,6 +64,8 @@ export enum HealthType {
   AlertmanagerConfig = 'alertmanagerConfig',
   Logging = 'logging',
   Monitoring = 'monitoring',
+  KubernetesDashboard = 'kubernetesDashboard',
+  OperatingSystemManager = 'operatingSystemManager',
 }
 
 export namespace HealthState {

@@ -116,6 +116,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     return Object.keys(AdmissionPlugin);
   }
 
+  get kubernetesDashboardHealth(): boolean {
+    return this.health?.kubernetesDashboard === HealthState.Up;
+  }
+
   constructor(
     private readonly _route: ActivatedRoute,
     private readonly _router: Router,
