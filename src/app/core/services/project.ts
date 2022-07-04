@@ -93,9 +93,13 @@ export class ProjectService {
   }
 
   selectProject(project: Project): Promise<boolean> {
+    let projectLandingPage: string;
     if (project?.status === ProjectStatus.Active) {
       this.onProjectChange.emit(project);
-      return this._router.navigate([`/projects/${project.id}/overview`]);
+      this._userService.currentUser.subscribe(settings => {
+        projectLandingPage = settings.userSettings.useClustersView ? 'clusters' : 'overview';
+      });
+      return this._router.navigate([`/projects/${project.id}/${projectLandingPage}`]);
     }
 
     return this._router.navigate(['/projects']);

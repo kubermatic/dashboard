@@ -174,8 +174,8 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       this._sortProjectOwners();
       this.dataSource.data = this.projects;
 
-      if (this._shouldRedirectToCluster()) {
-        this._redirectToCluster();
+      if (this._shouldRedirectToProjectLandingPage()) {
+        this._redirectToProjectLandingPage();
       }
       this.isInitializing = false;
       this.selectDefaultProject();
@@ -494,14 +494,15 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       });
   }
 
-  private _shouldRedirectToCluster(): boolean {
+  private _shouldRedirectToProjectLandingPage(): boolean {
     const autoredirect: boolean = this._cookieService.get(this._cookie.autoredirect) === 'true';
     this._cookieService.delete(this._cookie.autoredirect, '/');
     return this.projects.length === 1 && autoredirect;
   }
 
-  private _redirectToCluster(): void {
-    this._router.navigate([`/projects/${this.projects[0].id}/clusters`]);
+  private _redirectToProjectLandingPage(): void {
+    const projectLandingPage = this._apiSettings.useClustersView ? 'clusters' : 'overview';
+    this._router.navigate([`/projects/${this.projects[0].id}/${projectLandingPage}`]);
   }
 
   private _isPaginatorVisible(): boolean {

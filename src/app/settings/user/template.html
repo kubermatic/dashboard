@@ -98,6 +98,26 @@ limitations under the License.
         <km-spinner-with-confirmation [isSaved]="isEqual(settings.selectedProjectID, apiSettings.selectedProjectID)"
                                       fxFlexAlign=" center"></km-spinner-with-confirmation>
       </div>
+      <div fxLayout="row">
+        <div class="entry-label"
+             fxLayoutAlign=" center">Project Landing Page
+        </div>
+        <mat-button-toggle-group [(value)]="selectedProjectLandingPage"
+                                 (change)="changingLandingPage($event.value)">
+          <mat-button-toggle class="project-overview-button"
+                             value="ProjectOverView">
+            <i class="km-icon-mask km-icon-projects-card"></i>
+            Project Overview
+          </mat-button-toggle>
+          <mat-button-toggle class="clusters-button"
+                             value="Clusters">
+            <i class="km-icon-mask km-icon-cluster"></i>
+            Clusters
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+        <km-spinner-with-confirmation [isSaved]="isEqual(settings.useClustersView, apiSettings.useClustersView)"
+                                      fxFlexAlign=" center"></km-spinner-with-confirmation>
+      </div>
     </div>
   </mat-card-content>
 </mat-card>

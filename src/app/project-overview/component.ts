@@ -33,6 +33,7 @@ import {ClusterTemplate} from '@shared/entity/cluster-template';
 import {BackupService} from '@core/services/backup';
 import {EtcdBackupConfig} from '@shared/entity/backup';
 import {Health} from '@shared/entity/health';
+import {CookieService} from 'ngx-cookie-service';
 
 @Component({
   selector: 'km-project-overview',
@@ -57,6 +58,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   private _projectChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
   private readonly _refreshTime = 15;
+  firstVisite: string;
 
   constructor(
     private readonly _projectService: ProjectService,
@@ -67,7 +69,8 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     private readonly _memberService: MemberService,
     private readonly _serviceAccountService: ServiceAccountService,
     private readonly _settingsService: SettingsService,
-    private readonly _appConfigService: AppConfigService
+    private readonly _appConfigService: AppConfigService,
+    private readonly _cookieService: CookieService
   ) {}
 
   ngOnInit(): void {
@@ -80,6 +83,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     this._loadSSHKeys();
     this._loadMembers();
     this._loadServiceAccounts();
+    this._checkFirstVisit();
   }
 
   ngOnDestroy(): void {
@@ -189,5 +193,15 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
       .pipe(switchMap(() => (this.project ? this._serviceAccountService.get(this.project.id) : EMPTY)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(serviceAccounts => (this.serviceAccounts = serviceAccounts));
+  }
+
+  private _checkFirstVisit(): void {
+    this._cookieService.get('firstVisit')
+      ? this.hideFirstVisitMessage()
+      : this._cookieService.set('firstVisit', 'visited', null, '/', 'localhost', false, 'Lax');
+  }
+
+  hideFirstVisitMessage(): void {
+    this.firstVisite = this._cookieService.get('firstVisit');
   }
 }

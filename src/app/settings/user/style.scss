@@ -48,6 +48,26 @@
   }
 }
 
+.project-overview-button {
+  @include mixins.size(170px, 45px, $force: true);
+
+  i {
+    margin-right: 10px;
+    min-height: 28px;
+    min-width: 28px;
+  }
+}
+
+.clusters-button {
+  @include mixins.size(110px, 45px, $force: true);
+
+  i {
+    margin-right: 10px;
+    min-height: 28px;
+    min-width: 28px;
+  }
+}
+
 .km-pointer {
   margin-left: 8px;
 }

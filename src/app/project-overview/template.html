@@ -13,7 +13,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-
+<mat-card class="first-visit-message km-text"
+          *ngIf="!firstVisite">
+  Welcome to the new Project Overview! You can change your project landing page in
+  <a class="km-text-muted"
+     href="/account">User Settings.</a>
+  <i class="km-icon-close km-pointer"
+     (click)="hideFirstVisitMessage()"></i>
+</mat-card>
 <div fxLayout="column"
      fxLayoutGap="20px">
   <mat-card>

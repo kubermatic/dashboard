@@ -38,6 +38,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
   user: Member;
   settings: UserSettings; // Local settings copy. User can edit it.
   apiSettings: UserSettings; // Original settings from the API. Cannot be edited by the user.
+  selectedProjectLandingPage: string;
 
   private readonly _debounceTime = 1000;
   private _settingsChange = new Subject<void>();
@@ -60,6 +61,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
         }
         this.apiSettings = settings;
         this.settings = _.cloneDeep(this.apiSettings);
+        this.selectedProjectLandingPage = this.settings.useClustersView ? 'Clusters' : 'ProjectOverView';
       }
     });
 
@@ -82,6 +84,11 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  changingLandingPage(landingPage: string): void {
+    landingPage === 'Clusters' ? (this.settings.useClustersView = true) : (this.settings.useClustersView = false);
+    this.onSettingsChange();
   }
 
   onSettingsChange(): void {
