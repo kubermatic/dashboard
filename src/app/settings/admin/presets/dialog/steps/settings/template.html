@@ -80,6 +80,9 @@ limitations under the License.
       <km-vsphere-settings *ngSwitchCase="Providers.VSPHERE"
                            [formControl]="form.get(Controls.Settings)">
       </km-vsphere-settings>
+      <km-vmware-cloud-director-settings *ngSwitchCase="Providers.VMWARECLOUDDIRECTOR"
+                                         [formControl]="form.get(Controls.Settings)">
+      </km-vmware-cloud-director-settings>
     </div>
 
     <ng-container *ngIf="!isExternal()">

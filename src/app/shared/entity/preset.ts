@@ -76,6 +76,7 @@ export class CreatePresetSpec {
   openstack?: OpenstackPresetSpec;
   packet?: EquinixPresetSpec;
   vsphere?: VSpherePresetSpec;
+  vmwareclouddirector?: VMwareCloudDirectorPresetSpec;
 
   requiredEmails?: string[];
   enabled?: boolean;
@@ -210,4 +211,13 @@ export class VSpherePresetSpec extends PresetProviderSpec {
   datastore?: string;
   datastoreCluster?: string;
   resourcePool?: string;
+}
+
+export class VMwareCloudDirectorPresetSpec extends PresetProviderSpec {
+  username: string;
+  password: string;
+
+  organization: string;
+  vdc: string;
+  ovdcNetwork: string;
 }
