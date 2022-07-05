@@ -42,7 +42,7 @@ limitations under the License.
             class="km-share-kubeconfig-btn"
             color="alternative"
             (click)="shareConfigDialog()"
-            [disabled]="!isClusterRunning"
+            [disabled]="!kubernetesDashboardHealth"
             *ngIf="isShareConfigEnabled() | async">
       <i class="km-icon-mask km-icon-share"></i>
       <span>Share</span>
@@ -50,7 +50,7 @@ limitations under the License.
     <km-button color="alternative"
                icon="km-icon-download"
                label="Get Kubeconfig"
-               [disabled]="!isClusterRunning"
+               [disabled]="!kubernetesDashboardHealth"
                [observable]="getObservable()"
                (next)="onNext($event)">
     </km-button>
@@ -69,7 +69,7 @@ limitations under the License.
        [href]="getProxyURL()"
        target="_blank"
        mat-flat-button
-       [disabled]="!isClusterRunning"
+       [disabled]="!kubernetesDashboardHealth"
        *ngIf="(settings.adminSettings | async)?.enableDashboard">
       <i class="km-icon-mask km-icon-external-link"></i>
       <span>Open Dashboard</span>
