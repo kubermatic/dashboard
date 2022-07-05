@@ -12,29 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export class EKSCluster {
-  name: string;
-  region: string;
-  imported: boolean;
-}
-
-export class EKSCloudSpec {
-  name: string;
-  accessKeyID?: string;
-  secretAccessKey?: string;
-  region?: string;
-}
-
-export class EKSClusterSpec {
-  roleArn: string;
-  version?: string;
-  vpcConfigRequest: {
-    securityGroupIds: string[];
-    subnetIds: string[];
-  };
-}
-
-export interface EKSVpc {
-  default: boolean;
-  id: string;
+:host {
+  width: 100%;
 }

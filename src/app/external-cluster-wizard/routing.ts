@@ -1,4 +1,4 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,26 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'variables';
-@use 'mixins';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {AuthGuard} from '@core/services/auth/guard';
+import {ExternalClusterWizardComponent} from './component';
 
-h3 {
-  font-weight: normal;
-  width: 100%;
+const routes: Routes = [
+  {
+    path: '',
+    component: ExternalClusterWizardComponent,
+    canActivate: [AuthGuard],
+  },
+];
 
-  .tooltip {
-    font-size: variables.$font-size-body;
-    margin-top: 5px;
-  }
-}
-
-.mat-button-toggle {
-  .mat-button-toggle-button {
-    @include mixins.size(150px, 100%);
-  }
-}
-
-.mat-button-toggle-group[group='providerGroup'] {
-  margin-bottom: 0;
-  padding-bottom: variables.$content-padding;
-}
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
+})
+export class Routing {}

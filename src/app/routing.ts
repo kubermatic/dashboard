@@ -43,6 +43,10 @@ function createRouting(): Routes {
           loadChildren: () => import('./wizard/module').then(m => m.WizardModule),
         },
         {
+          path: 'projects/:projectID/external-cluster-wizard',
+          loadChildren: () => import('./external-cluster-wizard/module').then(m => m.ExternalClusterModule),
+        },
+        {
           path: 'projects/:projectID/sshkeys',
           loadChildren: () => import('./sshkey/module').then(m => m.SSHKeyModule),
         },

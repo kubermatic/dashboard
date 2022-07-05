@@ -1,5 +1,5 @@
 <!--
-Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,15 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-
-<div class="km-provider-logo km-provider-logo-{{provider}}"></div>
-
-<div [ngSwitch]="provider"
+<div [ngSwitch]="selectedProvider"
      fxLayout="column">
-  <km-aks-cluster-select *ngSwitchCase="Provider.AKS"
-                         [projectID]="projectID"></km-aks-cluster-select>
-  <km-eks-cluster-select *ngSwitchCase="Provider.EKS"
-                         [projectID]="projectID"></km-eks-cluster-select>
-  <km-gke-cluster-select *ngSwitchCase="Provider.GKE"
-                         [projectID]="projectID"></km-gke-cluster-select>
+  <km-eks-cluster-settings *ngSwitchCase="Provider.EKS"
+                           [formControl]="form.get(Controls.EKSExternalCluster)"></km-eks-cluster-settings>
 </div>

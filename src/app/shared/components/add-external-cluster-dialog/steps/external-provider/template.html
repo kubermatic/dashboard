@@ -21,9 +21,11 @@ limitations under the License.
                            [formControlName]="controls.Provider"
                            fxLayout="row wrap">
     <h3>Import</h3>
-    <mat-button-toggle *ngFor="let provider of EXTERNAL_PROVIDERS"
-                       [value]="provider"><span class="km-provider-logo km-provider-logo-{{provider}}"></span>
-    </mat-button-toggle>
+
+    <km-select-external-cluster-provider [providers]="externalProviders"
+                                         (providerChange)="onProviderChanged($event)">
+    </km-select-external-cluster-provider>
+
     <h3 fxLayoutGap="10px"
         fxLayoutAlign=" center">
       <div fxLayout="column">
@@ -31,8 +33,10 @@ limitations under the License.
         <span class="tooltip">Connected clusters can only be viewed, not edited</span>
       </div>
     </h3>
-    <mat-button-toggle [value]="provider.Custom"
-                       id="external-cluster-any-provider-btn">Any provider
+
+    <mat-button-toggle id="external-cluster-any-provider-btn"
+                       [value]="provider.Custom">
+      Any provider
     </mat-button-toggle>
   </mat-button-toggle-group>
 </form>

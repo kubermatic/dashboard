@@ -12,29 +12,42 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export class EKSCluster {
-  name: string;
-  region: string;
-  imported: boolean;
+@use 'variables';
+@use 'mixins';
+
+.button-navigation {
+  margin-top: 30px;
+
+  button {
+    margin-left: 10px;
+  }
+
+  km-button {
+    margin-left: 10px;
+  }
 }
 
-export class EKSCloudSpec {
-  name: string;
-  accessKeyID?: string;
-  secretAccessKey?: string;
-  region?: string;
+.wizard-step {
+  cursor: default;
+  font-size: variables.$font-size-subhead;
+  font-weight: 400;
+  margin-bottom: 0;
+  margin-top: 0;
+  padding-top: 20px;
+  user-select: none;
+
+  &.active {
+    font-weight: 500;
+  }
+
+  &.completed {
+    cursor: pointer;
+  }
 }
 
-export class EKSClusterSpec {
-  roleArn: string;
-  version?: string;
-  vpcConfigRequest: {
-    securityGroupIds: string[];
-    subnetIds: string[];
-  };
-}
-
-export interface EKSVpc {
-  default: boolean;
-  id: string;
+mat-card {
+  &.mat-card {
+    margin: 0;
+    padding: 16px 30px 30px;
+  }
 }

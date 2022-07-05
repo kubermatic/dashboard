@@ -14,21 +14,22 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
-import {catchError, take, takeUntil} from 'rxjs/operators';
-import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
+import {ExternalClusterService} from '@core/services/external-cluster';
 import {Observable, of, Subject} from 'rxjs';
+import {catchError, take, takeUntil, tap} from 'rxjs/operators';
 
 export enum Controls {
-  AccessKeyID = 'accessKeyID',
-  SecretAccessKey = 'secretAccessKey',
-  Region = 'region',
+  TenantID = 'tenantID',
+  SubscriptionID = 'subscriptionID',
+  ClientID = 'clientID',
+  ClientSecret = 'clientSecret',
 }
 
 @Component({
-  selector: 'km-eks-credentials',
+  selector: 'km-aks-credentials',
   templateUrl: './template.html',
 })
-export class EKSCredentialsComponent implements OnInit, OnDestroy {
+export class AKSCredentialsComponent implements OnInit, OnDestroy {
   form: FormGroup;
   readonly Controls = Controls;
   private readonly _unsubscribe = new Subject<void>();
@@ -41,9 +42,10 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.form = this._builder.group(
       {
-        [Controls.AccessKeyID]: this._builder.control('', [Validators.required]),
-        [Controls.SecretAccessKey]: this._builder.control('', [Validators.required]),
-        [Controls.Region]: this._builder.control('', [Validators.required]),
+        [Controls.TenantID]: this._builder.control('', [Validators.required]),
+        [Controls.SubscriptionID]: this._builder.control('', [Validators.required]),
+        [Controls.ClientID]: this._builder.control('', [Validators.required]),
+        [Controls.ClientSecret]: this._builder.control('', [Validators.required]),
       },
       {asyncValidators: [this._credentialsValidator.bind(this)]}
     );
@@ -72,28 +74,31 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
   }
 
   private _credentialsValidator(control: AbstractControl): Observable<ValidationErrors | null> {
-    const accessKeyID = control.get(Controls.AccessKeyID).value;
-    const secretAccessKey = control.get(Controls.SecretAccessKey).value;
-    const region = control.get(Controls.Region).value;
-    if (!accessKeyID || !secretAccessKey || !region) {
+    const tenantID = control.get(Controls.TenantID).value;
+    const subscriptionID = control.get(Controls.SubscriptionID).value;
+    const clientID = control.get(Controls.ClientID).value;
+    const clientSecret = control.get(Controls.ClientSecret).value;
+    if (!tenantID || !subscriptionID || !clientID || !clientSecret) {
       return of(null);
     }
 
-    return this._externalClusterService.validateEKSCredentials(accessKeyID, secretAccessKey, region).pipe(
-      take(1),
-      catchError(() => of({invalidCredentials: true}))
-    );
+    return this._externalClusterService
+      .validateAKSCredentials(tenantID, subscriptionID, clientID, clientSecret)
+      .pipe(take(1))
+      .pipe(tap(response => (this._externalClusterService.isCredentialsValidated = !!response)))
+      .pipe(catchError(() => of({invalidCredentials: true})));
   }
 
   private _update(): void {
     this._externalClusterService.externalCluster = {
       name: '',
       cloud: {
-        eks: {
+        aks: {
           name: '',
-          accessKeyID: this.form.get(Controls.AccessKeyID).value,
-          secretAccessKey: this.form.get(Controls.SecretAccessKey).value,
-          region: this.form.get(Controls.Region).value,
+          tenantID: this.form.get(Controls.TenantID).value,
+          subscriptionID: this.form.get(Controls.SubscriptionID).value,
+          clientID: this.form.get(Controls.ClientID).value,
+          clientSecret: this.form.get(Controls.ClientSecret).value,
         },
       },
     };

@@ -16,8 +16,8 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {merge, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {ExternalClusterService} from '@shared/components/add-external-cluster-dialog/steps/service';
-import {verifyYAML, verifyJSON} from '@shared/utils/common';
+import {ExternalClusterService} from '@core/services/external-cluster';
+import {verifyJSON, verifyYAML} from '@shared/utils/common';
 
 export enum Controls {
   Name = 'name',

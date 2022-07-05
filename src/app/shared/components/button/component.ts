@@ -58,6 +58,8 @@ export class ButtonComponent<T> implements OnInit, OnDestroy {
       },
       error: _ => {
         this.error.next();
+      },
+      complete: () => {
         this.loading = false;
       },
     });
