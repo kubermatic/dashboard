@@ -53,6 +53,7 @@ export class ProvidersOverviewComponent implements OnInit, OnChanges {
     {name: getProviderDisplayName(Provider.Nutanix), value: '#b0d236'},
     {name: getProviderDisplayName(Provider.OpenStack), value: '#e61742'},
     {name: getProviderDisplayName(Provider.Equinix), value: '#e51d26'},
+    {name: getProviderDisplayName(Provider.VMwareCloudDirector), value: '#59b7d1'},
     {name: getProviderDisplayName(Provider.VSphere), value: '#e5a900'},
     {name: getExternalProviderDisplayName(ExternalClusterProvider.AKS), value: '#008ad7'},
     {name: getExternalProviderDisplayName(ExternalClusterProvider.EKS), value: '#ee8910'},

@@ -30,6 +30,7 @@ export enum Provider {
   OpenStack = 'openstack',
   Equinix = 'packet',
   VSphere = 'vsphere',
+  VMwareCloudDirector = 'vmwareclouddirector',
 }
 
 const PROVIDER_DISPLAY_NAMES = new Map<Provider, string>([
@@ -46,6 +47,7 @@ const PROVIDER_DISPLAY_NAMES = new Map<Provider, string>([
   [Provider.OpenStack, 'Openstack'],
   [Provider.Equinix, 'Equinix Metal'],
   [Provider.VSphere, 'VSphere'],
+  [Provider.VMwareCloudDirector, 'VMware Cloud Director'],
 ]);
 
 export function getProviderDisplayName(provider: Provider): string {
@@ -118,6 +120,7 @@ export class CloudSpec {
   nutanix?: NutanixCloudSpec;
   alibaba?: AlibabaCloudSpec;
   anexia?: AnexiaCloudSpec;
+  vmwareclouddirector?: VMwareCloudDirectorCloudSpec;
 }
 
 export class ExtraCloudSpecOptions {
@@ -271,6 +274,29 @@ export class VSphereCloudSpec {
 export class VSphereInfraManagementUser {
   username: string;
   password: string;
+}
+
+export class VMwareCloudDirectorCloudSpec {
+  username: string;
+  password: string;
+  organization: string;
+  vdc: string;
+  ovdcNetwork: string;
+  vapp?: string;
+  csi: VMwareCloudDirectorCSIConfig;
+
+  // Following check skips storage class settings to allow using them and preset at the same time.
+  static isEmpty(spec: VMwareCloudDirectorCloudSpec): boolean {
+    return (
+      isObjectEmpty(_.omitBy(spec, (_, key) => key === 'csi')) &&
+      isObjectEmpty(_.omitBy(spec.csi, (_, key) => key === 'filesystem' || key === 'storageProfile'))
+    );
+  }
+}
+
+export class VMwareCloudDirectorCSIConfig {
+  storageProfile: string;
+  filesystem: string;
 }
 
 export class ClusterSpec {

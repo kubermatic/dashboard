@@ -72,6 +72,7 @@ import {MemberService} from '@core/services/member';
 import {SSHKeyService} from '@core/services/ssh-key';
 import {KubeVirtService} from '@core/services/provider/kubevirt';
 import {NutanixService} from '@core/services/provider/nutanix';
+import {VMwareCloudDirectorService} from '@core/services/provider/vmware-cloud-director';
 
 const components = [
   SidenavComponent,
@@ -131,6 +132,7 @@ const services = [
   MemberService,
   SSHKeyService,
   NutanixService,
+  VMwareCloudDirectorService,
 ];
 
 const interceptors = [

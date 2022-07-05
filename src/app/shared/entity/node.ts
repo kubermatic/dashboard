@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {VMwareCloudDirectorIPAllocationMode} from '@shared/entity/provider/vmware-cloud-director';
 import {NodeProvider, OperatingSystem} from '../model/NodeProviderConstants';
 
 export class Node {
@@ -59,6 +60,7 @@ export class NodeCloudSpec {
   nutanix?: NutanixNodeSpec;
   alibaba?: AlibabaNodeSpec;
   anexia?: AnexiaNodeSpec;
+  vmwareclouddirector?: VMwareCloudDirectorNodeSpec;
 }
 
 export class OperatingSystemSpec {
@@ -264,6 +266,22 @@ export class VSphereTag {
   description: string;
 }
 
+export class VMwareCloudDirectorNodeSpec {
+  cpus: number;
+  cpuCores: number;
+  memoryMB: number;
+
+  diskSizeGB: number;
+  diskIOPS?: number;
+  storageProfile: string;
+
+  ipAllocationMode: string;
+
+  vapp?: string;
+  catalog: string;
+  template: string;
+}
+
 export function getDefaultNodeProviderSpec(provider: string): object {
   switch (provider) {
     case NodeProvider.AWS:
@@ -356,6 +374,18 @@ export function getDefaultNodeProviderSpec(provider: string): object {
         memoryMB: 2048,
         diskSize: 20,
       } as NutanixNodeSpec;
+    case NodeProvider.VMWARECLOUDDIRECTOR:
+      return {
+        cpus: 2,
+        cpuCores: 1,
+        memoryMB: 2048,
+        diskSizeGB: 20,
+        storageProfile: '',
+        diskIOPS: 0,
+        ipAllocationMode: VMwareCloudDirectorIPAllocationMode.DHCP,
+        catalog: '',
+        template: '',
+      } as VMwareCloudDirectorNodeSpec;
   }
   return {};
 }

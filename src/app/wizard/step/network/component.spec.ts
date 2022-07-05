@@ -41,6 +41,7 @@ import {DigitalOceanService} from '@core/services/provider/digitalocean';
 import {OpenStackService} from '@core/services/provider/openstack';
 import {EquinixService} from '@core/services/provider/equinix';
 import {NutanixService} from '@app/core/services/provider/nutanix';
+import {VMwareCloudDirectorService} from '@core/services/provider/vmware-cloud-director';
 import {KubeVirtService} from '@core/services/provider/kubevirt';
 
 describe('MachineNetworkStepComponent', () => {
@@ -68,6 +69,7 @@ describe('MachineNetworkStepComponent', () => {
         HetznerService,
         OpenStackService,
         NutanixService,
+        VMwareCloudDirectorService,
         KubeVirtService,
         MachineDeploymentService,
         {provide: ProjectService, useValue: ProjectMockService},

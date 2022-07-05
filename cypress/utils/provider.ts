@@ -26,7 +26,7 @@ export enum Provider {
   OpenStack = 'openstack',
   Equinix = 'packet',
   VSphere = 'vsphere',
-  VMwareCloudDirector = 'vmware-cloud-director',
+  VMwareCloudDirector = 'vmwareclouddirector',
 }
 
 export enum Alibaba {

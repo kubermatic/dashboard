@@ -14,6 +14,7 @@
 
 import {HttpClient} from '@angular/common/http';
 import {EventEmitter, Injectable} from '@angular/core';
+import {VMwareCloudDirector} from '@core/services/wizard/provider/vmware-cloud-director';
 import {environment} from '@environments/environment';
 import {Preset, PresetList, PresetModel, PresetStat, UpdatePresetStatusReq} from '@shared/entity/preset';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
@@ -67,6 +68,7 @@ export class PresetsService {
   provider(provider: NodeProvider.ALIBABA): Alibaba;
   provider(provider: NodeProvider.ANEXIA): Anexia;
   provider(provider: NodeProvider.NUTANIX): Nutanix;
+  provider(provider: NodeProvider.VMWARECLOUDDIRECTOR): VMwareCloudDirector;
   provider(provider: NodeProvider): Provider {
     switch (provider) {
       case NodeProvider.AWS:
@@ -93,6 +95,8 @@ export class PresetsService {
         return new Anexia(this._http, NodeProvider.ANEXIA);
       case NodeProvider.NUTANIX:
         return new Nutanix(this._http, NodeProvider.NUTANIX);
+      case NodeProvider.VMWARECLOUDDIRECTOR:
+        return new VMwareCloudDirector(this._http, NodeProvider.VMWARECLOUDDIRECTOR);
       default:
         throw new Error(`Provider ${provider} not supported`);
     }

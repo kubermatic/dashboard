@@ -21,14 +21,12 @@ limitations under the License.
     <input matInput
            [formControlName]="Controls.Username"
            [name]="Controls.Username"
-           type="text"
            autocomplete="off"
            required>
     <mat-error *ngIf="form.get(Controls.Username).hasError('required')">
       Username is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
-
   <mat-form-field fxFlex>
     <mat-label>Password</mat-label>
     <input matInput
@@ -41,41 +39,26 @@ limitations under the License.
       Password is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
-
   <mat-form-field fxFlex>
     <mat-label>Organization</mat-label>
     <input matInput
            [formControlName]="Controls.Organization"
            [name]="Controls.Organization"
-           type="text"
-           autocomplete="off">
+           autocomplete="off"
+           required>
     <mat-error *ngIf="form.get(Controls.Organization).hasError('required')">
       Organization is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
-
   <mat-form-field fxFlex>
     <mat-label>VDC</mat-label>
     <input matInput
            [formControlName]="Controls.Vdc"
            [name]="Controls.Vdc"
-           type="text"
            autocomplete="off"
            required>
     <mat-error *ngIf="form.get(Controls.Vdc).hasError('required')">
       VDC is <strong>required</strong>.
-    </mat-error>
-  </mat-form-field>
-
-  <mat-form-field fxFlex>
-    <mat-label>Organization VDC Network</mat-label>
-    <input matInput
-           [formControlName]="Controls.OvdcNetwork"
-           [name]="Controls.OvdcNetwork"
-           type="text"
-           autocomplete="off">
-    <mat-error *ngIf="form.get(Controls.OvdcNetwork).hasError('required')">
-      Organization VDC Network is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
 </form>
