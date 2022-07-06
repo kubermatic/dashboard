@@ -138,6 +138,13 @@ limitations under the License.
           </km-property>
         </ng-container>
 
+        <ng-container *ngIf="machineDeployment.spec.template.cloud.vmwareclouddirector as vmwareclouddirector">
+          <km-property *ngIf="vmwareclouddirector.vapp">
+            <div key>VApp</div>
+            <div value>{{vmwareclouddirector.vapp}}</div>
+          </km-property>
+        </ng-container>
+
         <km-property>
           <div key>Created</div>
           <div value>
