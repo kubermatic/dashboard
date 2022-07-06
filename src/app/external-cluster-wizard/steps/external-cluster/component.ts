@@ -21,6 +21,7 @@ import {StepBase} from '../base';
 
 enum Controls {
   EKSExternalCluster = 'EKSExternalCluster',
+  GKEExternalCluster = 'GKEExternalCluster',
 }
 
 @Component({
@@ -69,6 +70,7 @@ export class ExternalClusterStepComponent
   private _initForm() {
     this.form = this._builder.group({
       [Controls.EKSExternalCluster]: this._builder.control(''),
+      [Controls.GKEExternalCluster]: this._builder.control(''),
     });
   }
 

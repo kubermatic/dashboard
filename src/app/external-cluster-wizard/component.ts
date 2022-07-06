@@ -35,7 +35,7 @@ import {ExternalClusterWizardStep, StepRegistry, WizardSteps} from './config';
 export class ExternalClusterWizardComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   readonly stepRegistry = StepRegistry;
-  readonly externalProviders = [ExternalClusterProvider.EKS];
+  readonly externalProviders = [ExternalClusterProvider.EKS, ExternalClusterProvider.GKE];
   form: FormGroup;
   project = {} as Project;
 
