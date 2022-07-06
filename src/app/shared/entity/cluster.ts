@@ -492,6 +492,7 @@ export class CloudSpecPatch {
   gcp?: GCPCloudSpecPatch;
   kubevirt?: KubevirtCloudSpecPatch;
   alibaba?: AlibabaCloudSpecPatch;
+  vmwareclouddirector?: VMwareCloudDirectorCloudSpecPatch;
 }
 
 export class AnexiaCloudSpecPatch {
@@ -559,6 +560,14 @@ export class KubevirtCloudSpecPatch {
 export class AlibabaCloudSpecPatch {
   accessKeyID?: string;
   accessKeySecret?: string;
+}
+
+export class VMwareCloudDirectorCloudSpecPatch {
+  username: string;
+  password: string;
+  organization: string;
+  vdc: string;
+  ovdcNetwork: string;
 }
 
 export class ProviderSettingsPatch {
