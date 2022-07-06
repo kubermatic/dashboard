@@ -258,6 +258,40 @@ limitations under the License.
             <div value>{{cluster.spec.cloud?.vsphere.resourcePool}}</div>
           </km-property>
         </ng-container>
+
+        <!-- VMware Cloud Director -->
+        <ng-container *ngIf="cluster.spec.cloud?.vmwareclouddirector as vmwareclouddirector">
+          <km-property>
+            <div key>Username</div>
+            <div value>{{vmwareclouddirector.username}}</div>
+          </km-property>
+          <km-property>
+            <div key>Organization</div>
+            <div value>{{vmwareclouddirector.organization}}</div>
+          </km-property>
+          <km-property>
+            <div key>VDC</div>
+            <div value>{{vmwareclouddirector.vdc}}</div>
+          </km-property>
+          <km-property>
+            <div key>Organziation VDC Network</div>
+            <div value>{{vmwareclouddirector.ovdcNetwork}}</div>
+          </km-property>
+          <km-property *ngIf="vmwareclouddirector.vapp">
+            <div key>VApp</div>
+            <div value>{{vmwareclouddirector.vapp}}</div>
+          </km-property>
+          <ng-container *ngIf="vmwareclouddirector.csi">
+            <km-property *ngIf="vmwareclouddirector.csi.storageProfile">
+              <div key>Storage Profile</div>
+              <div value>{{vmwareclouddirector.csi.storageProfile}}</div>
+            </km-property>
+            <km-property *ngIf="vmwareclouddirector.csi.filesystem">
+              <div key>Filesystem</div>
+              <div value>{{vmwareclouddirector.csi.filesystem}}</div>
+            </km-property>
+          </ng-container>
+        </ng-container>
       </ng-container>
     </div>
   </div>
@@ -822,6 +856,50 @@ limitations under the License.
               <km-property>
                 <div key>VLAN ID</div>
                 <div value>{{machineDeployment.spec.template.cloud?.anexia?.vlanID}}</div>
+              </km-property>
+            </ng-container>
+
+            <!-- VMware Cloud Director Nodes -->
+            <ng-container *ngIf="cluster.spec.cloud?.vmwareclouddirector">
+              <km-property>
+                <div key>CPUs</div>
+                <div value>{{machineDeployment.spec.template.cloud.vmwareclouddirector.cpus}}</div>
+              </km-property>
+              <km-property>
+                <div key>Cores per CPU</div>
+                <div value>{{machineDeployment.spec.template.cloud.vmwareclouddirector.cpuCores}}</div>
+              </km-property>
+              <km-property>
+                <div key>Memory</div>
+                <div value>{{machineDeployment.spec.template.cloud.vmwareclouddirector.memoryMB}} MB</div>
+              </km-property>
+              <km-property>
+                <div key>Disk Size</div>
+                <div value>{{machineDeployment.spec.template.cloud.vmwareclouddirector.diskSizeGB}} GB</div>
+              </km-property>
+              <km-property *ngIf="machineDeployment.spec.template.cloud.vmwareclouddirector.diskIOPS">
+                <div key>Disk IOPS</div>
+                <div value>{{machineDeployment.spec.template.cloud.vmwareclouddirector.diskIOPS}}</div>
+              </km-property>
+              <km-property>
+                <div key>Storage Profile</div>
+                <div value>{{machineDeployment.spec.template.cloud.vmwareclouddirector.storageProfile}}</div>
+              </km-property>
+              <km-property>
+                <div key>IP Allocation Mode</div>
+                <div value>{{machineDeployment.spec.template.cloud.vmwareclouddirector.ipAllocationMode}}</div>
+              </km-property>
+              <km-property *ngIf="machineDeployment.spec.template.cloud.vmwareclouddirector.vapp">
+                <div key>VApp</div>
+                <div value>{{machineDeployment.spec.template.cloud.vmwareclouddirector.vapp}}</div>
+              </km-property>
+              <km-property>
+                <div key>Catalog</div>
+                <div value>{{machineDeployment.spec.template.cloud.vmwareclouddirector.catalog}}</div>
+              </km-property>
+              <km-property>
+                <div key>Template</div>
+                <div value>{{machineDeployment.spec.template.cloud.vmwareclouddirector.template}}</div>
               </km-property>
             </ng-container>
 
