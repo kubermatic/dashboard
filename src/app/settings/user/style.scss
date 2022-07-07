@@ -21,7 +21,7 @@
   }
 
   .mat-card-content {
-    padding: 30px;
+    padding-left: 30px;
   }
 
   .user-name {
@@ -48,24 +48,20 @@
   }
 }
 
-.project-overview-button {
-  @include mixins.size(170px, 45px, $force: true);
+.mat-button-toggle {
+  margin: 10px 10px 10px 0;
 
   i {
     margin-right: 10px;
-    min-height: 28px;
-    min-width: 28px;
   }
 }
 
-.clusters-button {
-  @include mixins.size(110px, 45px, $force: true);
+.project-overview-button {
+  @include mixins.size(180px, 45px, true);
+}
 
-  i {
-    margin-right: 10px;
-    min-height: 28px;
-    min-width: 28px;
-  }
+.clusters-button {
+  @include mixins.size(120px, 45px, $force: true);
 }
 
 .km-pointer {
@@ -74,7 +70,7 @@
 
 .input {
   margin: 0 16px -20px 0;
-  width: 290px;
+  width: 310px;
 
   &.sm {
     width: 140px;

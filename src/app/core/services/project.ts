@@ -20,6 +20,7 @@ import {ParamsService, PathParam} from '@core/services/params';
 import {UserService} from '@core/services/user';
 import {environment} from '@environments/environment';
 import {Project, ProjectModel, ProjectStatus} from '@shared/entity/project';
+import {View} from '@shared/entity/common';
 import {EMPTY, merge, Observable, of, Subject, timer} from 'rxjs';
 import {catchError, map, shareReplay, switchMap} from 'rxjs/operators';
 
@@ -97,12 +98,12 @@ export class ProjectService {
     if (project?.status === ProjectStatus.Active) {
       this.onProjectChange.emit(project);
       this._userService.currentUser.subscribe(settings => {
-        projectLandingPage = settings.userSettings.useClustersView ? 'clusters' : 'overview';
+        projectLandingPage = settings.userSettings.useClustersView ? View.Clusters : View.Overview;
       });
-      return this._router.navigate([`/projects/${project.id}/${projectLandingPage}`]);
+      return this._router.navigateByUrl(`/projects/${project.id}/${projectLandingPage}`);
     }
 
-    return this._router.navigate(['/projects']);
+    return this._router.navigateByUrl('/projects');
   }
 
   private get _selectedProjectID(): string {

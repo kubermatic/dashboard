@@ -27,10 +27,6 @@ limitations under the License.
 </div>
 
 <mat-card>
-  <mat-card-header>
-    <mat-card-title>Account</mat-card-title>
-  </mat-card-header>
-  <mat-divider></mat-divider>
   <mat-card-content fxLayout="row wrap"
                     fxLayoutGap="20px grid">
     <div *ngIf="user"
@@ -103,14 +99,15 @@ limitations under the License.
              fxLayoutAlign=" center">Project Landing Page
         </div>
         <mat-button-toggle-group [(value)]="selectedProjectLandingPage"
-                                 (change)="changingLandingPage($event.value)">
+                                 (change)="changingLandingPage($event.value)"
+                                 fxLayout="row wrap">
           <mat-button-toggle class="project-overview-button"
-                             value="ProjectOverView">
+                             value="overview">
             <i class="km-icon-mask km-icon-projects-card"></i>
             Project Overview
           </mat-button-toggle>
           <mat-button-toggle class="clusters-button"
-                             value="Clusters">
+                             value="clusters">
             <i class="km-icon-mask km-icon-cluster"></i>
             Clusters
           </mat-button-toggle>

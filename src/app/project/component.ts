@@ -501,8 +501,8 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private _redirectToProjectLandingPage(): void {
-    const projectLandingPage = this._apiSettings.useClustersView ? 'clusters' : 'overview';
-    this._router.navigate([`/projects/${this.projects[0].id}/${projectLandingPage}`]);
+    const projectLandingPage = this._apiSettings.useClustersView ? View.Clusters : View.Overview;
+    this._router.navigateByUrl(`/projects/${this.projects[0].id}/${projectLandingPage}`);
   }
 
   private _isPaginatorVisible(): boolean {

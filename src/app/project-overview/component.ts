@@ -58,7 +58,8 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   private _projectChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
   private readonly _refreshTime = 15;
-  firstVisite: string;
+  firstVisitToOverviewPage: string;
+  private readonly _cookieName = 'firstVisit';
 
   constructor(
     private readonly _projectService: ProjectService,
@@ -83,7 +84,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     this._loadSSHKeys();
     this._loadMembers();
     this._loadServiceAccounts();
-    this._checkFirstVisit();
+    this._checkFirstVisitToOverviewPageMessage();
   }
 
   ngOnDestroy(): void {
@@ -195,13 +196,13 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
       .subscribe(serviceAccounts => (this.serviceAccounts = serviceAccounts));
   }
 
-  private _checkFirstVisit(): void {
-    this._cookieService.get('firstVisit')
-      ? this.hideFirstVisitMessage()
-      : this._cookieService.set('firstVisit', 'visited', null, '/', 'localhost', false, 'Lax');
+  private _checkFirstVisitToOverviewPageMessage(): void {
+    this._cookieService.get(this._cookieName)
+      ? this.hideFirstVisitToOverviewPageMessage()
+      : this._cookieService.set(this._cookieName, 'visited', null, '/', 'localhost', false, 'Lax');
   }
 
-  hideFirstVisitMessage(): void {
-    this.firstVisite = this._cookieService.get('firstVisit');
+  hideFirstVisitToOverviewPageMessage(): void {
+    this.firstVisitToOverviewPage = this._cookieService.get(this._cookieName);
   }
 }

@@ -21,6 +21,7 @@ import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {UserSettings} from '@shared/entity/settings';
 import {objectDiff} from '@shared/utils/common';
+import {View} from '@shared/entity/common';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, switchMap, take, takeUntil} from 'rxjs/operators';
@@ -61,7 +62,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
         }
         this.apiSettings = settings;
         this.settings = _.cloneDeep(this.apiSettings);
-        this.selectedProjectLandingPage = this.settings.useClustersView ? 'Clusters' : 'ProjectOverView';
+        this.selectedProjectLandingPage = this.settings.useClustersView ? View.Clusters : View.Overview;
       }
     });
 
@@ -87,7 +88,15 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
   }
 
   changingLandingPage(landingPage: string): void {
-    landingPage === 'Clusters' ? (this.settings.useClustersView = true) : (this.settings.useClustersView = false);
+    switch (landingPage) {
+      case View.Clusters:
+        this.settings.useClustersView = true;
+        break;
+      default:
+        this.settings.useClustersView = false;
+        break;
+    }
+    // landingPage === View.Clusters ? (this.settings.useClustersView = true) : (this.settings.useClustersView = false);
     this.onSettingsChange();
   }
 
