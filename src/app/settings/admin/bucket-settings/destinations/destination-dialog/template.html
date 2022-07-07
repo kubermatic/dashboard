@@ -27,6 +27,9 @@ limitations under the License.
              type="text"
              autocomplete="off"
              required>
+      <mat-error *ngIf="form.get(Controls.DestinationName).hasError('pattern')">
+        Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash.
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field fxFlex>
