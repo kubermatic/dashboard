@@ -19,6 +19,7 @@ import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
 import {AdminSeed, BackupDestination, DestinationDetails, Destinations} from '@shared/entity/datacenter';
 import {Observable, Subject} from 'rxjs';
+import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
 
 export interface DestinationDialogData {
   title: string;
@@ -68,7 +69,7 @@ export class DestinationDialog implements OnInit, OnDestroy {
     this.form = this._builder.group({
       [Controls.DestinationName]: this._builder.control(
         this.data.mode === Mode.Edit ? this.data.destination.destinationName : '',
-        [Validators.required]
+        [Validators.required, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR]
       ),
       [Controls.Bucket]: this._builder.control(this.data.mode === Mode.Edit ? this.data.destination.bucketName : '', [
         Validators.required,
