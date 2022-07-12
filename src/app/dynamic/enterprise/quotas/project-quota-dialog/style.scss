@@ -18,12 +18,17 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {Component, OnInit} from '@angular/core';
+.quota-form {
+  margin-bottom: 20px;
+}
 
-@Component({
-  selector: 'km-add-admin-dialog',
-  templateUrl: './template.html',
-})
-export class AddProjectQuotaDialogComponent implements OnInit {
-  ngOnInit(): void {}
+.quotas-error {
+  align-self: center;
+  font-size: 75%;
+  position: relative;
+  top: -25px;
+
+  &.hidden {
+    visibility: hidden;
+  }
 }

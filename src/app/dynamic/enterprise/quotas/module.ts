@@ -19,15 +19,15 @@
 // END OF TERMS AND CONDITIONS
 
 import {NgModule} from '@angular/core';
-
 import {SharedModule} from '@shared/module';
-
-import {AddProjectQuotaDialogComponent} from './add-project-quota-dialog/component';
+import {QuotaService} from '@core/services/quota';
+import {ProjectQuotaDialogComponent} from './project-quota-dialog/component';
 import {QuotasRoutingModule} from './routing';
 import {QuotasComponent} from './component';
 
 @NgModule({
   imports: [SharedModule, QuotasRoutingModule],
-  declarations: [QuotasComponent, AddProjectQuotaDialogComponent],
+  declarations: [QuotasComponent, ProjectQuotaDialogComponent],
+  providers: [QuotaService],
 })
 export class QuotasModule {}

@@ -39,6 +39,14 @@ END OF TERMS AND CONDITIONS
                            (queryChange)="onSearch($event)"></km-search-field>
         </div>
         <div fxFlex></div>
+        <button mat-flat-button
+                color="quaternary"
+                class="km-add-quota-btn"
+                fxLayoutAlign="center center"
+                (click)="add()">
+          <i class="km-icon-mask km-icon-add"></i>
+          <span>Add Project Quota</span>
+        </button>
       </div>
     </mat-card-title>
   </mat-card-header>
@@ -55,7 +63,7 @@ END OF TERMS AND CONDITIONS
             class="km-header-cell p-40"
             mat-sort-header>Project</th>
         <td mat-cell
-            *matCellDef="let element">{{element?.name}}</td>
+            *matCellDef="let element">{{ element?.subjectHumanReadableName || element?.name }}</td>
       </ng-container>
 
       <ng-container [matColumnDef]="Column.Memory">
