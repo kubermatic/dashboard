@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Quota} from '@shared/entity/quota';
+import {QuotaDetails} from '@shared/entity/quota';
 
-export const QuotaMock: Quota = {
+export const QuotaMock: QuotaDetails = {
   name: 'project-q4vgtz2rzh',
-  subject_name: 'q4vgtz2rzh',
-  subject_kind: 'project',
+  subjectName: 'q4vgtz2rzh',
+  subjectKind: 'project',
   quota: {
     cpu: '10',
     memory: '10Gi',
@@ -28,11 +28,11 @@ export const QuotaMock: Quota = {
   },
 };
 
-export const QuotasMock: Quota[] = [
+export const QuotasMock: QuotaDetails[] = [
   {
     name: 'project-q4vgtz2rzh',
-    subject_name: 'q4vgtz2rzh',
-    subject_kind: 'project',
+    subjectName: 'q4vgtz2rzh',
+    subjectKind: 'project',
     quota: {
       cpu: '10',
       memory: '10Gi',
@@ -44,8 +44,8 @@ export const QuotasMock: Quota[] = [
   },
   {
     name: 'project-srrqzs8c62',
-    subject_name: 'srrqzs8c62',
-    subject_kind: 'project',
+    subjectName: 'srrqzs8c62',
+    subjectKind: 'project',
     quota: {
       cpu: '30',
       memory: '10',

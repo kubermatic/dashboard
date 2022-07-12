@@ -14,7 +14,7 @@
 
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {Observable, Subject} from 'rxjs';
-import {tap, throttleTime} from 'rxjs/operators';
+import {throttleTime} from 'rxjs/operators';
 
 @Component({
   selector: 'km-button',
@@ -52,14 +52,13 @@ export class ButtonComponent<T> implements OnInit, OnDestroy {
   }
 
   private _subscribe(): void {
-    this.observable.pipe(tap(() => (this.loading = false))).subscribe({
+    this.observable.subscribe({
       next: result => {
         this.next.emit(result);
+        this.loading = false;
       },
       error: _ => {
         this.error.next();
-      },
-      complete: () => {
         this.loading = false;
       },
     });

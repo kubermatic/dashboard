@@ -21,13 +21,15 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
-import {SettingsService} from '@core/services/settings';
-import {QuotaDetails} from '@shared/entity/quota';
-import {UserService} from '@core/services/user';
+import {MatDialog} from '@angular/material/dialog';
 import {MatSort} from '@angular/material/sort';
-import {takeUntil, tap} from 'rxjs/operators';
-import {Subject} from 'rxjs';
+import {takeUntil, tap, filter} from 'rxjs/operators';
+import {Subject, lastValueFrom} from 'rxjs';
+import {QuotaService} from '@core/services/quota';
+import {UserService} from '@core/services/user';
+import {QuotaDetails} from '@shared/entity/quota';
 import _ from 'lodash';
+import {ProjectQuotaDialogComponent} from './project-quota-dialog/component';
 
 enum Column {
   ProjectId = 'ProjectId',
@@ -55,22 +57,23 @@ export class QuotasComponent implements OnInit {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  constructor(private readonly _settingsService: SettingsService, private readonly _userService: UserService) {}
+  constructor(
+    private readonly _quotaService: QuotaService,
+    private readonly _userService: UserService,
+    private readonly _matDialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this._setSortConfig();
 
-    this._settingsService.quotas
+    this._quotaService.quotas
       .pipe(
         tap(() => (this.isLoading = false)),
+        filter(quotas => !_.isEqual(quotas, this.quotas)),
         takeUntil(this._unsubscribe)
       )
       .subscribe({
         next: quotas => {
-          if (_.isEqual(quotas, this.quotas)) {
-            return;
-          }
-
           this.quotas = quotas;
           this.dataSource.data = quotas;
         },
@@ -93,9 +96,20 @@ export class QuotasComponent implements OnInit {
     this.dataSource.filter = query;
   }
 
+  async add(): Promise<void> {
+    await lastValueFrom(
+      this._matDialog
+        .open(ProjectQuotaDialogComponent, {
+          panelClass: 'km-quota-dialog',
+        })
+        .afterClosed()
+    );
+  }
+
   private _setSortConfig() {
     this.sort.active = Column.ProjectId;
     this.sort.direction = 'asc';
+
     this.dataSource.sortingDataAccessor = (item, property) => {
       switch (property) {
         case Column.ProjectId:
@@ -110,6 +124,7 @@ export class QuotasComponent implements OnInit {
           return item[property];
       }
     };
+
     this.dataSource.sort = this.sort;
   }
 }
