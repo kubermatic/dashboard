@@ -8,9 +8,15 @@ import {
   Validators,
 } from '@angular/forms';
 import {StepBase} from '@app/external-cluster-wizard/steps/base';
+import {ExternalClusterService} from '@core/services/external-cluster';
+import {NameGeneratorService} from '@core/services/name-generator';
+import {takeUntil} from 'rxjs/operators';
 
 enum Controls {
   Name = 'name',
+  Zone = 'zone',
+  Version = 'version',
+  NodeCount = 'nodeCount',
 }
 
 @Component({
@@ -35,12 +41,17 @@ export class GKEClusterSettingsComponent
 {
   readonly Controls = Controls;
 
-  constructor(private readonly _builder: FormBuilder) {
+  constructor(
+    private readonly _builder: FormBuilder,
+    private readonly _externalClusterService: ExternalClusterService,
+    private readonly _nameGenerator: NameGeneratorService
+  ) {
     super();
   }
 
   ngOnInit(): void {
     this._initForm();
+    this._initSubscriptions();
   }
 
   ngOnDestroy(): void {}
@@ -48,6 +59,38 @@ export class GKEClusterSettingsComponent
   private _initForm() {
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control('', Validators.required),
+      [Controls.Zone]: this._builder.control('', Validators.required),
+      [Controls.Version]: this._builder.control('', Validators.required),
+      [Controls.NodeCount]: this._builder.control('', Validators.required),
     });
+  }
+
+  generateName(): void {
+    this.form.get(Controls.Name).setValue(this._nameGenerator.generateName());
+  }
+
+  private _initSubscriptions() {
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
+      this._updateExternalClusterModel();
+    });
+  }
+
+  private _updateExternalClusterModel(): void {
+    this._externalClusterService.externalCluster = {
+      name: this.controlValue(Controls.Name),
+      cloud: {
+        gke: {
+          ...this._externalClusterService.externalCluster.cloud?.gke,
+          name: this.controlValue(Controls.Name),
+          zone: this.controlValue(Controls.Zone),
+        },
+      },
+      spec: {
+        gkeclusterSpec: {
+          initialClusterVersion: this.controlValue(Controls.Version),
+          initialNodeCount: this.controlValue(Controls.NodeCount),
+        },
+      },
+    };
   }
 }

@@ -14,7 +14,7 @@
 
 import _ from 'lodash';
 import {StatusIcon} from '@shared/utils/health-status';
-import {GKECloudSpec} from './provider/gke';
+import {GKECloudSpec, GKEClusterSpec} from './provider/gke';
 import {EKSCloudSpec, EKSClusterSpec} from './provider/eks';
 import {AKSCloudSpec} from './provider/aks';
 
@@ -85,7 +85,8 @@ export class ExternalCluster {
 
 export class ExternalClusterSpec {
   eksclusterSpec?: EKSClusterSpec;
-  version: string;
+  gkeclusterSpec?: GKEClusterSpec;
+  version?: string;
 }
 
 export class ExternalCloudSpec {

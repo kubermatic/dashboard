@@ -221,6 +221,9 @@ export class ExternalClusterService {
       case ExternalClusterProvider.EKS:
         headers = this._getEKSHeaders();
         break;
+      case ExternalClusterProvider.GKE:
+        headers = this._getGKEHeaders();
+        break;
       default:
         return throwError(() => 'Not implemented');
     }

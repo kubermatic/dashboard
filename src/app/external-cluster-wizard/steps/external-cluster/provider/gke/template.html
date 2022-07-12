@@ -1,13 +1,55 @@
 <form [formGroup]="form">
-  <div>
-    <mat-card-header>
+  <div fxFlex="50%">
+    <mat-card-header class="km-no-padding">
       <mat-card-title>Cluster</mat-card-title>
     </mat-card-header>
 
     <mat-form-field>
       <mat-label>Name</mat-label>
-      <input type="text"
+      <input matInput
+             type="text"
              [formControlName]="Controls.Name" />
+      <button mat-icon-button
+              type="button"
+              matSuffix
+              class="km-randomize-btn"
+              matTooltip="Generate name"
+              (click)="generateName()">
+        <i class="km-icon-randomize"></i>
+      </button>
+      <mat-hint>Enter a unique name for this cluster</mat-hint>
+      <mat-error *ngIf="form.get(Controls.Name).hasError('required')">
+        Name is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Zone</mat-label>
+      <input matInput
+             type="text"
+             [formControlName]="Controls.Zone" />
+      <mat-hint>Enter the Zone for your Cluster</mat-hint>
+      <mat-error *ngIf="form.get(Controls.Zone).hasError('required')">
+        Zone is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Kubernetes Version
+      </mat-label>
+      <input matInput
+             type="text"
+             [formControlName]="Controls.Version" />
+      <mat-hint>Set the kubernetes Version.</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Initial Node Count
+      </mat-label>
+      <input matInput
+             type="number"
+             [formControlName]="Controls.NodeCount" />
+      <mat-hint>Set the Initial Node Count.</mat-hint>
     </mat-form-field>
   </div>
 </form>
