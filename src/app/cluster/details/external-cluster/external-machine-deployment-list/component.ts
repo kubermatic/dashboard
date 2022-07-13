@@ -22,12 +22,13 @@ import {getOperatingSystem} from '@shared/entity/node';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
+import {Member} from '@shared/entity/member';
+import {GroupConfig} from '@shared/model/Config';
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ReplicasDialogComponent} from '@app/cluster/details/external-cluster/replicas-dialog/component';
-import {Member} from '@shared/entity/member';
-import {GroupConfig} from '@shared/model/Config';
+import {ExternalMachineDeploymentService} from '@core/services/external-machine-deployment';
 
 @Component({
   selector: 'km-external-machine-deployment-list',
@@ -35,9 +36,6 @@ import {GroupConfig} from '@shared/model/Config';
   styleUrls: ['style.scss'],
 })
 export class ExternalMachineDeploymentListComponent implements OnInit, OnChanges, OnDestroy {
-  private _unsubscribe: Subject<void> = new Subject<void>();
-  private _user: Member;
-  private _currentGroupConfig: GroupConfig;
   @Input() cluster: ExternalCluster;
   @Input() machineDeployments: ExternalMachineDeployment[] = [];
   @Input() projectID: string;
@@ -47,11 +45,15 @@ export class ExternalMachineDeploymentListComponent implements OnInit, OnChanges
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   dataSource = new MatTableDataSource<ExternalMachineDeployment>();
   displayedColumns: string[] = ['status', 'name', 'labels', 'replicas', 'version', 'os', 'created', 'actions'];
+  private _unsubscribe: Subject<void> = new Subject<void>();
+  private _user: Member;
+  private _currentGroupConfig: GroupConfig;
 
   constructor(
     private readonly _matDialog: MatDialog,
     private readonly _router: Router,
-    private readonly _userService: UserService
+    private readonly _userService: UserService,
+    private readonly _externalMachineDeploymentService: ExternalMachineDeploymentService
   ) {}
 
   ngOnInit(): void {
@@ -113,7 +115,12 @@ export class ExternalMachineDeploymentListComponent implements OnInit, OnChanges
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'machineDeployments', Permission.Edit);
   }
 
-  updateReplicas(md: ExternalMachineDeployment): void {
+  isDeleteEnabled(): boolean {
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'machineDeployments', Permission.Delete);
+  }
+
+  updateReplicas(md: ExternalMachineDeployment, event: Event): void {
+    event.stopPropagation();
     const dialogConfig: MatDialogConfig = {
       data: {
         projectID: this.projectID,
@@ -122,5 +129,12 @@ export class ExternalMachineDeploymentListComponent implements OnInit, OnChanges
       },
     };
     this._matDialog.open(ReplicasDialogComponent, dialogConfig);
+  }
+
+  showDeleteDialog(md: ExternalMachineDeployment, event: Event): void {
+    event.stopPropagation();
+    this._externalMachineDeploymentService
+      .showExternalMachineDeploymentDeleteDialog(this.projectID, this.cluster, md)
+      .subscribe(_ => {});
   }
 }

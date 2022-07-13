@@ -58,6 +58,7 @@ import {AuthInterceptor, CheckTokenInterceptor, ErrorNotificationsInterceptor, L
 import {ClusterTemplateService} from '@core/services/cluster-templates';
 import {ServiceAccountService} from '@core/services/service-account';
 import {MachineDeploymentService} from '@core/services/machine-deployment';
+import {ExternalMachineDeploymentService} from '@core/services/external-machine-deployment';
 import {AlibabaService} from '@core/services/provider/alibaba';
 import {AnexiaService} from '@core/services/provider/anexia';
 import {AWSService} from '@core/services/provider/aws';
@@ -117,6 +118,7 @@ const services = [
   BackupService,
   ServiceAccountService,
   MachineDeploymentService,
+  ExternalMachineDeploymentService,
   AlibabaService,
   AnexiaService,
   AWSService,
