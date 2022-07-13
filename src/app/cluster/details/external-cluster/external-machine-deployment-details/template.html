@@ -38,6 +38,14 @@ limitations under the License.
                 [disabled]="!isEditEnabled()">
           <i class="km-icon-mask km-icon-edit"></i>
         </button>
+
+        <button mat-icon-button
+                color="tertiary"
+                matTooltip="Delete Machine Deployment"
+                (click)="showDeleteDialog();"
+                [disabled]="!isDeleteEnabled()">
+          <i class="km-icon-mask km-icon-delete"></i>
+        </button>
       </div>
 
     </mat-card-header>

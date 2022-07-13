@@ -13,24 +13,25 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ReplicasDialogComponent} from '@app/cluster/details/external-cluster/replicas-dialog/component';
 import {AppConfigService} from '@app/config.service';
 import {ClusterService} from '@core/services/cluster';
 import {PathParam} from '@core/services/params';
+import {UserService} from '@core/services/user';
 import {Datacenter} from '@shared/entity/datacenter';
 import {Event} from '@shared/entity/event';
 import {ExternalCluster} from '@shared/entity/external-cluster';
+import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
+import {Member} from '@shared/entity/member';
 import {NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
+import {GroupConfig} from '@shared/model/Config';
+import {MemberUtils, Permission} from '@shared/utils/member';
 import {forkJoin, Subject, timer} from 'rxjs';
 import {switchMap, take, takeUntil} from 'rxjs/operators';
-import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
-import {MemberUtils, Permission} from '@shared/utils/member';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {ReplicasDialogComponent} from '@app/cluster/details/external-cluster/replicas-dialog/component';
-import {UserService} from '@core/services/user';
-import {Member} from '@shared/entity/member';
-import {GroupConfig} from '@shared/model/Config';
+import {ExternalMachineDeploymentService} from '@core/services/external-machine-deployment';
 
 @Component({
   selector: 'km-external-machine-deployment-details',
@@ -38,14 +39,6 @@ import {GroupConfig} from '@shared/model/Config';
   styleUrls: ['./style.scss'],
 })
 export class ExternalMachineDeploymentDetailsComponent implements OnInit, OnDestroy {
-  private readonly _refreshTime = 10;
-  private readonly _unsubscribe: Subject<void> = new Subject<void>();
-  private _machineDeploymentID: string;
-  private _isMachineDeploymentLoaded = false;
-  private _clusterID: string;
-  private _isClusterLoaded = false;
-  private _user: Member;
-  private _currentGroupConfig: GroupConfig;
   machineDeployment: ExternalMachineDeployment;
   nodes: Node[] = [];
   areNodesInitialized = false;
@@ -55,13 +48,23 @@ export class ExternalMachineDeploymentDetailsComponent implements OnInit, OnDest
   clusterProvider: string;
   datacenter: Datacenter;
   projectID: string;
+  private readonly _refreshTime = 10;
+  private readonly _unsubscribe: Subject<void> = new Subject<void>();
+  private _machineDeploymentID: string;
+  private _isMachineDeploymentLoaded = false;
+  private _clusterID: string;
+  private _isClusterLoaded = false;
+  private _user: Member;
+  private _currentGroupConfig: GroupConfig;
 
   constructor(
     private readonly _activatedRoute: ActivatedRoute,
     private readonly _matDialog: MatDialog,
     private readonly _appConfig: AppConfigService,
     private readonly _userService: UserService,
-    private readonly _clusterService: ClusterService
+    private readonly _clusterService: ClusterService,
+    private readonly _externalMachineDeploymentService: ExternalMachineDeploymentService,
+    private readonly _router: Router
   ) {}
 
   ngOnInit(): void {
@@ -135,14 +138,12 @@ export class ExternalMachineDeploymentDetailsComponent implements OnInit, OnDest
     return ExternalMachineDeployment.getStatusMessage(this.machineDeployment);
   }
 
-  private _storeNodeMetrics(metrics: NodeMetrics[]): void {
-    const map = new Map<string, NodeMetrics>();
-    metrics.forEach(m => map.set(m.name, m));
-    this.metrics = map;
-  }
-
   isEditEnabled(): boolean {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'machineDeployments', Permission.Edit);
+  }
+
+  isDeleteEnabled(): boolean {
+    return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'machineDeployments', Permission.Delete);
   }
 
   updateReplicas(): void {
@@ -154,5 +155,25 @@ export class ExternalMachineDeploymentDetailsComponent implements OnInit, OnDest
       },
     };
     this._matDialog.open(ReplicasDialogComponent, dialogConfig);
+  }
+
+  showDeleteDialog(): void {
+    this._externalMachineDeploymentService
+      .showExternalMachineDeploymentDeleteDialog(this.projectID, this.cluster, this.machineDeployment)
+      .subscribe(isDeploymentDeleted => {
+        if (isDeploymentDeleted) {
+          this._goBack();
+        }
+      });
+  }
+
+  private _goBack(): void {
+    this._router.navigateByUrl(`projects/${this.projectID}/clusters/external/${this.cluster.id}`);
+  }
+
+  private _storeNodeMetrics(metrics: NodeMetrics[]): void {
+    const map = new Map<string, NodeMetrics>();
+    metrics.forEach(m => map.set(m.name, m));
+    this.metrics = map;
   }
 }

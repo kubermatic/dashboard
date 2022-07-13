@@ -132,9 +132,17 @@ limitations under the License.
                 <button mat-icon-button
                         class="machine-deployment-action"
                         matTooltip="Update number of replicas"
-                        (click)="updateReplicas(element); $event.stopPropagation()"
+                        (click)="updateReplicas(element, $event);"
                         [disabled]="!isEditEnabled()">
                   <i class="km-icon-mask km-icon-edit"></i>
+                </button>
+
+                <button mat-icon-button
+                        class="machine-deployment-action"
+                        matTooltip="Delete Machine Deployment"
+                        [disabled]="!isDeleteEnabled()"
+                        (click)="showDeleteDialog(element, $event);">
+                  <i class="km-icon-mask km-icon-delete"></i>
                 </button>
               </ng-container>
             </ng-container>
