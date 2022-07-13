@@ -73,7 +73,7 @@ export class ExternalClusterWizardComponent implements OnInit, OnDestroy {
       case StepRegistry.Credentials:
         return !this._externalClusterService.isCredentialsStepValid;
       case StepRegistry.ExternalClusterDetails:
-        if (this.selectedProvider === ExternalClusterProvider.EKS) {
+        if (this.selectedProvider === ExternalClusterProvider.EKS || ExternalClusterProvider.GKE) {
           return !this._externalClusterService.isClusterDetailsStepValid;
         }
         return false;

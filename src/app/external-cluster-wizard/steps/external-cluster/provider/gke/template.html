@@ -1,5 +1,30 @@
-<form [formGroup]="form">
-  <div fxFlex="50%">
+<!--
+Copyright 2022 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<form [formGroup]="form"
+      fxLayout="row"
+      fxLayoutGap="30px"
+      fxLayout.md="column"
+      fxLayoutGap.md="auto"
+      fxLayout.sm="column"
+      fxLayoutGap.sm="30px">
+
+  <div fxFlex="50%"
+       fxLayout="column"
+       fxLayoutGap="8px">
+
     <mat-card-header class="km-no-padding">
       <mat-card-title>Cluster</mat-card-title>
     </mat-card-header>
@@ -24,17 +49,6 @@
     </mat-form-field>
 
     <mat-form-field>
-      <mat-label>Zone</mat-label>
-      <input matInput
-             type="text"
-             [formControlName]="Controls.Zone" />
-      <mat-hint>Enter the Zone for your Cluster</mat-hint>
-      <mat-error *ngIf="form.get(Controls.Zone).hasError('required')">
-        Zone is <strong>required</strong>.
-      </mat-error>
-    </mat-form-field>
-
-    <mat-form-field>
       <mat-label>Kubernetes Version
       </mat-label>
       <input matInput
@@ -52,4 +66,22 @@
       <mat-hint>Set the Initial Node Count.</mat-hint>
     </mat-form-field>
   </div>
+
+  <div fxFlex="50%"
+       fxLayout="column"
+       fxLayoutGap="8px">
+
+    <mat-card-header class="km-no-padding">
+      <mat-card-title>Google Cloud Settings</mat-card-title>
+    </mat-card-header>
+
+    <km-autocomplete class="km-dropdown-with-suffix"
+                     label="Zone"
+                     required="true"
+                     [isLoading]="isLoadingZones"
+                     [options]="zones"
+                     [formControlName]="Controls.Zone">
+    </km-autocomplete>
+  </div>
+
 </form>
