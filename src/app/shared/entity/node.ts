@@ -127,7 +127,7 @@ export class NodeAddress {
 
 export class NodeIPAddress {
   internalIPs: string[] = [];
-  externalIP: string;
+  externalIPs: string[] = [];
 }
 
 export class NodeSystemInfo {
