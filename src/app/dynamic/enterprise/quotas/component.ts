@@ -30,13 +30,15 @@ import {UserService} from '@core/services/user';
 import {QuotaDetails} from '@shared/entity/quota';
 import _ from 'lodash';
 import {ProjectQuotaDialogComponent} from './project-quota-dialog/component';
+import {ConfirmationDialogComponent, ConfirmationDialogConfig} from '@shared/components/confirmation-dialog/component';
+import {NotificationService} from '@core/services/notification';
 
 enum Column {
   ProjectId = 'ProjectId',
   CPU = 'CPU',
   Memory = 'Memory',
   Storage = 'Storage',
-  Spacer = 'Spacer',
+  Actions = 'Actions',
 }
 
 @Component({
@@ -49,7 +51,7 @@ export class QuotasComponent implements OnInit {
 
   quotas: QuotaDetails[] = [];
   dataSource = new MatTableDataSource<QuotaDetails>(this.quotas);
-  displayedColumns: string[] = [Column.ProjectId, Column.CPU, Column.Memory, Column.Storage, Column.Spacer];
+  displayedColumns: Column[] = [Column.ProjectId, Column.CPU, Column.Memory, Column.Storage, Column.Actions];
 
   isLoading: boolean;
   readonly Column = Column;
@@ -58,6 +60,7 @@ export class QuotasComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   constructor(
+    private readonly _notificationService: NotificationService,
     private readonly _quotaService: QuotaService,
     private readonly _userService: UserService,
     private readonly _matDialog: MatDialog
@@ -100,14 +103,38 @@ export class QuotasComponent implements OnInit {
     this.dataSource.filter = query;
   }
 
-  async add(): Promise<void> {
-    await lastValueFrom(
+  addQuota(): void {
+    this._matDialog.open<ProjectQuotaDialogComponent, QuotaDetails, never>(ProjectQuotaDialogComponent, {
+      panelClass: 'km-quota-dialog',
+    });
+  }
+
+  editQuota(quota: QuotaDetails): void {
+    this._matDialog.open<ProjectQuotaDialogComponent, QuotaDetails, never>(ProjectQuotaDialogComponent, {
+      panelClass: 'km-quota-dialog',
+      data: quota,
+    });
+  }
+
+  async deleteQuota(quota: QuotaDetails): Promise<void> {
+    const {subjectHumanReadableName, name} = quota ?? {};
+    const isConfirmed = await lastValueFrom(
       this._matDialog
-        .open(ProjectQuotaDialogComponent, {
-          panelClass: 'km-quota-dialog',
+        .open<ConfirmationDialogComponent, ConfirmationDialogConfig, boolean>(ConfirmationDialogComponent, {
+          data: {
+            title: 'Delete Quota',
+            message: `Delete quota for <b>${subjectHumanReadableName ?? name}</b>?`,
+            confirmLabel: 'Delete',
+          },
         })
         .afterClosed()
     );
+
+    if (!isConfirmed) return;
+
+    await lastValueFrom(this._quotaService.deleteQuota(name));
+    this._notificationService.success(`Deleting the <b>${subjectHumanReadableName ?? name}</b> quota`);
+    this._quotaService.refreshQuotas();
   }
 
   private _setSortConfig() {

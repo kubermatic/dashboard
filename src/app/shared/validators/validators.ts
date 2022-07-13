@@ -13,11 +13,9 @@
 // limitations under the License.
 
 import {ValidatorFn, Validators} from '@angular/forms';
-
-import {UniqueValidator} from '@shared/validators/unique.validator';
-import {LargerThanValidator} from '@shared/validators/larger-than.validator';
 import {ChipPatternValidator} from '@shared/validators/chip.pattern.validator';
-
+import {LargerThanValidator} from '@shared/validators/larger-than.validator';
+import {UniqueValidator} from '@shared/validators/unique.validator';
 import {CronExpressionValidator} from './cron.validator';
 import {AtLeastOneValidator} from './at-least-one.validator';
 

@@ -17,31 +17,31 @@ import {Project, ProjectStatus} from '@shared/entity/project';
 export function fakeProjects(): Project[] {
   return [
     {
-      creationTimestamp: new Date('2022-07-11T19:53:16.240Z'),
+      creationTimestamp: new Date(),
       id: '123ab4cd5e',
       name: 'new-project-1',
       status: ProjectStatus.Active,
       owners: [
         {
-          creationTimestamp: new Date('2022-07-11T19:53:16.240Z'),
+          creationTimestamp: new Date(),
           name: 'John Doe',
           email: 'john.doe@example.com',
         },
       ],
     },
     {
-      creationTimestamp: new Date('2022-07-11T19:53:16.240Z'),
+      creationTimestamp: new Date(),
       id: '234ab5cd6e',
       name: 'new-project-2',
       status: ProjectStatus.Active,
       owners: [
         {
-          creationTimestamp: new Date('2022-07-11T19:53:16.240Z'),
+          creationTimestamp: new Date(),
           name: 'John Doe',
           email: 'john.doe@example.com',
         },
         {
-          creationTimestamp: new Date('2022-07-11T19:53:16.240Z'),
+          creationTimestamp: new Date(),
           name: 'John Doe Junior',
           email: 'johndoejunior@example.com',
         },

@@ -13,9 +13,7 @@
 // limitations under the License.
 
 import {Injectable} from '@angular/core';
-
 import {Observable, of} from 'rxjs';
-
 import {AdminSettings, UserSettings} from '@shared/entity/settings';
 
 export const DEFAULT_USER_SETTINGS_MOCK: UserSettings = {
