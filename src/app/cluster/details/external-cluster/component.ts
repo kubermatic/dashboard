@@ -76,6 +76,14 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
     private readonly _notificationService: NotificationService
   ) {}
 
+  get subnetIds(): string[] {
+    return this.cluster?.spec?.eksclusterSpec?.vpcConfigRequest?.subnetIds;
+  }
+
+  get securityGroupIds(): string[] {
+    return this.cluster?.spec?.eksclusterSpec?.vpcConfigRequest?.securityGroupIds;
+  }
+
   ngOnInit(): void {
     this.projectID = this._activatedRoute.snapshot.paramMap.get(PathParam.ProjectID);
     const clusterID = this._activatedRoute.snapshot.paramMap.get(PathParam.ClusterID);

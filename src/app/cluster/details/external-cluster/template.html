@@ -109,24 +109,77 @@ limitations under the License.
             <span class="km-provider-logo km-provider-logo-{{provider}}"></span>
           </div>
         </km-property>
-        <km-property *ngIf="provider === Provider.AKS">
-          <div key>Resource Group</div>
-          <div value>{{cluster?.cloud?.aks?.resourceGroup}}</div>
-        </km-property>
-        <km-property *ngIf="provider === Provider.EKS">
-          <div key>Region</div>
-          <div value>{{cluster?.cloud?.eks?.region}}</div>
-        </km-property>
-        <km-property *ngIf="provider === Provider.GKE">
-          <div key>Zone</div>
-          <div value>{{cluster?.cloud?.gke?.zone}}</div>
-        </km-property>
         <km-property>
           <div key>Created</div>
           <div value>
             <km-relative-time [date]="cluster.creationTimestamp"></km-relative-time>
           </div>
         </km-property>
+
+        <!-- specification for AKS -->
+        <ng-container>
+          <km-property *ngIf="provider === Provider.AKS">
+            <div key>Resource Group</div>
+            <div value>{{cluster?.cloud?.aks?.resourceGroup}}</div>
+          </km-property>
+        </ng-container>
+
+        <!-- specification for EKS -->
+        <ng-container *ngIf="provider === Provider.EKS">
+          <km-property>
+            <div key>Region</div>
+            <div value>{{cluster?.cloud?.eks?.region}}</div>
+          </km-property>
+          <km-property>
+            <div key>Cluster Version</div>
+            <div value>{{cluster?.spec?.eksclusterSpec?.version}}</div>
+          </km-property>
+          <km-property>
+            <div key>subnet Ids</div>
+            <div value>
+              <mat-chip-list *ngIf="subnetIds.length > 0">
+                <div *ngFor="let subnetId of subnetIds">
+                  <mat-chip>
+                    <div>{{subnetId}}</div>
+                  </mat-chip>
+                </div>
+              </mat-chip-list>
+            </div>
+          </km-property>
+          <km-property>
+            <div key>security Group Ids</div>
+            <div value>
+              <mat-chip-list *ngIf="securityGroupIds.length > 0">
+                <div *ngFor="let securityGroupId of securityGroupIds">
+                  <mat-chip>
+                    <div>{{securityGroupId}}</div>
+                  </mat-chip>
+                </div>
+              </mat-chip-list>
+            </div>
+          </km-property>
+        </ng-container>
+
+        <!-- specification for GKE -->
+        <ng-container *ngIf="provider === Provider.GKE">
+          <km-property>
+            <div key>Zone</div>
+            <div value>{{cluster?.cloud?.gke?.zone}}</div>
+          </km-property>
+          <km-property>
+            <div key>Cluster Version</div>
+            <div value>{{cluster?.spec?.gkeclusterSpec?.initialClusterVersion}}</div>
+          </km-property>
+          <km-property>
+            <div key>cluster Ipv4 Cidr</div>
+            <div value>{{cluster?.spec?.gkeclusterSpec?.clusterIpv4Cidr}}</div>
+          </km-property>
+          <km-property>
+            <div key>default Max Pods Constraint</div>
+            <div value>{{cluster?.spec?.gkeclusterSpec?.defaultMaxPodsConstraint}}</div>
+          </km-property>
+        </ng-container>
+        <!--  -->
         <km-property *ngIf="cluster.labels">
           <div key>Labels</div>
           <div value>
