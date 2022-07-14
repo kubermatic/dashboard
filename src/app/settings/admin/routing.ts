@@ -70,6 +70,10 @@ const routes: Routes = [
         path: 'rulegroups',
         loadChildren: () => import('./rule-groups/module').then(m => m.AdminSettingsRuleGroupsModule),
       },
+      {
+        path: 'quotas',
+        loadChildren: () => DynamicModule.Quotas,
+      },
     ],
   },
 ];

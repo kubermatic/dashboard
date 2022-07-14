@@ -15,6 +15,8 @@
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {AdminSettings, UserSettings} from '@shared/entity/settings';
+import {GetQuotasMock} from '../data/quota';
+import {QuotaDetails} from '@shared/entity/quota';
 
 export const DEFAULT_USER_SETTINGS_MOCK: UserSettings = {
   itemsPerPage: 10,
@@ -60,6 +62,8 @@ export const DEFAULT_ADMIN_SETTINGS_MOCK: AdminSettings = {
 
 @Injectable()
 export class SettingsMockService {
+  private _quotas = GetQuotasMock();
+
   get adminSettings(): Observable<AdminSettings> {
     return of(DEFAULT_ADMIN_SETTINGS_MOCK);
   }
@@ -69,4 +73,8 @@ export class SettingsMockService {
   }
 
   refreshCustomLinks(): void {}
+
+  get quotas(): Observable<QuotaDetails[]> {
+    return of(this._quotas);
+  }
 }

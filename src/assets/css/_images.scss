@@ -364,6 +364,10 @@
   @include mixins.mask-image('/assets/images/icons/restore.svg', 18px);
 }
 
+.km-icon-quota {
+  @include mixins.mask-image('/assets/images/icons/quota.svg', 24px);
+}
+
 .km-provider-logo-alibaba {
   @include mixins.provider-image('/assets/images/clouds/alibaba.svg', 115px, 30px);
 }

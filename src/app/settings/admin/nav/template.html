@@ -117,6 +117,17 @@ limitations under the License.
     </a>
   </div>
 
+  <div class="menu-item"
+       *ngIf="isEnterpriseEdition">
+    <a id="km-nav-item-quotas"
+       routerLink="quotas"
+       routerLinkActive="active"
+       fxLayoutAlign=" center">
+      <i class="km-icon-quota"></i>
+      <span>Quotas</span>
+    </a>
+  </div>
+
   <div fxFlex></div>
 
   <div class="menu-item km-pointer">
