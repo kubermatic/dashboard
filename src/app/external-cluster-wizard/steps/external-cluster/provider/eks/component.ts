@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -24,9 +24,11 @@ import {
 import {StepBase} from '@app/external-cluster-wizard/steps/base';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {NameGeneratorService} from '@core/services/name-generator';
-import {EKSVpc} from '@shared/entity/provider/eks';
+import {EKSCloudSpec, EKSClusterSpec, EKSVpc} from '@shared/entity/provider/eks';
 import {forkJoin} from 'rxjs';
 import {debounceTime, finalize, takeUntil} from 'rxjs/operators';
+import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
+import {ExternalCloudSpec, ExternalClusterModel, ExternalClusterSpec} from '@shared/entity/external-cluster';
 
 enum Controls {
   Name = 'name',
@@ -57,13 +59,12 @@ export class EKSClusterSettingsComponent
   extends StepBase
   implements OnInit, OnDestroy, ControlValueAccessor, Validator
 {
-  private readonly _debounceTime = 500;
   readonly Controls = Controls;
   isLoadingVpcs: boolean;
   vpcs: string[] = [];
   subnetIds: string[] = [];
   securityGroupIds: string[] = [];
-  @Input() projectID: string;
+  private readonly _debounceTime = 500;
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -85,21 +86,21 @@ export class EKSClusterSettingsComponent
   }
 
   generateName(): void {
-    this.form.get(Controls.Name).setValue(this._nameGenerator.generateName());
+    this.control(Controls.Name).setValue(this._nameGenerator.generateName());
   }
 
-  private _initForm() {
+  private _initForm(): void {
     this.form = this._builder.group({
-      [Controls.Name]: this._builder.control('', Validators.required),
+      [Controls.Name]: this._builder.control('', [Validators.required, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR]),
       [Controls.RoleArn]: this._builder.control('', Validators.required),
-      [Controls.Version]: this._builder.control(null),
+      [Controls.Version]: this._builder.control(null, [Validators.required]),
       [Controls.Vpc]: this._builder.control(null, Validators.required),
       [Controls.SubnetIds]: this._builder.control([], Validators.required),
       [Controls.SecurityGroupsIds]: this._builder.control([], Validators.required),
     });
   }
 
-  private _initSubscriptions() {
+  private _initSubscriptions(): void {
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
       this._updateExternalClusterModel();
       this._externalClusterService.isClusterDetailsStepValid = this.form.valid;
@@ -136,7 +137,7 @@ export class EKSClusterSettingsComponent
       });
   }
 
-  private _getEKSVpcs() {
+  private _getEKSVpcs(): void {
     this.isLoadingVpcs = true;
     this._externalClusterService
       .getEKSVpcs()
@@ -167,8 +168,8 @@ export class EKSClusterSettingsComponent
         eks: {
           ...this._externalClusterService.externalCluster.cloud?.eks,
           name: this.controlValue(Controls.Name),
-        },
-      },
+        } as EKSCloudSpec,
+      } as ExternalCloudSpec,
       spec: {
         eksclusterSpec: {
           roleArn: this.controlValue(Controls.RoleArn),
@@ -177,9 +178,9 @@ export class EKSClusterSettingsComponent
             subnetIds: this.controlValue(Controls.SubnetIds),
             securityGroupIds: this.controlValue(Controls.SecurityGroupsIds),
           },
-        },
+        } as EKSClusterSpec,
         version: this.controlValue(Controls.Version),
-      },
-    };
+      } as ExternalClusterSpec,
+    } as ExternalClusterModel;
   }
 }
