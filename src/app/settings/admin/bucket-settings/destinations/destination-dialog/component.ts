@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DatacenterService} from '@core/services/datacenter';
@@ -20,6 +20,7 @@ import {NotificationService} from '@core/services/notification';
 import {AdminSeed, BackupDestination, DestinationDetails, Destinations} from '@shared/entity/datacenter';
 import {Observable, Subject} from 'rxjs';
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
+import _ from 'lodash';
 
 export interface DestinationDialogData {
   title: string;
@@ -46,6 +47,7 @@ export enum Controls {
   selector: 'km-destination-dialog',
   templateUrl: './template.html',
   styleUrls: ['style.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DestinationDialog implements OnInit, OnDestroy {
   readonly Controls = Controls;
@@ -117,10 +119,10 @@ export class DestinationDialog implements OnInit, OnDestroy {
       [Controls.Endpoint]: this.form.get(Controls.Endpoint).value,
     };
 
-    const destination: Destinations = this.data.seed.spec.etcdBackupRestore?.destinations || {};
+    const destination: Destinations = _.cloneDeep(this.data.seed.spec.etcdBackupRestore?.destinations || {});
     destination[this.form.get(Controls.DestinationName).value] = destinationDetails;
 
-    const configuration: AdminSeed = this.data.seed;
+    const configuration: AdminSeed = _.cloneDeep(this.data.seed);
     if (!configuration.spec.etcdBackupRestore) {
       configuration.spec.etcdBackupRestore = {destinations: {}, defaultDestination: ''};
     }
