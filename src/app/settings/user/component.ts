@@ -96,7 +96,6 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
         this.settings.useClustersView = false;
         break;
     }
-    // landingPage === View.Clusters ? (this.settings.useClustersView = true) : (this.settings.useClustersView = false);
     this.onSettingsChange();
   }
 

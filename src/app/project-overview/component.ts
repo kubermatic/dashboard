@@ -55,10 +55,10 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   externalClustersChange = new Subject<void>();
   clusterTemplatesChange = new Subject<void>();
   backupsChange = new Subject<void>();
+  firstVisitToOverviewPage: string;
   private _projectChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
   private readonly _refreshTime = 15;
-  firstVisitToOverviewPage: string;
   private readonly _cookieName = 'firstVisit';
 
   constructor(

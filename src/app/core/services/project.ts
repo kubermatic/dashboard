@@ -22,7 +22,7 @@ import {environment} from '@environments/environment';
 import {Project, ProjectModel, ProjectStatus} from '@shared/entity/project';
 import {View} from '@shared/entity/common';
 import {EMPTY, merge, Observable, of, Subject, timer} from 'rxjs';
-import {catchError, map, shareReplay, switchMap} from 'rxjs/operators';
+import {catchError, map, shareReplay, switchMap, take} from 'rxjs/operators';
 
 @Injectable()
 export class ProjectService {
@@ -93,17 +93,18 @@ export class ProjectService {
     return this._http.delete<Project>(url);
   }
 
-  selectProject(project: Project): Promise<boolean> {
+  selectProject(project: Project): void {
     let projectLandingPage: string;
     if (project?.status === ProjectStatus.Active) {
       this.onProjectChange.emit(project);
-      this._userService.currentUser.subscribe(settings => {
+      this._userService.currentUser.pipe(take(1)).subscribe(settings => {
         projectLandingPage = settings.userSettings.useClustersView ? View.Clusters : View.Overview;
-      });
-      return this._router.navigateByUrl(`/projects/${project.id}/${projectLandingPage}`);
-    }
 
-    return this._router.navigateByUrl('/projects');
+        this._router.navigateByUrl(`/projects/${project.id}/${projectLandingPage}`);
+      });
+    } else {
+      this._router.navigateByUrl('/projects');
+    }
   }
 
   private get _selectedProjectID(): string {
