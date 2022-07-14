@@ -22,9 +22,12 @@ import {
   Validators,
 } from '@angular/forms';
 import {StepBase} from '@app/external-cluster-wizard/steps/base';
+import {ExternalCloudSpec, ExternalClusterModel, ExternalClusterSpec} from '@app/shared/entity/external-cluster';
+import {GKECloudSpec, GKEClusterSpec, GKEZone} from '@app/shared/entity/provider/gke';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {NameGeneratorService} from '@core/services/name-generator';
-import {takeUntil, map} from 'rxjs/operators';
+import {map, takeUntil} from 'rxjs/operators';
+import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
 
 enum Controls {
   Name = 'name',
@@ -77,30 +80,30 @@ export class GKEClusterSettingsComponent
     this._unsubscribe.complete();
   }
 
-  private _initForm() {
+  generateName(): void {
+    this.control(Controls.Name).setValue(this._nameGenerator.generateName());
+  }
+
+  private _initForm(): void {
     this.form = this._builder.group({
-      [Controls.Name]: this._builder.control('', Validators.required),
+      [Controls.Name]: this._builder.control('', [Validators.required, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR]),
       [Controls.Zone]: this._builder.control('', Validators.required),
       [Controls.Version]: this._builder.control('', Validators.required),
       [Controls.NodeCount]: this._builder.control('', Validators.required),
     });
   }
 
-  generateName(): void {
-    this.form.get(Controls.Name).setValue(this._nameGenerator.generateName());
-  }
-
-  private _initSubscriptions() {
+  private _initSubscriptions(): void {
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
       this._updateExternalClusterModel();
       this._externalClusterService.isClusterDetailsStepValid = this.form.valid;
     });
   }
 
-  private _getGKEZones() {
+  private _getGKEZones(): void {
     this._externalClusterService
       .getGKEZones()
-      .pipe(map(zones => zones.map(zone => zone.name)))
+      .pipe(map((zones: GKEZone[]) => zones.map(zone => zone.name)))
       .subscribe(zones => (this.zones = zones));
   }
 
@@ -112,14 +115,14 @@ export class GKEClusterSettingsComponent
           ...this._externalClusterService.externalCluster.cloud?.gke,
           name: this.controlValue(Controls.Name),
           zone: this.controlValue(Controls.Zone)?.main,
-        },
-      },
+        } as GKECloudSpec,
+      } as ExternalCloudSpec,
       spec: {
         gkeclusterSpec: {
           initialClusterVersion: this.controlValue(Controls.Version),
           initialNodeCount: this.controlValue(Controls.NodeCount),
-        },
-      },
-    };
+        } as GKEClusterSpec,
+      } as ExternalClusterSpec,
+    } as ExternalClusterModel;
   }
 }

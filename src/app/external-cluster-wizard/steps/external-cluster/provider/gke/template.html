@@ -46,6 +46,9 @@ limitations under the License.
       <mat-error *ngIf="form.get(Controls.Name).hasError('required')">
         Name is <strong>required</strong>.
       </mat-error>
+      <mat-error *ngIf="form.get(Controls.Name).hasError('pattern')">
+        Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash.
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field>
@@ -54,7 +57,10 @@ limitations under the License.
       <input matInput
              type="text"
              [formControlName]="Controls.Version" />
-      <mat-hint>Set the kubernetes Version.</mat-hint>
+      <mat-hint>Set the kubernetes version.</mat-hint>
+      <mat-error *ngIf="form.get(Controls.Version).hasError('required')">
+        kubernetes Version is <strong>required</strong>.
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field>
@@ -64,6 +70,9 @@ limitations under the License.
              type="number"
              [formControlName]="Controls.NodeCount" />
       <mat-hint>Set the Initial Node Count.</mat-hint>
+      <mat-error *ngIf="form.get(Controls.NodeCount).hasError('required')">
+        Initial Node Count is <strong>required</strong>.
+      </mat-error>
     </mat-form-field>
   </div>
 
@@ -81,7 +90,9 @@ limitations under the License.
                      [isLoading]="isLoadingZones"
                      [options]="zones"
                      [formControlName]="Controls.Zone">
+      <ng-container hint>Chose from Zones List.</ng-container>
     </km-autocomplete>
+
   </div>
 
 </form>
