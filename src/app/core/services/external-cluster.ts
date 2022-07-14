@@ -16,7 +16,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {AKSCluster} from '@shared/entity/provider/aks';
 import {EKSCluster, EKSVpc} from '@shared/entity/provider/eks';
-import {GKECluster} from '@shared/entity/provider/gke';
+import {GKECluster, GKEZone} from '@shared/entity/provider/gke';
 import {ExternalCluster, ExternalClusterModel, ExternalClusterProvider} from '@shared/entity/external-cluster';
 import {PresetList} from '@shared/entity/preset';
 import {BehaviorSubject, Observable, of, throwError} from 'rxjs';
@@ -196,6 +196,11 @@ export class ExternalClusterService {
     this.isClusterDetailsStepValid = false;
   }
 
+  getGKEZones(): Observable<GKEZone[]> {
+    const url = `${this._newRestRoot}//providers/gke/zones`;
+    return this._http.get<GKEZone[]>(url, {headers: this._getGKEHeaders()}).pipe(catchError(() => of<[]>()));
+  }
+
   getEKSVpcs(): Observable<EKSVpc[]> {
     const url = `${this._newRestRoot}/providers/eks/vpcs`;
     return this._http.get<EKSVpc[]>(url, {headers: this._getEKSHeaders()}).pipe(catchError(() => of<[]>()));
@@ -220,6 +225,9 @@ export class ExternalClusterService {
     switch (this.provider) {
       case ExternalClusterProvider.EKS:
         headers = this._getEKSHeaders();
+        break;
+      case ExternalClusterProvider.GKE:
+        headers = this._getGKEHeaders();
         break;
       default:
         return throwError(() => 'Not implemented');

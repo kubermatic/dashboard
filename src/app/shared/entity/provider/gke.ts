@@ -91,3 +91,7 @@ export class GKENodeConfig {
   labels?: object;
   preemptible?: boolean;
 }
+
+export class GKEZone {
+  name: string;
+}
