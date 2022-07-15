@@ -42,6 +42,7 @@ export class OpenstackFloatingIPPool {
 export class OpenstackSubnet {
   id: string;
   name: string;
+  ipVersion: number;
 }
 
 export class OpenstackSecurityGroup {
@@ -56,4 +57,12 @@ export class OpenstackOptionalFields {
 
 export class OpenstackAvailabilityZone {
   name: string;
+}
+
+export class OpenstackSubnetPool {
+  id: string;
+  name: string;
+  ipVersion: number;
+  isDefault: boolean;
+  prefixes?: string[];
 }

@@ -245,6 +245,8 @@ export class OpenstackCloudSpec extends ExtraCloudSpecOptions {
   securityGroups: string;
   floatingIPPool: string;
   subnetID: string;
+  ipv6SubnetID: string;
+  ipv6SubnetPool: string;
 
   static isEmpty(spec: OpenstackCloudSpec): boolean {
     return _.difference(Object.keys(spec), Object.keys(ExtraCloudSpecOptions.new(spec))).every(key => !spec[key]);

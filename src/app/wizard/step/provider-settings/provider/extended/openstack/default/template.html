@@ -48,21 +48,58 @@ limitations under the License.
     </div>
   </km-combobox>
 
-  <km-combobox #subnetIDCombobox
+  <km-combobox #ipv4SubnetIDCombobox
                [required]="false"
                [grouped]="false"
                [isDisabled]="isPresetSelected"
-               [valueFormatter]="subnetIDDisplayName.bind(this)"
-               [options]="subnetIDs"
-               [hint]="getHint(Controls.SubnetID)"
-               [formControlName]="Controls.SubnetID"
-               (changed)="onSubnetIDChange($event)"
-               [label]="subnetIDsLabel"
-               inputLabel="Select subnet id..."
+               [valueFormatter]="ipv4SubnetIDDisplayName.bind(this)"
+               [options]="ipv4SubnetIDs"
+               [hint]="getHint(Controls.IPv4SubnetID)"
+               [formControlName]="Controls.IPv4SubnetID"
+               (changed)="onIPv4SubnetIDChange($event)"
+               [label]="ipv4SubnetIDsLabel"
+               inputLabel="Select IPv4 subnet ID..."
                filterBy="name"
                selectBy="id">
     <div *option="let subnet">
       {{subnet.name}} ({{subnet.id}})
     </div>
   </km-combobox>
+
+  <ng-container *ngIf="isDualStackNetworkSelected">
+    <km-combobox #ipv6SubnetIDCombobox
+                 [required]="false"
+                 [grouped]="false"
+                 [isDisabled]="isPresetSelected"
+                 [valueFormatter]="ipv6SubnetIDDisplayName.bind(this)"
+                 [options]="ipv6SubnetIDs"
+                 [hint]="getHint(Controls.IPv6SubnetID)"
+                 [formControlName]="Controls.IPv6SubnetID"
+                 (changed)="onIPv6SubnetIDChange($event)"
+                 [label]="ipv6SubnetIDsLabel"
+                 inputLabel="Select IPv6 subnet ID..."
+                 filterBy="name"
+                 selectBy="id">
+      <div *option="let subnet">
+        {{subnet.name}} ({{subnet.id}})
+      </div>
+    </km-combobox>
+
+    <km-combobox #ipv6SubnetPoolCombobox
+                 [required]="false"
+                 [grouped]="false"
+                 [isDisabled]="isPresetSelected"
+                 [options]="ipv6SubnetPools"
+                 [hint]="getHint(Controls.IPv6SubnetPool)"
+                 [formControlName]="Controls.IPv6SubnetPool"
+                 (changed)="onIPv6SubnetPoolChange($event)"
+                 [label]="ipv6SubnetPoolsLabel"
+                 inputLabel="Select IPv6 subnet pool..."
+                 filterBy="name"
+                 selectBy="name">
+      <div *option="let subnetPool">
+        {{subnetPool.name}}
+      </div>
+    </km-combobox>
+  </ng-container>
 </form>

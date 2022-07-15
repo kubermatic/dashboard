@@ -23,39 +23,37 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {OpenstackCredentialsTypeService} from '@app/wizard/step/provider-settings/provider/extended/openstack/service';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {PresetsService} from '@core/services/wizard/presets';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
-import {OpenstackNetwork, OpenstackSecurityGroup, OpenstackSubnet} from '@shared/entity/provider/openstack';
+import {Cluster} from '@shared/entity/cluster';
+import {
+  OpenstackNetwork,
+  OpenstackSecurityGroup,
+  OpenstackSubnet,
+  OpenstackSubnetPool,
+} from '@shared/entity/provider/openstack';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
 import {EMPTY, merge, Observable, onErrorResumeNext} from 'rxjs';
-import {catchError, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {catchError, debounceTime, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {OpenstackCredentialsTypeService} from '../service';
+import {IPVersion} from '../shared/types/ip-version';
+import {
+  IPv4SubnetIDState,
+  IPv6SubnetIDState,
+  IPv6SubnetPoolState,
+  NetworkState,
+  SecurityGroupState,
+} from '../shared/types/state';
 
 enum Controls {
   SecurityGroup = 'securityGroup',
   Network = 'network',
-  SubnetID = 'subnetID',
-}
-
-enum SecurityGroupState {
-  Ready = 'Security Group',
-  Loading = 'Loading...',
-  Empty = 'No Security Groups Available',
-}
-
-enum NetworkState {
-  Ready = 'Network',
-  Loading = 'Loading...',
-  Empty = 'No Networks Available',
-}
-
-enum SubnetIDState {
-  Ready = 'Subnet ID',
-  Loading = 'Loading...',
-  Empty = 'No Subnet IDs Available',
+  IPv4SubnetID = 'ipv4SubnetID',
+  IPv6SubnetID = 'ipv6SubnetID',
+  IPv6SubnetPool = 'ipv6SubnetPool',
 }
 
 @Component({
@@ -83,16 +81,26 @@ export class OpenstackProviderExtendedAppCredentialsComponent
   private readonly _networkCombobox: FilteredComboboxComponent;
   @ViewChild('securityGroupCombobox')
   private readonly _securityGroupCombobox: FilteredComboboxComponent;
-  @ViewChild('subnetIDCombobox')
-  private readonly _subnetIDCombobox: FilteredComboboxComponent;
+  @ViewChild('ipv4SubnetIDCombobox')
+  private readonly _ipv4SubnetIDCombobox: FilteredComboboxComponent;
+  @ViewChild('ipv6SubnetIDCombobox')
+  private readonly _ipv6SubnetIDCombobox: FilteredComboboxComponent;
+  @ViewChild('ipv6SubnetPoolCombobox')
+  private readonly _ipv6SubnetPoolCombobox: FilteredComboboxComponent;
+  private readonly _debounceTime = 500;
   readonly Controls = Controls;
   isPresetSelected = false;
   securityGroups: OpenstackSecurityGroup[] = [];
   securityGroupsLabel = SecurityGroupState.Empty;
   networks: OpenstackNetwork[] = [];
   networksLabel = NetworkState.Empty;
-  subnetIDs: OpenstackSubnet[] = [];
-  subnetIDsLabel = SubnetIDState.Empty;
+  ipv4SubnetIDs: OpenstackSubnet[] = [];
+  ipv4SubnetIDsLabel = IPv4SubnetIDState.Empty;
+  ipv6SubnetIDs: OpenstackSubnet[] = [];
+  ipv6SubnetIDsLabel = IPv6SubnetIDState.Empty;
+  ipv6SubnetPools: OpenstackSubnetPool[] = [];
+  ipv6SubnetPoolsLabel = IPv6SubnetPoolState.Empty;
+  isDualStackNetworkSelected: boolean;
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -108,7 +116,9 @@ export class OpenstackProviderExtendedAppCredentialsComponent
     this.form = this._builder.group({
       [Controls.SecurityGroup]: this._builder.control(''),
       [Controls.Network]: this._builder.control(''),
-      [Controls.SubnetID]: this._builder.control(''),
+      [Controls.IPv4SubnetID]: this._builder.control(''),
+      [Controls.IPv6SubnetID]: this._builder.control(''),
+      [Controls.IPv6SubnetPool]: this._builder.control(''),
     });
 
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset =>
@@ -121,11 +131,26 @@ export class OpenstackProviderExtendedAppCredentialsComponent
     this._credentialsTypeService.credentialsTypeChanges
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.form.reset());
+
+    this._clusterSpecService.clusterChanges
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
+      .pipe(map(cluster => Cluster.isDualStackNetworkSelected(cluster)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe({
+        next: isDualStackNetworkSelected => {
+          this.isDualStackNetworkSelected = isDualStackNetworkSelected;
+          if (!this.isDualStackNetworkSelected) {
+            this._ipv6SubnetIDCombobox?.reset();
+            this._ipv6SubnetPoolCombobox?.reset();
+          }
+        },
+      });
   }
 
   ngAfterViewInit(): void {
     merge(this._clusterSpecService.clusterChanges, this._credentialsTypeService.credentialsTypeChanges)
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
+      .pipe(debounceTime(this._debounceTime))
       .pipe(tap(_ => (!this._hasApplicationCredentials() ? this._clearSecurityGroup() : null)))
       .pipe(filter(_ => this._hasApplicationCredentials()))
       .pipe(switchMap(_ => this._securityGroupListObservable()))
@@ -134,6 +159,7 @@ export class OpenstackProviderExtendedAppCredentialsComponent
 
     merge(this._clusterSpecService.clusterChanges, this._credentialsTypeService.credentialsTypeChanges)
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
+      .pipe(debounceTime(this._debounceTime))
       .pipe(tap(_ => (!this._hasApplicationCredentials() ? this._clearNetwork() : null)))
       .pipe(filter(_ => this._hasApplicationCredentials()))
       .pipe(switchMap(_ => this._networkListObservable()))
@@ -143,11 +169,22 @@ export class OpenstackProviderExtendedAppCredentialsComponent
     this.form
       .get(Controls.Network)
       .valueChanges.pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
+      .pipe(debounceTime(this._debounceTime))
       .pipe(tap(_ => (!this._canLoadSubnet() ? this._clearSubnetID() : null)))
       .pipe(filter(_ => this._canLoadSubnet()))
       .pipe(switchMap(_ => this._subnetIDListObservable()))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._loadSubnetIDs.bind(this));
+
+    merge(this._clusterSpecService.clusterChanges, this._credentialsTypeService.credentialsTypeChanges)
+      .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
+      .pipe(debounceTime(this._debounceTime))
+      .pipe(filter(_ => Cluster.isDualStackNetworkSelected(this._clusterSpecService.cluster)))
+      .pipe(tap(_ => (!this._hasApplicationCredentials() ? this._clearSubnetPool() : null)))
+      .pipe(filter(_ => this._hasApplicationCredentials()))
+      .pipe(switchMap(_ => this._subnetPoolListObservable()))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(this._loadSubnetPools.bind(this));
   }
 
   onSecurityGroupChange(securityGroup: string): void {
@@ -158,16 +195,26 @@ export class OpenstackProviderExtendedAppCredentialsComponent
     this._clusterSpecService.cluster.spec.cloud.openstack.network = network;
   }
 
-  onSubnetIDChange(subnetID: string): void {
+  onIPv4SubnetIDChange(subnetID: string): void {
     this._clusterSpecService.cluster.spec.cloud.openstack.subnetID = subnetID;
+  }
+
+  onIPv6SubnetIDChange(subnetID: string): void {
+    this._clusterSpecService.cluster.spec.cloud.openstack.ipv6SubnetID = subnetID;
+  }
+
+  onIPv6SubnetPoolChange(subnetPool: string): void {
+    this._clusterSpecService.cluster.spec.cloud.openstack.ipv6SubnetPool = subnetPool;
   }
 
   getHint(control: Controls): string {
     switch (control) {
       case Controls.SecurityGroup:
       case Controls.Network:
+      case Controls.IPv6SubnetPool:
         return this._hasApplicationCredentials() ? '' : 'Please enter your credentials first.';
-      case Controls.SubnetID:
+      case Controls.IPv4SubnetID:
+      case Controls.IPv6SubnetID:
         return this._canLoadSubnet() ? '' : 'Please enter your credentials and network first.';
     }
   }
@@ -177,8 +224,13 @@ export class OpenstackProviderExtendedAppCredentialsComponent
     this._unsubscribe.complete();
   }
 
-  subnetIDDisplayName(id: string): string {
-    const subnetID = this.subnetIDs.find(subnetID => subnetID.id === id);
+  ipv4SubnetIDDisplayName(id: string): string {
+    const subnetID = this.ipv4SubnetIDs.find(subnetID => subnetID.id === id);
+    return subnetID ? `${subnetID.name} (${subnetID.id})` : '';
+  }
+
+  ipv6SubnetIDDisplayName(id: string): string {
+    const subnetID = this.ipv6SubnetIDs.find(subnetID => subnetID.id === id);
     return subnetID ? `${subnetID.name} (${subnetID.id})` : '';
   }
 
@@ -195,8 +247,18 @@ export class OpenstackProviderExtendedAppCredentialsComponent
   }
 
   private _loadSubnetIDs(subnetIDs: OpenstackSubnet[]): void {
-    this.subnetIDs = subnetIDs;
-    this.subnetIDsLabel = !_.isEmpty(this.subnetIDs) ? SubnetIDState.Ready : SubnetIDState.Empty;
+    this.ipv4SubnetIDs = subnetIDs.filter(subnetID => subnetID.ipVersion === IPVersion.IPv4);
+    this.ipv6SubnetIDs = subnetIDs.filter(subnetID => subnetID.ipVersion === IPVersion.IPv6);
+    this.ipv4SubnetIDsLabel = !_.isEmpty(this.ipv4SubnetIDs) ? IPv4SubnetIDState.Ready : IPv4SubnetIDState.Empty;
+    this.ipv6SubnetIDsLabel = !_.isEmpty(this.ipv6SubnetIDs) ? IPv6SubnetIDState.Ready : IPv6SubnetIDState.Empty;
+    this._cdr.detectChanges();
+  }
+
+  private _loadSubnetPools(subnetPools: OpenstackSubnetPool[]): void {
+    this.ipv6SubnetPools = subnetPools;
+    this.ipv6SubnetPoolsLabel = !_.isEmpty(this.ipv6SubnetPools)
+      ? IPv6SubnetPoolState.Ready
+      : IPv6SubnetPoolState.Empty;
     this._cdr.detectChanges();
   }
 
@@ -287,15 +349,48 @@ export class OpenstackProviderExtendedAppCredentialsComponent
   }
 
   private _clearSubnetID(): void {
-    this.subnetIDs = [];
-    this._subnetIDCombobox.reset();
-    this.subnetIDsLabel = SubnetIDState.Empty;
+    this.ipv4SubnetIDs = [];
+    this.ipv6SubnetIDs = [];
+    this._ipv4SubnetIDCombobox.reset();
+    this._ipv6SubnetIDCombobox?.reset();
+    this.ipv4SubnetIDsLabel = IPv4SubnetIDState.Empty;
+    this.ipv6SubnetIDsLabel = IPv6SubnetIDState.Empty;
     this._cdr.detectChanges();
   }
 
   private _onSubnetIDLoading(): void {
     this._clearSubnetID();
-    this.subnetIDsLabel = SubnetIDState.Loading;
+    this.ipv4SubnetIDsLabel = IPv4SubnetIDState.Loading;
+    this.ipv6SubnetIDsLabel = IPv6SubnetIDState.Loading;
+    this._cdr.detectChanges();
+  }
+
+  private _subnetPoolListObservable(): Observable<OpenstackSubnetPool[]> {
+    return this._presets
+      .provider(NodeProvider.OPENSTACK)
+      .applicationCredentialID(this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialID)
+      .applicationCredentialPassword(this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialSecret)
+      .datacenter(this._clusterSpecService.cluster.spec.cloud.dc)
+      .subnetPools(IPVersion.IPv6, this._onSubnetPoolLoading.bind(this))
+      .pipe(map(subnetPools => _.sortBy(subnetPools, s => s.name.toLowerCase())))
+      .pipe(
+        catchError(() => {
+          this._clearSubnetPool();
+          return onErrorResumeNext(EMPTY);
+        })
+      );
+  }
+
+  private _clearSubnetPool(): void {
+    this.ipv6SubnetPools = [];
+    this._ipv6SubnetPoolCombobox?.reset();
+    this.ipv6SubnetPoolsLabel = IPv6SubnetPoolState.Empty;
+    this._cdr.detectChanges();
+  }
+
+  private _onSubnetPoolLoading(): void {
+    this._clearSubnetPool();
+    this.ipv6SubnetPoolsLabel = IPv6SubnetPoolState.Loading;
     this._cdr.detectChanges();
   }
 

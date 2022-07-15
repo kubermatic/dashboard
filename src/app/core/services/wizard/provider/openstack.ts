@@ -20,6 +20,7 @@ import {
   OpenstackNetwork,
   OpenstackSecurityGroup,
   OpenstackSubnet,
+  OpenstackSubnetPool,
   OpenstackTenant,
 } from '@shared/entity/provider/openstack';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
@@ -240,6 +241,29 @@ export class Openstack extends Provider {
 
     const url = `${this._restRoot}/providers/openstack/subnets?network_id=${network}`;
     return this._http.get<OpenstackSubnet[]>(url, {headers: this._headers});
+  }
+
+  subnetPools(ipVersion: number, onLoadingCb: () => void = null): Observable<OpenstackSubnetPool[]> {
+    if (this._usingApplicationCredentials) {
+      this._setRequiredHeaders(
+        Openstack.Header.ApplicationCredentialID,
+        Openstack.Header.ApplicationCredentialSecret,
+        Openstack.Header.Datacenter
+      );
+
+      this._cleanupOptionalHeaders();
+    }
+
+    if (!this._hasRequiredHeaders() || !ipVersion) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
+    const url = `${this._newRestRoot}/providers/openstack/subnetpools?ip_version=${ipVersion}`;
+    return this._http.get<OpenstackSubnetPool[]>(url, {headers: this._headers});
   }
 
   availabilityZones(onLoadingCb: () => void = null): Observable<OpenstackAvailabilityZone[]> {
