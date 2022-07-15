@@ -92,6 +92,10 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
+  hideFirstVisitToOverviewPageMessage(): void {
+    this.firstVisitToOverviewPage = this._cookieService.get(this._cookieName);
+  }
+
   private _loadProject(): void {
     this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe)).subscribe(p => {
       this.project = p;
@@ -199,10 +203,6 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   private _checkFirstVisitToOverviewPageMessage(): void {
     this._cookieService.get(this._cookieName)
       ? this.hideFirstVisitToOverviewPageMessage()
-      : this._cookieService.set(this._cookieName, 'visited', null, '/', 'localhost', false, 'Lax');
-  }
-
-  hideFirstVisitToOverviewPageMessage(): void {
-    this.firstVisitToOverviewPage = this._cookieService.get(this._cookieName);
+      : this._cookieService.set(this._cookieName, 'visited', null, '/', window.location.hostname, false, 'Lax');
   }
 }

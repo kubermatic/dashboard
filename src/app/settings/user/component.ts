@@ -40,7 +40,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
   settings: UserSettings; // Local settings copy. User can edit it.
   apiSettings: UserSettings; // Original settings from the API. Cannot be edited by the user.
   selectedProjectLandingPage: string;
-
+  view = View;
   private readonly _debounceTime = 1000;
   private _settingsChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
@@ -62,7 +62,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
         }
         this.apiSettings = settings;
         this.settings = _.cloneDeep(this.apiSettings);
-        this.selectedProjectLandingPage = this.settings.useClustersView ? View.Clusters : View.Overview;
+        this.selectedProjectLandingPage = this.settings.useClustersView ? this.view.Clusters : this.view.Overview;
       }
     });
 

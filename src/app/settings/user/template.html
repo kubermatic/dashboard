@@ -102,12 +102,12 @@ limitations under the License.
                                  (change)="changingLandingPage($event.value)"
                                  fxLayout="row wrap">
           <mat-button-toggle class="project-overview-button"
-                             value="overview">
+                             value="{{view.Overview}}">
             <i class="km-icon-mask km-icon-projects-card"></i>
             Project Overview
           </mat-button-toggle>
           <mat-button-toggle class="clusters-button"
-                             value="clusters">
+                             value="{{view.Clusters}}">
             <i class="km-icon-mask km-icon-cluster"></i>
             Clusters
           </mat-button-toggle>
