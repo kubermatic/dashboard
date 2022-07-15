@@ -44,7 +44,7 @@ export class NodeUtils {
       if (node.status.addresses[i].type === 'InternalIP') {
         addresses.internalIPs = [...addresses.internalIPs, node.status.addresses[i].address];
       } else if (node.status.addresses[i].type === 'ExternalIP') {
-        addresses.externalIP = node.status.addresses[i].address;
+        addresses.externalIPs = [...addresses.externalIPs, node.status.addresses[i].address];
       }
     }
     return addresses;

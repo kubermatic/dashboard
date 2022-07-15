@@ -88,7 +88,7 @@ limitations under the License.
           <ng-container *ngIf="element.status.addresses && getAddresses(element) as addresses">
             <div fxLayout="column"
                  fxLayoutGap="5px"
-                 [ngClass]="{'node-ip-addresses-spacing': (addresses.externalIP && addresses.internalIPs.length) || addresses.internalIPs.length > 1}">
+                 [ngClass]="{'node-ip-addresses-spacing': (addresses.externalIPs.length && addresses.internalIPs.length) || addresses.internalIPs.length > 1 || addresses.externalIPs.length > 1}">
               <div *ngIf="!!addresses.internalIPs.length"
                    fxLayout="row"
                    fxLayoutGap="5px">
@@ -102,13 +102,18 @@ limitations under the License.
                         matTooltip="click to copy">{{internalIP}}</span>
                 </div>
               </div>
-              <div *ngIf="!!addresses.externalIP">
-                Ext. IP:
-                <span class="km-copy"
-                      [cbContent]="addresses.externalIP"
-                      (click)="$event.stopPropagation()"
-                      ngxClipboard
-                      matTooltip="click to copy">{{addresses.externalIP}}</span>
+              <div *ngIf="!!addresses.externalIPs.length"
+                   fxLayout="row"
+                   fxLayoutGap="5px">
+                <span>Ext. IP:</span>
+                <div fxLayout="column">
+                  <span *ngFor="let externalIP of addresses.externalIPs"
+                        class="km-copy"
+                        [cbContent]="externalIP"
+                        (click)="$event.stopPropagation()"
+                        ngxClipboard
+                        matTooltip="click to copy">{{externalIP}}</span>
+                </div>
               </div>
             </div>
           </ng-container>
