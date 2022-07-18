@@ -100,8 +100,12 @@ export class CreateResourcePanelComponent implements OnInit, OnDestroy {
     this._isOpen = !this._isOpen;
   }
 
-  createCluster(): void {
+  openClusterWizard(): void {
     this._router.navigate([`/projects/${this.project.id}/wizard`]);
+  }
+
+  openExternalClusterWizard(): void {
+    this._router.navigate([`/projects/${this.project.id}/external-cluster-wizard`]);
   }
 
   createClusterFromTemplate(): void {
@@ -116,7 +120,7 @@ export class CreateResourcePanelComponent implements OnInit, OnDestroy {
       .subscribe(_ => this.refreshClusters.next());
   }
 
-  createExternalCluster(): void {
+  importExternalCluster(): void {
     this.close();
     const dialog = this._matDialog.open(AddExternalClusterDialogComponent);
     dialog.componentInstance.projectId = this.project.id;

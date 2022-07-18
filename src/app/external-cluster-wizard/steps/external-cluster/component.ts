@@ -20,6 +20,7 @@ import {filter, takeUntil} from 'rxjs/operators';
 import {StepBase} from '../base';
 
 enum Controls {
+  AKSExternalCluster = 'AKSExternalCluster',
   EKSExternalCluster = 'EKSExternalCluster',
   GKEExternalCluster = 'GKEExternalCluster',
 }
@@ -69,6 +70,7 @@ export class ExternalClusterStepComponent
 
   private _initForm() {
     this.form = this._builder.group({
+      [Controls.AKSExternalCluster]: this._builder.control(''),
       [Controls.EKSExternalCluster]: this._builder.control(''),
       [Controls.GKEExternalCluster]: this._builder.control(''),
     });

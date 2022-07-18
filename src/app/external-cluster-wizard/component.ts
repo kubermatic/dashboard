@@ -35,7 +35,7 @@ import {ExternalClusterWizardStep, StepRegistry, WizardSteps} from './config';
 export class ExternalClusterWizardComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   readonly stepRegistry = StepRegistry;
-  readonly externalProviders = [ExternalClusterProvider.EKS, ExternalClusterProvider.GKE];
+  readonly externalProviders = [ExternalClusterProvider.AKS, ExternalClusterProvider.EKS, ExternalClusterProvider.GKE];
   form: FormGroup;
   project = {} as Project;
 
@@ -74,6 +74,7 @@ export class ExternalClusterWizardComponent implements OnInit, OnDestroy {
         return !this._externalClusterService.isCredentialsStepValid;
       case StepRegistry.ExternalClusterDetails:
         if (
+          this.selectedProvider === ExternalClusterProvider.AKS ||
           this.selectedProvider === ExternalClusterProvider.EKS ||
           this.selectedProvider === ExternalClusterProvider.GKE
         ) {
