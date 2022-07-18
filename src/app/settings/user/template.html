@@ -99,7 +99,7 @@ limitations under the License.
              fxLayoutAlign=" center">Project Landing Page
         </div>
         <mat-button-toggle-group [(value)]="selectedProjectLandingPage"
-                                 (change)="changingLandingPage($event.value)"
+                                 (change)="onLandingPageChange($event.value)"
                                  fxLayout="row wrap">
           <mat-button-toggle class="project-overview-button"
                              value="{{view.Overview}}">

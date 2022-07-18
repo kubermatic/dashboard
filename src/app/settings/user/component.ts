@@ -87,7 +87,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  changingLandingPage(landingPage: string): void {
+  onLandingPageChange(landingPage: string): void {
     switch (landingPage) {
       case View.Clusters:
         this.settings.useClustersView = true;
