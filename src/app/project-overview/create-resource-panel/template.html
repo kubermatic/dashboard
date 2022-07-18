@@ -27,10 +27,30 @@ limitations under the License.
          fxLayoutAlign=" center"
          fxLayoutGap="14px"
          matRipple
-         (click)="createCluster()">
+         (click)="openClusterWizard()">
       <i class="km-icon-mask km-icon-cluster"
          [ngClass]="{'km-muted-bg': !canCreateCluster}"></i>
-      <span>Cluster</span>
+      <span>Create Cluster</span>
+    </div>
+    <div class="entry"
+         [ngClass]="{'km-text-muted': !canCreateCluster, 'km-hover-bg km-pointer': canCreateCluster}"
+         fxLayoutAlign=" center"
+         fxLayoutGap="14px"
+         matRipple
+         (click)="importExternalCluster()">
+      <i class="km-icon-mask km-icon-cluster"
+         [ngClass]="{'km-muted-bg': !canCreateCluster}"></i>
+      <span>Import External Cluster</span>
+    </div>
+    <div class="entry"
+         [ngClass]="{'km-text-muted': !canCreateCluster, 'km-hover-bg km-pointer': canCreateCluster}"
+         fxLayoutAlign=" center"
+         fxLayoutGap="14px"
+         matRipple
+         (click)="openExternalClusterWizard()">
+      <i class="km-icon-mask km-icon-cluster"
+         [ngClass]="{'km-muted-bg': !canCreateCluster}"></i>
+      <span>Create External Cluster</span>
     </div>
     <div class="entry"
          [ngClass]="{'km-text-muted': !canCreateCluster, 'km-hover-bg km-pointer': canCreateCluster}"
@@ -41,16 +61,6 @@ limitations under the License.
       <i class="km-icon-mask km-icon-cluster"
          [ngClass]="{'km-muted-bg': !canCreateCluster}"></i>
       <span>Cluster from Template</span>
-    </div>
-    <div class="entry"
-         [ngClass]="{'km-text-muted': !canCreateCluster, 'km-hover-bg km-pointer': canCreateCluster}"
-         fxLayoutAlign=" center"
-         fxLayoutGap="14px"
-         matRipple
-         (click)="createExternalCluster()">
-      <i class="km-icon-mask km-icon-cluster"
-         [ngClass]="{'km-muted-bg': !canCreateCluster}"></i>
-      <span>External Cluster</span>
     </div>
     <div class="entry"
          [ngClass]="{'km-text-muted': !canCreateCluster, 'km-hover-bg km-pointer': canCreateCluster}"

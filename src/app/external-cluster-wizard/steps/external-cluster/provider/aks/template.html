@@ -1,0 +1,180 @@
+<!--
+Copyright 2022 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<form [formGroup]="form"
+      fxLayout="row"
+      fxLayoutGap="30px"
+      fxLayout.md="column"
+      fxLayoutGap.md="30px"
+      fxLayout.sm="column"
+      fxLayoutGap.sm="30px">
+  <div fxFlex="50%"
+       fxLayout="column"
+       fxLayoutGap="8px">
+    <mat-card-header class="km-no-padding">
+      <mat-card-title>Cluster</mat-card-title>
+    </mat-card-header>
+
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput
+             type="text"
+             autocomplete="off"
+             [formControlName]="Controls.Name" />
+      <button mat-icon-button
+              type="button"
+              matSuffix
+              class="km-randomize-btn"
+              matTooltip="Generate name"
+              (click)="generateName()">
+        <i class="km-icon-randomize"></i>
+      </button>
+      <mat-hint>Enter a unique name for this cluster</mat-hint>
+      <mat-error *ngIf="form.get(Controls.Name).hasError(ErrorType.Required)">
+        Name is <strong>required</strong>.
+      </mat-error>
+      <mat-error *ngIf="form.get(Controls.Name).hasError(ErrorType.Pattern)">
+        Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Kubernetes Version</mat-label>
+      <input [formControlName]="Controls.KubernetesVersion"
+             matInput
+             type="text"
+             autocomplete="off" />
+
+      <mat-hint>
+        Set the kubernetes version. See list of
+        <a href="https://docs.microsoft.com/en-us/azure/aks/supported-kubernetes-versions?tabs=azure-cli"
+           rel="noopener noreferrer"
+           target="_blank">supported versions</a>.
+      </mat-hint>
+
+      <mat-error *ngIf="form.get(Controls.KubernetesVersion).hasError(ErrorType.Required)">
+        Kubernetes Version is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Location</mat-label>
+      <input matInput
+             type="text"
+             autocomplete="off"
+             [formControlName]="Controls.Location" />
+      <mat-hint>Enter a region name for your cluster.</mat-hint>
+      <mat-error *ngIf="form.get(Controls.Location).hasError(ErrorType.Required)">
+        Location is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Resource Group</mat-label>
+      <input matInput
+             required
+             type="text"
+             autocomplete="off"
+             [formControlName]="Controls.NodeResourceGroup" />
+      <mat-hint>Enter name of the resource group containing agent pool nodes.</mat-hint>
+      <mat-error *ngIf="form.get(Controls.NodeResourceGroup).hasError(ErrorType.Required)">
+        Resource Group is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div fxFlex="50%"
+       fxLayout="column"
+       fxLayoutGap="8px">
+    <mat-card-header class="km-no-padding">
+      <mat-card-title>Node Pool Setting</mat-card-title>
+    </mat-card-header>
+
+    <km-autocomplete label="VM Size"
+                     required="true"
+                     [isLoading]="isLoadingVmSizes"
+                     [options]="vmSizes"
+                     [formControlName]="Controls.VmSize">
+      <ng-container hint>
+        VM size availability varies by region.
+        <a href="https://docs.microsoft.com/azure/aks/quotas-skus-regions"
+           rel="noopener noreferrer"
+           target="_blank">supported versions</a>.
+      </ng-container>
+    </km-autocomplete>
+
+    <mat-form-field>
+      <mat-label>Node Pool Name</mat-label>
+      <input matInput
+             type="text"
+             autocomplete="off"
+             [formControlName]="Controls.NodePoolName" />
+      <mat-hint>Enter node pool name. It must contain only lowercase letters and numbers.</mat-hint>
+      <mat-error *ngIf="form.get(Controls.NodePoolName).hasError(ErrorType.Required)">
+        Node Pool Name is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <km-number-stepper [formControlName]="Controls.Count"
+                       label="Count"
+                       mode="all"
+                       required="true"
+                       [hint]="form.get(Controls.EnableAutoScaling).value ?
+                        'Number of agents (VMs) to host docker containers can be between min and max auto scaling config' :
+                        'Number of agents (VMs) to host docker containers' "
+                       [min]="form.get(Controls.MinCount).value"
+                       [max]="form.get(Controls.MaxCount).value">
+    </km-number-stepper>
+
+    <mat-form-field>
+      <mat-label>Mode</mat-label>
+      <input matInput
+             type="text"
+             autocomplete="off"
+             [formControlName]="Controls.Mode" />
+    </mat-form-field>
+
+    <div fxLayout="column"
+         fxFlex="100"
+         fxLayoutGap="10px">
+      <mat-checkbox [formControlName]="Controls.EnableAutoScaling"
+                    (change)="onEnableAutoScalingChange($event)">
+        Enable Auto Scaling
+        <i class="km-icon-info km-pointer"
+           matTooltip="Indicates whether to enable auto scaling.This option is recommended so that cluster sized correctly for the current running workloads."></i>
+      </mat-checkbox>
+    </div>
+
+    <ng-container *ngIf="form.get(Controls.EnableAutoScaling).value">
+      <km-number-stepper label="Max Count"
+                         mode="all"
+                         hint="The maximum number of nodes for auto-scaling. Maximum value can be 1000."
+                         [required]="true"
+                         [min]="form.get(Controls.MinCount).value"
+                         [max]="1000"
+                         [formControlName]="Controls.MaxCount">
+      </km-number-stepper>
+
+      <km-number-stepper label="Min Count"
+                         mode="all"
+                         hint="The minimum number of nodes for auto-scaling. Minimum value can be 1"
+                         [required]="true"
+                         [min]="1"
+                         [max]="form.get(Controls.MaxCount).value"
+                         [formControlName]="Controls.MinCount">
+      </km-number-stepper>
+    </ng-container>
+  </div>
+</form>

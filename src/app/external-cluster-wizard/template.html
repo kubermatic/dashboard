@@ -40,7 +40,6 @@ limitations under the License.
       <div [ngSwitch]="step.name"
            id="{{step.id}}-step"
            class="wizard-step">
-
         <ng-container *ngSwitchCase="stepRegistry.Provider">
           <km-select-external-cluster-provider [providers]="externalProviders"
                                                (providerChange)="onProviderChanged($event)"></km-select-external-cluster-provider>

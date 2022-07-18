@@ -14,6 +14,7 @@
 
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
+import {environment} from '@environments/environment';
 import {AKSCluster} from '@shared/entity/provider/aks';
 import {EKSCluster, EKSVpc} from '@shared/entity/provider/eks';
 import {GKECluster, GKEZone} from '@shared/entity/provider/gke';
@@ -21,7 +22,6 @@ import {ExternalCluster, ExternalClusterModel, ExternalClusterProvider} from '@s
 import {PresetList} from '@shared/entity/preset';
 import {BehaviorSubject, Observable, of, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
-import {environment} from '@environments/environment';
 
 @Injectable({providedIn: 'root'})
 export class ExternalClusterService {
@@ -196,8 +196,13 @@ export class ExternalClusterService {
     this.isClusterDetailsStepValid = false;
   }
 
+  getAKSVmSizes(location?: string): Observable<string[]> {
+    const url = `${this._newRestRoot}/providers/aks/vmsizes`;
+    return this._http.get<string[]>(url, {headers: this._getAKSHeaders(location)}).pipe(catchError(() => of<[]>()));
+  }
+
   getGKEZones(): Observable<GKEZone[]> {
-    const url = `${this._newRestRoot}//providers/gke/zones`;
+    const url = `${this._newRestRoot}/providers/gke/zones`;
     return this._http.get<GKEZone[]>(url, {headers: this._getGKEHeaders()}).pipe(catchError(() => of<[]>()));
   }
 
@@ -223,6 +228,9 @@ export class ExternalClusterService {
 
     let headers: HttpHeaders;
     switch (this.provider) {
+      case ExternalClusterProvider.AKS:
+        headers = this._getAKSHeaders();
+        break;
       case ExternalClusterProvider.EKS:
         headers = this._getEKSHeaders();
         break;
@@ -236,17 +244,29 @@ export class ExternalClusterService {
     return this._http.post<ExternalCluster>(url, externalClusterModel, {headers}).pipe(catchError(() => of<null>()));
   }
 
-  private _getAKSHeaders(): HttpHeaders {
+  private _getAKSHeaders(location?: string): HttpHeaders {
+    let headers = {};
     if (this._preset) {
-      return new HttpHeaders({Credential: this._preset});
+      headers = {Credential: this._preset};
+      if (location) {
+        headers = {Credential: this._preset, Location: location};
+        return new HttpHeaders(headers);
+      }
+      return new HttpHeaders(headers);
     }
 
-    return new HttpHeaders({
+    headers = {
       TenantID: this._externalCluster.cloud.aks.tenantID,
       SubscriptionID: this._externalCluster.cloud.aks.subscriptionID,
       ClientID: this._externalCluster.cloud.aks.clientID,
       ClientSecret: this._externalCluster.cloud.aks.clientSecret,
-    });
+    };
+
+    if (location) {
+      headers['Location'] = location;
+    }
+
+    return new HttpHeaders(headers);
   }
 
   private _getEKSHeaders(vpcId?: string): HttpHeaders {
