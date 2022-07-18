@@ -14,19 +14,200 @@
 
 import {QuotaDetails} from '@shared/entity/quota';
 
-const QuotaMock: QuotaDetails = {
-  name: 'project-q4vgtz2rzh',
-  subjectName: 'q4vgtz2rzh',
-  subjectKind: 'project',
-  quota: {
-    cpu: '10',
-    memory: '10Gi',
+export const GetQuotasMock = (): QuotaDetails[] => [
+  {
+    name: 'project-tq9vx57zgc',
+    subjectName: 'tq9vx57zgc',
+    subjectKind: 'project',
+    quota: {
+      cpu: '200',
+      memory: '200',
+      storage: '200',
+    },
+    status: {
+      globalUsage: {
+        cpu: '0',
+        memory: '0',
+        storage: '0',
+      },
+      localUsage: {
+        cpu: '0',
+        memory: '0',
+        storage: '0',
+      },
+    },
   },
-  status: {
-    globalUsage: {},
-    localUsage: {},
+  {
+    name: 'project-bdtcw6zjpw',
+    subjectName: 'bdtcw6zjpw',
+    subjectKind: 'project',
+    quota: {
+      cpu: '100',
+      memory: '100',
+      storage: '100',
+    },
+    status: {
+      globalUsage: {
+        cpu: '0',
+        memory: '0',
+        storage: '0',
+      },
+      localUsage: {
+        cpu: '0',
+        memory: '0',
+        storage: '0',
+      },
+    },
   },
-};
-
-// eslint-disable-next-line @typescript-eslint/no-magic-numbers
-export const GetQuotasMock = () => Array<QuotaDetails>(10).fill(QuotaMock);
+  {
+    name: 'project-7s4ffcp9kv',
+    subjectName: '7s4ffcp9kv',
+    subjectKind: 'project',
+    quota: {
+      memory: '100M',
+      storage: '600G',
+    },
+    status: {
+      globalUsage: {
+        cpu: '0',
+        memory: '0',
+        storage: '0',
+      },
+      localUsage: {
+        cpu: '0',
+        memory: '0',
+        storage: '0',
+      },
+    },
+  },
+  {
+    name: 'project-q4vgtz2rzh',
+    subjectName: 'q4vgtz2rzh',
+    subjectKind: 'project',
+    quota: {
+      cpu: '4',
+      memory: '500M',
+    },
+    status: {
+      globalUsage: {
+        cpu: '0',
+        memory: '0',
+        storage: '0',
+      },
+      localUsage: {
+        cpu: '0',
+        memory: '0',
+        storage: '0',
+      },
+    },
+  },
+  {
+    name: 'project-c7xhcgtcvh',
+    subjectName: 'c7xhcgtcvh',
+    subjectKind: 'project',
+    quota: {
+      cpu: '3',
+      storage: '100G',
+    },
+    status: {
+      globalUsage: {
+        cpu: '0',
+        memory: '0',
+        storage: '0',
+      },
+      localUsage: {
+        cpu: '0',
+        memory: '0',
+        storage: '0',
+      },
+    },
+  },
+  {
+    name: 'project-f8vwtl5w7s',
+    subjectName: 'f8vwtl5w7s',
+    subjectKind: 'project',
+    quota: {
+      cpu: '200',
+      memory: '200',
+      storage: '200',
+    },
+    status: {
+      globalUsage: {
+        cpu: '0',
+        memory: '0',
+        storage: '0',
+      },
+      localUsage: {
+        cpu: '0',
+        memory: '0',
+        storage: '0',
+      },
+    },
+  },
+  {
+    name: 'project-svjfqck269',
+    subjectName: 'svjfqck269',
+    subjectKind: 'project',
+    quota: {
+      cpu: '300',
+      memory: '300',
+      storage: '300',
+    },
+    status: {
+      globalUsage: {
+        cpu: '0',
+        memory: '0',
+        storage: '0',
+      },
+      localUsage: {
+        cpu: '0',
+        memory: '0',
+        storage: '0',
+      },
+    },
+  },
+  {
+    name: 'project-67xfk4q4kg',
+    subjectName: '67xfk4q4kg',
+    subjectKind: 'project',
+    quota: {
+      cpu: '500',
+      memory: '500',
+      storage: '500',
+    },
+    status: {
+      globalUsage: {
+        cpu: '0',
+        memory: '0',
+        storage: '0',
+      },
+      localUsage: {
+        cpu: '0',
+        memory: '0',
+        storage: '0',
+      },
+    },
+  },
+  {
+    name: 'project-x45ktg7fwg',
+    subjectName: 'x45ktg7fwg',
+    subjectKind: 'project',
+    quota: {
+      cpu: '8',
+      memory: '100Mi',
+      storage: '20Gi',
+    },
+    status: {
+      globalUsage: {
+        cpu: '0',
+        memory: '0',
+        storage: '0',
+      },
+      localUsage: {
+        cpu: '0',
+        memory: '0',
+        storage: '0',
+      },
+    },
+  },
+];

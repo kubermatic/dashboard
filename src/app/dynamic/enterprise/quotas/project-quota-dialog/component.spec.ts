@@ -18,34 +18,40 @@
 //
 // END OF TERMS AND CONDITIONS
 
+import {MatDialogModule, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {TestBed, ComponentFixture} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
-import {MatTableModule} from '@angular/material/table';
-import {QuotaMockService} from '@test/services/quota-mock';
-import {UserMockService} from '@test/services/user-mock';
+import {ProjectService} from '@core/services/project';
 import {QuotaService} from '@core/services/quota';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
-import {QuotasComponent} from './component';
+import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
+import {ProjectMockService} from '@test/services/project-mock';
+import {QuotaMockService} from '@test/services/quota-mock';
+import {UserMockService} from '@test/services/user-mock';
+import {ProjectQuotaDialogComponent} from './component';
 
-describe('QuotasComponent', () => {
-  let fixture: ComponentFixture<QuotasComponent>;
-  let component: QuotasComponent;
+describe('AddProjectQuotaDialogComponent', () => {
+  let fixture: ComponentFixture<ProjectQuotaDialogComponent>;
+  let component: ProjectQuotaDialogComponent;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BrowserModule, NoopAnimationsModule, SharedModule, MatTableModule],
-      declarations: [QuotasComponent],
+      declarations: [ProjectQuotaDialogComponent],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule, MatDialogModule],
       providers: [
         {provide: QuotaService, useClass: QuotaMockService},
         {provide: UserService, useClass: UserMockService},
+        {provide: ProjectService, useClass: ProjectMockService},
+        {provide: MatDialogRef, useClass: MatDialogRefMock},
+        {provide: MAT_DIALOG_DATA, useValue: {}},
       ],
     }).compileComponents();
   });
 
   beforeEach(async () => {
-    fixture = TestBed.createComponent(QuotasComponent);
+    fixture = TestBed.createComponent(ProjectQuotaDialogComponent);
     component = fixture.componentInstance;
 
     fixture.detectChanges();
@@ -53,25 +59,5 @@ describe('QuotasComponent', () => {
 
   it('should initialize', async () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should hide table when quotas are empty', async () => {
-    component.isLoading = false;
-    component.quotas = [];
-    fixture.detectChanges();
-
-    const element = fixture.nativeElement.querySelector('#quotas-table');
-
-    expect(element.hidden).toEqual(true);
-  });
-
-  it('should display correct message when there are no quotas', () => {
-    component.isLoading = false;
-    component.quotas = [];
-    fixture.detectChanges();
-
-    const element = fixture.nativeElement.querySelector('#quotas-not-found');
-
-    expect(element.textContent.trim()).toEqual('No quotas found');
   });
 });

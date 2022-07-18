@@ -37,4 +37,8 @@ export class ProjectMockService {
   delete(_projectID: string): Observable<Project> {
     return of(null);
   }
+
+  get allProjects() {
+    return of(fakeProjects());
+  }
 }

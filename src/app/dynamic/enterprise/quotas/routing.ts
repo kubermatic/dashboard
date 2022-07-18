@@ -20,7 +20,6 @@
 
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-
 import {QuotasComponent} from './component';
 
 const routes: Routes = [

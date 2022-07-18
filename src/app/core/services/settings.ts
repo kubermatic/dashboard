@@ -14,7 +14,6 @@
 
 import {Injectable} from '@angular/core';
 import {webSocket} from 'rxjs/webSocket';
-import {QuotaDetails} from '@shared/entity/quota';
 import {HttpClient} from '@angular/common/http';
 import {Auth} from '@core/services/auth/service';
 import {Admin, Member} from '@shared/entity/member';
@@ -36,9 +35,7 @@ export class SettingsService {
   private readonly _retryTime = 3;
   private _adminSettingsWatch$: Observable<AdminSettings>;
   private _admins$: Observable<Admin[]>;
-  private _quotas$: Observable<QuotaDetails[]>;
   private _adminsRefresh$ = new Subject<void>();
-  private _quotasRefresh$ = new Subject<void>();
   private _users$: Observable<Member[]>;
   private _usersRefresh$ = new Subject<void>();
   private _customLinks$: Observable<CustomLink[]>;
@@ -150,24 +147,5 @@ export class SettingsService {
 
   refreshUsers(): void {
     this._usersRefresh$.next();
-  }
-
-  get quotas(): Observable<QuotaDetails[]> {
-    if (!this._quotas$) {
-      this._quotas$ = merge(this._refreshTimer$, this._quotasRefresh$)
-        .pipe(switchMap(() => this._getQuotas()))
-        .pipe(shareReplay({refCount: true, bufferSize: 1}));
-    }
-
-    return this._quotas$;
-  }
-
-  private _getQuotas(): Observable<QuotaDetails[]> {
-    const url = `${this._newRestRoot}/quotas`;
-    return this._httpClient.get<QuotaDetails[]>(url).pipe(catchError(() => of([])));
-  }
-
-  refreshQuotas(): void {
-    this._quotasRefresh$.next();
   }
 }

@@ -35,6 +35,7 @@ export class ProjectService {
 
   private _projects$: Observable<Project[]>;
   private _myProjects$: Observable<Project[]>;
+  private _allProjects$: Observable<Project[]>;
   private _project$: Observable<Project>;
   private _displayAllChanged = new Subject<boolean>();
   private _displayAll: boolean;
@@ -76,6 +77,17 @@ export class ProjectService {
     }
 
     return this._project$;
+  }
+
+  get allProjects() {
+    if (!this._allProjects$) {
+      this._allProjects$ = merge(this._refreshTimer$, this.onProjectsUpdate).pipe(
+        switchMap(_ => this._getProjects(true)),
+        shareReplay(1)
+      );
+    }
+
+    return this._allProjects$;
   }
 
   create(model: ProjectModel): Observable<Project> {

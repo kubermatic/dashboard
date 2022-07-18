@@ -12,25 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export class QuotaVariables {
-  cpu?: string;
-  memory?: string;
-  storage?: string;
-}
+import {Observable, of} from 'rxjs';
+import {QuotaDetails} from '@shared/entity/quota';
+import {GetQuotasMock} from '../data/quota';
 
-export class QuotaStatus {
-  globalUsage: QuotaVariables | Record<string, never>;
-  localUsage: QuotaVariables | Record<string, never>;
-}
+export class QuotaMockService {
+  private _quotas = GetQuotasMock();
 
-export class Quota {
-  quota: QuotaVariables;
-  subjectKind: string;
-  subjectName: string;
-}
-
-export class QuotaDetails extends Quota {
-  name: string;
-  subjectHumanReadableName?: string;
-  status: QuotaStatus;
+  get quotas(): Observable<QuotaDetails[]> {
+    return of(this._quotas);
+  }
 }
