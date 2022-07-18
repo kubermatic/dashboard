@@ -202,7 +202,7 @@ export class ExternalClusterService {
   }
 
   getGKEZones(): Observable<GKEZone[]> {
-    const url = `${this._newRestRoot}//providers/gke/zones`;
+    const url = `${this._newRestRoot}/providers/gke/zones`;
     return this._http.get<GKEZone[]>(url, {headers: this._getGKEHeaders()}).pipe(catchError(() => of<[]>()));
   }
 

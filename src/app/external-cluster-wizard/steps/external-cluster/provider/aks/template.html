@@ -65,7 +65,7 @@ limitations under the License.
       </mat-hint>
 
       <mat-error *ngIf="form.get(Controls.KubernetesVersion).hasError(ErrorType.Required)">
-        Version is <strong>required</strong>.
+        Kubernetes Version is <strong>required</strong>.
       </mat-error>
     </mat-form-field>
 
@@ -82,15 +82,15 @@ limitations under the License.
     </mat-form-field>
 
     <mat-form-field>
-      <mat-label>Resource group</mat-label>
+      <mat-label>Resource Group</mat-label>
       <input matInput
+             required
              type="text"
              autocomplete="off"
-             [formControlName]="Controls.NodeResourceGroup"
-             required="true" />
+             [formControlName]="Controls.NodeResourceGroup" />
       <mat-hint>Enter name of the resource group containing agent pool nodes.</mat-hint>
       <mat-error *ngIf="form.get(Controls.NodeResourceGroup).hasError(ErrorType.Required)">
-        Resource group is <strong>required</strong>.
+        Resource Group is <strong>required</strong>.
       </mat-error>
     </mat-form-field>
   </div>
@@ -121,9 +121,9 @@ limitations under the License.
              type="text"
              autocomplete="off"
              [formControlName]="Controls.NodePoolName" />
-      <mat-hint>Enter Node pool name. It must contain only lowercase letters and numbers.</mat-hint>
+      <mat-hint>Enter node pool name. It must contain only lowercase letters and numbers.</mat-hint>
       <mat-error *ngIf="form.get(Controls.NodePoolName).hasError(ErrorType.Required)">
-        Pool name is <strong>required</strong>.
+        Node Pool Name is <strong>required</strong>.
       </mat-error>
     </mat-form-field>
 
@@ -149,8 +149,7 @@ limitations under the License.
     <div fxLayout="column"
          fxFlex="100"
          fxLayoutGap="10px">
-      <mat-checkbox matTooltip=""
-                    [formControlName]="Controls.EnableAutoScaling"
+      <mat-checkbox [formControlName]="Controls.EnableAutoScaling"
                     (change)="onEnableAutoScalingChange($event)">
         Enable Auto Scaling
         <i class="km-icon-info km-pointer"
@@ -161,7 +160,7 @@ limitations under the License.
     <ng-container *ngIf="form.get(Controls.EnableAutoScaling).value">
       <km-number-stepper label="Max Count"
                          mode="all"
-                         hint="The maximum number of nodes for auto-scaling and max can be less than equal to 1000"
+                         hint="The maximum number of nodes for auto-scaling. Maximum value can be 1000."
                          [required]="true"
                          [min]="form.get(Controls.MinCount).value"
                          [max]="1000"
@@ -170,7 +169,7 @@ limitations under the License.
 
       <km-number-stepper label="Min Count"
                          mode="all"
-                         hint="The minimum number of nodes for auto-scaling. Min count be can 1"
+                         hint="The minimum number of nodes for auto-scaling. Minimum value can be 1"
                          [required]="true"
                          [min]="1"
                          [max]="form.get(Controls.MaxCount).value"

@@ -59,7 +59,7 @@ limitations under the License.
              [formControlName]="Controls.Version" />
       <mat-hint>Set the kubernetes version.</mat-hint>
       <mat-error *ngIf="form.get(Controls.Version).hasError('required')">
-        kubernetes Version is <strong>required</strong>.
+        Kubernetes Version is <strong>required</strong>.
       </mat-error>
     </mat-form-field>
 
@@ -90,7 +90,7 @@ limitations under the License.
                      [isLoading]="isLoadingZones"
                      [options]="zones"
                      [formControlName]="Controls.Zone">
-      <ng-container hint>Chose from Zones List.</ng-container>
+      <ng-container hint>Select from Zones List.</ng-container>
     </km-autocomplete>
 
   </div>
