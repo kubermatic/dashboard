@@ -168,8 +168,16 @@ limitations under the License.
             <div value>{{cluster.spec.cloud?.openstack.floatingIPPool}}</div>
           </km-property>
           <km-property *ngIf="cluster.spec.cloud?.openstack.subnetID">
-            <div key>Subnet ID</div>
+            <div key>IPv4 Subnet ID</div>
             <div value>{{cluster.spec.cloud?.openstack.subnetID}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud?.openstack.ipv6SubnetID">
+            <div key>IPv6 Subnet ID</div>
+            <div value>{{cluster.spec.cloud?.openstack.ipv6SubnetID}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud?.openstack.ipv6SubnetPool">
+            <div key>IPv6 Subnet Pool</div>
+            <div value>{{cluster.spec.cloud?.openstack.ipv6SubnetPool}}</div>
           </km-property>
         </ng-container>
 

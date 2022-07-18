@@ -171,6 +171,8 @@ export function fakeOpenstackCluster(): Cluster {
           project: 'test-tenant',
           projectID: '',
           subnetID: 'test-subnet-id',
+          ipv6SubnetID: '',
+          ipv6SubnetPool: '',
         },
         providerName: 'openstack',
       },
