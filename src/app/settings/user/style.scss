@@ -21,7 +21,7 @@
   }
 
   .mat-card-content {
-    padding: 30px;
+    padding-left: 30px;
   }
 
   .user-name {
@@ -48,13 +48,29 @@
   }
 }
 
+.mat-button-toggle {
+  margin: 10px 10px 10px 0;
+
+  i {
+    margin-right: 10px;
+  }
+}
+
+.project-overview-button {
+  @include mixins.size(180px, 45px, true);
+}
+
+.clusters-button {
+  @include mixins.size(120px, 45px, $force: true);
+}
+
 .km-pointer {
   margin-left: 8px;
 }
 
 .input {
   margin: 0 16px -20px 0;
-  width: 290px;
+  width: 310px;
 
   &.sm {
     width: 140px;

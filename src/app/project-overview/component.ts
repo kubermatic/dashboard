@@ -33,6 +33,7 @@ import {ClusterTemplate} from '@shared/entity/cluster-template';
 import {BackupService} from '@core/services/backup';
 import {EtcdBackupConfig} from '@shared/entity/backup';
 import {Health} from '@shared/entity/health';
+import {CookieService} from 'ngx-cookie-service';
 
 @Component({
   selector: 'km-project-overview',
@@ -54,9 +55,11 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   externalClustersChange = new Subject<void>();
   clusterTemplatesChange = new Subject<void>();
   backupsChange = new Subject<void>();
+  firstVisitToOverviewPage: string;
   private _projectChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
   private readonly _refreshTime = 15;
+  private readonly _cookieName = 'firstVisit';
 
   constructor(
     private readonly _projectService: ProjectService,
@@ -67,7 +70,8 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     private readonly _memberService: MemberService,
     private readonly _serviceAccountService: ServiceAccountService,
     private readonly _settingsService: SettingsService,
-    private readonly _appConfigService: AppConfigService
+    private readonly _appConfigService: AppConfigService,
+    private readonly _cookieService: CookieService
   ) {}
 
   ngOnInit(): void {
@@ -80,11 +84,16 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     this._loadSSHKeys();
     this._loadMembers();
     this._loadServiceAccounts();
+    this._checkFirstVisitToOverviewPageMessage();
   }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  hideFirstVisitToOverviewPageMessage(): void {
+    this.firstVisitToOverviewPage = this._cookieService.get(this._cookieName);
   }
 
   private _loadProject(): void {
@@ -189,5 +198,11 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
       .pipe(switchMap(() => (this.project ? this._serviceAccountService.get(this.project.id) : EMPTY)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(serviceAccounts => (this.serviceAccounts = serviceAccounts));
+  }
+
+  private _checkFirstVisitToOverviewPageMessage(): void {
+    this._cookieService.get(this._cookieName)
+      ? this.hideFirstVisitToOverviewPageMessage()
+      : this._cookieService.set(this._cookieName, 'visited', null, '/', window.location.hostname, false, 'Lax');
   }
 }

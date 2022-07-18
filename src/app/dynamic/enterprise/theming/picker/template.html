@@ -31,8 +31,7 @@ END OF TERMS AND CONDITIONS
                            fxLayout="row wrap">
     <mat-button-toggle *ngIf="hasPreferredTheme"
                        [value]="systemDefaultOption">
-      <i class="km-icon-mask"
-         [ngClass]="isSystemDefaultThemeDark ? 'km-icon-moon' : 'km-icon-sun'"></i>
+      <i class="km-icon-mask km-icon-defaults"></i>
       <span>System</span>
     </mat-button-toggle>
     <mat-button-toggle *ngFor="let theme of themes"

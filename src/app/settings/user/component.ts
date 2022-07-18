@@ -21,6 +21,7 @@ import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {UserSettings} from '@shared/entity/settings';
 import {objectDiff} from '@shared/utils/common';
+import {View} from '@shared/entity/common';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, switchMap, take, takeUntil} from 'rxjs/operators';
@@ -38,7 +39,8 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
   user: Member;
   settings: UserSettings; // Local settings copy. User can edit it.
   apiSettings: UserSettings; // Original settings from the API. Cannot be edited by the user.
-
+  selectedProjectLandingPage: string;
+  view = View;
   private readonly _debounceTime = 1000;
   private _settingsChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
@@ -60,6 +62,7 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
         }
         this.apiSettings = settings;
         this.settings = _.cloneDeep(this.apiSettings);
+        this.selectedProjectLandingPage = this.settings.useClustersView ? this.view.Clusters : this.view.Overview;
       }
     });
 
@@ -82,6 +85,18 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  onLandingPageChange(landingPage: string): void {
+    switch (landingPage) {
+      case View.Clusters:
+        this.settings.useClustersView = true;
+        break;
+      default:
+        this.settings.useClustersView = false;
+        break;
+    }
+    this.onSettingsChange();
   }
 
   onSettingsChange(): void {

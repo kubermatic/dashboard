@@ -27,3 +27,13 @@
     padding: 0 30px;
   }
 }
+
+.first-visit-overview-message {
+  margin-bottom: 20px;
+  padding: 10px 10px 10px 30px;
+
+  .km-icon-close {
+    position: fixed;
+    right: 40px;
+  }
+}

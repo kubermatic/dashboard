@@ -22,6 +22,7 @@ export interface UserSettings {
   collapseSidenav?: boolean;
   displayAllProjectsForAdmin?: boolean;
   lastSeenChangelogVersion?: string;
+  useClustersView?: boolean;
 }
 
 export interface AdminSettings {
