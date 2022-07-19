@@ -14,6 +14,8 @@
 
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
+import {Router} from '@angular/router';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {environment} from '@environments/environment';
 import {AKSCluster} from '@shared/entity/provider/aks';
 import {EKSCluster, EKSVpc} from '@shared/entity/provider/eks';
@@ -21,7 +23,10 @@ import {GKECluster, GKEZone} from '@shared/entity/provider/gke';
 import {ExternalCluster, ExternalClusterModel, ExternalClusterProvider} from '@shared/entity/external-cluster';
 import {PresetList} from '@shared/entity/preset';
 import {BehaviorSubject, Observable, of, throwError} from 'rxjs';
-import {catchError} from 'rxjs/operators';
+import {catchError, filter} from 'rxjs/operators';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
+import {ClusterListTab} from '@app/cluster/list/component';
+import {NotificationService} from '@core/services/notification';
 
 @Injectable({providedIn: 'root'})
 export class ExternalClusterService {
@@ -40,7 +45,12 @@ export class ExternalClusterService {
   private _isClusterDetailsStepValid = false;
   private _newRestRoot: string = environment.newRestRoot;
 
-  constructor(private readonly _http: HttpClient) {}
+  constructor(
+    private readonly _http: HttpClient,
+    private readonly _matDialog: MatDialog,
+    private readonly _notificationService: NotificationService,
+    private readonly _router: Router
+  ) {}
 
   get provider(): ExternalClusterProvider {
     return this._provider;
@@ -250,6 +260,34 @@ export class ExternalClusterService {
       Action: action,
     });
     return this._http.delete<void>(url, {headers: headers});
+  }
+
+  showDisconnectClusterDialog(cluster: ExternalCluster, projectID: string): void {
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        title: 'Disconnect Cluster',
+        message: `Are you sure you want to disconnect <b>${cluster.name}</b> cluster?`,
+        confirmLabel: 'Disconnect',
+        throttleButton: true,
+        observable: this._disconnectExternalCluster(projectID, cluster.id),
+      },
+    };
+
+    this._matDialog
+      .open(ConfirmationDialogComponent, dialogConfig)
+      .afterClosed()
+      .pipe(filter(isConfirmed => isConfirmed))
+      .subscribe(_ => {
+        this._router.navigate(['/projects/' + projectID + '/clusters'], {
+          fragment: `${ClusterListTab.ExternalCluster}`,
+        });
+        this._notificationService.success(`Disconnected the ${cluster.name} cluster`);
+      });
+  }
+
+  private _disconnectExternalCluster(projectID: string, clusterID: string): Observable<void> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}`;
+    return this._http.delete<void>(url);
   }
 
   private _getAKSHeaders(location?: string): HttpHeaders {

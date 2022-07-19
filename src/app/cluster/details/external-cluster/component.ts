@@ -32,6 +32,7 @@ import {switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 import {MasterVersion} from '@shared/entity/cluster';
 import {ClusterListTab} from '@app/cluster/list/component';
+import {ExternalClusterService} from '@core/services/external-cluster';
 
 @Component({
   selector: 'km-external-cluster-details',
@@ -65,6 +66,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
     private readonly _router: Router,
     private readonly _matDialog: MatDialog,
     private readonly _clusterService: ClusterService,
+    private readonly _externalClusterService: ExternalClusterService,
     private readonly _userService: UserService,
     private readonly _appConfigService: AppConfigService
   ) {}
@@ -173,6 +175,6 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   disconnect(): void {
-    this._clusterService.showDisconnectClusterDialog(this.cluster, this.projectID);
+    this._externalClusterService.showDisconnectClusterDialog(this.cluster, this.projectID);
   }
 }
