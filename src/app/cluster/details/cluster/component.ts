@@ -18,6 +18,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {EditProviderSettingsComponent} from '@app/cluster/details/cluster/edit-provider-settings/component';
 import {AppConfigService} from '@app/config.service';
 import {AddonService} from '@core/services/addon';
+import {ApplicationService} from '@core/services/application';
 import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
 import {MachineDeploymentService} from '@core/services/machine-deployment';
@@ -30,6 +31,7 @@ import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Addon} from '@shared/entity/addon';
+import {Application} from '@shared/entity/application';
 import {
   Cluster,
   CNIPlugin,
@@ -53,6 +55,13 @@ import {Constraint, GatekeeperConfig} from '@shared/entity/opa';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {Config, GroupConfig} from '@shared/model/Config';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
+import {
+  getClusterHealthStatus,
+  HealthStatus,
+  isClusterAPIRunning,
+  isClusterRunning,
+  isOPARunning,
+} from '@shared/utils/health-status';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
 import {combineLatest, iif, Observable, of, Subject} from 'rxjs';
@@ -63,13 +72,6 @@ import {EditClusterComponent} from './edit-cluster/component';
 import {EditSSHKeysComponent} from './edit-sshkeys/component';
 import {RevokeTokenComponent} from './revoke-token/component';
 import {ShareKubeconfigComponent} from './share-kubeconfig/component';
-import {
-  getClusterHealthStatus,
-  HealthStatus,
-  isClusterAPIRunning,
-  isClusterRunning,
-  isOPARunning,
-} from '@shared/utils/health-status';
 
 @Component({
   selector: 'km-cluster-details',
@@ -103,6 +105,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   metrics: ClusterMetrics;
   events: Event[] = [];
   addons: Addon[] = [];
+  applications: Application[] = [];
   upgrades: MasterVersion[] = [];
   cniVersions: string[] = [];
   constraints: Constraint[] = [];
@@ -134,6 +137,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     private readonly _notificationService: NotificationService,
     private readonly _opaService: OPAService,
     private readonly _mlaService: MLAService,
+    private readonly _applicationService: ApplicationService,
     readonly settings: SettingsService
   ) {}
 
@@ -201,8 +205,15 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                     this._clusterService.nodes(this.projectID, this.cluster.id),
                     this._machineDeploymentService.list(this.cluster.id, this.projectID),
                     this._clusterService.metrics(this.projectID, this.cluster.id),
+                    this._applicationService.list(this.projectID, this.cluster.id),
                   ]
-                : [of([] as Addon[]), of([] as Node[]), of([] as MachineDeployment[]), of({} as ClusterMetrics)]
+                : [
+                    of([] as Addon[]),
+                    of([] as Node[]),
+                    of([] as MachineDeployment[]),
+                    of({} as ClusterMetrics),
+                    of([] as Application[]),
+                  ]
             )
             .concat(
               this.isClusterRunning && this.isMLAEnabled()
@@ -226,6 +237,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             Observable<Node[]>,
             Observable<MachineDeployment[]>,
             Observable<ClusterMetrics>,
+            Observable<Application[]>,
             Observable<AlertmanagerConfig>,
             Observable<RuleGroup[]>,
             Observable<Constraint[]>,
@@ -244,6 +256,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           nodes,
           machineDeployments,
           metrics,
+          applications,
           alertmanagerConfig,
           ruleGroups,
           constraints,
@@ -255,6 +268,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           Node[],
           MachineDeployment[],
           ClusterMetrics,
+          Application[],
           AlertmanagerConfig,
           RuleGroup[],
           Constraint[],
@@ -265,6 +279,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.machineDeployments = machineDeployments;
           this.areMachineDeploymentsInitialized = true;
           this.metrics = metrics;
+          this.applications = applications;
           this.alertmanagerConfig = alertmanagerConfig;
           this.ruleGroups = ruleGroups;
           this.upgrades = _.isEmpty(upgrades) ? [] : upgrades;
@@ -489,6 +504,52 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         .list(this.projectID, this.cluster.id)
         .pipe(take(1))
         .subscribe(addons => (this.addons = addons));
+    }
+  }
+
+  onApplicationAdded(application: Application): void {
+    this._applicationService
+      .add(application, this.projectID, this.cluster.id)
+      .pipe(take(1))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(() => {
+        this.reloadApplications();
+        this._notificationService.success(
+          `Added the ${application.name} application to the ${this.cluster.name} cluster`
+        );
+      });
+  }
+
+  onApplicationUpdated(application: Application): void {
+    this._applicationService
+      .put(application, this.projectID, this.cluster.id)
+      .pipe(take(1))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(() => {
+        this.reloadApplications();
+        this._notificationService.success(`Updated the ${application.name} application`);
+      });
+  }
+
+  onApplicationDeleted(application: Application): void {
+    this._applicationService
+      .delete(application, this.projectID, this.cluster.id)
+      .pipe(take(1))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(() => {
+        this.reloadApplications();
+        this._notificationService.success(
+          `Deleting the ${application.name} application from the ${this.cluster.name} cluster`
+        );
+      });
+  }
+
+  reloadApplications(): void {
+    if (this.projectID && this.cluster) {
+      this._applicationService
+        .list(this.projectID, this.cluster.id)
+        .pipe(take(1))
+        .subscribe(applications => (this.applications = applications));
     }
   }
 
