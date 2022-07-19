@@ -57,6 +57,10 @@ import {ClusterStepComponent} from '@shared/components/add-external-cluster-dial
 import {AKSClusterSelectComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/aks/component';
 import {EKSClusterSelectComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/eks/component';
 import {GKEClusterSelectComponent} from '@shared/components/add-external-cluster-dialog/steps/cluster/provider/gke/component';
+import {AddApplicationDialogComponent} from '@shared/components/application-list/add-application-dialog/component';
+import {ApplicationMethodIconComponent} from '@shared/components/application-list/application-method-icon/component';
+import {ApplicationListComponent} from '@shared/components/application-list/component';
+import {EditApplicationDialogComponent} from '@shared/components/application-list/edit-application-dialog/component';
 import {CredentialsStepComponent} from '@shared/components/external-cluster-credentials/component';
 import {CredentialsPresetsComponent} from '@shared/components/external-cluster-credentials/preset/component';
 import {AKSCredentialsComponent} from '@shared/components/external-cluster-credentials/provider/aks/component';
@@ -237,6 +241,10 @@ const components = [
   OpenstackApplicationCredentialsComponent,
   ButtonComponent,
   ValidateJsonOrYamlComponent,
+  ApplicationListComponent,
+  AddApplicationDialogComponent,
+  EditApplicationDialogComponent,
+  ApplicationMethodIconComponent,
 ];
 
 const directives = [AutofocusDirective, ThrottleClickDirective, OptionDirective];

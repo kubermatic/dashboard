@@ -1,0 +1,302 @@
+// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
+import {ApplicationService} from '@core/services/application';
+import {AddApplicationDialogComponent} from '@shared/components/application-list/add-application-dialog/component';
+import {EditApplicationDialogComponent} from '@shared/components/application-list/edit-application-dialog/component';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
+import {Application, ApplicationDefinition} from '@shared/entity/application';
+import {Cluster} from '@shared/entity/cluster';
+import {StatusIcon} from '@shared/utils/health-status';
+import _ from 'lodash';
+import {Subject} from 'rxjs';
+import {take, takeUntil} from 'rxjs/operators';
+
+export enum ApplicationsListView {
+  Default,
+  Wizard,
+  Summary,
+}
+
+type ApplicationMethodMap = {
+  [key: string]: {[key: string]: string};
+};
+
+type ApplicationSourceMap = ApplicationMethodMap;
+type ApplicationStatusMap = {
+  [key: string]: {
+    [key: string]: {
+      icon: string;
+      message: string;
+    };
+  };
+};
+
+enum Column {
+  Status = 'status',
+  Name = 'name',
+  Application = 'application',
+  Version = 'version',
+  Method = 'method',
+  Source = 'source',
+  Namespace = 'namespace',
+  Added = 'added',
+  Actions = 'actions',
+}
+
+@Component({
+  selector: 'km-application-list',
+  templateUrl: './template.html',
+  styleUrls: ['style.scss'],
+})
+export class ApplicationListComponent implements OnInit, OnDestroy {
+  @Input() applications: Application[] = [];
+  @Input() cluster: Cluster;
+  @Input() isClusterReady = true;
+  @Input() canEdit = true;
+  @Input() view: ApplicationsListView = ApplicationsListView.Default;
+
+  @Output() addApplication = new EventEmitter<Application>();
+  @Output() editApplication = new EventEmitter<Application>();
+  @Output() deleteApplication = new EventEmitter<Application>();
+
+  readonly ApplicationListView = ApplicationsListView;
+  readonly Column = Column;
+  readonly displayedColumns: string[] = [
+    Column.Status,
+    Column.Name,
+    Column.Application,
+    Column.Version,
+    Column.Method,
+    Column.Source,
+    Column.Namespace,
+    Column.Added,
+    Column.Actions,
+  ];
+  showCards = true;
+  applicationDefinitions: ApplicationDefinition[] = [];
+  applicationDefinitionsMap = new Map<string, ApplicationDefinition>();
+  applicationsDataSource = new MatTableDataSource<Application>();
+  sort: MatSort;
+  applicationsMethodMap: ApplicationMethodMap = {};
+  applicationsSourceMap: ApplicationSourceMap = {};
+  applicationsStatusMap: ApplicationStatusMap = {};
+
+  private readonly _unsubscribe: Subject<void> = new Subject<void>();
+
+  @ViewChild(MatSort)
+  set matSort(ms: MatSort) {
+    this.sort = ms;
+    this.applicationsDataSource.sort = this.sort;
+  }
+
+  constructor(private readonly _applicationService: ApplicationService, private readonly _matDialog: MatDialog) {}
+
+  ngOnInit(): void {
+    this._initSubscriptions();
+
+    this.applicationsDataSource.data = this.applications;
+    this.applicationsDataSource.filterPredicate = this._filter.bind(this);
+    this.applicationsDataSource.filter = '';
+    this.applicationsDataSource.sortingDataAccessor = (item: Application, property) => {
+      switch (property) {
+        case Column.Name:
+          return item.name;
+        case Column.Application:
+          return item.spec.applicationRef.name;
+        case Column.Namespace:
+          return item.namespace;
+        default:
+          return '';
+      }
+    };
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.applications) {
+      if (!changes.applications.currentValue) {
+        this.applications = [];
+      }
+      this.applicationsDataSource.data = this.applications;
+      this._updateApplicationMaps();
+    }
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
+  }
+
+  onSearchQueryChanged(query: string): void {
+    this.applicationsDataSource.filter = query;
+  }
+
+  changeView(): void {
+    this.showCards = !this.showCards;
+  }
+
+  getAddBtnTooltip(): string {
+    if (!this.canEdit) {
+      return 'You have no permissions to edit applications in this cluster.';
+    } else if (this.applicationDefinitions.length === 0) {
+      return 'There are no application available.';
+    }
+    return '';
+  }
+
+  onAddApplication(): void {
+    if (this._canAdd()) {
+      const dialog = this._matDialog.open(AddApplicationDialogComponent);
+      dialog.componentInstance.installedApplications = this.applications;
+      dialog.componentInstance.applicationDefinitions = this.applicationDefinitions;
+      dialog.componentInstance.applicationDefinitionsMap = this.applicationDefinitionsMap;
+      dialog
+        .afterClosed()
+        .pipe(take(1))
+        .subscribe(addedApplication => {
+          if (addedApplication) {
+            this.addApplication.emit(addedApplication);
+          }
+        });
+    }
+  }
+
+  onEditApplication(application: Application): void {
+    const dialog = this._matDialog.open(EditApplicationDialogComponent);
+    dialog.componentInstance.application = application;
+    dialog.componentInstance.installedApplications = this.applications.filter(
+      item => item.name !== application.name || item.spec.namespace.name !== application.spec.namespace.name
+    );
+    dialog.componentInstance.applicationDefinition = this.applicationDefinitionsMap.get(
+      application.spec.applicationRef.name
+    );
+    dialog.componentInstance.cluster = this.cluster;
+    dialog
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(editedApplication => {
+        if (editedApplication) {
+          this.editApplication.emit(editedApplication);
+        }
+      });
+  }
+
+  onDeleteApplication(application: Application): void {
+    const config: MatDialogConfig = {
+      data: {
+        title: 'Delete Application',
+        message: `Delete <b>${application.name}</b> application${
+          this.cluster ? ` of <b>${this.cluster.name}</b> cluster permanently` : ''
+        }?`,
+        confirmLabel: 'Delete',
+      },
+    };
+
+    this._matDialog
+      .open(ConfirmationDialogComponent, config)
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(isConfirmed => {
+        if (isConfirmed) {
+          this.deleteApplication.emit(application);
+        }
+      });
+  }
+
+  private _initSubscriptions(): void {
+    this._applicationService
+      .applicationDefinitions()
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(applicationDefinitions => {
+        this.applicationDefinitions = applicationDefinitions;
+
+        const map = new Map();
+        applicationDefinitions.forEach(appDef => map.set(appDef.name, appDef));
+        this.applicationDefinitionsMap = map;
+
+        this._updateApplicationMaps();
+      });
+  }
+
+  private _updateApplicationMaps(): void {
+    this.applicationsMethodMap = {};
+    this.applicationsSourceMap = {};
+    this.applicationsStatusMap = {};
+    this.applications.forEach(application => {
+      const applicationRef = application.spec.applicationRef;
+      const status = application.status;
+      const namespace = application.spec.namespace.name;
+
+      this.applicationsMethodMap = {
+        ...this.applicationsMethodMap,
+        [namespace]: {
+          ...(this.applicationsMethodMap[namespace] || {}),
+          [application.name]: status?.method || this.applicationDefinitionsMap.get(applicationRef?.name)?.spec.method,
+        },
+      };
+
+      const versionSources =
+        status?.applicationVersion?.template?.source ||
+        this.applicationDefinitionsMap
+          .get(applicationRef?.name)
+          ?.spec.versions?.find(version => version.version === applicationRef?.version)?.template?.source;
+
+      this.applicationsSourceMap = {
+        ...this.applicationsSourceMap,
+        [namespace]: {
+          ...(this.applicationsSourceMap[namespace] || {}),
+          [application.name]: versionSources ? Object.keys(versionSources).find(key => !!versionSources[key]) : '',
+        },
+      };
+      if (status) {
+        let icon = StatusIcon.Pending;
+        let message = '';
+        if (application.deletionTimestamp) {
+          icon = StatusIcon.Error;
+          message = 'Deleting';
+        }
+        if (status.conditions?.length) {
+          const failingCondition = status.conditions.find(condition => condition.status === 'False');
+          if (failingCondition) {
+            icon = StatusIcon.Error;
+            message = failingCondition.message;
+          } else {
+            icon = StatusIcon.Running;
+            message = 'Ready';
+          }
+        }
+        this.applicationsStatusMap = {
+          ...this.applicationsStatusMap,
+          [namespace]: {
+            ...(this.applicationsStatusMap[namespace] || {}),
+            [application.name]: {icon, message},
+          },
+        };
+      }
+    });
+  }
+
+  private _canAdd(): boolean {
+    return this.isClusterReady && this.canEdit && !_.isEmpty(this.applicationDefinitions);
+  }
+
+  private _filter(application: Application, query: string): boolean {
+    query = query.toLowerCase();
+    return application.name.toLowerCase().includes(query) || application.namespace?.toLowerCase().includes(query);
+  }
+}

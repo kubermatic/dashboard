@@ -368,6 +368,22 @@
   @include mixins.mask-image('/assets/images/icons/quota.svg', 24px);
 }
 
+.km-icon-helm {
+  @include mixins.provider-image('/assets/images/icons/helm.svg', 24px);
+}
+
+.km-icon-git {
+  @include mixins.provider-image('/assets/images/icons/git.svg', 24px);
+}
+
+.km-icon-namespace {
+  @include mixins.mask-image('/assets/images/icons/namespace.svg', 24px);
+}
+
+.km-icon-application {
+  @include mixins.mask-image('/assets/images/icons/application.svg', 24px);
+}
+
 .km-provider-logo-alibaba {
   @include mixins.provider-image('/assets/images/clouds/alibaba.svg', 115px, 30px);
 }
