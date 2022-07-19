@@ -244,6 +244,14 @@ export class ExternalClusterService {
     return this._http.post<ExternalCluster>(url, externalClusterModel, {headers}).pipe(catchError(() => of<null>()));
   }
 
+  deleteExternalCluster(projectID: string, clusterID: string, action: string): Observable<void> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}`;
+    const headers = new HttpHeaders({
+      Action: action,
+    });
+    return this._http.delete<void>(url, {headers: headers});
+  }
+
   private _getAKSHeaders(location?: string): HttpHeaders {
     let headers = {};
     if (this._preset) {
