@@ -43,7 +43,7 @@ END OF TERMS AND CONDITIONS
                 color="quaternary"
                 class="km-add-quota-btn"
                 fxLayoutAlign="center center"
-                (click)="add()">
+                (click)="addQuota()">
           <i class="km-icon-mask km-icon-add"></i>
           <span>Add Project Quota</span>
         </button>
@@ -63,7 +63,7 @@ END OF TERMS AND CONDITIONS
             class="km-header-cell p-40"
             mat-sort-header>Project</th>
         <td mat-cell
-            *matCellDef="let element">{{ element?.subjectHumanReadableName || element?.name }}</td>
+            *matCellDef="let element">{{element?.subjectHumanReadableName || element?.name}}</td>
       </ng-container>
 
       <ng-container [matColumnDef]="Column.Memory">
@@ -93,13 +93,26 @@ END OF TERMS AND CONDITIONS
             *matCellDef="let element">{{element?.quota?.storage}}</td>
       </ng-container>
 
-      <ng-container [matColumnDef]="Column.Spacer">
+      <ng-container [matColumnDef]="Column.Actions">
         <th mat-header-cell
             *matHeaderCellDef
-            class="km-header-cell p-10"
-            mat-sort-header></th>
+            class="km-header-cell p-5"></th>
         <td mat-cell
-            *matCellDef="let element"></td>
+            *matCellDef="let element">
+          <div class="km-table-actions"
+               fxLayoutAlign="end">
+            <button mat-icon-button
+                    (click)="editQuota(element)">
+              <i class="km-icon-mask km-icon-edit"></i>
+            </button>
+
+            <button mat-icon-button
+                    (click)="deleteQuota(element)"
+                    [attr.id]="'km-quota-delete-btn-' + element.name">
+              <i class="km-icon-mask km-icon-delete"></i>
+            </button>
+          </div>
+        </td>
       </ng-container>
 
       <tr mat-header-row

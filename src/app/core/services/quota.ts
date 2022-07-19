@@ -63,6 +63,10 @@ export class QuotaService implements OnDestroy {
     return this._http.patch<Record<string, never>>(this._baseUrl + '/' + quotaName, payload);
   }
 
+  deleteQuota(quotaName: string): Observable<Record<string, never>> {
+    return this._http.delete<Record<string, never>>(this._baseUrl + '/' + quotaName);
+  }
+
   private _getQuotas(): Observable<QuotaDetails[]> {
     return this._http
       .get<QuotaDetails[]>(this._baseUrl)
