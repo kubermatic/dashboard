@@ -51,6 +51,11 @@ limitations under the License.
             <km-wizard-machine-network-step [formControl]="form.get(stepRegistry.MachineNetwork)"></km-wizard-machine-network-step>
           </ng-container>
 
+          <ng-container *ngSwitchCase="stepRegistry.Applications">
+            <km-wizard-applications-step [formControl]="form.get(stepRegistry.Applications)"
+                                         (applicationsChange)="onApplicationsChanged($event)"></km-wizard-applications-step>
+          </ng-container>
+
           <ng-container *ngSwitchCase="stepRegistry.Summary">
             <km-wizard-summary-step></km-wizard-summary-step>
           </ng-container>

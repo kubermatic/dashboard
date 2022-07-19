@@ -24,6 +24,7 @@ import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {WizardService} from '@core/services/wizard/wizard';
 import {SaveClusterTemplateDialogComponent} from '@shared/components/save-cluster-template/component';
+import {Application} from '@shared/entity/application';
 import {Cluster, CreateClusterModel} from '@shared/entity/cluster';
 import {Project} from '@shared/entity/project';
 import {OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deployment';
@@ -48,6 +49,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   @ViewChild('stepper', {static: true}) private readonly _stepper: MatStepper;
 
   private _unsubscribe: Subject<void> = new Subject<void>();
+  private _applications: Application[] = [];
 
   constructor(
     private readonly _formBuilder: FormBuilder,
@@ -105,6 +107,10 @@ export class WizardComponent implements OnInit, OnDestroy {
     this._unsubscribe.next();
     this._unsubscribe.complete();
     this._wizard.reset();
+  }
+
+  onApplicationsChanged(applications: Application[]): void {
+    this._applications = applications;
   }
 
   getObservable(): Observable<Cluster> {
@@ -166,6 +172,7 @@ export class WizardComponent implements OnInit, OnDestroy {
           dynamicConfig: nodeData.dynamicConfig,
         },
       },
+      applications: this._applications,
     };
     if (nodeData.operatingSystemProfile && cluster.spec.enableOperatingSystemManager) {
       clusterModel.nodeDeployment.annotations = {
