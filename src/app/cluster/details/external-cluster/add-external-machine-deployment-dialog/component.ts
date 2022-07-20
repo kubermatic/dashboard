@@ -7,6 +7,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { DialogDataOutput } from '@app/node-data/dialog/component';
 import { ExternalMachineDeployment } from '@app/shared/entity/external-machine-deployment';
 import {getIconClassForButton} from '@shared/utils/common';
+import { ExternalMachineDeploymentService } from '@app/core/services/external-machine-deployment';
 // import { NodeDataService } from '@app/core/services/node-data/service';
 // import { BaseFormValidator } from '@app/shared/validators/base-form.validator';
 
@@ -33,7 +34,7 @@ enum Controls {
 export class AddExternalMachineDeploymentDialogComponent extends BaseFormValidator implements OnInit {
   mode = 'edit';
   readonly Controls = Controls;
-  private _output: DialogDataOutput = {ExternalMachineDeploymentData: ExternalMachineDeployment.NewEmptyMachineDeployment()} as DialogDataOutput;
+  private _output: DialogDataOutput = {externalMachineDeploymentData: ExternalMachineDeployment.NewEmptyMachineDeployment()} as DialogDataOutput;
 
 
   get provider(): NodeProvider {    
@@ -43,6 +44,7 @@ export class AddExternalMachineDeploymentDialogComponent extends BaseFormValidat
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _clusterSpecService: ClusterSpecService,
+    private readonly _externalMachineDeploymentService: ExternalMachineDeploymentService,
     // @Inject(MAT_DIALOG_DATA) private _data: DialogDataInput,
     private _dialogRef: MatDialogRef<AddExternalMachineDeploymentDialogComponent>,
 
@@ -56,6 +58,7 @@ export class AddExternalMachineDeploymentDialogComponent extends BaseFormValidat
   }
 
   onConfirm(): void {
+    this._output = {externalMachineDeploymentData: this._externalMachineDeploymentService.externalMachineDeployment}
     this._dialogRef.close(this._output);
   }
 

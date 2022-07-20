@@ -25,7 +25,8 @@ limitations under the License.
        fxLayout="column"
        fxLayoutGap="8px">
 
-    <mat-card-header class="km-no-padding">
+    <mat-card-header  *ngIf="!isDialogView()"
+                      class="km-no-padding">
       <mat-card-title>Cluster</mat-card-title>
     </mat-card-header>
 
@@ -58,7 +59,7 @@ limitations under the License.
              matInput
              type="text"
              autocomplete="off" />
-      <mat-hint>
+      <mat-hint *ngIf="!isDialogView()">
         Set the kubernetes version. See list of
         <a href="https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html"
            rel="noopener noreferrer"
@@ -105,11 +106,38 @@ limitations under the License.
                             [required]="true"
                             [formControlName]="Controls.SubnetIds"></km-chip-autocomplete>
 
-      <km-chip-autocomplete label="Security Groups"
+      <km-chip-autocomplete 
+                            label="Security Groups"
                             placeholder="Select SecurityGroup IDs"
                             [tags]="securityGroupIds"
                             [required]="true"
                             [formControlName]="Controls.SecurityGroupsIds"></km-chip-autocomplete>
+    </ng-container>
+    <ng-container *ngIf="isDialogView()">
+        <km-number-stepper [formControlName]="Controls.DiskSize"
+          mode="errors"
+          label="Disk Size in GB"
+          min="1"         
+          required>
+        </km-number-stepper>
+        <km-number-stepper [formControlName]="Controls.DesiredSize"
+          mode="errors"
+          label="Desired Size"
+          min="1"         
+          required>
+        </km-number-stepper>
+        <km-number-stepper [formControlName]="Controls.MaxSize"
+          mode="errors"
+          label="Max count"
+          min="1"         
+          required>
+        </km-number-stepper>
+        <km-number-stepper [formControlName]="Controls.MinSize"
+          mode="errors"
+          label="Min count"
+          min="1"         
+          required>
+        </km-number-stepper>
     </ng-container>
   </div>
 </form>

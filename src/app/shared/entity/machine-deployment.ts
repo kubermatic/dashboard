@@ -20,7 +20,7 @@ export class MachineDeployment {
   deletionTimestamp?: Date;
   id?: string;
   name?: string;
-  spec: MachineDeploymentSpec;
+  spec?: MachineDeploymentSpec;
   status?: MachineDeploymentStatus;
 }
 

@@ -23,10 +23,21 @@ import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialo
 import {ExternalCluster} from '@shared/entity/external-cluster';
 import {ExternalMachineDeployment, ExternalMachineDeploymentPatch} from '@shared/entity/external-machine-deployment';
 import {MasterVersion} from '@shared/entity/cluster';
+import {AddExternalMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/add-external-machine-deployment-dialog/component';
 
 @Injectable()
 export class ExternalMachineDeploymentService {
   private readonly _newRestRoot: string = environment.newRestRoot;
+  private readonly _restRoot: string = environment.newRestRoot;
+  private _externalMachineDeployment: ExternalMachineDeployment = ExternalMachineDeployment.NewEmptyMachineDeployment();
+
+  get externalMachineDeployment(): ExternalMachineDeployment {
+    return this._externalMachineDeployment;
+  }
+
+  set externalMachineDeployment(externalMachineDeployment: ExternalMachineDeployment) {
+    this._externalMachineDeployment = externalMachineDeployment;
+  }
 
   constructor(
     private readonly _httpClient: HttpClient,
@@ -51,6 +62,20 @@ export class ExternalMachineDeploymentService {
   ): Observable<ExternalMachineDeployment> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/machinedeployments/${machineDeploymentID}`;
     return this._httpClient.patch<ExternalMachineDeployment>(url, patch);
+  }
+  
+  showExternalClusterMachineDeploymentCreateDialog(projectID: string, cluster: ExternalCluster): void {
+    this._matDialog
+      .open<AddExternalMachineDeploymentDialogComponent>(AddExternalMachineDeploymentDialogComponent)
+      .afterClosed().subscribe(data =>{
+
+        console.log(data);
+        console.log(projectID);
+        console.log(cluster.id);
+       return this.create(projectID, cluster.id, data.externalMachineDeployment)
+
+      })
+        
   }
 
   showExternalMachineDeploymentDeleteDialog(
@@ -93,7 +118,7 @@ export class ExternalMachineDeploymentService {
   ):Observable<ExternalMachineDeployment> {
     
     const url = `${this._restRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/machinedeployments`
-    return this._httpClient.post<ExternalMachineDeployment>(url, md)
+    return this._httpClient.post<ExternalMachineDeployment>(url, md).pipe(catchError(() => of<ExternalMachineDeployment>()));
   }
 
   private _deleteExternalMachineDeployment(

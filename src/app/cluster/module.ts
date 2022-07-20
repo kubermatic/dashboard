@@ -72,6 +72,7 @@ import {VMwareCloudDirectorProviderSettingsComponent} from '@app/cluster/details
 import {ExternalClusterDeleteConfirmationComponent} from '@app/cluster/details/external-cluster/external-cluster-delete-confirmation/component';
 import {UpdateExternalClusterMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/update-external-cluster-machine-deployment-dialog/component';
 import {ExternalClusterModule} from '@app/external-cluster-wizard/module';
+import { ExternalMachineDeploymentService } from '@app/core/services/external-machine-deployment';
 
 const components: any[] = [
   ClusterDetailsComponent,
@@ -133,6 +134,7 @@ const components: any[] = [
   exports: [...components],
   providers: [
     NodeService,
+    ExternalMachineDeploymentService,
     {
       provide: NODE_DATA_CONFIG,
       useValue: {mode: NodeDataMode.Dialog} as NodeDataConfig,
