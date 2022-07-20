@@ -64,6 +64,20 @@ export class ExternalMachineDeploymentService {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/machinedeployments/${machineDeploymentID}`;
     return this._httpClient.patch<ExternalMachineDeployment>(url, patch);
   }
+  
+  showExternalClusterMachineDeploymentCreateDialog(projectID: string, cluster: ExternalCluster): void {
+    this._matDialog
+      .open<AddExternalMachineDeploymentDialogComponent>(AddExternalMachineDeploymentDialogComponent)
+      .afterClosed().subscribe(data =>{
+
+        console.log(data);
+        console.log(projectID);
+        console.log(cluster.id);
+       return this.create(projectID, cluster.id, data.externalMachineDeployment)
+
+      })
+        
+  }
 
   get isAddMachineDeploymentFormValid(): boolean {
     return this._isAddMachineDeploymentFormValid;
