@@ -49,7 +49,7 @@ export interface DialogDataInput {
 
 export interface DialogDataOutput {
   nodeData?: NodeData;
-  ExternalMachineDeploymentData?: ExternalMachineDeployment
+  externalMachineDeploymentData?: ExternalMachineDeployment
 }
 
 @Component({

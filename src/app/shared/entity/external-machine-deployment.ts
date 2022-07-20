@@ -16,7 +16,7 @@ import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {StatusIcon} from '@shared/utils/health-status';
 
 export class ExternalMachineDeployment extends MachineDeployment {
-  cloud?: ExternalMachineDeploymentCloudSpec;
+  cloud: ExternalMachineDeploymentCloudSpec;
 
   static getStatusIcon(md: ExternalMachineDeployment): StatusIcon {
     if (md?.deletionTimestamp) {
@@ -38,8 +38,7 @@ export class ExternalMachineDeployment extends MachineDeployment {
 
   static NewEmptyMachineDeployment(): ExternalMachineDeployment {
     return {
-      cloud:{},
-      spec:{}
+      cloud:{},      
     }
   }
 }
