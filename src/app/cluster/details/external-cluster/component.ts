@@ -17,6 +17,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {ClusterService} from '@core/services/cluster';
+import {NodeService} from '@core/services/node';
 import {PathParam} from '@core/services/params';
 import {UserService} from '@core/services/user';
 import {EditClusterConnectionDialogComponent} from '@shared/components/external-cluster-data-dialog/component';
@@ -68,6 +69,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
     private readonly _matDialog: MatDialog,
     private readonly _clusterService: ClusterService,
     private readonly _externalClusterService: ExternalClusterService,
+    private readonly _nodeService: NodeService,
     private readonly _userService: UserService,
     private readonly _appConfigService: AppConfigService
   ) {}
@@ -193,5 +195,12 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
           });
         }
       });
+  }
+
+  addMachineDeployment(): void {
+    console.log(this.cluster,'cluster');
+
+    this._nodeService.showExternalClusterMachineDeploymentCreateDialog()
+    
   }
 }

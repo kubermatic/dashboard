@@ -27,6 +27,8 @@ import {NodeData} from '@shared/model/NodeSpecChange';
 import {getIconClassForButton, objectDiff} from '@shared/utils/common';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {NodeDataMode} from '../config';
+import { ExternalMachineDeployment } from '@app/shared/entity/external-machine-deployment';
+import { ExternalCluster } from '@app/shared/entity/external-cluster';
 
 enum Mode {
   Edit = 'Edit',
@@ -35,16 +37,19 @@ enum Mode {
 
 enum Controls {
   NodeData = 'nodeData',
+  
 }
 
 export interface DialogDataInput {
   // If provided, data will be reused to pre-fill fields.
   initialClusterData?: Cluster;
+  initialExternalClusterData?: ExternalCluster;
   initialNodeData?: NodeData;
 }
 
 export interface DialogDataOutput {
-  nodeData: NodeData;
+  nodeData?: NodeData;
+  ExternalMachineDeploymentData?: ExternalMachineDeployment
 }
 
 @Component({

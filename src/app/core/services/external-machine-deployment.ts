@@ -86,6 +86,16 @@ export class ExternalMachineDeploymentService {
     );
   }
 
+  create(
+    projectID: string,
+    clusterID: string,
+    md: ExternalMachineDeployment
+  ):Observable<ExternalMachineDeployment> {
+    
+    const url = `${this._restRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/machinedeployments`
+    return this._httpClient.post<ExternalMachineDeployment>(url, md)
+  }
+
   private _deleteExternalMachineDeployment(
     projectID: string,
     clusterId: string,
