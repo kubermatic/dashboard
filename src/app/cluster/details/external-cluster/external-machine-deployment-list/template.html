@@ -131,8 +131,8 @@ limitations under the License.
               <ng-container *ngSwitchCase="false">
                 <button mat-icon-button
                         class="machine-deployment-action"
-                        matTooltip="Update number of replicas"
-                        (click)="updateReplicas(element, $event);"
+                        matTooltip="Update Machine Deployment"
+                        (click)="updateMachineDeployment(element, $event);"
                         [disabled]="!isEditEnabled()">
                   <i class="km-icon-mask km-icon-edit"></i>
                 </button>

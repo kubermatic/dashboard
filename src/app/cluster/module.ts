@@ -66,10 +66,10 @@ import {ExternalNodeListComponent} from './details/external-cluster/external-nod
 import {ClusterRoutingModule} from './routing';
 import {ExternalClusterListComponent} from '@app/cluster/list/external-cluster/component';
 import {ClustersComponent} from '@app/cluster/list/component';
-import {ReplicasDialogComponent} from '@app/cluster/details/external-cluster/replicas-dialog/component';
 import {NutanixProviderSettingsComponent} from '@app/cluster/details/cluster/edit-provider-settings/nutanix-provider-settings/component';
 import {VMwareCloudDirectorProviderSettingsComponent} from '@app/cluster/details/cluster/edit-provider-settings/vmware-cloud-director-provider-settings/component';
 import {ExternalClusterDeleteConfirmationComponent} from '@app/cluster/details/external-cluster/external-cluster-delete-confirmation/component';
+import {UpdateExternalClusterMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/update-external-cluster-machine-deployment-dialog/component';
 
 const components: any[] = [
   ClusterDetailsComponent,
@@ -121,7 +121,7 @@ const components: any[] = [
   CNIVersionDialog,
   ExternalClusterListComponent,
   ClustersComponent,
-  ReplicasDialogComponent,
+  UpdateExternalClusterMachineDeploymentDialogComponent,
 ];
 
 @NgModule({

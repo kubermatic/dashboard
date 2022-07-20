@@ -76,4 +76,9 @@ export class ExternalMachineDeploymentPatch {
 
 class ExternalMachineDeploymentSpecPatch {
   replicas?: number;
+  template?: {
+    versions: {
+      kubelet: 'string';
+    };
+  };
 }

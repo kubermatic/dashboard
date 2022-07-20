@@ -40,7 +40,7 @@ import {SSHKey} from '@shared/entity/ssh-key';
 import {merge, Observable, of, Subject, timer} from 'rxjs';
 import {catchError, shareReplay, switchMapTo} from 'rxjs/operators';
 import {ExternalCluster, ExternalClusterModel, ExternalClusterPatch} from '@shared/entity/external-cluster';
-import {ExternalMachineDeployment, ExternalMachineDeploymentPatch} from '@shared/entity/external-machine-deployment';
+import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 
 @Injectable()
@@ -276,16 +276,6 @@ export class ClusterService {
   ): Observable<Node[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/machinedeployments/${machineDeploymentID}/nodes`;
     return this._http.get<Node[]>(url).pipe(catchError(() => of<Node[]>()));
-  }
-
-  patchExternalMachineDeployment(
-    projectID: string,
-    clusterID: string,
-    machineDeploymentID: string,
-    patch: ExternalMachineDeploymentPatch
-  ): Observable<ExternalMachineDeployment> {
-    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/machinedeployments/${machineDeploymentID}`;
-    return this._http.patch<ExternalMachineDeployment>(url, patch);
   }
 
   health(projectID: string, clusterID: string): Observable<Health> {

@@ -17,21 +17,31 @@ import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {catchError, map, mergeMap, take} from 'rxjs/operators';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {environment} from '@environments/environment';
 import {NotificationService} from '@core/services/notification';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {ExternalCluster} from '@shared/entity/external-cluster';
-import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
-import {environment} from '@environments/environment';
+import {ExternalMachineDeployment, ExternalMachineDeploymentPatch} from '@shared/entity/external-machine-deployment';
 
 @Injectable()
 export class ExternalMachineDeploymentService {
-  private readonly _restRoot: string = environment.newRestRoot;
+  private readonly _newRestRoot: string = environment.newRestRoot;
 
   constructor(
     private readonly _httpClient: HttpClient,
     private readonly _matDialog: MatDialog,
     private readonly _notificationService: NotificationService
   ) {}
+
+  patchExternalMachineDeployment(
+    projectID: string,
+    clusterID: string,
+    machineDeploymentID: string,
+    patch: ExternalMachineDeploymentPatch
+  ): Observable<ExternalMachineDeployment> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/machinedeployments/${machineDeploymentID}`;
+    return this._httpClient.patch<ExternalMachineDeployment>(url, patch);
+  }
 
   showExternalMachineDeploymentDeleteDialog(
     projectID: string,
@@ -71,7 +81,7 @@ export class ExternalMachineDeploymentService {
     clusterId: string,
     machineDeploymentId: string
   ): Observable<Record<string, never>> {
-    const url = `${this._restRoot}/projects/${projectID}/kubernetes/clusters/${clusterId}/machinedeployments/${machineDeploymentId}`;
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterId}/machinedeployments/${machineDeploymentId}`;
     return this._httpClient.delete<Record<string, never>>(url);
   }
 }
