@@ -46,6 +46,14 @@ export class ExternalMachineDeploymentService {
     this._externalMachineDeployment = externalMachineDeployment;
   }
 
+  get isAddMachineDeploymentFormValid(): boolean {
+    return this._isAddMachineDeploymentFormValid;
+  }
+
+  set isAddMachineDeploymentFormValid(valid: boolean) {
+    this._isAddMachineDeploymentFormValid = valid;
+  }
+
   machineDeploymentUpgrades(
     projectID: string,
     clusterID: string,
@@ -63,14 +71,6 @@ export class ExternalMachineDeploymentService {
   ): Observable<ExternalMachineDeployment> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/machinedeployments/${machineDeploymentID}`;
     return this._httpClient.patch<ExternalMachineDeployment>(url, patch);
-  }
-
-  get isAddMachineDeploymentFormValid(): boolean {
-    return this._isAddMachineDeploymentFormValid;
-  }
-
-  set isAddMachineDeploymentFormValid(valid: boolean) {
-    this._isAddMachineDeploymentFormValid = valid;
   }
 
   showCreateExternalClusterMachineDeploymentDialog(
