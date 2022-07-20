@@ -98,7 +98,10 @@ fi
 # Build binaries and load the Docker images into the kind cluster
 echodate "Building binaries for $KUBERMATIC_VERSION"
 TEST_NAME="Build Kubermatic binaries"
-KUBERMATICDOCKERTAG=latest UIDOCKERTAG=latest make kubermatic-installer
+
+# We can't use PULL_BASE_SHA directly since that'd point to the commit hash from dashboard repository.
+KUBERMATIC_COMMIT_HASH="$(git rev-parse HEAD)"
+PULL_BASE_SHA=$KUBERMATIC_COMMIT_HASH KUBERMATICDOCKERTAG=latest UIDOCKERTAG=latest make kubermatic-installer
 
 TEST_NAME="Deploy Kubermatic"
 echodate "Deploying Kubermatic [${KUBERMATIC_VERSION}]..."
