@@ -339,10 +339,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   getDownloadURL(): Observable<string> {
-    if (!this.isClusterAPIRunning) {
-      return of('');
-    }
-
     return this.settings.adminSettings.pipe(
       switchMap(settings =>
         iif(
