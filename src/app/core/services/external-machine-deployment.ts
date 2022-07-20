@@ -65,18 +65,35 @@ export class ExternalMachineDeploymentService {
     return this._httpClient.patch<ExternalMachineDeployment>(url, patch);
   }
   
-  showExternalClusterMachineDeploymentCreateDialog(projectID: string, cluster: ExternalCluster): void {
-    this._matDialog
-      .open<AddExternalMachineDeploymentDialogComponent>(AddExternalMachineDeploymentDialogComponent)
-      .afterClosed().subscribe(data =>{
+  get isAddMachineDeploymentFormValid(): boolean {
+    return this._isAddMachineDeploymentFormValid;
+  }
 
-        console.log(data);
-        console.log(projectID);
-        console.log(cluster.id);
-       return this.create(projectID, cluster.id, data.externalMachineDeployment)
+  set isAddMachineDeploymentFormValid(valid: boolean) {
+    this._isAddMachineDeploymentFormValid = valid;
+  }
 
-      })
-        
+  showCreateExternalClusterMachineDeploymentDialog(
+    projectID: string,
+    cluster: ExternalCluster
+  ): Observable<ExternalMachineDeployment> {
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        projectId: projectID,
+        clusterData: cluster,
+      },
+    };
+    const dialogRef = this._matDialog.open(AddExternalMachineDeploymentDialogComponent, dialogConfig);
+    return dialogRef
+      .afterClosed()
+      .pipe(filter(data => !!data))
+      .pipe(
+        switchMap(data => {
+          return this.create(projectID, cluster.id, data.externalMachineDeploymentData);
+        })
+      );
+    // .subscribe(data => {
+    //   });
   }
 
   get isAddMachineDeploymentFormValid(): boolean {
