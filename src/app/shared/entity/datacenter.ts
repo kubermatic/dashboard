@@ -47,6 +47,7 @@ export class DatacenterSpec {
   nutanix?: NutanixDatacenterSpec;
   alibaba?: AlibabaDatacenterSpec;
   anexia?: AnexiaDatacenterSpec;
+  vmwareclouddirector?: VMwareCloudDirectorDatacenterSpec;
 }
 
 export class DatacenterOperatingSystemOptions {
@@ -118,6 +119,14 @@ export class VSphereDatacenterSpec {
   endpoint: string;
   cluster: string;
   datacenter: string;
+  templates: DatacenterOperatingSystemOptions;
+}
+
+export class VMwareCloudDirectorDatacenterSpec {
+  url: string;
+  allowInsecure?: boolean;
+  catalog?: string;
+  storageProfile?: string;
   templates: DatacenterOperatingSystemOptions;
 }
 

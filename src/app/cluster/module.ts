@@ -68,6 +68,7 @@ import {ExternalClusterListComponent} from '@app/cluster/list/external-cluster/c
 import {ClustersComponent} from '@app/cluster/list/component';
 import {ReplicasDialogComponent} from '@app/cluster/details/external-cluster/replicas-dialog/component';
 import {NutanixProviderSettingsComponent} from '@app/cluster/details/cluster/edit-provider-settings/nutanix-provider-settings/component';
+import {VMwareCloudDirectorProviderSettingsComponent} from '@app/cluster/details/cluster/edit-provider-settings/vmware-cloud-director-provider-settings/component';
 
 const components: any[] = [
   ClusterDetailsComponent,
@@ -98,6 +99,7 @@ const components: any[] = [
   EquinixProviderSettingsComponent,
   KubevirtProviderSettingsComponent,
   AlibabaProviderSettingsComponent,
+  VMwareCloudDirectorProviderSettingsComponent,
   EditSSHKeysComponent,
   ShareKubeconfigComponent,
   ClusterPanelComponent,

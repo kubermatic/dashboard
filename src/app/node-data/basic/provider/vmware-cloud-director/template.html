@@ -1,0 +1,100 @@
+<!--
+Copyright 2022 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<form [formGroup]="form"
+      fxLayout="column"
+      fxLayoutGap="8px">
+  <km-number-stepper [formControlName]="Controls.CPUs"
+                     mode="errors"
+                     label="CPUs"
+                     min="1"
+                     required>
+  </km-number-stepper>
+
+  <km-number-stepper [formControlName]="Controls.CPUCores"
+                     mode="errors"
+                     label="Cores per CPU"
+                     min="1"
+                     required>
+  </km-number-stepper>
+
+  <km-number-stepper [formControlName]="Controls.MemoryMB"
+                     mode="errors"
+                     label="Memory (MB)"
+                     min="4"
+                     required>
+  </km-number-stepper>
+
+  <km-number-stepper [formControlName]="Controls.DiskSizeGB"
+                     mode="errors"
+                     label="Disk Size (GB)"
+                     min="1"
+                     required>
+  </km-number-stepper>
+
+  <km-combobox #catalogCombobox
+               [selected]="selectedCatalog"
+               [options]="catalogs"
+               [formControlName]="Controls.Catalog"
+               [label]="catalogLabel"
+               [required]="true"
+               (changed)="onCatalogChanged($event)"
+               inputLabel="Select catalog..."
+               filterBy="name">
+    <div *option="let catalog">{{catalog.name}}</div>
+  </km-combobox>
+
+  <km-combobox #templateCombobox
+               [selected]="selectedTemplate"
+               [options]="templates"
+               [formControlName]="Controls.Template"
+               [label]="templateLabel"
+               [required]="true"
+               (changed)="onTemplateChanged($event)"
+               inputLabel="Select template..."
+               filterBy="name">
+    <div *option="let template">{{template.name}}</div>
+  </km-combobox>
+
+  <km-combobox #storageProfileCombobox
+               [selected]="selectedStorageProfile"
+               [options]="storageProfiles"
+               [formControlName]="Controls.StorageProfile"
+               [label]="storageProfileLabel"
+               [required]="true"
+               (changed)="onStorageProfileChanged($event)"
+               inputLabel="Select storage profile..."
+               filterBy="name">
+    <div *option="let storageProfile">{{storageProfile.name}}</div>
+  </km-combobox>
+
+  <km-number-stepper [formControlName]="Controls.DiskIOPs"
+                     hint="Leave empty or 0 to use default value for the selected template."
+                     mode="all"
+                     label="Disk IOPS"
+                     min="0">
+  </km-number-stepper>
+
+  <mat-form-field fxFlex>
+    <mat-label>IP Allocation Mode</mat-label>
+    <mat-select [formControlName]="Controls.IPAllocationMode"
+                disableOptionCentering>
+      <mat-option *ngFor="let mode of ipAllocationModes"
+                  [value]="mode">
+        {{mode}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</form>

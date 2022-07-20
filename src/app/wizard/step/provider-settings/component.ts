@@ -75,6 +75,7 @@ export class ProviderSettingsStepComponent extends StepBase implements OnInit, O
       NodeProvider.OPENSTACK,
       NodeProvider.HETZNER,
       NodeProvider.NUTANIX,
+      NodeProvider.VMWARECLOUDDIRECTOR,
     ].includes(provider);
   }
 

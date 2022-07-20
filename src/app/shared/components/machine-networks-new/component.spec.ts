@@ -40,6 +40,7 @@ import {GCPService} from '@core/services/provider/gcp';
 import {HetznerService} from '@core/services/provider/hetzner';
 import {OpenStackService} from '@core/services/provider/openstack';
 import {NutanixService} from '@app/core/services/provider/nutanix';
+import {VMwareCloudDirectorService} from '@core/services/provider/vmware-cloud-director';
 import {KubeVirtService} from '@core/services/provider/kubevirt';
 
 describe('MachineNetworksComponent', () => {
@@ -66,6 +67,7 @@ describe('MachineNetworksComponent', () => {
         HetznerService,
         OpenStackService,
         NutanixService,
+        VMwareCloudDirectorService,
         KubeVirtService,
         {provide: ProjectService, useValue: ProjectMockService},
         {provide: NODE_DATA_CONFIG, useValue: NodeDataMode.Wizard},

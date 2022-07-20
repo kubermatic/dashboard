@@ -51,6 +51,8 @@ import {VSphereProviderExtendedComponent} from './step/provider-settings/provide
 import {SummaryStepComponent} from './step/summary/component';
 import {NutanixProviderBasicComponent} from '@app/wizard/step/provider-settings/provider/basic/nutanix/component';
 import {NutanixProviderExtendedComponent} from '@app/wizard/step/provider-settings/provider/extended/nutanix/component';
+import {VMwareCloudDirectorProviderBasicComponent} from '@app/wizard/step/provider-settings/provider/basic/vmware-cloud-director/component';
+import {VMwareCloudDirectorProviderExtendedComponent} from '@app/wizard/step/provider-settings/provider/extended/vmware-cloud-director/component';
 
 const components = [
   WizardComponent,
@@ -85,6 +87,8 @@ const components = [
   ClusterSSHKeysComponent,
   NutanixProviderBasicComponent,
   NutanixProviderExtendedComponent,
+  VMwareCloudDirectorProviderBasicComponent,
+  VMwareCloudDirectorProviderExtendedComponent,
 ];
 
 @NgModule({

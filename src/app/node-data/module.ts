@@ -51,6 +51,7 @@ import {EquinixExtendedNodeDataComponent} from './extended/provider/equinix/comp
 import {KubeletVersionNodeDataComponent} from './kubelet-version/component';
 import {NutanixBasicNodeDataComponent} from '@app/node-data/basic/provider/nutanix/component';
 import {FlavorDetailsDialogComponent} from '@app/node-data/basic/provider/kubevirt/flavor-details/component';
+import {VMwareCloudDirectorBasicNodeDataComponent} from '@app/node-data/basic/provider/vmware-cloud-director/component';
 
 const components = [
   AlibabaBasicNodeDataComponent,
@@ -79,6 +80,7 @@ const components = [
   NodeDataDialogComponent,
   NutanixBasicNodeDataComponent,
   FlavorDetailsDialogComponent,
+  VMwareCloudDirectorBasicNodeDataComponent,
 ];
 
 const services = [NodeDataService];

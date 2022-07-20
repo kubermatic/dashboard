@@ -19,26 +19,27 @@ import {PresetStepComponent} from '@app/settings/admin/presets/dialog/steps/pres
 import {PresetProviderStepComponent} from '@app/settings/admin/presets/dialog/steps/provider/component';
 import {PresetDialogService} from '@app/settings/admin/presets/dialog/steps/service';
 import {PresetSettingsStepComponent} from '@app/settings/admin/presets/dialog/steps/settings/component';
+import {AKSSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/aks/component';
 import {AlibabaSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/alibaba/component';
 import {AnexiaSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/anexia/component';
 import {AWSSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/aws/component';
 import {AzureSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/azure/component';
 import {DigitaloceanSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/digitalocean/component';
+import {EKSSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/eks/component';
+import {EquinixSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/equinix/component';
 import {GCPSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/gcp/component';
+import {GKESettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/gke/component';
 import {HetznerSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/hetzner/component';
 import {KubevirtSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/kubevirt/component';
+import {NutanixSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/nutanix/component';
 import {OpenstackSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/openstack/component';
-import {EquinixSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/equinix/component';
+import {VMwareCloudDirectorSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/vmware-cloud-director/component';
 import {VSphereSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/vsphere/component';
 import {EditPresetDialogComponent} from '@app/settings/admin/presets/edit-dialog/component';
 import {SharedModule} from '@shared/module';
 import {AdminSettingsComponent} from './component';
 import {DatacenterDataDialogComponent} from './dynamic-datacenters/datacenter-data-dialog/component';
 import {AdminSettingsRoutingModule} from './routing';
-import {GKESettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/gke/component';
-import {EKSSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/eks/component';
-import {AKSSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/aks/component';
-import {NutanixSettingsComponent} from '@app/settings/admin/presets/dialog/steps/settings/provider/nutanix/component';
 
 @NgModule({
   imports: [SharedModule, AdminSettingsRoutingModule],
@@ -66,6 +67,7 @@ import {NutanixSettingsComponent} from '@app/settings/admin/presets/dialog/steps
     EquinixSettingsComponent,
     VSphereSettingsComponent,
     NutanixSettingsComponent,
+    VMwareCloudDirectorSettingsComponent,
   ],
   providers: [PresetDialogService],
 })

@@ -31,6 +31,7 @@ export enum NodeProvider {
   KUBEVIRT = 'kubevirt',
   NUTANIX = 'nutanix',
   VSPHERE = 'vsphere',
+  VMWARECLOUDDIRECTOR = 'vmwareclouddirector',
   NONE = '',
 }
 
@@ -66,6 +67,7 @@ export namespace NodeProviderConstants {
     [NodeProvider.EQUINIX, 'Equinix Metal'],
     [NodeProvider.VSPHERE, 'VSphere'],
     [NodeProvider.NUTANIX, 'Nutanix'],
+    [NodeProvider.VMWARECLOUDDIRECTOR, 'VMware Cloud Director'],
   ]);
 
   export function displayName(provider: NodeProvider): string {
