@@ -1,18 +1,20 @@
 # Dashboard for the Kubermatic Kubernetes Platform
-[![codecov](https://codecov.io/gh/kubermatic/dashboard/branch/master/graph/badge.svg?token=njXM3OrmAM)](https://codecov.io/gh/kubermatic/dashboard)
 
+[![codecov](https://codecov.io/gh/kubermatic/dashboard/branch/master/graph/badge.svg?token=njXM3OrmAM)](https://codecov.io/gh/kubermatic/dashboard)
 
 ## Overview & More information
 
 This repo contains the Dashboard for the Kubermatic Kubernetes Platform. For more information regarding overview, installation and user guides check [Kubermatic Kubernetes Platform repo][5] & [Kubermatic Kubernetes Platform docs website][21].
 
 ## Editions
+
 There are two editions of Kubermatic Kubernetes Platform:
 
 Kubermatic Kubernetes Platform Community Edition (CE) is available freely under the Apache License, Version 2.0.
 Kubermatic Kubernetes Platform Enterprise Edition (EE) includes premium features that are most useful for organizations with large-scale Kubernetes installations with more than 50 clusters. To access the Enterprise Edition and get official support please become a subscriber.
 
 ## Licensing
+
 See the [LICENSE](LICENSE) file for licensing information as it pertains to files in this repository.
 
 ## Troubleshooting
@@ -30,7 +32,6 @@ Feedback and discussion are available on [the mailing list][11].
 * Please familiarize yourself with the [Code of Conduct][4] before contributing.
 * See [CONTRIBUTING.md][2] and [Development.md][3] for instructions on the developer certificate of origin that we require.
 * Read how [we're using ZenHub][13] for project and roadmap planning
-
 
 ### Pull requests
 

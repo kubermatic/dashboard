@@ -113,7 +113,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   masterVersions: MasterVersion[] = [];
   admissionPlugins: AdmissionPlugin[] = [];
   labels: object;
-  operatingSystemManagerFeatureEnabled: boolean;
   podNodeSelectorAdmissionPluginConfig: object;
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
   proxyMode = ProxyMode;
@@ -147,7 +146,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   ngOnInit(): void {
     this._featureGatesService.featureGates.pipe(takeUntil(this._unsubscribe)).subscribe(featureGates => {
       this.isKonnectivityEnabled = !!featureGates?.konnectivityService;
-      this.operatingSystemManagerFeatureEnabled = featureGates?.operatingSystemManager;
     });
 
     this.form = this._builder.group({
@@ -157,7 +155,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.AuditLogging]: this._builder.control(false),
       [Controls.AuditPolicyPreset]: this._builder.control(''),
       [Controls.UserSSHKeyAgent]: this._builder.control(true),
-      [Controls.OperatingSystemManager]: this._builder.control(false),
+      [Controls.OperatingSystemManager]: this._builder.control(true),
       [Controls.OPAIntegration]: this._builder.control(false),
       [Controls.Konnectivity]: this._builder.control(true),
       [Controls.MLALogging]: this._builder.control(false),

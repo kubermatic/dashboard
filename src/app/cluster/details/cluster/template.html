@@ -42,7 +42,6 @@ limitations under the License.
             class="km-share-kubeconfig-btn"
             color="alternative"
             (click)="shareConfigDialog()"
-            [disabled]="!kubernetesDashboardHealth"
             *ngIf="isShareConfigEnabled() | async">
       <i class="km-icon-mask km-icon-share"></i>
       <span>Share</span>
@@ -50,7 +49,6 @@ limitations under the License.
     <km-button color="alternative"
                icon="km-icon-download"
                label="Get Kubeconfig"
-               [disabled]="!kubernetesDashboardHealth"
                [observable]="getObservable()"
                (next)="onNext($event)">
     </km-button>
@@ -59,6 +57,7 @@ limitations under the License.
             type="button"
             (click)="addNode()"
             [fxHide]="nodeDc?.spec?.provider === 'bringyourown'"
+            [matTooltip]="isAddMachineDeploymentsEnabled() ? '' : !isClusterRunning ? 'Cluster is not healthy' : 'You do not have permission to perform this action'"
             [disabled]="!isAddMachineDeploymentsEnabled()">
       <i class="km-icon-mask km-icon-add"></i>
       <span>Add Machine Deployment</span>
@@ -70,6 +69,7 @@ limitations under the License.
        target="_blank"
        mat-flat-button
        [disabled]="!kubernetesDashboardHealth"
+       [matTooltip]="kubernetesDashboardHealth ? '' : 'Kubernetes Dashboard is not running'"
        *ngIf="(settings.adminSettings | async)?.enableDashboard">
       <i class="km-icon-mask km-icon-external-link"></i>
       <span>Open Dashboard</span>
@@ -221,8 +221,13 @@ limitations under the License.
                                 [healthState]="health?.controller"></km-property-health>
             <km-property-health label="Machine Controller"
                                 [healthState]="health?.machineController"></km-property-health>
+            <km-property-health *ngIf="cluster.spec.enableOperatingSystemManager"
+                                label="Operating System Manager"
+                                [healthState]="health?.operatingSystemManager"></km-property-health>
             <km-property-health label="User Controller Manager"
                                 [healthState]="health?.userClusterControllerManager"></km-property-health>
+            <km-property-health label="Kubernetes Dashboard"
+                                [healthState]="health?.kubernetesDashboard"></km-property-health>
           </div>
 
           <div fxFlex="33"
@@ -361,13 +366,6 @@ limitations under the License.
           <div fxFlex="33"
                class="container-spacing">
             <div class="section-header">Misc</div>
-            <div fxLayout="row">
-              <km-property-boolean label="Operating System Manager"
-                                   [value]="cluster.spec.enableOperatingSystemManager">
-              </km-property-boolean>
-              <span class="km-label-primary secondary">experimental</span>
-            </div>
-
             <div fxLayout="row">
               <km-property-boolean label="Audit Logging"
                                    [value]="cluster.spec.auditLogging?.enabled">
