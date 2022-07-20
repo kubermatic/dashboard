@@ -29,6 +29,7 @@ import {forkJoin} from 'rxjs';
 import {debounceTime, finalize, takeUntil} from 'rxjs/operators';
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
 import {ExternalCloudSpec, ExternalClusterModel, ExternalClusterSpec} from '@shared/entity/external-cluster';
+import { NodeDataService } from '@app/core/services/node-data/service';
 
 enum Controls {
   Name = 'name',
@@ -69,7 +70,8 @@ export class EKSClusterSettingsComponent
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _externalClusterService: ExternalClusterService,
-    private readonly _nameGenerator: NameGeneratorService
+    private readonly _nameGenerator: NameGeneratorService,
+    private readonly _nodeDataService: NodeDataService
   ) {
     super();
   }
@@ -89,6 +91,10 @@ export class EKSClusterSettingsComponent
     this.control(Controls.Name).setValue(this._nameGenerator.generateName());
   }
 
+  isDialogView(): boolean {
+    return !this._nodeDataService.isInWizardMode();
+  }
+
   private _initForm(): void {
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control('', [Validators.required, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR]),
@@ -98,6 +104,8 @@ export class EKSClusterSettingsComponent
       [Controls.SubnetIds]: this._builder.control([], Validators.required),
       [Controls.SecurityGroupsIds]: this._builder.control([], Validators.required),
     });
+
+    // console.log(this._externalClusterService.getEKSClusters('95wfjfgzvj'))
   }
 
   private _initSubscriptions(): void {

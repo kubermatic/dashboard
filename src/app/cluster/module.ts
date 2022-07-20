@@ -16,6 +16,7 @@ import {NgModule} from '@angular/core';
 import {AddMachineNetworkComponent} from '@app/cluster/details/cluster/add-machine-network/component';
 import {AnexiaProviderSettingsComponent} from '@app/cluster/details/cluster/edit-provider-settings/anexia-provider-settings/component';
 import {ExternalMachineDeploymentDetailsComponent} from '@app/cluster/details/external-cluster/external-machine-deployment-details/component';
+import {AddExternalMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/add-external-machine-deployment-dialog/component'
 import {ExternalMachineDeploymentListComponent} from '@app/cluster/details/external-cluster/external-machine-deployment-list/component';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '@app/node-data/config';
 import {NodeDataModule} from '@app/node-data/module';
@@ -69,6 +70,7 @@ import {ClustersComponent} from '@app/cluster/list/component';
 import {ReplicasDialogComponent} from '@app/cluster/details/external-cluster/replicas-dialog/component';
 import {NutanixProviderSettingsComponent} from '@app/cluster/details/cluster/edit-provider-settings/nutanix-provider-settings/component';
 import {VMwareCloudDirectorProviderSettingsComponent} from '@app/cluster/details/cluster/edit-provider-settings/vmware-cloud-director-provider-settings/component';
+import { ExternalClusterModule } from '@app/external-cluster-wizard/module';
 
 const components: any[] = [
   ClusterDetailsComponent,
@@ -76,6 +78,7 @@ const components: any[] = [
   ExternalNodeListComponent,
   ExternalMachineDeploymentListComponent,
   ExternalMachineDeploymentDetailsComponent,
+  AddExternalMachineDeploymentDialogComponent,
   NodeListComponent,
   MachineDeploymentListComponent,
   MachineDeploymentDetailsComponent,
@@ -123,7 +126,7 @@ const components: any[] = [
 ];
 
 @NgModule({
-  imports: [SharedModule, ClusterRoutingModule, MachineNetworksModule, NodeDataModule],
+  imports: [SharedModule, ClusterRoutingModule, MachineNetworksModule, NodeDataModule, ExternalClusterModule],
   declarations: [...components, AddMachineNetworkComponent],
   exports: [...components],
   providers: [

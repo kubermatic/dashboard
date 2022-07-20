@@ -25,8 +25,8 @@ export class MachineDeployment {
 }
 
 export class MachineDeploymentSpec {
-  replicas: number;
-  template: NodeSpec;
+  replicas?: number;
+  template?: NodeSpec;
   paused?: boolean;
   dynamicConfig?: boolean;
 }

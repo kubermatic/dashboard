@@ -35,10 +35,18 @@ export class ExternalMachineDeployment extends MachineDeployment {
     }
     return 'Provisioning';
   }
+
+  static NewEmptyMachineDeployment(): ExternalMachineDeployment {
+    return {
+      cloud:{},
+      spec:{}
+    }
+  }
 }
 
 class ExternalMachineDeploymentCloudSpec {
   gke?: GKEMachineDeploymentCloudSpec;
+  eks?: EKSMachineDeploymentCloudSpec
 }
 
 class GKEMachineDeploymentCloudSpec {
@@ -47,6 +55,10 @@ class GKEMachineDeploymentCloudSpec {
   management?: GKENodeManagement;
   locations?: string[];
   string;
+}
+
+class EKSMachineDeploymentCloudSpec {
+
 }
 
 class GKENodePoolAutoscaling {
