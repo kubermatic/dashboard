@@ -33,13 +33,23 @@ limitations under the License.
            (keyup)="onChange($event)"
            #clusterNameInput>
   </mat-form-field>
+
+
+  <div *ngIf="hasMachineDeployments"
+       fxLayoutAlign=" start"
+       class="warning-container">
+    <i class="km-icon-warning"></i>
+    <div class="km-text dynamic-kubelet-config-warning">
+      {{errorMessage}}
+    </div>
+  </div>
 </mat-dialog-content>
 
 <mat-dialog-actions>
   <km-button id="km-delete-cluster-dialog-delete-btn"
              icon="km-icon-delete"
              label="Delete Cluster"
-             [disabled]="inputName !== cluster.name"
+             [disabled]="inputName !== cluster.name || !hasMachineDeployments"
              [observable]="getObservable()"
              (next)="onNext()">
   </km-button>

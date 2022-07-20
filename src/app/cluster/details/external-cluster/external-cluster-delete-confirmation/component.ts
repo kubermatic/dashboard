@@ -23,6 +23,7 @@ import {take} from 'rxjs/operators';
 import {ExternalCluster} from '@shared/entity/external-cluster';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {ClusterService} from '@core/services/cluster';
+import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 
 @Component({
   selector: 'km-external-cluster-delete-confirmation',
@@ -30,11 +31,13 @@ import {ClusterService} from '@core/services/cluster';
   styleUrls: ['style.scss'],
 })
 export class ExternalClusterDeleteConfirmationComponent implements OnInit, OnDestroy, AfterContentChecked {
+  inputName = '';
+  settings: AdminSettings;
+  machineDeployments: ExternalMachineDeployment[] = [];
+  errorMessage = '';
   @Input() projectID: string;
   @Input() cluster: ExternalCluster;
   @ViewChild('clusterNameInput', {static: true}) clusterNameInputRef: ElementRef;
-  inputName = '';
-  settings: AdminSettings;
   private readonly _unsubscribe = new Subject<void>();
 
   constructor(
@@ -46,8 +49,25 @@ export class ExternalClusterDeleteConfirmationComponent implements OnInit, OnDes
     private readonly _notificationService: NotificationService
   ) {}
 
+  get hasMachineDeployments(): boolean {
+    return this.machineDeployments && this.machineDeployments.length > 0;
+  }
+
   ngOnInit(): void {
     this._googleAnalyticsService.emitEvent('clusterOverview', 'deleteClusterDialogOpened');
+
+    if (this.projectID && this.cluster) {
+      this._clusterService
+        .externalMachineDeployments(this.projectID, this.cluster?.id)
+        .pipe(take(1))
+        .subscribe((machineDeployments: ExternalMachineDeployment[]) => {
+          this.machineDeployments = machineDeployments;
+          if (machineDeployments.length > 0) {
+            const nodegroupNames = machineDeployments.map((md: ExternalMachineDeployment) => md.name).join(',');
+            this.errorMessage = `Cluster has nodegroups attached ${nodegroupNames}`;
+          }
+        });
+    }
   }
 
   ngOnDestroy(): void {
