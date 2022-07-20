@@ -71,6 +71,7 @@ describe('DigitalOcean Provider', () => {
       .type(initialMachineDeploymentReplicas)
       .should(Condition.HaveValue, initialMachineDeploymentReplicas);
     WizardPage.getNextBtn(WizardStep.NodeSettings).should(Condition.BeEnabled).click({force: true});
+    WizardPage.getNextBtn(WizardStep.Applications).should(Condition.BeEnabled).click({force: true});
     WizardPage.getCreateBtn().click({force: true});
 
     ClustersPage.verifyUrl();
