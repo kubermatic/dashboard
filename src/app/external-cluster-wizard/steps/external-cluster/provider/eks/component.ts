@@ -133,6 +133,8 @@ export class EKSClusterSettingsComponent
       [Controls.MinSize]: this._builder.control(DEFAULT_MD_MINSIZE),
       [Controls.DesiredSize]: this._builder.control(DEFAULT_MD_DESIRED_SIZE),
     });
+
+    // console.log(this._externalClusterService.getEKSClusters('95wfjfgzvj'))
   }
 
   private _initSubscriptions(): void {

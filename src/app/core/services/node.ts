@@ -24,6 +24,7 @@ import {Observable, of} from 'rxjs';
 import {catchError, filter, mergeMap, switchMap, take} from 'rxjs/operators';
 import {MachineDeploymentService} from '@core/services/machine-deployment';
 import {OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deployment';
+import { AddExternalMachineDeploymentDialogComponent } from '@app/cluster/details/external-cluster/add-external-machine-deployment-dialog/component';
 
 @Injectable()
 export class NodeService {
@@ -93,6 +94,12 @@ export class NodeService {
         filter(data => !!data),
         switchMap(data => this.createMachineDeployment(data.nodeData, projectID, cluster.id))
       );
+  }
+
+  showExternalClusterMachineDeploymentCreateDialog(): void {
+    this._matDialog
+      .open<AddExternalMachineDeploymentDialogComponent>(AddExternalMachineDeploymentDialogComponent)
+      
   }
 
   showMachineDeploymentEditDialog(
