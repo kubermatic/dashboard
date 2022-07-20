@@ -35,6 +35,7 @@ import {ClusterListTab} from '@app/cluster/list/component';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {ExternalClusterDeleteConfirmationComponent} from '@app/cluster/details/external-cluster/external-cluster-delete-confirmation/component';
 import {ExternalMachineDeploymentService} from '@app/core/services/external-machine-deployment';
+import {NotificationService} from '@app/core/services/notification';
 
 @Component({
   selector: 'km-external-cluster-details',
@@ -71,7 +72,8 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
     private readonly _externalClusterService: ExternalClusterService,
     private readonly _externalMachineDeploymentService: ExternalMachineDeploymentService,
     private readonly _userService: UserService,
-    private readonly _appConfigService: AppConfigService
+    private readonly _appConfigService: AppConfigService,
+    private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -198,7 +200,10 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   addExternalMachineDeployment(): void {
-    this._externalMachineDeploymentService.showExternalClusterMachineDeploymentCreateDialog(this.projectID, this.cluster)
-    
+    this._externalMachineDeploymentService
+      .showCreateExternalClusterMachineDeploymentDialog(this.projectID, this.cluster)
+      .subscribe(data => {
+        this._notificationService.success(`the ${data.name} Machine Deployment been created`);
+      });
   }
 }

@@ -27,8 +27,8 @@ import {NodeData} from '@shared/model/NodeSpecChange';
 import {getIconClassForButton, objectDiff} from '@shared/utils/common';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {NodeDataMode} from '../config';
-import { ExternalMachineDeployment } from '@app/shared/entity/external-machine-deployment';
-import { ExternalCluster } from '@app/shared/entity/external-cluster';
+import {ExternalMachineDeployment} from '@app/shared/entity/external-machine-deployment';
+import {ExternalCluster} from '@app/shared/entity/external-cluster';
 
 enum Mode {
   Edit = 'Edit',
@@ -37,7 +37,6 @@ enum Mode {
 
 enum Controls {
   NodeData = 'nodeData',
-  
 }
 
 export interface DialogDataInput {
@@ -49,7 +48,7 @@ export interface DialogDataInput {
 
 export interface DialogDataOutput {
   nodeData?: NodeData;
-  externalMachineDeploymentData?: ExternalMachineDeployment
+  externalMachineDeploymentData?: ExternalMachineDeployment;
 }
 
 @Component({
