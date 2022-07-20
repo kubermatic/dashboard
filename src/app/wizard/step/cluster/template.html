@@ -379,12 +379,10 @@ limitations under the License.
               </mat-checkbox>
             </ng-container>
 
-            <mat-checkbox *ngIf="operatingSystemManagerFeatureEnabled"
-                          [formControlName]="Controls.OperatingSystemManager">
+            <mat-checkbox [formControlName]="Controls.OperatingSystemManager">
               Operating System Manager
-              <span class="km-label-primary">Experimental</span>
               <i class="km-icon-info km-pointer"
-                 matTooltip="Enable to use OSM for creating and managing the configuration that are needed to configure worker nodes. This is an experimental feature and usage in production environment is not recommended."></i>
+                 matTooltip="Enable to use OSM for creating and managing worker node configurations. Disable this to use legacy machine-controller userdata, its usage in production environment is not recommended."></i>
             </mat-checkbox>
 
             <km-label-form title="Labels"
