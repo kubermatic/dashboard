@@ -37,7 +37,6 @@ enum Mode {
 
 enum Controls {
   NodeData = 'nodeData',
-  
 }
 
 export interface DialogDataInput {

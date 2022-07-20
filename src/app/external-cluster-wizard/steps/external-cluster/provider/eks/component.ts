@@ -133,11 +133,6 @@ export class EKSClusterSettingsComponent
       [Controls.MinSize]: this._builder.control(DEFAULT_MD_MINSIZE),
       [Controls.DesiredSize]: this._builder.control(DEFAULT_MD_DESIRED_SIZE),
     });
-
-    if(this.isDialogView()) {
-      this.form.get(Controls.Version).setValue('1.23.5');
-      this.form.get(Controls.Version).disable();
-    }
   }
 
   private _initSubscriptions(): void {
@@ -192,7 +187,6 @@ export class EKSClusterSettingsComponent
         if (!isValid) {
           return;
         }
-        debugger
         this._getEKSVpcs();
       });
   }
@@ -211,14 +205,14 @@ export class EKSClusterSettingsComponent
   }
 
   private _onVPCSelectionChange(vpc: string): void {
-      forkJoin([
-        this._externalClusterService.getEKSSubnets(vpc),
-        this._externalClusterService.getEKSSecurityGroups(vpc),
-      ]).subscribe(([subnetIds, securityGroupIds]) => {
-        this.subnetIds = subnetIds;
-        this.securityGroupIds = securityGroupIds;
-      });
-    }
+    forkJoin([
+      this._externalClusterService.getEKSSubnets(vpc),
+      this._externalClusterService.getEKSSecurityGroups(vpc),
+    ]).subscribe(([subnetIds, securityGroupIds]) => {
+      this.subnetIds = subnetIds;
+      this.securityGroupIds = securityGroupIds;
+    });
+  }
 
   private _updateExternalClusterModel(): void {
     this._externalClusterService.externalCluster = {
