@@ -70,8 +70,8 @@ import {ClustersComponent} from '@app/cluster/list/component';
 import {ReplicasDialogComponent} from '@app/cluster/details/external-cluster/replicas-dialog/component';
 import {NutanixProviderSettingsComponent} from '@app/cluster/details/cluster/edit-provider-settings/nutanix-provider-settings/component';
 import {VMwareCloudDirectorProviderSettingsComponent} from '@app/cluster/details/cluster/edit-provider-settings/vmware-cloud-director-provider-settings/component';
-import { ExternalClusterModule } from '@app/external-cluster-wizard/module';
-import { ExternalMachineDeploymentService } from '@app/core/services/external-machine-deployment';
+import {ExternalClusterModule} from '@app/external-cluster-wizard/module';
+import {ExternalMachineDeploymentService} from '@app/core/services/external-machine-deployment';
 
 const components: any[] = [
   ClusterDetailsComponent,
