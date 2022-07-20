@@ -38,14 +38,14 @@ export class ExternalMachineDeployment extends MachineDeployment {
 
   static NewEmptyMachineDeployment(): ExternalMachineDeployment {
     return {
-      cloud:{},      
-    }
+      cloud: {},
+    };
   }
 }
 
 class ExternalMachineDeploymentCloudSpec {
   gke?: GKEMachineDeploymentCloudSpec;
-  eks?: EKSMachineDeploymentCloudSpec
+  eks?: EKSMachineDeploymentCloudSpec;
 }
 
 class GKEMachineDeploymentCloudSpec {
@@ -57,7 +57,16 @@ class GKEMachineDeploymentCloudSpec {
 }
 
 class EKSMachineDeploymentCloudSpec {
+  diskSize: number;
+  scalingConfig: EKSScalingConfig;
+  nodeRole: string;
+  subnets: string[];
+}
 
+class EKSScalingConfig {
+  desiredSize: number;
+  maxSize: number;
+  minSize?: number;
 }
 
 class GKENodePoolAutoscaling {

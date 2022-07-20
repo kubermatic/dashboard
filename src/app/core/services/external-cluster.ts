@@ -213,14 +213,13 @@ export class ExternalClusterService {
 
   getEKSSubnets(vpcId: string): Observable<string[]> {
     const url = `${this._newRestRoot}/providers/eks/subnets`;
-    const headers: HttpHeaders = this._getEKSHeaders(vpcId);    
-    const response =  this._http.get<string[]>(url, {headers}).pipe(catchError(() => of<[]>()));
-    response.subscribe(res =>{
-      console.log(res);
-      
-    })
-    return response
-    
+    const headers: HttpHeaders = this._getEKSHeaders(vpcId);
+    return this._http.get<string[]>(url, {headers}).pipe(catchError(() => of<[]>()));
+  }
+
+  getEKSSubnetsForCluster(vpcId: string, projectID: string, clusterID: string): Observable<string[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/eks/subnets`;
+    return this._http.get<string[]>(url, {headers: {VpcId: vpcId}}).pipe(catchError(() => of<[]>()));
   }
 
   getEKSSecurityGroups(vpcId: string): Observable<string[]> {

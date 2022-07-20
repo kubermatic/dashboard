@@ -25,8 +25,8 @@ limitations under the License.
        fxLayout="column"
        fxLayoutGap="8px">
 
-    <mat-card-header  *ngIf="!isDialogView()"
-                      class="km-no-padding">
+    <mat-card-header *ngIf="!isDialogView()"
+                     class="km-no-padding">
       <mat-card-title>Cluster</mat-card-title>
     </mat-card-header>
 
@@ -92,21 +92,31 @@ limitations under the License.
     </mat-card-header>
 
 
-    <km-autocomplete label="VPC"
+    <km-autocomplete *ngIf="!isDialogView()"
+                     label="VPC"
                      required="true"
                      [isLoading]="isLoadingVpcs"
                      [options]="vpcs"
                      [formControlName]="Controls.Vpc">
     </km-autocomplete>
 
-    <ng-container *ngIf="form.get(Controls.Vpc).value?.main">
+    <mat-form-field *ngIf="isDialogView()">
+      <mat-label>Vpc</mat-label>
+      <input matInput
+             type="text"
+             autocomplete="off"
+             [formControlName]="Controls.Vpc" />
+    </mat-form-field>
+
+
+    <ng-container *ngIf="isDialogView() ? true : form.get(Controls.Vpc).value?.main">
       <km-chip-autocomplete label="Subnet"
                             placeholder="Select Subnet IDs"
                             [tags]="subnetIds"
                             [required]="true"
                             [formControlName]="Controls.SubnetIds"></km-chip-autocomplete>
 
-      <km-chip-autocomplete 
+      <km-chip-autocomplete *ngIf="!isDialogView()"
                             label="Security Groups"
                             placeholder="Select SecurityGroup IDs"
                             [tags]="securityGroupIds"
@@ -114,30 +124,32 @@ limitations under the License.
                             [formControlName]="Controls.SecurityGroupsIds"></km-chip-autocomplete>
     </ng-container>
     <ng-container *ngIf="isDialogView()">
-        <km-number-stepper [formControlName]="Controls.DiskSize"
-          mode="errors"
-          label="Disk Size in GB"
-          min="1"         
-          required>
-        </km-number-stepper>
-        <km-number-stepper [formControlName]="Controls.DesiredSize"
-          mode="errors"
-          label="Desired Size"
-          min="1"         
-          required>
-        </km-number-stepper>
-        <km-number-stepper [formControlName]="Controls.MaxSize"
-          mode="errors"
-          label="Max count"
-          min="1"         
-          required>
-        </km-number-stepper>
-        <km-number-stepper [formControlName]="Controls.MinSize"
-          mode="errors"
-          label="Min count"
-          min="1"         
-          required>
-        </km-number-stepper>
+      <km-number-stepper [formControlName]="Controls.DiskSize"
+                         mode="errors"
+                         label="Disk Size in GB"
+                         min="1"
+                         required>
+      </km-number-stepper>
+      <km-number-stepper [formControlName]="Controls.DesiredSize"
+                         mode="errors"
+                         label="Desired Size"
+                         [min]="minNodeCount"
+                         [max]="maxNodeCount"
+                         required>
+      </km-number-stepper>
+      <km-number-stepper [formControlName]="Controls.MaxSize"
+                         mode="errors"
+                         label="Max count"
+                         [min]="minNodeCount"
+                         required>
+      </km-number-stepper>
+      <km-number-stepper [formControlName]="Controls.MinSize"
+                         mode="errors"
+                         label="Min count"
+                         min="1"
+                         [max]="maxNodeCount"
+                         required>
+      </km-number-stepper>
     </ng-container>
   </div>
 </form>

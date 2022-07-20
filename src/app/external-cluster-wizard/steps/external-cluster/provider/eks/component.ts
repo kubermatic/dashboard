@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {Component, forwardRef, OnDestroy, Input, OnInit} from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -28,9 +28,14 @@ import {EKSCloudSpec, EKSClusterSpec, EKSVpc} from '@shared/entity/provider/eks'
 import {forkJoin} from 'rxjs';
 import {debounceTime, finalize, takeUntil} from 'rxjs/operators';
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
-import {ExternalCloudSpec, ExternalClusterModel, ExternalClusterSpec} from '@shared/entity/external-cluster';
-import { NodeDataService } from '@app/core/services/node-data/service';
-import { ExternalMachineDeploymentService } from '@app/core/services/external-machine-deployment';
+import {
+  ExternalCloudSpec,
+  ExternalCluster,
+  ExternalClusterModel,
+  ExternalClusterSpec,
+} from '@shared/entity/external-cluster';
+import {NodeDataService} from '@app/core/services/node-data/service';
+import {ExternalMachineDeploymentService} from '@app/core/services/external-machine-deployment';
 
 enum Controls {
   Name = 'name',
@@ -42,7 +47,7 @@ enum Controls {
   DiskSize = 'diskSize',
   MaxSize = 'maxSize',
   MinSize = 'minSize',
-  DesiredSize = 'desiredSize'
+  DesiredSize = 'desiredSize',
 }
 
 @Component({
@@ -70,6 +75,10 @@ export class EKSClusterSettingsComponent
   vpcs: string[] = [];
   subnetIds: string[] = [];
   securityGroupIds: string[] = [];
+  maxNodeCount: number;
+  minNodeCount: number;
+  @Input() projectID: string;
+  @Input() cluster: ExternalCluster;
   private readonly _debounceTime = 500;
 
   constructor(
@@ -112,20 +121,18 @@ export class EKSClusterSettingsComponent
       [Controls.DiskSize]: this._builder.control('20'),
       [Controls.MaxSize]: this._builder.control('1'),
       [Controls.MinSize]: this._builder.control('1'),
-      [Controls.DesiredSize]: this._builder.control('1')
+      [Controls.DesiredSize]: this._builder.control('1'),
     });
-
-    if(this.isDialogView()) {
-      this.form.get(Controls.Version).setValue('1.23.5');
-      this.form.get(Controls.Version).disable();
-    }
   }
 
   private _initSubscriptions(): void {
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
       this._updateExternalClusterModel();
       this._getExternalMachineDeployment();
+      this.maxNodeCount = this.controlValue(Controls.MaxSize);
+      this.minNodeCount = this.controlValue(Controls.MinSize);
       this._externalClusterService.isClusterDetailsStepValid = this.form.valid;
+      this._externalMachineDeploymentService.isAddMachineDeploymentFormValid = this.form.valid;
     });
 
     this.form
@@ -141,6 +148,21 @@ export class EKSClusterSettingsComponent
         this.control(Controls.SecurityGroupsIds).setValue([]);
       });
 
+    if (this.isDialogView()) {
+      const version = this.cluster.spec.version;
+      this.control(Controls.SecurityGroupsIds).removeValidators(Validators.required);
+      this.control(Controls.Version).setValue(version.slice(1, version.indexOf('-')));
+      this.control(Controls.Version).disable();
+      this.control(Controls.Vpc).setValue('vpc-06b7ef7c48faf9bcc');
+      this.control(Controls.Vpc).disable();
+
+      this._externalClusterService
+        .getEKSSubnetsForCluster(this.control(Controls.Vpc).value, this.projectID, this.cluster.id)
+        .subscribe(data => {
+          this.subnetIds = data;
+        });
+    }
+
     this._externalClusterService.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
       if (!preset) {
         return;
@@ -155,7 +177,6 @@ export class EKSClusterSettingsComponent
         if (!isValid) {
           return;
         }
-        debugger
         this._getEKSVpcs();
       });
   }
@@ -174,14 +195,14 @@ export class EKSClusterSettingsComponent
   }
 
   private _onVPCSelectionChange(vpc: string): void {
-      forkJoin([
-        this._externalClusterService.getEKSSubnets(vpc),
-        this._externalClusterService.getEKSSecurityGroups(vpc),
-      ]).subscribe(([subnetIds, securityGroupIds]) => {
-        this.subnetIds = subnetIds;
-        this.securityGroupIds = securityGroupIds;
-      });
-    }
+    forkJoin([
+      this._externalClusterService.getEKSSubnets(vpc),
+      this._externalClusterService.getEKSSecurityGroups(vpc),
+    ]).subscribe(([subnetIds, securityGroupIds]) => {
+      this.subnetIds = subnetIds;
+      this.securityGroupIds = securityGroupIds;
+    });
+  }
 
   private _updateExternalClusterModel(): void {
     this._externalClusterService.externalCluster = {
@@ -209,18 +230,19 @@ export class EKSClusterSettingsComponent
 
   private _getExternalMachineDeployment(): void {
     this._externalMachineDeploymentService.externalMachineDeployment = {
+      name: this.controlValue(Controls.Name),
       cloud: {
         eks: {
           diskSize: this.controlValue(Controls.DiskSize),
           scalingConfig: {
             desiredSize: this.controlValue(Controls.DesiredSize),
             maxSize: this.controlValue(Controls.MaxSize),
-            minSize: this.controlValue(Controls.MinSize)
+            minSize: this.controlValue(Controls.MinSize),
           },
           nodeRole: this.controlValue(Controls.RoleArn),
-          subnets: this.controlValue(Controls.SubnetIds)
-        }
-      }
-    }
+          subnets: this.controlValue(Controls.SubnetIds),
+        },
+      },
+    };
   }
 }
