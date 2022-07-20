@@ -1,0 +1,32 @@
+<form [formGroup]="form">
+  <km-dialog-title>Add External Machine Deployment</km-dialog-title>
+  <mat-dialog-content class="km-add-node-outer">
+    <!-- <p *ngIf="mode === 'Edit'"
+       class="km-dialog-context-description">Edit <b>{{machineDeploymentName}}</b> machine deployment of
+      <b>{{clusterName}}</b> cluster
+    </p> -->
+    <km-eks-cluster-settings>
+    </km-eks-cluster-settings>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <!-- <button mat-flat-button
+            color="pure"
+            (click)="onViewChange()"
+            *ngIf="hasExtendedOptions()">
+      <span *ngIf="!isExtended">Show Advanced Settings</span>
+      <span *ngIf="isExtended">Hide Advanced Settings</span>
+    </button> -->
+    <div fxFlex></div>
+    <!-- <i *ngIf="isRecreationWarningVisible"
+       class="km-icon-warning"
+       matTooltip="You have changed node specification. All nodes will be recreated.">
+    </i> -->
+    <button mat-flat-button
+            (click)="onConfirm()"
+            [disabled]="form.invalid"
+            class="btn btn-primary">
+      <i [ngClass]="getIconClass()"></i>
+      <span>Add Machine Deployment</span>
+    </button>
+  </mat-dialog-actions>
+</form>
