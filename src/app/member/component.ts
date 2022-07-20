@@ -38,6 +38,7 @@ import {MemberService} from '@core/services/member';
 @Component({
   selector: 'km-member',
   templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class MemberComponent implements OnInit, OnChanges, OnDestroy {
   members: Member[] = [];
