@@ -1,0 +1,56 @@
+<!--
+Copyright 2022 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<km-dialog-title>Delete External Cluster</km-dialog-title>
+<mat-dialog-content>
+  <p>Delete
+    <b (click)="copy(cluster.name)"
+       matTooltip="Click to copy"
+       class="km-copy">{{cluster.name}}</b>
+    cluster permanently?
+  </p>
+
+  <mat-form-field>
+    <mat-label>Cluster Name</mat-label>
+    <input id="km-delete-external-cluster-dialog-input"
+           required
+           matInput
+           type="text"
+           title="Cluster name"
+           [(ngModel)]="inputName"
+           #clusterNameInput>
+  </mat-form-field>
+
+
+  <div *ngIf="warningMessage"
+       fxLayoutAlign=" start"
+       class="warning-container">
+    <i class="km-icon-warning"></i>
+    <div class="km-text dynamic-kubelet-config-warning">
+      <p [innerHTML]="warningMessage"></p>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <km-button id="km-delete-external-cluster-dialog-delete-btn"
+             icon="km-icon-delete"
+             label="Delete Cluster"
+             [disabled]="inputName !== cluster.name || isLoadingMachineDeployments"
+             [matTooltip]="isLoadingMachineDeployments ? 'Loading Machine Deployments': null"
+             [observable]="getObservable()"
+             (next)="onNext()">
+  </km-button>
+</mat-dialog-actions>

@@ -14,11 +14,9 @@
 
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {AppConfigService} from '@app/config.service';
 
 import {environment} from '@environments/environment';
-import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {LabelFormComponent} from '@shared/components/label-form/component';
 import {TaintFormComponent} from '@shared/components/taint-form/component';
 import {EtcdRestore} from '@shared/entity/backup';
@@ -40,13 +38,10 @@ import {ClusterMetrics, NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {merge, Observable, of, Subject, timer} from 'rxjs';
-import {catchError, filter, shareReplay, switchMapTo} from 'rxjs/operators';
+import {catchError, shareReplay, switchMapTo} from 'rxjs/operators';
 import {ExternalCluster, ExternalClusterModel, ExternalClusterPatch} from '@shared/entity/external-cluster';
 import {ExternalMachineDeployment, ExternalMachineDeploymentPatch} from '@shared/entity/external-machine-deployment';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
-import {NotificationService} from './notification';
-import {Router} from '@angular/router';
-import {ClusterListTab} from '@app/cluster/list/component';
 
 @Injectable()
 export class ClusterService {
@@ -67,13 +62,7 @@ export class ClusterService {
   onClusterUpdate = new Subject<void>();
   onExternalClusterUpdate = new Subject<void>();
 
-  constructor(
-    private readonly _matDialog: MatDialog,
-    private readonly _http: HttpClient,
-    private readonly _appConfig: AppConfigService,
-    private readonly _notificationService: NotificationService,
-    private readonly _router: Router
-  ) {}
+  constructor(private readonly _http: HttpClient, private readonly _appConfig: AppConfigService) {}
 
   changeProviderSettingsPatch(patch: ProviderSettingsPatch): void {
     this._providerSettingsPatch.next(patch);
@@ -171,29 +160,6 @@ export class ClusterService {
     }
 
     return this._http.delete<void>(url, {headers: this._headers});
-  }
-
-  showDisconnectClusterDialog(cluster: ExternalCluster, projectID: string): void {
-    const dialogConfig: MatDialogConfig = {
-      data: {
-        title: 'Disconnect Cluster',
-        message: `Are you sure you want to disconnect ${cluster.name} cluster?`,
-        confirmLabel: 'Disconnect',
-        throttleButton: true,
-        observable: this._deleteExternalCluster(projectID, cluster.id),
-      },
-    };
-
-    this._matDialog
-      .open(ConfirmationDialogComponent, dialogConfig)
-      .afterClosed()
-      .pipe(filter(isConfirmed => isConfirmed))
-      .subscribe(_ => {
-        this._router.navigate(['/projects/' + projectID + '/clusters'], {
-          fragment: `${ClusterListTab.ExternalCluster}`,
-        });
-        this._notificationService.success(`Disconnected the ${cluster.name} cluster`);
-      });
   }
 
   upgrades(projectID: string, clusterID: string): Observable<MasterVersion[]> {
@@ -390,11 +356,6 @@ export class ClusterService {
   getCNIPluginVersions(cniPlugin: CNIPlugin): Observable<CNIPluginVersions> {
     const url = `${this._newRestRoot}/cni/${cniPlugin}/versions`;
     return this._http.get<CNIPluginVersions>(url);
-  }
-
-  private _deleteExternalCluster(projectID: string, clusterID: string): Observable<void> {
-    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}`;
-    return this._http.delete<void>(url);
   }
 
   private _getClusters(projectID: string, showMachineDeploymentCount = false): Observable<Cluster[]> {

@@ -38,6 +38,8 @@ import {
   ExternalClusterProvider,
   ExternalClusterState,
 } from '@shared/entity/external-cluster';
+import {ExternalClusterDeleteConfirmationComponent} from '@app/cluster/details/external-cluster/external-cluster-delete-confirmation/component';
+import {ExternalClusterService} from '@core/services/external-cluster';
 
 @Component({
   selector: 'km-external-cluster-list',
@@ -62,6 +64,7 @@ export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestro
 
   constructor(
     private readonly _clusterService: ClusterService,
+    private readonly _externalClusterService: ExternalClusterService,
     private readonly _projectService: ProjectService,
     private readonly _userService: UserService,
     private readonly _router: Router,
@@ -185,8 +188,15 @@ export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestro
 
   disconnectClusterDialog(cluster: ExternalCluster, event: Event): void {
     event.stopPropagation();
+    this._externalClusterService.showDisconnectClusterDialog(cluster, this._selectedProject.id);
+  }
 
-    this._clusterService.showDisconnectClusterDialog(cluster, this._selectedProject.id);
+  deleteClusterDialog(cluster: ExternalCluster, event: Event): void {
+    event.stopPropagation();
+
+    const modal = this._matDialog.open(ExternalClusterDeleteConfirmationComponent);
+    modal.componentInstance.projectID = this._selectedProject.id;
+    modal.componentInstance.cluster = cluster;
   }
 
   isPaginatorVisible(): boolean {

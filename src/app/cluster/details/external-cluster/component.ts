@@ -32,6 +32,8 @@ import {switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 import {MasterVersion} from '@shared/entity/cluster';
 import {ClusterListTab} from '@app/cluster/list/component';
+import {ExternalClusterService} from '@core/services/external-cluster';
+import {ExternalClusterDeleteConfirmationComponent} from '@app/cluster/details/external-cluster/external-cluster-delete-confirmation/component';
 
 @Component({
   selector: 'km-external-cluster-details',
@@ -65,6 +67,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
     private readonly _router: Router,
     private readonly _matDialog: MatDialog,
     private readonly _clusterService: ClusterService,
+    private readonly _externalClusterService: ExternalClusterService,
     private readonly _userService: UserService,
     private readonly _appConfigService: AppConfigService
   ) {}
@@ -172,7 +175,23 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'cluster', Permission.Delete);
   }
 
-  disconnect(): void {
-    this._clusterService.showDisconnectClusterDialog(this.cluster, this.projectID);
+  disconnectCluster(): void {
+    this._externalClusterService.showDisconnectClusterDialog(this.cluster, this.projectID);
+  }
+
+  deleteClusterDialog(): void {
+    const modal = this._matDialog.open(ExternalClusterDeleteConfirmationComponent);
+    modal.componentInstance.projectID = this.projectID;
+    modal.componentInstance.cluster = this.cluster;
+    modal
+      .afterClosed()
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(isDeleted => {
+        if (isDeleted) {
+          this._router.navigate(['/projects/' + this.projectID + '/clusters'], {
+            fragment: `${ClusterListTab.ExternalCluster}`,
+          });
+        }
+      });
   }
 }
