@@ -25,14 +25,24 @@ limitations under the License.
               matTooltip="Go back to the cluster list">
         <i class="km-icon-arrow-left"></i>
       </button>
-      <button id="km-delete-cluster-btn"
+      <button id="km-disconnect-external-cluster-btn"
               mat-flat-button
               color="tertiary"
               fxLayoutAlign="center center"
-              (click)="disconnect()"
+              (click)="disconnectCluster()"
               [disabled]="!canDisconnect()">
         <i class="km-icon-mask km-icon-disconnect"></i>
         <span>Disconnect</span>
+      </button>
+
+      <button id="km-delete-external-cluster-btn"
+              mat-flat-button
+              color="tertiary"
+              fxLayoutAlign="center center"
+              [disabled]="!canDisconnect()"
+              (click)="deleteClusterDialog()">
+        <i class="km-icon-mask km-icon-delete"></i>
+        <span>Delete</span>
       </button>
       <div fxFlex></div>
       <button color="alternative"
