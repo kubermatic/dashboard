@@ -127,6 +127,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   private _datacenterSpec: Datacenter;
   private _seedSettings: SeedSettings;
   private _settings: AdminSettings;
+  private _defaultProxyMode: ProxyMode;
   private readonly _minNameLength = 5;
   private readonly _defaultAllowedIPRange = '0.0.0.0/0';
 
@@ -275,7 +276,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .pipe(switchMap(() => this._clusterService.getCNIPluginVersions(this.form.get(Controls.CNIPlugin).value)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(cniVersions => {
-        this.updateCNIPluginOptions();
+        this._updateAvailableProxyModes();
         this.form.get(Controls.CNIPluginVersion).setValue('');
         this.cniPluginVersions = cniVersions.versions.sort((a, b) => compare(coerce(a), coerce(b)));
         this._setDefaultCNIVersion();
@@ -284,7 +285,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     this.control(Controls.Konnectivity)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
-        this.updateCNIPluginOptions();
+        this._updateAvailableProxyModes();
       });
 
     combineLatest([this.control(Controls.ProxyMode).valueChanges, this.control(Controls.CNIPlugin).valueChanges])
@@ -388,18 +389,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     return AdmissionPluginUtils.getPluginName(name);
   }
 
-  updateCNIPluginOptions() {
-    if (
-      this.controlValue(Controls.CNIPlugin) === CNIPlugin.Cilium &&
-      this.isKonnectivityEnabled &&
-      !!this.controlValue(Controls.Konnectivity)
-    ) {
-      this.availableProxyModes = [ProxyMode.ipvs, ProxyMode.iptables, ProxyMode.ebpf];
-    } else {
-      this.availableProxyModes = [ProxyMode.ipvs, ProxyMode.iptables];
-    }
-  }
-
   isPluginEnabled(name: string): boolean {
     return AdmissionPluginUtils.isPluginEnabled(this.form.get(Controls.AdmissionPlugins), name);
   }
@@ -480,6 +469,30 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     }
   }
 
+  private _updateAvailableProxyModes(): void {
+    const proxyModeControl = this.control(Controls.ProxyMode);
+    let newValue: ProxyMode;
+    if (this.controlValue(Controls.CNIPlugin) === CNIPlugin.Cilium) {
+      if (this.isKonnectivityEnabled && !!this.controlValue(Controls.Konnectivity)) {
+        this.availableProxyModes = [ProxyMode.iptables, ProxyMode.ebpf];
+        if (proxyModeControl.value === ProxyMode.ipvs) {
+          newValue = ProxyMode.ebpf;
+        }
+      } else {
+        this.availableProxyModes = [ProxyMode.iptables];
+        newValue = ProxyMode.iptables;
+      }
+    } else {
+      this.availableProxyModes = [ProxyMode.ipvs, ProxyMode.iptables];
+      if (proxyModeControl.pristine || !this.availableProxyModes.includes(proxyModeControl.value)) {
+        newValue = this._defaultProxyMode || ProxyMode.ipvs;
+      }
+    }
+    if (newValue && newValue !== proxyModeControl.value) {
+      proxyModeControl.setValue(newValue);
+    }
+  }
+
   private _setNetworkDefaults(): void {
     if (!this.isDualStackAllowed) {
       this.control(Controls.IPFamily).reset();
@@ -492,12 +505,15 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .subscribe({
         next: networkDefaults => {
           this.form.patchValue({
-            [Controls.ProxyMode]: networkDefaults.proxyMode,
             [Controls.NodeLocalDNSCache]: networkDefaults.nodeLocalDNSCacheEnabled,
             [Controls.IPv4PodsCIDR]: networkDefaults.ipv4?.podsCidr || '',
             [Controls.IPv4ServicesCIDR]: networkDefaults.ipv4?.servicesCidr || '',
             [Controls.IPv4CIDRMaskSize]: networkDefaults.ipv4?.nodeCidrMaskSize,
           });
+          this._defaultProxyMode = networkDefaults.proxyMode;
+          if (this.availableProxyModes.includes(this._defaultProxyMode)) {
+            this.control(Controls.ProxyMode).setValue(this._defaultProxyMode);
+          }
           if (this.isDualStackAllowed) {
             this.form.patchValue({
               [Controls.IPv6PodsCIDR]: networkDefaults.ipv6?.podsCidr || '',
