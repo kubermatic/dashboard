@@ -98,7 +98,10 @@ fi
 # Build binaries and load the Docker images into the kind cluster
 echodate "Building binaries for $KUBERMATIC_VERSION"
 TEST_NAME="Build Kubermatic binaries"
-KUBERMATICDOCKERTAG=latest UIDOCKERTAG=latest make kubermatic-installer
+
+# We can't use PULL_BASE_SHA directly since that'd point to the commit hash from dashboard repository.
+KUBERMATIC_COMMIT_HASH="$(git rev-parse HEAD)"
+PULL_BASE_SHA=$KUBERMATIC_COMMIT_HASH KUBERMATICDOCKERTAG=latest UIDOCKERTAG=latest make kubermatic-installer
 
 TEST_NAME="Deploy Kubermatic"
 echodate "Deploying Kubermatic [${KUBERMATIC_VERSION}]..."
@@ -134,6 +137,10 @@ sed -i "s/__KUBECONFIG__/$SEED_KUBECONFIG/g" $SEED_MANIFEST
 
 if [[ ! -z "${NUTANIX_E2E_ENDPOINT:-}" ]]; then
   sed -i "s/__NUTANIX_ENDPOINT__/$NUTANIX_E2E_ENDPOINT/g" $SEED_MANIFEST
+fi
+
+if [[ ! -z "${VCD_URL:-}" ]]; then
+  sed -i "s#__VCD_URL__#$VCD_URL#g" $SEED_MANIFEST
 fi
 
 retry 8 kubectl apply -f $SEED_MANIFEST

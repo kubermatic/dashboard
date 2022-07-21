@@ -1,4 +1,3 @@
-
 # Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,10 +16,10 @@ presubmits:
   - name: pre-dashboard-test-unit
     always_run: true
     decorate: true
-    clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
+    clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
     spec:
       containers:
-        - image: quay.io/kubermatic/chrome-headless:v1.2.0
+        - image: quay.io/kubermatic/chrome-headless:v1.4.0
           command:
             - make
             - test-headless

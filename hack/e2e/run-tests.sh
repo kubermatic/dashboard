@@ -27,6 +27,9 @@ if [ -z "${JOB_NAME:-}" ] || [ -z "${PROW_JOB_ID:-}" ]; then
   exit 1
 fi
 
+echodate "NPM version: $(npm -v)"
+echodate "Node version: $(node -v)"
+
 export KUBERMATIC_EDITION="${KUBERMATIC_EDITION:-ee}"
 export CYPRESS_MOCKS=${CYPRESS_MOCKS:-"false"}
 
