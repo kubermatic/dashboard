@@ -19,8 +19,8 @@ import {NotificationService} from '@core/services/notification';
 import {AdminSettings} from '@shared/entity/settings';
 import {ClipboardService} from 'ngx-clipboard';
 import {Observable, Subject} from 'rxjs';
-import {take} from 'rxjs/operators';
-import {ExternalCluster} from '@shared/entity/external-cluster';
+import {finalize, take} from 'rxjs/operators';
+import {DeleteExternalClusterAction, ExternalCluster} from '@shared/entity/external-cluster';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {ClusterService} from '@core/services/cluster';
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
@@ -34,10 +34,12 @@ export class ExternalClusterDeleteConfirmationComponent implements OnInit, OnDes
   inputName = '';
   settings: AdminSettings;
   machineDeployments: ExternalMachineDeployment[] = [];
-  errorMessage = '';
+  warningMessage = '';
+  isLoadingMachineDeployments = false;
   @Input() projectID: string;
   @Input() cluster: ExternalCluster;
   @ViewChild('clusterNameInput', {static: true}) clusterNameInputRef: ElementRef;
+  private readonly _googleAnalyticsEventCategory = 'clusterOverview';
   private readonly _unsubscribe = new Subject<void>();
 
   constructor(
@@ -49,22 +51,22 @@ export class ExternalClusterDeleteConfirmationComponent implements OnInit, OnDes
     private readonly _notificationService: NotificationService
   ) {}
 
-  get hasMachineDeployments(): boolean {
-    return this.machineDeployments && this.machineDeployments.length > 0;
-  }
-
   ngOnInit(): void {
-    this._googleAnalyticsService.emitEvent('clusterOverview', 'deleteClusterDialogOpened');
+    this._googleAnalyticsService.emitEvent(this._googleAnalyticsEventCategory, 'deleteExternalClusterDialogOpened');
 
     if (this.projectID && this.cluster) {
+      this.isLoadingMachineDeployments = true;
       this._clusterService
         .externalMachineDeployments(this.projectID, this.cluster?.id)
-        .pipe(take(1))
+        .pipe(
+          take(1),
+          finalize(() => (this.isLoadingMachineDeployments = false))
+        )
         .subscribe((machineDeployments: ExternalMachineDeployment[]) => {
           this.machineDeployments = machineDeployments;
           if (machineDeployments.length > 0) {
-            const nodegroupNames = machineDeployments.map((md: ExternalMachineDeployment) => md.name).join(',');
-            this.errorMessage = `Cluster has nodegroups attached ${nodegroupNames}`;
+            const nodegroupNames = machineDeployments.map((md: ExternalMachineDeployment) => md.name).join(', ');
+            this.warningMessage = `Cluster has nodegroups attached <b>${nodegroupNames}.</b> Please delete nodegroups before deleting the cluster.`;
           }
         });
     }
@@ -79,21 +81,19 @@ export class ExternalClusterDeleteConfirmationComponent implements OnInit, OnDes
     this.clusterNameInputRef.nativeElement.focus();
   }
 
-  onChange(event: any): void {
-    this.inputName = event.target.value;
-  }
-
   copy(clipboard: string): void {
     this._clipboardService.copy(clipboard);
   }
 
   getObservable(): Observable<void> {
-    return this._externalClusterService.deleteExternalCluster(this.projectID, this.cluster.id, 'delete').pipe(take(1));
+    return this._externalClusterService
+      .deleteExternalCluster(this.projectID, this.cluster.id, DeleteExternalClusterAction.Delete)
+      .pipe(take(1));
   }
 
   onNext(): void {
     this._dialogRef.close(true);
-    this._googleAnalyticsService.emitEvent('clusterOverview', 'clusterDeleted');
+    this._googleAnalyticsService.emitEvent(this._googleAnalyticsEventCategory, 'externalClusterDeleted');
     this._notificationService.success(`Deleting the ${this.cluster.name} cluster`);
     this._clusterService.refreshExternalClusters();
   }

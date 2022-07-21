@@ -130,9 +130,6 @@ limitations under the License.
                         [disabled]="!can(Permission.Delete)">
                   <i class="km-icon-mask km-icon-disconnect"></i>
                 </button>
-              </ng-container>
-
-              <ng-container *ngSwitchCase="false">
                 <button mat-icon-button
                         [attr.id]="'km-delete-cluster-' + element.name"
                         matTooltip="Delete Cluster"

@@ -20,7 +20,12 @@ import {environment} from '@environments/environment';
 import {AKSCluster} from '@shared/entity/provider/aks';
 import {EKSCluster, EKSVpc} from '@shared/entity/provider/eks';
 import {GKECluster, GKEZone} from '@shared/entity/provider/gke';
-import {ExternalCluster, ExternalClusterModel, ExternalClusterProvider} from '@shared/entity/external-cluster';
+import {
+  DeleteExternalClusterAction,
+  ExternalCluster,
+  ExternalClusterModel,
+  ExternalClusterProvider,
+} from '@shared/entity/external-cluster';
 import {PresetList} from '@shared/entity/preset';
 import {BehaviorSubject, Observable, of, throwError} from 'rxjs';
 import {catchError, filter} from 'rxjs/operators';
@@ -254,14 +259,6 @@ export class ExternalClusterService {
     return this._http.post<ExternalCluster>(url, externalClusterModel, {headers}).pipe(catchError(() => of<null>()));
   }
 
-  deleteExternalCluster(projectID: string, clusterID: string, action: string): Observable<void> {
-    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}`;
-    const headers = new HttpHeaders({
-      Action: action,
-    });
-    return this._http.delete<void>(url, {headers: headers});
-  }
-
   showDisconnectClusterDialog(cluster: ExternalCluster, projectID: string): void {
     const dialogConfig: MatDialogConfig = {
       data: {
@@ -269,7 +266,7 @@ export class ExternalClusterService {
         message: `Are you sure you want to disconnect <b>${cluster.name}</b> cluster?`,
         confirmLabel: 'Disconnect',
         throttleButton: true,
-        observable: this._disconnectExternalCluster(projectID, cluster.id),
+        observable: this.deleteExternalCluster(projectID, cluster.id, DeleteExternalClusterAction.Disconnect),
       },
     };
 
@@ -285,9 +282,12 @@ export class ExternalClusterService {
       });
   }
 
-  private _disconnectExternalCluster(projectID: string, clusterID: string): Observable<void> {
+  deleteExternalCluster(projectID: string, clusterID: string, action: DeleteExternalClusterAction): Observable<void> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}`;
-    return this._http.delete<void>(url);
+    const headers = new HttpHeaders({
+      Action: action,
+    });
+    return this._http.delete<void>(url, {headers: headers});
   }
 
   private _getAKSHeaders(location?: string): HttpHeaders {

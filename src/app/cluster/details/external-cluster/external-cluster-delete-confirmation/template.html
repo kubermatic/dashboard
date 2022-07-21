@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<km-dialog-title>Delete Cluster</km-dialog-title>
+<km-dialog-title>Delete External Cluster</km-dialog-title>
 <mat-dialog-content>
   <p>Delete
     <b (click)="copy(cluster.name)"
@@ -24,32 +24,32 @@ limitations under the License.
 
   <mat-form-field>
     <mat-label>Cluster Name</mat-label>
-    <input id="km-delete-cluster-dialog-input"
+    <input id="km-delete-external-cluster-dialog-input"
            required
            matInput
            type="text"
            title="Cluster name"
-           (blur)="onChange($event)"
-           (keyup)="onChange($event)"
+           [(ngModel)]="inputName"
            #clusterNameInput>
   </mat-form-field>
 
 
-  <div *ngIf="hasMachineDeployments"
+  <div *ngIf="warningMessage"
        fxLayoutAlign=" start"
        class="warning-container">
     <i class="km-icon-warning"></i>
     <div class="km-text dynamic-kubelet-config-warning">
-      {{errorMessage}}
+      <p [innerHTML]="warningMessage"></p>
     </div>
   </div>
 </mat-dialog-content>
 
 <mat-dialog-actions>
-  <km-button id="km-delete-cluster-dialog-delete-btn"
+  <km-button id="km-delete-external-cluster-dialog-delete-btn"
              icon="km-icon-delete"
              label="Delete Cluster"
-             [disabled]="inputName !== cluster.name || !hasMachineDeployments"
+             [disabled]="inputName !== cluster.name || isLoadingMachineDeployments"
+             [matTooltip]="isLoadingMachineDeployments ? 'Loading Machine Deployments': null"
              [observable]="getObservable()"
              (next)="onNext()">
   </km-button>
