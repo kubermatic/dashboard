@@ -536,9 +536,9 @@ km-dashboard {
   }
 
   &.km-quota-dialog {
-    .quota-inputs {
+    .km-quota-inputs {
       .mat-form-field {
-        width: 185px;
+        min-width: 135px;
       }
     }
   }

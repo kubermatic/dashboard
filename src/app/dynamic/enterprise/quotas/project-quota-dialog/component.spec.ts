@@ -23,7 +23,7 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {TestBed, ComponentFixture} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {ProjectService} from '@core/services/project';
-import {QuotaService} from '@core/services/quota';
+import {QuotaService} from '../service';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
 import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';

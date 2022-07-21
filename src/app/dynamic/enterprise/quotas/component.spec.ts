@@ -24,7 +24,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {MatTableModule} from '@angular/material/table';
 import {QuotaMockService} from '@test/services/quota-mock';
 import {UserMockService} from '@test/services/user-mock';
-import {QuotaService} from '@core/services/quota';
+import {QuotaService} from './service';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
 import {QuotasComponent} from './component';

@@ -28,6 +28,7 @@ limitations under the License.
          [min]="min"
          [max]="max"
          [id]="id"
+         (blur)="onTouch()"
          [attr.cdkFocusInitial]="focus ? focus : null">
   <mat-error *ngFor="let message of errors">{{message}}</mat-error>
   <mat-hint *ngIf="(mode === 'hint' || mode === 'all') && !!hint">{{hint}}</mat-hint>

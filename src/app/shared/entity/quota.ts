@@ -13,9 +13,9 @@
 // limitations under the License.
 
 export class QuotaVariables {
-  cpu?: string;
-  memory?: string;
-  storage?: string;
+  cpu?: number;
+  memory?: number;
+  storage?: number;
 }
 
 export class QuotaStatus {
