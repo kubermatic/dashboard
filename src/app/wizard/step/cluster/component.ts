@@ -155,7 +155,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.AuditLogging]: this._builder.control(false),
       [Controls.AuditPolicyPreset]: this._builder.control(''),
       [Controls.UserSSHKeyAgent]: this._builder.control(true),
-      [Controls.OperatingSystemManager]: this._builder.control(true),
+      [Controls.OperatingSystemManager]: this._builder.control(false),
       [Controls.OPAIntegration]: this._builder.control(false),
       [Controls.Konnectivity]: this._builder.control(true),
       [Controls.MLALogging]: this._builder.control(false),
