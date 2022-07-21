@@ -71,6 +71,8 @@ export class AddExternalMachineDeploymentDialogComponent extends BaseFormValidat
     this.form = this._builder.group({
       [Controls.MachineDeploymentData]: this._builder.control(''),
     });
+    console.log(this.cluster);
+    
   }
 
   onConfirm(): void {
