@@ -42,7 +42,6 @@ check: install
 	@$(CC) run check
 
 verify-go:
-	sleep 50000
 	go mod verify
 
 run:

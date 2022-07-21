@@ -14,37 +14,37 @@
 
 presubmits:
   - name: pre-dashboard-test-full-e2e
-    run_if_changed: "^(cypress|hack/e2e)/"
+    run_if_changed: '^(cypress|hack/e2e)/'
     optional: true
     decorate: true
-    clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
+    clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
     extra_refs:
       # Kubermatic repo is required as we need to have access to the helm files used to deploy it.
       - org: kubermatic
         repo: kubermatic
         base_ref: master
-        clone_uri: "ssh://git@github.com/kubermatic/kubermatic.git"
+        clone_uri: 'ssh://git@github.com/kubermatic/kubermatic.git'
     labels:
-      preset-alibaba: "true"
-      preset-anexia: "true"
-      preset-aws: "true"
-      preset-azure: "true"
-      preset-digitalocean: "true"
-      preset-gce: "true"
-      preset-hetzner: "true"
-      preset-kubevirt: "true"
-      preset-openstack: "true"
-      preset-packet: "true"
-      preset-vsphere: "true"
-      preset-docker-pull: "true"
-      preset-goproxy: "true"
-      preset-kind-volume-mounts: "true"
-      preset-kubeconfig-ci: "true"
-      preset-minio: "true"
-      preset-scratch-tmpfs: "true"
+      preset-alibaba: 'true'
+      preset-anexia: 'true'
+      preset-aws: 'true'
+      preset-azure: 'true'
+      preset-digitalocean: 'true'
+      preset-gce: 'true'
+      preset-hetzner: 'true'
+      preset-kubevirt: 'true'
+      preset-openstack: 'true'
+      preset-packet: 'true'
+      preset-vsphere: 'true'
+      preset-docker-pull: 'true'
+      preset-goproxy: 'true'
+      preset-kind-volume-mounts: 'true'
+      preset-kubeconfig-ci: 'true'
+      preset-minio: 'true'
+      preset-scratch-tmpfs: 'true'
     spec:
       containers:
-        - image: quay.io/kubermatic/chrome-headless:v1.3.0
+        - image: quay.io/kubermatic/chrome-headless:v1.4.0
           imagePullPolicy: Always
           command:
             - make
@@ -60,9 +60,9 @@ presubmits:
               cpu: 4
           env:
             - name: NO_COLOR
-              value: "1"
+              value: '1'
             - name: NODE_OPTIONS
-              value: "--max-old-space-size=6144"
+              value: '--max-old-space-size=6144'
             - name: SERVICE_ACCOUNT_KEY
               valueFrom:
                 secretKeyRef:
@@ -70,37 +70,37 @@ presubmits:
                   key: serviceAccountSigningKey
 
   - name: pre-dashboard-test-full-e2e-ce
-    run_if_changed: "^(cypress|hack/e2e)/"
+    run_if_changed: '^(cypress|hack/e2e)/'
     optional: true
     decorate: true
-    clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
+    clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
     extra_refs:
       # Kubermatic repo is required as we need to have access to the helm files used to deploy it.
       - org: kubermatic
         repo: kubermatic
         base_ref: master
-        clone_uri: "ssh://git@github.com/kubermatic/kubermatic.git"
+        clone_uri: 'ssh://git@github.com/kubermatic/kubermatic.git'
     labels:
-      preset-alibaba: "true"
-      preset-anexia: "true"
-      preset-aws: "true"
-      preset-azure: "true"
-      preset-digitalocean: "true"
-      preset-gce: "true"
-      preset-hetzner: "true"
-      preset-kubevirt: "true"
-      preset-openstack: "true"
-      preset-packet: "true"
-      preset-vsphere: "true"
-      preset-docker-pull: "true"
-      preset-goproxy: "true"
-      preset-kind-volume-mounts: "true"
-      preset-kubeconfig-ci: "true"
-      preset-minio: "true"
-      preset-scratch-tmpfs: "true"
+      preset-alibaba: 'true'
+      preset-anexia: 'true'
+      preset-aws: 'true'
+      preset-azure: 'true'
+      preset-digitalocean: 'true'
+      preset-gce: 'true'
+      preset-hetzner: 'true'
+      preset-kubevirt: 'true'
+      preset-openstack: 'true'
+      preset-packet: 'true'
+      preset-vsphere: 'true'
+      preset-docker-pull: 'true'
+      preset-goproxy: 'true'
+      preset-kind-volume-mounts: 'true'
+      preset-kubeconfig-ci: 'true'
+      preset-minio: 'true'
+      preset-scratch-tmpfs: 'true'
     spec:
       containers:
-        - image: quay.io/kubermatic/chrome-headless:v1.3.0
+        - image: quay.io/kubermatic/chrome-headless:v1.4.0
           imagePullPolicy: Always
           command:
             - make
@@ -118,9 +118,9 @@ presubmits:
             - name: KUBERMATIC_EDITION
               value: ce
             - name: NO_COLOR
-              value: "1"
+              value: '1'
             - name: NODE_OPTIONS
-              value: "--max-old-space-size=6144"
+              value: '--max-old-space-size=6144'
             - name: SERVICE_ACCOUNT_KEY
               valueFrom:
                 secretKeyRef:
@@ -131,12 +131,12 @@ presubmits:
     skip_if_only_changed: "^(containers|docs)/|\\.(md)$"
     optional: true
     decorate: true
-    clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
+    clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
     labels:
-      preset-minio: "true"
+      preset-minio: 'true'
     spec:
       containers:
-        - image: quay.io/kubermatic/chrome-headless:v1.3.0
+        - image: quay.io/kubermatic/chrome-headless:v1.4.0
           imagePullPolicy: Always
           command:
             - make
@@ -150,22 +150,22 @@ presubmits:
               cpu: 4
           env:
             - name: NO_COLOR
-              value: "1"
+              value: '1'
             - name: CYPRESS_MOCKS
-              value: "true"
+              value: 'true'
             - name: NODE_OPTIONS
-              value: "--max-old-space-size=6144"
+              value: '--max-old-space-size=6144'
 
   - name: pre-dashboard-test-e2e-ce
     skip_if_only_changed: "^(containers|docs)/|\\.(md)$"
     optional: true
     decorate: true
-    clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
+    clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
     labels:
-      preset-minio: "true"
+      preset-minio: 'true'
     spec:
       containers:
-        - image: quay.io/kubermatic/chrome-headless:v1.3.0
+        - image: quay.io/kubermatic/chrome-headless:v1.4.0
           imagePullPolicy: Always
           command:
             - make
@@ -181,8 +181,8 @@ presubmits:
             - name: KUBERMATIC_EDITION
               value: ce
             - name: NO_COLOR
-              value: "1"
+              value: '1'
             - name: CYPRESS_MOCKS
-              value: "true"
+              value: 'true'
             - name: NODE_OPTIONS
-              value: "--max-old-space-size=6144"
+              value: '--max-old-space-size=6144'
