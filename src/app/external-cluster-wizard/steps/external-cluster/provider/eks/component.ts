@@ -36,6 +36,12 @@ import {
 } from '@shared/entity/external-cluster';
 import {NodeDataService} from '@app/core/services/node-data/service';
 import {ExternalMachineDeploymentService} from '@app/core/services/external-machine-deployment';
+import {
+  EKSMachineDeploymentCloudSpec,
+  EKSScalingConfig,
+  ExternalMachineDeployment,
+  ExternalMachineDeploymentCloudSpec,
+} from '@app/shared/entity/external-machine-deployment';
 
 enum Controls {
   Name = 'name',
@@ -153,7 +159,7 @@ export class EKSClusterSettingsComponent
       this.control(Controls.SecurityGroupsIds).removeValidators(Validators.required);
       this.control(Controls.Version).setValue(version.slice(1, version.indexOf('-')));
       this.control(Controls.Version).disable();
-      this.control(Controls.Vpc).setValue('vpc-06b7ef7c48faf9bcc');
+      this.control(Controls.Vpc).setValue(this.cluster.spec.eksclusterSpec.vpcConfigRequest.vpcId);
       this.control(Controls.Vpc).disable();
 
       this._externalClusterService
@@ -238,11 +244,11 @@ export class EKSClusterSettingsComponent
             desiredSize: this.controlValue(Controls.DesiredSize),
             maxSize: this.controlValue(Controls.MaxSize),
             minSize: this.controlValue(Controls.MinSize),
-          },
+          } as EKSScalingConfig,
           nodeRole: this.controlValue(Controls.RoleArn),
           subnets: this.controlValue(Controls.SubnetIds),
-        },
-      },
-    };
+        } as EKSMachineDeploymentCloudSpec,
+      } as ExternalMachineDeploymentCloudSpec,
+    } as ExternalMachineDeployment;
   }
 }

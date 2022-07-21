@@ -29,6 +29,7 @@ export class EKSClusterSpec {
   roleArn: string;
   version?: string;
   vpcConfigRequest: {
+    vpcId: string;
     securityGroupIds: string[];
     subnetIds: string[];
   };

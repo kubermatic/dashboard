@@ -43,7 +43,7 @@ export class ExternalMachineDeployment extends MachineDeployment {
   }
 }
 
-class ExternalMachineDeploymentCloudSpec {
+export class ExternalMachineDeploymentCloudSpec {
   gke?: GKEMachineDeploymentCloudSpec;
   eks?: EKSMachineDeploymentCloudSpec;
 }
@@ -56,14 +56,14 @@ class GKEMachineDeploymentCloudSpec {
   string;
 }
 
-class EKSMachineDeploymentCloudSpec {
+export class EKSMachineDeploymentCloudSpec {
   diskSize: number;
   scalingConfig: EKSScalingConfig;
   nodeRole: string;
   subnets: string[];
 }
 
-class EKSScalingConfig {
+export class EKSScalingConfig {
   desiredSize: number;
   maxSize: number;
   minSize?: number;

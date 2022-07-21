@@ -92,8 +92,6 @@ export class ExternalMachineDeploymentService {
           return this.create(projectID, cluster.id, data.externalMachineDeploymentData);
         })
       );
-    // .subscribe(data => {
-    //   });
   }
 
   showExternalMachineDeploymentDeleteDialog(
