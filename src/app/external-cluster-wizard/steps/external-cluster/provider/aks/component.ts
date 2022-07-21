@@ -36,6 +36,8 @@ import {
   AKSNodegroupScalingConfig,
 } from '@shared/entity/provider/aks';
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@shared/validators/others';
+import { NodeDataService } from '@app/core/services/node-data/service';
+// import { ExternalMachineDeploymentService } from '@app/core/services/external-machine-deployment';
 
 enum Controls {
   Name = 'name',
@@ -87,7 +89,9 @@ export class AKSClusterSettingsComponent
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _externalClusterService: ExternalClusterService,
-    private readonly _nameGenerator: NameGeneratorService
+    // private readonly _externalMachineDeploymentService: ExternalMachineDeploymentService,
+    private readonly _nameGenerator: NameGeneratorService,
+    private readonly _nodeDataService: NodeDataService
   ) {
     super();
   }
@@ -105,6 +109,12 @@ export class AKSClusterSettingsComponent
 
   generateName(): void {
     this.control(Controls.Name).setValue(this._nameGenerator.generateName());
+  }
+
+  isDialogView(): boolean {
+    console.log(!this._nodeDataService.isInWizardMode());
+    
+    return !this._nodeDataService.isInWizardMode();
   }
 
   onEnableAutoScalingChange(evt: MatCheckboxChange) {
@@ -125,7 +135,7 @@ export class AKSClusterSettingsComponent
     const MIN_COUNT_DEFAULT_VALUE = 1;
     const MAX_COUNT_DEFAULT_VALUE = 5;
     const DEFAULT_MODE = 'System';
-
+    this.isDialogView()
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control('', [Validators.required, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR]),
       [Controls.Location]: this._builder.control('', Validators.required),
@@ -177,7 +187,7 @@ export class AKSClusterSettingsComponent
       name: this.controlValue(Controls.Name),
       cloud: {
         aks: {
-          ...this._externalClusterService.externalCluster.cloud.aks,
+          ...this._externalClusterService.externalCluster?.cloud?.aks,
           name: this.controlValue(Controls.Name),
           resourceGroup: this.controlValue(Controls.NodeResourceGroup),
         } as AKSCloudSpec,
@@ -210,4 +220,29 @@ export class AKSClusterSettingsComponent
     }
     this._externalClusterService.externalCluster = config;
   }
+
+  // private _getExternalMachineDeployment(): void {
+  //   this._externalMachineDeploymentService.externalMachineDeployment = {
+
+  //   }
+
+  // }
 }
+// "name": "ahmadmd3",
+// "cloud": {
+//  "aks":{
+//    "basicSettings": {
+//      "mode": "User",
+//      "orchestratorVersion": "1.22.6",
+//      "enableAutoScaling": true,
+    //  "scalingConfig"{
+    //  "maxCount": 4,
+    //  "minCount": 2,
+    //  },
+//      "maxCount": 4,
+//      "minCount": 2,
+//      "vmSize": "standard_B2ms",
+//      "count": 2
+//    }
+//  }
+// }

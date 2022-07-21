@@ -14,20 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <form [formGroup]="form"
-      fxLayout="row"
+      [fxLayout]="isDialogView() ? 'column' : 'row'"
       fxLayoutGap="30px"
       fxLayout.md="column"
       fxLayoutGap.md="30px"
       fxLayout.sm="column"
       fxLayoutGap.sm="30px">
-  <div fxFlex="50%"
+  <div [fxFlex]="isDialogView() ? '100%' : '50%'"
        fxLayout="column"
        fxLayoutGap="8px">
     <mat-card-header class="km-no-padding">
       <mat-card-title>Cluster</mat-card-title>
     </mat-card-header>
 
-    <mat-form-field>
+    <mat-form-field *ngIf="isDialogView()">
       <mat-label>Name</mat-label>
       <input matInput
              type="text"

@@ -15,6 +15,11 @@
 import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {StatusIcon} from '@shared/utils/health-status';
 
+export enum AKSMachineDeploymentMode {
+  User = 'User',
+  System = 'System'
+}
+
 export class ExternalMachineDeployment extends MachineDeployment {
   cloud: ExternalMachineDeploymentCloudSpec;
 
@@ -46,6 +51,7 @@ export class ExternalMachineDeployment extends MachineDeployment {
 export class ExternalMachineDeploymentCloudSpec {
   gke?: GKEMachineDeploymentCloudSpec;
   eks?: EKSMachineDeploymentCloudSpec;
+  aks?: AKSMachineDeploymentCloudSpec;
 }
 
 class GKEMachineDeploymentCloudSpec {
