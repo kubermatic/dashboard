@@ -23,13 +23,12 @@ import {Injectable} from '@angular/core';
 import {AppConfigService} from '@app/config.service';
 import {environment} from '@environments/environment';
 import {AllowedRegistry} from './entity';
-import {Observable, Subject, timer, merge} from 'rxjs';
-import {switchMap, shareReplay} from 'rxjs/operators';
+import {merge, Observable, Subject, timer} from 'rxjs';
+import {shareReplay, switchMap} from 'rxjs/operators';
 
 @Injectable()
 export class AllowedRegistriesService {
   private _newRestRoot: string = environment.newRestRoot;
-
   private readonly _refreshTime = 10;
   private _allowedRegistries$: Observable<AllowedRegistry[]>;
   private _allowedRegistriesRefresh$ = new Subject<void>();

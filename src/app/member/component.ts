@@ -34,6 +34,11 @@ import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {AddMemberComponent} from './add-member/component';
 import {EditMemberComponent} from './edit-member/component';
 import {MemberService} from '@core/services/member';
+import {DynamicTabComponent} from '@shared/components/tab-card/dynamic-tab/component';
+import {DynamicTab} from '@shared/model/dynamic-tab';
+import {AddGroupDialogComponent} from '@app/dynamic/enterprise/project-groups/add-group-dialog/component';
+import {GroupProjectBinding} from '@app/dynamic/enterprise/project-groups/entity';
+import {isEnterpriseEdition} from '@app/dynamic/common';
 
 @Component({
   selector: 'km-member',
@@ -42,14 +47,15 @@ import {MemberService} from '@core/services/member';
 })
 export class MemberComponent implements OnInit, OnChanges, OnDestroy {
   members: Member[] = [];
+  groupProjectBinding: GroupProjectBinding[] = [];
+  isInitialized: boolean;
   isInitializing = true;
   currentUser: Member;
   displayedColumns: string[] = ['name', 'email', 'group', 'actions'];
   dataSource = new MatTableDataSource<Member>();
-
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-
+  private _dynamicTabs = new Set<DynamicTabComponent>();
   private readonly _refreshTime = 10;
   private _unsubscribe = new Subject<void>();
   private _membersUpdate = new Subject<void>();
@@ -65,6 +71,14 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _appConfig: AppConfigService,
     private readonly _notificationService: NotificationService
   ) {}
+
+  get isEnterpriseEdition(): boolean {
+    return isEnterpriseEdition();
+  }
+
+  get dynamicTabs(): DynamicTabComponent[] {
+    return [...this._dynamicTabs];
+  }
 
   ngOnInit(): void {
     this.dataSource.data = this.members;
@@ -99,6 +113,10 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
         this.dataSource.data = this.members;
         this.isInitializing = false;
       });
+
+    setTimeout(() => {
+      this.isInitialized = true;
+    });
   }
 
   ngOnChanges(): void {
@@ -108,6 +126,10 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  onActivate(component: DynamicTab): void {
+    component.onTabReady.pipe(takeUntil(this._unsubscribe)).subscribe(tab => this._dynamicTabs.add(tab));
   }
 
   getGroup(member: Member): string {
@@ -132,6 +154,12 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
           this._membersUpdate.next();
         }
       });
+  }
+
+  addGroup(): void {
+    const modal = this._matDialog.open(AddGroupDialogComponent);
+    modal.componentInstance.project = this._selectedProject;
+    modal.afterClosed().pipe(take(1)).subscribe();
   }
 
   isEditEnabled(member: Member): boolean {

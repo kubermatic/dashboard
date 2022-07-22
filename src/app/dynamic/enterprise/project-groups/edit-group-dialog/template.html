@@ -1,0 +1,72 @@
+<!--
+               Kubermatic Enterprise Read-Only License
+                      Version 1.0 ("KERO-1.0”)
+                  Copyright © 2022 Kubermatic GmbH
+
+1. You may only view, read and display for studying purposes the source
+   code of the software licensed under this license, and, to the extent
+   explicitly provided under this license, the binary code.
+2. Any use of the software which exceeds the foregoing right, including,
+   without limitation, its execution, compilation, copying, modification
+   and distribution, is expressly prohibited.
+3. THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+   IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+   CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+   TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+   SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+END OF TERMS AND CONDITIONS
+-->
+
+<div id="km-edit-group-dialog">
+  <km-dialog-title>Edit Group</km-dialog-title>
+  <mat-dialog-content>
+    <p class="km-dialog-context-description">Edit <b>{{groupProjectBinding.group}}</b> of <b>{{project.name}}</b> project</p>
+    <form [formGroup]="form"
+          fxLayout="column"
+          id="edit-group-form">
+
+      <mat-form-field fxFlex>
+        <mat-label>Group</mat-label>
+        <input matInput
+               [value]="groupProjectBinding.group"
+               [formControlName]="'group'">
+      </mat-form-field>
+
+      <label class="km-radio-group-label">Select a Role</label>
+      <mat-radio-group formControlName="role"
+                       fxFlex
+                       fxLayout="column"
+                       class="km-radio-group">
+        <mat-radio-button value="owners"
+                          class="km-radio-button">
+          <div class="km-radio-button-title">Owner</div>
+          <div class="km-radio-button-description">Full access, allows all actions, also able to remove other owners
+            from the project
+          </div>
+        </mat-radio-button>
+        <mat-radio-button value="editors"
+                          class="km-radio-button">
+          <div class="km-radio-button-title">Editor</div>
+          <div class="km-radio-button-description">Write access and management of clusters, nodes and SSH keys</div>
+        </mat-radio-button>
+        <mat-radio-button value="viewers"
+                          class="km-radio-button">
+          <div class="km-radio-button-title">Viewer</div>
+          <div class="km-radio-button-description">Read-only access, can only view existing resources</div>
+        </mat-radio-button>
+      </mat-radio-group>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <km-button id="km-edit-group-dialog-edit-btn"
+               icon="km-icon-edit"
+               label="Edit Group"
+               [disabled]="!form.valid"
+               [observable]="getObservable()"
+               (next)="onNext()">
+    </km-button>
+  </mat-dialog-actions>
+</div>
