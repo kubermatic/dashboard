@@ -30,17 +30,22 @@ limitations under the License.
                        min="1"
                        focus
                        required
-                       hint="To Edit this property you must save or cancel your current changes"
-                       [showHint]="disableReplicaControl"
+                       [hint]="disableReplicaControl ? '' : 'To Edit this property you must save or cancel your current changes'"
                        [disabled]="disableReplicaControl">
     </km-number-stepper>
 
-    <mat-form-field class='kubelet-version'>
+    <mat-form-field class="kubelet-version">
+
       <mat-label>Kubelet Version</mat-label>
-      <input [formControlName]="Controls.KubeletVersion"
-             matInput
-             type="text"
-             autocomplete="off" />
+      <mat-select [formControlName]="Controls.KubeletVersion"
+                  required
+                  disableOptionCentering
+                  panelClass="km-add-dialog-dropdown">
+        <mat-option *ngFor="let version of versions"
+                    [value]="version">
+          {{ version }}
+        </mat-option>
+      </mat-select>
 
       <mat-hint *ngIf="form.get(Controls.KubeletVersion).disabled">
         To Edit this property you must save or cancel your current changes

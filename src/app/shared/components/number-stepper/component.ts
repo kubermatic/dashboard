@@ -67,7 +67,6 @@ export class NumberStepperComponent implements AfterViewInit, OnDestroy, Control
   private _onChange: (_: number | string) => void = noop;
   private _valid = false;
   @Input() label: string;
-  @Input() showHint = true;
   @Input() hint: string;
   @Input() min: number;
   @Input() max: number;

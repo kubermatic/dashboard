@@ -17,12 +17,17 @@ import {FormBuilder} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ExternalMachineDeploymentService} from '@core/services/external-machine-deployment';
 import {NotificationService} from '@core/services/notification';
-import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
+import {
+  ExternalMachineDeployment,
+  ExternalMachineDeploymentPatch,
+  ExternalMachineDeploymentSpecPatch,
+} from '@shared/entity/external-machine-deployment';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {Observable} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
+import {MasterVersion} from '@shared/entity/cluster';
 
-class DialogData {
+class UpdateExternalClusterMachineDeploymentDialogData {
   projectID: string;
   clusterID: string;
   machineDeployment: ExternalMachineDeployment;
@@ -41,9 +46,10 @@ enum Controls {
 export class UpdateExternalClusterMachineDeploymentDialogComponent extends BaseFormValidator implements OnInit {
   readonly Controls = Controls;
   disableReplicaControl: boolean;
+  versions: string[] = [];
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    @Inject(MAT_DIALOG_DATA) public data: UpdateExternalClusterMachineDeploymentDialogData,
     private readonly _dialogRef: MatDialogRef<UpdateExternalClusterMachineDeploymentDialogComponent>,
     private readonly _notificationService: NotificationService,
     private readonly _externalMachineDeploymentService: ExternalMachineDeploymentService,
@@ -70,14 +76,14 @@ export class UpdateExternalClusterMachineDeploymentDialogComponent extends BaseF
     this._dialogRef.close();
   }
 
-  private _initForm() {
+  private _initForm(): void {
     this.form = this._builder.group({
       [Controls.Replicas]: this._builder.control(1),
       [Controls.KubeletVersion]: this._builder.control(''),
     });
   }
 
-  private _initSubscriptions() {
+  private _initSubscriptions(): void {
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
       this._updateExternalMachineDeploymentPatchModel();
     });
@@ -104,9 +110,16 @@ export class UpdateExternalClusterMachineDeploymentDialogComponent extends BaseF
           this.disableReplicaControl = true;
         }
       });
+
+    this._externalMachineDeploymentService
+      .machineDeploymentUpgrades(this.data.projectID, this.data.clusterID, this.data.machineDeployment?.id)
+      .pipe(take(1))
+      .subscribe((upgrades: MasterVersion[]) => {
+        this.versions = upgrades.map(upgrade => upgrade.version);
+      });
   }
 
-  private _updateExternalMachineDeploymentPatchModel() {
+  private _updateExternalMachineDeploymentPatchModel(): ExternalMachineDeploymentPatch {
     return {
       spec: {
         replicas: this.form.get(Controls.Replicas).value,
@@ -115,7 +128,7 @@ export class UpdateExternalClusterMachineDeploymentDialogComponent extends BaseF
             kubelet: this.form.get(Controls.KubeletVersion).value,
           },
         },
-      },
+      } as ExternalMachineDeploymentSpecPatch,
     };
   }
 }

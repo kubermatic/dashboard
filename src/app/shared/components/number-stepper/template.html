@@ -30,7 +30,7 @@ limitations under the License.
          [id]="id"
          [attr.cdkFocusInitial]="focus ? focus : null">
   <mat-error *ngFor="let message of errors">{{message}}</mat-error>
-  <mat-hint *ngIf="(mode === 'hint' || mode === 'all') && !!hint && showHint">{{hint}}</mat-hint>
+  <mat-hint *ngIf="(mode === 'hint' || mode === 'all') && !!hint">{{hint}}</mat-hint>
 </mat-form-field>
 <button mat-icon-button
         class="stepper-button left"

@@ -22,6 +22,7 @@ import {NotificationService} from '@core/services/notification';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {ExternalCluster} from '@shared/entity/external-cluster';
 import {ExternalMachineDeployment, ExternalMachineDeploymentPatch} from '@shared/entity/external-machine-deployment';
+import {MasterVersion} from '@shared/entity/cluster';
 
 @Injectable()
 export class ExternalMachineDeploymentService {
@@ -32,6 +33,15 @@ export class ExternalMachineDeploymentService {
     private readonly _matDialog: MatDialog,
     private readonly _notificationService: NotificationService
   ) {}
+
+  machineDeploymentUpgrades(
+    projectID: string,
+    clusterID: string,
+    machineDeploymentId: string
+  ): Observable<MasterVersion[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/machinedeployments/${machineDeploymentId}/upgrades`;
+    return this._httpClient.get<MasterVersion[]>(url).pipe(catchError(() => of<MasterVersion[]>([])));
+  }
 
   patchExternalMachineDeployment(
     projectID: string,
