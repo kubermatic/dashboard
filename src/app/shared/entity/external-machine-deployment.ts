@@ -18,7 +18,7 @@ import {AKSMachineDeploymentCloudSpec} from './provider/aks';
 
 export enum AKSMachineDeploymentMode {
   User = 'User',
-  System = 'System'
+  System = 'System',
 }
 
 export class ExternalMachineDeployment extends MachineDeployment {

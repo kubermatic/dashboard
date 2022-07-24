@@ -297,21 +297,3 @@ export class AKSClusterSettingsComponent
     this._externalMachineDeploymentService.externalMachineDeployment = config;
   }
 }
-// "name": "ahmadmd3",
-// "cloud": {
-//  "aks":{
-//    "basicSettings": {
-//      "mode": "User",
-//      "orchestratorVersion": "1.22.6",
-//      "enableAutoScaling": true,
-    //  "scalingConfig"{
-    //  "maxCount": 4,
-    //  "minCount": 2,
-    //  },
-//      "maxCount": 4,
-//      "minCount": 2,
-//      "vmSize": "standard_B2ms",
-//      "count": 2
-//    }
-//  }
-// }
