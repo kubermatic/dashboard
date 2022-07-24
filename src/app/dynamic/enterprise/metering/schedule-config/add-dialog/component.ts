@@ -58,7 +58,7 @@ enum DefaultScheduleInterval {
   Monthly = 30,
 }
 
-enum DefalutReportRetentionOption {
+enum DefaultReportRetentionOption {
   Daily = 30,
   Weekly = 90,
   Monthly = 365,
@@ -81,11 +81,11 @@ export class MeteringScheduleAddDialog implements OnInit, OnDestroy {
   private get _retention(): number {
     switch (this._group) {
       case DefaultScheduleOption.Daily:
-        return DefalutReportRetentionOption.Daily;
+        return DefaultReportRetentionOption.Daily;
       case DefaultScheduleOption.Weekly:
-        return DefalutReportRetentionOption.Weekly;
+        return DefaultReportRetentionOption.Weekly;
       case DefaultScheduleOption.Monthly:
-        return DefalutReportRetentionOption.Monthly;
+        return DefaultReportRetentionOption.Monthly;
       case DefaultScheduleOption.Custom:
         return this.form.get(Controls.Retention).value;
     }

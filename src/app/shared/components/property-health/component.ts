@@ -33,7 +33,7 @@ export class PropertyHealthComponent {
       case HealthState.Provisioning:
         return StatusIcon.Pending;
       default:
-        return StatusIcon.Unkown;
+        return StatusIcon.Unknown;
     }
   }
 

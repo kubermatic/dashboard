@@ -109,7 +109,7 @@ limitations under the License.
           class="km-header-cell">Excluded Namespaces
       </th>
       <td mat-cell
-          *matCellDef="let element">{{toCommaSeperatedString(element.excludedNamespaces)}}</td>
+          *matCellDef="let element">{{toCommaSeparatedString(element.excludedNamespaces)}}</td>
     </ng-container>
 
     <ng-container matColumnDef="processes">
@@ -118,7 +118,7 @@ limitations under the License.
           class="km-header-cell">Processes
       </th>
       <td mat-cell
-          *matCellDef="let element">{{toCommaSeperatedString(element.processes)}}</td>
+          *matCellDef="let element">{{toCommaSeparatedString(element.processes)}}</td>
     </ng-container>
 
     <tr mat-header-row

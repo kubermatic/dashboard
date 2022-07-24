@@ -14,15 +14,15 @@ On your project some features need to work. Traditionally people tested them. Ho
 
 ## Implementation
 
-*How to implment the idea e.g.*
+*How to implement the idea e.g.*
 
 * removing all existing spec.ts files
 
-* add new spec.ts fils step by step for each component 
+* add new spec.ts files step by step for each component
 
 * add spec.ts files for each service
 
-* working with mocks for the beginning 
+* working with mocks for the beginning
 
 
 How To use it:
@@ -33,7 +33,7 @@ How To use it:
 
 * you can see the the progress in the bowser
 
-* if everything test run successful everything is is fine and you will no error message in the browser and the console 
+* if everything test run successful everything is is fine and you will no error message in the browser and the console
 
 
 ## Task & effort:
@@ -53,5 +53,5 @@ https://github.com/kubermatic/dashboard/issues/395 Testing/sshkey - about 1 day
 
 ## Branch:
 
-* currently we are will merge everything in the testing/anguler-cli-testing branch    
+* currently we are will merge everything in the testing/anguler-cli-testing branch
 
