@@ -14,10 +14,11 @@
 
 import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {StatusIcon} from '@shared/utils/health-status';
+import {AKSMachineDeploymentCloudSpec} from './provider/aks';
 
 export enum AKSMachineDeploymentMode {
   User = 'User',
-  System = 'System'
+  System = 'System',
 }
 
 export class ExternalMachineDeployment extends MachineDeployment {

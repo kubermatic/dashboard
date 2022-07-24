@@ -90,3 +90,7 @@ export class AKSNetworkProfile {
   outboundType?: string;
   loadBalancerSku?: string;
 }
+
+export class AKSNoodPoolVersion {
+  version: string;
+}

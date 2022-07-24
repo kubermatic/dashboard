@@ -21,3 +21,4 @@ export const IPV6_CIDR_PATTERN_VALIDATOR = Validators.pattern(
 export const KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR = Validators.pattern(
   '^(?=.{1,63}$)[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
 );
+export const AKS_POOL_NAME_VALIDATOR = Validators.pattern('[a-z0-9]{0,12}$');
