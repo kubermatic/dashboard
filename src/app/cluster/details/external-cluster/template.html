@@ -35,7 +35,8 @@ limitations under the License.
         <span>Disconnect</span>
       </button>
 
-      <button id="km-delete-external-cluster-btn"
+      <button *ngIf="!cluster?.labels || cluster.labels['isImported'] !== 'true'"
+              id="km-delete-external-cluster-btn"
               mat-flat-button
               color="tertiary"
               fxLayoutAlign="center center"
