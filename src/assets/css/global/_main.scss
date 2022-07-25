@@ -249,11 +249,11 @@ hr {
     border-top-right-radius: variables.$border-radius;
   }
 
-  td:first-child:not(.km-serviceaccount-token, .km-key-publickey) {
+  td:first-child:not(.km-serviceaccount-token):not(.km-key-publickey) {
     padding-left: 30px;
   }
 
-  td:last-child:not(.km-serviceaccount-token, .km-key-publickey) {
+  td:last-child:not(.km-serviceaccount-token):not(.km-key-publickey) {
     padding-right: 30px;
   }
 

@@ -132,7 +132,7 @@
       color: map.get($colors, text);
     }
 
-    &.mat-form-field-should-float:not(.mat-focused, .ng-invalid, .mat-form-field-disabled) {
+    &.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):not(.mat-form-field-disabled) {
       div.mat-form-field-flex:hover {
         label {
           color: map.get($colors, secondary-dark);
