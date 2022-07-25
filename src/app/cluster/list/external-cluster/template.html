@@ -130,7 +130,8 @@ limitations under the License.
                         [disabled]="!can(Permission.Delete)">
                   <i class="km-icon-mask km-icon-disconnect"></i>
                 </button>
-                <button mat-icon-button
+                <button *ngIf="!element?.labels || element?.labels['isImported'] !== 'true'"
+                        mat-icon-button
                         [attr.id]="'km-delete-cluster-' + element.name"
                         matTooltip="Delete Cluster"
                         (click)="deleteClusterDialog(element, $event)"
