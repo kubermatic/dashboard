@@ -23,7 +23,7 @@ export enum StatusIcon {
   Pending = 'km-icon-pending',
   Error = 'km-icon-error',
   Disabled = 'km-icon-disabled',
-  Unkown = 'km-icon-unknown',
+  Unknown = 'km-icon-unknown',
 }
 
 export class HealthStatus {
@@ -91,5 +91,5 @@ export function getBackupHealthStatus(backup: EtcdBackupConfig, condition: EtcdB
   } else if (condition.status === 'False') {
     return new HealthStatus('Disabled', StatusIcon.Disabled);
   }
-  return new HealthStatus('Unknown', StatusIcon.Unkown);
+  return new HealthStatus('Unknown', StatusIcon.Unknown);
 }

@@ -81,7 +81,7 @@ export class GatekeeperConfigComponent implements OnChanges, OnDestroy {
     );
   }
 
-  toCommaSeperatedString(data: string[]): string {
+  toCommaSeparatedString(data: string[]): string {
     return data.join(', ');
   }
 

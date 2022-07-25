@@ -83,7 +83,7 @@ export class ExternalCluster {
         return StatusIcon.Error;
       case ExternalClusterState.Unknown:
       default:
-        return StatusIcon.Unkown;
+        return StatusIcon.Unknown;
     }
   }
 }

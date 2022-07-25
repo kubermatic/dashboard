@@ -51,7 +51,7 @@ export class EventRateLimitComponent extends BaseFormValidator implements OnInit
   private readonly _qpsDefault = 50;
   private readonly _burstDefault = 100;
   private readonly _cacheSizeDefault = 4096;
-  private readonly _defaltLimitType = 'Namespace';
+  private readonly _defaultLimitType = 'Namespace';
 
   constructor(private readonly _builder: FormBuilder, private readonly _clusterSpecService: ClusterSpecService) {
     super();
@@ -68,7 +68,7 @@ export class EventRateLimitComponent extends BaseFormValidator implements OnInit
         Validators.required,
         Validators.minLength(this._minValue),
       ]),
-      [Controls.LimitType]: new FormControl({value: this._defaltLimitType, disabled: true}),
+      [Controls.LimitType]: new FormControl({value: this._defaultLimitType, disabled: true}),
     });
 
     merge(

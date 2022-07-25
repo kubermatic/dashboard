@@ -55,7 +55,7 @@ class UserPanel extends PageOptions {
     return this._get('#km-navbar-user-settings-btn');
   }
 
-  get adminSetttings(): Cypress.Chainable {
+  get adminSettings(): Cypress.Chainable {
     return this._get('#km-navbar-admin-settings-btn');
   }
 }

@@ -34,7 +34,7 @@ export class AdminSettings extends PageOptions implements Page {
 
   visit(): void {
     Pages.Root.UserPanel.open.click();
-    Pages.Root.UserPanel.adminSetttings.click();
+    Pages.Root.UserPanel.adminSettings.click();
   }
 }
 

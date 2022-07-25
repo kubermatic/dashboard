@@ -146,7 +146,7 @@ describe('Admin Settings - Custom Links Story', () => {
     }
   });
 
-  it('should veryfy that terms of service display is disabled', () => {
+  it('should verify that terms of service display is disabled', () => {
     AdminSettings.InterfacePage.getTermsOfServiceCheckbox().find('input').should(Condition.NotBeChecked);
   });
 
