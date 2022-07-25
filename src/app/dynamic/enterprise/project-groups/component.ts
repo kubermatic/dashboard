@@ -30,19 +30,14 @@ import {merge, Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {MatTableDataSource} from '@angular/material/table';
 import {DynamicTab} from '@shared/model/dynamic-tab';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {NotificationService} from '@core/services/notification';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {ProjectGroupBindingService} from '@app/dynamic/enterprise/project-groups/service';
 import {GroupProjectBinding} from '@app/dynamic/enterprise/project-groups/entity';
-import {EditGroupDialogComponent} from '@app/dynamic/enterprise/project-groups/edit-group-dialog/component';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
-import {NotificationService} from '@core/services/notification';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
-
-// @ts-ignore
-enum Mode {
-  Add = 'add',
-  Edit = 'edit',
-}
+import {AddGroupDialogComponent} from './add-group-dialog/component';
+import {EditGroupDialogComponent} from './edit-group-dialog/component';
 
 enum Column {
   Group = 'group',
@@ -53,20 +48,23 @@ enum Column {
 @Component({
   selector: 'km-project-group-bindings-list',
   templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
 })
 export class ProjectGroupBindingsComponent extends DynamicTab implements OnInit, OnChanges, OnDestroy {
   readonly column = Column;
   readonly displayedColumns: string[] = Object.values(Column);
-  private readonly _googleAnalyticsEventCategory = 'memberOverview';
-  private _unsubscribe = new Subject<void>();
-  private _selectedProject: Project;
 
   dataSource = new MatTableDataSource<GroupProjectBinding>();
   isLoadingGroupBindings = true;
   currentUser: Member;
   groupProjectBindings: GroupProjectBinding[] = [];
+
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+
+  private readonly _googleAnalyticsEventCategory = 'memberOverview';
+  private _unsubscribe = new Subject<void>();
+  private _selectedProject: Project;
 
   constructor(
     private readonly _matDialog: MatDialog,
@@ -118,6 +116,12 @@ export class ProjectGroupBindingsComponent extends DynamicTab implements OnInit,
     return this.currentUser && groupProjectBinding && this.currentUser.name === groupProjectBinding.name
       ? 'You cannot edit your own data and permissions'
       : 'Remove group';
+  }
+
+  addGroup(): void {
+    const modal = this._matDialog.open(AddGroupDialogComponent);
+    modal.componentInstance.project = this._selectedProject;
+    modal.afterClosed().pipe(take(1)).subscribe();
   }
 
   editGroupBinding(groupProjectBinding: GroupProjectBinding): void {

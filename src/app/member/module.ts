@@ -16,13 +16,11 @@ import {NgModule} from '@angular/core';
 import {SharedModule} from '@shared/module';
 import {MemberRoutingModule} from './routing';
 import {MemberComponent} from './component';
-import {ProjectGroupBindingService} from '@app/dynamic/enterprise/project-groups/service';
 
 const components: any[] = [MemberComponent];
 
 @NgModule({
   imports: [SharedModule, MemberRoutingModule],
-  providers: [ProjectGroupBindingService],
   declarations: [...components],
   exports: [...components],
 })

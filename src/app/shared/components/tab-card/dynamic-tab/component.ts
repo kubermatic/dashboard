@@ -20,5 +20,6 @@ import {Component, Input, TemplateRef, ViewChild} from '@angular/core';
 })
 export class DynamicTabComponent {
   @Input() label: string;
+  @Input() customTemplate: TemplateRef<any>;
   @ViewChild(TemplateRef) template: TemplateRef<any>;
 }

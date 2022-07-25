@@ -148,22 +148,7 @@ limitations under the License.
     <mat-tab *ngFor="let tab of dynamicTabs; let i = index"
              [label]="tab.label">
 
-      <div fxLayout
-           class="container">
-        <div fxFlex
-             fxLayoutAlign="end center"
-             fxLayoutGap="20px">
-          <button id="km-add-group-top-btn"
-                  fxLayoutAlign="center center"
-                  mat-flat-button
-                  type="button"
-                  (click)="addGroup()"
-                  [disabled]="!isAddEnabled()">
-            <i class="km-icon-mask km-icon-add"></i>
-            <span>Add Group</span>
-          </button>
-        </div>
-      </div>
+      <ng-container *ngTemplateOutlet="tab.customTemplate"></ng-container>
 
       <mat-card class="km-member-view">
         <mat-card-content>

@@ -20,7 +20,8 @@
 END OF TERMS AND CONDITIONS
 -->
 
-<km-dynamic-tab label="Groups">
+<km-dynamic-tab label="Groups"
+                [customTemplate]="buttonTemplate">
   <table class="km-table"
          mat-table
          matSort
@@ -110,3 +111,21 @@ END OF TERMS AND CONDITIONS
     <mat-paginator showFirstLastButtons></mat-paginator>
   </div>
 </km-dynamic-tab>
+
+<ng-template #buttonTemplate>
+  <div fxLayout
+       class="container">
+    <div fxFlex
+         fxLayoutAlign="end center"
+         fxLayoutGap="20px">
+      <button id="km-add-group-top-btn"
+              fxLayoutAlign="center center"
+              mat-flat-button
+              type="button"
+              (click)="addGroup()">
+        <i class="km-icon-mask km-icon-add"></i>
+        <span>Add Group</span>
+      </button>
+    </div>
+  </div>
+</ng-template>

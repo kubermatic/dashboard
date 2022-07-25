@@ -36,7 +36,6 @@ import {EditMemberComponent} from './edit-member/component';
 import {MemberService} from '@core/services/member';
 import {DynamicTabComponent} from '@shared/components/tab-card/dynamic-tab/component';
 import {DynamicTab} from '@shared/model/dynamic-tab';
-import {AddGroupDialogComponent} from '@app/dynamic/enterprise/project-groups/add-group-dialog/component';
 import {GroupProjectBinding} from '@app/dynamic/enterprise/project-groups/entity';
 import {isEnterpriseEdition} from '@app/dynamic/common';
 
@@ -154,12 +153,6 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
           this._membersUpdate.next();
         }
       });
-  }
-
-  addGroup(): void {
-    const modal = this._matDialog.open(AddGroupDialogComponent);
-    modal.componentInstance.project = this._selectedProject;
-    modal.afterClosed().pipe(take(1)).subscribe();
   }
 
   isEditEnabled(member: Member): boolean {
