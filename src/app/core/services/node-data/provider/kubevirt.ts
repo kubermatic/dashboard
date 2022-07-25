@@ -64,7 +64,9 @@ export class NodeDataKubeVirtProvider {
           .pipe(debounceTime(this._debounce))
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
-          .pipe(switchMap(_ => this._kubeVirtService.getVMFlavors(selectedProject, this._clusterSpecService.cluster.id)))
+          .pipe(
+            switchMap(_ => this._kubeVirtService.getVMFlavors(selectedProject, this._clusterSpecService.cluster.id))
+          )
           .pipe(
             catchError(_ => {
               if (onError) {
@@ -110,7 +112,9 @@ export class NodeDataKubeVirtProvider {
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(
-            switchMap(_ => this._kubeVirtService.getStorageClasses(selectedProject, this._clusterSpecService.cluster.id))
+            switchMap(_ =>
+              this._kubeVirtService.getStorageClasses(selectedProject, this._clusterSpecService.cluster.id)
+            )
           )
           .pipe(
             catchError(_ => {
