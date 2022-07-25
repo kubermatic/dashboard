@@ -139,7 +139,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
                     .pipe(tap(health => (this.health[cluster.id] = health)))
                     .pipe(
                       switchMap(_ =>
-                        Health.allHealthy(this.health[cluster.id])
+                        Health.allHealthy(this.health[cluster.id]) && !cluster.deletionTimestamp
                           ? this._machineDeploymentService.list(cluster.id, this._selectedProject.id)
                           : of([])
                       )
