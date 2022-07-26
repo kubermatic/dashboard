@@ -126,6 +126,8 @@ export class ExternalMachineDeploymentListComponent implements OnInit, OnChanges
         projectID: this.projectID,
         clusterID: this.cluster.id,
         machineDeployment: md,
+        replicas: md.spec?.replicas,
+        kubeletVersion: md.spec?.template?.versions?.kubelet,
       },
     };
     this._matDialog.open(UpdateExternalClusterMachineDeploymentDialogComponent, dialogConfig);

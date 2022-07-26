@@ -31,6 +31,8 @@ class UpdateExternalClusterMachineDeploymentDialogData {
   projectID: string;
   clusterID: string;
   machineDeployment: ExternalMachineDeployment;
+  kubeletVersion: string;
+  replicas: number;
 }
 
 enum Controls {
@@ -39,7 +41,7 @@ enum Controls {
 }
 
 @Component({
-  selector: 'km-update-external-cluster-machine-deployment-cluster-dialog',
+  selector: 'km-update-external-cluster-machine-deployment-dialog',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
@@ -58,13 +60,13 @@ export class UpdateExternalClusterMachineDeploymentDialogComponent extends BaseF
     super();
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this._initForm();
     this._initSubscriptions();
   }
 
-  getObservable(): Observable<any> {
-    const patchModel = this._updateExternalMachineDeploymentPatchModel();
+  getObservable(): Observable<ExternalMachineDeployment> {
+    const patchModel = this._getExternalMachineDeploymentPatchModel();
     const {projectID, clusterID, machineDeployment} = this.data;
     return this._externalMachineDeploymentService
       .patchExternalMachineDeployment(projectID, clusterID, machineDeployment.id, patchModel)
@@ -78,21 +80,17 @@ export class UpdateExternalClusterMachineDeploymentDialogComponent extends BaseF
 
   private _initForm(): void {
     this.form = this._builder.group({
-      [Controls.Replicas]: this._builder.control(1),
+      [Controls.Replicas]: this._builder.control(this.data.replicas),
       [Controls.KubeletVersion]: this._builder.control(''),
     });
   }
 
   private _initSubscriptions(): void {
-    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
-      this._updateExternalMachineDeploymentPatchModel();
-    });
-
     const initialValue = this.form.value;
     this.form
       .get(Controls.Replicas)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(value => {
+      .subscribe((value: number) => {
         if (initialValue[Controls.Replicas] === value) {
           this.form.get(Controls.KubeletVersion).enable({emitEvent: false});
         } else {
@@ -103,23 +101,27 @@ export class UpdateExternalClusterMachineDeploymentDialogComponent extends BaseF
     this.form
       .get(Controls.KubeletVersion)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(value => {
-        if (initialValue[Controls.KubeletVersion] === value) {
-          this.disableReplicaControl = false;
-        } else {
-          this.disableReplicaControl = true;
-        }
+      .subscribe((value: string) => {
+        this.disableReplicaControl = this.data.kubeletVersion !== value;
       });
 
     this._externalMachineDeploymentService
       .machineDeploymentUpgrades(this.data.projectID, this.data.clusterID, this.data.machineDeployment?.id)
       .pipe(take(1))
-      .subscribe((upgrades: MasterVersion[]) => {
-        this.versions = upgrades.map(upgrade => upgrade.version);
-      });
+      .subscribe(this._setDefaultVersion.bind(this));
   }
 
-  private _updateExternalMachineDeploymentPatchModel(): ExternalMachineDeploymentPatch {
+  private _setDefaultVersion(upgrades: MasterVersion[]): void {
+    this.versions = upgrades.map(upgrade => upgrade.version);
+    const kubeletVersion = this.data.kubeletVersion;
+
+    if (this.versions.includes(kubeletVersion)) {
+      this.form.get(Controls.KubeletVersion).setValue(kubeletVersion);
+      return;
+    }
+  }
+
+  private _getExternalMachineDeploymentPatchModel(): ExternalMachineDeploymentPatch {
     return {
       spec: {
         replicas: this.form.get(Controls.Replicas).value,

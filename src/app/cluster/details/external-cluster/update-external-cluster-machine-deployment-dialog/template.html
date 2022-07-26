@@ -30,7 +30,7 @@ limitations under the License.
                        min="1"
                        focus
                        required
-                       [hint]="disableReplicaControl ? '' : 'To Edit this property you must save or cancel your current changes'"
+                       [hint]="disableReplicaControl ? 'To update Replicas you must save or cancel your current changes.' : ''"
                        [disabled]="disableReplicaControl">
     </km-number-stepper>
 
@@ -48,7 +48,7 @@ limitations under the License.
       </mat-select>
 
       <mat-hint *ngIf="form.get(Controls.KubeletVersion).disabled">
-        To Edit this property you must save or cancel your current changes
+        To update Kubelet Version you must save or cancel your current changes.
       </mat-hint>
     </mat-form-field>
   </form>
@@ -56,7 +56,8 @@ limitations under the License.
 
 <mat-dialog-actions>
   <km-button icon="km-icon-check"
-             label="SAVE Changes"
+             label="Save Changes"
+             [disabled]="form.invalid"
              [observable]="getObservable()"
              (next)="onNext($event)">
   </km-button>

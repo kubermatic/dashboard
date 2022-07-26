@@ -31,7 +31,7 @@ import {MemberUtils, Permission} from '@shared/utils/member';
 import {forkJoin, Subject, timer} from 'rxjs';
 import {switchMap, take, takeUntil} from 'rxjs/operators';
 import {ExternalMachineDeploymentService} from '@core/services/external-machine-deployment';
-import {UpdateExternalClusterMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/update-external-cluster-machine-deployment-dialog/component';
+import {UpdateExternalClusterMachineDeploymentDialogComponent} from '../update-external-cluster-machine-deployment-dialog/component';
 
 @Component({
   selector: 'km-external-machine-deployment-details',
@@ -152,6 +152,8 @@ export class ExternalMachineDeploymentDetailsComponent implements OnInit, OnDest
         projectID: this.projectID,
         clusterID: this.cluster.id,
         machineDeployment: this.machineDeployment,
+        replicas: this.machineDeployment.spec?.replicas,
+        kubeletVersion: this.machineDeployment.spec?.template?.versions?.kubelet,
       },
     };
     this._matDialog.open(UpdateExternalClusterMachineDeploymentDialogComponent, dialogConfig);
