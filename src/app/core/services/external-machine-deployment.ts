@@ -129,6 +129,7 @@ export class ExternalMachineDeploymentService {
 
   create(projectID: string, clusterID: string, md: ExternalMachineDeployment): Observable<ExternalMachineDeployment> {
     const url = `${this._restRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/machinedeployments`;
+    console.log(md);    
     return this._httpClient
       .post<ExternalMachineDeployment>(url, md)
       .pipe(catchError(() => of<ExternalMachineDeployment>()));

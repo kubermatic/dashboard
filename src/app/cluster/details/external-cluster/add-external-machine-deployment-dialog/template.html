@@ -20,11 +20,17 @@ limitations under the License.
                              [projectID]="projectID"
                              [cluster]="cluster">
     </km-eks-cluster-settings>
+
     <km-aks-cluster-settings *ngIf="cluster.cloud.aks"
                              [cluster]="cluster"
                              [projectID]="projectID">
-
     </km-aks-cluster-settings>
+
+    <km-gke-cluster-settings *ngIf="cluster.cloud?.gke"
+                              [cluster]="cluster"
+                              [projectID]="projectID">
+    </km-gke-cluster-settings>
+
   </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-flat-button

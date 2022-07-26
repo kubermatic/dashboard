@@ -49,3 +49,8 @@ export class GCPSubnetwork {
   kind: string;
   path: string;
 }
+
+export class GCPImage {
+  name: string;
+  default?: boolean
+}

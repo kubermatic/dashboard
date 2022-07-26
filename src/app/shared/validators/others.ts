@@ -22,3 +22,4 @@ export const KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR = Validators.pattern(
   '^(?=.{1,63}$)[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'
 );
 export const AKS_POOL_NAME_VALIDATOR = Validators.pattern('[a-z0-9]{0,12}$');
+export const GKE_POOL_NAME_VALIDATOR = Validators.pattern('(?:[a-z](?:[-a-z0-9]{0,38}[a-z0-9])?)')
