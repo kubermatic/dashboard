@@ -13,29 +13,50 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-
 <km-dialog-title>
-  <div>Update Number of Replicas</div>
+  <div>Update Machine Deployment</div>
 </km-dialog-title>
+
 <mat-dialog-content>
   <p class="km-dialog-context-description">
     Update number of <b>{{data.machineDeployment.name}}</b> machine deployment replicas
   </p>
+
   <form [formGroup]="form"
-        id="replicas-form"
         fxLayout="column">
-    <km-number-stepper [formControlName]="control.Replicas"
-                       mode="errors"
+    <km-number-stepper [formControlName]="Controls.Replicas"
+                       mode="all"
                        label="Replicas"
                        min="1"
                        focus
-                       required>
+                       required
+                       [hint]="disableReplicaControl ? 'To update Replicas you must save or cancel your current changes.' : ''"
+                       [disabled]="disableReplicaControl">
     </km-number-stepper>
+
+    <mat-form-field class="kubelet-version">
+
+      <mat-label>Kubelet Version</mat-label>
+      <mat-select [formControlName]="Controls.KubeletVersion"
+                  required
+                  disableOptionCentering
+                  panelClass="km-add-dialog-dropdown">
+        <mat-option *ngFor="let version of versions"
+                    [value]="version">
+          {{ version }}
+        </mat-option>
+      </mat-select>
+
+      <mat-hint *ngIf="form.get(Controls.KubeletVersion).disabled">
+        To update Kubelet Version you must save or cancel your current changes.
+      </mat-hint>
+    </mat-form-field>
   </form>
 </mat-dialog-content>
+
 <mat-dialog-actions>
   <km-button icon="km-icon-check"
-             label="Update Number of Replicas"
+             label="Save Changes"
              [disabled]="form.invalid"
              [observable]="getObservable()"
              (next)="onNext($event)">

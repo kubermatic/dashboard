@@ -256,7 +256,7 @@ export class ExternalClusterService {
         return throwError(() => 'Not implemented');
     }
 
-    return this._http.post<ExternalCluster>(url, externalClusterModel, {headers}).pipe(catchError(() => of<null>()));
+    return this._http.post<ExternalCluster>(url, externalClusterModel, {headers}).pipe(catchError(() => of(null)));
   }
 
   showDisconnectClusterDialog(cluster: ExternalCluster, projectID: string): void {

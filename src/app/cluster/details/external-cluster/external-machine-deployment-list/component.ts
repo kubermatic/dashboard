@@ -27,8 +27,8 @@ import {GroupConfig} from '@shared/model/Config';
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {ReplicasDialogComponent} from '@app/cluster/details/external-cluster/replicas-dialog/component';
 import {ExternalMachineDeploymentService} from '@core/services/external-machine-deployment';
+import {UpdateExternalClusterMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/update-external-cluster-machine-deployment-dialog/component';
 
 @Component({
   selector: 'km-external-machine-deployment-list',
@@ -119,16 +119,18 @@ export class ExternalMachineDeploymentListComponent implements OnInit, OnChanges
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'machineDeployments', Permission.Delete);
   }
 
-  updateReplicas(md: ExternalMachineDeployment, event: Event): void {
+  updateMachineDeployment(md: ExternalMachineDeployment, event: Event): void {
     event.stopPropagation();
     const dialogConfig: MatDialogConfig = {
       data: {
         projectID: this.projectID,
         clusterID: this.cluster.id,
         machineDeployment: md,
+        replicas: md.spec?.replicas,
+        kubeletVersion: md.spec?.template?.versions?.kubelet,
       },
     };
-    this._matDialog.open(ReplicasDialogComponent, dialogConfig);
+    this._matDialog.open(UpdateExternalClusterMachineDeploymentDialogComponent, dialogConfig);
   }
 
   showDeleteDialog(md: ExternalMachineDeployment, event: Event): void {
