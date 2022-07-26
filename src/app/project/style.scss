@@ -17,7 +17,8 @@
 
 $view-switch-height: 45px;
 $view-switch-width: 50px;
-$project-card-height: 200px;
+$project-card-height-default: 200px;
+$project-card-height-extended: 263px;
 $project-card-width: 330px;
 
 .projects-spinner {
@@ -55,11 +56,17 @@ $project-card-width: 330px;
   }
 
   .mat-card {
-    @include mixins.size($project-card-width, $project-card-height, true);
-
     box-shadow: variables.$border-box-shadow;
     margin-top: 20px;
     padding: 0;
+
+    &.project-card-community {
+      @include mixins.size($project-card-width, $project-card-height-default, true);
+    }
+
+    &.project-card-enterprise {
+      @include mixins.size($project-card-width, $project-card-height-extended, true);
+    }
 
     button {
       &.mat-icon-button {

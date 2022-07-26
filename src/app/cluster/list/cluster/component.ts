@@ -44,6 +44,7 @@ import {catchError, distinctUntilChanged, switchMap, take, takeUntil, tap} from 
 import {ClusterDeleteConfirmationComponent} from '../../details/cluster/cluster-delete-confirmation/component';
 import {MachineDeploymentService} from '@core/services/machine-deployment';
 import {getClusterHealthStatus, HealthStatus} from '@shared/utils/health-status';
+import {QuotaWidgetComponent} from '../../../dynamic/enterprise/quotas/quota-widget/component';
 
 @Component({
   selector: 'km-cluster-list',
@@ -244,6 +245,10 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
             restore.status.phase === EtcdRestorePhase.Started || restore.status.phase === EtcdRestorePhase.StsRebuilding
         )
       : false;
+  }
+
+  onActivate(component: QuotaWidgetComponent): void {
+    component.projectId = this._selectedProject.id;
   }
 
   private _filter(cluster: Cluster, query: string): boolean {

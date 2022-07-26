@@ -21,12 +21,11 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {QuotasComponent} from './component';
+import {QuotaWidgetComponent} from './quota-widget/component';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: QuotasComponent,
-  },
+  {path: '', component: QuotasComponent},
+  {path: '', outlet: 'quota-widget', component: QuotaWidgetComponent},
 ];
 
 @NgModule({imports: [RouterModule.forChild(routes)]})

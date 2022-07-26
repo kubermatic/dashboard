@@ -20,12 +20,19 @@ import {ClusterDetailsComponent} from './details/cluster/component';
 import {MachineDeploymentDetailsComponent} from './details/cluster/machine-deployment-details/component';
 import {ExternalClusterDetailsComponent} from './details/external-cluster/component';
 import {ClustersComponent} from '@app/cluster/list/component';
+import {DynamicModule} from '../dynamic/module-registry';
 
 const routes: Routes = [
   {
     path: '',
     component: ClustersComponent,
     canActivate: [AuthGuard, AuthzGuard],
+    children: [
+      {
+        path: '',
+        loadChildren: () => DynamicModule.Quotas,
+      },
+    ],
   },
   {
     path: ':clusterName',

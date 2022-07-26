@@ -13,6 +13,8 @@
 // limitations under the License.
 
 import {Component, Input} from '@angular/core';
+import {ThemePalette} from '@angular/material/core';
+import {getPercentage} from '../../utils/common';
 
 @Component({
   selector: 'km-property-usage',
@@ -20,17 +22,14 @@ import {Component, Input} from '@angular/core';
   styleUrls: ['./style.scss'],
 })
 export class PropertyUsageComponent {
-  private readonly _maxUsage = 100;
-
   @Input() name: string;
   @Input() used: number;
   @Input() total: number;
   @Input() unit: string;
+  @Input() color: ThemePalette = 'primary';
 
   getPercentage(): number | undefined {
-    return this.used && this.total
-      ? Math.round(((this.used / this.total) * this._maxUsage + Number.EPSILON) * this._maxUsage) / this._maxUsage
-      : undefined;
+    return this.total && this.used ? getPercentage(this.total, this.used) : undefined;
   }
 
   getTooltip(): string {

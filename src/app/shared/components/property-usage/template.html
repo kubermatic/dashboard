@@ -23,6 +23,7 @@ limitations under the License.
       <mat-progress-bar *ngIf="total && used"
                         class="property-usage-bar"
                         mode="determinate"
+                        [color]="color"
                         [value]="getPercentage()"
                         [matTooltip]="getTooltip()"></mat-progress-bar>
       <div *ngIf="!total && used">{{used}} {{unit}}</div>

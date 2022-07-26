@@ -16,12 +16,19 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AuthGuard} from '@core/services/auth/guard';
 import {ProjectComponent} from './component';
+import {DynamicModule} from '../dynamic/module-registry';
 
 const routes: Routes = [
   {
     path: '',
     component: ProjectComponent,
     canActivate: [AuthGuard],
+    children: [
+      {
+        path: '',
+        loadChildren: () => DynamicModule.Quotas,
+      },
+    ],
   },
 ];
 

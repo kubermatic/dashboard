@@ -39,6 +39,8 @@ import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {EMPTY, merge, of} from 'rxjs';
 import {filter, finalize, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {ParamsService, PathParam} from '@core/services/params';
+import {QuotaWidgetComponent} from '../dynamic/enterprise/quotas/quota-widget/component';
 
 enum Controls {
   Name = 'name',
@@ -87,6 +89,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   operatingSystemProfiles: string[] = [];
   operatingSystemProfileValidators = [KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR];
   dialogEditMode = false;
+  projectId: string;
   endOfDynamicKubeletConfigSupportVersion: string = END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION;
   isLoadingOSProfiles: boolean;
 
@@ -113,12 +116,14 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     private readonly _settingsService: SettingsService,
     private readonly _osmService: OperatingSystemManagerService,
     private readonly _projectService: ProjectService,
+    private readonly _params: ParamsService,
     private readonly _cdr: ChangeDetectorRef
   ) {
     super();
   }
 
   ngOnInit(): void {
+    this.projectId = this._params.get(PathParam.ProjectID);
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control(this._nodeDataService.nodeData.name, [
         KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,
@@ -282,6 +287,11 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   onTaintsChange(taints: Taint[]): void {
     this.taints = taints;
     this._nodeDataService.taints = this.taints;
+  }
+
+  onActivate(component: QuotaWidgetComponent): void {
+    component.projectId = this.projectId;
+    component.showQuotaWidgetDetails = true;
   }
 
   private _init(): void {

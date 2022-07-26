@@ -1,0 +1,169 @@
+<!--
+               Kubermatic Enterprise Read-Only License
+                      Version 1.0 ("KERO-1.0”)
+                  Copyright © 2022 Kubermatic GmbH
+
+1. You may only view, read and display for studying purposes the source
+   code of the software licensed under this license, and, to the extent
+   explicitly provided under this license, the binary code.
+2. Any use of the software which exceeds the foregoing right, including,
+   without limitation, its execution, compilation, copying, modification
+   and distribution, is expressly prohibited.
+3. THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+   IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+   CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+   TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+   SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+END OF TERMS AND CONDITIONS
+-->
+
+<div class="km-quota-widget"
+     *ngIf="quotaDetails">
+  <ng-container *ngTemplateOutlet="showQuotaWidgetDetails ? quotaWidgetDetails : quotaWidget"></ng-container>
+</div>
+
+<ng-template #quotaWidget>
+  <mat-card *ngIf="showAsCard; else progressQuota">
+    <mat-card-content>
+      <ng-container *ngTemplateOutlet="progressQuota"></ng-container>
+    </mat-card-content>
+  </mat-card>
+
+  <ng-template #progressQuota>
+    <div fxLayout="row"
+         fxLayoutAlign=" center">
+      <i *ngIf="showIcon"
+         class="km-icon-mask km-icon-quota i-32"></i>
+
+      <ng-container *ngIf="quotaDetails.quota.cpu"
+                    [ngTemplateOutlet]="progressBar"
+                    [ngTemplateOutletContext]="{label: 'CPU', percentage: quotaPercentage.cpu}">
+      </ng-container>
+
+      <ng-container *ngIf="quotaDetails.quota.memory"
+                    [ngTemplateOutlet]="progressBar"
+                    [ngTemplateOutletContext]="{label: 'Memory', percentage: quotaPercentage.memory}">
+      </ng-container>
+
+      <ng-container *ngIf="quotaDetails.quota.storage"
+                    [ngTemplateOutlet]="progressBar"
+                    [ngTemplateOutletContext]=" {label: 'Disk', percentage: quotaPercentage.storage}">
+      </ng-container>
+    </div>
+
+    <mat-card class="km-detail-view"
+              *ngIf="showDetails$ | async">
+      <mat-card-content fxLayout="column">
+        <div class="km-detail-row">Project Quota</div>
+
+        <div class="km-detail-row"
+             *ngIf="quotaDetails.quota.cpu">
+          <span>CPU</span>
+          <span>{{quotaDetails.status.globalUsage.cpu ?? 0}}/{{quotaDetails.quota.cpu}}</span>
+        </div>
+
+        <div class="km-detail-row"
+             *ngIf="quotaDetails.quota.memory">
+          <span>Memory</span>
+          <span>{{quotaDetails.status.globalUsage.memory ?? 0}}/{{quotaDetails.quota.memory}}</span>
+        </div>
+
+        <div class="km-detail-row"
+             *ngIf="quotaDetails.quota.storage">
+          <span>Disk</span>
+          <span>{{quotaDetails.status.globalUsage.storage ?? 0}}/{{quotaDetails.quota.storage}}</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <ng-template #progressBar
+                 let-label="label"
+                 let-percentage="percentage">
+      <km-property class="km-quota-item"
+                   fxLayout="column"
+                   fxLayoutAlign="center center">
+        <div key>{{ label }}</div>
+        <mat-progress-bar value
+                          class="property-usage-bar"
+                          mode="determinate"
+                          [color]="getProgressBarAccent(percentage)"
+                          [value]="percentage ?? 1"
+                          [matTooltip]="percentage ? percentage + '%' : ''"></mat-progress-bar>
+      </km-property>
+    </ng-template>
+  </ng-template>
+</ng-template>
+
+<ng-template #quotaWidgetDetails>
+  <div class="km-extended-view"
+       fxLayout="row">
+    <div class="km-quota-heading"
+         fxLayout="row"
+         fxLayoutGap="5px"
+         fxLayoutAlign="center center">
+      <i class="km-icon-mask km-icon-quota i-32"></i>
+
+      <span>Project Quota</span>
+    </div>
+
+    <div class="km-quota-percentages"
+         fxLayout="row"
+         fxLayoutAlign="space-evenly center"
+         fxLayoutGap="10px">
+      <ng-container *ngIf="quotaDetails.quota.cpu"
+                    [ngTemplateOutlet]="extendedProgress"
+                    [ngTemplateOutletContext]="{
+      label: 'CPU',
+      total: quotaDetails.quota.cpu,
+      used: quotaDetails.status.globalUsage.cpu,
+      percentage: quotaPercentage.cpu
+      }"></ng-container>
+
+      <ng-container *ngIf="quotaDetails.quota.cpu"
+                    [ngTemplateOutlet]="extendedProgress"
+                    [ngTemplateOutletContext]="{
+      label: 'Memory',
+      unit: 'GB',
+      total: quotaDetails.quota.memory,
+      used: quotaDetails.status.globalUsage.memory,
+      percentage: quotaPercentage.memory
+      }"></ng-container>
+
+      <ng-container *ngIf="quotaDetails.quota.cpu"
+                    [ngTemplateOutlet]="extendedProgress"
+                    [ngTemplateOutletContext]="{
+      label: 'Storage',
+      unit: 'GB',
+      total: quotaDetails.quota.storage,
+      used: quotaDetails.status.globalUsage.storage,
+      percentage: quotaPercentage.storage
+      }"></ng-container>
+    </div>
+  </div>
+
+  <ng-template #extendedProgress
+               let-label="label"
+               let-percentage="percentage"
+               let-total="total"
+               let-used="used"
+               let-unit="unit">
+    <div fxLayout="column">
+      <km-property>
+        <div key>
+          <span fxFlex>{{label}}</span>
+          <span>{{used ?? 0}}/{{total}} {{unit}}</span>
+        </div>
+        <div value>
+          <mat-progress-bar class="property-usage-bar"
+                            mode="determinate"
+                            [color]="getProgressBarAccent(percentage)"
+                            [value]="percentage ?? 1"
+                            [matTooltip]="percentage ? percentage + '%' : ''"></mat-progress-bar>
+        </div>
+      </km-property>
+    </div>
+  </ng-template>
+</ng-template>

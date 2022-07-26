@@ -20,8 +20,8 @@
 
 import {Injectable, OnDestroy} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable, merge, timer, Subject} from 'rxjs';
-import {switchMap, shareReplay, map, takeUntil} from 'rxjs/operators';
+import {Observable, merge, timer, Subject, of} from 'rxjs';
+import {switchMap, shareReplay, map, takeUntil, catchError} from 'rxjs/operators';
 import {environment} from '@environments/environment';
 import {QuotaDetails, Quota, QuotaVariables} from '@shared/entity/quota';
 import {AppConfigService} from '../../../config.service';
@@ -44,7 +44,7 @@ export class QuotaService implements OnDestroy {
     if (!this._quotas$) {
       this._quotas$ = merge(this._refreshTimer$, this._quotasRefresh$).pipe(
         switchMap(() => this._getQuotas()),
-        shareReplay({refCount: true, bufferSize: 1}),
+        shareReplay(1),
         takeUntil(this._unsubscribe)
       );
     }
@@ -71,6 +71,16 @@ export class QuotaService implements OnDestroy {
 
   deleteQuota(quotaName: string): Observable<Record<string, never>> {
     return this._http.delete<Record<string, never>>(this._baseUrl + '/' + quotaName);
+  }
+
+  getProjectQuota(projectId: string): Observable<QuotaDetails> {
+    return this._refreshTimer$.pipe(
+      switchMap(_ =>
+        this._http.get<QuotaDetails>(`${this._newRestRoot}/projects/${projectId}/quota`).pipe(catchError(_ => of(null)))
+      ),
+      shareReplay(1),
+      takeUntil(this._unsubscribe)
+    );
   }
 
   private _getQuotas(): Observable<QuotaDetails[]> {

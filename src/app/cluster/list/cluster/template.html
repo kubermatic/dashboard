@@ -18,6 +18,11 @@ limitations under the License.
      fxLayoutAlign=" center">
   <km-search-field (queryChange)="onSearch($event)"></km-search-field>
   <div fxFlex></div>
+  <div fxLayoutAlign="center center">
+    <router-outlet name="quota-widget"
+                   (activate)="onActivate($event)"></router-outlet>
+  </div>
+
   <button mat-flat-button
           type="button"
           fxLayoutAlign="center center"
