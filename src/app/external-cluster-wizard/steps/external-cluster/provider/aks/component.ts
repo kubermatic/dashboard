@@ -39,7 +39,7 @@ import {
   AKSClusterSpec,
   AKSMachineDeploymentCloudSpec,
   AKSNodegroupScalingConfig,
-  AKSNoodPoolVersion,
+  AKSNodePoolVersionForMachineDeployments,
 } from '@shared/entity/provider/aks';
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR, AKS_POOL_NAME_VALIDATOR} from '@shared/validators/others';
 import {NodeDataService} from '@app/core/services/node-data/service';
@@ -97,9 +97,9 @@ export class AKSClusterSettingsComponent
   @Input() projectID: string;
   @Input() cluster: ExternalCluster;
   isLoadingVmSizes: boolean;
-  isLoadingNoodPoolVersions: boolean;
+  isLoadingNodePoolVersions: boolean;
   vmSizes: string[] = [];
-  kubernetesVersions: string[] = [];
+  nodePoolVersions: string[] = [];
 
   private readonly _debounceTime = 500;
 
@@ -174,22 +174,26 @@ export class AKSClusterSettingsComponent
 
   private _initSubscriptions(): void {
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
-      this.isDialogView() ? this._getExternalMachineDeployment() : this._updateExternalClusterModel();
+      this.isDialogView() ? this._updateExternalMachineDeployment() : this._updateExternalClusterModel();
       this._externalClusterService.isClusterDetailsStepValid = this.form.valid;
       this._externalMachineDeploymentService.isAddMachineDeploymentFormValid = this.form.valid;
     });
 
     if (this.isDialogView()) {
-      this.form.get(Controls.Name).clearValidators();
-      this.form.get(Controls.Location).removeValidators(Validators.required);
-      this.form.get(Controls.NodeResourceGroup).removeValidators(Validators.required);
-      this.form.get(Controls.Mode).enable();
-      this._getAKSVmSizesForCreateMachineDeployment(this.cluster.spec.aksclusterSpec.location).subscribe(vmSizes => {
-        this.vmSizes = vmSizes;
-      });
-      this._getAKSAvailableNoodPoolVersions().subscribe(versions => {
-        this.kubernetesVersions = versions.map(version => version.version);
-      });
+      this.control(Controls.Name).clearValidators();
+      this.control(Controls.Location).clearValidators();
+      this.control(Controls.NodeResourceGroup).clearValidators();
+      this.control(Controls.Mode).enable();
+      this._getAKSVmSizesForCreateMachineDeployment(this.cluster.spec.aksclusterSpec.location).subscribe(
+        (vmSizes: string[]) => {
+          this.vmSizes = vmSizes;
+        }
+      );
+      this._getAKSAvailableNodePoolVersionsForCreateMachineDeployment().subscribe(
+        (versions: AKSNodePoolVersionForMachineDeployments[]) => {
+          this.nodePoolVersions = versions.map(versions => versions.version);
+        }
+      );
     } else {
       this.control(Controls.Location)
         .valueChanges.pipe(debounceTime(this._debounceTime))
@@ -201,7 +205,7 @@ export class AKSClusterSettingsComponent
     }
   }
 
-  private _getAKSVmSizes(location?: string): Observable<string[]> {
+  private _getAKSVmSizes(location: string): Observable<string[]> {
     this.isLoadingVmSizes = true;
     return this._externalClusterService.getAKSVmSizes(location).pipe(
       takeUntil(this._unsubscribe),
@@ -211,18 +215,24 @@ export class AKSClusterSettingsComponent
 
   private _getAKSVmSizesForCreateMachineDeployment(location?: string): Observable<string[]> {
     this.isLoadingVmSizes = true;
-    return this._externalClusterService.getAKSVmSizesForCluster(location, this.projectID, this.cluster.id).pipe(
-      takeUntil(this._unsubscribe),
-      finalize(() => (this.isLoadingVmSizes = false))
-    );
+    return this._externalClusterService
+      .getAKSVmSizesForMachineDeployment(this.projectID, this.cluster.id, location)
+      .pipe(
+        takeUntil(this._unsubscribe),
+        finalize(() => (this.isLoadingVmSizes = false))
+      );
   }
 
-  private _getAKSAvailableNoodPoolVersions(): Observable<AKSNoodPoolVersion[]> {
-    this.isLoadingNoodPoolVersions = true;
-    return this._externalClusterService.getAKSAvailableNoodPoolVersions(this.projectID, this.cluster.id).pipe(
-      takeUntil(this._unsubscribe),
-      finalize(() => (this.isLoadingNoodPoolVersions = false))
-    );
+  private _getAKSAvailableNodePoolVersionsForCreateMachineDeployment(): Observable<
+    AKSNodePoolVersionForMachineDeployments[]
+  > {
+    this.isLoadingNodePoolVersions = true;
+    return this._externalClusterService
+      .getAKSAvailableNodePoolVersionsForMachineDeployment(this.projectID, this.cluster.id)
+      .pipe(
+        takeUntil(this._unsubscribe),
+        finalize(() => (this.isLoadingNodePoolVersions = false))
+      );
   }
 
   private _updateExternalClusterModel(): void {
@@ -264,7 +274,7 @@ export class AKSClusterSettingsComponent
     this._externalClusterService.externalCluster = config;
   }
 
-  private _getExternalMachineDeployment(): void {
+  private _updateExternalMachineDeployment(): void {
     const config = {
       name: this.controlValue(Controls.NodePoolName),
       cloud: {
@@ -281,7 +291,7 @@ export class AKSClusterSettingsComponent
     } as ExternalMachineDeployment;
 
     if (this.controlValue(Controls.EnableAutoScaling)) {
-      config.cloud.aks.basicSettings['scalingConfig'] = {
+      config.cloud.aks.basicSettings.scalingConfig = {
         maxCount: this.controlValue(Controls.MaxCount),
         minCount: this.controlValue(Controls.MinCount),
       } as AKSNodegroupScalingConfig;

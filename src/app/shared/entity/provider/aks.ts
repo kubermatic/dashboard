@@ -91,6 +91,6 @@ export class AKSNetworkProfile {
   loadBalancerSku?: string;
 }
 
-export class AKSNoodPoolVersion {
+export class AKSNodePoolVersionForMachineDeployments {
   version: string;
 }

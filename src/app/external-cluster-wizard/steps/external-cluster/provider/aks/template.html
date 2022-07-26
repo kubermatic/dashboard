@@ -20,11 +20,10 @@ limitations under the License.
       fxLayoutGap.md="30px"
       fxLayout.sm="column"
       fxLayoutGap.sm="30px">
-  <div [fxFlex]="isDialogView() ? '100%' : '50%'"
-       fxLayout="column"
-       fxLayoutGap="8px">
-
-    <ng-container *ngIf="!isDialogView()">
+  <ng-container *ngIf="!isDialogView()">
+    <div [fxFlex]="isDialogView() ? '100%' : '50%'"
+         fxLayout="column"
+         fxLayoutGap="8px">
 
       <mat-card-header class="km-no-padding">
         <mat-card-title>Cluster</mat-card-title>
@@ -96,8 +95,8 @@ limitations under the License.
           Resource Group is <strong>required</strong>.
         </mat-error>
       </mat-form-field>
-    </ng-container>
-  </div>
+    </div>
+  </ng-container>
 
   <div fxFlex="50%"
        fxLayout="column"
@@ -117,7 +116,7 @@ limitations under the License.
         Node Pool Name is <strong>required</strong>.
       </mat-error>
       <mat-error *ngIf="form.get(Controls.NodePoolName).hasError(ErrorType.Pattern)">
-        Node pool name must contain only lowercase letters and numbers, must be 12 or fewer characters.</mat-error>
+        Node Pool Name must contain only lowercase letters and numbers, must be 12 or fewer characters.</mat-error>
     </mat-form-field>
 
     <km-autocomplete label="VM Size"
@@ -132,12 +131,20 @@ limitations under the License.
            rel="noopener noreferrer"
            target="_blank">supported versions</a>.
       </ng-container>
+      <ng-container *ngIf="isDialogView()"
+                    hint>
+        set the VM Size for this Node.
+      </ng-container>
     </km-autocomplete>
 
-    <km-autocomplete label="Kubernetes Version"
-                     required="trtue"
-                     [options]="kubernetesVersions"
+    <km-autocomplete *ngIf="isDialogView()"
+                     label="Kubernetes Version"
+                     required="true"
+                     [options]="nodePoolVersions"
                      [formControlName]="Controls.KubernetesVersion">
+      <ng-container hint>
+        Set the kubernetes version.
+      </ng-container>
     </km-autocomplete>
 
     <km-number-stepper [formControlName]="Controls.Count"
@@ -151,7 +158,7 @@ limitations under the License.
                        [max]="form.get(Controls.MaxCount).value">
     </km-number-stepper>
 
-    <label class="km-radio-group-label">Select a Mode</label>
+    <label class="km-radio-group-label">Select Mode</label>
     <mat-radio-group fxFlex
                      fxLayout="column"
                      class="km-radio-group"
