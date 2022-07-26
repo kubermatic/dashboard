@@ -23,17 +23,23 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormArray, FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {MatDialog} from '@angular/material/dialog';
+import {FlavorDetailsDialogComponent} from '@app/node-data/basic/provider/kubevirt/flavor-details/component';
 import {NodeDataService} from '@core/services/node-data/service';
-import {Observable} from 'rxjs';
-import {map, takeUntil} from 'rxjs/operators';
-import {KubeVirtNodeSpec, KubeVirtSecondaryDisk, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
+import {ComboboxControls, FilteredComboboxComponent} from '@shared/components/combobox/component';
+import {
+  KubeVirtNodeAffinityPreset,
+  KubeVirtNodeSpec,
+  KubeVirtSecondaryDisk,
+  NodeCloudSpec,
+  NodeSpec,
+} from '@shared/entity/node';
+import {KubeVirtAffinityPreset, KubeVirtStorageClass, KubeVirtVMInstancePreset} from '@shared/entity/provider/kubevirt';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
-import {KubeVirtStorageClass, KubeVirtVMInstancePreset} from '@shared/entity/provider/kubevirt';
-import {ComboboxControls, FilteredComboboxComponent} from '@shared/components/combobox/component';
-import {MatDialog} from '@angular/material/dialog';
-import {FlavorDetailsDialogComponent} from '@app/node-data/basic/provider/kubevirt/flavor-details/component';
+import {Observable} from 'rxjs';
+import {map, takeUntil} from 'rxjs/operators';
 
 enum Controls {
   VMFlavor = 'vmFlavor',
@@ -45,6 +51,11 @@ enum Controls {
   SecondaryDisks = 'secondaryDisks',
   SecondaryDiskStorageClass = 'secondaryDiskStorageClass',
   SecondaryDiskSize = 'secondaryDiskSize',
+  PodAffinityPreset = 'podAffinityPreset',
+  PodAntiAffinityPreset = 'podAntiAffinityPreset',
+  NodeAffinityPreset = 'nodeAffinityPreset',
+  NodeAffinityPresetKey = 'nodeAffinityPresetKey',
+  NodeAffinityPresetValues = 'nodeAffinityPresetValues',
 }
 
 enum FlavorsState {
@@ -86,6 +97,7 @@ export class KubeVirtBasicNodeDataComponent
   private _storageClassCombobox: FilteredComboboxComponent;
   readonly Controls = Controls;
   readonly maxSecondaryDisks = 3;
+  readonly affinityPresetOptions = [KubeVirtAffinityPreset.Hard, KubeVirtAffinityPreset.Soft];
   private readonly _defaultCPUs = 2;
   private readonly _defaultMemory = 2048;
   private readonly _initialData = _.cloneDeep(this._nodeDataService.nodeData.spec.cloud.kubevirt);
@@ -95,6 +107,7 @@ export class KubeVirtBasicNodeDataComponent
   storageClasses: KubeVirtStorageClass[] = [];
   selectedStorageClass = '';
   storageClassLabel = StorageClassState.Empty;
+  nodeAffinityPresetValues: string[] = [];
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -114,7 +127,31 @@ export class KubeVirtBasicNodeDataComponent
       [Controls.PrimaryDiskStorageClassName]: this._builder.control('', Validators.required),
       [Controls.PrimaryDiskSize]: this._builder.control('10', Validators.required),
       [Controls.SecondaryDisks]: this._builder.array([]),
+      [Controls.PodAffinityPreset]: this._builder.control(''),
+      [Controls.PodAntiAffinityPreset]: this._builder.control(''),
+      [Controls.NodeAffinityPreset]: this._builder.control(''),
+      [Controls.NodeAffinityPresetKey]: this._builder.control(''),
+      [Controls.NodeAffinityPresetValues]: this._builder.control(''),
     });
+
+    this.form.get(Controls.NodeAffinityPresetKey).disable();
+    this.form.get(Controls.NodeAffinityPresetValues).disable();
+
+    this.form
+      .get(Controls.NodeAffinityPreset)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(value => {
+        if (value) {
+          this.form.get(Controls.NodeAffinityPresetKey).enable();
+          this.form.get(Controls.NodeAffinityPresetValues).enable();
+        } else {
+          this.form.get(Controls.NodeAffinityPresetKey).reset();
+          this.form.get(Controls.NodeAffinityPresetKey).disable();
+          this.form.get(Controls.NodeAffinityPresetValues).reset();
+          this.form.get(Controls.NodeAffinityPresetValues).disable();
+          this.nodeAffinityPresetValues = [];
+        }
+      });
 
     this._init();
     this._nodeDataService.nodeData = this._getNodeData();
@@ -185,6 +222,22 @@ export class KubeVirtBasicNodeDataComponent
     });
   }
 
+  resetPodAffinityPresetControl(): void {
+    this.form.get(Controls.PodAffinityPreset).reset();
+  }
+
+  resetPodAntiAffinityPresetControl(): void {
+    this.form.get(Controls.PodAntiAffinityPreset).reset();
+  }
+
+  resetNodeAffinityPresetControl(): void {
+    this.form.get(Controls.NodeAffinityPreset).reset();
+  }
+
+  onNodeAffinityPresetValuesChange(values: string[]): void {
+    this.nodeAffinityPresetValues = values;
+  }
+
   private get _flavorsObservable(): Observable<KubeVirtVMInstancePreset[]> {
     return this._nodeDataService.kubeVirt
       .vmFlavors(this._clearFlavor.bind(this), this._onFlavorLoading.bind(this))
@@ -253,6 +306,11 @@ export class KubeVirtBasicNodeDataComponent
       this.form.get(Controls.CPUs).setValue(parseInt(this._initialData.cpus) || this._defaultCPUs);
       this.form.get(Controls.PrimaryDiskSize).setValue(this._initialData.primaryDiskSize);
       this.form.get(Controls.PrimaryDiskOSImage).setValue(this._initialData.primaryDiskOSImage);
+      this.form.get(Controls.PodAffinityPreset).setValue(this._initialData.podAffinityPreset);
+      this.form.get(Controls.PodAntiAffinityPreset).setValue(this._initialData.podAntiAffinityPreset);
+      this.form.get(Controls.NodeAffinityPreset).setValue(this._initialData.nodeAffinityPreset?.Type);
+      this.form.get(Controls.NodeAffinityPresetKey).setValue(this._initialData.nodeAffinityPreset?.Key);
+      this.nodeAffinityPresetValues = this._initialData.nodeAffinityPreset?.Values || [];
     }
   }
 
@@ -261,6 +319,14 @@ export class KubeVirtBasicNodeDataComponent
     const cpus = this.form.get(Controls.CPUs).value;
     const memory = this.form.get(Controls.Memory).value;
     const secondaryDisks = this._secondaryDisks;
+    const nodeAffinityPreset = this.form.get(Controls.NodeAffinityPreset).value;
+    const nodeAffinityPresetData: KubeVirtNodeAffinityPreset = !nodeAffinityPreset
+      ? null
+      : {
+          Type: nodeAffinityPreset,
+          Key: this.form.get(Controls.NodeAffinityPresetKey).value,
+          Values: this.nodeAffinityPresetValues,
+        };
 
     return {
       spec: {
@@ -275,6 +341,9 @@ export class KubeVirtBasicNodeDataComponent
             ],
             primaryDiskSize: `${this.form.get(Controls.PrimaryDiskSize).value}Gi`,
             secondaryDisks: secondaryDisks?.length ? secondaryDisks : null,
+            podAffinityPreset: this.form.get(Controls.PodAffinityPreset).value,
+            podAntiAffinityPreset: this.form.get(Controls.PodAntiAffinityPreset).value,
+            nodeAffinityPreset: nodeAffinityPresetData,
           } as KubeVirtNodeSpec,
         } as NodeCloudSpec,
       } as NodeSpec,

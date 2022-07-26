@@ -21,3 +21,8 @@ export class KubeVirtVMInstancePreset {
 export class KubeVirtStorageClass {
   name: string;
 }
+
+export enum KubeVirtAffinityPreset {
+  Hard = 'hard',
+  Soft = 'soft',
+}
