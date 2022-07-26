@@ -117,6 +117,10 @@ export class EKSClusterSettingsComponent
   }
 
   private _initForm(): void {
+    const DEFAULT_MD_DISKSIZE = 20;
+    const DEFAULT_MD_MAXSIZE = 1;
+    const DEFAULT_MD_MINSIZE = 1;
+    const DEFAULT_MD_DESIRED_SIZE = 1;
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control('', [Validators.required, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR]),
       [Controls.RoleArn]: this._builder.control('', Validators.required),
@@ -124,17 +128,17 @@ export class EKSClusterSettingsComponent
       [Controls.Vpc]: this._builder.control(null, Validators.required),
       [Controls.SubnetIds]: this._builder.control([], Validators.required),
       [Controls.SecurityGroupsIds]: this._builder.control([], Validators.required),
-      [Controls.DiskSize]: this._builder.control('20'),
-      [Controls.MaxSize]: this._builder.control('1'),
-      [Controls.MinSize]: this._builder.control('1'),
-      [Controls.DesiredSize]: this._builder.control('1'),
+      [Controls.DiskSize]: this._builder.control(DEFAULT_MD_DISKSIZE),
+      [Controls.MaxSize]: this._builder.control(DEFAULT_MD_MAXSIZE),
+      [Controls.MinSize]: this._builder.control(DEFAULT_MD_MINSIZE),
+      [Controls.DesiredSize]: this._builder.control(DEFAULT_MD_DESIRED_SIZE),
     });
   }
 
   private _initSubscriptions(): void {
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
       this._updateExternalClusterModel();
-      this._getExternalMachineDeployment();
+      this._updateExternalMachineDeployment();
       this.maxNodeCount = this.controlValue(Controls.MaxSize);
       this.minNodeCount = this.controlValue(Controls.MinSize);
       this._externalClusterService.isClusterDetailsStepValid = this.form.valid;
@@ -163,7 +167,7 @@ export class EKSClusterSettingsComponent
       this.control(Controls.Vpc).disable();
 
       this._externalClusterService
-        .getEKSSubnetsForCluster(this.control(Controls.Vpc).value, this.projectID, this.cluster.id)
+        .getEKSSubnetsForCreateMachineDeployment(this.projectID, this.cluster.id, this.control(Controls.Vpc).value)
         .subscribe(data => {
           this.subnetIds = data;
         });
@@ -234,7 +238,7 @@ export class EKSClusterSettingsComponent
     } as ExternalClusterModel;
   }
 
-  private _getExternalMachineDeployment(): void {
+  private _updateExternalMachineDeployment(): void {
     this._externalMachineDeploymentService.externalMachineDeployment = {
       name: this.controlValue(Controls.Name),
       cloud: {

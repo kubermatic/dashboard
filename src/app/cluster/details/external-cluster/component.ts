@@ -203,7 +203,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
     this._externalMachineDeploymentService
       .showCreateExternalClusterMachineDeploymentDialog(this.projectID, this.cluster)
       .subscribe(data => {
-        this._notificationService.success(`the ${data.name} Machine Deployment been created`);
+        this._notificationService.success(`${data.name} Machine Deployment been created`);
       });
   }
 }

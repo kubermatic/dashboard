@@ -12,12 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, Inject, OnInit} from '@angular/core';
+import {Component, forwardRef, Inject} from '@angular/core';
 import {BaseFormValidator} from '@app/shared/validators/base-form.validator';
-import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {DialogDataOutput} from '@app/node-data/dialog/component';
-import {ExternalMachineDeployment} from '@app/shared/entity/external-machine-deployment';
 import {ExternalMachineDeploymentService} from '@app/core/services/external-machine-deployment';
 import {ExternalCluster} from '@app/shared/entity/external-cluster';
 
@@ -46,35 +44,24 @@ interface AddExternalMachineDeploymentDialogConfig {
     },
   ],
 })
-export class AddExternalMachineDeploymentDialogComponent extends BaseFormValidator implements OnInit {
+export class AddExternalMachineDeploymentDialogComponent extends BaseFormValidator {
+  readonly Controls = Controls;
   projectID = this._data.projectId;
   cluster = this._data.clusterData;
-  readonly Controls = Controls;
-  private _output: DialogDataOutput = {
-    externalMachineDeploymentData: ExternalMachineDeployment.NewEmptyMachineDeployment(),
-  } as DialogDataOutput;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) private _data: AddExternalMachineDeploymentDialogConfig,
-    private readonly _builder: FormBuilder,
     private readonly _externalMachineDeploymentService: ExternalMachineDeploymentService,
-    private _dialogRef: MatDialogRef<AddExternalMachineDeploymentDialogComponent>
+    private readonly _dialogRef: MatDialogRef<AddExternalMachineDeploymentDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) private _data: AddExternalMachineDeploymentDialogConfig
   ) {
     super();
   }
 
-  get formDialogValid(): boolean {
+  get isFormValid(): boolean {
     return this._externalMachineDeploymentService.isAddMachineDeploymentFormValid;
   }
 
-  ngOnInit(): void {
-    this.form = this._builder.group({
-      [Controls.MachineDeploymentData]: this._builder.control(''),
-    });
-  }
-
   onConfirm(): void {
-    this._output = {externalMachineDeploymentData: this._externalMachineDeploymentService.externalMachineDeployment};
-    this._dialogRef.close(this._output);
+    this._dialogRef.close(this._externalMachineDeploymentService.externalMachineDeployment);
   }
 }

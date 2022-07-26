@@ -23,7 +23,7 @@ import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialo
 import {ExternalCluster} from '@shared/entity/external-cluster';
 import {ExternalMachineDeployment, ExternalMachineDeploymentPatch} from '@shared/entity/external-machine-deployment';
 import {MasterVersion} from '@shared/entity/cluster';
-import {AddExternalMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/add-external-machine-deployment-dialog/component';
+import {AddExternalMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/external-cluster-add-machine-deployment/component';
 
 @Injectable()
 export class ExternalMachineDeploymentService {
@@ -89,7 +89,7 @@ export class ExternalMachineDeploymentService {
       .pipe(filter(data => !!data))
       .pipe(
         switchMap(data => {
-          return this.create(projectID, cluster.id, data.externalMachineDeploymentData);
+          return this.create(projectID, cluster.id, data);
         })
       );
   }

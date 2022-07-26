@@ -71,7 +71,7 @@ limitations under the License.
     </mat-form-field>
 
     <mat-form-field>
-      <mat-label>Cluster service role</mat-label>
+      <mat-label>Cluster Service Role</mat-label>
       <input matInput
              type="text"
              autocomplete="off"
@@ -101,7 +101,7 @@ limitations under the License.
     </km-autocomplete>
 
     <mat-form-field *ngIf="isDialogView()">
-      <mat-label>Vpc</mat-label>
+      <mat-label>VPC</mat-label>
       <input matInput
              type="text"
              autocomplete="off"
@@ -139,13 +139,13 @@ limitations under the License.
       </km-number-stepper>
       <km-number-stepper [formControlName]="Controls.MaxSize"
                          mode="errors"
-                         label="Max count"
+                         label="Max Count"
                          [min]="minNodeCount"
                          required>
       </km-number-stepper>
       <km-number-stepper [formControlName]="Controls.MinSize"
                          mode="errors"
-                         label="Min count"
+                         label="Min Count"
                          min="1"
                          [max]="maxNodeCount"
                          required>
