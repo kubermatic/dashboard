@@ -23,7 +23,7 @@ import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialo
 import {ExternalCluster} from '@shared/entity/external-cluster';
 import {ExternalMachineDeployment, ExternalMachineDeploymentPatch} from '@shared/entity/external-machine-deployment';
 import {MasterVersion} from '@shared/entity/cluster';
-import {AddExternalMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/external-cluster-add-machine-deployment/component';
+import {ExternalAddMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/external-cluster-add-machine-deployment/component';
 
 @Injectable()
 export class ExternalMachineDeploymentService {
@@ -64,7 +64,7 @@ export class ExternalMachineDeploymentService {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/machinedeployments/${machineDeploymentID}`;
     return this._httpClient.patch<ExternalMachineDeployment>(url, patch);
   }
-  
+
   get isAddMachineDeploymentFormValid(): boolean {
     return this._isAddMachineDeploymentFormValid;
   }
@@ -83,12 +83,12 @@ export class ExternalMachineDeploymentService {
         clusterData: cluster,
       },
     };
-    const dialogRef = this._matDialog.open(AddExternalMachineDeploymentDialogComponent, dialogConfig);
+    const dialogRef = this._matDialog.open(ExternalAddMachineDeploymentDialogComponent, dialogConfig);
     return dialogRef
       .afterClosed()
       .pipe(filter(data => !!data))
       .pipe(
-        switchMap(data => {
+        switchMap((data: ExternalMachineDeployment) => {
           return this.create(projectID, cluster.id, data);
         })
       );

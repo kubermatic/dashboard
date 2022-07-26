@@ -16,7 +16,7 @@ import {NgModule} from '@angular/core';
 import {AddMachineNetworkComponent} from '@app/cluster/details/cluster/add-machine-network/component';
 import {AnexiaProviderSettingsComponent} from '@app/cluster/details/cluster/edit-provider-settings/anexia-provider-settings/component';
 import {ExternalMachineDeploymentDetailsComponent} from '@app/cluster/details/external-cluster/external-machine-deployment-details/component';
-import {AddExternalMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/external-cluster-add-machine-deployment/component';
+import {ExternalAddMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/external-cluster-add-machine-deployment/component';
 import {ExternalMachineDeploymentListComponent} from '@app/cluster/details/external-cluster/external-machine-deployment-list/component';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '@app/node-data/config';
 import {NodeDataModule} from '@app/node-data/module';
@@ -80,7 +80,7 @@ const components: any[] = [
   ExternalNodeListComponent,
   ExternalMachineDeploymentListComponent,
   ExternalMachineDeploymentDetailsComponent,
-  AddExternalMachineDeploymentDialogComponent,
+  ExternalAddMachineDeploymentDialogComponent,
   NodeListComponent,
   MachineDeploymentListComponent,
   MachineDeploymentDetailsComponent,

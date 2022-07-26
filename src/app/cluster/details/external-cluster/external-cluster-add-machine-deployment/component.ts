@@ -19,40 +19,35 @@ import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {ExternalMachineDeploymentService} from '@app/core/services/external-machine-deployment';
 import {ExternalCluster} from '@app/shared/entity/external-cluster';
 
-enum Controls {
-  MachineDeploymentData = 'machineDeploymentData',
-}
-
-interface AddExternalMachineDeploymentDialogConfig {
+interface ExternalAddMachineDeploymentDialogConfig {
   projectId: string;
   clusterData: ExternalCluster;
 }
 
 @Component({
-  selector: 'km-add-external-machine-deployment-dialog',
+  selector: 'km-external-add-machine-deployment-dialog',
   templateUrl: './template.html',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => AddExternalMachineDeploymentDialogComponent),
+      useExisting: forwardRef(() => ExternalAddMachineDeploymentDialogComponent),
       multi: true,
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => AddExternalMachineDeploymentDialogComponent),
+      useExisting: forwardRef(() => ExternalAddMachineDeploymentDialogComponent),
       multi: true,
     },
   ],
 })
-export class AddExternalMachineDeploymentDialogComponent extends BaseFormValidator {
-  readonly Controls = Controls;
+export class ExternalAddMachineDeploymentDialogComponent extends BaseFormValidator {
   projectID = this._data.projectId;
   cluster = this._data.clusterData;
 
   constructor(
     private readonly _externalMachineDeploymentService: ExternalMachineDeploymentService,
-    private readonly _dialogRef: MatDialogRef<AddExternalMachineDeploymentDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) private _data: AddExternalMachineDeploymentDialogConfig
+    private readonly _dialogRef: MatDialogRef<ExternalAddMachineDeploymentDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) private _data: ExternalAddMachineDeploymentDialogConfig
   ) {
     super();
   }

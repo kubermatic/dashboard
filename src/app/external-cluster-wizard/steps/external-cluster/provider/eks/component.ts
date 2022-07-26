@@ -168,7 +168,7 @@ export class EKSClusterSettingsComponent
 
       this._externalClusterService
         .getEKSSubnetsForCreateMachineDeployment(this.projectID, this.cluster.id, this.control(Controls.Vpc).value)
-        .subscribe(data => {
+        .subscribe((data: string[]) => {
           this.subnetIds = data;
         });
     }
