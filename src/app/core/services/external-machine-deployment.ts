@@ -89,7 +89,7 @@ export class ExternalMachineDeploymentService {
       .pipe(filter(data => !!data))
       .pipe(
         switchMap(data => {
-          return this.create(projectID, cluster.id, data.externalMachineDeploymentData);
+          return this.create(projectID, cluster.id, data);
         })
       );
   }
