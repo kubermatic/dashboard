@@ -19,13 +19,13 @@
 // END OF TERMS AND CONDITIONS
 
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {Component, OnInit, OnDestroy, Inject} from '@angular/core';
+import {Component, OnInit, OnDestroy, Inject, ChangeDetectorRef} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {takeUntil, filter, tap} from 'rxjs/operators';
+import {takeUntil, filter, tap, distinctUntilChanged} from 'rxjs/operators';
 import {Observable, Subject, of} from 'rxjs';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
-import {QuotaService} from '@core/services/quota';
+import {QuotaService} from '../service';
 import {QuotaVariables, QuotaDetails, Quota} from '@shared/entity/quota';
 import {KmValidators} from '@shared/validators/validators';
 import {ControlsOf} from '@shared/model/shared';
@@ -58,6 +58,7 @@ export class ProjectQuotaDialogComponent implements OnInit, OnDestroy {
     private readonly _notificationService: NotificationService,
     private readonly _projectService: ProjectService,
     private readonly _quotaService: QuotaService,
+    private readonly _cdr: ChangeDetectorRef,
     private readonly _builder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public readonly editQuota: QuotaDetails
   ) {}
@@ -168,5 +169,17 @@ export class ProjectQuotaDialogComponent implements OnInit, OnDestroy {
         this.selectedProject = this.projects.find(({id}) => id === projectId);
         this.selectedQuota = this._quotas.find(({subjectName}) => subjectName === projectId);
       });
+
+    this.quotaGroup.statusChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this._cdr.detectChanges());
+
+    Object.values(this.quotaGroup.controls).forEach(control => {
+      control.valueChanges
+        .pipe(
+          distinctUntilChanged(),
+          filter(value => value === 0),
+          takeUntil(this._unsubscribe)
+        )
+        .subscribe(_ => control.setValue(null));
+    });
   }
 }

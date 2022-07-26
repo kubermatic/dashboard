@@ -64,6 +64,7 @@ export class NumberStepperComponent implements AfterViewInit, OnDestroy, Control
   private readonly _unsubscribe = new Subject<void>();
   private readonly _integerPattern = /^[-]?[0-9]*$/;
   @ViewChild('input') private readonly _model: NgModel;
+  onTouch: () => void = noop;
   private _onChange: (_: number | string) => void = noop;
   private _valid = false;
   @Input() label: string;
@@ -160,7 +161,9 @@ export class NumberStepperComponent implements AfterViewInit, OnDestroy, Control
     this._onChange = fn;
   }
 
-  registerOnTouched(_fn: () => void): void {}
+  registerOnTouched(_fn: () => void): void {
+    this.onTouch = _fn;
+  }
 
   validate(_?: AbstractControl): ValidationErrors | null {
     if (this._valid) {
@@ -171,19 +174,23 @@ export class NumberStepperComponent implements AfterViewInit, OnDestroy, Control
   }
 
   onIncrease(): void {
-    if (this.max !== undefined && +this._value + +this.step > this.max) {
+    this.onTouch();
+
+    if (this.max !== undefined && +(this._value ?? 0) + +this.step > this.max) {
       return;
     }
 
-    this.value = +this._value + +this.step;
+    this.value = +(this._value ?? this.min ?? 0) + +this.step;
   }
 
   onDecrease(): void {
-    if (this.min !== undefined && +this._value - +this.step < this.min) {
+    this.onTouch();
+
+    if (this.min !== undefined && +(this._value ?? 0) - +this.step < this.min) {
       return;
     }
 
-    this.value = +this._value - +this.step;
+    this.value = +(this._value ?? this.min ?? 0) - +this.step;
   }
 
   private _getErrors(): ValidationErrors {

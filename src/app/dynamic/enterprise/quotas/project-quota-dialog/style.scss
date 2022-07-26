@@ -26,9 +26,12 @@
   align-self: center;
   font-size: 75%;
   position: relative;
-  top: -25px;
 
   &.hidden {
     visibility: hidden;
   }
+}
+
+.km-project-name {
+  margin-top: 9px;
 }

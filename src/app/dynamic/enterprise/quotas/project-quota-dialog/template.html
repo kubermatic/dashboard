@@ -30,44 +30,45 @@ END OF TERMS AND CONDITIONS
           fxLayout="column"
           fxLayoutAlign="space-between stretch"
           fxLayoutGap="5px">
-      <div class="quota-inputs"
+      <div class="km-quota-inputs"
            fxLayout="row"
            fxLayoutGap="5px"
            fxLayoutAlign="space-between center">
-        <mat-form-field *ngIf="quotaGroup.controls.cpu as control">
-          <mat-label>CPU</mat-label>
-          <input matInput
-                 [formControl]="control"
-                 [required]="control.touched && quotaGroup.hasError(Error.AtLeastOneRequired)"
-                 type="text" />
-        </mat-form-field>
 
-        <mat-form-field *ngIf="quotaGroup.controls.memory as control">
-          <mat-label>RAM</mat-label>
-          <input matInput
-                 [formControl]="control"
-                 [required]="control.touched && quotaGroup.hasError(Error.AtLeastOneRequired)"
-                 type="text" />
-        </mat-form-field>
+        <km-number-stepper id="km-cpu-input"
+                           label="CPU"
+                           min="0"
+                           [formControl]="quotaGroup.controls.cpu"
+                           [required]="quotaGroup.hasError(Error.AtLeastOneRequired)">
+        </km-number-stepper>
 
-        <mat-form-field *ngIf="quotaGroup.controls.storage as control">
-          <mat-label>Disk</mat-label>
-          <input matInput
-                 [formControl]="control"
-                 [required]="control.touched && quotaGroup.hasError(Error.AtLeastOneRequired)"
-                 type="text" />
-        </mat-form-field>
+        <km-number-stepper id="km-memory-input"
+                           label="Memory (GB)"
+                           min="0"
+                           type="decimal"
+                           [formControl]="quotaGroup.controls.memory"
+                           [required]="quotaGroup.hasError(Error.AtLeastOneRequired)">
+        </km-number-stepper>
+
+        <km-number-stepper id="km-storage-input"
+                           label="Disk (GB)"
+                           min="0"
+                           type="decimal"
+                           [formControl]="quotaGroup.controls.storage"
+                           [required]="quotaGroup.hasError(Error.AtLeastOneRequired)">
+        </km-number-stepper>
       </div>
 
       <mat-error class="quotas-error"
                  [class.hidden]="!quotaGroup.hasError(Error.AtLeastOneRequired) || !quotaGroup.touched">
-        At least one limit (CPU, RAM or Disk) is <strong>required</strong>
+        At least one limit (CPU, Memory or Disk) is <strong>required</strong>
       </mat-error>
     </form>
 
     <div fxLayout="column"
          fxLayoutAlign=" stretch">
-      <mat-form-field class="km-dropdown-with-suffix">
+      <mat-form-field class="km-dropdown-with-suffix"
+                      *ngIf="!editQuota; else editMode">
         <mat-label>Project</mat-label>
         <mat-select disableOptionCentering
                     class="km-select-ellipsis"
@@ -96,9 +97,18 @@ END OF TERMS AND CONDITIONS
 </mat-dialog-content>
 <mat-dialog-actions>
   <km-button id="km-add-quota-dialog-save-btn"
-             icon="km-icon-add"
-             label="{{ selectedQuota ? 'Edit' : 'Add' }} Project Quota"
+             [icon]="selectedQuota ? 'km-icon-edit' : 'km-icon-add'"
+             label="{{ selectedQuota ? 'Save Changes' : 'Add Project Quota' }}"
              [disabled]="form.invalid"
              [observable]="getObservable()">
   </km-button>
 </mat-dialog-actions>
+
+<ng-template #editMode>
+  <km-property>
+    <div key>Project</div>
+    <div value
+         class="km-project-name">{{ editQuota?.subjectHumanReadableName ?? editQuota?.subjectName }}</div>
+  </km-property>
+
+</ng-template>

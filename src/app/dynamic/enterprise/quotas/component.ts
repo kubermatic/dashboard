@@ -21,11 +21,11 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
-import {MatDialog} from '@angular/material/dialog';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatSort} from '@angular/material/sort';
-import {takeUntil, filter} from 'rxjs/operators';
-import {Subject, lastValueFrom} from 'rxjs';
-import {QuotaService} from '@core/services/quota';
+import {takeUntil, filter, switchMap} from 'rxjs/operators';
+import {Subject} from 'rxjs';
+import {QuotaService} from './service';
 import {UserService} from '@core/services/user';
 import {QuotaDetails} from '@shared/entity/quota';
 import _ from 'lodash';
@@ -116,25 +116,28 @@ export class QuotasComponent implements OnInit {
     });
   }
 
-  async deleteQuota(quota: QuotaDetails): Promise<void> {
+  deleteQuota(quota: QuotaDetails): void {
     const {subjectHumanReadableName, name} = quota ?? {};
-    const isConfirmed = await lastValueFrom(
-      this._matDialog
-        .open<ConfirmationDialogComponent, ConfirmationDialogConfig, boolean>(ConfirmationDialogComponent, {
-          data: {
-            title: 'Delete Quota',
-            message: `Delete quota for <b>${subjectHumanReadableName ?? name}</b>?`,
-            confirmLabel: 'Delete',
-          },
-        })
-        .afterClosed()
-    );
 
-    if (!isConfirmed) return;
+    const config = {
+      data: {
+        title: 'Delete Quota',
+        message: `Delete quota for <b>${subjectHumanReadableName ?? name}</b>?`,
+        confirmLabel: 'Delete',
+      },
+    } as MatDialogConfig;
 
-    await lastValueFrom(this._quotaService.deleteQuota(name));
-    this._notificationService.success(`Deleting the <b>${subjectHumanReadableName ?? name}</b> quota`);
-    this._quotaService.refreshQuotas();
+    this._matDialog
+      .open<ConfirmationDialogComponent, ConfirmationDialogConfig, boolean>(ConfirmationDialogComponent, config)
+      .afterClosed()
+      .pipe(
+        filter(confirmed => confirmed),
+        switchMap(_ => this._quotaService.deleteQuota(name))
+      )
+      .subscribe(_ => {
+        this._notificationService.success(`Deleting the <b>${subjectHumanReadableName ?? name}</b> quota`);
+        this._quotaService.refreshQuotas();
+      });
   }
 
   private _setSortConfig() {
