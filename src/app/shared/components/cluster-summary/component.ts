@@ -13,7 +13,9 @@
 // limitations under the License.
 
 import {Component, Input} from '@angular/core';
+import {ApplicationsListView} from '@shared/components/application-list/component';
 import {LabelFormComponent} from '@shared/components/label-form/component';
+import {Application} from '@shared/entity/application';
 import {Cluster} from '@shared/entity/cluster';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
@@ -32,10 +34,13 @@ import {OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deploy
   styleUrls: ['./style.scss'],
 })
 export class ClusterSummaryComponent {
+  readonly ApplicationsListView = ApplicationsListView;
+
   @Input() cluster: Cluster;
   @Input() machineDeployment: MachineDeployment;
   @Input() datacenter: Datacenter;
   @Input() seedSettings: SeedSettings;
+  @Input() applications: Application[];
   @Input() flipLayout = false;
   @Input() showNumbering = false;
   operatingSystemProfileAnnotation = OPERATING_SYSTEM_PROFILE_ANNOTATION;

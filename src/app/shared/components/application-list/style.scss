@@ -93,9 +93,9 @@ $application-card-width: 320px;
   }
 
   .mat-card-content {
+    font-size: variables.$font-size-subhead;
     padding: 0 15px;
     word-break: break-word;
-    font-size: variables.$font-size-subhead;
 
     .application-description {
       font-size: variables.$font-size-subhead;

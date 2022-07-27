@@ -511,7 +511,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     this._applicationService
       .add(application, this.projectID, this.cluster.id)
       .pipe(take(1))
-      .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
         this.reloadApplications();
         this._notificationService.success(
@@ -524,7 +523,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     this._applicationService
       .put(application, this.projectID, this.cluster.id)
       .pipe(take(1))
-      .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
         this.reloadApplications();
         this._notificationService.success(`Updated the ${application.name} application`);
@@ -535,7 +533,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     this._applicationService
       .delete(application, this.projectID, this.cluster.id)
       .pipe(take(1))
-      .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
         this.reloadApplications();
         this._notificationService.success(

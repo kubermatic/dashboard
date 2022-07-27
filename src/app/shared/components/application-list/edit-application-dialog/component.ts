@@ -86,7 +86,7 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
   }
 
   private _initForm(): void {
-    this.valuesConfig = this.application.spec.values as string; // TODO: confirm it works on edit cluster page
+    this.valuesConfig = this.application.spec.values as string; // TODO: confirm it works on edit cluster page after BE changes
     this.form = this._builder.group({
       [Controls.Values]: this._builder.control(this.valuesConfig),
     });

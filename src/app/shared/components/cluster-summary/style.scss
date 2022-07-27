@@ -15,7 +15,7 @@
 @use 'variables';
 @use 'mixins';
 
-$steps: 5;
+$steps: 6;
 
 @mixin counter-x {
   @for $i from 1 through $steps {
@@ -103,4 +103,8 @@ $steps: 5;
 
 .step {
   padding-bottom: 24px;
+}
+
+.applications-summary {
+  padding: 0 1px; // to prevent left border of tiles to disappear
 }

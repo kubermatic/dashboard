@@ -44,12 +44,12 @@ export class WizardComponent implements OnInit, OnDestroy {
   project = {} as Project;
   creating = false;
   operatingSystemProfileAnnotation = OPERATING_SYSTEM_PROFILE_ANNOTATION;
+  applications: Application[] = [];
   readonly stepRegistry = StepRegistry;
 
   @ViewChild('stepper', {static: true}) private readonly _stepper: MatStepper;
 
   private _unsubscribe: Subject<void> = new Subject<void>();
-  private _applications: Application[] = [];
 
   constructor(
     private readonly _formBuilder: FormBuilder,
@@ -110,7 +110,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   }
 
   onApplicationsChanged(applications: Application[]): void {
-    this._applications = applications;
+    this.applications = applications;
   }
 
   getObservable(): Observable<Cluster> {
@@ -145,6 +145,7 @@ export class WizardComponent implements OnInit, OnDestroy {
         nodeData: this._nodeDataService.nodeData,
         sshKeys: this._clusterSpecService.sshKeys,
         projectID: this.project.id,
+        applications: this.applications,
       },
     };
 
@@ -172,7 +173,7 @@ export class WizardComponent implements OnInit, OnDestroy {
           dynamicConfig: nodeData.dynamicConfig,
         },
       },
-      applications: this._applications,
+      applications: this.applications,
     };
     if (nodeData.operatingSystemProfile && cluster.spec.enableOperatingSystemManager) {
       clusterModel.nodeDeployment.annotations = {

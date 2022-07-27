@@ -25,7 +25,7 @@ limitations under the License.
     <div class="header counter-1">Provider</div>
     <div class="properties"
          [fxLayoutAlign]="flipLayout ? ' center' : ''"
-         [fxLayout]="flipLayout ? 'row wrap' : 'column'">
+         fxLayout="row wrap">
       <km-property>
         <div key>Provider</div>
         <div value><i class="km-provider-logo km-provider-logo-{{provider}}"></i></div>
@@ -38,281 +38,7 @@ limitations under the License.
     </div>
   </div>
 
-  <div *ngIf="cluster.credential || displaySettings()"
-       [fxFlex]="flipLayout ? '100%' : '50%'"
-       fxLayout="column"
-       class="step">
-    <div class="header counter-3">Settings</div>
-    <div class="properties"
-         [fxLayoutAlign]="flipLayout ? ' center' : ''"
-         [fxLayout]="flipLayout ? 'row wrap' : 'column'">
-      <km-property *ngIf="cluster.credential">
-        <div key>Preset</div>
-        <div value>{{cluster.credential}}</div>
-      </km-property>
-
-      <ng-container *ngIf="!cluster.credential">
-        <!-- AWS -->
-        <ng-container *ngIf="cluster.spec.cloud?.aws">
-          <km-property *ngIf="cluster.spec.cloud?.aws?.securityGroupID">
-            <div key>Security Group ID</div>
-            <div value>{{cluster.spec.cloud?.aws?.securityGroupID}}</div>
-          </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.aws?.vpcID">
-            <div key>VPC ID</div>
-            <div value>{{cluster.spec.cloud?.aws?.vpcID}}</div>
-          </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.aws?.routeTableID">
-            <div key>Route Table ID</div>
-            <div value>{{cluster.spec.cloud?.aws?.routeTableID}}</div>
-          </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.aws?.instanceProfileName">
-            <div key>Instance Profile Name</div>
-            <div value>{{cluster.spec.cloud?.aws?.instanceProfileName}}</div>
-          </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.aws?.roleARN">
-            <div key>Control Plane Role (ARN)</div>
-            <div value>{{cluster.spec.cloud?.aws?.roleARN}}</div>
-          </km-property>
-        </ng-container>
-
-        <!-- Azure -->
-        <ng-container *ngIf="cluster.spec.cloud?.azure">
-          <km-property *ngIf="cluster.spec.cloud?.azure.loadBalancerSKU">
-            <div key>LoadBalancer SKU</div>
-            <div value>{{cluster.spec.cloud?.azure.loadBalancerSKU}}</div>
-          </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.azure.resourceGroup">
-            <div key>Resource Group</div>
-            <div value>{{cluster.spec.cloud?.azure.resourceGroup}}</div>
-          </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.azure.vnetResourceGroup">
-            <div key>VNet Resource Group</div>
-            <div value>{{cluster.spec.cloud?.azure.vnetResourceGroup}}</div>
-          </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.azure.routeTable">
-            <div key>Route Table</div>
-            <div value>{{cluster.spec.cloud?.azure.routeTable}}</div>
-          </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.azure.securityGroup">
-            <div key>Security Group</div>
-            <div value>{{cluster.spec.cloud?.azure.securityGroup}}</div>
-          </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.azure.subnet">
-            <div key>Subnet</div>
-            <div value>{{cluster.spec.cloud?.azure.subnet}}</div>
-          </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.azure.vnet">
-            <div key>VNet</div>
-            <div value>{{cluster.spec.cloud?.azure.vnet}}</div>
-          </km-property>
-
-          <km-property-boolean *ngIf="cluster.spec.cloud?.azure?.assignAvailabilitySet"
-                               label="Assign Availability Set"
-                               [value]="cluster.spec.cloud.azure.assignAvailabilitySet">
-          </km-property-boolean>
-        </ng-container>
-
-        <!-- GCP -->
-        <ng-container *ngIf="cluster.spec.cloud?.gcp">
-          <km-property *ngIf="cluster.spec.cloud?.gcp?.network">
-            <div key>Network</div>
-            <div value>{{cluster.spec.cloud?.gcp?.network}}</div>
-          </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.gcp?.subnetwork">
-            <div key>Subnetwork</div>
-            <div value>{{cluster.spec.cloud?.gcp?.subnetwork}}</div>
-          </km-property>
-        </ng-container>
-
-        <!-- Hetzner -->
-        <ng-container *ngIf="cluster.spec.cloud?.hetzner">
-          <km-property *ngIf="cluster.spec.cloud?.hetzner.network">
-            <div key>Network</div>
-            <div value>{{cluster.spec.cloud?.hetzner.network}}</div>
-          </km-property>
-        </ng-container>
-
-        <!-- Openstack -->
-        <ng-container *ngIf="cluster.spec.cloud?.openstack">
-          <km-property>
-            <div key>Domain</div>
-            <div value>{{cluster.spec.cloud?.openstack.domain}}</div>
-          </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.openstack.username">
-            <div key>Username</div>
-            <div value>{{cluster.spec.cloud?.openstack.username}}</div>
-          </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.openstack.applicationCredentialID">
-            <div key>Application Credential ID</div>
-            <div value>{{cluster.spec.cloud.openstack.applicationCredentialID}}</div>
-          </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.openstack.project">
-            <div key>Project</div>
-            <div value>{{cluster.spec.cloud?.openstack.project}}</div>
-          </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.openstack.projectID">
-            <div key>Project ID</div>
-            <div value>{{cluster.spec.cloud?.openstack.projectID}}</div>
-          </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.openstack.network">
-            <div key>Network Name</div>
-            <div value>{{cluster.spec.cloud?.openstack.network}}</div>
-          </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.openstack.securityGroups">
-            <div key>Security Groups</div>
-            <div value>{{cluster.spec.cloud?.openstack.securityGroups}}</div>
-          </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.openstack.floatingIPPool">
-            <div key>Floating IP Pool</div>
-            <div value>{{cluster.spec.cloud?.openstack.floatingIPPool}}</div>
-          </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.openstack.subnetID">
-            <div key>IPv4 Subnet ID</div>
-            <div value>{{cluster.spec.cloud?.openstack.subnetID}}</div>
-          </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.openstack.ipv6SubnetID">
-            <div key>IPv6 Subnet ID</div>
-            <div value>{{cluster.spec.cloud?.openstack.ipv6SubnetID}}</div>
-          </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.openstack.ipv6SubnetPool">
-            <div key>IPv6 Subnet Pool</div>
-            <div value>{{cluster.spec.cloud?.openstack.ipv6SubnetPool}}</div>
-          </km-property>
-        </ng-container>
-
-        <!-- Equinix -->
-        <ng-container *ngIf="cluster.spec.cloud?.packet">
-          <km-property>
-            <div key>Project ID</div>
-            <div value>{{cluster.spec.cloud?.packet.projectID}}</div>
-          </km-property>
-          <km-property>
-            <div key>Billing Cycle</div>
-            <div value>{{cluster.spec.cloud?.packet.billingCycle}}</div>
-          </km-property>
-        </ng-container>
-
-        <!-- Nutanix -->
-        <ng-container *ngIf="cluster.spec.cloud?.nutanix">
-          <km-property>
-            <div key>Username</div>
-            <div value>{{cluster.spec.cloud.nutanix.username}}</div>
-          </km-property>
-          <km-property *ngIf="cluster.spec.cloud.nutanix.proxyURL">
-            <div key>Proxy URL</div>
-            <div value>{{cluster.spec.cloud.nutanix.proxyURL}}</div>
-          </km-property>
-          <km-property>
-            <div key>Cluster Name</div>
-            <div value>{{cluster.spec.cloud.nutanix.clusterName}}</div>
-          </km-property>
-          <km-property *ngIf="cluster.spec.cloud.nutanix.projectName">
-            <div key>Project Name</div>
-            <div value>{{cluster.spec.cloud.nutanix.projectName}}</div>
-          </km-property>
-          <ng-container *ngIf="cluster.spec.cloud?.nutanix?.csi">
-            <km-property>
-              <div key>Prism Element Username</div>
-              <div value>{{cluster.spec.cloud.nutanix.csi.username}}</div>
-            </km-property>
-            <km-property>
-              <div key>Prism Element Endpoint</div>
-              <div value>{{cluster.spec.cloud.nutanix.csi.endpoint}}</div>
-            </km-property>
-            <km-property *ngIf="cluster.spec.cloud.nutanix.csi.port !== undefined">
-              <div key>Prism Element Port</div>
-              <div value>{{cluster.spec.cloud.nutanix.csi.port}}</div>
-            </km-property>
-            <km-property *ngIf="cluster.spec.cloud.nutanix.csi.storageContainer">
-              <div key>Prism Element Storage Container</div>
-              <div value>{{cluster.spec.cloud.nutanix.csi.storageContainer}}</div>
-            </km-property>
-            <km-property *ngIf="cluster.spec.cloud.nutanix.csi.fstype">
-              <div key>Prism Element Storage Fstype</div>
-              <div value>{{cluster.spec.cloud.nutanix.csi.fstype}}</div>
-            </km-property>
-          </ng-container>
-        </ng-container>
-
-        <!-- vSphere -->
-        <ng-container *ngIf="cluster.spec.cloud?.vsphere">
-          <km-property>
-            <div key>Username</div>
-            <div value>{{cluster.spec.cloud?.vsphere?.infraManagementUser?.username}}</div>
-          </km-property>
-          <km-property>
-            <div key>VSphere Cloud Provider Username</div>
-            <div value>{{cluster.spec.cloud?.vsphere.username}}</div>
-          </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.vsphere.vmNetName">
-            <div key>Network</div>
-            <div value>{{cluster.spec.cloud?.vsphere.vmNetName}}</div>
-          </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.vsphere.folder">
-            <div key>Folder</div>
-            <div value>{{cluster.spec.cloud?.vsphere.folder}}</div>
-          </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.vsphere.datastore">
-            <div key>Datastore</div>
-            <div value>{{cluster.spec.cloud?.vsphere.datastore}}</div>
-          </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.vsphere.datastoreCluster">
-            <div key>Datastore Cluster</div>
-            <div value>{{cluster.spec.cloud?.vsphere.datastoreCluster}}</div>
-          </km-property>
-          <km-property *ngIf="cluster.spec.cloud?.vsphere.resourcePool">
-            <div key>Resource Pool</div>
-            <div value>{{cluster.spec.cloud?.vsphere.resourcePool}}</div>
-          </km-property>
-        </ng-container>
-
-        <!-- VMware Cloud Director -->
-        <ng-container *ngIf="cluster.spec.cloud?.vmwareclouddirector as vmwareclouddirector">
-          <km-property>
-            <div key>Username</div>
-            <div value>{{vmwareclouddirector.username}}</div>
-          </km-property>
-          <km-property>
-            <div key>Organization</div>
-            <div value>{{vmwareclouddirector.organization}}</div>
-          </km-property>
-          <km-property>
-            <div key>VDC</div>
-            <div value>{{vmwareclouddirector.vdc}}</div>
-          </km-property>
-          <km-property>
-            <div key>Organziation VDC Network</div>
-            <div value>{{vmwareclouddirector.ovdcNetwork}}</div>
-          </km-property>
-          <km-property *ngIf="vmwareclouddirector.vapp">
-            <div key>VApp</div>
-            <div value>{{vmwareclouddirector.vapp}}</div>
-          </km-property>
-          <ng-container *ngIf="vmwareclouddirector.csi">
-            <km-property *ngIf="vmwareclouddirector.csi.storageProfile">
-              <div key>Storage Profile</div>
-              <div value>{{vmwareclouddirector.csi.storageProfile}}</div>
-            </km-property>
-            <km-property *ngIf="vmwareclouddirector.csi.filesystem">
-              <div key>Filesystem</div>
-              <div value>{{vmwareclouddirector.csi.filesystem}}</div>
-            </km-property>
-          </ng-container>
-        </ng-container>
-
-        <!-- KubeVirt -->
-        <ng-container *ngIf="cluster.spec.cloud?.kubevirt">
-          <km-property *ngFor="let volume of cluster.spec.cloud?.kubevirt.preAllocatedDataVolumes; let i = index;">
-            <div key>Pre-Allocated Data Volume {{i + 1}}</div>
-            <div value>
-              {{volume.name}}, {{volume.size}}, {{volume.storageClass}}, {{volume.url}}
-            </div>
-          </km-property>
-        </ng-container>
-      </ng-container>
-    </div>
-  </div>
+  <div [fxFlex]="flipLayout ? '100%' : '50%'"></div>
 
   <div [fxFlex]="flipLayout ? '100%' : '50%'"
        fxLayout="column"
@@ -1074,4 +800,298 @@ limitations under the License.
       </div>
     </ng-container>
   </div>
+
+  <div *ngIf="cluster.credential || displaySettings()"
+       [fxFlex]="flipLayout ? '100%' : '50%'"
+       fxLayout="column"
+       class="step">
+    <div class="header counter-3">Settings</div>
+    <div class="properties"
+         [fxLayoutAlign]="flipLayout ? ' center' : ''"
+         [fxLayout]="flipLayout ? 'row wrap' : 'column'">
+      <km-property *ngIf="cluster.credential">
+        <div key>Preset</div>
+        <div value>{{cluster.credential}}</div>
+      </km-property>
+
+      <ng-container *ngIf="!cluster.credential">
+        <!-- AWS -->
+        <ng-container *ngIf="cluster.spec.cloud?.aws">
+          <km-property *ngIf="cluster.spec.cloud?.aws?.securityGroupID">
+            <div key>Security Group ID</div>
+            <div value>{{cluster.spec.cloud?.aws?.securityGroupID}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud?.aws?.vpcID">
+            <div key>VPC ID</div>
+            <div value>{{cluster.spec.cloud?.aws?.vpcID}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud?.aws?.routeTableID">
+            <div key>Route Table ID</div>
+            <div value>{{cluster.spec.cloud?.aws?.routeTableID}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud?.aws?.instanceProfileName">
+            <div key>Instance Profile Name</div>
+            <div value>{{cluster.spec.cloud?.aws?.instanceProfileName}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud?.aws?.roleARN">
+            <div key>Control Plane Role (ARN)</div>
+            <div value>{{cluster.spec.cloud?.aws?.roleARN}}</div>
+          </km-property>
+        </ng-container>
+
+        <!-- Azure -->
+        <ng-container *ngIf="cluster.spec.cloud?.azure">
+          <km-property *ngIf="cluster.spec.cloud?.azure.loadBalancerSKU">
+            <div key>LoadBalancer SKU</div>
+            <div value>{{cluster.spec.cloud?.azure.loadBalancerSKU}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud?.azure.resourceGroup">
+            <div key>Resource Group</div>
+            <div value>{{cluster.spec.cloud?.azure.resourceGroup}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud?.azure.vnetResourceGroup">
+            <div key>VNet Resource Group</div>
+            <div value>{{cluster.spec.cloud?.azure.vnetResourceGroup}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud?.azure.routeTable">
+            <div key>Route Table</div>
+            <div value>{{cluster.spec.cloud?.azure.routeTable}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud?.azure.securityGroup">
+            <div key>Security Group</div>
+            <div value>{{cluster.spec.cloud?.azure.securityGroup}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud?.azure.subnet">
+            <div key>Subnet</div>
+            <div value>{{cluster.spec.cloud?.azure.subnet}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud?.azure.vnet">
+            <div key>VNet</div>
+            <div value>{{cluster.spec.cloud?.azure.vnet}}</div>
+          </km-property>
+
+          <km-property-boolean *ngIf="cluster.spec.cloud?.azure?.assignAvailabilitySet"
+                               label="Assign Availability Set"
+                               [value]="cluster.spec.cloud.azure.assignAvailabilitySet">
+          </km-property-boolean>
+        </ng-container>
+
+        <!-- GCP -->
+        <ng-container *ngIf="cluster.spec.cloud?.gcp">
+          <km-property *ngIf="cluster.spec.cloud?.gcp?.network">
+            <div key>Network</div>
+            <div value>{{cluster.spec.cloud?.gcp?.network}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud?.gcp?.subnetwork">
+            <div key>Subnetwork</div>
+            <div value>{{cluster.spec.cloud?.gcp?.subnetwork}}</div>
+          </km-property>
+        </ng-container>
+
+        <!-- Hetzner -->
+        <ng-container *ngIf="cluster.spec.cloud?.hetzner">
+          <km-property *ngIf="cluster.spec.cloud?.hetzner.network">
+            <div key>Network</div>
+            <div value>{{cluster.spec.cloud?.hetzner.network}}</div>
+          </km-property>
+        </ng-container>
+
+        <!-- Openstack -->
+        <ng-container *ngIf="cluster.spec.cloud?.openstack">
+          <km-property>
+            <div key>Domain</div>
+            <div value>{{cluster.spec.cloud?.openstack.domain}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud?.openstack.username">
+            <div key>Username</div>
+            <div value>{{cluster.spec.cloud?.openstack.username}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud?.openstack.applicationCredentialID">
+            <div key>Application Credential ID</div>
+            <div value>{{cluster.spec.cloud.openstack.applicationCredentialID}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud?.openstack.project">
+            <div key>Project</div>
+            <div value>{{cluster.spec.cloud?.openstack.project}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud?.openstack.projectID">
+            <div key>Project ID</div>
+            <div value>{{cluster.spec.cloud?.openstack.projectID}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud?.openstack.network">
+            <div key>Network Name</div>
+            <div value>{{cluster.spec.cloud?.openstack.network}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud?.openstack.securityGroups">
+            <div key>Security Groups</div>
+            <div value>{{cluster.spec.cloud?.openstack.securityGroups}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud?.openstack.floatingIPPool">
+            <div key>Floating IP Pool</div>
+            <div value>{{cluster.spec.cloud?.openstack.floatingIPPool}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud?.openstack.subnetID">
+            <div key>IPv4 Subnet ID</div>
+            <div value>{{cluster.spec.cloud?.openstack.subnetID}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud?.openstack.ipv6SubnetID">
+            <div key>IPv6 Subnet ID</div>
+            <div value>{{cluster.spec.cloud?.openstack.ipv6SubnetID}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud?.openstack.ipv6SubnetPool">
+            <div key>IPv6 Subnet Pool</div>
+            <div value>{{cluster.spec.cloud?.openstack.ipv6SubnetPool}}</div>
+          </km-property>
+        </ng-container>
+
+        <!-- Equinix -->
+        <ng-container *ngIf="cluster.spec.cloud?.packet">
+          <km-property>
+            <div key>Project ID</div>
+            <div value>{{cluster.spec.cloud?.packet.projectID}}</div>
+          </km-property>
+          <km-property>
+            <div key>Billing Cycle</div>
+            <div value>{{cluster.spec.cloud?.packet.billingCycle}}</div>
+          </km-property>
+        </ng-container>
+
+        <!-- Nutanix -->
+        <ng-container *ngIf="cluster.spec.cloud?.nutanix">
+          <km-property>
+            <div key>Username</div>
+            <div value>{{cluster.spec.cloud.nutanix.username}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud.nutanix.proxyURL">
+            <div key>Proxy URL</div>
+            <div value>{{cluster.spec.cloud.nutanix.proxyURL}}</div>
+          </km-property>
+          <km-property>
+            <div key>Cluster Name</div>
+            <div value>{{cluster.spec.cloud.nutanix.clusterName}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud.nutanix.projectName">
+            <div key>Project Name</div>
+            <div value>{{cluster.spec.cloud.nutanix.projectName}}</div>
+          </km-property>
+          <ng-container *ngIf="cluster.spec.cloud?.nutanix?.csi">
+            <km-property>
+              <div key>Prism Element Username</div>
+              <div value>{{cluster.spec.cloud.nutanix.csi.username}}</div>
+            </km-property>
+            <km-property>
+              <div key>Prism Element Endpoint</div>
+              <div value>{{cluster.spec.cloud.nutanix.csi.endpoint}}</div>
+            </km-property>
+            <km-property *ngIf="cluster.spec.cloud.nutanix.csi.port !== undefined">
+              <div key>Prism Element Port</div>
+              <div value>{{cluster.spec.cloud.nutanix.csi.port}}</div>
+            </km-property>
+            <km-property *ngIf="cluster.spec.cloud.nutanix.csi.storageContainer">
+              <div key>Prism Element Storage Container</div>
+              <div value>{{cluster.spec.cloud.nutanix.csi.storageContainer}}</div>
+            </km-property>
+            <km-property *ngIf="cluster.spec.cloud.nutanix.csi.fstype">
+              <div key>Prism Element Storage Fstype</div>
+              <div value>{{cluster.spec.cloud.nutanix.csi.fstype}}</div>
+            </km-property>
+          </ng-container>
+        </ng-container>
+
+        <!-- vSphere -->
+        <ng-container *ngIf="cluster.spec.cloud?.vsphere">
+          <km-property>
+            <div key>Username</div>
+            <div value>{{cluster.spec.cloud?.vsphere?.infraManagementUser?.username}}</div>
+          </km-property>
+          <km-property>
+            <div key>VSphere Cloud Provider Username</div>
+            <div value>{{cluster.spec.cloud?.vsphere.username}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud?.vsphere.vmNetName">
+            <div key>Network</div>
+            <div value>{{cluster.spec.cloud?.vsphere.vmNetName}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud?.vsphere.folder">
+            <div key>Folder</div>
+            <div value>{{cluster.spec.cloud?.vsphere.folder}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud?.vsphere.datastore">
+            <div key>Datastore</div>
+            <div value>{{cluster.spec.cloud?.vsphere.datastore}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud?.vsphere.datastoreCluster">
+            <div key>Datastore Cluster</div>
+            <div value>{{cluster.spec.cloud?.vsphere.datastoreCluster}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec.cloud?.vsphere.resourcePool">
+            <div key>Resource Pool</div>
+            <div value>{{cluster.spec.cloud?.vsphere.resourcePool}}</div>
+          </km-property>
+        </ng-container>
+
+        <!-- VMware Cloud Director -->
+        <ng-container *ngIf="cluster.spec.cloud?.vmwareclouddirector as vmwareclouddirector">
+          <km-property>
+            <div key>Username</div>
+            <div value>{{vmwareclouddirector.username}}</div>
+          </km-property>
+          <km-property>
+            <div key>Organization</div>
+            <div value>{{vmwareclouddirector.organization}}</div>
+          </km-property>
+          <km-property>
+            <div key>VDC</div>
+            <div value>{{vmwareclouddirector.vdc}}</div>
+          </km-property>
+          <km-property>
+            <div key>Organziation VDC Network</div>
+            <div value>{{vmwareclouddirector.ovdcNetwork}}</div>
+          </km-property>
+          <km-property *ngIf="vmwareclouddirector.vapp">
+            <div key>VApp</div>
+            <div value>{{vmwareclouddirector.vapp}}</div>
+          </km-property>
+          <ng-container *ngIf="vmwareclouddirector.csi">
+            <km-property *ngIf="vmwareclouddirector.csi.storageProfile">
+              <div key>Storage Profile</div>
+              <div value>{{vmwareclouddirector.csi.storageProfile}}</div>
+            </km-property>
+            <km-property *ngIf="vmwareclouddirector.csi.filesystem">
+              <div key>Filesystem</div>
+              <div value>{{vmwareclouddirector.csi.filesystem}}</div>
+            </km-property>
+          </ng-container>
+        </ng-container>
+
+        <!-- KubeVirt -->
+        <ng-container *ngIf="cluster.spec.cloud?.kubevirt">
+          <km-property *ngFor="let volume of cluster.spec.cloud?.kubevirt.preAllocatedDataVolumes; let i = index;">
+            <div key>Pre-Allocated Data Volume {{i + 1}}</div>
+            <div value>
+              {{volume.name}}, {{volume.size}}, {{volume.storageClass}}, {{volume.url}}
+            </div>
+          </km-property>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+
+  <div [fxFlex]="flipLayout ? '100%' : '50%'"
+       fxLayout="column"
+       class="step">
+    <div class="header counter-5">Applications</div>
+    <div class="applications-summary"
+         [fxLayoutAlign]="flipLayout ? ' center' : ''">
+      <km-application-list *ngIf="applications?.length; else noApplications"
+                           [applications]="applications"
+                           [canEdit]="false"
+                           [cluster]="cluster"
+                           [view]="ApplicationsListView.Summary"></km-application-list>
+      <ng-template #noApplications>
+        No application selected.
+      </ng-template>
+    </div>
+  </div>
+
 </div>
