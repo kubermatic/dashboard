@@ -59,6 +59,7 @@ limitations under the License.
       <button mat-flat-button
               fxLayoutAlign="center center"
               type="button"
+              [disabled]="!isRunning()"
               (click)="addExternalMachineDeployment()">
         <i class="km-icon-mask km-icon-add"></i>
         <span>Add Machine Deployment</span>

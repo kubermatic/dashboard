@@ -25,8 +25,8 @@ limitations under the License.
        fxLayout="column"
        fxLayoutGap="8px">
 
-    <mat-card-header  *ngIf="!isDialogView()" 
-                      class="km-no-padding">
+    <mat-card-header *ngIf="!isDialogView()"
+                     class="km-no-padding">
       <mat-card-title>Cluster</mat-card-title>
     </mat-card-header>
 
@@ -66,41 +66,68 @@ limitations under the License.
       </mat-error>
     </mat-form-field>
 
-    <km-autocomplete  *ngIf="isDialogView()"
-                      label="Disk Types"
-                      [options]="diskTypes"
-                      [formControlName]="Controls.DiskTypes">
+    <km-autocomplete *ngIf="isDialogView()"
+                     label="Disk Types"
+                     [options]="diskTypes"
+                     [formControlName]="Controls.DiskTypes">
       <mg-container hint>
         Set Disk Type
       </mg-container>
     </km-autocomplete>
 
-    <km-autocomplete  *ngIf="isDialogView()"
-                      label="Machine Sizes"
-                      [options]="machineSizes"
-                      [formControlName]="Controls.MachineSizes">
+    <km-autocomplete *ngIf="isDialogView()"
+                     label="Machine Sizes"
+                     [options]="machineSizes"
+                     [formControlName]="Controls.MachineSizes">
       <mg-container hint>
         Set Machine Size
       </mg-container>
     </km-autocomplete>
 
-    <km-autocomplete  *ngIf="isDialogView()"
-                      label="Images"
-                      [options]="clusterImages"
-                      [formControlName]="Controls.ClusterImages">
+    <km-autocomplete *ngIf="isDialogView()"
+                     label="Images"
+                     [options]="clusterImages"
+                     [formControlName]="Controls.ClusterImages">
       <ng-container hint>
         Set Image
       </ng-container>
     </km-autocomplete>
 
-    <km-number-stepper [formControlName]="Controls.NodeCount"
-                         mode="errors"
-                         [label]="isDialogView() ? 'Number of Replicas' : 'Initial Node Count'"
-                         [max]="form.get(Controls.EnableAutoScaling).value ? form.get(Controls.MaxCount).value : AUTOSCALING_MAX_VALUE"
-                         [min]="form.get(Controls.EnableAutoScaling).value ? form.get(Controls.MinCount).value : AUTOSCALING_MIN_VALUE"
-                         required>
+    <km-number-stepper hint="Set Number of Replicas"
+                       mode="all"
+                       [label]="isDialogView() ? 'Number of Replicas' : 'Initial Node Count'"
+                       [max]="form.get(Controls.EnableAutoScaling).value ? form.get(Controls.MaxCount).value : AUTOSCALING_MAX_VALUE"
+                       [min]="form.get(Controls.EnableAutoScaling).value ? form.get(Controls.MinCount).value : AUTOSCALING_MIN_VALUE"
+                       [required]="true"
+                       [formControlName]="Controls.NodeCount">
     </km-number-stepper>
 
+    <mat-checkbox [formControlName]="Controls.EnableAutoScaling"
+                  (change)="onEnableAutoScalingChange($event)">
+      Enable Auto Scaling
+      <i class="km-icon-info km-pointer"
+         matTooltip="Indicates whether to enable auto scaling.This option is recommended so that cluster sized correctly for the current running workloads."></i>
+    </mat-checkbox>
+
+    <ng-container *ngIf="form.get(Controls.EnableAutoScaling).value">
+      <km-number-stepper label="Max Count"
+                         mode="all"
+                         hint="The maximum number of nodes for auto-scaling. Maximum value can be 1000."
+                         [required]="true"
+                         [min]="form.get(Controls.MinCount).value"
+                         [max]="1000"
+                         [formControlName]="Controls.MaxCount">
+      </km-number-stepper>
+
+      <km-number-stepper label="Min Count"
+                         mode="all"
+                         hint="The minimum number of nodes for auto-scaling. Minimum value can be 1"
+                         [required]="true"
+                         [min]="1"
+                         [max]="form.get(Controls.MaxCount).value"
+                         [formControlName]="Controls.MinCount">
+      </km-number-stepper>
+    </ng-container>
   </div>
 
   <div *ngIf="!isDialogView()"
@@ -122,35 +149,4 @@ limitations under the License.
     </km-autocomplete>
 
   </div>
-  <div fxLayout="column"
-       fxFlex="100"
-       fxLayoutGap="10px">
-    <mat-checkbox [formControlName]="Controls.EnableAutoScaling"
-                (change)="onEnableAutoScalingChange($event)">
-                Enable Auto Scaling
-      <i class="km-icon-info km-pointer"
-         matTooltip="Indicates whether to enable auto scaling.This option is recommended so that cluster sized correctly for the current running workloads."></i>
-    </mat-checkbox>
-  </div>
-
-  <ng-container *ngIf="form.get(Controls.EnableAutoScaling).value">
-   <km-number-stepper label="Max Count"
-                      mode="all"
-                      hint="The maximum number of nodes for auto-scaling. Maximum value can be 1000."
-                      [required]="true"
-                      [min]="form.get(Controls.MinCount).value"
-                      [max]="1000"
-                      [formControlName]="Controls.MaxCount">
-   </km-number-stepper>
- 
-   <km-number-stepper label="Min Count"
-                      mode="all"
-                      hint="The minimum number of nodes for auto-scaling. Minimum value can be 1"
-                      [required]="true"
-                      [min]="1"
-                      [max]="form.get(Controls.MaxCount).value"
-                      [formControlName]="Controls.MinCount">
-   </km-number-stepper>
-  </ng-container>
-
 </form>
