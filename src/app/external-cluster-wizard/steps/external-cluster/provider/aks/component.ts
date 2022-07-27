@@ -169,7 +169,6 @@ export class AKSClusterSettingsComponent
         Validators.min(this.AUTOSCALING_MIN_VALUE),
       ]),
     });
-    this.control(Controls.Mode).disable();
   }
 
   private _initSubscriptions(): void {
@@ -183,21 +182,20 @@ export class AKSClusterSettingsComponent
       this.control(Controls.Name).clearValidators();
       this.control(Controls.Location).clearValidators();
       this.control(Controls.NodeResourceGroup).clearValidators();
-      this.control(Controls.Mode).enable();
       this._getAKSVmSizesForCreateMachineDeployment(this.cluster.spec.aksclusterSpec.location).subscribe(
         (vmSizes: string[]) => {
           this.vmSizes = vmSizes;
         }
       );
       this._getAKSAvailableNodePoolVersionsForCreateMachineDeployment().subscribe(
-        (versions: AKSNodePoolVersionForMachineDeployments[]) => {
-          this.nodePoolVersions = versions.map(versions => versions.version);
+        (nodePoolVersions: AKSNodePoolVersionForMachineDeployments[]) => {
+          this.nodePoolVersions = nodePoolVersions.map(nodePoolVersion => nodePoolVersion.version);
         }
       );
     } else {
       this.control(Controls.Location)
         .valueChanges.pipe(debounceTime(this._debounceTime))
-        .pipe(switchMap(location => this._getAKSVmSizes(location)))
+        .pipe(switchMap((location: string) => this._getAKSVmSizes(location)))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((vmSizes: string[]) => {
           this.vmSizes = vmSizes;

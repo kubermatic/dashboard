@@ -94,35 +94,6 @@ export class ExternalMachineDeploymentService {
       );
   }
 
-  get isAddMachineDeploymentFormValid(): boolean {
-    return this._isAddMachineDeploymentFormValid;
-  }
-
-  set isAddMachineDeploymentFormValid(valid: boolean) {
-    this._isAddMachineDeploymentFormValid = valid;
-  }
-
-  showCreateExternalClusterMachineDeploymentDialog(
-    projectID: string,
-    cluster: ExternalCluster
-  ): Observable<ExternalMachineDeployment> {
-    const dialogConfig: MatDialogConfig = {
-      data: {
-        projectId: projectID,
-        clusterData: cluster,
-      },
-    };
-    const dialogRef = this._matDialog.open(ExternalAddMachineDeploymentDialogComponent, dialogConfig);
-    return dialogRef
-      .afterClosed()
-      .pipe(filter(data => !!data))
-      .pipe(
-        switchMap((data: ExternalMachineDeployment) => {
-          return this.create(projectID, cluster.id, data);
-        })
-      );
-  }
-
   showExternalMachineDeploymentDeleteDialog(
     projectID: string,
     cluster: ExternalCluster,
