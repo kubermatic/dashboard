@@ -145,6 +145,10 @@ limitations under the License.
     No secondary disks configured. Use the add button above to configure up to three disks.
   </div>
 
+  <mat-card-header class="km-no-padding">
+    <mat-card-title>Affinity Settings</mat-card-title>
+  </mat-card-header>
+
   <ng-container *ngTemplateOutlet="selectAffinityPreset; context: {label: 'Pod Affinity Preset', controlName: Controls.PodAffinityPreset, resetCallback: resetPodAffinityPresetControl.bind(this)}"></ng-container>
 
   <ng-container *ngTemplateOutlet="selectAffinityPreset; context: {label: 'Pod Anti-Affinity Preset', controlName: Controls.PodAntiAffinityPreset, resetCallback: resetPodAntiAffinityPresetControl.bind(this)}"></ng-container>
