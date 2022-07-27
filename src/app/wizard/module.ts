@@ -53,6 +53,7 @@ import {NutanixProviderBasicComponent} from '@app/wizard/step/provider-settings/
 import {NutanixProviderExtendedComponent} from '@app/wizard/step/provider-settings/provider/extended/nutanix/component';
 import {VMwareCloudDirectorProviderBasicComponent} from '@app/wizard/step/provider-settings/provider/basic/vmware-cloud-director/component';
 import {VMwareCloudDirectorProviderExtendedComponent} from '@app/wizard/step/provider-settings/provider/extended/vmware-cloud-director/component';
+import {KubeVirtProviderExtendedComponent} from '@app/wizard/step/provider-settings/provider/extended/kubevirt/component';
 
 const components = [
   WizardComponent,
@@ -89,6 +90,7 @@ const components = [
   NutanixProviderExtendedComponent,
   VMwareCloudDirectorProviderBasicComponent,
   VMwareCloudDirectorProviderExtendedComponent,
+  KubeVirtProviderExtendedComponent,
 ];
 
 @NgModule({

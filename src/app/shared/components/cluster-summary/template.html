@@ -300,6 +300,16 @@ limitations under the License.
             </km-property>
           </ng-container>
         </ng-container>
+
+        <!-- KubeVirt -->
+        <ng-container *ngIf="cluster.spec.cloud?.kubevirt">
+          <km-property *ngFor="let volume of cluster.spec.cloud?.kubevirt.preAllocatedDataVolumes; let i = index;">
+            <div key>Pre-Allocated Data Volume {{i + 1}}</div>
+            <div value>
+              {{volume.name}}, {{volume.size}}, {{volume.storageClass}}, {{volume.url}}
+            </div>
+          </km-property>
+        </ng-container>
       </ng-container>
     </div>
   </div>

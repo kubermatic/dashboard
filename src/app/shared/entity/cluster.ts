@@ -205,6 +205,14 @@ export class HetznerCloudSpec {
 
 export class KubeVirtCloudSpec {
   kubeconfig: string;
+  preAllocatedDataVolumes: KubeVirtPreAllocatedDataVolume[];
+}
+
+export class KubeVirtPreAllocatedDataVolume {
+  name: string;
+  size: string;
+  storageClass: string;
+  url: string;
 }
 
 export class NutanixCloudSpec {
