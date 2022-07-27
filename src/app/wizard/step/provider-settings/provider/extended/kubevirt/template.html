@@ -1,0 +1,111 @@
+<!--
+Copyright 2022 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<form [formGroup]="form"
+      fxLayout="column"
+      fxLayoutGap="8px">
+  <mat-card-header class="km-no-padding"
+                   fxLayoutAlign=" center">
+    <mat-card-title>Pre-Allocated Data Volumes</mat-card-title>
+    <div fxFlex></div>
+    <button fxLayoutAlign="center center"
+            mat-flat-button
+            type="button"
+            color="quaternary"
+            matTooltip="Add pre-allocated data volume"
+            (click)="addPreAllocatedDataVolume()">
+      <i class="km-icon-mask km-icon-add"></i>
+      <span>Add Data Volume</span>
+    </button>
+
+  </mat-card-header>
+
+  <div [formArrayName]="Controls.PreAllocatedDataVolumes"
+       fxLayout="column">
+    <div *ngFor="let control of preAllocatedDataVolumesFormArray.controls; let i = index"
+         [formGroupName]="i"
+         class="data-volume-container">
+      <mat-divider *ngIf="i > 0"></mat-divider>
+      <div fxLayout="column">
+        <div fxFlex
+             fxLayout=" center"
+             class="data-volume-header">
+          <div fxLayoutAlign=" center">Volume {{i + 1}}</div>
+          <div fxFlex></div>
+          <button mat-icon-button
+                  type="button"
+                  matTooltip="Remove pre-allocated data volume"
+                  (click)="preAllocatedDataVolumesFormArray.removeAt(i)">
+            <i class="km-icon-mask km-icon-remove"></i>
+          </button>
+        </div>
+        <div fxLayout="row wrap"
+             fxLayoutAlign="space-between">
+          <div fxFlex="48%">
+            <mat-form-field>
+              <mat-label>Name</mat-label>
+              <input matInput
+                     [formControlName]="Controls.PreAllocatedDataVolumeName"
+                     [name]="Controls.PreAllocatedDataVolumeName"
+                     type="text"
+                     autocomplete="off">
+              <mat-error *ngIf="control.get(Controls.PreAllocatedDataVolumeName).hasError( 'required')">
+                Name is <strong>required</strong>.
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex="48%">
+            <km-number-stepper [formControlName]="Controls.PreAllocatedDataVolumeSize"
+                               mode="errors"
+                               label="Size (GB)"
+                               min="1"
+                               required>
+            </km-number-stepper>
+          </div>
+          <div fxFlex="48%">
+            <km-combobox [options]="storageClasses"
+                         [formControlName]="Controls.PreAllocatedDataVolumeStorageClass"
+                         [label]="storageClassLabel"
+                         inputLabel="Select storage class..."
+                         filterBy="name"
+                         required
+                         fxFlex>
+              <div *option="let storageClass">{{storageClass.name}}</div>
+            </km-combobox>
+          </div>
+          <div fxFlex="48%">
+            <mat-form-field fxFlex>
+              <mat-label>URL</mat-label>
+              <input matInput
+                     [formControlName]="Controls.PreAllocatedDataVolumeUrl"
+                     [name]="Controls.PreAllocatedDataVolumeUrl"
+                     type="text"
+                     autocomplete="off">
+              <mat-error *ngIf="control.get(Controls.PreAllocatedDataVolumeUrl).hasError( 'required')">
+                URL is <strong>required</strong>.
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!preAllocatedDataVolumesFormArray.length"
+       class="no-pre-allocated-data-volumes-msg km-text-muted">
+    No pre-allocated data volumes configured. Use the add button above to configure.
+  </div>
+
+</form>

@@ -55,6 +55,16 @@ export class ClusterSpecService {
       );
     }
 
+    // Copy kubevirt pre-allocated data volumes using different customizer, it
+    // will overwrite destination array with source array instead of ignoring the changes.
+    if (cluster.spec?.cloud?.kubevirt?.preAllocatedDataVolumes) {
+      this._cluster.spec.cloud.kubevirt.preAllocatedDataVolumes = _.mergeWith(
+        this._cluster.spec.cloud.kubevirt.preAllocatedDataVolumes,
+        cluster.spec.cloud.kubevirt.preAllocatedDataVolumes,
+        (dest, src) => (_.isArray(dest) && _.isArray(src) ? src : undefined)
+      );
+    }
+
     this.clusterChanges.emit(this._cluster);
   }
 
