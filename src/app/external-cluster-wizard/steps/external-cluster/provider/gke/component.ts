@@ -162,6 +162,7 @@ export class GKEClusterSettingsComponent
       this._getGKEMachineSizes();
       this._getGKEClusterImages();
       this.control(Controls.Version).setValue(version.slice(1, version.indexOf('-')));
+      this.control(Controls.Version).disable();
       this.control(Controls.Zone).clearValidators();
       this.control(Controls.MaxCount).addValidators([Validators.required, Validators.max(this.AUTOSCALING_MAX_VALUE)]);
       this.control(Controls.MinCount).addValidators([Validators.required, Validators.min(this.AUTOSCALING_MIN_VALUE)]);

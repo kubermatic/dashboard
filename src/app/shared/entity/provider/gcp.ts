@@ -52,5 +52,5 @@ export class GCPSubnetwork {
 
 export class GCPImage {
   name: string;
-  default?: boolean
+  default?: boolean;
 }

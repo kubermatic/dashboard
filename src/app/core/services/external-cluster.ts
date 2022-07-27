@@ -32,7 +32,7 @@ import {catchError, filter} from 'rxjs/operators';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {ClusterListTab} from '@app/cluster/list/component';
 import {NotificationService} from '@core/services/notification';
-import { GCPDiskType, GCPImage, GCPMachineSize } from '@app/shared/entity/provider/gcp';
+import {GCPDiskType, GCPImage, GCPMachineSize} from '@app/shared/entity/provider/gcp';
 
 @Injectable({providedIn: 'root'})
 export class ExternalClusterService {
@@ -236,17 +236,17 @@ export class ExternalClusterService {
   }
 
   getGKEDiskTypes(projectID: string, clusterID: string): Observable<GCPDiskType[]> {
-    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/gke/disktypes`
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/gke/disktypes`;
     return this._http.get<GCPDiskType[]>(url).pipe(catchError(() => of<[]>()));
   }
 
   getGKEMachineSizes(projectID: string, clusterID: string): Observable<GCPMachineSize[]> {
-    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/gke/sizes`
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/gke/sizes`;
     return this._http.get<GCPMachineSize[]>(url).pipe(catchError(() => of<[]>()));
   }
 
   getGKEClusterImages(projectID: string, clusterID: string): Observable<GCPImage[]> {
-    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/gke/images`
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/gke/images`;
     return this._http.get<GCPImage[]>(url).pipe(catchError(() => of<[]>()));
   }
 
@@ -259,11 +259,6 @@ export class ExternalClusterService {
     const url = `${this._newRestRoot}/providers/eks/subnets`;
     const headers: HttpHeaders = this._getEKSHeaders(vpcId);
     return this._http.get<string[]>(url, {headers}).pipe(catchError(() => of<[]>()));
-  }
-
-  getEKSSubnetsForCluster(vpcId: string, projectID: string, clusterID: string): Observable<string[]> {
-    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/eks/subnets`;
-    return this._http.get<string[]>(url, {headers: {VpcId: vpcId}}).pipe(catchError(() => of<[]>()));
   }
 
   getEKSSubnetsForCreateMachineDeployment(projectID: string, clusterID: string, vpcId: string): Observable<string[]> {
