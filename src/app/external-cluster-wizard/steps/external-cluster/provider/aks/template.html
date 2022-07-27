@@ -166,11 +166,13 @@ limitations under the License.
                      [formControlName]="Controls.Mode">
       <mat-radio-button [value]="Mode.System"
                         class="km-radio-button">
-        <div class="km-radio-button-title">System</div>
+        <div class="km-radio-button-title"
+             [ngClass]="!isDialogView() && 'km-text-muted'">System</div>
       </mat-radio-button>
       <mat-radio-button [value]="Mode.User"
                         class="km-radio-button">
-        <div class="km-radio-button-title">User</div>
+        <div class="km-radio-button-title"
+             [ngClass]="!isDialogView() && 'km-text-muted'">User</div>
       </mat-radio-button>
     </mat-radio-group>
 
