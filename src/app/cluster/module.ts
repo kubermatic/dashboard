@@ -16,6 +16,7 @@ import {NgModule} from '@angular/core';
 import {AddMachineNetworkComponent} from '@app/cluster/details/cluster/add-machine-network/component';
 import {AnexiaProviderSettingsComponent} from '@app/cluster/details/cluster/edit-provider-settings/anexia-provider-settings/component';
 import {ExternalMachineDeploymentDetailsComponent} from '@app/cluster/details/external-cluster/external-machine-deployment-details/component';
+import {ExternalAddMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/external-cluster-add-machine-deployment/component';
 import {ExternalMachineDeploymentListComponent} from '@app/cluster/details/external-cluster/external-machine-deployment-list/component';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '@app/node-data/config';
 import {NodeDataModule} from '@app/node-data/module';
@@ -70,6 +71,8 @@ import {NutanixProviderSettingsComponent} from '@app/cluster/details/cluster/edi
 import {VMwareCloudDirectorProviderSettingsComponent} from '@app/cluster/details/cluster/edit-provider-settings/vmware-cloud-director-provider-settings/component';
 import {ExternalClusterDeleteConfirmationComponent} from '@app/cluster/details/external-cluster/external-cluster-delete-confirmation/component';
 import {UpdateExternalClusterMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/update-external-cluster-machine-deployment-dialog/component';
+import {ExternalClusterModule} from '@app/external-cluster-wizard/module';
+import {ExternalMachineDeploymentService} from '@app/core/services/external-machine-deployment';
 
 const components: any[] = [
   ClusterDetailsComponent,
@@ -77,6 +80,7 @@ const components: any[] = [
   ExternalNodeListComponent,
   ExternalMachineDeploymentListComponent,
   ExternalMachineDeploymentDetailsComponent,
+  ExternalAddMachineDeploymentDialogComponent,
   NodeListComponent,
   MachineDeploymentListComponent,
   MachineDeploymentDetailsComponent,
@@ -125,11 +129,12 @@ const components: any[] = [
 ];
 
 @NgModule({
-  imports: [SharedModule, ClusterRoutingModule, MachineNetworksModule, NodeDataModule],
+  imports: [SharedModule, ClusterRoutingModule, MachineNetworksModule, NodeDataModule, ExternalClusterModule],
   declarations: [...components, AddMachineNetworkComponent],
   exports: [...components],
   providers: [
     NodeService,
+    ExternalMachineDeploymentService,
     {
       provide: NODE_DATA_CONFIG,
       useValue: {mode: NodeDataMode.Dialog} as NodeDataConfig,

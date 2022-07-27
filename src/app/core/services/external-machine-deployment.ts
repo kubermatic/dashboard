@@ -15,7 +15,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
-import {catchError, map, mergeMap, take} from 'rxjs/operators';
+import {catchError, map, mergeMap, filter, take, switchMap} from 'rxjs/operators';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {environment} from '@environments/environment';
 import {NotificationService} from '@core/services/notification';
@@ -23,16 +23,28 @@ import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialo
 import {ExternalCluster} from '@shared/entity/external-cluster';
 import {ExternalMachineDeployment, ExternalMachineDeploymentPatch} from '@shared/entity/external-machine-deployment';
 import {MasterVersion} from '@shared/entity/cluster';
+import {ExternalAddMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/external-cluster-add-machine-deployment/component';
 
 @Injectable()
 export class ExternalMachineDeploymentService {
   private readonly _newRestRoot: string = environment.newRestRoot;
+  private readonly _restRoot: string = environment.newRestRoot;
+  private _externalMachineDeployment: ExternalMachineDeployment = ExternalMachineDeployment.NewEmptyMachineDeployment();
+  private _isAddMachineDeploymentFormValid = false;
 
   constructor(
     private readonly _httpClient: HttpClient,
     private readonly _matDialog: MatDialog,
     private readonly _notificationService: NotificationService
   ) {}
+
+  get externalMachineDeployment(): ExternalMachineDeployment {
+    return this._externalMachineDeployment;
+  }
+
+  set externalMachineDeployment(externalMachineDeployment: ExternalMachineDeployment) {
+    this._externalMachineDeployment = externalMachineDeployment;
+  }
 
   machineDeploymentUpgrades(
     projectID: string,
@@ -51,6 +63,35 @@ export class ExternalMachineDeploymentService {
   ): Observable<ExternalMachineDeployment> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/machinedeployments/${machineDeploymentID}`;
     return this._httpClient.patch<ExternalMachineDeployment>(url, patch);
+  }
+
+  get isAddMachineDeploymentFormValid(): boolean {
+    return this._isAddMachineDeploymentFormValid;
+  }
+
+  set isAddMachineDeploymentFormValid(valid: boolean) {
+    this._isAddMachineDeploymentFormValid = valid;
+  }
+
+  showCreateExternalClusterMachineDeploymentDialog(
+    projectID: string,
+    cluster: ExternalCluster
+  ): Observable<ExternalMachineDeployment> {
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        projectId: projectID,
+        clusterData: cluster,
+      },
+    };
+    const dialogRef = this._matDialog.open(ExternalAddMachineDeploymentDialogComponent, dialogConfig);
+    return dialogRef
+      .afterClosed()
+      .pipe(filter(data => !!data))
+      .pipe(
+        switchMap((data: ExternalMachineDeployment) => {
+          return this.create(projectID, cluster.id, data);
+        })
+      );
   }
 
   showExternalMachineDeploymentDeleteDialog(
@@ -84,6 +125,13 @@ export class ExternalMachineDeploymentService {
         return of(false);
       })
     );
+  }
+
+  create(projectID: string, clusterID: string, md: ExternalMachineDeployment): Observable<ExternalMachineDeployment> {
+    const url = `${this._restRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/machinedeployments`;
+    return this._httpClient
+      .post<ExternalMachineDeployment>(url, md)
+      .pipe(catchError(() => of<ExternalMachineDeployment>()));
   }
 
   private _deleteExternalMachineDeployment(

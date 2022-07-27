@@ -16,7 +16,7 @@ import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {StatusIcon} from '@shared/utils/health-status';
 
 export class ExternalMachineDeployment extends MachineDeployment {
-  cloud?: ExternalMachineDeploymentCloudSpec;
+  cloud: ExternalMachineDeploymentCloudSpec;
 
   static getStatusIcon(md: ExternalMachineDeployment): StatusIcon {
     if (md?.deletionTimestamp) {
@@ -35,10 +35,17 @@ export class ExternalMachineDeployment extends MachineDeployment {
     }
     return 'Provisioning';
   }
+
+  static NewEmptyMachineDeployment(): ExternalMachineDeployment {
+    return {
+      cloud: {},
+    };
+  }
 }
 
-class ExternalMachineDeploymentCloudSpec {
+export class ExternalMachineDeploymentCloudSpec {
   gke?: GKEMachineDeploymentCloudSpec;
+  eks?: EKSMachineDeploymentCloudSpec;
 }
 
 class GKEMachineDeploymentCloudSpec {
@@ -47,6 +54,19 @@ class GKEMachineDeploymentCloudSpec {
   management?: GKENodeManagement;
   locations?: string[];
   string;
+}
+
+export class EKSMachineDeploymentCloudSpec {
+  diskSize: number;
+  scalingConfig: EKSScalingConfig;
+  nodeRole: string;
+  subnets: string[];
+}
+
+export class EKSScalingConfig {
+  desiredSize: number;
+  maxSize: number;
+  minSize?: number;
 }
 
 class GKENodePoolAutoscaling {

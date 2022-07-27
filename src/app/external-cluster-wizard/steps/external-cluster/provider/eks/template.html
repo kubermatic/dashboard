@@ -14,18 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <form [formGroup]="form"
-      fxLayout="row"
+      [fxLayout]="isDialogView() ? 'column' : 'row'"
       fxLayoutGap="30px"
       fxLayout.md="column"
       fxLayoutGap.md="30px"
       fxLayout.sm="column"
       fxLayoutGap.sm="30px">
 
-  <div fxFlex="50%"
+  <div [fxFlex]="isDialogView() ? '100%' : '50%'"
        fxLayout="column"
        fxLayoutGap="8px">
 
-    <mat-card-header class="km-no-padding">
+    <mat-card-header *ngIf="!isDialogView()"
+                     class="km-no-padding">
       <mat-card-title>Cluster</mat-card-title>
     </mat-card-header>
 
@@ -58,7 +59,7 @@ limitations under the License.
              matInput
              type="text"
              autocomplete="off" />
-      <mat-hint>
+      <mat-hint *ngIf="!isDialogView()">
         Set the kubernetes version. See list of
         <a href="https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html"
            rel="noopener noreferrer"
@@ -70,7 +71,7 @@ limitations under the License.
     </mat-form-field>
 
     <mat-form-field>
-      <mat-label>Cluster service role</mat-label>
+      <mat-label>Cluster Service Role</mat-label>
       <input matInput
              type="text"
              autocomplete="off"
@@ -91,25 +92,64 @@ limitations under the License.
     </mat-card-header>
 
 
-    <km-autocomplete label="VPC"
+    <km-autocomplete *ngIf="!isDialogView()"
+                     label="VPC"
                      required="true"
                      [isLoading]="isLoadingVpcs"
                      [options]="vpcs"
                      [formControlName]="Controls.Vpc">
     </km-autocomplete>
 
-    <ng-container *ngIf="form.get(Controls.Vpc).value?.main">
+    <mat-form-field *ngIf="isDialogView()">
+      <mat-label>VPC</mat-label>
+      <input matInput
+             type="text"
+             autocomplete="off"
+             [formControlName]="Controls.Vpc" />
+    </mat-form-field>
+
+
+    <ng-container *ngIf="isDialogView() ? true : form.get(Controls.Vpc).value?.main">
       <km-chip-autocomplete label="Subnet"
                             placeholder="Select Subnet IDs"
                             [tags]="subnetIds"
                             [required]="true"
                             [formControlName]="Controls.SubnetIds"></km-chip-autocomplete>
 
-      <km-chip-autocomplete label="Security Groups"
+      <km-chip-autocomplete *ngIf="!isDialogView()"
+                            label="Security Groups"
                             placeholder="Select SecurityGroup IDs"
                             [tags]="securityGroupIds"
                             [required]="true"
                             [formControlName]="Controls.SecurityGroupsIds"></km-chip-autocomplete>
+    </ng-container>
+    <ng-container *ngIf="isDialogView()">
+      <km-number-stepper [formControlName]="Controls.DiskSize"
+                         mode="errors"
+                         label="Disk Size in GB"
+                         min="1"
+                         required>
+      </km-number-stepper>
+      <km-number-stepper [formControlName]="Controls.DesiredSize"
+                         mode="errors"
+                         label="Desired Size"
+                         [min]="minNodeCount"
+                         [max]="maxNodeCount"
+                         required>
+      </km-number-stepper>
+      <km-number-stepper [formControlName]="Controls.MaxSize"
+                         mode="errors"
+                         label="Max Count"
+                         [min]="minNodeCount"
+                         required>
+      </km-number-stepper>
+      <km-number-stepper [formControlName]="Controls.MinSize"
+                         mode="errors"
+                         label="Min Count"
+                         min="1"
+                         [max]="maxNodeCount"
+                         required>
+      </km-number-stepper>
     </ng-container>
   </div>
 </form>

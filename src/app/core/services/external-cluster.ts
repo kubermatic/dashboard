@@ -232,6 +232,11 @@ export class ExternalClusterService {
     return this._http.get<string[]>(url, {headers}).pipe(catchError(() => of<[]>()));
   }
 
+  getEKSSubnetsForCreateMachineDeployment(projectID: string, clusterID: string, vpcId: string): Observable<string[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/eks/subnets`;
+    return this._http.get<string[]>(url, {headers: {VpcId: vpcId}}).pipe(catchError(() => of<[]>()));
+  }
+
   getEKSSecurityGroups(vpcId: string): Observable<string[]> {
     const url = `${this._newRestRoot}/providers/eks/securitygroups`;
     const headers: HttpHeaders = this._getEKSHeaders(vpcId);
