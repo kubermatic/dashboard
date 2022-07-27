@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {KubeVirtAffinityPreset} from '@shared/entity/provider/kubevirt';
 import {VMwareCloudDirectorIPAllocationMode} from '@shared/entity/provider/vmware-cloud-director';
 import {NodeProvider, OperatingSystem} from '../model/NodeProviderConstants';
 
@@ -219,11 +220,20 @@ export class KubeVirtNodeSpec {
   primaryDiskStorageClassName: string;
   primaryDiskSize: string;
   secondaryDisks?: KubeVirtSecondaryDisk[];
+  podAffinityPreset?: KubeVirtAffinityPreset;
+  podAntiAffinityPreset?: KubeVirtAffinityPreset;
+  nodeAffinityPreset?: KubeVirtNodeAffinityPreset;
 }
 
 export class KubeVirtSecondaryDisk {
   size: string;
   storageClassName: string;
+}
+
+export class KubeVirtNodeAffinityPreset {
+  Type: KubeVirtAffinityPreset;
+  Key?: string;
+  Values?: string[];
 }
 
 export class OpenstackNodeSpec {

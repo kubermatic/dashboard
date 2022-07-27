@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {COMMA, ENTER, SPACE} from '@angular/cdk/keycodes';
-import {Component, EventEmitter, forwardRef, Input, OnDestroy, Output} from '@angular/core';
+import {Component, EventEmitter, forwardRef, Input, OnChanges, OnDestroy, Output, SimpleChanges} from '@angular/core';
 import {
   AbstractControl,
   ControlValueAccessor,
@@ -52,13 +52,14 @@ enum Controls {
     },
   ],
 })
-export class ChipListComponent implements OnDestroy, ControlValueAccessor, Validator {
+export class ChipListComponent implements OnChanges, OnDestroy, ControlValueAccessor, Validator {
   private _unsubscribe = new Subject<void>();
   readonly controls = Controls;
   @Input() title: string;
   @Input() label: string;
   @Input() description = 'Use comma, enter or space key as the separator.';
   @Input() placeholder: string;
+  @Input() disabled: boolean;
   @Input('kmPatternError') patternError = 'Invalid pattern';
   @Input('kmPattern') pattern: string;
   @Input() tags: string[] = [];
@@ -70,10 +71,23 @@ export class ChipListComponent implements OnDestroy, ControlValueAccessor, Valid
 
   ngOnInit(): void {
     this.form = this._builder.group({[Controls.Tags]: this._builder.control(this.tags, this._validators())});
+    if (this.disabled) {
+      this.form.get(Controls.Tags).disable();
+    }
     this.onChange.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
       this.form.get(Controls.Tags).setValue(this.tags);
       this.form.get(Controls.Tags).updateValueAndValidity();
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.disabled && this.form) {
+      if (this.disabled) {
+        this.form.get(Controls.Tags).disable();
+      } else if (this.form.get(Controls.Tags).disabled) {
+        this.form.get(Controls.Tags).enable();
+      }
+    }
   }
 
   ngOnDestroy(): void {
