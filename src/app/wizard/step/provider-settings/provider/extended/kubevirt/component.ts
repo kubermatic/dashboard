@@ -17,13 +17,7 @@ import {FormArray, FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} fr
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {PresetsService} from '@core/services/wizard/presets';
 import {ComboboxControls} from '@shared/components/combobox/component';
-import {
-  CloudSpec,
-  Cluster,
-  ClusterSpec,
-  KubeVirtCloudSpec,
-  KubeVirtPreAllocatedDataVolume,
-} from '@shared/entity/cluster';
+import {Cluster, KubeVirtPreAllocatedDataVolume} from '@shared/entity/cluster';
 import {KubeVirtStorageClass} from '@shared/entity/provider/kubevirt';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
@@ -113,7 +107,12 @@ export class KubeVirtProviderExtendedComponent extends BaseFormValidator impleme
       .pipe(debounceTime(this._debounceTime))
       .pipe(distinctUntilChanged())
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => (this._clusterSpecService.cluster = this._getCluster()));
+      .subscribe(_ => {
+        const preAllocatedDataVolumes = this._preAllocatedDataVolumes;
+        this._clusterSpecService.cluster.spec.cloud.kubevirt.preAllocatedDataVolumes = preAllocatedDataVolumes.length
+          ? preAllocatedDataVolumes
+          : null;
+      });
   }
 
   ngOnDestroy(): void {
@@ -203,19 +202,6 @@ export class KubeVirtProviderExtendedComponent extends BaseFormValidator impleme
   private _clearCredentials(): void {
     this._preset = '';
     this._kubeconfig = '';
-  }
-
-  private _getCluster(): Cluster {
-    const preAllocatedDataVolumes = this._preAllocatedDataVolumes;
-    return {
-      spec: {
-        cloud: {
-          kubevirt: {
-            preAllocatedDataVolumes: preAllocatedDataVolumes.length ? preAllocatedDataVolumes : null,
-          } as KubeVirtCloudSpec,
-        } as CloudSpec,
-      } as ClusterSpec,
-    } as Cluster;
   }
 
   private get _preAllocatedDataVolumes(): KubeVirtPreAllocatedDataVolume[] {
