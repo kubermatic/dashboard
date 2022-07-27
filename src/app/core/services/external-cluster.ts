@@ -17,7 +17,7 @@ import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {environment} from '@environments/environment';
-import {AKSCluster} from '@shared/entity/provider/aks';
+import {AKSCluster, AKSNodePoolVersionForMachineDeployments} from '@shared/entity/provider/aks';
 import {EKSCluster, EKSVpc} from '@shared/entity/provider/eks';
 import {GKECluster, GKEZone} from '@shared/entity/provider/gke';
 import {
@@ -214,6 +214,19 @@ export class ExternalClusterService {
   getAKSVmSizes(location?: string): Observable<string[]> {
     const url = `${this._newRestRoot}/providers/aks/vmsizes`;
     return this._http.get<string[]>(url, {headers: this._getAKSHeaders(location)}).pipe(catchError(() => of<[]>()));
+  }
+
+  getAKSVmSizesForMachineDeployment(projectID: string, clusterID: string, location: string): Observable<string[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/aks/vmsizes`;
+    return this._http.get<string[]>(url, {headers: {Location: location}}).pipe(catchError(() => of<[]>()));
+  }
+
+  getAKSAvailableNodePoolVersionsForMachineDeployment(
+    projectID: string,
+    clusterID: string
+  ): Observable<AKSNodePoolVersionForMachineDeployments[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/aks/versions`;
+    return this._http.get<AKSNodePoolVersionForMachineDeployments[]>(url).pipe(catchError(() => of<[]>()));
   }
 
   getGKEZones(): Observable<GKEZone[]> {

@@ -27,15 +27,27 @@ import {NameGeneratorService} from '@core/services/name-generator';
 import {ErrorType} from '@shared/types/error-type';
 import {Observable} from 'rxjs';
 import {debounceTime, finalize, switchMap, takeUntil} from 'rxjs/operators';
-import {ExternalCloudSpec, ExternalClusterModel, ExternalClusterSpec} from '@shared/entity/external-cluster';
+import {
+  ExternalCloudSpec,
+  ExternalCluster,
+  ExternalClusterModel,
+  ExternalClusterSpec,
+} from '@shared/entity/external-cluster';
 import {
   AgentPoolBasics,
   AKSCloudSpec,
   AKSClusterSpec,
   AKSMachineDeploymentCloudSpec,
   AKSNodegroupScalingConfig,
+  AKSNodePoolVersionForMachineDeployments,
 } from '@shared/entity/provider/aks';
-import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@shared/validators/others';
+import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR, AKS_POOL_NAME_VALIDATOR} from '@shared/validators/others';
+import {NodeDataService} from '@app/core/services/node-data/service';
+import {ExternalMachineDeploymentService} from '@app/core/services/external-machine-deployment';
+import {
+  ExternalMachineDeployment,
+  ExternalMachineDeploymentCloudSpec,
+} from '@app/shared/entity/external-machine-deployment';
 
 enum Controls {
   Name = 'name',
@@ -49,6 +61,11 @@ enum Controls {
   EnableAutoScaling = 'enableAutoScaling',
   MaxCount = 'maxCount',
   MinCount = 'minCount',
+}
+
+enum Mode {
+  System = 'System',
+  User = 'User',
 }
 
 @Component({
@@ -73,21 +90,25 @@ export class AKSClusterSettingsComponent
   implements OnInit, OnDestroy, ControlValueAccessor, Validator
 {
   readonly Controls = Controls;
+  readonly Mode = Mode;
   readonly ErrorType = ErrorType;
   readonly AUTOSCALING_MIN_VALUE = 1;
   readonly AUTOSCALING_MAX_VALUE = 1000;
-
-  isLoadingVmSizes: boolean;
-  vmSizes: string[] = [];
-
   @Input() projectID: string;
+  @Input() cluster: ExternalCluster;
+  isLoadingVmSizes: boolean;
+  isLoadingNodePoolVersions: boolean;
+  vmSizes: string[] = [];
+  nodePoolVersions: string[] = [];
 
   private readonly _debounceTime = 500;
 
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _externalClusterService: ExternalClusterService,
-    private readonly _nameGenerator: NameGeneratorService
+    private readonly _externalMachineDeploymentService: ExternalMachineDeploymentService,
+    private readonly _nameGenerator: NameGeneratorService,
+    private readonly _nodeDataService: NodeDataService
   ) {
     super();
   }
@@ -105,6 +126,10 @@ export class AKSClusterSettingsComponent
 
   generateName(): void {
     this.control(Controls.Name).setValue(this._nameGenerator.generateName());
+  }
+
+  isDialogView(): boolean {
+    return !this._nodeDataService.isInWizardMode();
   }
 
   onEnableAutoScalingChange(evt: MatCheckboxChange) {
@@ -125,13 +150,12 @@ export class AKSClusterSettingsComponent
     const MIN_COUNT_DEFAULT_VALUE = 1;
     const MAX_COUNT_DEFAULT_VALUE = 5;
     const DEFAULT_MODE = 'System';
-
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control('', [Validators.required, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR]),
       [Controls.Location]: this._builder.control('', Validators.required),
       [Controls.NodeResourceGroup]: this._builder.control('', Validators.required),
       [Controls.KubernetesVersion]: this._builder.control('', Validators.required),
-      [Controls.NodePoolName]: this._builder.control('', Validators.required),
+      [Controls.NodePoolName]: this._builder.control('', [Validators.required, AKS_POOL_NAME_VALIDATOR]),
       [Controls.Count]: this._builder.control(1, Validators.required),
       [Controls.VmSize]: this._builder.control('', Validators.required),
       [Controls.Mode]: this._builder.control(DEFAULT_MODE),
@@ -145,26 +169,41 @@ export class AKSClusterSettingsComponent
         Validators.min(this.AUTOSCALING_MIN_VALUE),
       ]),
     });
-
-    this.control(Controls.Mode).disable();
   }
 
   private _initSubscriptions(): void {
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
-      this._updateExternalClusterModel();
+      this.isDialogView() ? this._updateExternalMachineDeployment() : this._updateExternalClusterModel();
       this._externalClusterService.isClusterDetailsStepValid = this.form.valid;
+      this._externalMachineDeploymentService.isAddMachineDeploymentFormValid = this.form.valid;
     });
 
-    this.control(Controls.Location)
-      .valueChanges.pipe(debounceTime(this._debounceTime))
-      .pipe(switchMap(location => this._getAKSVmSizes(location)))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe((vmSizes: string[]) => {
-        this.vmSizes = vmSizes;
-      });
+    if (this.isDialogView()) {
+      this.control(Controls.Name).clearValidators();
+      this.control(Controls.Location).clearValidators();
+      this.control(Controls.NodeResourceGroup).clearValidators();
+      this._getAKSVmSizesForCreateMachineDeployment(this.cluster.spec.aksclusterSpec.location).subscribe(
+        (vmSizes: string[]) => {
+          this.vmSizes = vmSizes;
+        }
+      );
+      this._getAKSAvailableNodePoolVersionsForCreateMachineDeployment().subscribe(
+        (nodePoolVersions: AKSNodePoolVersionForMachineDeployments[]) => {
+          this.nodePoolVersions = nodePoolVersions.map(nodePoolVersion => nodePoolVersion.version);
+        }
+      );
+    } else {
+      this.control(Controls.Location)
+        .valueChanges.pipe(debounceTime(this._debounceTime))
+        .pipe(switchMap((location: string) => this._getAKSVmSizes(location)))
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe((vmSizes: string[]) => {
+          this.vmSizes = vmSizes;
+        });
+    }
   }
 
-  private _getAKSVmSizes(location?: string): Observable<string[]> {
+  private _getAKSVmSizes(location: string): Observable<string[]> {
     this.isLoadingVmSizes = true;
     return this._externalClusterService.getAKSVmSizes(location).pipe(
       takeUntil(this._unsubscribe),
@@ -172,12 +211,34 @@ export class AKSClusterSettingsComponent
     );
   }
 
+  private _getAKSVmSizesForCreateMachineDeployment(location?: string): Observable<string[]> {
+    this.isLoadingVmSizes = true;
+    return this._externalClusterService
+      .getAKSVmSizesForMachineDeployment(this.projectID, this.cluster.id, location)
+      .pipe(
+        takeUntil(this._unsubscribe),
+        finalize(() => (this.isLoadingVmSizes = false))
+      );
+  }
+
+  private _getAKSAvailableNodePoolVersionsForCreateMachineDeployment(): Observable<
+    AKSNodePoolVersionForMachineDeployments[]
+  > {
+    this.isLoadingNodePoolVersions = true;
+    return this._externalClusterService
+      .getAKSAvailableNodePoolVersionsForMachineDeployment(this.projectID, this.cluster.id)
+      .pipe(
+        takeUntil(this._unsubscribe),
+        finalize(() => (this.isLoadingNodePoolVersions = false))
+      );
+  }
+
   private _updateExternalClusterModel(): void {
     const config = {
       name: this.controlValue(Controls.Name),
       cloud: {
         aks: {
-          ...this._externalClusterService.externalCluster.cloud.aks,
+          ...this._externalClusterService.externalCluster?.cloud?.aks,
           name: this.controlValue(Controls.Name),
           resourceGroup: this.controlValue(Controls.NodeResourceGroup),
         } as AKSCloudSpec,
@@ -209,5 +270,30 @@ export class AKSClusterSettingsComponent
       delete config.spec.aksclusterSpec?.machineDeploymentSpec?.basicSettings.scalingConfig;
     }
     this._externalClusterService.externalCluster = config;
+  }
+
+  private _updateExternalMachineDeployment(): void {
+    const config = {
+      name: this.controlValue(Controls.NodePoolName),
+      cloud: {
+        aks: {
+          basicSettings: {
+            mode: this.controlValue(Controls.Mode),
+            orchestratorVersion: this.controlValue(Controls.KubernetesVersion)?.main,
+            enableAutoScaling: this.controlValue(Controls.EnableAutoScaling),
+            vmSize: this.controlValue(Controls.VmSize)?.main,
+            count: this.controlValue(Controls.Count),
+          } as AgentPoolBasics,
+        } as AKSMachineDeploymentCloudSpec,
+      } as ExternalMachineDeploymentCloudSpec,
+    } as ExternalMachineDeployment;
+
+    if (this.controlValue(Controls.EnableAutoScaling)) {
+      config.cloud.aks.basicSettings.scalingConfig = {
+        maxCount: this.controlValue(Controls.MaxCount),
+        minCount: this.controlValue(Controls.MinCount),
+      } as AKSNodegroupScalingConfig;
+    }
+    this._externalMachineDeploymentService.externalMachineDeployment = config;
   }
 }
