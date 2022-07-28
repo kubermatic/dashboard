@@ -67,31 +67,32 @@ limitations under the License.
     </mat-form-field>
 
     <km-autocomplete *ngIf="isDialogView()"
-                     label="Disk Types"
+                     label="Machine Type"
+                     [options]="machineTypes"
+                     [formControlName]="Controls.MachineTypes">
+      <mg-container hint>
+        Select vCPU cores and memory
+      </mg-container>
+    </km-autocomplete>
+
+    <km-autocomplete *ngIf="isDialogView()"
+                     label="Disk Type"
                      [options]="diskTypes"
                      [formControlName]="Controls.DiskTypes">
       <mg-container hint>
-        Set Disk Type
+        SSD persistent disk is better for random IOPS or for streaming throughput with low latency.
       </mg-container>
     </km-autocomplete>
 
-    <km-autocomplete *ngIf="isDialogView()"
-                     label="Machine Sizes"
-                     [options]="machineSizes"
-                     [formControlName]="Controls.MachineSizes">
-      <mg-container hint>
-        Set Machine Size
-      </mg-container>
-    </km-autocomplete>
+    <km-number-stepper *ngIf="isDialogView()"
+                       hint="Boot disk size is permanent."
+                       mode="all"
+                       label="Disk Size"
+                       [max]="DISK_SIZE_MAX_VALUE"
+                       [min]="DISK_SIZE_MIN_VALUE"
+                       [formControlName]="Controls.DiskSize">
+    </km-number-stepper>
 
-    <km-autocomplete *ngIf="isDialogView()"
-                     label="Images"
-                     [options]="clusterImages"
-                     [formControlName]="Controls.ClusterImages">
-      <ng-container hint>
-        Set Image
-      </ng-container>
-    </km-autocomplete>
 
     <km-number-stepper hint="Set Number of Replicas"
                        mode="all"
@@ -102,7 +103,8 @@ limitations under the License.
                        [formControlName]="Controls.NodeCount">
     </km-number-stepper>
 
-    <mat-checkbox [formControlName]="Controls.EnableAutoScaling"
+    <mat-checkbox *ngIf="isDialogView()"
+                  [formControlName]="Controls.EnableAutoScaling"
                   (change)="onEnableAutoScalingChange($event)">
       Enable Auto Scaling
       <i class="km-icon-info km-pointer"
