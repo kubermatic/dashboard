@@ -33,6 +33,9 @@ limitations under the License.
       <mat-error *ngIf="form.get(control.Name).hasError('required')">
         Name is <strong>required</strong>.
       </mat-error>
+      <mat-error *ngIf="form.get(control.Name).hasError('pattern')">
+        Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash.
+      </mat-error>
     </mat-form-field>
 
     <label class="km-radio-group-label">Select a Scope</label>
