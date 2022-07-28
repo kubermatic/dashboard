@@ -144,5 +144,6 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
 
   writeValue(value: string | string[]) {
     this.form.get(ComboboxControls.Select).setValue(value, {emitEvent: false});
+    this.selected = value;
   }
 }
