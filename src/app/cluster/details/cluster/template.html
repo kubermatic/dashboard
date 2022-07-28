@@ -69,7 +69,7 @@ limitations under the License.
        target="_blank"
        mat-flat-button
        [disabled]="!kubernetesDashboardHealth"
-       [matTooltip]="kubernetesDashboardHealth ? '' : 'Kubernetes Dashboard is not running'"
+       [matTooltip]="kubernetesDashboardHealth ? '' : 'Kubernetes Dashboard is either disabled or not running'"
        *ngIf="(settings.adminSettings | async)?.enableDashboard">
       <i class="km-icon-mask km-icon-external-link"></i>
       <span>Open Dashboard</span>
@@ -226,7 +226,8 @@ limitations under the License.
                                 [healthState]="health?.operatingSystemManager"></km-property-health>
             <km-property-health label="User Controller Manager"
                                 [healthState]="health?.userClusterControllerManager"></km-property-health>
-            <km-property-health label="Kubernetes Dashboard"
+            <km-property-health *ngIf="cluster.spec.kubernetesDashboard?.enabled"
+                                label="Kubernetes Dashboard"
                                 [healthState]="health?.kubernetesDashboard"></km-property-health>
           </div>
 

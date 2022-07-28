@@ -117,7 +117,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   get kubernetesDashboardHealth(): boolean {
-    return this.health?.kubernetesDashboard === HealthState.Up;
+    return this.cluster?.spec?.kubernetesDashboard?.enabled && this.health?.kubernetesDashboard === HealthState.Up;
   }
 
   constructor(
