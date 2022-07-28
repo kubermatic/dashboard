@@ -208,7 +208,7 @@ export class KubeVirtProviderExtendedComponent extends BaseFormValidator impleme
     return this.preAllocatedDataVolumesFormArray.controls.map(perAllocatedDataVolumeFormGroup => {
       return {
         name: perAllocatedDataVolumeFormGroup.get(Controls.PreAllocatedDataVolumeName).value,
-        size: `${+perAllocatedDataVolumeFormGroup.get(Controls.PreAllocatedDataVolumeSize).value}GB`,
+        size: `${+perAllocatedDataVolumeFormGroup.get(Controls.PreAllocatedDataVolumeSize).value}Gi`,
         storageClass: perAllocatedDataVolumeFormGroup.get(Controls.PreAllocatedDataVolumeStorageClass).value[
           ComboboxControls.Select
         ],
