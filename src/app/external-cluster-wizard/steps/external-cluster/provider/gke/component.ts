@@ -84,6 +84,8 @@ export class GKEClusterSettingsComponent
   readonly DISK_SIZE_MAX_VALUE = 65536;
   readonly AUTOSCALING_MIN_VALUE = 1;
   readonly AUTOSCALING_MAX_VALUE = 1000;
+  readonly MAX_REPLICAS_COUNT_DEFAULT_VALUE = 5;
+  readonly MIN_REPLICAS_COUNT_DEFAULT_VALUE = 1;
   isLoadingZones: boolean;
   zones: string[] = [];
   diskTypes: string[] = [];
@@ -106,7 +108,7 @@ export class GKEClusterSettingsComponent
     this._initForm();
     this._initSubscriptions();
     if (!this.isDialogView()) {
-      this._getGKEZonesForMachineDeployment();
+      this._getGKEZones();
     }
   }
 
@@ -127,8 +129,8 @@ export class GKEClusterSettingsComponent
   onEnableAutoScalingChange(evt: MatCheckboxChange) {
     if (!evt.checked) {
       this.form.patchValue({
-        [Controls.MaxCount]: null,
-        [Controls.MinCount]: null,
+        [Controls.MaxCount]: this.MAX_REPLICAS_COUNT_DEFAULT_VALUE,
+        [Controls.MinCount]: this.MIN_REPLICAS_COUNT_DEFAULT_VALUE,
       });
 
       this.control(Controls.MaxCount).updateValueAndValidity();
@@ -137,19 +139,18 @@ export class GKEClusterSettingsComponent
   }
 
   private _initForm(): void {
-    const MIN_COUNT_DEFAULT_VALUE = 1;
-    const MAX_COUNT_DEFAULT_VALUE = 5;
+    const DISC_SIZE_DEFAULT_VALUE = 25;
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control('', [Validators.required, GKE_POOL_NAME_VALIDATOR]),
       [Controls.Zone]: this._builder.control('', Validators.required),
       [Controls.Version]: this._builder.control('', Validators.required),
-      [Controls.NodeCount]: this._builder.control(MIN_COUNT_DEFAULT_VALUE, Validators.required),
+      [Controls.NodeCount]: this._builder.control(this.MIN_REPLICAS_COUNT_DEFAULT_VALUE, Validators.required),
       [Controls.DiskTypes]: this._builder.control(''),
       [Controls.MachineTypes]: this._builder.control(''),
-      [Controls.DiskSize]: this._builder.control(this.DISK_SIZE_MIN_VALUE),
+      [Controls.DiskSize]: this._builder.control(DISC_SIZE_DEFAULT_VALUE),
       [Controls.EnableAutoScaling]: this._builder.control(''),
-      [Controls.MaxCount]: this._builder.control(MAX_COUNT_DEFAULT_VALUE),
-      [Controls.MinCount]: this._builder.control(MIN_COUNT_DEFAULT_VALUE),
+      [Controls.MaxCount]: this._builder.control(this.MAX_REPLICAS_COUNT_DEFAULT_VALUE),
+      [Controls.MinCount]: this._builder.control(this.MIN_REPLICAS_COUNT_DEFAULT_VALUE),
     });
   }
 
@@ -168,32 +169,32 @@ export class GKEClusterSettingsComponent
       this.control(Controls.Version).setValue(version.slice(1, version.indexOf('-')));
       this.control(Controls.Version).disable();
       this.control(Controls.Zone).clearValidators();
-      this.control(Controls.MaxCount).addValidators([Validators.required, Validators.max(this.AUTOSCALING_MAX_VALUE)]);
-      this.control(Controls.MinCount).addValidators([Validators.required, Validators.min(this.AUTOSCALING_MIN_VALUE)]);
+      this.control(Controls.MaxCount).addValidators([Validators.max(this.AUTOSCALING_MAX_VALUE)]);
+      this.control(Controls.MinCount).addValidators([Validators.min(this.AUTOSCALING_MIN_VALUE)]);
     }
   }
 
-  private _getGKEZonesForMachineDeployment(): void {
+  private _getGKEZones(): void {
     this._externalClusterService
-      .getGKEZonesForMachineDeployment()
+      .getGKEZones()
       .pipe(map((zones: GKEZone[]) => zones.map(zone => zone.name)))
       .subscribe(zones => (this.zones = zones));
   }
 
   private _getGKEDiskTypesForMachineDeployment(): void {
-    this._externalClusterService
+    this._externalMachineDeploymentService
       .getGKEDiskTypesForMachineDeployment(this.projectID, this.cluster.id)
-      .pipe(map((diskTypes: GCPDiskType[]) => diskTypes.map(type => type.name)))
+      .pipe(map((diskTypes: GCPDiskType[]) => diskTypes.map(type => type.name + ` (${type.description})`)))
       .subscribe(diskTypes => (this.diskTypes = diskTypes));
   }
 
   private _getGKEMachineSizesForMachineDeployment(): void {
-    this._externalClusterService
+    this._externalMachineDeploymentService
       .getGKEMachineSizesForMachineDeployment(this.projectID, this.cluster.id)
       .pipe(
         map((machineSizes: GCPMachineSize[]) =>
           machineSizes.map(machineType => {
-            return machineType.name + `(${machineType.description})`;
+            return machineType.name + ` (${machineType.description})`;
           })
         )
       )
@@ -220,14 +221,15 @@ export class GKEClusterSettingsComponent
   }
 
   private _updateExternalMachineDeployment(): void {
-    const selectedMachineTypes = this.controlValue(Controls.MachineTypes)?.main;
+    const selectedMachineType = this.controlValue(Controls.MachineTypes)?.main;
+    const selectedDiskType = this.controlValue(Controls.DiskTypes);
     this._externalMachineDeploymentService.externalMachineDeployment = {
       name: this.controlValue(Controls.Name),
       cloud: {
         gke: {
           config: {
-            diskType: this.controlValue(Controls.DiskTypes)?.main,
-            machineType: selectedMachineTypes?.slice(0, selectedMachineTypes.indexOf('(')),
+            diskType: selectedDiskType?.slice(0, selectedDiskType.indexOf(' ')),
+            machineType: selectedMachineType?.slice(0, selectedMachineType.indexOf(' ')),
             diskSizeGb: this.controlValue(Controls.DiskSize),
           } as GKENodeConfig,
         } as GKEMachineDeploymentCloudSpec,

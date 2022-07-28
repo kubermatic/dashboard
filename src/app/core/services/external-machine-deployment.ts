@@ -24,6 +24,8 @@ import {ExternalCluster} from '@shared/entity/external-cluster';
 import {ExternalMachineDeployment, ExternalMachineDeploymentPatch} from '@shared/entity/external-machine-deployment';
 import {MasterVersion} from '@shared/entity/cluster';
 import {ExternalAddMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/external-cluster-add-machine-deployment/component';
+import {AKSNodePoolVersionForMachineDeployments} from '@app/shared/entity/provider/aks';
+import {GCPDiskType, GCPMachineSize} from '@app/shared/entity/provider/gcp';
 
 @Injectable()
 export class ExternalMachineDeploymentService {
@@ -141,5 +143,33 @@ export class ExternalMachineDeploymentService {
   ): Observable<Record<string, never>> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterId}/machinedeployments/${machineDeploymentId}`;
     return this._httpClient.delete<Record<string, never>>(url);
+  }
+
+  getAKSVmSizesForMachineDeployment(projectID: string, clusterID: string, location: string): Observable<string[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/aks/vmsizes`;
+    return this._httpClient.get<string[]>(url, {headers: {Location: location}}).pipe(catchError(() => of<[]>()));
+  }
+
+  getAKSAvailableNodePoolVersionsForMachineDeployment(
+    projectID: string,
+    clusterID: string
+  ): Observable<AKSNodePoolVersionForMachineDeployments[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/aks/versions`;
+    return this._httpClient.get<AKSNodePoolVersionForMachineDeployments[]>(url).pipe(catchError(() => of<[]>()));
+  }
+
+  getEKSSubnetsForMachineDeployment(projectID: string, clusterID: string, vpcId: string): Observable<string[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/eks/subnets`;
+    return this._httpClient.get<string[]>(url, {headers: {VpcId: vpcId}}).pipe(catchError(() => of<[]>()));
+  }
+
+  getGKEDiskTypesForMachineDeployment(projectID: string, clusterID: string): Observable<GCPDiskType[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/gke/disktypes`;
+    return this._httpClient.get<GCPDiskType[]>(url).pipe(catchError(() => of<[]>()));
+  }
+
+  getGKEMachineSizesForMachineDeployment(projectID: string, clusterID: string): Observable<GCPMachineSize[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/gke/sizes`;
+    return this._httpClient.get<GCPMachineSize[]>(url).pipe(catchError(() => of<[]>()));
   }
 }

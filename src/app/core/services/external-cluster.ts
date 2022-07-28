@@ -17,7 +17,7 @@ import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {environment} from '@environments/environment';
-import {AKSCluster, AKSNodePoolVersionForMachineDeployments} from '@shared/entity/provider/aks';
+import {AKSCluster} from '@shared/entity/provider/aks';
 import {EKSCluster, EKSVpc} from '@shared/entity/provider/eks';
 import {GKECluster, GKEZone} from '@shared/entity/provider/gke';
 import {
@@ -32,7 +32,6 @@ import {catchError, filter} from 'rxjs/operators';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {ClusterListTab} from '@app/cluster/list/component';
 import {NotificationService} from '@core/services/notification';
-import {GCPDiskType, GCPMachineSize} from '@app/shared/entity/provider/gcp';
 
 @Injectable({providedIn: 'root'})
 export class ExternalClusterService {
@@ -217,32 +216,9 @@ export class ExternalClusterService {
     return this._http.get<string[]>(url, {headers: this._getAKSHeaders(location)}).pipe(catchError(() => of<[]>()));
   }
 
-  getAKSVmSizesForMachineDeployment(projectID: string, clusterID: string, location: string): Observable<string[]> {
-    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/aks/vmsizes`;
-    return this._http.get<string[]>(url, {headers: {Location: location}}).pipe(catchError(() => of<[]>()));
-  }
-
-  getAKSAvailableNodePoolVersionsForMachineDeployment(
-    projectID: string,
-    clusterID: string
-  ): Observable<AKSNodePoolVersionForMachineDeployments[]> {
-    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/aks/versions`;
-    return this._http.get<AKSNodePoolVersionForMachineDeployments[]>(url).pipe(catchError(() => of<[]>()));
-  }
-
-  getGKEZonesForMachineDeployment(): Observable<GKEZone[]> {
+  getGKEZones(): Observable<GKEZone[]> {
     const url = `${this._newRestRoot}/providers/gke/zones`;
     return this._http.get<GKEZone[]>(url, {headers: this._getGKEHeaders()}).pipe(catchError(() => of<[]>()));
-  }
-
-  getGKEDiskTypesForMachineDeployment(projectID: string, clusterID: string): Observable<GCPDiskType[]> {
-    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/gke/disktypes`;
-    return this._http.get<GCPDiskType[]>(url).pipe(catchError(() => of<[]>()));
-  }
-
-  getGKEMachineSizesForMachineDeployment(projectID: string, clusterID: string): Observable<GCPMachineSize[]> {
-    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/gke/sizes`;
-    return this._http.get<GCPMachineSize[]>(url).pipe(catchError(() => of<[]>()));
   }
 
   getEKSVpcs(): Observable<EKSVpc[]> {
@@ -254,11 +230,6 @@ export class ExternalClusterService {
     const url = `${this._newRestRoot}/providers/eks/subnets`;
     const headers: HttpHeaders = this._getEKSHeaders(vpcId);
     return this._http.get<string[]>(url, {headers}).pipe(catchError(() => of<[]>()));
-  }
-
-  getEKSSubnetsForMachineDeployment(projectID: string, clusterID: string, vpcId: string): Observable<string[]> {
-    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/eks/subnets`;
-    return this._http.get<string[]>(url, {headers: {VpcId: vpcId}}).pipe(catchError(() => of<[]>()));
   }
 
   getEKSSecurityGroups(vpcId: string): Observable<string[]> {

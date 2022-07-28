@@ -166,7 +166,7 @@ export class EKSClusterSettingsComponent
       this.control(Controls.Vpc).setValue(this.cluster.spec.eksclusterSpec.vpcConfigRequest.vpcId);
       this.control(Controls.Vpc).disable();
 
-      this._externalClusterService
+      this._externalMachineDeploymentService
         .getEKSSubnetsForMachineDeployment(this.projectID, this.cluster.id, this.control(Controls.Vpc).value)
         .subscribe((data: string[]) => {
           this.subnetIds = data;

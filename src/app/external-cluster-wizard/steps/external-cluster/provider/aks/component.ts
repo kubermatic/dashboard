@@ -213,7 +213,7 @@ export class AKSClusterSettingsComponent
 
   private _getAKSVmSizesForMachineDeployment(location?: string): Observable<string[]> {
     this.isLoadingVmSizes = true;
-    return this._externalClusterService
+    return this._externalMachineDeploymentService
       .getAKSVmSizesForMachineDeployment(this.projectID, this.cluster.id, location)
       .pipe(
         takeUntil(this._unsubscribe),
@@ -225,7 +225,7 @@ export class AKSClusterSettingsComponent
     AKSNodePoolVersionForMachineDeployments[]
   > {
     this.isLoadingNodePoolVersions = true;
-    return this._externalClusterService
+    return this._externalMachineDeploymentService
       .getAKSAvailableNodePoolVersionsForMachineDeployment(this.projectID, this.cluster.id)
       .pipe(
         takeUntil(this._unsubscribe),
