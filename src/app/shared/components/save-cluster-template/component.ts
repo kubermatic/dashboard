@@ -25,6 +25,7 @@ import {ClusterTemplateService} from '@core/services/cluster-templates';
 import {SSHKey} from '@shared/entity/ssh-key';
 import _ from 'lodash';
 import {Observable} from 'rxjs';
+import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@shared/validators/others';
 
 class SaveClusterTemplateDialogData {
   cluster: Cluster;
@@ -57,7 +58,7 @@ export class SaveClusterTemplateDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      [Control.Name]: new FormControl('', [Validators.required]),
+      [Control.Name]: new FormControl('', [Validators.required, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR]),
       [Control.Scope]: new FormControl(ClusterTemplateScope.User, [Validators.required]),
     });
 
