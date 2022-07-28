@@ -55,7 +55,7 @@ export class ExternalMachineDeploymentCloudSpec {
   aks?: AKSMachineDeploymentCloudSpec;
 }
 
-class GKEMachineDeploymentCloudSpec {
+export class GKEMachineDeploymentCloudSpec {
   autoscaling?: GKENodePoolAutoscaling;
   config?: GKENodeConfig;
   management?: GKENodeManagement;
@@ -76,14 +76,14 @@ export class EKSScalingConfig {
   minSize?: number;
 }
 
-class GKENodePoolAutoscaling {
+export class GKENodePoolAutoscaling {
   autoprovisioned?: boolean;
   enabled?: boolean;
   maxNodeCount?: number;
   minNodeCount?: number;
 }
 
-class GKENodeConfig {
+export class GKENodeConfig {
   diskSizeGb?: number;
   diskType?: string;
   imageType?: string;

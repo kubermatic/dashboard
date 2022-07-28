@@ -116,7 +116,7 @@ limitations under the License.
         Node Pool Name is <strong>required</strong>.
       </mat-error>
       <mat-error *ngIf="form.get(Controls.NodePoolName).hasError(ErrorType.Pattern)">
-        Node Pool Name must contain only lowercase letters and numbers, must be 12 or fewer characters.</mat-error>
+        Node pool Name must contain only lowercase letters and numbers, must be 12 or fewer characters.</mat-error>
     </mat-form-field>
 
     <km-autocomplete label="VM Size"
@@ -167,12 +167,11 @@ limitations under the License.
       <mat-radio-button [value]="Mode.System"
                         class="km-radio-button">
         <div class="km-radio-button-title"
-             [ngClass]="!isDialogView() && 'km-text-muted'">System</div>
+             [ngClass]="!isDialogView() && 'km-text'">System</div>
       </mat-radio-button>
       <mat-radio-button [value]="Mode.User"
                         class="km-radio-button">
-        <div class="km-radio-button-title"
-             [ngClass]="!isDialogView() && 'km-text-muted'">User</div>
+        <div class="km-radio-button-title">User</div>
       </mat-radio-button>
     </mat-radio-group>
 
@@ -181,7 +180,7 @@ limitations under the License.
          fxLayoutGap="10px">
       <mat-checkbox [formControlName]="Controls.EnableAutoScaling"
                     (change)="onEnableAutoScalingChange($event)">
-        Enable Auto Scaling
+        Enable AutoScaling
         <i class="km-icon-info km-pointer"
            matTooltip="Indicates whether to enable auto scaling.This option is recommended so that cluster sized correctly for the current running workloads."></i>
       </mat-checkbox>

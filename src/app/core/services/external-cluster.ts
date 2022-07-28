@@ -17,7 +17,7 @@ import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {environment} from '@environments/environment';
-import {AKSCluster, AKSNodePoolVersionForMachineDeployments} from '@shared/entity/provider/aks';
+import {AKSCluster} from '@shared/entity/provider/aks';
 import {EKSCluster, EKSVpc} from '@shared/entity/provider/eks';
 import {GKECluster, GKEZone} from '@shared/entity/provider/gke';
 import {
@@ -216,19 +216,6 @@ export class ExternalClusterService {
     return this._http.get<string[]>(url, {headers: this._getAKSHeaders(location)}).pipe(catchError(() => of<[]>()));
   }
 
-  getAKSVmSizesForMachineDeployment(projectID: string, clusterID: string, location: string): Observable<string[]> {
-    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/aks/vmsizes`;
-    return this._http.get<string[]>(url, {headers: {Location: location}}).pipe(catchError(() => of<[]>()));
-  }
-
-  getAKSAvailableNodePoolVersionsForMachineDeployment(
-    projectID: string,
-    clusterID: string
-  ): Observable<AKSNodePoolVersionForMachineDeployments[]> {
-    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/aks/versions`;
-    return this._http.get<AKSNodePoolVersionForMachineDeployments[]>(url).pipe(catchError(() => of<[]>()));
-  }
-
   getGKEZones(): Observable<GKEZone[]> {
     const url = `${this._newRestRoot}/providers/gke/zones`;
     return this._http.get<GKEZone[]>(url, {headers: this._getGKEHeaders()}).pipe(catchError(() => of<[]>()));
@@ -243,11 +230,6 @@ export class ExternalClusterService {
     const url = `${this._newRestRoot}/providers/eks/subnets`;
     const headers: HttpHeaders = this._getEKSHeaders(vpcId);
     return this._http.get<string[]>(url, {headers}).pipe(catchError(() => of<[]>()));
-  }
-
-  getEKSSubnetsForCreateMachineDeployment(projectID: string, clusterID: string, vpcId: string): Observable<string[]> {
-    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/eks/subnets`;
-    return this._http.get<string[]>(url, {headers: {VpcId: vpcId}}).pipe(catchError(() => of<[]>()));
   }
 
   getEKSSecurityGroups(vpcId: string): Observable<string[]> {

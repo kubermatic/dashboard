@@ -14,18 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <form [formGroup]="form"
-      fxLayout="row"
+      [fxLayout]="isDialogView() ? 'column' : 'row'"
       fxLayoutGap="30px"
       fxLayout.md="column"
       fxLayoutGap.md="auto"
       fxLayout.sm="column"
       fxLayoutGap.sm="30px">
 
-  <div fxFlex="50%"
+  <div [fxFlex]="isDialogView() ? '100%' : '50%'"
        fxLayout="column"
        fxLayoutGap="8px">
 
-    <mat-card-header class="km-no-padding">
+    <mat-card-header *ngIf="!isDialogView()"
+                     class="km-no-padding">
       <mat-card-title>Cluster</mat-card-title>
     </mat-card-header>
 
@@ -34,7 +35,8 @@ limitations under the License.
       <input matInput
              type="text"
              [formControlName]="Controls.Name" />
-      <button mat-icon-button
+      <button *ngIf="!isDialogView()"
+              mat-icon-button
               type="button"
               matSuffix
               class="km-randomize-btn"
@@ -47,7 +49,8 @@ limitations under the License.
         Name is <strong>required</strong>.
       </mat-error>
       <mat-error *ngIf="form.get(Controls.Name).hasError('pattern')">
-        Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash.
+        Node pool names must start with a lowercase letter followed by up to 39 lowercase letters,
+        numbers, or hyphens. They can't end with a hyphen.
       </mat-error>
     </mat-form-field>
 
@@ -57,26 +60,84 @@ limitations under the License.
       <input matInput
              type="text"
              [formControlName]="Controls.Version" />
-      <mat-hint>Set the kubernetes version.</mat-hint>
+      <mat-hint *ngIf="!isDialogView()">Set the kubernetes version.</mat-hint>
       <mat-error *ngIf="form.get(Controls.Version).hasError('required')">
         Kubernetes Version is <strong>required</strong>.
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>Initial Node Count
-      </mat-label>
-      <input matInput
-             type="number"
-             [formControlName]="Controls.NodeCount" />
-      <mat-hint>Set the Initial Node Count.</mat-hint>
-      <mat-error *ngIf="form.get(Controls.NodeCount).hasError('required')">
-        Initial Node Count is <strong>required</strong>.
-      </mat-error>
-    </mat-form-field>
+    <km-autocomplete *ngIf="isDialogView()"
+                     label="Machine Type"
+                     [options]="machineTypes"
+                     [formControlName]="Controls.MachineTypes">
+      <mg-container hint>
+        Select vCPU cores and memory
+      </mg-container>
+    </km-autocomplete>
+
+    <km-autocomplete *ngIf="isDialogView()"
+                     label="Disk Type"
+                     [options]="diskTypes"
+                     [formControlName]="Controls.DiskTypes">
+      <mg-container hint>
+        SSD persistent disk is better for random IOPS or for streaming throughput with low latency.
+      </mg-container>
+    </km-autocomplete>
+
+    <km-number-stepper *ngIf="isDialogView()"
+                       hint="Boot disk size is permanent."
+                       mode="all"
+                       label="Disk Size"
+                       [max]="DISK_SIZE_MAX_VALUE"
+                       [min]="DISK_SIZE_MIN_VALUE"
+                       [formControlName]="Controls.DiskSize">
+    </km-number-stepper>
+
+
+    <km-number-stepper hint="Set Number of Replicas"
+                       mode="all"
+                       [label]="isDialogView() ? 'Number of Replicas' : 'Initial Node Count'"
+                       [max]="form.get(Controls.EnableAutoScaling).value ? form.get(Controls.MaxCount).value : AUTOSCALING_MAX_VALUE"
+                       [min]="form.get(Controls.EnableAutoScaling).value ? form.get(Controls.MinCount).value : AUTOSCALING_MIN_VALUE"
+                       [required]="true"
+                       [formControlName]="Controls.NodeCount">
+    </km-number-stepper>
+
+    <div fxLayout="column"
+         fxFlex="100"
+         fxLayoutGap="10px">
+      <mat-checkbox *ngIf="isDialogView()"
+                    [formControlName]="Controls.EnableAutoScaling"
+                    (change)="onEnableAutoScalingChange($event)">
+        Enable AutoScaling
+        <i class="km-icon-info km-pointer"
+           matTooltip="Indicates whether to enable auto scaling.This option is recommended so that cluster sized correctly for the current running workloads."></i>
+      </mat-checkbox>
+    </div>
+
+    <ng-container *ngIf="form.get(Controls.EnableAutoScaling).value">
+      <km-number-stepper label="Max Count"
+                         mode="all"
+                         hint="The maximum number of nodes for auto-scaling. Maximum value can be 1000."
+                         [required]="true"
+                         [min]="form.get(Controls.MinCount).value"
+                         [max]="1000"
+                         [formControlName]="Controls.MaxCount">
+      </km-number-stepper>
+
+      <km-number-stepper label="Min Count"
+                         mode="all"
+                         hint="The minimum number of nodes for auto-scaling. Minimum value can be 1"
+                         [required]="true"
+                         [min]="1"
+                         [max]="form.get(Controls.MaxCount).value"
+                         [formControlName]="Controls.MinCount">
+      </km-number-stepper>
+    </ng-container>
   </div>
 
-  <div fxFlex="50%"
+  <div *ngIf="!isDialogView()"
+       fxFlex="50%"
        fxLayout="column"
        fxLayoutGap="8px">
 
@@ -94,5 +155,4 @@ limitations under the License.
     </km-autocomplete>
 
   </div>
-
 </form>

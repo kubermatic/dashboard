@@ -15,7 +15,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
-import {catchError, map, mergeMap, filter, take, switchMap} from 'rxjs/operators';
+import {catchError, filter, map, mergeMap, switchMap, take} from 'rxjs/operators';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {environment} from '@environments/environment';
 import {NotificationService} from '@core/services/notification';
@@ -24,6 +24,8 @@ import {ExternalCluster} from '@shared/entity/external-cluster';
 import {ExternalMachineDeployment, ExternalMachineDeploymentPatch} from '@shared/entity/external-machine-deployment';
 import {MasterVersion} from '@shared/entity/cluster';
 import {ExternalAddMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/external-cluster-add-machine-deployment/component';
+import {AKSNodePoolVersionForMachineDeployments} from '@app/shared/entity/provider/aks';
+import {GCPDiskType, GCPMachineSize} from '@app/shared/entity/provider/gcp';
 
 @Injectable()
 export class ExternalMachineDeploymentService {
@@ -46,6 +48,42 @@ export class ExternalMachineDeploymentService {
     this._externalMachineDeployment = externalMachineDeployment;
   }
 
+  get isAddMachineDeploymentFormValid(): boolean {
+    return this._isAddMachineDeploymentFormValid;
+  }
+
+  set isAddMachineDeploymentFormValid(valid: boolean) {
+    this._isAddMachineDeploymentFormValid = valid;
+  }
+
+  getEKSSubnetsForMachineDeployment(projectID: string, clusterID: string, vpcId: string): Observable<string[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/eks/subnets`;
+    return this._httpClient.get<string[]>(url, {headers: {VpcId: vpcId}}).pipe(catchError(() => of<[]>()));
+  }
+
+  getAKSVmSizesForMachineDeployment(projectID: string, clusterID: string, location: string): Observable<string[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/aks/vmsizes`;
+    return this._httpClient.get<string[]>(url, {headers: {Location: location}}).pipe(catchError(() => of<[]>()));
+  }
+
+  getAKSAvailableNodePoolVersionsForMachineDeployment(
+    projectID: string,
+    clusterID: string
+  ): Observable<AKSNodePoolVersionForMachineDeployments[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/aks/versions`;
+    return this._httpClient.get<AKSNodePoolVersionForMachineDeployments[]>(url).pipe(catchError(() => of<[]>()));
+  }
+
+  getGKEDiskTypesForMachineDeployment(projectID: string, clusterID: string): Observable<GCPDiskType[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/gke/disktypes`;
+    return this._httpClient.get<GCPDiskType[]>(url).pipe(catchError(() => of<[]>()));
+  }
+
+  getGKEMachineSizesForMachineDeployment(projectID: string, clusterID: string): Observable<GCPMachineSize[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/gke/sizes`;
+    return this._httpClient.get<GCPMachineSize[]>(url).pipe(catchError(() => of<[]>()));
+  }
+
   machineDeploymentUpgrades(
     projectID: string,
     clusterID: string,
@@ -63,14 +101,6 @@ export class ExternalMachineDeploymentService {
   ): Observable<ExternalMachineDeployment> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/machinedeployments/${machineDeploymentID}`;
     return this._httpClient.patch<ExternalMachineDeployment>(url, patch);
-  }
-
-  get isAddMachineDeploymentFormValid(): boolean {
-    return this._isAddMachineDeploymentFormValid;
-  }
-
-  set isAddMachineDeploymentFormValid(valid: boolean) {
-    this._isAddMachineDeploymentFormValid = valid;
   }
 
   showCreateExternalClusterMachineDeploymentDialog(

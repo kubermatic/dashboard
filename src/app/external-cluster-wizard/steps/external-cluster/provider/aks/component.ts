@@ -182,7 +182,7 @@ export class AKSClusterSettingsComponent
       this.control(Controls.Name).clearValidators();
       this.control(Controls.Location).clearValidators();
       this.control(Controls.NodeResourceGroup).clearValidators();
-      this._getAKSVmSizesForCreateMachineDeployment(this.cluster.spec.aksclusterSpec.location).subscribe(
+      this._getAKSVmSizesForMachineDeployment(this.cluster.spec.aksclusterSpec.location).subscribe(
         (vmSizes: string[]) => {
           this.vmSizes = vmSizes;
         }
@@ -211,9 +211,9 @@ export class AKSClusterSettingsComponent
     );
   }
 
-  private _getAKSVmSizesForCreateMachineDeployment(location?: string): Observable<string[]> {
+  private _getAKSVmSizesForMachineDeployment(location?: string): Observable<string[]> {
     this.isLoadingVmSizes = true;
-    return this._externalClusterService
+    return this._externalMachineDeploymentService
       .getAKSVmSizesForMachineDeployment(this.projectID, this.cluster.id, location)
       .pipe(
         takeUntil(this._unsubscribe),
@@ -225,7 +225,7 @@ export class AKSClusterSettingsComponent
     AKSNodePoolVersionForMachineDeployments[]
   > {
     this.isLoadingNodePoolVersions = true;
-    return this._externalClusterService
+    return this._externalMachineDeploymentService
       .getAKSAvailableNodePoolVersionsForMachineDeployment(this.projectID, this.cluster.id)
       .pipe(
         takeUntil(this._unsubscribe),
