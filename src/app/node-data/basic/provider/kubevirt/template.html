@@ -97,15 +97,18 @@ limitations under the License.
                      required>
   </km-number-stepper>
 
-  <mat-card-header class="km-no-padding">
+  <mat-card-header class="km-no-padding" fxLayoutAlign=" center">
     <mat-card-title>Secondary Disks</mat-card-title>
     <div fxFlex></div>
-    <button mat-icon-button
-            class="add-secondary-disk-button"
+    <button fxLayoutAlign="center center"
+            mat-flat-button
+            type="button"
+            color="quaternary"
             matTooltip="Add secondary disk"
             (click)="addSecondaryDisk()"
             [disabled]="this.secondaryDisksFormArray.length >= this.maxSecondaryDisks">
       <i class="km-icon-mask km-icon-add"></i>
+      <span>Add Disk</span>
     </button>
   </mat-card-header>
 
