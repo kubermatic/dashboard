@@ -321,6 +321,12 @@ export class KubeVirtBasicNodeDataComponent
       this.form.get(Controls.NodeAffinityPreset).setValue(this._initialData.nodeAffinityPreset?.Type);
       this.form.get(Controls.NodeAffinityPresetKey).setValue(this._initialData.nodeAffinityPreset?.Key);
       this.nodeAffinityPresetValues = this._initialData.nodeAffinityPreset?.Values || [];
+
+      if (this._initialData.secondaryDisks?.length) {
+        this._initialData.secondaryDisks.forEach(disk => {
+          this.addSecondaryDisk(disk.storageClassName, disk.size.match(/\d+/)[0]);
+        });
+      }
     }
   }
 
