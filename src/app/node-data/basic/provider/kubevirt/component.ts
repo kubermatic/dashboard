@@ -159,6 +159,16 @@ export class KubeVirtBasicNodeDataComponent
     this.form.valueChanges
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
+
+    this.form
+      .get(Controls.SecondaryDisks)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        const secondaryDisks = this._secondaryDisks;
+        this._nodeDataService.nodeData.spec.cloud.kubevirt.secondaryDisks = secondaryDisks?.length
+          ? secondaryDisks
+          : null;
+      });
   }
 
   ngAfterViewChecked(): void {
@@ -318,7 +328,6 @@ export class KubeVirtBasicNodeDataComponent
     const flavor = this.form.get(Controls.VMFlavor).value[ComboboxControls.Select];
     const cpus = this.form.get(Controls.CPUs).value;
     const memory = this.form.get(Controls.Memory).value;
-    const secondaryDisks = this._secondaryDisks;
     const nodeAffinityPreset = this.form.get(Controls.NodeAffinityPreset).value;
     const nodeAffinityPresetData: KubeVirtNodeAffinityPreset = !nodeAffinityPreset
       ? null
@@ -340,7 +349,6 @@ export class KubeVirtBasicNodeDataComponent
               ComboboxControls.Select
             ],
             primaryDiskSize: `${this.form.get(Controls.PrimaryDiskSize).value}Gi`,
-            secondaryDisks: secondaryDisks?.length ? secondaryDisks : null,
             podAffinityPreset: this.form.get(Controls.PodAffinityPreset).value,
             podAntiAffinityPreset: this.form.get(Controls.PodAntiAffinityPreset).value,
             nodeAffinityPreset: nodeAffinityPresetData,
