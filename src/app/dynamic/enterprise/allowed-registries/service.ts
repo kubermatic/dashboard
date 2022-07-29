@@ -29,6 +29,7 @@ import {shareReplay, switchMap} from 'rxjs/operators';
 @Injectable()
 export class AllowedRegistriesService {
   private _newRestRoot: string = environment.newRestRoot;
+
   private readonly _refreshTime = 10;
   private _allowedRegistries$: Observable<AllowedRegistry[]>;
   private _allowedRegistriesRefresh$ = new Subject<void>();

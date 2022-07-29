@@ -23,28 +23,26 @@ END OF TERMS AND CONDITIONS
 <div id="km-edit-group-dialog">
   <km-dialog-title>Edit Group</km-dialog-title>
   <mat-dialog-content>
-    <p class="km-dialog-context-description">Edit <b>{{groupProjectBinding.group}}</b> of <b>{{project.name}}</b> project</p>
+    <p class="km-dialog-context-description">Edit <b>{{group.group}}</b> group of <b>{{project.name}}</b> project</p>
     <form [formGroup]="form"
-          fxLayout="column"
-          id="edit-group-form">
+          fxLayout="column">
 
       <mat-form-field fxFlex>
         <mat-label>Group</mat-label>
         <input matInput
-               [value]="groupProjectBinding.group"
-               [formControlName]="'group'">
+               [value]="group.group"
+               [formControlName]="Controls.Group">
       </mat-form-field>
 
       <label class="km-radio-group-label">Select a Role</label>
-      <mat-radio-group formControlName="role"
+      <mat-radio-group [formControlName]="Controls.Role"
                        fxFlex
                        fxLayout="column"
                        class="km-radio-group">
         <mat-radio-button value="owners"
                           class="km-radio-button">
           <div class="km-radio-button-title">Owner</div>
-          <div class="km-radio-button-description">Full access, allows all actions, also able to remove other owners
-            from the project
+          <div class="km-radio-button-description">Full access, allows all actions, also able to remove other owners, groups from the project
           </div>
         </mat-radio-button>
         <mat-radio-button value="editors"

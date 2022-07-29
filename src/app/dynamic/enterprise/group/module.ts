@@ -1,20 +1,6 @@
-// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 //                Kubermatic Enterprise Read-Only License
 //                       Version 1.0 ("KERO-1.0”)
-//                   Copyright © 2020 Kubermatic GmbH
+//                   Copyright © 2022 Kubermatic GmbH
 //
 // 1. You may only view, read and display for studying purposes the source
 //    code of the software licensed under this license, and, to the extent
@@ -33,7 +19,18 @@
 // END OF TERMS AND CONDITIONS
 
 import {NgModule} from '@angular/core';
-import {RouterModule} from '@angular/router';
+import {RouterModule, Routes} from '@angular/router';
+import {SharedModule} from '@shared/module';
+import {GroupService} from './service';
+import {GroupComponent} from './component';
+import {AddGroupDialogComponent} from '@app/dynamic/enterprise/group/add-group-dialog/component';
+import {EditGroupDialogComponent} from '@app/dynamic/enterprise/group/edit-group-dialog/component';
 
-@NgModule({imports: [RouterModule.forChild([])]})
-export class ProjectGroupsModule {}
+const routes: Routes = [{path: '', outlet: 'groups', component: GroupComponent}];
+
+@NgModule({
+  imports: [SharedModule, RouterModule.forChild(routes)],
+  providers: [GroupService],
+  declarations: [GroupComponent, AddGroupDialogComponent, EditGroupDialogComponent],
+})
+export class GroupModule {}

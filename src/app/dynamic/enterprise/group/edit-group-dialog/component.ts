@@ -19,53 +19,59 @@
 // END OF TERMS AND CONDITIONS
 
 import {Component, Input, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
-import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {Observable} from 'rxjs';
-import {GroupProjectBinding} from '@app/dynamic/enterprise/project-groups/entity';
-import {ProjectGroupBindingService} from '@app/dynamic/enterprise/project-groups/service';
+import {Group} from '@app/dynamic/enterprise/group/entity';
+import {GroupService} from '@app/dynamic/enterprise/group/service';
+
+enum Controls {
+  Group = 'group',
+  Role = 'role',
+}
 
 @Component({
   selector: 'km-edit-group-dialog',
   templateUrl: './template.html',
 })
 export class EditGroupDialogComponent implements OnInit {
+  readonly Controls = Controls;
+
   @Input() project: Project;
-  @Input() member: Member;
-  @Input() groupProjectBinding: GroupProjectBinding;
+  @Input() group: Group;
 
   form: FormGroup;
 
   constructor(
-    private readonly _projectGroupBindingService: ProjectGroupBindingService,
+    private readonly _builder: FormBuilder,
+    private readonly _groupService: GroupService,
     private readonly _matDialogRef: MatDialogRef<EditGroupDialogComponent>,
     private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
-    this.form = new FormGroup({
-      group: new FormControl(this.groupProjectBinding.group, [Validators.required]),
-      role: new FormControl(this.groupProjectBinding.role, [Validators.required]),
+    const {group, role} = this.group;
+    this.form = this._builder.group({
+      [Controls.Group]: this._builder.control(group, Validators.required),
+      [Controls.Role]: this._builder.control(role, Validators.required),
     });
   }
 
-  getObservable(): Observable<GroupProjectBinding> {
-    return this._projectGroupBindingService.edit(
+  getObservable(): Observable<Group> {
+    return this._groupService.edit(
       {
-        name: this.groupProjectBinding.name,
-        projectID: this.groupProjectBinding.projectID,
         group: this.form.controls.group.value,
         role: this.form.controls.role.value,
       },
-      this.project.id
+      this.project.id,
+      this.group.name
     );
   }
 
   onNext(): void {
+    this._notificationService.success(`Updated the ${this.group.group} group`);
     this._matDialogRef.close(true);
-    this._notificationService.success(`Updated the ${this.groupProjectBinding.name} group`);
   }
 }

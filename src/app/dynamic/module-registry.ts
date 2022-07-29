@@ -24,7 +24,5 @@ export namespace DynamicModule {
   );
   export const Metering = import('./enterprise/metering/module').then(module => module.MeteringModule);
   export const Quotas = import('./enterprise/quotas/module').then(module => module.QuotasModule);
-  export const ProjectGroupsModule = import('./enterprise/project-groups/module').then(
-    module => module.ProjectGroupsModule
-  );
+  export const Group = import('./enterprise/group/module').then(module => module.GroupModule);
 }

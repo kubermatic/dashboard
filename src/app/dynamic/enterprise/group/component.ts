@@ -18,26 +18,30 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
-import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import _ from 'lodash';
-import {merge, Subject} from 'rxjs';
+import {EMPTY, merge, Subject, timer} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
 import {MatTableDataSource} from '@angular/material/table';
 import {DynamicTab} from '@shared/model/dynamic-tab';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
-import {ProjectGroupBindingService} from '@app/dynamic/enterprise/project-groups/service';
-import {GroupProjectBinding} from '@app/dynamic/enterprise/project-groups/entity';
+import {GroupService} from '@app/dynamic/enterprise/group/service';
+import {Group} from '@app/dynamic/enterprise/group/entity';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
 import {AddGroupDialogComponent} from './add-group-dialog/component';
 import {EditGroupDialogComponent} from './edit-group-dialog/component';
+import {AppConfigService} from '@app/config.service';
+import {MemberUtils, Permission} from '@shared/utils/member';
+import {View} from '@shared/entity/common';
+import {Member} from '@shared/entity/member';
+import {GroupConfig} from '@shared/model/Config';
 
 enum Column {
   Group = 'group',
@@ -46,46 +50,46 @@ enum Column {
 }
 
 @Component({
-  selector: 'km-project-group-bindings-list',
+  selector: 'km-group',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class ProjectGroupBindingsComponent extends DynamicTab implements OnInit, OnChanges, OnDestroy {
+export class GroupComponent extends DynamicTab implements OnInit, OnDestroy {
   readonly column = Column;
   readonly displayedColumns: string[] = Object.values(Column);
 
-  dataSource = new MatTableDataSource<GroupProjectBinding>();
-  isLoadingGroupBindings = true;
   currentUser: Member;
-  groupProjectBindings: GroupProjectBinding[] = [];
+  groups: Group[] = [];
+  dataSource = new MatTableDataSource<Group>();
+  isInitializingGroups = true;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  private readonly _googleAnalyticsEventCategory = 'memberOverview';
+  private readonly _refreshTime = 10;
+  private readonly _googleAnalyticsEventCategory = 'groupOverview';
+  private _currentGroupConfig: GroupConfig;
+  private _groupsUpdate = new Subject<void>();
   private _unsubscribe = new Subject<void>();
   private _selectedProject: Project;
 
   constructor(
+    private readonly _appConfig: AppConfigService,
     private readonly _matDialog: MatDialog,
-    private readonly _userService: UserService,
     private readonly _projectService: ProjectService,
-    private readonly _projectGroupBindingService: ProjectGroupBindingService,
+    private readonly _userService: UserService,
+    private readonly _groupService: GroupService,
     private readonly _googleAnalyticsService: GoogleAnalyticsService,
     private readonly _notificationService: NotificationService
   ) {
     super();
   }
 
-  ngOnChanges(): void {
-    this.dataSource.data = this.groupProjectBindings;
-  }
-
   ngOnInit(): void {
-    this.dataSource.data = this.groupProjectBindings;
+    this.dataSource.data = this.groups;
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.sort.active = 'name';
+    this.sort.active = Column.Group;
     this.sort.direction = 'asc';
 
     this._initSubscriptions();
@@ -96,53 +100,39 @@ export class ProjectGroupBindingsComponent extends DynamicTab implements OnInit,
     this._unsubscribe.complete();
   }
 
-  isPaginatorVisible(): boolean {
-    return (
-      !_.isEmpty(this.groupProjectBindings) &&
-      this.paginator &&
-      this.groupProjectBindings.length > this.paginator.pageSize
-    );
-  }
-
-  getEditTooltip(groupProjectBinding: GroupProjectBinding): string {
-    // Todo: Fix checks
-    return this.currentUser && groupProjectBinding && this.currentUser.name === groupProjectBinding.name
-      ? 'You cannot edit your own data and permissions'
-      : 'Edit group';
-  }
-
-  getDeleteTooltip(groupProjectBinding: GroupProjectBinding): string {
-    // Todo: Fix checks
-    return this.currentUser && groupProjectBinding && this.currentUser.name === groupProjectBinding.name
-      ? 'You cannot edit your own data and permissions'
-      : 'Remove group';
-  }
-
   addGroup(): void {
     const modal = this._matDialog.open(AddGroupDialogComponent);
     modal.componentInstance.project = this._selectedProject;
-    modal.afterClosed().pipe(take(1)).subscribe();
-  }
-
-  editGroupBinding(groupProjectBinding: GroupProjectBinding): void {
-    const modal = this._matDialog.open(EditGroupDialogComponent);
-    modal.componentInstance.project = this._selectedProject;
-    modal.componentInstance.groupProjectBinding = groupProjectBinding;
     modal
       .afterClosed()
       .pipe(take(1))
-      .subscribe(isEdited => {
-        if (isEdited) {
-          this._projectGroupBindingService.refreshProjectGroupBindings();
+      .subscribe((group: Group) => {
+        if (group) {
+          this.groups.push(group);
+          this._groupsUpdate.next();
         }
       });
   }
 
-  deleteGroupBinding(groupProjectBinding: GroupProjectBinding): void {
+  editGroup(group: Group): void {
+    const modal = this._matDialog.open(EditGroupDialogComponent);
+    modal.componentInstance.project = this._selectedProject;
+    modal.componentInstance.group = group;
+    modal
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe((isEdited: boolean) => {
+        if (isEdited) {
+          this._groupsUpdate.next();
+        }
+      });
+  }
+
+  deleteGroup(group: Group): void {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Remove Group',
-        message: `Remove <b>${groupProjectBinding.group}</b> from <b>${this._selectedProject.name}</b> project?`,
+        message: `Remove <b>${group.group}</b> group from <b>${this._selectedProject.name}</b> project?`,
         confirmLabel: 'Remove',
       },
     };
@@ -151,36 +141,60 @@ export class ProjectGroupBindingsComponent extends DynamicTab implements OnInit,
     this._matDialog
       .open(ConfirmationDialogComponent, dialogConfig)
       .afterClosed()
-      .pipe(filter(isConfirmed => isConfirmed))
-      .pipe(switchMap(_ => this._projectGroupBindingService.remove(groupProjectBinding, this._selectedProject.id)))
+      .pipe(filter((isConfirmed: boolean) => isConfirmed))
+      .pipe(switchMap(_ => this._groupService.remove(this._selectedProject.id, group.name)))
       .pipe(take(1))
       .subscribe(() => {
         this._notificationService.success(
-          `Removed the ${groupProjectBinding.group} group from the ${this._selectedProject.name} project`
+          `Removed the ${group.group} group from the ${this._selectedProject.name} project.`
         );
-        this._projectGroupBindingService.refreshProjectGroupBindings();
+        this._groupsUpdate.next();
         this._googleAnalyticsService.emitEvent(this._googleAnalyticsEventCategory, 'GroupDeleted');
       });
   }
 
+  isPaginatorVisible(): boolean {
+    return !_.isEmpty(this.groups) && this.paginator && this.groups.length > this.paginator.pageSize;
+  }
+
+  isAddEnabled(): boolean {
+    return MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, View.Members, Permission.Create);
+  }
+
+  isEditEnabled(): boolean {
+    return MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, View.Members, Permission.Edit);
+  }
+
+  isDeleteEnabled(): boolean {
+    return MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, View.Members, Permission.Delete);
+  }
+
   private _initSubscriptions(): void {
     this._userService.currentUser.pipe(take(1)).subscribe(user => (this.currentUser = user));
+
     this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.paginator.pageSize = settings.itemsPerPage;
-      this.dataSource.paginator = this.paginator; // Force refresh.
+      this.dataSource.paginator = this.paginator;
     });
 
-    merge(this._projectService.selectedProject, this._projectService.onProjectsUpdate)
-      .pipe(takeUntil(this._unsubscribe))
+    this._projectService.selectedProject
       .pipe(
-        switchMap((project: Project) => {
+        switchMap(project => {
           this._selectedProject = project;
-          return this._projectGroupBindingService.projectGroupsBindings(project.id);
+          this._groupsUpdate.next();
+          return this._userService.getCurrentUserGroup(project.id);
         })
       )
-      .subscribe((groupBindings: GroupProjectBinding[]) => {
-        this.groupProjectBindings = groupBindings;
-        this.dataSource.data = this.groupProjectBindings;
+      .pipe(take(1))
+      .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
+
+    merge(timer(0, this._refreshTime * this._appConfig.getRefreshTimeBase()), this._groupsUpdate)
+      .pipe(switchMap(() => (this._selectedProject ? this._groupService.list(this._selectedProject.id) : EMPTY)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe((groups: Group[]) => {
+        this.groups = groups;
+        this.dataSource.data = this.groups;
+        this.isInitializingGroups = false;
       });
   }
 }

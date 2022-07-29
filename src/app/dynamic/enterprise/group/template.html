@@ -64,21 +64,18 @@ END OF TERMS AND CONDITIONS
             </ng-container>
 
             <ng-container *ngSwitchCase="false">
-              <div [matTooltip]="getEditTooltip(element)">
+              <div>
                 <button mat-icon-button
-                        [attr.id]="'km-edit-member-' + element?.email"
-                        (click)="editGroupBinding(element)">
-                  <!--                  Todo: isEditEnabled-->
+                        (click)="editGroup(element)"
+                        [disabled]="!isEditEnabled()">
                   <i class="km-icon-mask km-icon-edit"></i>
                 </button>
               </div>
 
-              <div [matTooltip]="getDeleteTooltip(element)">
+              <div>
                 <button mat-icon-button
-                        [attr.id]="'km-delete-member-' + element?.email"
-                        (click)="deleteGroupBinding(element)">
-                  <!--                  Todo: isDeleteEnabled-->
-
+                        (click)="deleteGroup(element)"
+                        [disabled]="!isDeleteEnabled()">
                   <i class="km-icon-mask km-icon-delete"></i>
                 </button>
               </div>
@@ -95,18 +92,20 @@ END OF TERMS AND CONDITIONS
         *matRowDef="let row; columns: displayedColumns"
         class="km-mat-row"></tr>
   </table>
-  <ng-container *ngIf="!groupProjectBindings || groupProjectBindings.length === 0">
+
+  <ng-container *ngIf="!groups || groups.length === 0">
     <div class="km-row km-empty-list-msg"
-         *ngIf="!isLoadingGroupBindings">
-      No members available.
+         *ngIf="!isInitializingGroups">
+      No groups available.
     </div>
     <div class="km-row"
-         *ngIf="isLoadingGroupBindings">
+         *ngIf="isInitializingGroups">
       <mat-spinner color="accent"
                    class="km-spinner km-with-spacing"
                    [diameter]="25"></mat-spinner>
     </div>
   </ng-container>
+
   <div [hidden]="!isPaginatorVisible()">
     <mat-paginator showFirstLastButtons></mat-paginator>
   </div>
@@ -118,11 +117,12 @@ END OF TERMS AND CONDITIONS
     <div fxFlex
          fxLayoutAlign="end center"
          fxLayoutGap="20px">
-      <button id="km-add-group-top-btn"
+      <button id="km-add-group-btn"
               fxLayoutAlign="center center"
               mat-flat-button
               type="button"
-              (click)="addGroup()">
+              (click)="addGroup()"
+              [disabled]="!isAddEnabled()">
         <i class="km-icon-mask km-icon-add"></i>
         <span>Add Group</span>
       </button>

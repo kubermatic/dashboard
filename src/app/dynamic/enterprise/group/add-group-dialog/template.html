@@ -20,12 +20,11 @@
 END OF TERMS AND CONDITIONS
 -->
 
-<div id="km-add-member-dialog">
+<div id="km-add-group-dialog">
   <km-dialog-title>Add Group</km-dialog-title>
   <mat-dialog-content>
     <form [formGroup]="form"
-          fxLayout="column"
-          id="add-member-form">
+          fxLayout="column">
       <mat-form-field fxFlex>
         <mat-label>Name</mat-label>
         <input id="km-add-group-dialog-name-input"
@@ -34,22 +33,21 @@ END OF TERMS AND CONDITIONS
                autocomplete="off"
                required
                kmAutofocus
-               [formControlName]="'group'">
+               [formControlName]="Controls.Group">
         <mat-error *ngIf="form.controls.group.hasError('required')">
           Group name is <strong>required</strong>.
         </mat-error>
       </mat-form-field>
 
       <label class="km-radio-group-label">Select a Role</label>
-      <mat-radio-group [formControlName]="'role'"
+      <mat-radio-group [formControlName]="Controls.Role"
                        fxFlex
                        fxLayout="column"
                        class="km-radio-group">
         <mat-radio-button value="owners"
                           class="km-radio-button">
           <div class="km-radio-button-title">Owner</div>
-          <div class="km-radio-button-description">Full access, allows all actions, also able to remove other owners
-            from the project
+          <div class="km-radio-button-description">Full access, allows all actions, also able to remove other owners, groups from the project
           </div>
         </mat-radio-button>
         <mat-radio-button value="editors"
@@ -67,9 +65,9 @@ END OF TERMS AND CONDITIONS
   </mat-dialog-content>
 
   <mat-dialog-actions>
-    <km-button id="km-add-member-dialog-add-btn"
+    <km-button id="km-add-group-dialog-add-btn"
                icon="km-icon-add"
-               label="Add Member"
+               label="Add Group"
                [disabled]="!form.valid"
                [observable]="getObservable()"
                (next)="onNext($event)">

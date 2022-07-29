@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -36,24 +36,20 @@ import {EditMemberComponent} from './edit-member/component';
 import {MemberService} from '@core/services/member';
 import {DynamicTabComponent} from '@shared/components/tab-card/dynamic-tab/component';
 import {DynamicTab} from '@shared/model/dynamic-tab';
-import {GroupProjectBinding} from '@app/dynamic/enterprise/project-groups/entity';
-import {isEnterpriseEdition} from '@app/dynamic/common';
+import {UserSettings} from '@app/shared/entity/settings';
 
 @Component({
   selector: 'km-member',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class MemberComponent implements OnInit, OnChanges, OnDestroy {
+export class MemberComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
   members: Member[] = [];
-  groupProjectBinding: GroupProjectBinding[] = [];
-  isInitialized: boolean;
   isInitializing = true;
   currentUser: Member;
   displayedColumns: string[] = ['name', 'email', 'group', 'actions'];
   dataSource = new MatTableDataSource<Member>();
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  currentUserSettings: UserSettings;
   private _dynamicTabs = new Set<DynamicTabComponent>();
   private readonly _refreshTime = 10;
   private _unsubscribe = new Subject<void>();
@@ -62,6 +58,7 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
   private _selectedProject: Project;
 
   constructor(
+    private readonly _cdr: ChangeDetectorRef,
     private readonly _memberService: MemberService,
     private readonly _projectService: ProjectService,
     private readonly _matDialog: MatDialog,
@@ -71,8 +68,26 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _notificationService: NotificationService
   ) {}
 
-  get isEnterpriseEdition(): boolean {
-    return isEnterpriseEdition();
+  @ViewChild(MatSort) set sort(sort: MatSort) {
+    if (!sort) {
+      return;
+    }
+    sort.active = 'name';
+    sort.direction = 'asc';
+    this.dataSource.sort = sort;
+    this._cdr.detectChanges();
+  }
+
+  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) {
+    if (!paginator) {
+      return;
+    }
+    this.dataSource.paginator = paginator;
+    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      paginator.pageSize = settings.itemsPerPage;
+      this.dataSource.paginator = paginator; // Force refresh.
+      this.currentUserSettings = settings;
+    });
   }
 
   get dynamicTabs(): DynamicTabComponent[] {
@@ -81,15 +96,6 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit(): void {
     this.dataSource.data = this.members;
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
-    this.sort.active = 'name';
-    this.sort.direction = 'asc';
-
-    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
-      this.paginator.pageSize = settings.itemsPerPage;
-      this.dataSource.paginator = this.paginator; // Force refresh.
-    });
 
     this._userService.currentUser.pipe(take(1)).subscribe(user => (this.currentUser = user));
 
@@ -112,10 +118,6 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
         this.dataSource.data = this.members;
         this.isInitializing = false;
       });
-
-    setTimeout(() => {
-      this.isInitialized = true;
-    });
   }
 
   ngOnChanges(): void {
@@ -127,8 +129,12 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy {
     this._unsubscribe.complete();
   }
 
+  ngAfterViewInit(): void {
+    this._cdr.detectChanges();
+  }
+
   onActivate(component: DynamicTab): void {
-    component.onTabReady.pipe(takeUntil(this._unsubscribe)).subscribe(tab => this._dynamicTabs.add(tab));
+    component.onTabReady.pipe(take(1)).subscribe(tab => this._dynamicTabs.add(tab));
   }
 
   getGroup(member: Member): string {

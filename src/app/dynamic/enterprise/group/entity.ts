@@ -18,19 +18,14 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {SharedModule} from '@shared/module';
-import {ProjectGroupBindingService} from './service';
-import {ProjectGroupBindingsComponent} from './component';
-import {AddGroupDialogComponent} from '@app/dynamic/enterprise/project-groups/add-group-dialog/component';
-import {EditGroupDialogComponent} from '@app/dynamic/enterprise/project-groups/edit-group-dialog/component';
+export class Group {
+  name: string;
+  group: string;
+  projectID: string;
+  role: string;
+}
 
-const routes: Routes = [{path: '', outlet: 'project-groups', component: ProjectGroupBindingsComponent}];
-
-@NgModule({
-  imports: [SharedModule, RouterModule.forChild(routes)],
-  providers: [ProjectGroupBindingService],
-  declarations: [ProjectGroupBindingsComponent, AddGroupDialogComponent, EditGroupDialogComponent],
-})
-export class ProjectGroupsModule {}
+export class GroupModel {
+  group: string;
+  role: string;
+}

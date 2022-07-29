@@ -19,48 +19,55 @@
 // END OF TERMS AND CONDITIONS
 
 import {Component, Input, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
 import {Project} from '@shared/entity/project';
 import {Observable} from 'rxjs';
-import {GroupProjectBinding} from '@app/dynamic/enterprise/project-groups/entity';
-import {ProjectGroupBindingService} from '@app/dynamic/enterprise/project-groups/service';
+import {Group} from '@app/dynamic/enterprise/group/entity';
+import {GroupService} from '@app/dynamic/enterprise/group/service';
+
+enum Controls {
+  Group = 'group',
+  Role = 'role',
+}
 
 @Component({
   selector: 'km-add-group-dialog',
   templateUrl: './template.html',
 })
 export class AddGroupDialogComponent implements OnInit {
+  readonly Controls = Controls;
+
   form: FormGroup;
   @Input() project: Project;
 
   constructor(
-    private readonly _projectGroupBindingService: ProjectGroupBindingService,
+    private readonly _builder: FormBuilder,
+    private readonly _groupService: GroupService,
     private readonly _matDialogRef: MatDialogRef<AddGroupDialogComponent>,
     private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
-    this.form = new FormGroup({
-      group: new FormControl('', [Validators.required]),
-      role: new FormControl('', [Validators.required]),
+    this.form = this._builder.group({
+      [Controls.Group]: this._builder.control('', Validators.required),
+      [Controls.Role]: this._builder.control('', Validators.required),
     });
   }
 
-  getObservable(): Observable<GroupProjectBinding> {
-    return this._projectGroupBindingService.add(
+  getObservable(): Observable<Group> {
+    return this._groupService.add(
       {
-        group: this.form.controls.group.value,
-        role: this.form.controls.role.value,
+        group: this.form.get(Controls.Group).value,
+        role: this.form.get(Controls.Role).value,
       },
       this.project.id
     );
   }
 
-  onNext(groupProjectBinding: GroupProjectBinding): void {
-    this._projectGroupBindingService.refreshProjectGroupBindings();
-    this._notificationService.success(`Added the ${groupProjectBinding.group} to the ${this.project.name} project`);
-    this._matDialogRef.close(groupProjectBinding);
+  onNext(group: Group): void {
+    this._notificationService.success(`Added the ${group.group} group to the ${this.project.name} project`);
+    this._matDialogRef.close(group);
   }
 }

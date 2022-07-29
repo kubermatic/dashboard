@@ -26,7 +26,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        loadChildren: () => DynamicModule.ProjectGroupsModule,
+        loadChildren: () => DynamicModule.Group,
       },
     ],
   },
