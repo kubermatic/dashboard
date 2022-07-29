@@ -42,7 +42,8 @@ limitations under the License.
     </button>
   </div>
 
-  <km-number-stepper [formControlName]="Controls.CPUs"
+  <km-number-stepper *ngIf="!form.get(Controls.CPUs).disabled; else disabledCPUs"
+                     [formControlName]="Controls.CPUs"
                      mode="errors"
                      label="CPUs"
                      min="1"
@@ -50,7 +51,20 @@ limitations under the License.
                      required>
   </km-number-stepper>
 
-  <km-number-stepper [formControlName]="Controls.Memory"
+  <ng-template #disabledCPUs>
+    <mat-form-field fxFlex>
+      <mat-label>CPUs</mat-label>
+      <input matInput
+             required
+             [value]="selectedFlavorCpus"
+             type="text"
+             disabled
+             autocomplete="off">
+    </mat-form-field>
+  </ng-template>
+
+  <km-number-stepper *ngIf="!form.get(Controls.Memory).disabled; else disabledMemory"
+                     [formControlName]="Controls.Memory"
                      mode="errors"
                      label="Memory (MB)"
                      min="1000"
@@ -58,6 +72,18 @@ limitations under the License.
                      [disabled]="form.get(Controls.Memory).disabled"
                      required>
   </km-number-stepper>
+
+  <ng-template #disabledMemory>
+    <mat-form-field fxFlex>
+      <mat-label>Memory</mat-label>
+      <input matInput
+             required
+             [value]="selectedFlavorMemory"
+             type="text"
+             disabled
+             autocomplete="off">
+    </mat-form-field>
+  </ng-template>
 
   <mat-card-header class="km-no-padding">
     <mat-card-title>Primary Disk</mat-card-title>
@@ -97,15 +123,18 @@ limitations under the License.
                      required>
   </km-number-stepper>
 
-  <mat-card-header class="km-no-padding">
+  <mat-card-header class="km-no-padding" fxLayoutAlign=" center">
     <mat-card-title>Secondary Disks</mat-card-title>
     <div fxFlex></div>
-    <button mat-icon-button
-            class="add-secondary-disk-button"
+    <button fxLayoutAlign="center center"
+            mat-flat-button
+            type="button"
+            color="quaternary"
             matTooltip="Add secondary disk"
             (click)="addSecondaryDisk()"
             [disabled]="this.secondaryDisksFormArray.length >= this.maxSecondaryDisks">
       <i class="km-icon-mask km-icon-add"></i>
+      <span>Add Disk</span>
     </button>
   </mat-card-header>
 

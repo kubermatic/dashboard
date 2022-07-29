@@ -108,6 +108,8 @@ export class KubeVirtBasicNodeDataComponent
   selectedStorageClass = '';
   storageClassLabel = StorageClassState.Empty;
   nodeAffinityPresetValues: string[] = [];
+  selectedFlavorCpus: string;
+  selectedFlavorMemory: string;
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -208,6 +210,29 @@ export class KubeVirtBasicNodeDataComponent
     this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
 
     if (_.isString(flavor) && !_.isEmpty(flavor)) {
+      const selectedFlavorSpec = this.flavors.find(f => f.name === flavor)?.spec;
+      try {
+        const parsedSpec = JSON.parse(selectedFlavorSpec);
+        if (parsedSpec) {
+          const domainCPU = parsedSpec.domain?.cpu;
+          const requests = parsedSpec.domain?.resources?.requests;
+          const limits = parsedSpec.domain?.resources?.limits;
+
+          if (!_.isEmpty(domainCPU)) {
+            this.selectedFlavorCpus = `${(domainCPU.cores || 1) * (domainCPU.threads || 1) * (domainCPU.sockets || 1)}`;
+          }
+          if (!_.isEmpty(requests)) {
+            this.selectedFlavorCpus = this.selectedFlavorCpus || requests.cpu;
+            this.selectedFlavorMemory = requests.memory;
+          }
+          if (!_.isEmpty(limits)) {
+            this.selectedFlavorCpus = this.selectedFlavorCpus || limits.cpu;
+            this.selectedFlavorMemory = this.selectedFlavorMemory || limits.memory;
+          }
+        }
+        // eslint-disable-next-line no-empty
+      } catch (_) {}
+
       this.form.get(Controls.CPUs).setValue(null);
       this.form.get(Controls.CPUs).setValidators([]);
       this.form.get(Controls.CPUs).disable();
@@ -215,6 +240,8 @@ export class KubeVirtBasicNodeDataComponent
       this.form.get(Controls.Memory).setValidators([]);
       this.form.get(Controls.Memory).disable();
     } else {
+      this.selectedFlavorCpus = null;
+      this.selectedFlavorMemory = null;
       this.form.get(Controls.CPUs).setValue(this._defaultCPUs);
       this.form.get(Controls.CPUs).setValidators(Validators.required);
       this.form.get(Controls.CPUs).enable();
