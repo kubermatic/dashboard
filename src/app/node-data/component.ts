@@ -36,6 +36,7 @@ import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge, of} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {OperatingSystemProfile} from '@shared/entity/operating-system-profile';
 
 enum Controls {
   Name = 'name',
@@ -81,6 +82,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   @Input() showExtended = false;
   labels: object = {};
   taints: Taint[] = [];
+  operatingSystemProfiles: OperatingSystemProfile[] = [];
   dialogEditMode = false;
   endOfDynamicKubeletConfigSupportVersion: string = END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION;
 

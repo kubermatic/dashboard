@@ -160,10 +160,11 @@ limitations under the License.
         Kubernetes Dashboard
       </mat-checkbox>
 
-      <mat-checkbox [formControlName]="Controls.OperatingSystemManager">
+      <mat-checkbox [formControlName]="Controls.OperatingSystemManager"
+                    [disabled]="Controls.OperatingSystemManager">
         Operating System Manager
         <i class="km-icon-info km-pointer"
-           matTooltip="Disabling this is not recommended in a production environment. Enabling/disabling this will not rotate the machines automatically. The users need to update the Machine Deployments manually."></i>
+           [matTooltip]="form.get(Controls.OperatingSystemManager).value ? 'Operating System Manager cannot be disabled once it has been enabled.' : 'Disabling this is not recommended in a production environment. Enabling/disabling this will not rotate the machines automatically. The users need to update the Machine Deployments manually.'"></i>
       </mat-checkbox>
 
       <km-label-form title="Labels"
