@@ -117,10 +117,36 @@ limitations under the License.
         </km-property>
 
         <!-- specification for AKS -->
-        <ng-container>
-          <km-property *ngIf="provider === Provider.AKS">
+        <ng-container *ngIf="provider === Provider.AKS">
+          <km-property>
+            <div key>Location</div>
+            <div value>{{cluster?.spec?.aksclusterSpec?.location}}</div>
+          </km-property>
+          <km-property>
             <div key>Resource Group</div>
             <div value>{{cluster?.cloud?.aks?.resourceGroup}}</div>
+          </km-property>
+          <km-property>
+            <div key>Cluster Version</div>
+            <div value>{{cluster?.spec?.aksclusterSpec?.kubernetesVersion}}</div>
+          </km-property>
+          <km-property>
+            <div key>DNS Prefix</div>
+            <div value>{{cluster?.spec?.aksclusterSpec?.dnsPrefix}}</div>
+          </km-property>
+          <km-property>
+            <div key>Enable RBAC</div>
+            <div value>{{cluster?.spec?.aksclusterSpec?.enableRBAC}}</div>
+          </km-property>
+          <km-property>
+            <div key>FQDN</div>
+            <div value>{{cluster?.spec?.aksclusterSpec?.fqdn}}</div>
+          </km-property>
+          <km-property *ngIf="cluster.spec?.aksclusterSpec?.networkProfile">
+            <div key>Network Profile</div>
+            <div value>
+              <km-labels [labels]="cluster.spec?.aksclusterSpec?.networkProfile"></km-labels>
+            </div>
           </km-property>
         </ng-container>
 
@@ -135,7 +161,11 @@ limitations under the License.
             <div value>{{cluster?.spec?.eksclusterSpec?.version}}</div>
           </km-property>
           <km-property>
-            <div key>subnet Ids</div>
+            <div key>VpcId</div>
+            <div value>{{cluster?.spec?.eksclusterSpec?.vpcConfigRequest?.vpcId}}</div>
+          </km-property>
+          <km-property>
+            <div key>Subnet Ids</div>
             <div value>
               <mat-chip-list *ngIf="subnetIds.length > 0">
                 <div *ngFor="let subnetId of subnetIds">
@@ -147,7 +177,7 @@ limitations under the License.
             </div>
           </km-property>
           <km-property>
-            <div key>security Group Ids</div>
+            <div key>Security Group Ids</div>
             <div value>
               <mat-chip-list *ngIf="securityGroupIds.length > 0">
                 <div *ngFor="let securityGroupId of securityGroupIds">
@@ -156,6 +186,12 @@ limitations under the License.
                   </mat-chip>
                 </div>
               </mat-chip-list>
+            </div>
+          </km-property>
+          <km-property *ngIf="cluster.spec?.eksclusterSpec?.kubernetesNetworkConfig">
+            <div key>Kubernetes Network Config</div>
+            <div value>
+              <km-labels [labels]="cluster.spec?.eksclusterSpec?.kubernetesNetworkConfig"></km-labels>
             </div>
           </km-property>
         </ng-container>
@@ -171,12 +207,16 @@ limitations under the License.
             <div value>{{cluster?.spec?.gkeclusterSpec?.initialClusterVersion}}</div>
           </km-property>
           <km-property>
-            <div key>cluster Ipv4 Cidr</div>
+            <div key>Cluster Ipv4 CIDR</div>
             <div value>{{cluster?.spec?.gkeclusterSpec?.clusterIpv4Cidr}}</div>
           </km-property>
           <km-property>
-            <div key>default Max Pods Constraint</div>
+            <div key>Default Max Pods Constraint</div>
             <div value>{{cluster?.spec?.gkeclusterSpec?.defaultMaxPodsConstraint}}</div>
+          </km-property>
+          <km-property>
+            <div key>Sub Network</div>
+            <div value>{{cluster?.spec?.gkeclusterSpec?.subnetwork}}</div>
           </km-property>
         </ng-container>
         <!--  -->
