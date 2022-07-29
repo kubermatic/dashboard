@@ -119,7 +119,8 @@ limitations under the License.
       <km-providers-overview [clusters]="clusters"
                              [externalClusters]="externalClusters"></km-providers-overview>
       <km-members-overview [project]="project"
-                           [members]="members"></km-members-overview>
+                           [members]="members"
+                           [showMembers]="hasPermission(View.Members)"></km-members-overview>
     </div>
   </div>
 </div>

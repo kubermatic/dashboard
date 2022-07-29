@@ -110,8 +110,7 @@ export class ProjectService {
     if (project?.status === ProjectStatus.Active) {
       this.onProjectChange.emit(project);
       this._userService.currentUser.pipe(take(1)).subscribe(settings => {
-        projectLandingPage = settings.userSettings.useClustersView ? View.Clusters : View.Overview;
-
+        projectLandingPage = settings.userSettings?.useClustersView ? View.Clusters : View.Overview;
         this._router.navigateByUrl(`/projects/${project.id}/${projectLandingPage}`);
       });
     } else {
