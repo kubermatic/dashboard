@@ -74,6 +74,7 @@ enum Controls {
   OPAIntegration = 'opaIntegration',
   Konnectivity = 'konnectivity',
   MLALogging = 'loggingEnabled',
+  KubernetesDashboardEnabled = 'kubernetesDashboardEnabled',
   MLAMonitoring = 'monitoringEnabled',
   ProxyMode = 'proxyMode',
   IPv4PodsCIDR = 'ipv4PodsCIDR',
@@ -160,6 +161,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.OPAIntegration]: this._builder.control(false),
       [Controls.Konnectivity]: this._builder.control(true),
       [Controls.MLALogging]: this._builder.control(false),
+      [Controls.KubernetesDashboardEnabled]: this._builder.control(true),
       [Controls.MLAMonitoring]: this._builder.control(false),
       [Controls.AdmissionPlugins]: this._builder.control([]),
       [Controls.PodNodeSelectorAdmissionPluginConfig]: this._builder.control(''),
@@ -331,6 +333,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.AuditPolicyPreset).valueChanges,
       this.form.get(Controls.UserSSHKeyAgent).valueChanges,
       this.form.get(Controls.OperatingSystemManager).valueChanges,
+      this.form.get(Controls.KubernetesDashboardEnabled).valueChanges,
       this.form.get(Controls.OPAIntegration).valueChanges,
       this.form.get(Controls.Konnectivity).valueChanges,
       this.form.get(Controls.MLALogging).valueChanges,
@@ -584,6 +587,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         },
         opaIntegration: {
           enabled: this.controlValue(Controls.OPAIntegration),
+        },
+        kubernetesDashboard: {
+          enabled: this.controlValue(Controls.KubernetesDashboardEnabled),
         },
         mla: {
           loggingEnabled: this.controlValue(Controls.MLALogging),

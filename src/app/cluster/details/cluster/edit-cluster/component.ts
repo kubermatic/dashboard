@@ -54,6 +54,8 @@ enum Controls {
   Konnectivity = 'konnectivity',
   MLALogging = 'loggingEnabled',
   MLAMonitoring = 'monitoringEnabled',
+  OperatingSystemManager = 'enableOperatingSystemManager',
+  KubernetesDashboardEnabled = 'kubernetesDashboardEnabled',
 }
 
 @Component({
@@ -128,6 +130,10 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       }),
       [Controls.MLALogging]: new FormControl(!!this.cluster.spec.mla && this.cluster.spec.mla.loggingEnabled),
       [Controls.MLAMonitoring]: new FormControl(!!this.cluster.spec.mla && this.cluster.spec.mla.monitoringEnabled),
+      [Controls.OperatingSystemManager]: new FormControl(this.cluster.spec.enableOperatingSystemManager),
+      [Controls.KubernetesDashboardEnabled]: new FormControl(
+        !!this.cluster.spec.kubernetesDashboard && this.cluster.spec.kubernetesDashboard.enabled
+      ),
       [Controls.AdmissionPlugins]: new FormControl(this.cluster.spec.admissionPlugins),
       [Controls.PodNodeSelectorAdmissionPluginConfig]: new FormControl(''),
       [Controls.EventRateLimitConfig]: new FormControl(this.eventRateLimitConfig?.namespace),
@@ -287,6 +293,10 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         clusterNetwork: {
           konnectivityEnabled: this.form.get(Controls.Konnectivity).value,
         },
+        kubernetesDashboard: {
+          enabled: this.form.get(Controls.KubernetesDashboardEnabled).value,
+        },
+        enableOperatingSystemManager: this.form.get(Controls.OperatingSystemManager).value,
         mla: {
           loggingEnabled: this.form.get(Controls.MLALogging).value,
           monitoringEnabled: this.form.get(Controls.MLAMonitoring).value,

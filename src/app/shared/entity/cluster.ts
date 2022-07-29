@@ -314,6 +314,7 @@ export class ClusterSpec {
   machineNetworks?: MachineNetwork[];
   auditLogging?: AuditLoggingSettings;
   opaIntegration?: OPAIntegration;
+  kubernetesDashboard?: KubernetesDashboard;
   version?: string;
   usePodSecurityPolicyAdmissionPlugin?: boolean;
   usePodNodeSelectorAdmissionPlugin?: boolean;
@@ -407,6 +408,10 @@ export class AuditLoggingSettings {
   policyPreset?: AuditPolicyPreset;
 }
 
+export class KubernetesDashboard {
+  enabled?: boolean;
+}
+
 export class OPAIntegration {
   enabled: boolean;
 }
@@ -473,10 +478,12 @@ export class ClusterSpecPatch {
   usePodSecurityPolicyAdmissionPlugin?: boolean;
   usePodNodeSelectorAdmissionPlugin?: boolean;
   useEventRateLimitAdmissionPlugin?: boolean;
+  enableOperatingSystemManager?: boolean;
   eventRateLimitConfig?: EventRateLimitConfig;
   admissionPlugins?: string[];
   opaIntegration?: OPAIntegration;
   clusterNetwork?: ClusterNetwork;
+  kubernetesDashboard?: KubernetesDashboard;
   podNodeSelectorAdmissionPluginConfig?: object;
   auditLogging?: AuditLoggingSettings;
   machineNetworks?: MachineNetwork[];

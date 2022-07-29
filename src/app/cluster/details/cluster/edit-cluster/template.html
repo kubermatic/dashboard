@@ -156,6 +156,16 @@ limitations under the License.
            matTooltip="User Cluster Monitoring is enforced by your admin."></i>
       </mat-checkbox>
 
+      <mat-checkbox [formControlName]="Controls.KubernetesDashboardEnabled">
+        Kubernetes Dashboard
+      </mat-checkbox>
+
+      <mat-checkbox [formControlName]="Controls.OperatingSystemManager">
+        Operating System Manager
+        <i class="km-icon-info km-pointer"
+           matTooltip="Disabling this is not recommended in a production environment. Enabling/disabling this will not rotate the machines automatically. The users need to update the Machine Deployments manually."></i>
+      </mat-checkbox>
+
       <km-label-form title="Labels"
                      [(labels)]="labels"
                      [inheritedLabels]="cluster.inheritedLabels"
