@@ -24,6 +24,7 @@ import {Member} from '@shared/entity/member';
 export class MembersOverviewComponent {
   @Input() project: Project;
   @Input() members: Member[] = [];
+  @Input() showMembers = true;
 
   get ownerNames(): string {
     return this.project?.owners

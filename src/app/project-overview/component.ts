@@ -15,7 +15,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Project} from '@shared/entity/project';
 import {ProjectService} from '@core/services/project';
-import {catchError, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {catchError, filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {combineLatest, EMPTY, iif, merge, of, onErrorResumeNext, Subject, timer} from 'rxjs';
 import {Member} from '@shared/entity/member';
 import {MemberService} from '@core/services/member';
@@ -34,6 +34,10 @@ import {BackupService} from '@core/services/backup';
 import {EtcdBackupConfig} from '@shared/entity/backup';
 import {Health} from '@shared/entity/health';
 import {CookieService} from 'ngx-cookie-service';
+import {View} from '@shared/entity/common';
+import {MemberUtils, Permission} from '@shared/utils/member';
+import {UserService} from '@core/services/user';
+import {GroupConfig} from '@shared/model/Config';
 
 @Component({
   selector: 'km-project-overview',
@@ -41,6 +45,7 @@ import {CookieService} from 'ngx-cookie-service';
   styleUrls: ['style.scss'],
 })
 export class ProjectOverviewComponent implements OnInit, OnDestroy {
+  readonly View = View;
   project: Project;
   clusters: Cluster[] = [];
   clusterHealth: Health[] = [];
@@ -50,6 +55,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   backups: EtcdBackupConfig[] = [];
   sshKeys: SSHKey[] = [];
   members: Member[] = [];
+  currentUser: Member;
   serviceAccounts: ServiceAccount[] = [];
   clustersChange = new Subject<void>();
   externalClustersChange = new Subject<void>();
@@ -58,10 +64,13 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   firstVisitToOverviewPage: string;
   private _projectChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
+  private _unsubscribeLoadMembers = new Subject<void>();
+  private _currentGroupConfig: GroupConfig;
   private readonly _refreshTime = 15;
   private readonly _cookieName = 'firstVisit';
 
   constructor(
+    private readonly _userService: UserService,
     private readonly _projectService: ProjectService,
     private readonly _clusterService: ClusterService,
     private readonly _clusterTemplateService: ClusterTemplateService,
@@ -75,6 +84,39 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this._initSubscriptions();
+    this._loadData();
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
+    this._unsubscribeLoadMembers.complete();
+  }
+
+  hideFirstVisitToOverviewPageMessage(): void {
+    this.firstVisitToOverviewPage = this._cookieService.get(this._cookieName);
+  }
+
+  hasPermission(view: View): boolean {
+    return MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, view, Permission.View);
+  }
+
+  private _initSubscriptions() {
+    this._userService.currentUser.pipe(takeUntil(this._unsubscribe)).subscribe(user => (this.currentUser = user));
+    merge(this._projectService.selectedProject, this._projectService.onProjectChange)
+      .pipe(
+        switchMap((project: Project) => {
+          return this._userService.getCurrentUserGroup(project.id);
+        })
+      )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(userGroup => {
+        this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup);
+      });
+  }
+
+  private _loadData() {
     this._loadProject();
     this._loadAdminSettings();
     this._loadClusters();
@@ -85,15 +127,6 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     this._loadMembers();
     this._loadServiceAccounts();
     this._checkFirstVisitToOverviewPageMessage();
-  }
-
-  ngOnDestroy(): void {
-    this._unsubscribe.next();
-    this._unsubscribe.complete();
-  }
-
-  hideFirstVisitToOverviewPageMessage(): void {
-    this.firstVisitToOverviewPage = this._cookieService.get(this._cookieName);
   }
 
   private _loadProject(): void {
@@ -188,6 +221,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
 
   private _loadMembers(): void {
     merge(timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()), this._projectChange)
+      .pipe(filter(() => this.project && this.hasPermission(View.Members)))
       .pipe(switchMap(() => (this.project ? this._memberService.list(this.project.id) : EMPTY)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(members => (this.members = members));
