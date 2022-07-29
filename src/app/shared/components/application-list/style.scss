@@ -1,0 +1,111 @@
+// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+@use 'variables';
+@use 'mixins';
+
+$view-switch-height: 45px;
+$view-switch-width: 50px;
+$application-card-width: 320px;
+
+.applications-view-switch {
+  .mat-button-toggle {
+    @include mixins.size($view-switch-width, $view-switch-height, true);
+
+    border-radius: unset;
+    margin: 0;
+
+    &:first-child {
+      border-bottom-left-radius: variables.$border-radius;
+      border-top-left-radius: variables.$border-radius;
+    }
+
+    &:last-child {
+      border-bottom-right-radius: variables.$border-radius;
+      border-top-right-radius: variables.$border-radius;
+    }
+  }
+}
+
+.applications-container {
+  margin-top: 20px;
+}
+
+.application-cards-view {
+  button {
+    opacity: 0%;
+  }
+
+  .application-card {
+    @include mixins.size($application-card-width, null, true);
+
+    border-radius: variables.$border-radius;
+    margin-bottom: 20px;
+    padding: 0;
+
+    button {
+      &.mat-icon-button {
+        @include mixins.size(40px);
+      }
+    }
+
+    &:hover {
+      button {
+        opacity: 100%;
+        transition: opacity 0.1s ease-out;
+      }
+    }
+  }
+
+  .mat-card-header {
+    align-items: center;
+    display: flex;
+    padding: 20px 15px 10px;
+  }
+
+  .mat-card-title {
+    line-height: 23px;
+    margin: 0 5px 0 0;
+    overflow: hidden;
+    padding: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 175px;
+  }
+
+  .application-cards-status {
+    @include mixins.size(27px, auto);
+
+    align-items: center;
+    display: flex;
+    margin-right: 12px;
+  }
+
+  .mat-card-content {
+    font-size: variables.$font-size-subhead;
+    padding: 0 15px;
+    word-break: break-word;
+
+    .application-description {
+      font-size: variables.$font-size-subhead;
+      margin-top: 15px;
+    }
+  }
+}
+
+.no-data-warning {
+  font-size: variables.$font-size-body;
+  padding: 30px;
+  text-align: center;
+}

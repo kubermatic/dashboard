@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {verifyYAML, verifyJSON} from '@shared/utils/common';
 
 @Component({
@@ -22,6 +22,8 @@ import {verifyYAML, verifyJSON} from '@shared/utils/common';
 export class ValidateJsonOrYamlComponent implements OnChanges {
   @Input() data: string;
   @Input() isOnlyYAML = false;
+
+  @Output() dataValid = new EventEmitter<boolean>();
 
   isDataValid = false;
 
@@ -40,5 +42,6 @@ export class ValidateJsonOrYamlComponent implements OnChanges {
     } else {
       this.isDataValid = this._verifyYAML(data) || this._verifyJSON(data);
     }
+    this.dataValid.emit(this.isDataValid);
   }
 }

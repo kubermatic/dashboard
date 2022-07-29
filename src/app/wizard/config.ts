@@ -36,6 +36,7 @@ export enum StepRegistry {
   ProviderSettings = 'Settings',
   NodeSettings = 'Initial Nodes',
   MachineNetwork = 'Machine Network',
+  Applications = 'Applications',
   Summary = 'Summary',
 }
 
@@ -48,5 +49,6 @@ export const steps: WizardStep[] = [
   WizardStep.newWizardStep(StepRegistry.ProviderSettings),
   WizardStep.newWizardStep(StepRegistry.NodeSettings),
   WizardStep.newWizardStep(StepRegistry.MachineNetwork, false),
+  WizardStep.newWizardStep(StepRegistry.Applications),
   WizardStep.newWizardStep(StepRegistry.Summary),
 ];

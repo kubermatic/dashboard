@@ -18,5 +18,6 @@ export enum WizardStep {
   ProviderSettings = 'settings',
   NodeSettings = 'initial-nodes',
   MachineNetwork = 'machine-network',
+  Applications = 'applications',
   Summary = 'summary',
 }

@@ -55,6 +55,7 @@ describe('kubeAdm Provider', () => {
     WizardPage.getDatacenterBtn(BringYourOwn.Frankfurt).click();
     WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.getNextBtn(WizardStep.Cluster).click({force: true});
+    WizardPage.getNextBtn(WizardStep.Applications).should(Condition.BeEnabled).click({force: true});
     WizardPage.getCreateBtn().click({force: true});
 
     ClustersPage.verifyUrl();

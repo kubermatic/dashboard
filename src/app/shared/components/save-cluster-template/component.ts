@@ -14,6 +14,7 @@
 
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {Application} from '@shared/entity/application';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {Cluster} from '@shared/entity/cluster';
 import {ClusterTemplate, ClusterTemplateScope, ClusterTemplateSSHKey} from '@shared/entity/cluster-template';
@@ -32,6 +33,7 @@ class SaveClusterTemplateDialogData {
   nodeData: NodeData;
   sshKeys: SSHKey[];
   projectID: string;
+  applications: Application[];
 }
 
 enum Control {
@@ -91,7 +93,8 @@ export class SaveClusterTemplateDialogComponent implements OnInit {
         },
       },
       userSshKeys: this._getClusterTemplateSSHKeys(),
-    };
+      applications: this.data.applications,
+    } as ClusterTemplate;
   }
 
   private _getClusterTemplateSSHKeys(): ClusterTemplateSSHKey[] {

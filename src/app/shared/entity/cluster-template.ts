@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {Application} from '@shared/entity/application';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {Cluster} from '@shared/entity/cluster';
 
@@ -24,6 +25,7 @@ export class ClusterTemplate {
   cluster?: Cluster;
   nodeDeployment?: MachineDeployment;
   userSshKeys?: ClusterTemplateSSHKey[];
+  applications?: Application[];
 }
 
 export class ClusterTemplateSSHKey {

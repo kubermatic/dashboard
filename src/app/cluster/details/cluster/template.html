@@ -453,6 +453,17 @@ limitations under the License.
                        (deleteAddon)="handleAddonDeletion($event)"></km-addon-list>
       </div>
     </km-tab>
+    <km-tab label="Applications">
+      <div class="application-tab-content">
+        <km-application-list [applications]="applications"
+                             [cluster]="cluster"
+                             [isClusterReady]="isClusterRunning"
+                             [canEdit]="isEditEnabled()"
+                             (addApplication)="onApplicationAdded($event)"
+                             (editApplication)="onApplicationUpdated($event)"
+                             (deleteApplication)="onApplicationDeleted($event)"></km-application-list>
+      </div>
+    </km-tab>
     <km-tab label="OPA Constraints"
             *ngIf="cluster.spec.opaIntegration?.enabled">
       <km-constraint-list [constraints]="constraints"

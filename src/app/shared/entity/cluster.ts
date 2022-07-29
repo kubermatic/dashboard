@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {Application} from '@shared/entity/application';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
 import _ from 'lodash';
 import {isObjectEmpty} from '@shared/utils/common';
@@ -599,6 +600,7 @@ export const AZURE_LOADBALANCER_SKUS = ['basic', 'standard'];
 export class CreateClusterModel {
   cluster: ClusterModel;
   nodeDeployment?: MachineDeployment;
+  applications?: Application[];
 }
 
 class ClusterModel {

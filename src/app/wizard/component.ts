@@ -24,6 +24,7 @@ import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {WizardService} from '@core/services/wizard/wizard';
 import {SaveClusterTemplateDialogComponent} from '@shared/components/save-cluster-template/component';
+import {Application} from '@shared/entity/application';
 import {Cluster, CreateClusterModel} from '@shared/entity/cluster';
 import {Project} from '@shared/entity/project';
 import {OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deployment';
@@ -43,6 +44,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   project = {} as Project;
   creating = false;
   operatingSystemProfileAnnotation = OPERATING_SYSTEM_PROFILE_ANNOTATION;
+  applications: Application[] = [];
   readonly stepRegistry = StepRegistry;
 
   @ViewChild('stepper', {static: true}) private readonly _stepper: MatStepper;
@@ -107,6 +109,10 @@ export class WizardComponent implements OnInit, OnDestroy {
     this._wizard.reset();
   }
 
+  onApplicationsChanged(applications: Application[]): void {
+    this.applications = applications;
+  }
+
   getObservable(): Observable<Cluster> {
     const createCluster = this._getCreateClusterModel(this._clusterSpecService.cluster, this._nodeDataService.nodeData);
 
@@ -139,6 +145,7 @@ export class WizardComponent implements OnInit, OnDestroy {
         nodeData: this._nodeDataService.nodeData,
         sshKeys: this._clusterSpecService.sshKeys,
         projectID: this.project.id,
+        applications: this.applications,
       },
     };
 
@@ -166,6 +173,7 @@ export class WizardComponent implements OnInit, OnDestroy {
           dynamicConfig: nodeData.dynamicConfig,
         },
       },
+      applications: this.applications,
     };
     if (nodeData.operatingSystemProfile && cluster.spec.enableOperatingSystemManager) {
       clusterModel.nodeDeployment.annotations = {

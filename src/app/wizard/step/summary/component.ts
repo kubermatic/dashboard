@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {NodeDataService} from '@core/services/node-data/service';
+import {Application} from '@shared/entity/application';
 import {Cluster} from '@shared/entity/cluster';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {SSHKey} from '@shared/entity/ssh-key';
@@ -30,6 +31,8 @@ import {OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deploy
   styleUrls: ['./style.scss'],
 })
 export class SummaryStepComponent implements OnInit, OnDestroy {
+  @Input() applications: Application[] = [];
+
   datacenter: Datacenter;
   seedSettings: SeedSettings;
   clusterAdmissionPlugins: string[] = [];

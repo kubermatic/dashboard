@@ -20,7 +20,9 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {GoogleAnalyticsService} from '@app/google-analytics.service';
+import {ApplicationService} from '@core/services/application';
 import {fakeDigitaloceanCluster} from '@test/data/cluster';
+import {ApplicationServiceMock} from '@test/services/application-mock';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '@test/services/router-stubs';
 import {AppConfigMockService} from '@test/services/app-config-mock';
 import {AuthMockService} from '@test/services/auth-mock';
@@ -113,6 +115,7 @@ describe('ClusterDetailsComponent', () => {
         {provide: MatDialog, useClass: MatDialogMock},
         {provide: MachineDeploymentService, useClass: MachineDeploymentServiceMock},
         {provide: AddonService, useClass: AddonServiceMock},
+        {provide: ApplicationService, useClass: ApplicationServiceMock},
         EndOfLifeService,
         GoogleAnalyticsService,
         NotificationService,

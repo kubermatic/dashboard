@@ -70,6 +70,7 @@ describe('KubeVirt Provider', () => {
     WizardPage.kubeVirt.getSourceURLInput().type(sourceURL).should(Condition.HaveValue, sourceURL);
     WizardPage.kubeVirt.getStorageClassNameInput().type(storageClassName).should(Condition.HaveValue, storageClassName);
     WizardPage.getNextBtn(WizardStep.NodeSettings).should(Condition.BeEnabled).click({force: true});
+    WizardPage.getNextBtn(WizardStep.Applications).should(Condition.BeEnabled).click({force: true});
     WizardPage.getCreateBtn().click({force: true});
 
     ClustersPage.verifyUrl();

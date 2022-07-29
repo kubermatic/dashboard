@@ -27,6 +27,8 @@
 @import 'src/app/project/theme';
 @import 'src/app/shared/components/addon-list/install-addon-dialog/theme';
 @import 'src/app/shared/components/addon-list/theme';
+@import 'src/app/shared/components/application-list/theme';
+@import 'src/app/shared/components/application-list/add-application-dialog/theme';
 @import 'src/app/shared/components/editor/theme';
 @import 'src/app/shared/components/property-usage/theme';
 @import 'src/app/shared/components/number-stepper/theme';
@@ -54,6 +56,8 @@
   @include theme-project-selector-component($colors);
   @include theme-property-usage-component($colors);
   @include theme-install-addon-dialog-component($colors);
+  @include theme-applications-list-component($colors);
+  @include theme-add-application-dialog-component($colors);
   @include theme-sidenav-component($colors);
   @include theme-version-picker-component($colors);
   @include theme-cluster-summary-component($colors);
