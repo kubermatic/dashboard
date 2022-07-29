@@ -23,8 +23,8 @@ import {Injectable} from '@angular/core';
 import {AppConfigService} from '@app/config.service';
 import {environment} from '@environments/environment';
 import {AllowedRegistry} from './entity';
-import {Observable, Subject, timer, merge} from 'rxjs';
-import {switchMap, shareReplay} from 'rxjs/operators';
+import {merge, Observable, Subject, timer} from 'rxjs';
+import {shareReplay, switchMap} from 'rxjs/operators';
 
 @Injectable()
 export class AllowedRegistriesService {
