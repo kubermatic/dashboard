@@ -184,6 +184,7 @@ export class Mocks {
     {m: RequestType.GET, p: Endpoint.GatekeeperConfig, r: Mocks.gatekeeperConfig},
     {m: RequestType.POST, p: Endpoint.GatekeeperConfig, r: Mocks.defaultGatekeeperConfig},
     {m: RequestType.GET, p: Endpoint.Changelog, r: {}},
+    {m: RequestType.GET, p: Endpoint.FeatureGates, r: {fixture: 'feature-gates.json'}},
   ];
 
   static enabled(): boolean {

@@ -119,4 +119,5 @@ export namespace Endpoint {
   export const AdmissionPlugins = '**/api/**/admission/plugins/*';
   export const Versions = '**/providers/*/versions';
   export const Changelog = '**/changelog.json';
+  export const FeatureGates = '**/featuregates';
 }
