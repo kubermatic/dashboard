@@ -35,6 +35,7 @@ import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering
 import {MLAService} from '@core/services/mla';
 import {NameGeneratorService} from '@core/services/name-generator';
 import {OPAService} from '@core/services/opa';
+import {OperatingSystemManagerService} from '@core/services/operating-system-manager';
 import {PageTitleService} from '@core/services/page-title';
 import {ParamsService} from '@core/services/params';
 import {PreviousRouteService} from '@core/services/previous-route';
@@ -137,6 +138,7 @@ const services = [
   NutanixService,
   VMwareCloudDirectorService,
   ApplicationService,
+  OperatingSystemManagerService,
 ];
 
 const interceptors = [

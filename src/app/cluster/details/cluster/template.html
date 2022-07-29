@@ -68,8 +68,8 @@ limitations under the License.
        [href]="getProxyURL()"
        target="_blank"
        mat-flat-button
-       [disabled]="!kubernetesDashboardHealth"
-       [matTooltip]="kubernetesDashboardHealth ? '' : 'Kubernetes Dashboard is either disabled or not running'"
+       [disabled]="!isKubernetesDashboardHealthy"
+       [matTooltip]="isKubernetesDashboardHealthy ? '' : cluster?.spec?.kubernetesDashboard?.enabled ? 'Kubernetes Dashboard is not running' : 'Kubernetes Dashboard is disabled'"
        *ngIf="(settings.adminSettings | async)?.enableDashboard">
       <i class="km-icon-mask km-icon-external-link"></i>
       <span>Open Dashboard</span>
