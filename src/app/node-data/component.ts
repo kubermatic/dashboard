@@ -27,15 +27,18 @@ import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {NameGeneratorService} from '@core/services/name-generator';
 import {NodeDataService} from '@core/services/node-data/service';
+import {OperatingSystemManagerService} from '@core/services/operating-system-manager';
+import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
+import {AutocompleteControls} from '@shared/components/autocomplete/component';
 import {ContainerRuntime, END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION} from '@shared/entity/cluster';
 import {Datacenter} from '@shared/entity/datacenter';
 import {OperatingSystemSpec, Taint} from '@shared/entity/node';
 import {NodeProvider, NodeProviderConstants, OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {merge, of} from 'rxjs';
-import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {EMPTY, merge, of} from 'rxjs';
+import {filter, finalize, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 enum Controls {
   Name = 'name',
@@ -81,14 +84,19 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   @Input() showExtended = false;
   labels: object = {};
   taints: Taint[] = [];
+  operatingSystemProfiles: string[] = [];
+  operatingSystemProfileValidators = [KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR];
   dialogEditMode = false;
   endOfDynamicKubeletConfigSupportVersion: string = END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION;
+  isLoadingOSProfiles: boolean;
+
+  private _enableOperatingSystemManager: boolean;
 
   get providerDisplayName(): string {
     return NodeProviderConstants.displayName(this.provider);
   }
 
-  get showOperatingSystemProfile(): boolean {
+  get isOperatingSystemManagerEnabled(): boolean {
     return this._clusterSpecService.cluster.spec.enableOperatingSystemManager;
   }
 
@@ -103,6 +111,8 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     private readonly _datacenterService: DatacenterService,
     private readonly _nodeDataService: NodeDataService,
     private readonly _settingsService: SettingsService,
+    private readonly _osmService: OperatingSystemManagerService,
+    private readonly _projectService: ProjectService,
     private readonly _cdr: ChangeDetectorRef
   ) {
     super();
@@ -123,9 +133,9 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       [Controls.RhelOfflineToken]: this._builder.control(''),
       [Controls.ProviderBasic]: this._builder.control(''),
       [Controls.ProviderExtended]: this._builder.control(''),
-      [Controls.OperatingSystemProfile]: this._builder.control(this._nodeDataService.nodeData.operatingSystemProfile, [
-        KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,
-      ]),
+      [Controls.OperatingSystemProfile]: this._builder.control({
+        main: this._nodeDataService.nodeData.operatingSystemProfile || '',
+      }),
     });
 
     if (this.isDialogView()) {
@@ -135,7 +145,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
     if (this.dialogEditMode) {
       this.form.get(Controls.Name).disable();
-      this.form.get(Controls.OperatingSystemProfile).disable();
     }
 
     this._init();
@@ -150,11 +159,27 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       this.provider = this._clusterSpecService.provider;
     });
 
+    this._clusterSpecService.clusterChanges
+      .pipe(
+        filter(_ => {
+          if (this._enableOperatingSystemManager === this.isOperatingSystemManagerEnabled) {
+            return false;
+          }
+          this._enableOperatingSystemManager = this.isOperatingSystemManagerEnabled;
+          return this.isOperatingSystemManagerEnabled;
+        })
+      )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(() => {
+        this._loadOperatingSystemProfiles();
+      });
+
     merge(this._clusterSpecService.datacenterChanges, of(this._clusterSpecService.datacenter))
       .pipe(filter(dc => !!dc))
       .pipe(switchMap(dc => this._datacenterService.getDatacenter(dc).pipe(take(1))))
       .pipe(takeUntil(this._unsubscribe))
       .pipe(tap(dc => (this._datacenterSpec = dc)))
+      .pipe(tap(() => this._loadOperatingSystemProfiles()))
       .subscribe(_ => this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS()));
 
     merge(
@@ -286,6 +311,32 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     this._cdr.detectChanges();
   }
 
+  private _loadOperatingSystemProfiles() {
+    if (this.isOperatingSystemManagerEnabled) {
+      this.isLoadingOSProfiles = true;
+      const profiles$ = this.isDialogView()
+        ? this._projectService.selectedProject.pipe(take(1)).pipe(
+            switchMap(project => {
+              return this._osmService.getOperatingSystemProfilesForCluster(
+                this._clusterSpecService.cluster.id,
+                project.id
+              );
+            })
+          )
+        : this._datacenterSpec?.spec
+        ? this._osmService.getOperatingSystemProfilesForSeed(this._datacenterSpec.spec.seed)
+        : EMPTY;
+
+      profiles$
+        .pipe(takeUntil(this._unsubscribe))
+        .pipe(take(1))
+        .pipe(finalize(() => (this.isLoadingOSProfiles = false)))
+        .subscribe(profiles => {
+          this.operatingSystemProfiles = profiles.map(profile => profile.name);
+        });
+    }
+  }
+
   private _getOperatingSystemSpec(): OperatingSystemSpec {
     switch (this.form.get(Controls.OperatingSystem).value) {
       case OperatingSystem.Ubuntu:
@@ -351,7 +402,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       count: this.form.get(Controls.Count).value,
       name: this.form.get(Controls.Name).value,
       dynamicConfig: this.form.get(Controls.DynamicConfig).value,
-      operatingSystemProfile: this.form.get(Controls.OperatingSystemProfile).value,
+      operatingSystemProfile: this.form.get(Controls.OperatingSystemProfile).value?.[AutocompleteControls.Main],
     } as NodeData;
   }
 }

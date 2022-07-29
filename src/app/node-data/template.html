@@ -170,16 +170,18 @@ limitations under the License.
                              [formControlName]="Controls.ProviderExtended"></km-extended-node-data>
     </div>
 
-    <mat-form-field *ngIf="showOperatingSystemProfile">
-      <mat-label>Operating System Profile</mat-label>
-      <input [formControlName]="Controls.OperatingSystemProfile"
-             matInput
-             type="text">
-      <mat-hint *ngIf="!dialogEditMode">Leave this field blank to use default operating system profile.</mat-hint>
-      <mat-error *ngIf="form.get(Controls.OperatingSystemProfile).hasError( 'pattern')">
+    <km-autocomplete *ngIf="isOperatingSystemManagerEnabled"
+                     label="Operating System Profile"
+                     [formControlName]="Controls.OperatingSystemProfile"
+                     [isLoading]="isLoadingOSProfiles"
+                     [options]="operatingSystemProfiles"
+                     [validators]="operatingSystemProfileValidators">
+      <ng-container hint
+                    *ngIf="!dialogEditMode">Leave this field blank to use default operating system profile.</ng-container>
+      <span patternError>
         OSP can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash.
-      </mat-error>
-    </mat-form-field>
+      </span>
+    </km-autocomplete>
 
     <km-label-form [ngClass]="isDialogView() ? 'additional-margin' : ''"
                    title="Node Labels"
