@@ -53,22 +53,23 @@ limitations under the License.
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field>
+    <mat-form-field *ngIf="isDialogView()">
       <mat-label>Kubernetes Version</mat-label>
       <input [formControlName]="Controls.Version"
              matInput
              type="text"
              autocomplete="off" />
-      <mat-hint *ngIf="!isDialogView()">
-        Set the kubernetes version. See list of
-        <a href="https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html"
-           rel="noopener noreferrer"
-           target="_blank">supported versions</a>.
-      </mat-hint>
-      <mat-error *ngIf="form.get(Controls.Version).hasError('required')">
-        Kubernetes Version is <strong>required</strong>.
-      </mat-error>
     </mat-form-field>
+
+    <km-autocomplete *ngIf="!isDialogView()"
+                     label="Kubernetes Version"
+                     required="true"
+                     [options]="kubernetesVersions"
+                     [formControlName]="Controls.Version">
+      <ng-container hint>
+        Set the kubernetes version.
+      </ng-container>
+    </km-autocomplete>
 
     <mat-form-field>
       <mat-label>{{isDialogView() ? "Node IAM role" : "Cluster Service Role"}}</mat-label>

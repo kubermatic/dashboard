@@ -44,10 +44,13 @@ import {MachineDeploymentSpec} from '@app/shared/entity/machine-deployment';
 import {MatCheckboxChange} from '@angular/material/checkbox';
 import {GCPDiskType, GCPMachineSize} from '@app/shared/entity/provider/gcp';
 import {NameGeneratorService} from '@app/core/services/name-generator';
+import {MasterVersion} from '@app/shared/entity/cluster';
 
 enum Controls {
   Name = 'name',
   Zone = 'zone',
+  KubernetesVersionMode = 'kubernetesVersionMode',
+  ReleaseChannelOptions = 'releaseChannelOptions',
   Version = 'version',
   NodeCount = 'nodeCount',
   DiskTypes = 'diskTypes',
@@ -56,6 +59,11 @@ enum Controls {
   EnableAutoScaling = 'enableAutoScaling',
   MaxCount = 'maxCount',
   MinCount = 'minCount',
+}
+
+enum KubernetesVersionMode {
+  StaticVersion = 'Manual',
+  ReleaseChannel = 'Auto',
 }
 
 @Component({
@@ -80,6 +88,7 @@ export class GKEClusterSettingsComponent
   implements OnInit, OnDestroy, ControlValueAccessor, Validator
 {
   readonly Controls = Controls;
+  readonly KubernetesVersionMode = KubernetesVersionMode;
   readonly DISK_SIZE_MIN_VALUE = 10;
   readonly DISK_SIZE_MAX_VALUE = 65536;
   readonly AUTOSCALING_MIN_VALUE = 1;
@@ -91,6 +100,8 @@ export class GKEClusterSettingsComponent
   zones: string[] = [];
   diskTypes: string[] = [];
   machineTypes: string[] = [];
+  releaseChannelOptions: string[] = ['RAPID', 'REGULAR', 'STABLE'];
+  kubernetesVersions: string[] = [];
   isLoadingZones: boolean;
 
   @Input() projectID: string;
@@ -145,6 +156,8 @@ export class GKEClusterSettingsComponent
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control('', [Validators.required, GKE_POOL_NAME_VALIDATOR]),
       [Controls.Zone]: this._builder.control('', Validators.required),
+      [Controls.KubernetesVersionMode]: this._builder.control(KubernetesVersionMode.StaticVersion),
+      [Controls.ReleaseChannelOptions]: this._builder.control(''),
       [Controls.Version]: this._builder.control('', Validators.required),
       [Controls.NodeCount]: this._builder.control(this.MIN_REPLICAS_COUNT_DEFAULT_VALUE, Validators.required),
       [Controls.MachineTypes]: this._builder.control(''),
@@ -160,6 +173,9 @@ export class GKEClusterSettingsComponent
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
       this._updateExternalClusterModel();
       this._updateExternalMachineDeployment();
+      if (this.controlValue(Controls.Zone)?.main) {
+        this._getGKEKubernetesVersions();
+      }
       this._externalClusterService.isClusterDetailsStepValid = this.form.valid;
       this._externalMachineDeploymentService.isAddMachineDeploymentFormValid = this.form.valid;
     });
@@ -193,6 +209,21 @@ export class GKEClusterSettingsComponent
       .subscribe((diskTypes: string[]) => (this.diskTypes = diskTypes));
   }
 
+  private _getGKEKubernetesVersions(): void {
+    const zone = this.controlValue(Controls.Zone)?.main;
+    const mode = this.controlValue(Controls.KubernetesVersionMode);
+    if (mode === KubernetesVersionMode.ReleaseChannel) {
+      const releaseChannel = this.controlValue(Controls.ReleaseChannelOptions)?.main;
+      this._externalClusterService
+        .getGKEKubernetesVersions(zone, mode, releaseChannel)
+        .subscribe((versions: MasterVersion[]) => (this.kubernetesVersions = versions.map(version => version.version)));
+    } else {
+      this._externalClusterService
+        .getGKEKubernetesVersions(zone, mode)
+        .subscribe((versions: MasterVersion[]) => (this.kubernetesVersions = versions.map(version => version.version)));
+    }
+  }
+
   private _getGKEMachineSizesForMachineDeployment(): void {
     this._externalMachineDeploymentService
       .getGKEMachineSizesForMachineDeployment(this.projectID, this.cluster.id)
@@ -218,7 +249,7 @@ export class GKEClusterSettingsComponent
       } as ExternalCloudSpec,
       spec: {
         gkeclusterSpec: {
-          initialClusterVersion: this.controlValue(Controls.Version),
+          initialClusterVersion: this.controlValue(Controls.Version)?.main,
           initialNodeCount: this.controlValue(Controls.NodeCount),
         } as GKEClusterSpec,
       } as ExternalClusterSpec,

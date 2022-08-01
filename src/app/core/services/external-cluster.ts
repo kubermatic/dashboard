@@ -32,6 +32,7 @@ import {catchError, filter} from 'rxjs/operators';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {ClusterListTab} from '@app/cluster/list/component';
 import {NotificationService} from '@core/services/notification';
+import {MasterVersion} from '@app/shared/entity/cluster';
 
 @Injectable({providedIn: 'root'})
 export class ExternalClusterService {
@@ -221,6 +222,17 @@ export class ExternalClusterService {
     return this._http.get<GKEZone[]>(url, {headers: this._getGKEHeaders()}).pipe(catchError(() => of<[]>()));
   }
 
+  getGKEKubernetesVersions(zone: string, mode: string, releaseChannel?: string): Observable<MasterVersion[]> {
+    const url = `${this._newRestRoot}/providers/gke/versions`;
+    let headers: {};
+    if (releaseChannel) {
+      headers = {headers: this._getGKEHeaders(zone, mode, releaseChannel)};
+    } else {
+      headers = {headers: this._getGKEHeaders(zone, mode)};
+    }
+    return this._http.get<MasterVersion[]>(url, headers).pipe(catchError(() => of<[]>()));
+  }
+
   getEKSVpcs(): Observable<EKSVpc[]> {
     const url = `${this._newRestRoot}/providers/eks/vpcs`;
     return this._http.get<EKSVpc[]>(url, {headers: this._getEKSHeaders()}).pipe(catchError(() => of<[]>()));
@@ -236,6 +248,11 @@ export class ExternalClusterService {
     const url = `${this._newRestRoot}/providers/eks/securitygroups`;
     const headers: HttpHeaders = this._getEKSHeaders(vpcId);
     return this._http.get<string[]>(url, {headers}).pipe(catchError(() => of<[]>()));
+  }
+
+  getEKSKubernetesVersions() {
+    const url = `${this._newRestRoot}/providers/eks/versions`;
+    return this._http.get(url).pipe(catchError(() => of<[]>()));
   }
 
   createExternalCluster(projectID: string, externalClusterModel: ExternalClusterModel): Observable<ExternalCluster> {
@@ -336,11 +353,36 @@ export class ExternalClusterService {
     return new HttpHeaders(headers);
   }
 
-  private _getGKEHeaders(): HttpHeaders {
+  private _getGKEHeaders(zone?: string, mode?: string, releaseChannel?: string): HttpHeaders {
+    let headers = {};
+
     if (this._preset) {
-      return new HttpHeaders({Credential: this._preset});
+      headers = {Credential: this._preset};
+
+      if (zone) {
+        headers = {...headers, Zone: zone};
+      }
+      if (mode) {
+        headers = {...headers, Mode: mode};
+      }
+      if (releaseChannel) {
+        headers = {...headers, ReleaseChannel: releaseChannel};
+      }
+
+      return new HttpHeaders(headers);
     }
 
-    return new HttpHeaders({ServiceAccount: this._externalCluster.cloud.gke.serviceAccount});
+    headers = {ServiceAccount: this._externalCluster.cloud.gke.serviceAccount};
+
+    if (zone) {
+      headers = {...headers, Zone: zone};
+    }
+    if (mode) {
+      headers = {...headers, Mode: mode};
+    }
+    if (releaseChannel) {
+      headers = {...headers, ReleaseChannel: releaseChannel};
+    }
+    return new HttpHeaders(headers);
   }
 }

@@ -54,7 +54,19 @@ limitations under the License.
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field>
+
+    <km-autocomplete *ngIf="!isDialogView()"
+                     class="km-dropdown-with-suffix"
+                     label="Zone"
+                     required="true"
+                     [isLoading]="isLoadingZones"
+                     [options]="zones"
+                     [defaultValue]="ZONE_DEFAULT_VALUE"
+                     [formControlName]="Controls.Zone">
+      <ng-container hint>Select from Zones List.</ng-container>
+    </km-autocomplete>
+
+    <mat-form-field *ngIf="isDialogView()">
       <mat-label>Kubernetes Version
       </mat-label>
       <input matInput
@@ -141,18 +153,33 @@ limitations under the License.
        fxLayout="column"
        fxLayoutGap="8px">
 
-    <mat-card-header class="km-no-padding">
-      <mat-card-title>Google Cloud Settings</mat-card-title>
-    </mat-card-header>
+    <label class="km-radio-group-label">Kubernetes Version</label>
+    <mat-radio-group fxFlex
+                     fxLayout="column"
+                     class="km-radio-group"
+                     [formControlName]="Controls.KubernetesVersionMode">
+      <mat-radio-button [value]="KubernetesVersionMode.StaticVersion"
+                        class="km-radio-button">
+        <div class="km-radio-button-title">Static Version</div>
+      </mat-radio-button>
+      <mat-radio-button [value]="KubernetesVersionMode.ReleaseChannel"
+                        class="km-radio-button">
+        <div class="km-radio-button-title">Release Channel</div>
+      </mat-radio-button>
 
-    <km-autocomplete class="km-dropdown-with-suffix"
-                     label="Zone"
-                     required="true"
-                     [isLoading]="isLoadingZones"
-                     [options]="zones"
-                     [formControlName]="Controls.Zone">
-      <ng-container hint>Select from Zones List.</ng-container>
-    </km-autocomplete>
+      <km-autocomplete *ngIf="form.get(Controls.KubernetesVersionMode).value === KubernetesVersionMode.ReleaseChannel"
+                       label="Release Channel"
+                       [options]="releaseChannelOptions"
+                       [formControlName]="Controls.ReleaseChannelOptions">
+      </km-autocomplete>
 
+      <km-autocomplete label="Versions"
+                       [options]="kubernetesVersions"
+                       [formControlName]="Controls.Version">
+        <ng-container hint>
+          Set the kubernetes version.
+        </ng-container>
+      </km-autocomplete>
+    </mat-radio-group>
   </div>
 </form>
