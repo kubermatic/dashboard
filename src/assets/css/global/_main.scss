@@ -616,3 +616,15 @@ km-cni-version {
 .km-transition-none {
   transition: none;
 }
+
+.km-quota-widget {
+  .km-quota-item {
+    .container {
+      margin: 2px 5px;
+    }
+  }
+
+  .mat-progress-bar .mat-progress-bar-fill {
+    transition: none;
+  }
+}

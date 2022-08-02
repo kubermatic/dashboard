@@ -93,3 +93,8 @@ export function verifyJSON(data: string): boolean {
     return false;
   }
 }
+
+const maxUsageDefault = 100;
+export function getPercentage(total: number, used: number, maxUsage = maxUsageDefault): number {
+  return Math.round(((used / total) * maxUsage + Number.EPSILON) * maxUsage) / maxUsage;
+}

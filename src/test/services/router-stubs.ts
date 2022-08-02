@@ -17,6 +17,7 @@ import {Component, Directive, HostListener, Injectable, Input, NgModule} from '@
 import {convertToParamMap, NavigationExtras, ParamMap} from '@angular/router';
 import {BehaviorSubject} from 'rxjs';
 import {Subject} from 'rxjs';
+import {RouterTestingModule as RouterMock} from '@angular/router/testing';
 
 export {ActivatedRoute, Router, RouterLink, RouterOutlet} from '@angular/router';
 
@@ -75,7 +76,7 @@ export class ActivatedRouteStub {
 }
 
 @NgModule({
-  imports: [CommonModule],
+  imports: [CommonModule, RouterMock],
   declarations: [RouterOutletStubComponent, RouterLinkActiveStubDirective, RouterLinkStubDirective],
   exports: [RouterOutletStubComponent, RouterLinkActiveStubDirective, RouterLinkStubDirective],
 })

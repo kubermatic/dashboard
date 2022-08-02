@@ -366,6 +366,10 @@
 
 .km-icon-quota {
   @include mixins.mask-image('/assets/images/icons/quota.svg', 24px);
+
+  &.i-32 {
+    @include mixins.size(32px, 32px, true);
+  }
 }
 
 .km-icon-helm {

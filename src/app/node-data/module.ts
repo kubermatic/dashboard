@@ -52,6 +52,7 @@ import {KubeletVersionNodeDataComponent} from './kubelet-version/component';
 import {NutanixBasicNodeDataComponent} from '@app/node-data/basic/provider/nutanix/component';
 import {FlavorDetailsDialogComponent} from '@app/node-data/basic/provider/kubevirt/flavor-details/component';
 import {VMwareCloudDirectorBasicNodeDataComponent} from '@app/node-data/basic/provider/vmware-cloud-director/component';
+import {Routes, RouterModule} from '@angular/router';
 
 const components = [
   AlibabaBasicNodeDataComponent,
@@ -83,6 +84,14 @@ const components = [
   VMwareCloudDirectorBasicNodeDataComponent,
 ];
 
+// component NodeDataComponent is added to routing module so we can use our dynamic component here
+const routes: Routes = [
+  {
+    path: '',
+    component: NodeDataComponent,
+  },
+];
+
 const services = [NodeDataService];
 
 @NgModule({
@@ -98,6 +107,7 @@ const services = [NodeDataService];
     MatCardModule,
     MatAutocompleteModule,
     MatTooltipModule,
+    RouterModule.forChild(routes),
   ],
   declarations: [...components],
   providers: [...services],

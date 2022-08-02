@@ -48,6 +48,8 @@ import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {DeleteProjectConfirmationComponent} from './delete-project/component';
 import {EditProjectComponent} from './edit-project/component';
+import {DynamicModule} from '@app/dynamic/module-registry';
+import {QuotaWidgetComponent} from '../dynamic/enterprise/quotas/quota-widget/component';
 
 @Component({
   selector: 'km-project',
@@ -60,12 +62,13 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   currentUser: Member;
   isInitializing = true;
   role = new Map<string, string>();
-  displayedColumns: string[] = ['status', 'name', 'labels', 'id', 'role', 'clusters', 'owners', 'actions'];
+  displayedColumns: string[] = ['status', 'name', 'labels', 'id', 'role', 'clusters', 'owners'];
   dataSource = new MatTableDataSource<Project>();
   isPaginatorVisible = false;
   showCards = true;
   settings: UserSettings;
   restrictProjectCreation = false;
+  isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
 
   private readonly _maxOwnersLen = 30;
   private _apiSettings: UserSettings;
@@ -168,19 +171,26 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       this.restrictProjectCreation = settings.restrictProjectCreation;
     });
 
-    this._projectService.projects.pipe(takeUntil(this._unsubscribe)).subscribe((projects: Project[]) => {
-      this.projects = this._sortProjects(projects);
-      this._loadCurrentUserRoles();
-      this._sortProjectOwners();
-      this.dataSource.data = this.projects;
+    this._projectService.projects
+      .pipe(
+        filter(projects => !_.isEqual(this._sortProjects(projects), this.projects)),
+        takeUntil(this._unsubscribe)
+      )
+      .subscribe((projects: Project[]) => {
+        this.projects = this._sortProjects(projects);
+        this._loadCurrentUserRoles();
+        this._sortProjectOwners();
+        this.dataSource.data = this.projects;
 
-      if (this._shouldRedirectToProjectLandingPage()) {
-        this._redirectToProjectLandingPage();
-      }
-      this.isInitializing = false;
-      this.selectDefaultProject();
-      this._cdr.detectChanges();
-    });
+        if (this._shouldRedirectToProjectLandingPage()) {
+          this._redirectToProjectLandingPage();
+        }
+        this.isInitializing = false;
+        this.selectDefaultProject();
+        this._cdr.detectChanges();
+      });
+
+    this._setDisplayedColumns();
   }
 
   ngOnDestroy(): void {
@@ -492,6 +502,21 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
         this._googleAnalyticsService.emitEvent('projectOverview', 'ProjectDeleted');
         this._projectService.onProjectsUpdate.next();
       });
+  }
+
+  onActivate(component: QuotaWidgetComponent, projectId: string): void {
+    component.projectId = projectId;
+    component.showIcon = this.showCards;
+    component.showAsCard = false;
+    component.showDetailsOnHover = false;
+  }
+
+  private _setDisplayedColumns(): void {
+    if (this.isEnterpriseEdition) {
+      this.displayedColumns = [...this.displayedColumns, 'quota', 'actions'];
+    } else {
+      this.displayedColumns = [...this.displayedColumns, 'actions'];
+    }
   }
 
   private _shouldRedirectToProjectLandingPage(): boolean {

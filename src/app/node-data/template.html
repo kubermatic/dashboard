@@ -183,6 +183,13 @@ limitations under the License.
       </span>
     </km-autocomplete>
 
+    <div *ngIf="!isDialogView()"
+         class="additional-margin"
+         fxLayoutAlign="start center">
+      <router-outlet name="quota-widget"
+                     (activate)="onActivate($event)"></router-outlet>
+    </div>
+
     <km-label-form [ngClass]="isDialogView() ? 'additional-margin' : ''"
                    title="Node Labels"
                    [labels]="labels"
