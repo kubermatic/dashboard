@@ -49,16 +49,16 @@ import {MasterVersion} from '@app/shared/entity/cluster';
 enum Controls {
   Name = 'name',
   Zone = 'zone',
-  KubernetesVersionMode = 'kubernetesVersionMode',
-  ReleaseChannelOptions = 'releaseChannelOptions',
   Version = 'version',
+  DiskSize = 'diskSize',
+  MaxCount = 'maxCount',
+  MinCount = 'minCount',
   NodeCount = 'nodeCount',
   DiskTypes = 'diskTypes',
   MachineTypes = 'machineTypes',
-  DiskSize = 'diskSize',
   EnableAutoScaling = 'enableAutoScaling',
-  MaxCount = 'maxCount',
-  MinCount = 'minCount',
+  KubernetesVersionMode = 'kubernetesVersionMode',
+  ReleaseChannelOptions = 'releaseChannelOptions',
 }
 
 enum KubernetesVersionMode {
@@ -171,15 +171,31 @@ export class GKEClusterSettingsComponent
   }
 
   private _initSubscriptions(): void {
+    this._getGKEKubernetesVersions();
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
       this._updateExternalClusterModel();
       this._updateExternalMachineDeployment();
-      if (this.controlValue(Controls.Zone)?.main) {
-        this._getGKEKubernetesVersions();
-      }
       this._externalClusterService.isClusterDetailsStepValid = this.form.valid;
       this._externalMachineDeploymentService.isAddMachineDeploymentFormValid = this.form.valid;
     });
+
+    this.control(Controls.Zone)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        this._getGKEKubernetesVersions();
+      });
+
+    this.control(Controls.ReleaseChannelOptions)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        this._getGKEKubernetesVersions();
+      });
+
+    this.control(Controls.KubernetesVersionMode)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        this._getGKEKubernetesVersions();
+      });
 
     if (this.isDialogView()) {
       const version = this.cluster.spec.version;
@@ -211,18 +227,17 @@ export class GKEClusterSettingsComponent
   }
 
   private _getGKEKubernetesVersions(): void {
+    this.kubernetesVersions = [];
+    this.control(Controls.Version).setValue({main: ''});
     const zone = this.controlValue(Controls.Zone)?.main;
     const mode = this.controlValue(Controls.KubernetesVersionMode);
+    let releaseChannel: string;
     if (mode === KubernetesVersionMode.ReleaseChannel) {
-      const releaseChannel = this.controlValue(Controls.ReleaseChannelOptions)?.main;
-      this._externalClusterService
-        .getGKEKubernetesVersions(zone, mode, releaseChannel)
-        .subscribe((versions: MasterVersion[]) => (this.kubernetesVersions = versions.map(version => version.version)));
-    } else {
-      this._externalClusterService
-        .getGKEKubernetesVersions(zone, mode)
-        .subscribe((versions: MasterVersion[]) => (this.kubernetesVersions = versions.map(version => version.version)));
+      releaseChannel = this.controlValue(Controls.ReleaseChannelOptions)?.main;
     }
+    this._externalClusterService
+      .getGKEKubernetesVersions(zone, mode, releaseChannel)
+      .subscribe((versions: MasterVersion[]) => (this.kubernetesVersions = versions.map(version => version.version)));
   }
 
   private _getGKEMachineSizesForMachineDeployment(): void {

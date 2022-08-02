@@ -55,7 +55,7 @@ limitations under the License.
       <km-autocomplete *ngIf="!isDialogView()"
                        label="Kubernetes Version"
                        required="true"
-                       [options]="kubernetesVersionsForClusterCreation"
+                       [options]="kubernetesVersions"
                        [formControlName]="Controls.KubernetesVersion">
         <ng-container hint>
           Set the kubernetes version.

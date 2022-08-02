@@ -217,9 +217,9 @@ export class ExternalClusterService {
     return this._http.get<string[]>(url, {headers: this._getAKSHeaders(location)}).pipe(catchError(() => of<[]>()));
   }
 
-  getAKSKubernetesVersions() {
+  getAKSKubernetesVersions(): Observable<MasterVersion[]> {
     const url = `${this._newRestRoot}/providers/aks/versions`;
-    return this._http.get(url).pipe(catchError(() => of<[]>()));
+    return this._http.get<MasterVersion[]>(url).pipe(catchError(() => of<[]>()));
   }
 
   getGKEZones(): Observable<GKEZone[]> {

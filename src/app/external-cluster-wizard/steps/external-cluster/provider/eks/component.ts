@@ -135,10 +135,10 @@ export class EKSClusterSettingsComponent
       [Controls.MinSize]: this._builder.control(DEFAULT_MD_MINSIZE),
       [Controls.DesiredSize]: this._builder.control(DEFAULT_MD_DESIRED_SIZE),
     });
-    this._getEKSKubernetesVersions();
   }
 
   private _initSubscriptions(): void {
+    this._getEKSKubernetesVersions();
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
       this._updateExternalClusterModel();
       this._updateExternalMachineDeployment();
@@ -224,7 +224,7 @@ export class EKSClusterSettingsComponent
   }
 
   private _updateExternalClusterModel(): void {
-    const positionForIndexOfMethod = 2;
+    const indexPosition = 2;
     const version = this.controlValue(Controls.Version)?.main;
     this._externalClusterService.externalCluster = {
       ...this._externalClusterService.externalCluster,
@@ -238,13 +238,13 @@ export class EKSClusterSettingsComponent
       spec: {
         eksclusterSpec: {
           roleArn: this.controlValue(Controls.RoleArn),
-          version: version?.slice(0, version.indexOf('.', positionForIndexOfMethod)),
+          version: version?.slice(0, version.indexOf('.', indexPosition)),
           vpcConfigRequest: {
             subnetIds: this.controlValue(Controls.SubnetIds),
             securityGroupIds: this.controlValue(Controls.SecurityGroupsIds),
           },
         } as EKSClusterSpec,
-        version: version?.slice(0, version.indexOf('.', positionForIndexOfMethod)),
+        version: version?.slice(0, version.indexOf('.', indexPosition)),
       } as ExternalClusterSpec,
     } as ExternalClusterModel;
   }
