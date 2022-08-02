@@ -26,6 +26,8 @@ import {
   ApplicationVersion,
 } from '@shared/entity/application';
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@shared/validators/others';
+import * as y from 'js-yaml';
+import _ from 'lodash';
 import {Subscription} from 'rxjs';
 
 enum Controls {
@@ -174,7 +176,7 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
           name: this.form.get(Controls.Namespace).value,
           create: true,
         } as ApplicationNamespace,
-        // values: this.form.get(Controls.Values).value, // TODO: uncomment after backend changes
+        values: this._getValueConfig(),
       } as ApplicationSpec,
     } as Application;
   }
@@ -185,5 +187,10 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
       applicationDefinition.name.toLowerCase().includes(query) ||
       applicationDefinition.spec.description?.toLowerCase().includes(query)
     );
+  }
+
+  private _getValueConfig(): any {
+    const raw = y.load(this.form.get(Controls.Values).value);
+    return !_.isEmpty(raw) ? raw : {};
   }
 }
