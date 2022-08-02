@@ -25,6 +25,8 @@ import {
 } from '@shared/entity/application';
 import {Cluster} from '@shared/entity/cluster';
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@shared/validators/others';
+import * as y from 'js-yaml';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
@@ -86,7 +88,9 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
   }
 
   private _initForm(): void {
-    this.valuesConfig = this.application.spec.values as string; // TODO: confirm it works on edit cluster page after BE changes
+    if (!_.isEmpty(this.application.spec.values)) {
+      this.valuesConfig = y.dump(this.application.spec.values);
+    }
     this.form = this._builder.group({
       [Controls.Values]: this._builder.control(this.valuesConfig),
     });
