@@ -96,6 +96,7 @@ export class GKEClusterSettingsComponent
   readonly DISK_SIZE_DEFAULT_VALUE = 25;
   readonly MAX_REPLICAS_COUNT_DEFAULT_VALUE = 5;
   readonly MIN_REPLICAS_COUNT_DEFAULT_VALUE = 1;
+  readonly ZONE_DEFAULT_VALUE = 'us-central1-c';
 
   zones: string[] = [];
   diskTypes: string[] = [];
@@ -155,9 +156,9 @@ export class GKEClusterSettingsComponent
   private _initForm(): void {
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control('', [Validators.required, GKE_POOL_NAME_VALIDATOR]),
-      [Controls.Zone]: this._builder.control('', Validators.required),
+      [Controls.Zone]: this._builder.control({main: this.ZONE_DEFAULT_VALUE}, Validators.required),
       [Controls.KubernetesVersionMode]: this._builder.control(KubernetesVersionMode.StaticVersion),
-      [Controls.ReleaseChannelOptions]: this._builder.control(''),
+      [Controls.ReleaseChannelOptions]: this._builder.control({main: this.releaseChannelOptions[1]}),
       [Controls.Version]: this._builder.control('', Validators.required),
       [Controls.NodeCount]: this._builder.control(this.MIN_REPLICAS_COUNT_DEFAULT_VALUE, Validators.required),
       [Controls.MachineTypes]: this._builder.control(''),

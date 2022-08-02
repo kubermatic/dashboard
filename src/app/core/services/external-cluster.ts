@@ -217,6 +217,11 @@ export class ExternalClusterService {
     return this._http.get<string[]>(url, {headers: this._getAKSHeaders(location)}).pipe(catchError(() => of<[]>()));
   }
 
+  getAKSKubernetesVersions() {
+    const url = `${this._newRestRoot}/providers/aks/versions`;
+    return this._http.get(url).pipe(catchError(() => of<[]>()));
+  }
+
   getGKEZones(): Observable<GKEZone[]> {
     const url = `${this._newRestRoot}/providers/gke/zones`;
     return this._http.get<GKEZone[]>(url, {headers: this._getGKEHeaders()}).pipe(catchError(() => of<[]>()));

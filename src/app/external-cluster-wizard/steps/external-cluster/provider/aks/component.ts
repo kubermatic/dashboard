@@ -48,6 +48,7 @@ import {
   ExternalMachineDeployment,
   ExternalMachineDeploymentCloudSpec,
 } from '@app/shared/entity/external-machine-deployment';
+import {MasterVersion} from '@app/shared/entity/cluster';
 
 enum Controls {
   Name = 'name',
@@ -99,7 +100,8 @@ export class AKSClusterSettingsComponent
   isLoadingVmSizes: boolean;
   isLoadingNodePoolVersions: boolean;
   vmSizes: string[] = [];
-  nodePoolVersions: string[] = [];
+  nodePoolVersionsForMD: string[] = [];
+  kubernetesVersionsForClusterCreation: string[] = [];
 
   private readonly _debounceTime = 500;
 
@@ -169,6 +171,7 @@ export class AKSClusterSettingsComponent
         Validators.min(this.AUTOSCALING_MIN_VALUE),
       ]),
     });
+    this._getAKSKubernetesVersions();
   }
 
   private _initSubscriptions(): void {
@@ -189,7 +192,7 @@ export class AKSClusterSettingsComponent
       );
       this._getAKSAvailableNodePoolVersionsForCreateMachineDeployment().subscribe(
         (nodePoolVersions: AKSNodePoolVersionForMachineDeployments[]) => {
-          this.nodePoolVersions = nodePoolVersions.map(nodePoolVersion => nodePoolVersion.version);
+          this.nodePoolVersionsForMD = nodePoolVersions.map(nodePoolVersion => nodePoolVersion.version);
         }
       );
     } else {
@@ -209,6 +212,15 @@ export class AKSClusterSettingsComponent
       takeUntil(this._unsubscribe),
       finalize(() => (this.isLoadingVmSizes = false))
     );
+  }
+
+  private _getAKSKubernetesVersions(): void {
+    this._externalClusterService
+      .getAKSKubernetesVersions()
+      .subscribe(
+        (versions: MasterVersion[]) =>
+          (this.kubernetesVersionsForClusterCreation = versions.map(version => version.version))
+      );
   }
 
   private _getAKSVmSizesForMachineDeployment(location?: string): Observable<string[]> {
@@ -234,6 +246,9 @@ export class AKSClusterSettingsComponent
   }
 
   private _updateExternalClusterModel(): void {
+    const positionForIndexOfMethod = 2;
+    const version = this.controlValue(Controls.KubernetesVersion)?.main;
+
     const config = {
       name: this.controlValue(Controls.Name),
       cloud: {
@@ -245,7 +260,7 @@ export class AKSClusterSettingsComponent
       } as ExternalCloudSpec,
       spec: {
         aksclusterSpec: {
-          kubernetesVersion: this.controlValue(Controls.KubernetesVersion),
+          kubernetesVersion: version?.slice(0, version.indexOf('.', positionForIndexOfMethod)),
           location: this.controlValue(Controls.Location),
           machineDeploymentSpec: {
             name: this.controlValue(Controls.NodePoolName),
@@ -257,7 +272,7 @@ export class AKSClusterSettingsComponent
             } as AgentPoolBasics,
           } as AKSMachineDeploymentCloudSpec,
         } as AKSClusterSpec,
-        version: this.controlValue(Controls.KubernetesVersion),
+        version: version?.slice(0, version.indexOf('.', positionForIndexOfMethod)),
       } as ExternalClusterSpec,
     } as ExternalClusterModel;
 
