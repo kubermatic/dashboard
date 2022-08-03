@@ -119,7 +119,7 @@ export class ExternalMachineDeploymentService {
       .pipe(filter(data => !!data))
       .pipe(
         switchMap((data: ExternalMachineDeployment) => {
-          return this.create(projectID, cluster.id, data);
+          return this.createExternalMachineDeployment(projectID, cluster.id, data);
         })
       );
   }
@@ -157,7 +157,11 @@ export class ExternalMachineDeploymentService {
     );
   }
 
-  create(projectID: string, clusterID: string, md: ExternalMachineDeployment): Observable<ExternalMachineDeployment> {
+  createExternalMachineDeployment(
+    projectID: string,
+    clusterID: string,
+    md: ExternalMachineDeployment
+  ): Observable<ExternalMachineDeployment> {
     const url = `${this._restRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/machinedeployments`;
     return this._httpClient
       .post<ExternalMachineDeployment>(url, md)
