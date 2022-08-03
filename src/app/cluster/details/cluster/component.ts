@@ -571,12 +571,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  isShareConfigEnabled(): Observable<boolean> {
-    return this.settings.adminSettings.pipe(
-      map(settings => !!this.config.share_kubeconfig && !settings.enableOIDCKubeconfig)
-    );
-  }
-
   isAdmissionPluginEnabled(plugin: string): boolean {
     return this.cluster?.spec?.admissionPlugins?.includes(plugin) || false;
   }
