@@ -100,11 +100,6 @@ describe('Admin Settings - Defaults Story', () => {
 
     // Kubernetes Dashboard settings check
     Pages.Clusters.Details.Buttons.openKubernetesDashboard.should(Condition.Exist);
-
-    // OIDC Kubeconfig settings check
-    // Note: This is actually a workaround to simplify this check as it directly depends
-    // on the OIDC kubeconfig setting. Make sure to have also `share_kubeconfig` set to true.
-    Pages.Clusters.Details.Buttons.shareKubeconfig.should(Condition.Exist);
   });
 
   it('should go to the admin settings and update default values - defaults and limits page', () => {
@@ -151,9 +146,6 @@ describe('Admin Settings - Defaults Story', () => {
 
     // Kubernetes Dashboard settings check
     Pages.Clusters.Details.Buttons.openKubernetesDashboard.should(Condition.NotExist);
-
-    // OIDC Kubeconfig settings check
-    Pages.Clusters.Details.Buttons.shareKubeconfig.should(Condition.NotExist);
   });
 
   it('should delete created project and logout', () => {
