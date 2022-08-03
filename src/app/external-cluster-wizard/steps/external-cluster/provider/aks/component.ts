@@ -182,7 +182,7 @@ export class AKSClusterSettingsComponent
 
     if (this.isDialogView()) {
       const version = this.cluster.spec.version;
-      this.control(Controls.KubernetesVersion).setValue({main: version.slice(1, version.indexOf('-'))});
+      this.control(Controls.KubernetesVersion).setValue({main: version.slice(1)});
       this.control(Controls.Name).clearValidators();
       this.control(Controls.Location).clearValidators();
       this.control(Controls.NodeResourceGroup).clearValidators();
@@ -204,9 +204,8 @@ export class AKSClusterSettingsComponent
         .subscribe((vmSizes: string[]) => {
           this.vmSizes = vmSizes;
         });
+      this._getAKSKubernetesVersions();
     }
-
-    this._getAKSKubernetesVersions();
   }
 
   private _getAKSVmSizes(location: string): Observable<string[]> {
@@ -218,9 +217,15 @@ export class AKSClusterSettingsComponent
   }
 
   private _getAKSKubernetesVersions(): void {
-    this._externalClusterService
-      .getAKSKubernetesVersions()
-      .subscribe((versions: MasterVersion[]) => (this.kubernetesVersions = versions.map(version => version.version)));
+    this._externalClusterService.getAKSKubernetesVersions().subscribe(
+      (versions: MasterVersion[]) =>
+        (this.kubernetesVersions = versions.map(version => {
+          if (version.default) {
+            this.control(Controls.KubernetesVersion).setValue({main: version.version});
+          }
+          return version.version;
+        }))
+    );
   }
 
   private _getAKSVmSizesForMachineDeployment(location?: string): Observable<string[]> {

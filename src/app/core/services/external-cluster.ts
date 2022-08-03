@@ -255,9 +255,9 @@ export class ExternalClusterService {
     return this._http.get<string[]>(url, {headers}).pipe(catchError(() => of<[]>()));
   }
 
-  getEKSKubernetesVersions() {
+  getEKSKubernetesVersions(): Observable<MasterVersion[]> {
     const url = `${this._newRestRoot}/providers/eks/versions`;
-    return this._http.get(url).pipe(catchError(() => of<[]>()));
+    return this._http.get<MasterVersion[]>(url).pipe(catchError(() => of<[]>()));
   }
 
   createExternalCluster(projectID: string, externalClusterModel: ExternalClusterModel): Observable<ExternalCluster> {
@@ -363,21 +363,9 @@ export class ExternalClusterService {
 
     if (this._preset) {
       headers = {Credential: this._preset};
-
-      if (zone) {
-        headers = {...headers, Zone: zone};
-      }
-      if (mode) {
-        headers = {...headers, Mode: mode};
-      }
-      if (releaseChannel) {
-        headers = {...headers, ReleaseChannel: releaseChannel};
-      }
-
-      return new HttpHeaders(headers);
+    } else {
+      headers = {ServiceAccount: this._externalCluster.cloud.gke.serviceAccount};
     }
-
-    headers = {ServiceAccount: this._externalCluster.cloud.gke.serviceAccount};
 
     if (zone) {
       headers = {...headers, Zone: zone};

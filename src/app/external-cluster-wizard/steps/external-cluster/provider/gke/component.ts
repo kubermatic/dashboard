@@ -30,6 +30,7 @@ import {
 } from '@app/shared/entity/external-cluster';
 import {GKECloudSpec, GKEClusterSpec, GKEZone} from '@app/shared/entity/provider/gke';
 import {ExternalClusterService} from '@core/services/external-cluster';
+import {merge} from 'rxjs';
 import {map, takeUntil} from 'rxjs/operators';
 import {GKE_POOL_NAME_VALIDATOR} from '@app/shared/validators/others';
 import {NodeDataService} from '@app/core/services/node-data/service';
@@ -97,11 +98,11 @@ export class GKEClusterSettingsComponent
   readonly MAX_REPLICAS_COUNT_DEFAULT_VALUE = 5;
   readonly MIN_REPLICAS_COUNT_DEFAULT_VALUE = 1;
   readonly ZONE_DEFAULT_VALUE = 'us-central1-c';
+  readonly releaseChannelOptions: string[] = ['Rapid channel', 'Regular channel', 'Stable channel'];
 
   zones: string[] = [];
   diskTypes: string[] = [];
   machineTypes: string[] = [];
-  releaseChannelOptions: string[] = ['RAPID', 'REGULAR', 'STABLE'];
   kubernetesVersions: string[] = [];
   isLoadingZones: boolean;
 
@@ -171,31 +172,12 @@ export class GKEClusterSettingsComponent
   }
 
   private _initSubscriptions(): void {
-    this._getGKEKubernetesVersions();
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
       this._updateExternalClusterModel();
       this._updateExternalMachineDeployment();
       this._externalClusterService.isClusterDetailsStepValid = this.form.valid;
       this._externalMachineDeploymentService.isAddMachineDeploymentFormValid = this.form.valid;
     });
-
-    this.control(Controls.Zone)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => {
-        this._getGKEKubernetesVersions();
-      });
-
-    this.control(Controls.ReleaseChannelOptions)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => {
-        this._getGKEKubernetesVersions();
-      });
-
-    this.control(Controls.KubernetesVersionMode)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => {
-        this._getGKEKubernetesVersions();
-      });
 
     if (this.isDialogView()) {
       const version = this.cluster.spec.version;
@@ -209,6 +191,17 @@ export class GKEClusterSettingsComponent
       this.control(Controls.MinCount).setValidators([Validators.max(this.AUTOSCALING_MIN_VALUE)]);
       this.control(Controls.MaxCount).updateValueAndValidity();
       this.control(Controls.MinCount).updateValueAndValidity();
+    } else {
+      this._getGKEKubernetesVersions();
+      merge(
+        this.control(Controls.Zone).valueChanges,
+        this.control(Controls.ReleaseChannelOptions).valueChanges,
+        this.control(Controls.KubernetesVersionMode).valueChanges
+      )
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(_ => {
+          this._getGKEKubernetesVersions();
+        });
     }
   }
 
@@ -228,16 +221,22 @@ export class GKEClusterSettingsComponent
 
   private _getGKEKubernetesVersions(): void {
     this.kubernetesVersions = [];
-    this.control(Controls.Version).setValue({main: ''});
     const zone = this.controlValue(Controls.Zone)?.main;
     const mode = this.controlValue(Controls.KubernetesVersionMode);
     let releaseChannel: string;
     if (mode === KubernetesVersionMode.ReleaseChannel) {
-      releaseChannel = this.controlValue(Controls.ReleaseChannelOptions)?.main;
+      const releaseChannelToUpperCase = this.controlValue(Controls.ReleaseChannelOptions)?.main.toUpperCase();
+      releaseChannel = releaseChannelToUpperCase.slice(0, releaseChannelToUpperCase.indexOf(' '));
     }
-    this._externalClusterService
-      .getGKEKubernetesVersions(zone, mode, releaseChannel)
-      .subscribe((versions: MasterVersion[]) => (this.kubernetesVersions = versions.map(version => version.version)));
+    this._externalClusterService.getGKEKubernetesVersions(zone, mode, releaseChannel).subscribe(
+      (versions: MasterVersion[]) =>
+        (this.kubernetesVersions = versions.map(version => {
+          if (version.default) {
+            this.control(Controls.Version).setValue({main: version.version});
+          }
+          return version.version;
+        }))
+    );
   }
 
   private _getGKEMachineSizesForMachineDeployment(): void {

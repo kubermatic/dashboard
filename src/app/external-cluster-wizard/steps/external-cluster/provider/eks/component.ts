@@ -138,7 +138,6 @@ export class EKSClusterSettingsComponent
   }
 
   private _initSubscriptions(): void {
-    this._getEKSKubernetesVersions();
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
       this._updateExternalClusterModel();
       this._updateExternalMachineDeployment();
@@ -174,6 +173,8 @@ export class EKSClusterSettingsComponent
         .subscribe((data: string[]) => {
           this.subnetIds = data;
         });
+    } else {
+      this._getEKSKubernetesVersions();
     }
 
     this._externalClusterService.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
@@ -218,9 +219,15 @@ export class EKSClusterSettingsComponent
   }
 
   private _getEKSKubernetesVersions(): void {
-    this._externalClusterService
-      .getEKSKubernetesVersions()
-      .subscribe((versions: MasterVersion[]) => (this.kubernetesVersions = versions.map(version => version.version)));
+    this._externalClusterService.getEKSKubernetesVersions().subscribe(
+      (versions: MasterVersion[]) =>
+        (this.kubernetesVersions = versions.map(version => {
+          if (version.default) {
+            this.control(Controls.Version).setValue({main: version.version});
+          }
+          return version.version;
+        }))
+    );
   }
 
   private _updateExternalClusterModel(): void {
