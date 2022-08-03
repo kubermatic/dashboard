@@ -42,7 +42,7 @@ limitations under the License.
             class="km-share-kubeconfig-btn"
             color="alternative"
             (click)="shareConfigDialog()"
-            *ngIf="isShareConfigEnabled() | async">
+            *ngIf="config.share_kubeconfig">
       <i class="km-icon-mask km-icon-share"></i>
       <span>Share</span>
     </button>
