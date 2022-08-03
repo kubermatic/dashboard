@@ -618,9 +618,20 @@ km-cni-version {
 }
 
 .km-quota-widget {
-  .km-quota-item {
+  width: 100%;
+
+  km-property {
+    width: 100%;
+
     .container {
       margin: 2px 5px;
+      width: 100%;
+    }
+
+    &:last-child {
+      .container {
+        margin-right: 0;
+      }
     }
   }
 

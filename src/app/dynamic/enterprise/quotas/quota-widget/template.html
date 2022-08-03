@@ -20,20 +20,21 @@
 END OF TERMS AND CONDITIONS
 -->
 
-<div class="km-quota-widget"
+<div class="km-quota-widget-container"
      *ngIf="quotaDetails">
   <ng-container *ngTemplateOutlet="showQuotaWidgetDetails ? quotaWidgetDetails : quotaWidget"></ng-container>
 </div>
 
 <ng-template #quotaWidget>
-  <mat-card *ngIf="showAsCard; else progressQuota">
+  <mat-card *ngIf="showAsCard; else quotaWidgetWithoutCard">
     <mat-card-content>
-      <ng-container *ngTemplateOutlet="progressQuota"></ng-container>
+      <ng-container *ngTemplateOutlet="quotaWidgetWithoutCard"></ng-container>
     </mat-card-content>
   </mat-card>
 
-  <ng-template #progressQuota>
-    <div fxLayout="row"
+  <ng-template #quotaWidgetWithoutCard>
+    <div class="km-quota-widget"
+         fxLayout="row"
          fxLayoutAlign=" center">
       <i *ngIf="showIcon"
          class="km-icon-mask km-icon-quota i-32"></i>
@@ -54,7 +55,7 @@ END OF TERMS AND CONDITIONS
       </ng-container>
     </div>
 
-    <mat-card class="km-detail-view"
+    <mat-card class="km-quota-details"
               *ngIf="showDetails$ | async">
       <mat-card-content fxLayout="column">
         <div class="km-detail-row">Project Quota</div>
@@ -82,9 +83,7 @@ END OF TERMS AND CONDITIONS
     <ng-template #progressBar
                  let-label="label"
                  let-percentage="percentage">
-      <km-property class="km-quota-item"
-                   fxLayout="column"
-                   fxLayoutAlign="center center">
+      <km-property>
         <div key>{{ label }}</div>
         <mat-progress-bar value
                           class="property-usage-bar"
@@ -98,21 +97,20 @@ END OF TERMS AND CONDITIONS
 </ng-template>
 
 <ng-template #quotaWidgetDetails>
-  <div class="km-extended-view"
+  <div class="km-quota-widget km-extended-widget"
        fxLayout="row">
     <div class="km-quota-heading"
          fxLayout="row"
-         fxLayoutGap="5px"
-         fxLayoutAlign="center center">
-      <i class="km-icon-mask km-icon-quota i-32"></i>
+         fxLayoutAlign="space-between center">
+      <i class="km-icon-mask km-icon-quota"></i>
 
       <span>Project Quota</span>
     </div>
 
     <div class="km-quota-percentages"
          fxLayout="row"
-         fxLayoutAlign="space-evenly center"
-         fxLayoutGap="10px">
+         fxLayoutGap="30px"
+         fxLayoutAlign="space-between">
       <ng-container *ngIf="quotaDetails.quota.cpu"
                     [ngTemplateOutlet]="extendedProgress"
                     [ngTemplateOutletContext]="{
@@ -150,20 +148,18 @@ END OF TERMS AND CONDITIONS
                let-total="total"
                let-used="used"
                let-unit="unit">
-    <div fxLayout="column">
-      <km-property>
-        <div key>
-          <span fxFlex>{{label}}</span>
-          <span>{{used ?? 0}}/{{total}} {{unit}}</span>
-        </div>
-        <div value>
-          <mat-progress-bar class="property-usage-bar"
-                            mode="determinate"
-                            [color]="getProgressBarAccent(percentage)"
-                            [value]="percentage ?? 1"
-                            [matTooltip]="percentage ? percentage + '%' : ''"></mat-progress-bar>
-        </div>
-      </km-property>
-    </div>
+    <km-property>
+      <div key>
+        <span fxFlex>{{label}}</span>
+        <span>{{used ?? 0}}/{{total}} {{unit}}</span>
+      </div>
+      <div value>
+        <mat-progress-bar class="property-usage-bar"
+                          mode="determinate"
+                          [color]="getProgressBarAccent(percentage)"
+                          [value]="percentage ?? 1"
+                          [matTooltip]="percentage ? percentage + '%' : ''"></mat-progress-bar>
+      </div>
+    </km-property>
   </ng-template>
 </ng-template>
