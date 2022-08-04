@@ -30,6 +30,7 @@ import {
 } from '@app/shared/entity/external-cluster';
 import {GKECloudSpec, GKEClusterSpec, GKEZone} from '@app/shared/entity/provider/gke';
 import {ExternalClusterService} from '@core/services/external-cluster';
+import {merge} from 'rxjs';
 import {map, takeUntil} from 'rxjs/operators';
 import {GKE_POOL_NAME_VALIDATOR} from '@app/shared/validators/others';
 import {NodeDataService} from '@app/core/services/node-data/service';
@@ -44,18 +45,26 @@ import {MachineDeploymentSpec} from '@app/shared/entity/machine-deployment';
 import {MatCheckboxChange} from '@angular/material/checkbox';
 import {GCPDiskType, GCPMachineSize} from '@app/shared/entity/provider/gcp';
 import {NameGeneratorService} from '@app/core/services/name-generator';
+import {MasterVersion} from '@app/shared/entity/cluster';
 
 enum Controls {
   Name = 'name',
   Zone = 'zone',
   Version = 'version',
+  DiskSize = 'diskSize',
+  MaxCount = 'maxCount',
+  MinCount = 'minCount',
   NodeCount = 'nodeCount',
   DiskTypes = 'diskTypes',
   MachineTypes = 'machineTypes',
-  DiskSize = 'diskSize',
   EnableAutoScaling = 'enableAutoScaling',
-  MaxCount = 'maxCount',
-  MinCount = 'minCount',
+  KubernetesVersionMode = 'kubernetesVersionMode',
+  ReleaseChannelOptions = 'releaseChannelOptions',
+}
+
+enum KubernetesVersionMode {
+  StaticVersion = 'Manual',
+  ReleaseChannel = 'Auto',
 }
 
 @Component({
@@ -80,6 +89,7 @@ export class GKEClusterSettingsComponent
   implements OnInit, OnDestroy, ControlValueAccessor, Validator
 {
   readonly Controls = Controls;
+  readonly KubernetesVersionMode = KubernetesVersionMode;
   readonly DISK_SIZE_MIN_VALUE = 10;
   readonly DISK_SIZE_MAX_VALUE = 65536;
   readonly AUTOSCALING_MIN_VALUE = 1;
@@ -87,10 +97,13 @@ export class GKEClusterSettingsComponent
   readonly DISK_SIZE_DEFAULT_VALUE = 25;
   readonly MAX_REPLICAS_COUNT_DEFAULT_VALUE = 5;
   readonly MIN_REPLICAS_COUNT_DEFAULT_VALUE = 1;
+  readonly ZONE_DEFAULT_VALUE = 'us-central1-c';
+  readonly releaseChannelOptions: string[] = ['Rapid channel', 'Regular channel', 'Stable channel'];
 
   zones: string[] = [];
   diskTypes: string[] = [];
   machineTypes: string[] = [];
+  kubernetesVersions: string[] = [];
   isLoadingZones: boolean;
 
   @Input() projectID: string;
@@ -144,7 +157,9 @@ export class GKEClusterSettingsComponent
   private _initForm(): void {
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control('', [Validators.required, GKE_POOL_NAME_VALIDATOR]),
-      [Controls.Zone]: this._builder.control('', Validators.required),
+      [Controls.Zone]: this._builder.control({main: this.ZONE_DEFAULT_VALUE}, Validators.required),
+      [Controls.KubernetesVersionMode]: this._builder.control(KubernetesVersionMode.StaticVersion),
+      [Controls.ReleaseChannelOptions]: this._builder.control({main: this.releaseChannelOptions[1]}),
       [Controls.Version]: this._builder.control('', Validators.required),
       [Controls.NodeCount]: this._builder.control(this.MIN_REPLICAS_COUNT_DEFAULT_VALUE, Validators.required),
       [Controls.MachineTypes]: this._builder.control(''),
@@ -176,6 +191,17 @@ export class GKEClusterSettingsComponent
       this.control(Controls.MinCount).setValidators([Validators.max(this.AUTOSCALING_MIN_VALUE)]);
       this.control(Controls.MaxCount).updateValueAndValidity();
       this.control(Controls.MinCount).updateValueAndValidity();
+    } else {
+      this._getGKEKubernetesVersions();
+      merge(
+        this.control(Controls.Zone).valueChanges,
+        this.control(Controls.ReleaseChannelOptions).valueChanges,
+        this.control(Controls.KubernetesVersionMode).valueChanges
+      )
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(_ => {
+          this._getGKEKubernetesVersions();
+        });
     }
   }
 
@@ -191,6 +217,26 @@ export class GKEClusterSettingsComponent
       .getGKEDiskTypesForMachineDeployment(this.projectID, this.cluster.id)
       .pipe(map((diskTypes: GCPDiskType[]) => diskTypes.map(type => type.name + ` (${type.description})`)))
       .subscribe((diskTypes: string[]) => (this.diskTypes = diskTypes));
+  }
+
+  private _getGKEKubernetesVersions(): void {
+    this.kubernetesVersions = [];
+    const zone = this.controlValue(Controls.Zone)?.main;
+    const mode = this.controlValue(Controls.KubernetesVersionMode);
+    let releaseChannel: string;
+    if (mode === KubernetesVersionMode.ReleaseChannel) {
+      const releaseChannelToUpperCase = this.controlValue(Controls.ReleaseChannelOptions)?.main.toUpperCase();
+      releaseChannel = releaseChannelToUpperCase.slice(0, releaseChannelToUpperCase.indexOf(' '));
+    }
+    this._externalClusterService.getGKEKubernetesVersions(zone, mode, releaseChannel).subscribe(
+      (versions: MasterVersion[]) =>
+        (this.kubernetesVersions = versions.map(version => {
+          if (version.default) {
+            this.control(Controls.Version).setValue({main: version.version});
+          }
+          return version.version;
+        }))
+    );
   }
 
   private _getGKEMachineSizesForMachineDeployment(): void {
@@ -218,7 +264,7 @@ export class GKEClusterSettingsComponent
       } as ExternalCloudSpec,
       spec: {
         gkeclusterSpec: {
-          initialClusterVersion: this.controlValue(Controls.Version),
+          initialClusterVersion: this.controlValue(Controls.Version)?.main,
           initialNodeCount: this.controlValue(Controls.NodeCount),
         } as GKEClusterSpec,
       } as ExternalClusterSpec,

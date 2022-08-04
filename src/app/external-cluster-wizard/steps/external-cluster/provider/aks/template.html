@@ -52,24 +52,16 @@ limitations under the License.
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>Kubernetes Version</mat-label>
-        <input [formControlName]="Controls.KubernetesVersion"
-               matInput
-               type="text"
-               autocomplete="off" />
+      <km-autocomplete *ngIf="!isDialogView()"
+                       label="Kubernetes Version"
+                       required="true"
+                       [options]="kubernetesVersions"
+                       [formControlName]="Controls.KubernetesVersion">
+        <ng-container hint>
+          Set the kubernetes version.
+        </ng-container>
+      </km-autocomplete>
 
-        <mat-hint>
-          Set the kubernetes version. See list of
-          <a href="https://docs.microsoft.com/en-us/azure/aks/supported-kubernetes-versions?tabs=azure-cli"
-             rel="noopener noreferrer"
-             target="_blank">supported versions</a>.
-        </mat-hint>
-
-        <mat-error *ngIf="form.get(Controls.KubernetesVersion).hasError(ErrorType.Required)">
-          Kubernetes Version is <strong>required</strong>.
-        </mat-error>
-      </mat-form-field>
 
       <mat-form-field>
         <mat-label>Location</mat-label>
@@ -140,7 +132,7 @@ limitations under the License.
     <km-autocomplete *ngIf="isDialogView()"
                      label="Kubernetes Version"
                      required="true"
-                     [options]="nodePoolVersions"
+                     [options]="nodePoolVersionsForMD"
                      [formControlName]="Controls.KubernetesVersion">
       <ng-container hint>
         Set the kubernetes version.

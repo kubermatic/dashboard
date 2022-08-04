@@ -42,6 +42,7 @@ import {
   ExternalMachineDeployment,
   ExternalMachineDeploymentCloudSpec,
 } from '@app/shared/entity/external-machine-deployment';
+import {MasterVersion} from '@app/shared/entity/cluster';
 
 enum Controls {
   Name = 'name',
@@ -81,6 +82,7 @@ export class EKSClusterSettingsComponent
   vpcs: string[] = [];
   subnetIds: string[] = [];
   securityGroupIds: string[] = [];
+  kubernetesVersions: string[] = [];
   maxNodeCount: number;
   minNodeCount: number;
   @Input() projectID: string;
@@ -171,6 +173,8 @@ export class EKSClusterSettingsComponent
         .subscribe((data: string[]) => {
           this.subnetIds = data;
         });
+    } else {
+      this._getEKSKubernetesVersions();
     }
 
     this._externalClusterService.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
@@ -214,7 +218,21 @@ export class EKSClusterSettingsComponent
     });
   }
 
+  private _getEKSKubernetesVersions(): void {
+    this._externalClusterService.getEKSKubernetesVersions().subscribe(
+      (versions: MasterVersion[]) =>
+        (this.kubernetesVersions = versions.map(version => {
+          if (version.default) {
+            this.control(Controls.Version).setValue({main: version.version});
+          }
+          return version.version;
+        }))
+    );
+  }
+
   private _updateExternalClusterModel(): void {
+    const indexPosition = 2;
+    const version = this.controlValue(Controls.Version)?.main;
     this._externalClusterService.externalCluster = {
       ...this._externalClusterService.externalCluster,
       name: this.controlValue(Controls.Name),
@@ -227,13 +245,13 @@ export class EKSClusterSettingsComponent
       spec: {
         eksclusterSpec: {
           roleArn: this.controlValue(Controls.RoleArn),
-          version: this.controlValue(Controls.Version),
+          version: version?.slice(0, version.indexOf('.', indexPosition)),
           vpcConfigRequest: {
             subnetIds: this.controlValue(Controls.SubnetIds),
             securityGroupIds: this.controlValue(Controls.SecurityGroupsIds),
           },
         } as EKSClusterSpec,
-        version: this.controlValue(Controls.Version),
+        version: version?.slice(0, version.indexOf('.', indexPosition)),
       } as ExternalClusterSpec,
     } as ExternalClusterModel;
   }

@@ -156,7 +156,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   hasUpgrades(): boolean {
-    return this.isRunning() && this.provider !== ExternalClusterProvider.EKS;
+    return this.isRunning();
   }
 
   getStatus(): string {
