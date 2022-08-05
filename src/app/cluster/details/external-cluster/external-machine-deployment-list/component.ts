@@ -29,6 +29,7 @@ import {MemberUtils, Permission} from '@shared/utils/member';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ExternalMachineDeploymentService} from '@core/services/external-machine-deployment';
 import {UpdateExternalClusterMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/update-external-cluster-machine-deployment-dialog/component';
+import {HealthStatus} from '@shared/utils/health-status';
 
 @Component({
   selector: 'km-external-machine-deployment-list',
@@ -81,12 +82,8 @@ export class ExternalMachineDeploymentListComponent implements OnInit, OnChanges
     this._unsubscribe.complete();
   }
 
-  getStatusColor(md: ExternalMachineDeployment): string {
-    return ExternalMachineDeployment.getStatusIcon(md);
-  }
-
-  getStatusMessage(md: ExternalMachineDeployment): string {
-    return ExternalMachineDeployment.getStatusMessage(md);
+  getHealthStatus(md: ExternalMachineDeployment): HealthStatus {
+    return ExternalMachineDeployment.getExternalMachineDeploymentHealthStatus(md);
   }
 
   getOperatingSystem(md: ExternalMachineDeployment): string {

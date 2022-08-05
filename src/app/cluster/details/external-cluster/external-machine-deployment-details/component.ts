@@ -32,6 +32,7 @@ import {forkJoin, Subject, timer} from 'rxjs';
 import {switchMap, take, takeUntil} from 'rxjs/operators';
 import {ExternalMachineDeploymentService} from '@core/services/external-machine-deployment';
 import {UpdateExternalClusterMachineDeploymentDialogComponent} from '../update-external-cluster-machine-deployment-dialog/component';
+import {HealthStatus} from '@shared/utils/health-status';
 
 @Component({
   selector: 'km-external-machine-deployment-details',
@@ -130,12 +131,8 @@ export class ExternalMachineDeploymentDetailsComponent implements OnInit, OnDest
     this._unsubscribe.complete();
   }
 
-  getStatusColor(): string {
-    return ExternalMachineDeployment.getStatusIcon(this.machineDeployment);
-  }
-
-  getStatusMessage(): string {
-    return ExternalMachineDeployment.getStatusMessage(this.machineDeployment);
+  getHealthStatus(): HealthStatus {
+    return ExternalMachineDeployment.getExternalMachineDeploymentHealthStatus(this.machineDeployment);
   }
 
   isEditEnabled(): boolean {

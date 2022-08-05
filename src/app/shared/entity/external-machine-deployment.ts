@@ -13,8 +13,9 @@
 // limitations under the License.
 
 import {MachineDeployment} from '@shared/entity/machine-deployment';
-import {StatusIcon} from '@shared/utils/health-status';
+import {HealthStatus, StatusIcon} from '@shared/utils/health-status';
 import {AKSMachineDeploymentCloudSpec} from './provider/aks';
+import {ExternalClusterState} from '@shared/entity/external-cluster';
 
 export enum AKSMachineDeploymentMode {
   User = 'User',
@@ -22,6 +23,7 @@ export enum AKSMachineDeploymentMode {
 }
 
 export class ExternalMachineDeployment extends MachineDeployment {
+  phase?: any;
   cloud: ExternalMachineDeploymentCloudSpec;
 
   static getStatusIcon(md: ExternalMachineDeployment): StatusIcon {
@@ -40,6 +42,21 @@ export class ExternalMachineDeployment extends MachineDeployment {
       return 'Running';
     }
     return 'Provisioning';
+  }
+
+  static getExternalMachineDeploymentHealthStatus(md: ExternalMachineDeployment): HealthStatus {
+    if (md.phase && md.phase.state === ExternalClusterState.Deleting) {
+      return new HealthStatus(ExternalClusterState.Deleting, StatusIcon.Error);
+    } else if (md.phase && md.phase.state === ExternalClusterState.Running) {
+      return new HealthStatus(ExternalClusterState.Running, StatusIcon.Running);
+    } else if (md.phase && md.phase.state === ExternalClusterState.Reconciling) {
+      return new HealthStatus(ExternalClusterState.Reconciling, StatusIcon.Pending);
+    } else if (md.phase && md.phase.state === ExternalClusterState.Provisioning) {
+      return new HealthStatus(ExternalClusterState.Provisioning, StatusIcon.Pending);
+    } else if (md.phase && md.phase.state === ExternalClusterState.Error) {
+      return new HealthStatus(md.phase?.statusMessage || ExternalClusterState.Error, StatusIcon.Error);
+    }
+    return new HealthStatus(ExternalClusterState.Unknown, StatusIcon.Unknown);
   }
 
   static NewEmptyMachineDeployment(): ExternalMachineDeployment {
