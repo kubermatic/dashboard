@@ -15,16 +15,21 @@ limitations under the License.
 -->
 
 <div *ngIf="view !== ApplicationListView.Summary"
-     fxLayout
      fxLayoutAlign=" center">
   <km-search-field *ngIf="applications?.length"
                    (queryChange)="onSearchQueryChanged($event)"></km-search-field>
   <div fxFlex>
-    <p *ngIf="view === ApplicationListView.Wizard && !applications?.length">
-      No application selected to install on cluster creation.
+    <p *ngIf="!applications?.length">
+      <ng-container *ngIf="view === ApplicationListView.Wizard; else defaultViewText">
+        No application selected to install on cluster creation,
+      </ng-container>
+      <ng-template #defaultViewText>
+        Install third party Applications into a cluster,
+      </ng-template>
+      <ng-container *ngTemplateOutlet="applicationDocsLink"></ng-container>
     </p>
   </div>
-  <mat-button-toggle-group *ngIf="view === ApplicationListView.Default"
+  <mat-button-toggle-group *ngIf="view === ApplicationListView.Default && applications?.length"
                            class="applications-view-switch"
                            group="applicationsView"
                            (change)="changeView()">
@@ -50,7 +55,7 @@ limitations under the License.
 
 <div *ngIf="isClusterReady"
      class="applications-container">
-  <div *ngIf="showCards; else applicationsTable">
+  <div *ngIf="showCards || !applications?.length; else applicationsTable">
     <div class="application-cards-view"
          fxFlex
          fxLayout="row wrap"
@@ -246,11 +251,6 @@ limitations under the License.
     </table>
 
     <div class="km-row km-empty-list-msg"
-         *ngIf="!applications?.length">
-      No applications added.
-    </div>
-
-    <div class="km-row km-empty-list-msg"
          *ngIf="applications?.length && !applicationsDataSource.filteredData?.length">
       No results for "{{applicationsDataSource.filter}}" found.
     </div>
@@ -285,5 +285,13 @@ limitations under the License.
   </ng-template>
 
 </div>
+
+<ng-template #applicationDocsLink>
+  <a href="https://docs.kubermatic.com/kubermatic/master/tutorials_howtos/applications/"
+     target="_blank"
+     rel="noreferrer noopener">
+    learn more about Applications >
+  </a>
+</ng-template>
 
 <km-loader *ngIf="!isClusterReady"></km-loader>

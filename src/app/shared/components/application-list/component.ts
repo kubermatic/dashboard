@@ -274,7 +274,10 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
           const failingCondition = status.conditions.find(condition => condition.status === 'False');
           if (failingCondition) {
             icon = StatusIcon.Error;
-            message = failingCondition.message;
+            const error = failingCondition.message;
+            message = `${error} ${
+              error || !error.endsWith('.') ? '.' : ''
+            } Please check your configuration or contact your KKP Administrator.`;
           } else {
             icon = StatusIcon.Running;
             message = 'Ready';

@@ -14,8 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div fxLayout="row">
-  <div fxFlex></div>
+<div fxLayout="row"
+     fxLayoutAlign=" center">
+  <div fxFlex>
+    <p *ngIf="!addons?.length">
+      Addons are extensions provided by Kubermatic to expand cluster capabilities,
+      <a href="https://docs.kubermatic.com/kubermatic/master/architecture/concept/kkp-concepts/addons/"
+         target="_blank"
+         rel="noreferrer noopener">
+        learn more about Addons >
+      </a>
+    </p>
+  </div>
   <button mat-flat-button
           color="quaternary"
           [matTooltip]="getAddBtnTooltip()"
