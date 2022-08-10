@@ -39,7 +39,8 @@ enum Controls {
 
 enum StepRegistry {
   SelectApplication = 'Select Application',
-  ApplicationSettings = 'Application Settings',
+  Settings = 'Settings',
+  ApplicationValues = 'Application Values',
 }
 
 @Component({
@@ -95,7 +96,7 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
       this._initForm();
       this.applicationMethod = application.spec?.method;
     }
-    this._stepper.next();
+    this.next();
   }
 
   onVersionChanged(version: string): void {
@@ -103,12 +104,16 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
     this.selectedVersionSource = ApplicationVersion.getVersionSource(selectedVersion);
   }
 
-  onValuesConfigChanged(value: string) {
+  onValuesConfigChanged(value: string): void {
     this.form.get(Controls.Values).setValue(value);
   }
 
-  onValuesConfigValidityChanged(isValid: boolean) {
+  onValuesConfigValidityChanged(isValid: boolean): void {
     this.isValuesConfigValid = isValid;
+  }
+
+  next(): void {
+    this._stepper.next();
   }
 
   goBack(): void {

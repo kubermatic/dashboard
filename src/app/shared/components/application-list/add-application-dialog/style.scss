@@ -71,4 +71,12 @@
   .version-icon-value {
     margin-top: 10px;
   }
+
+  .application-values {
+    margin-bottom: 20px;
+
+    mat-hint, mat-error {
+      font-size: 75%;
+    }
+  }
 }

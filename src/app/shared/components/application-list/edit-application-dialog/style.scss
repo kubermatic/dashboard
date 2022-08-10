@@ -30,4 +30,10 @@
   .version-icon-value {
     margin-top: 10px;
   }
+
+  .application-values {
+    mat-hint, mat-error {
+      font-size: 75%;
+    }
+  }
 }
