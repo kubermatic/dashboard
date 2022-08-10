@@ -102,13 +102,12 @@ limitations under the License.
       <mat-card-title>Networking</mat-card-title>
     </mat-card-header>
 
-    <km-autocomplete *ngIf="!isDialogView()"
-                     label="VPC"
-                     required="true"
-                     [isLoading]="isLoadingVpcs"
-                     [options]="vpcs"
-                     [formControlName]="Controls.Vpc">
-    </km-autocomplete>
+    <km-select *ngIf="!isDialogView()"
+               label="VPC"
+               [required]="true"
+               [options]="vpcs"
+               [formControlName]="Controls.Vpc">
+    </km-select>
 
     <mat-form-field *ngIf="isDialogView()">
       <mat-label>VPC</mat-label>
@@ -118,7 +117,7 @@ limitations under the License.
              [formControlName]="Controls.Vpc" />
     </mat-form-field>
 
-    <ng-container *ngIf="isDialogView() ? true : form.get(Controls.Vpc).value?.main">
+    <ng-container *ngIf="isDialogView() ? true : form.get(Controls.Vpc).value">
       <km-chip-autocomplete label="Subnet"
                             placeholder="Select Subnet IDs"
                             [tags]="subnetIds"

@@ -26,11 +26,10 @@ mat-checkbox {
 
 mat-radio-group {
   mat-hint {
-    width: 90%;
-    font-size: variables.$font-size-caption;
-    position: relative;
     bottom: 8px;
+    font-size: variables.$font-size-caption;
     left: 15px;
-    
+    position: relative;
+    width: 90%;
   }
 }

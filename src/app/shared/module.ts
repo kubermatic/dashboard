@@ -128,6 +128,7 @@ import {ButtonComponent} from '@shared/components/button/component';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {ValidateJsonOrYamlComponent} from '@shared/components/validate-json-or-yaml/component';
 import {ChipAutocompleteComponent} from '@shared/components/chip-autocomplete/component';
+import {SelectComponent} from './components/select/component';
 
 const modules = [
   CommonModule,
@@ -247,6 +248,7 @@ const components = [
   EditApplicationDialogComponent,
   ApplicationMethodIconComponent,
   KubeVirtPreAllocatedDataVolumesComponent,
+  SelectComponent,
 ];
 
 const directives = [AutofocusDirective, ThrottleClickDirective, OptionDirective];
