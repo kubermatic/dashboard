@@ -26,24 +26,31 @@ limitations under the License.
     </ng-template>
     <mat-step [label]="StepRegistry.SelectApplication"
               fxFlex="100%">
-      <div class="applications-search">
-        <km-search-field (queryChange)="onSearchQueryChanged($event)"></km-search-field>
-      </div>
-      <div fxFlex
-           fxLayout="row wrap"
-           fxLayoutAlign="space-between">
-        <div *ngFor="let installableApplication of applicationDefsDataSource.filteredData"
-             (click)="select(installableApplication)"
-             class="application-option"
-             fxFlex="49%"
-             [ngClass]="{'selected': selectedApplication?.name === installableApplication.name}">
-          <div class="option-title">
-            {{installableApplication.name}}
+      <div fxLayout="column">
+        <div class="applications-search">
+          <km-search-field (queryChange)="onSearchQueryChanged($event)"></km-search-field>
+        </div>
+        <div fxFlex
+             fxLayout="row wrap"
+             fxLayoutAlign="space-between">
+          <div *ngFor="let installableApplication of applicationDefsDataSource.filteredData"
+               (click)="select(installableApplication)"
+               class="application-option"
+               fxFlex="49%"
+               [ngClass]="{'selected': selectedApplication?.name === installableApplication.name}">
+            <div class="option-title">
+              {{installableApplication.name}}
+            </div>
+            <div *ngIf="installableApplication.spec?.description"
+                 class="option-desc">
+              {{installableApplication.spec?.description}}
+            </div>
           </div>
-          <div *ngIf="installableApplication.spec?.description"
-               class="option-desc">
-            {{installableApplication.spec?.description}}
-          </div>
+        </div>
+        <div *ngIf="!applicationDefsDataSource.filteredData?.length"
+             class="km-no-data-message"
+             fxFlex>
+          No results for "{{applicationDefsDataSource.filter}}" found.
         </div>
       </div>
     </mat-step>

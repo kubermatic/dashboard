@@ -114,14 +114,14 @@ limitations under the License.
         </mat-card-content>
       </div>
       <div *ngIf="applications?.length === 0 && view === ApplicationListView.Default"
-           class="no-data-warning"
+           class="km-no-data-message"
            fxFlex>
         No applications added.
       </div>
       <div *ngIf="applications?.length && !applicationsDataSource.filteredData?.length"
-           class="no-data-warning"
+           class="km-no-data-message"
            fxFlex>
-        No applications found.
+        No results for "{{applicationsDataSource.filter}}" found.
       </div>
     </div>
 
@@ -252,7 +252,7 @@ limitations under the License.
 
     <div class="km-row km-empty-list-msg"
          *ngIf="applications?.length && !applicationsDataSource.filteredData?.length">
-      No applications found.
+      No results for "{{applicationsDataSource.filter}}" found.
     </div>
   </ng-template>
 
