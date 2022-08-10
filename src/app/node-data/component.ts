@@ -41,6 +41,7 @@ import {EMPTY, merge, of} from 'rxjs';
 import {filter, finalize, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ParamsService, PathParam} from '@core/services/params';
 import {QuotaWidgetComponent} from '../dynamic/enterprise/quotas/quota-widget/component';
+import {OperatingSystemProfile} from '@shared/entity/operating-system-profile';
 
 enum Controls {
   Name = 'name',
@@ -86,7 +87,9 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   @Input() showExtended = false;
   labels: object = {};
   taints: Taint[] = [];
-  operatingSystemProfiles: string[] = [];
+  selectedOperatingSystemProfile: string;
+  supportedOperatingSystemProfiles: string[] = [];
+  operatingSystemProfiles: OperatingSystemProfile[] = [];
   operatingSystemProfileValidators = [KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR];
   dialogEditMode = false;
   projectId: string;
@@ -124,6 +127,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
   ngOnInit(): void {
     this.projectId = this._params.get(PathParam.ProjectID);
+    this.selectedOperatingSystemProfile = this._nodeDataService.nodeData.operatingSystemProfile;
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control(this._nodeDataService.nodeData.name, [
         KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,
@@ -139,7 +143,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       [Controls.ProviderBasic]: this._builder.control(''),
       [Controls.ProviderExtended]: this._builder.control(''),
       [Controls.OperatingSystemProfile]: this._builder.control({
-        main: this._nodeDataService.nodeData.operatingSystemProfile || '',
+        main: this.selectedOperatingSystemProfile || '',
       }),
     });
 
@@ -206,6 +210,16 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.operatingSystemSpec = this._getOperatingSystemSpec()));
+
+    merge(this.form.get(Controls.OperatingSystem).valueChanges)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        // We don't want to retain the existing value for OSP in the edit view since user explicitly
+        // changed the selected operating system.
+        this.selectedOperatingSystemProfile = null;
+        this.supportedOperatingSystemProfiles = this.getSupportedOperatingSystemProfiles();
+        this.setDefaultOperatingSystemProfiles();
+      });
 
     this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
       const replicas = this.dialogEditMode ? this._nodeDataService.nodeData.count : settings.defaultNodeCount;
@@ -347,7 +361,9 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
         .pipe(take(1))
         .pipe(finalize(() => (this.isLoadingOSProfiles = false)))
         .subscribe(profiles => {
-          this.operatingSystemProfiles = profiles.map(profile => profile.name);
+          this.operatingSystemProfiles = profiles;
+          this.supportedOperatingSystemProfiles = this.getSupportedOperatingSystemProfiles();
+          this.setDefaultOperatingSystemProfiles();
         });
     }
   }
@@ -420,5 +436,29 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       dynamicConfig: this.form.get(Controls.DynamicConfig).value,
       operatingSystemProfile: this.form.get(Controls.OperatingSystemProfile).value?.[AutocompleteControls.Main],
     } as NodeData;
+  }
+
+  private getSupportedOperatingSystemProfiles(): string[] {
+    return this.operatingSystemProfiles
+      .filter(osp => osp.operatingSystem === this.form.get(Controls.OperatingSystem).value.toLowerCase())
+      .filter(osp => osp.supportedCloudProviders.indexOf(this.provider) > -1)
+      .map(osp => osp.name);
+  }
+
+  private setDefaultOperatingSystemProfiles(): void {
+    let ospValue = '';
+
+    if (this.selectedOperatingSystemProfile) {
+      ospValue = this.selectedOperatingSystemProfile;
+    } else if (this.form.get(Controls.OperatingSystem).value !== '') {
+      // We have to explicitly convert this to a lowercase string to handle the inconsistency between the
+      // node provider name 'rockyLinux' and the operating system name in machine-controller i.e. `rockylinux`.
+      const ospName = 'osp-' + this.form.get(Controls.OperatingSystem).value.toLowerCase();
+      if (this.supportedOperatingSystemProfiles.indexOf(ospName) > -1) {
+        ospValue = ospName;
+      }
+    }
+
+    this.form.get(Controls.OperatingSystemProfile).setValue({main: ospValue});
   }
 }
