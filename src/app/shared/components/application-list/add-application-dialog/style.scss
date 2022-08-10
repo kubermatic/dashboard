@@ -17,6 +17,10 @@
 .add-application-dialog-content {
   .applications-search {
     margin: 20px 0;
+
+    .km-search-input.mat-form-field {
+      width: 100%;
+    }
   }
 
   .application-option {
