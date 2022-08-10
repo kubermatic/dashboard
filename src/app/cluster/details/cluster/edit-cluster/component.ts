@@ -134,7 +134,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       [Controls.KubernetesDashboardEnabled]: new FormControl(!!this.cluster.spec.kubernetesDashboard?.enabled),
       [Controls.AdmissionPlugins]: new FormControl(this.cluster.spec.admissionPlugins),
       [Controls.PodNodeSelectorAdmissionPluginConfig]: new FormControl(''),
-      [Controls.EventRateLimitConfig]: new FormControl(this.eventRateLimitConfig?.namespace),
+      [Controls.EventRateLimitConfig]: new FormControl(''),
       [Controls.Labels]: new FormControl(''),
     });
 
