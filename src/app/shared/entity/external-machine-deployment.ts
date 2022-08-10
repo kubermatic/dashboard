@@ -15,48 +15,38 @@
 import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {HealthStatus, StatusIcon} from '@shared/utils/health-status';
 import {AKSMachineDeploymentCloudSpec} from './provider/aks';
-import {ExternalClusterState} from '@shared/entity/external-cluster';
 
 export enum AKSMachineDeploymentMode {
   User = 'User',
   System = 'System',
 }
 
+export enum ExternalClusterMDState {
+  Provisioning = 'Provisioning',
+  Running = 'Running',
+  Reconciling = 'Reconciling',
+  Deleting = 'Deleting',
+  Error = 'Error',
+  Unknown = 'Unknown',
+}
+
 export class ExternalMachineDeployment extends MachineDeployment {
-  phase?: any;
+  phase?: ExternalClusterMDPhase;
   cloud: ExternalMachineDeploymentCloudSpec;
 
-  static getStatusIcon(md: ExternalMachineDeployment): StatusIcon {
-    if (md?.deletionTimestamp) {
-      return StatusIcon.Error;
-    } else if (md?.status?.readyReplicas === md?.status?.replicas) {
-      return StatusIcon.Running;
-    }
-    return StatusIcon.Pending;
-  }
-
-  static getStatusMessage(md: ExternalMachineDeployment): string {
-    if (md?.deletionTimestamp) {
-      return 'Deleting';
-    } else if (md?.status?.readyReplicas === md?.status?.replicas) {
-      return 'Running';
-    }
-    return 'Provisioning';
-  }
-
   static getExternalMachineDeploymentHealthStatus(md: ExternalMachineDeployment): HealthStatus {
-    if (md.phase && md.phase.state === ExternalClusterState.Deleting) {
-      return new HealthStatus(ExternalClusterState.Deleting, StatusIcon.Error);
-    } else if (md.phase && md.phase.state === ExternalClusterState.Running) {
-      return new HealthStatus(ExternalClusterState.Running, StatusIcon.Running);
-    } else if (md.phase && md.phase.state === ExternalClusterState.Reconciling) {
-      return new HealthStatus(ExternalClusterState.Reconciling, StatusIcon.Pending);
-    } else if (md.phase && md.phase.state === ExternalClusterState.Provisioning) {
-      return new HealthStatus(ExternalClusterState.Provisioning, StatusIcon.Pending);
-    } else if (md.phase && md.phase.state === ExternalClusterState.Error) {
-      return new HealthStatus(md.phase?.statusMessage || ExternalClusterState.Error, StatusIcon.Error);
+    if (md.phase && md.phase.state === ExternalClusterMDState.Deleting) {
+      return new HealthStatus(ExternalClusterMDState.Deleting, StatusIcon.Error);
+    } else if (md.phase && md.phase.state === ExternalClusterMDState.Running) {
+      return new HealthStatus(ExternalClusterMDState.Running, StatusIcon.Running);
+    } else if (md.phase && md.phase.state === ExternalClusterMDState.Reconciling) {
+      return new HealthStatus(ExternalClusterMDState.Reconciling, StatusIcon.Pending);
+    } else if (md.phase && md.phase.state === ExternalClusterMDState.Provisioning) {
+      return new HealthStatus(ExternalClusterMDState.Provisioning, StatusIcon.Pending);
+    } else if (md.phase && md.phase.state === ExternalClusterMDState.Error) {
+      return new HealthStatus(md.phase?.statusMessage || ExternalClusterMDState.Error, StatusIcon.Error);
     }
-    return new HealthStatus(ExternalClusterState.Unknown, StatusIcon.Unknown);
+    return new HealthStatus(ExternalClusterMDState.Unknown, StatusIcon.Unknown);
   }
 
   static NewEmptyMachineDeployment(): ExternalMachineDeployment {
@@ -125,4 +115,9 @@ export class ExternalMachineDeploymentSpecPatch {
       kubelet: string;
     };
   };
+}
+
+export class ExternalClusterMDPhase {
+  state: ExternalClusterMDState;
+  statusMessage?: string;
 }
