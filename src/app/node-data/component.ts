@@ -222,6 +222,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     return provider.includes(this.provider);
   }
 
+  // Source of truth for supported operating system: https://github.com/kubermatic/machine-controller/blob/master/docs/operating-system.md
   isOperatingSystemSupported(os: OperatingSystem): boolean {
     // Enable OS per-provider basis
     switch (os) {
@@ -241,11 +242,12 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
         );
       case OperatingSystem.Flatcar:
         return this.isProvider(
+          NodeProvider.ANEXIA,
           NodeProvider.AWS,
           NodeProvider.AZURE,
-          NodeProvider.OPENSTACK,
-          NodeProvider.ANEXIA,
+          NodeProvider.EQUINIX,
           NodeProvider.KUBEVIRT,
+          NodeProvider.OPENSTACK,
           NodeProvider.VSPHERE
         );
       case OperatingSystem.Ubuntu:
