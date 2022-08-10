@@ -179,7 +179,7 @@ limitations under the License.
                      label="Operating System Profile"
                      [formControlName]="Controls.OperatingSystemProfile"
                      [isLoading]="isLoadingOSProfiles"
-                     [options]="operatingSystemProfiles"
+                     [options]="supportedOperatingSystemProfiles"
                      [validators]="operatingSystemProfileValidators">
       <ng-container hint
                     *ngIf="!dialogEditMode">Leave this field blank to use default operating system profile.</ng-container>
