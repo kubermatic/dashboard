@@ -65,12 +65,13 @@ export class NodeCloudSpec {
 }
 
 export class OperatingSystemSpec {
-  ubuntu?: UbuntuSpec;
+  amzn2?: Amzn2Spec;
   centos?: CentosSpec;
-  sles?: SLESSpec;
-  rhel?: RHELSpec;
   flatcar?: FlatcarSpec;
+  rhel?: RHELSpec;
   rockyLinux?: RockyLinuxSpec;
+  sles?: SLESSpec;
+  ubuntu?: UbuntuSpec;
 
   static getOperatingSystem(spec: OperatingSystemSpec): OperatingSystem {
     return Object.keys(spec).find(key => spec[key] !== undefined) as OperatingSystem;
@@ -82,6 +83,10 @@ export class UbuntuSpec {
 }
 
 export class CentosSpec {
+  distUpgradeOnBoot: boolean;
+}
+
+export class Amzn2Spec {
   distUpgradeOnBoot: boolean;
 }
 
@@ -425,6 +430,8 @@ export function getOperatingSystem(spec: NodeSpec): string {
     return 'Flatcar';
   } else if (spec.operatingSystem.rockyLinux) {
     return 'Rocky Linux';
+  } else if (spec.operatingSystem.amzn2) {
+    return 'Amazon Linux 2';
   }
   return '';
 }
@@ -442,6 +449,8 @@ export function getOperatingSystemLogoClass(spec: NodeSpec): string {
     return 'flatcar';
   } else if (spec.operatingSystem.rockyLinux) {
     return 'rocky-linux';
+  } else if (spec.operatingSystem.amzn2) {
+    return 'amazon-linux-2';
   }
   return '';
 }

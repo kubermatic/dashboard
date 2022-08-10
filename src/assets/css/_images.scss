@@ -472,6 +472,10 @@
   @include mixins.background-image('/assets/images/os/sles.svg', 24px);
 }
 
+.km-os-image-amazon-linux-2 {
+  @include mixins.background-image('/assets/images/os/amazon-linux-2.svg', 24px);
+}
+
 .km-os-image-rhel {
   @include mixins.background-image('/assets/images/os/rhel.svg', 24px);
 }

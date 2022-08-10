@@ -63,6 +63,7 @@ export class NodeService {
     patch.spec.template.operatingSystem.flatcar = patch.spec.template.operatingSystem.flatcar || null;
     patch.spec.template.operatingSystem.rockyLinux = patch.spec.template.operatingSystem.rockyLinux || null;
     patch.spec.template.operatingSystem.sles = patch.spec.template.operatingSystem.sles || null;
+    patch.spec.template.operatingSystem.amzn2 = patch.spec.template.operatingSystem.amzn2 || null;
 
     return patch;
   }

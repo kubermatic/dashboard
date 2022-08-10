@@ -460,6 +460,10 @@ limitations under the License.
                                  label="Upgrade system on first boot"
                                  [value]="element.spec.operatingSystem.sles.distUpgradeOnBoot">
             </km-property-boolean>
+            <km-property-boolean *ngIf="!!element.spec.operatingSystem.amzn2"
+                                 label="Upgrade system on first boot"
+                                 [value]="element.spec.operatingSystem.amzn2.distUpgradeOnBoot">
+            </km-property-boolean>
             <km-property-boolean *ngIf="!!element.spec.operatingSystem.rhel"
                                  label="Upgrade system on first boot"
                                  [value]="element.spec.operatingSystem.rhel.distUpgradeOnBoot">
