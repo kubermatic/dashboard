@@ -194,6 +194,9 @@ limitations under the License.
           <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.flatcar"
                                [value]="machineDeployment.spec.template.operatingSystem.flatcar.disableAutoUpdate"
                                label="Disable auto-update"></km-property-boolean>
+          <km-property-boolean *ngIf="machineDeployment.spec.template.operatingSystem.amzn2"
+                               [value]="machineDeployment.spec.template.operatingSystem.amzn2.distUpgradeOnBoot"
+                               label="Upgrade system on the first boot"></km-property-boolean>
         </div>
       </div>
 

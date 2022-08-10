@@ -91,6 +91,11 @@ limitations under the License.
           <i class="km-os-image-sles"></i>
           SLES
         </mat-button-toggle>
+        <mat-button-toggle [value]="OperatingSystem.AmazonLinux2"
+                           *ngIf="isOperatingSystemSupported(OperatingSystem.AmazonLinux2)">
+          <i class="km-os-image-amazon-linux-2"></i>
+          Amazon Linux 2
+        </mat-button-toggle>
         <mat-button-toggle [value]="OperatingSystem.RHEL"
                            *ngIf="isOperatingSystemSupported(OperatingSystem.RHEL)"
                            #rhelToggle>
@@ -137,8 +142,8 @@ limitations under the License.
 
       <div fxLayout="row"
            fxLayoutGap="36px">
-        <!-- Options for Ubuntu, CenOS, SLES and RHEL, Rocky Linux -->
-        <div *ngIf="isOperatingSystemSelected(OperatingSystem.Ubuntu, OperatingSystem.CentOS, OperatingSystem.SLES, OperatingSystem.RHEL, OperatingSystem.RockyLinux)"
+        <!-- Options for Ubuntu, CenOS, SLES, RHEL, Rocky Linux, and Amazon Linux 2 -->
+        <div *ngIf="isOperatingSystemSelected(OperatingSystem.Ubuntu, OperatingSystem.CentOS, OperatingSystem.SLES, OperatingSystem.AmazonLinux2, OperatingSystem.RHEL, OperatingSystem.RockyLinux)"
              class="os-options">
           <mat-checkbox [id]="Controls.UpgradeOnBoot"
                         [formControlName]="Controls.UpgradeOnBoot">Upgrade system on first boot

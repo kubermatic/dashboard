@@ -44,12 +44,13 @@ export const INTERNAL_NODE_PROVIDERS = Object.values(NodeProvider).filter(
 export const NODE_PROVIDERS = [...INTERNAL_NODE_PROVIDERS, ...EXTERNAL_NODE_PROVIDERS];
 
 export enum OperatingSystem {
-  Ubuntu = 'ubuntu',
+  AmazonLinux2 = 'amzn2',
   CentOS = 'centos',
-  SLES = 'sles',
-  RHEL = 'rhel',
   Flatcar = 'flatcar',
+  RHEL = 'rhel',
   RockyLinux = 'rockyLinux',
+  SLES = 'sles',
+  Ubuntu = 'ubuntu',
 }
 
 export namespace NodeProviderConstants {
@@ -92,6 +93,8 @@ export namespace NodeProviderConstants {
       return OperatingSystem.Flatcar;
     } else if (spec.operatingSystem.rockyLinux) {
       return OperatingSystem.RockyLinux;
+    } else if (spec.operatingSystem.amzn2) {
+      return OperatingSystem.AmazonLinux2;
     }
     return '';
   }

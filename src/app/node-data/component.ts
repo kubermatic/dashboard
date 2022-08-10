@@ -263,6 +263,8 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
           NodeProvider.OPENSTACK,
           NodeProvider.VSPHERE
         );
+      case OperatingSystem.AmazonLinux2:
+        return this.isProvider(NodeProvider.AWS);
     }
   }
 
@@ -302,6 +304,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       case OperatingSystem.Ubuntu:
       case OperatingSystem.CentOS:
       case OperatingSystem.SLES:
+      case OperatingSystem.AmazonLinux2:
       case OperatingSystem.RHEL:
       case OperatingSystem.RockyLinux:
         upgradeOnBoot =
@@ -352,6 +355,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       case OperatingSystem.Ubuntu:
       case OperatingSystem.CentOS:
       case OperatingSystem.SLES:
+      case OperatingSystem.AmazonLinux2:
       case OperatingSystem.RockyLinux:
         return {
           [this.form.get(Controls.OperatingSystem).value]: {

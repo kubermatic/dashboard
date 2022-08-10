@@ -51,12 +51,13 @@ export class DatacenterSpec {
 }
 
 export class DatacenterOperatingSystemOptions {
+  amzn2?: string;
   centos: string;
-  ubuntu: string;
-  sles?: string;
-  rhel?: string;
   flatcar?: string;
+  rhel?: string;
   rockyLinux?: string;
+  sles?: string;
+  ubuntu: string;
 }
 
 export class AnexiaDatacenterSpec {
