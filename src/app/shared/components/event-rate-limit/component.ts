@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {Component, forwardRef, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, FormControl, Validators} from '@angular/forms';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {EventRateLimitConfig} from '@shared/entity/cluster';
@@ -45,6 +45,8 @@ enum Controls {
   ],
 })
 export class EventRateLimitComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  @Input() eventRateLimitConfig: EventRateLimitConfig;
+
   private readonly _debounceTime = 500;
   readonly Controls = Controls;
   private readonly _minValue = 1;
@@ -59,12 +61,15 @@ export class EventRateLimitComponent extends BaseFormValidator implements OnInit
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.QPS]: new FormControl(this._qpsDefault, [Validators.required, Validators.minLength(this._minValue)]),
-      [Controls.Burst]: new FormControl(this._burstDefault, [
+      [Controls.QPS]: new FormControl(this.eventRateLimitConfig?.namespace?.qps || this._qpsDefault, [
         Validators.required,
         Validators.minLength(this._minValue),
       ]),
-      [Controls.CacheSize]: new FormControl(this._cacheSizeDefault, [
+      [Controls.Burst]: new FormControl(this.eventRateLimitConfig?.namespace?.burst || this._burstDefault, [
+        Validators.required,
+        Validators.minLength(this._minValue),
+      ]),
+      [Controls.CacheSize]: new FormControl(this.eventRateLimitConfig?.namespace?.cacheSize || this._cacheSizeDefault, [
         Validators.required,
         Validators.minLength(this._minValue),
       ]),
