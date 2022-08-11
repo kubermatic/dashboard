@@ -39,7 +39,8 @@ enum Controls {
 
 enum StepRegistry {
   SelectApplication = 'Select Application',
-  ApplicationSettings = 'Application Settings',
+  Settings = 'Settings',
+  ApplicationValues = 'Application Values',
 }
 
 @Component({
@@ -95,7 +96,7 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
       this._initForm();
       this.applicationMethod = application.spec?.method;
     }
-    this._stepper.next();
+    this.next();
   }
 
   onVersionChanged(version: string): void {
@@ -103,12 +104,16 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
     this.selectedVersionSource = ApplicationVersion.getVersionSource(selectedVersion);
   }
 
-  onValuesConfigChanged(value: string) {
+  onValuesConfigChanged(value: string): void {
     this.form.get(Controls.Values).setValue(value);
   }
 
-  onValuesConfigValidityChanged(isValid: boolean) {
+  onValuesConfigValidityChanged(isValid: boolean): void {
     this.isValuesConfigValid = isValid;
+  }
+
+  next(): void {
+    this._stepper.next();
   }
 
   goBack(): void {
@@ -124,11 +129,11 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
     const version = this.selectedApplication.spec.versions[0]?.version;
     this.form = this._builder.group({
       [Controls.Version]: this._builder.control(version, Validators.required),
-      [Controls.Namespace]: this._builder.control('', [
+      [Controls.Namespace]: this._builder.control(this.selectedApplication.name, [
         Validators.required,
         KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,
       ]),
-      [Controls.Name]: this._builder.control('', [
+      [Controls.Name]: this._builder.control(this.selectedApplication.name, [
         Validators.required,
         KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,
         this._duplicateNameValidator(),
