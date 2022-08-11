@@ -31,6 +31,8 @@
     background-hover: mat.get-color-from-palette($palette-background, hover),
     background: mat.get-color-from-palette($palette-background, background),
     checkbox-disabled: mat.get-color-from-palette($palette-foreground, disabled-checkbox),
+    checkbox-disabled-checked: mat.get-color-from-palette($palette-foreground, disabled-checkbox-checked),
+    checkbox-disabled-border: mat.get-color-from-palette($palette-foreground, disabled-checkbox-border),
     divider-disabled: mat.get-color-from-palette($palette-foreground, disabled),
     divider: mat.get-color-from-palette($palette-foreground, divider),
     project-switch: color.adjust(mat.get-color-from-palette($palette-foreground, secondary-text), $alpha: 0.7),
