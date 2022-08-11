@@ -22,8 +22,8 @@ limitations under the License.
     <mat-card-header>
       <mat-card-title class="machine-deployment-name">
         <i class="machine-deployment-health km-pointer"
-           [matTooltip]="getHealthStatus().message"
-           [ngClass]="getHealthStatus().icon"></i>
+           [matTooltip]="machineDeploymentHealthStatus?.message"
+           [ngClass]="machineDeploymentHealthStatus?.icon"></i>
         <span ngxClipboard
               [cbContent]="machineDeployment.name"
               matTooltip="Click to copy"

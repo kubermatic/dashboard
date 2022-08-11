@@ -34,19 +34,21 @@ export class ExternalMachineDeployment extends MachineDeployment {
   phase?: ExternalClusterMDPhase;
   cloud: ExternalMachineDeploymentCloudSpec;
 
-  static getExternalMachineDeploymentHealthStatus(md: ExternalMachineDeployment): HealthStatus {
-    if (md.phase && md.phase.state === ExternalClusterMDState.Deleting) {
-      return new HealthStatus(ExternalClusterMDState.Deleting, StatusIcon.Error);
-    } else if (md.phase && md.phase.state === ExternalClusterMDState.Running) {
-      return new HealthStatus(ExternalClusterMDState.Running, StatusIcon.Running);
-    } else if (md.phase && md.phase.state === ExternalClusterMDState.Reconciling) {
-      return new HealthStatus(ExternalClusterMDState.Reconciling, StatusIcon.Pending);
-    } else if (md.phase && md.phase.state === ExternalClusterMDState.Provisioning) {
-      return new HealthStatus(ExternalClusterMDState.Provisioning, StatusIcon.Pending);
-    } else if (md.phase && md.phase.state === ExternalClusterMDState.Error) {
-      return new HealthStatus(md.phase?.statusMessage || ExternalClusterMDState.Error, StatusIcon.Error);
+  static getHealthStatus(md: ExternalMachineDeployment): HealthStatus {
+    switch (md.phase?.state) {
+      case ExternalClusterMDState.Deleting:
+        return new HealthStatus(ExternalClusterMDState.Deleting, StatusIcon.Error);
+      case ExternalClusterMDState.Running:
+        return new HealthStatus(ExternalClusterMDState.Running, StatusIcon.Running);
+      case ExternalClusterMDState.Reconciling:
+        return new HealthStatus(ExternalClusterMDState.Reconciling, StatusIcon.Pending);
+      case ExternalClusterMDState.Provisioning:
+        return new HealthStatus(ExternalClusterMDState.Provisioning, StatusIcon.Pending);
+      case ExternalClusterMDState.Error:
+        return new HealthStatus(md.phase?.statusMessage || ExternalClusterMDState.Error, StatusIcon.Error);
+      default:
+        return new HealthStatus(ExternalClusterMDState.Unknown, StatusIcon.Unknown);
     }
-    return new HealthStatus(ExternalClusterMDState.Unknown, StatusIcon.Unknown);
   }
 
   static NewEmptyMachineDeployment(): ExternalMachineDeployment {

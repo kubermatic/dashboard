@@ -83,7 +83,7 @@ export class ExternalMachineDeploymentListComponent implements OnInit, OnChanges
   }
 
   getHealthStatus(md: ExternalMachineDeployment): HealthStatus {
-    return ExternalMachineDeployment.getExternalMachineDeploymentHealthStatus(md);
+    return ExternalMachineDeployment.getHealthStatus(md);
   }
 
   getOperatingSystem(md: ExternalMachineDeployment): string {
