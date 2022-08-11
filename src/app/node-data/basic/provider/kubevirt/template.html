@@ -97,7 +97,7 @@ limitations under the License.
            [formControlName]="Controls.PrimaryDiskOSImage"
            type="text"
            autocomplete="off">
-    <mat-hint>Use URL or namespace/PVC name format.</mat-hint>
+    <mat-hint>Use URL or Custom Local Disk name.</mat-hint>
     <mat-error *ngIf="form.get(Controls.PrimaryDiskOSImage).hasError('required')">
       Operating system image is <strong>required</strong>.
     </mat-error>
@@ -172,64 +172,80 @@ limitations under the License.
 
   <div *ngIf="secondaryDisksFormArray.length === 0"
        class="no-secondary-disks-msg km-text-muted">
-    No secondary disks configured. Use the add button above to configure up to three disks.
+    Optional disks that will be mounted to the nodes. Configure up to three disks.
   </div>
 
-  <mat-card-header class="km-no-padding">
-    <mat-card-title>Affinity Settings</mat-card-title>
-  </mat-card-header>
+  <km-expansion-panel expandLabel="ADVANCED SCHEDULING SETTINGS"
+                      collapseLabel="ADVANCED SCHEDULING SETTINGS">
+    <ng-container *ngTemplateOutlet="selectAffinityPreset;
+                                      context: {label: 'Pod Affinity Preset',
+                                      controlName: Controls.PodAffinityPreset,
+                                      resetCallback: resetPodAffinityPresetControl.bind(this),
+                                      hint: 'Ensures two tenant nodes to be co-located in a single infrastructure node. Hard and soft values represent required and preferred scheduling.'}">
+    </ng-container>
 
-  <ng-container *ngTemplateOutlet="selectAffinityPreset; context: {label: 'Pod Affinity Preset', controlName: Controls.PodAffinityPreset, resetCallback: resetPodAffinityPresetControl.bind(this)}"></ng-container>
+    <ng-container *ngTemplateOutlet="selectAffinityPreset;
+                                      context: {label: 'Pod Anti-Affinity Preset',
+                                      controlName: Controls.PodAntiAffinityPreset,
+                                      resetCallback: resetPodAntiAffinityPresetControl.bind(this),
+                                      hint: 'Allows you to prevent tenant nodes to be co-located in a single infrastructure node. Hard and soft values represent required and preferred scheduling.'}">
+    </ng-container>
 
-  <ng-container *ngTemplateOutlet="selectAffinityPreset; context: {label: 'Pod Anti-Affinity Preset', controlName: Controls.PodAntiAffinityPreset, resetCallback: resetPodAntiAffinityPresetControl.bind(this)}"></ng-container>
+    <ng-container *ngTemplateOutlet="selectAffinityPreset;
+                                      context: {label: 'Node Affinity Preset Type',
+                                      controlName: Controls.NodeAffinityPreset,
+                                      resetCallback: resetNodeAffinityPresetControl.bind(this),
+                                      hint: 'Ensures that tenant nodes are hosted on particular nodes.'}">
+    </ng-container>
 
-  <ng-container *ngTemplateOutlet="selectAffinityPreset; context: {label: 'Node Affinity Preset Type', controlName: Controls.NodeAffinityPreset, resetCallback: resetNodeAffinityPresetControl.bind(this)}"></ng-container>
-
-  <mat-form-field fxFlex>
-    <mat-label>Node Affinity Preset Key</mat-label>
-    <input matInput
-           [id]="Controls.NodeAffinityPresetKey"
-           [formControlName]="Controls.NodeAffinityPresetKey"
-           type="text"
-           autocomplete="off">
-  </mat-form-field>
-
-  <km-chip-list label="Node Affinity Preset Values"
-                [tags]="nodeAffinityPresetValues"
-                (onChange)="onNodeAffinityPresetValuesChange($event)"
-                [formControlName]="Controls.NodeAffinityPresetValues"
-                [disabled]="form.get(Controls.NodeAffinityPresetValues).disabled"
-                placeholder="Add values..."
-                fxFlex></km-chip-list>
-
-  <ng-template #selectAffinityPreset
-               let-label="label"
-               let-controlName="controlName"
-               let-resetCallback="resetCallback">
-    <mat-form-field fxFlex
-                    class="km-dropdown-with-suffix">
-      <mat-label>{{label}}</mat-label>
-      <mat-select [formControlName]="controlName"
-                  class="km-select-ellipsis"
-                  disableOptionCentering>
-        <mat-option *ngFor="let preset of affinityPresetOptions"
-                    [value]="preset">
-          {{preset}}
-        </mat-option>
-        <mat-select-trigger fxLayout="row">
-          <div fxLayoutAlign="start">{{form.get(controlName).value}}</div>
-
-          <div fxLayoutAlign="end"
-               class="km-select-trigger-button-wrapper">
-            <button matSuffix
-                    mat-icon-button
-                    aria-label="Clear"
-                    (click)="resetCallback(); $event.stopPropagation()">
-              <i class="km-icon-mask km-icon-remove"></i>
-            </button>
-          </div>
-        </mat-select-trigger>
-      </mat-select>
+    <mat-form-field fxFlex>
+      <mat-label>Node Affinity Preset Key</mat-label>
+      <input matInput
+             [id]="Controls.NodeAffinityPresetKey"
+             [formControlName]="Controls.NodeAffinityPresetKey"
+             type="text"
+             autocomplete="off">
     </mat-form-field>
-  </ng-template>
+
+    <km-chip-list label="Node Affinity Preset Values"
+                  [tags]="nodeAffinityPresetValues"
+                  (onChange)="onNodeAffinityPresetValuesChange($event)"
+                  [formControlName]="Controls.NodeAffinityPresetValues"
+                  [disabled]="form.get(Controls.NodeAffinityPresetValues).disabled"
+                  placeholder="Add values..."
+                  fxFlex></km-chip-list>
+
+    <ng-template #selectAffinityPreset
+                 let-label="label"
+                 let-controlName="controlName"
+                 let-resetCallback="resetCallback"
+                 let-hint="hint">
+      <mat-form-field fxFlex
+                      class="km-long-subscript km-dropdown-with-suffix">
+        <mat-label>{{label}}</mat-label>
+        <mat-select [formControlName]="controlName"
+                    class="km-select-ellipsis"
+                    disableOptionCentering>
+          <mat-option *ngFor="let preset of affinityPresetOptions"
+                      [value]="preset">
+            {{preset}}
+          </mat-option>
+          <mat-select-trigger fxLayout="row">
+            <div fxLayoutAlign="start">{{form.get(controlName).value}}</div>
+
+            <div fxLayoutAlign="end"
+                 class="km-select-trigger-button-wrapper">
+              <button matSuffix
+                      mat-icon-button
+                      aria-label="Clear"
+                      (click)="resetCallback(); $event.stopPropagation()">
+                <i class="km-icon-mask km-icon-remove"></i>
+              </button>
+            </div>
+          </mat-select-trigger>
+        </mat-select>
+        <mat-hint>{{hint}}</mat-hint>
+      </mat-form-field>
+    </ng-template>
+  </km-expansion-panel>
 </form>
