@@ -33,6 +33,7 @@ export class MeteringService {
   private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * this._refreshTime);
   private _scheduleConfigurations: Observable<MeteringReportConfiguration[]>;
   private _reports$ = new Map<string, Observable<Report[]>>();
+  private _oldReports$: Observable<Report[]>;
 
   readonly onConfigurationChange$ = new Subject<void>();
   readonly onCredentialsChange$ = new Subject<void>();
@@ -88,6 +89,13 @@ export class MeteringService {
     return this._http.delete(url);
   }
 
+  oldReports(): Observable<Report[]> {
+    if (!this._oldReports$) {
+      this._oldReports$ = this._getReports();
+    }
+    return this._oldReports$;
+  }
+
   reports(scheduleName: string): Observable<Report[]> {
     if (!this._reports$.get(scheduleName)) {
       const reports$ = merge(this.onReportListChange$, this._refreshTimer$)
@@ -99,19 +107,22 @@ export class MeteringService {
     return this._reports$.get(scheduleName);
   }
 
-  private _getReports(scheduleName: string): Observable<Report[]> {
+  private _getReports(scheduleName?: string): Observable<Report[]> {
     const url = `${this._restRoot}/admin/metering/reports`;
-    return this._http.get<Report[]>(url, {params: {configuration_name: scheduleName}});
+    const opts = scheduleName ? {params: {configuration_name: scheduleName}} : {};
+    return this._http.get<Report[]>(url, opts);
   }
 
-  reportDownload(reportName: string, scheduleName: string): Observable<string> {
+  reportDownload(reportName: string, scheduleName?: string): Observable<string> {
     const url = `${this._restRoot}/admin/metering/reports/${reportName}`;
-    return this._http.get<string>(url, {params: {configuration_name: scheduleName}});
+    const opts = scheduleName ? {params: {configuration_name: scheduleName}} : {};
+    return this._http.get<string>(url, opts);
   }
 
-  reportDelete(reportName: string, scheduleName: string): Observable<any> {
+  reportDelete(reportName: string, scheduleName?: string): Observable<any> {
     const url = `${this._restRoot}/admin/metering/reports/${reportName}`;
-    return this._http.delete(url, {params: {configuration_name: scheduleName}});
+    const opts = scheduleName ? {params: {configuration_name: scheduleName}} : {};
+    return this._http.delete(url, opts);
   }
 
   private _getScheduleConfigurations(): Observable<MeteringReportConfiguration[]> {
