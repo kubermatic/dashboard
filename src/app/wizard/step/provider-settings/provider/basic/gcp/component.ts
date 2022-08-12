@@ -66,9 +66,14 @@ export class GCPProviderBasicComponent extends BaseFormValidator implements OnIn
     this.form.valueChanges
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.GCP))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ =>
-        this._presets.enablePresets(GCPCloudSpec.isEmpty(this._clusterSpecService.cluster.spec.cloud.gcp))
-      );
+      .subscribe(_ => {
+        const gcp = this._clusterSpecService.cluster.spec.cloud.gcp;
+        this._presets.enablePresets(
+          Cluster.isDualStackNetworkSelected(this._clusterSpecService.cluster)
+            ? !gcp.serviceAccount
+            : GCPCloudSpec.isEmpty(gcp)
+        );
+      });
 
     merge(this._clusterSpecService.providerChanges, this._clusterSpecService.datacenterChanges)
       .pipe(takeUntil(this._unsubscribe))
