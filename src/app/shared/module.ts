@@ -68,6 +68,7 @@ import {CustomCredentialsComponent} from '@shared/components/external-cluster-cr
 import {EKSCredentialsComponent} from '@shared/components/external-cluster-credentials/provider/eks/component';
 import {GKECredentialsComponent} from '@shared/components/external-cluster-credentials/provider/gke/component';
 import {ExternalClusterProviderStepComponent} from '@shared/components/add-external-cluster-dialog/steps/external-provider/component';
+import {KubeVirtPreAllocatedDataVolumesComponent} from '@shared/components/kubevirt-pre-allocated-data-volumes/component';
 import {SelectExternalClusterProviderComponent} from '@shared/components/select-external-cluster-provider/component';
 import {AutocompleteComponent} from '@shared/components/autocomplete/component';
 import {CIDRFormComponent} from '@shared/components/cidr-form/component';
@@ -245,6 +246,7 @@ const components = [
   AddApplicationDialogComponent,
   EditApplicationDialogComponent,
   ApplicationMethodIconComponent,
+  KubeVirtPreAllocatedDataVolumesComponent,
 ];
 
 const directives = [AutofocusDirective, ThrottleClickDirective, OptionDirective];

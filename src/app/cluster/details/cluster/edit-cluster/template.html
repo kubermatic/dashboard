@@ -172,6 +172,10 @@ limitations under the License.
                      [inheritedLabels]="cluster.inheritedLabels"
                      [asyncKeyValidators]=asyncLabelValidators
                      [formControlName]="Controls.Labels"></km-label-form>
+
+      <ng-container *ngIf="cluster.spec.cloud?.kubevirt?.preAllocatedDataVolumes as dataVolumes">
+        <km-kubevirt-pre-allocated-data-volumes [dataVolumes]="dataVolumes"></km-kubevirt-pre-allocated-data-volumes>
+      </ng-container>
     </form>
   </mat-dialog-content>
   <mat-dialog-actions>
