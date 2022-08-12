@@ -32,6 +32,7 @@ import {forkJoin, Subject, timer} from 'rxjs';
 import {switchMap, take, takeUntil} from 'rxjs/operators';
 import {ExternalMachineDeploymentService} from '@core/services/external-machine-deployment';
 import {UpdateExternalClusterMachineDeploymentDialogComponent} from '../update-external-cluster-machine-deployment-dialog/component';
+import {HealthStatus} from '@shared/utils/health-status';
 
 @Component({
   selector: 'km-external-machine-deployment-details',
@@ -39,7 +40,10 @@ import {UpdateExternalClusterMachineDeploymentDialogComponent} from '../update-e
   styleUrls: ['./style.scss'],
 })
 export class ExternalMachineDeploymentDetailsComponent implements OnInit, OnDestroy {
+  private readonly _refreshTime = 10;
+  private readonly _unsubscribe: Subject<void> = new Subject<void>();
   machineDeployment: ExternalMachineDeployment;
+  machineDeploymentHealthStatus: HealthStatus;
   nodes: Node[] = [];
   areNodesInitialized = false;
   events: Event[] = [];
@@ -48,8 +52,6 @@ export class ExternalMachineDeploymentDetailsComponent implements OnInit, OnDest
   clusterProvider: string;
   datacenter: Datacenter;
   projectID: string;
-  private readonly _refreshTime = 10;
-  private readonly _unsubscribe: Subject<void> = new Subject<void>();
   private _machineDeploymentID: string;
   private _isMachineDeploymentLoaded = false;
   private _clusterID: string;
@@ -105,6 +107,7 @@ export class ExternalMachineDeploymentDetailsComponent implements OnInit, OnDest
       .subscribe(([md, nodes, nodeEvents, nodeMetrics]) => {
         this._isMachineDeploymentLoaded = true;
         this.machineDeployment = md;
+        this.machineDeploymentHealthStatus = this._getHealthStatus();
         this.nodes = nodes;
         this.areNodesInitialized = true;
         this.events = nodeEvents;
@@ -128,14 +131,6 @@ export class ExternalMachineDeploymentDetailsComponent implements OnInit, OnDest
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
-  }
-
-  getStatusColor(): string {
-    return ExternalMachineDeployment.getStatusIcon(this.machineDeployment);
-  }
-
-  getStatusMessage(): string {
-    return ExternalMachineDeployment.getStatusMessage(this.machineDeployment);
   }
 
   isEditEnabled(): boolean {
@@ -167,6 +162,10 @@ export class ExternalMachineDeploymentDetailsComponent implements OnInit, OnDest
           this._goBack();
         }
       });
+  }
+
+  private _getHealthStatus(): HealthStatus {
+    return ExternalMachineDeployment.getHealthStatus(this.machineDeployment);
   }
 
   private _goBack(): void {
