@@ -358,8 +358,23 @@
     background-color: map.get($colors, primary);
   }
 
-  .mat-checkbox-disabled .mat-checkbox-inner-container .mat-checkbox-background {
-    background-color: map.get($colors, checkbox-disabled);
+  .mat-checkbox-disabled {
+    &:not(.mat-checkbox-checked) {
+      .mat-checkbox-inner-container .mat-checkbox-frame {
+        background-color: map.get($colors, checkbox-disabled);
+        border-color: map.get($colors, checkbox-disabled-border);
+      }
+    }
+
+    &.mat-checkbox-checked {
+      .mat-checkbox-inner-container .mat-checkbox-background {
+        background-color: map.get($colors, checkbox-disabled-checked);
+      }
+    }
+
+    .mat-checkbox-label {
+      color: map.get($colors, text-secondary);
+    }
   }
 
   .mat-checkbox-frame {
@@ -406,20 +421,6 @@
   .mat-tab-group {
     .mat-tab-header {
       border-bottom: 1px solid map.get($colors, tab-divider);
-    }
-  }
-
-  // Checkbox
-  .mat-checkbox-disabled {
-    &.mat-checkbox-checked,
-    &.mat-checkbox-indeterminate {
-      .mat-checkbox-background {
-        background-color: map.get($colors, disabled-checkbox);
-      }
-    }
-
-    .mat-checkbox-label {
-      color: inherit;
     }
   }
 }
