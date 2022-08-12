@@ -35,8 +35,7 @@ limitations under the License.
     </km-number-stepper>
 
     <mat-form-field class="kubelet-version">
-
-      <mat-label>Kubelet Version</mat-label>
+      <mat-label>{{versionsLabel}}</mat-label>
       <mat-select [formControlName]="Controls.KubeletVersion"
                   required
                   disableOptionCentering

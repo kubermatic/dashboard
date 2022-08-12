@@ -32,8 +32,8 @@ limitations under the License.
         <td mat-cell
             *matCellDef="let element">
           <i class="machine-deployment-health"
-             [matTooltip]="getHealthStatus(element).message"
-             [ngClass]="getHealthStatus(element).icon"></i>
+             [matTooltip]="getHealthStatus(element)?.message"
+             [ngClass]="getHealthStatus(element)?.icon"></i>
         </td>
       </ng-container>
 

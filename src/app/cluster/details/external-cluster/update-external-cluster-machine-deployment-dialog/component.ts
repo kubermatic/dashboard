@@ -40,6 +40,12 @@ enum Controls {
   KubeletVersion = 'version',
 }
 
+export enum KubeletVersionState {
+  Empty = 'No Kubelet Versions Available',
+  Loading = 'Loading...',
+  Ready = 'Kubelet Version',
+}
+
 @Component({
   selector: 'km-update-external-cluster-machine-deployment-dialog',
   templateUrl: './template.html',
@@ -49,6 +55,7 @@ export class UpdateExternalClusterMachineDeploymentDialogComponent extends BaseF
   readonly Controls = Controls;
   disableReplicaControl: boolean;
   versions: string[] = [];
+  versionsLabel = KubeletVersionState.Loading;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: UpdateExternalClusterMachineDeploymentDialogData,
@@ -108,7 +115,11 @@ export class UpdateExternalClusterMachineDeploymentDialogComponent extends BaseF
     this._externalMachineDeploymentService
       .machineDeploymentUpgrades(this.data.projectID, this.data.clusterID, this.data.machineDeployment?.id)
       .pipe(take(1))
-      .subscribe(this._setDefaultVersion.bind(this));
+      .subscribe((upgrades: MasterVersion[]) => {
+        this.versionsLabel = upgrades?.length ? KubeletVersionState.Ready : KubeletVersionState.Empty;
+        this._enable(!!upgrades?.length, Controls.KubeletVersion);
+        this._setDefaultVersion(upgrades);
+      });
   }
 
   private _setDefaultVersion(upgrades: MasterVersion[]): void {
@@ -132,5 +143,13 @@ export class UpdateExternalClusterMachineDeploymentDialogComponent extends BaseF
         },
       } as ExternalMachineDeploymentSpecPatch,
     };
+  }
+
+  private _enable(enable: boolean, name: Controls): void {
+    if (enable && this.form.get(name).disabled) {
+      this.form.get(name).enable();
+    } else if (!enable && this.form.get(name).enabled) {
+      this.form.get(name).disable();
+    }
   }
 }
