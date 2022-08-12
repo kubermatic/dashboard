@@ -26,7 +26,7 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {PresetsService} from '@core/services/wizard/presets';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
-import {Cluster, GCPCloudSpec} from '@shared/entity/cluster';
+import {Cluster, GCPCloudSpec, IPFamily} from '@shared/entity/cluster';
 import {GCPNetwork, GCPSubnetwork} from '@shared/entity/provider/gcp';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
@@ -264,8 +264,10 @@ export class GCPProviderExtendedComponent extends BaseFormValidator implements O
   }
 
   private _loadSubNetworks(subNetworks: GCPSubnetwork[]): void {
-    this.subNetworkLabel = !_.isEmpty(subNetworks) ? SubNetworkState.Ready : SubNetworkState.Empty;
-    this.subNetworks = subNetworks;
+    this.subNetworks = this.isDualStackNetworkSelected
+      ? subNetworks.filter(network => network.ipFamily === IPFamily.DualStack)
+      : subNetworks;
+    this.subNetworkLabel = !_.isEmpty(this.subNetworks) ? SubNetworkState.Ready : SubNetworkState.Empty;
     this._cdr.detectChanges();
   }
 
