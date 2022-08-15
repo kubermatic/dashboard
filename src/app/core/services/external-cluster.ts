@@ -17,7 +17,7 @@ import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {environment} from '@environments/environment';
-import {AKSCluster} from '@shared/entity/provider/aks';
+import {AKSCluster, AKSVMSize} from '@shared/entity/provider/aks';
 import {EKSCluster, EKSVpc} from '@shared/entity/provider/eks';
 import {GKECluster, GKEZone} from '@shared/entity/provider/gke';
 import {
@@ -212,9 +212,9 @@ export class ExternalClusterService {
     this.isClusterDetailsStepValid = false;
   }
 
-  getAKSVmSizes(location?: string): Observable<string[]> {
+  getAKSVmSizes(location?: string): Observable<AKSVMSize[]> {
     const url = `${this._newRestRoot}/providers/aks/vmsizes`;
-    return this._http.get<string[]>(url, {headers: this._getAKSHeaders(location)}).pipe(catchError(() => of<[]>()));
+    return this._http.get<AKSVMSize[]>(url, {headers: this._getAKSHeaders(location)}).pipe(catchError(() => of<[]>()));
   }
 
   getAKSKubernetesVersions(): Observable<MasterVersion[]> {

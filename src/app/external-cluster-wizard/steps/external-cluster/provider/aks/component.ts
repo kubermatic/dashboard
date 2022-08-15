@@ -40,8 +40,9 @@ import {
   AKSMachineDeploymentCloudSpec,
   AKSNodegroupScalingConfig,
   AKSNodePoolVersionForMachineDeployments,
+  AKSVMSize,
 } from '@shared/entity/provider/aks';
-import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR, AKS_POOL_NAME_VALIDATOR} from '@shared/validators/others';
+import {AKS_POOL_NAME_VALIDATOR, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@shared/validators/others';
 import {NodeDataService} from '@app/core/services/node-data/service';
 import {ExternalMachineDeploymentService} from '@app/core/services/external-machine-deployment';
 import {
@@ -187,8 +188,8 @@ export class AKSClusterSettingsComponent
       this.control(Controls.Location).clearValidators();
       this.control(Controls.NodeResourceGroup).clearValidators();
       this._getAKSVmSizesForMachineDeployment(this.cluster.spec.aksclusterSpec.location).subscribe(
-        (vmSizes: string[]) => {
-          this.vmSizes = vmSizes;
+        (vmSizes: AKSVMSize[]) => {
+          this.vmSizes = vmSizes.map((vmSize: AKSVMSize) => vmSize.name);
         }
       );
       this._getAKSAvailableNodePoolVersionsForCreateMachineDeployment().subscribe(
@@ -201,14 +202,14 @@ export class AKSClusterSettingsComponent
         .valueChanges.pipe(debounceTime(this._debounceTime))
         .pipe(switchMap((location: string) => this._getAKSVmSizes(location)))
         .pipe(takeUntil(this._unsubscribe))
-        .subscribe((vmSizes: string[]) => {
-          this.vmSizes = vmSizes;
+        .subscribe((vmSizes: AKSVMSize[]) => {
+          this.vmSizes = vmSizes.map((vmSize: AKSVMSize) => vmSize.name);
         });
       this._getAKSKubernetesVersions();
     }
   }
 
-  private _getAKSVmSizes(location: string): Observable<string[]> {
+  private _getAKSVmSizes(location: string): Observable<AKSVMSize[]> {
     this.isLoadingVmSizes = true;
     return this._externalClusterService.getAKSVmSizes(location).pipe(
       takeUntil(this._unsubscribe),
@@ -228,7 +229,7 @@ export class AKSClusterSettingsComponent
     );
   }
 
-  private _getAKSVmSizesForMachineDeployment(location?: string): Observable<string[]> {
+  private _getAKSVmSizesForMachineDeployment(location?: string): Observable<AKSVMSize[]> {
     this.isLoadingVmSizes = true;
     return this._externalMachineDeploymentService
       .getAKSVmSizesForMachineDeployment(this.projectID, this.cluster.id, location)
