@@ -198,6 +198,23 @@ spec:
 EOF
 retry 2 kubectl apply -f preset-digitalocean.yaml
 
+# safebase64 ensures the given value is base64-encoded.
+# If the given value is already encoded, it will be echoed
+# unchanged.
+safebase64() {
+  local value="$1"
+
+  set +e
+  decoded="$(echo "$value" | base64 -d 2>/dev/null)"
+  if [ $? -eq 0 ]; then
+    echo "$value"
+    return 0
+  fi
+
+  echo "$value" | base64 -w0
+  echo
+}
+
 echodate "Creating UI GCP preset..."
 cat <<EOF > preset-gcp.yaml
 apiVersion: kubermatic.k8s.io/v1
@@ -207,7 +224,7 @@ metadata:
   namespace: kubermatic
 spec:
   gcp:
-    serviceAccount: ${GOOGLE_SERVICE_ACCOUNT}
+    serviceAccount: '$(safebase64 "${GOOGLE_SERVICE_ACCOUNT}")'
 EOF
 retry 2 kubectl apply -f preset-gcp.yaml
 
@@ -220,7 +237,7 @@ metadata:
   namespace: kubermatic
 spec:
   kubevirt:
-    kubeconfig: '${KUBEVIRT_E2E_TESTS_KUBECONFIG}'
+    kubeconfig: '$(safebase64 "${KUBEVIRT_E2E_TESTS_KUBECONFIG}")'
 
 EOF
 retry 2 kubectl apply -f preset-kubevirt.yaml
