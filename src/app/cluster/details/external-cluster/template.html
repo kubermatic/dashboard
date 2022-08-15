@@ -35,7 +35,7 @@ limitations under the License.
         <span>Disconnect</span>
       </button>
 
-      <button *ngIf="!cluster?.labels || cluster.labels['isImported'] !== 'true'"
+      <button *ngIf="!cluster?.labels || cluster.labels['is-imported'] !== 'true'"
               id="km-delete-external-cluster-btn"
               mat-flat-button
               color="tertiary"
@@ -109,7 +109,7 @@ limitations under the License.
             <span class="km-provider-logo km-provider-logo-{{provider}}"></span>
           </div>
         </km-property>
-        <km-property *ngIf="cluster.labels?.isImported === 'true'">
+        <km-property *ngIf="cluster.labels?.['is-imported'] === 'true'">
           <div key>Imported</div>
           <div value>
             <km-relative-time [date]="cluster.creationTimestamp"></km-relative-time>
@@ -173,7 +173,7 @@ limitations under the License.
           <km-property>
             <div key>Subnet Ids</div>
             <div value>
-              <mat-chip-list *ngIf="subnetIds.length > 0">
+              <mat-chip-list *ngIf="subnetIds?.length">
                 <div *ngFor="let subnetId of subnetIds">
                   <mat-chip>
                     <div>{{subnetId}}</div>
@@ -185,7 +185,7 @@ limitations under the License.
           <km-property>
             <div key>Security Group Ids</div>
             <div value>
-              <mat-chip-list *ngIf="securityGroupIds.length > 0">
+              <mat-chip-list *ngIf="securityGroupIds?.length">
                 <div *ngFor="let securityGroupId of securityGroupIds">
                   <mat-chip>
                     <div>{{securityGroupId}}</div>

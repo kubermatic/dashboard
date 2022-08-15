@@ -24,7 +24,7 @@ import {ExternalCluster} from '@shared/entity/external-cluster';
 import {ExternalMachineDeployment, ExternalMachineDeploymentPatch} from '@shared/entity/external-machine-deployment';
 import {MasterVersion} from '@shared/entity/cluster';
 import {ExternalAddMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/external-cluster-add-machine-deployment/component';
-import {AKSNodePoolVersionForMachineDeployments} from '@app/shared/entity/provider/aks';
+import {AKSNodePoolVersionForMachineDeployments, AKSVMSize} from '@app/shared/entity/provider/aks';
 import {GCPDiskType, GCPMachineSize} from '@app/shared/entity/provider/gcp';
 
 @Injectable()
@@ -61,9 +61,9 @@ export class ExternalMachineDeploymentService {
     return this._httpClient.get<string[]>(url, {headers: {VpcId: vpcId}}).pipe(catchError(() => of<[]>()));
   }
 
-  getAKSVmSizesForMachineDeployment(projectID: string, clusterID: string, location: string): Observable<string[]> {
+  getAKSVmSizesForMachineDeployment(projectID: string, clusterID: string, location: string): Observable<AKSVMSize[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/aks/vmsizes`;
-    return this._httpClient.get<string[]>(url, {headers: {Location: location}}).pipe(catchError(() => of<[]>()));
+    return this._httpClient.get<AKSVMSize[]>(url, {headers: {Location: location}}).pipe(catchError(() => of<[]>()));
   }
 
   getAKSAvailableNodePoolVersionsForMachineDeployment(
