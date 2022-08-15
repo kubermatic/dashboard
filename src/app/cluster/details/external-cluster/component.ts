@@ -85,8 +85,8 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
     return this.cluster?.spec?.eksclusterSpec?.vpcConfigRequest?.securityGroupIds;
   }
 
-  get showAddMachineDeploymentButton (): boolean {
-    return !_.isEmpty(this.cluster.cloud)
+  get showAddMachineDeploymentButton(): boolean {
+    return !_.isEmpty(this.cluster.cloud);
   }
 
   ngOnInit(): void {
