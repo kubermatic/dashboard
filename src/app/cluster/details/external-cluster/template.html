@@ -56,7 +56,8 @@ limitations under the License.
         <i class="km-icon-mask km-icon-download"></i>
         <span>Get Kubeconfig</span>
       </button>
-      <button mat-flat-button
+      <button *ngIf="showAddMachineDeploymentButton"
+              mat-flat-button
               fxLayoutAlign="center center"
               type="button"
               [disabled]="!isRunning()"
