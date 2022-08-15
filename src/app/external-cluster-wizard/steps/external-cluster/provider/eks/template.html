@@ -117,7 +117,7 @@ limitations under the License.
              [formControlName]="Controls.Vpc" />
     </mat-form-field>
 
-    <ng-container *ngIf="isDialogView() ? true : form.get(Controls.Vpc).value">
+    <ng-container *ngIf="form.get(Controls.Vpc).value">
       <km-chip-autocomplete label="Subnet"
                             placeholder="Select Subnet IDs"
                             [tags]="subnetIds"
