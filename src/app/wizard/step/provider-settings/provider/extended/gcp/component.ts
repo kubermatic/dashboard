@@ -26,7 +26,7 @@ import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {PresetsService} from '@core/services/wizard/presets';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
-import {GCPCloudSpec} from '@shared/entity/cluster';
+import {Cluster, GCPCloudSpec, IPFamily} from '@shared/entity/cluster';
 import {GCPNetwork, GCPSubnetwork} from '@shared/entity/provider/gcp';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
@@ -77,10 +77,14 @@ export class GCPProviderExtendedComponent extends BaseFormValidator implements O
   private readonly _subNetworkCombobox: FilteredComboboxComponent;
   readonly Controls = Controls;
   isPresetSelected = false;
+  isDualStackNetworkSelected: boolean;
   networks: GCPNetwork[] = [];
   networkLabel = NetworkState.Empty;
   subNetworks: GCPSubnetwork[] = [];
   subNetworkLabel = SubNetworkState.Empty;
+
+  private _preset = '';
+  private _serviceAccount = '';
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -97,32 +101,43 @@ export class GCPProviderExtendedComponent extends BaseFormValidator implements O
       [Controls.SubNetwork]: this._builder.control(''),
     });
 
-    this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset =>
-      Object.values(Controls).forEach(control => {
-        this.isPresetSelected = !!preset;
-        this._enable(!this.isPresetSelected, control);
-      })
-    );
+    this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
+      this.isPresetSelected = !!preset;
+      this._updateControlsState();
+    });
 
     this.form.valueChanges
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.GCP))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ =>
-        this._presets.enablePresets(GCPCloudSpec.isEmpty(this._clusterSpecService.cluster.spec.cloud.gcp))
-      );
+      .subscribe(_ => {
+        const gcp = this._clusterSpecService.cluster.spec.cloud.gcp;
+        this._presets.enablePresets(this.isDualStackNetworkSelected ? !gcp.serviceAccount : GCPCloudSpec.isEmpty(gcp));
+      });
 
     this._clusterSpecService.clusterChanges
       .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.GCP))
+      .pipe(
+        tap(cluster => {
+          const isDualStackSelected = Cluster.isDualStackNetworkSelected(cluster);
+          if (this.isDualStackNetworkSelected !== isDualStackSelected) {
+            this.isDualStackNetworkSelected = isDualStackSelected;
+            this._updateControlsState();
+            this._clearCredentials();
+          }
+        })
+      )
       .pipe(debounceTime(this._debounceTime))
       .pipe(
         tap(_ => {
           if (!this._hasRequiredCredentials()) {
             this._clearNetwork();
             this._clearSubNetwork();
+            this._clearCredentials();
           }
         })
       )
       .pipe(filter(_ => this._hasRequiredCredentials()))
+      .pipe(filter(cluster => this._areCredentialsChanged(cluster)))
       .pipe(switchMap(_ => this._networkListObservable()))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._loadNetworks.bind(this));
@@ -158,10 +173,30 @@ export class GCPProviderExtendedComponent extends BaseFormValidator implements O
   }
 
   private _hasRequiredCredentials(): boolean {
-    return (
-      !!this._clusterSpecService.cluster.spec.cloud.gcp &&
-      !!this._clusterSpecService.cluster.spec.cloud.gcp.serviceAccount
+    return !!(
+      this._clusterSpecService.cluster.spec.cloud.gcp?.serviceAccount ||
+      (this.isDualStackNetworkSelected && this._presets.preset)
     );
+  }
+
+  private _areCredentialsChanged(cluster: Cluster): boolean {
+    let credentialsChanged = false;
+    if (this._presets.preset !== this._preset) {
+      this._preset = this._presets.preset;
+      credentialsChanged = true;
+    }
+
+    if (cluster.spec.cloud.gcp.serviceAccount !== this._serviceAccount) {
+      this._serviceAccount = cluster.spec.cloud.gcp.serviceAccount;
+      credentialsChanged = true;
+    }
+
+    return credentialsChanged;
+  }
+
+  private _clearCredentials(): void {
+    this._preset = '';
+    this._serviceAccount = '';
   }
 
   private _loadNetworks(networks: GCPNetwork[]): void {
@@ -180,6 +215,7 @@ export class GCPProviderExtendedComponent extends BaseFormValidator implements O
     return this._presets
       .provider(NodeProvider.GCP)
       .serviceAccount(this._clusterSpecService.cluster.spec.cloud.gcp.serviceAccount)
+      .credential(this._presets.preset)
       .networks(this._onNetworkLoading.bind(this))
       .pipe(map(networks => _.sortBy(networks, n => n.name.toLowerCase())))
       .pipe(
@@ -202,6 +238,7 @@ export class GCPProviderExtendedComponent extends BaseFormValidator implements O
     return this._presets
       .provider(NodeProvider.GCP)
       .serviceAccount(this._clusterSpecService.cluster.spec.cloud.gcp.serviceAccount)
+      .credential(this._presets.preset)
       .network(this._clusterSpecService.cluster.spec.cloud.gcp.network)
       .subnetworks(this._clusterSpecService.datacenter, this._onSubNetworkLoading.bind(this))
       .pipe(map(networks => _.sortBy(networks, n => n.name.toLowerCase())))
@@ -227,8 +264,17 @@ export class GCPProviderExtendedComponent extends BaseFormValidator implements O
   }
 
   private _loadSubNetworks(subNetworks: GCPSubnetwork[]): void {
-    this.subNetworkLabel = !_.isEmpty(subNetworks) ? SubNetworkState.Ready : SubNetworkState.Empty;
-    this.subNetworks = subNetworks;
+    this.subNetworks = this.isDualStackNetworkSelected
+      ? subNetworks.filter(network => network.ipFamily === IPFamily.DualStack)
+      : subNetworks;
+    this.subNetworkLabel = !_.isEmpty(this.subNetworks) ? SubNetworkState.Ready : SubNetworkState.Empty;
+    this._cdr.detectChanges();
+  }
+
+  private _updateControlsState(): void {
+    Object.values(Controls).forEach(control => {
+      this._enable(!this.isPresetSelected || this.isDualStackNetworkSelected, control);
+    });
     this._cdr.detectChanges();
   }
 

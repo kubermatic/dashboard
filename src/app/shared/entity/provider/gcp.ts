@@ -42,6 +42,7 @@ export class GCPSubnetwork {
   name: string;
   network: string;
   ipCidrRange: string;
+  ipFamily: string;
   gatewayAddress: string;
   region: string;
   selfLink: string;

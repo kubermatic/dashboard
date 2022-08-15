@@ -17,9 +17,9 @@ limitations under the License.
       fxLayout="column"
       fxLayoutGap="8px">
   <km-combobox #networkCombobox
-               [required]="false"
+               [required]="isDualStackNetworkSelected"
                [grouped]="false"
-               [isDisabled]="isPresetSelected"
+               [isDisabled]="isPresetSelected && !isDualStackNetworkSelected"
                [options]="networks"
                [hint]="getHint(Controls.Network)"
                [formControlName]="Controls.Network"
@@ -34,9 +34,9 @@ limitations under the License.
   </km-combobox>
 
   <km-combobox #subNetworkCombobox
-               [required]="false"
+               [required]="isDualStackNetworkSelected"
                [grouped]="false"
-               [isDisabled]="isPresetSelected"
+               [isDisabled]="isPresetSelected && !isDualStackNetworkSelected"
                [options]="subNetworks"
                [hint]="getHint(Controls.SubNetwork)"
                [formControlName]="Controls.SubNetwork"
