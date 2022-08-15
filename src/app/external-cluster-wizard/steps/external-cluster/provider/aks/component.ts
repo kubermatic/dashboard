@@ -37,6 +37,7 @@ import {
   AgentPoolBasics,
   AKSCloudSpec,
   AKSClusterSpec,
+  AKSLocation,
   AKSMachineDeploymentCloudSpec,
   AKSNodegroupScalingConfig,
   AKSNodePoolVersionForMachineDeployments,
@@ -106,6 +107,7 @@ export class AKSClusterSettingsComponent
   isLoadingVmSizes: boolean;
   isLoadingNodePoolVersions: boolean;
   vmSizes: string[] = [];
+  locations: string[]=[]
   nodePoolVersionsForMD: string[] = [];
   kubernetesVersions: string[] = [];
   vmSizeLabel = VMSizeState.Ready;
@@ -254,7 +256,15 @@ export class AKSClusterSettingsComponent
     );
   }
 
-  private _getAKSVmSizesForMachineDeployment(location?: string): Observable<AKSVMSize[]> {
+  private_getAKSLocations(): void {
+    this._externalClusterService.getAKSLocations().subscribe(
+      (locations: AKSLocation[]) => {
+        this.locations = locations.map((location: AKSLocation) => location.name)
+      }
+    )
+  }
+
+  private _getAKSVmSizesForMachineDeployment(location?: string): Observable<string[]> {
     this.isLoadingVmSizes = true;
     return this._externalMachineDeploymentService
       .getAKSVmSizesForMachineDeployment(this.projectID, this.cluster.id, location)

@@ -29,8 +29,9 @@ export enum Controls {
   templateUrl: './template.html',
 })
 export class EKSCredentialsComponent implements OnInit, OnDestroy {
-  form: FormGroup;
   readonly Controls = Controls;
+  form: FormGroup;
+  regions: string[] = []
   private readonly _unsubscribe = new Subject<void>();
 
   constructor(
@@ -59,6 +60,12 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
       this._update();
       this._externalClusterService.isPresetEnabled = Object.values(Controls).every(c => !this.form.get(c).value);
+      const accessKeyID = this.form.get(Controls.AccessKeyID).value
+      const secretAccessKey = this.form.get(Controls.SecretAccessKey).value
+      if (accessKeyID && secretAccessKey) {
+        this._externalClusterService.getEKSRegions(accessKeyID, secretAccessKey)
+        .subscribe((regions: string[]) => this.regions = regions)
+      }
     });
 
     this._externalClusterService.presetChanges
@@ -74,7 +81,7 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
   private _credentialsValidator(control: AbstractControl): Observable<ValidationErrors | null> {
     const accessKeyID = control.get(Controls.AccessKeyID).value;
     const secretAccessKey = control.get(Controls.SecretAccessKey).value;
-    const region = control.get(Controls.Region).value;
+    const region = control.get(Controls.Region).value?.main;
     if (!accessKeyID || !secretAccessKey || !region) {
       return of(null);
     }
@@ -94,7 +101,7 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
           name: '',
           accessKeyID: this.form.get(Controls.AccessKeyID).value,
           secretAccessKey: this.form.get(Controls.SecretAccessKey).value,
-          region: this.form.get(Controls.Region).value,
+          region: this.form.get(Controls.Region).value?.main,
         },
       },
     };

@@ -40,7 +40,7 @@ limitations under the License.
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field fxFlex>
+  <!-- <mat-form-field fxFlex>
     <mat-label>Region</mat-label>
     <input matInput
            [formControlName]="Controls.Region"
@@ -49,5 +49,10 @@ limitations under the License.
     <mat-error *ngIf="form.get(Controls.Region).hasError('required')">
       Region is <strong>required</strong>.
     </mat-error>
-  </mat-form-field>
+  </mat-form-field> -->
+  <km-autocomplete label="Region"
+                   required="true"
+                   [options]="regions"
+                   [formControlName]="Controls.Region">
+  </km-autocomplete>  
 </form>
