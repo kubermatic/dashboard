@@ -18,10 +18,10 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {FormGroup, FormBuilder, Validators, FormControl} from '@angular/forms';
 import {Component, OnInit, OnDestroy, Inject, ChangeDetectorRef} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {takeUntil, filter, tap, distinctUntilChanged} from 'rxjs/operators';
+import {takeUntil, filter, tap, distinctUntilChanged, map} from 'rxjs/operators';
 import {Observable, Subject, of} from 'rxjs';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
@@ -30,10 +30,13 @@ import {QuotaVariables, QuotaDetails, Quota} from '@shared/entity/quota';
 import {KmValidators} from '@shared/validators/validators';
 import {ControlsOf} from '@shared/model/shared';
 import {Project} from '@shared/entity/project';
+import _ from 'lodash';
+import {ComboboxControls} from '@shared/components/combobox/component';
 
 enum Error {
   Required = 'required',
   AtLeastOneRequired = 'atLeastOneRequired',
+  IncorrectProject = 'incorrectProject',
 }
 
 @Component({
@@ -52,6 +55,9 @@ export class ProjectQuotaDialogComponent implements OnInit, OnDestroy {
   projects: Project[] = [];
   selectedProject: Project;
   selectedQuota: QuotaDetails;
+  projectControl: FormControl<Record<ComboboxControls.Select, string>>;
+  projectNameCountMap: Record<string, number>;
+  projectIdAndNameMap: Record<string, string>;
 
   constructor(
     private readonly _dialogRef: MatDialogRef<ProjectQuotaDialogComponent>,
@@ -67,6 +73,14 @@ export class ProjectQuotaDialogComponent implements OnInit, OnDestroy {
     return this.form?.controls.quota;
   }
 
+  get isQuotaUpdated(): boolean {
+    if (!this.editQuota) {
+      return this.form.controls.quota.dirty;
+    }
+
+    return !_.isEqual(this.editQuota.quota, this.quotaGroup.value);
+  }
+
   ngOnInit(): void {
     this._setSelectedQuota();
     this._initForm();
@@ -79,12 +93,14 @@ export class ProjectQuotaDialogComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  resetSubjectNameControl(): void {
-    this.form.controls.subjectName.reset();
+  projectDisplayFn(projectId: string): string {
+    return this.projectIdAndNameMap?.[projectId] ?? '';
   }
 
   getObservable(): Observable<Record<string, never>> {
-    if (this.form.invalid) return of(null);
+    if (this.form.invalid || !this.isQuotaUpdated) {
+      return of(null);
+    }
 
     const formValue = this.form.value as Quota;
 
@@ -114,21 +130,35 @@ export class ProjectQuotaDialogComponent implements OnInit, OnDestroy {
   }
 
   private _getProjects(): void {
-    this._projectService.allProjects.pipe(takeUntil(this._unsubscribe)).subscribe(projects => {
-      this.projects = projects;
+    this._projectService.allProjects
+      .pipe(
+        filter(projects => !_.isEqual(projects, this.projects)),
+        takeUntil(this._unsubscribe)
+      )
+      .subscribe(projects => {
+        this.projects = projects;
+        this.projectNameCountMap = projects.reduce(
+          (prev, curr) => ({...prev, [curr.name]: (prev[curr.name] || 0) + 1}),
+          {}
+        );
 
-      if (this.editQuota) {
-        this.selectedProject = projects.find(({id}) => id === this.editQuota.subjectName);
-      } else {
-        this.form.controls.subjectName.enable();
-      }
-    });
+        this.projectIdAndNameMap = projects.reduce((prev, curr) => ({...prev, [curr.id]: curr.name}), {});
+
+        if (this.editQuota) {
+          this.selectedProject = projects.find(({id}) => id === this.editQuota.subjectName);
+        }
+      });
   }
 
   private _getQuotas(): void {
-    this._quotaService.quotas.pipe(takeUntil(this._unsubscribe)).subscribe(quotas => {
-      this._quotas = quotas;
-    });
+    this._quotaService.quotas
+      .pipe(
+        filter(quotas => !_.isEqual(quotas, this._quotas)),
+        takeUntil(this._unsubscribe)
+      )
+      .subscribe(quotas => {
+        this._quotas = quotas;
+      });
   }
 
   private _initForm(): void {
@@ -149,37 +179,45 @@ export class ProjectQuotaDialogComponent implements OnInit, OnDestroy {
         validators: Validators.required,
         nonNullable: true,
       }),
-      subjectName: this._builder.control(
-        {value: subjectName, disabled: true},
-        {validators: Validators.required, nonNullable: true}
-      ),
+      subjectName: this._builder.control(subjectName ?? '', {
+        validators: Validators.required,
+        nonNullable: true,
+      }),
+    });
+
+    this.projectControl = this._builder.control(null, {
+      validators: Validators.required,
     });
 
     this._initSubscriptions();
   }
 
   private _initSubscriptions(): void {
-    // subjectName is project id
-    this.form.controls.subjectName.valueChanges
+    this.projectControl.valueChanges
       .pipe(
-        filter(projectId => !!projectId),
+        distinctUntilChanged(),
+        map(({select}) => select),
         takeUntil(this._unsubscribe)
       )
       .subscribe(projectId => {
-        this.selectedProject = this.projects.find(({id}) => id === projectId);
-        this.selectedQuota = this._quotas.find(({subjectName}) => subjectName === projectId);
+        this.form.controls.subjectName.setValue(this.projectControl.valid ? projectId : null);
       });
+
+    // subjectName is project id
+    this.form.controls.subjectName.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(projectId => {
+      this.selectedProject = this.projects.find(({id}) => id === projectId);
+      this.selectedQuota = this._quotas.find(({subjectName}) => subjectName === projectId);
+    });
 
     this.quotaGroup.statusChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this._cdr.detectChanges());
 
     Object.values(this.quotaGroup.controls).forEach(control => {
       control.valueChanges
         .pipe(
-          distinctUntilChanged(),
           filter(value => value === 0),
           takeUntil(this._unsubscribe)
         )
-        .subscribe(_ => control.setValue(null));
+        .subscribe(_ => control.setValue(null, {emitEvent: false}));
     });
   }
 }

@@ -34,7 +34,7 @@ import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {AdminSettings} from '@shared/entity/settings';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
-import {AsyncValidators} from '@shared/validators/async-label-form.validator';
+import {AsyncValidators} from '@shared/validators/async.validators';
 import _ from 'lodash';
 import {Observable, Subject} from 'rxjs';
 import {startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';

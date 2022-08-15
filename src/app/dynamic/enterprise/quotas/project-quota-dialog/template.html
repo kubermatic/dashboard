@@ -25,6 +25,11 @@ END OF TERMS AND CONDITIONS
   <form [formGroup]="form"
         fxLayout="column"
         fxLayoutAlign="space-between stretch">
+    <p *ngIf="editQuota"
+       class="km-dialog-context-description">
+      Edit quotas of <b>{{editQuota.subjectHumanReadableName}}</b> project
+    </p>
+
     <form [formGroup]="quotaGroup"
           class="quota-form"
           fxLayout="column"
@@ -34,7 +39,6 @@ END OF TERMS AND CONDITIONS
            fxLayout="row"
            fxLayoutGap="5px"
            fxLayoutAlign="space-between center">
-
         <km-number-stepper id="km-cpu-input"
                            label="CPU"
                            min="0"
@@ -65,33 +69,30 @@ END OF TERMS AND CONDITIONS
       </mat-error>
     </form>
 
-    <div fxLayout="column"
+    <div *ngIf="!editQuota"
+         fxLayout="column"
          fxLayoutAlign=" stretch">
-      <mat-form-field class="km-dropdown-with-suffix"
-                      *ngIf="!editQuota; else editMode">
-        <mat-label>Project</mat-label>
-        <mat-select disableOptionCentering
-                    class="km-select-ellipsis"
-                    [formControl]="form.controls.subjectName"
-                    required>
-          <mat-option *ngFor="let project of projects"
-                      [value]="project.id"> {{project.name}} </mat-option>
-          <mat-select-trigger fxLayout="row">
-            <div fxLayoutAlign="start">{{selectedProject?.name || editQuota?.name}}</div>
+      <km-combobox label="Project"
+                   inputLabel="Project"
+                   filterBy="name"
+                   selectBy="id"
+                   [required]="true"
+                   [isDisabled]="!projects.length"
+                   [options]="projects"
+                   [formControl]="projectControl"
+                   [valueFormatter]="projectDisplayFn.bind(this)">
+        <div *option="let project"
+             fxLayout="row"
+             fxLayoutGap="10px"
+             fxLayoutAlign=" center">
+          <span>{{project.name}}</span>
 
-            <div fxLayoutAlign="end"
-                 class="km-select-trigger-button-wrapper">
-              <button matSuffix
-                      mat-icon-button
-                      [disabled]="!!editQuota"
-                      (click)="resetSubjectNameControl()">
-                <i class="km-icon-mask km-icon-remove"></i>
-              </button>
-            </div>
-          </mat-select-trigger>
-        </mat-select>
-        <mat-error> Project is <strong>required</strong> </mat-error>
-      </mat-form-field>
+          <mat-card-subtitle class="km-no-margin km-no-padding"
+                             *ngIf="projectNameCountMap[project.name] > 1">
+            <strong>ID</strong> {{project.id}}
+          </mat-card-subtitle>
+        </div>
+      </km-combobox>
     </div>
   </form>
 </mat-dialog-content>
@@ -99,16 +100,7 @@ END OF TERMS AND CONDITIONS
   <km-button id="km-add-quota-dialog-save-btn"
              [icon]="selectedQuota ? 'km-icon-edit' : 'km-icon-add'"
              label="{{ selectedQuota ? 'Save Changes' : 'Add Project Quota' }}"
-             [disabled]="form.invalid"
+             [disabled]="!isQuotaUpdated || form.invalid"
              [observable]="getObservable()">
   </km-button>
 </mat-dialog-actions>
-
-<ng-template #editMode>
-  <km-property>
-    <div key>Project</div>
-    <div value
-         class="km-project-name">{{ editQuota?.subjectHumanReadableName ?? editQuota?.subjectName }}</div>
-  </km-property>
-
-</ng-template>

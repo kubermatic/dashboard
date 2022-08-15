@@ -18,10 +18,10 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
 import {ResourceType} from '@shared/entity/common';
 import {Project, ProjectModel} from '@shared/entity/project';
-import {AsyncValidators} from '@shared/validators/async-label-form.validator';
 import _ from 'lodash';
 import {ProjectService} from '@core/services/project';
 import {Observable} from 'rxjs';
+import {AsyncValidators} from '@shared/validators/async.validators';
 
 @Component({
   selector: 'km-edit-project',

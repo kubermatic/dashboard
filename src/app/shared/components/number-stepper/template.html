@@ -21,6 +21,7 @@ limitations under the License.
          matInput
          type="number"
          autocomplete="off"
+         onkeydown="return event.keyCode !== 69"
          [pattern]="pattern"
          [disabled]="disabled"
          [required]="required"

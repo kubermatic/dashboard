@@ -17,11 +17,11 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
 import {ResourceType} from '@shared/entity/common';
-import {AsyncValidators} from '@shared/validators/async-label-form.validator';
 import {ProjectService} from '@core/services/project';
 import {Observable} from 'rxjs';
 import {Project} from '@shared/entity/project';
 import {take} from 'rxjs/operators';
+import {AsyncValidators} from '../../validators/async.validators';
 
 @Component({
   selector: 'km-add-project-dialog',
