@@ -15,9 +15,13 @@
 @use 'mixins';
 @use 'variables';
 
+:host {
+  display: flex;
+}
+
 .property-usage-bar {
   @include mixins.size(280px, 6px, true);
 
   border-radius: variables.$border-radius;
-  margin: 8px 0;
+  margin: 6px 0;
 }
