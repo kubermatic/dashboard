@@ -1,6 +1,6 @@
 //                Kubermatic Enterprise Read-Only License
 //                       Version 1.0 ("KERO-1.0”)
-//                   Copyright © 2020 Kubermatic GmbH
+//                   Copyright © 2022 Kubermatic GmbH
 //
 // 1. You may only view, read and display for studying purposes the source
 //    code of the software licensed under this license, and, to the extent
@@ -19,7 +19,7 @@
 // END OF TERMS AND CONDITIONS
 
 import {DOCUMENT} from '@angular/common';
-import {Component, OnInit, ViewChild, Inject, Input} from '@angular/core';
+import {Component, OnInit, ViewChild, Inject, Input, OnDestroy} from '@angular/core';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {MatPaginator} from '@angular/material/paginator';
@@ -42,7 +42,7 @@ enum Column {
   selector: 'km-old-metering-reports-list',
   templateUrl: './template.html',
 })
-export class MeteringOldReportListComponent implements OnInit {
+export class MeteringOldReportListComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   @Input() reports: Report[];
 
@@ -107,7 +107,6 @@ export class MeteringOldReportListComponent implements OnInit {
       .pipe(
         switchMap(_ => {
           this._reportsInProgress.add(reportName);
-          this.dataSource.data = this.reports.filter(report => report.name !== reportName);
           return this._meteringService.reportDelete(reportName);
         })
       )
@@ -115,6 +114,7 @@ export class MeteringOldReportListComponent implements OnInit {
       .subscribe({
         next: () => {
           this._meteringService.onReportListChange$.next();
+          this.dataSource.data = this.reports.filter(report => report.name !== reportName);
           this._notificationService.success(`Deleting the ${reportName} report`);
         },
         complete: () => this._reportsInProgress.delete(reportName),
@@ -127,6 +127,6 @@ export class MeteringOldReportListComponent implements OnInit {
   }
 
   isPaginatorVisible(): boolean {
-    return this.reports && this.reports.length > 0 && this.paginator && this.reports.length > this.paginator.pageSize;
+    return this.reports?.length > this.paginator?.pageSize;
   }
 }

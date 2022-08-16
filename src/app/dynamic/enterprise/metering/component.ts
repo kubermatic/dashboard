@@ -72,12 +72,15 @@ export class MeteringComponent implements OnInit, OnDestroy {
         },
       });
 
-    this._meteringService.oldReports().subscribe(reports => {
-      this.oldReports = reports;
-      if (this.oldReports.length > 0) {
-        this.loadOldReportsCard = true;
-      }
-    });
+    this._meteringService
+      .oldReports()
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(reports => {
+        this.oldReports = reports;
+        if (this.oldReports.length > 0) {
+          this.loadOldReportsCard = true;
+        }
+      });
   }
 
   ngOnDestroy(): void {
