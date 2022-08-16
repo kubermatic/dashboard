@@ -71,7 +71,7 @@ enum Mode {
 }
 
 export enum VMSizeState {
-  Empty = 'No VM Size Available',
+  Empty = 'VM Size',
   Loading = 'Loading...',
   Ready = 'VM Size',
 }
@@ -168,13 +168,7 @@ export class AKSClusterSettingsComponent
       [Controls.KubernetesVersion]: this._builder.control('', Validators.required),
       [Controls.NodePoolName]: this._builder.control('', [Validators.required, AKS_POOL_NAME_VALIDATOR]),
       [Controls.Count]: this._builder.control(1, Validators.required),
-      [Controls.VmSize]: this._builder.control(
-        {
-          value: '',
-          disabled: true,
-        },
-        Validators.required
-      ),
+      [Controls.VmSize]: this._builder.control('', Validators.required),
       [Controls.Mode]: this._builder.control(DEFAULT_MODE),
       [Controls.EnableAutoScaling]: this._builder.control(true),
       [Controls.MaxCount]: this._builder.control(MAX_COUNT_DEFAULT_VALUE, [
@@ -186,6 +180,7 @@ export class AKSClusterSettingsComponent
         Validators.min(this.AUTOSCALING_MIN_VALUE),
       ]),
     });
+    this.control(Controls.VmSize).disable();
   }
 
   private _initSubscriptions(): void {
@@ -218,7 +213,7 @@ export class AKSClusterSettingsComponent
         .pipe(filter(value => !!value))
         .pipe(
           switchMap((location: string) => {
-            this.vmSizeLabel = VMSizeState.Loading;
+            this.control(Controls.VmSize).enable();
             return this._getAKSVmSizes(location);
           })
         )
@@ -227,7 +222,6 @@ export class AKSClusterSettingsComponent
           this.vmSizes = vmSizes.map((vmSize: AKSVMSize) => vmSize.name);
           if (vmSizes?.length) {
             this.vmSizeLabel = VMSizeState.Ready;
-            this.control(Controls.VmSize).enable();
           } else {
             this.vmSizeLabel = VMSizeState.Empty;
           }

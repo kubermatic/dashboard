@@ -11,15 +11,26 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+@use 'mixins';
 
-.delete-cluster-checkbox {
-  margin-bottom: 8px;
-}
+.mat-dialog-content {
+  p.heading {
+    margin: 0 0 20px;
+  }
 
-.mat-form-field {
-  margin-top: 8px;
-}
+  &.mat-form-field {
+    margin-top: 10px;
+  }
 
-.km-icon-warning {
-  margin: 0 14.4px 0 0;
+  .warning-container {
+    & i.km-icon-info {
+      @include mixins.size(18px, $force: true);
+
+      margin: 0 5px;
+    }
+
+    & .km-text > p {
+      margin: 0;
+    }
+  }
 }

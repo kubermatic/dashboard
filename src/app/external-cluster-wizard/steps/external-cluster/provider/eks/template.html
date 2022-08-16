@@ -104,6 +104,7 @@ limitations under the License.
 
     <km-select *ngIf="!isDialogView()"
                label="VPC"
+               hint="Select a VPC to use for your EKS cluster resources."
                [required]="true"
                [options]="vpcs"
                [formControlName]="Controls.Vpc">
@@ -115,7 +116,6 @@ limitations under the License.
              type="text"
              autocomplete="off"
              [formControlName]="Controls.Vpc" />
-      <mat-hint>Select a VPC to use for your EKS cluster resources.</mat-hint>
     </mat-form-field>
 
     <km-chip-autocomplete label="Subnet"
