@@ -24,7 +24,7 @@ import {
 } from '@shared/entity/external-machine-deployment';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {Observable} from 'rxjs';
-import {take, takeUntil} from 'rxjs/operators';
+import {filter, take, takeUntil} from 'rxjs/operators';
 import {MasterVersion} from '@shared/entity/cluster';
 
 class UpdateExternalClusterMachineDeploymentDialogData {
@@ -56,6 +56,7 @@ export class UpdateExternalClusterMachineDeploymentDialogComponent extends BaseF
   disableReplicaControl: boolean;
   versions: string[] = [];
   versionsLabel = KubeletVersionState.Loading;
+  upgradesAvailable: boolean;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: UpdateExternalClusterMachineDeploymentDialogData,
@@ -100,6 +101,7 @@ export class UpdateExternalClusterMachineDeploymentDialogComponent extends BaseF
       .subscribe((value: number) => {
         if (initialValue[Controls.Replicas] === value) {
           this.form.get(Controls.KubeletVersion).enable({emitEvent: false});
+          this.form.get(Controls.KubeletVersion).clearValidators();
         } else {
           this.form.get(Controls.KubeletVersion).disable({emitEvent: false});
         }
@@ -108,6 +110,7 @@ export class UpdateExternalClusterMachineDeploymentDialogComponent extends BaseF
     this.form
       .get(Controls.KubeletVersion)
       .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .pipe(filter(_ => !!this.upgradesAvailable))
       .subscribe((value: string) => {
         this.disableReplicaControl = this.data.kubeletVersion !== value;
       });
@@ -116,9 +119,11 @@ export class UpdateExternalClusterMachineDeploymentDialogComponent extends BaseF
       .machineDeploymentUpgrades(this.data.projectID, this.data.clusterID, this.data.machineDeployment?.id)
       .pipe(take(1))
       .subscribe((upgrades: MasterVersion[]) => {
-        this.versionsLabel = upgrades?.length ? KubeletVersionState.Ready : KubeletVersionState.Empty;
-        this._enable(!!upgrades?.length, Controls.KubeletVersion);
-        this._setDefaultVersion(upgrades);
+        this.upgradesAvailable = !!upgrades?.length;
+        this.versionsLabel = this.upgradesAvailable ? KubeletVersionState.Ready : KubeletVersionState.Empty;
+        if (this.upgradesAvailable) {
+          this._setDefaultVersion(upgrades);
+        }
       });
   }
 
@@ -143,13 +148,5 @@ export class UpdateExternalClusterMachineDeploymentDialogComponent extends BaseF
         },
       } as ExternalMachineDeploymentSpecPatch,
     };
-  }
-
-  private _enable(enable: boolean, name: Controls): void {
-    if (enable && this.form.get(name).disabled) {
-      this.form.get(name).enable();
-    } else if (!enable && this.form.get(name).enabled) {
-      this.form.get(name).disable();
-    }
   }
 }

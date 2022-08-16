@@ -111,21 +111,24 @@ limitations under the License.
         Node pool Name must contain only lowercase letters and numbers, must be 12 or fewer characters.</mat-error>
     </mat-form-field>
 
-    <km-autocomplete label="VM Size"
-                     required="true"
+    <km-autocomplete [required]="true"
+                     [label]="vmSizeLabel"
                      [isLoading]="isLoadingVmSizes"
                      [options]="vmSizes"
+                     [disabled]="form.get(Controls.VmSize).disabled"
                      [formControlName]="Controls.VmSize">
       <ng-container *ngIf="!isDialogView()"
                     hint>
-        VM size availability varies by region.
-        <a href="https://docs.microsoft.com/azure/aks/quotas-skus-regions"
-           rel="noopener noreferrer"
-           target="_blank">supported versions</a>.
+        <ng-container *ngIf="form.get(Controls.Location).value; else showHintForLocation">
+          VM size availability varies by region.
+        </ng-container>
+        <ng-template #showHintForLocation>
+          Enter location to fetch VM sizes
+        </ng-template>
       </ng-container>
       <ng-container *ngIf="isDialogView()"
                     hint>
-        Set the VM Size for this Node.
+        Set the VM Size for this node.
       </ng-container>
     </km-autocomplete>
 

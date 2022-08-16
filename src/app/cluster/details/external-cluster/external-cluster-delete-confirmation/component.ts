@@ -20,7 +20,7 @@ import {AdminSettings} from '@shared/entity/settings';
 import {ClipboardService} from 'ngx-clipboard';
 import {Observable, Subject} from 'rxjs';
 import {finalize, take} from 'rxjs/operators';
-import {DeleteExternalClusterAction, ExternalCluster} from '@shared/entity/external-cluster';
+import {DeleteExternalClusterAction, ExternalCluster, ExternalClusterProvider} from '@shared/entity/external-cluster';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {ClusterService} from '@core/services/cluster';
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
@@ -31,11 +31,14 @@ import {ExternalMachineDeployment} from '@shared/entity/external-machine-deploym
   styleUrls: ['style.scss'],
 })
 export class ExternalClusterDeleteConfirmationComponent implements OnInit, OnDestroy, AfterContentChecked {
+  readonly Provider = ExternalClusterProvider;
   inputName = '';
   settings: AdminSettings;
   machineDeployments: ExternalMachineDeployment[] = [];
   warningMessage = '';
   isLoadingMachineDeployments = false;
+  clusterProvider: ExternalClusterProvider;
+
   @Input() projectID: string;
   @Input() cluster: ExternalCluster;
   @ViewChild('clusterNameInput', {static: true}) clusterNameInputRef: ElementRef;
@@ -56,6 +59,7 @@ export class ExternalClusterDeleteConfirmationComponent implements OnInit, OnDes
 
     if (this.projectID && this.cluster) {
       this.isLoadingMachineDeployments = true;
+      this.clusterProvider = ExternalCluster.getProvider(this.cluster.cloud);
       this._clusterService
         .externalMachineDeployments(this.projectID, this.cluster?.id)
         .pipe(
@@ -66,7 +70,13 @@ export class ExternalClusterDeleteConfirmationComponent implements OnInit, OnDes
           this.machineDeployments = machineDeployments;
           if (machineDeployments.length > 0) {
             const nodegroupNames = machineDeployments.map((md: ExternalMachineDeployment) => md.name).join(', ');
-            this.warningMessage = `Cluster has nodegroups attached <b>${nodegroupNames}.</b> Please delete nodegroups before deleting the cluster.`;
+            if (this.clusterProvider === ExternalClusterProvider.EKS) {
+              this.warningMessage = `Cluster has nodegroups attached <b>${nodegroupNames}.</b> Please delete nodegroups before deleting the cluster.`;
+            } else {
+              this.warningMessage = `Cluster has nodegroups attached <b>${nodegroupNames}.</b>`;
+            }
+          } else {
+            this.warningMessage = '';
           }
         });
     }

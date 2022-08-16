@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import {Component, forwardRef, Input, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, forwardRef, Input, OnDestroy, OnInit} from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -26,7 +26,7 @@ import {ExternalClusterService} from '@core/services/external-cluster';
 import {NameGeneratorService} from '@core/services/name-generator';
 import {ErrorType} from '@shared/types/error-type';
 import {Observable} from 'rxjs';
-import {debounceTime, finalize, switchMap, takeUntil} from 'rxjs/operators';
+import {debounceTime, filter, finalize, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {
   ExternalCloudSpec,
   ExternalCluster,
@@ -70,6 +70,11 @@ enum Mode {
   User = 'User',
 }
 
+export enum VMSizeState {
+  Ready = 'VM Size',
+  Loading = 'Loading...',
+}
+
 @Component({
   selector: 'km-aks-cluster-settings',
   templateUrl: './template.html',
@@ -103,11 +108,13 @@ export class AKSClusterSettingsComponent
   vmSizes: string[] = [];
   nodePoolVersionsForMD: string[] = [];
   kubernetesVersions: string[] = [];
+  vmSizeLabel = VMSizeState.Ready;
 
   private readonly _debounceTime = 500;
 
   constructor(
     private readonly _builder: FormBuilder,
+    private readonly _cdr: ChangeDetectorRef,
     private readonly _externalClusterService: ExternalClusterService,
     private readonly _externalMachineDeploymentService: ExternalMachineDeploymentService,
     private readonly _nameGenerator: NameGeneratorService,
@@ -172,6 +179,7 @@ export class AKSClusterSettingsComponent
         Validators.min(this.AUTOSCALING_MIN_VALUE),
       ]),
     });
+    this.control(Controls.VmSize).disable();
   }
 
   private _initSubscriptions(): void {
@@ -200,13 +208,30 @@ export class AKSClusterSettingsComponent
     } else {
       this.control(Controls.Location)
         .valueChanges.pipe(debounceTime(this._debounceTime))
-        .pipe(switchMap((location: string) => this._getAKSVmSizes(location)))
+        .pipe(tap(_ => this._clearVmSize()))
+        .pipe(filter(value => !!value))
+        .pipe(
+          switchMap((location: string) => {
+            this.control(Controls.VmSize).enable();
+            return this._getAKSVmSizes(location);
+          })
+        )
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((vmSizes: AKSVMSize[]) => {
           this.vmSizes = vmSizes.map((vmSize: AKSVMSize) => vmSize.name);
+          this.vmSizeLabel = VMSizeState.Ready;
         });
+
       this._getAKSKubernetesVersions();
     }
+  }
+
+  private _clearVmSize(): void {
+    this.vmSizeLabel = VMSizeState.Ready;
+    this.vmSizes = [];
+    this.control(Controls.VmSize).setValue('');
+    this.control(Controls.VmSize).disable();
+    this._cdr.detectChanges();
   }
 
   private _getAKSVmSizes(location: string): Observable<AKSVMSize[]> {

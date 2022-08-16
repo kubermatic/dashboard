@@ -77,8 +77,8 @@ limitations under the License.
              type="text"
              autocomplete="off"
              [formControlName]="Controls.RoleArn" />
-      <mat-hint>{{isDialogView() ? 
-        'Enter the IAM role that will be used by the nodes' :        
+      <mat-hint>{{isDialogView() ?
+        'Enter the IAM role that will be used by the nodes' :
         'Enter the IAM role to allow the Kubernetes control plane to manage resources.'}}</mat-hint>
       <mat-error *ngIf="form.get(Controls.RoleArn).hasError('required')">
         Role is <strong>required</strong>.
@@ -104,6 +104,7 @@ limitations under the License.
 
     <km-select *ngIf="!isDialogView()"
                label="VPC"
+               hint="Select a VPC to use for your EKS cluster resources."
                [required]="true"
                [options]="vpcs"
                [formControlName]="Controls.Vpc">
@@ -117,43 +118,48 @@ limitations under the License.
              [formControlName]="Controls.Vpc" />
     </mat-form-field>
 
-    <ng-container *ngIf="form.get(Controls.Vpc).value">
-      <km-chip-autocomplete label="Subnet"
-                            placeholder="Select Subnet IDs"
-                            [tags]="subnetIds"
-                            [required]="true"
-                            [formControlName]="Controls.SubnetIds"></km-chip-autocomplete>
+    <km-chip-autocomplete label="Subnet"
+                          placeholder="Select Subnet IDs"
+                          [tags]="subnetIds"
+                          [required]="true"
+                          [disabled]="form.get(Controls.SubnetIds).disabled"
+                          [formControlName]="Controls.SubnetIds"></km-chip-autocomplete>
 
-      <km-chip-autocomplete *ngIf="!isDialogView()"
-                            label="Security Groups"
-                            placeholder="Select SecurityGroup IDs"
-                            [tags]="securityGroupIds"
-                            [required]="true"
-                            [formControlName]="Controls.SecurityGroupsIds"></km-chip-autocomplete>
-    </ng-container>
+    <km-chip-autocomplete *ngIf="!isDialogView()"
+                          label="Security Groups"
+                          placeholder="Select SecurityGroup IDs"
+                          [tags]="securityGroupIds"
+                          [required]="true"
+                          [disabled]="form.get(Controls.SecurityGroupsIds).disabled"
+                          [formControlName]="Controls.SecurityGroupsIds">
+    </km-chip-autocomplete>
+
     <ng-container *ngIf="isDialogView()">
       <mat-card-header class="km-no-padding">
         <mat-card-title>AutoScaling</mat-card-title>
       </mat-card-header>
       <km-number-stepper [formControlName]="Controls.DesiredSize"
-                         mode="errors"
+                         mode="all"
                          label="Desired Size"
+                         hint="Set the desired number of nodes that the group should launch with initially."
+                         [required]="true"
                          [min]="minNodeCount"
-                         [max]="maxNodeCount"
-                         required>
+                         [max]="maxNodeCount">
       </km-number-stepper>
       <km-number-stepper [formControlName]="Controls.MaxSize"
-                         mode="errors"
+                         mode="all"
                          label="Max Count"
-                         [min]="minNodeCount"
-                         required>
+                         hint="Set the maximum number of nodes that the group can scale out to."
+                         [required]="true"
+                         [min]="minNodeCount">
       </km-number-stepper>
       <km-number-stepper [formControlName]="Controls.MinSize"
-                         mode="errors"
+                         mode="all"
                          label="Min Count"
                          min="1"
-                         [max]="maxNodeCount"
-                         required>
+                         hint="Set the minimum number of nodes that the group can scale in to"
+                         [required]="true"
+                         [max]="maxNodeCount">
       </km-number-stepper>
     </ng-container>
   </div>

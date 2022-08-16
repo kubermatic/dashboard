@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <km-dialog-title>Delete External Cluster</km-dialog-title>
-<mat-dialog-content>
-  <p>Delete
+<mat-dialog-content class="km-external-cluster-delete-confirmation"
+                    fxLayout="column">
+  <p class="heading">Delete
     <b (click)="copy(cluster.name)"
        matTooltip="Click to copy"
        class="km-copy">{{cluster.name}}</b>
@@ -33,12 +34,13 @@ limitations under the License.
            #clusterNameInput>
   </mat-form-field>
 
-
   <div *ngIf="warningMessage"
-       fxLayoutAlign=" start"
-       class="warning-container">
-    <i class="km-icon-warning"></i>
-    <div class="km-text dynamic-kubelet-config-warning">
+       class="warning-container"
+       fxFlex
+       fxLayout="row"
+       fxLayoutAlign="start center">
+    <i [ngClass]="clusterProvider === Provider.EKS ? 'km-icon-warning' : 'km-icon-info'"></i>
+    <div class="km-text">
       <p [innerHTML]="warningMessage"></p>
     </div>
   </div>

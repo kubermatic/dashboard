@@ -645,3 +645,11 @@ km-cni-version {
     transition: none;
   }
 }
+
+.km-external-cluster-delete-confirmation {
+  .mat-form-field {
+    .mat-form-field-wrapper {
+      padding-bottom: 12px;
+    }
+  }
+}
