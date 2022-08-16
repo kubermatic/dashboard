@@ -35,6 +35,7 @@ export class MeteringComponent implements OnInit, OnDestroy {
   config: MeteringConfiguration;
   schedules: MeteringReportConfiguration[];
   oldReports: Report[] = [];
+  fetchingOldReportsInProgres = false;
   loadOldReportsCard = false;
 
   constructor(
@@ -72,14 +73,20 @@ export class MeteringComponent implements OnInit, OnDestroy {
         },
       });
 
+    this.fetchingOldReportsInProgres = true;
     this._meteringService
       .oldReports()
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(reports => {
-        this.oldReports = reports;
-        if (this.oldReports.length > 0) {
-          this.loadOldReportsCard = true;
-        }
+      .subscribe({
+        next: reports => {
+          this.oldReports = reports;
+          if (this.oldReports.length > 0) {
+            this.loadOldReportsCard = true;
+          }
+        },
+        complete: () => {
+          this.fetchingOldReportsInProgres = false;
+        },
       });
   }
 
