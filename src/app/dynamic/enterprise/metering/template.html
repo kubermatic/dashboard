@@ -26,8 +26,9 @@ END OF TERMS AND CONDITIONS
 </ng-container>
 
 <ng-container *ngIf="isLoading()">
-  <mat-spinner [diameter]="50"
+  <mat-spinner id="km-load-metering-spinner"
                class="km-spinner"
+               [diameter]="50"
                color="accent"></mat-spinner>
 </ng-container>
 

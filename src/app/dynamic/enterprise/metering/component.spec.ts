@@ -79,7 +79,7 @@ describe('MeteringComponent', () => {
     component.config = fakeSeedSettings().metering;
     fixture.detectChanges();
 
-    const spinnerAfterDataLoaded = fixture.debugElement.query(By.css('.km-spinner'));
+    const spinnerAfterDataLoaded = fixture.debugElement.query(By.css('#km-load-metering-spinner'));
     expect(spinnerAfterDataLoaded).toBeFalsy();
   }));
 });
