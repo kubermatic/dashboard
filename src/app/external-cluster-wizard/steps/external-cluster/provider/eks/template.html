@@ -94,6 +94,21 @@ limitations under the License.
       </ng-container>
     </km-combobox>
 
+    <km-combobox [required]="true"
+               [grouped]="false"
+               [multiple]="true"
+               [selected]="selectedInstanceTypes"
+               [options]="instanceTypes"
+               [formControlName]="Controls.InstanceType"
+               (changed)="onInstanceTypeChange($event)"
+               label="instance Type"
+               inputLabel="Select instance type..."
+               filterBy="pretty_name">
+      <div *option="let instanceType">
+        {{instanceType.pretty_name +'('+ instanceType.vcpus+' vCPUs, ' + instanceType.memory+' GB RAM)'}}
+      </div>
+  </km-combobox>
+
     <km-combobox *ngIf="!isDialogView()"
                  filterBy="roleName"
                  inputLabel="Select Cluster Service Role... "

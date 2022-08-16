@@ -27,6 +27,7 @@ import {ExternalAddMachineDeploymentDialogComponent} from '@app/cluster/details/
 import {AKSNodePoolVersionForMachineDeployments, AKSVMSize} from '@app/shared/entity/provider/aks';
 import {GCPDiskType, GCPMachineSize} from '@app/shared/entity/provider/gcp';
 import {EKSNodeRole, EKSSubnet} from '@shared/entity/provider/eks';
+import {EKSInstanceTypeList} from '@app/shared/entity/provider/eks';
 
 @Injectable()
 export class ExternalMachineDeploymentService {
@@ -65,6 +66,11 @@ export class ExternalMachineDeploymentService {
   getEKSNodeRoleForMachineDeployment(projectID: string, clusterID: string): Observable<EKSNodeRole[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/eks/noderoles`;
     return this._httpClient.get<EKSNodeRole[]>(url).pipe(catchError(() => of([])));
+  }
+  
+  getEKSInstanceTypesForMAchineDeployment(projectID: string, clusterID: string): Observable<EKSInstanceTypeList[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/eks/instancetypes`;
+    return this._httpClient.get<EKSInstanceTypeList[]>(url).pipe(catchError(() => of<[]>()));
   }
 
   getAKSVmSizesForMachineDeployment(projectID: string, clusterID: string, location: string): Observable<AKSVMSize[]> {

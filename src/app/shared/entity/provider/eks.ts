@@ -61,3 +61,10 @@ export class EKSNodeRole {
   arn: string;
   roleName: string;
 }
+
+export class EKSInstanceTypeList {
+  name: string;
+  pretty_name: string;
+  vcpus: number;
+  memory: number;
+}

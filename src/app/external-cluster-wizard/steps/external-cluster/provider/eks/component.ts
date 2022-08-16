@@ -32,6 +32,7 @@ import {
   EKSSecurityGroup,
   EKSSubnet,
   EKSVpc,
+  EKSInstanceTypeList
 } from '@shared/entity/provider/eks';
 import {forkJoin} from 'rxjs';
 import {debounceTime, takeUntil, tap} from 'rxjs/operators';
@@ -54,16 +55,17 @@ import {MasterVersion} from '@app/shared/entity/cluster';
 import {ComboboxControls, FilteredComboboxComponent} from '@shared/components/combobox/component';
 
 enum Controls {
+  Vpc = 'vpc',
   Name = 'name',
   Version = 'version',
   RoleArn = 'roleArn',
-  Vpc = 'vpc',
-  SubnetIds = 'subnetIds',
-  SecurityGroupsIds = 'securityGroupIds',
-  DiskSize = 'diskSize',
   MaxSize = 'maxSize',
   MinSize = 'minSize',
+  DiskSize = 'diskSize',
+  SubnetIds = 'subnetIds',
   DesiredSize = 'desiredSize',
+  InstanceType = 'instanceType',
+  SecurityGroupsIds = 'securityGroupIds',
 }
 
 enum VpcState {
@@ -119,6 +121,8 @@ export class EKSClusterSettingsComponent
   readonly Controls = Controls;
   vpcLabel = VpcState.Ready;
   vpcs: EKSVpc[] = [];
+  instanceTypes: EKSInstanceTypeList[] = [];
+  selectedInstanceTypes: string[] = []
   kubernetesVersions: string[] = [];
   maxNodeCount: number;
   minNodeCount: number;
@@ -158,6 +162,8 @@ export class EKSClusterSettingsComponent
   }
 
   ngOnInit(): void {
+    console.log(this.instanceTypes);
+    
     this._initForm();
     this._initSubscriptions();
   }
@@ -213,6 +219,7 @@ export class EKSClusterSettingsComponent
       [Controls.MaxSize]: this._builder.control(DEFAULT_MD_MAXSIZE),
       [Controls.MinSize]: this._builder.control(DEFAULT_MD_MINSIZE),
       [Controls.DesiredSize]: this._builder.control(DEFAULT_MD_DESIRED_SIZE),
+      [Controls.InstanceType]: this._builder.control('')
     });
 
     if (!this.isDialogView()) {
@@ -250,6 +257,15 @@ export class EKSClusterSettingsComponent
           this.subnetLabel = this.subnets?.length ? SubnetState.Ready : SubnetState.Empty;
           this._cdr.detectChanges();
         });
+
+      this._externalMachineDeploymentService
+        .getEKSInstanceTypesForMAchineDeployment(this.projectID, this.cluster.id)
+        .subscribe((instanceTypes: EKSInstanceTypeList[]) => {
+          this.instanceTypes = instanceTypes
+          console.log(this.instanceTypes);
+        })
+        
+      
     } else {
       this._getEKSKubernetesVersions();
 
@@ -277,6 +293,11 @@ export class EKSClusterSettingsComponent
       this._getEKSClusterRoles();
       this._getEKSVpcs();
     });
+  }
+
+  onInstanceTypeChange(instanceType: string[]): void {
+    this.selectedInstanceTypes = instanceType
+    console.log(this.selectedInstanceTypes);
   }
 
   private _getEKSVpcs(): void {
@@ -372,6 +393,7 @@ export class EKSClusterSettingsComponent
       name: this.controlValue(Controls.Name),
       cloud: {
         eks: {
+          instanceTypes: this.selectedInstanceTypes,
           diskSize: this.controlValue(Controls.DiskSize),
           scalingConfig: {
             desiredSize: this.controlValue(Controls.DesiredSize),
