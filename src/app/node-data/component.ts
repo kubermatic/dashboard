@@ -451,9 +451,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     if (this.selectedOperatingSystemProfile) {
       ospValue = this.selectedOperatingSystemProfile;
     } else if (this.form.get(Controls.OperatingSystem).value !== '') {
-      // We have to explicitly convert this to a lowercase string to handle the inconsistency between the
-      // node provider name 'rockyLinux' and the operating system name in machine-controller i.e. `rockylinux`.
-      const ospName = 'osp-' + this.form.get(Controls.OperatingSystem).value.toLowerCase();
+      const ospName = 'osp-' + this.form.get(Controls.OperatingSystem).value;
       if (this.supportedOperatingSystemProfiles.indexOf(ospName) > -1) {
         ospValue = ospName;
       }

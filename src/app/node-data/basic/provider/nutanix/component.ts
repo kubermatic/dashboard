@@ -222,7 +222,7 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
       case OperatingSystem.Flatcar:
         return this._images?.flatcar;
       case OperatingSystem.RockyLinux:
-        return this._images?.rockyLinux;
+        return this._images?.rockylinux;
       default:
         return this._images?.ubuntu;
     }

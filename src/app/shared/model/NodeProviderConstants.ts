@@ -48,7 +48,7 @@ export enum OperatingSystem {
   CentOS = 'centos',
   Flatcar = 'flatcar',
   RHEL = 'rhel',
-  RockyLinux = 'rockyLinux',
+  RockyLinux = 'rockylinux',
   SLES = 'sles',
   Ubuntu = 'ubuntu',
 }
@@ -91,7 +91,7 @@ export namespace NodeProviderConstants {
       return OperatingSystem.RHEL;
     } else if (spec.operatingSystem.flatcar) {
       return OperatingSystem.Flatcar;
-    } else if (spec.operatingSystem.rockyLinux) {
+    } else if (spec.operatingSystem.rockylinux) {
       return OperatingSystem.RockyLinux;
     } else if (spec.operatingSystem.amzn2) {
       return OperatingSystem.AmazonLinux2;

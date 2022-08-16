@@ -69,7 +69,7 @@ export class OperatingSystemSpec {
   centos?: CentosSpec;
   flatcar?: FlatcarSpec;
   rhel?: RHELSpec;
-  rockyLinux?: RockyLinuxSpec;
+  rockylinux?: RockyLinuxSpec;
   sles?: SLESSpec;
   ubuntu?: UbuntuSpec;
 
@@ -428,7 +428,7 @@ export function getOperatingSystem(spec: NodeSpec): string {
     return 'RHEL';
   } else if (spec.operatingSystem.flatcar) {
     return 'Flatcar';
-  } else if (spec.operatingSystem.rockyLinux) {
+  } else if (spec.operatingSystem.rockylinux) {
     return 'Rocky Linux';
   } else if (spec.operatingSystem.amzn2) {
     return 'Amazon Linux 2';
@@ -447,8 +447,8 @@ export function getOperatingSystemLogoClass(spec: NodeSpec): string {
     return 'rhel';
   } else if (spec.operatingSystem.flatcar) {
     return 'flatcar';
-  } else if (spec.operatingSystem.rockyLinux) {
-    return 'rocky-linux';
+  } else if (spec.operatingSystem.rockylinux) {
+    return 'rockylinux';
   } else if (spec.operatingSystem.amzn2) {
     return 'amazon-linux-2';
   }
