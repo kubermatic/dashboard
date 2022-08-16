@@ -45,8 +45,6 @@ enum Column {
 export class MeteringOldReportListComponent implements OnInit {
   private readonly _unsubscribe = new Subject<void>();
   @Input() reports: Report[];
-  @Input() scheduleName: string;
-  @Input() isLoadingReports: boolean;
 
   readonly column = Column;
   readonly displayedColumns: string[] = Object.values(Column);
@@ -119,6 +117,7 @@ export class MeteringOldReportListComponent implements OnInit {
           this._meteringService.onReportListChange$.next();
           this._notificationService.success(`Deleting the ${reportName} report`);
         },
+        complete: () => this._reportsInProgress.delete(reportName),
         error: _ => this._reportsInProgress.delete(reportName),
       });
   }

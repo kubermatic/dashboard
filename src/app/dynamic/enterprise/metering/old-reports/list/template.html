@@ -94,14 +94,6 @@ END OF TERMS AND CONDITIONS
       class="km-mat-row"></tr>
 </table>
 
-<ng-container *ngIf="isLoadingReports">
-  <div class="km-row">
-    <mat-spinner color="accent"
-                 class="km-spinner"
-                 [diameter]="25"></mat-spinner>
-  </div>
-</ng-container>
-
 <div [hidden]="!isPaginatorVisible()">
   <mat-paginator showFirstLastButtons
                  pageSize="10"></mat-paginator>
