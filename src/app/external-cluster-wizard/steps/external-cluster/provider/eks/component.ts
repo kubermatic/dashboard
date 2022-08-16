@@ -175,7 +175,7 @@ export class EKSClusterSettingsComponent
         .valueChanges.pipe(debounceTime(this._debounceTime))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => {
-          const vpc = this.controlValue(Controls.Vpc)?.main;
+          const vpc = this.controlValue(Controls.Vpc);
           if (vpc) {
             this._onVPCSelectionChange(vpc);
             this.control(Controls.SubnetIds).enable();
