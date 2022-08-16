@@ -38,6 +38,10 @@ export class MeteringMockService {
     return EMPTY;
   }
 
+  oldReports(): Observable<Report[]> {
+    return EMPTY;
+  }
+
   reportDownload(_1: string, _2: string): Observable<string> {
     return EMPTY;
   }
