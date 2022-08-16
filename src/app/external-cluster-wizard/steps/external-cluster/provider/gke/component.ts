@@ -221,14 +221,27 @@ export class GKEClusterSettingsComponent
 
   private _getGKEKubernetesVersions(): void {
     this.kubernetesVersions = [];
-    const zone = this.controlValue(Controls.Zone);
-    const mode = this.controlValue(Controls.KubernetesVersionMode);
+    let zone = this.controlValue(Controls.Zone);
+    let mode = this.controlValue(Controls.KubernetesVersionMode);
     let releaseChannel: string;
-    if (mode === KubernetesVersionMode.ReleaseChannel) {
-      const releaseChannelToUpperCase = this.controlValue(Controls.ReleaseChannelOptions).toUpperCase();
-      releaseChannel = releaseChannelToUpperCase.slice(0, releaseChannelToUpperCase.indexOf(' '));
+
+    if (!zone) {
+      zone = this.control(Controls.Zone).setValue(this.ZONE_DEFAULT_VALUE);
     }
-    if (zone) {
+
+    if (!mode) {
+      mode = this.control(Controls.KubernetesVersionMode).setValue(this.KubernetesVersionMode.StaticVersion);
+    }
+
+    if (!this.controlValue(Controls.ReleaseChannelOptions)) {
+      this.control(Controls.ReleaseChannelOptions).setValue(this.releaseChannelOptions[1]);
+    }
+
+    if (mode === KubernetesVersionMode.ReleaseChannel) {
+      const releaseChannelToUpperCase = this.controlValue(Controls.ReleaseChannelOptions)?.toUpperCase();
+      releaseChannel = releaseChannelToUpperCase?.slice(0, releaseChannelToUpperCase.indexOf(' '));
+    }
+    if (zone && mode) {
       this._externalClusterService.getGKEKubernetesVersions(zone, mode, releaseChannel).subscribe(
         (versions: MasterVersion[]) =>
           (this.kubernetesVersions = versions.map(version => {

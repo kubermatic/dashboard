@@ -13,15 +13,7 @@
 // limitations under the License.
 
 import {Component, forwardRef, Input, OnDestroy, OnInit} from '@angular/core';
-import {
-  ControlValueAccessor,
-  FormBuilder,
-  FormGroup,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
+import {FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidatorFn, Validators} from '@angular/forms';
 import {BaseFormValidator} from '@app/shared/validators/base-form.validator';
 import {takeUntil} from 'rxjs/operators';
 
@@ -45,7 +37,7 @@ export enum Controls {
     },
   ],
 })
-export class SelectComponent extends BaseFormValidator implements OnInit, OnDestroy, ControlValueAccessor {
+export class SelectComponent extends BaseFormValidator implements OnInit, OnDestroy {
   readonly Controls = Controls;
   form: FormGroup;
   @Input() options: string[];
