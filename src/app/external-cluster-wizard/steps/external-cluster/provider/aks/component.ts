@@ -252,8 +252,11 @@ export class AKSClusterSettingsComponent
   }
 
   private _updateExternalClusterModel(): void {
-    const indexPosition = 2;
-    const version = this.controlValue(Controls.KubernetesVersion)?.main;
+    let version = this.controlValue(Controls.KubernetesVersion)?.main;
+    const versionSplitArr = version?.split('.');
+    if (versionSplitArr?.length && !(versionSplitArr[2] > 0)) {
+      version = versionSplitArr[0] + '.' + versionSplitArr[1];
+    }
 
     const config = {
       name: this.controlValue(Controls.Name),
@@ -266,7 +269,7 @@ export class AKSClusterSettingsComponent
       } as ExternalCloudSpec,
       spec: {
         aksclusterSpec: {
-          kubernetesVersion: version?.slice(0, version.indexOf('.', indexPosition)),
+          kubernetesVersion: version,
           location: this.controlValue(Controls.Location),
           machineDeploymentSpec: {
             name: this.controlValue(Controls.NodePoolName),
@@ -278,7 +281,7 @@ export class AKSClusterSettingsComponent
             } as AgentPoolBasics,
           } as AKSMachineDeploymentCloudSpec,
         } as AKSClusterSpec,
-        version: version?.slice(0, version.indexOf('.', indexPosition)),
+        version: version,
       } as ExternalClusterSpec,
     } as ExternalClusterModel;
 

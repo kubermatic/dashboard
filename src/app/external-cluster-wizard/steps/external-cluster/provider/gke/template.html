@@ -44,7 +44,7 @@ limitations under the License.
               (click)="generateName()">
         <i class="km-icon-randomize"></i>
       </button>
-      <mat-hint>Enter a unique name for this {{isDialogView() ? 'machine deployment' : 'cluster'}}</mat-hint>
+      <mat-hint>Enter a unique name for this {{isDialogView() ? 'machine deployment.' : 'cluster.'}}</mat-hint>
       <mat-error *ngIf="form.get(Controls.Name).hasError('required')">
         Name is <strong>required</strong>.
       </mat-error>
@@ -54,16 +54,14 @@ limitations under the License.
       </mat-error>
     </mat-form-field>
 
-
-    <km-autocomplete *ngIf="!isDialogView()"
-                     class="km-dropdown-with-suffix"
-                     label="Zone"
-                     required="true"
-                     [isLoading]="isLoadingZones"
-                     [options]="zones"
-                     [formControlName]="Controls.Zone">
-      <ng-container hint>Select from Zones list.</ng-container>
-    </km-autocomplete>
+    <km-select *ngIf="!isDialogView()"
+               class="km-dropdown-with-suffix"
+               label="Zone"
+               required="true"
+               hint="Select The zone in which your cluster is located."
+               [options]="zones"
+               [formControlName]="Controls.Zone">
+    </km-select>
 
     <mat-form-field *ngIf="isDialogView()">
       <mat-label>Kubernetes Version
@@ -105,7 +103,7 @@ limitations under the License.
     </km-number-stepper>
 
 
-    <km-number-stepper hint="Set Number of Replicas"
+    <km-number-stepper hint="Set Number of nodes"
                        mode="all"
                        [label]="isDialogView() ? 'Number of Replicas' : 'Initial Node Count'"
                        [max]="form.get(Controls.EnableAutoScaling).value ? form.get(Controls.MaxCount).value : AUTOSCALING_MAX_VALUE"
@@ -160,28 +158,27 @@ limitations under the License.
       <mat-radio-button [value]="KubernetesVersionMode.StaticVersion"
                         class="km-radio-button">
         <div class="km-radio-button-title">Static Version</div>
-        <mat-hint>Manually manage the version upgrades.</mat-hint>
       </mat-radio-button>
+      <mat-hint>Manually manage the version upgrades,
+        GKE will only upgrade the control plane and nodes
+        if it's necessary to maintain security and compatibility.</mat-hint>
       <mat-radio-button [value]="KubernetesVersionMode.ReleaseChannel"
                         class="km-radio-button">
         <div class="km-radio-button-title">Release Channel</div>
-        <mat-hint>Let GKE automatically manage the cluster's control plane version.</mat-hint>
       </mat-radio-button>
+      <mat-hint>Let GKE automatically manage the cluster's control plane version.</mat-hint>
 
-      <km-autocomplete *ngIf="form.get(Controls.KubernetesVersionMode).value === KubernetesVersionMode.ReleaseChannel"
-                       label="Release Channel"
-                       [options]="releaseChannelOptions"
-                       [formControlName]="Controls.ReleaseChannelOptions">
-      </km-autocomplete>
+      <km-select *ngIf="form.get(Controls.KubernetesVersionMode).value === KubernetesVersionMode.ReleaseChannel"
+                 label="Release Channel"
+                 [options]="releaseChannelOptions"
+                 [formControlName]="Controls.ReleaseChannelOptions"></km-select>
 
-      <km-autocomplete label="Versions"
-                       [options]="kubernetesVersions"
-                       required="true"
-                       [formControlName]="Controls.Version">
-        <ng-container hint>
-          Set the kubernetes version.
-        </ng-container>
-      </km-autocomplete>
+      <km-select label="Versions"
+                 [options]="kubernetesVersions"
+                 required="true"
+                 hint="Set the cluster's control plane version."
+                 [formControlName]="Controls.Version">
+      </km-select>
     </mat-radio-group>
   </div>
 </form>

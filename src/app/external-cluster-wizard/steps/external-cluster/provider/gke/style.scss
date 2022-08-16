@@ -24,8 +24,12 @@ mat-checkbox {
   }
 }
 
-mat-radio-button {
+mat-radio-group {
   mat-hint {
+    bottom: 8px;
     font-size: variables.$font-size-caption;
+    left: 15px;
+    position: relative;
+    width: 90%;
   }
 }

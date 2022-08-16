@@ -157,9 +157,9 @@ export class GKEClusterSettingsComponent
   private _initForm(): void {
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control('', [Validators.required, GKE_POOL_NAME_VALIDATOR]),
-      [Controls.Zone]: this._builder.control({main: this.ZONE_DEFAULT_VALUE}, Validators.required),
+      [Controls.Zone]: this._builder.control(this.ZONE_DEFAULT_VALUE, Validators.required),
       [Controls.KubernetesVersionMode]: this._builder.control(KubernetesVersionMode.StaticVersion),
-      [Controls.ReleaseChannelOptions]: this._builder.control({main: this.releaseChannelOptions[1]}),
+      [Controls.ReleaseChannelOptions]: this._builder.control(this.releaseChannelOptions[1]),
       [Controls.Version]: this._builder.control('', Validators.required),
       [Controls.NodeCount]: this._builder.control(this.MIN_REPLICAS_COUNT_DEFAULT_VALUE, Validators.required),
       [Controls.MachineTypes]: this._builder.control(''),
@@ -221,22 +221,37 @@ export class GKEClusterSettingsComponent
 
   private _getGKEKubernetesVersions(): void {
     this.kubernetesVersions = [];
-    const zone = this.controlValue(Controls.Zone)?.main;
-    const mode = this.controlValue(Controls.KubernetesVersionMode);
+    let zone = this.controlValue(Controls.Zone);
+    let mode = this.controlValue(Controls.KubernetesVersionMode);
     let releaseChannel: string;
-    if (mode === KubernetesVersionMode.ReleaseChannel) {
-      const releaseChannelToUpperCase = this.controlValue(Controls.ReleaseChannelOptions)?.main.toUpperCase();
-      releaseChannel = releaseChannelToUpperCase.slice(0, releaseChannelToUpperCase.indexOf(' '));
+
+    if (!zone) {
+      zone = this.control(Controls.Zone).setValue(this.ZONE_DEFAULT_VALUE);
     }
-    this._externalClusterService.getGKEKubernetesVersions(zone, mode, releaseChannel).subscribe(
-      (versions: MasterVersion[]) =>
-        (this.kubernetesVersions = versions.map(version => {
-          if (version.default) {
-            this.control(Controls.Version).setValue({main: version.version});
-          }
-          return version.version;
-        }))
-    );
+
+    if (!mode) {
+      mode = this.control(Controls.KubernetesVersionMode).setValue(this.KubernetesVersionMode.StaticVersion);
+    }
+
+    if (!this.controlValue(Controls.ReleaseChannelOptions)) {
+      this.control(Controls.ReleaseChannelOptions).setValue(this.releaseChannelOptions[1]);
+    }
+
+    if (mode === KubernetesVersionMode.ReleaseChannel) {
+      const releaseChannelToUpperCase = this.controlValue(Controls.ReleaseChannelOptions)?.toUpperCase();
+      releaseChannel = releaseChannelToUpperCase?.slice(0, releaseChannelToUpperCase.indexOf(' '));
+    }
+    if (zone && mode) {
+      this._externalClusterService.getGKEKubernetesVersions(zone, mode, releaseChannel).subscribe(
+        (versions: MasterVersion[]) =>
+          (this.kubernetesVersions = versions.map(version => {
+            if (version.default) {
+              this.control(Controls.Version).setValue(version.version);
+            }
+            return version.version;
+          }))
+      );
+    }
   }
 
   private _getGKEMachineSizesForMachineDeployment(): void {
@@ -259,12 +274,12 @@ export class GKEClusterSettingsComponent
         gke: {
           ...this._externalClusterService.externalCluster.cloud?.gke,
           name: this.controlValue(Controls.Name),
-          zone: this.controlValue(Controls.Zone)?.main,
+          zone: this.controlValue(Controls.Zone),
         } as GKECloudSpec,
       } as ExternalCloudSpec,
       spec: {
         gkeclusterSpec: {
-          initialClusterVersion: this.controlValue(Controls.Version)?.main,
+          initialClusterVersion: this.controlValue(Controls.Version),
           initialNodeCount: this.controlValue(Controls.NodeCount),
         } as GKEClusterSpec,
       } as ExternalClusterSpec,

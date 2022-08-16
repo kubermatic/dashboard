@@ -147,34 +147,35 @@ export class EKSClusterSettingsComponent
       this._externalMachineDeploymentService.isAddMachineDeploymentFormValid = this.form.valid;
     });
 
-    this.form
-      .get(Controls.Vpc)
-      .valueChanges.pipe(debounceTime(this._debounceTime))
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => {
-        const vpc = this.controlValue(Controls.Vpc)?.main;
-        if (vpc) {
-          this._onVPCSelectionChange(vpc);
-        }
-        this.control(Controls.SubnetIds).setValue([]);
-        this.control(Controls.SecurityGroupsIds).setValue([]);
-      });
-
     if (this.isDialogView()) {
       const version = this.cluster.spec.version;
-      this.control(Controls.SecurityGroupsIds).removeValidators(Validators.required);
+      this.control(Controls.Vpc).clearValidators();
+      this.control(Controls.SecurityGroupsIds).clearValidators();
       this.control(Controls.Version).setValue(version.slice(1, version.indexOf('-')));
       this.control(Controls.Version).disable();
       this.control(Controls.Vpc).setValue(this.cluster.spec.eksclusterSpec.vpcConfigRequest.vpcId);
       this.control(Controls.Vpc).disable();
 
       this._externalMachineDeploymentService
-        .getEKSSubnetsForMachineDeployment(this.projectID, this.cluster.id, this.control(Controls.Vpc).value)
+        .getEKSSubnetsForMachineDeployment(this.projectID, this.cluster.id, this.controlValue(Controls.Vpc))
         .subscribe((data: string[]) => {
           this.subnetIds = data;
         });
     } else {
       this._getEKSKubernetesVersions();
+
+      this.form
+        .get(Controls.Vpc)
+        .valueChanges.pipe(debounceTime(this._debounceTime))
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(_ => {
+          const vpc = this.controlValue(Controls.Vpc);
+          if (vpc) {
+            this._onVPCSelectionChange(vpc);
+          }
+          this.control(Controls.SubnetIds).setValue([]);
+          this.control(Controls.SecurityGroupsIds).setValue([]);
+        });
     }
 
     this._externalClusterService.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
@@ -204,7 +205,12 @@ export class EKSClusterSettingsComponent
         finalize(() => (this.isLoadingVpcs = false))
       )
       .subscribe((vpcs: EKSVpc[]) => {
-        this.vpcs = vpcs.map(vpc => vpc.id);
+        this.vpcs = vpcs.map((vpc: EKSVpc) => {
+          if (vpc.default) {
+            this.control(Controls.Vpc).setValue(vpc.id);
+          }
+          return vpc.id;
+        });
       });
   }
 
@@ -231,8 +237,12 @@ export class EKSClusterSettingsComponent
   }
 
   private _updateExternalClusterModel(): void {
-    const indexPosition = 2;
-    const version = this.controlValue(Controls.Version)?.main;
+    let version = this.controlValue(Controls.Version)?.main;
+    const versionSplitArr = version?.split('.');
+    if (versionSplitArr?.length && !(versionSplitArr[2] > 0)) {
+      version = versionSplitArr[0] + '.' + versionSplitArr[1];
+    }
+
     this._externalClusterService.externalCluster = {
       ...this._externalClusterService.externalCluster,
       name: this.controlValue(Controls.Name),
@@ -245,13 +255,13 @@ export class EKSClusterSettingsComponent
       spec: {
         eksclusterSpec: {
           roleArn: this.controlValue(Controls.RoleArn),
-          version: version?.slice(0, version.indexOf('.', indexPosition)),
+          version: version,
           vpcConfigRequest: {
             subnetIds: this.controlValue(Controls.SubnetIds),
             securityGroupIds: this.controlValue(Controls.SecurityGroupsIds),
           },
         } as EKSClusterSpec,
-        version: version?.slice(0, version.indexOf('.', indexPosition)),
+        version: version,
       } as ExternalClusterSpec,
     } as ExternalClusterModel;
   }
