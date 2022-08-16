@@ -20,6 +20,16 @@ limitations under the License.
   <form [formGroup]="form"
         fxLayout="column">
     <mat-form-field fxFlex>
+      <mat-label>Access Key ID</mat-label>
+      <input matInput
+             [formControlName]="Controls.AccessKey"
+             type="password"
+             title="name"
+             autocomplete="off"
+             required>
+    </mat-form-field>
+
+    <mat-form-field fxFlex>
       <mat-label>Secret Access Key</mat-label>
       <input matInput
              [formControlName]="Controls.SecretAccessKey"
@@ -29,15 +39,6 @@ limitations under the License.
              required>
     </mat-form-field>
 
-    <mat-form-field fxFlx>
-      <mat-label>Access Key ID</mat-label>
-      <input matInput
-             [formControlName]="Controls.AccessKey"
-             type="password"
-             title="name"
-             autocomplete="off"
-             required>
-    </mat-form-field>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
