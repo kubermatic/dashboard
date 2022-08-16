@@ -13,20 +13,21 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<div fxLayout="column">
-  <km-property>
-    <div key>
-      <span fxFlex>{{name}}</span>
-      <span *ngIf="total && used">{{used}}/{{total}} {{unit}}</span>
-    </div>
-    <div value>
-      <mat-progress-bar *ngIf="total && used"
-                        class="property-usage-bar"
-                        mode="determinate"
-                        [color]="color"
-                        [value]="getPercentage()"
-                        [matTooltip]="getTooltip()"></mat-progress-bar>
-      <div *ngIf="!total && used">{{used}} {{unit}}</div>
-    </div>
-  </km-property>
-</div>
+<km-property>
+  <div key>
+    <span fxFlex>{{name}}</span>
+    <span *ngIf="total && used">{{used}}/{{total}} {{unit}}</span>
+  </div>
+  <div value
+       fxFlex="100%"
+       fxLayout="column"
+       fxLayoutAlign="flex-end">
+    <mat-progress-bar *ngIf="total && used"
+                      class="property-usage-bar"
+                      mode="determinate"
+                      [color]="color"
+                      [value]="getPercentage()"
+                      [matTooltip]="getTooltip()"></mat-progress-bar>
+    <div *ngIf="!total && used">{{used}} {{unit}}</div>
+  </div>
+</km-property>

@@ -18,6 +18,16 @@ export class AKSCluster {
   imported: boolean;
 }
 
+export class AKSVMSize {
+  name?: string;
+  numberOfCores?: number;
+  numberOfGPUs?: number;
+  osDiskSizeInMB?: number;
+  resourceDiskSizeInMB?: number;
+  memoryInMB?: number;
+  maxDataDiskCount?: number;
+}
+
 export class AKSCloudSpec {
   name: string;
   tenantID?: string;

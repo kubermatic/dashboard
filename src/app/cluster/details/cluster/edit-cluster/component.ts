@@ -134,7 +134,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       [Controls.KubernetesDashboardEnabled]: new FormControl(!!this.cluster.spec.kubernetesDashboard?.enabled),
       [Controls.AdmissionPlugins]: new FormControl(this.cluster.spec.admissionPlugins),
       [Controls.PodNodeSelectorAdmissionPluginConfig]: new FormControl(''),
-      [Controls.EventRateLimitConfig]: new FormControl(''),
+      [Controls.EventRateLimitConfig]: new FormControl(),
       [Controls.Labels]: new FormControl(''),
     });
 
@@ -302,14 +302,19 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         usePodNodeSelectorAdmissionPlugin: null,
         usePodSecurityPolicyAdmissionPlugin: null,
         useEventRateLimitAdmissionPlugin: null,
+        eventRateLimitConfig: null,
         admissionPlugins: this.form.get(Controls.AdmissionPlugins).value,
         podNodeSelectorAdmissionPluginConfig: this.podNodeSelectorAdmissionPluginConfig,
-        eventRateLimitConfig: {
-          namespace: this.form.get(Controls.EventRateLimitConfig).value,
-        },
         containerRuntime: this.form.get(Controls.ContainerRuntime).value,
       },
     };
+
+    if (this.isPluginEnabled(this.admissionPlugin.EventRateLimit)) {
+      patch.spec.eventRateLimitConfig = {
+        namespace: this.form.get(Controls.EventRateLimitConfig).value,
+      };
+    }
+
     return this._clusterService.patch(this.projectID, this.cluster.id, patch).pipe(take(1));
   }
 

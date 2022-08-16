@@ -100,7 +100,7 @@ limitations under the License.
       <ng-container matColumnDef="created">
         <th mat-header-cell
             *matHeaderCellDef
-            class="km-header-cell p-20">Created
+            class="km-header-cell p-20">Imported
         </th>
         <td mat-cell
             *matCellDef="let element">
@@ -130,7 +130,7 @@ limitations under the License.
                         [disabled]="!can(Permission.Delete)">
                   <i class="km-icon-mask km-icon-disconnect"></i>
                 </button>
-                <button *ngIf="!element?.labels || element?.labels['isImported'] !== 'true'"
+                <button *ngIf="!element?.labels || element?.labels['is-imported'] !== 'true'"
                         mat-icon-button
                         [attr.id]="'km-delete-cluster-' + element.name"
                         matTooltip="Delete Cluster"

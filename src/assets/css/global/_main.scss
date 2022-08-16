@@ -55,6 +55,12 @@ hr {
   text-align: center;
 }
 
+.km-no-data-message {
+  font-size: variables.$font-size-body;
+  padding: 30px;
+  text-align: center;
+}
+
 .mat-card {
   .km-mat-row {
     .km-mat-footer-row {

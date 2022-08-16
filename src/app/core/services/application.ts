@@ -18,7 +18,7 @@ import {AppConfigService} from '@app/config.service';
 import {environment} from '@environments/environment';
 import {Application, ApplicationDefinition} from '@shared/entity/application';
 import {Observable, of, timer} from 'rxjs';
-import {catchError, shareReplay, switchMap} from 'rxjs/operators';
+import {catchError, map, shareReplay, switchMap} from 'rxjs/operators';
 
 @Injectable()
 export class ApplicationService {
@@ -39,6 +39,7 @@ export class ApplicationService {
               .pipe(catchError(() => of<ApplicationDefinition[]>([])))
           )
         )
+        .pipe(map(applications => applications.sort((a, b) => a.name.localeCompare(b.name))))
         .pipe(shareReplay({refCount: true, bufferSize: 1}));
     }
     return this._applicationDefinitions$;

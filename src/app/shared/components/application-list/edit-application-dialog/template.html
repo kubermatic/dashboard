@@ -123,14 +123,16 @@ limitations under the License.
             </mat-error>
           </mat-form-field>
         </ng-template>
-        <km-editor [(model)]="valuesConfig"
-                   (modelChange)="onValuesConfigChanged($event)"
-                   height="400px"
-                   header="values.yaml">
-        </km-editor>
-        <km-validate-json-or-yaml [data]="valuesConfig"
-                                  [isOnlyYAML]="true"
-                                  (dataValid)="onValuesConfigValidityChanged($event)"></km-validate-json-or-yaml>
+        <div class="application-values">
+          <km-editor [(model)]="valuesConfig"
+                     (modelChange)="onValuesConfigChanged($event)"
+                     height="370px"
+                     header="values.yaml">
+          </km-editor>
+          <km-validate-json-or-yaml [data]="valuesConfig"
+                                    [isOnlyYAML]="true"
+                                    (dataValid)="onValuesConfigValidityChanged($event)"></km-validate-json-or-yaml>
+        </div>
       </div>
 
     </form>

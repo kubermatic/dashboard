@@ -36,6 +36,7 @@ import {ExternalClusterService} from '@core/services/external-cluster';
 import {ExternalClusterDeleteConfirmationComponent} from '@app/cluster/details/external-cluster/external-cluster-delete-confirmation/component';
 import {ExternalMachineDeploymentService} from '@app/core/services/external-machine-deployment';
 import {NotificationService} from '@app/core/services/notification';
+import _ from 'lodash';
 
 @Component({
   selector: 'km-external-cluster-details',
@@ -82,6 +83,10 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
 
   get securityGroupIds(): string[] {
     return this.cluster?.spec?.eksclusterSpec?.vpcConfigRequest?.securityGroupIds;
+  }
+
+  get showAddMachineDeploymentButton(): boolean {
+    return !_.isEmpty(this.cluster.cloud);
   }
 
   ngOnInit(): void {

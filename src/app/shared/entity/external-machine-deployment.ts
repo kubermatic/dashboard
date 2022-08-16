@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {MachineDeployment} from '@shared/entity/machine-deployment';
-import {StatusIcon} from '@shared/utils/health-status';
+import {HealthStatus, StatusIcon} from '@shared/utils/health-status';
 import {AKSMachineDeploymentCloudSpec} from './provider/aks';
 
 export enum AKSMachineDeploymentMode {
@@ -21,25 +21,34 @@ export enum AKSMachineDeploymentMode {
   System = 'System',
 }
 
+export enum ExternalClusterMDState {
+  Provisioning = 'Provisioning',
+  Running = 'Running',
+  Reconciling = 'Reconciling',
+  Deleting = 'Deleting',
+  Error = 'Error',
+  Unknown = 'Unknown',
+}
+
 export class ExternalMachineDeployment extends MachineDeployment {
+  phase?: ExternalClusterMDPhase;
   cloud: ExternalMachineDeploymentCloudSpec;
 
-  static getStatusIcon(md: ExternalMachineDeployment): StatusIcon {
-    if (md?.deletionTimestamp) {
-      return StatusIcon.Error;
-    } else if (md?.status?.readyReplicas === md?.status?.replicas) {
-      return StatusIcon.Running;
+  static getHealthStatus(md: ExternalMachineDeployment): HealthStatus {
+    switch (md.phase?.state) {
+      case ExternalClusterMDState.Deleting:
+        return new HealthStatus(ExternalClusterMDState.Deleting, StatusIcon.Error);
+      case ExternalClusterMDState.Running:
+        return new HealthStatus(ExternalClusterMDState.Running, StatusIcon.Running);
+      case ExternalClusterMDState.Reconciling:
+        return new HealthStatus(ExternalClusterMDState.Reconciling, StatusIcon.Pending);
+      case ExternalClusterMDState.Provisioning:
+        return new HealthStatus(ExternalClusterMDState.Provisioning, StatusIcon.Pending);
+      case ExternalClusterMDState.Error:
+        return new HealthStatus(md.phase?.statusMessage || ExternalClusterMDState.Error, StatusIcon.Error);
+      default:
+        return new HealthStatus(ExternalClusterMDState.Unknown, StatusIcon.Unknown);
     }
-    return StatusIcon.Pending;
-  }
-
-  static getStatusMessage(md: ExternalMachineDeployment): string {
-    if (md?.deletionTimestamp) {
-      return 'Deleting';
-    } else if (md?.status?.readyReplicas === md?.status?.replicas) {
-      return 'Running';
-    }
-    return 'Provisioning';
   }
 
   static NewEmptyMachineDeployment(): ExternalMachineDeployment {
@@ -108,4 +117,9 @@ export class ExternalMachineDeploymentSpecPatch {
       kubelet: string;
     };
   };
+}
+
+export class ExternalClusterMDPhase {
+  state: ExternalClusterMDState;
+  statusMessage?: string;
 }

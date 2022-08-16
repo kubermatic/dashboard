@@ -16,7 +16,11 @@
 
 .add-application-dialog-content {
   .applications-search {
-    margin: 20px 0;
+    margin-bottom: 20px;
+
+    .km-search-input.mat-form-field {
+      width: 100%;
+    }
   }
 
   .application-option {
@@ -66,5 +70,14 @@
 
   .version-icon-value {
     margin-top: 10px;
+  }
+
+  .application-values {
+    margin-bottom: 20px;
+
+    mat-hint,
+    mat-error {
+      font-size: 75%;
+    }
   }
 }
