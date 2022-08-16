@@ -71,9 +71,8 @@ enum Mode {
 }
 
 export enum VMSizeState {
-  Empty = 'VM Size',
-  Loading = 'Loading...',
   Ready = 'VM Size',
+  Loading = 'Loading...',
 }
 
 @Component({
@@ -109,7 +108,7 @@ export class AKSClusterSettingsComponent
   vmSizes: string[] = [];
   nodePoolVersionsForMD: string[] = [];
   kubernetesVersions: string[] = [];
-  vmSizeLabel: string = VMSizeState.Empty;
+  vmSizeLabel = VMSizeState.Ready;
 
   private readonly _debounceTime = 500;
 
@@ -220,11 +219,7 @@ export class AKSClusterSettingsComponent
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((vmSizes: AKSVMSize[]) => {
           this.vmSizes = vmSizes.map((vmSize: AKSVMSize) => vmSize.name);
-          if (vmSizes?.length) {
-            this.vmSizeLabel = VMSizeState.Ready;
-          } else {
-            this.vmSizeLabel = VMSizeState.Empty;
-          }
+          this.vmSizeLabel = VMSizeState.Ready;
         });
 
       this._getAKSKubernetesVersions();
@@ -232,8 +227,9 @@ export class AKSClusterSettingsComponent
   }
 
   private _clearVmSize(): void {
-    this.vmSizeLabel = VMSizeState.Empty;
+    this.vmSizeLabel = VMSizeState.Ready;
     this.vmSizes = [];
+    this.control(Controls.VmSize).setValue('');
     this.control(Controls.VmSize).disable();
     this._cdr.detectChanges();
   }
