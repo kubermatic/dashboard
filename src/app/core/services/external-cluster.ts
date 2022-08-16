@@ -223,7 +223,7 @@ export class ExternalClusterService {
 
   getAKSLocations(): Observable<AKSLocation[]> {
     const url = `${this._newRestRoot}/providers/aks/locations`;
-    return this._http.get<AKSLocation[]>(url,{headers: this._getAKSHeaders()}).pipe(catchError(() => of<[]>()));
+    return this._http.get<AKSLocation[]>(url, {headers: this._getAKSHeaders()}).pipe(catchError(() => of<[]>()));
   }
 
   getGKEZones(): Observable<GKEZone[]> {
@@ -264,14 +264,14 @@ export class ExternalClusterService {
     return this._http.get<MasterVersion[]>(url).pipe(catchError(() => of<[]>()));
   }
 
-  getEKSRegions(accessKeyID: string, secretAccessKey: string):Observable<string[]> {
+  getEKSRegions(accessKeyID: string, secretAccessKey: string): Observable<string[]> {
     const url = `${this._newRestRoot}/providers/eks/regions`;
-      const credentials = {
-        AccessKeyID: accessKeyID,
-        SecretAccessKey: secretAccessKey,
-      }
-    const headers = new HttpHeaders(credentials)
-    return this._http.get<string[]>(url,{headers}).pipe(catchError(() => of<[]>()))
+    const credentials = {
+      AccessKeyID: accessKeyID,
+      SecretAccessKey: secretAccessKey,
+    };
+    const headers = new HttpHeaders(credentials);
+    return this._http.get<string[]>(url, {headers}).pipe(catchError(() => of<[]>()));
   }
 
   createExternalCluster(projectID: string, externalClusterModel: ExternalClusterModel): Observable<ExternalCluster> {

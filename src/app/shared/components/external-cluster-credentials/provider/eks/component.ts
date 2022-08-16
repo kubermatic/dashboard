@@ -15,7 +15,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {ExternalClusterService} from '@core/services/external-cluster';
-import {Observable, of, Subject} from 'rxjs';
+import {merge, Observable, of, Subject} from 'rxjs';
 import {catchError, take, takeUntil, tap} from 'rxjs/operators';
 
 export enum Controls {
@@ -31,7 +31,7 @@ export enum Controls {
 export class EKSCredentialsComponent implements OnInit, OnDestroy {
   readonly Controls = Controls;
   form: FormGroup;
-  regions: string[] = []
+  regions: string[] = [];
   private readonly _unsubscribe = new Subject<void>();
 
   constructor(
@@ -60,13 +60,13 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
       this._update();
       this._externalClusterService.isPresetEnabled = Object.values(Controls).every(c => !this.form.get(c).value);
-      const accessKeyID = this.form.get(Controls.AccessKeyID).value
-      const secretAccessKey = this.form.get(Controls.SecretAccessKey).value
-      if (accessKeyID && secretAccessKey) {
-        this._externalClusterService.getEKSRegions(accessKeyID, secretAccessKey)
-        .subscribe((regions: string[]) => this.regions = regions)
-      }
     });
+
+    merge(this.form.get(Controls.AccessKeyID).valueChanges, this.form.get(Controls.SecretAccessKey).valueChanges)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        this._getEKSRegions();
+      });
 
     this._externalClusterService.presetChanges
       .pipe(takeUntil(this._unsubscribe))
@@ -78,10 +78,25 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
+  private _getEKSRegions(): void {
+    const accessKeyID = this.form.get(Controls.AccessKeyID).value;
+    const secretAccessKey = this.form.get(Controls.SecretAccessKey).value;
+    if (accessKeyID && secretAccessKey) {
+      this._externalClusterService
+        .getEKSRegions(accessKeyID, secretAccessKey)
+        .subscribe((regions: string[]) => (this.regions = regions));
+      this.form.get(Controls.Region).setValue('eu-central-1');
+    } else {
+      this.regions = [];
+      this.form.get(Controls.Region).setValue('');
+    }
+  }
+
   private _credentialsValidator(control: AbstractControl): Observable<ValidationErrors | null> {
     const accessKeyID = control.get(Controls.AccessKeyID).value;
     const secretAccessKey = control.get(Controls.SecretAccessKey).value;
-    const region = control.get(Controls.Region).value?.main;
+    const region = control.get(Controls.Region).value;
+
     if (!accessKeyID || !secretAccessKey || !region) {
       return of(null);
     }
@@ -101,7 +116,7 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
           name: '',
           accessKeyID: this.form.get(Controls.AccessKeyID).value,
           secretAccessKey: this.form.get(Controls.SecretAccessKey).value,
-          region: this.form.get(Controls.Region).value?.main,
+          region: this.form.get(Controls.Region).value,
         },
       },
     };

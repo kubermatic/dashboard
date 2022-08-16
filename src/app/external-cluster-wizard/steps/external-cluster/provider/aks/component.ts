@@ -102,12 +102,13 @@ export class AKSClusterSettingsComponent
   readonly ErrorType = ErrorType;
   readonly AUTOSCALING_MIN_VALUE = 1;
   readonly AUTOSCALING_MAX_VALUE = 1000;
+  readonly LOCATION_DEFAULT_VALUE = 'eastus';
   @Input() projectID: string;
   @Input() cluster: ExternalCluster;
   isLoadingVmSizes: boolean;
   isLoadingNodePoolVersions: boolean;
   vmSizes: string[] = [];
-  locations: string[]=[]
+  locations: string[] = [];
   nodePoolVersionsForMD: string[] = [];
   kubernetesVersions: string[] = [];
   vmSizeLabel = VMSizeState.Ready;
@@ -225,6 +226,7 @@ export class AKSClusterSettingsComponent
         });
 
       this._getAKSKubernetesVersions();
+      this._getAKSLocations();
     }
   }
 
@@ -256,15 +258,14 @@ export class AKSClusterSettingsComponent
     );
   }
 
-  private_getAKSLocations(): void {
-    this._externalClusterService.getAKSLocations().subscribe(
-      (locations: AKSLocation[]) => {
-        this.locations = locations.map((location: AKSLocation) => location.name)
-      }
-    )
+  private _getAKSLocations(): void {
+    this._externalClusterService.getAKSLocations().subscribe((locations: AKSLocation[]) => {
+      this.locations = locations.map((location: AKSLocation) => location.name);
+      this.control(Controls.Location).setValue(this.LOCATION_DEFAULT_VALUE);
+    });
   }
 
-  private _getAKSVmSizesForMachineDeployment(location?: string): Observable<string[]> {
+  private _getAKSVmSizesForMachineDeployment(location?: string): Observable<AKSVMSize[]> {
     this.isLoadingVmSizes = true;
     return this._externalMachineDeploymentService
       .getAKSVmSizesForMachineDeployment(this.projectID, this.cluster.id, location)
