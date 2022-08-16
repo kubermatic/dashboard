@@ -101,13 +101,23 @@ limitations under the License.
                [options]="instanceTypes"
                [formControlName]="Controls.InstanceType"
                (changed)="onInstanceTypeChange($event)"
+               hint="Select instance types you prefer for this node group."
                label="instance Type"
                inputLabel="Select instance type..."
-               filterBy="pretty_name">
+               filterBy="name">
       <div *option="let instanceType">
         {{instanceType.pretty_name +'('+ instanceType.vcpus+' vCPUs, ' + instanceType.memory+' GB RAM)'}}
       </div>
   </km-combobox>
+
+      <div class="km-dialog-warning"
+         *ngIf="selectedInstanceTypes.length > 1"
+         fxLayoutAlign=" center">
+      <i class="km-icon-warning"></i>
+      <div>Using instances with different resource sizes may affect the scaling of nodes,
+         because Kubernetes Cluster Autoscaler assumes all the nodes within a node group have the same resources
+          such as vCPU and memory.</div>
+    </div>
 
     <km-combobox *ngIf="!isDialogView()"
                  filterBy="roleName"
@@ -129,7 +139,7 @@ limitations under the License.
         </a>
       </ng-container>
     </km-combobox>
-
+    
     <km-number-stepper *ngIf="isDialogView()"
                        [formControlName]="Controls.DiskSize"
                        mode="all"

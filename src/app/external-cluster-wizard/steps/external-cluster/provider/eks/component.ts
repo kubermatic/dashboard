@@ -162,8 +162,6 @@ export class EKSClusterSettingsComponent
   }
 
   ngOnInit(): void {
-    console.log(this.instanceTypes);
-    
     this._initForm();
     this._initSubscriptions();
   }
@@ -262,7 +260,6 @@ export class EKSClusterSettingsComponent
         .getEKSInstanceTypesForMAchineDeployment(this.projectID, this.cluster.id)
         .subscribe((instanceTypes: EKSInstanceTypeList[]) => {
           this.instanceTypes = instanceTypes
-          console.log(this.instanceTypes);
         })
         
       
@@ -297,7 +294,6 @@ export class EKSClusterSettingsComponent
 
   onInstanceTypeChange(instanceType: string[]): void {
     this.selectedInstanceTypes = instanceType
-    console.log(this.selectedInstanceTypes);
   }
 
   private _getEKSVpcs(): void {
