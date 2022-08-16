@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, Input, OnInit} from '@angular/core';
+import {Component, forwardRef, Input, OnInit, SimpleChanges} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidatorFn, Validators} from '@angular/forms';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 
@@ -46,10 +46,21 @@ export class AutocompleteComponent extends BaseFormValidator implements OnInit {
   @Input() isLoading = false;
   @Input() options: string[] = [];
   @Input() validators: ValidatorFn[] = [];
+  @Input() disabled: boolean;
   controls = AutocompleteControls;
 
   constructor(private readonly _builder: FormBuilder) {
     super();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes?.disabled && this.form) {
+      if (this.disabled) {
+        this.form.get(AutocompleteControls.Main).disable();
+      } else if (this.form.get(AutocompleteControls.Main).disabled) {
+        this.form.get(AutocompleteControls.Main).enable();
+      }
+    }
   }
 
   ngOnInit(): void {
@@ -60,5 +71,9 @@ export class AutocompleteComponent extends BaseFormValidator implements OnInit {
     this.form = this._builder.group({
       [AutocompleteControls.Main]: this._builder.control('', this.validators),
     });
+
+    if (this.disabled) {
+      this.form.get(AutocompleteControls.Main).disable();
+    }
   }
 }

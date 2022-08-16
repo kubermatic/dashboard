@@ -211,10 +211,9 @@ export class ExternalClusterService {
     this.clusterStepValidity = false;
     this.isClusterDetailsStepValid = false;
   }
-
   getAKSVmSizes(location?: string): Observable<AKSVMSize[]> {
     const url = `${this._newRestRoot}/providers/aks/vmsizes`;
-    return this._http.get<AKSVMSize[]>(url, {headers: this._getAKSHeaders(location)}).pipe(catchError(() => of<[]>()));
+    return this._http.get<AKSVMSize[]>(url, {headers: this._getAKSHeaders(location)}).pipe(catchError(() => of([])));
   }
 
   getAKSKubernetesVersions(): Observable<MasterVersion[]> {

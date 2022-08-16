@@ -77,6 +77,7 @@ export class ChipAutocompleteComponent implements OnChanges, OnInit, OnDestroy, 
   @Input() label: string;
   @Input() title: string;
   @Input() tags: string[] = [];
+  @Input() disabled = false;
   @Input() description = 'Use comma, enter or space key as the separator.';
   @Input() placeholder = 'Select single or multiple values';
   @Input() required = false;
@@ -90,6 +91,13 @@ export class ChipAutocompleteComponent implements OnChanges, OnInit, OnDestroy, 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes?.tags) {
       this.filteredTags = this._removeSelectedTagsFromList();
+    }
+    if (changes?.disabled && this.form) {
+      if (this.disabled) {
+        this.form.get(Controls.Tags).disable();
+      } else if (this.form.get(Controls.Tags).disabled) {
+        this.form.get(Controls.Tags).enable();
+      }
     }
   }
 
@@ -147,6 +155,10 @@ export class ChipAutocompleteComponent implements OnChanges, OnInit, OnDestroy, 
         this.required ? [Validators.required, KmValidators.unique()] : [KmValidators.unique()]
       ),
     });
+
+    if (this.disabled) {
+      this.form.get(Controls.Tags).disable();
+    }
   }
 
   private _initSubscriptions() {

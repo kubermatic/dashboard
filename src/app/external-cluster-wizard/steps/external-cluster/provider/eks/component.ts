@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, OnDestroy, Input, OnInit} from '@angular/core';
+import {Component, forwardRef, Input, OnDestroy, OnInit} from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -135,6 +135,11 @@ export class EKSClusterSettingsComponent
       [Controls.MinSize]: this._builder.control(DEFAULT_MD_MINSIZE),
       [Controls.DesiredSize]: this._builder.control(DEFAULT_MD_DESIRED_SIZE),
     });
+
+    if (!this.isDialogView()) {
+      this.control(Controls.SubnetIds).disable();
+      this.control(Controls.SecurityGroupsIds).disable();
+    }
   }
 
   private _initSubscriptions(): void {
@@ -160,6 +165,7 @@ export class EKSClusterSettingsComponent
         .getEKSSubnetsForMachineDeployment(this.projectID, this.cluster.id, this.controlValue(Controls.Vpc))
         .subscribe((data: string[]) => {
           this.subnetIds = data;
+          this.control(Controls.SubnetIds).enable();
         });
     } else {
       this._getEKSKubernetesVersions();
@@ -169,12 +175,17 @@ export class EKSClusterSettingsComponent
         .valueChanges.pipe(debounceTime(this._debounceTime))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => {
-          const vpc = this.controlValue(Controls.Vpc);
+          const vpc = this.controlValue(Controls.Vpc)?.main;
           if (vpc) {
             this._onVPCSelectionChange(vpc);
+            this.control(Controls.SubnetIds).enable();
+            this.control(Controls.SecurityGroupsIds).enable();
+          } else {
+            this.control(Controls.SubnetIds).disable();
+            this.control(Controls.SubnetIds).setValue([]);
+            this.control(Controls.SecurityGroupsIds).disable();
+            this.control(Controls.SecurityGroupsIds).setValue([]);
           }
-          this.control(Controls.SubnetIds).setValue([]);
-          this.control(Controls.SecurityGroupsIds).setValue([]);
         });
     }
 
