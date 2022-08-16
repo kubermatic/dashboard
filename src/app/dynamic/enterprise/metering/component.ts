@@ -24,6 +24,7 @@ import {MeteringConfiguration, MeteringReportConfiguration} from '@shared/entity
 import {Subject} from 'rxjs';
 import {filter, map, switchMap, takeUntil} from 'rxjs/operators';
 import {MeteringService} from './service/metering';
+import {Report} from '@app/shared/entity/metering';
 
 @Component({
   selector: 'km-metering',
@@ -33,6 +34,8 @@ export class MeteringComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   config: MeteringConfiguration;
   schedules: MeteringReportConfiguration[];
+  oldReports: Report[] = [];
+  loadOldReportsCard = false;
 
   constructor(
     private readonly _dcService: DatacenterService,
@@ -68,6 +71,13 @@ export class MeteringComponent implements OnInit, OnDestroy {
           this._cdr.detectChanges();
         },
       });
+
+    this._meteringService.oldReports().subscribe(reports => {
+      this.oldReports = reports;
+      if (this.oldReports.length > 0) {
+        this.loadOldReportsCard = true;
+      }
+    });
   }
 
   ngOnDestroy(): void {

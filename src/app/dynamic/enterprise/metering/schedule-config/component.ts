@@ -30,7 +30,6 @@ import {MeteringScheduleEditDialog} from '@app/dynamic/enterprise/metering/sched
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {NotificationService} from '@core/services/notification';
 import {Router} from '@angular/router';
-import {Report} from '@app/shared/entity/metering';
 
 enum Column {
   name = 'name',
@@ -54,9 +53,6 @@ export class MeteringScheduleConfigComponent implements OnInit {
   dataSource = new MatTableDataSource<MeteringReportConfiguration>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-  oldReports: Report[] = [];
-  loadOldReportsCard = false;
-
   constructor(
     private readonly _meteringService: MeteringService,
     private readonly _matDialog: MatDialog,
@@ -67,13 +63,6 @@ export class MeteringScheduleConfigComponent implements OnInit {
   ngOnInit(): void {
     this.dataSource.data = this.schedules;
     this.dataSource.sort = this.sort;
-
-    this._meteringService.oldReports().subscribe(reports => {
-      this.oldReports = reports;
-      if (this.oldReports.length > 0) {
-        this.loadOldReportsCard = true;
-      }
-    });
   }
 
   ngOnChanges(): void {

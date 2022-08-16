@@ -30,3 +30,14 @@ END OF TERMS AND CONDITIONS
                class="km-spinner"
                color="accent"></mat-spinner>
 </ng-container>
+
+<ng-container *ngIf="loadOldReportsCard">
+  <km-old-metering-reports-card [reports]="oldReports"
+                                [isLoadingReports]="false"></km-old-metering-reports-card>
+</ng-container>
+
+<ng-container *ngIf="!loadOldReportsCard && !isLoading()">
+  <mat-spinner [diameter]="50"
+               class="km-spinner"
+               color="accent"></mat-spinner>
+</ng-container>
