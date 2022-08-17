@@ -28,8 +28,8 @@ import {MeteringCredentialsDialog} from '@app/dynamic/enterprise/metering/config
 import {MeteringScheduleAddDialog} from '@app/dynamic/enterprise/metering/schedule-config/add-dialog/component';
 import {MeteringScheduleEditDialog} from '@app/dynamic/enterprise/metering/schedule-config/edit-dialog/component';
 import {MeteringReportListComponent} from '@app/dynamic/enterprise/metering/schedule-config/report-list/component';
-import {MeteringOldReportListComponent} from '@app/dynamic/enterprise/metering/old-reports/list/component';
-import {MeteringOldReportCardComponent} from '@app/dynamic/enterprise/metering/old-reports/card/component';
+import {MeteringLegacyReportListComponent} from '@app/dynamic/enterprise/metering/legacy-reports/list/component';
+import {MeteringLegacyReportCardComponent} from '@app/dynamic/enterprise/metering/legacy-reports/card/component';
 import {SharedModule} from '@shared/module';
 
 const routes: Routes = [
@@ -54,8 +54,8 @@ const routes: Routes = [
     MeteringScheduleAddDialog,
     MeteringScheduleEditDialog,
     MeteringReportListComponent,
-    MeteringOldReportListComponent,
-    MeteringOldReportCardComponent,
+    MeteringLegacyReportListComponent,
+    MeteringLegacyReportCardComponent,
   ],
 })
 export class MeteringModule {}

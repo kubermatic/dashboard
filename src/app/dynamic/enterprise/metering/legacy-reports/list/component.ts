@@ -39,10 +39,10 @@ enum Column {
 }
 
 @Component({
-  selector: 'km-old-metering-reports-list',
+  selector: 'km-metering-legacy-reports-list',
   templateUrl: './template.html',
 })
-export class MeteringOldReportListComponent implements OnInit, OnDestroy {
+export class MeteringLegacyReportListComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   @Input() reports: Report[];
 

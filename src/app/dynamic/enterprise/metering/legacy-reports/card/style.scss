@@ -18,19 +18,54 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {Component, Input} from '@angular/core';
-import {Report} from '@shared/entity/metering';
+@use 'variables';
 
-@Component({
-  selector: 'km-old-metering-reports-card',
-  templateUrl: './template.html',
-})
-export class MeteringOldReportCardComponent {
-  @Input() reports: Report[];
+mat-card-header {
+  cursor: pointer;
+  padding: 0;
+}
 
-  showReports = false;
+.toggled-events {
+  padding-bottom: 8px;
 
-  toggleReports(): void {
-    this.showReports = !this.showReports;
+  mat-card-header {
+    border-radius: variables.$border-radius;
+  }
+}
+
+.mat-card {
+  &:not(.toggled-events) {
+    .mat-card-header {
+      .mat-card-title {
+        margin: 0;
+        padding: 8px 0;
+      }
+
+      .events-title {
+        padding: 8px 0;
+      }
+    }
+  }
+}
+
+.events-title {
+  font-size: variables.$font-size-subhead;
+  line-height: 20px;
+  padding: 8px 30px 16px 0;
+
+  i {
+    margin-right: 10px;
+  }
+}
+
+.km-icon-arrow-down {
+  margin-left: 0;
+}
+
+.mat-card-title {
+  .km-icon-arrow-down,
+  .km-icon-arrow-up {
+    margin-left: 0;
+    margin-right: 18px;
   }
 }

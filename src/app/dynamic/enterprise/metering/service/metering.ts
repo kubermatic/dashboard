@@ -33,7 +33,7 @@ export class MeteringService {
   private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * this._refreshTime);
   private _scheduleConfigurations: Observable<MeteringReportConfiguration[]>;
   private _reports$ = new Map<string, Observable<Report[]>>();
-  private _oldReports$: Observable<Report[]>;
+  private _legacyReports$: Observable<Report[]>;
 
   readonly onConfigurationChange$ = new Subject<void>();
   readonly onCredentialsChange$ = new Subject<void>();
@@ -89,11 +89,11 @@ export class MeteringService {
     return this._http.delete(url);
   }
 
-  oldReports(): Observable<Report[]> {
-    if (!this._oldReports$) {
-      this._oldReports$ = this._getReports();
+  legacyReports(): Observable<Report[]> {
+    if (!this._legacyReports$) {
+      this._legacyReports$ = this._getReports();
     }
-    return this._oldReports$;
+    return this._legacyReports$;
   }
 
   reports(scheduleName: string): Observable<Report[]> {

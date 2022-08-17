@@ -38,7 +38,7 @@ export class MeteringMockService {
     return EMPTY;
   }
 
-  oldReports(): Observable<Report[]> {
+  legacyReports(): Observable<Report[]> {
     return EMPTY;
   }
 

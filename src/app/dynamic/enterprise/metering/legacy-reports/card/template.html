@@ -22,17 +22,19 @@ END OF TERMS AND CONDITIONS
 
 <mat-card>
   <mat-card-header (click)="toggleReports()">
-    <mat-card-title fxFlex
-                    fxLayout="row"
-                    fxLayoutAlign=" center">
-      <div fxFlex>
-        Old Reports <i class="km-icon-mask"
-           [ngClass]="showReports ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
-      </div>
+    <mat-card-title>
+      <i class="km-icon-mask"
+         [ngClass]="showReports ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
+      <span>Legacy Reports</span>
     </mat-card-title>
+    <div fxFlex></div>
+    <span class="events-title">
+      <i class="km-icon-info"></i>
+      {{reports.length}} report<ng-container *ngIf="reports.length !== 1">s</ng-container>
+    </span>
   </mat-card-header>
   <mat-card-content *ngIf="showReports"
                     fxLayout="column">
-    <km-old-metering-reports-list [reports]="reports"></km-old-metering-reports-list>
+    <km-metering-legacy-reports-list [reports]="reports"></km-metering-legacy-reports-list>
   </mat-card-content>
 </mat-card>

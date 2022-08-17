@@ -25,13 +25,14 @@ END OF TERMS AND CONDITIONS
   <km-metering-schedule-config [schedules]="schedules"></km-metering-schedule-config>
 </ng-container>
 
-<ng-container *ngIf="isLoading() || fetchingOldReportsInProgres">
+<ng-container *ngIf="isLoading() || fetchingLegacyReportsInProgres">
   <mat-spinner class="km-spinner"
                [diameter]="50"
                color="accent"></mat-spinner>
 </ng-container>
 
-<ng-container *ngIf="loadOldReportsCard">
-  <km-old-metering-reports-card [reports]="oldReports"
-                                [isLoadingReports]="false"></km-old-metering-reports-card>
+<ng-container *ngIf="showLegacyReportsCard">
+  <km-metering-legacy-reports-card [reports]="legacyReports"
+                                   [isLoadingReports]="false">
+  </km-metering-legacy-reports-card>
 </ng-container>

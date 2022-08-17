@@ -34,9 +34,9 @@ export class MeteringComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   config: MeteringConfiguration;
   schedules: MeteringReportConfiguration[];
-  oldReports: Report[] = [];
-  fetchingOldReportsInProgres = false;
-  loadOldReportsCard = false;
+  legacyReports: Report[] = [];
+  fetchingLegacyReportsInProgres = false;
+  showLegacyReportsCard = false;
 
   constructor(
     private readonly _dcService: DatacenterService,
@@ -73,19 +73,19 @@ export class MeteringComponent implements OnInit, OnDestroy {
         },
       });
 
-    this.fetchingOldReportsInProgres = true;
+    this.fetchingLegacyReportsInProgres = true;
     this._meteringService
-      .oldReports()
+      .legacyReports()
       .pipe(takeUntil(this._unsubscribe))
       .subscribe({
         next: reports => {
-          this.oldReports = reports;
-          if (this.oldReports.length > 0) {
-            this.loadOldReportsCard = true;
+          this.legacyReports = reports;
+          if (this.legacyReports.length > 0) {
+            this.showLegacyReportsCard = true;
           }
         },
         complete: () => {
-          this.fetchingOldReportsInProgres = false;
+          this.fetchingLegacyReportsInProgres = false;
         },
       });
   }
