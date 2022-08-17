@@ -22,6 +22,7 @@
 
 mat-card-header {
   cursor: pointer;
+  height: 32px;
   padding: 0;
 }
 
@@ -46,6 +47,7 @@ mat-card-header {
 }
 
 .km-icon-info {
+  margin-bottom: -2px;
   margin-left: 8px;
 }
 
