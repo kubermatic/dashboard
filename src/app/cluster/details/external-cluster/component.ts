@@ -85,10 +85,6 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
     return this.cluster?.spec?.eksclusterSpec?.vpcConfigRequest?.securityGroupIds;
   }
 
-  get showAddMachineDeploymentButton(): boolean {
-    return !_.isEmpty(this.cluster.cloud);
-  }
-
   ngOnInit(): void {
     this.projectID = this._activatedRoute.snapshot.paramMap.get(PathParam.ProjectID);
     const clusterID = this._activatedRoute.snapshot.paramMap.get(PathParam.ClusterID);
