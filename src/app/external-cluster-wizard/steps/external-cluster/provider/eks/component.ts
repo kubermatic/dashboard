@@ -32,7 +32,7 @@ import {
   EKSSecurityGroup,
   EKSSubnet,
   EKSVpc,
-  EKSInstanceTypeList
+  EKSInstanceTypeList  
 } from '@shared/entity/provider/eks';
 import {forkJoin} from 'rxjs';
 import {debounceTime, takeUntil, tap} from 'rxjs/operators';
@@ -101,6 +101,7 @@ enum NodeRoleState {
 @Component({
   selector: 'km-eks-cluster-settings',
   templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -122,7 +123,7 @@ export class EKSClusterSettingsComponent
   vpcLabel = VpcState.Ready;
   vpcs: EKSVpc[] = [];
   instanceTypes: EKSInstanceTypeList[] = [];
-  selectedInstanceTypes: string[] = []
+  selectedInstanceTypes: string[] = [];
   kubernetesVersions: string[] = [];
   maxNodeCount: number;
   minNodeCount: number;
@@ -206,6 +207,7 @@ export class EKSClusterSettingsComponent
     const DEFAULT_MD_MAXSIZE = 1;
     const DEFAULT_MD_MINSIZE = 1;
     const DEFAULT_MD_DESIRED_SIZE = 1;
+    const DEFAULT_INSTANCE_TYPE = ['t3.medium'];
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control('', [Validators.required, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR]),
       [Controls.RoleArn]: this._builder.control('', Validators.required),
@@ -217,7 +219,7 @@ export class EKSClusterSettingsComponent
       [Controls.MaxSize]: this._builder.control(DEFAULT_MD_MAXSIZE),
       [Controls.MinSize]: this._builder.control(DEFAULT_MD_MINSIZE),
       [Controls.DesiredSize]: this._builder.control(DEFAULT_MD_DESIRED_SIZE),
-      [Controls.InstanceType]: this._builder.control('')
+      [Controls.InstanceType]: this._builder.control(DEFAULT_INSTANCE_TYPE),
     });
 
     if (!this.isDialogView()) {
@@ -255,14 +257,7 @@ export class EKSClusterSettingsComponent
           this.subnetLabel = this.subnets?.length ? SubnetState.Ready : SubnetState.Empty;
           this._cdr.detectChanges();
         });
-
-      this._externalMachineDeploymentService
-        .getEKSInstanceTypesForMAchineDeployment(this.projectID, this.cluster.id)
-        .subscribe((instanceTypes: EKSInstanceTypeList[]) => {
-          this.instanceTypes = instanceTypes
-        })
-        
-      
+      this._getEKSInstanceTypesForMAchineDeployment();
     } else {
       this._getEKSKubernetesVersions();
 
@@ -293,7 +288,11 @@ export class EKSClusterSettingsComponent
   }
 
   onInstanceTypeChange(instanceType: string[]): void {
-    this.selectedInstanceTypes = instanceType
+    this.selectedInstanceTypes = instanceType;
+  }
+
+  instanceDisplayName(): string[] {
+    return this.selectedInstanceTypes?.map(instance => ` ${instance}`);
   }
 
   private _getEKSVpcs(): void {
@@ -351,6 +350,16 @@ export class EKSClusterSettingsComponent
           ? ClusterServiceRoleState.Ready
           : ClusterServiceRoleState.Empty;
       });
+    }
+
+  private _getEKSInstanceTypesForMAchineDeployment(): void {
+    this._externalMachineDeploymentService
+      .getEKSInstanceTypesForMAchineDeployment(this.projectID, this.cluster.id)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe((instanceTypes: EKSInstanceTypeList[]) => {
+        this.instanceTypes = instanceTypes;
+        this._cdr.detectChanges();
+      });
   }
 
   private _updateExternalClusterModel(): void {
@@ -389,7 +398,6 @@ export class EKSClusterSettingsComponent
       name: this.controlValue(Controls.Name),
       cloud: {
         eks: {
-          instanceTypes: this.selectedInstanceTypes,
           diskSize: this.controlValue(Controls.DiskSize),
           scalingConfig: {
             desiredSize: this.controlValue(Controls.DesiredSize),
@@ -401,6 +409,11 @@ export class EKSClusterSettingsComponent
         } as EKSMachineDeploymentCloudSpec,
       } as ExternalMachineDeploymentCloudSpec,
     } as ExternalMachineDeployment;
+
+    if (this.selectedInstanceTypes?.length > 0) {
+      this._externalMachineDeploymentService.externalMachineDeployment.cloud.eks.instanceTypes =
+        this.selectedInstanceTypes;
+    }
   }
 
   private _getNodeRoleForMachineDeployment(projectID: string, clusterID: string): void {

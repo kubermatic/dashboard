@@ -94,21 +94,22 @@ limitations under the License.
       </ng-container>
     </km-combobox>
 
-    <km-combobox [required]="true"
-               [grouped]="false"
-               [multiple]="true"
-               [selected]="selectedInstanceTypes"
-               [options]="instanceTypes"
-               [formControlName]="Controls.InstanceType"
-               (changed)="onInstanceTypeChange($event)"
-               hint="Select instance types you prefer for this node group."
-               label="instance Type"
-               inputLabel="Select instance type..."
-               filterBy="name">
-      <div *option="let instanceType">
-        {{instanceType.pretty_name +'('+ instanceType.vcpus+' vCPUs, ' + instanceType.memory+' GB RAM)'}}
-      </div>
-  </km-combobox>
+    <ng-container *ngIf="isDialogView()">
+      <km-combobox [grouped]="false"
+                   [multiple]="true"
+                   [options]="instanceTypes"
+                   [formControlName]="Controls.InstanceType"
+                   (changed)="onInstanceTypeChange($event)"
+                   [valueFormatter]="instanceDisplayName.bind(this)"
+                   hint="Select the instance types for a node group."
+                   label="instance Type"
+                   inputLabel="Select instance type by name"
+                   selectBy="name"
+                   filterBy="name">
+        <div *option="let instanceType">
+          {{instanceType.pretty_name +' ('+ instanceType.vcpus+' vCPUs, ' + instanceType.memory+' GB RAM)'}}
+        </div>
+      </km-combobox>
 
       <div class="km-dialog-warning"
          *ngIf="selectedInstanceTypes.length > 1"
@@ -140,6 +141,8 @@ limitations under the License.
       </ng-container>
     </km-combobox>
     
+    </ng-container>
+
     <km-number-stepper *ngIf="isDialogView()"
                        [formControlName]="Controls.DiskSize"
                        mode="all"
