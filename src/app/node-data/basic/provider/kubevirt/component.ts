@@ -155,6 +155,32 @@ export class KubeVirtBasicNodeDataComponent
         }
       });
 
+    this.form
+      .get(Controls.PodAffinityPreset)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(value => {
+        const antiAffinityControl = this.form.get(Controls.PodAntiAffinityPreset);
+        if (value && antiAffinityControl.enabled) {
+          antiAffinityControl.reset();
+          antiAffinityControl.disable();
+        } else if (!value && antiAffinityControl.disabled) {
+          antiAffinityControl.enable();
+        }
+      });
+
+    this.form
+      .get(Controls.PodAntiAffinityPreset)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(value => {
+        const affinityControl = this.form.get(Controls.PodAffinityPreset);
+        if (value && affinityControl.enabled) {
+          affinityControl.reset();
+          affinityControl.disable();
+        } else if (!value && affinityControl.disabled) {
+          affinityControl.enable();
+        }
+      });
+
     this._init();
     this._nodeDataService.nodeData = this._getNodeData();
 
