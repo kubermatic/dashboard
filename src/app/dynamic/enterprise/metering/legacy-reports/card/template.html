@@ -20,16 +20,18 @@
 END OF TERMS AND CONDITIONS
 -->
 
-<mat-card>
+<mat-card [ngClass]="{'toggled': showReports}">
   <mat-card-header (click)="toggleReports()">
     <mat-card-title>
       <i class="km-icon-mask"
          [ngClass]="showReports ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
       <span>Legacy Reports</span>
+      <div class="km-icon-info km-pointer tooltip"
+           matTooltip="Legacy reports were generated before KKP version 2.21. Reports generated after 2.21 have improved file format and differentiate between namespace and cluster reports.">
+      </div>
     </mat-card-title>
     <div fxFlex></div>
-    <span class="events-title">
-      <i class="km-icon-info"></i>
+    <span class="card-title">
       {{reports.length}} report<ng-container *ngIf="reports.length !== 1">s</ng-container>
     </span>
   </mat-card-header>

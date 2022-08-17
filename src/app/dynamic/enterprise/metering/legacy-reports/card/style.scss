@@ -25,30 +25,13 @@ mat-card-header {
   padding: 0;
 }
 
-.toggled-events {
-  padding-bottom: 8px;
-
+.toggled {
   mat-card-header {
     border-radius: variables.$border-radius;
   }
 }
 
-.mat-card {
-  &:not(.toggled-events) {
-    .mat-card-header {
-      .mat-card-title {
-        margin: 0;
-        padding: 8px 0;
-      }
-
-      .events-title {
-        padding: 8px 0;
-      }
-    }
-  }
-}
-
-.events-title {
+.card-title {
   font-size: variables.$font-size-subhead;
   line-height: 20px;
   padding: 8px 30px 16px 0;
@@ -60,6 +43,10 @@ mat-card-header {
 
 .km-icon-arrow-down {
   margin-left: 0;
+}
+
+.km-icon-info {
+  margin-left: 8px;
 }
 
 .mat-card-title {
