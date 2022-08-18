@@ -14,30 +14,122 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <form [formGroup]="form"
-      fxLayout="column">
+      fxLayout="column"
+      fxLayoutGap="8px">
+
+  <mat-button-toggle-group class="openstack-button-toggle-group"
+                           group="bindingType"
+                           (change)="onCredentialsTypeChanged($event.value)">
+    <mat-button-toggle [value]="CredentialsType.Default"
+                       [checked]="credentialsType === CredentialsType.Default">
+      User Credentials
+    </mat-button-toggle>
+    <mat-button-toggle [value]="CredentialsType.Application"
+                       [checked]="credentialsType === CredentialsType.Application">
+      Application Credentials
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+
+  <form *ngIf="credentialsType === CredentialsType.Default"
+        [formGroup]="defaultCredentialsForm"
+        fxLayout="column"
+        fxLayoutGap="8px">
+    <mat-form-field fxFlex>
+      <mat-label>Username</mat-label>
+      <input matInput
+             [formControlName]="Control.Username"
+             [name]="Control.Username"
+             type="text"
+             autocomplete="off"
+             required>
+      <mat-error *ngIf="defaultCredentialsForm.get(Control.Username).hasError('required')">
+        Username is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field fxFlex>
+      <mat-label>Password</mat-label>
+      <input matInput
+             [formControlName]="Control.Password"
+             type="password"
+             autocomplete="off"
+             required>
+      <mat-error *ngIf="defaultCredentialsForm.get(Control.Password).hasError('required')">
+        Password is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field fxFlex>
+      <mat-label>Project</mat-label>
+      <input [formControlName]="Control.Project"
+             [name]="Control.Project"
+             [required]="!defaultCredentialsForm.get(Control.ProjectID).value"
+             matInput
+             autocomplete="off">
+      <mat-error *ngIf="defaultCredentialsForm.get(Control.Project).hasError('required')">
+        Project is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field fxFlex>
+      <mat-label>Project ID</mat-label>
+      <input [formControlName]="Control.ProjectID"
+             [name]="Control.ProjectID"
+             [required]="!defaultCredentialsForm.get(Control.Project).value"
+             matInput
+             autocomplete="off">
+      <mat-error *ngIf="defaultCredentialsForm.get(Control.ProjectID).hasError('required')">
+        Project ID is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <div *ngIf="defaultCredentialsForm.get(Control.Project).value || defaultCredentialsForm.get(Control.ProjectID).value"
+         fxFlex
+         fxLayout="row"
+         fxLayoutAlign="start center"
+         class="warning-container">
+      <i class="km-icon-warning"></i>
+      <p class="km-text km-no-margin">When switching from application to user credentials, ensure that you are configuring the project already in use.</p>
+    </div>
+  </form>
+  <form *ngIf="credentialsType === CredentialsType.Application"
+        [formGroup]="applicationCredentialsForm"
+        fxLayout="column"
+        fxLayoutGap="8px">
+    <mat-form-field fxFlex>
+      <mat-label>Application Credential ID</mat-label>
+      <input [formControlName]="Control.ApplicationCredentialID"
+             [name]="Control.ApplicationCredentialID"
+             matInput
+             autocomplete="off"
+             required>
+      <mat-error *ngIf="applicationCredentialsForm.get(Control.ApplicationCredentialID).hasError('required')">
+        Application Credential ID is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field fxFlex>
+      <mat-label>Application Credential Secret</mat-label>
+      <input [formControlName]="Control.ApplicationCredentialSecret"
+             [name]="Control.ApplicationCredentialSecret"
+             matInput
+             type="password"
+             autocomplete="off"
+             required>
+      <mat-error *ngIf="applicationCredentialsForm.get(Control.ApplicationCredentialSecret).hasError('required')">
+        Application Credential Secret is <strong>required</strong>.
+      </mat-error>
+    </mat-form-field>
+  </form>
+
   <mat-form-field fxFlex>
-    <mat-label>Username</mat-label>
-    <input matInput
-           [formControlName]="Control.Username"
-           [name]="Control.Username"
-           type="text"
-           title="Username"
+    <mat-label>Domain</mat-label>
+    <input [formControlName]="Control.Domain"
+           [name]="Control.Domain"
+           matInput
            autocomplete="off"
-           required>
-    <mat-error *ngIf="form.get(Control.Username).hasError('required')">
-      Username is <strong>required</strong>.
-    </mat-error>
-  </mat-form-field>
-  <mat-form-field fxFlex>
-    <mat-label>Password</mat-label>
-    <input matInput
-           [formControlName]="Control.Password"
-           type="password"
-           title="Password"
-           autocomplete="off"
-           required>
-    <mat-error *ngIf="form.get(Control.Password).hasError('required')">
-      Password is <strong>required</strong>.
+           [required]="credentialsType === CredentialsType.Default">
+    <mat-error *ngIf="form.get(Control.Domain).hasError('required')">
+      Domain is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
 </form>
