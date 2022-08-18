@@ -1,0 +1,60 @@
+//                Kubermatic Enterprise Read-Only License
+//                       Version 1.0 ("KERO-1.0”)
+//                   Copyright © 2022 Kubermatic GmbH
+//
+// 1. You may only view, read and display for studying purposes the source
+//    code of the software licensed under this license, and, to the extent
+//    explicitly provided under this license, the binary code.
+// 2. Any use of the software which exceeds the foregoing right, including,
+//    without limitation, its execution, compilation, copying, modification
+//    and distribution, is expressly prohibited.
+// 3. THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
+//    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+//    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+//    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+//    CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+//    TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+//    SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+// END OF TERMS AND CONDITIONS
+
+@use 'variables';
+
+mat-card-header {
+  cursor: pointer;
+  height: 32px;
+  padding: 0;
+}
+
+.toggled {
+  mat-card-header {
+    border-radius: variables.$border-radius;
+  }
+}
+
+.card-title {
+  font-size: variables.$font-size-subhead;
+  line-height: 20px;
+  padding: 8px 30px 16px 0;
+
+  i {
+    margin-right: 10px;
+  }
+}
+
+.km-icon-arrow-down {
+  margin-left: 0;
+}
+
+.km-icon-info {
+  margin-bottom: -2px;
+  margin-left: 8px;
+}
+
+.mat-card-title {
+  .km-icon-arrow-down,
+  .km-icon-arrow-up {
+    margin-left: 0;
+    margin-right: 18px;
+  }
+}

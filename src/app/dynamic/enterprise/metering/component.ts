@@ -24,6 +24,7 @@ import {MeteringConfiguration, MeteringReportConfiguration} from '@shared/entity
 import {Subject} from 'rxjs';
 import {filter, map, switchMap, takeUntil} from 'rxjs/operators';
 import {MeteringService} from './service/metering';
+import {Report} from '@app/shared/entity/metering';
 
 @Component({
   selector: 'km-metering',
@@ -33,6 +34,9 @@ export class MeteringComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   config: MeteringConfiguration;
   schedules: MeteringReportConfiguration[];
+  legacyReports: Report[] = [];
+  fetchingLegacyReportsInProgres = false;
+  showLegacyReportsCard = false;
 
   constructor(
     private readonly _dcService: DatacenterService,
@@ -66,6 +70,22 @@ export class MeteringComponent implements OnInit, OnDestroy {
         },
         error: _ => {
           this._cdr.detectChanges();
+        },
+      });
+
+    this.fetchingLegacyReportsInProgres = true;
+    this._meteringService
+      .legacyReports()
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe({
+        next: reports => {
+          this.legacyReports = reports;
+          if (this.legacyReports.length > 0) {
+            this.showLegacyReportsCard = true;
+          }
+        },
+        complete: () => {
+          this.fetchingLegacyReportsInProgres = false;
         },
       });
   }

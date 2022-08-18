@@ -1,7 +1,7 @@
 <!--
                Kubermatic Enterprise Read-Only License
                       Version 1.0 ("KERO-1.0”)
-                  Copyright © 2020 Kubermatic GmbH
+                  Copyright © 2022 Kubermatic GmbH
 
 1. You may only view, read and display for studying purposes the source
    code of the software licensed under this license, and, to the extent
@@ -20,19 +20,23 @@
 END OF TERMS AND CONDITIONS
 -->
 
-<ng-container *ngIf="!isLoading()">
-  <km-metering-config [config]="config"></km-metering-config>
-  <km-metering-schedule-config [schedules]="schedules"></km-metering-schedule-config>
-</ng-container>
-
-<ng-container *ngIf="isLoading() || fetchingLegacyReportsInProgres">
-  <mat-spinner class="km-spinner"
-               [diameter]="50"
-               color="accent"></mat-spinner>
-</ng-container>
-
-<ng-container *ngIf="showLegacyReportsCard">
-  <km-metering-legacy-reports-card [reports]="legacyReports"
-                                   [isLoadingReports]="false">
-  </km-metering-legacy-reports-card>
-</ng-container>
+<mat-card [ngClass]="{'toggled': showReports}">
+  <mat-card-header (click)="toggleReports()">
+    <mat-card-title>
+      <i class="km-icon-mask"
+         [ngClass]="showReports ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
+      <span>Legacy Reports</span>
+      <div class="km-icon-info km-pointer tooltip"
+           matTooltip="Legacy reports were generated before KKP version 2.21. Reports generated after 2.21 have improved file format and differentiate between namespace and cluster reports.">
+      </div>
+    </mat-card-title>
+    <div fxFlex></div>
+    <span class="card-title">
+      {{reports.length}} report<ng-container *ngIf="reports.length !== 1">s</ng-container>
+    </span>
+  </mat-card-header>
+  <mat-card-content *ngIf="showReports"
+                    fxLayout="column">
+    <km-metering-legacy-reports-list [reports]="reports"></km-metering-legacy-reports-list>
+  </mat-card-content>
+</mat-card>
