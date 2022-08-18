@@ -83,7 +83,7 @@ export class ProjectService {
     if (!this._allProjects$) {
       this._allProjects$ = merge(this._refreshTimer$, this.onProjectsUpdate).pipe(
         switchMap(_ => this._getProjects(true)),
-        shareReplay(1)
+        shareReplay({refCount: true, bufferSize: 1})
       );
     }
 

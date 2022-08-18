@@ -18,16 +18,16 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {Injectable, OnDestroy} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable, merge, timer, Subject, of} from 'rxjs';
-import {switchMap, shareReplay, map, takeUntil, catchError} from 'rxjs/operators';
+import {Injectable} from '@angular/core';
 import {environment} from '@environments/environment';
-import {QuotaDetails, Quota, QuotaVariables} from '@shared/entity/quota';
-import {AppConfigService} from '../../../config.service';
+import {Quota, QuotaDetails, QuotaVariables} from '@shared/entity/quota';
+import {merge, Observable, of, Subject, timer} from 'rxjs';
+import {catchError, map, shareReplay, switchMap, takeUntil} from 'rxjs/operators';
+import {AppConfigService} from '@app/config.service';
 
 @Injectable()
-export class QuotaService implements OnDestroy {
+export class QuotaService {
   private _unsubscribe = new Subject<void>();
 
   constructor(private _http: HttpClient, private readonly _appConfigService: AppConfigService) {}
@@ -44,17 +44,11 @@ export class QuotaService implements OnDestroy {
     if (!this._quotas$) {
       this._quotas$ = merge(this._refreshTimer$, this._quotasRefresh$).pipe(
         switchMap(() => this._getQuotas()),
-        shareReplay(1),
-        takeUntil(this._unsubscribe)
+        shareReplay({refCount: true, bufferSize: 1})
       );
     }
 
     return this._quotas$;
-  }
-
-  ngOnDestroy(): void {
-    this._unsubscribe.next();
-    this._unsubscribe.complete();
   }
 
   refreshQuotas(): void {
@@ -78,7 +72,7 @@ export class QuotaService implements OnDestroy {
       switchMap(_ =>
         this._http.get<QuotaDetails>(`${this._newRestRoot}/projects/${projectId}/quota`).pipe(catchError(_ => of(null)))
       ),
-      shareReplay(1),
+      shareReplay({refCount: true, bufferSize: 1}),
       takeUntil(this._unsubscribe)
     );
   }
