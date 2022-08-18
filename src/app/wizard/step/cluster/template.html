@@ -89,7 +89,15 @@ limitations under the License.
                          fxLayoutGap="50px"
                          [formControlName]="Controls.IPFamily">
           <mat-radio-button [value]="IPFamily.IPv4">IPv4</mat-radio-button>
-          <mat-radio-button [value]="IPFamily.DualStack">IPv4 and IPv6 (Dual Stack)</mat-radio-button>
+          <mat-radio-button [value]="IPFamily.DualStack">
+            <div fxFlex
+                 fxLayout="row"
+                 fxLayoutAlign=" center">
+              <span>IPv4 and IPv6 (Dual Stack)</span>
+              <i class="km-icon-info km-pointer"
+                 matTooltip="Dual Stack is a technology preview feature, some limitations may apply depending on the chosen provider. Please see the KKP documentation for more details."></i>
+            </div>
+          </mat-radio-button>
         </mat-radio-group>
 
         <km-expansion-panel expandLabel="ADVANCED NETWORK CONFIGURATION"
