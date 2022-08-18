@@ -15,7 +15,8 @@ limitations under the License.
 -->
 <form [formGroup]="form">
   <mat-form-field fxFlex
-                  class="km-dropdown-with-suffix">
+                  class="km-dropdown-with-suffix"
+                  [ngClass]="customClasses">
     <mat-label>{{label}}</mat-label>
     <mat-select #select
                 class="km-select-ellipsis"
@@ -57,7 +58,7 @@ limitations under the License.
                           fxLayout="row">
         <div fxFlex
              fxLayoutAlign="start">
-          {{ valueFormatter ? valueFormatter(selected) : selected }}
+          {{ valueFormatter ? valueFormatter(selected) : multiple ? formatMultiple(selected) : selected }}
         </div>
 
         <div fxFlex
@@ -73,7 +74,7 @@ limitations under the License.
         </div>
       </mat-select-trigger>
     </mat-select>
-    <mat-error *ngIf="required && hasOptions() && form.get(controls.Select).hasError('required')">
+    <mat-error *ngIf="required && !!hasOptions() && form.get(controls.Select).hasError('required')">
       {{label}} is <strong>required</strong>.
     </mat-error>
     <mat-hint *ngIf="hint">{{hint}}</mat-hint>

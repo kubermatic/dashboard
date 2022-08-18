@@ -69,6 +69,7 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
   @Input() valueFormatter: (selected: string | string[]) => string;
   @Input() multiple = false;
   @Input() customId = undefined;
+  @Input() customClasses: Array<string> = [];
 
   @Output() changed = new EventEmitter<string | string[]>();
   @ContentChild(OptionDirective, {read: TemplateRef}) optionTemplate;
@@ -121,6 +122,10 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
       this._inputEl.nativeElement.value = '';
       this.filterByInput[this.filterBy] = '';
     }
+  }
+
+  formatMultiple(value: string | string[]): string {
+    return value?.length ? (value as string[]).join(', ') : '';
   }
 
   reset(): void {
