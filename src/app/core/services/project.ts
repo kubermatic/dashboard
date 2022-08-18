@@ -23,6 +23,7 @@ import {Project, ProjectModel, ProjectStatus} from '@shared/entity/project';
 import {View} from '@shared/entity/common';
 import {EMPTY, merge, Observable, of, Subject, timer} from 'rxjs';
 import {catchError, map, shareReplay, switchMap, take} from 'rxjs/operators';
+import _ from 'lodash';
 
 @Injectable()
 export class ProjectService {
@@ -136,7 +137,10 @@ export class ProjectService {
 
   private _getProjects(displayAll: boolean): Observable<Project[]> {
     const url = `${this._restRoot}/projects?displayAll=${displayAll}`;
-    return this._http.get<Project[]>(url).pipe(catchError(() => of<Project[]>()));
+    return this._http.get<Project[]>(url).pipe(
+      map(projects => _.sortBy(projects, project => project.name.toLowerCase())),
+      catchError(() => of<Project[]>())
+    );
   }
 
   private _getProject(projectID: string): Observable<Project> {

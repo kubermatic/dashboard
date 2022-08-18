@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {AbstractControl, AsyncValidator, AsyncValidatorFn, ValidationErrors} from '@angular/forms';
+import {AbstractControl, AsyncValidator, ValidationErrors} from '@angular/forms';
 import {GlobalModule} from '@core/services/global/module';
 import {LabelService} from '@core/services/label';
 import {ResourceLabelMap, ResourceType} from '@shared/entity/common';
@@ -40,12 +40,5 @@ export class RestrictedLabelKeyNameValidator implements AsyncValidator {
       }),
       catchError(() => of(null))
     );
-  }
-}
-
-export class AsyncValidators {
-  static RestrictedLabelKeyName(resourceType: ResourceType): AsyncValidatorFn {
-    const validator = new RestrictedLabelKeyNameValidator(resourceType);
-    return validator.validate.bind(validator);
   }
 }

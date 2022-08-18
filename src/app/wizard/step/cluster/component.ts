@@ -48,7 +48,6 @@ import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {AdminSettings} from '@shared/entity/settings';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
-import {AsyncValidators} from '@shared/validators/async-label-form.validator';
 import {IPV4_CIDR_PATTERN_VALIDATOR} from '@shared/validators/others';
 import {KmValidators} from '@shared/validators/validators';
 import {combineLatest, merge} from 'rxjs';
@@ -56,6 +55,7 @@ import {filter, startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators
 import * as semver from 'semver';
 import {coerce, compare} from 'semver';
 import {StepBase} from '../base';
+import {AsyncValidators} from '@shared/validators/async.validators';
 
 enum Controls {
   Name = 'name',

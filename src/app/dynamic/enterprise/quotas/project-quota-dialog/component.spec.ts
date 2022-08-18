@@ -31,6 +31,7 @@ import {ProjectMockService} from '@test/services/project-mock';
 import {QuotaMockService} from '@test/services/quota-mock';
 import {UserMockService} from '@test/services/user-mock';
 import {ProjectQuotaDialogComponent} from './component';
+import {GlobalModule} from '@core/services/global/module';
 
 describe('AddProjectQuotaDialogComponent', () => {
   let fixture: ComponentFixture<ProjectQuotaDialogComponent>;
@@ -39,7 +40,7 @@ describe('AddProjectQuotaDialogComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ProjectQuotaDialogComponent],
-      imports: [BrowserModule, NoopAnimationsModule, SharedModule, MatDialogModule],
+      imports: [BrowserModule, NoopAnimationsModule, SharedModule, MatDialogModule, GlobalModule],
       providers: [
         {provide: QuotaService, useClass: QuotaMockService},
         {provide: UserService, useClass: UserMockService},

@@ -60,23 +60,43 @@ END OF TERMS AND CONDITIONS
       <mat-card-content fxLayout="column">
         <div class="km-detail-row">Project Quota</div>
 
-        <div class="km-detail-row"
-             *ngIf="quotaDetails.quota.cpu">
-          <span>CPU</span>
-          <span>{{quotaDetails.status.globalUsage.cpu ?? 0}}/{{quotaDetails.quota.cpu}}</span>
-        </div>
+        <ng-container *ngTemplateOutlet="detailRow; context: {
+         label: 'CPU',
+         usage: quotaDetails.status.globalUsage.cpu,
+         quota: quotaDetails.quota.cpu
+         }"></ng-container>
 
-        <div class="km-detail-row"
-             *ngIf="quotaDetails.quota.memory">
-          <span>Memory</span>
-          <span>{{quotaDetails.status.globalUsage.memory ?? 0}}/{{quotaDetails.quota.memory}}</span>
-        </div>
+        <ng-container *ngTemplateOutlet="detailRow; context: {
+         label: 'Memory',
+         usage: quotaDetails.status.globalUsage.memory,
+         quota: quotaDetails.quota.memory,
+         unit: 'GB'
+         }"></ng-container>
 
-        <div class="km-detail-row"
-             *ngIf="quotaDetails.quota.storage">
-          <span>Disk</span>
-          <span>{{quotaDetails.status.globalUsage.storage ?? 0}}/{{quotaDetails.quota.storage}}</span>
-        </div>
+        <ng-container *ngTemplateOutlet="detailRow; context: {
+         label: 'Disk',
+         usage: quotaDetails.status.globalUsage.storage,
+         quota: quotaDetails.quota.storage,
+         unit: 'GB'
+         }"></ng-container>
+
+        <ng-template #detailRow
+                     let-label="label"
+                     let-usage="usage"
+                     let-quota="quota"
+                     let-unit="unit">
+          <div class="km-detail-row"
+               *ngIf="quota"
+               fxLayout="row"
+               fxLayoutAlign="space-between center">
+            <span fxFlex>{{ label }}</span>
+
+            <span fxFlex="20"
+                  dir="rtl">{{ usage ?? 0 }}/{{ quota }}</span>
+            <span fxFlex="10"
+                  dir="rtl">{{ unit }}</span>
+          </div>
+        </ng-template>
       </mat-card-content>
     </mat-card>
 

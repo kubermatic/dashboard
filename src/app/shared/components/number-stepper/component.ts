@@ -34,6 +34,7 @@ import {
   Validator,
 } from '@angular/forms';
 import {noop, Subject} from 'rxjs';
+import _ from 'lodash';
 
 enum Error {
   Required = 'required',
@@ -116,14 +117,16 @@ export class NumberStepperComponent implements AfterViewInit, OnDestroy, Control
   }
 
   set value(val: number | string) {
-    const parsed = this.type === 'decimal' ? this._decimalPipe.transform(val, '1.0-4') : val?.toString();
-    if (!Number.isNaN(parsed) && parsed !== null && parsed !== undefined) {
+    const parsed =
+      this.type === 'decimal' ? this._decimalPipe.transform(val, '1.0-4')?.replace(/,/g, '') : val?.toString();
+
+    if (_.isNil(parsed) || _.isNaN(parsed)) {
+      this._value = null;
+    } else {
       this._value = this.type === 'decimal' ? Number.parseFloat(parsed) : Number.parseInt(parsed);
-      this._onChange(val);
-    } else if (!parsed) {
-      this._value = parsed;
-      this._onChange(val);
     }
+
+    this._onChange(this._value);
     this._cdr.detectChanges();
   }
 
