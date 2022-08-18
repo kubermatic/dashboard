@@ -64,6 +64,7 @@ export class ApplicationDefinitionSpec {
   description: string;
   method: ApplicationMethod;
   versions: ApplicationVersion[];
+  defaultValues?: string | object;
 }
 
 export class ApplicationVersion {

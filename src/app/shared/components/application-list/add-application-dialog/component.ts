@@ -125,7 +125,13 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
   }
 
   private _initForm(): void {
-    this.valuesConfig = '';
+    if (!_.isEmpty(this.selectedApplication.spec.defaultValues)) {
+      try {
+        this.valuesConfig = y.dump(this.selectedApplication.spec.defaultValues);
+      } catch (e) {
+        this.valuesConfig = '';
+      }
+    }
     const version = this.selectedApplication.spec.versions[0]?.version;
     this.form = this._builder.group({
       [Controls.Version]: this._builder.control(version, Validators.required),
@@ -138,7 +144,7 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
         KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,
         this._duplicateNameValidator(),
       ]),
-      [Controls.Values]: this._builder.control(''),
+      [Controls.Values]: this._builder.control(this.valuesConfig),
     });
 
     if (version) {
