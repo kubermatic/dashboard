@@ -34,6 +34,7 @@ export class MeteringService {
   private _scheduleConfigurations: Observable<MeteringReportConfiguration[]>;
   private _reports$ = new Map<string, Observable<Report[]>>();
   private _legacyReports$: Observable<Report[]>;
+  private readonly _legacyReportPrefix = 'report-';
 
   readonly onConfigurationChange$ = new Subject<void>();
   readonly onCredentialsChange$ = new Subject<void>();
@@ -91,7 +92,7 @@ export class MeteringService {
 
   legacyReports(): Observable<Report[]> {
     if (!this._legacyReports$) {
-      this._legacyReports$ = this._getReports();
+      this._legacyReports$ = this._getReports(this._legacyReportPrefix);
     }
     return this._legacyReports$;
   }
