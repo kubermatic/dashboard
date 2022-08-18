@@ -56,7 +56,7 @@ limitations under the License.
         <i class="km-icon-mask km-icon-download"></i>
         <span>Get Kubeconfig</span>
       </button>
-      <button *ngIf="showAddMachineDeploymentButton"
+      <button *ngIf="!cluster.cloud.bringYourOwn"
               mat-flat-button
               fxLayoutAlign="center center"
               type="button"

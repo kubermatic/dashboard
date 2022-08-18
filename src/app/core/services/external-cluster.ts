@@ -17,7 +17,7 @@ import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {environment} from '@environments/environment';
-import {AKSCluster, AKSVMSize} from '@shared/entity/provider/aks';
+import {AKSCluster, AKSLocation, AKSVMSize} from '@shared/entity/provider/aks';
 import {EKSCluster, EKSVpc} from '@shared/entity/provider/eks';
 import {GKECluster, GKEZone} from '@shared/entity/provider/gke';
 import {
@@ -221,6 +221,11 @@ export class ExternalClusterService {
     return this._http.get<MasterVersion[]>(url).pipe(catchError(() => of<[]>()));
   }
 
+  getAKSLocations(): Observable<AKSLocation[]> {
+    const url = `${this._newRestRoot}/providers/aks/locations`;
+    return this._http.get<AKSLocation[]>(url, {headers: this._getAKSHeaders()}).pipe(catchError(() => of([])));
+  }
+
   getGKEZones(): Observable<GKEZone[]> {
     const url = `${this._newRestRoot}/providers/gke/zones`;
     return this._http.get<GKEZone[]>(url, {headers: this._getGKEHeaders()}).pipe(catchError(() => of<[]>()));
@@ -257,6 +262,16 @@ export class ExternalClusterService {
   getEKSKubernetesVersions(): Observable<MasterVersion[]> {
     const url = `${this._newRestRoot}/providers/eks/versions`;
     return this._http.get<MasterVersion[]>(url).pipe(catchError(() => of<[]>()));
+  }
+
+  getEKSRegions(accessKeyID: string, secretAccessKey: string): Observable<string[]> {
+    const url = `${this._newRestRoot}/providers/eks/regions`;
+    const credentials = {
+      AccessKeyID: accessKeyID,
+      SecretAccessKey: secretAccessKey,
+    };
+    const headers = new HttpHeaders(credentials);
+    return this._http.get<string[]>(url, {headers}).pipe(catchError(() => of([])));
   }
 
   createExternalCluster(projectID: string, externalClusterModel: ExternalClusterModel): Observable<ExternalCluster> {

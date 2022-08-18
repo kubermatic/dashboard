@@ -17,6 +17,7 @@ import {StatusIcon} from '@shared/utils/health-status';
 import {AKSCloudSpec, AKSClusterSpec} from './provider/aks';
 import {GKECloudSpec, GKEClusterSpec} from './provider/gke';
 import {EKSCloudSpec, EKSClusterSpec} from './provider/eks';
+import {BringYourOwnCloudSpec} from './cluster';
 
 export enum DeleteExternalClusterAction {
   Delete = 'delete',
@@ -99,6 +100,7 @@ export class ExternalCloudSpec {
   aks?: AKSCloudSpec;
   eks?: EKSCloudSpec;
   gke?: GKECloudSpec;
+  bringYourOwn?: BringYourOwnCloudSpec;
 }
 
 export enum ExternalClusterState {

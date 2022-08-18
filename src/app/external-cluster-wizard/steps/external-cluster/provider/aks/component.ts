@@ -37,6 +37,7 @@ import {
   AgentPoolBasics,
   AKSCloudSpec,
   AKSClusterSpec,
+  AKSLocation,
   AKSMachineDeploymentCloudSpec,
   AKSNodegroupScalingConfig,
   AKSNodePoolVersionForMachineDeployments,
@@ -101,11 +102,13 @@ export class AKSClusterSettingsComponent
   readonly ErrorType = ErrorType;
   readonly AUTOSCALING_MIN_VALUE = 1;
   readonly AUTOSCALING_MAX_VALUE = 1000;
+  readonly DEFAULT_LOCATION = 'eastus';
   @Input() projectID: string;
   @Input() cluster: ExternalCluster;
   isLoadingVmSizes: boolean;
   isLoadingNodePoolVersions: boolean;
   vmSizes: string[] = [];
+  locations: string[] = [];
   nodePoolVersionsForMD: string[] = [];
   kubernetesVersions: string[] = [];
   vmSizeLabel = VMSizeState.Ready;
@@ -223,6 +226,7 @@ export class AKSClusterSettingsComponent
         });
 
       this._getAKSKubernetesVersions();
+      this._getAKSLocations();
     }
   }
 
@@ -252,6 +256,20 @@ export class AKSClusterSettingsComponent
           return version.version;
         }))
     );
+  }
+
+  private _getAKSLocations(): void {
+    this._externalClusterService
+      .getAKSLocations()
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe((locations: AKSLocation[]) => {
+        this.locations = locations.map((location: AKSLocation) => {
+          if (location.name === this.DEFAULT_LOCATION) {
+            this.control(Controls.Location).setValue(this.DEFAULT_LOCATION);
+          }
+          return location.name;
+        });
+      });
   }
 
   private _getAKSVmSizesForMachineDeployment(location?: string): Observable<AKSVMSize[]> {

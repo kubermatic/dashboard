@@ -104,3 +104,8 @@ export class AKSNetworkProfile {
 export class AKSNodePoolVersionForMachineDeployments {
   version: string;
 }
+
+export class AKSLocation {
+  name: string;
+  regionCategory: string;
+}
