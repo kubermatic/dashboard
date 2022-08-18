@@ -23,8 +23,6 @@ END OF TERMS AND CONDITIONS
 <table class="km-table"
        mat-table
        matSort
-       matSortActive="name"
-       matSortDirection="asc"
        [dataSource]="dataSource">
   <ng-container [matColumnDef]="column.name">
     <th mat-header-cell
@@ -63,25 +61,27 @@ END OF TERMS AND CONDITIONS
         *matCellDef="let element">
       <div class="km-table-actions"
            fxLayoutAlign="end">
-        <ng-container *ngIf="isProcessingReport(element)">
+        <ng-container *ngIf="isProcessingReport(element); else actionButtons">
           <mat-spinner color="accent"
                        class="km-spinner"
                        fxFlexAlign=" center"
                        [diameter]="25"></mat-spinner>
         </ng-container>
 
-        <button id="km-download-report-button"
-                mat-icon-button
-                kmThrottleClick
-                (throttleClick)="download(element.name)">
-          <i class="km-icon-mask km-icon-download"></i>
-        </button>
+        <ng-template #actionButtons>
+          <button id="km-download-report-button"
+                  mat-icon-button
+                  kmThrottleClick
+                  (throttleClick)="download(element.name)">
+            <i class="km-icon-mask km-icon-download"></i>
+          </button>
 
-        <button mat-icon-button
-                kmThrottleClick
-                (throttleClick)="remove(element.name)">
-          <i class="km-icon-mask km-icon-delete"></i>
-        </button>
+          <button mat-icon-button
+                  kmThrottleClick
+                  (throttleClick)="remove(element.name)">
+            <i class="km-icon-mask km-icon-delete"></i>
+          </button>
+        </ng-template>
       </div>
     </td>
   </ng-container>
