@@ -17,7 +17,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {UserService} from '@core/services/user';
-import {ExternalCluster} from '@shared/entity/external-cluster';
+import {ExternalCluster, ExternalClusterState} from '@shared/entity/external-cluster';
 import {NodeMetrics} from '@shared/entity/metrics';
 import {Node, NodeIPAddress} from '@shared/entity/node';
 import {NodeUtils} from '@shared/utils/node';
@@ -36,7 +36,6 @@ export class ExternalNodeListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() nodes: Node[] = [];
   @Input() nodesMetrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
   @Input() projectID: string;
-  @Input() isClusterRunning = false;
   @Input() isInitialized = false;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -72,11 +71,15 @@ export class ExternalNodeListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isLoadingData(): boolean {
-    return (_.isEmpty(this.nodes) && !this.isClusterRunning) || !this.isInitialized;
+    return (_.isEmpty(this.nodes) && !this.isRunning()) || !this.isInitialized;
   }
 
   hasNoData(): boolean {
-    return _.isEmpty(this.nodes) && this.isClusterRunning && this.isInitialized;
+    return _.isEmpty(this.nodes) && this.isRunning() && this.isInitialized;
+  }
+
+  isRunning(): boolean {
+    return this.cluster?.status?.state === ExternalClusterState.Running;
   }
 
   getNodeHealthStatus(n: Node): HealthStatus {
