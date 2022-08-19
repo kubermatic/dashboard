@@ -91,10 +91,18 @@ END OF TERMS AND CONDITIONS
                fxLayoutAlign="space-between center">
             <span fxFlex>{{ label }}</span>
 
-            <span fxFlex="20"
-                  dir="rtl">{{ usage ?? 0 }}/{{ quota }}</span>
-            <span fxFlex="10"
-                  dir="rtl">{{ unit }}</span>
+            <div fxFlex="70%"
+                 fxLayout="row wrap"
+                 fxLayoutGap="5px"
+                 fxLayoutAlign="flex-end center">
+              <span fxLayoutAlign="flex-end">
+                {{ usage ?? 0 }}/{{ quota }}
+              </span>
+              <span fxFlex="15%"
+                    fxLayoutAlign="flex-end">
+                {{ unit }}
+              </span>
+            </div>
           </div>
         </ng-template>
       </mat-card-content>
