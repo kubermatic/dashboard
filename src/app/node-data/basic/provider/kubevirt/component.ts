@@ -299,6 +299,7 @@ export class KubeVirtBasicNodeDataComponent
 
   onNodeAffinityPresetValuesChange(values: string[]): void {
     this.nodeAffinityPresetValues = values;
+    this._nodeDataService.nodeData.spec.cloud.kubevirt.nodeAffinityPreset.Values = values;
   }
 
   private get _flavorsObservable(): Observable<KubeVirtVMInstancePreset[]> {
