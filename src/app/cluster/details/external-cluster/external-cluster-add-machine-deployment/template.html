@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <form>
-  <km-dialog-title>Add External Machine Deployment</km-dialog-title>
+  <km-dialog-title>Add {{ cluster?.cloud.eks ? 'Node Group' : 'Node Pool'}}</km-dialog-title>
   <mat-dialog-content class="km-add-node-outer">
     <km-eks-cluster-settings *ngIf="cluster.cloud.eks"
                              [projectID]="projectID"
