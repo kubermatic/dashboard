@@ -135,7 +135,7 @@ export class QuotasComponent implements OnInit {
         switchMap(_ => this._quotaService.deleteQuota(name))
       )
       .subscribe(_ => {
-        this._notificationService.success(`Deleting the <b>${subjectHumanReadableName ?? name}</b> quota`);
+        this._notificationService.success(`Deleting the ${subjectHumanReadableName ?? name} quota`);
         this._quotaService.refreshQuotas();
       });
   }
