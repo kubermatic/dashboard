@@ -56,15 +56,13 @@ $project-card-width: 330px;
   }
 
   .mat-card {
+    @include mixins.size($project-card-width, $project-card-height-default, true);
+
     box-shadow: variables.$border-box-shadow;
     margin-top: 20px;
     padding: 0;
 
-    &.project-card-community {
-      @include mixins.size($project-card-width, $project-card-height-default, true);
-    }
-
-    &.project-card-enterprise {
+    &.project-card-extended {
       @include mixins.size($project-card-width, $project-card-height-extended, true);
     }
 

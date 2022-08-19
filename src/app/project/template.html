@@ -236,7 +236,7 @@ limitations under the License.
 
     <mat-card *ngFor="let project of dataSource.filteredData; trackBy: projectTrackBy"
               (click)="selectProject(project)"
-              [ngClass]="{'active-project-card': isProjectActive(project), 'project-card-community': !isEnterpriseEdition, 'project-card-enterprise': isEnterpriseEdition}">
+              [ngClass]="{'active-project-card': isProjectActive(project), 'project-card-extended': isEnterpriseEdition && hasQuota}">
       <mat-card-header>
         <i mat-card-avatar
            [matTooltip]="project.status"
@@ -314,9 +314,10 @@ limitations under the License.
                 class="km-label-primary">External Project</span>
         </div>
 
-        <div fxLayoutAlign="start start">
+        <div *ngIf="hasQuota"
+             fxLayoutAlign="start start">
           <router-outlet name="quota-widget"
-                         (activate)="onActivate($event, project.id)"></router-outlet>
+                         (activate)="onActivate($event, project.id, true)"></router-outlet>
         </div>
       </mat-card-content>
     </mat-card>

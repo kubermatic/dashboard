@@ -45,11 +45,13 @@ import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
 import {CookieService} from 'ngx-cookie-service';
 import {Subject} from 'rxjs';
-import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {DeleteProjectConfirmationComponent} from './delete-project/component';
 import {EditProjectComponent} from './edit-project/component';
 import {DynamicModule} from '@app/dynamic/module-registry';
 import {QuotaWidgetComponent} from '../dynamic/enterprise/quotas/quota-widget/component';
+import {QuotaService} from '../dynamic/enterprise/quotas/service';
+import {GlobalModule} from '@core/services/global/module';
 
 @Component({
   selector: 'km-project',
@@ -69,9 +71,11 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   settings: UserSettings;
   restrictProjectCreation = false;
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
+  hasQuota: boolean;
 
   private readonly _maxOwnersLen = 30;
   private _apiSettings: UserSettings;
+  private _quotaService: QuotaService;
   private _settingsChange = new EventEmitter<void>();
   private _unsubscribe: Subject<void> = new Subject<void>();
 
@@ -114,7 +118,11 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _cdr: ChangeDetectorRef,
     private readonly _settingsService: SettingsService,
     @Inject(COOKIE_DI_TOKEN) private readonly _cookie: Cookie
-  ) {}
+  ) {
+    if (this.isEnterpriseEdition) {
+      this._quotaService = GlobalModule.injector.get(QuotaService);
+    }
+  }
 
   ngOnInit(): void {
     this.dataSource.data = this.projects;
@@ -180,6 +188,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       if (this._shouldRedirectToProjectLandingPage()) {
         this._redirectToProjectLandingPage();
       }
+      this.verifyQuotas(this.projects);
       this.isInitializing = false;
       this.selectDefaultProject();
       this._cdr.detectChanges();
@@ -198,7 +207,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     this._cdr.detectChanges();
   }
 
-  projectTrackBy(project: Project): string {
+  projectTrackBy(_: number, project: Project): string {
     return project.id;
   }
 
@@ -212,6 +221,24 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
 
   onSearch(query: string): void {
     this.dataSource.filter = query;
+  }
+
+  verifyQuotas(projects: Project[]): void {
+    this.hasQuota = false;
+
+    if (!this.isEnterpriseEdition) {
+      return;
+    }
+
+    for (const project of projects) {
+      const quota$ = this.currentUser.isAdmin
+        ? this._quotaService.quotas.pipe(map(quotas => quotas.find(({subjectName}) => subjectName === project.id)))
+        : this._quotaService.getProjectQuota(project.id);
+
+      quota$.pipe(filter(Boolean), takeUntil(this._unsubscribe)).subscribe(_ => {
+        this.hasQuota = true;
+      });
+    }
   }
 
   private _filter(project: Project, query: string): boolean {
@@ -503,11 +530,12 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       });
   }
 
-  onActivate(component: QuotaWidgetComponent, projectId: string): void {
+  onActivate(component: QuotaWidgetComponent, projectId: string, showEmptyPlaceholder = false): void {
     component.projectId = projectId;
     component.showIcon = this.showCards;
     component.showAsCard = false;
     component.showDetailsOnHover = false;
+    component.showEmptyPlaceholder = showEmptyPlaceholder;
   }
 
   private _setDisplayedColumns(): void {

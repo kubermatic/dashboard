@@ -45,8 +45,11 @@ export class QuotaWidgetComponent implements OnInit, OnDestroy {
   @Input() showAsCard = true;
   @Input() showIcon = true;
   @Input() showDetailsOnHover = true;
+  @Input() showEmptyPlaceholder = false;
   quotaPercentage: QuotaVariables;
   quotaDetails: QuotaDetails;
+
+  isLoading: boolean;
 
   showDetails$ = this._showDetails$.asObservable().pipe(debounceTime(this._debounce));
 
@@ -69,6 +72,7 @@ export class QuotaWidgetComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.isLoading = true;
     this._initSubscriptions();
   }
 
@@ -104,6 +108,10 @@ export class QuotaWidgetComponent implements OnInit, OnDestroy {
       this.quotaDetails = quotaDetails;
       this._setQuotaPercentages(this.quotaDetails);
       this._cdr.detectChanges();
+    });
+
+    quota$.pipe(take(1)).subscribe(_ => {
+      this.isLoading = false;
     });
   }
 

@@ -38,6 +38,8 @@ import {View} from '@shared/entity/common';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import {UserService} from '@core/services/user';
 import {GroupConfig} from '@shared/model/Config';
+import {QuotaWidgetComponent} from '../dynamic/enterprise/quotas/quota-widget/component';
+import {DynamicModule} from '../dynamic/module-registry';
 
 @Component({
   selector: 'km-project-overview',
@@ -62,6 +64,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   clusterTemplatesChange = new Subject<void>();
   backupsChange = new Subject<void>();
   firstVisitToOverviewPage: string;
+  isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   private _projectChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
   private _unsubscribeLoadMembers = new Subject<void>();
@@ -100,6 +103,12 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
 
   hasPermission(view: View): boolean {
     return MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, view, Permission.View);
+  }
+
+  onActivate(component: QuotaWidgetComponent): void {
+    component.projectId = this.project.id;
+    component.showQuotaWidgetDetails = true;
+    component.showIcon = false;
   }
 
   private _initSubscriptions() {
