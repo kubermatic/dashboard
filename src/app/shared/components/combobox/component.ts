@@ -123,6 +123,10 @@ export class FilteredComboboxComponent extends BaseFormValidator implements OnIn
     }
   }
 
+  formatMultiple(value: string | string[]): string {
+    return value?.length ? (value as string[]).join(', ') : '';
+  }
+
   reset(): void {
     this.selected = null;
     this.form.get(ComboboxControls.Select).setValue(this.selected);

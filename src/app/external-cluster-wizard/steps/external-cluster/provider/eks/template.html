@@ -15,15 +15,14 @@ limitations under the License.
 -->
 <form [formGroup]="form"
       [fxLayout]="isDialogView() ? 'column' : 'row'"
-      fxLayoutGap="30px"
       fxLayout.md="column"
-      fxLayoutGap.md="30px"
       fxLayout.sm="column"
-      fxLayoutGap.sm="30px">
+      fxLayout.xs="column"
+      fxLayoutGap="20px">
 
   <div [fxFlex]="isDialogView() ? '100%' : '50%'"
        fxLayout="column"
-       fxLayoutGap="8px">
+       fxLayoutGap="20px">
 
     <mat-card-header *ngIf="!isDialogView()"
                      class="km-no-padding">
@@ -59,6 +58,7 @@ limitations under the License.
              matInput
              type="text"
              autocomplete="off" />
+      <mat-hint>Selected kubernetes version for your nodes.</mat-hint>
     </mat-form-field>
 
     <km-autocomplete *ngIf="!isDialogView()"
@@ -87,16 +87,17 @@ limitations under the License.
 
     <km-number-stepper *ngIf="isDialogView()"
                        [formControlName]="Controls.DiskSize"
-                       mode="errors"
+                       mode="all"
                        label="Disk Size in GB"
                        min="1"
+                       hint="Enter the size of the attached EBS volume for each node."
                        required>
     </km-number-stepper>
   </div>
 
   <div fxFlex="50%"
        fxLayout="column"
-       fxLayoutGap="8px">
+       fxLayoutGap="20px">
 
     <mat-card-header class="km-no-padding">
       <mat-card-title>Networking</mat-card-title>
@@ -110,29 +111,48 @@ limitations under the License.
                [formControlName]="Controls.Vpc">
     </km-select>
 
-    <mat-form-field *ngIf="isDialogView()">
-      <mat-label>VPC</mat-label>
-      <input matInput
-             type="text"
-             autocomplete="off"
-             [formControlName]="Controls.Vpc" />
-    </mat-form-field>
 
-    <km-chip-autocomplete label="Subnet"
-                          placeholder="Select Subnet IDs"
-                          [tags]="subnetIds"
-                          [required]="true"
-                          [disabled]="form.get(Controls.SubnetIds).disabled"
-                          [formControlName]="Controls.SubnetIds"></km-chip-autocomplete>
+    <div *ngIf="isDialogView()">
+      <mat-form-field>
+        <mat-label>VPC</mat-label>
+        <input matInput
+               type="text"
+               autocomplete="off"
+               [formControlName]="Controls.Vpc" />
+        <mat-hint>Selected VPC for your nodes.</mat-hint>
+      </mat-form-field>
+    </div>
 
-    <km-chip-autocomplete *ngIf="!isDialogView()"
-                          label="Security Groups"
-                          placeholder="Select SecurityGroup IDs"
-                          [tags]="securityGroupIds"
-                          [required]="true"
-                          [disabled]="form.get(Controls.SecurityGroupsIds).disabled"
-                          [formControlName]="Controls.SecurityGroupsIds">
-    </km-chip-autocomplete>
+    <km-combobox #subnetCombobox
+                 filterBy="subnetId"
+                 inputLabel="Select Subnets..."
+                 [hint]="getHint(Controls.SubnetIds)"
+                 [required]="true"
+                 [multiple]="true"
+                 [label]="subnetLabel"
+                 [options]="subnets"
+                 [formControlName]="Controls.SubnetIds"
+                 [isDisabled]="form.get(Controls.SubnetIds).disabled">
+      <div *option="let subnet">
+        {{subnet?.subnetId}} ({{subnet?.availabilityZone}})
+      </div>
+    </km-combobox>
+
+    <km-combobox *ngIf="!isDialogView()"
+                 #securityGroupCombobox
+                 filterBy="groupId"
+                 hint="Choose the security groups to apply to the EKS-managed Elastic Network Interfaces that are created in your worker node subnets"
+                 inputLabel="Select Security Groups..."
+                 [required]="true"
+                 [multiple]="true"
+                 [label]="securityGroupLabel"
+                 [options]="securityGroups"
+                 [formControlName]="Controls.SecurityGroupsIds"
+                 [isDisabled]="form.get(Controls.SecurityGroupsIds).disabled">
+      <div *option="let securityGroup">
+        {{securityGroup?.groupId}}
+      </div>
+    </km-combobox>
 
     <ng-container *ngIf="isDialogView()">
       <mat-card-header class="km-no-padding">

@@ -39,3 +39,14 @@ export interface EKSVpc {
   default: boolean;
   id: string;
 }
+
+export class EKSSubnet {
+  availabilityZone: string;
+  subnetId: string;
+  vpcId: string;
+}
+
+export class EKSSecurityGroup {
+  groupId: string;
+  vpcId: string;
+}

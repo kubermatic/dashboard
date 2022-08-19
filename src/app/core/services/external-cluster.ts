@@ -18,7 +18,7 @@ import {Router} from '@angular/router';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {environment} from '@environments/environment';
 import {AKSCluster, AKSLocation, AKSVMSize} from '@shared/entity/provider/aks';
-import {EKSCluster, EKSVpc} from '@shared/entity/provider/eks';
+import {EKSCluster, EKSSecurityGroup, EKSSubnet, EKSVpc} from '@shared/entity/provider/eks';
 import {GKECluster, GKEZone} from '@shared/entity/provider/gke';
 import {
   DeleteExternalClusterAction,
@@ -211,6 +211,7 @@ export class ExternalClusterService {
     this.clusterStepValidity = false;
     this.isClusterDetailsStepValid = false;
   }
+
   getAKSVmSizes(location?: string): Observable<AKSVMSize[]> {
     const url = `${this._newRestRoot}/providers/aks/vmsizes`;
     return this._http.get<AKSVMSize[]>(url, {headers: this._getAKSHeaders(location)}).pipe(catchError(() => of([])));
@@ -247,16 +248,16 @@ export class ExternalClusterService {
     return this._http.get<EKSVpc[]>(url, {headers: this._getEKSHeaders()}).pipe(catchError(() => of<[]>()));
   }
 
-  getEKSSubnets(vpcId: string): Observable<string[]> {
+  getEKSSubnets(vpcId: string): Observable<EKSSubnet[]> {
     const url = `${this._newRestRoot}/providers/eks/subnets`;
     const headers: HttpHeaders = this._getEKSHeaders(vpcId);
-    return this._http.get<string[]>(url, {headers}).pipe(catchError(() => of<[]>()));
+    return this._http.get<EKSSubnet[]>(url, {headers}).pipe(catchError(() => of([])));
   }
 
-  getEKSSecurityGroups(vpcId: string): Observable<string[]> {
+  getEKSSecurityGroups(vpcId: string): Observable<EKSSecurityGroup[]> {
     const url = `${this._newRestRoot}/providers/eks/securitygroups`;
     const headers: HttpHeaders = this._getEKSHeaders(vpcId);
-    return this._http.get<string[]>(url, {headers}).pipe(catchError(() => of<[]>()));
+    return this._http.get<EKSSecurityGroup[]>(url, {headers}).pipe(catchError(() => of([])));
   }
 
   getEKSKubernetesVersions(): Observable<MasterVersion[]> {
@@ -291,8 +292,7 @@ export class ExternalClusterService {
       default:
         return throwError(() => 'Not implemented');
     }
-
-    return this._http.post<ExternalCluster>(url, externalClusterModel, {headers}).pipe(catchError(() => of(null)));
+    return this._http.post<ExternalCluster>(url, externalClusterModel, {headers});
   }
 
   showDisconnectClusterDialog(cluster: ExternalCluster, projectID: string): void {

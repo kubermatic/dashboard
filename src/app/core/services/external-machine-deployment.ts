@@ -26,6 +26,7 @@ import {MasterVersion} from '@shared/entity/cluster';
 import {ExternalAddMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/external-cluster-add-machine-deployment/component';
 import {AKSNodePoolVersionForMachineDeployments, AKSVMSize} from '@app/shared/entity/provider/aks';
 import {GCPDiskType, GCPMachineSize} from '@app/shared/entity/provider/gcp';
+import {EKSSubnet} from '@shared/entity/provider/eks';
 
 @Injectable()
 export class ExternalMachineDeploymentService {
@@ -56,9 +57,9 @@ export class ExternalMachineDeploymentService {
     this._isAddMachineDeploymentFormValid = valid;
   }
 
-  getEKSSubnetsForMachineDeployment(projectID: string, clusterID: string, vpcId: string): Observable<string[]> {
+  getEKSSubnetsForMachineDeployment(projectID: string, clusterID: string, vpcId: string): Observable<EKSSubnet[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/eks/subnets`;
-    return this._httpClient.get<string[]>(url, {headers: {VpcId: vpcId}}).pipe(catchError(() => of<[]>()));
+    return this._httpClient.get<EKSSubnet[]>(url, {headers: {VpcId: vpcId}}).pipe(catchError(() => of<[]>()));
   }
 
   getAKSVmSizesForMachineDeployment(projectID: string, clusterID: string, location: string): Observable<AKSVMSize[]> {

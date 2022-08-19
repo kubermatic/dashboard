@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import {ChangeDetectorRef, Component, forwardRef, Input, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, forwardRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -26,7 +26,7 @@ import {ExternalClusterService} from '@core/services/external-cluster';
 import {NameGeneratorService} from '@core/services/name-generator';
 import {ErrorType} from '@shared/types/error-type';
 import {Observable} from 'rxjs';
-import {debounceTime, filter, finalize, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {debounceTime, finalize, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {
   ExternalCloudSpec,
   ExternalCluster,
@@ -51,6 +51,8 @@ import {
   ExternalMachineDeploymentCloudSpec,
 } from '@app/shared/entity/external-machine-deployment';
 import {MasterVersion} from '@app/shared/entity/cluster';
+import {EKSSecurityGroup} from '@shared/entity/provider/eks';
+import {ComboboxControls, FilteredComboboxComponent} from '@shared/components/combobox/component';
 
 enum Controls {
   Name = 'name',
@@ -107,11 +109,15 @@ export class AKSClusterSettingsComponent
   @Input() cluster: ExternalCluster;
   isLoadingVmSizes: boolean;
   isLoadingNodePoolVersions: boolean;
-  vmSizes: string[] = [];
+  vmSizes: AKSVMSize[] = [];
+  vmSizeLabel = VMSizeState.Ready;
+  securityGroups: EKSSecurityGroup[] = [];
   locations: string[] = [];
   nodePoolVersionsForMD: string[] = [];
   kubernetesVersions: string[] = [];
-  vmSizeLabel = VMSizeState.Ready;
+
+  @ViewChild('vmSizeCombobox')
+  private readonly _vmSizeCombobox: FilteredComboboxComponent;
 
   private readonly _debounceTime = 500;
 
@@ -159,17 +165,42 @@ export class AKSClusterSettingsComponent
     }
   }
 
+  vmSizeDisplayName(vmSizeName: string): string {
+    const vmSize = this.vmSizes.find((vmSize: AKSVMSize) => vmSize.name === vmSizeName);
+    if (!vmSize) {
+      return vmSizeName;
+    }
+    return `${vmSize.name}, ${vmSize.numberOfCores} vCPUs, ${vmSize.memoryInMB}MB RAM`;
+  }
+
+  getHint(control: Controls): string {
+    switch (control) {
+      case Controls.Location:
+        if (!this.isDialogView()) {
+          if (this.form.get(Controls.Location).value) {
+            return 'VM size availability varies by region.';
+          }
+          return 'Enter location to fetch VM sizes';
+        }
+        return 'Set the VM Size for this node.';
+
+      default:
+        return '';
+    }
+  }
+
   private _initForm(): void {
     const MIN_COUNT_DEFAULT_VALUE = 1;
     const MAX_COUNT_DEFAULT_VALUE = 5;
     const DEFAULT_MODE = 'System';
+    const DEFAULT_NO_OF_NODES = 1;
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control('', [Validators.required, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR]),
       [Controls.Location]: this._builder.control('', Validators.required),
       [Controls.NodeResourceGroup]: this._builder.control('', Validators.required),
       [Controls.KubernetesVersion]: this._builder.control('', Validators.required),
       [Controls.NodePoolName]: this._builder.control('', [Validators.required, AKS_POOL_NAME_VALIDATOR]),
-      [Controls.Count]: this._builder.control(1, Validators.required),
+      [Controls.Count]: this._builder.control(DEFAULT_NO_OF_NODES, Validators.required),
       [Controls.VmSize]: this._builder.control('', Validators.required),
       [Controls.Mode]: this._builder.control(DEFAULT_MODE),
       [Controls.EnableAutoScaling]: this._builder.control(true),
@@ -182,7 +213,6 @@ export class AKSClusterSettingsComponent
         Validators.min(this.AUTOSCALING_MIN_VALUE),
       ]),
     });
-    this.control(Controls.VmSize).disable();
   }
 
   private _initSubscriptions(): void {
@@ -198,9 +228,14 @@ export class AKSClusterSettingsComponent
       this.control(Controls.Name).clearValidators();
       this.control(Controls.Location).clearValidators();
       this.control(Controls.NodeResourceGroup).clearValidators();
+
+      this.vmSizeLabel = VMSizeState.Loading;
+      this.control(Controls.VmSize).disable();
       this._getAKSVmSizesForMachineDeployment(this.cluster.spec.aksclusterSpec.location).subscribe(
         (vmSizes: AKSVMSize[]) => {
-          this.vmSizes = vmSizes.map((vmSize: AKSVMSize) => vmSize.name);
+          this.vmSizes = vmSizes;
+          this.vmSizeLabel = VMSizeState.Ready;
+          this.control(Controls.VmSize).enable();
         }
       );
       this._getAKSAvailableNodePoolVersionsForCreateMachineDeployment().subscribe(
@@ -212,30 +247,21 @@ export class AKSClusterSettingsComponent
       this.control(Controls.Location)
         .valueChanges.pipe(debounceTime(this._debounceTime))
         .pipe(tap(_ => this._clearVmSize()))
-        .pipe(filter(value => !!value))
         .pipe(
           switchMap((location: string) => {
-            this.control(Controls.VmSize).enable();
+            this.vmSizeLabel = VMSizeState.Loading;
             return this._getAKSVmSizes(location);
           })
         )
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((vmSizes: AKSVMSize[]) => {
-          this.vmSizes = vmSizes.map((vmSize: AKSVMSize) => vmSize.name);
+          this.vmSizes = vmSizes;
           this.vmSizeLabel = VMSizeState.Ready;
         });
 
       this._getAKSKubernetesVersions();
       this._getAKSLocations();
     }
-  }
-
-  private _clearVmSize(): void {
-    this.vmSizeLabel = VMSizeState.Ready;
-    this.vmSizes = [];
-    this.control(Controls.VmSize).setValue('');
-    this.control(Controls.VmSize).disable();
-    this._cdr.detectChanges();
   }
 
   private _getAKSVmSizes(location: string): Observable<AKSVMSize[]> {
@@ -318,7 +344,7 @@ export class AKSClusterSettingsComponent
             name: this.controlValue(Controls.NodePoolName),
             basicSettings: {
               mode: this.controlValue(Controls.Mode),
-              vmSize: this.controlValue(Controls.VmSize)?.main,
+              vmSize: this.controlValue(Controls.VmSize)?.[ComboboxControls.Select],
               count: this.controlValue(Controls.Count),
               enableAutoScaling: this.controlValue(Controls.EnableAutoScaling),
             } as AgentPoolBasics,
@@ -348,7 +374,7 @@ export class AKSClusterSettingsComponent
             mode: this.controlValue(Controls.Mode),
             orchestratorVersion: this.controlValue(Controls.KubernetesVersion)?.main,
             enableAutoScaling: this.controlValue(Controls.EnableAutoScaling),
-            vmSize: this.controlValue(Controls.VmSize)?.main,
+            vmSize: this.controlValue(Controls.VmSize)?.[ComboboxControls.Select],
             count: this.controlValue(Controls.Count),
           } as AgentPoolBasics,
         } as AKSMachineDeploymentCloudSpec,
@@ -362,5 +388,12 @@ export class AKSClusterSettingsComponent
       } as AKSNodegroupScalingConfig;
     }
     this._externalMachineDeploymentService.externalMachineDeployment = config;
+  }
+
+  private _clearVmSize(): void {
+    this.vmSizes = [];
+    this.vmSizeLabel = VMSizeState.Ready;
+    this._vmSizeCombobox.reset();
+    this._cdr.detectChanges();
   }
 }
