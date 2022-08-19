@@ -171,24 +171,19 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       this.restrictProjectCreation = settings.restrictProjectCreation;
     });
 
-    this._projectService.projects
-      .pipe(
-        filter(projects => !_.isEqual(this._sortProjects(projects), this.projects)),
-        takeUntil(this._unsubscribe)
-      )
-      .subscribe((projects: Project[]) => {
-        this.projects = this._sortProjects(projects);
-        this._loadCurrentUserRoles();
-        this._sortProjectOwners();
-        this.dataSource.data = this.projects;
+    this._projectService.projects.pipe(takeUntil(this._unsubscribe)).subscribe((projects: Project[]) => {
+      this.projects = this._sortProjects(projects);
+      this._loadCurrentUserRoles();
+      this._sortProjectOwners();
+      this.dataSource.data = this.projects;
 
-        if (this._shouldRedirectToProjectLandingPage()) {
-          this._redirectToProjectLandingPage();
-        }
-        this.isInitializing = false;
-        this.selectDefaultProject();
-        this._cdr.detectChanges();
-      });
+      if (this._shouldRedirectToProjectLandingPage()) {
+        this._redirectToProjectLandingPage();
+      }
+      this.isInitializing = false;
+      this.selectDefaultProject();
+      this._cdr.detectChanges();
+    });
 
     this._setDisplayedColumns();
   }
@@ -201,6 +196,10 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges(): void {
     this.dataSource.data = this.projects;
     this._cdr.detectChanges();
+  }
+
+  projectTrackBy(project: Project): string {
+    return project.id;
   }
 
   compare(a: number | string, b: number | string, isAsc: boolean) {

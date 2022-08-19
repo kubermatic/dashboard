@@ -54,7 +54,8 @@ limitations under the License.
       <table class="km-table"
              mat-table
              matSort
-             [dataSource]="dataSource">
+             [dataSource]="dataSource"
+             [trackBy]="projectTrackBy.bind(this)">
         <ng-container matColumnDef="status">
           <th mat-header-cell
               *matHeaderCellDef
@@ -233,7 +234,7 @@ limitations under the License.
        fxLayout="row"
        fxLayoutGap="20px">
 
-    <mat-card *ngFor="let project of dataSource.filteredData"
+    <mat-card *ngFor="let project of dataSource.filteredData; trackBy: projectTrackBy"
               (click)="selectProject(project)"
               [ngClass]="{'active-project-card': isProjectActive(project), 'project-card-community': !isEnterpriseEdition, 'project-card-enterprise': isEnterpriseEdition}">
       <mat-card-header>
