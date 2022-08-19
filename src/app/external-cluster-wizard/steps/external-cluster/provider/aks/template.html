@@ -105,26 +105,19 @@ limitations under the License.
         Node pool Name must contain only lowercase letters and numbers, must be 12 or fewer characters.</mat-error>
     </mat-form-field>
 
-    <km-autocomplete [required]="true"
-                     [label]="vmSizeLabel"
-                     [isLoading]="isLoadingVmSizes"
-                     [options]="vmSizes"
-                     [disabled]="form.get(Controls.VmSize).disabled"
-                     [formControlName]="Controls.VmSize">
-      <ng-container *ngIf="!isDialogView()"
-                    hint>
-        <ng-container *ngIf="form.get(Controls.Location).value; else showHintForLocation">
-          VM size availability varies by region.
-        </ng-container>
-        <ng-template #showHintForLocation>
-          Enter location to fetch VM sizes
-        </ng-template>
-      </ng-container>
-      <ng-container *ngIf="isDialogView()"
-                    hint>
-        Set the VM Size for this node.
-      </ng-container>
-    </km-autocomplete>
+    <km-combobox #vmSizeCombobox
+                 filterBy="name"
+                 inputLabel="Select VM Sizes..."
+                 [hint]="getHint(Controls.Location)"
+                 [required]="true"
+                 [label]="vmSizeLabel"
+                 [options]="vmSizes"
+                 [formControlName]="Controls.VmSize"
+                 [isDisabled]="form.get(Controls.VmSize).disabled">
+      <div *option="let vmSize">
+        {{vmSizeDisplayName(vmSize?.name)}}
+      </div>
+    </km-combobox>
 
     <km-autocomplete *ngIf="isDialogView()"
                      label="Kubernetes Version"

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, Input, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, forwardRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -24,9 +24,9 @@ import {
 import {StepBase} from '@app/external-cluster-wizard/steps/base';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {NameGeneratorService} from '@core/services/name-generator';
-import {EKSCloudSpec, EKSClusterSpec, EKSVpc} from '@shared/entity/provider/eks';
+import {EKSCloudSpec, EKSClusterSpec, EKSSecurityGroup, EKSSubnet, EKSVpc} from '@shared/entity/provider/eks';
 import {forkJoin} from 'rxjs';
-import {debounceTime, finalize, takeUntil} from 'rxjs/operators';
+import {debounceTime, finalize, takeUntil, tap} from 'rxjs/operators';
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
 import {
   ExternalCloudSpec,
@@ -43,6 +43,7 @@ import {
   ExternalMachineDeploymentCloudSpec,
 } from '@app/shared/entity/external-machine-deployment';
 import {MasterVersion} from '@app/shared/entity/cluster';
+import {ComboboxControls, FilteredComboboxComponent} from '@shared/components/combobox/component';
 
 enum Controls {
   Name = 'name',
@@ -55,6 +56,16 @@ enum Controls {
   MaxSize = 'maxSize',
   MinSize = 'minSize',
   DesiredSize = 'desiredSize',
+}
+
+enum SubnetState {
+  Loading = 'Loading...',
+  Ready = 'Subnet',
+}
+
+enum SecurityGroupState {
+  Loading = 'Loading...',
+  Ready = 'Security Groups',
 }
 
 @Component({
@@ -80,16 +91,24 @@ export class EKSClusterSettingsComponent
   readonly Controls = Controls;
   isLoadingVpcs: boolean;
   vpcs: string[] = [];
-  subnetIds: string[] = [];
-  securityGroupIds: string[] = [];
   kubernetesVersions: string[] = [];
   maxNodeCount: number;
   minNodeCount: number;
+  subnets: EKSSubnet[] = [];
+  subnetLabel = SubnetState.Ready;
+  securityGroupLabel = SecurityGroupState.Ready;
+  securityGroups: EKSSecurityGroup[] = [];
   @Input() projectID: string;
   @Input() cluster: ExternalCluster;
   private readonly _debounceTime = 500;
+  @ViewChild('subnetCombobox')
+  private readonly _subnetCombobox: FilteredComboboxComponent;
+
+  @ViewChild('securityGroupCombobox')
+  private readonly _securityGroupCombobox: FilteredComboboxComponent;
 
   constructor(
+    private readonly _cdr: ChangeDetectorRef,
     private readonly _builder: FormBuilder,
     private readonly _externalClusterService: ExternalClusterService,
     private readonly _externalMachineDeploymentService: ExternalMachineDeploymentService,
@@ -116,6 +135,19 @@ export class EKSClusterSettingsComponent
 
   isDialogView(): boolean {
     return !this._nodeDataService.isInWizardMode();
+  }
+
+  getHint(control: Controls): string {
+    switch (control) {
+      case Controls.SubnetIds:
+        if (this.isDialogView()) {
+          return 'Select the subnets in your VPC where your nodes will run.';
+        }
+        return 'Select the subnets in your VPC where the control plane may place elastic network interfaces (ENIs) to facilitate communication with your cluster. Subnets specified must be in at least two different AZs';
+
+      default:
+        return '';
+    }
   }
 
   private _initForm(): void {
@@ -161,11 +193,14 @@ export class EKSClusterSettingsComponent
       this.control(Controls.Vpc).setValue(this.cluster.spec.eksclusterSpec.vpcConfigRequest.vpcId);
       this.control(Controls.Vpc).disable();
 
+      this.subnetLabel = SubnetState.Loading;
       this._externalMachineDeploymentService
         .getEKSSubnetsForMachineDeployment(this.projectID, this.cluster.id, this.controlValue(Controls.Vpc))
-        .subscribe((data: string[]) => {
-          this.subnetIds = data;
-          this.control(Controls.SubnetIds).enable();
+        .pipe(tap(_ => this._clearSubnet()))
+        .subscribe((data: EKSSubnet[]) => {
+          this.subnets = data;
+          this.subnetLabel = SubnetState.Ready;
+          this._cdr.detectChanges();
         });
     } else {
       this._getEKSKubernetesVersions();
@@ -175,17 +210,15 @@ export class EKSClusterSettingsComponent
         .valueChanges.pipe(debounceTime(this._debounceTime))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => {
+          this._clearSubnet();
+          this._clearSecurityGroups();
+
           const vpc = this.controlValue(Controls.Vpc);
           if (vpc) {
             this._onVPCSelectionChange(vpc);
-            this.control(Controls.SubnetIds).enable();
-            this.control(Controls.SecurityGroupsIds).enable();
-          } else {
-            this.control(Controls.SubnetIds).disable();
-            this.control(Controls.SubnetIds).setValue([]);
-            this.control(Controls.SecurityGroupsIds).disable();
-            this.control(Controls.SecurityGroupsIds).setValue([]);
           }
+          this._enable(!!vpc, Controls.SubnetIds);
+          this._enable(!!vpc, Controls.SecurityGroupsIds);
         });
     }
 
@@ -226,12 +259,17 @@ export class EKSClusterSettingsComponent
   }
 
   private _onVPCSelectionChange(vpc: string): void {
+    this.subnetLabel = SubnetState.Loading;
+    this.securityGroupLabel = SecurityGroupState.Loading;
     forkJoin([
       this._externalClusterService.getEKSSubnets(vpc),
       this._externalClusterService.getEKSSecurityGroups(vpc),
-    ]).subscribe(([subnetIds, securityGroupIds]) => {
-      this.subnetIds = subnetIds;
-      this.securityGroupIds = securityGroupIds;
+    ]).subscribe(([subnets, securityGroups]) => {
+      this.subnets = subnets;
+      this.securityGroups = securityGroups;
+      this.subnetLabel = SubnetState.Ready;
+      this.securityGroupLabel = SecurityGroupState.Ready;
+      this._cdr.detectChanges();
     });
   }
 
@@ -268,8 +306,8 @@ export class EKSClusterSettingsComponent
           roleArn: this.controlValue(Controls.RoleArn),
           version: version,
           vpcConfigRequest: {
-            subnetIds: this.controlValue(Controls.SubnetIds),
-            securityGroupIds: this.controlValue(Controls.SecurityGroupsIds),
+            subnetIds: this.controlValue(Controls.SubnetIds)?.[ComboboxControls.Select],
+            securityGroupIds: this.controlValue(Controls.SecurityGroupsIds)?.[ComboboxControls.Select],
           },
         } as EKSClusterSpec,
         version: version,
@@ -289,9 +327,33 @@ export class EKSClusterSettingsComponent
             minSize: this.controlValue(Controls.MinSize),
           } as EKSScalingConfig,
           nodeRole: this.controlValue(Controls.RoleArn),
-          subnets: this.controlValue(Controls.SubnetIds),
+          subnets: this.controlValue(Controls.SubnetIds)?.[ComboboxControls.Select],
         } as EKSMachineDeploymentCloudSpec,
       } as ExternalMachineDeploymentCloudSpec,
     } as ExternalMachineDeployment;
+  }
+
+  private _clearSubnet(): void {
+    this.subnets = [];
+    this.subnetLabel = SubnetState.Ready;
+    this._subnetCombobox.reset();
+    this._cdr.detectChanges();
+  }
+
+  private _clearSecurityGroups(): void {
+    this.securityGroups = [];
+    this.securityGroupLabel = SecurityGroupState.Ready;
+    this._securityGroupCombobox.reset();
+    this._cdr.detectChanges();
+  }
+
+  private _enable(enable: boolean, name: string): void {
+    if (enable && this.form.get(name).disabled) {
+      this.form.get(name).enable();
+    }
+
+    if (!enable && this.form.get(name).enabled) {
+      this.form.get(name).disable();
+    }
   }
 }
