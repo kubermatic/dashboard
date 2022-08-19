@@ -528,6 +528,11 @@ export class GCPCloudSpecPatch {
 export class OpenstackCloudSpecPatch {
   username?: string;
   password?: string;
+  project?: string;
+  projectID?: string;
+  applicationCredentialID?: string;
+  applicationCredentialSecret?: string;
+  domain?: string;
 }
 
 export class EquinixCloudSpecPatch {
