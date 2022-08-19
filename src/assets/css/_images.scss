@@ -456,6 +456,10 @@
   @include mixins.provider-image('/assets/images/clouds/eks.svg', 130px, 30px);
 }
 
+.km-provider-logo-custom-externalcluster {
+  @include mixins.provider-image('/assets/images/clouds/customkubernetescluster.svg', 130px, 30px);
+}
+
 .km-os-image-centos {
   @include mixins.background-image('/assets/images/os/centos.svg', 24px);
 }

@@ -92,7 +92,8 @@ limitations under the License.
           <ng-container [ngSwitch]="getProvider(element.cloud) !== Provider.Custom">
             <span *ngSwitchCase="true"
                   class="km-provider-logo km-provider-logo-{{getProvider(element.cloud)}}"></span>
-            <span *ngSwitchCase="false">{{getProvider(element.cloud)}}</span>
+            <span *ngSwitchCase="false"
+                  class="km-provider-logo km-provider-logo-custom-externalcluster"></span>
           </ng-container>
         </td>
       </ng-container>

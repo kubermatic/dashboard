@@ -25,7 +25,7 @@ export enum DeleteExternalClusterAction {
 }
 
 export enum ExternalClusterProvider {
-  Custom = 'custom',
+  Custom = 'bringyourown',
   AKS = 'aks',
   EKS = 'eks',
   GKE = 'gke',

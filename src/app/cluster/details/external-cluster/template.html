@@ -105,9 +105,13 @@ limitations under the License.
             {{cluster?.id}}
           </div>
         </km-property>
-        <km-property *ngIf="provider !== Provider.Custom">
+        <km-property [ngSwitch]="provider !== Provider.Custom">
+          <div key>Provider</div>
           <div value>
-            <span class="km-provider-logo km-provider-logo-{{provider}}"></span>
+            <span *ngSwitchCase="true"
+                  class="km-provider-logo km-provider-logo-{{provider}}"></span>
+            <span *ngSwitchCase="false"
+                  class="km-provider-logo km-provider-logo-custom-externalcluster"></span>
           </div>
         </km-property>
         <km-property *ngIf="cluster.labels?.['is-imported'] === 'true'">
