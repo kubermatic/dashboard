@@ -19,9 +19,8 @@
 
 END OF TERMS AND CONDITIONS
 -->
-
 <div class="km-quota-widget-container"
-     *ngIf="quotaDetails">
+     *ngIf="quotaDetails || (showEmptyPlaceholder && !isLoading)">
   <ng-container *ngTemplateOutlet="showQuotaWidgetDetails ? quotaWidgetDetails : quotaWidget"></ng-container>
 </div>
 
@@ -34,25 +33,32 @@ END OF TERMS AND CONDITIONS
 
   <ng-template #quotaWidgetWithoutCard>
     <div class="km-quota-widget"
+         [class.km-no-quota-top-margin]="!quotaDetails"
          fxLayout="row"
          fxLayoutAlign=" center">
       <i *ngIf="showIcon"
          class="km-icon-mask km-icon-quota i-32"></i>
 
-      <ng-container *ngIf="quotaDetails.quota.cpu"
-                    [ngTemplateOutlet]="progressBar"
-                    [ngTemplateOutletContext]="{label: 'CPU', percentage: quotaPercentage.cpu}">
+      <ng-container *ngIf="quotaDetails else emptyPlaceholder">
+        <ng-container *ngIf="quotaDetails.quota.cpu"
+                      [ngTemplateOutlet]="progressBar"
+                      [ngTemplateOutletContext]="{label: 'CPU', percentage: quotaPercentage.cpu}">
+        </ng-container>
+
+        <ng-container *ngIf="quotaDetails.quota.memory"
+                      [ngTemplateOutlet]="progressBar"
+                      [ngTemplateOutletContext]="{label: 'Memory', percentage: quotaPercentage.memory}">
+        </ng-container>
+
+        <ng-container *ngIf="quotaDetails.quota.storage"
+                      [ngTemplateOutlet]="progressBar"
+                      [ngTemplateOutletContext]=" {label: 'Disk', percentage: quotaPercentage.storage}">
+        </ng-container>
       </ng-container>
 
-      <ng-container *ngIf="quotaDetails.quota.memory"
-                    [ngTemplateOutlet]="progressBar"
-                    [ngTemplateOutletContext]="{label: 'Memory', percentage: quotaPercentage.memory}">
-      </ng-container>
-
-      <ng-container *ngIf="quotaDetails.quota.storage"
-                    [ngTemplateOutlet]="progressBar"
-                    [ngTemplateOutletContext]=" {label: 'Disk', percentage: quotaPercentage.storage}">
-      </ng-container>
+      <ng-template #emptyPlaceholder>
+        No quotas configured
+      </ng-template>
     </div>
 
     <mat-card class="km-quota-details"
@@ -127,7 +133,8 @@ END OF TERMS AND CONDITIONS
 <ng-template #quotaWidgetDetails>
   <div class="km-quota-widget km-extended-widget"
        fxLayout="row">
-    <div class="km-quota-heading"
+    <div *ngIf="showIcon"
+         class="km-quota-heading"
          fxLayout="row"
          fxLayoutAlign="space-between center">
       <i class="km-icon-mask km-icon-quota"></i>

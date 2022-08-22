@@ -23,12 +23,14 @@ import {Injectable} from '@angular/core';
 import {environment} from '@environments/environment';
 import {Quota, QuotaDetails, QuotaVariables} from '@shared/entity/quota';
 import {merge, Observable, of, Subject, timer} from 'rxjs';
-import {catchError, map, shareReplay, switchMap, takeUntil} from 'rxjs/operators';
+import {catchError, map, shareReplay, switchMap} from 'rxjs/operators';
 import {AppConfigService} from '@app/config.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class QuotaService {
-  private _unsubscribe = new Subject<void>();
+  quotaMap = new Map<string, Observable<QuotaDetails>>();
 
   constructor(private _http: HttpClient, private readonly _appConfigService: AppConfigService) {}
 
@@ -68,13 +70,20 @@ export class QuotaService {
   }
 
   getProjectQuota(projectId: string): Observable<QuotaDetails> {
-    return this._refreshTimer$.pipe(
-      switchMap(_ =>
-        this._http.get<QuotaDetails>(`${this._newRestRoot}/projects/${projectId}/quota`).pipe(catchError(_ => of(null)))
-      ),
-      shareReplay({refCount: true, bufferSize: 1}),
-      takeUntil(this._unsubscribe)
-    );
+    if (!this.quotaMap.get(projectId)) {
+      const quota$ = this._refreshTimer$.pipe(
+        switchMap(_ =>
+          this._http
+            .get<QuotaDetails>(`${this._newRestRoot}/projects/${projectId}/quota`)
+            .pipe(catchError(_ => of(null)))
+        ),
+        shareReplay({refCount: true, bufferSize: 1})
+      );
+
+      this.quotaMap.set(projectId, quota$);
+    }
+
+    return this.quotaMap.get(projectId);
   }
 
   private _getQuotas(): Observable<QuotaDetails[]> {

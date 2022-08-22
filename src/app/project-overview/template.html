@@ -118,6 +118,15 @@ limitations under the License.
     <div fxLayout="column"
          fxLayoutGap="20px"
          fxFlex="50">
+      <mat-card *ngIf="project && isEnterpriseEdition">
+        <mat-card-header>
+          <mat-card-title>Project Quota</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <router-outlet name="quota-widget"
+                         (activate)="onActivate($event)"></router-outlet>
+        </mat-card-content>
+      </mat-card>
       <km-providers-overview [clusters]="clusters"
                              [externalClusters]="externalClusters"></km-providers-overview>
       <km-members-overview [project]="project"

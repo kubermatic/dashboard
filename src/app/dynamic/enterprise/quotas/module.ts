@@ -20,7 +20,6 @@
 
 import {NgModule} from '@angular/core';
 import {SharedModule} from '@shared/module';
-import {QuotaService} from './service';
 import {ProjectQuotaDialogComponent} from './project-quota-dialog/component';
 import {QuotasRoutingModule} from './routing';
 import {QuotasComponent} from './component';
@@ -29,6 +28,5 @@ import {QuotaWidgetComponent} from './quota-widget/component';
 @NgModule({
   imports: [SharedModule, QuotasRoutingModule],
   declarations: [QuotasComponent, ProjectQuotaDialogComponent, QuotaWidgetComponent],
-  providers: [QuotaService],
 })
 export class QuotasModule {}
