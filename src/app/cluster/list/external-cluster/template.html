@@ -89,12 +89,8 @@ limitations under the License.
         </th>
         <td mat-cell
             *matCellDef="let element">
-          <ng-container [ngSwitch]="getProvider(element.cloud) !== Provider.Custom">
-            <span *ngSwitchCase="true"
-                  class="km-provider-logo km-provider-logo-{{getProvider(element.cloud)}}"></span>
-            <span *ngSwitchCase="false"
-                  class="km-provider-logo km-provider-logo-custom-externalcluster"></span>
-          </ng-container>
+          <span [ngClass]="getProvider(element.cloud) === Provider.Custom ?
+              'km-provider-logo km-provider-logo-custom-external-cluster' : 'km-provider-logo km-provider-logo-'+getProvider(element.cloud)"></span>
         </td>
       </ng-container>
 

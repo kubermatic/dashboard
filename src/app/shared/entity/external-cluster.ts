@@ -54,13 +54,10 @@ export class ExternalCluster {
 
   static getProvider(cloud: ExternalCloudSpec): ExternalClusterProvider {
     if (!cloud) {
-      return ExternalClusterProvider.Custom;
+      return null;
     }
-
     const providers = Object.keys(cloud);
-    return providers.length > 0
-      ? (providers.pop().toLowerCase() as ExternalClusterProvider)
-      : ExternalClusterProvider.Custom;
+    return providers.pop()?.toLowerCase() as ExternalClusterProvider;
   }
 
   static getProviderDisplayName(cloud: ExternalCloudSpec): string {
