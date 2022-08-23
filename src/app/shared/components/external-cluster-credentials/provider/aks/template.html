@@ -22,6 +22,10 @@ limitations under the License.
            [formControlName]="Controls.TenantID"
            autocomplete="off"
            required>
+    <mat-hint>
+      Enter Azure Tenant ID. You can create one&nbsp;
+      <ng-container *ngTemplateOutlet="azureAccessKeysDocLink"></ng-container>
+    </mat-hint>
     <mat-error *ngIf="form.get(Controls.TenantID).hasError('required')">
       Tenant ID is <strong>required</strong>.
     </mat-error>
@@ -33,6 +37,10 @@ limitations under the License.
            [formControlName]="Controls.SubscriptionID"
            autocomplete="off"
            required>
+    <mat-hint>
+      Enter Azure Subscription ID. You can create one&nbsp;
+      <ng-container *ngTemplateOutlet="azureAccessKeysDocLink"></ng-container>
+    </mat-hint>
     <mat-error *ngIf="form.get(Controls.TenantID).hasError('required')">
       Subscription ID is <strong>required</strong>.
     </mat-error>
@@ -44,6 +52,10 @@ limitations under the License.
            [formControlName]="Controls.ClientID"
            autocomplete="off"
            required>
+    <mat-hint>
+      Enter Azure Client ID. You can create one&nbsp;
+      <ng-container *ngTemplateOutlet="azureAccessKeysDocLink"></ng-container>
+    </mat-hint>
     <mat-error *ngIf="form.get(Controls.ClientID).hasError('required')">
       Client ID is <strong>required</strong>.
     </mat-error>
@@ -56,8 +68,18 @@ limitations under the License.
            autocomplete="off"
            type="password"
            required>
+    <mat-hint>
+      Enter Azure Client Client. You can create one&nbsp;
+      <ng-container *ngTemplateOutlet="azureAccessKeysDocLink"></ng-container>
+    </mat-hint>
     <mat-error *ngIf="form.get(Controls.ClientSecret).hasError('required')">
       Client secret is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
 </form>
+
+<ng-template #azureAccessKeysDocLink>
+  <a target="_blank"
+     rel="noopener"
+     href="https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal">check</a>.
+</ng-template>

@@ -79,18 +79,18 @@ limitations under the License.
 
         <mat-hint *ngIf="!isDialogView();">
           Enter the name of the resource group. The resource group should have sufficient permissions to manage AKS
-          cluster
+          cluster and to pull the Admin kubeconfig.
           <a
             href="https://docs.microsoft.com/en-us/azure/aks/concepts-identity#azure-rbac-to-authorize-access-to-the-aks-resource"
             target="_blank"
             rel="noreferrer noopener">
-            learn more about AKS RBAC guide >
+            AKS RBAC guide >
           </a>
-          To get or create a resource group <a
+          To get or create a resource group check <a
           href="https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal"
           target="_blank"
           rel="noreferrer noopener">
-          learn more about AKS user guide >
+          AKS user guide >
         </a>
         </mat-hint>
         <mat-error *ngIf="form.get(Controls.NodeResourceGroup).hasError(ErrorType.Required)">
@@ -142,7 +142,7 @@ limitations under the License.
                      [options]="nodePoolVersionsForMD"
                      [formControlName]="Controls.KubernetesVersion">
       <ng-container hint>
-        Set the kubernetes version.
+        Select the kubernetes version.
       </ng-container>
     </km-autocomplete>
 

@@ -58,18 +58,17 @@ limitations under the License.
                class="km-dropdown-with-suffix"
                label="Zone"
                required="true"
-               hint="Select The zone in which your cluster is located."
+               hint="Select zone in which your cluster is located."
                [options]="zones"
                [formControlName]="Controls.Zone">
     </km-select>
 
     <mat-form-field *ngIf="isDialogView()">
-      <mat-label>Kubernetes Version
-      </mat-label>
+      <mat-label>Kubernetes Version</mat-label>
       <input matInput
              type="text"
              [formControlName]="Controls.Version" />
-      <mat-hint *ngIf="!isDialogView()">Set the kubernetes version.</mat-hint>
+      <mat-hint>Selected kubernetes version for the node pool</mat-hint>
       <mat-error *ngIf="form.get(Controls.Version).hasError('required')">
         Kubernetes Version is <strong>required</strong>.
       </mat-error>
@@ -161,7 +160,8 @@ limitations under the License.
       </mat-radio-button>
       <mat-hint>Manually manage the version upgrades,
         GKE will only upgrade the control plane and nodes
-        if it's necessary to maintain security and compatibility.</mat-hint>
+        if it's necessary to maintain security and compatibility.
+      </mat-hint>
       <mat-radio-button [value]="KubernetesVersionMode.ReleaseChannel"
                         class="km-radio-button">
         <div class="km-radio-button-title">Release Channel</div>
@@ -176,7 +176,7 @@ limitations under the License.
       <km-select label="Versions"
                  [options]="kubernetesVersions"
                  required="true"
-                 hint="Set the cluster's control plane version."
+                 hint="Select the cluster's control plane version."
                  [formControlName]="Controls.Version">
       </km-select>
     </mat-radio-group>

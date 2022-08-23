@@ -69,7 +69,7 @@ limitations under the License.
                matInput
                type="text"
                autocomplete="off" />
-        <mat-hint>Selected kubernetes version for your nodes.</mat-hint>
+        <mat-hint>Selected kubernetes version for the node group.</mat-hint>
       </mat-form-field>
     </ng-template>
 
@@ -81,22 +81,21 @@ limitations under the License.
              [formControlName]="Controls.RoleArn" />
 
       <mat-hint *ngIf="!isDialogView(); else dialogView">
-        EKS Cluster Role for Create Wizard: Add hint Enter the IAM role arn to allow the Kubernetes control plane to
-        manage AWS resources on your behalf. To get or create a cluster service role&nbsp;
+        Enter the IAM role arn to allow the Kubernetes control plane to manage AWS resources on your behalf.
         <a href="https://docs.aws.amazon.com/eks/latest/userguide/service_IAM_role.html"
            target="_blank"
            rel="noreferrer noopener">
-          learn more about Amazon EKS user guide >
+          EKS user guide >
         </a>
       </mat-hint>
 
       <ng-template #dialogView>
         <mat-hint>
-          Enter the IAM role arn that will be used by the nodes. To get or create a node role
+          Enter the IAM role arn that will be used by the nodes.
           <a href="https://docs.aws.amazon.com/eks/latest/userguide/create-node-role.html"
              target="_blank"
              rel="noreferrer noopener">
-            learn more about Amazon EKS user guide >
+            EKS user guide >
           </a>
         </mat-hint>
       </ng-template>
