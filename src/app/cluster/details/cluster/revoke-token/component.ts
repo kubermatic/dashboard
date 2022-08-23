@@ -23,7 +23,7 @@ import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import {take} from 'rxjs/operators';
 import {ClusterService} from '@core/services/cluster';
-import {Observable} from 'rxjs';
+import {forkJoin, Observable} from 'rxjs';
 
 @Component({
   selector: 'km-revoke-token',
@@ -57,24 +57,27 @@ export class RevokeTokenComponent implements OnInit {
     return MemberUtils.hasPermission(this._user, this._currentGroupConfig, View.Clusters, Permission.Edit);
   }
 
-  getObservable(): Observable<Token> | void {
+  getObservable(): Observable<Token[]> {
+    const requests = [];
     if (this.revokeAdminToken) {
-      return this._clusterService.editToken(this.cluster, this.projectID, {token: ''});
+      requests.push(this._clusterService.editToken(this.cluster, this.projectID, {token: ''}));
     }
 
     if (this.revokeViewerToken) {
-      return this._clusterService.editViewerToken(this.cluster, this.projectID, {token: ''});
+      requests.push(this._clusterService.editViewerToken(this.cluster, this.projectID, {token: ''}));
     }
+
+    return forkJoin(requests);
   }
 
-  onNext(token: Token): void {
+  onNext(tokens: Token[]): void {
     if (this.revokeAdminToken) {
       this._notificationService.success(`Revoked the admin token from the ${this.cluster.name} cluster`);
-      this._matDialogRef.close(token);
+      this._matDialogRef.close(tokens[0]);
     }
     if (this.revokeViewerToken) {
       this._notificationService.success(`Revoked the viewer token from the ${this.cluster.name} cluster`);
-      this._matDialogRef.close(token);
+      this._matDialogRef.close(tokens.length > 1 ? tokens[1] : tokens[0]);
     }
   }
 }
