@@ -22,7 +22,7 @@ limitations under the License.
 
   <div [fxFlex]="isDialogView() ? '100%' : '50%'"
        fxLayout="column"
-       fxLayoutGap="20px">
+       fxLayoutGap="30px">
 
     <mat-card-header *ngIf="!isDialogView()"
                      class="km-no-padding">
@@ -52,24 +52,26 @@ limitations under the License.
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field *ngIf="isDialogView()">
-      <mat-label>Kubernetes Version</mat-label>
-      <input [formControlName]="Controls.Version"
-             matInput
-             type="text"
-             autocomplete="off" />
-      <mat-hint>Selected kubernetes version for your nodes.</mat-hint>
-    </mat-form-field>
-
-    <km-autocomplete *ngIf="!isDialogView()"
+    <km-autocomplete *ngIf="!isDialogView(); else dialogViewKubernetesVersion"
                      label="Kubernetes Version"
                      required="true"
                      [options]="kubernetesVersions"
                      [formControlName]="Controls.Version">
       <ng-container hint>
-        Set the kubernetes version.
+        Enter or Select Kubernetes Version
       </ng-container>
     </km-autocomplete>
+
+    <ng-template #dialogViewKubernetesVersion>
+      <mat-form-field *ngIf="isDialogView()">
+        <mat-label>Kubernetes Version</mat-label>
+        <input [formControlName]="Controls.Version"
+               matInput
+               type="text"
+               autocomplete="off" />
+        <mat-hint>Selected kubernetes version for your nodes.</mat-hint>
+      </mat-form-field>
+    </ng-template>
 
     <mat-form-field>
       <mat-label>{{isDialogView() ? "Node IAM role" : "Cluster Service Role"}}</mat-label>
@@ -77,9 +79,28 @@ limitations under the License.
              type="text"
              autocomplete="off"
              [formControlName]="Controls.RoleArn" />
-      <mat-hint>{{isDialogView() ?
-        'Enter the IAM role that will be used by the nodes' :
-        'Enter the IAM role to allow the Kubernetes control plane to manage resources.'}}</mat-hint>
+
+      <mat-hint *ngIf="!isDialogView(); else dialogView">
+        EKS Cluster Role for Create Wizard: Add hint Enter the IAM role arn to allow the Kubernetes control plane to
+        manage AWS resources on your behalf. To get or create a cluster service role&nbsp;
+        <a href="https://docs.aws.amazon.com/eks/latest/userguide/service_IAM_role.html"
+           target="_blank"
+           rel="noreferrer noopener">
+          learn more about Amazon EKS user guide >
+        </a>
+      </mat-hint>
+
+      <ng-template #dialogView>
+        <mat-hint>
+          Enter the IAM role arn that will be used by the nodes. To get or create a node role
+          <a href="https://docs.aws.amazon.com/eks/latest/userguide/create-node-role.html"
+             target="_blank"
+             rel="noreferrer noopener">
+            learn more about Amazon EKS user guide >
+          </a>
+        </mat-hint>
+      </ng-template>
+
       <mat-error *ngIf="form.get(Controls.RoleArn).hasError('required')">
         Role is <strong>required</strong>.
       </mat-error>
@@ -97,7 +118,7 @@ limitations under the License.
 
   <div fxFlex="50%"
        fxLayout="column"
-       fxLayoutGap="20px">
+       fxLayoutGap="30px">
 
     <mat-card-header class="km-no-padding">
       <mat-card-title>Networking</mat-card-title>

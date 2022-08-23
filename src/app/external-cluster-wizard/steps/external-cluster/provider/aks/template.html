@@ -58,7 +58,7 @@ limitations under the License.
                        [options]="kubernetesVersions"
                        [formControlName]="Controls.KubernetesVersion">
         <ng-container hint>
-          Set the kubernetes version.
+          Enter or Select Kubernetes Version
         </ng-container>
       </km-autocomplete>
 
@@ -76,7 +76,23 @@ limitations under the License.
                type="text"
                autocomplete="off"
                [formControlName]="Controls.NodeResourceGroup" />
-        <mat-hint>Enter name of the resource group containing agent pool nodes.</mat-hint>
+
+        <mat-hint *ngIf="!isDialogView();">
+          Enter the name of the resource group. The resource group should have sufficient permissions to manage AKS
+          cluster
+          <a
+            href="https://docs.microsoft.com/en-us/azure/aks/concepts-identity#azure-rbac-to-authorize-access-to-the-aks-resource"
+            target="_blank"
+            rel="noreferrer noopener">
+            learn more about AKS RBAC guide >
+          </a>
+          To get or create a resource group <a
+          href="https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal"
+          target="_blank"
+          rel="noreferrer noopener">
+          learn more about AKS user guide >
+        </a>
+        </mat-hint>
         <mat-error *ngIf="form.get(Controls.NodeResourceGroup).hasError(ErrorType.Required)">
           Resource Group is <strong>required</strong>.
         </mat-error>
@@ -102,7 +118,8 @@ limitations under the License.
         Node Pool Name is <strong>required</strong>.
       </mat-error>
       <mat-error *ngIf="form.get(Controls.NodePoolName).hasError(ErrorType.Pattern)">
-        Node pool Name must contain only lowercase letters and numbers, must be 12 or fewer characters.</mat-error>
+        Node pool Name must contain only lowercase letters and numbers, must be 12 or fewer characters.
+      </mat-error>
     </mat-form-field>
 
     <km-combobox #vmSizeCombobox
@@ -149,7 +166,8 @@ limitations under the License.
       <mat-radio-button [value]="Mode.System"
                         class="km-radio-button">
         <div class="km-radio-button-title"
-             [ngClass]="!isDialogView() && 'km-text'">System</div>
+             [ngClass]="!isDialogView() && 'km-text'">System
+        </div>
       </mat-radio-button>
       <mat-radio-button [value]="Mode.User"
                         class="km-radio-button">
