@@ -237,6 +237,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
 
       quota$.pipe(filter(Boolean), takeUntil(this._unsubscribe)).subscribe(_ => {
         this.hasQuota = true;
+        this._cdr.detectChanges();
       });
     }
   }
