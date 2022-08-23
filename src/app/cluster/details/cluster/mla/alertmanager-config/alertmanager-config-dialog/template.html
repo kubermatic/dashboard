@@ -22,7 +22,7 @@ limitations under the License.
 </mat-dialog-content>
 <mat-dialog-actions>
   <km-button id="km-alertmanager-config-dialog-btn"
-             [icon]="getIconClass"
+             [icon]="getIconClass()"
              [label]="data.confirmLabel+' Alertmanager Config'"
              [disabled]="!isValid"
              [observable]="getObservable()"

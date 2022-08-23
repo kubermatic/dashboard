@@ -51,7 +51,7 @@ export class EditServiceAccountDialogComponent implements OnInit {
       creationTimestamp: this.serviceaccount.creationTimestamp,
       deletionTimestamp: this.serviceaccount.deletionTimestamp,
       group: this.form.controls.group.value,
-      status: this.serviceaccount.id,
+      status: this.serviceaccount.status,
     };
 
     return this._serviceAccountService.edit(this.project.id, editServiceAccount).pipe(take(1));
