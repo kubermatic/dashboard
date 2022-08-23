@@ -93,10 +93,6 @@
       }
     }
 
-    .km-icon-quota {
-      @include mixins.size(32px, 32px, true);
-    }
-
     .km-quota-percentages {
       width: 100%;
 
@@ -110,6 +106,6 @@
   }
 
   .km-no-quota-top-margin {
-    margin-top: 10px;
+    margin-top: 13px;
   }
 }
