@@ -15,11 +15,10 @@ limitations under the License.
 -->
 <form [formGroup]="form"
       [fxLayout]="isDialogView() ? 'column' : 'row'"
-      fxLayoutGap="30px"
       fxLayout.md="column"
-      fxLayoutGap.md="30px"
       fxLayout.sm="column"
-      fxLayoutGap.sm="30px">
+      fxLayout.xs="column"
+      fxLayoutGap="30px">
   <ng-container *ngIf="!isDialogView()">
     <div [fxFlex]="isDialogView() ? '100%' : '50%'"
          fxLayout="column"

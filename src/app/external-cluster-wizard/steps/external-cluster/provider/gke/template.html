@@ -15,11 +15,10 @@ limitations under the License.
 -->
 <form [formGroup]="form"
       [fxLayout]="isDialogView() ? 'column' : 'row'"
-      fxLayoutGap="30px"
       fxLayout.md="column"
-      fxLayoutGap.md="auto"
       fxLayout.sm="column"
-      fxLayoutGap.sm="30px">
+      fxLayout.xs="column"
+      fxLayoutGap="30px">
 
   <div [fxFlex]="isDialogView() ? '100%' : '50%'"
        fxLayout="column"
