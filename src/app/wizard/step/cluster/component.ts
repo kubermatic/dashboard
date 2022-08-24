@@ -53,7 +53,7 @@ import {KmValidators} from '@shared/validators/validators';
 import {combineLatest, merge} from 'rxjs';
 import {filter, startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import * as semver from 'semver';
-import {coerce, compare} from 'semver';
+import {coerce, compare, gte} from 'semver';
 import {StepBase} from '../base';
 import {AsyncValidators} from '@shared/validators/async.validators';
 
@@ -131,6 +131,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   private _defaultProxyMode: ProxyMode;
   private readonly _minNameLength = 5;
   private readonly _defaultAllowedIPRange = '0.0.0.0/0';
+  private readonly _canalDualStackMinimumSupportedVersion = '3.22.0';
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -273,8 +274,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .valueChanges.pipe(takeUntil(this._unsubscribe))
       .subscribe(() => (this._clusterSpecService.admissionPlugins = this.form.get(Controls.AdmissionPlugins).value));
 
-    this.control(Controls.CNIPlugin)
-      .valueChanges.pipe(filter(value => !!value))
+    merge(this.form.get(Controls.CNIPlugin).valueChanges, this.form.get(Controls.IPFamily).valueChanges)
       .pipe(switchMap(() => this._clusterService.getCNIPluginVersions(this.form.get(Controls.CNIPlugin).value)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(cniVersions => {
@@ -468,6 +468,13 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
   private _setDefaultCNIVersion(): void {
     if (this.cniPluginVersions.length > 0 && !this.form.get(Controls.CNIPluginVersion).value) {
+      // Dual-stack not allowed on Canal CNI version lower than 3.22.
+      if (this.controlValue(Controls.CNIPlugin) === CNIPlugin.Canal && this.isDualStackIPFamilySelected()) {
+        this.cniPluginVersions = this.cniPluginVersions.filter(v =>
+          gte(coerce(v), this._canalDualStackMinimumSupportedVersion)
+        );
+      }
+
       this.form.get(Controls.CNIPluginVersion).setValue(this.cniPluginVersions[this.cniPluginVersions.length - 1]);
     }
   }
