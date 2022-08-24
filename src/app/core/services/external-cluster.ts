@@ -299,7 +299,7 @@ export class ExternalClusterService {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Disconnect Cluster',
-        message: `Are you sure you want to disconnect <b>${cluster.name}</b> cluster?`,
+        message: `Are you sure you want to disconnect <b>${cluster.name}</b> cluster? This action will not remove the cluster from the cloud provider’s end.`,
         confirmLabel: 'Disconnect',
         throttleButton: true,
         observable: this.deleteExternalCluster(projectID, cluster.id, DeleteExternalClusterAction.Disconnect),

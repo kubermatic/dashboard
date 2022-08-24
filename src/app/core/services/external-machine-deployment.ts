@@ -132,8 +132,8 @@ export class ExternalMachineDeploymentService {
   ): Observable<boolean> {
     const dialogConfig: MatDialogConfig = {
       data: {
-        title: 'Delete Machine Deployment',
-        message: `Delete <b>${md.name}</b> machine deployment of <b>${cluster.name}</b> cluster permanently?`,
+        title: `Delete ${cluster?.cloud.eks ? 'Node Group' : 'Node Pool'}`,
+        message: `Delete <b>${md.name}</b> of <b>${cluster.name}</b> cluster permanently?`,
         confirmLabel: 'Delete',
       },
     };
