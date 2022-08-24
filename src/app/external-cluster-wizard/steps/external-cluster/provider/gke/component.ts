@@ -267,6 +267,7 @@ export class GKEClusterSettingsComponent
       this.versionLabel = VersionState.Loading;
       this._externalClusterService
         .getGKEKubernetesVersions(zone, mode, releaseChannel)
+        .pipe(takeUntil(this._unsubscribe))
         .subscribe((versions: MasterVersion[]) => {
           this.versionLabel = VersionState.Ready;
           this.kubernetesVersions = versions.map(version => {

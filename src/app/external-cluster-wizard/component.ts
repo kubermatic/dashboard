@@ -37,7 +37,7 @@ export class ExternalClusterWizardComponent implements OnInit, OnDestroy {
   readonly externalProviders = [ExternalClusterProvider.AKS, ExternalClusterProvider.EKS, ExternalClusterProvider.GKE];
   form: FormGroup;
   project = {} as Project;
-  isInValid = true;
+  isInvalid = true;
   private readonly _unsubscribe = new Subject<void>();
   @ViewChild('stepper', {static: true}) private readonly _stepper: MatStepper;
 
@@ -152,8 +152,8 @@ export class ExternalClusterWizardComponent implements OnInit, OnDestroy {
     steps.forEach(step => (controls[step.name] = this._builder.control('')));
     this.form = this._builder.group(controls);
 
-    this.form.valueChanges.subscribe(_ => {
-      this.isInValid = this.isInvalidStep();
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
+      this.isInvalid = this.isInvalidStep();
       this._cdr.detectChanges();
     });
   }
