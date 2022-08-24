@@ -78,10 +78,11 @@ export class ExternalClusterStepComponent
 
   private _initSubscriptions() {
     this._externalClusterService.providerChanges
-      .pipe(filter(provider => !!provider))
+      .pipe(filter(provider => !!provider && provider !== this.selectedProvider))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(provider => {
         this.selectedProvider = provider;
+        this.form.reset();
       });
   }
 }

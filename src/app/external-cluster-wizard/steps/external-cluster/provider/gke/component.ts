@@ -67,6 +67,23 @@ enum KubernetesVersionMode {
   ReleaseChannel = 'Auto',
 }
 
+enum ReleaseChannelOptions {
+  RapidChannel = 'Rapid channel',
+  RegularChannel = 'Regular channel',
+  StableChannel = 'Stable channel',
+}
+
+enum ReleaseChannelOptionsValue {
+  Rapid = 'RAPID',
+  Regular = 'REGULAR',
+  Stable = 'STABLE',
+}
+
+export enum VersionState {
+  Ready = 'Versions',
+  Loading = 'Loading...',
+}
+
 @Component({
   selector: 'km-gke-cluster-settings',
   templateUrl: './template.html',
@@ -98,13 +115,18 @@ export class GKEClusterSettingsComponent
   readonly MAX_REPLICAS_COUNT_DEFAULT_VALUE = 5;
   readonly MIN_REPLICAS_COUNT_DEFAULT_VALUE = 1;
   readonly ZONE_DEFAULT_VALUE = 'us-central1-c';
-  readonly releaseChannelOptions: string[] = ['Rapid channel', 'Regular channel', 'Stable channel'];
+  readonly releaseChannelOptions: string[] = [
+    ReleaseChannelOptions.RapidChannel,
+    ReleaseChannelOptions.RegularChannel,
+    ReleaseChannelOptions.StableChannel,
+  ];
 
   zones: string[] = [];
   diskTypes: string[] = [];
   machineTypes: string[] = [];
   kubernetesVersions: string[] = [];
   isLoadingZones: boolean;
+  versionLabel = VersionState.Ready;
 
   @Input() projectID: string;
   @Input() cluster: ExternalCluster;
@@ -242,15 +264,19 @@ export class GKEClusterSettingsComponent
       releaseChannel = releaseChannelToUpperCase?.slice(0, releaseChannelToUpperCase.indexOf(' '));
     }
     if (zone && mode) {
-      this._externalClusterService.getGKEKubernetesVersions(zone, mode, releaseChannel).subscribe(
-        (versions: MasterVersion[]) =>
-          (this.kubernetesVersions = versions.map(version => {
+      this.versionLabel = VersionState.Loading;
+      this._externalClusterService
+        .getGKEKubernetesVersions(zone, mode, releaseChannel)
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe((versions: MasterVersion[]) => {
+          this.versionLabel = VersionState.Ready;
+          this.kubernetesVersions = versions.map(version => {
             if (version.default) {
               this.control(Controls.Version).setValue(version.version);
             }
             return version.version;
-          }))
-      );
+          });
+        });
     }
   }
 
@@ -268,7 +294,7 @@ export class GKEClusterSettingsComponent
   }
 
   private _updateExternalClusterModel(): void {
-    this._externalClusterService.externalCluster = {
+    const config = {
       name: this.controlValue(Controls.Name),
       cloud: {
         gke: {
@@ -284,6 +310,25 @@ export class GKEClusterSettingsComponent
         } as GKEClusterSpec,
       } as ExternalClusterSpec,
     } as ExternalClusterModel;
+
+    if (this.controlValue(Controls.KubernetesVersionMode) === KubernetesVersionMode.ReleaseChannel) {
+      let value = '';
+      switch (this.controlValue(Controls.ReleaseChannelOptions)) {
+        case ReleaseChannelOptions.RapidChannel:
+          value = ReleaseChannelOptionsValue.Rapid;
+          break;
+        case ReleaseChannelOptions.RegularChannel:
+          value = ReleaseChannelOptionsValue.Regular;
+          break;
+        case ReleaseChannelOptions.StableChannel:
+          value = ReleaseChannelOptionsValue.Stable;
+          break;
+      }
+      config.spec.gkeclusterSpec.releaseChannel = value;
+    } else {
+      delete config.cloud?.gke?.clusterSpec?.releaseChannel;
+    }
+    this._externalClusterService.externalCluster = config;
   }
 
   private _updateExternalMachineDeployment(): void {

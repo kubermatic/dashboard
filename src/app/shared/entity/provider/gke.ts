@@ -28,6 +28,7 @@ export class GKECloudSpec {
 export class GKEClusterSpec {
   autopilot?: boolean;
   autoscaling?: GKEClusterAutoscaling;
+  releaseChannel?: string;
   clusterIpv4Cidr?: string;
   defaultMaxPodsConstraint?: number;
   enableKubernetesAlpha?: boolean;

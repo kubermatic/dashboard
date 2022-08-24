@@ -15,15 +15,15 @@ limitations under the License.
 -->
 <form [formGroup]="form"
       [fxLayout]="isDialogView() ? 'column' : 'row'"
-      fxLayoutGap="30px"
       fxLayout.md="column"
-      fxLayoutGap.md="30px"
       fxLayout.sm="column"
-      fxLayoutGap.sm="30px">
+      fxLayout.xs="column"
+      fxLayoutGap="20px">
+
   <ng-container *ngIf="!isDialogView()">
     <div [fxFlex]="isDialogView() ? '100%' : '50%'"
          fxLayout="column"
-         fxLayoutGap="8px">
+         fxLayoutGap="10px">
 
       <mat-card-header class="km-no-padding">
         <mat-card-title>Cluster</mat-card-title>
@@ -58,11 +58,11 @@ limitations under the License.
                        [options]="kubernetesVersions"
                        [formControlName]="Controls.KubernetesVersion">
         <ng-container hint>
-          Set the kubernetes version.
+          Enter or Select Kubernetes Version
         </ng-container>
       </km-autocomplete>
 
-      <km-select label="Location"
+      <km-select [label]="locationLabel"
                  [options]="locations"
                  required="true"
                  hint="Enter a region name for your cluster."
@@ -76,7 +76,21 @@ limitations under the License.
                type="text"
                autocomplete="off"
                [formControlName]="Controls.NodeResourceGroup" />
-        <mat-hint>Enter name of the resource group containing agent pool nodes.</mat-hint>
+
+        <mat-hint *ngIf="!isDialogView();">
+          Enter the name of the resource group. The resource group should have sufficient permissions to manage AKS
+          cluster and to pull the Admin kubeconfig.
+          <a href="https://docs.microsoft.com/en-us/azure/aks/concepts-identity#azure-rbac-to-authorize-access-to-the-aks-resource"
+             target="_blank"
+             rel="noreferrer noopener">
+            AKS RBAC guide >
+          </a>
+          To get or create a resource group check <a href="https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal"
+             target="_blank"
+             rel="noreferrer noopener">
+            AKS user guide >
+          </a>
+        </mat-hint>
         <mat-error *ngIf="form.get(Controls.NodeResourceGroup).hasError(ErrorType.Required)">
           Resource Group is <strong>required</strong>.
         </mat-error>
@@ -86,7 +100,7 @@ limitations under the License.
 
   <div fxFlex="50%"
        fxLayout="column"
-       fxLayoutGap="8px">
+       fxLayoutGap="10px">
     <mat-card-header class="km-no-padding">
       <mat-card-title>Node Pool Setting</mat-card-title>
     </mat-card-header>
@@ -102,7 +116,8 @@ limitations under the License.
         Node Pool Name is <strong>required</strong>.
       </mat-error>
       <mat-error *ngIf="form.get(Controls.NodePoolName).hasError(ErrorType.Pattern)">
-        Node pool Name must contain only lowercase letters and numbers, must be 12 or fewer characters.</mat-error>
+        Node pool Name must contain only lowercase letters and numbers, must be 12 or fewer characters.
+      </mat-error>
     </mat-form-field>
 
     <km-combobox #vmSizeCombobox
@@ -125,7 +140,7 @@ limitations under the License.
                      [options]="nodePoolVersionsForMD"
                      [formControlName]="Controls.KubernetesVersion">
       <ng-container hint>
-        Set the kubernetes version.
+        Select the kubernetes version.
       </ng-container>
     </km-autocomplete>
 
@@ -149,7 +164,8 @@ limitations under the License.
       <mat-radio-button [value]="Mode.System"
                         class="km-radio-button">
         <div class="km-radio-button-title"
-             [ngClass]="!isDialogView() && 'km-text'">System</div>
+             [ngClass]="!isDialogView() && 'km-text'">System
+        </div>
       </mat-radio-button>
       <mat-radio-button [value]="Mode.User"
                         class="km-radio-button">

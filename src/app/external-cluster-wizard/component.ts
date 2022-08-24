@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {MatStepper} from '@angular/material/stepper';
 import {Router} from '@angular/router';
@@ -33,15 +33,16 @@ import {ExternalClusterWizardStep, StepRegistry, WizardSteps} from './config';
   styleUrls: ['./style.scss'],
 })
 export class ExternalClusterWizardComponent implements OnInit, OnDestroy {
-  private readonly _unsubscribe = new Subject<void>();
   readonly stepRegistry = StepRegistry;
   readonly externalProviders = [ExternalClusterProvider.AKS, ExternalClusterProvider.EKS, ExternalClusterProvider.GKE];
   form: FormGroup;
   project = {} as Project;
-
+  isInvalid = true;
+  private readonly _unsubscribe = new Subject<void>();
   @ViewChild('stepper', {static: true}) private readonly _stepper: MatStepper;
 
   constructor(
+    private readonly _cdr: ChangeDetectorRef,
     private readonly _builder: FormBuilder,
     private readonly _externalClusterService: ExternalClusterService,
     private readonly _wizard: ExternalClusterWizardService,
@@ -66,26 +67,6 @@ export class ExternalClusterWizardComponent implements OnInit, OnDestroy {
     return this._stepper.selectedIndex === this.steps.length - 1;
   }
 
-  get isInvalidStep(): boolean {
-    switch (this.active.name) {
-      case StepRegistry.Provider:
-        return !this._externalClusterService.provider;
-      case StepRegistry.Credentials:
-        return !this._externalClusterService.isCredentialsStepValid;
-      case StepRegistry.ExternalClusterDetails:
-        if (
-          this.selectedProvider === ExternalClusterProvider.AKS ||
-          this.selectedProvider === ExternalClusterProvider.EKS ||
-          this.selectedProvider === ExternalClusterProvider.GKE
-        ) {
-          return !this._externalClusterService.isClusterDetailsStepValid;
-        }
-        return false;
-      default:
-        return true;
-    }
-  }
-
   get isPresetSelected(): boolean {
     return !!this._externalClusterService.preset;
   }
@@ -104,6 +85,12 @@ export class ExternalClusterWizardComponent implements OnInit, OnDestroy {
     this._wizard.stepper = this._stepper;
     this._initForm(this.steps);
     this._initSubscriptions();
+
+    this._stepper.selectionChange.pipe(takeUntil(this._unsubscribe)).subscribe(selection => {
+      if (selection.previouslySelectedIndex > selection.selectedIndex) {
+        selection.previouslySelectedStep.reset();
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -140,10 +127,35 @@ export class ExternalClusterWizardComponent implements OnInit, OnDestroy {
     });
   }
 
+  private isInvalidStep(): boolean {
+    switch (this.active.name) {
+      case StepRegistry.Provider:
+        return !this._externalClusterService.provider;
+      case StepRegistry.Credentials:
+        return !this._externalClusterService.isCredentialsStepValid;
+      case StepRegistry.ExternalClusterDetails:
+        if (
+          this.selectedProvider === ExternalClusterProvider.AKS ||
+          this.selectedProvider === ExternalClusterProvider.EKS ||
+          this.selectedProvider === ExternalClusterProvider.GKE
+        ) {
+          return !this._externalClusterService.isClusterDetailsStepValid;
+        }
+        return false;
+      default:
+        return true;
+    }
+  }
+
   private _initForm(steps: ExternalClusterWizardStep[]): void {
     const controls = {};
     steps.forEach(step => (controls[step.name] = this._builder.control('')));
     this.form = this._builder.group(controls);
+
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
+      this.isInvalid = this.isInvalidStep();
+      this._cdr.detectChanges();
+    });
   }
 
   private _initSubscriptions() {

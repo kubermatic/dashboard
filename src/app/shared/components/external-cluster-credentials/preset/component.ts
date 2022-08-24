@@ -17,8 +17,9 @@ import {FormBuilder, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} 
 import {SimplePresetList} from '@shared/entity/preset';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
-import {filter, map, switchMap, takeUntil} from 'rxjs/operators';
+import {filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {ExternalClusterService} from '@core/services/external-cluster';
+import {ExternalClusterProvider} from '@shared/entity/external-cluster';
 
 export enum Controls {
   Preset = 'name',
@@ -47,9 +48,10 @@ export enum PresetsState {
   ],
 })
 export class CredentialsPresetsComponent extends BaseFormValidator implements OnInit, OnDestroy {
+  readonly Controls = Controls;
   presetList = new SimplePresetList();
   presetsLoaded = false;
-  readonly Controls = Controls;
+  selectedProvider: ExternalClusterProvider;
   private _state = PresetsState.Loading;
 
   constructor(
@@ -84,6 +86,12 @@ export class CredentialsPresetsComponent extends BaseFormValidator implements On
     this._externalClusterService.providerChanges
       .pipe(
         filter(provider => !!provider),
+        tap(provider => {
+          if (provider !== this.selectedProvider) {
+            this.selectedProvider = provider;
+            this.reset();
+          }
+        }),
         switchMap(provider => this._externalClusterService.getPresets(provider)),
         map(presetList => new SimplePresetList(...presetList.items.map(preset => preset.name))),
         takeUntil(this._unsubscribe)
