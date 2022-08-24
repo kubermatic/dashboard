@@ -49,6 +49,9 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
   currentUser: Member;
   displayedColumns: string[] = ['name', 'scope', 'provider', 'region', 'actions'];
   dataSource = new MatTableDataSource<any>();
+  isGroupConfigLoading: boolean;
+  projectViewOnlyToolTip =
+    'You do not have permission to perform this action. Contact the project owner to change your membership role';
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -110,10 +113,14 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private _loadUserGroup(): void {
+    this.isGroupConfigLoading = true;
     this._onChange
       .pipe(switchMap(_ => this._userService.getCurrentUserGroup(this._selectedProject.id).pipe(take(1))))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
+      .subscribe(userGroup => {
+        this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup);
+        this.isGroupConfigLoading = false;
+      });
   }
 
   private _loadTemplates(): void {

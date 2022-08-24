@@ -22,8 +22,10 @@ limitations under the License.
     <button fxLayoutAlign="center center"
             mat-flat-button
             type="button"
+            [matTooltip]="projectViewOnlyToolTip"
+            [matTooltipDisabled]="canCreate()"
             (click)="create()"
-            [disabled]="!canCreate()">
+            [disabled]="!canCreate() || isGroupConfigLoading">
       <i class="km-icon-mask km-icon-add"></i>
       <span>Create Cluster Template</span>
     </button>
