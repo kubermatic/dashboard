@@ -47,6 +47,9 @@ export class CreateResourcePanelComponent implements OnInit, OnDestroy {
   @Output() refreshClusterTemplates = new EventEmitter<void>();
   @Output() refreshBackups = new EventEmitter<void>();
 
+  projectViewOnlyToolTip =
+    'You do not have permission to perform this action. Contact the project owner to change your membership role';
+
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
   private _isOpen = false;
