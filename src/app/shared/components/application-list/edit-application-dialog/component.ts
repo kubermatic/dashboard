@@ -144,7 +144,7 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
       ...this.application,
       spec: {
         ...this.application.spec,
-        values: this.form.get(Controls.Values).value,
+        values: this._getValueConfig(),
       } as ApplicationSpec,
     } as Application;
 
@@ -167,5 +167,10 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
       } as Application;
     }
     return patch;
+  }
+
+  private _getValueConfig(): any {
+    const raw = y.load(this.form.get(Controls.Values).value);
+    return !_.isEmpty(raw) ? raw : {};
   }
 }
