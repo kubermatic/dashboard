@@ -23,7 +23,7 @@ limitations under the License.
            autocomplete="off"
            required>
     <mat-hint>
-      Enter Azure Tenant ID. You can create one&nbsp;
+      Enter Azure Tenant ID. To create one
       <ng-container *ngTemplateOutlet="azureAccessKeysDocLink"></ng-container>
     </mat-hint>
     <mat-error *ngIf="form.get(Controls.TenantID).hasError('required')">
@@ -37,13 +37,13 @@ limitations under the License.
            [formControlName]="Controls.SubscriptionID"
            autocomplete="off"
            required>
-    <mat-hint>
-      Enter Azure Subscription ID. You can create one&nbsp;
-      <ng-container *ngTemplateOutlet="azureAccessKeysDocLink"></ng-container>
-    </mat-hint>
     <mat-error *ngIf="form.get(Controls.TenantID).hasError('required')">
       Subscription ID is <strong>required</strong>.
     </mat-error>
+    <mat-hint>
+      Enter Azure Subscription ID. To create one
+      <ng-container *ngTemplateOutlet="azureAccessKeysDocLink"></ng-container>
+    </mat-hint>
   </mat-form-field>
 
   <mat-form-field fxFlex>
@@ -53,7 +53,7 @@ limitations under the License.
            autocomplete="off"
            required>
     <mat-hint>
-      Enter Azure Client ID. You can create one&nbsp;
+      Enter Azure Client ID. To create one
       <ng-container *ngTemplateOutlet="azureAccessKeysDocLink"></ng-container>
     </mat-hint>
     <mat-error *ngIf="form.get(Controls.ClientID).hasError('required')">
@@ -69,7 +69,7 @@ limitations under the License.
            type="password"
            required>
     <mat-hint>
-      Enter Azure Client Client. You can create one&nbsp;
+      Enter Azure Client Client. To create one
       <ng-container *ngTemplateOutlet="azureAccessKeysDocLink"></ng-container>
     </mat-hint>
     <mat-error *ngIf="form.get(Controls.ClientSecret).hasError('required')">

@@ -22,7 +22,7 @@ limitations under the License.
 
   <div [fxFlex]="isDialogView() ? '100%' : '50%'"
        fxLayout="column"
-       fxLayoutGap="30px">
+       fxLayoutGap="20px">
 
     <mat-card-header *ngIf="!isDialogView()"
                      class="km-no-padding">
@@ -63,7 +63,7 @@ limitations under the License.
     </km-autocomplete>
 
     <ng-template #dialogViewKubernetesVersion>
-      <mat-form-field *ngIf="isDialogView()">
+      <mat-form-field>
         <mat-label>Kubernetes Version</mat-label>
         <input [formControlName]="Controls.Version"
                matInput
@@ -117,7 +117,7 @@ limitations under the License.
 
   <div fxFlex="50%"
        fxLayout="column"
-       fxLayoutGap="30px">
+       fxLayoutGap="20px">
 
     <mat-card-header class="km-no-padding">
       <mat-card-title>Networking</mat-card-title>

@@ -79,6 +79,11 @@ enum ReleaseChannelOptionsValue {
   Stable = 'STABLE',
 }
 
+export enum VersionState {
+  Ready = 'Versions',
+  Loading = 'Loading...',
+}
+
 @Component({
   selector: 'km-gke-cluster-settings',
   templateUrl: './template.html',
@@ -121,6 +126,7 @@ export class GKEClusterSettingsComponent
   machineTypes: string[] = [];
   kubernetesVersions: string[] = [];
   isLoadingZones: boolean;
+  versionLabel = VersionState.Ready;
 
   @Input() projectID: string;
   @Input() cluster: ExternalCluster;
@@ -258,15 +264,18 @@ export class GKEClusterSettingsComponent
       releaseChannel = releaseChannelToUpperCase?.slice(0, releaseChannelToUpperCase.indexOf(' '));
     }
     if (zone && mode) {
-      this._externalClusterService.getGKEKubernetesVersions(zone, mode, releaseChannel).subscribe(
-        (versions: MasterVersion[]) =>
-          (this.kubernetesVersions = versions.map(version => {
+      this.versionLabel = VersionState.Loading;
+      this._externalClusterService
+        .getGKEKubernetesVersions(zone, mode, releaseChannel)
+        .subscribe((versions: MasterVersion[]) => {
+          this.versionLabel = VersionState.Ready;
+          this.kubernetesVersions = versions.map(version => {
             if (version.default) {
               this.control(Controls.Version).setValue(version.version);
             }
             return version.version;
-          }))
-      );
+          });
+        });
     }
   }
 

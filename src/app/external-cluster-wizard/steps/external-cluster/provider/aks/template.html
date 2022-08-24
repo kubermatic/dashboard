@@ -18,11 +18,12 @@ limitations under the License.
       fxLayout.md="column"
       fxLayout.sm="column"
       fxLayout.xs="column"
-      fxLayoutGap="30px">
+      fxLayoutGap="20px">
+
   <ng-container *ngIf="!isDialogView()">
     <div [fxFlex]="isDialogView() ? '100%' : '50%'"
          fxLayout="column"
-         fxLayoutGap="8px">
+         fxLayoutGap="10px">
 
       <mat-card-header class="km-no-padding">
         <mat-card-title>Cluster</mat-card-title>
@@ -61,7 +62,7 @@ limitations under the License.
         </ng-container>
       </km-autocomplete>
 
-      <km-select label="Location"
+      <km-select [label]="locationLabel"
                  [options]="locations"
                  required="true"
                  hint="Enter a region name for your cluster."
@@ -79,18 +80,16 @@ limitations under the License.
         <mat-hint *ngIf="!isDialogView();">
           Enter the name of the resource group. The resource group should have sufficient permissions to manage AKS
           cluster and to pull the Admin kubeconfig.
-          <a
-            href="https://docs.microsoft.com/en-us/azure/aks/concepts-identity#azure-rbac-to-authorize-access-to-the-aks-resource"
-            target="_blank"
-            rel="noreferrer noopener">
+          <a href="https://docs.microsoft.com/en-us/azure/aks/concepts-identity#azure-rbac-to-authorize-access-to-the-aks-resource"
+             target="_blank"
+             rel="noreferrer noopener">
             AKS RBAC guide >
           </a>
-          To get or create a resource group check <a
-          href="https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal"
-          target="_blank"
-          rel="noreferrer noopener">
-          AKS user guide >
-        </a>
+          To get or create a resource group check <a href="https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal"
+             target="_blank"
+             rel="noreferrer noopener">
+            AKS user guide >
+          </a>
         </mat-hint>
         <mat-error *ngIf="form.get(Controls.NodeResourceGroup).hasError(ErrorType.Required)">
           Resource Group is <strong>required</strong>.
@@ -101,7 +100,7 @@ limitations under the License.
 
   <div fxFlex="50%"
        fxLayout="column"
-       fxLayoutGap="8px">
+       fxLayoutGap="10px">
     <mat-card-header class="km-no-padding">
       <mat-card-title>Node Pool Setting</mat-card-title>
     </mat-card-header>

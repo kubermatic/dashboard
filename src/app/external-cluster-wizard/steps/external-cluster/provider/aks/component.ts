@@ -73,6 +73,11 @@ enum Mode {
   User = 'User',
 }
 
+export enum LocationState {
+  Ready = 'Location',
+  Loading = 'Loading...',
+}
+
 export enum VMSizeState {
   Ready = 'VM Size',
   Loading = 'Loading...',
@@ -110,6 +115,7 @@ export class AKSClusterSettingsComponent
   isLoadingVmSizes: boolean;
   isLoadingNodePoolVersions: boolean;
   vmSizes: AKSVMSize[] = [];
+  locationLabel = LocationState.Ready;
   vmSizeLabel = VMSizeState.Ready;
   securityGroups: EKSSecurityGroup[] = [];
   locations: string[] = [];
@@ -285,10 +291,12 @@ export class AKSClusterSettingsComponent
   }
 
   private _getAKSLocations(): void {
+    this.locationLabel = LocationState.Loading;
     this._externalClusterService
       .getAKSLocations()
       .pipe(takeUntil(this._unsubscribe))
       .subscribe((locations: AKSLocation[]) => {
+        this.locationLabel = LocationState.Ready;
         this.locations = locations.map((location: AKSLocation) => {
           if (location.name === this.DEFAULT_LOCATION) {
             this.control(Controls.Location).setValue(this.DEFAULT_LOCATION);

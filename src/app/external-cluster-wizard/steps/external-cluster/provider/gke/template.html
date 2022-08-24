@@ -18,11 +18,11 @@ limitations under the License.
       fxLayout.md="column"
       fxLayout.sm="column"
       fxLayout.xs="column"
-      fxLayoutGap="30px">
+      fxLayoutGap="20px">
 
   <div [fxFlex]="isDialogView() ? '100%' : '50%'"
        fxLayout="column"
-       fxLayoutGap="8px">
+       fxLayoutGap="10px">
 
     <mat-card-header *ngIf="!isDialogView()"
                      class="km-no-padding">
@@ -146,7 +146,7 @@ limitations under the License.
   <div *ngIf="!isDialogView()"
        fxFlex="50%"
        fxLayout="column"
-       fxLayoutGap="8px">
+       fxLayoutGap="10px">
 
     <label class="km-radio-group-label">Kubernetes Version</label>
     <mat-radio-group fxFlex
@@ -172,7 +172,7 @@ limitations under the License.
                  [options]="releaseChannelOptions"
                  [formControlName]="Controls.ReleaseChannelOptions"></km-select>
 
-      <km-select label="Versions"
+      <km-select [label]="versionLabel"
                  [options]="kubernetesVersions"
                  required="true"
                  hint="Select the cluster's control plane version."
