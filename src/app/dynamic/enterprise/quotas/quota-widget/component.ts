@@ -18,7 +18,16 @@
 //
 // END OF TERMS AND CONDITIONS
 
-import {Component, Input, OnDestroy, OnInit, HostListener, ChangeDetectorRef} from '@angular/core';
+import {
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  HostListener,
+  ChangeDetectorRef,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import {ThemePalette} from '@angular/material/core';
 import {debounceTime, take, takeUntil, map, filter} from 'rxjs/operators';
 import {BehaviorSubject, Subject} from 'rxjs';
@@ -33,7 +42,7 @@ import {QuotaService} from '../service';
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class QuotaWidgetComponent implements OnInit, OnDestroy {
+export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   private readonly _debounce = 500;
   private readonly _showDetails$ = new BehaviorSubject(false);
@@ -74,6 +83,13 @@ export class QuotaWidgetComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.isLoading = true;
     this._initSubscriptions();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.projectId) {
+      this._unsubscribe.next();
+      this._subscribeToQuotaDetails();
+    }
   }
 
   ngOnDestroy(): void {

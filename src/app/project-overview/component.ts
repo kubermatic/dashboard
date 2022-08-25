@@ -15,7 +15,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Project} from '@shared/entity/project';
 import {ProjectService} from '@core/services/project';
-import {catchError, filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {catchError, filter, map, switchMap, take, takeUntil, tap, startWith} from 'rxjs/operators';
 import {combineLatest, EMPTY, iif, merge, of, onErrorResumeNext, Subject, timer} from 'rxjs';
 import {Member} from '@shared/entity/member';
 import {MemberService} from '@core/services/member';
@@ -40,6 +40,10 @@ import {UserService} from '@core/services/user';
 import {GroupConfig} from '@shared/model/Config';
 import {QuotaWidgetComponent} from '../dynamic/enterprise/quotas/quota-widget/component';
 import {DynamicModule} from '../dynamic/module-registry';
+import {QuotaService} from '../dynamic/enterprise/quotas/service';
+import {Quota} from '@shared/entity/quota';
+import {GlobalModule} from '@core/services/global/module';
+import {PathParam, ParamsService} from '@core/services/params';
 
 @Component({
   selector: 'km-project-overview',
@@ -64,7 +68,10 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   clusterTemplatesChange = new Subject<void>();
   backupsChange = new Subject<void>();
   firstVisitToOverviewPage: string;
+  projectQuota: Quota;
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
+  private _quotaWidgetComponent: QuotaWidgetComponent | null;
+  private _quotaService: QuotaService;
   private _projectChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
   private _unsubscribeLoadMembers = new Subject<void>();
@@ -83,8 +90,13 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     private readonly _serviceAccountService: ServiceAccountService,
     private readonly _settingsService: SettingsService,
     private readonly _appConfigService: AppConfigService,
+    private readonly _params: ParamsService,
     private readonly _cookieService: CookieService
-  ) {}
+  ) {
+    if (this.isEnterpriseEdition) {
+      this._quotaService = GlobalModule.injector.get(QuotaService);
+    }
+  }
 
   ngOnInit(): void {
     this._initSubscriptions();
@@ -106,9 +118,14 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   }
 
   onActivate(component: QuotaWidgetComponent): void {
-    component.projectId = this.project.id;
+    this._quotaWidgetComponent = component;
+    component.projectId = this._currentProjectId;
     component.showQuotaWidgetDetails = true;
     component.showIcon = false;
+  }
+
+  private get _currentProjectId(): string {
+    return this._params.get(PathParam.ProjectID);
   }
 
   private _initSubscriptions() {
@@ -135,6 +152,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     this._loadSSHKeys();
     this._loadMembers();
     this._loadServiceAccounts();
+    this._loadProjectQuota();
     this._checkFirstVisitToOverviewPageMessage();
   }
 
@@ -241,6 +259,30 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
       .pipe(switchMap(() => (this.project ? this._serviceAccountService.get(this.project.id) : EMPTY)))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(serviceAccounts => (this.serviceAccounts = serviceAccounts));
+  }
+
+  private _loadProjectQuota(): void {
+    if (!this.isEnterpriseEdition) {
+      return;
+    }
+
+    this._projectService.onProjectChange
+      .pipe(
+        startWith({id: this._currentProjectId}),
+        switchMap(({id}) => {
+          if (this._quotaWidgetComponent) {
+            this._quotaWidgetComponent.projectId = id;
+          }
+
+          return this.currentUser.isAdmin
+            ? this._quotaService.quotas.pipe(map(quotas => quotas.find(({subjectName}) => subjectName === id)))
+            : this._quotaService.getProjectQuota(id);
+        }),
+        takeUntil(this._unsubscribe)
+      )
+      .subscribe(quota => {
+        this.projectQuota = quota;
+      });
   }
 
   private _checkFirstVisitToOverviewPageMessage(): void {

@@ -155,7 +155,7 @@ END OF TERMS AND CONDITIONS
       percentage: quotaPercentage.cpu
       }"></ng-container>
 
-      <ng-container *ngIf="quotaDetails.quota.cpu"
+      <ng-container *ngIf="quotaDetails.quota.memory"
                     [ngTemplateOutlet]="extendedProgress"
                     [ngTemplateOutletContext]="{
       label: 'Memory',
@@ -165,10 +165,10 @@ END OF TERMS AND CONDITIONS
       percentage: quotaPercentage.memory
       }"></ng-container>
 
-      <ng-container *ngIf="quotaDetails.quota.cpu"
+      <ng-container *ngIf="quotaDetails.quota.storage"
                     [ngTemplateOutlet]="extendedProgress"
                     [ngTemplateOutletContext]="{
-      label: 'Storage',
+      label: 'Disk',
       unit: 'GB',
       total: quotaDetails.quota.storage,
       used: quotaDetails.status.globalUsage.storage,
