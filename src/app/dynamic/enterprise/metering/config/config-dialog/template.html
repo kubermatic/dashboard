@@ -43,6 +43,9 @@ END OF TERMS AND CONDITIONS
       <mat-error *ngIf="form.get(controls.StorageClassName).hasError('required')">
         Storage Class Name is <strong>required</strong>.
       </mat-error>
+      <mat-error *ngIf="form.get(controls.StorageClassName).hasError('pattern')">
+        Storage Class Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start or end with dash.
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field fxFlex>

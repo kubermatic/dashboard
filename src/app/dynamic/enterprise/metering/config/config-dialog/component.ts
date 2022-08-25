@@ -27,6 +27,7 @@ import {pushToSide} from '@shared/animations/push';
 import {MeteringConfiguration} from '@shared/entity/datacenter';
 import {Observable, Subject} from 'rxjs';
 import {take} from 'rxjs/operators';
+import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@shared/validators/others';
 
 export interface MeteringConfigurationDialogConfig {
   configuration: MeteringConfiguration;
@@ -62,7 +63,10 @@ export class MeteringConfigurationDialog implements OnInit, OnDestroy {
     this.form = this._builder.group({
       [Controls.Enabled]: this._builder.control(this.data.configuration.enabled, Validators.required),
       [Controls.StorageSize]: this._builder.control(this.data.configuration.storageSize, Validators.required),
-      [Controls.StorageClassName]: this._builder.control(this.data.configuration.storageClassName, Validators.required),
+      [Controls.StorageClassName]: this._builder.control(this.data.configuration.storageClassName, [
+        Validators.required,
+        KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,
+      ]),
     });
   }
 
