@@ -26,6 +26,7 @@ import {MeteringService} from '@app/dynamic/enterprise/metering/service/metering
 import {MeteringReportConfiguration} from '@app/shared/entity/datacenter';
 import {KmValidators} from '@app/shared/validators/validators';
 import {Observable, Subject, take, takeUntil} from 'rxjs';
+import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@shared/validators/others';
 
 export interface MeteringScheduleAddDialogConfig {
   title: string;
@@ -127,7 +128,7 @@ export class MeteringScheduleAddDialog implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Name]: this._builder.control('', Validators.required),
+      [Controls.Name]: this._builder.control('', [Validators.required, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR]),
       [Controls.Group]: this._builder.control(DefaultScheduleOption.Daily, Validators.required),
       [Controls.Schedule]: this._builder.control(DefaultSchedule.Daily),
       [Controls.Interval]: this._builder.control('1', Validators.min(1)),
