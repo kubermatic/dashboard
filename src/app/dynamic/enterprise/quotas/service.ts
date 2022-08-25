@@ -62,7 +62,7 @@ export class QuotaService {
   }
 
   updateQuota(quotaName: string, payload: QuotaVariables): Observable<Record<string, never>> {
-    return this._http.patch<Record<string, never>>(this._baseUrl + '/' + quotaName, payload);
+    return this._http.put<Record<string, never>>(this._baseUrl + '/' + quotaName, payload);
   }
 
   deleteQuota(quotaName: string): Observable<Record<string, never>> {
