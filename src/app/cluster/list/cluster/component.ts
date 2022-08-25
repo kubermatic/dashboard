@@ -40,7 +40,7 @@ import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
 import {combineLatest, EMPTY, iif, of, onErrorResumeNext, Subject} from 'rxjs';
-import {catchError, distinctUntilChanged, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {catchError, distinctUntilChanged, switchMap, take, takeUntil, tap, startWith} from 'rxjs/operators';
 import {ClusterDeleteConfirmationComponent} from '../../details/cluster/cluster-delete-confirmation/component';
 import {MachineDeploymentService} from '@core/services/machine-deployment';
 import {getClusterHealthStatus, HealthStatus} from '@shared/utils/health-status';
@@ -248,7 +248,11 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onActivate(component: QuotaWidgetComponent): void {
-    component.projectId = this._selectedProject.id;
+    this._projectService.onProjectChange
+      .pipe(startWith(this._selectedProject), takeUntil(this._unsubscribe))
+      .subscribe(({id}) => {
+        component.projectId = id;
+      });
   }
 
   private _filter(cluster: Cluster, query: string): boolean {

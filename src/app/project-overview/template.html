@@ -118,7 +118,7 @@ limitations under the License.
     <div fxLayout="column"
          fxLayoutGap="20px"
          fxFlex="50">
-      <mat-card *ngIf="project && isEnterpriseEdition">
+      <mat-card *ngIf="isEnterpriseEdition && projectQuota">
         <mat-card-header>
           <mat-card-title>Project Quota</mat-card-title>
         </mat-card-header>
