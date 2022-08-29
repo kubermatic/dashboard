@@ -18,6 +18,7 @@ export class Member {
   creationTimestamp: Date;
   deletionTimestamp?: Date;
   email: string;
+  groups?: string[];
   isAdmin?: boolean;
   id: string;
   name: string;
