@@ -62,6 +62,41 @@ limitations under the License.
                [formControlName]="Controls.Zone">
     </km-select>
 
+    <ng-container *ngIf="!isDialogView()">
+
+      <label class="km-radio-group-label">Kubernetes Version</label>
+      <mat-radio-group fxFlex
+                       fxLayout="column"
+                       class="km-radio-group"
+                       [formControlName]="Controls.KubernetesVersionMode">
+        <mat-radio-button [value]="KubernetesVersionMode.StaticVersion"
+                          class="km-radio-button">
+          <div class="km-radio-button-title">Static Version</div>
+        </mat-radio-button>
+        <mat-hint>Manually manage the version upgrades,
+          GKE will only upgrade the control plane and nodes
+          if it's necessary to maintain security and compatibility.
+        </mat-hint>
+        <mat-radio-button [value]="KubernetesVersionMode.ReleaseChannel"
+                          class="km-radio-button">
+          <div class="km-radio-button-title">Release Channel</div>
+        </mat-radio-button>
+        <mat-hint>Let GKE automatically manage the cluster's control plane version.</mat-hint>
+
+        <km-select *ngIf="form.get(Controls.KubernetesVersionMode).value === KubernetesVersionMode.ReleaseChannel"
+                   label="Release Channel"
+                   [options]="releaseChannelOptions"
+                   [formControlName]="Controls.ReleaseChannelOptions"></km-select>
+
+        <km-select [label]="versionLabel"
+                   [options]="kubernetesVersions"
+                   required="true"
+                   hint="Select the cluster's control plane version."
+                   [formControlName]="Controls.Version">
+        </km-select>
+      </mat-radio-group>
+    </ng-container>
+
     <mat-form-field *ngIf="isDialogView()">
       <mat-label>Kubernetes Version</mat-label>
       <input matInput
@@ -100,6 +135,28 @@ limitations under the License.
                        [formControlName]="Controls.DiskSize">
     </km-number-stepper>
 
+    <!-- <div fxLayout="column"
+         fxFlex="100"
+         fxLayoutGap="10px"> -->
+    <!-- </div> -->
+  </div>
+
+  <div [fxFlex]="isDialogView() ? '100%' : '50%'"
+       fxLayout="column"
+       fxLayoutGap="10px">
+    <ng-container *ngIf="!isDialogView()">
+      <mat-card-header class="km-no-padding">
+        <mat-card-title>Initial Node Pool</mat-card-title>
+      </mat-card-header>
+
+      <mat-form-field>
+        <mat-label>Node Pool Name</mat-label>
+        <input matInput
+               type="text"
+               [formControlName]="Controls.InitialNodePoolName" />
+        <mat-hint>Initial Node Pool Name can't be changed</mat-hint>
+      </mat-form-field>
+    </ng-container>
 
     <km-number-stepper hint="Set Number of nodes"
                        mode="all"
@@ -109,18 +166,13 @@ limitations under the License.
                        [required]="true"
                        [formControlName]="Controls.NodeCount">
     </km-number-stepper>
-
-    <div fxLayout="column"
-         fxFlex="100"
-         fxLayoutGap="10px">
-      <mat-checkbox *ngIf="isDialogView()"
-                    [formControlName]="Controls.EnableAutoScaling"
-                    (change)="onEnableAutoScalingChange($event)">
-        Enable AutoScaling
-        <i class="km-icon-info km-pointer"
-           matTooltip="Indicates whether to enable auto scaling.This option is recommended so that cluster sized correctly for the current running workloads."></i>
-      </mat-checkbox>
-    </div>
+    <mat-checkbox *ngIf="isDialogView()"
+                  [formControlName]="Controls.EnableAutoScaling"
+                  (change)="onEnableAutoScalingChange($event)">
+      Enable AutoScaling
+      <i class="km-icon-info km-pointer"
+         matTooltip="Indicates whether to enable auto scaling.This option is recommended so that cluster sized correctly for the current running workloads."></i>
+    </mat-checkbox>
 
     <ng-container *ngIf="form.get(Controls.EnableAutoScaling).value">
       <km-number-stepper label="Max Count"
@@ -141,43 +193,6 @@ limitations under the License.
                          [formControlName]="Controls.MinCount">
       </km-number-stepper>
     </ng-container>
-  </div>
 
-  <div *ngIf="!isDialogView()"
-       fxFlex="50%"
-       fxLayout="column"
-       fxLayoutGap="10px">
-
-    <label class="km-radio-group-label">Kubernetes Version</label>
-    <mat-radio-group fxFlex
-                     fxLayout="column"
-                     class="km-radio-group"
-                     [formControlName]="Controls.KubernetesVersionMode">
-      <mat-radio-button [value]="KubernetesVersionMode.StaticVersion"
-                        class="km-radio-button">
-        <div class="km-radio-button-title">Static Version</div>
-      </mat-radio-button>
-      <mat-hint>Manually manage the version upgrades,
-        GKE will only upgrade the control plane and nodes
-        if it's necessary to maintain security and compatibility.
-      </mat-hint>
-      <mat-radio-button [value]="KubernetesVersionMode.ReleaseChannel"
-                        class="km-radio-button">
-        <div class="km-radio-button-title">Release Channel</div>
-      </mat-radio-button>
-      <mat-hint>Let GKE automatically manage the cluster's control plane version.</mat-hint>
-
-      <km-select *ngIf="form.get(Controls.KubernetesVersionMode).value === KubernetesVersionMode.ReleaseChannel"
-                 label="Release Channel"
-                 [options]="releaseChannelOptions"
-                 [formControlName]="Controls.ReleaseChannelOptions"></km-select>
-
-      <km-select [label]="versionLabel"
-                 [options]="kubernetesVersions"
-                 required="true"
-                 hint="Select the cluster's control plane version."
-                 [formControlName]="Controls.Version">
-      </km-select>
-    </mat-radio-group>
   </div>
 </form>

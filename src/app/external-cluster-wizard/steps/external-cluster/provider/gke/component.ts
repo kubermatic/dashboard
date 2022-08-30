@@ -57,6 +57,7 @@ enum Controls {
   NodeCount = 'nodeCount',
   DiskTypes = 'diskTypes',
   MachineTypes = 'machineTypes',
+  InitialNodePoolName = 'initialNodePoolName',
   EnableAutoScaling = 'enableAutoScaling',
   KubernetesVersionMode = 'kubernetesVersionMode',
   ReleaseChannelOptions = 'releaseChannelOptions',
@@ -115,6 +116,7 @@ export class GKEClusterSettingsComponent
   readonly MAX_REPLICAS_COUNT_DEFAULT_VALUE = 5;
   readonly MIN_REPLICAS_COUNT_DEFAULT_VALUE = 1;
   readonly ZONE_DEFAULT_VALUE = 'us-central1-c';
+  readonly INITIAL_NODE_POOL_NAME = 'default-pool';
   readonly releaseChannelOptions: string[] = [
     ReleaseChannelOptions.RapidChannel,
     ReleaseChannelOptions.RegularChannel,
@@ -190,6 +192,7 @@ export class GKEClusterSettingsComponent
       [Controls.EnableAutoScaling]: this._builder.control(false),
       [Controls.MaxCount]: this._builder.control(this.MAX_REPLICAS_COUNT_DEFAULT_VALUE),
       [Controls.MinCount]: this._builder.control(this.MIN_REPLICAS_COUNT_DEFAULT_VALUE),
+      [Controls.InitialNodePoolName]: this._builder.control(this.INITIAL_NODE_POOL_NAME),
     });
   }
 
@@ -224,6 +227,7 @@ export class GKEClusterSettingsComponent
         .subscribe(_ => {
           this._getGKEKubernetesVersions();
         });
+      this.control(Controls.InitialNodePoolName).disable();
     }
   }
 
