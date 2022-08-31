@@ -275,6 +275,15 @@ export class ExternalClusterService {
     return this._http.get<string[]>(url, {headers}).pipe(catchError(() => of([])));
   }
 
+  getEKSRegionsByPreset(presetName: string): Observable<string[]> {
+    const url = `${this._newRestRoot}/providers/eks/regions`;
+    const credentials = {
+      Credential: presetName,
+    };
+    const headers = new HttpHeaders(credentials);
+    return this._http.get<string[]>(url, {headers}).pipe(catchError(() => of([])));
+  }
+
   createExternalCluster(projectID: string, externalClusterModel: ExternalClusterModel): Observable<ExternalCluster> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters`;
 
@@ -354,7 +363,10 @@ export class ExternalClusterService {
   private _getEKSHeaders(vpcId?: string): HttpHeaders {
     let headers = {};
     if (this._preset) {
-      headers = {Credential: this._preset};
+      headers = {
+        Credential: this._preset,
+        Region: this._externalCluster.cloud.eks.region,
+      };
       if (vpcId) {
         headers = {...headers, VpcId: vpcId};
       }

@@ -41,6 +41,10 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
     private readonly _externalClusterService: ExternalClusterService
   ) {}
 
+  get selectedPreset(): string {
+    return this._externalClusterService.preset;
+  }
+
   ngOnInit(): void {
     this.form = this._builder.group(
       {
@@ -61,7 +65,9 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
       this._update();
-      this._externalClusterService.isPresetEnabled = Object.values(Controls).every(c => !this.form.get(c).value);
+      this._externalClusterService.isPresetEnabled = Object.values(Controls)
+        .filter(key => key !== Controls.Region)
+        .every(c => !this.form.get(c).value);
     });
 
     merge(this.form.get(Controls.AccessKeyID).valueChanges, this.form.get(Controls.SecretAccessKey).valueChanges)
@@ -71,9 +77,15 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
         this._getEKSRegions();
       });
 
-    this._externalClusterService.presetChanges
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(preset => Object.values(Controls).forEach(control => this._enable(!preset, control)));
+    this._externalClusterService.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
+      Object.values(Controls)
+        .filter(key => key !== Controls.Region)
+        .forEach(control => this._enable(!preset, control));
+
+      if (this.selectedPreset) {
+        this._getEKSRegionsByPreset();
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -90,6 +102,26 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
     if (accessKeyID && secretAccessKey) {
       this._externalClusterService
         .getEKSRegions(accessKeyID, secretAccessKey)
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe((regions: string[]) => {
+          this.regions = regions;
+          regions.map(region => {
+            if (region === this.DEFAULT_LOCATION) {
+              this.form.get(Controls.Region).setValue(this.DEFAULT_LOCATION);
+            }
+          });
+        });
+    } else {
+      this.regions = [];
+      this.form.get(Controls.Region).setValue('');
+    }
+  }
+
+  private _getEKSRegionsByPreset(): void {
+    const presetValue = this.selectedPreset;
+    if (presetValue) {
+      this._externalClusterService
+        .getEKSRegionsByPreset(presetValue)
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((regions: string[]) => {
           this.regions = regions;
@@ -137,11 +169,11 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
 
   private _enable(enable: boolean, name: string): void {
     if (enable && this.form.get(name).disabled) {
-      this.form.get(name).enable();
+      this.form.get(name).enable({emitEvent: false});
     }
 
     if (!enable && this.form.get(name).enabled) {
-      this.form.get(name).disable();
+      this.form.get(name).disable({emitEvent: false});
     }
   }
 }
