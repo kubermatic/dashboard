@@ -107,38 +107,6 @@ limitations under the License.
         Kubernetes Version is <strong>required</strong>.
       </mat-error>
     </mat-form-field>
-
-    <km-autocomplete *ngIf="isDialogView()"
-                     label="Machine Type"
-                     [options]="machineTypes"
-                     [formControlName]="Controls.MachineTypes">
-      <mg-container hint>
-        Select vCPU cores and memory
-      </mg-container>
-    </km-autocomplete>
-
-    <km-autocomplete *ngIf="isDialogView()"
-                     label="Disk Type"
-                     [options]="diskTypes"
-                     [formControlName]="Controls.DiskTypes">
-      <mg-container hint>
-        SSD persistent disk is better for random IOPS or for streaming throughput with low latency.
-      </mg-container>
-    </km-autocomplete>
-
-    <km-number-stepper *ngIf="isDialogView()"
-                       hint="Boot disk size is permanent."
-                       mode="all"
-                       label="Disk Size"
-                       [max]="DISK_SIZE_MAX_VALUE"
-                       [min]="DISK_SIZE_MIN_VALUE"
-                       [formControlName]="Controls.DiskSize">
-    </km-number-stepper>
-
-    <!-- <div fxLayout="column"
-         fxFlex="100"
-         fxLayoutGap="10px"> -->
-    <!-- </div> -->
   </div>
 
   <div [fxFlex]="isDialogView() ? '100%' : '50%'"
@@ -157,6 +125,36 @@ limitations under the License.
         <mat-hint>Initial Node Pool Name can't be changed</mat-hint>
       </mat-form-field>
     </ng-container>
+
+    <km-combobox filterBy="name"
+                 inputLabel="Select Machine Type..."
+                 hint="Select vCPU cores and memory"
+                 [label]="machineTypeLabel"
+                 [options]="machineTypes"
+                 [formControlName]="Controls.MachineTypes">
+      <div *option="let machineType">
+        {{machineType.name+" ("+machineType.vcpus +" vCPUs "+machineType.memory+"MB RAM)"}}
+      </div>
+    </km-combobox>
+
+    <km-combobox filterBy="name"
+                 inputLabel="Select Disk Type..."
+                 hint="SSD persistent disk is better for random IOPS or for streaming throughput with low latency."
+                 [label]="diskTypeLabel"
+                 [options]="diskTypes"
+                 [formControlName]="Controls.DiskTypes">
+      <div *option="let diskType">
+        {{diskType.description}}
+      </div>
+    </km-combobox>
+
+    <km-number-stepper hint="Boot disk size is permanent."
+                       mode="all"
+                       label="Disk Size"
+                       [max]="DISK_SIZE_MAX_VALUE"
+                       [min]="DISK_SIZE_MIN_VALUE"
+                       [formControlName]="Controls.DiskSize">
+    </km-number-stepper>
 
     <km-number-stepper hint="Set Number of nodes"
                        mode="all"
