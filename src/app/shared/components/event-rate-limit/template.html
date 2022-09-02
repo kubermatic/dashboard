@@ -23,39 +23,50 @@ limitations under the License.
   </mat-card-header>
   <form fxLayout="row"
         fxLayoutGap="8px"
+        fxLayout.sm="column"
+        fxLayout.xs="column"
         [formGroup]="form">
-    <mat-form-field class="km-dropdown-with-suffix">
-      <mat-label>Limit Type</mat-label>
-      <mat-select [formControlName]="Controls.LimitType"
-                  title="Namespace is the only supported limit type"
-                  class="km-select-ellipsis"
-                  disableOptionCentering>
-        <mat-option value="Namespace">Namespace</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <km-number-stepper [formControlName]="Controls.QPS"
-                       id="km-event-rate-limit-qps-input"
-                       mode="errors"
-                       label="QPS"
-                       min="1"
-                       step="10"
-                       required>
-    </km-number-stepper>
-    <km-number-stepper [formControlName]="Controls.Burst"
-                       id="km-event-rate-limit-burst-input"
-                       mode="errors"
-                       label="Burst"
-                       min="1"
-                       step="10"
-                       required>
-    </km-number-stepper>
-    <km-number-stepper [formControlName]="Controls.CacheSize"
-                       id="km-event-rate-limit-cache-size-input"
-                       mode="errors"
-                       label="Cache Size"
-                       step="10"
-                       min="1"
-                       required>
-    </km-number-stepper>
+
+    <div fxFlex
+         fxLayout="column">
+      <mat-form-field class="km-dropdown-with-suffix">
+        <mat-label>Limit Type</mat-label>
+        <mat-select [formControlName]="Controls.LimitType"
+                    title="Namespace is the only supported limit type"
+                    class="km-select-ellipsis"
+                    disableOptionCentering>
+          <mat-option value="Namespace">Namespace</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <km-number-stepper [formControlName]="Controls.QPS"
+                         id="km-event-rate-limit-qps-input"
+                         mode="errors"
+                         label="QPS"
+                         min="1"
+                         step="10"
+                         required>
+      </km-number-stepper>
+    </div>
+
+    <div fxFlex
+         fxLayout="column">
+      <km-number-stepper [formControlName]="Controls.Burst"
+                         id="km-event-rate-limit-burst-input"
+                         mode="errors"
+                         label="Burst"
+                         min="1"
+                         step="10"
+                         required>
+      </km-number-stepper>
+      <km-number-stepper [formControlName]="Controls.CacheSize"
+                         id="km-event-rate-limit-cache-size-input"
+                         mode="errors"
+                         label="Cache Size"
+                         step="10"
+                         min="1"
+                         required>
+      </km-number-stepper>
+    </div>
+
   </form>
 </div>
