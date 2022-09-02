@@ -23,6 +23,11 @@ import {EKSClusterSettingsComponent} from '@app/external-cluster-wizard/steps/ex
 import {AKSClusterSettingsComponent} from '@app/external-cluster-wizard/steps/external-cluster/provider/aks/component';
 import {GKEClusterSettingsComponent} from '@app/external-cluster-wizard/steps/external-cluster/provider/gke/component';
 import {ExternalClusterWizardService} from '@core/services/external-cluster-wizard/external-cluster-wizard';
+import {ExternalClusterSummaryStepComponent} from './steps/summary/component';
+import {ExternalClusterDetailsComponent} from './steps/summary/external-cluster-details/component';
+import {EKSClusterSummaryComponent} from './steps/summary/external-cluster-details/provider/eks/component';
+import {AKSClusterSummaryComponent} from './steps/summary/external-cluster-details/provider/aks/component';
+import {GKEClusterSummaryComponent} from './steps/summary/external-cluster-details/provider/gke/component';
 
 const components = [
   ExternalClusterWizardComponent,
@@ -30,6 +35,11 @@ const components = [
   EKSClusterSettingsComponent,
   AKSClusterSettingsComponent,
   GKEClusterSettingsComponent,
+  ExternalClusterSummaryStepComponent,
+  ExternalClusterDetailsComponent,
+  EKSClusterSummaryComponent,
+  AKSClusterSummaryComponent,
+  GKEClusterSummaryComponent,
 ];
 
 @NgModule({

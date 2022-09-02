@@ -298,6 +298,7 @@ export class EKSClusterSettingsComponent
           roleArn: this.controlValue(Controls.RoleArn),
           version: version,
           vpcConfigRequest: {
+            vpcId: this.controlValue(Controls.Vpc),
             subnetIds: this.controlValue(Controls.SubnetIds)?.[ComboboxControls.Select],
             securityGroupIds: this.controlValue(Controls.SecurityGroupsIds)?.[ComboboxControls.Select],
           },

@@ -14,8 +14,9 @@
 
 export enum StepRegistry {
   Provider = 'Provider',
-  Credentials = 'Credentials',
+  Settings = 'Settings',
   ExternalClusterDetails = 'External Cluster Details',
+  Summary = 'Summary',
 }
 
 export class ExternalClusterWizardStep {
@@ -38,6 +39,7 @@ export class ExternalClusterWizardStep {
 
 export const WizardSteps: ExternalClusterWizardStep[] = [
   ExternalClusterWizardStep.newWizardStep(StepRegistry.Provider),
-  ExternalClusterWizardStep.newWizardStep(StepRegistry.Credentials),
+  ExternalClusterWizardStep.newWizardStep(StepRegistry.Settings),
   ExternalClusterWizardStep.newWizardStep(StepRegistry.ExternalClusterDetails),
+  ExternalClusterWizardStep.newWizardStep(StepRegistry.Summary),
 ];

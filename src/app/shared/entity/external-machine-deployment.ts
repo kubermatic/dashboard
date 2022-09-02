@@ -15,6 +15,7 @@
 import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {HealthStatus, StatusIcon} from '@shared/utils/health-status';
 import {AKSMachineDeploymentCloudSpec} from './provider/aks';
+import {GKENodeConfig} from './provider/gke';
 
 export enum AKSMachineDeploymentMode {
   User = 'User',
@@ -90,15 +91,6 @@ export class GKENodePoolAutoscaling {
   enabled?: boolean;
   maxNodeCount?: number;
   minNodeCount?: number;
-}
-
-export class GKENodeConfig {
-  diskSizeGb?: number;
-  diskType?: string;
-  imageType?: string;
-  localSsdCount?: number;
-  machineType?: string;
-  labels?: Map<string, string>;
 }
 
 class GKENodeManagement {
