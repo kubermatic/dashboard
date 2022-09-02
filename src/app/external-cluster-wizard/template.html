@@ -51,7 +51,6 @@ limitations under the License.
                                                 title="Settings"
                                                 [hideLogo]="true"></km-external-cluster-credentials-step>
         </ng-container>
-
         <ng-container *ngSwitchCase="stepRegistry.ExternalClusterDetails">
           <ng-container *ngIf="isPresetSelected || isCredentialStepValid">
             <km-external-cluster-step [formControl]="form.get(stepRegistry.ExternalClusterDetails)"></km-external-cluster-step>
