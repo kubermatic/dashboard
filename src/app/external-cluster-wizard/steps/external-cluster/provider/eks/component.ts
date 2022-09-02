@@ -60,12 +60,14 @@ enum Controls {
 
 enum SubnetState {
   Loading = 'Loading...',
-  Ready = 'Subnet',
+  Ready = 'Subnets',
+  Empty = 'No Subnets Available',
 }
 
 enum SecurityGroupState {
   Loading = 'Loading...',
   Ready = 'Security Groups',
+  Empty = 'No Security Groups Available',
 }
 
 @Component({
@@ -197,9 +199,9 @@ export class EKSClusterSettingsComponent
       this._externalMachineDeploymentService
         .getEKSSubnetsForMachineDeployment(this.projectID, this.cluster.id, this.controlValue(Controls.Vpc))
         .pipe(tap(_ => this._clearSubnet()))
-        .subscribe((data: EKSSubnet[]) => {
-          this.subnets = data;
-          this.subnetLabel = SubnetState.Ready;
+        .subscribe((subnets: EKSSubnet[]) => {
+          this.subnets = subnets;
+          this.subnetLabel = this.subnets?.length ? SubnetState.Ready : SubnetState.Empty;
           this._cdr.detectChanges();
         });
     } else {
@@ -267,8 +269,8 @@ export class EKSClusterSettingsComponent
     ]).subscribe(([subnets, securityGroups]) => {
       this.subnets = subnets;
       this.securityGroups = securityGroups;
-      this.subnetLabel = SubnetState.Ready;
-      this.securityGroupLabel = SecurityGroupState.Ready;
+      this.subnetLabel = this.subnets?.length ? SubnetState.Ready : SubnetState.Empty;
+      this.securityGroupLabel = this.securityGroups?.length ? SecurityGroupState.Ready : SecurityGroupState.Empty;
       this._cdr.detectChanges();
     });
   }

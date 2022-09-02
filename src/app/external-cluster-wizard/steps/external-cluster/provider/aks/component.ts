@@ -74,13 +74,15 @@ enum Mode {
 }
 
 export enum LocationState {
-  Ready = 'Location',
+  Ready = 'Locations',
   Loading = 'Loading...',
+  Empty = 'No Locations Available',
 }
 
 export enum VMSizeState {
-  Ready = 'VM Size',
+  Ready = 'VM Sizes',
   Loading = 'Loading...',
+  Empty = 'No VM Sizes Available',
 }
 
 @Component({
@@ -240,7 +242,7 @@ export class AKSClusterSettingsComponent
       this._getAKSVmSizesForMachineDeployment(this.cluster.spec.aksclusterSpec.location).subscribe(
         (vmSizes: AKSVMSize[]) => {
           this.vmSizes = vmSizes;
-          this.vmSizeLabel = VMSizeState.Ready;
+          this.vmSizeLabel = this.vmSizes?.length ? VMSizeState.Ready : VMSizeState.Empty;
           this.control(Controls.VmSize).enable();
         }
       );
@@ -262,7 +264,7 @@ export class AKSClusterSettingsComponent
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((vmSizes: AKSVMSize[]) => {
           this.vmSizes = vmSizes;
-          this.vmSizeLabel = VMSizeState.Ready;
+          this.vmSizeLabel = this.vmSizes?.length ? VMSizeState.Ready : VMSizeState.Empty;
         });
 
       this._getAKSKubernetesVersions();
@@ -296,7 +298,7 @@ export class AKSClusterSettingsComponent
       .getAKSLocations()
       .pipe(takeUntil(this._unsubscribe))
       .subscribe((locations: AKSLocation[]) => {
-        this.locationLabel = LocationState.Ready;
+        this.locationLabel = this.locations?.length ? LocationState.Ready : LocationState.Empty;
         this.locations = locations.map((location: AKSLocation) => {
           if (location.name === this.DEFAULT_LOCATION) {
             this.control(Controls.Location).setValue(this.DEFAULT_LOCATION);
