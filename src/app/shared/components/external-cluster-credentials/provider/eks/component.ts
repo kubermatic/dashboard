@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {merge, Observable, of, Subject} from 'rxjs';
@@ -24,6 +24,12 @@ export enum Controls {
   Region = 'region',
 }
 
+export enum RegionState {
+  Ready = 'Regions',
+  Loading = 'Loading...',
+  Empty = 'No Regions Available',
+}
+
 @Component({
   selector: 'km-eks-credentials',
   templateUrl: './template.html',
@@ -33,14 +39,15 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
   readonly DEFAULT_LOCATION = 'eu-central-1';
   form: FormGroup;
   regions: string[] = [];
+  regionLabel = RegionState.Ready;
   private readonly _debounceTime = 500;
   private readonly _unsubscribe = new Subject<void>();
 
   constructor(
     private readonly _builder: FormBuilder,
+    private readonly _cdr: ChangeDetectorRef,
     private readonly _externalClusterService: ExternalClusterService
-  ) {
-  }
+  ) {}
 
   get selectedPreset(): string {
     return this._externalClusterService.preset;
@@ -91,13 +98,9 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
         .filter(key => key !== Controls.Region)
         .forEach(control => this._enable(!preset, control));
 
-      if (this.selectedPreset) {
-        this._getEKSRegions();
-      } else {
-        this._clearRegions();
-      }
+      this._clearRegions();
+      this._getEKSRegions();
     });
-
   }
 
   ngOnDestroy(): void {
@@ -109,30 +112,33 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
     let obs$;
     if (this.selectedPreset) {
       const presetValue = this.selectedPreset;
-      obs$ = this._externalClusterService.getEKSRegions(presetValue)
+      obs$ = this._externalClusterService.getEKSRegions(presetValue);
     } else {
       const accessKeyID = this.form.get(Controls.AccessKeyID).value;
       const secretAccessKey = this.form.get(Controls.SecretAccessKey).value;
       if (accessKeyID && secretAccessKey) {
-        obs$ = this._externalClusterService.getEKSRegions(null, accessKeyID, secretAccessKey)
+        obs$ = this._externalClusterService.getEKSRegions(null, accessKeyID, secretAccessKey);
       } else {
         obs$ = of([]);
         this._clearRegions();
       }
     }
-    obs$
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe((regions: string[]) => {
-        this.regions = regions;
-        if (regions.includes(this.DEFAULT_LOCATION)) {
-          this.form.get(Controls.Region).setValue(this.DEFAULT_LOCATION);
-        }
-      });
+
+    this.regionLabel = RegionState.Loading;
+    obs$.pipe(takeUntil(this._unsubscribe)).subscribe((regions: string[]) => {
+      this.regions = regions;
+      this.regionLabel = this.regions?.length ? RegionState.Ready : RegionState.Empty;
+      if (regions.includes(this.DEFAULT_LOCATION)) {
+        this.form.get(Controls.Region).setValue(this.DEFAULT_LOCATION);
+      }
+    });
   }
 
   private _clearRegions() {
     this.regions = [];
+    this.regionLabel = RegionState.Ready;
     this.form.get(Controls.Region).setValue('');
+    this._cdr.detectChanges();
   }
 
   private _credentialsValidator(control: AbstractControl): Observable<ValidationErrors | null> {

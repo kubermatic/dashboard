@@ -49,8 +49,8 @@ limitations under the License.
     </mat-error>
   </mat-form-field>
 
-  <km-select label="Region"
-             hint="Select region from the dropdown list"
+  <km-select hint="Select region from the dropdown list"
+             [label]="regionLabel"
              [required]="true"
              [options]="regions"
              [formControlName]="Controls.Region">

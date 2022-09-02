@@ -273,12 +273,12 @@ export class ExternalClusterService {
     if (preset) {
       credentials = {
         Credential: preset,
-      }
+      };
     } else {
       credentials = {
         AccessKeyID: accessKeyID,
         SecretAccessKey: secretAccessKey,
-      }
+      };
     }
     const headers = new HttpHeaders(credentials);
     return this._http.get<string[]>(url, {headers}).pipe(catchError(() => of([])));
