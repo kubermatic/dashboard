@@ -64,7 +64,11 @@ limitations under the License.
 
     <ng-container *ngIf="!isDialogView()">
 
-      <label class="km-radio-group-label">Kubernetes Version</label>
+      <label class="km-radio-group-label"
+             fxLayoutAlign=" center">Kubernetes Version
+        <i class="km-icon-info km-pointer"
+           matTooltip="This version will also be used for initial nodepool"></i>
+      </label>
       <mat-radio-group fxFlex
                        fxLayout="column"
                        class="km-radio-group"
@@ -126,25 +130,27 @@ limitations under the License.
       </mat-form-field>
     </ng-container>
 
-    <km-combobox filterBy="name"
+    <km-combobox #machineTypesCombobox
+                 filterBy="name"
                  inputLabel="Select Machine Type..."
                  hint="Select vCPU cores and memory"
                  [label]="machineTypeLabel"
                  [options]="machineTypes"
                  [formControlName]="Controls.MachineTypes">
       <div *option="let machineType">
-        {{machineType.name+" ("+machineType.vcpus +" vCPUs "+machineType.memory+"MB RAM)"}}
+        {{displayMachineType(machineType)}}
       </div>
     </km-combobox>
 
-    <km-combobox filterBy="name"
+    <km-combobox #diskTypesCombobox
+                 filterBy="name"
                  inputLabel="Select Disk Type..."
                  hint="SSD persistent disk is better for random IOPS or for streaming throughput with low latency."
                  [label]="diskTypeLabel"
                  [options]="diskTypes"
                  [formControlName]="Controls.DiskTypes">
       <div *option="let diskType">
-        {{diskType.description}}
+        {{displayDiskType(diskType)}}
       </div>
     </km-combobox>
 

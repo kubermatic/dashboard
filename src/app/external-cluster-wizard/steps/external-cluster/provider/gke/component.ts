@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, forwardRef, Input, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, forwardRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -31,7 +31,7 @@ import {
 import {GKECloudSpec, GKEClusterSpec, GKEZone} from '@app/shared/entity/provider/gke';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {merge} from 'rxjs';
-import {map, takeUntil} from 'rxjs/operators';
+import {debounceTime, map, takeUntil, tap} from 'rxjs/operators';
 import {GKE_POOL_NAME_VALIDATOR} from '@app/shared/validators/others';
 import {NodeDataService} from '@app/core/services/node-data/service';
 import {ExternalMachineDeploymentService} from '@app/core/services/external-machine-deployment';
@@ -46,7 +46,7 @@ import {MatCheckboxChange} from '@angular/material/checkbox';
 import {GCPDiskType, GCPMachineSize} from '@app/shared/entity/provider/gcp';
 import {NameGeneratorService} from '@app/core/services/name-generator';
 import {MasterVersion} from '@app/shared/entity/cluster';
-import {ComboboxControls} from '@app/shared/components/combobox/component';
+import {ComboboxControls, FilteredComboboxComponent} from '@app/shared/components/combobox/component';
 
 enum Controls {
   Name = 'name',
@@ -150,12 +150,20 @@ export class GKEClusterSettingsComponent
   @Input() projectID: string;
   @Input() cluster: ExternalCluster;
 
+  @ViewChild('diskTypesCombobox')
+  private readonly _diskTypesCombobox: FilteredComboboxComponent;
+  @ViewChild('machineTypesCombobox')
+  private readonly _machineTypesCombobox: FilteredComboboxComponent;
+
+  private readonly _debounceTime = 500;
+
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _externalClusterService: ExternalClusterService,
     private readonly _externalMachineDeploymentService: ExternalMachineDeploymentService,
     private readonly _nodeDataService: NodeDataService,
-    private readonly _nameGenerator: NameGeneratorService
+    private readonly _nameGenerator: NameGeneratorService,
+    private readonly _cdr: ChangeDetectorRef
   ) {
     super();
   }
@@ -193,6 +201,14 @@ export class GKEClusterSettingsComponent
       this.control(Controls.MaxCount).updateValueAndValidity();
       this.control(Controls.MinCount).updateValueAndValidity();
     }
+  }
+
+  displayMachineType(machineType: GCPMachineSize): string {
+    return `${machineType.name} (${machineType.vcpus} vCPUs ${machineType.memory}MB RAM)`;
+  }
+
+  displayDiskType(diskType: GCPDiskType): string {
+    return `${diskType.name} (${diskType.description})`;
   }
 
   private _initForm(): void {
@@ -246,7 +262,13 @@ export class GKEClusterSettingsComponent
           this._getGKEKubernetesVersions();
         });
       this.control(Controls.Zone)
-        .valueChanges.pipe(takeUntil(this._unsubscribe))
+        .valueChanges.pipe(debounceTime(this._debounceTime))
+        .pipe(
+          tap(_ => {
+            this._clearDiskTypes();
+            this._clearMachineTypes();
+          })
+        )
         .subscribe(_ => {
           this._getGKEDiskTypes();
           this._getGKEMachineTypes();
@@ -263,6 +285,7 @@ export class GKEClusterSettingsComponent
   }
 
   private _getGKEDiskTypes(): void {
+    this.diskTypeLabel = DiskTypeState.Loading;
     this._externalClusterService
       .getGKEDiskTypes(this.controlValue(Controls.Zone))
       .pipe(takeUntil(this._unsubscribe))
@@ -278,6 +301,7 @@ export class GKEClusterSettingsComponent
   }
 
   private _getGKEMachineTypes(): void {
+    this.machineTypeLabel = MachineTypeState.Loading;
     this._externalClusterService
       .getGKEMachineTypes(this.controlValue(Controls.Zone))
       .pipe(takeUntil(this._unsubscribe))
@@ -433,5 +457,19 @@ export class GKEClusterSettingsComponent
         minNodeCount: this.controlValue(Controls.MinCount),
       };
     }
+  }
+
+  private _clearDiskTypes(): void {
+    this.diskTypes = [];
+    this.diskTypeLabel = DiskTypeState.Ready;
+    this._diskTypesCombobox.reset();
+    this._cdr.detectChanges();
+  }
+
+  private _clearMachineTypes(): void {
+    this.machineTypes = [];
+    this.machineTypeLabel = MachineTypeState.Ready;
+    this._machineTypesCombobox.reset();
+    this._cdr.detectChanges();
   }
 }
