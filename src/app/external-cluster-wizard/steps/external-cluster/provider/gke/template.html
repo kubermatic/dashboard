@@ -91,7 +91,7 @@ limitations under the License.
         <km-select [label]="versionLabel"
                    [options]="kubernetesVersions"
                    required="true"
-                   hint="Select the cluster's control plane version."
+                   hint="Select the cluster's control plane version.same Version will be used for the Node Pool"
                    [formControlName]="Controls.Version">
         </km-select>
       </mat-radio-group>
@@ -126,18 +126,23 @@ limitations under the License.
       </mat-form-field>
     </ng-container>
 
-    <km-combobox filterBy="name"
+    <km-combobox #machineTypesCombobox
+                 filterBy="name"
+                 [options]="machineTypes"
+                 [formControlName]="Controls.MachineTypes"
+                 [valueFormatter]="machineTypeDisplayName.bind(this)"
                  inputLabel="Select Machine Type..."
                  hint="Select vCPU cores and memory"
                  [label]="machineTypeLabel"
-                 [options]="machineTypes"
-                 [formControlName]="Controls.MachineTypes">
+                 >
       <div *option="let machineType">
-        {{machineType.name+" ("+machineType.vcpus +" vCPUs "+machineType.memory+"MB RAM)"}}
+        {{machineTypeDisplayName(machineType.name)}}
+        <!-- {{machineType.name}} ({{machineType.vcpus}} vCPUs {{machineType.memory}}MB RAM) -->
       </div>
     </km-combobox>
 
-    <km-combobox filterBy="name"
+    <km-combobox #diskTypesCombobox
+                 filterBy="name"
                  inputLabel="Select Disk Type..."
                  hint="SSD persistent disk is better for random IOPS or for streaming throughput with low latency."
                  [label]="diskTypeLabel"
