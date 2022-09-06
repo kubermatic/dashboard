@@ -389,7 +389,7 @@ export class ExternalClusterService {
     if (this._preset) {
       headers = {Credential: this._preset};
     } else {
-      headers = {ServiceAccount: this._externalCluster.cloud.gke.serviceAccount};
+      headers = {ServiceAccount: this._externalCluster.cloud?.gke?.serviceAccount};
     }
 
     if (zone) {

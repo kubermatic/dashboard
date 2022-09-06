@@ -31,7 +31,7 @@ import {
 import {GKECloudSpec, GKEClusterSpec, GKEZone} from '@app/shared/entity/provider/gke';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {merge} from 'rxjs';
-import {debounceTime, map, takeUntil, tap} from 'rxjs/operators';
+import {debounceTime, takeUntil, tap} from 'rxjs/operators';
 import {GKE_POOL_NAME_VALIDATOR} from '@app/shared/validators/others';
 import {NodeDataService} from '@app/core/services/node-data/service';
 import {ExternalMachineDeploymentService} from '@app/core/services/external-machine-deployment';
@@ -84,18 +84,25 @@ enum ReleaseChannelOptionsValue {
 export enum VersionState {
   Ready = 'Versions',
   Loading = 'Loading...',
+  Empty = 'No Versions Available',
 }
 
 export enum MachineTypeState {
-  Ready = 'Machine Type',
+  Ready = 'Machine Types',
   Loading = 'Loading...',
-  Empty = 'No Machine Type Available',
+  Empty = 'No Machine Types Available',
 }
 
 export enum DiskTypeState {
-  Ready = 'Disk Type',
+  Ready = 'Disk Types',
   Loading = 'Loading...',
-  Empty = 'No Disk Type Available',
+  Empty = 'No Disk Types Available',
+}
+
+export enum Zones {
+  ready = 'Zones',
+  Loading = 'Loading...',
+  Empty = 'No Zones Available',
 }
 
 @Component({
@@ -142,10 +149,10 @@ export class GKEClusterSettingsComponent
   diskTypes: GCPDiskType[] = [];
   machineTypes: GCPMachineSize[] = [];
   kubernetesVersions: string[] = [];
-  isLoadingZones: boolean;
   versionLabel = VersionState.Ready;
   machineTypeLabel = MachineTypeState.Ready;
   diskTypeLabel = DiskTypeState.Ready;
+  zoneLabel = Zones.ready;
 
   @Input() projectID: string;
   @Input() cluster: ExternalCluster;
@@ -171,13 +178,10 @@ export class GKEClusterSettingsComponent
   ngOnInit(): void {
     this._initForm();
     this._initSubscriptions();
-
-    if (!this.isDialogView()) {
-      this._getGKEZones();
-    }
   }
 
   ngOnDestroy(): void {
+    this.control(Controls.InitialNodePoolName).enable();
     this.reset();
     this._unsubscribe.next();
     this._unsubscribe.complete();
@@ -214,7 +218,7 @@ export class GKEClusterSettingsComponent
   private _initForm(): void {
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control('', [Validators.required, GKE_POOL_NAME_VALIDATOR]),
-      [Controls.Zone]: this._builder.control(this.ZONE_DEFAULT_VALUE, Validators.required),
+      [Controls.Zone]: this._builder.control('', Validators.required),
       [Controls.KubernetesVersionMode]: this._builder.control(KubernetesVersionMode.StaticVersion),
       [Controls.ReleaseChannelOptions]: this._builder.control(this.releaseChannelOptions[1]),
       [Controls.Version]: this._builder.control('', Validators.required),
@@ -225,7 +229,7 @@ export class GKEClusterSettingsComponent
       [Controls.EnableAutoScaling]: this._builder.control(false),
       [Controls.MaxCount]: this._builder.control(this.MAX_REPLICAS_COUNT_DEFAULT_VALUE),
       [Controls.MinCount]: this._builder.control(this.MIN_REPLICAS_COUNT_DEFAULT_VALUE),
-      [Controls.InitialNodePoolName]: this._builder.control(this.INITIAL_NODE_POOL_NAME),
+      [Controls.InitialNodePoolName]: this._builder.control({value: this.INITIAL_NODE_POOL_NAME, disabled: true}),
     });
   }
 
@@ -249,6 +253,7 @@ export class GKEClusterSettingsComponent
       this.control(Controls.MaxCount).updateValueAndValidity();
       this.control(Controls.MinCount).updateValueAndValidity();
     } else {
+      this._getGKEZones();
       this._getGKEKubernetesVersions();
       this._getGKEDiskTypes();
       this._getGKEMachineTypes();
@@ -269,19 +274,29 @@ export class GKEClusterSettingsComponent
             this._clearMachineTypes();
           })
         )
-        .subscribe(_ => {
-          this._getGKEDiskTypes();
-          this._getGKEMachineTypes();
+        .subscribe(zone => {
+          if (zone) {
+            this._getGKEDiskTypes();
+            this._getGKEMachineTypes();
+          }
         });
-      this.control(Controls.InitialNodePoolName).disable();
     }
   }
 
   private _getGKEZones(): void {
+    this.zoneLabel = Zones.Loading;
     this._externalClusterService
       .getGKEZones()
-      .pipe(map((zones: GKEZone[]) => zones.map(zone => zone.name)))
-      .subscribe((zones: string[]) => (this.zones = zones));
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe((zones: GKEZone[]) => {
+        this.zones = zones.map(zone => {
+          if (zone.name === this.ZONE_DEFAULT_VALUE) {
+            this.control(Controls.Zone).setValue(this.ZONE_DEFAULT_VALUE);
+          }
+          return zone.name;
+        });
+        this.zones.length ? (this.zoneLabel = Zones.ready) : (this.zoneLabel = Zones.Empty);
+      });
   }
 
   private _getGKEDiskTypes(): void {
@@ -359,13 +374,13 @@ export class GKEClusterSettingsComponent
         .getGKEKubernetesVersions(zone, mode, releaseChannel)
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((versions: MasterVersion[]) => {
-          this.versionLabel = VersionState.Ready;
           this.kubernetesVersions = versions.map(version => {
             if (version.default) {
               this.control(Controls.Version).setValue(version.version);
             }
             return version.version;
           });
+          this.versionLabel = this.kubernetesVersions?.length ? VersionState.Ready : VersionState.Empty;
         });
     }
   }

@@ -55,7 +55,7 @@ limitations under the License.
 
     <km-select *ngIf="!isDialogView()"
                class="km-dropdown-with-suffix"
-               label="Zone"
+               [label]="zoneLabel"
                required="true"
                hint="Select zone in which your cluster is located."
                [options]="zones"
