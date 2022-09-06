@@ -35,10 +35,10 @@ export class AKSCloudSpec {
   clientID?: string;
   clientSecret?: string;
   resourceGroup?: string;
+  location?: string;
 }
 
 export class AKSClusterSpec {
-  location: string;
   kubernetesVersion: string;
   nodeResourceGroup?: string;
   enableRBAC?: boolean;

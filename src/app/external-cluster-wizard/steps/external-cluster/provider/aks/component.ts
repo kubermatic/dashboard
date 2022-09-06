@@ -239,13 +239,11 @@ export class AKSClusterSettingsComponent
 
       this.vmSizeLabel = VMSizeState.Loading;
       this.control(Controls.VmSize).disable();
-      this._getAKSVmSizesForMachineDeployment(this.cluster.spec.aksclusterSpec.location).subscribe(
-        (vmSizes: AKSVMSize[]) => {
-          this.vmSizes = vmSizes;
-          this.vmSizeLabel = this.vmSizes?.length ? VMSizeState.Ready : VMSizeState.Empty;
-          this.control(Controls.VmSize).enable();
-        }
-      );
+      this._getAKSVmSizesForMachineDeployment(this.cluster.cloud.aks.location).subscribe((vmSizes: AKSVMSize[]) => {
+        this.vmSizes = vmSizes;
+        this.vmSizeLabel = this.vmSizes?.length ? VMSizeState.Ready : VMSizeState.Empty;
+        this.control(Controls.VmSize).enable();
+      });
       this._getAKSAvailableNodePoolVersionsForCreateMachineDeployment().subscribe(
         (nodePoolVersions: AKSNodePoolVersionForMachineDeployments[]) => {
           this.nodePoolVersionsForMD = nodePoolVersions.map(nodePoolVersion => nodePoolVersion.version);
@@ -344,12 +342,12 @@ export class AKSClusterSettingsComponent
           ...this._externalClusterService.externalCluster?.cloud?.aks,
           name: this.controlValue(Controls.Name),
           resourceGroup: this.controlValue(Controls.NodeResourceGroup),
+          location: this.controlValue(Controls.Location),
         } as AKSCloudSpec,
       } as ExternalCloudSpec,
       spec: {
         aksclusterSpec: {
           kubernetesVersion: version,
-          location: this.controlValue(Controls.Location),
           machineDeploymentSpec: {
             name: this.controlValue(Controls.NodePoolName),
             basicSettings: {
