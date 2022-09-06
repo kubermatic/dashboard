@@ -38,12 +38,13 @@ import {MasterVersion} from '@app/shared/entity/cluster';
 export class ExternalClusterService {
   providerChanges = new BehaviorSubject<ExternalClusterProvider>(undefined);
   presetChanges = new BehaviorSubject<string>(undefined);
+  regionChanges = new BehaviorSubject<string>(undefined);
   presetStatusChanges = new BehaviorSubject<boolean>(false);
-  private _providerCredentialChanges$ = new BehaviorSubject<boolean>(false);
 
   private _provider: ExternalClusterProvider;
   private _externalCluster: ExternalClusterModel = ExternalClusterModel.new();
   private _preset: string;
+  private _region: string;
   private _error: string;
   private _isValidating = false;
   private _credentialsStepValidity = false;
@@ -82,6 +83,15 @@ export class ExternalClusterService {
   set preset(preset: string) {
     this._preset = preset;
     this.presetChanges.next(preset);
+  }
+
+  set region(regionName: string) {
+    this._region = regionName;
+    this.regionChanges.next(regionName);
+  }
+
+  get region(): string {
+    return this._region;
   }
 
   get error(): string {
@@ -126,14 +136,6 @@ export class ExternalClusterService {
 
   get isClusterStepValid(): boolean {
     return this._clusterStepValidity;
-  }
-
-  set isCredentialsValidated(validated: boolean) {
-    this._providerCredentialChanges$.next(validated);
-  }
-
-  getProviderCredentialChangesObservable(): Observable<boolean> {
-    return this._providerCredentialChanges$.asObservable();
   }
 
   import(projectID: string, model: ExternalClusterModel): Observable<ExternalCluster> {
@@ -265,12 +267,19 @@ export class ExternalClusterService {
     return this._http.get<MasterVersion[]>(url).pipe(catchError(() => of<[]>()));
   }
 
-  getEKSRegions(accessKeyID: string, secretAccessKey: string): Observable<string[]> {
+  getEKSRegions(preset?: string, accessKeyID?: string, secretAccessKey?: string): Observable<string[]> {
     const url = `${this._newRestRoot}/providers/eks/regions`;
-    const credentials = {
-      AccessKeyID: accessKeyID,
-      SecretAccessKey: secretAccessKey,
-    };
+    let credentials = {};
+    if (preset) {
+      credentials = {
+        Credential: preset,
+      };
+    } else {
+      credentials = {
+        AccessKeyID: accessKeyID,
+        SecretAccessKey: secretAccessKey,
+      };
+    }
     const headers = new HttpHeaders(credentials);
     return this._http.get<string[]>(url, {headers}).pipe(catchError(() => of([])));
   }
@@ -354,7 +363,10 @@ export class ExternalClusterService {
   private _getEKSHeaders(vpcId?: string): HttpHeaders {
     let headers = {};
     if (this._preset) {
-      headers = {Credential: this._preset};
+      headers = {
+        Credential: this._preset,
+        Region: this._externalCluster.cloud.eks.region,
+      };
       if (vpcId) {
         headers = {...headers, VpcId: vpcId};
       }
