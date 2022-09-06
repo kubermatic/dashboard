@@ -16,7 +16,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {Observable, of, Subject} from 'rxjs';
-import {catchError, take, takeUntil, tap} from 'rxjs/operators';
+import {catchError, take, takeUntil} from 'rxjs/operators';
 
 export enum Controls {
   TenantID = 'tenantID',
@@ -85,7 +85,6 @@ export class AKSCredentialsComponent implements OnInit, OnDestroy {
     return this._externalClusterService
       .validateAKSCredentials(tenantID, subscriptionID, clientID, clientSecret)
       .pipe(take(1))
-      .pipe(tap(response => (this._externalClusterService.isCredentialsValidated = !!response)))
       .pipe(catchError(() => of({invalidCredentials: true})));
   }
 

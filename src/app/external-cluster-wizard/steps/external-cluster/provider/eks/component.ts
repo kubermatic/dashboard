@@ -224,22 +224,12 @@ export class EKSClusterSettingsComponent
         });
     }
 
-    this._externalClusterService.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
-      if (!preset) {
+    this._externalClusterService.regionChanges.pipe(takeUntil(this._unsubscribe)).subscribe(region => {
+      if (!region) {
         return;
       }
       this._getEKSVpcs();
     });
-
-    this._externalClusterService
-      .getProviderCredentialChangesObservable()
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(isValid => {
-        if (!isValid) {
-          return;
-        }
-        this._getEKSVpcs();
-      });
   }
 
   private _getEKSVpcs(): void {

@@ -15,9 +15,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {ExternalClusterService} from '@core/services/external-cluster';
-import {encode, isValid} from 'js-base64';
 import {Observable, of, Subject} from 'rxjs';
-import {catchError, take, takeUntil, tap} from 'rxjs/operators';
+import {catchError, take, takeUntil} from 'rxjs/operators';
+import {encode, isValid} from 'js-base64';
 
 export enum Controls {
   ServiceAccount = 'serviceAccount',
@@ -73,7 +73,6 @@ export class GKECredentialsComponent implements OnInit, OnDestroy {
     return this._externalClusterService
       .validateGKECredentials(serviceAccount)
       .pipe(take(1))
-      .pipe(tap(response => (this._externalClusterService.isCredentialsValidated = !!response)))
       .pipe(catchError(() => of({invalidCredentials: true})));
   }
 
