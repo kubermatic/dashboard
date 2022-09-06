@@ -85,6 +85,10 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
     return this.cluster?.spec?.eksclusterSpec?.vpcConfigRequest?.securityGroupIds;
   }
 
+  get isImportedCluster(): boolean {
+    return this.cluster?.labels['is-imported'] === 'true';
+  }
+
   ngOnInit(): void {
     this.projectID = this._activatedRoute.snapshot.paramMap.get(PathParam.ProjectID);
     const clusterID = this._activatedRoute.snapshot.paramMap.get(PathParam.ClusterID);
