@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {merge, Observable, of, Subject} from 'rxjs';
-import {catchError, take, takeUntil, debounceTime} from 'rxjs/operators';
+import {catchError, take, takeUntil, debounceTime, tap} from 'rxjs/operators';
 
 export enum Controls {
   AccessKeyID = 'accessKeyID',
@@ -45,7 +45,6 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly _builder: FormBuilder,
-    private readonly _cdr: ChangeDetectorRef,
     private readonly _externalClusterService: ExternalClusterService
   ) {}
 
@@ -98,7 +97,6 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
         .filter(key => key !== Controls.Region)
         .forEach(control => this._enable(!preset, control));
 
-      this._clearRegions();
       this._getEKSRegions();
     });
   }
@@ -120,25 +118,26 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
         obs$ = this._externalClusterService.getEKSRegions(null, accessKeyID, secretAccessKey);
       } else {
         obs$ = of([]);
-        this._clearRegions();
       }
     }
 
     this.regionLabel = RegionState.Loading;
-    obs$.pipe(takeUntil(this._unsubscribe)).subscribe((regions: string[]) => {
-      this.regions = regions;
-      this.regionLabel = this.regions?.length ? RegionState.Ready : RegionState.Empty;
-      if (regions.includes(this.DEFAULT_LOCATION)) {
-        this.form.get(Controls.Region).setValue(this.DEFAULT_LOCATION);
-      }
-    });
+    obs$
+      .pipe(tap(_ => this._clearRegions()))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe((regions: string[]) => {
+        this.regions = regions;
+        this.regionLabel = this.regions?.length ? RegionState.Ready : RegionState.Empty;
+        if (regions.includes(this.DEFAULT_LOCATION)) {
+          this.form.get(Controls.Region).setValue(this.DEFAULT_LOCATION);
+        }
+      });
   }
 
   private _clearRegions() {
     this.regions = [];
     this.regionLabel = RegionState.Ready;
-    this.form.get(Controls.Region).setValue('');
-    this._cdr.detectChanges();
+    this.form.get(Controls.Region).setValue('', {emitEvent: false});
   }
 
   private _credentialsValidator(control: AbstractControl): Observable<ValidationErrors | null> {
