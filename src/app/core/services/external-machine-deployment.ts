@@ -80,7 +80,7 @@ export class ExternalMachineDeploymentService {
     return this._httpClient.get<GCPDiskType[]>(url).pipe(catchError(() => of<[]>()));
   }
 
-  getGKEMachineSizesForMachineDeployment(projectID: string, clusterID: string): Observable<GCPMachineSize[]> {
+  getGKEMachineTypesForMachineDeployment(projectID: string, clusterID: string): Observable<GCPMachineSize[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/gke/sizes`;
     return this._httpClient.get<GCPMachineSize[]>(url).pipe(catchError(() => of<[]>()));
   }

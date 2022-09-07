@@ -55,12 +55,51 @@ limitations under the License.
 
     <km-select *ngIf="!isDialogView()"
                class="km-dropdown-with-suffix"
-               label="Zone"
+               [label]="zoneLabel"
                required="true"
                hint="Select zone in which your cluster is located."
                [options]="zones"
                [formControlName]="Controls.Zone">
     </km-select>
+
+    <ng-container *ngIf="!isDialogView()">
+
+      <label class="km-radio-group-label"
+             fxLayoutAlign=" center">Kubernetes Version
+        <i class="km-icon-info km-pointer"
+           matTooltip="This version will also be used for initial nodepool"></i>
+      </label>
+      <mat-radio-group fxFlex
+                       fxLayout="column"
+                       class="km-radio-group"
+                       [formControlName]="Controls.KubernetesVersionMode">
+        <mat-radio-button [value]="KubernetesVersionMode.StaticVersion"
+                          class="km-radio-button">
+          <div class="km-radio-button-title">Static Version</div>
+        </mat-radio-button>
+        <mat-hint>Manually manage the version upgrades,
+          GKE will only upgrade the control plane and nodes
+          if it's necessary to maintain security and compatibility.
+        </mat-hint>
+        <mat-radio-button [value]="KubernetesVersionMode.ReleaseChannel"
+                          class="km-radio-button">
+          <div class="km-radio-button-title">Release Channel</div>
+        </mat-radio-button>
+        <mat-hint>Let GKE automatically manage the cluster's control plane version.</mat-hint>
+
+        <km-select *ngIf="form.get(Controls.KubernetesVersionMode).value === KubernetesVersionMode.ReleaseChannel"
+                   label="Release Channel"
+                   [options]="releaseChannelOptions"
+                   [formControlName]="Controls.ReleaseChannelOptions"></km-select>
+
+        <km-select [label]="versionLabel"
+                   [options]="kubernetesVersions"
+                   required="true"
+                   hint="Select the cluster's control plane version."
+                   [formControlName]="Controls.Version">
+        </km-select>
+      </mat-radio-group>
+    </ng-container>
 
     <mat-form-field *ngIf="isDialogView()">
       <mat-label>Kubernetes Version</mat-label>
@@ -72,34 +111,56 @@ limitations under the License.
         Kubernetes Version is <strong>required</strong>.
       </mat-error>
     </mat-form-field>
+  </div>
 
-    <km-autocomplete *ngIf="isDialogView()"
-                     label="Machine Type"
-                     [options]="machineTypes"
-                     [formControlName]="Controls.MachineTypes">
-      <mg-container hint>
-        Select vCPU cores and memory
-      </mg-container>
-    </km-autocomplete>
+  <div [fxFlex]="isDialogView() ? '100%' : '50%'"
+       fxLayout="column"
+       fxLayoutGap="10px">
+    <ng-container *ngIf="!isDialogView()">
+      <mat-card-header class="km-no-padding">
+        <mat-card-title>Initial Node Pool</mat-card-title>
+      </mat-card-header>
 
-    <km-autocomplete *ngIf="isDialogView()"
-                     label="Disk Type"
-                     [options]="diskTypes"
-                     [formControlName]="Controls.DiskTypes">
-      <mg-container hint>
-        SSD persistent disk is better for random IOPS or for streaming throughput with low latency.
-      </mg-container>
-    </km-autocomplete>
+      <mat-form-field>
+        <mat-label>Node Pool Name</mat-label>
+        <input matInput
+               type="text"
+               [formControlName]="Controls.InitialNodePoolName" />
+        <mat-hint>Initial Node Pool Name can't be changed</mat-hint>
+      </mat-form-field>
+    </ng-container>
 
-    <km-number-stepper *ngIf="isDialogView()"
-                       hint="Boot disk size is permanent."
+    <km-combobox #machineTypesCombobox
+                 filterBy="name"
+                 inputLabel="Select Machine Type..."
+                 hint="Select vCPU cores and memory"
+                 [label]="machineTypeLabel"
+                 [options]="machineTypes"
+                 [formControlName]="Controls.MachineTypes">
+      <div *option="let machineType">
+        {{displayMachineType(machineType)}}
+      </div>
+    </km-combobox>
+
+    <km-combobox #diskTypesCombobox
+                 filterBy="name"
+                 inputLabel="Select Disk Type..."
+                 hint="SSD persistent disk is better for random IOPS or for streaming throughput with low latency."
+                 [label]="diskTypeLabel"
+                 [options]="diskTypes"
+                 [formControlName]="Controls.DiskTypes">
+      <div *option="let diskType">
+        {{displayDiskType(diskType)}}
+      </div>
+    </km-combobox>
+
+    <km-number-stepper hint="Boot disk size is permanent."
                        mode="all"
                        label="Disk Size"
                        [max]="DISK_SIZE_MAX_VALUE"
                        [min]="DISK_SIZE_MIN_VALUE"
                        [formControlName]="Controls.DiskSize">
     </km-number-stepper>
-
 
     <km-number-stepper hint="Set Number of nodes"
                        mode="all"
@@ -109,18 +170,13 @@ limitations under the License.
                        [required]="true"
                        [formControlName]="Controls.NodeCount">
     </km-number-stepper>
-
-    <div fxLayout="column"
-         fxFlex="100"
-         fxLayoutGap="10px">
-      <mat-checkbox *ngIf="isDialogView()"
-                    [formControlName]="Controls.EnableAutoScaling"
-                    (change)="onEnableAutoScalingChange($event)">
-        Enable AutoScaling
-        <i class="km-icon-info km-pointer"
-           matTooltip="Indicates whether to enable auto scaling.This option is recommended so that cluster sized correctly for the current running workloads."></i>
-      </mat-checkbox>
-    </div>
+    <mat-checkbox *ngIf="isDialogView()"
+                  [formControlName]="Controls.EnableAutoScaling"
+                  (change)="onEnableAutoScalingChange($event)">
+      Enable AutoScaling
+      <i class="km-icon-info km-pointer"
+         matTooltip="Indicates whether to enable auto scaling.This option is recommended so that cluster sized correctly for the current running workloads."></i>
+    </mat-checkbox>
 
     <ng-container *ngIf="form.get(Controls.EnableAutoScaling).value">
       <km-number-stepper label="Max Count"
@@ -141,43 +197,6 @@ limitations under the License.
                          [formControlName]="Controls.MinCount">
       </km-number-stepper>
     </ng-container>
-  </div>
 
-  <div *ngIf="!isDialogView()"
-       fxFlex="50%"
-       fxLayout="column"
-       fxLayoutGap="10px">
-
-    <label class="km-radio-group-label">Kubernetes Version</label>
-    <mat-radio-group fxFlex
-                     fxLayout="column"
-                     class="km-radio-group"
-                     [formControlName]="Controls.KubernetesVersionMode">
-      <mat-radio-button [value]="KubernetesVersionMode.StaticVersion"
-                        class="km-radio-button">
-        <div class="km-radio-button-title">Static Version</div>
-      </mat-radio-button>
-      <mat-hint>Manually manage the version upgrades,
-        GKE will only upgrade the control plane and nodes
-        if it's necessary to maintain security and compatibility.
-      </mat-hint>
-      <mat-radio-button [value]="KubernetesVersionMode.ReleaseChannel"
-                        class="km-radio-button">
-        <div class="km-radio-button-title">Release Channel</div>
-      </mat-radio-button>
-      <mat-hint>Let GKE automatically manage the cluster's control plane version.</mat-hint>
-
-      <km-select *ngIf="form.get(Controls.KubernetesVersionMode).value === KubernetesVersionMode.ReleaseChannel"
-                 label="Release Channel"
-                 [options]="releaseChannelOptions"
-                 [formControlName]="Controls.ReleaseChannelOptions"></km-select>
-
-      <km-select [label]="versionLabel"
-                 [options]="kubernetesVersions"
-                 required="true"
-                 hint="Select the cluster's control plane version."
-                 [formControlName]="Controls.Version">
-      </km-select>
-    </mat-radio-group>
   </div>
 </form>
