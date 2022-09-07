@@ -33,6 +33,7 @@ import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialo
 import {ClusterListTab} from '@app/cluster/list/component';
 import {NotificationService} from '@core/services/notification';
 import {MasterVersion} from '@app/shared/entity/cluster';
+import {GCPDiskType, GCPMachineSize} from '@app/shared/entity/provider/gcp';
 
 @Injectable({providedIn: 'root'})
 export class ExternalClusterService {
@@ -245,6 +246,16 @@ export class ExternalClusterService {
     return this._http.get<MasterVersion[]>(url, headers).pipe(catchError(() => of<[]>()));
   }
 
+  getGKEDiskTypes(zone: string): Observable<GCPDiskType[]> {
+    const url = `${this._newRestRoot}/providers/gke/disktypes`;
+    return this._http.get<GCPDiskType[]>(url, {headers: this._getGKEHeaders(zone)}).pipe(catchError(() => of([])));
+  }
+
+  getGKEMachineTypes(zone: string): Observable<GCPMachineSize[]> {
+    const url = `${this._newRestRoot}/providers/gke/vmsizes`;
+    return this._http.get<GCPMachineSize[]>(url, {headers: this._getGKEHeaders(zone)}).pipe(catchError(() => of([])));
+  }
+
   getEKSVpcs(): Observable<EKSVpc[]> {
     const url = `${this._newRestRoot}/providers/eks/vpcs`;
     return this._http.get<EKSVpc[]>(url, {headers: this._getEKSHeaders()}).pipe(catchError(() => of<[]>()));
@@ -390,7 +401,7 @@ export class ExternalClusterService {
     if (this._preset) {
       headers = {Credential: this._preset};
     } else {
-      headers = {ServiceAccount: this._externalCluster.cloud.gke.serviceAccount};
+      headers = {ServiceAccount: this._externalCluster.cloud?.gke?.serviceAccount};
     }
 
     if (zone) {
