@@ -73,37 +73,46 @@ limitations under the License.
       </mat-form-field>
     </ng-template>
 
-    <mat-form-field>
-      <mat-label>{{isDialogView() ? "Node IAM role" : "Cluster Service Role"}}</mat-label>
+    <mat-form-field *ngIf="isDialogView()">
+      <mat-label>Node IAM role</mat-label>
       <input matInput
              type="text"
              autocomplete="off"
              [formControlName]="Controls.RoleArn" />
-
-      <mat-hint *ngIf="!isDialogView(); else dialogView">
-        Enter the IAM role arn to allow the Kubernetes control plane to manage AWS resources on your behalf.
-        <a href="https://docs.aws.amazon.com/eks/latest/userguide/service_IAM_role.html"
+      <mat-hint>
+        Enter the IAM role arn that will be used by the nodes.
+        <a href="https://docs.aws.amazon.com/eks/latest/userguide/create-node-role.html"
            target="_blank"
            rel="noreferrer noopener">
           EKS user guide >
         </a>
       </mat-hint>
 
-      <ng-template #dialogView>
-        <mat-hint>
-          Enter the IAM role arn that will be used by the nodes.
-          <a href="https://docs.aws.amazon.com/eks/latest/userguide/create-node-role.html"
-             target="_blank"
-             rel="noreferrer noopener">
-            EKS user guide >
-          </a>
-        </mat-hint>
-      </ng-template>
-
       <mat-error *ngIf="form.get(Controls.RoleArn).hasError('required')">
         Role is <strong>required</strong>.
       </mat-error>
     </mat-form-field>
+
+    <km-combobox *ngIf="!isDialogView()"
+                 filterBy="roleName"
+                 inputLabel="Select Role... "
+                 [label]="roleArnLabel"
+                 [required]="true"
+                 [options]="roleArn"
+                 (changed)="onRoleArnChange($event)"
+                 [formControlName]="Controls.RoleArn">
+      <div *option="let roleArn">
+        {{roleArn.roleName}} ({{roleArn.arn}})
+      </div>
+      <ng-container hint>
+        Select the IAM role arn to allow the Kubernetes control plane to manage AWS resources on your behalf.
+        <a href="https://docs.aws.amazon.com/eks/latest/userguide/service_IAM_role.html"
+           target="_blank"
+           rel="noreferrer noopener">
+          EKS user guide >
+        </a>
+      </ng-container>
+    </km-combobox>
 
     <km-number-stepper *ngIf="isDialogView()"
                        [formControlName]="Controls.DiskSize"

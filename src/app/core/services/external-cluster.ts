@@ -18,7 +18,7 @@ import {Router} from '@angular/router';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {environment} from '@environments/environment';
 import {AKSCluster, AKSLocation, AKSVMSize, AzureResourceGroup} from '@shared/entity/provider/aks';
-import {EKSCluster, EKSSecurityGroup, EKSSubnet, EKSVpc} from '@shared/entity/provider/eks';
+import {EKSCluster, EKSClusterRoleList, EKSSecurityGroup, EKSSubnet, EKSVpc} from '@shared/entity/provider/eks';
 import {GKECluster, GKEZone} from '@shared/entity/provider/gke';
 import {
   DeleteExternalClusterAction,
@@ -283,6 +283,12 @@ export class ExternalClusterService {
     return this._http.get<MasterVersion[]>(url).pipe(catchError(() => of<[]>()));
   }
 
+  getEKSClusterRoles(): Observable<EKSClusterRoleList[]> {
+    const url = `${this._newRestRoot}/providers/eks/clusterroles`;
+    const headers = this._getEKSHeaders();
+    return this._http.get<EKSClusterRoleList[]>(url, {headers}).pipe(catchError(() => of([])));
+  }
+
   getEKSRegions(preset?: string, accessKeyID?: string, secretAccessKey?: string): Observable<string[]> {
     const url = `${this._newRestRoot}/providers/eks/regions`;
     let credentials = {};
@@ -381,7 +387,7 @@ export class ExternalClusterService {
     if (this._preset) {
       headers = {
         Credential: this._preset,
-        Region: this._externalCluster.cloud.eks.region,
+        Region: this._externalCluster.cloud?.eks.region,
       };
       if (vpcId) {
         headers = {...headers, VpcId: vpcId};
@@ -392,7 +398,7 @@ export class ExternalClusterService {
     headers = {
       AccessKeyID: this._externalCluster.cloud.eks.accessKeyID,
       SecretAccessKey: this._externalCluster.cloud.eks.secretAccessKey,
-      Region: this._externalCluster.cloud.eks.region,
+      Region: this._externalCluster.cloud?.eks.region,
     };
     if (vpcId) {
       headers['VpcId'] = vpcId;
