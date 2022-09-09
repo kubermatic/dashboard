@@ -1,0 +1,80 @@
+// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+@use 'src/assets/css/variables';
+@use 'src/assets/css/mixins';
+
+$steps: 3;
+
+@mixin counter-x {
+  @for $i from 1 through $steps {
+    .counter-#{$i} {
+      &::before {
+        @include mixins.size(22px);
+
+        align-items: center;
+        border-radius: 50%;
+        border-style: solid;
+        border-width: 1px;
+        content: '#{$i}';
+        display: inline-flex;
+        font-size: variables.$font-size-body;
+        justify-content: center;
+        margin-right: 12px;
+      }
+    }
+  }
+}
+
+.km-external-cluster-summary {
+  @include counter-x;
+
+  .km-wizard-summary {
+    .header {
+      font-size: variables.$font-size-subhead-lg;
+      margin-bottom: 16px;
+    }
+  }
+
+  .km-provider-logo {
+    height: 30px;
+    margin-top: 2px;
+    max-height: 30px;
+    max-width: 100px;
+    width: 100px;
+  }
+
+  .info-container {
+    padding: 0;
+
+    > div {
+      padding-bottom: 24px;
+    }
+
+    .container-spacing {
+      > :not(:first-child) {
+        margin-bottom: 8px;
+      }
+
+      .section-header {
+        font-size: variables.$font-size-subhead-lg;
+        margin-bottom: 14px;
+      }
+    }
+  }
+
+  .step {
+    padding-bottom: 24px;
+  }
+}

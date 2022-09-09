@@ -1,0 +1,95 @@
+<!--
+Copyright 2022 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<div class="km-external-cluster-summary">
+  <div class="km-wizard-summary"
+       fxLayout="row wrap"
+       fxLayout.md="column"
+       fxLayout.sm="column"
+       fxLayout.xs="column">
+
+    <div class="step"
+         fxFlex="20%"
+         fxFlex.md="100%"
+         fxFlex.sm="100%"
+         fxFlex.xs="100%"
+         fxLayout="column">
+      <div class="header counter-1">{{ step.Provider }}</div>
+
+      <div fxFlex
+           class="info-container">
+        <div fxFlex
+             class="container-spacing">
+          <km-property>
+            <div key>Provider</div>
+            <div value><i class="km-provider-logo km-provider-logo-{{ provider }}"></i></div>
+          </km-property>
+        </div>
+      </div>
+    </div>
+
+    <div fxFlex="20%"
+         fxFlex.md="100%"
+         fxFlex.sm="100%"
+         fxFlex.xs="100%"
+         fxLayout="column"
+         class="step">
+      <div class="header counter-2">{{ step.Settings }}</div>
+
+      <div fxFlex
+           class="info-container">
+
+        <div fxFlex
+             class="container-spacing">
+          <div class="section-header">Credentials</div>
+          <km-property>
+            <div key>Preset</div>
+            <div value>
+              <span>{{ preset ?? 'No preset selected' }}</span>
+            </div>
+          </km-property>
+
+          <km-property *ngIf="cluster.cloud.eks?.region">
+            <div key>Region</div>
+            <div value>
+              <span>{{ cluster.cloud.eks.region }}</span>
+            </div>
+          </km-property>
+        </div>
+      </div>
+    </div>
+
+    <div fxFlex="60%"
+         fxFlex.md="100%"
+         fxFlex.sm="100%"
+         fxFlex.xs="100%"
+         fxLayout="column"
+         class="step">
+      <div class="header counter-3">{{ step.ExternalClusterDetails }}</div>
+
+      <ng-container [ngSwitch]="provider">
+        <km-eks-cluster-summary *ngSwitchCase="ExternalClusterProvider.EKS"
+                                [cluster]="cluster"></km-eks-cluster-summary>
+
+        <km-aks-cluster-summary *ngSwitchCase="ExternalClusterProvider.AKS"
+                                [cluster]="cluster"></km-aks-cluster-summary>
+
+        <km-gke-cluster-summary *ngSwitchCase="ExternalClusterProvider.GKE"
+                                [cluster]="cluster"></km-gke-cluster-summary>
+      </ng-container>
+    </div>
+  </div>
+</div>
