@@ -42,6 +42,7 @@ import {
   AKSNodegroupScalingConfig,
   AKSNodePoolVersionForMachineDeployments,
   AKSVMSize,
+  AzureResourceGroup,
 } from '@shared/entity/provider/aks';
 import {AKS_POOL_NAME_VALIDATOR, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@shared/validators/others';
 import {NodeDataService} from '@app/core/services/node-data/service';
@@ -85,6 +86,12 @@ export enum VMSizeState {
   Empty = 'No VM Sizes Available',
 }
 
+export enum ResourceGroupState {
+  Ready = 'Resource Group',
+  Loading = 'Loading...',
+  Empty = 'No Resource Groups Available',
+}
+
 @Component({
   selector: 'km-aks-cluster-settings',
   templateUrl: './template.html',
@@ -123,6 +130,8 @@ export class AKSClusterSettingsComponent
   locations: string[] = [];
   nodePoolVersionsForMD: string[] = [];
   kubernetesVersions: string[] = [];
+  resourceGroupLabel = ResourceGroupState.Ready;
+  resourceGroups: AzureResourceGroup[] = [];
 
   @ViewChild('vmSizeCombobox')
   private readonly _vmSizeCombobox: FilteredComboboxComponent;
@@ -267,6 +276,7 @@ export class AKSClusterSettingsComponent
 
       this._getAKSKubernetesVersions();
       this._getAKSLocations();
+      this._getAKSResourceGroups();
     }
   }
 
@@ -306,6 +316,17 @@ export class AKSClusterSettingsComponent
       });
   }
 
+  private _getAKSResourceGroups(): void {
+    this.resourceGroupLabel = ResourceGroupState.Loading;
+    this._externalClusterService
+      .getAKSResourceGroups()
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe((resourceGroups: AzureResourceGroup[]) => {
+        this.resourceGroups = resourceGroups;
+        this.resourceGroupLabel = this.resourceGroups?.length ? ResourceGroupState.Ready : ResourceGroupState.Empty;
+      });
+  }
+
   private _getAKSVmSizesForMachineDeployment(location?: string): Observable<AKSVMSize[]> {
     this.isLoadingVmSizes = true;
     return this._externalMachineDeploymentService
@@ -341,7 +362,7 @@ export class AKSClusterSettingsComponent
         aks: {
           ...this._externalClusterService.externalCluster?.cloud?.aks,
           name: this.controlValue(Controls.Name),
-          resourceGroup: this.controlValue(Controls.NodeResourceGroup),
+          resourceGroup: this.controlValue(Controls.NodeResourceGroup)?.[ComboboxControls.Select],
           location: this.controlValue(Controls.Location),
         } as AKSCloudSpec,
       } as ExternalCloudSpec,

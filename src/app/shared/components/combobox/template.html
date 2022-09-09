@@ -77,5 +77,10 @@ limitations under the License.
       {{label}} is <strong>required</strong>.
     </mat-error>
     <mat-hint *ngIf="hint">{{hint}}</mat-hint>
+
+    <mat-hint *ngIf="!hint">
+      <ng-content select="[hint]"></ng-content>
+    </mat-hint>
+
   </mat-form-field>
 </form>

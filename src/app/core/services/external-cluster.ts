@@ -17,7 +17,7 @@ import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {environment} from '@environments/environment';
-import {AKSCluster, AKSLocation, AKSVMSize} from '@shared/entity/provider/aks';
+import {AKSCluster, AKSLocation, AKSVMSize, AzureResourceGroup} from '@shared/entity/provider/aks';
 import {EKSCluster, EKSSecurityGroup, EKSSubnet, EKSVpc} from '@shared/entity/provider/eks';
 import {GKECluster, GKEZone} from '@shared/entity/provider/gke';
 import {
@@ -213,6 +213,11 @@ export class ExternalClusterService {
     this.credentialsStepValidity = false;
     this.clusterStepValidity = false;
     this.isClusterDetailsStepValid = false;
+  }
+
+  getAKSResourceGroups(): Observable<AzureResourceGroup[]> {
+    const url = `${this._newRestRoot}/providers/aks/resourcegroups`;
+    return this._http.get<AzureResourceGroup[]>(url, {headers: this._getAKSHeaders()}).pipe(catchError(() => of([])));
   }
 
   getAKSVmSizes(location?: string): Observable<AKSVMSize[]> {
