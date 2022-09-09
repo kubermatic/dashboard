@@ -1,0 +1,82 @@
+<!--
+Copyright 2022 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<km-external-cluster-details *ngIf="spec && cloudSpec"
+                             [cluster]="cluster">
+  <ng-container leftColumn>
+    <km-property>
+      <div key>Zone</div>
+      <div value>
+        <span>{{ cloudSpec.zone }}</span>
+      </div>
+    </km-property>
+
+    <div class="section-header">Kubernetes Version</div>
+
+    <km-property>
+      <div key>Release Channel</div>
+      <div value>
+        <span>{{ spec.releaseChannel ?? 'STATIC' }}</span>
+      </div>
+    </km-property>
+
+    <km-property>
+      <div key>Version</div>
+      <div value>
+        <span>{{ spec.initialClusterVersion }}</span>
+      </div>
+    </km-property>
+  </ng-container>
+
+  <ng-container rightColumn
+                *ngIf="spec.nodeConfig as nodeConfig">
+    <div class="section-header">Initial Node Pool</div>
+
+    <km-property>
+      <div key>Node Pool Name</div>
+      <div value>
+        <span>{{ nodeConfig.name}}</span>
+      </div>
+    </km-property>
+
+    <km-property>
+      <div key>Machine Types</div>
+      <div value>
+        <span>{{ nodeConfig.machineType }}</span>
+      </div>
+    </km-property>
+
+    <km-property>
+      <div key>Disk Types</div>
+      <div value>
+        <span>{{ nodeConfig.diskType }}</span>
+      </div>
+    </km-property>
+
+    <km-property>
+      <div key>Disk Size</div>
+      <div value>
+        <span>{{ nodeConfig.diskSizeGb }}</span>
+      </div>
+    </km-property>
+
+    <km-property>
+      <div key>Initial Node Count</div>
+      <div value>
+        <span>{{ spec.initialNodeCount }}</span>
+      </div>
+    </km-property>
+  </ng-container>
+</km-external-cluster-details>

@@ -45,16 +45,20 @@ limitations under the License.
                                                (providerChange)="onProviderChanged($event)"></km-select-external-cluster-provider>
         </ng-container>
 
-        <ng-container *ngSwitchCase="stepRegistry.Credentials">
+        <ng-container *ngSwitchCase="stepRegistry.Settings">
           <km-external-cluster-credentials-step fxFlex="50%"
                                                 fxFlex.sm="100%"
-                                                title="Settings"
+                                                title="Credentials"
                                                 [hideLogo]="true"></km-external-cluster-credentials-step>
         </ng-container>
         <ng-container *ngSwitchCase="stepRegistry.ExternalClusterDetails">
           <ng-container *ngIf="isPresetSelected || isCredentialStepValid">
             <km-external-cluster-step [formControl]="form.get(stepRegistry.ExternalClusterDetails)"></km-external-cluster-step>
           </ng-container>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="stepRegistry.Summary">
+          <km-external-cluster-summary-step *ngIf="stepperLastIndex"></km-external-cluster-summary-step>
         </ng-container>
       </div>
 

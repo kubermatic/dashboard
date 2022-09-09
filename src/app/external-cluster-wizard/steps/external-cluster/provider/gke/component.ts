@@ -28,7 +28,7 @@ import {
   ExternalClusterModel,
   ExternalClusterSpec,
 } from '@app/shared/entity/external-cluster';
-import {GKECloudSpec, GKEClusterSpec, GKEZone} from '@app/shared/entity/provider/gke';
+import {GKECloudSpec, GKEClusterSpec, GKEZone, GKENodeConfig} from '@app/shared/entity/provider/gke';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {merge} from 'rxjs';
 import {debounceTime, takeUntil, tap} from 'rxjs/operators';
@@ -39,7 +39,6 @@ import {
   ExternalMachineDeployment,
   ExternalMachineDeploymentCloudSpec,
   GKEMachineDeploymentCloudSpec,
-  GKENodeConfig,
 } from '@app/shared/entity/external-machine-deployment';
 import {MachineDeploymentSpec} from '@app/shared/entity/machine-deployment';
 import {MatCheckboxChange} from '@angular/material/checkbox';
@@ -415,6 +414,7 @@ export class GKEClusterSettingsComponent
           initialClusterVersion: this.controlValue(Controls.Version),
           initialNodeCount: this.controlValue(Controls.NodeCount),
           nodeConfig: {
+            name: this.controlValue(Controls.InitialNodePoolName),
             diskSizeGb: this.controlValue(Controls.DiskSize),
             diskType: this.controlValue(Controls.DiskTypes)?.[ComboboxControls.Select],
             machineType: this.controlValue(Controls.MachineTypes)?.[ComboboxControls.Select],

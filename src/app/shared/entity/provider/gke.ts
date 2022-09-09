@@ -84,6 +84,7 @@ export class GKEResourceLimit {
 }
 
 export class GKENodeConfig {
+  name?: string;
   diskSizeGb?: number;
   diskType?: string;
   imageType?: string;
