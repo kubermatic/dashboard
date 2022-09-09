@@ -109,3 +109,7 @@ export class AKSLocation {
   name: string;
   regionCategory: string;
 }
+
+export class AzureResourceGroup {
+  name?: string;
+}
