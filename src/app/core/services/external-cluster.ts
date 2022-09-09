@@ -27,7 +27,7 @@ import {
   ExternalClusterProvider,
 } from '@shared/entity/external-cluster';
 import {PresetList} from '@shared/entity/preset';
-import {BehaviorSubject, Observable, of, throwError} from 'rxjs';
+import {BehaviorSubject, Observable, of, Subject, throwError} from 'rxjs';
 import {catchError, filter} from 'rxjs/operators';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {ClusterListTab} from '@app/cluster/list/component';
@@ -38,9 +38,9 @@ import {GCPDiskType, GCPMachineSize} from '@app/shared/entity/provider/gcp';
 @Injectable({providedIn: 'root'})
 export class ExternalClusterService {
   providerChanges = new BehaviorSubject<ExternalClusterProvider>(undefined);
-  presetChanges = new BehaviorSubject<string>(undefined);
-  regionChanges = new BehaviorSubject<string>(undefined);
-  presetStatusChanges = new BehaviorSubject<boolean>(false);
+  presetChanges = new Subject<string>();
+  regionChanges = new Subject<string>();
+  presetStatusChanges = new Subject<boolean>();
 
   private _provider: ExternalClusterProvider;
   private _externalCluster: ExternalClusterModel = ExternalClusterModel.new();
@@ -206,6 +206,7 @@ export class ExternalClusterService {
   reset(): void {
     this.provider = undefined;
     this.preset = undefined;
+    this.region = undefined;
     this.isPresetEnabled = false;
     this.externalCluster = ExternalClusterModel.new();
     this.error = undefined;
