@@ -24,7 +24,14 @@ import {
 import {StepBase} from '@app/external-cluster-wizard/steps/base';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {NameGeneratorService} from '@core/services/name-generator';
-import {EKSCloudSpec, EKSClusterSpec, EKSSecurityGroup, EKSSubnet, EKSVpc} from '@shared/entity/provider/eks';
+import {
+  EKSCloudSpec,
+  EKSClusterRoleList,
+  EKSClusterSpec,
+  EKSSecurityGroup,
+  EKSSubnet,
+  EKSVpc,
+} from '@shared/entity/provider/eks';
 import {forkJoin} from 'rxjs';
 import {debounceTime, finalize, takeUntil, tap} from 'rxjs/operators';
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
@@ -70,6 +77,12 @@ enum SecurityGroupState {
   Empty = 'No Security Groups Available',
 }
 
+enum RoleArnState {
+  Loading = 'Loading...',
+  Ready = 'Cluster Service Roles',
+  Empty = 'No Cluster Service Roles Available',
+}
+
 @Component({
   selector: 'km-eks-cluster-settings',
   templateUrl: './template.html',
@@ -100,6 +113,9 @@ export class EKSClusterSettingsComponent
   subnetLabel = SubnetState.Ready;
   securityGroupLabel = SecurityGroupState.Ready;
   securityGroups: EKSSecurityGroup[] = [];
+  roleArn: EKSClusterRoleList[] = [];
+  selectedRoleArn = '';
+  roleArnLabel = RoleArnState.Ready;
   @Input() projectID: string;
   @Input() cluster: ExternalCluster;
   private readonly _debounceTime = 500;
@@ -150,6 +166,10 @@ export class EKSClusterSettingsComponent
       default:
         return '';
     }
+  }
+
+  onRoleArnChange(roleArnName: string) {
+    this.selectedRoleArn = this.roleArn.find(roleArn => roleArn.roleName === roleArnName)?.arn;
   }
 
   private _initForm(): void {
@@ -228,6 +248,7 @@ export class EKSClusterSettingsComponent
       if (!region) {
         return;
       }
+      this._getEKSClusterRoles();
       this._getEKSVpcs();
     });
   }
@@ -277,6 +298,17 @@ export class EKSClusterSettingsComponent
     );
   }
 
+  private _getEKSClusterRoles(): void {
+    this.roleArnLabel = RoleArnState.Loading;
+    this._externalClusterService
+      .getEKSClusterRoles()
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe((roleArn: EKSClusterRoleList[]) => {
+        this.roleArn = roleArn;
+        this.roleArnLabel = this.roleArn.length ? RoleArnState.Ready : RoleArnState.Empty;
+      });
+  }
+
   private _updateExternalClusterModel(): void {
     let version = this.controlValue(Controls.Version)?.main;
     const versionSplitArr = version?.split('.');
@@ -295,7 +327,7 @@ export class EKSClusterSettingsComponent
       } as ExternalCloudSpec,
       spec: {
         eksclusterSpec: {
-          roleArn: this.controlValue(Controls.RoleArn),
+          roleArn: this.selectedRoleArn,
           version: version,
           vpcConfigRequest: {
             vpcId: this.controlValue(Controls.Vpc),
