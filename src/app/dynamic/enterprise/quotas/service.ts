@@ -23,16 +23,14 @@ import {Injectable} from '@angular/core';
 import {environment} from '@environments/environment';
 import {Quota, QuotaDetails, QuotaVariables} from '@shared/entity/quota';
 import {merge, Observable, of, Subject, timer} from 'rxjs';
-import {catchError, map, shareReplay, switchMap} from 'rxjs/operators';
+import {catchError, map, shareReplay, switchMap, startWith, tap} from 'rxjs/operators';
 import {AppConfigService} from '@app/config.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class QuotaService {
-  quotaMap = new Map<string, Observable<QuotaDetails>>();
-
-  constructor(private _http: HttpClient, private readonly _appConfigService: AppConfigService) {}
+  constructor(private readonly _http: HttpClient, private readonly _appConfigService: AppConfigService) {}
 
   private _quotas$: Observable<QuotaDetails[]>;
   private _quotasRefresh$ = new Subject<void>();
@@ -41,15 +39,25 @@ export class QuotaService {
   private readonly _newRestRoot = environment.newRestRoot;
   private readonly _baseUrl = this._newRestRoot + '/quotas';
   private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
+  private _previousQuotas: QuotaDetails[];
+
+  private _quotaMap = new Map<string, Observable<QuotaDetails>>();
+  private _previousQuotaMap = new Map<string, QuotaDetails>();
 
   get quotas(): Observable<QuotaDetails[]> {
     if (!this._quotas$) {
       this._quotas$ = merge(this._refreshTimer$, this._quotasRefresh$).pipe(
         switchMap(() => this._getQuotas()),
-        shareReplay({refCount: true, bufferSize: 1})
+        shareReplay({refCount: true, bufferSize: 1}),
+        tap(quotas => {
+          this._previousQuotas = quotas;
+        })
       );
     }
 
+    if (this._previousQuotas) {
+      return this._quotas$.pipe(startWith(this._previousQuotas));
+    }
     return this._quotas$;
   }
 
@@ -70,20 +78,26 @@ export class QuotaService {
   }
 
   getProjectQuota(projectId: string): Observable<QuotaDetails> {
-    if (!this.quotaMap.get(projectId)) {
+    if (!this._quotaMap.has(projectId)) {
       const quota$ = this._refreshTimer$.pipe(
         switchMap(_ =>
           this._http
             .get<QuotaDetails>(`${this._newRestRoot}/projects/${projectId}/quota`)
             .pipe(catchError(_ => of(null)))
         ),
-        shareReplay({refCount: true, bufferSize: 1})
+        shareReplay({refCount: true, bufferSize: 1}),
+        tap(quota => {
+          this._previousQuotaMap.set(projectId, quota);
+        })
       );
 
-      this.quotaMap.set(projectId, quota$);
+      this._quotaMap.set(projectId, quota$);
     }
 
-    return this.quotaMap.get(projectId);
+    if (this._previousQuotaMap.has(projectId)) {
+      return this._quotaMap.get(projectId).pipe(startWith(this._previousQuotaMap.get(projectId)));
+    }
+    return this._quotaMap.get(projectId);
   }
 
   private _getQuotas(): Observable<QuotaDetails[]> {
