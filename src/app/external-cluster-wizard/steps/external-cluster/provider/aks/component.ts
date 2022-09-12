@@ -118,6 +118,8 @@ export class AKSClusterSettingsComponent
   readonly ErrorType = ErrorType;
   readonly AUTOSCALING_MIN_VALUE = 1;
   readonly AUTOSCALING_MAX_VALUE = 1000;
+  readonly MIN_COUNT_DEFAULT_VALUE = 1;
+  readonly MAX_COUNT_DEFAULT_VALUE = 5;
   readonly DEFAULT_LOCATION = 'eastus';
   @Input() projectID: string;
   @Input() cluster: ExternalCluster;
@@ -171,8 +173,8 @@ export class AKSClusterSettingsComponent
   onEnableAutoScalingChange(evt: MatCheckboxChange) {
     if (!evt.checked) {
       this.form.patchValue({
-        [Controls.MaxCount]: null,
-        [Controls.MinCount]: null,
+        [Controls.MaxCount]: this.MAX_COUNT_DEFAULT_VALUE,
+        [Controls.MinCount]: this.MIN_COUNT_DEFAULT_VALUE,
       });
 
       this.control(Controls.MaxCount).clearValidators();
@@ -207,8 +209,6 @@ export class AKSClusterSettingsComponent
   }
 
   private _initForm(): void {
-    const MIN_COUNT_DEFAULT_VALUE = 1;
-    const MAX_COUNT_DEFAULT_VALUE = 5;
     const DEFAULT_MODE = 'System';
     const DEFAULT_NO_OF_NODES = 1;
     this.form = this._builder.group({
@@ -221,11 +221,11 @@ export class AKSClusterSettingsComponent
       [Controls.VmSize]: this._builder.control('', Validators.required),
       [Controls.Mode]: this._builder.control(DEFAULT_MODE),
       [Controls.EnableAutoScaling]: this._builder.control(true),
-      [Controls.MaxCount]: this._builder.control(MAX_COUNT_DEFAULT_VALUE, [
+      [Controls.MaxCount]: this._builder.control(this.MAX_COUNT_DEFAULT_VALUE, [
         Validators.required,
         Validators.max(this.AUTOSCALING_MAX_VALUE),
       ]),
-      [Controls.MinCount]: this._builder.control(MIN_COUNT_DEFAULT_VALUE, [
+      [Controls.MinCount]: this._builder.control(this.MIN_COUNT_DEFAULT_VALUE, [
         Validators.required,
         Validators.min(this.AUTOSCALING_MIN_VALUE),
       ]),
