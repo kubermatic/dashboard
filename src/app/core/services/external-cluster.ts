@@ -18,7 +18,7 @@ import {Router} from '@angular/router';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {environment} from '@environments/environment';
 import {AKSCluster, AKSLocation, AKSVMSize, AzureResourceGroup} from '@shared/entity/provider/aks';
-import {EKSCluster, EKSSecurityGroup, EKSSubnet, EKSVpc} from '@shared/entity/provider/eks';
+import {EKSCluster, EKSClusterRoleList, EKSSecurityGroup, EKSSubnet, EKSVpc} from '@shared/entity/provider/eks';
 import {GKECluster, GKEZone} from '@shared/entity/provider/gke';
 import {
   DeleteExternalClusterAction,
@@ -27,7 +27,7 @@ import {
   ExternalClusterProvider,
 } from '@shared/entity/external-cluster';
 import {PresetList} from '@shared/entity/preset';
-import {BehaviorSubject, Observable, of, throwError} from 'rxjs';
+import {BehaviorSubject, Observable, of, Subject, throwError} from 'rxjs';
 import {catchError, filter} from 'rxjs/operators';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {ClusterListTab} from '@app/cluster/list/component';
@@ -38,9 +38,9 @@ import {GCPDiskType, GCPMachineSize} from '@app/shared/entity/provider/gcp';
 @Injectable({providedIn: 'root'})
 export class ExternalClusterService {
   providerChanges = new BehaviorSubject<ExternalClusterProvider>(undefined);
-  presetChanges = new BehaviorSubject<string>(undefined);
-  regionChanges = new BehaviorSubject<string>(undefined);
-  presetStatusChanges = new BehaviorSubject<boolean>(false);
+  presetChanges = new Subject<string>();
+  regionChanges = new Subject<string>();
+  presetStatusChanges = new Subject<boolean>();
 
   private _provider: ExternalClusterProvider;
   private _externalCluster: ExternalClusterModel = ExternalClusterModel.new();
@@ -206,6 +206,7 @@ export class ExternalClusterService {
   reset(): void {
     this.provider = undefined;
     this.preset = undefined;
+    this.region = undefined;
     this.isPresetEnabled = false;
     this.externalCluster = ExternalClusterModel.new();
     this.error = undefined;
@@ -281,6 +282,12 @@ export class ExternalClusterService {
   getEKSKubernetesVersions(): Observable<MasterVersion[]> {
     const url = `${this._newRestRoot}/providers/eks/versions`;
     return this._http.get<MasterVersion[]>(url).pipe(catchError(() => of<[]>()));
+  }
+
+  getEKSClusterRoles(): Observable<EKSClusterRoleList[]> {
+    const url = `${this._newRestRoot}/providers/eks/clusterroles`;
+    const headers = this._getEKSHeaders();
+    return this._http.get<EKSClusterRoleList[]>(url, {headers}).pipe(catchError(() => of([])));
   }
 
   getEKSRegions(preset?: string, accessKeyID?: string, secretAccessKey?: string): Observable<string[]> {
@@ -381,7 +388,7 @@ export class ExternalClusterService {
     if (this._preset) {
       headers = {
         Credential: this._preset,
-        Region: this._externalCluster.cloud.eks.region,
+        Region: this._externalCluster.cloud?.eks.region,
       };
       if (vpcId) {
         headers = {...headers, VpcId: vpcId};
@@ -392,7 +399,7 @@ export class ExternalClusterService {
     headers = {
       AccessKeyID: this._externalCluster.cloud.eks.accessKeyID,
       SecretAccessKey: this._externalCluster.cloud.eks.secretAccessKey,
-      Region: this._externalCluster.cloud.eks.region,
+      Region: this._externalCluster.cloud?.eks.region,
     };
     if (vpcId) {
       headers['VpcId'] = vpcId;

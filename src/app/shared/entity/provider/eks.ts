@@ -50,3 +50,8 @@ export class EKSSecurityGroup {
   groupId: string;
   vpcId: string;
 }
+
+export class EKSClusterRoleList {
+  arn: string;
+  roleName: string;
+}
