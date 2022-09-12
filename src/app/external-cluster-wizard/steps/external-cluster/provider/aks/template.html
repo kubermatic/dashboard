@@ -144,8 +144,8 @@ limitations under the License.
                        [hint]="form.get(Controls.EnableAutoScaling).value ?
                         'Number of Nodes must be in the range of min and max auto scaling config' :
                         'Number of Nodes' "
-                       [min]="form.get(Controls.MinCount).value"
-                       [max]="form.get(Controls.MaxCount).value">
+                       [min]="form.get(Controls.EnableAutoScaling).value ? form.get(Controls.MinCount).value : AUTOSCALING_MIN_VALUE"
+                       [max]="form.get(Controls.EnableAutoScaling).value ? form.get(Controls.MaxCount).value : AUTOSCALING_MAX_VALUE">
     </km-number-stepper>
 
     <label class="km-radio-group-label">Select Mode</label>
@@ -183,7 +183,7 @@ limitations under the License.
                          hint="The maximum number of nodes for auto-scaling. Maximum value can be 1000."
                          [required]="true"
                          [min]="form.get(Controls.MinCount).value"
-                         [max]="1000"
+                         [max]="AUTOSCALING_MAX_VALUE"
                          [formControlName]="Controls.MaxCount">
       </km-number-stepper>
 
@@ -191,7 +191,7 @@ limitations under the License.
                          mode="all"
                          hint="The minimum number of nodes for auto-scaling. Minimum value can be 1"
                          [required]="true"
-                         [min]="1"
+                         [min]="AUTOSCALING_MIN_VALUE"
                          [max]="form.get(Controls.MaxCount).value"
                          [formControlName]="Controls.MinCount">
       </km-number-stepper>
