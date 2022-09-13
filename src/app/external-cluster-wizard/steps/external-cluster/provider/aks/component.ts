@@ -157,7 +157,7 @@ export class AKSClusterSettingsComponent
   }
 
   ngOnDestroy(): void {
-    this.reset();
+    this.onValueChange?.(null);
     this._unsubscribe.next();
     this._unsubscribe.complete();
   }

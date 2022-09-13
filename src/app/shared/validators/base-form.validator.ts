@@ -19,6 +19,7 @@ import {takeUntil} from 'rxjs/operators';
 export abstract class BaseFormValidator implements ControlValueAccessor, Validator {
   form: FormGroup;
   protected _unsubscribe = new Subject<void>();
+  protected onValueChange: (value: unknown) => unknown;
 
   protected constructor(private _formName = 'Form') {}
 
@@ -52,6 +53,7 @@ export abstract class BaseFormValidator implements ControlValueAccessor, Validat
 
   // ControlValueAccessor interface implementation
   registerOnChange(fn: any): void {
+    this.onValueChange = fn;
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(fn);
   }
 
