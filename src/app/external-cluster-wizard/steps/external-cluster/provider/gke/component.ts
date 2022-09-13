@@ -181,7 +181,7 @@ export class GKEClusterSettingsComponent
 
   ngOnDestroy(): void {
     this.control(Controls.InitialNodePoolName).enable();
-    this.reset();
+    this.onValueChange?.(null);
     this._unsubscribe.next();
     this._unsubscribe.complete();
   }
