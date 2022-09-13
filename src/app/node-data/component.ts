@@ -441,7 +441,12 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   private getSupportedOperatingSystemProfiles(): string[] {
     return this.operatingSystemProfiles
       .filter(osp => osp.operatingSystem === this.form.get(Controls.OperatingSystem).value.toLowerCase())
-      .filter(osp => osp.supportedCloudProviders.indexOf(this.provider) > -1)
+      .filter(
+        // Packet was renamed to EquinixMetal for the machines.
+        osp =>
+          osp.supportedCloudProviders.indexOf(this.provider === NodeProvider.EQUINIX ? 'equinixmetal' : this.provider) >
+          -1
+      )
       .map(osp => osp.name);
   }
 
