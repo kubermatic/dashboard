@@ -44,6 +44,7 @@ export class EKSSubnet {
   availabilityZone: string;
   subnetId: string;
   vpcId: string;
+  default: boolean;
 }
 
 export class EKSSecurityGroup {

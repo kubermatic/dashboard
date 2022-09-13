@@ -75,7 +75,13 @@ export class ExternalCluster {
         return StatusIcon.Running;
       case ExternalClusterState.Provisioning:
       case ExternalClusterState.Reconciling:
+      case ExternalClusterState.Starting:
+      case ExternalClusterState.Stopping:
         return StatusIcon.Pending;
+      case ExternalClusterState.Stopped:
+        return StatusIcon.Stopped;
+      case ExternalClusterState.Warning:
+        return StatusIcon.Warning;
       case ExternalClusterState.Deleting:
       case ExternalClusterState.Error:
         return StatusIcon.Error;
@@ -106,9 +112,11 @@ export enum ExternalClusterState {
   Reconciling = 'Reconciling',
   Stopping = 'Stopping',
   Stopped = 'Stopped',
+  Starting = 'Starting',
   Deleting = 'Deleting',
   Error = 'Error',
   Unknown = 'Unknown',
+  Warning = 'Warning',
 }
 
 export class ExternalClusterStatus {

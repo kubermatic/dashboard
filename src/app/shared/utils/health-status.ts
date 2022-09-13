@@ -24,6 +24,8 @@ export enum StatusIcon {
   Error = 'km-icon-error',
   Disabled = 'km-icon-disabled',
   Unknown = 'km-icon-unknown',
+  Warning = 'km-icon-warning-state',
+  Stopped = 'km-icon-stopped',
 }
 
 export class HealthStatus {
