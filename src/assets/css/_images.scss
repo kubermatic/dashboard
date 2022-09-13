@@ -131,6 +131,24 @@
   margin: 4px 14px 4px 0;
 }
 
+.km-icon-warning-state {
+  @include mixins.background-image('/assets/images/icons/warning.svg', 16px);
+
+  background-color: rgb(255 196 87);
+  background-size: 12px;
+  border-radius: 50%;
+  margin: 4px 14px 4px 0;
+}
+
+.km-icon-stopped {
+  @include mixins.background-image('/assets/images/icons/circle-empty.svg', 16px);
+
+  background-size: 16px;
+  border: solid #eb5757 4px;
+  border-radius: 50%;
+  margin: 4px 14px 4px 0;
+}
+
 .km-icon-pending {
   @include mixins.mask-image('/assets/images/icons/spinner.svg', 16px);
 }

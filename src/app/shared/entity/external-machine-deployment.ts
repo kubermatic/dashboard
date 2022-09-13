@@ -24,11 +24,15 @@ export enum AKSMachineDeploymentMode {
 
 export enum ExternalClusterMDState {
   Provisioning = 'Provisioning',
+  Starting = 'Starting',
+  Stopping = 'Stopping',
+  Stopped = 'Stopped',
   Running = 'Running',
   Reconciling = 'Reconciling',
   Deleting = 'Deleting',
   Error = 'Error',
   Unknown = 'Unknown',
+  Warning = 'Warning',
 }
 
 export class ExternalMachineDeployment extends MachineDeployment {
@@ -45,6 +49,14 @@ export class ExternalMachineDeployment extends MachineDeployment {
         return new HealthStatus(ExternalClusterMDState.Reconciling, StatusIcon.Pending);
       case ExternalClusterMDState.Provisioning:
         return new HealthStatus(ExternalClusterMDState.Provisioning, StatusIcon.Pending);
+      case ExternalClusterMDState.Starting:
+        return new HealthStatus(ExternalClusterMDState.Starting, StatusIcon.Pending);
+      case ExternalClusterMDState.Stopping:
+        return new HealthStatus(ExternalClusterMDState.Stopping, StatusIcon.Pending);
+      case ExternalClusterMDState.Stopped:
+        return new HealthStatus(ExternalClusterMDState.Stopped, StatusIcon.Stopped);
+      case ExternalClusterMDState.Warning:
+        return new HealthStatus(ExternalClusterMDState.Warning, StatusIcon.Warning);
       case ExternalClusterMDState.Error:
         return new HealthStatus(md.phase?.statusMessage || ExternalClusterMDState.Error, StatusIcon.Error);
       default:
