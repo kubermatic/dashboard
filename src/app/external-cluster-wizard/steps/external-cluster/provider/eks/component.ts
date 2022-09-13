@@ -142,7 +142,7 @@ export class EKSClusterSettingsComponent
   }
 
   ngOnDestroy(): void {
-    this.reset();
+    this.onValueChange?.(null);
     this._unsubscribe.next();
     this._unsubscribe.complete();
   }
