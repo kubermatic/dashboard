@@ -106,7 +106,7 @@
     "@types/lodash": "4.14.185",
     "@types/node": "18.7.16",
     "@typescript-eslint/eslint-plugin": "5.36.2",
-    "@typescript-eslint/parser": "5.36.2",
+    "@typescript-eslint/parser": "5.37.0",
     "browserlist": "1.0.1",
     "btoa": "1.2.1",
     "concurrently": "7.4.0",
