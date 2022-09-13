@@ -91,7 +91,7 @@ limitations under the License.
                   fxLayoutAlign="center center"
                   mat-flat-button
                   (click)="onNext()"
-                  [disabled]="isInvalid">
+                  [disabled]="isInvalidStep()">
             <i class="km-icon-mask km-icon-next"></i>
             <span>Next</span>
           </button>
@@ -100,7 +100,7 @@ limitations under the License.
           <km-button buttonId="km-external-cluster-wizard-create-btn"
                      icon="km-icon-add"
                      label="Create External Cluster"
-                     [disabled]="isInvalid"
+                     [disabled]="isInvalidStep()"
                      [observable]="getObservable()"
                      (next)="onCreateSuccess($event)">
           </km-button>
