@@ -39,7 +39,7 @@
     "fix:license": "license-check-and-add add -r 2022",
     "clean": "gts clean",
     "vi": "node version.js",
-    "postinstall": "ngcc && rm cypress/**/*.js && rm cypress/tsconfig.json",
+    "postinstall": "ngcc && rm -rf cypress/**/*.js && rm -f cypress/tsconfig.json",
     "prepare": "husky install"
   },
   "lint-staged": {
