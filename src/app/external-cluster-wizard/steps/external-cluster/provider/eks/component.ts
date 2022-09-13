@@ -279,6 +279,10 @@ export class EKSClusterSettingsComponent
       this._externalClusterService.getEKSSecurityGroups(vpc),
     ]).subscribe(([subnets, securityGroups]) => {
       this.subnets = subnets;
+      if (subnets.length) {
+        const defaultSubNets = subnets.filter(subnet => subnet.default).map(filteredSubnet => filteredSubnet.subnetId);
+        this.control(Controls.SubnetIds).setValue(defaultSubNets);
+      }
       this.securityGroups = securityGroups;
       this.subnetLabel = this.subnets?.length ? SubnetState.Ready : SubnetState.Empty;
       this.securityGroupLabel = this.securityGroups?.length ? SecurityGroupState.Ready : SecurityGroupState.Empty;
