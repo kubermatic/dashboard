@@ -37,7 +37,6 @@ export class ExternalClusterWizardComponent implements OnInit, OnDestroy {
   readonly externalProviders = [ExternalClusterProvider.AKS, ExternalClusterProvider.EKS, ExternalClusterProvider.GKE];
   form: FormGroup;
   project = {} as Project;
-  isInvalid = true;
   private readonly _unsubscribe = new Subject<void>();
   @ViewChild('stepper', {static: true}) private readonly _stepper: MatStepper;
 
@@ -99,6 +98,19 @@ export class ExternalClusterWizardComponent implements OnInit, OnDestroy {
     this._wizard.reset();
   }
 
+  isInvalidStep(): boolean {
+    switch (this.active.name) {
+      case StepRegistry.Provider:
+        return !this._externalClusterService.provider;
+      case StepRegistry.Settings:
+        return !this._externalClusterService.isCredentialsStepValid;
+      case StepRegistry.ExternalClusterDetails:
+        return !this._externalClusterService.isClusterDetailsStepValid;
+      default:
+        return true;
+    }
+  }
+
   onNext(): void {
     this._stepper.next();
   }
@@ -127,33 +139,12 @@ export class ExternalClusterWizardComponent implements OnInit, OnDestroy {
     });
   }
 
-  private isInvalidStep(): boolean {
-    switch (this.active.name) {
-      case StepRegistry.Provider:
-        return !this._externalClusterService.provider;
-      case StepRegistry.Settings:
-        return !this._externalClusterService.isCredentialsStepValid;
-      case StepRegistry.ExternalClusterDetails:
-        if (
-          this.selectedProvider === ExternalClusterProvider.AKS ||
-          this.selectedProvider === ExternalClusterProvider.EKS ||
-          this.selectedProvider === ExternalClusterProvider.GKE
-        ) {
-          return !this._externalClusterService.isClusterDetailsStepValid;
-        }
-        return false;
-      default:
-        return true;
-    }
-  }
-
   private _initForm(steps: ExternalClusterWizardStep[]): void {
     const controls = {};
     steps.forEach(step => (controls[step.name] = this._builder.control('')));
     this.form = this._builder.group(controls);
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
-      this.isInvalid = this.isInvalidStep();
       this._cdr.detectChanges();
     });
   }
