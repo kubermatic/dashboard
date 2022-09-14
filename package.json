@@ -110,7 +110,7 @@
     "browserlist": "1.0.1",
     "btoa": "1.2.1",
     "concurrently": "7.4.0",
-    "cypress": "9.7.0",
+    "cypress": "10.8.0",
     "cypress-fail-fast": "3.4.1",
     "del": "6.1.1",
     "eslint": "8.23.1",
@@ -133,7 +133,7 @@
     "stylelint-config-standard-scss": "5.0.0",
     "stylelint-no-unsupported-browser-features": "5.0.3",
     "stylelint-order": "5.0.0",
-    "ts-jest": "28.0.8",
+    "ts-jest": "29.0.1",
     "ts-node": "10.9.1",
     "tslib": "2.4.0",
     "typescript": "4.6.4"
