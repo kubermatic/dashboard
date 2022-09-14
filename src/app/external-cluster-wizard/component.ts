@@ -107,7 +107,7 @@ export class ExternalClusterWizardComponent implements OnInit, OnDestroy {
       case StepRegistry.ExternalClusterDetails:
         return !this._externalClusterService.isClusterDetailsStepValid;
       default:
-        return true;
+        return false;
     }
   }
 
