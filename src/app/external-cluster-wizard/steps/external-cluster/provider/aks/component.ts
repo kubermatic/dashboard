@@ -25,7 +25,7 @@ import {StepBase} from '@app/external-cluster-wizard/steps/base';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {NameGeneratorService} from '@core/services/name-generator';
 import {ErrorType} from '@shared/types/error-type';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {debounceTime, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {
   ExternalCloudSpec,
@@ -117,8 +117,7 @@ export enum NodePoolVersionState {
 })
 export class AKSClusterSettingsComponent
   extends StepBase
-  implements OnInit, OnDestroy, ControlValueAccessor, Validator
-{
+  implements OnInit, OnDestroy, ControlValueAccessor, Validator {
   readonly Controls = Controls;
   readonly Mode = Mode;
   readonly ErrorType = ErrorType;
@@ -282,8 +281,15 @@ export class AKSClusterSettingsComponent
         .pipe(tap(_ => this._clearVmSize()))
         .pipe(
           switchMap((location: AKSLocation) => {
+            let obs$;
+            const locationValue = this.controlValue(Controls.Location)?.[ComboboxControls.Select];
+            if (locationValue) {
+              obs$ = this._getAKSVmSizes(location?.[ComboboxControls.Select]);
+            } else {
+              obs$ = of([]);
+            }
             this.vmSizeLabel = VMSizeState.Loading;
-            return this._getAKSVmSizes(location?.[ComboboxControls.Select]);
+            return obs$;
           })
         )
         .pipe(takeUntil(this._unsubscribe))
