@@ -102,6 +102,7 @@ export class AKSNetworkProfile {
 }
 
 export class AKSNodePoolVersionForMachineDeployments {
+  default: boolean;
   version: string;
 }
 

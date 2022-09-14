@@ -26,7 +26,7 @@ import {ExternalClusterService} from '@core/services/external-cluster';
 import {NameGeneratorService} from '@core/services/name-generator';
 import {ErrorType} from '@shared/types/error-type';
 import {Observable} from 'rxjs';
-import {debounceTime, finalize, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {debounceTime, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {
   ExternalCloudSpec,
   ExternalCluster,
@@ -92,6 +92,12 @@ export enum ResourceGroupState {
   Empty = 'No Resource Groups Available',
 }
 
+export enum NodePoolVersionState {
+  Ready = 'Kubernetes Version',
+  Loading = 'Loading...',
+  Empty = 'No Kubernetes Versions Available',
+}
+
 @Component({
   selector: 'km-aks-cluster-settings',
   templateUrl: './template.html',
@@ -123,17 +129,19 @@ export class AKSClusterSettingsComponent
   readonly DEFAULT_LOCATION = 'eastus';
   @Input() projectID: string;
   @Input() cluster: ExternalCluster;
-  isLoadingVmSizes: boolean;
-  isLoadingNodePoolVersions: boolean;
+  vmSizeLabel = VMSizeState.Ready;
   vmSizes: AKSVMSize[] = [];
   locationLabel = LocationState.Ready;
-  vmSizeLabel = VMSizeState.Ready;
+  locations: AKSLocation[] = [];
   securityGroups: EKSSecurityGroup[] = [];
-  locations: string[] = [];
-  nodePoolVersionsForMD: string[] = [];
+  nodePoolVersionsForMDLabel = NodePoolVersionState.Ready;
+  nodePoolVersionsForMD: AKSNodePoolVersionForMachineDeployments[] = [];
   kubernetesVersions: string[] = [];
   resourceGroupLabel = ResourceGroupState.Ready;
   resourceGroups: AzureResourceGroup[] = [];
+
+  @ViewChild('nodePoolVersionsForMDCombobox')
+  private readonly _nodePoolVersionsForMDCombobox: FilteredComboboxComponent;
 
   @ViewChild('vmSizeCombobox')
   private readonly _vmSizeCombobox: FilteredComboboxComponent;
@@ -253,19 +261,29 @@ export class AKSClusterSettingsComponent
         this.vmSizeLabel = this.vmSizes?.length ? VMSizeState.Ready : VMSizeState.Empty;
         this.control(Controls.VmSize).enable();
       });
-      this._getAKSAvailableNodePoolVersionsForCreateMachineDeployment().subscribe(
-        (nodePoolVersions: AKSNodePoolVersionForMachineDeployments[]) => {
-          this.nodePoolVersionsForMD = nodePoolVersions.map(nodePoolVersion => nodePoolVersion.version);
-        }
-      );
+
+      this.nodePoolVersionsForMDLabel = NodePoolVersionState.Loading;
+      this._getAKSAvailableNodePoolVersionsForCreateMachineDeployment()
+        .pipe(tap(_ => this._clearNodePoolVersions()))
+        .subscribe((nodePoolVersions: AKSNodePoolVersionForMachineDeployments[]) => {
+          this.nodePoolVersionsForMD = nodePoolVersions;
+          this.nodePoolVersionsForMDLabel = this.nodePoolVersionsForMD?.length
+            ? NodePoolVersionState.Ready
+            : NodePoolVersionState.Empty;
+          nodePoolVersions.forEach((nodePoolVersion: AKSNodePoolVersionForMachineDeployments) => {
+            if (nodePoolVersion.default) {
+              this.control(Controls.KubernetesVersion).setValue(nodePoolVersion.version);
+            }
+          });
+        });
     } else {
       this.control(Controls.Location)
         .valueChanges.pipe(debounceTime(this._debounceTime))
         .pipe(tap(_ => this._clearVmSize()))
         .pipe(
-          switchMap((location: string) => {
+          switchMap((location: AKSLocation) => {
             this.vmSizeLabel = VMSizeState.Loading;
-            return this._getAKSVmSizes(location);
+            return this._getAKSVmSizes(location?.[ComboboxControls.Select]);
           })
         )
         .pipe(takeUntil(this._unsubscribe))
@@ -281,20 +299,13 @@ export class AKSClusterSettingsComponent
   }
 
   private _getAKSVmSizes(location: string): Observable<AKSVMSize[]> {
-    this.isLoadingVmSizes = true;
-    return this._externalClusterService.getAKSVmSizes(location).pipe(
-      takeUntil(this._unsubscribe),
-      finalize(() => (this.isLoadingVmSizes = false))
-    );
+    return this._externalClusterService.getAKSVmSizes(location).pipe(takeUntil(this._unsubscribe));
   }
 
   private _getAKSKubernetesVersions(): void {
     this._externalClusterService.getAKSKubernetesVersions().subscribe(
       (versions: MasterVersion[]) =>
         (this.kubernetesVersions = versions.map(version => {
-          if (version.default) {
-            this.control(Controls.KubernetesVersion).setValue({main: version.version});
-          }
           return version.version;
         }))
     );
@@ -306,12 +317,12 @@ export class AKSClusterSettingsComponent
       .getAKSLocations()
       .pipe(takeUntil(this._unsubscribe))
       .subscribe((locations: AKSLocation[]) => {
+        this.locations = locations;
         this.locationLabel = this.locations?.length ? LocationState.Ready : LocationState.Empty;
-        this.locations = locations.map((location: AKSLocation) => {
+        locations.forEach((location: AKSLocation) => {
           if (location.name === this.DEFAULT_LOCATION) {
             this.control(Controls.Location).setValue(this.DEFAULT_LOCATION);
           }
-          return location.name;
         });
       });
   }
@@ -328,25 +339,17 @@ export class AKSClusterSettingsComponent
   }
 
   private _getAKSVmSizesForMachineDeployment(location?: string): Observable<AKSVMSize[]> {
-    this.isLoadingVmSizes = true;
     return this._externalMachineDeploymentService
       .getAKSVmSizesForMachineDeployment(this.projectID, this.cluster.id, location)
-      .pipe(
-        takeUntil(this._unsubscribe),
-        finalize(() => (this.isLoadingVmSizes = false))
-      );
+      .pipe(takeUntil(this._unsubscribe));
   }
 
   private _getAKSAvailableNodePoolVersionsForCreateMachineDeployment(): Observable<
     AKSNodePoolVersionForMachineDeployments[]
   > {
-    this.isLoadingNodePoolVersions = true;
     return this._externalMachineDeploymentService
       .getAKSAvailableNodePoolVersionsForMachineDeployment(this.projectID, this.cluster.id)
-      .pipe(
-        takeUntil(this._unsubscribe),
-        finalize(() => (this.isLoadingNodePoolVersions = false))
-      );
+      .pipe(takeUntil(this._unsubscribe));
   }
 
   private _updateExternalClusterModel(): void {
@@ -417,6 +420,13 @@ export class AKSClusterSettingsComponent
       } as AKSNodegroupScalingConfig;
     }
     this._externalMachineDeploymentService.externalMachineDeployment = config;
+  }
+
+  private _clearNodePoolVersions(): void {
+    this.nodePoolVersionsForMD = [];
+    this.nodePoolVersionsForMDLabel = NodePoolVersionState.Ready;
+    this._nodePoolVersionsForMDCombobox.reset();
+    this._cdr.detectChanges();
   }
 
   private _clearVmSize(): void {

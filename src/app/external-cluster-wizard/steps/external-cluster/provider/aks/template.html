@@ -61,12 +61,17 @@ limitations under the License.
         </ng-container>
       </km-autocomplete>
 
-      <km-select [label]="locationLabel"
-                 [options]="locations"
-                 required="true"
-                 hint="Enter a region name for your cluster."
-                 [formControlName]="Controls.Location">
-      </km-select>
+      <km-combobox filterBy="name"
+                   inputLabel="Select Location..."
+                   hint="Enter a region name for your cluster."
+                   [required]="true"
+                   [label]="locationLabel"
+                   [options]="locations"
+                   [formControlName]="Controls.Location">
+        <div *option="let location">
+          {{location.name}}
+        </div>
+      </km-combobox>
 
       <km-combobox filterBy="name"
                    inputLabel="Select Resource Group..."
@@ -127,15 +132,19 @@ limitations under the License.
       </div>
     </km-combobox>
 
-    <km-autocomplete *ngIf="isDialogView()"
-                     label="Kubernetes Version"
-                     required="true"
-                     [options]="nodePoolVersionsForMD"
-                     [formControlName]="Controls.KubernetesVersion">
-      <ng-container hint>
-        Select the kubernetes version.
-      </ng-container>
-    </km-autocomplete>
+    <km-combobox *ngIf="isDialogView()"
+                 #nodePoolVersionsForMDCombobox
+                 filterBy="version"
+                 inputLabel="Select Kubernetes Version..."
+                 hint="Select the kubernetes version."
+                 [required]="true"
+                 [label]="nodePoolVersionsForMDLabel"
+                 [options]="nodePoolVersionsForMD"
+                 [formControlName]="Controls.KubernetesVersion">
+      <div *option="let kubernetesVersion">
+        {{kubernetesVersion.version}}
+      </div>
+    </km-combobox>
 
     <km-number-stepper [formControlName]="Controls.Count"
                        label="Count"

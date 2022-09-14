@@ -294,9 +294,6 @@ export class EKSClusterSettingsComponent
     this._externalClusterService.getEKSKubernetesVersions().subscribe(
       (versions: MasterVersion[]) =>
         (this.kubernetesVersions = versions.map(version => {
-          if (version.default) {
-            this.control(Controls.Version).setValue({main: version.version});
-          }
           return version.version;
         }))
     );
