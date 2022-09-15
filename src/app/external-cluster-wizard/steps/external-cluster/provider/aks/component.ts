@@ -117,7 +117,8 @@ export enum NodePoolVersionState {
 })
 export class AKSClusterSettingsComponent
   extends StepBase
-  implements OnInit, OnDestroy, ControlValueAccessor, Validator {
+  implements OnInit, OnDestroy, ControlValueAccessor, Validator
+{
   readonly Controls = Controls;
   readonly Mode = Mode;
   readonly ErrorType = ErrorType;
@@ -280,11 +281,11 @@ export class AKSClusterSettingsComponent
         .valueChanges.pipe(debounceTime(this._debounceTime))
         .pipe(tap(_ => this._clearVmSize()))
         .pipe(
-          switchMap((location: AKSLocation) => {
+          switchMap(() => {
             let obs$;
             const locationValue = this.controlValue(Controls.Location)?.[ComboboxControls.Select];
             if (locationValue) {
-              obs$ = this._getAKSVmSizes(location?.[ComboboxControls.Select]);
+              obs$ = this._getAKSVmSizes(locationValue);
             } else {
               obs$ = of([]);
             }
@@ -372,7 +373,7 @@ export class AKSClusterSettingsComponent
           ...this._externalClusterService.externalCluster?.cloud?.aks,
           name: this.controlValue(Controls.Name),
           resourceGroup: this.controlValue(Controls.NodeResourceGroup)?.[ComboboxControls.Select],
-          location: this.controlValue(Controls.Location),
+          location: this.controlValue(Controls.Location)?.[ComboboxControls.Select],
         } as AKSCloudSpec,
       } as ExternalCloudSpec,
       spec: {
@@ -410,7 +411,7 @@ export class AKSClusterSettingsComponent
         aks: {
           basicSettings: {
             mode: this.controlValue(Controls.Mode),
-            orchestratorVersion: this.controlValue(Controls.KubernetesVersion)?.main,
+            orchestratorVersion: this.controlValue(Controls.KubernetesVersion)?.[ComboboxControls.Select],
             enableAutoScaling: this.controlValue(Controls.EnableAutoScaling),
             vmSize: this.controlValue(Controls.VmSize)?.[ComboboxControls.Select],
             count: this.controlValue(Controls.Count),
