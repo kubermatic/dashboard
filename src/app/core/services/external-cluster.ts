@@ -249,7 +249,7 @@ export class ExternalClusterService {
     } else {
       headers = {headers: this._getGKEHeaders(zone, mode)};
     }
-    return this._http.get<MasterVersion[]>(url, headers).pipe(catchError(() => of<[]>()));
+    return this._http.get<MasterVersion[]>(url, headers).pipe(catchError(() => of([])));
   }
 
   getGKEDiskTypes(zone: string): Observable<GCPDiskType[]> {
@@ -264,7 +264,7 @@ export class ExternalClusterService {
 
   getEKSVpcs(): Observable<EKSVpc[]> {
     const url = `${this._newRestRoot}/providers/eks/vpcs`;
-    return this._http.get<EKSVpc[]>(url, {headers: this._getEKSHeaders()}).pipe(catchError(() => of<[]>()));
+    return this._http.get<EKSVpc[]>(url, {headers: this._getEKSHeaders()}).pipe(catchError(() => of([])));
   }
 
   getEKSSubnets(vpcId: string): Observable<EKSSubnet[]> {

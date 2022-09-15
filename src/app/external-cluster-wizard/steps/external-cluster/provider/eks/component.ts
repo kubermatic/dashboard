@@ -33,7 +33,7 @@ import {
   EKSVpc,
 } from '@shared/entity/provider/eks';
 import {forkJoin} from 'rxjs';
-import {debounceTime, finalize, takeUntil, tap} from 'rxjs/operators';
+import {debounceTime, takeUntil, tap} from 'rxjs/operators';
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
 import {
   ExternalCloudSpec,
@@ -63,6 +63,12 @@ enum Controls {
   MaxSize = 'maxSize',
   MinSize = 'minSize',
   DesiredSize = 'desiredSize',
+}
+
+enum VpcState {
+  Loading = 'Loading...',
+  Ready = 'VPCs',
+  Empty = 'No VPCs Available',
 }
 
 enum SubnetState {
@@ -104,8 +110,8 @@ export class EKSClusterSettingsComponent
   implements OnInit, OnDestroy, ControlValueAccessor, Validator
 {
   readonly Controls = Controls;
-  isLoadingVpcs: boolean;
-  vpcs: string[] = [];
+  vpcLabel = VpcState.Ready;
+  vpcs: EKSVpc[] = [];
   kubernetesVersions: string[] = [];
   maxNodeCount: number;
   minNodeCount: number;
@@ -119,6 +125,10 @@ export class EKSClusterSettingsComponent
   @Input() projectID: string;
   @Input() cluster: ExternalCluster;
   private readonly _debounceTime = 500;
+
+  @ViewChild('vpcCombobox')
+  private readonly _vpcCombobox: FilteredComboboxComponent;
+
   @ViewChild('subnetCombobox')
   private readonly _subnetCombobox: FilteredComboboxComponent;
 
@@ -235,7 +245,7 @@ export class EKSClusterSettingsComponent
           this._clearSubnet();
           this._clearSecurityGroups();
 
-          const vpc = this.controlValue(Controls.Vpc);
+          const vpc = this.controlValue(Controls.Vpc)?.[ComboboxControls.Select];
           if (vpc) {
             this._onVPCSelectionChange(vpc);
           }
@@ -254,19 +264,17 @@ export class EKSClusterSettingsComponent
   }
 
   private _getEKSVpcs(): void {
-    this.isLoadingVpcs = true;
     this._externalClusterService
       .getEKSVpcs()
-      .pipe(
-        takeUntil(this._unsubscribe),
-        finalize(() => (this.isLoadingVpcs = false))
-      )
+      .pipe(tap(_ => this._clearVpcs()))
+      .pipe(takeUntil(this._unsubscribe))
       .subscribe((vpcs: EKSVpc[]) => {
-        this.vpcs = vpcs.map((vpc: EKSVpc) => {
+        this.vpcs = vpcs;
+        this.vpcLabel = this.vpcs?.length ? VpcState.Ready : VpcState.Empty;
+        vpcs.forEach((vpc: EKSVpc) => {
           if (vpc.default) {
             this.control(Controls.Vpc).setValue(vpc.id);
           }
-          return vpc.id;
         });
       });
   }
@@ -294,9 +302,6 @@ export class EKSClusterSettingsComponent
     this._externalClusterService.getEKSKubernetesVersions().subscribe(
       (versions: MasterVersion[]) =>
         (this.kubernetesVersions = versions.map(version => {
-          if (version.default) {
-            this.control(Controls.Version).setValue({main: version.version});
-          }
           return version.version;
         }))
     );
@@ -334,7 +339,7 @@ export class EKSClusterSettingsComponent
           roleArn: this.selectedRoleArn,
           version: version,
           vpcConfigRequest: {
-            vpcId: this.controlValue(Controls.Vpc),
+            vpcId: this.controlValue(Controls.Vpc)?.[ComboboxControls.Select],
             subnetIds: this.controlValue(Controls.SubnetIds)?.[ComboboxControls.Select],
             securityGroupIds: this.controlValue(Controls.SecurityGroupsIds)?.[ComboboxControls.Select],
           },
@@ -360,6 +365,13 @@ export class EKSClusterSettingsComponent
         } as EKSMachineDeploymentCloudSpec,
       } as ExternalMachineDeploymentCloudSpec,
     } as ExternalMachineDeployment;
+  }
+
+  private _clearVpcs(): void {
+    this.vpcs = [];
+    this.vpcLabel = VpcState.Ready;
+    this._vpcCombobox.reset();
+    this._cdr.detectChanges();
   }
 
   private _clearSubnet(): void {

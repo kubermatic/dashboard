@@ -144,7 +144,7 @@ export class GKEClusterSettingsComponent
     ReleaseChannelOptions.StableChannel,
   ];
 
-  zones: string[] = [];
+  zones: GKEZone[] = [];
   diskTypes: GCPDiskType[] = [];
   machineTypes: GCPMachineSize[] = [];
   kubernetesVersions: string[] = [];
@@ -253,18 +253,21 @@ export class GKEClusterSettingsComponent
       this.control(Controls.MinCount).updateValueAndValidity();
     } else {
       this._getGKEZones();
-      this._getGKEKubernetesVersions();
-      this._getGKEDiskTypes();
-      this._getGKEMachineTypes();
+
       merge(
-        this.control(Controls.Zone).valueChanges,
         this.control(Controls.ReleaseChannelOptions).valueChanges,
         this.control(Controls.KubernetesVersionMode).valueChanges
       )
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => {
-          this._getGKEKubernetesVersions();
+          const modeValue = this.controlValue(Controls.KubernetesVersionMode) ?? KubernetesVersionMode.StaticVersion;
+
+          if (modeValue) {
+            const zoneValue = this.controlValue(Controls.Zone)?.[ComboboxControls.Select];
+            this._getGKEKubernetesVersions(zoneValue, modeValue);
+          }
         });
+
       this.control(Controls.Zone)
         .valueChanges.pipe(debounceTime(this._debounceTime))
         .pipe(
@@ -274,9 +277,13 @@ export class GKEClusterSettingsComponent
           })
         )
         .subscribe(zone => {
-          if (zone) {
-            this._getGKEDiskTypes();
-            this._getGKEMachineTypes();
+          const zoneValue = zone?.[ComboboxControls.Select];
+
+          if (zoneValue) {
+            const modeValue = this.controlValue(Controls.KubernetesVersionMode) ?? KubernetesVersionMode.StaticVersion;
+            this._getGKEKubernetesVersions(zoneValue, modeValue);
+            this._getGKEDiskTypes(zoneValue);
+            this._getGKEMachineTypes(zoneValue);
           }
         });
     }
@@ -288,20 +295,20 @@ export class GKEClusterSettingsComponent
       .getGKEZones()
       .pipe(takeUntil(this._unsubscribe))
       .subscribe((zones: GKEZone[]) => {
-        this.zones = zones.map(zone => {
+        this.zones = zones;
+        this.zoneLabel = this.zones?.length ? Zones.ready : Zones.Empty;
+        zones.forEach(zone => {
           if (zone.name === this.ZONE_DEFAULT_VALUE) {
             this.control(Controls.Zone).setValue(this.ZONE_DEFAULT_VALUE);
           }
-          return zone.name;
         });
-        this.zones.length ? (this.zoneLabel = Zones.ready) : (this.zoneLabel = Zones.Empty);
       });
   }
 
-  private _getGKEDiskTypes(): void {
+  private _getGKEDiskTypes(zone: string): void {
     this.diskTypeLabel = DiskTypeState.Loading;
     this._externalClusterService
-      .getGKEDiskTypes(this.controlValue(Controls.Zone))
+      .getGKEDiskTypes(zone)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe((diskTypes: GCPDiskType[]) => {
         diskTypes.map(diskType => {
@@ -314,10 +321,10 @@ export class GKEClusterSettingsComponent
       });
   }
 
-  private _getGKEMachineTypes(): void {
+  private _getGKEMachineTypes(zone: string): void {
     this.machineTypeLabel = MachineTypeState.Loading;
     this._externalClusterService
-      .getGKEMachineTypes(this.controlValue(Controls.Zone))
+      .getGKEMachineTypes(zone)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe((machineTypes: GCPMachineSize[]) => {
         machineTypes.map(machineType => {
@@ -345,28 +352,15 @@ export class GKEClusterSettingsComponent
       });
   }
 
-  private _getGKEKubernetesVersions(): void {
+  private _getGKEKubernetesVersions(zone: string, mode: string): void {
     this.kubernetesVersions = [];
-    let zone = this.controlValue(Controls.Zone);
-    let mode = this.controlValue(Controls.KubernetesVersionMode);
     let releaseChannel: string;
-
-    if (!zone) {
-      zone = this.control(Controls.Zone).setValue(this.ZONE_DEFAULT_VALUE);
-    }
-
-    if (!mode) {
-      mode = this.control(Controls.KubernetesVersionMode).setValue(this.KubernetesVersionMode.StaticVersion);
-    }
-
-    if (!this.controlValue(Controls.ReleaseChannelOptions)) {
-      this.control(Controls.ReleaseChannelOptions).setValue(this.releaseChannelOptions[1]);
-    }
 
     if (mode === KubernetesVersionMode.ReleaseChannel) {
       const releaseChannelToUpperCase = this.controlValue(Controls.ReleaseChannelOptions)?.toUpperCase();
       releaseChannel = releaseChannelToUpperCase?.slice(0, releaseChannelToUpperCase.indexOf(' '));
     }
+
     if (zone && mode) {
       this.versionLabel = VersionState.Loading;
       this._externalClusterService
@@ -406,7 +400,7 @@ export class GKEClusterSettingsComponent
         gke: {
           ...this._externalClusterService.externalCluster.cloud?.gke,
           name: this.controlValue(Controls.Name),
-          zone: this.controlValue(Controls.Zone),
+          zone: this.controlValue(Controls.Zone)?.[ComboboxControls.Select],
         } as GKECloudSpec,
       } as ExternalCloudSpec,
       spec: {
