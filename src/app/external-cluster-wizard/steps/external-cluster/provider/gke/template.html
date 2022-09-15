@@ -53,16 +53,18 @@ limitations under the License.
       </mat-error>
     </mat-form-field>
 
-    <km-select *ngIf="!isDialogView()"
-               class="km-dropdown-with-suffix"
-               [label]="zoneLabel"
-               required="true"
-               hint="Select zone in which your cluster is located."
-               [options]="zones"
-               [formControlName]="Controls.Zone">
-    </km-select>
-
     <ng-container *ngIf="!isDialogView()">
+      <km-combobox filterBy="name"
+                   inputLabel="Select Zone..."
+                   hint="Select zone in which your cluster is located."
+                   [required]="true"
+                   [label]="zoneLabel"
+                   [options]="zones"
+                   [formControlName]="Controls.Zone">
+        <div *option="let zone">
+          {{zone.name}}
+        </div>
+      </km-combobox>
 
       <label class="km-radio-group-label"
              fxLayoutAlign=" center">Kubernetes Version

@@ -132,13 +132,19 @@ limitations under the License.
       <mat-card-title>Networking</mat-card-title>
     </mat-card-header>
 
-    <km-select *ngIf="!isDialogView()"
-               label="VPC"
-               hint="Select a VPC to use for your EKS cluster resources."
-               [required]="true"
-               [options]="vpcs"
-               [formControlName]="Controls.Vpc">
-    </km-select>
+    <km-combobox *ngIf="!isDialogView()"
+                 #vpcCombobox
+                 filterBy="id"
+                 inputLabel="Select Vpc..."
+                 hint="Select a VPC to use for your EKS cluster resources."
+                 [required]="true"
+                 [label]="vpcLabel"
+                 [options]="vpcs"
+                 [formControlName]="Controls.Vpc">
+      <div *option="let vpc">
+        {{vpc.id}}
+      </div>
+    </km-combobox>
 
 
     <div *ngIf="isDialogView()">
