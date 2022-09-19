@@ -9211,12 +9211,53 @@
         "operationId": "listApplicationDefinitions",
         "responses": {
           "200": {
-            "description": "ApplicationDefinition",
+            "description": "ApplicationDefinitionListItem",
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/ApplicationDefinition"
+                "$ref": "#/definitions/ApplicationDefinitionListItem"
               }
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/applicationdefinitions/{appdef_name}": {
+      "get": {
+        "description": "Gets the given ApplicationDefinition",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "applications"
+        ],
+        "operationId": "getApplicationDefinition",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "AppDefName",
+            "name": "appdef_name",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ApplicationDefinition",
+            "schema": {
+              "$ref": "#/definitions/ApplicationDefinition"
             }
           },
           "401": {
@@ -10754,11 +10795,11 @@
         ],
         "responses": {
           "200": {
-            "description": "ApplicationInstallation",
+            "description": "ApplicationInstallationListItem",
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/ApplicationInstallation"
+                "$ref": "#/definitions/ApplicationInstallationListItem"
               }
             }
           },
@@ -25189,6 +25230,32 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
+    "ApplicationDefinitionListItem": {
+      "type": "object",
+      "title": "ApplicationDefinitionListItem is the object representing an ApplicationDefinitionListItem.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "spec": {
+          "$ref": "#/definitions/ApplicationDefinitionListItemSpec"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/api/v2"
+    },
+    "ApplicationDefinitionListItemSpec": {
+      "type": "object",
+      "title": "ApplicationDefinitionListItemSpec defines the desired state of ApplicationDefinitionListItemSpec.",
+      "properties": {
+        "description": {
+          "description": "Description of the application. what is its purpose",
+          "type": "string",
+          "x-go-name": "Description"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/api/v2"
+    },
     "ApplicationDefinitionSpec": {
       "type": "object",
       "title": "ApplicationDefinitionSpec defines the desired state of ApplicationDefinition.",
@@ -25347,6 +25414,60 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
+    "ApplicationInstallationListItem": {
+      "type": "object",
+      "title": "ApplicationInstallationListItem is the object representing an ApplicationInstallationListItem.",
+      "properties": {
+        "creationTimestamp": {
+          "type": "string",
+          "x-go-name": "CreationTimestamp"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "spec": {
+          "$ref": "#/definitions/ApplicationInstallationListItemSpec"
+        },
+        "status": {
+          "$ref": "#/definitions/ApplicationInstallationListItemStatus"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/api/v2"
+    },
+    "ApplicationInstallationListItemSpec": {
+      "type": "object",
+      "title": "ApplicationInstallationListItemSpec is the object representing an ApplicationInstallationListItemSpec.",
+      "properties": {
+        "applicationRef": {
+          "$ref": "#/definitions/ApplicationRef"
+        },
+        "namespace": {
+          "$ref": "#/definitions/NamespaceSpec"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/api/v2"
+    },
+    "ApplicationInstallationListItemStatus": {
+      "type": "object",
+      "properties": {
+        "applicationVersion": {
+          "$ref": "#/definitions/ApplicationVersion"
+        },
+        "conditions": {
+          "description": "Conditions contains conditions an installation is in, its primary use case is status signaling between controllers or between controllers and the API",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ApplicationInstallationCondition"
+          },
+          "x-go-name": "Conditions"
+        },
+        "method": {
+          "$ref": "#/definitions/TemplateMethod"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/api/v2"
+    },
     "ApplicationInstallationSpec": {
       "type": "object",
       "properties": {
@@ -25388,16 +25509,15 @@
       "title": "ApplicationRef describes a KKP-wide, unique reference to an Application.",
       "properties": {
         "name": {
-          "description": "Name of the Application.\nShould be a valid lowercase RFC1123 domain name",
+          "description": "Name of the Application",
           "type": "string",
-          "pattern": "=`^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$`",
           "x-go-name": "Name"
         },
         "version": {
           "$ref": "#/definitions/Version"
         }
       },
-      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/api/v1"
     },
     "ApplicationSource": {
       "type": "object",

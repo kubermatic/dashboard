@@ -1762,6 +1762,39 @@ type ApplicationInstallation struct {
 	Status *ApplicationInstallationStatus `json:"status"`
 }
 
+// ApplicationInstallationListItem is the object representing an ApplicationInstallationListItem.
+// swagger:model ApplicationInstallationListItem
+type ApplicationInstallationListItem struct {
+	Name string `json:"name"`
+
+	CreationTimestamp apiv1.Time `json:"creationTimestamp,omitempty"`
+
+	Spec *ApplicationInstallationListItemSpec `json:"spec"`
+
+	Status *ApplicationInstallationListItemStatus `json:"status"`
+}
+
+// ApplicationInstallationListItemSpec is the object representing an ApplicationInstallationListItemSpec.
+// swagger:model ApplicationInstallationListItemSpec
+type ApplicationInstallationListItemSpec struct {
+	// Namespace describe the desired state of the namespace where application will be created.
+	Namespace NamespaceSpec `json:"namespace"`
+
+	// ApplicationRef is a reference to identify which Application should be deployed
+	ApplicationRef appskubermaticv1.ApplicationRef `json:"applicationRef"`
+}
+
+type ApplicationInstallationListItemStatus struct {
+	// Conditions contains conditions an installation is in, its primary use case is status signaling between controllers or between controllers and the API
+	Conditions []ApplicationInstallationCondition `json:"conditions,omitempty"`
+
+	// ApplicationVersion contains information installing / removing application
+	ApplicationVersion *appskubermaticv1.ApplicationVersion `json:"applicationVersion,omitempty"`
+
+	// Method used to install the application
+	Method appskubermaticv1.TemplateMethod `json:"method"`
+}
+
 // ApplicationInstallationBody is the object representing the POST/PUT payload of an ApplicationInstallation
 // swagger:model ApplicationInstallationBody
 type ApplicationInstallationBody struct {
@@ -1877,4 +1910,18 @@ type OperatingSystemProfile struct {
 type ClusterServiceAccount struct {
 	apiv1.ObjectMeta `json:",inline"`
 	Namespace        string `json:"namespace,omitempty"`
+}
+
+// ApplicationDefinitionListItem is the object representing an ApplicationDefinitionListItem.
+// swagger:model ApplicationDefinitionListItem
+type ApplicationDefinitionListItem struct {
+	Name string `json:"name"`
+
+	Spec ApplicationDefinitionListItemSpec `json:"spec"`
+}
+
+// ApplicationDefinitionListItemSpec defines the desired state of ApplicationDefinitionListItemSpec.
+type ApplicationDefinitionListItemSpec struct {
+	// Description of the application. what is its purpose
+	Description string `json:"description"`
 }

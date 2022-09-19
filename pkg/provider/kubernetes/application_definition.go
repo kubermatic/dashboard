@@ -22,6 +22,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 	appskubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
 
+	"k8s.io/apimachinery/pkg/types"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -51,4 +52,12 @@ func (p *ApplicationDefinitionProvider) ListUnsecured(ctx context.Context) (*app
 		return nil, err
 	}
 	return appDefList, nil
+}
+
+func (p *ApplicationDefinitionProvider) GetUnsecured(ctx context.Context, appDefName string) (*appskubermaticv1.ApplicationDefinition, error) {
+	appDef := &appskubermaticv1.ApplicationDefinition{}
+	if err := p.privilegedClient.Get(ctx, types.NamespacedName{Name: appDefName}, appDef); err != nil {
+		return nil, err
+	}
+	return appDef, nil
 }
