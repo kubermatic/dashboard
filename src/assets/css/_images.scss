@@ -336,6 +336,10 @@
 
 .km-icon-projects-card {
   @include mixins.mask-image('/assets/images/icons/projects-cards.svg', 24px);
+
+  &.i-40 {
+    @include mixins.size(40px, 40px, true);
+  }
 }
 
 .km-icon-sun {
