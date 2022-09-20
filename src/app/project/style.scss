@@ -25,6 +25,21 @@ $project-card-width: 330px;
   margin: 20px auto;
 }
 
+.placeholder {
+  height: 75vh;
+
+  & h2 {
+    font-weight: variables.$font-weight-medium;
+    margin: 15px 0;
+  }
+
+  & .placeholder-text {
+    & p {
+      margin: 0 0 10px;
+    }
+  }
+}
+
 .project-view-switch {
   .mat-button-toggle {
     @include mixins.size($view-switch-width, $view-switch-height, true);
