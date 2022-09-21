@@ -318,6 +318,8 @@ limitations under the License.
                            noValidators="true"
                            [labels]="podNodeSelectorAdmissionPluginConfig"
                            [formControlName]="Controls.PodNodeSelectorAdmissionPluginConfig"
+                           [labelHint]="CLUSTER_DEFAULT_NODE_SELECTOR_HINT"
+                           [labelHintKey]="CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE"
                            (labelsChange)="onPodNodeSelectorAdmissionPluginConfigChange($event)"
                            fxFlex="100"></km-label-form>
             <div *ngIf="isPluginEnabled(admissionPlugin.EventRateLimit)">
@@ -401,8 +403,11 @@ limitations under the License.
                            [labels]="labels"
                            [asyncKeyValidators]="asyncLabelValidators"
                            [formControlName]="Controls.Labels"
+                           [disabledLabel]="clusterDefaultNodeSelectorNamespace"
+                           [disabledLabelTooltip]="CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP"
                            (labelsChange)="onLabelsChange($event)"
-                           fxFlex="100"></km-label-form>
+                           fxFlex="100">
+            </km-label-form>
           </div>
         </div>
       </div>

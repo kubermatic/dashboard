@@ -1,4 +1,4 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,17 +12,4 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'variables';
-
-.mat-icon-button {
-  &.delete-button {
-    margin: 4px 0 0;
-  }
-}
-
-.label-hint {
-  font-size: variables.$font-size-hint;
-  margin-left: 13px;
-  margin-top: -18px;
-  padding-bottom: 21px;
-}
+export type KeyValueEntry = [key: string, value: string];
