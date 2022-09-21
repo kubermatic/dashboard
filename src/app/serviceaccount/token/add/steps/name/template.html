@@ -29,7 +29,7 @@ limitations under the License.
            cdkFocusInitial
            required>
     <mat-error *ngIf="form.get(controls.Name).hasError('required')">
-      Name is <strong>required</strong>.
+      <strong>Required</strong>
     </mat-error>
     <mat-error *ngIf="form.get(controls.Name).hasError('validLabelValuePattern')">
       Only alphanumeric characters, "." and "-" can be used. "-" and "." cannot be first or last character.

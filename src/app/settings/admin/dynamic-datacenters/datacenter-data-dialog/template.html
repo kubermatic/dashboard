@@ -31,7 +31,7 @@ limitations under the License.
              autocomplete="off"
              cdkFocusInitial>
       <mat-error *ngIf="form.get(controls.Name).hasError('required')">
-        Name is <strong>required</strong>.
+        <strong>Required</strong>
       </mat-error>
     </mat-form-field>
 
@@ -51,7 +51,7 @@ limitations under the License.
         </mat-option>
       </mat-select>
       <mat-error *ngIf="form.get(controls.Provider).hasError('required')">
-        Provider is <strong>required</strong>.
+        <strong>Required</strong>
       </mat-error>
     </mat-form-field>
 
@@ -68,7 +68,7 @@ limitations under the License.
       </mat-select>
 
       <mat-error *ngIf="form.get(controls.Seed).hasError('required')">
-        Seed is <strong>required</strong>.
+        <strong>Required</strong>
       </mat-error>
     </mat-form-field>
 
@@ -98,7 +98,7 @@ limitations under the License.
         </mat-option>
       </mat-select>
       <mat-error *ngIf="form.get(controls.Country).hasError('required')">
-        Country is <strong>required</strong>.
+        <strong>Required</strong>
       </mat-error>
     </mat-form-field>
 
@@ -111,7 +111,7 @@ limitations under the License.
              type="text"
              autocomplete="off">
       <mat-error *ngIf="form.get(controls.Location).hasError('required')">
-        Location is <strong>required</strong>.
+        <strong>Required</strong>
       </mat-error>
     </mat-form-field>
 

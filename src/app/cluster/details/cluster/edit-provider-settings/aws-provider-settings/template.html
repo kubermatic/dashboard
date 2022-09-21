@@ -30,7 +30,7 @@ limitations under the License.
          href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">here</a>.
     </mat-hint>
     <mat-error *ngIf="form.get(Control.AccessKeyID).hasError('required')">
-      Access key ID is <strong>required</strong>.
+      <strong>Required</strong>
     </mat-error>
   </mat-form-field>
 
@@ -48,7 +48,7 @@ limitations under the License.
          href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">here</a>.
     </mat-hint>
     <mat-error *ngIf="form.get(Control.SecretAccessKey).hasError('required')">
-      Secret Access Key is <strong>required</strong>.
+      <strong>Required</strong>
     </mat-error>
   </mat-form-field>
 
@@ -70,7 +70,7 @@ limitations under the License.
            href="https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html">here</a>.
       </mat-hint>
       <mat-error *ngIf="form.get(Control.AssumeRoleARN).hasError('required')">
-        AssumeRole ARN is <strong>required</strong>.
+        <strong>Required</strong>
       </mat-error>
     </mat-form-field>
 
@@ -89,7 +89,7 @@ limitations under the License.
            href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user_externalid.html">here</a>.
       </mat-hint>
       <mat-error *ngIf="form.get(Control.AssumeRoleExternalID).hasError('required')">
-        AssumeRole External ID is <strong>required</strong>.
+        <strong>Required</strong>
       </mat-error>
     </mat-form-field>
   </ng-container>

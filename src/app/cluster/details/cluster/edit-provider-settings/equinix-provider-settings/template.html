@@ -24,7 +24,7 @@ limitations under the License.
            autocomplete="off"
            required>
     <mat-error *ngIf="form.get(Control.ApiKey).hasError('required')">
-      Equinix Metal API key is <strong>required</strong>.
+      <strong>Required</strong>
     </mat-error>
     <mat-error *ngIf="form.get(Control.ApiKey).hasError('maxlength')">
       Equinix Metal API key must be less than <strong>256</strong> characters long.
@@ -40,7 +40,7 @@ limitations under the License.
            autocomplete="off"
            required>
     <mat-error *ngIf="form.get(Control.ProjectID).hasError('required')">
-      Equinix Metal project ID is <strong>required</strong>.
+      <strong>Required</strong>
     </mat-error>
     <mat-error *ngIf="form.get(Control.ProjectID).hasError('maxlength')">
       Equinix Metal project ID must be less than <strong>256</strong> characters long.

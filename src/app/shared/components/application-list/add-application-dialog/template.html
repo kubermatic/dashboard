@@ -92,7 +92,7 @@ limitations under the License.
                   </mat-select>
                   <mat-hint>Application version upgrades are currently not supported.</mat-hint>
                   <mat-error *ngIf="form.get(Controls.Version).hasError('required')">
-                    Version is <strong>required</strong>.
+                    <strong>Required</strong>
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -127,7 +127,7 @@ limitations under the License.
                      autocomplete="off">
               <mat-hint>Namespace where application resources will be deployed.</mat-hint>
               <mat-error *ngIf="form.get(Controls.Namespace).hasError('required')">
-                Namespace is <strong>required</strong>.
+                <strong>Required</strong>
               </mat-error>
               <mat-error *ngIf="form.get(Controls.Namespace).hasError('pattern')">
                 Namespace can only contain alphanumeric characters and dashes (only between characters).
@@ -141,7 +141,7 @@ limitations under the License.
                      type="text"
                      autocomplete="off">
               <mat-error *ngIf="form.get(Controls.Name).hasError('required')">
-                Name is <strong>required</strong>.
+                <strong>Required</strong>
               </mat-error>
               <mat-error *ngIf="form.get(Controls.Name).hasError('pattern')">
                 Name can only contain alphanumeric characters and dashes (only between characters).

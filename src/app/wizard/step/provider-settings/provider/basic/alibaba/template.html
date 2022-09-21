@@ -25,7 +25,7 @@ limitations under the License.
            autocomplete="off"
            required>
     <mat-error *ngIf="form.get(Controls.AccessKeyID).hasError('required')">
-      Access Key ID is <strong>required</strong>.
+      <strong>Required</strong>
     </mat-error>
   </mat-form-field>
 
@@ -38,7 +38,7 @@ limitations under the License.
            autocomplete="off"
            required>
     <mat-error *ngIf="form.get(Controls.AccessKeySecret).hasError('required')">
-      Access Key Secret is <strong>required</strong>.
+      <strong>Required</strong>
     </mat-error>
   </mat-form-field>
 </form>

@@ -26,7 +26,7 @@ limitations under the License.
            autocomplete="off"
            required>
     <mat-error *ngIf="form.get(Controls.InfraManagementUsername).hasError('required')">
-      Username is <strong>required</strong>.
+      <strong>Required</strong>
     </mat-error>
   </mat-form-field>
 
@@ -40,7 +40,7 @@ limitations under the License.
              autocomplete="off"
              required>
       <mat-error *ngIf="form.get(Controls.InfraManagementPassword).hasError('required')">
-        Password is <strong>required</strong>.
+        <strong>Required</strong>
       </mat-error>
     </mat-form-field>
     <mat-checkbox [formControlName]="Controls.UseCustomCloudCredentials"
@@ -60,7 +60,7 @@ limitations under the License.
              autocomplete="off"
              required>
       <mat-error *ngIf="form.get(Controls.Username).hasError('required')">
-        VSphere Cloud Provider username is <strong>required</strong>.
+        <strong>Required</strong>
       </mat-error>
     </mat-form-field>
 
@@ -73,7 +73,7 @@ limitations under the License.
              autocomplete="off"
              required>
       <mat-error *ngIf="form.get(Controls.Password).hasError('required')">
-        VSphere Cloud Provider password is <strong>required</strong>.
+        <strong>Required</strong>
       </mat-error>
     </mat-form-field>
   </ng-container>
