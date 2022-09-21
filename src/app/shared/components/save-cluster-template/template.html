@@ -31,7 +31,7 @@ limitations under the License.
              required
              cdkFocusInitial>
       <mat-error *ngIf="form.get(control.Name).hasError('required')">
-        Name is <strong>required</strong>.
+        <strong>Required</strong>
       </mat-error>
       <mat-error *ngIf="form.get(control.Name).hasError('pattern')">
         Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash.

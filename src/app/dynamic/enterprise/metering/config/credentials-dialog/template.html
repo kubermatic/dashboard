@@ -34,7 +34,7 @@ END OF TERMS AND CONDITIONS
              autocomplete="off"
              cdkFocusInitial>
       <mat-error *ngIf="form.get(controls.AccessKey).hasError('required')">
-        Access Key is <strong>required</strong>.
+        <strong>Required</strong>
       </mat-error>
     </mat-form-field>
 
@@ -46,7 +46,7 @@ END OF TERMS AND CONDITIONS
              type="password"
              autocomplete="off">
       <mat-error *ngIf="form.get(controls.AccessSecret).hasError('required')">
-        Access Secret is <strong>required</strong>.
+        <strong>Required</strong>
       </mat-error>
     </mat-form-field>
 
@@ -58,7 +58,7 @@ END OF TERMS AND CONDITIONS
              type="text"
              autocomplete="off">
       <mat-error *ngIf="form.get(controls.BucketName).hasError('required')">
-        Bucket Name is <strong>required</strong>.
+        <strong>Required</strong>
       </mat-error>
     </mat-form-field>
 
@@ -70,7 +70,7 @@ END OF TERMS AND CONDITIONS
              type="text"
              autocomplete="off">
       <mat-error *ngIf="form.get(controls.Endpoint).hasError('required')">
-        Endpoint is <strong>required</strong>.
+        <strong>Required</strong>
       </mat-error>
     </mat-form-field>
   </form>

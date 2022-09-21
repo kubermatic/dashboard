@@ -29,7 +29,7 @@ limitations under the License.
            autocomplete="off"
            required>
     <mat-error *ngIf="form.get(controls.Name).hasError('required')">
-      Preset name is <strong>required</strong>.
+      <strong>Required</strong>
     </mat-error>
     <mat-error *ngIf="form.get(controls.Name).hasError('pattern')">
       Preset name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start or end with dash.

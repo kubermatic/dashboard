@@ -24,7 +24,7 @@ limitations under the License.
            autocomplete="off"
            required>
     <mat-error *ngIf="form.get(Controls.Username).hasError('required')">
-      Username is <strong>required</strong>.
+      <strong>Required</strong>
     </mat-error>
   </mat-form-field>
 
@@ -37,7 +37,7 @@ limitations under the License.
            autocomplete="off"
            required>
     <mat-error *ngIf="form.get(Controls.Password).hasError('required')">
-      Password is <strong>required</strong>.
+      <strong>Required</strong>
     </mat-error>
   </mat-form-field>
 
@@ -56,7 +56,7 @@ limitations under the License.
     </mat-autocomplete>
     <mat-hint *ngIf="mode === Modes.Wizard">{{getHint(Controls.Project)}}</mat-hint>
     <mat-error *ngIf="form.get(Controls.Project).hasError('required')">
-      The Project is <strong>required</strong>.
+      <strong>Required</strong>
     </mat-error>
   </mat-form-field>
 
@@ -68,7 +68,7 @@ limitations under the License.
            matInput
            autocomplete="off">
     <mat-error *ngIf="form.get(Controls.ProjectID).hasError('required')">
-      Project ID is <strong>required</strong>.
+      <strong>Required</strong>
     </mat-error>
   </mat-form-field>
 </form>

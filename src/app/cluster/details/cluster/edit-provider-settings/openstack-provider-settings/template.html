@@ -43,7 +43,7 @@ limitations under the License.
              autocomplete="off"
              required>
       <mat-error *ngIf="defaultCredentialsForm.get(Control.Username).hasError('required')">
-        Username is <strong>required</strong>.
+        <strong>Required</strong>
       </mat-error>
     </mat-form-field>
     <mat-form-field fxFlex>
@@ -54,7 +54,7 @@ limitations under the License.
              autocomplete="off"
              required>
       <mat-error *ngIf="defaultCredentialsForm.get(Control.Password).hasError('required')">
-        Password is <strong>required</strong>.
+        <strong>Required</strong>
       </mat-error>
     </mat-form-field>
 
@@ -66,7 +66,7 @@ limitations under the License.
              matInput
              autocomplete="off">
       <mat-error *ngIf="defaultCredentialsForm.get(Control.Project).hasError('required')">
-        Project is <strong>required</strong>.
+        <strong>Required</strong>
       </mat-error>
     </mat-form-field>
 
@@ -78,7 +78,7 @@ limitations under the License.
              matInput
              autocomplete="off">
       <mat-error *ngIf="defaultCredentialsForm.get(Control.ProjectID).hasError('required')">
-        Project ID is <strong>required</strong>.
+        <strong>Required</strong>
       </mat-error>
     </mat-form-field>
 
@@ -103,7 +103,7 @@ limitations under the License.
              autocomplete="off"
              required>
       <mat-error *ngIf="applicationCredentialsForm.get(Control.ApplicationCredentialID).hasError('required')">
-        Application Credential ID is <strong>required</strong>.
+        <strong>Required</strong>
       </mat-error>
     </mat-form-field>
 
@@ -116,7 +116,7 @@ limitations under the License.
              autocomplete="off"
              required>
       <mat-error *ngIf="applicationCredentialsForm.get(Control.ApplicationCredentialSecret).hasError('required')">
-        Application Credential Secret is <strong>required</strong>.
+        <strong>Required</strong>
       </mat-error>
     </mat-form-field>
   </form>
@@ -129,7 +129,7 @@ limitations under the License.
            autocomplete="off"
            [required]="credentialsType === CredentialsType.Default">
     <mat-error *ngIf="form.get(Control.Domain).hasError('required')">
-      Domain is <strong>required</strong>.
+      <strong>Required</strong>
     </mat-error>
   </mat-form-field>
 </form>

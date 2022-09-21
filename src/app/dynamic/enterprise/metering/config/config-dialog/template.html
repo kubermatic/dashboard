@@ -41,7 +41,7 @@ END OF TERMS AND CONDITIONS
              autocomplete="off"
              cdkFocusInitial>
       <mat-error *ngIf="form.get(controls.StorageClassName).hasError('required')">
-        Storage Class Name is <strong>required</strong>.
+        <strong>Required</strong>
       </mat-error>
       <mat-error *ngIf="form.get(controls.StorageClassName).hasError('pattern')">
         Storage Class Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start or end with dash.
@@ -56,7 +56,7 @@ END OF TERMS AND CONDITIONS
              type="text"
              autocomplete="off">
       <mat-error *ngIf="form.get(controls.StorageSize).hasError('required')">
-        Storage Size is <strong>required</strong>.
+        <strong>Required</strong>
       </mat-error>
     </mat-form-field>
   </form>

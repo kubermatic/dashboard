@@ -23,6 +23,8 @@ limitations under the License.
       </mat-option>
     </mat-select>
     <mat-hint *ngIf="hint">{{hint}}</mat-hint>
-    <mat-error *ngIf="form.get(Controls.Select).hasError('required')">{{label}} is <strong>required</strong></mat-error>
+    <mat-error *ngIf="form.get(Controls.Select).hasError('required')">
+      <strong>Required</strong>
+    </mat-error>
   </mat-form-field>
 </form>

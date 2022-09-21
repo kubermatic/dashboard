@@ -74,7 +74,7 @@ limitations under the License.
       </mat-select-trigger>
     </mat-select>
     <mat-error *ngIf="required && !!hasOptions() && form.get(controls.Select).hasError('required')">
-      {{label}} is <strong>required</strong>.
+      <strong>Required</strong>
     </mat-error>
     <mat-hint *ngIf="hint">{{hint}}</mat-hint>
 
