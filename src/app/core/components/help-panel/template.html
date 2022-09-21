@@ -42,7 +42,7 @@ limitations under the License.
     <div class="menu"
          fxLayout="column">
       <div *ngIf="hasChangelog()"
-           class="km-hover-bg"
+           class="km-option-hover-bg"
            matRipple
            (click)="openChangelog()"
            fxLayoutGap="8px"
@@ -53,7 +53,7 @@ limitations under the License.
       </div>
 
       <div *ngIf="settings?.displayAPIDocs"
-           class="km-hover-bg"
+           class="km-option-hover-bg"
            id="km-navbar-api-docs-btn"
            matRipple
            (click)="goToAPIDocs()">
@@ -61,7 +61,7 @@ limitations under the License.
       </div>
 
       <div *ngFor="let link of settings?.customLinks | kmLinkLocation: 'HelpPanel'"
-           class="km-hover-bg">
+           class="km-option-hover-bg">
         <a [href]="link.url"
            class="custom-link"
            target="_blank"

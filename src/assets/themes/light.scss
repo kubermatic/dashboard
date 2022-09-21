@@ -73,6 +73,7 @@ $foreground: map.merge($foreground, (disabled-checkbox-checked: #cad1c9));
 $foreground: map.merge($foreground, (disabled-checkbox-border: #d5d5d5));
 $foreground: map.merge($foreground, (disabled: #eff1f2));
 $foreground: map.merge($foreground, (divider: #e0e3e5));
+$foreground: map.merge($foreground, (disabled-divider: #eff1f2));
 $theme-light: map.merge($theme-light, (foreground: $foreground));
 
 @include mat.all-component-themes($theme-light);

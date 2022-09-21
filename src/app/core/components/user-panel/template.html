@@ -36,20 +36,20 @@ limitations under the License.
     </div>
     <div class="menu"
          fxLayout="column">
-      <div class="km-hover-bg"
+      <div class="km-option-hover-bg"
            id="km-navbar-user-settings-btn"
            matRipple
            (click)="goToAccount()">
         User Settings
       </div>
-      <div class="km-hover-bg"
+      <div class="km-option-hover-bg"
            id="km-navbar-admin-settings-btn"
            matRipple
            *ngIf="isAdminPanelVisible()"
            (click)="goToAdminPanel()">
         Admin Panel
       </div>
-      <div class="km-hover-bg"
+      <div class="km-option-hover-bg"
            id="km-navbar-logout-btn"
            matRipple
            *ngIf="isAuthenticated()"
