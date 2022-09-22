@@ -19,6 +19,7 @@ import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ClusterService} from '@core/services/cluster';
+import {ClusterTemplateService} from '@core/services/cluster-templates';
 import {DatacenterService} from '@core/services/datacenter';
 import {PathParam} from '@core/services/params';
 import {ProjectService} from '@core/services/project';
@@ -30,6 +31,7 @@ import {
 } from '@shared/components/add-cluster-from-template-dialog/component';
 import {EtcdRestore, EtcdRestorePhase} from '@shared/entity/backup';
 import {Cluster} from '@shared/entity/cluster';
+import {ClusterTemplate} from '@shared/entity/cluster-template';
 import {View} from '@shared/entity/common';
 import {Datacenter} from '@shared/entity/datacenter';
 import {Health} from '@shared/entity/health';
@@ -60,6 +62,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   private _projectChange$ = new Subject<void>();
   readonly Permission = Permission;
   clusters: Cluster[] = [];
+  clusterTemplates: ClusterTemplate[] = [];
   isInitialized = false;
   nodeDC: Datacenter[] = [];
   health: Health[] = [];
@@ -78,7 +81,8 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _activeRoute: ActivatedRoute,
     private readonly _matDialog: MatDialog,
     private readonly _machineDeploymentService: MachineDeploymentService,
-    private readonly _settingsService: SettingsService
+    private readonly _settingsService: SettingsService,
+    private readonly _clusterTemplateService: ClusterTemplateService
   ) {}
 
   ngOnInit(): void {
@@ -107,6 +111,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
         tap(_ => {
           this.dataSource.data = [];
           this.isInitialized = false;
+          this._loadClusterTemplates();
         })
       )
       .pipe(
@@ -294,5 +299,16 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   private _onProjectChange(project: Project): void {
     this._selectedProject = project;
     this._projectChange$.next();
+  }
+
+  private _loadClusterTemplates(): void {
+    this.clusterTemplates = [];
+    this._clusterTemplateService
+      .list(this._selectedProject.id)
+      .pipe(takeUntil(this._unsubscribe))
+      .pipe(takeUntil(this._projectChange$))
+      .subscribe(templates => {
+        this.clusterTemplates = templates;
+      });
   }
 }

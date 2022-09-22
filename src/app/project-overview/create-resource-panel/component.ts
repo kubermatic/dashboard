@@ -15,6 +15,7 @@
 import {Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {slideOut} from '@shared/animations/slide';
 import {Router} from '@angular/router';
+import {ClusterTemplate} from '@shared/entity/cluster-template';
 import {Project} from '@shared/entity/project';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import {View} from '@shared/entity/common';
@@ -42,6 +43,7 @@ import {AddSnapshotDialogComponent, AddSnapshotDialogConfig} from '@app/backup/l
 })
 export class CreateResourcePanelComponent implements OnInit, OnDestroy {
   @Input() project: Project;
+  @Input() clusterTemplates: ClusterTemplate[];
   @Output() refreshClusters = new EventEmitter<void>();
   @Output() refreshExternalClusters = new EventEmitter<void>();
   @Output() refreshClusterTemplates = new EventEmitter<void>();

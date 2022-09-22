@@ -28,6 +28,7 @@ limitations under the License.
       <mat-card-title>Project Overview</mat-card-title>
       <km-create-resource-panel *ngIf="project"
                                 [project]="project"
+                                [clusterTemplates]="clusterTemplates"
                                 (refreshClusters)="clustersChange.next()"
                                 (refreshExternalClusters)="externalClustersChange.next()"
                                 (refreshClusterTemplates)="clusterTemplatesChange.next()"
