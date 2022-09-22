@@ -37,13 +37,16 @@ limitations under the License.
              kmAutofocus
              [opened]="select.openedChange">
       <ng-container *ngIf="grouped; else ungrouped">
-        <mat-optgroup *ngFor="let group of groups"
-                      [label]="group">
-          <mat-option *ngFor="let option of getOptions(group) | filterBy: filterByInput"
-                      [value]="option[selectBy]">
-            <ng-container *ngTemplateOutlet="optionTemplate; context: {$implicit: option}"></ng-container>
-          </mat-option>
-        </mat-optgroup>
+        <ng-container *ngFor="let group of groups; last as isLast">
+          <mat-optgroup [label]="group">
+            <mat-option *ngFor="let option of getOptions(group) | filterBy: filterByInput"
+                        [value]="option[selectBy]">
+              <ng-container *ngTemplateOutlet="optionTemplate; context: {$implicit: option}"></ng-container>
+            </mat-option>
+          </mat-optgroup>
+          <mat-divider *ngIf="!isLast"
+                       class="km-option-divider"></mat-divider>
+        </ng-container>
       </ng-container>
 
       <ng-template #ungrouped>

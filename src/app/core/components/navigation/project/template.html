@@ -25,18 +25,20 @@ limitations under the License.
                 [(value)]="selectedProject"
                 [compareWith]="areProjectsEqual"
                 disableOptionCentering>
-      <mat-optgroup *ngIf="externalProjects.length > 0">
-        <div>External projects</div>
-        <mat-option *ngFor="let project of externalProjects; trackBy: trackByProject"
+      <mat-optgroup *ngIf="myProjects"
+                    label="My Projects">
+        <mat-option *ngFor="let project of myProjects; trackBy: trackByProject"
                     [value]="project"
                     [disabled]="project.status !== 'Active'"
                     [matTooltip]="project.status !== 'Active' ? project.status + ' Project' : ''">
           {{project.name}}
         </mat-option>
       </mat-optgroup>
-      <mat-optgroup *ngIf="myProjects">
-        <div>My projects</div>
-        <mat-option *ngFor="let project of myProjects; trackBy: trackByProject"
+      <mat-divider *ngIf="externalProjects.length"
+                   class="km-option-divider"></mat-divider>
+      <mat-optgroup *ngIf="externalProjects.length > 0"
+                    label="External Projects">
+        <mat-option *ngFor="let project of externalProjects; trackBy: trackByProject"
                     [value]="project"
                     [disabled]="project.status !== 'Active'"
                     [matTooltip]="project.status !== 'Active' ? project.status + ' Project' : ''">
