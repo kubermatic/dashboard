@@ -18,4 +18,14 @@
   .mat-card-content {
     padding: 0 30px;
   }
+
+  .members-link {
+    visibility: hidden;
+  }
+
+  &:hover {
+    .members-link {
+      visibility: visible;
+    }
+  }
 }
