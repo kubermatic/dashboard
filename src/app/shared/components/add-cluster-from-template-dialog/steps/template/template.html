@@ -17,10 +17,15 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column"
       id="select-template-form">
-  <km-autocomplete label="Cluster Template"
-                   [formControlName]="control.ClusterTemplate"
-                   [isLoading]="isLoadingTemplates"
-                   [options]="templateNames"
-                   required>
-  </km-autocomplete>
+  <km-combobox [required]="true"
+               [options]="templates"
+               [formControlName]="control.ClusterTemplate"
+               [label]="templateLabel"
+               [valueFormatter]="templateDisplayName.bind(this)"
+               inputLabel="Select cluster template..."
+               filterBy="name"
+               selectBy="id"
+               fxFlex>
+    <div *option="let template">{{template.name}}</div>
+  </km-combobox>
 </form>

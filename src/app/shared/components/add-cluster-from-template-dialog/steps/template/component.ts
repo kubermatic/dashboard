@@ -15,10 +15,17 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ClusterTemplateService} from '@core/services/cluster-templates';
-import {AutocompleteControls} from '@shared/components/autocomplete/component';
+import {ComboboxControls} from '@shared/components/combobox/component';
 import {ClusterTemplate} from '@shared/entity/cluster-template';
+import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {map, takeUntil} from 'rxjs/operators';
+
+enum TemplateState {
+  Ready = 'Cluster Template',
+  Loading = 'Loading...',
+  Empty = 'No Cluster Templates Available',
+}
 
 enum Control {
   ClusterTemplate = 'clusterTemplate',
@@ -32,8 +39,7 @@ export class SelectClusterTemplateComponent implements OnInit, OnDestroy {
   @Input() projectId: string;
   control = Control;
   templates: ClusterTemplate[] = [];
-  templateNames: string[] = [];
-  isLoadingTemplates = true;
+  templateLabel: TemplateState = TemplateState.Ready;
   form: FormGroup;
   private _unsubscribe = new Subject<void>();
 
@@ -42,20 +48,20 @@ export class SelectClusterTemplateComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.form = new FormGroup({[Control.ClusterTemplate]: new FormControl('', [Validators.required])});
 
+    this.templateLabel = TemplateState.Loading;
     this._clusterTemplateService
       .list(this.projectId)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(templates => {
-        this.templates = templates;
-        this.templateNames = templates.map(t => t.name).sort();
-        this.isLoadingTemplates = false;
+        this.templates = _.sortBy(templates, 'name');
+        this.templateLabel = this.templates?.length ? TemplateState.Ready : TemplateState.Empty;
       });
 
     this.form
       .get(Control.ClusterTemplate)
-      .valueChanges.pipe(map(form => form[AutocompleteControls.Main]))
+      .valueChanges.pipe(map(form => form[ComboboxControls.Select]))
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(template => (this._clusterTemplateService.template = this.templates.find(t => t.name === template)));
+      .subscribe(template => (this._clusterTemplateService.template = this.templates.find(t => t.id === template)));
 
     this.form.statusChanges
       .pipe(takeUntil(this._unsubscribe))
@@ -65,5 +71,12 @@ export class SelectClusterTemplateComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  templateDisplayName(templateId: string): string {
+    if (templateId) {
+      return this.templates?.find(template => template.id === templateId)?.name || '';
+    }
+    return templateId;
   }
 }
