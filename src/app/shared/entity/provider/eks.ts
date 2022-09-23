@@ -56,3 +56,8 @@ export class EKSClusterRoleList {
   arn: string;
   roleName: string;
 }
+
+export class EKSNodeRole {
+  arn: string;
+  roleName: string;
+}

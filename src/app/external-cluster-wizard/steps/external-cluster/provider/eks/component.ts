@@ -28,6 +28,7 @@ import {
   EKSCloudSpec,
   EKSClusterRoleList,
   EKSClusterSpec,
+  EKSNodeRole,
   EKSSecurityGroup,
   EKSSubnet,
   EKSVpc,
@@ -89,6 +90,12 @@ enum RoleArnState {
   Empty = 'No Cluster Service Roles Available',
 }
 
+enum NodeRoleState {
+  Loading = 'Loading...',
+  Ready = 'Node IAM Role',
+  Empty = 'No Node IAM Roles Available',
+}
+
 @Component({
   selector: 'km-eks-cluster-settings',
   templateUrl: './template.html',
@@ -120,8 +127,12 @@ export class EKSClusterSettingsComponent
   securityGroupLabel = SecurityGroupState.Ready;
   securityGroups: EKSSecurityGroup[] = [];
   roleArn: EKSClusterRoleList[] = [];
-  selectedRoleArn = '';
   roleArnLabel = RoleArnState.Ready;
+  selectedRoleArn = '';
+  nodeRoles: EKSNodeRole[] = [];
+  selectedNodeRolArn = '';
+  nodeRoleLabel = NodeRoleState.Ready;
+
   @Input() projectID: string;
   @Input() cluster: ExternalCluster;
   private readonly _debounceTime = 500;
@@ -182,6 +193,10 @@ export class EKSClusterSettingsComponent
     this.selectedRoleArn = this.roleArn.find(roleArn => roleArn.roleName === roleArnName)?.arn;
   }
 
+  onNodeRoleChange(roleName: string) {
+    this.selectedNodeRolArn = this.nodeRoles.find((nodeRole: EKSNodeRole) => nodeRole.roleName === roleName)?.arn;
+  }
+
   private _initForm(): void {
     const DEFAULT_MD_DISKSIZE = 20;
     const DEFAULT_MD_MAXSIZE = 1;
@@ -225,6 +240,7 @@ export class EKSClusterSettingsComponent
       this.control(Controls.Vpc).setValue(this.cluster.spec.eksclusterSpec.vpcConfigRequest.vpcId);
       this.control(Controls.Vpc).disable();
 
+      this._getNodeRoleForMachineDeployment(this.projectID, this.cluster.id);
       this.subnetLabel = SubnetState.Loading;
       this._externalMachineDeploymentService
         .getEKSSubnetsForMachineDeployment(this.projectID, this.cluster.id, this.controlValue(Controls.Vpc))
@@ -360,11 +376,22 @@ export class EKSClusterSettingsComponent
             maxSize: this.controlValue(Controls.MaxSize),
             minSize: this.controlValue(Controls.MinSize),
           } as EKSScalingConfig,
-          nodeRole: this.controlValue(Controls.RoleArn),
+          nodeRole: this.selectedNodeRolArn,
           subnets: this.controlValue(Controls.SubnetIds)?.[ComboboxControls.Select],
         } as EKSMachineDeploymentCloudSpec,
       } as ExternalMachineDeploymentCloudSpec,
     } as ExternalMachineDeployment;
+  }
+
+  private _getNodeRoleForMachineDeployment(projectID: string, clusterID: string): void {
+    this.nodeRoleLabel = NodeRoleState.Loading;
+    this._externalMachineDeploymentService
+      .getEKSNodeRoleForMachineDeployment(projectID, clusterID)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe((nodeRoles: EKSNodeRole[]) => {
+        this.nodeRoles = nodeRoles;
+        this.nodeRoleLabel = this.nodeRoles.length ? NodeRoleState.Ready : NodeRoleState.Empty;
+      });
   }
 
   private _clearVpcs(): void {
