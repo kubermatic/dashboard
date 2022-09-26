@@ -18,7 +18,7 @@ import {Router} from '@angular/router';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {environment} from '@environments/environment';
 import {AKSCluster, AKSLocation, AKSVMSize, AzureResourceGroup} from '@shared/entity/provider/aks';
-import {EKSCluster, EKSClusterRoleList, EKSSecurityGroup, EKSSubnet, EKSVpc} from '@shared/entity/provider/eks';
+import {EKSCluster, EKSClusterRole, EKSSecurityGroup, EKSSubnet, EKSVpc} from '@shared/entity/provider/eks';
 import {GKECluster, GKEZone} from '@shared/entity/provider/gke';
 import {
   DeleteExternalClusterAction,
@@ -284,10 +284,10 @@ export class ExternalClusterService {
     return this._http.get<MasterVersion[]>(url).pipe(catchError(() => of<[]>()));
   }
 
-  getEKSClusterRoles(): Observable<EKSClusterRoleList[]> {
+  getEKSClusterRoles(): Observable<EKSClusterRole[]> {
     const url = `${this._newRestRoot}/providers/eks/clusterroles`;
     const headers = this._getEKSHeaders();
-    return this._http.get<EKSClusterRoleList[]>(url, {headers}).pipe(catchError(() => of([])));
+    return this._http.get<EKSClusterRole[]>(url, {headers}).pipe(catchError(() => of([])));
   }
 
   getEKSRegions(preset?: string, accessKeyID?: string, secretAccessKey?: string): Observable<string[]> {

@@ -26,7 +26,7 @@ import {ExternalClusterService} from '@core/services/external-cluster';
 import {NameGeneratorService} from '@core/services/name-generator';
 import {
   EKSCloudSpec,
-  EKSClusterRoleList,
+  EKSClusterRole,
   EKSClusterSpec,
   EKSNodeRole,
   EKSSecurityGroup,
@@ -84,7 +84,7 @@ enum SecurityGroupState {
   Empty = 'No Security Groups Available',
 }
 
-enum RoleArnState {
+enum ClusterServiceRoleState {
   Loading = 'Loading...',
   Ready = 'Cluster Service Roles',
   Empty = 'No Cluster Service Roles Available',
@@ -126,9 +126,9 @@ export class EKSClusterSettingsComponent
   subnetLabel = SubnetState.Ready;
   securityGroupLabel = SecurityGroupState.Ready;
   securityGroups: EKSSecurityGroup[] = [];
-  roleArn: EKSClusterRoleList[] = [];
-  roleArnLabel = RoleArnState.Ready;
-  selectedRoleArn = '';
+  selectedClusterRole = '';
+  clusterRoles: EKSClusterRole[] = [];
+  clusterRoleLabel = ClusterServiceRoleState.Ready;
   nodeRoles: EKSNodeRole[] = [];
   selectedNodeRolArn = '';
   nodeRoleLabel = NodeRoleState.Ready;
@@ -190,7 +190,7 @@ export class EKSClusterSettingsComponent
   }
 
   onRoleArnChange(roleArnName: string) {
-    this.selectedRoleArn = this.roleArn.find(roleArn => roleArn.roleName === roleArnName)?.arn;
+    this.selectedClusterRole = this.clusterRoles.find(roleArn => roleArn.roleName === roleArnName)?.arn;
   }
 
   onNodeRoleChange(roleName: string) {
@@ -324,13 +324,15 @@ export class EKSClusterSettingsComponent
   }
 
   private _getEKSClusterRoles(): void {
-    this.roleArnLabel = RoleArnState.Loading;
+    this.clusterRoleLabel = ClusterServiceRoleState.Loading;
     this._externalClusterService
       .getEKSClusterRoles()
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe((roleArn: EKSClusterRoleList[]) => {
-        this.roleArn = roleArn;
-        this.roleArnLabel = this.roleArn.length ? RoleArnState.Ready : RoleArnState.Empty;
+      .subscribe((roleArn: EKSClusterRole[]) => {
+        this.clusterRoles = roleArn;
+        this.clusterRoleLabel = this.clusterRoles.length
+          ? ClusterServiceRoleState.Ready
+          : ClusterServiceRoleState.Empty;
       });
   }
 
@@ -352,7 +354,7 @@ export class EKSClusterSettingsComponent
       } as ExternalCloudSpec,
       spec: {
         eksclusterSpec: {
-          roleArn: this.selectedRoleArn,
+          roleArn: this.selectedClusterRole,
           version: version,
           vpcConfigRequest: {
             vpcId: this.controlValue(Controls.Vpc)?.[ComboboxControls.Select],

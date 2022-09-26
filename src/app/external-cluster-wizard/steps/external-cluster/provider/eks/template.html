@@ -96,10 +96,10 @@ limitations under the License.
 
     <km-combobox *ngIf="!isDialogView()"
                  filterBy="roleName"
-                 inputLabel="Select Role... "
-                 [label]="roleArnLabel"
+                 inputLabel="Select Cluster Service Role... "
+                 [label]="clusterRoleLabel"
                  [required]="true"
-                 [options]="roleArn"
+                 [options]="clusterRoles"
                  (changed)="onRoleArnChange($event)"
                  [formControlName]="Controls.RoleArn">
       <div *option="let roleArn">

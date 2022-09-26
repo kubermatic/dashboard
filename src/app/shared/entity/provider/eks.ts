@@ -52,7 +52,7 @@ export class EKSSecurityGroup {
   vpcId: string;
 }
 
-export class EKSClusterRoleList {
+export class EKSClusterRole {
   arn: string;
   roleName: string;
 }
