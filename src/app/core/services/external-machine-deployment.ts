@@ -68,8 +68,12 @@ export class ExternalMachineDeploymentService {
     return this._httpClient.get<EKSNodeRole[]>(url).pipe(catchError(() => of([])));
   }
   
-  getEKSInstanceTypesForMAchineDeployment(projectID: string, clusterID: string): Observable<EKSInstanceTypeList[]> {
-    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/eks/instancetypes`;
+  getEKSInstanceTypesForMAchineDeployment(
+    projectID: string,
+    clusterID: string,
+    architecture?: string
+  ): Observable<EKSInstanceTypeList[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/eks/instancetypes?architecture=${architecture}`;
     return this._httpClient.get<EKSInstanceTypeList[]>(url).pipe(catchError(() => of<[]>()));
   }
 

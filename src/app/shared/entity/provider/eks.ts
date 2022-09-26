@@ -67,4 +67,5 @@ export class EKSInstanceTypeList {
   pretty_name: string;
   vcpus: number;
   memory: number;
+  architecture: string;
 }

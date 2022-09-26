@@ -73,6 +73,7 @@ limitations under the License.
       </mat-form-field>
     </ng-template>
 
+  <ng-container>
     <km-combobox *ngIf="isDialogView()"
                  filterBy="roleName"
                  inputLabel="Select Node IAM Role... "
@@ -94,17 +95,25 @@ limitations under the License.
       </ng-container>
     </km-combobox>
 
-    <ng-container *ngIf="isDialogView()">
-      <km-combobox [grouped]="false"
+      <mat-radio-group fxLayoutGap="15px"
+                       [formControlName]="Controls.Architecture">
+        <mat-radio-button [value]="Architecture.X86_64">
+          <div>x86_64 architecture</div>
+        </mat-radio-button>
+        <mat-radio-button [value]="Architecture.ARM64">
+          <div>arm64 architecture</div>
+        </mat-radio-button>
+      </mat-radio-group>
+
+      <km-combobox #instanceTypeCombobox
                    [multiple]="true"
                    [options]="instanceTypes"
                    [formControlName]="Controls.InstanceType"
                    (changed)="onInstanceTypeChange($event)"
                    [valueFormatter]="instanceDisplayName.bind(this)"
                    hint="Select the instance types for a node group."
-                   label="instance Type"
+                   [label]="instanceTypeLabel"
                    inputLabel="Select instance type by name"
-                   selectBy="name"
                    filterBy="name">
         <div *option="let instanceType">
           {{instanceType.pretty_name +' ('+ instanceType.vcpus+' vCPUs, ' + instanceType.memory+' GB RAM)'}}
@@ -112,13 +121,14 @@ limitations under the License.
       </km-combobox>
 
       <div class="km-dialog-warning"
-         *ngIf="selectedInstanceTypes.length > 1"
-         fxLayoutAlign=" center">
-      <i class="km-icon-warning"></i>
-      <div>Using instances with different resource sizes may affect the scaling of nodes,
-         because Kubernetes Cluster Autoscaler assumes all the nodes within a node group have the same resources
+           *ngIf="selectedInstanceTypes?.length > 1"
+           fxLayoutAlign=" center">
+        <i class="km-icon-warning"></i>
+        <div>Using instances with different resource sizes may affect the scaling of nodes,
+          because Kubernetes Cluster Autoscaler assumes all the nodes within a node group have the same resources
           such as vCPU and memory.</div>
-    </div>
+      </div>
+  </ng-container>
 
     <km-combobox *ngIf="!isDialogView()"
                  filterBy="roleName"
@@ -140,8 +150,6 @@ limitations under the License.
         </a>
       </ng-container>
     </km-combobox>
-    
-    </ng-container>
 
     <km-number-stepper *ngIf="isDialogView()"
                        [formControlName]="Controls.DiskSize"
