@@ -17,6 +17,7 @@ import {AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators} from '
 import {MatDialogRef} from '@angular/material/dialog';
 import {MatStepper} from '@angular/material/stepper';
 import {MatTableDataSource} from '@angular/material/table';
+import {ApplicationService} from '@core/services/application';
 import {
   Application,
   ApplicationDefinition,
@@ -28,7 +29,8 @@ import {
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@shared/validators/others';
 import * as y from 'js-yaml';
 import _ from 'lodash';
-import {Subscription} from 'rxjs';
+import {Subject, Subscription} from 'rxjs';
+import {finalize, takeUntil} from 'rxjs/operators';
 
 enum Controls {
   Version = 'version',
@@ -65,10 +67,16 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
   applicationMethod: string;
   selectedVersionSource: string;
   isValuesConfigValid = true;
+  isLoadingDetails: boolean;
 
+  private readonly _unsubscribe = new Subject<void>();
   private _namespaceValueChangesSubscription$: Subscription;
 
-  constructor(public dialogRef: MatDialogRef<AddApplicationDialogComponent>, private readonly _builder: FormBuilder) {}
+  constructor(
+    public dialogRef: MatDialogRef<AddApplicationDialogComponent>,
+    private readonly _builder: FormBuilder,
+    private readonly _applicationService: ApplicationService
+  ) {}
 
   ngOnInit(): void {
     this.applicationDefsDataSource.data = this.applicationDefinitions;
@@ -84,6 +92,8 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
     if (this._namespaceValueChangesSubscription$) {
       this._namespaceValueChangesSubscription$.unsubscribe();
     }
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   onSearchQueryChanged(query: string): void {
@@ -93,8 +103,7 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
   select(application: ApplicationDefinition): void {
     if (!this.selectedApplication || this.selectedApplication.name !== application.name) {
       this.selectedApplication = application;
-      this._initForm();
-      this.applicationMethod = application.spec?.method;
+      this._loadApplicationDefinitionDetails();
     }
     this.next();
   }
@@ -121,7 +130,25 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
   }
 
   add(): void {
-    this.dialogRef.close(this._getApplicationEntity());
+    this.dialogRef.close([this._getApplicationEntity(), this.selectedApplication]);
+  }
+
+  private _loadApplicationDefinitionDetails() {
+    this.isLoadingDetails = true;
+    this._applicationService
+      .getApplicationDefinition(this.selectedApplication.name)
+      .pipe(
+        takeUntil(this._unsubscribe),
+        finalize(() => (this.isLoadingDetails = false))
+      )
+      .subscribe({
+        next: appDef => {
+          this.selectedApplication = appDef;
+          this._initForm();
+          this.applicationMethod = this.selectedApplication.spec?.method;
+        },
+        error: _ => {},
+      });
   }
 
   private _initForm(): void {
@@ -157,6 +184,8 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
     this._namespaceValueChangesSubscription$ = this.form
       .get(Controls.Namespace)
       .valueChanges.subscribe(() => this.form.get(Controls.Name).updateValueAndValidity());
+
+    this.form.get(Controls.Name).markAsTouched();
   }
 
   private _duplicateNameValidator(): ValidatorFn {

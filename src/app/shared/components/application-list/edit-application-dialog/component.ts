@@ -15,6 +15,7 @@
 import {Component, Input, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
+import {ApplicationService} from '@core/services/application';
 import {
   Application,
   ApplicationDefinition,
@@ -27,8 +28,8 @@ import {Cluster} from '@shared/entity/cluster';
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@shared/validators/others';
 import * as y from 'js-yaml';
 import _ from 'lodash';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {forkJoin, of, Subject} from 'rxjs';
+import {finalize, takeUntil} from 'rxjs/operators';
 
 enum Controls {
   Version = 'version',
@@ -49,6 +50,7 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
   @Input() application: Application;
   @Input() installedApplications: Application[] = [];
   @Input() applicationDefinition: ApplicationDefinition;
+  @Input() projectID: string;
   @Input() cluster: Cluster;
 
   form: FormGroup;
@@ -56,13 +58,18 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
   applicationMethod: string;
   selectedVersionSource: string;
   isValuesConfigValid = true;
+  isLoadingDetails: boolean;
 
   private readonly _unsubscribe = new Subject<void>();
 
-  constructor(public dialogRef: MatDialogRef<EditApplicationDialogComponent>, private readonly _builder: FormBuilder) {}
+  constructor(
+    public dialogRef: MatDialogRef<EditApplicationDialogComponent>,
+    private readonly _builder: FormBuilder,
+    private readonly _applicationService: ApplicationService
+  ) {}
 
   ngOnInit(): void {
-    this._initForm();
+    this._loadApplicationDetails();
   }
 
   ngOnDestroy(): void {
@@ -85,6 +92,28 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
 
   edit(): void {
     this.dialogRef.close(this._getApplicationPatch());
+  }
+
+  private _loadApplicationDetails() {
+    this.isLoadingDetails = true;
+    forkJoin([
+      this._applicationService.getApplicationDefinition(this.applicationDefinition.name),
+      this.cluster?.id && this.application.creationTimestamp
+        ? this._applicationService.getApplication(this.application, this.projectID, this.cluster.id)
+        : of(undefined),
+    ])
+      .pipe(
+        takeUntil(this._unsubscribe),
+        finalize(() => (this.isLoadingDetails = false))
+      )
+      .subscribe({
+        next: ([appDef, application]) => {
+          this.applicationDefinition = appDef;
+          this.application = application || this.application;
+          this._initForm();
+        },
+        error: _ => {},
+      });
   }
 
   private _initForm(): void {

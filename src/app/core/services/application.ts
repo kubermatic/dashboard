@@ -45,6 +45,11 @@ export class ApplicationService {
     return this._applicationDefinitions$;
   }
 
+  getApplicationDefinition(name: string): Observable<ApplicationDefinition> {
+    const url = `${this._restRoot}/applicationdefinitions/${name}`;
+    return this._httpClient.get<ApplicationDefinition>(url);
+  }
+
   add(application: Application, projectID: string, clusterID: string): Observable<Application> {
     const url = `${this._restRoot}/projects/${projectID}/clusters/${clusterID}/applicationinstallations`;
     return this._httpClient.post<Application>(url, application);
@@ -55,13 +60,18 @@ export class ApplicationService {
     return this._httpClient.get<Application[]>(url).pipe(catchError(() => of<Application[]>([])));
   }
 
+  getApplication(application: Application, projectID: string, clusterID: string): Observable<Application> {
+    const url = `${this._restRoot}/projects/${projectID}/clusters/${clusterID}/applicationinstallations/${application.spec.namespace.name}/${application.name}`;
+    return this._httpClient.get<Application>(url);
+  }
+
   put(application: Application, projectID: string, clusterID: string): Observable<Application> {
-    const url = `${this._restRoot}/projects/${projectID}/clusters/${clusterID}/applicationinstallations/${application.namespace}/${application.name}`;
+    const url = `${this._restRoot}/projects/${projectID}/clusters/${clusterID}/applicationinstallations/${application.spec.namespace.name}/${application.name}`;
     return this._httpClient.put<Application>(url, application);
   }
 
   delete(application: Application, projectID: string, clusterID: string): Observable<void> {
-    const url = `${this._restRoot}/projects/${projectID}/clusters/${clusterID}/applicationinstallations/${application.namespace}/${application.name}`;
+    const url = `${this._restRoot}/projects/${projectID}/clusters/${clusterID}/applicationinstallations/${application.spec.namespace.name}/${application.name}`;
     return this._httpClient.delete<void>(url);
   }
 }

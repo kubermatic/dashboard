@@ -69,7 +69,8 @@ limitations under the License.
            class="application-settings-desc">
           {{selectedApplication.spec?.description}}
         </p>
-        <form [formGroup]="form">
+        <form *ngIf="form && !isLoadingDetails"
+              [formGroup]="form">
           <div fxFlex
                fxLayout="column"
                fxLayoutGap="10px">
@@ -152,6 +153,10 @@ limitations under the License.
             </mat-form-field>
           </div>
         </form>
+        <mat-spinner *ngIf="isLoadingDetails"
+                     [diameter]="25"
+                     class="km-spinner"
+                     color="primary"></mat-spinner>
       </ng-container>
     </mat-step>
     <mat-step [label]="StepRegistry.ApplicationValues">
@@ -189,7 +194,7 @@ limitations under the License.
           mat-flat-button
           type="button"
           fxLayoutAlign="center center"
-          [disabled]="!form.valid"
+          [disabled]="!form?.valid || isLoadingDetails"
           (click)="next()">
     <i class="km-icon-mask km-icon-next"></i>
     <span>Next</span>
