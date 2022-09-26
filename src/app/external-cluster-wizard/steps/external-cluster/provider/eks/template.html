@@ -73,32 +73,33 @@ limitations under the License.
       </mat-form-field>
     </ng-template>
 
-    <mat-form-field *ngIf="isDialogView()">
-      <mat-label>Node IAM role</mat-label>
-      <input matInput
-             type="text"
-             autocomplete="off"
-             [formControlName]="Controls.RoleArn" />
-      <mat-hint>
-        Enter the IAM role arn that will be used by the nodes.
+    <km-combobox *ngIf="isDialogView()"
+                 filterBy="roleName"
+                 inputLabel="Select Node IAM Role... "
+                 [label]="nodeRoleLabel"
+                 [required]="true"
+                 [options]="nodeRoles"
+                 (changed)="onNodeRoleChange($event)"
+                 [formControlName]="Controls.RoleArn">
+      <div *option="let roleArn">
+        {{roleArn.roleName}} ({{roleArn.arn}})
+      </div>
+      <ng-container hint>
+        Select the IAM role arn that will be used by the nodes.
         <a href="https://docs.aws.amazon.com/eks/latest/userguide/create-node-role.html"
            target="_blank"
            rel="noreferrer noopener">
           EKS user guide >
         </a>
-      </mat-hint>
-
-      <mat-error *ngIf="form.get(Controls.RoleArn).hasError('required')">
-        <strong>Required</strong>
-      </mat-error>
-    </mat-form-field>
+      </ng-container>
+    </km-combobox>
 
     <km-combobox *ngIf="!isDialogView()"
                  filterBy="roleName"
-                 inputLabel="Select Role... "
-                 [label]="roleArnLabel"
+                 inputLabel="Select Cluster Service Role... "
+                 [label]="clusterRoleLabel"
                  [required]="true"
-                 [options]="roleArn"
+                 [options]="clusterRoles"
                  (changed)="onRoleArnChange($event)"
                  [formControlName]="Controls.RoleArn">
       <div *option="let roleArn">

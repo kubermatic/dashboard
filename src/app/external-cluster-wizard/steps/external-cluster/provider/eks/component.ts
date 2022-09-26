@@ -26,8 +26,9 @@ import {ExternalClusterService} from '@core/services/external-cluster';
 import {NameGeneratorService} from '@core/services/name-generator';
 import {
   EKSCloudSpec,
-  EKSClusterRoleList,
+  EKSClusterRole,
   EKSClusterSpec,
+  EKSNodeRole,
   EKSSecurityGroup,
   EKSSubnet,
   EKSVpc,
@@ -83,10 +84,16 @@ enum SecurityGroupState {
   Empty = 'No Security Groups Available',
 }
 
-enum RoleArnState {
+enum ClusterServiceRoleState {
   Loading = 'Loading...',
   Ready = 'Cluster Service Roles',
   Empty = 'No Cluster Service Roles Available',
+}
+
+enum NodeRoleState {
+  Loading = 'Loading...',
+  Ready = 'Node IAM Role',
+  Empty = 'No Node IAM Roles Available',
 }
 
 @Component({
@@ -119,9 +126,13 @@ export class EKSClusterSettingsComponent
   subnetLabel = SubnetState.Ready;
   securityGroupLabel = SecurityGroupState.Ready;
   securityGroups: EKSSecurityGroup[] = [];
-  roleArn: EKSClusterRoleList[] = [];
-  selectedRoleArn = '';
-  roleArnLabel = RoleArnState.Ready;
+  selectedClusterRole = '';
+  clusterRoles: EKSClusterRole[] = [];
+  clusterRoleLabel = ClusterServiceRoleState.Ready;
+  nodeRoles: EKSNodeRole[] = [];
+  selectedNodeRolArn = '';
+  nodeRoleLabel = NodeRoleState.Ready;
+
   @Input() projectID: string;
   @Input() cluster: ExternalCluster;
   private readonly _debounceTime = 500;
@@ -179,7 +190,11 @@ export class EKSClusterSettingsComponent
   }
 
   onRoleArnChange(roleArnName: string) {
-    this.selectedRoleArn = this.roleArn.find(roleArn => roleArn.roleName === roleArnName)?.arn;
+    this.selectedClusterRole = this.clusterRoles.find(roleArn => roleArn.roleName === roleArnName)?.arn;
+  }
+
+  onNodeRoleChange(roleName: string) {
+    this.selectedNodeRolArn = this.nodeRoles.find((nodeRole: EKSNodeRole) => nodeRole.roleName === roleName)?.arn;
   }
 
   private _initForm(): void {
@@ -225,6 +240,7 @@ export class EKSClusterSettingsComponent
       this.control(Controls.Vpc).setValue(this.cluster.spec.eksclusterSpec.vpcConfigRequest.vpcId);
       this.control(Controls.Vpc).disable();
 
+      this._getNodeRoleForMachineDeployment(this.projectID, this.cluster.id);
       this.subnetLabel = SubnetState.Loading;
       this._externalMachineDeploymentService
         .getEKSSubnetsForMachineDeployment(this.projectID, this.cluster.id, this.controlValue(Controls.Vpc))
@@ -308,13 +324,15 @@ export class EKSClusterSettingsComponent
   }
 
   private _getEKSClusterRoles(): void {
-    this.roleArnLabel = RoleArnState.Loading;
+    this.clusterRoleLabel = ClusterServiceRoleState.Loading;
     this._externalClusterService
       .getEKSClusterRoles()
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe((roleArn: EKSClusterRoleList[]) => {
-        this.roleArn = roleArn;
-        this.roleArnLabel = this.roleArn.length ? RoleArnState.Ready : RoleArnState.Empty;
+      .subscribe((roleArn: EKSClusterRole[]) => {
+        this.clusterRoles = roleArn;
+        this.clusterRoleLabel = this.clusterRoles.length
+          ? ClusterServiceRoleState.Ready
+          : ClusterServiceRoleState.Empty;
       });
   }
 
@@ -336,7 +354,7 @@ export class EKSClusterSettingsComponent
       } as ExternalCloudSpec,
       spec: {
         eksclusterSpec: {
-          roleArn: this.selectedRoleArn,
+          roleArn: this.selectedClusterRole,
           version: version,
           vpcConfigRequest: {
             vpcId: this.controlValue(Controls.Vpc)?.[ComboboxControls.Select],
@@ -360,11 +378,22 @@ export class EKSClusterSettingsComponent
             maxSize: this.controlValue(Controls.MaxSize),
             minSize: this.controlValue(Controls.MinSize),
           } as EKSScalingConfig,
-          nodeRole: this.controlValue(Controls.RoleArn),
+          nodeRole: this.selectedNodeRolArn,
           subnets: this.controlValue(Controls.SubnetIds)?.[ComboboxControls.Select],
         } as EKSMachineDeploymentCloudSpec,
       } as ExternalMachineDeploymentCloudSpec,
     } as ExternalMachineDeployment;
+  }
+
+  private _getNodeRoleForMachineDeployment(projectID: string, clusterID: string): void {
+    this.nodeRoleLabel = NodeRoleState.Loading;
+    this._externalMachineDeploymentService
+      .getEKSNodeRoleForMachineDeployment(projectID, clusterID)
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe((nodeRoles: EKSNodeRole[]) => {
+        this.nodeRoles = nodeRoles;
+        this.nodeRoleLabel = this.nodeRoles.length ? NodeRoleState.Ready : NodeRoleState.Empty;
+      });
   }
 
   private _clearVpcs(): void {
