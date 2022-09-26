@@ -18,8 +18,10 @@ import {BrowserModule, By} from '@angular/platform-browser';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
+import {ClusterTemplateService} from '@core/services/cluster-templates';
 import {fakeAWSCluster} from '@test/data/cluster';
 import {fakeHealth} from '@test/data/health';
+import {ClusterTemplateMockService} from '@test/services/cluster-template-mock';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '@test/services/router-stubs';
 import {AppConfigMockService} from '@test/services/app-config-mock';
 import {AuthMockService} from '@test/services/auth-mock';
@@ -69,6 +71,7 @@ describe('ClusterListComponent', () => {
         {provide: DatacenterService, useClass: DatacenterMockService},
         {provide: ProjectService, useClass: ProjectMockService},
         {provide: SettingsService, useClass: SettingsMockService},
+        {provide: ClusterTemplateService, useClass: ClusterTemplateMockService},
         EndOfLifeService,
         MachineDeploymentService,
       ],

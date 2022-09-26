@@ -150,7 +150,7 @@
 }
 
 .km-icon-pending {
-  @include mixins.mask-image('/assets/images/icons/spinner.svg', 16px);
+  @include mixins.mask-image('/assets/images/icons/spinner.svg', 16px, 16px, #7e868f);
 }
 
 .km-icon-error {

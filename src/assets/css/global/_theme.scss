@@ -96,8 +96,8 @@
     background-color: map.get($colors, changelog-deprecated);
   }
 
-  .km-hover-bg:hover {
-    background-color: map.get($colors, background-hover);
+  .km-option-hover-bg:hover {
+    background-color: map.get($colors, option-background-hover);
   }
 
   .km-new-bg {
@@ -202,7 +202,7 @@
 
   .km-panel {
     .panel {
-      background-color: map.get($colors, background-app-bar);
+      background-color: map.get($colors, option-background);
       box-shadow: map.get($colors, shadow-dark);
       color: map.get($colors, text);
 

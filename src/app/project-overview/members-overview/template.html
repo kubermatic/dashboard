@@ -14,9 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<mat-card>
+<mat-card class="members-overview-card">
   <mat-card-header>
-    <mat-card-title>{{showMembers ? 'Owners & Members' : 'Owners'}}</mat-card-title>
+    <mat-card-title>
+      <div fxLayout="row"
+           fxLayoutAlign=" center"
+           fxLayoutGap="10px">
+        <span>{{showMembers ? 'Owners & Members' : 'Owners'}}</span>
+        <a class="members-link"
+           [routerLink]="['../members']"><i class="km-icon-next km-icon-mask km-no-margin"></i></a>
+      </div>
+    </mat-card-title>
   </mat-card-header>
   <mat-card-content fxLayoutGap="10px grid">
     <div fxLayout="row"

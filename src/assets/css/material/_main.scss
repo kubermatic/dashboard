@@ -468,7 +468,8 @@ mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):no
 }
 
 .mat-optgroup-label {
-  font-size: variables.$font-size-caption;
+  font-size: variables.$font-size-caption !important;
+  font-weight: normal !important;
   height: 35px;
   line-height: 35px;
   padding-left: 10px;
@@ -697,4 +698,8 @@ mat-tooltip-component .mat-tooltip {
 // Radio button.
 .mat-radio-label-content {
   flex: 1 1 auto;
+}
+
+.mat-optgroup .mat-option:not(.mat-option-multiple) {
+  padding-left: 16px !important;
 }
