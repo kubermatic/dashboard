@@ -240,12 +240,20 @@
 
 .km-icon-arrow-down {
   @include mixins.mask-image('/assets/images/icons/arrow-down.svg', 12px);
+
+  &.i-14 {
+    @include mixins.size(14px, 14px, true);
+  }
 }
 
 .km-icon-arrow-up {
   @include mixins.mask-image('/assets/images/icons/arrow-down.svg', 12px);
 
   transform: rotate(180deg);
+
+  &.i-14 {
+    @include mixins.size(14px, 14px, true);
+  }
 }
 
 .km-icon-arrow-left {

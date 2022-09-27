@@ -26,6 +26,7 @@ export enum AutocompleteControls {
 
 @Component({
   selector: 'km-autocomplete',
+  styleUrls: ['./style.scss'],
   templateUrl: './template.html',
   providers: [
     {
@@ -48,6 +49,7 @@ export class AutocompleteComponent extends BaseFormValidator implements OnInit {
   @Input() validators: ValidatorFn[] = [];
   @Input() disabled: boolean;
   controls = AutocompleteControls;
+  isDropdownOpen: boolean;
 
   constructor(private readonly _builder: FormBuilder) {
     super();
@@ -75,5 +77,13 @@ export class AutocompleteComponent extends BaseFormValidator implements OnInit {
     if (this.disabled) {
       this.form.get(AutocompleteControls.Main).disable();
     }
+  }
+
+  onDropdownOpened(): void {
+    this.isDropdownOpen = true;
+  }
+
+  onDropdownClosed(): void {
+    this.isDropdownOpen = false;
   }
 }
