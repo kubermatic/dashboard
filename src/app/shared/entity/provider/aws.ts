@@ -73,5 +73,4 @@ export class AWSSize {
 export enum Architecture {
   ARM64 = 'arm64',
   X64 = 'x64',
-  X86_64 = 'x86_64',
 }

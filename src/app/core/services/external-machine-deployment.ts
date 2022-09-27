@@ -27,7 +27,7 @@ import {ExternalAddMachineDeploymentDialogComponent} from '@app/cluster/details/
 import {AKSNodePoolVersionForMachineDeployments, AKSVMSize} from '@app/shared/entity/provider/aks';
 import {GCPDiskType, GCPMachineSize} from '@app/shared/entity/provider/gcp';
 import {EKSNodeRole, EKSSubnet} from '@shared/entity/provider/eks';
-import {EKSInstanceTypeList} from '@app/shared/entity/provider/eks';
+import {EKSInstanceType} from '@app/shared/entity/provider/eks';
 
 @Injectable()
 export class ExternalMachineDeploymentService {
@@ -67,14 +67,14 @@ export class ExternalMachineDeploymentService {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/eks/noderoles`;
     return this._httpClient.get<EKSNodeRole[]>(url).pipe(catchError(() => of([])));
   }
-  
-  getEKSInstanceTypesForMAchineDeployment(
+
+  getEKSInstanceTypesForMachineDeployment(
     projectID: string,
     clusterID: string,
     architecture?: string
-  ): Observable<EKSInstanceTypeList[]> {
+  ): Observable<EKSInstanceType[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/kubernetes/clusters/${clusterID}/providers/eks/instancetypes?architecture=${architecture}`;
-    return this._httpClient.get<EKSInstanceTypeList[]>(url).pipe(catchError(() => of<[]>()));
+    return this._httpClient.get<EKSInstanceType[]>(url).pipe(catchError(() => of<[]>([])));
   }
 
   getAKSVmSizesForMachineDeployment(projectID: string, clusterID: string, location: string): Observable<AKSVMSize[]> {
