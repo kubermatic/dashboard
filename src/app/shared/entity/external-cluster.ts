@@ -134,6 +134,13 @@ export enum ExternalClusterState {
 export class ExternalClusterStatus {
   state: ExternalClusterState;
   statusMessage: string;
+  // this property is used only for AKS Cluster.
+  aks?: AKSClusterStatus;
+}
+
+class AKSClusterStatus {
+  provisioningState: string;
+  powerState: string;
 }
 
 export class ExternalClusterPatch {
