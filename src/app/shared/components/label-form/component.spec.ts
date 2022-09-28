@@ -54,6 +54,7 @@ describe('LabelFormComponent', () => {
       env: 'test',
     };
     component.ngOnInit();
+    component.ngOnChanges(null);
     component.deleteLabel(0);
 
     expect(component.labels).toEqual({env: null});
@@ -66,6 +67,7 @@ describe('LabelFormComponent', () => {
       env: 'test',
     };
     component.ngOnInit();
+    component.ngOnChanges(null);
     component.initialLabels = {};
     component.deleteLabel(0);
 

@@ -40,6 +40,13 @@ import {Observable, Subject} from 'rxjs';
 import {startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import * as semver from 'semver';
 import {FeatureGateService} from '@core/services/feature-gate';
+import {
+  CLUSTER_DEFAULT_NODE_SELECTOR_HINT,
+  CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE,
+  CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP,
+  handleClusterDefaultNodeSelector,
+} from '@shared/utils/cluster';
+import {KeyValueEntry} from '@shared/types/common';
 
 enum Controls {
   Name = 'name',
@@ -70,8 +77,9 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   containerRuntime = ContainerRuntime;
   admissionPlugin = AdmissionPlugin;
   form: FormGroup;
-  labels: object;
-  podNodeSelectorAdmissionPluginConfig: object;
+  labels: Record<string, string>;
+  initialClusterDefaultNodeSelectorKey: string;
+  podNodeSelectorAdmissionPluginConfig: Record<string, string>;
   eventRateLimitConfig: EventRateLimitConfig;
   admissionPlugins: string[] = [];
   isKonnectivityEnabled = false;
@@ -80,7 +88,10 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     cloudSpecPatch: {},
   };
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
-
+  clusterDefaultNodeSelectorNamespace: KeyValueEntry;
+  readonly CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE = CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE;
+  readonly CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP = CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP;
+  readonly CLUSTER_DEFAULT_NODE_SELECTOR_HINT = CLUSTER_DEFAULT_NODE_SELECTOR_HINT;
   readonly Controls = Controls;
   readonly AuditPolicyPreset = AuditPolicyPreset;
   private readonly _nameMinLen = 3;
@@ -103,8 +114,10 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(featureGates => (this.isKonnectivityEnabled = !!featureGates?.konnectivityService));
 
-    this.labels = _.cloneDeep(this.cluster.labels);
-    this.podNodeSelectorAdmissionPluginConfig = _.cloneDeep(this.cluster.spec.podNodeSelectorAdmissionPluginConfig);
+    this.labels = _.cloneDeep(this.cluster.labels) as Record<string, string>;
+    this.podNodeSelectorAdmissionPluginConfig = _.cloneDeep(
+      this.cluster.spec.podNodeSelectorAdmissionPluginConfig
+    ) as Record<string, string>;
     this.eventRateLimitConfig = _.cloneDeep(this.cluster.spec.eventRateLimitConfig);
 
     this.form = this._builder.group({
@@ -135,7 +148,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       [Controls.AdmissionPlugins]: new FormControl(this.cluster.spec.admissionPlugins),
       [Controls.PodNodeSelectorAdmissionPluginConfig]: new FormControl(''),
       [Controls.EventRateLimitConfig]: new FormControl(),
-      [Controls.Labels]: new FormControl(''),
+      [Controls.Labels]: new FormControl(null),
     });
 
     this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
@@ -185,6 +198,14 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       .subscribe(plugins => (this.admissionPlugins = plugins));
 
     this.checkForLegacyAdmissionPlugins();
+
+    const [initialClusterDefaultNodeSelectorKey] =
+      this.podNodeSelectorAdmissionPluginConfig?.[this.CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE]?.split('=') ?? [];
+
+    if (initialClusterDefaultNodeSelectorKey) {
+      this.initialClusterDefaultNodeSelectorKey = initialClusterDefaultNodeSelectorKey;
+      this._handleClusterDefaultNodeSelector(this.podNodeSelectorAdmissionPluginConfig);
+    }
   }
 
   private _getAuditPolicyPresetInitialState(): AuditPolicyPreset | '' {
@@ -195,6 +216,26 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     return this.cluster.spec.auditLogging.policyPreset
       ? this.cluster.spec.auditLogging.policyPreset
       : AuditPolicyPreset.Custom;
+  }
+
+  onLabelsChange(labels: Record<string, string>): void {
+    const [key, value] = this.clusterDefaultNodeSelectorNamespace ?? [];
+
+    if (key && value) {
+      labels = {...labels, [key]: value};
+    }
+
+    if (!Object.hasOwnProperty.call(labels, this.initialClusterDefaultNodeSelectorKey)) {
+      labels = {...labels, [this.initialClusterDefaultNodeSelectorKey]: null};
+    }
+
+    this.labels = labels;
+  }
+
+  onPodNodeSelectorAdmissionPluginConfigChange(config: Record<string, string>): void {
+    this.podNodeSelectorAdmissionPluginConfig = config;
+
+    this._handleClusterDefaultNodeSelector(config);
   }
 
   checkForLegacyAdmissionPlugins(): void {
@@ -322,6 +363,18 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     this._matDialogRef.close(cluster);
     this._clusterService.onClusterUpdate.next();
     this._notificationService.success(`Updated the ${this.cluster.name} cluster`);
+  }
+
+  private _handleClusterDefaultNodeSelector(config: Record<string, string>): void {
+    handleClusterDefaultNodeSelector(
+      this.labels ?? {},
+      config,
+      this.clusterDefaultNodeSelectorNamespace,
+      (entry, labels): void => {
+        this.clusterDefaultNodeSelectorNamespace = entry;
+        this.onLabelsChange(labels);
+      }
+    );
   }
 
   ngOnDestroy(): void {

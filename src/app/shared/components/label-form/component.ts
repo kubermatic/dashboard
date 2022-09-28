@@ -39,8 +39,9 @@ import {
 } from '@angular/forms';
 import {Observable, of, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-
+import {KeyValueEntry} from '@shared/types/common';
 import {LabelFormValidators} from '../../validators/label-form.validators';
+import {ControlsOf} from '../../model/shared';
 
 @Component({
   selector: 'km-label-form',
@@ -63,19 +64,24 @@ export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, Control
   @Input() title = 'Labels';
   @Input() keyName = 'Key';
   @Input() valueName = 'Value';
-  @Input() labels: object;
+  @Input() labels: Record<string, string>;
+  @Input() disabledLabel: KeyValueEntry;
+  @Input() disabledLabelTooltip: string;
+  @Input() labelHint: string;
+  @Input() labelHintKey: string;
   @Input() inheritedLabels: object = {};
   @Input() noValidators = false;
   @Input() asyncKeyValidators: AsyncValidatorFn[] = [];
   @Output() labelsChange = new EventEmitter<object>();
   form: FormGroup;
-  initialLabels: object;
+  initialLabels: Record<string, string>;
+  disabledLabelFormGroup: FormGroup<ControlsOf<{key: string; value: string}>>;
   private _unsubscribe = new Subject<void>();
 
   constructor(private readonly _formBuilder: FormBuilder) {}
 
   get labelArray(): FormArray {
-    return this.form.get('labels') as FormArray;
+    return this.form?.get('labels') as FormArray;
   }
 
   static filterNullifiedKeys(labels: object): object {
@@ -96,18 +102,44 @@ export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, Control
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    this.labels = this.labels ?? {};
+
+    this.inheritedLabels = this.inheritedLabels ?? {};
+
+    if (!this.form) {
+      this._initForm();
+    }
     if (changes && changes.keyName) {
       this.keyName = changes.keyName.currentValue;
     }
     if (changes && changes.valueName) {
       this.valueName = changes.valueName.currentValue;
     }
+    if (changes?.disabledLabel) {
+      const [key = '', value = ''] = this.disabledLabel ?? [];
+
+      if (this.disabledLabelFormGroup) {
+        this.disabledLabelFormGroup.patchValue({key, value});
+      } else {
+        this.disabledLabelFormGroup = this._formBuilder.group({
+          key: this._formBuilder.control({value: key, disabled: true}),
+          value: this._formBuilder.control({value, disabled: true}),
+        });
+      }
+
+      if (key && value) {
+        const removeLabelIndex = (this.labelArray?.value as {key: string; value: string}[]).findIndex(
+          label => label.key === key
+        );
+
+        if (removeLabelIndex >= 0) {
+          this.labelArray.removeAt(removeLabelIndex);
+        }
+      }
+    }
   }
 
   ngOnInit(): void {
-    // Initialize labels form.
-    this.form = this._formBuilder.group({labels: this._formBuilder.array([])});
-
     // Make sure that labels object exist.
     if (!this.labels) {
       this.labels = {};
@@ -117,17 +149,6 @@ export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, Control
 
     // Save initial state of labels.
     this.initialLabels = this.labels;
-
-    // Setup labels form with label data.
-    const filteredLabels = Object.keys(LabelFormComponent.filterNullifiedKeys(this.labels));
-    if (filteredLabels.length > 0) {
-      filteredLabels.forEach(key => {
-        this._addLabel(key, this.labels[key]);
-      });
-    }
-
-    // Add initial label for the user.
-    this._addLabel();
   }
 
   ngDoCheck(): void {
@@ -163,6 +184,22 @@ export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, Control
     return of(this.form.valid ? null : {invalid: true});
   }
 
+  private _initForm() {
+    // Initialize labels form.
+    this.form = this._formBuilder.group({labels: this._formBuilder.array([])});
+
+    // Setup labels form with label data.
+    const filteredLabels = Object.keys(LabelFormComponent.filterNullifiedKeys(this.labels));
+    if (filteredLabels.length > 0) {
+      filteredLabels.forEach(key => {
+        this._addLabel(key, this.labels[key]);
+      });
+    }
+
+    // Add initial label for the user.
+    this._addLabel();
+  }
+
   isRemovable(index: number): boolean {
     return index < this.labelArray.length - 1 && !this._isInherited(Object.keys(this.labels)[index]);
   }
@@ -179,7 +216,7 @@ export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, Control
   }
 
   private _isInherited(labelKey: string): boolean {
-    return Object.keys(this.inheritedLabels).includes(labelKey);
+    return Object.keys(this.inheritedLabels ?? {}).includes(labelKey);
   }
 
   private _addLabelIfNeeded(): void {

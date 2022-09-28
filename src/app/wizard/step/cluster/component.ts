@@ -56,6 +56,13 @@ import * as semver from 'semver';
 import {coerce, compare, gte} from 'semver';
 import {StepBase} from '../base';
 import {AsyncValidators} from '@shared/validators/async.validators';
+import {
+  CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE,
+  CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP,
+  CLUSTER_DEFAULT_NODE_SELECTOR_HINT,
+  handleClusterDefaultNodeSelector,
+} from '@shared/utils/cluster';
+import {KeyValueEntry} from '@shared/types/common';
 
 enum Controls {
   Name = 'name',
@@ -113,8 +120,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   admissionPlugin = AdmissionPlugin;
   masterVersions: MasterVersion[] = [];
   admissionPlugins: AdmissionPlugin[] = [];
-  labels: object;
-  podNodeSelectorAdmissionPluginConfig: object;
+  labels: Record<string, string>;
+  podNodeSelectorAdmissionPluginConfig: Record<string, string>;
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
   proxyMode = ProxyMode;
   cniPlugin = CNIPlugin;
@@ -122,6 +129,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   availableProxyModes = [ProxyMode.ipvs, ProxyMode.iptables];
   isKonnectivityEnabled = false;
   isDualStackAllowed = false;
+  clusterDefaultNodeSelectorNamespace: KeyValueEntry;
+  readonly CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE = CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE;
+  readonly CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP = CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP;
+  readonly CLUSTER_DEFAULT_NODE_SELECTOR_HINT = CLUSTER_DEFAULT_NODE_SELECTOR_HINT;
   readonly Controls = Controls;
   readonly AuditPolicyPreset = AuditPolicyPreset;
   readonly IPFamily = IPFamily;
@@ -165,9 +176,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.KubernetesDashboardEnabled]: this._builder.control(true),
       [Controls.MLAMonitoring]: this._builder.control(false),
       [Controls.AdmissionPlugins]: this._builder.control([]),
-      [Controls.PodNodeSelectorAdmissionPluginConfig]: this._builder.control(''),
+      [Controls.PodNodeSelectorAdmissionPluginConfig]: this._builder.control(null),
       [Controls.EventRateLimitConfig]: this._builder.control(''),
-      [Controls.Labels]: this._builder.control(''),
+      [Controls.Labels]: this._builder.control(null),
       [Controls.SSHKeys]: this._builder.control(''),
       [Controls.IPFamily]: this._builder.control(IPFamily.IPv4),
       [Controls.ProxyMode]: this._builder.control(''),
@@ -359,14 +370,30 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     this.control(Controls.Name).setValue(this._nameGenerator.generateName());
   }
 
-  onLabelsChange(labels: object): void {
+  onLabelsChange(labels: Record<string, string>): void {
+    const [key, value] = this.clusterDefaultNodeSelectorNamespace ?? [];
+
+    if (key && value) {
+      labels = {...labels, [key]: value};
+    }
+
     this.labels = labels;
-    this._clusterSpecService.labels = this.labels;
+    this._clusterSpecService.labels = labels;
   }
 
-  onPodNodeSelectorAdmissionPluginConfigChange(config: object): void {
+  onPodNodeSelectorAdmissionPluginConfigChange(config: Record<string, string>): void {
     this.podNodeSelectorAdmissionPluginConfig = config;
     this._clusterSpecService.podNodeSelectorAdmissionPluginConfig = this.podNodeSelectorAdmissionPluginConfig;
+
+    handleClusterDefaultNodeSelector(
+      this.labels ?? {},
+      config,
+      this.clusterDefaultNodeSelectorNamespace,
+      (entry, labels) => {
+        this.clusterDefaultNodeSelectorNamespace = entry;
+        this.onLabelsChange(labels);
+      }
+    );
   }
 
   isEnforced(control: Controls): boolean {
