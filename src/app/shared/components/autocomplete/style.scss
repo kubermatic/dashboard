@@ -1,4 +1,4 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,26 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'variables';
-
-:host {
-  display: flex;
-}
-
-.container {
-  margin: 6px 30px 6px 0;
-
-  .label:not(:empty) {
-    font-size: variables.$font-size-caption;
-    line-height: 14px;
-    min-height: 14px;
-  }
-
-  .value {
-    font-size: variables.$font-size-subhead;
-    line-height: 24px;
-    margin-top: 5px;
-    min-height: 24px;
-    word-break: break-all;
+.mat-icon-button {
+  &:hover {
+    background-color: transparent;
   }
 }
