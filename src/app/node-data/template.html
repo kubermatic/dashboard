@@ -29,15 +29,14 @@ limitations under the License.
                      class="km-no-padding">
       <mat-card-title>Basic Settings</mat-card-title>
     </mat-card-header>
-    <mat-form-field>
+    <mat-form-field *ngIf="!dialogEditMode">
       <mat-label>Name</mat-label>
       <input [formControlName]="Controls.Name"
              id="km-node-name-input"
              matInput
              type="text"
              autocomplete="off">
-      <button *ngIf="!dialogEditMode"
-              mat-icon-button
+      <button mat-icon-button
               type="button"
               matSuffix
               class="km-randomize-btn"
