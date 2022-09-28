@@ -39,6 +39,8 @@ $steps: 6;
 
 .km-wizard-summary {
   .header {
+    align-items: center;
+    display: flex;
     font-size: variables.$font-size-subhead-lg;
     margin-bottom: 16px;
   }

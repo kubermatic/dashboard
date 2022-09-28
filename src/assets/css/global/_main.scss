@@ -195,6 +195,10 @@ hr {
   display: flex;
   flex-flow: row wrap;
   padding: 8px 60px 0;
+
+  > * {
+    margin-bottom: 10px;
+  }
 }
 
 .km-no-padding {

@@ -34,10 +34,12 @@ limitations under the License.
                                 (refreshClusterTemplates)="clusterTemplatesChange.next()"
                                 (refreshBackups)="backupsChange.next()"></km-create-resource-panel>
     </mat-card-header>
-    <mat-card-content fxLayout="row wrap">
+    <mat-card-content fxLayout="row wrap"
+                      fxLayoutAlign="space-between center"
+                      fxLayoutGap="10px grid">
       <div fxLayoutAlign=" center"
            fxLayoutGap="15px"
-           fxFlex>
+           fxFlex="auto">
         <i class="km-icon-mask km-icon-projects-card"></i>
         <km-property>
           <div key>Project</div>
@@ -46,7 +48,7 @@ limitations under the License.
       </div>
 
       <div fxLayout="row wrap"
-           fxLayoutGap="30px grid">
+           fxFlex="auto">
         <div fxLayoutAlign=" center"
              fxLayoutGap="15px"
              fxFlex>
