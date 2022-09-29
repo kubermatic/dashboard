@@ -5,14 +5,23 @@
     "outDir": "dist/out-tsc/app",
     "baseUrl": "src",
     "paths": {
-      "@app/*": [
-        "app/*"
-      ],
       "@core/*": [
         "app/core/*"
       ],
+      "@entity/*": [
+        "app/shared/entity/*"
+      ],
+      "@utils/*": [
+        "app/shared/utils/*"
+      ],
+      "@components/*": [
+        "app/shared/components/*"
+      ],
       "@shared/*": [
         "app/shared/*"
+      ],
+      "@app/*": [
+        "app/*"
       ],
       "@assets/*": [
         "assets/*"
