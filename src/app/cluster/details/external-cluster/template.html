@@ -30,9 +30,12 @@ limitations under the License.
               color="tertiary"
               fxLayoutAlign="center center"
               (click)="disconnectCluster()"
-              [disabled]="!canDisconnect()">
-        <i class="km-icon-mask km-icon-disconnect"></i>
-        <span>Disconnect</span>
+              [disabled]="!canDisconnect() || !!cluster?.deletionTimestamp">
+        <div fxLayoutAlign=" center"
+             [matTooltip]="!!cluster?.deletionTimestamp ? 'Cluster is being deleted.' : ''">
+          <i class="km-icon-mask km-icon-disconnect"></i>
+          <span>Disconnect</span>
+        </div>
       </button>
 
       <button *ngIf="!cluster?.labels || !isImportedCluster"
@@ -40,10 +43,13 @@ limitations under the License.
               mat-flat-button
               color="tertiary"
               fxLayoutAlign="center center"
-              [disabled]="!canDisconnect()"
+              [disabled]="!canDisconnect() || !!cluster?.deletionTimestamp"
               (click)="deleteClusterDialog()">
-        <i class="km-icon-mask km-icon-delete"></i>
-        <span>Delete</span>
+        <div fxLayoutAlign=" center"
+             [matTooltip]="!!cluster?.deletionTimestamp ? 'Cluster is being deleted.' : ''">
+          <i class="km-icon-mask km-icon-delete"></i>
+          <span>Delete</span>
+        </div>
       </button>
       <div fxFlex></div>
       <button color="alternative"
