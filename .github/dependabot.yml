@@ -20,6 +20,7 @@ updates:
       interval: daily
     labels:
       - dependencies
+      - docs/none
       - release-note-none
       - ok-to-test
 
