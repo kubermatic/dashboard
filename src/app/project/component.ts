@@ -72,6 +72,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   restrictProjectCreation = false;
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   hasQuota: boolean;
+  isProjectsLoading: boolean;
 
   private readonly _maxOwnersLen = 30;
   private _apiSettings: UserSettings;
@@ -191,6 +192,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
       this.verifyQuotas(this.projects);
       this.isInitializing = false;
       this.selectDefaultProject();
+      this.isProjectsLoading = false;
       this._cdr.detectChanges();
     });
 
@@ -345,6 +347,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
 
   changeProjectVisibility(): void {
     this.settings.displayAllProjectsForAdmin = !this.settings.displayAllProjectsForAdmin;
+    this.isProjectsLoading = true;
     this._settingsChange.emit();
   }
 
