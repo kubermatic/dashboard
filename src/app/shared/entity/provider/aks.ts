@@ -16,6 +16,7 @@ export class AKSCluster {
   name: string;
   resourceGroup: string;
   imported: boolean;
+  location: string;
 }
 
 export class AKSVMSize {
