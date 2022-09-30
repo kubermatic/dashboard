@@ -186,6 +186,10 @@ export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestro
     return ExternalCluster.getStatusIcon(cluster);
   }
 
+  isClusterDeleted(cluster: ExternalCluster): boolean {
+    return ExternalCluster.isDeleted(cluster);
+  }
+
   disconnectClusterDialog(cluster: ExternalCluster, event: Event): void {
     event.stopPropagation();
     this._externalClusterService.showDisconnectClusterDialog(cluster, this._selectedProject.id);
