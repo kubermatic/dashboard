@@ -64,6 +64,18 @@ export class ExternalCluster {
     return getExternalProviderDisplayName(ExternalCluster.getProvider(cloud));
   }
 
+  static isDeleted(cluster: ExternalCluster): boolean {
+    if (!cluster) {
+      return false;
+    }
+    return (
+      !!cluster.deletionTimestamp ||
+      cluster.status?.state === ExternalClusterState.Deleting ||
+      (cluster.status?.state === ExternalClusterState.Error &&
+        (cluster.status?.statusMessage?.includes('NotFound') || cluster.status?.statusMessage?.includes('Not Found')))
+    );
+  }
+
   static getStatusMessage(cluster: ExternalCluster): string {
     const state = _.capitalize(cluster?.status?.state);
     return cluster?.status?.statusMessage ? `${state}: ${cluster?.status.statusMessage}` : state;
