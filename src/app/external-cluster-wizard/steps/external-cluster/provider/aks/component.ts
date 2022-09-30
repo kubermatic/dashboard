@@ -127,6 +127,7 @@ export class AKSClusterSettingsComponent
   readonly MIN_COUNT_DEFAULT_VALUE = 1;
   readonly MAX_COUNT_DEFAULT_VALUE = 5;
   readonly DEFAULT_LOCATION = 'eastus';
+  readonly DEFAULT_VMSIZE = 'Standard_DS2_v2';
   @Input() projectID: string;
   @Input() cluster: ExternalCluster;
   vmSizeLabel = VMSizeState.Ready;
@@ -258,6 +259,10 @@ export class AKSClusterSettingsComponent
       this.control(Controls.VmSize).disable();
       this._getAKSVmSizesForMachineDeployment(this.cluster.cloud.aks.location).subscribe((vmSizes: AKSVMSize[]) => {
         this.vmSizes = vmSizes;
+        const defaultValue = this.vmSizes.find((vmSize: AKSVMSize) => vmSize.name === this.DEFAULT_VMSIZE);
+        if (defaultValue) {
+          this.control(Controls.VmSize).setValue(defaultValue.name);
+        }
         this.vmSizeLabel = this.vmSizes?.length ? VMSizeState.Ready : VMSizeState.Empty;
         this.control(Controls.VmSize).enable();
       });
@@ -296,6 +301,8 @@ export class AKSClusterSettingsComponent
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((vmSizes: AKSVMSize[]) => {
           this.vmSizes = vmSizes;
+          const defaultValue = this.vmSizes.find((vmSize: AKSVMSize) => vmSize.name === this.DEFAULT_VMSIZE);
+          defaultValue && this.control(Controls.VmSize).setValue(defaultValue.name);
           this.vmSizeLabel = this.vmSizes?.length ? VMSizeState.Ready : VMSizeState.Empty;
         });
 

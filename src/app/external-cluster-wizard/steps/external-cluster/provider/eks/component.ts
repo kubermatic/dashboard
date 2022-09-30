@@ -32,6 +32,7 @@ import {
   EKSSecurityGroup,
   EKSSubnet,
   EKSVpc,
+  EKSInstanceType,
 } from '@shared/entity/provider/eks';
 import {forkJoin} from 'rxjs';
 import {debounceTime, takeUntil, tap} from 'rxjs/operators';
@@ -52,18 +53,21 @@ import {
 } from '@app/shared/entity/external-machine-deployment';
 import {MasterVersion} from '@app/shared/entity/cluster';
 import {ComboboxControls, FilteredComboboxComponent} from '@shared/components/combobox/component';
+import {EKSArchitecture} from '@app/shared/entity/provider/eks';
 
 enum Controls {
+  Vpc = 'vpc',
   Name = 'name',
   Version = 'version',
   RoleArn = 'roleArn',
-  Vpc = 'vpc',
-  SubnetIds = 'subnetIds',
-  SecurityGroupsIds = 'securityGroupIds',
-  DiskSize = 'diskSize',
   MaxSize = 'maxSize',
   MinSize = 'minSize',
+  DiskSize = 'diskSize',
+  SubnetIds = 'subnetIds',
   DesiredSize = 'desiredSize',
+  InstanceType = 'instanceType',
+  Architecture = 'architecture',
+  SecurityGroupsIds = 'securityGroupIds',
 }
 
 enum VpcState {
@@ -96,9 +100,16 @@ enum NodeRoleState {
   Empty = 'No Node IAM Roles Available',
 }
 
+enum InstanceTypeState {
+  Loading = 'Loading...',
+  Ready = 'Instance Types',
+  Empty = 'No Instance Types Available',
+}
+
 @Component({
   selector: 'km-eks-cluster-settings',
   templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -117,8 +128,13 @@ export class EKSClusterSettingsComponent
   implements OnInit, OnDestroy, ControlValueAccessor, Validator
 {
   readonly Controls = Controls;
+  readonly Architecture = EKSArchitecture;
+  readonly DEFAULT_INSTANCE_TYPES = ['t3.medium', 'a1.medium'];
   vpcLabel = VpcState.Ready;
   vpcs: EKSVpc[] = [];
+  instanceTypes: EKSInstanceType[] = [];
+  selectedInstanceTypes: string[] = [];
+  instanceTypeLabel = InstanceTypeState.Ready;
   kubernetesVersions: string[] = [];
   maxNodeCount: number;
   minNodeCount: number;
@@ -145,6 +161,9 @@ export class EKSClusterSettingsComponent
 
   @ViewChild('securityGroupCombobox')
   private readonly _securityGroupCombobox: FilteredComboboxComponent;
+
+  @ViewChild('instanceTypeCombobox')
+  private readonly _instanceTypeCombobox: FilteredComboboxComponent;
 
   constructor(
     private readonly _cdr: ChangeDetectorRef,
@@ -197,6 +216,21 @@ export class EKSClusterSettingsComponent
     this.selectedNodeRolArn = this.nodeRoles.find((nodeRole: EKSNodeRole) => nodeRole.roleName === roleName)?.arn;
   }
 
+  instanceDisplayName(values: string[]): string[] {
+    this.selectedInstanceTypes = values ? values : [];
+    if (this.selectedInstanceTypes.length === 1) {
+      const selectedObj = this.instanceTypes.find(
+        (instanceObj: EKSInstanceType) => instanceObj.name === this.selectedInstanceTypes[0]
+      );
+      return selectedObj && [`${selectedObj.pretty_name} (${selectedObj.vcpus} vCPUs, ${selectedObj.memory} GB RAM)`];
+    }
+
+    return this.selectedInstanceTypes?.map(
+      (instance: string) =>
+        this.instanceTypes.find((instanceObj: EKSInstanceType) => instanceObj.name === instance)?.pretty_name
+    );
+  }
+
   private _initForm(): void {
     const DEFAULT_MD_DISKSIZE = 20;
     const DEFAULT_MD_MAXSIZE = 1;
@@ -213,6 +247,8 @@ export class EKSClusterSettingsComponent
       [Controls.MaxSize]: this._builder.control(DEFAULT_MD_MAXSIZE),
       [Controls.MinSize]: this._builder.control(DEFAULT_MD_MINSIZE),
       [Controls.DesiredSize]: this._builder.control(DEFAULT_MD_DESIRED_SIZE),
+      [Controls.InstanceType]: this._builder.control(''),
+      [Controls.Architecture]: this._builder.control(EKSArchitecture.X86_64),
     });
 
     if (!this.isDialogView()) {
@@ -249,6 +285,14 @@ export class EKSClusterSettingsComponent
           this.subnets = subnets;
           this.subnetLabel = this.subnets?.length ? SubnetState.Ready : SubnetState.Empty;
           this._cdr.detectChanges();
+        });
+      this._getEKSInstanceTypesForMachineDeployment();
+      this.control(Controls.Architecture)
+        .valueChanges.pipe(debounceTime(this._debounceTime))
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(_ => {
+          this.clearInstanceTypes();
+          this._getEKSInstanceTypesForMachineDeployment();
         });
     } else {
       this._getEKSKubernetesVersions();
@@ -336,6 +380,33 @@ export class EKSClusterSettingsComponent
       });
   }
 
+  private _getEKSInstanceTypesForMachineDeployment(): void {
+    this.instanceTypeLabel = InstanceTypeState.Loading;
+    this._externalMachineDeploymentService
+      .getEKSInstanceTypesForMachineDeployment(
+        this.projectID,
+        this.cluster.id,
+        this.controlValue(Controls.Architecture)
+      )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe((instanceTypes: EKSInstanceType[]) => {
+        this.instanceTypes = instanceTypes;
+        switch (this.controlValue(Controls.Architecture)) {
+          case EKSArchitecture.X86_64:
+            this.control(Controls.InstanceType).setValue([this.DEFAULT_INSTANCE_TYPES[0]]);
+            break;
+          case EKSArchitecture.ARM64:
+            this.control(Controls.InstanceType).setValue([this.DEFAULT_INSTANCE_TYPES[1]]);
+            break;
+          default:
+            this.control(Controls.InstanceType).setValue([this.instanceTypes[0]]);
+            break;
+        }
+        this.instanceTypeLabel = instanceTypes.length ? InstanceTypeState.Ready : InstanceTypeState.Empty;
+        this._cdr.detectChanges();
+      });
+  }
+
   private _updateExternalClusterModel(): void {
     let version = this.controlValue(Controls.Version)?.main;
     const versionSplitArr = version?.split('.');
@@ -373,6 +444,8 @@ export class EKSClusterSettingsComponent
       cloud: {
         eks: {
           diskSize: this.controlValue(Controls.DiskSize),
+          instanceTypes: this.selectedInstanceTypes,
+          architecture: this.controlValue(Controls.Architecture),
           scalingConfig: {
             desiredSize: this.controlValue(Controls.DesiredSize),
             maxSize: this.controlValue(Controls.MaxSize),
@@ -414,6 +487,14 @@ export class EKSClusterSettingsComponent
     this.securityGroups = [];
     this.securityGroupLabel = SecurityGroupState.Ready;
     this._securityGroupCombobox.reset();
+    this._cdr.detectChanges();
+  }
+
+  private clearInstanceTypes(): void {
+    this.instanceTypes = [];
+    this.selectedInstanceTypes = [];
+    this.instanceTypeLabel = InstanceTypeState.Ready;
+    this._instanceTypeCombobox.reset();
     this._cdr.detectChanges();
   }
 

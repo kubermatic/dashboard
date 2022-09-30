@@ -61,3 +61,16 @@ export class EKSNodeRole {
   arn: string;
   roleName: string;
 }
+
+export class EKSInstanceType {
+  name: string;
+  pretty_name: string;
+  vcpus: number;
+  memory: number;
+  architecture: string;
+}
+
+export enum EKSArchitecture {
+  ARM64 = 'arm64',
+  X86_64 = 'x86_64',
+}

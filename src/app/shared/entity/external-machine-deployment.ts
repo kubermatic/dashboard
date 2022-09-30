@@ -86,6 +86,7 @@ export class GKEMachineDeploymentCloudSpec {
 }
 
 export class EKSMachineDeploymentCloudSpec {
+  instanceTypes?: string[];
   diskSize: number;
   scalingConfig: EKSScalingConfig;
   nodeRole: string;
