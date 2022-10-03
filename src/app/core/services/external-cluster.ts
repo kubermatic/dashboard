@@ -38,7 +38,7 @@ import {GCPDiskType, GCPMachineSize} from '@app/shared/entity/provider/gcp';
 @Injectable({providedIn: 'root'})
 export class ExternalClusterService {
   providerChanges = new BehaviorSubject<ExternalClusterProvider>(undefined);
-  presetChanges = new Subject<string>();
+  private _presetChanges = new BehaviorSubject<string>(null);
   private _regionChanges = new BehaviorSubject<string>(null);
   presetStatusChanges = new Subject<boolean>();
 
@@ -59,6 +59,10 @@ export class ExternalClusterService {
     private readonly _notificationService: NotificationService,
     private readonly _router: Router
   ) {}
+
+  get presetChanges(): Observable<string> {
+    return this._presetChanges.asObservable().pipe(filter(preset => preset !== null));
+  }
 
   get provider(): ExternalClusterProvider {
     return this._provider;
@@ -83,7 +87,7 @@ export class ExternalClusterService {
 
   set preset(preset: string) {
     this._preset = preset;
-    this.presetChanges.next(preset);
+    this._presetChanges.next(preset);
   }
 
   get regionChanges(): Observable<string> {
