@@ -43,7 +43,8 @@ limitations under the License.
             fxFlex="100%">
     <ng-template matStepLabel>{{step.Cluster}}</ng-template>
     <ng-template matStepContent>
-      <km-external-cluster-cluster-step [projectID]="projectId"></km-external-cluster-cluster-step>
+      <km-external-cluster-cluster-step *ngIf="active === step.Cluster"
+                                        [projectID]="projectId"></km-external-cluster-cluster-step>
     </ng-template>
   </mat-step>
 </mat-horizontal-stepper>
@@ -56,16 +57,26 @@ limitations under the License.
                [diameter]="25"
                color="accent"
                *ngIf="externalClusterService.isValidating"></mat-spinner>
+  <button fxLayoutAlign="center center"
+          mat-flat-button
+          type="button"
+          color="tertiary"
+          (click)="previous(stepper)"
+          *ngIf="!first">
+    <i class="km-icon-mask km-icon-back"></i>
+    <span>Back</span>
+  </button>
   <button mat-flat-button
           type="button"
           (click)="next()"
           [disabled]="invalid"
-          *ngIf="active === step.Credentials && !last">
+          *ngIf="!last">
     <i class="km-icon-mask km-icon-next"></i>
     <span>Next</span>
   </button>
   <km-button *ngIf="last"
              id="external-cluster-add-btn"
+             class="external-cluster-add-btn"
              icon="km-icon-add"
              [label]="label"
              [disabled]="invalid"
