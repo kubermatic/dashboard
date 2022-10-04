@@ -31,12 +31,30 @@ import {ExternalMachineDeploymentService} from '@core/services/external-machine-
 import {UpdateExternalClusterMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/update-external-cluster-machine-deployment-dialog/component';
 import {HealthStatus} from '@shared/utils/health-status';
 
+enum AKSNodePoolState {
+  ProvisioningState = 'provisioningState',
+  PowerState = 'powerState',
+}
+
+enum Column {
+  Status = 'status',
+  Name = 'name',
+  ProvisioningState = 'provisioningState',
+  PowerState = 'powerState',
+  Replicas = 'replicas',
+  Version = 'version',
+  OS = 'os',
+  Created = 'created',
+  Actions = 'actions',
+}
+
 @Component({
   selector: 'km-external-machine-deployment-list',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
 })
 export class ExternalMachineDeploymentListComponent implements OnInit, OnChanges, OnDestroy {
+  readonly column = Column;
   @Input() cluster: ExternalCluster;
   @Input() machineDeployments: ExternalMachineDeployment[] = [];
   @Input() projectID: string;
@@ -45,7 +63,8 @@ export class ExternalMachineDeploymentListComponent implements OnInit, OnChanges
   @Output() machineDeploymentChange$ = new EventEmitter<ExternalMachineDeployment>();
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   dataSource = new MatTableDataSource<ExternalMachineDeployment>();
-  displayedColumns: string[] = ['status', 'name', 'labels', 'replicas', 'version', 'os', 'created', 'actions'];
+  displayedColumns: string[] = Object.values(Column);
+
   private _unsubscribe: Subject<void> = new Subject<void>();
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
@@ -58,6 +77,7 @@ export class ExternalMachineDeploymentListComponent implements OnInit, OnChanges
   ) {}
 
   ngOnInit(): void {
+    this._filterDisplayedColumn();
     this.dataSource.data = this.machineDeployments ? this.machineDeployments : [];
     this.dataSource.paginator = this.paginator;
 
@@ -135,5 +155,13 @@ export class ExternalMachineDeploymentListComponent implements OnInit, OnChanges
     this._externalMachineDeploymentService
       .showExternalMachineDeploymentDeleteDialog(this.projectID, this.cluster, md)
       .subscribe(_ => {});
+  }
+
+  private _filterDisplayedColumn(): void {
+    if (!this.cluster.cloud.aks) {
+      this.displayedColumns = this.displayedColumns.filter(
+        (column: string) => column !== AKSNodePoolState.ProvisioningState && column !== AKSNodePoolState.PowerState
+      );
+    }
   }
 }
