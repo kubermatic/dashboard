@@ -26,7 +26,7 @@ import {ExternalClusterService} from '@core/services/external-cluster';
 import {NameGeneratorService} from '@core/services/name-generator';
 import {ErrorType} from '@shared/types/error-type';
 import {Observable, of} from 'rxjs';
-import {debounceTime, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {debounceTime, switchMap, takeUntil, tap, filter} from 'rxjs/operators';
 import {
   ExternalCloudSpec,
   ExternalCluster,
@@ -306,9 +306,16 @@ export class AKSClusterSettingsComponent
           this.vmSizeLabel = this.vmSizes?.length ? VMSizeState.Ready : VMSizeState.Empty;
         });
 
-      this._getAKSKubernetesVersions();
-      this._getAKSLocations();
-      this._getAKSResourceGroups();
+      this._externalClusterService.presetChanges
+        .pipe(
+          filter(preset => !!preset),
+          takeUntil(this._unsubscribe)
+        )
+        .subscribe(_ => {
+          this._getAKSKubernetesVersions();
+          this._getAKSLocations();
+          this._getAKSResourceGroups();
+        });
     }
   }
 
