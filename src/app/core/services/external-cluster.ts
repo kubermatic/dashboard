@@ -39,7 +39,7 @@ import {GCPDiskType, GCPMachineSize} from '@app/shared/entity/provider/gcp';
 export class ExternalClusterService {
   providerChanges = new BehaviorSubject<ExternalClusterProvider>(undefined);
   presetChanges = new Subject<string>();
-  regionChanges = new Subject<string>();
+  private _regionChanges = new BehaviorSubject<string>(null);
   presetStatusChanges = new Subject<boolean>();
 
   private _provider: ExternalClusterProvider;
@@ -86,9 +86,13 @@ export class ExternalClusterService {
     this.presetChanges.next(preset);
   }
 
+  get regionChanges(): Observable<string> {
+    return this._regionChanges.asObservable().pipe(filter(region => region !== null));
+  }
+
   set region(regionName: string) {
     this._region = regionName;
-    this.regionChanges.next(regionName);
+    this._regionChanges.next(regionName);
   }
 
   get region(): string {
