@@ -100,6 +100,17 @@ limitations under the License.
           </div>
         </km-property>
 
+        <ng-container *ngIf="machineDeployment?.cloud?.aks">
+          <km-property>
+            <div key>Provisioning State</div>
+            <div value>{{machineDeployment?.phase?.aks?.provisioningState}}</div>
+          </km-property>
+          <km-property>
+            <div key>Power State</div>
+            <div value>{{machineDeployment?.phase?.aks?.powerState}}</div>
+          </km-property>
+        </ng-container>
+
         <km-property>
           <div key>Created</div>
           <div value>

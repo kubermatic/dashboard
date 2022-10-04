@@ -114,12 +114,6 @@ limitations under the License.
                   'km-provider-logo km-provider-logo-custom-external-cluster' : 'km-provider-logo km-provider-logo-'+provider"></span>
           </div>
         </km-property>
-        <km-property *ngIf="isImportedCluster">
-          <div key>Imported</div>
-          <div value>
-            <km-relative-time [date]="cluster.creationTimestamp"></km-relative-time>
-          </div>
-        </km-property>
 
         <!-- specification for AKS -->
         <ng-container *ngIf="provider === Provider.AKS">
@@ -134,6 +128,14 @@ limitations under the License.
           <km-property>
             <div key>Cluster Version</div>
             <div value>{{cluster?.spec?.aksclusterSpec?.kubernetesVersion}}</div>
+          </km-property>
+          <km-property>
+            <div key>Provisioning State</div>
+            <div value>{{cluster?.status?.aks?.provisioningState}}</div>
+          </km-property>
+          <km-property>
+            <div key>Power State</div>
+            <div value>{{cluster?.status?.aks?.powerState}}</div>
           </km-property>
           <km-property>
             <div key>DNS Prefix</div>
@@ -157,12 +159,6 @@ limitations under the License.
 
         <!-- specification for EKS -->
         <ng-container *ngIf="provider === Provider.EKS">
-          <km-property>
-            <div key>Created</div>
-            <div value>
-              <km-relative-time [date]="cluster?.spec?.eksclusterSpec?.createdAt"></km-relative-time>
-            </div>
-          </km-property>
           <km-property>
             <div key>Region</div>
             <div value>{{cluster?.cloud?.eks?.region}}</div>
@@ -210,12 +206,6 @@ limitations under the License.
         <!-- specification for GKE -->
         <ng-container *ngIf="provider === Provider.GKE">
           <km-property>
-            <div key>Created</div>
-            <div value>
-              <km-relative-time [date]="cluster?.spec?.gkeclusterSpec?.createTime"></km-relative-time>
-            </div>
-          </km-property>
-          <km-property>
             <div key>Zone</div>
             <div value>{{cluster?.cloud?.gke?.zone}}</div>
           </km-property>
@@ -241,6 +231,23 @@ limitations under the License.
           <div key>Labels</div>
           <div value>
             <km-labels [labels]="cluster.labels"></km-labels>
+          </div>
+        </km-property>
+        <km-property *ngIf="provider !== Provider.AKS">
+          <div key>Created</div>
+          <div *ngIf="provider === Provider.GKE"
+               value>
+            <km-relative-time [date]="cluster?.spec?.gkeclusterSpec?.createTime"></km-relative-time>
+          </div>
+          <div *ngIf="provider === Provider.EKS"
+               value>
+            <km-relative-time [date]="cluster?.spec?.eksclusterSpec?.createdAt"></km-relative-time>
+          </div>
+        </km-property>
+        <km-property *ngIf="isImportedCluster">
+          <div key>Imported</div>
+          <div value>
+            <km-relative-time [date]="cluster.creationTimestamp"></km-relative-time>
           </div>
         </km-property>
       </div>

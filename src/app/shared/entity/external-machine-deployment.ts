@@ -127,4 +127,11 @@ export class ExternalMachineDeploymentSpecPatch {
 export class ExternalClusterMDPhase {
   state: ExternalClusterMDState;
   statusMessage?: string;
+  // this property is used only for AKS Node Pool.
+  aks?: AKSNodePoolStatus;
+}
+
+export class AKSNodePoolStatus {
+  powerState: string;
+  provisioningState: string;
 }
