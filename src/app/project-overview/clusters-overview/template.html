@@ -16,7 +16,8 @@ limitations under the License.
 
 <km-tab-card [verticalMargin]="false">
   <km-tab label="Clusters">
-    <table class="km-table"
+    <table *ngIf="!isLoadingClusters; else spinner"
+           class="km-table"
            mat-table
            [dataSource]="clusterDataSource"
            [trackBy]="clusterTrackBy">
@@ -85,7 +86,7 @@ limitations under the License.
           (click)="clusterNavigate(cluster)"></tr>
     </table>
     <div class="km-row km-empty-list-msg"
-         *ngIf="clusters.length < 1">
+         *ngIf="!isLoadingClusters && clusters.length < 1">
       No clusters available.
     </div>
     <div class="action-container"
@@ -100,7 +101,8 @@ limitations under the License.
   </km-tab>
   <km-tab label="External Clusters"
           *ngIf="externalClustersEnabled">
-    <table class="km-table"
+    <table *ngIf="!isLoadingExternalClusters; else spinner"
+           class="km-table"
            mat-table
            [dataSource]="externalClusterDataSource"
            [trackBy]="externalClusterTrackBy">
@@ -139,7 +141,7 @@ limitations under the License.
           (click)="externalClusterNavigate(cluster)"></tr>
     </table>
     <div class="km-row km-empty-list-msg"
-         *ngIf="externalClusters.length < 1">
+         *ngIf="!isLoadingExternalClusters && externalClusters.length < 1">
       No clusters available.
     </div>
     <div class="action-container"
@@ -152,4 +154,10 @@ limitations under the License.
       </button>
     </div>
   </km-tab>
+
+  <ng-template #spinner>
+    <mat-spinner [diameter]="25"
+                 class="km-spinner"
+                 color="accent"></mat-spinner>
+  </ng-template>
 </km-tab-card>

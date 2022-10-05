@@ -74,6 +74,8 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   firstVisitToOverviewPage: string;
   projectQuota: Quota;
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
+  isLoadingClusters = true;
+  isLoadingExternalClusters = true;
   private _quotaWidgetComponent: QuotaWidgetComponent | null;
   private _quotaService: QuotaService;
   private _projectChange = new Subject<void>();
@@ -145,6 +147,11 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
       .subscribe(userGroup => {
         this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup);
       });
+
+    this._projectService.onProjectChange.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
+      this.isLoadingClusters = true;
+      this.isLoadingExternalClusters = true;
+    });
   }
 
   private _loadData() {
@@ -186,6 +193,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap(() => (this.project ? this._clusterService.clusters(this.project.id) : EMPTY)),
         tap(clusters => (this.clusters = clusters)),
+        tap(_ => (this.isLoadingClusters = false)),
         switchMap(clusters =>
           iif(
             () => clusters.length > 0,
@@ -232,6 +240,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
         switchMap(() =>
           this.project && this.externalClustersEnabled ? this._clusterService.externalClusters(this.project.id) : EMPTY
         ),
+        tap(_ => (this.isLoadingExternalClusters = false)),
         takeUntil(this._unsubscribe)
       )
       .subscribe(externalClusters => (this.externalClusters = externalClusters));
