@@ -40,6 +40,7 @@ import {MachineDeploymentStatus} from '@shared/entity/machine-deployment';
 import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {GroupConfig} from '@shared/model/Config';
+import {getClusterMachinesCount} from '@shared/utils/cluster';
 import {getClusterHealthStatus, HealthStatus, StatusIcon} from '@shared/utils/health-status';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
@@ -324,17 +325,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
         .pipe(takeUntil(this._unsubscribe))
         .subscribe({
           next: machineDeployments => {
-            const mdStatus: MachineDeploymentStatus = {
-              replicas: 0,
-              availableReplicas: 0,
-              updatedReplicas: 0,
-            } as MachineDeploymentStatus;
-            machineDeployments.forEach(machineDeployment => {
-              mdStatus.replicas += machineDeployment.status?.replicas || 0;
-              mdStatus.availableReplicas += machineDeployment.status?.availableReplicas || 0;
-              mdStatus.updatedReplicas += machineDeployment.status?.updatedReplicas || 0;
-            });
-            this.machinesCount[cluster.id] = mdStatus;
+            this.machinesCount[cluster.id] = getClusterMachinesCount(machineDeployments);
           },
         });
     }

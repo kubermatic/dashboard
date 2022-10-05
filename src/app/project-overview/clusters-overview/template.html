@@ -44,17 +44,36 @@ limitations under the License.
           </div>
         </td>
       </ng-container>
-      <ng-container matColumnDef="machineDeployments">
+      <ng-container matColumnDef="machines">
         <th mat-header-cell
             *matHeaderCellDef
-            class="km-header-cell p-30">Machine Deployments
+            class="km-header-cell p-30">
+          <div fxLayout="row"
+               fxLayoutAlign=" center"
+               fxLayoutGap="10px">
+            <span>Machines</span>
+            <i class="km-icon-info km-pointer"
+               matTooltip="Number of ready nodes / Total number of machines"></i>
+          </div>
         </th>
         <td mat-cell
             *matCellDef="let cluster">
-          <div fxLayoutAlign=" center"
-               fxLayoutGap="8px">
-            {{cluster.machineDeploymentCount}}
-          </div>
+          <ng-container *ngIf="!!clusterMachinesCount?.[cluster.id]; else mdSpinner">
+            <div *ngIf="clusterMachinesCount[cluster.id].replicas > 0; else noMD"
+                 fxLayout="row"
+                 fxLayoutAlign=" center">
+              <i [matTooltip]="getClusterMDHealthStatus(cluster).message"
+                 [ngClass]="getClusterMDHealthStatus(cluster).icon"
+                 class="machine-deployment-health"></i>
+              <span>{{clusterMachinesCount[cluster.id].availableReplicas}} / {{clusterMachinesCount[cluster.id].replicas}}</span>
+            </div>
+            <ng-template #noMD>0</ng-template>
+          </ng-container>
+          <ng-template #mdSpinner>
+            <mat-spinner [diameter]="15"
+                         class="km-spinner"
+                         color="accent"></mat-spinner>
+          </ng-template>
         </td>
       </ng-container>
       <tr mat-header-row
