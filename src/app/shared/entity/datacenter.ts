@@ -48,6 +48,7 @@ export class DatacenterSpec {
   alibaba?: AlibabaDatacenterSpec;
   anexia?: AnexiaDatacenterSpec;
   vmwareclouddirector?: VMwareCloudDirectorDatacenterSpec;
+  operatingSystemProfiles?: DatacenterOperatingSystemOptions;
 }
 
 export class DatacenterOperatingSystemOptions {
