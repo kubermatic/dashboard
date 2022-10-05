@@ -452,11 +452,17 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
 
   private setDefaultOperatingSystemProfiles(): void {
     let ospValue = '';
+    const selectedOperatingSystem = this.form.get(Controls.OperatingSystem).value;
+    const dcOSP = this._datacenterSpec?.spec.operatingSystemProfiles?.[selectedOperatingSystem];
 
     if (this.selectedOperatingSystemProfile) {
       ospValue = this.selectedOperatingSystemProfile;
-    } else if (this.form.get(Controls.OperatingSystem).value !== '') {
-      const ospName = 'osp-' + this.form.get(Controls.OperatingSystem).value;
+    } else if (dcOSP) {
+      if (this.supportedOperatingSystemProfiles.indexOf(dcOSP) > -1) {
+        ospValue = dcOSP;
+      }
+    } else if (selectedOperatingSystem !== '') {
+      const ospName = 'osp-' + selectedOperatingSystem;
       if (this.supportedOperatingSystemProfiles.indexOf(ospName) > -1) {
         ospValue = ospName;
       }
