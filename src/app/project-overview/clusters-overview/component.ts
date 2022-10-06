@@ -17,8 +17,9 @@ import {ExternalCluster, ExternalClusterProvider, ExternalClusterState} from '@s
 import {Cluster} from '@shared/entity/cluster';
 import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
+import {MachineDeploymentStatus} from '@shared/entity/machine-deployment';
 import _ from 'lodash';
-import {getClusterHealthStatus, HealthStatus} from '@shared/utils/health-status';
+import {getClusterHealthStatus, HealthStatus, StatusIcon} from '@shared/utils/health-status';
 import {Health} from '@shared/entity/health';
 import {ClusterListTab} from '@app/cluster/list/component';
 import {Project} from '@shared/entity/project';
@@ -32,9 +33,12 @@ export class ClustersOverviewComponent implements OnInit, OnChanges {
   @Input() project: Project;
   @Input() clusters: Cluster[] = [];
   @Input() clusterHealth: Health[] = [];
+  @Input() clusterMachinesCount: Record<string, MachineDeploymentStatus> = {};
   @Input() externalClusters: ExternalCluster[] = [];
   @Input() externalClustersEnabled = false;
-  clusterColumns: string[] = ['status', 'name', 'machineDeployments'];
+  @Input() isLoadingClusters: boolean;
+  @Input() isLoadingExternalClusters: boolean;
+  clusterColumns: string[] = ['status', 'name', 'machines'];
   clusterDataSource = new MatTableDataSource<Cluster>();
   externalClusterColumns: string[] = ['status', 'name'];
   externalClusterDataSource = new MatTableDataSource<ExternalCluster>();
@@ -80,6 +84,18 @@ export class ClustersOverviewComponent implements OnInit, OnChanges {
 
   getClusterHealthStatus(cluster: Cluster): HealthStatus {
     return getClusterHealthStatus(cluster, this.clusterHealth[cluster.id]);
+  }
+
+  getClusterMDHealthStatus(cluster: Cluster): HealthStatus {
+    const mdCount = this.clusterMachinesCount[cluster.id];
+    if (
+      mdCount &&
+      mdCount.replicas === mdCount.availableReplicas &&
+      mdCount.availableReplicas === mdCount.updatedReplicas
+    ) {
+      return new HealthStatus('Running', StatusIcon.Running);
+    }
+    return new HealthStatus('Updating', StatusIcon.Pending);
   }
 
   externalClusterTrackBy(cluster: ExternalCluster): string {

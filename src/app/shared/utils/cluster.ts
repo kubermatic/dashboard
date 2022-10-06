@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {MachineDeployment, MachineDeploymentStatus} from '@shared/entity/machine-deployment';
 import {KeyValueEntry} from '../types/common';
 
 export const CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE = 'clusterDefaultNodeSelector';
@@ -35,4 +36,23 @@ export function handleClusterDefaultNodeSelector(
   const [currKey, currValue] = nodeConfig[CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE]?.split('=') ?? [];
 
   onComplete(currKey && currValue ? [currKey, currValue] : null, labels);
+}
+
+export function getClusterMachinesCount(machineDeployments: MachineDeployment[]): MachineDeploymentStatus {
+  const mdStatus: MachineDeploymentStatus = {
+    replicas: 0,
+    availableReplicas: 0,
+    updatedReplicas: 0,
+    readyReplicas: 0,
+    unavailableReplicas: 0,
+  } as MachineDeploymentStatus;
+  machineDeployments.forEach(machineDeployment => {
+    mdStatus.replicas += machineDeployment.status?.replicas || 0;
+    mdStatus.availableReplicas += machineDeployment.status?.availableReplicas || 0;
+    mdStatus.updatedReplicas += machineDeployment.status?.updatedReplicas || 0;
+    mdStatus.readyReplicas += machineDeployment.status?.readyReplicas || 0;
+    mdStatus.unavailableReplicas += machineDeployment.status?.unavailableReplicas || 0;
+  });
+
+  return mdStatus;
 }

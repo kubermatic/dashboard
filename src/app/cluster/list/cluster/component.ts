@@ -21,6 +21,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ClusterService} from '@core/services/cluster';
 import {ClusterTemplateService} from '@core/services/cluster-templates';
 import {DatacenterService} from '@core/services/datacenter';
+import {MachineDeploymentService} from '@core/services/machine-deployment';
 import {PathParam} from '@core/services/params';
 import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
@@ -35,18 +36,18 @@ import {ClusterTemplate} from '@shared/entity/cluster-template';
 import {View} from '@shared/entity/common';
 import {Datacenter} from '@shared/entity/datacenter';
 import {Health} from '@shared/entity/health';
-import {MachineDeployment} from '@shared/entity/machine-deployment';
+import {MachineDeploymentStatus} from '@shared/entity/machine-deployment';
 import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {GroupConfig} from '@shared/model/Config';
+import {getClusterMachinesCount} from '@shared/utils/cluster';
+import {getClusterHealthStatus, HealthStatus, StatusIcon} from '@shared/utils/health-status';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
 import {combineLatest, EMPTY, iif, of, onErrorResumeNext, Subject} from 'rxjs';
-import {catchError, distinctUntilChanged, switchMap, take, takeUntil, tap, startWith} from 'rxjs/operators';
-import {ClusterDeleteConfirmationComponent} from '../../details/cluster/cluster-delete-confirmation/component';
-import {MachineDeploymentService} from '@core/services/machine-deployment';
-import {getClusterHealthStatus, HealthStatus} from '@shared/utils/health-status';
+import {catchError, distinctUntilChanged, startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {QuotaWidgetComponent} from '../../../dynamic/enterprise/quotas/quota-widget/component';
+import {ClusterDeleteConfirmationComponent} from '../../details/cluster/cluster-delete-confirmation/component';
 
 @Component({
   selector: 'km-cluster-list',
@@ -66,8 +67,8 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   isInitialized = false;
   nodeDC: Datacenter[] = [];
   health: Health[] = [];
-  machineDeployments: MachineDeployment[][] = [];
-  displayedColumns: string[] = ['status', 'name', 'labels', 'provider', 'region', 'created', 'actions'];
+  machinesCount: Record<string, MachineDeploymentStatus> = {};
+  displayedColumns: string[] = ['status', 'name', 'labels', 'provider', 'region', 'machines', 'created', 'actions'];
   dataSource = new MatTableDataSource<Cluster>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -141,15 +142,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
                   this._datacenterService.getDatacenter(cluster.spec.cloud.dc).pipe(take(1)),
                   this._clusterService
                     .health(this._selectedProject.id, cluster.id)
-                    .pipe(catchError(() => onErrorResumeNext(EMPTY)))
-                    .pipe(tap(health => (this.health[cluster.id] = health)))
-                    .pipe(
-                      switchMap(_ =>
-                        Health.allHealthy(this.health[cluster.id]) && !cluster.deletionTimestamp
-                          ? this._machineDeploymentService.list(cluster.id, this._selectedProject.id)
-                          : of([])
-                      )
-                    ),
+                    .pipe(catchError(() => onErrorResumeNext(EMPTY))),
                 ])
               ),
             ]).pipe(take(1)),
@@ -162,10 +155,11 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
         groups.forEach(group => {
           const cluster = group[0];
           const datacenter = group[1];
-          const machineDeployments = group[2];
+          const health = group[2];
 
           this.nodeDC[cluster.id] = datacenter;
-          this.machineDeployments[cluster.id] = machineDeployments;
+          this.health[cluster.id] = health;
+          this._loadMachineDeployments(cluster);
         });
 
         this.dataSource.data = this.clusters;
@@ -204,6 +198,18 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
 
   getHealthStatus(cluster: Cluster): HealthStatus {
     return getClusterHealthStatus(cluster, this.health[cluster.id]);
+  }
+
+  getMDHealthStatus(cluster: Cluster): HealthStatus {
+    const mdCount = this.machinesCount[cluster.id];
+    if (
+      mdCount &&
+      mdCount.replicas === mdCount.availableReplicas &&
+      mdCount.availableReplicas === mdCount.updatedReplicas
+    ) {
+      return new HealthStatus('Running', StatusIcon.Running);
+    }
+    return new HealthStatus('Updating', StatusIcon.Pending);
   }
 
   can(permission: Permission): boolean {
@@ -310,5 +316,18 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(templates => {
         this.clusterTemplates = templates;
       });
+  }
+
+  private _loadMachineDeployments(cluster: Cluster): void {
+    if (Health.allHealthy(this.health[cluster.id]) && !cluster.deletionTimestamp) {
+      this._machineDeploymentService
+        .list(cluster.id, this._selectedProject.id)
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe({
+          next: machineDeployments => {
+            this.machinesCount[cluster.id] = getClusterMachinesCount(machineDeployments);
+          },
+        });
+    }
   }
 }

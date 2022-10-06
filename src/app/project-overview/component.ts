@@ -13,8 +13,11 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
+import {MachineDeploymentService} from '@core/services/machine-deployment';
+import {MachineDeploymentStatus} from '@shared/entity/machine-deployment';
 import {Project} from '@shared/entity/project';
 import {ProjectService} from '@core/services/project';
+import {getClusterMachinesCount} from '@shared/utils/cluster';
 import {catchError, filter, map, switchMap, take, takeUntil, tap, startWith} from 'rxjs/operators';
 import {combineLatest, EMPTY, iif, merge, of, onErrorResumeNext, Subject, timer} from 'rxjs';
 import {Member} from '@shared/entity/member';
@@ -55,6 +58,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   project: Project;
   clusters: Cluster[] = [];
   clusterHealth: Health[] = [];
+  clusterMachinesCount: Record<string, MachineDeploymentStatus> = {};
   externalClusters: ExternalCluster[] = [];
   externalClustersEnabled = false;
   clusterTemplates: ClusterTemplate[] = [];
@@ -70,6 +74,8 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   firstVisitToOverviewPage: string;
   projectQuota: Quota;
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
+  isLoadingClusters = true;
+  isLoadingExternalClusters = true;
   private _quotaWidgetComponent: QuotaWidgetComponent | null;
   private _quotaService: QuotaService;
   private _projectChange = new Subject<void>();
@@ -90,6 +96,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     private readonly _serviceAccountService: ServiceAccountService,
     private readonly _settingsService: SettingsService,
     private readonly _appConfigService: AppConfigService,
+    private readonly _machineDeploymentService: MachineDeploymentService,
     private readonly _params: ParamsService,
     private readonly _cookieService: CookieService
   ) {
@@ -140,6 +147,11 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
       .subscribe(userGroup => {
         this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup);
       });
+
+    this._projectService.onProjectChange.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
+      this.isLoadingClusters = true;
+      this.isLoadingExternalClusters = true;
+    });
   }
 
   private _loadData() {
@@ -179,8 +191,9 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
       this.clustersChange
     )
       .pipe(
-        switchMap(() => (this.project ? this._clusterService.clusters(this.project.id, true) : EMPTY)),
+        switchMap(() => (this.project ? this._clusterService.clusters(this.project.id) : EMPTY)),
         tap(clusters => (this.clusters = clusters)),
+        tap(_ => (this.isLoadingClusters = false)),
         switchMap(clusters =>
           iif(
             () => clusters.length > 0,
@@ -190,6 +203,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
                   .health(this.project.id, cluster.id)
                   .pipe(catchError(() => onErrorResumeNext(EMPTY)))
                   .pipe(tap(health => (this.clusterHealth[cluster.id] = health)))
+                  .pipe(tap(_ => this._loadClusterMachineDeployments(cluster)))
               ),
             ]).pipe(take(1)),
             of([])
@@ -198,6 +212,22 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
         takeUntil(this._unsubscribe)
       )
       .subscribe();
+  }
+
+  private _loadClusterMachineDeployments(cluster: Cluster): void {
+    if (Health.allHealthy(this.clusterHealth[cluster.id]) && !cluster.deletionTimestamp) {
+      this._machineDeploymentService
+        .list(cluster.id, this.project.id)
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe({
+          next: machineDeployments => {
+            this.clusterMachinesCount = {
+              ...this.clusterMachinesCount,
+              [cluster.id]: getClusterMachinesCount(machineDeployments),
+            };
+          },
+        });
+    }
   }
 
   private _loadExternalClusters(): void {
@@ -210,6 +240,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
         switchMap(() =>
           this.project && this.externalClustersEnabled ? this._clusterService.externalClusters(this.project.id) : EMPTY
         ),
+        tap(_ => (this.isLoadingExternalClusters = false)),
         takeUntil(this._unsubscribe)
       )
       .subscribe(externalClusters => (this.externalClusters = externalClusters));
