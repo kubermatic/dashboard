@@ -24,17 +24,17 @@ import {fakeDigitaloceanCluster} from '@test/data/cluster';
 import {fakeProject} from '@test/data/project';
 import {ClusterMockService} from '@test/services/cluster-mock';
 import {ActivatedRouteStub} from '@test/services/router-stubs';
-import {XTermTerminalComponent} from './component';
+import {TerminalComponent} from './component';
 
 describe('XTermTerminal', () => {
-  let component: XTermTerminalComponent;
-  let fixture: ComponentFixture<XTermTerminalComponent>;
+  let component: TerminalComponent;
+  let fixture: ComponentFixture<TerminalComponent>;
   let activatedRoute: ActivatedRouteStub;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [BrowserModule, RouterTestingModule, BrowserAnimationsModule, MatSnackBarModule],
-      declarations: [XTermTerminalComponent],
+      declarations: [TerminalComponent],
       providers: [
         {provide: ActivatedRoute, useClass: ActivatedRouteStub},
         {provide: ClusterService, useClass: ClusterMockService},
@@ -45,7 +45,7 @@ describe('XTermTerminal', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(XTermTerminalComponent);
+    fixture = TestBed.createComponent(TerminalComponent);
     component = fixture.componentInstance;
 
     // Fake Data for Cluster

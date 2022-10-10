@@ -68,7 +68,7 @@ enum ErrorOperations {
   styleUrls: ['./style.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class XTermTerminalComponent implements OnChanges, OnInit, OnDestroy, AfterViewInit {
+export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterViewInit {
   readonly DELAY_TIMEOUT = 100;
   readonly MAX_SESSION_SUPPORTED = 5;
   message = '';

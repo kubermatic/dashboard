@@ -129,9 +129,9 @@ import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {ValidateJsonOrYamlComponent} from '@shared/components/validate-json-or-yaml/component';
 import {ChipAutocompleteComponent} from '@shared/components/chip-autocomplete/component';
 import {SelectComponent} from './components/select/component';
-import {XTermTerminalComponent} from '@shared/components/xterm-terminal/component';
-import {TerminalToolBarComponent} from '@shared/components/xterm-terminal/terminal-toolbar/component';
-import {TerminalStatusBarComponent} from '@shared/components/xterm-terminal/terminal-status-bar/component';
+import {TerminalComponent} from '@shared/components/terminal/component';
+import {TerminalToolBarComponent} from '@shared/components/terminal/terminal-toolbar/component';
+import {TerminalStatusBarComponent} from '@shared/components/terminal/terminal-status-bar/component';
 
 const modules = [
   CommonModule,
@@ -252,7 +252,7 @@ const components = [
   ApplicationMethodIconComponent,
   KubeVirtPreAllocatedDataVolumesComponent,
   SelectComponent,
-  XTermTerminalComponent,
+  TerminalComponent,
   TerminalToolBarComponent,
   TerminalStatusBarComponent,
 ];
