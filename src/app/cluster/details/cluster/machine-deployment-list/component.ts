@@ -12,7 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+  TemplateRef,
+} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
@@ -30,6 +40,7 @@ import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {switchMap, take, takeUntil} from 'rxjs/operators';
 import {getMachineDeploymentHealthStatus, HealthStatus} from '@shared/utils/health-status';
+import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 
 @Component({
   selector: 'km-machine-deployment-list',
@@ -42,6 +53,7 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
   @Input() projectID: string;
   @Input() isClusterRunning: boolean;
   @Input() isInitialized = false;
+  @Input() quotaWidget: TemplateRef<QuotaWidgetComponent>;
   @Output() changeMachineDeployment = new EventEmitter<MachineDeployment>();
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   dataSource = new MatTableDataSource<MachineDeployment>();
@@ -117,7 +129,7 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
 
   showEditDialog(md: MachineDeployment): void {
     this._nodeService
-      .showMachineDeploymentEditDialog(md, this.cluster, this.projectID)
+      .showMachineDeploymentEditDialog(md, this.cluster, this.projectID, this.quotaWidget)
       .pipe(take(1))
       .subscribe(
         _ => {

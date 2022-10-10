@@ -49,7 +49,7 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   private readonly _getPercentage = getPercentage;
   private _user: Member;
 
-  @Input() projectId: string;
+  @Input() projectId = '';
   @Input() showQuotaWidgetDetails = false;
   @Input() showAsCard = true;
   @Input() showIcon = true;

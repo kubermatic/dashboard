@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, EventEmitter, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, ViewChild, TemplateRef} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EditProviderSettingsComponent} from '@app/cluster/details/cluster/edit-provider-settings/component';
@@ -72,6 +72,7 @@ import {EditClusterComponent} from './edit-cluster/component';
 import {EditSSHKeysComponent} from './edit-sshkeys/component';
 import {RevokeTokenComponent} from './revoke-token/component';
 import {ShareKubeconfigComponent} from './share-kubeconfig/component';
+import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 
 @Component({
   selector: 'km-cluster-details',
@@ -83,6 +84,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
   private _seedSettings: SeedSettings;
+
+  @ViewChild('quotaWidget') quotaWidget: TemplateRef<QuotaWidgetComponent>;
 
   readonly HealthType = HealthType;
   readonly IPFamily = IPFamily;
@@ -311,7 +314,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   addNode(): void {
     this._node
-      .showMachineDeploymentCreateDialog(this.cluster, this.projectID)
+      .showMachineDeploymentCreateDialog(this.cluster, this.projectID, this.quotaWidget)
       .pipe(take(1))
       .subscribe(
         _ => this._clusterService.onClusterUpdate.next(),
@@ -581,6 +584,12 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   isHavingCNI(): boolean {
     return !!this.cluster?.spec?.cniPlugin && this.cluster?.spec?.cniPlugin?.type !== CNIPlugin.None;
+  }
+
+  onActivate(component: QuotaWidgetComponent): void {
+    component.projectId = this.projectID;
+    component.showQuotaWidgetDetails = true;
+    component.showIcon = true;
   }
 
   private _canReloadVersions(): boolean {

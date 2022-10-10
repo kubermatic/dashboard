@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {EventEmitter, Injectable, Injector} from '@angular/core';
+import {EventEmitter, Injectable, Injector, TemplateRef} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {DialogDataInput, DialogDataOutput, NodeDataDialogComponent} from '@app/node-data/dialog/component';
 import {NotificationService} from '@core/services/notification';
@@ -24,6 +24,7 @@ import {Observable, of} from 'rxjs';
 import {catchError, filter, mergeMap, switchMap, take} from 'rxjs/operators';
 import {MachineDeploymentService} from '@core/services/machine-deployment';
 import {OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deployment';
+import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 
 @Injectable()
 export class NodeService {
@@ -84,10 +85,14 @@ export class NodeService {
     );
   }
 
-  showMachineDeploymentCreateDialog(cluster: Cluster, projectID: string): Observable<MachineDeployment> {
+  showMachineDeploymentCreateDialog(
+    cluster: Cluster,
+    projectID: string,
+    quotaWidget: TemplateRef<QuotaWidgetComponent>
+  ): Observable<MachineDeployment> {
     return this._matDialog
       .open<NodeDataDialogComponent, DialogDataInput, DialogDataOutput>(NodeDataDialogComponent, {
-        data: {initialClusterData: cluster} as DialogDataInput,
+        data: {initialClusterData: cluster, quotaWidget} as DialogDataInput,
       })
       .afterClosed()
       .pipe(
@@ -99,7 +104,8 @@ export class NodeService {
   showMachineDeploymentEditDialog(
     md: MachineDeployment,
     cluster: Cluster,
-    projectID: string
+    projectID: string,
+    quotaWidget: TemplateRef<QuotaWidgetComponent>
   ): Observable<MachineDeployment> {
     const dialogRef = this._matDialog.open(NodeDataDialogComponent, {
       data: {
@@ -111,6 +117,7 @@ export class NodeService {
           spec: md.spec.template,
           dynamicConfig: md.spec.dynamicConfig,
         } as NodeData,
+        quotaWidget,
       },
     });
 
