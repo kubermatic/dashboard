@@ -1,23 +1,36 @@
-import {Component, EventEmitter, OnInit, Output,} from '@angular/core';
+// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 @Component({
   selector: 'km-terminal-toolbar',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class TerminalToolBarComponent implements OnInit {
-  @Output() closeTerminal = new EventEmitter<boolean>();
-  @Output() openInNewTab = new EventEmitter<boolean>();
+export class TerminalToolBarComponent {
+  @Input() showCloseButton: boolean;
+  @Input() showOpenInSeparateViewButton: boolean;
 
-  constructor() {}
+  @Output() close = new EventEmitter<void>();
+  @Output() openInNewTab = new EventEmitter<void>();
 
-  ngOnInit(): void {}
-
-  onCloseTerminal() {
-    this.closeTerminal.emit(true);
+  onClose(): void {
+    this.close.emit();
   }
 
-  onOpenInNewTab() {
-    this.openInNewTab.next(true);
+  onOpenInNewTab(): void {
+    this.openInNewTab.next();
   }
 }

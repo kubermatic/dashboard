@@ -12,23 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'variables';
-@use 'mixins';
+@use 'sass:map';
 
-.toolbar-container {
-  @include mixins.size(100%, 4rem);
-
-  box-sizing: border-box;
-  padding: 0 1.75rem;
-
-  & .toolbar-text-cloud-shell-terminal {
-    font-family: variables.$font-primary;
-    font-size: 1rem;
-    line-height: 1.5rem;
-    margin: 5px 0;
-  }
-
-  .km-icon-terminal {
-    @include mixins.size(20px, $force: true);
+@mixin theme-terminal-overlay-component($colors) {
+  .overlay-terminal {
+    box-shadow: 0 -4px 4px -1px  map.get($colors, terminal-box-shadow);
   }
 }

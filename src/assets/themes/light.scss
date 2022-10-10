@@ -52,6 +52,16 @@ $colors-light: (
   shadow: 0 4px 4px rgb(0 0 0 / 8%),
   shadow-dark: (0 2px 4px -1px rgb(0 0 0 / 20%), 0 4px 5px 0 rgb(0 0 0 / 14%), 0 1px 10px 0 rgb(0 0 0 / 12%)),
   swagger-ui-input-text-color: #4d555c,
+  terminal-toolbar-hover: #4d555b,
+  terminal-toolbar-color: #edeff0,
+  terminal-toolbar-background: #2b3035,
+  terminal-box-shadow: #a5aeb8,
+  terminal-status-bar-color: #edeff0,
+  terminal-status-bar-background: #4d555c,
+  terminal-status-bar-border-color: #797979,
+  terminal-status-bar-reconnect-button: #2f70aa,
+  terminal-status-bar-close-button-hover: #484e54,
+  terminal-status-bar-button-border-color: #e0e3e5,
 );
 $colors-light-palette: mat.$blue-palette;
 $colors-light-palette: map.merge($colors-light-palette, (500: #00517d));

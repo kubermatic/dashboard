@@ -80,6 +80,7 @@ import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/comp
 })
 export class ClusterDetailsComponent implements OnInit, OnDestroy {
   private _unsubscribe: Subject<void> = new Subject<void>();
+  private _terminalUnsubscribe: Subject<void> = new Subject<void>();
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
   private _seedSettings: SeedSettings;
@@ -114,7 +115,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   gatekeeperConfig: GatekeeperConfig;
   alertmanagerConfig: AlertmanagerConfig;
   ruleGroups: RuleGroup[];
-  showTerminal: boolean;
+  showTerminal = false;
   onExpandChange$ = new EventEmitter<boolean>();
   isDualStackNetworkSelected: boolean;
 
@@ -140,10 +141,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     private readonly _opaService: OPAService,
     private readonly _mlaService: MLAService,
     private readonly _applicationService: ApplicationService,
-    readonly settings: SettingsService
-  ) {
-    this.showTerminal = false;
-  }
+    readonly settingsService: SettingsService
+  ) {}
 
   ngOnInit(): void {
     this.config = this._appConfigService.getConfig();
@@ -341,7 +340,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   getDownloadURL(): Observable<string> {
-    return this.settings.adminSettings.pipe(
+    return this.settingsService.adminSettings.pipe(
       switchMap(settings =>
         iif(
           () => settings.enableOIDCKubeconfig,
@@ -556,6 +555,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+    this._terminalUnsubscribe.complete();
   }
 
   isAdmissionPluginEnabled(plugin: string): boolean {
@@ -576,23 +576,11 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     component.showIcon = true;
   }
 
-  toggleTerminal() {
+  toggleTerminal(): void {
     if (!this.isClusterRunning) {
       return;
     }
     this.showTerminal = !this.showTerminal;
-  }
-
-  onCloseTerminal(isClosed: boolean) {
-    if (isClosed) {
-      this.toggleTerminal();
-    }
-  }
-
-  onOpenInNewTab(isOpenInNewTab: boolean) {
-    if (isOpenInNewTab) {
-      this._router.navigate(['terminal'], { relativeTo: this._route });
-    }
   }
 
   private _canReloadVersions(): boolean {

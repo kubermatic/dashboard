@@ -12,23 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'variables';
-@use 'mixins';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
-.toolbar-container {
-  @include mixins.size(100%, 4rem);
+@Component({
+  selector: 'km-terminal-status-bar',
+  templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
+})
+export class TerminalStatusBarComponent {
+  @Input() showCloseButton: boolean;
 
-  box-sizing: border-box;
-  padding: 0 1.75rem;
+  @Output() close = new EventEmitter<void>();
+  @Output() reconnect = new EventEmitter<void>();
 
-  & .toolbar-text-cloud-shell-terminal {
-    font-family: variables.$font-primary;
-    font-size: 1rem;
-    line-height: 1.5rem;
-    margin: 5px 0;
+  onClose(): void {
+    this.close.emit();
   }
 
-  .km-icon-terminal {
-    @include mixins.size(20px, $force: true);
+  onReconnect(): void {
+    this.reconnect.emit();
   }
 }

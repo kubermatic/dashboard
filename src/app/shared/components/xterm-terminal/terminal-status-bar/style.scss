@@ -12,23 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'variables';
 @use 'mixins';
 
-.toolbar-container {
-  @include mixins.size(100%, 4rem);
+.toolbar-status-container {
+  @include mixins.size(100%, 3rem);
 
+  align-items: center;
   box-sizing: border-box;
+  display: flex;
   padding: 0 1.75rem;
 
-  & .toolbar-text-cloud-shell-terminal {
-    font-family: variables.$font-primary;
-    font-size: 1rem;
-    line-height: 1.5rem;
-    margin: 5px 0;
+  & button[mat-flat-button],
+  & button[mat-icon-button], {
+    @include mixins.size(auto, 1.8rem);
+
+    margin: 0;
   }
 
-  .km-icon-terminal {
+  & .close-terminal-button {
+    padding: 4px;
+  }
+
+  .km-icon-warning {
+    @include mixins.size(20px, $force: true);
+
+    margin-top: 12px;
+  }
+
+  .km-icon-reconnect {
     @include mixins.size(20px, $force: true);
   }
 }

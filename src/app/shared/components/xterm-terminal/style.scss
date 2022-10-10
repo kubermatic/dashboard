@@ -1,7 +1,48 @@
-// Note:
-// Padding to Visible Commands on terminal viewport
-::ng-deep #terminal {
-  & .xterm-screen {
-    padding: 5px 8px !important;
+// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// Note: "ViewEncapsulation.None"
+// By wrapping styles with "selector" will prevent styles to go up the chain to parent and sibling components.
+// It will only effect styles specified here will go down to children components only.
+
+km-terminal {
+  .xterm {
+    padding: 10px 30px;
+  }
+
+  // Note: css added by fitAddOn plugin slightly pushes terminal viewport inside
+  // due to viewport scrollbar therefore width is increased to 100%.
+  & .xterm .xterm-viewport {
+    overflow-y: auto;
+    width: 100% !important;
+  }
+
+  // Note: Make the area behind the scrolling bar the color of the terminal
+  // so that it looks as if the scroll bar is inside the terminal.
+  ::-webkit-scrollbar-corner,
+  ::-webkit-scrollbar-track {
+    background: none;
+  }
+
+  ::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+  }
+
+  .terminal-placeholder {
+    background-color: white;
+    height: 50vh;
+    position: relative;
   }
 }

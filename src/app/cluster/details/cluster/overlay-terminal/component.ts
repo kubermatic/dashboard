@@ -1,6 +1,19 @@
-import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
-import {Terminal} from 'xterm';
-import {Cluster} from '@shared/entity/cluster';
+// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+import {Component, EventEmitter, Output} from '@angular/core';
+import {LayoutType} from '@shared/model/Terminal';
 
 @Component({
   selector: 'km-overlay-terminal',
@@ -8,22 +21,11 @@ import {Cluster} from '@shared/entity/cluster';
   styleUrls: ['./style.scss'],
 })
 export class OverlayTerminalComponent {
-  terminal: Terminal;
-  projectId: string;
-  clusterId: string;
+  readonly layoutType = LayoutType;
 
-  @Input() cluster: Cluster;
-  @Output() openInNewTab = new EventEmitter<boolean>();
-  @Output() closeTerminal = new EventEmitter<boolean>();
-  @ViewChild('terminal', { static: true }) terminalRef: ElementRef;
+  @Output() close = new EventEmitter<void>();
 
-  constructor() {}
-
-  onCloseTerminal($event: boolean) {
-    this.closeTerminal.emit($event);
-  }
-
-  onOpenInNewTab($event: boolean) {
-    this.openInNewTab.emit($event);
+  onClose(): void {
+    this.close.emit();
   }
 }

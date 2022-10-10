@@ -14,35 +14,37 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div class="toolbar-container">
+<div class="toolbar-status-container">
   <div fxFlex
        fxLayout="row"
-       fxLayoutAlign="start center"
-       fxLayoutGap="10px">
+       fxLayoutAlign="start center">
     <div>
-      <i class="km-icon-mask-white km-icon-terminal"></i>
+      <i class="km-icon-warning"></i>
     </div>
     <div>
-      <p class="toolbar-text-cloud-shell-terminal">Cloud Shell Terminal</p>
+      <p>The connection to your Cloud Shell was lost.</p>
     </div>
   </div>
 
   <div fxFlex
        fxLayout="row"
-       fxLayoutAlign="end center">
-    <button *ngIf="showOpenInSeparateViewButton"
-            mat-icon-button
-            class="button-border-box"
-            matTooltip="Open in new tab"
-            (click)="onOpenInNewTab()">
-      <i class="km-icon-mask-white km-icon-external-link"></i>
-    </button>
+       fxLayoutAlign="end center"
+       fxLayoutGap="10px">
     <button *ngIf="showCloseButton"
             mat-icon-button
-            class="button-border-box"
+            class="close-terminal-button button-border-box"
+            fxLayoutAlign="center center"
             matTooltip="Close terminal"
             (click)="onClose()">
-      <i class="km-icon-mask-white km-icon-close km-pointer"></i>
+      <i class="km-icon-mask-white km-icon-close"></i>
+    </button>
+    <button mat-flat-button
+            class="button-border-box"
+            fxLayoutAlign="center center"
+            matTooltip="Gain lost connection to terminal"
+            (click)="onReconnect()">
+      <i class="km-icon-mask km-icon-reconnect"></i>
+      <span>Reconnect</span>
     </button>
   </div>
 </div>
