@@ -138,13 +138,11 @@ END OF TERMS AND CONDITIONS
          fxLayout="row"
          fxLayoutAlign="space-between center">
       <i class="km-icon-mask km-icon-quota"></i>
-
-      <span>Project Quota</span>
     </div>
 
     <div class="km-quota-percentages"
          fxLayout="row"
-         fxLayoutGap="30px"
+         fxLayoutGap="20px"
          fxLayoutAlign="space-between">
       <ng-container *ngIf="quotaDetails.quota.cpu"
                     [ngTemplateOutlet]="extendedProgress"

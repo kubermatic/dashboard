@@ -428,6 +428,7 @@ limitations under the License.
                               [machineDeployments]="machineDeployments"
                               [projectID]="projectID"
                               [isClusterRunning]="isClusterRunning"
+                              [quotaWidget]="quotaWidget"
                               [isInitialized]="areMachineDeploymentsInitialized"></km-machine-deployment-list>
 
   <div *ngIf="nodes.length > 0">
@@ -498,3 +499,8 @@ limitations under the License.
                color="accent"
                class="km-spinner"></mat-spinner>
 </div>
+
+<ng-template #quotaWidget>
+  <router-outlet name="quota-widget"
+                 (activate)="onActivate($event)"></router-outlet>
+</ng-template>

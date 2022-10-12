@@ -12,7 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+  TemplateRef,
+} from '@angular/core';
 import {slideOut} from '@shared/animations/slide';
 import {Router} from '@angular/router';
 import {ClusterTemplate} from '@shared/entity/cluster-template';
@@ -34,6 +45,7 @@ import {
   AddAutomaticBackupDialogConfig,
 } from '@app/backup/list/automatic-backup/add-dialog/component';
 import {AddSnapshotDialogComponent, AddSnapshotDialogConfig} from '@app/backup/list/snapshot/add-dialog/component';
+import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 
 @Component({
   selector: 'km-create-resource-panel',
@@ -42,6 +54,8 @@ import {AddSnapshotDialogComponent, AddSnapshotDialogConfig} from '@app/backup/l
   animations: [slideOut],
 })
 export class CreateResourcePanelComponent implements OnInit, OnDestroy {
+  @ViewChild('quotaWidget') quotaWidget: TemplateRef<QuotaWidgetComponent>;
+
   @Input() project: Project;
   @Input() clusterTemplates: ClusterTemplate[];
   @Output() refreshClusters = new EventEmitter<void>();
@@ -115,9 +129,12 @@ export class CreateResourcePanelComponent implements OnInit, OnDestroy {
 
   createClusterFromTemplate(): void {
     this.close();
-    const dialog = this._matDialog.open(AddClusterFromTemplateDialogComponent, {
-      data: {projectId: this.project.id} as AddClusterFromTemplateDialogData,
-    });
+    const dialog = this._matDialog.open<AddClusterFromTemplateDialogComponent, AddClusterFromTemplateDialogData>(
+      AddClusterFromTemplateDialogComponent,
+      {
+        data: {projectId: this.project.id, quotaWidget: this.quotaWidget},
+      }
+    );
     dialog
       .afterClosed()
       .pipe(filter(confirmed => confirmed))
@@ -155,5 +172,11 @@ export class CreateResourcePanelComponent implements OnInit, OnDestroy {
   createSnapshot(): void {
     this.close();
     this._matDialog.open(AddSnapshotDialogComponent, {data: {projectID: this.project.id} as AddSnapshotDialogConfig});
+  }
+
+  onActivate(component: QuotaWidgetComponent): void {
+    component.projectId = this.project.id;
+    component.showQuotaWidgetDetails = true;
+    component.showIcon = true;
   }
 }

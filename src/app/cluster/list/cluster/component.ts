@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit, ViewChild, TemplateRef} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -72,6 +72,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   dataSource = new MatTableDataSource<Cluster>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild('quotaWidget') quotaWidget: TemplateRef<QuotaWidgetComponent>;
 
   constructor(
     private readonly _clusterService: ClusterService,
@@ -190,6 +191,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
     const config: MatDialogConfig = {
       data: {
         projectId: this._selectedProject.id,
+        quotaWidget: this.quotaWidget,
       } as AddClusterFromTemplateDialogData,
     };
 
@@ -264,6 +266,15 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(({id}) => {
         component.projectId = id;
       });
+  }
+
+  onActivateQuotaDetails(component: QuotaWidgetComponent): void {
+    component.showQuotaWidgetDetails = true;
+    component.showIcon = true;
+    const id = this._activeRoute.snapshot.paramMap.get(PathParam.ProjectID);
+    this._projectService.onProjectChange.pipe(startWith({id}), takeUntil(this._unsubscribe)).subscribe(({id}) => {
+      component.projectId = id;
+    });
   }
 
   private _filter(cluster: Cluster, query: string): boolean {

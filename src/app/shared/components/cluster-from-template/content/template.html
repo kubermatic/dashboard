@@ -27,8 +27,10 @@ limitations under the License.
                        focus
                        required>
     </km-number-stepper>
+    <ng-container *ngTemplateOutlet="quotaWidget"></ng-container>
   </form>
-  <km-cluster-summary [cluster]="template.cluster"
+  <km-cluster-summary class="cluster-summary"
+                      [cluster]="template.cluster"
                       [machineDeployment]="template.nodeDeployment"
                       [sshKeys]="sshKeys"
                       [datacenter]="datacenter"

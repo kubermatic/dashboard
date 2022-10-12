@@ -16,12 +16,19 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AuthGuard, AuthzGuard} from '@core/services/auth/guard';
 import {ClusterTemplateComponent} from './component';
+import {DynamicModule} from '@dynamic/module-registry';
 
 const routes: Routes = [
   {
     path: '',
     component: ClusterTemplateComponent,
     canActivate: [AuthGuard, AuthzGuard],
+    children: [
+      {
+        path: '',
+        loadChildren: () => DynamicModule.Quotas,
+      },
+    ],
   },
 ];
 

@@ -226,3 +226,8 @@ limitations under the License.
 
   </mat-card-content>
 </mat-card>
+
+<ng-template #quotaWidget>
+  <router-outlet name="quota-widget"
+                 (activate)="onActivateQuotaDetails($event)"></router-outlet>
+</ng-template>
