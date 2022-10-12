@@ -27,7 +27,7 @@ import (
 
 	providerconfig "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
-	"k8c.io/kubermatic/v2/pkg/provider"
+	"k8c.io/dashboard/v2/pkg/provider"
 	ostesting "k8c.io/dashboard/v2/pkg/provider/cloud/openstack/internal/testing"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	"k8c.io/kubermatic/v2/pkg/resources/test"

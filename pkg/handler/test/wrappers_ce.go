@@ -19,7 +19,7 @@ limitations under the License.
 package test
 
 import (
-	"k8c.io/kubermatic/v2/pkg/provider"
+	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
 
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"

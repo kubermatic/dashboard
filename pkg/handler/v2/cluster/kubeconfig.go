@@ -23,7 +23,7 @@ import (
 	"github.com/go-kit/kit/endpoint"
 
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
-	"k8c.io/kubermatic/v2/pkg/provider"
+	"k8c.io/dashboard/v2/pkg/provider"
 )
 
 func GetAdminKubeconfigEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {

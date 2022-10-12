@@ -27,7 +27,7 @@ import (
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
-	"k8c.io/kubermatic/v2/pkg/provider"
+	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	"k8c.io/kubermatic/v2/pkg/resources/reconciling"
 	ksemver "k8c.io/kubermatic/v2/pkg/semver"

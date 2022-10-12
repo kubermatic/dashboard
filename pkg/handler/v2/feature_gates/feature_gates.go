@@ -21,7 +21,7 @@ import (
 
 	"github.com/go-kit/kit/endpoint"
 
-	"k8c.io/kubermatic/v2/pkg/provider"
+	"k8c.io/dashboard/v2/pkg/provider"
 )
 
 func GetEndpoint(featureGatesProvider provider.FeatureGatesProvider) endpoint.Endpoint {

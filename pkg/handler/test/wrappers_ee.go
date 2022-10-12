@@ -19,9 +19,9 @@ limitations under the License.
 package test
 
 import (
-	eeapi "k8c.io/kubermatic/v2/pkg/ee/cmd/kubermatic-api"
-	"k8c.io/kubermatic/v2/pkg/provider"
+	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
+	eeapi "k8c.io/kubermatic/v2/pkg/ee/cmd/kubermatic-api"
 
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )

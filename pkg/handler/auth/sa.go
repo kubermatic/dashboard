@@ -21,7 +21,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"k8c.io/kubermatic/v2/pkg/provider"
+	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/kubermatic/v2/pkg/serviceaccount"
 
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
