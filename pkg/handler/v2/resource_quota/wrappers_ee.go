@@ -23,8 +23,8 @@ import (
 	"net/http"
 
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
+	resourcequota "k8c.io/dashboard/v2/pkg/ee/resource-quota"
 	"k8c.io/dashboard/v2/pkg/provider"
-	resourcequota "k8c.io/kubermatic/v2/pkg/ee/resource-quota"
 )
 
 func getResourceQuotaForProject(ctx context.Context, request interface{}, projectProvider provider.ProjectProvider,
