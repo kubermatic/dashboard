@@ -26,14 +26,12 @@ import (
 	"syscall"
 	"time"
 
+	"k8c.io/dashboard/v2/pkg/version/kubermatic"
+
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
-
-// Those values will be overridden during the build
-var Version = "Development"
-var Edition = "N/A"
 
 func main() {
 	addr := flag.String("address", "0.0.0.0:8080", "Address to listen on")
@@ -48,7 +46,7 @@ func main() {
 	rawLog, _ := config.Build()
 	log := rawLog.Sugar()
 
-	log.Infof("Kubermatic Dashboard %s - %s", getEditionDisplayName(), Version)
+	log.Infof("Kubermatic Dashboard %s - %s", getEditionDisplayName(), kubermatic.Version)
 
 	mux := http.NewServeMux()
 	mux.Handle("/metrics", promhttp.HandlerFor(registry, promhttp.HandlerOpts{}))
@@ -133,7 +131,7 @@ func isCacheDisabled(path string) bool {
 }
 
 func getEditionDisplayName() string {
-	if Edition == "ce" {
+	if kubermatic.Edition == "ce" {
 		return "Community Edition"
 	}
 

@@ -7,29 +7,6 @@ CC=npm
 GOOS ?= $(shell go env GOOS)
 export GOOS
 
-export CGO_ENABLED ?= 0
-export GOFLAGS ?= -mod=readonly -trimpath
-export GO111MODULE = on
-DOCKER_REPO ?= quay.io/kubermatic
-REPO = $(DOCKER_REPO)/kubermatic$(shell [ "$(KUBERMATIC_EDITION)" != "ce" ] && echo "-$(KUBERMATIC_EDITION)" )
-CMD ?= $(filter-out OWNERS nodeport-proxy kubeletdnat-controller, $(notdir $(wildcard ./cmd/*)))
-GOBUILDFLAGS ?= -v
-GIT_VERSION = $(shell git describe --tags --always)
-TAGS ?= $(GIT_VERSION)
-DOCKERTAGS = $(TAGS) latestbuild
-DOCKER_BUILD_FLAG += $(foreach tag, $(DOCKERTAGS), -t $(REPO):$(tag))
-KUBERMATICCOMMIT ?= $(shell git log -1 --format=%H)
-KUBERMATICDOCKERTAG ?= $(KUBERMATICCOMMIT)
-UIDOCKERTAG ?= NA
-LDFLAGS += -extldflags '-static' \
-  -X k8c.io/kubermatic/v2/pkg/version/kubermatic.gitVersion=$(GIT_VERSION) \
-  -X k8c.io/kubermatic/v2/pkg/version/kubermatic.kubermaticDockerTag=$(KUBERMATICDOCKERTAG) \
-  -X k8c.io/kubermatic/v2/pkg/version/kubermatic.uiDockerTag=$(UIDOCKERTAG)
-LDFLAGS_EXTRA=-w
-BUILD_DEST ?= _build
-GOTOOLFLAGS ?= $(GOBUILDFLAGS) -ldflags '$(LDFLAGS_EXTRA) $(LDFLAGS)' $(GOTOOLFLAGS_EXTRA)
-DOCKER_BIN := $(shell which docker)
-
 # This determines the version that is printed at the footer in the
 # dashboard. It does not influence the tags used for the Docker images
 # for each revision.
@@ -54,6 +31,28 @@ ifeq (${HUMAN_VERSION},)
 	HUMAN_VERSION=$(or $(shell git describe --tags --match "v[0-9]*"),v2.21.0-dev-g$(shell git rev-parse --short HEAD))
 	endif
 endif
+
+export CGO_ENABLED ?= 0
+export GOFLAGS ?= -mod=readonly -trimpath
+export GO111MODULE = on
+DOCKER_REPO ?= quay.io/kubermatic
+REPO = $(DOCKER_REPO)/kubermatic$(shell [ "$(KUBERMATIC_EDITION)" != "ce" ] && echo "-$(KUBERMATIC_EDITION)" )
+CMD ?= $(filter-out OWNERS nodeport-proxy kubeletdnat-controller, $(notdir $(wildcard ./cmd/*)))
+GOBUILDFLAGS ?= -v
+GIT_VERSION = $(shell git describe --tags --always)
+TAGS ?= $(GIT_VERSION)
+DOCKERTAGS = $(TAGS) latestbuild
+DOCKER_BUILD_FLAG += $(foreach tag, $(DOCKERTAGS), -t $(REPO):$(tag))
+KUBERMATICCOMMIT ?= $(shell git log -1 --format=%H)
+KUBERMATICDOCKERTAG ?= $(KUBERMATICCOMMIT)
+UIDOCKERTAG ?= NA
+LDFLAGS += -extldflags '-static' \
+  -X k8c.io/dashboard/v2/pkg/version/kubermatic.Edition=$(KUBERMATIC_EDITION) \
+  -X k8c.io/dashboard/v2/pkg/version/kubermatic.Version=$(HUMAN_VERSION)
+LDFLAGS_EXTRA=-w
+BUILD_DEST ?= _build
+GOTOOLFLAGS ?= $(GOBUILDFLAGS) -ldflags '$(LDFLAGS_EXTRA) $(LDFLAGS)' $(GOTOOLFLAGS_EXTRA)
+DOCKER_BIN := $(shell which docker)
 
 .PHONY: all
 all: install run
@@ -101,9 +100,6 @@ run-e2e-ci: install
 
 dist: install
 	@KUBERMATIC_EDITION=${KUBERMATIC_EDITION} $(CC) run build
-
-#build:
-#	CGO_ENABLED=0 go build -a -ldflags '-w -extldflags -static -X 'main.Edition=${KUBERMATIC_EDITION}' -X 'main.Version=${HUMAN_VERSION}'' -o dashboard .
 
 docker-build: build dist
 	docker build -t $(REPO):$(IMAGE_TAG) .
