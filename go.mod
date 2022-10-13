@@ -26,12 +26,12 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/iam v1.18.17
 	github.com/aws/aws-sdk-go-v2/service/sts v1.16.15
 	github.com/aws/smithy-go v1.13.2
-	github.com/cert-manager/cert-manager v1.9.1 // indirect
+	github.com/cert-manager/cert-manager v1.9.1
 	github.com/coreos/go-oidc v2.2.1+incompatible
-	github.com/coreos/locksmith v0.6.2 // indirect
+	github.com/coreos/locksmith v0.6.2
 	github.com/cristim/ec2-instances-info v0.0.0-20220804141719-da3da500d587
 	github.com/digitalocean/godo v1.83.0
-	github.com/distribution/distribution/v3 v3.0.0-20220907155224-78b9c98c5c31 // indirect
+	github.com/distribution/distribution/v3 v3.0.0-20220907155224-78b9c98c5c31
 	github.com/embik/nutanix-client-go v0.1.0
 	github.com/evanphx/json-patch v5.6.0+incompatible
 	github.com/go-kit/kit v0.12.0
@@ -48,10 +48,9 @@ require (
 	github.com/gorilla/securecookie v1.1.1
 	github.com/gorilla/websocket v1.5.0
 	github.com/hetznercloud/hcloud-go v1.35.2
-	github.com/imdario/mergo v0.3.13 // indirect
+	github.com/imdario/mergo v0.3.13
 	github.com/kubermatic/machine-controller v1.55.0
 	github.com/minio/minio-go/v7 v7.0.36
-	github.com/onsi/gomega v1.20.2 // indirect
 	github.com/open-policy-agent/frameworks/constraint v0.0.0-20220504225309-3462b1a344f3 // v0.5.1
 	github.com/open-policy-agent/gatekeeper v0.0.0-20220504234711-ecf609290e2e // v3.8.1
 	github.com/packethost/packngo v0.26.0
@@ -96,7 +95,10 @@ require (
 	sigs.k8s.io/yaml v1.3.0
 )
 
-require github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/resources/armsubscriptions v1.0.0
+require (
+	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/resources/armsubscriptions v1.0.0
+	k8c.io/kubermatic/v2 v2.21.1-0.20221012091925-abed55b1eab3
+)
 
 require (
 	cloud.google.com/go/compute v1.7.0 // indirect
@@ -116,7 +118,6 @@ require (
 	github.com/antlr/antlr4/runtime/Go/antlr v0.0.0-20220418222510-f25a4f6275ed // indirect
 	github.com/araddon/dateparse v0.0.0-20190622164848-0fb0a474d195 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d // indirect
-	github.com/aws/aws-sdk-go v1.44.57 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.12.13 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/configsources v1.1.21 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.4.15 // indirect
@@ -205,7 +206,6 @@ require (
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/ini.v1 v1.66.6 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	k8c.io/kubermatic/v2 v2.21.1-0.20221012091925-abed55b1eab3 // indirect
 	k8s.io/component-base v0.25.0 // indirect
 	k8s.io/klog v1.0.0 // indirect
 	k8s.io/kubelet v0.25.0 // indirect

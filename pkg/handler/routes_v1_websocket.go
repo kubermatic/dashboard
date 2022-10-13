@@ -38,7 +38,7 @@ import (
 	"k8c.io/kubermatic/v2/pkg/log"
 	kubermaticcontext "k8c.io/kubermatic/v2/pkg/util/context"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
-	"k8c.io/kubermatic/v2/pkg/watcher"
+	"k8c.io/dashboard/v2/pkg/watcher"
 
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"

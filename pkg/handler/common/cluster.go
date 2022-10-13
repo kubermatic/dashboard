@@ -46,7 +46,7 @@ import (
 	"k8c.io/kubermatic/v2/pkg/resources"
 	utilcluster "k8c.io/kubermatic/v2/pkg/util/cluster"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
-	"k8c.io/kubermatic/v2/pkg/validation"
+	"k8c.io/dashboard/v2/pkg/validation"
 	"k8c.io/kubermatic/v2/pkg/version"
 
 	corev1 "k8s.io/api/core/v1"
