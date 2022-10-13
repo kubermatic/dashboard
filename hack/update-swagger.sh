@@ -23,5 +23,12 @@ CONTAINERIZE_IMAGE=quay.io/kubermatic/build:go-1.19-node-18-1 containerize ./hac
 
 echodate "Generating swagger spec"
 cd cmd/kubermatic-api/
-run_swagger generate spec --tags=ee --scan-models -o swagger.json
+
+# TEMPORARY WORKAROUND to avoid inconstant swagger generation:
+# Because kubermatic repository still contains api types, swagger generation is not consistent.
+# Sometime the  "x-go-package" point on dashboard repo and sometime on kubermatic repo.
+# To avoid this exclude kubermatic packages with this option -x k8c.io/kubermatic/v2/pkg/api/*
+#
+# this workaround will be removed once api will be totally removed from kubermatic repository
+run_swagger generate spec --tags=ee --scan-models -o swagger.json -x k8c.io/kubermatic/v2/pkg/api/*
 echodate "Completed."
