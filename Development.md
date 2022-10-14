@@ -31,7 +31,7 @@ npm start
 ```
 
 It will run a proxy for the API hosted at [dev.kubermatic.io](https://dev.kubermatic.io).
-It is always based on our latest `master` build, but be aware that it might be unstable.
+It is always based on our latest `main` build, but be aware that it might be unstable.
 
 ### Using the Local API
 
