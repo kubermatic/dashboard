@@ -82,7 +82,7 @@ beforeDockerBuild=$(nowms)
   echodate "Building Kubermatic Docker image"
   TEST_NAME="Build Kubermatic Docker image"
   IMAGE_NAME="quay.io/kubermatic/kubermatic$REPOSUFFIX:$KUBERMATIC_VERSION"
-  time retry 5 docker build -t "$IMAGE_NAME" .
+  time retry 5 docker build -t "$IMAGE_NAME" -f api.Dockerfile .
   time retry 5 kind load docker-image "$IMAGE_NAME" --name "$KIND_CLUSTER_NAME"
 )
 (
