@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, ViewChild, TemplateRef} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {MatStepper} from '@angular/material/stepper';
 import {Router} from '@angular/router';
@@ -21,6 +21,7 @@ import {NotificationService} from '@core/services/notification';
 import {ClusterTemplate, ClusterTemplateInstance} from '@shared/entity/cluster-template';
 import {Observable, Subject} from 'rxjs';
 import {filter, take, takeUntil} from 'rxjs/operators';
+import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 
 export enum Step {
   Template = 'Select Template',
@@ -29,6 +30,7 @@ export enum Step {
 
 export class AddClusterFromTemplateDialogData {
   projectId: string;
+  quotaWidget: TemplateRef<QuotaWidgetComponent>;
 }
 
 @Component({
@@ -40,6 +42,7 @@ export class AddClusterFromTemplateDialogComponent implements OnInit, OnDestroy 
   template: ClusterTemplate;
   replicas: number;
   steps: Step[] = [Step.Template, Step.Cluster];
+  quotaWidget: TemplateRef<QuotaWidgetComponent>;
   readonly step = Step;
   @ViewChild('stepper', {static: true}) private readonly _stepper: MatStepper;
   private readonly _unsubscribe = new Subject<void>();
@@ -53,6 +56,8 @@ export class AddClusterFromTemplateDialogComponent implements OnInit, OnDestroy 
   ) {}
 
   ngOnInit(): void {
+    this.quotaWidget = this.data.quotaWidget;
+
     this._clusterTemplateService.templateChanges
       .pipe(filter(template => !!template))
       .pipe(takeUntil(this._unsubscribe))

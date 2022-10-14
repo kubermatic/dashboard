@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, TemplateRef} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import {ClusterTemplateService} from '@core/services/cluster-templates';
@@ -20,10 +20,12 @@ import {NotificationService} from '@core/services/notification';
 import {ClusterTemplate, ClusterTemplateInstance} from '@shared/entity/cluster-template';
 import {Observable, Subject} from 'rxjs';
 import {filter, take, takeUntil} from 'rxjs/operators';
+import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 
-class ClusterFromTemplateDialogData {
+export class ClusterFromTemplateDialogData {
   template: ClusterTemplate;
   projectID: string;
+  quotaWidget: TemplateRef<QuotaWidgetComponent>;
 }
 
 @Component({
@@ -33,6 +35,7 @@ class ClusterFromTemplateDialogData {
 export class ClusterFromTemplateDialogComponent implements OnInit, OnDestroy {
   showDetails = false;
   replicas: number;
+  quotaWidget: TemplateRef<QuotaWidgetComponent>;
   private readonly _unsubscribe = new Subject<void>();
 
   constructor(
@@ -44,6 +47,8 @@ export class ClusterFromTemplateDialogComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.quotaWidget = this.data.quotaWidget;
+
     this._clusterTemplateService.replicasChanges
       .pipe(filter(replicas => !!replicas))
       .pipe(takeUntil(this._unsubscribe))

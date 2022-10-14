@@ -38,6 +38,12 @@ const routes: Routes = [
     path: ':clusterName',
     component: ClusterDetailsComponent,
     canActivate: [AuthGuard, AuthzGuard],
+    children: [
+      {
+        path: '',
+        loadChildren: () => DynamicModule.Quotas,
+      },
+    ],
   },
   {
     path: 'external/:clusterName',
@@ -48,6 +54,12 @@ const routes: Routes = [
     path: ':clusterName/md/:machineDeploymentID',
     component: MachineDeploymentDetailsComponent,
     canActivate: [AuthGuard, AuthzGuard],
+    children: [
+      {
+        path: '',
+        loadChildren: () => DynamicModule.Quotas,
+      },
+    ],
   },
   {
     path: 'external/:clusterName/md/:machineDeploymentID',

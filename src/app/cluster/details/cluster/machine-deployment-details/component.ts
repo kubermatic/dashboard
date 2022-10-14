@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild, TemplateRef} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppConfigService} from '@app/config.service';
 import {ClusterService} from '@core/services/cluster';
@@ -34,6 +34,7 @@ import {take, takeUntil} from 'rxjs/operators';
 import {PathParam} from '@core/services/params';
 import {MachineDeploymentService} from '@core/services/machine-deployment';
 import {getMachineDeploymentHealthStatus, HealthStatus} from '@shared/utils/health-status';
+import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 
 @Component({
   selector: 'km-machine-deployment-details',
@@ -41,6 +42,8 @@ import {getMachineDeploymentHealthStatus, HealthStatus} from '@shared/utils/heal
   styleUrls: ['./style.scss'],
 })
 export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
+  @ViewChild('quotaWidget') quotaWidget: TemplateRef<QuotaWidgetComponent>;
+
   machineDeployment: MachineDeployment;
   machineDeploymentHealthStatus: HealthStatus;
   nodes: Node[] = [];
@@ -193,7 +196,7 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   showEditDialog(): void {
     this._nodeService
-      .showMachineDeploymentEditDialog(this.machineDeployment, this.cluster, this.projectID)
+      .showMachineDeploymentEditDialog(this.machineDeployment, this.cluster, this.projectID, this.quotaWidget)
       .pipe(take(1))
       .subscribe(
         _ => {
@@ -217,6 +220,12 @@ export class MachineDeploymentDetailsComponent implements OnInit, OnDestroy {
           this.goBackToCluster();
         }
       });
+  }
+
+  onActivate(component: QuotaWidgetComponent): void {
+    component.projectId = this.projectID;
+    component.showQuotaWidgetDetails = true;
+    component.showIcon = true;
   }
 
   ngOnDestroy(): void {

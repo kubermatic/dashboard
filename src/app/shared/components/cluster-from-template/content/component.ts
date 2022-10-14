@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, TemplateRef} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {ClusterTemplateService} from '@core/services/cluster-templates';
 import {DatacenterService} from '@core/services/datacenter';
@@ -21,6 +21,7 @@ import {ClusterTemplate} from '@shared/entity/cluster-template';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {Subject} from 'rxjs';
 import {switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 
 enum Control {
   Replicas = 'replicas',
@@ -36,6 +37,8 @@ export class ClusterFromTemplateComponent implements OnInit, OnDestroy {
   @Input() template: ClusterTemplate;
   @Input() projectId: string;
   @Input() showDetails = false;
+  @Input() quotaWidget: TemplateRef<QuotaWidgetComponent>;
+
   control = Control;
   datacenter: Datacenter;
   seedSettings: SeedSettings;

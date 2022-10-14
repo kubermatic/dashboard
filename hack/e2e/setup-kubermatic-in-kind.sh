@@ -15,7 +15,7 @@
 # limitations under the License.
 
 export KUBERMATIC_VERSION=latest
-export TARGET_BRANCH="${PULL_BASE_REF:-master}"
+export TARGET_BRANCH="${PULL_BASE_REF:-main}"
 export KUBERMATIC_OIDC_LOGIN="roxy@kubermatic.com"
 export KUBERMATIC_OIDC_PASSWORD="password"
 

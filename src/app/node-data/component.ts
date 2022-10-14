@@ -20,6 +20,7 @@ import {
   Input,
   OnDestroy,
   OnInit,
+  TemplateRef,
 } from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@app/shared/validators/others';
@@ -42,6 +43,7 @@ import {filter, finalize, switchMap, take, takeUntil, tap} from 'rxjs/operators'
 import {ParamsService, PathParam} from '@core/services/params';
 import {QuotaWidgetComponent} from '../dynamic/enterprise/quotas/quota-widget/component';
 import {OperatingSystemProfile} from '@shared/entity/operating-system-profile';
+import {DynamicModule} from '@dynamic/module-registry';
 
 enum Controls {
   Name = 'name',
@@ -85,6 +87,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   @Input() provider: NodeProvider;
   // Used only when in dialog mode.
   @Input() showExtended = false;
+  @Input() quotaWidget: TemplateRef<QuotaWidgetComponent>;
   labels: object = {};
   taints: Taint[] = [];
   selectedOperatingSystemProfile: string;
@@ -95,6 +98,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   projectId: string;
   endOfDynamicKubeletConfigSupportVersion: string = END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION;
   isLoadingOSProfiles: boolean;
+  isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
 
   private _enableOperatingSystemManager: boolean;
 
@@ -236,7 +240,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     return provider.includes(this.provider);
   }
 
-  // Source of truth for supported operating system: https://github.com/kubermatic/machine-controller/blob/master/docs/operating-system.md
+  // Source of truth for supported operating system: https://github.com/kubermatic/machine-controller/blob/main/docs/operating-system.md
   isOperatingSystemSupported(os: OperatingSystem): boolean {
     // Enable OS per-provider basis
     switch (os) {
@@ -310,6 +314,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   onActivate(component: QuotaWidgetComponent): void {
     component.projectId = this.projectId;
     component.showQuotaWidgetDetails = true;
+    component.showIcon = true;
   }
 
   private _init(): void {

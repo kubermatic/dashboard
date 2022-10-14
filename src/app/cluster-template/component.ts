@@ -12,18 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit, ViewChild, TemplateRef} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
-import {Router} from '@angular/router';
+import {Router, ActivatedRoute} from '@angular/router';
 import {ClusterTemplateService} from '@core/services/cluster-templates';
 import {DatacenterService} from '@core/services/datacenter';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {UserService} from '@core/services/user';
-import {ClusterFromTemplateDialogComponent} from '@shared/components/cluster-from-template/dialog/component';
+import {
+  ClusterFromTemplateDialogComponent,
+  ClusterFromTemplateDialogData,
+} from '@shared/components/cluster-from-template/dialog/component';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Cluster} from '@shared/entity/cluster';
 import {ClusterTemplate, ClusterTemplateScope} from '@shared/entity/cluster-template';
@@ -35,7 +38,9 @@ import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
-import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {filter, startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {PathParam} from '@core/services/params';
+import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 
 @Component({
   selector: 'km-cluster-template',
@@ -55,6 +60,7 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild('quotaWidget') quotaWidget: TemplateRef<QuotaWidgetComponent>;
 
   private _currentGroupConfig: GroupConfig;
   private _selectedProject: Project;
@@ -68,6 +74,7 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
     private readonly _projectService: ProjectService,
     private readonly _matDialog: MatDialog,
     private readonly _userService: UserService,
+    private readonly _activeRoute: ActivatedRoute,
     private readonly _notificationService: NotificationService
   ) {}
 
@@ -218,13 +225,30 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   createCluster(template: ClusterTemplate): void {
-    const dialogConfig: MatDialogConfig = {
+    const dialogConfig: MatDialogConfig<ClusterFromTemplateDialogData> = {
       data: {
         template: template,
         projectID: this._selectedProject.id,
+        quotaWidget: this.quotaWidget,
       },
     };
 
     this._matDialog.open(ClusterFromTemplateDialogComponent, dialogConfig);
+  }
+
+  onActivate(component: QuotaWidgetComponent): void {
+    const id = this._activeRoute.snapshot.paramMap.get(PathParam.ProjectID);
+    this._projectService.onProjectChange.pipe(startWith({id}), takeUntil(this._unsubscribe)).subscribe(({id}) => {
+      component.projectId = id;
+    });
+  }
+
+  onActivateQuotaDetails(component: QuotaWidgetComponent): void {
+    component.showQuotaWidgetDetails = true;
+    component.showIcon = true;
+    const id = this._activeRoute.snapshot.paramMap.get(PathParam.ProjectID);
+    this._projectService.onProjectChange.pipe(startWith({id}), takeUntil(this._unsubscribe)).subscribe(({id}) => {
+      component.projectId = id;
+    });
   }
 }

@@ -50,6 +50,10 @@ limitations under the License.
       </mat-error>
     </mat-form-field>
 
+    <div class="quota-widget" *ngIf="isEnterpriseEdition && isDialogView()">
+      <ng-container *ngTemplateOutlet="quotaWidget"></ng-container>
+    </div>
+
     <km-number-stepper [formControlName]="Controls.Count"
                        id="km-node-count-input"
                        mode="errors"
