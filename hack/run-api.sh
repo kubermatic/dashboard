@@ -64,7 +64,7 @@ echodate "Starting API..."
 set -x
 ./_build/kubermatic-api $API_EXTRA_ARGS \
   -kubeconfig=$KUBECONFIG \
-  -ca-bundle=charts/kubermatic-operator/static/ca-bundle.pem \
+  -ca-bundle=certs/ca-bundle.pem \
   -worker-name="$(worker_name)" \
   -internal-address=127.0.0.1:18085 \
   -prometheus-url=http://localhost:9090 \
