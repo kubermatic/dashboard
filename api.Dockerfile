@@ -15,9 +15,11 @@
 FROM alpine:3.13
 LABEL maintainer="support@kubermatic.com"
 
-RUN apk add -U ca-certificates && rm -rf /var/cache/apk/*
+# We need the ca-certs so the KKP API can verify the certificates of the OIDC server (usually Dex)
+RUN apk add ca-certificates
 
-COPY ./_build/dashboard
+# Do not needless copy all binaries into the image.
+COPY ./_build/kubermatic-api /usr/local/bin/
+COPY ./cmd/kubermatic-api/swagger.json /opt/swagger.json
 
-COPY ./dist /dist
-CMD ["/dashboard"]
+USER nobody
