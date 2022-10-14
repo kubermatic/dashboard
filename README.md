@@ -1,6 +1,6 @@
 # Dashboard for the Kubermatic Kubernetes Platform
 
-[![codecov](https://codecov.io/gh/kubermatic/dashboard/branch/master/graph/badge.svg?token=njXM3OrmAM)](https://codecov.io/gh/kubermatic/dashboard)
+[![codecov](https://codecov.io/gh/kubermatic/dashboard/branch/main/graph/badge.svg?token=njXM3OrmAM)](https://codecov.io/gh/kubermatic/dashboard)
 
 ## Overview & More information
 
@@ -42,15 +42,15 @@ Feedback and discussion are available on [the mailing list][11].
 See [the list of releases][3] to find out about feature changes.
 
 [1]: https://github.com/kubermatic/dashboard/issues
-[2]: https://github.com/kubermatic/dashboard/blob/master/CONTRIBUTING.md
-[3]: https://github.com/kubermatic/dashboard/blob/master/Development.md
+[2]: https://github.com/kubermatic/dashboard/blob/main/CONTRIBUTING.md
+[3]: https://github.com/kubermatic/dashboard/blob/main/Development.md
 [3]: https://github.com/kubermatic/dashboard/releases
-[4]: https://github.com/kubermatic/dashboard/blob/master/code-of-conduct.md
-[5]: https://github.com/kubermatic/kubermatic/blob/master/README.md
+[4]: https://github.com/kubermatic/dashboard/blob/main/code-of-conduct.md
+[5]: https://github.com/kubermatic/kubermatic/blob/main/README.md
 
 [11]: https://groups.google.com/forum/#!forum/kubermatic-dev
 [12]: https://kubermatic.slack.com/messages/kubermatic
-[13]: https://github.com/kubermatic/dashboard/blob/master/Zenhub.md
+[13]: https://github.com/kubermatic/dashboard/blob/main/Zenhub.md
 [15]: http://slack.kubermatic.io/
 
 [21]: https://docs.kubermatic.com/kubermatic/

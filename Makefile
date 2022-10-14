@@ -9,7 +9,7 @@ export GOOS?=linux
 # dashboard. It does not influence the tags used for the Docker images
 # for each revision.
 # As we only tag revisions in the release branches, a simple `git describe`
-# in the master branch yields not usable result. This is why the master
+# in the main branch yields not usable result. This is why the main
 # branch is manually set to the next minor version. When using a version
 # stamp like "v2.16.0-dev-gXXXX", Git only cares for the hash at the end,
 # thankfully.
@@ -23,7 +23,7 @@ ifeq (${HUMAN_VERSION},)
 	CURRENT_BRANCH=$(shell git rev-parse --abbrev-ref HEAD)
 	TARGET_BRANCH=$(or ${PULL_BASE_REF},${CURRENT_BRANCH})
 
-	ifeq (${TARGET_BRANCH},master)
+	ifeq (${TARGET_BRANCH},main)
 	HUMAN_VERSION=v2.21.0-dev-g$(shell git rev-parse --short HEAD)
 	else
 	HUMAN_VERSION=$(or $(shell git describe --tags --match "v[0-9]*"),v2.21.0-dev-g$(shell git rev-parse --short HEAD))

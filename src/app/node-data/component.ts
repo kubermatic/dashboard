@@ -240,7 +240,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     return provider.includes(this.provider);
   }
 
-  // Source of truth for supported operating system: https://github.com/kubermatic/machine-controller/blob/master/docs/operating-system.md
+  // Source of truth for supported operating system: https://github.com/kubermatic/machine-controller/blob/main/docs/operating-system.md
   isOperatingSystemSupported(os: OperatingSystem): boolean {
     // Enable OS per-provider basis
     switch (os) {
