@@ -28,8 +28,10 @@ if [ -z "${KIND_CLUSTER_NAME:-}" ]; then
   exit 1
 fi
 
-# The Kubermatic version to build.
-export KUBERMATIC_VERSION="${KUBERMATIC_VERSION:-$(git rev-parse HEAD)}"
+# The Kubermatic version to use. "latest" is the most recent version built from
+# the main branch.
+export KUBERMATIC_VERSION="${KUBERMATIC_VERSION:-latest}"
+export DASHBOARD_VERSION="${DASHBOARD_VERSION:-$(git rev-parse HEAD)}"
 KUBERMATIC_OSM_ENABLED="${KUBERMATIC_OSM_ENABLED:-true}"
 
 REPOSUFFIX=""
@@ -46,7 +48,7 @@ export KUBERMATIC_YAML="${KUBERMATIC_YAML:-hack/ci/testdata/kubermatic.yaml}"
 # The api service is kubectl-proxied later on.
 export KUBERMATIC_API_ENDPOINT="http://localhost:8080"
 
-# Tell the conformance tester what dummy account we configure for the e2e tests.
+# Tell the Go tests what dummy account we configure for the e2e tests.
 export KUBERMATIC_DEX_VALUES_FILE=$(realpath hack/ci/testdata/oauth_values.yaml)
 export KUBERMATIC_OIDC_LOGIN="roxy@kubermatic.com"
 export KUBERMATIC_OIDC_PASSWORD="password"
@@ -69,68 +71,21 @@ if ! grep oauth /etc/hosts > /dev/null; then
 fi
 
 # Build binaries and load the Docker images into the kind cluster
-echodate "Building binaries for $KUBERMATIC_VERSION"
-TEST_NAME="Build Kubermatic binaries"
+echodate "Building binaries for $DASHBOARD_VERSION"
+TEST_NAME="Build API binaries"
 
 beforeGoBuild=$(nowms)
 time retry 1 make build
 pushElapsed kubermatic_go_build_duration_milliseconds $beforeGoBuild
 
-beforeDockerBuild=$(nowms)
+IMAGE_NAME="quay.io/kubermatic/dashboard$REPOSUFFIX:$DASHBOARD_VERSION"
 
 (
-  echodate "Building Kubermatic Docker image"
-  TEST_NAME="Build Kubermatic Docker image"
-  IMAGE_NAME="quay.io/kubermatic/kubermatic$REPOSUFFIX:$KUBERMATIC_VERSION"
+  echodate "Building Kubermatic API Docker image"
+  TEST_NAME="Build Kubermatic API Docker image"
   time retry 5 docker build -t "$IMAGE_NAME" -f api.Dockerfile .
   time retry 5 kind load docker-image "$IMAGE_NAME" --name "$KIND_CLUSTER_NAME"
 )
-(
-  echodate "Building addons image"
-  TEST_NAME="Build addons Docker image"
-  cd addons
-  IMAGE_NAME="quay.io/kubermatic/addons:$KUBERMATIC_VERSION"
-  time retry 5 docker build -t "${IMAGE_NAME}" .
-  time retry 5 kind load docker-image "$IMAGE_NAME" --name "$KIND_CLUSTER_NAME"
-)
-(
-  echodate "Building nodeport-proxy image"
-  TEST_NAME="Build nodeport-proxy Docker image"
-  cd cmd/nodeport-proxy
-  make build
-  IMAGE_NAME="quay.io/kubermatic/nodeport-proxy:$KUBERMATIC_VERSION"
-  time retry 5 docker build -t "${IMAGE_NAME}" .
-  time retry 5 kind load docker-image "$IMAGE_NAME" --name "$KIND_CLUSTER_NAME"
-)
-(
-  echodate "Building kubeletdnat-controller image"
-  TEST_NAME="Build kubeletdnat-controller Docker image"
-  cd cmd/kubeletdnat-controller
-  make build
-  IMAGE_NAME="quay.io/kubermatic/kubeletdnat-controller:$KUBERMATIC_VERSION"
-  time retry 5 docker build -t "${IMAGE_NAME}" .
-  time retry 5 kind load docker-image "$IMAGE_NAME" --name "$KIND_CLUSTER_NAME"
-)
-(
-  echodate "Building user-ssh-keys-agent image"
-  TEST_NAME="Build user-ssh-keys-agent Docker image"
-  retry 5 docker login -u "$QUAY_IO_USERNAME" -p "$QUAY_IO_PASSWORD" quay.io
-  cd cmd/user-ssh-keys-agent
-  make build
-  IMAGE_NAME="quay.io/kubermatic/user-ssh-keys-agent:$KUBERMATIC_VERSION"
-  time retry 5 docker build -t "${IMAGE_NAME}" .
-  time retry 5 docker push "${IMAGE_NAME}"
-)
-(
-  echodate "Building etcd-launcher image"
-  TEST_NAME="Build etcd-launcher Docker image"
-  IMAGE_NAME="quay.io/kubermatic/etcd-launcher:${KUBERMATIC_VERSION}"
-  time retry 5 docker build -t "${IMAGE_NAME}" -f cmd/etcd-launcher/Dockerfile .
-  time retry 5 kind load docker-image "$IMAGE_NAME" --name "$KIND_CLUSTER_NAME"
-)
-
-pushElapsed kubermatic_docker_build_duration_milliseconds $beforeDockerBuild
-echodate "Successfully built and loaded all images"
 
 # prepare to run kubermatic-installer
 KUBERMATIC_CONFIG="$(mktemp)"
@@ -179,17 +134,35 @@ EOF
 # append custom Dex configuration
 cat hack/ci/testdata/oauth_values.yaml >> $HELM_VALUES_FILE
 
-# prepare CRDs
-copy_crds_to_chart
-set_crds_version_annotation
+# to potentially make use of the EE images, we need to authenticate to quay.io first
+retry 5 docker login -u "$QUAY_IO_USERNAME" -p "$QUAY_IO_PASSWORD" quay.io
 
 # install dependencies and Kubermatic Operator into cluster
-./_build/kubermatic-installer deploy kubermatic-master \
-  --storageclass copy-default \
-  --config "$KUBERMATIC_CONFIG" \
-  --helm-values "$HELM_VALUES_FILE"
+chmod 664 "$KUBECONFIG" "$KUBERMATIC_CONFIG" "$HELM_VALUES_FILE"
 
-# TODO: The installer should wait for everything to finish reconciling.
+# prepare a temp directory for helm
+# mkdir /tmp/.{config,cache}
+# chmod 777 /tmp/.{config,cache}
+#   --volume "/tmp/.config:/.config" \
+#   --volume "/tmp/.cache:/.cache" \
+
+# temporary hack due to a bug in the KKP installer
+kubectl apply -f /home/prow/go/src/github.com/kubermatic/kubermatic/pkg/crd/k8c.io
+
+docker run \
+  --rm \
+  --volume "$(dirname $KUBECONFIG):/kkp/kubeconfig" \
+  --volume "$(dirname $KUBERMATIC_CONFIG):/kkp/config" \
+  --volume "$(dirname $HELM_VALUES_FILE):/kkp/helmvalues" \
+  --env "KUBECONFIG=/kkp/kubeconfig/$(basename $KUBECONFIG)" \
+  --user root \
+  --net=host \
+  "quay.io/kubermatic/kubermatic$REPOSUFFIX:$KUBERMATIC_VERSION" \
+  kubermatic-installer deploy kubermatic-master \
+  --storageclass copy-default \
+  --config "/kkp/config/$(basename $KUBERMATIC_CONFIG)" \
+  --helm-values "/kkp/helmvalues/$(basename $HELM_VALUES_FILE)"
+
 echodate "Waiting for Kubermatic Operator to deploy Master components..."
 # sleep a bit to prevent us from checking the Deployments too early, before
 # the operator had time to reconcile
@@ -203,10 +176,19 @@ echodate "Installing Seed..."
 # master&seed are the same cluster, but we still want to test that the
 # installer can setup the seed components. Effectively, in these tests
 # this is a NOP.
-./_build/kubermatic-installer deploy kubermatic-seed \
+docker run \
+  --rm \
+  --volume "$(dirname $KUBECONFIG):/kkp/kubeconfig" \
+  --volume "$(dirname $KUBERMATIC_CONFIG):/kkp/config" \
+  --volume "$(dirname $HELM_VALUES_FILE):/kkp/helmvalues" \
+  --env "KUBECONFIG=/kkp/kubeconfig/$(basename $KUBECONFIG)" \
+  --user root \
+  --net=host \
+  "quay.io/kubermatic/kubermatic$REPOSUFFIX:$KUBERMATIC_VERSION" \
+  kubermatic-installer deploy kubermatic-seed \
   --storageclass copy-default \
-  --config "$KUBERMATIC_CONFIG" \
-  --helm-values "$HELM_VALUES_FILE"
+  --config "/kkp/config/$(basename $KUBERMATIC_CONFIG)" \
+  --helm-values "/kkp/helmvalues/$(basename $HELM_VALUES_FILE)"
 
 SEED_MANIFEST="$(mktemp)"
 SEED_KUBECONFIG="$(cat $KUBECONFIG | sed 's/127.0.0.1.*/kubernetes.default.svc.cluster.local./' | base64 -w0)"
@@ -239,6 +221,21 @@ sleep 5
 echodate "Waiting for Deployments to roll out..."
 retry 9 check_all_deployments_ready kubermatic
 echodate "Kubermatic is ready."
+
+# hack to replace the API's image with our own until the operator
+# can deal with setting up a non kubermatic/kubermatic Docker image
+# for the API natively
+echodate "Stopping KKP Operator..."
+kubectl --namespace kubermatic scale deployment/kubermatic-operator --replicas=0
+retry 5 check_pod_count kubermatic "app.kubernetes.io/name=kubermatic-operator" 0
+echodate "Operator has shut down."
+
+echodate "Patching API Deployment..."
+patch="{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"api\",\"image\":\"$IMAGE_NAME\"}]}}}}"
+kubectl --namespace kubermatic patch deployment kubermatic-api --patch "$patch"
+sleep 3
+retry 9 check_pod_count kubermatic "app.kubernetes.io/name=kubermatic-api" 1
+echodate "API has been replaced."
 
 echodate "Waiting for VPA to be ready..."
 retry 8 check_all_deployments_ready kube-system
