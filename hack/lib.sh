@@ -358,6 +358,10 @@ check_all_deployments_ready() {
   return 0
 }
 
+check_pod_count() {
+  [[ $(kubectl --namespace "$1" get pods --selector "$2" --output json | jq -r '.items | length') -eq $3 ]]
+}
+
 check_seed_ready() {
   status="$(kubectl --namespace "$1" get seed "$2" --output json | jq -r '.status.conditions.ResourcesReconciled.status')"
   if [ "$status" != "True" ]; then

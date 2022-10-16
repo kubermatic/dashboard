@@ -30,6 +30,11 @@ presubmits:
       preset-kind-volume-mounts: "true"
       preset-vault: "true"
       preset-goproxy: "true"
+    extra_refs:
+      - org: kubermatic
+        repo: kubermatic
+        base_ref: main
+        clone_uri: 'ssh://git@github.com/kubermatic/kubermatic.git'
     spec:
       containers:
         - image: quay.io/kubermatic/build:go-1.19-node-18-kind-0.14-1

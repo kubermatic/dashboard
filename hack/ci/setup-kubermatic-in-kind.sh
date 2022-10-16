@@ -78,10 +78,11 @@ beforeGoBuild=$(nowms)
 time retry 1 make build
 pushElapsed kubermatic_go_build_duration_milliseconds $beforeGoBuild
 
+IMAGE_NAME="quay.io/kubermatic/dashboard$REPOSUFFIX:$DASHBOARD_VERSION"
+
 (
   echodate "Building Kubermatic API Docker image"
   TEST_NAME="Build Kubermatic API Docker image"
-  IMAGE_NAME="quay.io/kubermatic/dashboard$REPOSUFFIX:$DASHBOARD_VERSION"
   time retry 5 docker build -t "$IMAGE_NAME" -f api.Dockerfile .
   time retry 5 kind load docker-image "$IMAGE_NAME" --name "$KIND_CLUSTER_NAME"
 )
@@ -133,21 +134,35 @@ EOF
 # append custom Dex configuration
 cat hack/ci/testdata/oauth_values.yaml >> $HELM_VALUES_FILE
 
-# prepare CRDs
-copy_crds_to_chart
-set_crds_version_annotation
+# to potentially make use of the EE images, we need to authenticate to quay.io first
+retry 5 docker login -u "$QUAY_IO_USERNAME" -p "$QUAY_IO_PASSWORD" quay.io
 
 # install dependencies and Kubermatic Operator into cluster
+chmod 664 "$KUBECONFIG" "$KUBERMATIC_CONFIG" "$HELM_VALUES_FILE"
+
+# prepare a temp directory for helm
+# mkdir /tmp/.{config,cache}
+# chmod 777 /tmp/.{config,cache}
+#   --volume "/tmp/.config:/.config" \
+#   --volume "/tmp/.cache:/.cache" \
+
+# temporary hack due to a bug in the KKP installer
+kubectl apply -f /home/prow/go/src/github.com/kubermatic/kubermatic/pkg/crd/k8c.io
+
 docker run \
   --rm \
-  -it \
+  --volume "$(dirname $KUBECONFIG):/kkp/kubeconfig" \
+  --volume "$(dirname $KUBERMATIC_CONFIG):/kkp/config" \
+  --volume "$(dirname $HELM_VALUES_FILE):/kkp/helmvalues" \
+  --env "KUBECONFIG=/kkp/kubeconfig/$(basename $KUBECONFIG)" \
+  --user root \
+  --net=host \
   "quay.io/kubermatic/kubermatic$REPOSUFFIX:$KUBERMATIC_VERSION" \
   kubermatic-installer deploy kubermatic-master \
   --storageclass copy-default \
-  --config "$KUBERMATIC_CONFIG" \
-  --helm-values "$HELM_VALUES_FILE"
+  --config "/kkp/config/$(basename $KUBERMATIC_CONFIG)" \
+  --helm-values "/kkp/helmvalues/$(basename $HELM_VALUES_FILE)"
 
-# TODO: The installer should wait for everything to finish reconciling.
 echodate "Waiting for Kubermatic Operator to deploy Master components..."
 # sleep a bit to prevent us from checking the Deployments too early, before
 # the operator had time to reconcile
@@ -161,10 +176,19 @@ echodate "Installing Seed..."
 # master&seed are the same cluster, but we still want to test that the
 # installer can setup the seed components. Effectively, in these tests
 # this is a NOP.
-./_build/kubermatic-installer deploy kubermatic-seed \
+docker run \
+  --rm \
+  --volume "$(dirname $KUBECONFIG):/kkp/kubeconfig" \
+  --volume "$(dirname $KUBERMATIC_CONFIG):/kkp/config" \
+  --volume "$(dirname $HELM_VALUES_FILE):/kkp/helmvalues" \
+  --env "KUBECONFIG=/kkp/kubeconfig/$(basename $KUBECONFIG)" \
+  --user root \
+  --net=host \
+  "quay.io/kubermatic/kubermatic$REPOSUFFIX:$KUBERMATIC_VERSION" \
+  kubermatic-installer deploy kubermatic-seed \
   --storageclass copy-default \
-  --config "$KUBERMATIC_CONFIG" \
-  --helm-values "$HELM_VALUES_FILE"
+  --config "/kkp/config/$(basename $KUBERMATIC_CONFIG)" \
+  --helm-values "/kkp/helmvalues/$(basename $HELM_VALUES_FILE)"
 
 SEED_MANIFEST="$(mktemp)"
 SEED_KUBECONFIG="$(cat $KUBECONFIG | sed 's/127.0.0.1.*/kubernetes.default.svc.cluster.local./' | base64 -w0)"
@@ -197,6 +221,21 @@ sleep 5
 echodate "Waiting for Deployments to roll out..."
 retry 9 check_all_deployments_ready kubermatic
 echodate "Kubermatic is ready."
+
+# hack to replace the API's image with our own until the operator
+# can deal with setting up a non kubermatic/kubermatic Docker image
+# for the API natively
+echodate "Stopping KKP Operator..."
+kubectl --namespace kubermatic scale deployment/kubermatic-operator --replicas=0
+retry 5 check_pod_count kubermatic "app.kubernetes.io/name=kubermatic-operator" 0
+echodate "Operator has shut down."
+
+echodate "Patching API Deployment..."
+patch="{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"api\",\"image\":\"$IMAGE_NAME\"}]}}}}"
+kubectl --namespace kubermatic patch deployment kubermatic-api --patch "$patch"
+sleep 3
+retry 9 check_pod_count kubermatic "app.kubernetes.io/name=kubermatic-api" 1
+echodate "API has been replaced."
 
 echodate "Waiting for VPA to be ready..."
 retry 8 check_all_deployments_ready kube-system
