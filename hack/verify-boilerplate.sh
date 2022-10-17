@@ -23,6 +23,7 @@ boilerplate \
   -boilerplates hack/boilerplate/ce \
   -exclude src/app/dynamic/enterprise \
   -exclude src/index.html \
+  -exclude pkg/provider/cloud/eks/authenticator \
   -exclude pkg/ee
 
 echo "Checking Kubermatic EE licenses..."
