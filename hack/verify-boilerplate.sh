@@ -22,9 +22,11 @@ echo "Checking Kubermatic CE licenses..."
 boilerplate \
   -boilerplates hack/boilerplate/ce \
   -exclude src/app/dynamic/enterprise \
-  -exclude src/index.html
+  -exclude src/index.html \
+  -exclude pkg/ee
 
 echo "Checking Kubermatic EE licenses..."
 boilerplate \
   -boilerplates hack/boilerplate/ee \
-  src/app/dynamic/enterprise
+  src/app/dynamic/enterprise \
+  pkg/ee
