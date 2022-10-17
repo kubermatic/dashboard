@@ -17,13 +17,6 @@ presubmits:
     run_if_changed: "(cmd/kubermatic-api/|hack/|pkg/|.prow/)"
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
-    # this is required because we need to manually install the KKP CRDs
-    # until the upstream KKP Docker image is fixed
-    extra_refs:
-      - org: kubermatic
-        repo: kubermatic
-        base_ref: main
-        clone_uri: 'ssh://git@github.com/kubermatic/kubermatic.git'
     labels:
       preset-digitalocean: "true"
       preset-hetzner: "true"

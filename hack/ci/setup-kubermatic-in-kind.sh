@@ -28,11 +28,22 @@ if [ -z "${KIND_CLUSTER_NAME:-}" ]; then
   exit 1
 fi
 
-# The Kubermatic version to use. "latest" is the most recent version built from
-# the main branch.
-export KUBERMATIC_VERSION="${KUBERMATIC_VERSION:-latest}"
+# make sure to mirror the dashboard's branch to the kubermatic branch, so that
+# when a release is made and later cherrypicks happen, those jobs will not rely
+# on the wrong KKP version
+if [[ "${PULL_BASE_REF:-main}" =~ release/v[0-9]+.* ]]; then
+  # turn "release/v2.21" into "v2.21-latest"
+  KUBERMATIC_VERSION="${PULL_BASE_REF#release/}"
+  KUBERMATIC_VERSION="${KUBERMATIC_VERSION//\//-}-latest"
+else
+  KUBERMATIC_VERSION=latest
+fi
+
 export DASHBOARD_VERSION="${DASHBOARD_VERSION:-$(git rev-parse HEAD)}"
 KUBERMATIC_OSM_ENABLED="${KUBERMATIC_OSM_ENABLED:-true}"
+
+echodate "KKP Docker image tag: $KUBERMATIC_VERSION"
+echodate "Dashboard version...: $DASHBOARD_VERSION"
 
 REPOSUFFIX=""
 if [ "$KUBERMATIC_EDITION" != "ce" ]; then
@@ -137,18 +148,12 @@ cat hack/ci/testdata/oauth_values.yaml >> $HELM_VALUES_FILE
 # to potentially make use of the EE images, we need to authenticate to quay.io first
 retry 5 docker login -u "$QUAY_IO_USERNAME" -p "$QUAY_IO_PASSWORD" quay.io
 
-# install dependencies and Kubermatic Operator into cluster
-chmod 664 "$KUBECONFIG" "$KUBERMATIC_CONFIG" "$HELM_VALUES_FILE"
-
-# prepare a temp directory for helm
-# mkdir /tmp/.{config,cache}
-# chmod 777 /tmp/.{config,cache}
-#   --volume "/tmp/.config:/.config" \
-#   --volume "/tmp/.cache:/.cache" \
-
-# temporary hack due to a bug in the KKP installer
-kubectl apply -f /home/prow/go/src/github.com/kubermatic/kubermatic/pkg/crd/k8c.io
-
+# Install KKP into kind; this will for now (until the operator knows how to handle
+# the new dashboard images) simply install KKP's default API (the current one when
+# the KKP image was built, which is most likely 1 or 2 commits behind the dashboard
+# right now). Once KKP is reconciled and running, we later pause the operator and
+# replace the API with the Docker image built earlier, so that we actually test our
+# local code.
 docker run \
   --rm \
   --volume "$(dirname $KUBECONFIG):/kkp/kubeconfig" \
@@ -227,7 +232,7 @@ echodate "Kubermatic is ready."
 # for the API natively
 echodate "Stopping KKP Operator..."
 kubectl --namespace kubermatic scale deployment/kubermatic-operator --replicas=0
-retry 5 check_pod_count kubermatic "app.kubernetes.io/name=kubermatic-operator" 0
+retry 7 check_pod_count kubermatic "app.kubernetes.io/name=kubermatic-operator" 0
 echodate "Operator has shut down."
 
 echodate "Patching API Deployment..."
