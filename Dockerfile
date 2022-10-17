@@ -17,7 +17,11 @@ LABEL maintainer="support@kubermatic.com"
 
 RUN apk add -U ca-certificates && rm -rf /var/cache/apk/*
 
-COPY ./_build/dashboard
-
+COPY ./_build/ /usr/local/bin/
+COPY ./cmd/kubermatic-api/swagger.json /opt/swagger.json
 COPY ./dist /dist
-CMD ["/dashboard"]
+
+# We need to duplicate this binary in root till we update kkp operator.
+COPY ./_build/dashboard /
+
+USER nobody
