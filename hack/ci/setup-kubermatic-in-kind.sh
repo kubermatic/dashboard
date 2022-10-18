@@ -81,7 +81,10 @@ if ! grep oauth /etc/hosts > /dev/null; then
   echodate "Set dex.oauth alias in /etc/hosts"
 fi
 
-# Build binaries and load the Docker images into the kind cluster
+# Build binaries and load the Docker images into the kind cluster.
+echodate "Building statics for $DASHBOARD_VERSION"
+time retry 1 make dist
+
 echodate "Building binaries for $DASHBOARD_VERSION"
 TEST_NAME="Build API binaries"
 
