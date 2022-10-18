@@ -94,7 +94,7 @@ IMAGE_NAME="quay.io/kubermatic/dashboard$REPOSUFFIX:$DASHBOARD_VERSION"
 (
   echodate "Building Kubermatic API Docker image"
   TEST_NAME="Build Kubermatic API Docker image"
-  time retry 5 docker build -t "$IMAGE_NAME" -f api.Dockerfile .
+  time retry 5 docker build -t "$IMAGE_NAME" .
   time retry 5 kind load docker-image "$IMAGE_NAME" --name "$KIND_CLUSTER_NAME"
 )
 
