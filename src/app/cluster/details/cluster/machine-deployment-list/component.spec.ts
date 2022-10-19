@@ -32,6 +32,8 @@ import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
 import {of} from 'rxjs';
 import {MachineDeploymentListComponent} from './component';
+import {ClusterService} from '@core/services/cluster';
+import {ClusterMockService} from '@test/services/cluster-mock';
 
 class MatDialogMock {
   open(): any {
@@ -55,6 +57,7 @@ describe('MachineDeploymentListComponent', () => {
         {provide: MatDialog, useClass: MatDialogMock},
         {provide: Router, useClass: RouterStub},
         {provide: SettingsService, useClass: SettingsMockService},
+        {provide: ClusterService, useClass: ClusterMockService},
         GoogleAnalyticsService,
       ],
       teardown: {destroyAfterEach: false},

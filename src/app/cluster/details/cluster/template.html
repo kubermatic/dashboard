@@ -55,16 +55,6 @@ limitations under the License.
                [observable]="getObservable()"
                (next)="onNext($event)">
     </km-button>
-    <button fxLayoutAlign="center center"
-            mat-flat-button
-            type="button"
-            (click)="addNode()"
-            [fxHide]="nodeDc?.spec?.provider === 'bringyourown'"
-            [matTooltip]="isAddMachineDeploymentsEnabled() ? '' : !isClusterRunning ? 'Cluster is not healthy' : 'You do not have permission to perform this action'"
-            [disabled]="!isAddMachineDeploymentsEnabled()">
-      <i class="km-icon-mask km-icon-add"></i>
-      <span>Add Machine Deployment</span>
-    </button>
     <a class="km-open-kubernetes-dashboard-btn"
        id="km-open-kubernetes-dashboard-btn"
        fxLayoutAlign="center center"
@@ -428,6 +418,7 @@ limitations under the License.
                               [machineDeployments]="machineDeployments"
                               [projectID]="projectID"
                               [isClusterRunning]="isClusterRunning"
+                              [nodeDc]="nodeDc"
                               [quotaWidget]="quotaWidget"
                               [isInitialized]="areMachineDeploymentsInitialized"></km-machine-deployment-list>
 

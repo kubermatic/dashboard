@@ -34,12 +34,7 @@
 
   .mat-card {
     margin: 0;
-    padding: 0 10px 0 0;
-    width: 250px;
-
-    .km-icon-quota {
-      margin-left: 10px;
-    }
+    padding: 0 10px;
   }
 
   km-property {
@@ -52,13 +47,14 @@
 
     [value] {
       margin: 9px 0;
+      min-width: 65px;
     }
   }
 
   .km-quota-details {
     left: 0;
     position: absolute;
-    top: 59px;
+    top: 50px;
     width: 100%;
     z-index: 1;
 
