@@ -33,8 +33,8 @@ export interface ConstraintTemplateDialogConfig {
 }
 
 export enum Mode {
-  Add = 'add',
-  Edit = 'edit',
+  Add = 'Add',
+  Edit = 'Edit',
 }
 
 export enum Controls {
@@ -57,6 +57,17 @@ export class ConstraintTemplateDialog implements OnInit, OnDestroy {
     private readonly _notificationService: NotificationService,
     @Inject(MAT_DIALOG_DATA) public data: ConstraintTemplateDialogConfig
   ) {}
+
+  get label(): string {
+    switch (this.data.confirmLabel) {
+      case Mode.Add:
+        return 'Add Constraint Template';
+      case Mode.Edit:
+        return 'Save Changes';
+      default:
+        return '';
+    }
+  }
 
   ngOnInit(): void {
     this._initProviderConfigEditor();

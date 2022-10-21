@@ -52,6 +52,11 @@ enum Title {
   Edit = 'Edit Datacenter',
 }
 
+enum Mode {
+  Add = 'Add',
+  Edit = 'Edit',
+}
+
 @Component({
   selector: 'km-add-admin-dialog',
   templateUrl: './template.html',
@@ -75,6 +80,17 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
     private readonly _datacenterService: DatacenterService,
     private readonly _notificationService: NotificationService
   ) {}
+
+  get label(): string {
+    switch (this.data.confirmLabel) {
+      case Mode.Add:
+        return 'Add Datacenter';
+      case Mode.Edit:
+        return 'Save Chanfes';
+      default:
+        return '';
+    }
+  }
 
   ngOnInit(): void {
     this._datacenterService.seeds.pipe(takeUntil(this._unsubscribe)).subscribe(seeds => (this.seeds = seeds));

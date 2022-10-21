@@ -66,6 +66,17 @@ export class AdminRuleGroupDialog implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: RuleGroupDialogData
   ) {}
 
+  get label(): string {
+    switch (this.data.mode) {
+      case Mode.Add:
+        return 'Create Allowed Registry';
+      case Mode.Edit:
+        return 'Save Changes';
+      default:
+        return '';
+    }
+  }
+
   ngOnInit(): void {
     this.form = this._builder.group({
       [Controls.Type]: this._builder.control(this.data.mode === Mode.Edit ? this.data.adminRuleGroup.type : '', [

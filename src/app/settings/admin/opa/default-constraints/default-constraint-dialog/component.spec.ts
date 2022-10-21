@@ -123,7 +123,7 @@ describe('DefaultConstraintDialog', () => {
     });
 
     it('should have correct button text: edit', () => {
-      expect(document.body.querySelector('#km-default-constraint-dialog-btn').textContent).toContain('Edit');
+      expect(document.body.querySelector('#km-default-constraint-dialog-btn').textContent).toContain('Save Changes');
     });
 
     xit('should call patchDefaultConstraint()', () => {

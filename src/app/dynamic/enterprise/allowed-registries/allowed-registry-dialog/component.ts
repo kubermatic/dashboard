@@ -38,8 +38,8 @@ export interface AllowedRegistryDialogConfig {
 }
 
 export enum Mode {
-  Add = 'add',
-  Edit = 'edit',
+  Add = 'Add',
+  Edit = 'Edit',
 }
 
 export enum Controls {
@@ -83,7 +83,14 @@ export class AllowedRegistryDialog implements OnInit, OnDestroy {
   }
 
   label(): string {
-    return this.data.confirmLabel + ' Allowed Registry';
+    switch (this.data.confirmLabel) {
+      case Mode.Add:
+        return 'Add Allowed Registry';
+      case Mode.Edit:
+        return 'Save Changes';
+      default:
+        return '';
+    }
   }
 
   getIconClass(): string {

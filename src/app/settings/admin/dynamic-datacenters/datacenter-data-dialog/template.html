@@ -141,7 +141,7 @@ limitations under the License.
 <mat-dialog-actions>
   <km-button [icon]="getIconClass()"
              buttonId="km-add-dc-save-btn"
-             [label]="data.confirmLabel + ' Datacenter'"
+             [label]="label"
              [disabled]="form.invalid"
              [observable]="getObservable()"
              (next)="onNext($event)">

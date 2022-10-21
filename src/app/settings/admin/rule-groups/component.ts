@@ -134,7 +134,7 @@ export class AdminSettingsRuleGroupsComponent implements OnInit, OnChanges, OnDe
       data: {
         title: 'Create Rule Group',
         mode: Mode.Add,
-        confirmLabel: 'Create',
+        confirmLabel: 'Add',
         seeds: this.seeds,
       },
     };

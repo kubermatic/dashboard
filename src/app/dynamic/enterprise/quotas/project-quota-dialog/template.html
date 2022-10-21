@@ -98,7 +98,7 @@ END OF TERMS AND CONDITIONS
 </mat-dialog-content>
 <mat-dialog-actions>
   <km-button id="km-add-quota-dialog-save-btn"
-             [icon]="selectedQuota ? 'km-icon-edit' : 'km-icon-add'"
+             [icon]="selectedQuota ? 'km-icon-save' : 'km-icon-add'"
              label="{{ selectedQuota ? 'Save Changes' : 'Add Project Quota' }}"
              [disabled]="!isQuotaUpdated || form.invalid"
              [observable]="getObservable()">

@@ -121,7 +121,7 @@ describe('ConstraintTemplateDialog', () => {
     });
 
     it('should have correct button text: edit', () => {
-      expect(document.body.querySelector('#km-constraint-template-dialog-btn').textContent).toContain('Edit');
+      expect(document.body.querySelector('#km-constraint-template-dialog-btn').textContent).toContain('Save Changes');
     });
 
     xit('should call patchConstraintTemplate()', () => {
