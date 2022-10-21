@@ -34,10 +34,14 @@ if [[ ${TARGET_BRANCH} == release* ]]; then
   export KUBERMATIC_VERSION=${TAG_VERSION}
 fi
 
+export DASHBOARD_VERSION="${DASHBOARD_VERSION:-$(git rev-parse HEAD)}"
+
 REPOSUFFIX=""
 if [ "$KUBERMATIC_EDITION" != "ce" ]; then
   REPOSUFFIX="-$KUBERMATIC_EDITION"
 fi
+
+IMAGE_NAME="quay.io/kubermatic/dashboard$REPOSUFFIX:$DASHBOARD_VERSION"
 
 HELM_VALUES_FILE="$(mktemp)"
 cat <<EOF >$HELM_VALUES_FILE
@@ -150,6 +154,21 @@ sleep 5
 echodate "Waiting for Kubermatic Operator to deploy Seed components..."
 retry 8 check_all_deployments_ready kubermatic
 echodate "Kubermatic Seed is ready."
+
+# hack to replace the API's image with our own until the operator
+# can deal with setting up a non kubermatic/kubermatic Docker image
+# for the API natively
+echodate "Stopping KKP Operator..."
+kubectl --namespace kubermatic scale deployment/kubermatic-operator --replicas=0
+retry 7 check_pod_count kubermatic "app.kubernetes.io/name=kubermatic-operator" 0
+echodate "Operator has shut down."
+
+echodate "Patching API Deployment..."
+patch="{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"api\",\"image\":\"$IMAGE_NAME\"}]}}}}"
+kubectl --namespace kubermatic patch deployment kubermatic-api --patch "$patch"
+sleep 3
+retry 9 check_pod_count kubermatic "app.kubernetes.io/name=kubermatic-api" 1
+echodate "API has been replaced."
 
 echodate "Waiting for VPA to be ready..."
 retry 8 check_all_deployments_ready kube-system
