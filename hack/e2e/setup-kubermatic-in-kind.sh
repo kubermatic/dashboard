@@ -46,6 +46,17 @@ if [ "$KUBERMATIC_EDITION" != "ce" ]; then
   REPOSUFFIX="-$KUBERMATIC_EDITION"
 fi
 
+# Build binaries and load the Docker images into the kind cluster.
+echodate "Building statics for $DASHBOARD_VERSION"
+time retry 1 make dist
+
+echodate "Building binaries for $DASHBOARD_VERSION"
+TEST_NAME="Build API binaries"
+
+beforeGoBuild=$(nowms)
+time retry 1 make build
+pushElapsed kubermatic_go_build_duration_milliseconds $beforeGoBuild
+
 IMAGE_NAME="quay.io/kubermatic/dashboard$REPOSUFFIX:$DASHBOARD_VERSION"
 (
   echodate "Building Kubermatic API Docker image"
