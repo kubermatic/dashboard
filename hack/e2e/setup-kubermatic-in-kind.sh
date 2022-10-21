@@ -14,6 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+if [ -z "${KIND_CLUSTER_NAME:-}" ]; then
+  echodate "KIND_CLUSTER_NAME must be set by calling setup-kind-cluster.sh first."
+  exit 1
+fi
+
 export KUBERMATIC_VERSION=latest
 export TARGET_BRANCH="${PULL_BASE_REF:-main}"
 export KUBERMATIC_OIDC_LOGIN="roxy@kubermatic.com"
@@ -42,6 +47,12 @@ if [ "$KUBERMATIC_EDITION" != "ce" ]; then
 fi
 
 IMAGE_NAME="quay.io/kubermatic/dashboard$REPOSUFFIX:$DASHBOARD_VERSION"
+(
+  echodate "Building Kubermatic API Docker image"
+  TEST_NAME="Build Kubermatic API Docker image"
+  time retry 5 docker build -t "$IMAGE_NAME" .
+  time retry 5 kind load docker-image "$IMAGE_NAME" --name "$KIND_CLUSTER_NAME"
+)
 
 HELM_VALUES_FILE="$(mktemp)"
 cat <<EOF >$HELM_VALUES_FILE
