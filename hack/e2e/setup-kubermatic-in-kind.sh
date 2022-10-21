@@ -27,18 +27,6 @@ export KUBERMATIC_OIDC_PASSWORD="password"
 # Set docker config
 echo "$IMAGE_PULL_SECRET_DATA" | base64 -d > /config.json
 
-REPO_ROOT="$(realpath .)"
-cd "${GOPATH}/src/github.com/kubermatic/kubermatic"
-
-if [[ ${TARGET_BRANCH} == release* ]]; then
-  VERSION=${TARGET_BRANCH#release/}
-  TAG_VERSION=$(git tag | egrep "${VERSION}" | tail -n 1 || true)
-  if [ -z "${TAG_VERSION}" ]; then
-    TAG_VERSION=latest
-  fi
-  export KUBERMATIC_VERSION=${TAG_VERSION}
-fi
-
 export DASHBOARD_VERSION="${DASHBOARD_VERSION:-$(git rev-parse HEAD)}"
 
 REPOSUFFIX=""
@@ -64,6 +52,18 @@ IMAGE_NAME="quay.io/kubermatic/dashboard$REPOSUFFIX:$DASHBOARD_VERSION"
   time retry 5 docker build -t "$IMAGE_NAME" .
   time retry 5 kind load docker-image "$IMAGE_NAME" --name "$KIND_CLUSTER_NAME"
 )
+
+REPO_ROOT="$(realpath .)"
+cd "${GOPATH}/src/github.com/kubermatic/kubermatic"
+
+if [[ ${TARGET_BRANCH} == release* ]]; then
+  VERSION=${TARGET_BRANCH#release/}
+  TAG_VERSION=$(git tag | egrep "${VERSION}" | tail -n 1 || true)
+  if [ -z "${TAG_VERSION}" ]; then
+    TAG_VERSION=latest
+  fi
+  export KUBERMATIC_VERSION=${TAG_VERSION}
+fi
 
 HELM_VALUES_FILE="$(mktemp)"
 cat <<EOF >$HELM_VALUES_FILE
