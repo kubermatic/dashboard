@@ -13,7 +13,7 @@
 # limitations under the License.
 
 presubmits:
-  - name: pre-kubermatic-api-e2e
+  - name: pre-dashboard-api-e2e
     run_if_changed: "(cmd/kubermatic-api/|hack/|pkg/|.prow/)"
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
@@ -32,7 +32,7 @@ presubmits:
       preset-goproxy: "true"
     spec:
       containers:
-        - image: quay.io/kubermatic/build:go-1.19-node-18-kind-0.14-1
+        - image: quay.io/kubermatic/build:go-1.19-node-18-kind-0.16-2
           command:
             - "./hack/ci/run-api-e2e.sh"
           env:
