@@ -55,12 +55,14 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   @Input() showIcon = true;
   @Input() showDetailsOnHover = true;
   @Input() showEmptyPlaceholder = false;
+
   quotaPercentage: QuotaVariables;
   quotaDetails: QuotaDetails;
-
   isLoading: boolean;
-
+  showWarning: boolean;
   showDetails$ = this._showDetails$.asObservable().pipe(debounceTime(this._debounce));
+
+  readonly quotaLimit = 100;
 
   @HostListener('mouseover') onMouseOver(): void {
     if (!this.showDetailsOnHover) return;
@@ -123,6 +125,7 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
     quota$.pipe(filter(Boolean), takeUntil(this._unsubscribe)).subscribe(quotaDetails => {
       this.quotaDetails = quotaDetails;
       this._setQuotaPercentages(this.quotaDetails);
+      this._setShowWarningIcon();
       this._cdr.detectChanges();
     });
 
@@ -140,5 +143,9 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
     const storage = this._getPercentage(quota.storage, usage.storage) ?? 0;
 
     this.quotaPercentage = {cpu, memory, storage};
+  }
+
+  private _setShowWarningIcon(): void {
+    this.showWarning = Object.values(this.quotaPercentage).some((quota: number) => quota > this.quotaLimit);
   }
 }

@@ -41,6 +41,8 @@ import {Subject} from 'rxjs';
 import {switchMap, take, takeUntil} from 'rxjs/operators';
 import {getMachineDeploymentHealthStatus, HealthStatus} from '@shared/utils/health-status';
 import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
+import {Datacenter} from '@shared/entity/datacenter';
+import {ClusterService} from '@core/services/cluster';
 
 @Component({
   selector: 'km-machine-deployment-list',
@@ -53,6 +55,7 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
   @Input() projectID: string;
   @Input() isClusterRunning: boolean;
   @Input() isInitialized = false;
+  @Input() nodeDc: Datacenter;
   @Input() quotaWidget: TemplateRef<QuotaWidgetComponent>;
   @Output() changeMachineDeployment = new EventEmitter<MachineDeployment>();
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -68,6 +71,8 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
     private readonly _nodeService: NodeService,
     private readonly _projectService: ProjectService,
     private readonly _userService: UserService,
+    private readonly _node: NodeService,
+    private readonly _clusterService: ClusterService,
     private readonly _notificationService: NotificationService
   ) {}
 
@@ -99,6 +104,13 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  get isAddMachineDeploymentsEnabled(): boolean {
+    return (
+      this.isClusterRunning &&
+      MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'machineDeployments', Permission.Create)
+    );
   }
 
   getHealthStatus(md: MachineDeployment): HealthStatus {
@@ -162,5 +174,21 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
 
   hasNoData(): boolean {
     return _.isEmpty(this.machineDeployments) && this.isClusterRunning && this.isInitialized;
+  }
+
+  addNode(): void {
+    this._node
+      .showMachineDeploymentCreateDialog(this.cluster, this.projectID, this.quotaWidget)
+      .pipe(take(1))
+      .subscribe({
+        next: _ => this._clusterService.onClusterUpdate.next(),
+        error: _ => this._notificationService.error('Could not create the machine deployment'),
+      });
+  }
+
+  onActivate(component: QuotaWidgetComponent): void {
+    component.projectId = this.projectID;
+    component.showDetailsOnHover = false;
+    component.showAsCard = false;
   }
 }

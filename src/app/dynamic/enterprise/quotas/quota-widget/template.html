@@ -36,6 +36,10 @@ END OF TERMS AND CONDITIONS
          [class.km-no-quota-top-margin]="!quotaDetails"
          fxLayout="row"
          fxLayoutAlign=" center">
+      <i *ngIf="showWarning"
+         class="km-icon-warning"
+         matTooltip="The project quota is overdrawn"></i>
+
       <i *ngIf="showIcon"
          class="km-icon-mask km-icon-quota"></i>
 
@@ -69,13 +73,15 @@ END OF TERMS AND CONDITIONS
         <ng-container *ngTemplateOutlet="detailRow; context: {
          label: 'CPU',
          usage: quotaDetails.status.globalUsage.cpu,
-         quota: quotaDetails.quota.cpu
+         quota: quotaDetails.quota.cpu,
+         percentage: quotaPercentage.cpu
          }"></ng-container>
 
         <ng-container *ngTemplateOutlet="detailRow; context: {
          label: 'Memory',
          usage: quotaDetails.status.globalUsage.memory,
          quota: quotaDetails.quota.memory,
+         percentage: quotaPercentage.memory,
          unit: 'GB'
          }"></ng-container>
 
@@ -83,6 +89,7 @@ END OF TERMS AND CONDITIONS
          label: 'Disk',
          usage: quotaDetails.status.globalUsage.storage,
          quota: quotaDetails.quota.storage,
+         percentage: quotaPercentage.storage,
          unit: 'GB'
          }"></ng-container>
 
@@ -90,7 +97,8 @@ END OF TERMS AND CONDITIONS
                      let-label="label"
                      let-usage="usage"
                      let-quota="quota"
-                     let-unit="unit">
+                     let-unit="unit"
+                     let-percentage="percentage">
           <div class="km-detail-row"
                *ngIf="quota"
                fxLayout="row"
@@ -101,6 +109,9 @@ END OF TERMS AND CONDITIONS
                  fxLayout="row wrap"
                  fxLayoutGap="5px"
                  fxLayoutAlign="flex-end center">
+              <i class="km-icon-circle"
+                 *ngIf="showWarning && percentage > quotaLimit"></i>
+
               <span fxLayoutAlign="flex-end">
                 {{ usage ?? 0 }}/{{ quota }}
               </span>

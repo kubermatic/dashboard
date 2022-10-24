@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<ng-container *ngIf="isInitialized()">
+<div class="km-machine-deployment-details"
+     *ngIf="isInitialized()">
   <km-cluster-panel [cluster]="cluster"
                     [datacenter]="datacenter"
                     [projectID]="projectID"></km-cluster-panel>
@@ -151,6 +152,12 @@ limitations under the License.
             <km-relative-time [date]="machineDeployment.creationTimestamp"></km-relative-time>
           </div>
         </km-property>
+
+        <div class="quota-widget">
+          <router-outlet name="quota-widget"
+                         (activate)="onActivate($event)"></router-outlet>
+        </div>
+
         <div fxFlex="100%">
           <km-property fxFlex="50%"
                        *ngIf="machineDeployment.spec.template.labels">
@@ -212,7 +219,7 @@ limitations under the License.
 
   <km-event-card [events]="events"></km-event-card>
 
-</ng-container>
+</div>
 
 <ng-container *ngIf="!isInitialized()">
   <mat-spinner [diameter]="25"

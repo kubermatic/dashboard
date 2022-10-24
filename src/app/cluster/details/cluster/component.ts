@@ -23,7 +23,6 @@ import {ClusterService} from '@core/services/cluster';
 import {DatacenterService} from '@core/services/datacenter';
 import {MachineDeploymentService} from '@core/services/machine-deployment';
 import {MLAService} from '@core/services/mla';
-import {NodeService} from '@core/services/node';
 import {NotificationService} from '@core/services/notification';
 import {OPAService} from '@core/services/opa';
 import {PathParam} from '@core/services/params';
@@ -135,7 +134,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     private readonly _matDialog: MatDialog,
     private readonly _datacenterService: DatacenterService,
     private readonly _appConfigService: AppConfigService,
-    private readonly _node: NodeService,
     private readonly _userService: UserService,
     private readonly _notificationService: NotificationService,
     private readonly _opaService: OPAService,
@@ -303,23 +301,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   getProvider(provider: string): string {
     return provider === 'google' ? 'gcp' : provider;
-  }
-
-  isAddMachineDeploymentsEnabled(): boolean {
-    return (
-      this.isClusterRunning &&
-      MemberUtils.hasPermission(this._user, this._currentGroupConfig, 'machineDeployments', Permission.Create)
-    );
-  }
-
-  addNode(): void {
-    this._node
-      .showMachineDeploymentCreateDialog(this.cluster, this.projectID, this.quotaWidget)
-      .pipe(take(1))
-      .subscribe(
-        _ => this._clusterService.onClusterUpdate.next(),
-        _ => this._notificationService.error('Could not create the machine deployment')
-      );
   }
 
   goBack(): void {
