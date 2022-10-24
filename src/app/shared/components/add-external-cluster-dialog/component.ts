@@ -59,6 +59,12 @@ export class AddExternalClusterDialogComponent implements OnInit, OnDestroy {
 
         this._stepper.next();
       });
+
+    this._stepper.selectionChange.pipe(takeUntil(this._unsubscribe)).subscribe(selection => {
+      if (selection.previouslySelectedIndex > selection.selectedIndex) {
+        selection.previouslySelectedStep.reset();
+      }
+    });
   }
 
   ngOnDestroy() {
@@ -81,10 +87,14 @@ export class AddExternalClusterDialogComponent implements OnInit, OnDestroy {
     return this._stepper.selectedIndex === this.steps.length - 1;
   }
 
+  get first(): boolean {
+    return this._stepper.selectedIndex === 0;
+  }
+
   get invalid(): boolean {
     switch (this.active) {
       case Step.Provider:
-        return false;
+        return !this.externalClusterService.provider;
       case Step.Credentials:
         return !this.externalClusterService.isCredentialsStepValid;
       case Step.Cluster:
@@ -112,5 +122,9 @@ export class AddExternalClusterDialogComponent implements OnInit, OnDestroy {
 
   next(): void {
     this._stepper.next();
+  }
+
+  previous(): void {
+    this._stepper.previous();
   }
 }

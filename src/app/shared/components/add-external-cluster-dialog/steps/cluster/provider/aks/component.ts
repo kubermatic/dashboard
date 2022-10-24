@@ -61,6 +61,7 @@ export class AKSClusterSelectComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+    this._externalClusterService.clusterStepValidity = false;
   }
 
   get isEmpty(): boolean {
