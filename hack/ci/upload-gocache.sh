@@ -58,7 +58,7 @@ export KUBERMATIC_EDITION=ee
 echodate "Building binaries"
 
 (
-  TEST_NAME="Build Kubermatic"
+  TEST_NAME="Build Dashboard"
 
   # prevent the Makefile from downloading the old Gocache. This ensures that
   # our cache does not grow over time, as packages are added and removed,
