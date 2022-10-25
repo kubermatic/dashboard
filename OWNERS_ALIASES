@@ -2,10 +2,24 @@
 # To change team associations, update the GitHub teams via https://github.com/kubermatic/access.
 
 aliases:
+  sig-api:
+    - ahmedwaleedmalik
+    - hbernardo
+    - lsviben
+    - pkprzekwas
+  sig-cluster-management:
+    - ahmedwaleedmalik
+    - dermorz
+    - embik
+    - hdurand0710
+    - imharshita
+    - kron4eg
+    - moadqassem
+    - moelsayed
+    - pratikdeoghare
+    - xmudrii
+    - xrstf
   sig-ui:
     - ahmedwaleedmalik
     - khizerrehan
     - waseem826
-
-  sig-cluster-management: []
-  sig-api: []
