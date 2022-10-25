@@ -30,12 +30,15 @@ import (
 	"github.com/gorilla/websocket"
 
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
+	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/log"
 	"k8c.io/kubermatic/v2/pkg/resources"
 
 	corev1 "k8s.io/api/core/v1"
+	networkingv1 "k8s.io/api/networking/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
@@ -48,6 +51,7 @@ import (
 const (
 	END_OF_TRANSMISSION    = "\u0004"
 	timeout                = 2 * time.Minute
+	appName                = "webterminal"
 	webTerminalStorage     = "web-terminal-storage"
 	podLifetime            = 30 * time.Minute
 	expirationTimestampKey = "ExpirationTimestamp"
@@ -160,35 +164,48 @@ func (t TerminalSession) Toast(p string) error {
 	return nil
 }
 
-func appName(userEmailID string) string {
-	return fmt.Sprintf("webterminal-%s", userEmailID)
+func userAppName(userEmailID string) string {
+	return fmt.Sprintf("%s-%s", appName, userEmailID)
 }
 
 // startProcess is called by terminal session creation.
 // Executed cmd in the container specified in request and connects it up with the ptyHandler (a session).
-func startProcess(ctx context.Context, client ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cmd []string, ptyHandler PtyHandler, websocketConn *websocket.Conn) error {
-	appName := appName(userEmailID)
+func startProcess(ctx context.Context, client ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, cmd []string, ptyHandler PtyHandler, websocketConn *websocket.Conn) error {
+	userAppName := userAppName(userEmailID)
 
 	// check if WEB terminal Pod exists, if not create
 	pod := &corev1.Pod{}
 	if err := client.Get(ctx, ctrlruntimeclient.ObjectKey{
 		Namespace: metav1.NamespaceSystem,
-		Name:      appName,
+		Name:      userAppName,
 	}, pod); err != nil {
 		if !apierrors.IsNotFound(err) {
 			return err
 		}
-		// create Configmap and Pod if not found
-		if err := client.Create(ctx, genWebTerminalConfigMap(appName)); err != nil {
+		// create Configmap, NetworkPolicy and Pod if not found
+		if err := client.Create(ctx, genWebTerminalConfigMap(userAppName)); err != nil {
 			if !apierrors.IsAlreadyExists(err) {
 				return err
 			}
-			err := client.Update(ctx, genWebTerminalConfigMap(appName))
+			err := client.Update(ctx, genWebTerminalConfigMap(userAppName))
 			if err != nil {
 				return err
 			}
 		}
-		if err := client.Create(ctx, genWebTerminalPod(appName, userEmailID)); err != nil {
+		webTerminalNetworkPolicy, err := genWebTerminalNetworkPolicy(userAppName, cluster)
+		if err != nil {
+			return err
+		}
+		if err := client.Create(ctx, webTerminalNetworkPolicy); err != nil {
+			if !apierrors.IsAlreadyExists(err) {
+				return err
+			}
+			err := client.Update(ctx, webTerminalNetworkPolicy)
+			if err != nil {
+				return err
+			}
+		}
+		if err := client.Create(ctx, genWebTerminalPod(userAppName, userEmailID)); err != nil {
 			return err
 		}
 	}
@@ -197,7 +214,7 @@ func startProcess(ctx context.Context, client ctrlruntimeclient.Client, k8sClien
 		pod := &corev1.Pod{}
 		if err := client.Get(ctx, ctrlruntimeclient.ObjectKey{
 			Namespace: metav1.NamespaceSystem,
-			Name:      appName,
+			Name:      userAppName,
 		}, pod); err != nil {
 			return false
 		}
@@ -222,7 +239,7 @@ func startProcess(ctx context.Context, client ctrlruntimeclient.Client, k8sClien
 
 	req := k8sClient.CoreV1().RESTClient().Post().
 		Resource("pods").
-		Name(appName).
+		Name(userAppName).
 		Namespace(metav1.NamespaceSystem).
 		SubResource("exec")
 
@@ -253,12 +270,12 @@ func startProcess(ctx context.Context, client ctrlruntimeclient.Client, k8sClien
 	return nil
 }
 
-func genWebTerminalConfigMap(appName string) *corev1.ConfigMap {
+func genWebTerminalConfigMap(userAppName string) *corev1.ConfigMap {
 	expirationTime := time.Now().Add(podLifetime)
 
 	return &corev1.ConfigMap{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      appName,
+			Name:      userAppName,
 			Namespace: metav1.NamespaceSystem,
 			Labels: map[string]string{
 				"app": appName,
@@ -270,16 +287,105 @@ func genWebTerminalConfigMap(appName string) *corev1.ConfigMap {
 	}
 }
 
-func genWebTerminalPod(appName, userEmailID string) *corev1.Pod {
+func genWebTerminalNetworkPolicy(userAppName string, cluster *kubermaticv1.Cluster) (*networkingv1.NetworkPolicy, error) {
+	dnsPort := intstr.FromInt(53)
+	apiServicePort := intstr.FromInt(443)
+	protoUdp := corev1.ProtocolUDP
+	protoTcp := corev1.ProtocolTCP
+	k8sApiIP := cluster.Status.Address.IP
+	apiPort := intstr.FromInt(int(cluster.Status.Address.Port))
+
+	k8sServiceApiIP, err := resources.InClusterApiserverIP(cluster)
+	if err != nil {
+		return nil, err
+	}
+
+	// block all ingress and allow only egress to the API server
+	return &networkingv1.NetworkPolicy{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      userAppName,
+			Namespace: metav1.NamespaceSystem,
+		},
+		Spec: networkingv1.NetworkPolicySpec{
+			PodSelector: metav1.LabelSelector{
+				MatchLabels: map[string]string{
+					"app": appName,
+				},
+			},
+			PolicyTypes: []networkingv1.PolicyType{
+				networkingv1.PolicyTypeIngress,
+				networkingv1.PolicyTypeEgress,
+			},
+			// api access
+			Egress: []networkingv1.NetworkPolicyEgressRule{
+				{
+					To: []networkingv1.NetworkPolicyPeer{
+						{
+							IPBlock: &networkingv1.IPBlock{
+								CIDR: fmt.Sprintf("%s/32", k8sApiIP),
+							},
+						},
+					},
+					Ports: []networkingv1.NetworkPolicyPort{
+						{
+							Protocol: &protoTcp,
+							Port:     &apiPort,
+						},
+					},
+				},
+				{
+					To: []networkingv1.NetworkPolicyPeer{
+						{
+							IPBlock: &networkingv1.IPBlock{
+								CIDR: fmt.Sprintf("%s/32", k8sServiceApiIP),
+							},
+						},
+					},
+					Ports: []networkingv1.NetworkPolicyPort{
+						{
+							Protocol: &protoTcp,
+							Port:     &apiServicePort,
+						},
+					},
+				},
+				// world dns access
+				{
+					To: []networkingv1.NetworkPolicyPeer{
+						{
+							IPBlock: &networkingv1.IPBlock{
+								CIDR: "0.0.0.0/0",
+							},
+						},
+					},
+					Ports: []networkingv1.NetworkPolicyPort{
+						{
+							Protocol: &protoTcp,
+							Port:     &dnsPort,
+						},
+						{
+							Protocol: &protoUdp,
+							Port:     &dnsPort,
+						},
+					},
+				},
+			},
+		},
+	}, nil
+}
+
+func genWebTerminalPod(userAppName, userEmailID string) *corev1.Pod {
 	pod := &corev1.Pod{}
-	pod.Name = appName
+	pod.Name = userAppName
 	pod.Namespace = metav1.NamespaceSystem
+	pod.Labels = map[string]string{
+		"app": appName,
+	}
 	pod.Spec = corev1.PodSpec{}
 	pod.Spec.Volumes = getVolumes(userEmailID)
 	pod.Spec.InitContainers = []corev1.Container{}
 	pod.Spec.Containers = []corev1.Container{
 		{
-			Name:    appName,
+			Name:    userAppName,
 			Image:   resources.RegistryQuay + "/kubermatic/web-terminal:0.2.0",
 			Command: []string{"/bin/bash", "-c", "--"},
 			Args:    []string{"while true; do sleep 30; done;"},
@@ -350,13 +456,14 @@ func getVolumeMounts() []corev1.VolumeMount {
 }
 
 // Terminal is called for any new websocket connection.
-func Terminal(ctx context.Context, ws *websocket.Conn, client ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *restclient.Config, userEmailID string) {
+func Terminal(ctx context.Context, ws *websocket.Conn, client ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *restclient.Config, userEmailID string, cluster *kubermaticv1.Cluster) {
 	if err := startProcess(
 		ctx,
 		client,
 		k8sClient,
 		cfg,
 		userEmailID,
+		cluster,
 		[]string{"bash", "-c", "cd /data/terminal && /bin/bash"},
 		TerminalSession{
 			websocketConn: ws,
