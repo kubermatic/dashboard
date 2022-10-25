@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+# Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -71,7 +71,7 @@ fi
 GIT_BRANCH="$(echo "$GIT_BRANCH" | sed 's#/#-#g')"
 
 ARCHIVE_NAME="${CACHE_VERSION}-${GO_VERSION}-${GOARCH}.tar"
-URL="${GOCACHE_MINIO_ADDRESS}/kubermatic/${GIT_BRANCH}/${ARCHIVE_NAME}"
+URL="${GOCACHE_MINIO_ADDRESS}/dashboard/${GIT_BRANCH}/${ARCHIVE_NAME}"
 
 # Do not go through the retry loop when there is nothing, but do try the
 # first few parents if no cache was found. This is helpful for retests happening
