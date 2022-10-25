@@ -35,6 +35,7 @@ import (
 	"k8c.io/kubermatic/v2/pkg/log"
 	"k8c.io/kubermatic/v2/pkg/resources"
 
+	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
 	networkingv1 "k8s.io/api/networking/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -53,10 +54,14 @@ const (
 	timeout                           = 2 * time.Minute
 	appName                           = "webterminal"
 	webTerminalStorage                = "web-terminal-storage"
+	webTerminalConfigVolume           = "web-terminal-config"
 	podLifetime                       = 30 * time.Minute
 	remainingExpirationTimeForWarning = 5 * time.Minute // should be lesser than "podLifetime"
 	expirationCheckInterval           = 1 * time.Minute // should be lesser than "remainingExpirationTimeForWarning"
 	expirationTimestampKey            = "ExpirationTimestamp"
+
+	webTerminalImage                   = resources.RegistryQuay + "/kubermatic/web-terminal:0.2.0"
+	webTerminalContainerKubeconfigPath = "/etc/kubernetes/kubeconfig/kubeconfig"
 )
 
 type TerminalConnStatus string
@@ -240,30 +245,8 @@ func startProcess(ctx context.Context, client ctrlruntimeclient.Client, k8sClien
 		if !apierrors.IsNotFound(err) {
 			return err
 		}
-		// create Configmap, NetworkPolicy and Pod if not found
-		if err := client.Create(ctx, genWebTerminalConfigMap(userAppName)); err != nil {
-			if !apierrors.IsAlreadyExists(err) {
-				return err
-			}
-			err := client.Update(ctx, genWebTerminalConfigMap(userAppName))
-			if err != nil {
-				return err
-			}
-		}
-		webTerminalNetworkPolicy, err := genWebTerminalNetworkPolicy(userAppName, cluster)
-		if err != nil {
-			return err
-		}
-		if err := client.Create(ctx, webTerminalNetworkPolicy); err != nil {
-			if !apierrors.IsAlreadyExists(err) {
-				return err
-			}
-			err := client.Update(ctx, webTerminalNetworkPolicy)
-			if err != nil {
-				return err
-			}
-		}
-		if err := client.Create(ctx, genWebTerminalPod(userAppName, userEmailID)); err != nil {
+		// create Configmap, NetworkPolicy, Pod and cleanup Job
+		if err := createOrUpdateResources(ctx, client, userEmailID, userAppName, cluster); err != nil {
 			return err
 		}
 	}
@@ -330,6 +313,39 @@ func startProcess(ctx context.Context, client ctrlruntimeclient.Client, k8sClien
 	return nil
 }
 
+func createOrUpdateResources(ctx context.Context, client ctrlruntimeclient.Client, userEmailID, userAppName string, cluster *kubermaticv1.Cluster) error {
+	if err := client.Create(ctx, genWebTerminalConfigMap(userAppName)); err != nil {
+		if !apierrors.IsAlreadyExists(err) {
+			return err
+		}
+		err := client.Update(ctx, genWebTerminalConfigMap(userAppName))
+		if err != nil {
+			return err
+		}
+	}
+	webTerminalNetworkPolicy, err := genWebTerminalNetworkPolicy(userAppName, cluster)
+	if err != nil {
+		return err
+	}
+	if err := client.Create(ctx, webTerminalNetworkPolicy); err != nil {
+		if !apierrors.IsAlreadyExists(err) {
+			return err
+		}
+		err := client.Update(ctx, webTerminalNetworkPolicy)
+		if err != nil {
+			return err
+		}
+	}
+	if err := client.Create(ctx, genWebTerminalPod(userAppName, userEmailID)); err != nil {
+		return err
+	}
+	if err := client.Create(ctx, genWebTerminalCleanupJob(userAppName, userEmailID)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func genWebTerminalConfigMap(userAppName string) *corev1.ConfigMap {
 	expirationTime := time.Now().Add(podLifetime)
 
@@ -338,7 +354,7 @@ func genWebTerminalConfigMap(userAppName string) *corev1.ConfigMap {
 			Name:      userAppName,
 			Namespace: metav1.NamespaceSystem,
 			Labels: map[string]string{
-				"app": appName,
+				resources.AppLabelKey: appName,
 			},
 		},
 		Data: map[string]string{
@@ -369,7 +385,7 @@ func genWebTerminalNetworkPolicy(userAppName string, cluster *kubermaticv1.Clust
 		Spec: networkingv1.NetworkPolicySpec{
 			PodSelector: metav1.LabelSelector{
 				MatchLabels: map[string]string{
-					"app": appName,
+					resources.AppLabelKey: appName,
 				},
 			},
 			PolicyTypes: []networkingv1.PolicyType{
@@ -438,21 +454,21 @@ func genWebTerminalPod(userAppName, userEmailID string) *corev1.Pod {
 	pod.Name = userAppName
 	pod.Namespace = metav1.NamespaceSystem
 	pod.Labels = map[string]string{
-		"app": appName,
+		resources.AppLabelKey: appName,
 	}
 	pod.Spec = corev1.PodSpec{}
-	pod.Spec.Volumes = getVolumes(userEmailID)
+	pod.Spec.Volumes = getVolumes(userEmailID, userAppName)
 	pod.Spec.InitContainers = []corev1.Container{}
 	pod.Spec.Containers = []corev1.Container{
 		{
 			Name:    userAppName,
-			Image:   resources.RegistryQuay + "/kubermatic/web-terminal:0.2.0",
+			Image:   webTerminalImage,
 			Command: []string{"/bin/bash", "-c", "--"},
 			Args:    []string{"while true; do sleep 30; done;"},
 			Env: []corev1.EnvVar{
 				{
 					Name:  "KUBECONFIG",
-					Value: "/etc/kubernetes/kubeconfig/kubeconfig",
+					Value: webTerminalContainerKubeconfigPath,
 				},
 				{
 					Name:  "PS1",
@@ -478,7 +494,86 @@ func genWebTerminalPod(userAppName, userEmailID string) *corev1.Pod {
 	return pod
 }
 
-func getVolumes(userEmailID string) []corev1.Volume {
+func genWebTerminalCleanupJob(userAppName, userEmailID string) *batchv1.Job {
+	return &batchv1.Job{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      fmt.Sprintf("cleanup-%s", userAppName),
+			Namespace: metav1.NamespaceSystem,
+			Labels: map[string]string{
+				resources.AppLabelKey: appName,
+			},
+		},
+		Spec: batchv1.JobSpec{
+			BackoffLimit:            resources.Int32(10),
+			Completions:             resources.Int32(1),
+			Parallelism:             resources.Int32(1),
+			TTLSecondsAfterFinished: resources.Int32(0),
+			Template: corev1.PodTemplateSpec{
+				Spec: corev1.PodSpec{
+					Volumes:        getVolumes(userEmailID, userAppName),
+					InitContainers: []corev1.Container{},
+					Containers: []corev1.Container{
+						{
+							Name:    userAppName,
+							Image:   webTerminalImage,
+							Command: []string{"/bin/bash", "-c"},
+							Args: []string{`
+								EXP=$(<$EXPIRATION);
+								NOW=$(date +"%s");
+								REMAINING_TIME_SEC=$((EXP-NOW));
+								if (( REMAINING_TIME_SEC > 0 )); then
+									sleep $REMAINING_TIME_SEC;
+									exit 1; # exit as failed, so the job will be restarted to check if the expiration was updated
+								fi
+								# user web terminal is already expired, so delete its resources
+								kubectl delete networkpolicy $USER_APP_NAME -n $NAMESPACE_SYSTEM;
+								kubectl delete configmap $USER_APP_NAME -n $NAMESPACE_SYSTEM;
+								kubectl delete pod $USER_APP_NAME -n $NAMESPACE_SYSTEM;`,
+							},
+							Env: []corev1.EnvVar{
+								{
+									Name:  "KUBECONFIG",
+									Value: webTerminalContainerKubeconfigPath,
+								},
+								{
+									Name:  "USER_APP_NAME",
+									Value: userAppName,
+								},
+								{
+									Name:  "NAMESPACE_SYSTEM",
+									Value: metav1.NamespaceSystem,
+								},
+								{
+									Name:  "EXPIRATION",
+									Value: "/etc/config/expiration",
+								},
+								{
+									Name:  "PS1",
+									Value: "\\$ ",
+								},
+							},
+							VolumeMounts: getVolumeMounts(),
+							SecurityContext: &corev1.SecurityContext{
+								AllowPrivilegeEscalation: resources.Bool(false),
+							},
+						},
+					},
+					RestartPolicy: corev1.RestartPolicyOnFailure,
+					SecurityContext: &corev1.PodSecurityContext{
+						RunAsUser:  resources.Int64(1000),
+						RunAsGroup: resources.Int64(3000),
+						FSGroup:    resources.Int64(2000),
+						SeccompProfile: &corev1.SeccompProfile{
+							Type: corev1.SeccompProfileTypeRuntimeDefault,
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func getVolumes(userEmailID, userAppName string) []corev1.Volume {
 	vs := []corev1.Volume{
 		{
 			Name: resources.WEBTerminalKubeconfigSecretName,
@@ -493,6 +588,22 @@ func getVolumes(userEmailID string) []corev1.Volume {
 			VolumeSource: corev1.VolumeSource{
 				EmptyDir: &corev1.EmptyDirVolumeSource{
 					Medium: corev1.StorageMediumMemory,
+				},
+			},
+		},
+		{
+			Name: webTerminalConfigVolume,
+			VolumeSource: corev1.VolumeSource{
+				ConfigMap: &corev1.ConfigMapVolumeSource{
+					LocalObjectReference: corev1.LocalObjectReference{
+						Name: userAppName,
+					},
+					Items: []corev1.KeyToPath{
+						{
+							Key:  expirationTimestampKey,
+							Path: "expiration",
+						},
+					},
 				},
 			},
 		},
@@ -511,6 +622,10 @@ func getVolumeMounts() []corev1.VolumeMount {
 			Name:      webTerminalStorage,
 			ReadOnly:  false,
 			MountPath: "/data/terminal",
+		},
+		{
+			Name:      webTerminalConfigVolume,
+			MountPath: "/etc/config",
 		},
 	}
 }
