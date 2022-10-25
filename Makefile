@@ -36,7 +36,7 @@ export CGO_ENABLED ?= 0
 export GOFLAGS ?= -mod=readonly -trimpath
 export GO111MODULE = on
 DOCKER_REPO ?= quay.io/kubermatic
-REPO = $(DOCKER_REPO)/kubermatic$(shell [ "$(KUBERMATIC_EDITION)" != "ce" ] && echo "-$(KUBERMATIC_EDITION)" )
+REPO = $(DOCKER_REPO)/dashboard$(shell [ "$(KUBERMATIC_EDITION)" != "ce" ] && echo "-$(KUBERMATIC_EDITION)" )
 CMD ?= $(notdir $(wildcard ./cmd/*))
 GOBUILDFLAGS ?= -v
 GIT_VERSION = $(shell git describe --tags --always)

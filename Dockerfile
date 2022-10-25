@@ -21,8 +21,8 @@ COPY ./_build/ /usr/local/bin/
 COPY ./cmd/kubermatic-api/swagger.json /opt/swagger.json
 COPY ./dist /dist
 
-# We need to duplicate this binary in the root untill we update
-# the KKP operator to use the binary from /usr/local/bin.
-COPY ./_build/dashboard /
-
 USER nobody
+
+# this default CMD is for the legacy KKP Operator, which did not
+# specify an explicit command in the dashboard Deployment
+CMD ["dashboard"]
