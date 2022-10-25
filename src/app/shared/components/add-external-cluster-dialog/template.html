@@ -44,7 +44,8 @@ limitations under the License.
     <ng-template matStepLabel>{{step.Cluster}}</ng-template>
     <ng-template matStepContent>
       <km-external-cluster-cluster-step *ngIf="active === step.Cluster"
-                                        [projectID]="projectId"></km-external-cluster-cluster-step>
+                                        [projectID]="projectId"
+                                        [quotaWidget]="quotaWidget"></km-external-cluster-cluster-step>
     </ng-template>
   </mat-step>
 </mat-horizontal-stepper>

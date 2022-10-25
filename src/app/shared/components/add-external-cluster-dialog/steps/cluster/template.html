@@ -14,7 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div class="km-provider-logo km-provider-logo-{{provider}}"></div>
+<div fxLayout="row"
+     fxLayoutAlign="space-between center">
+  <div class="km-provider-logo km-provider-logo-{{provider}}"></div>
+  <div class="quota-widget">
+    <ng-container *ngTemplateOutlet="quotaWidget"></ng-container>
+  </div>
+</div>
 
 <div [ngSwitch]="provider"
      fxLayout="column">
