@@ -45,3 +45,5 @@ cypress/plugins/cy-ts-preprocessor.js
 
 # GO
 /vendor
+**/_build
+download-gocache

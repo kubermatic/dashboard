@@ -14,6 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+if [ -z "${KIND_CLUSTER_NAME:-}" ]; then
+  echodate "KIND_CLUSTER_NAME must be set by calling setup-kind-cluster.sh first."
+  exit 1
+fi
+
 export KUBERMATIC_VERSION=latest
 export TARGET_BRANCH="${PULL_BASE_REF:-main}"
 export KUBERMATIC_OIDC_LOGIN="roxy@kubermatic.com"
@@ -21,6 +26,32 @@ export KUBERMATIC_OIDC_PASSWORD="password"
 
 # Set docker config
 echo "$IMAGE_PULL_SECRET_DATA" | base64 -d > /config.json
+
+export DASHBOARD_VERSION="${DASHBOARD_VERSION:-$(git rev-parse HEAD)}"
+
+REPOSUFFIX=""
+if [ "$KUBERMATIC_EDITION" != "ce" ]; then
+  REPOSUFFIX="-$KUBERMATIC_EDITION"
+fi
+
+# Build binaries and load the Docker images into the kind cluster.
+echodate "Building statics for $DASHBOARD_VERSION"
+time retry 1 make dist
+
+echodate "Building binaries for $DASHBOARD_VERSION"
+TEST_NAME="Build API binaries"
+
+beforeGoBuild=$(nowms)
+time retry 1 make build
+pushElapsed kubermatic_go_build_duration_milliseconds $beforeGoBuild
+
+IMAGE_NAME="quay.io/kubermatic/dashboard$REPOSUFFIX:$DASHBOARD_VERSION"
+(
+  echodate "Building Kubermatic API Docker image"
+  TEST_NAME="Build Kubermatic API Docker image"
+  time retry 5 docker build -t "$IMAGE_NAME" .
+  time retry 5 kind load docker-image "$IMAGE_NAME" --name "$KIND_CLUSTER_NAME"
+)
 
 REPO_ROOT="$(realpath .)"
 cd "${GOPATH}/src/github.com/kubermatic/kubermatic"
@@ -32,11 +63,6 @@ if [[ ${TARGET_BRANCH} == release* ]]; then
     TAG_VERSION=latest
   fi
   export KUBERMATIC_VERSION=${TAG_VERSION}
-fi
-
-REPOSUFFIX=""
-if [ "$KUBERMATIC_EDITION" != "ce" ]; then
-  REPOSUFFIX="-$KUBERMATIC_EDITION"
 fi
 
 HELM_VALUES_FILE="$(mktemp)"
@@ -150,6 +176,21 @@ sleep 5
 echodate "Waiting for Kubermatic Operator to deploy Seed components..."
 retry 8 check_all_deployments_ready kubermatic
 echodate "Kubermatic Seed is ready."
+
+# hack to replace the API's image with our own until the operator
+# can deal with setting up a non kubermatic/kubermatic Docker image
+# for the API natively
+echodate "Stopping KKP Operator..."
+kubectl --namespace kubermatic scale deployment/kubermatic-operator --replicas=0
+retry 7 check_pod_count kubermatic "app.kubernetes.io/name=kubermatic-operator" 0
+echodate "Operator has shut down."
+
+echodate "Patching API Deployment..."
+patch="{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"api\",\"image\":\"$IMAGE_NAME\"}]}}}}"
+kubectl --namespace kubermatic patch deployment kubermatic-api --patch "$patch"
+sleep 3
+retry 9 check_pod_count kubermatic "app.kubernetes.io/name=kubermatic-api" 1
+echodate "API has been replaced."
 
 echodate "Waiting for VPA to be ready..."
 retry 8 check_all_deployments_ready kube-system

@@ -1,9 +1,11 @@
 SHELL=/bin/bash
 KUBERMATIC_EDITION?=ee
+export KUBERMATIC_EDITION
 REPO=quay.io/kubermatic/dashboard$(shell [[ "$(KUBERMATIC_EDITION)" != "ce" ]] && echo "\-${KUBERMATIC_EDITION}" )
 IMAGE_TAG=$(shell echo $$(git rev-parse HEAD)|tr -d '\n')
 CC=npm
-export GOOS?=linux
+GOOS ?= $(shell go env GOOS)
+export GOOS
 
 # This determines the version that is printed at the footer in the
 # dashboard. It does not influence the tags used for the Docker images
@@ -30,7 +32,47 @@ ifeq (${HUMAN_VERSION},)
 	endif
 endif
 
+export CGO_ENABLED ?= 0
+export GOFLAGS ?= -mod=readonly -trimpath
+export GO111MODULE = on
+DOCKER_REPO ?= quay.io/kubermatic
+REPO = $(DOCKER_REPO)/kubermatic$(shell [ "$(KUBERMATIC_EDITION)" != "ce" ] && echo "-$(KUBERMATIC_EDITION)" )
+CMD ?= $(notdir $(wildcard ./cmd/*))
+GOBUILDFLAGS ?= -v
+GIT_VERSION = $(shell git describe --tags --always)
+TAGS ?= $(GIT_VERSION)
+DOCKERTAGS = $(TAGS) latestbuild
+DOCKER_BUILD_FLAG += $(foreach tag, $(DOCKERTAGS), -t $(REPO):$(tag))
+KUBERMATICCOMMIT ?= $(shell git log -1 --format=%H)
+KUBERMATICDOCKERTAG ?= $(KUBERMATICCOMMIT)
+UIDOCKERTAG ?= NA
+LDFLAGS += -extldflags '-static' \
+  -X k8c.io/kubermatic/v2/pkg/version/kubermatic.gitVersion=$(GIT_VERSION) \
+  -X k8c.io/kubermatic/v2/pkg/version/kubermatic.kubermaticDockerTag=$(KUBERMATICDOCKERTAG) \
+  -X k8c.io/kubermatic/v2/pkg/version/kubermatic.uiDockerTag=$(UIDOCKERTAG) \
+  -X k8c.io/dashboard/v2/pkg/version/kubermatic.Edition=$(KUBERMATIC_EDITION) \
+  -X k8c.io/dashboard/v2/pkg/version/kubermatic.Version=$(HUMAN_VERSION)
+LDFLAGS_EXTRA=-w
+BUILD_DEST ?= _build
+GOTOOLFLAGS ?= $(GOBUILDFLAGS) -ldflags '$(LDFLAGS_EXTRA) $(LDFLAGS)' $(GOTOOLFLAGS_EXTRA)
+DOCKER_BIN := $(shell which docker)
+
+.PHONY: all
 all: install run
+
+.PHONY: build
+build: $(CMD)
+
+.PHONY: $(CMD)
+$(CMD): %: $(BUILD_DEST)/%
+
+$(BUILD_DEST)/%: cmd/% download-gocache
+	GOOS=$(GOOS) go build -tags "$(KUBERMATIC_EDITION)" $(GOTOOLFLAGS) -o $@ ./cmd/$*
+
+download-gocache:
+	@./hack/ci/download-gocache.sh
+	@# Prevent this from getting executed multiple times
+	@touch download-gocache
 
 version:
 	@echo $(HUMAN_VERSION)
@@ -61,9 +103,6 @@ run-e2e-ci: install
 
 dist: install
 	@KUBERMATIC_EDITION=${KUBERMATIC_EDITION} $(CC) run build
-
-build:
-	CGO_ENABLED=0 go build -a -ldflags '-w -extldflags -static -X 'main.Edition=${KUBERMATIC_EDITION}' -X 'main.Version=${HUMAN_VERSION}'' -o dashboard .
 
 docker-build: build dist
 	docker build -t $(REPO):$(IMAGE_TAG) .
