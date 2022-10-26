@@ -16,7 +16,7 @@
 // By wrapping styles with "selector" will prevent styles to go up the chain to parent and sibling components.
 // It will only effect styles specified here will go down to children components only.
 
-km-terminal {
+.km-terminal {
   .xterm {
     padding: 10px 30px;
   }

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, ViewEncapsulation} from '@angular/core';
+import {Component, ViewEncapsulation} from '@angular/core';
 import {Cluster} from '@shared/entity/cluster';
 import {Datacenter} from '@shared/entity/datacenter';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -34,9 +34,6 @@ export class WebTerminalComponent {
   cluster: Cluster;
   datacenter: Datacenter;
   projectID: string;
-
-  @Input() showCloseIcon = true;
-  @Input() showOpenInSeparateViewIcon = true;
 
   private _clusterName: string;
   private _isClusterLoaded = false;

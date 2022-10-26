@@ -15,16 +15,16 @@
 @use 'mixins';
 
 .toolbar-status-container {
-  @include mixins.size(100%, 3rem);
+  @include mixins.size(100%, 48px);
 
   align-items: center;
   box-sizing: border-box;
   display: flex;
-  padding: 0 1.75rem;
+  padding: 0 28px;
 
   & button[mat-flat-button],
   & button[mat-icon-button], {
-    @include mixins.size(auto, 1.8rem);
+    @include mixins.size(auto, 28px);
 
     margin: 0;
   }

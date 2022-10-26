@@ -16,15 +16,15 @@
 @use 'mixins';
 
 .toolbar-container {
-  @include mixins.size(100%, 4rem);
+  @include mixins.size(100%, 64px);
 
   box-sizing: border-box;
-  padding: 0 1.75rem;
+  padding: 0 28px;
 
   & .toolbar-text-cloud-shell-terminal {
     font-family: variables.$font-primary;
-    font-size: 1rem;
-    line-height: 1.5rem;
+    font-size: 16px;
+    line-height: 26px;
     margin: 5px 0;
   }
 

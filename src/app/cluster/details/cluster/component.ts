@@ -80,7 +80,6 @@ import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/comp
 })
 export class ClusterDetailsComponent implements OnInit, OnDestroy {
   private _unsubscribe: Subject<void> = new Subject<void>();
-  private _terminalUnsubscribe: Subject<void> = new Subject<void>();
   private _user: Member;
   private _currentGroupConfig: GroupConfig;
   private _seedSettings: SeedSettings;
@@ -555,7 +554,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
-    this._terminalUnsubscribe.complete();
   }
 
   isAdmissionPluginEnabled(plugin: string): boolean {

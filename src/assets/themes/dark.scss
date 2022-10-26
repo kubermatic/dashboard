@@ -88,7 +88,7 @@ $foreground: map.merge($foreground, (disabled-text: #636363));
 $foreground: map.merge($foreground, (disabled-checkbox: #656d75));
 $foreground: map.merge($foreground, (disabled-checkbox-checked: #7e868f));
 $foreground: map.merge($foreground, (disabled-checkbox-border: #b6b6b6));
-$foreground: map.merge($foreground, (disabled: #313132));
+$foreground: map.merge($foreground, (disabled: #7c7c7c));
 $foreground: map.merge($foreground, (divider: #464647));
 $foreground: map.merge($foreground, (disabled-divider: #313132));
 $theme-dark: map.merge($theme-dark, (foreground: $foreground));

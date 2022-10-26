@@ -18,7 +18,7 @@
 // By wrapping styles with "selector" will prevent styles to go up the chain to parent and sibling components.
 // It will only effect styles specified here will go down to children components only.
 
-km-web-terminal {
+.km-web-terminal {
   .xterm-viewport {
     height: 72vh;
   }

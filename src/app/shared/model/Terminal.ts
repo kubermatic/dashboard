@@ -23,11 +23,11 @@ export interface ITerminalFrame {
 }
 
 export class TerminalConfig {
-  fontSize: number;
-  fontFamily: string;
-  cursorBlink: boolean;
-  foreground: string;
-  background: string;
+  FontSize: number;
+  FontFamily: string;
+  CursorBlink: boolean;
+  Foreground: string;
+  Background: string;
 }
 
 export enum LayoutType {

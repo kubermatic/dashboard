@@ -43,9 +43,6 @@ END OF TERMS AND CONDITIONS
         <mat-error *ngIf="form.get(controls.Name).hasError('pattern')">
           Schedule name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start or end with dash.
         </mat-error>
-        <mat-error *ngIf="form.get(controls.Name).hasError('pattern')">
-          Schedule name can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start or end with dash.
-        </mat-error>
       </mat-form-field>
 
       <mat-radio-group [formControlName]="controls.Group"

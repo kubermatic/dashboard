@@ -22,7 +22,7 @@ import {webSocket, WebSocketSubject} from 'rxjs/webSocket';
 @Injectable({
   providedIn: 'root',
 })
-export class WebsocketService {
+export class WebTerminalSocketService {
   private readonly _wsRoot = environment.wsRoot;
   private _socket$: WebSocketSubject<ITerminalFrame>;
   private _connectSubject$ = new Subject<void>();

@@ -31,7 +31,7 @@ import {
 import {ActivatedRoute, Router} from '@angular/router';
 import {ClusterService} from '@core/services/cluster';
 import {PathParam} from '@core/services/params';
-import {WebsocketService} from '@core/services/websocket';
+import {WebTerminalSocketService} from '@core/services/websocket';
 import {Cluster} from '@shared/entity/cluster';
 import {UserService} from '@core/services/user';
 import {Member} from '@shared/entity/member';
@@ -43,23 +43,23 @@ import {Terminal} from 'xterm';
 import {FitAddon} from 'xterm-addon-fit';
 
 const Config: TerminalConfig = {
-  fontSize: 13,
-  fontFamily: 'Consolas, "Courier New", monospace',
-  cursorBlink: true,
-  foreground: '#f8f8f8',
-  background: '#2b3035',
+  FontSize: 13,
+  FontFamily: 'Consolas, "Courier New", monospace',
+  CursorBlink: true,
+  Foreground: '#f8f8f8',
+  Background: '#2b3035',
 };
 
 enum Operations {
-  stdout = 'stdout',
-  stdin = 'stdin',
-  msg = 'msg',
+  Stdout = 'stdout',
+  Stdin = 'stdin',
+  Msg = 'msg',
 }
 
 enum ErrorOperations {
-  kubeconfigSecretMissing = 'KUBECONFIG_SECRET_MISSING',
-  webTerminalPodPending = 'WEBTERMINAL_POD_PENDING',
-  connectionPoolExceeded = 'CONNECTION_POOL_EXCEEDED',
+  KubeConfigSecretMissing = 'KUBECONFIG_SECRET_MISSING',
+  WebTerminalPodPending = 'WEBTERMINAL_POD_PENDING',
+  ConnectionPoolExceeded = 'CONNECTION_POOL_EXCEEDED',
 }
 
 @Component({
@@ -80,9 +80,9 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
   isLoadingTerminal = true;
   isDexAuthenticationPageOpened = false;
 
-  showCloseButtonOnToolbar;
-  showOpenInSeparateViewButtonOnToolbar;
-  showCloseButtonOnStatusToolbar;
+  showCloseButtonOnToolbar: boolean;
+  showOpenInSeparateViewButtonOnToolbar: boolean;
+  showCloseButtonOnStatusToolbar: boolean;
 
   private _user: Member;
   private _initializeTerminalOnSuccess: Subject<boolean> = new Subject<boolean>();
@@ -91,7 +91,7 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
 
   @Output() close = new EventEmitter<void>();
   @ViewChild('terminal', {static: false}) terminalRef: ElementRef;
-  @ViewChild('showTerminal', {static: true}) showTerminalRef: ElementRef;
+  @ViewChild('terminalContainer', {static: true}) terminalContainerRef: ElementRef;
 
   private readonly _unsubscribe = new Subject<void>();
   private _resizeEventlistenerFn: () => void;
@@ -104,7 +104,7 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
     private readonly _clusterService: ClusterService,
     private readonly _renderer: Renderer2,
     private readonly _userService: UserService,
-    private readonly _websocketService: WebsocketService
+    private readonly _webTerminalSocketService: WebTerminalSocketService
   ) {}
 
   ngOnChanges(changes: SimpleChanges) {
@@ -132,18 +132,18 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
         });
     }
 
-    this._websocketService.messages$.pipe(takeUntil(this._unsubscribe)).subscribe((frame: ITerminalFrame) => {
+    this._webTerminalSocketService.messages$.pipe(takeUntil(this._unsubscribe)).subscribe((frame: ITerminalFrame) => {
       this._handleWebSocketConnectionMessages(frame);
     });
 
-    this._websocketService
+    this._webTerminalSocketService
       .getWebSocketOnConnectObservable$()
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
         this.isConnectionLost = false;
       });
 
-    this._websocketService
+    this._webTerminalSocketService
       .getWebSocketOnCloseObservable$()
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
@@ -155,7 +155,7 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
 
     this._initializeTerminalOnSuccess.pipe(take(1)).subscribe(_ => {
       this.isLoadingTerminal = false;
-      this._cdr.detectChanges();
+      this._cdr.detectChanges(); // Update DOM to access terminal elememt
       this.initTerminal();
     });
   }
@@ -163,7 +163,7 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
-    this._websocketService.close();
+    this._webTerminalSocketService.close();
     // Clean 'resize' Event listener subscription
     this._removeEventListener();
   }
@@ -178,12 +178,12 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
     }
 
     this.terminal = new Terminal({
-      fontSize: Config.fontSize,
-      fontFamily: Config.fontFamily,
-      cursorBlink: Config.cursorBlink,
+      fontSize: Config.FontSize,
+      fontFamily: Config.FontFamily,
+      cursorBlink: Config.CursorBlink,
       theme: {
-        foreground: Config.foreground,
-        background: Config.background,
+        foreground: Config.Foreground,
+        background: Config.Background,
       },
     });
 
@@ -244,7 +244,7 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
   }
 
   private _connectToWebSocketConnection(): void {
-    this._websocketService.connect(this._getConnectionString());
+    this._webTerminalSocketService.connect(this._getConnectionString());
   }
 
   private _getConnectionString(): string {
@@ -252,13 +252,13 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
   }
 
   private _handleWebSocketConnectionMessages(frame: ITerminalFrame): void {
-    if (frame.Op === Operations.stdout) {
+    if (frame.Op === Operations.Stdout) {
       // Initialize terminal on WS connection success.
       this._initializeTerminalOnSuccess.next(true);
       this._initializeTerminalOnSuccess.complete();
       this.terminal.write(frame.Data);
-    } else if (frame.Op === Operations.msg) {
-      if (frame.Data === ErrorOperations.kubeconfigSecretMissing) {
+    } else if (frame.Op === Operations.Msg) {
+      if (frame.Data === ErrorOperations.KubeConfigSecretMissing) {
         if (!this.isDexAuthenticationPageOpened) {
           const url = this._getWebTerminalProxyURL();
           window.open(url, '_blank');
@@ -266,11 +266,11 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
         }
 
         this.message = 'Please wait, authenticate in order to access cloud shell...';
-      } else if (frame.Data === ErrorOperations.webTerminalPodPending) {
+      } else if (frame.Data === ErrorOperations.WebTerminalPodPending) {
         this.message = 'Please wait, provisioning your Cloud Shell machine...';
-      } else if (frame.Data === ErrorOperations.connectionPoolExceeded) {
+      } else if (frame.Data === ErrorOperations.ConnectionPoolExceeded) {
         this.terminal.write(
-          `Oops! There could be ${this.MAX_SESSION_SUPPORTED} concurrent session per user either discard or close other sessions`
+          `Oops! There could be ${this.MAX_SESSION_SUPPORTED} concurrent session per user. Please either discard or close other sessions.`
         );
       }
     }
@@ -283,8 +283,8 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
   }
 
   private _onTerminalSendString(str: string): void {
-    this._websocketService.sendMessage({
-      Op: Operations.stdin,
+    this._webTerminalSocketService.sendMessage({
+      Op: Operations.Stdin,
       Data: `${str}`,
       Cols: this.terminal.cols,
       Rows: this.terminal.rows,

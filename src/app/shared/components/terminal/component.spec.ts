@@ -20,13 +20,15 @@ import {ActivatedRoute} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import {ClusterService} from '@core/services/cluster';
 import {NotificationService} from '@core/services/notification';
+import {UserService} from '@core/services/user';
+import {UserMockService} from '@test/services/user-mock';
 import {fakeDigitaloceanCluster} from '@test/data/cluster';
 import {fakeProject} from '@test/data/project';
 import {ClusterMockService} from '@test/services/cluster-mock';
 import {ActivatedRouteStub} from '@test/services/router-stubs';
 import {TerminalComponent} from './component';
 
-describe('XTermTerminal', () => {
+describe('TerminalComponent', () => {
   let component: TerminalComponent;
   let fixture: ComponentFixture<TerminalComponent>;
   let activatedRoute: ActivatedRouteStub;
@@ -38,6 +40,7 @@ describe('XTermTerminal', () => {
       providers: [
         {provide: ActivatedRoute, useClass: ActivatedRouteStub},
         {provide: ClusterService, useClass: ClusterMockService},
+        {provide: UserService, useClass: UserMockService},
         NotificationService,
       ],
       teardown: {destroyAfterEach: false},

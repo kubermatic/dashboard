@@ -15,7 +15,7 @@ limitations under the License.
 -->
 
 
-<ng-container *ngIf="isLoadingTerminal; else showTerminal">
+<ng-container *ngIf="isLoadingTerminal; else terminalContainer">
   <div class="terminal-placeholder">
     <div fxFlex
          fxLayout="column"
@@ -31,7 +31,7 @@ limitations under the License.
   </div>
 </ng-container>
 
-<ng-template #showTerminal>
+<ng-template #terminalContainer>
   <km-terminal-toolbar [showCloseButton]="showCloseButtonOnToolbar"
                        [showOpenInSeparateViewButton]="showOpenInSeparateViewButtonOnToolbar"
                        (openInNewTab)="openInSeparateView()"
@@ -42,7 +42,6 @@ limitations under the License.
                           (reconnect)="onReconnect()"
                           (close)="onClose()"></km-terminal-status-bar>
 
-  <div #terminal
-       id="test"
-       content></div>
+  <div class="km-terminal"
+       #terminal></div>
 </ng-template>
