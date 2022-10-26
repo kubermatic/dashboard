@@ -200,7 +200,7 @@ func expirationCheckRoutine(ctx context.Context, clusterClient ctrlruntimeclient
 			Name:      userAppName(userEmailID),
 		}, webTerminalConfigMap); err != nil {
 			log.Logger.Debug(err)
-			continue
+			break
 		}
 
 		if webTerminalConfigMap.Data == nil {
@@ -222,6 +222,12 @@ func expirationCheckRoutine(ctx context.Context, clusterClient ctrlruntimeclient
 
 		expirationTime := time.Unix(expirationTimestamp, 0)
 		remainingExpirationTime := time.Until(expirationTime)
+
+		if remainingExpirationTime < 0 {
+			// web terminal is already expired, so break the check loop
+			break
+		}
+
 		if remainingExpirationTime < remainingExpirationTimeForWarning {
 			_ = websocketConn.WriteJSON(TerminalMessage{
 				Op:   "expiration",
