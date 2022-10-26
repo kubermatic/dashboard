@@ -2,8 +2,12 @@
 
 approvers:
   - sig-ui
-  - sig-api
 
 reviewers:
   - sig-ui
-  - sig-api
+
+labels:
+  - sig-ui
+
+options:
+  no_parent_owners: true
