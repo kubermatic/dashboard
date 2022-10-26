@@ -37,6 +37,7 @@
             },
             "styles": [
               "src/assets/css/root.scss",
+              "node_modules/xterm/css/xterm.css",
               {
                 "input": "src/assets/themes/light.scss",
                 "bundleName": "light",

@@ -37,6 +37,9 @@
 @import 'src/app/shared/components/chip/theme';
 @import 'src/app/shared/components/tab-card/theme';
 @import 'src/app/shared/components/openstack-credentials/theme';
+@import 'src/app/shared/components/terminal/terminal-toolbar/theme';
+@import 'src/app/shared/components/terminal/terminal-status-bar/theme';
+@import 'src/app/cluster/details/cluster/overlay-terminal/theme';
 @import 'src/app/cluster/details/cluster/rbac/add-binding/theme';
 @import 'src/app/settings/admin/bucket-settings/destinations/theme';
 @import 'src/app/settings/admin/presets/theme';
@@ -74,4 +77,7 @@
   @include theme-number-stepper-component($colors);
   @include theme-admin-backup-destinations-component($colors);
   @include theme-cni-version-component($colors);
+  @include theme-terminal-toolbar-component($colors);
+  @include theme-terminal-status-bar-component($colors);
+  @include theme-terminal-overlay-component($colors);
 }

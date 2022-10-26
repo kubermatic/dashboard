@@ -230,6 +230,10 @@ export class ClusterService {
     return `${this._newRestRoot}/dashboard/login?projectID=${projectID}&clusterID=${clusterID}`;
   }
 
+  getWebTerminalProxyURL(projectID: string, clusterID: string, userID: string): string {
+    return `${this._newRestRoot}/kubeconfig/secret?project_id=${projectID}&cluster_id=${clusterID}&user_id=${userID}`;
+  }
+
   getShareKubeconfigURL(projectID: string, seed: string, clusterID: string, userID: string): string {
     return `${this._location}/${this._restRoot}/kubeconfig?project_id=${projectID}&datacenter=${seed}&cluster_id=${clusterID}&user_id=${userID}`;
   }

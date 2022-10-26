@@ -122,6 +122,10 @@
   @include mixins.mask-image('/assets/images/icons/regenerate.svg', 18px);
 }
 
+.km-icon-reconnect {
+  @include mixins.mask-image('/assets/images/icons/reconnect.svg', 18px);
+}
+
 .km-icon-running {
   @include mixins.background-image('/assets/images/icons/check.svg#16', 16px);
 
@@ -392,6 +396,18 @@
 
 .km-icon-restore {
   @include mixins.mask-image('/assets/images/icons/restore.svg', 18px);
+}
+
+.km-icon-terminal {
+  @include mixins.mask-image('/assets/images/icons/terminal.svg', 28px);
+}
+
+.km-icon-terminal-placeholder {
+  @include mixins.mask-image('/assets/images/icons/webterminal-placholder.svg', 28px);
+
+  &.i-60 {
+    @include mixins.size(60px, 60px, true);
+  }
 }
 
 .km-icon-quota {

@@ -63,10 +63,21 @@ limitations under the License.
        mat-flat-button
        [disabled]="!isKubernetesDashboardHealthy"
        [matTooltip]="isKubernetesDashboardHealthy ? '' : cluster?.spec?.kubernetesDashboard?.enabled ? 'Kubernetes Dashboard is not running' : 'Kubernetes Dashboard is disabled'"
-       *ngIf="(settings.adminSettings | async)?.enableDashboard">
+       *ngIf="(settingsService.adminSettings | async)?.enableDashboard">
       <i class="km-icon-mask km-icon-external-link"></i>
       <span>Open Dashboard</span>
     </a>
+
+    <button *ngIf="(settingsService.adminSettings | async)?.enableOIDCKubeconfig"
+            fxLayoutAlign="center center"
+            mat-flat-button
+            type="button"
+            [disabled]="!isClusterRunning"
+            (click)="toggleTerminal()">
+      <i class="km-icon-mask km-icon-terminal"></i>
+      <span>Web Terminal</span>
+    </button>
+
   </div>
 
   <mat-card>
@@ -495,3 +506,8 @@ limitations under the License.
   <router-outlet name="quota-widget"
                  (activate)="onActivate($event)"></router-outlet>
 </ng-template>
+
+
+<km-overlay-terminal *ngIf="showTerminal"
+                     (close)="toggleTerminal()">
+</km-overlay-terminal>

@@ -21,6 +21,7 @@ import {MachineDeploymentDetailsComponent} from './details/cluster/machine-deplo
 import {ExternalClusterDetailsComponent} from './details/external-cluster/component';
 import {ClustersComponent} from '@app/cluster/list/component';
 import {DynamicModule} from '../dynamic/module-registry';
+import {WebTerminalComponent} from '@app/cluster/details/cluster/web-terminal/component';
 
 const routes: Routes = [
   {
@@ -44,6 +45,11 @@ const routes: Routes = [
         loadChildren: () => DynamicModule.Quotas,
       },
     ],
+  },
+  {
+    path: ':clusterName/terminal',
+    component: WebTerminalComponent,
+    canActivate: [AuthGuard, AuthzGuard],
   },
   {
     path: 'external/:clusterName',
