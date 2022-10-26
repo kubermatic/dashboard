@@ -73,6 +73,7 @@ const (
 	WebterminalPodPending   TerminalConnStatus = "WEBTERMINAL_POD_PENDING"
 	WebterminalPodFailed    TerminalConnStatus = "WEBTERMINAL_POD_FAILED"
 	ConnectionPoolExceeded  TerminalConnStatus = "CONNECTION_POOL_EXCEEDED"
+	RefreshesLimitExceeded  TerminalConnStatus = "REFRESHES_LIMIT_EXCEEDED"
 )
 
 // PtyHandler is what remote command expects from a pty.
@@ -185,6 +186,11 @@ func (t TerminalSession) extendExpirationTime(ctx context.Context) error {
 	_, currentNumberOfRefreshes, err := getWebTerminalExpirationValues(ctx, t.clusterClient, t.userEmailID)
 	if err != nil {
 		return err
+	}
+
+	if currentNumberOfRefreshes >= maxNumberOfExpirationRefreshes {
+		SendMessage(t.websocketConn, string(RefreshesLimitExceeded))
+		return nil
 	}
 
 	// regenerate the configmap to extend the expiration period
@@ -370,10 +376,14 @@ func createOrUpdateResources(ctx context.Context, client ctrlruntimeclient.Clien
 		}
 	}
 	if err := client.Create(ctx, genWebTerminalPod(userAppName, userEmailID)); err != nil {
-		return err
+		if !apierrors.IsAlreadyExists(err) {
+			return err
+		}
 	}
 	if err := client.Create(ctx, genWebTerminalCleanupJob(userAppName, userEmailID)); err != nil {
-		return err
+		if !apierrors.IsAlreadyExists(err) {
+			return err
+		}
 	}
 
 	return nil
