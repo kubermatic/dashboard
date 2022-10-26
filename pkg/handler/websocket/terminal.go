@@ -56,9 +56,11 @@ const (
 	webTerminalStorage                = "web-terminal-storage"
 	webTerminalConfigVolume           = "web-terminal-config"
 	podLifetime                       = 30 * time.Minute
+	maxNumberOfExpirationRefreshes    = 48              // it means maximum 24h for a pod lifetime of 30 minutes
 	remainingExpirationTimeForWarning = 5 * time.Minute // should be lesser than "podLifetime"
 	expirationCheckInterval           = 1 * time.Minute // should be lesser than "remainingExpirationTimeForWarning"
 	expirationTimestampKey            = "ExpirationTimestamp"
+	expirationRefreshesKey            = "ExpirationRefreshes"
 
 	webTerminalImage                   = resources.RegistryQuay + "/kubermatic/web-terminal:0.2.0"
 	webTerminalContainerKubeconfigPath = "/etc/kubernetes/kubeconfig/kubeconfig"
@@ -180,50 +182,75 @@ func (t TerminalSession) Toast(p string) error {
 }
 
 func (t TerminalSession) extendExpirationTime(ctx context.Context) error {
-	return t.clusterClient.Update(ctx,
+	_, currentNumberOfRefreshes, err := getWebTerminalExpirationValues(ctx, t.clusterClient, t.userEmailID)
+	if err != nil {
+		return err
+	}
+
+	// regenerate the configmap to extend the expiration period
+	if err := t.clusterClient.Update(ctx,
 		genWebTerminalConfigMap(
 			userAppName(t.userEmailID),
-		)) // regenerate the configmap to extend the expiration period
+			currentNumberOfRefreshes+1,
+		)); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func userAppName(userEmailID string) string {
 	return fmt.Sprintf("%s-%s", appName, userEmailID)
 }
 
+func getWebTerminalExpirationValues(ctx context.Context, clusterClient ctrlruntimeclient.Client, userEmailID string) (time.Time, int, error) {
+	webTerminalConfigMap := &corev1.ConfigMap{}
+	if err := clusterClient.Get(ctx, ctrlruntimeclient.ObjectKey{
+		Namespace: metav1.NamespaceSystem,
+		Name:      userAppName(userEmailID),
+	}, webTerminalConfigMap); err != nil {
+		return time.Time{}, 0, err
+	}
+
+	if webTerminalConfigMap.Data == nil {
+		return time.Time{}, 0, errors.New("no data set for webterminal configmap")
+	}
+
+	expirationTimestampStr, isExpirationSet := webTerminalConfigMap.Data[expirationTimestampKey]
+	if !isExpirationSet {
+		return time.Time{}, 0, errors.New("no expiration set in the webterminal configmap")
+	}
+	expirationTimestamp, err := strconv.ParseInt(expirationTimestampStr, 10, 64)
+	if err != nil {
+		return time.Time{}, 0, errors.New("invalid expiration timestamp in the webterminal configmap")
+	}
+	expirationTime := time.Unix(expirationTimestamp, 0)
+
+	expirationRefreshesStr, isExpirationRefreshesSet := webTerminalConfigMap.Data[expirationRefreshesKey]
+	if !isExpirationRefreshesSet {
+		return time.Time{}, 0, errors.New("no number of expiration refreshes set in the webterminal configmap")
+	}
+	expirationRefreshes, err := strconv.Atoi(expirationRefreshesStr)
+	if err != nil {
+		return time.Time{}, 0, errors.New("invalid number of expiration refreshes in the webterminal configmap")
+	}
+
+	return expirationTime, expirationRefreshes, nil
+}
+
 func expirationCheckRoutine(ctx context.Context, clusterClient ctrlruntimeclient.Client, userEmailID string, websocketConn *websocket.Conn) {
 	for {
 		time.Sleep(expirationCheckInterval)
 
-		webTerminalConfigMap := &corev1.ConfigMap{}
-		if err := clusterClient.Get(ctx, ctrlruntimeclient.ObjectKey{
-			Namespace: metav1.NamespaceSystem,
-			Name:      userAppName(userEmailID),
-		}, webTerminalConfigMap); err != nil {
+		expirationTime, numberOfRefreshes, err := getWebTerminalExpirationValues(ctx, clusterClient, userEmailID)
+		if err != nil {
 			log.Logger.Debug(err)
 			break
 		}
 
-		if webTerminalConfigMap.Data == nil {
-			log.Logger.Debug(errors.New("no data set for webterminal configmap"))
-			break
-		}
-
-		expirationTimestampStr, isExpirationSet := webTerminalConfigMap.Data[expirationTimestampKey]
-		if !isExpirationSet {
-			log.Logger.Debug(errors.New("no expiration set in the webterminal configmap"))
-			break
-		}
-
-		expirationTimestamp, err := strconv.ParseInt(expirationTimestampStr, 10, 64)
-		if err != nil {
-			log.Logger.Debug(errors.New("invalid expiration timestamp in the webterminal configmap"))
-			break
-		}
-
-		expirationTime := time.Unix(expirationTimestamp, 0)
 		remainingExpirationTime := time.Until(expirationTime)
 
-		if remainingExpirationTime < 0 {
+		if remainingExpirationTime <= 0 || numberOfRefreshes > maxNumberOfExpirationRefreshes {
 			// web terminal is already expired, so break the check loop
 			break
 		}
@@ -231,7 +258,7 @@ func expirationCheckRoutine(ctx context.Context, clusterClient ctrlruntimeclient
 		if remainingExpirationTime < remainingExpirationTimeForWarning {
 			_ = websocketConn.WriteJSON(TerminalMessage{
 				Op:   "expiration",
-				Data: expirationTimestampStr,
+				Data: expirationTime.UTC().Format(time.RFC3339),
 			})
 		}
 	}
@@ -320,11 +347,11 @@ func startProcess(ctx context.Context, client ctrlruntimeclient.Client, k8sClien
 }
 
 func createOrUpdateResources(ctx context.Context, client ctrlruntimeclient.Client, userEmailID, userAppName string, cluster *kubermaticv1.Cluster) error {
-	if err := client.Create(ctx, genWebTerminalConfigMap(userAppName)); err != nil {
+	if err := client.Create(ctx, genWebTerminalConfigMap(userAppName, 0)); err != nil {
 		if !apierrors.IsAlreadyExists(err) {
 			return err
 		}
-		err := client.Update(ctx, genWebTerminalConfigMap(userAppName))
+		err := client.Update(ctx, genWebTerminalConfigMap(userAppName, 0))
 		if err != nil {
 			return err
 		}
@@ -352,7 +379,7 @@ func createOrUpdateResources(ctx context.Context, client ctrlruntimeclient.Clien
 	return nil
 }
 
-func genWebTerminalConfigMap(userAppName string) *corev1.ConfigMap {
+func genWebTerminalConfigMap(userAppName string, numberOfExpirationRefreshes int) *corev1.ConfigMap {
 	expirationTime := time.Now().Add(podLifetime)
 
 	return &corev1.ConfigMap{
@@ -365,6 +392,7 @@ func genWebTerminalConfigMap(userAppName string) *corev1.ConfigMap {
 		},
 		Data: map[string]string{
 			expirationTimestampKey: strconv.FormatInt(expirationTime.Unix(), 10),
+			expirationRefreshesKey: strconv.Itoa(numberOfExpirationRefreshes),
 		},
 	}
 }
@@ -510,7 +538,7 @@ func genWebTerminalCleanupJob(userAppName, userEmailID string) *batchv1.Job {
 			},
 		},
 		Spec: batchv1.JobSpec{
-			BackoffLimit:            resources.Int32(10),
+			BackoffLimit:            resources.Int32(10 + maxNumberOfExpirationRefreshes),
 			Completions:             resources.Int32(1),
 			Parallelism:             resources.Int32(1),
 			TTLSecondsAfterFinished: resources.Int32(0),
@@ -527,7 +555,8 @@ func genWebTerminalCleanupJob(userAppName, userEmailID string) *batchv1.Job {
 								EXP=$(<$EXPIRATION);
 								NOW=$(date +"%s");
 								REMAINING_TIME_SEC=$((EXP-NOW));
-								if (( REMAINING_TIME_SEC > 0 )); then
+								EXP_REFRESHES=$(<$EXPIRATION_REFRESHES);
+								if (( EXP_REFRESHES <= MAX_EXPIRATION_REFRESHES && REMAINING_TIME_SEC > 0 )); then
 									sleep $REMAINING_TIME_SEC;
 									exit 1; # exit as failed, so the job will be restarted to check if the expiration was updated
 								fi
@@ -552,6 +581,14 @@ func genWebTerminalCleanupJob(userAppName, userEmailID string) *batchv1.Job {
 								{
 									Name:  "EXPIRATION",
 									Value: "/etc/config/expiration",
+								},
+								{
+									Name:  "EXPIRATION_REFRESHES",
+									Value: "/etc/config/expiration-refreshes",
+								},
+								{
+									Name:  "MAX_EXPIRATION_REFRESHES",
+									Value: strconv.Itoa(maxNumberOfExpirationRefreshes),
 								},
 								{
 									Name:  "PS1",
@@ -608,6 +645,10 @@ func getVolumes(userEmailID, userAppName string) []corev1.Volume {
 						{
 							Key:  expirationTimestampKey,
 							Path: "expiration",
+						},
+						{
+							Key:  expirationRefreshesKey,
+							Path: "expiration-refreshes",
 						},
 					},
 				},
