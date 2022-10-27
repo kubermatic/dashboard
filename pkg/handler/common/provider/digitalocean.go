@@ -57,21 +57,6 @@ func ListDigitaloceanSizes(ctx context.Context, token string) ([]godo.Size, erro
 	return godoSizes, nil
 }
 
-func DescribeDigitaloceanSize(ctx context.Context, token, sizeName string) (godo.Size, error) {
-	godoSize := godo.Size{}
-	godoSizes, err := ListDigitaloceanSizes(ctx, token)
-	if err != nil {
-		return godoSize, err
-	}
-
-	for _, godosize := range godoSizes {
-		if godosize.Slug == sizeName {
-			return godosize, nil
-		}
-	}
-	return godoSize, fmt.Errorf("digital ocean size:%s not found", sizeName)
-}
-
 func DigitaloceanSizeWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, seedsGetter provider.SeedsGetter, settingsProvider provider.SettingsProvider, projectID, clusterID string) (interface{}, error) {
 	clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
 
