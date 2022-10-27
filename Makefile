@@ -1,7 +1,7 @@
 SHELL=/bin/bash
 export KUBERMATIC_EDITION ?= ee
 DOCKER_REPO ?= quay.io/kubermatic
-REPO = $(DOCKER_REPO)/kubermatic$(shell [[ "$(KUBERMATIC_EDITION)" != "ce" ]] && printf -- '-%s' ${KUBERMATIC_EDITION})
+REPO = $(DOCKER_REPO)/dashboard$(shell [[ "$(KUBERMATIC_EDITION)" != "ce" ]] && printf -- '-%s' ${KUBERMATIC_EDITION})
 IMAGE_TAG=$(shell echo $$(git rev-parse HEAD)|tr -d '\n')
 CC=npm
 GOOS ?= $(shell go env GOOS)
