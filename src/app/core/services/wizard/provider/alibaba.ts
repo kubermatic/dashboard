@@ -46,6 +46,13 @@ export class Alibaba extends Provider {
     return this;
   }
 
+  datacenterName(datacenterName: string): Alibaba {
+    if (datacenterName) {
+      this._headers = this._headers.set(Alibaba.Header.DatacenterName, datacenterName);
+    }
+    return this;
+  }
+
   region(region: string): Alibaba {
     if (region) {
       this._headers = this._headers.set(Alibaba.Header.Region, region);
@@ -101,5 +108,6 @@ export namespace Alibaba {
     AccessKeyID = 'AccessKeyID',
     AccessKeySecret = 'AccessKeySecret',
     Region = 'Region',
+    DatacenterName = 'DatacenterName',
   }
 }

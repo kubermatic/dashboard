@@ -46,6 +46,7 @@ export class NodeDataHetznerProvider {
                 .provider(NodeProvider.HETZNER)
                 .token(cluster.spec.cloud.hetzner.token)
                 .credential(this._presetService.preset)
+                .datacenterName(cluster.spec.cloud.dc)
                 .flavors(onLoadingCb)
                 .pipe(
                   catchError(_ => {

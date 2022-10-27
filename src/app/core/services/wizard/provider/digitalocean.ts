@@ -37,6 +37,13 @@ export class Digitalocean extends Provider {
     return this;
   }
 
+  datacenterName(datacenterName: string): Digitalocean {
+    if (datacenterName) {
+      this._headers = this._headers.set(Digitalocean.Header.DatacenterName, datacenterName);
+    }
+    return this;
+  }
+
   flavors(onLoadingCb: () => void = null): Observable<DigitaloceanSizes> {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
@@ -55,5 +62,6 @@ export class Digitalocean extends Provider {
 export namespace Digitalocean {
   export enum Header {
     Token = 'DoToken',
+    DatacenterName = 'DatacenterName',
   }
 }

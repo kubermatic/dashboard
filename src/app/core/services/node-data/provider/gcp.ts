@@ -103,6 +103,7 @@ export class NodeDataGCPProvider {
           .serviceAccount(this._clusterSpecService.cluster.spec.cloud.gcp.serviceAccount)
           .zone(this._nodeDataService.nodeData.spec.cloud.gcp.zone)
           .credential(this._presetService.preset)
+          .datacenterName(this._clusterSpecService.cluster.spec.cloud.dc)
           .diskTypes(onLoadingCb)
           .pipe(
             catchError(_ => {

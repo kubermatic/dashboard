@@ -32,6 +32,13 @@ export class KubeVirt extends Provider {
     return this;
   }
 
+  datacenterName(datacenterName: string): KubeVirt {
+    if (datacenterName) {
+      this._headers = this._headers.set(KubeVirt.Header.DatacenterName, datacenterName);
+    }
+    return this;
+  }
+
   credential(credential: string): KubeVirt {
     super._credential(credential);
     return this;
@@ -67,5 +74,6 @@ export class KubeVirt extends Provider {
 export namespace KubeVirt {
   export enum Header {
     Kubeconfig = 'Kubeconfig',
+    DatacenterName = 'DatacenterName',
   }
 }

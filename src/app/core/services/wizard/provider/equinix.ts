@@ -46,6 +46,13 @@ export class Equinix extends Provider {
     return this;
   }
 
+  datacenterName(datacenterName: string): Equinix {
+    if (datacenterName) {
+      this._headers = this._headers.set(Equinix.Header.DatacenterName, datacenterName);
+    }
+    return this;
+  }
+
   flavors(onLoadingCb: () => void = null): Observable<EquinixSize[]> {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
@@ -63,5 +70,6 @@ export namespace Equinix {
   export enum Header {
     APIKey = 'apiKey',
     ProjectID = 'projectID',
+    DatacenterName = 'DatacenterName',
   }
 }

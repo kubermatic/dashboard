@@ -64,6 +64,7 @@ export class NodeDataAzureProvider {
                 .tenantID(cluster.spec.cloud.azure.tenantID)
                 .location(location)
                 .credential(this._presetService.preset)
+                .datacenterName(cluster.spec.cloud.dc)
                 .flavors(onLoadingCb)
                 .pipe(
                   catchError(_ => {

@@ -100,6 +100,13 @@ export class Azure extends Provider {
     return this;
   }
 
+  datacenterName(datacenterName: string): Azure {
+    if (datacenterName) {
+      this._headers = this._headers.set(Azure.Header.DatacenterName, datacenterName);
+    }
+    return this;
+  }
+
   flavors(onLoadingCb: () => void = null): Observable<AzureSizes[]> {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
@@ -260,5 +267,6 @@ export namespace Azure {
     ResourceGroup = 'ResourceGroup',
     VNet = 'VirtualNetwork',
     SKUName = 'SKUName',
+    DatacenterName = 'DatacenterName',
   }
 }
