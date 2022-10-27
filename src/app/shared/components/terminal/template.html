@@ -32,16 +32,17 @@ limitations under the License.
 </ng-container>
 
 <ng-template #terminalContainer>
-  <km-terminal-toolbar [showCloseButton]="showCloseButtonOnToolbar"
-                       [showOpenInSeparateViewButton]="showOpenInSeparateViewButtonOnToolbar"
-                       (openInNewTab)="openInSeparateView()"
-                       (close)="onClose()"></km-terminal-toolbar>
+  <div class="km-terminal">
+    <km-terminal-toolbar [showCloseButton]="showCloseButtonOnToolbar"
+                         [showOpenInSeparateViewButton]="showOpenInSeparateViewButtonOnToolbar"
+                         (openInNewTab)="openInSeparateView()"
+                         (close)="onClose()"></km-terminal-toolbar>
 
-  <km-terminal-status-bar *ngIf="isConnectionLost"
-                          [showCloseButton]="showCloseButtonOnToolbar"
-                          (reconnect)="onReconnect()"
-                          (close)="onClose()"></km-terminal-status-bar>
+    <km-terminal-status-bar *ngIf="isConnectionLost"
+                            [showCloseButton]="showCloseButtonOnToolbar"
+                            (reconnect)="onReconnect()"
+                            (close)="onClose()"></km-terminal-status-bar>
 
-  <div class="km-terminal"
-       #terminal></div>
+    <div #terminal></div>
+  </div>
 </ng-template>
