@@ -21,6 +21,7 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -30,27 +31,39 @@ import (
 	"github.com/gorilla/websocket"
 
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
+	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/log"
 	"k8c.io/kubermatic/v2/pkg/resources"
 
+	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
+	networkingv1 "k8s.io/api/networking/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
-	restclient "k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/remotecommand"
 	"k8s.io/kubectl/pkg/scheme"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 const (
-	END_OF_TRANSMISSION    = "\u0004"
-	timeout                = 2 * time.Minute
-	webTerminalStorage     = "web-terminal-storage"
-	podLifetime            = 30 * time.Minute
-	expirationTimestampKey = "ExpirationTimestamp"
+	END_OF_TRANSMISSION               = "\u0004"
+	timeout                           = 2 * time.Minute
+	appName                           = "webterminal"
+	webTerminalStorage                = "web-terminal-storage"
+	webTerminalConfigVolume           = "web-terminal-config"
+	podLifetime                       = 30 * time.Minute
+	maxNumberOfExpirationRefreshes    = 48              // it means maximum 24h for a pod lifetime of 30 minutes
+	remainingExpirationTimeForWarning = 5 * time.Minute // should be lesser than "podLifetime"
+	expirationCheckInterval           = 1 * time.Minute // should be lesser than "remainingExpirationTimeForWarning"
+	expirationTimestampKey            = "ExpirationTimestamp"
+	expirationRefreshesKey            = "ExpirationRefreshes"
+
+	webTerminalImage                   = resources.RegistryQuay + "/kubermatic/web-terminal:0.2.0"
+	webTerminalContainerKubeconfigPath = "/etc/kubernetes/kubeconfig/kubeconfig"
 )
 
 type TerminalConnStatus string
@@ -60,6 +73,7 @@ const (
 	WebterminalPodPending   TerminalConnStatus = "WEBTERMINAL_POD_PENDING"
 	WebterminalPodFailed    TerminalConnStatus = "WEBTERMINAL_POD_FAILED"
 	ConnectionPoolExceeded  TerminalConnStatus = "CONNECTION_POOL_EXCEEDED"
+	RefreshesLimitExceeded  TerminalConnStatus = "REFRESHES_LIMIT_EXCEEDED"
 )
 
 // PtyHandler is what remote command expects from a pty.
@@ -74,19 +88,25 @@ type TerminalSession struct {
 	websocketConn *websocket.Conn
 	sizeChan      chan remotecommand.TerminalSize
 	doneChan      chan struct{}
+
+	userEmailID   string
+	clusterClient ctrlruntimeclient.Client
 }
 
 // TerminalMessage is the messaging protocol between ShellController and TerminalSession.
 //
-// OP      DIRECTION  FIELD(S) USED  DESCRIPTION
+// OP          DIRECTION  FIELD(S) USED  DESCRIPTION
 // ---------------------------------------------------------------------
-// stdin   fe->be     Data           Keystrokes/paste buffer
-// resize fe->be      Rows, Cols     New terminal size
-// stdout  be->fe     Data           Output from the process
-// toast   be->fe     Data           OOB message to be shown to the user.
+// stdin       fe->be     Data           Keystrokes/paste buffer.
+// resize      fe->be     Rows, Cols     New terminal size.
+// refresh     fe->be                    Signal to extend expiration time.
+// stdout      be->fe     Data           Output from the process.
+// toast       be->fe     Data           OOB message to be shown to the user.
+// msg         be->fe     Data           Any necessary message from the backend to the frontend.
+// expiration  be->fe     Data           Expiration timestamp in seconds.
 type TerminalMessage struct {
-	Op, Data, SessionID string
-	Rows, Cols          uint16
+	Op, Data   string
+	Rows, Cols uint16
 }
 
 // TerminalSize handles pty->process resize events.
@@ -100,7 +120,7 @@ func (t TerminalSession) Next() *remotecommand.TerminalSize {
 	}
 }
 
-// Read handles pty->process messages (stdin, resize).
+// Read handles pty->process messages (stdin, resize, refresh).
 // Called in a loop from remotecommand as long as the process is running.
 func (t TerminalSession) Read(p []byte) (int, error) {
 	_, m, err := t.websocketConn.ReadMessage()
@@ -120,6 +140,8 @@ func (t TerminalSession) Read(p []byte) (int, error) {
 	case "resize":
 		t.sizeChan <- remotecommand.TerminalSize{Width: msg.Cols, Height: msg.Rows}
 		return 0, nil
+	case "refresh":
+		return 0, t.extendExpirationTime(context.Background())
 	default:
 		return copy(p, END_OF_TRANSMISSION), fmt.Errorf("unknown message type '%s'", msg.Op)
 	}
@@ -160,35 +182,110 @@ func (t TerminalSession) Toast(p string) error {
 	return nil
 }
 
-func appName(userEmailID string) string {
-	return fmt.Sprintf("webterminal-%s", userEmailID)
+func (t TerminalSession) extendExpirationTime(ctx context.Context) error {
+	_, currentNumberOfRefreshes, err := getWebTerminalExpirationValues(ctx, t.clusterClient, t.userEmailID)
+	if err != nil {
+		return err
+	}
+
+	if currentNumberOfRefreshes >= maxNumberOfExpirationRefreshes {
+		SendMessage(t.websocketConn, string(RefreshesLimitExceeded))
+		return nil
+	}
+
+	// regenerate the configmap to extend the expiration period
+	if err := t.clusterClient.Update(ctx,
+		genWebTerminalConfigMap(
+			userAppName(t.userEmailID),
+			currentNumberOfRefreshes+1,
+		)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func userAppName(userEmailID string) string {
+	return fmt.Sprintf("%s-%s", appName, userEmailID)
+}
+
+func getWebTerminalExpirationValues(ctx context.Context, clusterClient ctrlruntimeclient.Client, userEmailID string) (time.Time, int, error) {
+	webTerminalConfigMap := &corev1.ConfigMap{}
+	if err := clusterClient.Get(ctx, ctrlruntimeclient.ObjectKey{
+		Namespace: metav1.NamespaceSystem,
+		Name:      userAppName(userEmailID),
+	}, webTerminalConfigMap); err != nil {
+		return time.Time{}, 0, err
+	}
+
+	if webTerminalConfigMap.Data == nil {
+		return time.Time{}, 0, errors.New("no data set for webterminal configmap")
+	}
+
+	expirationTimestampStr, isExpirationSet := webTerminalConfigMap.Data[expirationTimestampKey]
+	if !isExpirationSet {
+		return time.Time{}, 0, errors.New("no expiration set in the webterminal configmap")
+	}
+	expirationTimestamp, err := strconv.ParseInt(expirationTimestampStr, 10, 64)
+	if err != nil {
+		return time.Time{}, 0, errors.New("invalid expiration timestamp in the webterminal configmap")
+	}
+	expirationTime := time.Unix(expirationTimestamp, 0)
+
+	expirationRefreshesStr, isExpirationRefreshesSet := webTerminalConfigMap.Data[expirationRefreshesKey]
+	if !isExpirationRefreshesSet {
+		return time.Time{}, 0, errors.New("no number of expiration refreshes set in the webterminal configmap")
+	}
+	expirationRefreshes, err := strconv.Atoi(expirationRefreshesStr)
+	if err != nil {
+		return time.Time{}, 0, errors.New("invalid number of expiration refreshes in the webterminal configmap")
+	}
+
+	return expirationTime, expirationRefreshes, nil
+}
+
+func expirationCheckRoutine(ctx context.Context, clusterClient ctrlruntimeclient.Client, userEmailID string, websocketConn *websocket.Conn) {
+	for {
+		time.Sleep(expirationCheckInterval)
+
+		expirationTime, numberOfRefreshes, err := getWebTerminalExpirationValues(ctx, clusterClient, userEmailID)
+		if err != nil {
+			log.Logger.Debug(err)
+			break
+		}
+
+		remainingExpirationTime := time.Until(expirationTime)
+
+		if remainingExpirationTime <= 0 || numberOfRefreshes > maxNumberOfExpirationRefreshes {
+			// web terminal is already expired, so break the check loop
+			break
+		}
+
+		if remainingExpirationTime < remainingExpirationTimeForWarning {
+			_ = websocketConn.WriteJSON(TerminalMessage{
+				Op:   "expiration",
+				Data: expirationTime.UTC().Format(time.RFC3339),
+			})
+		}
+	}
 }
 
 // startProcess is called by terminal session creation.
 // Executed cmd in the container specified in request and connects it up with the ptyHandler (a session).
-func startProcess(ctx context.Context, client ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cmd []string, ptyHandler PtyHandler, websocketConn *websocket.Conn) error {
-	appName := appName(userEmailID)
+func startProcess(ctx context.Context, client ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster, cmd []string, ptyHandler PtyHandler, websocketConn *websocket.Conn) error {
+	userAppName := userAppName(userEmailID)
 
 	// check if WEB terminal Pod exists, if not create
 	pod := &corev1.Pod{}
 	if err := client.Get(ctx, ctrlruntimeclient.ObjectKey{
 		Namespace: metav1.NamespaceSystem,
-		Name:      appName,
+		Name:      userAppName,
 	}, pod); err != nil {
 		if !apierrors.IsNotFound(err) {
 			return err
 		}
-		// create Configmap and Pod if not found
-		if err := client.Create(ctx, genWebTerminalConfigMap(appName)); err != nil {
-			if !apierrors.IsAlreadyExists(err) {
-				return err
-			}
-			err := client.Update(ctx, genWebTerminalConfigMap(appName))
-			if err != nil {
-				return err
-			}
-		}
-		if err := client.Create(ctx, genWebTerminalPod(appName, userEmailID)); err != nil {
+		// create Configmap, NetworkPolicy, Pod and cleanup Job
+		if err := createOrUpdateResources(ctx, client, userEmailID, userAppName, cluster); err != nil {
 			return err
 		}
 	}
@@ -197,7 +294,7 @@ func startProcess(ctx context.Context, client ctrlruntimeclient.Client, k8sClien
 		pod := &corev1.Pod{}
 		if err := client.Get(ctx, ctrlruntimeclient.ObjectKey{
 			Namespace: metav1.NamespaceSystem,
-			Name:      appName,
+			Name:      userAppName,
 		}, pod); err != nil {
 			return false
 		}
@@ -220,9 +317,11 @@ func startProcess(ctx context.Context, client ctrlruntimeclient.Client, k8sClien
 		return fmt.Errorf("the WEB terminal Pod is not ready")
 	}
 
+	go expirationCheckRoutine(ctx, client, userEmailID, websocketConn)
+
 	req := k8sClient.CoreV1().RESTClient().Post().
 		Resource("pods").
-		Name(appName).
+		Name(userAppName).
 		Namespace(metav1.NamespaceSystem).
 		SubResource("exec")
 
@@ -253,40 +352,167 @@ func startProcess(ctx context.Context, client ctrlruntimeclient.Client, k8sClien
 	return nil
 }
 
-func genWebTerminalConfigMap(appName string) *corev1.ConfigMap {
+func createOrUpdateResources(ctx context.Context, client ctrlruntimeclient.Client, userEmailID, userAppName string, cluster *kubermaticv1.Cluster) error {
+	if err := client.Create(ctx, genWebTerminalConfigMap(userAppName, 0)); err != nil {
+		if !apierrors.IsAlreadyExists(err) {
+			return err
+		}
+		err := client.Update(ctx, genWebTerminalConfigMap(userAppName, 0))
+		if err != nil {
+			return err
+		}
+	}
+	webTerminalNetworkPolicy, err := genWebTerminalNetworkPolicy(userAppName, cluster)
+	if err != nil {
+		return err
+	}
+	if err := client.Create(ctx, webTerminalNetworkPolicy); err != nil {
+		if !apierrors.IsAlreadyExists(err) {
+			return err
+		}
+		err := client.Update(ctx, webTerminalNetworkPolicy)
+		if err != nil {
+			return err
+		}
+	}
+	if err := client.Create(ctx, genWebTerminalPod(userAppName, userEmailID)); err != nil {
+		if !apierrors.IsAlreadyExists(err) {
+			return err
+		}
+	}
+	if err := client.Create(ctx, genWebTerminalCleanupJob(userAppName, userEmailID)); err != nil {
+		if !apierrors.IsAlreadyExists(err) {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func genWebTerminalConfigMap(userAppName string, numberOfExpirationRefreshes int) *corev1.ConfigMap {
 	expirationTime := time.Now().Add(podLifetime)
 
 	return &corev1.ConfigMap{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      appName,
+			Name:      userAppName,
 			Namespace: metav1.NamespaceSystem,
 			Labels: map[string]string{
-				"app": appName,
+				resources.AppLabelKey: appName,
 			},
 		},
 		Data: map[string]string{
 			expirationTimestampKey: strconv.FormatInt(expirationTime.Unix(), 10),
+			expirationRefreshesKey: strconv.Itoa(numberOfExpirationRefreshes),
 		},
 	}
 }
 
-func genWebTerminalPod(appName, userEmailID string) *corev1.Pod {
+func genWebTerminalNetworkPolicy(userAppName string, cluster *kubermaticv1.Cluster) (*networkingv1.NetworkPolicy, error) {
+	dnsPort := intstr.FromInt(53)
+	apiServicePort := intstr.FromInt(443)
+	protoUdp := corev1.ProtocolUDP
+	protoTcp := corev1.ProtocolTCP
+	k8sApiIP := cluster.Status.Address.IP
+	apiPort := intstr.FromInt(int(cluster.Status.Address.Port))
+
+	k8sServiceApiIP, err := resources.InClusterApiserverIP(cluster)
+	if err != nil {
+		return nil, err
+	}
+
+	// block all ingress and allow only egress to the API server
+	return &networkingv1.NetworkPolicy{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      userAppName,
+			Namespace: metav1.NamespaceSystem,
+		},
+		Spec: networkingv1.NetworkPolicySpec{
+			PodSelector: metav1.LabelSelector{
+				MatchLabels: map[string]string{
+					resources.AppLabelKey: appName,
+				},
+			},
+			PolicyTypes: []networkingv1.PolicyType{
+				networkingv1.PolicyTypeIngress,
+				networkingv1.PolicyTypeEgress,
+			},
+			// api access
+			Egress: []networkingv1.NetworkPolicyEgressRule{
+				{
+					To: []networkingv1.NetworkPolicyPeer{
+						{
+							IPBlock: &networkingv1.IPBlock{
+								CIDR: fmt.Sprintf("%s/32", k8sApiIP),
+							},
+						},
+					},
+					Ports: []networkingv1.NetworkPolicyPort{
+						{
+							Protocol: &protoTcp,
+							Port:     &apiPort,
+						},
+					},
+				},
+				{
+					To: []networkingv1.NetworkPolicyPeer{
+						{
+							IPBlock: &networkingv1.IPBlock{
+								CIDR: fmt.Sprintf("%s/32", k8sServiceApiIP),
+							},
+						},
+					},
+					Ports: []networkingv1.NetworkPolicyPort{
+						{
+							Protocol: &protoTcp,
+							Port:     &apiServicePort,
+						},
+					},
+				},
+				// world dns access
+				{
+					To: []networkingv1.NetworkPolicyPeer{
+						{
+							IPBlock: &networkingv1.IPBlock{
+								CIDR: "0.0.0.0/0",
+							},
+						},
+					},
+					Ports: []networkingv1.NetworkPolicyPort{
+						{
+							Protocol: &protoTcp,
+							Port:     &dnsPort,
+						},
+						{
+							Protocol: &protoUdp,
+							Port:     &dnsPort,
+						},
+					},
+				},
+			},
+		},
+	}, nil
+}
+
+func genWebTerminalPod(userAppName, userEmailID string) *corev1.Pod {
 	pod := &corev1.Pod{}
-	pod.Name = appName
+	pod.Name = userAppName
 	pod.Namespace = metav1.NamespaceSystem
+	pod.Labels = map[string]string{
+		resources.AppLabelKey: appName,
+	}
 	pod.Spec = corev1.PodSpec{}
-	pod.Spec.Volumes = getVolumes(userEmailID)
+	pod.Spec.Volumes = getVolumes(userEmailID, userAppName)
 	pod.Spec.InitContainers = []corev1.Container{}
 	pod.Spec.Containers = []corev1.Container{
 		{
-			Name:    appName,
-			Image:   resources.RegistryQuay + "/kubermatic/web-terminal:0.2.0",
+			Name:    userAppName,
+			Image:   webTerminalImage,
 			Command: []string{"/bin/bash", "-c", "--"},
 			Args:    []string{"while true; do sleep 30; done;"},
 			Env: []corev1.EnvVar{
 				{
 					Name:  "KUBECONFIG",
-					Value: "/etc/kubernetes/kubeconfig/kubeconfig",
+					Value: webTerminalContainerKubeconfigPath,
 				},
 				{
 					Name:  "PS1",
@@ -312,7 +538,95 @@ func genWebTerminalPod(appName, userEmailID string) *corev1.Pod {
 	return pod
 }
 
-func getVolumes(userEmailID string) []corev1.Volume {
+func genWebTerminalCleanupJob(userAppName, userEmailID string) *batchv1.Job {
+	return &batchv1.Job{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      fmt.Sprintf("cleanup-%s", userAppName),
+			Namespace: metav1.NamespaceSystem,
+			Labels: map[string]string{
+				resources.AppLabelKey: appName,
+			},
+		},
+		Spec: batchv1.JobSpec{
+			BackoffLimit:            resources.Int32(10 + maxNumberOfExpirationRefreshes),
+			Completions:             resources.Int32(1),
+			Parallelism:             resources.Int32(1),
+			TTLSecondsAfterFinished: resources.Int32(0),
+			Template: corev1.PodTemplateSpec{
+				Spec: corev1.PodSpec{
+					Volumes:        getVolumes(userEmailID, userAppName),
+					InitContainers: []corev1.Container{},
+					Containers: []corev1.Container{
+						{
+							Name:    userAppName,
+							Image:   webTerminalImage,
+							Command: []string{"/bin/bash", "-c"},
+							Args: []string{`
+								EXP=$(<$EXPIRATION);
+								NOW=$(date +"%s");
+								REMAINING_TIME_SEC=$((EXP-NOW));
+								EXP_REFRESHES=$(<$EXPIRATION_REFRESHES);
+								if (( EXP_REFRESHES <= MAX_EXPIRATION_REFRESHES && REMAINING_TIME_SEC > 0 )); then
+									sleep $REMAINING_TIME_SEC;
+									exit 1; # exit as failed, so the job will be restarted to check if the expiration was updated
+								fi
+								# user web terminal is already expired, so delete its resources
+								kubectl delete networkpolicy $USER_APP_NAME -n $NAMESPACE_SYSTEM;
+								kubectl delete configmap $USER_APP_NAME -n $NAMESPACE_SYSTEM;
+								kubectl delete pod $USER_APP_NAME -n $NAMESPACE_SYSTEM;`,
+							},
+							Env: []corev1.EnvVar{
+								{
+									Name:  "KUBECONFIG",
+									Value: webTerminalContainerKubeconfigPath,
+								},
+								{
+									Name:  "USER_APP_NAME",
+									Value: userAppName,
+								},
+								{
+									Name:  "NAMESPACE_SYSTEM",
+									Value: metav1.NamespaceSystem,
+								},
+								{
+									Name:  "EXPIRATION",
+									Value: "/etc/config/expiration",
+								},
+								{
+									Name:  "EXPIRATION_REFRESHES",
+									Value: "/etc/config/expiration-refreshes",
+								},
+								{
+									Name:  "MAX_EXPIRATION_REFRESHES",
+									Value: strconv.Itoa(maxNumberOfExpirationRefreshes),
+								},
+								{
+									Name:  "PS1",
+									Value: "\\$ ",
+								},
+							},
+							VolumeMounts: getVolumeMounts(),
+							SecurityContext: &corev1.SecurityContext{
+								AllowPrivilegeEscalation: resources.Bool(false),
+							},
+						},
+					},
+					RestartPolicy: corev1.RestartPolicyOnFailure,
+					SecurityContext: &corev1.PodSecurityContext{
+						RunAsUser:  resources.Int64(1000),
+						RunAsGroup: resources.Int64(3000),
+						FSGroup:    resources.Int64(2000),
+						SeccompProfile: &corev1.SeccompProfile{
+							Type: corev1.SeccompProfileTypeRuntimeDefault,
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func getVolumes(userEmailID, userAppName string) []corev1.Volume {
 	vs := []corev1.Volume{
 		{
 			Name: resources.WEBTerminalKubeconfigSecretName,
@@ -327,6 +641,26 @@ func getVolumes(userEmailID string) []corev1.Volume {
 			VolumeSource: corev1.VolumeSource{
 				EmptyDir: &corev1.EmptyDirVolumeSource{
 					Medium: corev1.StorageMediumMemory,
+				},
+			},
+		},
+		{
+			Name: webTerminalConfigVolume,
+			VolumeSource: corev1.VolumeSource{
+				ConfigMap: &corev1.ConfigMapVolumeSource{
+					LocalObjectReference: corev1.LocalObjectReference{
+						Name: userAppName,
+					},
+					Items: []corev1.KeyToPath{
+						{
+							Key:  expirationTimestampKey,
+							Path: "expiration",
+						},
+						{
+							Key:  expirationRefreshesKey,
+							Path: "expiration-refreshes",
+						},
+					},
 				},
 			},
 		},
@@ -346,20 +680,27 @@ func getVolumeMounts() []corev1.VolumeMount {
 			ReadOnly:  false,
 			MountPath: "/data/terminal",
 		},
+		{
+			Name:      webTerminalConfigVolume,
+			MountPath: "/etc/config",
+		},
 	}
 }
 
 // Terminal is called for any new websocket connection.
-func Terminal(ctx context.Context, ws *websocket.Conn, client ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *restclient.Config, userEmailID string) {
+func Terminal(ctx context.Context, ws *websocket.Conn, client ctrlruntimeclient.Client, k8sClient kubernetes.Interface, cfg *rest.Config, userEmailID string, cluster *kubermaticv1.Cluster) {
 	if err := startProcess(
 		ctx,
 		client,
 		k8sClient,
 		cfg,
 		userEmailID,
+		cluster,
 		[]string{"bash", "-c", "cd /data/terminal && /bin/bash"},
 		TerminalSession{
 			websocketConn: ws,
+			userEmailID:   userEmailID,
+			clusterClient: client,
 		},
 		ws); err != nil {
 		log.Logger.Debug(err)
