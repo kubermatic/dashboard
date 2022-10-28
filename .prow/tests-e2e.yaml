@@ -27,7 +27,7 @@ presubmits:
     labels:
       preset-alibaba: 'true'
       preset-anexia: 'true'
-      preset-aws: 'true'
+      preset-aws-kkp: 'true'
       preset-azure: 'true'
       preset-digitalocean: 'true'
       preset-gce: 'true'
@@ -83,7 +83,7 @@ presubmits:
     labels:
       preset-alibaba: 'true'
       preset-anexia: 'true'
-      preset-aws: 'true'
+      preset-aws-kkp: 'true'
       preset-azure: 'true'
       preset-digitalocean: 'true'
       preset-gce: 'true'
