@@ -69,7 +69,7 @@ func PacketSizesWithClusterCredentialsEndpoint(ctx context.Context, userInfoGett
 	return PacketSizes(apiKey, projectID, settings.Spec.MachineDeploymentVMResourceQuota)
 }
 
-func PacketSizes(apiKey, projectID string, quota kubermaticv1.MachineDeploymentVMResourceQuota) (apiv1.PacketSizeList, error) {
+func PacketSizes(apiKey, projectID string, quota *kubermaticv1.MachineFlavorFilter) (apiv1.PacketSizeList, error) {
 	sizes := apiv1.PacketSizeList{}
 	root := new(plansRoot)
 
@@ -132,7 +132,7 @@ func DescribePacketSize(apiKey, projectID, instanceType string) (packngo.Plan, e
 	return plan, fmt.Errorf("packet instanceType:%s not found", instanceType)
 }
 
-func filterPacketByQuota(instances apiv1.PacketSizeList, quota kubermaticv1.MachineDeploymentVMResourceQuota) apiv1.PacketSizeList {
+func filterPacketByQuota(instances apiv1.PacketSizeList, quota *kubermaticv1.MachineFlavorFilter) apiv1.PacketSizeList {
 	filteredRecords := apiv1.PacketSizeList{}
 
 	// Range over the records and apply all the filters to each record.

@@ -30,15 +30,15 @@ import (
 	kvinstancetypev1alpha1 "kubevirt.io/api/instancetype/v1alpha1"
 
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
-	"k8c.io/kubermatic/v2/pkg/log"
 	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/kubevirt"
 	kvmanifests "k8c.io/dashboard/v2/pkg/provider/cloud/kubevirt/manifests"
 	kubernetesprovider "k8c.io/dashboard/v2/pkg/provider/kubernetes"
+	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	"k8c.io/kubermatic/v2/pkg/log"
 	"k8c.io/kubermatic/v2/pkg/resources/reconciling"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
@@ -265,7 +265,7 @@ func KubeVirtStorageClassesWithClusterCredentialsEndpoint(ctx context.Context, u
 	return KubeVirtStorageClasses(ctx, kvKubeconfig)
 }
 
-func filterVMIPresets(vmiPresets apiv2.VirtualMachineInstancePresetList, quota kubermaticv1.MachineDeploymentVMResourceQuota) apiv2.VirtualMachineInstancePresetList {
+func filterVMIPresets(vmiPresets apiv2.VirtualMachineInstancePresetList, quota *kubermaticv1.MachineFlavorFilter) apiv2.VirtualMachineInstancePresetList {
 	filteredVMIPresets := apiv2.VirtualMachineInstancePresetList{}
 
 	// Range over the records and apply all the filters to each record.
@@ -538,7 +538,7 @@ func preferenceCreator(w preferenceWrapper) reconciling.NamedKvInstancetypeV1alp
 	}
 }
 
-func filterInstancetypes(instancetypes *apiv2.VirtualMachineInstancetypeList, quota kubermaticv1.MachineDeploymentVMResourceQuota) *apiv2.VirtualMachineInstancetypeList {
+func filterInstancetypes(instancetypes *apiv2.VirtualMachineInstancetypeList, quota *kubermaticv1.MachineFlavorFilter) *apiv2.VirtualMachineInstancetypeList {
 	filtered := &apiv2.VirtualMachineInstancetypeList{}
 
 	// Range over the records and apply all the filters to each record.

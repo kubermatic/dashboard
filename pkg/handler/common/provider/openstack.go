@@ -25,13 +25,13 @@ import (
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/openstack"
 	kubernetesprovider "k8c.io/dashboard/v2/pkg/provider/kubernetes"
+	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 )
@@ -299,7 +299,7 @@ func GetOpenstackProjects(userInfo *provider.UserInfo, seedsGetter provider.Seed
 }
 
 func GetOpenstackSizes(credentials *resources.OpenstackCredentials, datacenter *kubermaticv1.Datacenter,
-	quota kubermaticv1.MachineDeploymentVMResourceQuota, caBundle *x509.CertPool) ([]apiv1.OpenstackSize, error) {
+	quota *kubermaticv1.MachineFlavorFilter, caBundle *x509.CertPool) ([]apiv1.OpenstackSize, error) {
 	flavors, err := openstack.GetFlavors(datacenter.Spec.Openstack.AuthURL,
 		datacenter.Spec.Openstack.Region, credentials, caBundle)
 	if err != nil {
@@ -351,7 +351,7 @@ func GetOpenStackFlavorSize(credentials *resources.OpenstackCredentials, authURL
 	return nil, fmt.Errorf("cannot find openstack flavor %q size", flavorName)
 }
 
-func filterOpenStackByQuota(instances []apiv1.OpenstackSize, quota kubermaticv1.MachineDeploymentVMResourceQuota) []apiv1.OpenstackSize {
+func filterOpenStackByQuota(instances []apiv1.OpenstackSize, quota *kubermaticv1.MachineFlavorFilter) []apiv1.OpenstackSize {
 	var filteredRecords []apiv1.OpenstackSize
 
 	filteredRecords = make([]apiv1.OpenstackSize, 0)

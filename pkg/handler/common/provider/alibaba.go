@@ -27,10 +27,10 @@ import (
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/alibaba"
 	kubernetesprovider "k8c.io/dashboard/v2/pkg/provider/kubernetes"
+	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
 	"k8s.io/apimachinery/pkg/util/sets"
@@ -79,7 +79,7 @@ func AlibabaInstanceTypesWithClusterCredentialsEndpoint(ctx context.Context, use
 	return ListAlibabaInstanceTypes(accessKeyID, accessKeySecret, region, settings.Spec.MachineDeploymentVMResourceQuota)
 }
 
-func ListAlibabaInstanceTypes(accessKeyID string, accessKeySecret string, region string, quota kubermaticv1.MachineDeploymentVMResourceQuota) (apiv1.AlibabaInstanceTypeList, error) {
+func ListAlibabaInstanceTypes(accessKeyID string, accessKeySecret string, region string, quota *kubermaticv1.MachineFlavorFilter) (apiv1.AlibabaInstanceTypeList, error) {
 	// Alibaba has way too many instance types that are not all available in each region
 	// recommendedInstanceFamilies are those families that are recommended in this document:
 	// https://www.alibabacloud.com/help/doc-detail/25378.htm?spm=a2c63.p38356.b99.47.7acf342enhNVmo
@@ -137,7 +137,7 @@ func ListAlibabaInstanceTypes(accessKeyID string, accessKeySecret string, region
 	return filterByQuota(instanceTypes, quota), nil
 }
 
-func filterByQuota(instances apiv1.AlibabaInstanceTypeList, quota kubermaticv1.MachineDeploymentVMResourceQuota) apiv1.AlibabaInstanceTypeList {
+func filterByQuota(instances apiv1.AlibabaInstanceTypeList, quota *kubermaticv1.MachineFlavorFilter) apiv1.AlibabaInstanceTypeList {
 	filteredRecords := apiv1.AlibabaInstanceTypeList{}
 
 	// Range over the records and apply all the filters to each record.

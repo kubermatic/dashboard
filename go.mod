@@ -49,7 +49,7 @@ require (
 	github.com/gorilla/websocket v1.5.0
 	github.com/hetznercloud/hcloud-go v1.35.2
 	github.com/imdario/mergo v0.3.13
-	github.com/kubermatic/machine-controller v1.55.0
+	github.com/kubermatic/machine-controller v1.55.1-0.20220930055319-5819bb5f27f7
 	github.com/minio/minio-go/v7 v7.0.36
 	github.com/open-policy-agent/frameworks/constraint v0.0.0-20220504225309-3462b1a344f3 // v0.5.1
 	github.com/open-policy-agent/gatekeeper v0.0.0-20220504234711-ecf609290e2e // v3.8.1
@@ -58,8 +58,8 @@ require (
 	github.com/prometheus/client_golang v1.13.0
 	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/sirupsen/logrus v1.9.0 // indirect
-	github.com/spf13/cobra v1.5.0 // indirect
-	github.com/spf13/pflag v1.0.5 // indirect
+	github.com/spf13/cobra v1.5.0
+	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.8.0
 	github.com/vmware/go-vcloud-director/v2 v2.16.0
 	github.com/vmware/govmomi v0.29.0
@@ -89,7 +89,7 @@ require (
 	k8s.io/kubectl v0.25.0
 	k8s.io/metrics v0.25.0
 	k8s.io/utils v0.0.0-20220823124924-e9cbc92d1a73
-	kubevirt.io/api v0.56.0
+	kubevirt.io/api v0.58.0
 	kubevirt.io/containerized-data-importer-api v1.54.0
 	sigs.k8s.io/controller-runtime v0.13.0
 	sigs.k8s.io/yaml v1.3.0
@@ -103,7 +103,7 @@ require (
 	github.com/go-openapi/validate v0.22.0
 	github.com/go-swagger/go-swagger v0.30.1
 	github.com/onsi/ginkgo v1.16.5
-	k8c.io/kubermatic/v2 v2.21.1-0.20221012091925-abed55b1eab3
+	k8c.io/kubermatic/v2 v2.21.1-0.20221028185109-e27dc017c4f1
 	k8s.io/code-generator v0.25.0
 	sigs.k8s.io/controller-tools v0.9.2
 )

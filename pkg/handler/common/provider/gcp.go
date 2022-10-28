@@ -279,7 +279,7 @@ func ListGCPZones(ctx context.Context, userInfo *provider.UserInfo, sa, datacent
 	return zones, err
 }
 
-func ListGCPSizes(ctx context.Context, quota kubermaticv1.MachineDeploymentVMResourceQuota, sa, zone string) (apiv1.GCPMachineSizeList, error) {
+func ListGCPSizes(ctx context.Context, quota *kubermaticv1.MachineFlavorFilter, sa, zone string) (apiv1.GCPMachineSizeList, error) {
 	sizes := apiv1.GCPMachineSizeList{}
 
 	computeService, project, err := gcp.ConnectToComputeService(ctx, sa)
@@ -322,7 +322,7 @@ func GetGCPInstanceSize(ctx context.Context, machineType, sa, zone string) (*api
 	}, nil
 }
 
-func filterGCPByQuota(instances apiv1.GCPMachineSizeList, quota kubermaticv1.MachineDeploymentVMResourceQuota) apiv1.GCPMachineSizeList {
+func filterGCPByQuota(instances apiv1.GCPMachineSizeList, quota *kubermaticv1.MachineFlavorFilter) apiv1.GCPMachineSizeList {
 	filteredRecords := apiv1.GCPMachineSizeList{}
 
 	// Range over the records and apply all the filters to each record.

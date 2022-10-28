@@ -30128,15 +30128,16 @@
       },
       "x-go-package": "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
     },
-    "MachineDeploymentVMResourceQuota": {
+    "MachineFlavorFilter": {
       "type": "object",
       "properties": {
         "enableGPU": {
+          "description": "Include VMs with GPU",
           "type": "boolean",
           "x-go-name": "EnableGPU"
         },
         "maxCPU": {
-          "description": "Maximal number of vCPU",
+          "description": "Maximum number of vCPU",
           "type": "integer",
           "format": "int64",
           "x-go-name": "MaxCPU"
@@ -30148,13 +30149,13 @@
           "x-go-name": "MaxRAM"
         },
         "minCPU": {
-          "description": "Minimal number of vCPU",
+          "description": "Minimum number of vCPU",
           "type": "integer",
           "format": "int64",
           "x-go-name": "MinCPU"
         },
         "minRAM": {
-          "description": "Minimal RAM size in GB",
+          "description": "Minimum RAM size in GB",
           "type": "integer",
           "format": "int64",
           "x-go-name": "MinRAM"
@@ -33512,8 +33513,13 @@
           "type": "boolean",
           "x-go-name": "EnableOIDCKubeconfig"
         },
+        "enableWebTerminal": {
+          "description": "EnableWebTerminal enables the Web Terminal feature for the user clusters.",
+          "type": "boolean",
+          "x-go-name": "EnableWebTerminal"
+        },
         "machineDeploymentVMResourceQuota": {
-          "$ref": "#/definitions/MachineDeploymentVMResourceQuota"
+          "$ref": "#/definitions/MachineFlavorFilter"
         },
         "mlaAlertmanagerPrefix": {
           "type": "string",

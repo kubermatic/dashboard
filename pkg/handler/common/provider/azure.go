@@ -395,7 +395,7 @@ func GetAzureVMSize(ctx context.Context, subscriptionID, clientID, clientSecret,
 	return nil, fmt.Errorf("could not find Azure VM Size named %q", vmName)
 }
 
-func AzureSize(ctx context.Context, quota kubermaticv1.MachineDeploymentVMResourceQuota, subscriptionID, clientID, clientSecret, tenantID, location string) (apiv1.AzureSizeList, error) {
+func AzureSize(ctx context.Context, quota *kubermaticv1.MachineFlavorFilter, subscriptionID, clientID, clientSecret, tenantID, location string) (apiv1.AzureSizeList, error) {
 	sizesClient, err := NewAzureClientSet(subscriptionID, clientID, clientSecret, tenantID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create authorizer for size client: %w", err)
@@ -448,7 +448,7 @@ func AzureSize(ctx context.Context, quota kubermaticv1.MachineDeploymentVMResour
 	return filterAzureByQuota(sizeList, quota), nil
 }
 
-func filterAzureByQuota(instances apiv1.AzureSizeList, quota kubermaticv1.MachineDeploymentVMResourceQuota) apiv1.AzureSizeList {
+func filterAzureByQuota(instances apiv1.AzureSizeList, quota *kubermaticv1.MachineFlavorFilter) apiv1.AzureSizeList {
 	filteredRecords := apiv1.AzureSizeList{}
 
 	// Range over the records and apply all the filters to each record.

@@ -69,7 +69,7 @@ func HetznerSizeWithClusterCredentialsEndpoint(ctx context.Context, userInfoGett
 	return HetznerSize(ctx, settings.Spec.MachineDeploymentVMResourceQuota, hetznerToken)
 }
 
-func HetznerSize(ctx context.Context, quota kubermaticv1.MachineDeploymentVMResourceQuota, token string) (apiv1.HetznerSizeList, error) {
+func HetznerSize(ctx context.Context, quota *kubermaticv1.MachineFlavorFilter, token string) (apiv1.HetznerSizeList, error) {
 	client := hcloud.NewClient(hcloud.WithToken(token))
 
 	listOptions := hcloud.ServerTypeListOpts{
@@ -106,7 +106,7 @@ func HetznerSize(ctx context.Context, quota kubermaticv1.MachineDeploymentVMReso
 	return filterHetznerByQuota(sizeList, quota), nil
 }
 
-func filterHetznerByQuota(instances apiv1.HetznerSizeList, quota kubermaticv1.MachineDeploymentVMResourceQuota) apiv1.HetznerSizeList {
+func filterHetznerByQuota(instances apiv1.HetznerSizeList, quota *kubermaticv1.MachineFlavorFilter) apiv1.HetznerSizeList {
 	filteredRecords := apiv1.HetznerSizeList{
 		Standard:  []apiv1.HetznerSize{},
 		Dedicated: []apiv1.HetznerSize{},

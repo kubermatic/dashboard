@@ -228,7 +228,7 @@ func SetDefaultSubnet(machineDeployments *clusterv1alpha1.MachineDeploymentList,
 	return subnets, nil
 }
 
-func AWSSizes(region, architecture string, quota kubermaticv1.MachineDeploymentVMResourceQuota) (apiv1.AWSSizeList, error) {
+func AWSSizes(region, architecture string, quota *kubermaticv1.MachineFlavorFilter) (apiv1.AWSSizeList, error) {
 	if data == nil {
 		return nil, fmt.Errorf("AWS instance type data not initialized")
 	}
@@ -284,7 +284,7 @@ func isValidArchitecture(architecture, processorType string) bool {
 	return true
 }
 
-func filterAWSByQuota(instances apiv1.AWSSizeList, quota kubermaticv1.MachineDeploymentVMResourceQuota) apiv1.AWSSizeList {
+func filterAWSByQuota(instances apiv1.AWSSizeList, quota *kubermaticv1.MachineFlavorFilter) apiv1.AWSSizeList {
 	filteredRecords := apiv1.AWSSizeList{}
 
 	// Range over the records and apply all the filters to each record.

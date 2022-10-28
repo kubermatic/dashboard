@@ -101,7 +101,7 @@ func DigitaloceanSizeWithClusterCredentialsEndpoint(ctx context.Context, userInf
 	return DigitaloceanSize(ctx, settings.Spec.MachineDeploymentVMResourceQuota, accessToken)
 }
 
-func DigitaloceanSize(ctx context.Context, quota kubermaticv1.MachineDeploymentVMResourceQuota, token string) (apiv1.DigitaloceanSizeList, error) {
+func DigitaloceanSize(ctx context.Context, quota *kubermaticv1.MachineFlavorFilter, token string) (apiv1.DigitaloceanSizeList, error) {
 	sizes, err := ListDigitaloceanSizes(ctx, token)
 	if err != nil {
 		return apiv1.DigitaloceanSizeList{}, err
@@ -146,7 +146,7 @@ func getDigitalOceanClient(ctx context.Context, token string) (*godo.Client, err
 	return client, nil
 }
 
-func filterDigitalOceanByQuota(instances apiv1.DigitaloceanSizeList, quota kubermaticv1.MachineDeploymentVMResourceQuota) apiv1.DigitaloceanSizeList {
+func filterDigitalOceanByQuota(instances apiv1.DigitaloceanSizeList, quota *kubermaticv1.MachineFlavorFilter) apiv1.DigitaloceanSizeList {
 	filteredRecords := apiv1.DigitaloceanSizeList{
 		Standard:  []apiv1.DigitaloceanSize{},
 		Optimized: []apiv1.DigitaloceanSize{},
