@@ -12,11 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, TemplateRef} from '@angular/core';
 import {ExternalClusterProvider} from '@shared/entity/external-cluster';
 import {takeUntil} from 'rxjs/operators';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {Subject} from 'rxjs';
+import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 
 @Component({
   selector: 'km-external-cluster-cluster-step',
@@ -25,6 +26,7 @@ import {Subject} from 'rxjs';
 })
 export class ClusterStepComponent implements OnInit, OnDestroy {
   @Input() projectID: string;
+  @Input() quotaWidget: TemplateRef<QuotaWidgetComponent>;
   provider: ExternalClusterProvider;
   readonly Provider = ExternalClusterProvider;
   private _unsubscribe = new Subject<void>();

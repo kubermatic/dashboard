@@ -12,7 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ChangeDetectorRef, Component, forwardRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  forwardRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  TemplateRef,
+} from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -46,6 +55,7 @@ import {GCPDiskType, GCPMachineSize} from '@app/shared/entity/provider/gcp';
 import {NameGeneratorService} from '@app/core/services/name-generator';
 import {MasterVersion} from '@app/shared/entity/cluster';
 import {ComboboxControls, FilteredComboboxComponent} from '@app/shared/components/combobox/component';
+import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 
 enum Controls {
   Name = 'name',
@@ -155,6 +165,7 @@ export class GKEClusterSettingsComponent
 
   @Input() projectID: string;
   @Input() cluster: ExternalCluster;
+  @Input() quotaWidget: TemplateRef<QuotaWidgetComponent>;
 
   @ViewChild('diskTypesCombobox')
   private readonly _diskTypesCombobox: FilteredComboboxComponent;

@@ -36,29 +36,37 @@ END OF TERMS AND CONDITIONS
          [class.km-no-quota-top-margin]="!quotaDetails"
          fxLayout="row"
          fxLayoutAlign=" center">
-      <i *ngIf="showWarning"
+      <i *ngIf="showWarning && !isWidgetApplicableForExternalOrImportedCluster"
          class="km-icon-warning"
          matTooltip="The project quota is overdrawn"></i>
 
       <i *ngIf="showIcon"
          class="km-icon-mask km-icon-quota"></i>
 
-      <ng-container *ngIf="quotaDetails else emptyPlaceholder">
-        <ng-container *ngIf="quotaDetails.quota.cpu"
-                      [ngTemplateOutlet]="progressBar"
-                      [ngTemplateOutletContext]="{label: 'CPU', percentage: quotaPercentage.cpu}">
-        </ng-container>
+      <ng-container [ngTemplateOutlet]="!isWidgetApplicableForExternalOrImportedCluster ? quotaBars : notApplicableText"></ng-container>
 
-        <ng-container *ngIf="quotaDetails.quota.memory"
-                      [ngTemplateOutlet]="progressBar"
-                      [ngTemplateOutletContext]="{label: 'Memory', percentage: quotaPercentage.memory}">
-        </ng-container>
+      <ng-template #quotaBars>
+        <ng-container *ngIf="quotaDetails else emptyPlaceholder">
+          <ng-container *ngIf="quotaDetails.quota.cpu"
+                        [ngTemplateOutlet]="progressBar"
+                        [ngTemplateOutletContext]="{label: 'CPU', percentage: quotaPercentage.cpu}">
+          </ng-container>
 
-        <ng-container *ngIf="quotaDetails.quota.storage"
-                      [ngTemplateOutlet]="progressBar"
-                      [ngTemplateOutletContext]=" {label: 'Disk', percentage: quotaPercentage.storage}">
+          <ng-container *ngIf="quotaDetails.quota.memory"
+                        [ngTemplateOutlet]="progressBar"
+                        [ngTemplateOutletContext]="{label: 'Memory', percentage: quotaPercentage.memory}">
+          </ng-container>
+
+          <ng-container *ngIf="quotaDetails.quota.storage"
+                        [ngTemplateOutlet]="progressBar"
+                        [ngTemplateOutletContext]=" {label: 'Disk', percentage: quotaPercentage.storage}">
+          </ng-container>
         </ng-container>
-      </ng-container>
+      </ng-template>
+
+      <ng-template #notApplicableText>
+        Does not apply to {{ isImportedCluster ? 'imported' : 'external' }} cluster
+      </ng-template>
 
       <ng-template #emptyPlaceholder>
         No quotas configured

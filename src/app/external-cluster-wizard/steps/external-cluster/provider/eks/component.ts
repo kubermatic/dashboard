@@ -12,7 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ChangeDetectorRef, Component, forwardRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  forwardRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  TemplateRef,
+} from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -54,6 +63,7 @@ import {
 import {MasterVersion} from '@app/shared/entity/cluster';
 import {ComboboxControls, FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {EKSArchitecture} from '@app/shared/entity/provider/eks';
+import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 
 enum Controls {
   Vpc = 'vpc',
@@ -151,6 +161,7 @@ export class EKSClusterSettingsComponent
 
   @Input() projectID: string;
   @Input() cluster: ExternalCluster;
+  @Input() quotaWidget: TemplateRef<QuotaWidgetComponent>;
   private readonly _debounceTime = 500;
 
   @ViewChild('vpcCombobox')

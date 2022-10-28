@@ -18,6 +18,7 @@ import {ExternalClusterService} from '@core/services/external-cluster';
 import {ExternalClusterProvider} from '@shared/entity/external-cluster';
 import {filter, takeUntil} from 'rxjs/operators';
 import {StepBase} from '../base';
+import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 
 enum Controls {
   AKSExternalCluster = 'AKSExternalCluster',
@@ -66,6 +67,13 @@ export class ExternalClusterStepComponent
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  onActivate(component: QuotaWidgetComponent): void {
+    component.projectId = this.projectID;
+    component.isExternalCluster = true;
+    component.showAsCard = false;
+    component.showDetailsOnHover = false;
   }
 
   private _initForm() {

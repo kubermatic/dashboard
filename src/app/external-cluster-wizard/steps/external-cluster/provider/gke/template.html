@@ -132,6 +132,10 @@ limitations under the License.
       </mat-form-field>
     </ng-container>
 
+    <div>
+      <ng-container *ngTemplateOutlet="quotaWidget"></ng-container>
+    </div>
+
     <km-combobox #machineTypesCombobox
                  filterBy="name"
                  inputLabel="Select Machine Type..."

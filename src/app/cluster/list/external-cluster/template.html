@@ -19,6 +19,10 @@ limitations under the License.
   <km-search-field (queryChange)="onSearch($event)"></km-search-field>
   <div fxFlex></div>
 
+  <div fxLayoutAlign="center center">
+    <router-outlet name="quota-widget"
+                   (activate)="onActivate($event)"></router-outlet>
+  </div>
   <button id="km-add-external-cluster-btn"
           mat-flat-button
           [disabled]="!can(Permission.Create)"
@@ -175,3 +179,8 @@ limitations under the License.
 
   </mat-card-content>
 </mat-card>
+
+<ng-template #quotaWidget>
+  <router-outlet name="quota-widget"
+                 (activate)="onActivateQuotaWidgetWithoutCard($event)"></router-outlet>
+</ng-template>

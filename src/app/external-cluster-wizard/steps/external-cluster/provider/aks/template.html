@@ -117,6 +117,10 @@ limitations under the License.
       </mat-error>
     </mat-form-field>
 
+    <div>
+      <ng-container *ngTemplateOutlet="quotaWidget"></ng-container>
+    </div>
+
     <km-combobox #vmSizeCombobox
                  filterBy="name"
                  inputLabel="Select VM Sizes..."

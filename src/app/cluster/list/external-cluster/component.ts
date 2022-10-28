@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit, ViewChild, TemplateRef} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -30,7 +30,7 @@ import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
-import {distinctUntilChanged, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {distinctUntilChanged, switchMap, take, takeUntil, tap, startWith} from 'rxjs/operators';
 import {AddExternalClusterDialogComponent} from '@shared/components/add-external-cluster-dialog/component';
 import {
   ExternalCloudSpec,
@@ -40,6 +40,7 @@ import {
 } from '@shared/entity/external-cluster';
 import {ExternalClusterDeleteConfirmationComponent} from '@app/cluster/details/external-cluster/external-cluster-delete-confirmation/component';
 import {ExternalClusterService} from '@core/services/external-cluster';
+import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 
 @Component({
   selector: 'km-external-cluster-list',
@@ -56,6 +57,7 @@ export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestro
   searchQuery: string;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild('quotaWidget') quotaWidget: TemplateRef<QuotaWidgetComponent>;
   private _unsubscribe: Subject<void> = new Subject<void>();
   private _selectedProject = {} as Project;
   private _user: Member;
@@ -159,6 +161,7 @@ export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestro
   addExternalCluster(): void {
     const dialog = this._matDialog.open(AddExternalClusterDialogComponent);
     dialog.componentInstance.projectId = this._selectedProject.id;
+    dialog.componentInstance.quotaWidget = this.quotaWidget;
   }
 
   canAccess(cluster: ExternalCluster): boolean {
@@ -217,6 +220,27 @@ export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestro
 
   openWizard(): void {
     this._router.navigate(['projects', this._selectedProject.id, 'external-cluster-wizard']);
+  }
+
+  onActivate(component: QuotaWidgetComponent): void {
+    component.isExternalCluster = true;
+    component.showDetailsOnHover = false;
+    this._projectService.onProjectChange
+      .pipe(startWith(this._selectedProject), takeUntil(this._unsubscribe))
+      .subscribe(({id}) => {
+        component.projectId = id;
+      });
+  }
+
+  onActivateQuotaWidgetWithoutCard(component: QuotaWidgetComponent): void {
+    component.isImportedCluster = true;
+    component.showDetailsOnHover = false;
+    component.showAsCard = false;
+    this._projectService.onProjectChange
+      .pipe(startWith(this._selectedProject), takeUntil(this._unsubscribe))
+      .subscribe(({id}) => {
+        component.projectId = id;
+      });
   }
 
   private _onProjectChange(project: Project): void {

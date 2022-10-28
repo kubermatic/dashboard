@@ -224,6 +224,10 @@ limitations under the License.
       </div>
     </km-combobox>
 
+    <div>
+      <ng-container *ngTemplateOutlet="quotaWidget"></ng-container>
+    </div>
+
     <ng-container *ngIf="isDialogView()">
       <mat-card-header class="km-no-padding">
         <mat-card-title>AutoScaling</mat-card-title>

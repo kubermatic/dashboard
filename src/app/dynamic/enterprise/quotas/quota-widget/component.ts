@@ -55,11 +55,14 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   @Input() showIcon = true;
   @Input() showDetailsOnHover = true;
   @Input() showEmptyPlaceholder = false;
+  @Input() isExternalCluster = false;
+  @Input() isImportedCluster = false;
 
   quotaPercentage: QuotaVariables;
   quotaDetails: QuotaDetails;
   isLoading: boolean;
   showWarning: boolean;
+  isWidgetApplicableForExternalOrImportedCluster: boolean;
   showDetails$ = this._showDetails$.asObservable().pipe(debounceTime(this._debounce));
 
   readonly quotaLimit = 100;
@@ -85,12 +88,17 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit(): void {
     this.isLoading = true;
     this._initSubscriptions();
+    this._setShowNotApplicableText();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.projectId) {
       this._unsubscribe.next();
       this._subscribeToQuotaDetails();
+    }
+
+    if (changes.isExternalCluster || changes.isImportedCluster) {
+      this._setShowNotApplicableText();
     }
   }
 
@@ -147,5 +155,9 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
 
   private _setShowWarningIcon(): void {
     this.showWarning = Object.values(this.quotaPercentage).some((quota: number) => quota > this.quotaLimit);
+  }
+
+  private _setShowNotApplicableText(): void {
+    this.isWidgetApplicableForExternalOrImportedCluster = this.isExternalCluster || this.isImportedCluster;
   }
 }

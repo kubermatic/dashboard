@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, ViewChild, TemplateRef} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {MatStepper} from '@angular/material/stepper';
@@ -21,6 +21,7 @@ import {NotificationService} from '@core/services/notification';
 import {Router} from '@angular/router';
 import {ExternalCluster, ExternalClusterProvider} from '@shared/entity/external-cluster';
 import {Observable, Subject} from 'rxjs';
+import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 
 export enum Step {
   Provider = 'Pick Provider',
@@ -34,6 +35,7 @@ export enum Step {
 })
 export class AddExternalClusterDialogComponent implements OnInit, OnDestroy {
   @Input() projectId: string;
+  @Input() quotaWidget: TemplateRef<QuotaWidgetComponent>;
   steps: Step[] = [Step.Provider, Step.Credentials];
   readonly step = Step;
   readonly provider = ExternalClusterProvider;
