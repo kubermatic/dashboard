@@ -190,11 +190,6 @@ export class AdminSeedSpec {
   etcdBackupRestore?: EtcdBackupRestore;
 }
 
-export class BackupRestoreConfiguration {
-  s3BucketName?: string;
-  s3Endpoint?: string;
-}
-
 export class MeteringCredentials {
   bucketName: string;
   accessKey: string;
