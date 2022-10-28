@@ -49,6 +49,15 @@ export class DatacenterSpec {
   anexia?: AnexiaDatacenterSpec;
   vmwareclouddirector?: VMwareCloudDirectorDatacenterSpec;
   operatingSystemProfiles?: DatacenterOperatingSystemOptions;
+  machineFlavorFilter?: MachineFlavorFilter;
+}
+
+export class MachineFlavorFilter {
+  minCPU: number;
+  maxCPU: number;
+  minRAM: number;
+  maxRAM: number;
+  enableGPU: boolean;
 }
 
 export class DatacenterOperatingSystemOptions {

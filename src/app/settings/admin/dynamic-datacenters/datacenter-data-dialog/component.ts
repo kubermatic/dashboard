@@ -17,7 +17,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
 import {DatacenterService} from '@core/services/datacenter';
-import {CreateDatacenterModel, Datacenter} from '@shared/entity/datacenter';
+import {CreateDatacenterModel, Datacenter, MachineFlavorFilter} from '@shared/entity/datacenter';
 import {INTERNAL_NODE_PROVIDERS} from '@shared/model/NodeProviderConstants';
 import {getIconClassForButton} from '@shared/utils/common';
 import * as countryCodeLookup from 'country-code-lookup';
@@ -44,6 +44,7 @@ export enum Controls {
   RequiredEmails = 'requiredEmails',
   EnforcePodSecurityPolicy = 'enforcePodSecurityPolicy',
   EnforceAuditLogging = 'enforceAuditLogging',
+  MachineFlavorFilter = 'machineFlavorFilter',
 }
 
 enum Title {
@@ -66,6 +67,7 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
   form: FormGroup;
   requiredEmails: string[] = [];
   providerConfig = '';
+  machineFlavorFilter: MachineFlavorFilter;
 
   constructor(
     public _matDialogRef: MatDialogRef<DatacenterDataDialogComponent>,
@@ -76,6 +78,10 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this._datacenterService.seeds.pipe(takeUntil(this._unsubscribe)).subscribe(seeds => (this.seeds = seeds));
+
+    if (this.data.isEditing) {
+      this.machineFlavorFilter = _.cloneDeep(this.data.datacenter?.spec?.machineFlavorFilter);
+    }
 
     this.form = new FormGroup({
       name: new FormControl(this.data.isEditing ? this.data.datacenter.metadata.name : '', [Validators.required]),
@@ -94,6 +100,7 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
         this.data.isEditing && this.data.datacenter.spec.enforcePodSecurityPolicy
       ),
       enforceAuditLogging: new FormControl(this.data.isEditing && this.data.datacenter.spec.enforceAuditLogging),
+      machineFlavorFilter: new FormControl(),
     });
 
     this._initRequiredEmailsInput();
@@ -136,6 +143,7 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
         requiredEmails: this.requiredEmails,
         enforcePodSecurityPolicy: this.form.get(Controls.EnforcePodSecurityPolicy).value,
         enforceAuditLogging: this.form.get(Controls.EnforceAuditLogging).value,
+        machineFlavorFilter: this.form.get(Controls.MachineFlavorFilter).value,
       },
     };
 
