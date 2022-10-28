@@ -1,5 +1,7 @@
 # Dashboard for the Kubermatic Kubernetes Platform
 
+...
+
 [![codecov](https://codecov.io/gh/kubermatic/dashboard/branch/main/graph/badge.svg?token=njXM3OrmAM)](https://codecov.io/gh/kubermatic/dashboard)
 
 ## Overview & More information
