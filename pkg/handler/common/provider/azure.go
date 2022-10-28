@@ -19,11 +19,12 @@ package provider
 import (
 	"context"
 	"fmt"
+	"net/http"
+
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/compute/armcompute"
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/network/armnetwork"
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/resources/armresources"
-	"net/http"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
