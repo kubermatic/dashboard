@@ -19,7 +19,7 @@ presubmits:
     clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
     spec:
       containers:
-        - image: quay.io/kubermatic/chrome-headless:v1.5.0
+        - image: quay.io/kubermatic/chrome-headless:v1.6.0
           command:
             - make
             - test-headless
