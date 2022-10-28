@@ -1,0 +1,63 @@
+<!--
+Copyright 2022 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<div title="Resource Filter">
+  <mat-card-header class="km-no-padding">
+    <mat-card-title>Resource Filter
+      <i class="km-icon-info km-pointer"
+         matTooltip="Hides machine sizes that do not meet the specified conditions in wizard and edit dialogs. Set limit to 0 for the respective limit to be disabled."></i>
+    </mat-card-title>
+  </mat-card-header>
+  <form fxLayout="row"
+        fxLayoutGap="8px"
+        fxLayout.sm="column"
+        fxLayout.xs="column"
+        [formGroup]="form">
+
+    <div fxFlex
+         fxLayout="column">
+      <km-number-stepper [formControlName]="Controls.MinCPU"
+                         id="km-cpu-resource-quota-setting"
+                         label="Min CPU"
+                         min="0"
+                         required>
+      </km-number-stepper>
+
+      <km-number-stepper [formControlName]="Controls.MaxCPU"
+                         label="Max CPU"
+                         min="0"
+                         required>
+      </km-number-stepper>
+
+      <km-number-stepper [formControlName]="Controls.MinRAM"
+                         id="km-ram-resource-quota-setting"
+                         label="Min RAM (GB)"
+                         min="0"
+                         required>
+      </km-number-stepper>
+
+      <km-number-stepper [formControlName]="Controls.MaxRAM"
+                         label="Max RAM (GB)"
+                         min="0"
+                         required>
+      </km-number-stepper>
+
+      <mat-checkbox fxLayoutAlign=" center"
+                    [formControlName]="Controls.EnableGPU">Enable GPU
+      </mat-checkbox>
+    </div>
+
+  </form>
+</div>

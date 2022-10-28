@@ -52,6 +52,7 @@ export class NodeDataDigitalOceanProvider {
                 .provider(NodeProvider.DIGITALOCEAN)
                 .token(cluster.spec.cloud.digitalocean.token)
                 .credential(this._presetService.preset)
+                .datacenterName(cluster.spec.cloud.dc)
                 .flavors(onLoadingCb)
                 .pipe(
                   catchError(_ => {

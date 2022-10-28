@@ -77,14 +77,6 @@ export class DefaultsAndLimitsComponent implements OnInit, OnDestroy {
     return _.isEqual(a, b);
   }
 
-  isDisplayLinksEqual(): boolean {
-    return (
-      this.isEqual(this.settings.displayAPIDocs, this.apiSettings.displayAPIDocs) &&
-      this.isEqual(this.settings.displayDemoInfo, this.apiSettings.displayDemoInfo) &&
-      this.isEqual(this.settings.displayTermsOfService, this.apiSettings.displayTermsOfService)
-    );
-  }
-
   isMLALoggingEqual(): boolean {
     return (
       this.isEqual(this.settings.mlaOptions.loggingEnabled, this.apiSettings.mlaOptions.loggingEnabled) &&

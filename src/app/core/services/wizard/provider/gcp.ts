@@ -52,6 +52,13 @@ export class GCP extends Provider {
     return this;
   }
 
+  datacenterName(datacenterName: string): GCP {
+    if (datacenterName) {
+      this._headers = this._headers.set(GCP.Header.DatacenterName, datacenterName);
+    }
+    return this;
+  }
+
   diskTypes(onLoadingCb: () => void = null): Observable<GCPDiskType[]> {
     if (!this._hasRequiredHeaders() && this._headers.has(GCP.Header.Zone)) {
       return EMPTY;
@@ -125,5 +132,6 @@ export namespace GCP {
     ServiceAccount = 'ServiceAccount',
     Zone = 'Zone',
     Network = 'Network',
+    DatacenterName = 'DatacenterName',
   }
 }

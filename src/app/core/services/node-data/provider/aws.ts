@@ -101,6 +101,7 @@ export class NodeDataAWSProvider {
                 .assumeRoleExternalID(cluster.spec.cloud.aws.assumeRoleExternalID)
                 .vpc(cluster.spec.cloud.aws.vpcID)
                 .credential(this._presetService.preset)
+                .datacenterName(cluster.spec.cloud.dc)
                 .subnets(cluster.spec.cloud.dc, onLoadingCb)
                 .pipe(
                   map((subnets: AWSSubnet[]) => {

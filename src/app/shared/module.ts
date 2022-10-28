@@ -69,6 +69,7 @@ import {EKSCredentialsComponent} from '@shared/components/external-cluster-crede
 import {GKECredentialsComponent} from '@shared/components/external-cluster-credentials/provider/gke/component';
 import {ExternalClusterProviderStepComponent} from '@shared/components/add-external-cluster-dialog/steps/external-provider/component';
 import {KubeVirtPreAllocatedDataVolumesComponent} from '@shared/components/kubevirt-pre-allocated-data-volumes/component';
+import {MachineFlavorFilterComponent} from '@shared/components/machine-flavor-filter/component';
 import {SelectExternalClusterProviderComponent} from '@shared/components/select-external-cluster-provider/component';
 import {AutocompleteComponent} from '@shared/components/autocomplete/component';
 import {CIDRFormComponent} from '@shared/components/cidr-form/component';
@@ -255,6 +256,7 @@ const components = [
   TerminalComponent,
   TerminalToolBarComponent,
   TerminalStatusBarComponent,
+  MachineFlavorFilterComponent,
 ];
 
 const directives = [AutofocusDirective, ThrottleClickDirective, OptionDirective];

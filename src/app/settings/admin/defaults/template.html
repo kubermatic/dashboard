@@ -253,14 +253,14 @@ limitations under the License.
             <km-number-stepper [(ngModel)]="settings.machineDeploymentVMResourceQuota.minRAM"
                                (ngModelChange)="onSettingsChange()"
                                id="km-ram-resource-quota-setting"
-                               label="Min RAM"
+                               label="Min RAM (GB)"
                                min="0"
                                required>
             </km-number-stepper>
 
             <km-number-stepper [(ngModel)]="settings.machineDeploymentVMResourceQuota.maxRAM"
                                (ngModelChange)="onSettingsChange()"
-                               label="Max RAM"
+                               label="Max RAM (GB)"
                                min="0"
                                required>
             </km-number-stepper>

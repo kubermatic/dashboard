@@ -53,6 +53,7 @@ export class NodeDataEquinixProvider {
                 .apiKey(cluster.spec.cloud.packet.apiKey)
                 .projectID(cluster.spec.cloud.packet.projectID)
                 .credential(this._presetService.preset)
+                .datacenterName(cluster.spec.cloud.dc)
                 .flavors(onLoadingCb)
                 .pipe(
                   catchError(_ => {

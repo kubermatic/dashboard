@@ -63,6 +63,7 @@ export class NodeDataAlibabaProvider {
                 .accessKeySecret(cluster.spec.cloud.alibaba.accessKeySecret)
                 .region(region)
                 .credential(this._presetService.preset)
+                .datacenterName(cluster.spec.cloud.dc)
                 .instanceTypes(onLoadingCb)
                 .pipe(
                   catchError(_ => {

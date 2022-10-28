@@ -75,6 +75,13 @@ export class AWS extends Provider {
     return this;
   }
 
+  datacenterName(datacenterName: string): AWS {
+    if (datacenterName) {
+      this._headers = this._headers.set(AWS.Header.DatacenterName, datacenterName);
+    }
+    return this;
+  }
+
   vpcs(seed: string, onLoadingCb: () => void = null): Observable<AWSVPC[]> {
     if (this._headers.has(AWS.Header.AssumeRoleARN) || this._headers.has(AWS.Header.AssumeRoleExternalID)) {
       this._setRequiredHeaders(
@@ -168,5 +175,6 @@ export namespace AWS {
     AssumeRoleExternalID = 'AssumeRoleExternalID',
     VPC = 'VPC',
     Region = 'Region',
+    DatacenterName = 'DatacenterName',
   }
 }

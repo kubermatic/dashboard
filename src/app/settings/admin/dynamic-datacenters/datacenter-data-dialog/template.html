@@ -127,6 +127,10 @@ limitations under the License.
 
     <mat-checkbox [formControlName]="controls.EnforcePodSecurityPolicy">Enforce Pod Security Policy</mat-checkbox>
     <mat-checkbox [formControlName]="controls.EnforceAuditLogging">Enforce Audit Logging</mat-checkbox>
+
+    <km-machine-flavor-filter class="km-machine-flavor-filter"
+                              [formControl]="form.get(controls.MachineFlavorFilter)"
+                              [machineFlavorFilter]="machineFlavorFilter"></km-machine-flavor-filter>
   </form>
 
   <div class="property-name">Provider Configuration</div>

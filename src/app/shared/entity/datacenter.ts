@@ -49,6 +49,15 @@ export class DatacenterSpec {
   anexia?: AnexiaDatacenterSpec;
   vmwareclouddirector?: VMwareCloudDirectorDatacenterSpec;
   operatingSystemProfiles?: DatacenterOperatingSystemOptions;
+  machineFlavorFilter?: MachineFlavorFilter;
+}
+
+export class MachineFlavorFilter {
+  minCPU: number;
+  maxCPU: number;
+  minRAM: number;
+  maxRAM: number;
+  enableGPU: boolean;
 }
 
 export class DatacenterOperatingSystemOptions {
@@ -179,11 +188,6 @@ export class AdminSeedSpec {
   expose_strategy?: string;
   mla: MLA;
   etcdBackupRestore?: EtcdBackupRestore;
-}
-
-export class BackupRestoreConfiguration {
-  s3BucketName?: string;
-  s3Endpoint?: string;
 }
 
 export class MeteringCredentials {

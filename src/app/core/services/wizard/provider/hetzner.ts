@@ -37,6 +37,13 @@ export class Hetzner extends Provider {
     return this;
   }
 
+  datacenterName(datacenterName: string): Hetzner {
+    if (datacenterName) {
+      this._headers = this._headers.set(Hetzner.Header.DatacenterName, datacenterName);
+    }
+    return this;
+  }
+
   flavors(onLoadingCb: () => void = null): Observable<HetznerTypes> {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
@@ -53,5 +60,6 @@ export class Hetzner extends Provider {
 export namespace Hetzner {
   export enum Header {
     Token = 'HetznerToken',
+    DatacenterName = 'DatacenterName',
   }
 }
