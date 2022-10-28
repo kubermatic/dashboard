@@ -87,6 +87,11 @@ export class MachineFlavorFilterComponent extends BaseFormValidator implements O
       .subscribe(_ => this.onChange.next(this._getMachineFilterFlavor()));
   }
 
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
+  }
+
   private _getMachineFilterFlavor(): MachineFlavorFilter {
     return {
       minCPU: this.form.get(Controls.MinCPU).value,
@@ -95,10 +100,5 @@ export class MachineFlavorFilterComponent extends BaseFormValidator implements O
       maxRAM: this.form.get(Controls.MaxRAM).value,
       enableGPU: this.form.get(Controls.EnableGPU).value,
     } as MachineFlavorFilter;
-  }
-
-  ngOnDestroy(): void {
-    this._unsubscribe.next();
-    this._unsubscribe.complete();
   }
 }
