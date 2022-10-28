@@ -32,9 +32,9 @@ import (
 	"github.com/vmware/govmomi/vim25"
 	"github.com/vmware/govmomi/vim25/soap"
 
+	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	kuberneteshelper "k8c.io/kubermatic/v2/pkg/kubernetes"
-	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/kubermatic/v2/pkg/resources"
 
 	kruntime "k8s.io/apimachinery/pkg/util/runtime"
@@ -459,16 +459,4 @@ func GetCredentialsForCluster(cloud kubermaticv1.CloudSpec, secretKeySelector pr
 	}
 
 	return username, password, nil
-}
-
-func ValidateCredentials(ctx context.Context, dc *kubermaticv1.DatacenterSpecVSphere, username, password string, caBundle *x509.CertPool) error {
-	session, err := newSession(ctx, dc, username, password, caBundle)
-	if err != nil {
-		return err
-	}
-	defer session.Logout(ctx)
-
-	_, err = session.Finder.DefaultFolder(ctx)
-
-	return err
 }

@@ -252,27 +252,6 @@ func (p *Provider) reconcileCluster(ctx context.Context, cluster *kubermaticv1.C
 	return cluster, nil
 }
 
-func ValidateCredentials(ctx context.Context, dc *kubermaticv1.DatacenterSpecVMwareCloudDirector, username, password, organization, vdc string) error {
-	client, err := NewClientWithCreds(username, password, organization, vdc, dc.URL, dc.AllowInsecure)
-	if err != nil {
-		return fmt.Errorf("failed to create VMware Cloud Director client: %w", err)
-	}
-
-	// We need to validate VDC as well since we scope everything down to VDC.
-	// It's not consumed in the credentials directly.
-	org, err := client.GetOrganization()
-	if err != nil {
-		return fmt.Errorf("failed to get organization %s: %w", client.Auth.Organization, err)
-	}
-
-	_, err = client.GetVDCForOrg(*org)
-	if err != nil {
-		return fmt.Errorf("failed to get organization VDC '%s': %w", vdc, err)
-	}
-
-	return err
-}
-
 func ListCatalogs(ctx context.Context, auth Auth) (apiv1.VMwareCloudDirectorCatalogList, error) {
 	client, err := NewClientWithAuth(auth)
 	if err != nil {
