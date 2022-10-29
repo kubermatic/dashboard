@@ -34,7 +34,7 @@ func Test_filterInstancetypes(t *testing.T) {
 	tests := []struct {
 		name          string
 		instancetypes *apiv2.VirtualMachineInstancetypeList
-		quota         kubermaticv1.MachineDeploymentVMResourceQuota
+		quota         kubermaticv1.MachineFlavorFilter
 		want          *apiv2.VirtualMachineInstancetypeList
 	}{
 		{
@@ -49,7 +49,7 @@ func Test_filterInstancetypes(t *testing.T) {
 				addInstanceType(apiv2.InstancetypeCustom, 2, "2Gi").     // filtered out due to memory
 				addInstanceType(apiv2.InstancetypeCustom, 2, "6Gi").     // filtered out due to memory
 				toApiWithoutError(),
-			quota: kubermaticv1.MachineDeploymentVMResourceQuota{
+			quota: kubermaticv1.MachineFlavorFilter{
 				MinCPU: 2,
 				MaxCPU: 4,
 				MinRAM: 3,
@@ -68,7 +68,7 @@ func Test_filterInstancetypes(t *testing.T) {
 				addInstanceType(apiv2.InstancetypeCustom, 2, "4Mi").     // filtered out due to memory
 				addInstanceType(apiv2.InstancetypeKubermatic, 3, "4Ti"). // filtered out due to memory
 				toApiWithoutError(),
-			quota: kubermaticv1.MachineDeploymentVMResourceQuota{
+			quota: kubermaticv1.MachineFlavorFilter{
 				MinCPU: 2,
 				MaxCPU: 4,
 				MinRAM: 3,
@@ -85,7 +85,7 @@ func Test_filterInstancetypes(t *testing.T) {
 				addInstanceType(apiv2.InstancetypeCustom, 2, "2Gi").     // filtered out due to memory
 				addInstanceType(apiv2.InstancetypeKubermatic, 2, "6Gi"). // filtered out due to memory
 				toApiWithoutError(),
-			quota: kubermaticv1.MachineDeploymentVMResourceQuota{
+			quota: kubermaticv1.MachineFlavorFilter{
 				MinCPU: 2,
 				MaxCPU: 4,
 				MinRAM: 3,
@@ -102,7 +102,7 @@ func Test_filterInstancetypes(t *testing.T) {
 				addInstanceType(apiv2.InstancetypeCustom, 4, "4Gi").     // ok
 				addInstanceType(apiv2.InstancetypeKubermatic, 4, "4Gi"). // ok
 				toApiWithoutError(),
-			quota: kubermaticv1.MachineDeploymentVMResourceQuota{
+			quota: kubermaticv1.MachineFlavorFilter{
 				MinCPU: 2,
 				MaxCPU: 4,
 				MinRAM: 3,
@@ -176,18 +176,13 @@ func instancetypeName(cpu uint32, memory string) string {
 	return fmt.Sprintf("cpu-%d-memory-%s", cpu, memory)
 }
 
-func getQuantity(q string) *resource.Quantity {
-	res := resource.MustParse(q)
-	return &res
-}
-
 func getInstancetypeSpec(cpu uint32, memory string) kvinstancetypev1alpha1.VirtualMachineInstancetypeSpec {
 	return kvinstancetypev1alpha1.VirtualMachineInstancetypeSpec{
 		CPU: kvinstancetypev1alpha1.CPUInstancetype{
 			Guest: cpu,
 		},
 		Memory: kvinstancetypev1alpha1.MemoryInstancetype{
-			Guest: *getQuantity(memory),
+			Guest: resource.MustParse(memory),
 		},
 	}
 }

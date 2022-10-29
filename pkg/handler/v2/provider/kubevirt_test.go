@@ -33,6 +33,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/test"
 	"k8c.io/dashboard/v2/pkg/handler/test/hack"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	"k8c.io/kubermatic/v2/pkg/provider/cloud/kubevirt"
 
 	corev1 "k8s.io/api/core/v1"
 	storagev1 "k8s.io/api/storage/v1"
@@ -42,6 +43,10 @@ import (
 	"k8s.io/client-go/kubernetes/scheme"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 	fakectrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client/fake"
+)
+
+const (
+	kubevirtDatacenterName = "KubevirtDC"
 )
 
 func init() {
@@ -168,8 +173,10 @@ var (
 )
 
 func setFakeNewKubeVirtClient(objects []ctrlruntimeclient.Object) {
-	providercommon.NewKubeVirtClient = func(kubeconfig string) (ctrlruntimeclient.Client, error) {
-		return fakectrlruntimeclient.NewClientBuilder().WithScheme(scheme.Scheme).WithObjects(objects...).Build(), nil
+	providercommon.NewKubeVirtClient = func(kubeconfig string, options kubevirt.ClientOptions) (*kubevirt.Client, error) {
+		return &kubevirt.Client{
+			Client: fakectrlruntimeclient.NewClientBuilder().WithScheme(scheme.Scheme).WithObjects(objects...).Build(),
+		}, nil
 	}
 }
 
@@ -190,7 +197,7 @@ func TestListPresetEndpoint(t *testing.T) {
 	}{
 		// KUBEVIRT PRESET LIST
 		{
-			Name:               "scenario 1: preset list- kubevirt kubeconfig provided",
+			Name:               "scenario 1: preset list - kubevirt kubeconfig provided",
 			HTTPRequestMethod:  http.MethodGet,
 			HTTPRequestURL:     "/api/v2/providers/kubevirt/vmflavors",
 			HTTPRequestHeaders: []KeyValue{{Key: "Kubeconfig", Value: fakeKvConfig}},
@@ -204,7 +211,7 @@ func TestListPresetEndpoint(t *testing.T) {
 			ExpectedResponse:        presetListResponse,
 		},
 		{
-			Name:               "scenario 2: preset list- kubevirt kubeconfig from kubermatic preset",
+			Name:               "scenario 2: preset list - kubevirt kubeconfig from kubermatic preset",
 			HTTPRequestMethod:  http.MethodGet,
 			HTTPRequestURL:     "/api/v2/providers/kubevirt/vmflavors",
 			HTTPRequestHeaders: []KeyValue{{Key: "Credential", Value: "kubermatic-preset"}},
@@ -273,7 +280,7 @@ func TestListPresetNoCredentialsEndpoint(t *testing.T) {
 				func() *kubermaticv1.Cluster {
 					cluster := test.GenCluster(clusterId, clusterName, test.GenDefaultProject().Name, time.Date(2013, 02, 03, 19, 54, 0, 0, time.UTC))
 					cluster.Spec.Cloud = kubermaticv1.CloudSpec{
-						DatacenterName: "KubevirtDC",
+						DatacenterName: kubevirtDatacenterName,
 						Kubevirt: &kubermaticv1.KubevirtCloudSpec{
 							Kubeconfig: fakeKvConfig,
 						},
@@ -296,7 +303,7 @@ func TestListPresetNoCredentialsEndpoint(t *testing.T) {
 				func() *kubermaticv1.Cluster {
 					cluster := test.GenCluster(clusterId, clusterName, test.GenDefaultProject().Name, time.Date(2013, 02, 03, 19, 54, 0, 0, time.UTC))
 					cluster.Spec.Cloud = kubermaticv1.CloudSpec{
-						DatacenterName: "KubevirtDC",
+						DatacenterName: kubevirtDatacenterName,
 						Kubevirt: &kubermaticv1.KubevirtCloudSpec{
 							CredentialsReference: &types.GlobalSecretKeySelector{
 								ObjectReference: corev1.ObjectReference{Name: credentialref, Namespace: credentialns},
@@ -485,7 +492,7 @@ func TestListInstancetypeNoCredentialsEndpoint(t *testing.T) {
 				func() *kubermaticv1.Cluster {
 					cluster := test.GenCluster(clusterId, clusterName, test.GenDefaultProject().Name, time.Date(2013, 02, 03, 19, 54, 0, 0, time.UTC))
 					cluster.Spec.Cloud = kubermaticv1.CloudSpec{
-						DatacenterName: "KubevirtDC",
+						DatacenterName: kubevirtDatacenterName,
 						Kubevirt: &kubermaticv1.KubevirtCloudSpec{
 							Kubeconfig: fakeKvConfig,
 						},
@@ -508,7 +515,7 @@ func TestListInstancetypeNoCredentialsEndpoint(t *testing.T) {
 				func() *kubermaticv1.Cluster {
 					cluster := test.GenCluster(clusterId, clusterName, test.GenDefaultProject().Name, time.Date(2013, 02, 03, 19, 54, 0, 0, time.UTC))
 					cluster.Spec.Cloud = kubermaticv1.CloudSpec{
-						DatacenterName: "KubevirtDC",
+						DatacenterName: kubevirtDatacenterName,
 						Kubevirt: &kubermaticv1.KubevirtCloudSpec{
 							CredentialsReference: &types.GlobalSecretKeySelector{
 								ObjectReference: corev1.ObjectReference{Name: credentialref, Namespace: credentialns},
@@ -676,7 +683,7 @@ func TestListPreferenceNoCredentialsEndpoint(t *testing.T) {
 				func() *kubermaticv1.Cluster {
 					cluster := test.GenCluster(clusterId, clusterName, test.GenDefaultProject().Name, time.Date(2013, 02, 03, 19, 54, 0, 0, time.UTC))
 					cluster.Spec.Cloud = kubermaticv1.CloudSpec{
-						DatacenterName: "KubevirtDC",
+						DatacenterName: kubevirtDatacenterName,
 						Kubevirt: &kubermaticv1.KubevirtCloudSpec{
 							Kubeconfig: fakeKvConfig,
 						},
@@ -699,7 +706,7 @@ func TestListPreferenceNoCredentialsEndpoint(t *testing.T) {
 				func() *kubermaticv1.Cluster {
 					cluster := test.GenCluster(clusterId, clusterName, test.GenDefaultProject().Name, time.Date(2013, 02, 03, 19, 54, 0, 0, time.UTC))
 					cluster.Spec.Cloud = kubermaticv1.CloudSpec{
-						DatacenterName: "KubevirtDC",
+						DatacenterName: kubevirtDatacenterName,
 						Kubevirt: &kubermaticv1.KubevirtCloudSpec{
 							CredentialsReference: &types.GlobalSecretKeySelector{
 								ObjectReference: corev1.ObjectReference{Name: credentialref, Namespace: credentialns},
@@ -860,7 +867,7 @@ func TestListStorageClassNoCredentialsEndpoint(t *testing.T) {
 				func() *kubermaticv1.Cluster {
 					cluster := test.GenCluster(clusterId, clusterName, test.GenDefaultProject().Name, time.Date(2013, 02, 03, 19, 54, 0, 0, time.UTC))
 					cluster.Spec.Cloud = kubermaticv1.CloudSpec{
-						DatacenterName: "KubevirtDC",
+						DatacenterName: kubevirtDatacenterName,
 						Kubevirt: &kubermaticv1.KubevirtCloudSpec{
 							Kubeconfig: fakeKvConfig,
 						},
@@ -884,7 +891,7 @@ func TestListStorageClassNoCredentialsEndpoint(t *testing.T) {
 				func() *kubermaticv1.Cluster {
 					cluster := test.GenCluster(clusterId, clusterName, test.GenDefaultProject().Name, time.Date(2013, 02, 03, 19, 54, 0, 0, time.UTC))
 					cluster.Spec.Cloud = kubermaticv1.CloudSpec{
-						DatacenterName: "KubevirtDC",
+						DatacenterName: kubevirtDatacenterName,
 						Kubevirt: &kubermaticv1.KubevirtCloudSpec{
 							CredentialsReference: &types.GlobalSecretKeySelector{
 								ObjectReference: corev1.ObjectReference{Name: credentialref, Namespace: credentialns},

@@ -157,6 +157,8 @@ retry 5 docker login -u "$QUAY_IO_USERNAME" -p "$QUAY_IO_PASSWORD" quay.io
 # right now). Once KKP is reconciled and running, we later pause the operator and
 # replace the API with the Docker image built earlier, so that we actually test our
 # local code.
+TEST_NAME="Install KKP into kind"
+
 docker run \
   --rm \
   --volume "$(dirname $KUBECONFIG):/kkp/kubeconfig" \
@@ -179,6 +181,7 @@ retry 10 check_all_deployments_ready kubermatic
 
 echodate "Finished installing Kubermatic"
 
+TEST_NAME="Setup KKP Seed"
 echodate "Installing Seed..."
 
 # master&seed are the same cluster, but we still want to test that the
@@ -222,7 +225,7 @@ fi
 kubectl apply --filename hack/ci/testdata/metering_s3_creds.yaml
 
 retry 8 kubectl apply --filename $SEED_MANIFEST
-retry 5 check_seed_ready kubermatic "$SEED_NAME"
+retry 8 check_seed_ready kubermatic "$SEED_NAME"
 echodate "Finished installing Seed"
 
 sleep 5
