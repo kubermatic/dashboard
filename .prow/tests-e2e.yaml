@@ -41,7 +41,6 @@ presubmits:
       preset-kind-volume-mounts: 'true'
       preset-kubeconfig-ci: 'true'
       preset-minio: 'true'
-      preset-scratch-tmpfs: 'true'
     spec:
       containers:
         - image: quay.io/kubermatic/chrome-headless:v1.6.0
@@ -97,7 +96,6 @@ presubmits:
       preset-kind-volume-mounts: 'true'
       preset-kubeconfig-ci: 'true'
       preset-minio: 'true'
-      preset-scratch-tmpfs: 'true'
     spec:
       containers:
         - image: quay.io/kubermatic/chrome-headless:v1.6.0
