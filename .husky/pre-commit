@@ -1,7 +1,7 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-if git diff --name-only | grep --quiet "src/"
+if git diff --name-only | grep --quiet "src/\|cypress/\|package.json"
 then
   npx lint-staged && npm run check
 else
