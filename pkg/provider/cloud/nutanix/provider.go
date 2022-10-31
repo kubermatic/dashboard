@@ -25,10 +25,10 @@ import (
 	nutanixv3 "github.com/embik/nutanix-client-go/pkg/client/v3"
 	"go.uber.org/zap"
 
+	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	kuberneteshelper "k8c.io/kubermatic/v2/pkg/kubernetes"
 	"k8c.io/kubermatic/v2/pkg/log"
-	"k8c.io/dashboard/v2/pkg/provider"
 
 	"k8s.io/utils/pointer"
 )
@@ -349,14 +349,4 @@ func reconcileCategoryAndValue(ctx context.Context, client *ClientSet, cluster *
 
 func CategoryValue(clusterName string) string {
 	return categoryValuePrefix + clusterName
-}
-
-func ValidateCredentials(ctx context.Context, endpoint string, port *int32, allowInsecure *bool, proxyURL, username, password string) error {
-	cli, err := GetClientSetWithCreds(endpoint, port, allowInsecure, proxyURL, username, password)
-	if err != nil {
-		return err
-	}
-	_, err = cli.Prism.V3.ListAllImage(ctx, "")
-
-	return err
 }

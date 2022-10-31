@@ -27,10 +27,10 @@ import (
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/alibaba"
 	kubernetesprovider "k8c.io/dashboard/v2/pkg/provider/kubernetes"
+	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
 	"k8s.io/apimachinery/pkg/util/sets"
@@ -291,20 +291,4 @@ func getAlibabaClient(accessKeyID, accessKeySecret, region string) (*ecs.Client,
 		return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("failed to create client: %v", err))
 	}
 	return client, err
-}
-
-func DescribeAlibabaInstanceTypes(accessKeyID, accessKeySecret, region, instanceType string) (*ecs.DescribeInstanceTypesResponse, error) {
-	client, err := getAlibabaClient(accessKeyID, accessKeySecret, region)
-	if err != nil {
-		return nil, err
-	}
-	requestInstanceTypes := ecs.CreateDescribeInstanceTypesRequest()
-	instanceTypes := []string{instanceType}
-	requestInstanceTypes.InstanceTypes = &instanceTypes
-
-	instTypes, err := client.DescribeInstanceTypes(requestInstanceTypes)
-	if err != nil {
-		return nil, fmt.Errorf("failed to list instance types, error: %w", err)
-	}
-	return instTypes, nil
 }

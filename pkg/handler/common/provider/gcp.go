@@ -18,7 +18,6 @@ package provider
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -316,24 +315,6 @@ func ListGCPSizes(ctx context.Context, machineFilter kubermaticv1.MachineFlavorF
 	})
 
 	return filterGCPByQuota(sizes, machineFilter), err
-}
-
-func GetGCPInstanceSize(ctx context.Context, machineType, sa, zone string) (*apiv1.GCPMachineSize, error) {
-	computeService, project, err := gcp.ConnectToComputeService(ctx, sa)
-	if err != nil {
-		return nil, err
-	}
-
-	req := computeService.MachineTypes.Get(project, zone, machineType)
-	m, err := req.Do()
-	if err != nil {
-		return nil, fmt.Errorf("error getting GCP Instance Size: %w", err)
-	}
-
-	return &apiv1.GCPMachineSize{
-		Memory: m.MemoryMb,
-		VCPUs:  m.GuestCpus,
-	}, nil
 }
 
 func filterGCPByQuota(instances apiv1.GCPMachineSizeList, machineFilter kubermaticv1.MachineFlavorFilter) apiv1.GCPMachineSizeList {

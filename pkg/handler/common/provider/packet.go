@@ -116,38 +116,6 @@ func PacketSizes(apiKey, projectID string, machineFilter kubermaticv1.MachineFla
 	return filterMachineFlavorsForPacket(sizes, machineFilter), nil
 }
 
-func DescribePacketSize(apiKey, projectID, instanceType string) (packngo.Plan, error) {
-	plan := packngo.Plan{}
-
-	if len(apiKey) == 0 {
-		return plan, fmt.Errorf("missing required parameter: apiKey")
-	}
-
-	if len(projectID) == 0 {
-		return plan, fmt.Errorf("missing required parameter: projectID")
-	}
-
-	packetclient := packngo.NewClientWithAuth("kubermatic", apiKey, nil)
-	req, err := packetclient.NewRequest(http.MethodGet, "/projects/"+projectID+"/plans", nil)
-	if err != nil {
-		return plan, err
-	}
-	root := new(plansRoot)
-
-	_, err = packetclient.Do(req, root)
-	if err != nil {
-		return plan, err
-	}
-
-	plans := root.Plans
-	for _, currentPlan := range plans {
-		if currentPlan.Slug == instanceType {
-			return currentPlan, nil
-		}
-	}
-	return plan, fmt.Errorf("packet instanceType:%s not found", instanceType)
-}
-
 func filterMachineFlavorsForPacket(instances apiv1.PacketSizeList, machineFilter kubermaticv1.MachineFlavorFilter) apiv1.PacketSizeList {
 	filteredRecords := apiv1.PacketSizeList{}
 

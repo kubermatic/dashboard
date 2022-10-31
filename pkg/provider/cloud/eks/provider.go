@@ -18,7 +18,6 @@ package eks
 
 import (
 	"context"
-	"encoding/base64"
 	"errors"
 	"fmt"
 	"strings"
@@ -35,12 +34,10 @@ import (
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/provider"
 	awsprovider "k8c.io/dashboard/v2/pkg/provider/cloud/aws"
-	"k8c.io/dashboard/v2/pkg/provider/cloud/eks/authenticator"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
-	"k8s.io/client-go/tools/clientcmd/api"
 	"k8s.io/utils/pointer"
 )
 
@@ -57,73 +54,6 @@ func getClientSet(ctx context.Context, accessKeyID, secretAccessKey, region, end
 	return &awsprovider.ClientSet{
 		EKS: eks.NewFromConfig(cfg),
 	}, nil
-}
-
-func GetClusterConfig(ctx context.Context, accessKeyID, secretAccessKey, clusterName, region string) (*api.Config, error) {
-	cfg, err := awsprovider.GetAWSConfig(ctx, accessKeyID, secretAccessKey, "", "", region, "")
-	if err != nil {
-		return nil, fmt.Errorf("failed to create API session: %w", err)
-	}
-
-	cs := awsprovider.ClientSet{EKS: eks.NewFromConfig(cfg)}
-
-	clusterInput := &eks.DescribeClusterInput{
-		Name: aws.String(clusterName),
-	}
-	clusterOutput, err := cs.EKS.DescribeCluster(ctx, clusterInput)
-	if err != nil {
-		return nil, fmt.Errorf("error calling DescribeCluster: %w", err)
-	}
-
-	cluster := clusterOutput.Cluster
-	eksclusterName := cluster.Name
-
-	config := api.Config{
-		APIVersion: "v1",
-		Kind:       "Config",
-		Clusters:   map[string]*api.Cluster{},
-		AuthInfos:  map[string]*api.AuthInfo{},
-		Contexts:   map[string]*api.Context{},
-	}
-
-	gen, err := authenticator.NewGenerator(true)
-	if err != nil {
-		return nil, err
-	}
-
-	opts := &authenticator.GetTokenOptions{
-		ClusterID: *eksclusterName,
-		Config:    &cfg,
-	}
-	token, err := gen.GetWithOptions(ctx, opts)
-	if err != nil {
-		return nil, err
-	}
-
-	// example: eks_eu-central-1_cluster-1 => https://XX.XX.XX.XX
-	name := fmt.Sprintf("eks_%s_%s", region, *eksclusterName)
-
-	cert, err := base64.StdEncoding.DecodeString(pointer.StringDeref(cluster.CertificateAuthority.Data, ""))
-	if err != nil {
-		return nil, err
-	}
-
-	config.Clusters[name] = &api.Cluster{
-		CertificateAuthorityData: cert,
-		Server:                   *cluster.Endpoint,
-	}
-	config.CurrentContext = name
-
-	// Just reuse the context name as an auth name.
-	config.Contexts[name] = &api.Context{
-		Cluster:  name,
-		AuthInfo: name,
-	}
-	// AWS specific configation; use cloud platform scope.
-	config.AuthInfos[name] = &api.AuthInfo{
-		Token: token.Token,
-	}
-	return &config, nil
 }
 
 func GetCredentialsForCluster(cloud *kubermaticv1.ExternalClusterEKSCloudSpec, secretKeySelector provider.SecretKeySelectorValueFunc) (accessKeyID, secretAccessKey string, err error) {
