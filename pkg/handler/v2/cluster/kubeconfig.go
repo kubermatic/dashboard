@@ -20,10 +20,10 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/go-kit/kit/endpoint"
-
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/provider"
+
+	"github.com/go-kit/kit/endpoint"
 )
 
 func GetAdminKubeconfigEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {

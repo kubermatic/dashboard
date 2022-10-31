@@ -25,11 +25,11 @@ import (
 	"strconv"
 	"strings"
 
+	"k8c.io/dashboard/v2/pkg/provider"
+
 	nutanixclient "github.com/embik/nutanix-client-go/pkg/client"
 	nutanixv3 "github.com/embik/nutanix-client-go/pkg/client/v3"
-
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
-	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/kubermatic/v2/pkg/resources"
 )
 

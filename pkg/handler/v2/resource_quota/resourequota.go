@@ -20,10 +20,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/go-kit/kit/endpoint"
-
 	"k8c.io/dashboard/v2/pkg/provider"
 
+	"github.com/go-kit/kit/endpoint"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 )

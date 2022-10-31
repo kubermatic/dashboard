@@ -20,12 +20,12 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/gorilla/websocket"
-
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
+	"k8c.io/dashboard/v2/pkg/watcher"
+
+	"github.com/gorilla/websocket"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/log"
-	"k8c.io/dashboard/v2/pkg/watcher"
 )
 
 func WriteSettings(ctx context.Context, providers watcher.Providers, ws *websocket.Conn) {

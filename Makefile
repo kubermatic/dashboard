@@ -106,6 +106,12 @@ api-test: download-gocache run-api-tests build-tests
 run-api-tests:
 	./hack/run-api-tests.sh
 
+lint:
+	golangci-lint run \
+		--verbose \
+		--print-resources-usage \
+		./pkg/... ./cmd/...
+
 .PHONY: build-tests
 build-tests:
 	go test -tags "$(KUBERMATIC_EDITION)" -run nope ./pkg/... ./cmd/...

@@ -19,7 +19,6 @@ package aws
 import (
 	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
 	iamtypes "github.com/aws/aws-sdk-go-v2/service/iam/types"
-
 	"k8s.io/utils/pointer"
 )
 

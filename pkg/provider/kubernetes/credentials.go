@@ -23,7 +23,6 @@ import (
 	"fmt"
 	"strconv"
 
-	providerconfig "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/provider"
@@ -40,11 +39,12 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider/cloud/packet"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/vmwareclouddirector"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/vsphere"
+
+	providerconfig "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	"k8c.io/kubermatic/v2/pkg/resources/reconciling"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
-
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"

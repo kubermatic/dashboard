@@ -22,6 +22,8 @@ import (
 	"net/http"
 	"strings"
 
+	"k8c.io/dashboard/v2/pkg/provider"
+
 	"github.com/gophercloud/gophercloud"
 	goopenstack "github.com/gophercloud/gophercloud/openstack"
 	osavailabilityzones "github.com/gophercloud/gophercloud/openstack/compute/v2/extensions/availabilityzones"
@@ -38,10 +40,7 @@ import (
 	osports "github.com/gophercloud/gophercloud/openstack/networking/v2/ports"
 	ossubnets "github.com/gophercloud/gophercloud/openstack/networking/v2/subnets"
 	"github.com/gophercloud/gophercloud/pagination"
-
-	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
-
 	"k8s.io/utils/net"
 	"k8s.io/utils/pointer"
 )

@@ -20,16 +20,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"k8c.io/dashboard/v2/pkg/resources/machine"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
 
-	semverlib "github.com/Masterminds/semver/v3"
-	jsonpatch "github.com/evanphx/json-patch"
-
-	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
@@ -37,11 +32,15 @@ import (
 	machineconversions "k8c.io/dashboard/v2/pkg/machine"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubernetesprovider "k8c.io/dashboard/v2/pkg/provider/kubernetes"
+	"k8c.io/dashboard/v2/pkg/resources/machine"
 	machineresource "k8c.io/dashboard/v2/pkg/resources/machine"
+
+	semverlib "github.com/Masterminds/semver/v3"
+	jsonpatch "github.com/evanphx/json-patch"
+	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 	"k8c.io/kubermatic/v2/pkg/validation/nodeupdate"
-
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"

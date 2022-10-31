@@ -32,8 +32,8 @@ import (
 
 	resourcequotas "k8c.io/dashboard/v2/pkg/ee/resource-quota"
 	"k8c.io/dashboard/v2/pkg/provider"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 
+	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes/scheme"

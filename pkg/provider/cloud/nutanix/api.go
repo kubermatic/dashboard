@@ -22,7 +22,6 @@ import (
 	"strings"
 
 	nutanixv3 "github.com/embik/nutanix-client-go/pkg/client/v3"
-
 	"k8s.io/utils/pointer"
 )
 

@@ -20,12 +20,11 @@ import (
 	"context"
 	"testing"
 
-	"github.com/go-test/deep"
-
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
-	"k8c.io/kubermatic/v2/pkg/test/diff"
 
+	"github.com/go-test/deep"
+	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	"k8c.io/kubermatic/v2/pkg/test/diff"
 	"k8s.io/client-go/kubernetes/scheme"
 	restclient "k8s.io/client-go/rest"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"

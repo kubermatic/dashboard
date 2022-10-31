@@ -24,24 +24,23 @@ import (
 	"reflect"
 	"strings"
 
-	ekstypes "github.com/aws/aws-sdk-go-v2/service/eks/types"
-	"github.com/go-kit/kit/endpoint"
-
-	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
-	providerconfig "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	providercommon "k8c.io/dashboard/v2/pkg/handler/common/provider"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
-	kuberneteshelper "k8c.io/kubermatic/v2/pkg/kubernetes"
 	"k8c.io/dashboard/v2/pkg/provider"
 	awsprovider "k8c.io/dashboard/v2/pkg/provider/cloud/aws"
 	eksprovider "k8c.io/dashboard/v2/pkg/provider/cloud/eks"
+
+	ekstypes "github.com/aws/aws-sdk-go-v2/service/eks/types"
+	"github.com/go-kit/kit/endpoint"
+	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
+	providerconfig "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
+	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	kuberneteshelper "k8c.io/kubermatic/v2/pkg/kubernetes"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
-
 	"k8s.io/utils/pointer"
 )
 

@@ -20,13 +20,13 @@ import (
 	"context"
 	"encoding/json"
 
+	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
+	"k8c.io/dashboard/v2/pkg/watcher"
+
 	"code.cloudfoundry.org/go-pubsub"
 	"github.com/gorilla/websocket"
-
-	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/log"
-	"k8c.io/dashboard/v2/pkg/watcher"
 )
 
 func WriteUser(ctx context.Context, providers watcher.Providers, ws *websocket.Conn, userEmail string) {

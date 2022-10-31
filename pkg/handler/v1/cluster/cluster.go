@@ -25,20 +25,20 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/go-kit/kit/endpoint"
-	"github.com/gorilla/mux"
-	"go.uber.org/zap"
-
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
+	"k8c.io/dashboard/v2/pkg/provider"
+	kubernetesprovider "k8c.io/dashboard/v2/pkg/provider/kubernetes"
+
+	"github.com/go-kit/kit/endpoint"
+	"github.com/gorilla/mux"
+	"go.uber.org/zap"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	kubermaticv1helper "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1/helper"
 	"k8c.io/kubermatic/v2/pkg/features"
 	kubermaticlog "k8c.io/kubermatic/v2/pkg/log"
-	"k8c.io/dashboard/v2/pkg/provider"
-	kubernetesprovider "k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 	"k8c.io/kubermatic/v2/pkg/version"
 )

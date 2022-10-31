@@ -24,14 +24,13 @@ import (
 	"strings"
 	"testing"
 
+	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
+
 	semverlib "github.com/Masterminds/semver/v3"
 	"github.com/stretchr/testify/assert"
-
-	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/features"
 	"k8c.io/kubermatic/v2/pkg/version"
-
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	"k8s.io/utils/pointer"
 )

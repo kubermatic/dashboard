@@ -17,9 +17,9 @@ limitations under the License.
 package watcher
 
 import (
-	"code.cloudfoundry.org/go-pubsub"
-
 	"k8c.io/dashboard/v2/pkg/provider"
+
+	"code.cloudfoundry.org/go-pubsub"
 )
 
 type Providers struct {

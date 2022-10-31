@@ -21,14 +21,14 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/go-kit/kit/endpoint"
-
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	providercommon "k8c.io/dashboard/v2/pkg/handler/common/provider"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/handler/v2/cluster"
 	"k8c.io/dashboard/v2/pkg/provider"
+
+	"github.com/go-kit/kit/endpoint"
 )
 
 // AWSSizeNoCredentialsEndpoint handles the request to list available AWS sizes.

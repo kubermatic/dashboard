@@ -24,17 +24,16 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/go-kit/kit/endpoint"
-	httptransport "github.com/go-kit/kit/transport/http"
-	"github.com/gorilla/mux"
-	"github.com/gorilla/securecookie"
-
 	"k8c.io/dashboard/v2/pkg/handler/auth"
 	commonv2 "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
-	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
+	"github.com/go-kit/kit/endpoint"
+	httptransport "github.com/go-kit/kit/transport/http"
+	"github.com/gorilla/mux"
+	"github.com/gorilla/securecookie"
+	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 	"k8s.io/apimachinery/pkg/util/rand"
 )
 

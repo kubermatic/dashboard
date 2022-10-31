@@ -20,11 +20,11 @@ import (
 	"context"
 	"net/http"
 
+	"k8c.io/dashboard/v2/pkg/provider"
+
 	"github.com/go-kit/kit/endpoint"
 	httptransport "github.com/go-kit/kit/transport/http"
 	"github.com/gorilla/mux"
-
-	"k8c.io/dashboard/v2/pkg/provider"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 )
 

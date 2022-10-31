@@ -24,11 +24,11 @@ import (
 	"net"
 	"strings"
 
-	semverlib "github.com/Masterminds/semver/v3"
-	"github.com/coreos/locksmith/pkg/timeutil"
-
 	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/gcp"
+
+	semverlib "github.com/Masterminds/semver/v3"
+	"github.com/coreos/locksmith/pkg/timeutil"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	kubermaticv1helper "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1/helper"
 	"k8c.io/kubermatic/v2/pkg/features"
@@ -37,7 +37,6 @@ import (
 	"k8c.io/kubermatic/v2/pkg/semver"
 	"k8c.io/kubermatic/v2/pkg/version"
 	"k8c.io/kubermatic/v2/pkg/version/cni"
-
 	"k8s.io/apimachinery/pkg/api/equality"
 	apimachineryvalidation "k8s.io/apimachinery/pkg/api/validation"
 	kubenetutil "k8s.io/apimachinery/pkg/util/net"

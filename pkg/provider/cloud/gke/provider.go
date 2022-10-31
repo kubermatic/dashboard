@@ -24,23 +24,22 @@ import (
 	"fmt"
 	"net/http"
 
+	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
+	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
+	"k8c.io/dashboard/v2/pkg/handler/v1/common"
+	"k8c.io/dashboard/v2/pkg/provider"
+	"k8c.io/dashboard/v2/pkg/provider/cloud/gcp"
+
 	semverlib "github.com/Masterminds/semver/v3"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/compute/v1"
 	"google.golang.org/api/container/v1"
 	googleapi "google.golang.org/api/googleapi"
 	"google.golang.org/api/option"
-
-	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
-	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
-	"k8c.io/dashboard/v2/pkg/handler/v1/common"
-	"k8c.io/dashboard/v2/pkg/provider"
-	"k8c.io/dashboard/v2/pkg/provider/cloud/gcp"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	ksemver "k8c.io/kubermatic/v2/pkg/semver"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
-
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/client-go/tools/clientcmd/api"
 )
