@@ -47,3 +47,4 @@ cypress/plugins/cy-ts-preprocessor.js
 /vendor
 **/_build
 download-gocache
+dev.kubeconfig
