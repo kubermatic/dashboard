@@ -1036,6 +1036,7 @@ func convertGlobalSettings(gSettings *models.GlobalSettings) *apiv1.GlobalSettin
 		DisplayTermsOfService: gSettings.DisplayTermsOfService,
 		EnableOIDCKubeconfig:  gSettings.EnableOIDCKubeconfig,
 		EnableDashboard:       gSettings.EnableDashboard,
+		EnableWebTerminal:     gSettings.EnableWebTerminal,
 		OpaOptions: kubermaticv1.OpaOptions{
 			Enabled:  gSettings.OpaOptions.Enabled,
 			Enforced: gSettings.OpaOptions.Enforced,
