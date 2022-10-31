@@ -169,11 +169,11 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     this._loadSSHKeys();
     this._loadMembers();
     this._loadServiceAccounts();
-    this._loadProjectQuota();
     this._checkFirstVisitToOverviewPageMessage();
 
     if (this.isEnterpriseEdition) {
       this._loadGroups();
+      this._loadProjectQuota();
     }
   }
 
@@ -310,10 +310,6 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   }
 
   private _loadProjectQuota(): void {
-    if (!this.isEnterpriseEdition) {
-      return;
-    }
-
     this._projectService.onProjectChange
       .pipe(
         startWith({id: this._currentProjectId}),
