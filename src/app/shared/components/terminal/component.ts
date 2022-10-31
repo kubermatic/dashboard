@@ -193,10 +193,8 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
     this.terminal.open(containerElement);
 
     const clusterName = this.cluster && this.cluster.name;
-    this.terminal.write('\x1b[37mWelcome to Cloud Shell! Type "help" to get started.\r\n');
-    this.terminal.write(
-      `\x1b[37mYour Cloud Platform project in this session is set to \x1b[1;34m${clusterName}\x1B[0m\n\n\r`
-    );
+    this.terminal.write('\x1b[37mWelcome to Web Terminal! Type "help" to get started.\r\n');
+    this.terminal.write(`\x1b[37mYour KKP cluster in this session is set to \x1b[1;34m${clusterName}\x1B[0m\n\n\r`);
 
     const delayFn = debounce(() => {
       fitAddon.fit();
@@ -265,9 +263,9 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
           this.isDexAuthenticationPageOpened = true;
         }
 
-        this.message = 'Please wait, authenticate in order to access cloud shell...';
+        this.message = 'Please wait, authenticate in order to access web terminal...';
       } else if (frame.Data === ErrorOperations.WebTerminalPodPending) {
-        this.message = 'Please wait, provisioning your Cloud Shell machine...';
+        this.message = 'Please wait, provisioning your Web Terminal pod...';
       } else if (frame.Data === ErrorOperations.ConnectionPoolExceeded) {
         this.terminal.write(
           `Oops! There could be ${this.MAX_SESSION_SUPPORTED} concurrent session per user. Please either discard or close other sessions.`
