@@ -234,6 +234,10 @@
   @include mixins.mask-image('/assets/images/icons/members.svg', 24px);
 }
 
+.km-icon-group {
+  @include mixins.mask-image('/assets/images/icons/groups.svg', 24px);
+}
+
 .km-icon-serviceaccount {
   @include mixins.mask-image('/assets/images/icons/service-accounts.svg', 24px);
 }

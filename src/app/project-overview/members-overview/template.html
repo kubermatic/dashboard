@@ -20,9 +20,7 @@ limitations under the License.
       <div fxLayout="row"
            fxLayoutAlign=" center"
            fxLayoutGap="10px">
-        <span>{{showMembers ? 'Owners & Members' : 'Owners'}}</span>
-        <a class="members-link"
-           [routerLink]="['../members']"><i class="km-icon-next km-icon-mask km-no-margin"></i></a>
+        <span>{{showMembersAndGroups ? 'Owners, Members & Groups' : 'Access'}}</span>
       </div>
     </mat-card-title>
   </mat-card-header>
@@ -33,12 +31,37 @@ limitations under the License.
       <i class="km-icon-mask km-icon-owner"></i>
       <div>{{ownerNames}}</div>
     </div>
-    <div *ngIf="showMembers"
-         fxLayout="row"
-         fxLayoutAlign=" center"
-         fxLayoutGap="15px">
-      <i class="km-icon-mask km-icon-member"></i>
-      <div>{{memberNames}}</div>
-    </div>
+    <ng-container *ngIf="showMembersAndGroups">
+      <div fxLayout="row"
+           fxLayoutAlign=" center"
+           fxLayoutGap="15px">
+        <i class="km-icon-mask km-icon-member"></i>
+        <div>{{memberNames}}</div>
+      </div>
+
+      <div *ngIf="isEnterpriseEdition"
+           fxLayout="row"
+           fxLayoutAlign=" center"
+           fxLayoutGap="15px">
+        <i class="km-icon-mask km-icon-group"></i>
+        <div>{{groupNames}}</div>
+      </div>
+    </ng-container>
   </mat-card-content>
+
+  <div *ngIf="showMembersAndGroups"
+       fxLayout="row"
+       fxLayoutAlign=" center"
+       fxLayoutGap="15px">
+    <div class="action-container"
+         fxFlex
+         fxLayoutAlign="end">
+      <button mat-flat-button
+              (click)="membersAndGroupsNavigate()">
+        <i class="km-icon-mask km-icon-next"></i>
+        <span>{{isEnterpriseEdition ? 'Show All Members & Groups' : 'Show All Members'}}</span>
+      </button>
+    </div>
+  </div>
+
 </mat-card>
