@@ -211,6 +211,12 @@ func getTerminalWatchHandler(writer WebsocketTerminalWriter, providers watcher.P
 
 	return func(w http.ResponseWriter, req *http.Request) {
 		ctx := req.Context()
+
+		if err := checkWebTerminalEnabled(ctx, providers.SettingsProvider); err != nil {
+			log.Logger.Debug(err)
+			return
+		}
+
 		authenticatedUser, err := verifyAuthorizationToken(req, routing.tokenVerifiers, routing.tokenExtractors)
 		if err != nil {
 			log.Logger.Debug(err)
@@ -354,4 +360,18 @@ func requestLoggingReader(websocket *websocket.Conn) {
 
 		log.Logger.Debug(message)
 	}
+}
+
+func checkWebTerminalEnabled(ctx context.Context, settingsProvider provider.SettingsProvider) error {
+	settings, err := settingsProvider.GetGlobalSettings(ctx)
+
+	if err != nil {
+		return utilerrors.New(http.StatusInternalServerError, "could not read global settings")
+	}
+
+	if !settings.Spec.EnableWebTerminal {
+		return utilerrors.New(http.StatusForbidden, "Web Terminal is disabled by the global settings")
+	}
+
+	return nil
 }

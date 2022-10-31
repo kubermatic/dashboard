@@ -22,8 +22,6 @@ import (
 
 	"k8c.io/dashboard/v2/pkg/provider"
 
-	"go.anx.io/go-anxcloud/pkg/client"
-	"go.anx.io/go-anxcloud/pkg/vsphere/provisioning/templates"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
 )
@@ -82,19 +80,4 @@ func GetCredentialsForCluster(cloud kubermaticv1.CloudSpec, secretKeySelector pr
 	}
 
 	return accessToken, nil
-}
-
-func ValidateCredentials(ctx context.Context, accessToken, locationID string) error {
-	cli, err := getClient(accessToken)
-	if err != nil {
-		return err
-	}
-	t := templates.NewAPI(cli)
-	_, err = t.List(ctx, locationID, "templates", 1, 1)
-	return err
-}
-
-func getClient(token string) (client.Client, error) {
-	tokenOpt := client.TokenFromString(token)
-	return client.New(tokenOpt)
 }

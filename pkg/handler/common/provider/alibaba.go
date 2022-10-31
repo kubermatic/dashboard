@@ -291,19 +291,3 @@ func getAlibabaClient(accessKeyID, accessKeySecret, region string) (*ecs.Client,
 	}
 	return client, err
 }
-
-func DescribeAlibabaInstanceTypes(accessKeyID, accessKeySecret, region, instanceType string) (*ecs.DescribeInstanceTypesResponse, error) {
-	client, err := getAlibabaClient(accessKeyID, accessKeySecret, region)
-	if err != nil {
-		return nil, err
-	}
-	requestInstanceTypes := ecs.CreateDescribeInstanceTypesRequest()
-	instanceTypes := []string{instanceType}
-	requestInstanceTypes.InstanceTypes = &instanceTypes
-
-	instTypes, err := client.DescribeInstanceTypes(requestInstanceTypes)
-	if err != nil {
-		return nil, fmt.Errorf("failed to list instance types, error: %w", err)
-	}
-	return instTypes, nil
-}

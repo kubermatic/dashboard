@@ -41,8 +41,6 @@ import (
 	ksemver "k8c.io/kubermatic/v2/pkg/semver"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 	"k8s.io/apimachinery/pkg/util/sets"
-	"k8s.io/client-go/tools/clientcmd"
-	"k8s.io/client-go/tools/clientcmd/api"
 )
 
 func GetLocations(ctx context.Context, cred resources.AKSCredentials) (apiv2.AKSLocationList, error) {
@@ -77,25 +75,6 @@ func GetLocations(ctx context.Context, cred resources.AKSCredentials) (apiv2.AKS
 		}
 	}
 	return locationList, nil
-}
-
-func GetClusterConfig(ctx context.Context, cred resources.AKSCredentials, clusterName, resourceGroupName string) (*api.Config, error) {
-	aksClient, err := GetClusterClient(cred)
-	if err != nil {
-		return nil, err
-	}
-
-	credResult, err := aksClient.ListClusterAdminCredentials(ctx, resourceGroupName, clusterName, nil)
-	if err != nil {
-		return nil, DecodeError(err)
-	}
-
-	config, err := clientcmd.Load(credResult.Kubeconfigs[0].Value)
-	if err != nil {
-		return nil, fmt.Errorf("cannot get azure cluster config: %w", err)
-	}
-
-	return config, nil
 }
 
 func GetCredentialsForCluster(cloud *kubermaticv1.ExternalClusterAKSCloudSpec, secretKeySelector provider.SecretKeySelectorValueFunc) (resources.AKSCredentials, error) {

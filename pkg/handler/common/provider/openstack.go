@@ -21,7 +21,6 @@ import (
 	"crypto/x509"
 	"fmt"
 	"net/http"
-	"strings"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
@@ -327,30 +326,6 @@ func GetOpenstackSizes(credentials *resources.OpenstackCredentials, datacenter *
 	}
 
 	return filterMachineFlavorsForOpenstack(apiSizes, machineFilter), nil
-}
-
-func GetOpenStackFlavorSize(credentials *resources.OpenstackCredentials, authURL, region string,
-	caBundle *x509.CertPool, flavorName string) (*apiv1.OpenstackSize, error) {
-	flavors, err := openstack.GetFlavors(authURL, region, credentials, caBundle)
-	if err != nil {
-		return nil, err
-	}
-
-	for _, flavor := range flavors {
-		if strings.EqualFold(flavor.Name, flavorName) {
-			return &apiv1.OpenstackSize{
-				Slug:     flavor.Name,
-				Memory:   flavor.RAM,
-				VCPUs:    flavor.VCPUs,
-				Disk:     flavor.Disk,
-				Swap:     flavor.Swap,
-				Region:   region,
-				IsPublic: flavor.IsPublic,
-			}, nil
-		}
-	}
-
-	return nil, fmt.Errorf("cannot find openstack flavor %q size", flavorName)
 }
 
 func filterMachineFlavorsForOpenstack(instances []apiv1.OpenstackSize, machineFilter kubermaticv1.MachineFlavorFilter) []apiv1.OpenstackSize {

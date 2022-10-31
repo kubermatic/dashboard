@@ -24,7 +24,6 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"strings"
 
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
@@ -168,26 +167,6 @@ func KubeVirtVMIPresetsWithClusterCredentialsEndpoint(ctx context.Context, seeds
 	}
 
 	return KubeVirtVMIPresets(ctx, kvKubeconfig, datacenterName, cluster, settingsProvider, userInfoGetter, seedsGetter)
-}
-
-func KubeVirtVMIPreset(ctx context.Context, kubeconfig, flavor string) (*kubevirtv1.VirtualMachineInstancePreset, error) {
-	client, err := NewKubeVirtClient(kubeconfig, kubevirt.ClientOptions{})
-	if err != nil {
-		return nil, err
-	}
-
-	// KubeVirt presets concatenated with Kubermatic standards.
-	vmiPresets, err := kubeVirtPresets(ctx, client, kubeconfig)
-	if err != nil {
-		return nil, err
-	}
-
-	for _, vmiPreset := range vmiPresets.Items {
-		if strings.EqualFold(vmiPreset.Name, flavor) {
-			return &vmiPreset, nil
-		}
-	}
-	return nil, fmt.Errorf("KubeVirt VMI preset %q not found", flavor)
 }
 
 func KubeVirtInstancetypesWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider,

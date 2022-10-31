@@ -32,7 +32,6 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/handler/v1/label"
 	"k8c.io/dashboard/v2/pkg/provider"
-	kubernetesprovider "k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	"k8c.io/dashboard/v2/pkg/resources/cluster"
 	"k8c.io/dashboard/v2/pkg/validation"
 
@@ -44,6 +43,7 @@ import (
 	"k8c.io/kubermatic/v2/pkg/features"
 	kuberneteshelper "k8c.io/kubermatic/v2/pkg/kubernetes"
 	kubermaticlog "k8c.io/kubermatic/v2/pkg/log"
+	kubernetesprovider "k8c.io/kubermatic/v2/pkg/provider/kubernetes"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	utilcluster "k8c.io/kubermatic/v2/pkg/util/cluster"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"

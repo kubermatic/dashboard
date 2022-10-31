@@ -29,6 +29,7 @@ import (
 
 	providerconfig "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	kubernetesprovider "k8c.io/kubermatic/v2/pkg/provider/kubernetes"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	"k8c.io/kubermatic/v2/pkg/resources/reconciling"
 	ksemver "k8c.io/kubermatic/v2/pkg/semver"
@@ -433,7 +434,7 @@ func (p *ExternalClusterProvider) CreateOrUpdateCredentialSecretForCluster(ctx c
 		cluster.Spec.Cloud.GCP = &kubermaticv1.GCPCloudSpec{
 			ServiceAccount: cloud.GKE.ServiceAccount,
 		}
-		err := CreateOrUpdateCredentialSecretForCluster(ctx, p.clientPrivileged, cluster)
+		err := kubernetesprovider.CreateOrUpdateCredentialSecretForCluster(ctx, p.clientPrivileged, cluster)
 		if err != nil {
 			return nil, err
 		}
@@ -444,7 +445,7 @@ func (p *ExternalClusterProvider) CreateOrUpdateCredentialSecretForCluster(ctx c
 			AccessKeyID:     cloud.EKS.AccessKeyID,
 			SecretAccessKey: cloud.EKS.SecretAccessKey,
 		}
-		err := CreateOrUpdateCredentialSecretForCluster(ctx, p.clientPrivileged, cluster)
+		err := kubernetesprovider.CreateOrUpdateCredentialSecretForCluster(ctx, p.clientPrivileged, cluster)
 		if err != nil {
 			return nil, err
 		}
@@ -457,7 +458,7 @@ func (p *ExternalClusterProvider) CreateOrUpdateCredentialSecretForCluster(ctx c
 			ClientID:       cloud.AKS.ClientID,
 			ClientSecret:   cloud.AKS.ClientSecret,
 		}
-		err := CreateOrUpdateCredentialSecretForCluster(ctx, p.clientPrivileged, cluster)
+		err := kubernetesprovider.CreateOrUpdateCredentialSecretForCluster(ctx, p.clientPrivileged, cluster)
 		if err != nil {
 			return nil, err
 		}
