@@ -78,7 +78,7 @@ describe('MeteringScheduleConfigComponent', () => {
     const createScheduleBtn = fixture.debugElement.query(By.css('#km-create-schedule-btn'));
     createScheduleBtn.triggerEventHandler('click', null);
     expect(spyCreateDialog).toHaveBeenCalledWith(MeteringScheduleAddDialog, {
-      data: {title: 'Add Schedule Configuration'},
+      data: {title: 'Create Schedule Configuration'},
     });
   });
 

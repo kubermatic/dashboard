@@ -19,6 +19,7 @@ import {OPAService} from '@core/services/opa';
 import {NotificationService} from '@core/services/notification';
 import {Constraint, ConstraintTemplate, ConstraintSpec} from '@shared/entity/opa';
 import {getIconClassForButton} from '@shared/utils/common';
+import {DialogActionMode} from '@shared/types/common';
 import * as y from 'js-yaml';
 import _ from 'lodash';
 import {Observable, Subject} from 'rxjs';
@@ -26,16 +27,11 @@ import {take, takeUntil} from 'rxjs/operators';
 
 export interface DefaultConstraintDialogConfig {
   title: string;
-  mode: Mode;
+  mode: DialogActionMode;
   confirmLabel: string;
 
   // Default Constraint has to be specified only if dialog is used in the edit mode.
   defaultConstraint?: Constraint;
-}
-
-export enum Mode {
-  Add = 'Add',
-  Edit = 'Edit',
 }
 
 export enum Controls {
@@ -51,7 +47,7 @@ export enum Controls {
 })
 export class DefaultConstraintDialog implements OnInit, OnDestroy {
   readonly Controls = Controls;
-  readonly Mode = Mode;
+  readonly Mode = DialogActionMode;
   form: FormGroup;
   spec = '';
   constraintTemplates: ConstraintTemplate[] = [];
@@ -67,9 +63,9 @@ export class DefaultConstraintDialog implements OnInit, OnDestroy {
 
   get label(): string {
     switch (this.data.confirmLabel) {
-      case Mode.Add:
+      case this.Mode.Add:
         return 'Add Default Constraint';
-      case Mode.Edit:
+      case this.Mode.Edit:
         return 'Save Changes';
       default:
         return '';
@@ -78,13 +74,14 @@ export class DefaultConstraintDialog implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Name]: this._builder.control(this.data.mode === Mode.Edit ? this.data.defaultConstraint.name : '', [
-        Validators.required,
-      ]),
+      [Controls.Name]: this._builder.control(
+        this.data.mode === this.Mode.Edit ? this.data.defaultConstraint.name : '',
+        [Validators.required]
+      ),
       [Controls.ConstraintTemplate]: this._builder.control(
         {
-          value: this.data.mode === Mode.Edit ? this.data.defaultConstraint.spec.constraintType : '',
-          disabled: this.data.mode === Mode.Edit,
+          value: this.data.mode === this.Mode.Edit ? this.data.defaultConstraint.spec.constraintType : '',
+          disabled: this.data.mode === this.Mode.Edit,
         },
         [Validators.required]
       ),
@@ -115,9 +112,9 @@ export class DefaultConstraintDialog implements OnInit, OnDestroy {
     };
 
     switch (this.data.mode) {
-      case Mode.Add:
+      case this.Mode.Add:
         return this._create(defaultConstraint);
-      case Mode.Edit:
+      case this.Mode.Edit:
         return this._edit(defaultConstraint);
     }
   }
@@ -126,10 +123,10 @@ export class DefaultConstraintDialog implements OnInit, OnDestroy {
     this._matDialogRef.close(true);
 
     switch (this.data.mode) {
-      case Mode.Add:
+      case this.Mode.Add:
         this._notificationService.success(`Created the ${constraint.name} default constraint`);
         break;
-      case Mode.Edit:
+      case this.Mode.Edit:
         this._notificationService.success(`Updated the ${constraint.name} default constraint`);
     }
     this._opaService.refreshConstraint();
@@ -144,7 +141,7 @@ export class DefaultConstraintDialog implements OnInit, OnDestroy {
   }
 
   private _initConstraintSpecEditor(): void {
-    if (this.data.mode === Mode.Edit) {
+    if (this.data.mode === this.Mode.Edit) {
       const spec = this.data.defaultConstraint.spec;
       if (!_.isEmpty(spec)) {
         this.spec = y.dump(spec);

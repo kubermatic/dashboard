@@ -27,19 +27,15 @@ import {Observable, Subject} from 'rxjs';
 import {take} from 'rxjs/operators';
 import {AllowedRegistry} from '../entity';
 import {AllowedRegistriesService} from '../service';
+import {DialogActionMode} from '@shared/types/common';
 
 export interface AllowedRegistryDialogConfig {
   title: string;
-  mode: Mode;
+  mode: DialogActionMode;
   confirmLabel: string;
 
   // Allowed Registry has to be specified only if dialog is used in the edit mode.
   allowedRegistry?: AllowedRegistry;
-}
-
-export enum Mode {
-  Add = 'Add',
-  Edit = 'Edit',
 }
 
 export enum Controls {
@@ -53,7 +49,7 @@ export enum Controls {
 })
 export class AllowedRegistryDialog implements OnInit, OnDestroy {
   readonly controls = Controls;
-  readonly Mode = Mode;
+  readonly Mode = DialogActionMode;
   form: FormGroup;
   private readonly _unsubscribe = new Subject<void>();
 
@@ -67,11 +63,11 @@ export class AllowedRegistryDialog implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Name]: new FormControl(this.data.mode === Mode.Edit ? this.data.allowedRegistry.name : '', [
+      [Controls.Name]: new FormControl(this.data.mode === this.Mode.Edit ? this.data.allowedRegistry.name : '', [
         Validators.required,
       ]),
       [Controls.RegistryPrefix]: new FormControl(
-        this.data.mode === Mode.Edit ? this.data.allowedRegistry.spec.registryPrefix : '',
+        this.data.mode === this.Mode.Edit ? this.data.allowedRegistry.spec.registryPrefix : '',
         [Validators.required]
       ),
     });
@@ -84,9 +80,9 @@ export class AllowedRegistryDialog implements OnInit, OnDestroy {
 
   label(): string {
     switch (this.data.confirmLabel) {
-      case Mode.Add:
+      case this.Mode.Add:
         return 'Add Allowed Registry';
-      case Mode.Edit:
+      case this.Mode.Edit:
         return 'Save Changes';
       default:
         return '';
@@ -106,21 +102,21 @@ export class AllowedRegistryDialog implements OnInit, OnDestroy {
     };
 
     switch (this.data.mode) {
-      case Mode.Add:
+      case this.Mode.Add:
         return this._create(allowedRegistry);
-      case Mode.Edit:
+      case this.Mode.Edit:
         return this._edit(allowedRegistry);
     }
   }
 
   onNext(allowedRegistry: AllowedRegistry): void {
     switch (this.data.mode) {
-      case Mode.Add:
+      case this.Mode.Add:
         this._matDialogRef.close(true);
         this._notificationService.success(`Created the ${allowedRegistry.name} allowed registry`);
         this._allowedRegistriesService.refreshAllowedRegistries();
         break;
-      case Mode.Edit:
+      case this.Mode.Edit:
         this._matDialogRef.close(true);
         this._notificationService.success(`Updated the ${allowedRegistry.name} allowed registry`);
         this._allowedRegistriesService.refreshAllowedRegistries();

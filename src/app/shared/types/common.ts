@@ -13,3 +13,8 @@
 // limitations under the License.
 
 export type KeyValueEntry = [key: string, value: string];
+
+export enum DialogActionMode {
+  Add = 'Add',
+  Edit = 'Edit',
+}

@@ -18,6 +18,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
 import {DatacenterService} from '@core/services/datacenter';
 import {CreateDatacenterModel, Datacenter, MachineFlavorFilter} from '@shared/entity/datacenter';
+import {DialogActionMode} from '@shared/types/common';
 import {INTERNAL_NODE_PROVIDERS} from '@shared/model/NodeProviderConstants';
 import {getIconClassForButton} from '@shared/utils/common';
 import * as countryCodeLookup from 'country-code-lookup';
@@ -52,11 +53,6 @@ enum Title {
   Edit = 'Edit Datacenter',
 }
 
-enum Mode {
-  Add = 'Add',
-  Edit = 'Edit',
-}
-
 @Component({
   selector: 'km-add-admin-dialog',
   templateUrl: './template.html',
@@ -83,10 +79,10 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
 
   get label(): string {
     switch (this.data.confirmLabel) {
-      case Mode.Add:
+      case DialogActionMode.Add:
         return 'Add Datacenter';
-      case Mode.Edit:
-        return 'Save Chanfes';
+      case DialogActionMode.Edit:
+        return 'Save Changes';
       default:
         return '';
     }

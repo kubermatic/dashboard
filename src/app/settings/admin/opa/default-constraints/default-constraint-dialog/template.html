@@ -15,7 +15,7 @@ limitations under the License.
 -->
 <km-dialog-title>{{data.title}}</km-dialog-title>
 <mat-dialog-content>
-  <p *ngIf="data.mode === 'Edit'"
+  <p *ngIf="data.mode === Mode.Edit"
      class="km-dialog-context-description">Edit <b>{{data.defaultConstraint.name}}</b> default constraint</p>
   <form [formGroup]="form"
         fxLayout="column">
