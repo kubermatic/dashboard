@@ -31,10 +31,10 @@ import (
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
+	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	kubermaticv1helper "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1/helper"
 	"k8c.io/kubermatic/v2/pkg/log"
-	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/kubermatic/v2/pkg/util/email"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
@@ -643,6 +643,7 @@ func ConvertInternalDCToExternalSpec(dc *kubermaticv1.Datacenter, seedName strin
 		EnforcePodSecurityPolicy:       dc.Spec.EnforcePodSecurityPolicy,
 		DefaultOperatingSystemProfiles: dc.Spec.DefaultOperatingSystemProfiles,
 		IPv6Enabled:                    dc.IsIPv6Enabled(kubermaticv1.ProviderType(p)),
+		MachineFlavorFilter:            dc.Spec.MachineFlavorFilter,
 	}, nil
 }
 
@@ -670,6 +671,7 @@ func convertExternalDCToInternal(datacenter *apiv1.DatacenterSpec) kubermaticv1.
 			RequiredEmails:           datacenter.RequiredEmails,
 			EnforceAuditLogging:      datacenter.EnforceAuditLogging,
 			EnforcePodSecurityPolicy: datacenter.EnforcePodSecurityPolicy,
+			MachineFlavorFilter:      datacenter.MachineFlavorFilter,
 		},
 	}
 }
