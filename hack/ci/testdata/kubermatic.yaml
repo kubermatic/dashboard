@@ -36,6 +36,9 @@ spec:
     OperatingSystemManager: __KUBERMATIC_OSM_ENABLED__
   ui:
     replicas: 0
+    # this is how we override KKP's default API/UI docker tag and inject
+    # the locally built Docker image tag
+    dockerTag: '__DASHBOARD_VERSION__'
   # Dex integration
   auth:
     tokenIssuer: "http://dex.oauth:5556/dex"

@@ -112,6 +112,7 @@ sed -i "s;__SERVICE_ACCOUNT_KEY__;$SERVICE_ACCOUNT_KEY;g" $KUBERMATIC_CONFIG
 sed -i "s;__IMAGE_PULL_SECRET__;$IMAGE_PULL_SECRET_INLINE;g" $KUBERMATIC_CONFIG
 sed -i "s;__KUBERMATIC_DOMAIN__;$KUBERMATIC_DOMAIN;g" $KUBERMATIC_CONFIG
 sed -i "s;__KUBERMATIC_OSM_ENABLED__;$KUBERMATIC_OSM_ENABLED;g" $KUBERMATIC_CONFIG
+sed -i "s;__DASHBOARD_VERSION__;$DASHBOARD_VERSION;g" $KUBERMATIC_CONFIG
 
 HELM_VALUES_FILE="$(mktemp)"
 cat << EOF > $HELM_VALUES_FILE
@@ -232,21 +233,6 @@ sleep 5
 echodate "Waiting for Deployments to roll out..."
 retry 9 check_all_deployments_ready kubermatic
 echodate "Kubermatic is ready."
-
-# hack to replace the API's image with our own until the operator
-# can deal with setting up a non kubermatic/kubermatic Docker image
-# for the API natively
-echodate "Stopping KKP Operator..."
-kubectl --namespace kubermatic scale deployment/kubermatic-operator --replicas=0
-retry 7 check_pod_count kubermatic "app.kubernetes.io/name=kubermatic-operator" 0
-echodate "Operator has shut down."
-
-echodate "Patching API Deployment..."
-patch="{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"api\",\"image\":\"$IMAGE_NAME\"}]}}}}"
-kubectl --namespace kubermatic patch deployment kubermatic-api --patch "$patch"
-sleep 3
-retry 9 check_pod_count kubermatic "app.kubernetes.io/name=kubermatic-api" 1
-echodate "API has been replaced."
 
 echodate "Waiting for VPA to be ready..."
 retry 8 check_all_deployments_ready kube-system
