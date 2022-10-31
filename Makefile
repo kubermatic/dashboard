@@ -87,6 +87,10 @@ verify-go:
 run:
 	@$(CC) start
 
+dist: install
+	@KUBERMATIC_EDITION=${KUBERMATIC_EDITION} $(CC) run build
+
+# Dashboard tests
 test-full: test run-e2e
 
 test:
@@ -96,11 +100,19 @@ test-headless: install
 	@$(CC) run test:ci
 	./hack/upload-coverage.sh
 
+# API tests
+api-test: download-gocache run-api-tests build-tests
+
+run-api-tests:
+	./hack/run-api-tests.sh
+
+.PHONY: build-tests
+build-tests:
+	go test -tags "$(KUBERMATIC_EDITION)" -run nope ./pkg/... ./cmd/...
+
+.PHONY: run-e2e-ci
 run-e2e-ci: install
 	./hack/e2e/run-tests.sh
-
-dist: install
-	@KUBERMATIC_EDITION=${KUBERMATIC_EDITION} $(CC) run build
 
 docker-build: build dist
 	docker build -t $(REPO):$(IMAGE_TAG) .

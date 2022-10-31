@@ -51,3 +51,23 @@ presubmits:
               cpu: 2
             limits:
               memory: 6Gi
+  - name: pre-dashboard-api-unit
+    run_if_changed: "^(cmd|hack|pkg)/"
+    decorate: true
+    clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
+    labels:
+      preset-goproxy: "true"
+    spec:
+      containers:
+        - image: quay.io/kubermatic/build:go-1.19-node-18-2
+          command:
+            - make
+          args:
+            - api-test
+          resources:
+            requests:
+              memory: 7Gi
+              cpu: 2
+          env:
+            - name: KUBERMATIC_EDITION
+              value: ee
