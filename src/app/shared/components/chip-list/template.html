@@ -42,7 +42,7 @@ limitations under the License.
       Value already exists.
     </mat-error>
     <mat-error *ngIf="form.get(controls.Tags).hasError('pattern')">
-      {{patternError}}
+      <span [innerHTML]="patternError"></span>
     </mat-error>
   </mat-form-field>
 </form>

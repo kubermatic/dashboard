@@ -213,6 +213,8 @@ limitations under the License.
                   [formControlName]="Controls.NodeAffinityPresetValues"
                   [disabled]="form.get(Controls.NodeAffinityPresetValues).disabled"
                   placeholder="Add values..."
+                  [kmPattern]="nodeAffinityPresetValuesPattern"
+                  [kmPatternError]="nodeAffinityPresetValuesPatternError"
                   fxFlex></km-chip-list>
 
     <ng-template #selectAffinityPreset

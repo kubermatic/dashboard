@@ -40,6 +40,7 @@ import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
 import {Observable} from 'rxjs';
 import {map, takeUntil} from 'rxjs/operators';
+import {KUBERNETES_RESOURCE_NAME_PATTERN} from '@shared/validators/others';
 
 enum Controls {
   VMFlavor = 'vmFlavor',
@@ -110,6 +111,9 @@ export class KubeVirtBasicNodeDataComponent
   nodeAffinityPresetValues: string[] = [];
   selectedFlavorCpus: string;
   selectedFlavorMemory: string;
+  nodeAffinityPresetValuesPattern = KUBERNETES_RESOURCE_NAME_PATTERN;
+  nodeAffinityPresetValuesPatternError =
+    'Field can only contain <b>alphanumeric characters</b> and <b>dashes</b> (a-z, 0-9 and -). <b>Must not start or end with dash</b>.';
 
   constructor(
     private readonly _builder: FormBuilder,
