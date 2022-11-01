@@ -85,8 +85,6 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   readonly Controls = Controls;
   readonly OperatingSystem = OperatingSystem;
   @Input() provider: NodeProvider;
-  // Used only when in dialog mode.
-  @Input() showExtended = false;
   @Input() quotaWidget: TemplateRef<QuotaWidgetComponent>;
   labels: object = {};
   taints: Taint[] = [];

@@ -55,16 +55,21 @@ limitations under the License.
       <ng-container *ngTemplateOutlet="quotaWidget"></ng-container>
     </div>
 
-    <km-number-stepper [formControlName]="Controls.Count"
-                       id="km-node-count-input"
-                       mode="errors"
-                       label="Replicas"
-                       min="0"
-                       required>
-    </km-number-stepper>
+    <div fxLayout="row"
+         fxLayoutGap="10px">
+      <km-number-stepper fxFlex="50"
+                         [formControlName]="Controls.Count"
+                         id="km-node-count-input"
+                         mode="errors"
+                         label="Replicas"
+                         min="0"
+                         required>
+      </km-number-stepper>
 
-    <km-node-data-kubelet-version *ngIf="isDialogView()"
-                                  [formControl]="form.get(Controls.Kubelet)"></km-node-data-kubelet-version>
+      <km-node-data-kubelet-version fxFlex="50"
+                                    *ngIf="isDialogView()"
+                                    [formControl]="form.get(Controls.Kubelet)"></km-node-data-kubelet-version>
+    </div>
 
     <ng-container *ngIf="isDialogView()">
       <km-basic-node-data [provider]="provider"
@@ -172,12 +177,6 @@ limitations under the License.
       </div>
     </div>
 
-    <div *ngIf="isDialogView() && showExtended">
-      <mat-card-title class="provider-options">{{ providerDisplayName }} Options</mat-card-title>
-      <km-extended-node-data [provider]="provider"
-                             [visible]="true"
-                             [formControlName]="Controls.ProviderExtended"></km-extended-node-data>
-    </div>
 
     <km-autocomplete *ngIf="isOperatingSystemManagerEnabled"
                      label="Operating System Profile"
@@ -191,6 +190,19 @@ limitations under the License.
         OSP can only contain alphanumeric characters and dashes (a-z, 0-9 and -). Must not start/end with dash.
       </span>
     </km-autocomplete>
+
+    <div *ngIf="isDialogView()">
+      <km-expansion-panel expandLabel="Show Advanced Settings"
+                          collapseLabel="Hide Advanced Settings">
+        <ng-container>
+          <mat-card-title class="provider-options">{{ providerDisplayName }} Options</mat-card-title>
+          <km-extended-node-data [provider]="provider"
+                                 [visible]="true"
+                                 [formControlName]="Controls.ProviderExtended"></km-extended-node-data>
+        </ng-container>
+      </km-expansion-panel>
+    </div>
+
 
     <div *ngIf="!isDialogView()"
          class="additional-margin"
