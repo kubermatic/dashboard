@@ -63,10 +63,24 @@ type NutanixClusterReq struct {
 	NutanixCommonReq
 }
 
+// NutanixProjectClusterReq represents a request for Nutanix clusters within the context of a KKP project
+// swagger:parameters listProjectNutanixClusters
+type NutanixProjectClusterReq struct {
+	common.ProjectReq
+	NutanixClusterReq
+}
+
 // NutanixProjectReq represents a request for Nutanix projects
 // swagger:parameters listNutanixProjects
 type NutanixProjectReq struct {
 	NutanixCommonReq
+}
+
+// NutanixProjectProjectReq represents a request for Nutanix projects within the context of a KKP project
+// swagger:parameters listProjectNutanixProjects
+type NutanixProjectProjectReq struct {
+	common.ProjectReq
+	NutanixProjectReq
 }
 
 // NutanixSubnetReq represents a request for Nutanix subnets
@@ -85,10 +99,24 @@ type NutanixSubnetReq struct {
 	NutanixProject string
 }
 
+// NutanixProjectSubnetReq represents a request for Nutanix subnets within the context of a KKP project
+// swagger:parameters listProjectNutanixSubnets
+type NutanixProjectSubnetReq struct {
+	common.ProjectReq
+	NutanixSubnetReq
+}
+
 // NutanixCategoryReq represents a request for Nutanix categories
 // swagger:parameters listNutanixCategories
 type NutanixCategoryReq struct {
 	NutanixCommonReq
+}
+
+// NutanixProjectCategoryReq represents a request for Nutanix categories within the context of a KKP project
+// swagger:parameters listProjectNutanixCategories
+type NutanixProjectCategoryReq struct {
+	common.ProjectReq
+	NutanixCategoryReq
 }
 
 // NutanixCategoryValueReq represents a request for Nutanix category values for a specific category
@@ -100,6 +128,13 @@ type NutanixCategoryValueReq struct {
 	// in: path
 	// required: true
 	Category string `json:"category"`
+}
+
+// NutanixProjectCategoryValueReq represents a request for Nutanix category values for a specific category within the context of a KKP project
+// swagger:parameters listProjectNutanixCategoryValues
+type NutanixProjectCategoryValueReq struct {
+	common.ProjectReq
+	NutanixCategoryValueReq
 }
 
 // NutanixNoCredentialReq represent a request for Nutanix information with cluster-provided credentials
@@ -136,6 +171,45 @@ func DecodeNutanixCommonReq(c context.Context, r *http.Request) (interface{}, er
 	return req, nil
 }
 
+func DecodeNutanixProjectClusterReq(c context.Context, r *http.Request) (interface{}, error) {
+	commonReq, err := DecodeNutanixCommonReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	projectReq, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return NutanixProjectClusterReq{
+		ProjectReq: projectReq.(common.ProjectReq),
+		NutanixClusterReq: NutanixClusterReq{
+			NutanixCommonReq: commonReq.(NutanixCommonReq),
+		},
+	}, nil
+}
+
+func DecodeNutanixProjectProjectReq(c context.Context, r *http.Request) (interface{}, error) {
+	commonReq, err := DecodeNutanixCommonReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	projectReq, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return NutanixProjectProjectReq{
+		ProjectReq: projectReq.(common.ProjectReq),
+		NutanixProjectReq: NutanixProjectReq{
+			NutanixCommonReq: commonReq.(NutanixCommonReq),
+		},
+	}, nil
+
+}
+
 func DecodeNutanixSubnetReq(c context.Context, r *http.Request) (interface{}, error) {
 	var req NutanixSubnetReq
 
@@ -148,6 +222,23 @@ func DecodeNutanixSubnetReq(c context.Context, r *http.Request) (interface{}, er
 	req.NutanixProject = r.Header.Get("NutanixProject")
 
 	return req, nil
+}
+
+func DecodeNutanixProjectSubnetReq(c context.Context, r *http.Request) (interface{}, error) {
+	subnetReq, err := DecodeNutanixSubnetReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	projectReq, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return NutanixProjectSubnetReq{
+		ProjectReq:       projectReq.(common.ProjectReq),
+		NutanixSubnetReq: subnetReq.(NutanixSubnetReq),
+	}, nil
 }
 
 func DecodeNutanixCategoryValueReq(c context.Context, r *http.Request) (interface{}, error) {
@@ -167,6 +258,42 @@ func DecodeNutanixCategoryValueReq(c context.Context, r *http.Request) (interfac
 	req.Category = category
 
 	return req, nil
+}
+
+func DecodeNutanixProjectCategoryReq(c context.Context, r *http.Request) (interface{}, error) {
+	commonReq, err := DecodeNutanixCommonReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	projectReq, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return NutanixProjectCategoryReq{
+		NutanixCategoryReq: NutanixCategoryReq{
+			NutanixCommonReq: commonReq.(NutanixCommonReq),
+		},
+		ProjectReq: projectReq.(common.ProjectReq),
+	}, nil
+}
+
+func DecodeNutanixProjectCategoryValueReq(c context.Context, r *http.Request) (interface{}, error) {
+	categoryValueReq, err := DecodeNutanixCategoryValueReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	projectReq, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return NutanixProjectCategoryValueReq{
+		NutanixCategoryValueReq: categoryValueReq.(NutanixCategoryValueReq),
+		ProjectReq:              projectReq.(common.ProjectReq),
+	}, nil
 }
 
 func DecodeNutanixNoCredentialReq(c context.Context, r *http.Request) (interface{}, error) {
@@ -207,11 +334,30 @@ func DecodeNutanixCategoryValuesNoCredentialReq(c context.Context, r *http.Reque
 }
 
 // NutanixClusterEndpoint handles the request for a list of clusters, using provided credentials.
-func NutanixClusterEndpoint(presetProvider provider.PresetProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func NutanixClusterEndpoint(presetProvider provider.PresetProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(NutanixCommonReq)
+		var (
+			req       NutanixCommonReq
+			projectID string
+		)
 
-		client, _, err := getNutanixClient(ctx, req, presetProvider, seedsGetter, userInfoGetter)
+		if !withProject {
+			commonReq, ok := request.(NutanixCommonReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+			req = commonReq
+		} else {
+			projectReq, ok := request.(NutanixProjectClusterReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+
+			projectID = projectReq.GetProjectID()
+			req = projectReq.NutanixCommonReq
+		}
+
+		client, _, err := getNutanixClient(ctx, req, presetProvider, seedsGetter, userInfoGetter, projectID)
 		if err != nil {
 			return nil, err
 		}
@@ -226,11 +372,30 @@ func NutanixClusterEndpoint(presetProvider provider.PresetProvider, seedsGetter 
 }
 
 // NutanixProjectEndpoint handles the request for a list of projects, using provided credentials.
-func NutanixProjectEndpoint(presetProvider provider.PresetProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func NutanixProjectEndpoint(presetProvider provider.PresetProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(NutanixCommonReq)
+		var (
+			req       NutanixCommonReq
+			projectID string
+		)
 
-		client, _, err := getNutanixClient(ctx, req, presetProvider, seedsGetter, userInfoGetter)
+		if !withProject {
+			commonReq, ok := request.(NutanixCommonReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+			req = commonReq
+		} else {
+			projectReq, ok := request.(NutanixProjectProjectReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+
+			projectID = projectReq.GetProjectID()
+			req = projectReq.NutanixCommonReq
+		}
+
+		client, _, err := getNutanixClient(ctx, req, presetProvider, seedsGetter, userInfoGetter, projectID)
 		if err != nil {
 			return nil, err
 		}
@@ -245,11 +410,30 @@ func NutanixProjectEndpoint(presetProvider provider.PresetProvider, seedsGetter 
 }
 
 // NutanixSubnetEndpoint handles the request for a list of subnets on a specific Nutanix cluster, using provided credentials.
-func NutanixSubnetEndpoint(presetProvider provider.PresetProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func NutanixSubnetEndpoint(presetProvider provider.PresetProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(NutanixSubnetReq)
+		var (
+			req       NutanixSubnetReq
+			projectID string
+		)
 
-		client, creds, err := getNutanixClient(ctx, req.NutanixCommonReq, presetProvider, seedsGetter, userInfoGetter)
+		if !withProject {
+			commonReq, ok := request.(NutanixSubnetReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+			req = commonReq
+		} else {
+			projectReq, ok := request.(NutanixProjectSubnetReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+
+			projectID = projectReq.GetProjectID()
+			req = projectReq.NutanixSubnetReq
+		}
+
+		client, creds, err := getNutanixClient(ctx, req.NutanixCommonReq, presetProvider, seedsGetter, userInfoGetter, projectID)
 		if err != nil {
 			return nil, err
 		}
@@ -271,11 +455,30 @@ func NutanixSubnetEndpoint(presetProvider provider.PresetProvider, seedsGetter p
 	}
 }
 
-func NutanixCategoryEndpoint(presetProvider provider.PresetProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func NutanixCategoryEndpoint(presetProvider provider.PresetProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(NutanixCommonReq)
+		var (
+			req       NutanixCategoryReq
+			projectID string
+		)
 
-		client, _, err := getNutanixClient(ctx, req, presetProvider, seedsGetter, userInfoGetter)
+		if !withProject {
+			catValueReq, ok := request.(NutanixCategoryReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+			req = catValueReq
+		} else {
+			projectReq, ok := request.(NutanixProjectCategoryReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+
+			projectID = projectReq.GetProjectID()
+			req = projectReq.NutanixCategoryReq
+		}
+
+		client, _, err := getNutanixClient(ctx, req.NutanixCommonReq, presetProvider, seedsGetter, userInfoGetter, projectID)
 		if err != nil {
 			return nil, err
 		}
@@ -289,11 +492,30 @@ func NutanixCategoryEndpoint(presetProvider provider.PresetProvider, seedsGetter
 	}
 }
 
-func NutanixCategoryValuesEndpoint(presetProvider provider.PresetProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func NutanixCategoryValuesEndpoint(presetProvider provider.PresetProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(NutanixCategoryValueReq)
+		var (
+			req       NutanixCategoryValueReq
+			projectID string
+		)
 
-		client, _, err := getNutanixClient(ctx, req.NutanixCommonReq, presetProvider, seedsGetter, userInfoGetter)
+		if !withProject {
+			commonReq, ok := request.(NutanixCategoryValueReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+			req = commonReq
+		} else {
+			projectReq, ok := request.(NutanixProjectCategoryValueReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+
+			projectID = projectReq.GetProjectID()
+			req = projectReq.NutanixCategoryValueReq
+		}
+
+		client, _, err := getNutanixClient(ctx, req.NutanixCommonReq, presetProvider, seedsGetter, userInfoGetter, projectID)
 		if err != nil {
 			return nil, err
 		}
@@ -307,7 +529,7 @@ func NutanixCategoryValuesEndpoint(presetProvider provider.PresetProvider, seeds
 	}
 }
 
-func getNutanixClient(ctx context.Context, req NutanixCommonReq, presetProvider provider.PresetProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter) (providercommon.NutanixClientSet, *kubermaticv1.Nutanix, error) {
+func getNutanixClient(ctx context.Context, req NutanixCommonReq, presetProvider provider.PresetProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter, projectID string) (providercommon.NutanixClientSet, *kubermaticv1.Nutanix, error) {
 	creds := providercommon.NutanixCredentials{
 		ProxyURL: req.NutanixProxyURL,
 		Username: req.NutanixUsername,
@@ -316,13 +538,13 @@ func getNutanixClient(ctx context.Context, req NutanixCommonReq, presetProvider 
 
 	var credential *kubermaticv1.Nutanix
 
-	userInfo, err := userInfoGetter(ctx, "")
+	userInfo, err := userInfoGetter(ctx, projectID)
 	if err != nil {
 		return nil, nil, common.KubernetesErrorToHTTPError(err)
 	}
 
 	if len(req.Credential) > 0 {
-		preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(""), req.Credential)
+		preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(projectID), req.Credential)
 		if err != nil {
 			return nil, nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", req.Credential, userInfo.Email))
 		}

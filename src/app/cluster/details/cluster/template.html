@@ -63,12 +63,12 @@ limitations under the License.
        mat-flat-button
        [disabled]="!isKubernetesDashboardHealthy"
        [matTooltip]="isKubernetesDashboardHealthy ? '' : cluster?.spec?.kubernetesDashboard?.enabled ? 'Kubernetes Dashboard is not running' : 'Kubernetes Dashboard is disabled'"
-       *ngIf="(settingsService.adminSettings | async)?.enableDashboard">
+       *ngIf="adminSettings.enableDashboard">
       <i class="km-icon-mask km-icon-external-link"></i>
       <span>Open Dashboard</span>
     </a>
 
-    <button *ngIf="(settingsService.adminSettings | async)?.enableOIDCKubeconfig"
+    <button *ngIf="adminSettings.enableOIDCKubeconfig && adminSettings.enableWebTerminal"
             fxLayoutAlign="center center"
             mat-flat-button
             type="button"

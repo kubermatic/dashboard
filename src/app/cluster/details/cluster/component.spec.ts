@@ -143,20 +143,20 @@ describe('ClusterDetailsComponent', () => {
     fixture.detectChanges();
 
     const expectedCluster = fakeDigitaloceanCluster();
-    expectedCluster.creationTimestamp = expect.any(Date);
 
     tick();
-    expect(component.cluster).toEqual(expectedCluster);
+    expect(component.cluster).toMatchObject({
+      ...expectedCluster,
+      creationTimestamp: expect.any(Date),
+    });
   }));
 
   it('should get nodes', fakeAsync(() => {
     fixture.detectChanges();
 
     const expectedNodes = nodesFake();
-    expectedNodes[0].creationTimestamp = expect.any(Date);
-    expectedNodes[1].creationTimestamp = expect.any(Date);
 
     tick();
-    expect(component.nodes).toEqual(expectedNodes);
+    expect(component.nodes).toMatchObject(expectedNodes.map(node => ({...node, creationTimestamp: expect.any(Date)})));
   }));
 });

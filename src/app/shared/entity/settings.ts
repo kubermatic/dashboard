@@ -33,6 +33,7 @@ export interface AdminSettings {
   displayDemoInfo: boolean;
   displayTermsOfService: boolean;
   enableDashboard: boolean;
+  enableWebTerminal: boolean;
   enableOIDCKubeconfig: boolean;
   userProjectsLimit: number;
   restrictProjectCreation: boolean;
@@ -139,6 +140,7 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
   displayDemoInfo: false,
   displayTermsOfService: false,
   enableDashboard: true,
+  enableWebTerminal: false,
   enableOIDCKubeconfig: false,
   restrictProjectCreation: false,
   enableExternalClusterImport: true,
