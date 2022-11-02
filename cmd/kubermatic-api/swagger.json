@@ -19817,6 +19817,341 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/providers/nutanix/{dc}/categories": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "nutanix"
+        ],
+        "summary": "List category keys from Nutanix.",
+        "operationId": "listProjectNutanixCategories",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "DC",
+            "description": "KKP Datacenter to use for endpoint",
+            "name": "dc",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "NutanixUsername",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "NutanixPassword",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "NutanixProxyURL",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "NutanixCategoryList",
+            "schema": {
+              "$ref": "#/definitions/NutanixCategoryList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/nutanix/{dc}/categories/{category}/values": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "nutanix"
+        ],
+        "summary": "List available category values for a specific category from Nutanix.",
+        "operationId": "listProjectNutanixCategoryValues",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "DC",
+            "description": "KKP Datacenter to use for endpoint",
+            "name": "dc",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "NutanixUsername",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "NutanixPassword",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "NutanixProxyURL",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "Category",
+            "description": "Category to query the available values for",
+            "name": "category",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "NutanixCategoryValueList",
+            "schema": {
+              "$ref": "#/definitions/NutanixCategoryValueList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/nutanix/{dc}/clusters": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "nutanix"
+        ],
+        "summary": "List clusters from Nutanix.",
+        "operationId": "listProjectNutanixClusters",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "DC",
+            "description": "KKP Datacenter to use for endpoint",
+            "name": "dc",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "NutanixUsername",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "NutanixPassword",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "NutanixProxyURL",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "NutanixClusterList",
+            "schema": {
+              "$ref": "#/definitions/NutanixClusterList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/nutanix/{dc}/projects": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "nutanix"
+        ],
+        "summary": "List projects from Nutanix.",
+        "operationId": "listProjectNutanixProjects",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "DC",
+            "description": "KKP Datacenter to use for endpoint",
+            "name": "dc",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "NutanixUsername",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "NutanixPassword",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "NutanixProxyURL",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "NutanixProjectList",
+            "schema": {
+              "$ref": "#/definitions/NutanixProjectList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/nutanix/{dc}/subnets": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "nutanix"
+        ],
+        "summary": "List subnets from Nutanix.",
+        "operationId": "listProjectNutanixSubnets",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "DC",
+            "description": "KKP Datacenter to use for endpoint",
+            "name": "dc",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "NutanixUsername",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "NutanixPassword",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "NutanixProxyURL",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "NutanixCluster",
+            "in": "header",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Project query parameter. Can be omitted to query subnets without project scope",
+            "name": "NutanixProject",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "NutanixSubnetList",
+            "schema": {
+              "$ref": "#/definitions/NutanixSubnetList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/providers/{provider_name}/presets": {
       "get": {
         "description": "Lists presets for the provider in a specific project",

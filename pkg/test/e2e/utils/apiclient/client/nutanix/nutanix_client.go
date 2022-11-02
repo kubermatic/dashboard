@@ -44,6 +44,16 @@ type ClientService interface {
 
 	ListNutanixSubnetsNoCredentials(params *ListNutanixSubnetsNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListNutanixSubnetsNoCredentialsOK, error)
 
+	ListProjectNutanixCategories(params *ListProjectNutanixCategoriesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectNutanixCategoriesOK, error)
+
+	ListProjectNutanixCategoryValues(params *ListProjectNutanixCategoryValuesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectNutanixCategoryValuesOK, error)
+
+	ListProjectNutanixClusters(params *ListProjectNutanixClustersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectNutanixClustersOK, error)
+
+	ListProjectNutanixProjects(params *ListProjectNutanixProjectsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectNutanixProjectsOK, error)
+
+	ListProjectNutanixSubnets(params *ListProjectNutanixSubnetsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectNutanixSubnetsOK, error)
+
 	SetTransport(transport runtime.ClientTransport)
 }
 
@@ -348,6 +358,196 @@ func (a *Client) ListNutanixSubnetsNoCredentials(params *ListNutanixSubnetsNoCre
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListNutanixSubnetsNoCredentialsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectNutanixCategories lists category keys from nutanix
+*/
+func (a *Client) ListProjectNutanixCategories(params *ListProjectNutanixCategoriesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectNutanixCategoriesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectNutanixCategoriesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectNutanixCategories",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/nutanix/{dc}/categories",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectNutanixCategoriesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectNutanixCategoriesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectNutanixCategoriesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectNutanixCategoryValues lists available category values for a specific category from nutanix
+*/
+func (a *Client) ListProjectNutanixCategoryValues(params *ListProjectNutanixCategoryValuesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectNutanixCategoryValuesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectNutanixCategoryValuesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectNutanixCategoryValues",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/nutanix/{dc}/categories/{category}/values",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectNutanixCategoryValuesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectNutanixCategoryValuesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectNutanixCategoryValuesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectNutanixClusters lists clusters from nutanix
+*/
+func (a *Client) ListProjectNutanixClusters(params *ListProjectNutanixClustersParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectNutanixClustersOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectNutanixClustersParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectNutanixClusters",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/nutanix/{dc}/clusters",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectNutanixClustersReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectNutanixClustersOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectNutanixClustersDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectNutanixProjects lists projects from nutanix
+*/
+func (a *Client) ListProjectNutanixProjects(params *ListProjectNutanixProjectsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectNutanixProjectsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectNutanixProjectsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectNutanixProjects",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/nutanix/{dc}/projects",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectNutanixProjectsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectNutanixProjectsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectNutanixProjectsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectNutanixSubnets lists subnets from nutanix
+*/
+func (a *Client) ListProjectNutanixSubnets(params *ListProjectNutanixSubnetsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectNutanixSubnetsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectNutanixSubnetsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectNutanixSubnets",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/nutanix/{dc}/subnets",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectNutanixSubnetsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectNutanixSubnetsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectNutanixSubnetsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

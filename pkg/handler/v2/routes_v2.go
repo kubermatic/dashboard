@@ -742,26 +742,30 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 				Path("/projects/{project_id}/providers/vsphere/datastores").
 				Handler(r.listProjectVSphereDatastores())
 
-			// Nutanix endpoints
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/nutanix/{dc}/clusters").
-				Handler(r.listProjectNutanixClusters())
+		*/
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/nutanix/{dc}/projects").
-				Handler(r.listProjectNutanixProjects())
+	// Nutanix endpoints
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/nutanix/{dc}/clusters").
+		Handler(r.listProjectNutanixClusters())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/nutanix/{dc}/subnets").
-				Handler(r.listProjectNutanixSubnets())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/nutanix/{dc}/projects").
+		Handler(r.listProjectNutanixProjects())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/nutanix/{dc}/categories").
-				Handler(r.listProjectNutanixCategories())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/nutanix/{dc}/subnets").
+		Handler(r.listProjectNutanixSubnets())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/nutanix/{dc}/categories/{category}/values").
-				Handler(r.listProjectNutanixCategoryValues())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/nutanix/{dc}/categories").
+		Handler(r.listProjectNutanixCategories())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/nutanix/{dc}/categories/{category}/values").
+		Handler(r.listProjectNutanixCategoryValues())
+
+		/*
 
 			// VMware Cloud Director endpoints
 			mux.Methods(http.MethodGet).
@@ -4664,7 +4668,7 @@ func (r Routing) listNutanixClusters() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.NutanixClusterEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter)),
+		)(provider.NutanixClusterEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, false)),
 		provider.DecodeNutanixCommonReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -4686,7 +4690,7 @@ func (r Routing) listNutanixProjects() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.NutanixProjectEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter)),
+		)(provider.NutanixProjectEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, false)),
 		provider.DecodeNutanixCommonReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -4708,7 +4712,7 @@ func (r Routing) listNutanixSubnets() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.NutanixSubnetEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter)),
+		)(provider.NutanixSubnetEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, false)),
 		provider.DecodeNutanixSubnetReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -4730,7 +4734,7 @@ func (r Routing) listNutanixCategories() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.NutanixCategoryEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter)),
+		)(provider.NutanixCategoryEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, false)),
 		provider.DecodeNutanixCommonReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -4752,7 +4756,7 @@ func (r Routing) listNutanixCategoryValues() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.NutanixCategoryValuesEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter)),
+		)(provider.NutanixCategoryValuesEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, false)),
 		provider.DecodeNutanixCategoryValueReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -5594,6 +5598,116 @@ func (r Routing) listProjectEKSCapacityTypes() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(externalcluster.EKSCapacityTypesEndpoint()),
 		externalcluster.DecodeEKSProjectReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/nutanix/{dc}/clusters nutanix listProjectNutanixClusters
+//
+// List clusters from Nutanix.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	default: errorResponse
+//	200: NutanixClusterList
+func (r Routing) listProjectNutanixClusters() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.NutanixClusterEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, true)),
+		provider.DecodeNutanixProjectClusterReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/nutanix/{dc}/projects nutanix listProjectNutanixProjects
+//
+// List projects from Nutanix.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	default: errorResponse
+//	200: NutanixProjectList
+func (r Routing) listProjectNutanixProjects() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.NutanixProjectEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, true)),
+		provider.DecodeNutanixProjectProjectReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/nutanix/{dc}/subnets nutanix listProjectNutanixSubnets
+//
+// List subnets from Nutanix.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	default: errorResponse
+//	200: NutanixSubnetList
+func (r Routing) listProjectNutanixSubnets() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.NutanixSubnetEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, true)),
+		provider.DecodeNutanixProjectSubnetReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/nutanix/{dc}/categories nutanix listProjectNutanixCategories
+//
+// List category keys from Nutanix.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	default: errorResponse
+//	200: NutanixCategoryList
+func (r Routing) listProjectNutanixCategories() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.NutanixCategoryEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, true)),
+		provider.DecodeNutanixProjectCategoryReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/nutanix/{dc}/categories/{category}/values nutanix listProjectNutanixCategoryValues
+//
+// List available category values for a specific category from Nutanix.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	default: errorResponse
+//	200: NutanixCategoryValueList
+func (r Routing) listProjectNutanixCategoryValues() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.NutanixCategoryValuesEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, true)),
+		provider.DecodeNutanixProjectCategoryValueReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
