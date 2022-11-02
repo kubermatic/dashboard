@@ -81,9 +81,6 @@ install:
 check: install
 	@$(CC) run check
 
-verify-go:
-	go mod verify
-
 run:
 	@$(CC) start
 
@@ -111,6 +108,18 @@ lint:
 		--verbose \
 		--print-resources-usage \
 		./pkg/... ./cmd/...
+
+.PHONY: verify-go
+verify-go:
+	go mod verify
+
+.PHONY: verify-imports
+verify-imports:
+	./hack/verify-import-order.sh
+
+.PHONY: spellcheck
+spellcheck:
+	./hack/verify-spelling.sh
 
 .PHONY: build-tests
 build-tests:
