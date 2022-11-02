@@ -32,7 +32,8 @@ import {AllowedRegistry} from './entity';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
-import {Mode, AllowedRegistryDialog} from './allowed-registry-dialog/component';
+import {AllowedRegistryDialog} from './allowed-registry-dialog/component';
+import {DialogActionMode} from '@shared/types/common';
 
 @Component({
   selector: 'km-allowed-registries-list',
@@ -102,7 +103,7 @@ export class AllowedRegistriesComponent extends DynamicTab implements OnInit, On
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Add Allowed Registry',
-        mode: Mode.Add,
+        mode: DialogActionMode.Add,
         confirmLabel: 'Add',
       },
     };
@@ -115,7 +116,7 @@ export class AllowedRegistriesComponent extends DynamicTab implements OnInit, On
       data: {
         title: 'Edit Allowed Registry',
         allowedRegistry: allowedRegistry,
-        mode: Mode.Edit,
+        mode: DialogActionMode.Edit,
         confirmLabel: 'Edit',
       },
     };

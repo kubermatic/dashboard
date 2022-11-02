@@ -24,7 +24,8 @@ import {NotificationService} from '@core/services/notification';
 import {OPAService} from '@core/services/opa';
 import {SharedModule} from '@shared/module';
 import {MonacoEditorModule, NGX_MONACO_EDITOR_CONFIG} from 'ngx-monaco-editor';
-import {ConstraintTemplateDialog, Mode} from './component';
+import {ConstraintTemplateDialog} from './component';
+import {DialogActionMode} from '@shared/types/common';
 
 declare let monaco: any;
 
@@ -72,7 +73,7 @@ describe('ConstraintTemplateDialog', () => {
 
       component.data = {
         title: 'Add Constraint Template',
-        mode: Mode.Add,
+        mode: DialogActionMode.Add,
         confirmLabel: 'Add',
       };
       fixture.detectChanges();
@@ -105,7 +106,7 @@ describe('ConstraintTemplateDialog', () => {
 
       component.data = {
         title: 'Edit Constraint Template',
-        mode: Mode.Edit,
+        mode: DialogActionMode.Edit,
         confirmLabel: 'Edit',
         constraintTemplate: fakeConstraintTemplates()[0],
       };
@@ -121,7 +122,7 @@ describe('ConstraintTemplateDialog', () => {
     });
 
     it('should have correct button text: edit', () => {
-      expect(document.body.querySelector('#km-constraint-template-dialog-btn').textContent).toContain('Edit');
+      expect(document.body.querySelector('#km-constraint-template-dialog-btn').textContent).toContain('Save Changes');
     });
 
     xit('should call patchConstraintTemplate()', () => {

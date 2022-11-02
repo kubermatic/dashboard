@@ -52,7 +52,7 @@ limitations under the License.
 <mat-dialog-actions>
   <km-button id="km-rule-group-dialog-btn"
              [icon]="getIconClass()"
-             [label]="data.confirmLabel+' Rule Group'"
+             [label]="label"
              [disabled]="!isValid()"
              [observable]="getObservable()"
              (next)="onNext($event)">

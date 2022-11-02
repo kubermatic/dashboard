@@ -15,7 +15,7 @@ limitations under the License.
 -->
 <km-dialog-title>{{data.title}}</km-dialog-title>
 <mat-dialog-content>
-  <p *ngIf="data.mode === 'edit'"
+  <p *ngIf="data.mode === Mode.Edit"
      class="km-dialog-context-description">Edit <b>{{getCTName()}}</b> constraint template</p>
   <div class="spec">Spec</div>
   <km-editor [(model)]="spec"
@@ -24,7 +24,7 @@ limitations under the License.
 <mat-dialog-actions>
   <km-button id="km-constraint-template-dialog-btn"
              [icon]="getIconClass()"
-             [label]="data.confirmLabel+' Constraint Template'"
+             [label]="label"
              [disabled]="!isValid()"
              [observable]="getObservable()"
              (next)="onNext($event)">

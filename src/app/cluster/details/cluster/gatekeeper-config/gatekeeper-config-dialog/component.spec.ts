@@ -24,8 +24,9 @@ import {CoreModule} from '@core/module';
 import {NotificationService} from '@core/services/notification';
 import {OPAService} from '@core/services/opa';
 import {SharedModule} from '@shared/module';
+import {DialogActionMode} from '@shared/types/common';
 import {MonacoEditorModule, NGX_MONACO_EDITOR_CONFIG} from 'ngx-monaco-editor';
-import {GatekeeperConfigDialog, Mode} from './component';
+import {GatekeeperConfigDialog} from './component';
 import {asyncData} from '@test/services/cluster-mock';
 
 declare let monaco: any;
@@ -78,7 +79,7 @@ describe('GatekeeperConfigDialog', () => {
         title: 'Add Gatekeeper Config',
         projectId: fakeProject().id,
         cluster: fakeDigitaloceanCluster(),
-        mode: Mode.Add,
+        mode: DialogActionMode.Add,
         confirmLabel: 'Add',
       };
       fixture.detectChanges();
@@ -113,7 +114,7 @@ describe('GatekeeperConfigDialog', () => {
         title: 'Edit Gatekeeper Config',
         projectId: fakeProject().id,
         cluster: fakeDigitaloceanCluster(),
-        mode: Mode.Edit,
+        mode: DialogActionMode.Edit,
         confirmLabel: 'Edit',
         gatekeeperConfig: fakeGatekeeperConfig(),
       };
@@ -129,7 +130,7 @@ describe('GatekeeperConfigDialog', () => {
     });
 
     it('should have correct button text: edit', () => {
-      expect(document.body.querySelector('#km-gatekeeper-config-dialog-btn').textContent).toContain('Edit');
+      expect(document.body.querySelector('#km-gatekeeper-config-dialog-btn').textContent).toContain('Save Changes');
     });
 
     xit('should call patchGatekeeperConfig()', () => {

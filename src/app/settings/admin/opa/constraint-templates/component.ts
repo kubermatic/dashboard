@@ -22,10 +22,11 @@ import {UserService} from '@core/services/user';
 import {NotificationService} from '@core/services/notification';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {ConstraintTemplate} from '@shared/entity/opa';
+import {DialogActionMode} from '@shared/types/common';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
-import {Mode, ConstraintTemplateDialog} from './constraint-template-dialog/component';
+import {ConstraintTemplateDialog} from './constraint-template-dialog/component';
 
 @Component({
   selector: 'km-constraint-templates-list',
@@ -93,7 +94,7 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Add Constraint Template',
-        mode: Mode.Add,
+        mode: DialogActionMode.Add,
         confirmLabel: 'Add',
       },
     };
@@ -110,7 +111,7 @@ export class ConstraintTemplatesComponent implements OnInit, OnChanges, OnDestro
       data: {
         title: 'Edit Constraint Template',
         constraintTemplate: constraintTemplate,
-        mode: Mode.Edit,
+        mode: DialogActionMode.Edit,
         confirmLabel: 'Edit',
       },
     };
