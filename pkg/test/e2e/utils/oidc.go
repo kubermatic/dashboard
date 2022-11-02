@@ -22,7 +22,6 @@ import (
 	"os"
 
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/dex"
-
 	"k8c.io/kubermatic/v2/pkg/log"
 )
 

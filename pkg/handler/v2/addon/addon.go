@@ -22,13 +22,13 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/go-kit/kit/endpoint"
+	"github.com/gorilla/mux"
+
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
-
-	"github.com/go-kit/kit/endpoint"
-	"github.com/gorilla/mux"
 )
 
 // addonReq defines HTTP request for getAddonV2 and deleteAddonV2

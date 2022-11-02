@@ -21,11 +21,12 @@ import (
 	"fmt"
 	"net/http"
 
-	"k8c.io/dashboard/v2/pkg/provider"
-
 	"github.com/go-kit/kit/endpoint"
 	"github.com/gorilla/mux"
+
+	"k8c.io/dashboard/v2/pkg/provider"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
+
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 

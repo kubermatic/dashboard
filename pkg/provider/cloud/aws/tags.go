@@ -20,12 +20,13 @@ import (
 	"context"
 	"fmt"
 
-	"k8c.io/dashboard/v2/pkg/provider"
-
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
 	iamtypes "github.com/aws/aws-sdk-go-v2/service/iam/types"
+
+	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+
 	"k8s.io/utils/pointer"
 )
 

@@ -21,8 +21,8 @@ import (
 	"testing"
 
 	"k8c.io/dashboard/v2/pkg/provider"
-
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 

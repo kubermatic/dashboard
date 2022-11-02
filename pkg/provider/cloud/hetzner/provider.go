@@ -21,9 +21,9 @@ import (
 	"errors"
 	"time"
 
-	"k8c.io/dashboard/v2/pkg/provider"
-
 	"github.com/hetznercloud/hcloud-go/hcloud"
+
+	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
 )

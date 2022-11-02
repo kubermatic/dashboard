@@ -22,21 +22,22 @@ import (
 	"fmt"
 	"strings"
 
-	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
-	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
-	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
-	"k8c.io/dashboard/v2/pkg/provider"
-	awsprovider "k8c.io/dashboard/v2/pkg/provider/cloud/aws"
-
 	semverlib "github.com/Masterminds/semver/v3"
 	aws "github.com/aws/aws-sdk-go-v2/aws"
 	awshttp "github.com/aws/aws-sdk-go-v2/aws/transport/http"
 	"github.com/aws/aws-sdk-go-v2/service/eks"
 	ekstypes "github.com/aws/aws-sdk-go-v2/service/eks/types"
 	"github.com/aws/smithy-go"
+
+	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
+	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
+	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
+	"k8c.io/dashboard/v2/pkg/provider"
+	awsprovider "k8c.io/dashboard/v2/pkg/provider/cloud/aws"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
+
 	"k8s.io/utils/pointer"
 )
 

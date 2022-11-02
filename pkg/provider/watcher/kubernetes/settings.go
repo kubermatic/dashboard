@@ -21,7 +21,9 @@ import (
 
 	"code.cloudfoundry.org/go-pubsub"
 	"go.uber.org/zap"
+
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+
 	toolscache "k8s.io/client-go/tools/cache"
 )
 

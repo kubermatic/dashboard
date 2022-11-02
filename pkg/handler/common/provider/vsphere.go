@@ -29,7 +29,6 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/vsphere"
 	kubernetesprovider "k8c.io/dashboard/v2/pkg/provider/kubernetes"
-
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 )
 

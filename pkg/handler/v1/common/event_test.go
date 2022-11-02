@@ -19,10 +19,11 @@ package common_test
 import (
 	"testing"
 
+	"github.com/google/go-cmp/cmp"
+
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 
-	"github.com/google/go-cmp/cmp"
 	corev1 "k8s.io/api/core/v1"
 )
 

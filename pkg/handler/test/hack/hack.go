@@ -19,6 +19,10 @@ package hack
 import (
 	"net/http"
 
+	"github.com/gorilla/mux"
+	prometheusapi "github.com/prometheus/client_golang/api"
+	"github.com/prometheus/client_golang/prometheus"
+
 	"k8c.io/dashboard/v2/pkg/handler"
 	"k8c.io/dashboard/v2/pkg/handler/auth"
 	"k8c.io/dashboard/v2/pkg/handler/test"
@@ -26,10 +30,6 @@ import (
 	v2 "k8c.io/dashboard/v2/pkg/handler/v2"
 	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
-
-	"github.com/gorilla/mux"
-	prometheusapi "github.com/prometheus/client_golang/api"
-	"github.com/prometheus/client_golang/prometheus"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/features"
 	kubermaticlog "k8c.io/kubermatic/v2/pkg/log"
@@ -37,6 +37,7 @@ import (
 	"k8c.io/kubermatic/v2/pkg/serviceaccount"
 	"k8c.io/kubermatic/v2/pkg/version/kubermatic"
 	"k8c.io/kubermatic/v2/pkg/watcher"
+
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 

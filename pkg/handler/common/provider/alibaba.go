@@ -21,6 +21,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/aliyun/alibaba-cloud-sdk-go/services/ecs"
+
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
@@ -28,10 +30,9 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/alibaba"
 	kubernetesprovider "k8c.io/dashboard/v2/pkg/provider/kubernetes"
-
-	"github.com/aliyun/alibaba-cloud-sdk-go/services/ecs"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
+
 	"k8s.io/apimachinery/pkg/util/sets"
 )
 

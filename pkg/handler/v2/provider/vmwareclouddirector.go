@@ -21,6 +21,9 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/go-kit/kit/endpoint"
+	"github.com/gorilla/mux"
+
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
@@ -28,10 +31,8 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 	vcd "k8c.io/dashboard/v2/pkg/provider/cloud/vmwareclouddirector"
 	kubernetesprovider "k8c.io/dashboard/v2/pkg/provider/kubernetes"
-
-	"github.com/go-kit/kit/endpoint"
-	"github.com/gorilla/mux"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
+
 	"k8s.io/utils/pointer"
 )
 

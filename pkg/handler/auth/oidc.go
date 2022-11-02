@@ -28,10 +28,10 @@ import (
 	"strings"
 	"time"
 
-	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
-
 	"github.com/coreos/go-oidc"
 	"golang.org/x/oauth2"
+
+	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 )
 
 // OIDCToken represents the credentials used to authorize

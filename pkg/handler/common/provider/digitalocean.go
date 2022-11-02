@@ -22,6 +22,9 @@ import (
 	"net/http"
 	"regexp"
 
+	"github.com/digitalocean/godo"
+	"golang.org/x/oauth2"
+
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
@@ -30,9 +33,6 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 	doprovider "k8c.io/dashboard/v2/pkg/provider/cloud/digitalocean"
 	kubernetesprovider "k8c.io/dashboard/v2/pkg/provider/kubernetes"
-
-	"github.com/digitalocean/godo"
-	"golang.org/x/oauth2"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 )

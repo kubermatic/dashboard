@@ -24,8 +24,8 @@ import (
 	"testing"
 
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils"
-
 	"k8c.io/kubermatic/v2/pkg/controller/master-controller-manager/rbac"
+
 	"k8s.io/apimachinery/pkg/util/rand"
 )
 

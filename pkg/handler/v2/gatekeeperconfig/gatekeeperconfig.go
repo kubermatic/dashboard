@@ -23,17 +23,18 @@ import (
 	"io"
 	"net/http"
 
+	jsonpatch "github.com/evanphx/json-patch"
+	"github.com/go-kit/kit/endpoint"
+	configv1alpha1 "github.com/open-policy-agent/gatekeeper/apis/config/v1alpha1"
+
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/handler/v2/cluster"
 	"k8c.io/dashboard/v2/pkg/provider"
-
-	jsonpatch "github.com/evanphx/json-patch"
-	"github.com/go-kit/kit/endpoint"
-	configv1alpha1 "github.com/open-policy-agent/gatekeeper/apis/config/v1alpha1"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
+
 	"k8s.io/apimachinery/pkg/types"
 )
 

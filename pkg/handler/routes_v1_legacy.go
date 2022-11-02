@@ -19,12 +19,12 @@ package handler
 import (
 	"net/http"
 
-	"k8c.io/dashboard/v2/pkg/handler/middleware"
-	"k8c.io/dashboard/v2/pkg/handler/v1/node"
-
 	"github.com/go-kit/kit/endpoint"
 	httptransport "github.com/go-kit/kit/transport/http"
 	"github.com/gorilla/mux"
+
+	"k8c.io/dashboard/v2/pkg/handler/middleware"
+	"k8c.io/dashboard/v2/pkg/handler/v1/node"
 )
 
 // RegisterV1Legacy declares legacy HTTP paths that can be deleted in the future

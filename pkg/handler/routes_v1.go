@@ -19,6 +19,10 @@ package handler
 import (
 	"net/http"
 
+	"github.com/go-kit/kit/endpoint"
+	httptransport "github.com/go-kit/kit/transport/http"
+	"github.com/gorilla/mux"
+
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	v1 "k8c.io/dashboard/v2/pkg/handler/v1"
 	"k8c.io/dashboard/v2/pkg/handler/v1/addon"
@@ -35,10 +39,6 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/v1/serviceaccount"
 	"k8c.io/dashboard/v2/pkg/handler/v1/ssh"
 	"k8c.io/dashboard/v2/pkg/handler/v1/user"
-
-	"github.com/go-kit/kit/endpoint"
-	httptransport "github.com/go-kit/kit/transport/http"
-	"github.com/gorilla/mux"
 )
 
 // RegisterV1 declares all router paths for v1.

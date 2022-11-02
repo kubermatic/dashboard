@@ -21,12 +21,13 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/vmware/govmomi/simulator"
+
 	"k8c.io/dashboard/v2/pkg/handler/test"
 	"k8c.io/dashboard/v2/pkg/handler/test/hack"
 	"k8c.io/dashboard/v2/pkg/provider"
-
-	"github.com/vmware/govmomi/simulator"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )

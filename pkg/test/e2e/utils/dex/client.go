@@ -26,6 +26,7 @@ import (
 	"time"
 
 	"go.uber.org/zap"
+
 	"k8c.io/kubermatic/v2/pkg/util/wait"
 )
 
