@@ -14,27 +14,27 @@
 
 presubmits:
   - name: pre-dashboard-api-e2e
-    run_if_changed: "(cmd/kubermatic-api/|hack/|pkg/|.prow/)"
+    run_if_changed: '(cmd/kubermatic-api/|hack/|pkg/|.prow/)'
     decorate: true
-    clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
+    clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
     labels:
-      preset-digitalocean: "true"
-      preset-hetzner: "true"
-      preset-openstack: "true"
-      preset-azure: "true"
-      preset-kubeconfig-ci: "true"
-      preset-docker-mirror: "true"
-      preset-docker-pull: "true"
-      preset-docker-push: "true"
-      preset-gce: "true"
-      preset-kind-volume-mounts: "true"
-      preset-vault: "true"
-      preset-goproxy: "true"
+      preset-digitalocean: 'true'
+      preset-hetzner: 'true'
+      preset-openstack: 'true'
+      preset-azure: 'true'
+      preset-kubeconfig-ci: 'true'
+      preset-docker-mirror: 'true'
+      preset-docker-pull: 'true'
+      preset-docker-push: 'true'
+      preset-gce: 'true'
+      preset-kind-volume-mounts: 'true'
+      preset-vault: 'true'
+      preset-goproxy: 'true'
     spec:
       containers:
-        - image: quay.io/kubermatic/build:go-1.19-node-18-kind-0.16-2
+        - image: quay.io/kubermatic/build:go-1.19-node-18-kind-0.17-4
           command:
-            - "./hack/ci/run-api-e2e.sh"
+            - './hack/ci/run-api-e2e.sh'
           env:
             - name: KUBERMATIC_EDITION
               value: ee
