@@ -617,269 +617,270 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 		Path("/projects/{project_id}/providers/gke/validatecredentials").
 		Handler(r.validateProjectGKECredentials())
 
-	// TODO: implement provider-specific API endpoints and uncomment providers you implement.
+	// EKS endpoints
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/eks/validatecredentials").
+		Handler(r.validateProjectEKSCredentials())
 
-	/*
-		// EKS endpoints
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/eks/validatecredentials").
-			Handler(r.validateProjectEKSCredentials())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/eks/vpcs").
+		Handler(r.listProjectEKSVPCs())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/eks/vpcs").
-			Handler(r.listProjectEKSVPCS())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/eks/subnets").
+		Handler(r.listProjectEKSSubnets())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/eks/subnets").
-			Handler(r.listProjectEKSSubnets())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/eks/securitygroups").
+		Handler(r.listProjectEKSSecurityGroups())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/eks/securitygroups").
-			Handler(r.listProjectEKSSecurityGroups())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/eks/regions").
+		Handler(r.listProjectEKSRegions())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/eks/regions").
-			Handler(r.listProjectEKSRegions())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/eks/clusterroles").
+		Handler(r.listProjectEKSClusterRoles())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/eks/clusterroles").
-			Handler(r.listProjectEKSClusterRoles())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/eks/versions").
+		Handler(r.listProjectEKSVersions())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/eks/versions").
-			Handler(r.listProjectEKSVersions())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/eks/amitypes").
+		Handler(r.listProjectEKSAMITypes())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/eks/amitypes").
-			Handler(r.listProjectEKSAMITypes())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/eks/capacitytypes").
+		Handler(r.listProjectEKSCapacityTypes())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/eks/capacitytypes").
-			Handler(r.listProjectEKSCapacityTypes())
+		// TODO: implement provider-specific API endpoints and uncomment providers you implement.
 
-		// AKS credentials
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/aks/validatecredentials").
-			Handler(r.validateProjectAKSCredentials())
+		/*
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/aks/vmsizes").
-			Handler(r.listProjectAKSVMSizes())
+			// AKS credentials
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/aks/validatecredentials").
+				Handler(r.validateProjectAKSCredentials())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/aks/resourcegroups").
-			Handler(r.listProjectAKSResourceGroups())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/aks/vmsizes").
+				Handler(r.listProjectAKSVMSizes())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/aks/locations").
-			Handler(r.listProjectAKSLocations())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/aks/resourcegroups").
+				Handler(r.listProjectAKSResourceGroups())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/aks/modes").
-			Handler(r.listProjectAKSNodePoolModes())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/aks/locations").
+				Handler(r.listProjectAKSLocations())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/aks/versions").
-			Handler(r.listProjectAKSVersions())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/aks/modes").
+				Handler(r.listProjectAKSNodePoolModes())
 
-		// Kubevirt endpoints
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/kubevirt/vmflavors").
-			Handler(r.listProjectKubeVirtVMIPresets())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/aks/versions").
+				Handler(r.listProjectAKSVersions())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/kubevirt/instancetypes").
-			Handler(r.listProjectKubeVirtInstancetypes())
+			// Kubevirt endpoints
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/kubevirt/vmflavors").
+				Handler(r.listProjectKubeVirtVMIPresets())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/kubevirt/preferences").
-			Handler(r.listProjectKubeVirtPreferences())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/kubevirt/instancetypes").
+				Handler(r.listProjectKubeVirtInstancetypes())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/kubevirt/storageclasses").
-			Handler(r.listProjectKubevirtStorageClasses())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/kubevirt/preferences").
+				Handler(r.listProjectKubeVirtPreferences())
 
-		// Azure endpoints
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/azure/sizes").
-			Handler(r.listProjectAzureSizes())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/kubevirt/storageclasses").
+				Handler(r.listProjectKubevirtStorageClasses())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/azure/availabilityzones").
-			Handler(r.listProjectAzureSKUAvailabilityZones())
+			// Azure endpoints
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/azure/sizes").
+				Handler(r.listProjectAzureSizes())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/azure/securitygroups").
-			Handler(r.listProjectAzureSecurityGroups())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/azure/availabilityzones").
+				Handler(r.listProjectAzureSKUAvailabilityZones())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/azure/resourcegroups").
-			Handler(r.listProjectAzureResourceGroups())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/azure/securitygroups").
+				Handler(r.listProjectAzureSecurityGroups())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/azure/routetables").
-			Handler(r.listProjectAzureRouteTables())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/azure/resourcegroups").
+				Handler(r.listProjectAzureResourceGroups())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/azure/subnets").
-			Handler(r.listProjectAzureSubnets())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/azure/routetables").
+				Handler(r.listProjectAzureRouteTables())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/azure/vnets").
-			Handler(r.listProjectAzureVnets())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/azure/subnets").
+				Handler(r.listProjectAzureSubnets())
 
-		// vSphere endpoints
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/vsphere/networks").
-			Handler(r.listProjectVSphereNetworks())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/azure/vnets").
+				Handler(r.listProjectAzureVnets())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/vsphere/folders").
-			Handler(r.listProjectVSphereFolders())
+			// vSphere endpoints
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/vsphere/networks").
+				Handler(r.listProjectVSphereNetworks())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/vsphere/datastores").
-			Handler(r.listProjectVSphereDatastores())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/vsphere/folders").
+				Handler(r.listProjectVSphereFolders())
 
-		// Nutanix endpoints
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/nutanix/{dc}/clusters").
-			Handler(r.listProjectNutanixClusters())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/vsphere/datastores").
+				Handler(r.listProjectVSphereDatastores())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/nutanix/{dc}/projects").
-			Handler(r.listProjectNutanixProjects())
+			// Nutanix endpoints
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/nutanix/{dc}/clusters").
+				Handler(r.listProjectNutanixClusters())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/nutanix/{dc}/subnets").
-			Handler(r.listProjectNutanixSubnets())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/nutanix/{dc}/projects").
+				Handler(r.listProjectNutanixProjects())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/nutanix/{dc}/categories").
-			Handler(r.listProjectNutanixCategories())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/nutanix/{dc}/subnets").
+				Handler(r.listProjectNutanixSubnets())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/nutanix/{dc}/categories/{category}/values").
-			Handler(r.listProjectNutanixCategoryValues())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/nutanix/{dc}/categories").
+				Handler(r.listProjectNutanixCategories())
 
-		// VMware Cloud Director endpoints
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/networks").
-			Handler(r.listProjectVMwareCloudDirectorNetworks())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/nutanix/{dc}/categories/{category}/values").
+				Handler(r.listProjectNutanixCategoryValues())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/storageprofiles").
-			Handler(r.listProjectVMwareCloudDirectorStorageProfiles())
+			// VMware Cloud Director endpoints
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/networks").
+				Handler(r.listProjectVMwareCloudDirectorNetworks())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/catalogs").
-			Handler(r.listProjectVMwareCloudDirectorCatalogs())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/storageprofiles").
+				Handler(r.listProjectVMwareCloudDirectorStorageProfiles())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/templates/{catalog_name}").
-			Handler(r.listProjectVMwareCloudDirectorTemplates())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/catalogs").
+				Handler(r.listProjectVMwareCloudDirectorCatalogs())
 
-		// AWS endpoints
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/aws/sizes").
-			Handler(r.listProjectAWSSizes())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/vmwareclouddirector/{dc}/templates/{catalog_name}").
+				Handler(r.listProjectVMwareCloudDirectorTemplates())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/aws/{dc}/subnets").
-			Handler(r.listProjectAWSSubnets())
+			// AWS endpoints
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/aws/sizes").
+				Handler(r.listProjectAWSSizes())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/aws/{dc}/vpcs").
-			Handler(r.listProjectAWSVPCS())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/aws/{dc}/subnets").
+				Handler(r.listProjectAWSSubnets())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/aws/{dc}/securitygroups").
-			Handler(r.listProjectAWSSecurityGroups())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/aws/{dc}/vpcs").
+				Handler(r.listProjectAWSVPCS())
 
-		// GCP endpoints
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/gcp/disktypes").
-			Handler(r.listProjectGCPDiskTypes())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/aws/{dc}/securitygroups").
+				Handler(r.listProjectAWSSecurityGroups())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/gcp/sizes").
-			Handler(r.listProjectGCPSizes())
+			// GCP endpoints
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/gcp/disktypes").
+				Handler(r.listProjectGCPDiskTypes())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/gcp/{dc}/zones").
-			Handler(r.listProjectGCPZones())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/gcp/sizes").
+				Handler(r.listProjectGCPSizes())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/gcp/networks").
-			Handler(r.listProjectGCPNetworks())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/gcp/{dc}/zones").
+				Handler(r.listProjectGCPZones())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/gcp/{dc}/subnetworks").
-			Handler(r.listProjectGCPSubnetworks())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/gcp/networks").
+				Handler(r.listProjectGCPNetworks())
 
-		// Digitalocean endpoints
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/digitalocean/sizes").
-			Handler(r.listProjectDigitaloceanSizes())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/gcp/{dc}/subnetworks").
+				Handler(r.listProjectGCPSubnetworks())
 
-		// Openstack endpoints
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/openstack/sizes").
-			Handler(r.listProjectOpenstackSizes())
+			// Digitalocean endpoints
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/digitalocean/sizes").
+				Handler(r.listProjectDigitaloceanSizes())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/openstack/tenants").
-			Handler(r.listProjectOpenstackTenants())
+			// Openstack endpoints
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/openstack/sizes").
+				Handler(r.listProjectOpenstackSizes())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/openstack/networks").
-			Handler(r.listProjectOpenstackNetworks())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/openstack/tenants").
+				Handler(r.listProjectOpenstackTenants())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/openstack/securitygroups").
-			Handler(r.listProjectOpenstackSecurityGroups())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/openstack/networks").
+				Handler(r.listProjectOpenstackNetworks())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/openstack/subnets").
-			Handler(r.listProjectOpenstackSubnets())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/openstack/securitygroups").
+				Handler(r.listProjectOpenstackSecurityGroups())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/openstack/availabilityzones").
-			Handler(r.listProjectOpenstackAvailabilityZones())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/openstack/subnets").
+				Handler(r.listProjectOpenstackSubnets())
 
-		// Equinix Metal (Packet) endpoints
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/packet/sizes").
-			Handler(r.listProjectPacketSizes())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/openstack/availabilityzones").
+				Handler(r.listProjectOpenstackAvailabilityZones())
 
-		// Hetzner endpoints
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/hetzner/sizes").
-			Handler(r.listProjectHetznerSizes())
+			// Equinix Metal (Packet) endpoints
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/packet/sizes").
+				Handler(r.listProjectPacketSizes())
 
-		// Alibaba endpoints
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/alibaba/instancetypes").
-			Handler(r.listProjectAlibabaInstanceTypes())
+			// Hetzner endpoints
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/hetzner/sizes").
+				Handler(r.listProjectHetznerSizes())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/alibaba/zones").
-			Handler(r.listProjectAlibabaZones())
+			// Alibaba endpoints
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/alibaba/instancetypes").
+				Handler(r.listProjectAlibabaInstanceTypes())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/alibaba/vswitches").
-			Handler(r.listProjectAlibabaVSwitches())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/alibaba/zones").
+				Handler(r.listProjectAlibabaZones())
 
-		// Anexia endpoints
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/anexia/vlans").
-			Handler(r.listProjectAnexiaVlans())
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/alibaba/vswitches").
+				Handler(r.listProjectAlibabaVSwitches())
 
-		mux.Methods(http.MethodGet).
-			Path("/projects/{project_id}/providers/anexia/templates").
-			Handler(r.listProjectAnexiaTemplates())
+			// Anexia endpoints
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/anexia/vlans").
+				Handler(r.listProjectAnexiaVlans())
 
-	*/
+			mux.Methods(http.MethodGet).
+				Path("/projects/{project_id}/providers/anexia/templates").
+				Handler(r.listProjectAnexiaTemplates())
+
+		*/
 
 	// Defines a set of HTTP endpoints for various cloud providers
 	// Note that these endpoints don't require credentials as opposed to the ones defined under
@@ -5388,6 +5389,216 @@ func (r Routing) validateProjectGKECredentials() http.Handler {
 	)
 }
 
+// swagger:route GET /api/v2/projects/{project_id}/providers/eks/validatecredentials eks validateProjectEKSCredentials
+//
+// Validates EKS credentials.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: empty
+func (r Routing) validateProjectEKSCredentials() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(externalcluster.EKSValidateCredentialsEndpoint(r.presetProvider, r.userInfoGetter, true)),
+		externalcluster.DecodeEKSProjectCommonReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/eks/vpcs eks listProjectEKSVPCs
+//
+// List EKS VPCs.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: EKSVPCList
+func (r Routing) listProjectEKSVPCs() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(externalcluster.ListEKSVPCEndpoint(r.userInfoGetter, r.presetProvider, true)),
+		externalcluster.DecodeEKSProjectRegionReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/eks/subnets eks listProjectEKSSubnets
+//
+// Lists EKS subnets.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: EKSSubnetList
+func (r Routing) listProjectEKSSubnets() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(externalcluster.ListEKSSubnetsEndpoint(r.userInfoGetter, r.presetProvider, true)),
+		externalcluster.DecodeEKSProjectVPCReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/eks/securitygroups eks listProjectEKSSecurityGroups
+//
+//	Lists EKS security groups.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: EKSSecurityGroupList
+//	  401: empty
+//	  403: empty
+func (r Routing) listProjectEKSSecurityGroups() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(externalcluster.ListEKSSecurityGroupsEndpoint(r.userInfoGetter, r.presetProvider, true)),
+		externalcluster.DecodeEKSProjectVPCReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/eks/regions eks listProjectEKSRegions
+//
+//	Lists EKS regions.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []EKSRegionList
+//	  401: empty
+//	  403: empty
+func (r Routing) listProjectEKSRegions() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(externalcluster.ListEKSRegionsEndpoint(r.userInfoGetter, r.presetProvider, true)),
+		externalcluster.DecodeEKSProjectCommonReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/eks/clusterroles eks listProjectEKSClusterRoles
+//
+//	Lists EKS cluster service roles.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: EKSClusterRoleList
+//	  401: empty
+//	  403: empty
+func (r Routing) listProjectEKSClusterRoles() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(externalcluster.ListEKSClusterRolesEndpoint(r.userInfoGetter, r.presetProvider, true)),
+		externalcluster.DecodeEKSProjectCommonReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/eks/versions eks listProjectEKSVersions
+//
+// Lists EKS versions.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []MasterVersion
+func (r Routing) listProjectEKSVersions() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(externalcluster.EKSVersionsEndpoint(r.kubermaticConfigGetter, r.externalClusterProvider)),
+		externalcluster.DecodeEKSProjectReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/eks/amitypes eks listProjectEKSAMITypes
+//
+//	Gets the EKS AMI types for node groups.
+//
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: EKSAMITypeList
+//	  401: empty
+//	  403: empty
+func (r Routing) listProjectEKSAMITypes() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(externalcluster.EKSAMITypesEndpoint()),
+		externalcluster.DecodeEKSProjectReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/eks/capacitytypes eks listProjectEKSCapacityTypes
+//
+//	Gets the EKS Capacity types for node groups.
+//
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: EKSCapacityTypeList
+//	  401: empty
+//	  403: empty
+func (r Routing) listProjectEKSCapacityTypes() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(externalcluster.EKSCapacityTypesEndpoint()),
+		externalcluster.DecodeEKSProjectReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
 // swagger:route GET /api/v2/seeds/{seed_name}/settings seed getSeedSettings
 //
 //	Gets the seed settings.
@@ -6568,8 +6779,8 @@ func (r Routing) validateEKSCredentials() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(externalcluster.EKSValidateCredentialsEndpoint(r.presetProvider, r.userInfoGetter)),
-		externalcluster.DecodeEKSTypesReq,
+		)(externalcluster.EKSValidateCredentialsEndpoint(r.presetProvider, r.userInfoGetter, false)),
+		externalcluster.DecodeEKSRegionReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
@@ -6825,7 +7036,7 @@ func (r Routing) listEKSClusters() http.Handler {
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
 		)(externalcluster.ListEKSClustersEndpoint(r.userInfoGetter, r.projectProvider, r.privilegedProjectProvider, r.externalClusterProvider, r.presetProvider)),
-		externalcluster.DecodeEKSClusterListReq,
+		externalcluster.DecodeEKSProjectRegionReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
@@ -6846,8 +7057,8 @@ func (r Routing) listEKSVPCS() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(externalcluster.ListEKSVPCEndpoint(r.userInfoGetter, r.presetProvider)),
-		externalcluster.DecodeEKSTypesReq,
+		)(externalcluster.ListEKSVPCEndpoint(r.userInfoGetter, r.presetProvider, false)),
+		externalcluster.DecodeEKSRegionReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
@@ -6868,8 +7079,8 @@ func (r Routing) listEKSSubnets() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(externalcluster.ListEKSSubnetsEndpoint(r.userInfoGetter, r.presetProvider)),
-		externalcluster.DecodeEKSReq,
+		)(externalcluster.ListEKSSubnetsEndpoint(r.userInfoGetter, r.presetProvider, false)),
+		externalcluster.DecodeEKSVPCReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
@@ -6892,8 +7103,8 @@ func (r Routing) listEKSSecurityGroups() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(externalcluster.ListEKSSecurityGroupsEndpoint(r.userInfoGetter, r.presetProvider)),
-		externalcluster.DecodeEKSReq,
+		)(externalcluster.ListEKSSecurityGroupsEndpoint(r.userInfoGetter, r.presetProvider, false)),
+		externalcluster.DecodeEKSVPCReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
@@ -6916,7 +7127,7 @@ func (r Routing) listEKSRegions() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(externalcluster.ListEKSRegionsEndpoint(r.userInfoGetter, r.presetProvider)),
+		)(externalcluster.ListEKSRegionsEndpoint(r.userInfoGetter, r.presetProvider, false)),
 		externalcluster.DecodeEKSCommonReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -6940,7 +7151,7 @@ func (r Routing) listEKSClusterRoles() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(externalcluster.ListEKSClusterRolesEndpoint(r.userInfoGetter, r.presetProvider)),
+		)(externalcluster.ListEKSClusterRolesEndpoint(r.userInfoGetter, r.presetProvider, false)),
 		externalcluster.DecodeEKSCommonReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
