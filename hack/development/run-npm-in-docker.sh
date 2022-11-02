@@ -15,8 +15,8 @@
 # limitations under the License.
 
 # Configuration
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-KUBERMATIC_DIR=$(cd "$( dirname "${BASH_SOURCE[0]}" )/../.." && pwd)
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+KUBERMATIC_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)
 LOCAL_UID=$(id -u)
 LOCAL_GID=$(id -g)
 KUBERMATIC_NPM_CMD=${KUBERMATIC_NPM_CMD:-$*}

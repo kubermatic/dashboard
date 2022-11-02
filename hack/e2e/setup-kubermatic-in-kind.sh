@@ -66,7 +66,7 @@ if [[ ${TARGET_BRANCH} == release* ]]; then
 fi
 
 HELM_VALUES_FILE="$(mktemp)"
-cat <<EOF >$HELM_VALUES_FILE
+cat << EOF > $HELM_VALUES_FILE
 kubermaticOperator:
   image:
     repository: "quay.io/kubermatic/kubermatic$REPOSUFFIX"
@@ -201,7 +201,7 @@ appendTrap cleanup_kubermatic_clusters_in_kind EXIT
 TEST_NAME="Expose Dex and Kubermatic API"
 echodate "Exposing Dex and Kubermatic API to localhost..."
 
-cat <<EOF | kubectl apply -f -
+cat << EOF | kubectl apply -f -
 apiVersion: v1
 kind: Service
 metadata:
@@ -218,7 +218,7 @@ spec:
     app: dex
 EOF
 
-cat <<EOF | kubectl apply -f -
+cat << EOF | kubectl apply -f -
 apiVersion: v1
 kind: Service
 metadata:
@@ -237,7 +237,7 @@ EOF
 echodate "Finished exposing components"
 
 echodate "Creating UI AWS preset..."
-cat <<EOF > preset-aws.yaml
+cat << EOF > preset-aws.yaml
 apiVersion: kubermatic.k8c.io/v1
 kind: Preset
 metadata:
@@ -253,7 +253,7 @@ EOF
 retry 2 kubectl apply -f preset-aws.yaml
 
 echodate "Creating UI Azure preset..."
-cat <<EOF > preset-azure.yaml
+cat << EOF > preset-azure.yaml
 apiVersion: kubermatic.k8c.io/v1
 kind: Preset
 metadata:
@@ -270,7 +270,7 @@ EOF
 retry 2 kubectl apply -f preset-azure.yaml
 
 echodate "Creating UI DigitalOcean preset..."
-cat <<EOF > preset-digitalocean.yaml
+cat << EOF > preset-digitalocean.yaml
 apiVersion: kubermatic.k8c.io/v1
 kind: Preset
 metadata:
@@ -289,7 +289,7 @@ safebase64() {
   local value="$1"
 
   set +e
-  decoded="$(echo "$value" | base64 -d 2>/dev/null)"
+  decoded="$(echo "$value" | base64 -d 2> /dev/null)"
   if [ $? -eq 0 ]; then
     echo "$value"
     return 0
@@ -300,7 +300,7 @@ safebase64() {
 }
 
 echodate "Creating UI GCP preset..."
-cat <<EOF > preset-gcp.yaml
+cat << EOF > preset-gcp.yaml
 apiVersion: kubermatic.k8c.io/v1
 kind: Preset
 metadata:
@@ -313,7 +313,7 @@ EOF
 retry 2 kubectl apply -f preset-gcp.yaml
 
 echodate "Creating UI KubeVirt preset..."
-cat <<EOF > preset-kubevirt.yaml
+cat << EOF > preset-kubevirt.yaml
 apiVersion: kubermatic.k8c.io/v1
 kind: Preset
 metadata:
@@ -327,7 +327,7 @@ EOF
 retry 2 kubectl apply -f preset-kubevirt.yaml
 
 echodate "Creating UI OpenStack preset..."
-cat <<EOF > preset-openstack.yaml
+cat << EOF > preset-openstack.yaml
 apiVersion: kubermatic.k8c.io/v1
 kind: Preset
 metadata:
@@ -348,7 +348,7 @@ EOF
 retry 2 kubectl apply -f preset-openstack.yaml
 
 echodate "Creating UI Equinix Metal preset..."
-cat <<EOF > preset-equinix.yaml
+cat << EOF > preset-equinix.yaml
 apiVersion: kubermatic.k8c.io/v1
 kind: Preset
 metadata:
@@ -362,7 +362,7 @@ EOF
 retry 2 kubectl apply -f preset-equinix.yaml
 
 echodate "Creating UI Anexia preset..."
-cat <<EOF > preset-anexia.yaml
+cat << EOF > preset-anexia.yaml
 apiVersion: kubermatic.k8c.io/v1
 kind: Preset
 metadata:
@@ -375,7 +375,7 @@ EOF
 retry 2 kubectl apply -f preset-anexia.yaml
 
 echodate "Creating UI Hetzner preset..."
-cat <<EOF > preset-hetzner.yaml
+cat << EOF > preset-hetzner.yaml
 apiVersion: kubermatic.k8c.io/v1
 kind: Preset
 metadata:
@@ -388,7 +388,7 @@ EOF
 retry 2 kubectl apply -f preset-hetzner.yaml
 
 echodate "Creating UI VSPhere preset..."
-cat <<EOF > preset-vsphere.yaml
+cat << EOF > preset-vsphere.yaml
 apiVersion: kubermatic.k8c.io/v1
 kind: Preset
 metadata:
@@ -402,7 +402,7 @@ EOF
 retry 2 kubectl apply -f preset-vsphere.yaml
 
 echodate "Creating UI Alibaba preset..."
-cat <<EOF > preset-alibaba.yaml
+cat << EOF > preset-alibaba.yaml
 apiVersion: kubermatic.k8c.io/v1
 kind: Preset
 metadata:

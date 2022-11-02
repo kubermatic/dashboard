@@ -30,4 +30,3 @@ codespell \
   --check-hidden
 
 echodate "No problems detected."
-
