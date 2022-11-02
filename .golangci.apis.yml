@@ -14,8 +14,6 @@
 
 run:
   modules-download-mode: readonly
-  skip-files:
-    - zz_generated.*.go
 
 linters:
   enable:

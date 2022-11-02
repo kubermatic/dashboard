@@ -24,10 +24,11 @@ import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialo
 import {Cluster} from '@shared/entity/cluster';
 import {Constraint, ConstraintTemplate, Kind, Violation} from '@shared/entity/opa';
 import {UserSettings} from '@shared/entity/settings';
+import {DialogActionMode} from '@shared/types/common';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {take, takeUntil, filter, switchMap} from 'rxjs/operators';
-import {Mode, ConstraintDialog} from './constraint-dialog/component';
+import {ConstraintDialog} from './constraint-dialog/component';
 
 @Component({
   selector: 'km-constraint-list',
@@ -142,7 +143,7 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
         title: 'Add Constraint',
         projectId: this.projectID,
         cluster: this.cluster,
-        mode: Mode.Add,
+        mode: DialogActionMode.Add,
         confirmLabel: 'Add',
       },
     };
@@ -158,7 +159,7 @@ export class ConstraintsComponent implements OnInit, OnChanges, OnDestroy {
         projectId: this.projectID,
         cluster: this.cluster,
         constraint: constraint,
-        mode: Mode.Edit,
+        mode: DialogActionMode.Edit,
         confirmLabel: 'Edit',
       },
     };

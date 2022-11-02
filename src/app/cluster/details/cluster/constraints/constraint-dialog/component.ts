@@ -19,6 +19,7 @@ import {OPAService} from '@core/services/opa';
 import {NotificationService} from '@core/services/notification';
 import {Cluster} from '@shared/entity/cluster';
 import {Constraint, ConstraintTemplate, ConstraintSpec} from '@shared/entity/opa';
+import {DialogActionMode} from '@shared/types/common';
 import * as y from 'js-yaml';
 import _ from 'lodash';
 import {Observable, Subject} from 'rxjs';
@@ -28,16 +29,11 @@ export interface ConstraintDialogConfig {
   title: string;
   projectId: string;
   cluster: Cluster;
-  mode: Mode;
+  mode: DialogActionMode;
   confirmLabel: string;
 
   // Constraint has to be specified only if dialog is used in the edit mode.
   constraint?: Constraint;
-}
-
-export enum Mode {
-  Add = 'add',
-  Edit = 'edit',
 }
 
 export enum Controls {
@@ -53,7 +49,7 @@ export enum Controls {
 })
 export class ConstraintDialog implements OnInit, OnDestroy {
   readonly Controls = Controls;
-  readonly Mode = Mode;
+  readonly Mode = DialogActionMode;
   form: FormGroup;
   spec = '';
   constraintTemplates: ConstraintTemplate[] = [];
@@ -69,13 +65,13 @@ export class ConstraintDialog implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Name]: this._builder.control(this.data.mode === Mode.Edit ? this.data.constraint.name : '', [
+      [Controls.Name]: this._builder.control(this.data.mode === this.Mode.Edit ? this.data.constraint.name : '', [
         Validators.required,
       ]),
       [Controls.ConstraintTemplate]: this._builder.control(
         {
-          value: this.data.mode === Mode.Edit ? this.data.constraint.spec.constraintType : '',
-          disabled: this.data.mode === Mode.Edit,
+          value: this.data.mode === this.Mode.Edit ? this.data.constraint.spec.constraintType : '',
+          disabled: this.data.mode === this.Mode.Edit,
         },
         [Validators.required]
       ),
@@ -97,10 +93,10 @@ export class ConstraintDialog implements OnInit, OnDestroy {
 
   get label(): string {
     switch (this.data.mode) {
-      case Mode.Add:
+      case this.Mode.Add:
         return 'Add Constraint';
-      case Mode.Edit:
-        return 'Edit Constraint';
+      case this.Mode.Edit:
+        return 'Save Changes';
       default:
         return '';
     }
@@ -108,10 +104,10 @@ export class ConstraintDialog implements OnInit, OnDestroy {
 
   get icon(): string {
     switch (this.data.mode) {
-      case Mode.Add:
+      case this.Mode.Add:
         return 'km-icon-add';
-      case Mode.Edit:
-        return 'km-icon-edit';
+      case this.Mode.Edit:
+        return 'km-icon-save';
       default:
         return '';
     }
@@ -124,9 +120,9 @@ export class ConstraintDialog implements OnInit, OnDestroy {
     };
 
     switch (this.data.mode) {
-      case Mode.Add:
+      case this.Mode.Add:
         return this._create(constraint);
-      case Mode.Edit:
+      case this.Mode.Edit:
         return this._edit(constraint);
     }
   }
@@ -135,9 +131,9 @@ export class ConstraintDialog implements OnInit, OnDestroy {
     this._matDialogRef.close(true);
     this._opaService.refreshConstraint();
     switch (this.data.mode) {
-      case Mode.Add:
+      case this.Mode.Add:
         return this._notificationService.success(`Created the ${constraint.name} constraint`);
-      case Mode.Edit:
+      case this.Mode.Edit:
         return this._notificationService.success(`Updated the ${constraint.name} constraint`);
     }
   }
@@ -153,7 +149,7 @@ export class ConstraintDialog implements OnInit, OnDestroy {
   }
 
   private _initConstraintSpecEditor(): void {
-    if (this.data.mode === Mode.Edit) {
+    if (this.data.mode === this.Mode.Edit) {
       const spec = this.data.constraint.spec;
       if (!_.isEmpty(spec)) {
         this.spec = y.dump(spec);

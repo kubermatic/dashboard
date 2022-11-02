@@ -115,7 +115,7 @@ export class PresetDialogComponent implements OnInit, OnDestroy {
       case Mode.Add:
         return 'Add';
       case Mode.Edit:
-        return 'Edit';
+        return 'Save Changes';
       default:
         return '';
     }
@@ -127,7 +127,7 @@ export class PresetDialogComponent implements OnInit, OnDestroy {
       case Mode.Add:
         return 'km-icon-add';
       case Mode.Edit:
-        return 'km-icon-edit';
+        return 'km-icon-save';
       default:
         return '';
     }

@@ -24,10 +24,11 @@ import {UserService} from '@core/services/user';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {AdminRuleGroup, RuleGroup, RuleGroupType} from '@shared/entity/mla';
 import {UserSettings} from '@shared/entity/settings';
+import {DialogActionMode} from '@shared/types/common';
 import _ from 'lodash';
 import {combineLatest, Observable, Subject} from 'rxjs';
 import {filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import {AdminRuleGroupDialog, Mode} from './rule-group-dialog/component';
+import {AdminRuleGroupDialog} from './rule-group-dialog/component';
 
 @Component({
   selector: 'km-admin-settings-rule-groups',
@@ -132,9 +133,9 @@ export class AdminSettingsRuleGroupsComponent implements OnInit, OnChanges, OnDe
   add(): void {
     const dialogConfig: MatDialogConfig = {
       data: {
-        title: 'Create Rule Group',
-        mode: Mode.Add,
-        confirmLabel: 'Create',
+        title: 'Add Rule Group',
+        mode: DialogActionMode.Add,
+        confirmLabel: 'Add',
         seeds: this.seeds,
       },
     };
@@ -146,7 +147,7 @@ export class AdminSettingsRuleGroupsComponent implements OnInit, OnChanges, OnDe
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Edit Rule Group',
-        mode: Mode.Edit,
+        mode: DialogActionMode.Edit,
         adminRuleGroup: adminRuleGroup,
         confirmLabel: 'Edit',
         seeds: this.seeds,

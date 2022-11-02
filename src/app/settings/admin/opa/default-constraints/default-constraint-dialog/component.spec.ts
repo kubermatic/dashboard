@@ -25,7 +25,8 @@ import {OPAService} from '@core/services/opa';
 import {SharedModule} from '@shared/module';
 import {MonacoEditorModule, NGX_MONACO_EDITOR_CONFIG} from 'ngx-monaco-editor';
 import {of} from 'rxjs';
-import {DefaultConstraintDialog, Mode} from './component';
+import {DefaultConstraintDialog} from './component';
+import {DialogActionMode} from '@shared/types/common';
 
 declare let monaco: any;
 
@@ -74,7 +75,7 @@ describe('DefaultConstraintDialog', () => {
 
       component.data = {
         title: 'Add Default Constraint',
-        mode: Mode.Add,
+        mode: DialogActionMode.Add,
         confirmLabel: 'Add',
       };
       fixture.detectChanges();
@@ -107,7 +108,7 @@ describe('DefaultConstraintDialog', () => {
 
       component.data = {
         title: 'Edit Default Constraint',
-        mode: Mode.Edit,
+        mode: DialogActionMode.Edit,
         confirmLabel: 'Edit',
         defaultConstraint: fakeConstraints()[0],
       };
@@ -123,7 +124,7 @@ describe('DefaultConstraintDialog', () => {
     });
 
     it('should have correct button text: edit', () => {
-      expect(document.body.querySelector('#km-default-constraint-dialog-btn').textContent).toContain('Edit');
+      expect(document.body.querySelector('#km-default-constraint-dialog-btn').textContent).toContain('Save Changes');
     });
 
     xit('should call patchDefaultConstraint()', () => {

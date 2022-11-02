@@ -24,9 +24,10 @@ import {CoreModule} from '@core/module';
 import {NotificationService} from '@core/services/notification';
 import {OPAService} from '@core/services/opa';
 import {SharedModule} from '@shared/module';
+import {DialogActionMode} from '@shared/types/common';
 import {MonacoEditorModule, NGX_MONACO_EDITOR_CONFIG} from 'ngx-monaco-editor';
 import {of} from 'rxjs';
-import {ConstraintDialog, Mode} from './component';
+import {ConstraintDialog} from './component';
 import {asyncData} from '@test/services/cluster-mock';
 
 declare let monaco: any;
@@ -80,7 +81,7 @@ describe('ConstraintDialog', () => {
         title: 'Add Constraint',
         projectId: fakeProject().id,
         cluster: fakeDigitaloceanCluster(),
-        mode: Mode.Add,
+        mode: DialogActionMode.Add,
         confirmLabel: 'Add',
       };
       fixture.detectChanges();
@@ -115,7 +116,7 @@ describe('ConstraintDialog', () => {
         title: 'Edit Constraint',
         projectId: fakeProject().id,
         cluster: fakeDigitaloceanCluster(),
-        mode: Mode.Edit,
+        mode: DialogActionMode.Edit,
         confirmLabel: 'Edit',
         constraint: fakeConstraints()[0],
       };
@@ -131,7 +132,7 @@ describe('ConstraintDialog', () => {
     });
 
     it('should have correct button text: edit', () => {
-      expect(document.body.querySelector('#km-constraint-dialog-btn').textContent).toContain('Edit');
+      expect(document.body.querySelector('#km-constraint-dialog-btn').textContent).toContain('Save Changes');
     });
 
     xit('should call patchConstraint()', () => {

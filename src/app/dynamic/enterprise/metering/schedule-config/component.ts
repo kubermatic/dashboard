@@ -76,7 +76,7 @@ export class MeteringScheduleConfigComponent implements OnInit {
   create(): void {
     const dialogConfig: MatDialogConfig = {
       data: {
-        title: 'Add Schedule Configuration',
+        title: 'Create Schedule Configuration',
       },
     };
     this._matDialog.open(MeteringScheduleAddDialog, dialogConfig);

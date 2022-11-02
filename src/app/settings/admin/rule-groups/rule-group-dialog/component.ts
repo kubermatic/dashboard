@@ -20,6 +20,7 @@ import {NotificationService} from '@core/services/notification';
 import {AdminRuleGroup, RuleGroup, RuleGroupType} from '@shared/entity/mla';
 import {getIconClassForButton} from '@shared/utils/common';
 import {MLAUtils} from '@shared/utils/mla';
+import {DialogActionMode} from '@shared/types/common';
 import _ from 'lodash';
 import {encode, decode} from 'js-base64';
 import {Observable, Subject} from 'rxjs';
@@ -27,17 +28,12 @@ import {take} from 'rxjs/operators';
 
 export interface RuleGroupDialogData {
   title: string;
-  mode: Mode;
+  mode: DialogActionMode;
   confirmLabel: string;
   seeds: string[];
 
   // Rule Group has to be specified only if dialog is used in the edit mode.
   adminRuleGroup?: AdminRuleGroup;
-}
-
-export enum Mode {
-  Add = 'add',
-  Edit = 'edit',
 }
 
 export enum Controls {
@@ -52,7 +48,7 @@ export enum Controls {
 })
 export class AdminRuleGroupDialog implements OnInit, OnDestroy {
   readonly Controls = Controls;
-  readonly Mode = Mode;
+  readonly Mode = DialogActionMode;
   form: FormGroup;
   ruleGroupData = '';
   ruleGroupTypes = Object.values(RuleGroupType);
@@ -66,12 +62,23 @@ export class AdminRuleGroupDialog implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: RuleGroupDialogData
   ) {}
 
+  get label(): string {
+    switch (this.data.mode) {
+      case this.Mode.Add:
+        return 'Add Rule Group';
+      case this.Mode.Edit:
+        return 'Save Changes';
+      default:
+        return '';
+    }
+  }
+
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.Type]: this._builder.control(this.data.mode === Mode.Edit ? this.data.adminRuleGroup.type : '', [
+      [Controls.Type]: this._builder.control(this.data.mode === this.Mode.Edit ? this.data.adminRuleGroup.type : '', [
         Validators.required,
       ]),
-      [Controls.Seed]: this._builder.control(this.data.mode === Mode.Edit ? this.data.adminRuleGroup.seed : '', [
+      [Controls.Seed]: this._builder.control(this.data.mode === this.Mode.Edit ? this.data.adminRuleGroup.seed : '', [
         Validators.required,
       ]),
     });
@@ -94,7 +101,7 @@ export class AdminRuleGroupDialog implements OnInit, OnDestroy {
 
   getObservable(): Observable<RuleGroup> {
     const ruleGroupName =
-      this.data.mode === Mode.Edit
+      this.data.mode === this.Mode.Edit
         ? this.data.adminRuleGroup.name
         : MLAUtils.getRuleGroupName(this._getRuleGroupData());
     const ruleGroup: RuleGroup = {
@@ -104,9 +111,9 @@ export class AdminRuleGroupDialog implements OnInit, OnDestroy {
     };
 
     switch (this.data.mode) {
-      case Mode.Add:
+      case this.Mode.Add:
         return this._create(ruleGroup, this.form.get(Controls.Seed).value);
-      case Mode.Edit:
+      case this.Mode.Edit:
         return this._edit(ruleGroup, this.form.get(Controls.Seed).value);
     }
   }
@@ -114,10 +121,10 @@ export class AdminRuleGroupDialog implements OnInit, OnDestroy {
   onNext(ruleGroup: RuleGroup): void {
     this._matDialogRef.close(true);
     switch (this.data.mode) {
-      case Mode.Add:
+      case this.Mode.Add:
         this._notificationService.success(`The Rule Group ${ruleGroup.name} was created`);
         break;
-      case Mode.Edit:
+      case this.Mode.Edit:
         this._notificationService.success(`The Rule Group ${ruleGroup.name} was updated`);
     }
     this._mlaService.refreshAdminRuleGroups();
@@ -132,7 +139,7 @@ export class AdminRuleGroupDialog implements OnInit, OnDestroy {
   }
 
   private _initProviderConfigEditor(): void {
-    if (this.data.mode === Mode.Edit) {
+    if (this.data.mode === this.Mode.Edit) {
       const data = this.data.adminRuleGroup.data;
       if (!_.isEmpty(data)) {
         this.ruleGroupData = decode(data);

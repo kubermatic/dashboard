@@ -20,10 +20,11 @@ import {OPAService} from '@core/services/opa';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Cluster} from '@shared/entity/cluster';
 import {GatekeeperConfig, GVK, MatchEntry, Trace} from '@shared/entity/opa';
+import {DialogActionMode} from '@shared/types/common';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take} from 'rxjs/operators';
-import {Mode, GatekeeperConfigDialog} from './gatekeeper-config-dialog/component';
+import {GatekeeperConfigDialog} from './gatekeeper-config-dialog/component';
 
 @Component({
   selector: 'km-gatekeeper-config',
@@ -91,7 +92,7 @@ export class GatekeeperConfigComponent implements OnChanges, OnDestroy {
         title: 'Add Gatekeeper Config',
         projectId: this.projectID,
         cluster: this.cluster,
-        mode: Mode.Add,
+        mode: DialogActionMode.Add,
         confirmLabel: 'Add',
       },
     };
@@ -106,7 +107,7 @@ export class GatekeeperConfigComponent implements OnChanges, OnDestroy {
         projectId: this.projectID,
         cluster: this.cluster,
         gatekeeperConfig: this.gatekeeperConfig,
-        mode: Mode.Edit,
+        mode: DialogActionMode.Edit,
         confirmLabel: 'Edit',
       },
     };

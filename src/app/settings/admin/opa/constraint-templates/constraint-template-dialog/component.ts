@@ -22,19 +22,15 @@ import * as y from 'js-yaml';
 import _ from 'lodash';
 import {Observable, Subject} from 'rxjs';
 import {take} from 'rxjs/operators';
+import {DialogActionMode} from '@shared/types/common';
 
 export interface ConstraintTemplateDialogConfig {
   title: string;
-  mode: Mode;
+  mode: DialogActionMode;
   confirmLabel: string;
 
   // Constraint Template has to be specified only if dialog is used in the edit mode.
   constraintTemplate?: ConstraintTemplate;
-}
-
-export enum Mode {
-  Add = 'add',
-  Edit = 'edit',
 }
 
 export enum Controls {
@@ -48,6 +44,7 @@ export enum Controls {
 })
 export class ConstraintTemplateDialog implements OnInit, OnDestroy {
   readonly controls = Controls;
+  readonly Mode = DialogActionMode;
   spec = '';
   private readonly _unsubscribe = new Subject<void>();
 
@@ -57,6 +54,17 @@ export class ConstraintTemplateDialog implements OnInit, OnDestroy {
     private readonly _notificationService: NotificationService,
     @Inject(MAT_DIALOG_DATA) public data: ConstraintTemplateDialogConfig
   ) {}
+
+  get label(): string {
+    switch (this.data.confirmLabel) {
+      case this.Mode.Add:
+        return 'Add Constraint Template';
+      case this.Mode.Edit:
+        return 'Save Changes';
+      default:
+        return '';
+    }
+  }
 
   ngOnInit(): void {
     this._initProviderConfigEditor();
@@ -88,9 +96,9 @@ export class ConstraintTemplateDialog implements OnInit, OnDestroy {
     };
 
     switch (this.data.mode) {
-      case Mode.Add:
+      case this.Mode.Add:
         return this._create(constraintTemplate);
-      case Mode.Edit:
+      case this.Mode.Edit:
         return this._edit(constraintTemplate);
     }
   }
@@ -99,10 +107,10 @@ export class ConstraintTemplateDialog implements OnInit, OnDestroy {
     this._matDialogRef.close(true);
 
     switch (this.data.mode) {
-      case Mode.Add:
+      case this.Mode.Add:
         this._notificationService.success(`Created the ${ct.name} constraint template`);
         break;
-      case Mode.Edit:
+      case this.Mode.Edit:
         this._notificationService.success(`Updated the ${ct.name} constraint template`);
     }
 
@@ -110,7 +118,7 @@ export class ConstraintTemplateDialog implements OnInit, OnDestroy {
   }
 
   private _initProviderConfigEditor(): void {
-    if (this.data.mode === Mode.Edit) {
+    if (this.data.mode === this.Mode.Edit) {
       const spec = this.data.constraintTemplate.spec;
       if (!_.isEmpty(spec)) {
         this.spec = y.dump(spec);

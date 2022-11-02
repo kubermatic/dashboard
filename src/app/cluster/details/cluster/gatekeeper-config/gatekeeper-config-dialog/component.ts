@@ -18,6 +18,7 @@ import {OPAService} from '@core/services/opa';
 import {NotificationService} from '@core/services/notification';
 import {Cluster} from '@shared/entity/cluster';
 import {GatekeeperConfig, GatekeeperConfigSpec} from '@shared/entity/opa';
+import {DialogActionMode} from '@shared/types/common';
 import {getIconClassForButton} from '@shared/utils/common';
 import * as y from 'js-yaml';
 import _ from 'lodash';
@@ -28,16 +29,11 @@ export interface GatekeeperConfigDialogData {
   title: string;
   projectId: string;
   cluster: Cluster;
-  mode: Mode;
+  mode: DialogActionMode;
   confirmLabel: string;
 
   // Gatekeeper Config has to be specified only if dialog is used in the edit mode.
   gatekeeperConfig?: GatekeeperConfig;
-}
-
-export enum Mode {
-  Add = 'Add',
-  Edit = 'Edit',
 }
 
 @Component({
@@ -46,6 +42,7 @@ export enum Mode {
   styleUrls: ['./style.scss'],
 })
 export class GatekeeperConfigDialog implements OnInit, OnDestroy {
+  readonly Mode = DialogActionMode;
   spec = '';
   private readonly _unsubscribe = new Subject<void>();
 
@@ -71,10 +68,10 @@ export class GatekeeperConfigDialog implements OnInit, OnDestroy {
 
   label(): string {
     switch (this.data.mode) {
-      case Mode.Add:
+      case this.Mode.Add:
         return 'Add Gatekeeper Config';
-      case Mode.Edit:
-        return 'Edit Gatekeeper Config';
+      case this.Mode.Edit:
+        return 'Save Changes';
       default:
         return '';
     }
@@ -89,9 +86,9 @@ export class GatekeeperConfigDialog implements OnInit, OnDestroy {
     };
 
     switch (this.data.mode) {
-      case Mode.Add:
+      case this.Mode.Add:
         return this._create(gatekeeperConfig);
-      case Mode.Edit:
+      case this.Mode.Edit:
         return this._edit(gatekeeperConfig);
     }
   }
@@ -100,17 +97,17 @@ export class GatekeeperConfigDialog implements OnInit, OnDestroy {
     this._matDialogRef.close(true);
     this._opaService.refreshGatekeeperConfig();
     switch (this.data.confirmLabel) {
-      case Mode.Add:
+      case this.Mode.Add:
         this._notificationService.success('Created the Gatekeeper config');
         break;
-      case Mode.Edit:
+      case this.Mode.Edit:
         this._notificationService.success('Updated the Gatekeeper config');
         break;
     }
   }
 
   private _initProviderConfigEditor(): void {
-    if (this.data.mode === Mode.Edit) {
+    if (this.data.mode === this.Mode.Edit) {
       const spec = this.data.gatekeeperConfig.spec;
       if (!_.isEmpty(spec)) {
         this.spec = y.dump(spec);

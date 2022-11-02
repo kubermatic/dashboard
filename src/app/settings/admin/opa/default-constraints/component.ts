@@ -24,10 +24,11 @@ import {UserService} from '@core/services/user';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Constraint, ConstraintSelector, ConstraintTemplate, Kind} from '@shared/entity/opa';
 import {UserSettings} from '@shared/entity/settings';
+import {DialogActionMode} from '@shared/types/common';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
-import {DefaultConstraintDialog, Mode} from './default-constraint-dialog/component';
+import {DefaultConstraintDialog} from './default-constraint-dialog/component';
 
 @Component({
   selector: 'km-default-constraint-list',
@@ -141,7 +142,7 @@ export class DefaultConstraintComponent implements OnInit, OnChanges, OnDestroy 
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Add Default Constraint',
-        mode: Mode.Add,
+        mode: DialogActionMode.Add,
         confirmLabel: 'Add',
       },
     };
@@ -154,7 +155,7 @@ export class DefaultConstraintComponent implements OnInit, OnChanges, OnDestroy 
       data: {
         title: 'Edit Default Constraint',
         defaultConstraint: defaultConstraint,
-        mode: Mode.Edit,
+        mode: DialogActionMode.Edit,
         confirmLabel: 'Edit',
       },
     };

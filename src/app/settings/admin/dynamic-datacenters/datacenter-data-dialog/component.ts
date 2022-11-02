@@ -18,6 +18,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
 import {DatacenterService} from '@core/services/datacenter';
 import {CreateDatacenterModel, Datacenter, MachineFlavorFilter} from '@shared/entity/datacenter';
+import {DialogActionMode} from '@shared/types/common';
 import {INTERNAL_NODE_PROVIDERS} from '@shared/model/NodeProviderConstants';
 import {getIconClassForButton} from '@shared/utils/common';
 import * as countryCodeLookup from 'country-code-lookup';
@@ -75,6 +76,17 @@ export class DatacenterDataDialogComponent implements OnInit, OnDestroy {
     private readonly _datacenterService: DatacenterService,
     private readonly _notificationService: NotificationService
   ) {}
+
+  get label(): string {
+    switch (this.data.confirmLabel) {
+      case DialogActionMode.Add:
+        return 'Add Datacenter';
+      case DialogActionMode.Edit:
+        return 'Save Changes';
+      default:
+        return '';
+    }
+  }
 
   ngOnInit(): void {
     this._datacenterService.seeds.pipe(takeUntil(this._unsubscribe)).subscribe(seeds => (this.seeds = seeds));
