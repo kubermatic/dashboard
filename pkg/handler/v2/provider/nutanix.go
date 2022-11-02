@@ -207,7 +207,6 @@ func DecodeNutanixProjectProjectReq(c context.Context, r *http.Request) (interfa
 			NutanixCommonReq: commonReq.(NutanixCommonReq),
 		},
 	}, nil
-
 }
 
 func DecodeNutanixSubnetReq(c context.Context, r *http.Request) (interface{}, error) {
