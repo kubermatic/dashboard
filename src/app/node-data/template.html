@@ -57,7 +57,7 @@ limitations under the License.
 
     <div fxLayout="row"
          fxLayoutGap="10px">
-      <km-number-stepper fxFlex="50"
+      <km-number-stepper [fxFlex]="isDialogView() ? '50' : '100'"
                          [formControlName]="Controls.Count"
                          id="km-node-count-input"
                          mode="errors"
@@ -192,8 +192,8 @@ limitations under the License.
     </km-autocomplete>
 
     <div *ngIf="isDialogView()">
-      <km-expansion-panel expandLabel="Show Advanced Settings"
-                          collapseLabel="Hide Advanced Settings">
+      <km-expansion-panel expandLabel="Advanced Settings"
+                          collapseLabel="Advanced Settings">
         <ng-container>
           <mat-card-title class="provider-options">{{ providerDisplayName }} Options</mat-card-title>
           <km-extended-node-data [provider]="provider"

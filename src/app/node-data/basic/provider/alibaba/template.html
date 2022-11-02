@@ -16,6 +16,32 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column"
       fxLayoutGap="8px">
+  <div [fxLayout]="isDialogView() ? 'row' : 'column'"
+       fxLayoutGap="10px">
+    <km-combobox [fxFlex]="isDialogView() ? '50' : '100'"
+                 [required]="true"
+                 [grouped]="false"
+                 [selected]="selectedDiskType"
+                 [options]="diskTypes"
+                 [formControlName]="Controls.DiskType"
+                 (changed)="onDiskTypeChange($event)"
+                 label="Disk Type"
+                 inputLabel="Select disk type..."
+                 filterBy="name">
+      <div *option="let diskType">
+        {{diskType.name}}
+      </div>
+    </km-combobox>
+    <km-number-stepper [fxFlex]="isDialogView() ? '50' : '100'"
+                       [formControlName]="Controls.DiskSize"
+                       mode="errors"
+                       label="Disk Size in GB"
+                       min="10"
+                       max="16000"
+                       required>
+    </km-number-stepper>
+  </div>
+
   <km-combobox #instanceTypeCombobox
                [required]="true"
                [grouped]="false"
@@ -31,28 +57,6 @@ limitations under the License.
       {{getInstanceDisplayName(instanceType)}}
     </div>
   </km-combobox>
-
-  <km-combobox [required]="true"
-               [grouped]="false"
-               [selected]="selectedDiskType"
-               [options]="diskTypes"
-               [formControlName]="Controls.DiskType"
-               (changed)="onDiskTypeChange($event)"
-               label="Disk Type"
-               inputLabel="Select disk type..."
-               filterBy="name">
-    <div *option="let diskType">
-      {{diskType.name}}
-    </div>
-  </km-combobox>
-
-  <km-number-stepper [formControlName]="Controls.DiskSize"
-                     mode="errors"
-                     label="Disk Size in GB"
-                     min="10"
-                     max="16000"
-                     required>
-  </km-number-stepper>
 
   <km-autocomplete label="VSwitch ID"
                    [formControlName]="Controls.VSwitchID"

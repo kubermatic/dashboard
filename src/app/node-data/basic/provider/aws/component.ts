@@ -211,6 +211,11 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
     return `${result}, ${size.memory} GB RAM, ${size.price} USD per hour)`;
   }
 
+  isDialogView(): boolean {
+    // In the wizard we do not split extended and basic options.
+    return !this._nodeDataService.isInWizardMode();
+  }
+
   private _init(): void {
     if (this._nodeDataService.nodeData.spec.cloud.aws) {
       this.form.get(Controls.DiskSize).setValue(this._nodeDataService.nodeData.spec.cloud.aws.diskSize);
