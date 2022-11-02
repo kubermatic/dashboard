@@ -87,10 +87,9 @@ describe('ExternalClusterListComponent', () => {
     tick(1);
 
     const expectedCluster = fakeCustomExternalCluster();
-    expectedCluster.creationTimestamp = expect.any(Date);
 
     expect(getClustersSpy).toHaveBeenCalled();
-    expect(component.clusters).toEqual([expectedCluster]);
+    expect(component.clusters).toMatchObject([{...expectedCluster, creationTimestamp: expect.any(Date)}]);
     discardPeriodicTasks();
   }));
 
