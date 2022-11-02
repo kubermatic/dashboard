@@ -34,6 +34,7 @@ export const DEFAULT_ADMIN_SETTINGS_MOCK: AdminSettings = {
   displayTermsOfService: false,
   enableDashboard: true,
   enableOIDCKubeconfig: false,
+  enableWebTerminal: false,
   userProjectsLimit: 0,
   restrictProjectCreation: false,
   enableExternalClusterImport: true,
