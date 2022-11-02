@@ -76,6 +76,13 @@ export class InterfaceComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
+  onOIDCKubeconfigSettingsChange(): void {
+    if (this.settings.enableWebTerminal) {
+      this.settings.enableWebTerminal = false;
+    }
+    this.onSettingsChange();
+  }
+
   onSettingsChange(): void {
     this._settingsChange.next();
   }

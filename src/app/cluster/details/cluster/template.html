@@ -68,7 +68,8 @@ limitations under the License.
       <span>Open Dashboard</span>
     </a>
 
-    <button *ngIf="(settingsService.adminSettings | async)?.enableOIDCKubeconfig"
+    <button *ngIf="(settingsService.adminSettings | async)?.enableOIDCKubeconfig &&
+                   (settingsService.adminSettings | async)?.enableWebTerminal"
             fxLayoutAlign="center center"
             mat-flat-button
             type="button"
