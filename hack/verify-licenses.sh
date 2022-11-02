@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+# Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,15 +19,10 @@ set -euo pipefail
 cd $(dirname $0)/..
 source hack/lib.sh
 
-CONTAINERIZE_IMAGE=quay.io/kubermatic/build:go-1.19-node-18-2 containerize ./hack/verify-spelling.sh
+CONTAINERIZE_IMAGE=quay.io/kubermatic/build:go-1.19-node-18-2 containerize ./hack/verify-licenses.sh
 
-echodate "Running codespell..."
+go mod vendor
 
-codespell \
-  --skip .git,_build,_dist,vendor,go.mod,go.sum,*.jpg,*.jpeg,*.png,*.woff,*.woff2,*.pem,node_modules,src,.angular,package-lock.json,dist, \
-  --ignore-words .codespell.exclude \
-  --check-filenames \
-  --check-hidden
-
-echodate "No problems detected."
-
+echodate "Checking licenses..."
+wwhrd check -q
+echodate "Check successful."

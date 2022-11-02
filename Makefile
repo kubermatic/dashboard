@@ -121,6 +121,12 @@ verify-imports:
 spellcheck:
 	./hack/verify-spelling.sh
 
+.PHONY: check-dependencies
+check-dependencies:
+	go mod tidy
+	go mod verify
+	git diff --exit-code
+
 .PHONY: build-tests
 build-tests:
 	go test -tags "$(KUBERMATIC_EDITION)" -run nope ./pkg/... ./cmd/...
