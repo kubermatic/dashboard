@@ -50,6 +50,7 @@ import {Member} from '@shared/entity/member';
 import {ClusterMetrics} from '@shared/entity/metrics';
 import {AlertmanagerConfig, RuleGroup} from '@shared/entity/mla';
 import {Node} from '@shared/entity/node';
+import {AdminSettings} from '@shared/entity/settings';
 import {Constraint, GatekeeperConfig} from '@shared/entity/opa';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {Config, GroupConfig} from '@shared/model/Config';
@@ -89,6 +90,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   readonly HealthType = HealthType;
   readonly IPFamily = IPFamily;
 
+  adminSettings: AdminSettings;
   externalCCMMigrationStatus = ExternalCCMMigrationStatus;
   cluster: Cluster;
   nodeDc: Datacenter;
@@ -154,6 +156,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       .getCurrentUserGroup(this.projectID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
+
+    this.settingsService.adminSettings
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(settings => (this.adminSettings = settings));
 
     this._clusterService
       .cluster(this.projectID, clusterID)
