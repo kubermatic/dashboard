@@ -129,7 +129,7 @@
     "ng2-mock-component": "0.2.0",
     "start-server-and-test": "1.14.0",
     "stream": "0.0.2",
-    "stylelint": "14.14.0",
+    "stylelint": "14.14.1",
     "stylelint-config-standard-scss": "6.0.0",
     "stylelint-no-unsupported-browser-features": "6.0.1",
     "stylelint-order": "5.0.0",
