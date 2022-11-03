@@ -26,7 +26,9 @@ import {AppConfigService} from '@app/config.service';
 import {Group, GroupModel} from './entity';
 import {environment} from '@environments/environment';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class GroupService {
   private _newRestRoot: string = environment.newRestRoot;
   private readonly _retryTime = 3;

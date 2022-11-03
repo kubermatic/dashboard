@@ -137,7 +137,8 @@ limitations under the License.
                              [externalClusters]="externalClusters"></km-providers-overview>
       <km-members-overview [project]="project"
                            [members]="members"
-                           [showMembers]="hasPermission(View.Members)"></km-members-overview>
+                           [groups]="groups"
+                           [showMembersAndGroups]="hasPermission(View.Members)"></km-members-overview>
     </div>
   </div>
 </div>

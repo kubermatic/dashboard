@@ -40,6 +40,8 @@ import {CookieService} from 'ngx-cookie-service';
 import {View} from '@shared/entity/common';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import {UserService} from '@core/services/user';
+import {Group} from '@dynamic/enterprise/group/entity';
+import {GroupService} from '@dynamic/enterprise/group/service';
 import {GroupConfig} from '@shared/model/Config';
 import {QuotaWidgetComponent} from '../dynamic/enterprise/quotas/quota-widget/component';
 import {DynamicModule} from '../dynamic/module-registry';
@@ -65,6 +67,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   backups: EtcdBackupConfig[] = [];
   sshKeys: SSHKey[] = [];
   members: Member[] = [];
+  groups: Group[] = [];
   currentUser: Member;
   serviceAccounts: ServiceAccount[] = [];
   clustersChange = new Subject<void>();
@@ -78,6 +81,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   isLoadingExternalClusters = true;
   private _quotaWidgetComponent: QuotaWidgetComponent | null;
   private _quotaService: QuotaService;
+  private _groupService: GroupService;
   private _projectChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
   private _unsubscribeLoadMembers = new Subject<void>();
@@ -102,6 +106,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   ) {
     if (this.isEnterpriseEdition) {
       this._quotaService = GlobalModule.injector.get(QuotaService);
+      this._groupService = GlobalModule.injector.get(GroupService);
     }
   }
 
@@ -164,8 +169,12 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     this._loadSSHKeys();
     this._loadMembers();
     this._loadServiceAccounts();
-    this._loadProjectQuota();
     this._checkFirstVisitToOverviewPageMessage();
+
+    if (this.isEnterpriseEdition) {
+      this._loadGroups();
+      this._loadProjectQuota();
+    }
   }
 
   private _loadProject(): void {
@@ -285,6 +294,14 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
       .subscribe(members => (this.members = members));
   }
 
+  private _loadGroups(): void {
+    merge(timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()), this._projectChange)
+      .pipe(filter(() => this.project && this.hasPermission(View.Members)))
+      .pipe(switchMap(() => (this.project ? this._groupService.list(this.project.id) : EMPTY)))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(groups => (this.groups = groups));
+  }
+
   private _loadServiceAccounts(): void {
     merge(timer(0, this._refreshTime * this._appConfigService.getRefreshTimeBase()), this._projectChange)
       .pipe(switchMap(() => (this.project ? this._serviceAccountService.get(this.project.id) : EMPTY)))
@@ -293,10 +310,6 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   }
 
   private _loadProjectQuota(): void {
-    if (!this.isEnterpriseEdition) {
-      return;
-    }
-
     this._projectService.onProjectChange
       .pipe(
         startWith({id: this._currentProjectId}),

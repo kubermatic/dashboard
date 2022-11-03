@@ -21,7 +21,6 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {SharedModule} from '@shared/module';
-import {GroupService} from './service';
 import {GroupComponent} from './component';
 import {AddGroupDialogComponent} from '@app/dynamic/enterprise/group/add-group-dialog/component';
 import {EditGroupDialogComponent} from '@app/dynamic/enterprise/group/edit-group-dialog/component';
@@ -30,7 +29,6 @@ const routes: Routes = [{path: '', outlet: 'groups', component: GroupComponent}]
 
 @NgModule({
   imports: [SharedModule, RouterModule.forChild(routes)],
-  providers: [GroupService],
   declarations: [GroupComponent, AddGroupDialogComponent, EditGroupDialogComponent],
 })
 export class GroupModule {}

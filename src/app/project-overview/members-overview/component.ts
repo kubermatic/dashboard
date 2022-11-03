@@ -13,8 +13,11 @@
 // limitations under the License.
 
 import {Component, Input} from '@angular/core';
+import {Router} from '@angular/router';
 import {Project} from '@shared/entity/project';
 import {Member} from '@shared/entity/member';
+import {Group} from '@dynamic/enterprise/group/entity';
+import {DynamicModule} from '@dynamic/module-registry';
 
 @Component({
   selector: 'km-members-overview',
@@ -24,7 +27,11 @@ import {Member} from '@shared/entity/member';
 export class MembersOverviewComponent {
   @Input() project: Project;
   @Input() members: Member[] = [];
-  @Input() showMembers = true;
+  @Input() groups: Group[] = [];
+  @Input() showMembersAndGroups = true;
+  isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
+
+  constructor(private readonly _router: Router) {}
 
   get ownerNames(): string {
     return this.project?.owners
@@ -41,5 +48,18 @@ export class MembersOverviewComponent {
           .sort()
           .join(', ')
       : '-';
+  }
+
+  get groupNames(): string {
+    return this.groups?.length
+      ? this.groups
+          .map(group => group.group)
+          .sort()
+          .join(', ')
+      : '-';
+  }
+
+  membersAndGroupsNavigate(): void {
+    this._router.navigate(['/projects/' + this.project.id + '/members']);
   }
 }
