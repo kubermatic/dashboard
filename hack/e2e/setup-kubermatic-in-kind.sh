@@ -104,6 +104,9 @@ nginx:
     replicaCount: 1
 EOF
 
+# append custom Dex configuration
+cat $REPO_ROOT/hack/ci/testdata/oauth_values.yaml >> $HELM_VALUES_FILE
+
 # The alias makes it easier to access the port-forwarded Dex inside the Kind cluster;
 # the token issuer cannot be localhost:5556, because pods inside the cluster would not
 # find Dex anymore. As this script can be run multiple times in the same CI job,
