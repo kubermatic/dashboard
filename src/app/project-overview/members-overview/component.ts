@@ -28,7 +28,7 @@ export class MembersOverviewComponent {
   @Input() project: Project;
   @Input() members: Member[] = [];
   @Input() groups: Group[] = [];
-  @Input('showMembers') showMembersAndGroups = true;
+  @Input() showMembersAndGroups = true;
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
 
   constructor(private readonly _router: Router) {}

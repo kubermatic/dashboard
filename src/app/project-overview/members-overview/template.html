@@ -20,7 +20,7 @@ limitations under the License.
       <div fxLayout="row"
            fxLayoutAlign=" center"
            fxLayoutGap="10px">
-        <span>{{showMembersAndGroups ? 'Owners, Members & Groups' : 'Access'}}</span>
+        <span>Access</span>
       </div>
     </mat-card-title>
   </mat-card-header>
@@ -28,14 +28,16 @@ limitations under the License.
     <div fxLayout="row"
          fxLayoutAlign=" center"
          fxLayoutGap="15px">
-      <i class="km-icon-mask km-icon-owner"></i>
+      <i class="km-icon-mask km-icon-owner"
+         matTooltip="Owners"></i>
       <div>{{ownerNames}}</div>
     </div>
     <ng-container *ngIf="showMembersAndGroups">
       <div fxLayout="row"
            fxLayoutAlign=" center"
            fxLayoutGap="15px">
-        <i class="km-icon-mask km-icon-member"></i>
+        <i class="km-icon-mask km-icon-member"
+           matTooltip="Members"></i>
         <div>{{memberNames}}</div>
       </div>
 
@@ -43,7 +45,8 @@ limitations under the License.
            fxLayout="row"
            fxLayoutAlign=" center"
            fxLayoutGap="15px">
-        <i class="km-icon-mask km-icon-group"></i>
+        <i class="km-icon-mask km-icon-group"
+           matTooltip="Groups"></i>
         <div>{{groupNames}}</div>
       </div>
     </ng-container>
@@ -51,8 +54,7 @@ limitations under the License.
 
   <div *ngIf="showMembersAndGroups"
        fxLayout="row"
-       fxLayoutAlign=" center"
-       fxLayoutGap="15px">
+       fxLayoutAlign=" center">
     <div class="action-container"
          fxFlex
          fxLayoutAlign="end">
