@@ -1,0 +1,15 @@
+
+@use 'sass:map';
+
+@mixin theme-sidenav-field-component($colors) {
+    .expanded {
+        background-color: map.get($colors, sidenav-background-active);
+    }
+    
+    .label {
+        &:hover{
+            background-color: map.get($colors, sidenav-background-hover);
+        }
+
+    }
+}
