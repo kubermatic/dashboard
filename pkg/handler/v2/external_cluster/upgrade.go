@@ -153,13 +153,12 @@ func GetMachineDeploymentUpgradesEndpoint(userInfoGetter provider.UserInfoGetter
 				req.MachineDeploymentID)
 		}
 		if cloud.EKS != nil {
-			accessKeyID, secretAccessKey, err := eks.GetCredentialsForCluster(cloud.EKS, secretKeySelector)
+			creds, err := eks.GetCredentialsForCluster(cloud.EKS, secretKeySelector)
 			if err != nil {
 				return nil, err
 			}
 			return eks.ListMachineDeploymentUpgrades(ctx,
-				accessKeyID,
-				secretAccessKey,
+				creds,
 				cloud.EKS.Region,
 				cloud.EKS.Name,
 				req.MachineDeploymentID)

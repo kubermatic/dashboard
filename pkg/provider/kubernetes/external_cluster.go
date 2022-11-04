@@ -444,6 +444,8 @@ func (p *ExternalClusterProvider) CreateOrUpdateCredentialSecretForCluster(ctx c
 		cluster.Spec.Cloud.AWS = &kubermaticv1.AWSCloudSpec{
 			AccessKeyID:     cloud.EKS.AccessKeyID,
 			SecretAccessKey: cloud.EKS.SecretAccessKey,
+			AssumeRoleARN: cloud.EKS.AssumeRoleARN,
+			AssumeRoleExternalID: cloud.EKS.AssumeRoleExternalID,
 		}
 		err := kubernetesprovider.CreateOrUpdateCredentialSecretForCluster(ctx, p.clientPrivileged, cluster)
 		if err != nil {

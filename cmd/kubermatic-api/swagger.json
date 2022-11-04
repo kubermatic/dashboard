@@ -19070,6 +19070,16 @@
           },
           {
             "type": "string",
+            "name": "AssumeRoleARN",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleExternalID",
+            "in": "header"
+          },
+          {
+            "type": "string",
             "name": "Region",
             "in": "header"
           }
@@ -19131,6 +19141,16 @@
           },
           {
             "type": "string",
+            "name": "AssumeRoleARN",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleExternalID",
+            "in": "header"
+          },
+          {
+            "type": "string",
             "name": "Region",
             "in": "header"
           }
@@ -19182,6 +19202,16 @@
           {
             "type": "string",
             "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleARN",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleExternalID",
             "in": "header"
           }
         ],
@@ -19241,6 +19271,16 @@
           {
             "type": "string",
             "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleARN",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleExternalID",
             "in": "header"
           },
           {
@@ -19311,6 +19351,16 @@
           },
           {
             "type": "string",
+            "name": "AssumeRoleARN",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleExternalID",
+            "in": "header"
+          },
+          {
+            "type": "string",
             "name": "Region",
             "in": "header"
           },
@@ -19367,6 +19417,16 @@
           {
             "type": "string",
             "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleARN",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleExternalID",
             "in": "header"
           },
           {
@@ -19457,6 +19517,16 @@
           {
             "type": "string",
             "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleARN",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleExternalID",
             "in": "header"
           },
           {
@@ -20839,6 +20909,16 @@
             "type": "string",
             "name": "Credential",
             "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleARN",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleExternalID",
+            "in": "header"
           }
         ],
         "responses": {
@@ -20887,6 +20967,16 @@
           {
             "type": "string",
             "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleARN",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleExternalID",
             "in": "header"
           }
         ],
@@ -20939,6 +21029,16 @@
           {
             "type": "string",
             "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleARN",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleExternalID",
             "in": "header"
           },
           {
@@ -21002,6 +21102,16 @@
           },
           {
             "type": "string",
+            "name": "AssumeRoleARN",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleExternalID",
+            "in": "header"
+          },
+          {
+            "type": "string",
             "name": "Region",
             "in": "header"
           },
@@ -21051,6 +21161,16 @@
           {
             "type": "string",
             "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleARN",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleExternalID",
             "in": "header"
           },
           {
@@ -21125,6 +21245,16 @@
           {
             "type": "string",
             "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleARN",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleExternalID",
             "in": "header"
           },
           {
@@ -24016,6 +24146,11 @@
         },
         "credentialsReference": {
           "$ref": "#/definitions/GlobalSecretKeySelector"
+        },
+        "disableIAMReconciling": {
+          "description": "DisableIAMReconciling is used to disable reconciliation for IAM related configuration. This is useful in air-gapped\nsetups where access to IAM service is not possible.",
+          "type": "boolean",
+          "x-go-name": "DisableIAMReconciling"
         },
         "instanceProfileName": {
           "type": "string",
@@ -27800,6 +27935,14 @@
           "type": "string",
           "x-go-name": "AccessKeyID"
         },
+        "assumeRoleARN": {
+          "type": "string",
+          "x-go-name": "AssumeRoleARN"
+        },
+        "assumeRoleExternalID": {
+          "type": "string",
+          "x-go-name": "AssumeRoleExternalID"
+        },
         "datacenter": {
           "description": "If datacenter is set, this preset is only applicable to the\nconfigured datacenter.",
           "type": "string",
@@ -27839,6 +27982,14 @@
         "accessKeyID": {
           "type": "string",
           "x-go-name": "AccessKeyID"
+        },
+        "assumeRoleARN": {
+          "type": "string",
+          "x-go-name": "AssumeRoleARN"
+        },
+        "assumeRoleExternalID": {
+          "type": "string",
+          "x-go-name": "AssumeRoleExternalID"
         },
         "name": {
           "type": "string",

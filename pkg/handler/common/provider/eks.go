@@ -49,7 +49,7 @@ const (
 )
 
 func listEKSClusters(ctx context.Context, cred resources.EKSCredential, region string) ([]string, error) {
-	client, err := awsprovider.GetClientSet(ctx, cred.AccessKeyID, cred.SecretAccessKey, "", "", region)
+	client, err := awsprovider.GetClientSet(ctx, cred.AccessKeyID, cred.SecretAccessKey, cred.AssumeRoleARN, cred.AssumeRoleExternalID, region)
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +108,7 @@ func ListEKSClusters(ctx context.Context, projectProvider provider.ProjectProvid
 func ListEKSSubnetIDs(ctx context.Context, cred resources.EKSCredential, vpcId string) (apiv2.EKSSubnetList, error) {
 	subnets := apiv2.EKSSubnetList{}
 
-	subnetResults, err := awsprovider.GetSubnets(ctx, cred.AccessKeyID, cred.SecretAccessKey, "", "", cred.Region, vpcId)
+	subnetResults, err := awsprovider.GetSubnets(ctx, cred.AccessKeyID, cred.SecretAccessKey, cred.AssumeRoleARN, cred.AssumeRoleExternalID, cred.Region, vpcId)
 	if err != nil {
 		return nil, err
 	}
@@ -138,7 +138,7 @@ func ListEKSSubnetIDs(ctx context.Context, cred resources.EKSCredential, vpcId s
 func ListEKSVPC(ctx context.Context, cred resources.EKSCredential) (apiv2.EKSVPCList, error) {
 	vpcs := apiv2.EKSVPCList{}
 
-	vpcResults, err := awsprovider.GetVPCS(ctx, cred.AccessKeyID, cred.SecretAccessKey, "", "", cred.Region)
+	vpcResults, err := awsprovider.GetVPCS(ctx, cred.AccessKeyID, cred.SecretAccessKey, cred.AssumeRoleARN, cred.AssumeRoleExternalID, cred.Region)
 	if err != nil {
 		return nil, err
 	}
@@ -161,7 +161,7 @@ func ListInstanceTypes(ctx context.Context, cred resources.EKSCredential, archit
 		return nil, fmt.Errorf("AWS instance type data not initialized")
 	}
 
-	instanceTypesResults, err := awsprovider.GetInstanceTypes(ctx, cred.AccessKeyID, cred.SecretAccessKey, "", "", cred.Region)
+	instanceTypesResults, err := awsprovider.GetInstanceTypes(ctx, cred.AccessKeyID, cred.SecretAccessKey, cred.AssumeRoleARN, cred.AssumeRoleExternalID, cred.Region)
 	if err != nil {
 		return nil, err
 	}
@@ -196,7 +196,7 @@ func ListEKSRegions(ctx context.Context, cred resources.EKSCredential) (apiv2.EK
 
 	// Must provide either a region or endpoint configured to use the SDK, even for operations that may enumerate other regions
 	// See https://github.com/aws/aws-sdk-go/issues/224 for more details
-	client, err := awsprovider.GetClientSet(ctx, cred.AccessKeyID, cred.SecretAccessKey, "", "", cred.Region)
+	client, err := awsprovider.GetClientSet(ctx, cred.AccessKeyID, cred.SecretAccessKey, cred.AssumeRoleARN, cred.AssumeRoleExternalID, cred.Region)
 	if err != nil {
 		return nil, err
 	}
@@ -217,7 +217,7 @@ func ListEKSRegions(ctx context.Context, cred resources.EKSCredential) (apiv2.EK
 func ListEKSClusterRoles(ctx context.Context, cred resources.EKSCredential) (apiv2.EKSClusterRoleList, error) {
 	var rolesList apiv2.EKSClusterRoleList
 
-	client, err := awsprovider.GetClientSet(ctx, cred.AccessKeyID, cred.SecretAccessKey, "", "", cred.Region)
+	client, err := awsprovider.GetClientSet(ctx, cred.AccessKeyID, cred.SecretAccessKey, cred.AssumeRoleARN, cred.AssumeRoleExternalID, cred.Region)
 	if err != nil {
 		return nil, err
 	}
@@ -252,7 +252,7 @@ func ListEKSClusterRoles(ctx context.Context, cred resources.EKSCredential) (api
 func ListEKSNodeRoles(ctx context.Context, cred resources.EKSCredential) (apiv2.EKSNodeRoleList, error) {
 	var rolesList apiv2.EKSNodeRoleList
 
-	client, err := awsprovider.GetClientSet(ctx, cred.AccessKeyID, cred.SecretAccessKey, "", "", cred.Region)
+	client, err := awsprovider.GetClientSet(ctx, cred.AccessKeyID, cred.SecretAccessKey, cred.AssumeRoleARN, cred.AssumeRoleExternalID, cred.Region)
 	if err != nil {
 		return nil, err
 	}
@@ -287,7 +287,7 @@ func ListEKSNodeRoles(ctx context.Context, cred resources.EKSCredential) (apiv2.
 func ListEKSSecurityGroup(ctx context.Context, cred resources.EKSCredential, vpcID string) (apiv2.EKSSecurityGroupList, error) {
 	securityGroupID := apiv2.EKSSecurityGroupList{}
 
-	securityGroups, err := awsprovider.GetSecurityGroupsByVPC(ctx, cred.AccessKeyID, cred.SecretAccessKey, "", "", cred.Region, vpcID)
+	securityGroups, err := awsprovider.GetSecurityGroupsByVPC(ctx, cred.AccessKeyID, cred.SecretAccessKey, cred.AssumeRoleARN, cred.AssumeRoleExternalID, cred.Region, vpcID)
 	if err != nil {
 		return nil, fmt.Errorf("couldn't get security groups: %w", err)
 	}
