@@ -23,10 +23,8 @@ import (
 	"testing"
 
 	iam "github.com/aws/aws-sdk-go-v2/service/iam"
-
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	kuberneteshelper "k8c.io/kubermatic/v2/pkg/kubernetes"
-
 	"k8s.io/apimachinery/pkg/util/rand"
 	"k8s.io/utils/pointer"
 )

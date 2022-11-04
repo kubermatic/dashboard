@@ -23,16 +23,15 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/gophercloud/gophercloud"
-
-	providerconfig "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
 	"k8c.io/dashboard/v2/pkg/provider"
 	ostesting "k8c.io/dashboard/v2/pkg/provider/cloud/openstack/internal/testing"
+
+	"github.com/gophercloud/gophercloud"
+	providerconfig "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	"k8c.io/kubermatic/v2/pkg/resources/test"
 	"k8c.io/kubermatic/v2/pkg/test/diff"
-
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/sets"

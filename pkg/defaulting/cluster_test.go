@@ -20,9 +20,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
-
 	"k8s.io/utils/pointer"
 )
 

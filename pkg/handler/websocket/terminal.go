@@ -28,13 +28,12 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/gorilla/websocket"
-
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
+
+	"github.com/gorilla/websocket"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/log"
 	"k8c.io/kubermatic/v2/pkg/resources"
-
 	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
 	networkingv1 "k8s.io/api/networking/v1"

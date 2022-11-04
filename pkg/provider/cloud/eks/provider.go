@@ -22,22 +22,21 @@ import (
 	"fmt"
 	"strings"
 
+	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
+	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
+	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
+	"k8c.io/dashboard/v2/pkg/provider"
+	awsprovider "k8c.io/dashboard/v2/pkg/provider/cloud/aws"
+
 	semverlib "github.com/Masterminds/semver/v3"
 	aws "github.com/aws/aws-sdk-go-v2/aws"
 	awshttp "github.com/aws/aws-sdk-go-v2/aws/transport/http"
 	"github.com/aws/aws-sdk-go-v2/service/eks"
 	ekstypes "github.com/aws/aws-sdk-go-v2/service/eks/types"
 	"github.com/aws/smithy-go"
-
-	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
-	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
-	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
-	"k8c.io/dashboard/v2/pkg/provider"
-	awsprovider "k8c.io/dashboard/v2/pkg/provider/cloud/aws"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
-
 	"k8s.io/utils/pointer"
 )
 
@@ -45,8 +44,15 @@ const (
 	EKSNodeGroupStatus = "ACTIVE"
 )
 
-func getClientSet(ctx context.Context, accessKeyID, secretAccessKey, region, endpoint string) (*awsprovider.ClientSet, error) {
-	cfg, err := awsprovider.GetAWSConfig(ctx, accessKeyID, secretAccessKey, "", "", region, endpoint)
+type EKSCredentials struct {
+	AccessKeyID          string
+	SecretAccessKey      string
+	AssumeRoleARN        string
+	AssumeRoleExternalID string
+}
+
+func getClientSet(ctx context.Context, creds EKSCredentials, region, endpoint string) (*awsprovider.ClientSet, error) {
+	cfg, err := awsprovider.GetAWSConfig(ctx, creds.AccessKeyID, creds.SecretAccessKey, creds.AssumeRoleARN, creds.AssumeRoleExternalID, region, endpoint)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create API session: %w", err)
 	}
@@ -56,31 +62,67 @@ func getClientSet(ctx context.Context, accessKeyID, secretAccessKey, region, end
 	}, nil
 }
 
-func GetCredentialsForCluster(cloud *kubermaticv1.ExternalClusterEKSCloudSpec, secretKeySelector provider.SecretKeySelectorValueFunc) (accessKeyID, secretAccessKey string, err error) {
-	accessKeyID = cloud.AccessKeyID
-	secretAccessKey = cloud.SecretAccessKey
+func GetCredentialsForCluster(cloud *kubermaticv1.ExternalClusterEKSCloudSpec, secretKeySelector provider.SecretKeySelectorValueFunc) (EKSCredentials, error) {
+	creds := EKSCredentials{
+		AccessKeyID:          cloud.AccessKeyID,
+		SecretAccessKey:      cloud.SecretAccessKey,
+		AssumeRoleARN:        cloud.AssumeRoleARN,
+		AssumeRoleExternalID: cloud.AssumeRoleExternalID,
+	}
+	var err error
 
-	if accessKeyID == "" {
+	if creds.AccessKeyID == "" {
 		if cloud.CredentialsReference == nil {
-			return "", "", errors.New("no credentials provided")
+			return creds, errors.New("no credentials provided")
 		}
-		accessKeyID, err = secretKeySelector(cloud.CredentialsReference, resources.AWSAccessKeyID)
+		creds.AccessKeyID, err = secretKeySelector(cloud.CredentialsReference, resources.AWSAccessKeyID)
 		if err != nil {
-			return "", "", err
+			return creds, nil
 		}
 	}
 
-	if secretAccessKey == "" {
+	if creds.SecretAccessKey == "" {
 		if cloud.CredentialsReference == nil {
-			return "", "", errors.New("no credentials provided")
+			return creds, errors.New("no credentials provided")
 		}
-		secretAccessKey, err = secretKeySelector(cloud.CredentialsReference, resources.AWSSecretAccessKey)
+		creds.SecretAccessKey, err = secretKeySelector(cloud.CredentialsReference, resources.AWSSecretAccessKey)
 		if err != nil {
-			return "", "", err
+			return creds, err
 		}
 	}
 
-	return accessKeyID, secretAccessKey, nil
+	if creds.AssumeRoleARN == "" {
+		// AssumeRoleARN is optional
+		if cloud.CredentialsReference != nil {
+			assumeRoleARN, err := secretKeySelector(cloud.CredentialsReference, resources.AWSAssumeRoleARN)
+			if err == nil {
+				creds.AssumeRoleARN = assumeRoleARN
+			}
+		}
+	}
+
+	if creds.AssumeRoleExternalID == "" {
+		// AssumeRoleARN is optional
+		if cloud.CredentialsReference != nil {
+			assumeRoleExternalID, err := secretKeySelector(cloud.CredentialsReference, resources.AWSAssumeRoleExternalID)
+			if err == nil {
+				creds.AssumeRoleExternalID = assumeRoleExternalID
+			}
+		}
+	}
+
+	if creds.AssumeRoleExternalID == "" {
+		// AssumeRoleARN is optional
+		if cloud.CredentialsReference == nil {
+			return creds, errors.New("no credentials provided")
+		}
+		creds.AssumeRoleExternalID, err = secretKeySelector(cloud.CredentialsReference, resources.AWSAssumeRoleExternalID)
+		if err != nil {
+			return creds, err
+		}
+	}
+
+	return creds, nil
 }
 
 func GetCluster(ctx context.Context, client *awsprovider.ClientSet, eksClusterName string) (*ekstypes.Cluster, error) {
@@ -92,12 +134,12 @@ func GetCluster(ctx context.Context, client *awsprovider.ClientSet, eksClusterNa
 }
 
 func GetClusterStatus(ctx context.Context, secretKeySelector provider.SecretKeySelectorValueFunc, cloudSpec *kubermaticv1.ExternalClusterEKSCloudSpec) (*apiv2.ExternalClusterStatus, error) {
-	accessKeyID, secretAccessKey, err := GetCredentialsForCluster(cloudSpec, secretKeySelector)
+	creds, err := GetCredentialsForCluster(cloudSpec, secretKeySelector)
 	if err != nil {
 		return nil, err
 	}
 
-	client, err := getClientSet(ctx, accessKeyID, secretAccessKey, cloudSpec.Region, "")
+	client, err := getClientSet(ctx, creds, cloudSpec.Region, "")
 	if err != nil {
 		return nil, err
 	}

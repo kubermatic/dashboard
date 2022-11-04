@@ -22,20 +22,20 @@ import (
 	"net/http"
 	"os"
 
-	httptransport "github.com/go-kit/kit/transport/http"
-	"github.com/go-kit/log"
-	prometheusapi "github.com/prometheus/client_golang/api"
-	"go.uber.org/zap"
-
 	"k8c.io/dashboard/v2/pkg/handler"
 	"k8c.io/dashboard/v2/pkg/handler/auth"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/provider"
+	"k8c.io/dashboard/v2/pkg/serviceaccount"
+	"k8c.io/dashboard/v2/pkg/watcher"
+
+	httptransport "github.com/go-kit/kit/transport/http"
+	"github.com/go-kit/log"
+	prometheusapi "github.com/prometheus/client_golang/api"
+	"go.uber.org/zap"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/features"
-	"k8c.io/kubermatic/v2/pkg/serviceaccount"
 	"k8c.io/kubermatic/v2/pkg/version/kubermatic"
-	"k8c.io/kubermatic/v2/pkg/watcher"
 )
 
 // Routing represents an object which binds endpoints to http handlers.

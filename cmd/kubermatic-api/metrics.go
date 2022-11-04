@@ -20,10 +20,10 @@ import (
 	"net/http"
 	"time"
 
+	"k8c.io/dashboard/v2/pkg/handler/v1/common"
+
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-
-	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 )
 
 var metrics = common.ServerMetrics{

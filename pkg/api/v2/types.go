@@ -19,13 +19,12 @@ package v2
 import (
 	"time"
 
-	constrainttemplatesv1 "github.com/open-policy-agent/frameworks/constraint/pkg/apis/templates/v1"
-
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
+
+	constrainttemplatesv1 "github.com/open-policy-agent/frameworks/constraint/pkg/apis/templates/v1"
 	appskubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	ksemver "k8c.io/kubermatic/v2/pkg/semver"
-
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 )
@@ -639,10 +638,12 @@ type GKECloudSpec struct {
 }
 
 type EKSCloudSpec struct {
-	Name            string `json:"name"`
-	AccessKeyID     string `json:"accessKeyID,omitempty" required:"true"`
-	SecretAccessKey string `json:"secretAccessKey,omitempty" required:"true"`
-	Region          string `json:"region" required:"true"`
+	Name                 string `json:"name"`
+	AccessKeyID          string `json:"accessKeyID,omitempty" required:"true"`
+	SecretAccessKey      string `json:"secretAccessKey,omitempty" required:"true"`
+	Region               string `json:"region" required:"true"`
+	AssumeRoleARN        string `json:"assumeRoleARN,omitempty"` //nolint:tagliatelle
+	AssumeRoleExternalID string `json:"assumeRoleExternalID,omitempty"`
 }
 
 type EKSClusterSpec struct {

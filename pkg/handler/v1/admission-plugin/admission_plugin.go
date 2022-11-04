@@ -21,12 +21,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/go-kit/kit/endpoint"
-	"github.com/gorilla/mux"
-
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
 
+	"github.com/go-kit/kit/endpoint"
+	"github.com/gorilla/mux"
 	"k8s.io/apimachinery/pkg/util/sets"
 )
 

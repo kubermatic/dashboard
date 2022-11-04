@@ -25,12 +25,6 @@ import (
 	"testing"
 	"time"
 
-	semverlib "github.com/Masterminds/semver/v3"
-	"github.com/go-openapi/runtime"
-	httptransport "github.com/go-openapi/runtime/client"
-	"github.com/gorilla/websocket"
-
-	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	apiclient "k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client"
@@ -45,8 +39,13 @@ import (
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/tokens"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/users"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/models"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 
+	semverlib "github.com/Masterminds/semver/v3"
+	"github.com/go-openapi/runtime"
+	httptransport "github.com/go-openapi/runtime/client"
+	"github.com/gorilla/websocket"
+	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
+	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/client-go/kubernetes/scheme"

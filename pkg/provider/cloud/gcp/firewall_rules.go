@@ -23,10 +23,10 @@ import (
 	"reflect"
 	"strings"
 
+	"k8c.io/dashboard/v2/pkg/provider"
+
 	"go.uber.org/zap"
 	"google.golang.org/api/compute/v1"
-
-	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	kuberneteshelper "k8c.io/kubermatic/v2/pkg/kubernetes"
 	"k8c.io/kubermatic/v2/pkg/resources"

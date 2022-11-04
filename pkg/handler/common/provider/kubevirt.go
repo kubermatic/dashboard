@@ -25,9 +25,6 @@ import (
 	"net/http"
 	"strconv"
 
-	kubevirtv1 "kubevirt.io/api/core/v1"
-	kvinstancetypev1alpha1 "kubevirt.io/api/instancetype/v1alpha1"
-
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
@@ -36,13 +33,15 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider/cloud/kubevirt"
 	kvmanifests "k8c.io/dashboard/v2/pkg/provider/cloud/kubevirt/manifests"
 	kubernetesprovider "k8c.io/dashboard/v2/pkg/provider/kubernetes"
+
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/log"
 	"k8c.io/kubermatic/v2/pkg/resources/reconciling"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
-
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	kubevirtv1 "kubevirt.io/api/core/v1"
+	kvinstancetypev1alpha1 "kubevirt.io/api/instancetype/v1alpha1"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 

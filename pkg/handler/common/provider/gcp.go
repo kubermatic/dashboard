@@ -21,8 +21,6 @@ import (
 	"net/http"
 	"strings"
 
-	"google.golang.org/api/compute/v1"
-
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
@@ -31,9 +29,10 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/gcp"
 	kubernetesprovider "k8c.io/dashboard/v2/pkg/provider/kubernetes"
+
+	"google.golang.org/api/compute/v1"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
-
 	"k8s.io/apimachinery/pkg/util/sets"
 )
 
