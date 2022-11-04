@@ -201,12 +201,20 @@ export class ExternalClusterService {
     return this._http.get(url, {headers: headers});
   }
 
-  validateEKSCredentials(accessKeyID: string, secretAccessKey: string, region: string): Observable<any> {
+  validateEKSCredentials(
+    accessKeyID: string,
+    secretAccessKey: string,
+    assumeRoleARN: string,
+    assumeRoleExternalID: string,
+    region: string
+  ): Observable<any> {
     const url = `${this._newRestRoot}/providers/eks/validatecredentials`;
     const headers = new HttpHeaders({
       AccessKeyID: accessKeyID,
       SecretAccessKey: secretAccessKey,
       Region: region,
+      AssumeRoleARN: assumeRoleARN,
+      AssumeRoleExternalID: assumeRoleExternalID,
     });
     return this._http.get(url, {headers: headers});
   }

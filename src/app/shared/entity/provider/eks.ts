@@ -23,6 +23,8 @@ export class EKSCloudSpec {
   accessKeyID?: string;
   secretAccessKey?: string;
   region?: string;
+  assumeRoleARN?: string;
+  assumeRoleExternalID?: string;
 }
 
 export class EKSClusterSpec {

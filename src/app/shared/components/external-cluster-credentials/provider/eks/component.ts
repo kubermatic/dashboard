@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {merge, Observable, of, Subject} from 'rxjs';
@@ -22,6 +22,9 @@ export enum Controls {
   AccessKeyID = 'accessKeyID',
   SecretAccessKey = 'secretAccessKey',
   Region = 'region',
+  AssumeRoleARN = 'assumeRoleARN',
+  AssumeRoleExternalID = 'assumeRoleID',
+  UseAssumeRole = 'useAssumeRole',
 }
 
 export enum RegionState {
@@ -45,11 +48,16 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly _builder: FormBuilder,
-    private readonly _externalClusterService: ExternalClusterService
+    private readonly _externalClusterService: ExternalClusterService,
+    private readonly _cdr: ChangeDetectorRef
   ) {}
 
   get selectedPreset(): string {
     return this._externalClusterService.preset;
+  }
+
+  get isAssumeRoleEnabled(): boolean {
+    return !!this.form.get(Controls.UseAssumeRole).value;
   }
 
   ngOnInit(): void {
@@ -58,6 +66,9 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
         [Controls.AccessKeyID]: this._builder.control('', [Validators.required]),
         [Controls.SecretAccessKey]: this._builder.control('', [Validators.required]),
         [Controls.Region]: this._builder.control('', [Validators.required]),
+        [Controls.UseAssumeRole]: this._builder.control(false),
+        [Controls.AssumeRoleARN]: this._builder.control(''),
+        [Controls.AssumeRoleExternalID]: this._builder.control(''),
       },
       {asyncValidators: [this._credentialsValidator.bind(this)]}
     );
@@ -77,7 +88,12 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
         .every(c => !this.form.get(c).value);
     });
 
-    merge(this.form.get(Controls.AccessKeyID).valueChanges, this.form.get(Controls.SecretAccessKey).valueChanges)
+    merge(
+      this.form.get(Controls.AccessKeyID).valueChanges,
+      this.form.get(Controls.SecretAccessKey).valueChanges,
+      this.form.get(Controls.AssumeRoleARN).valueChanges,
+      this.form.get(Controls.AssumeRoleExternalID).valueChanges
+    )
       .pipe(debounceTime(this._debounceTime))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => {
@@ -90,6 +106,25 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(region => {
         this._externalClusterService.region = region;
+      });
+
+    this.form
+      .get(Controls.UseAssumeRole)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        if (this.isAssumeRoleEnabled) {
+          this.form.get(Controls.AssumeRoleARN).setValidators(Validators.required);
+          this.form.get(Controls.AssumeRoleExternalID).setValidators(Validators.required);
+        } else {
+          this.form.get(Controls.AssumeRoleARN).clearValidators();
+          this.form.get(Controls.AssumeRoleARN).setValue(null);
+          this.form.get(Controls.AssumeRoleExternalID).clearValidators();
+          this.form.get(Controls.AssumeRoleExternalID).setValue(null);
+        }
+
+        this.form.get(Controls.AssumeRoleARN).updateValueAndValidity();
+        this.form.get(Controls.AssumeRoleExternalID).updateValueAndValidity();
+        this._cdr.detectChanges();
       });
 
     this._externalClusterService.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
@@ -144,13 +179,15 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
     const accessKeyID = control.get(Controls.AccessKeyID).value;
     const secretAccessKey = control.get(Controls.SecretAccessKey).value;
     const region = control.get(Controls.Region).value;
+    const assumeRoleARN = control.get(Controls.AssumeRoleARN).value;
+    const assumeRoleExternalID = control.get(Controls.AssumeRoleExternalID).value;
 
     if (!accessKeyID || !secretAccessKey || !region) {
       return of(null);
     }
 
     return this._externalClusterService
-      .validateEKSCredentials(accessKeyID, secretAccessKey, region)
+      .validateEKSCredentials(accessKeyID, secretAccessKey, assumeRoleARN, assumeRoleExternalID, region)
       .pipe(take(1))
       .pipe(catchError(() => of({invalidCredentials: true})));
   }
@@ -164,6 +201,8 @@ export class EKSCredentialsComponent implements OnInit, OnDestroy {
           accessKeyID: this.form.get(Controls.AccessKeyID).value,
           secretAccessKey: this.form.get(Controls.SecretAccessKey).value,
           region: this.form.get(Controls.Region).value,
+          assumeRoleARN: this.form.get(Controls.AssumeRoleARN).value,
+          assumeRoleExternalID: this.form.get(Controls.AssumeRoleExternalID).value,
         },
       },
     };
