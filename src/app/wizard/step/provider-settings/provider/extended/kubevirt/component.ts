@@ -24,6 +24,7 @@ import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
 import {merge, Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {URL_PATTERN_VALIDATOR, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@shared/validators/others';
 
 enum Controls {
   PreAllocatedDataVolumes = 'preAllocatedDataVolumes',
@@ -127,13 +128,16 @@ export class KubeVirtProviderExtendedComponent extends BaseFormValidator impleme
   addPreAllocatedDataVolume(): void {
     this.preAllocatedDataVolumesFormArray.push(
       this._builder.group({
-        [Controls.PreAllocatedDataVolumeName]: this._builder.control('', Validators.required),
+        [Controls.PreAllocatedDataVolumeName]: this._builder.control('', [
+          Validators.required,
+          KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,
+        ]),
         [Controls.PreAllocatedDataVolumeSize]: this._builder.control(
           this._defaultPreAllocatedDataVolumeSize,
           Validators.required
         ),
         [Controls.PreAllocatedDataVolumeStorageClass]: this._builder.control('', Validators.required),
-        [Controls.PreAllocatedDataVolumeUrl]: this._builder.control('', Validators.required),
+        [Controls.PreAllocatedDataVolumeUrl]: this._builder.control('', [Validators.required, URL_PATTERN_VALIDATOR]),
       })
     );
   }

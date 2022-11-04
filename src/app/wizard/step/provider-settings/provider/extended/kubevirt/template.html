@@ -17,7 +17,8 @@ limitations under the License.
       fxLayout="column"
       fxLayoutGap="8px">
   <km-expansion-panel expandLabel="ADVANCED DISK CONFIGURATION"
-                      collapseLabel="ADVANCED DISK CONFIGURATION">
+                      collapseLabel="ADVANCED DISK CONFIGURATION"
+                      [expanded]="true">
     <mat-card-header class="km-no-padding"
                      fxLayoutAlign=" center">
       <mat-card-title>Custom Local Disks</mat-card-title>
@@ -32,6 +33,13 @@ limitations under the License.
       </button>
 
     </mat-card-header>
+
+    <div class="km-text-muted">
+      Custom local disks are optional disks used for the provisioning of nodes with custom images.
+      <a href="https://docs.kubermatic.com/kubermatic/main/architecture/supported-providers/kubevirt/kubevirt/"
+         target="_blank"
+         rel="noreferrer noopener">Learn more ></a>
+    </div>
 
     <div [formArrayName]="Controls.PreAllocatedDataVolumes"
          fxLayout="column">
@@ -55,15 +63,19 @@ limitations under the License.
           <div fxLayout="row wrap"
                fxLayoutAlign="space-between">
             <div fxFlex="48%">
-              <mat-form-field>
+              <mat-form-field [ngClass]="{'km-long-subscript': control.get(Controls.PreAllocatedDataVolumeName).hasError('pattern')}">
                 <mat-label>Name</mat-label>
                 <input matInput
                        [formControlName]="Controls.PreAllocatedDataVolumeName"
                        [name]="Controls.PreAllocatedDataVolumeName + i"
                        type="text"
                        autocomplete="off">
-                <mat-error *ngIf="control.get(Controls.PreAllocatedDataVolumeName).hasError( 'required')">
+                <mat-error *ngIf="control.get(Controls.PreAllocatedDataVolumeName).hasError('required')">
                   <strong>Required</strong>
+                </mat-error>
+                <mat-error
+                           *ngIf="control.get(Controls.PreAllocatedDataVolumeName).hasError('pattern')">
+                  Field can only contain <b>alphanumeric characters</b> and <b>dashes</b> (a-z, 0-9 and -). <b>Must not start or end with dash</b>.
                 </mat-error>
               </mat-form-field>
             </div>
@@ -92,24 +104,19 @@ limitations under the License.
                 <input matInput
                        [formControlName]="Controls.PreAllocatedDataVolumeUrl"
                        [name]="Controls.PreAllocatedDataVolumeUrl + i"
-                       type="text"
+                       type="url"
                        autocomplete="off">
-                <mat-error *ngIf="control.get(Controls.PreAllocatedDataVolumeUrl).hasError( 'required')">
+                <mat-error *ngIf="control.get(Controls.PreAllocatedDataVolumeUrl).hasError('required')">
                   <strong>Required</strong>
+                </mat-error>
+                <mat-error *ngIf="control.get(Controls.PreAllocatedDataVolumeUrl).hasError('pattern')">
+                  Please enter a valid <strong>URL</strong>
                 </mat-error>
               </mat-form-field>
             </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <div *ngIf="!preAllocatedDataVolumesFormArray.length"
-         class="km-text-muted">
-      Custom local disks are optional disks used for the provisioning of nodes with custom images.
-      <a href="https://docs.kubermatic.com/kubermatic/main/architecture/supported-providers/kubevirt/kubevirt/"
-         target="_blank"
-         rel="noreferrer noopener">Learn more ></a>
     </div>
   </km-expansion-panel>
 
