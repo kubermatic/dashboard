@@ -20,8 +20,8 @@ import (
 	"strings"
 	"testing"
 
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/dashboard/v2/pkg/handler/common/provider"
+	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 )
 
 func TestAWSSizeARMFiltering(t *testing.T) {

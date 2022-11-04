@@ -27,10 +27,8 @@ import (
 	jsonpatch "github.com/evanphx/json-patch"
 	"github.com/go-kit/kit/endpoint"
 
-	kubeonev1beta2 "k8c.io/kubeone/pkg/apis/kubeone/v1beta2"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	kuberneteshelper "k8c.io/dashboard/v2/pkg/kubernetes"
@@ -38,6 +36,8 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider/cloud/aks"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/eks"
 	"k8c.io/dashboard/v2/pkg/provider/cloud/gke"
+	kubeonev1beta2 "k8c.io/kubeone/pkg/apis/kubeone/v1beta2"
+	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 

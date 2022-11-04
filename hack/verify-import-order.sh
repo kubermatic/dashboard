@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+# Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,11 +16,21 @@
 
 set -euo pipefail
 
-REL_ROOT_DIR="$(dirname "$0")/../"
-ABS_ROOT_DIR="$(
-  cd ${REL_ROOT_DIR}
-  pwd
-)"
+cd $(dirname $0)/..
+source hack/lib.sh
 
-${ABS_ROOT_DIR}/hack/run-in-docker.sh make install
-${ABS_ROOT_DIR}/hack/run-in-docker.sh npm run start -- --host 127.0.0.1
+if ! [ -x "$(command -v gimps)" ]; then
+  echodate "You need to have gimps installed before running this script. Please install it: https://github.com/xrstf/gimps"
+  exit 1
+fi
+
+echodate "Sorting import statements..."
+gimps .
+
+echodate "Diffing..."
+if ! git diff --exit-code; then
+  echodate "Some import statements are not properly grouped. Please run https://github.com/xrstf/gimps or sort them manually."
+  exit 1
+fi
+
+echodate "Your Go import statements are in order :-)"

@@ -16,11 +16,17 @@
 
 set -euo pipefail
 
-REL_ROOT_DIR="$(dirname "$0")/../"
-ABS_ROOT_DIR="$(
-  cd ${REL_ROOT_DIR}
-  pwd
-)"
+cd $(dirname $0)/..
+source hack/lib.sh
 
-${ABS_ROOT_DIR}/hack/run-in-docker.sh make install
-${ABS_ROOT_DIR}/hack/run-in-docker.sh npm run start -- --host 127.0.0.1
+CONTAINERIZE_IMAGE=quay.io/kubermatic/build:go-1.19-node-18-2 containerize ./hack/verify-spelling.sh
+
+echodate "Running codespell..."
+
+codespell \
+  --skip .git,_build,_dist,vendor,go.mod,go.sum,*.jpg,*.jpeg,*.png,*.woff,*.woff2,*.pem,node_modules,src,.angular,package-lock.json,dist,coverage,swagger.json,src \
+  --ignore-words .codespell.exclude \
+  --check-filenames \
+  --check-hidden
+
+echodate "No problems detected."

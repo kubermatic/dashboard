@@ -82,7 +82,7 @@ if ! grep oauth /etc/hosts > /dev/null; then
 fi
 
 # Build binaries and load the Docker images into the kind cluster.
-echodate "Building statics for $DASHBOARD_VERSION"
+echodate "Building static files for $DASHBOARD_VERSION"
 time retry 1 make dist
 
 echodate "Building binaries for $DASHBOARD_VERSION"

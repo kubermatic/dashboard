@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+# Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,11 +16,13 @@
 
 set -euo pipefail
 
-REL_ROOT_DIR="$(dirname "$0")/../"
-ABS_ROOT_DIR="$(
-  cd ${REL_ROOT_DIR}
-  pwd
-)"
+cd $(dirname $0)/..
+source hack/lib.sh
 
-${ABS_ROOT_DIR}/hack/run-in-docker.sh make install
-${ABS_ROOT_DIR}/hack/run-in-docker.sh npm run start -- --host 127.0.0.1
+CONTAINERIZE_IMAGE=quay.io/kubermatic/build:go-1.19-node-18-2 containerize ./hack/verify-licenses.sh
+
+go mod vendor
+
+echodate "Checking licenses..."
+wwhrd check -q
+echodate "Check successful."

@@ -26,11 +26,11 @@ import (
 	"syscall"
 	"time"
 
-	"k8c.io/dashboard/v2/pkg/version/kubermatic"
-
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+
+	"k8c.io/dashboard/v2/pkg/version/kubermatic"
 )
 
 func main() {

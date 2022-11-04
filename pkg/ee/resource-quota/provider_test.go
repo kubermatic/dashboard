@@ -30,9 +30,9 @@ import (
 	"strconv"
 	"testing"
 
+	resourcequotas "k8c.io/dashboard/v2/pkg/ee/resource-quota"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
-	resourcequotas "k8c.io/kubermatic/v2/pkg/ee/resource-quota"
 
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"

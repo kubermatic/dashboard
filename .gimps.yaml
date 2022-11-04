@@ -1,6 +1,4 @@
-#!/usr/bin/env bash
-
-# Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+# Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,13 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -euo pipefail
+# This is the configuration for https://github.com/xrstf/gimps.
 
-REL_ROOT_DIR="$(dirname "$0")/../"
-ABS_ROOT_DIR="$(
-  cd ${REL_ROOT_DIR}
-  pwd
-)"
-
-${ABS_ROOT_DIR}/hack/run-in-docker.sh make install
-${ABS_ROOT_DIR}/hack/run-in-docker.sh npm run start -- --host 127.0.0.1
+importOrder: [std, external, kubermatic, kubernetes]
+sets:
+  - name: kubermatic
+    patterns:
+      - 'k8c.io/**'
+      - 'github.com/kubermatic/**'
+  - name: kubernetes
+    patterns:
+      - 'k8s.io/**'
+      - '*.k8s.io/**'

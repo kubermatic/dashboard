@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+# Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,11 +16,10 @@
 
 set -euo pipefail
 
-REL_ROOT_DIR="$(dirname "$0")/../"
-ABS_ROOT_DIR="$(
-  cd ${REL_ROOT_DIR}
-  pwd
-)"
+cd $(dirname $0)/..
+source hack/lib.sh
 
-${ABS_ROOT_DIR}/hack/run-in-docker.sh make install
-${ABS_ROOT_DIR}/hack/run-in-docker.sh npm run start -- --host 127.0.0.1
+KUBERMATIC_EDITION="${KUBERMATIC_EDITION:-ce}"
+
+CGO_ENABLED=1 go_test unit_tests \
+  -tags "unit,${KUBERMATIC_EDITION}" -race ./pkg/... ./cmd/...
