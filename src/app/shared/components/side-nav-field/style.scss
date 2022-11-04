@@ -1,0 +1,22 @@
+
+@use 'variables';
+
+.side-nav-bar {
+    margin-left: 10px;
+}
+
+.expanded {
+    border-radius: variables.$border-radius;
+
+}
+
+.label {
+    height: 45px;
+    border-radius: variables.$border-radius;
+    padding: 10px 10px 10px 10px;
+    margin: 0 0 15px 0;
+    cursor: pointer;
+    i:last-child {
+        margin-left: 50px;
+    }
+}
