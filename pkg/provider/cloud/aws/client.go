@@ -30,6 +30,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/iam"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 	"github.com/aws/smithy-go"
+
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/utils/pointer"
 )

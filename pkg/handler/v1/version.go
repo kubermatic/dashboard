@@ -19,9 +19,9 @@ package v1
 import (
 	"context"
 
-	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
-
 	"github.com/go-kit/kit/endpoint"
+
+	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	"k8c.io/kubermatic/v2/pkg/version/kubermatic"
 )
 

@@ -19,13 +19,13 @@ package handler
 import (
 	"net/http"
 
-	"k8c.io/dashboard/v2/pkg/handler/middleware"
-	"k8c.io/dashboard/v2/pkg/handler/v1/cluster"
-	"k8c.io/dashboard/v2/pkg/handler/v1/common"
-
 	"github.com/go-kit/kit/endpoint"
 	httptransport "github.com/go-kit/kit/transport/http"
 	"github.com/gorilla/mux"
+
+	"k8c.io/dashboard/v2/pkg/handler/middleware"
+	"k8c.io/dashboard/v2/pkg/handler/v1/cluster"
+	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 )
 
 // RegisterV1Optional declares all router paths for v1.

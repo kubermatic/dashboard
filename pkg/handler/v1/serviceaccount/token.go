@@ -24,15 +24,16 @@ import (
 	"net/http"
 	"unicode/utf8"
 
+	"github.com/go-kit/kit/endpoint"
+	"github.com/gorilla/mux"
+
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/serviceaccount"
-
-	"github.com/go-kit/kit/endpoint"
-	"github.com/gorilla/mux"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
+
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/labels"

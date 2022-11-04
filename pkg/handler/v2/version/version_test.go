@@ -23,14 +23,15 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	semverlib "github.com/Masterminds/semver/v3"
+
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	"k8c.io/dashboard/v2/pkg/handler/test"
 	"k8c.io/dashboard/v2/pkg/handler/test/hack"
-
-	semverlib "github.com/Masterminds/semver/v3"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	k8csemver "k8c.io/kubermatic/v2/pkg/semver"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )

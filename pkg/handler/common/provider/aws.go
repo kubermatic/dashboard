@@ -22,6 +22,10 @@ import (
 	"net/http"
 	"strings"
 
+	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
+	ec2 "github.com/cristim/ec2-instances-info"
+
+	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
@@ -31,12 +35,9 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 	awsprovider "k8c.io/dashboard/v2/pkg/provider/cloud/aws"
 	kubernetesprovider "k8c.io/dashboard/v2/pkg/provider/kubernetes"
-
-	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
-	ec2 "github.com/cristim/ec2-instances-info"
-	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/utils/pointer"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"

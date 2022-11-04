@@ -23,16 +23,17 @@ import (
 	"io"
 	"net/http"
 
+	jsonpatch "github.com/evanphx/json-patch"
+	"github.com/go-kit/kit/endpoint"
+	"github.com/gorilla/mux"
+
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
-
-	jsonpatch "github.com/evanphx/json-patch"
-	"github.com/go-kit/kit/endpoint"
-	"github.com/gorilla/mux"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
+
 	rbacv1 "k8s.io/api/rbac/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"

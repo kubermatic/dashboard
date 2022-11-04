@@ -20,8 +20,6 @@ import (
 	"fmt"
 	"strconv"
 
-	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
-
 	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
 	alibaba "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/alibaba/types"
 	anexia "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/anexia/types"
@@ -44,6 +42,8 @@ import (
 	"github.com/kubermatic/machine-controller/pkg/userdata/rockylinux"
 	"github.com/kubermatic/machine-controller/pkg/userdata/sles"
 	"github.com/kubermatic/machine-controller/pkg/userdata/ubuntu"
+	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
+
 	"k8s.io/apimachinery/pkg/util/json"
 	"k8s.io/utils/pointer"
 )

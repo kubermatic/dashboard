@@ -20,12 +20,12 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/go-kit/kit/endpoint"
+
 	"k8c.io/dashboard/v2/pkg/handler/auth"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
-
-	"github.com/go-kit/kit/endpoint"
 )
 
 func CreateOIDCKubeconfigSecretEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, oidcIssuerVerifier auth.OIDCIssuerVerifier, oidcCfg common.OIDCConfiguration) endpoint.Endpoint {

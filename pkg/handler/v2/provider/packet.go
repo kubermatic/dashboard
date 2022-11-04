@@ -20,13 +20,13 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/go-kit/kit/endpoint"
+
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	providercommon "k8c.io/dashboard/v2/pkg/handler/common/provider"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/handler/v2/cluster"
 	"k8c.io/dashboard/v2/pkg/provider"
-
-	"github.com/go-kit/kit/endpoint"
 )
 
 // packetSizesNoCredentialsReq represent a request for Packet sizes EP

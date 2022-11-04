@@ -23,6 +23,10 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/go-kit/kit/endpoint"
+	"github.com/gorilla/mux"
+	"gopkg.in/yaml.v3"
+
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
@@ -30,16 +34,13 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	clusterv2 "k8c.io/dashboard/v2/pkg/handler/v2/cluster"
 	"k8c.io/dashboard/v2/pkg/provider"
-
-	"github.com/go-kit/kit/endpoint"
-	"github.com/gorilla/mux"
-	"gopkg.in/yaml.v3"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/features"
 	kuberneteshelper "k8c.io/kubermatic/v2/pkg/kubernetes"
 	kubernetesprovider "k8c.io/kubermatic/v2/pkg/provider/kubernetes"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 	"k8c.io/kubermatic/v2/pkg/version"
+
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/sets"

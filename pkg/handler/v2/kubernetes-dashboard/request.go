@@ -19,9 +19,9 @@ package kubernetesdashboard
 import (
 	"net/http"
 
-	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
-
 	"github.com/gorilla/mux"
+
+	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 )
 
 type InitialRequest struct {

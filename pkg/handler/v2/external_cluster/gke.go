@@ -22,23 +22,24 @@ import (
 	"net/http"
 	"strings"
 
+	semverlib "github.com/Masterminds/semver/v3"
+	"github.com/go-kit/kit/endpoint"
+	"google.golang.org/api/compute/v1"
+	"google.golang.org/api/container/v1"
+
+	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
+	providerconfig "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
 	gcpprovider "k8c.io/dashboard/v2/pkg/provider/cloud/gcp"
 	gkeprovider "k8c.io/dashboard/v2/pkg/provider/cloud/gke"
-
-	semverlib "github.com/Masterminds/semver/v3"
-	"github.com/go-kit/kit/endpoint"
-	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
-	providerconfig "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
-	"google.golang.org/api/compute/v1"
-	"google.golang.org/api/container/v1"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	kuberneteshelper "k8c.io/kubermatic/v2/pkg/kubernetes"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
+
 	"k8s.io/apimachinery/pkg/util/sets"
 )
 

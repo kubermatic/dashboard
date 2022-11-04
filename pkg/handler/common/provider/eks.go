@@ -21,18 +21,19 @@ import (
 	"fmt"
 	"strings"
 
-	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
-	"k8c.io/dashboard/v2/pkg/handler/v1/common"
-	"k8c.io/dashboard/v2/pkg/provider"
-	awsprovider "k8c.io/dashboard/v2/pkg/provider/cloud/aws"
-	eksprovider "k8c.io/dashboard/v2/pkg/provider/cloud/eks"
-
 	"github.com/Azure/go-autorest/autorest/to"
 	ec2service "github.com/aws/aws-sdk-go-v2/service/ec2"
 	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
 	"github.com/aws/aws-sdk-go-v2/service/iam"
 	ec2 "github.com/cristim/ec2-instances-info"
+
+	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
+	"k8c.io/dashboard/v2/pkg/handler/v1/common"
+	"k8c.io/dashboard/v2/pkg/provider"
+	awsprovider "k8c.io/dashboard/v2/pkg/provider/cloud/aws"
+	eksprovider "k8c.io/dashboard/v2/pkg/provider/cloud/eks"
 	"k8c.io/kubermatic/v2/pkg/resources"
+
 	"k8s.io/apimachinery/pkg/util/sets"
 )
 

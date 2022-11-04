@@ -26,14 +26,15 @@ import (
 	"strings"
 	"testing"
 
+	configv1alpha1 "github.com/open-policy-agent/gatekeeper/apis/config/v1alpha1"
+	"github.com/open-policy-agent/gatekeeper/pkg/util"
+
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/handler/test"
 	"k8c.io/dashboard/v2/pkg/handler/test/hack"
 	"k8c.io/dashboard/v2/pkg/handler/v2/gatekeeperconfig"
 
-	configv1alpha1 "github.com/open-policy-agent/gatekeeper/apis/config/v1alpha1"
-	"github.com/open-policy-agent/gatekeeper/pkg/util"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 

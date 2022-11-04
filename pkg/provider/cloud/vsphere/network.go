@@ -24,6 +24,7 @@ import (
 	"strings"
 
 	"github.com/vmware/govmomi/object"
+
 	"k8s.io/apimachinery/pkg/util/runtime"
 )
 

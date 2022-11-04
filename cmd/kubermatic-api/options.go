@@ -22,12 +22,12 @@ import (
 	"fmt"
 	"os"
 
+	"go.uber.org/zap"
+	"gopkg.in/yaml.v3"
+
 	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/serviceaccount"
 	"k8c.io/dashboard/v2/pkg/watcher"
-
-	"go.uber.org/zap"
-	"gopkg.in/yaml.v3"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/defaulting"
 	"k8c.io/kubermatic/v2/pkg/features"
