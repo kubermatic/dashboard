@@ -85,12 +85,12 @@ func TestGetClusterUpgrades(t *testing.T) {
 				{
 					From:      "1.6.0",
 					To:        "1.6.1",
-					Automatic: pointer.BoolPtr(false),
+					Automatic: pointer.Bool(false),
 				},
 				{
 					From:      "1.6.x",
 					To:        "1.7.0",
-					Automatic: pointer.BoolPtr(false),
+					Automatic: pointer.Bool(false),
 				},
 			},
 		},
@@ -131,12 +131,12 @@ func TestGetClusterUpgrades(t *testing.T) {
 				{
 					From:      "1.6.0",
 					To:        "1.6.1",
-					Automatic: pointer.BoolPtr(false),
+					Automatic: pointer.Bool(false),
 				},
 				{
 					From:      "1.6.x",
 					To:        "1.7.0",
-					Automatic: pointer.BoolPtr(false),
+					Automatic: pointer.Bool(false),
 				},
 			},
 		},
@@ -170,17 +170,17 @@ func TestGetClusterUpgrades(t *testing.T) {
 				{
 					From:      "1.21.*",
 					To:        "1.21.*",
-					Automatic: pointer.BoolPtr(false),
+					Automatic: pointer.Bool(false),
 				},
 				{
 					From:      "1.21.*",
 					To:        "1.22.*",
-					Automatic: pointer.BoolPtr(false),
+					Automatic: pointer.Bool(false),
 				},
 				{
 					From:      "1.22.*",
 					To:        "1.22.*",
-					Automatic: pointer.BoolPtr(false),
+					Automatic: pointer.Bool(false),
 				},
 			},
 			incompatibilities: []kubermaticv1.Incompatibility{
@@ -242,12 +242,12 @@ func TestGetClusterUpgrades(t *testing.T) {
 				{
 					From:      "1.6.0",
 					To:        "1.6.1",
-					Automatic: pointer.BoolPtr(false),
+					Automatic: pointer.Bool(false),
 				},
 				{
 					From:      "1.6.x",
 					To:        "1.7.0",
-					Automatic: pointer.BoolPtr(false),
+					Automatic: pointer.Bool(false),
 				},
 			},
 		},
@@ -439,12 +439,12 @@ func TestGetNodeUpgrades(t *testing.T) {
 				{
 					From:      "1.6.0",
 					To:        "1.6.1",
-					Automatic: pointer.BoolPtr(false),
+					Automatic: pointer.Bool(false),
 				},
 				{
 					From:      "1.6.x",
 					To:        "1.7.0",
-					Automatic: pointer.BoolPtr(false),
+					Automatic: pointer.Bool(false),
 				},
 			},
 			existingVersions: []k8csemver.Semver{

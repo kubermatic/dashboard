@@ -21,8 +21,8 @@ import (
 	"testing"
 	"time"
 
+	"k8c.io/dashboard/v2/pkg/handler/test"
 	"k8c.io/dashboard/v2/pkg/serviceaccount"
-	"k8c.io/kubermatic/v2/pkg/handler/test"
 )
 
 func TestServiceAccountIssuer(t *testing.T) {
