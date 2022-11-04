@@ -49,6 +49,16 @@ import {catchError, distinctUntilChanged, startWith, switchMap, take, takeUntil,
 import {QuotaWidgetComponent} from '../../../dynamic/enterprise/quotas/quota-widget/component';
 import {ClusterDeleteConfirmationComponent} from '../../details/cluster/cluster-delete-confirmation/component';
 
+enum Column {
+  Status = 'status',
+  Name = 'name',
+  Provider = 'provider',
+  Region = 'region',
+  Machines = 'machines',
+  Created = 'created',
+  Actions = 'actions',
+}
+
 @Component({
   selector: 'km-cluster-list',
   templateUrl: './template.html',
@@ -61,6 +71,8 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   private _currentGroupConfig: GroupConfig;
   private _etcdRestores: EtcdRestore[] = [];
   private _projectChange$ = new Subject<void>();
+  readonly Column = Column;
+  readonly displayedColumns: string[] = Object.values(Column);
   readonly Permission = Permission;
   clusters: Cluster[] = [];
   clusterTemplates: ClusterTemplate[] = [];
@@ -68,7 +80,6 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   nodeDC: Datacenter[] = [];
   health: Health[] = [];
   machinesCount: Record<string, MachineDeploymentStatus> = {};
-  displayedColumns: string[] = ['status', 'name', 'labels', 'provider', 'region', 'machines', 'created', 'actions'];
   dataSource = new MatTableDataSource<Cluster>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;

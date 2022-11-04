@@ -42,6 +42,14 @@ import {ExternalClusterDeleteConfirmationComponent} from '@app/cluster/details/e
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 
+enum Column {
+  Status = 'status',
+  Name = 'name',
+  Provider = 'provider',
+  Created = 'created',
+  Actions = 'actions',
+}
+
 @Component({
   selector: 'km-external-cluster-list',
   templateUrl: './template.html',
@@ -50,9 +58,10 @@ import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/comp
 export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestroy {
   readonly Permission = Permission;
   readonly Provider = ExternalClusterProvider;
+  readonly Column = Column;
+  readonly displayedColumns: string[] = Object.values(Column);
   clusters: ExternalCluster[] = [];
   isInitialized = false;
-  displayedColumns: string[] = ['status', 'name', 'labels', 'provider', 'created', 'actions'];
   dataSource = new MatTableDataSource<ExternalCluster>();
   searchQuery: string;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
