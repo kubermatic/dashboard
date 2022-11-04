@@ -942,6 +942,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 		Handler(r.listOpenstackSecurityGroupsNoCredentials())
 
 	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/clusters/{cluster_id}/providers/openstack/servergroups").
+		Handler(r.listOpenstackServerGroupsNoCredentials())
+
+	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/clusters/{cluster_id}/providers/openstack/subnets").
 		Handler(r.listOpenstackSubnetsNoCredentials())
 
@@ -1104,6 +1108,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 	mux.Methods(http.MethodGet).
 		Path("/providers/nutanix/{dc}/categories/{category}/values").
 		Handler(r.listNutanixCategoryValues())
+
+	mux.Methods(http.MethodGet).
+		Path("/providers/openstack/servergroups").
+		Handler(r.listOpenstackServerGroups())
 
 	// Endpoints for VMware Cloud Director
 	mux.Methods(http.MethodGet).
@@ -3938,6 +3946,53 @@ func (r Routing) listOpenstackSecurityGroupsNoCredentials() http.Handler {
 		)(provider.OpenstackSecurityGroupWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider,
 			r.seedsGetter, r.userInfoGetter, r.caBundle)),
 		provider.DecodeOpenstackNoCredentialsReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/openstack/servergroups openstack listOpenstackServerGroupsNoCredentials
+//
+// Lists server groups from openstack
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []OpenstackServerGroup
+func (r Routing) listOpenstackServerGroupsNoCredentials() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(provider.OpenstackServerGroupWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider,
+			r.seedsGetter, r.userInfoGetter, r.caBundle)),
+		provider.DecodeOpenstackNoCredentialsReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/providers/openstack/servergroups openstack listOpenstackServerGroups
+//
+// Lists server groups from openstack
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []OpenstackServerGroup
+func (r Routing) listOpenstackServerGroups() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.OpenstackServerGroupEndpoint(r.seedsGetter, r.presetProvider, r.userInfoGetter, r.caBundle)),
+		provider.DecodeOpenstackReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)

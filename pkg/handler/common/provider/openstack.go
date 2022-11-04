@@ -136,6 +136,29 @@ func OpenstackSecurityGroupWithClusterCredentialsEndpoint(ctx context.Context, u
 	return GetOpenstackSecurityGroups(ctx, userInfo, seedsGetter, creds, datacenterName, caBundle)
 }
 
+func OpenstackServerGroupWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter,
+	projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider,
+	seedsGetter provider.SeedsGetter, projectID, clusterID string, caBundle *x509.CertPool) (interface{}, error) {
+	cluster, err := getClusterForOpenstack(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, projectID, clusterID)
+	if err != nil {
+		return nil, err
+	}
+
+	datacenterName := cluster.Spec.Cloud.DatacenterName
+
+	userInfo, err := userInfoGetter(ctx, projectID)
+	if err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
+	}
+
+	creds, err := getCredentials(ctx, cluster.Spec.Cloud)
+	if err != nil {
+		return nil, err
+	}
+
+	return GetOpenstackServerGroups(ctx, userInfo, seedsGetter, creds, datacenterName, caBundle)
+}
+
 func OpenstackSubnetsWithClusterCredentialsEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter,
 	projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider,
 	seedsGetter provider.SeedsGetter, projectID, clusterID, networkID string, caBundle *x509.CertPool) (interface{}, error) {
@@ -396,6 +419,30 @@ func GetOpenstackSecurityGroups(ctx context.Context, userInfo *provider.UserInfo
 	}
 
 	return apiSecurityGroups, nil
+}
+
+func GetOpenstackServerGroups(ctx context.Context, userInfo *provider.UserInfo, seedsGetter provider.SeedsGetter, credentials *resources.OpenstackCredentials, datacenterName string, caBundle *x509.CertPool) ([]apiv2.OpenstackServerGroup, error) {
+	authURL, region, err := getOpenstackAuthURLAndRegion(userInfo, seedsGetter, datacenterName)
+	if err != nil {
+		return nil, err
+	}
+
+	serverGroups, err := openstack.GetSeverGroups(ctx, authURL, region, credentials, caBundle)
+	if err != nil {
+		return nil, err
+	}
+
+	apiServerGroups := []apiv2.OpenstackServerGroup{}
+	for _, serverGroup := range serverGroups {
+		apiServerGroup := apiv2.OpenstackServerGroup{
+			Name: serverGroup.Name,
+			ID:   serverGroup.ID,
+		}
+
+		apiServerGroups = append(apiServerGroups, apiServerGroup)
+	}
+
+	return apiServerGroups, nil
 }
 
 func getClusterForOpenstack(ctx context.Context, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter, projectID string, clusterID string) (*kubermaticv1.Cluster, error) {

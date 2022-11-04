@@ -29,6 +29,7 @@ import (
 	"github.com/gophercloud/gophercloud"
 	goopenstack "github.com/gophercloud/gophercloud/openstack"
 	osavailabilityzones "github.com/gophercloud/gophercloud/openstack/compute/v2/extensions/availabilityzones"
+	ossservergroups "github.com/gophercloud/gophercloud/openstack/compute/v2/extensions/servergroups"
 	osflavors "github.com/gophercloud/gophercloud/openstack/compute/v2/flavors"
 	osprojects "github.com/gophercloud/gophercloud/openstack/identity/v3/projects"
 	ossecuritygroups "github.com/gophercloud/gophercloud/openstack/networking/v2/extensions/security/groups"
@@ -555,6 +556,24 @@ func GetSecurityGroups(ctx context.Context, authURL, region string, credentials 
 		return nil, fmt.Errorf("failed to extract security groups: %w", err)
 	}
 	return secGroups, nil
+}
+
+// GetSeverGroups lists all available server groups for the given CloudSpec.DatacenterName.
+func GetSeverGroups(ctx context.Context, authURL, region string, credentials *resources.OpenstackCredentials, caBundle *x509.CertPool) ([]ossservergroups.ServerGroup, error) {
+	netClient, err := getNetClient(ctx, authURL, region, credentials, caBundle)
+	if err != nil {
+		return nil, fmt.Errorf("couldn't get auth client: %w", err)
+	}
+
+	page, err := ossservergroups.List(netClient, ossservergroups.ListOpts{}).AllPages()
+	if err != nil {
+		return nil, fmt.Errorf("failed to list server groups: %w", err)
+	}
+	groups, err := ossservergroups.ExtractServerGroups(page)
+	if err != nil {
+		return nil, fmt.Errorf("failed to extract server groups: %w", err)
+	}
+	return groups, nil
 }
 
 // GetAvailabilityZones lists availability zones for the given CloudSpec.DatacenterName and OpenstackSpec.Region.

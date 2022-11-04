@@ -1702,6 +1702,15 @@ type OpenstackSubnetPool struct {
 	Prefixes []string `json:"prefixes"`
 }
 
+// OpenstackServerGroup is the object representing a openstack server group.
+// swagger:model OpenstackServerGroup
+type OpenstackServerGroup struct {
+	// Id uniquely identifies the current server group
+	ID string `json:"id"`
+	// Name is the name of the server group
+	Name string `json:"name"`
+}
+
 // swagger:model ResourceQuota
 type ResourceQuota struct {
 	Name        string `json:"name"`

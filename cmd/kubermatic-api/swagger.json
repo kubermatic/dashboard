@@ -14888,6 +14888,35 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/openstack/servergroups": {
+      "get": {
+        "description": "Lists server groups from openstack",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "openstack"
+        ],
+        "operationId": "listOpenstackServerGroupsNoCredentials",
+        "responses": {
+          "200": {
+            "description": "OpenstackServerGroup",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/OpenstackServerGroup"
+              }
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/openstack/sizes": {
       "get": {
         "description": "Lists sizes from openstack",
@@ -21821,6 +21850,97 @@
             "description": "NutanixSubnetList",
             "schema": {
               "$ref": "#/definitions/NutanixSubnetList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/providers/openstack/servergroups": {
+      "get": {
+        "description": "Lists server groups from openstack",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "openstack"
+        ],
+        "operationId": "listOpenstackServerGroups",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "Username",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Password",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Domain",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Tenant",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "TenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Project",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ProjectID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ApplicationCredentialSecret",
+            "in": "header"
+          },
+          {
+            "type": "boolean",
+            "name": "OIDCAuthentication",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OpenstackServerGroup",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/OpenstackServerGroup"
+              }
             }
           },
           "default": {
@@ -32680,6 +32800,23 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
+    "OpenstackServerGroup": {
+      "type": "object",
+      "title": "OpenstackServerGroup is the object representing a openstack server group.",
+      "properties": {
+        "id": {
+          "description": "Id uniquely identifies the current server group",
+          "type": "string",
+          "x-go-name": "ID"
+        },
+        "name": {
+          "description": "Name is the name of the server group",
+          "type": "string",
+          "x-go-name": "Name"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
     "OpenstackSize": {
       "type": "object",
