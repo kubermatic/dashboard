@@ -243,6 +243,7 @@ export class KubeVirtNodeAffinityPreset {
 
 export class OpenstackNodeSpec {
   flavor: string;
+  serverGroup: string;
   image: string;
   useFloatingIP: boolean;
   tags: object;

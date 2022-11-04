@@ -32768,6 +32768,11 @@
           "type": "string",
           "x-go-name": "InstanceReadyCheckTimeout"
         },
+        "serverGroup": {
+          "description": "UUID of the server group, used to configure affinity or anti-affinity of the VM instances relative to hypervisor",
+          "type": "string",
+          "x-go-name": "ServerGroup"
+        },
         "tags": {
           "description": "Additional metadata to set",
           "type": "object",

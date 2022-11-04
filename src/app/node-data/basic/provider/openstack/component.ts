@@ -29,7 +29,7 @@ import {NodeDataService} from '@core/services/node-data/service';
 import {FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {DatacenterOperatingSystemOptions} from '@shared/entity/datacenter';
 import {NodeCloudSpec, NodeSpec, OpenstackNodeSpec} from '@shared/entity/node';
-import {OpenstackAvailabilityZone, OpenstackFlavor} from '@shared/entity/provider/openstack';
+import {OpenstackAvailabilityZone, OpenstackFlavor, OpenstackServerGroup} from '@shared/entity/provider/openstack';
 import {OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
@@ -47,6 +47,7 @@ enum Controls {
   AvailabilityZone = 'availabilityZone',
   InstanceReadyCheckPeriod = 'instanceReadyCheckPeriod',
   InstanceReadyCheckTimeout = 'instanceReadyCheckTimeout',
+  ServerGroup = 'serverGroup',
 }
 
 enum FlavorState {
@@ -59,6 +60,12 @@ enum AvailabilityZoneState {
   Ready = 'Availability Zone',
   Loading = 'Loading...',
   Empty = 'No Availability Zones Available',
+}
+
+enum ServerGroupState {
+  Ready = 'Server Group',
+  Loading = 'Loading...',
+  Empty = 'No Server Groups Available',
 }
 
 @Component({
@@ -92,6 +99,9 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   @ViewChild('availabilityZoneCombobox')
   private readonly _availabilityZoneCombobox: FilteredComboboxComponent;
 
+  @ViewChild('serverGroupCombobox')
+  private readonly _serverGroupCombobox: FilteredComboboxComponent;
+
   readonly Controls = Controls;
 
   flavors: OpenstackFlavor[] = [];
@@ -100,6 +110,9 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   availabilityZones: OpenstackAvailabilityZone[] = [];
   selectedAvailabilityZone = '';
   availabilityZonesLabel = AvailabilityZoneState.Empty;
+  serverGroups: OpenstackServerGroup[] = [];
+  selectedServerGroup = '';
+  serverGroupLabel = ServerGroupState.Empty;
 
   private get _availabilityZonesObservable(): Observable<OpenstackAvailabilityZone[]> {
     return this._nodeDataService.openstack
@@ -115,6 +128,12 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
     return this._nodeDataService.openstack
       .flavors(this._clearFlavor.bind(this), this._onFlavorLoading.bind(this))
       .pipe(map((flavors: OpenstackFlavor[]) => flavors.sort((a, b) => (a.memory < b.memory ? -1 : 1))));
+  }
+
+  private get _serverGroupsObservable(): Observable<OpenstackServerGroup[]> {
+    return this._nodeDataService.openstack
+      .serverGroups(this._clearServerGroup.bind(this), this._onServerGroupsLoading.bind(this))
+      .pipe(map((serverGroups: OpenstackServerGroup[]) => serverGroups.sort((a, b) => (a.name < b.name ? -1 : 1))));
   }
 
   constructor(
@@ -137,6 +156,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
       [Controls.AvailabilityZone]: this._builder.control(''),
       [Controls.InstanceReadyCheckPeriod]: this._builder.control(this._instanceReadyCheckPeriodDefault),
       [Controls.InstanceReadyCheckTimeout]: this._builder.control(this._instanceReadyCheckTimeoutDefault),
+      [Controls.ServerGroup]: this._builder.control(''),
     });
 
     this._init();
@@ -172,6 +192,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
   ngAfterViewInit() {
     this._flavorsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultFlavor.bind(this));
+    this._serverGroupsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultServerGroup.bind(this));
     this._availabilityZonesObservable
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setAvailabilityZone.bind(this));
@@ -193,6 +214,11 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
   onAvailabilityZoneChange(availabilityZone: string): void {
     this._nodeDataService.nodeData.spec.cloud.openstack.availabilityZone = availabilityZone;
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
+  }
+
+  onServerGroupChange(serverGroup: string): void {
+    this._nodeDataService.nodeData.spec.cloud.openstack.serverGroup = serverGroup;
     this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
@@ -236,6 +262,19 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
     this._cdr.detectChanges();
   }
 
+  private _clearServerGroup(): void {
+    this.serverGroups = [];
+    this.selectedServerGroup = '';
+    this.serverGroupLabel = ServerGroupState.Empty;
+    this._serverGroupCombobox.reset();
+    this._cdr.detectChanges();
+  }
+
+  private _onServerGroupsLoading(): void {
+    this.serverGroupLabel = ServerGroupState.Loading;
+    this._cdr.detectChanges();
+  }
+
   private _onFlavorLoading(): void {
     this.flavorsLabel = FlavorState.Loading;
     this._cdr.detectChanges();
@@ -250,6 +289,18 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
     }
 
     this.flavorsLabel = !_.isEmpty(this.flavors) ? FlavorState.Ready : FlavorState.Empty;
+    this._cdr.detectChanges();
+  }
+
+  private _setDefaultServerGroup(serverGroups: OpenstackServerGroup[]): void {
+    this.serverGroups = serverGroups;
+    this.selectedServerGroup = this._nodeDataService.nodeData.spec.cloud.openstack.serverGroup;
+
+    if (!this.selectedServerGroup && !_.isEmpty(this.serverGroups)) {
+      this.selectedServerGroup = this.serverGroups[0].name;
+    }
+
+    this.serverGroupLabel = !_.isEmpty(this.serverGroups) ? ServerGroupState.Ready : ServerGroupState.Empty;
     this._cdr.detectChanges();
   }
 
@@ -334,6 +385,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
             diskSize: this.form.get(Controls.DiskSize).value,
             instanceReadyCheckPeriod: `${this.form.get(Controls.InstanceReadyCheckPeriod).value}s`,
             instanceReadyCheckTimeout: `${this.form.get(Controls.InstanceReadyCheckTimeout).value}s`,
+            serverGroup: this.form.get(Controls.ServerGroup).value,
           } as OpenstackNodeSpec,
         } as NodeCloudSpec,
       } as NodeSpec,

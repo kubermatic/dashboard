@@ -16,7 +16,7 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {environment} from '@environments/environment';
 import {Observable} from 'rxjs';
-import {OpenstackAvailabilityZone, OpenstackFlavor} from '@shared/entity/provider/openstack';
+import {OpenstackAvailabilityZone, OpenstackFlavor, OpenstackServerGroup} from '@shared/entity/provider/openstack';
 
 @Injectable()
 export class OpenStackService {
@@ -27,6 +27,11 @@ export class OpenStackService {
   getFlavors(projectID: string, clusterID: string): Observable<OpenstackFlavor[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/providers/openstack/sizes`;
     return this._httpClient.get<OpenstackFlavor[]>(url);
+  }
+
+  getServerGroups(projectID: string, clusterID: string): Observable<OpenstackServerGroup[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/providers/openstack/servergroups`;
+    return this._httpClient.get<OpenstackServerGroup[]>(url);
   }
 
   getAvailabilityZones(projectID: string, clusterID: string): Observable<OpenstackAvailabilityZone[]> {
