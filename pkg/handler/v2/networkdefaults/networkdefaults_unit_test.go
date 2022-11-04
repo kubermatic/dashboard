@@ -53,6 +53,7 @@ func TestOverrideNetworkDefaultsByDefaultingTemplate(t *testing.T) {
 				},
 				ProxyMode:                "ipvs",
 				NodeLocalDNSCacheEnabled: true,
+				ClusterExposeStrategy:    "NodePort",
 			},
 		},
 		{
@@ -74,6 +75,7 @@ func TestOverrideNetworkDefaultsByDefaultingTemplate(t *testing.T) {
 				},
 				ProxyMode:                "ipvs",
 				NodeLocalDNSCacheEnabled: true,
+				ClusterExposeStrategy:    "NodePort",
 			},
 		},
 		{
@@ -95,6 +97,7 @@ func TestOverrideNetworkDefaultsByDefaultingTemplate(t *testing.T) {
 				},
 				ProxyMode:                "iptables",
 				NodeLocalDNSCacheEnabled: true,
+				ClusterExposeStrategy:    "NodePort",
 			},
 		},
 		{
@@ -131,6 +134,7 @@ func TestOverrideNetworkDefaultsByDefaultingTemplate(t *testing.T) {
 				},
 				ProxyMode:                "ipvs",
 				NodeLocalDNSCacheEnabled: false,
+				ClusterExposeStrategy:    "NodePort",
 			},
 		},
 		{
@@ -168,6 +172,7 @@ func TestOverrideNetworkDefaultsByDefaultingTemplate(t *testing.T) {
 				},
 				ProxyMode:                "proxy-test",
 				NodeLocalDNSCacheEnabled: false,
+				ClusterExposeStrategy:    "NodePort",
 			},
 		},
 	}

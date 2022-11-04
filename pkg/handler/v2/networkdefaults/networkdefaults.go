@@ -29,6 +29,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	clusterv2 "k8c.io/dashboard/v2/pkg/handler/v2/cluster"
+	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticprovider "k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/defaulting"
@@ -90,6 +91,7 @@ func DecodeGetNetworkDefaultsReq(ctx context.Context, r *http.Request) (interfac
 func GetNetworkDefaultsEndpoint(
 	seedsGetter kubermaticprovider.SeedsGetter,
 	userInfoGetter kubermaticprovider.UserInfoGetter,
+	configGetter provider.KubermaticConfigurationGetter,
 ) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req, ok := request.(getNetworkDefaultsReq)
@@ -99,6 +101,11 @@ func GetNetworkDefaultsEndpoint(
 		err := req.Validate()
 		if err != nil {
 			return nil, utilerrors.NewBadRequest(err.Error())
+		}
+
+		config, err := configGetter(ctx)
+		if err != nil {
+			return nil, err
 		}
 
 		networkDefaults := generateNetworkDefaults(kubermaticv1.ProviderType(req.ProviderName))
@@ -122,9 +129,18 @@ func GetNetworkDefaultsEndpoint(
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 
+		// Check if kubermatic config has Expose strategy
+		if config.Spec.ExposeStrategy != "" {
+			networkDefaults.ClusterExposeStrategy = config.Spec.ExposeStrategy
+		}
+		// Seed config takes priority over kubermatic config
+		if seed.Spec.ExposeStrategy != "" {
+			networkDefaults.ClusterExposeStrategy = seed.Spec.ExposeStrategy
+		}
 		// Using network defaults from the template defaults when it's available
 		if defaultingTemplate != nil {
 			networkDefaults = overrideNetworkDefaultsByDefaultingTemplate(networkDefaults, defaultingTemplate.Spec.ClusterNetwork, kubermaticv1.ProviderType(req.ProviderName))
+			networkDefaults.ClusterExposeStrategy = defaultingTemplate.Spec.ExposeStrategy
 		}
 
 		return networkDefaults, nil
@@ -147,6 +163,7 @@ func generateNetworkDefaults(provider kubermaticv1.ProviderType) apiv2.NetworkDe
 		},
 		ProxyMode:                resources.GetDefaultProxyMode(provider),
 		NodeLocalDNSCacheEnabled: resources.DefaultNodeLocalDNSCacheEnabled,
+		ClusterExposeStrategy:    defaulting.DefaultExposeStrategy,
 	}
 }
 

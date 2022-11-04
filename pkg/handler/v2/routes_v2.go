@@ -8002,7 +8002,7 @@ func (r Routing) getNetworkDefaults() http.Handler {
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
 			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
-		)(networkdefaults.GetNetworkDefaultsEndpoint(r.seedsGetter, r.userInfoGetter)),
+		)(networkdefaults.GetNetworkDefaultsEndpoint(r.seedsGetter, r.userInfoGetter, r.kubermaticConfigGetter)),
 		networkdefaults.DecodeGetNetworkDefaultsReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,

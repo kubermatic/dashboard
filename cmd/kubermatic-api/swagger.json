@@ -31373,6 +31373,9 @@
       "type": "object",
       "title": "NetworkDefaults contains cluster network default settings.",
       "properties": {
+        "clusterExposeStrategy": {
+          "$ref": "#/definitions/ExposeStrategy"
+        },
         "ipv4": {
           "$ref": "#/definitions/NetworkDefaultsIPFamily"
         },
