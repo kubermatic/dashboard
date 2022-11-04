@@ -594,9 +594,9 @@ func getEKSCredentialsFromReq(ctx context.Context, req EKSRegionReq, userInfoGet
 	}
 
 	return &resources.EKSCredential{
-		AccessKeyID:     accessKeyID,
-		SecretAccessKey: secretAccessKey,
-		Region:          region,
+		AccessKeyID:          accessKeyID,
+		SecretAccessKey:      secretAccessKey,
+		Region:               region,
 		AssumeRoleARN:        assumeRoleARN,
 		AssumeRoleExternalID: assumeRoleExternalID,
 	}, nil
@@ -946,11 +946,11 @@ func EKSInstanceTypesWithClusterCredentialsEndpoint(userInfoGetter provider.User
 			return nil, errors.New("no region provided in externalcluter spec")
 		}
 		credential := resources.EKSCredential{
-			AccessKeyID:     creds.AccessKeyID,
-			SecretAccessKey: creds.SecretAccessKey,
-			AssumeRoleARN: creds.AssumeRoleARN,
+			AccessKeyID:          creds.AccessKeyID,
+			SecretAccessKey:      creds.SecretAccessKey,
+			AssumeRoleARN:        creds.AssumeRoleARN,
 			AssumeRoleExternalID: creds.AssumeRoleExternalID,
-			Region:          cloudSpec.Region,
+			Region:               cloudSpec.Region,
 		}
 
 		return providercommon.ListInstanceTypes(ctx, credential, req.Architecture)
@@ -988,11 +988,11 @@ func EKSVPCsWithClusterCredentialsEndpoint(userInfoGetter provider.UserInfoGette
 			return nil, errors.New("no region provided in externalcluter spec")
 		}
 		credential := resources.EKSCredential{
-			AccessKeyID:     creds.AccessKeyID,
-			SecretAccessKey: creds.SecretAccessKey,
-			AssumeRoleARN: creds.AssumeRoleARN,
+			AccessKeyID:          creds.AccessKeyID,
+			SecretAccessKey:      creds.SecretAccessKey,
+			AssumeRoleARN:        creds.AssumeRoleARN,
 			AssumeRoleExternalID: creds.AssumeRoleExternalID,
-			Region:          cloudSpec.Region,
+			Region:               cloudSpec.Region,
 		}
 		return providercommon.ListEKSVPC(ctx, credential)
 	}
@@ -1033,11 +1033,11 @@ func EKSSubnetsWithClusterCredentialsEndpoint(userInfoGetter provider.UserInfoGe
 			return nil, errors.New("no region provided in externalcluter spec")
 		}
 		credential := resources.EKSCredential{
-			AccessKeyID:     creds.AccessKeyID,
-			SecretAccessKey: creds.SecretAccessKey,
-			AssumeRoleARN: creds.AssumeRoleARN,
+			AccessKeyID:          creds.AccessKeyID,
+			SecretAccessKey:      creds.SecretAccessKey,
+			AssumeRoleARN:        creds.AssumeRoleARN,
 			AssumeRoleExternalID: creds.AssumeRoleExternalID,
-			Region:          cloudSpec.Region,
+			Region:               cloudSpec.Region,
 		}
 		return providercommon.ListEKSSubnetIDs(ctx, credential, req.VpcId)
 	}
@@ -1071,11 +1071,11 @@ func EKSNodeRolesWithClusterCredentialsEndpoint(userInfoGetter provider.UserInfo
 		}
 
 		credential := resources.EKSCredential{
-			AccessKeyID:     creds.AccessKeyID,
-			SecretAccessKey: creds.SecretAccessKey,
-			AssumeRoleARN: creds.AssumeRoleARN,
+			AccessKeyID:          creds.AccessKeyID,
+			SecretAccessKey:      creds.SecretAccessKey,
+			AssumeRoleARN:        creds.AssumeRoleARN,
 			AssumeRoleExternalID: creds.AssumeRoleExternalID,
-			Region:          cloudSpec.Region,
+			Region:               cloudSpec.Region,
 		}
 		return providercommon.ListEKSNodeRoles(ctx, credential)
 	}
