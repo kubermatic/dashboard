@@ -14,7 +14,7 @@
 
 export class Config {
   static readonly defaultPageLoadTimeout = 20000;
-  static readonly defaultElementLoadTimeout = 20000;
+  static readonly defaultElementLoadTimeout = 40000;
 
   static isAPIMocked(): boolean {
     return Cypress.env('MOCKS') === 'true' || Cypress.env('MOCKS') === true;

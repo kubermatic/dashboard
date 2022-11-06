@@ -110,15 +110,19 @@ class Buttons extends PageOptions {
     return this._get('km-serviceaccount-token');
   }
 
+  get noTokensAvailable(): Cypress.Chainable {
+    return this._get('#km-serviceaccount-tokens-not-available');
+  }
+
   deleteDialog(name: string): Cypress.Chainable {
     return this._get(`#km-delete-serviceaccount-${CSS.escape(name)}`);
   }
 
-  tableRow(name: string): Cypress.Chainable {
-    return this._contains(name);
+  serviceAccountNameColumn(name: string): Cypress.Chainable {
+    return this._get(`td#km-serviceaccount-name-${name}`);
   }
 
-  tokenTableRow(name: string): Cypress.Chainable {
-    return this._contains(name);
+  tokenName(name: string): Cypress.Chainable {
+    return this._get(`td > div#km-serviceaccount-token-name-${name}`);
   }
 }

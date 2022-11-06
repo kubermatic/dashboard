@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ClusterDetailStrategy, Page, PageOptions, Provider} from '@kmtypes';
+import {ClusterDetailStrategy, Condition, Page, PageOptions, Provider} from '@kmtypes';
 import {ProviderMenuOption} from '../proxy';
 import {ClusterDetailStrategyFactory} from './strategy/factory';
 
@@ -34,6 +34,7 @@ export class ClusterDetail extends PageOptions implements Page {
     this.Buttons.deleteCluster.click().then(_ => this._strategy?.onDelete(provider));
     this.Elements.deleteDialogInput.type(name);
     this.Buttons.deleteClusterConfirm.click();
+    this.Buttons.deleteClusterConfirm.should(Condition.NotExist);
   }
 
   removeSSHKey(name: string, provider: Provider): void {

@@ -50,29 +50,30 @@ describe('Service Accounts Story', () => {
 
   it('should create new service account', () => {
     Pages.ServiceAccounts.create(serviceAccountName, Group.Editor);
-    Pages.ServiceAccounts.Buttons.tableRow(serviceAccountName).should(Condition.Exist);
+    Pages.ServiceAccounts.Buttons.serviceAccountNameColumn(serviceAccountName).should(Condition.Exist);
     Pages.ServiceAccounts.Buttons.tokenTable.should(Condition.NotBeVisible);
   });
 
   it('should open token panel for created service account', () => {
-    Pages.ServiceAccounts.Buttons.tableRow(serviceAccountName).parent().click();
+    Pages.ServiceAccounts.Buttons.serviceAccountNameColumn(serviceAccountName).parent().click();
     Pages.ServiceAccounts.Buttons.tokenTable.should(Condition.BeVisible);
-    Pages.ServiceAccounts.Buttons.tokenTableRow(tokenName).should(Condition.NotExist);
+    Pages.ServiceAccounts.Buttons.noTokensAvailable.should(Condition.BeVisible);
+    Pages.ServiceAccounts.Buttons.tokenName(tokenName).should(Condition.NotExist);
   });
 
   it('should add token', () => {
     Pages.ServiceAccounts.addToken(tokenName);
-    Pages.ServiceAccounts.Buttons.tokenTableRow(tokenName).should(Condition.Exist);
+    Pages.ServiceAccounts.Buttons.tokenName(tokenName).should(Condition.Exist);
   });
 
   it('should close token panel for created service account', () => {
-    Pages.ServiceAccounts.Buttons.tableRow(serviceAccountName).parent().click();
+    Pages.ServiceAccounts.Buttons.serviceAccountNameColumn(serviceAccountName).parent().click();
     Pages.ServiceAccounts.Buttons.tokenTable.should(Condition.NotBeVisible);
   });
 
   it('should delete service account', () => {
     Pages.ServiceAccounts.delete(serviceAccountName);
-    Pages.ServiceAccounts.Buttons.tableRow(serviceAccountName).should(Condition.NotExist);
+    Pages.ServiceAccounts.Buttons.serviceAccountNameColumn(serviceAccountName).should(Condition.NotExist);
   });
 
   it('should go to the projects page', () => {

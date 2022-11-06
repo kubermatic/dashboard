@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {AdminSettingsDatacentersStrategy, Datacenter, Page, PageOptions, Provider} from '@kmtypes';
+import {AdminSettingsDatacentersStrategy, Condition, Datacenter, Page, PageOptions, Provider} from '@kmtypes';
 import {AdminSettingsDatacentersFactory} from '@pages/v2/settings/admin/dynamic-datacenters/strategy/factory';
 import {Config} from '@utils/config';
 import _ from 'lodash';
@@ -51,6 +51,7 @@ export class DynamicDatacenters extends PageOptions implements Page {
     this.Elements.selectAddDatacenterCountry(country);
     this.Elements.addDatacenterLocationInput.type(location);
     this.Buttons.addDatacenterSave.click();
+    this.Buttons.addDatacenterSave.should(Condition.NotExist);
   }
 
   delete(name: string): void {
