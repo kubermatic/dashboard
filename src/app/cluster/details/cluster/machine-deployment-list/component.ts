@@ -44,12 +44,25 @@ import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/comp
 import {Datacenter} from '@shared/entity/datacenter';
 import {ClusterService} from '@core/services/cluster';
 
+enum Column {
+  Status = 'status',
+  Name = 'name',
+  Replicas = 'replicas',
+  Version = 'version',
+  OS = 'os',
+  Created = 'created',
+  Actions = 'actions',
+}
+
 @Component({
   selector: 'km-machine-deployment-list',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
 })
 export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDestroy {
+  readonly Column = Column;
+  dataSource = new MatTableDataSource<MachineDeployment>();
+  displayedColumns: string[] = Object.values(Column);
   @Input() cluster: Cluster;
   @Input() machineDeployments: MachineDeployment[] = [];
   @Input() projectID: string;
@@ -59,8 +72,6 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
   @Input() quotaWidget: TemplateRef<QuotaWidgetComponent>;
   @Output() changeMachineDeployment = new EventEmitter<MachineDeployment>();
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  dataSource = new MatTableDataSource<MachineDeployment>();
-  displayedColumns: string[] = ['status', 'name', 'labels', 'replicas', 'ver', 'os', 'created', 'actions'];
 
   private _unsubscribe: Subject<void> = new Subject<void>();
   private _user: Member;
@@ -77,6 +88,7 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
   ) {}
 
   ngOnInit(): void {
+    this._filterDisplayedColumn();
     this.dataSource.data = this.machineDeployments ? this.machineDeployments : [];
     this.dataSource.paginator = this.paginator;
 
@@ -91,10 +103,6 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
       .pipe(takeUntil(this._unsubscribe))
       .pipe(switchMap(project => this._userService.getCurrentUserGroup(project.id)))
       .subscribe(userGroup => (this._currentGroupConfig = this._userService.getCurrentUserGroupConfig(userGroup)));
-
-    if (this.cluster.spec.cloud.aws) {
-      this.displayedColumns = ['status', 'name', 'replicas', 'ver', 'availabilityZone', 'os', 'created', 'actions'];
-    }
   }
 
   ngOnChanges(): void {
@@ -190,5 +198,11 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
     component.projectId = this.projectID;
     component.showDetailsOnHover = false;
     component.showAsCard = false;
+  }
+
+  private _filterDisplayedColumn(): void {
+    if (this.cluster.spec.cloud.aws) {
+      this.displayedColumns = ['status', 'name', 'replicas', 'version', 'availabilityZone', 'os', 'created', 'actions'];
+    }
   }
 }
