@@ -81,11 +81,13 @@ describe('SSH Key Management Story', () => {
   it('should delete the cluster', () => {
     Pages.Clusters.Details.delete(clusterName, Provider.kubeadm);
     Pages.Root.Elements.spinner.should(Condition.NotExist);
+    Pages.expect(View.Clusters.Default);
     Pages.Clusters.List.Elements.clusterItem(clusterName).should(Condition.NotExist);
   });
 
   it('should delete the ssh key', () => {
     Pages.SSHKeys.visit();
+    Pages.expect(View.SSHKeys.Default);
     Pages.SSHKeys.delete(sshKeyName);
     Pages.SSHKeys.Elements.sshKey(sshKeyName).should(Condition.NotExist);
   });
