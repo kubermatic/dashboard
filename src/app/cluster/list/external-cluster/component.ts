@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnChanges, OnDestroy, OnInit, ViewChild, TemplateRef} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -30,7 +30,7 @@ import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
-import {distinctUntilChanged, switchMap, take, takeUntil, tap, startWith} from 'rxjs/operators';
+import {distinctUntilChanged, startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {AddExternalClusterDialogComponent} from '@shared/components/add-external-cluster-dialog/component';
 import {
   ExternalCloudSpec,
@@ -46,6 +46,7 @@ enum Column {
   Status = 'status',
   Name = 'name',
   Provider = 'provider',
+  Region = 'region',
   Created = 'created',
   Actions = 'actions',
 }
@@ -250,6 +251,20 @@ export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestro
       .subscribe(({id}) => {
         component.projectId = id;
       });
+  }
+
+  getRegion(cloud: ExternalCloudSpec) {
+    const provider = this.getProvider(cloud);
+    switch (provider) {
+      case ExternalClusterProvider.EKS:
+        return cloud.eks.region;
+      case ExternalClusterProvider.AKS:
+        return cloud.aks.location;
+      case ExternalClusterProvider.GKE:
+        return cloud.gke.zone;
+      default:
+        return '';
+    }
   }
 
   private _onProjectChange(project: Project): void {

@@ -69,7 +69,10 @@ limitations under the License.
             *matCellDef="let element"
             [attr.id]="'km-clusters-' + element.name">
           <div fxLayoutAlign=" center"
-               fxLayoutGap="8px">{{element.name}}
+               fxLayoutGap="8px">
+            <span>{{element.name}}</span>
+            <span *ngIf="(!element?.labels || element?.labels['is-imported'] !== 'true')"
+                  class="km-label-primary">Imported</span>
           </div>
         </td>
       </ng-container>
@@ -77,12 +80,26 @@ limitations under the License.
       <ng-container [matColumnDef]="Column.Provider">
         <th mat-header-cell
             *matHeaderCellDef
-            class="km-header-cell">Provider
+            class="km-header-cell p-20">Provider
         </th>
         <td mat-cell
             *matCellDef="let element">
           <span [ngClass]="getProvider(element.cloud) === Provider.Custom ?
               'km-provider-logo km-provider-logo-custom-external-cluster' : 'km-provider-logo km-provider-logo-'+getProvider(element.cloud)"></span>
+        </td>
+      </ng-container>
+
+
+      <ng-container [matColumnDef]="Column.Region">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-20">Region
+        </th>
+        <td mat-cell
+            *matCellDef="let element">
+          <ng-container *ngIf="element.cloud">
+            {{getRegion(element.cloud)}}
+          </ng-container>
         </td>
       </ng-container>
 
