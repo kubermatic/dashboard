@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"net/http"
 
+	semverlib "github.com/Masterminds/semver/v3"
 	"github.com/go-kit/kit/endpoint"
 	"github.com/gorilla/mux"
 
@@ -40,10 +41,20 @@ func GetAdmissionPluginEndpoint(admissionPluginProvider provider.AdmissionPlugin
 
 		// for the backward compatibility we have to keep those plugins as a default
 		plugins := sets.NewString(
-			"PodSecurityPolicy",
 			"PodNodeSelector",
 			"EventRateLimit",
 		)
+
+		v, err := semverlib.NewVersion(req.Version)
+		if err != nil {
+			return nil, err
+		}
+
+		// Pod Security Policy was removed in k8s v1.25
+		gteKube125Condition, _ := semverlib.NewConstraint(">= 1.25")
+		if !gteKube125Condition.Check(v) {
+			plugins.Insert("PodSecurityPolicy")
+		}
 		plugins.Insert(pluginResponse...)
 
 		return plugins.List(), nil
