@@ -204,6 +204,7 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 			Image:                     config.Image.Value,
 			Tags:                      config.Tags,
 			AvailabilityZone:          config.AvailabilityZone.Value,
+			ServerGroup:               config.ServerGroup.Value,
 			InstanceReadyCheckPeriod:  config.InstanceReadyCheckPeriod.Value,
 			InstanceReadyCheckTimeout: config.InstanceReadyCheckTimeout.Value,
 		}

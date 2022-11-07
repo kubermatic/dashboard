@@ -240,7 +240,7 @@ func OpenstackAvailabilityZoneEndpoint(seedsGetter provider.SeedsGetter, presetP
 		if err != nil {
 			return nil, fmt.Errorf("error getting dc: %w", err)
 		}
-		return providercommon.GetOpenstackAvailabilityZones(datacenter, cred, caBundle)
+		return providercommon.GetOpenstackAvailabilityZones(ctx, datacenter, cred, caBundle)
 	}
 }
 

@@ -22,6 +22,7 @@ import {
   OpenstackSubnet,
   OpenstackSubnetPool,
   OpenstackTenant,
+  OpenstackServerGroup,
 } from '@shared/entity/provider/openstack';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {EMPTY, Observable} from 'rxjs';
@@ -33,6 +34,7 @@ export class Openstack extends Provider {
   readonly securityGroupsUrl = `${this._restRoot}/providers/openstack/securitygroups`;
   readonly networksUrl = `${this._restRoot}/providers/openstack/networks`;
   readonly availabilityZonesUrl = `${this._restRoot}/providers/openstack/availabilityzones`;
+  readonly serverGroupsURL = `${this._newRestRoot}/providers/openstack/servergroups`;
   private _usingApplicationCredentials = false;
 
   constructor(http: HttpClient, provider: NodeProvider) {
@@ -187,6 +189,35 @@ export class Openstack extends Provider {
     }
 
     return this._http.get<OpenstackSecurityGroup[]>(this.securityGroupsUrl, {
+      headers: this._headers,
+    });
+  }
+
+  serverGroups(onLoadingCb: () => void = null): Observable<OpenstackServerGroup[]> {
+    const projectHeader = this._headers.get(Openstack.Header.Project)
+      ? Openstack.Header.Project
+      : Openstack.Header.ProjectID;
+    this._addRequiredHeader(projectHeader);
+
+    if (this._usingApplicationCredentials) {
+      this._setRequiredHeaders(
+        Openstack.Header.ApplicationCredentialID,
+        Openstack.Header.ApplicationCredentialSecret,
+        Openstack.Header.Datacenter
+      );
+
+      this._cleanupOptionalHeaders();
+    }
+
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
+    return this._http.get<OpenstackServerGroup[]>(this.serverGroupsURL, {
       headers: this._headers,
     });
   }

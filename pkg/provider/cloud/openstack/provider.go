@@ -29,6 +29,7 @@ import (
 	"github.com/gophercloud/gophercloud"
 	goopenstack "github.com/gophercloud/gophercloud/openstack"
 	osavailabilityzones "github.com/gophercloud/gophercloud/openstack/compute/v2/extensions/availabilityzones"
+	ossservergroups "github.com/gophercloud/gophercloud/openstack/compute/v2/extensions/servergroups"
 	osflavors "github.com/gophercloud/gophercloud/openstack/compute/v2/flavors"
 	osprojects "github.com/gophercloud/gophercloud/openstack/identity/v3/projects"
 	ossecuritygroups "github.com/gophercloud/gophercloud/openstack/networking/v2/extensions/security/groups"
@@ -557,9 +558,27 @@ func GetSecurityGroups(ctx context.Context, authURL, region string, credentials 
 	return secGroups, nil
 }
 
+// GetSeverGroups lists all available server groups for the given CloudSpec.DatacenterName.
+func GetSeverGroups(ctx context.Context, authURL, region string, credentials *resources.OpenstackCredentials, caBundle *x509.CertPool) ([]ossservergroups.ServerGroup, error) {
+	netClient, err := getComputeClient(ctx, authURL, region, credentials, caBundle)
+	if err != nil {
+		return nil, fmt.Errorf("couldn't get auth client: %w", err)
+	}
+
+	page, err := ossservergroups.List(netClient, ossservergroups.ListOpts{}).AllPages()
+	if err != nil {
+		return nil, fmt.Errorf("failed to list server groups: %w", err)
+	}
+	groups, err := ossservergroups.ExtractServerGroups(page)
+	if err != nil {
+		return nil, fmt.Errorf("failed to extract server groups: %w", err)
+	}
+	return groups, nil
+}
+
 // GetAvailabilityZones lists availability zones for the given CloudSpec.DatacenterName and OpenstackSpec.Region.
-func GetAvailabilityZones(authURL, region string, credentials *resources.OpenstackCredentials, caBundle *x509.CertPool) ([]osavailabilityzones.AvailabilityZone, error) {
-	computeClient, err := getComputeClient(authURL, region, credentials, caBundle)
+func GetAvailabilityZones(ctx context.Context, authURL, region string, credentials *resources.OpenstackCredentials, caBundle *x509.CertPool) ([]osavailabilityzones.AvailabilityZone, error) {
+	computeClient, err := getComputeClient(ctx, authURL, region, credentials, caBundle)
 	if err != nil {
 		return nil, err
 	}
@@ -641,7 +660,7 @@ func getNetClient(ctx context.Context, authURL, region string, credentials *reso
 	return serviceClient, err
 }
 
-func getComputeClient(authURL, region string, credentials *resources.OpenstackCredentials, caBundle *x509.CertPool) (*gophercloud.ServiceClient, error) {
+func getComputeClient(ctx context.Context, authURL, region string, credentials *resources.OpenstackCredentials, caBundle *x509.CertPool) (*gophercloud.ServiceClient, error) {
 	authClient, err := getAuthClient(authURL, credentials, caBundle)
 	if err != nil {
 		return nil, err
@@ -659,6 +678,7 @@ func getComputeClient(authURL, region string, credentials *resources.OpenstackCr
 			return nil, err
 		}
 	}
+	serviceClient.Context = ctx
 	return serviceClient, err
 }
 

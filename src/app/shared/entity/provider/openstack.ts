@@ -50,6 +50,11 @@ export class OpenstackSecurityGroup {
   name: string;
 }
 
+export class OpenstackServerGroup {
+  id: string;
+  name: string;
+}
+
 export class OpenstackOptionalFields {
   length: number;
   name: string;

@@ -77,6 +77,22 @@ limitations under the License.
            required>
   </mat-form-field>
 
+  <km-combobox #serverGroupCombobox
+               fxFlex
+               [required]="false"
+               [grouped]="false"
+               [selected]="selectedServerGroup"
+               [options]="serverGroups"
+               [formControlName]="Controls.ServerGroup"
+               (changed)="onServerGroupChange($event)"
+               [label]="serverGroupLabel"
+               inputLabel="Select server group..."
+               filterBy="name">
+    <div *option="let serverGroup">
+      {{serverGroup.name}}
+    </div>
+  </km-combobox>
+
   <mat-checkbox class="use-floating-ip-checkbox"
                 [formControlName]="Controls.UseFloatingIP"
                 fxFlex>

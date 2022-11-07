@@ -16,7 +16,7 @@ import {NodeDataMode} from '@app/node-data/config';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {ProjectService} from '@core/services/project';
 import {PresetsService} from '@core/services/wizard/presets';
-import {OpenstackAvailabilityZone, OpenstackFlavor} from '@shared/entity/provider/openstack';
+import {OpenstackAvailabilityZone, OpenstackFlavor, OpenstackServerGroup} from '@shared/entity/provider/openstack';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, filter, switchMap, take, tap} from 'rxjs/operators';
@@ -80,6 +80,62 @@ export class NodeDataOpenstackProvider {
           .pipe(tap(project => (selectedProject = project.id)))
           .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
           .pipe(switchMap(_ => this._openStackService.getFlavors(selectedProject, this._clusterSpecService.cluster.id)))
+          .pipe(
+            catchError(_ => {
+              if (onError) {
+                onError();
+              }
+
+              return onErrorResumeNext(of([]));
+            })
+          )
+          .pipe(take(1));
+      }
+    }
+  }
+
+  serverGroups(onError: () => void = undefined, onLoadingCb: () => void = null): Observable<OpenstackServerGroup[]> {
+    switch (this._nodeDataService.mode) {
+      case NodeDataMode.Wizard:
+        return this._clusterSpecService.clusterChanges
+          .pipe(filter(_ => this._clusterSpecService.provider === NodeProvider.OPENSTACK))
+          .pipe(debounceTime(this._debounceTime))
+          .pipe(
+            switchMap(_ =>
+              this._presetService
+                .provider(NodeProvider.OPENSTACK)
+                .domain(this._clusterSpecService.cluster.spec.cloud.openstack.domain)
+                .username(this._clusterSpecService.cluster.spec.cloud.openstack.username)
+                .password(this._clusterSpecService.cluster.spec.cloud.openstack.password)
+                .applicationCredentialID(this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialID)
+                .applicationCredentialPassword(
+                  this._clusterSpecService.cluster.spec.cloud.openstack.applicationCredentialSecret
+                )
+                .project(this._clusterSpecService.cluster.spec.cloud.openstack.project)
+                .projectID(this._clusterSpecService.cluster.spec.cloud.openstack.projectID)
+                .datacenter(this._clusterSpecService.cluster.spec.cloud.dc)
+                .credential(this._presetService.preset)
+                .serverGroups(onLoadingCb)
+                .pipe(
+                  catchError(_ => {
+                    if (onError) {
+                      onError();
+                    }
+
+                    return onErrorResumeNext(of([]));
+                  })
+                )
+            )
+          );
+      case NodeDataMode.Dialog: {
+        let selectedProject: string;
+        return this._projectService.selectedProject
+          .pipe(debounceTime(this._debounceTime))
+          .pipe(tap(project => (selectedProject = project.id)))
+          .pipe(tap(_ => (onLoadingCb ? onLoadingCb() : null)))
+          .pipe(
+            switchMap(_ => this._openStackService.getServerGroups(selectedProject, this._clusterSpecService.cluster.id))
+          )
           .pipe(
             catchError(_ => {
               if (onError) {
