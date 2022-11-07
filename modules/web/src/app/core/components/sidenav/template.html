@@ -76,6 +76,19 @@ limitations under the License.
     </ng-container>
   </km-side-nav-field>
 
+   <div [matTooltip]="getTooltip(view.ExternalClusters)"
+       [ngClass]="getMenuItemClass(view.Clusters)"
+       class="menu-item">
+    <a id="km-nav-item-clusters"
+       fxLayoutAlign=" center"
+       [routerLink]="getRouterLink(view.ExternalClusters)"
+       [ngClass]="getLinkClass(view.ExternalClusters)">
+      <span *ngIf="!isSidenavCollapsed()">Extrnal Clusters</span>
+    </a>
+  </div>
+</km-side-nav-field>
+
+
   <div [matTooltip]="getTooltip(view.ClusterTemplates)"
        [ngClass]="!isDisabledField(view.Overview) && 'km-disabled'"
        class="menu-item">
