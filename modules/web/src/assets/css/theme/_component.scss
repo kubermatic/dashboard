@@ -45,6 +45,7 @@
 @import 'src/app/settings/admin/presets/theme';
 @import 'src/app/settings/admin/presets/edit-dialog/theme';
 @import 'src/app/settings/admin/nav/theme';
+@import 'src/app/shared/components/side-nav-field/theme.scss';
 
 @mixin theme-components($colors) {
   @include theme-addon-list-component($colors);
@@ -62,6 +63,7 @@
   @include theme-applications-list-component($colors);
   @include theme-add-application-dialog-component($colors);
   @include theme-sidenav-component($colors);
+  @include theme-sidenav-field-component($colors);
   @include theme-version-picker-component($colors);
   @include theme-cluster-summary-component($colors);
   @include theme-eol-component($colors);

@@ -31,7 +31,6 @@ import {forkJoin, of, Subject, timer} from 'rxjs';
 import {switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 import {MasterVersion} from '@shared/entity/cluster';
-import {ClusterListTab} from '@app/cluster/list/component';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {ExternalClusterDeleteConfirmationComponent} from '@app/cluster/details/external-cluster/external-cluster-delete-confirmation/component';
 import {ExternalMachineDeploymentService} from '@app/core/services/external-machine-deployment';
@@ -187,9 +186,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   goBack(): void {
-    this._router.navigate(['/projects/' + this.projectID + '/clusters'], {
-      fragment: `${ClusterListTab.ExternalCluster}`,
-    });
+    this._router.navigate(['/projects/' + this.projectID + '/externalclusters']);
   }
 
   canDisconnect(): boolean {
@@ -209,9 +206,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(isDeleted => {
         if (isDeleted) {
-          this._router.navigate(['/projects/' + this.projectID + '/clusters'], {
-            fragment: `${ClusterListTab.ExternalCluster}`,
-          });
+          this._router.navigate(['/projects/' + this.projectID + '/externalclusters']);
         }
       });
   }

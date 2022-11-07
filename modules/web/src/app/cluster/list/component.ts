@@ -16,12 +16,8 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subject} from 'rxjs';
 import {SettingsService} from '@core/services/settings';
 import {map, takeUntil} from 'rxjs/operators';
-import {ActivatedRoute} from '@angular/router';
-
-export enum ClusterListTab {
-  Cluster,
-  ExternalCluster,
-}
+import { Router } from '@angular/router';
+import { View } from '@app/shared/entity/common';
 
 @Component({
   selector: 'km-clusters',
@@ -31,9 +27,11 @@ export enum ClusterListTab {
 export class ClustersComponent implements OnInit, OnDestroy {
   private _unsubscribe: Subject<void> = new Subject<void>();
   areExternalClustersEnabled = false;
-  clusterIndex = this._route.snapshot.fragment;
 
-  constructor(private readonly _settingsService: SettingsService, private readonly _route: ActivatedRoute) {}
+  constructor(
+    private readonly _settingsService: SettingsService,
+    private _router: Router,
+    ) {}
 
   ngOnInit(): void {
     this._settingsService.adminSettings
@@ -47,5 +45,10 @@ export class ClustersComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  isExternalClustersUrl(): boolean {
+    const urlArray = this._router.routerState.snapshot.url.split('/');
+    return !!urlArray.find(x => x === View.ExternalClusters);
   }
 }
