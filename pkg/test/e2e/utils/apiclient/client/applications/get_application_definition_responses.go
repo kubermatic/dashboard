@@ -12,7 +12,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 
-	"k8c.io/kubermatic/v2/pkg/test/e2e/utils/apiclient/models"
+	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/models"
 )
 
 // GetApplicationDefinitionReader is a Reader for the GetApplicationDefinition structure.
