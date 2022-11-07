@@ -27,6 +27,7 @@ import (
 	ksemver "k8c.io/kubermatic/v2/pkg/semver"
 
 	corev1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 )
 
@@ -1927,4 +1928,17 @@ type ApplicationDefinitionListItem struct {
 type ApplicationDefinitionListItemSpec struct {
 	// Description of the application. what is its purpose
 	Description string `json:"description"`
+}
+
+type SeedOverview struct {
+	Name                  string                 `json:"name"`
+	Location              string                 `json:"location"`
+	Phase                 kubermaticv1.SeedPhase `json:"phase"`
+	Created               metav1.Time            `json:"created"`
+	Providers             int                    `json:"providers"`
+	Datacenters           int                    `json:"datacenters"`
+	Clusters              int                    `json:"clusters"`
+	ClustersByDC          map[string]int         `json:"clusters_by_datacenter"`
+	ClustersByProvider    map[string]int         `json:"clusters_by_provider"`
+	DatacentersByProvider map[string]int         `json:"datacenters_by_provider"`
 }
