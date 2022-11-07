@@ -103,23 +103,12 @@ func GetCredentialsForCluster(cloud *kubermaticv1.ExternalClusterEKSCloudSpec, s
 	}
 
 	if creds.AssumeRoleExternalID == "" {
-		// AssumeRoleARN is optional
+		// AssumeRoleExternalID is optional
 		if cloud.CredentialsReference != nil {
 			assumeRoleExternalID, err := secretKeySelector(cloud.CredentialsReference, resources.AWSAssumeRoleExternalID)
 			if err == nil {
 				creds.AssumeRoleExternalID = assumeRoleExternalID
 			}
-		}
-	}
-
-	if creds.AssumeRoleExternalID == "" {
-		// AssumeRoleARN is optional
-		if cloud.CredentialsReference == nil {
-			return creds, errors.New("no credentials provided")
-		}
-		creds.AssumeRoleExternalID, err = secretKeySelector(cloud.CredentialsReference, resources.AWSAssumeRoleExternalID)
-		if err != nil {
-			return creds, err
 		}
 	}
 
