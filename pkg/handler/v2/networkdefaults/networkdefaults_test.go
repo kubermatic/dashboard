@@ -68,6 +68,7 @@ func TestGetEndpoint(t *testing.T) {
 				},
 				ProxyMode:                resources.IPVSProxyMode,
 				NodeLocalDNSCacheEnabled: true,
+				ClusterExposeStrategy:    "NodePort",
 			},
 		},
 		{
@@ -94,6 +95,7 @@ func TestGetEndpoint(t *testing.T) {
 				},
 				ProxyMode:                resources.IPVSProxyMode,
 				NodeLocalDNSCacheEnabled: true,
+				ClusterExposeStrategy:    "NodePort",
 			},
 		},
 		{
@@ -120,6 +122,7 @@ func TestGetEndpoint(t *testing.T) {
 				},
 				ProxyMode:                resources.IPTablesProxyMode,
 				NodeLocalDNSCacheEnabled: true,
+				ClusterExposeStrategy:    "NodePort",
 			},
 		},
 	}

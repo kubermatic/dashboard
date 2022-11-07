@@ -1672,6 +1672,8 @@ type NetworkDefaults struct {
 	ProxyMode string `json:"proxyMode,omitempty"`
 	// NodeLocalDNSCacheEnabled controls whether the NodeLocal DNS Cache feature is enabled.
 	NodeLocalDNSCacheEnabled bool `json:"nodeLocalDNSCacheEnabled,omitempty"`
+	// ClusterExposeStrategy is the strategy used to expose a cluster control plane.
+	ClusterExposeStrategy kubermaticv1.ExposeStrategy `json:"clusterExposeStrategy,omitempty"`
 }
 
 // NetworkDefaultsIPFamily contains cluster network default settings for an IP family.
