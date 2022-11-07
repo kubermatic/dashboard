@@ -39,6 +39,9 @@ type OpenstackNodeSpec struct {
 	// if set, the rootDisk will be a volume. If not, the rootDisk will be on ephemeral storage and its size will be derived from the flavor
 	RootDiskSizeGB int64 `json:"diskSize,omitempty"`
 
+	// UUID of the server group, used to configure affinity or anti-affinity of the VM instances relative to hypervisor
+	ServerGroup string `json:"serverGroup,omitempty"`
+
 	// Additional metadata to set
 	Tags map[string]string `json:"tags,omitempty"`
 

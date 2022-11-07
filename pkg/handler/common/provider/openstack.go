@@ -207,11 +207,11 @@ func OpenstackAvailabilityZoneWithClusterCredentialsEndpoint(ctx context.Context
 		return nil, err
 	}
 
-	return GetOpenstackAvailabilityZones(datacenter, creds, caBundle)
+	return GetOpenstackAvailabilityZones(ctx, datacenter, creds, caBundle)
 }
 
-func GetOpenstackAvailabilityZones(datacenter *kubermaticv1.Datacenter, credentials *resources.OpenstackCredentials, caBundle *x509.CertPool) ([]apiv1.OpenstackAvailabilityZone, error) {
-	availabilityZones, err := openstack.GetAvailabilityZones(datacenter.Spec.Openstack.AuthURL, datacenter.Spec.Openstack.Region, credentials, caBundle)
+func GetOpenstackAvailabilityZones(ctx context.Context, datacenter *kubermaticv1.Datacenter, credentials *resources.OpenstackCredentials, caBundle *x509.CertPool) ([]apiv1.OpenstackAvailabilityZone, error) {
+	availabilityZones, err := openstack.GetAvailabilityZones(ctx, datacenter.Spec.Openstack.AuthURL, datacenter.Spec.Openstack.Region, credentials, caBundle)
 	if err != nil {
 		return nil, err
 	}
