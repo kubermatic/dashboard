@@ -49,22 +49,7 @@ func convertInternalToAPIApplicationInstallation(in *appskubermaticv1.Applicatio
 		},
 	}
 
-	var apiCondition []apiv2.ApplicationInstallationCondition
-	for condType, condition := range in.Status.Conditions {
-		apiCondition = append(apiCondition, apiv2.ApplicationInstallationCondition{
-			Type:               condType,
-			Status:             condition.Status,
-			LastHeartbeatTime:  apiv1.NewTime(condition.LastHeartbeatTime.Time),
-			LastTransitionTime: apiv1.NewTime(condition.LastTransitionTime.Time),
-			Reason:             condition.Reason,
-			Message:            condition.Message,
-		})
-	}
-	// ensure a stable sorting order
-	sort.Slice(apiCondition, func(i, j int) bool {
-		return apiCondition[i].Type < apiCondition[j].Type
-	})
-	out.Status.Conditions = apiCondition
+	out.Status.Conditions = convertApplicationInstallationCondition(in.Status.Conditions)
 
 	if in.DeletionTimestamp != nil {
 		ts := apiv1.NewTime(in.DeletionTimestamp.Time)
@@ -93,24 +78,7 @@ func convertInternalToAPIApplicationInstallationForList(in *appskubermaticv1.App
 		},
 	}
 
-	// TODO @vgramer decide if we want to extract this into a separate method, as duplicate code is used in convertInternalToAPIApplicationInstallation
-	// TODO personally I don't have a strong preference
-	var apiCondition []apiv2.ApplicationInstallationCondition
-	for condType, condition := range in.Status.Conditions {
-		apiCondition = append(apiCondition, apiv2.ApplicationInstallationCondition{
-			Type:               condType,
-			Status:             condition.Status,
-			LastHeartbeatTime:  apiv1.NewTime(condition.LastHeartbeatTime.Time),
-			LastTransitionTime: apiv1.NewTime(condition.LastTransitionTime.Time),
-			Reason:             condition.Reason,
-			Message:            condition.Message,
-		})
-	}
-	// ensure a stable sorting order
-	sort.Slice(apiCondition, func(i, j int) bool {
-		return apiCondition[i].Type < apiCondition[j].Type
-	})
-	out.Status.Conditions = apiCondition
+	out.Status.Conditions = convertApplicationInstallationCondition(in.Status.Conditions)
 
 	return out
 }
@@ -136,4 +104,22 @@ func convertAPItoInternalApplicationInstallationBody(app *apiv2.ApplicationInsta
 			Values:         app.Spec.Values,
 		},
 	}
+}
+
+func convertApplicationInstallationCondition(conditions map[appskubermaticv1.ApplicationInstallationConditionType]appskubermaticv1.ApplicationInstallationCondition) (apiConditions []apiv2.ApplicationInstallationCondition) {
+	for condType, condition := range conditions {
+		apiConditions = append(apiConditions, apiv2.ApplicationInstallationCondition{
+			Type:               condType,
+			Status:             condition.Status,
+			LastHeartbeatTime:  apiv1.NewTime(condition.LastHeartbeatTime.Time),
+			LastTransitionTime: apiv1.NewTime(condition.LastTransitionTime.Time),
+			Reason:             condition.Reason,
+			Message:            condition.Message,
+		})
+	}
+	// ensure a stable sorting order
+	sort.Slice(apiConditions, func(i, j int) bool {
+		return apiConditions[i].Type < apiConditions[j].Type
+	})
+	return apiConditions
 }
