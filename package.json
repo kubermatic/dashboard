@@ -101,7 +101,7 @@
     "@angular/cli": "14.2.8",
     "@angular/compiler-cli": "14.2.8",
     "@jest/globals": "29.2.2",
-    "@types/jest": "29.2.1",
+    "@types/jest": "29.2.2",
     "@types/js-yaml": "4.0.5",
     "@types/lodash": "4.14.187",
     "@types/node": "18.11.9",
