@@ -36,6 +36,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/handler/v1/label"
 	"k8c.io/dashboard/v2/pkg/provider"
+	kubernetesprovider "k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	"k8c.io/dashboard/v2/pkg/resources/cluster"
 	"k8c.io/dashboard/v2/pkg/validation"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -43,7 +44,6 @@ import (
 	"k8c.io/kubermatic/v2/pkg/features"
 	kuberneteshelper "k8c.io/kubermatic/v2/pkg/kubernetes"
 	kubermaticlog "k8c.io/kubermatic/v2/pkg/log"
-	kubernetesprovider "k8c.io/kubermatic/v2/pkg/provider/kubernetes"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	utilcluster "k8c.io/kubermatic/v2/pkg/util/cluster"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
@@ -277,14 +277,14 @@ func GenerateCluster(
 	partialCluster.Spec = *spec
 
 	if body.Cluster.Spec.EnableUserSSHKeyAgent == nil {
-		partialCluster.Spec.EnableUserSSHKeyAgent = pointer.BoolPtr(true)
+		partialCluster.Spec.EnableUserSSHKeyAgent = pointer.Bool(true)
 	} else {
 		partialCluster.Spec.EnableUserSSHKeyAgent = body.Cluster.Spec.EnableUserSSHKeyAgent
 	}
 
 	// OSM is enabled by default.
 	if body.Cluster.Spec.EnableOperatingSystemManager == nil {
-		partialCluster.Spec.EnableOperatingSystemManager = pointer.BoolPtr(true)
+		partialCluster.Spec.EnableOperatingSystemManager = pointer.Bool(true)
 	} else {
 		partialCluster.Spec.EnableOperatingSystemManager = body.Cluster.Spec.EnableOperatingSystemManager
 	}

@@ -45,6 +45,9 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/v2/etcdbackupconfig"
 	"k8c.io/dashboard/v2/pkg/provider"
 	"k8c.io/dashboard/v2/pkg/provider/kubernetes"
+	"k8c.io/dashboard/v2/pkg/serviceaccount"
+	"k8c.io/dashboard/v2/pkg/watcher"
+	kuberneteswatcher "k8c.io/dashboard/v2/pkg/watcher/kubernetes"
 	appskubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	kubermaticv1helper "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1/helper"
@@ -55,11 +58,8 @@ import (
 	kubermaticlog "k8c.io/kubermatic/v2/pkg/log"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	"k8c.io/kubermatic/v2/pkg/semver"
-	"k8c.io/kubermatic/v2/pkg/serviceaccount"
 	"k8c.io/kubermatic/v2/pkg/version/cni"
 	"k8c.io/kubermatic/v2/pkg/version/kubermatic"
-	"k8c.io/kubermatic/v2/pkg/watcher"
-	kuberneteswatcher "k8c.io/kubermatic/v2/pkg/watcher/kubernetes"
 	osmv1alpha1 "k8c.io/operating-system-manager/pkg/crd/osm/v1alpha1"
 
 	corev1 "k8s.io/api/core/v1"
@@ -1051,13 +1051,13 @@ func GenCluster(id string, name string, projectID string, creationTime time.Time
 			},
 			Version:               version,
 			HumanReadableName:     name,
-			EnableUserSSHKeyAgent: pointer.BoolPtr(false),
+			EnableUserSSHKeyAgent: pointer.Bool(false),
 			ExposeStrategy:        kubermaticv1.ExposeStrategyNodePort,
 			ClusterNetwork: kubermaticv1.ClusterNetworkingConfig{
 				DNSDomain: "cluster.local",
 				ProxyMode: "ipvs",
 				IPVS: &kubermaticv1.IPVSConfiguration{
-					StrictArp: pointer.BoolPtr(true),
+					StrictArp: pointer.Bool(true),
 				},
 				IPFamily: kubermaticv1.IPFamilyIPv4,
 				Pods: kubermaticv1.NetworkRanges{
@@ -1882,7 +1882,7 @@ func GenDefaultAPIConstraint(name, kind string) apiv2.Constraint {
 					Name:              "gatekeeper",
 				},
 			},
-			Synced: pointer.BoolPtr(true),
+			Synced: pointer.Bool(true),
 		},
 	}
 }

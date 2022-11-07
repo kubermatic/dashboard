@@ -1444,7 +1444,7 @@ func TestListClusters(t *testing.T) {
 							Fake:           &kubermaticv1.FakeCloudSpec{},
 						},
 						Version:               *semver.NewSemverOrDie("9.9.9"),
-						EnableUserSSHKeyAgent: pointer.BoolPtr(false),
+						EnableUserSSHKeyAgent: pointer.Bool(false),
 						ClusterNetwork: &kubermaticv1.ClusterNetworkingConfig{
 							IPFamily:             kubermaticv1.IPFamilyIPv4,
 							Pods:                 kubermaticv1.NetworkRanges{CIDRBlocks: []string{"1.2.3.4/8"}},
@@ -1452,7 +1452,7 @@ func TestListClusters(t *testing.T) {
 							NodeCIDRMaskSizeIPv4: pointer.Int32(24),
 							ProxyMode:            resources.IPVSProxyMode,
 							IPVS: &kubermaticv1.IPVSConfiguration{
-								StrictArp: pointer.BoolPtr(true),
+								StrictArp: pointer.Bool(true),
 							},
 							DNSDomain: "cluster.local",
 						},
@@ -1481,7 +1481,7 @@ func TestListClusters(t *testing.T) {
 							Fake:           &kubermaticv1.FakeCloudSpec{},
 						},
 						Version:               *semver.NewSemverOrDie("9.9.9"),
-						EnableUserSSHKeyAgent: pointer.BoolPtr(false),
+						EnableUserSSHKeyAgent: pointer.Bool(false),
 						ClusterNetwork: &kubermaticv1.ClusterNetworkingConfig{
 							IPFamily:             kubermaticv1.IPFamilyIPv4,
 							Pods:                 kubermaticv1.NetworkRanges{CIDRBlocks: []string{"1.2.3.4/8"}},
@@ -1489,7 +1489,7 @@ func TestListClusters(t *testing.T) {
 							NodeCIDRMaskSizeIPv4: pointer.Int32(24),
 							ProxyMode:            resources.IPVSProxyMode,
 							IPVS: &kubermaticv1.IPVSConfiguration{
-								StrictArp: pointer.BoolPtr(true),
+								StrictArp: pointer.Bool(true),
 							},
 							DNSDomain: "cluster.local",
 						},
@@ -1526,7 +1526,7 @@ func TestListClusters(t *testing.T) {
 							},
 						},
 						Version:               *semver.NewSemverOrDie("9.9.9"),
-						EnableUserSSHKeyAgent: pointer.BoolPtr(false),
+						EnableUserSSHKeyAgent: pointer.Bool(false),
 						ClusterNetwork: &kubermaticv1.ClusterNetworkingConfig{
 							IPFamily:             kubermaticv1.IPFamilyIPv4,
 							Pods:                 kubermaticv1.NetworkRanges{CIDRBlocks: []string{"1.2.3.4/8"}},
@@ -1534,7 +1534,7 @@ func TestListClusters(t *testing.T) {
 							NodeCIDRMaskSizeIPv4: pointer.Int32(24),
 							ProxyMode:            resources.IPVSProxyMode,
 							IPVS: &kubermaticv1.IPVSConfiguration{
-								StrictArp: pointer.BoolPtr(true),
+								StrictArp: pointer.Bool(true),
 							},
 							DNSDomain: "cluster.local",
 						},
@@ -1583,7 +1583,7 @@ func TestListClusters(t *testing.T) {
 							Fake:           &kubermaticv1.FakeCloudSpec{},
 						},
 						Version:               *semver.NewSemverOrDie("9.9.9"),
-						EnableUserSSHKeyAgent: pointer.BoolPtr(false),
+						EnableUserSSHKeyAgent: pointer.Bool(false),
 						ClusterNetwork: &kubermaticv1.ClusterNetworkingConfig{
 							IPFamily:             kubermaticv1.IPFamilyIPv4,
 							Pods:                 kubermaticv1.NetworkRanges{CIDRBlocks: []string{"1.2.3.4/8"}},
@@ -1591,7 +1591,7 @@ func TestListClusters(t *testing.T) {
 							NodeCIDRMaskSizeIPv4: pointer.Int32(24),
 							ProxyMode:            resources.IPVSProxyMode,
 							IPVS: &kubermaticv1.IPVSConfiguration{
-								StrictArp: pointer.BoolPtr(true),
+								StrictArp: pointer.Bool(true),
 							},
 							DNSDomain: "cluster.local",
 						},
@@ -1620,7 +1620,7 @@ func TestListClusters(t *testing.T) {
 							Fake:           &kubermaticv1.FakeCloudSpec{},
 						},
 						Version:               *semver.NewSemverOrDie("9.9.9"),
-						EnableUserSSHKeyAgent: pointer.BoolPtr(false),
+						EnableUserSSHKeyAgent: pointer.Bool(false),
 						ClusterNetwork: &kubermaticv1.ClusterNetworkingConfig{
 							IPFamily:             kubermaticv1.IPFamilyIPv4,
 							Pods:                 kubermaticv1.NetworkRanges{CIDRBlocks: []string{"1.2.3.4/8"}},
@@ -1628,7 +1628,7 @@ func TestListClusters(t *testing.T) {
 							NodeCIDRMaskSizeIPv4: pointer.Int32(24),
 							ProxyMode:            resources.IPVSProxyMode,
 							IPVS: &kubermaticv1.IPVSConfiguration{
-								StrictArp: pointer.BoolPtr(true),
+								StrictArp: pointer.Bool(true),
 							},
 							DNSDomain: "cluster.local",
 						},
@@ -1665,7 +1665,7 @@ func TestListClusters(t *testing.T) {
 							},
 						},
 						Version:               *semver.NewSemverOrDie("9.9.9"),
-						EnableUserSSHKeyAgent: pointer.BoolPtr(false),
+						EnableUserSSHKeyAgent: pointer.Bool(false),
 						ClusterNetwork: &kubermaticv1.ClusterNetworkingConfig{
 							IPFamily:             kubermaticv1.IPFamilyIPv4,
 							Pods:                 kubermaticv1.NetworkRanges{CIDRBlocks: []string{"1.2.3.4/8"}},
@@ -1673,7 +1673,7 @@ func TestListClusters(t *testing.T) {
 							NodeCIDRMaskSizeIPv4: pointer.Int32(24),
 							ProxyMode:            resources.IPVSProxyMode,
 							IPVS: &kubermaticv1.IPVSConfiguration{
-								StrictArp: pointer.BoolPtr(true),
+								StrictArp: pointer.Bool(true),
 							},
 							DNSDomain: "cluster.local",
 						},
@@ -1768,7 +1768,7 @@ func TestListClustersForProject(t *testing.T) {
 							NodeCIDRMaskSizeIPv4: pointer.Int32(24),
 							ProxyMode:            resources.IPVSProxyMode,
 							IPVS: &kubermaticv1.IPVSConfiguration{
-								StrictArp: pointer.BoolPtr(true),
+								StrictArp: pointer.Bool(true),
 							},
 							DNSDomain: "cluster.local",
 						},
@@ -1778,7 +1778,7 @@ func TestListClustersForProject(t *testing.T) {
 						},
 						ExposeStrategy:        kubermaticv1.ExposeStrategyNodePort,
 						Version:               *semver.NewSemverOrDie("9.9.9"),
-						EnableUserSSHKeyAgent: pointer.BoolPtr(false),
+						EnableUserSSHKeyAgent: pointer.Bool(false),
 					},
 					Status: apiv1.ClusterStatus{
 						Version:              *semver.NewSemverOrDie("9.9.9"),
@@ -1813,7 +1813,7 @@ func TestListClustersForProject(t *testing.T) {
 							NodeCIDRMaskSizeIPv4: pointer.Int32(24),
 							ProxyMode:            resources.IPVSProxyMode,
 							IPVS: &kubermaticv1.IPVSConfiguration{
-								StrictArp: pointer.BoolPtr(true),
+								StrictArp: pointer.Bool(true),
 							},
 							DNSDomain: "cluster.local",
 						},
@@ -1823,7 +1823,7 @@ func TestListClustersForProject(t *testing.T) {
 						},
 						ExposeStrategy:        kubermaticv1.ExposeStrategyNodePort,
 						Version:               *semver.NewSemverOrDie("9.9.9"),
-						EnableUserSSHKeyAgent: pointer.BoolPtr(false),
+						EnableUserSSHKeyAgent: pointer.Bool(false),
 					},
 					Status: apiv1.ClusterStatus{
 						Version:              *semver.NewSemverOrDie("9.9.9"),
@@ -1867,7 +1867,7 @@ func TestListClustersForProject(t *testing.T) {
 							NodeCIDRMaskSizeIPv4: pointer.Int32(24),
 							ProxyMode:            resources.IPVSProxyMode,
 							IPVS: &kubermaticv1.IPVSConfiguration{
-								StrictArp: pointer.BoolPtr(true),
+								StrictArp: pointer.Bool(true),
 							},
 							DNSDomain: "cluster.local",
 						},
@@ -1877,7 +1877,7 @@ func TestListClustersForProject(t *testing.T) {
 						},
 						ExposeStrategy:        kubermaticv1.ExposeStrategyNodePort,
 						Version:               *semver.NewSemverOrDie("9.9.9"),
-						EnableUserSSHKeyAgent: pointer.BoolPtr(false),
+						EnableUserSSHKeyAgent: pointer.Bool(false),
 					},
 					Status: apiv1.ClusterStatus{
 						Version:              *semver.NewSemverOrDie("9.9.9"),
@@ -1905,7 +1905,7 @@ func TestListClustersForProject(t *testing.T) {
 								Project:        "project",
 							},
 						},
-						EnableUserSSHKeyAgent: pointer.BoolPtr(false),
+						EnableUserSSHKeyAgent: pointer.Bool(false),
 						ClusterNetwork: &kubermaticv1.ClusterNetworkingConfig{
 							IPFamily:             kubermaticv1.IPFamilyIPv4,
 							Pods:                 kubermaticv1.NetworkRanges{CIDRBlocks: []string{"1.2.3.4/8"}},
@@ -1913,7 +1913,7 @@ func TestListClustersForProject(t *testing.T) {
 							NodeCIDRMaskSizeIPv4: pointer.Int32(24),
 							ProxyMode:            resources.IPVSProxyMode,
 							IPVS: &kubermaticv1.IPVSConfiguration{
-								StrictArp: pointer.BoolPtr(true),
+								StrictArp: pointer.Bool(true),
 							},
 							DNSDomain: "cluster.local",
 						},

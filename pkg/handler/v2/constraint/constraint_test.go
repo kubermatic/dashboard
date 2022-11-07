@@ -69,7 +69,7 @@ func TestListConstraints(t *testing.T) {
 				test.GenDefaultAPIConstraint("ct3", "UniqueLabel"),
 				func() apiv2.Constraint {
 					c := test.GenDefaultAPIConstraint("ct4", "UniqueLabel")
-					c.Status = &apiv2.ConstraintStatus{Synced: pointer.BoolPtr(false)}
+					c.Status = &apiv2.ConstraintStatus{Synced: pointer.Bool(false)}
 					return c
 				}(),
 			},

@@ -946,3 +946,13 @@ func ignoreRouterAlreadyHasPortInSubnetError(err error, subnetID string) error {
 
 	return nil
 }
+
+func ValidateCredentials(ctx context.Context, authURL, region string, credentials *resources.OpenstackCredentials, caBundle *x509.CertPool) error {
+	computeClient, err := getComputeClient(ctx, authURL, region, credentials, caBundle)
+	if err != nil {
+		return err
+	}
+	_, err = getAvailabilityZones(computeClient)
+
+	return err
+}

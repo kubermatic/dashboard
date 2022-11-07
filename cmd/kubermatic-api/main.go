@@ -66,6 +66,8 @@ import (
 	v2 "k8c.io/dashboard/v2/pkg/handler/v2"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubernetesprovider "k8c.io/dashboard/v2/pkg/provider/kubernetes"
+	"k8c.io/dashboard/v2/pkg/serviceaccount"
+	kuberneteswatcher "k8c.io/dashboard/v2/pkg/watcher/kubernetes"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/cluster/client"
 	"k8c.io/kubermatic/v2/pkg/controller/master-controller-manager/rbac"
@@ -73,9 +75,7 @@ import (
 	kubermaticlog "k8c.io/kubermatic/v2/pkg/log"
 	metricspkg "k8c.io/kubermatic/v2/pkg/metrics"
 	"k8c.io/kubermatic/v2/pkg/pprof"
-	"k8c.io/kubermatic/v2/pkg/serviceaccount"
 	"k8c.io/kubermatic/v2/pkg/util/cli"
-	kuberneteswatcher "k8c.io/kubermatic/v2/pkg/watcher/kubernetes"
 	osmv1alpha1 "k8c.io/operating-system-manager/pkg/crd/osm/v1alpha1"
 
 	corev1 "k8s.io/api/core/v1"
