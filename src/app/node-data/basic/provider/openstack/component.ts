@@ -112,6 +112,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   availabilityZonesLabel = AvailabilityZoneState.Empty;
   serverGroups: OpenstackServerGroup[] = [];
   selectedServerGroup = '';
+  selectedServerGroupID = '';
   serverGroupLabel = ServerGroupState.Empty;
 
   private get _availabilityZonesObservable(): Observable<OpenstackAvailabilityZone[]> {
@@ -218,7 +219,8 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   }
 
   onServerGroupChange(serverGroup: string): void {
-    this._nodeDataService.nodeData.spec.cloud.openstack.serverGroup = serverGroup;
+    this.selectedServerGroupID = this.serverGroups.find(key => key.name === serverGroup)?.id;
+    this._nodeDataService.nodeData.spec.cloud.openstack.serverGroup = this.selectedServerGroupID;
     this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
@@ -250,6 +252,13 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
       this._defaultOS = this._nodeDataService.operatingSystem;
       this._defaultImage = this._nodeDataService.nodeData.spec.cloud.openstack.image;
 
+      if (this._nodeDataService.nodeData.spec.cloud.openstack.serverGroup) {
+        const serverGroup = this.serverGroups.find(
+          key => key.id === this._nodeDataService.nodeData.spec.cloud.openstack.serverGroup
+        )?.name;
+        this.form.get(Controls.ServerGroup).setValue(serverGroup);
+      }
+
       this._cdr.detectChanges();
     }
   }
@@ -265,6 +274,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
   private _clearServerGroup(): void {
     this.serverGroups = [];
     this.selectedServerGroup = '';
+    this.selectedServerGroupID = '';
     this.serverGroupLabel = ServerGroupState.Empty;
     this._serverGroupCombobox.reset();
     this._cdr.detectChanges();
@@ -294,10 +304,10 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
   private _setDefaultServerGroup(serverGroups: OpenstackServerGroup[]): void {
     this.serverGroups = serverGroups;
-    this.selectedServerGroup = this._nodeDataService.nodeData.spec.cloud.openstack.serverGroup;
+    this.selectedServerGroupID = this._nodeDataService.nodeData.spec.cloud.openstack.serverGroup;
 
-    if (!this.selectedServerGroup && !_.isEmpty(this.serverGroups)) {
-      this.selectedServerGroup = this.serverGroups[0].name;
+    if (this.selectedServerGroupID) {
+      this.selectedServerGroup = this.serverGroups.find(key => key.id === this.selectedServerGroupID)?.name;
     }
 
     this.serverGroupLabel = !_.isEmpty(this.serverGroups) ? ServerGroupState.Ready : ServerGroupState.Empty;
