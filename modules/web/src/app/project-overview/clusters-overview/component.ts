@@ -21,7 +21,6 @@ import {MachineDeploymentStatus} from '@shared/entity/machine-deployment';
 import _ from 'lodash';
 import {getClusterHealthStatus, HealthStatus, StatusIcon} from '@shared/utils/health-status';
 import {Health} from '@shared/entity/health';
-import {ClusterListTab} from '@app/cluster/list/component';
 import {Project} from '@shared/entity/project';
 
 @Component({
@@ -107,9 +106,7 @@ export class ClustersOverviewComponent implements OnInit, OnChanges {
   }
 
   externalClustersNavigate(): void {
-    this._router.navigate(['/projects/' + this.project.id + '/clusters'], {
-      fragment: `${ClusterListTab.ExternalCluster}`,
-    });
+    this._router.navigate(['/projects/' + this.project.id + '/externalclusters']);
   }
 
   getExternalClusterStatus(cluster: ExternalCluster): string {

@@ -30,7 +30,6 @@ import {PresetList} from '@shared/entity/preset';
 import {BehaviorSubject, Observable, of, Subject, throwError} from 'rxjs';
 import {catchError, filter} from 'rxjs/operators';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
-import {ClusterListTab} from '@app/cluster/list/component';
 import {NotificationService} from '@core/services/notification';
 import {MasterVersion} from '@app/shared/entity/cluster';
 import {GCPDiskType, GCPMachineSize} from '@app/shared/entity/provider/gcp';
@@ -359,9 +358,7 @@ export class ExternalClusterService {
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
       .subscribe(_ => {
-        this._router.navigate(['/projects/' + projectID + '/clusters'], {
-          fragment: `${ClusterListTab.ExternalCluster}`,
-        });
+        this._router.navigate(['/projects/' + projectID + '/externalclusters']);
         this._notificationService.success(`Disconnected the ${cluster.name} cluster`);
       });
   }

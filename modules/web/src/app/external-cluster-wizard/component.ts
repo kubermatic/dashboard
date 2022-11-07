@@ -16,7 +16,6 @@ import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angul
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {MatStepper} from '@angular/material/stepper';
 import {Router} from '@angular/router';
-import {ClusterListTab} from '@app/cluster/list/component';
 import {ExternalCluster, ExternalClusterProvider} from '@app/shared/entity/external-cluster';
 import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
@@ -116,9 +115,7 @@ export class ExternalClusterWizardComponent implements OnInit, OnDestroy {
   }
 
   onCancel(): void {
-    this._router.navigate(['projects', this.project.id, 'clusters'], {
-      fragment: `${ClusterListTab.ExternalCluster}`,
-    });
+    this._router.navigate(['projects', this.project.id, 'externalclusters']);
   }
 
   onProviderChanged(provider: ExternalClusterProvider): void {
@@ -134,9 +131,7 @@ export class ExternalClusterWizardComponent implements OnInit, OnDestroy {
 
   onCreateSuccess(externalCluster: ExternalCluster): void {
     this._notificationService.success(`Created the ${externalCluster.name} external cluster`);
-    this._router.navigate(['projects', this.project.id, 'clusters'], {
-      fragment: `${ClusterListTab.ExternalCluster}`,
-    });
+    this._router.navigate(['projects', this.project.id, 'externalclusters']);
   }
 
   private _initForm(steps: ExternalClusterWizardStep[]): void {
