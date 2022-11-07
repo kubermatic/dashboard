@@ -345,7 +345,7 @@ func createOrUpdateOpenstackSecret(ctx context.Context, seedClient ctrlruntimecl
 		}
 
 		dcSpec := validate.Datacenter.Spec.Openstack
-		if err := openstack.ValidateCredentials(dcSpec.AuthURL, dcSpec.Region, cred, validate.CABundle); err != nil {
+		if err := openstack.ValidateCredentials(ctx, dcSpec.AuthURL, dcSpec.Region, cred, validate.CABundle); err != nil {
 			return false, fmt.Errorf("invalid Openstack credentials: %w", err)
 		}
 	}
