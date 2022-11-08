@@ -2296,3 +2296,10 @@ func GenApiApplicationDefinition(name string) apiv2.ApplicationDefinition {
 		},
 	}
 }
+
+func GenApiApplicationDefinitionListItem(name string) apiv2.ApplicationDefinitionListItem {
+	return apiv2.ApplicationDefinitionListItem{
+		Name: name,
+		Spec: apiv2.ApplicationDefinitionListItemSpec{},
+	}
+}

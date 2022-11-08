@@ -26,6 +26,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
 	appskubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
+	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 )
 
 func ListApplicationDefinitions(applicationDefinitionProvider provider.ApplicationDefinitionProvider) endpoint.Endpoint {
@@ -35,16 +36,41 @@ func ListApplicationDefinitions(applicationDefinitionProvider provider.Applicati
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 
-		definitions := make([]*apiv2.ApplicationDefinition, len(defList.Items))
+		definitions := make([]*apiv2.ApplicationDefinitionListItem, len(defList.Items))
 		for i := range defList.Items {
-			definitions[i] = convertInternalToExternal(&defList.Items[i])
+			definitions[i] = convertInternalToAPIApplicationDefinitionForList(&defList.Items[i])
 		}
 
 		return definitions, nil
 	}
 }
 
-func convertInternalToExternal(appDef *appskubermaticv1.ApplicationDefinition) *apiv2.ApplicationDefinition {
+func GetApplicationDefinition(applicationDefinitionProvider provider.ApplicationDefinitionProvider) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (response interface{}, err error) {
+		req, ok := request.(getApplicationDefinitionReq)
+		if !ok {
+			return nil, utilerrors.NewBadRequest("invalid request")
+		}
+
+		appdef, err := applicationDefinitionProvider.GetUnsecured(ctx, req.AppDefName)
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+
+		return convertInternalToAPIApplicationDefinition(appdef), nil
+	}
+}
+
+func convertInternalToAPIApplicationDefinitionForList(appDef *appskubermaticv1.ApplicationDefinition) *apiv2.ApplicationDefinitionListItem {
+	return &apiv2.ApplicationDefinitionListItem{
+		Name: appDef.Name,
+		Spec: apiv2.ApplicationDefinitionListItemSpec{
+			Description: appDef.Spec.Description,
+		},
+	}
+}
+
+func convertInternalToAPIApplicationDefinition(appDef *appskubermaticv1.ApplicationDefinition) *apiv2.ApplicationDefinition {
 	return &apiv2.ApplicationDefinition{
 		ObjectMeta: apiv1.ObjectMeta{
 			CreationTimestamp: apiv1.Time(appDef.CreationTimestamp),

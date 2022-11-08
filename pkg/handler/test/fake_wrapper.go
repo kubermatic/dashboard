@@ -554,9 +554,9 @@ func (k NewEtcdRestoreSliceWrapper) EqualOrDie(expected NewEtcdRestoreSliceWrapp
 	}
 }
 
-// NewApplicationInstallationWrapper wraps []apiv2.ApplicationInstallation
+// NewApplicationInstallationWrapper wraps []apiv2.ApplicationInstallationListItem
 // to provide convenient methods for tests.
-type NewApplicationInstallationWrapper []*apiv2.ApplicationInstallation
+type NewApplicationInstallationWrapper []apiv2.ApplicationInstallationListItem
 
 // DecodeOrDie reads and decodes json data from the reader.
 func (k *NewApplicationInstallationWrapper) DecodeOrDie(r io.Reader, t *testing.T) *NewApplicationInstallationWrapper {
@@ -584,9 +584,9 @@ func (k NewApplicationInstallationWrapper) EqualOrDie(expected NewApplicationIns
 	}
 }
 
-// NewApplicationDefinitionWrapper wraps []apiv2.ApplicationDefinition
+// NewApplicationDefinitionWrapper wraps []apiv2.ApplicationDefinitionListItem
 // to provide convenient methods for tests.
-type NewApplicationDefinitionWrapper []apiv2.ApplicationDefinition
+type NewApplicationDefinitionWrapper []apiv2.ApplicationDefinitionListItem
 
 // DecodeOrDie reads and decodes json data from the reader.
 func (k *NewApplicationDefinitionWrapper) DecodeOrDie(r io.Reader, t *testing.T) *NewApplicationDefinitionWrapper {
