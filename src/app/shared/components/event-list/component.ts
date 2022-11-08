@@ -20,6 +20,7 @@ import {UserService} from '@core/services/user';
 import {Event} from '@shared/entity/event';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+import {SettingsService} from '@core/services/settings';
 
 @Component({
   selector: 'km-event-list',
@@ -28,6 +29,7 @@ import {takeUntil} from 'rxjs/operators';
 })
 export class EventListComponent implements OnInit, OnChanges, OnDestroy {
   private _unsubscribe = new Subject<void>();
+
   @Input() events: Event[] = [];
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -40,8 +42,9 @@ export class EventListComponent implements OnInit, OnChanges, OnDestroy {
     'count',
     'lastTimestamp',
   ];
+  silenceErrorEvents = false;
 
-  constructor(private readonly _userService: UserService) {}
+  constructor(private readonly _userService: UserService, private readonly _settingsService: SettingsService) {}
 
   ngOnInit(): void {
     this.dataSource.data = this.events;
@@ -54,6 +57,12 @@ export class EventListComponent implements OnInit, OnChanges, OnDestroy {
     this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       this.paginator.pageSize = settings.itemsPerPage;
       this.dataSource.paginator = this.paginator; // Force refresh.
+    });
+
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.silenceErrorEvents = settings.notifications?.hideErrorEvents;
+
+      this.events = this.filterEvents(this.events);
     });
   }
 
@@ -117,6 +126,10 @@ export class EventListComponent implements OnInit, OnChanges, OnDestroy {
       map.set(hash, event);
     });
 
-    return Array.from(map.values());
+    return this.filterEvents(Array.from(map.values()));
+  }
+
+  private filterEvents(events: Event[]): Event[] {
+    return events.filter(e => !(e.type === 'Warning' && this.silenceErrorEvents));
   }
 }

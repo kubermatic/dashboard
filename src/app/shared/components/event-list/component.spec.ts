@@ -20,6 +20,8 @@ import {UserService} from '@core/services/user';
 import {Event} from '@shared/entity/event';
 import {SharedModule} from '@shared/module';
 import {EventListComponent} from './component';
+import {SettingsService} from '@core/services/settings';
+import {SettingsMockService} from '@test/services/settings-mock';
 
 describe('EventListComponent', () => {
   let fixture: ComponentFixture<EventListComponent>;
@@ -28,7 +30,10 @@ describe('EventListComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [BrowserModule, BrowserAnimationsModule, SharedModule],
-      providers: [{provide: UserService, useClass: UserMockService}],
+      providers: [
+        {provide: UserService, useClass: UserMockService},
+        {provide: SettingsService, useClass: SettingsMockService},
+      ],
       teardown: {destroyAfterEach: false},
     }).compileComponents();
   });

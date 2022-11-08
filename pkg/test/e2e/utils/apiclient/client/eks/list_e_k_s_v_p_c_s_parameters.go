@@ -64,6 +64,12 @@ type ListEKSVPCSParams struct {
 	// AccessKeyID.
 	AccessKeyID *string
 
+	// AssumeRoleARN.
+	AssumeRoleARN *string
+
+	// AssumeRoleExternalID.
+	AssumeRoleExternalID *string
+
 	// Credential.
 	Credential *string
 
@@ -137,6 +143,28 @@ func (o *ListEKSVPCSParams) SetAccessKeyID(accessKeyID *string) {
 	o.AccessKeyID = accessKeyID
 }
 
+// WithAssumeRoleARN adds the assumeRoleARN to the list e k s v p c s params
+func (o *ListEKSVPCSParams) WithAssumeRoleARN(assumeRoleARN *string) *ListEKSVPCSParams {
+	o.SetAssumeRoleARN(assumeRoleARN)
+	return o
+}
+
+// SetAssumeRoleARN adds the assumeRoleARN to the list e k s v p c s params
+func (o *ListEKSVPCSParams) SetAssumeRoleARN(assumeRoleARN *string) {
+	o.AssumeRoleARN = assumeRoleARN
+}
+
+// WithAssumeRoleExternalID adds the assumeRoleExternalID to the list e k s v p c s params
+func (o *ListEKSVPCSParams) WithAssumeRoleExternalID(assumeRoleExternalID *string) *ListEKSVPCSParams {
+	o.SetAssumeRoleExternalID(assumeRoleExternalID)
+	return o
+}
+
+// SetAssumeRoleExternalID adds the assumeRoleExternalId to the list e k s v p c s params
+func (o *ListEKSVPCSParams) SetAssumeRoleExternalID(assumeRoleExternalID *string) {
+	o.AssumeRoleExternalID = assumeRoleExternalID
+}
+
 // WithCredential adds the credential to the list e k s v p c s params
 func (o *ListEKSVPCSParams) WithCredential(credential *string) *ListEKSVPCSParams {
 	o.SetCredential(credential)
@@ -182,6 +210,22 @@ func (o *ListEKSVPCSParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.R
 
 		// header param AccessKeyID
 		if err := r.SetHeaderParam("AccessKeyID", *o.AccessKeyID); err != nil {
+			return err
+		}
+	}
+
+	if o.AssumeRoleARN != nil {
+
+		// header param AssumeRoleARN
+		if err := r.SetHeaderParam("AssumeRoleARN", *o.AssumeRoleARN); err != nil {
+			return err
+		}
+	}
+
+	if o.AssumeRoleExternalID != nil {
+
+		// header param AssumeRoleExternalID
+		if err := r.SetHeaderParam("AssumeRoleExternalID", *o.AssumeRoleExternalID); err != nil {
 			return err
 		}
 	}

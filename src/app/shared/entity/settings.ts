@@ -43,6 +43,7 @@ export interface AdminSettings {
   mlaOptions: MLAOptions;
   mlaAlertmanagerPrefix: string;
   mlaGrafanaPrefix: string;
+  notifications?: NotificationOptions;
 }
 
 export interface MachineDeploymentVMResourceQuota {
@@ -68,6 +69,11 @@ export interface MLAOptions {
   loggingEnforced: boolean;
   monitoringEnabled: boolean;
   monitoringEnforced: boolean;
+}
+
+export interface NotificationOptions {
+  hideErrors: boolean;
+  hideErrorEvents: boolean;
 }
 
 export class CustomLink {

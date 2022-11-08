@@ -24,6 +24,9 @@ type NetworkDefaults struct {
 	// ProxyMode defines the default kube-proxy mode ("ipvs" / "iptables" / "ebpf").
 	ProxyMode string `json:"proxyMode,omitempty"`
 
+	// cluster expose strategy
+	ClusterExposeStrategy ExposeStrategy `json:"clusterExposeStrategy,omitempty"`
+
 	// ipv4
 	IPV4 *NetworkDefaultsIPFamily `json:"ipv4,omitempty"`
 
@@ -34,6 +37,10 @@ type NetworkDefaults struct {
 // Validate validates this network defaults
 func (m *NetworkDefaults) Validate(formats strfmt.Registry) error {
 	var res []error
+
+	if err := m.validateClusterExposeStrategy(formats); err != nil {
+		res = append(res, err)
+	}
 
 	if err := m.validateIPV4(formats); err != nil {
 		res = append(res, err)
@@ -46,6 +53,23 @@ func (m *NetworkDefaults) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *NetworkDefaults) validateClusterExposeStrategy(formats strfmt.Registry) error {
+	if swag.IsZero(m.ClusterExposeStrategy) { // not required
+		return nil
+	}
+
+	if err := m.ClusterExposeStrategy.Validate(formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("clusterExposeStrategy")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("clusterExposeStrategy")
+		}
+		return err
+	}
+
 	return nil
 }
 
@@ -91,6 +115,10 @@ func (m *NetworkDefaults) validateIPV6(formats strfmt.Registry) error {
 func (m *NetworkDefaults) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.contextValidateClusterExposeStrategy(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateIPV4(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -102,6 +130,20 @@ func (m *NetworkDefaults) ContextValidate(ctx context.Context, formats strfmt.Re
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *NetworkDefaults) contextValidateClusterExposeStrategy(ctx context.Context, formats strfmt.Registry) error {
+
+	if err := m.ClusterExposeStrategy.ContextValidate(ctx, formats); err != nil {
+		if ve, ok := err.(*errors.Validation); ok {
+			return ve.ValidateName("clusterExposeStrategy")
+		} else if ce, ok := err.(*errors.CompositeError); ok {
+			return ce.ValidateName("clusterExposeStrategy")
+		}
+		return err
+	}
+
 	return nil
 }
 

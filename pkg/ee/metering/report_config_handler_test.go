@@ -32,10 +32,10 @@ import (
 	"testing"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
+	"k8c.io/dashboard/v2/pkg/ee/metering"
 	"k8c.io/dashboard/v2/pkg/handler/test"
 	"k8c.io/dashboard/v2/pkg/handler/test/hack"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
-	"k8c.io/kubermatic/v2/pkg/ee/metering"
 
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )

@@ -20,6 +20,12 @@ type EKS struct {
 	// access key ID
 	AccessKeyID string `json:"accessKeyID,omitempty"`
 
+	// assume role a r n
+	AssumeRoleARN string `json:"assumeRoleARN,omitempty"`
+
+	// assume role external ID
+	AssumeRoleExternalID string `json:"assumeRoleExternalID,omitempty"`
+
 	// If datacenter is set, this preset is only applicable to the
 	// configured datacenter.
 	Datacenter string `json:"datacenter,omitempty"`
