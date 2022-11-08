@@ -64,6 +64,12 @@ type ValidateProjectEKSCredentialsParams struct {
 	// AccessKeyID.
 	AccessKeyID *string
 
+	// AssumeRoleARN.
+	AssumeRoleARN *string
+
+	// AssumeRoleExternalID.
+	AssumeRoleExternalID *string
+
 	// Credential.
 	Credential *string
 
@@ -140,6 +146,28 @@ func (o *ValidateProjectEKSCredentialsParams) SetAccessKeyID(accessKeyID *string
 	o.AccessKeyID = accessKeyID
 }
 
+// WithAssumeRoleARN adds the assumeRoleARN to the validate project e k s credentials params
+func (o *ValidateProjectEKSCredentialsParams) WithAssumeRoleARN(assumeRoleARN *string) *ValidateProjectEKSCredentialsParams {
+	o.SetAssumeRoleARN(assumeRoleARN)
+	return o
+}
+
+// SetAssumeRoleARN adds the assumeRoleARN to the validate project e k s credentials params
+func (o *ValidateProjectEKSCredentialsParams) SetAssumeRoleARN(assumeRoleARN *string) {
+	o.AssumeRoleARN = assumeRoleARN
+}
+
+// WithAssumeRoleExternalID adds the assumeRoleExternalID to the validate project e k s credentials params
+func (o *ValidateProjectEKSCredentialsParams) WithAssumeRoleExternalID(assumeRoleExternalID *string) *ValidateProjectEKSCredentialsParams {
+	o.SetAssumeRoleExternalID(assumeRoleExternalID)
+	return o
+}
+
+// SetAssumeRoleExternalID adds the assumeRoleExternalId to the validate project e k s credentials params
+func (o *ValidateProjectEKSCredentialsParams) SetAssumeRoleExternalID(assumeRoleExternalID *string) {
+	o.AssumeRoleExternalID = assumeRoleExternalID
+}
+
 // WithCredential adds the credential to the validate project e k s credentials params
 func (o *ValidateProjectEKSCredentialsParams) WithCredential(credential *string) *ValidateProjectEKSCredentialsParams {
 	o.SetCredential(credential)
@@ -196,6 +224,22 @@ func (o *ValidateProjectEKSCredentialsParams) WriteToRequest(r runtime.ClientReq
 
 		// header param AccessKeyID
 		if err := r.SetHeaderParam("AccessKeyID", *o.AccessKeyID); err != nil {
+			return err
+		}
+	}
+
+	if o.AssumeRoleARN != nil {
+
+		// header param AssumeRoleARN
+		if err := r.SetHeaderParam("AssumeRoleARN", *o.AssumeRoleARN); err != nil {
+			return err
+		}
+	}
+
+	if o.AssumeRoleExternalID != nil {
+
+		// header param AssumeRoleExternalID
+		if err := r.SetHeaderParam("AssumeRoleExternalID", *o.AssumeRoleExternalID); err != nil {
 			return err
 		}
 	}

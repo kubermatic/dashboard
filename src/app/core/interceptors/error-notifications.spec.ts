@@ -20,6 +20,8 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {SharedModule} from '@shared/module';
 import {CoreModule} from '@core/module';
 import {ErrorNotificationsInterceptor} from '@core/interceptors';
+import {SettingsService} from '@core/services/settings';
+import {SettingsMockService} from '@test/services/settings-mock';
 
 describe('ErrorNotificationsInterceptorService', () => {
   beforeEach(() => {
@@ -32,7 +34,7 @@ describe('ErrorNotificationsInterceptorService', () => {
         SharedModule,
         CoreModule,
       ],
-      providers: [ErrorNotificationsInterceptor],
+      providers: [ErrorNotificationsInterceptor, {provide: SettingsService, useClass: SettingsMockService}],
       teardown: {destroyAfterEach: false},
     });
   });

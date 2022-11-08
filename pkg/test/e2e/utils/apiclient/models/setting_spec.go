@@ -66,6 +66,9 @@ type SettingSpec struct {
 	// mla options
 	MlaOptions *MlaOptions `json:"mlaOptions,omitempty"`
 
+	// notifications
+	Notifications *NotificationsOptions `json:"notifications,omitempty"`
+
 	// opa options
 	OpaOptions *OpaOptions `json:"opaOptions,omitempty"`
 }
@@ -87,6 +90,10 @@ func (m *SettingSpec) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateMlaOptions(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateNotifications(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -174,6 +181,25 @@ func (m *SettingSpec) validateMlaOptions(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *SettingSpec) validateNotifications(formats strfmt.Registry) error {
+	if swag.IsZero(m.Notifications) { // not required
+		return nil
+	}
+
+	if m.Notifications != nil {
+		if err := m.Notifications.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("notifications")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("notifications")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *SettingSpec) validateOpaOptions(formats strfmt.Registry) error {
 	if swag.IsZero(m.OpaOptions) { // not required
 		return nil
@@ -210,6 +236,10 @@ func (m *SettingSpec) ContextValidate(ctx context.Context, formats strfmt.Regist
 	}
 
 	if err := m.contextValidateMlaOptions(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateNotifications(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -277,6 +307,22 @@ func (m *SettingSpec) contextValidateMlaOptions(ctx context.Context, formats str
 				return ve.ValidateName("mlaOptions")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("mlaOptions")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *SettingSpec) contextValidateNotifications(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Notifications != nil {
+		if err := m.Notifications.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("notifications")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("notifications")
 			}
 			return err
 		}

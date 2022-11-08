@@ -16,7 +16,9 @@ import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest}
 import {Injectable, Injector} from '@angular/core';
 import {NotificationService} from '@core/services/notification';
 import {Observable} from 'rxjs';
-import {tap} from 'rxjs/operators';
+import {take, tap} from 'rxjs/operators';
+import {SettingsService} from '@core/services/settings';
+import {AdminSettings} from '@shared/entity/settings';
 
 export interface APIError {
   error: Error;
@@ -64,8 +66,18 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
     ['failed to retrieve temporary AWS credentials for assumed role', 'Invalid AssumeRole information provided'],
   ]);
 
-  constructor(private readonly _inj: Injector) {
+  private adminSettings: AdminSettings;
+
+  constructor(private readonly _inj: Injector, private readonly _settingsService: SettingsService) {
     this._notificationService = this._inj.get(NotificationService);
+    this._settingsService = this._inj.get(SettingsService);
+
+    // TODO: Fix this
+    // Currently the way admin settings is being fetched is wrong and it needs to be revamped. We don't need a websocket or defaultings in FE.
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    this._settingsService.adminSettings.pipe(take(2)).subscribe(settings => {
+      this.adminSettings = settings;
+    });
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -105,6 +117,10 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
   }
 
   private _shouldSilenceError(error: Error): boolean {
+    if (this.adminSettings.notifications?.hideErrors) {
+      return true;
+    }
+
     return this._silenceErrArr.some(partial => error.message.includes(partial));
   }
 

@@ -20,6 +20,12 @@ type EKSCloudSpec struct {
 	// access key ID
 	AccessKeyID string `json:"accessKeyID,omitempty"`
 
+	// assume role a r n
+	AssumeRoleARN string `json:"assumeRoleARN,omitempty"`
+
+	// assume role external ID
+	AssumeRoleExternalID string `json:"assumeRoleExternalID,omitempty"`
+
 	// name
 	Name string `json:"name,omitempty"`
 
