@@ -22,24 +22,17 @@ limitations under the License.
       <b>{{clusterName}}</b> cluster
     </p>
     <km-node-data [provider]="provider"
-                  [showExtended]="isExtended"
                   [quotaWidget]="quotaWidget"
                   [formControl]="form.get(Control.NodeData)">
     </km-node-data>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <button mat-flat-button
-            color="pure"
-            (click)="onViewChange()"
-            *ngIf="hasExtendedOptions()">
-      <span *ngIf="!isExtended">Show Advanced Settings</span>
-      <span *ngIf="isExtended">Hide Advanced Settings</span>
-    </button>
-    <div fxFlex></div>
-    <i *ngIf="isRecreationWarningVisible"
-       class="km-icon-warning"
-       matTooltip="You have changed node specification. All nodes will be recreated.">
-    </i>
+    <div *ngIf="isRecreationWarningVisible"
+         fxFlex
+         fxLayoutAlign="start center">
+      <i class="km-icon-warning"></i>
+      <div>Changed node settings, Nodes will be recreated.</div>
+    </div>
     <button mat-flat-button
             (click)="onConfirm()"
             [disabled]="form.invalid"

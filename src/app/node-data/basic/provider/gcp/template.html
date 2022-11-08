@@ -16,12 +16,32 @@ limitations under the License.
 <form [formGroup]="form"
       fxLayout="column"
       fxLayoutGap="8px">
-  <km-number-stepper [formControlName]="Controls.DiskSize"
-                     mode="errors"
-                     label="Disk Size"
-                     min="1"
-                     required>
-  </km-number-stepper>
+  <div [fxLayout]="isDialogView() ? 'row' : 'column'"
+       fxLayoutGap="10px">
+    <km-number-stepper [fxFlex]="isDialogView() ? '50' : '100'"
+                       [formControlName]="Controls.DiskSize"
+                       mode="errors"
+                       label="Disk Size"
+                       min="1"
+                       required>
+    </km-number-stepper>
+
+    <km-combobox [fxFlex]="isDialogView() ? '50' : '100'"
+                 #diskTypesCombobox
+                 [required]="true"
+                 [grouped]="false"
+                 [selected]="selectedDiskType"
+                 [options]="diskTypes"
+                 [formControlName]="Controls.DiskType"
+                 (changed)="onDiskTypeChange($event)"
+                 [label]="diskTypeLabel"
+                 inputLabel="Select disk type..."
+                 filterBy="name">
+      <div *option="let diskType">
+        {{diskType.name}} ({{diskType.description}})
+      </div>
+    </km-combobox>
+  </div>
 
   <km-combobox #zonesCombobox
                [required]="true"
@@ -35,21 +55,6 @@ limitations under the License.
                filterBy="name">
     <div *option="let zone">
       {{zone.name}}
-    </div>
-  </km-combobox>
-
-  <km-combobox #diskTypesCombobox
-               [required]="true"
-               [grouped]="false"
-               [selected]="selectedDiskType"
-               [options]="diskTypes"
-               [formControlName]="Controls.DiskType"
-               (changed)="onDiskTypeChange($event)"
-               [label]="diskTypeLabel"
-               inputLabel="Select disk type..."
-               filterBy="name">
-    <div *option="let diskType">
-      {{diskType.name}} ({{diskType.description}})
     </div>
   </km-combobox>
 

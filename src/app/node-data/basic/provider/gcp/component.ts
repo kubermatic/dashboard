@@ -189,6 +189,11 @@ export class GCPBasicNodeDataComponent extends BaseFormValidator implements OnIn
     return `${machine.name} (${machine.description})`;
   }
 
+  isDialogView(): boolean {
+    // In the wizard we do not split extended and basic options.
+    return !this._nodeDataService.isInWizardMode();
+  }
+
   private _init(): void {
     if (this._nodeDataService.nodeData.spec.cloud.gcp) {
       this.form.get(Controls.DiskSize).setValue(this._nodeDataService.nodeData.spec.cloud.gcp.diskSize);

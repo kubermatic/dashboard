@@ -72,7 +72,6 @@ export interface DialogDataOutput {
 })
 export class NodeDataDialogComponent extends BaseFormValidator implements OnInit, OnDestroy {
   isRecreationWarningVisible = false;
-  isExtended = false;
   mode = Mode.Add;
   quotaWidget: TemplateRef<QuotaWidgetComponent>;
 
@@ -143,10 +142,6 @@ export class NodeDataDialogComponent extends BaseFormValidator implements OnInit
     // List of providers that do not have extended options right now.
     const blacklist = [NodeProvider.HETZNER, NodeProvider.BRINGYOUROWN, NodeProvider.ANEXIA, NodeProvider.KUBEVIRT];
     return !blacklist.includes(this._clusterSpecService.provider);
-  }
-
-  onViewChange(): void {
-    this.isExtended = !this.isExtended;
   }
 
   onConfirm(): void {
