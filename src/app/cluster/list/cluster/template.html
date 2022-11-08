@@ -51,7 +51,7 @@ limitations under the License.
            matSort
            [dataSource]="dataSource"
            [trackBy]="trackBy">
-      <ng-container matColumnDef="status">
+      <ng-container [matColumnDef]="Column.Status">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell"></th>
@@ -63,10 +63,10 @@ limitations under the License.
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="name">
+      <ng-container [matColumnDef]="Column.Name">
         <th mat-header-cell
             *matHeaderCellDef
-            class="km-header-cell p-25"
+            class="km-header-cell p-30"
             mat-sort-header>Name
         </th>
         <td mat-cell
@@ -83,22 +83,10 @@ limitations under the License.
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="labels">
+      <ng-container [matColumnDef]="Column.Provider">
         <th mat-header-cell
             *matHeaderCellDef
-            class="km-header-cell p-30">Labels
-        </th>
-        <td mat-cell
-            *matCellDef="let element">
-          <km-labels [labels]="element.labels"
-                     [limit]="2"></km-labels>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="provider">
-        <th mat-header-cell
-            *matHeaderCellDef
-            class="km-header-cell p-10">Provider
+            class="km-header-cell p-20">Provider
         </th>
         <td mat-cell
             *matCellDef="let element">
@@ -107,7 +95,20 @@ limitations under the License.
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="region">
+      <ng-container [matColumnDef]="Column.Version">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-15">Version
+        </th>
+
+        <td mat-cell
+            *matCellDef="let element">
+          <span>v{{element?.spec?.version}}</span>
+        </td>
+      </ng-container>
+
+
+      <ng-container [matColumnDef]="Column.Region">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell p-15">Region
@@ -120,7 +121,7 @@ limitations under the License.
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="machines">
+      <ng-container [matColumnDef]="Column.Machines">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell p-10">
@@ -153,7 +154,7 @@ limitations under the License.
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="created">
+      <ng-container [matColumnDef]="Column.Created">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell p-15">Created
@@ -164,7 +165,7 @@ limitations under the License.
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="actions">
+      <ng-container [matColumnDef]="Column.Actions">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell"></th>

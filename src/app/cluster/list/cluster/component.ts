@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnChanges, OnDestroy, OnInit, ViewChild, TemplateRef} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -49,6 +49,17 @@ import {catchError, distinctUntilChanged, startWith, switchMap, take, takeUntil,
 import {QuotaWidgetComponent} from '../../../dynamic/enterprise/quotas/quota-widget/component';
 import {ClusterDeleteConfirmationComponent} from '../../details/cluster/cluster-delete-confirmation/component';
 
+enum Column {
+  Status = 'status',
+  Name = 'name',
+  Provider = 'provider',
+  Version = 'version',
+  Region = 'region',
+  Machines = 'machines',
+  Created = 'created',
+  Actions = 'actions',
+}
+
 @Component({
   selector: 'km-cluster-list',
   templateUrl: './template.html',
@@ -61,6 +72,8 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   private _currentGroupConfig: GroupConfig;
   private _etcdRestores: EtcdRestore[] = [];
   private _projectChange$ = new Subject<void>();
+  readonly Column = Column;
+  readonly displayedColumns: string[] = Object.values(Column);
   readonly Permission = Permission;
   clusters: Cluster[] = [];
   clusterTemplates: ClusterTemplate[] = [];
@@ -68,7 +81,6 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   nodeDC: Datacenter[] = [];
   health: Health[] = [];
   machinesCount: Record<string, MachineDeploymentStatus> = {};
-  displayedColumns: string[] = ['status', 'name', 'labels', 'provider', 'region', 'machines', 'created', 'actions'];
   dataSource = new MatTableDataSource<Cluster>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;

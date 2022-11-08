@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnChanges, OnDestroy, OnInit, ViewChild, TemplateRef} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -30,7 +30,7 @@ import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
-import {distinctUntilChanged, switchMap, take, takeUntil, tap, startWith} from 'rxjs/operators';
+import {distinctUntilChanged, startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {AddExternalClusterDialogComponent} from '@shared/components/add-external-cluster-dialog/component';
 import {
   ExternalCloudSpec,
@@ -42,6 +42,15 @@ import {ExternalClusterDeleteConfirmationComponent} from '@app/cluster/details/e
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 
+enum Column {
+  Status = 'status',
+  Name = 'name',
+  Provider = 'provider',
+  Region = 'region',
+  Imported = 'imported',
+  Actions = 'actions',
+}
+
 @Component({
   selector: 'km-external-cluster-list',
   templateUrl: './template.html',
@@ -50,9 +59,10 @@ import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/comp
 export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestroy {
   readonly Permission = Permission;
   readonly Provider = ExternalClusterProvider;
+  readonly Column = Column;
+  readonly displayedColumns: string[] = Object.values(Column);
   clusters: ExternalCluster[] = [];
   isInitialized = false;
-  displayedColumns: string[] = ['status', 'name', 'labels', 'provider', 'created', 'actions'];
   dataSource = new MatTableDataSource<ExternalCluster>();
   searchQuery: string;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -241,6 +251,20 @@ export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestro
       .subscribe(({id}) => {
         component.projectId = id;
       });
+  }
+
+  getRegion(cloud: ExternalCloudSpec) {
+    const provider = this.getProvider(cloud);
+    switch (provider) {
+      case ExternalClusterProvider.EKS:
+        return cloud.eks.region;
+      case ExternalClusterProvider.AKS:
+        return cloud.aks.location;
+      case ExternalClusterProvider.GKE:
+        return cloud.gke.zone;
+      default:
+        return '';
+    }
   }
 
   private _onProjectChange(project: Project): void {

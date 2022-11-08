@@ -57,7 +57,7 @@ limitations under the License.
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="name">
+        <ng-container [matColumnDef]="Column.Name">
           <th mat-header-cell
               *matHeaderCellDef
               class="km-header-cell p-20"
@@ -78,21 +78,7 @@ limitations under the License.
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="labels">
-          <th mat-header-cell
-              *matHeaderCellDef
-              class="km-header-cell p-20">Labels
-          </th>
-          <td mat-cell
-              *matCellDef="let element">
-            <div class="machine-deployment-labels">
-              <km-labels [labels]="element?.spec?.template?.labels"
-                         [limit]="2"></km-labels>
-            </div>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="replicas">
+        <ng-container [matColumnDef]="Column.Replicas">
           <th mat-header-cell
               *matHeaderCellDef
               class="km-header-cell p-10">
@@ -115,25 +101,27 @@ limitations under the License.
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="ver">
+        <ng-container [matColumnDef]="Column.Version">
           <th mat-header-cell
               *matHeaderCellDef
-              class="km-header-cell p-10">kubelet Version
+              class="km-header-cell p-10">Kubelet Version
           </th>
           <td mat-cell
               *matCellDef="let element">v{{element.spec.template.versions?.kubelet}}</td>
         </ng-container>
 
-        <ng-container matColumnDef="availabilityZone">
-          <th mat-header-cell
-              *matHeaderCellDef
-              class="km-header-cell p-10">Availability Zone
-          </th>
-          <td mat-cell
-              *matCellDef="let element">{{element.spec.template.cloud?.aws?.availabilityZone}}</td>
+        <ng-container *ngIf="cluster?.spec?.cloud.aws">
+          <ng-container matColumnDef="availabilityZone">
+            <th mat-header-cell
+                *matHeaderCellDef
+                class="km-header-cell p-10">Availability Zone
+            </th>
+            <td mat-cell
+                *matCellDef="let element">{{element.spec.template.cloud?.aws?.availabilityZone}}</td>
+          </ng-container>
         </ng-container>
 
-        <ng-container matColumnDef="os">
+        <ng-container [matColumnDef]="Column.OS">
           <th mat-header-cell
               *matHeaderCellDef
               class="km-header-cell p-10">Operating System
@@ -149,7 +137,7 @@ limitations under the License.
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="created">
+        <ng-container [matColumnDef]="Column.Created">
           <th mat-header-cell
               *matHeaderCellDef
               class="km-header-cell p-10">Created
@@ -160,7 +148,7 @@ limitations under the License.
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="actions">
+        <ng-container [matColumnDef]="Column.Actions">
           <th mat-header-cell
               *matHeaderCellDef
               class="km-header-cell p-5"></th>
