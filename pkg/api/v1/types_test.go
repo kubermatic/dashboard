@@ -21,6 +21,8 @@ import (
 	"strings"
 	"testing"
 
+	kubevirtv1 "kubevirt.io/api/core/v1"
+
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/semver"
@@ -633,7 +635,7 @@ func TestKubevirtNodeSpec_MarshalJSON(t *testing.T) {
 			"missing or invalid required parameter(s): cpus, memory, primaryDiskOSImage, primaryDiskStorageClassName",
 		},
 		{
-			"case 7: should marshal when instance type is provided",
+			"case 7: should marshal when instance type is not provided",
 			&apiv1.KubevirtNodeSpec{
 				CPUs:                        "1",
 				Memory:                      "1",
@@ -641,7 +643,7 @@ func TestKubevirtNodeSpec_MarshalJSON(t *testing.T) {
 				PrimaryDiskStorageClassName: "test-sc",
 				PrimaryDiskSize:             "1",
 			},
-			"{\"flavorName\":\"\",\"flavorProfile\":\"\",\"cpus\":\"1\",\"memory\":\"1\",\"primaryDiskOSImage\":\"test-url\",\"primaryDiskStorageClassName\":\"test-sc\",\"primaryDiskSize\":\"1\",\"secondaryDisks\":null,\"podAffinityPreset\":\"\",\"podAntiAffinityPreset\":\"\",\"nodeAffinityPreset\":{\"Type\":\"\",\"Key\":\"\",\"Values\":null},\"topologySpreadConstraints\":null}",
+			"{\"flavorName\":\"\",\"flavorProfile\":\"\",\"instancetype\":null,\"preference\":null,\"cpus\":\"1\",\"memory\":\"1\",\"primaryDiskOSImage\":\"test-url\",\"primaryDiskStorageClassName\":\"test-sc\",\"primaryDiskSize\":\"1\",\"secondaryDisks\":null,\"podAffinityPreset\":\"\",\"podAntiAffinityPreset\":\"\",\"nodeAffinityPreset\":{\"Type\":\"\",\"Key\":\"\",\"Values\":null},\"topologySpreadConstraints\":null}",
 		},
 		{
 			"case 8: should marshal when instance type is provided with vm-flavor",
@@ -651,10 +653,10 @@ func TestKubevirtNodeSpec_MarshalJSON(t *testing.T) {
 				PrimaryDiskStorageClassName: "test-sc",
 				PrimaryDiskSize:             "1",
 			},
-			"{\"flavorName\":\"test-flavor\",\"flavorProfile\":\"\",\"cpus\":\"\",\"memory\":\"\",\"primaryDiskOSImage\":\"test-url\",\"primaryDiskStorageClassName\":\"test-sc\",\"primaryDiskSize\":\"1\",\"secondaryDisks\":null,\"podAffinityPreset\":\"\",\"podAntiAffinityPreset\":\"\",\"nodeAffinityPreset\":{\"Type\":\"\",\"Key\":\"\",\"Values\":null},\"topologySpreadConstraints\":null}",
+			"{\"flavorName\":\"test-flavor\",\"flavorProfile\":\"\",\"instancetype\":null,\"preference\":null,\"cpus\":\"\",\"memory\":\"\",\"primaryDiskOSImage\":\"test-url\",\"primaryDiskStorageClassName\":\"test-sc\",\"primaryDiskSize\":\"1\",\"secondaryDisks\":null,\"podAffinityPreset\":\"\",\"podAntiAffinityPreset\":\"\",\"nodeAffinityPreset\":{\"Type\":\"\",\"Key\":\"\",\"Values\":null},\"topologySpreadConstraints\":null}",
 		},
 		{
-			"case 9: should marshal when instance type is provided with affinity",
+			"case 9: should marshal when flavor is provided with affinity",
 			&apiv1.KubevirtNodeSpec{
 				CPUs:                        "1",
 				Memory:                      "1",
@@ -667,13 +669,17 @@ func TestKubevirtNodeSpec_MarshalJSON(t *testing.T) {
 					Values: []string{"bar"},
 				},
 			},
-			"{\"flavorName\":\"\",\"flavorProfile\":\"\",\"cpus\":\"1\",\"memory\":\"1\",\"primaryDiskOSImage\":\"test-url\",\"primaryDiskStorageClassName\":\"test-sc\",\"primaryDiskSize\":\"1\",\"secondaryDisks\":null,\"podAffinityPreset\":\"\",\"podAntiAffinityPreset\":\"\",\"nodeAffinityPreset\":{\"Type\":\"soft\",\"Key\":\"foo\",\"Values\":[\"bar\"]},\"topologySpreadConstraints\":null}",
+			"{\"flavorName\":\"\",\"flavorProfile\":\"\",\"instancetype\":null,\"preference\":null,\"cpus\":\"1\",\"memory\":\"1\",\"primaryDiskOSImage\":\"test-url\",\"primaryDiskStorageClassName\":\"test-sc\",\"primaryDiskSize\":\"1\",\"secondaryDisks\":null,\"podAffinityPreset\":\"\",\"podAntiAffinityPreset\":\"\",\"nodeAffinityPreset\":{\"Type\":\"soft\",\"Key\":\"foo\",\"Values\":[\"bar\"]},\"topologySpreadConstraints\":null}",
 		},
 		{
 			"case 10: should marshal when instance type is provided with topology constraint",
 			&apiv1.KubevirtNodeSpec{
-				CPUs:                        "1",
-				Memory:                      "1",
+				CPUs:   "1",
+				Memory: "1",
+				Instancetype: &kubevirtv1.InstancetypeMatcher{
+					Name: "standard-2",
+					Kind: "VirtualMachineInstancetype",
+				},
 				PrimaryDiskOSImage:          "test-url",
 				PrimaryDiskStorageClassName: "test-sc",
 				PrimaryDiskSize:             "1",
@@ -684,7 +690,38 @@ func TestKubevirtNodeSpec_MarshalJSON(t *testing.T) {
 				},
 				TopologySpreadConstraints: []apiv1.TopologySpreadConstraint{{MaxSkew: 1, TopologyKey: "zone", WhenUnsatisfiable: "ScheduleAnyway"}},
 			},
-			"{\"flavorName\":\"\",\"flavorProfile\":\"\",\"cpus\":\"1\",\"memory\":\"1\",\"primaryDiskOSImage\":\"test-url\",\"primaryDiskStorageClassName\":\"test-sc\",\"primaryDiskSize\":\"1\",\"secondaryDisks\":null,\"podAffinityPreset\":\"\",\"podAntiAffinityPreset\":\"\",\"nodeAffinityPreset\":{\"Type\":\"soft\",\"Key\":\"foo\",\"Values\":[\"bar\"]},\"topologySpreadConstraints\":[{\"maxSkew\":1,\"topologyKey\":\"zone\",\"whenUnsatisfiable\":\"ScheduleAnyway\"}]}",
+			"{\"flavorName\":\"\",\"flavorProfile\":\"\",\"instancetype\":{\"name\":\"standard-2\",\"kind\":\"VirtualMachineInstancetype\"},\"preference\":null,\"cpus\":\"1\",\"memory\":\"1\",\"primaryDiskOSImage\":\"test-url\",\"primaryDiskStorageClassName\":\"test-sc\",\"primaryDiskSize\":\"1\",\"secondaryDisks\":null,\"podAffinityPreset\":\"\",\"podAntiAffinityPreset\":\"\",\"nodeAffinityPreset\":{\"Type\":\"soft\",\"Key\":\"foo\",\"Values\":[\"bar\"]},\"topologySpreadConstraints\":[{\"maxSkew\":1,\"topologyKey\":\"zone\",\"whenUnsatisfiable\":\"ScheduleAnyway\"}]}",
+		},
+		{
+			"case 11: should fail when no cpu is provided (neither directly nor instancetype)",
+			&apiv1.KubevirtNodeSpec{
+				Memory:                      "1",
+				PrimaryDiskOSImage:          "test-url",
+				PrimaryDiskStorageClassName: "test-sc",
+				PrimaryDiskSize:             "1"},
+			"missing or invalid required parameter(s): cpus",
+		},
+		{
+			"case 12: should fail when no memory is provided (neither directly nor instancetype)",
+			&apiv1.KubevirtNodeSpec{
+				CPUs:                        "1",
+				PrimaryDiskOSImage:          "test-url",
+				PrimaryDiskStorageClassName: "test-sc",
+				PrimaryDiskSize:             "1"},
+			"missing or invalid required parameter(s): memory",
+		},
+		{
+			"case 13: should marshal when cpu/memory are provided with instancetype",
+			&apiv1.KubevirtNodeSpec{
+				Instancetype: &kubevirtv1.InstancetypeMatcher{
+					Name: "standard-2",
+					Kind: "VirtualMachineInstancetype",
+				},
+				PrimaryDiskOSImage:          "test-url",
+				PrimaryDiskStorageClassName: "test-sc",
+				PrimaryDiskSize:             "1",
+			},
+			"{\"flavorName\":\"\",\"flavorProfile\":\"\",\"instancetype\":{\"name\":\"standard-2\",\"kind\":\"VirtualMachineInstancetype\"},\"preference\":null,\"cpus\":\"\",\"memory\":\"\",\"primaryDiskOSImage\":\"test-url\",\"primaryDiskStorageClassName\":\"test-sc\",\"primaryDiskSize\":\"1\",\"secondaryDisks\":null,\"podAffinityPreset\":\"\",\"podAntiAffinityPreset\":\"\",\"nodeAffinityPreset\":{\"Type\":\"\",\"Key\":\"\",\"Values\":null},\"topologySpreadConstraints\":null}",
 		},
 	}
 

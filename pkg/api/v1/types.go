@@ -23,6 +23,7 @@ import (
 	"time"
 
 	semverlib "github.com/Masterminds/semver/v3"
+	kubevirtv1 "kubevirt.io/api/core/v1"
 
 	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
 	vcd "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/vmwareclouddirector/types"
@@ -1956,9 +1957,22 @@ func (spec *GCPNodeSpec) MarshalJSON() ([]byte, error) {
 // swagger:model KubevirtNodeSpec
 type KubevirtNodeSpec struct {
 	// FlavorName states name of the virtual-machine flavor.
+	//
+	// Deprecated. In favor of Instancetype and Preference.
 	FlavorName string `json:"flavorName"`
 	// FlavorProfile states name of virtual-machine profile.
+	//
+	// Deprecated. In favor of Instancetype and Preference.
 	FlavorProfile string `json:"flavorProfile"`
+	// Instancetype provide a way to define a set of resource, performance and other runtime characteristics,
+	// allowing users to reuse these definitions across multiple VirtualMachines.
+	// Anything provided within an instancetype cannot be overridden within the VirtualMachine.
+	// Type is very simple, re-use directly KubeVirt type.
+	Instancetype *kubevirtv1.InstancetypeMatcher `json:"instancetype"`
+	// Preference are like Instancetype defining runtime characteristics. But unlike Instancetypes,
+	// Preferences only represent the preferred values and as such can be overridden by values in the VirtualMachine.
+	// Type is very simple, re-use directly KubeVirt type.
+	Preference *kubevirtv1.PreferenceMatcher `json:"preference"`
 	// CPUs states how many cpus the kubevirt node will have.
 	// required: true
 	CPUs string `json:"cpus"`
@@ -2018,11 +2032,12 @@ type TopologySpreadConstraint struct {
 func (spec *KubevirtNodeSpec) MarshalJSON() ([]byte, error) {
 	missing := make([]string, 0)
 
-	if spec.FlavorName == "" {
+	// Deprecated. Flavor is deprecated. Will be removed when migration to instancetype/preference is fully done.
+	// When UI is not using it any more.
+	if spec.FlavorName == "" && spec.Instancetype == nil {
 		if len(spec.CPUs) == 0 {
 			missing = append(missing, "cpus")
 		}
-
 		if len(spec.Memory) == 0 {
 			missing = append(missing, "memory")
 		}
@@ -2045,21 +2060,25 @@ func (spec *KubevirtNodeSpec) MarshalJSON() ([]byte, error) {
 	}
 
 	res := struct {
-		FlavorName                  string                     `json:"flavorName"`
-		FlavorProfile               string                     `json:"flavorProfile"`
-		CPUs                        string                     `json:"cpus"`
-		Memory                      string                     `json:"memory"`
-		PrimaryDiskOSImage          string                     `json:"primaryDiskOSImage"`
-		PrimaryDiskStorageClassName string                     `json:"primaryDiskStorageClassName"`
-		PrimaryDiskSize             string                     `json:"primaryDiskSize"`
-		SecondaryDisks              []SecondaryDisks           `json:"secondaryDisks"`
-		PodAffinityPreset           string                     `json:"podAffinityPreset"`
-		PodAntiAffinityPreset       string                     `json:"podAntiAffinityPreset"`
-		NodeAffinityPreset          NodeAffinityPreset         `json:"nodeAffinityPreset"`
-		TopologySpreadConstraints   []TopologySpreadConstraint `json:"topologySpreadConstraints"`
+		FlavorName                  string                          `json:"flavorName"`
+		FlavorProfile               string                          `json:"flavorProfile"`
+		Instancetype                *kubevirtv1.InstancetypeMatcher `json:"instancetype"`
+		Preference                  *kubevirtv1.PreferenceMatcher   `json:"preference"`
+		CPUs                        string                          `json:"cpus"`
+		Memory                      string                          `json:"memory"`
+		PrimaryDiskOSImage          string                          `json:"primaryDiskOSImage"`
+		PrimaryDiskStorageClassName string                          `json:"primaryDiskStorageClassName"`
+		PrimaryDiskSize             string                          `json:"primaryDiskSize"`
+		SecondaryDisks              []SecondaryDisks                `json:"secondaryDisks"`
+		PodAffinityPreset           string                          `json:"podAffinityPreset"`
+		PodAntiAffinityPreset       string                          `json:"podAntiAffinityPreset"`
+		NodeAffinityPreset          NodeAffinityPreset              `json:"nodeAffinityPreset"`
+		TopologySpreadConstraints   []TopologySpreadConstraint      `json:"topologySpreadConstraints"`
 	}{
 		FlavorName:                  spec.FlavorName,
 		FlavorProfile:               spec.FlavorProfile,
+		Instancetype:                spec.Instancetype,
+		Preference:                  spec.Preference,
 		CPUs:                        spec.CPUs,
 		Memory:                      spec.Memory,
 		PrimaryDiskOSImage:          spec.PrimaryDiskOSImage,
