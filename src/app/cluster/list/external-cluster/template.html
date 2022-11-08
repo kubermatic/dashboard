@@ -71,7 +71,7 @@ limitations under the License.
           <div fxLayoutAlign=" center"
                fxLayoutGap="8px">
             <span>{{element.name}}</span>
-            <span *ngIf="(!element?.labels || element?.labels['is-imported'] !== 'true')"
+            <span *ngIf="element?.labels['is-imported'] === 'true'"
                   class="km-label-primary">Imported</span>
           </div>
         </td>
@@ -103,7 +103,7 @@ limitations under the License.
         </td>
       </ng-container>
 
-      <ng-container [matColumnDef]="Column.Created">
+      <ng-container [matColumnDef]="Column.Imported">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell">Imported

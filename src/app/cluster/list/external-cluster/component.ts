@@ -47,7 +47,7 @@ enum Column {
   Name = 'name',
   Provider = 'provider',
   Region = 'region',
-  Created = 'created',
+  Imported = 'imported',
   Actions = 'actions',
 }
 
