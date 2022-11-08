@@ -30030,6 +30030,28 @@
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
+    "InstancetypeMatcher": {
+      "type": "object",
+      "title": "InstancetypeMatcher references a instancetype that is used to fill fields in the VMI template.",
+      "properties": {
+        "kind": {
+          "description": "Kind specifies which instancetype resource is referenced.\nAllowed values are: \"VirtualMachineInstancetype\" and \"VirtualMachineClusterInstancetype\".\nIf not specified, \"VirtualMachineClusterInstancetype\" is used by default.\n\n+optional",
+          "type": "string",
+          "x-go-name": "Kind"
+        },
+        "name": {
+          "description": "Name is the name of the VirtualMachineInstancetype or VirtualMachineClusterInstancetype",
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "revisionName": {
+          "description": "RevisionName specifies a ControllerRevision containing a specific copy of the\nVirtualMachineInstancetype or VirtualMachineClusterInstancetype to be used. This is initially\ncaptured the first time the instancetype is applied to the VirtualMachineInstance.\n\n+optional",
+          "type": "string",
+          "x-go-name": "RevisionName"
+        }
+      },
+      "x-go-package": "kubevirt.io/api/core/v1"
+    },
     "JSON": {
       "description": "These types are supported: bool, int64, float64, string, []interface{}, map[string]interface{} and nil.",
       "type": "object",
@@ -30740,14 +30762,17 @@
           "x-go-name": "CPUs"
         },
         "flavorName": {
-          "description": "FlavorName states name of the virtual-machine flavor.",
+          "description": "FlavorName states name of the virtual-machine flavor.\n\nDeprecated. In favor of Instancetype and Preference.",
           "type": "string",
           "x-go-name": "FlavorName"
         },
         "flavorProfile": {
-          "description": "FlavorProfile states name of virtual-machine profile.",
+          "description": "FlavorProfile states name of virtual-machine profile.\n\nDeprecated. In favor of Instancetype and Preference.",
           "type": "string",
           "x-go-name": "FlavorProfile"
+        },
+        "instancetype": {
+          "$ref": "#/definitions/InstancetypeMatcher"
         },
         "memory": {
           "description": "Memory states the memory that kubevirt node will have.",
@@ -30766,6 +30791,9 @@
           "description": "PodAntiAffinityPreset describes pod anti-affinity scheduling rules\n\nDeprecated: in favor of topology spread constraints",
           "type": "string",
           "x-go-name": "PodAntiAffinityPreset"
+        },
+        "preference": {
+          "$ref": "#/definitions/PreferenceMatcher"
         },
         "primaryDiskOSImage": {
           "description": "PrimaryDiskOSImage states the source from which the imported image will be downloaded.\nThis field contains:\na URL to download an Os Image from a HTTP source.\na DataVolume Name as source for DataVolume cloning.",
@@ -33129,6 +33157,28 @@
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "PreferenceMatcher": {
+      "type": "object",
+      "title": "PreferenceMatcher references a set of preference that is used to fill fields in the VMI template.",
+      "properties": {
+        "kind": {
+          "description": "Kind specifies which preference resource is referenced.\nAllowed values are: \"VirtualMachinePreference\" and \"VirtualMachineClusterPreference\".\nIf not specified, \"VirtualMachineClusterPreference\" is used by default.\n\n+optional",
+          "type": "string",
+          "x-go-name": "Kind"
+        },
+        "name": {
+          "description": "Name is the name of the VirtualMachinePreference or VirtualMachineClusterPreference",
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "revisionName": {
+          "description": "RevisionName specifies a ControllerRevision containing a specific copy of the\nVirtualMachinePreference or VirtualMachineClusterPreference to be used. This is\ninitially captured the first time the instancetype is applied to the VirtualMachineInstance.\n\n+optional",
+          "type": "string",
+          "x-go-name": "RevisionName"
+        }
+      },
+      "x-go-package": "kubevirt.io/api/core/v1"
     },
     "Preset": {
       "description": "Preset represents a preset",

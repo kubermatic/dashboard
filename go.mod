@@ -49,7 +49,7 @@ require (
 	github.com/gorilla/websocket v1.5.0
 	github.com/hetznercloud/hcloud-go v1.35.3
 	github.com/imdario/mergo v0.3.13
-	github.com/kubermatic/machine-controller v1.55.1-0.20220930055319-5819bb5f27f7
+	github.com/kubermatic/machine-controller v1.55.1-0.20221006174428-7784255e05d8
 	github.com/minio/minio-go/v7 v7.0.43
 	github.com/open-policy-agent/frameworks/constraint v0.0.0-20221021181852-5942e3928c9d // v0.5.1
 	github.com/open-policy-agent/gatekeeper v0.0.0-20220504234711-ecf609290e2e // v3.8.1
