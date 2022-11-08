@@ -22,6 +22,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 
+	"k8c.io/kubermatic/v2/pkg/log"
 	"k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
@@ -167,7 +168,9 @@ func EtcdRestoreProjectProviderFactory(mapper meta.RESTMapper, seedKubeconfigGet
 		for seedName, seed := range seeds {
 			cfg, err := seedKubeconfigGetter(seed)
 			if err != nil {
-				return nil, err
+				// if one or more Seeds are bad, continue with the request, log that a Seed is in error
+				log.Logger.Warnw("error getting seed kubeconfig", "seed", seedName, "error", err)
+				continue
 			}
 			createSeedImpersonationClients[seedName] = NewImpersonationClient(cfg, mapper).CreateImpersonatedClient
 			clientPrivileged, err := ctrlruntimeclient.New(cfg, ctrlruntimeclient.Options{Mapper: mapper})

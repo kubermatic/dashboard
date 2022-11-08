@@ -577,7 +577,7 @@ func createAPIHandler(options serverRunOptions, prov providers, oidcIssuerVerifi
 				dummyWriter := newResponseLogger(w)
 				next.ServeHTTP(dummyWriter, r)
 
-				log.Debugw("response", "body", dummyWriter.buf.String(), "status", dummyWriter.statusCode)
+				log.Debugw("response", "body", dummyWriter.buf.String(), "status", dummyWriter.statusCode, "uri", r.RequestURI)
 			})
 		})
 	}
