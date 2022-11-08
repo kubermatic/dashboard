@@ -62,7 +62,7 @@ const (
 	expirationTimestampKey            = "ExpirationTimestamp"
 	expirationRefreshesKey            = "ExpirationRefreshes"
 
-	webTerminalImage                   = resources.RegistryQuay + "/kubermatic/web-terminal:0.2.0"
+	webTerminalImage                   = resources.RegistryQuay + "/kubermatic/web-terminal:0.3.0"
 	webTerminalContainerKubeconfigPath = "/etc/kubernetes/kubeconfig/kubeconfig"
 )
 
