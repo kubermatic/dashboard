@@ -17,6 +17,13 @@ limitations under the License.
 <div fxLayout="column"
      fxLayoutGap="15px">
 
+  <mat-radio-group [(ngModel)]="selectedArchitecture"
+                   (change)="onArchitectureChange()"
+                   fxLayoutGap="15px">
+    <mat-radio-button [value]="Architecture.X64">{{Architecture.X64}} architecture</mat-radio-button>
+    <mat-radio-button [value]="Architecture.ARM64">{{Architecture.ARM64}} architecture</mat-radio-button>
+  </mat-radio-group>
+
   <form [formGroup]="form"
         fxLayout="column"
         fxLayoutGap="8px">
@@ -46,12 +53,6 @@ limitations under the License.
       </km-number-stepper>
     </div>
 
-    <mat-radio-group [(ngModel)]="selectedArchitecture"
-                     (change)="onArchitectureChange()"
-                     fxLayoutGap="15px">
-      <mat-radio-button [value]="Architecture.X64">{{Architecture.X64}} architecture</mat-radio-button>
-      <mat-radio-button [value]="Architecture.ARM64">{{Architecture.ARM64}} architecture</mat-radio-button>
-    </mat-radio-group>
     <km-combobox #sizeCombobox
                  [required]="true"
                  [grouped]="false"
