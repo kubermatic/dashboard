@@ -256,6 +256,8 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
         const serverGroup = this.serverGroups.find(
           key => key.id === this._nodeDataService.nodeData.spec.cloud.openstack.serverGroup
         )?.name;
+
+        this.selectedServerGroupID = this._nodeDataService.nodeData.spec.cloud.openstack.serverGroup;
         this.form.get(Controls.ServerGroup).setValue(serverGroup);
       }
 
@@ -395,7 +397,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
             diskSize: this.form.get(Controls.DiskSize).value,
             instanceReadyCheckPeriod: `${this.form.get(Controls.InstanceReadyCheckPeriod).value}s`,
             instanceReadyCheckTimeout: `${this.form.get(Controls.InstanceReadyCheckTimeout).value}s`,
-            serverGroup: this.form.get(Controls.ServerGroup).value,
+            serverGroup: this.selectedServerGroupID,
           } as OpenstackNodeSpec,
         } as NodeCloudSpec,
       } as NodeSpec,
