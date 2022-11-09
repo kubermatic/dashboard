@@ -7,7 +7,7 @@ reviewers:
   - sig-api
 
 labels:
-  - sig/api
+  - sig-api
 
 options:
   no_parent_owners: true
