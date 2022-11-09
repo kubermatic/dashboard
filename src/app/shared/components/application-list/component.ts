@@ -67,6 +67,7 @@ enum Column {
 export class ApplicationListComponent implements OnInit, OnDestroy {
   @Input() applications: Application[] = [];
   @Input() cluster: Cluster;
+  @Input() projectID: string;
   @Input() isClusterReady = true;
   @Input() canEdit = true;
   @Input() view: ApplicationsListView = ApplicationsListView.Default;
@@ -120,7 +121,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
         case Column.Application:
           return item.spec.applicationRef.name;
         case Column.Namespace:
-          return item.namespace;
+          return item.spec.namespace?.name;
         default:
           return '';
       }
@@ -168,9 +169,22 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
       dialog
         .afterClosed()
         .pipe(take(1))
-        .subscribe(addedApplication => {
-          if (addedApplication) {
-            this.addApplication.emit(addedApplication);
+        .subscribe((dialogData: [Application, ApplicationDefinition]) => {
+          if (dialogData) {
+            const addedApplication = dialogData[0];
+            const selectedAppDef = dialogData[1];
+            if (selectedAppDef) {
+              const updatedAppDefs = this.applicationDefinitions.map(appDef => {
+                if (appDef.name === selectedAppDef.name) {
+                  return _.merge(selectedAppDef, appDef);
+                }
+                return appDef;
+              });
+              this._updateApplicationDefinitions(updatedAppDefs);
+            }
+            if (addedApplication) {
+              this.addApplication.emit(addedApplication);
+            }
           }
         });
     }
@@ -186,6 +200,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
       application.spec.applicationRef.name
     );
     dialog.componentInstance.cluster = this.cluster;
+    dialog.componentInstance.projectID = this.projectID;
     dialog
       .afterClosed()
       .pipe(take(1))
@@ -223,14 +238,21 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
       .applicationDefinitions()
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(applicationDefinitions => {
-        this.applicationDefinitions = applicationDefinitions;
-
-        const map = new Map();
-        applicationDefinitions.forEach(appDef => map.set(appDef.name, appDef));
-        this.applicationDefinitionsMap = map;
-
+        this._updateApplicationDefinitions(applicationDefinitions);
         this._updateApplicationMaps();
       });
+  }
+
+  private _updateApplicationDefinitions(applicationDefinitions: ApplicationDefinition[]): void {
+    const updatedMap = new Map();
+    this.applicationDefinitions = applicationDefinitions.map(appDef => {
+      if (this.applicationDefinitionsMap.has(appDef.name)) {
+        appDef = _.merge(this.applicationDefinitionsMap.get(appDef.name), appDef);
+      }
+      updatedMap.set(appDef.name, appDef);
+      return appDef;
+    });
+    this.applicationDefinitionsMap = updatedMap;
   }
 
   private _updateApplicationMaps(): void {
@@ -300,6 +322,8 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
 
   private _filter(application: Application, query: string): boolean {
     query = query.toLowerCase();
-    return application.name.toLowerCase().includes(query) || application.namespace?.toLowerCase().includes(query);
+    return (
+      application.name.toLowerCase().includes(query) || application.spec.namespace?.name?.toLowerCase().includes(query)
+    );
   }
 }

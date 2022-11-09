@@ -20,7 +20,8 @@ limitations under the License.
     <p class="km-dialog-context-description">Edit <b>{{application.name}}</b> application
       <ng-container *ngIf="cluster"> of <b>{{cluster.name}}</b> cluster</ng-container>
     </p>
-    <form [formGroup]="form">
+    <form *ngIf="form && !isLoadingDetails"
+          [formGroup]="form">
       <div fxLayout="column"
            fxLayoutGap="10px">
         <ng-container *ngIf="application.creationTimestamp; else editableFields">
@@ -136,6 +137,10 @@ limitations under the License.
       </div>
 
     </form>
+    <mat-spinner *ngIf="isLoadingDetails"
+                 [diameter]="25"
+                 class="km-spinner"
+                 color="primary"></mat-spinner>
   </ng-container>
 </mat-dialog-content>
 
@@ -143,7 +148,7 @@ limitations under the License.
   <button mat-flat-button
           kmThrottleClick
           (throttleClick)="edit()"
-          [disabled]="!form.valid || !!(valuesConfig && !isValuesConfigValid)">
+          [disabled]="!form?.valid || isLoadingDetails || !!(valuesConfig && !isValuesConfigValid)">
     <i class="km-icon-mask km-icon-save"></i>
     <span>Save Changes</span>
   </button>
