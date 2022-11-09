@@ -15,6 +15,9 @@
 @use 'variables';
 @use 'mixins';
 
+$step-heading: 20px;
+$step-sub-heading: 16px;
+$step-padding: 48px;
 $steps: 6;
 
 @mixin counter-x {
@@ -41,7 +44,7 @@ $steps: 6;
   .header {
     align-items: center;
     display: flex;
-    font-size: variables.$font-size-subhead-lg;
+    font-size: $step-heading;
     margin-bottom: 16px;
   }
 }
@@ -84,7 +87,9 @@ $steps: 6;
   padding: 0;
 
   > div {
-    padding-bottom: 24px;
+    &:not(:last-child) {
+      padding-bottom: 24px;
+    }
   }
 
   .container-spacing {
@@ -93,7 +98,7 @@ $steps: 6;
     }
 
     .section-header {
-      font-size: variables.$font-size-subhead-lg;
+      font-size: $step-sub-heading;
       margin-bottom: 14px;
     }
 
@@ -104,9 +109,26 @@ $steps: 6;
 }
 
 .step {
-  padding-bottom: 24px;
+  @include mixins.breakpoint('medium') {
+    &.padding-top {
+      padding-top: $step-padding;
+    }
+  }
+
+  &:not(:last-child) {
+    padding-bottom: $step-padding;
+  }
+}
+
+.padding-top-force {
+  padding-top: $step-padding;
 }
 
 .applications-summary {
   padding: 0 1px; // to prevent left border of tiles to disappear
+}
+
+.kubevirt-custom-local-disks {
+  max-width: 500px;
+  padding: 24px 0;
 }
