@@ -1,0 +1,7 @@
+// TODO: Do we really need go workspaces?
+go 1.19
+
+use (
+	./api // k8c.io/dashboard/v2
+	./web // k8c.io/dashboard/web
+)
