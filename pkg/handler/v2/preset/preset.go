@@ -31,6 +31,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	kubermaticv1helper "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1/helper"
+	"k8c.io/kubermatic/v2/pkg/log"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -858,10 +859,12 @@ func GetPresetStats(presetProvider provider.PresetProvider, userInfoGetter provi
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 
-		for datacenter, seed := range seeds {
+		for seedName, seed := range seeds {
 			clusterProvider, err := clusterProviderGetter(seed)
 			if err != nil {
-				return nil, utilerrors.NewNotFound("cluster-provider", datacenter)
+				// if one or more Seeds are bad, continue with the request, log that a Seed is in error
+				log.Logger.Warnw("error getting cluster provider", "seed", seedName, "error", err)
+				continue
 			}
 			clusters, err := clusterProvider.ListAll(ctx, labels.NewSelector().Add(*presetLabelRequirement))
 			if err != nil {

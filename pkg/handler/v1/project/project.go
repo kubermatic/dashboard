@@ -34,6 +34,7 @@ import (
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	kubermaticv1helper "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1/helper"
 	"k8c.io/kubermatic/v2/pkg/controller/master-controller-manager/rbac"
+	"k8c.io/kubermatic/v2/pkg/log"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -590,10 +591,12 @@ func getNumberOfClustersForProject(ctx context.Context, clusterProviderGetter pr
 		return clustersNumber, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("failed to list seeds: %v", err))
 	}
 
-	for datacenter, seed := range seeds {
+	for seedName, seed := range seeds {
 		clusterProvider, err := clusterProviderGetter(seed)
 		if err != nil {
-			return clustersNumber, utilerrors.NewNotFound("cluster-provider", datacenter)
+			// if one or more Seeds are bad, continue with the request, log that a Seed is in error
+			log.Logger.Warnw("error getting cluster provider", "seed", seedName, "error", err)
+			continue
 		}
 		clusters, err := clusterProvider.List(ctx, project, nil)
 		if err != nil {
@@ -612,10 +615,12 @@ func getNumberOfClusters(ctx context.Context, clusterProviderGetter provider.Clu
 		return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("failed to list seeds: %v", err))
 	}
 
-	for datacenter, seed := range seeds {
+	for seedName, seed := range seeds {
 		clusterProvider, err := clusterProviderGetter(seed)
 		if err != nil {
-			return nil, utilerrors.NewNotFound("cluster-provider", datacenter)
+			// if one or more Seeds are bad, continue with the request, log that a Seed is in error
+			log.Logger.Warnw("error getting cluster provider", "seed", seedName, "error", err)
+			continue
 		}
 		clusters, err := clusterProvider.ListAll(ctx, nil)
 		if err != nil {

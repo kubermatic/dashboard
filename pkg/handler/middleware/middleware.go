@@ -31,6 +31,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	"k8c.io/kubermatic/v2/pkg/log"
 	kubermaticcontext "k8c.io/kubermatic/v2/pkg/util/context"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
@@ -427,7 +428,9 @@ func getClusterProviderByClusterID(ctx context.Context, seeds map[string]*kuberm
 	for _, seed := range seeds {
 		clusterProvider, err := clusterProviderGetter(seed)
 		if err != nil {
-			return nil, ctx, utilerrors.NewNotFound("cluster-provider", clusterID)
+			// if one or more Seeds are bad, continue with the request, log that a Seed is in error
+			log.Logger.Warnw("error getting cluster provider", "cluster", clusterID, "seed", seed.Name, "error", err)
+			continue
 		}
 		if clusterProvider.IsCluster(ctx, clusterID) {
 			return clusterProvider, ctx, nil
@@ -623,7 +626,9 @@ func getRuleGroupProvider(ctx context.Context, clusterProviderGetter provider.Cl
 		for _, seed := range seeds {
 			clusterProvider, err := clusterProviderGetter(seed)
 			if err != nil {
-				return nil, common.KubernetesErrorToHTTPError(err)
+				// if one or more Seeds are bad, continue with the request, log that a Seed is in error
+				log.Logger.Warnw("error getting cluster provider", "cluster", clusterID, "seed", seed.Name, "error", err)
+				continue
 			}
 			if clusterProvider.IsCluster(ctx, clusterID) {
 				seedName = seed.Name
