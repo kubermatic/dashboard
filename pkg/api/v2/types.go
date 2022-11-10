@@ -1930,6 +1930,8 @@ type ApplicationDefinitionListItemSpec struct {
 	Description string `json:"description"`
 }
 
+// SeedOverview stores some details of a requested Seed object.
+// swagger:model SeedOverview
 type SeedOverview struct {
 	Name                  string                 `json:"name"`
 	Location              string                 `json:"location"`

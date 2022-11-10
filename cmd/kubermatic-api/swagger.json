@@ -29226,6 +29226,10 @@
           "type": "boolean",
           "x-go-name": "OIDCKubeCfgEndpoint"
         },
+        "openIDAuthPlugin": {
+          "type": "boolean",
+          "x-go-name": "OpenIDAuthPlugin"
+        },
         "operatingSystemManager": {
           "type": "boolean",
           "x-go-name": "OperatingSystemManager"
