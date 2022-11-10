@@ -41,7 +41,7 @@ export type ResourceLabelMap = {
 export enum View {
   Overview = 'overview',
   Clusters = 'clusters',
-  ExternalClusters = 'externalclusters',
+  ExternalClusters = 'external',
   ClusterTemplates = 'clustertemplates',
   Projects = 'projects',
   Members = 'members',

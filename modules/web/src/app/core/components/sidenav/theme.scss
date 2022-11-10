@@ -88,4 +88,47 @@
       }
     }
   }
+
+  .sub-menu-item {
+    &:hover {
+      background-color: map.get($colors, sidenav-background-hover);
+    }
+
+    &.active {
+      border-left: 3px solid map.get($colors, primary);
+
+      a {
+        span {
+          color: map.get($colors, primary-dark);
+        }
+      }
+    }
+  }
+
+  .collapsed-sub-menu-item {
+    &:hover {
+      background-color: map.get($colors, sidenav-background-hover);
+    }
+
+    &.active {
+      border-left: 3px solid map.get($colors, primary);
+
+      span {
+        color: map.get($colors, primary-dark);
+      }
+    }
+
+    span {
+      color: map.get($colors, text);
+    }
+  }
+
+  .menu-label {
+    color: map.get($colors, primary-dark);
+    font-weight: bolder;
+  }
+
+  .collapesd-button {
+    background-color: map.get($colors, text);
+  }
 }
