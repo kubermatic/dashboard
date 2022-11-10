@@ -15,7 +15,7 @@ limitations under the License.
 -->
 
 <ng-container [ngSwitch]="isExternalClustersUrl()">
-        <km-cluster-list *ngSwitchCase="false"></km-cluster-list>
+  <km-cluster-list *ngSwitchCase="false"></km-cluster-list>
 
-        <km-external-cluster-list *ngSwitchCase="true"></km-external-cluster-list>
+  <km-external-cluster-list *ngSwitchCase="true"></km-external-cluster-list>
 </ng-container>

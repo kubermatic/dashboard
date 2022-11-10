@@ -14,18 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div  fxLayout="column"
-      class="side-nav-bar">
-  <div 
-       (click)="onClick()">
-    <div fxLayoutAlign="start center"
-         fxLayoutGap="20px"
-         class="label"
-         [ngClass]="expanded ? 'expanded' : ''">
-         <i [class]="icon"></i>
-      <div >{{label}}</div>
-      <i 
-      class="km-icon-mask km-icon-arrow-{{expanded ? 'up' : 'down'}}"></i>
+<div fxLayout="column"
+     class="side-nav-bar">
+  <div (click)="onClick()">
+    <div class="label"
+         [ngClass]="isExpandedActive() ? 'expanded' : ''">
+      <a fxLayoutAlign="start center"
+         fxLayoutGap="20px">
+        <i [class]="icon"></i>
+        <span>{{label}}</span>
+        <i class="km-icon-mask km-icon-arrow-{{expanded ? 'up' : 'down'}}"></i>
+      </a>
     </div>
   </div>
   <div *ngIf="expanded"

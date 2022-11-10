@@ -45,7 +45,7 @@
 @import 'src/app/settings/admin/presets/theme';
 @import 'src/app/settings/admin/presets/edit-dialog/theme';
 @import 'src/app/settings/admin/nav/theme';
-@import 'src/app/shared/components/side-nav-field/theme.scss';
+@import 'src/app/shared/components/side-nav-field/theme';
 
 @mixin theme-components($colors) {
   @include theme-addon-list-component($colors);

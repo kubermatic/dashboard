@@ -18,7 +18,7 @@ limitations under the License.
      fxLayout="column"
      [ngClass]="isSidenavCollapsed() ? 'collapse-sidenav' : ''">
   <div [matTooltip]="getTooltip(view.Overview)"
-       [ngClass]="getMenuItemClass(view.Overview)"
+       [ngClass]="!getMenuItemClass(view.Overview) && 'km-disabled'"
        class="menu-item">
     <a id="km-nav-item-overview"
        fxLayoutAlign=" center"
@@ -28,35 +28,62 @@ limitations under the License.
       <span *ngIf="!isSidenavCollapsed()">Project Overview</span>
     </a>
   </div>
-  <km-side-nav-field label="Resources"
-                      icon="km-icon-cluster" >
+  <ng-container *ngIf="!isSidenavCollapsed()">
+    <km-side-nav-field label="Resources"
+                       icon="km-icon-cluster">
+      <div class="sub-menu-item"
+           [ngClass]="{'active': checkUrl(view.Clusters), 'km-disabled': !getMenuItemClass(view.Clusters)}">
+        <a id="km-nav-item-clusters"
+           fxLayoutAlign=" center"
+           [routerLink]="getRouterLink(view.Clusters)">
+          <span>Clusters</span>
+        </a>
+      </div>
 
-  <div [matTooltip]="getTooltip(view.Clusters)"
-       [ngClass]="getMenuItemClass(view.Clusters)"
-       class="menu-item">
-    <a id="km-nav-item-clusters"
-       fxLayoutAlign=" center"
-       [routerLink]="getRouterLink(view.Clusters)"
-       [ngClass]="getLinkClass(view.Clusters)">
-      <span *ngIf="!isSidenavCollapsed()">Clusters</span>
-    </a>
-  </div>
+      <div class="sub-menu-item"
+           [ngClass]="{'active': checkUrl(view.ExternalClusters), 'km-disabled': !getMenuItemClass(view.ExternalClusters)}">
+        <a id="km-nav-item-clusters"
+           fxLayoutAlign=" center"
+           [routerLink]="getRouterLink(view.ExternalClusters)">
+          <span>Extrnal Clusters</span>
+        </a>
+      </div>
+    </km-side-nav-field>
+  </ng-container>
 
-   <div [matTooltip]="getTooltip(view.ExternalClusters)"
-       [ngClass]="getMenuItemClass(view.Clusters)"
-       class="menu-item">
-    <a id="km-nav-item-clusters"
-       fxLayoutAlign=" center"
-       [routerLink]="getRouterLink(view.ExternalClusters)"
-       [ngClass]="getLinkClass(view.ExternalClusters)">
-      <span *ngIf="!isSidenavCollapsed()">Extrnal Clusters</span>
-    </a>
-  </div>
-</km-side-nav-field>
+  <ng-container *ngIf="isSidenavCollapsed()">
+    <button class="km-icon-cluster collapesd-button"
+            (click)="menuTrigger.openMenu()"
+            [matTooltip]="getTooltip(view.Clusters)">
+      <div #menuTrigger="matMenuTrigger"
+           [matMenuTriggerFor]="menu"
+           [ngClass]="getLinkClass(view.Clusters)">
+      </div>
+    </button>
+    <mat-menu #menu="matMenu">
+      <mat-label class="menu-label">Resources</mat-label>
+      <hr />
+      <a mat-menu-item
+         id="km-nav-item-clusters"
+         fxLayoutAlign=" center"
+         [routerLink]="getRouterLink(view.Clusters)"
+         class="collapsed-sub-menu-item"
+         [ngClass]="getLinkClass(view.Clusters)">
+        <span>Clusters</span>
+      </a>
 
+      <a mat-menu-item
+         fxLayoutAlign=" center"
+         [routerLink]="getRouterLink(view.ExternalClusters)"
+         class="collapsed-sub-menu-item"
+         [ngClass]="getLinkClass(view.ExternalClusters)">
+        <span>Extrnal Clusters</span>
+      </a>
+    </mat-menu>
+  </ng-container>
 
   <div [matTooltip]="getTooltip(view.ClusterTemplates)"
-       [ngClass]="getMenuItemClass(view.ClusterTemplates)"
+       [ngClass]="!getMenuItemClass(view.Overview) && 'km-disabled'"
        class="menu-item">
     <a id="km-nav-item-cluster-templates"
        fxLayoutAlign=" center"
@@ -66,53 +93,168 @@ limitations under the License.
       <span *ngIf="!isSidenavCollapsed()">Cluster Templates</span>
     </a>
   </div>
+  <ng-container *ngIf="!isSidenavCollapsed()">
+    <km-side-nav-field label="etcd Backups"
+                       icon="km-icon-backup">
+      <div [ngClass]="{'active': checkUrl(view.Backups), 'km-disabled': !getMenuItemClass(view.Backups)}"
+           class="sub-menu-item">
+        <a id="km-nav-item-backups"
+           fxLayoutAlign=" center"
+           [routerLink]="getRouterLink(view.Backups)"
+           [ngClass]="getLinkClass(view.Backups)">
+          <span>Automatic Backups</span>
+        </a>
+      </div>
 
-  <div [matTooltip]="getTooltip(view.Backups)"
-       [ngClass]="getMenuItemClass(view.Backups)"
-       class="menu-item">
-    <a id="km-nav-item-backups"
-       fxLayoutAlign=" center"
-       [routerLink]="getRouterLink(view.Backups)"
-       [ngClass]="getLinkClass(view.Backups)">
-      <i class="km-icon-backup"></i>
-      <span *ngIf="!isSidenavCollapsed()">etcd Backups</span>
-    </a>
-  </div>
+      <div [matTooltip]="getTooltip(view.Backups)"
+           [ngClass]="{'active': checkUrl(view.Snapshots), 'km-disabled': !getMenuItemClass(view.Snapshots)}"
+           class="sub-menu-item">
+        <a fxLayoutAlign=" center"
+           [routerLink]="getRouterLink(view.Snapshots)"
+           [ngClass]="getLinkClass(view.Snapshots)">
+          <span>Snapshots</span>
+        </a>
+      </div>
 
-  <div [matTooltip]="getTooltip(view.SSHKeys)"
-       [ngClass]="getMenuItemClass(view.SSHKeys)"
-       class="menu-item">
-    <a id="km-nav-item-sshkeys"
-       fxLayoutAlign=" center"
-       [routerLink]="getRouterLink(view.SSHKeys)"
-       [ngClass]="getLinkClass(view.SSHKeys)">
-      <i class="km-icon-key"></i>
-      <span *ngIf="!isSidenavCollapsed()">SSH Keys</span>
-    </a>
-  </div>
+      <div [matTooltip]="getTooltip(view.Backups)"
+           [ngClass]="{'active': checkUrl(view.Restores), 'km-disabled': !getMenuItemClass(view.Restores)}"
+           class="sub-menu-item">
+        <a fxLayoutAlign=" center"
+           [routerLink]="getRouterLink(view.Restores)"
+           [ngClass]="getLinkClass(view.Restores)">
+          <span>Restores</span>
+        </a>
+      </div>
+    </km-side-nav-field>
+  </ng-container>
 
-  <div [matTooltip]="getTooltip(view.Members)"
-       [ngClass]="getMenuItemClass(view.Members)"
-       class="menu-item">
-    <a id="km-nav-item-members"
-       fxLayoutAlign=" center"
-       [routerLink]="getRouterLink(view.Members)"
-       [ngClass]="getLinkClass(view.Members)">
-      <i class="km-icon-member"></i>
-      <span *ngIf="!isSidenavCollapsed()">Members</span>
-    </a>
-  </div>
+  <ng-container *ngIf="isSidenavCollapsed()">
+    <button (click)="menuTrigger.openMenu()"
+            class="km-icon-backup collapesd-button"
+            [ngClass]="getLinkClass(view.Backups)"
+            [matTooltip]="getTooltip(view.Backups)">
+      <div #menuTrigger="matMenuTrigger"
+           [matMenuTriggerFor]="menu"></div>
+    </button>
 
-  <div [matTooltip]="getTooltip(view.ServiceAccounts)"
-       [ngClass]="getMenuItemClass(view.ServiceAccounts)"
-       class="menu-item">
-    <a id="km-nav-item-service-accounts"
-       fxLayoutAlign=" center"
-       [routerLink]="getRouterLink(view.ServiceAccounts)"
-       [ngClass]="getLinkClass(view.ServiceAccounts)">
-      <i class="km-icon-serviceaccount"></i>
-      <span *ngIf="!isSidenavCollapsed()">Service Accounts</span></a>
-  </div>
+    <mat-menu #menu="matMenu">
+      <mat-label class="menu-label">etcd Backups</mat-label>
+      <hr />
+      <a mat-menu-item
+         id="km-nav-item-backups"
+         fxLayoutAlign=" center"
+         [routerLink]="getRouterLink(view.Backups)"
+         class="collapsed-sub-menu-item"
+         [ngClass]="getLinkClass(view.Backups)">
+        <span>Automatic Backups</span>
+      </a>
+
+      <a mat-menu-item
+         fxLayoutAlign=" center"
+         [routerLink]="getRouterLink(view.Snapshots)"
+         class="collapsed-sub-menu-item"
+         [ngClass]="getLinkClass(view.Snapshots)">
+        <span>Snapshots</span>
+      </a>
+
+      <a mat-menu-item
+         fxLayoutAlign=" center"
+         [routerLink]="getRouterLink(view.Restores)"
+         class="collapsed-sub-menu-item"
+         [ngClass]="getLinkClass(view.Restores)">
+        <span>Restores</span>
+      </a>
+    </mat-menu>
+  </ng-container>
+
+  <ng-container *ngIf="!isSidenavCollapsed()">
+    <km-side-nav-field label="Access"
+                       icon="km-icon-key">
+      <div [ngClass]="{'active': checkUrl(view.SSHKeys), 'km-disabled': !getMenuItemClass(view.SSHKeys)}"
+           class="sub-menu-item">
+        <a id="km-nav-item-sshkeys"
+           fxLayoutAlign=" center"
+           [routerLink]="getRouterLink(view.SSHKeys)"
+           [ngClass]="getLinkClass(view.SSHKeys)">
+          <span>SSH Keys</span>
+        </a>
+      </div>
+
+      <div [ngClass]="{'active': checkUrl(view.Members), 'km-disabled': !getMenuItemClass(view.Members)}"
+           class="sub-menu-item">
+        <a id="km-nav-item-members"
+           fxLayoutAlign=" center"
+           [routerLink]="getRouterLink(view.Members)"
+           [ngClass]="getLinkClass(view.Members)">
+          <span>Members</span>
+        </a>
+      </div>
+
+      <div [ngClass]="{'active': checkUrl(view.Groups), 'km-disabled': !getMenuItemClass(view.Groups)}"
+           class="sub-menu-item">
+        <a fxLayoutAlign=" center"
+           [routerLink]="getRouterLink(view.Groups)"
+           [ngClass]="getLinkClass(view.Groups)">
+          <span>Groups</span>
+        </a>
+      </div>
+
+      <div [ngClass]="{'active': checkUrl(view.ServiceAccounts), 'km-disabled': !getMenuItemClass(view.ServiceAccounts)}"
+           class="sub-menu-item">
+        <a id="km-nav-item-service-accounts"
+           fxLayoutAlign=" center"
+           [routerLink]="getRouterLink(view.ServiceAccounts)"
+           [ngClass]="getLinkClass(view.ServiceAccounts)">
+          <span>Service Accounts</span></a>
+      </div>
+    </km-side-nav-field>
+  </ng-container>
+
+  <ng-container *ngIf="isSidenavCollapsed()">
+    <button (click)="menuTrigger.openMenu()"
+            class="km-icon-key collapesd-button"
+            [matTooltip]="getTooltip(view.Backups)">
+      <div #menuTrigger="matMenuTrigger"
+           [matMenuTriggerFor]="menu"></div>
+    </button>
+    <mat-menu #menu="matMenu">
+      <mat-label class="menu-label">Access</mat-label>
+      <hr />
+      <a mat-menu-item
+         id="km-nav-item-sshkeys"
+         fxLayoutAlign=" center"
+         [routerLink]="getRouterLink(view.SSHKeys)"
+         class="collapsed-sub-menu-item"
+         [ngClass]="getLinkClass(view.SSHKeys)">
+        <span>SSH Keys</span>
+      </a>
+
+      <a mat-menu-item
+         id="km-nav-item-members"
+         fxLayoutAlign=" center"
+         [routerLink]="getRouterLink(view.Members)"
+         class="collapsed-sub-menu-item"
+         [ngClass]="getLinkClass(view.Members)">
+        <span>Members</span>
+      </a>
+
+      <a mat-menu-item
+         fxLayoutAlign=" center"
+         [routerLink]="getRouterLink(view.Groups)"
+         class="collapsed-sub-menu-item"
+         [ngClass]="getLinkClass(view.Groups)">
+        <span>Groups</span>
+      </a>
+
+      <a mat-menu-item
+         id="km-nav-item-service-accounts"
+         fxLayoutAlign=" center"
+         [routerLink]="getRouterLink(view.ServiceAccounts)"
+         class="collapsed-sub-menu-item"
+         [ngClass]="getLinkClass(view.ServiceAccounts)">
+        <span>Service Accounts</span></a>
+    </mat-menu>
+  </ng-container>
 
   <ng-container *ngIf="(customLinks | kmLinkLocation: 'Default') as filtered">
     <mat-divider *ngIf="filtered.length > 0"></mat-divider>

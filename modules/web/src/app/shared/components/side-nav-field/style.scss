@@ -1,4 +1,4 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,28 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input} from '@angular/core';
-import {shrinkGrow} from '@shared/animations/grow';
+@use 'variables';
 
-@Component({
-  selector: 'km-side-nav-field',
-  templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
-  animations: [shrinkGrow],
-})
-export class SideNavFieldComponent {
-  @Input() label = '';
-  @Input() icon = ''
+.side-nav-bar {
+  margin-left: 10px;
+}
 
-  private _expanded = false;
+.expanded {
+  border-radius: variables.$border-radius;
+}
 
-  get expanded(): boolean {
-    return this._expanded;
-  }
+.label {
+  cursor: pointer;
+  height: 45px;
+  margin: 0 0 15px;
+  padding: 10px;
 
- 
-
-  onClick(): void {
-    this._expanded = !this._expanded;
+  i:last-child {
+    font-size: variables.$font-size-subhead;
+    position: absolute;
+    right: 10px;
+    text-decoration: none;
   }
 }

@@ -37,6 +37,7 @@ import {MemberService} from '@core/services/member';
 import {DynamicTabComponent} from '@shared/components/tab-card/dynamic-tab/component';
 import {DynamicTab} from '@shared/model/dynamic-tab';
 import {UserSettings} from '@app/shared/entity/settings';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'km-member',
@@ -44,6 +45,7 @@ import {UserSettings} from '@app/shared/entity/settings';
   styleUrls: ['./style.scss'],
 })
 export class MemberComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
+  View = View;
   members: Member[] = [];
   isInitializing = true;
   currentUser: Member;
@@ -65,7 +67,8 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
     private readonly _userService: UserService,
     private readonly _googleAnalyticsService: GoogleAnalyticsService,
     private readonly _appConfig: AppConfigService,
-    private readonly _notificationService: NotificationService
+    private readonly _notificationService: NotificationService,
+    private _router: Router
   ) {}
 
   @ViewChild(MatSort) set sort(sort: MatSort) {
@@ -232,5 +235,11 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
 
   isPaginatorVisible(): boolean {
     return !_.isEmpty(this.members) && this.paginator && this.members.length > this.paginator.pageSize;
+  }
+
+  geturl(): string {
+    const urlArray = this._router.routerState.snapshot.url.split('/');
+
+    return urlArray[urlArray.length - 1];
   }
 }

@@ -186,7 +186,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   goBack(): void {
-    this._router.navigate(['/projects/' + this.projectID + '/externalclusters']);
+    this._router.navigate(['/projects/' + this.projectID + '/external']);
   }
 
   canDisconnect(): boolean {
@@ -206,7 +206,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(isDeleted => {
         if (isDeleted) {
-          this._router.navigate(['/projects/' + this.projectID + '/externalclusters']);
+          this._router.navigate(['/projects/' + this.projectID + '/external']);
         }
       });
   }

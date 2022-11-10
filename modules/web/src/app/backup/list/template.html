@@ -14,16 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<mat-tab-group animationDuration="0ms">
-  <mat-tab label="Automatic Backups">
-    <km-automatic-backup-list></km-automatic-backup-list>
-  </mat-tab>
+<ng-container [ngSwitch]="checkbackupURL()">
+  <km-automatic-backup-list *ngSwitchCase="View.Backups"></km-automatic-backup-list>
 
-  <mat-tab label="Snapshots">
-    <km-snapshot-list></km-snapshot-list>
-  </mat-tab>
+  <km-snapshot-list *ngSwitchCase="View.Snapshots"></km-snapshot-list>
 
-  <mat-tab label="Restores">
-    <km-restore-list></km-restore-list>
-  </mat-tab>
-</mat-tab-group>
+  <km-restore-list *ngSwitchCase="View.Restores"></km-restore-list>
+</ng-container>
