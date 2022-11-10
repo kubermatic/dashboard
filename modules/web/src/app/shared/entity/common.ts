@@ -41,10 +41,11 @@ export type ResourceLabelMap = {
 export enum View {
   Overview = 'overview',
   Clusters = 'clusters',
-  ExternalClusters = 'externalclusters',
+  ExternalClusters = 'external',
   ClusterTemplates = 'clustertemplates',
   Projects = 'projects',
   Members = 'members',
+  Groups = 'groups',
   SSHKeys = 'sshkeys',
   ServiceAccounts = 'serviceaccounts',
   Wizard = 'wizard',
@@ -52,6 +53,8 @@ export enum View {
   Settings = 'settings',
   MachineDeployment = 'md',
   Backups = 'backups',
+  Snapshots = 'snapshots',
+  Restores = 'restores',
 }
 
 // IMPORTANT: names in 'ViewDisplayName' have to be in sync with names in 'View'

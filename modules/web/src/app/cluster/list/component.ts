@@ -16,8 +16,8 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subject} from 'rxjs';
 import {SettingsService} from '@core/services/settings';
 import {map, takeUntil} from 'rxjs/operators';
-import { Router } from '@angular/router';
-import { View } from '@app/shared/entity/common';
+import {Router} from '@angular/router';
+import {View} from '@app/shared/entity/common';
 
 @Component({
   selector: 'km-clusters',
@@ -28,10 +28,7 @@ export class ClustersComponent implements OnInit, OnDestroy {
   private _unsubscribe: Subject<void> = new Subject<void>();
   areExternalClustersEnabled = false;
 
-  constructor(
-    private readonly _settingsService: SettingsService,
-    private _router: Router,
-    ) {}
+  constructor(private readonly _settingsService: SettingsService, private _router: Router) {}
 
   ngOnInit(): void {
     this._settingsService.adminSettings

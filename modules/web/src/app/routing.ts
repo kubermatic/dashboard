@@ -16,7 +16,7 @@ import {NgModule} from '@angular/core';
 import {PreloadingStrategy, Route, RouterModule, Routes} from '@angular/router';
 import {AdminGuard} from '@core/services/auth/guard';
 import {Observable, of} from 'rxjs';
-import { ExternalClusterListComponent } from './cluster/list/external-cluster/component';
+import {ExternalClusterListComponent} from './cluster/list/external-cluster/component';
 import {DashboardComponent} from './dashboard/component';
 
 class SelectedPreloadingStrategy implements PreloadingStrategy {
@@ -56,6 +56,10 @@ function createRouting(): Routes {
           loadChildren: () => import('./member/module').then(m => m.MemberModule),
         },
         {
+          path: 'projects/:projectID/groups',
+          loadChildren: () => import('./member/module').then(m => m.MemberModule),
+        },
+        {
           path: 'projects/:projectID/serviceaccounts',
           loadChildren: () => import('./serviceaccount/module').then(m => m.ServiceAccountModule),
         },
@@ -64,7 +68,7 @@ function createRouting(): Routes {
           loadChildren: () => import('./cluster/module').then(m => m.ClusterModule),
         },
         {
-          path: 'projects/:projectID/externalclusters',
+          path: 'projects/:projectID/external',
           component: ExternalClusterListComponent,
         },
         {
@@ -73,6 +77,14 @@ function createRouting(): Routes {
         },
         {
           path: 'projects/:projectID/backups',
+          loadChildren: () => import('./backup/module').then(m => m.BackupModule),
+        },
+        {
+          path: 'projects/:projectID/snapshots',
+          loadChildren: () => import('./backup/module').then(m => m.BackupModule),
+        },
+        {
+          path: 'projects/:projectID/restores',
           loadChildren: () => import('./backup/module').then(m => m.BackupModule),
         },
         {

@@ -102,10 +102,14 @@ export class SidenavComponent implements OnInit, OnDestroy {
   checkUrl(url: string): boolean {
     const selectedProjectID = this._selectedProject.id;
     const urlArray = this._router.routerState.snapshot.url.split('/');
-    return (
-      !!urlArray.find(x => x === selectedProjectID) &&
-      (!!urlArray.find(x => x === url) || (url === View.Clusters && !!urlArray.find(x => x === View.Wizard)))
-    );
+    if (url === View.Clusters) {
+      return (
+        !!urlArray.find(x => x === selectedProjectID) &&
+        ((!!urlArray.find(x => x === url) && !urlArray.find(x => x === View.ExternalClusters)) ||
+          !!urlArray.find(x => x === View.Wizard))
+      );
+    }
+    return !!urlArray.find(x => x === selectedProjectID) && !!urlArray.find(x => x === url);
   }
 
   getRouterLink(view: View): string {
@@ -129,9 +133,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     return {'background-image': `url('${CustomLink.getIcon(link)}')`};
   }
 
-  getMenuItemClass(view: View): string {
-    return MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, view, Permission.View)
-      ? ''
-      : 'km-disabled';
+  getMenuItemClass(view: View): boolean {
+    return MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, view, Permission.View);
   }
 }
