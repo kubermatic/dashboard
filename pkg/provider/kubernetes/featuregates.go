@@ -39,7 +39,7 @@ func (fg featureGatesProvider) GetFeatureGates() (apiv2.FeatureGates, error) {
 	if v, ok := fg[features.OIDCKubeCfgEndpoint]; ok {
 		f.OIDCKubeCfgEndpoint = &v
 	}
-	if v,ok := fg[features.OpenIDAuthPlugin]; ok {
+	if v, ok := fg[features.OpenIDAuthPlugin]; ok {
 		f.OpenIDAuthPlugin = &v
 	}
 
