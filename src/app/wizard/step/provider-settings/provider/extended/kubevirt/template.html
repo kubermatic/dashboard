@@ -73,8 +73,7 @@ limitations under the License.
                 <mat-error *ngIf="control.get(Controls.PreAllocatedDataVolumeName).hasError('required')">
                   <strong>Required</strong>
                 </mat-error>
-                <mat-error
-                           *ngIf="control.get(Controls.PreAllocatedDataVolumeName).hasError('pattern')">
+                <mat-error *ngIf="control.get(Controls.PreAllocatedDataVolumeName).hasError('pattern')">
                   Field can only contain <b>alphanumeric characters</b> and <b>dashes</b> (a-z, 0-9 and -). <b>Must not start or end with dash</b>.
                 </mat-error>
               </mat-form-field>
