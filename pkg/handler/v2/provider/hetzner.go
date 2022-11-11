@@ -18,12 +18,19 @@ package provider
 
 import (
 	"context"
+	"fmt"
+	"net/http"
 
 	"github.com/go-kit/kit/endpoint"
 
+	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	providercommon "k8c.io/dashboard/v2/pkg/handler/common/provider"
+	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/handler/v2/cluster"
 	"k8c.io/dashboard/v2/pkg/provider"
+	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
+
+	"k8s.io/utils/pointer"
 )
 
 func HetznerSizeWithClusterCredentialsEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter, settingsProvider provider.SettingsProvider) endpoint.Endpoint {
@@ -31,4 +38,75 @@ func HetznerSizeWithClusterCredentialsEndpoint(projectProvider provider.ProjectP
 		req := request.(cluster.GetClusterReq)
 		return providercommon.HetznerSizeWithClusterCredentialsEndpoint(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, seedsGetter, settingsProvider, req.ProjectID, req.ClusterID)
 	}
+}
+
+func HetznerProjectSizeEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter, settingsProvider provider.SettingsProvider) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(HetznerProjectSizesReq)
+		token := req.HetznerToken
+
+		userInfo, err := userInfoGetter(ctx, "")
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+
+		if len(req.Credential) > 0 {
+			preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(req.GetProjectID()), req.Credential)
+			if err != nil {
+				return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", req.Credential, userInfo.Email))
+			}
+			if credentials := preset.Spec.Hetzner; credentials != nil {
+				token = credentials.Token
+			}
+		}
+
+		settings, err := settingsProvider.GetGlobalSettings(ctx)
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+
+		filter := *settings.Spec.MachineDeploymentVMResourceQuota
+		datacenterName := req.DatacenterName
+		if datacenterName != "" {
+			_, datacenter, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, datacenterName)
+			if err != nil {
+				return nil, fmt.Errorf("error getting dc: %w", err)
+			}
+			filter = handlercommon.DetermineMachineFlavorFilter(datacenter.Spec.MachineFlavorFilter, settings.Spec.MachineDeploymentVMResourceQuota)
+		}
+
+		return providercommon.HetznerSize(ctx, filter, token)
+	}
+}
+
+// HetznerProjectSizesReq represent a request for Hetzner sizes.
+// swagger:parameters listProjectHetznerSizes
+type HetznerProjectSizesReq struct {
+	common.ProjectReq
+	// in: header
+	// HetznerToken Hetzner token
+	HetznerToken string
+	// in: header
+	// Credential predefined Kubermatic credential name from the presets
+	Credential string
+	// in: header
+	// DatacenterName datacenter name
+	DatacenterName string
+}
+
+func DecodeHetznerProjectSizesReq(c context.Context, r *http.Request) (interface{}, error) {
+	var req HetznerProjectSizesReq
+
+	req.HetznerToken = r.Header.Get("HetznerToken")
+	req.Credential = r.Header.Get("Credential")
+	req.DatacenterName = r.Header.Get("DatacenterName")
+
+	projectReq, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	req.ProjectReq = projectReq.(common.ProjectReq)
+
+	return req, nil
 }

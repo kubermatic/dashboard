@@ -861,11 +861,14 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 			mux.Methods(http.MethodGet).
 				Path("/projects/{project_id}/providers/packet/sizes").
 				Handler(r.listProjectPacketSizes())
+		*/
 
-			// Hetzner endpoints
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/hetzner/sizes").
-				Handler(r.listProjectHetznerSizes())
+	// Hetzner endpoints
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/hetzner/sizes").
+		Handler(r.listProjectHetznerSizes())
+
+		/*
 
 			// Alibaba endpoints
 			mux.Methods(http.MethodGet).
@@ -5772,6 +5775,28 @@ func (r Routing) listProjectNutanixCategoryValues() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(provider.NutanixCategoryValuesEndpoint(r.presetProvider, r.seedsGetter, r.userInfoGetter, true)),
 		provider.DecodeNutanixProjectCategoryValueReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/hetzner/sizes hetzner listProjectHetznerSizes
+//
+// Lists sizes from Hetzner.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: HetznerSizeList
+func (r Routing) listProjectHetznerSizes() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.HetznerProjectSizeEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, r.settingsProvider)),
+		provider.DecodeHetznerProjectSizesReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)

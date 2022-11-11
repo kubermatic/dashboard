@@ -34,6 +34,8 @@ type ClientService interface {
 
 	ListHetznerSizesNoCredentialsV2(params *ListHetznerSizesNoCredentialsV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListHetznerSizesNoCredentialsV2OK, error)
 
+	ListProjectHetznerSizes(params *ListProjectHetznerSizesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectHetznerSizesOK, error)
+
 	SetTransport(transport runtime.ClientTransport)
 }
 
@@ -148,6 +150,44 @@ func (a *Client) ListHetznerSizesNoCredentialsV2(params *ListHetznerSizesNoCrede
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListHetznerSizesNoCredentialsV2Default)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectHetznerSizes lists sizes from hetzner
+*/
+func (a *Client) ListProjectHetznerSizes(params *ListProjectHetznerSizesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectHetznerSizesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectHetznerSizesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectHetznerSizes",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/hetzner/sizes",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectHetznerSizesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectHetznerSizesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectHetznerSizesDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
