@@ -141,7 +141,6 @@ func TestCreateCluster(t *testing.T) {
 				// status fields are managed later by the various controllers, so asserting them here would not make sense
 				cluster.Status.NamespaceName = tc.expectedCluster.Status.NamespaceName
 				cluster.Status.ExtendedHealth = tc.expectedCluster.Status.ExtendedHealth
-				cluster.Status.CloudMigrationRevision = tc.expectedCluster.Status.CloudMigrationRevision
 				cluster.Status.UserEmail = tc.expectedCluster.Status.UserEmail
 
 				if !diff.SemanticallyEqual(tc.expectedCluster, cluster) {
