@@ -36,6 +36,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/controller/master-controller-manager/rbac"
+	"k8c.io/kubermatic/v2/pkg/log"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -224,11 +225,18 @@ func ListEndpoint(projectProvider provider.ProjectProvider, privilegedProjectPro
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 
+		rawLog := log.New(true, log.FormatJSON)
+		log := rawLog.Sugar()
 		var externalUsers []*apiv1.User
 		for _, memberOfProjectBinding := range membersOfUserProjectBindings {
 			user, err := userProvider.UserByEmail(ctx, memberOfProjectBinding.Spec.UserEmail)
 			if err != nil {
-				return nil, common.KubernetesErrorToHTTPError(err)
+				if errors.Is(err, provider.ErrNotFound) {
+					log.Debugw("the user could not be found with emailId", memberOfProjectBinding.Spec.UserEmail, ", the userprojectbinding is invalid!", memberOfProjectBinding.Name)
+					continue
+				} else {
+					return nil, common.KubernetesErrorToHTTPError(err)
+				}
 			}
 			externalUser := apiv1.ConvertInternalUserToExternal(
 				user,
