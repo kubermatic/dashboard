@@ -23322,6 +23322,45 @@
         }
       }
     },
+    "/api/v2/seeds/{seed_name}/overview": {
+      "get": {
+        "tags": [
+          "seed",
+          "admin"
+        ],
+        "summary": "Returns seed's overview.",
+        "operationId": "getSeedOverview",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "SeedName",
+            "name": "seed_name",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "SeedOverview",
+            "schema": {
+              "$ref": "#/definitions/SeedOverview"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/seeds/{seed_name}/rulegroups": {
       "get": {
         "produces": [
@@ -29187,6 +29226,10 @@
           "type": "boolean",
           "x-go-name": "OIDCKubeCfgEndpoint"
         },
+        "openIDAuthPlugin": {
+          "type": "boolean",
+          "x-go-name": "OpenIDAuthPlugin"
+        },
         "operatingSystemManager": {
           "type": "boolean",
           "x-go-name": "OperatingSystemManager"
@@ -31760,7 +31803,7 @@
       "title": "NamespaceSpec describe the desired state of the namespace where application will be created.",
       "properties": {
         "annotations": {
-          "description": "Annotations of the namespace",
+          "description": "Annotations of the namespace\nMore info: http://kubernetes.io/docs/user-guide/annotations\n+optional",
           "type": "object",
           "additionalProperties": {
             "type": "string"
@@ -31768,12 +31811,12 @@
           "x-go-name": "Annotations"
         },
         "create": {
-          "description": "Create defines whether the namespace should be created if it does not exist.",
+          "description": "Create defines whether the namespace should be created if it does not exist. Defaults to true",
           "type": "boolean",
           "x-go-name": "Create"
         },
         "labels": {
-          "description": "Labels of the namespace",
+          "description": "Labels of the namespace\nMore info: http://kubernetes.io/docs/user-guide/labels\n+optional",
           "type": "object",
           "additionalProperties": {
             "type": "string"
@@ -31781,13 +31824,13 @@
           "x-go-name": "Labels"
         },
         "name": {
-          "description": "Name is the namespace to deploy the Application into",
+          "description": "Name is the namespace to deploy the Application into.\nShould be a valid lowercase RFC1123 domain name",
           "type": "string",
           "pattern": "=`^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$`",
           "x-go-name": "Name"
         }
       },
-      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
     "NetworkDefaults": {
       "type": "object",
@@ -34635,6 +34678,71 @@
         "type": "string"
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
+    "SeedOverview": {
+      "type": "object",
+      "title": "SeedOverview stores some details of a requested Seed object.",
+      "properties": {
+        "clusters": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Clusters"
+        },
+        "clusters_by_datacenter": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "x-go-name": "ClustersByDC"
+        },
+        "clusters_by_provider": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "x-go-name": "ClustersByProvider"
+        },
+        "created": {
+          "type": "string",
+          "x-go-name": "Created"
+        },
+        "datacenters": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Datacenters"
+        },
+        "datacenters_by_provider": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "x-go-name": "DatacentersByProvider"
+        },
+        "location": {
+          "type": "string",
+          "x-go-name": "Location"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "phase": {
+          "$ref": "#/definitions/SeedPhase"
+        },
+        "providers": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Providers"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "SeedPhase": {
+      "type": "string",
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
     "SeedSettings": {
       "description": "SeedSettings represents settings for a Seed cluster",

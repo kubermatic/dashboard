@@ -30,5 +30,5 @@ cd cmd/kubermatic-api/
 # To avoid this exclude kubermatic packages with this option -x k8c.io/kubermatic/v2/pkg/api/*
 #
 # this workaround will be removed once api will be totally removed from kubermatic repository
-run_swagger generate spec --tags=ee --scan-models -o swagger.json -x k8c.io/kubermatic/v2/pkg/api/*
+run_swagger generate spec --tags=ee --scan-models -o swagger.json -x k8c.io/kubermatic/v2/pkg/api*
 echodate "Completed."

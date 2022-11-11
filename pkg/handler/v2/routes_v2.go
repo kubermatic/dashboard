@@ -55,6 +55,7 @@ import (
 	resourcequota "k8c.io/dashboard/v2/pkg/handler/v2/resource_quota"
 	"k8c.io/dashboard/v2/pkg/handler/v2/rulegroup"
 	rulegroupadmin "k8c.io/dashboard/v2/pkg/handler/v2/rulegroup_admin"
+	"k8c.io/dashboard/v2/pkg/handler/v2/seedoverview"
 	"k8c.io/dashboard/v2/pkg/handler/v2/seedsettings"
 	"k8c.io/dashboard/v2/pkg/handler/v2/user"
 	"k8c.io/dashboard/v2/pkg/handler/v2/version"
@@ -1502,6 +1503,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 	mux.Methods(http.MethodDelete).
 		Path("/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}").
 		Handler(r.deleteClusterServiceAccount())
+
+	mux.Methods(http.MethodGet).
+		Path("/seeds/{seed_name}/overview").
+		Handler(r.getSeedOverview())
 }
 
 // swagger:route POST /api/v2/projects/{project_id}/clusters project createClusterV2
@@ -8846,6 +8851,28 @@ func (r Routing) deleteClusterServiceAccount() http.Handler {
 			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 		)(cluster.DeleteClusterSAKubeconigEndpoint(r.userInfoGetter, r.projectProvider, r.privilegedProjectProvider)),
 		cluster.DecodeClusterSAReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/seeds/{seed_name}/overview seed admin getSeedOverview
+//
+//	Returns seed's overview.
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: SeedOverview
+//	  401: empty
+//	  403: empty
+func (r Routing) getSeedOverview() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(seedoverview.GetSeedOverview(r.userInfoGetter, r.seedsGetter)),
+		seedoverview.DecodeGetSeedOverviewReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
