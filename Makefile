@@ -75,6 +75,11 @@ docker-push: docker-build
 deploy:
 	kubectl -n kubermatic patch kubermaticconfiguration kubermatic --patch '{"spec":{"ui":{"dockerTag":"$(IMAGE_TAG)"}}}' --type=merge
 
+download-gocache:
+	@./hack/ci/download-gocache.sh
+	@# Prevent this from getting executed multiple times
+	@touch download-gocache
+
 # API
 api-lint:
 	$(MAKE) -C modules/api lint

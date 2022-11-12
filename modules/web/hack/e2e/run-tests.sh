@@ -37,8 +37,8 @@ if [ $CYPRESS_MOCKS != "true" ]; then
   export KIND_CLUSTER_NAME="${SEED_NAME}"
 
   source "${GOPATH}/src/github.com/kubermatic/kubermatic/hack/lib.sh"
-  source ../../../hack/e2e/setup-kind-cluster.sh
-  source ../../../hack/e2e/setup-kubermatic-in-kind.sh
+  source ../../hack/e2e/setup-kind-cluster.sh
+  source ../../hack/e2e/setup-kubermatic-in-kind.sh
 
   export CYPRESS_SEED_NAME="${SEED_NAME}"
   export CYPRESS_KUBECONFIG_ENCODED="$(kind get kubeconfig --name="$KIND_CLUSTER_NAME" --internal | base64 -w0)"

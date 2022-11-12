@@ -21,7 +21,7 @@
 set -euo pipefail
 
 cd $(dirname $0)/..
-source hack/lib.sh
+source ../../hack/lib.sh
 
 EXIT_CODE=0
 

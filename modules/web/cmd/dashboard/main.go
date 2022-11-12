@@ -31,7 +31,7 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-// TODO(waleed): Temporary fix for go modules
+// TODO(waleed): Temporary fix for go modules.
 const (
 	version = "Development"
 	edition = "N/A"

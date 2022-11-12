@@ -68,7 +68,7 @@ $(BUILD_DEST)/%: cmd/% download-gocache
 	GOOS=$(GOOS) go build -tags "$(KUBERMATIC_EDITION)" $(GOTOOLFLAGS) -o $@ ./cmd/$*
 
 download-gocache:
-	@./hack/ci/download-gocache.sh
+	@../../hack/ci/download-gocache.sh
 	@# Prevent this from getting executed multiple times
 	@touch download-gocache
 
