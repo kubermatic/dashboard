@@ -29,8 +29,12 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+)
 
-	"k8c.io/dashboard/v2/pkg/version/kubermatic"
+// TODO(waleed): Temporary fix for go modules
+const (
+	version = "Development"
+	edition = "N/A"
 )
 
 func main() {
@@ -46,7 +50,7 @@ func main() {
 	rawLog, _ := config.Build()
 	log := rawLog.Sugar()
 
-	log.Infof("Kubermatic Dashboard %s - %s", getEditionDisplayName(), kubermatic.Version)
+	log.Infof("Kubermatic Dashboard %s - %s", getEditionDisplayName(), version)
 
 	mux := http.NewServeMux()
 	mux.Handle("/metrics", promhttp.HandlerFor(registry, promhttp.HandlerOpts{}))
@@ -131,7 +135,7 @@ func isCacheDisabled(path string) bool {
 }
 
 func getEditionDisplayName() string {
-	if kubermatic.Edition == "ce" {
+	if edition == "ce" {
 		return "Community Edition"
 	}
 
