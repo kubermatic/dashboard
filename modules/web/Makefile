@@ -108,7 +108,7 @@ verify-go:
 check-dependencies:
 	go mod tidy
 	go mod verify
-	git diff --exit-codeW
+	git diff --exit-code
 
 .PHONY: run-e2e-ci
 run-e2e-ci: install

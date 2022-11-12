@@ -62,8 +62,10 @@ version:
 spellcheck:
 	./hack/verify-spelling.sh
 
-docker-build: build dist
+docker-build: build web-dist
 	docker build -t $(REPO):$(IMAGE_TAG) .
+
+build: web-build api-build
 
 docker-push: docker-build
 	docker push $(REPO):$(IMAGE_TAG)
@@ -103,6 +105,8 @@ web-run-e2e-ci:
 web-test-headless:
 	$(MAKE) -C modules/web test-headless
 
+web-dist:
+	$(MAKE) -C modules/web dist
 
 web-check:
 	$(MAKE) -C modules/web check

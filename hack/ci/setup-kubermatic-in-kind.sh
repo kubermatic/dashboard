@@ -83,7 +83,7 @@ fi
 
 # Build binaries and load the Docker images into the kind cluster.
 echodate "Building static files for $DASHBOARD_VERSION"
-time retry 1 make dist
+time retry 1 make web-dist
 
 echodate "Building binaries for $DASHBOARD_VERSION"
 TEST_NAME="Build API binaries"

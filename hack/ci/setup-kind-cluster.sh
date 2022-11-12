@@ -168,8 +168,12 @@ if [ -z "${DISABLE_CLUSTER_EXPOSER:-}" ]; then
   # a NodePort service on the host
   echodate "Starting cluster exposer"
 
-  CGO_ENABLED=0 go build --tags "$KUBERMATIC_EDITION" -v -o /tmp/clusterexposer ./pkg/test/clusterexposer/cmd
-  /tmp/clusterexposer \
+  (
+    cd ./modules/api
+    CGO_ENABLED=0 go build --tags "$KUBERMATIC_EDITION" -v -o clusterexposer ./pkg/test/clusterexposer/cmd
+  )
+
+  ./modules/api/clusterexposer \
     --kubeconfig-inner "$KUBECONFIG" \
     --kubeconfig-outer "/etc/kubeconfig/kubeconfig" \
     --build-id "$PROW_JOB_ID" &> /var/log/clusterexposer.log &

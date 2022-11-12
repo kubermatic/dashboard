@@ -39,21 +39,27 @@ echodate "Building static files for $DASHBOARD_VERSION"
 time retry 1 make dist
 
 echodate "Building binaries for $DASHBOARD_VERSION"
-TEST_NAME="Build API binaries"
+TEST_NAME="Build binaries"
 
-beforeGoBuild=$(nowms)
-time retry 1 make build
-pushElapsed kubermatic_go_build_duration_milliseconds $beforeGoBuild
+(
+  echodate "Building binaries for API"
+  beforeGoBuild=$(nowms)
+  cd ../../
+  time retry 1 make build
+  pushElapsed kubermatic_web_go_build_duration_milliseconds $beforeGoBuild
+)
 
 IMAGE_NAME="quay.io/kubermatic/dashboard$REPOSUFFIX:$DASHBOARD_VERSION"
 (
   echodate "Building Kubermatic API Docker image"
   TEST_NAME="Build Kubermatic API Docker image"
-  time retry 5 docker build -t "$IMAGE_NAME" .
+  time retry 5 docker build -t "$IMAGE_NAME" ../../
   time retry 5 kind load docker-image "$IMAGE_NAME" --name "$KIND_CLUSTER_NAME"
 )
 
-REPO_ROOT="$(realpath .)"
+WEB_MODULE_ROOT="$(realpath .)"
+REPO_ROOT="$(realpath .)/../.."
+
 cd "${GOPATH}/src/github.com/kubermatic/kubermatic"
 
 if [[ ${TARGET_BRANCH} == release* ]]; then
@@ -74,14 +80,15 @@ kubermaticOperator:
 EOF
 
 # append custom Dex configuration
-cat $REPO_ROOT/hack/e2e/fixtures/oauth_values.yaml >> $HELM_VALUES_FILE
+cat $WEB_MODULE_ROOT/hack/e2e/fixtures/oauth_values.yaml >> $HELM_VALUES_FILE
 
 # prepare to run kubermatic-installer
 KUBERMATIC_CONFIG="$(mktemp)"
 IMAGE_PULL_SECRET_INLINE="$(echo "$IMAGE_PULL_SECRET_DATA" | base64 --decode | jq --compact-output --monochrome-output '.')"
 KUBERMATIC_DOMAIN="${KUBERMATIC_DOMAIN:-ci.kubermatic.io}"
 
-cp $REPO_ROOT/hack/e2e/fixtures/kubermatic.yaml $KUBERMATIC_CONFIG
+cp $WEB_MODULE_ROOT/hack/e2e/fixtures/kubermatic.yaml $KUBERMATIC_CONFIG
+cp $WEB_MODULE_ROOT/hack/e2e/fixtures/kubermatic.yaml $KUBERMATIC_CONFIG
 
 sed -i "s;__SERVICE_ACCOUNT_KEY__;$SERVICE_ACCOUNT_KEY;g" $KUBERMATIC_CONFIG
 sed -i "s;__IMAGE_PULL_SECRET__;$IMAGE_PULL_SECRET_INLINE;g" $KUBERMATIC_CONFIG
@@ -154,7 +161,7 @@ echodate "Installing Seed..."
 SEED_MANIFEST="$(mktemp)"
 SEED_KUBECONFIG="$(cat $KUBECONFIG | sed 's/127.0.0.1.*/kubernetes.default.svc.cluster.local./' | base64 -w0)"
 
-cd $REPO_ROOT
+cd $WEB_MODULE_ROOT
 cp hack/e2e/fixtures/seed.yaml $SEED_MANIFEST
 
 sed -i "s/__SEED_NAME__/$SEED_NAME/g" $SEED_MANIFEST
