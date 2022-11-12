@@ -13,7 +13,7 @@
 # limitations under the License.
 
 presubmits:
-  - name: pre-dashboard-test-full-e2e
+  - name: pre-dashboard-web-e2e
     run_if_changed: 'modules/web'
     optional: true
     decorate: true
@@ -68,7 +68,7 @@ presubmits:
                   name: e2e-ci
                   key: serviceAccountSigningKey
 
-  - name: pre-dashboard-test-full-e2e-ce
+  - name: pre-dashboard-test-web-e2e-ce
     run_if_changed: 'modules/web'
     optional: true
     decorate: true
@@ -125,7 +125,7 @@ presubmits:
                   name: e2e-ci
                   key: serviceAccountSigningKey
 
-  - name: pre-dashboard-test-e2e
+  - name: pre-dashboard-web-integration-tests
     run_if_changed: 'modules/web'
     optional: true
     decorate: true
@@ -154,7 +154,7 @@ presubmits:
             - name: NODE_OPTIONS
               value: '--max-old-space-size=6144'
 
-  - name: pre-dashboard-test-e2e-ce
+  - name: pre-dashboard-web-integration-tests-ce
     run_if_changed: 'modules/web'
     optional: true
     decorate: true
@@ -185,7 +185,7 @@ presubmits:
             - name: NODE_OPTIONS
               value: '--max-old-space-size=6144'
 
-  - name: pre-dashboard-test-unit
+  - name: pre-dashboard-web-unit
     run_if_changed: 'modules/web'
     decorate: true
     clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
@@ -209,7 +209,7 @@ presubmits:
                   name: kubermatic-codecov
                   key: token
 
-  - name: pre-dashboard-go-mod-verify
+  - name: pre-dashboard-web-go-mod-verify
     run_if_changed: 'modules/web'
     decorate: true
     clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
@@ -225,7 +225,7 @@ presubmits:
             requests:
               cpu: 100m
 
-  - name: pre-dashboard-lint
+  - name: pre-dashboard-web-lint
     run_if_changed: 'modules/web'
     decorate: true
     clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
@@ -245,7 +245,7 @@ presubmits:
             - name: KUBERMATIC_EDITION
               value: ee
 
-  - name: pre-dashboard-check
+  - name: pre-dashboard-web-check
     run_if_changed: 'modules/web'
     decorate: true
     clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
