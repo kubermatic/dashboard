@@ -67,6 +67,7 @@ To automatically fix issues run `npm run fix` command.
 Run `npm test` to execute the unit tests via [Jest](https://jestjs.io/).
 
 #### Unit Testing Guideline
+
 - Component tests should be located in the same directory as the tested component and named `component.spec.ts`.
 - Test utils and mocks are placed in `src/test`.
 - Focus on testing components that are shared across the project (see `src/app/shared`).

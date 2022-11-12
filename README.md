@@ -44,7 +44,6 @@ See [the list of releases][3] to find out about feature changes.
 [1]: https://github.com/kubermatic/dashboard/issues
 [2]: https://github.com/kubermatic/dashboard/blob/main/CONTRIBUTING.md
 [3]: https://github.com/kubermatic/dashboard/blob/main/Development.md
-[3]: https://github.com/kubermatic/dashboard/releases
 [4]: https://github.com/kubermatic/dashboard/blob/main/code-of-conduct.md
 [5]: https://github.com/kubermatic/kubermatic/blob/main/README.md
 
