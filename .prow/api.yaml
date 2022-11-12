@@ -14,7 +14,7 @@
 
 presubmits:
   - name: pre-dashboard-api-e2e
-    run_if_changed: '(cmd/kubermatic-api/|hack/|pkg/|.prow/)'
+    run_if_changed: 'modules/api'
     decorate: true
     clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
     labels:
@@ -52,7 +52,7 @@ presubmits:
             limits:
               memory: 6Gi
   - name: pre-dashboard-api-unit
-    run_if_changed: "^(cmd|hack|pkg)/"
+    run_if_changed: 'modules/api'
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     labels:
@@ -72,8 +72,8 @@ presubmits:
             - name: KUBERMATIC_EDITION
               value: ee
 
-  - name: pre-kubermatic-lint
-    run_if_changed: "^(cmd/|hack/|pkg/|go.mod|go.sum)"
+  - name: pre-dashboard-api-lint
+    run_if_changed: 'modules/api'
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     labels:

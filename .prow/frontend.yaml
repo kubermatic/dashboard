@@ -14,7 +14,7 @@
 
 presubmits:
   - name: pre-dashboard-test-full-e2e
-    run_if_changed: '^(cypress|hack/e2e)/'
+    run_if_changed: 'modules/web'
     optional: true
     decorate: true
     clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
@@ -69,7 +69,7 @@ presubmits:
                   key: serviceAccountSigningKey
 
   - name: pre-dashboard-test-full-e2e-ce
-    run_if_changed: '^(cypress|hack/e2e)/'
+    run_if_changed: 'modules/web'
     optional: true
     decorate: true
     clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
@@ -126,7 +126,7 @@ presubmits:
                   key: serviceAccountSigningKey
 
   - name: pre-dashboard-test-e2e
-    skip_if_only_changed: "^(containers|docs)/|\\.(md)$"
+    run_if_changed: 'modules/web'
     optional: true
     decorate: true
     clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
@@ -155,7 +155,7 @@ presubmits:
               value: '--max-old-space-size=6144'
 
   - name: pre-dashboard-test-e2e-ce
-    skip_if_only_changed: "^(containers|docs)/|\\.(md)$"
+    run_if_changed: 'modules/web'
     optional: true
     decorate: true
     clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
@@ -184,3 +184,28 @@ presubmits:
               value: 'true'
             - name: NODE_OPTIONS
               value: '--max-old-space-size=6144'
+
+  - name: pre-dashboard-test-unit
+    run_if_changed: 'modules/web'
+    always_run: true
+    decorate: true
+    clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
+    spec:
+      containers:
+        - image: quay.io/kubermatic/chrome-headless:v1.6.0
+          command:
+            - make
+            - test-headless
+          resources:
+            requests:
+              cpu: 1
+              memory: 3Gi
+            limits:
+              cpu: 2
+              memory: 5Gi
+          env:
+            - name: CODECOV_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: kubermatic-codecov
+                  key: token
