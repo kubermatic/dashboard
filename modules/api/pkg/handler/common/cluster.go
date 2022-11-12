@@ -38,6 +38,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubernetesprovider "k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	"k8c.io/dashboard/v2/pkg/resources/cluster"
+	"k8c.io/dashboard/v2/pkg/resources/machine"
 	"k8c.io/dashboard/v2/pkg/validation"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	kubermaticv1helper "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1/helper"
@@ -242,7 +243,15 @@ func GenerateCluster(
 				body.NodeDeployment.Name = fmt.Sprintf("%s-worker-%s", partialCluster.Name, rand.String(6))
 			}
 
-			data, err := json.Marshal(body.NodeDeployment)
+			// Convert NodeDeployment into a standard MachineDeployment; leave out the SSH keys as the
+			// controller in KKP will apply the currently assigned keys automatically when processing
+			// this annotation.
+			md, err := machine.Deployment(partialCluster, body.NodeDeployment, dc, nil)
+			if err != nil {
+				return nil, fmt.Errorf("cannot create machine deployment data: %w", err)
+			}
+
+			data, err := json.Marshal(md)
 			if err != nil {
 				return nil, fmt.Errorf("cannot marshal initial machine deployment: %w", err)
 			}

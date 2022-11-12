@@ -42,7 +42,7 @@ import (
 )
 
 // Deployment returns a Machine Deployment object for the given Node Deployment spec.
-func Deployment(c *kubermaticv1.Cluster, nd *apiv1.NodeDeployment, dc *kubermaticv1.Datacenter, keys []*kubermaticv1.UserSSHKey, data resources.CredentialsData) (*clusterv1alpha1.MachineDeployment, error) {
+func Deployment(c *kubermaticv1.Cluster, nd *apiv1.NodeDeployment, dc *kubermaticv1.Datacenter, keys []*kubermaticv1.UserSSHKey) (*clusterv1alpha1.MachineDeployment, error) {
 	md := &clusterv1alpha1.MachineDeployment{}
 
 	if nd.Name != "" {
@@ -125,7 +125,7 @@ func Deployment(c *kubermaticv1.Cluster, nd *apiv1.NodeDeployment, dc *kubermati
 		md.Spec.Paused = *nd.Spec.Paused
 	}
 
-	config, err := getProviderConfig(c, nd, dc, keys, data)
+	config, err := getProviderConfig(c, nd, dc, keys)
 	if err != nil {
 		return nil, err
 	}
@@ -146,7 +146,7 @@ func Deployment(c *kubermaticv1.Cluster, nd *apiv1.NodeDeployment, dc *kubermati
 }
 
 //gocyclo:ignore
-func getProviderConfig(c *kubermaticv1.Cluster, nd *apiv1.NodeDeployment, dc *kubermaticv1.Datacenter, keys []*kubermaticv1.UserSSHKey, data resources.CredentialsData) (*providerconfig.Config, error) {
+func getProviderConfig(c *kubermaticv1.Cluster, nd *apiv1.NodeDeployment, dc *kubermaticv1.Datacenter, keys []*kubermaticv1.UserSSHKey) (*providerconfig.Config, error) {
 	config := providerconfig.Config{}
 	config.SSHPublicKeys = make([]string, len(keys))
 	for i, key := range keys {

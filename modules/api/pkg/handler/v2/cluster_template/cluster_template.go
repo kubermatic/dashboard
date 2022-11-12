@@ -27,6 +27,7 @@ import (
 	"github.com/gorilla/mux"
 	"gopkg.in/yaml.v3"
 
+	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
@@ -730,10 +731,16 @@ func DecodeExportReq(c context.Context, r *http.Request) (interface{}, error) {
 }
 
 func convertInternalClusterTemplatetoExternal(template *kubermaticv1.ClusterTemplate) (*apiv2.ClusterTemplate, error) {
-	md := &apiv1.NodeDeployment{}
-	rawMachineDeployment, ok := template.Annotations[kubermaticv1.InitialMachineDeploymentRequestAnnotation]
-	if ok && rawMachineDeployment != "" {
-		err := json.Unmarshal([]byte(rawMachineDeployment), md)
+	initialNodeDeployment := &apiv1.NodeDeployment{}
+	if rawMachineDeployment := template.Annotations[kubermaticv1.InitialMachineDeploymentRequestAnnotation]; rawMachineDeployment != "" {
+		var md clusterv1alpha1.MachineDeployment
+		err := json.Unmarshal([]byte(rawMachineDeployment), &md)
+		if err != nil {
+			return nil, err
+		}
+
+		// convert MachineDeployment back into a NodeDeployment
+		initialNodeDeployment, err = handlercommon.OutputMachineDeployment(&md)
 		if err != nil {
 			return nil, err
 		}
@@ -797,7 +804,7 @@ func convertInternalClusterTemplatetoExternal(template *kubermaticv1.ClusterTemp
 			},
 		},
 		NodeDeployment: &apiv2.ClusterTemplateNodeDeployment{
-			Spec: md.Spec,
+			Spec: initialNodeDeployment.Spec,
 		},
 		Applications: apps,
 	}
