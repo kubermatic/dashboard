@@ -1,0 +1,16 @@
+# Github
+/.github/
+
+# Dependency directories
+/vendor
+
+# Code
+/docs
+/hack
+download-gocache
+dev.kubeconfig
+
+# IDEs and editors
+.idea
+.settings/
+.vscode/*
