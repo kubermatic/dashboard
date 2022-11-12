@@ -14,35 +14,37 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-### Generates the KKP API Swagger spec and client. The generated client is then
-### used in the api-e2e tests and published into https://github.com/kubermatic/go-kubermatic
-
 set -euo pipefail
 
 cd $(dirname $0)/..
 source ../../hack/lib.sh
 
-CONTAINERIZE_IMAGE=golang:1.19.3 containerize ./hack/gen-api-client.sh
-
-cd cmd/kubermatic-api/
-SWAGGER_FILE="swagger.json"
-TMP_SWAGGER="${SWAGGER_FILE}.tmp"
-
 function cleanup() {
-  rm $TMP_SWAGGER
+  if [[ -n "${TMP_DIFFROOT:-}" ]]; then
+    rm -rf "${TMP_DIFFROOT}"
+  fi
 }
 trap cleanup EXIT SIGINT SIGTERM
 
-run_swagger generate spec \
-  --tags=ee \
-  --scan-models \
-  -o ${TMP_SWAGGER}
+ROOT_DIR="$(realpath .)"
+DIFFROOT="${ROOT_DIR}/pkg/test/e2e/utils/apiclient"
 
-rm -r ../../pkg/test/e2e/utils/apiclient/
-mkdir -p ../../pkg/test/e2e/utils/apiclient/
+TMP_DIFFROOT=$(mktemp -d)
 
-run_swagger generate client \
-  -q \
-  --skip-validation \
-  -f ${TMP_SWAGGER} \
-  -t ../../pkg/test/e2e/utils/apiclient/
+cp -a "${DIFFROOT}"/* "${TMP_DIFFROOT}"
+
+echodate "Generating API client"
+./hack/gen-api-client.sh
+
+echodate "Diffing ${DIFFROOT} against freshly generated api client"
+ret=0
+diff -Naupr "${DIFFROOT}" "${TMP_DIFFROOT}" || ret=$?
+cp -a "${TMP_DIFFROOT}"/client "${DIFFROOT}"
+cp -a "${TMP_DIFFROOT}"/models "${DIFFROOT}"
+
+if [[ $ret -eq 0 ]]; then
+  echodate "${DIFFROOT} up to date."
+else
+  echodate "${DIFFROOT} is out of date. Please run hack/gen-api-client.sh"
+  exit 1
+fi

@@ -17,13 +17,13 @@
 set -euo pipefail
 
 cd $(dirname $0)/..
-source hack/lib.sh
+source ../../hack/lib.sh
 
 # Please make sure to set -feature-gates=PrometheusEndpoint=true if you want to use that endpoint.
 # Please make sure to set -feature-gates=OIDCKubeCfgEndpoint=true if you want to use that endpoint.
 
 FEATURE_GATES="${FEATURE_GATES:-}"
-KUBERMATIC_EDITION="${KUBERMATIC_EDITION:-ce}"
+KUBERMATIC_EDITION="${KUBERMATIC_EDITION:-ee}"
 KUBERMATIC_DEBUG=${KUBERMATIC_DEBUG:-true}
 PPROF_PORT=${PPROF_PORT:-6600}
 

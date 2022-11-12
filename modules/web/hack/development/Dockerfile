@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM node:16
+FROM node:18
 
 # Configuration
 ENV KUBERMATIC_DIR=/dashboard

@@ -17,7 +17,7 @@
 set -euo pipefail
 
 cd $(dirname $0)/..
-source hack/lib.sh
+source ../../hack/lib.sh
 
 function cleanup() {
   rm -f $TMP_SWAGGER
@@ -36,10 +36,10 @@ cd cmd/kubermatic-api/
 # TEMPORARY WORKAROUND to avoid inconstant swagger generation:
 # Because kubermatic repository still contains api types, swagger generation is not consistent.
 # Sometime the  "x-go-package" point on dashboard repo and sometime on kubermatic repo.
-# To avoid this exclude kubermatic packages with this option -x k8c.io/kubermatic/v2/pkg/api/*
+# To avoid this exclude kubermatic packages with this option -x k8c.io/kubermatic/*
 #
 # this workaround will be removed once api will be totally removed from kubermatic repository
-run_swagger generate spec --tags=ee --scan-models -o ${TMP_SWAGGER} -x k8c.io/kubermatic/v2/pkg/api*
+run_swagger generate spec --tags=ee --scan-models -o ${TMP_SWAGGER} -x k8c.io/kubermatic/*
 # The parameters order in the generated swagger spec json file is not
 # deterministic, sort in order to avoid flake results.
 # The sorting here is applied only to first level arrays, nested arrays are not

@@ -17,7 +17,7 @@
 set -euo pipefail
 
 cd $(dirname $0)/..
-source hack/lib.sh
+source ../../hack/lib.sh
 
 if ! [ -x "$(command -v gimps)" ]; then
   echodate "You need to have gimps installed before running this script. Please install it: https://github.com/xrstf/gimps"

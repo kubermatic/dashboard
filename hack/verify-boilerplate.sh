@@ -21,13 +21,13 @@ cd $(dirname $0)/..
 echo "Checking Kubermatic CE licenses..."
 boilerplate \
   -boilerplates hack/boilerplate/ce \
-  -exclude src/app/dynamic/enterprise \
-  -exclude src/index.html \
-  -exclude pkg/provider/cloud/eks/authenticator \
-  -exclude pkg/ee
+  -exclude modules/web/src/app/dynamic/enterprise \
+  -exclude modules/web/src/index.html \
+  -exclude modules/api/pkg/provider/cloud/eks/authenticator \
+  -exclude modules/api/pkg/ee
 
 echo "Checking Kubermatic EE licenses..."
 boilerplate \
-  -boilerplates hack/boilerplate/ee \
-  src/app/dynamic/enterprise \
-  pkg/ee
+  -boilerplates modules/web/hack/boilerplate/ee \
+  modules/web/src/app/dynamic/enterprise \
+  modules/api/pkg/ee

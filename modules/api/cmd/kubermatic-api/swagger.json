@@ -25733,7 +25733,7 @@
       "title": "ApplicationRef describes a KKP-wide, unique reference to an Application.",
       "properties": {
         "name": {
-          "description": "Name of the Application.\nShould be a valid lowercase RFC1123 domain name",
+          "description": "Name of the Application",
           "type": "string",
           "pattern": "=`^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$`",
           "x-go-name": "Name"
@@ -25742,7 +25742,7 @@
           "$ref": "#/definitions/Version"
         }
       },
-      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "ApplicationSource": {
       "type": "object",
@@ -31853,7 +31853,7 @@
       "title": "NamespaceSpec describe the desired state of the namespace where application will be created.",
       "properties": {
         "annotations": {
-          "description": "Annotations of the namespace\nMore info: http://kubernetes.io/docs/user-guide/annotations\n+optional",
+          "description": "Annotations of the namespace",
           "type": "object",
           "additionalProperties": {
             "type": "string"
@@ -31861,12 +31861,12 @@
           "x-go-name": "Annotations"
         },
         "create": {
-          "description": "Create defines whether the namespace should be created if it does not exist. Defaults to true",
+          "description": "Create defines whether the namespace should be created if it does not exist.",
           "type": "boolean",
           "x-go-name": "Create"
         },
         "labels": {
-          "description": "Labels of the namespace\nMore info: http://kubernetes.io/docs/user-guide/labels\n+optional",
+          "description": "Labels of the namespace",
           "type": "object",
           "additionalProperties": {
             "type": "string"
@@ -31874,13 +31874,13 @@
           "x-go-name": "Labels"
         },
         "name": {
-          "description": "Name is the namespace to deploy the Application into.\nShould be a valid lowercase RFC1123 domain name",
+          "description": "Name is the namespace to deploy the Application into",
           "type": "string",
           "pattern": "=`^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$`",
           "x-go-name": "Name"
         }
       },
-      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "NetworkDefaults": {
       "type": "object",
@@ -32913,6 +32913,17 @@
         "enforced": {
           "type": "boolean",
           "x-go-name": "Enforced"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "OpenStack": {
+      "type": "object",
+      "properties": {
+        "enforceCustomDisk": {
+          "description": "EnforceCustomDisk will enforce the custom disk option for machines for the dashboard.",
+          "type": "boolean",
+          "x-go-name": "EnforceCustomDisk"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -33952,6 +33963,15 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+    },
+    "ProviderConfiguration": {
+      "type": "object",
+      "properties": {
+        "openStack": {
+          "$ref": "#/definitions/OpenStack"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
     "ProviderPreset": {
       "type": "object",
@@ -35052,6 +35072,9 @@
         },
         "opaOptions": {
           "$ref": "#/definitions/OpaOptions"
+        },
+        "providerConfiguration": {
+          "$ref": "#/definitions/ProviderConfiguration"
         },
         "restrictProjectCreation": {
           "type": "boolean",

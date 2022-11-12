@@ -71,6 +71,9 @@ type SettingSpec struct {
 
 	// opa options
 	OpaOptions *OpaOptions `json:"opaOptions,omitempty"`
+
+	// provider configuration
+	ProviderConfiguration *ProviderConfiguration `json:"providerConfiguration,omitempty"`
 }
 
 // Validate validates this setting spec
@@ -98,6 +101,10 @@ func (m *SettingSpec) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateOpaOptions(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateProviderConfiguration(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -219,6 +226,25 @@ func (m *SettingSpec) validateOpaOptions(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *SettingSpec) validateProviderConfiguration(formats strfmt.Registry) error {
+	if swag.IsZero(m.ProviderConfiguration) { // not required
+		return nil
+	}
+
+	if m.ProviderConfiguration != nil {
+		if err := m.ProviderConfiguration.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("providerConfiguration")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("providerConfiguration")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this setting spec based on the context it is used
 func (m *SettingSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
@@ -244,6 +270,10 @@ func (m *SettingSpec) ContextValidate(ctx context.Context, formats strfmt.Regist
 	}
 
 	if err := m.contextValidateOpaOptions(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateProviderConfiguration(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -339,6 +369,22 @@ func (m *SettingSpec) contextValidateOpaOptions(ctx context.Context, formats str
 				return ve.ValidateName("opaOptions")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("opaOptions")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *SettingSpec) contextValidateProviderConfiguration(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.ProviderConfiguration != nil {
+		if err := m.ProviderConfiguration.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("providerConfiguration")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("providerConfiguration")
 			}
 			return err
 		}

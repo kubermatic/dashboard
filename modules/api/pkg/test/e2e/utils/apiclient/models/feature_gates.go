@@ -23,6 +23,9 @@ type FeatureGates struct {
 	// o ID c kube cfg endpoint
 	OIDCKubeCfgEndpoint bool `json:"oidcKubeCfgEndpoint,omitempty"`
 
+	// open ID auth plugin
+	OpenIDAuthPlugin bool `json:"openIDAuthPlugin,omitempty"`
+
 	// operating system manager
 	OperatingSystemManager bool `json:"operatingSystemManager,omitempty"`
 }
