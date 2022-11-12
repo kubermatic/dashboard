@@ -51,6 +51,7 @@ presubmits:
               cpu: 2
             limits:
               memory: 6Gi
+
   - name: pre-dashboard-api-unit
     run_if_changed: 'modules/api'
     decorate: true
@@ -83,7 +84,7 @@ presubmits:
         - image: quay.io/kubermatic/build:go-1.19-node-18-4
           command:
             - make
-            - lint
+            - api-lint
           resources:
             requests:
               memory: 10Gi
@@ -92,7 +93,7 @@ presubmits:
             - name: KUBERMATIC_EDITION
               value: ee
 
-  - name: pre-kubermatic-verify
+  - name: pre-dashboard-api-verify
     always_run: true
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
@@ -102,7 +103,8 @@ presubmits:
       containers:
         - image: quay.io/kubermatic/build:go-1.19-node-18-4
           command:
-            - ./hack/ci/verify.sh
+            - make
+            - api-verify
           resources:
             requests:
               memory: 2Gi

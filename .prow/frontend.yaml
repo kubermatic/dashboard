@@ -47,7 +47,7 @@ presubmits:
           imagePullPolicy: Always
           command:
             - make
-            - run-e2e-ci
+            - web-run-e2e-ci
           securityContext:
             privileged: true
           resources:
@@ -102,7 +102,7 @@ presubmits:
           imagePullPolicy: Always
           command:
             - make
-            - run-e2e-ci
+            - web-run-e2e-ci
           securityContext:
             privileged: true
           resources:
@@ -138,7 +138,7 @@ presubmits:
           imagePullPolicy: Always
           command:
             - make
-            - run-e2e-ci
+            - web-run-e2e-ci
           resources:
             requests:
               memory: 6Gi
@@ -167,7 +167,7 @@ presubmits:
           imagePullPolicy: Always
           command:
             - make
-            - run-e2e-ci
+            - web-run-e2e-ci
           resources:
             requests:
               memory: 6Gi
@@ -195,7 +195,7 @@ presubmits:
         - image: quay.io/kubermatic/chrome-headless:v1.6.0
           command:
             - make
-            - test-headless
+            - web-test-headless
           resources:
             requests:
               cpu: 1
@@ -209,3 +209,51 @@ presubmits:
                 secretKeyRef:
                   name: kubermatic-codecov
                   key: token
+
+  - name: pre-dashboard-go-mod-verify
+    run_if_changed: 'modules/web'
+    decorate: true
+    clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
+    labels:
+      preset-goproxy: 'true'
+    spec:
+      containers:
+        - image: quay.io/kubermatic/build:go-1.19-node-18-kind-0.17-4
+          command:
+            - make
+            - web-check-dependencies
+          resources:
+            requests:
+              cpu: 100m
+
+  - name: pre-dashboard-lint
+    run_if_changed: 'modules/web'
+    decorate: true
+    clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
+    labels:
+      preset-goproxy: 'true'
+    spec:
+      containers:
+        - image: quay.io/kubermatic/build:go-1.19-node-18-kind-0.17-4
+          command:
+            - make
+            - web-lint
+          resources:
+            requests:
+              cpu: 100m
+
+  - name: pre-dashboard-check
+    run_if_changed: 'modules/web'
+    decorate: true
+    clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
+    labels:
+      preset-goproxy: 'true'
+    spec:
+      containers:
+        - image: quay.io/kubermatic/build:go-1.19-node-18-kind-0.17-4
+          command:
+            - make
+            - web-check
+          resources:
+            requests:
+              cpu: 100m

@@ -13,24 +13,8 @@
 # limitations under the License.
 
 presubmits:
-  - name: pre-dashboard-verify-boilerplate
+  - name: pre-dashboard-common-verify
     always_run: true
-    decorate: true
-    clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
-    labels:
-      preset-goproxy: 'true'
-    spec:
-      containers:
-        - image: quay.io/kubermatic-labs/boilerplate:v0.2.0
-          command:
-            - ./hack/verify-boilerplate.sh
-          resources:
-            requests:
-              memory: 256Mi
-              cpu: 100m
-
-  - name: pre-dashboard-go-mod-verify
-    run_if_changed: "^(go.sum|go.mod)$|\\.(go)$"
     decorate: true
     clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
     labels:
@@ -39,11 +23,14 @@ presubmits:
       containers:
         - image: quay.io/kubermatic/build:go-1.19-node-18-kind-0.17-4
           command:
-            - make
-            - verify-go
+            - ./hack/ci/verify.sh
           resources:
             requests:
-              cpu: 100m
+              memory: 2Gi
+              cpu: 2
+          env:
+            - name: KUBERMATIC_EDITION
+              value: ee
 
   - name: pre-dashboard-check-static
     always_run: true

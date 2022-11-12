@@ -20,7 +20,7 @@
 
 set -euo pipefail
 
-cd $(dirname $0)/../..
+cd $(dirname $0)/..
 source hack/lib.sh
 
 EXIT_CODE=0
@@ -55,14 +55,8 @@ try() {
   echo
 }
 
-try "Verify boilerplate" ./hack/verify-boilerplate.sh
-try "Spellcheck" make spellcheck
-
-# -l        list files whose formatting differs from shfmt's
-# -d        error with a diff when the formatting differs
-# -i uint   indent: 0 for tabs (default), >0 for number of spaces
-try "shfmt" shfmt -l -sr -i 2 -d hack
-try "shfmt" shfmt -l -sr -i 2 -d modules/api/hack
-try "shfmt" shfmt -l -sr -i 2 -d modules/web/hack
+try "Verify import order" make verify-imports
+try "Verify go.mod" make check-dependencies
+try "Verify license compatibility" ./hack/verify-licenses.sh
 
 exit $EXIT_CODE

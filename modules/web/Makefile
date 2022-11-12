@@ -1,8 +1,5 @@
 SHELL=/bin/bash
 export KUBERMATIC_EDITION ?= ee
-DOCKER_REPO ?= quay.io/kubermatic
-REPO = $(DOCKER_REPO)/dashboard$(shell [[ "$(KUBERMATIC_EDITION)" != "ce" ]] && printf -- '-%s' ${KUBERMATIC_EDITION})
-IMAGE_TAG=$(shell echo $$(git rev-parse HEAD)|tr -d '\n')
 CC=npm
 GOOS ?= $(shell go env GOOS)
 export GOOS
@@ -58,65 +55,47 @@ DOCKER_BIN := $(shell which docker)
 .PHONY: all
 all: install run
 
-.PHONY: build
-build: $(CMD)
-
-.PHONY: $(CMD)
-$(CMD): %: $(BUILD_DEST)/%
-
-$(BUILD_DEST)/%: cmd/% download-gocache
-	GOOS=$(GOOS) go build -tags "$(KUBERMATIC_EDITION)" $(GOTOOLFLAGS) -o $@ ./cmd/$*
-
-download-gocache:
-	@./hack/ci/download-gocache.sh
-	@# Prevent this from getting executed multiple times
-	@touch download-gocache
-
 version:
 	@echo $(HUMAN_VERSION)
 
-.PHONY: spellcheck
-spellcheck:
-	./hack/verify-spelling.sh
+install:
+	@$(CC) ci --unsafe-perm
 
-docker-build: build dist
-	docker build -t $(REPO):$(IMAGE_TAG) .
+check: install
+	@$(CC) run check
 
-docker-push: docker-build
-	docker push $(REPO):$(IMAGE_TAG)
-	for TAG in $(ADDITIONAL_TAGS) ; do \
-		docker tag $(REPO):$(IMAGE_TAG) $(REPO):$$TAG ; \
-		docker push $(REPO):$$TAG ; \
-	done
+run:
+	@$(CC) start
 
-deploy:
-	kubectl -n kubermatic patch kubermaticconfiguration kubermatic --patch '{"spec":{"ui":{"dockerTag":"$(IMAGE_TAG)"}}}' --type=merge
+dist: install
+	@KUBERMATIC_EDITION=${KUBERMATIC_EDITION} $(CC) run build
 
-# API
-api-lint:
-	$(MAKE) -C modules/api lint
+# Dashboard tests
+test-full: test run-e2e-ci
 
-api-test:
-	$(MAKE) -C modules/api api-test
+test:
+	@$(CC) test
 
-api-verify:
-	$(MAKE) -C modules/api verify
+test-headless: install
+	@$(CC) run test:ci
+	./hack/upload-coverage.sh
 
-# Web
-web-lint:
-	$(MAKE) -C modules/web lint
+lint:
+	golangci-lint run \
+		--verbose \
+		--print-resources-usage \
+		./cmd/...
 
-web-run-e2e-ci:
-	$(MAKE) -C modules/web run-e2e-ci
+.PHONY: verify-go
+verify-go:
+	go mod verify
 
-web-test-headless:
-	$(MAKE) -C modules/web test-headless
+.PHONY: check-dependencies
+check-dependencies:
+	go mod tidy
+	go mod verify
+	git diff --exit-codeW
 
-web-lint:
-	$(MAKE) -C modules/web lint
-
-web-check:
-	$(MAKE) -C modules/web check
-
-web-check-dependencies:
-	$(MAKE) -C modules/web check-dependencies
+.PHONY: run-e2e-ci
+run-e2e-ci: install
+	./hack/e2e/run-tests.sh

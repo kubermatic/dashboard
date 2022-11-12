@@ -18,6 +18,7 @@ set -euo pipefail
 
 THEMES_DIR=dist-themes
 REL_ROOT_DIR="$(dirname "$0")/.."
+
 ABS_ROOT_DIR="$(
   cd ${REL_ROOT_DIR}
   pwd

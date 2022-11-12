@@ -75,48 +75,36 @@ download-gocache:
 version:
 	@echo $(HUMAN_VERSION)
 
-.PHONY: spellcheck
-spellcheck:
-	./hack/verify-spelling.sh
+# API tests
+api-test: download-gocache run-api-tests build-tests
 
-docker-build: build dist
-	docker build -t $(REPO):$(IMAGE_TAG) .
+run-api-tests:
+	./hack/run-api-tests.sh
 
-docker-push: docker-build
-	docker push $(REPO):$(IMAGE_TAG)
-	for TAG in $(ADDITIONAL_TAGS) ; do \
-		docker tag $(REPO):$(IMAGE_TAG) $(REPO):$$TAG ; \
-		docker push $(REPO):$$TAG ; \
-	done
+lint:
+	golangci-lint run \
+		--verbose \
+		--print-resources-usage \
+		./pkg/... ./cmd/...
 
-deploy:
-	kubectl -n kubermatic patch kubermaticconfiguration kubermatic --patch '{"spec":{"ui":{"dockerTag":"$(IMAGE_TAG)"}}}' --type=merge
+.PHONY: verify-go
+verify-go:
+	go mod verify
 
-# API
-api-lint:
-	$(MAKE) -C modules/api lint
+.PHONY: verify-imports
+verify-imports:
+	./hack/verify-import-order.sh
 
-api-test:
-	$(MAKE) -C modules/api api-test
+.PHONY: check-dependencies
+check-dependencies:
+	go mod tidy
+	go mod verify
+	git diff --exit-code
 
-api-verify:
-	$(MAKE) -C modules/api verify
+.PHONY: build-tests
+build-tests:
+	go test -tags "$(KUBERMATIC_EDITION)" -run nope ./pkg/... ./cmd/...
 
-# Web
-web-lint:
-	$(MAKE) -C modules/web lint
-
-web-run-e2e-ci:
-	$(MAKE) -C modules/web run-e2e-ci
-
-web-test-headless:
-	$(MAKE) -C modules/web test-headless
-
-web-lint:
-	$(MAKE) -C modules/web lint
-
-web-check:
-	$(MAKE) -C modules/web check
-
-web-check-dependencies:
-	$(MAKE) -C modules/web check-dependencies
+.PHONY: verify
+verify:
+	./hack/verify.sh

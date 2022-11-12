@@ -39,8 +39,7 @@
     "fix:license": "license-check-and-add add -r 2022",
     "clean": "gts clean",
     "vi": "node version.js",
-    "postinstall": "ngcc",
-    "prepare": "husky install"
+    "postinstall": "ngcc"
   },
   "lint-staged": {
     "src/**/*.ts": [
