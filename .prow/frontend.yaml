@@ -187,7 +187,6 @@ presubmits:
 
   - name: pre-dashboard-test-unit
     run_if_changed: 'modules/web'
-    always_run: true
     decorate: true
     clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
     spec:

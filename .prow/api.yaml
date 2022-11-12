@@ -94,7 +94,7 @@ presubmits:
               value: ee
 
   - name: pre-dashboard-api-verify
-    always_run: true
+    run_if_changed: 'modules/api'
     decorate: true
     clone_uri: "ssh://git@github.com/kubermatic/dashboard.git"
     labels:
