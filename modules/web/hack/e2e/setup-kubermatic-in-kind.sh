@@ -19,6 +19,8 @@ if [ -z "${KIND_CLUSTER_NAME:-}" ]; then
   exit 1
 fi
 
+source ../../hack/lib.sh
+
 export KUBERMATIC_VERSION=latest
 export TARGET_BRANCH="${PULL_BASE_REF:-main}"
 export KUBERMATIC_OIDC_LOGIN="roxy@kubermatic.com"
