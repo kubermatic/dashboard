@@ -55,6 +55,20 @@ DOCKER_BIN := $(shell which docker)
 .PHONY: all
 all: install run
 
+.PHONY: build
+build: $(CMD)
+
+.PHONY: $(CMD)
+$(CMD): %: $(BUILD_DEST)/%
+
+$(BUILD_DEST)/%: cmd/% download-gocache
+	GOOS=$(GOOS) go build -a -tags "$(KUBERMATIC_EDITION)" $(GOTOOLFLAGS) -o $@ ./cmd/$*
+
+download-gocache:
+	@../../hack/ci/download-gocache.sh
+	@# Prevent this from getting executed multiple times
+	@touch download-gocache
+
 version:
 	@echo $(HUMAN_VERSION)
 

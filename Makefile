@@ -55,23 +55,6 @@ BUILD_DEST ?= _build
 GOTOOLFLAGS ?= $(GOBUILDFLAGS) -ldflags '$(LDFLAGS_EXTRA) $(LDFLAGS)' $(GOTOOLFLAGS_EXTRA)
 DOCKER_BIN := $(shell which docker)
 
-.PHONY: all
-all: install run
-
-.PHONY: build
-build: $(CMD)
-
-.PHONY: $(CMD)
-$(CMD): %: $(BUILD_DEST)/%
-
-$(BUILD_DEST)/%: cmd/% download-gocache
-	GOOS=$(GOOS) go build -tags "$(KUBERMATIC_EDITION)" $(GOTOOLFLAGS) -o $@ ./cmd/$*
-
-download-gocache:
-	@./hack/ci/download-gocache.sh
-	@# Prevent this from getting executed multiple times
-	@touch download-gocache
-
 version:
 	@echo $(HUMAN_VERSION)
 
@@ -102,6 +85,9 @@ api-test:
 api-verify:
 	$(MAKE) -C modules/api verify
 
+api-build:
+	$(MAKE) -C modules/api build
+
 # Web
 web-lint:
 	$(MAKE) -C modules/web lint
@@ -112,11 +98,12 @@ web-run-e2e-ci:
 web-test-headless:
 	$(MAKE) -C modules/web test-headless
 
-web-lint:
-	$(MAKE) -C modules/web lint
 
 web-check:
 	$(MAKE) -C modules/web check
 
 web-check-dependencies:
 	$(MAKE) -C modules/web check-dependencies
+
+web-build:
+	$(MAKE) -C modules/web build

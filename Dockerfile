@@ -18,6 +18,7 @@ LABEL maintainer="support@kubermatic.com"
 RUN apk add -U ca-certificates && rm -rf /var/cache/apk/*
 
 COPY ./modues/api/_build/ /usr/local/bin/
+COPY ./modues/web/_build/ /usr/local/bin/
 COPY ./modues/api/cmd/kubermatic-api/swagger.json /opt/swagger.json
 COPY ./modues/web/dist /dist
 
