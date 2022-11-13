@@ -12,14 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM alpine:3.13
+FROM alpine:3.16
 LABEL maintainer="support@kubermatic.com"
 
 RUN apk add -U ca-certificates && rm -rf /var/cache/apk/*
 
-COPY ./_build/ /usr/local/bin/
-COPY ./cmd/kubermatic-api/swagger.json /opt/swagger.json
-COPY ./dist /dist
+COPY ./modules/api/_build/ /usr/local/bin/
+COPY ./modules/web/_build/ /usr/local/bin/
+COPY ./modules/api/cmd/kubermatic-api/swagger.json /opt/swagger.json
+COPY ./modules/web/dist /dist
 
 USER nobody
 

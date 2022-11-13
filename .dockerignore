@@ -1,5 +1,6 @@
-containers
-docs
 hack
-node_modules
 .idea
+.git
+docs/
+.prow
+.github

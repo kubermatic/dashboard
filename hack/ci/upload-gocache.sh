@@ -28,6 +28,8 @@ set -o monitor
 cd $(dirname $0)/../..
 source hack/lib.sh
 
+cd $(dirname $0)/../../modules/api
+
 if [ -z "${GOCACHE_MINIO_ADDRESS:-}" ]; then
   echodate "Fatal: env var GOCACHE_MINIO_ADDRESS unset"
   exit 1

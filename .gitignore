@@ -2,12 +2,12 @@
 /.angular/cache
 /dist
 /tmp
-/coverage
-/dashboard
 /dist-themes
 
 # Dependencies.
 /node_modules
+.angular
+.envrc
 
 # IDEs and editors.
 /.idea
@@ -18,34 +18,4 @@
 .settings/
 .vscode/*
 .nvmrc
-
-# Misc.
-/.sass-cache
-/connect.lock
-/coverage/*
-/libpeerconnection.log
-npm-debug.log
-testem.log
-/typings
-.angular
-.envrc
-
-# System files.
 .DS_Store
-Thumbs.db
-
-# Generated.
-bindata_assetfs.go
-version.json
-
-# Cypress.
-cypress/screenshots
-cypress/videos
-cypress/plugins/index.js
-cypress/plugins/cy-ts-preprocessor.js
-
-# GO
-/vendor
-**/_build
-download-gocache
-dev.kubeconfig

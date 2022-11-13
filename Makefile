@@ -55,88 +55,17 @@ BUILD_DEST ?= _build
 GOTOOLFLAGS ?= $(GOBUILDFLAGS) -ldflags '$(LDFLAGS_EXTRA) $(LDFLAGS)' $(GOTOOLFLAGS_EXTRA)
 DOCKER_BIN := $(shell which docker)
 
-.PHONY: all
-all: install run
-
-.PHONY: build
-build: $(CMD)
-
-.PHONY: $(CMD)
-$(CMD): %: $(BUILD_DEST)/%
-
-$(BUILD_DEST)/%: cmd/% download-gocache
-	GOOS=$(GOOS) go build -tags "$(KUBERMATIC_EDITION)" $(GOTOOLFLAGS) -o $@ ./cmd/$*
-
-download-gocache:
-	@./hack/ci/download-gocache.sh
-	@# Prevent this from getting executed multiple times
-	@touch download-gocache
-
 version:
 	@echo $(HUMAN_VERSION)
-
-install:
-	@$(CC) ci --unsafe-perm
-
-check: install
-	@$(CC) run check
-
-run:
-	@$(CC) start
-
-dist: install
-	@KUBERMATIC_EDITION=${KUBERMATIC_EDITION} $(CC) run build
-
-# Dashboard tests
-test-full: test run-e2e
-
-test:
-	@$(CC) test
-
-test-headless: install
-	@$(CC) run test:ci
-	./hack/upload-coverage.sh
-
-# API tests
-api-test: download-gocache run-api-tests build-tests
-
-run-api-tests:
-	./hack/run-api-tests.sh
-
-lint:
-	golangci-lint run \
-		--verbose \
-		--print-resources-usage \
-		./pkg/... ./cmd/...
-
-.PHONY: verify-go
-verify-go:
-	go mod verify
-
-.PHONY: verify-imports
-verify-imports:
-	./hack/verify-import-order.sh
 
 .PHONY: spellcheck
 spellcheck:
 	./hack/verify-spelling.sh
 
-.PHONY: check-dependencies
-check-dependencies:
-	go mod tidy
-	go mod verify
-	git diff --exit-code
-
-.PHONY: build-tests
-build-tests:
-	go test -tags "$(KUBERMATIC_EDITION)" -run nope ./pkg/... ./cmd/...
-
-.PHONY: run-e2e-ci
-run-e2e-ci: install
-	./hack/e2e/run-tests.sh
-
-docker-build: build dist
+docker-build: build web-dist
 	docker build -t $(REPO):$(IMAGE_TAG) .
+
+build: web-build api-build
 
 docker-push: docker-build
 	docker push $(REPO):$(IMAGE_TAG)
@@ -147,3 +76,43 @@ docker-push: docker-build
 
 deploy:
 	kubectl -n kubermatic patch kubermaticconfiguration kubermatic --patch '{"spec":{"ui":{"dockerTag":"$(IMAGE_TAG)"}}}' --type=merge
+
+download-gocache:
+	@./hack/ci/download-gocache.sh
+	@# Prevent this from getting executed multiple times
+	@touch download-gocache
+
+# API
+api-lint:
+	$(MAKE) -C modules/api lint
+
+api-test:
+	$(MAKE) -C modules/api api-test
+
+api-verify:
+	$(MAKE) -C modules/api verify
+
+api-build:
+	$(MAKE) -C modules/api build
+
+# Web
+web-lint:
+	$(MAKE) -C modules/web lint
+
+web-run-e2e-ci:
+	$(MAKE) -C modules/web run-e2e-ci
+
+web-test-headless:
+	$(MAKE) -C modules/web test-headless
+
+web-dist:
+	$(MAKE) -C modules/web dist
+
+web-check:
+	$(MAKE) -C modules/web check
+
+web-check-dependencies:
+	$(MAKE) -C modules/web check-dependencies
+
+web-build:
+	$(MAKE) -C modules/web build

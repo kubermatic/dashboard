@@ -55,9 +55,6 @@ try() {
   echo
 }
 
-try "Verify import order" make verify-imports
-try "Verify go.mod" make check-dependencies
-try "Verify license compatibility" ./hack/verify-licenses.sh
 try "Verify boilerplate" ./hack/verify-boilerplate.sh
 try "Spellcheck" make spellcheck
 
@@ -65,5 +62,7 @@ try "Spellcheck" make spellcheck
 # -d        error with a diff when the formatting differs
 # -i uint   indent: 0 for tabs (default), >0 for number of spaces
 try "shfmt" shfmt -l -sr -i 2 -d hack
+try "shfmt" shfmt -l -sr -i 2 -d modules/api/hack
+try "shfmt" shfmt -l -sr -i 2 -d modules/web/hack
 
 exit $EXIT_CODE

@@ -28,7 +28,8 @@ Note that we're requiring all commits in a PR to be signed-off. If you already c
 git rebase --signoff origin/main
 ```
 
-By doing this you state that you can certify the following (from https://developercertificate.org/):
+By doing this you state that you can certify the following (from <https://developercertificate.org/>):
+
 ```
 Developer Certificate of Origin
 Version 1.1
@@ -72,8 +73,9 @@ By making a contribution to this project, I certify that:
 ## Email and Chat
 
 Kubermatic Kubernetes Platform currently uses the general Kubermatic email list and Slack channel:
+
 - Email: [kubermatic-dev](https://groups.google.com/forum/#!forum/kubermatic-dev)
-- Slack: #[Slack](http://slack.kubermatic.io/) on Slack
+- Slack: #[Slack](https://join.slack.com/t/kubermatic-community/shared_invite/zt-vqjjqnza-dDw8BuUm3HvD4VGrVQ_ptw%20) on Slack
 
 Please avoid emailing maintainers found in the MAINTAINERS file directly. They
 are very busy and read the mailing lists.

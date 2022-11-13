@@ -1,0 +1,67 @@
+# Copyright 2022 The Kubermatic Kubernetes Platform contributors.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# To add a license, we follow https://github.com/cncf/foundation/blob/main/allowed-third-party-license-policy.md.
+
+# Compiled output.
+/.angular/cache
+/dist
+/tmp
+/coverage
+/dashboard
+/dist-themes
+
+# Dependencies.
+/node_modules
+
+# IDEs and editors.
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+.vscode/*
+.nvmrc
+
+# Misc.
+/.sass-cache
+/connect.lock
+/coverage/*
+/libpeerconnection.log
+npm-debug.log
+testem.log
+/typings
+.angular
+.envrc
+
+# System files.
+.DS_Store
+Thumbs.db
+
+# Generated.
+bindata_assetfs.go
+version.json
+
+# Cypress.
+cypress/screenshots
+cypress/videos
+cypress/plugins/index.js
+cypress/plugins/cy-ts-preprocessor.js
+
+# GO
+/vendor
+**/_build
+download-gocache
+dev.kubeconfig
