@@ -36,7 +36,7 @@ limitations under the License.
       </div>
     </km-combobox>
 
-    <mat-checkbox [formControlName]="Controls.CustomDiskSize"
+    <mat-checkbox [formControlName]="Controls.UseCustomDisk"
                   class="custom-disk-size">
       Custom Disk
       <i class="km-pointer km-custom-disk-size-info-icon"
@@ -44,8 +44,8 @@ limitations under the License.
     </mat-checkbox>
   </div>
 
-  <km-number-stepper *ngIf="!!form.get(Controls.CustomDiskSize).value"
-                     [formControlName]="Controls.DiskSize"
+  <km-number-stepper *ngIf="form.get(Controls.UseCustomDisk).value"
+                     [formControlName]="Controls.CustomDiskSize"
                      mode="errors"
                      label="Disk Size in GB"
                      hint="An additional network storage volume will be created and used as the disk for the VM."

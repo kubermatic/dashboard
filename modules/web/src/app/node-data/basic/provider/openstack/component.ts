@@ -37,12 +37,13 @@ import _ from 'lodash';
 import {merge, Observable, of} from 'rxjs';
 import {filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {duration} from 'moment';
+import {SettingsService} from '@core/services/settings';
 
 enum Controls {
   Flavor = 'flavor',
   UseFloatingIP = 'useFloatingIP',
-  DiskSize = 'diskSize',
   CustomDiskSize = 'customDiskSize',
+  UseCustomDisk = 'useCustomDisk',
   Image = 'image',
   AvailabilityZone = 'availabilityZone',
   InstanceReadyCheckPeriod = 'instanceReadyCheckPeriod',
@@ -142,6 +143,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
     private readonly _nodeDataService: NodeDataService,
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _datacenterService: DatacenterService,
+    private readonly _settingsService: SettingsService,
     private readonly _cdr: ChangeDetectorRef
   ) {
     super();
@@ -151,8 +153,8 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
     this.form = this._builder.group({
       [Controls.Flavor]: this._builder.control('', Validators.required),
       [Controls.UseFloatingIP]: this._builder.control(false),
-      [Controls.DiskSize]: this._builder.control(null),
-      [Controls.CustomDiskSize]: this._builder.control(''),
+      [Controls.CustomDiskSize]: this._builder.control(null),
+      [Controls.UseCustomDisk]: this._builder.control(false),
       [Controls.Image]: this._builder.control('', Validators.required),
       [Controls.AvailabilityZone]: this._builder.control(''),
       [Controls.InstanceReadyCheckPeriod]: this._builder.control(this._instanceReadyCheckPeriodDefault),
@@ -164,7 +166,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
     this._nodeDataService.nodeData = this._getNodeData();
 
     merge(
-      this.form.get(Controls.DiskSize).valueChanges,
+      this.form.get(Controls.CustomDiskSize).valueChanges,
       this.form.get(Controls.Image).valueChanges,
       this.form.get(Controls.UseFloatingIP).valueChanges,
       this.form.get(Controls.InstanceReadyCheckPeriod).valueChanges,
@@ -189,6 +191,19 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
       .pipe(filter(_ => !!this._images))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(this._setDefaultImage.bind(this));
+
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      if (settings.providerConfiguration?.openStack?.enforceCustomDisk) {
+        this.form.get(Controls.UseCustomDisk).setValue(true);
+        this.form.get(Controls.UseCustomDisk).disable();
+        this.form.get(Controls.CustomDiskSize).setValidators(Validators.required);
+        this.form.get(Controls.CustomDiskSize).updateValueAndValidity();
+      } else {
+        this.form.get(Controls.UseCustomDisk).enable();
+        this.form.get(Controls.CustomDiskSize).clearValidators();
+        this.form.get(Controls.UseCustomDisk).setValue(false);
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -245,7 +260,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
 
       this.form.get(Controls.UseFloatingIP).setValue(this._nodeDataService.nodeData.spec.cloud.openstack.useFloatingIP);
       this.form.get(Controls.Image).setValue(this._nodeDataService.nodeData.spec.cloud.openstack.image);
-      this.form.get(Controls.DiskSize).setValue(this._nodeDataService.nodeData.spec.cloud.openstack.diskSize);
+      this.form.get(Controls.CustomDiskSize).setValue(this._nodeDataService.nodeData.spec.cloud.openstack.diskSize);
       this.form.get(Controls.InstanceReadyCheckPeriod).setValue(instanceReadyCheckPeriod);
       this.form.get(Controls.InstanceReadyCheckTimeout).setValue(instanceReadyCheckTimeout);
 
@@ -394,7 +409,7 @@ export class OpenstackBasicNodeDataComponent extends BaseFormValidator implement
           openstack: {
             image: this.form.get(Controls.Image).value,
             useFloatingIP: this.form.get(Controls.UseFloatingIP).value,
-            diskSize: this.form.get(Controls.DiskSize).value,
+            diskSize: this.form.get(Controls.CustomDiskSize).value,
             instanceReadyCheckPeriod: `${this.form.get(Controls.InstanceReadyCheckPeriod).value}s`,
             instanceReadyCheckTimeout: `${this.form.get(Controls.InstanceReadyCheckTimeout).value}s`,
             serverGroup: this.selectedServerGroupID,
