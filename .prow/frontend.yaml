@@ -14,7 +14,7 @@
 
 presubmits:
   - name: pre-dashboard-web-e2e
-    run_if_changed: 'modules/web'
+    #run_if_changed: 'modules/web'
     optional: true
     decorate: true
     clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
@@ -69,7 +69,7 @@ presubmits:
                   key: serviceAccountSigningKey
 
   - name: pre-dashboard-web-e2e-ce
-    run_if_changed: 'modules/web'
+    #run_if_changed: 'modules/web'
     optional: true
     decorate: true
     clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
@@ -127,7 +127,6 @@ presubmits:
 
   - name: pre-dashboard-web-integration-tests
     run_if_changed: 'modules/web'
-    optional: true
     decorate: true
     clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
     labels:
@@ -156,7 +155,6 @@ presubmits:
 
   - name: pre-dashboard-web-integration-tests-ce
     run_if_changed: 'modules/web'
-    optional: true
     decorate: true
     clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
     labels:
