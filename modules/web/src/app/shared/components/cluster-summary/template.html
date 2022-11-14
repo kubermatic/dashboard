@@ -841,6 +841,12 @@ limitations under the License.
                   <div key>Disk Size</div>
                   <div value>{{machineDeployment.spec.template.cloud.nutanix.diskSize}} GB</div>
                 </km-property>
+                <km-property *ngIf="displayTags(machineDeployment.spec.template.cloud.nutanix.categories)">
+                  <div key>Categories</div>
+                  <div value>
+                    <km-labels [labels]="machineDeployment.spec.template.cloud.nutanix.categories"></km-labels>
+                  </div>
+                </km-property>
               </ng-container>
               <km-property-boolean *ngIf="machineDeployment.spec.template.cloud.nutanix?.cpuPassthrough"
                                    label="CPU Passthrough"
