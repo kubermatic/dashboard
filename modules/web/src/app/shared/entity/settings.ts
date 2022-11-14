@@ -178,4 +178,9 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
   },
   mlaAlertmanagerPrefix: '',
   mlaGrafanaPrefix: '',
+  providerConfiguration: {
+    openStack: {
+      enforceCustomDisk: false,
+    },
+  },
 };
