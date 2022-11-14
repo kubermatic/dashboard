@@ -42,6 +42,8 @@ import {
   IPFamily,
   MasterVersion,
   ProxyMode,
+  ExposeStrategy,
+  NetworkRanges,
 } from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
@@ -96,6 +98,9 @@ enum Controls {
   IPv6CIDRMaskSize = 'ipv6CIDRMaskSize',
   NodeLocalDNSCache = 'nodeLocalDNSCache',
   IPFamily = 'ipFamily',
+  ExposeStrategy = 'exposeStrategy',
+  IPv4APIServerAllowedIPRanges = 'ipv4APIServerAllowedIPRanges',
+  IPv6APIServerAllowedIPRanges = 'ipv6APIServerAllowedIPRanges',
 }
 
 @Component({
@@ -127,6 +132,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   cniPlugin = CNIPlugin;
   cniPluginVersions: string[] = [];
   availableProxyModes = [ProxyMode.ipvs, ProxyMode.iptables];
+  exposeStrategies = [ExposeStrategy.loadbalancer, ExposeStrategy.nodePort, ExposeStrategy.tunneling];
   isKonnectivityEnabled = false;
   isDualStackAllowed = false;
   clusterDefaultNodeSelectorNamespace: KeyValueEntry;
@@ -142,6 +148,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   private _defaultProxyMode: ProxyMode;
   private readonly _minNameLength = 5;
   private readonly _defaultAllowedIPRange = '0.0.0.0/0';
+  private readonly _defaultAllowedIPv6Range = '::/0';
   private readonly _canalDualStackMinimumSupportedVersion = '3.22.0';
 
   constructor(
@@ -211,6 +218,13 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.IPv4CIDRMaskSize]: this._builder.control(null),
       [Controls.IPv6CIDRMaskSize]: this._builder.control(null),
       [Controls.NodeLocalDNSCache]: this._builder.control(false),
+      [Controls.ExposeStrategy]: this._builder.control(null),
+      [Controls.IPv4APIServerAllowedIPRanges]: this._builder.control(this._defaultAllowedIPRange, [
+        IPV4_CIDR_PATTERN_VALIDATOR,
+      ]),
+      [Controls.IPv6APIServerAllowedIPRanges]: this._builder.control(this._defaultAllowedIPv6Range, [
+        IPV6_CIDR_PATTERN_VALIDATOR,
+      ]),
     });
 
     this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
@@ -338,6 +352,16 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     this._initDualStackControlsValueChangeListeners();
 
     merge(
+      this.form.get(Controls.ExposeStrategy).valueChanges,
+      this.form.get(Controls.IPv4APIServerAllowedIPRanges).valueChanges,
+      this.form.get(Controls.IPv6APIServerAllowedIPRanges).valueChanges
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(
+        _ => (this._clusterSpecService.cluster.spec.apiServerAllowedIPRanges = this.getAPIServerAllowedIPRange())
+      );
+
+    merge(
       this.form.get(Controls.Name).valueChanges,
       this.form.get(Controls.Version).valueChanges,
       this.form.get(Controls.AuditLogging).valueChanges,
@@ -360,7 +384,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.IPv6CIDRMaskSize).valueChanges,
       this.form.get(Controls.NodeLocalDNSCache).valueChanges,
       this.form.get(Controls.CNIPlugin).valueChanges,
-      this.form.get(Controls.CNIPluginVersion).valueChanges
+      this.form.get(Controls.CNIPluginVersion).valueChanges,
+      this.form.get(Controls.ExposeStrategy).valueChanges,
+      this.form.get(Controls.IPv4APIServerAllowedIPRanges).valueChanges,
+      this.form.get(Controls.IPv6APIServerAllowedIPRanges).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
@@ -435,6 +462,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     return [NodeProvider.AZURE, NodeProvider.GCP, NodeProvider.OPENSTACK, NodeProvider.AWS].includes(
       this._clusterSpecService.provider
     );
+  }
+
+  isExposeStrategyLoadBalancer(): boolean {
+    return this.form.get(Controls.ExposeStrategy).value === ExposeStrategy.loadbalancer;
   }
 
   isDualStackIPFamilySelected(): boolean {
@@ -580,6 +611,25 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     );
   }
 
+  private getAPIServerAllowedIPRange(): NetworkRanges {
+    let apiServerAllowedIPRange = null;
+
+    if (this.controlValue(Controls.ExposeStrategy) === ExposeStrategy.loadbalancer) {
+      const ipv4APIServerAllowedIPRanges = this.controlValue(Controls.IPv4APIServerAllowedIPRanges);
+      if (ipv4APIServerAllowedIPRanges) {
+        apiServerAllowedIPRange = [ipv4APIServerAllowedIPRanges];
+      }
+
+      if (this.isDualStackIPFamilySelected()) {
+        const ipv6APIServerAllowedIPRanges = this.controlValue(Controls.IPv6APIServerAllowedIPRanges);
+        if (ipv6APIServerAllowedIPRanges) {
+          apiServerAllowedIPRange = [...apiServerAllowedIPRange, ipv6APIServerAllowedIPRanges];
+        }
+      }
+    }
+    return {cidrBlocks: apiServerAllowedIPRange};
+  }
+
   private _getClusterEntity(): Cluster {
     const ipv4Pods = this.controlValue(Controls.IPv4PodsCIDR);
     const ipv4Services = this.controlValue(Controls.IPv4ServicesCIDR);
@@ -595,6 +645,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       nodeCidrMaskSizeIPv4: this.controlValue(Controls.IPv4CIDRMaskSize),
       nodeLocalDNSCacheEnabled: this.controlValue(Controls.NodeLocalDNSCache),
       konnectivityEnabled: konnectivity,
+      clusterExposeStrategy: this.controlValue(Controls.ExposeStrategy),
     } as ClusterNetwork;
 
     if (this.isDualStackIPFamilySelected()) {
@@ -634,6 +685,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         containerRuntime: this.controlValue(Controls.ContainerRuntime),
         clusterNetwork,
         cniPlugin: cniPlugin,
+        apiServerAllowedIPRanges: this.getAPIServerAllowedIPRange(),
       } as ClusterSpec,
     } as Cluster;
   }

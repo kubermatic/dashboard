@@ -99,6 +99,10 @@ limitations under the License.
               <div key>Proxy Mode</div>
               <div value>{{cluster.spec.clusterNetwork.proxyMode}}</div>
             </km-property>
+            <km-property *ngIf="cluster.spec.clusterNetwork.clusterExposeStrategy">
+              <div key>Expose Strategy</div>
+              <div value>{{cluster.spec.clusterNetwork.clusterExposeStrategy}}</div>
+            </km-property>
 
             <ng-container *ngIf="!showIPv4"
                           [ngTemplateOutlet]="ipv4Properties"></ng-container>
@@ -136,6 +140,10 @@ limitations under the License.
                   <div key>Allowed IP Range for NodePorts</div>
                   <div value>{{allowedIPRange}}</div>
                 </km-property>
+                <km-property *ngIf="ipv6APIServerAllowedIPRange as allowedIPRange">
+                  <div key>Allowed IP Range for API Server</div>
+                  <div value>{{allowedIPRange}}</div>
+                </km-property>
               </div>
             </ng-container>
 
@@ -169,6 +177,11 @@ limitations under the License.
             <km-property *ngIf="ipv4NodePortsAllowedIPRange as allowedIPRange">
               <div key>Allowed IP Range for NodePorts</div>
               <div value>{{allowedIPRange}}</div>
+            </km-property>
+
+            <km-property *ngIf="ipv4APIServerAllowedIPRange as allowedIPRangeForAPIServer">
+              <div key>Allowed IP Range for API Server</div>
+              <div value>{{allowedIPRangeForAPIServer}}</div>
             </km-property>
           </ng-template>
         </div>

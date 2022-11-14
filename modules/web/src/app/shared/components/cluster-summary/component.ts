@@ -16,9 +16,9 @@ import {Component, Input} from '@angular/core';
 import {ApplicationsListView} from '@shared/components/application-list/component';
 import {LabelFormComponent} from '@shared/components/label-form/component';
 import {Application} from '@shared/entity/application';
-import {Cluster} from '@shared/entity/cluster';
+import {Cluster, ExposeStrategy} from '@shared/entity/cluster';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
-import {MachineDeployment} from '@shared/entity/machine-deployment';
+import {MachineDeployment, OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deployment';
 import {getOperatingSystem, getOperatingSystemLogoClass, VSphereTag} from '@shared/entity/node';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {getIpCount} from '@shared/functions/get-ip-count';
@@ -26,7 +26,6 @@ import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
 import _ from 'lodash';
 import {convertArrayToObject} from '@shared/utils/common';
-import {OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deployment';
 
 @Component({
   selector: 'km-cluster-summary',
@@ -93,6 +92,18 @@ export class ClusterSummaryComponent {
 
   get ipv4NodePortsAllowedIPRange(): string {
     return this.cluster.spec.cloud[this.provider]?.nodePortsAllowedIPRanges?.cidrBlocks?.[0];
+  }
+
+  get ipv4APIServerAllowedIPRange(): string {
+    return this.cluster.spec.clusterNetwork.clusterExposeStrategy === ExposeStrategy.loadbalancer
+      ? this.cluster.spec.apiServerAllowedIPRanges?.cidrBlocks?.[0]
+      : null;
+  }
+
+  get ipv6APIServerAllowedIPRange(): string {
+    return this.cluster.spec.clusterNetwork.clusterExposeStrategy === ExposeStrategy.loadbalancer
+      ? this.cluster.spec.apiServerAllowedIPRanges?.cidrBlocks?.[1]
+      : null;
   }
 
   get ipv6NodePortsAllowedIPRange(): string {
