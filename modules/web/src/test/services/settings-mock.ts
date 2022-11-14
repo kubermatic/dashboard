@@ -57,6 +57,11 @@ export const DEFAULT_ADMIN_SETTINGS_MOCK: AdminSettings = {
   },
   mlaAlertmanagerPrefix: '',
   mlaGrafanaPrefix: '',
+  providerConfiguration: {
+    openStack: {
+      enforceCustomDisk: false,
+    },
+  },
 };
 
 @Injectable()
