@@ -22,7 +22,11 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import {IPV6_CIDR_PATTERN_VALIDATOR} from '@app/shared/validators/others';
+import {
+  IPV6_CIDR_PATTERN_VALIDATOR,
+  IPV4_CIDR_PATTERN_VALIDATOR,
+  IPV4_IPV6_CIDR_PATTERN,
+} from '@app/shared/validators/others';
 import {ClusterService} from '@core/services/cluster';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
@@ -50,7 +54,6 @@ import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {AdminSettings} from '@shared/entity/settings';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
-import {IPV4_CIDR_PATTERN_VALIDATOR} from '@shared/validators/others';
 import {KmValidators} from '@shared/validators/validators';
 import {combineLatest, merge} from 'rxjs';
 import {filter, startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
@@ -99,8 +102,7 @@ enum Controls {
   NodeLocalDNSCache = 'nodeLocalDNSCache',
   IPFamily = 'ipFamily',
   ExposeStrategy = 'exposeStrategy',
-  IPv4APIServerAllowedIPRanges = 'ipv4APIServerAllowedIPRanges',
-  IPv6APIServerAllowedIPRanges = 'ipv6APIServerAllowedIPRanges',
+  APIServerAllowedIPRanges = 'apiServerAllowedIPRanges',
 }
 
 @Component({
@@ -139,6 +141,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE = CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP = CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_HINT = CLUSTER_DEFAULT_NODE_SELECTOR_HINT;
+  readonly ipv4AndIPv6CidrRegex = IPV4_IPV6_CIDR_PATTERN;
   readonly Controls = Controls;
   readonly AuditPolicyPreset = AuditPolicyPreset;
   readonly IPFamily = IPFamily;
@@ -148,7 +151,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   private _defaultProxyMode: ProxyMode;
   private readonly _minNameLength = 5;
   private readonly _defaultAllowedIPRange = '0.0.0.0/0';
-  private readonly _defaultAllowedIPv6Range = '::/0';
   private readonly _canalDualStackMinimumSupportedVersion = '3.22.0';
 
   constructor(
@@ -219,12 +221,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.IPv6CIDRMaskSize]: this._builder.control(null),
       [Controls.NodeLocalDNSCache]: this._builder.control(false),
       [Controls.ExposeStrategy]: this._builder.control(null),
-      [Controls.IPv4APIServerAllowedIPRanges]: this._builder.control(this._defaultAllowedIPRange, [
-        IPV4_CIDR_PATTERN_VALIDATOR,
-      ]),
-      [Controls.IPv6APIServerAllowedIPRanges]: this._builder.control(this._defaultAllowedIPv6Range, [
-        IPV6_CIDR_PATTERN_VALIDATOR,
-      ]),
+      [Controls.APIServerAllowedIPRanges]: this._builder.control(null),
     });
 
     this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
@@ -353,8 +350,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
     merge(
       this.form.get(Controls.ExposeStrategy).valueChanges,
-      this.form.get(Controls.IPv4APIServerAllowedIPRanges).valueChanges,
-      this.form.get(Controls.IPv6APIServerAllowedIPRanges).valueChanges
+      this.form.get(Controls.APIServerAllowedIPRanges).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(
@@ -386,8 +382,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.CNIPlugin).valueChanges,
       this.form.get(Controls.CNIPluginVersion).valueChanges,
       this.form.get(Controls.ExposeStrategy).valueChanges,
-      this.form.get(Controls.IPv4APIServerAllowedIPRanges).valueChanges,
-      this.form.get(Controls.IPv6APIServerAllowedIPRanges).valueChanges
+      this.form.get(Controls.APIServerAllowedIPRanges).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
@@ -615,19 +610,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     let apiServerAllowedIPRange = null;
 
     if (this.controlValue(Controls.ExposeStrategy) === ExposeStrategy.loadbalancer) {
-      const ipv4APIServerAllowedIPRanges = this.controlValue(Controls.IPv4APIServerAllowedIPRanges);
-      if (ipv4APIServerAllowedIPRanges) {
-        apiServerAllowedIPRange = [ipv4APIServerAllowedIPRanges];
-      }
-
-      if (this.isDualStackIPFamilySelected()) {
-        const ipv6APIServerAllowedIPRanges = this.controlValue(Controls.IPv6APIServerAllowedIPRanges);
-        if (ipv6APIServerAllowedIPRanges) {
-          apiServerAllowedIPRange = [...apiServerAllowedIPRange, ipv6APIServerAllowedIPRanges];
-        }
-      }
+      apiServerAllowedIPRange = this.controlValue(Controls.APIServerAllowedIPRanges)?.tags;
     }
-    return {cidrBlocks: apiServerAllowedIPRange};
+    return apiServerAllowedIPRange === null ? null : {cidrBlocks: apiServerAllowedIPRange};
   }
 
   private _getClusterEntity(): Cluster {

@@ -104,6 +104,18 @@ limitations under the License.
         </div>
       </div>
 
+      <km-chip-list *ngIf="isExposeStrategyLoadBalancer()"
+                    class="tag-list"
+                    label="Allowed IP Range for API server"
+                    placeholder="IPs..."
+                    description="Use commas, space or enter key as the separators."
+                    (onChange)="onAPIServerAllowIPRangeChange($event)"
+                    [tags]="apiServerAllowedIPRanges"
+                    [formControlName]="Controls.APIServerAllowedIPRanges"
+                    [kmPattern]="ipv4AndIPv6CidrRegex"
+                    kmPatternError="Input has to be a valid IPv4 or IPv6 address">
+      </km-chip-list>
+
       <mat-checkbox *ngIf="isKonnectivityEnabled"
                     [formControlName]="Controls.Konnectivity"
                     [class.km-text-muted]="form.get(Controls.Konnectivity).disabled">

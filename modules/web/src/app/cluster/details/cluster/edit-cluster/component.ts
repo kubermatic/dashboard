@@ -27,6 +27,8 @@ import {
   ContainerRuntime,
   END_OF_DOCKER_SUPPORT_VERSION,
   EventRateLimitConfig,
+  ExposeStrategy,
+  NetworkRanges,
   ProviderSettingsPatch,
   ProxyMode,
 } from '@shared/entity/cluster';
@@ -47,6 +49,7 @@ import {
   handleClusterDefaultNodeSelector,
 } from '@shared/utils/cluster';
 import {KeyValueEntry} from '@shared/types/common';
+import {IPV4_IPV6_CIDR_PATTERN} from '@shared/validators/others';
 
 enum Controls {
   Name = 'name',
@@ -63,6 +66,7 @@ enum Controls {
   MLAMonitoring = 'monitoringEnabled',
   OperatingSystemManager = 'enableOperatingSystemManager',
   KubernetesDashboardEnabled = 'kubernetesDashboardEnabled',
+  APIServerAllowedIPRanges = 'apiServerAllowedIPRanges',
 }
 
 @Component({
@@ -89,11 +93,13 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   };
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Cluster)];
   clusterDefaultNodeSelectorNamespace: KeyValueEntry;
+  apiServerAllowedIPRanges: string[] = [];
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE = CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP = CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_HINT = CLUSTER_DEFAULT_NODE_SELECTOR_HINT;
   readonly Controls = Controls;
   readonly AuditPolicyPreset = AuditPolicyPreset;
+  readonly ipv4AndIPv6CidrRegex = IPV4_IPV6_CIDR_PATTERN;
   private readonly _nameMinLen = 3;
   private _settings: AdminSettings;
   private _seedSettings: SeedSettings;
@@ -149,6 +155,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       [Controls.PodNodeSelectorAdmissionPluginConfig]: new FormControl(''),
       [Controls.EventRateLimitConfig]: new FormControl(),
       [Controls.Labels]: new FormControl(null),
+      [Controls.APIServerAllowedIPRanges]: new FormControl(this.cluster.spec.apiServerAllowedIPRanges),
     });
 
     this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
@@ -236,6 +243,14 @@ export class EditClusterComponent implements OnInit, OnDestroy {
     this.podNodeSelectorAdmissionPluginConfig = config;
 
     this._handleClusterDefaultNodeSelector(config);
+  }
+
+  onAPIServerAllowIPRangeChange(ips: string[]): void {
+    this.apiServerAllowedIPRanges = ips;
+  }
+
+  isExposeStrategyLoadBalancer(): boolean {
+    return this.cluster.spec.exposeStrategy === ExposeStrategy.loadbalancer;
   }
 
   checkForLegacyAdmissionPlugins(): void {
@@ -356,6 +371,10 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       };
     }
 
+    if (this.cluster.spec.exposeStrategy === ExposeStrategy.loadbalancer) {
+      patch.spec.apiServerAllowedIPRanges = this.getAPIServerAllowedIPRange();
+    }
+
     return this._clusterService.patch(this.projectID, this.cluster.id, patch).pipe(take(1));
   }
 
@@ -375,6 +394,15 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         this.onLabelsChange(labels);
       }
     );
+  }
+
+  private getAPIServerAllowedIPRange(): NetworkRanges {
+    let apiServerAllowedIPRange = null;
+
+    if (this.cluster.spec.exposeStrategy === ExposeStrategy.loadbalancer) {
+      apiServerAllowedIPRange = this.form.get(Controls.APIServerAllowedIPRanges).value?.tags;
+    }
+    return apiServerAllowedIPRange === null ? null : {cidrBlocks: apiServerAllowedIPRange};
   }
 
   ngOnDestroy(): void {

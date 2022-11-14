@@ -53,7 +53,7 @@ limitations under the License.
         <mat-card-title>Network Configuration</mat-card-title>
       </mat-card-header>
       <div fxLayout="column"
-           fxLayoutGap="8px">
+           fxLayoutGap="7px">
 
         <div class="cni-plugin"
              fxLayout="column">
@@ -113,7 +113,7 @@ limitations under the License.
               </mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-form-field class="km-dropdown-with-suffix">
+          <mat-form-field class="km-dropdown-with-suffix km-long-subscript">
             <mat-label>Expose Strategy</mat-label>
             <mat-select [formControlName]="Controls.ExposeStrategy"
                         class="km-select-ellipsis"
@@ -128,8 +128,17 @@ limitations under the License.
                  href="https://docs.kubermatic.com/kubermatic/main/tutorials-howtos/networking/expose-strategies/#configure-the-expose-strategy">here</a>.
             </mat-hint>
           </mat-form-field>
+          <km-chip-list *ngIf="isExposeStrategyLoadBalancer()"
+                        class="tag-list"
+                        label="Allowed IP Range for API server"
+                        placeholder="IPs..."
+                        description="Use commas, space or enter key as the separators."
+                        [formControlName]="Controls.APIServerAllowedIPRanges"
+                        [kmPattern]="ipv4AndIPv6CidrRegex"
+                        kmPatternError="Input has to be a valid IPv4 or IPv6 address">
+          </km-chip-list>
           <div fxLayout="row"
-               fxLayoutGap="100px"
+               fxLayoutGap="50px"
                fxFlex="100">
             <div fxLayout="column"
                  [fxFlex]="isDualStackIPFamilySelected() ? '50' : '100'">
@@ -177,17 +186,6 @@ limitations under the License.
                   <strong>Required</strong>
                 </mat-error>
                 <mat-error *ngIf="form.get(Controls.IPv4AllowedIPRange).hasError('pattern')">
-                  Invalid pattern. Use CIDR notation, i.e. 192.168.1.0/24.
-                </mat-error>
-              </mat-form-field>
-              <mat-form-field *ngIf="isExposeStrategyLoadBalancer()"
-                              class="km-long-subscript">
-                <mat-label>Allowed IP Range for API server</mat-label>
-                <input matInput
-                       [formControlName]="Controls.IPv4APIServerAllowedIPRanges"
-                       type="text"
-                       autocomplete="off">
-                <mat-error *ngIf="form.get(Controls.IPv4APIServerAllowedIPRanges).hasError('pattern')">
                   Invalid pattern. Use CIDR notation, i.e. 192.168.1.0/24.
                 </mat-error>
               </mat-form-field>
@@ -239,17 +237,6 @@ limitations under the License.
                   <strong>Required</strong>
                 </mat-error>
                 <mat-error *ngIf="form.get(Controls.IPv6AllowedIPRange).hasError('pattern')">
-                  Invalid pattern. Use CIDR notation, i.e. 2002::1234:abcd:ffff:c0a8:101/64.
-                </mat-error>
-              </mat-form-field>
-              <mat-form-field *ngIf="isExposeStrategyLoadBalancer()"
-                              class="km-long-subscript">
-                <mat-label>Allowed IP Range for API server</mat-label>
-                <input matInput
-                       [formControlName]="Controls.IPv6APIServerAllowedIPRanges"
-                       type="text"
-                       autocomplete="off">
-                <mat-error *ngIf="form.get(Controls.IPv6APIServerAllowedIPRanges).hasError('pattern')">
                   Invalid pattern. Use CIDR notation, i.e. 2002::1234:abcd:ffff:c0a8:101/64.
                 </mat-error>
               </mat-form-field>

@@ -330,6 +330,7 @@ export class ClusterSpec {
   clusterNetwork?: ClusterNetwork;
   cniPlugin?: CNIPluginConfig;
   apiServerAllowedIPRanges?: NetworkRanges;
+  exposeStrategy?: ExposeStrategy;
 }
 
 export class EventRateLimitConfig {
@@ -499,6 +500,7 @@ export class ClusterSpecPatch {
   mla?: MLASettings;
   containerRuntime?: ContainerRuntime;
   cniPlugin?: CNIPluginConfigPatch;
+  apiServerAllowedIPRanges?: NetworkRanges;
 }
 
 export class CNIPluginConfigPatch {

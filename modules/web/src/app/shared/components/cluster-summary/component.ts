@@ -94,15 +94,9 @@ export class ClusterSummaryComponent {
     return this.cluster.spec.cloud[this.provider]?.nodePortsAllowedIPRanges?.cidrBlocks?.[0];
   }
 
-  get ipv4APIServerAllowedIPRange(): string {
+  get apiServerAllowedIPRange(): string[] {
     return this.cluster.spec.clusterNetwork.clusterExposeStrategy === ExposeStrategy.loadbalancer
-      ? this.cluster.spec.apiServerAllowedIPRanges?.cidrBlocks?.[0]
-      : null;
-  }
-
-  get ipv6APIServerAllowedIPRange(): string {
-    return this.cluster.spec.clusterNetwork.clusterExposeStrategy === ExposeStrategy.loadbalancer
-      ? this.cluster.spec.apiServerAllowedIPRanges?.cidrBlocks?.[1]
+      ? this.cluster.spec.apiServerAllowedIPRanges?.cidrBlocks
       : null;
   }
 
