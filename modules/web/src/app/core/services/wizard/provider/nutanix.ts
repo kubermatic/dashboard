@@ -16,7 +16,13 @@ import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {Provider} from './provider';
-import {NutanixCluster, NutanixProject, NutanixSubnet} from '@shared/entity/provider/nutanix';
+import {
+  NutanixCategory,
+  NutanixCategoryValue,
+  NutanixCluster,
+  NutanixProject,
+  NutanixSubnet,
+} from '@shared/entity/provider/nutanix';
 
 export class Nutanix extends Provider {
   constructor(http: HttpClient, provider: NodeProvider) {
@@ -107,6 +113,39 @@ export class Nutanix extends Provider {
 
     const url = `${this._newRestRoot}/providers/${this._provider}/${seed}/subnets`;
     return this._http.get<NutanixSubnet[]>(url, {headers: this._headers});
+  }
+
+  categories(seed: string, projectID: string, onLoadingCb: () => void = null): Observable<NutanixCategory[]> {
+    this._setRequiredHeaders(Nutanix.Header.NutanixUsername, Nutanix.Header.NutanixPassword);
+    if (!this._hasRequiredHeaders() || !seed) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
+    const url = `${this._newRestRoot}/projects/${projectID}/providers/${this._provider}/${seed}/categories`;
+    return this._http.get<NutanixCategory[]>(url, {headers: this._headers});
+  }
+
+  categoryValues(
+    seed: string,
+    projectID: string,
+    categoryName: string,
+    onLoadingCb: () => void = null
+  ): Observable<NutanixCategoryValue[]> {
+    this._setRequiredHeaders(Nutanix.Header.NutanixUsername, Nutanix.Header.NutanixPassword);
+    if (!this._hasRequiredHeaders() || !seed) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
+    const url = `${this._newRestRoot}/projects/${projectID}/providers/${this._provider}/${seed}/categories/${categoryName}/values`;
+    return this._http.get<NutanixCategoryValue[]>(url, {headers: this._headers});
   }
 }
 

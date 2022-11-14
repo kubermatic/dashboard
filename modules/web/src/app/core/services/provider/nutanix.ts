@@ -15,8 +15,8 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {environment} from '@environments/environment';
-import {Observable} from 'rxjs';
-import {NutanixSubnet} from '@shared/entity/provider/nutanix';
+import {catchError, Observable, of} from 'rxjs';
+import {NutanixCategory, NutanixCategoryValue, NutanixSubnet} from '@shared/entity/provider/nutanix';
 
 @Injectable()
 export class NutanixService {
@@ -27,5 +27,15 @@ export class NutanixService {
   getSubnets(projectID: string, clusterID: string): Observable<NutanixSubnet[]> {
     const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/providers/nutanix/subnets`;
     return this._httpClient.get<NutanixSubnet[]>(url);
+  }
+
+  getCategories(projectID: string, clusterID: string): Observable<NutanixCategory[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/providers/nutanix/categories`;
+    return this._httpClient.get<NutanixCategory[]>(url).pipe(catchError(() => of([])));
+  }
+
+  getCategoryValues(projectID: string, clusterID: string, categoryName: string): Observable<NutanixCategoryValue[]> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/providers/nutanix/categories/${categoryName}/values`;
+    return this._httpClient.get<NutanixCategoryValue[]>(url).pipe(catchError(() => of([])));
   }
 }

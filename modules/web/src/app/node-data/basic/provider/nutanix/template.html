@@ -69,4 +69,59 @@ limitations under the License.
                      min="1"
                      required>
   </km-number-stepper>
+
+  <mat-card-header class="km-no-padding"
+                   fxLayoutAlign=" center">
+    <mat-card-title>Categories</mat-card-title>
+    <div fxFlex></div>
+    <button fxLayoutAlign="center center"
+            mat-flat-button
+            type="button"
+            color="quaternary"
+            (click)="addCategory()">
+      <i class="km-icon-mask km-icon-add"></i>
+      <span>Add Category</span>
+    </button>
+  </mat-card-header>
+
+  <div [formArrayName]="Controls.Categories">
+    <div *ngFor="let control of categoriesFormArray.controls; let i = index"
+         [formGroupName]="i">
+      <div fxFlex
+           fxLayoutGap="10px">
+        <km-combobox [options]="filteredCategories[getSelectedCategory(control) || '']"
+                     [formControlName]="Controls.Category"
+                     [label]="getCategoryLabel(control)"
+                     [required]="true"
+                     inputLabel="Select category..."
+                     filterBy="name"
+                     fxFlex>
+          <div *option="let category">{{category.name}}</div>
+        </km-combobox>
+        <km-combobox [options]="categoryValues[getSelectedCategory(control)]"
+                     [formControlName]="Controls.CategoryValue"
+                     [label]="categoryValuesLabel[getSelectedCategory(control)] || CategoryValueState.Empty"
+                     [isDisabled]="control.get(Controls.Category).invalid"
+                     [required]="true"
+                     inputLabel="Select category value..."
+                     filterBy="value"
+                     fxFlex>
+          <div *option="let categoryValue">{{categoryValue.value}}</div>
+        </km-combobox>
+        <button mat-icon-button
+                type="button"
+                matTooltip="Delete category"
+                class="delete-button"
+                (click)="removeCategory(i)">
+          <i class="km-icon-mask km-icon-delete"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="categoriesFormArray.length === 0"
+       class="categories-msg km-text-muted">
+    Select categories for Nutanix.
+  </div>
+
 </form>
