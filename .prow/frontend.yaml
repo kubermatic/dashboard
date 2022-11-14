@@ -68,7 +68,7 @@ presubmits:
                   name: e2e-ci
                   key: serviceAccountSigningKey
 
-  - name: pre-dashboard-test-web-e2e-ce
+  - name: pre-dashboard-web-e2e-ce
     run_if_changed: 'modules/web'
     optional: true
     decorate: true
@@ -210,7 +210,7 @@ presubmits:
                   key: token
 
   - name: pre-dashboard-web-go-mod-verify
-    run_if_changed: 'modules/web'
+    run_if_changed: 'modules/web/cmd/|modules/web/go.mod|modules/web/go.sum'
     decorate: true
     clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
     labels:
@@ -226,7 +226,7 @@ presubmits:
               cpu: 100m
 
   - name: pre-dashboard-web-lint
-    run_if_changed: 'modules/web'
+    run_if_changed: 'modules/web/cmd/|modules/web/go.mod|modules/web/go.sum'
     decorate: true
     clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
     labels:
