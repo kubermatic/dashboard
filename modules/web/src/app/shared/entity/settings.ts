@@ -44,6 +44,7 @@ export interface AdminSettings {
   mlaAlertmanagerPrefix: string;
   mlaGrafanaPrefix: string;
   notifications?: NotificationOptions;
+  providerConfiguration?: ProviderConfiguration;
 }
 
 export interface MachineDeploymentVMResourceQuota {
@@ -74,6 +75,14 @@ export interface MLAOptions {
 export interface NotificationOptions {
   hideErrors: boolean;
   hideErrorEvents: boolean;
+}
+
+export interface ProviderConfiguration {
+  openStack: OpenStack;
+}
+
+export interface OpenStack {
+  enforceCustomDisk: boolean;
 }
 
 export class CustomLink {
@@ -169,4 +178,9 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
   },
   mlaAlertmanagerPrefix: '',
   mlaGrafanaPrefix: '',
+  providerConfiguration: {
+    openStack: {
+      enforceCustomDisk: false,
+    },
+  },
 };

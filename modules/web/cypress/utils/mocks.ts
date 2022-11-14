@@ -78,6 +78,11 @@ export class Mocks {
       maxRAM: 0,
       enableGPU: false,
     },
+    providerConfiguration: {
+      openStack: {
+        enforceCustomDisk: false,
+      },
+    },
   };
 
   static defaultAdmin: any = {

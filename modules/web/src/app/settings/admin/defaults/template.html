@@ -278,3 +278,44 @@ limitations under the License.
     </div>
   </mat-card-content>
 </mat-card>
+
+<mat-card>
+  <mat-card-header>
+    <mat-card-title fxFlex
+                    fxLayout="row"
+                    fxLayoutAlign=" center">
+      <div fxFlex>Provider Defaults</div>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div fxLayout="column"
+         fxLayoutGap="32px"
+         class="admin-settings">
+      <div fxFlex
+           fxLayout="column"
+           fxLayoutGap="16px">
+
+        <div fxLayout="row"
+             fxLayoutAlign=" center">
+          <div fxFlex="16%"
+               fxLayoutAlign=" center"
+               class="entry-label">
+            <span>OpenStack - Custom Disk</span>
+            <div class="km-icon-info km-pointer"
+                 matTooltip="Used to enforce custom disks for OpenStack machines."></div>
+          </div>
+          <div fxFlexAlign=" center"
+               fxLayout="row">
+            <mat-checkbox [(ngModel)]="settings.providerConfiguration.openStack.enforceCustomDisk"
+                          (change)="onSettingsChange()"
+                          id="km-openstack-enforce-custom-disk"
+                          fxFlexAlign=" center">Enforce Default
+            </mat-checkbox>
+            <km-spinner-with-confirmation [isSaved]="isEqual(settings.providerConfiguration.openStack.enforceCustomDisk, settings.providerConfiguration.openStack.enforceCustomDisk)"></km-spinner-with-confirmation>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
