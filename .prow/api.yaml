@@ -14,7 +14,7 @@
 
 presubmits:
   - name: pre-dashboard-api-e2e
-    run_if_changed: 'modules/api'
+    run_if_changed: 'modules/api/pkg'
     decorate: true
     clone_uri: 'ssh://git@github.com/kubermatic/dashboard.git'
     labels:
