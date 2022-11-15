@@ -99,7 +99,10 @@ limitations under the License.
               <div key>Proxy Mode</div>
               <div value>{{cluster.spec.clusterNetwork.proxyMode}}</div>
             </km-property>
-
+            <km-property *ngIf="cluster.spec.clusterNetwork.clusterExposeStrategy">
+              <div key>Expose Strategy</div>
+              <div value>{{cluster.spec.clusterNetwork.clusterExposeStrategy}}</div>
+            </km-property>
             <ng-container *ngIf="!showIPv4"
                           [ngTemplateOutlet]="ipv4Properties"></ng-container>
           </div>

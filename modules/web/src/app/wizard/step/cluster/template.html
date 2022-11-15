@@ -53,7 +53,7 @@ limitations under the License.
         <mat-card-title>Network Configuration</mat-card-title>
       </mat-card-header>
       <div fxLayout="column"
-           fxLayoutGap="8px">
+           fxLayoutGap="7px">
 
         <div class="cni-plugin"
              fxLayout="column">
@@ -113,6 +113,30 @@ limitations under the License.
               </mat-option>
             </mat-select>
           </mat-form-field>
+          <mat-form-field class="km-dropdown-with-suffix km-long-subscript">
+            <mat-label>Expose Strategy</mat-label>
+            <mat-select [formControlName]="Controls.ExposeStrategy"
+                        class="km-select-ellipsis"
+                        disableOptionCentering>
+              <mat-option *ngFor="let exposeStrategy of exposeStrategies"
+                          [value]="exposeStrategy">
+                {{exposeStrategy}}
+              </mat-option>
+            </mat-select>
+            <mat-hint>Leave empty to use the default value. Check the documentation for more information&nbsp;<a target="_blank"
+                 rel="noopener"
+                 href="https://docs.kubermatic.com/kubermatic/main/tutorials-howtos/networking/expose-strategies/#configure-the-expose-strategy">here</a>.
+            </mat-hint>
+          </mat-form-field>
+          <km-chip-list *ngIf="isExposeStrategyLoadBalancer()"
+                        class="tag-list"
+                        label="Allowed IP Range for API server"
+                        placeholder="IPs..."
+                        description="Use commas, space or enter key as the separators."
+                        [formControlName]="Controls.APIServerAllowedIPRanges"
+                        [kmPattern]="ipv4AndIPv6CidrRegex"
+                        kmPatternError="Input has to be a valid IPv4 or IPv6 address">
+          </km-chip-list>
           <div fxLayout="row"
                fxLayoutGap="50px"
                fxFlex="100">
