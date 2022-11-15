@@ -31,6 +31,10 @@ export class Members extends PageOptions implements Page {
     this.Elements.navButton.click();
   }
 
+  accessSideNavItem(): void {
+    this.Elements.accessSideNavItem.click();
+  }
+
   add(email: string, group: Group): void {
     this.Buttons.openDialog.click();
     this.Elements.addDialogEmailInput.type(email);
@@ -47,6 +51,10 @@ export class Members extends PageOptions implements Page {
 class Elements extends PageOptions {
   get navButton(): Cypress.Chainable {
     return this._get('#km-nav-item-members');
+  }
+
+  get accessSideNavItem(): Cypress.Chainable {
+    return this._get('#km-side-nav-field-Access');
   }
 
   get addDialogEmailInput(): Cypress.Chainable {

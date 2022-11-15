@@ -76,7 +76,6 @@ describe('SidenavComponent', () => {
     fixture = TestBed.createComponent(SidenavComponent);
     component = fixture.componentInstance;
     linkDes = fixture.debugElement.queryAll(By.directive(RouterLinkStubDirective));
-
     links = linkDes.map(de => de.injector.get(RouterLinkStubDirective) as RouterLinkStubDirective);
   });
 
@@ -85,8 +84,9 @@ describe('SidenavComponent', () => {
   }));
 
   it('should get RouterLinks from template', () => {
-    const expectedLinks = 8;
+    const expectedLinks = 3;
     fixture.detectChanges();
+
     expect(links.length).toBe(expectedLinks);
     expect(links[0].linkParams).toBe(`/projects/${fakeProjects()[0].id}/overview`);
   });
