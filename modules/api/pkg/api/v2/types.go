@@ -1930,17 +1930,15 @@ type ApplicationDefinitionListItemSpec struct {
 	Description string `json:"description"`
 }
 
-// SeedOverview stores some details of a requested Seed object.
+type DatacentersByProvider = map[string]ClustersByDatacenter
+type ClustersByDatacenter = map[string]int
+
+// SeedOverview stores details about a requested Seed object.
 // swagger:model SeedOverview
 type SeedOverview struct {
 	Name                  string                 `json:"name"`
 	Location              string                 `json:"location"`
 	Phase                 kubermaticv1.SeedPhase `json:"phase"`
 	Created               metav1.Time            `json:"created"`
-	Providers             int                    `json:"providers"`
-	Datacenters           int                    `json:"datacenters"`
-	Clusters              int                    `json:"clusters"`
-	ClustersByDC          map[string]int         `json:"clusters_by_datacenter"`
-	ClustersByProvider    map[string]int         `json:"clusters_by_provider"`
-	DatacentersByProvider map[string]int         `json:"datacenters_by_provider"`
+	DatacentersByProvider DatacentersByProvider  `json:"providers"`
 }
