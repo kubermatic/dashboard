@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<ng-container [ngSwitch]="isExternalClustersUrl()">
-  <km-cluster-list *ngSwitchCase="false"></km-cluster-list>
+  <km-cluster-list *ngIf="checkResourcesTypeURL() === view.Clusters"></km-cluster-list>
 
-  <km-external-cluster-list *ngSwitchCase="true"></km-external-cluster-list>
-</ng-container>
+  <km-external-cluster-list *ngIf="(checkResourcesTypeURL() === view.ExternalClusters) && areExternalClustersEnabled"
+                            ></km-external-cluster-list>
+

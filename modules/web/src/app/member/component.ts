@@ -35,7 +35,6 @@ import {AddMemberComponent} from './add-member/component';
 import {EditMemberComponent} from './edit-member/component';
 import {MemberService} from '@core/services/member';
 import {DynamicTabComponent} from '@shared/components/tab-card/dynamic-tab/component';
-import {DynamicTab} from '@shared/model/dynamic-tab';
 import {UserSettings} from '@app/shared/entity/settings';
 import {Router} from '@angular/router';
 
@@ -134,10 +133,6 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
 
   ngAfterViewInit(): void {
     this._cdr.detectChanges();
-  }
-
-  onActivate(component: DynamicTab): void {
-    component.onTabReady.pipe(take(1)).subscribe(tab => this._dynamicTabs.add(tab));
   }
 
   getGroup(member: Member): string {

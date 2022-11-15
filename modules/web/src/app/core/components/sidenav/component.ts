@@ -20,6 +20,7 @@ import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {environment} from '@environments/environment';
 import {getViewDisplayName, View} from '@shared/entity/common';
+import {isEnterpriseEdition} from '@app/dynamic/common';
 import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {CustomLink, UserSettings} from '@shared/entity/settings';
@@ -40,6 +41,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   settings: UserSettings;
   currentUser: Member;
   screenWidth = 0;
+  areExternalClustersEnabled = false;
 
   private _selectedProject = {} as Project;
   private _currentGroupConfig: GroupConfig;
@@ -55,6 +57,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
     private readonly _settingsService: SettingsService
   ) {}
 
+  get isEnterpriseEdition(): boolean {
+    return isEnterpriseEdition();
+  }
+
   ngOnInit(): void {
     this._screenWidth.subscribe(width => (this.screenWidth = width));
 
@@ -65,9 +71,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
       this.settings = settings;
     });
 
-    this._settingsService.adminSettings
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(settings => (this.customLinks = settings.customLinks));
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.areExternalClustersEnabled = settings.enableExternalClusterImport;
+      this.customLinks = settings.customLinks;
+    });
 
     merge(this._projectService.selectedProject, this._projectService.onProjectChange)
       .pipe(takeUntil(this._unsubscribe))
