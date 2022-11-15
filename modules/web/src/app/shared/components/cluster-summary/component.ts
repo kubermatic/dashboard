@@ -18,15 +18,13 @@ import {LabelFormComponent} from '@shared/components/label-form/component';
 import {Application} from '@shared/entity/application';
 import {Cluster} from '@shared/entity/cluster';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
-import {MachineDeployment} from '@shared/entity/machine-deployment';
+import {MachineDeployment, OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deployment';
 import {getOperatingSystem, getOperatingSystemLogoClass, VSphereTag} from '@shared/entity/node';
 import {SSHKey} from '@shared/entity/ssh-key';
-import {getIpCount} from '@shared/functions/get-ip-count';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
 import _ from 'lodash';
 import {convertArrayToObject} from '@shared/utils/common';
-import {OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deployment';
 
 @Component({
   selector: 'km-cluster-summary',
@@ -80,11 +78,6 @@ export class ClusterSummaryComponent {
 
   get isMLAEnabled(): boolean {
     return this.seedSettings?.mla?.user_cluster_mla_enabled;
-  }
-
-  get hasIPLeft(): boolean {
-    const ipCount = getIpCount(this.cluster.spec.machineNetworks);
-    return ipCount > 0 ? ipCount < this.machineDeployment.spec.replicas : false;
   }
 
   get hasNetworkConfiguration(): boolean {

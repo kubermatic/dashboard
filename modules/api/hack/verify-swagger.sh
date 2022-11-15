@@ -16,8 +16,10 @@
 
 set -euo pipefail
 
-cd $(dirname $0)/..
-source ../../hack/lib.sh
+cd $(dirname $0)/../../..
+source hack/lib.sh
+
+API=modules/api
 
 function cleanup() {
   rm -f $TMP_SWAGGER
@@ -31,7 +33,7 @@ trap cleanup EXIT SIGINT SIGTERM
 SWAGGER_FILE="swagger.json"
 TMP_SWAGGER="${SWAGGER_FILE}.tmp"
 
-cd cmd/kubermatic-api/
+cd $API/cmd/kubermatic-api/
 
 # TEMPORARY WORKAROUND to avoid inconstant swagger generation:
 # Because kubermatic repository still contains api types, swagger generation is not consistent.

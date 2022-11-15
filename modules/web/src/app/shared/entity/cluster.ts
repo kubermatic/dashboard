@@ -329,6 +329,8 @@ export class ClusterSpec {
   containerRuntime?: ContainerRuntime;
   clusterNetwork?: ClusterNetwork;
   cniPlugin?: CNIPluginConfig;
+  apiServerAllowedIPRanges?: NetworkRanges;
+  exposeStrategy?: ExposeStrategy;
 }
 
 export class EventRateLimitConfig {
@@ -350,6 +352,7 @@ export class ClusterNetwork {
   nodeCidrMaskSizeIPv6?: number;
   nodeLocalDNSCacheEnabled?: boolean;
   konnectivityEnabled?: boolean;
+  clusterExposeStrategy?: ExposeStrategy;
 }
 
 export class ClusterNetworkDefaults {
@@ -384,6 +387,12 @@ export enum ProxyMode {
   ipvs = 'ipvs',
   iptables = 'iptables',
   ebpf = 'ebpf',
+}
+
+export enum ExposeStrategy {
+  nodePort = 'NodePort',
+  loadbalancer = 'LoadBalancer',
+  tunneling = 'Tunneling',
 }
 
 export enum CNIPlugin {
@@ -491,6 +500,7 @@ export class ClusterSpecPatch {
   mla?: MLASettings;
   containerRuntime?: ContainerRuntime;
   cniPlugin?: CNIPluginConfigPatch;
+  apiServerAllowedIPRanges?: NetworkRanges;
 }
 
 export class CNIPluginConfigPatch {

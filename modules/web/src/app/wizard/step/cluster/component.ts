@@ -22,7 +22,11 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import {IPV6_CIDR_PATTERN_VALIDATOR} from '@app/shared/validators/others';
+import {
+  IPV6_CIDR_PATTERN_VALIDATOR,
+  IPV4_CIDR_PATTERN_VALIDATOR,
+  IPV4_IPV6_CIDR_PATTERN,
+} from '@app/shared/validators/others';
 import {ClusterService} from '@core/services/cluster';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
@@ -42,13 +46,14 @@ import {
   IPFamily,
   MasterVersion,
   ProxyMode,
+  ExposeStrategy,
+  NetworkRanges,
 } from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {AdminSettings} from '@shared/entity/settings';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
-import {IPV4_CIDR_PATTERN_VALIDATOR} from '@shared/validators/others';
 import {KmValidators} from '@shared/validators/validators';
 import {combineLatest, merge} from 'rxjs';
 import {filter, startWith, switchMap, take, takeUntil, tap} from 'rxjs/operators';
@@ -96,6 +101,8 @@ enum Controls {
   IPv6CIDRMaskSize = 'ipv6CIDRMaskSize',
   NodeLocalDNSCache = 'nodeLocalDNSCache',
   IPFamily = 'ipFamily',
+  ExposeStrategy = 'exposeStrategy',
+  APIServerAllowedIPRanges = 'apiServerAllowedIPRanges',
 }
 
 @Component({
@@ -127,12 +134,14 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   cniPlugin = CNIPlugin;
   cniPluginVersions: string[] = [];
   availableProxyModes = [ProxyMode.ipvs, ProxyMode.iptables];
+  exposeStrategies = [ExposeStrategy.loadbalancer, ExposeStrategy.nodePort, ExposeStrategy.tunneling];
   isKonnectivityEnabled = false;
   isDualStackAllowed = false;
   clusterDefaultNodeSelectorNamespace: KeyValueEntry;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE = CLUSTER_DEFAULT_NODE_SELECTOR_NAMESPACE;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP = CLUSTER_DEFAULT_NODE_SELECTOR_TOOLTIP;
   readonly CLUSTER_DEFAULT_NODE_SELECTOR_HINT = CLUSTER_DEFAULT_NODE_SELECTOR_HINT;
+  readonly ipv4AndIPv6CidrRegex = IPV4_IPV6_CIDR_PATTERN;
   readonly Controls = Controls;
   readonly AuditPolicyPreset = AuditPolicyPreset;
   readonly IPFamily = IPFamily;
@@ -211,6 +220,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.IPv4CIDRMaskSize]: this._builder.control(null),
       [Controls.IPv6CIDRMaskSize]: this._builder.control(null),
       [Controls.NodeLocalDNSCache]: this._builder.control(false),
+      [Controls.ExposeStrategy]: this._builder.control(null),
+      [Controls.APIServerAllowedIPRanges]: this._builder.control(null),
     });
 
     this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
@@ -338,6 +349,15 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     this._initDualStackControlsValueChangeListeners();
 
     merge(
+      this.form.get(Controls.ExposeStrategy).valueChanges,
+      this.form.get(Controls.APIServerAllowedIPRanges).valueChanges
+    )
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(
+        _ => (this._clusterSpecService.cluster.spec.apiServerAllowedIPRanges = this.getAPIServerAllowedIPRange())
+      );
+
+    merge(
       this.form.get(Controls.Name).valueChanges,
       this.form.get(Controls.Version).valueChanges,
       this.form.get(Controls.AuditLogging).valueChanges,
@@ -360,7 +380,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       this.form.get(Controls.IPv6CIDRMaskSize).valueChanges,
       this.form.get(Controls.NodeLocalDNSCache).valueChanges,
       this.form.get(Controls.CNIPlugin).valueChanges,
-      this.form.get(Controls.CNIPluginVersion).valueChanges
+      this.form.get(Controls.CNIPluginVersion).valueChanges,
+      this.form.get(Controls.ExposeStrategy).valueChanges,
+      this.form.get(Controls.APIServerAllowedIPRanges).valueChanges
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
@@ -435,6 +457,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     return [NodeProvider.AZURE, NodeProvider.GCP, NodeProvider.OPENSTACK, NodeProvider.AWS].includes(
       this._clusterSpecService.provider
     );
+  }
+
+  isExposeStrategyLoadBalancer(): boolean {
+    return this.form.get(Controls.ExposeStrategy).value === ExposeStrategy.loadbalancer;
   }
 
   isDualStackIPFamilySelected(): boolean {
@@ -580,6 +606,15 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     );
   }
 
+  private getAPIServerAllowedIPRange(): NetworkRanges {
+    let apiServerAllowedIPRange = null;
+
+    if (this.controlValue(Controls.ExposeStrategy) === ExposeStrategy.loadbalancer) {
+      apiServerAllowedIPRange = this.controlValue(Controls.APIServerAllowedIPRanges)?.tags;
+    }
+    return apiServerAllowedIPRange === null ? null : {cidrBlocks: apiServerAllowedIPRange};
+  }
+
   private _getClusterEntity(): Cluster {
     const ipv4Pods = this.controlValue(Controls.IPv4PodsCIDR);
     const ipv4Services = this.controlValue(Controls.IPv4ServicesCIDR);
@@ -595,6 +630,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       nodeCidrMaskSizeIPv4: this.controlValue(Controls.IPv4CIDRMaskSize),
       nodeLocalDNSCacheEnabled: this.controlValue(Controls.NodeLocalDNSCache),
       konnectivityEnabled: konnectivity,
+      clusterExposeStrategy: this.controlValue(Controls.ExposeStrategy),
     } as ClusterNetwork;
 
     if (this.isDualStackIPFamilySelected()) {
@@ -634,6 +670,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
         containerRuntime: this.controlValue(Controls.ContainerRuntime),
         clusterNetwork,
         cniPlugin: cniPlugin,
+        apiServerAllowedIPRanges: this.getAPIServerAllowedIPRange(),
       } as ClusterSpec,
     } as Cluster;
   }

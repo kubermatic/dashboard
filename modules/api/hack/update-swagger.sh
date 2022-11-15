@@ -16,13 +16,15 @@
 
 set -euo pipefail
 
-cd $(dirname $0)/..
-source ../../hack/lib.sh
+cd $(dirname $0)/../../..
+source hack/lib.sh
 
-CONTAINERIZE_IMAGE=quay.io/kubermatic/build:go-1.19-node-18-2 containerize ./hack/update-swagger.sh
+API=modules/api
+
+CONTAINERIZE_IMAGE=quay.io/kubermatic/build:go-1.19-node-18-2 containerize ./$API/hack/update-swagger.sh
 
 echodate "Generating swagger spec"
-cd cmd/kubermatic-api/
+cd $API/cmd/kubermatic-api/
 
 # TEMPORARY WORKAROUND to avoid inconstant swagger generation:
 # Because kubermatic repository still contains api types, swagger generation is not consistent.

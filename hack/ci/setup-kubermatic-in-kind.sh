@@ -36,7 +36,7 @@ if [[ "${PULL_BASE_REF:-main}" =~ release/v[0-9]+.* ]]; then
   KUBERMATIC_VERSION="${PULL_BASE_REF#release/}"
   KUBERMATIC_VERSION="${KUBERMATIC_VERSION//\//-}-latest"
 else
-  KUBERMATIC_VERSION=latest
+  KUBERMATIC_VERSION="$(kubermatic_git_hash)"
 fi
 
 export DASHBOARD_VERSION="${DASHBOARD_VERSION:-$(git rev-parse HEAD)}"

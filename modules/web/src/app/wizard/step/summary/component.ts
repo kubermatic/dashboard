@@ -35,7 +35,6 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
 
   datacenter: Datacenter;
   seedSettings: SeedSettings;
-  clusterAdmissionPlugins: string[] = [];
   private _sshKeys: SSHKey[] = [];
   private _unsubscribe = new Subject<void>();
 
