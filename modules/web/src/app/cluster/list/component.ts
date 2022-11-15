@@ -27,6 +27,7 @@ import {View} from '@app/shared/entity/common';
 export class ClustersComponent implements OnInit, OnDestroy {
   private _unsubscribe: Subject<void> = new Subject<void>();
   areExternalClustersEnabled = false;
+  readonly view = View;
 
   constructor(private readonly _settingsService: SettingsService, private _router: Router) {}
 
@@ -44,8 +45,8 @@ export class ClustersComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  isExternalClustersUrl(): boolean {
+  checkResourcesTypeURL(): string {
     const urlArray = this._router.routerState.snapshot.url.split('/');
-    return !!urlArray.find(x => x === View.ExternalClusters);
+    return urlArray[urlArray.length - 1];
   }
 }

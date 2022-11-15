@@ -40,7 +40,8 @@ limitations under the License.
         </a>
       </div>
 
-      <div class="sub-menu-item"
+      <div *ngIf="areExternalClustersEnabled"
+           class="sub-menu-item"
            [ngClass]="{'active': checkUrl(view.ExternalClusters), 'km-disabled': !getMenuItemClass(view.ExternalClusters)}">
         <a id="km-nav-item-external-clusters"
            fxLayoutAlign=" center"
@@ -188,7 +189,8 @@ limitations under the License.
         </a>
       </div>
 
-      <div [ngClass]="{'active': checkUrl(view.Groups), 'km-disabled': !getMenuItemClass(view.Groups)}"
+      <div *ngIf="isEnterpriseEdition"
+           [ngClass]="{'active': checkUrl(view.Groups), 'km-disabled': !getMenuItemClass(view.Groups)}"
            class="sub-menu-item">
         <a fxLayoutAlign=" center"
            [routerLink]="getRouterLink(view.Groups)"

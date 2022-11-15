@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<ng-container [ngSwitch]="checkbackupURL()">
+<ng-container [ngSwitch]="getEtcdBackupTypeURL()">
   <km-automatic-backup-list *ngSwitchCase="View.Backups"></km-automatic-backup-list>
 
   <km-snapshot-list *ngSwitchCase="View.Snapshots"></km-snapshot-list>

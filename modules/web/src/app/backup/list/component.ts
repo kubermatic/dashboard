@@ -21,10 +21,10 @@ import {View} from '@app/shared/entity/common';
   templateUrl: './template.html',
 })
 export class BackupsComponent {
-  View = View;
+  readonly View = View;
   constructor(private _router: Router) {}
 
-  checkbackupURL(): string {
+  getEtcdBackupTypeURL(): string {
     const urlArray = this._router.routerState.snapshot.url.split('/');
 
     return urlArray[urlArray.length - 1];

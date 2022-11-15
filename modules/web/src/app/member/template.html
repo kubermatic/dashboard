@@ -17,7 +17,7 @@ limitations under the License.
 <ng-container [ngSwitch]="geturl()">
   <router-outlet *ngSwitchCase="View.Groups"
                  name="groups"
-                 (activate)="onActivate($event)"></router-outlet>
+                 ></router-outlet>
 
   <ng-container *ngSwitchCase="View.Members">
     <div fxLayout
