@@ -16,7 +16,8 @@ limitations under the License.
 
 <div fxLayout="column"
      class="side-nav-bar">
-  <div (click)="onClick()">
+  <div (click)="onClick()"
+       id="km-side-nav-field-{{label}}">
     <div class="label"
          [ngClass]="isExpandedActive() ? 'expanded' : ''">
       <a fxLayoutAlign="start center"

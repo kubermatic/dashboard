@@ -42,7 +42,7 @@ limitations under the License.
 
       <div class="sub-menu-item"
            [ngClass]="{'active': checkUrl(view.ExternalClusters), 'km-disabled': !getMenuItemClass(view.ExternalClusters)}">
-        <a id="km-nav-item-clusters"
+        <a id="km-nav-item-external-clusters"
            fxLayoutAlign=" center"
            [routerLink]="getRouterLink(view.ExternalClusters)">
           <span>Extrnal Clusters</span>
@@ -64,7 +64,6 @@ limitations under the License.
       <mat-label class="menu-label">Resources</mat-label>
       <hr />
       <a mat-menu-item
-         id="km-nav-item-clusters"
          fxLayoutAlign=" center"
          [routerLink]="getRouterLink(view.Clusters)"
          class="collapsed-sub-menu-item"
@@ -141,7 +140,6 @@ limitations under the License.
       <mat-label class="menu-label">etcd Backups</mat-label>
       <hr />
       <a mat-menu-item
-         id="km-nav-item-backups"
          fxLayoutAlign=" center"
          [routerLink]="getRouterLink(view.Backups)"
          class="collapsed-sub-menu-item"
@@ -221,7 +219,6 @@ limitations under the License.
       <mat-label class="menu-label">Access</mat-label>
       <hr />
       <a mat-menu-item
-         id="km-nav-item-sshkeys"
          fxLayoutAlign=" center"
          [routerLink]="getRouterLink(view.SSHKeys)"
          class="collapsed-sub-menu-item"
@@ -230,7 +227,6 @@ limitations under the License.
       </a>
 
       <a mat-menu-item
-         id="km-nav-item-members"
          fxLayoutAlign=" center"
          [routerLink]="getRouterLink(view.Members)"
          class="collapsed-sub-menu-item"
@@ -247,7 +243,6 @@ limitations under the License.
       </a>
 
       <a mat-menu-item
-         id="km-nav-item-service-accounts"
          fxLayoutAlign=" center"
          [routerLink]="getRouterLink(view.ServiceAccounts)"
          class="collapsed-sub-menu-item"

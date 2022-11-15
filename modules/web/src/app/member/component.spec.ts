@@ -62,6 +62,14 @@ describe('MemberComponent', () => {
         MatDialog,
         GoogleAnalyticsService,
         NotificationService,
+        {
+          provide: Router,
+          useValue: {
+            routerState: {
+              snapshot: {url: ''},
+            },
+          },
+        },
       ],
       teardown: {destroyAfterEach: false},
     }).compileComponents();
