@@ -60,6 +60,13 @@ ListKubeVirtPreferencesParams contains all the parameters to send to the API end
 	Typically these are written to a http.Request.
 */
 type ListKubeVirtPreferencesParams struct {
+
+	// Credential.
+	Credential *string
+
+	// Kubeconfig.
+	Kubeconfig *string
+
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -113,6 +120,28 @@ func (o *ListKubeVirtPreferencesParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithCredential adds the credential to the list kube virt preferences params
+func (o *ListKubeVirtPreferencesParams) WithCredential(credential *string) *ListKubeVirtPreferencesParams {
+	o.SetCredential(credential)
+	return o
+}
+
+// SetCredential adds the credential to the list kube virt preferences params
+func (o *ListKubeVirtPreferencesParams) SetCredential(credential *string) {
+	o.Credential = credential
+}
+
+// WithKubeconfig adds the kubeconfig to the list kube virt preferences params
+func (o *ListKubeVirtPreferencesParams) WithKubeconfig(kubeconfig *string) *ListKubeVirtPreferencesParams {
+	o.SetKubeconfig(kubeconfig)
+	return o
+}
+
+// SetKubeconfig adds the kubeconfig to the list kube virt preferences params
+func (o *ListKubeVirtPreferencesParams) SetKubeconfig(kubeconfig *string) {
+	o.Kubeconfig = kubeconfig
+}
+
 // WriteToRequest writes these params to a swagger request
 func (o *ListKubeVirtPreferencesParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -120,6 +149,22 @@ func (o *ListKubeVirtPreferencesParams) WriteToRequest(r runtime.ClientRequest, 
 		return err
 	}
 	var res []error
+
+	if o.Credential != nil {
+
+		// header param Credential
+		if err := r.SetHeaderParam("Credential", *o.Credential); err != nil {
+			return err
+		}
+	}
+
+	if o.Kubeconfig != nil {
+
+		// header param Kubeconfig
+		if err := r.SetHeaderParam("Kubeconfig", *o.Kubeconfig); err != nil {
+			return err
+		}
+	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)

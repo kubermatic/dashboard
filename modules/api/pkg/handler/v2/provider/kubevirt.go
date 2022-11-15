@@ -33,7 +33,7 @@ import (
 )
 
 // KubeVirtGenericReq represent a request with common parameters for KubeVirt.
-// swagger:parameters listKubevirtStorageClasses listKubeVirtIPreferences
+// swagger:parameters listKubevirtStorageClasses listKubeVirtPreferences
 type KubeVirtGenericReq struct {
 	// in: header
 	// name: Kubeconfig (provided credential)

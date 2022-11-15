@@ -21685,6 +21685,18 @@
         ],
         "summary": "Lists available KubeVirt VirtualMachinePreference.",
         "operationId": "listKubeVirtPreferences",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "Kubeconfig",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
         "responses": {
           "200": {
             "description": "VirtualMachinePreferenceList",
