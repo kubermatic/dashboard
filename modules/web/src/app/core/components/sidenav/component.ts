@@ -59,6 +59,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
     private readonly _settingsService: SettingsService
   ) {}
 
+  get isEnterpriseEdition(): boolean {
+    return isEnterpriseEdition();
+  }
+
   ngOnInit(): void {
     this._screenWidth.subscribe(width => (this.screenWidth = width));
 
