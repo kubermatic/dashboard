@@ -16,8 +16,10 @@
 
 set -euo pipefail
 
-cd $(dirname $0)/..
-source ../../hack/lib.sh
+cd $(dirname $0)/../../..
+source hack/lib.sh
+
+API=modules/api
 
 if ! [ -x "$(command -v gimps)" ]; then
   echodate "You need to have gimps installed before running this script. Please install it: https://github.com/xrstf/gimps"
@@ -25,7 +27,7 @@ if ! [ -x "$(command -v gimps)" ]; then
 fi
 
 echodate "Sorting import statements..."
-gimps .
+gimps ./$API
 
 echodate "Diffing..."
 if ! git diff --exit-code; then
