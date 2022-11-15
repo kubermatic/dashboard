@@ -13,37 +13,22 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// SeedOverview SeedOverview stores some details of a requested Seed object.
+// SeedOverview SeedOverview stores details about a requested Seed object.
 //
 // swagger:model SeedOverview
 type SeedOverview struct {
 
-	// clusters
-	Clusters int64 `json:"clusters,omitempty"`
-
-	// clusters by d c
-	ClustersByDC map[string]int64 `json:"clusters_by_datacenter,omitempty"`
-
-	// clusters by provider
-	ClustersByProvider map[string]int64 `json:"clusters_by_provider,omitempty"`
-
 	// created
 	Created string `json:"created,omitempty"`
 
-	// datacenters
-	Datacenters int64 `json:"datacenters,omitempty"`
-
 	// datacenters by provider
-	DatacentersByProvider map[string]int64 `json:"datacenters_by_provider,omitempty"`
+	DatacentersByProvider map[string]map[string]int64 `json:"providers,omitempty"`
 
 	// location
 	Location string `json:"location,omitempty"`
 
 	// name
 	Name string `json:"name,omitempty"`
-
-	// providers
-	Providers int64 `json:"providers,omitempty"`
 
 	// phase
 	Phase SeedPhase `json:"phase,omitempty"`
