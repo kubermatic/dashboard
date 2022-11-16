@@ -100,7 +100,7 @@ func GetSeedOverview(userInfoGetter provider.UserInfoGetter, seedsGetter provide
 				provider[datacenterName] = 0
 			} else {
 				// Creating a map of clusters by datacenter for each previously found provider type.
-				// For now cluster number is initialised with 0. Proper calculation happens later on.
+				// For now cluster number is initialised with 0, proper calculation takes place later on.
 				datacentersByProvider[string(providerType)] = apiv2.ClustersByDatacenter{datacenterName: 0}
 			}
 		}
