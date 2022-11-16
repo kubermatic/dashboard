@@ -53,13 +53,24 @@ func TestGetSeedOverview(t *testing.T) {
 			},
 			expectedHTTPStatus: http.StatusOK,
 			expectedResponse: apiv2.SeedOverview{
-				Name:                  "us-central1",
-				Location:              "us-central",
-				Providers:             1,
-				Datacenters:           1,
-				ClustersByDC:          map[string]int{"private-do1": 1},
-				ClustersByProvider:    map[string]int{"fake": 1},
-				DatacentersByProvider: map[string]int{"fake": 1}},
+				Name:     "us-central1",
+				Location: "us-central",
+				DatacentersByProvider: apiv2.DatacentersByProvider{
+					"digitalocean": apiv2.ClustersByDatacenter{
+						"private-do1": 0,
+						"regular-do1": 0,
+					},
+					"fake": apiv2.ClustersByDatacenter{
+						"audited-dc":          0,
+						"fake-dc":             0,
+						"node-dc":             0,
+						"private-do1":         1,
+						"psp-dc":              0,
+						"restricted-fake-dc":  0,
+						"restricted-fake-dc2": 0,
+					},
+				},
+			},
 		},
 		{
 			name:            "scenario 2: non admin user",

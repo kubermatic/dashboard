@@ -27,7 +27,9 @@ import (
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
+	"k8c.io/dashboard/v2/pkg/handler/v1/dc"
 	"k8c.io/dashboard/v2/pkg/provider"
+	"k8c.io/kubermatic/v2/pkg/log"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 )
 
@@ -69,37 +71,7 @@ func GetSeedOverview(userInfoGetter provider.UserInfoGetter, seedsGetter provide
 			return nil, utilerrors.NewNotAuthorized()
 		}
 
-		clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
-		clusterList, err := clusterProvider.ListAll(ctx, nil)
-		if err != nil {
-			return nil, common.KubernetesErrorToHTTPError(err)
-		}
-
-		clustersByProvider := make(map[string]int)
-		clustersByDatacenter := make(map[string]int)
-		datacentersByProvider := make(map[string]int)
-
-		for _, cluster := range clusterList.Items {
-			providerName := cluster.Spec.Cloud.ProviderName
-			if val, ok := clustersByProvider[providerName]; ok {
-				clustersByProvider[providerName] = val + 1
-			} else {
-				clustersByProvider[providerName] = 1
-			}
-
-			if val, ok := datacentersByProvider[providerName]; ok {
-				datacentersByProvider[providerName] = val + 1
-			} else {
-				datacentersByProvider[providerName] = 1
-			}
-
-			datacenterName := cluster.Spec.Cloud.DatacenterName
-			if val, ok := clustersByDatacenter[datacenterName]; ok {
-				clustersByDatacenter[datacenterName] = val + 1
-			} else {
-				clustersByDatacenter[datacenterName] = 1
-			}
-		}
+		datacentersByProvider := make(apiv2.DatacentersByProvider)
 
 		seedMap, err := seedsGetter()
 		if err != nil {
@@ -110,16 +82,61 @@ func GetSeedOverview(userInfoGetter provider.UserInfoGetter, seedsGetter provide
 			return nil, utilerrors.NewNotFound("Seed", req.SeedName)
 		}
 
+		// Creating a map of datacenters by provider based on the Seed object.
+		for datacenterName, datacenter := range seed.Spec.Datacenters {
+			spec, err := dc.ConvertInternalDCToExternalSpec(datacenter.DeepCopy(), seed.Name)
+			if err != nil {
+				log.Logger.Errorf("api spec error in dc %q: %v", datacenterName, err)
+				continue
+			}
+
+			providerType, err := dc.GetProviderName(spec)
+			if err != nil {
+				log.Logger.Error(err)
+				continue
+			}
+
+			if provider, ok := datacentersByProvider[string(providerType)]; ok {
+				provider[datacenterName] = 0
+			} else {
+				// Creating a map of clusters by datacenter for each previously found provider type.
+				// For now cluster number is initialised with 0, proper calculation takes place later on.
+				datacentersByProvider[string(providerType)] = apiv2.ClustersByDatacenter{datacenterName: 0}
+			}
+		}
+
+		clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
+		clusterList, err := clusterProvider.ListAll(ctx, nil)
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+
+		for _, cluster := range clusterList.Items {
+			providerName := cluster.Spec.Cloud.ProviderName
+			datacenterName := cluster.Spec.Cloud.DatacenterName
+
+			if datacenters, ok := datacentersByProvider[providerName]; ok {
+				if clustersByDatacenter, ok := datacenters[datacenterName]; ok {
+					datacenters[datacenterName] = clustersByDatacenter + 1
+				} else {
+					// This code should execute only when a datacenter is removed
+					// but some of its clusters are still running.
+					datacenters[datacenterName] = 1
+				}
+			} else {
+				// This code should execute only when all datacenters of a provider type are removed
+				// but some of their clusters are still running.
+				clustersByDatacenter := make(apiv2.ClustersByDatacenter)
+				clustersByDatacenter[datacenterName] = 1
+				datacentersByProvider[providerName] = clustersByDatacenter
+			}
+		}
+
 		return apiv2.SeedOverview{
 			Name:                  seed.Name,
 			Location:              seed.Spec.Location,
 			Phase:                 seed.Status.Phase,
 			Created:               seed.CreationTimestamp,
-			Clusters:              seed.Status.Clusters,
-			Providers:             len(clustersByProvider),
-			Datacenters:           len(clustersByDatacenter),
-			ClustersByDC:          clustersByDatacenter,
-			ClustersByProvider:    clustersByProvider,
 			DatacentersByProvider: datacentersByProvider,
 		}, nil
 	}
