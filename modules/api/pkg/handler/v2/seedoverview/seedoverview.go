@@ -19,8 +19,6 @@ package seedoverview
 import (
 	"context"
 	"net/http"
-	"reflect"
-	"strings"
 
 	"github.com/go-kit/kit/endpoint"
 	"github.com/gorilla/mux"
@@ -29,8 +27,9 @@ import (
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
+	"k8c.io/dashboard/v2/pkg/handler/v1/dc"
 	"k8c.io/dashboard/v2/pkg/provider"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	"k8c.io/kubermatic/v2/pkg/log"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 )
 
@@ -84,18 +83,25 @@ func GetSeedOverview(userInfoGetter provider.UserInfoGetter, seedsGetter provide
 		}
 
 		// Creating a map of datacenters by provider based on the Seed object.
-		for dcName, dc := range seed.Spec.Datacenters {
-			providerType := getProviderType(dcName, &dc)
-			if providerType == "" {
-				// Unsupported provider type.
+		for datacenterName, datacenter := range seed.Spec.Datacenters {
+			spec, err := dc.ConvertInternalDCToExternalSpec(datacenter.DeepCopy(), seed.Name)
+			if err != nil {
+				log.Logger.Errorf("api spec error in dc %q: %v", datacenterName, err)
 				continue
 			}
+
+			providerType, err := dc.GetProviderName(spec)
+			if err != nil {
+				log.Logger.Error(err)
+				continue
+			}
+
 			if provider, ok := datacentersByProvider[string(providerType)]; ok {
-				provider[dcName] = 0
+				provider[datacenterName] = 0
 			} else {
 				// Creating a map of clusters by datacenter for each previously found provider type.
 				// For now cluster number is initialised with 0. Proper calculation happens later on.
-				datacentersByProvider[string(providerType)] = apiv2.ClustersByDatacenter{dcName: 0}
+				datacentersByProvider[string(providerType)] = apiv2.ClustersByDatacenter{datacenterName: 0}
 			}
 		}
 
@@ -113,13 +119,13 @@ func GetSeedOverview(userInfoGetter provider.UserInfoGetter, seedsGetter provide
 				if clustersByDatacenter, ok := datacenters[datacenterName]; ok {
 					datacenters[datacenterName] = clustersByDatacenter + 1
 				} else {
-					// This code should not execute.
-					// `clustersByDatacenter`` map was previously populated based on the Seed object.
+					// This code should execute only when a datacenter is removed
+					// but some of its clusters are still running.
 					datacenters[datacenterName] = 1
 				}
 			} else {
-				// This code should not execute.
-				// `datacentersByProvider` map was previously populated based on the Seed object.
+				// This code should execute only when all datacenters of a provider type are removed
+				// but some of their clusters are still running.
 				clustersByDatacenter := make(apiv2.ClustersByDatacenter)
 				clustersByDatacenter[datacenterName] = 1
 				datacentersByProvider[providerName] = clustersByDatacenter
@@ -134,35 +140,4 @@ func GetSeedOverview(userInfoGetter provider.UserInfoGetter, seedsGetter provide
 			DatacentersByProvider: datacentersByProvider,
 		}, nil
 	}
-}
-
-func getProviderValue(dcSpec *kubermaticv1.DatacenterSpec, providerType kubermaticv1.ProviderType) reflect.Value {
-	spec := reflect.ValueOf(dcSpec).Elem()
-	if spec.Kind() != reflect.Struct {
-		return reflect.Value{}
-	}
-
-	ignoreCaseCompare := func(name string) bool {
-		return strings.EqualFold(name, string(providerType))
-	}
-
-	provider := reflect.Indirect(spec).FieldByNameFunc(ignoreCaseCompare)
-	if !provider.IsValid() {
-		return reflect.Value{}
-	}
-	return provider
-}
-
-func hasProvider(dc *kubermaticv1.Datacenter, providerType kubermaticv1.ProviderType) (bool, reflect.Value) {
-	provider := getProviderValue(&dc.Spec, providerType)
-	return provider.IsValid() && !provider.IsZero(), provider
-}
-
-func getProviderType(dcName string, dc *kubermaticv1.Datacenter) kubermaticv1.ProviderType {
-	for _, provType := range kubermaticv1.SupportedProviders {
-		if hasProvider, _ := hasProvider(dc, provType); hasProvider {
-			return provType
-		}
-	}
-	return ""
 }

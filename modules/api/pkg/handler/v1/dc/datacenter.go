@@ -911,7 +911,7 @@ func DecodePatchDCReq(c context.Context, r *http.Request) (interface{}, error) {
 	return req, nil
 }
 
-func validateProvider(dcSpec *apiv1.DatacenterSpec) error {
+func GetProviderName(dcSpec *apiv1.DatacenterSpec) (kubermaticv1.ProviderType, error) {
 	var providerNames []kubermaticv1.ProviderType
 
 	if dcSpec.Alibaba != nil {
@@ -956,11 +956,15 @@ func validateProvider(dcSpec *apiv1.DatacenterSpec) error {
 	if dcSpec.VMwareCloudDirector != nil {
 		providerNames = append(providerNames, kubermaticv1.VMwareCloudDirectorCloudProvider)
 	}
-
 	if len(providerNames) != 1 {
-		return fmt.Errorf("one DC provider should be specified, got: %v", providerNames)
+		return "", fmt.Errorf("only one DC provider should be specified, got: %v", providerNames)
 	}
-	return nil
+	return providerNames[0], nil
+}
+
+func validateProvider(dcSpec *apiv1.DatacenterSpec) error {
+	_, err := GetProviderName(dcSpec)
+	return err
 }
 
 // deleteDCReq defines HTTP request for DeleteDC
