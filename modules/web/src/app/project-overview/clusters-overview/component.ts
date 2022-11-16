@@ -22,6 +22,7 @@ import _ from 'lodash';
 import {getClusterHealthStatus, HealthStatus, StatusIcon} from '@shared/utils/health-status';
 import {Health} from '@shared/entity/health';
 import {Project} from '@shared/entity/project';
+import {View} from '@app/shared/entity/common';
 
 @Component({
   selector: 'km-clusters-overview',
@@ -102,11 +103,11 @@ export class ClustersOverviewComponent implements OnInit, OnChanges {
   }
 
   externalClusterNavigate(cluster: ExternalCluster): void {
-    this._router.navigate([`/projects/${this.project.id}/clusters/external/${cluster.id}`]);
+    this._router.navigate([`/projects/${this.project.id}/${View.Clusters}/${View.ExternalClusters}/${cluster.id}`]);
   }
 
   externalClustersNavigate(): void {
-    this._router.navigate(['/projects/' + this.project.id + '/external']);
+    this._router.navigate([`/projects/${this.project.id}/${View.ExternalClusters}`]);
   }
 
   getExternalClusterStatus(cluster: ExternalCluster): string {

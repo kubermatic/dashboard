@@ -30,6 +30,7 @@ import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ExternalMachineDeploymentService} from '@core/services/external-machine-deployment';
 import {UpdateExternalClusterMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/update-external-cluster-machine-deployment-dialog/component';
 import {HealthStatus} from '@shared/utils/health-status';
+import {View} from '@app/shared/entity/common';
 
 enum AKSNodePoolState {
   ProvisioningState = 'provisioningState',
@@ -111,7 +112,9 @@ export class ExternalMachineDeploymentListComponent implements OnInit, OnChanges
   }
 
   goToDetails(md: ExternalMachineDeployment): void {
-    this._router.navigate(['/projects/' + this.projectID + '/clusters/external/' + this.cluster.id + /md/ + md.id]);
+    this._router.navigate([
+      `/projects/${this.projectID}/${View.Clusters}/${View.ExternalClusters}/${this.cluster.id}/md/${md.id}`,
+    ]);
   }
 
   isPaginatorVisible(): boolean {

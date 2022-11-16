@@ -25,6 +25,7 @@ import {Project} from '@shared/entity/project';
 import {Observable, Subject} from 'rxjs';
 import {filter, takeUntil} from 'rxjs/operators';
 import {ExternalClusterWizardStep, StepRegistry, WizardSteps} from './config';
+import {View} from '@app/shared/entity/common';
 
 @Component({
   selector: 'km-external-cluster-wizard',
@@ -115,7 +116,7 @@ export class ExternalClusterWizardComponent implements OnInit, OnDestroy {
   }
 
   onCancel(): void {
-    this._router.navigate(['projects', this.project.id, 'externalclusters']);
+    this._router.navigate(['projects', this.project.id, View.ExternalClusters]);
   }
 
   onProviderChanged(provider: ExternalClusterProvider): void {
@@ -131,7 +132,7 @@ export class ExternalClusterWizardComponent implements OnInit, OnDestroy {
 
   onCreateSuccess(externalCluster: ExternalCluster): void {
     this._notificationService.success(`Created the ${externalCluster.name} external cluster`);
-    this._router.navigate(['projects', this.project.id, 'externalclusters']);
+    this._router.navigate(['projects', this.project.id, View.ExternalClusters]);
   }
 
   private _initForm(steps: ExternalClusterWizardStep[]): void {

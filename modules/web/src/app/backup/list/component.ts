@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {View} from '@app/shared/entity/common';
 
@@ -20,13 +20,18 @@ import {View} from '@app/shared/entity/common';
   selector: 'km-backups',
   templateUrl: './template.html',
 })
-export class BackupsComponent {
-  readonly View = View;
+export class BackupsComponent implements OnInit {
+  readonly view = View;
+  etcdBackupType = '';
+
   constructor(private _router: Router) {}
 
-  getEtcdBackupTypeURL(): string {
-    const urlArray = this._router.routerState.snapshot.url.split('/');
+  ngOnInit(): void {
+    this.getEtcdBackupType();
+  }
 
-    return urlArray[urlArray.length - 1];
+  getEtcdBackupType(): void {
+    const urlArray = this._router.routerState.snapshot.url.split('/');
+    this.etcdBackupType = urlArray[urlArray.length - 1];
   }
 }

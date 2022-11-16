@@ -96,7 +96,7 @@ export class PageTitleService {
   private _clusterObservable(): Observable<Cluster> | Observable<ExternalCluster> {
     const projectId = this._params.get(PathParam.ProjectID);
     const clusterId = this._params.get(PathParam.ClusterID);
-    const isExternal = this._params.getCurrentUrl().includes('/external/');
+    const isExternal = this._params.getCurrentUrl().includes(`/${View.ExternalClusters}/`);
 
     if (projectId && clusterId && !isExternal) {
       return this._clusterService.cluster(projectId, clusterId);
@@ -110,7 +110,7 @@ export class PageTitleService {
     const projectId = this._params.get(PathParam.ProjectID);
     const clusterId = this._params.get(PathParam.ClusterID);
     const machineDeploymentId = this._params.get(PathParam.MachineDeploymentID);
-    const isExternal = this._params.getCurrentUrl().includes('/external/');
+    const isExternal = this._params.getCurrentUrl().includes(`/${View.ExternalClusters}/`);
 
     if (!projectId || !clusterId || !machineDeploymentId) {
       return of(null);

@@ -36,6 +36,7 @@ import {ExternalClusterDeleteConfirmationComponent} from '@app/cluster/details/e
 import {ExternalMachineDeploymentService} from '@app/core/services/external-machine-deployment';
 import {NotificationService} from '@app/core/services/notification';
 import _ from 'lodash';
+import {View} from '@app/shared/entity/common';
 
 @Component({
   selector: 'km-external-cluster-details',
@@ -186,7 +187,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   goBack(): void {
-    this._router.navigate(['/projects/' + this.projectID + '/external']);
+    this._router.navigate([`/projects/${this.projectID}/${View.ExternalClusters}`]);
   }
 
   canDisconnect(): boolean {
@@ -206,7 +207,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(isDeleted => {
         if (isDeleted) {
-          this._router.navigate(['/projects/' + this.projectID + '/external']);
+          this._router.navigate([`/projects/${this.projectID}/${View.ExternalClusters}`]);
         }
       });
   }

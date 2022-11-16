@@ -20,7 +20,6 @@ import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {environment} from '@environments/environment';
 import {getViewDisplayName, View} from '@shared/entity/common';
-import {isEnterpriseEdition} from '@app/dynamic/common';
 import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {CustomLink, UserSettings} from '@shared/entity/settings';
@@ -28,6 +27,7 @@ import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import {BehaviorSubject, merge, Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
+import {DynamicModule} from '@app/dynamic/module-registry';
 
 @Component({
   selector: 'km-sidenav',
@@ -35,7 +35,8 @@ import {switchMap, takeUntil} from 'rxjs/operators';
   styleUrls: ['./style.scss'],
 })
 export class SidenavComponent implements OnInit, OnDestroy {
-  view = View;
+  readonly view = View;
+  readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   environment: any = environment;
   customLinks: CustomLink[] = [];
   settings: UserSettings;
@@ -56,10 +57,6 @@ export class SidenavComponent implements OnInit, OnDestroy {
     private readonly _userService: UserService,
     private readonly _settingsService: SettingsService
   ) {}
-
-  get isEnterpriseEdition(): boolean {
-    return isEnterpriseEdition();
-  }
 
   ngOnInit(): void {
     this._screenWidth.subscribe(width => (this.screenWidth = width));
@@ -109,14 +106,14 @@ export class SidenavComponent implements OnInit, OnDestroy {
   checkUrl(url: string): boolean {
     const selectedProjectID = this._selectedProject.id;
     const urlArray = this._router.routerState.snapshot.url.split('/');
+    const isProjectAndUrlExists = !!urlArray.find(x => x === selectedProjectID) && !!urlArray.find(x => x === url);
     if (url === View.Clusters) {
       return (
-        !!urlArray.find(x => x === selectedProjectID) &&
-        ((!!urlArray.find(x => x === url) && !urlArray.find(x => x === View.ExternalClusters)) ||
-          !!urlArray.find(x => x === View.Wizard))
+        isProjectAndUrlExists &&
+        !urlArray.find(x => x === View.ExternalClusters || !!urlArray.find(x => x === View.Wizard))
       );
     }
-    return !!urlArray.find(x => x === selectedProjectID) && !!urlArray.find(x => x === url);
+    return isProjectAndUrlExists;
   }
 
   getRouterLink(view: View): string {

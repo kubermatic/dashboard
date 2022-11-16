@@ -169,7 +169,7 @@ export class ExternalMachineDeploymentDetailsComponent implements OnInit, OnDest
   }
 
   private _goBack(): void {
-    this._router.navigateByUrl(`projects/${this.projectID}/clusters/external/${this.cluster.id}`);
+    this._router.navigateByUrl(`projects/${this.projectID}/clusters/externalclusters/${this.cluster.id}`);
   }
 
   private _storeNodeMetrics(metrics: NodeMetrics[]): void {

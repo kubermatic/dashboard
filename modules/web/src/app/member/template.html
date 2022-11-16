@@ -14,12 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<ng-container [ngSwitch]="geturl()">
-  <router-outlet *ngSwitchCase="View.Groups"
-                 name="groups"
-                 ></router-outlet>
+<ng-container [ngSwitch]="urlPath">
+  <router-outlet *ngSwitchCase="view.Groups"
+                 name="groups"></router-outlet>
 
-  <ng-container *ngSwitchCase="View.Members">
+  <ng-container *ngSwitchCase="view.Members">
     <div fxLayout
          class="container">
       <div fxFlex
@@ -141,4 +140,3 @@ limitations under the License.
     </mat-card>
   </ng-container>
 </ng-container>
-<!-- </ng-template> -->

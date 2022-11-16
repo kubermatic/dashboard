@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<ng-container [ngSwitch]="getEtcdBackupTypeURL()">
-  <km-automatic-backup-list *ngSwitchCase="View.Backups"></km-automatic-backup-list>
+<ng-container [ngSwitch]="etcdBackupType">
+  <km-automatic-backup-list *ngSwitchCase="view.Backups"></km-automatic-backup-list>
 
-  <km-snapshot-list *ngSwitchCase="View.Snapshots"></km-snapshot-list>
+  <km-snapshot-list *ngSwitchCase="view.Snapshots"></km-snapshot-list>
 
-  <km-restore-list *ngSwitchCase="View.Restores"></km-restore-list>
+  <km-restore-list *ngSwitchCase="view.Restores"></km-restore-list>
 </ng-container>

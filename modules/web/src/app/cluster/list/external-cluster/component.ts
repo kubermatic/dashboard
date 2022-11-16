@@ -183,7 +183,9 @@ export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestro
 
   navigateToCluster(cluster: ExternalCluster): void {
     if (this.canAccess(cluster)) {
-      this._router.navigate([`/projects/${this._selectedProject.id}/clusters/external/${cluster.id}`]);
+      this._router.navigate([
+        `/projects/${this._selectedProject.id}/${View.Clusters}/${View.ExternalClusters}/${cluster.id}`,
+      ]);
     }
   }
 

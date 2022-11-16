@@ -1,4 +1,4 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input} from '@angular/core';
+import {AfterViewChecked, ChangeDetectorRef, Component, Input} from '@angular/core';
 import {Router} from '@angular/router';
 import {View} from '@app/shared/entity/common';
 import {shrinkGrow} from '@shared/animations/grow';
@@ -23,16 +23,24 @@ import {shrinkGrow} from '@shared/animations/grow';
   styleUrls: ['./style.scss'],
   animations: [shrinkGrow],
 })
-export class SideNavFieldComponent {
+export class SideNavExpansionMenuComponent implements AfterViewChecked {
   private _expanded = false;
-  view = View;
+  readonly view = View;
   @Input() label = '';
   @Input() icon = '';
+  @Input() isSidenavCollapsed: boolean;
 
-  constructor(private _router: Router) {}
+  constructor(private _router: Router, private readonly _cdr: ChangeDetectorRef) {}
 
   get expanded(): boolean {
     return this._expanded;
+  }
+
+  ngAfterViewChecked(): void {
+    if (this.isExpandedActive()) {
+      this._expanded = true;
+    }
+    this._cdr.detectChanges();
   }
 
   isExpandedActive(): boolean {

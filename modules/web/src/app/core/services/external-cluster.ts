@@ -33,6 +33,7 @@ import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialo
 import {NotificationService} from '@core/services/notification';
 import {MasterVersion} from '@app/shared/entity/cluster';
 import {GCPDiskType, GCPMachineSize} from '@app/shared/entity/provider/gcp';
+import {View} from '@app/shared/entity/common';
 
 @Injectable({providedIn: 'root'})
 export class ExternalClusterService {
@@ -358,7 +359,7 @@ export class ExternalClusterService {
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
       .subscribe(_ => {
-        this._router.navigate(['/projects/' + projectID + '/external']);
+        this._router.navigate([`/projects/${projectID}/${View.ExternalClusters}`]);
         this._notificationService.success(`Disconnected the ${cluster.name} cluster`);
       });
   }

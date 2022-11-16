@@ -22,7 +22,23 @@
   border-radius: variables.$border-radius;
 }
 
-.label {
+.expanded-menu {
+  border-radius: variables.$border-radius;
+}
+
+button {
+  cursor: pointer;
+  margin: 5px 15px 10px 10px;
+  padding: 0 0 0 20px;
+
+  .mat-menu-trigger {
+    left: 20px;
+    position: relative;
+    top: -10px;
+  }
+}
+
+.nav-field-label {
   cursor: pointer;
   height: 45px;
   margin: 0 0 15px;
@@ -34,4 +50,8 @@
     right: 10px;
     text-decoration: none;
   }
+}
+
+.menu-label {
+  margin: 0 0 0 20px;
 }

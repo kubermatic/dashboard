@@ -15,13 +15,43 @@
 @use 'sass:map';
 
 @mixin theme-sidenav-field-component($colors) {
-  .expanded {
-    background-color: map.get($colors, sidenav-background-active);
-  }
+  .nav-field-label {
+    &.expanded {
+      background-color: map.get($colors, sidenav-background-active);
 
-  .label {
+      a {
+        i {
+          background-color: map.get($colors, primary-dark);
+          filter: none !important;
+        }
+
+        span {
+          color: map.get($colors, primary-dark);
+        }
+      }
+    }
+
     &:hover {
       background-color: map.get($colors, sidenav-background-hover);
+    }
+  }
+
+  .menu-label {
+    color: map.get($colors, primary-dark);
+    font-weight: bolder;
+  }
+
+  .side-nav-bar:not(.expanded-menu) {
+    button {
+      background-color: map.get($colors, text);
+    }
+  }
+
+  .expanded-menu {
+    background-color: map.get($colors, sidenav-background-active);
+
+    button {
+      background-color: map.get($colors, primary-dark);
     }
   }
 }

@@ -44,13 +44,14 @@ import {Router} from '@angular/router';
   styleUrls: ['./style.scss'],
 })
 export class MemberComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
-  View = View;
+  readonly view = View;
   members: Member[] = [];
   isInitializing = true;
   currentUser: Member;
   displayedColumns: string[] = ['name', 'email', 'group', 'actions'];
   dataSource = new MatTableDataSource<Member>();
   currentUserSettings: UserSettings;
+  urlPath = '';
   private _dynamicTabs = new Set<DynamicTabComponent>();
   private readonly _refreshTime = 10;
   private _unsubscribe = new Subject<void>();
@@ -120,6 +121,8 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
         this.dataSource.data = this.members;
         this.isInitializing = false;
       });
+
+    this.getURLPath();
   }
 
   ngOnChanges(): void {
@@ -232,9 +235,9 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
     return !_.isEmpty(this.members) && this.paginator && this.members.length > this.paginator.pageSize;
   }
 
-  geturl(): string {
+  getURLPath(): void {
     const urlArray = this._router.routerState.snapshot.url.split('/');
 
-    return urlArray[urlArray.length - 1];
+    this.urlPath = urlArray[urlArray.length - 1];
   }
 }

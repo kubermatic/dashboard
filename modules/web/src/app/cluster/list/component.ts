@@ -26,8 +26,9 @@ import {View} from '@app/shared/entity/common';
 })
 export class ClustersComponent implements OnInit, OnDestroy {
   private _unsubscribe: Subject<void> = new Subject<void>();
-  areExternalClustersEnabled = false;
   readonly view = View;
+  areExternalClustersEnabled = false;
+  resourcesType = '';
 
   constructor(private readonly _settingsService: SettingsService, private _router: Router) {}
 
@@ -38,6 +39,8 @@ export class ClustersComponent implements OnInit, OnDestroy {
         takeUntil(this._unsubscribe)
       )
       .subscribe(areExternalClustersEnabled => (this.areExternalClustersEnabled = areExternalClustersEnabled));
+
+    this.checkResourcesType();
   }
 
   ngOnDestroy(): void {
@@ -45,8 +48,8 @@ export class ClustersComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  checkResourcesTypeURL(): string {
+  checkResourcesType(): void {
     const urlArray = this._router.routerState.snapshot.url.split('/');
-    return urlArray[urlArray.length - 1];
+    this.resourcesType = urlArray[urlArray.length - 1];
   }
 }
