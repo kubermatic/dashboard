@@ -122,13 +122,4 @@
       color: map.get($colors, text);
     }
   }
-
-  .menu-label {
-    color: map.get($colors, primary-dark);
-    font-weight: bolder;
-  }
-
-  .collapesd-button {
-    background-color: map.get($colors, text);
-  }
 }

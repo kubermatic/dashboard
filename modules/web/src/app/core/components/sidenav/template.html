@@ -76,35 +76,29 @@ limitations under the License.
     </ng-container>
   </km-side-nav-field>
 
-  <ng-container *ngIf="isSidenavCollapsed()">
-    <button class="km-icon-cluster collapesd-button"
-            (click)="menuTrigger.openMenu()"
-            [matTooltip]="getTooltip(view.Clusters)">
-      <div #menuTrigger="matMenuTrigger"
-           [matMenuTriggerFor]="menu"
-           [ngClass]="getLinkClass(view.Clusters)">
-      </div>
-    </button>
-    <mat-menu #menu="matMenu">
-      <mat-label class="menu-label">Resources</mat-label>
-      <hr />
+    </ng-container>
+
+    <ng-container *ngIf="isSidenavCollapsed()">
+
+
       <a mat-menu-item
          fxLayoutAlign=" center"
          [routerLink]="getRouterLink(view.Clusters)"
          class="collapsed-sub-menu-item"
-         [ngClass]="getLinkClass(view.Clusters)">
+         [ngClass]="{'active': checkUrl(view.Clusters), 'km-disabled': !getMenuItemClass(view.Clusters)}">
         <span>Clusters</span>
       </a>
 
       <a mat-menu-item
+         *ngIf="areExternalClustersEnabled"
          fxLayoutAlign=" center"
          [routerLink]="getRouterLink(view.ExternalClusters)"
          class="collapsed-sub-menu-item"
-         [ngClass]="getLinkClass(view.ExternalClusters)">
-        <span>Extrnal Clusters</span>
+         [ngClass]="{'active': checkUrl(view.ExternalClusters), 'km-disabled': !getMenuItemClass(view.ExternalClusters)}">
+        <span>External Clusters</span>
       </a>
-    </mat-menu>
-  </ng-container>
+    </ng-container>
+  </km-side-nav-field>
 
   <div [matTooltip]="getTooltip(view.ClusterTemplates)"
        [ngClass]="!isDisabledField(view.Overview) && 'km-disabled'"
