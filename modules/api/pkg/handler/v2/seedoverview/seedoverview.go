@@ -114,12 +114,12 @@ func GetSeedOverview(userInfoGetter provider.UserInfoGetter, seedsGetter provide
 					datacenters[datacenterName] = clustersByDatacenter + 1
 				} else {
 					// This code should not execute.
-					// `clustersByDatacenter`` map was previosuly populated based on the Seed object.
+					// `clustersByDatacenter`` map was previously populated based on the Seed object.
 					datacenters[datacenterName] = 1
 				}
 			} else {
 				// This code should not execute.
-				// `datacentersByProvider` map was previosuly populated based on the Seed object.
+				// `datacentersByProvider` map was previously populated based on the Seed object.
 				clustersByDatacenter := make(apiv2.ClustersByDatacenter)
 				clustersByDatacenter[datacenterName] = 1
 				datacentersByProvider[providerName] = clustersByDatacenter
