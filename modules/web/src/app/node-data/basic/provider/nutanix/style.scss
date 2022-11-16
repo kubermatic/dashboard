@@ -1,4 +1,4 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,26 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export class NutanixSubnet {
-  name: string;
-  type: string;
-  vlanID?: number;
+.mat-icon-button {
+  &.delete-button {
+    margin-top: 4px;
+  }
 }
 
-export class NutanixCluster {
-  name: string;
-}
-
-export class NutanixProject {
-  name: string;
-}
-
-export class NutanixCategory {
-  name: string;
-  description: string;
-  systemDefined: boolean;
-}
-
-export class NutanixCategoryValue {
-  value: string;
+.categories-msg {
+  padding-bottom: 15px;
 }

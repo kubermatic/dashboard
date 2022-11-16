@@ -21,19 +21,20 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {NodeDataService} from '@core/services/node-data/service';
-import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import {getDefaultNodeProviderSpec, NodeCloudSpec, NodeSpec, NutanixNodeSpec} from '@shared/entity/node';
-import {NodeData} from '@shared/model/NodeSpecChange';
-import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {DatacenterOperatingSystemOptions} from '@shared/entity/datacenter';
-import {merge, Observable, of} from 'rxjs';
-import {NodeProvider, OperatingSystem} from '@shared/model/NodeProviderConstants';
+import {AbstractControl, FormArray, FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
+import {NodeDataService} from '@core/services/node-data/service';
+import {ComboboxControls} from '@shared/components/combobox/component';
+import {DatacenterOperatingSystemOptions} from '@shared/entity/datacenter';
+import {getDefaultNodeProviderSpec, NodeCloudSpec, NodeSpec, NutanixNodeSpec} from '@shared/entity/node';
+import {NutanixCategory, NutanixCategoryValue, NutanixSubnet} from '@shared/entity/provider/nutanix';
+import {NodeProvider, OperatingSystem} from '@shared/model/NodeProviderConstants';
+import {NodeData} from '@shared/model/NodeSpecChange';
+import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
-import {NutanixSubnet} from '@shared/entity/provider/nutanix';
+import {merge, Observable, of, Subscription} from 'rxjs';
+import {distinctUntilChanged, filter, map, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 
 enum Controls {
   ImageName = 'imageName',
@@ -44,17 +45,32 @@ enum Controls {
   MemoryMB = 'memoryMB',
   DiskSize = 'diskSize',
   Categories = 'categories',
+  Category = 'category',
+  CategoryValue = 'categoryValue',
 }
 
 enum SubnetState {
   Ready = 'Subnet',
   Loading = 'Loading...',
-  Empty = 'No subnets available',
+  Empty = 'No Subnets Available',
+}
+
+enum CategoryState {
+  Ready = 'Category',
+  Loading = 'Loading...',
+  Empty = 'No Categories Available',
+}
+
+enum CategoryValueState {
+  Ready = 'Value',
+  Loading = 'Loading...',
+  Empty = 'No Values Available',
 }
 
 @Component({
   selector: 'km-nutanix-basic-node-data',
   templateUrl: './template.html',
+  styleUrls: ['./style.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -71,12 +87,19 @@ enum SubnetState {
 })
 export class NutanixBasicNodeDataComponent extends BaseFormValidator implements OnInit, AfterViewChecked, OnDestroy {
   readonly Controls = Controls;
+  readonly CategoryValueState = CategoryValueState;
   private _images: DatacenterOperatingSystemOptions;
   private _defaultImage = '';
   private _defaultOS: OperatingSystem;
   private _subnets: NutanixSubnet[] = [];
   selectedSubnet = '';
   subnetLabel = SubnetState.Empty;
+  categories: NutanixCategory[] = [];
+  filteredCategories: Record<string, NutanixCategory[]> = {};
+  categoryLabel = CategoryState.Empty;
+  categoryValues: Record<string, NutanixCategoryValue[]> = {};
+  categoryValuesLabel: Record<string, CategoryValueState> = {};
+  categoryValuesSubscription: Record<string, Subscription> = {};
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -103,11 +126,20 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
       [Controls.CPUPassthrough]: this._builder.control(values ? values.cpuPassthrough : defaults.cpuPassthrough),
       [Controls.MemoryMB]: this._builder.control(values ? values.memoryMB : defaults.memoryMB, [Validators.required]),
       [Controls.DiskSize]: this._builder.control(values ? values.diskSize : defaults.diskSize, [Validators.required]),
+      [Controls.Categories]: this._builder.array([]),
     });
+
+    if (values?.categories) {
+      Object.keys(values.categories).forEach(category => {
+        this.addCategory(category, values.categories[category]);
+      });
+      this._updateFilteredCategories();
+    }
 
     this._nodeDataService.nodeData = this._getNodeData();
 
     this._subnetsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultSubnet.bind(this));
+    this._categoriesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setCategories.bind(this));
 
     this._defaultOS = this._nodeDataService.operatingSystem;
     this._defaultImage = this._nodeDataService.nodeData.spec.cloud.nutanix.imageName;
@@ -134,6 +166,13 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
+
+    this.form
+      .get(Controls.Categories)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        this._nodeDataService.nodeData.spec.cloud.nutanix.categories = this._getCategories();
+      });
   }
 
   ngAfterViewChecked(): void {
@@ -161,6 +200,57 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
   onSubnetChange(subnet: string): void {
     this._nodeDataService.nodeData.spec.cloud.nutanix.subnetName = subnet;
     this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
+  }
+
+  get categoriesFormArray(): FormArray {
+    return this.form.get(Controls.Categories) as FormArray;
+  }
+
+  getSelectedCategory(control: AbstractControl): string {
+    return control.get(Controls.Category).value[ComboboxControls.Select];
+  }
+
+  getCategoryLabel(control: AbstractControl): string {
+    return this.categoryLabel === CategoryState.Loading
+      ? CategoryState.Loading
+      : this.filteredCategories[this.getSelectedCategory(control) || '']?.length === 0
+      ? CategoryState.Empty
+      : this.categoryLabel;
+  }
+
+  addCategory(category = '', value = ''): void {
+    const categoryControl = this._builder.control('', Validators.required);
+    this.categoriesFormArray.push(
+      this._builder.group({
+        [Controls.Category]: categoryControl,
+        [Controls.CategoryValue]: this._builder.control(value, Validators.required),
+      })
+    );
+    this.categoryValuesLabel[category] = CategoryValueState.Ready;
+
+    categoryControl.valueChanges
+      .pipe(takeUntil(this._unsubscribe))
+      .pipe(map(data => data[ComboboxControls.Select]))
+      .pipe(distinctUntilChanged())
+      .subscribe(() => {
+        const selectedCategory = categoryControl.value?.[ComboboxControls.Select];
+        this._loadCategoryValues(selectedCategory);
+        this._updateFilteredCategories();
+      });
+
+    if (category) {
+      categoryControl.setValue(category);
+    }
+  }
+
+  removeCategory(index: number): void {
+    const selectedCategory = this.categoriesFormArray.at(index).get(Controls.Category).value[ComboboxControls.Select];
+    this.categoriesFormArray.removeAt(index);
+    if (selectedCategory) {
+      this.categoryValuesSubscription[selectedCategory].unsubscribe();
+      delete this.categoryValuesSubscription[selectedCategory];
+    }
+    this._updateFilteredCategories();
   }
 
   private get _subnetsObservable(): Observable<NutanixSubnet[]> {
@@ -191,6 +281,84 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
     }
 
     this.subnetLabel = this.selectedSubnet ? SubnetState.Ready : SubnetState.Empty;
+    this._cdr.detectChanges();
+  }
+
+  private get _categoriesObservable(): Observable<NutanixCategory[]> {
+    return this._nodeDataService.nutanix.categories(this._clearCategory.bind(this), this._onCategoryLoading.bind(this));
+  }
+
+  private _onCategoryLoading(): void {
+    this._clearCategory();
+    this.categoryLabel = CategoryState.Loading;
+    this._cdr.detectChanges();
+  }
+
+  private _clearCategory(): void {
+    this.categories = [];
+    this._updateFilteredCategories();
+    this.categoryLabel = CategoryState.Empty;
+    this._cdr.detectChanges();
+  }
+
+  private _setCategories(categories: NutanixCategory[]): void {
+    this.categories = categories;
+    this._updateFilteredCategories();
+    this.categoryLabel = this.categories?.length ? CategoryState.Ready : CategoryState.Empty;
+    this._cdr.detectChanges();
+  }
+
+  private _updateFilteredCategories(): void {
+    const selectedCategories = this.categoriesFormArray.controls
+      .map(control => control.get(Controls.Category).value[ComboboxControls.Select])
+      .filter(Boolean);
+    selectedCategories.push('');
+    this.filteredCategories = {};
+    selectedCategories.forEach(selectedCategory => {
+      this.filteredCategories[selectedCategory] = this.categories?.filter(
+        category => category.name === selectedCategory || !selectedCategories.includes(category.name)
+      );
+    });
+  }
+
+  private _loadCategoryValues(categoryName: string): void {
+    if (categoryName && !this.categoryValuesSubscription[categoryName]) {
+      this.categoryValuesSubscription[categoryName] = this._nodeDataService.nutanix
+        .categoryValues(
+          categoryName,
+          this._clearCategoryValue.bind(this, categoryName),
+          this._onCategoryValueLoading.bind(this, categoryName)
+        )
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(this._setCategoryValues.bind(this, categoryName));
+    }
+  }
+
+  private _onCategoryValueLoading(categoryName: string): void {
+    this._clearCategoryValue(categoryName);
+    this.categoryValuesLabel[categoryName] = CategoryValueState.Loading;
+    this._cdr.detectChanges();
+  }
+
+  private _clearCategoryValue(categoryName: string): void {
+    this.categoryValues[categoryName] = [];
+    this.categoryValuesLabel[categoryName] = CategoryValueState.Empty;
+    this._cdr.detectChanges();
+  }
+
+  private _setCategoryValues(categoryName: string, values: NutanixCategoryValue[]): void {
+    this.categoryValues[categoryName] = values;
+    const categoryControls = this.categoriesFormArray.controls.find(
+      control => this.getSelectedCategory(control) === categoryName
+    );
+    if (categoryControls) {
+      const categoryValueControl = categoryControls.get(Controls.CategoryValue);
+      if (!values.find(item => item.value === categoryValueControl.value[ComboboxControls.Select])) {
+        categoryValueControl.setValue(null);
+      }
+    }
+
+    this.categoryValuesLabel[categoryName] = values?.length ? CategoryValueState.Ready : CategoryValueState.Empty;
     this._cdr.detectChanges();
   }
 
@@ -243,5 +411,20 @@ export class NutanixBasicNodeDataComponent extends BaseFormValidator implements 
         } as NodeCloudSpec,
       } as NodeSpec,
     } as NodeData;
+  }
+
+  private _getCategories(): Record<string, string> {
+    if (!this.categoriesFormArray.controls.length) {
+      return null;
+    }
+    const categories = {};
+    this.categoriesFormArray.controls.forEach(control => {
+      const category = control.get(Controls.Category).value?.[ComboboxControls.Select];
+      const value = control.get(Controls.CategoryValue).value?.[ComboboxControls.Select];
+      if (category && value) {
+        categories[category] = value;
+      }
+    });
+    return categories;
   }
 }

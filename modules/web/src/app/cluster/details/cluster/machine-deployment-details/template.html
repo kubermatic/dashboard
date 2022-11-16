@@ -137,6 +137,12 @@ limitations under the License.
             <div key>Disk Size</div>
             <div value>{{machineDeployment.spec.template.cloud.nutanix.diskSize}} GB</div>
           </km-property>
+          <km-property *ngIf="machineDeployment.spec.template.cloud.nutanix.categories as categories">
+            <div key>Categories</div>
+            <div value>
+              <km-labels [labels]="categories"></km-labels>
+            </div>
+          </km-property>
         </ng-container>
 
         <ng-container *ngIf="machineDeployment.spec.template.cloud.vmwareclouddirector as vmwareclouddirector">
