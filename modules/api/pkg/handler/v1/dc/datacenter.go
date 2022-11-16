@@ -956,6 +956,9 @@ func GetProviderName(dcSpec *apiv1.DatacenterSpec) (kubermaticv1.ProviderType, e
 	if dcSpec.VMwareCloudDirector != nil {
 		providerNames = append(providerNames, kubermaticv1.VMwareCloudDirectorCloudProvider)
 	}
+	if dcSpec.Fake != nil {
+		providerNames = append(providerNames, kubermaticv1.FakeCloudProvider)
+	}
 	if len(providerNames) != 1 {
 		return "", fmt.Errorf("only one DC provider should be specified, got: %v", providerNames)
 	}
