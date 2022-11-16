@@ -34,6 +34,7 @@ export class InterfaceComponent implements OnInit, OnDestroy {
   settings: AdminSettings; // Local settings copy. User can edit it.
   apiSettings: AdminSettings; // Original settings from the API. Cannot be edited by the user.
   isOIDCKubeCfgEndpointEnabled = true;
+  isOpenIDAuthPluginEnabled = true;
 
   private readonly _debounceTime = 500;
   private _settingsChange = new Subject<void>();
@@ -49,9 +50,11 @@ export class InterfaceComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this._userService.currentUser.pipe(take(1)).subscribe(user => (this.user = user));
 
-    this._featureGatesService.featureGates
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(featureGates => (this.isOIDCKubeCfgEndpointEnabled = !!featureGates?.oidcKubeCfgEndpoint));
+    this._featureGatesService.featureGates.pipe(takeUntil(this._unsubscribe)).subscribe(featureGates => {
+      this.isOIDCKubeCfgEndpointEnabled = !!featureGates?.oidcKubeCfgEndpoint;
+      this.isOpenIDAuthPluginEnabled = !!featureGates?.openIDAuthPlugin;
+      this._verifyEnableKubernetesDashboardRequirements();
+    });
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       if (!_.isEqual(settings, this.apiSettings)) {
@@ -59,6 +62,7 @@ export class InterfaceComponent implements OnInit, OnDestroy {
           this._notificationService.success('Updated the admin settings');
         }
         this._applySettings(settings);
+        this._verifyEnableKubernetesDashboardRequirements();
       }
     });
 
@@ -97,6 +101,20 @@ export class InterfaceComponent implements OnInit, OnDestroy {
       this.isEqual(this.settings.displayDemoInfo, this.apiSettings.displayDemoInfo) &&
       this.isEqual(this.settings.displayTermsOfService, this.apiSettings.displayTermsOfService)
     );
+  }
+
+  isKubernetesDashboardFeatureGatesEnabled(): boolean {
+    return this.isOIDCKubeCfgEndpointEnabled && this.isOpenIDAuthPluginEnabled;
+  }
+
+  private _verifyEnableKubernetesDashboardRequirements() {
+    // Note: Kubernetes Dashboard feature requires both feature gates from admin side to be enabled.
+    if (!this.isOIDCKubeCfgEndpointEnabled || !this.isOpenIDAuthPluginEnabled) {
+      if (this.settings.enableDashboard) {
+        this.settings.enableDashboard = false;
+        this.onSettingsChange();
+      }
+    }
   }
 
   private _applySettings(settings: AdminSettings): void {
