@@ -44,7 +44,7 @@ import {Router} from '@angular/router';
   styleUrls: ['./style.scss'],
 })
 export class MemberComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
-  View = View;
+  readonly View = View;
   members: Member[] = [];
   isInitializing = true;
   currentUser: Member;

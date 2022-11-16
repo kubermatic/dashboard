@@ -68,7 +68,7 @@ function createRouting(): Routes {
           loadChildren: () => import('./cluster/module').then(m => m.ClusterModule),
         },
         {
-          path: 'projects/:projectID/external',
+          path: 'projects/:projectID/externalclusters',
           component: ClustersComponent,
         },
         {

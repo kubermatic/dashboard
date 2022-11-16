@@ -52,7 +52,7 @@ const routes: Routes = [
     canActivate: [AuthGuard, AuthzGuard],
   },
   {
-    path: 'external/:clusterName',
+    path: 'externalclusters/:clusterName',
     component: ExternalClusterDetailsComponent,
     canActivate: [AuthGuard, AuthzGuard],
   },
@@ -68,7 +68,7 @@ const routes: Routes = [
     ],
   },
   {
-    path: 'external/:clusterName/md/:machineDeploymentID',
+    path: 'externalclusters/:clusterName/md/:machineDeploymentID',
     component: ExternalMachineDeploymentDetailsComponent,
     canActivate: [AuthGuard, AuthzGuard],
   },

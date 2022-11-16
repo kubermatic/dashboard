@@ -1,5 +1,5 @@
 <!--
-Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div fxLayout="column"
+<div *ngIf="!isSidenavCollapsed"
+     fxLayout="column"
      class="side-nav-bar">
   <div (click)="onClick()"
        id="km-side-nav-field-{{label}}">
@@ -30,6 +31,25 @@ limitations under the License.
   </div>
   <div *ngIf="expanded"
        @shrinkGrow>
-    <ng-content></ng-content>
+    <ng-container *ngTemplateOutlet="content"></ng-container>
   </div>
 </div>
+
+<div *ngIf="isSidenavCollapsed"
+     class="side-nav-bar"
+     [ngClass]="isExpandedActive() ? 'expanded-menu' : ''">
+  <button [matTooltip]="label"
+          [class]="icon"
+          (click)="menuTrigger.openMenu()">
+    <div #menuTrigger="matMenuTrigger"
+         [matMenuTriggerFor]="menu">
+    </div>
+  </button>
+  <mat-menu #menu="matMenu">
+    <mat-label class="menu-label">{{label}}</mat-label>
+    <hr />
+    <ng-container *ngTemplateOutlet="content"></ng-container>
+  </mat-menu>
+</div>
+
+<ng-template #content><ng-content></ng-content></ng-template>

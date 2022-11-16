@@ -102,11 +102,11 @@ export class ClustersOverviewComponent implements OnInit, OnChanges {
   }
 
   externalClusterNavigate(cluster: ExternalCluster): void {
-    this._router.navigate([`/projects/${this.project.id}/clusters/external/${cluster.id}`]);
+    this._router.navigate([`/projects/${this.project.id}/clusters/externalclusters/${cluster.id}`]);
   }
 
   externalClustersNavigate(): void {
-    this._router.navigate(['/projects/' + this.project.id + '/external']);
+    this._router.navigate(['/projects/' + this.project.id + '/externalclusters']);
   }
 
   getExternalClusterStatus(cluster: ExternalCluster): string {

@@ -54,16 +54,12 @@ $sidenav-item-margin: 10px;
   .mat-divider {
     margin: $sidenav-item-margin 0 $sidenav-item-margin $sidenav-item-margin;
   }
+}
 
-  .km-disabled {
-    cursor: default;
-    opacity: 40%;
-    pointer-events: none;
-  }
-
-  button {
-    border: none;
-  }
+.km-disabled {
+  cursor: default;
+  opacity: 40%;
+  pointer-events: none;
 }
 
 .collapse-sidenav {
@@ -75,19 +71,6 @@ $sidenav-item-margin: 10px;
   }
 }
 
-button {
-  cursor: pointer;
-  margin: 15px 15px 15px 10px;
-  padding: 0 0 0 45px;
-
-  .mat-menu-trigger {
-    left: 0;
-    left: 20px;
-    position: relative;
-    top: -10px;
-  }
-}
-
 .sub-menu-item {
   height: 25px;
   margin: 0 0 10px 45px;
@@ -96,11 +79,6 @@ button {
 
 .menu-title {
   border-bottom: 2px solid gray;
-}
-
-.menu-label {
-  font-weight: bolder;
-  margin: 0 0 0 20px;
 }
 
 .collapsed-sub-menu-item {

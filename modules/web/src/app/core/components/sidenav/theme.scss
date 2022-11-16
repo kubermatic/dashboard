@@ -34,6 +34,15 @@
 
       &.active {
         background-color: map.get($colors, sidenav-background-active);
+
+        i:first-child {
+          background-color: map.get($colors, primary-dark) !important;
+          filter: none !important;
+        }
+
+        span {
+          color: map.get($colors, primary-dark);
+        }
       }
     }
   }
@@ -70,14 +79,5 @@
     span {
       color: map.get($colors, text);
     }
-  }
-
-  .menu-label {
-    color: map.get($colors, primary-dark);
-    font-weight: bolder;
-  }
-
-  .collapesd-button {
-    background-color: map.get($colors, text);
   }
 }

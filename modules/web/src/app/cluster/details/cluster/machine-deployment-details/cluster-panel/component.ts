@@ -31,7 +31,7 @@ export class ClusterPanelComponent {
   @Input() projectID: string;
 
   private get _isExternalCluster(): boolean {
-    return this._params.getCurrentUrl().includes('/external/');
+    return this._params.getCurrentUrl().includes('/externalclusters/');
   }
 
   get region(): string {
@@ -50,7 +50,7 @@ export class ClusterPanelComponent {
 
   goBack(): void {
     if (this._isExternalCluster) {
-      this._router.navigate(['/projects/' + this.projectID + '/clusters/external/' + this.cluster.id]);
+      this._router.navigate(['/projects/' + this.projectID + '/clusters/externalclusters/' + this.cluster.id]);
       return;
     }
 

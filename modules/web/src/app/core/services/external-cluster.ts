@@ -358,7 +358,7 @@ export class ExternalClusterService {
       .afterClosed()
       .pipe(filter(isConfirmed => isConfirmed))
       .subscribe(_ => {
-        this._router.navigate(['/projects/' + projectID + '/external']);
+        this._router.navigate(['/projects/' + projectID + '/externalclusters']);
         this._notificationService.success(`Disconnected the ${cluster.name} cluster`);
       });
   }

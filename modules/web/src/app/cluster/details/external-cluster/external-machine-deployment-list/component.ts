@@ -111,7 +111,9 @@ export class ExternalMachineDeploymentListComponent implements OnInit, OnChanges
   }
 
   goToDetails(md: ExternalMachineDeployment): void {
-    this._router.navigate(['/projects/' + this.projectID + '/clusters/external/' + this.cluster.id + /md/ + md.id]);
+    this._router.navigate([
+      '/projects/' + this.projectID + '/clusters/externalclusters/' + this.cluster.id + /md/ + md.id,
+    ]);
   }
 
   isPaginatorVisible(): boolean {

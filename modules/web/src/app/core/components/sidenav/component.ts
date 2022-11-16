@@ -35,7 +35,7 @@ import {switchMap, takeUntil} from 'rxjs/operators';
   styleUrls: ['./style.scss'],
 })
 export class SidenavComponent implements OnInit, OnDestroy {
-  view = View;
+  readonly view = View;
   environment: any = environment;
   customLinks: CustomLink[] = [];
   settings: UserSettings;
