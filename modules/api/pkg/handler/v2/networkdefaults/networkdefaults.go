@@ -164,6 +164,7 @@ func generateNetworkDefaults(provider kubermaticv1.ProviderType) apiv2.NetworkDe
 		ProxyMode:                resources.GetDefaultProxyMode(provider),
 		NodeLocalDNSCacheEnabled: resources.DefaultNodeLocalDNSCacheEnabled,
 		ClusterExposeStrategy:    defaulting.DefaultExposeStrategy,
+		TunnelingAgentIP:         resources.DefaultTunnelingAgentIP,
 	}
 }
 

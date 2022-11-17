@@ -120,6 +120,11 @@ func ValidateClusterSpec(spec *kubermaticv1.ClusterSpec, dc *kubermaticv1.Datace
 		allErrs = append(allErrs, field.Forbidden(parentFieldPath.Child("APIServerAllowedIPRanges"), "Access control for API server is supported only for LoadBalancer expose strategy"))
 	}
 
+	// Validate TunnelingAgentIP for Tunneling Expose strategy
+	if spec.ExposeStrategy != kubermaticv1.ExposeStrategyTunneling && spec.ClusterNetwork.TunnelingAgentIP != "" {
+		allErrs = append(allErrs, field.Forbidden(parentFieldPath.Child("TunnelingAgentIP"), "Tunneling agent IP can be configured only for Tunneling Expose strategy"))
+	}
+
 	// External CCM is not supported for all providers and all Kubernetes versions.
 	if spec.Features[kubermaticv1.ClusterFeatureExternalCloudProvider] {
 		if !resources.ExternalCloudControllerFeatureSupported(dc, &spec.Cloud, spec.Version, versionManager.GetIncompatibilities()...) {

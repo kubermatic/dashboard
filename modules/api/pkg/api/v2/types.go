@@ -1665,6 +1665,8 @@ type NetworkDefaults struct {
 	NodeLocalDNSCacheEnabled bool `json:"nodeLocalDNSCacheEnabled,omitempty"`
 	// ClusterExposeStrategy is the strategy used to expose a cluster control plane.
 	ClusterExposeStrategy kubermaticv1.ExposeStrategy `json:"clusterExposeStrategy,omitempty"`
+	// TunnelingAgentIP is the address used by the tunneling agents
+	TunnelingAgentIP string `json:"tunnelingAgentIP,omitempty"`
 }
 
 // NetworkDefaultsIPFamily contains cluster network default settings for an IP family.
