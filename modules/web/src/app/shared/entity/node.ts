@@ -12,7 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {KubeVirtAffinityPreset} from '@shared/entity/provider/kubevirt';
+import {
+  KubeVirtAffinityPreset,
+  KubeVirtNodeInstanceType,
+  KubeVirtNodePreference,
+} from '@shared/entity/provider/kubevirt';
 import {VMwareCloudDirectorIPAllocationMode} from '@shared/entity/provider/vmware-cloud-director';
 import {NodeProvider, OperatingSystem} from '../model/NodeProviderConstants';
 
@@ -215,9 +219,8 @@ export class HetznerNodeSpec {
 export class KubeVirtNodeSpec {
   name: string;
 
-  // At the moment KubeVirt VM flavors are stored only in the default namespace so their names are unique.
-  // It is going to be adjusted in the future.
-  flavorName?: string;
+  instancetype?: KubeVirtNodeInstanceType;
+  preference?: KubeVirtNodePreference;
   flavorProfile: string;
   cpus?: string;
   memory?: string;

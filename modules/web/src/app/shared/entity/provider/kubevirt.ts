@@ -18,6 +18,38 @@ export class KubeVirtVMInstancePreset {
   spec: string;
 }
 
+export class KubeVirtInstanceTypeList {
+  instancetypes: Record<KubeVirtInstanceTypeCategory, KubeVirtInstanceType[]>;
+}
+
+export class KubeVirtInstanceType {
+  _id?: string; // unique identifier for dropdown options
+  name: string;
+  spec: string;
+}
+
+export class KubeVirtPreferenceList {
+  preferences: Record<KubeVirtInstanceTypeCategory, KubeVirtPreference[]>;
+}
+
+export class KubeVirtPreference {
+  _id?: string; // unique identifier for dropdown options
+  name: string;
+  spec: string;
+}
+
+export class KubeVirtNodeInstanceType {
+  name: string;
+  kind: KubeVirtInstanceTypeKind;
+  revisionName?: string;
+}
+
+export class KubeVirtNodePreference {
+  name: string;
+  kind: KubeVirtPreferenceKind;
+  revisionName?: string;
+}
+
 export class KubeVirtStorageClass {
   name: string;
 }
@@ -25,4 +57,19 @@ export class KubeVirtStorageClass {
 export enum KubeVirtAffinityPreset {
   Hard = 'hard',
   Soft = 'soft',
+}
+
+export enum KubeVirtInstanceTypeCategory {
+  Kubermatic = 'kubermatic',
+  Custom = 'custom',
+}
+
+export enum KubeVirtInstanceTypeKind {
+  VirtualMachineInstancetype = 'VirtualMachineInstancetype',
+  VirtualMachineClusterInstancetype = 'VirtualMachineClusterInstancetype',
+}
+
+export enum KubeVirtPreferenceKind {
+  VirtualMachinePreference = 'VirtualMachinePreference',
+  VirtualMachineClusterPreference = 'VirtualMachineClusterPreference',
 }

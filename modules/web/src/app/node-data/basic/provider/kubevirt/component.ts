@@ -23,8 +23,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormArray, FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {MatDialog} from '@angular/material/dialog';
-import {FlavorDetailsDialogComponent} from '@app/node-data/basic/provider/kubevirt/flavor-details/component';
 import {NodeDataService} from '@core/services/node-data/service';
 import {ComboboxControls, FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {
@@ -34,16 +32,29 @@ import {
   NodeCloudSpec,
   NodeSpec,
 } from '@shared/entity/node';
-import {KubeVirtAffinityPreset, KubeVirtStorageClass, KubeVirtVMInstancePreset} from '@shared/entity/provider/kubevirt';
+import {
+  KubeVirtAffinityPreset,
+  KubeVirtInstanceType,
+  KubeVirtInstanceTypeCategory,
+  KubeVirtInstanceTypeKind,
+  KubeVirtInstanceTypeList,
+  KubeVirtNodeInstanceType,
+  KubeVirtNodePreference,
+  KubeVirtPreference,
+  KubeVirtPreferenceKind,
+  KubeVirtPreferenceList,
+  KubeVirtStorageClass,
+} from '@shared/entity/provider/kubevirt';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
+import {KUBERNETES_RESOURCE_NAME_PATTERN} from '@shared/validators/others';
 import _ from 'lodash';
 import {Observable} from 'rxjs';
 import {map, takeUntil} from 'rxjs/operators';
-import {KUBERNETES_RESOURCE_NAME_PATTERN} from '@shared/validators/others';
 
 enum Controls {
-  VMFlavor = 'vmFlavor',
+  InstanceType = 'instancetype',
+  Preference = 'preference',
   CPUs = 'cpus',
   Memory = 'memory',
   PrimaryDiskOSImage = 'primaryDiskOSImage',
@@ -59,10 +70,16 @@ enum Controls {
   NodeAffinityPresetValues = 'nodeAffinityPresetValues',
 }
 
-enum FlavorsState {
-  Ready = 'VM Flavor',
+enum InstanceTypeState {
+  Ready = 'Instance Type',
   Loading = 'Loading...',
-  Empty = 'No VM Flavors Available',
+  Empty = 'No Instance Types Available',
+}
+
+enum PreferenceState {
+  Ready = 'Preference',
+  Loading = 'Loading...',
+  Empty = 'No Preferences Available',
 }
 
 enum StorageClassState {
@@ -92,25 +109,31 @@ export class KubeVirtBasicNodeDataComponent
   extends BaseFormValidator
   implements OnInit, OnDestroy, AfterViewChecked, AfterViewInit
 {
-  @ViewChild('flavorCombobox')
-  private _flavorCombobox: FilteredComboboxComponent;
+  @ViewChild('instanceTypeCombobox')
+  private _instanceTypeCombobox: FilteredComboboxComponent;
+  @ViewChild('preferenceCombobox')
+  private _preferenceCombobox: FilteredComboboxComponent;
   @ViewChild('storageClassCombobox')
   private _storageClassCombobox: FilteredComboboxComponent;
   readonly Controls = Controls;
   readonly maxSecondaryDisks = 3;
   readonly affinityPresetOptions = [KubeVirtAffinityPreset.Hard, KubeVirtAffinityPreset.Soft];
+  private readonly _instanceTypeIDSeparator = ':';
   private readonly _defaultCPUs = 2;
   private readonly _defaultMemory = 2048;
   private readonly _initialData = _.cloneDeep(this._nodeDataService.nodeData.spec.cloud.kubevirt);
-  flavors: KubeVirtVMInstancePreset[] = [];
-  selectedFlavor = '';
-  flavorLabel = FlavorsState.Empty;
+  private _instanceTypes: KubeVirtInstanceTypeList;
+  private _preferences: KubeVirtPreferenceList;
+  selectedInstanceType: KubeVirtInstanceType;
+  instanceTypeLabel = InstanceTypeState.Empty;
+  selectedPreference: KubeVirtPreference;
+  preferenceLabel = PreferenceState.Empty;
   storageClasses: KubeVirtStorageClass[] = [];
   selectedStorageClass = '';
   storageClassLabel = StorageClassState.Empty;
   nodeAffinityPresetValues: string[] = [];
-  selectedFlavorCpus: string;
-  selectedFlavorMemory: string;
+  selectedInstanceTypeCpus: string;
+  selectedInstanceTypeMemory: string;
   nodeAffinityPresetValuesPattern = KUBERNETES_RESOURCE_NAME_PATTERN;
   nodeAffinityPresetValuesPatternError =
     'Field can only contain <b>alphanumeric characters</b> and <b>dashes</b> (a-z, 0-9 and -). <b>Must not start or end with dash</b>.';
@@ -118,15 +141,15 @@ export class KubeVirtBasicNodeDataComponent
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
-    private readonly _cdr: ChangeDetectorRef,
-    private readonly _matDialog: MatDialog
+    private readonly _cdr: ChangeDetectorRef
   ) {
     super();
   }
 
   ngOnInit(): void {
     this.form = this._builder.group({
-      [Controls.VMFlavor]: this._builder.control(''),
+      [Controls.InstanceType]: this._builder.control(''),
+      [Controls.Preference]: this._builder.control(''),
       [Controls.CPUs]: this._builder.control(this._defaultCPUs, Validators.required),
       [Controls.Memory]: this._builder.control(this._defaultMemory, Validators.required),
       [Controls.PrimaryDiskOSImage]: this._builder.control('', Validators.required),
@@ -140,8 +163,23 @@ export class KubeVirtBasicNodeDataComponent
       [Controls.NodeAffinityPresetValues]: this._builder.control(''),
     });
 
+    this.form.get(Controls.Preference).disable();
     this.form.get(Controls.NodeAffinityPresetKey).disable();
     this.form.get(Controls.NodeAffinityPresetValues).disable();
+
+    this.form
+      .get(Controls.InstanceType)
+      .valueChanges.pipe(takeUntil(this._unsubscribe))
+      .pipe(map(value => value[ComboboxControls.Select]))
+      .subscribe(value => {
+        const preferenceControl = this.form.get(Controls.Preference);
+        if (value && preferenceControl.disabled) {
+          preferenceControl.enable();
+        } else if (!value && preferenceControl.enabled) {
+          preferenceControl.reset();
+          preferenceControl.disable();
+        }
+      });
 
     this.form
       .get(Controls.NodeAffinityPreset)
@@ -209,7 +247,8 @@ export class KubeVirtBasicNodeDataComponent
   }
 
   ngAfterViewInit(): void {
-    this._flavorsObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setDefaultFlavor.bind(this));
+    this._instanceTypesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setInstanceTypes.bind(this));
+    this._preferencesObservable.pipe(takeUntil(this._unsubscribe)).subscribe(this._setPreferences.bind(this));
 
     this._storageClassesObservable
       .pipe(takeUntil(this._unsubscribe))
@@ -221,8 +260,40 @@ export class KubeVirtBasicNodeDataComponent
     this._unsubscribe.complete();
   }
 
+  get instanceTypeCategories(): string[] {
+    return Object.keys(this._instanceTypes?.instancetypes || {});
+  }
+
+  get preferenceCategories(): string[] {
+    return Object.keys(this._preferences?.preferences || {});
+  }
+
   get secondaryDisksFormArray(): FormArray {
     return this.form.get(Controls.SecondaryDisks) as FormArray;
+  }
+
+  getInstanceTypeOptions(group: string): KubeVirtInstanceType[] {
+    return this._instanceTypes?.instancetypes?.[group] || [];
+  }
+
+  instanceTypeDisplayName(instanceTypeId: string): string {
+    if (instanceTypeId) {
+      // only display name of selected instance type
+      return instanceTypeId.substring(instanceTypeId.indexOf(this._instanceTypeIDSeparator) + 1);
+    }
+    return instanceTypeId;
+  }
+
+  getPreferenceOptions(group: string): KubeVirtPreference[] {
+    return this._preferences?.preferences?.[group] || [];
+  }
+
+  preferenceDisplayName(preferenceId: string): string {
+    if (preferenceId) {
+      // only display name of selected preference
+      return preferenceId.substring(preferenceId.indexOf(this._instanceTypeIDSeparator) + 1);
+    }
+    return preferenceId;
   }
 
   addSecondaryDisk(storageClass = '', size = '10'): void {
@@ -234,31 +305,48 @@ export class KubeVirtBasicNodeDataComponent
     );
   }
 
-  onFlavorChange(flavor: string): void {
-    this.selectedFlavor = flavor;
-    this._nodeDataService.nodeData.spec.cloud.kubevirt.flavorName = flavor;
-    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
+  onInstanceTypeChange(instanceTypeId: string): void {
+    if (!instanceTypeId) {
+      this.selectedInstanceType = null;
+      this._nodeDataService.nodeData.spec.cloud.kubevirt.instancetype = null;
+      this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
 
-    if (_.isString(flavor) && !_.isEmpty(flavor)) {
-      const selectedFlavorSpec = this.flavors.find(f => f.name === flavor)?.spec;
+      this.selectedInstanceTypeCpus = null;
+      this.selectedInstanceTypeMemory = null;
+      this.form.get(Controls.CPUs).setValue(this._defaultCPUs);
+      this.form.get(Controls.CPUs).setValidators(Validators.required);
+      this.form.get(Controls.CPUs).enable();
+      this.form.get(Controls.Memory).setValue(this._defaultMemory);
+      this.form.get(Controls.Memory).setValidators(Validators.required);
+      this.form.get(Controls.Memory).enable();
+    } else if (this._instanceTypes) {
+      const tokens = instanceTypeId.split(this._instanceTypeIDSeparator);
+      const category = tokens.shift();
+      const name = tokens.join(this._instanceTypeIDSeparator);
+      let kind;
+      switch (category) {
+        case KubeVirtInstanceTypeCategory.Kubermatic:
+          kind = KubeVirtInstanceTypeKind.VirtualMachineInstancetype;
+          break;
+        case KubeVirtInstanceTypeCategory.Custom:
+          kind = KubeVirtInstanceTypeKind.VirtualMachineClusterInstancetype;
+          break;
+      }
+      this.selectedInstanceType = this._instanceTypes?.instancetypes?.[category]?.find(
+        instanceType => instanceType.name === name
+      );
+      this._nodeDataService.nodeData.spec.cloud.kubevirt.instancetype = {
+        name,
+        kind,
+      };
+      this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
+
+      const selectedInstanceTypeSpec = this.selectedInstanceType?.spec;
       try {
-        const parsedSpec = JSON.parse(selectedFlavorSpec);
+        const parsedSpec = JSON.parse(selectedInstanceTypeSpec);
         if (parsedSpec) {
-          const domainCPU = parsedSpec.domain?.cpu;
-          const requests = parsedSpec.domain?.resources?.requests;
-          const limits = parsedSpec.domain?.resources?.limits;
-
-          if (!_.isEmpty(domainCPU)) {
-            this.selectedFlavorCpus = `${(domainCPU.cores || 1) * (domainCPU.threads || 1) * (domainCPU.sockets || 1)}`;
-          }
-          if (!_.isEmpty(requests)) {
-            this.selectedFlavorCpus = this.selectedFlavorCpus || requests.cpu;
-            this.selectedFlavorMemory = requests.memory;
-          }
-          if (!_.isEmpty(limits)) {
-            this.selectedFlavorCpus = this.selectedFlavorCpus || limits.cpu;
-            this.selectedFlavorMemory = this.selectedFlavorMemory || limits.memory;
-          }
+          this.selectedInstanceTypeCpus = parsedSpec.cpu?.guest;
+          this.selectedInstanceTypeMemory = parsedSpec.memory?.guest;
         }
         // eslint-disable-next-line no-empty
       } catch (_) {}
@@ -269,24 +357,37 @@ export class KubeVirtBasicNodeDataComponent
       this.form.get(Controls.Memory).setValue(null);
       this.form.get(Controls.Memory).setValidators([]);
       this.form.get(Controls.Memory).disable();
-    } else {
-      this.selectedFlavorCpus = null;
-      this.selectedFlavorMemory = null;
-      this.form.get(Controls.CPUs).setValue(this._defaultCPUs);
-      this.form.get(Controls.CPUs).setValidators(Validators.required);
-      this.form.get(Controls.CPUs).enable();
-      this.form.get(Controls.Memory).setValue(this._defaultMemory);
-      this.form.get(Controls.Memory).setValidators(Validators.required);
-      this.form.get(Controls.Memory).enable();
     }
-
     this.form.updateValueAndValidity();
   }
 
-  viewFlavor(): void {
-    this._matDialog.open(FlavorDetailsDialogComponent, {
-      data: {flavor: this.flavors.find(f => f.name === this.selectedFlavor)},
-    });
+  onPreferenceChange(preferenceId: string): void {
+    if (!preferenceId) {
+      this.selectedPreference = null;
+      this._nodeDataService.nodeData.spec.cloud.kubevirt.preference = null;
+      this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
+    } else if (this._preferences) {
+      const tokens = preferenceId.split(this._instanceTypeIDSeparator);
+      const category = tokens.shift();
+      const name = tokens.join(this._instanceTypeIDSeparator);
+      let kind;
+      switch (category) {
+        case KubeVirtInstanceTypeCategory.Kubermatic:
+          kind = KubeVirtPreferenceKind.VirtualMachinePreference;
+          break;
+        case KubeVirtInstanceTypeCategory.Custom:
+          kind = KubeVirtPreferenceKind.VirtualMachineClusterPreference;
+          break;
+      }
+      this.selectedPreference = this._preferences?.preferences?.[category]?.find(
+        preference => preference.name === name
+      );
+      this._nodeDataService.nodeData.spec.cloud.kubevirt.preference = {
+        name,
+        kind,
+      };
+      this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
+    }
   }
 
   resetPodAffinityPresetControl(): void {
@@ -306,29 +407,97 @@ export class KubeVirtBasicNodeDataComponent
     this._nodeDataService.nodeData.spec.cloud.kubevirt.nodeAffinityPreset.Values = values;
   }
 
-  private get _flavorsObservable(): Observable<KubeVirtVMInstancePreset[]> {
+  private get _instanceTypesObservable(): Observable<KubeVirtInstanceTypeList> {
     return this._nodeDataService.kubeVirt
-      .vmFlavors(this._clearFlavor.bind(this), this._onFlavorLoading.bind(this))
-      .pipe(map(flavors => _.sortBy(flavors, f => f.name.toLowerCase())));
+      .instanceTypes(this._clearInstanceType.bind(this), this._onInstanceTypeLoading.bind(this))
+      .pipe(
+        map(instanceTypes => {
+          if (instanceTypes?.instancetypes) {
+            Object.keys(instanceTypes.instancetypes).forEach(category => {
+              instanceTypes.instancetypes[category] = instanceTypes.instancetypes[category].map(
+                (instanceType: KubeVirtInstanceType) => ({
+                  _id: `${category}${this._instanceTypeIDSeparator}${instanceType.name}`,
+                  ...instanceType,
+                })
+              );
+            });
+          }
+          return instanceTypes;
+        })
+      );
   }
 
-  private _clearFlavor(): void {
-    this.flavors = [];
-    this.selectedFlavor = '';
-    this.flavorLabel = FlavorsState.Empty;
-    this._flavorCombobox.reset();
+  private _clearInstanceType(): void {
+    this._instanceTypes = null;
+    this.selectedInstanceType = null;
+    this.instanceTypeLabel = InstanceTypeState.Empty;
+    this._instanceTypeCombobox.reset();
     this._cdr.detectChanges();
   }
 
-  private _onFlavorLoading(): void {
-    this.flavorLabel = FlavorsState.Loading;
+  private _onInstanceTypeLoading(): void {
+    this.instanceTypeLabel = InstanceTypeState.Loading;
     this._cdr.detectChanges();
   }
 
-  private _setDefaultFlavor(flavors: KubeVirtVMInstancePreset[]): void {
-    this.flavors = flavors;
-    this.selectedFlavor = this._initialData?.flavorName;
-    this.flavorLabel = this.flavors ? FlavorsState.Ready : FlavorsState.Empty;
+  private _setInstanceTypes(instanceTypes: KubeVirtInstanceTypeList): void {
+    this._instanceTypes = instanceTypes;
+    if (this._initialData?.instancetype) {
+      const instanceTypeId = this._getSelectedInstanceTypeId(this._initialData.instancetype);
+      this.onInstanceTypeChange(instanceTypeId);
+    }
+    this.instanceTypeLabel = Object.keys(this._instanceTypes?.instancetypes || {}).some(
+      category => this._instanceTypes?.instancetypes?.[category]?.length
+    )
+      ? InstanceTypeState.Ready
+      : InstanceTypeState.Empty;
+    this._cdr.detectChanges();
+  }
+
+  private get _preferencesObservable(): Observable<KubeVirtPreferenceList> {
+    return this._nodeDataService.kubeVirt
+      .preferences(this._clearPreference.bind(this), this._onPreferenceLoading.bind(this))
+      .pipe(
+        map(preferences => {
+          if (preferences?.preferences) {
+            Object.keys(preferences.preferences).forEach(category => {
+              preferences.preferences[category] = preferences.preferences[category].map(
+                (preference: KubeVirtPreference) => ({
+                  _id: `${category}${this._instanceTypeIDSeparator}${preference.name}`,
+                  ...preference,
+                })
+              );
+            });
+          }
+          return preferences;
+        })
+      );
+  }
+
+  private _clearPreference(): void {
+    this._preferences = null;
+    this.selectedPreference = null;
+    this.preferenceLabel = PreferenceState.Empty;
+    this._preferenceCombobox.reset();
+    this._cdr.detectChanges();
+  }
+
+  private _onPreferenceLoading(): void {
+    this.preferenceLabel = PreferenceState.Loading;
+    this._cdr.detectChanges();
+  }
+
+  private _setPreferences(preferences: KubeVirtPreferenceList): void {
+    this._preferences = preferences;
+    if (this._initialData?.preference) {
+      const preferenceId = this._getSelectedPreferenceId(this._initialData.preference);
+      this.onPreferenceChange(preferenceId);
+    }
+    this.preferenceLabel = Object.keys(this._preferences?.preferences || {}).some(
+      category => this._preferences?.preferences?.[category]?.length
+    )
+      ? PreferenceState.Ready
+      : PreferenceState.Empty;
     this._cdr.detectChanges();
   }
 
@@ -380,6 +549,14 @@ export class KubeVirtBasicNodeDataComponent
       this.form.get(Controls.NodeAffinityPresetKey).setValue(this._initialData.nodeAffinityPreset?.Key);
       this.nodeAffinityPresetValues = this._initialData.nodeAffinityPreset?.Values || [];
 
+      if (this._initialData.instancetype) {
+        this.form.get(Controls.InstanceType).setValue(this._getSelectedInstanceTypeId(this._initialData.instancetype));
+      }
+
+      if (this._initialData.preference) {
+        this.form.get(Controls.Preference).setValue(this._getSelectedPreferenceId(this._initialData.preference));
+      }
+
       if (this._initialData.secondaryDisks?.length) {
         this._initialData.secondaryDisks.forEach(disk => {
           this.addSecondaryDisk(disk.storageClassName, disk.size.match(/\d+/)[0]);
@@ -388,8 +565,34 @@ export class KubeVirtBasicNodeDataComponent
     }
   }
 
+  private _getSelectedInstanceTypeId(instanceType: KubeVirtNodeInstanceType): string {
+    let category;
+    switch (instanceType.kind) {
+      case KubeVirtInstanceTypeKind.VirtualMachineInstancetype:
+        category = KubeVirtInstanceTypeCategory.Kubermatic;
+        break;
+      case KubeVirtInstanceTypeKind.VirtualMachineClusterInstancetype:
+        category = KubeVirtInstanceTypeCategory.Custom;
+        break;
+    }
+    return `${category}${this._instanceTypeIDSeparator}${instanceType.name}`;
+  }
+
+  private _getSelectedPreferenceId(preference: KubeVirtNodePreference): string {
+    let category;
+    switch (preference.kind) {
+      case KubeVirtPreferenceKind.VirtualMachinePreference:
+        category = KubeVirtInstanceTypeCategory.Kubermatic;
+        break;
+      case KubeVirtPreferenceKind.VirtualMachineClusterPreference:
+        category = KubeVirtInstanceTypeCategory.Custom;
+        break;
+    }
+    return `${category}${this._instanceTypeIDSeparator}${preference.name}`;
+  }
+
   private _getNodeData(): NodeData {
-    const flavor = this.form.get(Controls.VMFlavor).value[ComboboxControls.Select];
+    const instanceType = this.form.get(Controls.InstanceType).value[ComboboxControls.Select];
     const cpus = this.form.get(Controls.CPUs).value;
     const memory = this.form.get(Controls.Memory).value;
     const nodeAffinityPreset = this.form.get(Controls.NodeAffinityPreset).value;
@@ -405,9 +608,8 @@ export class KubeVirtBasicNodeDataComponent
       spec: {
         cloud: {
           kubevirt: {
-            flavorName: flavor,
-            cpus: !flavor && cpus ? `${cpus}` : null,
-            memory: !flavor && memory ? `${memory}Mi` : null,
+            cpus: !instanceType && cpus ? `${cpus}` : null,
+            memory: !instanceType && memory ? `${memory}Mi` : null,
             primaryDiskOSImage: this.form.get(Controls.PrimaryDiskOSImage).value,
             primaryDiskStorageClassName: this.form.get(Controls.PrimaryDiskStorageClassName).value[
               ComboboxControls.Select
