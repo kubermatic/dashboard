@@ -43,6 +43,7 @@ import (
 	"github.com/kubermatic/machine-controller/pkg/userdata/sles"
 	"github.com/kubermatic/machine-controller/pkg/userdata/ubuntu"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
+	nutanixprovider "k8c.io/dashboard/v2/pkg/provider/cloud/nutanix"
 
 	"k8s.io/apimachinery/pkg/util/json"
 	"k8s.io/utils/pointer"
@@ -390,10 +391,16 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 			if err := json.Unmarshal(decodedProviderSpec.CloudProviderSpec.Raw, &config); err != nil {
 				return nil, fmt.Errorf("failed to parse nutanix config: %w", err)
 			}
+
+			// remove system categories
+			categories := config.Categories
+			delete(categories, nutanixprovider.ClusterCategoryName)
+			delete(categories, nutanixprovider.ProjectCategoryName)
+
 			cloudSpec.Nutanix = &apiv1.NutanixNodeSpec{
 				SubnetName:     config.SubnetName.Value,
 				ImageName:      config.ImageName.Value,
-				Categories:     config.Categories,
+				Categories:     categories,
 				CPUs:           config.CPUs,
 				CPUCores:       config.CPUCores,
 				CPUPassthrough: config.CPUPassthrough,
