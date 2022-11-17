@@ -53,6 +53,16 @@ limitations under the License.
                  fxFlex>
       <div *option="let preference">{{preference.name}}</div>
     </km-combobox>
+    <button mat-flat-button
+            type="button"
+            fxLayoutAlign=" center"
+            color="tertiary"
+            class="view-instance-details-button"
+            (click)="viewInstanceDetails()"
+            [disabled]="!selectedInstanceType">
+      <i class="km-icon-mask km-icon-search"></i>
+      <span>View</span>
+    </button>
   </div>
 
   <km-number-stepper *ngIf="!form.get(Controls.CPUs).disabled; else disabledCPUs"

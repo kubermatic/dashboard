@@ -23,6 +23,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import {FormArray, FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {MatDialog} from '@angular/material/dialog';
+import {InstanceDetailsDialogComponent} from '@app/node-data/basic/provider/kubevirt/instance-details/component';
 import {NodeDataService} from '@core/services/node-data/service';
 import {ComboboxControls, FilteredComboboxComponent} from '@shared/components/combobox/component';
 import {
@@ -141,7 +143,8 @@ export class KubeVirtBasicNodeDataComponent
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _nodeDataService: NodeDataService,
-    private readonly _cdr: ChangeDetectorRef
+    private readonly _cdr: ChangeDetectorRef,
+    private readonly _matDialog: MatDialog
   ) {
     super();
   }
@@ -388,6 +391,12 @@ export class KubeVirtBasicNodeDataComponent
       };
       this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
     }
+  }
+
+  viewInstanceDetails(): void {
+    this._matDialog.open(InstanceDetailsDialogComponent, {
+      data: {instanceType: this.selectedInstanceType, preference: this.selectedPreference},
+    });
   }
 
   resetPodAffinityPresetControl(): void {

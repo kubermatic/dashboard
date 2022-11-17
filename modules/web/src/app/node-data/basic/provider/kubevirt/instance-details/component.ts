@@ -14,26 +14,34 @@
 
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
-import _ from 'lodash';
-import {KubeVirtVMInstancePreset} from '@shared/entity/provider/kubevirt';
+import {KubeVirtInstanceType, KubeVirtPreference} from '@shared/entity/provider/kubevirt';
 
 export interface DialogDataInput {
-  flavor: KubeVirtVMInstancePreset;
+  instanceType: KubeVirtInstanceType;
+  preference: KubeVirtPreference;
 }
 
 @Component({
-  selector: 'km-flavor-details',
+  selector: 'km-instance-details',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class FlavorDetailsDialogComponent {
+export class InstanceDetailsDialogComponent {
   constructor(@Inject(MAT_DIALOG_DATA) private _data: DialogDataInput) {}
 
-  get flavor(): KubeVirtVMInstancePreset {
-    return this._data.flavor;
+  get instance(): KubeVirtInstanceType {
+    return this._data.instanceType;
   }
 
-  get spec(): unknown {
-    return JSON.parse(this.flavor.spec);
+  get instanceSpec(): unknown {
+    return JSON.parse(this.instance.spec);
+  }
+
+  get preference(): KubeVirtPreference {
+    return this._data.preference;
+  }
+
+  get preferenceSpec(): unknown {
+    return JSON.parse(this.preference.spec);
   }
 }

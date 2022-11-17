@@ -12,12 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export class KubeVirtVMInstancePreset {
-  name: string;
-  namespace: string;
-  spec: string;
-}
-
 export class KubeVirtInstanceTypeList {
   instancetypes: Record<KubeVirtInstanceTypeCategory, KubeVirtInstanceType[]>;
 }
