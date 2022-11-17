@@ -50,6 +50,10 @@ const routes: Routes = [
         loadChildren: () => import('./presets/module').then(m => m.AdminSettingsPresetsModule),
       },
       {
+        path: 'seeds',
+        loadChildren: () => import('./seed-configurations/module').then(m => m.AdminSettingsSeedConfigurationsModule),
+      },
+      {
         path: 'opa',
         loadChildren: () => import('./opa/module').then(m => m.AdminSettingsOPAModule),
       },

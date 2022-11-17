@@ -374,6 +374,10 @@
   @include mixins.background-image('/assets/images/icons/kubernetes.svg', 30px);
 }
 
+.km-icon-seed {
+  @include mixins.mask-image('/assets/images/icons/seed.svg', 24px);
+}
+
 .km-icon-opa {
   @include mixins.mask-image('/assets/images/icons/opa.svg', 24px);
 }
