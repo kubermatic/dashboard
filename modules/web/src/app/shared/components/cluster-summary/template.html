@@ -830,6 +830,18 @@ limitations under the License.
                     <div value>{{nodeAffinityPreset.Values.join(', ')}}</div>
                   </km-property>
                 </ng-container>
+                <km-property *ngIf="machineDeployment.spec.template.cloud?.kubevirt.topologySpreadConstraints?.length > 0">
+                  <div key>Topology Spread Constraints</div>
+                  <div value>
+                    <mat-chip-list selectable="false">
+                      <mat-chip *ngFor="let constraint of machineDeployment.spec.template.cloud?.kubevirt.topologySpreadConstraints">
+                        <div>{{constraint.topologyKey}}</div>
+                        <div class="km-chip-accent">{{constraint.maxSkew}}</div>
+                        <div>{{constraint.whenUnsatisfiable}}</div>
+                      </mat-chip>
+                    </mat-chip-list>
+                  </div>
+                </km-property>
               </ng-container>
 
               <!-- Nutanix Nodes -->
