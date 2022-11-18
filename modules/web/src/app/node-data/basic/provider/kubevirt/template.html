@@ -272,5 +272,9 @@ limitations under the License.
         <mat-hint>{{hint}}</mat-hint>
       </mat-form-field>
     </ng-template>
+
+    <km-topology-spread-constraint-form [formControlName]="Controls.TopologySpreadConstraints"
+                                        [constraints]="topologySpreadConstraints"
+                                        (constraintsChange)="onTopologySpreadConstraintsChange($event)"></km-topology-spread-constraint-form>
   </km-expansion-panel>
 </form>

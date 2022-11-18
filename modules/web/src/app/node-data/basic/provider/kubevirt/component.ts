@@ -46,6 +46,7 @@ import {
   KubeVirtPreferenceKind,
   KubeVirtPreferenceList,
   KubeVirtStorageClass,
+  KubeVirtTopologySpreadConstraint,
 } from '@shared/entity/provider/kubevirt';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
@@ -70,6 +71,7 @@ enum Controls {
   NodeAffinityPreset = 'nodeAffinityPreset',
   NodeAffinityPresetKey = 'nodeAffinityPresetKey',
   NodeAffinityPresetValues = 'nodeAffinityPresetValues',
+  TopologySpreadConstraints = 'topologySpreadConstraints',
 }
 
 enum InstanceTypeState {
@@ -164,6 +166,7 @@ export class KubeVirtBasicNodeDataComponent
       [Controls.NodeAffinityPreset]: this._builder.control(''),
       [Controls.NodeAffinityPresetKey]: this._builder.control(''),
       [Controls.NodeAffinityPresetValues]: this._builder.control(''),
+      [Controls.TopologySpreadConstraints]: this._builder.control(''),
     });
 
     this.form.get(Controls.Preference).disable();
@@ -273,6 +276,10 @@ export class KubeVirtBasicNodeDataComponent
 
   get secondaryDisksFormArray(): FormArray {
     return this.form.get(Controls.SecondaryDisks) as FormArray;
+  }
+
+  get topologySpreadConstraints(): KubeVirtTopologySpreadConstraint[] {
+    return this._nodeDataService.nodeData.spec.cloud.kubevirt?.topologySpreadConstraints || [];
   }
 
   getInstanceTypeOptions(group: string): KubeVirtInstanceType[] {
@@ -414,6 +421,11 @@ export class KubeVirtBasicNodeDataComponent
   onNodeAffinityPresetValuesChange(values: string[]): void {
     this.nodeAffinityPresetValues = values;
     this._nodeDataService.nodeData.spec.cloud.kubevirt.nodeAffinityPreset.Values = values;
+  }
+
+  onTopologySpreadConstraintsChange(constraints: KubeVirtTopologySpreadConstraint[]): void {
+    this._nodeDataService.nodeData.spec.cloud.kubevirt.topologySpreadConstraints = constraints;
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
   private get _instanceTypesObservable(): Observable<KubeVirtInstanceTypeList> {

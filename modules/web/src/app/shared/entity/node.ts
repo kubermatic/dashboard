@@ -16,6 +16,7 @@ import {
   KubeVirtAffinityPreset,
   KubeVirtNodeInstanceType,
   KubeVirtNodePreference,
+  KubeVirtTopologySpreadConstraint,
 } from '@shared/entity/provider/kubevirt';
 import {VMwareCloudDirectorIPAllocationMode} from '@shared/entity/provider/vmware-cloud-director';
 import {NodeProvider, OperatingSystem} from '../model/NodeProviderConstants';
@@ -231,6 +232,7 @@ export class KubeVirtNodeSpec {
   podAffinityPreset?: KubeVirtAffinityPreset;
   podAntiAffinityPreset?: KubeVirtAffinityPreset;
   nodeAffinityPreset?: KubeVirtNodeAffinityPreset;
+  topologySpreadConstraints?: KubeVirtTopologySpreadConstraint[];
 }
 
 export class KubeVirtSecondaryDisk {

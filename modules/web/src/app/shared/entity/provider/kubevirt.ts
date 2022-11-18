@@ -70,6 +70,12 @@ export class KubeVirtStorageClass {
   name: string;
 }
 
+export class KubeVirtTopologySpreadConstraint {
+  maxSkew: number;
+  topologyKey: string;
+  whenUnsatisfiable: KubeVirtTopologyWhenUnsatisfiable;
+}
+
 export enum KubeVirtAffinityPreset {
   Hard = 'hard',
   Soft = 'soft',
@@ -88,4 +94,9 @@ export enum KubeVirtInstanceTypeKind {
 export enum KubeVirtPreferenceKind {
   VirtualMachinePreference = 'VirtualMachinePreference',
   VirtualMachineClusterPreference = 'VirtualMachineClusterPreference',
+}
+
+export enum KubeVirtTopologyWhenUnsatisfiable {
+  ScheduleAnyway = 'ScheduleAnyway',
+  DoNotSchedule = 'DoNotSchedule',
 }
