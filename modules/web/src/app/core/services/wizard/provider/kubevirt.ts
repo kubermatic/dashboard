@@ -13,10 +13,10 @@
 // limitations under the License.
 
 import {HttpClient} from '@angular/common/http';
+import {KubeVirtInstanceTypeList, KubeVirtPreferenceList, KubeVirtStorageClass} from '@shared/entity/provider/kubevirt';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {EMPTY, Observable} from 'rxjs';
 import {Provider} from './provider';
-import {KubeVirtStorageClass, KubeVirtVMInstancePreset} from '@shared/entity/provider/kubevirt';
 
 export class KubeVirt extends Provider {
   constructor(http: HttpClient, provider: NodeProvider) {
@@ -44,7 +44,7 @@ export class KubeVirt extends Provider {
     return this;
   }
 
-  vmFlavors(onLoadingCb: () => void = null): Observable<KubeVirtVMInstancePreset[]> {
+  instanceTypes(onLoadingCb: () => void = null): Observable<KubeVirtInstanceTypeList> {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
@@ -53,8 +53,21 @@ export class KubeVirt extends Provider {
       onLoadingCb();
     }
 
-    const url = `${this._newRestRoot}/providers/${this._provider}/vmflavors`;
-    return this._http.get<KubeVirtVMInstancePreset[]>(url, {headers: this._headers});
+    const url = `${this._newRestRoot}/providers/${this._provider}/instancetypes`;
+    return this._http.get<KubeVirtInstanceTypeList>(url, {headers: this._headers});
+  }
+
+  preferences(onLoadingCb: () => void = null): Observable<KubeVirtPreferenceList> {
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+
+    if (onLoadingCb) {
+      onLoadingCb();
+    }
+
+    const url = `${this._newRestRoot}/providers/${this._provider}/preferences`;
+    return this._http.get<KubeVirtPreferenceList>(url, {headers: this._headers});
   }
 
   storageClass(onLoadingCb: () => void = null): Observable<KubeVirtStorageClass[]> {

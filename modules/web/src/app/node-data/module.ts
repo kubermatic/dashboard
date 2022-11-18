@@ -50,7 +50,7 @@ import {OpenstackExtendedNodeDataComponent} from './extended/provider/openstack/
 import {EquinixExtendedNodeDataComponent} from './extended/provider/equinix/component';
 import {KubeletVersionNodeDataComponent} from './kubelet-version/component';
 import {NutanixBasicNodeDataComponent} from '@app/node-data/basic/provider/nutanix/component';
-import {FlavorDetailsDialogComponent} from '@app/node-data/basic/provider/kubevirt/flavor-details/component';
+import {InstanceDetailsDialogComponent} from '@app/node-data/basic/provider/kubevirt/instance-details/component';
 import {VMwareCloudDirectorBasicNodeDataComponent} from '@app/node-data/basic/provider/vmware-cloud-director/component';
 import {Routes, RouterModule} from '@angular/router';
 
@@ -80,7 +80,7 @@ const components = [
   KubeletVersionNodeDataComponent,
   NodeDataDialogComponent,
   NutanixBasicNodeDataComponent,
-  FlavorDetailsDialogComponent,
+  InstanceDetailsDialogComponent,
   VMwareCloudDirectorBasicNodeDataComponent,
 ];
 

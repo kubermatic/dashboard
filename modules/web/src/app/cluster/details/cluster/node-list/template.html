@@ -284,9 +284,23 @@ limitations under the License.
                 <div key>Memory</div>
                 <div value>{{element.spec.cloud.kubevirt.memory}}</div>
               </km-property>
-              <km-property *ngIf="element.spec.cloud.kubevirt.flavorName">
-                <div key>VM Flavor</div>
-                <div value>{{element.spec.cloud.kubevirt.flavorName}}</div>
+              <km-property *ngIf="element.spec.cloud.kubevirt.instancetype as instanceType">
+                <div key>Instance Type</div>
+                <div value>
+                  <mat-chip>
+                    <div>{{instanceType.kind}}</div>
+                    <div class="km-chip-accent">{{instanceType.name}}</div>
+                  </mat-chip>
+                </div>
+              </km-property>
+              <km-property *ngIf="element.spec.cloud.kubevirt.preference as preference">
+                <div key>Preference</div>
+                <div value>
+                  <mat-chip>
+                    <div>{{preference.kind}}</div>
+                    <div class="km-chip-accent">{{preference.name}}</div>
+                  </mat-chip>
+                </div>
               </km-property>
               <km-property>
                 <div key>Operating System Image</div>

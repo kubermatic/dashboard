@@ -18,25 +18,48 @@ limitations under the License.
       fxLayoutGap="8px">
   <div fxLayout="row"
        fxLayoutGap="8px">
-    <km-combobox #flavorCombobox
+    <km-combobox #instanceTypeCombobox
                  [required]="false"
-                 [grouped]="false"
-                 [selected]="selectedFlavor"
-                 [options]="flavors"
-                 [formControlName]="Controls.VMFlavor"
-                 (changed)="onFlavorChange($event)"
-                 [label]="flavorLabel"
-                 inputLabel="Select VM flavor..."
+                 [grouped]="true"
+                 [groups]="instanceTypeCategories"
+                 [selected]="selectedInstanceType?._id"
+                 [optionsGetter]="getInstanceTypeOptions.bind(this)"
+                 [valueFormatter]="instanceTypeDisplayName.bind(this)"
+                 [formControlName]="Controls.InstanceType"
+                 (changed)="onInstanceTypeChange($event)"
+                 [label]="instanceTypeLabel"
+                 inputLabel="Select instance type..."
+                 selectBy="_id"
                  filterBy="name"
                  fxFlex>
-      <div *option="let flavor">{{flavor.name}}</div>
+      <div *option="let instanceType">{{instanceType.name}}</div>
+    </km-combobox>
+
+    <km-combobox #preferenceCombobox
+                 [required]="false"
+                 [grouped]="true"
+                 [groups]="preferenceCategories"
+                 [selected]="selectedPreference?._id"
+                 [optionsGetter]="getPreferenceOptions.bind(this)"
+                 [valueFormatter]="preferenceDisplayName.bind(this)"
+                 [formControlName]="Controls.Preference"
+                 [isDisabled]="!selectedInstanceType"
+                 [hint]="!selectedInstanceType ? 'Please select an instance type first.' : ''"
+                 [label]="preferenceLabel"
+                 (changed)="onPreferenceChange($event)"
+                 inputLabel="Select preference..."
+                 selectBy="_id"
+                 filterBy="name"
+                 fxFlex>
+      <div *option="let preference">{{preference.name}}</div>
     </km-combobox>
     <button mat-flat-button
             type="button"
+            fxLayoutAlign=" center"
             color="tertiary"
-            class="view-flavor-button"
-            (click)="viewFlavor()"
-            [disabled]="!selectedFlavor">
+            class="view-instance-details-button"
+            (click)="viewInstanceDetails()"
+            [disabled]="!selectedInstanceType">
       <i class="km-icon-mask km-icon-search"></i>
       <span>View</span>
     </button>
@@ -56,7 +79,7 @@ limitations under the License.
       <mat-label>CPUs</mat-label>
       <input matInput
              required
-             [value]="selectedFlavorCpus"
+             [value]="selectedInstanceTypeCpus"
              type="text"
              disabled
              autocomplete="off">
@@ -78,7 +101,7 @@ limitations under the License.
       <mat-label>Memory</mat-label>
       <input matInput
              required
-             [value]="selectedFlavorMemory"
+             [value]="selectedInstanceTypeMemory"
              type="text"
              disabled
              autocomplete="off">
