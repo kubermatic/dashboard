@@ -3,7 +3,7 @@
     "*", ".git", ".angular", ".github", ".idea", "docs", "vendor", ".husky", "dist", "coverage",
     "src/assets/fonts", "src/assets/js", "src/assets/css/font-awesome", "src/app/dynamic/enterprise/**",
     "src/index.html", "**/.DS_Store", "**/.gitignore", "**/*.json", "**/*.yaml", "**/*.svg",
-    "**/*.txt", "**/*.md", "pkg", "cmd", "certs", "**/OWNERS"
+    "**/*.txt", "**/*.md", "**/OWNERS"
   ],
   "license": "license-header.txt",
   "defaultFormat": {
