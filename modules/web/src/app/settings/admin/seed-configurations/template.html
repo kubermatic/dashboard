@@ -34,7 +34,7 @@ limitations under the License.
       <td mat-cell
           *matCellDef="let element">
         <i [matTooltip]="element[Column.Phase]"
-           [ngClass]="getStatusColor(element)"></i>
+           [ngClass]="getStatusIcon(element)"></i>
       </td>
     </ng-container>
 
@@ -65,7 +65,8 @@ limitations under the License.
           </span>
         </ng-container>
         <span *ngIf="element['providerNames']?.length > displayedProviders"
-              class="km-text km-pointer">
+              class="km-text km-pointer"
+              [matTooltip]="getHiddenProviders(element['providerNames'])">
           +{{element['providerNames']?.length - displayedProviders}}
         </span>
       </td>

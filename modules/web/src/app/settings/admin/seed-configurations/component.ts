@@ -84,7 +84,18 @@ export class SeedConfigurationsComponent implements OnDestroy {
     return _.isEmpty(seedOverviewDatasource);
   }
 
-  getStatusColor(seedOverview: SeedOverview): string {
+  getHiddenProviders(providers: string[]): string {
+    let hiddenProviders = '';
+    for (let i = this.displayedProviders; i < providers.length; i++) {
+      hiddenProviders += `${providers[i]}`;
+      if (i < providers.length - 1) {
+        hiddenProviders += ', ';
+      }
+    }
+    return hiddenProviders;
+  }
+
+  getStatusIcon(seedOverview: SeedOverview): string {
     return SeedOverview.getStatusIcon(seedOverview);
   }
 

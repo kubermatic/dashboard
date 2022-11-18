@@ -88,7 +88,7 @@ export class SeedConfigurationDetailsComponent implements OnInit {
     this._router.navigate(['/settings/seeds']);
   }
 
-  getStatusColor(seedOverviewDatasource: SeedOverviewDatasource): string {
+  getStatusIcon(seedOverviewDatasource: SeedOverviewDatasource): string {
     return SeedOverview.getStatusIcon(seedOverviewDatasource);
   }
 
