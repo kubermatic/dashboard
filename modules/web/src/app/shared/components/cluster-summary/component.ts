@@ -20,6 +20,7 @@ import {Cluster} from '@shared/entity/cluster';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {MachineDeployment, OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deployment';
 import {getOperatingSystem, getOperatingSystemLogoClass, VSphereTag} from '@shared/entity/node';
+import {KubeVirtNodeInstanceType, KubeVirtNodePreference} from '@shared/entity/provider/kubevirt';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import {AdmissionPlugin, AdmissionPluginUtils} from '@shared/utils/admission-plugin';
@@ -148,6 +149,14 @@ export class ClusterSummaryComponent {
   // conversion array into object form to pass onto `km-labels` component as Input
   convertVSphereTagsIntoObject(tags: Array<VSphereTag>): VSphereTag | {} {
     return convertArrayToObject(tags, 'name', 'description');
+  }
+
+  getKubeVirtInstanceTypeCategory(instanceType: KubeVirtNodeInstanceType): string {
+    return KubeVirtNodeInstanceType.getCategory(instanceType);
+  }
+
+  getKubeVirtPreferenceCategory(preference: KubeVirtNodePreference): string {
+    return KubeVirtNodePreference.getCategory(preference);
   }
 
   private _hasProviderOptions(provider: NodeProvider): boolean {

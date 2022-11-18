@@ -575,28 +575,12 @@ export class KubeVirtBasicNodeDataComponent
   }
 
   private _getSelectedInstanceTypeId(instanceType: KubeVirtNodeInstanceType): string {
-    let category;
-    switch (instanceType.kind) {
-      case KubeVirtInstanceTypeKind.VirtualMachineInstancetype:
-        category = KubeVirtInstanceTypeCategory.Kubermatic;
-        break;
-      case KubeVirtInstanceTypeKind.VirtualMachineClusterInstancetype:
-        category = KubeVirtInstanceTypeCategory.Custom;
-        break;
-    }
+    const category = KubeVirtNodeInstanceType.getCategory(instanceType);
     return `${category}${this._instanceTypeIDSeparator}${instanceType.name}`;
   }
 
   private _getSelectedPreferenceId(preference: KubeVirtNodePreference): string {
-    let category;
-    switch (preference.kind) {
-      case KubeVirtPreferenceKind.VirtualMachinePreference:
-        category = KubeVirtInstanceTypeCategory.Kubermatic;
-        break;
-      case KubeVirtPreferenceKind.VirtualMachineClusterPreference:
-        category = KubeVirtInstanceTypeCategory.Custom;
-        break;
-    }
+    const category = KubeVirtNodePreference.getCategory(preference);
     return `${category}${this._instanceTypeIDSeparator}${preference.name}`;
   }
 
