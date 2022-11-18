@@ -12,26 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//                Kubermatic Enterprise Read-Only License
-//                       Version 1.0 ("KERO-1.0”)
-//                   Copyright © 2022 Kubermatic GmbH
-//
-// 1. You may only view, read and display for studying purposes the source
-//    code of the software licensed under this license, and, to the extent
-//    explicitly provided under this license, the binary code.
-// 2. Any use of the software which exceeds the foregoing right, including,
-//    without limitation, its execution, compilation, copying, modification
-//    and distribution, is expressly prohibited.
-// 3. THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
-//    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-//    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-//    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-//    CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-//    TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-//    SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-// END OF TERMS AND CONDITIONS
-
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subject} from 'rxjs';
@@ -39,12 +19,13 @@ import {finalize, takeUntil} from 'rxjs/operators';
 import {SeedOverview} from '@shared/entity/datacenter';
 import {DatacenterService} from '@core/services/datacenter';
 import {MatTableDataSource} from '@angular/material/table';
+import {handleSeedOverviewDatasource} from '@shared/utils/seed-configurations';
 import {
-  ClusterByDatacenter,
-  handleSeedOverviewDatasource,
+  DatacenterDetail,
   ProviderDetail,
   SeedOverviewDatasource,
-} from '@shared/utils/seed-configurations';
+} from '@app/settings/admin/seed-configurations/types/seed-configurations';
+import _ from 'lodash';
 
 enum Column {
   StateArrow = 'stateArrow',
@@ -55,20 +36,20 @@ enum Column {
 }
 
 @Component({
-  selector: 'km-admin-settings-seed-configurations-details',
+  selector: 'km-seed-configuration-details',
   templateUrl: './template.html',
   styleUrls: ['style.scss'],
 })
-export class AdminSettingsSeedConfigurationsDetailsComponent implements OnInit {
+export class SeedConfigurationDetailsComponent implements OnInit {
   readonly Column = Column;
-  clustersByDatacenter: Record<string, ClusterByDatacenter[]> = {};
+  datacenterDetailPerProvider: Record<string, DatacenterDetail[]> = {};
+  isShowProviders: Record<string, boolean> = {};
+  isLoadingDetails: boolean;
   displayedColumns: string[] = Object.values(Column).filter(column => column !== Column.ClustersByDatacenter);
   dataSource = new MatTableDataSource<ProviderDetail>();
   toggledColumns: string[] = [Column.ClustersByDatacenter];
   seedName: string;
   seedOverviewDatasource: SeedOverviewDatasource;
-  isLoadingDetails: boolean;
-  isShowProviders = [];
 
   private readonly _unsubscribe = new Subject<void>();
 
@@ -88,10 +69,14 @@ export class AdminSettingsSeedConfigurationsDetailsComponent implements OnInit {
         takeUntil(this._unsubscribe),
         finalize(() => (this.isLoadingDetails = false))
       )
-      .subscribe((seedsOverview: SeedOverview) => {
-        this.seedOverviewDatasource = handleSeedOverviewDatasource(seedsOverview);
-        this.dataSource.data = this._mapProviderDetailToArray(seedsOverview);
-        this._setClustersByDatacenterPerProvider(seedsOverview);
+      .subscribe((seedOverview: SeedOverview) => {
+        if (_.isEmpty(seedOverview)) {
+          this.goBack();
+          return;
+        }
+        this.seedOverviewDatasource = handleSeedOverviewDatasource(seedOverview);
+        this.dataSource.data = this._mapProviderDetailToArray(seedOverview);
+        this._setDatacenterDetailPerProvider(seedOverview);
       });
   }
 
@@ -112,37 +97,37 @@ export class AdminSettingsSeedConfigurationsDetailsComponent implements OnInit {
 
     return providers.map(provider => {
       const providerObj = seedOverview.providers[provider];
-      const datacentersPerProvider = Object.keys(providerObj);
-      let clustersPerProviderDatacenters = 0;
+      const datacenters = Object.keys(providerObj);
+      let clustersCount = 0;
 
-      datacentersPerProvider.forEach(datacenter => {
-        clustersPerProviderDatacenters += providerObj[datacenter];
+      datacenters.forEach(datacenter => {
+        clustersCount += providerObj[datacenter];
       });
 
       return {
         provider: provider,
-        datacentersCount: datacentersPerProvider.length,
-        clustersCount: clustersPerProviderDatacenters,
+        datacentersCount: datacenters.length,
+        clustersCount: clustersCount,
       } as ProviderDetail;
     });
   }
 
-  private _setClustersByDatacenterPerProvider(seedOverview: SeedOverview): void {
+  private _setDatacenterDetailPerProvider(seedOverview: SeedOverview): void {
     const providers = Object.keys(seedOverview.providers);
     providers.map(provider => {
       const providerObj = seedOverview.providers[provider];
-      const datacentersPerProvider = Object.keys(providerObj);
+      const datacenters = Object.keys(providerObj);
 
-      // Per Provider may contains multiple datacenters:
-      let clusterByDatacenterPerProvider = [];
-      clusterByDatacenterPerProvider = datacentersPerProvider.map(datacenter => {
+      // Multiple datacenters exists per provider.
+      let datacenterDetails = [];
+      datacenterDetails = datacenters.map(datacenter => {
         return {
           datacenter: datacenter,
           clustersCount: providerObj[datacenter],
-        } as ClusterByDatacenter;
+        } as DatacenterDetail;
       });
 
-      this.clustersByDatacenter[provider] = clusterByDatacenterPerProvider;
+      this.datacenterDetailPerProvider[provider] = datacenterDetails;
     });
   }
 }

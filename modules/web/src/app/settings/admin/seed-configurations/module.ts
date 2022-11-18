@@ -15,16 +15,12 @@
 import {NgModule} from '@angular/core';
 import {SharedModule} from '@shared/module';
 import {AdminSettingsSeedConfigurationsRoutingModule} from '@app/settings/admin/seed-configurations/routing';
-import {AdminSettingsSeedConfigurationsComponent} from '@app/settings/admin/seed-configurations/component';
-import {AdminSettingsSeedConfigurationsDetailsComponent} from '@app/settings/admin/seed-configurations/seed-configurations-details/component';
-import {ClustersByDatacenterComponent} from '@app/settings/admin/seed-configurations/clusters-by-datacenter/component';
+import {SeedConfigurationsComponent} from '@app/settings/admin/seed-configurations/component';
+import {SeedConfigurationDetailsComponent} from '@app/settings/admin/seed-configurations/seed-configurations-details/component';
+import {ProviderDatacenterDetailsComponent} from '@app/settings/admin/seed-configurations/clusters-by-datacenter/component';
 
 @NgModule({
   imports: [SharedModule, AdminSettingsSeedConfigurationsRoutingModule],
-  declarations: [
-    AdminSettingsSeedConfigurationsComponent,
-    AdminSettingsSeedConfigurationsDetailsComponent,
-    ClustersByDatacenterComponent,
-  ],
+  declarations: [SeedConfigurationsComponent, SeedConfigurationDetailsComponent, ProviderDatacenterDetailsComponent],
 })
 export class AdminSettingsSeedConfigurationsModule {}

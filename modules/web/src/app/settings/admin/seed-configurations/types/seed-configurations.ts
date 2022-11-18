@@ -12,42 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'variables';
+import {SeedOverview} from '@shared/entity/datacenter';
 
-.content {
-  padding: 20px 0;
+export interface DatacenterDetail {
+  datacenter: string;
+  clustersCount: number;
 }
 
-.mat-card {
-  &.info {
-    .mat-card-header {
-      padding-left: 20px;
+export interface ProviderDetail {
+  provider: string;
+  datacentersCount: number;
+  clustersCount: number;
+}
 
-      .mat-card-title {
-        &.title {
-          padding: 0;
-        }
-
-        i {
-          margin-left: 0;
-          margin-right: 15px;
-        }
-      }
-    }
-
-    .mat-card-content.info-details {
-      padding-left: 50px;
-    }
-
-    td {
-      &.km-clusters-by-datacenter {
-        padding: 0;
-
-        .km-clusters-by-datacenter-wrapper {
-          box-shadow: variables.$border-box-shadow-inset;
-          padding: 10px 30px;
-        }
-      }
-    }
-  }
+// Note: SeedOverviewDatasource is extension of SeedOverview to customize payload for UI
+export class SeedOverviewDatasource extends SeedOverview {
+  providerCount: number; // # providers count / seed
+  clustersCount: number; // # clusters count / seed
+  datacentersCount: number; // # datacenters count / seed
+  providerNames: string[]; // # providers name
 }

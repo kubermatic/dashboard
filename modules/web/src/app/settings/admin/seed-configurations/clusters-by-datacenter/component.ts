@@ -14,7 +14,7 @@
 
 import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {MatTableDataSource} from '@angular/material/table';
-import {ClusterByDatacenter} from '@shared/utils/seed-configurations';
+import {DatacenterDetail} from '@app/settings/admin/seed-configurations/types/seed-configurations';
 
 enum Column {
   Datacenter = 'datacenter',
@@ -22,20 +22,20 @@ enum Column {
 }
 
 @Component({
-  selector: 'km-clusters-by-datacenter',
+  selector: 'km-provider-datacenter-details',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
 })
-export class ClustersByDatacenterComponent implements OnChanges {
+export class ProviderDatacenterDetailsComponent implements OnChanges {
   readonly Column = Column;
 
-  @Input() clustersByDatacenter: ClusterByDatacenter[];
+  @Input() datacentersDetail: DatacenterDetail[];
   displayedColumns: string[] = Object.values(Column);
-  dataSource = new MatTableDataSource<ClusterByDatacenter>();
+  dataSource = new MatTableDataSource<DatacenterDetail>();
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.clustersByDatacenter) {
-      this.dataSource.data = changes.clustersByDatacenter.currentValue;
+    if (changes.datacentersDetail) {
+      this.dataSource.data = changes.datacentersDetail.currentValue;
     }
   }
 }

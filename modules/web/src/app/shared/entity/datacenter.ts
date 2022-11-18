@@ -15,7 +15,7 @@
 import {NodeProvider} from '../model/NodeProviderConstants';
 import {Metadata} from './common';
 import {StatusIcon} from '@shared/utils/health-status';
-import {SeedOverviewDatasource} from '@shared/utils/seed-configurations';
+import {SeedOverviewDatasource} from '@app/settings/admin/seed-configurations/types/seed-configurations';
 
 export class CreateDatacenterModel {
   name: string;
@@ -206,8 +206,6 @@ export class SeedOverview {
   phase: string;
   created: Date;
   providers: DatacentersByProvider[];
-
-  // Note: SeedOverviewDatasource is extension of SeedOverview to customize payload for UI
 
   static getStatusIcon(overview: SeedOverview | SeedOverviewDatasource): string {
     switch (overview.phase) {

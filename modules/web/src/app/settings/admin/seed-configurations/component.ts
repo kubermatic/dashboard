@@ -21,23 +21,24 @@ import {DatacenterService} from '@core/services/datacenter';
 import {SeedOverview} from '@shared/entity/datacenter';
 import {MatSort} from '@angular/material/sort';
 import _ from 'lodash';
-import {handleSeedOverviewDatasource, SeedOverviewDatasource} from '@shared/utils/seed-configurations';
+import {SeedOverviewDatasource} from '@app/settings/admin/seed-configurations/types/seed-configurations';
+import {handleSeedOverviewDatasource} from '@shared/utils/seed-configurations';
 
 enum Column {
   Phase = 'phase',
   Name = 'name',
   Providers = 'providers',
   Datacenters = 'datacentersCount', // # total datacenters per seed
-  Clusters = 'clustersCount', // # total datacenters per seed
+  Clusters = 'clustersCount', // # total clusters per seed
   Location = 'location',
 }
 
 @Component({
-  selector: 'km-admin-settings-seed',
+  selector: 'km-seed-configurations',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class AdminSettingsSeedConfigurationsComponent implements OnDestroy {
+export class SeedConfigurationsComponent implements OnDestroy {
   readonly Column = Column;
   readonly displayedProviders = 5;
 
@@ -101,10 +102,12 @@ export class AdminSettingsSeedConfigurationsComponent implements OnDestroy {
 
   private _handleSeedsOverviewDatasource(seedsOverview: SeedOverview[]): SeedOverviewDatasource[] {
     const list = [];
-    seedsOverview?.forEach((seedOverview: SeedOverview) => {
-      const seedOverviewDatasource = handleSeedOverviewDatasource(seedOverview);
-      list.push(seedOverviewDatasource);
-    });
+    seedsOverview
+      ?.filter(seedOverview => !_.isEmpty(seedOverview))
+      .forEach((seedOverview: SeedOverview) => {
+        const seedOverviewDatasource = handleSeedOverviewDatasource(seedOverview);
+        list.push(seedOverviewDatasource);
+      });
     return list;
   }
 }

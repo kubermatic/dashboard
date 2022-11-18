@@ -14,17 +14,17 @@
 
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {AdminSettingsSeedConfigurationsComponent} from '@app/settings/admin/seed-configurations/component';
-import {AdminSettingsSeedConfigurationsDetailsComponent} from '@app/settings/admin/seed-configurations/seed-configurations-details/component';
+import {SeedConfigurationsComponent} from '@app/settings/admin/seed-configurations/component';
+import {SeedConfigurationDetailsComponent} from '@app/settings/admin/seed-configurations/seed-configurations-details/component';
 
 const routes: Routes = [
   {
     path: '',
-    component: AdminSettingsSeedConfigurationsComponent,
+    component: SeedConfigurationsComponent,
   },
   {
     path: ':seedName',
-    component: AdminSettingsSeedConfigurationsDetailsComponent,
+    component: SeedConfigurationDetailsComponent,
   },
 ];
 

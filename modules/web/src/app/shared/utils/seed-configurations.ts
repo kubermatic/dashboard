@@ -13,28 +13,7 @@
 // limitations under the License.
 
 import {SeedOverview} from '@shared/entity/datacenter';
-
-export interface ClusterByDatacenter {
-  datacenter: string;
-  clustersCount: number;
-}
-
-export interface ProviderDetail {
-  provider: string;
-  datacentersCount: number;
-  clustersCount: number;
-}
-
-export interface SeedOverviewDatasource {
-  name: string;
-  location: string;
-  phase: string;
-  created: Date;
-  providerCount: number; // # providers count / seed
-  clustersCount: number; // # clusters count / seed
-  datacentersCount: number; // # datacenters count / seed
-  providerNames: string[]; // # providers name
-}
+import {SeedOverviewDatasource} from '@app/settings/admin/seed-configurations/types/seed-configurations';
 
 export function handleSeedOverviewDatasource(seedOverview: SeedOverview): SeedOverviewDatasource {
   let totalClustersPerSeed = 0;
@@ -45,12 +24,12 @@ export function handleSeedOverviewDatasource(seedOverview: SeedOverview): SeedOv
     const providerObj = seedOverview.providers[provider];
     const datacentersPerProvider = Object.keys(providerObj);
 
-    let clustersPerProviderDatacenters = 0;
+    let clustersCount = 0;
     datacentersPerProvider.forEach(datacenter => {
-      clustersPerProviderDatacenters += providerObj[datacenter];
+      clustersCount += providerObj[datacenter];
     });
 
-    totalClustersPerSeed += clustersPerProviderDatacenters;
+    totalClustersPerSeed += clustersCount;
     totalDatacentersPerSeed += datacentersPerProvider.length;
   });
 
@@ -60,5 +39,5 @@ export function handleSeedOverviewDatasource(seedOverview: SeedOverview): SeedOv
     clustersCount: totalClustersPerSeed,
     datacentersCount: totalDatacentersPerSeed,
     providerNames: providers,
-  };
+  } as SeedOverviewDatasource;
 }
