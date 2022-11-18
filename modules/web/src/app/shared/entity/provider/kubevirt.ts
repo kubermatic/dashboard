@@ -36,12 +36,34 @@ export class KubeVirtNodeInstanceType {
   name: string;
   kind: KubeVirtInstanceTypeKind;
   revisionName?: string;
+
+  static getCategory(instanceType: KubeVirtNodeInstanceType): KubeVirtInstanceTypeCategory {
+    switch (instanceType.kind) {
+      case KubeVirtInstanceTypeKind.VirtualMachineInstancetype:
+        return KubeVirtInstanceTypeCategory.Kubermatic;
+      case KubeVirtInstanceTypeKind.VirtualMachineClusterInstancetype:
+        return KubeVirtInstanceTypeCategory.Custom;
+      default:
+        return instanceType.kind;
+    }
+  }
 }
 
 export class KubeVirtNodePreference {
   name: string;
   kind: KubeVirtPreferenceKind;
   revisionName?: string;
+
+  static getCategory(preference: KubeVirtNodePreference): KubeVirtInstanceTypeCategory {
+    switch (preference.kind) {
+      case KubeVirtPreferenceKind.VirtualMachinePreference:
+        return KubeVirtInstanceTypeCategory.Kubermatic;
+      case KubeVirtPreferenceKind.VirtualMachineClusterPreference:
+        return KubeVirtInstanceTypeCategory.Custom;
+      default:
+        return preference.kind;
+    }
+  }
 }
 
 export class KubeVirtStorageClass {

@@ -778,7 +778,7 @@ limitations under the License.
                   <div key>Instance Type</div>
                   <div value>
                     <mat-chip>
-                      <div>{{instanceType.kind}}</div>
+                      <div>{{getKubeVirtInstanceTypeCategory(instanceType)}}</div>
                       <div class="km-chip-accent">{{instanceType.name}}</div>
                     </mat-chip>
                   </div>
@@ -787,7 +787,7 @@ limitations under the License.
                   <div key>Preference</div>
                   <div value>
                     <mat-chip>
-                      <div>{{preference.kind}}</div>
+                      <div>{{getKubeVirtPreferenceCategory(preference)}}</div>
                       <div class="km-chip-accent">{{preference.name}}</div>
                     </mat-chip>
                   </div>
