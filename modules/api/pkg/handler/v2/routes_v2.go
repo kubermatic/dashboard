@@ -1419,6 +1419,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 		Path("/projects/{project_id}/quota").
 		Handler(r.getProjectQuota())
 
+	mux.Methods(http.MethodPost).
+		Path("/projects/{project_id}/calculatequotaupdate").
+		Handler(r.calculateProjectQuotaUpdate())
+
 	mux.Methods(http.MethodGet).
 		Path("/quotas/{quota_name}").
 		Handler(r.getResourceQuota())
@@ -8144,6 +8148,33 @@ func (r Routing) getProjectQuota() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(resourcequota.GetForProjectEndpoint(r.projectProvider, r.privilegedProjectProvider, r.userInfoGetter, r.resourceQuotaProvider)),
 		common.DecodeGetProject,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route POST /api/v2/projects/{project_id}/quotacalculation project calculateProjectQuotaUpdate
+//
+//	Calculates the projects resource quota updated by the given resources.
+//
+//	Consumes:
+//	- application/json
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: ResourceQuotaUpdateCalculation
+//	  401: empty
+//	  403: empty
+func (r Routing) calculateProjectQuotaUpdate() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(resourcequota.CalculateProjectQuotaUpdateEndpoint(r.projectProvider, r.privilegedProjectProvider, r.userInfoGetter, r.resourceQuotaProvider)),
+		resourcequota.DecodeCalculateProjectResourceQuotaUpdateReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
