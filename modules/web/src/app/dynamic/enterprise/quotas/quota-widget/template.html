@@ -65,7 +65,7 @@ END OF TERMS AND CONDITIONS
       </ng-template>
 
       <ng-template #notApplicableText>
-        Does not apply to {{ isImportedCluster ? 'imported' : 'external' }} cluster
+        Does not apply to {{ isImportedCluster ? 'imported' : 'external' }} clusters
       </ng-template>
 
       <ng-template #emptyPlaceholder>
@@ -74,6 +74,7 @@ END OF TERMS AND CONDITIONS
     </div>
 
     <mat-card class="km-quota-details"
+              [ngClass]="{ 'no-card': !showAsCard && showDetailsOnHover }"
               *ngIf="showDetails$ | async">
       <mat-card-content fxLayout="column">
         <div class="km-detail-row">Project Quota</div>

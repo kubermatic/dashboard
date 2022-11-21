@@ -196,7 +196,7 @@ export class MachineDeploymentListComponent implements OnInit, OnChanges, OnDest
 
   onActivate(component: QuotaWidgetComponent): void {
     component.projectId = this.projectID;
-    component.showDetailsOnHover = false;
+    component.showDetailsOnHover = true;
     component.showAsCard = false;
   }
 
