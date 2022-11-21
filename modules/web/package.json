@@ -63,7 +63,7 @@
     "@angular/forms": "14.2.10",
     "@angular/localize": "14.2.10",
     "@angular/material": "14.2.7",
-    "@angular/platform-browser": "14.2.10",
+    "@angular/platform-browser": "15.0.0",
     "@angular/platform-browser-dynamic": "14.2.10",
     "@angular/router": "14.2.10",
     "@fontsource/inconsolata": "4.5.9",
