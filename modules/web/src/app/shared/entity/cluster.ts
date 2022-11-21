@@ -76,7 +76,7 @@ export class Cluster {
   name: string;
   spec: ClusterSpec;
   status?: Status;
-  labels?: object;
+  labels?: Record<string, string>;
   inheritedLabels?: object;
   credential?: string;
   machineDeploymentCount?: number;
@@ -324,7 +324,7 @@ export class ClusterSpec {
   admissionPlugins?: string[];
   enableUserSSHKeyAgent?: boolean;
   enableOperatingSystemManager?: boolean;
-  podNodeSelectorAdmissionPluginConfig?: object;
+  podNodeSelectorAdmissionPluginConfig?: Record<string, string>;
   mla?: MLASettings;
   containerRuntime?: ContainerRuntime;
   clusterNetwork?: ClusterNetwork;
@@ -494,7 +494,7 @@ export class ClusterSpecPatch {
   opaIntegration?: OPAIntegration;
   clusterNetwork?: ClusterNetwork;
   kubernetesDashboard?: KubernetesDashboard;
-  podNodeSelectorAdmissionPluginConfig?: object;
+  podNodeSelectorAdmissionPluginConfig?: Record<string, string>;
   auditLogging?: AuditLoggingSettings;
   machineNetworks?: MachineNetwork[];
   mla?: MLASettings;

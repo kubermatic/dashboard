@@ -115,4 +115,13 @@ export class AddClusterFromTemplateDialogComponent implements OnInit, OnDestroy 
   next(): void {
     this._stepper.next();
   }
+
+  openClusterWizard(): void {
+    this._matDialogRef.close();
+
+    // We chose optional query params instead of creating new route or using state behind the curtain.
+    this._router.navigate([`/projects/${this.data.projectId}/wizard`], {
+      queryParams: {clusterTemplateID: this.template.id},
+    });
+  }
 }

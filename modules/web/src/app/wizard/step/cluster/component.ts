@@ -76,7 +76,7 @@ enum Controls {
   Type = 'type',
   AuditLogging = 'auditLogging',
   AuditPolicyPreset = 'auditPolicyPreset',
-  UserSSHKeyAgent = 'userSshKeyAgent',
+  UserSSHKeyAgent = 'userSSHKeyAgent',
   OperatingSystemManager = 'enableOperatingSystemManager',
   Labels = 'labels',
   AdmissionPlugins = 'admissionPlugins',
@@ -386,6 +386,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     )
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
+
+    this._clusterSpecService.clusterDefaulted.pipe(takeUntil(this._unsubscribe)).subscribe(cluster => {
+      this.loadFormFromCluster(cluster);
+    });
   }
 
   generateName(): void {
@@ -512,6 +516,12 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
 
   private _setDefaultVersion(versions: MasterVersion[]): void {
     this.masterVersions = versions;
+
+    if (this._clusterSpecService.cluster.spec.version) {
+      this.control(Controls.Version).setValue(this._clusterSpecService.cluster.spec.version);
+      return;
+    }
+
     for (const version of versions) {
       if (version.default) {
         this.control(Controls.Version).setValue(version.version);
@@ -675,4 +685,47 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       } as ClusterSpec,
     } as Cluster;
   }
+
+  private loadFormFromCluster(cluster: Cluster): void {
+    this.form.patchValue({
+      [Controls.Name]: cluster.name,
+      [Controls.Version]: cluster.spec.version,
+      [Controls.ContainerRuntime]: cluster.spec.containerRuntime,
+      [Controls.AuditLogging]: cluster.spec.auditLogging?.enabled,
+      [Controls.AuditPolicyPreset]: cluster.spec.auditLogging?.policyPreset,
+      [Controls.UserSSHKeyAgent]: cluster.spec.enableUserSSHKeyAgent ?? true,
+      [Controls.OperatingSystemManager]: cluster.spec.enableOperatingSystemManager ?? true,
+      // [Controls.Labels]: cluster.labels,
+      [Controls.AdmissionPlugins]: cluster.spec.admissionPlugins,
+      [Controls.SSHKeys]: this._clusterSpecService.sshKeys,
+      [Controls.PodNodeSelectorAdmissionPluginConfig]: cluster.spec.podNodeSelectorAdmissionPluginConfig,
+      // [Controls.EventRateLimitConfig]: cluster.spec.eventRateLimitConfig,
+      [Controls.OPAIntegration]: cluster.spec.opaIntegration?.enabled,
+      [Controls.Konnectivity]: cluster.spec.clusterNetwork?.konnectivityEnabled,
+      [Controls.MLALogging]: cluster.spec.mla?.loggingEnabled,
+      [Controls.KubernetesDashboardEnabled]: !!cluster.spec.kubernetesDashboard?.enabled,
+      [Controls.MLAMonitoring]: cluster.spec.mla?.monitoringEnabled,
+      [Controls.ProxyMode]: cluster.spec.clusterNetwork?.proxyMode,
+      [Controls.CNIPlugin]: cluster.spec.cniPlugin?.type,
+      [Controls.CNIPluginVersion]: cluster.spec.cniPlugin?.version,
+      [Controls.NodeLocalDNSCache]: cluster.spec.clusterNetwork?.nodeLocalDNSCacheEnabled,
+      [Controls.APIServerAllowedIPRanges]: cluster.spec.apiServerAllowedIPRanges,
+      [Controls.IPFamily]: cluster.spec.clusterNetwork?.ipFamily,
+      [Controls.ExposeStrategy]: cluster.spec.exposeStrategy,
+    });
+    // this.onLabelsChange(cluster.labels);
+    // this.onPodNodeSelectorAdmissionPluginConfigChange(cluster.spec.podNodeSelectorAdmissionPluginConfig);
+  }
 }
+
+// enum Controls {
+//   Type = 'type',
+//   IPv4PodsCIDR = 'ipv4PodsCIDR',
+//   IPv6PodsCIDR = 'ipv6PodsCIDR',
+//   IPv4ServicesCIDR = 'ipv4ServicesCIDR',
+//   IPv6ServicesCIDR = 'ipv6ServicesCIDR',
+//   IPv4AllowedIPRange = 'ipv4AllowedIPRange',
+//   IPv6AllowedIPRange = 'ipv6AllowedIPRange',
+//   IPv4CIDRMaskSize = 'ipv4CIDRMaskSize',
+//   IPv6CIDRMaskSize = 'ipv6CIDRMaskSize',
+// }

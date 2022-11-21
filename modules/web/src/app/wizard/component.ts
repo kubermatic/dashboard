@@ -16,7 +16,7 @@ import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild} from '
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatStepper} from '@angular/material/stepper';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ClusterService} from '@core/services/cluster';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {NodeDataService} from '@core/services/node-data/service';
@@ -30,8 +30,11 @@ import {Project} from '@shared/entity/project';
 import {OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deployment';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {Observable, Subject, take} from 'rxjs';
-import {filter, switchMap, takeUntil} from 'rxjs/operators';
+import {filter, startWith, switchMap, takeUntil} from 'rxjs/operators';
 import {StepRegistry, steps, WizardStep} from './config';
+import {ClusterTemplateService} from '@core/services/cluster-templates';
+import {NameGeneratorService} from '@core/services/name-generator';
+import {PathParam} from '@core/services/params';
 
 @Component({
   selector: 'km-wizard',
@@ -45,6 +48,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   creating = false;
   operatingSystemProfileAnnotation = OPERATING_SYSTEM_PROFILE_ANNOTATION;
   applications: Application[] = [];
+  clusterTemplateID: string;
   readonly stepRegistry = StepRegistry;
 
   @ViewChild('stepper', {static: true}) private readonly _stepper: MatStepper;
@@ -60,11 +64,16 @@ export class WizardComponent implements OnInit, OnDestroy {
     private readonly _clusterService: ClusterService,
     private readonly _nodeDataService: NodeDataService,
     private readonly _matDialog: MatDialog,
-    private readonly _router: Router
+    private readonly _router: Router,
+    private readonly _route: ActivatedRoute,
+    private readonly _clusterTemplateService: ClusterTemplateService,
+    private readonly _nameGenerator: NameGeneratorService
   ) {}
 
   get steps(): WizardStep[] {
-    return this._wizard.steps.filter(step => step.enabled);
+    return this._wizard.steps
+      .filter(step => step.enabled)
+      .filter(step => !(this.clusterTemplateID && step.name === StepRegistry.Provider));
   }
 
   get active(): WizardStep {
@@ -86,6 +95,14 @@ export class WizardComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this._wizard.reset();
 
+    // Retrieve params
+    this.clusterTemplateID = this._route.snapshot.queryParams?.clusterTemplateID;
+    this.project.id = this._route.snapshot.paramMap.get(PathParam.ProjectID);
+
+    if (this.clusterTemplateID) {
+      this.loadClusterTemplate();
+    }
+
     // Init steps for wizard
     this._wizard.steps = steps;
     this._wizard.stepper = this._stepper;
@@ -98,9 +115,16 @@ export class WizardComponent implements OnInit, OnDestroy {
       }
     });
 
-    this._projectService.selectedProject
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(project => (this.project = project));
+    this._projectService.onProjectChange
+      .pipe(startWith(this.project), takeUntil(this._unsubscribe))
+      .subscribe(project => {
+        // Template is already loaded at this point and we don't need to reload it unless the project ID has changed.
+        if (this.clusterTemplateID && project.id !== this.project.id) {
+          this.project = project;
+          this.loadClusterTemplate();
+        }
+        this.project = project;
+      });
   }
 
   ngOnDestroy(): void {
@@ -187,5 +211,20 @@ export class WizardComponent implements OnInit, OnDestroy {
     const controls = {};
     steps.forEach(step => (controls[step.name] = this._formBuilder.control('')));
     this.form = this._formBuilder.group(controls);
+  }
+
+  private loadClusterTemplate(): void {
+    this._clusterTemplateService
+      .get(this.project.id, this.clusterTemplateID)
+      // We just need to load the cluster template once. Usage of `takeUntil` will cause an endless chain of update that
+      // will keep on reloading and defaulting the values.
+      .pipe(take(1))
+      .subscribe(template => {
+        const namePrefix = this._nameGenerator.generateName();
+        template.cluster.name = namePrefix + '-' + template.name;
+        template.nodeDeployment.name = namePrefix;
+        this._clusterSpecService.initializeClusterFromClusterTemplate(template);
+        this._nodeDataService.initializeNodeDataFromMachineDeployment(template.nodeDeployment);
+      });
   }
 }

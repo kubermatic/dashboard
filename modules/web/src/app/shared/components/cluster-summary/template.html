@@ -1004,15 +1004,15 @@ limitations under the License.
 
               <!-- AWS Node Options -->
               <ng-container *ngIf="cluster.spec.cloud?.aws">
-                <km-property-boolean *ngIf="machineDeployment.spec.template.cloud?.aws?.isSpotInstance !== undefined"
+                <km-property-boolean *ngIf="machineDeployment.spec.template.cloud?.aws?.isSpotInstance"
                                      label="Spot Instance"
                                      [value]="machineDeployment.spec.template.cloud?.aws?.isSpotInstance">
                 </km-property-boolean>
-                <km-property-boolean *ngIf="machineDeployment.spec.template.cloud?.aws?.spotInstancePersistentRequest !== undefined"
+                <km-property-boolean *ngIf="machineDeployment.spec.template.cloud?.aws?.spotInstancePersistentRequest"
                                      label="Spot Instance Persistent Request"
                                      [value]="machineDeployment.spec.template.cloud.aws.spotInstancePersistentRequest">
                 </km-property-boolean>
-                <km-property-boolean *ngIf="machineDeployment.spec.template.cloud?.aws?.assignPublicIP !== undefined"
+                <km-property-boolean *ngIf="machineDeployment.spec.template.cloud?.aws?.assignPublicIP"
                                      label="Assign Public IP"
                                      [value]="machineDeployment.spec.template.cloud?.aws?.assignPublicIP">
                 </km-property-boolean>

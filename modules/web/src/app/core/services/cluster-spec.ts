@@ -17,6 +17,7 @@ import {CloudSpec, Cluster, EventRateLimitConfig} from '@shared/entity/cluster';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import _ from 'lodash';
+import {ClusterTemplate, ClusterTemplateSSHKey} from '@shared/entity/cluster-template';
 
 @Injectable()
 export class ClusterSpecService {
@@ -25,6 +26,7 @@ export class ClusterSpecService {
   readonly sshKeyChanges = new EventEmitter<SSHKey[]>();
   readonly clusterChanges = new EventEmitter<Cluster>();
   readonly providerSpecChanges = new EventEmitter<void>();
+  readonly clusterDefaulted = new EventEmitter<Cluster>();
 
   private _cluster: Cluster = Cluster.newEmptyClusterEntity();
 
@@ -109,12 +111,12 @@ export class ClusterSpecService {
     }
   }
 
-  set labels(labels: object) {
+  set labels(labels: Record<string, string>) {
     delete this._cluster.labels;
     this._cluster.labels = labels;
   }
 
-  set podNodeSelectorAdmissionPluginConfig(config: object) {
+  set podNodeSelectorAdmissionPluginConfig(config: Record<string, string>) {
     this._cluster.spec.podNodeSelectorAdmissionPluginConfig = config;
   }
 
@@ -135,6 +137,23 @@ export class ClusterSpecService {
   reset(): void {
     this._cluster = Cluster.newEmptyClusterEntity();
     this._sshKeys = [];
+  }
+
+  initializeClusterFromClusterTemplate(template: ClusterTemplate): void {
+    this.cluster = template.cluster;
+    this.sshKeys = this.sshKeysFromClusterTemplateUserSSHKeys(template.userSshKeys);
+    this.sshKeyChanges.emit(this._sshKeys);
+    this.clusterDefaulted.emit(this._cluster);
+    this.datacenterChanges.next(this._cluster.spec.cloud.dc);
+    this.providerChanges.emit(this._getProvider(this._cluster));
+  }
+
+  private sshKeysFromClusterTemplateUserSSHKeys(sshKeys: ClusterTemplateSSHKey[]): SSHKey[] {
+    return sshKeys
+      ? sshKeys.map(key => {
+          return {name: key.name, id: key.id} as SSHKey;
+        })
+      : [];
   }
 
   private _getProvider(cluster: Cluster): NodeProvider {
