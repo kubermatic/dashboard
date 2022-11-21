@@ -14613,53 +14613,6 @@
         }
       }
     },
-    "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/vmflavors": {
-      "get": {
-        "description": "Lists available VirtualMachineInstancePreset",
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "kubevirt"
-        ],
-        "operationId": "listKubeVirtVMIPresetsNoCredentials",
-        "parameters": [
-          {
-            "type": "string",
-            "x-go-name": "ProjectID",
-            "name": "project_id",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "x-go-name": "ClusterID",
-            "name": "cluster_id",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "DatacenterName",
-            "in": "header"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "VirtualMachineInstancePresetList",
-            "schema": {
-              "$ref": "#/definitions/VirtualMachineInstancePresetList"
-            }
-          },
-          "default": {
-            "description": "errorResponse",
-            "schema": {
-              "$ref": "#/definitions/errorResponse"
-            }
-          }
-        }
-      }
-    },
     "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/nutanix/categories": {
       "get": {
         "description": "Lists available Nutanix categories",
@@ -21740,49 +21693,6 @@
             "description": "StorageClassList",
             "schema": {
               "$ref": "#/definitions/StorageClassList"
-            }
-          },
-          "default": {
-            "description": "errorResponse",
-            "schema": {
-              "$ref": "#/definitions/errorResponse"
-            }
-          }
-        }
-      }
-    },
-    "/api/v2/providers/kubevirt/vmflavors": {
-      "get": {
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "kubevirt"
-        ],
-        "summary": "Lists available KubeVirt VirtualMachineInstancePreset.",
-        "operationId": "listKubeVirtVMIPresets",
-        "parameters": [
-          {
-            "type": "string",
-            "name": "Kubeconfig",
-            "in": "header"
-          },
-          {
-            "type": "string",
-            "name": "Credential",
-            "in": "header"
-          },
-          {
-            "type": "string",
-            "name": "DatacenterName",
-            "in": "header"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "VirtualMachineInstancePresetList",
-            "schema": {
-              "$ref": "#/definitions/VirtualMachineInstancePresetList"
             }
           },
           "default": {
@@ -35903,34 +35813,6 @@
           "type": "string",
           "x-go-name": "Namespace"
         }
-      },
-      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
-    },
-    "VirtualMachineInstancePreset": {
-      "description": "VirtualMachineInstancePreset represents a KubeVirt Virtual Machine Instance Preset",
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "x-go-name": "Name"
-        },
-        "namespace": {
-          "type": "string",
-          "x-go-name": "Namespace"
-        },
-        "spec": {
-          "description": "Spec contains the kubevirtv1.VirtualMachineInstancePreset.Spec object marshalled",
-          "type": "string",
-          "x-go-name": "Spec"
-        }
-      },
-      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
-    },
-    "VirtualMachineInstancePresetList": {
-      "type": "array",
-      "title": "VirtualMachineInstancePresetList represents a list of VirtualMachineInstancePreset.",
-      "items": {
-        "$ref": "#/definitions/VirtualMachineInstancePreset"
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },

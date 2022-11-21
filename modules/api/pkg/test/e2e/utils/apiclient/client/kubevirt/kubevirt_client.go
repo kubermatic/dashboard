@@ -36,10 +36,6 @@ type ClientService interface {
 
 	ListKubeVirtPreferencesNoCredentials(params *ListKubeVirtPreferencesNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListKubeVirtPreferencesNoCredentialsOK, error)
 
-	ListKubeVirtVMIPresets(params *ListKubeVirtVMIPresetsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListKubeVirtVMIPresetsOK, error)
-
-	ListKubeVirtVMIPresetsNoCredentials(params *ListKubeVirtVMIPresetsNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListKubeVirtVMIPresetsNoCredentialsOK, error)
-
 	ListKubevirtStorageClasses(params *ListKubevirtStorageClassesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListKubevirtStorageClassesOK, error)
 
 	ListKubevirtStorageClassesNoCredentials(params *ListKubevirtStorageClassesNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListKubevirtStorageClassesNoCredentialsOK, error)
@@ -196,82 +192,6 @@ func (a *Client) ListKubeVirtPreferencesNoCredentials(params *ListKubeVirtPrefer
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListKubeVirtPreferencesNoCredentialsDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-ListKubeVirtVMIPresets lists available kube virt virtual machine instance preset
-*/
-func (a *Client) ListKubeVirtVMIPresets(params *ListKubeVirtVMIPresetsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListKubeVirtVMIPresetsOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewListKubeVirtVMIPresetsParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "listKubeVirtVMIPresets",
-		Method:             "GET",
-		PathPattern:        "/api/v2/providers/kubevirt/vmflavors",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &ListKubeVirtVMIPresetsReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ListKubeVirtVMIPresetsOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ListKubeVirtVMIPresetsDefault)
-	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
-}
-
-/*
-ListKubeVirtVMIPresetsNoCredentials Lists available VirtualMachineInstancePreset
-*/
-func (a *Client) ListKubeVirtVMIPresetsNoCredentials(params *ListKubeVirtVMIPresetsNoCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListKubeVirtVMIPresetsNoCredentialsOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewListKubeVirtVMIPresetsNoCredentialsParams()
-	}
-	op := &runtime.ClientOperation{
-		ID:                 "listKubeVirtVMIPresetsNoCredentials",
-		Method:             "GET",
-		PathPattern:        "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/vmflavors",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"https"},
-		Params:             params,
-		Reader:             &ListKubeVirtVMIPresetsNoCredentialsReader{formats: a.formats},
-		AuthInfo:           authInfo,
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	}
-	for _, opt := range opts {
-		opt(op)
-	}
-
-	result, err := a.transport.Submit(op)
-	if err != nil {
-		return nil, err
-	}
-	success, ok := result.(*ListKubeVirtVMIPresetsNoCredentialsOK)
-	if ok {
-		return success, nil
-	}
-	// unexpected success response
-	unexpectedSuccess := result.(*ListKubeVirtVMIPresetsNoCredentialsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
