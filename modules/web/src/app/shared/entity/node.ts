@@ -229,8 +229,6 @@ export class KubeVirtNodeSpec {
   primaryDiskStorageClassName: string;
   primaryDiskSize: string;
   secondaryDisks?: KubeVirtSecondaryDisk[];
-  podAffinityPreset?: KubeVirtAffinityPreset;
-  podAntiAffinityPreset?: KubeVirtAffinityPreset;
   nodeAffinityPreset?: KubeVirtNodeAffinityPreset;
   topologySpreadConstraints?: KubeVirtTopologySpreadConstraint[];
 }

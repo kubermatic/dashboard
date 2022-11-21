@@ -808,14 +808,6 @@ limitations under the License.
                   <div key>Secondary Disk {{i + 1}}</div>
                   <div value>{{disk.storageClassName}}, {{disk.size}}</div>
                 </km-property>
-                <km-property *ngIf="machineDeployment.spec.template.cloud?.kubevirt.podAffinityPreset">
-                  <div key>Pod Affinity Preset</div>
-                  <div value>{{machineDeployment.spec.template.cloud?.kubevirt.podAffinityPreset}}</div>
-                </km-property>
-                <km-property *ngIf="machineDeployment.spec.template.cloud?.kubevirt.podAntiAffinityPreset">
-                  <div key>Pod Anti-Affinity Preset</div>
-                  <div value>{{machineDeployment.spec.template.cloud?.kubevirt.podAntiAffinityPreset}}</div>
-                </km-property>
                 <ng-container *ngIf="machineDeployment.spec.template.cloud?.kubevirt.nodeAffinityPreset as nodeAffinityPreset">
                   <km-property>
                     <div key>Node Affinity Preset</div>
