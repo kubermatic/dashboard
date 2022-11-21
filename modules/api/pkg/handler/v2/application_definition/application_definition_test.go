@@ -17,6 +17,7 @@ limitations under the License.
 package applicationdefinition_test
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -27,7 +28,6 @@ import (
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/handler/test"
 	"k8c.io/dashboard/v2/pkg/handler/test/hack"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
@@ -47,7 +47,6 @@ func TestListApplicationDefinitions(t *testing.T) {
 			ExistingObjects: test.GenDefaultKubermaticObjects(
 				test.GenApplicationDefinition("appdef1"),
 				test.GenApplicationDefinition("appdef2"),
-				genKubermaticUser("John", "john@acme.com", true),
 			),
 			ExpectedHTTPStatus: http.StatusOK,
 			ExpectedAppDefs: []apiv2.ApplicationDefinitionListItem{
@@ -166,8 +165,54 @@ func TestGetApplicationDefinition(t *testing.T) {
 	}
 }
 
-func genKubermaticUser(name, email string, isAdmin bool) *kubermaticv1.User {
-	user := test.GenUser("", name, email)
-	user.Spec.IsAdmin = isAdmin
-	return user
+func TestCreateApplicationDefinition(t *testing.T) {
+	t.Parallel()
+	const appname = "app1"
+	testcases := []struct {
+		Name                   string
+		ExistingAPIUser        *apiv1.User
+		ApplicationDefinition  apiv2.ApplicationDefinition
+		ExpectedResponse       apiv2.ApplicationDefinition
+		ExpectedHTTPStatusCode int
+	}{
+		{
+			Name:                   "admin can create an applicationdefinition",
+			ApplicationDefinition:  test.GenApiApplicationDefinition(appname),
+			ExistingAPIUser:        test.GenDefaultAdminAPIUser(),
+			ExpectedResponse:       test.GenApiApplicationDefinition(appname),
+			ExpectedHTTPStatusCode: http.StatusCreated,
+		},
+	}
+
+	for _, tc := range testcases {
+		t.Run(tc.Name, func(t *testing.T) {
+			requestURL := "/api/v2/applicationdefinitions"
+			body, err := json.Marshal(tc.ApplicationDefinition)
+			if err != nil {
+				t.Fatalf("failed to marshal ApplicationDefinition: %v", err)
+			}
+			req := httptest.NewRequest(http.MethodPost, requestURL, bytes.NewBuffer(body))
+			res := httptest.NewRecorder()
+
+			ep, err := test.CreateTestEndpoint(*tc.ExistingAPIUser, nil, nil, nil, hack.NewTestRouting)
+			if err != nil {
+				t.Fatalf("failed to create test endpoint due to: %v", err)
+			}
+
+			ep.ServeHTTP(res, req)
+
+			if res.Code != tc.ExpectedHTTPStatusCode {
+				t.Errorf("Expected HTTP status code %d, got %d: %s", tc.ExpectedHTTPStatusCode, res.Code, res.Body.String())
+				return
+			}
+
+			if res.Code == http.StatusOK {
+				b, err := json.Marshal(tc.ExpectedResponse)
+				if err != nil {
+					t.Fatalf("failed to marshal expected response: %v", err)
+				}
+				test.CompareWithResult(t, res, string(b))
+			}
+		})
+	}
 }
