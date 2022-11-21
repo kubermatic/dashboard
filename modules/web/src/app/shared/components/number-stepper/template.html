@@ -15,7 +15,7 @@ limitations under the License.
 -->
 
 <mat-form-field class="km-number-stepper-input"
-                [ngClass]="mode === 'hint' || mode === 'errors' || mode === 'all' ? 'message' : ''">
+                [ngClass]="{'message': mode === 'hint' || mode === 'errors' || mode === 'all', 'force-min-width': forceFormFieldMinWidth}">
   <mat-label *ngIf="!!label">{{label}}</mat-label>
   <input #input="ngModel"
          matInput

@@ -46,6 +46,7 @@ import {
   KubeVirtPreferenceKind,
   KubeVirtPreferenceList,
   KubeVirtStorageClass,
+  KubeVirtTopologySpreadConstraint,
 } from '@shared/entity/provider/kubevirt';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
@@ -65,11 +66,10 @@ enum Controls {
   SecondaryDisks = 'secondaryDisks',
   SecondaryDiskStorageClass = 'secondaryDiskStorageClass',
   SecondaryDiskSize = 'secondaryDiskSize',
-  PodAffinityPreset = 'podAffinityPreset',
-  PodAntiAffinityPreset = 'podAntiAffinityPreset',
   NodeAffinityPreset = 'nodeAffinityPreset',
   NodeAffinityPresetKey = 'nodeAffinityPresetKey',
   NodeAffinityPresetValues = 'nodeAffinityPresetValues',
+  TopologySpreadConstraints = 'topologySpreadConstraints',
 }
 
 enum InstanceTypeState {
@@ -159,11 +159,10 @@ export class KubeVirtBasicNodeDataComponent
       [Controls.PrimaryDiskStorageClassName]: this._builder.control('', Validators.required),
       [Controls.PrimaryDiskSize]: this._builder.control('10', Validators.required),
       [Controls.SecondaryDisks]: this._builder.array([]),
-      [Controls.PodAffinityPreset]: this._builder.control(''),
-      [Controls.PodAntiAffinityPreset]: this._builder.control(''),
       [Controls.NodeAffinityPreset]: this._builder.control(''),
       [Controls.NodeAffinityPresetKey]: this._builder.control(''),
       [Controls.NodeAffinityPresetValues]: this._builder.control(''),
+      [Controls.TopologySpreadConstraints]: this._builder.control(''),
     });
 
     this.form.get(Controls.Preference).disable();
@@ -197,32 +196,6 @@ export class KubeVirtBasicNodeDataComponent
           this.form.get(Controls.NodeAffinityPresetValues).reset();
           this.form.get(Controls.NodeAffinityPresetValues).disable();
           this.nodeAffinityPresetValues = [];
-        }
-      });
-
-    this.form
-      .get(Controls.PodAffinityPreset)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(value => {
-        const antiAffinityControl = this.form.get(Controls.PodAntiAffinityPreset);
-        if (value && antiAffinityControl.enabled) {
-          antiAffinityControl.reset();
-          antiAffinityControl.disable();
-        } else if (!value && antiAffinityControl.disabled) {
-          antiAffinityControl.enable();
-        }
-      });
-
-    this.form
-      .get(Controls.PodAntiAffinityPreset)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(value => {
-        const affinityControl = this.form.get(Controls.PodAffinityPreset);
-        if (value && affinityControl.enabled) {
-          affinityControl.reset();
-          affinityControl.disable();
-        } else if (!value && affinityControl.disabled) {
-          affinityControl.enable();
         }
       });
 
@@ -273,6 +246,10 @@ export class KubeVirtBasicNodeDataComponent
 
   get secondaryDisksFormArray(): FormArray {
     return this.form.get(Controls.SecondaryDisks) as FormArray;
+  }
+
+  get topologySpreadConstraints(): KubeVirtTopologySpreadConstraint[] {
+    return this._nodeDataService.nodeData.spec.cloud.kubevirt?.topologySpreadConstraints || [];
   }
 
   getInstanceTypeOptions(group: string): KubeVirtInstanceType[] {
@@ -399,14 +376,6 @@ export class KubeVirtBasicNodeDataComponent
     });
   }
 
-  resetPodAffinityPresetControl(): void {
-    this.form.get(Controls.PodAffinityPreset).reset();
-  }
-
-  resetPodAntiAffinityPresetControl(): void {
-    this.form.get(Controls.PodAntiAffinityPreset).reset();
-  }
-
   resetNodeAffinityPresetControl(): void {
     this.form.get(Controls.NodeAffinityPreset).reset();
   }
@@ -414,6 +383,11 @@ export class KubeVirtBasicNodeDataComponent
   onNodeAffinityPresetValuesChange(values: string[]): void {
     this.nodeAffinityPresetValues = values;
     this._nodeDataService.nodeData.spec.cloud.kubevirt.nodeAffinityPreset.Values = values;
+  }
+
+  onTopologySpreadConstraintsChange(constraints: KubeVirtTopologySpreadConstraint[]): void {
+    this._nodeDataService.nodeData.spec.cloud.kubevirt.topologySpreadConstraints = constraints;
+    this._nodeDataService.nodeDataChanges.next(this._nodeDataService.nodeData);
   }
 
   private get _instanceTypesObservable(): Observable<KubeVirtInstanceTypeList> {
@@ -552,8 +526,6 @@ export class KubeVirtBasicNodeDataComponent
       this.form.get(Controls.CPUs).setValue(parseInt(this._initialData.cpus) || this._defaultCPUs);
       this.form.get(Controls.PrimaryDiskSize).setValue(this._initialData.primaryDiskSize);
       this.form.get(Controls.PrimaryDiskOSImage).setValue(this._initialData.primaryDiskOSImage);
-      this.form.get(Controls.PodAffinityPreset).setValue(this._initialData.podAffinityPreset);
-      this.form.get(Controls.PodAntiAffinityPreset).setValue(this._initialData.podAntiAffinityPreset);
       this.form.get(Controls.NodeAffinityPreset).setValue(this._initialData.nodeAffinityPreset?.Type);
       this.form.get(Controls.NodeAffinityPresetKey).setValue(this._initialData.nodeAffinityPreset?.Key);
       this.nodeAffinityPresetValues = this._initialData.nodeAffinityPreset?.Values || [];
@@ -608,8 +580,6 @@ export class KubeVirtBasicNodeDataComponent
               ComboboxControls.Select
             ],
             primaryDiskSize: `${this.form.get(Controls.PrimaryDiskSize).value}Gi`,
-            podAffinityPreset: this.form.get(Controls.PodAffinityPreset).value,
-            podAntiAffinityPreset: this.form.get(Controls.PodAntiAffinityPreset).value,
             nodeAffinityPreset: nodeAffinityPresetData,
           } as KubeVirtNodeSpec,
         } as NodeCloudSpec,

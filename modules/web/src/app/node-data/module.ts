@@ -34,6 +34,7 @@ import {DigitalOceanBasicNodeDataComponent} from './basic/provider/digitalocean/
 import {GCPBasicNodeDataComponent} from './basic/provider/gcp/component';
 import {HetznerBasicNodeDataComponent} from './basic/provider/hetzner/component';
 import {KubeVirtBasicNodeDataComponent} from './basic/provider/kubevirt/component';
+import {TopologySpreadConstraintFormComponent} from './basic/provider/kubevirt/topology-spread-contraint-form/component';
 import {OpenstackBasicNodeDataComponent} from './basic/provider/openstack/component';
 import {EquinixBasicNodeDataComponent} from './basic/provider/equinix/component';
 import {VSphereBasicNodeDataComponent} from './basic/provider/vsphere/component';
@@ -82,6 +83,7 @@ const components = [
   NutanixBasicNodeDataComponent,
   InstanceDetailsDialogComponent,
   VMwareCloudDirectorBasicNodeDataComponent,
+  TopologySpreadConstraintFormComponent,
 ];
 
 // component NodeDataComponent is added to routing module so we can use our dynamic component here

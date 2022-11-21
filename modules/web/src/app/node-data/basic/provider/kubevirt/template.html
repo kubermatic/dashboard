@@ -201,20 +201,6 @@ limitations under the License.
   <km-expansion-panel expandLabel="ADVANCED SCHEDULING SETTINGS"
                       collapseLabel="ADVANCED SCHEDULING SETTINGS">
     <ng-container *ngTemplateOutlet="selectAffinityPreset;
-                                      context: {label: 'Pod Affinity Preset',
-                                      controlName: Controls.PodAffinityPreset,
-                                      resetCallback: resetPodAffinityPresetControl.bind(this),
-                                      hint: 'Ensures two tenant nodes to be co-located in a single infrastructure node. Hard and soft values represent required and preferred scheduling.'}">
-    </ng-container>
-
-    <ng-container *ngTemplateOutlet="selectAffinityPreset;
-                                      context: {label: 'Pod Anti-Affinity Preset',
-                                      controlName: Controls.PodAntiAffinityPreset,
-                                      resetCallback: resetPodAntiAffinityPresetControl.bind(this),
-                                      hint: 'Allows you to prevent tenant nodes to be co-located in a single infrastructure node. Hard and soft values represent required and preferred scheduling.'}">
-    </ng-container>
-
-    <ng-container *ngTemplateOutlet="selectAffinityPreset;
                                       context: {label: 'Node Affinity Preset Type',
                                       controlName: Controls.NodeAffinityPreset,
                                       resetCallback: resetNodeAffinityPresetControl.bind(this),
@@ -272,5 +258,9 @@ limitations under the License.
         <mat-hint>{{hint}}</mat-hint>
       </mat-form-field>
     </ng-template>
+
+    <km-topology-spread-constraint-form [formControlName]="Controls.TopologySpreadConstraints"
+                                        [constraints]="topologySpreadConstraints"
+                                        (constraintsChange)="onTopologySpreadConstraintsChange($event)"></km-topology-spread-constraint-form>
   </km-expansion-panel>
 </form>
