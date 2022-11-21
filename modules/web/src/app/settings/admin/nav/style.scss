@@ -17,6 +17,7 @@
 
 $sidenav-item-height: 45px;
 $sidenav-item-margin: 10px;
+$sidenav-width-collapsed: 54px;
 
 .sidenav {
   @include mixins.size(variables.$sidenav-width, 100%);
@@ -53,4 +54,13 @@ $sidenav-item-margin: 10px;
   height: 25px;
   margin: 0 0 10px 45px;
   padding: 5px 10px;
+}
+
+.collapse-sidenav {
+  overflow-x: hidden;
+  width: $sidenav-width-collapsed;
+
+  .menu-item a i {
+    margin-right: 0;
+  }
 }

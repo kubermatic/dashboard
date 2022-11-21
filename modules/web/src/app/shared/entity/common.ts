@@ -90,6 +90,7 @@ export enum AdminPanelView {
   Defaults = 'defaults',
   Limits = 'limits',
   Customization = 'customization',
+  SeedConfiguration = 'seeds',
   Datacenters = 'datacenters',
   ProviderPresets = 'presets',
   BackupDestinations = 'backupdestinations',
@@ -106,6 +107,7 @@ export enum AdminPanelViewDisplayName {
   Limits = 'Limits',
   Customization = 'Customization',
   Datacenters = 'Datacenters',
+  SeedConfiguration = 'Seed Configuration',
   ProviderPresets = 'Provider Presets',
   BackupDestinations = 'Backup Destinations',
   ProjectQuotas = 'Project Quotas',
@@ -120,7 +122,7 @@ export enum AdminPanelMainSections {
   Interface = 'Interface',
   ManageResources = 'Manage Resources',
   Monitoring = 'Monitoring',
-  Users = 'Users'
+  Users = 'Users',
 }
 
 export function getViewDisplayName(viewName: string): string {

@@ -59,14 +59,19 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked {
           this.checkUrl(View.ServiceAccounts)
         );
       case this.adminPanelMainSections.Interface:
-        return this.checkUrl(AdminPanelView.Defaults) || this.checkUrl(AdminPanelView.Limits)  || this.checkUrl(AdminPanelView.Customization);
+        return (
+          this.checkUrl(AdminPanelView.Defaults) ||
+          this.checkUrl(AdminPanelView.Limits) ||
+          this.checkUrl(AdminPanelView.Customization)
+        );
       case this.adminPanelMainSections.ManageResources:
         return (
           this.checkUrl(AdminPanelView.Datacenters) ||
           this.checkUrl(AdminPanelView.ProviderPresets) ||
           this.checkUrl(AdminPanelView.BackupDestinations) ||
           this.checkUrl(AdminPanelView.ProjectQuotas) ||
-          this.checkUrl(AdminPanelView.OPA));
+          this.checkUrl(AdminPanelView.OPA)
+        );
       case this.adminPanelMainSections.Monitoring:
         return this.checkUrl(AdminPanelView.RuleGroups) || this.checkUrl(AdminPanelView.Metering);
       case this.adminPanelMainSections.Users:

@@ -44,6 +44,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   private readonly _onSettingsChange = new Subject<void>();
   @Input() showMenuSwitchAndProjectSelector: boolean;
+  @Input() hasSecondarySidenav: boolean;
   showSidenav = true;
   currentView: string;
 

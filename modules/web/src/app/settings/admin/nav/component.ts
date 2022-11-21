@@ -24,14 +24,6 @@ import {BehaviorSubject, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {HistoryService} from '@core/services/history';
 import {AdminPanelMainSections, AdminPanelView, AdminPanelViewDisplayName} from '@app/shared/entity/common';
-import {Router} from '@angular/router';
-
-// enum AdminPanelMainSections {
-//   Interface = 'Interface',
-//   ManageResources = 'Manage Resources',
-//   Monitoring = 'Monitoring',
-//   Users = 'Users'
-// }
 @Component({
   selector: 'km-admin-sidenav',
   templateUrl: './template.html',
@@ -45,7 +37,7 @@ export class AdminSidenavComponent implements OnInit, OnDestroy {
   screenWidth = 0;
   readonly adminPanelView = AdminPanelView;
   readonly adminPanelViewDisplayName = AdminPanelViewDisplayName;
-  readonly adminPanelMainSections = AdminPanelMainSections
+  readonly adminPanelMainSections = AdminPanelMainSections;
 
   private _unsubscribe = new Subject<void>();
   private _isSidenavCollapsed = false;
@@ -64,8 +56,7 @@ export class AdminSidenavComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private readonly _userService: UserService,
     private readonly _settingsService: SettingsService,
-    private readonly _historyService: HistoryService,
-    private _router: Router
+    private readonly _historyService: HistoryService
   ) {}
 
   ngOnInit(): void {
@@ -93,11 +84,6 @@ export class AdminSidenavComponent implements OnInit, OnDestroy {
 
   goBack(): void {
     this._historyService.goBack('/projects');
-  }
-
-  checkSettingsUrl(url: string): boolean {
-    const urlArray = this._router.routerState.snapshot.url.split('/');
-    return urlArray.includes(url);
   }
 
   getRouterLink(view: string): string {
