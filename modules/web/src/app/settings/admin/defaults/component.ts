@@ -13,6 +13,8 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {AdminPanelView} from '@app/shared/entity/common';
 import {NotificationService} from '@core/services/notification';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
@@ -32,7 +34,9 @@ export class DefaultsAndLimitsComponent implements OnInit, OnDestroy {
   user: Member;
   settings: AdminSettings; // Local settings copy. User can edit it.
   apiSettings: AdminSettings; // Original settings from the API. Cannot be edited by the user.
+  interfaceTypeUrl = '';
 
+  readonly adminPanelView = AdminPanelView;
   private readonly _debounceTime = 500;
   private _settingsChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
@@ -40,7 +44,8 @@ export class DefaultsAndLimitsComponent implements OnInit, OnDestroy {
   constructor(
     private readonly _userService: UserService,
     private readonly _settingsService: SettingsService,
-    private readonly _notificationService: NotificationService
+    private readonly _notificationService: NotificationService,
+    private _router: Router
   ) {}
 
   ngOnInit(): void {
@@ -62,6 +67,10 @@ export class DefaultsAndLimitsComponent implements OnInit, OnDestroy {
         takeUntil(this._unsubscribe)
       )
       .subscribe();
+
+    setTimeout(() => {
+      this.checkInterfaceTypeUrl();
+    }, this._debounceTime);
   }
 
   ngOnDestroy(): void {
@@ -104,5 +113,10 @@ export class DefaultsAndLimitsComponent implements OnInit, OnDestroy {
     }
 
     return patch;
+  }
+
+  checkInterfaceTypeUrl(): void {
+    const urlArray = this._router.routerState.snapshot.url.split('/');
+    this.interfaceTypeUrl = urlArray[urlArray.length - 1];
   }
 }

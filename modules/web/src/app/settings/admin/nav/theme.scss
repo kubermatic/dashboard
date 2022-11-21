@@ -32,4 +32,20 @@
       }
     }
   }
+
+  .sub-menu-item {
+    &:hover {
+      background-color: map.get($colors, sidenav-background-hover);
+    }
+
+    &.active {
+      border-left: 3px solid map.get($colors, primary);
+
+      a {
+        span {
+          color: map.get($colors, primary-dark);
+        }
+      }
+    }
+  }
 }

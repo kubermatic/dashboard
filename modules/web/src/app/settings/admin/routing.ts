@@ -30,12 +30,16 @@ const routes: Routes = [
         pathMatch: 'full',
       },
       {
+        path: 'limits',
+        loadChildren: () => import('./defaults/module').then(m => m.AdminSettingsDefaultsModule),
+      },
+      {
         path: 'administrators',
         loadChildren: () => import('./admins/module').then(m => m.AdministratorsModule),
       },
       {
-        path: 'interface',
-        loadChildren: () => import('./interface/module').then(m => m.AdminSettingsInterfaceModule),
+        path: 'customization',
+        loadChildren: () => import('./customization/module').then(m => m.AdminSettingsCustomizationModule),
       },
       {
         path: 'defaults',

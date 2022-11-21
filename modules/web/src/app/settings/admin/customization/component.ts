@@ -29,7 +29,7 @@ import {debounceTime, switchMap, take, takeUntil} from 'rxjs/operators';
   styleUrls: ['style.scss'],
   templateUrl: 'template.html',
 })
-export class InterfaceComponent implements OnInit, OnDestroy {
+export class CustomizationComponent implements OnInit, OnDestroy {
   user: Member;
   settings: AdminSettings; // Local settings copy. User can edit it.
   apiSettings: AdminSettings; // Original settings from the API. Cannot be edited by the user.

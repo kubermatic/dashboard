@@ -14,9 +14,8 @@
 
 import {AfterViewChecked, ChangeDetectorRef, Component, Input} from '@angular/core';
 import {Router} from '@angular/router';
-import {ProjectSidenavMainSection, View} from '@app/shared/entity/common';
+import {AdminPanelMainSections,ProjectSidenavMainSection, AdminPanelView, View} from '@app/shared/entity/common';
 import {shrinkGrow} from '@shared/animations/grow';
-
 @Component({
   selector: 'km-side-nav-field',
   templateUrl: './template.html',
@@ -27,6 +26,9 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked {
   private _expanded = false;
   readonly view = View;
   @Input() label: ProjectSidenavMainSection;
+  readonly projectSidenvMainSections = ProjectSidenavMainSection;
+  readonly adminPanelView = AdminPanelView;
+  readonly adminPanelMainSections = AdminPanelMainSections
   @Input() icon = '';
   @Input() isSidenavCollapsed: boolean;
 
@@ -56,6 +58,19 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked {
           this.checkUrl(View.Groups) ||
           this.checkUrl(View.ServiceAccounts)
         );
+      case this.adminPanelMainSections.Interface:
+        return this.checkUrl(AdminPanelView.Defaults) || this.checkUrl(AdminPanelView.Limits)  || this.checkUrl(AdminPanelView.Customization);
+      case this.adminPanelMainSections.ManageResources:
+        return (
+          this.checkUrl(AdminPanelView.Datacenters) ||
+          this.checkUrl(AdminPanelView.ProviderPresets) ||
+          this.checkUrl(AdminPanelView.BackupDestinations) ||
+          this.checkUrl(AdminPanelView.ProjectQuotas) ||
+          this.checkUrl(AdminPanelView.OPA));
+      case this.adminPanelMainSections.Monitoring:
+        return this.checkUrl(AdminPanelView.RuleGroups) || this.checkUrl(AdminPanelView.Metering);
+      case this.adminPanelMainSections.Users:
+        return this.checkUrl(AdminPanelView.Accounts) || this.checkUrl(AdminPanelView.Administrators);
       default:
         return false;
     }

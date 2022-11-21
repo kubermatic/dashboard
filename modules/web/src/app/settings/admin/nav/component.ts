@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {isEnterpriseEdition} from '@app/dynamic/common';
 import {SettingsService} from '@core/services/settings';
@@ -20,10 +20,18 @@ import {UserService} from '@core/services/user';
 import {environment} from '@environments/environment';
 import {Member} from '@shared/entity/member';
 import {CustomLink, UserSettings} from '@shared/entity/settings';
-import {Subject} from 'rxjs';
+import {BehaviorSubject, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {HistoryService} from '@core/services/history';
+import {AdminPanelMainSections, AdminPanelView, AdminPanelViewDisplayName} from '@app/shared/entity/common';
+import {Router} from '@angular/router';
 
+// enum AdminPanelMainSections {
+//   Interface = 'Interface',
+//   ManageResources = 'Manage Resources',
+//   Monitoring = 'Monitoring',
+//   Users = 'Users'
+// }
 @Component({
   selector: 'km-admin-sidenav',
   templateUrl: './template.html',
@@ -34,23 +42,40 @@ export class AdminSidenavComponent implements OnInit, OnDestroy {
   customLinks: CustomLink[] = [];
   settings: UserSettings;
   currentUser: Member;
+  screenWidth = 0;
+  readonly adminPanelView = AdminPanelView;
+  readonly adminPanelViewDisplayName = AdminPanelViewDisplayName;
+  readonly adminPanelMainSections = AdminPanelMainSections
 
   private _unsubscribe = new Subject<void>();
+  private _isSidenavCollapsed = false;
+  private _screenWidth = new BehaviorSubject<number>(window.innerWidth);
 
   get isEnterpriseEdition(): boolean {
     return isEnterpriseEdition();
+  }
+
+  get isSidenavCollapsed(): boolean {
+    const maxScreenWidth = 767;
+    return this._isSidenavCollapsed || this.screenWidth < maxScreenWidth;
   }
 
   constructor(
     public dialog: MatDialog,
     private readonly _userService: UserService,
     private readonly _settingsService: SettingsService,
-    private readonly _historyService: HistoryService
+    private readonly _historyService: HistoryService,
+    private _router: Router
   ) {}
 
   ngOnInit(): void {
+    this._screenWidth.subscribe(width => (this.screenWidth = width));
+
     this._userService.currentUser.pipe(takeUntil(this._unsubscribe)).subscribe(u => (this.currentUser = u));
-    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(s => (this.settings = s));
+    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(s => {
+      this.settings = s;
+      this._isSidenavCollapsed = this.settings.collapseSidenav;
+    });
     this._settingsService.adminSettings
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(s => (this.customLinks = s.customLinks));
@@ -61,7 +86,21 @@ export class AdminSidenavComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event): void {
+    this._screenWidth.next(event.target.innerWidth);
+  }
+
   goBack(): void {
     this._historyService.goBack('/projects');
+  }
+
+  checkSettingsUrl(url: string): boolean {
+    const urlArray = this._router.routerState.snapshot.url.split('/');
+    return urlArray.includes(url);
+  }
+
+  getRouterLink(view: string): string {
+    return `/settings/${view}`;
   }
 }

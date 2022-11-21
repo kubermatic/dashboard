@@ -86,6 +86,43 @@ export enum ProjectSidenavMainSection {
   Access = 'Access',
 }
 
+export enum AdminPanelView {
+  Defaults = 'defaults',
+  Limits = 'limits',
+  Customization = 'customization',
+  Datacenters = 'datacenters',
+  ProviderPresets = 'presets',
+  BackupDestinations = 'backupdestinations',
+  ProjectQuotas = 'quotas',
+  OPA = 'opa',
+  RuleGroups = 'rulegroups',
+  Metering = 'metering',
+  Accounts = 'accounts',
+  Administrators = 'administrators',
+}
+
+export enum AdminPanelViewDisplayName {
+  Defaults = 'Defaults',
+  Limits = 'Limits',
+  Customization = 'Customization',
+  Datacenters = 'Datacenters',
+  ProviderPresets = 'Provider Presets',
+  BackupDestinations = 'Backup Destinations',
+  ProjectQuotas = 'Project Quotas',
+  OPA = 'Open Policy Agent',
+  RuleGroups = 'Rule Groups',
+  Metering = 'Metering',
+  Accounts = 'Accounts',
+  Administrators = 'Administrators',
+}
+
+export enum AdminPanelMainSections {
+  Interface = 'Interface',
+  ManageResources = 'Manage Resources',
+  Monitoring = 'Monitoring',
+  Users = 'Users'
+}
+
 export function getViewDisplayName(viewName: string): string {
   const view: View = Object.values(View).find(view => view === viewName);
   if (!view) {
