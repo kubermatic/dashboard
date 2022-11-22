@@ -212,30 +212,31 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       ),
       [Controls.ExposeStrategy]: this._builder.control(clusterSpec?.exposeStrategy ?? null),
       [Controls.APIServerAllowedIPRanges]: this._builder.control(clusterSpec?.apiServerAllowedIPRanges ?? null),
-      [Controls.IPv4PodsCIDR]: this._builder.control('', [
+      [Controls.IPv4PodsCIDR]: this._builder.control(NetworkRanges.ipv4CIDR(clusterSpec?.clusterNetwork?.pods) ?? '', [
         IPV4_CIDR_PATTERN_VALIDATOR,
         this._dualStackRequiredIfValidator(Controls.IPv6PodsCIDR),
       ]),
-      [Controls.IPv6PodsCIDR]: this._builder.control('', [
+      [Controls.IPv6PodsCIDR]: this._builder.control(NetworkRanges.ipv6CIDR(clusterSpec?.clusterNetwork?.pods) ?? '', [
         IPV6_CIDR_PATTERN_VALIDATOR,
         this._dualStackRequiredIfValidator(Controls.IPv4PodsCIDR),
       ]),
-      [Controls.IPv4ServicesCIDR]: this._builder.control('', [
-        IPV4_CIDR_PATTERN_VALIDATOR,
-        this._dualStackRequiredIfValidator(Controls.IPv6ServicesCIDR),
-      ]),
-      [Controls.IPv6ServicesCIDR]: this._builder.control('', [
-        IPV6_CIDR_PATTERN_VALIDATOR,
-        this._dualStackRequiredIfValidator(Controls.IPv4ServicesCIDR),
-      ]),
-      [Controls.IPv4AllowedIPRange]: this._builder.control(this._defaultAllowedIPRange, [
-        IPV4_CIDR_PATTERN_VALIDATOR,
-        this._dualStackRequiredIfValidator(Controls.IPv6AllowedIPRange),
-      ]),
-      [Controls.IPv6AllowedIPRange]: this._builder.control('', [
-        IPV6_CIDR_PATTERN_VALIDATOR,
-        this._dualStackRequiredIfValidator(Controls.IPv4AllowedIPRange),
-      ]),
+      [Controls.IPv4ServicesCIDR]: this._builder.control(
+        NetworkRanges.ipv4CIDR(clusterSpec?.clusterNetwork?.services) ?? '',
+        [IPV4_CIDR_PATTERN_VALIDATOR, this._dualStackRequiredIfValidator(Controls.IPv6ServicesCIDR)]
+      ),
+      [Controls.IPv6ServicesCIDR]: this._builder.control(
+        NetworkRanges.ipv6CIDR(clusterSpec?.clusterNetwork?.services) ?? '',
+        [IPV6_CIDR_PATTERN_VALIDATOR, this._dualStackRequiredIfValidator(Controls.IPv4ServicesCIDR)]
+      ),
+      [Controls.IPv4AllowedIPRange]: this._builder.control(
+        NetworkRanges.ipv4CIDR(this._getExtraCloudSpecOptions().nodePortsAllowedIPRanges) ??
+          this._defaultAllowedIPRange,
+        [IPV4_CIDR_PATTERN_VALIDATOR, this._dualStackRequiredIfValidator(Controls.IPv6AllowedIPRange)]
+      ),
+      [Controls.IPv6AllowedIPRange]: this._builder.control(
+        NetworkRanges.ipv6CIDR(this._getExtraCloudSpecOptions().nodePortsAllowedIPRanges) ?? '',
+        [IPV6_CIDR_PATTERN_VALIDATOR, this._dualStackRequiredIfValidator(Controls.IPv4AllowedIPRange)]
+      ),
     });
 
     this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
@@ -606,11 +607,8 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .pipe(take(1))
       .subscribe({
         next: networkDefaults => {
-          const clusterNetwork = this._clusterSpecService.cluster?.spec.clusterNetwork;
-
           this.form.patchValue({
-            [Controls.NodeLocalDNSCache]:
-              clusterNetwork?.nodeLocalDNSCacheEnabled ?? networkDefaults.nodeLocalDNSCacheEnabled,
+            [Controls.NodeLocalDNSCache]: networkDefaults.nodeLocalDNSCacheEnabled,
             [Controls.IPv4PodsCIDR]: networkDefaults.ipv4?.podsCidr || '',
             [Controls.IPv4ServicesCIDR]: networkDefaults.ipv4?.servicesCidr || '',
             [Controls.IPv4CIDRMaskSize]: networkDefaults.ipv4?.nodeCidrMaskSize,
@@ -655,7 +653,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       return apiServerAllowedIPRange;
     }
     apiServerAllowedIPRange = this.controlValue(Controls.APIServerAllowedIPRanges)?.tags;
-    return !apiServerAllowedIPRange ? {cidrBlocks: []} : {cidrBlocks: apiServerAllowedIPRange};
+    return {
+      cidrBlocks: apiServerAllowedIPRange ? apiServerAllowedIPRange : [],
+    };
   }
 
   private _getClusterEntity(): Cluster {
