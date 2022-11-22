@@ -1132,6 +1132,7 @@ func GKEValidateCredentialsEndpoint(presetProvider provider.PresetProvider, user
 		return nil, err
 	}
 }
+
 func getSAFromPreset(ctx context.Context,
 	userInfoGetter provider.UserInfoGetter,
 	presetProvider provider.PresetProvider,

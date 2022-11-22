@@ -18,6 +18,7 @@ package provider
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/go-kit/kit/endpoint"
@@ -27,6 +28,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/handler/v2/cluster"
 	"k8c.io/dashboard/v2/pkg/provider"
+	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 )
 
 // gcpTypesNoCredentialReq represent a request for GCP machine or disk types.
@@ -58,6 +60,23 @@ type gcpSubnetworksNoCredentialReq struct {
 	// in: header
 	// name: Network
 	Network string
+}
+
+type GCPCommonReq struct {
+	ServiceAccount string
+	Credential     string
+
+	Zone string
+}
+
+type GCPVMReq struct {
+	common GCPCommonReq
+	Zone   string
+}
+
+type GCPProjectVMReq struct {
+	GCPVMReq  GCPVMReq
+	ProjectId string
 }
 
 // GetSeedCluster returns the SeedCluster object.
@@ -104,6 +123,80 @@ func DecodeGCPSubnetworksNoCredentialReq(c context.Context, r *http.Request) (in
 	req.Network = r.Header.Get("Network")
 
 	return req, nil
+}
+
+// Validate validates GCP request.
+func (req GCPCommonReq) Validate() error {
+	if len(req.ServiceAccount) == 0 && len(req.Credential) == 0 {
+		return fmt.Errorf("GCP credentials cannot be empty")
+	}
+	return nil
+}
+
+func (req GCPVMReq) Validate() error {
+	if len(req.Zone) == 0 {
+		return fmt.Errorf("GCP zone cannot be empty")
+	}
+	return nil
+}
+
+func getSAFromPreset(ctx context.Context,
+	userInfoGetter provider.UserInfoGetter,
+	presetProvider provider.PresetProvider,
+	presetName string,
+	projectID string,
+) (string, error) {
+	userInfo, err := userInfoGetter(ctx, projectID)
+	if err != nil {
+		return "", common.KubernetesErrorToHTTPError(err)
+	}
+	preset, err := presetProvider.GetPreset(ctx, userInfo, &projectID, presetName)
+	if err != nil {
+		return "", utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", presetName, userInfo.Email))
+	}
+	credentials := preset.Spec.GKE
+	if credentials == nil {
+		return "", fmt.Errorf("gke credentials not present in the preset %s", presetName)
+	}
+	return credentials.ServiceAccount, nil
+}
+
+func ListProjectGCPDiskTypes(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		var (
+			req       GCPVMReq
+			projectID string
+		)
+
+		if !withProject {
+			vmReq, ok := request.(GCPVMReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+			req = vmReq
+		} else {
+			projectReq, ok := request.(GCPProjectVMReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+
+			projectID = projectReq.ProjectId
+			req = projectReq.GCPVMReq
+		}
+		if err := req.Validate(); err != nil {
+			return nil, utilerrors.NewBadRequest(err.Error())
+		}
+
+		sa := req.common.ServiceAccount
+		var err error
+
+		sa, err = getSAFromPreset(ctx, userInfoGetter, presetProvider, req.common.Credential, projectID)
+		if err != nil {
+			return nil, err
+		}
+
+		return providercommon.ListGCPDiskTypes(ctx, sa, req.Zone)
+	}
 }
 
 func GCPDiskTypesWithClusterCredentialsEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
