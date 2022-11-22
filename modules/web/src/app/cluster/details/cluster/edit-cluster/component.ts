@@ -397,12 +397,11 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   }
 
   private getAPIServerAllowedIPRange(): NetworkRanges {
-    let apiServerAllowedIPRange = null;
-
-    if (this.cluster.spec.exposeStrategy === ExposeStrategy.loadbalancer) {
-      apiServerAllowedIPRange = this.form.get(Controls.APIServerAllowedIPRanges).value?.tags;
+    if (this.cluster.spec.exposeStrategy !== ExposeStrategy.loadbalancer) {
+      return null;
     }
-    return apiServerAllowedIPRange === null ? null : {cidrBlocks: apiServerAllowedIPRange};
+    const apiServerAllowedIPRange = this.form.get(Controls.APIServerAllowedIPRanges).value?.tags;
+    return !apiServerAllowedIPRange ? {cidrBlocks: []} : {cidrBlocks: apiServerAllowedIPRange};
   }
 
   ngOnDestroy(): void {
