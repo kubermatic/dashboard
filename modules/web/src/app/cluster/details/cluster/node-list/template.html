@@ -55,16 +55,16 @@ limitations under the License.
         </th>
         <td mat-cell
             *matCellDef="let element">
-          <div fxLayoutAlign=" center">
-            {{element.spec.cloud.aws ? getNodeName(element) : element.name}}
-            <i *ngIf="showInfo(element)"
-               class="km-icon-info km-pointer"
-               matTooltip="{{getInfo(element)}}"></i>
+          <div fxLayout="row"
+               fxLayoutAlign=" center">
+            <span>{{element.spec.cloud.aws ? getNodeName(element) : element.name}}</span>
+            <ng-container *ngIf="element.status.errorMessage as errorMessage; else infoIcon">
+              <i [matTooltip]="errorMessage" class="km-icon-warning"></i>
+            </ng-container>
+            <ng-template #infoIcon>
+              <i *ngIf="showInfo(element)" class="km-icon-info km-pointer" matTooltip="{{getInfo(element)}}"></i>
+            </ng-template>
           </div>
-          <ng-container *ngIf="element.status.errorMessage">
-            <i [matTooltip]="element.status.errorMessage"
-               class="km-icon-warning"></i>
-          </ng-container>
         </td>
       </ng-container>
 
