@@ -95,31 +95,39 @@
     }
 
     &.active {
-      border-left: 3px solid map.get($colors, primary);
-
       a {
         span {
           color: map.get($colors, primary-dark);
+        }
+
+        &::after {
+          background-color: map.get($colors, primary);
         }
       }
     }
   }
 
   .collapsed-sub-menu-item {
-    &:hover {
-      background-color: map.get($colors, sidenav-background-hover);
+    span {
+      color: map.get($colors, text);
     }
 
-    &.active {
-      border-left: 3px solid map.get($colors, primary);
+    &:hover {
+      background-color: map.get($colors, sidenav-background-hover) !important;
 
       span {
         color: map.get($colors, primary-dark);
       }
     }
 
-    span {
-      color: map.get($colors, text);
+    &.active {
+      span {
+        color: map.get($colors, primary-dark);
+      }
+
+      &::after {
+        background-color: map.get($colors, primary);
+      }
     }
   }
 }

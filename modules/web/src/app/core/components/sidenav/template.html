@@ -94,7 +94,7 @@ limitations under the License.
          fxLayoutAlign=" center"
          [routerLink]="getRouterLink(view.ExternalClusters)"
          class="collapsed-sub-menu-item"
-         [ngClass]="{'active': checkUrl(view.ExternalClusters), 'km-disabled': !getMenuItemClass(view.ExternalClusters)}">
+         [ngClass]="{'active': checkUrl(view.ExternalClusters), 'km-disabled': !isDisabledField(view.ExternalClusters)}">
         <span>External Clusters</span>
       </a>
     </ng-container>
