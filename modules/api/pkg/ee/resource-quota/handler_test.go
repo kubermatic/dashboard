@@ -28,6 +28,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"k8s.io/utils/pointer"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -481,7 +482,7 @@ func TestCalculateResourceQuotaUpdate(t *testing.T) {
 				build(),
 		},
 		{
-			Name:      "should process do request successfully",
+			Name:      "should process digitalocean request successfully",
 			ProjectID: test.GenDefaultProject().Name,
 			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
 				newRQBuilder().
@@ -492,6 +493,147 @@ func TestCalculateResourceQuotaUpdate(t *testing.T) {
 			RequestBody: newCalcReq().
 				withReplicas(2).
 				withDO(2, 3000, 10).
+				encode(t),
+			ExpectedHTTPStatusCode: http.StatusOK,
+			ExpectedResponse: newRQUpdateCalculationBuilder().
+				withQuota(genAPIQuota(12, 10, 30)).
+				withGlobalUsage(genAPIQuota(2, 3, 5)).
+				withCalculatedQuota(genAPIQuota(6, 9, 25)).
+				build(),
+		},
+		{
+			Name:      "should process equinix request successfully",
+			ProjectID: test.GenDefaultProject().Name,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				newRQBuilder().
+					withQuota("12", "10G", "30G").
+					withGlobalUsage("2", "3G", "5G").
+					build()),
+			ExistingAPIUser: test.GenDefaultAPIUser(),
+			RequestBody: newCalcReq().
+				withReplicas(2).
+				withEquinix(2, "3GB", "10GB").
+				encode(t),
+			ExpectedHTTPStatusCode: http.StatusOK,
+			ExpectedResponse: newRQUpdateCalculationBuilder().
+				withQuota(genAPIQuota(12, 10, 30)).
+				withGlobalUsage(genAPIQuota(2, 3, 5)).
+				withCalculatedQuota(genAPIQuota(6, 9, 25)).
+				build(),
+		},
+		{
+			Name:      "should process gcp request successfully",
+			ProjectID: test.GenDefaultProject().Name,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				newRQBuilder().
+					withQuota("12", "10G", "30G").
+					withGlobalUsage("2", "3G", "5G").
+					build()),
+			ExistingAPIUser: test.GenDefaultAPIUser(),
+			RequestBody: newCalcReq().
+				withReplicas(2).
+				withDiskSize(10).
+				withGCP(2, 3000).
+				encode(t),
+			ExpectedHTTPStatusCode: http.StatusOK,
+			ExpectedResponse: newRQUpdateCalculationBuilder().
+				withQuota(genAPIQuota(12, 10, 30)).
+				withGlobalUsage(genAPIQuota(2, 3, 5)).
+				withCalculatedQuota(genAPIQuota(6, 9, 25)).
+				build(),
+		},
+		{
+			Name:      "should process hetzner request successfully",
+			ProjectID: test.GenDefaultProject().Name,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				newRQBuilder().
+					withQuota("12", "10G", "30G").
+					withGlobalUsage("2", "3G", "5G").
+					build()),
+			ExistingAPIUser: test.GenDefaultAPIUser(),
+			RequestBody: newCalcReq().
+				withReplicas(2).
+				withHetzner(2, 3, 10).
+				encode(t),
+			ExpectedHTTPStatusCode: http.StatusOK,
+			ExpectedResponse: newRQUpdateCalculationBuilder().
+				withQuota(genAPIQuota(12, 10, 30)).
+				withGlobalUsage(genAPIQuota(2, 3, 5)).
+				withCalculatedQuota(genAPIQuota(6, 9, 25)).
+				build(),
+		},
+		{
+			Name:      "should process nutanix request successfully",
+			ProjectID: test.GenDefaultProject().Name,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				newRQBuilder().
+					withQuota("12", "10G", "30G").
+					withGlobalUsage("2", "3G", "5G").
+					build()),
+			ExistingAPIUser: test.GenDefaultAPIUser(),
+			RequestBody: newCalcReq().
+				withReplicas(2).
+				withNutanix(2, 3000, 10).
+				encode(t),
+			ExpectedHTTPStatusCode: http.StatusOK,
+			ExpectedResponse: newRQUpdateCalculationBuilder().
+				withQuota(genAPIQuota(12, 10, 30)).
+				withGlobalUsage(genAPIQuota(2, 3, 5)).
+				withCalculatedQuota(genAPIQuota(6, 9, 25)).
+				build(),
+		},
+		{
+			Name:      "should process openstack request successfully",
+			ProjectID: test.GenDefaultProject().Name,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				newRQBuilder().
+					withQuota("12", "10G", "30G").
+					withGlobalUsage("2", "3G", "5G").
+					build()),
+			ExistingAPIUser: test.GenDefaultAPIUser(),
+			RequestBody: newCalcReq().
+				withReplicas(2).
+				withOpenstack(2, 3, 10).
+				encode(t),
+			ExpectedHTTPStatusCode: http.StatusOK,
+			ExpectedResponse: newRQUpdateCalculationBuilder().
+				withQuota(genAPIQuota(12, 10, 30)).
+				withGlobalUsage(genAPIQuota(2, 3, 5)).
+				withCalculatedQuota(genAPIQuota(6, 9, 25)).
+				build(),
+		},
+		{
+			Name:      "should process vmclouddirector request successfully",
+			ProjectID: test.GenDefaultProject().Name,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				newRQBuilder().
+					withQuota("12", "10G", "30G").
+					withGlobalUsage("2", "3G", "5G").
+					build()),
+			ExistingAPIUser: test.GenDefaultAPIUser(),
+			RequestBody: newCalcReq().
+				withReplicas(2).
+				withVMDirector(2, 3000, 10).
+				encode(t),
+			ExpectedHTTPStatusCode: http.StatusOK,
+			ExpectedResponse: newRQUpdateCalculationBuilder().
+				withQuota(genAPIQuota(12, 10, 30)).
+				withGlobalUsage(genAPIQuota(2, 3, 5)).
+				withCalculatedQuota(genAPIQuota(6, 9, 25)).
+				build(),
+		},
+		{
+			Name:      "should process vsphere request successfully",
+			ProjectID: test.GenDefaultProject().Name,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				newRQBuilder().
+					withQuota("12", "10G", "30G").
+					withGlobalUsage("2", "3G", "5G").
+					build()),
+			ExistingAPIUser: test.GenDefaultAPIUser(),
+			RequestBody: newCalcReq().
+				withReplicas(2).
+				withVsphere(2, 3, 10).
 				encode(t),
 			ExpectedHTTPStatusCode: http.StatusOK,
 			ExpectedResponse: newRQUpdateCalculationBuilder().
@@ -592,6 +734,7 @@ func (c *calcReq) withAnexia(cpu int, memory, diskSize int64) *calcReq {
 		CPUs:       cpu,
 		Memory:     memory,
 		Disks:      []apiv1.AnexiaDiskConfig{{Size: diskSize}},
+		// needed for json encoding
 		VlanID:     "2",
 		TemplateID: "5",
 	}
@@ -612,6 +755,75 @@ func (c *calcReq) withDO(cpu, memory, storage int) *calcReq {
 		VCPUs:  cpu,
 		Memory: memory,
 		Disk:   storage,
+	}
+	return c
+}
+
+func (c *calcReq) withEquinix(cpu int, memory, storage string) *calcReq {
+	c.EquinixSize = &apiv1.PacketSize{
+		CPUs:   []apiv1.PacketCPU{{Count: cpu}},
+		Memory: memory,
+		Drives: []apiv1.PacketDrive{{Size: storage, Count: 1}},
+	}
+	return c
+}
+
+func (c *calcReq) withGCP(cpu, memory int64) *calcReq {
+	c.GCPSize = &apiv1.GCPMachineSize{
+		VCPUs:  cpu,
+		Memory: memory,
+	}
+	return c
+}
+
+func (c *calcReq) withHetzner(cpu, memory, storage int) *calcReq {
+	c.HetznerSize = &apiv1.HetznerSize{
+		Cores:  cpu,
+		Memory: float32(memory),
+		Disk:   storage,
+	}
+	return c
+}
+
+func (c *calcReq) withNutanix(cpu, memory, storage int64) *calcReq {
+	c.NutanixNodeSpec = &apiv1.NutanixNodeSpec{
+		CPUs:     cpu,
+		CPUCores: pointer.Int64(1),
+		MemoryMB: memory,
+		DiskSize: pointer.Int64(storage),
+	}
+	return c
+}
+
+func (c *calcReq) withOpenstack(cpu, memory, storage int) *calcReq {
+	c.OpenstackSize = &apiv1.OpenstackSize{
+		VCPUs:  cpu,
+		Memory: memory,
+		Disk:   storage,
+	}
+	return c
+}
+
+func (c *calcReq) withVMDirector(cpu, memory, storage int) *calcReq {
+	c.VMDirectorNodeSpec = &apiv1.VMwareCloudDirectorNodeSpec{
+		CPUCores:   1,
+		CPUs:       cpu,
+		MemoryMB:   memory,
+		DiskSizeGB: pointer.Int64(int64(storage)),
+		// needed for json encoding
+		Template: "t",
+		Catalog:  "c",
+	}
+	return c
+}
+
+func (c *calcReq) withVsphere(cpu, memory, storage int) *calcReq {
+	c.VSphereNodeSpec = &apiv1.VSphereNodeSpec{
+		CPUs:       cpu,
+		Memory:     memory,
+		DiskSizeGB: pointer.Int64(int64(storage)),
+		// needed for json encoding
+		Template: "t",
 	}
 	return c
 }
@@ -678,19 +890,6 @@ func genDefaultResourceQuota() *kubermaticv1.ResourceQuota {
 		Status: kubermaticv1.ResourceQuotaStatus{
 			GlobalUsage: genQuota(resource.MustParse("3"), resource.MustParse("2000M"), resource.MustParse("10G")),
 		},
-	}
-}
-
-func genAPIResourceQuota(quota, globalUsage apiv2.Quota) apiv2.ResourceQuota {
-	return apiv2.ResourceQuota{
-		Name:        fmt.Sprintf("project-%s", projectName),
-		SubjectName: projectName,
-		SubjectKind: kubermaticv1.ProjectSubjectKind,
-		Quota:       quota,
-		Status: apiv2.ResourceQuotaStatus{
-			GlobalUsage: globalUsage,
-		},
-		SubjectHumanReadableName: "my-first-project",
 	}
 }
 
