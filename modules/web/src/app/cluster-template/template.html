@@ -104,6 +104,12 @@ limitations under the License.
 
               <ng-container *ngSwitchCase="false">
                 <button mat-icon-button
+                        matTooltip="Edit Cluster Template"
+                        (click)="editClusterTemplate(element)"
+                        [disabled]="!canEdit()">
+                  <i class="km-icon-mask km-icon-edit"></i>
+                </button>
+                <button mat-icon-button
                         [attr.id]="'km-template-instance-' + element.name"
                         matTooltip="Create Cluster from Template"
                         (click)="createCluster(element)"

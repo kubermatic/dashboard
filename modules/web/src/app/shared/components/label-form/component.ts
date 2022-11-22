@@ -71,6 +71,7 @@ export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, Control
   @Input() labelHintKey: string;
   @Input() inheritedLabels: object = {};
   @Input() noValidators = false;
+  @Input() hideRestrictedLabels = false;
   @Input() asyncKeyValidators: AsyncValidatorFn[] = [];
   @Output() labelsChange = new EventEmitter<object>();
   form: FormGroup;
@@ -162,9 +163,9 @@ export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, Control
 
   onTouched(): void {}
 
-  writeValue(obj: any): void {
+  writeValue(obj: Record<string, string>): void {
     if (obj) {
-      this.form.setValue(obj, {emitEvent: false});
+      this.form.patchValue({labels: obj}, {emitEvent: false});
     }
   }
 

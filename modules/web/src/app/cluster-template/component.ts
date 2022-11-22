@@ -176,6 +176,15 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
     );
   }
 
+  canEdit(): boolean {
+    return MemberUtils.hasPermission(
+      this.currentUser,
+      this._currentGroupConfig,
+      View.ClusterTemplates,
+      Permission.Edit
+    );
+  }
+
   create(): void {
     this._router.navigate([`/projects/${this._selectedProject.id}/wizard`]);
   }
@@ -234,6 +243,12 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
     };
 
     this._matDialog.open(ClusterFromTemplateDialogComponent, dialogConfig);
+  }
+
+  editClusterTemplate(template: ClusterTemplate): void {
+    this._router.navigate([`/projects/${this._selectedProject.id}/wizard`], {
+      queryParams: {clusterTemplateID: template.id},
+    });
   }
 
   onActivate(component: QuotaWidgetComponent): void {

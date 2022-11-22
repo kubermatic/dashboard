@@ -13,11 +13,20 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<form [formGroup]="form">
+
+<ng-container *ngIf="loadingClusterTemplate">
+  <mat-spinner [diameter]="50"
+               class="km-spinner"
+               color="accent"></mat-spinner>
+</ng-container>
+
+<form [formGroup]="form"
+      *ngIf="!loadingClusterTemplate">
   <mat-card fxFlex="100%">
     <mat-horizontal-stepper linear
                             disableRipple
                             style="transition: none;"
+                            [@.disabled]="true"
                             #stepper>
       <ng-template matStepperIcon="edit">
         <i class="km-icon-done"></i>
@@ -118,5 +127,6 @@ limitations under the License.
         </div>
       </mat-step>
     </mat-horizontal-stepper>
+
   </mat-card>
 </form>

@@ -108,7 +108,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     return this._clusterSpecService.cluster.spec.enableOperatingSystemManager;
   }
 
-  get isDynamicKubletConfigSupported(): boolean {
+  get isDynamicKubeletConfigSupported(): boolean {
     return this._clusterSpecService.cluster.spec.version < this.endOfDynamicKubeletConfigSupportVersion;
   }
 
@@ -183,6 +183,11 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
         this._loadOperatingSystemProfiles();
+        if (this.isDynamicKubeletConfigSupported) {
+          this.form.get(Controls.DynamicConfig).enable();
+        } else {
+          this.form.get(Controls.DynamicConfig).disable();
+        }
       });
 
     merge(this._clusterSpecService.datacenterChanges, of(this._clusterSpecService.datacenter))

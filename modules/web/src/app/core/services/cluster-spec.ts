@@ -26,9 +26,9 @@ export class ClusterSpecService {
   readonly sshKeyChanges = new EventEmitter<SSHKey[]>();
   readonly clusterChanges = new EventEmitter<Cluster>();
   readonly providerSpecChanges = new EventEmitter<void>();
-  readonly clusterDefaulted = new EventEmitter<Cluster>();
 
   private _cluster: Cluster = Cluster.newEmptyClusterEntity();
+  private isCusterTemplateEditMode = false;
 
   get cluster(): Cluster {
     return this._cluster;
@@ -36,9 +36,9 @@ export class ClusterSpecService {
 
   set cluster(cluster: Cluster) {
     if (
-      this._getProvider(this._cluster) !== NodeProvider.NONE &&
-      this._getProvider(cluster) !== NodeProvider.NONE &&
-      this._getProvider(this._cluster) !== this._getProvider(cluster)
+      this.getProvider(this._cluster) !== NodeProvider.NONE &&
+      this.getProvider(cluster) !== NodeProvider.NONE &&
+      this.getProvider(this._cluster) !== this.getProvider(cluster)
     ) {
       return;
     }
@@ -69,6 +69,10 @@ export class ClusterSpecService {
   set sshKeys(keys: SSHKey[]) {
     this._sshKeys = keys;
     this.sshKeyChanges.emit(this._sshKeys);
+  }
+
+  get clusterTemplateEditMode(): boolean {
+    return this.isCusterTemplateEditMode;
   }
 
   get provider(): NodeProvider {
@@ -142,10 +146,13 @@ export class ClusterSpecService {
   initializeClusterFromClusterTemplate(template: ClusterTemplate): void {
     this.cluster = template.cluster;
     this.sshKeys = this.sshKeysFromClusterTemplateUserSSHKeys(template.userSshKeys);
+    this.isCusterTemplateEditMode = true;
+  }
+
+  emitChangeEvents(): void {
     this.sshKeyChanges.emit(this._sshKeys);
-    this.clusterDefaulted.emit(this._cluster);
     this.datacenterChanges.next(this._cluster.spec.cloud.dc);
-    this.providerChanges.emit(this._getProvider(this._cluster));
+    this.providerChanges.emit(this.getProvider(this._cluster));
   }
 
   private sshKeysFromClusterTemplateUserSSHKeys(sshKeys: ClusterTemplateSSHKey[]): SSHKey[] {
@@ -156,7 +163,7 @@ export class ClusterSpecService {
       : [];
   }
 
-  private _getProvider(cluster: Cluster): NodeProvider {
+  getProvider(cluster: Cluster): NodeProvider {
     if (!cluster || !cluster.spec || !cluster.spec.cloud) {
       return NodeProvider.NONE;
     }

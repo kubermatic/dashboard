@@ -46,7 +46,8 @@ limitations under the License.
 
     <div *ngFor="let label of labelArray.controls; let i = index;"
          fxLayout="column">
-      <div [formGroupName]="i"
+      <div *ngIf="!(hideRestrictedLabels && label.get('key').errors?.labelKeyNameRestricted)"
+           [formGroupName]="i"
            fxLayout="row"
            fxLayoutGap="10px">
         <mat-form-field fxFlex="45">
