@@ -8,6 +8,7 @@ package models
 import (
 	"context"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -40,15 +41,71 @@ type PublicOpenstackCloudSpec struct {
 
 	// subnet ID
 	SubnetID string `json:"subnetID,omitempty"`
+
+	// node ports allowed IP ranges
+	NodePortsAllowedIPRanges *NetworkRanges `json:"nodePortsAllowedIPRanges,omitempty"`
 }
 
 // Validate validates this public openstack cloud spec
 func (m *PublicOpenstackCloudSpec) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateNodePortsAllowedIPRanges(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }
 
-// ContextValidate validates this public openstack cloud spec based on context it is used
+func (m *PublicOpenstackCloudSpec) validateNodePortsAllowedIPRanges(formats strfmt.Registry) error {
+	if swag.IsZero(m.NodePortsAllowedIPRanges) { // not required
+		return nil
+	}
+
+	if m.NodePortsAllowedIPRanges != nil {
+		if err := m.NodePortsAllowedIPRanges.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("nodePortsAllowedIPRanges")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("nodePortsAllowedIPRanges")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ContextValidate validate this public openstack cloud spec based on the context it is used
 func (m *PublicOpenstackCloudSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateNodePortsAllowedIPRanges(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *PublicOpenstackCloudSpec) contextValidateNodePortsAllowedIPRanges(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.NodePortsAllowedIPRanges != nil {
+		if err := m.NodePortsAllowedIPRanges.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("nodePortsAllowedIPRanges")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("nodePortsAllowedIPRanges")
+			}
+			return err
+		}
+	}
+
 	return nil
 }
 

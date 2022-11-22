@@ -33935,6 +33935,11 @@
     "PublicAWSCloudSpec": {
       "type": "object",
       "title": "PublicAWSCloudSpec is a public counterpart of apiv1.AWSCloudSpec.",
+      "properties": {
+        "nodePortsAllowedIPRanges": {
+          "$ref": "#/definitions/NetworkRanges"
+        }
+      },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "PublicAlibabaCloudSpec": {
@@ -33954,6 +33959,9 @@
         "assignAvailabilitySet": {
           "type": "boolean",
           "x-go-name": "AssignAvailabilitySet"
+        },
+        "nodePortsAllowedIPRanges": {
+          "$ref": "#/definitions/NetworkRanges"
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
@@ -34032,6 +34040,11 @@
     "PublicGCPCloudSpec": {
       "type": "object",
       "title": "PublicGCPCloudSpec is a public counterpart of apiv1.GCPCloudSpec.",
+      "properties": {
+        "nodePortsAllowedIPRanges": {
+          "$ref": "#/definitions/NetworkRanges"
+        }
+      },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "PublicHetznerCloudSpec": {
@@ -34073,6 +34086,9 @@
         "network": {
           "type": "string",
           "x-go-name": "Network"
+        },
+        "nodePortsAllowedIPRanges": {
+          "$ref": "#/definitions/NetworkRanges"
         },
         "project": {
           "type": "string",

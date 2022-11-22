@@ -32,6 +32,7 @@ import (
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
+	"k8c.io/dashboard/v2/pkg/handler/v1/label"
 	clusterv2 "k8c.io/dashboard/v2/pkg/handler/v2/cluster"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -668,7 +669,7 @@ func convertInternalClusterTemplatetoExternal(template *kubermaticv1.ClusterTemp
 		User:      template.Annotations[kubermaticv1.ClusterTemplateUserAnnotationKey],
 		Scope:     template.Labels[kubermaticv1.ClusterTemplateScopeLabelKey],
 		Cluster: &apiv2.ClusterTemplateInfo{
-			Labels:          template.ClusterLabels,
+			Labels:          label.FilterLabels(label.ClusterResourceType, template.ClusterLabels),
 			InheritedLabels: template.InheritedClusterLabels,
 			Credential:      template.Credential,
 			Spec: apiv1.ClusterSpec{
