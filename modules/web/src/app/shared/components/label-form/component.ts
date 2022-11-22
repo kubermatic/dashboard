@@ -163,9 +163,9 @@ export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, Control
 
   onTouched(): void {}
 
-  writeValue(obj: Record<string, string>): void {
+  writeValue(obj: any): void {
     if (obj) {
-      this.form.patchValue({labels: obj}, {emitEvent: false});
+      this.form.setValue(obj, {emitEvent: false});
     }
   }
 

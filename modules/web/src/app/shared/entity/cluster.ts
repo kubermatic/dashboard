@@ -376,6 +376,18 @@ export class CNIPluginConfig {
 
 export class NetworkRanges {
   cidrBlocks: string[];
+
+  constructor(cidrBlocks: string[]) {
+    this.cidrBlocks = cidrBlocks;
+  }
+
+  ipv4CIDR(): string {
+    return this.cidrBlocks?.length ? this.cidrBlocks[0] : null;
+  }
+
+  ipv6CIDR(): string {
+    return this.cidrBlocks?.length > 1 ? this.cidrBlocks[1] : null;
+  }
 }
 
 export class CNIPluginVersions {

@@ -195,13 +195,11 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.KubernetesDashboardEnabled]: this._builder.control(clusterSpec?.kubernetesDashboard?.enabled ?? true),
       [Controls.MLAMonitoring]: this._builder.control(clusterSpec?.mla?.monitoringEnabled ?? false),
       [Controls.AdmissionPlugins]: this._builder.control(clusterSpec?.admissionPlugins ?? []),
-      [Controls.PodNodeSelectorAdmissionPluginConfig]: this._builder.control(
-        clusterSpec?.podNodeSelectorAdmissionPluginConfig ?? null
-      ),
       [Controls.EventRateLimitConfig]: this._builder.control(clusterSpec?.eventRateLimitConfig ?? ''),
-      // We intentionally don't default this to the values from clusterSpecService and instead just rely on `onLabelsChange`
-      // method for the defaulting.
+      // We intentionally don't default labels and podNodeSelectorAdmissionPluginConfig to the values from
+      // clusterSpecService and instead just rely on `onLabelsChange`method for the defaulting.
       [Controls.Labels]: this._builder.control(null),
+      [Controls.PodNodeSelectorAdmissionPluginConfig]: this._builder.control(null),
       [Controls.SSHKeys]: this._builder.control(this._clusterSpecService?.sshKeys ?? ''),
       [Controls.IPFamily]: this._builder.control(clusterSpec?.clusterNetwork?.ipFamily ?? IPFamily.IPv4),
       [Controls.ProxyMode]: this._builder.control(clusterSpec?.clusterNetwork?.proxyMode ?? ''),
@@ -243,6 +241,12 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
     this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
       this._settings = settings;
 
+      // Admin settings should be ignored in this case since we want to completely depend upon the cluster template
+      // as the data source.
+      if (this.clusterTemplateEditMode) {
+        return;
+      }
+
       this.form.get(Controls.MLALogging).setValue(this._settings.mlaOptions.loggingEnabled, {emitEvent: false});
       this._enforce(Controls.MLALogging, this._settings.mlaOptions.loggingEnforced);
       this.form.get(Controls.MLAMonitoring).setValue(this._settings.mlaOptions.monitoringEnabled, {emitEvent: false});
@@ -271,7 +275,12 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           this.isDualStackAllowed = !!datacenter.spec.ipv6Enabled;
           this._enforce(Controls.AuditLogging, datacenter.spec.enforceAuditLogging);
           this._enforcePodSecurityPolicy(datacenter.spec.enforcePodSecurityPolicy);
-          this._setNetworkDefaults();
+
+          // Ignore network defaults since the cluster or cluster template has already been initialized with all the
+          // required network configurations.
+          if (!this.clusterTemplateEditMode) {
+            this._setNetworkDefaults();
+          }
         })
       )
       .pipe(switchMap(_ => this._datacenterService.seedSettings(this._datacenterSpec.spec.seed)))
@@ -597,8 +606,11 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .pipe(take(1))
       .subscribe({
         next: networkDefaults => {
+          const clusterNetwork = this._clusterSpecService.cluster?.spec.clusterNetwork;
+
           this.form.patchValue({
-            [Controls.NodeLocalDNSCache]: networkDefaults.nodeLocalDNSCacheEnabled,
+            [Controls.NodeLocalDNSCache]:
+              clusterNetwork?.nodeLocalDNSCacheEnabled ?? networkDefaults.nodeLocalDNSCacheEnabled,
             [Controls.IPv4PodsCIDR]: networkDefaults.ipv4?.podsCidr || '',
             [Controls.IPv4ServicesCIDR]: networkDefaults.ipv4?.servicesCidr || '',
             [Controls.IPv4CIDRMaskSize]: networkDefaults.ipv4?.nodeCidrMaskSize,
