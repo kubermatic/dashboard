@@ -287,7 +287,8 @@ func getResourceDetailsFromRequest(req calculateProjectResourceQuotaUpdate) (*ku
 
 	var err error
 
-	if req.Body.AlibabaInstanceType != nil {
+	switch {
+	case req.Body.AlibabaInstanceType != nil:
 		nc.WithCPUCount(req.Body.AlibabaInstanceType.CPUCoreCount)
 
 		if err = nc.WithMemory(int(req.Body.AlibabaInstanceType.MemorySize), "G"); err != nil {
@@ -296,7 +297,7 @@ func getResourceDetailsFromRequest(req calculateProjectResourceQuotaUpdate) (*ku
 		if err = nc.WithStorage(req.Body.DiskSizeGB, "G"); err != nil {
 			return nil, err
 		}
-	} else if req.Body.AnexiaNodeSpec != nil {
+	case req.Body.AnexiaNodeSpec != nil:
 		nc.WithCPUCount(req.Body.AnexiaNodeSpec.CPUs)
 
 		if err = nc.WithMemory(int(req.Body.AnexiaNodeSpec.Memory), "M"); err != nil {
@@ -310,7 +311,7 @@ func getResourceDetailsFromRequest(req calculateProjectResourceQuotaUpdate) (*ku
 		if err = nc.WithStorage(int(diskSize), "G"); err != nil {
 			return nil, err
 		}
-	} else if req.Body.AWSSize != nil {
+	case req.Body.AWSSize != nil:
 		nc.WithCPUCount(req.Body.AWSSize.VCPUs)
 
 		if err = nc.WithMemory(int(req.Body.AWSSize.Memory), "G"); err != nil {
@@ -319,7 +320,8 @@ func getResourceDetailsFromRequest(req calculateProjectResourceQuotaUpdate) (*ku
 		if err = nc.WithStorage(req.Body.DiskSizeGB, "G"); err != nil {
 			return nil, err
 		}
-	} else if req.Body.AzureSize != nil {
+
+	case req.Body.AzureSize != nil:
 		nc.WithCPUCount(int(req.Body.AzureSize.NumberOfCores))
 
 		if err = nc.WithMemory(int(req.Body.AzureSize.MemoryInMB), "M"); err != nil {
@@ -329,7 +331,7 @@ func getResourceDetailsFromRequest(req calculateProjectResourceQuotaUpdate) (*ku
 		if err = nc.WithStorage(int(req.Body.AzureSize.ResourceDiskSizeInMB+req.Body.AzureSize.OsDiskSizeInMB), "M"); err != nil {
 			return nil, err
 		}
-	} else if req.Body.DOSize != nil {
+	case req.Body.DOSize != nil:
 		nc.WithCPUCount(req.Body.DOSize.VCPUs)
 
 		if err = nc.WithMemory(req.Body.DOSize.Memory, "M"); err != nil {
@@ -338,7 +340,7 @@ func getResourceDetailsFromRequest(req calculateProjectResourceQuotaUpdate) (*ku
 		if err = nc.WithStorage(req.Body.DOSize.Disk, "G"); err != nil {
 			return nil, err
 		}
-	} else if req.Body.EquinixSize != nil {
+	case req.Body.EquinixSize != nil:
 		var cpuCount int
 		for _, c := range req.Body.EquinixSize.CPUs {
 			cpuCount += c.Count
@@ -372,7 +374,7 @@ func getResourceDetailsFromRequest(req calculateProjectResourceQuotaUpdate) (*ku
 			allDrivesStorage.Add(totalStorage)
 		}
 		nc.Storage = &allDrivesStorage
-	} else if req.Body.GCPSize != nil {
+	case req.Body.GCPSize != nil:
 		nc.WithCPUCount(int(req.Body.GCPSize.VCPUs))
 
 		if err = nc.WithMemory(int(req.Body.GCPSize.Memory), "M"); err != nil {
@@ -381,7 +383,7 @@ func getResourceDetailsFromRequest(req calculateProjectResourceQuotaUpdate) (*ku
 		if err = nc.WithStorage(req.Body.DiskSizeGB, "G"); err != nil {
 			return nil, err
 		}
-	} else if req.Body.HetznerSize != nil {
+	case req.Body.HetznerSize != nil:
 		nc.WithCPUCount(req.Body.HetznerSize.Cores)
 
 		if err = nc.WithMemory(int(req.Body.HetznerSize.Memory), "G"); err != nil {
@@ -390,7 +392,7 @@ func getResourceDetailsFromRequest(req calculateProjectResourceQuotaUpdate) (*ku
 		if err = nc.WithStorage(req.Body.HetznerSize.Disk, "G"); err != nil {
 			return nil, err
 		}
-	} else if req.Body.NutanixNodeSpec != nil {
+	case req.Body.NutanixNodeSpec != nil:
 		nc.WithCPUCount(int(req.Body.NutanixNodeSpec.CPUs))
 
 		if err = nc.WithMemory(int(req.Body.NutanixNodeSpec.MemoryMB), "M"); err != nil {
@@ -404,8 +406,7 @@ func getResourceDetailsFromRequest(req calculateProjectResourceQuotaUpdate) (*ku
 		} else {
 			nc.Storage = &resource.Quantity{}
 		}
-
-	} else if req.Body.OpenstackSize != nil {
+	case req.Body.OpenstackSize != nil:
 		nc.WithCPUCount(req.Body.OpenstackSize.VCPUs)
 
 		if err = nc.WithMemory(req.Body.OpenstackSize.Memory, "G"); err != nil {
@@ -414,7 +415,7 @@ func getResourceDetailsFromRequest(req calculateProjectResourceQuotaUpdate) (*ku
 		if err = nc.WithStorage(req.Body.OpenstackSize.Disk, "G"); err != nil {
 			return nil, err
 		}
-	} else if req.Body.VSphereNodeSpec != nil {
+	case req.Body.VSphereNodeSpec != nil:
 		nc.WithCPUCount(req.Body.VSphereNodeSpec.CPUs)
 
 		if err = nc.WithMemory(req.Body.VSphereNodeSpec.Memory, "G"); err != nil {
@@ -428,8 +429,7 @@ func getResourceDetailsFromRequest(req calculateProjectResourceQuotaUpdate) (*ku
 		} else {
 			nc.Storage = &resource.Quantity{}
 		}
-
-	} else if req.Body.VMDirectorNodeSpec != nil {
+	case req.Body.VMDirectorNodeSpec != nil:
 		nc.WithCPUCount(req.Body.VMDirectorNodeSpec.CPUCores * req.Body.VMDirectorNodeSpec.CPUs)
 
 		if err = nc.WithMemory(req.Body.VMDirectorNodeSpec.MemoryMB, "M"); err != nil {
@@ -443,7 +443,7 @@ func getResourceDetailsFromRequest(req calculateProjectResourceQuotaUpdate) (*ku
 		} else {
 			nc.Storage = &resource.Quantity{}
 		}
-	} else {
+	default:
 		return nil, fmt.Errorf("provider set in request not supported: %v", req.Body)
 	}
 
