@@ -731,9 +731,9 @@ func (c *calcReq) withAlibaba(cpu, memory int) *calcReq {
 
 func (c *calcReq) withAnexia(cpu int, memory, diskSize int64) *calcReq {
 	c.AnexiaNodeSpec = &apiv1.AnexiaNodeSpec{
-		CPUs:       cpu,
-		Memory:     memory,
-		Disks:      []apiv1.AnexiaDiskConfig{{Size: diskSize}},
+		CPUs:   cpu,
+		Memory: memory,
+		Disks:  []apiv1.AnexiaDiskConfig{{Size: diskSize}},
 		// needed for json encoding
 		VlanID:     "2",
 		TemplateID: "5",
