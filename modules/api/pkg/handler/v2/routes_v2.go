@@ -1420,7 +1420,7 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 		Handler(r.getProjectQuota())
 
 	mux.Methods(http.MethodPost).
-		Path("/projects/{project_id}/calculatequotaupdate").
+		Path("/projects/{project_id}/quotacalculation").
 		Handler(r.calculateProjectQuotaUpdate())
 
 	mux.Methods(http.MethodGet).

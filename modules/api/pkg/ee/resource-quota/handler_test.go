@@ -25,6 +25,7 @@
 package resourcequota_test
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -346,6 +347,275 @@ func TestHandlerResourceQuotas(t *testing.T) {
 	}
 }
 
+func TestCalculateResourceQuotaUpdate(t *testing.T) {
+	t.Parallel()
+	testCases := []struct {
+		Name                      string
+		ProjectID                 string
+		ExistingKubermaticObjects []ctrlruntimeclient.Object
+		ExistingAPIUser           *apiv1.User
+		RequestBody               []byte
+		ExpectedHTTPStatusCode    int
+		ExpectedResponse          *apiv2.ResourceQuotaUpdateCalculation
+	}{
+		{
+			Name:                      "should get empty response if resource quota does not exist for the project",
+			ProjectID:                 test.GenDefaultProject().Name,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(),
+			ExistingAPIUser:           test.GenDefaultAPIUser(),
+			RequestBody:               newCalcReq().encode(t),
+			ExpectedHTTPStatusCode:    http.StatusOK,
+			ExpectedResponse:          nil,
+		},
+		{
+			Name:                      "should not let non-project user to access the resource",
+			ProjectID:                 test.GenDefaultProject().Name,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(),
+			ExistingAPIUser:           test.GenAPIUser("bob", "bob@bob"),
+			RequestBody:               newCalcReq().encode(t),
+			ExpectedHTTPStatusCode:    http.StatusForbidden,
+			ExpectedResponse:          nil,
+		},
+		{
+			Name:      "should notify when quota is exceeded",
+			ProjectID: test.GenDefaultProject().Name,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				newRQBuilder().
+					withQuota("12", "10G", "30G").
+					withGlobalUsage("2", "3G", "5G").
+					build()),
+			ExistingAPIUser: test.GenDefaultAPIUser(),
+			RequestBody: newCalcReq().
+				withReplicas(2).
+				withDiskSize(30).
+				withAWS(2, 3).
+				encode(t),
+			ExpectedHTTPStatusCode: http.StatusOK,
+			ExpectedResponse: newRQUpdateCalculationBuilder().
+				withQuota(genAPIQuota(12, 10, 30)).
+				withGlobalUsage(genAPIQuota(2, 3, 5)).
+				withCalculatedQuota(genAPIQuota(6, 9, 65)).
+				withMessage("Calculated disk size (65G) exceeds resource quota (30G)").
+				build(),
+		},
+		{
+			Name:      "should process aws request successfully",
+			ProjectID: test.GenDefaultProject().Name,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				newRQBuilder().
+					withQuota("12", "10G", "30G").
+					withGlobalUsage("2", "3G", "5G").
+					build()),
+			ExistingAPIUser: test.GenDefaultAPIUser(),
+			RequestBody: newCalcReq().
+				withReplicas(2).
+				withDiskSize(10).
+				withAWS(2, 3).
+				encode(t),
+			ExpectedHTTPStatusCode: http.StatusOK,
+			ExpectedResponse: newRQUpdateCalculationBuilder().
+				withQuota(genAPIQuota(12, 10, 30)).
+				withGlobalUsage(genAPIQuota(2, 3, 5)).
+				withCalculatedQuota(genAPIQuota(6, 9, 25)).
+				build(),
+		},
+		{
+			Name:      "should process alibaba request successfully",
+			ProjectID: test.GenDefaultProject().Name,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				newRQBuilder().
+					withQuota("12", "10G", "30G").
+					withGlobalUsage("2", "3G", "5G").
+					build()),
+			ExistingAPIUser: test.GenDefaultAPIUser(),
+			RequestBody: newCalcReq().
+				withReplicas(2).
+				withDiskSize(10).
+				withAlibaba(2, 3).
+				encode(t),
+			ExpectedHTTPStatusCode: http.StatusOK,
+			ExpectedResponse: newRQUpdateCalculationBuilder().
+				withQuota(genAPIQuota(12, 10, 30)).
+				withGlobalUsage(genAPIQuota(2, 3, 5)).
+				withCalculatedQuota(genAPIQuota(6, 9, 25)).
+				build(),
+		},
+		{
+			Name:      "should process anexia request successfully",
+			ProjectID: test.GenDefaultProject().Name,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				newRQBuilder().
+					withQuota("12", "10G", "30G").
+					withGlobalUsage("2", "3G", "5G").
+					build()),
+			ExistingAPIUser: test.GenDefaultAPIUser(),
+			RequestBody: newCalcReq().
+				withReplicas(2).
+				withAnexia(2, 3000, 10).
+				encode(t),
+			ExpectedHTTPStatusCode: http.StatusOK,
+			ExpectedResponse: newRQUpdateCalculationBuilder().
+				withQuota(genAPIQuota(12, 10, 30)).
+				withGlobalUsage(genAPIQuota(2, 3, 5)).
+				withCalculatedQuota(genAPIQuota(6, 9, 25)).
+				build(),
+		},
+		{
+			Name:      "should process azure request successfully",
+			ProjectID: test.GenDefaultProject().Name,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				newRQBuilder().
+					withQuota("12", "10G", "30G").
+					withGlobalUsage("2", "3G", "5G").
+					build()),
+			ExistingAPIUser: test.GenDefaultAPIUser(),
+			RequestBody: newCalcReq().
+				withReplicas(2).
+				withAzure(2, 3000, 10000).
+				encode(t),
+			ExpectedHTTPStatusCode: http.StatusOK,
+			ExpectedResponse: newRQUpdateCalculationBuilder().
+				withQuota(genAPIQuota(12, 10, 30)).
+				withGlobalUsage(genAPIQuota(2, 3, 5)).
+				withCalculatedQuota(genAPIQuota(6, 9, 25)).
+				build(),
+		},
+		{
+			Name:      "should process do request successfully",
+			ProjectID: test.GenDefaultProject().Name,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				newRQBuilder().
+					withQuota("12", "10G", "30G").
+					withGlobalUsage("2", "3G", "5G").
+					build()),
+			ExistingAPIUser: test.GenDefaultAPIUser(),
+			RequestBody: newCalcReq().
+				withReplicas(2).
+				withDO(2, 3000, 10).
+				encode(t),
+			ExpectedHTTPStatusCode: http.StatusOK,
+			ExpectedResponse: newRQUpdateCalculationBuilder().
+				withQuota(genAPIQuota(12, 10, 30)).
+				withGlobalUsage(genAPIQuota(2, 3, 5)).
+				withCalculatedQuota(genAPIQuota(6, 9, 25)).
+				build(),
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.Name, func(t *testing.T) {
+			requestURL := fmt.Sprintf("/api/v2/projects/%s/quotacalculation", tc.ProjectID)
+			req := httptest.NewRequest(http.MethodPost, requestURL, bytes.NewBuffer(tc.RequestBody))
+			resp := httptest.NewRecorder()
+
+			ep, err := test.CreateTestEndpoint(*tc.ExistingAPIUser, nil, tc.ExistingKubermaticObjects, nil, hack.NewTestRouting)
+			if err != nil {
+				t.Fatalf("failed to create test endpoint: %v", err)
+			}
+			ep.ServeHTTP(resp, req)
+
+			if resp.Code != tc.ExpectedHTTPStatusCode {
+				t.Fatalf("Expected HTTP status code %d, got %d: %s", tc.ExpectedHTTPStatusCode, resp.Code, resp.Body.String())
+			}
+			// skip the comparison for error codes and when the name is generated
+			if resp.Code == http.StatusOK {
+				b, err := json.Marshal(tc.ExpectedResponse)
+				if err != nil {
+					t.Fatalf("failed to marshal expected response %v", err)
+				}
+				test.CompareWithResult(t, resp, string(b))
+			}
+		})
+	}
+}
+
+type calcReq struct {
+	Replicas int `json:"replicas"`
+	// DiskSizeGB will be processed only for those providers which don't have the disk size in their API objects, like AWS, Alibabla and GCP.
+	DiskSizeGB          int                        `json:"diskSizeGB,omitempty"`
+	AlibabaInstanceType *apiv1.AlibabaInstanceType `json:"alibabaInstanceType,omitempty"`
+	AnexiaNodeSpec      *apiv1.AnexiaNodeSpec      `json:"anexiaNodeSpec,omitempty"`
+	AWSSize             *apiv1.AWSSize             `json:"awsSize,omitempty"`
+	AzureSize           *apiv1.AzureSize           `json:"azureSize,omitempty"`
+	DOSize              *apiv1.DigitaloceanSize    `json:"doSize,omitempty"`
+	EquinixSize         *apiv1.PacketSize          `json:"equinixSize,omitempty"`
+	GCPSize             *apiv1.GCPMachineSize      `json:"gcpSize,omitempty"`
+	HetznerSize         *apiv1.HetznerSize         `json:"hetznerSize,omitempty"`
+	// TODO Kubevirt
+	NutanixNodeSpec    *apiv1.NutanixNodeSpec             `json:"nutanixNodeSpec,omitempty"`
+	OpenstackSize      *apiv1.OpenstackSize               `json:"openstackSize,omitempty"`
+	VMDirectorNodeSpec *apiv1.VMwareCloudDirectorNodeSpec `json:"vmDirectorNodeSpec,omitempty"`
+	VSphereNodeSpec    *apiv1.VSphereNodeSpec             `json:"vSphereNodeSpec,omitempty"`
+}
+
+func newCalcReq() *calcReq {
+	return &calcReq{}
+}
+
+func (c *calcReq) encode(t *testing.T) []byte {
+	body, err := json.Marshal(c)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	return body
+}
+
+func (c *calcReq) withReplicas(replicas int) *calcReq {
+	c.Replicas = replicas
+	return c
+}
+
+func (c *calcReq) withDiskSize(disk int) *calcReq {
+	c.DiskSizeGB = disk
+	return c
+}
+
+func (c *calcReq) withAWS(cpu, memory int) *calcReq {
+	c.AWSSize = &apiv1.AWSSize{
+		VCPUs:  cpu,
+		Memory: float32(memory),
+	}
+	return c
+}
+
+func (c *calcReq) withAlibaba(cpu, memory int) *calcReq {
+	c.AlibabaInstanceType = &apiv1.AlibabaInstanceType{
+		CPUCoreCount: cpu,
+		MemorySize:   float64(memory),
+	}
+	return c
+}
+
+func (c *calcReq) withAnexia(cpu int, memory, diskSize int64) *calcReq {
+	c.AnexiaNodeSpec = &apiv1.AnexiaNodeSpec{
+		CPUs:       cpu,
+		Memory:     memory,
+		Disks:      []apiv1.AnexiaDiskConfig{{Size: diskSize}},
+		VlanID:     "2",
+		TemplateID: "5",
+	}
+	return c
+}
+
+func (c *calcReq) withAzure(cpu, memory, storage int32) *calcReq {
+	c.AzureSize = &apiv1.AzureSize{
+		NumberOfCores:        cpu,
+		MemoryInMB:           memory,
+		ResourceDiskSizeInMB: storage,
+	}
+	return c
+}
+
+func (c *calcReq) withDO(cpu, memory, storage int) *calcReq {
+	c.DOSize = &apiv1.DigitaloceanSize{
+		VCPUs:  cpu,
+		Memory: memory,
+		Disk:   storage,
+	}
+	return c
+}
+
 func genQuota(cpu resource.Quantity, mem resource.Quantity, storage resource.Quantity) kubermaticv1.ResourceDetails {
 	return kubermaticv1.ResourceDetails{
 		CPU:     &cpu,
@@ -365,4 +635,102 @@ func genAPIQuota(cpu int64, mem, storage float64) apiv2.Quota {
 		quota.Storage = &storage
 	}
 	return quota
+}
+
+type rqBuilder struct {
+	resourceQuota *kubermaticv1.ResourceQuota
+}
+
+func (r *rqBuilder) build() *kubermaticv1.ResourceQuota {
+	return r.resourceQuota
+}
+
+func newRQBuilder() *rqBuilder {
+	return &rqBuilder{resourceQuota: genDefaultResourceQuota()}
+}
+
+func (r *rqBuilder) withQuota(cpu, mem, storage string) *rqBuilder {
+	r.resourceQuota.Spec.Quota = genQuota(resource.MustParse(cpu), resource.MustParse(mem), resource.MustParse(storage))
+	return r
+}
+
+func (r *rqBuilder) withGlobalUsage(cpu, mem, storage string) *rqBuilder {
+	r.resourceQuota.Status.GlobalUsage = genQuota(resource.MustParse(cpu), resource.MustParse(mem), resource.MustParse(storage))
+	return r
+}
+
+func genDefaultResourceQuota() *kubermaticv1.ResourceQuota {
+	return &kubermaticv1.ResourceQuota{
+		ObjectMeta: metav1.ObjectMeta{
+			Name: fmt.Sprintf("project-%s", projectName),
+			Labels: map[string]string{
+				kubermaticv1.ResourceQuotaSubjectKindLabelKey: kubermaticv1.ProjectSubjectKind,
+				kubermaticv1.ResourceQuotaSubjectNameLabelKey: projectName,
+			},
+		},
+		Spec: kubermaticv1.ResourceQuotaSpec{
+			Subject: kubermaticv1.Subject{
+				Name: projectName,
+				Kind: kubermaticv1.ProjectSubjectKind,
+			},
+			Quota: genQuota(resource.MustParse("5"), resource.MustParse("10G"), resource.MustParse("20Gi")),
+		},
+		Status: kubermaticv1.ResourceQuotaStatus{
+			GlobalUsage: genQuota(resource.MustParse("3"), resource.MustParse("2000M"), resource.MustParse("10G")),
+		},
+	}
+}
+
+func genAPIResourceQuota(quota, globalUsage apiv2.Quota) apiv2.ResourceQuota {
+	return apiv2.ResourceQuota{
+		Name:        fmt.Sprintf("project-%s", projectName),
+		SubjectName: projectName,
+		SubjectKind: kubermaticv1.ProjectSubjectKind,
+		Quota:       quota,
+		Status: apiv2.ResourceQuotaStatus{
+			GlobalUsage: globalUsage,
+		},
+		SubjectHumanReadableName: "my-first-project",
+	}
+}
+
+type rqUpdateCalculationBuilder struct {
+	cr apiv2.ResourceQuotaUpdateCalculation
+}
+
+func newRQUpdateCalculationBuilder() *rqUpdateCalculationBuilder {
+	return &rqUpdateCalculationBuilder{
+		cr: apiv2.ResourceQuotaUpdateCalculation{
+			ResourceQuota: apiv2.ResourceQuota{
+				Name:                     fmt.Sprintf("project-%s", projectName),
+				SubjectName:              projectName,
+				SubjectKind:              kubermaticv1.ProjectSubjectKind,
+				SubjectHumanReadableName: "my-first-project",
+			},
+		},
+	}
+}
+
+func (r *rqUpdateCalculationBuilder) withQuota(quota apiv2.Quota) *rqUpdateCalculationBuilder {
+	r.cr.ResourceQuota.Quota = quota
+	return r
+}
+
+func (r *rqUpdateCalculationBuilder) withGlobalUsage(usage apiv2.Quota) *rqUpdateCalculationBuilder {
+	r.cr.ResourceQuota.Status.GlobalUsage = usage
+	return r
+}
+
+func (r *rqUpdateCalculationBuilder) withCalculatedQuota(calc apiv2.Quota) *rqUpdateCalculationBuilder {
+	r.cr.CalculatedQuota = calc
+	return r
+}
+
+func (r *rqUpdateCalculationBuilder) withMessage(msg string) *rqUpdateCalculationBuilder {
+	r.cr.Message = msg
+	return r
+}
+
+func (r *rqUpdateCalculationBuilder) build() *apiv2.ResourceQuotaUpdateCalculation {
+	return &r.cr
 }

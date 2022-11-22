@@ -56,7 +56,7 @@ type getResourceQuota struct {
 
 // swagger:parameters calculateProjectResourceQuotaUpdate
 type calculateProjectResourceQuotaUpdate struct {
-	common.ProjectReq
+	common.GetProjectRq
 	Body struct {
 		Replicas int `json:"replicas"`
 		// DiskSizeGB will be processed only for those providers which don't have the disk size in their API objects, like AWS, Alibabla and GCP.
@@ -234,7 +234,7 @@ func CalculateResourceQuotaUpdateForProject(ctx context.Context, request interfa
 		return nil, utilerrors.NewBadRequest("invalid request")
 	}
 
-	projectResourceQuota, projectName, err := getProjectResourceQuota(ctx, request, projectProvider, privilegedProjectProvider, userInfoGetter, quotaProvider)
+	projectResourceQuota, projectName, err := getProjectResourceQuota(ctx, req.GetProjectRq, projectProvider, privilegedProjectProvider, userInfoGetter, quotaProvider)
 	if err != nil {
 		return nil, err
 	}
