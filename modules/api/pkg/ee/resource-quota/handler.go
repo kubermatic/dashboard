@@ -284,165 +284,58 @@ func CalculateResourceQuotaUpdateForProject(ctx context.Context, request interfa
 }
 
 func getResourceDetailsFromRequest(req calculateProjectResourceQuotaUpdate) (*kubermaticv1.ResourceDetails, error) {
-	nc := kubermaticprovider.NodeCapacity{}
+	nc := &kubermaticprovider.NodeCapacity{}
 
 	var err error
 
 	switch {
 	case req.Body.AlibabaInstanceType != nil:
-		nc.WithCPUCount(req.Body.AlibabaInstanceType.CPUCoreCount)
-
-		if err = nc.WithMemory(int(req.Body.AlibabaInstanceType.MemorySize), "G"); err != nil {
-			return nil, err
-		}
-		if err = nc.WithStorage(req.Body.DiskSizeGB, "G"); err != nil {
+		if err = getAlibabaResourceDetails(req, nc); err != nil {
 			return nil, err
 		}
 	case req.Body.AnexiaNodeSpec != nil:
-		nc.WithCPUCount(req.Body.AnexiaNodeSpec.CPUs)
-
-		if err = nc.WithMemory(int(req.Body.AnexiaNodeSpec.Memory), "M"); err != nil {
-			return nil, err
-		}
-
-		var diskSize int64
-		for _, disk := range req.Body.AnexiaNodeSpec.Disks {
-			diskSize += disk.Size
-		}
-		if err = nc.WithStorage(int(diskSize), "G"); err != nil {
+		if err = getAnexiaResourceDetails(req, nc); err != nil {
 			return nil, err
 		}
 	case req.Body.AWSSize != nil:
-		nc.WithCPUCount(req.Body.AWSSize.VCPUs)
-
-		if err = nc.WithMemory(int(req.Body.AWSSize.Memory), "G"); err != nil {
+		if err = getAWSResourceDetails(req, nc); err != nil {
 			return nil, err
 		}
-		if err = nc.WithStorage(req.Body.DiskSizeGB, "G"); err != nil {
-			return nil, err
-		}
-
 	case req.Body.AzureSize != nil:
-		nc.WithCPUCount(int(req.Body.AzureSize.NumberOfCores))
-
-		if err = nc.WithMemory(int(req.Body.AzureSize.MemoryInMB), "M"); err != nil {
-			return nil, err
-		}
-
-		if err = nc.WithStorage(int(req.Body.AzureSize.ResourceDiskSizeInMB+req.Body.AzureSize.OsDiskSizeInMB), "M"); err != nil {
+		if err = getAzureResourceDetails(req, nc); err != nil {
 			return nil, err
 		}
 	case req.Body.DOSize != nil:
-		nc.WithCPUCount(req.Body.DOSize.VCPUs)
-
-		if err = nc.WithMemory(req.Body.DOSize.Memory, "M"); err != nil {
-			return nil, err
-		}
-		if err = nc.WithStorage(req.Body.DOSize.Disk, "G"); err != nil {
+		if err = getDOResourceDetails(req, nc); err != nil {
 			return nil, err
 		}
 	case req.Body.EquinixSize != nil:
-		var cpuCount int
-		for _, c := range req.Body.EquinixSize.CPUs {
-			cpuCount += c.Count
-		}
-		nc.WithCPUCount(cpuCount)
-
-		// trimming "B" as quantities must match the regular expression '^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$'.
-		memory, err := resource.ParseQuantity(strings.TrimSuffix(req.Body.EquinixSize.Memory, "B"))
-		if err != nil {
+		if err = getEquinixResourceDetails(req, nc); err != nil {
 			return nil, err
 		}
-		nc.Memory = &memory
-
-		var allDrivesStorage resource.Quantity
-		for _, drive := range req.Body.EquinixSize.Drives {
-			if drive.Size == "" || drive.Count == 0 {
-				continue
-			}
-
-			storage, err := resource.ParseQuantity(strings.TrimSuffix(drive.Size, "B"))
-			if err != nil {
-				return nil, err
-			}
-
-			// total storage for each types = drive count *drive Size.
-			strDrive := strconv.FormatInt(storage.Value()*int64(drive.Count), 10)
-			totalStorage, err := resource.ParseQuantity(strDrive)
-			if err != nil {
-				return nil, err
-			}
-			allDrivesStorage.Add(totalStorage)
-		}
-		nc.Storage = &allDrivesStorage
 	case req.Body.GCPSize != nil:
-		nc.WithCPUCount(int(req.Body.GCPSize.VCPUs))
-
-		if err = nc.WithMemory(int(req.Body.GCPSize.Memory), "M"); err != nil {
-			return nil, err
-		}
-		if err = nc.WithStorage(req.Body.DiskSizeGB, "G"); err != nil {
+		if err = getGCPResourceDetails(req, nc); err != nil {
 			return nil, err
 		}
 	case req.Body.HetznerSize != nil:
-		nc.WithCPUCount(req.Body.HetznerSize.Cores)
-
-		if err = nc.WithMemory(int(req.Body.HetznerSize.Memory), "G"); err != nil {
-			return nil, err
-		}
-		if err = nc.WithStorage(req.Body.HetznerSize.Disk, "G"); err != nil {
+		if err = getHetznerResourceDetails(req, nc); err != nil {
 			return nil, err
 		}
 	case req.Body.NutanixNodeSpec != nil:
-		nc.WithCPUCount(int(req.Body.NutanixNodeSpec.CPUs))
-
-		if err = nc.WithMemory(int(req.Body.NutanixNodeSpec.MemoryMB), "M"); err != nil {
+		if err = getNutanixResourceDetails(req, nc); err != nil {
 			return nil, err
-		}
-
-		if req.Body.NutanixNodeSpec.DiskSize != nil {
-			if err = nc.WithStorage(int(*req.Body.NutanixNodeSpec.DiskSize), "G"); err != nil {
-				return nil, err
-			}
-		} else {
-			nc.Storage = &resource.Quantity{}
 		}
 	case req.Body.OpenstackSize != nil:
-		nc.WithCPUCount(req.Body.OpenstackSize.VCPUs)
-
-		if err = nc.WithMemory(req.Body.OpenstackSize.Memory, "G"); err != nil {
-			return nil, err
-		}
-		if err = nc.WithStorage(req.Body.OpenstackSize.Disk, "G"); err != nil {
+		if err = getOpenstackResourceDetails(req, nc); err != nil {
 			return nil, err
 		}
 	case req.Body.VSphereNodeSpec != nil:
-		nc.WithCPUCount(req.Body.VSphereNodeSpec.CPUs)
-
-		if err = nc.WithMemory(req.Body.VSphereNodeSpec.Memory, "G"); err != nil {
+		if err = getVSphereResourceDetails(req, nc); err != nil {
 			return nil, err
-		}
-
-		if req.Body.VSphereNodeSpec.DiskSizeGB != nil {
-			if err = nc.WithStorage(int(*req.Body.VSphereNodeSpec.DiskSizeGB), "G"); err != nil {
-				return nil, err
-			}
-		} else {
-			nc.Storage = &resource.Quantity{}
 		}
 	case req.Body.VMDirectorNodeSpec != nil:
-		nc.WithCPUCount(req.Body.VMDirectorNodeSpec.CPUCores * req.Body.VMDirectorNodeSpec.CPUs)
-
-		if err = nc.WithMemory(req.Body.VMDirectorNodeSpec.MemoryMB, "M"); err != nil {
+		if err = getVMCloudDirectorResourceDetails(req, nc); err != nil {
 			return nil, err
-		}
-
-		if req.Body.VMDirectorNodeSpec.DiskSizeGB != nil {
-			if err = nc.WithStorage(int(*req.Body.VMDirectorNodeSpec.DiskSizeGB), "G"); err != nil {
-				return nil, err
-			}
-		} else {
-			nc.Storage = &resource.Quantity{}
 		}
 	default:
 		return nil, fmt.Errorf("provider set in request not supported: %v", req.Body)
@@ -470,6 +363,196 @@ func getResourceDetailsFromRequest(req calculateProjectResourceQuotaUpdate) (*ku
 	rd := kubermaticv1.NewResourceDetails(cpu, mem, sto)
 
 	return rd, nil
+}
+
+func getAlibabaResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kubermaticprovider.NodeCapacity) error {
+	nc.WithCPUCount(req.Body.AlibabaInstanceType.CPUCoreCount)
+
+	if err := nc.WithMemory(int(req.Body.AlibabaInstanceType.MemorySize), "G"); err != nil {
+		return err
+	}
+	if err := nc.WithStorage(req.Body.DiskSizeGB, "G"); err != nil {
+		return err
+	}
+	return nil
+}
+
+func getAnexiaResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kubermaticprovider.NodeCapacity) error {
+	nc.WithCPUCount(req.Body.AnexiaNodeSpec.CPUs)
+
+	if err := nc.WithMemory(int(req.Body.AnexiaNodeSpec.Memory), "M"); err != nil {
+		return err
+	}
+
+	var diskSize int64
+	for _, disk := range req.Body.AnexiaNodeSpec.Disks {
+		diskSize += disk.Size
+	}
+	if err := nc.WithStorage(int(diskSize), "G"); err != nil {
+		return err
+	}
+	return nil
+}
+
+func getAWSResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kubermaticprovider.NodeCapacity) error {
+	nc.WithCPUCount(req.Body.AWSSize.VCPUs)
+
+	if err := nc.WithMemory(int(req.Body.AWSSize.Memory), "G"); err != nil {
+		return err
+	}
+	if err := nc.WithStorage(req.Body.DiskSizeGB, "G"); err != nil {
+		return err
+	}
+	return nil
+}
+
+func getAzureResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kubermaticprovider.NodeCapacity) error {
+	nc.WithCPUCount(int(req.Body.AzureSize.NumberOfCores))
+
+	if err := nc.WithMemory(int(req.Body.AzureSize.MemoryInMB), "M"); err != nil {
+		return err
+	}
+
+	if err := nc.WithStorage(int(req.Body.AzureSize.ResourceDiskSizeInMB+req.Body.AzureSize.OsDiskSizeInMB), "M"); err != nil {
+		return err
+	}
+	return nil
+}
+
+func getDOResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kubermaticprovider.NodeCapacity) error {
+	nc.WithCPUCount(req.Body.DOSize.VCPUs)
+
+	if err := nc.WithMemory(req.Body.DOSize.Memory, "M"); err != nil {
+		return err
+	}
+	if err := nc.WithStorage(req.Body.DOSize.Disk, "G"); err != nil {
+		return err
+	}
+	return nil
+}
+
+func getEquinixResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kubermaticprovider.NodeCapacity) error {
+	var cpuCount int
+	for _, c := range req.Body.EquinixSize.CPUs {
+		cpuCount += c.Count
+	}
+	nc.WithCPUCount(cpuCount)
+
+	// trimming "B" as quantities must match the regular expression '^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$'.
+	memory, err := resource.ParseQuantity(strings.TrimSuffix(req.Body.EquinixSize.Memory, "B"))
+	if err != nil {
+		return err
+	}
+	nc.Memory = &memory
+
+	var allDrivesStorage resource.Quantity
+	for _, drive := range req.Body.EquinixSize.Drives {
+		if drive.Size == "" || drive.Count == 0 {
+			continue
+		}
+
+		storage, err := resource.ParseQuantity(strings.TrimSuffix(drive.Size, "B"))
+		if err != nil {
+			return err
+		}
+
+		// total storage for each types = drive count *drive Size.
+		strDrive := strconv.FormatInt(storage.Value()*int64(drive.Count), 10)
+		totalStorage, err := resource.ParseQuantity(strDrive)
+		if err != nil {
+			return err
+		}
+		allDrivesStorage.Add(totalStorage)
+	}
+	nc.Storage = &allDrivesStorage
+	return nil
+}
+
+func getGCPResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kubermaticprovider.NodeCapacity) error {
+	nc.WithCPUCount(int(req.Body.GCPSize.VCPUs))
+
+	if err := nc.WithMemory(int(req.Body.GCPSize.Memory), "M"); err != nil {
+		return err
+	}
+	if err := nc.WithStorage(req.Body.DiskSizeGB, "G"); err != nil {
+		return err
+	}
+	return nil
+}
+
+func getHetznerResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kubermaticprovider.NodeCapacity) error {
+	nc.WithCPUCount(req.Body.HetznerSize.Cores)
+
+	if err := nc.WithMemory(int(req.Body.HetznerSize.Memory), "G"); err != nil {
+		return err
+	}
+	if err := nc.WithStorage(req.Body.HetznerSize.Disk, "G"); err != nil {
+		return err
+	}
+	return nil
+}
+
+func getNutanixResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kubermaticprovider.NodeCapacity) error {
+	nc.WithCPUCount(int(req.Body.NutanixNodeSpec.CPUs))
+
+	if err := nc.WithMemory(int(req.Body.NutanixNodeSpec.MemoryMB), "M"); err != nil {
+		return err
+	}
+
+	if req.Body.NutanixNodeSpec.DiskSize != nil {
+		if err := nc.WithStorage(int(*req.Body.NutanixNodeSpec.DiskSize), "G"); err != nil {
+			return err
+		}
+	} else {
+		nc.Storage = &resource.Quantity{}
+	}
+	return nil
+}
+
+func getOpenstackResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kubermaticprovider.NodeCapacity) error {
+	nc.WithCPUCount(req.Body.OpenstackSize.VCPUs)
+
+	if err := nc.WithMemory(req.Body.OpenstackSize.Memory, "G"); err != nil {
+		return err
+	}
+	if err := nc.WithStorage(req.Body.OpenstackSize.Disk, "G"); err != nil {
+		return err
+	}
+	return nil
+}
+
+func getVSphereResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kubermaticprovider.NodeCapacity) error {
+	nc.WithCPUCount(req.Body.VSphereNodeSpec.CPUs)
+
+	if err := nc.WithMemory(req.Body.VSphereNodeSpec.Memory, "G"); err != nil {
+		return err
+	}
+
+	if req.Body.VSphereNodeSpec.DiskSizeGB != nil {
+		if err := nc.WithStorage(int(*req.Body.VSphereNodeSpec.DiskSizeGB), "G"); err != nil {
+			return err
+		}
+	} else {
+		nc.Storage = &resource.Quantity{}
+	}
+	return nil
+}
+
+func getVMCloudDirectorResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kubermaticprovider.NodeCapacity) error {
+	nc.WithCPUCount(req.Body.VMDirectorNodeSpec.CPUCores * req.Body.VMDirectorNodeSpec.CPUs)
+
+	if err := nc.WithMemory(req.Body.VMDirectorNodeSpec.MemoryMB, "M"); err != nil {
+		return err
+	}
+
+	if req.Body.VMDirectorNodeSpec.DiskSizeGB != nil {
+		if err := nc.WithStorage(int(*req.Body.VMDirectorNodeSpec.DiskSizeGB), "G"); err != nil {
+			return err
+		}
+	} else {
+		nc.Storage = &resource.Quantity{}
+	}
+	return nil
 }
 
 func getProjectResourceQuota(ctx context.Context, request interface{}, projectProvider provider.ProjectProvider,
