@@ -533,6 +533,13 @@ km-dashboard {
       overflow-y: auto;
       padding-right: 24px;
     }
+
+    // Override material default "Forms" field padding
+    & km-preset-settings-step {
+      mat-form-field.mat-form-field .mat-form-field-wrapper {
+        padding-bottom: 0;
+      }
+    }
   }
 
   &.km-changelog-dialog {
