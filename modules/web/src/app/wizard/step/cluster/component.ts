@@ -609,10 +609,11 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   private getAPIServerAllowedIPRange(): NetworkRanges {
     let apiServerAllowedIPRange = null;
 
-    if (this.controlValue(Controls.ExposeStrategy) === ExposeStrategy.loadbalancer) {
-      apiServerAllowedIPRange = this.controlValue(Controls.APIServerAllowedIPRanges)?.tags;
+    if (this.controlValue(Controls.ExposeStrategy) !== ExposeStrategy.loadbalancer) {
+      return apiServerAllowedIPRange;
     }
-    return apiServerAllowedIPRange === null ? null : {cidrBlocks: apiServerAllowedIPRange};
+    apiServerAllowedIPRange = this.controlValue(Controls.APIServerAllowedIPRanges)?.tags;
+    return !apiServerAllowedIPRange ? {cidrBlocks: []} : {cidrBlocks: apiServerAllowedIPRange};
   }
 
   private _getClusterEntity(): Cluster {
@@ -630,7 +631,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       nodeCidrMaskSizeIPv4: this.controlValue(Controls.IPv4CIDRMaskSize),
       nodeLocalDNSCacheEnabled: this.controlValue(Controls.NodeLocalDNSCache),
       konnectivityEnabled: konnectivity,
-      clusterExposeStrategy: this.controlValue(Controls.ExposeStrategy),
     } as ClusterNetwork;
 
     if (this.isDualStackIPFamilySelected()) {
@@ -666,6 +666,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           monitoringEnabled: this.controlValue(Controls.MLAMonitoring),
         },
         enableUserSSHKeyAgent: this.controlValue(Controls.UserSSHKeyAgent),
+        exposeStrategy: this.controlValue(Controls.ExposeStrategy),
         enableOperatingSystemManager: this.controlValue(Controls.OperatingSystemManager),
         containerRuntime: this.controlValue(Controls.ContainerRuntime),
         clusterNetwork,
