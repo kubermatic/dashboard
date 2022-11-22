@@ -1565,9 +1565,7 @@ func (r Routing) listProjectGCPSubnetworks() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
-			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
-		)(provider.GCPSubnetworkWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider, r.seedsGetter, r.userInfoGetter)),
+		)(provider.ListProjectGCPSubnetworks(r.projectProvider, r.privilegedProjectProvider, r.seedsGetter, r.userInfoGetter)),
 		provider.DecodeGCPSubnetworksNoCredentialReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -1602,7 +1600,7 @@ func (r Routing) listProjectGCPNetworks() http.Handler {
 			middleware.UserSaver(r.userProvider),
 			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
-		)(provider.GCPNetworkWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider, r.userInfoGetter)),
+		)(provider.ListProjectGCPNetworks(r.projectProvider, r.privilegedProjectProvider, r.userInfoGetter)),
 		cluster.DecodeGetClusterReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -1624,7 +1622,7 @@ func (r Routing) listProjectGCPZones() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(externalcluster.GKEZonesEndpoint(r.presetProvider, r.userInfoGetter, true)),
+		)(externalcluster.ListProjectGCPZones(r.presetProvider, r.userInfoGetter, true)),
 		externalcluster.DecodeGKEProjectCommonReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -1646,7 +1644,7 @@ func (r Routing) listProjectGCPSizes() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(externalcluster.GKEVMSizesEndpoint(r.presetProvider, r.userInfoGetter, true)),
+		)(externalcluster.ListProjectGCPSizes(r.presetProvider, r.userInfoGetter, true)),
 		externalcluster.DecodeGKEProjectVMReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,

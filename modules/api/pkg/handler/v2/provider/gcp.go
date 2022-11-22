@@ -65,18 +65,31 @@ type gcpSubnetworksNoCredentialReq struct {
 type GCPCommonReq struct {
 	ServiceAccount string
 	Credential     string
+}
 
-	Zone string
+type GCPProjectCommonReq struct {
+	Common    GCPCommonReq
+	ProjectID string
 }
 
 type GCPVMReq struct {
-	common GCPCommonReq
+	Common GCPCommonReq
 	Zone   string
 }
 
 type GCPProjectVMReq struct {
 	GCPVMReq  GCPVMReq
 	ProjectId string
+}
+
+type GCPDCReq struct {
+	Common GCPCommonReq
+	DC     string
+}
+
+type GCPProjectDCReq struct {
+	ProjectReq GCPProjectCommonReq
+	DC         string
 }
 
 // GetSeedCluster returns the SeedCluster object.
@@ -137,7 +150,7 @@ func (req GCPVMReq) Validate() error {
 	if len(req.Zone) == 0 {
 		return fmt.Errorf("GCP zone cannot be empty")
 	}
-	return nil
+	return req.Common.Validate()
 }
 
 func getSAFromPreset(ctx context.Context,
@@ -187,15 +200,66 @@ func ListProjectGCPDiskTypes(presetProvider provider.PresetProvider, userInfoGet
 			return nil, utilerrors.NewBadRequest(err.Error())
 		}
 
-		sa := req.common.ServiceAccount
-		var err error
-
-		sa, err = getSAFromPreset(ctx, userInfoGetter, presetProvider, req.common.Credential, projectID)
+		sa, err := getSAFromPreset(ctx, userInfoGetter, presetProvider, req.Common.Credential, projectID)
 		if err != nil {
 			return nil, err
 		}
 
 		return providercommon.ListGCPDiskTypes(ctx, sa, req.Zone)
+	}
+}
+
+func ListProjectGCPZones(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, seedGetter provider.SeedsGetter, withProject bool) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		var (
+			req        GCPCommonReq
+			projectID  string
+			datacenter string
+		)
+
+		if !withProject {
+			dcReq, ok := request.(GCPDCReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+			req = dcReq.Common
+			datacenter = dcReq.DC
+		} else {
+			projectReq, ok := request.(GCPProjectDCReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+
+			projectID = projectReq.ProjectReq.ProjectID
+			datacenter = projectReq.DC
+			req = projectReq.ProjectReq.Common
+		}
+
+		req, ok := request.(GCPCommonReq)
+		if !ok {
+			return nil, utilerrors.NewBadRequest("invalid request")
+		}
+		if err := req.Validate(); err != nil {
+			return nil, utilerrors.NewBadRequest(err.Error())
+		}
+
+		sa, err := getSAFromPreset(ctx, userInfoGetter, presetProvider, req.Credential, projectID)
+		if err != nil {
+			return nil, err
+		}
+
+		userInfo, err := userInfoGetter(ctx, projectID)
+		if err != nil {
+			return nil, err
+		}
+
+		return providercommon.ListGCPZones(ctx, userInfo, sa, datacenter, seedGetter)
+	}
+}
+
+func ListGCPSubnetworks(ctx context.Context, userInfo *provider.UserInfo, datacenterName string, networkName string, seedsGetter provider.SeedsGetter) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		return nil, nil
 	}
 }
 
