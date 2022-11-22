@@ -19,7 +19,7 @@ import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {environment} from '@environments/environment';
-import {getViewDisplayName, View} from '@shared/entity/common';
+import {getViewDisplayName, ProjectSidenavMainSection, View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {CustomLink, UserSettings} from '@shared/entity/settings';
@@ -36,6 +36,7 @@ import {DynamicModule} from '@app/dynamic/module-registry';
 })
 export class SidenavComponent implements OnInit, OnDestroy {
   readonly view = View;
+  readonly projectSidenavMainSections = ProjectSidenavMainSection;
   readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   environment: any = environment;
   customLinks: CustomLink[] = [];
@@ -109,9 +110,11 @@ export class SidenavComponent implements OnInit, OnDestroy {
     const isProjectAndUrlExists = !!urlArray.find(x => x === selectedProjectID) && !!urlArray.find(x => x === url);
     if (url === View.Clusters) {
       return (
-        isProjectAndUrlExists &&
-        !urlArray.find(x => x === View.ExternalClusters || !!urlArray.find(x => x === View.Wizard))
+        (isProjectAndUrlExists && !urlArray.find(x => x === View.ExternalClusters)) ||
+        !!urlArray.find(x => x === View.Wizard)
       );
+    } else if (url === View.ExternalClusters) {
+      return isProjectAndUrlExists || !!urlArray.find(x => x === View.ExternalClusterWizard);
     }
     return isProjectAndUrlExists;
   }
@@ -137,7 +140,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     return {'background-image': `url('${CustomLink.getIcon(link)}')`};
   }
 
-  getMenuItemClass(view: View): boolean {
+  isDisabledField(view: View): boolean {
     return MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, view, Permission.View);
   }
 }

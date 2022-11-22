@@ -280,6 +280,10 @@ km-wizard {
 
 .mat-menu-panel {
   min-height: auto;
+
+  &.side-nav-sub-menu-item {
+    min-width: 200px;
+  }
 }
 
 .mat-nav-list {

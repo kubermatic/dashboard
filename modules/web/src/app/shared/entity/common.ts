@@ -49,6 +49,7 @@ export enum View {
   SSHKeys = 'sshkeys',
   ServiceAccounts = 'serviceaccounts',
   Wizard = 'wizard',
+  ExternalClusterWizard = 'external-cluster-wizard',
   Account = 'account',
   Settings = 'settings',
   MachineDeployment = 'md',
@@ -76,6 +77,12 @@ export enum ViewDisplayName {
   Backups = 'Backups',
   Snapshots = 'Snapshots',
   Restores = 'Restores',
+  Access = 'Access',
+}
+
+export enum ProjectSidenavMainSection {
+  Resources = 'Resources',
+  Backups = 'etcd Backups',
   Access = 'Access',
 }
 

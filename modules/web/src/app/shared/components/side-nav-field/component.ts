@@ -14,7 +14,7 @@
 
 import {AfterViewChecked, ChangeDetectorRef, Component, Input} from '@angular/core';
 import {Router} from '@angular/router';
-import {View} from '@app/shared/entity/common';
+import {ProjectSidenavMainSection, View} from '@app/shared/entity/common';
 import {shrinkGrow} from '@shared/animations/grow';
 
 @Component({
@@ -26,7 +26,7 @@ import {shrinkGrow} from '@shared/animations/grow';
 export class SideNavExpansionMenuComponent implements AfterViewChecked {
   private _expanded = false;
   readonly view = View;
-  @Input() label = '';
+  @Input() label: ProjectSidenavMainSection;
   @Input() icon = '';
   @Input() isSidenavCollapsed: boolean;
 
@@ -45,11 +45,11 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked {
 
   isExpandedActive(): boolean {
     switch (this.label) {
-      case 'Resources':
+      case ProjectSidenavMainSection.Resources:
         return this.checkUrl(View.Clusters) || this.checkUrl(View.ExternalClusters);
-      case 'etcd Backups':
+      case ProjectSidenavMainSection.Backups:
         return this.checkUrl(View.Backups) || this.checkUrl(View.Snapshots) || this.checkUrl(View.Restores);
-      case 'Access':
+      case ProjectSidenavMainSection.Access:
         return (
           this.checkUrl(View.SSHKeys) ||
           this.checkUrl(View.Members) ||
@@ -63,16 +63,16 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked {
 
   checkUrl(url: string): boolean {
     const urlArray = this._router.routerState.snapshot.url.split('/');
+    const urlExists = !!urlArray.find(x => x === url);
     if (url === View.Clusters) {
-      return (
-        (!!urlArray.find(x => x === url) && !urlArray.find(x => x === View.ExternalClusters)) ||
-        !!urlArray.find(x => x === View.Wizard)
-      );
+      return (urlExists && !urlArray.find(x => x === View.ExternalClusters)) || !!urlArray.find(x => x === View.Wizard);
+    } else if (url === View.ExternalClusters) {
+      return urlExists || !!urlArray.find(x => x === View.ExternalClusterWizard);
     }
-    return !!urlArray.find(x => x === url);
+    return urlExists;
   }
 
   onClick(): void {
-    this._expanded = !this._expanded;
+    this._expanded = this.isExpandedActive() || !this._expanded;
   }
 }

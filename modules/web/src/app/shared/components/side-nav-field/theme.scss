@@ -41,9 +41,15 @@
     font-weight: bolder;
   }
 
-  .side-nav-bar:not(.expanded-menu) {
+  .collapsed-side-nav-bar:not(.expanded-menu) {
     button {
       background-color: map.get($colors, text);
+    }
+  }
+
+  .collapsed-side-nav-bar {
+    &:hover {
+      background-color: map.get($colors, sidenav-background-hover);
     }
   }
 

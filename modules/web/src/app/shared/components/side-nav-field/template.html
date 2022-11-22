@@ -21,10 +21,12 @@ limitations under the License.
        id="km-side-nav-field-{{label}}">
     <div class="nav-field-label"
          [ngClass]="isExpandedActive() ? 'expanded' : ''">
-      <a fxLayoutAlign="start center"
-         fxLayoutGap="20px">
-        <i [class]="icon"></i>
-        <span>{{label}}</span>
+      <a fxLayoutAlign="space-between center">
+        <span fxLayoutAlign="start center"
+              fxLayoutGap="20px">
+          <i [class]="icon"></i>
+          <span>{{label}}</span>
+        </span>
         <i class="km-icon-mask km-icon-arrow-{{expanded ? 'up' : 'down'}}"></i>
       </a>
     </div>
@@ -36,7 +38,7 @@ limitations under the License.
 </div>
 
 <div *ngIf="isSidenavCollapsed"
-     class="side-nav-bar"
+     class="collapsed-side-nav-bar"
      [ngClass]="isExpandedActive() ? 'expanded-menu' : ''">
   <button [matTooltip]="label"
           [class]="icon"
@@ -45,7 +47,8 @@ limitations under the License.
          [matMenuTriggerFor]="menu">
     </div>
   </button>
-  <mat-menu #menu="matMenu">
+  <mat-menu #menu="matMenu"
+            [class]="'side-nav-sub-menu-item'">
     <mat-label class="menu-label">{{label}}</mat-label>
     <hr />
     <ng-container *ngTemplateOutlet="content"></ng-container>
