@@ -235,10 +235,6 @@ func ListProjectGCPZones(presetProvider provider.PresetProvider, userInfoGetter 
 			req = projectReq.ProjectReq.Common
 		}
 
-		req, ok := request.(GCPCommonReq)
-		if !ok {
-			return nil, utilerrors.NewBadRequest("invalid request")
-		}
 		if err := req.Validate(); err != nil {
 			return nil, utilerrors.NewBadRequest(err.Error())
 		}
@@ -254,6 +250,42 @@ func ListProjectGCPZones(presetProvider provider.PresetProvider, userInfoGetter 
 		}
 
 		return providercommon.ListGCPZones(ctx, userInfo, sa, datacenter, seedGetter)
+	}
+}
+
+func ListProjectGCPNetworks(userInfoGetter provider.UserInfoGetter, presetProvider provider.PresetProvider, withProject bool) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		var (
+			req       GCPCommonReq
+			projectID string
+		)
+
+		if !withProject {
+			listReq, ok := request.(GCPProjectCommonReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+			projectID = listReq.ProjectID
+			req = listReq.Common
+		} else {
+			listReq, ok := request.(GCPCommonReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+			req = listReq
+		}
+
+		err := req.Validate()
+		if err != nil {
+			return nil, utilerrors.NewBadRequest("invalid request")
+		}
+
+		sa, err := getSAFromPreset(ctx, userInfoGetter, presetProvider, req.Credential, projectID)
+		if err != nil {
+			return nil, err
+		}
+
+		return providercommon.ListGCPNetworks(ctx, sa)
 	}
 }
 
