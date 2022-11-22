@@ -22,7 +22,6 @@ import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {KmValidators} from '@shared/validators/validators';
 import {merge} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {NodeDataMode} from '../../../config';
 
 enum Controls {
   AssignPublicIP = 'assignPublicIP',
@@ -116,29 +115,19 @@ export class AWSExtendedNodeDataComponent extends BaseFormValidator implements O
     if (this.nodeData.spec.cloud.aws) {
       this.onTagsChange(this.nodeData.spec.cloud.aws.tags);
 
-      const assignPublicIP =
-        this._nodeDataService.mode === NodeDataMode.Dialog && !!this.nodeData.name
-          ? this.nodeData.spec.cloud.aws.assignPublicIP
-          : true;
-      this.form.get(Controls.AssignPublicIP).setValue(assignPublicIP);
+      if (this.nodeData.name) {
+        const assignPublicIP = this.nodeData.spec.cloud.aws.assignPublicIP ?? true;
+        this.form.get(Controls.AssignPublicIP).setValue(assignPublicIP);
 
-      const isSpotInstance =
-        this._nodeDataService.mode === NodeDataMode.Dialog && !!this.nodeData.name
-          ? this.nodeData.spec.cloud.aws.isSpotInstance
-          : false;
-      this.form.get(Controls.IsSpotInstance).setValue(isSpotInstance);
+        const isSpotInstance = this.nodeData.spec.cloud.aws.isSpotInstance ?? false;
+        this.form.get(Controls.IsSpotInstance).setValue(isSpotInstance);
 
-      const spotInstanceMaxPrice =
-        this._nodeDataService.mode === NodeDataMode.Dialog && !!this.nodeData.name
-          ? this.nodeData.spec.cloud.aws.spotInstanceMaxPrice
-          : '';
-      this.form.get(Controls.SpotInstanceMaxPrice).setValue(spotInstanceMaxPrice);
+        const spotInstanceMaxPrice = this.nodeData.spec.cloud.aws.spotInstanceMaxPrice ?? '';
+        this.form.get(Controls.SpotInstanceMaxPrice).setValue(spotInstanceMaxPrice);
 
-      const spotInstancePersistentRequest =
-        this._nodeDataService.mode === NodeDataMode.Dialog && !!this.nodeData.name
-          ? this.nodeData.spec.cloud.aws.spotInstancePersistentRequest
-          : false;
-      this.form.get(Controls.SpotInstancePersistentRequest).setValue(spotInstancePersistentRequest);
+        const spotInstancePersistentRequest = this.nodeData.spec.cloud.aws.spotInstancePersistentRequest ?? false;
+        this.form.get(Controls.SpotInstancePersistentRequest).setValue(spotInstancePersistentRequest);
+      }
     }
   }
 

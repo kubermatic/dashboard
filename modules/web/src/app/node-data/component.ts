@@ -168,10 +168,13 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS()));
 
-    this._clusterSpecService.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
-      delete this._nodeDataService.nodeData.spec.cloud[this.provider];
-      this.provider = this._clusterSpecService.provider;
-    });
+    this._clusterSpecService.providerChanges
+      .pipe(filter(_ => !this.isCusterTemplateEditMode))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        delete this._nodeDataService.nodeData.spec.cloud[this.provider];
+        this.provider = this._clusterSpecService.provider;
+      });
 
     this._clusterSpecService.clusterChanges
       .pipe(

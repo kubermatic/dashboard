@@ -131,7 +131,7 @@ export class NodeDataService {
   }
 
   initializeNodeDataFromMachineDeployment(md: MachineDeployment): void {
-    this._nodeData = {
+    this.nodeData = {
       operatingSystemProfile: md.annotations?.[OPERATING_SYSTEM_PROFILE_ANNOTATION],
       count: md.spec.replicas,
       name: md.name,

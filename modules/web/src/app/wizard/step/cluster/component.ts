@@ -612,6 +612,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
             [Controls.IPv4PodsCIDR]: networkDefaults.ipv4?.podsCidr || '',
             [Controls.IPv4ServicesCIDR]: networkDefaults.ipv4?.servicesCidr || '',
             [Controls.IPv4CIDRMaskSize]: networkDefaults.ipv4?.nodeCidrMaskSize,
+            [Controls.ExposeStrategy]: networkDefaults.clusterExposeStrategy ?? null,
           });
           this._defaultProxyMode = networkDefaults.proxyMode;
           if (this.availableProxyModes.includes(this._defaultProxyMode)) {

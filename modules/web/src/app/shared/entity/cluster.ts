@@ -352,7 +352,6 @@ export class ClusterNetwork {
   nodeCidrMaskSizeIPv6?: number;
   nodeLocalDNSCacheEnabled?: boolean;
   konnectivityEnabled?: boolean;
-  clusterExposeStrategy?: ExposeStrategy;
 }
 
 export class ClusterNetworkDefaults {
@@ -360,6 +359,7 @@ export class ClusterNetworkDefaults {
   ipv6?: NetworkDefaultsIPFamily;
   nodeLocalDNSCacheEnabled?: boolean;
   proxyMode?: ProxyMode;
+  clusterExposeStrategy?: ExposeStrategy;
 }
 
 export class NetworkDefaultsIPFamily {
