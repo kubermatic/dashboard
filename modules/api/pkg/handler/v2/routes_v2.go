@@ -163,10 +163,6 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 
 	// Defines a set of HTTP endpoints for interacting with KubeVirt clusters
 	mux.Methods(http.MethodGet).
-		Path("/providers/kubevirt/vmflavors").
-		Handler(r.listKubeVirtVMIPresets())
-
-	mux.Methods(http.MethodGet).
 		Path("/providers/kubevirt/instancetypes").
 		Handler(r.listKubeVirtInstancetypes())
 
@@ -1004,10 +1000,6 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/clusters/{cluster_id}/providers/anexia/templates").
 		Handler(r.listAnexiaTemplatesNoCredentials())
-
-	mux.Methods(http.MethodGet).
-		Path("/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/vmflavors").
-		Handler(r.listKubeVirtVMIPresetsNoCredentials())
 
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/instancetypes").
@@ -4322,32 +4314,6 @@ func (r Routing) listAnexiaTemplatesNoCredentials() http.Handler {
 	)
 }
 
-// swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/vmflavors kubevirt listKubeVirtVMIPresetsNoCredentials
-//
-// Lists available VirtualMachineInstancePreset
-//
-//	Produces:
-//	- application/json
-//
-//	Responses:
-//	  default: errorResponse
-//	  200: VirtualMachineInstancePresetList
-//
-// Deprecated: in favor of listKubeVirtInstancetypesNoCredentials.
-func (r Routing) listKubeVirtVMIPresetsNoCredentials() http.Handler {
-	return httptransport.NewServer(
-		endpoint.Chain(
-			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
-			middleware.UserSaver(r.userProvider),
-			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
-			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
-		)(provider.KubeVirtVMIPresetsWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider, r.seedsGetter, r.userInfoGetter, r.settingsProvider)),
-		provider.DecodeKubeVirtListInstanceOrVMIPresetsNoCredentialReq,
-		handler.EncodeJSON,
-		r.defaultServerOptions()...,
-	)
-}
-
 // swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/instancetypes kubevirt listKubeVirtInstancetypesNoCredentials
 //
 // Lists available VirtualMachineInstancetype
@@ -4366,7 +4332,7 @@ func (r Routing) listKubeVirtInstancetypesNoCredentials() http.Handler {
 			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 		)(provider.KubeVirtInstancetypesWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider, r.seedsGetter, r.userInfoGetter, r.settingsProvider)),
-		provider.DecodeKubeVirtListInstanceOrVMIPresetsNoCredentialReq,
+		provider.DecodeKubeVirtListInstancesNoCredentialReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
@@ -7455,30 +7421,6 @@ func (r Routing) listAKSClusters() http.Handler {
 	)
 }
 
-// swagger:route GET /api/v2/providers/kubevirt/vmflavors kubevirt listKubeVirtVMIPresets
-//
-// Lists available KubeVirt VirtualMachineInstancePreset.
-//
-//	Produces:
-//	- application/json
-//
-//	Responses:
-//	  default: errorResponse
-//	  200: VirtualMachineInstancePresetList
-//
-// Deprecated: in favor of listKubeVirtInstancetypes.
-func (r Routing) listKubeVirtVMIPresets() http.Handler {
-	return httptransport.NewServer(
-		endpoint.Chain(
-			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
-			middleware.UserSaver(r.userProvider),
-		)(provider.KubeVirtVMIPresetsEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, r.settingsProvider)),
-		provider.DecodeKubeVirtListInstanceOrVMIPresetsReq,
-		handler.EncodeJSON,
-		r.defaultServerOptions()...,
-	)
-}
-
 // swagger:route GET /api/v2/providers/kubevirt/instancetypes kubevirt listKubeVirtInstancetypes
 //
 // Lists available KubeVirt VirtualMachineInstancetype.
@@ -7495,7 +7437,7 @@ func (r Routing) listKubeVirtInstancetypes() http.Handler {
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
 		)(provider.KubeVirtInstancetypesEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, r.settingsProvider)),
-		provider.DecodeKubeVirtListInstanceOrVMIPresetsReq,
+		provider.DecodeKubeVirtListInstanceReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)

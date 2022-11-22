@@ -61,6 +61,11 @@ all: install run
 .PHONY: build
 build: $(CMD)
 
+.PHONY: clean
+clean:
+	rm -rf $(BUILD_DEST)
+	@echo "Cleaned $(BUILD_DEST)"
+
 .PHONY: $(CMD)
 $(CMD): %: $(BUILD_DEST)/%
 

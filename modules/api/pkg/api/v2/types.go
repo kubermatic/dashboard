@@ -1594,19 +1594,6 @@ type GKEUpgradeSettings struct {
 	MaxUnavailable int64 `json:"maxUnavailable,omitempty"`
 }
 
-// VirtualMachineInstancePresetList represents a list of VirtualMachineInstancePreset.
-// swagger:model VirtualMachineInstancePresetList
-type VirtualMachineInstancePresetList []VirtualMachineInstancePreset
-
-// VirtualMachineInstancePreset represents a KubeVirt Virtual Machine Instance Preset
-// swagger:model VirtualMachineInstancePreset
-type VirtualMachineInstancePreset struct {
-	Name      string `json:"name,omitempty"`
-	Namespace string `json:"namespace,omitempty"`
-	// Spec contains the kubevirtv1.VirtualMachineInstancePreset.Spec object marshalled
-	Spec string `json:"spec,omitempty"`
-}
-
 // VirtualMachineInstancetypeList represents a list of VirtualMachineInstancetype.
 // VirtualMachineInstancetype are divided into 2 categories: "custom" or "kubermatic".
 // swagger:model VirtualMachineInstancetypeList
