@@ -16,5 +16,12 @@
 . "$(dirname "$0")/_/husky.sh"
 cd modules/web/.husky
 
+# If there are no changes in modules/web, exit the hook early so we don't run on BE-only changes.
+# Since we cd into husky dir, run git diff based on git root directory
+if git diff --quiet main -- "$(git rev-parse --show-toplevel)/modules/web" ; then
+  echo "No changes detected in modules/web, skipping pre-commit hook"
+  exit 0
+fi
+
 npx lint-staged
 npm run check
