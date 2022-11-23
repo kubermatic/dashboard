@@ -57,6 +57,8 @@ export class ApplicationsStepComponent extends StepBase implements OnInit, OnDes
     this.form = this._builder.group({
       [Controls.Applications]: this._builder.control(''),
     });
+
+    this.applications = this.applicationService.applications;
   }
 
   onApplicationAdded(application: Application): void {

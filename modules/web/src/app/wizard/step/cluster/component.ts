@@ -198,7 +198,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       [Controls.AdmissionPlugins]: this._builder.control(clusterSpec?.admissionPlugins ?? []),
       [Controls.EventRateLimitConfig]: this._builder.control(clusterSpec?.eventRateLimitConfig ?? ''),
       // We intentionally don't default labels and podNodeSelectorAdmissionPluginConfig to the values from
-      // clusterSpecService and instead just rely on `onLabelsChange`method for the defaulting.
+      // clusterSpecService and instead just rely on `onLabelsChange` method for the defaulting.
       [Controls.Labels]: this._builder.control(null),
       [Controls.PodNodeSelectorAdmissionPluginConfig]: this._builder.control(null),
       [Controls.SSHKeys]: this._builder.control(this._clusterSpecService?.sshKeys ?? ''),

@@ -85,4 +85,8 @@ export class ApplicationService {
     const url = `${this._restRoot}/projects/${projectID}/clusters/${clusterID}/applicationinstallations/${application.spec.namespace.name}/${application.name}`;
     return this._httpClient.delete<void>(url);
   }
+
+  reset(): void {
+    this._applications = [];
+  }
 }

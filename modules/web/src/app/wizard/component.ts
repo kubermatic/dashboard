@@ -262,6 +262,7 @@ export class WizardComponent implements OnInit, OnDestroy {
         template.nodeDeployment.name = namePrefix;
         this._clusterSpecService.initializeClusterFromClusterTemplate(template);
         this._nodeDataService.initializeNodeDataFromMachineDeployment(template.nodeDeployment);
+        this.applicationService.applications = template.applications;
         this.clusterTemplate = template;
 
         // Re-initialize the form.
