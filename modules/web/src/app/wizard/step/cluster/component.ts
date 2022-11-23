@@ -68,6 +68,7 @@ import {
   handleClusterDefaultNodeSelector,
 } from '@shared/utils/cluster';
 import {KeyValueEntry} from '@shared/types/common';
+import {getEditionVersion} from '@shared/utils/common';
 
 enum Controls {
   Name = 'name',
@@ -134,6 +135,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
   cniPlugin = CNIPlugin;
   cniPluginVersions: string[] = [];
   availableProxyModes = [ProxyMode.ipvs, ProxyMode.iptables];
+  editionVersion: string = getEditionVersion();
   exposeStrategies = [ExposeStrategy.loadbalancer, ExposeStrategy.nodePort, ExposeStrategy.tunneling];
   isKonnectivityEnabled = false;
   isDualStackAllowed = false;

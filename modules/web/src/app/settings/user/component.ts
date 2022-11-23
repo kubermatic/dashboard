@@ -20,7 +20,7 @@ import {UserService} from '@core/services/user';
 import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {UserSettings} from '@shared/entity/settings';
-import {objectDiff} from '@shared/utils/common';
+import {getEditionVersion, objectDiff} from '@shared/utils/common';
 import {View} from '@shared/entity/common';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
@@ -41,6 +41,8 @@ export class UserSettingsComponent implements OnInit, OnDestroy {
   apiSettings: UserSettings; // Original settings from the API. Cannot be edited by the user.
   selectedProjectLandingPage: string;
   view = View;
+  editionVersion: string = getEditionVersion();
+
   private readonly _debounceTime = 1000;
   private _settingsChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();

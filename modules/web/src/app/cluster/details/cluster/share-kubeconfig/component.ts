@@ -18,6 +18,7 @@ import {UserService} from '@core/services/user';
 import {Cluster} from '@shared/entity/cluster';
 import {take} from 'rxjs/operators';
 import {ClusterService} from '@core/services/cluster';
+import {getEditionVersion} from '@shared/utils/common';
 
 @Component({
   selector: 'km-share-kubeconfig',
@@ -30,6 +31,7 @@ export class ShareKubeconfigComponent implements OnInit {
   @Input() projectID: string;
   private userID: string;
   kubeconfigLink: string;
+  editionVersion: string = getEditionVersion();
 
   constructor(
     private readonly _clusterService: ClusterService,

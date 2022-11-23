@@ -27,6 +27,7 @@ import {
 } from '@shared/entity/addon';
 import {FormBuilder, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {MatStepper} from '@angular/material/stepper';
+import {getEditionVersion} from '@shared/utils/common';
 
 export enum Controls {
   ContinuouslyReconcile = 'continuouslyReconcile',
@@ -55,6 +56,7 @@ export class InstallAddonDialogComponent {
   selectedAddon: string;
   form: FormGroup;
   formBasic: FormGroup;
+  editionVersion: string = getEditionVersion();
 
   constructor(
     public dialogRef: MatDialogRef<Component>,

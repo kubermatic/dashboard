@@ -14,6 +14,7 @@
 
 import _ from 'lodash';
 import {load as loadYAML} from 'js-yaml';
+import version from '@assets/config/version.json';
 
 export function objectDiff(object: any, base: any): any {
   return _.transform(object, (result, value, key) => {
@@ -97,4 +98,8 @@ export function verifyJSON(data: string): boolean {
 const maxUsageDefault = 100;
 export function getPercentage(total: number, used: number, maxUsage = maxUsageDefault): number {
   return Math.round(((used / total) * maxUsage + Number.EPSILON) * maxUsage) / maxUsage;
+}
+
+export function getEditionVersion(): string {
+  return `v${version.semver?.major}.${version.semver?.minor}`;
 }

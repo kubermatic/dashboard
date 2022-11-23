@@ -26,6 +26,7 @@ import {StatusIcon} from '@shared/utils/health-status';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
+import {getEditionVersion} from '@shared/utils/common';
 
 export enum ApplicationsListView {
   Default,
@@ -97,6 +98,7 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   applicationsMethodMap: ApplicationMethodMap = {};
   applicationsSourceMap: ApplicationSourceMap = {};
   applicationsStatusMap: ApplicationStatusMap = {};
+  editionVersion: string = getEditionVersion();
 
   private readonly _unsubscribe: Subject<void> = new Subject<void>();
 
