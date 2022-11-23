@@ -24,6 +24,7 @@ import (
 	"github.com/go-kit/kit/endpoint"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
+	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	providercommon "k8c.io/dashboard/v2/pkg/handler/common/provider"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/handler/v2/cluster"
@@ -47,10 +48,30 @@ func AzureAvailabilityZonesWithClusterCredentialsEndpoint(projectProvider provid
 	}
 }
 
-func AzureSecurityGroupsEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func AzureSecurityGroupsEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(azureSecurityGroupsReq)
-		credentials, err := getAzureCredentialsFromReq(ctx, req.azureCommonReq, userInfoGetter, presetProvider)
+		var (
+			req       azureSecurityGroupsReq
+			projectID string
+		)
+
+		if !withProject {
+			commonReq, ok := request.(azureSecurityGroupsReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+			req = commonReq
+		} else {
+			projectReq, ok := request.(azureProjectSecurityGroupsReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+
+			projectID = projectReq.GetProjectID()
+			req = projectReq.azureSecurityGroupsReq
+		}
+
+		credentials, err := getAzureCredentialsFromReq(ctx, req.azureCommonReq, userInfoGetter, presetProvider, projectID)
 		if err != nil {
 			return nil, err
 		}
@@ -58,10 +79,30 @@ func AzureSecurityGroupsEndpoint(presetProvider provider.PresetProvider, userInf
 	}
 }
 
-func AzureResourceGroupsEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func AzureResourceGroupsEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(azureResourceGroupsReq)
-		credentials, err := getAzureCredentialsFromReq(ctx, req.azureCommonReq, userInfoGetter, presetProvider)
+		var (
+			req       azureResourceGroupsReq
+			projectID string
+		)
+
+		if !withProject {
+			commonReq, ok := request.(azureResourceGroupsReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+			req = commonReq
+		} else {
+			projectReq, ok := request.(azureProjectResourceGroupsReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+
+			projectID = projectReq.GetProjectID()
+			req = projectReq.azureResourceGroupsReq
+		}
+
+		credentials, err := getAzureCredentialsFromReq(ctx, req.azureCommonReq, userInfoGetter, presetProvider, projectID)
 		if err != nil {
 			return nil, err
 		}
@@ -69,10 +110,30 @@ func AzureResourceGroupsEndpoint(presetProvider provider.PresetProvider, userInf
 	}
 }
 
-func AzureRouteTablesEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func AzureRouteTablesEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(azureRouteTablesReq)
-		credentials, err := getAzureCredentialsFromReq(ctx, req.azureCommonReq, userInfoGetter, presetProvider)
+		var (
+			req       azureRouteTablesReq
+			projectID string
+		)
+
+		if !withProject {
+			commonReq, ok := request.(azureRouteTablesReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+			req = commonReq
+		} else {
+			projectReq, ok := request.(azureProjectRouteTablesReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+
+			projectID = projectReq.GetProjectID()
+			req = projectReq.azureRouteTablesReq
+		}
+
+		credentials, err := getAzureCredentialsFromReq(ctx, req.azureCommonReq, userInfoGetter, presetProvider, projectID)
 		if err != nil {
 			return nil, err
 		}
@@ -80,10 +141,30 @@ func AzureRouteTablesEndpoint(presetProvider provider.PresetProvider, userInfoGe
 	}
 }
 
-func AzureVirtualNetworksEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func AzureVirtualNetworksEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(azureVirtualNetworksReq)
-		credentials, err := getAzureCredentialsFromReq(ctx, req.azureCommonReq, userInfoGetter, presetProvider)
+		var (
+			req       azureVirtualNetworksReq
+			projectID string
+		)
+
+		if !withProject {
+			commonReq, ok := request.(azureVirtualNetworksReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+			req = commonReq
+		} else {
+			projectReq, ok := request.(azureProjectVirtualNetworksReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+
+			projectID = projectReq.GetProjectID()
+			req = projectReq.azureVirtualNetworksReq
+		}
+
+		credentials, err := getAzureCredentialsFromReq(ctx, req.azureCommonReq, userInfoGetter, presetProvider, projectID)
 		if err != nil {
 			return nil, err
 		}
@@ -91,14 +172,86 @@ func AzureVirtualNetworksEndpoint(presetProvider provider.PresetProvider, userIn
 	}
 }
 
-func AzureSubnetsEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func AzureSubnetsEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(azureSubnetsReq)
-		credentials, err := getAzureCredentialsFromReq(ctx, req.azureCommonReq, userInfoGetter, presetProvider)
+		var (
+			req       azureSubnetsReq
+			projectID string
+		)
+
+		if !withProject {
+			commonReq, ok := request.(azureSubnetsReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+			req = commonReq
+		} else {
+			projectReq, ok := request.(azureProjectSubnetsReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+
+			projectID = projectReq.GetProjectID()
+			req = projectReq.azureSubnetsReq
+		}
+
+		credentials, err := getAzureCredentialsFromReq(ctx, req.azureCommonReq, userInfoGetter, presetProvider, projectID)
 		if err != nil {
 			return nil, err
 		}
 		return providercommon.AzureSubnetEndpoint(ctx, credentials.subscriptionID, credentials.clientID, credentials.clientSecret, credentials.tenantID, req.ResourceGroup, req.VirtualNetwork)
+	}
+}
+
+func AzureSizesEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, seedsGetter provider.SeedsGetter, settingsProvider provider.SettingsProvider) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req, ok := request.(azureProjectSizesReq)
+		if !ok {
+			return nil, utilerrors.NewBadRequest("invalid request")
+		}
+
+		userInfo, err := userInfoGetter(ctx, req.ProjectID)
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+
+		credentials, err := getAzureCredentialsFromReq(ctx, req.azureCommonReq, userInfoGetter, presetProvider, req.ProjectID)
+		if err != nil {
+			return nil, err
+		}
+
+		settings, err := settingsProvider.GetGlobalSettings(ctx)
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+
+		filter := *settings.Spec.MachineDeploymentVMResourceQuota
+		datacenterName := req.DatacenterName
+		if datacenterName != "" {
+			_, datacenter, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, datacenterName)
+			if err != nil {
+				return nil, fmt.Errorf("error getting dc: %w", err)
+			}
+			filter = handlercommon.DetermineMachineFlavorFilter(datacenter.Spec.MachineFlavorFilter, settings.Spec.MachineDeploymentVMResourceQuota)
+		}
+
+		return providercommon.AzureSize(ctx, filter, credentials.subscriptionID, credentials.clientID, credentials.clientSecret, credentials.tenantID, req.Location)
+	}
+}
+
+func AzureAvailabilityZonesEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req, ok := request.(azureProjectAvailabilityZonesReq)
+		if !ok {
+			return nil, utilerrors.NewBadRequest("invalid request")
+		}
+
+		credentials, err := getAzureCredentialsFromReq(ctx, req.azureCommonReq, userInfoGetter, presetProvider, req.ProjectID)
+		if err != nil {
+			return nil, err
+		}
+
+		return providercommon.AzureSKUAvailabilityZones(ctx, credentials.subscriptionID, credentials.clientID, credentials.clientSecret, credentials.tenantID, req.Location, req.SKUName)
 	}
 }
 
@@ -109,7 +262,7 @@ type azureCredentials struct {
 	clientSecret   string
 }
 
-func getAzureCredentialsFromReq(ctx context.Context, req azureCommonReq, userInfoGetter provider.UserInfoGetter, presetProvider provider.PresetProvider) (*azureCredentials, error) {
+func getAzureCredentialsFromReq(ctx context.Context, req azureCommonReq, userInfoGetter provider.UserInfoGetter, presetProvider provider.PresetProvider, projectID string) (*azureCredentials, error) {
 	subscriptionID := req.SubscriptionID
 	clientID := req.ClientID
 	clientSecret := req.ClientSecret
@@ -121,7 +274,7 @@ func getAzureCredentialsFromReq(ctx context.Context, req azureCommonReq, userInf
 	}
 
 	if len(req.Credential) > 0 {
-		preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(""), req.Credential)
+		preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(projectID), req.Credential)
 		if err != nil {
 			return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", req.Credential, userInfo.Email))
 		}
@@ -226,6 +379,69 @@ func DecodeAzureCommonReq(_ context.Context, r *http.Request) (interface{}, erro
 	return req, nil
 }
 
+// azureProjectSizeReq represent a request for Azure VM sizes within the context of a KKP project
+// swagger:parameters listProjectAzureSizes
+type azureProjectSizesReq struct {
+	common.ProjectReq
+	azureCommonReq
+
+	// in: header
+	Location string
+	// in: header
+	// DatacenterName datacenter name
+	DatacenterName string
+}
+
+func DecodeAzureProjectSizesReq(c context.Context, r *http.Request) (interface{}, error) {
+	commonReq, err := DecodeAzureCommonReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	projectReq, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return azureProjectSizesReq{
+		ProjectReq:     projectReq.(common.ProjectReq),
+		azureCommonReq: commonReq.(azureCommonReq),
+		Location:       r.Header.Get("Location"),
+		DatacenterName: r.Header.Get("DatacenterName"),
+	}, nil
+}
+
+// AvailabilityZonesReq represent a request for Azure VM Multi-AvailabilityZones support within the context of a KKP project
+// swagger:parameters listProjectAzureSKUAvailabilityZones
+type azureProjectAvailabilityZonesReq struct {
+	common.ProjectReq
+	azureCommonReq
+
+	// in: header
+	Location string
+	// in: header
+	SKUName string
+}
+
+func DecodeAzureProjectAvailabilityZonesReq(c context.Context, r *http.Request) (interface{}, error) {
+	commonReq, err := DecodeAzureCommonReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	projectReq, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return azureProjectAvailabilityZonesReq{
+		ProjectReq:     projectReq.(common.ProjectReq),
+		azureCommonReq: commonReq.(azureCommonReq),
+		Location:       r.Header.Get("Location"),
+		SKUName:        r.Header.Get("SKUName"),
+	}, nil
+}
+
 // azureSecurityGroupsReq represent a request for Azure VM security groups
 // swagger:parameters listAzureSecurityGroups
 type azureSecurityGroupsReq struct {
@@ -249,6 +465,30 @@ func DecodeAzureSecurityGroupsReq(c context.Context, r *http.Request) (interface
 	return req, nil
 }
 
+// azureSecurityGroupsReq represent a request for Azure VM security groups within the context of a KKP project
+// swagger:parameters listProjectAzureSecurityGroups
+type azureProjectSecurityGroupsReq struct {
+	common.ProjectReq
+	azureSecurityGroupsReq
+}
+
+func DecodeAzureProjectSecurityGroupsReq(c context.Context, r *http.Request) (interface{}, error) {
+	securityGroupsReq, err := DecodeAzureSecurityGroupsReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	projectReq, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return azureProjectSecurityGroupsReq{
+		ProjectReq:             projectReq.(common.ProjectReq),
+		azureSecurityGroupsReq: securityGroupsReq.(azureSecurityGroupsReq),
+	}, nil
+}
+
 // azureResourceGroupsReq represent a request for Azure VM resource groups
 // swagger:parameters listAzureResourceGroups
 type azureResourceGroupsReq struct {
@@ -268,6 +508,30 @@ func DecodeAzureResourceGroupsReq(c context.Context, r *http.Request) (interface
 
 	req.Location = r.Header.Get("Location")
 	return req, nil
+}
+
+// azureResourceGroupsReq represent a request for Azure VM resource groups within the context of a KKP project
+// swagger:parameters listProjectAzureResourceGroups
+type azureProjectResourceGroupsReq struct {
+	common.ProjectReq
+	azureResourceGroupsReq
+}
+
+func DecodeAzureProjectResourceGroupsReq(c context.Context, r *http.Request) (interface{}, error) {
+	resourceGroupsReq, err := DecodeAzureResourceGroupsReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	projectReq, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return azureProjectResourceGroupsReq{
+		ProjectReq:             projectReq.(common.ProjectReq),
+		azureResourceGroupsReq: resourceGroupsReq.(azureResourceGroupsReq),
+	}, nil
 }
 
 // azureRouteTablesReq represent a request for Azure VM route tables
@@ -293,6 +557,30 @@ func DecodeAzureRouteTablesReq(c context.Context, r *http.Request) (interface{},
 	return req, nil
 }
 
+// azureRouteTablesReq represent a request for Azure VM route tables within the context of a KKP project
+// swagger:parameters listProjectAzureRouteTables
+type azureProjectRouteTablesReq struct {
+	common.ProjectReq
+	azureRouteTablesReq
+}
+
+func DecodeAzureProjectRouteTablesReq(c context.Context, r *http.Request) (interface{}, error) {
+	routeTablesReq, err := DecodeAzureRouteTablesReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	projectReq, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return azureProjectRouteTablesReq{
+		ProjectReq:          projectReq.(common.ProjectReq),
+		azureRouteTablesReq: routeTablesReq.(azureRouteTablesReq),
+	}, nil
+}
+
 // azureVirtualNetworksReq represent a request for Azure VM virtual networks
 // swagger:parameters listAzureVnets
 type azureVirtualNetworksReq struct {
@@ -316,6 +604,30 @@ func DecodeAzureVirtualNetworksReq(c context.Context, r *http.Request) (interfac
 	return req, nil
 }
 
+// azureVirtualNetworksReq represent a request for Azure VM virtual networks within the context of a KKP project
+// swagger:parameters listProjectAzureVnets
+type azureProjectVirtualNetworksReq struct {
+	common.ProjectReq
+	azureVirtualNetworksReq
+}
+
+func DecodeAzureProjectVirtualNetworksReq(c context.Context, r *http.Request) (interface{}, error) {
+	virtualNetworksReq, err := DecodeAzureVirtualNetworksReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	projectReq, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return azureProjectVirtualNetworksReq{
+		ProjectReq:              projectReq.(common.ProjectReq),
+		azureVirtualNetworksReq: virtualNetworksReq.(azureVirtualNetworksReq),
+	}, nil
+}
+
 // azureSubnetsReq represent a request for Azure VM subnets
 // swagger:parameters listAzureSubnets
 type azureSubnetsReq struct {
@@ -337,4 +649,28 @@ func DecodeAzureSubnetsReq(c context.Context, r *http.Request) (interface{}, err
 	req.ResourceGroup = r.Header.Get("ResourceGroup")
 	req.VirtualNetwork = r.Header.Get("VirtualNetwork")
 	return req, nil
+}
+
+// azureSubnetsReq represent a request for Azure VM subnets within the context of a KKP project
+// swagger:parameters listProjectAzureSubnets
+type azureProjectSubnetsReq struct {
+	common.ProjectReq
+	azureSubnetsReq
+}
+
+func DecodeAzureProjectSubnetsReq(c context.Context, r *http.Request) (interface{}, error) {
+	subnetsReq, err := DecodeAzureSubnetsReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	projectReq, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return azureProjectSubnetsReq{
+		ProjectReq:      projectReq.(common.ProjectReq),
+		azureSubnetsReq: subnetsReq.(azureSubnetsReq),
+	}, nil
 }

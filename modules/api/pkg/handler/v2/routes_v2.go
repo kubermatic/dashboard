@@ -700,35 +700,38 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 			mux.Methods(http.MethodGet).
 				Path("/projects/{project_id}/providers/kubevirt/storageclasses").
 				Handler(r.listProjectKubevirtStorageClasses())
+		*/
 
-			// Azure endpoints
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/azure/sizes").
-				Handler(r.listProjectAzureSizes())
+	// Azure endpoints
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/azure/sizes").
+		Handler(r.listProjectAzureSizes())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/azure/availabilityzones").
-				Handler(r.listProjectAzureSKUAvailabilityZones())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/azure/availabilityzones").
+		Handler(r.listProjectAzureSKUAvailabilityZones())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/azure/securitygroups").
-				Handler(r.listProjectAzureSecurityGroups())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/azure/securitygroups").
+		Handler(r.listProjectAzureSecurityGroups())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/azure/resourcegroups").
-				Handler(r.listProjectAzureResourceGroups())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/azure/resourcegroups").
+		Handler(r.listProjectAzureResourceGroups())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/azure/routetables").
-				Handler(r.listProjectAzureRouteTables())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/azure/routetables").
+		Handler(r.listProjectAzureRouteTables())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/azure/subnets").
-				Handler(r.listProjectAzureSubnets())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/azure/subnets").
+		Handler(r.listProjectAzureSubnets())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/azure/vnets").
-				Handler(r.listProjectAzureVnets())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/azure/vnets").
+		Handler(r.listProjectAzureVnets())
+
+		/*
 
 			// vSphere endpoints
 			mux.Methods(http.MethodGet).
@@ -4569,7 +4572,7 @@ func (r Routing) listAzureSecurityGroups() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.AzureSecurityGroupsEndpoint(r.presetProvider, r.userInfoGetter)),
+		)(provider.AzureSecurityGroupsEndpoint(r.presetProvider, r.userInfoGetter, false)),
 		provider.DecodeAzureSecurityGroupsReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -4591,7 +4594,7 @@ func (r Routing) listAzureResourceGroups() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.AzureResourceGroupsEndpoint(r.presetProvider, r.userInfoGetter)),
+		)(provider.AzureResourceGroupsEndpoint(r.presetProvider, r.userInfoGetter, false)),
 		provider.DecodeAzureResourceGroupsReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -4613,7 +4616,7 @@ func (r Routing) listAzureRouteTables() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.AzureRouteTablesEndpoint(r.presetProvider, r.userInfoGetter)),
+		)(provider.AzureRouteTablesEndpoint(r.presetProvider, r.userInfoGetter, false)),
 		provider.DecodeAzureRouteTablesReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -4635,7 +4638,7 @@ func (r Routing) listAzureVnets() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.AzureVirtualNetworksEndpoint(r.presetProvider, r.userInfoGetter)),
+		)(provider.AzureVirtualNetworksEndpoint(r.presetProvider, r.userInfoGetter, false)),
 		provider.DecodeAzureVirtualNetworksReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -4679,7 +4682,7 @@ func (r Routing) listAzureSubnets() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.AzureSubnetsEndpoint(r.presetProvider, r.userInfoGetter)),
+		)(provider.AzureSubnetsEndpoint(r.presetProvider, r.userInfoGetter, false)),
 		provider.DecodeAzureSubnetsReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -5631,6 +5634,160 @@ func (r Routing) listProjectEKSCapacityTypes() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(externalcluster.EKSCapacityTypesEndpoint()),
 		externalcluster.DecodeEKSProjectReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/azure/sizes azure listProjectAzureSizes
+//
+// Lists available VM sizes in an Azure region
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AzureSizeList
+func (r Routing) listProjectAzureSizes() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.AzureSizesEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, r.settingsProvider)),
+		provider.DecodeAzureProjectSizesReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/azure/availabilityzones azure listProjectAzureAvailabilityZones
+//
+// Lists VM availability zones in an Azure region
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AzureAvailabilityZonesList
+func (r Routing) listProjectAzureSKUAvailabilityZones() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.AzureAvailabilityZonesEndpoint(r.presetProvider, r.userInfoGetter)),
+		provider.DecodeAzureProjectAvailabilityZonesReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/azure/securitygroups azure listProjectAzureSecurityGroups
+//
+// Lists available VM security groups
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AzureSecurityGroupsList
+func (r Routing) listProjectAzureSecurityGroups() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.AzureSecurityGroupsEndpoint(r.presetProvider, r.userInfoGetter, true)),
+		provider.DecodeAzureProjectSecurityGroupsReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/azure/resourcegroups azure listProjectAzureResourceGroups
+//
+// Lists available VM resource groups
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AzureResourceGroupsList
+func (r Routing) listProjectAzureResourceGroups() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.AzureResourceGroupsEndpoint(r.presetProvider, r.userInfoGetter, true)),
+		provider.DecodeAzureProjectResourceGroupsReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/azure/routetables azure listProjectAzureRouteTables
+//
+// Lists available VM route tables
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AzureRouteTablesList
+func (r Routing) listProjectAzureRouteTables() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.AzureRouteTablesEndpoint(r.presetProvider, r.userInfoGetter, true)),
+		provider.DecodeAzureProjectRouteTablesReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/azure/vnets azure listProjectAzureVnets
+//
+// Lists available VM virtual networks
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AzureVirtualNetworksList
+func (r Routing) listProjectAzureVnets() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.AzureVirtualNetworksEndpoint(r.presetProvider, r.userInfoGetter, true)),
+		provider.DecodeAzureProjectVirtualNetworksReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/azure/subnets azure listProjectAzureSubnets
+//
+// Lists available VM subnets
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AzureSubnetsList
+func (r Routing) listProjectAzureSubnets() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.AzureSubnetsEndpoint(r.presetProvider, r.userInfoGetter, true)),
+		provider.DecodeAzureProjectSubnetsReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
