@@ -16964,6 +16964,41 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/disktypes": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "project"
+        ],
+        "summary": "Creates a cluster for the given project.",
+        "operationId": "listProjectGCPDisk",
+        "responses": {
+          "201": {
+            "description": "Cluster",
+            "schema": {
+              "$ref": "#/definitions/Cluster"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/etcdbackupconfigs": {
       "get": {
         "description": "List etcd backup configs for a given project",
@@ -20164,6 +20199,82 @@
             "description": "EKSVPCList",
             "schema": {
               "$ref": "#/definitions/EKSVPCList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/gcp/subnetworks": {
+      "get": {
+        "description": "Lists available GCP subnetworks",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "gcp"
+        ],
+        "operationId": "listProjectGCPSubnetworks",
+        "responses": {
+          "200": {
+            "description": "GCPSubnetworkList",
+            "schema": {
+              "$ref": "#/definitions/GCPSubnetworkList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/gcp/vmsizes": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "gke"
+        ],
+        "summary": "Lists GCP VM sizes.",
+        "operationId": "listProjectGCPVMSizes",
+        "responses": {
+          "200": {
+            "description": "GCPMachineSizeList",
+            "schema": {
+              "$ref": "#/definitions/GCPMachineSizeList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/gcp/zones": {
+      "get": {
+        "description": "Produces\napplication/json",
+        "tags": [
+          "gke"
+        ],
+        "summary": "Lists GCP zones.",
+        "operationId": "listProjectGCPZones",
+        "responses": {
+          "200": {
+            "description": "GCPZoneList",
+            "schema": {
+              "$ref": "#/definitions/GCPZoneList"
             }
           },
           "default": {
@@ -32582,7 +32693,7 @@
           "x-go-name": "Name"
         }
       },
-      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
     "NetworkDefaults": {
       "type": "object",
