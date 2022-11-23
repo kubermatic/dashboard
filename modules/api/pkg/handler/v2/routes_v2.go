@@ -1642,7 +1642,7 @@ func (r Routing) listProjectGCPSizes() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.ListProjectGCPSizes(r.presetProvider, r.userInfoGetter, , true)),
+		)(provider.ListProjectGCPSizes(r.presetProvider, r.userInfoGetter, r.settingsProvider, r.seedsGetter, true)),
 		externalcluster.DecodeGKEProjectVMReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
