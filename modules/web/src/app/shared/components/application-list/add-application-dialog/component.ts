@@ -31,6 +31,7 @@ import * as y from 'js-yaml';
 import _ from 'lodash';
 import {Subject, Subscription} from 'rxjs';
 import {finalize, takeUntil} from 'rxjs/operators';
+import {getEditionVersion} from '@shared/utils/common';
 
 enum Controls {
   Version = 'version',
@@ -68,6 +69,7 @@ export class AddApplicationDialogComponent implements OnInit, OnChanges, OnDestr
   selectedVersionSource: string;
   isValuesConfigValid = true;
   isLoadingDetails: boolean;
+  editionVersion: string = getEditionVersion();
 
   private readonly _unsubscribe = new Subject<void>();
   private _namespaceValueChangesSubscription$: Subscription;
