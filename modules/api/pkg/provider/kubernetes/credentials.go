@@ -37,7 +37,6 @@ import (
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/provider/cloud/alibaba"
 	"k8c.io/kubermatic/v2/pkg/provider/cloud/anexia"
-	"k8c.io/kubermatic/v2/pkg/provider/cloud/kubevirt"
 	"k8c.io/kubermatic/v2/pkg/provider/cloud/nutanix"
 	"k8c.io/kubermatic/v2/pkg/provider/cloud/vmwareclouddirector"
 	"k8c.io/kubermatic/v2/pkg/provider/cloud/vsphere"
@@ -421,17 +420,9 @@ func createOrUpdateKubevirtSecret(ctx context.Context, seedClient ctrlruntimecli
 		return false, nil
 	}
 
-	// ensure that CSI driver on user cluster will have access to KubeVirt cluster
-	// RBAC reconciliation takes place in the kubevirt cloud provider
-	csiKubeconfig, err := kubevirt.EnsureCSIInfraTokenAccess(ctx, spec.Kubeconfig)
-	if err != nil {
-		return false, err
-	}
-
 	// move credentials into dedicated Secret
 	credentialRef, err := ensureCredentialSecret(ctx, seedClient, cluster, map[string][]byte{
-		resources.KubevirtKubeConfig:    []byte(spec.Kubeconfig),
-		resources.KubevirtCSIKubeConfig: csiKubeconfig,
+		resources.KubeVirtKubeconfig: []byte(spec.Kubeconfig),
 	})
 	if err != nil {
 		return false, err

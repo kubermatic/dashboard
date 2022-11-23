@@ -30,7 +30,6 @@ import (
 	"testing"
 	"time"
 
-	semverlib "github.com/Masterminds/semver/v3"
 	constrainttemplatev1 "github.com/open-policy-agent/frameworks/constraint/pkg/apis/templates/v1"
 	gatekeeperconfigv1alpha1 "github.com/open-policy-agent/gatekeeper/apis/config/v1alpha1"
 	prometheusapi "github.com/prometheus/client_golang/api"
@@ -2181,10 +2180,8 @@ func GenApplicationInstallation(name, clusterName, targetnamespace string) *apps
 				Create: true,
 			},
 			ApplicationRef: appskubermaticv1.ApplicationRef{
-				Name: "sample-app",
-				Version: appskubermaticv1.Version{
-					Version: *semverlib.MustParse("v1.0.0"),
-				},
+				Name:    "sample-app",
+				Version: "1.0.0",
 			},
 		},
 	}
@@ -2203,10 +2200,8 @@ func GenApiApplicationInstallation(name, clusterName, targetnamespace string) *a
 				Create: true,
 			},
 			ApplicationRef: appskubermaticv1.ApplicationRef{
-				Name: "sample-app",
-				Version: appskubermaticv1.Version{
-					Version: *semverlib.MustParse("v1.0.0"),
-				},
+				Name:    "sample-app",
+				Version: "1.0.0",
 			},
 		},
 		Status: &apiv2.ApplicationInstallationStatus{},
