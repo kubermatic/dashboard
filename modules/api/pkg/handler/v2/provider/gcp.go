@@ -24,6 +24,7 @@ import (
 	"github.com/go-kit/kit/endpoint"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
+	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	providercommon "k8c.io/dashboard/v2/pkg/handler/common/provider"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/handler/v2/cluster"
@@ -87,6 +88,28 @@ type GCPDCReq struct {
 	DC     string
 }
 
+type GCPSubnetReq struct {
+	Req     GCPDCReq
+	Network string
+}
+
+type GCPProjectSubnetReq struct {
+	Req     GCPProjectDCReq
+	Network string
+}
+
+type GCPMachineTypesReq struct {
+	Common GCPCommonReq
+	Zone   string
+	DC     string
+}
+
+type GCPProjectMachineTypesReq struct {
+	Request GCPProjectCommonReq
+	Zone    string
+	DC      string
+}
+
 type GCPProjectDCReq struct {
 	ProjectReq GCPProjectCommonReq
 	DC         string
@@ -138,7 +161,7 @@ func DecodeGCPSubnetworksNoCredentialReq(c context.Context, r *http.Request) (in
 	return req, nil
 }
 
-// Validate validates GCP request.
+// Validate checks that ServiceAccount and Credentials aren't empty
 func (req GCPCommonReq) Validate() error {
 	if len(req.ServiceAccount) == 0 && len(req.Credential) == 0 {
 		return fmt.Errorf("GCP credentials cannot be empty")
@@ -253,7 +276,7 @@ func ListProjectGCPZones(presetProvider provider.PresetProvider, userInfoGetter 
 	}
 }
 
-func ListProjectGCPNetworks(userInfoGetter provider.UserInfoGetter, presetProvider provider.PresetProvider, withProject bool) endpoint.Endpoint {
+func ListProjectGCPNetworks(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		var (
 			req       GCPCommonReq
@@ -265,7 +288,6 @@ func ListProjectGCPNetworks(userInfoGetter provider.UserInfoGetter, presetProvid
 			if !ok {
 				return nil, utilerrors.NewBadRequest("invalid request")
 			}
-			projectID = listReq.ProjectID
 			req = listReq.Common
 		} else {
 			listReq, ok := request.(GCPCommonReq)
@@ -289,9 +311,108 @@ func ListProjectGCPNetworks(userInfoGetter provider.UserInfoGetter, presetProvid
 	}
 }
 
-func ListGCPSubnetworks(ctx context.Context, userInfo *provider.UserInfo, datacenterName string, networkName string, seedsGetter provider.SeedsGetter) endpoint.Endpoint {
+func ListProjectGCPSubnetworks(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, seedGetter provider.SeedsGetter, withProject bool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		return nil, nil
+		var (
+			datacenterName string
+			projectID      string
+			networkName    string
+			req            GCPCommonReq
+		)
+
+		if !withProject {
+			listReq := request.(GCPSubnetReq)
+
+			networkName = listReq.Network
+			datacenterName = listReq.Req.DC
+			req = listReq.Req.Common
+		} else {
+			listReq := request.(GCPProjectSubnetReq)
+
+			networkName = listReq.Network
+			datacenterName = listReq.Req.DC
+			projectID = listReq.Req.ProjectReq.ProjectID
+			req = listReq.Req.ProjectReq.Common
+		}
+
+		if err := req.Validate(); err != nil {
+			return nil, utilerrors.NewBadRequest("invalid request")
+		}
+
+		userInfo, err := userInfoGetter(ctx, projectID)
+		if err != nil {
+			return nil, utilerrors.NewBadRequest("invalid request")
+		}
+
+		sa, err := getSAFromPreset(ctx, userInfoGetter, presetProvider, req.Credential, projectID)
+		if err != nil {
+			return nil, err
+		}
+
+		return providercommon.ListGCPSubnetworks(ctx, userInfo, datacenterName, sa, networkName, seedGetter)
+	}
+}
+
+func ListProjectGCPSizes(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, settingsProvider provider.SettingsProvider, seedsGetter provider.SeedsGetter, withProject bool) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		var (
+			req       GCPCommonReq
+			zone      string
+			sa        string
+			dc        string
+			projectID string
+		)
+
+		if !withProject {
+			listReq, ok := request.(GCPMachineTypesReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+			sa = listReq.Common.Credential
+			dc = listReq.DC
+			zone = listReq.Zone
+			req = listReq.Common
+		} else {
+			listReq, ok := request.(GCPProjectMachineTypesReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+			projectID = listReq.Request.ProjectID
+			dc = listReq.DC
+			zone = listReq.Zone
+			req = listReq.Request.Common
+		}
+
+		err := req.Validate()
+		if err != nil {
+			return nil, utilerrors.NewBadRequest("invalid request")
+		}
+
+		userInfo, err := userInfoGetter(ctx, projectID)
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+
+		sa, err = getSAFromPreset(ctx, userInfoGetter, presetProvider, req.Credential, projectID)
+		if err != nil {
+			return nil, err
+		}
+
+		settings, err := settingsProvider.GetGlobalSettings(ctx)
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+
+		filter := *settings.Spec.MachineDeploymentVMResourceQuota
+		if dc != "" {
+			_, datacenter, err := provider.DatacenterFromSeedMap(userInfo, seedsGetter, dc)
+			if err != nil {
+				return nil, fmt.Errorf("error getting dc: %w", err)
+			}
+			filter = handlercommon.DetermineMachineFlavorFilter(datacenter.Spec.MachineFlavorFilter, settings.Spec.MachineDeploymentVMResourceQuota)
+		}
+
+		return providercommon.ListGCPSizes(ctx, filter, sa, zone)
 	}
 }
 
