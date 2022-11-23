@@ -41,6 +41,8 @@ export class ClusterSummaryComponent {
   @Input() seedSettings: SeedSettings;
   @Input() applications: Application[];
   @Input() flipLayout = false;
+  @Input() clusterTemplateEditMode = false;
+
   operatingSystemProfileAnnotation = OPERATING_SYSTEM_PROFILE_ANNOTATION;
 
   private _sshKeys: SSHKey[] = [];

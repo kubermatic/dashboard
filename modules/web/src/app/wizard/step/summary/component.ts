@@ -64,6 +64,10 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
     return this._clusterSpecService.cluster;
   }
 
+  get clusterTemplateEditMode(): boolean {
+    return this._clusterSpecService.clusterTemplateEditMode;
+  }
+
   get machineDeployment(): MachineDeployment {
     const data = this._nodeDataService.nodeData;
     const md: MachineDeployment = {
