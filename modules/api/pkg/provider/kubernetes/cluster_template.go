@@ -48,8 +48,8 @@ func NewClusterTemplateProvider(createMasterImpersonatedClient ImpersonationClie
 	}, nil
 }
 
-func (p *ClusterTemplateProvider) New(ctx context.Context, userInfo *provider.UserInfo, newClusterTemplate *kubermaticv1.ClusterTemplate, scope, projectID string) (*kubermaticv1.ClusterTemplate, error) {
-	if userInfo == nil || newClusterTemplate == nil {
+func (p *ClusterTemplateProvider) CreateorUpdate(ctx context.Context, userInfo *provider.UserInfo, clusterTemplate *kubermaticv1.ClusterTemplate, scope, projectID string, update bool) (*kubermaticv1.ClusterTemplate, error) {
+	if userInfo == nil || clusterTemplate == nil {
 		return nil, errors.New("userInfo and/or cluster is missing but required")
 	}
 	if scope == "" {
@@ -57,7 +57,10 @@ func (p *ClusterTemplateProvider) New(ctx context.Context, userInfo *provider.Us
 	}
 
 	if userInfo.IsAdmin {
-		return p.createTemplate(ctx, newClusterTemplate)
+		if update {
+			return p.updateTemplate(ctx, clusterTemplate)
+		}
+		return p.createTemplate(ctx, clusterTemplate)
 	}
 
 	if !userInfo.IsAdmin && scope == kubermaticv1.GlobalClusterTemplateScope {
@@ -72,15 +75,34 @@ func (p *ClusterTemplateProvider) New(ctx context.Context, userInfo *provider.Us
 		return nil, errors.New("project ID is missing but required")
 	}
 
-	return p.createTemplate(ctx, newClusterTemplate)
+	if update {
+		return p.updateTemplate(ctx, clusterTemplate)
+	}
+	return p.createTemplate(ctx, clusterTemplate)
 }
 
-func (p *ClusterTemplateProvider) createTemplate(ctx context.Context, newClusterTemplate *kubermaticv1.ClusterTemplate) (*kubermaticv1.ClusterTemplate, error) {
-	if err := p.clientPrivileged.Create(ctx, newClusterTemplate); err != nil {
+func (p *ClusterTemplateProvider) createTemplate(ctx context.Context, clusterTemplate *kubermaticv1.ClusterTemplate) (*kubermaticv1.ClusterTemplate, error) {
+	if err := p.clientPrivileged.Create(ctx, clusterTemplate); err != nil {
 		return nil, err
 	}
 
-	return newClusterTemplate, nil
+	return clusterTemplate, nil
+}
+
+func (p *ClusterTemplateProvider) updateTemplate(ctx context.Context, clusterTemplate *kubermaticv1.ClusterTemplate) (*kubermaticv1.ClusterTemplate, error) {
+	originalTemplate := &kubermaticv1.ClusterTemplate{}
+	if err := p.clientPrivileged.Get(ctx, ctrlruntimeclient.ObjectKey{Name: clusterTemplate.Name}, originalTemplate); err != nil {
+		return nil, err
+	}
+
+	// restore ResourceVersion to make patching work.
+	clusterTemplate.ResourceVersion = originalTemplate.ResourceVersion
+
+	if err := p.clientPrivileged.Update(ctx, clusterTemplate); err != nil {
+		return nil, err
+	}
+
+	return clusterTemplate, nil
 }
 
 func (p *ClusterTemplateProvider) List(ctx context.Context, userInfo *provider.UserInfo, projectID string) ([]kubermaticv1.ClusterTemplate, error) {

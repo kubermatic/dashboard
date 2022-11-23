@@ -908,7 +908,7 @@ type PrivilegedAlertmanagerProvider interface {
 
 // ClusterTemplateProvider declares the set of method for interacting with cluster templates.
 type ClusterTemplateProvider interface {
-	New(ctx context.Context, userInfo *UserInfo, newClusterTemplate *kubermaticv1.ClusterTemplate, scope, projectID string) (*kubermaticv1.ClusterTemplate, error)
+	CreateorUpdate(ctx context.Context, userInfo *UserInfo, newClusterTemplate *kubermaticv1.ClusterTemplate, scope, projectID string, update bool) (*kubermaticv1.ClusterTemplate, error)
 	List(ctx context.Context, userInfo *UserInfo, projectID string) ([]kubermaticv1.ClusterTemplate, error)
 	ListALL(ctx context.Context, labelSelector labels.Selector) ([]kubermaticv1.ClusterTemplate, error)
 	Get(ctx context.Context, userInfo *UserInfo, projectID, templateID string) (*kubermaticv1.ClusterTemplate, error)

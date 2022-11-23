@@ -1206,7 +1206,9 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 	mux.Methods(http.MethodPost).
 		Path("/projects/{project_id}/clustertemplates/{template_id}/instances").
 		Handler(r.createClusterTemplateInstance())
-
+	mux.Methods(http.MethodPut).
+		Path("/projects/{project_id}/clustertemplates/{template_id}").
+		Handler(r.updateClusterTemplate())
 	// Defines a set of HTTP endpoints for managing rule groups
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/clusters/{cluster_id}/rulegroups/{rulegroup_id}").
@@ -2092,7 +2094,6 @@ func (r Routing) patchExternalCluster() http.Handler {
 // swagger:route PUT /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id} project updateExternalCluster
 //
 //	Updates an external cluster for the given project.
-//
 //
 //	Produces:
 //	- application/json
@@ -5950,6 +5951,34 @@ func (r Routing) deleteClusterTemplate() http.Handler {
 		)(clustertemplate.DeleteEndpoint(r.projectProvider, r.privilegedProjectProvider, r.userInfoGetter, r.clusterTemplateProvider)),
 		clustertemplate.DecodeGetReq,
 		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route PUT /api/v2/projects/{project_id}/clustertemplates/{template_id} project updateClusterTemplate
+//
+//	Update a specified cluster templates for the given project.
+//
+//	Consumes:
+//	- application/json
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  201: ClusterTemplate
+//	  401: empty
+//	  403: empty
+func (r Routing) updateClusterTemplate() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(clustertemplate.UpdateEndpoint(r.projectProvider, r.privilegedProjectProvider, r.userInfoGetter, r.clusterTemplateProvider, r.seedsGetter, r.presetProvider, r.caBundle, r.exposeStrategy, r.sshKeyProvider, r.kubermaticConfigGetter, r.features)),
+		clustertemplate.DecodeUpdateReq,
+		handler.SetStatusCreatedHeader(handler.EncodeJSON),
 		r.defaultServerOptions()...,
 	)
 }

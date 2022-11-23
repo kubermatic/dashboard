@@ -16653,6 +16653,92 @@
           }
         }
       },
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "project"
+        ],
+        "summary": "Update a specified cluster templates for the given project.",
+        "operationId": "updateClusterTemplate",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "applications": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Application"
+                  },
+                  "x-go-name": "Applications"
+                },
+                "cluster": {
+                  "$ref": "#/definitions/Cluster"
+                },
+                "name": {
+                  "type": "string",
+                  "x-go-name": "Name"
+                },
+                "nodeDeployment": {
+                  "$ref": "#/definitions/NodeDeployment"
+                },
+                "scope": {
+                  "type": "string",
+                  "x-go-name": "Scope"
+                },
+                "userSshKeys": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/ClusterTemplateSSHKey"
+                  },
+                  "x-go-name": "UserSSHKeys"
+                }
+              }
+            }
+          },
+          {
+            "type": "string",
+            "x-go-name": "ClusterTemplateID",
+            "name": "template_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "ClusterTemplate",
+            "schema": {
+              "$ref": "#/definitions/ClusterTemplate"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      },
       "delete": {
         "consumes": [
           "application/json"
@@ -25655,7 +25741,7 @@
       "title": "ApplicationRef describes a KKP-wide, unique reference to an Application.",
       "properties": {
         "name": {
-          "description": "Name of the Application",
+          "description": "Name of the Application.\nShould be a valid lowercase RFC1123 domain name",
           "type": "string",
           "pattern": "=`^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$`",
           "x-go-name": "Name"
@@ -25664,7 +25750,7 @@
           "$ref": "#/definitions/Version"
         }
       },
-      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
     },
     "ApplicationSource": {
       "type": "object",
