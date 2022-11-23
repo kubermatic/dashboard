@@ -61,12 +61,11 @@ limitations under the License.
           </ng-container>
 
           <ng-container *ngSwitchCase="stepRegistry.Applications">
-            <km-wizard-applications-step [formControl]="form.get(stepRegistry.Applications)"
-                                         (applicationsChange)="onApplicationsChanged($event)"></km-wizard-applications-step>
+            <km-wizard-applications-step [formControl]="form.get(stepRegistry.Applications)"></km-wizard-applications-step>
           </ng-container>
 
           <ng-container *ngSwitchCase="stepRegistry.Summary">
-            <km-wizard-summary-step [applications]="applications"></km-wizard-summary-step>
+            <km-wizard-summary-step></km-wizard-summary-step>
           </ng-container>
         </div>
 

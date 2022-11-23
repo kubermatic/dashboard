@@ -24,7 +24,6 @@ import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {WizardService} from '@core/services/wizard/wizard';
 import {SaveClusterTemplateDialogComponent} from '@shared/components/save-cluster-template/component';
-import {Application} from '@shared/entity/application';
 import {Cluster, CreateClusterModel} from '@shared/entity/cluster';
 import {Project} from '@shared/entity/project';
 import {OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deployment';
@@ -36,6 +35,8 @@ import {ClusterTemplateService} from '@core/services/cluster-templates';
 import {NameGeneratorService} from '@core/services/name-generator';
 import {PathParam} from '@core/services/params';
 import {ClusterTemplate} from '@shared/entity/cluster-template';
+import {ApplicationService} from '@core/services/application';
+import {Application} from '@shared/entity/application';
 
 @Component({
   selector: 'km-wizard',
@@ -48,7 +49,6 @@ export class WizardComponent implements OnInit, OnDestroy {
   project = {} as Project;
   creating = false;
   operatingSystemProfileAnnotation = OPERATING_SYSTEM_PROFILE_ANNOTATION;
-  applications: Application[] = [];
   clusterTemplateID: string;
   loadingClusterTemplate = true;
   private clusterTemplate: ClusterTemplate;
@@ -70,7 +70,8 @@ export class WizardComponent implements OnInit, OnDestroy {
     private readonly _router: Router,
     private readonly _route: ActivatedRoute,
     private readonly _clusterTemplateService: ClusterTemplateService,
-    private readonly _nameGenerator: NameGeneratorService
+    private readonly _nameGenerator: NameGeneratorService,
+    private readonly applicationService: ApplicationService
   ) {}
 
   @ViewChild('stepper')
@@ -124,12 +125,12 @@ export class WizardComponent implements OnInit, OnDestroy {
     this._wizard.reset();
   }
 
-  onApplicationsChanged(applications: Application[]): void {
-    this.applications = applications;
-  }
-
   getObservable(): Observable<Cluster> {
-    const createCluster = this._getCreateClusterModel(this._clusterSpecService.cluster, this._nodeDataService.nodeData);
+    const createCluster = this._getCreateClusterModel(
+      this._clusterSpecService.cluster,
+      this._nodeDataService.nodeData,
+      this.applicationService.applications
+    );
 
     return this._clusterService
       .create(this.project.id, createCluster)
@@ -153,11 +154,6 @@ export class WizardComponent implements OnInit, OnDestroy {
     this._router.navigate([`/projects/${this.project.id}/clusters/${cluster.id}`]);
   }
 
-  onClusterTemplateUpdated(clusterTemplate: ClusterTemplate): void {
-    this._notificationService.success(`Updated the ${clusterTemplate.name} cluster`);
-    this._router.navigate([`/projects/${this.project.id}/clustertemplates`]);
-  }
-
   onSaveClusterTemplate(isEditMode?: boolean): void {
     const dialogConfig: MatDialogConfig = {
       data: {
@@ -165,7 +161,7 @@ export class WizardComponent implements OnInit, OnDestroy {
         nodeData: this._nodeDataService.nodeData,
         sshKeys: this._clusterSpecService.sshKeys,
         projectID: this.project.id,
-        applications: this.applications,
+        applications: this.applicationService.applications,
       },
     };
 
@@ -185,7 +181,11 @@ export class WizardComponent implements OnInit, OnDestroy {
       );
   }
 
-  private _getCreateClusterModel(cluster: Cluster, nodeData: NodeData): CreateClusterModel {
+  private _getCreateClusterModel(
+    cluster: Cluster,
+    nodeData: NodeData,
+    applications: Application[]
+  ): CreateClusterModel {
     const clusterModel: CreateClusterModel = {
       cluster: {
         name: cluster.name,
@@ -201,7 +201,7 @@ export class WizardComponent implements OnInit, OnDestroy {
           dynamicConfig: nodeData.dynamicConfig,
         },
       },
-      applications: this.applications,
+      applications: applications,
     };
     if (nodeData.operatingSystemProfile && cluster.spec.enableOperatingSystemManager) {
       clusterModel.nodeDeployment.annotations = {

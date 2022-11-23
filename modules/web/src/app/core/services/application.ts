@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import {AppConfigService} from '@app/config.service';
 import {environment} from '@environments/environment';
 import {Application, ApplicationDefinition} from '@shared/entity/application';
@@ -22,12 +22,23 @@ import {catchError, map, shareReplay, switchMap} from 'rxjs/operators';
 
 @Injectable()
 export class ApplicationService {
+  private _applications: Application[] = [];
   private readonly _restRoot: string = environment.newRestRoot;
   private readonly _refreshTime = 30;
   private readonly _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
   private _applicationDefinitions$: Observable<ApplicationDefinition[]>;
+  readonly applicationChanges = new EventEmitter<Application[]>();
 
   constructor(private readonly _appConfigService: AppConfigService, private readonly _httpClient: HttpClient) {}
+
+  get applications(): Application[] {
+    return this._applications;
+  }
+
+  set applications(applications: Application[]) {
+    this._applications = applications;
+    this.applicationChanges.emit(this._applications);
+  }
 
   applicationDefinitions(): Observable<ApplicationDefinition[]> {
     if (!this._applicationDefinitions$) {
