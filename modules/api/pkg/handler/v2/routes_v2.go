@@ -1572,17 +1572,6 @@ func (r Routing) listProjectGCPSubnetworks() http.Handler {
 	)
 }
 
-// swagger:route GET /api/v2/projects/{project_id}/providers/gcp/zones gke listProjectGCPZones
-//
-// Lists GKE zones.
-//
-//	Produces
-//	- application/json
-//
-//	Responses:
-//	  default: errorResponse
-//	  200: GKEZoneList
-//
 // swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/gcp/networks gcp listGCPNetworksNoCredentialsV2
 //
 // Lists available GCP networks
