@@ -622,9 +622,7 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 		Path("/projects/{project_id}/providers/gke/validatecredentials").
 		Handler(r.validateProjectGKECredentials())
 
-	// GCP endpoints TODO SANG
-	// look how we get the credentials like GKE
-	// look at the api
+	// GCP endpoints
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/providers/gcp/disktypes").
 		Handler(r.listProjectGCPDiskTypes())
@@ -1520,9 +1518,6 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 		Handler(r.getSeedOverview())
 }
 
-// TODO SANG
-// GCP Endpoints
-
 // swagger:route GET /api/v2/projects/{project_id}/disktypes project listProjectGCPDisk
 //
 //	Creates a cluster for the given project.
@@ -1544,7 +1539,7 @@ func (r Routing) listProjectGCPDiskTypes() http.Handler {
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
 		)(provider.ListProjectGCPDiskTypes(r.presetProvider, r.userInfoGetter, true)),
-		provider.DecodeGCPSubnetworksNoCredentialReq, // TODO
+		provider.DecodeGCPSubnetworksNoCredentialReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
