@@ -35,6 +35,7 @@ import {StepRegistry, steps, WizardStep} from './config';
 import {ClusterTemplateService} from '@core/services/cluster-templates';
 import {NameGeneratorService} from '@core/services/name-generator';
 import {PathParam} from '@core/services/params';
+import {ClusterTemplate} from '@shared/entity/cluster-template';
 
 @Component({
   selector: 'km-wizard',
@@ -50,6 +51,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   applications: Application[] = [];
   clusterTemplateID: string;
   loadingClusterTemplate = true;
+  private clusterTemplate: ClusterTemplate;
   readonly stepRegistry = StepRegistry;
 
   private _stepper: MatStepper;
@@ -151,7 +153,12 @@ export class WizardComponent implements OnInit, OnDestroy {
     this._router.navigate([`/projects/${this.project.id}/clusters/${cluster.id}`]);
   }
 
-  onSaveClusterTemplate(): void {
+  onClusterTemplateUpdated(clusterTemplate: ClusterTemplate): void {
+    this._notificationService.success(`Updated the ${clusterTemplate.name} cluster`);
+    this._router.navigate([`/projects/${this.project.id}/clustertemplates`]);
+  }
+
+  onSaveClusterTemplate(isEditMode?: boolean): void {
     const dialogConfig: MatDialogConfig = {
       data: {
         cluster: this._clusterSpecService.cluster,
@@ -162,12 +169,20 @@ export class WizardComponent implements OnInit, OnDestroy {
       },
     };
 
+    if (isEditMode) {
+      dialogConfig.data.name = this.clusterTemplate.name;
+      dialogConfig.data.clusterTemplateID = this.clusterTemplate.id;
+      dialogConfig.data.scope = this.clusterTemplate.scope;
+    }
+
     this._matDialog
       .open(SaveClusterTemplateDialogComponent, dialogConfig)
       .afterClosed()
       .pipe(filter(ct => !!ct))
       .pipe(take(1))
-      .subscribe(ct => this._notificationService.success(`Saved the ${ct.name} cluster template`));
+      .subscribe(ct =>
+        this._notificationService.success(`${isEditMode ? 'Saved' : 'Updated'} the ${ct.name} cluster template`)
+      );
   }
 
   private _getCreateClusterModel(cluster: Cluster, nodeData: NodeData): CreateClusterModel {
@@ -247,6 +262,7 @@ export class WizardComponent implements OnInit, OnDestroy {
         template.nodeDeployment.name = namePrefix;
         this._clusterSpecService.initializeClusterFromClusterTemplate(template);
         this._nodeDataService.initializeNodeDataFromMachineDeployment(template.nodeDeployment);
+        this.clusterTemplate = template;
 
         // Re-initialize the form.
         this.loadingClusterTemplate = false;

@@ -48,6 +48,7 @@ import {
   ProxyMode,
   ExposeStrategy,
   NetworkRanges,
+  ClusterNetworkDefaults,
 } from '@shared/entity/cluster';
 import {ResourceType} from '@shared/entity/common';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
@@ -276,12 +277,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           this.isDualStackAllowed = !!datacenter.spec.ipv6Enabled;
           this._enforce(Controls.AuditLogging, datacenter.spec.enforceAuditLogging);
           this._enforcePodSecurityPolicy(datacenter.spec.enforcePodSecurityPolicy);
-
-          // Ignore network defaults since the cluster or cluster template has already been initialized with all the
-          // required network configurations.
-          if (!this.clusterTemplateEditMode) {
-            this._setNetworkDefaults();
-          }
+          this._setNetworkDefaults();
         })
       )
       .pipe(switchMap(_ => this._datacenterService.seedSettings(this._datacenterSpec.spec.seed)))
@@ -607,6 +603,16 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .pipe(take(1))
       .subscribe({
         next: networkDefaults => {
+          this.setIPv6Defaults(networkDefaults);
+          // Only load cluster networking defaults when editing cluster template if IPv4 is the selected IP Family.
+          // This is required so that IPv6 controls are not loaded empty.
+          if (
+            this._clusterSpecService.cluster.spec.clusterNetwork?.ipFamily !== IPFamily.DualStack &&
+            this.clusterTemplateEditMode
+          ) {
+            return;
+          }
+
           this.form.patchValue({
             [Controls.NodeLocalDNSCache]: networkDefaults.nodeLocalDNSCacheEnabled,
             [Controls.IPv4PodsCIDR]: networkDefaults.ipv4?.podsCidr || '',
@@ -618,27 +624,36 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           if (this.availableProxyModes.includes(this._defaultProxyMode)) {
             this.control(Controls.ProxyMode).setValue(this._defaultProxyMode);
           }
-          if (this.isDualStackAllowed) {
-            this.form.patchValue({
-              [Controls.IPv6PodsCIDR]: networkDefaults.ipv6?.podsCidr || '',
-              [Controls.IPv6ServicesCIDR]: networkDefaults.ipv6?.servicesCidr || '',
-              [Controls.IPv6CIDRMaskSize]: networkDefaults.ipv6?.nodeCidrMaskSize,
-            });
-          }
           if (this.isAllowedIPRangeSupported()) {
             this.form.patchValue({
               [Controls.IPv4AllowedIPRange]:
                 networkDefaults.ipv4?.nodePortsAllowedIPRange || this._defaultAllowedIPRange,
-              [Controls.IPv6AllowedIPRange]: networkDefaults.ipv6?.nodePortsAllowedIPRange || '',
             });
           } else {
             this.form.patchValue({
               [Controls.IPv4AllowedIPRange]: null,
-              [Controls.IPv6AllowedIPRange]: null,
             });
           }
         },
       });
+  }
+
+  private setIPv6Defaults(networkDefaults: ClusterNetworkDefaults): void {
+    this.form.patchValue({
+      [Controls.IPv6PodsCIDR]: networkDefaults.ipv6?.podsCidr || '',
+      [Controls.IPv6ServicesCIDR]: networkDefaults.ipv6?.servicesCidr || '',
+      [Controls.IPv6CIDRMaskSize]: networkDefaults.ipv6?.nodeCidrMaskSize,
+    });
+
+    if (this.isAllowedIPRangeSupported()) {
+      this.form.patchValue({
+        [Controls.IPv6AllowedIPRange]: networkDefaults.ipv6?.nodePortsAllowedIPRange || '',
+      });
+    } else {
+      this.form.patchValue({
+        [Controls.IPv6AllowedIPRange]: null,
+      });
+    }
   }
 
   private _getExtraCloudSpecOptions(): ExtraCloudSpecOptions {

@@ -34,6 +34,9 @@ class SaveClusterTemplateDialogData {
   sshKeys: SSHKey[];
   projectID: string;
   applications: Application[];
+  name?: string;
+  clusterTemplateID?: string;
+  scope?: string;
 }
 
 enum Control {
@@ -60,8 +63,11 @@ export class SaveClusterTemplateDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      [Control.Name]: new FormControl('', [Validators.required, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR]),
-      [Control.Scope]: new FormControl(ClusterTemplateScope.User, [Validators.required]),
+      [Control.Name]: new FormControl(this.data.name ?? '', [
+        Validators.required,
+        KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,
+      ]),
+      [Control.Scope]: new FormControl(this.data.scope ?? ClusterTemplateScope.User, [Validators.required]),
     });
 
     this._userService.currentUser.pipe(take(1)).subscribe(user => (this.user = user));
@@ -72,6 +78,11 @@ export class SaveClusterTemplateDialogComponent implements OnInit {
   }
 
   getObservable(): Observable<ClusterTemplate> {
+    if (this.data.clusterTemplateID) {
+      return this._clusterTemplateService
+        .update(this._getClusterTemplate(), this.data.projectID, this.data.clusterTemplateID)
+        .pipe(take(1));
+    }
     return this._clusterTemplateService.create(this._getClusterTemplate(), this.data.projectID).pipe(take(1));
   }
 

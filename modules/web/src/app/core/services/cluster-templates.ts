@@ -43,6 +43,11 @@ export class ClusterTemplateService {
     return this._http.post<ClusterTemplate>(url, template);
   }
 
+  update(template: ClusterTemplate, projectID: string, templateID: string): Observable<ClusterTemplate> {
+    const url = `${this._newRestRoot}/projects/${projectID}/clustertemplates/${templateID}`;
+    return this._http.put<ClusterTemplate>(url, template);
+  }
+
   list(projectID: string): Observable<ClusterTemplate[]> {
     if (!this._templates$.get(projectID)) {
       const templates$ = merge(this._onUpdate, this._refreshTimer$).pipe(

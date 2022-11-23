@@ -115,7 +115,18 @@ limitations under the License.
                   kmThrottleClick
                   (throttleClick)="onSaveClusterTemplate()">
             <i class="km-icon-mask km-icon-save"></i>
-            <span>Save Cluster Template</span>
+            <span>{{ clusterTemplateID ? 'Save as new template' : 'Save Cluster Template' }}</span>
+          </button>
+          <button id="km-wizard-update-template-btn"
+                  fxLayoutAlign="center center"
+                  mat-flat-button
+                  type="button"
+                  [disabled]="creating"
+                  *ngIf="last && clusterTemplateID"
+                  kmThrottleClick
+                  (throttleClick)="onSaveClusterTemplate(true)">
+            <i class="km-icon-mask km-icon-save"></i>
+            <span>Save changes to Template</span>
           </button>
           <km-button buttonId="km-wizard-create-btn"
                      *ngIf="last"

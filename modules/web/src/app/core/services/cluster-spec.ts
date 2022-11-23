@@ -141,6 +141,7 @@ export class ClusterSpecService {
   reset(): void {
     this._cluster = Cluster.newEmptyClusterEntity();
     this._sshKeys = [];
+    this.isCusterTemplateEditMode = false;
   }
 
   initializeClusterFromClusterTemplate(template: ClusterTemplate): void {
