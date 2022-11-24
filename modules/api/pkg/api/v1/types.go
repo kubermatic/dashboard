@@ -2031,9 +2031,7 @@ type TopologySpreadConstraint struct {
 func (spec *KubevirtNodeSpec) MarshalJSON() ([]byte, error) {
 	missing := make([]string, 0)
 
-	// Deprecated. Flavor is deprecated. Will be removed when migration to instancetype/preference is fully done.
-	// When UI is not using it any more.
-	if spec.FlavorName == "" && spec.Instancetype == nil {
+	if spec.Instancetype == nil {
 		if len(spec.CPUs) == 0 {
 			missing = append(missing, "cpus")
 		}

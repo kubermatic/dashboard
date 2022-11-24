@@ -646,14 +646,14 @@ func TestKubevirtNodeSpec_MarshalJSON(t *testing.T) {
 			"{\"flavorName\":\"\",\"flavorProfile\":\"\",\"instancetype\":null,\"preference\":null,\"cpus\":\"1\",\"memory\":\"1\",\"primaryDiskOSImage\":\"test-url\",\"primaryDiskStorageClassName\":\"test-sc\",\"primaryDiskSize\":\"1\",\"secondaryDisks\":null,\"podAffinityPreset\":\"\",\"podAntiAffinityPreset\":\"\",\"nodeAffinityPreset\":{\"Type\":\"\",\"Key\":\"\",\"Values\":null},\"topologySpreadConstraints\":null}",
 		},
 		{
-			"case 8: should marshal when instance type is provided with vm-flavor",
+			"case 8: should fail when cpu/memory is provided with vm-flavor",
 			&apiv1.KubevirtNodeSpec{
 				FlavorName:                  "test-flavor",
 				PrimaryDiskOSImage:          "test-url",
 				PrimaryDiskStorageClassName: "test-sc",
 				PrimaryDiskSize:             "1",
 			},
-			"{\"flavorName\":\"test-flavor\",\"flavorProfile\":\"\",\"instancetype\":null,\"preference\":null,\"cpus\":\"\",\"memory\":\"\",\"primaryDiskOSImage\":\"test-url\",\"primaryDiskStorageClassName\":\"test-sc\",\"primaryDiskSize\":\"1\",\"secondaryDisks\":null,\"podAffinityPreset\":\"\",\"podAntiAffinityPreset\":\"\",\"nodeAffinityPreset\":{\"Type\":\"\",\"Key\":\"\",\"Values\":null},\"topologySpreadConstraints\":null}",
+			"missing or invalid required parameter(s): cpus, memory",
 		},
 		{
 			"case 9: should marshal when flavor is provided with affinity",
