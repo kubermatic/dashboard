@@ -33,6 +33,11 @@ import {merge, of, Subject, timer} from 'rxjs';
 import {catchError, filter, switchMap, switchMapTo, take, takeUntil} from 'rxjs/operators';
 import {CreateServiceAccountDialogComponent} from './create-dialog/component';
 import {EditServiceAccountDialogComponent} from './edit-dialog/component';
+import {
+  ServiceAccountTokenDialog,
+  ServiceAccountTokenDialogData,
+  ServiceAccountTokenDialogMode,
+} from '@app/serviceaccount/token/add/component';
 
 class TokenList {
   initializing = true;
@@ -42,12 +47,22 @@ class TokenList {
   onChange = new Subject<void>();
 }
 
+enum Column {
+  StateArrow = 'stateArrow',
+  Name = 'name',
+  Group = 'group',
+  CreationDate = 'creationDate',
+  Actions = 'actions',
+}
+
 @Component({
   selector: 'km-serviceaccount',
   templateUrl: 'template.html',
   styleUrls: ['style.scss'],
 })
 export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
+  readonly Column = Column;
+
   isInitializing = true;
   serviceAccounts: ServiceAccount[] = [];
   displayedColumns: string[] = ['stateArrow', 'name', 'group', 'creationDate', 'actions'];
@@ -119,6 +134,28 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
     this._unsubscribe.complete();
   }
 
+  createToken(serviceAccount: ServiceAccount, $event: Event): void {
+    $event.preventDefault();
+    $event.stopPropagation();
+
+    this._loadTokens(serviceAccount);
+    this.getTokenList(serviceAccount.id).visible = false;
+
+    const config: MatDialogConfig = {
+      data: {
+        projectID: this._selectedProject.id,
+        serviceAccount: serviceAccount,
+        mode: ServiceAccountTokenDialogMode.Create,
+      } as ServiceAccountTokenDialogData,
+    };
+
+    this._matDialog
+      .open(ServiceAccountTokenDialog, config)
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(() => this.onTokenChange(serviceAccount.id));
+  }
+
   getGroupDisplayName(group: string): string {
     return MemberUtils.getGroupDisplayName(group);
   }
@@ -128,7 +165,7 @@ export class ServiceAccountComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isTokenVisible(id: string): boolean {
-    return this._tokenMap.has(id);
+    return this._tokenMap.get(id)?.visible;
   }
 
   isTokenInitializing(id: string): boolean {

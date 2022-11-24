@@ -36,7 +36,7 @@ limitations under the License.
            matSort
            [dataSource]="dataSource">
 
-      <ng-container matColumnDef="stateArrow">
+      <ng-container [matColumnDef]="Column.StateArrow">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell"></th>
@@ -46,7 +46,7 @@ limitations under the License.
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="name">
+      <ng-container [matColumnDef]="Column.Name">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell p-50"
@@ -57,7 +57,7 @@ limitations under the License.
             [attr.id]="'km-serviceaccount-name-' + element.name">{{element.name}}</td>
       </ng-container>
 
-      <ng-container matColumnDef="group">
+      <ng-container [matColumnDef]="Column.Group">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell p-25"
@@ -67,7 +67,7 @@ limitations under the License.
             *matCellDef="let element">{{getGroupDisplayName(element.group)}}</td>
       </ng-container>
 
-      <ng-container matColumnDef="creationDate">
+      <ng-container [matColumnDef]="Column.CreationDate">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell p-25"
@@ -79,7 +79,7 @@ limitations under the License.
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="actions">
+      <ng-container [matColumnDef]="Column.Actions">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell"></th>
@@ -95,6 +95,17 @@ limitations under the License.
               </ng-container>
 
               <ng-container *ngSwitchCase="false">
+
+                <button *ngIf="!isTokenVisible(element.id)"
+                        mat-icon-button
+                        fxLayoutAlign="center center"
+                        matTooltip="Add Token"
+                        [attr.id]="'km-add-dialog-' + element?.name"
+                        (click)="createToken(element, $event)"
+                        [disabled]="!isEnabled('create')">
+                  <i class="km-icon-mask km-icon-add"></i>
+                </button>
+
                 <button mat-icon-button
                         [attr.id]="'km-edit-dialog-' + element?.name"
                         matTooltip="Edit Service Account"

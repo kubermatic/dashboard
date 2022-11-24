@@ -59,10 +59,13 @@ limitations under the License.
                fxLayoutAlign=" center">
             <span>{{element.spec.cloud.aws ? getNodeName(element) : element.name}}</span>
             <ng-container *ngIf="element.status.errorMessage as errorMessage; else infoIcon">
-              <i [matTooltip]="errorMessage" class="km-icon-warning"></i>
+              <i [matTooltip]="errorMessage"
+                 class="km-icon-warning"></i>
             </ng-container>
             <ng-template #infoIcon>
-              <i *ngIf="showInfo(element)" class="km-icon-info km-pointer" matTooltip="{{getInfo(element)}}"></i>
+              <i *ngIf="showInfo(element)"
+                 class="km-icon-info km-pointer"
+                 matTooltip="{{getInfo(element)}}"></i>
             </ng-template>
           </div>
         </td>

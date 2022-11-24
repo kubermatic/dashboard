@@ -21,12 +21,14 @@ import {UserService} from '@core/services/user';
 import {AdminSeed} from '@shared/entity/datacenter';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import _ from 'lodash';
+import {DestinationDialog, Mode} from '@app/settings/admin/bucket-settings/destinations/destination-dialog/component';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 
 enum Column {
+  StateArrow = 'stateArrow',
   Seed = 'seed',
   Destinations = 'destinations',
-  StateArrow = 'stateArrow',
+  Actions = 'actions',
 }
 
 @Component({
@@ -40,7 +42,7 @@ export class BucketSettingsComponent implements OnInit, OnDestroy, AfterViewInit
 
   isLoading = false;
   dataSource: MatTableDataSource<AdminSeed>;
-  displayedColumns: string[] = [Column.StateArrow, Column.Seed];
+  displayedColumns: string[] = Object.values(Column).filter(column => column !== Column.Destinations);
   toggledColumns: string[] = [Column.Destinations];
   isShowDestinations = [];
   readonly Column = Column;
@@ -52,7 +54,11 @@ export class BucketSettingsComponent implements OnInit, OnDestroy, AfterViewInit
     return this.dataSource.data;
   }
 
-  constructor(private readonly _datacenterService: DatacenterService, private readonly _userService: UserService) {}
+  constructor(
+    private readonly _datacenterService: DatacenterService,
+    private readonly _userService: UserService,
+    private readonly _matDialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.dataSource = new MatTableDataSource<AdminSeed>([]);
@@ -78,6 +84,25 @@ export class BucketSettingsComponent implements OnInit, OnDestroy, AfterViewInit
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  addDestination($event, seed: AdminSeed): void {
+    $event.preventDefault();
+    $event.stopPropagation();
+
+    const dialogConfig: MatDialogConfig = {
+      data: {
+        title: 'Add Destination',
+        mode: Mode.Add,
+        seed: seed,
+      },
+    };
+
+    this._matDialog.open(DestinationDialog, dialogConfig);
+  }
+
+  isDestinationVisible(name: string): boolean {
+    return !!this.isShowDestinations[name];
   }
 
   toggleDestinations(element: any): void {
