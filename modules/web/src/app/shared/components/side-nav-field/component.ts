@@ -14,7 +14,7 @@
 
 import {AfterViewChecked, ChangeDetectorRef, Component, Input} from '@angular/core';
 import {Router} from '@angular/router';
-import {AdminPanelMainSections,ProjectSidenavMainSection, AdminPanelView, View} from '@app/shared/entity/common';
+import {AdminPanelMainSections, ProjectSidenavMainSection, AdminPanelView, View} from '@app/shared/entity/common';
 import {shrinkGrow} from '@shared/animations/grow';
 @Component({
   selector: 'km-side-nav-field',
@@ -25,10 +25,10 @@ import {shrinkGrow} from '@shared/animations/grow';
 export class SideNavExpansionMenuComponent implements AfterViewChecked {
   private _expanded = false;
   readonly view = View;
-  @Input() label: ProjectSidenavMainSection;
+  @Input() label = '';
   readonly projectSidenvMainSections = ProjectSidenavMainSection;
   readonly adminPanelView = AdminPanelView;
-  readonly adminPanelMainSections = AdminPanelMainSections
+  readonly adminPanelMainSections = AdminPanelMainSections;
   @Input() icon = '';
   @Input() isSidenavCollapsed: boolean;
 

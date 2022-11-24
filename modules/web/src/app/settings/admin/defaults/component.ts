@@ -14,6 +14,7 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
+import {FeatureGateService} from '@app/core/services/feature-gate';
 import {AdminPanelView} from '@app/shared/entity/common';
 import {NotificationService} from '@core/services/notification';
 import {SettingsService} from '@core/services/settings';
@@ -35,6 +36,9 @@ export class DefaultsAndLimitsComponent implements OnInit, OnDestroy {
   settings: AdminSettings; // Local settings copy. User can edit it.
   apiSettings: AdminSettings; // Original settings from the API. Cannot be edited by the user.
   interfaceTypeUrl = '';
+  isOIDCKubeCfgEndpointEnabled = true;
+  isOpenIDAuthPluginEnabled = true;
+
 
   readonly adminPanelView = AdminPanelView;
   private readonly _debounceTime = 500;
@@ -45,11 +49,18 @@ export class DefaultsAndLimitsComponent implements OnInit, OnDestroy {
     private readonly _userService: UserService,
     private readonly _settingsService: SettingsService,
     private readonly _notificationService: NotificationService,
+    private readonly _featureGatesService: FeatureGateService,
     private _router: Router
   ) {}
 
   ngOnInit(): void {
     this._userService.currentUser.pipe(take(1)).subscribe(user => (this.user = user));
+    this._getInterfaceTypeUrl();
+    this._featureGatesService.featureGates.pipe(takeUntil(this._unsubscribe)).subscribe(featureGates => {
+      this.isOIDCKubeCfgEndpointEnabled = !!featureGates?.oidcKubeCfgEndpoint;
+      this.isOpenIDAuthPluginEnabled = !!featureGates?.openIDAuthPlugin;
+      this._verifyEnableKubernetesDashboardRequirements();
+    });
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       if (!_.isEqual(settings, this.apiSettings)) {
@@ -67,10 +78,6 @@ export class DefaultsAndLimitsComponent implements OnInit, OnDestroy {
         takeUntil(this._unsubscribe)
       )
       .subscribe();
-
-    setTimeout(() => {
-      this.checkInterfaceTypeUrl();
-    }, this._debounceTime);
   }
 
   ngOnDestroy(): void {
@@ -100,6 +107,27 @@ export class DefaultsAndLimitsComponent implements OnInit, OnDestroy {
     );
   }
 
+  onOIDCKubeconfigSettingsChange(): void {
+    if (this.settings.enableWebTerminal) {
+      this.settings.enableWebTerminal = false;
+    }
+    this.onSettingsChange();
+  }
+
+  isKubernetesDashboardFeatureGatesEnabled(): boolean {
+    return this.isOIDCKubeCfgEndpointEnabled && this.isOpenIDAuthPluginEnabled;
+  }
+
+  private _verifyEnableKubernetesDashboardRequirements() {
+    // Note: Kubernetes Dashboard feature requires both feature gates from admin side to be enabled.
+    if (!this.isOIDCKubeCfgEndpointEnabled || !this.isOpenIDAuthPluginEnabled) {
+      if (this.settings.enableDashboard) {
+        this.settings.enableDashboard = false;
+        this.onSettingsChange();
+      }
+    }
+  }
+
   private _applySettings(settings: AdminSettings): void {
     this.apiSettings = settings;
     this.settings = _.cloneDeep(this.apiSettings);
@@ -115,8 +143,9 @@ export class DefaultsAndLimitsComponent implements OnInit, OnDestroy {
     return patch;
   }
 
-  checkInterfaceTypeUrl(): void {
+  private _getInterfaceTypeUrl(): void {
     const urlArray = this._router.routerState.snapshot.url.split('/');
     this.interfaceTypeUrl = urlArray[urlArray.length - 1];
   }
+
 }

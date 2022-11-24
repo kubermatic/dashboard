@@ -96,7 +96,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   isSidenavCollapsed(): boolean {
-    const maxScreenWidth = 767;
+    const maxScreenWidth = 1200;
     return this._isSidenavCollapsed || this.screenWidth < maxScreenWidth;
   }
 

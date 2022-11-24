@@ -48,7 +48,7 @@ export class AdminSidenavComponent implements OnInit, OnDestroy {
   }
 
   get isSidenavCollapsed(): boolean {
-    const maxScreenWidth = 767;
+    const maxScreenWidth = 1200;
     return this._isSidenavCollapsed || this.screenWidth < maxScreenWidth;
   }
 
