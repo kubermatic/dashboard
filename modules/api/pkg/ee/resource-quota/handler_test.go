@@ -573,7 +573,7 @@ func TestCalculateResourceQuotaUpdate(t *testing.T) {
 			ExistingAPIUser: test.GenDefaultAPIUser(),
 			RequestBody: newCalcReq().
 				withReplicas(2).
-				withNutanix(2, 3000, 10).
+				withNutanix(2, 3000, 10, true).
 				encode(t),
 			ExpectedHTTPStatusCode: http.StatusOK,
 			ExpectedResponse: newRQUpdateCalculationBuilder().
@@ -640,6 +640,26 @@ func TestCalculateResourceQuotaUpdate(t *testing.T) {
 				withQuota(genAPIQuota(12, 10, 30)).
 				withGlobalUsage(genAPIQuota(2, 3, 5)).
 				withCalculatedQuota(genAPIQuota(6, 9, 25)).
+				build(),
+		},
+		{
+			Name:      "should process nutanix request successfully with no disk set",
+			ProjectID: test.GenDefaultProject().Name,
+			ExistingKubermaticObjects: test.GenDefaultKubermaticObjects(
+				newRQBuilder().
+					withQuota("12", "10G", "30G").
+					withGlobalUsage("2", "3G", "5G").
+					build()),
+			ExistingAPIUser: test.GenDefaultAPIUser(),
+			RequestBody: newCalcReq().
+				withReplicas(2).
+				withNutanix(2, 3000, 0, false).
+				encode(t),
+			ExpectedHTTPStatusCode: http.StatusOK,
+			ExpectedResponse: newRQUpdateCalculationBuilder().
+				withQuota(genAPIQuota(12, 10, 30)).
+				withGlobalUsage(genAPIQuota(2, 3, 5)).
+				withCalculatedQuota(genAPIQuota(6, 9, 5)).
 				build(),
 		},
 	}
@@ -785,13 +805,17 @@ func (c *calcReq) withHetzner(cpu, memory, storage int) *calcReq {
 	return c
 }
 
-func (c *calcReq) withNutanix(cpu, memory, storage int64) *calcReq {
+func (c *calcReq) withNutanix(cpu, memory, storage int64, withDisk bool) *calcReq {
 	c.NutanixNodeSpec = &apiv1.NutanixNodeSpec{
 		CPUs:     cpu,
 		CPUCores: pointer.Int64(1),
 		MemoryMB: memory,
-		DiskSize: pointer.Int64(storage),
 	}
+
+	if withDisk {
+		c.NutanixNodeSpec.DiskSize = pointer.Int64(storage)
+	}
+
 	return c
 }
 

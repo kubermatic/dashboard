@@ -284,7 +284,7 @@ func CalculateResourceQuotaUpdateForProject(ctx context.Context, request interfa
 }
 
 func getResourceDetailsFromRequest(req calculateProjectResourceQuotaUpdate) (*kubermaticv1.ResourceDetails, error) {
-	nc := &kubermaticprovider.NodeCapacity{}
+	nc := kubermaticprovider.NewNodeCapacity()
 
 	var err error
 
@@ -341,15 +341,15 @@ func getResourceDetailsFromRequest(req calculateProjectResourceQuotaUpdate) (*ku
 		return nil, fmt.Errorf("provider set in request not supported: %v", req.Body)
 	}
 
-	// These should not happen, unless we have a bug in the setting resource values code above
+	// if some resource is not set, default it
 	if nc.CPUCores == nil {
-		return nil, fmt.Errorf("cpu not set in the request: %v", req.Body)
+		nc.CPUCores = &resource.Quantity{}
 	}
 	if nc.Memory == nil {
-		return nil, fmt.Errorf("memory not set in the request: %v", req.Body)
+		nc.Memory = &resource.Quantity{}
 	}
 	if nc.Storage == nil {
-		return nil, fmt.Errorf("storage not set in the request: %v", req.Body)
+		nc.Storage = &resource.Quantity{}
 	}
 
 	// Multiply by replicas count
@@ -432,7 +432,7 @@ func getDOResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kubermati
 }
 
 func getEquinixResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kubermaticprovider.NodeCapacity) error {
-	var cpuCount int
+	cpuCount := 0
 	for _, c := range req.Body.EquinixSize.CPUs {
 		cpuCount += c.Count
 	}
@@ -445,7 +445,7 @@ func getEquinixResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kube
 	}
 	nc.Memory = &memory
 
-	var allDrivesStorage resource.Quantity
+	allDrivesStorage := resource.Quantity{}
 	for _, drive := range req.Body.EquinixSize.Drives {
 		if drive.Size == "" || drive.Count == 0 {
 			continue
@@ -456,7 +456,7 @@ func getEquinixResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kube
 			return err
 		}
 
-		// total storage for each types = drive count *drive Size.
+		// total storage for each type = drive count *drive Size.
 		strDrive := strconv.FormatInt(storage.Value()*int64(drive.Count), 10)
 		totalStorage, err := resource.ParseQuantity(strDrive)
 		if err != nil {
