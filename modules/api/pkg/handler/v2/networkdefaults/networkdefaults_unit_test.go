@@ -23,6 +23,7 @@ import (
 
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	"k8c.io/kubermatic/v2/pkg/resources"
 
 	"k8s.io/utils/pointer"
 )
@@ -54,6 +55,7 @@ func TestOverrideNetworkDefaultsByDefaultingTemplate(t *testing.T) {
 				ProxyMode:                "ipvs",
 				NodeLocalDNSCacheEnabled: true,
 				ClusterExposeStrategy:    "NodePort",
+				TunnelingAgentIP:         resources.DefaultTunnelingAgentIP,
 			},
 		},
 		{
@@ -76,6 +78,7 @@ func TestOverrideNetworkDefaultsByDefaultingTemplate(t *testing.T) {
 				ProxyMode:                "ipvs",
 				NodeLocalDNSCacheEnabled: true,
 				ClusterExposeStrategy:    "NodePort",
+				TunnelingAgentIP:         resources.DefaultTunnelingAgentIP,
 			},
 		},
 		{
@@ -98,6 +101,7 @@ func TestOverrideNetworkDefaultsByDefaultingTemplate(t *testing.T) {
 				ProxyMode:                "iptables",
 				NodeLocalDNSCacheEnabled: true,
 				ClusterExposeStrategy:    "NodePort",
+				TunnelingAgentIP:         resources.DefaultTunnelingAgentIP,
 			},
 		},
 		{
@@ -135,6 +139,7 @@ func TestOverrideNetworkDefaultsByDefaultingTemplate(t *testing.T) {
 				ProxyMode:                "ipvs",
 				NodeLocalDNSCacheEnabled: false,
 				ClusterExposeStrategy:    "NodePort",
+				TunnelingAgentIP:         resources.DefaultTunnelingAgentIP,
 			},
 		},
 		{
@@ -173,6 +178,7 @@ func TestOverrideNetworkDefaultsByDefaultingTemplate(t *testing.T) {
 				ProxyMode:                "proxy-test",
 				NodeLocalDNSCacheEnabled: false,
 				ClusterExposeStrategy:    "NodePort",
+				TunnelingAgentIP:         resources.DefaultTunnelingAgentIP,
 			},
 		},
 	}
