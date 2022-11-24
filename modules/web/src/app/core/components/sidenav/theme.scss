@@ -13,6 +13,7 @@
 // limitations under the License.
 
 @use 'sass:map';
+@use 'sass:color';
 
 @mixin theme-sidenav-component($colors) {
   .km-sidenav {
@@ -27,20 +28,63 @@
     }
 
     .menu-item a {
-      &:hover {
-        background-color: map.get($colors, sidenav-background-hover);
-      }
-
       &.active {
         background-color: map.get($colors, sidenav-background-active);
 
-        i {
-          background-color: map.get($colors, sidenav-active);
+        i:first-child {
+          background-color: map.get($colors, primary-dark) !important;
+          filter: none !important;
         }
 
         span {
-          color: map.get($colors, sidenav-active);
+          color: map.get($colors, primary-dark);
         }
+      }
+    }
+  }
+
+  .sub-menu-item {
+    a {
+      &:hover {
+        background-color: map.get($colors, sidenav-background-hover);
+
+        span {
+          color: map.get($colors, primary-dark);
+        }
+      }
+    }
+
+    &.active {
+      a {
+        span {
+          color: map.get($colors, primary-dark);
+        }
+
+        &::after {
+          background-color: map.get($colors, primary);
+        }
+      }
+    }
+  }
+
+  .collapsed-sub-menu-item {
+    span {
+      color: map.get($colors, text);
+    }
+
+    &:hover {
+      span {
+        color: map.get($colors, primary-dark);
+      }
+    }
+
+    &.active {
+      span {
+        color: map.get($colors, primary-dark);
+      }
+
+      &::after {
+        background-color: map.get($colors, primary);
       }
     }
   }

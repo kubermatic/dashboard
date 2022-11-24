@@ -42,6 +42,7 @@ describe('Members Story', () => {
   });
 
   it('should go to the members page', () => {
+    Pages.Members.accessSideNavItem();
     Pages.Members.visit();
     Pages.expect(View.Members.Default);
   });
@@ -72,6 +73,7 @@ describe('Members Story', () => {
   });
 
   it('should go to the members page', () => {
+    Pages.Members.accessSideNavItem();
     Pages.Members.visit();
     Pages.expect(View.Members.Default);
   });

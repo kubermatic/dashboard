@@ -44,6 +44,7 @@ describe('Service Accounts Story', () => {
   });
 
   it('should go to the service accounts page', () => {
+    Pages.Members.accessSideNavItem();
     Pages.ServiceAccounts.visit();
     Pages.expect(View.ServiceAccounts.Default);
   });

@@ -44,6 +44,7 @@ describe('SSH Key Management Story', () => {
   });
 
   it('should go to the ssh keys page', () => {
+    Pages.Members.accessSideNavItem();
     Pages.SSHKeys.visit();
     Pages.expect(View.SSHKeys.Default);
   });
@@ -54,6 +55,7 @@ describe('SSH Key Management Story', () => {
   });
 
   it('should go to the clusters page', () => {
+    Pages.Clusters.List.Buttons.resourcesSideNavItem.click();
     Pages.Clusters.List.visit();
     Pages.expect(View.Clusters.Default);
   });

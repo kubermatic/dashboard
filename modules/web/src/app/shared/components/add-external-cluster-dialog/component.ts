@@ -22,6 +22,7 @@ import {Router} from '@angular/router';
 import {ExternalCluster, ExternalClusterProvider} from '@shared/entity/external-cluster';
 import {Observable, Subject} from 'rxjs';
 import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
+import {View} from '@app/shared/entity/common';
 
 export enum Step {
   Provider = 'Pick Provider',
@@ -115,7 +116,7 @@ export class AddExternalClusterDialogComponent implements OnInit, OnDestroy {
   onNext(cluster: ExternalCluster): void {
     this._matDialogRef.close();
     this._notificationService.success(`Added the ${cluster.name} cluster`);
-    this._router.navigate([`/projects/${this.projectId}/clusters/external/${cluster.id}`]);
+    this._router.navigate([`/projects/${this.projectId}/${View.Clusters}/${View.ExternalClusters}/${cluster.id}`]);
   }
 
   isAvailable(step: Step): boolean {

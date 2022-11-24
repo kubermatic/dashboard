@@ -41,25 +41,33 @@ export type ResourceLabelMap = {
 export enum View {
   Overview = 'overview',
   Clusters = 'clusters',
+  ExternalClusters = 'externalclusters',
   ClusterTemplates = 'clustertemplates',
   Projects = 'projects',
   Members = 'members',
+  Groups = 'groups',
   SSHKeys = 'sshkeys',
   ServiceAccounts = 'serviceaccounts',
   Wizard = 'wizard',
+  ExternalClusterWizard = 'external-cluster-wizard',
   Account = 'account',
   Settings = 'settings',
   MachineDeployment = 'md',
   Backups = 'backups',
+  Snapshots = 'snapshots',
+  Restores = 'restores',
+  Access = 'access',
 }
 
 // IMPORTANT: names in 'ViewDisplayName' have to be in sync with names in 'View'
 export enum ViewDisplayName {
   Overview = 'Overview',
   Clusters = 'Clusters',
+  ExternalClusters = 'External Clusters',
   ClusterTemplates = 'Cluster Templates',
   Projects = 'Projects',
   Members = 'Members',
+  Groups = 'Groups',
   SSHKeys = 'SSH Keys',
   ServiceAccounts = 'Service Accounts',
   Wizard = 'Wizard',
@@ -67,6 +75,15 @@ export enum ViewDisplayName {
   Settings = 'Admin Panel',
   MachineDeployment = 'Machine Deployment',
   Backups = 'Backups',
+  Snapshots = 'Snapshots',
+  Restores = 'Restores',
+  Access = 'Access',
+}
+
+export enum ProjectSidenavMainSection {
+  Resources = 'Resources',
+  Backups = 'etcd Backups',
+  Access = 'Access',
 }
 
 export function getViewDisplayName(viewName: string): string {

@@ -19,7 +19,7 @@ import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {environment} from '@environments/environment';
-import {getViewDisplayName, View} from '@shared/entity/common';
+import {getViewDisplayName, ProjectSidenavMainSection, View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {CustomLink, UserSettings} from '@shared/entity/settings';
@@ -27,6 +27,7 @@ import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import {BehaviorSubject, merge, Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
+import {DynamicModule} from '@app/dynamic/module-registry';
 
 @Component({
   selector: 'km-sidenav',
@@ -34,12 +35,15 @@ import {switchMap, takeUntil} from 'rxjs/operators';
   styleUrls: ['./style.scss'],
 })
 export class SidenavComponent implements OnInit, OnDestroy {
-  view = View;
+  readonly view = View;
+  readonly projectSidenavMainSections = ProjectSidenavMainSection;
+  readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   environment: any = environment;
   customLinks: CustomLink[] = [];
   settings: UserSettings;
   currentUser: Member;
   screenWidth = 0;
+  areExternalClustersEnabled = false;
 
   private _selectedProject = {} as Project;
   private _currentGroupConfig: GroupConfig;
@@ -65,9 +69,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
       this.settings = settings;
     });
 
-    this._settingsService.adminSettings
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(settings => (this.customLinks = settings.customLinks));
+    this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.areExternalClustersEnabled = settings.enableExternalClusterImport;
+      this.customLinks = settings.customLinks;
+    });
 
     merge(this._projectService.selectedProject, this._projectService.onProjectChange)
       .pipe(takeUntil(this._unsubscribe))
@@ -102,10 +107,16 @@ export class SidenavComponent implements OnInit, OnDestroy {
   checkUrl(url: string): boolean {
     const selectedProjectID = this._selectedProject.id;
     const urlArray = this._router.routerState.snapshot.url.split('/');
-    return (
-      !!urlArray.find(x => x === selectedProjectID) &&
-      (!!urlArray.find(x => x === url) || (url === View.Clusters && !!urlArray.find(x => x === View.Wizard)))
-    );
+    const isProjectAndUrlExists = !!urlArray.find(x => x === selectedProjectID) && !!urlArray.find(x => x === url);
+    if (url === View.Clusters) {
+      return (
+        (isProjectAndUrlExists && !urlArray.find(x => x === View.ExternalClusters)) ||
+        !!urlArray.find(x => x === View.Wizard)
+      );
+    } else if (url === View.ExternalClusters) {
+      return isProjectAndUrlExists || !!urlArray.find(x => x === View.ExternalClusterWizard);
+    }
+    return isProjectAndUrlExists;
   }
 
   getRouterLink(view: View): string {
@@ -129,9 +140,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     return {'background-image': `url('${CustomLink.getIcon(link)}')`};
   }
 
-  getMenuItemClass(view: View): string {
-    return MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, view, Permission.View)
-      ? ''
-      : 'km-disabled';
+  isDisabledField(view: View): boolean {
+    return MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, view, Permission.View);
   }
 }
