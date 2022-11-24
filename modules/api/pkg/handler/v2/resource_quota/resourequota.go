@@ -35,6 +35,13 @@ func GetForProjectEndpoint(projectProvider provider.ProjectProvider, privilegedP
 	}
 }
 
+func CalculateProjectQuotaUpdateEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider,
+	userInfoGetter provider.UserInfoGetter, quotaProvider provider.ResourceQuotaProvider) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		return calculateResourceQuotaUpdateForProject(ctx, request, projectProvider, privilegedProjectProvider, userInfoGetter, quotaProvider)
+	}
+}
+
 func GetResourceQuotaEndpoint(userInfoGetter provider.UserInfoGetter, provider provider.ResourceQuotaProvider, projectProvider provider.PrivilegedProjectProvider) endpoint.Endpoint {
 	return func(ctx context.Context, req interface{}) (interface{}, error) {
 		userInfo, err := userInfoGetter(ctx, "")

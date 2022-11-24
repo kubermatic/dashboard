@@ -1733,6 +1733,16 @@ type Quota struct {
 	Storage *float64 `json:"storage,omitempty"`
 }
 
+// swagger:model ResourceQuotaUpdateCalculation
+type ResourceQuotaUpdateCalculation struct {
+	// ResourceQuota represents the requested resource quota.
+	ResourceQuota ResourceQuota `json:"resourceQuota"`
+	// CalculatedQuota represents the calculation of the resource quota global usage + the updated node usage.
+	CalculatedQuota Quota `json:"calculatedQuota"`
+	// Message is filled if a resource in the calculated quota exceeds the resource quota limits.
+	Message string `json:"message"`
+}
+
 // swagger:model GroupProjectBinding
 type GroupProjectBinding struct {
 	Name      string `json:"name"`

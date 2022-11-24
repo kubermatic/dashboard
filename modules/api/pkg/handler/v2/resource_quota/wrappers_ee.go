@@ -33,6 +33,12 @@ func getResourceQuotaForProject(ctx context.Context, request interface{}, projec
 	return resourcequota.GetResourceQuotaForProject(ctx, request, projectProvider, privilegedProjectProvider, userInfoGetter, quotaProvider)
 }
 
+func calculateResourceQuotaUpdateForProject(ctx context.Context, request interface{}, projectProvider provider.ProjectProvider,
+	privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter,
+	quotaProvider provider.ResourceQuotaProvider) (*apiv2.ResourceQuotaUpdateCalculation, error) {
+	return resourcequota.CalculateResourceQuotaUpdateForProject(ctx, request, projectProvider, privilegedProjectProvider, userInfoGetter, quotaProvider)
+}
+
 func getResourceQuota(ctx context.Context, request interface{}, provider provider.ResourceQuotaProvider, projectProvider provider.PrivilegedProjectProvider) (*apiv2.ResourceQuota, error) {
 	return resourcequota.GetResourceQuota(ctx, request, provider, projectProvider)
 }
@@ -67,4 +73,8 @@ func DecodeCreateResourceQuotasReq(_ context.Context, r *http.Request) (interfac
 
 func DecodePutResourceQuotasReq(_ context.Context, r *http.Request) (interface{}, error) {
 	return resourcequota.DecodePutResourceQuotaReq(r)
+}
+
+func DecodeCalculateProjectResourceQuotaUpdateReq(c context.Context, r *http.Request) (interface{}, error) {
+	return resourcequota.DecodeCalculateProjectResourceQuotaUpdateReq(c, r)
 }
