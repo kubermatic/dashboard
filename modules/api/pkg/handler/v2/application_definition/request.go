@@ -18,10 +18,13 @@ package applicationdefinition
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
+
+	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 )
 
 // getApplicationDefinitionReq defines HTTP request for getApplicationDefinition
@@ -29,6 +32,14 @@ import (
 type getApplicationDefinitionReq struct {
 	// in: path
 	AppDefName string `json:"appdef_name"`
+}
+
+// createApplicationDefinitionReq defines HTTP request for createApplicationDefinitionReq
+// swagger:parameters createApplicationDefinition
+type createApplicationDefinitionReq struct {
+	// in: body
+	// required: true
+	Body apiv2.ApplicationDefinitionBody
 }
 
 func DecodeGetApplicationDefinition(c context.Context, r *http.Request) (interface{}, error) {
@@ -40,6 +51,15 @@ func DecodeGetApplicationDefinition(c context.Context, r *http.Request) (interfa
 	}
 	req.AppDefName = appDefName
 
+	return req, nil
+}
+
+func DecodeCreateApplicationDefinition(c context.Context, r *http.Request) (interface{}, error) {
+	var req createApplicationDefinitionReq
+
+	if err := json.NewDecoder(r.Body).Decode(&req.Body); err != nil {
+		return nil, err
+	}
 	return req, nil
 }
 

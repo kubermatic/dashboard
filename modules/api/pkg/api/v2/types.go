@@ -1927,6 +1927,14 @@ type ApplicationDefinitionListItemSpec struct {
 	Description string `json:"description"`
 }
 
+// ApplicationDefinitionBody is the object representing the POST/PUT payload of an ApplicationDefinition
+// swagger:model ApplicationDefinitionBody
+type ApplicationDefinitionBody struct {
+	apiv1.ObjectMeta
+
+	Spec *appskubermaticv1.ApplicationDefinitionSpec
+}
+
 type DatacentersByProvider = map[string]ClustersByDatacenter
 type ClustersByDatacenter = map[string]int
 

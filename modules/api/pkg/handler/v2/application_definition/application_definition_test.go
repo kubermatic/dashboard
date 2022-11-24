@@ -17,6 +17,7 @@ limitations under the License.
 package applicationdefinition_test
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -47,7 +48,6 @@ func TestListApplicationDefinitions(t *testing.T) {
 			ExistingObjects: test.GenDefaultKubermaticObjects(
 				test.GenApplicationDefinition("appdef1"),
 				test.GenApplicationDefinition("appdef2"),
-				genKubermaticUser("John", "john@acme.com", true),
 			),
 			ExpectedHTTPStatus: http.StatusOK,
 			ExpectedAppDefs: []apiv2.ApplicationDefinitionListItem{
@@ -57,7 +57,7 @@ func TestListApplicationDefinitions(t *testing.T) {
 		},
 		{
 			Name:            "user can list all applicationdefinitions",
-			ExistingAPIUser: test.GenAPIUser("John", "john@acme.com"),
+			ExistingAPIUser: test.GenDefaultAPIUser(),
 			ExistingObjects: test.GenDefaultKubermaticObjects(
 				test.GenApplicationDefinition("appdef1"),
 				test.GenApplicationDefinition("appdef2"),
@@ -118,7 +118,7 @@ func TestGetApplicationDefinition(t *testing.T) {
 				test.GenApplicationDefinition(app1Name),
 				test.GenApplicationDefinition(app2Name),
 			),
-			ExistingAPIUser:        test.GenDefaultAPIUser(),
+			ExistingAPIUser:        test.GenDefaultAdminAPIUser(),
 			ExpectedHTTPStatusCode: http.StatusOK,
 			ExpectedResponse:       test.GenApiApplicationDefinition(app1Name),
 		},
@@ -131,7 +131,7 @@ func TestGetApplicationDefinition(t *testing.T) {
 				test.GenApplicationDefinition(app1Name),
 				test.GenApplicationDefinition(app2Name),
 			),
-			ExistingAPIUser:        test.GenAPIUser("John", "john@acme.com"),
+			ExistingAPIUser:        test.GenDefaultAPIUser(),
 			ExpectedHTTPStatusCode: http.StatusOK,
 			ExpectedResponse:       test.GenApiApplicationDefinition(app1Name),
 		},
@@ -166,7 +166,69 @@ func TestGetApplicationDefinition(t *testing.T) {
 	}
 }
 
-func genKubermaticUser(name, email string, isAdmin bool) *kubermaticv1.User {
+func TestCreateApplicationDefinition(t *testing.T) {
+	t.Parallel()
+	const appname = "app1"
+	testcases := []struct {
+		Name                   string
+		ExistingAPIUser        *apiv1.User
+		ExistingKubermaticObjs []ctrlruntimeclient.Object
+		ApplicationDefinition  apiv2.ApplicationDefinition
+		ExpectedResponse       apiv2.ApplicationDefinition
+		ExpectedHTTPStatusCode int
+	}{
+		{
+			Name:                   "admin can create an applicationdefinition",
+			ApplicationDefinition:  test.GenApiApplicationDefinition(appname),
+			ExistingAPIUser:        test.GenDefaultAdminAPIUser(),
+			ExistingKubermaticObjs: []ctrlruntimeclient.Object{genUser("Bob", "bob@acme.com", true)},
+			ExpectedResponse:       test.GenApiApplicationDefinition(appname),
+			ExpectedHTTPStatusCode: http.StatusCreated,
+		},
+		{
+			Name:                   "user cannot create an applicationdefinition",
+			ApplicationDefinition:  test.GenApiApplicationDefinition(appname),
+			ExistingAPIUser:        test.GenAPIUser("John", "john@acme.com"),
+			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(),
+			ExpectedResponse:       apiv2.ApplicationDefinition{},
+			ExpectedHTTPStatusCode: http.StatusForbidden,
+		},
+	}
+
+	for _, tc := range testcases {
+		t.Run(tc.Name, func(t *testing.T) {
+			requestURL := "/api/v2/applicationdefinitions"
+			body, err := json.Marshal(tc.ApplicationDefinition)
+			if err != nil {
+				t.Fatalf("failed to marshal ApplicationDefinition: %v", err)
+			}
+			req := httptest.NewRequest(http.MethodPost, requestURL, bytes.NewBuffer(body))
+			res := httptest.NewRecorder()
+
+			ep, err := test.CreateTestEndpoint(*tc.ExistingAPIUser, nil, tc.ExistingKubermaticObjs, nil, hack.NewTestRouting)
+			if err != nil {
+				t.Fatalf("failed to create test endpoint due to: %v", err)
+			}
+
+			ep.ServeHTTP(res, req)
+
+			if res.Code != tc.ExpectedHTTPStatusCode {
+				t.Errorf("Expected HTTP status code %d, got %d: %s", tc.ExpectedHTTPStatusCode, res.Code, res.Body.String())
+				return
+			}
+
+			if res.Code == http.StatusOK {
+				b, err := json.Marshal(tc.ExpectedResponse)
+				if err != nil {
+					t.Fatalf("failed to marshal expected response: %v", err)
+				}
+				test.CompareWithResult(t, res, string(b))
+			}
+		})
+	}
+}
+
+func genUser(name, email string, isAdmin bool) *kubermaticv1.User {
 	user := test.GenUser("", name, email)
 	user.Spec.IsAdmin = isAdmin
 	return user
