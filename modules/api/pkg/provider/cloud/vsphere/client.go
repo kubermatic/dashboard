@@ -19,7 +19,9 @@ package vsphere
 import (
 	"context"
 	"fmt"
+
 	"github.com/vmware/govmomi/vapi/rest"
+
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 )
 

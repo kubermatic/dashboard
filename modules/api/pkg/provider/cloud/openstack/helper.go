@@ -19,6 +19,7 @@ package openstack
 import (
 	"errors"
 	"fmt"
+
 	"github.com/gophercloud/gophercloud"
 	goopenstack "github.com/gophercloud/gophercloud/openstack"
 	osavailabilityzones "github.com/gophercloud/gophercloud/openstack/compute/v2/extensions/availabilityzones"
@@ -35,7 +36,7 @@ import (
 )
 
 const (
-	subnetCIDR         = "192.168.1.0/24"
+	subnetCIDR = "192.168.1.0/24"
 )
 
 func getSecurityGroups(netClient *gophercloud.ServiceClient, opts ossecuritygroups.ListOpts) ([]ossecuritygroups.SecGroup, error) {
@@ -224,7 +225,6 @@ func getSubnetForNetwork(netClient *gophercloud.ServiceClient, networkIDOrName s
 
 	return allSubnets, nil
 }
-
 
 func isEndpointNotFoundErr(err error) bool {
 	var endpointNotFoundErr *gophercloud.ErrEndpointNotFound
