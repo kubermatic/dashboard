@@ -28,7 +28,6 @@ import (
 	"go.uber.org/zap"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/compute/v1"
-	"google.golang.org/api/googleapi"
 	"google.golang.org/api/option"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
@@ -140,13 +139,6 @@ func GetCredentialsForCluster(cloud kubermaticv1.CloudSpec, secretKeySelector pr
 	}
 
 	return serviceAccount, nil
-}
-
-// isHTTPError returns true if the given error is of a specific HTTP status code.
-func isHTTPError(err error, status int) bool {
-	var gerr *googleapi.Error
-
-	return errors.As(err, &gerr) && gerr.Code == status
 }
 
 func GetGCPNetwork(ctx context.Context, sa, networkName string) (apiv1.GCPNetwork, error) {
