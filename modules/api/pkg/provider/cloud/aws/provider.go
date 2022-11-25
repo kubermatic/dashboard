@@ -26,8 +26,6 @@ import (
 )
 
 const (
-	kubernetesClusterTagPrefix = "kubernetes.io/cluster/"
-
 	authFailure = "AuthFailure"
 )
 

@@ -33,12 +33,9 @@ import (
 const (
 	ClusterCategoryName = "KKPCluster"
 	ProjectCategoryName = "KKPProject"
-	categoryDescription = "automatically created by KKP"
 	categoryValuePrefix = "kubernetes-"
 
 	DefaultProject = "default"
-
-	categoryCleanupFinalizer = "kubermatic.k8c.io/cleanup-nutanix-categories"
 )
 
 type Nutanix struct {

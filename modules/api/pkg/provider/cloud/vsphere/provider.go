@@ -39,10 +39,6 @@ import (
 	kruntime "k8s.io/apimachinery/pkg/util/runtime"
 )
 
-const (
-	defaultCategory = "cluster"
-)
-
 // Provider represents the vsphere provider.
 type Provider struct {
 	dc                *kubermaticv1.DatacenterSpecVSphere

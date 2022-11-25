@@ -38,17 +38,6 @@ import (
 	"k8c.io/kubermatic/v2/pkg/resources"
 )
 
-const (
-	computeAPIEndpoint               = "https://www.googleapis.com/compute/v1/"
-	firewallSelfCleanupFinalizer     = "kubermatic.k8c.io/cleanup-gcp-firewall-self"
-	firewallICMPCleanupFinalizer     = "kubermatic.k8c.io/cleanup-gcp-firewall-icmp"
-	firewallNodePortCleanupFinalizer = "kubermatic.k8c.io/cleanup-gcp-firewall-nodeport"
-	routesCleanupFinalizer           = "kubermatic.k8c.io/cleanup-gcp-routes"
-
-	k8sNodeRouteTag          = "k8s-node-route"
-	k8sNodeRoutePrefixRegexp = "kubernetes-.*"
-)
-
 type gcp struct {
 	secretKeySelector provider.SecretKeySelectorValueFunc
 	log               *zap.SugaredLogger

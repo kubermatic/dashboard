@@ -27,10 +27,6 @@ import (
 	"k8c.io/kubermatic/v2/pkg/resources"
 )
 
-const (
-	defaultBillingCycle = "hourly"
-)
-
 type packet struct {
 	secretKeySelector provider.SecretKeySelectorValueFunc
 }

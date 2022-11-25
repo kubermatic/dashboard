@@ -27,10 +27,6 @@ import (
 	"k8c.io/kubermatic/v2/pkg/resources"
 )
 
-const (
-	vappFinalizer = "kubermatic.k8c.io/cleanup-vmware-cloud-director-vapp"
-)
-
 type Provider struct {
 	dc                *kubermaticv1.DatacenterSpecVMwareCloudDirector
 	secretKeySelector provider.SecretKeySelectorValueFunc
