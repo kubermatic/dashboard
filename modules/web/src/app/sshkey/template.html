@@ -13,22 +13,24 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<div fxLayout>
-  <div fxFlex
-       fxLayoutAlign="end center">
-    <button id="km-add-ssh-key-top-btn"
-            fxLayoutAlign="center center"
-            mat-flat-button
-            type="button"
-            (click)="addSshKey()"
-            [disabled]="!canAdd()">
-      <i class="km-icon-mask km-icon-add"></i>
-      <span>Add SSH Key</span>
-    </button>
-  </div>
-</div>
 
-<mat-card class="km-sshkey-view">
+<mat-card class="km-card">
+  <div fxLayout
+       class="header">
+    <div fxFlex
+         fxLayoutAlign="end center">
+      <button id="km-add-ssh-key-top-btn"
+              fxLayoutAlign="center center"
+              mat-flat-button
+              type="button"
+              (click)="addSshKey()"
+              [disabled]="!canAdd()">
+        <i class="km-icon-mask km-icon-add"></i>
+        <span>Add SSH Key</span>
+      </button>
+    </div>
+  </div>
+
   <mat-card-content>
     <table class="km-table"
            mat-table

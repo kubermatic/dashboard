@@ -23,23 +23,24 @@ END OF TERMS AND CONDITIONS
 <!-- <km-dynamic-tab label="Groups"
                 [customTemplate]="buttonTemplate"> -->
 
-<div fxLayout
-     class="container">
-  <div fxFlex
-       fxLayoutAlign="end center"
-       fxLayoutGap="20px">
-    <button id="km-add-group-btn"
-            fxLayoutAlign="center center"
-            mat-flat-button
-            type="button"
-            (click)="addGroup()"
-            [disabled]="!isAddEnabled()">
-      <i class="km-icon-mask km-icon-add"></i>
-      <span>Add Group</span>
-    </button>
+<mat-card class="km-card">
+  <div fxLayout
+       class="header">
+    <div fxFlex
+         fxLayoutAlign="end center"
+         fxLayoutGap="20px">
+      <button id="km-add-group-btn"
+              fxLayoutAlign="center center"
+              mat-flat-button
+              type="button"
+              (click)="addGroup()"
+              [disabled]="!isAddEnabled()">
+        <i class="km-icon-mask km-icon-add"></i>
+        <span>Add Group</span>
+      </button>
+    </div>
   </div>
-</div>
-<mat-card>
+
   <mat-card-content>
     <table class="km-table"
            mat-table

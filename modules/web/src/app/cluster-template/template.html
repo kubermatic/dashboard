@@ -13,29 +13,31 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<div fxLayout
-     fxLayoutAlign=" center">
-  <km-search-field (queryChange)="onSearch($event)"></km-search-field>
-  <div fxFlex
-       fxLayoutAlign="end center">
-    <div>
-      <router-outlet name="quota-widget"
-                     (activate)="onActivate($event)"></router-outlet>
-    </div>
-    <button fxLayoutAlign="center center"
-            mat-flat-button
-            type="button"
-            [matTooltip]="projectViewOnlyToolTip"
-            [matTooltipDisabled]="canCreate()"
-            (click)="create()"
-            [disabled]="!canCreate() || isGroupConfigLoading">
-      <i class="km-icon-mask km-icon-add"></i>
-      <span>Create Cluster Template</span>
-    </button>
-  </div>
-</div>
 
-<mat-card>
+<mat-card class="km-card">
+  <div fxLayout
+       fxLayoutAlign=" center"
+       class="header">
+    <km-search-field (queryChange)="onSearch($event)"></km-search-field>
+    <div fxFlex
+         fxLayoutAlign="end center">
+      <div>
+        <router-outlet name="quota-widget"
+                       (activate)="onActivate($event)"></router-outlet>
+      </div>
+      <button fxLayoutAlign="center center"
+              mat-flat-button
+              type="button"
+              [matTooltip]="projectViewOnlyToolTip"
+              [matTooltipDisabled]="canCreate()"
+              (click)="create()"
+              [disabled]="!canCreate() || isGroupConfigLoading">
+        <i class="km-icon-mask km-icon-add"></i>
+        <span>Create Cluster Template</span>
+      </button>
+    </div>
+  </div>
+
   <mat-card-content>
     <table class="km-table"
            mat-table
@@ -152,7 +154,6 @@ limitations under the License.
     <div [hidden]="!isPaginatorVisible()">
       <mat-paginator showFirstLastButtons></mat-paginator>
     </div>
-
   </mat-card-content>
 </mat-card>
 

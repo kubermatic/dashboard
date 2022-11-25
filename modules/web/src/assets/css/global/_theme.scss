@@ -216,6 +216,16 @@
     }
   }
 
+  .km-provider-edit-settings {
+    background-color: map.get($colors, option-background);
+
+    .mat-menu-item {
+      &:hover {
+        background-color: map.get($colors, option-background-hover);
+      }
+    }
+  }
+
   .km-update-available-badge {
     border: 1px solid map.get($colors, secondary);
 
@@ -313,16 +323,10 @@
       background-color: map.get($colors, option-background);
       box-shadow: map.get($colors, shadow-dark);
     }
-  }
 
-  .km-machine-deployment-list {
-    .mat-card {
-      .mat-card-header {
-        .mat-card-title {
-          .km-quota-widget {
-            border: 1px solid map.get($colors, divider);
-          }
-        }
+    .km-quota-widget {
+      &.widget-border {
+        border: 1px solid map.get($colors, divider);
       }
     }
   }

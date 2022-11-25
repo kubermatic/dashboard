@@ -16,7 +16,7 @@ limitations under the License.
 <div *ngIf="isLoaded()"
      fxLayout="column">
   <div fxFlex
-       fxLayoutAlign="end center"
+       fxLayoutAlign="start center"
        class="cluster-detail-actions">
     <button mat-flat-button
             color="tertiary"
@@ -25,59 +25,6 @@ limitations under the License.
             matTooltip="Go back to the cluster list">
       <i class="km-icon-mask km-icon-arrow-left"></i>
     </button>
-    <button id="km-delete-cluster-btn"
-            mat-flat-button
-            color="tertiary"
-            fxLayoutAlign="center center"
-            (click)="deleteClusterDialog()"
-            [disabled]="!isDeleteEnabled() || !!cluster?.deletionTimestamp">
-      <div fxLayoutAlign=" center"
-           [matTooltip]="!!cluster?.deletionTimestamp ? 'Cluster is being deleted.' : ''">
-        <i class="km-icon-mask km-icon-delete i-24"></i>
-        <span>Delete</span>
-      </div>
-    </button>
-    <div fxFlex></div>
-    <button mat-flat-button
-            type="button"
-            fxLayoutAlign="center center"
-            id="km-share-kubeconfig-btn"
-            class="km-share-kubeconfig-btn"
-            color="alternative"
-            (click)="shareConfigDialog()"
-            *ngIf="config.share_kubeconfig">
-      <i class="km-icon-mask km-icon-share"></i>
-      <span>Share</span>
-    </button>
-    <km-button color="alternative"
-               icon="km-icon-download"
-               label="Get Kubeconfig"
-               [observable]="getObservable()"
-               (next)="onNext($event)">
-    </km-button>
-    <a class="km-open-kubernetes-dashboard-btn"
-       id="km-open-kubernetes-dashboard-btn"
-       fxLayoutAlign="center center"
-       [href]="getProxyURL()"
-       target="_blank"
-       mat-flat-button
-       [disabled]="!isKubernetesDashboardHealthy"
-       [matTooltip]="isKubernetesDashboardHealthy ? '' : cluster?.spec?.kubernetesDashboard?.enabled ? 'Kubernetes Dashboard is not running' : 'Kubernetes Dashboard is disabled'"
-       *ngIf="adminSettings.enableDashboard">
-      <i class="km-icon-mask km-icon-external-link"></i>
-      <span>Open Dashboard</span>
-    </a>
-
-    <button *ngIf="adminSettings.enableOIDCKubeconfig && adminSettings.enableWebTerminal"
-            fxLayoutAlign="center center"
-            mat-flat-button
-            type="button"
-            [disabled]="!isClusterRunning"
-            (click)="toggleTerminal()">
-      <i class="km-icon-mask km-icon-terminal"></i>
-      <span>Web Terminal</span>
-    </button>
-
   </div>
 
   <mat-card>
@@ -94,7 +41,39 @@ limitations under the License.
               matTooltip="Click to copy"
               class="cluster-name km-copy">{{cluster.name}}</span>
       </mat-card-title>
+
       <div fxFlex></div>
+
+      <km-button color="alternative"
+                 icon="km-icon-download"
+                 label="Get Kubeconfig"
+                 [observable]="getObservable()"
+                 (next)="onNext($event)">
+      </km-button>
+
+      <a class="km-open-kubernetes-dashboard-btn"
+         id="km-open-kubernetes-dashboard-btn"
+         fxLayoutAlign="center center"
+         [href]="getProxyURL()"
+         target="_blank"
+         mat-flat-button
+         [disabled]="!isKubernetesDashboardHealthy"
+         [matTooltip]="isKubernetesDashboardHealthy ? '' : cluster?.spec?.kubernetesDashboard?.enabled ? 'Kubernetes Dashboard is not running' : 'Kubernetes Dashboard is disabled'"
+         *ngIf="adminSettings.enableDashboard">
+        <i class="km-icon-mask km-icon-external-link"></i>
+        <span>Open Dashboard</span>
+      </a>
+
+      <button *ngIf="adminSettings.enableOIDCKubeconfig && adminSettings.enableWebTerminal"
+              fxLayoutAlign="center center"
+              mat-flat-button
+              type="button"
+              [disabled]="!isClusterRunning"
+              (click)="toggleTerminal()">
+        <i class="km-icon-mask km-icon-terminal"></i>
+        <span>Web Terminal</span>
+      </button>
+
       <div class="provider-menu">
         <button mat-icon-button
                 color="tertiary"
@@ -121,12 +100,26 @@ limitations under the License.
                   [disabled]="!isSSHKeysEditEnabled()">
             <span>Manage SSH keys</span>
           </button>
-
           <button mat-menu-item
                   (click)="revokeToken()"
                   [disabled]="!isRevokeTokenEnabled()">
             <span>Revoke Token</span>
           </button>
+          <button mat-menu-item
+                  id="km-share-kubeconfig-btn"
+                  *ngIf="config.share_kubeconfig"
+                  (click)="shareConfigDialog()">
+            <span>Share Cluster</span>
+          </button>
+          <mat-divider></mat-divider>
+          <span [matTooltip]="!!cluster?.deletionTimestamp ? 'Cluster is being deleted.' : ''">
+            <button mat-menu-item
+                    id="km-delete-cluster-btn"
+                    (click)="deleteClusterDialog()"
+                    [disabled]="!isDeleteEnabled() || !!cluster?.deletionTimestamp">
+              <span>Delete Cluster</span>
+            </button>
+          </span>
         </mat-menu>
       </div>
     </mat-card-header>

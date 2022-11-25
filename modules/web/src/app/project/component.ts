@@ -540,6 +540,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     component.showIcon = this.showCards;
     component.showAsCard = false;
     component.showDetailsOnHover = false;
+    component.showBorderOutline = false;
     component.showEmptyPlaceholder = showEmptyPlaceholder;
   }
 

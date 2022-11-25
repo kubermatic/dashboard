@@ -41,7 +41,6 @@ import {Router} from '@angular/router';
 @Component({
   selector: 'km-member',
   templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
 })
 export class MemberComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
   readonly view = View;

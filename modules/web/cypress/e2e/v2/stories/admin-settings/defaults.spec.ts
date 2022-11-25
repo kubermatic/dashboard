@@ -94,6 +94,7 @@ describe('Admin Settings - Defaults Story', () => {
 
   it('should make sure default admin settings work', () => {
     // Cleanup settings check
+    Pages.Clusters.Details.Buttons.providerMenu.click();
     Pages.Clusters.Details.Buttons.deleteCluster.click();
     Pages.Clusters.Details.Elements.deleteDialogCleanupLBCheckboxInput.should(Condition.NotBeChecked);
     Pages.Clusters.Details.Elements.deleteDialogCleanupVolumeCheckboxInput.should(Condition.NotBeChecked);
@@ -139,6 +140,7 @@ describe('Admin Settings - Defaults Story', () => {
     Pages.Clusters.List.select(clusterName);
 
     // Cleanup settings check
+    Pages.Clusters.Details.Buttons.providerMenu.click();
     Pages.Clusters.Details.Buttons.deleteCluster.click();
     Pages.Clusters.Details.Elements.deleteDialogCleanupLBCheckboxInput.should(Condition.BeChecked);
     Pages.Clusters.Details.Elements.deleteDialogCleanupLBCheckboxInput.should(Condition.BeDisabled);

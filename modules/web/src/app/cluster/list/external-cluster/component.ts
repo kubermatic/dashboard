@@ -236,6 +236,7 @@ export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestro
 
   onActivate(component: QuotaWidgetComponent): void {
     component.isExternalCluster = true;
+    component.showAsCard = false;
     component.showDetailsOnHover = false;
     this._projectService.onProjectChange
       .pipe(startWith(this._selectedProject), takeUntil(this._unsubscribe))

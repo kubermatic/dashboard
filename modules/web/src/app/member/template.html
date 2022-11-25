@@ -19,23 +19,24 @@ limitations under the License.
                  name="groups"></router-outlet>
 
   <ng-container *ngSwitchCase="view.Members">
-    <div fxLayout
-         class="container">
-      <div fxFlex
-           fxLayoutAlign="end center"
-           fxLayoutGap="20px">
-        <button id="km-add-member-top-btn"
-                fxLayoutAlign="center center"
-                mat-flat-button
-                type="button"
-                (click)="addMember()"
-                [disabled]="!isAddEnabled()">
-          <i class="km-icon-mask km-icon-add"></i>
-          <span>Add Member</span>
-        </button>
+    <mat-card class="km-card">
+      <div fxLayout
+           class="header">
+        <div fxFlex
+             fxLayoutAlign="end center"
+             fxLayoutGap="20px">
+          <button id="km-add-member-top-btn"
+                  fxLayoutAlign="center center"
+                  mat-flat-button
+                  type="button"
+                  (click)="addMember()"
+                  [disabled]="!isAddEnabled()">
+            <i class="km-icon-mask km-icon-add"></i>
+            <span>Add Member</span>
+          </button>
+        </div>
       </div>
-    </div>
-    <mat-card class="km-member-view">
+
       <mat-card-content>
         <table class="km-table"
                mat-table
@@ -135,7 +136,6 @@ limitations under the License.
         <div [hidden]="!isPaginatorVisible()">
           <mat-paginator showFirstLastButtons></mat-paginator>
         </div>
-
       </mat-card-content>
     </mat-card>
   </ng-container>

@@ -16,7 +16,6 @@ import {NgModule} from '@angular/core';
 import {PreloadingStrategy, Route, RouterModule, Routes} from '@angular/router';
 import {AdminGuard} from '@core/services/auth/guard';
 import {Observable, of} from 'rxjs';
-import {ClustersComponent} from './cluster/list/component';
 import {DashboardComponent} from './dashboard/component';
 
 class SelectedPreloadingStrategy implements PreloadingStrategy {
@@ -69,7 +68,7 @@ function createRouting(): Routes {
         },
         {
           path: 'projects/:projectID/externalclusters',
-          component: ClustersComponent,
+          loadChildren: () => import('./cluster/module').then(m => m.ClusterModule),
         },
         {
           path: 'projects/:projectID/clustertemplates',

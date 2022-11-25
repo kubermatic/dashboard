@@ -14,19 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div class="container">
-  <div fxFlex></div>
-  <button mat-flat-button
-          type="button"
-          (click)="add()"
-          [disabled]="!canAdd"
-          fxLayoutAlign="center center">
-    <i class="km-icon-mask km-icon-add"></i>
-    <span>Add Automatic Backup</span>
-  </button>
-</div>
+<mat-card class="km-card">
+  <div class="header">
+    <div fxFlex></div>
+    <button mat-flat-button
+            type="button"
+            (click)="add()"
+            [disabled]="!canAdd"
+            fxLayoutAlign="center center">
+      <i class="km-icon-mask km-icon-add"></i>
+      <span>Add Automatic Backup</span>
+    </button>
+  </div>
 
-<mat-card>
   <mat-card-content>
     <table class="km-table"
            mat-table
