@@ -21,7 +21,8 @@ limitations under the License.
   <div [fxFlex]="flipLayout ? '100%' : '50%'"
        fxLayout="column">
     <div class="step">
-      <div class="header counter-1">Provider</div>
+      <div class="header"
+           [ngClass]="clusterTemplateEditMode ? '' : 'counter-1'">Provider</div>
       <div class="info-container">
         <div class="container-spacing"
              fxLayout="row wrap">
@@ -40,7 +41,8 @@ limitations under the License.
 
     <div fxLayout="column"
          class="step">
-      <div class="header counter-2">Cluster</div>
+      <div class="header"
+           [ngClass]="clusterTemplateEditMode ? 'counter-1' : 'counter-2'">Cluster</div>
       <div class="info-container"
            fxLayout="row wrap">
         <div class="container-spacing">
@@ -260,7 +262,8 @@ limitations under the License.
 
     <div *ngIf="cluster.credential || displaySettings()"
          class="step">
-      <div class="header counter-3">Settings</div>
+      <div class="header"
+           [ngClass]="clusterTemplateEditMode ? 'counter-2' : 'counter-3'">Settings</div>
       <div class="properties"
            [fxLayout]="cluster.spec.cloud?.kubevirt ? 'column' : 'row wrap'">
         <km-property *ngIf="cluster.credential">
@@ -535,7 +538,8 @@ limitations under the License.
     <div class="step padding-top"
          [class.padding-top-force]="flipLayout">
       <ng-container *ngIf="!cluster.spec.cloud?.bringyourown">
-        <div class="header counter-4">Initial Nodes</div>
+        <div class="header"
+             [ngClass]="clusterTemplateEditMode ? 'counter-3' : 'counter-4'">Initial Nodes</div>
         <div class="info-container">
           <div class="container-spacing">
             <div class="section-header">GENERAL</div>
@@ -1130,7 +1134,8 @@ limitations under the License.
     </div>
 
     <div class="step">
-      <div class="header counter-5">Applications</div>
+      <div class="header"
+           [ngClass]="clusterTemplateEditMode ? 'counter-4' : 'counter-5'">Applications</div>
       <div class="applications-summary"
            [fxLayoutAlign]="flipLayout ? ' center' : ''">
         <km-application-list *ngIf="applications?.length; else noApplications"

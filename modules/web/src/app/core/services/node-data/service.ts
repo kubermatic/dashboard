@@ -48,6 +48,7 @@ import {NutanixService} from '@core/services/provider/nutanix';
 import {NodeDataVSphereProvider} from '@core/services/node-data/provider/vsphere';
 import {NodeDataKubeVirtProvider} from '@core/services/node-data/provider/kubevirt';
 import {KubeVirtService} from '@core/services/provider/kubevirt';
+import {MachineDeployment, OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deployment';
 
 @Injectable()
 export class NodeDataService {
@@ -127,6 +128,16 @@ export class NodeDataService {
   reset(): void {
     this._nodeData = NodeData.NewEmptyNodeData();
     this._operatingSystemChanges = new ReplaySubject<OperatingSystem>();
+  }
+
+  initializeNodeDataFromMachineDeployment(md: MachineDeployment): void {
+    this.nodeData = {
+      operatingSystemProfile: md.annotations?.[OPERATING_SYSTEM_PROFILE_ANNOTATION],
+      count: md.spec.replicas,
+      name: md.name,
+      spec: md.spec.template,
+      dynamicConfig: md.spec.dynamicConfig,
+    } as NodeData;
   }
 
   readonly alibaba = new NodeDataAlibabaProvider(

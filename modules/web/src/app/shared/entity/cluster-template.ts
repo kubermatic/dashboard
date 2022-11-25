@@ -26,6 +26,7 @@ export class ClusterTemplate {
   nodeDeployment?: MachineDeployment;
   userSshKeys?: ClusterTemplateSSHKey[];
   applications?: Application[];
+  annotations?: Map<string, string>;
 }
 
 export class ClusterTemplateSSHKey {
@@ -54,3 +55,5 @@ export class ClusterTemplateInstanceSpec {
   projectID: string;
   replicas: number;
 }
+
+export const PRESET_NAME_ANNOTATION = 'presetName';

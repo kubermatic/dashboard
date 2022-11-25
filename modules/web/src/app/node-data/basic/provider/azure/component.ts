@@ -33,7 +33,7 @@ import {compare} from '@shared/utils/common';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import _ from 'lodash';
 import {merge, Observable} from 'rxjs';
-import {filter, switchMap, takeUntil, tap} from 'rxjs/operators';
+import {distinctUntilChanged, filter, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 enum Controls {
   Size = 'size',
@@ -120,6 +120,7 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
     this._presets.presetChanges.pipe(takeUntil(this._unsubscribe)).subscribe(this._clearSize.bind(this));
 
     this._nodeDataService.operatingSystemChanges
+      .pipe(distinctUntilChanged())
       .pipe(tap(_ => this.form.get(Controls.OSDiskSize).setValue(this.defaultOSDiskSize())))
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this._cdr.detectChanges());
@@ -184,6 +185,15 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
 
   defaultOSDiskSize(): number {
     const defaultDiskSizeRHEL = 64;
+
+    const selectedOSDiskSize = this._nodeDataService.nodeData.spec?.cloud?.azure?.osDiskSize;
+
+    if (selectedOSDiskSize) {
+      return this._nodeDataService.operatingSystem === OperatingSystem.RHEL && selectedOSDiskSize < defaultDiskSizeRHEL
+        ? defaultDiskSizeRHEL
+        : selectedOSDiskSize;
+    }
+
     return this._nodeDataService.operatingSystem === OperatingSystem.RHEL ? defaultDiskSizeRHEL : this._defaultDiskSize;
   }
 

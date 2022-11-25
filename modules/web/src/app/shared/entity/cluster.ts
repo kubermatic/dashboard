@@ -76,7 +76,7 @@ export class Cluster {
   name: string;
   spec: ClusterSpec;
   status?: Status;
-  labels?: object;
+  labels?: Record<string, string>;
   inheritedLabels?: object;
   credential?: string;
   machineDeploymentCount?: number;
@@ -324,7 +324,7 @@ export class ClusterSpec {
   admissionPlugins?: string[];
   enableUserSSHKeyAgent?: boolean;
   enableOperatingSystemManager?: boolean;
-  podNodeSelectorAdmissionPluginConfig?: object;
+  podNodeSelectorAdmissionPluginConfig?: Record<string, string>;
   mla?: MLASettings;
   containerRuntime?: ContainerRuntime;
   clusterNetwork?: ClusterNetwork;
@@ -352,7 +352,6 @@ export class ClusterNetwork {
   nodeCidrMaskSizeIPv6?: number;
   nodeLocalDNSCacheEnabled?: boolean;
   konnectivityEnabled?: boolean;
-  clusterExposeStrategy?: ExposeStrategy;
 }
 
 export class ClusterNetworkDefaults {
@@ -360,6 +359,7 @@ export class ClusterNetworkDefaults {
   ipv6?: NetworkDefaultsIPFamily;
   nodeLocalDNSCacheEnabled?: boolean;
   proxyMode?: ProxyMode;
+  clusterExposeStrategy?: ExposeStrategy;
 }
 
 export class NetworkDefaultsIPFamily {
@@ -376,6 +376,14 @@ export class CNIPluginConfig {
 
 export class NetworkRanges {
   cidrBlocks: string[];
+
+  static ipv4CIDR(networkRange: NetworkRanges): string {
+    return networkRange?.cidrBlocks?.length ? networkRange.cidrBlocks[0] : null;
+  }
+
+  static ipv6CIDR(networkRange: NetworkRanges): string {
+    return networkRange?.cidrBlocks?.length > 1 ? networkRange.cidrBlocks[1] : null;
+  }
 }
 
 export class CNIPluginVersions {
@@ -494,7 +502,7 @@ export class ClusterSpecPatch {
   opaIntegration?: OPAIntegration;
   clusterNetwork?: ClusterNetwork;
   kubernetesDashboard?: KubernetesDashboard;
-  podNodeSelectorAdmissionPluginConfig?: object;
+  podNodeSelectorAdmissionPluginConfig?: Record<string, string>;
   auditLogging?: AuditLoggingSettings;
   machineNetworks?: MachineNetwork[];
   mla?: MLASettings;

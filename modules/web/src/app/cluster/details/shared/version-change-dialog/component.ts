@@ -44,7 +44,7 @@ export class VersionChangeDialogComponent implements OnInit, OnDestroy {
   protected nodesSupportDynamicKubeletConfig = '';
   endOfDynamicKubeletConfigSupportVersion: string = END_OF_DYNAMIC_KUBELET_CONFIG_SUPPORT_VERSION;
 
-  get isDynamicKubletConfigSupportedInUpgrade(): boolean {
+  get isDynamicKubeletConfigSupportedInUpgrade(): boolean {
     const endSliceParameter = 4;
     return this.selectedVersion?.slice(0, endSliceParameter) < this.endOfDynamicKubeletConfigSupportVersion;
   }

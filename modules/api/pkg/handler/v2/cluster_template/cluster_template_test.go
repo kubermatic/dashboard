@@ -55,7 +55,7 @@ func TestCreateClusterTemplateEndpoint(t *testing.T) {
 		{
 			Name:             "scenario 1: create cluster template in user scope",
 			Body:             fmt.Sprintf(`{"name":"test","scope":"user","cluster":{"name":"keen-snyder","spec":{"version":"%s","cloud":{"fake":{"token":"dummy_token"},"dc":"fake-dc"}}}}`, version),
-			ExpectedResponse: fmt.Sprintf(`{"creationTimestamp":"0001-01-01T00:00:00Z","name":"test","id":"%%s","projectID":"my-first-project-ID","user":"bob@acme.com","scope":"user","cluster":{"labels":{"project-id":"my-first-project-ID"},"spec":{"cloud":{"dc":"fake-dc","fake":{}},"version":"%s","oidc":{},"enableUserSSHKeyAgent":true,"enableOperatingSystemManager":true,"kubernetesDashboard":{"enabled":true},"containerRuntime":"containerd"}},"nodeDeployment":{"spec":{"replicas":0,"template":{"cloud":{},"operatingSystem":{},"versions":{"kubelet":""}}}}}`, version),
+			ExpectedResponse: fmt.Sprintf(`{"creationTimestamp":"0001-01-01T00:00:00Z","name":"test","id":"%%s","projectID":"my-first-project-ID","user":"bob@acme.com","scope":"user","cluster":{"spec":{"cloud":{"dc":"fake-dc","fake":{}},"version":"%s","oidc":{},"enableUserSSHKeyAgent":true,"enableOperatingSystemManager":true,"kubernetesDashboard":{"enabled":true},"containerRuntime":"containerd","clusterNetwork":{"ipFamily":"IPv4","services":{"cidrBlocks":["10.240.16.0/20"]},"pods":{"cidrBlocks":["172.25.0.0/16"]},"nodeCidrMaskSizeIPv4":24,"dnsDomain":"cluster.local","proxyMode":"ipvs","ipvs":{"strictArp":true},"nodeLocalDNSCacheEnabled":true},"cniPlugin":{"type":"canal","version":"v3.23"},"exposeStrategy":"NodePort"}},"nodeDeployment":{"spec":{"replicas":0,"template":{"cloud":{},"operatingSystem":{},"versions":{"kubelet":""}}}}}`, version),
 			RewriteClusterID: true,
 			HTTPStatus:       http.StatusCreated,
 			ProjectToSync:    test.GenDefaultProject().Name,
@@ -68,7 +68,7 @@ func TestCreateClusterTemplateEndpoint(t *testing.T) {
 		{
 			Name:             "scenario 2: create cluster template in project scope",
 			Body:             fmt.Sprintf(`{"name":"test","scope":"project","cluster":{"name":"keen-snyder","spec":{"version":"%s","cloud":{"fake":{"token":"dummy_token"},"dc":"fake-dc"}}}}`, version),
-			ExpectedResponse: fmt.Sprintf(`{"creationTimestamp":"0001-01-01T00:00:00Z","name":"test","id":"%%s","projectID":"my-first-project-ID","user":"bob@acme.com","scope":"project","cluster":{"labels":{"project-id":"my-first-project-ID"},"spec":{"cloud":{"dc":"fake-dc","fake":{}},"version":"%s","oidc":{},"enableUserSSHKeyAgent":true,"enableOperatingSystemManager":true,"kubernetesDashboard":{"enabled":true},"containerRuntime":"containerd"}},"nodeDeployment":{"spec":{"replicas":0,"template":{"cloud":{},"operatingSystem":{},"versions":{"kubelet":""}}}}}`, version),
+			ExpectedResponse: fmt.Sprintf(`{"creationTimestamp":"0001-01-01T00:00:00Z","name":"test","id":"%%s","projectID":"my-first-project-ID","user":"bob@acme.com","scope":"project","cluster":{"spec":{"cloud":{"dc":"fake-dc","fake":{}},"version":"%s","oidc":{},"enableUserSSHKeyAgent":true,"enableOperatingSystemManager":true,"kubernetesDashboard":{"enabled":true},"containerRuntime":"containerd","clusterNetwork":{"ipFamily":"IPv4","services":{"cidrBlocks":["10.240.16.0/20"]},"pods":{"cidrBlocks":["172.25.0.0/16"]},"nodeCidrMaskSizeIPv4":24,"dnsDomain":"cluster.local","proxyMode":"ipvs","ipvs":{"strictArp":true},"nodeLocalDNSCacheEnabled":true},"cniPlugin":{"type":"canal","version":"v3.23"},"exposeStrategy":"NodePort"}},"nodeDeployment":{"spec":{"replicas":0,"template":{"cloud":{},"operatingSystem":{},"versions":{"kubelet":""}}}}}`, version),
 			RewriteClusterID: true,
 			HTTPStatus:       http.StatusCreated,
 			ProjectToSync:    test.GenDefaultProject().Name,
@@ -81,7 +81,7 @@ func TestCreateClusterTemplateEndpoint(t *testing.T) {
 		{
 			Name:             "scenario 3: create cluster template in global scope by admin",
 			Body:             fmt.Sprintf(`{"name":"test","scope":"global","cluster":{"name":"keen-snyder","spec":{"version":"%s","cloud":{"fake":{"token":"dummy_token"},"dc":"fake-dc"}}}}`, version),
-			ExpectedResponse: fmt.Sprintf(`{"creationTimestamp":"0001-01-01T00:00:00Z","name":"test","id":"%%s","projectID":"my-first-project-ID","user":"john@acme.com","scope":"global","cluster":{"labels":{"project-id":"my-first-project-ID"},"spec":{"cloud":{"dc":"fake-dc","fake":{}},"version":"%s","oidc":{},"enableUserSSHKeyAgent":true,"enableOperatingSystemManager":true,"kubernetesDashboard":{"enabled":true},"containerRuntime":"containerd"}},"nodeDeployment":{"spec":{"replicas":0,"template":{"cloud":{},"operatingSystem":{},"versions":{"kubelet":""}}}}}`, version),
+			ExpectedResponse: fmt.Sprintf(`{"creationTimestamp":"0001-01-01T00:00:00Z","name":"test","id":"%%s","projectID":"my-first-project-ID","user":"john@acme.com","scope":"global","cluster":{"spec":{"cloud":{"dc":"fake-dc","fake":{}},"version":"%s","oidc":{},"enableUserSSHKeyAgent":true,"enableOperatingSystemManager":true,"kubernetesDashboard":{"enabled":true},"containerRuntime":"containerd","clusterNetwork":{"ipFamily":"IPv4","services":{"cidrBlocks":["10.240.16.0/20"]},"pods":{"cidrBlocks":["172.25.0.0/16"]},"nodeCidrMaskSizeIPv4":24,"dnsDomain":"cluster.local","proxyMode":"ipvs","ipvs":{"strictArp":true},"nodeLocalDNSCacheEnabled":true},"cniPlugin":{"type":"canal","version":"v3.23"},"exposeStrategy":"NodePort"}},"nodeDeployment":{"spec":{"replicas":0,"template":{"cloud":{},"operatingSystem":{},"versions":{"kubelet":""}}}}}`, version),
 			RewriteClusterID: true,
 			HTTPStatus:       http.StatusCreated,
 			ProjectToSync:    test.GenDefaultProject().Name,
@@ -107,7 +107,7 @@ func TestCreateClusterTemplateEndpoint(t *testing.T) {
 		{
 			Name:             "scenario 5: create cluster template in project scope with SSH key",
 			Body:             fmt.Sprintf(`{"name":"test","scope":"project","userSshKeys":[{"id":"key-c08aa5c7abf34504f18552846485267d-yafn","name":"test"}],"cluster":{"name":"keen-snyder","spec":{"version":"%s","cloud":{"fake":{"token":"dummy_token"},"dc":"fake-dc"}}}}`, version),
-			ExpectedResponse: fmt.Sprintf(`{"creationTimestamp":"0001-01-01T00:00:00Z","name":"test","id":"%%s","projectID":"my-first-project-ID","user":"bob@acme.com","scope":"project","userSshKeys":[{"name":"test","id":"key-c08aa5c7abf34504f18552846485267d-yafn"}],"cluster":{"labels":{"project-id":"my-first-project-ID"},"spec":{"cloud":{"dc":"fake-dc","fake":{}},"version":"%s","oidc":{},"enableUserSSHKeyAgent":true,"enableOperatingSystemManager":true,"kubernetesDashboard":{"enabled":true},"containerRuntime":"containerd"}},"nodeDeployment":{"spec":{"replicas":0,"template":{"cloud":{},"operatingSystem":{},"versions":{"kubelet":""}}}}}`, version),
+			ExpectedResponse: fmt.Sprintf(`{"creationTimestamp":"0001-01-01T00:00:00Z","name":"test","id":"%%s","projectID":"my-first-project-ID","user":"bob@acme.com","scope":"project","userSshKeys":[{"name":"test","id":"key-c08aa5c7abf34504f18552846485267d-yafn"}],"cluster":{"spec":{"cloud":{"dc":"fake-dc","fake":{}},"version":"%s","oidc":{},"enableUserSSHKeyAgent":true,"enableOperatingSystemManager":true,"kubernetesDashboard":{"enabled":true},"containerRuntime":"containerd","clusterNetwork":{"ipFamily":"IPv4","services":{"cidrBlocks":["10.240.16.0/20"]},"pods":{"cidrBlocks":["172.25.0.0/16"]},"nodeCidrMaskSizeIPv4":24,"dnsDomain":"cluster.local","proxyMode":"ipvs","ipvs":{"strictArp":true},"nodeLocalDNSCacheEnabled":true},"cniPlugin":{"type":"canal","version":"v3.23"},"exposeStrategy":"NodePort"}},"nodeDeployment":{"spec":{"replicas":0,"template":{"cloud":{},"operatingSystem":{},"versions":{"kubelet":""}}}}}`, version),
 			RewriteClusterID: true,
 			HTTPStatus:       http.StatusCreated,
 			ProjectToSync:    test.GenDefaultProject().Name,
@@ -222,6 +222,12 @@ func TestListClusterTemplates(t *testing.T) {
 								DatacenterName: "fake-dc",
 								Fake:           &kubermaticv1.FakeCloudSpec{},
 							},
+							ClusterNetwork: &kubermaticv1.ClusterNetworkingConfig{
+								Pods:      kubermaticv1.NetworkRanges{CIDRBlocks: nil},
+								Services:  kubermaticv1.NetworkRanges{CIDRBlocks: nil},
+								ProxyMode: "",
+								DNSDomain: "",
+							},
 						},
 					},
 					NodeDeployment: &apiv2.ClusterTemplateNodeDeployment{},
@@ -238,6 +244,12 @@ func TestListClusterTemplates(t *testing.T) {
 								DatacenterName: "fake-dc",
 								Fake:           &kubermaticv1.FakeCloudSpec{},
 							},
+							ClusterNetwork: &kubermaticv1.ClusterNetworkingConfig{
+								Pods:      kubermaticv1.NetworkRanges{CIDRBlocks: nil},
+								Services:  kubermaticv1.NetworkRanges{CIDRBlocks: nil},
+								ProxyMode: "",
+								DNSDomain: "",
+							},
 						},
 					},
 					NodeDeployment: &apiv2.ClusterTemplateNodeDeployment{},
@@ -253,6 +265,12 @@ func TestListClusterTemplates(t *testing.T) {
 							Cloud: kubermaticv1.CloudSpec{
 								DatacenterName: "fake-dc",
 								Fake:           &kubermaticv1.FakeCloudSpec{},
+							},
+							ClusterNetwork: &kubermaticv1.ClusterNetworkingConfig{
+								Pods:      kubermaticv1.NetworkRanges{CIDRBlocks: nil},
+								Services:  kubermaticv1.NetworkRanges{CIDRBlocks: nil},
+								ProxyMode: "",
+								DNSDomain: "",
 							},
 						},
 					},
@@ -314,7 +332,7 @@ func TestGetClusterTemplates(t *testing.T) {
 		{
 			Name:             "scenario 1: get global template",
 			TemplateID:       "ctID2",
-			ExpectedResponse: `{"creationTimestamp":"0001-01-01T00:00:00Z","name":"ct2","id":"ctID2","user":"john@acme.com","scope":"global","cluster":{"spec":{"cloud":{"dc":"fake-dc","fake":{}},"version":"","oidc":{}}},"nodeDeployment":{"spec":{"replicas":0,"template":{"cloud":{},"operatingSystem":{},"versions":{"kubelet":""}}}}}`,
+			ExpectedResponse: `{"creationTimestamp":"0001-01-01T00:00:00Z","name":"ct2","id":"ctID2","user":"john@acme.com","scope":"global","cluster":{"spec":{"cloud":{"dc":"fake-dc","fake":{}},"version":"","oidc":{},"clusterNetwork":{"services":{"cidrBlocks":null},"pods":{"cidrBlocks":null},"dnsDomain":"","proxyMode":""}}},"nodeDeployment":{"spec":{"replicas":0,"template":{"cloud":{},"operatingSystem":{},"versions":{"kubelet":""}}}}}`,
 			HTTPStatus:       http.StatusOK,
 			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
@@ -346,7 +364,7 @@ func TestGetClusterTemplates(t *testing.T) {
 		{
 			Name:             "scenario 3: get user scope template",
 			TemplateID:       "ctID1",
-			ExpectedResponse: `{"creationTimestamp":"0001-01-01T00:00:00Z","name":"ct1","id":"ctID1","projectID":"my-first-project-ID","user":"bob@acme.com","scope":"user","cluster":{"spec":{"cloud":{"dc":"fake-dc","fake":{}},"version":"","oidc":{}}},"nodeDeployment":{"spec":{"replicas":0,"template":{"cloud":{},"operatingSystem":{},"versions":{"kubelet":""}}}}}`,
+			ExpectedResponse: `{"creationTimestamp":"0001-01-01T00:00:00Z","name":"ct1","id":"ctID1","projectID":"my-first-project-ID","user":"bob@acme.com","scope":"user","cluster":{"spec":{"cloud":{"dc":"fake-dc","fake":{}},"version":"","oidc":{},"clusterNetwork":{"services":{"cidrBlocks":null},"pods":{"cidrBlocks":null},"dnsDomain":"","proxyMode":""}}},"nodeDeployment":{"spec":{"replicas":0,"template":{"cloud":{},"operatingSystem":{},"versions":{"kubelet":""}}}}}`,
 			HTTPStatus:       http.StatusOK,
 			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
@@ -362,7 +380,7 @@ func TestGetClusterTemplates(t *testing.T) {
 		{
 			Name:             "scenario 4: get project scope template",
 			TemplateID:       "ctID4",
-			ExpectedResponse: `{"creationTimestamp":"0001-01-01T00:00:00Z","name":"ct4","id":"ctID4","projectID":"my-first-project-ID","user":"john@acme.com","scope":"project","cluster":{"spec":{"cloud":{"dc":"fake-dc","fake":{}},"version":"","oidc":{}}},"nodeDeployment":{"spec":{"replicas":0,"template":{"cloud":{},"operatingSystem":{},"versions":{"kubelet":""}}}}}`,
+			ExpectedResponse: `{"creationTimestamp":"0001-01-01T00:00:00Z","name":"ct4","id":"ctID4","projectID":"my-first-project-ID","user":"john@acme.com","scope":"project","cluster":{"spec":{"cloud":{"dc":"fake-dc","fake":{}},"version":"","oidc":{},"clusterNetwork":{"services":{"cidrBlocks":null},"pods":{"cidrBlocks":null},"dnsDomain":"","proxyMode":""}}},"nodeDeployment":{"spec":{"replicas":0,"template":{"cloud":{},"operatingSystem":{},"versions":{"kubelet":""}}}}}`,
 			HTTPStatus:       http.StatusOK,
 			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
@@ -603,7 +621,7 @@ func TestExportlusterTemplates(t *testing.T) {
 		{
 			Name:             "scenario 1: export global template",
 			TemplateID:       "ctID2",
-			ExpectedResponse: `{"creationTimestamp":"0001-01-01T00:00:00Z","name":"ct2","user":"john@acme.com","scope":"global","cluster":{"spec":{"cloud":{"dc":"fake-dc","fake":{}},"version":"","oidc":{}}},"nodeDeployment":{"spec":{"replicas":0,"template":{"cloud":{},"operatingSystem":{},"versions":{"kubelet":""}}}}}`,
+			ExpectedResponse: `{"creationTimestamp":"0001-01-01T00:00:00Z","name":"ct2","user":"john@acme.com","scope":"global","cluster":{"spec":{"cloud":{"dc":"fake-dc","fake":{}},"version":"","oidc":{},"clusterNetwork":{"services":{"cidrBlocks":null},"pods":{"cidrBlocks":null},"dnsDomain":"","proxyMode":""}}},"nodeDeployment":{"spec":{"replicas":0,"template":{"cloud":{},"operatingSystem":{},"versions":{"kubelet":""}}}}}`,
 			HTTPStatus:       http.StatusOK,
 			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
@@ -635,7 +653,7 @@ func TestExportlusterTemplates(t *testing.T) {
 		{
 			Name:             "scenario 3: export user scope template",
 			TemplateID:       "ctID1",
-			ExpectedResponse: `{"creationTimestamp":"0001-01-01T00:00:00Z","name":"ct1","user":"bob@acme.com","scope":"user","cluster":{"spec":{"cloud":{"dc":"fake-dc","fake":{}},"version":"","oidc":{}}},"nodeDeployment":{"spec":{"replicas":0,"template":{"cloud":{},"operatingSystem":{},"versions":{"kubelet":""}}}}}`,
+			ExpectedResponse: `{"creationTimestamp":"0001-01-01T00:00:00Z","name":"ct1","user":"bob@acme.com","scope":"user","cluster":{"spec":{"cloud":{"dc":"fake-dc","fake":{}},"version":"","oidc":{},"clusterNetwork":{"services":{"cidrBlocks":null},"pods":{"cidrBlocks":null},"dnsDomain":"","proxyMode":""}}},"nodeDeployment":{"spec":{"replicas":0,"template":{"cloud":{},"operatingSystem":{},"versions":{"kubelet":""}}}}}`,
 			HTTPStatus:       http.StatusOK,
 			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
@@ -651,7 +669,7 @@ func TestExportlusterTemplates(t *testing.T) {
 		{
 			Name:             "scenario 4: exportproject scope template",
 			TemplateID:       "ctID4",
-			ExpectedResponse: `{"creationTimestamp":"0001-01-01T00:00:00Z","name":"ct4","user":"john@acme.com","scope":"project","cluster":{"spec":{"cloud":{"dc":"fake-dc","fake":{}},"version":"","oidc":{}}},"nodeDeployment":{"spec":{"replicas":0,"template":{"cloud":{},"operatingSystem":{},"versions":{"kubelet":""}}}}}`,
+			ExpectedResponse: `{"creationTimestamp":"0001-01-01T00:00:00Z","name":"ct4","user":"john@acme.com","scope":"project","cluster":{"spec":{"cloud":{"dc":"fake-dc","fake":{}},"version":"","oidc":{},"clusterNetwork":{"services":{"cidrBlocks":null},"pods":{"cidrBlocks":null},"dnsDomain":"","proxyMode":""}}},"nodeDeployment":{"spec":{"replicas":0,"template":{"cloud":{},"operatingSystem":{},"versions":{"kubelet":""}}}}}`,
 			HTTPStatus:       http.StatusOK,
 			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
@@ -723,7 +741,7 @@ func TestImportClusterTemplateEndpoint(t *testing.T) {
 		{
 			Name:             "scenario 1: import cluster template in user scope",
 			Body:             fmt.Sprintf(`{"name":"test","scope":"user","cluster":{"name":"keen-snyder","spec":{"version":"%s","cloud":{"fake":{"token":"dummy_token"},"dc":"fake-dc"}}}}`, version),
-			ExpectedResponse: fmt.Sprintf(`{"creationTimestamp":"0001-01-01T00:00:00Z","name":"test","id":"%%s","projectID":"my-first-project-ID","user":"bob@acme.com","scope":"user","cluster":{"labels":{"project-id":"my-first-project-ID"},"spec":{"cloud":{"dc":"fake-dc","fake":{}},"version":"%s","oidc":{},"enableUserSSHKeyAgent":true,"enableOperatingSystemManager":true,"kubernetesDashboard":{"enabled":true},"containerRuntime":"containerd"}},"nodeDeployment":{"spec":{"replicas":0,"template":{"cloud":{},"operatingSystem":{},"versions":{"kubelet":""}}}}}`, version),
+			ExpectedResponse: fmt.Sprintf(`{"creationTimestamp":"0001-01-01T00:00:00Z","name":"test","id":"%%s","projectID":"my-first-project-ID","user":"bob@acme.com","scope":"user","cluster":{"spec":{"cloud":{"dc":"fake-dc","fake":{}},"version":"%s","oidc":{},"enableUserSSHKeyAgent":true,"enableOperatingSystemManager":true,"kubernetesDashboard":{"enabled":true},"containerRuntime":"containerd","clusterNetwork":{"ipFamily":"IPv4","services":{"cidrBlocks":["10.240.16.0/20"]},"pods":{"cidrBlocks":["172.25.0.0/16"]},"nodeCidrMaskSizeIPv4":24,"dnsDomain":"cluster.local","proxyMode":"ipvs","ipvs":{"strictArp":true},"nodeLocalDNSCacheEnabled":true},"cniPlugin":{"type":"canal","version":"v3.23"},"exposeStrategy":"NodePort"}},"nodeDeployment":{"spec":{"replicas":0,"template":{"cloud":{},"operatingSystem":{},"versions":{"kubelet":""}}}}}`, version),
 			RewriteClusterID: true,
 			HTTPStatus:       http.StatusCreated,
 			ProjectToSync:    test.GenDefaultProject().Name,
@@ -748,7 +766,7 @@ func TestImportClusterTemplateEndpoint(t *testing.T) {
 		{
 			Name:             "scenario 3: import cluster template in project scope with SSH key",
 			Body:             fmt.Sprintf(`{"name":"test","scope":"project","userSshKeys":[{"id":"key-c08aa5c7abf34504f18552846485267d-yafn","name":"test"}],"cluster":{"name":"keen-snyder","spec":{"version":"%s","cloud":{"fake":{"token":"dummy_token"},"dc":"fake-dc"}}}}`, version),
-			ExpectedResponse: fmt.Sprintf(`{"creationTimestamp":"0001-01-01T00:00:00Z","name":"test","id":"%%s","projectID":"my-first-project-ID","user":"bob@acme.com","scope":"project","userSshKeys":[{"name":"test","id":"key-c08aa5c7abf34504f18552846485267d-yafn"}],"cluster":{"labels":{"project-id":"my-first-project-ID"},"spec":{"cloud":{"dc":"fake-dc","fake":{}},"version":"%s","oidc":{},"enableUserSSHKeyAgent":true,"enableOperatingSystemManager":true,"kubernetesDashboard":{"enabled":true},"containerRuntime":"containerd"}},"nodeDeployment":{"spec":{"replicas":0,"template":{"cloud":{},"operatingSystem":{},"versions":{"kubelet":""}}}}}`, version),
+			ExpectedResponse: fmt.Sprintf(`{"creationTimestamp":"0001-01-01T00:00:00Z","name":"test","id":"%%s","projectID":"my-first-project-ID","user":"bob@acme.com","scope":"project","userSshKeys":[{"name":"test","id":"key-c08aa5c7abf34504f18552846485267d-yafn"}],"cluster":{"spec":{"cloud":{"dc":"fake-dc","fake":{}},"version":"%s","oidc":{},"enableUserSSHKeyAgent":true,"enableOperatingSystemManager":true,"kubernetesDashboard":{"enabled":true},"containerRuntime":"containerd","clusterNetwork":{"ipFamily":"IPv4","services":{"cidrBlocks":["10.240.16.0/20"]},"pods":{"cidrBlocks":["172.25.0.0/16"]},"nodeCidrMaskSizeIPv4":24,"dnsDomain":"cluster.local","proxyMode":"ipvs","ipvs":{"strictArp":true},"nodeLocalDNSCacheEnabled":true},"cniPlugin":{"type":"canal","version":"v3.23"},"exposeStrategy":"NodePort"}},"nodeDeployment":{"spec":{"replicas":0,"template":{"cloud":{},"operatingSystem":{},"versions":{"kubelet":""}}}}}`, version),
 			RewriteClusterID: true,
 			HTTPStatus:       http.StatusCreated,
 			ProjectToSync:    test.GenDefaultProject().Name,

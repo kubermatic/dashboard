@@ -20,6 +20,7 @@ import {NodeProvider, OperatingSystem} from '@shared/model/NodeProviderConstants
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+import {ApplicationService} from '@core/services/application';
 
 @Injectable()
 export class WizardService {
@@ -79,7 +80,8 @@ export class WizardService {
 
   constructor(
     private readonly _clusterSpecService: ClusterSpecService,
-    private readonly _nodeDataService: NodeDataService
+    private readonly _nodeDataService: NodeDataService,
+    private readonly applicationService: ApplicationService
   ) {
     this._nodeDataService.operatingSystemChanges
       .pipe(takeUntil(this._unsubscribe))
@@ -113,6 +115,7 @@ export class WizardService {
 
     this._clusterSpecService.reset();
     this._nodeDataService.reset();
+    this.applicationService.reset();
 
     this._unsubscribe = new Subject<void>();
     this._monitorOSChange();

@@ -1131,7 +1131,8 @@ func newPublicHetznerCloudSpec(internal *kubermaticv1.HetznerCloudSpec) (public 
 
 // PublicAzureCloudSpec is a public counterpart of apiv1.AzureCloudSpec.
 type PublicAzureCloudSpec struct {
-	AssignAvailabilitySet *bool `json:"assignAvailabilitySet"`
+	AssignAvailabilitySet    *bool                       `json:"assignAvailabilitySet"`
+	NodePortsAllowedIPRanges *kubermaticv1.NetworkRanges `json:"nodePortsAllowedIPRanges,omitempty"`
 }
 
 func newPublicAzureCloudSpec(internal *kubermaticv1.AzureCloudSpec) (public *PublicAzureCloudSpec) {
@@ -1140,7 +1141,8 @@ func newPublicAzureCloudSpec(internal *kubermaticv1.AzureCloudSpec) (public *Pub
 	}
 
 	return &PublicAzureCloudSpec{
-		AssignAvailabilitySet: internal.AssignAvailabilitySet,
+		AssignAvailabilitySet:    internal.AssignAvailabilitySet,
+		NodePortsAllowedIPRanges: internal.NodePortsAllowedIPRanges,
 	}
 }
 
@@ -1167,26 +1169,31 @@ func newPublicBringYourOwnCloudSpec(internal *kubermaticv1.BringYourOwnCloudSpec
 }
 
 // PublicAWSCloudSpec is a public counterpart of apiv1.AWSCloudSpec.
-type PublicAWSCloudSpec struct{}
+type PublicAWSCloudSpec struct {
+	NodePortsAllowedIPRanges *kubermaticv1.NetworkRanges `json:"nodePortsAllowedIPRanges,omitempty"`
+}
 
 func newPublicAWSCloudSpec(internal *kubermaticv1.AWSCloudSpec) (public *PublicAWSCloudSpec) {
 	if internal == nil {
 		return nil
 	}
 
-	return &PublicAWSCloudSpec{}
+	return &PublicAWSCloudSpec{
+		NodePortsAllowedIPRanges: internal.NodePortsAllowedIPRanges,
+	}
 }
 
 // PublicOpenstackCloudSpec is a public counterpart of apiv1.OpenstackCloudSpec.
 type PublicOpenstackCloudSpec struct {
-	FloatingIPPool string `json:"floatingIPPool"`
-	Project        string `json:"project,omitempty"`
-	ProjectID      string `json:"projectID,omitempty"`
-	Domain         string `json:"domain,omitempty"`
-	Network        string `json:"network"`
-	SecurityGroups string `json:"securityGroups"`
-	RouterID       string `json:"routerID"`
-	SubnetID       string `json:"subnetID"`
+	FloatingIPPool           string                      `json:"floatingIPPool"`
+	Project                  string                      `json:"project,omitempty"`
+	ProjectID                string                      `json:"projectID,omitempty"`
+	Domain                   string                      `json:"domain,omitempty"`
+	Network                  string                      `json:"network"`
+	SecurityGroups           string                      `json:"securityGroups"`
+	RouterID                 string                      `json:"routerID"`
+	SubnetID                 string                      `json:"subnetID"`
+	NodePortsAllowedIPRanges *kubermaticv1.NetworkRanges `json:"nodePortsAllowedIPRanges,omitempty"`
 }
 
 func newPublicOpenstackCloudSpec(internal *kubermaticv1.OpenstackCloudSpec) (public *PublicOpenstackCloudSpec) {
@@ -1195,14 +1202,15 @@ func newPublicOpenstackCloudSpec(internal *kubermaticv1.OpenstackCloudSpec) (pub
 	}
 
 	return &PublicOpenstackCloudSpec{
-		FloatingIPPool: internal.FloatingIPPool,
-		Project:        internal.Project,
-		ProjectID:      internal.ProjectID,
-		Domain:         internal.Domain,
-		Network:        internal.Network,
-		SecurityGroups: internal.SecurityGroups,
-		RouterID:       internal.RouterID,
-		SubnetID:       internal.SubnetID,
+		FloatingIPPool:           internal.FloatingIPPool,
+		Project:                  internal.Project,
+		ProjectID:                internal.ProjectID,
+		Domain:                   internal.Domain,
+		Network:                  internal.Network,
+		SecurityGroups:           internal.SecurityGroups,
+		RouterID:                 internal.RouterID,
+		SubnetID:                 internal.SubnetID,
+		NodePortsAllowedIPRanges: internal.NodePortsAllowedIPRanges,
 	}
 }
 
@@ -1218,14 +1226,18 @@ func newPublicPacketCloudSpec(internal *kubermaticv1.PacketCloudSpec) (public *P
 }
 
 // PublicGCPCloudSpec is a public counterpart of apiv1.GCPCloudSpec.
-type PublicGCPCloudSpec struct{}
+type PublicGCPCloudSpec struct {
+	NodePortsAllowedIPRanges *kubermaticv1.NetworkRanges `json:"nodePortsAllowedIPRanges,omitempty"`
+}
 
 func newPublicGCPCloudSpec(internal *kubermaticv1.GCPCloudSpec) (public *PublicGCPCloudSpec) {
 	if internal == nil {
 		return nil
 	}
 
-	return &PublicGCPCloudSpec{}
+	return &PublicGCPCloudSpec{
+		NodePortsAllowedIPRanges: internal.NodePortsAllowedIPRanges,
+	}
 }
 
 // PublicKubevirtCloudSpec is a public counterpart of apiv1.KubevirtCloudSpec.

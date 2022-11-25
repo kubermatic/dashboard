@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {NodeCloudSpec, NodeSpec} from '../entity/node';
+import {NodeCloudSpec, NodeSpec, OperatingSystemSpec} from '../entity/node';
 
 export class NodeData {
   operatingSystemProfile?: string;
@@ -25,9 +25,7 @@ export class NodeData {
   static NewEmptyNodeData(): NodeData {
     return {
       spec: {
-        operatingSystem: {
-          ubuntu: {},
-        },
+        operatingSystem: {} as OperatingSystemSpec,
         cloud: {} as NodeCloudSpec,
       } as NodeSpec,
     } as NodeData;
