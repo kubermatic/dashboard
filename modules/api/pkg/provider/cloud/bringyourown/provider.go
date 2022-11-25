@@ -30,7 +30,7 @@ func NewCloudProvider() provider.CloudProvider {
 	return &bringyourown{}
 }
 
-var _ provider.ReconcilingCloudProvider = &bringyourown{}
+var _ provider.CloudProvider = &bringyourown{}
 
 func (b *bringyourown) DefaultCloudSpec(_ context.Context, _ *kubermaticv1.CloudSpec) error {
 	return nil
@@ -38,18 +38,6 @@ func (b *bringyourown) DefaultCloudSpec(_ context.Context, _ *kubermaticv1.Cloud
 
 func (b *bringyourown) ValidateCloudSpec(_ context.Context, _ kubermaticv1.CloudSpec) error {
 	return nil
-}
-
-func (b *bringyourown) InitializeCloudProvider(_ context.Context, cluster *kubermaticv1.Cluster, _ provider.ClusterUpdater) (*kubermaticv1.Cluster, error) {
-	return cluster, nil
-}
-
-func (b *bringyourown) ReconcileCluster(ctx context.Context, cluster *kubermaticv1.Cluster, update provider.ClusterUpdater) (*kubermaticv1.Cluster, error) {
-	return cluster, nil
-}
-
-func (b *bringyourown) CleanUpCloudProvider(_ context.Context, cluster *kubermaticv1.Cluster, _ provider.ClusterUpdater) (*kubermaticv1.Cluster, error) {
-	return cluster, nil
 }
 
 // ValidateCloudSpecUpdate verifies whether an update of cloud spec is valid and permitted.

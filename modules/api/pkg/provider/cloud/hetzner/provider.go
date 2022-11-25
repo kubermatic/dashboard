@@ -69,16 +69,6 @@ func (h *hetzner) ValidateCloudSpec(ctx context.Context, spec kubermaticv1.Cloud
 	return err
 }
 
-// InitializeCloudProvider.
-func (h *hetzner) InitializeCloudProvider(_ context.Context, cluster *kubermaticv1.Cluster, _ provider.ClusterUpdater) (*kubermaticv1.Cluster, error) {
-	return cluster, nil
-}
-
-// CleanUpCloudProvider.
-func (h *hetzner) CleanUpCloudProvider(_ context.Context, cluster *kubermaticv1.Cluster, _ provider.ClusterUpdater) (*kubermaticv1.Cluster, error) {
-	return cluster, nil
-}
-
 // ValidateCloudSpecUpdate verifies whether an update of cloud spec is valid and permitted.
 func (h *hetzner) ValidateCloudSpecUpdate(_ context.Context, _ kubermaticv1.CloudSpec, _ kubermaticv1.CloudSpec) error {
 	return nil

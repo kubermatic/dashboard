@@ -62,14 +62,6 @@ func (do *digitalocean) ValidateCloudSpec(ctx context.Context, spec kubermaticv1
 	return ValidateCredentials(ctx, token)
 }
 
-func (do *digitalocean) InitializeCloudProvider(_ context.Context, cluster *kubermaticv1.Cluster, _ provider.ClusterUpdater) (*kubermaticv1.Cluster, error) {
-	return cluster, nil
-}
-
-func (do *digitalocean) CleanUpCloudProvider(_ context.Context, cluster *kubermaticv1.Cluster, _ provider.ClusterUpdater) (*kubermaticv1.Cluster, error) {
-	return cluster, nil
-}
-
 // ValidateCloudSpecUpdate verifies whether an update of cloud spec is valid and permitted.
 func (do *digitalocean) ValidateCloudSpecUpdate(_ context.Context, _ kubermaticv1.CloudSpec, _ kubermaticv1.CloudSpec) error {
 	return nil

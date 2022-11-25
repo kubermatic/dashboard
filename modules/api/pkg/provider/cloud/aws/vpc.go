@@ -24,9 +24,6 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
 
-	"k8c.io/dashboard/v2/pkg/provider"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
-
 	"k8s.io/utils/pointer"
 )
 
@@ -35,40 +32,6 @@ func ec2VPCFilter(vpcID string) ec2types.Filter {
 		Name:   pointer.String("vpc-id"),
 		Values: []string{vpcID},
 	}
-}
-
-func reconcileVPC(ctx context.Context, client *ec2.Client, cluster *kubermaticv1.Cluster, update provider.ClusterUpdater) (*kubermaticv1.Cluster, error) {
-	vpcID := cluster.Spec.Cloud.AWS.VPCID
-
-	// check if the VPC exists, if we have an ID cached
-	if vpcID != "" {
-		out, err := client.DescribeVpcs(ctx, &ec2.DescribeVpcsInput{
-			VpcIds: []string{vpcID},
-		})
-		if err != nil && !isNotFound(err) {
-			return nil, fmt.Errorf("failed to list VPCs: %w", err)
-		}
-
-		// not found
-		if out == nil || len(out.Vpcs) == 0 {
-			return nil, fmt.Errorf("the configured VPC %s does not exist", vpcID)
-		}
-	}
-
-	// all good :)
-	if vpcID != "" {
-		return cluster, nil
-	}
-
-	// re-find the default VPC
-	defaultVPC, err := getDefaultVPC(ctx, client)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get default VPC: %w", err)
-	}
-
-	return update(ctx, cluster.Name, func(cluster *kubermaticv1.Cluster) {
-		cluster.Spec.Cloud.AWS.VPCID = *defaultVPC.VpcId
-	})
 }
 
 func getDefaultVPC(ctx context.Context, client *ec2.Client) (*ec2types.Vpc, error) {
