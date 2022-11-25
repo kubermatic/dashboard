@@ -304,8 +304,6 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 		}
 
 		cloudSpec.Kubevirt = &apiv1.KubevirtNodeSpec{
-			FlavorName:                  config.VirtualMachine.Flavor.Name.Value,
-			FlavorProfile:               config.VirtualMachine.Flavor.Profile.Value,
 			Instancetype:                config.VirtualMachine.Instancetype,
 			Preference:                  config.VirtualMachine.Preference,
 			CPUs:                        config.VirtualMachine.Template.CPUs.Value,
@@ -313,8 +311,6 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 			PrimaryDiskOSImage:          config.VirtualMachine.Template.PrimaryDisk.OsImage.Value,
 			PrimaryDiskStorageClassName: config.VirtualMachine.Template.PrimaryDisk.StorageClassName.Value,
 			PrimaryDiskSize:             config.VirtualMachine.Template.PrimaryDisk.Size.Value,
-			PodAffinityPreset:           config.Affinity.PodAffinityPreset.Value,     //nolint:staticcheck
-			PodAntiAffinityPreset:       config.Affinity.PodAntiAffinityPreset.Value, //nolint:staticcheck
 			NodeAffinityPreset: apiv1.NodeAffinityPreset{
 				Type: config.Affinity.NodeAffinityPreset.Type.Value,
 				Key:  config.Affinity.NodeAffinityPreset.Key.Value,
