@@ -34,13 +34,11 @@ import (
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
-	kuberneteshelper "k8c.io/kubermatic/v2/pkg/kubernetes"
 	"k8c.io/kubermatic/v2/pkg/log"
 	"k8c.io/kubermatic/v2/pkg/resources"
 )
 
 const (
-	DefaultNetwork                   = "global/networks/default"
 	computeAPIEndpoint               = "https://www.googleapis.com/compute/v1/"
 	firewallSelfCleanupFinalizer     = "kubermatic.k8c.io/cleanup-gcp-firewall-self"
 	firewallICMPCleanupFinalizer     = "kubermatic.k8c.io/cleanup-gcp-firewall-icmp"
@@ -64,54 +62,7 @@ func NewCloudProvider(secretKeyGetter provider.SecretKeySelectorValueFunc) provi
 	}
 }
 
-var _ provider.ReconcilingCloudProvider = &gcp{}
-
-// InitializeCloudProvider initializes a cluster.
-func (g *gcp) InitializeCloudProvider(ctx context.Context, cluster *kubermaticv1.Cluster, update provider.ClusterUpdater) (*kubermaticv1.Cluster, error) {
-	return g.reconcileCluster(ctx, cluster, update, false, true)
-}
-
-// ReconcileCluster enforces the existence of the needed resources in the cloud provider.
-func (g *gcp) ReconcileCluster(ctx context.Context, cluster *kubermaticv1.Cluster, update provider.ClusterUpdater) (*kubermaticv1.Cluster, error) {
-	return g.reconcileCluster(ctx, cluster, update, true, true)
-}
-
-func (g *gcp) reconcileCluster(ctx context.Context, cluster *kubermaticv1.Cluster, update provider.ClusterUpdater, force, setTags bool) (*kubermaticv1.Cluster, error) {
-	var err error
-	if cluster.Spec.Cloud.GCP.Network == "" && cluster.Spec.Cloud.GCP.Subnetwork == "" {
-		cluster, err = update(ctx, cluster.Name, func(cluster *kubermaticv1.Cluster) {
-			cluster.Spec.Cloud.GCP.Network = DefaultNetwork
-		})
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	serviceAccount, err := GetCredentialsForCluster(cluster.Spec.Cloud, g.secretKeySelector)
-	if err != nil {
-		return nil, err
-	}
-
-	svc, projectID, err := ConnectToComputeService(ctx, serviceAccount)
-	if err != nil {
-		return nil, err
-	}
-
-	if err := reconcileFirewallRules(ctx, cluster, update, svc, projectID); err != nil {
-		return nil, err
-	}
-
-	// add the routes cleanup finalizer
-	if !kuberneteshelper.HasFinalizer(cluster, routesCleanupFinalizer) {
-		cluster, err = update(ctx, cluster.Name, func(cluster *kubermaticv1.Cluster) {
-			kuberneteshelper.AddFinalizer(cluster, routesCleanupFinalizer)
-		})
-		if err != nil {
-			return nil, fmt.Errorf("failed to add %s finalizer: %w", routesCleanupFinalizer, err)
-		}
-	}
-	return cluster, nil
-}
+var _ provider.CloudProvider = &gcp{}
 
 // DefaultCloudSpec adds defaults to the cloud spec.
 func (g *gcp) DefaultCloudSpec(ctx context.Context, spec *kubermaticv1.CloudSpec) error {
@@ -128,21 +79,6 @@ func (g *gcp) ValidateCloudSpec(ctx context.Context, spec kubermaticv1.CloudSpec
 		return fmt.Errorf("serviceAccount cannot be empty")
 	}
 	return nil
-}
-
-// CleanUpCloudProvider removes firewall rules and related finalizer.
-func (g *gcp) CleanUpCloudProvider(ctx context.Context, cluster *kubermaticv1.Cluster, update provider.ClusterUpdater) (*kubermaticv1.Cluster, error) {
-	serviceAccount, err := GetCredentialsForCluster(cluster.Spec.Cloud, g.secretKeySelector)
-	if err != nil {
-		return nil, err
-	}
-
-	svc, projectID, err := ConnectToComputeService(ctx, serviceAccount)
-	if err != nil {
-		return nil, err
-	}
-
-	return deleteFirewallRules(ctx, cluster, update, g.log, svc, projectID)
 }
 
 func ValidateCredentials(ctx context.Context, serviceAccount string) error {

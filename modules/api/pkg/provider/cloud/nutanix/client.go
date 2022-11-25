@@ -152,39 +152,6 @@ func getClientSet(credentials nutanixclient.Credentials) (*ClientSet, error) {
 	}, nil
 }
 
-func GetSubnetByName(ctx context.Context, client *ClientSet, name, clusterID string) (*nutanixv3.SubnetIntentResponse, error) {
-	filter := fmt.Sprintf("name==%s", name)
-	subnets, err := client.Prism.V3.ListAllSubnet(ctx, filter)
-
-	if err != nil {
-		return nil, err
-	}
-
-	if subnets == nil || subnets.Entities == nil {
-		return nil, fmt.Errorf("subnets list is nil for '%s'", filter)
-	}
-
-	for _, subnet := range subnets.Entities {
-		if subnet == nil {
-			return nil, errors.New("subnet is nil")
-		}
-
-		if subnet.Status == nil {
-			return nil, errors.New("subnet status is nil")
-		}
-
-		if subnet.Status.Name == nil {
-			return nil, errors.New("subnet name is nil")
-		}
-
-		if *subnet.Status.Name == name && (subnet.Status.ClusterReference == nil || (subnet.Status.ClusterReference.UUID != nil && *subnet.Status.ClusterReference.UUID == clusterID)) {
-			return subnet, nil
-		}
-	}
-
-	return nil, fmt.Errorf("no subnet found for '%s' on cluster '%s'", filter, clusterID)
-}
-
 func GetProjectByName(ctx context.Context, client *ClientSet, name string) (*nutanixv3.Project, error) {
 	filter := fmt.Sprintf("name==%s", name)
 	projects, err := client.Prism.V3.ListAllProject(ctx, filter)

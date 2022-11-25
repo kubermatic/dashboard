@@ -54,9 +54,6 @@ var (
 )
 
 const (
-	DefaultSSHPort     = 22
-	DefaultKubeletPort = 10250
-
 	DefaultKubeconfigFieldPath = "kubeconfig"
 )
 
@@ -123,19 +120,9 @@ type PrivilegedOperatingSystemProfileProviderGetter = func(seed *kubermaticv1.Se
 
 // CloudProvider declares a set of methods for interacting with a cloud provider.
 type CloudProvider interface {
-	InitializeCloudProvider(context.Context, *kubermaticv1.Cluster, ClusterUpdater) (*kubermaticv1.Cluster, error)
-	CleanUpCloudProvider(context.Context, *kubermaticv1.Cluster, ClusterUpdater) (*kubermaticv1.Cluster, error)
 	DefaultCloudSpec(context.Context, *kubermaticv1.CloudSpec) error
 	ValidateCloudSpec(context.Context, kubermaticv1.CloudSpec) error
 	ValidateCloudSpecUpdate(ctx context.Context, oldSpec kubermaticv1.CloudSpec, newSpec kubermaticv1.CloudSpec) error
-}
-
-// ReconcilingCloudProvider is a cloud provider that can not just created resources
-// once, but is capable of continuously reconciling and fixing any problems with them.
-type ReconcilingCloudProvider interface {
-	CloudProvider
-
-	ReconcileCluster(context.Context, *kubermaticv1.Cluster, ClusterUpdater) (*kubermaticv1.Cluster, error)
 }
 
 // ClusterUpdater defines a function to persist an update to a cluster.

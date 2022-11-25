@@ -62,14 +62,6 @@ func (a *Alibaba) ValidateCloudSpec(_ context.Context, spec kubermaticv1.CloudSp
 	return nil
 }
 
-func (a *Alibaba) InitializeCloudProvider(_ context.Context, cluster *kubermaticv1.Cluster, _ provider.ClusterUpdater) (*kubermaticv1.Cluster, error) {
-	return cluster, nil
-}
-
-func (a *Alibaba) CleanUpCloudProvider(_ context.Context, cluster *kubermaticv1.Cluster, _ provider.ClusterUpdater) (*kubermaticv1.Cluster, error) {
-	return cluster, nil
-}
-
 func (a *Alibaba) ValidateCloudSpecUpdate(_ context.Context, _ kubermaticv1.CloudSpec, _ kubermaticv1.CloudSpec) error {
 	return nil
 }

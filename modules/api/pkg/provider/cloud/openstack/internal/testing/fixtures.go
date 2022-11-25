@@ -16,11 +16,6 @@ limitations under the License.
 
 package testing
 
-import (
-	"github.com/gophercloud/gophercloud/openstack/networking/v2/extensions/external"
-	"github.com/gophercloud/gophercloud/openstack/networking/v2/networks"
-)
-
 // IDs used when a new resource is created.
 // Note that using always the same ID is not correct, but is sufficient to
 // cover the current usage. For more advanced usages a pseudo-random UID
@@ -35,25 +30,3 @@ const (
 	SecGroupID      = "babf744f-0098-4f61-8e15-f91c30b3ed05"
 	SecGroupRuleID  = "da8d0577-eeb8-4351-b543-4bb0687f81d3"
 )
-
-// Relative paths to resource endpoints.
-const (
-	SecurityGroupsEndpoint = "/security-groups"
-	NetworksEndpoint       = "/networks"
-	SubnetsEndpoint        = "/subnets"
-	RoutersEndpoint        = "/routers"
-	SubnetPoolsEndpoint    = "/subnetpools"
-)
-
-func AddRouterInterfaceEndpoint(routerID string) string {
-	return "/routers/" + routerID + "/add_router_interface"
-}
-
-var ExternalNetwork = Network{
-	Network:            networks.Network{Name: "external-network", ID: "d32019d3-bc6e-4319-9c1d-6722fc136a22"},
-	NetworkExternalExt: external.NetworkExternalExt{External: true},
-}
-
-var InternalNetwork = Network{
-	Network: networks.Network{Name: "kubernetes-cluster-xyz", ID: NetworkID},
-}

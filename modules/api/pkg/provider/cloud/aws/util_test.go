@@ -22,12 +22,6 @@ import (
 	"context"
 	"os"
 	"testing"
-
-	"k8c.io/dashboard/v2/pkg/provider"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
-	utilcluster "k8c.io/kubermatic/v2/pkg/util/cluster"
-
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 const (
@@ -46,36 +40,4 @@ func getTestClientSet(ctx context.Context, t *testing.T) *ClientSet {
 	}
 
 	return cs
-}
-
-// makeCluster returns a KKP Cluster object with the AWS cloud spec inserted.
-// The cluster will have a random name, which helps to re-use the same localstack
-// test environment without causing name clashes (or having to restart the
-// test env in between every test).
-func makeCluster(cloudSpec *kubermaticv1.AWSCloudSpec) *kubermaticv1.Cluster {
-	return &kubermaticv1.Cluster{
-		ObjectMeta: metav1.ObjectMeta{
-			Name: utilcluster.MakeClusterName(),
-		},
-		Spec: kubermaticv1.ClusterSpec{
-			Cloud: kubermaticv1.CloudSpec{
-				AWS: cloudSpec,
-			},
-			ClusterNetwork: kubermaticv1.ClusterNetworkingConfig{
-				Pods: kubermaticv1.NetworkRanges{
-					CIDRBlocks: []string{"172.25.0.0/16", "fd00::/56"},
-				},
-				Services: kubermaticv1.NetworkRanges{
-					CIDRBlocks: []string{"10.240.16.0/20", "fd03::/120"},
-				},
-			},
-		},
-	}
-}
-
-func testClusterUpdater(cluster *kubermaticv1.Cluster) provider.ClusterUpdater {
-	return func(_ context.Context, clusterName string, patcher func(*kubermaticv1.Cluster)) (*kubermaticv1.Cluster, error) {
-		patcher(cluster)
-		return cluster, nil
-	}
 }

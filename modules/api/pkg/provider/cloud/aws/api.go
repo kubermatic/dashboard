@@ -82,7 +82,7 @@ func GetVPCS(ctx context.Context, accessKeyID, secretAccessKey, assumeRoleARN, a
 	return vpcOut.Vpcs, nil
 }
 
-// GetSecurityGroups returns the list of AWS Security Group filtered by VPC.
+// GetSecurityGroupsByVPC returns the list of AWS Security Group filtered by VPC.
 func GetSecurityGroupsByVPC(ctx context.Context, accessKeyID, secretAccessKey, assumeRoleARN, assumeRoleExternalID, region, vpcID string) ([]ec2types.SecurityGroup, error) {
 	client, err := GetClientSet(ctx, accessKeyID, secretAccessKey, "", "", region)
 	if err != nil {

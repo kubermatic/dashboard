@@ -20,14 +20,10 @@ import (
 	"context"
 	"encoding/base64"
 	"errors"
-	"fmt"
-
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
-	kuberneteshelper "k8c.io/kubermatic/v2/pkg/kubernetes"
 	"k8c.io/kubermatic/v2/pkg/resources"
 
-	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/client-go/tools/clientcmd"
 )
 
@@ -46,7 +42,7 @@ func NewCloudProvider(secretKeyGetter provider.SecretKeySelectorValueFunc) provi
 	}
 }
 
-var _ provider.ReconcilingCloudProvider = &kubevirt{}
+var _ provider.CloudProvider = &kubevirt{}
 
 func (k *kubevirt) DefaultCloudSpec(ctx context.Context, spec *kubermaticv1.CloudSpec) error {
 	if spec.Kubevirt == nil {
@@ -84,75 +80,6 @@ func (k *kubevirt) ValidateCloudSpec(ctx context.Context, spec kubermaticv1.Clou
 	spec.Kubevirt.Kubeconfig = string(config)
 
 	return nil
-}
-
-func (k *kubevirt) InitializeCloudProvider(ctx context.Context, cluster *kubermaticv1.Cluster, update provider.ClusterUpdater) (*kubermaticv1.Cluster, error) {
-	return k.reconcileCluster(ctx, cluster, update)
-}
-
-func (k *kubevirt) ReconcileCluster(ctx context.Context, cluster *kubermaticv1.Cluster, update provider.ClusterUpdater) (*kubermaticv1.Cluster, error) {
-	return k.reconcileCluster(ctx, cluster, update)
-}
-
-func (k *kubevirt) reconcileCluster(ctx context.Context, cluster *kubermaticv1.Cluster, update provider.ClusterUpdater) (*kubermaticv1.Cluster, error) {
-	client, err := k.GetClientForCluster(cluster.Spec.Cloud)
-	if err != nil {
-		return cluster, err
-	}
-
-	// If the cluster NamespaceName is not filled yet, return a conflict error:
-	// will requeue but not send an error event
-	if cluster.Status.NamespaceName == "" {
-		return cluster, apierrors.NewConflict(kubermaticv1.Resource("cluster"), cluster.Name, fmt.Errorf("cluster.Status.NamespaceName for cluster %s", cluster.Name))
-	}
-
-	cluster, err = reconcileNamespace(ctx, cluster.Status.NamespaceName, cluster, update, client)
-	if err != nil {
-		return cluster, err
-	}
-
-	err = reconcileCSIRoleRoleBinding(ctx, cluster.Status.NamespaceName, client)
-	if err != nil {
-		return cluster, err
-	}
-
-	err = reconcileInstancetypes(ctx, cluster.Status.NamespaceName, client)
-	if err != nil {
-		return cluster, err
-	}
-
-	err = reconcilePreferences(ctx, cluster.Status.NamespaceName, client)
-	if err != nil {
-		return cluster, err
-	}
-
-	err = reconcilePreAllocatedDataVolumes(ctx, cluster, client)
-	if err != nil {
-		return cluster, err
-	}
-
-	err = reconcileNetworkPolicy(ctx, cluster, client)
-
-	return cluster, err
-}
-
-func (k *kubevirt) CleanUpCloudProvider(ctx context.Context, cluster *kubermaticv1.Cluster, update provider.ClusterUpdater) (*kubermaticv1.Cluster, error) {
-	if !kuberneteshelper.HasFinalizer(cluster, FinalizerNamespace) {
-		return cluster, nil
-	}
-
-	client, err := k.GetClientForCluster(cluster.Spec.Cloud)
-	if err != nil {
-		return cluster, err
-	}
-
-	if err := deleteNamespace(ctx, cluster.Status.NamespaceName, client); err != nil && !apierrors.IsNotFound(err) {
-		return cluster, fmt.Errorf("failed to delete namespace %s: %w", cluster.Status.NamespaceName, err)
-	}
-
-	return update(ctx, cluster.Name, func(updatedCluster *kubermaticv1.Cluster) {
-		kuberneteshelper.RemoveFinalizer(updatedCluster, FinalizerNamespace)
-	})
 }
 
 func (k *kubevirt) ValidateCloudSpecUpdate(ctx context.Context, oldSpec kubermaticv1.CloudSpec, newSpec kubermaticv1.CloudSpec) error {

@@ -26,36 +26,8 @@ import (
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/test/diff"
 
-	"k8s.io/apimachinery/pkg/util/rand"
 	"k8s.io/apimachinery/pkg/util/sets"
 )
-
-func TestCreateVMFolder(t *testing.T) {
-	dc := getTestDC()
-	dc.RootPath = path.Join("/", vSphereDatacenter, "vm")
-
-	ctx := context.Background()
-	session, err := newSession(ctx, dc, vSphereUsername, vSpherePassword, nil)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	// Use a unique ID to prevent side effects when running this test concurrently
-	id := "kubermatic-e2e-" + rand.String(8)
-	folder := path.Join(dc.RootPath, id)
-
-	// Cheap way to test idempotency
-	for i := 0; i < 2; i++ {
-		if err := createVMFolder(ctx, session, folder); err != nil {
-			t.Fatal(err)
-		}
-	}
-	for i := 0; i < 2; i++ {
-		if err := deleteVMFolder(ctx, session, folder); err != nil {
-			t.Fatal(err)
-		}
-	}
-}
 
 func TestProvider_GetVMFolders(t *testing.T) {
 	tests := []struct {

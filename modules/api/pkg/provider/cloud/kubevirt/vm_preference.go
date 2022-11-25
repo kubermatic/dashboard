@@ -17,44 +17,11 @@ limitations under the License.
 package kubevirt
 
 import (
-	"context"
-
 	kvinstancetypev1alpha1 "kubevirt.io/api/instancetype/v1alpha1"
 
 	kvmanifests "k8c.io/dashboard/v2/pkg/provider/cloud/kubevirt/manifests"
-	"k8c.io/kubermatic/v2/pkg/resources/reconciling"
-
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
-
-func preferenceCreator(preference *kvinstancetypev1alpha1.VirtualMachinePreference) reconciling.NamedKvInstancetypeV1alpha1VirtualMachinePreferenceCreatorGetter {
-	return func() (string, reconciling.KvInstancetypeV1alpha1VirtualMachinePreferenceCreator) {
-		return preference.Name, func(p *kvinstancetypev1alpha1.VirtualMachinePreference) (*kvinstancetypev1alpha1.VirtualMachinePreference, error) {
-			p.Labels = preference.Labels
-			p.Spec = preference.Spec
-			return p, nil
-		}
-	}
-}
-
-// reconcilePreferences reconciles the Kubermatic standard VirtualMachinePreference into the dedicated namespace.
-func reconcilePreferences(ctx context.Context, namespace string, client ctrlruntimeclient.Client) error {
-	prefs := &kvinstancetypev1alpha1.VirtualMachinePreferenceList{}
-
-	// add Kubermatic standards
-	prefs.Items = append(prefs.Items, GetKubermaticStandardPreferences(client, &kvmanifests.StandardPreferenceGetter{})...)
-
-	for _, pref := range prefs.Items {
-		preferenceCreators := []reconciling.NamedKvInstancetypeV1alpha1VirtualMachinePreferenceCreatorGetter{
-			preferenceCreator(&pref),
-		}
-		if err := reconciling.ReconcileKvInstancetypeV1alpha1VirtualMachinePreferences(ctx, preferenceCreators, namespace, client); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
 
 // GetKubermaticStandardPreferences returns the Kubermatic standard VirtualMachinePreferences.
 func GetKubermaticStandardPreferences(client ctrlruntimeclient.Client, getter kvmanifests.ManifestFSGetter) []kvinstancetypev1alpha1.VirtualMachinePreference {

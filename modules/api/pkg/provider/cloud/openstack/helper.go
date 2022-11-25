@@ -19,9 +19,6 @@ package openstack
 import (
 	"errors"
 	"fmt"
-	"net/http"
-	"strings"
-
 	"github.com/gophercloud/gophercloud"
 	goopenstack "github.com/gophercloud/gophercloud/openstack"
 	osavailabilityzones "github.com/gophercloud/gophercloud/openstack/compute/v2/extensions/availabilityzones"
@@ -30,30 +27,15 @@ import (
 	ostokens "github.com/gophercloud/gophercloud/openstack/identity/v3/tokens"
 	osusers "github.com/gophercloud/gophercloud/openstack/identity/v3/users"
 	osextnetwork "github.com/gophercloud/gophercloud/openstack/networking/v2/extensions/external"
-	osrouters "github.com/gophercloud/gophercloud/openstack/networking/v2/extensions/layer3/routers"
 	ossecuritygroups "github.com/gophercloud/gophercloud/openstack/networking/v2/extensions/security/groups"
-	ossecuritygrouprules "github.com/gophercloud/gophercloud/openstack/networking/v2/extensions/security/rules"
 	"github.com/gophercloud/gophercloud/openstack/networking/v2/extensions/subnetpools"
 	osnetworks "github.com/gophercloud/gophercloud/openstack/networking/v2/networks"
-	osports "github.com/gophercloud/gophercloud/openstack/networking/v2/ports"
 	ossubnets "github.com/gophercloud/gophercloud/openstack/networking/v2/subnets"
 	"github.com/gophercloud/gophercloud/pagination"
-
-	"k8c.io/dashboard/v2/pkg/provider"
-	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
-
-	"k8s.io/utils/net"
-	"k8s.io/utils/pointer"
 )
 
 const (
 	subnetCIDR         = "192.168.1.0/24"
-	subnetFirstAddress = "192.168.1.2"
-	subnetLastAddress  = "192.168.1.254"
-
-	defaultIPv6SubnetCIDR = "fd00::/64"
-
-	resourceNamePrefix = "kubernetes-"
 )
 
 func getSecurityGroups(netClient *gophercloud.ServiceClient, opts ossecuritygroups.ListOpts) ([]ossecuritygroups.SecGroup, error) {
@@ -111,21 +93,6 @@ func getNetworkByName(netClient *gophercloud.ServiceClient, name string, isExter
 	}
 }
 
-func getExternalNetwork(netClient *gophercloud.ServiceClient) (*NetworkWithExternalExt, error) {
-	existingNetworks, err := getAllNetworks(netClient, osnetworks.ListOpts{})
-	if err != nil {
-		return nil, err
-	}
-
-	for _, n := range existingNetworks {
-		if n.External {
-			return &n, nil
-		}
-	}
-
-	return nil, errors.New("no external network found")
-}
-
 func validateSecurityGroupsExist(netClient *gophercloud.ServiceClient, securityGroups []string) error {
 	for _, sg := range securityGroups {
 		results, err := getSecurityGroups(netClient, ossecuritygroups.ListOpts{Name: sg})
@@ -137,301 +104,6 @@ func validateSecurityGroupsExist(netClient *gophercloud.ServiceClient, securityG
 		}
 	}
 	return nil
-}
-
-func deleteSecurityGroup(netClient *gophercloud.ServiceClient, sgName string) error {
-	results, err := getSecurityGroups(netClient, ossecuritygroups.ListOpts{Name: sgName})
-	if err != nil {
-		return fmt.Errorf("failed to get security group: %w", err)
-	}
-
-	for _, sg := range results {
-		res := ossecuritygroups.Delete(netClient, sg.ID)
-		if res.Err != nil {
-			return res.Err
-		}
-		if err := res.ExtractErr(); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-type createKubermaticSecurityGroupRequest struct {
-	clusterName    string
-	ipv4Rules      bool
-	ipv6Rules      bool
-	nodePortsCIDRs kubermaticv1.NetworkRanges
-	lowPort        int
-	highPort       int
-}
-
-func createKubermaticSecurityGroup(netClient *gophercloud.ServiceClient, req createKubermaticSecurityGroupRequest) (string, error) {
-	secGroupName := resourceNamePrefix + req.clusterName
-	secGroups, err := getSecurityGroups(netClient, ossecuritygroups.ListOpts{Name: secGroupName})
-	if err != nil {
-		return "", fmt.Errorf("failed to get security groups: %w", err)
-	}
-
-	var securityGroupID string
-	switch len(secGroups) {
-	case 0:
-		gres := ossecuritygroups.Create(netClient, ossecuritygroups.CreateOpts{
-			Name:        secGroupName,
-			Description: "Contains security rules for the Kubernetes worker nodes",
-		})
-		if gres.Err != nil {
-			return "", gres.Err
-		}
-		g, err := gres.Extract()
-		if err != nil {
-			return "", err
-		}
-		securityGroupID = g.ID
-	case 1:
-		securityGroupID = secGroups[0].ID
-	default:
-		return "", fmt.Errorf("there are already %d security groups with name %q, dont know which one to use",
-			len(secGroups), secGroupName)
-	}
-
-	var rules []ossecuritygrouprules.CreateOpts
-
-	if req.ipv4Rules {
-		rules = append(rules, []ossecuritygrouprules.CreateOpts{
-			{
-				// Allows ipv4 traffic within this group
-				Direction:     ossecuritygrouprules.DirIngress,
-				EtherType:     ossecuritygrouprules.EtherType4,
-				SecGroupID:    securityGroupID,
-				RemoteGroupID: securityGroupID,
-			},
-			{
-				// Allows ssh from external
-				Direction:    ossecuritygrouprules.DirIngress,
-				EtherType:    ossecuritygrouprules.EtherType4,
-				SecGroupID:   securityGroupID,
-				PortRangeMin: provider.DefaultSSHPort,
-				PortRangeMax: provider.DefaultSSHPort,
-				Protocol:     ossecuritygrouprules.ProtocolTCP,
-			},
-			{
-				// Allows ICMP traffic
-				Direction:  ossecuritygrouprules.DirIngress,
-				EtherType:  ossecuritygrouprules.EtherType4,
-				SecGroupID: securityGroupID,
-				Protocol:   ossecuritygrouprules.ProtocolICMP,
-			},
-		}...)
-	}
-
-	if req.ipv6Rules {
-		rules = append(rules, []ossecuritygrouprules.CreateOpts{
-			{
-				// Allows ipv6 traffic within this group
-				Direction:     ossecuritygrouprules.DirIngress,
-				EtherType:     ossecuritygrouprules.EtherType6,
-				SecGroupID:    securityGroupID,
-				RemoteGroupID: securityGroupID,
-			},
-			{
-				// Allows ssh from external
-				Direction:    ossecuritygrouprules.DirIngress,
-				EtherType:    ossecuritygrouprules.EtherType6,
-				SecGroupID:   securityGroupID,
-				PortRangeMin: provider.DefaultSSHPort,
-				PortRangeMax: provider.DefaultSSHPort,
-				Protocol:     ossecuritygrouprules.ProtocolTCP,
-			},
-			{
-				// Allows ICMPv6 traffic
-				Direction:  ossecuritygrouprules.DirIngress,
-				EtherType:  ossecuritygrouprules.EtherType6,
-				SecGroupID: securityGroupID,
-				Protocol:   ossecuritygrouprules.ProtocolIPv6ICMP,
-			},
-		}...)
-	}
-
-	for _, cidr := range req.nodePortsCIDRs.CIDRBlocks {
-		tcp := ossecuritygrouprules.CreateOpts{
-			// Allows TCP traffic to nodePorts from external
-			Direction:      ossecuritygrouprules.DirIngress,
-			SecGroupID:     securityGroupID,
-			PortRangeMin:   req.lowPort,
-			PortRangeMax:   req.highPort,
-			Protocol:       ossecuritygrouprules.ProtocolTCP,
-			RemoteIPPrefix: cidr,
-		}
-		udp := ossecuritygrouprules.CreateOpts{
-			// Allows UDP traffic to nodePorts from external
-			Direction:      ossecuritygrouprules.DirIngress,
-			SecGroupID:     securityGroupID,
-			PortRangeMin:   req.lowPort,
-			PortRangeMax:   req.highPort,
-			Protocol:       ossecuritygrouprules.ProtocolUDP,
-			RemoteIPPrefix: cidr,
-		}
-		if net.IsIPv4CIDRString(cidr) {
-			tcp.EtherType = ossecuritygrouprules.EtherType4
-			udp.EtherType = ossecuritygrouprules.EtherType4
-		} else {
-			tcp.EtherType = ossecuritygrouprules.EtherType6
-			udp.EtherType = ossecuritygrouprules.EtherType6
-		}
-		rules = append(rules, tcp, udp)
-	}
-
-	for _, opts := range rules {
-	reiterate:
-		rres := ossecuritygrouprules.Create(netClient, opts)
-		if rres.Err != nil {
-			var unexpected gophercloud.ErrUnexpectedResponseCode
-			if errors.As(rres.Err, &unexpected) && unexpected.Actual == http.StatusConflict {
-				// already exists
-				continue
-			}
-
-			if errors.As(rres.Err, &gophercloud.ErrDefault400{}) && opts.Protocol == ossecuritygrouprules.ProtocolIPv6ICMP {
-				// workaround for old versions of Openstack with different protocol name,
-				// from before https://review.opendev.org/#/c/252155/
-				opts.Protocol = "icmpv6"
-				goto reiterate // I'm very sorry, but this was really the cleanest way.
-			}
-
-			return "", rres.Err
-		}
-
-		if _, err := rres.Extract(); err != nil {
-			return "", err
-		}
-	}
-
-	return secGroupName, nil
-}
-
-func createKubermaticNetwork(netClient *gophercloud.ServiceClient, clusterName string) (*osnetworks.Network, error) {
-	iTrue := true
-	res := osnetworks.Create(netClient, osnetworks.CreateOpts{
-		Name:         resourceNamePrefix + clusterName,
-		AdminStateUp: &iTrue,
-	})
-	if res.Err != nil {
-		return nil, res.Err
-	}
-	return res.Extract()
-}
-
-func deleteNetworkByName(netClient *gophercloud.ServiceClient, networkName string) error {
-	network, err := getNetworkByName(netClient, networkName, false)
-	if err != nil {
-		return fmt.Errorf("failed to get network '%s' by name: %w", networkName, err)
-	}
-
-	res := osnetworks.Delete(netClient, network.ID)
-	if res.Err != nil {
-		return res.Err
-	}
-	return res.ExtractErr()
-}
-
-func deleteSubnet(netClient *gophercloud.ServiceClient, subnetID string) error {
-	res := ossubnets.Delete(netClient, subnetID)
-	if res.Err != nil {
-		return res.Err
-	}
-	return res.ExtractErr()
-}
-
-func deleteRouter(netClient *gophercloud.ServiceClient, routerID string) error {
-	res := osrouters.Delete(netClient, routerID)
-	if res.Err != nil {
-		return res.Err
-	}
-	return res.ExtractErr()
-}
-
-func createKubermaticSubnet(netClient *gophercloud.ServiceClient, clusterName, networkID string, dnsServers []string) (*ossubnets.Subnet, error) {
-	iTrue := true
-	subnetOpts := ossubnets.CreateOpts{
-		Name:       resourceNamePrefix + clusterName,
-		NetworkID:  networkID,
-		IPVersion:  gophercloud.IPv4,
-		CIDR:       subnetCIDR,
-		GatewayIP:  nil,
-		EnableDHCP: &iTrue,
-		AllocationPools: []ossubnets.AllocationPool{
-			{
-				Start: subnetFirstAddress,
-				End:   subnetLastAddress,
-			},
-		},
-	}
-
-	for _, s := range dnsServers {
-		if net.IsIPv4String(s) {
-			subnetOpts.DNSNameservers = append(subnetOpts.DNSNameservers, s)
-		}
-	}
-
-	res := ossubnets.Create(netClient, subnetOpts)
-	if res.Err != nil {
-		return nil, res.Err
-	}
-	return res.Extract()
-}
-
-func createKubermaticIPv6Subnet(netClient *gophercloud.ServiceClient, clusterName, networkID, subnetPoolName string, dnsServers []string) (*ossubnets.Subnet, error) {
-	subnetOpts := ossubnets.CreateOpts{
-		Name:            resourceNamePrefix + clusterName + "-ipv6",
-		NetworkID:       networkID,
-		IPVersion:       gophercloud.IPv6,
-		GatewayIP:       nil,
-		EnableDHCP:      pointer.Bool(true),
-		IPv6AddressMode: "dhcpv6-stateless",
-		IPv6RAMode:      "dhcpv6-stateless",
-	}
-	subnetPoolID := ""
-
-	// if IPv6 subnet pool name is provided - resolve to ID
-	if subnetPoolName != "" {
-		subnetPool, err := getSubnetPoolByName(netClient, subnetPoolName)
-		if err != nil {
-			return nil, err
-		}
-		subnetPoolID = subnetPool.ID
-	}
-
-	// if IPv6 subnet pool name is not provided - look for the default IPv6 subnet pool
-	if subnetPoolID == "" {
-		pools, err := getAllSubnetPools(netClient, subnetpools.ListOpts{IPVersion: 6, IsDefault: pointer.Bool(true)})
-		if err != nil {
-			return nil, err
-		}
-		if len(pools) > 0 {
-			subnetPoolID = pools[0].ID
-		}
-	}
-
-	if subnetPoolID != "" {
-		subnetOpts.SubnetPoolID = subnetPoolID
-	} else {
-		// if no IPv6 subnet pool was provided / found, use the default IPv6 subnet CIDR
-		subnetOpts.CIDR = defaultIPv6SubnetCIDR
-	}
-
-	for _, s := range dnsServers {
-		if net.IsIPv6String(s) {
-			subnetOpts.DNSNameservers = append(subnetOpts.DNSNameservers, s)
-		}
-	}
-
-	res := ossubnets.Create(netClient, subnetOpts)
-	if res.Err != nil {
-		return nil, res.Err
-	}
-	return res.Extract()
 }
 
 func getSubnetPoolByName(netClient *gophercloud.ServiceClient, name string) (*subnetpools.SubnetPool, error) {
@@ -459,51 +131,6 @@ func getAllSubnetPools(netClient *gophercloud.ServiceClient, listOpts subnetpool
 		return nil, err
 	}
 	return allSubnetPools, nil
-}
-
-func createKubermaticRouter(netClient *gophercloud.ServiceClient, clusterName, extNetworkName string) (*osrouters.Router, error) {
-	extNetwork, err := getNetworkByName(netClient, extNetworkName, true)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get external network %q: %w", extNetworkName, err)
-	}
-
-	iTrue := true
-	gwi := osrouters.GatewayInfo{
-		NetworkID: extNetwork.ID,
-	}
-
-	res := osrouters.Create(netClient, osrouters.CreateOpts{
-		Name:         resourceNamePrefix + clusterName,
-		AdminStateUp: &iTrue,
-		GatewayInfo:  &gwi,
-	})
-	if res.Err != nil {
-		return nil, res.Err
-	}
-	return res.Extract()
-}
-
-func attachSubnetToRouter(netClient *gophercloud.ServiceClient, subnetID, routerID string) (*osrouters.InterfaceInfo, error) {
-	interf, err := func() (*osrouters.InterfaceInfo, error) {
-		res := osrouters.AddInterface(netClient, routerID, osrouters.AddInterfaceOpts{
-			SubnetID: subnetID,
-		})
-		if res.Err != nil {
-			return nil, res.Err
-		}
-		return res.Extract()
-	}()
-	return interf, ignoreRouterAlreadyHasPortInSubnetError(err, subnetID)
-}
-
-func detachSubnetFromRouter(netClient *gophercloud.ServiceClient, subnetID, routerID string) (*osrouters.InterfaceInfo, error) {
-	res := osrouters.RemoveInterface(netClient, routerID, osrouters.RemoveInterfaceOpts{
-		SubnetID: subnetID,
-	})
-	if res.Err != nil {
-		return nil, res.Err
-	}
-	return res.Extract()
 }
 
 func getFlavors(authClient *gophercloud.ProviderClient, region string) ([]osflavors.Flavor, error) {
@@ -598,49 +225,12 @@ func getSubnetForNetwork(netClient *gophercloud.ServiceClient, networkIDOrName s
 	return allSubnets, nil
 }
 
-func isNotFoundErr(err error) bool {
-	var errNotFound gophercloud.ErrDefault404
-
-	return errors.As(err, &errNotFound) || strings.Contains(err.Error(), "not found")
-}
 
 func isEndpointNotFoundErr(err error) bool {
 	var endpointNotFoundErr *gophercloud.ErrEndpointNotFound
 	// left side of the || to catch any error returned as pointer to struct (current case of gophercloud)
 	// right side of the || to catch any error returned as struct (in case...)
 	return errors.As(err, &endpointNotFoundErr) || errors.As(err, &gophercloud.ErrEndpointNotFound{})
-}
-
-func getRouterIDForSubnet(netClient *gophercloud.ServiceClient, subnetID string) (string, error) {
-	ports, err := getAllNetworkPorts(netClient, subnetID)
-	if err != nil {
-		return "", fmt.Errorf("failed to list ports for subnet: %w", err)
-	}
-
-	for _, port := range ports {
-		if port.DeviceOwner == "network:router_interface" || port.DeviceOwner == "network:router_interface_distributed" || port.DeviceOwner == "network:ha_router_replicated_interface" {
-			// Check IP for the interface & check if the IP belongs to the subnet
-			return port.DeviceID, nil
-		}
-	}
-
-	return "", nil
-}
-
-func getAllNetworkPorts(netClient *gophercloud.ServiceClient, subnetID string) ([]osports.Port, error) {
-	allPages, err := osports.List(netClient, osports.ListOpts{
-		FixedIPs: []osports.FixedIPOpts{{SubnetID: subnetID}},
-	}).AllPages()
-	if err != nil {
-		return nil, err
-	}
-
-	allPorts, err := osports.ExtractPorts(allPages)
-	if err != nil {
-		return nil, err
-	}
-
-	return allPorts, nil
 }
 
 func getAvailabilityZones(computeClient *gophercloud.ServiceClient) ([]osavailabilityzones.AvailabilityZone, error) {

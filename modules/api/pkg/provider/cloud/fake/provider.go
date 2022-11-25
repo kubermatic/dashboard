@@ -45,14 +45,6 @@ func (p *fakeCloudProvider) ValidateCloudSpec(_ context.Context, _ kubermaticv1.
 	return nil
 }
 
-func (p *fakeCloudProvider) InitializeCloudProvider(_ context.Context, cluster *kubermaticv1.Cluster, _ provider.ClusterUpdater) (*kubermaticv1.Cluster, error) {
-	return cluster, nil
-}
-
-func (p *fakeCloudProvider) CleanUpCloudProvider(_ context.Context, cluster *kubermaticv1.Cluster, _ provider.ClusterUpdater) (*kubermaticv1.Cluster, error) {
-	return cluster, nil
-}
-
 // ValidateCloudSpecUpdate verifies whether an update of cloud spec is valid and permitted.
 func (p *fakeCloudProvider) ValidateCloudSpecUpdate(_ context.Context, _ kubermaticv1.CloudSpec, _ kubermaticv1.CloudSpec) error {
 	return nil
