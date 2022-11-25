@@ -21,7 +21,8 @@ limitations under the License.
   <div [fxFlex]="flipLayout ? '100%' : '50%'"
        fxLayout="column">
     <div class="step">
-      <div [class]="clusterTemplateEditMode ? 'header' : 'header counter-1'">Provider</div>
+      <div class="header"
+           [ngClass]="clusterTemplateEditMode ? '' : 'counter-1'">Provider</div>
       <div class="info-container">
         <div class="container-spacing"
              fxLayout="row wrap">
@@ -40,7 +41,8 @@ limitations under the License.
 
     <div fxLayout="column"
          class="step">
-      <div [class]="clusterTemplateEditMode ? 'header counter-1' : 'header counter-2'">Cluster</div>
+      <div class="header"
+           [ngClass]="clusterTemplateEditMode ? 'counter-1' : 'counter-2'">Cluster</div>
       <div class="info-container"
            fxLayout="row wrap">
         <div class="container-spacing">
@@ -260,7 +262,8 @@ limitations under the License.
 
     <div *ngIf="cluster.credential || displaySettings()"
          class="step">
-      <div [class]="clusterTemplateEditMode ? 'header counter-2' : 'header counter-3'">Settings</div>
+      <div class="header"
+           [ngClass]="clusterTemplateEditMode ? 'counter-2' : 'counter-3'">Settings</div>
       <div class="properties"
            [fxLayout]="cluster.spec.cloud?.kubevirt ? 'column' : 'row wrap'">
         <km-property *ngIf="cluster.credential">
@@ -535,7 +538,8 @@ limitations under the License.
     <div class="step padding-top"
          [class.padding-top-force]="flipLayout">
       <ng-container *ngIf="!cluster.spec.cloud?.bringyourown">
-        <div [class]="clusterTemplateEditMode ? 'header counter-3' : 'header counter-4'">Initial Nodes</div>
+        <div class="header"
+             [ngClass]="clusterTemplateEditMode ? 'counter-3' : 'counter-4'">Initial Nodes</div>
         <div class="info-container">
           <div class="container-spacing">
             <div class="section-header">GENERAL</div>
@@ -1004,15 +1008,15 @@ limitations under the License.
 
               <!-- AWS Node Options -->
               <ng-container *ngIf="cluster.spec.cloud?.aws">
-                <km-property-boolean *ngIf="machineDeployment.spec.template.cloud?.aws?.isSpotInstance"
+                <km-property-boolean *ngIf="machineDeployment.spec.template.cloud?.aws?.isSpotInstance !== undefined"
                                      label="Spot Instance"
                                      [value]="machineDeployment.spec.template.cloud?.aws?.isSpotInstance">
                 </km-property-boolean>
-                <km-property-boolean *ngIf="machineDeployment.spec.template.cloud?.aws?.spotInstancePersistentRequest"
+                <km-property-boolean *ngIf="machineDeployment.spec.template.cloud?.aws?.spotInstancePersistentRequest !== undefined"
                                      label="Spot Instance Persistent Request"
                                      [value]="machineDeployment.spec.template.cloud.aws.spotInstancePersistentRequest">
                 </km-property-boolean>
-                <km-property-boolean *ngIf="machineDeployment.spec.template.cloud?.aws?.assignPublicIP"
+                <km-property-boolean *ngIf="machineDeployment.spec.template.cloud?.aws?.assignPublicIP !== undefined"
                                      label="Assign Public IP"
                                      [value]="machineDeployment.spec.template.cloud?.aws?.assignPublicIP">
                 </km-property-boolean>
@@ -1130,7 +1134,8 @@ limitations under the License.
     </div>
 
     <div class="step">
-      <div [class]="clusterTemplateEditMode ? 'header counter-4' : 'header counter-5'">Applications</div>
+      <div class="header"
+           [ngClass]="clusterTemplateEditMode ? 'counter-4' : 'counter-5'">Applications</div>
       <div class="applications-summary"
            [fxLayoutAlign]="flipLayout ? ' center' : ''">
         <km-application-list *ngIf="applications?.length; else noApplications"

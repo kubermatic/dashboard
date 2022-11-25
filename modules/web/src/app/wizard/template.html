@@ -23,6 +23,16 @@ limitations under the License.
 <form [formGroup]="form"
       *ngIf="!loadingClusterTemplate">
   <mat-card fxFlex="100%">
+    <div *ngIf="clusterTemplateID"
+         fxLayout="row">
+      <mat-card-header class="km-no-padding"
+                       fxLayout="row"
+                       fxLayoutGap="40px">
+        <mat-card-title>
+          <div>Customize Cluster Template</div>
+        </mat-card-title>
+      </mat-card-header>
+    </div>
     <mat-horizontal-stepper linear
                             disableRipple
                             style="transition: none;"

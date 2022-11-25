@@ -136,7 +136,6 @@ export class ClusterSSHKeysComponent extends BaseFormValidator implements OnInit
 
   writeValue(keys: SSHKey[]): void {
     this.form.get(Controls.Keys).setValue(keys, {emitEvent: false});
-    this.keys = keys;
   }
 
   private _getSelectedKeys(): SSHKey[] {

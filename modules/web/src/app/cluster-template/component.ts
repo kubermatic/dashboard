@@ -176,13 +176,20 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
     );
   }
 
-  canEdit(): boolean {
-    return MemberUtils.hasPermission(
-      this.currentUser,
-      this._currentGroupConfig,
-      View.ClusterTemplates,
-      Permission.Edit
-    );
+  canEdit(template: ClusterTemplate): boolean {
+    switch (template.scope) {
+      case ClusterTemplateScope.Global:
+        return this.currentUser.isAdmin;
+      case ClusterTemplateScope.User:
+        return this.currentUser.isAdmin || this.currentUser.email === template.user;
+      case ClusterTemplateScope.Project:
+        return MemberUtils.hasPermission(
+          this.currentUser,
+          this._currentGroupConfig,
+          View.ClusterTemplates,
+          Permission.Edit
+        );
+    }
   }
 
   create(): void {

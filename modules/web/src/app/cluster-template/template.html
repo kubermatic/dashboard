@@ -106,7 +106,7 @@ limitations under the License.
                 <button mat-icon-button
                         matTooltip="Edit Cluster Template"
                         (click)="editClusterTemplate(element)"
-                        [disabled]="!canEdit()">
+                        [disabled]="!canEdit(element)">
                   <i class="km-icon-mask km-icon-edit"></i>
                 </button>
                 <button mat-icon-button
