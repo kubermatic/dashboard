@@ -14,7 +14,6 @@
 
 import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {isEnterpriseEdition} from '@app/dynamic/common';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {environment} from '@environments/environment';
@@ -24,6 +23,7 @@ import {BehaviorSubject, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {HistoryService} from '@core/services/history';
 import {AdminPanelMainSections, AdminPanelView, AdminPanelViewDisplayName} from '@app/shared/entity/common';
+import {DynamicModule} from '@app/dynamic/module-registry';
 @Component({
   selector: 'km-admin-sidenav',
   templateUrl: './template.html',
@@ -35,6 +35,7 @@ export class AdminSidenavComponent implements OnInit, OnDestroy {
   settings: UserSettings;
   currentUser: Member;
   screenWidth = 0;
+  readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   readonly adminPanelView = AdminPanelView;
   readonly adminPanelViewDisplayName = AdminPanelViewDisplayName;
   readonly adminPanelMainSections = AdminPanelMainSections;
@@ -42,10 +43,6 @@ export class AdminSidenavComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();
   private _isSidenavCollapsed = false;
   private _screenWidth = new BehaviorSubject<number>(window.innerWidth);
-
-  get isEnterpriseEdition(): boolean {
-    return isEnterpriseEdition();
-  }
 
   get isSidenavCollapsed(): boolean {
     const maxScreenWidth = 1200;

@@ -39,6 +39,10 @@ export class DynamicDatacenters extends PageOptions implements Page {
     return this._dcName;
   }
 
+  manageResourcesSideNavItem(): void {
+    this.Elements.manageResourcesNavField.click();
+  }
+
   visit(): void {
     this.Elements.navItem.click();
   }
@@ -113,6 +117,10 @@ class Elements extends PageOptions {
 
   get addDatacenterLocationInput(): Cypress.Chainable {
     return this._get('#km-add-dc-location-input');
+  }
+
+  get manageResourcesNavField(): Cypress.Chainable {
+    return this._get('#km-side-nav-field-Manage-Resources');
   }
 
   get navItem(): Cypress.Chainable {

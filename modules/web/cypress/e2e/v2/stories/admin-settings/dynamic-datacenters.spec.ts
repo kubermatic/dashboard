@@ -44,7 +44,7 @@ describe('Admin Settings - Dynamic Datacenters Story', () => {
   it('should go to the admin settings - dynamic datacenters page', () => {
     Pages.AdminSettings.visit();
     Pages.expect(View.AdminSettings.DefaultsAndLimits);
-
+    Pages.AdminSettings.DynamicDatacenters.manageResourcesSideNavItem();
     Pages.AdminSettings.DynamicDatacenters.visit();
     Pages.expect(View.AdminSettings.DynamicDatacenters);
   });

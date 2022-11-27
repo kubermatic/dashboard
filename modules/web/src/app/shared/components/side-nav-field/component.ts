@@ -38,6 +38,10 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked {
     return this._expanded;
   }
 
+  get id(): string {
+    return this.label.replace(' ', '-');
+  }
+
   ngAfterViewChecked(): void {
     if (this.isExpandedActive()) {
       this._expanded = true;
@@ -46,6 +50,17 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked {
   }
 
   isExpandedActive(): boolean {
+    const urlArray = this._router.routerState.snapshot.url.split('/');
+
+    if (urlArray.includes(View.Settings)) {
+      return this.isAdminSettingsExpandedActive();
+    } else if (urlArray.includes(View.Projects)) {
+      return this.isProjectExpandedActive();
+    }
+    return false;
+  }
+
+  isProjectExpandedActive(): boolean {
     switch (this.label) {
       case ProjectSidenavMainSection.Resources:
         return this.checkUrl(View.Clusters) || this.checkUrl(View.ExternalClusters);
@@ -58,6 +73,13 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked {
           this.checkUrl(View.Groups) ||
           this.checkUrl(View.ServiceAccounts)
         );
+      default:
+        return false;
+    }
+  }
+
+  isAdminSettingsExpandedActive(): boolean {
+    switch (this.label) {
       case this.adminPanelMainSections.Interface:
         return (
           this.checkUrl(AdminPanelView.Defaults) ||
@@ -70,7 +92,8 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked {
           this.checkUrl(AdminPanelView.ProviderPresets) ||
           this.checkUrl(AdminPanelView.BackupDestinations) ||
           this.checkUrl(AdminPanelView.ProjectQuotas) ||
-          this.checkUrl(AdminPanelView.OPA)
+          this.checkUrl(AdminPanelView.OPA) ||
+          this.checkUrl(AdminPanelView.SeedConfiguration)
         );
       case this.adminPanelMainSections.Monitoring:
         return this.checkUrl(AdminPanelView.RuleGroups) || this.checkUrl(AdminPanelView.Metering);

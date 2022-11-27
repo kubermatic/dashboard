@@ -40,12 +40,11 @@ export class CustomizationComponent implements OnInit, OnDestroy {
   constructor(
     private readonly _userService: UserService,
     private readonly _settingsService: SettingsService,
-    private readonly _notificationService: NotificationService,
+    private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
     this._userService.currentUser.pipe(take(1)).subscribe(user => (this.user = user));
-
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       if (!_.isEqual(settings, this.apiSettings)) {
@@ -85,7 +84,6 @@ export class CustomizationComponent implements OnInit, OnDestroy {
       this.isEqual(this.settings.displayTermsOfService, this.apiSettings.displayTermsOfService)
     );
   }
-
 
   private _applySettings(settings: AdminSettings): void {
     this.apiSettings = settings;

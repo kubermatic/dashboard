@@ -39,7 +39,6 @@ export class DefaultsAndLimitsComponent implements OnInit, OnDestroy {
   isOIDCKubeCfgEndpointEnabled = true;
   isOpenIDAuthPluginEnabled = true;
 
-
   readonly adminPanelView = AdminPanelView;
   private readonly _debounceTime = 500;
   private _settingsChange = new Subject<void>();
@@ -147,5 +146,4 @@ export class DefaultsAndLimitsComponent implements OnInit, OnDestroy {
     const urlArray = this._router.routerState.snapshot.url.split('/');
     this.interfaceTypeUrl = urlArray[urlArray.length - 1];
   }
-
 }

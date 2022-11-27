@@ -23,7 +23,7 @@ limitations under the License.
                      [isSidenavCollapsed]="isSidenavCollapsed">
     <ng-container *ngIf="!isSidenavCollapsed">
       <div class="sub-menu-item"
-      routerLinkActive="active">
+           routerLinkActive="active">
         <a id="km-nav-item-defaults"
            fxLayoutAlign=" center"
            [routerLink]="getRouterLink(adminPanelView.Defaults)">
@@ -32,7 +32,7 @@ limitations under the License.
       </div>
 
       <div class="sub-menu-item"
-      routerLinkActive="active">
+           routerLinkActive="active">
         <a fxLayoutAlign=" center"
            [routerLink]="getRouterLink(adminPanelView.Limits)">
           <span>{{adminPanelViewDisplayName.Limits}}</span>
@@ -60,216 +60,216 @@ limitations under the License.
       </a>
 
       <a mat-menu-item
-      fxLayoutAlign=" center"
-      routerLinkActive="active"
-      [routerLink]="getRouterLink(adminPanelView.Limits)"
-      class="collapsed-sub-menu-item">
-     <span>{{adminPanelViewDisplayName.Limits}}</span>
-   </a>
+         fxLayoutAlign=" center"
+         routerLinkActive="active"
+         [routerLink]="getRouterLink(adminPanelView.Limits)"
+         class="collapsed-sub-menu-item">
+        <span>{{adminPanelViewDisplayName.Limits}}</span>
+      </a>
 
-   <a mat-menu-item
-   fxLayoutAlign=" center"
-   routerLinkActive="active"
-   [routerLink]="getRouterLink(adminPanelView.Customization)"
-   class="collapsed-sub-menu-item">
-  <span>{{adminPanelViewDisplayName.Customization}}</span>
-</a>
+      <a mat-menu-item
+         fxLayoutAlign=" center"
+         routerLinkActive="active"
+         [routerLink]="getRouterLink(adminPanelView.Customization)"
+         class="collapsed-sub-menu-item">
+        <span>{{adminPanelViewDisplayName.Customization}}</span>
+      </a>
     </ng-container>
   </km-side-nav-field>
 
-    <km-side-nav-field [label]="adminPanelMainSections.ManageResources"
+  <km-side-nav-field [label]="adminPanelMainSections.ManageResources"
                      icon="km-icon-node"
                      [isSidenavCollapsed]="isSidenavCollapsed">
-      <ng-container *ngIf="!isSidenavCollapsed">
+    <ng-container *ngIf="!isSidenavCollapsed">
 
-        <div class="sub-menu-item"
-        routerLinkActive="active">
-     <a  id="km-nav-item-SeedConfiguration"
+      <div class="sub-menu-item"
+           routerLinkActive="active">
+        <a id="km-nav-item-SeedConfiguration"
+           fxLayoutAlign=" center"
+           [routerLink]="getRouterLink(adminPanelView.SeedConfiguration)">
+          <span>{{adminPanelViewDisplayName.SeedConfiguration}}</span>
+        </a>
+      </div>
+
+      <div class="sub-menu-item"
+           routerLinkActive="active">
+        <a id="km-nav-item-dc"
+           fxLayoutAlign=" center"
+           [routerLink]="getRouterLink(adminPanelView.Datacenters)">
+          <span>{{adminPanelViewDisplayName.Datacenters}}</span>
+        </a>
+      </div>
+
+      <div class="sub-menu-item"
+           routerLinkActive="active">
+        <a id="km-nav-item-presets"
+           [routerLink]="getRouterLink(adminPanelView.ProviderPresets)"
+           fxLayoutAlign=" center">
+          <span>{{adminPanelViewDisplayName.ProviderPresets}}</span>
+        </a>
+      </div>
+
+      <div class="sub-menu-item"
+           routerLinkActive="active">
+        <a id="km-nav-item-backupdestinations"
+           [routerLink]="getRouterLink(adminPanelView.BackupDestinations)"
+           fxLayoutAlign=" center">
+          <span>{{adminPanelViewDisplayName.BackupDestinations}}</span>
+        </a>
+      </div>
+
+      <div class="sub-menu-item"
+           *ngIf="isEnterpriseEdition"
+           routerLinkActive="active">
+        <a id="km-nav-item-quotas"
+           [routerLink]="getRouterLink(adminPanelView.ProjectQuotas)"
+           fxLayoutAlign=" center">
+          <span>{{adminPanelViewDisplayName.ProjectQuotas}}</span>
+        </a>
+      </div>
+
+      <div class="sub-menu-item"
+           routerLinkActive="active">
+        <a id="km-nav-item-opa"
+           [routerLink]="getRouterLink(adminPanelView.OPA)"
+           fxLayoutAlign=" center">
+          <span>{{adminPanelViewDisplayName.OPA}}</span>
+        </a>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="isSidenavCollapsed">
+      <a mat-menu-item
          fxLayoutAlign=" center"
-         [routerLink]="getRouterLink(adminPanelView.SeedConfiguration)">
-       <span>{{adminPanelViewDisplayName.SeedConfiguration}}</span>
-     </a>
-   </div>
+         routerLinkActive="active"
+         [routerLink]="getRouterLink(adminPanelView.SeedConfiguration)"
+         class="collapsed-sub-menu-item">
+        <span>{{adminPanelViewDisplayName.SeedConfiguration}}</span>
+      </a>
 
-        <div class="sub-menu-item"
-        routerLinkActive="active">
-          <a  id="km-nav-item-dc"
-              fxLayoutAlign=" center"
-              [routerLink]="getRouterLink(adminPanelView.Datacenters)">
-            <span>{{adminPanelViewDisplayName.Datacenters}}</span>
-          </a>
-        </div>
+      <a mat-menu-item
+         fxLayoutAlign=" center"
+         routerLinkActive="active"
+         [routerLink]="getRouterLink(adminPanelView.Datacenters)"
+         class="collapsed-sub-menu-item">
+        <span>{{adminPanelViewDisplayName.Datacenters}}</span>
+      </a>
 
-        <div class="sub-menu-item"
-        routerLinkActive="active">
-          <a id="km-nav-item-presets"
-             [routerLink]="getRouterLink(adminPanelView.ProviderPresets)"
-             fxLayoutAlign=" center">
-            <span>{{adminPanelViewDisplayName.ProviderPresets}}</span>
-          </a>
-        </div>
+      <a mat-menu-item
+         fxLayoutAlign=" center"
+         routerLinkActive="active"
+         [routerLink]="getRouterLink(adminPanelView.ProviderPresets)"
+         class="collapsed-sub-menu-item">
+        <span>{{adminPanelViewDisplayName.ProviderPresets}}</span>
+      </a>
 
-        <div class="sub-menu-item"
-        routerLinkActive="active">
-          <a id="km-nav-item-backupdestinations"
-             [routerLink]="getRouterLink(adminPanelView.BackupDestinations)"
-             fxLayoutAlign=" center">
-            <span>{{adminPanelViewDisplayName.BackupDestinations}}</span>
-          </a>
-        </div>
+      <a mat-menu-item
+         fxLayoutAlign=" center"
+         routerLinkActive="active"
+         [routerLink]="getRouterLink(adminPanelView.BackupDestinations)"
+         class="collapsed-sub-menu-item">
+        <span>{{adminPanelViewDisplayName.BackupDestinations}}</span>
+      </a>
 
-        <div class="sub-menu-item"
-             *ngIf="isEnterpriseEdition"
-             routerLinkActive="active">
-          <a id="km-nav-item-quotas"
-             [routerLink]="getRouterLink(adminPanelView.ProjectQuotas)"
-             fxLayoutAlign=" center">
-            <span>{{adminPanelViewDisplayName.ProjectQuotas}}</span>
-          </a>
-        </div>
+      <a mat-menu-item
+         fxLayoutAlign=" center"
+         routerLinkActive="active"
+         [routerLink]="getRouterLink(adminPanelView.ProjectQuotas)"
+         class="collapsed-sub-menu-item">
+        <span>{{adminPanelViewDisplayName.ProjectQuotas}}</span>
+      </a>
 
-        <div class="sub-menu-item"
-        routerLinkActive="active">
-          <a id="km-nav-item-opa"
-             [routerLink]="getRouterLink(adminPanelView.OPA)"
-             fxLayoutAlign=" center">
-            <span>{{adminPanelViewDisplayName.OPA}}</span>
-          </a>
-        </div>        
-      </ng-container>
+      <a mat-menu-item
+         fxLayoutAlign=" center"
+         routerLinkActive="active"
+         [routerLink]="getRouterLink(adminPanelView.OPA)"
+         class="collapsed-sub-menu-item">
+        <span>{{adminPanelViewDisplayName.OPA}}</span>
+      </a>
+    </ng-container>
+  </km-side-nav-field>
 
-      <ng-container *ngIf="isSidenavCollapsed">
-        <a mat-menu-item
-        fxLayoutAlign=" center"
-        routerLinkActive="active"
-        [routerLink]="getRouterLink(adminPanelView.SeedConfiguration)"
-        class="collapsed-sub-menu-item">
-       <span>{{adminPanelViewDisplayName.SeedConfiguration}}</span>
-     </a>
-
-     <a mat-menu-item
-     fxLayoutAlign=" center"
-     routerLinkActive="active"
-     [routerLink]="getRouterLink(adminPanelView.Datacenters)"
-     class="collapsed-sub-menu-item">
-    <span>{{adminPanelViewDisplayName.Datacenters}}</span>
-  </a>
-
-  <a mat-menu-item
-  fxLayoutAlign=" center"
-  routerLinkActive="active"
-  [routerLink]="getRouterLink(adminPanelView.ProviderPresets)"
-  class="collapsed-sub-menu-item">
- <span>{{adminPanelViewDisplayName.ProviderPresets}}</span>
-</a>
-
-<a mat-menu-item
-fxLayoutAlign=" center"
-routerLinkActive="active"
-[routerLink]="getRouterLink(adminPanelView.BackupDestinations)"
-class="collapsed-sub-menu-item">
-<span>{{adminPanelViewDisplayName.BackupDestinations}}</span>
-</a>
-
-<a mat-menu-item
-fxLayoutAlign=" center"
-routerLinkActive="active"
-[routerLink]="getRouterLink(adminPanelView.ProjectQuotas)"
-class="collapsed-sub-menu-item">
-<span>{{adminPanelViewDisplayName.ProjectQuotas}}</span>
-</a>
-
-<a mat-menu-item
-fxLayoutAlign=" center"
-routerLinkActive="active"
-[routerLink]="getRouterLink(adminPanelView.OPA)"
-class="collapsed-sub-menu-item">
-<span>{{adminPanelViewDisplayName.OPA}}</span>
-</a>
-      </ng-container>
-    </km-side-nav-field>
-    
-    <km-side-nav-field [label]="adminPanelMainSections.Monitoring"
+  <km-side-nav-field [label]="adminPanelMainSections.Monitoring"
                      icon="km-icon-metering"
                      [isSidenavCollapsed]="isSidenavCollapsed">
-      <ng-container *ngIf="!isSidenavCollapsed">
-        <div class="sub-menu-item"
-        routerLinkActive="active">
-          <a  id="km-nav-item-rulegroups"
-              fxLayoutAlign=" center"
-              [routerLink]="getRouterLink(adminPanelView.RuleGroups)">
-            <span>{{adminPanelViewDisplayName.RuleGroups}}</span>
-          </a>
-        </div>
+    <ng-container *ngIf="!isSidenavCollapsed">
+      <div class="sub-menu-item"
+           routerLinkActive="active">
+        <a id="km-nav-item-rulegroups"
+           fxLayoutAlign=" center"
+           [routerLink]="getRouterLink(adminPanelView.RuleGroups)">
+          <span>{{adminPanelViewDisplayName.RuleGroups}}</span>
+        </a>
+      </div>
 
-        <div *ngIf="isEnterpriseEdition"
-             class="sub-menu-item"
-             routerLinkActive="active">
-          <a  id="km-nav-item-metering"
-              fxLayoutAlign=" center"
-              [routerLink]="getRouterLink(adminPanelView.Metering)">
-            <span>{{adminPanelViewDisplayName.Metering}}</span>
-          </a>
-        </div>
-      </ng-container>
+      <div *ngIf="isEnterpriseEdition"
+           class="sub-menu-item"
+           routerLinkActive="active">
+        <a id="km-nav-item-metering"
+           fxLayoutAlign=" center"
+           [routerLink]="getRouterLink(adminPanelView.Metering)">
+          <span>{{adminPanelViewDisplayName.Metering}}</span>
+        </a>
+      </div>
+    </ng-container>
 
-      <ng-container *ngIf="isSidenavCollapsed">
-        <a mat-menu-item
-        fxLayoutAlign=" center"
-        routerLinkActive="active"
-        [routerLink]="getRouterLink(adminPanelView.RuleGroups)"
-        class="collapsed-sub-menu-item">
-       <span>{{adminPanelViewDisplayName.RuleGroups}}</span>
-     </a>
-     <a mat-menu-item
-     fxLayoutAlign=" center"
-     routerLinkActive="active"
-     [routerLink]="getRouterLink(adminPanelView.Metering)"
-     class="collapsed-sub-menu-item">
-    <span>{{adminPanelViewDisplayName.Metering}}</span>
-  </a>
-</ng-container>
-    </km-side-nav-field>
+    <ng-container *ngIf="isSidenavCollapsed">
+      <a mat-menu-item
+         fxLayoutAlign=" center"
+         routerLinkActive="active"
+         [routerLink]="getRouterLink(adminPanelView.RuleGroups)"
+         class="collapsed-sub-menu-item">
+        <span>{{adminPanelViewDisplayName.RuleGroups}}</span>
+      </a>
+      <a mat-menu-item
+         fxLayoutAlign=" center"
+         routerLinkActive="active"
+         [routerLink]="getRouterLink(adminPanelView.Metering)"
+         class="collapsed-sub-menu-item">
+        <span>{{adminPanelViewDisplayName.Metering}}</span>
+      </a>
+    </ng-container>
+  </km-side-nav-field>
 
-    <km-side-nav-field [label]="adminPanelMainSections.Users"
+  <km-side-nav-field [label]="adminPanelMainSections.Users"
                      icon="km-icon-member"
                      [isSidenavCollapsed]="isSidenavCollapsed">
-      <ng-container *ngIf="!isSidenavCollapsed">
-        <div class="sub-menu-item"
-        routerLinkActive="active">
-          <a  id="km-nav-item-users"
-              fxLayoutAlign=" center"
-              [routerLink]="getRouterLink(adminPanelView.Accounts)">
-            <span>{{adminPanelViewDisplayName.Accounts}}</span>
-          </a>
-        </div>
+    <ng-container *ngIf="!isSidenavCollapsed">
+      <div class="sub-menu-item"
+           routerLinkActive="active">
+        <a id="km-nav-item-users"
+           fxLayoutAlign=" center"
+           [routerLink]="getRouterLink(adminPanelView.Accounts)">
+          <span>{{adminPanelViewDisplayName.Accounts}}</span>
+        </a>
+      </div>
 
-        <div class="sub-menu-item"
-        routerLinkActive="active">
-          <a  id="km-nav-item-administrators"
-              fxLayoutAlign=" center"
-              [routerLink]="getRouterLink(adminPanelView.Administrators)">
-            <span>{{adminPanelViewDisplayName.Administrators}}</span>
-          </a>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="isSidenavCollapsed">
-        <a mat-menu-item
-        fxLayoutAlign=" center"
-        routerLinkActive="active"
-        [routerLink]="getRouterLink(adminPanelView.Accounts)"
-        class="collapsed-sub-menu-item">
-       <span>{{adminPanelViewDisplayName.Accounts}}</span>
-     </a>
-     <a mat-menu-item
-     fxLayoutAlign=" center"
-     routerLinkActive="active"
-     [routerLink]="getRouterLink(adminPanelView.Administrators)"
-     class="collapsed-sub-menu-item">
-    <span>{{adminPanelViewDisplayName.Administrators}}</span>
-  </a>
+      <div class="sub-menu-item"
+           routerLinkActive="active">
+        <a id="km-nav-item-administrators"
+           fxLayoutAlign=" center"
+           [routerLink]="getRouterLink(adminPanelView.Administrators)">
+          <span>{{adminPanelViewDisplayName.Administrators}}</span>
+        </a>
+      </div>
     </ng-container>
-    </km-side-nav-field>
+    <ng-container *ngIf="isSidenavCollapsed">
+      <a mat-menu-item
+         fxLayoutAlign=" center"
+         routerLinkActive="active"
+         [routerLink]="getRouterLink(adminPanelView.Accounts)"
+         class="collapsed-sub-menu-item">
+        <span>{{adminPanelViewDisplayName.Accounts}}</span>
+      </a>
+      <a mat-menu-item
+         fxLayoutAlign=" center"
+         routerLinkActive="active"
+         [routerLink]="getRouterLink(adminPanelView.Administrators)"
+         class="collapsed-sub-menu-item">
+        <span>{{adminPanelViewDisplayName.Administrators}}</span>
+      </a>
+    </ng-container>
+  </km-side-nav-field>
   <div fxFlex></div>
   <div class="menu-item km-pointer">
     <a fxLayoutAlign="center center"
