@@ -74,8 +74,6 @@ const (
 
 // ValidateClusterSpec validates the given cluster spec. If this is not called from within another validation
 // routine, parentFieldPath can be nil.
-//
-//gocyclo:ignore
 func ValidateClusterSpec(spec *kubermaticv1.ClusterSpec, dc *kubermaticv1.Datacenter, enabledFeatures features.FeatureGate, versionManager *version.Manager, parentFieldPath *field.Path) field.ErrorList {
 	allErrs := field.ErrorList{}
 
@@ -109,22 +107,9 @@ func ValidateClusterSpec(spec *kubermaticv1.ClusterSpec, dc *kubermaticv1.Datace
 		}
 	}
 
-	if !kubermaticv1.AllExposeStrategies.Has(spec.ExposeStrategy) {
-		allErrs = append(allErrs, field.NotSupported(parentFieldPath.Child("exposeStrategy"), spec.ExposeStrategy, kubermaticv1.AllExposeStrategies.Items()))
-	}
-
-	if spec.ExposeStrategy == kubermaticv1.ExposeStrategyTunneling && !enabledFeatures.Enabled(features.TunnelingExposeStrategy) {
-		allErrs = append(allErrs, field.Forbidden(parentFieldPath.Child("exposeStrategy"), "cannot create cluster with Tunneling expose strategy because the TunnelingExposeStrategy feature gate is not enabled"))
-	}
-
-	// Validate APIServerAllowedIPRanges for LoadBalancer expose strategy
-	if spec.ExposeStrategy != kubermaticv1.ExposeStrategyLoadBalancer && spec.APIServerAllowedIPRanges != nil {
-		allErrs = append(allErrs, field.Forbidden(parentFieldPath.Child("APIServerAllowedIPRanges"), "Access control for API server is supported only for LoadBalancer expose strategy"))
-	}
-
-	// Validate TunnelingAgentIP for Tunneling Expose strategy
-	if spec.ExposeStrategy != kubermaticv1.ExposeStrategyTunneling && spec.ClusterNetwork.TunnelingAgentIP != "" {
-		allErrs = append(allErrs, field.Forbidden(parentFieldPath.Child("TunnelingAgentIP"), "Tunneling agent IP can be configured only for Tunneling Expose strategy"))
+	// Validate expose strategy configurations
+	if errs := validateExposeStrategyConfiguration(spec, enabledFeatures, parentFieldPath); len(errs) > 0 {
+		allErrs = append(allErrs, errs...)
 	}
 
 	// External CCM is not supported for all providers and all Kubernetes versions.
@@ -392,6 +377,30 @@ func ValidateClusterNetworkConfig(n *kubermaticv1.ClusterNetworkingConfig, dc *k
 				fmt.Sprintf("IP family %q requires ipv6 to be enabled for the datacenter", n.IPFamily)),
 			)
 		}
+	}
+
+	return allErrs
+}
+
+func validateExposeStrategyConfiguration(spec *kubermaticv1.ClusterSpec, enabledFeatures features.FeatureGate, fieldPath *field.Path) field.ErrorList {
+	allErrs := field.ErrorList{}
+
+	if !kubermaticv1.AllExposeStrategies.Has(spec.ExposeStrategy) {
+		allErrs = append(allErrs, field.NotSupported(fieldPath.Child("exposeStrategy"), spec.ExposeStrategy, kubermaticv1.AllExposeStrategies.Items()))
+	}
+
+	// Validate APIServerAllowedIPRanges for LoadBalancer expose strategy
+	if spec.ExposeStrategy != kubermaticv1.ExposeStrategyLoadBalancer && spec.APIServerAllowedIPRanges != nil {
+		allErrs = append(allErrs, field.Forbidden(fieldPath.Child("APIServerAllowedIPRanges"), "Access control for API server is supported only for LoadBalancer expose strategy"))
+	}
+
+	if spec.ExposeStrategy == kubermaticv1.ExposeStrategyTunneling && !enabledFeatures.Enabled(features.TunnelingExposeStrategy) {
+		allErrs = append(allErrs, field.Forbidden(fieldPath.Child("exposeStrategy"), "cannot create cluster with Tunneling expose strategy because the TunnelingExposeStrategy feature gate is not enabled"))
+	}
+
+	// Validate TunnelingAgentIP for Tunneling Expose strategy
+	if spec.ExposeStrategy != kubermaticv1.ExposeStrategyTunneling && spec.ClusterNetwork.TunnelingAgentIP != "" {
+		allErrs = append(allErrs, field.Forbidden(fieldPath.Child("TunnelingAgentIP"), "Tunneling agent IP can be configured only for Tunneling Expose strategy"))
 	}
 
 	return allErrs
