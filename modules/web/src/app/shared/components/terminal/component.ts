@@ -237,8 +237,8 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
       this.showOpenInSeparateViewButtonOnToolbar = true;
     }
 
-    this.showCloseButtonOnStatusToolbar = true;
     this.showCloseButtonOnToolbar = true;
+    this.showCloseButtonOnStatusToolbar = true;
   }
 
   private _connectToWebSocketConnection(): void {

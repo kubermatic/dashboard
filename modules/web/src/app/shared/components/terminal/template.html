@@ -39,9 +39,9 @@ limitations under the License.
                          (close)="onClose()"></km-terminal-toolbar>
 
     <km-terminal-status-bar *ngIf="isConnectionLost"
-                            [showCloseButton]="showCloseButtonOnToolbar"
                             (reconnect)="onReconnect()"
-                            (close)="onClose()"></km-terminal-status-bar>
+                            (close)="onClose()">
+    </km-terminal-status-bar>
 
     <div #terminal></div>
   </div>
