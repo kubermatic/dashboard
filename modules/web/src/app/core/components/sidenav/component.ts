@@ -51,6 +51,11 @@ export class SidenavComponent implements OnInit, OnDestroy {
   private _screenWidth = new BehaviorSubject<number>(window.innerWidth);
   private _unsubscribe = new Subject<void>();
 
+  get isSidenavCollapsed(): boolean {
+    const maxScreenWidth = 1200;
+    return this._isSidenavCollapsed || this.screenWidth < maxScreenWidth;
+  }
+
   constructor(
     public dialog: MatDialog,
     private _router: Router,
@@ -95,11 +100,6 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this._screenWidth.next(event.target.innerWidth);
   }
 
-  isSidenavCollapsed(): boolean {
-    const maxScreenWidth = 1200;
-    return this._isSidenavCollapsed || this.screenWidth < maxScreenWidth;
-  }
-
   getLinkClass(url: string): string {
     return this.checkUrl(url) ? 'active' : '';
   }
@@ -124,7 +124,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   getTooltip(view: View): string {
-    let tooltip = this.isSidenavCollapsed() ? getViewDisplayName(view) : '';
+    let tooltip = this._isSidenavCollapsed ? getViewDisplayName(view) : '';
     if (!MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, view, Permission.View)) {
       tooltip = 'Cannot enter this view.';
       if (this._selectedProject.status !== 'Active') {

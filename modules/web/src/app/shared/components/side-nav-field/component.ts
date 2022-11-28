@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {AfterViewChecked, ChangeDetectorRef, Component, Input} from '@angular/core';
+import {AfterViewChecked, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AdminPanelMainSections, ProjectSidenavMainSection, AdminPanelView, View} from '@app/shared/entity/common';
 import {shrinkGrow} from '@shared/animations/grow';
@@ -22,7 +22,7 @@ import {shrinkGrow} from '@shared/animations/grow';
   styleUrls: ['./style.scss'],
   animations: [shrinkGrow],
 })
-export class SideNavExpansionMenuComponent implements AfterViewChecked {
+export class SideNavExpansionMenuComponent implements AfterViewChecked, OnInit {
   private _expanded = false;
   readonly view = View;
   @Input() label = '';
@@ -40,6 +40,12 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked {
 
   get id(): string {
     return this.label.replace(' ', '-');
+  }
+
+  ngOnInit(): void {
+    if (this.label === ProjectSidenavMainSection.Resources) {
+      this._expanded = true;
+    }
   }
 
   ngAfterViewChecked(): void {

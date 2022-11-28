@@ -15,26 +15,26 @@
 @use 'mixins';
 @use 'variables';
 
-$sidenav-item-height: 45px;
-$sidenav-item-margin: 10px;
-$sidenav-width-collapsed: 54px;
-
 .sidenav {
   @include mixins.size(variables.$sidenav-width, 100%);
 
   overflow-y: auto;
   padding-top: (variables.$content-padding + variables.$toolbar-height);
 
+  &.collapse-sidenav {
+    @include mixins.size(variables.$sidenav-width-collapsed, 100%);
+  }
+
   .menu-item {
-    height: $sidenav-item-height;
-    margin: 0 0 (1.5 * $sidenav-item-margin) $sidenav-item-margin;
+    height: variables.$sidenav-item-height;
+    margin: 0 0 (1.5 * variables.$sidenav-item-margin) variables.$sidenav-item-margin;
 
     a {
       border-radius: variables.$border-radius;
       display: flex;
       font-size: variables.$font-size-subhead;
-      height: $sidenav-item-height;
-      padding: $sidenav-item-margin;
+      height: variables.$sidenav-item-height;
+      padding: variables.$sidenav-item-margin;
       text-decoration: none;
 
       i {
@@ -50,61 +50,61 @@ $sidenav-width-collapsed: 54px;
   }
 }
 
-.collapse-sidenav {
-  overflow-x: hidden;
-  width: $sidenav-width-collapsed;
+// .collapse-sidenav {
+//   overflow-x: hidden;
+//   width: $sidenav-width-collapsed;
 
-  .menu-item a i {
-    margin-right: 0;
-  }
-}
+//   .menu-item a i {
+//     margin-right: 0;
+//   }
+// }
 
-.sub-menu-item {
-  position: relative;
+// .sub-menu-item {
+//   position: relative;
 
-  a {
-    margin-left: 22px;
-    padding: 6px 5px 6px 30px;
+//   a {
+//     margin-left: 22px;
+//     padding: 6px 5px 6px 30px;
 
-    &:hover {
-      border-radius: variables.$border-radius;
-    }
-  }
+//     &:hover {
+//       border-radius: variables.$border-radius;
+//     }
+//   }
 
-  &.active > a::after {
-    content: '';
-    height: 60%;
-    left: 22px;
-    position: absolute;
-    top: 20%;
-    width: 3px;
-  }
-}
+//   &.active > a::after {
+//     content: '';
+//     height: 60%;
+//     left: 22px;
+//     position: absolute;
+//     top: 20%;
+//     width: 3px;
+//   }
+// }
 
-km-side-nav-field .sub-menu-item:last-child {
-  margin-bottom: 20px;
-}
+// km-side-nav-field .sub-menu-item:last-child {
+//   margin-bottom: 20px;
+// }
 
-.menu-title {
-  border-bottom: 2px solid gray;
-}
+// .menu-title {
+//   border-bottom: 2px solid gray;
+// }
 
-.collapsed-sub-menu-item {
-  height: 30px;
-  margin: 0 10px 0 15px;
-  padding: 5px 0 5px 25px;
-  position: relative;
+// .collapsed-sub-menu-item {
+//   height: 30px;
+//   margin: 0 10px 0 15px;
+//   padding: 5px 0 5px 25px;
+//   position: relative;
 
-  &:hover {
-    border-radius: variables.$border-radius;
-  }
+//   &:hover {
+//     border-radius: variables.$border-radius;
+//   }
 
-  &.active::after {
-    content: '';
-    height: 60%;
-    left: 0;
-    position: absolute;
-    top: 20%;
-    width: 3px;
-  }
-}
+//   &.active::after {
+//     content: '';
+//     height: 60%;
+//     left: 0;
+//     position: absolute;
+//     top: 20%;
+//     width: 3px;
+//   }
+// }
