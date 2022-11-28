@@ -412,7 +412,7 @@ func DecodeAzureProjectSizesReq(c context.Context, r *http.Request) (interface{}
 }
 
 // AvailabilityZonesReq represent a request for Azure VM Multi-AvailabilityZones support within the context of a KKP project
-// swagger:parameters listProjectAzureSKUAvailabilityZones
+// swagger:parameters listProjectAzureSKUAvailabilityZones listProjectAzureAvailabilityZones
 type azureProjectAvailabilityZonesReq struct {
 	common.ProjectReq
 	azureCommonReq

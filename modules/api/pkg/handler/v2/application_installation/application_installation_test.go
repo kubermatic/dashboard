@@ -69,11 +69,11 @@ func TestListApplicationInstallations(t *testing.T) {
 				{
 					Name: "app1",
 					Spec: &apiv2.ApplicationInstallationListItemSpec{
-						Namespace: apiv2.NamespaceSpec{
+						Namespace: apiv1.NamespaceSpec{
 							Name:   app1TargetNamespace,
 							Create: true,
 						},
-						ApplicationRef: appskubermaticv1.ApplicationRef{
+						ApplicationRef: apiv1.ApplicationRef{
 							Name:    "sample-app",
 							Version: "1.0.0",
 						},
@@ -83,11 +83,11 @@ func TestListApplicationInstallations(t *testing.T) {
 				{
 					Name: "app2",
 					Spec: &apiv2.ApplicationInstallationListItemSpec{
-						Namespace: apiv2.NamespaceSpec{
+						Namespace: apiv1.NamespaceSpec{
 							Name:   app2TargetNamespace,
 							Create: true,
 						},
-						ApplicationRef: appskubermaticv1.ApplicationRef{
+						ApplicationRef: apiv1.ApplicationRef{
 							Name:    "sample-app",
 							Version: "1.0.0",
 						},
@@ -158,11 +158,11 @@ func TestCreateApplicationInstallation(t *testing.T) {
 				},
 				Namespace: app1TargetNamespace,
 				Spec: &apiv2.ApplicationInstallationSpec{
-					Namespace: apiv2.NamespaceSpec{
+					Namespace: apiv1.NamespaceSpec{
 						Name:   app1TargetNamespace,
 						Create: true,
 					},
-					ApplicationRef: appskubermaticv1.ApplicationRef{
+					ApplicationRef: apiv1.ApplicationRef{
 						Name:    "sample-app",
 						Version: "1.0.0",
 					},
@@ -334,11 +334,11 @@ func TestGetApplication(t *testing.T) {
 				},
 				Namespace: app1TargetNamespace,
 				Spec: &apiv2.ApplicationInstallationSpec{
-					Namespace: apiv2.NamespaceSpec{
+					Namespace: apiv1.NamespaceSpec{
 						Name:   app1TargetNamespace,
 						Create: true,
 					},
-					ApplicationRef: appskubermaticv1.ApplicationRef{
+					ApplicationRef: apiv1.ApplicationRef{
 						Name:    "sample-app",
 						Version: "1.0.0",
 					},
@@ -411,11 +411,11 @@ func TestUpdateApplicationInstallation(t *testing.T) {
 				},
 				Namespace: app1TargetNamespace,
 				Spec: &apiv2.ApplicationInstallationSpec{
-					Namespace: apiv2.NamespaceSpec{
+					Namespace: apiv1.NamespaceSpec{
 						Name:   app1TargetNamespace,
 						Create: true,
 					},
-					ApplicationRef: appskubermaticv1.ApplicationRef{
+					ApplicationRef: apiv1.ApplicationRef{
 						Name:    "sample-app",
 						Version: "1.0.0",
 					},

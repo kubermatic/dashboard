@@ -2195,11 +2195,11 @@ func GenApiApplicationInstallation(name, clusterName, targetnamespace string) *a
 		},
 		Namespace: targetnamespace,
 		Spec: &apiv2.ApplicationInstallationSpec{
-			Namespace: apiv2.NamespaceSpec{
+			Namespace: apiv1.NamespaceSpec{
 				Name:   targetnamespace,
 				Create: true,
 			},
-			ApplicationRef: appskubermaticv1.ApplicationRef{
+			ApplicationRef: apiv1.ApplicationRef{
 				Name:    "sample-app",
 				Version: "1.0.0",
 			},

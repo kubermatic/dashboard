@@ -16,10 +16,8 @@
 
 set -euo pipefail
 
-cd $(dirname $0)/../../..
-source hack/lib.sh
-
-API=modules/api
+cd $(dirname $0)/..
+source ../../hack/lib.sh
 
 function cleanup() {
   if [[ -n "${TMP_DIFFROOT:-}" ]]; then

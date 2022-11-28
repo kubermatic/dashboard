@@ -34,14 +34,17 @@ func convertInternalToAPIApplicationInstallation(in *appskubermaticv1.Applicatio
 		},
 		Namespace: in.Namespace,
 		Spec: &apiv2.ApplicationInstallationSpec{
-			Namespace: apiv2.NamespaceSpec{
+			Namespace: apiv1.NamespaceSpec{
 				Name:        in.Spec.Namespace.Name,
 				Create:      in.Spec.Namespace.Create,
 				Labels:      in.Spec.Namespace.Labels,
 				Annotations: in.Spec.Namespace.Annotations,
 			},
-			ApplicationRef: in.Spec.ApplicationRef,
-			Values:         in.Spec.Values,
+			ApplicationRef: apiv1.ApplicationRef{
+				Name:    in.Spec.ApplicationRef.Name,
+				Version: in.Spec.ApplicationRef.Version,
+			},
+			Values: in.Spec.Values,
 		},
 		Status: &apiv2.ApplicationInstallationStatus{
 			ApplicationVersion: in.Status.ApplicationVersion,
@@ -64,13 +67,16 @@ func convertInternalToAPIApplicationInstallationForList(in *appskubermaticv1.App
 		Name:              in.Name,
 		CreationTimestamp: apiv1.Time(in.CreationTimestamp),
 		Spec: &apiv2.ApplicationInstallationListItemSpec{
-			Namespace: apiv2.NamespaceSpec{
+			Namespace: apiv1.NamespaceSpec{
 				Name:        in.Spec.Namespace.Name,
 				Create:      in.Spec.Namespace.Create,
 				Labels:      in.Spec.Namespace.Labels,
 				Annotations: in.Spec.Namespace.Annotations,
 			},
-			ApplicationRef: in.Spec.ApplicationRef,
+			ApplicationRef: apiv1.ApplicationRef{
+				Name:    in.Spec.ApplicationRef.Name,
+				Version: in.Spec.ApplicationRef.Version,
+			},
 		},
 		Status: &apiv2.ApplicationInstallationListItemStatus{
 			Method:             in.Status.Method,
@@ -100,8 +106,11 @@ func convertAPItoInternalApplicationInstallationBody(app *apiv2.ApplicationInsta
 				Labels:      app.Spec.Namespace.Labels,
 				Annotations: app.Spec.Namespace.Annotations,
 			},
-			ApplicationRef: app.Spec.ApplicationRef,
-			Values:         app.Spec.Values,
+			ApplicationRef: appskubermaticv1.ApplicationRef{
+				Name:    app.Spec.ApplicationRef.Name,
+				Version: app.Spec.ApplicationRef.Version,
+			},
+			Values: app.Spec.Values,
 		},
 	}
 }

@@ -38,7 +38,8 @@ trap cleanup EXIT SIGINT SIGTERM
 run_swagger generate spec \
   --tags=ee \
   --scan-models \
-  -o ${TMP_SWAGGER}
+  -o ${TMP_SWAGGER} \
+  -x k8c.io/kubermatic/*
 
 rm -r ../../pkg/test/e2e/utils/apiclient/
 mkdir -p ../../pkg/test/e2e/utils/apiclient/

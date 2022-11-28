@@ -46,6 +46,9 @@ type ClusterNetworkingConfig struct {
 	// Defaults to "ipvs". "ebpf" disables kube-proxy and requires CNI support.
 	ProxyMode string `json:"proxyMode,omitempty"`
 
+	// TunnelingAgentIP is the address used by the tunneling agents
+	TunnelingAgentIP string `json:"tunnelingAgentIP,omitempty"`
+
 	// ip family
 	IPFamily IPFamily `json:"ipFamily,omitempty"`
 

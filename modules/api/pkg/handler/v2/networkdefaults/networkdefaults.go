@@ -139,7 +139,7 @@ func GetNetworkDefaultsEndpoint(
 		}
 		// Using network defaults from the template defaults when it's available
 		if defaultingTemplate != nil {
-			networkDefaults = overrideNetworkDefaultsByDefaultingTemplate(networkDefaults, defaultingTemplate.Spec.ClusterNetwork, kubermaticv1.ProviderType(req.ProviderName))
+			networkDefaults = overrideNetworkDefaultsByDefaultingTemplate(networkDefaults, defaultingTemplate.Spec.ClusterNetwork, kubermaticv1.ProviderType(req.ProviderName), defaultingTemplate.Spec.ExposeStrategy)
 			networkDefaults.ClusterExposeStrategy = defaultingTemplate.Spec.ExposeStrategy
 		}
 
@@ -168,8 +168,8 @@ func generateNetworkDefaults(provider kubermaticv1.ProviderType) apiv2.NetworkDe
 	}
 }
 
-func overrideNetworkDefaultsByDefaultingTemplate(networkDefaults apiv2.NetworkDefaults, templateClusterNetwork kubermaticv1.ClusterNetworkingConfig, provider kubermaticv1.ProviderType) apiv2.NetworkDefaults {
-	defaultClusterNetwork := defaulting.DefaultClusterNetwork(templateClusterNetwork, provider)
+func overrideNetworkDefaultsByDefaultingTemplate(networkDefaults apiv2.NetworkDefaults, templateClusterNetwork kubermaticv1.ClusterNetworkingConfig, provider kubermaticv1.ProviderType, exposeStrategy kubermaticv1.ExposeStrategy) apiv2.NetworkDefaults {
+	defaultClusterNetwork := defaulting.DefaultClusterNetwork(templateClusterNetwork, provider, exposeStrategy)
 
 	if defaultClusterNetwork.ProxyMode != "" {
 		networkDefaults.ProxyMode = defaultClusterNetwork.ProxyMode
