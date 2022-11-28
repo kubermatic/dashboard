@@ -2195,7 +2195,7 @@ func GenApiApplicationInstallation(name, clusterName, targetnamespace string) *a
 		},
 		Namespace: targetnamespace,
 		Spec: &apiv2.ApplicationInstallationSpec{
-			Namespace: apiv2.NamespaceSpec{
+			Namespace: apiv1.NamespaceSpec{
 				Name:   targetnamespace,
 				Create: true,
 			},

@@ -8,49 +8,27 @@ package models
 import (
 	"context"
 
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
-	"github.com/go-openapi/validate"
 )
 
-// ApplicationRef ApplicationRef describes a KKP-wide, unique reference to an Application.
+// ApplicationRef application ref
 //
 // swagger:model ApplicationRef
 type ApplicationRef struct {
 
-	// Name of the Application.
-	// Should be a valid lowercase RFC1123 domain name
-	// Pattern: =`^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$`
+	// Name of the Application
 	Name string `json:"name,omitempty"`
 
-	// version
-	Version Version `json:"version,omitempty"`
+	// Version of the Application. Must be a valid SemVer version
+	// NOTE: We are not using Masterminds/semver here, as it keeps data in unexported fields witch causes issues for
+	// DeepEqual used in our reconciliation packages. At the same time, we are not using pkg/semver because
+	// of the reasons stated in https://github.com/kubermatic/kubermatic/pull/10891.
+	Version string `json:"version,omitempty"`
 }
 
 // Validate validates this application ref
 func (m *ApplicationRef) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := m.validateName(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (m *ApplicationRef) validateName(formats strfmt.Registry) error {
-	if swag.IsZero(m.Name) { // not required
-		return nil
-	}
-
-	if err := validate.Pattern("name", "body", m.Name, `=`+"`"+`^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$`+"`"+``); err != nil {
-		return err
-	}
-
 	return nil
 }
 

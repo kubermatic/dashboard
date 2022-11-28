@@ -2500,17 +2500,28 @@ type ApplicationSpec struct {
 	Values json.RawMessage `json:"values,omitempty"`
 }
 
+// NamespaceSpec describe the desired state of the namespace where application will be created.
 type NamespaceSpec struct {
-	// Name is the namespace to deploy the Application into
-	Name string `json:"name" required:"true"`
+	// Name is the namespace to deploy the Application into.
+	// Should be a valid lowercase RFC1123 domain name
+	// +kubebuilder:validation:Pattern:=`^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$`
+	// +kubebuilder:validation:MaxLength:=63
+	// +kubebuilder:validation:Type=string
+	Name string `json:"name"`
 
-	// Create defines whether the namespace should be created if it does not exist.
-	Create bool `json:"create" required:"true"`
+	// +kubebuilder:default:=true
+
+	// Create defines whether the namespace should be created if it does not exist. Defaults to true
+	Create bool `json:"create"`
 
 	// Labels of the namespace
+	// More info: http://kubernetes.io/docs/user-guide/labels
+	// +optional
 	Labels map[string]string `json:"labels,omitempty"`
 
 	// Annotations of the namespace
+	// More info: http://kubernetes.io/docs/user-guide/annotations
+	// +optional
 	Annotations map[string]string `json:"annotations,omitempty"`
 }
 

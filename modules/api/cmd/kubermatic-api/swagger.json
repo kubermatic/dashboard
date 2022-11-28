@@ -20966,6 +20966,41 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/quotacalculation": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "project"
+        ],
+        "summary": "Calculates the projects resource quota updated by the given resources.",
+        "operationId": "calculateProjectQuotaUpdate",
+        "responses": {
+          "200": {
+            "description": "ResourceQuotaUpdateCalculation",
+            "schema": {
+              "$ref": "#/definitions/ResourceQuotaUpdateCalculation"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/providers/aks/locations": {
       "get": {
         "produces": [
@@ -26262,19 +26297,19 @@
     },
     "ApplicationRef": {
       "type": "object",
-      "title": "ApplicationRef describes a KKP-wide, unique reference to an Application.",
       "properties": {
         "name": {
-          "description": "Name of the Application.\nShould be a valid lowercase RFC1123 domain name",
+          "description": "Name of the Application",
           "type": "string",
-          "pattern": "=`^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$`",
           "x-go-name": "Name"
         },
         "version": {
-          "$ref": "#/definitions/Version"
+          "description": "Version of the Application. Must be a valid SemVer version\nNOTE: We are not using Masterminds/semver here, as it keeps data in unexported fields witch causes issues for\nDeepEqual used in our reconciliation packages. At the same time, we are not using pkg/semver because\nof the reasons stated in https://github.com/kubermatic/kubermatic/pull/10891.",
+          "type": "string",
+          "x-go-name": "Version"
         }
       },
-      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "ApplicationSource": {
       "type": "object",
@@ -32412,7 +32447,7 @@
           "x-go-name": "Name"
         }
       },
-      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "NetworkDefaults": {
       "type": "object",
@@ -34919,6 +34954,23 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
+    "ResourceQuotaUpdateCalculation": {
+      "type": "object",
+      "properties": {
+        "calculatedQuota": {
+          "$ref": "#/definitions/Quota"
+        },
+        "message": {
+          "description": "Message is filled if a resource in the calculated quota exceeds the resource quota limits.",
+          "type": "string",
+          "x-go-name": "Message"
+        },
+        "resourceQuota": {
+          "$ref": "#/definitions/ResourceQuota"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
     "ResourceRequirements": {
       "type": "object",
       "title": "ResourceRequirements describes the compute resource requirements.",
@@ -36408,9 +36460,9 @@
       "x-go-package": "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
     },
     "Version": {
-      "description": "Version wraps semverlib.Version. It is needed because kubebuilder does not accept structs with non-tagged fields, even if they have custom marshallers\nWith this the CRD resource will have Version as string but operator code can work directly with the semverlib.Version struct\n(taken from https://github.com/kubernetes-sigs/controller-tools/blob/master/pkg/crd/testdata/cronjob_types.go#L283)",
       "type": "object",
-      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
+      "title": "Version represents a single semantic version.",
+      "x-go-package": "github.com/Masterminds/semver/v3"
     },
     "VersionList": {
       "description": "VersionList represents a list of versions",

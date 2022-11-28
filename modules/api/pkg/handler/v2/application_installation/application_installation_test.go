@@ -69,7 +69,7 @@ func TestListApplicationInstallations(t *testing.T) {
 				{
 					Name: "app1",
 					Spec: &apiv2.ApplicationInstallationListItemSpec{
-						Namespace: apiv2.NamespaceSpec{
+						Namespace: apiv1.NamespaceSpec{
 							Name:   app1TargetNamespace,
 							Create: true,
 						},
@@ -83,7 +83,7 @@ func TestListApplicationInstallations(t *testing.T) {
 				{
 					Name: "app2",
 					Spec: &apiv2.ApplicationInstallationListItemSpec{
-						Namespace: apiv2.NamespaceSpec{
+						Namespace: apiv1.NamespaceSpec{
 							Name:   app2TargetNamespace,
 							Create: true,
 						},
@@ -158,7 +158,7 @@ func TestCreateApplicationInstallation(t *testing.T) {
 				},
 				Namespace: app1TargetNamespace,
 				Spec: &apiv2.ApplicationInstallationSpec{
-					Namespace: apiv2.NamespaceSpec{
+					Namespace: apiv1.NamespaceSpec{
 						Name:   app1TargetNamespace,
 						Create: true,
 					},
@@ -334,7 +334,7 @@ func TestGetApplication(t *testing.T) {
 				},
 				Namespace: app1TargetNamespace,
 				Spec: &apiv2.ApplicationInstallationSpec{
-					Namespace: apiv2.NamespaceSpec{
+					Namespace: apiv1.NamespaceSpec{
 						Name:   app1TargetNamespace,
 						Create: true,
 					},
@@ -411,7 +411,7 @@ func TestUpdateApplicationInstallation(t *testing.T) {
 				},
 				Namespace: app1TargetNamespace,
 				Spec: &apiv2.ApplicationInstallationSpec{
-					Namespace: apiv2.NamespaceSpec{
+					Namespace: apiv1.NamespaceSpec{
 						Name:   app1TargetNamespace,
 						Create: true,
 					},
