@@ -103,7 +103,7 @@ require (
 	github.com/go-openapi/validate v0.22.0
 	github.com/go-swagger/go-swagger v0.30.3
 	github.com/onsi/ginkgo v1.16.5
-	k8c.io/kubermatic/v2 v2.21.1-0.20221122140205-50133d9551f3
+	k8c.io/kubermatic/v2 v2.21.1-0.20221128102027-8c8f7a3a7481
 	k8s.io/code-generator v0.25.4
 	sigs.k8s.io/controller-tools v0.10.0
 )

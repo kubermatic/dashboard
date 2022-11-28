@@ -2199,7 +2199,7 @@ func GenApiApplicationInstallation(name, clusterName, targetnamespace string) *a
 				Name:   targetnamespace,
 				Create: true,
 			},
-			ApplicationRef: appskubermaticv1.ApplicationRef{
+			ApplicationRef: apiv1.ApplicationRef{
 				Name:    "sample-app",
 				Version: "1.0.0",
 			},

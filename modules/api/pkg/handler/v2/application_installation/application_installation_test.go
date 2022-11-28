@@ -73,7 +73,7 @@ func TestListApplicationInstallations(t *testing.T) {
 							Name:   app1TargetNamespace,
 							Create: true,
 						},
-						ApplicationRef: appskubermaticv1.ApplicationRef{
+						ApplicationRef: apiv1.ApplicationRef{
 							Name:    "sample-app",
 							Version: "1.0.0",
 						},
@@ -87,7 +87,7 @@ func TestListApplicationInstallations(t *testing.T) {
 							Name:   app2TargetNamespace,
 							Create: true,
 						},
-						ApplicationRef: appskubermaticv1.ApplicationRef{
+						ApplicationRef: apiv1.ApplicationRef{
 							Name:    "sample-app",
 							Version: "1.0.0",
 						},
@@ -162,7 +162,7 @@ func TestCreateApplicationInstallation(t *testing.T) {
 						Name:   app1TargetNamespace,
 						Create: true,
 					},
-					ApplicationRef: appskubermaticv1.ApplicationRef{
+					ApplicationRef: apiv1.ApplicationRef{
 						Name:    "sample-app",
 						Version: "1.0.0",
 					},
@@ -338,7 +338,7 @@ func TestGetApplication(t *testing.T) {
 						Name:   app1TargetNamespace,
 						Create: true,
 					},
-					ApplicationRef: appskubermaticv1.ApplicationRef{
+					ApplicationRef: apiv1.ApplicationRef{
 						Name:    "sample-app",
 						Version: "1.0.0",
 					},
@@ -415,7 +415,7 @@ func TestUpdateApplicationInstallation(t *testing.T) {
 						Name:   app1TargetNamespace,
 						Create: true,
 					},
-					ApplicationRef: appskubermaticv1.ApplicationRef{
+					ApplicationRef: apiv1.ApplicationRef{
 						Name:    "sample-app",
 						Version: "1.0.0",
 					},
