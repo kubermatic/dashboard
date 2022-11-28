@@ -14935,6 +14935,22 @@
           "openstack"
         ],
         "operationId": "listOpenstackServerGroupsNoCredentials",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "ClusterID",
+            "name": "cluster_id",
+            "in": "path",
+            "required": true
+          }
+        ],
         "responses": {
           "200": {
             "description": "OpenstackServerGroup",
@@ -19086,6 +19102,50 @@
           "azure"
         ],
         "operationId": "listProjectAzureAvailabilityZones",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "SubscriptionID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "TenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ClientID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ClientSecret",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Location",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "SKUName",
+            "in": "header"
+          }
+        ],
         "responses": {
           "200": {
             "description": "AzureAvailabilityZonesList",
@@ -20978,7 +21038,72 @@
           "project"
         ],
         "summary": "Calculates the projects resource quota updated by the given resources.",
-        "operationId": "calculateProjectQuotaUpdate",
+        "operationId": "calculateProjectResourceQuotaUpdate",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "alibabaInstanceType": {
+                  "$ref": "#/definitions/AlibabaInstanceType"
+                },
+                "anexiaNodeSpec": {
+                  "$ref": "#/definitions/AnexiaNodeSpec"
+                },
+                "awsSize": {
+                  "$ref": "#/definitions/AWSSize"
+                },
+                "azureSize": {
+                  "$ref": "#/definitions/AzureSize"
+                },
+                "diskSizeGB": {
+                  "description": "DiskSizeGB will be processed only for those providers which don't have the disk size in their API objects, like AWS, Alibabla and GCP.",
+                  "type": "integer",
+                  "format": "int64",
+                  "x-go-name": "DiskSizeGB"
+                },
+                "doSize": {
+                  "$ref": "#/definitions/DigitaloceanSize"
+                },
+                "equinixSize": {
+                  "$ref": "#/definitions/PacketSize"
+                },
+                "gcpSize": {
+                  "$ref": "#/definitions/GCPMachineSize"
+                },
+                "hetznerSize": {
+                  "$ref": "#/definitions/HetznerSize"
+                },
+                "nutanixNodeSpec": {
+                  "$ref": "#/definitions/NutanixNodeSpec"
+                },
+                "openstackSize": {
+                  "$ref": "#/definitions/OpenstackSize"
+                },
+                "replicas": {
+                  "type": "integer",
+                  "format": "int64",
+                  "x-go-name": "Replicas"
+                },
+                "vSphereNodeSpec": {
+                  "$ref": "#/definitions/VSphereNodeSpec"
+                },
+                "vmDirectorNodeSpec": {
+                  "$ref": "#/definitions/VMwareCloudDirectorNodeSpec"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "ResourceQuotaUpdateCalculation",

@@ -58,6 +58,7 @@ type getResourceQuota struct {
 // swagger:parameters calculateProjectResourceQuotaUpdate
 type calculateProjectResourceQuotaUpdate struct {
 	common.GetProjectRq
+	// in: body
 	Body struct {
 		Replicas int `json:"replicas"`
 		// DiskSizeGB will be processed only for those providers which don't have the disk size in their API objects, like AWS, Alibabla and GCP.

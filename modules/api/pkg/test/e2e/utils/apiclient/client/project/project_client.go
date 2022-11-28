@@ -40,7 +40,7 @@ type ClientService interface {
 
 	BindUserToRoleV2(params *BindUserToRoleV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*BindUserToRoleV2OK, error)
 
-	CalculateProjectQuotaUpdate(params *CalculateProjectQuotaUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CalculateProjectQuotaUpdateOK, error)
+	CalculateProjectResourceQuotaUpdate(params *CalculateProjectResourceQuotaUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CalculateProjectResourceQuotaUpdateOK, error)
 
 	CreateCluster(params *CreateClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateClusterCreated, error)
 
@@ -560,22 +560,22 @@ func (a *Client) BindUserToRoleV2(params *BindUserToRoleV2Params, authInfo runti
 }
 
 /*
-CalculateProjectQuotaUpdate calculates the projects resource quota updated by the given resources
+CalculateProjectResourceQuotaUpdate calculates the projects resource quota updated by the given resources
 */
-func (a *Client) CalculateProjectQuotaUpdate(params *CalculateProjectQuotaUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CalculateProjectQuotaUpdateOK, error) {
+func (a *Client) CalculateProjectResourceQuotaUpdate(params *CalculateProjectResourceQuotaUpdateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CalculateProjectResourceQuotaUpdateOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewCalculateProjectQuotaUpdateParams()
+		params = NewCalculateProjectResourceQuotaUpdateParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "calculateProjectQuotaUpdate",
+		ID:                 "calculateProjectResourceQuotaUpdate",
 		Method:             "POST",
 		PathPattern:        "/api/v2/projects/{project_id}/quotacalculation",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &CalculateProjectQuotaUpdateReader{formats: a.formats},
+		Reader:             &CalculateProjectResourceQuotaUpdateReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -588,12 +588,12 @@ func (a *Client) CalculateProjectQuotaUpdate(params *CalculateProjectQuotaUpdate
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*CalculateProjectQuotaUpdateOK)
+	success, ok := result.(*CalculateProjectResourceQuotaUpdateOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*CalculateProjectQuotaUpdateDefault)
+	unexpectedSuccess := result.(*CalculateProjectResourceQuotaUpdateDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

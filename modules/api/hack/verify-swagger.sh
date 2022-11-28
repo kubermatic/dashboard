@@ -46,6 +46,7 @@ run_swagger generate spec --tags=ee --scan-models -o ${TMP_SWAGGER} -x k8c.io/ku
 # deterministic, sort in order to avoid flake results.
 # The sorting here is applied only to first level arrays, nested arrays are not
 # sorted.
+
 curr="$(jq --argfile f ${SWAGGER_FILE} -n '($f | (..  | arrays) |= sort)')"
 exp="$(jq --argfile f ${TMP_SWAGGER} -n '($f | (..  | arrays) |= sort)')"
 diff -Naup <(echo "${curr}") <(echo "${exp}")

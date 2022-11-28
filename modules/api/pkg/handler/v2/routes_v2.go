@@ -1422,7 +1422,7 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 
 	mux.Methods(http.MethodPost).
 		Path("/projects/{project_id}/quotacalculation").
-		Handler(r.calculateProjectQuotaUpdate())
+		Handler(r.calculateProjectResourceQuotaUpdate())
 
 	mux.Methods(http.MethodGet).
 		Path("/quotas/{quota_name}").
@@ -8285,7 +8285,7 @@ func (r Routing) getProjectQuota() http.Handler {
 	)
 }
 
-// swagger:route POST /api/v2/projects/{project_id}/quotacalculation project calculateProjectQuotaUpdate
+// swagger:route POST /api/v2/projects/{project_id}/quotacalculation project calculateProjectResourceQuotaUpdate
 //
 //	Calculates the projects resource quota updated by the given resources.
 //
@@ -8300,7 +8300,7 @@ func (r Routing) getProjectQuota() http.Handler {
 //	  200: ResourceQuotaUpdateCalculation
 //	  401: empty
 //	  403: empty
-func (r Routing) calculateProjectQuotaUpdate() http.Handler {
+func (r Routing) calculateProjectResourceQuotaUpdate() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
