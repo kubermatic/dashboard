@@ -20,6 +20,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strconv"
 	"strings"
 
 	semverlib "github.com/Masterminds/semver/v3"
@@ -39,6 +40,11 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/rand"
 	"k8s.io/apimachinery/pkg/util/sets"
+)
+
+const (
+	AutoscalerMinSizeAnnotation = "cluster.k8s.io/cluster-api-autoscaler-node-group-min-size"
+	AutoscalerMaxSizeAnnotation = "cluster.k8s.io/cluster-api-autoscaler-node-group-max-size"
 )
 
 // Deployment returns a Machine Deployment object for the given Node Deployment spec.
@@ -94,6 +100,20 @@ func Deployment(c *kubermaticv1.Cluster, nd *apiv1.NodeDeployment, dc *kubermati
 	// Create a copy to avoid changing the ND when changing the MD
 	replicas := nd.Spec.Replicas
 	md.Spec.Replicas = &replicas
+
+	// Set autoscaler min and max replicas if present
+	if nd.Spec.MaxReplicas != nil {
+		if md.Annotations == nil {
+			md.Annotations = map[string]string{}
+		}
+		md.Annotations[AutoscalerMaxSizeAnnotation] = strconv.Itoa(int(*nd.Spec.MaxReplicas))
+	}
+	if nd.Spec.MinReplicas != nil {
+		if md.Annotations == nil {
+			md.Annotations = map[string]string{}
+		}
+		md.Annotations[AutoscalerMinSizeAnnotation] = strconv.Itoa(int(*nd.Spec.MinReplicas))
+	}
 
 	md.Spec.Template.Spec.Versions.Kubelet = nd.Spec.Template.Versions.Kubelet
 

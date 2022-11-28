@@ -20,6 +20,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"k8s.io/utils/pointer"
 	"net/http"
 	"strconv"
 	"strings"
@@ -158,6 +159,8 @@ func outputMachineDeployment(md *clusterv1alpha1.MachineDeployment) (*apiv1.Node
 		}
 	}
 
+	minReplicas, maxReplicas, err := getMinAndMaxReplicas(md)
+
 	hasDynamicConfig := md.Spec.Template.Spec.ConfigSource != nil
 
 	return &apiv1.NodeDeployment{
@@ -181,6 +184,8 @@ func outputMachineDeployment(md *clusterv1alpha1.MachineDeployment) (*apiv1.Node
 			},
 			Paused:        &md.Spec.Paused,
 			DynamicConfig: &hasDynamicConfig,
+			MinReplicas:   minReplicas,
+			MaxReplicas:   maxReplicas,
 		},
 		Status: md.Status,
 	}, nil
@@ -526,6 +531,7 @@ func PatchMachineDeployment(ctx context.Context, userInfoGetter provider.UserInf
 
 	// Only the fields from NodeDeploymentSpec will be updated by a patch.
 	// It ensures that the name and resource version are set and the selector stays the same.
+	machineDeployment.Annotations = patchedMachineDeployment.Annotations
 	machineDeployment.Spec.Template.Spec = patchedMachineDeployment.Spec.Template.Spec
 	machineDeployment.Spec.Replicas = patchedMachineDeployment.Spec.Replicas
 	machineDeployment.Spec.Paused = patchedMachineDeployment.Spec.Paused
@@ -902,4 +908,24 @@ func selectedOperatingSystems(os apiv1.OperatingSystemSpec) int {
 		counter++
 	}
 	return counter
+}
+
+func getMinAndMaxReplicas(md *clusterv1alpha1.MachineDeployment) (*int32, *int32, error) {
+	var minReplicas *int32
+	if min, ok := md.Annotations[machineresource.AutoscalerMinSizeAnnotation]; ok && min != "" {
+		minInt, err := strconv.ParseInt(min, 10, 32)
+		if err != nil {
+			return nil, nil, fmt.Errorf("failed to read autoscaler min size annotation: %v", err)
+		}
+		minReplicas = pointer.Int32(int32(minInt))
+	}
+	var maxReplicas *int32
+	if max, ok := md.Annotations[machineresource.AutoscalerMaxSizeAnnotation]; ok && max != "" {
+		maxInt, err := strconv.ParseInt(max, 10, 32)
+		if err != nil {
+			return nil, nil, fmt.Errorf("failed to read autoscaler max size annotation: %v", err)
+		}
+		maxReplicas = pointer.Int32(int32(maxInt))
+	}
+	return minReplicas, maxReplicas, nil
 }

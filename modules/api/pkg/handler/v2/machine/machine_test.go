@@ -20,6 +20,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"k8c.io/dashboard/v2/pkg/resources/machine"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -692,6 +693,60 @@ func TestGetMachineDeployment(t *testing.T) {
 					Replicas:      replicas,
 					Paused:        &paused,
 					DynamicConfig: pointer.Bool(false),
+				},
+				Status: clusterv1alpha1.MachineDeploymentStatus{},
+			},
+		},
+		{
+			Name:            "scenario 4: get machine deployment that has cluster-autoscaler min/max replicas set",
+			HTTPStatus:      http.StatusOK,
+			ClusterIDToSync: test.GenDefaultCluster().Name,
+			ProjectIDToSync: test.GenDefaultProject().Name,
+			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
+				test.GenTestSeed(),
+				test.GenDefaultCluster(),
+			),
+			ExistingAPIUser: test.GenDefaultAPIUser(),
+			ExistingMachineDeployments: []*clusterv1alpha1.MachineDeployment{
+				func() *clusterv1alpha1.MachineDeployment {
+					md := genTestMachineDeployment("venus", `{"cloudProvider":"digitalocean","cloudProviderSpec":{"token":"dummy-token","region":"fra1","size":"2GB"}, "operatingSystem":"ubuntu", "operatingSystemSpec":{"distUpgradeOnBoot":true}}`, nil, false)
+					md.Annotations = map[string]string{
+						machine.AutoscalerMinSizeAnnotation: "5",
+						machine.AutoscalerMaxSizeAnnotation: "7",
+					}
+					return md
+				}(),
+			},
+			ExpectedResponse: apiv1.NodeDeployment{
+				ObjectMeta: apiv1.ObjectMeta{
+					ID:   "venus",
+					Name: "venus",
+					Annotations: map[string]string{
+						machine.AutoscalerMinSizeAnnotation: "5",
+						machine.AutoscalerMaxSizeAnnotation: "7",
+					},
+				},
+				Spec: apiv1.NodeDeploymentSpec{
+					Template: apiv1.NodeSpec{
+						Cloud: apiv1.NodeCloudSpec{
+							Digitalocean: &apiv1.DigitaloceanNodeSpec{
+								Size: "2GB",
+							},
+						},
+						OperatingSystem: apiv1.OperatingSystemSpec{
+							Ubuntu: &apiv1.UbuntuSpec{
+								DistUpgradeOnBoot: true,
+							},
+						},
+						Versions: apiv1.NodeVersionInfo{
+							Kubelet: "v9.9.9",
+						},
+					},
+					Replicas:      replicas,
+					Paused:        &paused,
+					DynamicConfig: pointer.Bool(false),
+					MinReplicas:   pointer.Int32(5),
+					MaxReplicas:   pointer.Int32(7),
 				},
 				Status: clusterv1alpha1.MachineDeploymentStatus{},
 			},

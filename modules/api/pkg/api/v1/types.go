@@ -2557,6 +2557,10 @@ type NodeDeploymentSpec struct {
 	// Only supported for nodes with Kubernetes 1.23 or less.
 	// required: false
 	DynamicConfig *bool `json:"dynamicConfig,omitempty"`
+	// required: false
+	MinReplicas *int32 `json:"minReplicas,omitempty"`
+	// required: false
+	MaxReplicas *int32 `json:"maxReplicas,omitempty"`
 }
 
 // Event is a report of an event somewhere in the cluster.
