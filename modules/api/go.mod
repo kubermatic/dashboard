@@ -26,7 +26,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/iam v1.18.23
 	github.com/aws/aws-sdk-go-v2/service/sts v1.17.1
 	github.com/aws/smithy-go v1.13.4
-	github.com/cert-manager/cert-manager v1.10.0
+	github.com/cert-manager/cert-manager v1.10.1
 	github.com/coreos/go-oidc v2.2.1+incompatible
 	github.com/coreos/locksmith v0.6.2
 	github.com/cristim/ec2-instances-info v0.0.0-20220804141719-da3da500d587
@@ -49,7 +49,7 @@ require (
 	github.com/gorilla/websocket v1.5.0
 	github.com/hetznercloud/hcloud-go v1.35.3
 	github.com/imdario/mergo v0.3.13
-	github.com/kubermatic/machine-controller v1.55.1-0.20221006174428-7784255e05d8
+	github.com/kubermatic/machine-controller v1.55.1-0.20221025093451-cc6662347401
 	github.com/minio/minio-go/v7 v7.0.43
 	github.com/open-policy-agent/frameworks/constraint v0.0.0-20221021181852-5942e3928c9d // v0.5.1
 	github.com/open-policy-agent/gatekeeper v0.0.0-20220504234711-ecf609290e2e // v3.8.1
@@ -103,7 +103,7 @@ require (
 	github.com/go-openapi/validate v0.22.0
 	github.com/go-swagger/go-swagger v0.30.3
 	github.com/onsi/ginkgo v1.16.5
-	k8c.io/kubermatic/v2 v2.21.1-0.20221122140205-50133d9551f3
+	k8c.io/kubermatic/v2 v2.21.1-0.20221123202401-38574e5e6038
 	k8s.io/code-generator v0.25.3
 	sigs.k8s.io/controller-tools v0.10.0
 )

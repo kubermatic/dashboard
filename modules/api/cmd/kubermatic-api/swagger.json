@@ -32436,6 +32436,11 @@
           "description": "ProxyMode defines the default kube-proxy mode (\"ipvs\" / \"iptables\" / \"ebpf\").",
           "type": "string",
           "x-go-name": "ProxyMode"
+        },
+        "tunnelingAgentIP": {
+          "description": "TunnelingAgentIP is the address used by the tunneling agents",
+          "type": "string",
+          "x-go-name": "TunnelingAgentIP"
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
