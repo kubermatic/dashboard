@@ -63,59 +63,93 @@ type gcpSubnetworksNoCredentialReq struct {
 	Network string
 }
 
+// type GCPCommonReq struct {
+// 	ServiceAccount string
+// 	Credential     string
+// }
+
+// type GCPProjectCommonReq struct {
+// 	GCPCommonReq
+// 	common.ProjectReq
+// }
+
+// type GCPVMReq struct {
+// 	common.ProjectReq
+// 	GCPCommonReq
+// 	Zone string
+// }
+
+// type GCPProjectVMReq struct {
+// 	GCPProjectCommonReq
+// 	Zone string
+// }
+
+// type GCPDatacenterReq struct {
+// 	Request GCPCommonReq
+// 	DC      string
+// }
+
+// type GCPProjectDatacenterReq struct {
+// 	GCPProjectCommonReq
+// 	DC string
+// }
+
+// type GCPSubnetReq struct {
+// 	Request GCPCommonReq
+// 	Network string
+// 	DC      string
+// }
+
+// type GCPProjectSubnetReq struct {
+// 	ProjectRequest GCPProjectCommonReq
+// 	Network        string
+// 	DC             string
+// }
+
+// type GCPMachineTypesReq struct {
+// 	Request GCPCommonReq
+// 	Zone    string
+// 	DC      string
+// }
+
+// type GCPProjectMachineTypesReq struct {
+// 	ProjectRequest GCPProjectCommonReq
+// 	Zone           string
+// 	DC             string
+// }
+
 type GCPCommonReq struct {
 	ServiceAccount string
 	Credential     string
 }
 
 type GCPProjectCommonReq struct {
-	Request   GCPCommonReq
-	ProjectID string
+	GCPCommonReq
+	common.ProjectReq
 }
 
-type GCPVMReq struct {
-	Request GCPCommonReq
-	Zone    string
-}
-
+// GCPProjectVMReq represents a request for GCP Disktypes within the context of a KKP project
+// swagger:parameters listProjectGCPDiskTypes
 type GCPProjectVMReq struct {
-	Request   GCPProjectCommonReq
-	Zone      string
-	ProjectID string
-}
-
-type GCPDatacenterReq struct {
-	Request GCPCommonReq
-	DC      string
+	GCPProjectCommonReq
+	Zone string
 }
 
 type GCPProjectDatacenterReq struct {
-	ProjectRequest GCPProjectCommonReq
-	DC             string
+	GCPProjectCommonReq
+	DC string
 }
 
-type GCPSubnetReq struct {
-	Request GCPCommonReq
+type GCPProjectSubnetReq struct {
+	GCPProjectCommonReq
 	Network string
 	DC      string
 }
 
-type GCPProjectSubnetReq struct {
-	ProjectRequest GCPProjectCommonReq
-	Network        string
-	DC             string
-}
-
-type GCPMachineTypesReq struct {
-	Request GCPCommonReq
-	Zone    string
-	DC      string
-}
-
 type GCPProjectMachineTypesReq struct {
-	ProjectRequest GCPProjectCommonReq
-	Zone           string
-	DC             string
+	GCPCommonReq
+	Zone string
+	DC   string
 }
 
 // GetSeedCluster returns the SeedCluster object.
@@ -193,37 +227,21 @@ func getSAFromPreset(ctx context.Context,
 	return credentials.ServiceAccount, nil
 }
 
-func ListProjectGCPDiskTypes(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
+func ListProjectGCPDiskTypes(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		var (
-			req       GCPCommonReq
-			zone      string
-			projectID string
-			sa        string
-		)
-
-		if !withProject {
-			vmReq, ok := request.(GCPVMReq)
-			if !ok {
-				return nil, utilerrors.NewBadRequest("invalid request")
-			}
-			zone = vmReq.Zone
-			req = vmReq.Request
-		} else {
-			projectReq, ok := request.(GCPProjectVMReq)
-			if !ok {
-				return nil, utilerrors.NewBadRequest("invalid request")
-			}
-			zone = projectReq.Zone
-			projectID = projectReq.ProjectID
-			req = projectReq.Request.Request
+		listReq, ok := request.(GCPProjectVMReq)
+		if !ok {
+			return nil, utilerrors.NewBadRequest("invalid request")
 		}
 
+		zone := listReq.Zone
+		projectID := listReq.GetProjectID()
+		req := listReq.GCPCommonReq
 		if err := req.Validate(); err != nil {
 			return nil, utilerrors.NewBadRequest(err.Error())
 		}
 
-		sa = req.ServiceAccount
+		sa := req.ServiceAccount
 		var err error
 		if len(req.Credential) > 0 {
 			sa, err = getSAFromPreset(ctx, userInfoGetter, presetProvider, req.Credential, projectID)
@@ -258,9 +276,9 @@ func ListProjectGCPZones(presetProvider provider.PresetProvider, userInfoGetter 
 				return nil, utilerrors.NewBadRequest("invalid request")
 			}
 
-			projectID = projectReq.ProjectRequest.ProjectID
+			projectID = projectReq.GetProjectID()
 			datacenter = projectReq.DC
-			req = projectReq.ProjectRequest.Request
+			req = projectReq.GCPCommonReq
 		}
 
 		if err := req.Validate(); err != nil {
@@ -298,7 +316,7 @@ func ListProjectGCPNetworks(presetProvider provider.PresetProvider, userInfoGett
 			if !ok {
 				return nil, utilerrors.NewBadRequest("invalid request")
 			}
-			req = listReq.Request
+			req = listReq.GCPCommonReq
 		} else {
 			listReq, ok := request.(GCPCommonReq)
 			if !ok {
@@ -346,7 +364,7 @@ func ListProjectGCPSubnetworks(presetProvider provider.PresetProvider, userInfoG
 			networkName = listReq.Network
 			datacenterName = listReq.DC
 			projectID = listReq.ProjectRequest.ProjectID
-			req = listReq.ProjectRequest.Request
+			req = listReq.ProjectRequest.GCPCommonReq
 		}
 
 		if err := req.Validate(); err != nil {
@@ -397,7 +415,7 @@ func ListProjectGCPSizes(presetProvider provider.PresetProvider, userInfoGetter 
 			projectID = listReq.ProjectRequest.ProjectID
 			dc = listReq.DC
 			zone = listReq.Zone
-			req = listReq.ProjectRequest.Request
+			req = listReq.ProjectRequest.GCPCommonReq
 		}
 
 		err := req.Validate()

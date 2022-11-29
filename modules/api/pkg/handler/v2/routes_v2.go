@@ -1520,7 +1520,7 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 
 // swagger:route GET /api/v2/projects/{project_id}/disktypes project listProjectGCPDisk
 //
-//	Creates a cluster for the given project.
+//	List disktypes for a given project
 //
 //	Consumes:
 //	- application/json
@@ -1530,15 +1530,13 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 //
 //	Responses:
 //	  default: errorResponse
-//	  201: Cluster
-//	  401: empty
-//	  403: empty
+//	  200: GCPDiskTypeList
 func (r Routing) listProjectGCPDiskTypes() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.ListProjectGCPDiskTypes(r.presetProvider, r.userInfoGetter, true)),
+		)(provider.ListProjectGCPDiskTypes(r.presetProvider, r.userInfoGetter)),
 		provider.DecodeGCPSubnetworksNoCredentialReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -1567,7 +1565,7 @@ func (r Routing) listProjectGCPSubnetworks() http.Handler {
 	)
 }
 
-// swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/gcp/networks gcp listGCPNetworksNoCredentialsV2
+// swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/gcp/networks gcp listProjectGCPNetworks
 //
 // Lists available GCP networks
 //
