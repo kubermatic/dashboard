@@ -30,7 +30,6 @@ import (
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	"k8c.io/dashboard/v2/pkg/validation"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
-	"k8c.io/kubermatic/v2/pkg/resources"
 	"k8c.io/kubermatic/v2/pkg/validation/nodeupdate"
 	osmresources "k8c.io/operating-system-manager/pkg/controllers/osc/resources"
 
@@ -107,7 +106,7 @@ func Deployment(c *kubermaticv1.Cluster, nd *apiv1.NodeDeployment, dc *kubermati
 
 		md.Spec.Template.Spec.ConfigSource = &corev1.NodeConfigSource{
 			ConfigMap: &corev1.ConfigMapNodeConfigSource{
-				Namespace:        resources.KubeSystemNamespaceName,
+				Namespace:        metav1.NamespaceSystem,
 				Name:             fmt.Sprintf("kubelet-config-%d.%d", kubeletVersion.Major(), kubeletVersion.Minor()),
 				KubeletConfigKey: "kubelet",
 			},

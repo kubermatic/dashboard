@@ -535,7 +535,7 @@ func createKubeconfigSecret(ctx context.Context, client ctrlruntimeclient.Client
 		return err
 	}
 
-	namespacedName := types.NamespacedName{Namespace: resources.KubeSystemNamespaceName, Name: kubeconfigSecretName}
+	namespacedName := types.NamespacedName{Namespace: metav1.NamespaceSystem, Name: kubeconfigSecretName}
 
 	existingSecret := &corev1.Secret{}
 	if err := client.Get(ctx, namespacedName, existingSecret); err != nil && !apierrors.IsNotFound(err) {
@@ -558,7 +558,7 @@ func createSecret(ctx context.Context, client ctrlruntimeclient.Client, name, em
 	secret := &corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:        name,
-			Namespace:   resources.KubeSystemNamespaceName,
+			Namespace:   metav1.NamespaceSystem,
 			Annotations: map[string]string{"user": email},
 		},
 		Type: corev1.SecretTypeOpaque,
