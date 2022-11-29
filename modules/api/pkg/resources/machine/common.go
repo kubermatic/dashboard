@@ -519,6 +519,7 @@ func getGCPProviderSpec(c *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, dc *ku
 
 func GetKubevirtProviderConfig(cluster *kubermaticv1.Cluster, nodeSpec apiv1.NodeSpec, dc *kubermaticv1.Datacenter) (*kubevirt.RawConfig, error) {
 	config := &kubevirt.RawConfig{
+		ClusterName: providerconfig.ConfigVarString{Value: cluster.Name},
 		VirtualMachine: kubevirt.VirtualMachine{
 			Instancetype: nodeSpec.Cloud.Kubevirt.Instancetype,
 			Preference:   nodeSpec.Cloud.Kubevirt.Preference,
