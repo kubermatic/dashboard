@@ -1028,7 +1028,7 @@ func (cs *ClusterSpec) MarshalJSON() ([]byte, error) {
 		ClusterNetwork                       *kubermaticv1.ClusterNetworkingConfig  `json:"clusterNetwork,omitempty"`
 		CNIPlugin                            *kubermaticv1.CNIPluginSettings        `json:"cniPlugin,omitempty"`
 		ExposeStrategy                       kubermaticv1.ExposeStrategy            `json:"exposeStrategy,omitempty"`
-		APIServerAllowedIPRanges             *kubermaticv1.NetworkRanges            `json:"apiserverallowedIPRanges,omitempty"`
+		APIServerAllowedIPRanges             *kubermaticv1.NetworkRanges            `json:"apiServerAllowedIPRanges,omitempty"`
 	}{
 		Cloud: PublicCloudSpec{
 			DatacenterName:      cs.Cloud.DatacenterName,
