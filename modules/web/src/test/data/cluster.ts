@@ -35,6 +35,9 @@ export function fakeDigitaloceanCluster(): Cluster {
         type: CNIPlugin.Cilium,
         version: 'v1.11',
       },
+      apiServerAllowedIPRanges: {
+        cidrBlocks: ['10.0.0.0/8'],
+      },
     },
     status: {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
@@ -60,6 +63,9 @@ export function fakeEquinixCluster(): Cluster {
         providerName: 'packet',
       },
       version: '1.8.5',
+      apiServerAllowedIPRanges: {
+        cidrBlocks: ['10.0.0.0/8'],
+      },
     },
     status: {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
@@ -83,6 +89,9 @@ export function fakeHetznerCluster(): Cluster {
         providerName: 'digitalocean',
       },
       version: '1.8.5',
+      apiServerAllowedIPRanges: {
+        cidrBlocks: ['10.0.0.0/8'],
+      },
     },
     status: {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
@@ -113,6 +122,9 @@ export function fakeVSphereCluster(): Cluster {
         providerName: 'vsphere',
       },
       version: '1.8.5',
+      apiServerAllowedIPRanges: {
+        cidrBlocks: ['10.0.0.0/8'],
+      },
     },
     status: {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
@@ -144,6 +156,9 @@ export function fakeAWSCluster(): Cluster {
         providerName: 'aws',
       },
       version: '1.9.6',
+      apiServerAllowedIPRanges: {
+        cidrBlocks: ['10.0.0.0/8'],
+      },
     },
     status: {
       url: 'https://vr4m6wpqv6.europe-west3-c.dev.kubermatic.io:30003',
@@ -177,6 +192,9 @@ export function fakeOpenstackCluster(): Cluster {
         providerName: 'openstack',
       },
       version: '1.9.6',
+      apiServerAllowedIPRanges: {
+        cidrBlocks: ['10.0.0.0/8'],
+      },
     },
     status: {
       url: 'https://vr4m6wpqv6.europe-west3-c.dev.kubermatic.io:30003',
@@ -211,6 +229,9 @@ export function fakeAzureCluster(): Cluster {
         providerName: 'azure',
       },
       version: '1.8.5',
+      apiServerAllowedIPRanges: {
+        cidrBlocks: ['10.0.0.0/8'],
+      },
     },
     status: {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
@@ -232,6 +253,9 @@ export function fakeBringyourownCluster(): Cluster {
         providerName: 'bringyourown',
       },
       version: '1.8.5',
+      apiServerAllowedIPRanges: {
+        cidrBlocks: ['10.0.0.0/8'],
+      },
     },
     status: {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
@@ -256,6 +280,9 @@ export function fakeAlibabaCluster(): Cluster {
         providerName: 'alibaba',
       },
       version: '1.9.6',
+      apiServerAllowedIPRanges: {
+        cidrBlocks: ['10.0.0.0/8'],
+      },
     },
     status: {
       url: 'https://vr4m6wpqv6.europe-west3-c.dev.kubermatic.io:30003',
