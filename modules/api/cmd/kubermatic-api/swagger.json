@@ -16966,6 +16966,7 @@
     },
     "/api/v2/projects/{project_id}/disktypes": {
       "get": {
+        "description": "List disktypes for a given project",
         "consumes": [
           "application/json"
         ],
@@ -16975,20 +16976,13 @@
         "tags": [
           "project"
         ],
-        "summary": "Creates a cluster for the given project.",
         "operationId": "listProjectGCPDisk",
         "responses": {
-          "201": {
-            "description": "Cluster",
+          "200": {
+            "description": "GCPDiskTypeList",
             "schema": {
-              "$ref": "#/definitions/Cluster"
+              "$ref": "#/definitions/GCPDiskTypeList"
             }
-          },
-          "401": {
-            "$ref": "#/responses/empty"
-          },
-          "403": {
-            "$ref": "#/responses/empty"
           },
           "default": {
             "description": "errorResponse",
@@ -20220,6 +20214,35 @@
           "gcp"
         ],
         "operationId": "listProjectGCPSubnetworks",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "ServiceAccount",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Network",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "DC",
+            "in": "query"
+          }
+        ],
         "responses": {
           "200": {
             "description": "GCPSubnetworkList",
@@ -20270,6 +20293,30 @@
         ],
         "summary": "Lists GCP zones.",
         "operationId": "listProjectGCPZones",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "ServiceAccount",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "DC",
+            "in": "query"
+          }
+        ],
         "responses": {
           "200": {
             "description": "GCPZoneList",

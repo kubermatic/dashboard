@@ -23,24 +23,12 @@ type ListProjectGCPDiskReader struct {
 // ReadResponse reads a server response into the received o.
 func (o *ListProjectGCPDiskReader) ReadResponse(response runtime.ClientResponse, consumer runtime.Consumer) (interface{}, error) {
 	switch response.Code() {
-	case 201:
-		result := NewListProjectGCPDiskCreated()
+	case 200:
+		result := NewListProjectGCPDiskOK()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
 			return nil, err
 		}
 		return result, nil
-	case 401:
-		result := NewListProjectGCPDiskUnauthorized()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
-	case 403:
-		result := NewListProjectGCPDiskForbidden()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
 	default:
 		result := NewListProjectGCPDiskDefault(response.Code())
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -53,167 +41,63 @@ func (o *ListProjectGCPDiskReader) ReadResponse(response runtime.ClientResponse,
 	}
 }
 
-// NewListProjectGCPDiskCreated creates a ListProjectGCPDiskCreated with default headers values
-func NewListProjectGCPDiskCreated() *ListProjectGCPDiskCreated {
-	return &ListProjectGCPDiskCreated{}
+// NewListProjectGCPDiskOK creates a ListProjectGCPDiskOK with default headers values
+func NewListProjectGCPDiskOK() *ListProjectGCPDiskOK {
+	return &ListProjectGCPDiskOK{}
 }
 
 /*
-ListProjectGCPDiskCreated describes a response with status code 201, with default header values.
+ListProjectGCPDiskOK describes a response with status code 200, with default header values.
 
-Cluster
+GCPDiskTypeList
 */
-type ListProjectGCPDiskCreated struct {
-	Payload *models.Cluster
+type ListProjectGCPDiskOK struct {
+	Payload models.GCPDiskTypeList
 }
 
-// IsSuccess returns true when this list project g c p disk created response has a 2xx status code
-func (o *ListProjectGCPDiskCreated) IsSuccess() bool {
+// IsSuccess returns true when this list project g c p disk o k response has a 2xx status code
+func (o *ListProjectGCPDiskOK) IsSuccess() bool {
 	return true
 }
 
-// IsRedirect returns true when this list project g c p disk created response has a 3xx status code
-func (o *ListProjectGCPDiskCreated) IsRedirect() bool {
+// IsRedirect returns true when this list project g c p disk o k response has a 3xx status code
+func (o *ListProjectGCPDiskOK) IsRedirect() bool {
 	return false
 }
 
-// IsClientError returns true when this list project g c p disk created response has a 4xx status code
-func (o *ListProjectGCPDiskCreated) IsClientError() bool {
+// IsClientError returns true when this list project g c p disk o k response has a 4xx status code
+func (o *ListProjectGCPDiskOK) IsClientError() bool {
 	return false
 }
 
-// IsServerError returns true when this list project g c p disk created response has a 5xx status code
-func (o *ListProjectGCPDiskCreated) IsServerError() bool {
+// IsServerError returns true when this list project g c p disk o k response has a 5xx status code
+func (o *ListProjectGCPDiskOK) IsServerError() bool {
 	return false
 }
 
-// IsCode returns true when this list project g c p disk created response a status code equal to that given
-func (o *ListProjectGCPDiskCreated) IsCode(code int) bool {
-	return code == 201
+// IsCode returns true when this list project g c p disk o k response a status code equal to that given
+func (o *ListProjectGCPDiskOK) IsCode(code int) bool {
+	return code == 200
 }
 
-func (o *ListProjectGCPDiskCreated) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/disktypes][%d] listProjectGCPDiskCreated  %+v", 201, o.Payload)
+func (o *ListProjectGCPDiskOK) Error() string {
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/disktypes][%d] listProjectGCPDiskOK  %+v", 200, o.Payload)
 }
 
-func (o *ListProjectGCPDiskCreated) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/disktypes][%d] listProjectGCPDiskCreated  %+v", 201, o.Payload)
+func (o *ListProjectGCPDiskOK) String() string {
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/disktypes][%d] listProjectGCPDiskOK  %+v", 200, o.Payload)
 }
 
-func (o *ListProjectGCPDiskCreated) GetPayload() *models.Cluster {
+func (o *ListProjectGCPDiskOK) GetPayload() models.GCPDiskTypeList {
 	return o.Payload
 }
 
-func (o *ListProjectGCPDiskCreated) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	o.Payload = new(models.Cluster)
+func (o *ListProjectGCPDiskOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
-
-	return nil
-}
-
-// NewListProjectGCPDiskUnauthorized creates a ListProjectGCPDiskUnauthorized with default headers values
-func NewListProjectGCPDiskUnauthorized() *ListProjectGCPDiskUnauthorized {
-	return &ListProjectGCPDiskUnauthorized{}
-}
-
-/*
-ListProjectGCPDiskUnauthorized describes a response with status code 401, with default header values.
-
-EmptyResponse is a empty response
-*/
-type ListProjectGCPDiskUnauthorized struct {
-}
-
-// IsSuccess returns true when this list project g c p disk unauthorized response has a 2xx status code
-func (o *ListProjectGCPDiskUnauthorized) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this list project g c p disk unauthorized response has a 3xx status code
-func (o *ListProjectGCPDiskUnauthorized) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this list project g c p disk unauthorized response has a 4xx status code
-func (o *ListProjectGCPDiskUnauthorized) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this list project g c p disk unauthorized response has a 5xx status code
-func (o *ListProjectGCPDiskUnauthorized) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this list project g c p disk unauthorized response a status code equal to that given
-func (o *ListProjectGCPDiskUnauthorized) IsCode(code int) bool {
-	return code == 401
-}
-
-func (o *ListProjectGCPDiskUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/disktypes][%d] listProjectGCPDiskUnauthorized ", 401)
-}
-
-func (o *ListProjectGCPDiskUnauthorized) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/disktypes][%d] listProjectGCPDiskUnauthorized ", 401)
-}
-
-func (o *ListProjectGCPDiskUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	return nil
-}
-
-// NewListProjectGCPDiskForbidden creates a ListProjectGCPDiskForbidden with default headers values
-func NewListProjectGCPDiskForbidden() *ListProjectGCPDiskForbidden {
-	return &ListProjectGCPDiskForbidden{}
-}
-
-/*
-ListProjectGCPDiskForbidden describes a response with status code 403, with default header values.
-
-EmptyResponse is a empty response
-*/
-type ListProjectGCPDiskForbidden struct {
-}
-
-// IsSuccess returns true when this list project g c p disk forbidden response has a 2xx status code
-func (o *ListProjectGCPDiskForbidden) IsSuccess() bool {
-	return false
-}
-
-// IsRedirect returns true when this list project g c p disk forbidden response has a 3xx status code
-func (o *ListProjectGCPDiskForbidden) IsRedirect() bool {
-	return false
-}
-
-// IsClientError returns true when this list project g c p disk forbidden response has a 4xx status code
-func (o *ListProjectGCPDiskForbidden) IsClientError() bool {
-	return true
-}
-
-// IsServerError returns true when this list project g c p disk forbidden response has a 5xx status code
-func (o *ListProjectGCPDiskForbidden) IsServerError() bool {
-	return false
-}
-
-// IsCode returns true when this list project g c p disk forbidden response a status code equal to that given
-func (o *ListProjectGCPDiskForbidden) IsCode(code int) bool {
-	return code == 403
-}
-
-func (o *ListProjectGCPDiskForbidden) Error() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/disktypes][%d] listProjectGCPDiskForbidden ", 403)
-}
-
-func (o *ListProjectGCPDiskForbidden) String() string {
-	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/disktypes][%d] listProjectGCPDiskForbidden ", 403)
-}
-
-func (o *ListProjectGCPDiskForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	return nil
 }

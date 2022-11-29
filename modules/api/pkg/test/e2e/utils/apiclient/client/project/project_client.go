@@ -254,7 +254,7 @@ type ClientService interface {
 
 	ListNodesForCluster(params *ListNodesForClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListNodesForClusterOK, error)
 
-	ListProjectGCPDisk(params *ListProjectGCPDiskParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectGCPDiskCreated, error)
+	ListProjectGCPDisk(params *ListProjectGCPDiskParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectGCPDiskOK, error)
 
 	ListProjects(params *ListProjectsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectsOK, error)
 
@@ -4636,9 +4636,9 @@ func (a *Client) ListNodesForCluster(params *ListNodesForClusterParams, authInfo
 }
 
 /*
-ListProjectGCPDisk creates a cluster for the given project
+ListProjectGCPDisk List disktypes for a given project
 */
-func (a *Client) ListProjectGCPDisk(params *ListProjectGCPDiskParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectGCPDiskCreated, error) {
+func (a *Client) ListProjectGCPDisk(params *ListProjectGCPDiskParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectGCPDiskOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
 		params = NewListProjectGCPDiskParams()
@@ -4664,7 +4664,7 @@ func (a *Client) ListProjectGCPDisk(params *ListProjectGCPDiskParams, authInfo r
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*ListProjectGCPDiskCreated)
+	success, ok := result.(*ListProjectGCPDiskOK)
 	if ok {
 		return success, nil
 	}

@@ -60,6 +60,22 @@ ListProjectGCPSubnetworksParams contains all the parameters to send to the API e
 	Typically these are written to a http.Request.
 */
 type ListProjectGCPSubnetworksParams struct {
+
+	// Credential.
+	Credential *string
+
+	// DC.
+	DC *string
+
+	// Network.
+	Network *string
+
+	// ServiceAccount.
+	ServiceAccount *string
+
+	// ProjectID.
+	ProjectID string
+
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -113,6 +129,61 @@ func (o *ListProjectGCPSubnetworksParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithCredential adds the credential to the list project g c p subnetworks params
+func (o *ListProjectGCPSubnetworksParams) WithCredential(credential *string) *ListProjectGCPSubnetworksParams {
+	o.SetCredential(credential)
+	return o
+}
+
+// SetCredential adds the credential to the list project g c p subnetworks params
+func (o *ListProjectGCPSubnetworksParams) SetCredential(credential *string) {
+	o.Credential = credential
+}
+
+// WithDC adds the dC to the list project g c p subnetworks params
+func (o *ListProjectGCPSubnetworksParams) WithDC(dC *string) *ListProjectGCPSubnetworksParams {
+	o.SetDC(dC)
+	return o
+}
+
+// SetDC adds the dC to the list project g c p subnetworks params
+func (o *ListProjectGCPSubnetworksParams) SetDC(dC *string) {
+	o.DC = dC
+}
+
+// WithNetwork adds the network to the list project g c p subnetworks params
+func (o *ListProjectGCPSubnetworksParams) WithNetwork(network *string) *ListProjectGCPSubnetworksParams {
+	o.SetNetwork(network)
+	return o
+}
+
+// SetNetwork adds the network to the list project g c p subnetworks params
+func (o *ListProjectGCPSubnetworksParams) SetNetwork(network *string) {
+	o.Network = network
+}
+
+// WithServiceAccount adds the serviceAccount to the list project g c p subnetworks params
+func (o *ListProjectGCPSubnetworksParams) WithServiceAccount(serviceAccount *string) *ListProjectGCPSubnetworksParams {
+	o.SetServiceAccount(serviceAccount)
+	return o
+}
+
+// SetServiceAccount adds the serviceAccount to the list project g c p subnetworks params
+func (o *ListProjectGCPSubnetworksParams) SetServiceAccount(serviceAccount *string) {
+	o.ServiceAccount = serviceAccount
+}
+
+// WithProjectID adds the projectID to the list project g c p subnetworks params
+func (o *ListProjectGCPSubnetworksParams) WithProjectID(projectID string) *ListProjectGCPSubnetworksParams {
+	o.SetProjectID(projectID)
+	return o
+}
+
+// SetProjectID adds the projectId to the list project g c p subnetworks params
+func (o *ListProjectGCPSubnetworksParams) SetProjectID(projectID string) {
+	o.ProjectID = projectID
+}
+
 // WriteToRequest writes these params to a swagger request
 func (o *ListProjectGCPSubnetworksParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -120,6 +191,61 @@ func (o *ListProjectGCPSubnetworksParams) WriteToRequest(r runtime.ClientRequest
 		return err
 	}
 	var res []error
+
+	if o.Credential != nil {
+
+		// header param Credential
+		if err := r.SetHeaderParam("Credential", *o.Credential); err != nil {
+			return err
+		}
+	}
+
+	if o.DC != nil {
+
+		// query param DC
+		var qrDC string
+
+		if o.DC != nil {
+			qrDC = *o.DC
+		}
+		qDC := qrDC
+		if qDC != "" {
+
+			if err := r.SetQueryParam("DC", qDC); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.Network != nil {
+
+		// query param Network
+		var qrNetwork string
+
+		if o.Network != nil {
+			qrNetwork = *o.Network
+		}
+		qNetwork := qrNetwork
+		if qNetwork != "" {
+
+			if err := r.SetQueryParam("Network", qNetwork); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.ServiceAccount != nil {
+
+		// header param ServiceAccount
+		if err := r.SetHeaderParam("ServiceAccount", *o.ServiceAccount); err != nil {
+			return err
+		}
+	}
+
+	// path param project_id
+	if err := r.SetPathParam("project_id", o.ProjectID); err != nil {
+		return err
+	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
