@@ -230,7 +230,7 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
 
   onExtendSession(): void {
     this._onTerminalExtendSession();
-    // this.isSessionExpiring = false;
+    this.isSessionExpiring = false;
   }
 
   private _getWebTerminalProxyURL(): string {
