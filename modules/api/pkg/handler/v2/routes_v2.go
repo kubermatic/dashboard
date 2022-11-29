@@ -1558,7 +1558,7 @@ func (r Routing) listProjectGCPSubnetworks() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.ListProjectGCPSubnetworks(r.presetProvider, r.userInfoGetter, r.seedsGetter, true)),
+		)(provider.ListProjectGCPSubnetworks(r.presetProvider, r.userInfoGetter, r.seedsGetter)),
 		provider.DecodeGCPSubnetworksNoCredentialReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -1580,7 +1580,7 @@ func (r Routing) listProjectGCPNetworks() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.ListProjectGCPNetworks(r.presetProvider, r.userInfoGetter, true)),
+		)(provider.ListProjectGCPNetworks(r.presetProvider, r.userInfoGetter)),
 		cluster.DecodeGetClusterReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -1602,7 +1602,7 @@ func (r Routing) listProjectGCPZones() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.ListProjectGCPZones(r.presetProvider, r.userInfoGetter, r.seedsGetter, true)),
+		)(provider.ListProjectGCPZones(r.presetProvider, r.userInfoGetter, r.seedsGetter)),
 		externalcluster.DecodeGKEProjectCommonReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -1624,7 +1624,7 @@ func (r Routing) listProjectGCPSizes() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.ListProjectGCPSizes(r.presetProvider, r.userInfoGetter, r.settingsProvider, r.seedsGetter, true)),
+		)(provider.ListProjectGCPSizes(r.presetProvider, r.userInfoGetter, r.settingsProvider, r.seedsGetter)),
 		externalcluster.DecodeGKEProjectVMReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
