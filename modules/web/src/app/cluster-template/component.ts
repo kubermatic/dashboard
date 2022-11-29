@@ -260,6 +260,7 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
 
   onActivate(component: QuotaWidgetComponent): void {
     const id = this._activeRoute.snapshot.paramMap.get(PathParam.ProjectID);
+    component.showAsCard = false;
     this._projectService.onProjectChange.pipe(startWith({id}), takeUntil(this._unsubscribe)).subscribe(({id}) => {
       component.projectId = id;
     });

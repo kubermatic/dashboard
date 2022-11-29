@@ -124,6 +124,7 @@ describe('Admin Settings - Cluster Related Settings Story', () => {
 
   it('should make sure default admin settings work', () => {
     // Cleanup settings check
+    ClustersPage.getProviderMenu().click();
     ClustersPage.getDeleteClusterBtn().click();
     ClustersPage.getDeleteDialogCleanupLBCheckbox().find('input').should(Condition.NotBeChecked);
     ClustersPage.getDeleteDialogCleanupVolumeCheckbox().find('input').should(Condition.NotBeChecked);
@@ -194,6 +195,7 @@ describe('Admin Settings - Cluster Related Settings Story', () => {
 
   it('should make sure default admin settings work', () => {
     // Cleanup settings check
+    ClustersPage.getProviderMenu().click();
     ClustersPage.getDeleteClusterBtn().click();
     ClustersPage.getDeleteDialogCleanupLBCheckbox().find('input').should(Condition.BeChecked);
     ClustersPage.getDeleteDialogCleanupLBCheckbox().find('input').should(Condition.BeDisabled);

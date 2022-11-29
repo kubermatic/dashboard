@@ -14,33 +14,34 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div fxLayout
-     fxLayoutAlign=" center">
-  <km-search-field (queryChange)="onSearch($event)"></km-search-field>
-  <div fxFlex></div>
+<mat-card class="km-card">
+  <div fxLayout
+       fxLayoutAlign=" center"
+       class="header">
+    <km-search-field (queryChange)="onSearch($event)"></km-search-field>
+    <div fxFlex></div>
 
-  <div fxLayoutAlign="center center">
-    <router-outlet name="quota-widget"
-                   (activate)="onActivate($event)"></router-outlet>
+    <div fxLayoutAlign="center center">
+      <router-outlet name="quota-widget"
+                     (activate)="onActivate($event)"></router-outlet>
+    </div>
+    <button id="km-add-external-cluster-btn"
+            mat-flat-button
+            [disabled]="!can(Permission.Create)"
+            (click)="addExternalCluster()">
+      <i class="km-icon-mask km-icon-add"></i>
+      <span>Import External Cluster</span>
+    </button>
+
+    <button id="km-create-external-cluster-btn"
+            mat-flat-button
+            [disabled]="!can(Permission.Create)"
+            (click)="openWizard()">
+      <i class="km-icon-mask km-icon-add"></i>
+      <span>Create External Cluster</span>
+    </button>
   </div>
-  <button id="km-add-external-cluster-btn"
-          mat-flat-button
-          [disabled]="!can(Permission.Create)"
-          (click)="addExternalCluster()">
-    <i class="km-icon-mask km-icon-add"></i>
-    <span>Import External Cluster</span>
-  </button>
 
-  <button id="km-create-external-cluster-btn"
-          mat-flat-button
-          [disabled]="!can(Permission.Create)"
-          (click)="openWizard()">
-    <i class="km-icon-mask km-icon-add"></i>
-    <span>Create External Cluster</span>
-  </button>
-</div>
-
-<mat-card class="km-cluster-view">
   <mat-card-content>
     <table class="km-table"
            mat-table
@@ -181,7 +182,6 @@ limitations under the License.
     <div [hidden]="!isPaginatorVisible()">
       <mat-paginator showFirstLastButtons></mat-paginator>
     </div>
-
   </mat-card-content>
 </mat-card>
 

@@ -17,7 +17,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
 import {UserService} from '@core/services/user';
-import {ExternalCluster} from '@shared/entity/external-cluster';
+import {ExternalCluster, ExternalClusterState} from '@shared/entity/external-cluster';
 import {getOperatingSystem} from '@shared/entity/node';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
@@ -31,6 +31,7 @@ import {ExternalMachineDeploymentService} from '@core/services/external-machine-
 import {UpdateExternalClusterMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/update-external-cluster-machine-deployment-dialog/component';
 import {HealthStatus} from '@shared/utils/health-status';
 import {View} from '@app/shared/entity/common';
+import {NotificationService} from 'app/core/services/notification';
 
 enum AKSNodePoolState {
   ProvisioningState = 'provisioningState',
@@ -74,6 +75,7 @@ export class ExternalMachineDeploymentListComponent implements OnInit, OnChanges
     private readonly _matDialog: MatDialog,
     private readonly _router: Router,
     private readonly _userService: UserService,
+    private readonly _notificationService: NotificationService,
     private readonly _externalMachineDeploymentService: ExternalMachineDeploymentService
   ) {}
 
@@ -101,6 +103,10 @@ export class ExternalMachineDeploymentListComponent implements OnInit, OnChanges
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  get isRunning(): boolean {
+    return this.cluster?.status?.state === ExternalClusterState.Running;
   }
 
   getHealthStatus(md: ExternalMachineDeployment): HealthStatus {
@@ -158,6 +164,14 @@ export class ExternalMachineDeploymentListComponent implements OnInit, OnChanges
     this._externalMachineDeploymentService
       .showExternalMachineDeploymentDeleteDialog(this.projectID, this.cluster, md)
       .subscribe(_ => {});
+  }
+
+  addExternalMachineDeployment(): void {
+    this._externalMachineDeploymentService
+      .showCreateExternalClusterMachineDeploymentDialog(this.projectID, this.cluster)
+      .subscribe((data: ExternalMachineDeployment) => {
+        this._notificationService.success(`${data.name} Machine Deployment been created`);
+      });
   }
 
   private _filterDisplayedColumn(): void {

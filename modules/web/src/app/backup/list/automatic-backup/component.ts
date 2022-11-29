@@ -39,7 +39,6 @@ import {getBackupHealthStatus, HealthStatus} from '@shared/utils/health-status';
 @Component({
   selector: 'km-automatic-backup-list',
   templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
 })
 export class AutomaticBackupListComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator, {static: true}) private readonly _paginator: MatPaginator;

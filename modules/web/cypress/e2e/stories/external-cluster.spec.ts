@@ -74,6 +74,7 @@ describe('External Cluster Story', () => {
   });
 
   it('should disconnect cluster', () => {
+    ClustersPage.getProviderMenu().click();
     ClustersPage.getDeleteClusterBtn().click();
     ClustersPage.getDisconnectConfirmBtn().click();
   });

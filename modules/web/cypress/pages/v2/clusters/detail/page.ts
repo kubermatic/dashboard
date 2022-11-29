@@ -15,6 +15,7 @@
 import {ClusterDetailStrategy, Condition, Page, PageOptions, Provider} from '@kmtypes';
 import {ProviderMenuOption} from '../proxy';
 import {ClusterDetailStrategyFactory} from './strategy/factory';
+import {Pages} from 'pages/v2/pages';
 
 export class ClusterDetail extends PageOptions implements Page {
   private readonly _strategy: ClusterDetailStrategy | undefined;
@@ -31,6 +32,7 @@ export class ClusterDetail extends PageOptions implements Page {
   visit(): void {}
 
   delete(name: string, provider: Provider): void {
+    Pages.Clusters.Details.Buttons.providerMenu.click();
     this.Buttons.deleteCluster.click().then(_ => this._strategy?.onDelete(provider));
     this.Elements.deleteDialogInput.type(name);
     this.Buttons.deleteClusterConfirm.click();

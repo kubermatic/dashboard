@@ -678,15 +678,6 @@ km-cni-version {
         i {
           margin: 0 12px 0 0;
         }
-
-        .km-quota-widget {
-          border-radius: variables.$border-radius;
-          padding: 0 10px;
-
-          km-property {
-            padding-top: 6px;
-          }
-        }
       }
     }
   }
@@ -707,5 +698,19 @@ km-cni-version {
         @include mixins.size(240px, null, true);
       }
     }
+  }
+}
+
+.km-card {
+  &.mat-card:first-child &:not(.keep-margin) {
+    margin-top: 0;
+  }
+
+  .header {
+    padding: 0 30px;
+  }
+
+  .mat-card-content {
+    margin-top: 30px;
   }
 }

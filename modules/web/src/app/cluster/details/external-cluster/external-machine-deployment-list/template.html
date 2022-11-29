@@ -13,9 +13,18 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<mat-card>
-  <mat-card-header>
+<mat-card class="km-card keep-margin">
+  <mat-card-header fxFlexAlign=" center">
     <mat-card-title>Machine Deployments</mat-card-title>
+    <button *ngIf="!cluster.cloud.bringYourOwn"
+            mat-flat-button
+            fxLayoutAlign="center center"
+            type="button"
+            [disabled]="!isRunning"
+            (click)="addExternalMachineDeployment()">
+      <i class="km-icon-mask km-icon-add"></i>
+      <span>Add Machine Deployment</span>
+    </button>
   </mat-card-header>
   <mat-card-content>
     <table class="km-table"
@@ -85,8 +94,8 @@ limitations under the License.
               <span>Power State</span>
               <i class="km-icon-info km-pointer"
                  matTooltip="This represents whether the node pool is powered on.
-               This field only changes as the result of a 'Start' or 'Stop' operation. 
-               To check if nodes are ready and accepting pods, 
+               This field only changes as the result of a 'Start' or 'Stop' operation.
+               To check if nodes are ready and accepting pods,
                view the status of the nodes within the node pool."></i>
             </div>
           </th>

@@ -13,9 +13,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<div fxLayout>
-  <div fxFlex
-       align="right">
+
+
+<mat-card class="km-card">
+  <div fxLayout="row"
+       fxLayoutAlign="end center"
+       class="header">
     <button id="km-create-serviceaccount-top-btn"
             fxLayoutAlign="center center"
             mat-flat-button
@@ -26,9 +29,7 @@ limitations under the License.
       <span>Create Service Account</span>
     </button>
   </div>
-</div>
 
-<mat-card>
   <mat-card-content>
     <table class="km-table"
            mat-table
@@ -170,6 +171,5 @@ limitations under the License.
     <div [hidden]="!isPaginatorVisible()">
       <mat-paginator showFirstLastButtons></mat-paginator>
     </div>
-
   </mat-card-content>
 </mat-card>

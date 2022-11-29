@@ -38,7 +38,6 @@ import {getBackupHealthStatus, HealthStatus} from '@shared/utils/health-status';
 @Component({
   selector: 'km-snapshot-list',
   templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
 })
 export class SnapshotListComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator, {static: true}) private readonly _paginator: MatPaginator;
