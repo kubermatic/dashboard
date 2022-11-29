@@ -51,18 +51,6 @@ func (req gcpTypesNoCredentialReq) GetSeedCluster() apiv1.SeedCluster {
 	}
 }
 
-// gcpSubnetworksNoCredentialReq represent a request for GCP subnetworks.
-// swagger:parameters listGCPSubnetworksNoCredentialsV2
-type gcpSubnetworksNoCredentialReq struct {
-	common.ProjectReq
-	// in: path
-	// required: true
-	ClusterID string `json:"cluster_id"`
-	// in: header
-	// name: Network
-	Network string
-}
-
 // GCPCommonReq represents a request with common parameters for GCP.
 type GCPCommonReq struct {
 	// in: header
@@ -77,6 +65,18 @@ type GCPCommonReq struct {
 type GCPProjectCommonReq struct {
 	GCPCommonReq
 	common.ProjectReq
+}
+
+// gcpSubnetworksNoCredentialReq represent a request for GCP subnetworks.
+// swagger:parameters listGCPSubnetworksNoCredentialsV2
+type gcpSubnetworksNoCredentialReq struct {
+	common.ProjectReq
+	// in: path
+	// required: true
+	ClusterID string `json:"cluster_id"`
+	// in: header
+	// name: Network
+	Network string
 }
 
 // GCPProjectVMReq represents a request for GCP Disktypes within the context of a KKP project
