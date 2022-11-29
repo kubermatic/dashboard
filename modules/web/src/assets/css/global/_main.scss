@@ -713,6 +713,8 @@ km-cni-version {
   .mat-card-content {
     margin-top: 30px;
   }
+}
+
 // side-nav-field content styling
 
 .collapse-sidenav {
@@ -726,6 +728,7 @@ km-cni-version {
 
 .sub-menu-item {
   position: relative;
+  z-index: 1;
 
   a {
     margin-left: 22px;
@@ -747,7 +750,7 @@ km-cni-version {
 }
 
 km-side-nav-field .sub-menu-item:last-child {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .menu-title {
@@ -755,7 +758,7 @@ km-side-nav-field .sub-menu-item:last-child {
 }
 
 .collapsed-sub-menu-item {
-  height: 30px !important;
+  height: 30px;
   margin: 0 10px 0 15px;
   padding: 10px 0 10px 25px;
   position: relative;
@@ -773,4 +776,39 @@ km-side-nav-field .sub-menu-item:last-child {
     width: 3px;
   }
 }
+
+// go back button side nav bar
+
+.go-back:not(.go-back-collapsed) {
+  bottom: (1.5 * variables.$sidenav-item-margin);
+  height: variables.$sidenav-item-height;
+  position: absolute;
+  width: variables.$sidenav-width;
+  z-index: 4;
+
+  a {
+    border-radius: variables.$border-radius;
+    display: flex;
+    font-size: variables.$font-size-subhead;
+    height: variables.$sidenav-item-height;
+    padding: variables.$sidenav-item-margin;
+    text-decoration: none;
+
+    i {
+      @include mixins.size(24px);
+
+      margin-right: 20px;
+
+      &.km-icon-arrow-left {
+        @include mixins.size(16px);
+      }
+    }
+  }
+}
+
+.go-back-collapsed {
+  bottom: (1.5 * variables.$sidenav-item-margin);
+  padding: variables.$sidenav-item-margin;
+  position: absolute;
+  width: variables.$sidenav-width-collapsed;
 }

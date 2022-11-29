@@ -107,7 +107,7 @@ limitations under the License.
             </km-property>
 
             <km-property *ngIf="cluster.spec?.apiServerAllowedIPRanges?.cidrBlocks?.length">
-            <div key>Allowed IP Range for API server</div>
+              <div key>Allowed IP Range for API server</div>
               <div value>
                 <km-labels [labels]="cluster.spec.apiServerAllowedIPRanges.cidrBlocks"></km-labels>
               </div>

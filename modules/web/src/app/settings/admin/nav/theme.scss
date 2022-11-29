@@ -26,7 +26,7 @@
       border-top-color: map.get($colors, sidenav-divider);
     }
 
-    .menu-item a {
+    .go-back a {
       &:hover {
         background-color: map.get($colors, sidenav-background-hover);
       }

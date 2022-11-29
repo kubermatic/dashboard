@@ -31,6 +31,7 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked, OnInit {
   readonly adminPanelMainSections = AdminPanelMainSections;
   @Input() icon = '';
   @Input() isSidenavCollapsed: boolean;
+  @Input() lastItem = false;
 
   constructor(private _router: Router, private readonly _cdr: ChangeDetectorRef) {}
 

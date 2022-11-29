@@ -18,6 +18,7 @@
 .km-sidenav {
   @include mixins.size(variables.$sidenav-width, 100%);
 
+  overflow: hidden;
   overflow-y: auto;
   padding-top: variables.$content-padding;
 
@@ -27,7 +28,8 @@
 
   .menu-item {
     height: variables.$sidenav-item-height;
-    margin: 0 0 variables.$sidenav-item-margin variables.$sidenav-item-margin;
+    margin: 0 0 0 variables.$sidenav-item-margin;
+    z-index: 10;
 
     a {
       border-radius: variables.$border-radius;

@@ -57,16 +57,14 @@ limitations under the License.
     <ng-container *ngIf="isSidenavCollapsed">
 
 
-      <a mat-menu-item
-         fxLayoutAlign=" center"
+      <a fxLayoutAlign=" center"
          [routerLink]="getRouterLink(view.Clusters)"
          class="collapsed-sub-menu-item"
          [ngClass]="{'active': checkUrl(view.Clusters), 'km-disabled': !isDisabledField(view.Clusters)}">
         <span>Clusters</span>
       </a>
 
-      <a mat-menu-item
-         *ngIf="areExternalClustersEnabled"
+      <a *ngIf="areExternalClustersEnabled"
          fxLayoutAlign=" center"
          [routerLink]="getRouterLink(view.ExternalClusters)"
          class="collapsed-sub-menu-item"
@@ -124,24 +122,21 @@ limitations under the License.
 
     <ng-container *ngIf="isSidenavCollapsed">
 
-      <a mat-menu-item
-         fxLayoutAlign=" center"
+      <a fxLayoutAlign=" center"
          [routerLink]="getRouterLink(view.Backups)"
          class="collapsed-sub-menu-item"
          [ngClass]="{'active': checkUrl(view.Backups), 'km-disabled': !isDisabledField(view.Backups)}">
         <span>Automatic Backups</span>
       </a>
 
-      <a mat-menu-item
-         fxLayoutAlign=" center"
+      <a fxLayoutAlign=" center"
          [routerLink]="getRouterLink(view.Snapshots)"
          class="collapsed-sub-menu-item"
          [ngClass]="{'active': checkUrl(view.Snapshots), 'km-disabled': !isDisabledField(view.Snapshots)}">
         <span>Snapshots</span>
       </a>
 
-      <a mat-menu-item
-         fxLayoutAlign=" center"
+      <a fxLayoutAlign=" center"
          [routerLink]="getRouterLink(view.Restores)"
          class="collapsed-sub-menu-item"
          [ngClass]="{'active': checkUrl(view.Restores), 'km-disabled': !isDisabledField(view.Restores)}">
@@ -152,7 +147,8 @@ limitations under the License.
 
   <km-side-nav-field [label]="projectSidenavMainSections.Access"
                      icon="km-icon-key"
-                     [isSidenavCollapsed]="isSidenavCollapsed">
+                     [isSidenavCollapsed]="isSidenavCollapsed"
+                     [lastItem]=true>
     <ng-container *ngIf="!isSidenavCollapsed">
       <div [ngClass]="{'active': checkUrl(view.SSHKeys), 'km-disabled': !isDisabledField(view.SSHKeys)}"
            class="sub-menu-item">
@@ -191,16 +187,14 @@ limitations under the License.
     </ng-container>
 
     <ng-container *ngIf="isSidenavCollapsed">
-      <a mat-menu-item
-         fxLayoutAlign=" center"
+      <a fxLayoutAlign=" center"
          [routerLink]="getRouterLink(view.SSHKeys)"
          class="collapsed-sub-menu-item"
          [ngClass]="{'active': checkUrl(view.SSHKeys), 'km-disabled': !isDisabledField(view.SSHKeys)}">
         <span>SSH Keys</span>
       </a>
 
-      <a mat-menu-item
-         fxLayoutAlign=" center"
+      <a fxLayoutAlign=" center"
          [routerLink]="getRouterLink(view.Members)"
          class="collapsed-sub-menu-item"
          [ngClass]="{'active': checkUrl(view.Members), 'km-disabled': !isDisabledField(view.Members)}">
@@ -208,7 +202,6 @@ limitations under the License.
       </a>
 
       <a *ngIf="isEnterpriseEdition"
-         mat-menu-item
          fxLayoutAlign=" center"
          [routerLink]="getRouterLink(view.Groups)"
          class="collapsed-sub-menu-item"
@@ -216,8 +209,7 @@ limitations under the License.
         <span>Groups</span>
       </a>
 
-      <a mat-menu-item
-         fxLayoutAlign=" center"
+      <a fxLayoutAlign=" center"
          [routerLink]="getRouterLink(view.ServiceAccounts)"
          class="collapsed-sub-menu-item"
          [ngClass]="{'active': checkUrl(view.ServiceAccounts), 'km-disabled': !isDisabledField(view.ServiceAccounts)}">
@@ -244,7 +236,8 @@ limitations under the License.
   <div fxFlex></div>
 
   <div [matTooltip]="getTooltip(view.Projects)"
-       class="menu-item">
+       class="go-back"
+       [ngClass]="isSidenavCollapsed && 'go-back-collapsed'">
     <a id="km-nav-item-projects"
        fxLayoutAlign="center center"
        routerLink="/projects">

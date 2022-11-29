@@ -16,6 +16,10 @@
 
 @mixin theme-sidenav-field-component($colors) {
   .nav-field-label {
+    &:not(.expanded) {
+      background-color: map.get($colors, side-nav-background-color);
+    }
+
     &.expanded {
       background-color: map.get($colors, sidenav-background-active);
 
@@ -61,6 +65,8 @@
 
   .sub-menu-item {
     &:not(.active) {
+      background-color: map.get($colors, side-nav-background-color) !important;
+
       a {
         &:hover {
           background-color: map.get($colors, sidenav-background-hover);
@@ -107,5 +113,9 @@
         background-color: map.get($colors, primary);
       }
     }
+  }
+
+  .side-nav-end {
+    background-color: map.get($colors, side-nav-background-color);
   }
 }

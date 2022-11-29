@@ -18,23 +18,24 @@ limitations under the License.
      fxLayout="column"
      class="side-nav-bar">
   <div (click)="onClick()"
-       id="km-side-nav-field-{{id}}">
-    <div class="nav-field-label"
-         [ngClass]="isExpandedActive() ? 'expanded' : ''">
-      <a fxLayoutAlign="space-between center">
-        <span fxLayoutAlign="start center"
-              fxLayoutGap="20px">
-          <i [class]="icon"></i>
-          <span>{{label}}</span>
-        </span>
-        <i class="km-icon-mask km-icon-arrow-{{expanded ? 'up' : 'down'}}"></i>
-      </a>
-    </div>
+       id="km-side-nav-field-{{id}}"
+       class="nav-field-label"
+       [ngClass]="isExpandedActive() ? 'expanded' : ''">
+    <a fxLayoutAlign="space-between center">
+      <span fxLayoutAlign="start center"
+            fxLayoutGap="20px">
+        <i [class]="icon"></i>
+        <span>{{label}}</span>
+      </span>
+      <i class="km-icon-mask km-icon-arrow-{{expanded ? 'up' : 'down'}}"></i>
+    </a>
   </div>
   <div *ngIf="expanded"
        @shrinkGrow>
     <ng-container *ngTemplateOutlet="content"></ng-container>
   </div>
+  <div *ngIf="lastItem"
+       class="side-nav-end"></div>
 </div>
 
 <div *ngIf="isSidenavCollapsed"
