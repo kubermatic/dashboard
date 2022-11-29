@@ -105,6 +105,14 @@ limitations under the License.
               <div key>Expose Strategy</div>
               <div value>{{cluster.spec.exposeStrategy}}</div>
             </km-property>
+
+            <km-property *ngIf="cluster.spec?.apiServerAllowedIPRanges?.cidrBlocks?.length">
+            <div key>Allowed IP Range for API server</div>
+              <div value>
+                <km-labels [labels]="cluster.spec.apiServerAllowedIPRanges.cidrBlocks"></km-labels>
+              </div>
+            </km-property>
+
             <ng-container *ngIf="!showIPv4"
                           [ngTemplateOutlet]="ipv4Properties"></ng-container>
           </div>
