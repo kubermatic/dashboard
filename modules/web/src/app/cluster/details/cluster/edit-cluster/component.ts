@@ -126,7 +126,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       this.cluster.spec.podNodeSelectorAdmissionPluginConfig
     ) as Record<string, string>;
     this.eventRateLimitConfig = _.cloneDeep(this.cluster.spec.eventRateLimitConfig);
-    this.apiServerAllowedIPRanges = this.cluster.spec.apiServerAllowedIPRanges.cidrBlocks;
+    this.apiServerAllowedIPRanges = this.cluster.spec.apiServerAllowedIPRanges?.cidrBlocks;
 
     this.form = this._builder.group({
       [Controls.Name]: new FormControl(this.cluster.name, [
@@ -157,7 +157,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       [Controls.PodNodeSelectorAdmissionPluginConfig]: new FormControl(''),
       [Controls.EventRateLimitConfig]: new FormControl(),
       [Controls.Labels]: new FormControl(null),
-      [Controls.APIServerAllowedIPRanges]: new FormControl(this.cluster.spec.apiServerAllowedIPRanges),
+      [Controls.APIServerAllowedIPRanges]: new FormControl(this.cluster.spec.apiServerAllowedIPRanges?.cidrBlocks),
     });
 
     this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
