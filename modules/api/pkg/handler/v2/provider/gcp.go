@@ -61,7 +61,7 @@ type GCPCommonReq struct {
 	Credential string
 }
 
-// GCPProjectCommonReq represents a project based request
+// GCPProjectCommonReq represents a project based request.
 type GCPProjectCommonReq struct {
 	GCPCommonReq
 	common.ProjectReq
@@ -79,21 +79,21 @@ type gcpSubnetworksNoCredentialReq struct {
 	Network string
 }
 
-// GCPProjectVMReq represents a request for GCP Disktypes within the context of a KKP project
+// GCPProjectVMReq represents a request for GCP Disktypes within the context of a KKP project.
 // swagger:parameters listProjectGCPDiskTypes
 type GCPProjectVMReq struct {
 	GCPProjectCommonReq
 	Zone string
 }
 
-// GCPProjectDatacenterReq represents a request for GCP datacenters within the context of a KKP project
+// GCPProjectDatacenterReq represents a request for GCP datacenters within the context of a KKP project.
 // swagger:parameters listProjectGCPZones
 type GCPProjectDatacenterReq struct {
 	GCPProjectCommonReq
 	DC string
 }
 
-// GCPProjectSubnetReq represents a request for GCP subnets within the context of a KKP project
+// GCPProjectSubnetReq represents a request for GCP subnets within the context of a KKP project.
 // swagger:parameters listProjectGCPSubnetworks
 type GCPProjectSubnetReq struct {
 	GCPProjectCommonReq
@@ -101,7 +101,7 @@ type GCPProjectSubnetReq struct {
 	DC      string
 }
 
-// GCPProjectMachineTypesReq represents a request for GCP machine types within the context of a KKP project
+// GCPProjectMachineTypesReq represents a request for GCP machine types within the context of a KKP project.
 // swagger:parameters listProjectGCPSizes
 type GCPProjectMachineTypesReq struct {
 	GCPProjectCommonReq
@@ -155,7 +155,7 @@ func DecodeGCPSubnetworksNoCredentialReq(c context.Context, r *http.Request) (in
 	return req, nil
 }
 
-// Validate checks that ServiceAccount and Credentials aren't empty
+// Validate checks that ServiceAccount and Credentials aren't empty.
 func (req GCPCommonReq) Validate() error {
 	if len(req.ServiceAccount) == 0 && len(req.Credential) == 0 {
 		return fmt.Errorf("GCP credentials cannot be empty")
