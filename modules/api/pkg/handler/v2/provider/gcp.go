@@ -155,6 +155,95 @@ func DecodeGCPSubnetworksNoCredentialReq(c context.Context, r *http.Request) (in
 	return req, nil
 }
 
+func DecodeGCPCommonReq(c context.Context, r *http.Request) (interface{}, error) {
+	var req GCPCommonReq
+
+	req.ServiceAccount = r.Header.Get("ServiceAccount")
+	req.Credential = r.Header.Get("Credential")
+
+	return req, nil
+}
+
+func DecodeProjectGCPDisktypes(c context.Context, r *http.Request) (interface{}, error) {
+	var req GCPProjectVMReq
+
+	project, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+	req.ProjectReq = project.(common.ProjectReq)
+
+	commonReq, err := DecodeGCPCommonReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+	req.GCPCommonReq = commonReq.(GCPCommonReq)
+
+	req.Zone = r.Header.Get("Zone")
+
+	return req, nil
+}
+
+func DecodeProjectGCPSubnetworks(c context.Context, r *http.Request) (interface{}, error) {
+	var req GCPProjectSubnetReq
+
+	project, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+	req.ProjectReq = project.(common.ProjectReq)
+
+	commonReq, err := DecodeGCPCommonReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+	req.GCPCommonReq = commonReq.(GCPCommonReq)
+
+	req.DC = r.Header.Get("DatacenterName")
+	req.Network = r.Header.Get("Network")
+	return req, nil
+}
+
+func DecodeProjectGCPZones(c context.Context, r *http.Request) (interface{}, error) {
+	var req GCPProjectDatacenterReq
+
+	project, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+	req.ProjectReq = project.(common.ProjectReq)
+
+	commonReq, err := DecodeGCPCommonReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+	req.GCPCommonReq = commonReq.(GCPCommonReq)
+
+	req.DC = r.Header.Get("DatacenterName")
+	return req, nil
+}
+
+func DecodeProjectGCPSizes(c context.Context, r *http.Request) (interface{}, error) {
+	var req GCPProjectMachineTypesReq
+
+	project, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+	req.ProjectReq = project.(common.ProjectReq)
+
+	commonReq, err := DecodeGCPCommonReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+	req.GCPCommonReq = commonReq.(GCPCommonReq)
+
+	req.DC = r.Header.Get("DatacenterName")
+	req.Zone = r.Header.Get("Zone")
+
+	return req, nil
+}
+
 // Validate checks that ServiceAccount and Credentials aren't empty.
 func (req GCPCommonReq) Validate() error {
 	if len(req.ServiceAccount) == 0 && len(req.Credential) == 0 {

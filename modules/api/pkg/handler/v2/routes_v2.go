@@ -1537,7 +1537,7 @@ func (r Routing) listProjectGCPDiskTypes() http.Handler {
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
 		)(provider.ListProjectGCPDiskTypes(r.presetProvider, r.userInfoGetter)),
-		provider.DecodeGCPSubnetworksNoCredentialReq,
+		provider.DecodeProjectGCPDisktypes,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
@@ -1559,7 +1559,7 @@ func (r Routing) listProjectGCPSubnetworks() http.Handler {
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
 		)(provider.ListProjectGCPSubnetworks(r.presetProvider, r.userInfoGetter, r.seedsGetter)),
-		provider.DecodeGCPSubnetworksNoCredentialReq,
+		provider.DecodeProjectGCPSubnetworks,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
@@ -1581,7 +1581,7 @@ func (r Routing) listProjectGCPNetworks() http.Handler {
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
 		)(provider.ListProjectGCPNetworks(r.presetProvider, r.userInfoGetter)),
-		cluster.DecodeGetClusterReq,
+		provider.DecodeGCPCommonReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
@@ -1603,7 +1603,7 @@ func (r Routing) listProjectGCPZones() http.Handler {
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
 		)(provider.ListProjectGCPZones(r.presetProvider, r.userInfoGetter, r.seedsGetter)),
-		externalcluster.DecodeGKEProjectCommonReq,
+		provider.DecodeProjectGCPZones,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
@@ -1625,7 +1625,7 @@ func (r Routing) listProjectGCPSizes() http.Handler {
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
 		)(provider.ListProjectGCPSizes(r.presetProvider, r.userInfoGetter, r.settingsProvider, r.seedsGetter)),
-		externalcluster.DecodeGKEProjectVMReq,
+		provider.DecodeProjectGCPSizes,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
