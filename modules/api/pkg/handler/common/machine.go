@@ -20,7 +20,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"k8s.io/utils/pointer"
 	"net/http"
 	"strconv"
 	"strings"
@@ -50,6 +49,7 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/metrics/pkg/apis/metrics/v1beta1"
+	"k8s.io/utils/pointer"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
