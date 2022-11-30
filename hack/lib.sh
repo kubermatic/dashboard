@@ -544,5 +544,5 @@ kubermatic_git_hash() {
   # first line in the patch file contains the hash and date, like
   # "From 09081f7b55200900773e079260d15a403382f756 Mon Sep 17 00:00:00 2001";
   # this uses https://unix.stackexchange.com/a/13472 to extract the hash
-  curl --silent "$patchURL" | grep -oP 'From \K\w+'
+  curl --silent "$patchURL" | grep -oP '^From \K\w+'
 }
