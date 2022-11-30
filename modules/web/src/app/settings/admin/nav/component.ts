@@ -19,10 +19,11 @@ import {UserService} from '@core/services/user';
 import {environment} from '@environments/environment';
 import {Member} from '@shared/entity/member';
 import {CustomLink, UserSettings} from '@shared/entity/settings';
+import {maxScreenWidth} from '@shared/constants/common';
 import {BehaviorSubject, Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {debounceTime, takeUntil} from 'rxjs/operators';
 import {HistoryService} from '@core/services/history';
-import {AdminPanelMainSections, AdminPanelView, AdminPanelViewDisplayName} from '@app/shared/entity/common';
+import {AdminPanelSections, AdminPanelView, AdminPanelViewDisplayName} from '@app/shared/entity/common';
 import {DynamicModule} from '@app/dynamic/module-registry';
 @Component({
   selector: 'km-admin-sidenav',
@@ -30,22 +31,22 @@ import {DynamicModule} from '@app/dynamic/module-registry';
   styleUrls: ['./style.scss'],
 })
 export class AdminSidenavComponent implements OnInit, OnDestroy {
+  readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
+  readonly adminPanelView = AdminPanelView;
+  readonly adminPanelViewDisplayName = AdminPanelViewDisplayName;
+  readonly adminPanelSections = AdminPanelSections;
   environment: any = environment;
   customLinks: CustomLink[] = [];
   settings: UserSettings;
   currentUser: Member;
   screenWidth = 0;
-  readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
-  readonly adminPanelView = AdminPanelView;
-  readonly adminPanelViewDisplayName = AdminPanelViewDisplayName;
-  readonly adminPanelMainSections = AdminPanelMainSections;
 
+  private readonly _debounceTime = 500;
   private _unsubscribe = new Subject<void>();
   private _isSidenavCollapsed = false;
   private _screenWidth = new BehaviorSubject<number>(window.innerWidth);
 
   get isSidenavCollapsed(): boolean {
-    const maxScreenWidth = 1200;
     return this._isSidenavCollapsed || this.screenWidth < maxScreenWidth;
   }
 
@@ -57,16 +58,19 @@ export class AdminSidenavComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this._screenWidth.subscribe(width => (this.screenWidth = width));
+    this._screenWidth
+      .pipe(debounceTime(this._debounceTime))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(width => (this.screenWidth = width));
 
-    this._userService.currentUser.pipe(takeUntil(this._unsubscribe)).subscribe(u => (this.currentUser = u));
-    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(s => {
-      this.settings = s;
+    this._userService.currentUser.pipe(takeUntil(this._unsubscribe)).subscribe(user => (this.currentUser = user));
+    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.settings = settings;
       this._isSidenavCollapsed = this.settings.collapseSidenav;
     });
     this._settingsService.adminSettings
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(s => (this.customLinks = s.customLinks));
+      .subscribe(settings => (this.customLinks = settings.customLinks));
   }
 
   ngOnDestroy(): void {

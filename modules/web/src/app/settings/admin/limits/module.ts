@@ -1,4 +1,4 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,15 +13,12 @@
 // limitations under the License.
 
 import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {DefaultsComponent} from '@app/settings/admin/defaults/component';
+import {LimitsComponent} from '@app/settings/admin/limits/component';
+import {AdminSettingsLimitsRoutingModule} from '@app/settings/admin/limits/routing';
+import {SharedModule} from '@shared/module';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: DefaultsComponent,
-  },
-];
-
-@NgModule({imports: [RouterModule.forChild(routes)], exports: [RouterModule]})
-export class AdminSettingsDefaultsRoutingModule {}
+@NgModule({
+  imports: [SharedModule, AdminSettingsLimitsRoutingModule],
+  declarations: [LimitsComponent],
+})
+export class AdminSettingsLimitsModule {}

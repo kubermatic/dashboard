@@ -15,7 +15,7 @@ limitations under the License.
 -->
 <div class="km-sidenav"
      fxLayout="column"
-     [ngClass]="isSidenavCollapsed ? 'collapse-sidenav' : ''">
+     [ngClass]="{'collapse-sidenav': isSidenavCollapsed}">
   <div [matTooltip]="getTooltip(view.Overview)"
        [ngClass]="!isDisabledField(view.Overview) && 'km-disabled'"
        class="menu-item">
@@ -28,7 +28,7 @@ limitations under the License.
       <span *ngIf="!isSidenavCollapsed">Project Overview</span>
     </a>
   </div>
-  <km-side-nav-field [label]="projectSidenavMainSections.Resources"
+  <km-side-nav-field [label]="projectSidenavSections.Resources"
                      icon="km-icon-cluster"
                      [isSidenavCollapsed]="isSidenavCollapsed">
     <ng-container *ngIf="!isSidenavCollapsed">
@@ -76,7 +76,7 @@ limitations under the License.
 
 
   <div [matTooltip]="getTooltip(view.ClusterTemplates)"
-       [ngClass]="!isDisabledField(view.Overview) && 'km-disabled'"
+       [ngClass]="{'km-disabled': !isDisabledField(view.Overview)}"
        class="menu-item">
     <a id="km-nav-item-cluster-templates"
        fxLayoutAlign=" center"
@@ -87,7 +87,7 @@ limitations under the License.
       <span *ngIf="!isSidenavCollapsed">Cluster Templates</span>
     </a>
   </div>
-  <km-side-nav-field [label]="projectSidenavMainSections.Backups"
+  <km-side-nav-field [label]="projectSidenavSections.Backups"
                      icon="km-icon-backup"
                      [isSidenavCollapsed]="isSidenavCollapsed">
     <ng-container *ngIf="!isSidenavCollapsed">
@@ -145,7 +145,7 @@ limitations under the License.
     </ng-container>
   </km-side-nav-field>
 
-  <km-side-nav-field [label]="projectSidenavMainSections.Access"
+  <km-side-nav-field [label]="projectSidenavSections.Access"
                      icon="km-icon-key"
                      [isSidenavCollapsed]="isSidenavCollapsed"
                      [lastItem]=true>
@@ -237,7 +237,7 @@ limitations under the License.
 
   <div [matTooltip]="getTooltip(view.Projects)"
        class="go-back"
-       [ngClass]="isSidenavCollapsed && 'go-back-collapsed'">
+       [ngClass]="{'go-back-collapsed': isSidenavCollapsed}">
     <a id="km-nav-item-projects"
        fxLayoutAlign="center center"
        routerLink="/projects">

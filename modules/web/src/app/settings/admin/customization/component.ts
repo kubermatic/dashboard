@@ -24,7 +24,7 @@ import {Subject} from 'rxjs';
 import {debounceTime, switchMap, take, takeUntil} from 'rxjs/operators';
 
 @Component({
-  selector: 'km-admin-settings-Customization',
+  selector: 'km-Customization',
   styleUrls: ['style.scss'],
   templateUrl: 'template.html',
 })

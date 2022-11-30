@@ -14,7 +14,7 @@
 
 import {AfterViewChecked, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {AdminPanelMainSections, ProjectSidenavMainSection, AdminPanelView, View} from '@app/shared/entity/common';
+import {AdminPanelSections, ProjectSidenavSection, AdminPanelView, View} from '@app/shared/entity/common';
 import {shrinkGrow} from '@shared/animations/grow';
 @Component({
   selector: 'km-side-nav-field',
@@ -26,9 +26,9 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked, OnInit {
   private _expanded = false;
   readonly view = View;
   @Input() label = '';
-  readonly projectSidenvMainSections = ProjectSidenavMainSection;
+  readonly projectSidenavSections = ProjectSidenavSection;
   readonly adminPanelView = AdminPanelView;
-  readonly adminPanelMainSections = AdminPanelMainSections;
+  readonly adminPanelSections = AdminPanelSections;
   @Input() icon = '';
   @Input() isSidenavCollapsed: boolean;
   @Input() lastItem = false;
@@ -44,9 +44,7 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked, OnInit {
   }
 
   ngOnInit(): void {
-    if (this.label === ProjectSidenavMainSection.Resources) {
-      this._expanded = true;
-    }
+    this._expanded = this.label === ProjectSidenavSection.Resources;
   }
 
   ngAfterViewChecked(): void {
@@ -69,11 +67,11 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked, OnInit {
 
   isProjectExpandedActive(): boolean {
     switch (this.label) {
-      case ProjectSidenavMainSection.Resources:
+      case ProjectSidenavSection.Resources:
         return this.checkUrl(View.Clusters) || this.checkUrl(View.ExternalClusters);
-      case ProjectSidenavMainSection.Backups:
+      case ProjectSidenavSection.Backups:
         return this.checkUrl(View.Backups) || this.checkUrl(View.Snapshots) || this.checkUrl(View.Restores);
-      case ProjectSidenavMainSection.Access:
+      case ProjectSidenavSection.Access:
         return (
           this.checkUrl(View.SSHKeys) ||
           this.checkUrl(View.Members) ||
@@ -87,13 +85,13 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked, OnInit {
 
   isAdminSettingsExpandedActive(): boolean {
     switch (this.label) {
-      case this.adminPanelMainSections.Interface:
+      case AdminPanelSections.Interface:
         return (
           this.checkUrl(AdminPanelView.Defaults) ||
           this.checkUrl(AdminPanelView.Limits) ||
           this.checkUrl(AdminPanelView.Customization)
         );
-      case this.adminPanelMainSections.ManageResources:
+      case AdminPanelSections.ManageResources:
         return (
           this.checkUrl(AdminPanelView.Datacenters) ||
           this.checkUrl(AdminPanelView.ProviderPresets) ||
@@ -102,9 +100,9 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked, OnInit {
           this.checkUrl(AdminPanelView.OPA) ||
           this.checkUrl(AdminPanelView.SeedConfiguration)
         );
-      case this.adminPanelMainSections.Monitoring:
+      case AdminPanelSections.Monitoring:
         return this.checkUrl(AdminPanelView.RuleGroups) || this.checkUrl(AdminPanelView.Metering);
-      case this.adminPanelMainSections.Users:
+      case AdminPanelSections.Users:
         return this.checkUrl(AdminPanelView.Accounts) || this.checkUrl(AdminPanelView.Administrators);
       default:
         return false;

@@ -16,9 +16,9 @@ limitations under the License.
 
 <div class="km-sidenav sidenav"
      fxLayout="column"
-     [ngClass]="isSidenavCollapsed ? 'collapse-sidenav' : ''">
+     [ngClass]="{'collapse-sidenav': isSidenavCollapsed}">
 
-  <km-side-nav-field [label]="adminPanelMainSections.Interface"
+  <km-side-nav-field [label]="adminPanelSections.Interface"
                      icon="km-icon-defaults"
                      [isSidenavCollapsed]="isSidenavCollapsed">
     <ng-container *ngIf="!isSidenavCollapsed">
@@ -74,7 +74,7 @@ limitations under the License.
     </ng-container>
   </km-side-nav-field>
 
-  <km-side-nav-field [label]="adminPanelMainSections.ManageResources"
+  <km-side-nav-field [label]="adminPanelSections.ManageResources"
                      icon="km-icon-node"
                      [isSidenavCollapsed]="isSidenavCollapsed">
     <ng-container *ngIf="!isSidenavCollapsed">
@@ -180,7 +180,7 @@ limitations under the License.
     </ng-container>
   </km-side-nav-field>
 
-  <km-side-nav-field [label]="adminPanelMainSections.Monitoring"
+  <km-side-nav-field [label]="adminPanelSections.Monitoring"
                      icon="km-icon-metering"
                      [isSidenavCollapsed]="isSidenavCollapsed">
     <ng-container *ngIf="!isSidenavCollapsed">
@@ -220,7 +220,7 @@ limitations under the License.
     </ng-container>
   </km-side-nav-field>
 
-  <km-side-nav-field [label]="adminPanelMainSections.Users"
+  <km-side-nav-field [label]="adminPanelSections.Users"
                      icon="km-icon-member"
                      [isSidenavCollapsed]="isSidenavCollapsed"
                      [lastItem]="true">
@@ -260,7 +260,7 @@ limitations under the License.
   </km-side-nav-field>
   <div fxFlex></div>
   <div class="go-back km-pointer"
-       [ngClass]="isSidenavCollapsed && 'go-back-collapsed'">
+       [ngClass]="{'go-back-collapsed': isSidenavCollapsed}">
     <a fxLayoutAlign="center center"
        (click)="goBack()">
       <i class="km-icon-mask km-icon-back"></i>

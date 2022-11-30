@@ -19,14 +19,15 @@ import {ProjectService} from '@core/services/project';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {environment} from '@environments/environment';
-import {getViewDisplayName, ProjectSidenavMainSection, View} from '@shared/entity/common';
+import {getViewDisplayName, ProjectSidenavSection, View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
 import {Project} from '@shared/entity/project';
 import {CustomLink, UserSettings} from '@shared/entity/settings';
 import {GroupConfig} from '@shared/model/Config';
+import {maxScreenWidth} from '@shared/constants/common';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import {BehaviorSubject, merge, Subject} from 'rxjs';
-import {switchMap, takeUntil} from 'rxjs/operators';
+import {debounceTime, switchMap, takeUntil} from 'rxjs/operators';
 import {DynamicModule} from '@app/dynamic/module-registry';
 
 @Component({
@@ -36,7 +37,7 @@ import {DynamicModule} from '@app/dynamic/module-registry';
 })
 export class SidenavComponent implements OnInit, OnDestroy {
   readonly view = View;
-  readonly projectSidenavMainSections = ProjectSidenavMainSection;
+  readonly projectSidenavSections = ProjectSidenavSection;
   readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   environment: any = environment;
   customLinks: CustomLink[] = [];
@@ -45,6 +46,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   screenWidth = 0;
   areExternalClustersEnabled = false;
 
+  private readonly _debounceTime = 500;
   private _selectedProject = {} as Project;
   private _currentGroupConfig: GroupConfig;
   private _isSidenavCollapsed = false;
@@ -52,7 +54,6 @@ export class SidenavComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();
 
   get isSidenavCollapsed(): boolean {
-    const maxScreenWidth = 1200;
     return this._isSidenavCollapsed || this.screenWidth < maxScreenWidth;
   }
 
@@ -65,7 +66,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this._screenWidth.subscribe(width => (this.screenWidth = width));
+    this._screenWidth
+      .pipe(debounceTime(this._debounceTime))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(width => (this.screenWidth = width));
 
     this._userService.currentUser.subscribe(user => (this.currentUser = user));
 
@@ -124,7 +128,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   getTooltip(view: View): string {
-    let tooltip = this._isSidenavCollapsed ? getViewDisplayName(view) : '';
+    let tooltip = this.isSidenavCollapsed ? getViewDisplayName(view) : '';
     if (!MemberUtils.hasPermission(this.currentUser, this._currentGroupConfig, view, Permission.View)) {
       tooltip = 'Cannot enter this view.';
       if (this._selectedProject.status !== 'Active') {

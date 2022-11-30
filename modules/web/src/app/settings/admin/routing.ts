@@ -31,7 +31,7 @@ const routes: Routes = [
       },
       {
         path: 'limits',
-        loadChildren: () => import('./defaults/module').then(m => m.AdminSettingsDefaultsModule),
+        loadChildren: () => import('./limits/module').then(m => m.AdminSettingsLimitsModule),
       },
       {
         path: 'administrators',

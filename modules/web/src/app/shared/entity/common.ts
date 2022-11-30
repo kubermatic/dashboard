@@ -80,7 +80,7 @@ export enum ViewDisplayName {
   Access = 'Access',
 }
 
-export enum ProjectSidenavMainSection {
+export enum ProjectSidenavSection {
   Resources = 'Resources',
   Backups = 'etcd Backups',
   Access = 'Access',
@@ -118,7 +118,7 @@ export enum AdminPanelViewDisplayName {
   Administrators = 'Administrators',
 }
 
-export enum AdminPanelMainSections {
+export enum AdminPanelSections {
   Interface = 'Interface',
   ManageResources = 'Manage Resources',
   Monitoring = 'Monitoring',

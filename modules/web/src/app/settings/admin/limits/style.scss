@@ -1,4 +1,4 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,16 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {DefaultsComponent} from '@app/settings/admin/defaults/component';
+@use 'mixins';
+@use 'variables';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: DefaultsComponent,
-  },
-];
+.admin-settings {
+  font-size: variables.$font-size-subhead;
+  padding-left: 30px;
 
-@NgModule({imports: [RouterModule.forChild(routes)], exports: [RouterModule]})
-export class AdminSettingsDefaultsRoutingModule {}
+  .entry-label {
+    max-height: 46px;
+    min-width: 316px;
+  }
+
+  mat-checkbox {
+    margin-right: 48px;
+  }
+
+  .km-pointer {
+    @include mixins.size(16);
+
+    margin-left: 4px;
+  }
+}

@@ -750,7 +750,12 @@ km-cni-version {
 }
 
 km-side-nav-field .sub-menu-item:last-child {
-  margin-bottom: 10px;
+  padding-bottom: 10px;
+
+  &.active > a::after {
+    height: 45%;
+    top: 18%;
+  }
 }
 
 .menu-title {
@@ -782,7 +787,7 @@ km-side-nav-field .sub-menu-item:last-child {
 .go-back:not(.go-back-collapsed) {
   bottom: (1.5 * variables.$sidenav-item-margin);
   height: variables.$sidenav-item-height;
-  position: absolute;
+  position: relative;
   width: variables.$sidenav-width;
   z-index: 4;
 
@@ -809,6 +814,6 @@ km-side-nav-field .sub-menu-item:last-child {
 .go-back-collapsed {
   bottom: (1.5 * variables.$sidenav-item-margin);
   padding: variables.$sidenav-item-margin;
-  position: absolute;
+  position: relative;
   width: variables.$sidenav-width-collapsed;
 }

@@ -79,6 +79,8 @@
     }
 
     &.active {
+      background-color: map.get($colors, side-nav-background-color);
+
       a {
         span {
           color: map.get($colors, primary-dark);

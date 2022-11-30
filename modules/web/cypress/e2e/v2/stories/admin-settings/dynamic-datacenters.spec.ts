@@ -17,7 +17,7 @@ import {BringYourOwn, Condition, Provider, View} from '@kmtypes';
 import {DynamicDatacenters, Pages, Projects} from '@pages/v2';
 import {Config} from '@utils/config';
 
-describe('Admin Settings - Dynamic Datacenters Story', () => {
+describe('Admin Settings - Datacenters Story', () => {
   const projectName = Projects.getName();
   const datacenterName = DynamicDatacenters.getName();
   const seedName = Config.seedName();
@@ -41,7 +41,7 @@ describe('Admin Settings - Dynamic Datacenters Story', () => {
     Pages.Projects.Elements.projectItemIcon(projectName, 'running').should(Condition.Exist);
   });
 
-  it('should go to the admin settings - dynamic datacenters page', () => {
+  it('should go to the admin settings - datacenters page', () => {
     Pages.AdminSettings.visit();
     Pages.expect(View.AdminSettings.DefaultsAndLimits);
     Pages.AdminSettings.DynamicDatacenters.manageResourcesSideNavItem();

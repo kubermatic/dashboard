@@ -13,12 +13,12 @@
 // limitations under the License.
 
 import {NgModule} from '@angular/core';
-import {DefaultsAndLimitsComponent} from '@app/settings/admin/defaults/component';
+import {DefaultsComponent} from '@app/settings/admin/defaults/component';
 import {AdminSettingsDefaultsRoutingModule} from '@app/settings/admin/defaults/routing';
 import {SharedModule} from '@shared/module';
 
 @NgModule({
   imports: [SharedModule, AdminSettingsDefaultsRoutingModule],
-  declarations: [DefaultsAndLimitsComponent],
+  declarations: [DefaultsComponent],
 })
 export class AdminSettingsDefaultsModule {}
