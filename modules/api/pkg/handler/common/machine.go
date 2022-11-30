@@ -20,7 +20,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"strconv"
 	"strings"
 	"time"
@@ -35,7 +34,6 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/v1/label"
 	machineconversions "k8c.io/dashboard/v2/pkg/machine"
 	"k8c.io/dashboard/v2/pkg/provider"
-	kubernetesprovider "k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	"k8c.io/dashboard/v2/pkg/resources/machine"
 	machineresource "k8c.io/dashboard/v2/pkg/resources/machine"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -106,18 +104,7 @@ func CreateMachineDeployment(ctx context.Context, userInfoGetter provider.UserIn
 		return nil, utilerrors.NewBadRequest(fmt.Sprintf("node deployment validation failed: %s", err.Error()))
 	}
 
-	assertedClusterProvider, ok := clusterProvider.(*kubernetesprovider.ClusterProvider)
-	if !ok {
-		return nil, utilerrors.New(http.StatusInternalServerError, "clusterprovider is not a kubernetesprovider.Clusterprovider, can not create secret")
-	}
-
-	data := common.CredentialsData{
-		Ctx:               ctx,
-		KubermaticCluster: cluster,
-		Client:            assertedClusterProvider.GetSeedClusterAdminRuntimeClient(),
-	}
-
-	md, err := machineresource.Deployment(cluster, nd, dc, keys, data)
+	md, err := machineresource.Deployment(cluster, nd, dc, keys)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create machine deployment from template: %w", err)
 	}
@@ -126,10 +113,10 @@ func CreateMachineDeployment(ctx context.Context, userInfoGetter provider.UserIn
 		return nil, fmt.Errorf("failed to create machine deployment: %w", err)
 	}
 
-	return outputMachineDeployment(md)
+	return OutputMachineDeployment(md)
 }
 
-func outputMachineDeployment(md *clusterv1alpha1.MachineDeployment) (*apiv1.NodeDeployment, error) {
+func OutputMachineDeployment(md *clusterv1alpha1.MachineDeployment) (*apiv1.NodeDeployment, error) {
 	nodeStatus := apiv1.NodeStatus{}
 	nodeStatus.MachineName = md.Name
 
@@ -234,7 +221,7 @@ func ListMachineDeployments(ctx context.Context, userInfoGetter provider.UserInf
 
 	nodeDeployments := make([]*apiv1.NodeDeployment, 0, len(machineDeployments.Items))
 	for i := range machineDeployments.Items {
-		nd, err := outputMachineDeployment(&machineDeployments.Items[i])
+		nd, err := OutputMachineDeployment(&machineDeployments.Items[i])
 		if err != nil {
 			return nil, fmt.Errorf("failed to output machine deployment %s: %w", machineDeployments.Items[i].Name, err)
 		}
@@ -262,7 +249,7 @@ func GetMachineDeployment(ctx context.Context, userInfoGetter provider.UserInfoG
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
-	return outputMachineDeployment(machineDeployment)
+	return OutputMachineDeployment(machineDeployment)
 }
 
 func ListMachineDeploymentNodes(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, projectID, clusterID, machineDeploymentID string, hideInitialConditions bool) (interface{}, error) {
@@ -458,7 +445,7 @@ func PatchMachineDeployment(ctx context.Context, userInfoGetter provider.UserInf
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
-	nodeDeployment, err := outputMachineDeployment(machineDeployment)
+	nodeDeployment, err := OutputMachineDeployment(machineDeployment)
 	if err != nil {
 		return nil, fmt.Errorf("cannot output existing node deployment: %w", err)
 	}
@@ -510,16 +497,7 @@ func PatchMachineDeployment(ctx context.Context, userInfoGetter provider.UserInf
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
-	assertedClusterProvider, ok := clusterProvider.(*kubernetesprovider.ClusterProvider)
-	if !ok {
-		return nil, utilerrors.New(http.StatusInternalServerError, "clusterprovider is not a kubernetesprovider.Clusterprovider, can not create nodeDeployment")
-	}
-	data := common.CredentialsData{
-		Ctx:               ctx,
-		KubermaticCluster: cluster,
-		Client:            assertedClusterProvider.GetSeedClusterAdminRuntimeClient(),
-	}
-	patchedMachineDeployment, err := machineresource.Deployment(cluster, patchedNodeDeployment, dc, keys, data)
+	patchedMachineDeployment, err := machineresource.Deployment(cluster, patchedNodeDeployment, dc, keys)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create machine deployment from template: %w", err)
 	}
@@ -534,7 +512,7 @@ func PatchMachineDeployment(ctx context.Context, userInfoGetter provider.UserInf
 		return nil, fmt.Errorf("failed to update machine deployment: %w", err)
 	}
 
-	return outputMachineDeployment(machineDeployment)
+	return OutputMachineDeployment(machineDeployment)
 }
 
 func RestartMachineDeployment(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, projectID, clusterID, machineDeploymentID string) (interface{}, error) {
@@ -563,7 +541,7 @@ func RestartMachineDeployment(ctx context.Context, userInfoGetter provider.UserI
 		return nil, fmt.Errorf("failed to update machine deployment: %w", err)
 	}
 
-	return outputMachineDeployment(machineDeployment)
+	return OutputMachineDeployment(machineDeployment)
 }
 
 func ListMachineDeploymentNodesEvents(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, projectID, clusterID, machineDeploymentID, eventType string) (interface{}, error) {

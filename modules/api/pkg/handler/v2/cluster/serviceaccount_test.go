@@ -30,7 +30,6 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/test/hack"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/handler/v2/cluster"
-	"k8c.io/kubermatic/v2/pkg/resources"
 	"k8c.io/kubermatic/v2/pkg/test/diff"
 
 	corev1 "k8s.io/api/core/v1"
@@ -83,7 +82,7 @@ func TestCreateClusterSAEndpoint(t *testing.T) {
 			existingKubermaticObjs: test.GenDefaultKubermaticObjects(
 				test.GenTestSeed(),
 				test.GenDefaultCluster(),
-				&corev1.ServiceAccount{ObjectMeta: metav1.ObjectMeta{Namespace: resources.KubeSystemNamespaceName, Name: "test"}},
+				&corev1.ServiceAccount{ObjectMeta: metav1.ObjectMeta{Namespace: metav1.NamespaceSystem, Name: "test"}},
 			),
 			existingKubernetesObjs: []ctrlruntimeclient.Object{},
 			existingAPIUser:        test.GenDefaultAPIUser(),
@@ -756,8 +755,8 @@ func TestListClusterSAEndpoint(t *testing.T) {
 				test.GenDefaultCluster(),
 			),
 			existingKubernetesObjs: []ctrlruntimeclient.Object{
-				&corev1.ServiceAccount{ObjectMeta: metav1.ObjectMeta{Namespace: resources.KubeSystemNamespaceName, Name: "non-labeled-sa"}},
-				&corev1.ServiceAccount{ObjectMeta: metav1.ObjectMeta{Namespace: resources.KubeSystemNamespaceName, Name: "labeled-sa-1", Labels: map[string]string{cluster.ServiceAccountComponentKey: cluster.ServiceAccountComponentValue}}},
+				&corev1.ServiceAccount{ObjectMeta: metav1.ObjectMeta{Namespace: metav1.NamespaceSystem, Name: "non-labeled-sa"}},
+				&corev1.ServiceAccount{ObjectMeta: metav1.ObjectMeta{Namespace: metav1.NamespaceSystem, Name: "labeled-sa-1", Labels: map[string]string{cluster.ServiceAccountComponentKey: cluster.ServiceAccountComponentValue}}},
 				&corev1.ServiceAccount{ObjectMeta: metav1.ObjectMeta{Namespace: "default", Name: "labeled-sa-1", Labels: map[string]string{cluster.ServiceAccountComponentKey: cluster.ServiceAccountComponentValue}}},
 			},
 			existingAPIUser: test.GenDefaultAPIUser(),
@@ -773,8 +772,8 @@ func TestListClusterSAEndpoint(t *testing.T) {
 				genUser("John", "john@acme.com", true),
 			),
 			existingKubernetesObjs: []ctrlruntimeclient.Object{
-				&corev1.ServiceAccount{ObjectMeta: metav1.ObjectMeta{Namespace: resources.KubeSystemNamespaceName, Name: "non-labeled-sa"}},
-				&corev1.ServiceAccount{ObjectMeta: metav1.ObjectMeta{Namespace: resources.KubeSystemNamespaceName, Name: "labeled-sa-1", Labels: map[string]string{cluster.ServiceAccountComponentKey: cluster.ServiceAccountComponentValue}}},
+				&corev1.ServiceAccount{ObjectMeta: metav1.ObjectMeta{Namespace: metav1.NamespaceSystem, Name: "non-labeled-sa"}},
+				&corev1.ServiceAccount{ObjectMeta: metav1.ObjectMeta{Namespace: metav1.NamespaceSystem, Name: "labeled-sa-1", Labels: map[string]string{cluster.ServiceAccountComponentKey: cluster.ServiceAccountComponentValue}}},
 				&corev1.ServiceAccount{ObjectMeta: metav1.ObjectMeta{Namespace: "default", Name: "labeled-sa-1", Labels: map[string]string{cluster.ServiceAccountComponentKey: cluster.ServiceAccountComponentValue}}},
 			},
 			existingAPIUser: test.GenAPIUser("John", "john@acme.com"),
@@ -790,8 +789,8 @@ func TestListClusterSAEndpoint(t *testing.T) {
 				genUser("John", "john@acme.com", false),
 			),
 			existingKubernetesObjs: []ctrlruntimeclient.Object{
-				&corev1.ServiceAccount{ObjectMeta: metav1.ObjectMeta{Namespace: resources.KubeSystemNamespaceName, Name: "non-labeled-sa"}},
-				&corev1.ServiceAccount{ObjectMeta: metav1.ObjectMeta{Namespace: resources.KubeSystemNamespaceName, Name: "labeled-sa-1", Labels: map[string]string{cluster.ServiceAccountComponentKey: cluster.ServiceAccountComponentValue}}},
+				&corev1.ServiceAccount{ObjectMeta: metav1.ObjectMeta{Namespace: metav1.NamespaceSystem, Name: "non-labeled-sa"}},
+				&corev1.ServiceAccount{ObjectMeta: metav1.ObjectMeta{Namespace: metav1.NamespaceSystem, Name: "labeled-sa-1", Labels: map[string]string{cluster.ServiceAccountComponentKey: cluster.ServiceAccountComponentValue}}},
 				&corev1.ServiceAccount{ObjectMeta: metav1.ObjectMeta{Namespace: "default", Name: "labeled-sa-1", Labels: map[string]string{cluster.ServiceAccountComponentKey: cluster.ServiceAccountComponentValue}}},
 			},
 			existingAPIUser: test.GenAPIUser("John", "john@acme.com"),
