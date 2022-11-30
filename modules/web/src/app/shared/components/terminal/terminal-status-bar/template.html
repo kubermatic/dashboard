@@ -22,7 +22,14 @@ limitations under the License.
       <i class="km-icon-warning"></i>
     </div>
     <div>
-      <p>The connection to your Web Terminal was lost.</p>
+
+      <ng-container *ngIf="isConnectionLost; else sessionExpiration">
+        <p>The connection to your Web Terminal was lost.</p>
+      </ng-container>
+
+      <ng-template #sessionExpiration>
+        <p>The web session will expire soon.</p>
+      </ng-template>
     </div>
   </div>
 
@@ -30,15 +37,8 @@ limitations under the License.
        fxLayout="row"
        fxLayoutAlign="end center"
        fxLayoutGap="10px">
-    <button *ngIf="showCloseButton"
-            mat-icon-button
-            class="close-terminal-button button-border-box"
-            fxLayoutAlign="center center"
-            matTooltip="Close terminal"
-            (click)="onClose()">
-      <i class="km-icon-mask-white km-icon-close"></i>
-    </button>
-    <button mat-flat-button
+    <button *ngIf="isConnectionLost"
+            mat-flat-button
             class="button-border-box"
             fxLayoutAlign="center center"
             matTooltip="Gain lost connection to terminal"
@@ -46,5 +46,16 @@ limitations under the License.
       <i class="km-icon-mask km-icon-reconnect"></i>
       <span>Reconnect</span>
     </button>
+
+    <button *ngIf="isSessionExpiring"
+            mat-flat-button
+            class="button-border-box"
+            fxLayoutAlign="center center"
+            matTooltip="Retain current session to terminal"
+            (click)="onExtendSession()">
+      <i class="km-icon-mask km-icon-clock"></i>
+      <span>Extend Session</span>
+    </button>
+
   </div>
 </div>

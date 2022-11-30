@@ -20,13 +20,13 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
   styleUrls: ['./style.scss'],
 })
 export class TerminalStatusBarComponent {
-  @Input() showCloseButton: boolean;
-
-  @Output() close = new EventEmitter<void>();
+  @Input() isConnectionLost: boolean;
+  @Input() isSessionExpiring: boolean;
   @Output() reconnect = new EventEmitter<void>();
+  @Output() extendSession = new EventEmitter<void>();
 
-  onClose(): void {
-    this.close.emit();
+  onExtendSession(): void {
+    this.extendSession.emit();
   }
 
   onReconnect(): void {
