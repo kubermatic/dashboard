@@ -160,6 +160,9 @@ func outputMachineDeployment(md *clusterv1alpha1.MachineDeployment) (*apiv1.Node
 	}
 
 	minReplicas, maxReplicas, err := getMinAndMaxReplicas(md)
+	if err != nil {
+		return nil, err
+	}
 
 	hasDynamicConfig := md.Spec.Template.Spec.ConfigSource != nil
 
@@ -915,7 +918,7 @@ func getMinAndMaxReplicas(md *clusterv1alpha1.MachineDeployment) (*int32, *int32
 	if min, ok := md.Annotations[machineresource.AutoscalerMinSizeAnnotation]; ok && min != "" {
 		minInt, err := strconv.ParseInt(min, 10, 32)
 		if err != nil {
-			return nil, nil, fmt.Errorf("failed to read autoscaler min size annotation: %v", err)
+			return nil, nil, fmt.Errorf("failed to read autoscaler min size annotation: %w", err)
 		}
 		minReplicas = pointer.Int32(int32(minInt))
 	}
@@ -923,7 +926,7 @@ func getMinAndMaxReplicas(md *clusterv1alpha1.MachineDeployment) (*int32, *int32
 	if max, ok := md.Annotations[machineresource.AutoscalerMaxSizeAnnotation]; ok && max != "" {
 		maxInt, err := strconv.ParseInt(max, 10, 32)
 		if err != nil {
-			return nil, nil, fmt.Errorf("failed to read autoscaler max size annotation: %v", err)
+			return nil, nil, fmt.Errorf("failed to read autoscaler max size annotation: %w", err)
 		}
 		maxReplicas = pointer.Int32(int32(maxInt))
 	}
