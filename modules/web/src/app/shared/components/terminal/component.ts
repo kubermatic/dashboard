@@ -281,7 +281,7 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
       } else if (frame.Data === ErrorOperations.RefreshesLimitExceeded) {
         const clusterName = this.cluster && this.cluster.name;
         this.terminal.write(
-          `Oops! Max limit of ${this.MAX_EXPIRATION_REFRESHES} is reached. You are not allowed to extend the session for \x1b[1;34m${clusterName}\x1B[0m\n\n\r`
+          `Oops! Max limit of ${this.MAX_EXPIRATION_REFRESHES} refreshes is reached. You are not allowed to extend the session for \x1b[1;34m${clusterName}\x1B[0m\n\n\r`
         );
       }
     } else if (frame.Op === Operations.Expiration) {

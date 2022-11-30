@@ -20,8 +20,6 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
   styleUrls: ['./style.scss'],
 })
 export class TerminalStatusBarComponent {
-  readonly DefaultSessionExpiration = 5; // This is default expiration set by backend.
-
   @Input() isConnectionLost: boolean;
   @Input() isSessionExpiring: boolean;
   @Output() reconnect = new EventEmitter<void>();
