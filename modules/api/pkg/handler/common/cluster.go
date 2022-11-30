@@ -246,6 +246,7 @@ func GenerateCluster(
 			// Convert NodeDeployment into a standard MachineDeployment; leave out the SSH keys as the
 			// controller in KKP will apply the currently assigned keys automatically when processing
 			// this annotation.
+			partialCluster.Spec = *spec
 			md, err := machine.Deployment(partialCluster, body.NodeDeployment, dc, nil)
 			if err != nil {
 				return nil, fmt.Errorf("cannot create machine deployment data: %w", err)
