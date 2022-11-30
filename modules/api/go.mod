@@ -83,7 +83,7 @@ require (
 	gopkg.in/yaml.v3 v3.0.1
 	helm.sh/helm/v3 v3.10.2 // indirect
 	k8c.io/kubeone v1.5.3
-	k8c.io/kubermatic/v2 v2.21.1-0.20221129150910-9c0d992f1d0e
+	k8c.io/kubermatic/v2 v2.21.1-0.20221130170545-ab124be18d30
 	k8c.io/operating-system-manager v1.1.1
 	k8s.io/api v0.25.4
 	k8s.io/apiextensions-apiserver v0.25.4
