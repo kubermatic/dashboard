@@ -108,8 +108,8 @@ export class AzureBasicNodeDataComponent extends BaseFormValidator implements On
       [Controls.Size]: this._builder.control('', Validators.required),
       [Controls.Zone]: this._builder.control(''),
       [Controls.ImageID]: this._builder.control(''),
-      [Controls.OSDiskSize]: this._builder.control(this.defaultOSDiskSize()),
-      [Controls.DataDiskSize]: this._builder.control(this._defaultDiskSize),
+      [Controls.OSDiskSize]: this._builder.control(this.defaultOSDiskSize(), Validators.required),
+      [Controls.DataDiskSize]: this._builder.control(this._defaultDiskSize, Validators.required),
     });
 
     this._init();

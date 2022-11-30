@@ -533,6 +533,7 @@ func PatchEndpoint(
 	newInternalCluster.Spec.ExposeStrategy = patchedCluster.Spec.ExposeStrategy
 	newInternalCluster.Spec.EnableOperatingSystemManager = patchedCluster.Spec.EnableOperatingSystemManager
 	newInternalCluster.Spec.KubernetesDashboard = patchedCluster.Spec.KubernetesDashboard
+	newInternalCluster.Spec.APIServerAllowedIPRanges = patchedCluster.Spec.APIServerAllowedIPRanges
 
 	incompatibleKubelets, err := common.CheckClusterVersionSkew(ctx, userInfoGetter, clusterProvider, newInternalCluster, projectID)
 	if err != nil {
