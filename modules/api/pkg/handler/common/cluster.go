@@ -31,7 +31,6 @@ import (
 
 	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
-	"k8c.io/dashboard/v2/pkg/defaulting"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/handler/v1/label"
@@ -39,15 +38,17 @@ import (
 	kubernetesprovider "k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	"k8c.io/dashboard/v2/pkg/resources/cluster"
 	"k8c.io/dashboard/v2/pkg/resources/machine"
-	"k8c.io/dashboard/v2/pkg/validation"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	kubermaticv1helper "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1/helper"
+	"k8c.io/kubermatic/v2/pkg/defaulting"
 	"k8c.io/kubermatic/v2/pkg/features"
 	kuberneteshelper "k8c.io/kubermatic/v2/pkg/kubernetes"
 	kubermaticlog "k8c.io/kubermatic/v2/pkg/log"
+	kubermaticprovider "k8c.io/kubermatic/v2/pkg/provider"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	utilcluster "k8c.io/kubermatic/v2/pkg/util/cluster"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
+	"k8c.io/kubermatic/v2/pkg/validation"
 	"k8c.io/kubermatic/v2/pkg/version"
 
 	corev1 "k8s.io/api/core/v1"
@@ -207,7 +208,7 @@ func GenerateCluster(
 	}
 
 	// Create the Cluster object.
-	secretKeyGetter := provider.SecretKeySelectorValueFuncFactory(ctx, seedClient)
+	secretKeyGetter := kubermaticprovider.SecretKeySelectorValueFuncFactory(ctx, seedClient)
 	spec, err := cluster.Spec(ctx, body.Cluster, defaultingTemplate, seed, dc, config, secretKeyGetter, caBundle, features)
 	if err != nil {
 		return nil, utilerrors.NewBadRequest("invalid cluster: %v", err)
@@ -562,7 +563,7 @@ func PatchEndpoint(
 	}
 
 	// determine cloud provider for defaulting
-	secretKeyGetter := provider.SecretKeySelectorValueFuncFactory(ctx, seedClient)
+	secretKeyGetter := kubermaticprovider.SecretKeySelectorValueFuncFactory(ctx, seedClient)
 	cloudProvider, err := cluster.CloudProviderForCluster(&newInternalCluster.Spec, dc, secretKeyGetter, caBundle)
 	if err != nil {
 		return nil, err

@@ -113,3 +113,8 @@ build-tests:
 .PHONY: verify
 verify:
 	./hack/verify.sh
+
+.PHONY: update-kkp
+update-kkp:
+	go get -v k8c.io/kubermatic/v2@main
+	go mod tidy
