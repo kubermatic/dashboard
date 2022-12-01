@@ -59,6 +59,8 @@ enum Controls {
   ProviderExtended = 'providerExtended',
   Kubelet = 'kubelet',
   OperatingSystemProfile = 'operatingSystemProfile',
+  MaxReplicas = 'maxReplicas',
+  MinReplicas = 'minReplicas',
 }
 
 @Component({
@@ -84,6 +86,11 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   readonly NodeProvider = NodeProvider;
   readonly Controls = Controls;
   readonly OperatingSystem = OperatingSystem;
+  readonly MinReplicasCount = 0;
+  readonly MaxReplicasCount = 1000;
+  readonly MaxReplicasDefaultValue = 1;
+  readonly MinReplicasDefaultValue = 0;
+
   @Input() provider: NodeProvider;
   @Input() quotaWidget: TemplateRef<QuotaWidgetComponent>;
   labels: object = {};
@@ -150,6 +157,8 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       [Controls.OperatingSystemProfile]: this._builder.control({
         main: this.selectedOperatingSystemProfile || '',
       }),
+      [Controls.MinReplicas]: this._builder.control(this.MinReplicasDefaultValue, [Validators.min(0)]),
+      [Controls.MaxReplicas]: this._builder.control(this.MaxReplicasDefaultValue, [Validators.min(1)]),
     });
 
     if (this.isDialogView()) {
@@ -450,6 +459,8 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   private _getNodeData(): NodeData {
     return {
       count: this.form.get(Controls.Count).value,
+      minReplicas: this.form.get(Controls.MinReplicas).value ?? 0,
+      maxReplicas: this.form.get(Controls.MaxReplicas).value ?? 0,
       name: this.form.get(Controls.Name).value,
       dynamicConfig: this.form.get(Controls.DynamicConfig).value,
       operatingSystemProfile: this.form.get(Controls.OperatingSystemProfile).value?.[AutocompleteControls.Main],

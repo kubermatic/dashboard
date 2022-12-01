@@ -37,6 +37,8 @@ export class NodeService {
         template: nodeData.spec,
         replicas: nodeData.count,
         dynamicConfig: nodeData.dynamicConfig,
+        minReplicas: nodeData.minReplicas,
+        maxReplicas: nodeData.maxReplicas,
       },
     };
     if (nodeData.operatingSystemProfile) {

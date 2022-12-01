@@ -58,12 +58,13 @@ limitations under the License.
     <div fxLayout="row"
          fxLayoutGap="10px">
       <km-number-stepper [fxFlex]="isDialogView() ? '50' : '100'"
-                         [formControlName]="Controls.Count"
                          id="km-node-count-input"
                          mode="errors"
                          label="Replicas"
-                         min="0"
-                         required>
+                         required
+                         [min]="form.get(Controls.MinReplicas).value ?? MinReplicasCount"
+                         [max]="form.get(Controls.MaxReplicas).value"
+                         [formControlName]="Controls.Count">
       </km-number-stepper>
 
       <km-node-data-kubelet-version fxFlex="50"
@@ -209,6 +210,34 @@ limitations under the License.
       <router-outlet name="quota-widget"
                      (activate)="onActivate($event)"></router-outlet>
     </div>
+
+
+    <mat-card-header class="km-no-padding"
+                     fxFlex
+                     fxLayoutGap="10px"
+                     fxLayoutAlign=" center">
+      <mat-card-title>
+        Node Autoscaling
+        <i class="km-icon-info km-pointer km-no-margin"
+           matTooltip="Autoscaling works when auto-scaler addon is added on cluster"></i>
+      </mat-card-title>
+    </mat-card-header>
+
+    <km-number-stepper label="Max Replicas"
+                       mode="all"
+                       hint="The maximum number of replicas for autoscaling. Maximum value can be 1000."
+                       [min]="form.get(Controls.MinReplicas).value"
+                       [max]="MaxReplicasCount"
+                       [formControlName]="Controls.MaxReplicas">
+    </km-number-stepper>
+
+    <km-number-stepper label="Min Replicas"
+                       mode="all"
+                       hint="The minimum number of replicas for autoscaling. Minimum value can be 1"
+                       [min]="MinReplicasCount"
+                       [max]="form.get(Controls.MaxReplicas).value"
+                       [formControlName]="Controls.MinReplicas">
+    </km-number-stepper>
 
     <km-label-form [ngClass]="isDialogView() ? 'additional-margin' : ''"
                    title="Node Labels"
