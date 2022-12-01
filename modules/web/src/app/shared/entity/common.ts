@@ -50,6 +50,7 @@ export enum View {
   ServiceAccounts = 'serviceaccounts',
   Wizard = 'wizard',
   ExternalClusterWizard = 'external-cluster-wizard',
+  KubeOneWizard = 'kubeone-wizard',
   Account = 'account',
   Settings = 'settings',
   MachineDeployment = 'md',

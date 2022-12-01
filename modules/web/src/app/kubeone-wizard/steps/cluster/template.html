@@ -1,0 +1,77 @@
+<!--
+Copyright 2022 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<form [formGroup]="form"
+      fxLayout="column">
+
+  <div fxLayout="row"
+       fxLayout.lt-lg="column"
+       fxLayoutGap="30px">
+    <div fxFlex="50"
+         fxLayout="column"
+         fxLayoutGap="8px">
+      <mat-card-header class="km-no-padding">
+        <mat-card-title>KubeOne Manifest File</mat-card-title>
+      </mat-card-header>
+      <div>
+        <p class="manifest-message">
+          Created by using `<code matTooltip="Click to copy"
+                class="km-copy"
+                (click)="copyManifestCommand()"><b>{{manifestCommand}}</b></code>`.
+        </p>
+
+        <div>
+          <km-editor [(model)]="manifest"
+                     (modelChange)="onManifestChange($event)"
+                     height="400px"
+                     header="YAML">
+          </km-editor>
+          <km-validate-json-or-yaml [data]="manifest"
+                                    [isOnlyYAML]="true"></km-validate-json-or-yaml>
+        </div>
+      </div>
+    </div>
+    <div fxFlex="50"
+         fxLayout="column"
+         fxLayoutGap="8px">
+      <mat-card-header class="km-no-padding">
+        <mat-card-title>SSH Details</mat-card-title>
+      </mat-card-header>
+      <mat-form-field>
+        <mat-label>Private SSH Key</mat-label>
+        <textarea id="key"
+                  matInput
+                  required
+                  rows="8"
+                  [formControlName]="Controls.SSHKey"
+                  [name]="Controls.SSHKey"></textarea>
+        <mat-hint>Enter the Private SSH Key which was used while creating the KubeOne cluster.</mat-hint>
+        <mat-error *ngIf="form.get(Controls.SSHKey).hasError('required')">
+          <strong>Required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field fxFlex>
+        <mat-label>Passphrase</mat-label>
+        <input matInput
+               [formControlName]="Controls.Passphrase"
+               [name]="Controls.Passphrase"
+               type="password"
+               autocomplete="off">
+        <mat-hint>Leave this field blank if SSH Key has no passphrase.</mat-hint>
+      </mat-form-field>
+    </div>
+  </div>
+</form>

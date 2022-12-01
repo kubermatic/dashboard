@@ -234,6 +234,10 @@ export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestro
     this._router.navigate(['projects', this._selectedProject.id, 'external-cluster-wizard']);
   }
 
+  importKubeOneCluster(): void {
+    this._router.navigate(['projects', this._selectedProject.id, 'kubeone-wizard']);
+  }
+
   onActivate(component: QuotaWidgetComponent): void {
     component.isExternalCluster = true;
     component.showAsCard = false;

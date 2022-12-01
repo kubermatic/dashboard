@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import _ from 'lodash';
+import {KubeOneClusterSpec} from '@shared/entity/kubeone-cluster';
 import {StatusIcon} from '@shared/utils/health-status';
-import {AKSCloudSpec, AKSClusterSpec} from './provider/aks';
-import {GKECloudSpec, GKEClusterSpec} from './provider/gke';
-import {EKSCloudSpec, EKSClusterSpec} from './provider/eks';
+import _ from 'lodash';
 import {BringYourOwnCloudSpec} from './cluster';
+import {AKSCloudSpec, AKSClusterSpec} from './provider/aks';
+import {EKSCloudSpec, EKSClusterSpec} from './provider/eks';
+import {GKECloudSpec, GKEClusterSpec} from './provider/gke';
 
 export enum DeleteExternalClusterAction {
   Delete = 'delete',
@@ -51,6 +52,15 @@ export class ExternalCluster {
   spec: ExternalClusterSpec;
   cloud: ExternalCloudSpec;
   status: ExternalClusterStatus;
+
+  static newEmptyKubeOneClusterEntity(): ExternalCluster {
+    return {
+      name: '',
+      cloud: {
+        kubeOne: KubeOneClusterSpec.newEmptyClusterEntity(),
+      } as ExternalCloudSpec,
+    } as ExternalCluster;
+  }
 
   static getProvider(cloud: ExternalCloudSpec): ExternalClusterProvider {
     if (!cloud) {
@@ -116,6 +126,7 @@ export class ExternalCloudSpec {
   eks?: EKSCloudSpec;
   gke?: GKECloudSpec;
   bringYourOwn?: BringYourOwnCloudSpec;
+  kubeOne?: KubeOneClusterSpec;
 }
 
 export enum ExternalClusterState {
@@ -152,7 +163,7 @@ export class ExternalClusterSpecPatch {
 }
 
 export class ExternalClusterModel {
-  name: string;
+  name?: string;
   kubeconfig?: string;
   cloud?: ExternalCloudSpec;
   spec?: ExternalClusterSpec;

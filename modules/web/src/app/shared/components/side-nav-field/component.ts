@@ -115,7 +115,7 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked, OnInit {
     if (url === View.Clusters) {
       return (urlExists && !urlArray.find(x => x === View.ExternalClusters)) || !!urlArray.find(x => x === View.Wizard);
     } else if (url === View.ExternalClusters) {
-      return urlExists || !!urlArray.find(x => x === View.ExternalClusterWizard);
+      return urlExists || !!urlArray.find(x => x === View.ExternalClusterWizard || x === View.KubeOneWizard);
     }
     return urlExists;
   }

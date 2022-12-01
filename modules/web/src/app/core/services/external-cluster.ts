@@ -27,7 +27,7 @@ import {
   ExternalClusterProvider,
 } from '@shared/entity/external-cluster';
 import {PresetList} from '@shared/entity/preset';
-import {BehaviorSubject, Observable, of, Subject, throwError} from 'rxjs';
+import {BehaviorSubject, Observable, of, Subject} from 'rxjs';
 import {catchError, filter} from 'rxjs/operators';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {NotificationService} from '@core/services/notification';
@@ -338,7 +338,7 @@ export class ExternalClusterService {
         headers = this._getGKEHeaders();
         break;
       default:
-        return throwError(() => 'Not implemented');
+        break;
     }
     return this._http.post<ExternalCluster>(url, externalClusterModel, {headers});
   }
