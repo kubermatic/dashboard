@@ -12,11 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export enum ErrorType {
-  Required = 'required',
-  Min = 'min',
-  Max = 'max',
-  Pattern = 'pattern',
-  Number = 'number',
-  InvalidYaml = 'invalidYaml',
+import {AbstractControl, ValidationErrors, Validator} from '@angular/forms';
+import {ErrorType} from '@shared/types/error-type';
+import {verifyYAML} from '@shared/utils/common';
+
+export class YamlValidator implements Validator {
+  validate(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) {
+      return null;
+    }
+    return verifyYAML(control.value) ? null : this._error();
+  }
+
+  private _error(): ValidationErrors {
+    return {
+      [ErrorType.InvalidYaml]: true,
+    };
+  }
 }

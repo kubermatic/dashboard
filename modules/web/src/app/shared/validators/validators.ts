@@ -16,6 +16,7 @@ import {ValidatorFn, Validators} from '@angular/forms';
 import {ChipPatternValidator} from '@shared/validators/chip.pattern.validator';
 import {LargerThanValidator} from '@shared/validators/larger-than.validator';
 import {UniqueValidator} from '@shared/validators/unique.validator';
+import {YamlValidator} from '@shared/validators/yaml.validator';
 import {CronExpressionValidator} from './cron.validator';
 import {AtLeastOneValidator} from './at-least-one.validator';
 
@@ -55,5 +56,10 @@ export class KmValidators {
       }
       return null;
     };
+  }
+
+  static yaml(): ValidatorFn {
+    const validator = new YamlValidator();
+    return validator.validate.bind(validator);
   }
 }
