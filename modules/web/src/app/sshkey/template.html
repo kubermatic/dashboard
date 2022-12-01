@@ -15,21 +15,18 @@ limitations under the License.
 -->
 
 <mat-card class="km-card">
-  <div fxLayout
-       class="header">
-    <div fxFlex
-         fxLayoutAlign="end center">
-      <button id="km-add-ssh-key-top-btn"
-              fxLayoutAlign="center center"
-              mat-flat-button
-              type="button"
-              (click)="addSshKey()"
-              [disabled]="!canAdd()">
-        <i class="km-icon-mask km-icon-add"></i>
-        <span>Add SSH Key</span>
-      </button>
-    </div>
-  </div>
+  <mat-card-header>
+    <mat-card-title>SSH Keys</mat-card-title>
+        <button id="km-add-ssh-key-top-btn"
+                fxLayoutAlign="center center"
+                mat-flat-button
+                type="button"
+                (click)="addSshKey()"
+                [disabled]="!canAdd()">
+          <i class="km-icon-mask km-icon-add"></i>
+          <span>Add SSH Key</span>
+        </button>
+  </mat-card-header>  
 
   <mat-card-content>
     <table class="km-table"

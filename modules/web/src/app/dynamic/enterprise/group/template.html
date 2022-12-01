@@ -24,12 +24,9 @@ END OF TERMS AND CONDITIONS
                 [customTemplate]="buttonTemplate"> -->
 
 <mat-card class="km-card">
-  <div fxLayout
-       class="header">
-    <div fxFlex
-         fxLayoutAlign="end center"
-         fxLayoutGap="20px">
-      <button id="km-add-group-btn"
+  <mat-card-header>
+    <mat-card-title>Groups</mat-card-title>
+          <button id="km-add-group-btn"
               fxLayoutAlign="center center"
               mat-flat-button
               type="button"
@@ -38,9 +35,7 @@ END OF TERMS AND CONDITIONS
         <i class="km-icon-mask km-icon-add"></i>
         <span>Add Group</span>
       </button>
-    </div>
-  </div>
-
+  </mat-card-header>
   <mat-card-content>
     <table class="km-table"
            mat-table

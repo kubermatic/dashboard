@@ -16,10 +16,9 @@ limitations under the License.
 
 
 <mat-card class="km-card">
-  <div fxLayout="row"
-       fxLayoutAlign="end center"
-       class="header">
-    <button id="km-create-serviceaccount-top-btn"
+  <mat-card-header>
+    <mat-card-title>Service Accounts</mat-card-title>
+        <button id="km-create-serviceaccount-top-btn"
             fxLayoutAlign="center center"
             mat-flat-button
             type="button"
@@ -28,8 +27,7 @@ limitations under the License.
       <i class="km-icon-mask km-icon-add"></i>
       <span>Create Service Account</span>
     </button>
-  </div>
-
+  </mat-card-header>
   <mat-card-content>
     <table class="km-table"
            mat-table

@@ -15,17 +15,17 @@ limitations under the License.
 -->
 
 <mat-card class="km-card">
-  <div class="header">
-    <div fxFlex></div>
-    <button mat-flat-button
-            type="button"
-            (click)="add()"
-            [disabled]="!canAdd"
-            fxLayoutAlign="center center">
-      <i class="km-icon-mask km-icon-add"></i>
-      <span>Add Automatic Backup</span>
-    </button>
-  </div>
+  <mat-card-header>
+    <mat-card-title>Automatic Backup</mat-card-title>
+      <button mat-flat-button
+              type="button"
+              (click)="add()"
+              [disabled]="!canAdd"
+              fxLayoutAlign="center center">
+        <i class="km-icon-mask km-icon-add"></i>
+        <span>Add Automatic Backup</span>
+      </button>
+  </mat-card-header>
 
   <mat-card-content>
     <table class="km-table"
