@@ -24,6 +24,9 @@ type NetworkDefaults struct {
 	// ProxyMode defines the default kube-proxy mode ("ipvs" / "iptables" / "ebpf").
 	ProxyMode string `json:"proxyMode,omitempty"`
 
+	// TunnelingAgentIP is the address used by the tunneling agents
+	TunnelingAgentIP string `json:"tunnelingAgentIP,omitempty"`
+
 	// cluster expose strategy
 	ClusterExposeStrategy ExposeStrategy `json:"clusterExposeStrategy,omitempty"`
 

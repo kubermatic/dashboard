@@ -18,14 +18,14 @@ package applicationdefinition
 
 import (
 	"context"
+	"fmt"
+	"net/http"
 
 	"github.com/go-kit/kit/endpoint"
 
-	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
-	appskubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 )
 
@@ -61,21 +61,25 @@ func GetApplicationDefinition(applicationDefinitionProvider provider.Application
 	}
 }
 
-func convertInternalToAPIApplicationDefinitionForList(appDef *appskubermaticv1.ApplicationDefinition) *apiv2.ApplicationDefinitionListItem {
-	return &apiv2.ApplicationDefinitionListItem{
-		Name: appDef.Name,
-		Spec: apiv2.ApplicationDefinitionListItemSpec{
-			Description: appDef.Spec.Description,
-		},
-	}
-}
+func CreateApplicationDefinition(userInfoGetter provider.UserInfoGetter, applicationDefinitionProvider provider.ApplicationDefinitionProvider) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (response interface{}, err error) {
+		userInfo, err := userInfoGetter(ctx, "")
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+		if !userInfo.IsAdmin {
+			return nil, utilerrors.New(http.StatusForbidden, fmt.Sprintf("forbidden: \"%s\" doesn't have admin rights", userInfo.Email))
+		}
 
-func convertInternalToAPIApplicationDefinition(appDef *appskubermaticv1.ApplicationDefinition) *apiv2.ApplicationDefinition {
-	return &apiv2.ApplicationDefinition{
-		ObjectMeta: apiv1.ObjectMeta{
-			CreationTimestamp: apiv1.Time(appDef.CreationTimestamp),
-			Name:              appDef.Name,
-		},
-		Spec: &appDef.Spec,
+		req, ok := request.(createApplicationDefinitionReq)
+		if !ok {
+			return nil, utilerrors.NewBadRequest("invalid request")
+		}
+
+		appdef, err := applicationDefinitionProvider.CreateUnsecured(ctx, convertAPItoInternalApplicationDefinitionBody(&req.Body))
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+		return appdef, nil
 	}
 }

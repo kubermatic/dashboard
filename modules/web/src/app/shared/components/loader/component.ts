@@ -21,4 +21,5 @@ import {Component, Input} from '@angular/core';
 })
 export class LoaderComponent {
   @Input() text = 'Loading...';
+  @Input() icon = 'km-icon-pending';
 }

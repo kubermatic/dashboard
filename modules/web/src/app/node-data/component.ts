@@ -41,7 +41,7 @@ import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {EMPTY, merge, of} from 'rxjs';
 import {filter, finalize, switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ParamsService, PathParam} from '@core/services/params';
-import {QuotaWidgetComponent} from '../dynamic/enterprise/quotas/quota-widget/component';
+import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 import {OperatingSystemProfile} from '@shared/entity/operating-system-profile';
 import {DynamicModule} from '@dynamic/module-registry';
 
@@ -99,6 +99,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
 
   private _enableOperatingSystemManager: boolean;
+  private isCusterTemplateEditMode = false;
 
   get providerDisplayName(): string {
     return NodeProviderConstants.displayName(this.provider);
@@ -108,7 +109,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     return this._clusterSpecService.cluster.spec.enableOperatingSystemManager;
   }
 
-  get isDynamicKubletConfigSupported(): boolean {
+  get isDynamicKubeletConfigSupported(): boolean {
     return this._clusterSpecService.cluster.spec.version < this.endOfDynamicKubeletConfigSupportVersion;
   }
 
@@ -130,6 +131,8 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   ngOnInit(): void {
     this.projectId = this._params.get(PathParam.ProjectID);
     this.selectedOperatingSystemProfile = this._nodeDataService.nodeData.operatingSystemProfile;
+    this.isCusterTemplateEditMode = this._clusterSpecService.clusterTemplateEditMode;
+
     this.form = this._builder.group({
       [Controls.Name]: this._builder.control(this._nodeDataService.nodeData.name, [
         KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR,
@@ -165,10 +168,13 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => this.form.get(Controls.OperatingSystem).setValue(this._getDefaultOS()));
 
-    this._clusterSpecService.providerChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => {
-      delete this._nodeDataService.nodeData.spec.cloud[this.provider];
-      this.provider = this._clusterSpecService.provider;
-    });
+    this._clusterSpecService.providerChanges
+      .pipe(filter(_ => !this.isCusterTemplateEditMode))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(_ => {
+        delete this._nodeDataService.nodeData.spec.cloud[this.provider];
+        this.provider = this._clusterSpecService.provider;
+      });
 
     this._clusterSpecService.clusterChanges
       .pipe(
@@ -183,6 +189,12 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(() => {
         this._loadOperatingSystemProfiles();
+        this.isCusterTemplateEditMode = this._clusterSpecService.clusterTemplateEditMode;
+        if (this.isDynamicKubeletConfigSupported) {
+          this.form.get(Controls.DynamicConfig).enable();
+        } else {
+          this.form.get(Controls.DynamicConfig).disable();
+        }
       });
 
     merge(this._clusterSpecService.datacenterChanges, of(this._clusterSpecService.datacenter))
@@ -224,7 +236,10 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       });
 
     this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
-      const replicas = this.dialogEditMode ? this._nodeDataService.nodeData.count : settings.defaultNodeCount;
+      const replicas =
+        this.dialogEditMode || this.isCusterTemplateEditMode
+          ? this._nodeDataService.nodeData.count
+          : settings.defaultNodeCount;
       this.form.get(Controls.Count).setValue(replicas);
     });
   }

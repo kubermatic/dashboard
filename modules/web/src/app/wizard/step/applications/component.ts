@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, EventEmitter, forwardRef, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {StepBase} from '@app/wizard/step/base';
 import {WizardService} from '@core/services/wizard/wizard';
 import {ApplicationsListView} from '@shared/components/application-list/component';
 import {Application} from '@shared/entity/application';
+import {ApplicationService} from '@core/services/application';
 
 enum Controls {
   Applications = 'applications',
@@ -42,11 +43,13 @@ enum Controls {
 export class ApplicationsStepComponent extends StepBase implements OnInit, OnDestroy {
   readonly ApplicationsListView = ApplicationsListView;
 
-  @Output() applicationsChange = new EventEmitter<Application[]>();
-
   applications: Application[] = [];
 
-  constructor(wizard: WizardService, private readonly _builder: FormBuilder) {
+  constructor(
+    wizard: WizardService,
+    private readonly _builder: FormBuilder,
+    private readonly applicationService: ApplicationService
+  ) {
     super(wizard, 'Applications');
   }
 
@@ -54,6 +57,8 @@ export class ApplicationsStepComponent extends StepBase implements OnInit, OnDes
     this.form = this._builder.group({
       [Controls.Applications]: this._builder.control(''),
     });
+
+    this.applications = this.applicationService.applications;
   }
 
   onApplicationAdded(application: Application): void {
@@ -80,7 +85,6 @@ export class ApplicationsStepComponent extends StepBase implements OnInit, OnDes
   }
 
   private _onApplicationsChanged() {
-    const applicationsWithoutIds = this.applications.map(application => ({...application, id: null}));
-    this.applicationsChange.emit(applicationsWithoutIds);
+    this.applicationService.applications = this.applications.map(application => ({...application, id: null}));
   }
 }

@@ -40,7 +40,7 @@ import {View} from '@shared/entity/common';
 import {Member} from '@shared/entity/member';
 import {Project, ProjectOwner, ProjectStatus} from '@shared/entity/project';
 import {UserSettings} from '@shared/entity/settings';
-import {objectDiff} from '@shared/utils/common';
+import {getEditionVersion, objectDiff} from '@shared/utils/common';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import _ from 'lodash';
 import {CookieService} from 'ngx-cookie-service';
@@ -73,6 +73,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
   isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
   hasQuota: boolean;
   isProjectsLoading: boolean;
+  editionVersion: string = getEditionVersion();
 
   private readonly _maxOwnersLen = 30;
   private _apiSettings: UserSettings;
@@ -539,6 +540,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     component.showIcon = this.showCards;
     component.showAsCard = false;
     component.showDetailsOnHover = false;
+    component.showBorderOutline = false;
     component.showEmptyPlaceholder = showEmptyPlaceholder;
   }
 

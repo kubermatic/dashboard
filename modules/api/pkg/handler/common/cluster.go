@@ -31,22 +31,24 @@ import (
 
 	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
-	"k8c.io/dashboard/v2/pkg/defaulting"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/handler/v1/label"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubernetesprovider "k8c.io/dashboard/v2/pkg/provider/kubernetes"
 	"k8c.io/dashboard/v2/pkg/resources/cluster"
-	"k8c.io/dashboard/v2/pkg/validation"
+	"k8c.io/dashboard/v2/pkg/resources/machine"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	kubermaticv1helper "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1/helper"
+	"k8c.io/kubermatic/v2/pkg/defaulting"
 	"k8c.io/kubermatic/v2/pkg/features"
 	kuberneteshelper "k8c.io/kubermatic/v2/pkg/kubernetes"
 	kubermaticlog "k8c.io/kubermatic/v2/pkg/log"
+	kubermaticprovider "k8c.io/kubermatic/v2/pkg/provider"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	utilcluster "k8c.io/kubermatic/v2/pkg/util/cluster"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
+	"k8c.io/kubermatic/v2/pkg/validation"
 	"k8c.io/kubermatic/v2/pkg/version"
 
 	corev1 "k8s.io/api/core/v1"
@@ -206,7 +208,7 @@ func GenerateCluster(
 	}
 
 	// Create the Cluster object.
-	secretKeyGetter := provider.SecretKeySelectorValueFuncFactory(ctx, seedClient)
+	secretKeyGetter := kubermaticprovider.SecretKeySelectorValueFuncFactory(ctx, seedClient)
 	spec, err := cluster.Spec(ctx, body.Cluster, defaultingTemplate, seed, dc, config, secretKeyGetter, caBundle, features)
 	if err != nil {
 		return nil, utilerrors.NewBadRequest("invalid cluster: %v", err)
@@ -242,7 +244,16 @@ func GenerateCluster(
 				body.NodeDeployment.Name = fmt.Sprintf("%s-worker-%s", partialCluster.Name, rand.String(6))
 			}
 
-			data, err := json.Marshal(body.NodeDeployment)
+			// Convert NodeDeployment into a standard MachineDeployment; leave out the SSH keys as the
+			// controller in KKP will apply the currently assigned keys automatically when processing
+			// this annotation.
+			partialCluster.Spec = *spec
+			md, err := machine.Deployment(partialCluster, body.NodeDeployment, dc, nil)
+			if err != nil {
+				return nil, fmt.Errorf("cannot create machine deployment data: %w", err)
+			}
+
+			data, err := json.Marshal(md)
 			if err != nil {
 				return nil, fmt.Errorf("cannot marshal initial machine deployment: %w", err)
 			}
@@ -533,6 +544,7 @@ func PatchEndpoint(
 	newInternalCluster.Spec.ExposeStrategy = patchedCluster.Spec.ExposeStrategy
 	newInternalCluster.Spec.EnableOperatingSystemManager = patchedCluster.Spec.EnableOperatingSystemManager
 	newInternalCluster.Spec.KubernetesDashboard = patchedCluster.Spec.KubernetesDashboard
+	newInternalCluster.Spec.APIServerAllowedIPRanges = patchedCluster.Spec.APIServerAllowedIPRanges
 
 	incompatibleKubelets, err := common.CheckClusterVersionSkew(ctx, userInfoGetter, clusterProvider, newInternalCluster, projectID)
 	if err != nil {
@@ -551,7 +563,7 @@ func PatchEndpoint(
 	}
 
 	// determine cloud provider for defaulting
-	secretKeyGetter := provider.SecretKeySelectorValueFuncFactory(ctx, seedClient)
+	secretKeyGetter := kubermaticprovider.SecretKeySelectorValueFuncFactory(ctx, seedClient)
 	cloudProvider, err := cluster.CloudProviderForCluster(&newInternalCluster.Spec, dc, secretKeyGetter, caBundle)
 	if err != nil {
 		return nil, err
@@ -1088,6 +1100,7 @@ func ConvertInternalClusterToExternal(internalCluster *kubermaticv1.Cluster, dat
 			ClusterNetwork:                       &internalCluster.Spec.ClusterNetwork,
 			CNIPlugin:                            internalCluster.Spec.CNIPlugin,
 			ExposeStrategy:                       internalCluster.Spec.ExposeStrategy,
+			APIServerAllowedIPRanges:             internalCluster.Spec.APIServerAllowedIPRanges,
 		},
 		Status: apiv1.ClusterStatus{
 			Version:              internalCluster.Status.Versions.ControlPlane,

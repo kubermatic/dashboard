@@ -21,7 +21,8 @@ limitations under the License.
   <div [fxFlex]="flipLayout ? '100%' : '50%'"
        fxLayout="column">
     <div class="step">
-      <div class="header counter-1">Provider</div>
+      <div class="header"
+           [ngClass]="clusterTemplateEditMode ? '' : 'counter-1'">Provider</div>
       <div class="info-container">
         <div class="container-spacing"
              fxLayout="row wrap">
@@ -40,7 +41,8 @@ limitations under the License.
 
     <div fxLayout="column"
          class="step">
-      <div class="header counter-2">Cluster</div>
+      <div class="header"
+           [ngClass]="clusterTemplateEditMode ? 'counter-1' : 'counter-2'">Cluster</div>
       <div class="info-container"
            fxLayout="row wrap">
         <div class="container-spacing">
@@ -99,10 +101,18 @@ limitations under the License.
               <div key>Proxy Mode</div>
               <div value>{{cluster.spec.clusterNetwork.proxyMode}}</div>
             </km-property>
-            <km-property *ngIf="cluster.spec.clusterNetwork.clusterExposeStrategy">
+            <km-property *ngIf="cluster.spec.exposeStrategy">
               <div key>Expose Strategy</div>
-              <div value>{{cluster.spec.clusterNetwork.clusterExposeStrategy}}</div>
+              <div value>{{cluster.spec.exposeStrategy}}</div>
             </km-property>
+
+            <km-property *ngIf="cluster.spec?.apiServerAllowedIPRanges?.cidrBlocks?.length">
+            <div key>Allowed IP Range for API server</div>
+              <div value>
+                <km-labels [labels]="cluster.spec.apiServerAllowedIPRanges.cidrBlocks"></km-labels>
+              </div>
+            </km-property>
+
             <ng-container *ngIf="!showIPv4"
                           [ngTemplateOutlet]="ipv4Properties"></ng-container>
           </div>
@@ -260,7 +270,8 @@ limitations under the License.
 
     <div *ngIf="cluster.credential || displaySettings()"
          class="step">
-      <div class="header counter-3">Settings</div>
+      <div class="header"
+           [ngClass]="clusterTemplateEditMode ? 'counter-2' : 'counter-3'">Settings</div>
       <div class="properties"
            [fxLayout]="cluster.spec.cloud?.kubevirt ? 'column' : 'row wrap'">
         <km-property *ngIf="cluster.credential">
@@ -535,7 +546,8 @@ limitations under the License.
     <div class="step padding-top"
          [class.padding-top-force]="flipLayout">
       <ng-container *ngIf="!cluster.spec.cloud?.bringyourown">
-        <div class="header counter-4">Initial Nodes</div>
+        <div class="header"
+             [ngClass]="clusterTemplateEditMode ? 'counter-3' : 'counter-4'">Initial Nodes</div>
         <div class="info-container">
           <div class="container-spacing">
             <div class="section-header">GENERAL</div>
@@ -774,9 +786,23 @@ limitations under the License.
                   <div key>Memory</div>
                   <div value>{{machineDeployment.spec.template.cloud?.kubevirt.memory}}</div>
                 </km-property>
-                <km-property *ngIf="machineDeployment.spec.template.cloud?.kubevirt.flavorName">
-                  <div key>VM Flavor</div>
-                  <div value>{{machineDeployment.spec.template.cloud?.kubevirt.flavorName}}</div>
+                <km-property *ngIf="machineDeployment.spec.template.cloud?.kubevirt.instancetype as instanceType">
+                  <div key>Instance Type</div>
+                  <div value>
+                    <mat-chip>
+                      <div>{{getKubeVirtInstanceTypeCategory(instanceType)}}</div>
+                      <div class="km-chip-accent">{{instanceType.name}}</div>
+                    </mat-chip>
+                  </div>
+                </km-property>
+                <km-property *ngIf="machineDeployment.spec.template.cloud?.kubevirt.preference as preference">
+                  <div key>Preference</div>
+                  <div value>
+                    <mat-chip>
+                      <div>{{getKubeVirtPreferenceCategory(preference)}}</div>
+                      <div class="km-chip-accent">{{preference.name}}</div>
+                    </mat-chip>
+                  </div>
                 </km-property>
                 <km-property>
                   <div key>Operating System Image</div>
@@ -794,14 +820,6 @@ limitations under the License.
                   <div key>Secondary Disk {{i + 1}}</div>
                   <div value>{{disk.storageClassName}}, {{disk.size}}</div>
                 </km-property>
-                <km-property *ngIf="machineDeployment.spec.template.cloud?.kubevirt.podAffinityPreset">
-                  <div key>Pod Affinity Preset</div>
-                  <div value>{{machineDeployment.spec.template.cloud?.kubevirt.podAffinityPreset}}</div>
-                </km-property>
-                <km-property *ngIf="machineDeployment.spec.template.cloud?.kubevirt.podAntiAffinityPreset">
-                  <div key>Pod Anti-Affinity Preset</div>
-                  <div value>{{machineDeployment.spec.template.cloud?.kubevirt.podAntiAffinityPreset}}</div>
-                </km-property>
                 <ng-container *ngIf="machineDeployment.spec.template.cloud?.kubevirt.nodeAffinityPreset as nodeAffinityPreset">
                   <km-property>
                     <div key>Node Affinity Preset</div>
@@ -816,6 +834,18 @@ limitations under the License.
                     <div value>{{nodeAffinityPreset.Values.join(', ')}}</div>
                   </km-property>
                 </ng-container>
+                <km-property *ngIf="machineDeployment.spec.template.cloud?.kubevirt.topologySpreadConstraints?.length > 0">
+                  <div key>Topology Spread Constraints</div>
+                  <div value>
+                    <mat-chip-list selectable="false">
+                      <mat-chip *ngFor="let constraint of machineDeployment.spec.template.cloud?.kubevirt.topologySpreadConstraints">
+                        <div>{{constraint.topologyKey}}</div>
+                        <div class="km-chip-accent">{{constraint.maxSkew}}</div>
+                        <div>{{constraint.whenUnsatisfiable}}</div>
+                      </mat-chip>
+                    </mat-chip-list>
+                  </div>
+                </km-property>
               </ng-container>
 
               <!-- Nutanix Nodes -->
@@ -1112,7 +1142,8 @@ limitations under the License.
     </div>
 
     <div class="step">
-      <div class="header counter-5">Applications</div>
+      <div class="header"
+           [ngClass]="clusterTemplateEditMode ? 'counter-4' : 'counter-5'">Applications</div>
       <div class="applications-summary"
            [fxLayoutAlign]="flipLayout ? ' center' : ''">
         <km-application-list *ngIf="applications?.length; else noApplications"

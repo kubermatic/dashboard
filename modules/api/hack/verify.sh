@@ -58,5 +58,7 @@ try() {
 try "Verify import order" make verify-imports
 try "Verify go.mod" make check-dependencies
 try "Verify license compatibility" ./hack/verify-licenses.sh
+try "Verify Swagger" ./hack/verify-swagger.sh
+try "Verify generated API Client" ./hack/verify-api-client.sh
 
 exit $EXIT_CODE

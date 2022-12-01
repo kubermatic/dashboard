@@ -69,6 +69,7 @@ func TestGetEndpoint(t *testing.T) {
 				ProxyMode:                resources.IPVSProxyMode,
 				NodeLocalDNSCacheEnabled: true,
 				ClusterExposeStrategy:    "NodePort",
+				TunnelingAgentIP:         resources.DefaultTunnelingAgentIP,
 			},
 		},
 		{
@@ -96,6 +97,7 @@ func TestGetEndpoint(t *testing.T) {
 				ProxyMode:                resources.IPVSProxyMode,
 				NodeLocalDNSCacheEnabled: true,
 				ClusterExposeStrategy:    "NodePort",
+				TunnelingAgentIP:         resources.DefaultTunnelingAgentIP,
 			},
 		},
 		{
@@ -123,6 +125,7 @@ func TestGetEndpoint(t *testing.T) {
 				ProxyMode:                resources.IPTablesProxyMode,
 				NodeLocalDNSCacheEnabled: true,
 				ClusterExposeStrategy:    "NodePort",
+				TunnelingAgentIP:         resources.DefaultTunnelingAgentIP,
 			},
 		},
 	}

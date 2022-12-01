@@ -16,7 +16,7 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {AppConfigService} from '@app/config.service';
 import {environment} from '@environments/environment';
-import {AdminSeed, CreateDatacenterModel, Datacenter, SeedSettings} from '@shared/entity/datacenter';
+import {AdminSeed, CreateDatacenterModel, Datacenter, SeedOverview, SeedSettings} from '@shared/entity/datacenter';
 import _ from 'lodash';
 import {iif, merge, Observable, of, Subject, timer} from 'rxjs';
 import {catchError, map, retry, shareReplay, switchMap, take} from 'rxjs/operators';
@@ -116,6 +116,11 @@ export class DatacenterService {
 
   refreshSeedSettings(): void {
     this._seedSettingsRefresh$.next();
+  }
+
+  getSeedOverview(seedName: string): Observable<SeedOverview> {
+    const url = `${this._newRestRoot}/seeds/${seedName}/overview`;
+    return this._httpClient.get<SeedOverview>(url).pipe(catchError(() => of<SeedOverview>({} as SeedOverview)));
   }
 
   private _getSeedSettings(seedName: string): Observable<SeedSettings> {

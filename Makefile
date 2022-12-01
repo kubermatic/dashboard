@@ -95,6 +95,9 @@ api-verify:
 api-build:
 	$(MAKE) -C modules/api build
 
+api-clean:
+	$(MAKE) -C modules/api clean
+
 # Web
 web-lint:
 	$(MAKE) -C modules/web lint

@@ -71,6 +71,7 @@ export class LabelFormComponent implements OnChanges, OnInit, OnDestroy, Control
   @Input() labelHintKey: string;
   @Input() inheritedLabels: object = {};
   @Input() noValidators = false;
+  @Input() hideRestrictedLabels = false;
   @Input() asyncKeyValidators: AsyncValidatorFn[] = [];
   @Output() labelsChange = new EventEmitter<object>();
   form: FormGroup;

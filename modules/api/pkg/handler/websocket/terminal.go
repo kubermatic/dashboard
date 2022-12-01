@@ -284,8 +284,19 @@ func startProcess(ctx context.Context, client ctrlruntimeclient.Client, k8sClien
 		if !apierrors.IsNotFound(err) {
 			return err
 		}
-		// create Configmap, NetworkPolicy, Pod and cleanup Job
+		// create NetworkPolicy, Pod and cleanup Job
 		if err := createOrUpdateResources(ctx, client, userEmailID, userAppName, cluster); err != nil {
+			return err
+		}
+	}
+
+	// create or update ConfigMap to renew expiration time
+	if err := client.Create(ctx, genWebTerminalConfigMap(userAppName, 0)); err != nil {
+		if !apierrors.IsAlreadyExists(err) {
+			return err
+		}
+		err := client.Update(ctx, genWebTerminalConfigMap(userAppName, 0))
+		if err != nil {
 			return err
 		}
 	}
@@ -353,15 +364,6 @@ func startProcess(ctx context.Context, client ctrlruntimeclient.Client, k8sClien
 }
 
 func createOrUpdateResources(ctx context.Context, client ctrlruntimeclient.Client, userEmailID, userAppName string, cluster *kubermaticv1.Cluster) error {
-	if err := client.Create(ctx, genWebTerminalConfigMap(userAppName, 0)); err != nil {
-		if !apierrors.IsAlreadyExists(err) {
-			return err
-		}
-		err := client.Update(ctx, genWebTerminalConfigMap(userAppName, 0))
-		if err != nil {
-			return err
-		}
-	}
 	webTerminalNetworkPolicy, err := genWebTerminalNetworkPolicy(userAppName, cluster)
 	if err != nil {
 		return err

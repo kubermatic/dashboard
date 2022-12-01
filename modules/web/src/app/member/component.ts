@@ -35,21 +35,22 @@ import {AddMemberComponent} from './add-member/component';
 import {EditMemberComponent} from './edit-member/component';
 import {MemberService} from '@core/services/member';
 import {DynamicTabComponent} from '@shared/components/tab-card/dynamic-tab/component';
-import {DynamicTab} from '@shared/model/dynamic-tab';
 import {UserSettings} from '@app/shared/entity/settings';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'km-member',
   templateUrl: './template.html',
-  styleUrls: ['./style.scss'],
 })
 export class MemberComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
+  readonly view = View;
   members: Member[] = [];
   isInitializing = true;
   currentUser: Member;
   displayedColumns: string[] = ['name', 'email', 'group', 'actions'];
   dataSource = new MatTableDataSource<Member>();
   currentUserSettings: UserSettings;
+  urlPath = '';
   private _dynamicTabs = new Set<DynamicTabComponent>();
   private readonly _refreshTime = 10;
   private _unsubscribe = new Subject<void>();
@@ -65,7 +66,8 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
     private readonly _userService: UserService,
     private readonly _googleAnalyticsService: GoogleAnalyticsService,
     private readonly _appConfig: AppConfigService,
-    private readonly _notificationService: NotificationService
+    private readonly _notificationService: NotificationService,
+    private _router: Router
   ) {}
 
   @ViewChild(MatSort) set sort(sort: MatSort) {
@@ -118,6 +120,8 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
         this.dataSource.data = this.members;
         this.isInitializing = false;
       });
+
+    this.getURLPath();
   }
 
   ngOnChanges(): void {
@@ -131,10 +135,6 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
 
   ngAfterViewInit(): void {
     this._cdr.detectChanges();
-  }
-
-  onActivate(component: DynamicTab): void {
-    component.onTabReady.pipe(take(1)).subscribe(tab => this._dynamicTabs.add(tab));
   }
 
   getGroup(member: Member): string {
@@ -232,5 +232,11 @@ export class MemberComponent implements OnInit, OnChanges, OnDestroy, AfterViewI
 
   isPaginatorVisible(): boolean {
     return !_.isEmpty(this.members) && this.paginator && this.members.length > this.paginator.pageSize;
+  }
+
+  getURLPath(): void {
+    const urlArray = this._router.routerState.snapshot.url.split('/');
+
+    this.urlPath = urlArray[urlArray.length - 1];
   }
 }

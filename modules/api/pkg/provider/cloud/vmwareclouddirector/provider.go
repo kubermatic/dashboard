@@ -21,17 +21,10 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/vmware/go-vcloud-director/v2/govcd"
-
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
-	kuberneteshelper "k8c.io/kubermatic/v2/pkg/kubernetes"
 	"k8c.io/kubermatic/v2/pkg/resources"
-)
-
-const (
-	vappFinalizer = "kubermatic.k8c.io/cleanup-vmware-cloud-director-vapp"
 )
 
 type Provider struct {
@@ -51,7 +44,7 @@ func NewCloudProvider(dc *kubermaticv1.Datacenter, secretKeyGetter provider.Secr
 	}, nil
 }
 
-var _ provider.ReconcilingCloudProvider = &Provider{}
+var _ provider.CloudProvider = &Provider{}
 
 func (p *Provider) DefaultCloudSpec(_ context.Context, _ *kubermaticv1.CloudSpec) error {
 	return nil
@@ -95,60 +88,6 @@ func (p *Provider) ValidateCloudSpec(_ context.Context, spec kubermaticv1.CloudS
 	}
 
 	return nil
-}
-
-func (p *Provider) InitializeCloudProvider(ctx context.Context, cluster *kubermaticv1.Cluster, update provider.ClusterUpdater) (*kubermaticv1.Cluster, error) {
-	return p.reconcileCluster(ctx, cluster, update, false)
-}
-
-func (p *Provider) ReconcileCluster(ctx context.Context, cluster *kubermaticv1.Cluster, update provider.ClusterUpdater) (*kubermaticv1.Cluster, error) {
-	return p.reconcileCluster(ctx, cluster, update, true)
-}
-
-func (p *Provider) CleanUpCloudProvider(ctx context.Context, cluster *kubermaticv1.Cluster, update provider.ClusterUpdater) (*kubermaticv1.Cluster, error) {
-	// Cleanup is not required if finalizer was not present.
-	if !kuberneteshelper.HasFinalizer(cluster, vappFinalizer) {
-		return nil, nil
-	}
-
-	// Create an authenticated client.
-	client, err := NewClient(cluster.Spec.Cloud, p.secretKeySelector, p.dc)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create VMware Cloud Director client: %w", err)
-	}
-
-	org, err := client.GetOrganization()
-	if err != nil {
-		return nil, fmt.Errorf("failed to get organization %s: %w", client.Auth.Organization, err)
-	}
-
-	vdc, err := client.GetVDCForOrg(*org)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get organization VDC '%s': %w", client.Auth.VDC, err)
-	}
-
-	vAppName := cluster.Spec.Cloud.VMwareCloudDirector.VApp
-	if vAppName == "" {
-		vAppName = fmt.Sprintf(ResourceNamePattern, cluster.Name)
-	}
-
-	vapp, err := vdc.GetVAppByNameOrId(vAppName, true)
-	if err != nil && !errors.Is(err, govcd.ErrorEntityNotFound) {
-		return nil, fmt.Errorf("failed to get vApp '%s': %w", vAppName, err)
-	}
-
-	// We need to delete the vApp
-	if err == nil {
-		err := deleteVApp(vdc, vapp)
-		if err != nil {
-			return nil, fmt.Errorf("unable to delete vApp: %w", err)
-		}
-	}
-
-	// vApp has been removed at this point. We need to cleanup the finalizer
-	return update(ctx, cluster.Name, func(cluster *kubermaticv1.Cluster) {
-		kuberneteshelper.RemoveFinalizer(cluster, vappFinalizer)
-	})
 }
 
 // ValidateCloudSpecUpdate verifies whether an update of cloud spec is valid and permitted.
@@ -216,40 +155,6 @@ func GetCredentialsForCluster(cloud kubermaticv1.CloudSpec, secretKeySelector pr
 		Organization: organization,
 		VDC:          vdc,
 	}, nil
-}
-
-func (p *Provider) reconcileCluster(ctx context.Context, cluster *kubermaticv1.Cluster, update provider.ClusterUpdater, force bool) (*kubermaticv1.Cluster, error) {
-	// Create an authenticated client.
-	client, err := NewClient(cluster.Spec.Cloud, p.secretKeySelector, p.dc)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create VMware Cloud Director client: %w", err)
-	}
-
-	// Ensure that Organization exists.
-	org, err := client.GetOrganization()
-	if err != nil {
-		return nil, fmt.Errorf("failed to get organization %s: %w", client.Auth.Organization, err)
-	}
-
-	// Ensure that VDC exists.
-	vdc, err := client.GetVDCForOrg(*org)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get organization VDC '%s': %w", client.Auth.VDC, err)
-	}
-
-	// 1. Create the vApp, if it doesn't exist.
-	cluster, err = reconcileVApp(ctx, cluster, update, vdc)
-	if err != nil {
-		return nil, err
-	}
-
-	// 2. Configure the required networks for vApp
-	cluster, err = reconcileNetwork(ctx, cluster, update, vdc)
-	if err != nil {
-		return nil, err
-	}
-
-	return cluster, nil
 }
 
 func ListCatalogs(ctx context.Context, auth Auth) (apiv1.VMwareCloudDirectorCatalogList, error) {

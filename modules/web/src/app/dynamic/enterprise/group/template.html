@@ -20,98 +20,120 @@
 END OF TERMS AND CONDITIONS
 -->
 
-<km-dynamic-tab label="Groups"
-                [customTemplate]="buttonTemplate">
-  <table class="km-table"
-         mat-table
-         matSort
-         [dataSource]="dataSource">
+<!-- <km-dynamic-tab label="Groups"
+                [customTemplate]="buttonTemplate"> -->
 
-    <ng-container [matColumnDef]="column.Group">
-      <th mat-header-cell
-          *matHeaderCellDef
-          class="km-header-cell p-35"
-          mat-sort-header>Group
-      </th>
-
-      <td mat-cell
-          *matCellDef="let element">{{element.group}}</td>
-    </ng-container>
-
-    <ng-container [matColumnDef]="column.Role">
-      <th mat-header-cell
-          *matHeaderCellDef
-          class="km-header-cell p-35"
-          mat-sort-header>Role
-      </th>
-      <td mat-cell
-          *matCellDef="let element">{{element.role}}</td>
-    </ng-container>
-
-    <ng-container [matColumnDef]="column.Actions">
-      <th mat-header-cell
-          *matHeaderCellDef
-          class="km-header-cell"></th>
-      <td mat-cell
-          *matCellDef="let element">
-        <div fxLayoutAlign="end"
-             class="km-table-actions">
-          <ng-container [ngSwitch]="!!element.deletionTimestamp">
-            <ng-container *ngSwitchCase="true">
-              <mat-spinner [diameter]="25"
-                           class="km-spinner"
-                           color="accent"></mat-spinner>
-            </ng-container>
-
-            <ng-container *ngSwitchCase="false">
-              <div>
-                <button mat-icon-button
-                        (click)="editGroup(element)"
-                        [disabled]="!isEditEnabled()">
-                  <i class="km-icon-mask km-icon-edit"></i>
-                </button>
-              </div>
-
-              <div>
-                <button mat-icon-button
-                        (click)="deleteGroup(element)"
-                        [disabled]="!isDeleteEnabled()">
-                  <i class="km-icon-mask km-icon-delete"></i>
-                </button>
-              </div>
-            </ng-container>
-          </ng-container>
-        </div>
-      </td>
-    </ng-container>
-
-    <tr mat-header-row
-        class="km-header-row"
-        *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row
-        *matRowDef="let row; columns: displayedColumns"
-        class="km-mat-row"></tr>
-  </table>
-
-  <ng-container *ngIf="!groups || groups.length === 0">
-    <div class="km-row km-empty-list-msg"
-         *ngIf="!isInitializingGroups">
-      No groups available.
+<mat-card class="km-card">
+  <div fxLayout
+       class="header">
+    <div fxFlex
+         fxLayoutAlign="end center"
+         fxLayoutGap="20px">
+      <button id="km-add-group-btn"
+              fxLayoutAlign="center center"
+              mat-flat-button
+              type="button"
+              (click)="addGroup()"
+              [disabled]="!isAddEnabled()">
+        <i class="km-icon-mask km-icon-add"></i>
+        <span>Add Group</span>
+      </button>
     </div>
-    <div class="km-row"
-         *ngIf="isInitializingGroups">
-      <mat-spinner color="accent"
-                   class="km-spinner km-with-spacing"
-                   [diameter]="25"></mat-spinner>
-    </div>
-  </ng-container>
-
-  <div [hidden]="!isPaginatorVisible()">
-    <mat-paginator showFirstLastButtons></mat-paginator>
   </div>
-</km-dynamic-tab>
 
-<ng-template #buttonTemplate>
+  <mat-card-content>
+    <table class="km-table"
+           mat-table
+           matSort
+           [dataSource]="dataSource">
+
+      <ng-container [matColumnDef]="column.Group">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-35"
+            mat-sort-header>Group
+        </th>
+
+        <td mat-cell
+            *matCellDef="let element">{{element.group}}</td>
+      </ng-container>
+
+      <ng-container [matColumnDef]="column.Role">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell p-35"
+            mat-sort-header>Role
+        </th>
+        <td mat-cell
+            *matCellDef="let element">{{element.role}}</td>
+      </ng-container>
+
+      <ng-container [matColumnDef]="column.Actions">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"></th>
+        <td mat-cell
+            *matCellDef="let element">
+          <div fxLayoutAlign="end"
+               class="km-table-actions">
+            <ng-container [ngSwitch]="!!element.deletionTimestamp">
+              <ng-container *ngSwitchCase="true">
+                <mat-spinner [diameter]="25"
+                             class="km-spinner"
+                             color="accent"></mat-spinner>
+              </ng-container>
+
+              <ng-container *ngSwitchCase="false">
+                <div>
+                  <button mat-icon-button
+                          (click)="editGroup(element)"
+                          [disabled]="!isEditEnabled()">
+                    <i class="km-icon-mask km-icon-edit"></i>
+                  </button>
+                </div>
+
+                <div>
+                  <button mat-icon-button
+                          (click)="deleteGroup(element)"
+                          [disabled]="!isDeleteEnabled()">
+                    <i class="km-icon-mask km-icon-delete"></i>
+                  </button>
+                </div>
+              </ng-container>
+            </ng-container>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row
+          class="km-header-row"
+          *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          class="km-mat-row"></tr>
+    </table>
+
+    <ng-container *ngIf="!groups || groups.length === 0">
+      <div class="km-row km-empty-list-msg"
+           *ngIf="!isInitializingGroups">
+        No groups available.
+      </div>
+      <div class="km-row"
+           *ngIf="isInitializingGroups">
+        <mat-spinner color="accent"
+                     class="km-spinner km-with-spacing"
+                     [diameter]="25"></mat-spinner>
+      </div>
+    </ng-container>
+
+    <div [hidden]="!isPaginatorVisible()">
+      <mat-paginator showFirstLastButtons></mat-paginator>
+    </div>
+  </mat-card-content>
+</mat-card>
+<!-- </km-dynamic-tab> -->
+
+<!-- <ng-template #buttonTemplate>
   <div fxLayout
        class="container">
     <div fxFlex
@@ -128,4 +150,4 @@ END OF TERMS AND CONDITIONS
       </button>
     </div>
   </div>
-</ng-template>
+</ng-template> -->

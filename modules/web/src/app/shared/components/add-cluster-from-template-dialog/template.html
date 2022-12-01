@@ -60,6 +60,14 @@ limitations under the License.
   </div>
   <button mat-flat-button
           type="button"
+          (click)="openClusterWizard()"
+          [disabled]="invalid"
+          *ngIf="active === step.Template && !last">
+    <i class="km-icon-mask km-icon-edit"></i>
+    <span>Customize Template</span>
+  </button>
+  <button mat-flat-button
+          type="button"
           (click)="next()"
           [disabled]="invalid"
           *ngIf="active === step.Template && !last">

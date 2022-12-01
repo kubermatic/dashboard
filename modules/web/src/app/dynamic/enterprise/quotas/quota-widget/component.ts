@@ -57,6 +57,7 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   @Input() showEmptyPlaceholder = false;
   @Input() isExternalCluster = false;
   @Input() isImportedCluster = false;
+  @Input() showBorderOutline = true;
 
   quotaPercentage: QuotaVariables;
   quotaDetails: QuotaDetails;

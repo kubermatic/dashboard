@@ -27,10 +27,6 @@ import (
 	"k8c.io/kubermatic/v2/pkg/resources"
 )
 
-const (
-	defaultBillingCycle = "hourly"
-)
-
 type packet struct {
 	secretKeySelector provider.SecretKeySelectorValueFunc
 }
@@ -53,31 +49,6 @@ func (p *packet) DefaultCloudSpec(_ context.Context, _ *kubermaticv1.CloudSpec) 
 func (p *packet) ValidateCloudSpec(_ context.Context, spec kubermaticv1.CloudSpec) error {
 	_, _, err := GetCredentialsForCluster(spec, p.secretKeySelector)
 	return err
-}
-
-// InitializeCloudProvider initializes a cluster, in particular
-// updates BillingCycle to the defaultBillingCycle, if it is not set.
-func (p *packet) InitializeCloudProvider(ctx context.Context, cluster *kubermaticv1.Cluster, update provider.ClusterUpdater) (*kubermaticv1.Cluster, error) {
-	var err error
-	if cluster.Spec.Cloud.Packet.BillingCycle == "" {
-		cluster, err = update(ctx, cluster.Name, func(cluster *kubermaticv1.Cluster) {
-			cluster.Spec.Cloud.Packet.BillingCycle = defaultBillingCycle
-		})
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	return cluster, nil
-}
-
-func (p *packet) ReconcileCluster(ctx context.Context, cluster *kubermaticv1.Cluster, update provider.ClusterUpdater) (*kubermaticv1.Cluster, error) {
-	return p.InitializeCloudProvider(ctx, cluster, update)
-}
-
-// CleanUpCloudProvider.
-func (p *packet) CleanUpCloudProvider(_ context.Context, cluster *kubermaticv1.Cluster, _ provider.ClusterUpdater) (*kubermaticv1.Cluster, error) {
-	return cluster, nil
 }
 
 // ValidateCloudSpecUpdate verifies whether an update of cloud spec is valid and permitted.

@@ -34,18 +34,9 @@ import (
 
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
-	kuberneteshelper "k8c.io/kubermatic/v2/pkg/kubernetes"
 	"k8c.io/kubermatic/v2/pkg/resources"
 
 	kruntime "k8s.io/apimachinery/pkg/util/runtime"
-)
-
-const (
-	folderCleanupFinalizer = "kubermatic.k8c.io/cleanup-vsphere-folder"
-	// categoryCleanupFinilizer will instruct the deletion of the default category tag.
-	tagCategoryCleanupFinilizer = "kubermatic.k8c.io/cleanup-vsphere-tag-category"
-
-	defaultCategory = "cluster"
 )
 
 // Provider represents the vsphere provider.
@@ -142,63 +133,6 @@ func getVMRootPath(dc *kubermaticv1.DatacenterSpecVSphere) string {
 	}
 	return rootPath
 }
-
-// InitializeCloudProvider initializes the vsphere cloud provider by setting up vm folders for the cluster.
-func (v *Provider) InitializeCloudProvider(ctx context.Context, cluster *kubermaticv1.Cluster, update provider.ClusterUpdater) (*kubermaticv1.Cluster, error) {
-	username, password, err := GetCredentialsForCluster(cluster.Spec.Cloud, v.secretKeySelector, v.dc)
-	if err != nil {
-		return nil, err
-	}
-	rootPath := getVMRootPath(v.dc)
-	if cluster.Spec.Cloud.VSphere.Folder == "" {
-		session, err := newSession(ctx, v.dc, username, password, v.caBundle)
-		if err != nil {
-			return nil, fmt.Errorf("failed to create vCenter session: %w", err)
-		}
-		defer session.Logout(ctx)
-		// If the user did not specify a folder, we create a own folder for this cluster to improve
-		// the VM management in vCenter
-		clusterFolder := path.Join(rootPath, cluster.Name)
-		if err := createVMFolder(ctx, session, clusterFolder); err != nil {
-			return nil, fmt.Errorf("failed to create the VM folder %q: %w", clusterFolder, err)
-		}
-
-		cluster, err = update(ctx, cluster.Name, func(cluster *kubermaticv1.Cluster) {
-			kuberneteshelper.AddFinalizer(cluster, folderCleanupFinalizer)
-			cluster.Spec.Cloud.VSphere.Folder = clusterFolder
-		})
-		if err != nil {
-			return nil, err
-		}
-	}
-	if cluster.Spec.Cloud.VSphere.TagCategoryID == "" {
-		restSession, err := newRESTSession(ctx, v.dc, username, password, v.caBundle)
-		if err != nil {
-			return nil, fmt.Errorf("failed to create REST client session: %w", err)
-		}
-		defer restSession.Logout(ctx)
-
-		// If the user did not specify a tag category, we create an own default for this cluster
-		categoryID, err := createTagCategory(ctx, restSession, cluster)
-		if err != nil {
-			return nil, fmt.Errorf("failed to create tag category: %w", err)
-		}
-		cluster, err = update(ctx, cluster.Name, func(cluster *kubermaticv1.Cluster) {
-			kuberneteshelper.AddFinalizer(cluster, tagCategoryCleanupFinilizer)
-			cluster.Spec.Cloud.VSphere.TagCategoryID = categoryID
-		})
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	return cluster, nil
-}
-
-// TODO: Hey, you! Yes, you! Why don't you implement reconciling for vSphere? Would be really cool :)
-// func (v *Provider) ReconcileCluster(cluster *kubermaticv1.Cluster, update provider.ClusterUpdater) (*kubermaticv1.Cluster, error) {
-// 	return cluster, nil
-// }
 
 // GetNetworks returns a slice of VSphereNetworks of the datacenter from the passed cloudspec.
 func GetNetworks(ctx context.Context, dc *kubermaticv1.DatacenterSpecVSphere, username, password string, caBundle *x509.CertPool) ([]NetworkInfo, error) {
@@ -297,53 +231,6 @@ func (v *Provider) ValidateCloudSpec(ctx context.Context, spec kubermaticv1.Clou
 	}
 
 	return nil
-}
-
-// CleanUpCloudProvider we always check if the folder is there and remove it if yes because we know its absolute path
-// This covers cases where the finalizer was not added
-// We also remove the finalizer if either the folder is not present or we successfully deleted it.
-func (v *Provider) CleanUpCloudProvider(ctx context.Context, cluster *kubermaticv1.Cluster, update provider.ClusterUpdater) (*kubermaticv1.Cluster, error) {
-	username, password, err := GetCredentialsForCluster(cluster.Spec.Cloud, v.secretKeySelector, v.dc)
-	if err != nil {
-		return nil, err
-	}
-
-	session, err := newSession(ctx, v.dc, username, password, v.caBundle)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create vCenter session: %w", err)
-	}
-	defer session.Logout(ctx)
-
-	restSession, err := newRESTSession(ctx, v.dc, username, password, v.caBundle)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create REST client session: %w", err)
-	}
-	defer restSession.Logout(ctx)
-
-	if kuberneteshelper.HasFinalizer(cluster, folderCleanupFinalizer) {
-		if err := deleteVMFolder(ctx, session, cluster.Spec.Cloud.VSphere.Folder); err != nil {
-			return nil, err
-		}
-		cluster, err = update(ctx, cluster.Name, func(cluster *kubermaticv1.Cluster) {
-			kuberneteshelper.RemoveFinalizer(cluster, folderCleanupFinalizer)
-		})
-		if err != nil {
-			return nil, err
-		}
-	}
-	if kuberneteshelper.HasFinalizer(cluster, tagCategoryCleanupFinilizer) {
-		if err := deleteTagCategory(ctx, restSession, cluster); err != nil {
-			return nil, err
-		}
-		cluster, err = update(ctx, cluster.Name, func(cluster *kubermaticv1.Cluster) {
-			kuberneteshelper.RemoveFinalizer(cluster, tagCategoryCleanupFinilizer)
-		})
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	return cluster, nil
 }
 
 // ValidateCloudSpecUpdate verifies whether an update of cloud spec is valid and permitted.

@@ -64,17 +64,18 @@ describe('Admin Settings - Defaults Story', () => {
   });
 
   it('should go to the clusters page', () => {
+    Pages.Clusters.List.Buttons.resourcesSideNavItem.click();
     Pages.Clusters.List.visit();
     Pages.expect(View.Clusters.Default);
   });
 
   it('should make sure connect cluster button is visible', () => {
-    Pages.Clusters.List.Buttons.externalClustersTab.should(Condition.Exist).click();
+    Pages.Clusters.List.Buttons.externalClusters.should(Condition.Exist).click();
     Pages.Clusters.List.Buttons.addExternalCluster.should(Condition.Exist);
   });
 
   it('should go to wizard', () => {
-    Pages.Clusters.List.Buttons.clustersTab.click();
+    Pages.Clusters.List.Buttons.clusters.click();
     Pages.Wizard.visit();
   });
 
@@ -93,6 +94,7 @@ describe('Admin Settings - Defaults Story', () => {
 
   it('should make sure default admin settings work', () => {
     // Cleanup settings check
+    Pages.Clusters.Details.Buttons.providerMenu.click();
     Pages.Clusters.Details.Buttons.deleteCluster.click();
     Pages.Clusters.Details.Elements.deleteDialogCleanupLBCheckboxInput.should(Condition.NotBeChecked);
     Pages.Clusters.Details.Elements.deleteDialogCleanupVolumeCheckboxInput.should(Condition.NotBeChecked);
@@ -128,6 +130,7 @@ describe('Admin Settings - Defaults Story', () => {
   it('should go to clusters view and make sure external clusters are not available', () => {
     Pages.Projects.open(projectName);
     Pages.expect(View.Overview.Default);
+    Pages.Clusters.List.Buttons.resourcesSideNavItem.click();
     Pages.Clusters.List.visit();
     Pages.expect(View.Clusters.Default);
     Pages.Clusters.List.Buttons.anyTab.should(Condition.NotExist);
@@ -137,6 +140,7 @@ describe('Admin Settings - Defaults Story', () => {
     Pages.Clusters.List.select(clusterName);
 
     // Cleanup settings check
+    Pages.Clusters.Details.Buttons.providerMenu.click();
     Pages.Clusters.Details.Buttons.deleteCluster.click();
     Pages.Clusters.Details.Elements.deleteDialogCleanupLBCheckboxInput.should(Condition.BeChecked);
     Pages.Clusters.Details.Elements.deleteDialogCleanupLBCheckboxInput.should(Condition.BeDisabled);

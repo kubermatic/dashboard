@@ -183,7 +183,9 @@ export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestro
 
   navigateToCluster(cluster: ExternalCluster): void {
     if (this.canAccess(cluster)) {
-      this._router.navigate([`/projects/${this._selectedProject.id}/clusters/external/${cluster.id}`]);
+      this._router.navigate([
+        `/projects/${this._selectedProject.id}/${View.Clusters}/${View.ExternalClusters}/${cluster.id}`,
+      ]);
     }
   }
 
@@ -234,6 +236,7 @@ export class ExternalClusterListComponent implements OnInit, OnChanges, OnDestro
 
   onActivate(component: QuotaWidgetComponent): void {
     component.isExternalCluster = true;
+    component.showAsCard = false;
     component.showDetailsOnHover = false;
     this._projectService.onProjectChange
       .pipe(startWith(this._selectedProject), takeUntil(this._unsubscribe))

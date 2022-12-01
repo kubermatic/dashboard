@@ -40,6 +40,15 @@
   .km-quota-widget {
     height: 46px;
     white-space: nowrap;
+
+    &.widget-border {
+      border-radius: variables.$border-radius;
+      padding: 0 10px;
+
+      km-property {
+        padding-top: 6px;
+      }
+    }
   }
 
   km-property {
@@ -80,6 +89,12 @@
       &:not(:last-child) {
         margin-bottom: 10px;
       }
+    }
+
+    &.no-card {
+      left: auto;
+      top: 87px;
+      width: 272px;
     }
   }
 

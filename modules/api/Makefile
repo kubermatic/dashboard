@@ -61,6 +61,11 @@ all: install run
 .PHONY: build
 build: $(CMD)
 
+.PHONY: clean
+clean:
+	rm -rf $(BUILD_DEST)
+	@echo "Cleaned $(BUILD_DEST)"
+
 .PHONY: $(CMD)
 $(CMD): %: $(BUILD_DEST)/%
 
@@ -108,3 +113,8 @@ build-tests:
 .PHONY: verify
 verify:
 	./hack/verify.sh
+
+.PHONY: update-kkp
+update-kkp:
+	go get -v k8c.io/kubermatic/v2@main
+	go mod tidy

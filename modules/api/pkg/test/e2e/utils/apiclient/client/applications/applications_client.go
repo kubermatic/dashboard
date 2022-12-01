@@ -28,6 +28,8 @@ type ClientOption func(*runtime.ClientOperation)
 
 // ClientService is the interface for Client methods
 type ClientService interface {
+	CreateApplicationDefinition(params *CreateApplicationDefinitionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateApplicationDefinitionCreated, error)
+
 	CreateApplicationInstallation(params *CreateApplicationInstallationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateApplicationInstallationCreated, error)
 
 	DeleteApplicationInstallation(params *DeleteApplicationInstallationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*DeleteApplicationInstallationOK, error)
@@ -43,6 +45,44 @@ type ClientService interface {
 	UpdateApplicationInstallation(params *UpdateApplicationInstallationParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*UpdateApplicationInstallationOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
+}
+
+/*
+CreateApplicationDefinition Creates ApplicationDefinition into the given cluster
+*/
+func (a *Client) CreateApplicationDefinition(params *CreateApplicationDefinitionParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*CreateApplicationDefinitionCreated, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewCreateApplicationDefinitionParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "createApplicationDefinition",
+		Method:             "POST",
+		PathPattern:        "/api/v2/applicationdefinitions",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &CreateApplicationDefinitionReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*CreateApplicationDefinitionCreated)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*CreateApplicationDefinitionDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
 /*

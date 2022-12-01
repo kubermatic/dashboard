@@ -54,9 +54,6 @@ var (
 )
 
 const (
-	DefaultSSHPort     = 22
-	DefaultKubeletPort = 10250
-
 	DefaultKubeconfigFieldPath = "kubeconfig"
 )
 
@@ -123,19 +120,9 @@ type PrivilegedOperatingSystemProfileProviderGetter = func(seed *kubermaticv1.Se
 
 // CloudProvider declares a set of methods for interacting with a cloud provider.
 type CloudProvider interface {
-	InitializeCloudProvider(context.Context, *kubermaticv1.Cluster, ClusterUpdater) (*kubermaticv1.Cluster, error)
-	CleanUpCloudProvider(context.Context, *kubermaticv1.Cluster, ClusterUpdater) (*kubermaticv1.Cluster, error)
 	DefaultCloudSpec(context.Context, *kubermaticv1.CloudSpec) error
 	ValidateCloudSpec(context.Context, kubermaticv1.CloudSpec) error
 	ValidateCloudSpecUpdate(ctx context.Context, oldSpec kubermaticv1.CloudSpec, newSpec kubermaticv1.CloudSpec) error
-}
-
-// ReconcilingCloudProvider is a cloud provider that can not just created resources
-// once, but is capable of continuously reconciling and fixing any problems with them.
-type ReconcilingCloudProvider interface {
-	CloudProvider
-
-	ReconcileCluster(context.Context, *kubermaticv1.Cluster, ClusterUpdater) (*kubermaticv1.Cluster, error)
 }
 
 // ClusterUpdater defines a function to persist an update to a cluster.
@@ -908,7 +895,7 @@ type PrivilegedAlertmanagerProvider interface {
 
 // ClusterTemplateProvider declares the set of method for interacting with cluster templates.
 type ClusterTemplateProvider interface {
-	New(ctx context.Context, userInfo *UserInfo, newClusterTemplate *kubermaticv1.ClusterTemplate, scope, projectID string) (*kubermaticv1.ClusterTemplate, error)
+	CreateorUpdate(ctx context.Context, userInfo *UserInfo, newClusterTemplate *kubermaticv1.ClusterTemplate, scope, projectID string, update bool) (*kubermaticv1.ClusterTemplate, error)
 	List(ctx context.Context, userInfo *UserInfo, projectID string) ([]kubermaticv1.ClusterTemplate, error)
 	ListALL(ctx context.Context, labelSelector labels.Selector) ([]kubermaticv1.ClusterTemplate, error)
 	Get(ctx context.Context, userInfo *UserInfo, projectID, templateID string) (*kubermaticv1.ClusterTemplate, error)
@@ -1331,11 +1318,17 @@ type ApplicationDefinitionProvider interface {
 	// is unsafe in a sense that it uses privileged account to get the resources
 	ListUnsecured(ctx context.Context) (*appskubermaticv1.ApplicationDefinitionList, error)
 
-	// Get returns a  ApplicationDefinition based on name.
+	// Get returns a ApplicationDefinition based on name.
 	//
 	// Note that this function:
 	// is unsafe in a sense that it uses privileged account to get the resources
 	GetUnsecured(ctx context.Context, appDefName string) (*appskubermaticv1.ApplicationDefinition, error)
+
+	// Create creates an ApplicationDefinition
+	//
+	// Note that this function:
+	// is unsafe in a sense that it uses privileged account to get the resources
+	CreateUnsecured(ctx context.Context, appDef *appskubermaticv1.ApplicationDefinition) (*appskubermaticv1.ApplicationDefinition, error)
 }
 
 type PrivilegedOperatingSystemProfileProvider interface {

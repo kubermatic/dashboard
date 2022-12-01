@@ -26,6 +26,7 @@ import {Cluster} from '@shared/entity/cluster';
 import {Member} from '@shared/entity/member';
 import {NodeMetrics} from '@shared/entity/metrics';
 import {getOperatingSystem, getOperatingSystemLogoClass, Node, NodeIPAddress, VSphereTag} from '@shared/entity/node';
+import {KubeVirtNodeInstanceType, KubeVirtNodePreference} from '@shared/entity/provider/kubevirt';
 import {GroupConfig} from '@shared/model/Config';
 import {MemberUtils, Permission} from '@shared/utils/member';
 import {NodeUtils} from '@shared/utils/node';
@@ -230,5 +231,13 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
 
   getMetrics(nodeName: string): NodeMetrics | undefined {
     return this.nodesMetrics.get(nodeName);
+  }
+
+  getKubeVirtInstanceTypeCategory(instanceType: KubeVirtNodeInstanceType): string {
+    return KubeVirtNodeInstanceType.getCategory(instanceType);
+  }
+
+  getKubeVirtPreferenceCategory(preference: KubeVirtNodePreference): string {
+    return KubeVirtNodePreference.getCategory(preference);
   }
 }

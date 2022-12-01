@@ -42,12 +42,16 @@ class Buttons extends PageOptions {
     return this._get('#km-nav-item-clusters');
   }
 
-  get externalClustersTab(): Cypress.Chainable {
-    return this._getContains('.mat-tab-label', 'External Clusters');
+  get resourcesSideNavItem(): Cypress.Chainable {
+    return this._get('#km-side-nav-field-Resources');
   }
 
-  get clustersTab(): Cypress.Chainable {
-    return this._getContains('.mat-tab-label', 'Clusters');
+  get externalClusters(): Cypress.Chainable {
+    return this._get('#km-nav-item-external-clusters');
+  }
+
+  get clusters(): Cypress.Chainable {
+    return this._get('#km-nav-item-clusters');
   }
 
   get anyTab(): Cypress.Chainable {

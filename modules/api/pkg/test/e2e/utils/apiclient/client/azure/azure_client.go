@@ -50,6 +50,20 @@ type ClientService interface {
 
 	ListAzureVnets(params *ListAzureVnetsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListAzureVnetsOK, error)
 
+	ListProjectAzureAvailabilityZones(params *ListProjectAzureAvailabilityZonesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAzureAvailabilityZonesOK, error)
+
+	ListProjectAzureResourceGroups(params *ListProjectAzureResourceGroupsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAzureResourceGroupsOK, error)
+
+	ListProjectAzureRouteTables(params *ListProjectAzureRouteTablesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAzureRouteTablesOK, error)
+
+	ListProjectAzureSecurityGroups(params *ListProjectAzureSecurityGroupsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAzureSecurityGroupsOK, error)
+
+	ListProjectAzureSizes(params *ListProjectAzureSizesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAzureSizesOK, error)
+
+	ListProjectAzureSubnets(params *ListProjectAzureSubnetsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAzureSubnetsOK, error)
+
+	ListProjectAzureVnets(params *ListProjectAzureVnetsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAzureVnetsOK, error)
+
 	SetTransport(transport runtime.ClientTransport)
 }
 
@@ -468,6 +482,272 @@ func (a *Client) ListAzureVnets(params *ListAzureVnetsParams, authInfo runtime.C
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListAzureVnetsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectAzureAvailabilityZones Lists VM availability zones in an Azure region
+*/
+func (a *Client) ListProjectAzureAvailabilityZones(params *ListProjectAzureAvailabilityZonesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAzureAvailabilityZonesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectAzureAvailabilityZonesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectAzureAvailabilityZones",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/azure/availabilityzones",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectAzureAvailabilityZonesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectAzureAvailabilityZonesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectAzureAvailabilityZonesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectAzureResourceGroups Lists available VM resource groups
+*/
+func (a *Client) ListProjectAzureResourceGroups(params *ListProjectAzureResourceGroupsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAzureResourceGroupsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectAzureResourceGroupsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectAzureResourceGroups",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/azure/resourcegroups",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectAzureResourceGroupsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectAzureResourceGroupsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectAzureResourceGroupsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectAzureRouteTables Lists available VM route tables
+*/
+func (a *Client) ListProjectAzureRouteTables(params *ListProjectAzureRouteTablesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAzureRouteTablesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectAzureRouteTablesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectAzureRouteTables",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/azure/routetables",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectAzureRouteTablesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectAzureRouteTablesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectAzureRouteTablesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectAzureSecurityGroups Lists available VM security groups
+*/
+func (a *Client) ListProjectAzureSecurityGroups(params *ListProjectAzureSecurityGroupsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAzureSecurityGroupsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectAzureSecurityGroupsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectAzureSecurityGroups",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/azure/securitygroups",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectAzureSecurityGroupsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectAzureSecurityGroupsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectAzureSecurityGroupsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectAzureSizes Lists available VM sizes in an Azure region
+*/
+func (a *Client) ListProjectAzureSizes(params *ListProjectAzureSizesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAzureSizesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectAzureSizesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectAzureSizes",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/azure/sizes",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectAzureSizesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectAzureSizesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectAzureSizesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectAzureSubnets Lists available VM subnets
+*/
+func (a *Client) ListProjectAzureSubnets(params *ListProjectAzureSubnetsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAzureSubnetsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectAzureSubnetsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectAzureSubnets",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/azure/subnets",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectAzureSubnetsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectAzureSubnetsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectAzureSubnetsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectAzureVnets Lists available VM virtual networks
+*/
+func (a *Client) ListProjectAzureVnets(params *ListProjectAzureVnetsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAzureVnetsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectAzureVnetsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectAzureVnets",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/azure/vnets",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectAzureVnetsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectAzureVnetsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectAzureVnetsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

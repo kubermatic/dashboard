@@ -81,6 +81,6 @@ $breakpoints: (
 @mixin toolbar-button($position: 1) {
   position: fixed;
   right: ($position * 40px) + (16px * ($position - 1));
-  top: 11px;
+  top: 8px;
 }
 /* stylelint-enable */

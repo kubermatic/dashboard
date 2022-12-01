@@ -55,6 +55,10 @@ function createRouting(): Routes {
           loadChildren: () => import('./member/module').then(m => m.MemberModule),
         },
         {
+          path: 'projects/:projectID/groups',
+          loadChildren: () => import('./member/module').then(m => m.MemberModule),
+        },
+        {
           path: 'projects/:projectID/serviceaccounts',
           loadChildren: () => import('./serviceaccount/module').then(m => m.ServiceAccountModule),
         },
@@ -63,11 +67,23 @@ function createRouting(): Routes {
           loadChildren: () => import('./cluster/module').then(m => m.ClusterModule),
         },
         {
+          path: 'projects/:projectID/externalclusters',
+          loadChildren: () => import('./cluster/module').then(m => m.ClusterModule),
+        },
+        {
           path: 'projects/:projectID/clustertemplates',
           loadChildren: () => import('./cluster-template/module').then(m => m.ClusterTemplateModule),
         },
         {
           path: 'projects/:projectID/backups',
+          loadChildren: () => import('./backup/module').then(m => m.BackupModule),
+        },
+        {
+          path: 'projects/:projectID/snapshots',
+          loadChildren: () => import('./backup/module').then(m => m.BackupModule),
+        },
+        {
+          path: 'projects/:projectID/restores',
           loadChildren: () => import('./backup/module').then(m => m.BackupModule),
         },
         {

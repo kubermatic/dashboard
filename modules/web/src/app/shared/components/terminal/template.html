@@ -38,10 +38,12 @@ limitations under the License.
                          (openInNewTab)="openInSeparateView()"
                          (close)="onClose()"></km-terminal-toolbar>
 
-    <km-terminal-status-bar *ngIf="isConnectionLost"
-                            [showCloseButton]="showCloseButtonOnToolbar"
+    <km-terminal-status-bar *ngIf="isConnectionLost || isSessionExpiring"
+                            [isConnectionLost]="isConnectionLost"
+                            [isSessionExpiring]="isSessionExpiring"
                             (reconnect)="onReconnect()"
-                            (close)="onClose()"></km-terminal-status-bar>
+                            (extendSession)="onExtendSession()">
+    </km-terminal-status-bar>
 
     <div #terminal></div>
   </div>

@@ -54,12 +54,15 @@ enum Operations {
   Stdout = 'stdout',
   Stdin = 'stdin',
   Msg = 'msg',
+  Expiration = 'expiration',
+  Refresh = 'refresh',
 }
 
 enum ErrorOperations {
   KubeConfigSecretMissing = 'KUBECONFIG_SECRET_MISSING',
   WebTerminalPodPending = 'WEBTERMINAL_POD_PENDING',
   ConnectionPoolExceeded = 'CONNECTION_POOL_EXCEEDED',
+  RefreshesLimitExceeded = 'REFRESHES_LIMIT_EXCEEDED',
 }
 
 @Component({
@@ -71,28 +74,28 @@ enum ErrorOperations {
 export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterViewInit {
   readonly DELAY_TIMEOUT = 100;
   readonly MAX_SESSION_SUPPORTED = 5;
+  readonly MAX_EXPIRATION_REFRESHES = 48; // maximum 24h for a pod lifetime of 30 minutes/session
+
   message = '';
   projectId: string;
   clusterId: string;
   cluster: Cluster;
   terminal: Terminal;
   isConnectionLost: boolean;
+  isSessionExpiring: boolean;
   isLoadingTerminal = true;
   isDexAuthenticationPageOpened = false;
-
   showCloseButtonOnToolbar: boolean;
   showOpenInSeparateViewButtonOnToolbar: boolean;
   showCloseButtonOnStatusToolbar: boolean;
 
-  private _user: Member;
-  private _initializeTerminalOnSuccess: Subject<boolean> = new Subject<boolean>();
-
   @Input() layout = LayoutType.page;
-
   @Output() close = new EventEmitter<void>();
   @ViewChild('terminal', {static: false}) terminalRef: ElementRef;
   @ViewChild('terminalContainer', {static: true}) terminalContainerRef: ElementRef;
 
+  private _user: Member;
+  private _initializeTerminalOnSuccess: Subject<boolean> = new Subject<boolean>();
   private readonly _unsubscribe = new Subject<void>();
   private _resizeEventlistenerFn: () => void;
 
@@ -225,6 +228,11 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
     this._connectToWebSocketConnection();
   }
 
+  onExtendSession(): void {
+    this._onTerminalExtendSession();
+    this.isSessionExpiring = false;
+  }
+
   private _getWebTerminalProxyURL(): string {
     const userId = this._user?.id;
     return this._clusterService.getWebTerminalProxyURL(this.projectId, this.cluster.id, userId);
@@ -237,8 +245,8 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
       this.showOpenInSeparateViewButtonOnToolbar = true;
     }
 
-    this.showCloseButtonOnStatusToolbar = true;
     this.showCloseButtonOnToolbar = true;
+    this.showCloseButtonOnStatusToolbar = true;
   }
 
   private _connectToWebSocketConnection(): void {
@@ -270,7 +278,14 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
         this.terminal.write(
           `Oops! There could be ${this.MAX_SESSION_SUPPORTED} concurrent session per user. Please either discard or close other sessions.`
         );
+      } else if (frame.Data === ErrorOperations.RefreshesLimitExceeded) {
+        const clusterName = this.cluster && this.cluster.name;
+        this.terminal.write(
+          `Oops! Max limit of ${this.MAX_EXPIRATION_REFRESHES} refreshes is reached. You are not allowed to extend the session for \x1b[1;34m${clusterName}\x1B[0m\n\n\r`
+        );
       }
+    } else if (frame.Op === Operations.Expiration) {
+      this.isSessionExpiring = true;
     }
   }
 
@@ -286,6 +301,12 @@ export class TerminalComponent implements OnChanges, OnInit, OnDestroy, AfterVie
       Data: `${str}`,
       Cols: this.terminal.cols,
       Rows: this.terminal.rows,
+    });
+  }
+
+  private _onTerminalExtendSession(): void {
+    this._webTerminalSocketService.sendMessage({
+      Op: Operations.Refresh,
     });
   }
 }

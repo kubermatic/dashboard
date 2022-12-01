@@ -24,6 +24,7 @@ import {ConfirmationDialogComponent} from '../confirmation-dialog/component';
 import {EditAddonDialogComponent} from './edit-addon-dialog/component';
 import {InstallAddonDialogComponent} from './install-addon-dialog/component';
 import {AddonService} from '@core/services/addon';
+import {getEditionVersion} from '@shared/utils/common';
 
 @Component({
   selector: 'km-addon-list',
@@ -46,6 +47,8 @@ export class AddonsListComponent implements OnInit, OnChanges, OnDestroy {
   accessibleAddons: string[] = [];
   installableAddons: string[] = [];
   addonConfigs = new Map<string, AddonConfig>();
+  editionVersion: string = getEditionVersion();
+
   private _unsubscribe: Subject<void> = new Subject<void>();
 
   constructor(

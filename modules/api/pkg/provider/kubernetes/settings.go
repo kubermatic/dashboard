@@ -87,7 +87,7 @@ func (s *SettingsProvider) createDefaultGlobalSettings(ctx context.Context) (*ku
 			RestrictProjectCreation:     false,
 			EnableExternalClusterImport: true,
 			MachineDeploymentVMResourceQuota: &kubermaticv1.MachineFlavorFilter{
-				MinCPU:    1,
+				MinCPU:    2,
 				MaxCPU:    32,
 				MinRAM:    2,
 				MaxRAM:    128,

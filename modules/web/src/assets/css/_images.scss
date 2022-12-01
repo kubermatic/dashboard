@@ -126,6 +126,10 @@
   @include mixins.mask-image('/assets/images/icons/reconnect.svg', 18px);
 }
 
+.km-icon-clock {
+  @include mixins.mask-image('/assets/images/icons/clock.svg', 18px);
+}
+
 .km-icon-running {
   @include mixins.background-image('/assets/images/icons/check.svg#16', 16px);
 
@@ -372,6 +376,10 @@
 
 .km-icon-kubernetes {
   @include mixins.background-image('/assets/images/icons/kubernetes.svg', 30px);
+}
+
+.km-icon-seed {
+  @include mixins.mask-image('/assets/images/icons/seed.svg', 24px);
 }
 
 .km-icon-opa {

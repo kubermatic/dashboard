@@ -25,6 +25,7 @@ import _ from 'lodash';
 import {merge, Observable, of, onErrorResumeNext} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {URL_PATTERN_VALIDATOR, KUBERNETES_RESOURCE_NAME_PATTERN_VALIDATOR} from '@shared/validators/others';
+import {getEditionVersion} from '@shared/utils/common';
 
 enum Controls {
   PreAllocatedDataVolumes = 'preAllocatedDataVolumes',
@@ -63,6 +64,7 @@ export class KubeVirtProviderExtendedComponent extends BaseFormValidator impleme
   private readonly _defaultPreAllocatedDataVolumeSize = 10;
   readonly Controls = Controls;
 
+  editionVersion: string = getEditionVersion();
   storageClasses: KubeVirtStorageClass[] = [];
   storageClassLabel = StorageClassState.Empty;
   private _preset: string;

@@ -273,6 +273,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onActivate(component: QuotaWidgetComponent): void {
+    component.showAsCard = false;
     this._projectService.onProjectChange
       .pipe(startWith(this._selectedProject), takeUntil(this._unsubscribe))
       .subscribe(({id}) => {

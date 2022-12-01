@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {DatacenterService} from '@core/services/datacenter';
 import {NodeDataService} from '@core/services/node-data/service';
-import {Application} from '@shared/entity/application';
 import {Cluster} from '@shared/entity/cluster';
 import {Datacenter, SeedSettings} from '@shared/entity/datacenter';
 import {SSHKey} from '@shared/entity/ssh-key';
@@ -24,6 +23,8 @@ import {Subject} from 'rxjs';
 import {take, switchMap, takeUntil, tap} from 'rxjs/operators';
 import {MachineDeployment} from '@shared/entity/machine-deployment';
 import {OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deployment';
+import {ApplicationService} from '@core/services/application';
+import {Application} from '@shared/entity/application';
 
 @Component({
   selector: 'km-wizard-summary-step',
@@ -31,8 +32,6 @@ import {OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deploy
   styleUrls: ['./style.scss'],
 })
 export class SummaryStepComponent implements OnInit, OnDestroy {
-  @Input() applications: Application[] = [];
-
   datacenter: Datacenter;
   seedSettings: SeedSettings;
   private _sshKeys: SSHKey[] = [];
@@ -41,7 +40,8 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
   constructor(
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _nodeDataService: NodeDataService,
-    private readonly _datacenterService: DatacenterService
+    private readonly _datacenterService: DatacenterService,
+    private readonly applicationService: ApplicationService
   ) {}
 
   ngOnInit(): void {
@@ -62,6 +62,14 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
 
   get cluster(): Cluster {
     return this._clusterSpecService.cluster;
+  }
+
+  get clusterTemplateEditMode(): boolean {
+    return this._clusterSpecService.clusterTemplateEditMode;
+  }
+
+  get applications(): Application[] {
+    return this.applicationService.applications;
   }
 
   get machineDeployment(): MachineDeployment {

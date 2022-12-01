@@ -17,6 +17,7 @@ import {CloudSpec, Cluster, EventRateLimitConfig} from '@shared/entity/cluster';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
 import _ from 'lodash';
+import {ClusterTemplate, ClusterTemplateSSHKey} from '@shared/entity/cluster-template';
 
 @Injectable()
 export class ClusterSpecService {
@@ -27,6 +28,7 @@ export class ClusterSpecService {
   readonly providerSpecChanges = new EventEmitter<void>();
 
   private _cluster: Cluster = Cluster.newEmptyClusterEntity();
+  private isCusterTemplateEditMode = false;
 
   get cluster(): Cluster {
     return this._cluster;
@@ -34,9 +36,9 @@ export class ClusterSpecService {
 
   set cluster(cluster: Cluster) {
     if (
-      this._getProvider(this._cluster) !== NodeProvider.NONE &&
-      this._getProvider(cluster) !== NodeProvider.NONE &&
-      this._getProvider(this._cluster) !== this._getProvider(cluster)
+      this.getProvider(this._cluster) !== NodeProvider.NONE &&
+      this.getProvider(cluster) !== NodeProvider.NONE &&
+      this.getProvider(this._cluster) !== this.getProvider(cluster)
     ) {
       return;
     }
@@ -67,6 +69,10 @@ export class ClusterSpecService {
   set sshKeys(keys: SSHKey[]) {
     this._sshKeys = keys;
     this.sshKeyChanges.emit(this._sshKeys);
+  }
+
+  get clusterTemplateEditMode(): boolean {
+    return this.isCusterTemplateEditMode;
   }
 
   get provider(): NodeProvider {
@@ -109,12 +115,12 @@ export class ClusterSpecService {
     }
   }
 
-  set labels(labels: object) {
+  set labels(labels: Record<string, string>) {
     delete this._cluster.labels;
     this._cluster.labels = labels;
   }
 
-  set podNodeSelectorAdmissionPluginConfig(config: object) {
+  set podNodeSelectorAdmissionPluginConfig(config: Record<string, string>) {
     this._cluster.spec.podNodeSelectorAdmissionPluginConfig = config;
   }
 
@@ -135,9 +141,30 @@ export class ClusterSpecService {
   reset(): void {
     this._cluster = Cluster.newEmptyClusterEntity();
     this._sshKeys = [];
+    this.isCusterTemplateEditMode = false;
   }
 
-  private _getProvider(cluster: Cluster): NodeProvider {
+  initializeClusterFromClusterTemplate(template: ClusterTemplate): void {
+    this.cluster = template.cluster;
+    this.sshKeys = this.sshKeysFromClusterTemplateUserSSHKeys(template.userSshKeys);
+    this.isCusterTemplateEditMode = true;
+  }
+
+  emitChangeEvents(): void {
+    this.sshKeyChanges.emit(this._sshKeys);
+    this.datacenterChanges.next(this._cluster.spec.cloud.dc);
+    this.providerChanges.emit(this.getProvider(this._cluster));
+  }
+
+  private sshKeysFromClusterTemplateUserSSHKeys(sshKeys: ClusterTemplateSSHKey[]): SSHKey[] {
+    return sshKeys
+      ? sshKeys.map(key => {
+          return {name: key.name, id: key.id} as SSHKey;
+        })
+      : [];
+  }
+
+  getProvider(cluster: Cluster): NodeProvider {
     if (!cluster || !cluster.spec || !cluster.spec.cloud) {
       return NodeProvider.NONE;
     }

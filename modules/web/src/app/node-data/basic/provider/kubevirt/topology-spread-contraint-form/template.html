@@ -1,0 +1,64 @@
+<!--
+Copyright 2022 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<mat-card-header class="km-no-padding topology-spread-constraints-title">
+  <mat-card-title>Topology Spread Constraints</mat-card-title>
+</mat-card-header>
+<form [formGroup]="form"
+      fxLayout="column">
+  <div [formArrayName]="Controls.Constraints">
+    <div *ngFor="let constraint of constraintArray.controls; let i = index; let isLast = last"
+         [formGroupName]="i"
+         fxLayout="row"
+         fxLayoutGap="10px">
+      <div fxFlex="29">
+        <km-number-stepper [formControlName]="Controls.MaxSkew"
+                           [min]="minimumMaxSkew"
+                           [forceFormFieldMinWidth]="false"
+                           [required]="!isLast"
+                           mode="raw"
+                           label="Max Skew">
+        </km-number-stepper>
+      </div>
+      <mat-form-field fxFlex="29">
+        <mat-label>Topology Key</mat-label>
+        <input matInput
+               [name]="Controls.TopologyKey"
+               [formControlName]="Controls.TopologyKey"
+               (keyup)="onControlValueChange(constraint)">
+        <mat-error *ngIf="constraint.get(Controls.TopologyKey).errors?.validLabelKeyUniqueness">
+          Key is not unique.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field fxFlex="29">
+        <mat-label>When Unsatisfiable</mat-label>
+        <mat-select [formControlName]="Controls.WhenUnsatisfiable"
+                    disableOptionCentering
+                    (selectionChange)="onControlValueChange(constraint)">
+          <mat-option *ngFor="let option of whenUnsatisfiableOptions"
+                      [value]="option">
+            {{option}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-icon-button
+              class="delete-button"
+              *ngIf="isRemovable(i)"
+              (click)="deleteConstraint(i)">
+        <i class="km-icon-mask km-icon-delete"></i>
+      </button>
+    </div>
+  </div>
+</form>

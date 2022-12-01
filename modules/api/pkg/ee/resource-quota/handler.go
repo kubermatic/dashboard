@@ -30,14 +30,17 @@ import (
 	"fmt"
 	"math"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/gorilla/mux"
 
+	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	kubermaticprovider "k8c.io/kubermatic/v2/pkg/provider"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -50,6 +53,30 @@ type getResourceQuota struct {
 	// in: path
 	// required: true
 	Name string `json:"quota_name"`
+}
+
+// swagger:parameters calculateProjectResourceQuotaUpdate
+type calculateProjectResourceQuotaUpdate struct {
+	common.GetProjectRq
+	// in: body
+	Body struct {
+		Replicas int `json:"replicas"`
+		// DiskSizeGB will be processed only for those providers which don't have the disk size in their API objects, like AWS, Alibabla and GCP.
+		DiskSizeGB          int                        `json:"diskSizeGB,omitempty"`
+		AlibabaInstanceType *apiv1.AlibabaInstanceType `json:"alibabaInstanceType,omitempty"`
+		AnexiaNodeSpec      *apiv1.AnexiaNodeSpec      `json:"anexiaNodeSpec,omitempty"`
+		AWSSize             *apiv1.AWSSize             `json:"awsSize,omitempty"`
+		AzureSize           *apiv1.AzureSize           `json:"azureSize,omitempty"`
+		DOSize              *apiv1.DigitaloceanSize    `json:"doSize,omitempty"`
+		EquinixSize         *apiv1.PacketSize          `json:"equinixSize,omitempty"`
+		GCPSize             *apiv1.GCPMachineSize      `json:"gcpSize,omitempty"`
+		HetznerSize         *apiv1.HetznerSize         `json:"hetznerSize,omitempty"`
+		// TODO Kubevirt
+		NutanixNodeSpec    *apiv1.NutanixNodeSpec             `json:"nutanixNodeSpec,omitempty"`
+		OpenstackSize      *apiv1.OpenstackSize               `json:"openstackSize,omitempty"`
+		VMDirectorNodeSpec *apiv1.VMwareCloudDirectorNodeSpec `json:"vmDirectorNodeSpec,omitempty"`
+		VSphereNodeSpec    *apiv1.VSphereNodeSpec             `json:"vSphereNodeSpec,omitempty"`
+	}
 }
 
 // swagger:parameters listResourceQuotas
@@ -143,6 +170,22 @@ func DecodePutResourceQuotaReq(r *http.Request) (interface{}, error) {
 	return req, nil
 }
 
+func DecodeCalculateProjectResourceQuotaUpdateReq(c context.Context, r *http.Request) (interface{}, error) {
+	var req calculateProjectResourceQuotaUpdate
+
+	pReq, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+	req.ProjectReq = pReq.(common.ProjectReq)
+
+	if err := json.NewDecoder(r.Body).Decode(&req.Body); err != nil {
+		return nil, utilerrors.NewBadRequest(err.Error())
+	}
+
+	return req, nil
+}
+
 func GetResourceQuota(ctx context.Context, request interface{}, provider provider.ResourceQuotaProvider, projectProvider provider.PrivilegedProjectProvider) (*apiv2.ResourceQuota, error) {
 	req, ok := request.(getResourceQuota)
 	if !ok {
@@ -172,27 +215,9 @@ func GetResourceQuota(ctx context.Context, request interface{}, provider provide
 func GetResourceQuotaForProject(ctx context.Context, request interface{}, projectProvider provider.ProjectProvider,
 	privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter,
 	quotaProvider provider.ResourceQuotaProvider) (*apiv2.ResourceQuota, error) {
-	req, ok := request.(common.GetProjectRq)
-	if !ok {
-		return nil, utilerrors.NewBadRequest("invalid request")
-	}
-	if len(req.ProjectID) == 0 {
-		return nil, utilerrors.NewBadRequest("the id of the project cannot be empty")
-	}
-
-	kubermaticProject, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, nil)
-	if err != nil {
-		return nil, common.KubernetesErrorToHTTPError(err)
-	}
-
-	userInfo, err := userInfoGetter(ctx, kubermaticProject.Name)
+	projectResourceQuota, projectName, err := getProjectResourceQuota(ctx, request, projectProvider, privilegedProjectProvider, userInfoGetter, quotaProvider)
 	if err != nil {
 		return nil, err
-	}
-
-	projectResourceQuota, err := quotaProvider.Get(ctx, userInfo, kubermaticProject.Name, strings.ToLower(kubermaticv1.ProjectKindName))
-	if err != nil {
-		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
 	if projectResourceQuota == nil {
@@ -200,7 +225,363 @@ func GetResourceQuotaForProject(ctx context.Context, request interface{}, projec
 		return nil, nil
 	}
 
-	return convertToAPIStruct(projectResourceQuota, kubermaticProject.Spec.Name), nil
+	return convertToAPIStruct(projectResourceQuota, projectName), nil
+}
+
+func CalculateResourceQuotaUpdateForProject(ctx context.Context, request interface{}, projectProvider provider.ProjectProvider,
+	privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter,
+	quotaProvider provider.ResourceQuotaProvider) (*apiv2.ResourceQuotaUpdateCalculation, error) {
+	req, ok := request.(calculateProjectResourceQuotaUpdate)
+	if !ok {
+		return nil, utilerrors.NewBadRequest("invalid request")
+	}
+
+	projectResourceQuota, projectName, err := getProjectResourceQuota(ctx, req.GetProjectRq, projectProvider, privilegedProjectProvider, userInfoGetter, quotaProvider)
+	if err != nil {
+		return nil, err
+	}
+
+	if projectResourceQuota == nil {
+		// ResourceQuota not found. Return an empty response.
+		return nil, nil
+	}
+
+	calculatedResources, err := getResourceDetailsFromRequest(req)
+	if err != nil {
+		return nil, utilerrors.NewBadRequest("invalid request, failed getting resources from request body: %v", err)
+	}
+
+	// Add the current global usage
+	if projectResourceQuota.Status.GlobalUsage.CPU != nil && calculatedResources.CPU != nil {
+		calculatedResources.CPU.Add(*projectResourceQuota.Status.GlobalUsage.CPU)
+	}
+	if projectResourceQuota.Status.GlobalUsage.Memory != nil && calculatedResources.Memory != nil {
+		calculatedResources.Memory.Add(*projectResourceQuota.Status.GlobalUsage.Memory)
+	}
+	if projectResourceQuota.Status.GlobalUsage.Storage != nil && calculatedResources.Storage != nil {
+		calculatedResources.Storage.Add(*projectResourceQuota.Status.GlobalUsage.Storage)
+	}
+
+	// check if quota is exceeded
+	var msg string
+	if projectResourceQuota.Spec.Quota.CPU != nil && calculatedResources.CPU != nil &&
+		calculatedResources.CPU.Cmp(*projectResourceQuota.Spec.Quota.CPU) > 0 {
+		msg += fmt.Sprintf("Calculated cpu (%s) exceeds resource quota (%s)", calculatedResources.CPU, projectResourceQuota.Spec.Quota.CPU)
+	}
+	if projectResourceQuota.Spec.Quota.Memory != nil && calculatedResources.Memory != nil &&
+		calculatedResources.Memory.Cmp(*projectResourceQuota.Spec.Quota.Memory) > 0 {
+		msg += fmt.Sprintf("Calculated memory (%s) exceeds resource quota (%s)", calculatedResources.Memory, projectResourceQuota.Spec.Quota.Memory)
+	}
+	if projectResourceQuota.Spec.Quota.Storage != nil && calculatedResources.Storage != nil &&
+		calculatedResources.Storage.Cmp(*projectResourceQuota.Spec.Quota.Storage) > 0 {
+		msg += fmt.Sprintf("Calculated disk size (%s) exceeds resource quota (%s)", calculatedResources.Storage, projectResourceQuota.Spec.Quota.Storage)
+	}
+
+	return &apiv2.ResourceQuotaUpdateCalculation{
+		ResourceQuota:   *convertToAPIStruct(projectResourceQuota, projectName),
+		CalculatedQuota: convertToAPIQuota(*calculatedResources),
+		Message:         msg,
+	}, nil
+}
+
+func getResourceDetailsFromRequest(req calculateProjectResourceQuotaUpdate) (*kubermaticv1.ResourceDetails, error) {
+	nc := kubermaticprovider.NewNodeCapacity()
+
+	var err error
+
+	switch {
+	case req.Body.AlibabaInstanceType != nil:
+		if err = getAlibabaResourceDetails(req, nc); err != nil {
+			return nil, err
+		}
+	case req.Body.AnexiaNodeSpec != nil:
+		if err = getAnexiaResourceDetails(req, nc); err != nil {
+			return nil, err
+		}
+	case req.Body.AWSSize != nil:
+		if err = getAWSResourceDetails(req, nc); err != nil {
+			return nil, err
+		}
+	case req.Body.AzureSize != nil:
+		if err = getAzureResourceDetails(req, nc); err != nil {
+			return nil, err
+		}
+	case req.Body.DOSize != nil:
+		if err = getDOResourceDetails(req, nc); err != nil {
+			return nil, err
+		}
+	case req.Body.EquinixSize != nil:
+		if err = getEquinixResourceDetails(req, nc); err != nil {
+			return nil, err
+		}
+	case req.Body.GCPSize != nil:
+		if err = getGCPResourceDetails(req, nc); err != nil {
+			return nil, err
+		}
+	case req.Body.HetznerSize != nil:
+		if err = getHetznerResourceDetails(req, nc); err != nil {
+			return nil, err
+		}
+	case req.Body.NutanixNodeSpec != nil:
+		if err = getNutanixResourceDetails(req, nc); err != nil {
+			return nil, err
+		}
+	case req.Body.OpenstackSize != nil:
+		if err = getOpenstackResourceDetails(req, nc); err != nil {
+			return nil, err
+		}
+	case req.Body.VSphereNodeSpec != nil:
+		if err = getVSphereResourceDetails(req, nc); err != nil {
+			return nil, err
+		}
+	case req.Body.VMDirectorNodeSpec != nil:
+		if err = getVMCloudDirectorResourceDetails(req, nc); err != nil {
+			return nil, err
+		}
+	default:
+		return nil, fmt.Errorf("provider set in request not supported: %v", req.Body)
+	}
+
+	// if some resource is not set, default it
+	if nc.CPUCores == nil {
+		nc.CPUCores = &resource.Quantity{}
+	}
+	if nc.Memory == nil {
+		nc.Memory = &resource.Quantity{}
+	}
+	if nc.Storage == nil {
+		nc.Storage = &resource.Quantity{}
+	}
+
+	// Multiply by replicas count
+	var cpu, mem, sto resource.Quantity
+	for i := 0; i < req.Body.Replicas; i++ {
+		cpu.Add(*nc.CPUCores)
+		mem.Add(*nc.Memory)
+		sto.Add(*nc.Storage)
+	}
+
+	rd := kubermaticv1.NewResourceDetails(cpu, mem, sto)
+
+	return rd, nil
+}
+
+func getAlibabaResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kubermaticprovider.NodeCapacity) error {
+	nc.WithCPUCount(req.Body.AlibabaInstanceType.CPUCoreCount)
+
+	if err := nc.WithMemory(int(req.Body.AlibabaInstanceType.MemorySize), "G"); err != nil {
+		return err
+	}
+	if err := nc.WithStorage(req.Body.DiskSizeGB, "G"); err != nil {
+		return err
+	}
+	return nil
+}
+
+func getAnexiaResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kubermaticprovider.NodeCapacity) error {
+	nc.WithCPUCount(req.Body.AnexiaNodeSpec.CPUs)
+
+	if err := nc.WithMemory(int(req.Body.AnexiaNodeSpec.Memory), "M"); err != nil {
+		return err
+	}
+
+	var diskSize int64
+	for _, disk := range req.Body.AnexiaNodeSpec.Disks {
+		diskSize += disk.Size
+	}
+	if err := nc.WithStorage(int(diskSize), "G"); err != nil {
+		return err
+	}
+	return nil
+}
+
+func getAWSResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kubermaticprovider.NodeCapacity) error {
+	nc.WithCPUCount(req.Body.AWSSize.VCPUs)
+
+	if err := nc.WithMemory(int(req.Body.AWSSize.Memory), "G"); err != nil {
+		return err
+	}
+	if err := nc.WithStorage(req.Body.DiskSizeGB, "G"); err != nil {
+		return err
+	}
+	return nil
+}
+
+func getAzureResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kubermaticprovider.NodeCapacity) error {
+	nc.WithCPUCount(int(req.Body.AzureSize.NumberOfCores))
+
+	if err := nc.WithMemory(int(req.Body.AzureSize.MemoryInMB), "M"); err != nil {
+		return err
+	}
+
+	if err := nc.WithStorage(int(req.Body.AzureSize.ResourceDiskSizeInMB+req.Body.AzureSize.OsDiskSizeInMB), "M"); err != nil {
+		return err
+	}
+	return nil
+}
+
+func getDOResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kubermaticprovider.NodeCapacity) error {
+	nc.WithCPUCount(req.Body.DOSize.VCPUs)
+
+	if err := nc.WithMemory(req.Body.DOSize.Memory, "M"); err != nil {
+		return err
+	}
+	if err := nc.WithStorage(req.Body.DOSize.Disk, "G"); err != nil {
+		return err
+	}
+	return nil
+}
+
+func getEquinixResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kubermaticprovider.NodeCapacity) error {
+	cpuCount := 0
+	for _, c := range req.Body.EquinixSize.CPUs {
+		cpuCount += c.Count
+	}
+	nc.WithCPUCount(cpuCount)
+
+	// trimming "B" as quantities must match the regular expression '^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$'.
+	memory, err := resource.ParseQuantity(strings.TrimSuffix(req.Body.EquinixSize.Memory, "B"))
+	if err != nil {
+		return err
+	}
+	nc.Memory = &memory
+
+	allDrivesStorage := resource.Quantity{}
+	for _, drive := range req.Body.EquinixSize.Drives {
+		if drive.Size == "" || drive.Count == 0 {
+			continue
+		}
+
+		storage, err := resource.ParseQuantity(strings.TrimSuffix(drive.Size, "B"))
+		if err != nil {
+			return err
+		}
+
+		// total storage for each type = drive count *drive Size.
+		strDrive := strconv.FormatInt(storage.Value()*int64(drive.Count), 10)
+		totalStorage, err := resource.ParseQuantity(strDrive)
+		if err != nil {
+			return err
+		}
+		allDrivesStorage.Add(totalStorage)
+	}
+	nc.Storage = &allDrivesStorage
+	return nil
+}
+
+func getGCPResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kubermaticprovider.NodeCapacity) error {
+	nc.WithCPUCount(int(req.Body.GCPSize.VCPUs))
+
+	if err := nc.WithMemory(int(req.Body.GCPSize.Memory), "M"); err != nil {
+		return err
+	}
+	if err := nc.WithStorage(req.Body.DiskSizeGB, "G"); err != nil {
+		return err
+	}
+	return nil
+}
+
+func getHetznerResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kubermaticprovider.NodeCapacity) error {
+	nc.WithCPUCount(req.Body.HetznerSize.Cores)
+
+	if err := nc.WithMemory(int(req.Body.HetznerSize.Memory), "G"); err != nil {
+		return err
+	}
+	if err := nc.WithStorage(req.Body.HetznerSize.Disk, "G"); err != nil {
+		return err
+	}
+	return nil
+}
+
+func getNutanixResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kubermaticprovider.NodeCapacity) error {
+	nc.WithCPUCount(int(req.Body.NutanixNodeSpec.CPUs))
+
+	if err := nc.WithMemory(int(req.Body.NutanixNodeSpec.MemoryMB), "M"); err != nil {
+		return err
+	}
+
+	if req.Body.NutanixNodeSpec.DiskSize != nil {
+		if err := nc.WithStorage(int(*req.Body.NutanixNodeSpec.DiskSize), "G"); err != nil {
+			return err
+		}
+	} else {
+		nc.Storage = &resource.Quantity{}
+	}
+	return nil
+}
+
+func getOpenstackResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kubermaticprovider.NodeCapacity) error {
+	nc.WithCPUCount(req.Body.OpenstackSize.VCPUs)
+
+	if err := nc.WithMemory(req.Body.OpenstackSize.Memory, "G"); err != nil {
+		return err
+	}
+	if err := nc.WithStorage(req.Body.OpenstackSize.Disk, "G"); err != nil {
+		return err
+	}
+	return nil
+}
+
+func getVSphereResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kubermaticprovider.NodeCapacity) error {
+	nc.WithCPUCount(req.Body.VSphereNodeSpec.CPUs)
+
+	if err := nc.WithMemory(req.Body.VSphereNodeSpec.Memory, "G"); err != nil {
+		return err
+	}
+
+	if req.Body.VSphereNodeSpec.DiskSizeGB != nil {
+		if err := nc.WithStorage(int(*req.Body.VSphereNodeSpec.DiskSizeGB), "G"); err != nil {
+			return err
+		}
+	} else {
+		nc.Storage = &resource.Quantity{}
+	}
+	return nil
+}
+
+func getVMCloudDirectorResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kubermaticprovider.NodeCapacity) error {
+	nc.WithCPUCount(req.Body.VMDirectorNodeSpec.CPUCores * req.Body.VMDirectorNodeSpec.CPUs)
+
+	if err := nc.WithMemory(req.Body.VMDirectorNodeSpec.MemoryMB, "M"); err != nil {
+		return err
+	}
+
+	if req.Body.VMDirectorNodeSpec.DiskSizeGB != nil {
+		if err := nc.WithStorage(int(*req.Body.VMDirectorNodeSpec.DiskSizeGB), "G"); err != nil {
+			return err
+		}
+	} else {
+		nc.Storage = &resource.Quantity{}
+	}
+	return nil
+}
+
+func getProjectResourceQuota(ctx context.Context, request interface{}, projectProvider provider.ProjectProvider,
+	privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter,
+	quotaProvider provider.ResourceQuotaProvider) (*kubermaticv1.ResourceQuota, string, error) {
+	req, ok := request.(common.GetProjectRq)
+	if !ok {
+		return nil, "", utilerrors.NewBadRequest("invalid request")
+	}
+	if len(req.ProjectID) == 0 {
+		return nil, "", utilerrors.NewBadRequest("the id of the project cannot be empty")
+	}
+
+	kubermaticProject, err := common.GetProject(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, req.ProjectID, nil)
+	if err != nil {
+		return nil, "", common.KubernetesErrorToHTTPError(err)
+	}
+
+	userInfo, err := userInfoGetter(ctx, kubermaticProject.Name)
+	if err != nil {
+		return nil, "", err
+	}
+
+	projectResourceQuota, err := quotaProvider.Get(ctx, userInfo, kubermaticProject.Name, strings.ToLower(kubermaticv1.ProjectKindName))
+	if err != nil {
+		return nil, "", common.KubernetesErrorToHTTPError(err)
+	}
+	return projectResourceQuota, kubermaticProject.Spec.Name, err
 }
 
 func ListResourceQuotas(ctx context.Context, request interface{}, provider provider.ResourceQuotaProvider, projectProvider provider.ProjectProvider) ([]*apiv2.ResourceQuota, error) {

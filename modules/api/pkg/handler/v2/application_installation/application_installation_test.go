@@ -26,8 +26,6 @@ import (
 	"strings"
 	"testing"
 
-	semverlib "github.com/Masterminds/semver/v3"
-
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/handler/test"
@@ -71,15 +69,13 @@ func TestListApplicationInstallations(t *testing.T) {
 				{
 					Name: "app1",
 					Spec: &apiv2.ApplicationInstallationListItemSpec{
-						Namespace: apiv2.NamespaceSpec{
+						Namespace: apiv1.NamespaceSpec{
 							Name:   app1TargetNamespace,
 							Create: true,
 						},
-						ApplicationRef: appskubermaticv1.ApplicationRef{
-							Name: "sample-app",
-							Version: appskubermaticv1.Version{
-								Version: *semverlib.MustParse("v1.0.0"),
-							},
+						ApplicationRef: apiv1.ApplicationRef{
+							Name:    "sample-app",
+							Version: "1.0.0",
 						},
 					},
 					Status: &apiv2.ApplicationInstallationListItemStatus{},
@@ -87,15 +83,13 @@ func TestListApplicationInstallations(t *testing.T) {
 				{
 					Name: "app2",
 					Spec: &apiv2.ApplicationInstallationListItemSpec{
-						Namespace: apiv2.NamespaceSpec{
+						Namespace: apiv1.NamespaceSpec{
 							Name:   app2TargetNamespace,
 							Create: true,
 						},
-						ApplicationRef: appskubermaticv1.ApplicationRef{
-							Name: "sample-app",
-							Version: appskubermaticv1.Version{
-								Version: *semverlib.MustParse("v1.0.0"),
-							},
+						ApplicationRef: apiv1.ApplicationRef{
+							Name:    "sample-app",
+							Version: "1.0.0",
 						},
 					},
 					Status: &apiv2.ApplicationInstallationListItemStatus{},
@@ -164,15 +158,13 @@ func TestCreateApplicationInstallation(t *testing.T) {
 				},
 				Namespace: app1TargetNamespace,
 				Spec: &apiv2.ApplicationInstallationSpec{
-					Namespace: apiv2.NamespaceSpec{
+					Namespace: apiv1.NamespaceSpec{
 						Name:   app1TargetNamespace,
 						Create: true,
 					},
-					ApplicationRef: appskubermaticv1.ApplicationRef{
-						Name: "sample-app",
-						Version: appskubermaticv1.Version{
-							Version: *semverlib.MustParse("v1.0.0"),
-						},
+					ApplicationRef: apiv1.ApplicationRef{
+						Name:    "sample-app",
+						Version: "1.0.0",
 					},
 				},
 				Status: &apiv2.ApplicationInstallationStatus{},
@@ -342,15 +334,13 @@ func TestGetApplication(t *testing.T) {
 				},
 				Namespace: app1TargetNamespace,
 				Spec: &apiv2.ApplicationInstallationSpec{
-					Namespace: apiv2.NamespaceSpec{
+					Namespace: apiv1.NamespaceSpec{
 						Name:   app1TargetNamespace,
 						Create: true,
 					},
-					ApplicationRef: appskubermaticv1.ApplicationRef{
-						Name: "sample-app",
-						Version: appskubermaticv1.Version{
-							Version: *semverlib.MustParse("v1.0.0"),
-						},
+					ApplicationRef: apiv1.ApplicationRef{
+						Name:    "sample-app",
+						Version: "1.0.0",
 					},
 				},
 				Status: &apiv2.ApplicationInstallationStatus{},
@@ -421,15 +411,13 @@ func TestUpdateApplicationInstallation(t *testing.T) {
 				},
 				Namespace: app1TargetNamespace,
 				Spec: &apiv2.ApplicationInstallationSpec{
-					Namespace: apiv2.NamespaceSpec{
+					Namespace: apiv1.NamespaceSpec{
 						Name:   app1TargetNamespace,
 						Create: true,
 					},
-					ApplicationRef: appskubermaticv1.ApplicationRef{
-						Name: "sample-app",
-						Version: appskubermaticv1.Version{
-							Version: *semverlib.MustParse("v1.0.0"),
-						},
+					ApplicationRef: apiv1.ApplicationRef{
+						Name:    "sample-app",
+						Version: "1.0.0",
 					},
 					Values: *test.CreateRawVariables(t, map[string]interface{}{"key": "val"}),
 				},

@@ -23,6 +23,7 @@ import (
 
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	"k8c.io/kubermatic/v2/pkg/resources"
 
 	"k8s.io/utils/pointer"
 )
@@ -32,6 +33,7 @@ func TestOverrideNetworkDefaultsByDefaultingTemplate(t *testing.T) {
 		name                         string
 		provider                     kubermaticv1.ProviderType
 		templateClusterNetwork       kubermaticv1.ClusterNetworkingConfig
+		exposeStrategy               kubermaticv1.ExposeStrategy
 		expectedFinalNetworkDefaults apiv2.NetworkDefaults
 	}{
 		{
@@ -54,6 +56,7 @@ func TestOverrideNetworkDefaultsByDefaultingTemplate(t *testing.T) {
 				ProxyMode:                "ipvs",
 				NodeLocalDNSCacheEnabled: true,
 				ClusterExposeStrategy:    "NodePort",
+				TunnelingAgentIP:         resources.DefaultTunnelingAgentIP,
 			},
 		},
 		{
@@ -76,6 +79,7 @@ func TestOverrideNetworkDefaultsByDefaultingTemplate(t *testing.T) {
 				ProxyMode:                "ipvs",
 				NodeLocalDNSCacheEnabled: true,
 				ClusterExposeStrategy:    "NodePort",
+				TunnelingAgentIP:         resources.DefaultTunnelingAgentIP,
 			},
 		},
 		{
@@ -98,6 +102,7 @@ func TestOverrideNetworkDefaultsByDefaultingTemplate(t *testing.T) {
 				ProxyMode:                "iptables",
 				NodeLocalDNSCacheEnabled: true,
 				ClusterExposeStrategy:    "NodePort",
+				TunnelingAgentIP:         resources.DefaultTunnelingAgentIP,
 			},
 		},
 		{
@@ -135,11 +140,13 @@ func TestOverrideNetworkDefaultsByDefaultingTemplate(t *testing.T) {
 				ProxyMode:                "ipvs",
 				NodeLocalDNSCacheEnabled: false,
 				ClusterExposeStrategy:    "NodePort",
+				TunnelingAgentIP:         resources.DefaultTunnelingAgentIP,
 			},
 		},
 		{
-			name:     "filled cluster network config from template dual stack",
-			provider: kubermaticv1.KubevirtCloudProvider,
+			name:           "filled cluster network config from template dual stack",
+			provider:       kubermaticv1.KubevirtCloudProvider,
+			exposeStrategy: kubermaticv1.ExposeStrategyLoadBalancer,
 			templateClusterNetwork: kubermaticv1.ClusterNetworkingConfig{
 				IPFamily: "IPv4+IPv6",
 				Pods: kubermaticv1.NetworkRanges{
@@ -173,6 +180,7 @@ func TestOverrideNetworkDefaultsByDefaultingTemplate(t *testing.T) {
 				ProxyMode:                "proxy-test",
 				NodeLocalDNSCacheEnabled: false,
 				ClusterExposeStrategy:    "NodePort",
+				TunnelingAgentIP:         resources.DefaultTunnelingAgentIP,
 			},
 		},
 	}
@@ -180,7 +188,7 @@ func TestOverrideNetworkDefaultsByDefaultingTemplate(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			networkDefaults := generateNetworkDefaults(tc.provider)
-			networkDefaults = overrideNetworkDefaultsByDefaultingTemplate(networkDefaults, tc.templateClusterNetwork, tc.provider)
+			networkDefaults = overrideNetworkDefaultsByDefaultingTemplate(networkDefaults, tc.templateClusterNetwork, tc.provider, tc.exposeStrategy)
 			assert.Equal(t, tc.expectedFinalNetworkDefaults, networkDefaults)
 		})
 	}

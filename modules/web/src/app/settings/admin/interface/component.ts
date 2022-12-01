@@ -19,7 +19,7 @@ import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {Member} from '@shared/entity/member';
 import {AdminSettings} from '@shared/entity/settings';
-import {objectDiff} from '@shared/utils/common';
+import {getEditionVersion, objectDiff} from '@shared/utils/common';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
 import {debounceTime, switchMap, take, takeUntil} from 'rxjs/operators';
@@ -35,6 +35,7 @@ export class InterfaceComponent implements OnInit, OnDestroy {
   apiSettings: AdminSettings; // Original settings from the API. Cannot be edited by the user.
   isOIDCKubeCfgEndpointEnabled = true;
   isOpenIDAuthPluginEnabled = true;
+  editionVersion: string = getEditionVersion();
 
   private readonly _debounceTime = 500;
   private _settingsChange = new Subject<void>();

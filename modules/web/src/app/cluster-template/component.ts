@@ -176,6 +176,22 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
     );
   }
 
+  canEdit(template: ClusterTemplate): boolean {
+    switch (template.scope) {
+      case ClusterTemplateScope.Global:
+        return this.currentUser.isAdmin;
+      case ClusterTemplateScope.User:
+        return this.currentUser.isAdmin || this.currentUser.email === template.user;
+      case ClusterTemplateScope.Project:
+        return MemberUtils.hasPermission(
+          this.currentUser,
+          this._currentGroupConfig,
+          View.ClusterTemplates,
+          Permission.Edit
+        );
+    }
+  }
+
   create(): void {
     this._router.navigate([`/projects/${this._selectedProject.id}/wizard`]);
   }
@@ -236,8 +252,15 @@ export class ClusterTemplateComponent implements OnInit, OnChanges, OnDestroy {
     this._matDialog.open(ClusterFromTemplateDialogComponent, dialogConfig);
   }
 
+  editClusterTemplate(template: ClusterTemplate): void {
+    this._router.navigate([`/projects/${this._selectedProject.id}/wizard`], {
+      queryParams: {clusterTemplateID: template.id},
+    });
+  }
+
   onActivate(component: QuotaWidgetComponent): void {
     const id = this._activeRoute.snapshot.paramMap.get(PathParam.ProjectID);
+    component.showAsCard = false;
     this._projectService.onProjectChange.pipe(startWith({id}), takeUntil(this._unsubscribe)).subscribe(({id}) => {
       component.projectId = id;
     });

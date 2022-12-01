@@ -28,7 +28,6 @@ import (
 	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
 	vcd "github.com/kubermatic/machine-controller/pkg/cloudprovider/provider/vmwareclouddirector/types"
 	"github.com/kubermatic/machine-controller/pkg/userdata/flatcar"
-	appskubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	ksemver "k8c.io/kubermatic/v2/pkg/semver"
 
@@ -1029,7 +1028,7 @@ func (cs *ClusterSpec) MarshalJSON() ([]byte, error) {
 		ClusterNetwork                       *kubermaticv1.ClusterNetworkingConfig  `json:"clusterNetwork,omitempty"`
 		CNIPlugin                            *kubermaticv1.CNIPluginSettings        `json:"cniPlugin,omitempty"`
 		ExposeStrategy                       kubermaticv1.ExposeStrategy            `json:"exposeStrategy,omitempty"`
-		APIServerAllowedIPRanges             *kubermaticv1.NetworkRanges            `json:"apiserverallowedIPRanges,omitempty"`
+		APIServerAllowedIPRanges             *kubermaticv1.NetworkRanges            `json:"apiServerAllowedIPRanges,omitempty"`
 	}{
 		Cloud: PublicCloudSpec{
 			DatacenterName:      cs.Cloud.DatacenterName,
@@ -1132,7 +1131,8 @@ func newPublicHetznerCloudSpec(internal *kubermaticv1.HetznerCloudSpec) (public 
 
 // PublicAzureCloudSpec is a public counterpart of apiv1.AzureCloudSpec.
 type PublicAzureCloudSpec struct {
-	AssignAvailabilitySet *bool `json:"assignAvailabilitySet"`
+	AssignAvailabilitySet    *bool                       `json:"assignAvailabilitySet"`
+	NodePortsAllowedIPRanges *kubermaticv1.NetworkRanges `json:"nodePortsAllowedIPRanges,omitempty"`
 }
 
 func newPublicAzureCloudSpec(internal *kubermaticv1.AzureCloudSpec) (public *PublicAzureCloudSpec) {
@@ -1141,7 +1141,8 @@ func newPublicAzureCloudSpec(internal *kubermaticv1.AzureCloudSpec) (public *Pub
 	}
 
 	return &PublicAzureCloudSpec{
-		AssignAvailabilitySet: internal.AssignAvailabilitySet,
+		AssignAvailabilitySet:    internal.AssignAvailabilitySet,
+		NodePortsAllowedIPRanges: internal.NodePortsAllowedIPRanges,
 	}
 }
 
@@ -1168,26 +1169,31 @@ func newPublicBringYourOwnCloudSpec(internal *kubermaticv1.BringYourOwnCloudSpec
 }
 
 // PublicAWSCloudSpec is a public counterpart of apiv1.AWSCloudSpec.
-type PublicAWSCloudSpec struct{}
+type PublicAWSCloudSpec struct {
+	NodePortsAllowedIPRanges *kubermaticv1.NetworkRanges `json:"nodePortsAllowedIPRanges,omitempty"`
+}
 
 func newPublicAWSCloudSpec(internal *kubermaticv1.AWSCloudSpec) (public *PublicAWSCloudSpec) {
 	if internal == nil {
 		return nil
 	}
 
-	return &PublicAWSCloudSpec{}
+	return &PublicAWSCloudSpec{
+		NodePortsAllowedIPRanges: internal.NodePortsAllowedIPRanges,
+	}
 }
 
 // PublicOpenstackCloudSpec is a public counterpart of apiv1.OpenstackCloudSpec.
 type PublicOpenstackCloudSpec struct {
-	FloatingIPPool string `json:"floatingIPPool"`
-	Project        string `json:"project,omitempty"`
-	ProjectID      string `json:"projectID,omitempty"`
-	Domain         string `json:"domain,omitempty"`
-	Network        string `json:"network"`
-	SecurityGroups string `json:"securityGroups"`
-	RouterID       string `json:"routerID"`
-	SubnetID       string `json:"subnetID"`
+	FloatingIPPool           string                      `json:"floatingIPPool"`
+	Project                  string                      `json:"project,omitempty"`
+	ProjectID                string                      `json:"projectID,omitempty"`
+	Domain                   string                      `json:"domain,omitempty"`
+	Network                  string                      `json:"network"`
+	SecurityGroups           string                      `json:"securityGroups"`
+	RouterID                 string                      `json:"routerID"`
+	SubnetID                 string                      `json:"subnetID"`
+	NodePortsAllowedIPRanges *kubermaticv1.NetworkRanges `json:"nodePortsAllowedIPRanges,omitempty"`
 }
 
 func newPublicOpenstackCloudSpec(internal *kubermaticv1.OpenstackCloudSpec) (public *PublicOpenstackCloudSpec) {
@@ -1196,14 +1202,15 @@ func newPublicOpenstackCloudSpec(internal *kubermaticv1.OpenstackCloudSpec) (pub
 	}
 
 	return &PublicOpenstackCloudSpec{
-		FloatingIPPool: internal.FloatingIPPool,
-		Project:        internal.Project,
-		ProjectID:      internal.ProjectID,
-		Domain:         internal.Domain,
-		Network:        internal.Network,
-		SecurityGroups: internal.SecurityGroups,
-		RouterID:       internal.RouterID,
-		SubnetID:       internal.SubnetID,
+		FloatingIPPool:           internal.FloatingIPPool,
+		Project:                  internal.Project,
+		ProjectID:                internal.ProjectID,
+		Domain:                   internal.Domain,
+		Network:                  internal.Network,
+		SecurityGroups:           internal.SecurityGroups,
+		RouterID:                 internal.RouterID,
+		SubnetID:                 internal.SubnetID,
+		NodePortsAllowedIPRanges: internal.NodePortsAllowedIPRanges,
 	}
 }
 
@@ -1219,14 +1226,18 @@ func newPublicPacketCloudSpec(internal *kubermaticv1.PacketCloudSpec) (public *P
 }
 
 // PublicGCPCloudSpec is a public counterpart of apiv1.GCPCloudSpec.
-type PublicGCPCloudSpec struct{}
+type PublicGCPCloudSpec struct {
+	NodePortsAllowedIPRanges *kubermaticv1.NetworkRanges `json:"nodePortsAllowedIPRanges,omitempty"`
+}
 
 func newPublicGCPCloudSpec(internal *kubermaticv1.GCPCloudSpec) (public *PublicGCPCloudSpec) {
 	if internal == nil {
 		return nil
 	}
 
-	return &PublicGCPCloudSpec{}
+	return &PublicGCPCloudSpec{
+		NodePortsAllowedIPRanges: internal.NodePortsAllowedIPRanges,
+	}
 }
 
 // PublicKubevirtCloudSpec is a public counterpart of apiv1.KubevirtCloudSpec.
@@ -2032,9 +2043,7 @@ type TopologySpreadConstraint struct {
 func (spec *KubevirtNodeSpec) MarshalJSON() ([]byte, error) {
 	missing := make([]string, 0)
 
-	// Deprecated. Flavor is deprecated. Will be removed when migration to instancetype/preference is fully done.
-	// When UI is not using it any more.
-	if spec.FlavorName == "" && spec.Instancetype == nil {
+	if spec.Instancetype == nil {
 		if len(spec.CPUs) == 0 {
 			missing = append(missing, "cpus")
 		}
@@ -2491,17 +2500,28 @@ type ApplicationSpec struct {
 	Values json.RawMessage `json:"values,omitempty"`
 }
 
+// NamespaceSpec describe the desired state of the namespace where application will be created.
 type NamespaceSpec struct {
-	// Name is the namespace to deploy the Application into
-	Name string `json:"name" required:"true"`
+	// Name is the namespace to deploy the Application into.
+	// Should be a valid lowercase RFC1123 domain name
+	// +kubebuilder:validation:Pattern:=`^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$`
+	// +kubebuilder:validation:MaxLength:=63
+	// +kubebuilder:validation:Type=string
+	Name string `json:"name"`
 
-	// Create defines whether the namespace should be created if it does not exist.
-	Create bool `json:"create" required:"true"`
+	// +kubebuilder:default:=true
+
+	// Create defines whether the namespace should be created if it does not exist. Defaults to true
+	Create bool `json:"create"`
 
 	// Labels of the namespace
+	// More info: http://kubernetes.io/docs/user-guide/labels
+	// +optional
 	Labels map[string]string `json:"labels,omitempty"`
 
 	// Annotations of the namespace
+	// More info: http://kubernetes.io/docs/user-guide/annotations
+	// +optional
 	Annotations map[string]string `json:"annotations,omitempty"`
 }
 
@@ -2510,7 +2530,10 @@ type ApplicationRef struct {
 	Name string `json:"name" required:"true"`
 
 	// Version of the Application. Must be a valid SemVer version
-	Version appskubermaticv1.Version `json:"version" required:"true"`
+	// NOTE: We are not using Masterminds/semver here, as it keeps data in unexported fields witch causes issues for
+	// DeepEqual used in our reconciliation packages. At the same time, we are not using pkg/semver because
+	// of the reasons stated in https://github.com/kubermatic/kubermatic/pull/10891.
+	Version string `json:"version" required:"true"`
 }
 
 // NodeDeployment represents a set of worker nodes that is part of a cluster

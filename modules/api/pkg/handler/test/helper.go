@@ -30,7 +30,6 @@ import (
 	"testing"
 	"time"
 
-	semverlib "github.com/Masterminds/semver/v3"
 	constrainttemplatev1 "github.com/open-policy-agent/frameworks/constraint/pkg/apis/templates/v1"
 	gatekeeperconfigv1alpha1 "github.com/open-policy-agent/gatekeeper/apis/config/v1alpha1"
 	prometheusapi "github.com/prometheus/client_golang/api"
@@ -52,13 +51,13 @@ import (
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	kubermaticv1helper "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1/helper"
 	k8cuserclusterclient "k8c.io/kubermatic/v2/pkg/cluster/client"
+	"k8c.io/kubermatic/v2/pkg/cni"
 	"k8c.io/kubermatic/v2/pkg/controller/master-controller-manager/rbac"
 	"k8c.io/kubermatic/v2/pkg/controller/operator/common"
 	"k8c.io/kubermatic/v2/pkg/features"
 	kubermaticlog "k8c.io/kubermatic/v2/pkg/log"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	"k8c.io/kubermatic/v2/pkg/semver"
-	"k8c.io/kubermatic/v2/pkg/version/cni"
 	"k8c.io/kubermatic/v2/pkg/version/kubermatic"
 	osmv1alpha1 "k8c.io/operating-system-manager/pkg/crd/osm/v1alpha1"
 
@@ -2181,10 +2180,8 @@ func GenApplicationInstallation(name, clusterName, targetnamespace string) *apps
 				Create: true,
 			},
 			ApplicationRef: appskubermaticv1.ApplicationRef{
-				Name: "sample-app",
-				Version: appskubermaticv1.Version{
-					Version: *semverlib.MustParse("v1.0.0"),
-				},
+				Name:    "sample-app",
+				Version: "1.0.0",
 			},
 		},
 	}
@@ -2198,15 +2195,13 @@ func GenApiApplicationInstallation(name, clusterName, targetnamespace string) *a
 		},
 		Namespace: targetnamespace,
 		Spec: &apiv2.ApplicationInstallationSpec{
-			Namespace: apiv2.NamespaceSpec{
+			Namespace: apiv1.NamespaceSpec{
 				Name:   targetnamespace,
 				Create: true,
 			},
-			ApplicationRef: appskubermaticv1.ApplicationRef{
-				Name: "sample-app",
-				Version: appskubermaticv1.Version{
-					Version: *semverlib.MustParse("v1.0.0"),
-				},
+			ApplicationRef: apiv1.ApplicationRef{
+				Name:    "sample-app",
+				Version: "1.0.0",
 			},
 		},
 		Status: &apiv2.ApplicationInstallationStatus{},

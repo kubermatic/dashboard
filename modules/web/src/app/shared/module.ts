@@ -79,6 +79,7 @@ import {ClusterSummaryComponent} from '@shared/components/cluster-summary/compon
 import {EventCardComponent} from '@shared/components/event-card/component';
 import {EventRateLimitComponent} from '@shared/components/event-rate-limit/component';
 import {ExpansionPanelComponent} from '@shared/components/expansion-panel/component';
+import {SideNavExpansionMenuComponent} from '@shared/components/side-nav-field/component';
 import {NumberStepperComponent} from '@shared/components/number-stepper/component';
 import {PropertyHealthComponent} from '@shared/components/property-health/component';
 import {SaveClusterTemplateDialogComponent} from '@shared/components/save-cluster-template/component';
@@ -239,6 +240,7 @@ const components = [
   EKSClusterSelectComponent,
   CredentialsPresetsComponent,
   ExpansionPanelComponent,
+  SideNavExpansionMenuComponent,
   PropertyHealthComponent,
   AddClusterFromTemplateDialogComponent,
   SelectClusterTemplateComponent,

@@ -14,58 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <ng-container *ngIf="cluster">
-  <div fxLayout
-       class="cluster-detail-actions">
-    <div fxFlex
-         fxLayoutAlign="end center">
-      <button mat-flat-button
-              color="tertiary"
-              (click)="goBack()"
-              fxLayoutAlign="center center"
-              matTooltip="Go back to the cluster list">
-        <i class="km-icon-mask km-icon-arrow-left"></i>
-      </button>
-      <button id="km-disconnect-external-cluster-btn"
-              mat-flat-button
-              color="tertiary"
-              fxLayoutAlign="center center"
-              (click)="disconnectCluster()"
-              [disabled]="!canDisconnect()">
-        <i class="km-icon-mask km-icon-disconnect"></i>
-        <span>Disconnect</span>
-      </button>
-
-      <button *ngIf="(!cluster?.labels || !isImportedCluster) && !isClusterDeleted(cluster)"
-              id="km-delete-external-cluster-btn"
-              mat-flat-button
-              color="tertiary"
-              fxLayoutAlign="center center"
-              [disabled]="!canDisconnect()"
-              (click)="deleteClusterDialog()">
-        <i class="km-icon-mask km-icon-delete"></i>
-        <span>Delete</span>
-      </button>
-      <div fxFlex></div>
-      <button color="alternative"
-              fxLayoutAlign="center center"
-              mat-flat-button
-              type="button"
-              kmThrottleClick
-              (throttleClick)="downloadKubeconfig()"
-              [disabled]="!isRunning()">
-        <i class="km-icon-mask km-icon-download"></i>
-        <span>Get Kubeconfig</span>
-      </button>
-      <button *ngIf="!cluster.cloud.bringYourOwn"
-              mat-flat-button
-              fxLayoutAlign="center center"
-              type="button"
-              [disabled]="!isRunning()"
-              (click)="addExternalMachineDeployment()">
-        <i class="km-icon-mask km-icon-add"></i>
-        <span>Add Machine Deployment</span>
-      </button>
-    </div>
+  <div class="cluster-detail-actions">
+    <button mat-flat-button
+            color="tertiary"
+            (click)="goBack()"
+            fxLayoutAlign="center center"
+            matTooltip="Go back to the cluster list">
+      <i class="km-icon-mask km-icon-arrow-left"></i>
+    </button>
+    <div fxFlex></div>
   </div>
 
   <mat-card>
@@ -86,7 +43,41 @@ limitations under the License.
         <span *ngIf="isImportedCluster"
               class="km-label-primary">Imported</span>
       </mat-card-title>
-      <div fxFlex></div>
+
+      <button color="alternative"
+              fxLayoutAlign="center center"
+              mat-flat-button
+              type="button"
+              kmThrottleClick
+              (throttleClick)="downloadKubeconfig()"
+              [disabled]="!isRunning()">
+        <i class="km-icon-mask km-icon-download"></i>
+        <span>Get Kubeconfig</span>
+      </button>
+      <div class="provider-menu">
+        <button mat-icon-button
+                color="tertiary"
+                class="provider-menu-btn"
+                [matMenuTriggerFor]="menu">
+          <i class="km-icon-mask km-icon-points-menu"></i>
+        </button>
+        <mat-menu #menu="matMenu"
+                  class="km-provider-edit-settings">
+          <button id="km-disconnect-external-cluster-btn"
+                  mat-menu-item
+                  (click)="disconnectCluster()"
+                  [disabled]="!canDisconnect()">
+            Disconnect Cluster
+          </button>
+          <button *ngIf="(!cluster?.labels || !isImportedCluster) && !isClusterDeleted(cluster)"
+                  mat-menu-item
+                  id="km-delete-external-cluster-btn"
+                  [disabled]="!canDisconnect()"
+                  (click)="deleteClusterDialog()">
+            Delete Cluster
+          </button>
+        </mat-menu>
+      </div>
     </mat-card-header>
 
     <mat-card-content class="km-row">

@@ -19,7 +19,6 @@ import {takeUntil} from 'rxjs/operators';
 import {AzureNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
-import {NodeDataMode} from '../../../config';
 
 enum Controls {
   AssignPublicIP = 'assignPublicIP',
@@ -84,10 +83,7 @@ export class AzureExtendedNodeDataComponent extends BaseFormValidator implements
     if (this._nodeDataService.nodeData.spec.cloud.azure) {
       this.onTagsChange(this.nodeData.spec.cloud.azure.tags);
 
-      const assignPublicIP =
-        this._nodeDataService.mode === NodeDataMode.Dialog && !!this.nodeData.name
-          ? this.nodeData.spec.cloud.azure.assignPublicIP
-          : true;
+      const assignPublicIP = this.nodeData.name ? this.nodeData.spec.cloud.azure.assignPublicIP : true;
       this.form.get(Controls.AssignPublicIP).setValue(assignPublicIP);
     }
   }

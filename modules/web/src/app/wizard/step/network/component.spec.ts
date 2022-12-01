@@ -43,6 +43,7 @@ import {EquinixService} from '@core/services/provider/equinix';
 import {NutanixService} from '@app/core/services/provider/nutanix';
 import {VMwareCloudDirectorService} from '@core/services/provider/vmware-cloud-director';
 import {KubeVirtService} from '@core/services/provider/kubevirt';
+import {ApplicationService} from '@core/services/application';
 
 describe('MachineNetworkStepComponent', () => {
   let fixture: ComponentFixture<MachineNetworkStepComponent>;
@@ -72,6 +73,7 @@ describe('MachineNetworkStepComponent', () => {
         VMwareCloudDirectorService,
         KubeVirtService,
         MachineDeploymentService,
+        ApplicationService,
         {provide: ProjectService, useValue: ProjectMockService},
         {provide: Auth, useClass: AuthMockService},
         {provide: NODE_DATA_CONFIG, useValue: NodeDataMode.Wizard},

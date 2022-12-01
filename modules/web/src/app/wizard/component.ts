@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {MatStepper} from '@angular/material/stepper';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ClusterService} from '@core/services/cluster';
 import {ClusterSpecService} from '@core/services/cluster-spec';
 import {NodeDataService} from '@core/services/node-data/service';
@@ -24,14 +24,19 @@ import {NotificationService} from '@core/services/notification';
 import {ProjectService} from '@core/services/project';
 import {WizardService} from '@core/services/wizard/wizard';
 import {SaveClusterTemplateDialogComponent} from '@shared/components/save-cluster-template/component';
-import {Application} from '@shared/entity/application';
 import {Cluster, CreateClusterModel} from '@shared/entity/cluster';
 import {Project} from '@shared/entity/project';
 import {OPERATING_SYSTEM_PROFILE_ANNOTATION} from '@shared/entity/machine-deployment';
 import {NodeData} from '@shared/model/NodeSpecChange';
 import {Observable, Subject, take} from 'rxjs';
-import {filter, switchMap, takeUntil} from 'rxjs/operators';
+import {filter, startWith, switchMap, takeUntil} from 'rxjs/operators';
 import {StepRegistry, steps, WizardStep} from './config';
+import {ClusterTemplateService} from '@core/services/cluster-templates';
+import {NameGeneratorService} from '@core/services/name-generator';
+import {PathParam} from '@core/services/params';
+import {ClusterTemplate} from '@shared/entity/cluster-template';
+import {ApplicationService} from '@core/services/application';
+import {Application} from '@shared/entity/application';
 
 @Component({
   selector: 'km-wizard',
@@ -44,11 +49,12 @@ export class WizardComponent implements OnInit, OnDestroy {
   project = {} as Project;
   creating = false;
   operatingSystemProfileAnnotation = OPERATING_SYSTEM_PROFILE_ANNOTATION;
-  applications: Application[] = [];
+  clusterTemplateID: string;
+  loadingClusterTemplate = true;
+  private clusterTemplate: ClusterTemplate;
   readonly stepRegistry = StepRegistry;
 
-  @ViewChild('stepper', {static: true}) private readonly _stepper: MatStepper;
-
+  private _stepper: MatStepper;
   private _unsubscribe: Subject<void> = new Subject<void>();
 
   constructor(
@@ -58,49 +64,59 @@ export class WizardComponent implements OnInit, OnDestroy {
     private readonly _notificationService: NotificationService,
     private readonly _clusterSpecService: ClusterSpecService,
     private readonly _clusterService: ClusterService,
+    private readonly _cdr: ChangeDetectorRef,
     private readonly _nodeDataService: NodeDataService,
     private readonly _matDialog: MatDialog,
-    private readonly _router: Router
+    private readonly _router: Router,
+    private readonly _route: ActivatedRoute,
+    private readonly _clusterTemplateService: ClusterTemplateService,
+    private readonly _nameGenerator: NameGeneratorService,
+    private readonly applicationService: ApplicationService
   ) {}
 
+  @ViewChild('stepper')
+  set matStepper(stepper: MatStepper) {
+    if (stepper) {
+      this._stepper = stepper;
+      this.initializeWizard();
+    }
+  }
+
   get steps(): WizardStep[] {
-    return this._wizard.steps.filter(step => step.enabled);
+    return steps
+      .filter(step => step.enabled)
+      .filter(step => !(this.clusterTemplateID && step.name === StepRegistry.Provider));
   }
 
   get active(): WizardStep {
-    return this.steps[this._stepper.selectedIndex];
+    return this._stepper ? this.steps[this._stepper.selectedIndex] : null;
   }
 
   get first(): boolean {
-    return this._stepper.selectedIndex === 0;
+    return this._stepper ? this._stepper.selectedIndex === 0 : true;
   }
 
   get last(): boolean {
-    return this._stepper.selectedIndex === this.steps.length - 1;
+    return this._stepper ? this._stepper.selectedIndex === this.steps.length - 1 : false;
   }
 
   get invalid(): boolean {
-    return this.form.get(this.active.name).invalid;
+    return this._stepper ? this.form.get(this.active.name).invalid : false;
   }
 
   ngOnInit(): void {
     this._wizard.reset();
-
-    // Init steps for wizard
-    this._wizard.steps = steps;
-    this._wizard.stepper = this._stepper;
-
     this._initForm(this.steps);
-    this._wizard.stepsChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this._initForm(this.steps));
-    this._stepper.selectionChange.pipe(takeUntil(this._unsubscribe)).subscribe(selection => {
-      if (selection.previouslySelectedIndex > selection.selectedIndex) {
-        selection.previouslySelectedStep.reset();
-      }
-    });
 
-    this._projectService.selectedProject
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(project => (this.project = project));
+    // Retrieve params
+    this.clusterTemplateID = this._route.snapshot.queryParams?.clusterTemplateID;
+    this.project.id = this._route.snapshot.paramMap.get(PathParam.ProjectID);
+
+    if (this.clusterTemplateID) {
+      this.loadClusterTemplate();
+    } else {
+      this.loadingClusterTemplate = false;
+    }
   }
 
   ngOnDestroy(): void {
@@ -109,12 +125,12 @@ export class WizardComponent implements OnInit, OnDestroy {
     this._wizard.reset();
   }
 
-  onApplicationsChanged(applications: Application[]): void {
-    this.applications = applications;
-  }
-
   getObservable(): Observable<Cluster> {
-    const createCluster = this._getCreateClusterModel(this._clusterSpecService.cluster, this._nodeDataService.nodeData);
+    const createCluster = this._getCreateClusterModel(
+      this._clusterSpecService.cluster,
+      this._nodeDataService.nodeData,
+      this.applicationService.applications
+    );
 
     return this._clusterService
       .create(this.project.id, createCluster)
@@ -138,26 +154,38 @@ export class WizardComponent implements OnInit, OnDestroy {
     this._router.navigate([`/projects/${this.project.id}/clusters/${cluster.id}`]);
   }
 
-  onSaveClusterTemplate(): void {
+  onSaveClusterTemplate(isEditMode?: boolean): void {
     const dialogConfig: MatDialogConfig = {
       data: {
         cluster: this._clusterSpecService.cluster,
         nodeData: this._nodeDataService.nodeData,
         sshKeys: this._clusterSpecService.sshKeys,
         projectID: this.project.id,
-        applications: this.applications,
+        applications: this.applicationService.applications,
       },
     };
+
+    if (isEditMode) {
+      dialogConfig.data.name = this.clusterTemplate.name;
+      dialogConfig.data.clusterTemplateID = this.clusterTemplate.id;
+      dialogConfig.data.scope = this.clusterTemplate.scope;
+    }
 
     this._matDialog
       .open(SaveClusterTemplateDialogComponent, dialogConfig)
       .afterClosed()
       .pipe(filter(ct => !!ct))
       .pipe(take(1))
-      .subscribe(ct => this._notificationService.success(`Saved the ${ct.name} cluster template`));
+      .subscribe(ct =>
+        this._notificationService.success(`${isEditMode ? 'Saved' : 'Updated'} the ${ct.name} cluster template`)
+      );
   }
 
-  private _getCreateClusterModel(cluster: Cluster, nodeData: NodeData): CreateClusterModel {
+  private _getCreateClusterModel(
+    cluster: Cluster,
+    nodeData: NodeData,
+    applications: Application[]
+  ): CreateClusterModel {
     const clusterModel: CreateClusterModel = {
       cluster: {
         name: cluster.name,
@@ -173,7 +201,7 @@ export class WizardComponent implements OnInit, OnDestroy {
           dynamicConfig: nodeData.dynamicConfig,
         },
       },
-      applications: this.applications,
+      applications: applications,
     };
     if (nodeData.operatingSystemProfile && cluster.spec.enableOperatingSystemManager) {
       clusterModel.nodeDeployment.annotations = {
@@ -183,9 +211,63 @@ export class WizardComponent implements OnInit, OnDestroy {
     return clusterModel;
   }
 
+  private initializeWizard(): void {
+    // Init steps for wizard
+    this._wizard.steps = this.steps;
+    this._wizard.stepper = this._stepper;
+
+    this._initForm(this.steps);
+    this._wizard.stepsChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this._initForm(this.steps));
+    this._stepper?.selectionChange.pipe(takeUntil(this._unsubscribe)).subscribe(selection => {
+      if (selection.previouslySelectedIndex > selection.selectedIndex) {
+        selection.previouslySelectedStep.reset();
+      }
+    });
+
+    this._projectService.onProjectChange
+      .pipe(startWith(this.project), takeUntil(this._unsubscribe))
+      .subscribe(project => {
+        // Template is already loaded at this point and we don't need to reload it unless the project ID has changed.
+        if (this.clusterTemplateID && project.id !== this.project.id) {
+          this.project = project;
+          this.loadClusterTemplate();
+        }
+        this.project = project;
+      });
+
+    // After much evaluation, we found out that this is the best place to trigger this EventEmitter chaining. The only
+    // other option is to do this inside each and every component and sub-component for the wizard step which doesn't
+    // really make any sense.
+    if (this.clusterTemplateID) {
+      this._clusterSpecService.emitChangeEvents();
+    }
+  }
+
   private _initForm(steps: WizardStep[]): void {
     const controls = {};
     steps.forEach(step => (controls[step.name] = this._formBuilder.control('')));
     this.form = this._formBuilder.group(controls);
+  }
+
+  private loadClusterTemplate(): void {
+    this._clusterTemplateService
+      .get(this.project.id, this.clusterTemplateID)
+      // We just need to load the cluster template once. Usage of `takeUntil` will cause an endless chain of update that
+      // will keep on reloading and defaulting the values.
+      .pipe(take(1))
+      .subscribe(template => {
+        // Load data into corresponding services.
+        const namePrefix = this._nameGenerator.generateName();
+        template.cluster.name = namePrefix + '-' + template.name;
+        template.nodeDeployment.name = namePrefix;
+        this._clusterSpecService.initializeClusterFromClusterTemplate(template);
+        this._nodeDataService.initializeNodeDataFromMachineDeployment(template.nodeDeployment);
+        this.applicationService.applications = template.applications;
+        this.clusterTemplate = template;
+
+        // Re-initialize the form.
+        this.loadingClusterTemplate = false;
+        this._cdr.detectChanges();
+      });
   }
 }

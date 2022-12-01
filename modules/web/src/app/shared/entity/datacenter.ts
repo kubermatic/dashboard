@@ -14,6 +14,8 @@
 
 import {NodeProvider} from '../model/NodeProviderConstants';
 import {Metadata} from './common';
+import {StatusIcon} from '@shared/utils/health-status';
+import {SeedOverviewDatasource} from '@app/settings/admin/seed-configurations/types/seed-configurations';
 
 export class CreateDatacenterModel {
   name: string;
@@ -178,6 +180,14 @@ export class AdminSeed {
   spec: AdminSeedSpec;
 }
 
+export enum SeedHealthyPhase {
+  Healthy = 'Healthy',
+  Unhealthy = 'Unhealthy',
+  Invalid = 'Invalid',
+  Terminating = 'Terminating',
+  Running = 'Paused',
+}
+
 export class AdminSeedSpec {
   country?: string;
   location?: string;
@@ -188,6 +198,37 @@ export class AdminSeedSpec {
   expose_strategy?: string;
   mla: MLA;
   etcdBackupRestore?: EtcdBackupRestore;
+}
+
+export class SeedOverview {
+  name: string;
+  location: string;
+  phase: string;
+  created: Date;
+  providers: DatacentersByProvider[];
+
+  static getStatusIcon(overview: SeedOverview | SeedOverviewDatasource): string {
+    switch (overview.phase) {
+      case SeedHealthyPhase.Healthy:
+        return StatusIcon.Running;
+      case SeedHealthyPhase.Unhealthy:
+        return StatusIcon.Warning;
+      case SeedHealthyPhase.Terminating:
+        return StatusIcon.Error;
+      case SeedHealthyPhase.Invalid:
+        return StatusIcon.Unknown;
+      default:
+        return StatusIcon.Unknown;
+    }
+  }
+}
+
+export class DatacentersByProvider {
+  [key: string]: ClustersByDatacenter;
+}
+
+export class ClustersByDatacenter {
+  [key: string]: number;
 }
 
 export class MeteringCredentials {

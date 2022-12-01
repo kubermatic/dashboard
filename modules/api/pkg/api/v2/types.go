@@ -1594,19 +1594,6 @@ type GKEUpgradeSettings struct {
 	MaxUnavailable int64 `json:"maxUnavailable,omitempty"`
 }
 
-// VirtualMachineInstancePresetList represents a list of VirtualMachineInstancePreset.
-// swagger:model VirtualMachineInstancePresetList
-type VirtualMachineInstancePresetList []VirtualMachineInstancePreset
-
-// VirtualMachineInstancePreset represents a KubeVirt Virtual Machine Instance Preset
-// swagger:model VirtualMachineInstancePreset
-type VirtualMachineInstancePreset struct {
-	Name      string `json:"name,omitempty"`
-	Namespace string `json:"namespace,omitempty"`
-	// Spec contains the kubevirtv1.VirtualMachineInstancePreset.Spec object marshalled
-	Spec string `json:"spec,omitempty"`
-}
-
 // VirtualMachineInstancetypeList represents a list of VirtualMachineInstancetype.
 // VirtualMachineInstancetype are divided into 2 categories: "custom" or "kubermatic".
 // swagger:model VirtualMachineInstancetypeList
@@ -1678,6 +1665,8 @@ type NetworkDefaults struct {
 	NodeLocalDNSCacheEnabled bool `json:"nodeLocalDNSCacheEnabled,omitempty"`
 	// ClusterExposeStrategy is the strategy used to expose a cluster control plane.
 	ClusterExposeStrategy kubermaticv1.ExposeStrategy `json:"clusterExposeStrategy,omitempty"`
+	// TunnelingAgentIP is the address used by the tunneling agents
+	TunnelingAgentIP string `json:"tunnelingAgentIP,omitempty"`
 }
 
 // NetworkDefaultsIPFamily contains cluster network default settings for an IP family.
@@ -1746,6 +1735,16 @@ type Quota struct {
 	Storage *float64 `json:"storage,omitempty"`
 }
 
+// swagger:model ResourceQuotaUpdateCalculation
+type ResourceQuotaUpdateCalculation struct {
+	// ResourceQuota represents the requested resource quota.
+	ResourceQuota ResourceQuota `json:"resourceQuota"`
+	// CalculatedQuota represents the calculation of the resource quota global usage + the updated node usage.
+	CalculatedQuota Quota `json:"calculatedQuota"`
+	// Message is filled if a resource in the calculated quota exceeds the resource quota limits.
+	Message string `json:"message"`
+}
+
 // swagger:model GroupProjectBinding
 type GroupProjectBinding struct {
 	Name      string `json:"name"`
@@ -1782,10 +1781,10 @@ type ApplicationInstallationListItem struct {
 // swagger:model ApplicationInstallationListItemSpec
 type ApplicationInstallationListItemSpec struct {
 	// Namespace describe the desired state of the namespace where application will be created.
-	Namespace NamespaceSpec `json:"namespace"`
+	Namespace apiv1.NamespaceSpec `json:"namespace"`
 
 	// ApplicationRef is a reference to identify which Application should be deployed
-	ApplicationRef appskubermaticv1.ApplicationRef `json:"applicationRef"`
+	ApplicationRef apiv1.ApplicationRef `json:"applicationRef"`
 }
 
 type ApplicationInstallationListItemStatus struct {
@@ -1811,40 +1810,15 @@ type ApplicationInstallationBody struct {
 
 type ApplicationInstallationSpec struct {
 	// Namespace describe the desired state of the namespace where application will be created.
-	Namespace NamespaceSpec `json:"namespace"`
+	Namespace apiv1.NamespaceSpec `json:"namespace"`
 
 	// ApplicationRef is a reference to identify which Application should be deployed
-	ApplicationRef appskubermaticv1.ApplicationRef `json:"applicationRef"`
+	ApplicationRef apiv1.ApplicationRef `json:"applicationRef"`
 
 	// Values describe overrides for manifest-rendering. It's a free yaml field.
 	// +kubebuilder:pruning:PreserveUnknownFields
 	Values runtime.RawExtension `json:"values,omitempty"`
 	// As kubebuilder does not support interface{} as a type, deferring json decoding, seems to be our best option (see https://github.com/kubernetes-sigs/controller-tools/issues/294#issuecomment-518379253)
-}
-
-// NamespaceSpec describe the desired state of the namespace where application will be created.
-type NamespaceSpec struct {
-	// Name is the namespace to deploy the Application into.
-	// Should be a valid lowercase RFC1123 domain name
-	// +kubebuilder:validation:Pattern:=`^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$`
-	// +kubebuilder:validation:MaxLength:=63
-	// +kubebuilder:validation:Type=string
-	Name string `json:"name"`
-
-	// +kubebuilder:default:=true
-
-	// Create defines whether the namespace should be created if it does not exist. Defaults to true
-	Create bool `json:"create"`
-
-	// Labels of the namespace
-	// More info: http://kubernetes.io/docs/user-guide/labels
-	// +optional
-	Labels map[string]string `json:"labels,omitempty"`
-
-	// Annotations of the namespace
-	// More info: http://kubernetes.io/docs/user-guide/annotations
-	// +optional
-	Annotations map[string]string `json:"annotations,omitempty"`
 }
 
 // ApplicationInstallationStatus is the object representing the status of an Application.
@@ -1928,6 +1902,14 @@ type ApplicationDefinitionListItem struct {
 type ApplicationDefinitionListItemSpec struct {
 	// Description of the application. what is its purpose
 	Description string `json:"description"`
+}
+
+// ApplicationDefinitionBody is the object representing the POST/PUT payload of an ApplicationDefinition
+// swagger:model ApplicationDefinitionBody
+type ApplicationDefinitionBody struct {
+	apiv1.ObjectMeta
+
+	Spec *appskubermaticv1.ApplicationDefinitionSpec
 }
 
 type DatacentersByProvider = map[string]ClustersByDatacenter

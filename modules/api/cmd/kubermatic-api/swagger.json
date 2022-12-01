@@ -9232,6 +9232,49 @@
             }
           }
         }
+      },
+      "post": {
+        "description": "Creates ApplicationDefinition into the given cluster",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "applications"
+        ],
+        "operationId": "createApplicationDefinition",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ApplicationDefinitionBody"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "ApplicationDefinition",
+            "schema": {
+              "$ref": "#/definitions/ApplicationDefinition"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
       }
     },
     "/api/v2/applicationdefinitions/{appdef_name}": {
@@ -14613,53 +14656,6 @@
         }
       }
     },
-    "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/vmflavors": {
-      "get": {
-        "description": "Lists available VirtualMachineInstancePreset",
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "kubevirt"
-        ],
-        "operationId": "listKubeVirtVMIPresetsNoCredentials",
-        "parameters": [
-          {
-            "type": "string",
-            "x-go-name": "ProjectID",
-            "name": "project_id",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "x-go-name": "ClusterID",
-            "name": "cluster_id",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "name": "DatacenterName",
-            "in": "header"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "VirtualMachineInstancePresetList",
-            "schema": {
-              "$ref": "#/definitions/VirtualMachineInstancePresetList"
-            }
-          },
-          "default": {
-            "description": "errorResponse",
-            "schema": {
-              "$ref": "#/definitions/errorResponse"
-            }
-          }
-        }
-      }
-    },
     "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/nutanix/categories": {
       "get": {
         "description": "Lists available Nutanix categories",
@@ -14939,6 +14935,22 @@
           "openstack"
         ],
         "operationId": "listOpenstackServerGroupsNoCredentials",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "ClusterID",
+            "name": "cluster_id",
+            "in": "path",
+            "required": true
+          }
+        ],
         "responses": {
           "200": {
             "description": "OpenstackServerGroup",
@@ -16681,6 +16693,92 @@
         ],
         "responses": {
           "200": {
+            "description": "ClusterTemplate",
+            "schema": {
+              "$ref": "#/definitions/ClusterTemplate"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      },
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "project"
+        ],
+        "summary": "Update a specified cluster templates for the given project.",
+        "operationId": "updateClusterTemplate",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "applications": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Application"
+                  },
+                  "x-go-name": "Applications"
+                },
+                "cluster": {
+                  "$ref": "#/definitions/Cluster"
+                },
+                "name": {
+                  "type": "string",
+                  "x-go-name": "Name"
+                },
+                "nodeDeployment": {
+                  "$ref": "#/definitions/NodeDeployment"
+                },
+                "scope": {
+                  "type": "string",
+                  "x-go-name": "Scope"
+                },
+                "userSshKeys": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/ClusterTemplateSSHKey"
+                  },
+                  "x-go-name": "UserSSHKeys"
+                }
+              }
+            }
+          },
+          {
+            "type": "string",
+            "x-go-name": "ClusterTemplateID",
+            "name": "template_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
             "description": "ClusterTemplate",
             "schema": {
               "$ref": "#/definitions/ClusterTemplate"
@@ -18994,6 +19092,491 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/providers/azure/availabilityzones": {
+      "get": {
+        "description": "Lists VM availability zones in an Azure region",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "azure"
+        ],
+        "operationId": "listProjectAzureAvailabilityZones",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "SubscriptionID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "TenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ClientID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ClientSecret",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Location",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "SKUName",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "AzureAvailabilityZonesList",
+            "schema": {
+              "$ref": "#/definitions/AzureAvailabilityZonesList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/azure/resourcegroups": {
+      "get": {
+        "description": "Lists available VM resource groups",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "azure"
+        ],
+        "operationId": "listProjectAzureResourceGroups",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "SubscriptionID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "TenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ClientID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ClientSecret",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Location",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "AzureResourceGroupsList",
+            "schema": {
+              "$ref": "#/definitions/AzureResourceGroupsList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/azure/routetables": {
+      "get": {
+        "description": "Lists available VM route tables",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "azure"
+        ],
+        "operationId": "listProjectAzureRouteTables",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "SubscriptionID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "TenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ClientID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ClientSecret",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ResourceGroup",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Location",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "AzureRouteTablesList",
+            "schema": {
+              "$ref": "#/definitions/AzureRouteTablesList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/azure/securitygroups": {
+      "get": {
+        "description": "Lists available VM security groups",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "azure"
+        ],
+        "operationId": "listProjectAzureSecurityGroups",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "SubscriptionID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "TenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ClientID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ClientSecret",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ResourceGroup",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Location",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "AzureSecurityGroupsList",
+            "schema": {
+              "$ref": "#/definitions/AzureSecurityGroupsList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/azure/sizes": {
+      "get": {
+        "description": "Lists available VM sizes in an Azure region",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "azure"
+        ],
+        "operationId": "listProjectAzureSizes",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "SubscriptionID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "TenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ClientID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ClientSecret",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Location",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "AzureSizeList",
+            "schema": {
+              "$ref": "#/definitions/AzureSizeList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/azure/subnets": {
+      "get": {
+        "description": "Lists available VM subnets",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "azure"
+        ],
+        "operationId": "listProjectAzureSubnets",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "SubscriptionID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "TenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ClientID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ClientSecret",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ResourceGroup",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "VirtualNetwork",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "AzureSubnetsList",
+            "schema": {
+              "$ref": "#/definitions/AzureSubnetsList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/azure/vnets": {
+      "get": {
+        "description": "Lists available VM virtual networks",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "azure"
+        ],
+        "operationId": "listProjectAzureVnets",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "SubscriptionID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "TenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ClientID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ClientSecret",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ResourceGroup",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Location",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "AzureVirtualNetworksList",
+            "schema": {
+              "$ref": "#/definitions/AzureVirtualNetworksList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/providers/eks/amitypes": {
       "get": {
         "produces": [
@@ -20443,6 +21026,106 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/quotacalculation": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "project"
+        ],
+        "summary": "Calculates the projects resource quota updated by the given resources.",
+        "operationId": "calculateProjectResourceQuotaUpdate",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "alibabaInstanceType": {
+                  "$ref": "#/definitions/AlibabaInstanceType"
+                },
+                "anexiaNodeSpec": {
+                  "$ref": "#/definitions/AnexiaNodeSpec"
+                },
+                "awsSize": {
+                  "$ref": "#/definitions/AWSSize"
+                },
+                "azureSize": {
+                  "$ref": "#/definitions/AzureSize"
+                },
+                "diskSizeGB": {
+                  "description": "DiskSizeGB will be processed only for those providers which don't have the disk size in their API objects, like AWS, Alibabla and GCP.",
+                  "type": "integer",
+                  "format": "int64",
+                  "x-go-name": "DiskSizeGB"
+                },
+                "doSize": {
+                  "$ref": "#/definitions/DigitaloceanSize"
+                },
+                "equinixSize": {
+                  "$ref": "#/definitions/PacketSize"
+                },
+                "gcpSize": {
+                  "$ref": "#/definitions/GCPMachineSize"
+                },
+                "hetznerSize": {
+                  "$ref": "#/definitions/HetznerSize"
+                },
+                "nutanixNodeSpec": {
+                  "$ref": "#/definitions/NutanixNodeSpec"
+                },
+                "openstackSize": {
+                  "$ref": "#/definitions/OpenstackSize"
+                },
+                "replicas": {
+                  "type": "integer",
+                  "format": "int64",
+                  "x-go-name": "Replicas"
+                },
+                "vSphereNodeSpec": {
+                  "$ref": "#/definitions/VSphereNodeSpec"
+                },
+                "vmDirectorNodeSpec": {
+                  "$ref": "#/definitions/VMwareCloudDirectorNodeSpec"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ResourceQuotaUpdateCalculation",
+            "schema": {
+              "$ref": "#/definitions/ResourceQuotaUpdateCalculation"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/providers/aks/locations": {
       "get": {
         "produces": [
@@ -21740,49 +22423,6 @@
             "description": "StorageClassList",
             "schema": {
               "$ref": "#/definitions/StorageClassList"
-            }
-          },
-          "default": {
-            "description": "errorResponse",
-            "schema": {
-              "$ref": "#/definitions/errorResponse"
-            }
-          }
-        }
-      }
-    },
-    "/api/v2/providers/kubevirt/vmflavors": {
-      "get": {
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "kubevirt"
-        ],
-        "summary": "Lists available KubeVirt VirtualMachineInstancePreset.",
-        "operationId": "listKubeVirtVMIPresets",
-        "parameters": [
-          {
-            "type": "string",
-            "name": "Kubeconfig",
-            "in": "header"
-          },
-          {
-            "type": "string",
-            "name": "Credential",
-            "in": "header"
-          },
-          {
-            "type": "string",
-            "name": "DatacenterName",
-            "in": "header"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "VirtualMachineInstancePresetList",
-            "schema": {
-              "$ref": "#/definitions/VirtualMachineInstancePresetList"
             }
           },
           "default": {
@@ -25466,6 +26106,46 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
+    "ApplicationDefinitionBody": {
+      "description": "ApplicationDefinitionBody is the object representing the POST/PUT payload of an ApplicationDefinition",
+      "type": "object",
+      "properties": {
+        "Spec": {
+          "$ref": "#/definitions/ApplicationDefinitionSpec"
+        },
+        "annotations": {
+          "description": "Annotations that can be added to the resource",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Annotations"
+        },
+        "creationTimestamp": {
+          "description": "CreationTimestamp is a timestamp representing the server time when this object was created.",
+          "type": "string",
+          "format": "date-time",
+          "x-go-name": "CreationTimestamp"
+        },
+        "deletionTimestamp": {
+          "description": "DeletionTimestamp is a timestamp representing the server time when this object was deleted.",
+          "type": "string",
+          "format": "date-time",
+          "x-go-name": "DeletionTimestamp"
+        },
+        "id": {
+          "description": "ID unique value that identifies the resource generated by the server. Read-Only.",
+          "type": "string",
+          "x-go-name": "ID"
+        },
+        "name": {
+          "description": "Name represents human readable name for the resource",
+          "type": "string",
+          "x-go-name": "Name"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
     "ApplicationDefinitionListItem": {
       "type": "object",
       "title": "ApplicationDefinitionListItem is the object representing an ApplicationDefinitionListItem.",
@@ -25742,16 +26422,16 @@
     },
     "ApplicationRef": {
       "type": "object",
-      "title": "ApplicationRef describes a KKP-wide, unique reference to an Application.",
       "properties": {
         "name": {
           "description": "Name of the Application",
           "type": "string",
-          "pattern": "=`^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$`",
           "x-go-name": "Name"
         },
         "version": {
-          "$ref": "#/definitions/Version"
+          "description": "Version of the Application. Must be a valid SemVer version\nNOTE: We are not using Masterminds/semver here, as it keeps data in unexported fields witch causes issues for\nDeepEqual used in our reconciliation packages. At the same time, we are not using pkg/semver because\nof the reasons stated in https://github.com/kubermatic/kubermatic/pull/10891.",
+          "type": "string",
+          "x-go-name": "Version"
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
@@ -26725,6 +27405,11 @@
         },
         "services": {
           "$ref": "#/definitions/NetworkRanges"
+        },
+        "tunnelingAgentIP": {
+          "description": "TunnelingAgentIP is the address used by the tunneling agents",
+          "type": "string",
+          "x-go-name": "TunnelingAgentIP"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -27974,6 +28659,11 @@
           "description": "The default Datastore to be used for provisioning volumes using storage\nclasses/dynamic provisioning and for storing virtual machine files in\ncase no `Datastore` or `DatastoreCluster` is provided at Cluster level.",
           "type": "string",
           "x-go-name": "DefaultDatastore"
+        },
+        "defaultTagCategoryID": {
+          "description": "DefaultTagCategoryID is the tag category id that will be used as default, if users don't specify it on a cluster level,\nand they don't wish KKP to create default generated tag category, upon cluster creation.",
+          "type": "string",
+          "x-go-name": "DefaultTagCategoryID"
         },
         "endpoint": {
           "description": "Endpoint URL to use, including protocol, for example \"https://vcenter.example.com\".",
@@ -31892,7 +32582,7 @@
           "x-go-name": "Name"
         }
       },
-      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "NetworkDefaults": {
       "type": "object",
@@ -31916,6 +32606,11 @@
           "description": "ProxyMode defines the default kube-proxy mode (\"ipvs\" / \"iptables\" / \"ebpf\").",
           "type": "string",
           "x-go-name": "ProxyMode"
+        },
+        "tunnelingAgentIP": {
+          "description": "TunnelingAgentIP is the address used by the tunneling agents",
+          "type": "string",
+          "x-go-name": "TunnelingAgentIP"
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
@@ -34025,6 +34720,11 @@
     "PublicAWSCloudSpec": {
       "type": "object",
       "title": "PublicAWSCloudSpec is a public counterpart of apiv1.AWSCloudSpec.",
+      "properties": {
+        "nodePortsAllowedIPRanges": {
+          "$ref": "#/definitions/NetworkRanges"
+        }
+      },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "PublicAlibabaCloudSpec": {
@@ -34044,6 +34744,9 @@
         "assignAvailabilitySet": {
           "type": "boolean",
           "x-go-name": "AssignAvailabilitySet"
+        },
+        "nodePortsAllowedIPRanges": {
+          "$ref": "#/definitions/NetworkRanges"
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
@@ -34122,6 +34825,11 @@
     "PublicGCPCloudSpec": {
       "type": "object",
       "title": "PublicGCPCloudSpec is a public counterpart of apiv1.GCPCloudSpec.",
+      "properties": {
+        "nodePortsAllowedIPRanges": {
+          "$ref": "#/definitions/NetworkRanges"
+        }
+      },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "PublicHetznerCloudSpec": {
@@ -34163,6 +34871,9 @@
         "network": {
           "type": "string",
           "x-go-name": "Network"
+        },
+        "nodePortsAllowedIPRanges": {
+          "$ref": "#/definitions/NetworkRanges"
         },
         "project": {
           "type": "string",
@@ -34374,6 +35085,23 @@
         },
         "localUsage": {
           "$ref": "#/definitions/Quota"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "ResourceQuotaUpdateCalculation": {
+      "type": "object",
+      "properties": {
+        "calculatedQuota": {
+          "$ref": "#/definitions/Quota"
+        },
+        "message": {
+          "description": "Message is filled if a resource in the calculated quota exceeds the resource quota limits.",
+          "type": "string",
+          "x-go-name": "Message"
+        },
+        "resourceQuota": {
+          "$ref": "#/definitions/ResourceQuota"
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
@@ -35867,9 +36595,9 @@
       "x-go-package": "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
     },
     "Version": {
-      "description": "Version wraps semverlib.Version. It is needed because kubebuilder does not accept structs with non-tagged fields, even if they have custom marshallers\nWith this the CRD resource will have Version as string but operator code can work directly with the semverlib.Version struct\n(taken from https://github.com/kubernetes-sigs/controller-tools/blob/master/pkg/crd/testdata/cronjob_types.go#L283)",
       "type": "object",
-      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
+      "title": "Version represents a single semantic version.",
+      "x-go-package": "github.com/Masterminds/semver/v3"
     },
     "VersionList": {
       "description": "VersionList represents a list of versions",
@@ -35903,34 +36631,6 @@
           "type": "string",
           "x-go-name": "Namespace"
         }
-      },
-      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
-    },
-    "VirtualMachineInstancePreset": {
-      "description": "VirtualMachineInstancePreset represents a KubeVirt Virtual Machine Instance Preset",
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "x-go-name": "Name"
-        },
-        "namespace": {
-          "type": "string",
-          "x-go-name": "Namespace"
-        },
-        "spec": {
-          "description": "Spec contains the kubevirtv1.VirtualMachineInstancePreset.Spec object marshalled",
-          "type": "string",
-          "x-go-name": "Spec"
-        }
-      },
-      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
-    },
-    "VirtualMachineInstancePresetList": {
-      "type": "array",
-      "title": "VirtualMachineInstancePresetList represents a list of VirtualMachineInstancePreset.",
-      "items": {
-        "$ref": "#/definitions/VirtualMachineInstancePreset"
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },

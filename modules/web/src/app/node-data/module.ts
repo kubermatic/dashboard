@@ -34,6 +34,7 @@ import {DigitalOceanBasicNodeDataComponent} from './basic/provider/digitalocean/
 import {GCPBasicNodeDataComponent} from './basic/provider/gcp/component';
 import {HetznerBasicNodeDataComponent} from './basic/provider/hetzner/component';
 import {KubeVirtBasicNodeDataComponent} from './basic/provider/kubevirt/component';
+import {TopologySpreadConstraintFormComponent} from './basic/provider/kubevirt/topology-spread-contraint-form/component';
 import {OpenstackBasicNodeDataComponent} from './basic/provider/openstack/component';
 import {EquinixBasicNodeDataComponent} from './basic/provider/equinix/component';
 import {VSphereBasicNodeDataComponent} from './basic/provider/vsphere/component';
@@ -50,7 +51,7 @@ import {OpenstackExtendedNodeDataComponent} from './extended/provider/openstack/
 import {EquinixExtendedNodeDataComponent} from './extended/provider/equinix/component';
 import {KubeletVersionNodeDataComponent} from './kubelet-version/component';
 import {NutanixBasicNodeDataComponent} from '@app/node-data/basic/provider/nutanix/component';
-import {FlavorDetailsDialogComponent} from '@app/node-data/basic/provider/kubevirt/flavor-details/component';
+import {InstanceDetailsDialogComponent} from '@app/node-data/basic/provider/kubevirt/instance-details/component';
 import {VMwareCloudDirectorBasicNodeDataComponent} from '@app/node-data/basic/provider/vmware-cloud-director/component';
 import {Routes, RouterModule} from '@angular/router';
 
@@ -80,8 +81,9 @@ const components = [
   KubeletVersionNodeDataComponent,
   NodeDataDialogComponent,
   NutanixBasicNodeDataComponent,
-  FlavorDetailsDialogComponent,
+  InstanceDetailsDialogComponent,
   VMwareCloudDirectorBasicNodeDataComponent,
+  TopologySpreadConstraintFormComponent,
 ];
 
 // component NodeDataComponent is added to routing module so we can use our dynamic component here

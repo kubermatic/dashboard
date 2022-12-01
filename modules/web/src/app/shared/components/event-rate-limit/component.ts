@@ -92,6 +92,15 @@ export class EventRateLimitComponent extends BaseFormValidator implements OnInit
     delete this._clusterSpecService.eventRateLimitConfig;
   }
 
+  writeValue(eventRateLimitConfig: EventRateLimitConfig) {
+    if (eventRateLimitConfig) {
+      this.form.get(Controls.QPS).setValue(eventRateLimitConfig?.namespace?.qps, {emitEvent: false});
+      this.form.get(Controls.Burst).setValue(eventRateLimitConfig?.namespace?.burst, {emitEvent: false});
+      this.form.get(Controls.CacheSize).setValue(eventRateLimitConfig?.namespace?.cacheSize, {emitEvent: false});
+      this.eventRateLimitConfig = eventRateLimitConfig;
+    }
+  }
+
   private _getEventRateLimitConfigPatch(): EventRateLimitConfig {
     return {
       namespace: {

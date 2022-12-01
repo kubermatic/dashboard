@@ -31,12 +31,9 @@ import {forkJoin, of, Subject, timer} from 'rxjs';
 import {switchMap, take, takeUntil, tap} from 'rxjs/operators';
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 import {MasterVersion} from '@shared/entity/cluster';
-import {ClusterListTab} from '@app/cluster/list/component';
 import {ExternalClusterService} from '@core/services/external-cluster';
 import {ExternalClusterDeleteConfirmationComponent} from '@app/cluster/details/external-cluster/external-cluster-delete-confirmation/component';
-import {ExternalMachineDeploymentService} from '@app/core/services/external-machine-deployment';
-import {NotificationService} from '@app/core/services/notification';
-import _ from 'lodash';
+import {View} from '@app/shared/entity/common';
 
 @Component({
   selector: 'km-external-cluster-details',
@@ -71,10 +68,8 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
     private readonly _matDialog: MatDialog,
     private readonly _clusterService: ClusterService,
     private readonly _externalClusterService: ExternalClusterService,
-    private readonly _externalMachineDeploymentService: ExternalMachineDeploymentService,
     private readonly _userService: UserService,
-    private readonly _appConfigService: AppConfigService,
-    private readonly _notificationService: NotificationService
+    private readonly _appConfigService: AppConfigService
   ) {}
 
   get subnetIds(): string[] {
@@ -187,9 +182,7 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   goBack(): void {
-    this._router.navigate(['/projects/' + this.projectID + '/clusters'], {
-      fragment: `${ClusterListTab.ExternalCluster}`,
-    });
+    this._router.navigate([`/projects/${this.projectID}/${View.ExternalClusters}`]);
   }
 
   canDisconnect(): boolean {
@@ -209,18 +202,8 @@ export class ExternalClusterDetailsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(isDeleted => {
         if (isDeleted) {
-          this._router.navigate(['/projects/' + this.projectID + '/clusters'], {
-            fragment: `${ClusterListTab.ExternalCluster}`,
-          });
+          this._router.navigate([`/projects/${this.projectID}/${View.ExternalClusters}`]);
         }
-      });
-  }
-
-  addExternalMachineDeployment(): void {
-    this._externalMachineDeploymentService
-      .showCreateExternalClusterMachineDeploymentDialog(this.projectID, this.cluster)
-      .subscribe((data: ExternalMachineDeployment) => {
-        this._notificationService.success(`${data.name} Machine Deployment been created`);
       });
   }
 }

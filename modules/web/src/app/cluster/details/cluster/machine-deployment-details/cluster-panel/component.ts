@@ -14,6 +14,7 @@
 
 import {Component, Input} from '@angular/core';
 import {Router} from '@angular/router';
+import {View} from '@app/shared/entity/common';
 import {ParamsService} from '@core/services/params';
 import {Cluster} from '@shared/entity/cluster';
 import {Datacenter} from '@shared/entity/datacenter';
@@ -31,7 +32,7 @@ export class ClusterPanelComponent {
   @Input() projectID: string;
 
   private get _isExternalCluster(): boolean {
-    return this._params.getCurrentUrl().includes('/external/');
+    return this._params.getCurrentUrl().includes(`/${View.ExternalClusters}/`);
   }
 
   get region(): string {
@@ -50,7 +51,7 @@ export class ClusterPanelComponent {
 
   goBack(): void {
     if (this._isExternalCluster) {
-      this._router.navigate(['/projects/' + this.projectID + '/clusters/external/' + this.cluster.id]);
+      this._router.navigate([`/projects/${this.projectID}/clusters/${View.ExternalClusters}/${this.cluster.id}`]);
       return;
     }
 

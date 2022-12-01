@@ -23,6 +23,7 @@ import {
   AuditPolicyPreset,
   Cluster,
   ClusterPatch,
+  ClusterSpecPatch,
   CNIPlugin,
   ContainerRuntime,
   END_OF_DOCKER_SUPPORT_VERSION,
@@ -125,6 +126,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       this.cluster.spec.podNodeSelectorAdmissionPluginConfig
     ) as Record<string, string>;
     this.eventRateLimitConfig = _.cloneDeep(this.cluster.spec.eventRateLimitConfig);
+    this.apiServerAllowedIPRanges = this.cluster.spec.apiServerAllowedIPRanges?.cidrBlocks;
 
     this.form = this._builder.group({
       [Controls.Name]: new FormControl(this.cluster.name, [
@@ -155,7 +157,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       [Controls.PodNodeSelectorAdmissionPluginConfig]: new FormControl(''),
       [Controls.EventRateLimitConfig]: new FormControl(),
       [Controls.Labels]: new FormControl(null),
-      [Controls.APIServerAllowedIPRanges]: new FormControl(this.cluster.spec.apiServerAllowedIPRanges),
+      [Controls.APIServerAllowedIPRanges]: new FormControl(this.cluster.spec.apiServerAllowedIPRanges?.cidrBlocks),
     });
 
     this._settingsService.adminSettings.pipe(take(1)).subscribe(settings => {
@@ -362,8 +364,11 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         admissionPlugins: this.form.get(Controls.AdmissionPlugins).value,
         podNodeSelectorAdmissionPluginConfig: this.podNodeSelectorAdmissionPluginConfig,
         containerRuntime: this.form.get(Controls.ContainerRuntime).value,
-      },
-    };
+        apiServerAllowedIPRanges: {
+          cidrBlocks: this.form.get(Controls.APIServerAllowedIPRanges).value?.tags,
+        } as NetworkRanges,
+      } as ClusterSpecPatch,
+    } as ClusterPatch;
 
     if (this.isPluginEnabled(this.admissionPlugin.EventRateLimit)) {
       patch.spec.eventRateLimitConfig = {
@@ -397,12 +402,11 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   }
 
   private getAPIServerAllowedIPRange(): NetworkRanges {
-    let apiServerAllowedIPRange = null;
-
-    if (this.cluster.spec.exposeStrategy === ExposeStrategy.loadbalancer) {
-      apiServerAllowedIPRange = this.form.get(Controls.APIServerAllowedIPRanges).value?.tags;
+    if (this.cluster.spec.exposeStrategy !== ExposeStrategy.loadbalancer) {
+      return null;
     }
-    return apiServerAllowedIPRange === null ? null : {cidrBlocks: apiServerAllowedIPRange};
+    const apiServerAllowedIPRange = this.form.get(Controls.APIServerAllowedIPRanges).value?.tags;
+    return !apiServerAllowedIPRange ? {cidrBlocks: []} : {cidrBlocks: apiServerAllowedIPRange};
   }
 
   ngOnDestroy(): void {

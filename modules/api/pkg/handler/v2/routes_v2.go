@@ -163,10 +163,6 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 
 	// Defines a set of HTTP endpoints for interacting with KubeVirt clusters
 	mux.Methods(http.MethodGet).
-		Path("/providers/kubevirt/vmflavors").
-		Handler(r.listKubeVirtVMIPresets())
-
-	mux.Methods(http.MethodGet).
 		Path("/providers/kubevirt/instancetypes").
 		Handler(r.listKubeVirtInstancetypes())
 
@@ -476,6 +472,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 		Path("/applicationdefinitions/{appdef_name}").
 		Handler(r.getApplicationDefinition())
 
+	mux.Methods(http.MethodPost).
+		Path("/applicationdefinitions").
+		Handler(r.createApplicationDefinition())
+
 	// Define a set of endpoints for gatekeeper constraint templates
 	mux.Methods(http.MethodGet).
 		Path("/constrainttemplates").
@@ -704,35 +704,38 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 			mux.Methods(http.MethodGet).
 				Path("/projects/{project_id}/providers/kubevirt/storageclasses").
 				Handler(r.listProjectKubevirtStorageClasses())
+		*/
 
-			// Azure endpoints
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/azure/sizes").
-				Handler(r.listProjectAzureSizes())
+	// Azure endpoints
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/azure/sizes").
+		Handler(r.listProjectAzureSizes())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/azure/availabilityzones").
-				Handler(r.listProjectAzureSKUAvailabilityZones())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/azure/availabilityzones").
+		Handler(r.listProjectAzureSKUAvailabilityZones())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/azure/securitygroups").
-				Handler(r.listProjectAzureSecurityGroups())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/azure/securitygroups").
+		Handler(r.listProjectAzureSecurityGroups())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/azure/resourcegroups").
-				Handler(r.listProjectAzureResourceGroups())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/azure/resourcegroups").
+		Handler(r.listProjectAzureResourceGroups())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/azure/routetables").
-				Handler(r.listProjectAzureRouteTables())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/azure/routetables").
+		Handler(r.listProjectAzureRouteTables())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/azure/subnets").
-				Handler(r.listProjectAzureSubnets())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/azure/subnets").
+		Handler(r.listProjectAzureSubnets())
 
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/azure/vnets").
-				Handler(r.listProjectAzureVnets())
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/azure/vnets").
+		Handler(r.listProjectAzureVnets())
+
+		/*
 
 			// vSphere endpoints
 			mux.Methods(http.MethodGet).
@@ -1006,10 +1009,6 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 		Handler(r.listAnexiaTemplatesNoCredentials())
 
 	mux.Methods(http.MethodGet).
-		Path("/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/vmflavors").
-		Handler(r.listKubeVirtVMIPresetsNoCredentials())
-
-	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/instancetypes").
 		Handler(r.listKubeVirtInstancetypesNoCredentials())
 
@@ -1214,7 +1213,9 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 	mux.Methods(http.MethodPost).
 		Path("/projects/{project_id}/clustertemplates/{template_id}/instances").
 		Handler(r.createClusterTemplateInstance())
-
+	mux.Methods(http.MethodPut).
+		Path("/projects/{project_id}/clustertemplates/{template_id}").
+		Handler(r.updateClusterTemplate())
 	// Defines a set of HTTP endpoints for managing rule groups
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/clusters/{cluster_id}/rulegroups/{rulegroup_id}").
@@ -1418,6 +1419,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/quota").
 		Handler(r.getProjectQuota())
+
+	mux.Methods(http.MethodPost).
+		Path("/projects/{project_id}/quotacalculation").
+		Handler(r.calculateProjectResourceQuotaUpdate())
 
 	mux.Methods(http.MethodGet).
 		Path("/quotas/{quota_name}").
@@ -2100,7 +2105,6 @@ func (r Routing) patchExternalCluster() http.Handler {
 // swagger:route PUT /api/v2/projects/{project_id}/kubernetes/clusters/{cluster_id} project updateExternalCluster
 //
 //	Updates an external cluster for the given project.
-//
 //
 //	Produces:
 //	- application/json
@@ -4322,32 +4326,6 @@ func (r Routing) listAnexiaTemplatesNoCredentials() http.Handler {
 	)
 }
 
-// swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/vmflavors kubevirt listKubeVirtVMIPresetsNoCredentials
-//
-// Lists available VirtualMachineInstancePreset
-//
-//	Produces:
-//	- application/json
-//
-//	Responses:
-//	  default: errorResponse
-//	  200: VirtualMachineInstancePresetList
-//
-// Deprecated: in favor of listKubeVirtInstancetypesNoCredentials.
-func (r Routing) listKubeVirtVMIPresetsNoCredentials() http.Handler {
-	return httptransport.NewServer(
-		endpoint.Chain(
-			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
-			middleware.UserSaver(r.userProvider),
-			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
-			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
-		)(provider.KubeVirtVMIPresetsWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider, r.seedsGetter, r.userInfoGetter, r.settingsProvider)),
-		provider.DecodeKubeVirtListInstanceOrVMIPresetsNoCredentialReq,
-		handler.EncodeJSON,
-		r.defaultServerOptions()...,
-	)
-}
-
 // swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/kubevirt/instancetypes kubevirt listKubeVirtInstancetypesNoCredentials
 //
 // Lists available VirtualMachineInstancetype
@@ -4366,7 +4344,7 @@ func (r Routing) listKubeVirtInstancetypesNoCredentials() http.Handler {
 			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 		)(provider.KubeVirtInstancetypesWithClusterCredentialsEndpoint(r.projectProvider, r.privilegedProjectProvider, r.seedsGetter, r.userInfoGetter, r.settingsProvider)),
-		provider.DecodeKubeVirtListInstanceOrVMIPresetsNoCredentialReq,
+		provider.DecodeKubeVirtListInstancesNoCredentialReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
@@ -4603,7 +4581,7 @@ func (r Routing) listAzureSecurityGroups() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.AzureSecurityGroupsEndpoint(r.presetProvider, r.userInfoGetter)),
+		)(provider.AzureSecurityGroupsEndpoint(r.presetProvider, r.userInfoGetter, false)),
 		provider.DecodeAzureSecurityGroupsReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -4625,7 +4603,7 @@ func (r Routing) listAzureResourceGroups() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.AzureResourceGroupsEndpoint(r.presetProvider, r.userInfoGetter)),
+		)(provider.AzureResourceGroupsEndpoint(r.presetProvider, r.userInfoGetter, false)),
 		provider.DecodeAzureResourceGroupsReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -4647,7 +4625,7 @@ func (r Routing) listAzureRouteTables() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.AzureRouteTablesEndpoint(r.presetProvider, r.userInfoGetter)),
+		)(provider.AzureRouteTablesEndpoint(r.presetProvider, r.userInfoGetter, false)),
 		provider.DecodeAzureRouteTablesReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -4669,7 +4647,7 @@ func (r Routing) listAzureVnets() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.AzureVirtualNetworksEndpoint(r.presetProvider, r.userInfoGetter)),
+		)(provider.AzureVirtualNetworksEndpoint(r.presetProvider, r.userInfoGetter, false)),
 		provider.DecodeAzureVirtualNetworksReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -4713,7 +4691,7 @@ func (r Routing) listAzureSubnets() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.AzureSubnetsEndpoint(r.presetProvider, r.userInfoGetter)),
+		)(provider.AzureSubnetsEndpoint(r.presetProvider, r.userInfoGetter, false)),
 		provider.DecodeAzureSubnetsReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -5670,6 +5648,160 @@ func (r Routing) listProjectEKSCapacityTypes() http.Handler {
 	)
 }
 
+// swagger:route GET /api/v2/projects/{project_id}/providers/azure/sizes azure listProjectAzureSizes
+//
+// Lists available VM sizes in an Azure region
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AzureSizeList
+func (r Routing) listProjectAzureSizes() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.AzureSizesEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, r.settingsProvider)),
+		provider.DecodeAzureProjectSizesReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/azure/availabilityzones azure listProjectAzureAvailabilityZones
+//
+// Lists VM availability zones in an Azure region
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AzureAvailabilityZonesList
+func (r Routing) listProjectAzureSKUAvailabilityZones() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.AzureAvailabilityZonesEndpoint(r.presetProvider, r.userInfoGetter)),
+		provider.DecodeAzureProjectAvailabilityZonesReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/azure/securitygroups azure listProjectAzureSecurityGroups
+//
+// Lists available VM security groups
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AzureSecurityGroupsList
+func (r Routing) listProjectAzureSecurityGroups() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.AzureSecurityGroupsEndpoint(r.presetProvider, r.userInfoGetter, true)),
+		provider.DecodeAzureProjectSecurityGroupsReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/azure/resourcegroups azure listProjectAzureResourceGroups
+//
+// Lists available VM resource groups
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AzureResourceGroupsList
+func (r Routing) listProjectAzureResourceGroups() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.AzureResourceGroupsEndpoint(r.presetProvider, r.userInfoGetter, true)),
+		provider.DecodeAzureProjectResourceGroupsReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/azure/routetables azure listProjectAzureRouteTables
+//
+// Lists available VM route tables
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AzureRouteTablesList
+func (r Routing) listProjectAzureRouteTables() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.AzureRouteTablesEndpoint(r.presetProvider, r.userInfoGetter, true)),
+		provider.DecodeAzureProjectRouteTablesReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/azure/vnets azure listProjectAzureVnets
+//
+// Lists available VM virtual networks
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AzureVirtualNetworksList
+func (r Routing) listProjectAzureVnets() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.AzureVirtualNetworksEndpoint(r.presetProvider, r.userInfoGetter, true)),
+		provider.DecodeAzureProjectVirtualNetworksReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/azure/subnets azure listProjectAzureSubnets
+//
+// Lists available VM subnets
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AzureSubnetsList
+func (r Routing) listProjectAzureSubnets() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.AzureSubnetsEndpoint(r.presetProvider, r.userInfoGetter, true)),
+		provider.DecodeAzureProjectSubnetsReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
 // swagger:route GET /api/v2/projects/{project_id}/providers/nutanix/{dc}/clusters nutanix listProjectNutanixClusters
 //
 // List clusters from Nutanix.
@@ -5984,6 +6116,34 @@ func (r Routing) deleteClusterTemplate() http.Handler {
 		)(clustertemplate.DeleteEndpoint(r.projectProvider, r.privilegedProjectProvider, r.userInfoGetter, r.clusterTemplateProvider)),
 		clustertemplate.DecodeGetReq,
 		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route PUT /api/v2/projects/{project_id}/clustertemplates/{template_id} project updateClusterTemplate
+//
+//	Update a specified cluster templates for the given project.
+//
+//	Consumes:
+//	- application/json
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  201: ClusterTemplate
+//	  401: empty
+//	  403: empty
+func (r Routing) updateClusterTemplate() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(clustertemplate.UpdateEndpoint(r.projectProvider, r.privilegedProjectProvider, r.userInfoGetter, r.clusterTemplateProvider, r.seedsGetter, r.presetProvider, r.caBundle, r.exposeStrategy, r.sshKeyProvider, r.kubermaticConfigGetter, r.features)),
+		clustertemplate.DecodeUpdateReq,
+		handler.SetStatusCreatedHeader(handler.EncodeJSON),
 		r.defaultServerOptions()...,
 	)
 }
@@ -7455,30 +7615,6 @@ func (r Routing) listAKSClusters() http.Handler {
 	)
 }
 
-// swagger:route GET /api/v2/providers/kubevirt/vmflavors kubevirt listKubeVirtVMIPresets
-//
-// Lists available KubeVirt VirtualMachineInstancePreset.
-//
-//	Produces:
-//	- application/json
-//
-//	Responses:
-//	  default: errorResponse
-//	  200: VirtualMachineInstancePresetList
-//
-// Deprecated: in favor of listKubeVirtInstancetypes.
-func (r Routing) listKubeVirtVMIPresets() http.Handler {
-	return httptransport.NewServer(
-		endpoint.Chain(
-			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
-			middleware.UserSaver(r.userProvider),
-		)(provider.KubeVirtVMIPresetsEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, r.settingsProvider)),
-		provider.DecodeKubeVirtListInstanceOrVMIPresetsReq,
-		handler.EncodeJSON,
-		r.defaultServerOptions()...,
-	)
-}
-
 // swagger:route GET /api/v2/providers/kubevirt/instancetypes kubevirt listKubeVirtInstancetypes
 //
 // Lists available KubeVirt VirtualMachineInstancetype.
@@ -7495,7 +7631,7 @@ func (r Routing) listKubeVirtInstancetypes() http.Handler {
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
 		)(provider.KubeVirtInstancetypesEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, r.settingsProvider)),
-		provider.DecodeKubeVirtListInstanceOrVMIPresetsReq,
+		provider.DecodeKubeVirtListInstanceReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
@@ -8149,6 +8285,33 @@ func (r Routing) getProjectQuota() http.Handler {
 	)
 }
 
+// swagger:route POST /api/v2/projects/{project_id}/quotacalculation project calculateProjectResourceQuotaUpdate
+//
+//	Calculates the projects resource quota updated by the given resources.
+//
+//	Consumes:
+//	- application/json
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: ResourceQuotaUpdateCalculation
+//	  401: empty
+//	  403: empty
+func (r Routing) calculateProjectResourceQuotaUpdate() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(resourcequota.CalculateProjectQuotaUpdateEndpoint(r.projectProvider, r.privilegedProjectProvider, r.userInfoGetter, r.resourceQuotaProvider)),
+		resourcequota.DecodeCalculateProjectResourceQuotaUpdateReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
 // swagger:route GET /api/v2/quotas/{quota_name} resourceQuota admin getResourceQuota
 //
 //	Gets a specific Resource Quota.
@@ -8598,6 +8761,33 @@ func (r Routing) getApplicationDefinition() http.Handler {
 		)(applicationdefinition.GetApplicationDefinition(r.applicationDefinitionProvider)),
 		applicationdefinition.DecodeGetApplicationDefinition,
 		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route POST /api/v2/applicationdefinitions applications createApplicationDefinition
+//
+//	Creates ApplicationDefinition into the given cluster
+//
+//	Consumes:
+//	- application/json
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  201: ApplicationDefinition
+//	  401: empty
+//	  403: empty
+func (r Routing) createApplicationDefinition() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(applicationdefinition.CreateApplicationDefinition(r.userInfoGetter, r.applicationDefinitionProvider)),
+		applicationdefinition.DecodeCreateApplicationDefinition,
+		handler.SetStatusCreatedHeader(handler.EncodeJSON),
 		r.defaultServerOptions()...,
 	)
 }

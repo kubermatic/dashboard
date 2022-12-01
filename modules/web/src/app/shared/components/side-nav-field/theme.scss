@@ -1,0 +1,63 @@
+// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+@use 'sass:map';
+
+@mixin theme-sidenav-field-component($colors) {
+  .nav-field-label {
+    &.expanded {
+      background-color: map.get($colors, sidenav-background-active);
+
+      a {
+        i {
+          background-color: map.get($colors, primary-dark);
+          filter: none !important;
+        }
+
+        span {
+          color: map.get($colors, primary-dark);
+        }
+      }
+    }
+
+    &:hover {
+      background-color: map.get($colors, sidenav-background-hover);
+    }
+  }
+
+  .menu-label {
+    color: map.get($colors, primary-dark);
+    font-weight: bolder;
+  }
+
+  .collapsed-side-nav-bar:not(.expanded-menu) {
+    button {
+      background-color: map.get($colors, text);
+    }
+  }
+
+  .collapsed-side-nav-bar {
+    &:hover {
+      background-color: map.get($colors, sidenav-background-hover);
+    }
+  }
+
+  .expanded-menu {
+    background-color: map.get($colors, sidenav-background-active);
+
+    button {
+      background-color: map.get($colors, primary-dark);
+    }
+  }
+}

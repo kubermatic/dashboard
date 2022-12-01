@@ -30,18 +30,6 @@
       &:hover {
         background-color: map.get($colors, sidenav-background-hover);
       }
-
-      &.active {
-        background-color: map.get($colors, sidenav-background-active);
-
-        i {
-          background-color: map.get($colors, sidenav-active);
-        }
-
-        span {
-          color: map.get($colors, sidenav-active);
-        }
-      }
     }
   }
 }
