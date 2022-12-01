@@ -145,11 +145,11 @@ func (p *FakeExternalClusterProvider) CreateOrUpdateCredentialSecretForCluster(c
 	return p.Provider.CreateOrUpdateCredentialSecretForCluster(ctx, cloud, projectID, clusterID)
 }
 
-func (p *FakeExternalClusterProvider) IsMetricServerAvailable(ctx context.Context, cluster *kubermaticv1.ExternalCluster) (bool, error) {
+func (p *FakeExternalClusterProvider) IsMetricServerAvailable(ctx context.Context, userInfo *provider.UserInfo, cluster *kubermaticv1.ExternalCluster) (bool, error) {
 	return true, nil
 }
 
-func (p *FakeExternalClusterProvider) GetNode(ctx context.Context, cluster *kubermaticv1.ExternalCluster, nodeName string) (*corev1.Node, error) {
+func (p *FakeExternalClusterProvider) GetNode(ctx context.Context, userInfo *provider.UserInfo, cluster *kubermaticv1.ExternalCluster, nodeName string) (*corev1.Node, error) {
 	node := &corev1.Node{}
 	if err := p.FakeClient.Get(ctx, ctrlruntimeclient.ObjectKey{Name: nodeName}, node); err != nil {
 		return nil, err
@@ -158,7 +158,7 @@ func (p *FakeExternalClusterProvider) GetNode(ctx context.Context, cluster *kube
 	return node, nil
 }
 
-func (p *FakeExternalClusterProvider) ListNodes(ctx context.Context, cluster *kubermaticv1.ExternalCluster) (*corev1.NodeList, error) {
+func (p *FakeExternalClusterProvider) ListNodes(ctx context.Context, userInfo *provider.UserInfo, cluster *kubermaticv1.ExternalCluster) (*corev1.NodeList, error) {
 	nodes := &corev1.NodeList{}
 	if err := p.FakeClient.List(ctx, nodes); err != nil {
 		return nil, err
@@ -171,7 +171,7 @@ func (p *FakeExternalClusterProvider) Update(ctx context.Context, userInfo *prov
 	return p.Provider.Update(ctx, userInfo, cluster)
 }
 
-func (p *FakeExternalClusterProvider) GetVersion(ctx context.Context, cluster *kubermaticv1.ExternalCluster) (*semver.Semver, error) {
+func (p *FakeExternalClusterProvider) GetVersion(ctx context.Context, userInfo *provider.UserInfo, cluster *kubermaticv1.ExternalCluster) (*semver.Semver, error) {
 	return defaulting.DefaultKubernetesVersioning.Default, nil
 }
 
@@ -179,7 +179,7 @@ func (p *FakeExternalClusterProvider) VersionsEndpoint(ctx context.Context, conf
 	return p.Provider.VersionsEndpoint(ctx, configGetter, providerType)
 }
 
-func (p *FakeExternalClusterProvider) GetClient(ctx context.Context, cluster *kubermaticv1.ExternalCluster) (ctrlruntimeclient.Client, error) {
+func (p *FakeExternalClusterProvider) GetClient(ctx context.Context, userInfo *provider.UserInfo, cluster *kubermaticv1.ExternalCluster) (ctrlruntimeclient.Client, error) {
 	return p.FakeClient, nil
 }
 
@@ -207,28 +207,28 @@ func (p *FakeExternalClusterProvider) CreateOrUpdateKubeconfigSecretForCluster(c
 	return p.Provider.CreateOrUpdateKubeconfigSecretForCluster(ctx, cluster, kubeconfig)
 }
 
-func (p *FakeExternalClusterProvider) CreateOrUpdateKubeOneSSHSecret(ctx context.Context, sshKey apiv2.KubeOneSSHKey, externalCluster *kubermaticv1.ExternalCluster) error {
-	return p.Provider.CreateOrUpdateKubeOneSSHSecret(ctx, sshKey, externalCluster)
+func (p *FakeExternalClusterProvider) CreateOrUpdateKubeOneSSHSecret(ctx context.Context, userInfo *provider.UserInfo, sshKey apiv2.KubeOneSSHKey, externalCluster *kubermaticv1.ExternalCluster) error {
+	return p.Provider.CreateOrUpdateKubeOneSSHSecret(ctx, userInfo, sshKey, externalCluster)
 }
 
 func (p *FakeExternalClusterProvider) CreateKubeOneClusterNamespace(ctx context.Context, externalCluster *kubermaticv1.ExternalCluster) error {
 	return p.Provider.CreateKubeOneClusterNamespace(ctx, externalCluster)
 }
 
-func (p *FakeExternalClusterProvider) CreateOrUpdateKubeOneManifestSecret(ctx context.Context, manifest string, externalCluster *kubermaticv1.ExternalCluster) error {
-	return p.Provider.CreateOrUpdateKubeOneManifestSecret(ctx, manifest, externalCluster)
+func (p *FakeExternalClusterProvider) CreateOrUpdateKubeOneManifestSecret(ctx context.Context, userInfo *provider.UserInfo, manifest string, externalCluster *kubermaticv1.ExternalCluster) error {
+	return p.Provider.CreateOrUpdateKubeOneManifestSecret(ctx, userInfo, manifest, externalCluster)
 }
 
-func (p *FakeExternalClusterProvider) CreateOrUpdateKubeOneCredentialSecret(ctx context.Context, cloud apiv2.KubeOneCloudSpec, externalCluster *kubermaticv1.ExternalCluster) error {
-	return p.Provider.CreateOrUpdateKubeOneCredentialSecret(ctx, cloud, externalCluster)
+func (p *FakeExternalClusterProvider) CreateOrUpdateKubeOneCredentialSecret(ctx context.Context, userInfo *provider.UserInfo, cloud apiv2.KubeOneCloudSpec, externalCluster *kubermaticv1.ExternalCluster) error {
+	return p.Provider.CreateOrUpdateKubeOneCredentialSecret(ctx, userInfo, cloud, externalCluster)
 }
 
 func (p *FakeExternalClusterProvider) New(ctx context.Context, userInfo *provider.UserInfo, project *kubermaticv1.Project, cluster *kubermaticv1.ExternalCluster) (*kubermaticv1.ExternalCluster, error) {
 	return p.Provider.New(ctx, userInfo, project, cluster)
 }
 
-func (p *FakeExternalClusterProvider) GetProviderPoolNodes(ctx context.Context, cluster *kubermaticv1.ExternalCluster, providerNodeLabel, providerNodePoolName string) ([]corev1.Node, error) {
-	return p.Provider.GetProviderPoolNodes(ctx, cluster, providerNodeLabel, providerNodePoolName)
+func (p *FakeExternalClusterProvider) GetProviderPoolNodes(ctx context.Context, userInfo *provider.UserInfo, cluster *kubermaticv1.ExternalCluster, providerNodeLabel, providerNodePoolName string) ([]corev1.Node, error) {
+	return p.Provider.GetProviderPoolNodes(ctx, userInfo, cluster, providerNodeLabel, providerNodePoolName)
 }
 
 type FakeConstraintTemplateProvider struct {

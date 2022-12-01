@@ -58,16 +58,20 @@ func importKubeOneCluster(ctx context.Context, name string, userInfoGetter func(
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
-	err = clusterProvider.CreateOrUpdateKubeOneSSHSecret(ctx, cloud.KubeOne.SSHKey, newCluster)
+	userInfo, err := userInfoGetter(ctx, project.Name)
+	if err != nil {
+		return nil, err
+	}
+	err = clusterProvider.CreateOrUpdateKubeOneSSHSecret(ctx, userInfo, cloud.KubeOne.SSHKey, newCluster)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
-	err = clusterProvider.CreateOrUpdateKubeOneManifestSecret(ctx, cloud.KubeOne.Manifest, newCluster)
+	err = clusterProvider.CreateOrUpdateKubeOneManifestSecret(ctx, userInfo, cloud.KubeOne.Manifest, newCluster)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
-	err = clusterProvider.CreateOrUpdateKubeOneCredentialSecret(ctx, *cloud.KubeOne.CloudSpec, newCluster)
+	err = clusterProvider.CreateOrUpdateKubeOneCredentialSecret(ctx, userInfo, *cloud.KubeOne.CloudSpec, newCluster)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
@@ -229,9 +233,9 @@ func createAPIMachineDeployment(md clusterv1alpha1.MachineDeployment) apiv2.Exte
 	return apimd
 }
 
-func getKubeOneMachineDeployment(ctx context.Context, mdName string, cluster *kubermaticv1.ExternalCluster, clusterProvider provider.ExternalClusterProvider) (*clusterv1alpha1.MachineDeployment, error) {
+func getKubeOneMachineDeployment(ctx context.Context, userInfo *provider.UserInfo, mdName string, cluster *kubermaticv1.ExternalCluster, clusterProvider provider.ExternalClusterProvider) (*clusterv1alpha1.MachineDeployment, error) {
 	machineDeployment := &clusterv1alpha1.MachineDeployment{}
-	userClusterClient, err := clusterProvider.GetClient(ctx, cluster)
+	userClusterClient, err := clusterProvider.GetClient(ctx, userInfo, cluster)
 	if err != nil {
 		return nil, err
 	}
@@ -241,9 +245,9 @@ func getKubeOneMachineDeployment(ctx context.Context, mdName string, cluster *ku
 	return machineDeployment, nil
 }
 
-func getKubeOneMachineDeployments(ctx context.Context, cluster *kubermaticv1.ExternalCluster, clusterProvider provider.ExternalClusterProvider) (*clusterv1alpha1.MachineDeploymentList, error) {
+func getKubeOneMachineDeployments(ctx context.Context, userInfo *provider.UserInfo, cluster *kubermaticv1.ExternalCluster, clusterProvider provider.ExternalClusterProvider) (*clusterv1alpha1.MachineDeploymentList, error) {
 	mdList := &clusterv1alpha1.MachineDeploymentList{}
-	userClusterClient, err := clusterProvider.GetClient(ctx, cluster)
+	userClusterClient, err := clusterProvider.GetClient(ctx, userInfo, cluster)
 	if err != nil {
 		return nil, err
 	}
@@ -253,12 +257,12 @@ func getKubeOneMachineDeployments(ctx context.Context, cluster *kubermaticv1.Ext
 	return mdList, nil
 }
 
-func patchKubeOneMachineDeployment(ctx context.Context, machineDeployment *clusterv1alpha1.MachineDeployment, oldmd, newmd *apiv2.ExternalClusterMachineDeployment, cluster *kubermaticv1.ExternalCluster, clusterProvider provider.ExternalClusterProvider) (*apiv2.ExternalClusterMachineDeployment, error) {
+func patchKubeOneMachineDeployment(ctx context.Context, userInfo *provider.UserInfo, machineDeployment *clusterv1alpha1.MachineDeployment, oldmd, newmd *apiv2.ExternalClusterMachineDeployment, cluster *kubermaticv1.ExternalCluster, clusterProvider provider.ExternalClusterProvider) (*apiv2.ExternalClusterMachineDeployment, error) {
 	currentVersion := oldmd.NodeDeployment.Spec.Template.Versions.Kubelet
 	desiredVersion := newmd.NodeDeployment.Spec.Template.Versions.Kubelet
 	if desiredVersion != currentVersion {
 		machineDeployment.Spec.Template.Spec.Versions.Kubelet = desiredVersion
-		userClusterClient, err := clusterProvider.GetClient(ctx, cluster)
+		userClusterClient, err := clusterProvider.GetClient(ctx, userInfo, cluster)
 		if err != nil {
 			return nil, err
 		}
@@ -272,7 +276,7 @@ func patchKubeOneMachineDeployment(ctx context.Context, machineDeployment *clust
 	desiredReplicas := newmd.NodeDeployment.Spec.Replicas
 	if desiredReplicas != currentReplicas {
 		machineDeployment.Spec.Replicas = &desiredReplicas
-		userClusterClient, err := clusterProvider.GetClient(ctx, cluster)
+		userClusterClient, err := clusterProvider.GetClient(ctx, userInfo, cluster)
 		if err != nil {
 			return nil, err
 		}
@@ -286,10 +290,11 @@ func patchKubeOneMachineDeployment(ctx context.Context, machineDeployment *clust
 }
 
 func getKubeOneAPIMachineDeployment(ctx context.Context,
+	userInfo *provider.UserInfo,
 	mdName string,
 	cluster *kubermaticv1.ExternalCluster,
 	clusterProvider provider.ExternalClusterProvider) (*apiv2.ExternalClusterMachineDeployment, error) {
-	md, err := getKubeOneMachineDeployment(ctx, mdName, cluster, clusterProvider)
+	md, err := getKubeOneMachineDeployment(ctx, userInfo, mdName, cluster, clusterProvider)
 	if err != nil {
 		return nil, err
 	}
@@ -297,9 +302,11 @@ func getKubeOneAPIMachineDeployment(ctx context.Context,
 	return &apiMD, nil
 }
 
-func getKubeOneAPIMachineDeployments(ctx context.Context, cluster *kubermaticv1.ExternalCluster,
+func getKubeOneAPIMachineDeployments(ctx context.Context,
+	userInfo *provider.UserInfo,
+	cluster *kubermaticv1.ExternalCluster,
 	clusterProvider provider.ExternalClusterProvider) ([]apiv2.ExternalClusterMachineDeployment, error) {
-	mdList, err := getKubeOneMachineDeployments(ctx, cluster, clusterProvider)
+	mdList, err := getKubeOneMachineDeployments(ctx, userInfo, cluster, clusterProvider)
 	machineDeployments := make([]apiv2.ExternalClusterMachineDeployment, 0, len(mdList.Items))
 	if err != nil {
 		return nil, err

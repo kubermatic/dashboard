@@ -46,7 +46,6 @@ import (
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
 	corev1 "k8s.io/api/core/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -636,19 +635,6 @@ func GetKubeOneNamespaceName(externalClusterName string) string {
 	return fmt.Sprintf("%s%s", resources.KubeOneNamespacePrefix, externalClusterName)
 }
 
-func (p *ExternalClusterProvider) CreateKubeOneClusterNamespace(ctx context.Context, externalCluster *kubermaticv1.ExternalCluster) error {
-	kubeOneNamespace := &corev1.Namespace{
-		ObjectMeta: metav1.ObjectMeta{
-			Name: GetKubeOneNamespaceName(externalCluster.Name),
-		},
-	}
-	if err := p.GetMasterClient().Create(ctx, kubeOneNamespace); err != nil {
-		return fmt.Errorf("failed to create kubeone cluster namespace: %w", err)
-	}
-
-	return nil
-}
-
 func ensureCredentialKubeOneSecret(ctx context.Context, masterClient ctrlruntimeclient.Client, externalcluster *kubermaticv1.ExternalCluster, secretName string, secretData map[string][]byte) (*providerconfig.GlobalSecretKeySelector, error) {
 	creator, err := credentialSecretCreatorGetter(secretName, externalcluster.Labels, secretData)
 	if err != nil {
@@ -668,53 +654,6 @@ func ensureCredentialKubeOneSecret(ctx context.Context, masterClient ctrlruntime
 			Namespace: kubeOneNamespaceName,
 		},
 	}, nil
-}
-
-// CreateOrUpdateKubeOneCredentialSecret creates a new secret for a credential.
-func (p *ExternalClusterProvider) CreateOrUpdateKubeOneCredentialSecret(ctx context.Context, cloud apiv2.KubeOneCloudSpec, externalCluster *kubermaticv1.ExternalCluster) error {
-	secretName := GetKubeOneCredentialsSecretName(cloud)
-
-	if cloud.AWS != nil {
-		externalCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneAWS
-		return createOrUpdateKubeOneAWSSecret(ctx, cloud, p.GetMasterClient(), secretName, externalCluster)
-	}
-	if cloud.GCP != nil {
-		externalCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneGCP
-		return createOrUpdateKubeOneGCPSecret(ctx, cloud, p.GetMasterClient(), secretName, externalCluster)
-	}
-	if cloud.Azure != nil {
-		externalCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneAzure
-		return createOrUpdateKubeOneAzureSecret(ctx, cloud, p.GetMasterClient(), secretName, externalCluster)
-	}
-	if cloud.DigitalOcean != nil {
-		externalCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneDigitalOcean
-		return createOrUpdateKubeOneDigitaloceanSecret(ctx, cloud, p.GetMasterClient(), secretName, externalCluster)
-	}
-	if cloud.VSphere != nil {
-		externalCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneVSphere
-		return createOrUpdateKubeOneVSphereSecret(ctx, cloud, p.GetMasterClient(), secretName, externalCluster)
-	}
-	if cloud.Hetzner != nil {
-		externalCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneHetzner
-		return createOrUpdateKubeOneHetznerSecret(ctx, cloud, p.GetMasterClient(), secretName, externalCluster)
-	}
-	if cloud.Equinix != nil {
-		externalCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneEquinix
-		return createOrUpdateKubeOneEquinixSecret(ctx, cloud, p.GetMasterClient(), secretName, externalCluster)
-	}
-	if cloud.OpenStack != nil {
-		externalCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneOpenStack
-		return createOrUpdateKubeOneOpenstackSecret(ctx, cloud, p.GetMasterClient(), secretName, externalCluster)
-	}
-	if cloud.Nutanix != nil {
-		externalCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneNutanix
-		return createOrUpdateKubeOneNutanixSecret(ctx, cloud, p.GetMasterClient(), secretName, externalCluster)
-	}
-	if cloud.VMwareCloudDirector != nil {
-		externalCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneVMwareCloudDirector
-		return createOrUpdateKubeOneVMwareCloudDirectorSecret(ctx, cloud, p.GetMasterClient(), secretName, externalCluster)
-	}
-	return nil
 }
 
 func createOrUpdateKubeOneAWSSecret(ctx context.Context, cloud apiv2.KubeOneCloudSpec, masterClient ctrlruntimeclient.Client, secretName string, externalcluster *kubermaticv1.ExternalCluster) error {

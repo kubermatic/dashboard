@@ -31,10 +31,11 @@ const (
 )
 
 func CheckContainerRuntime(ctx context.Context,
+	userInfo *provider.UserInfo,
 	externalCluster *kubermaticv1.ExternalCluster,
 	externalClusterProvider provider.ExternalClusterProvider,
 ) (string, error) {
-	nodes, err := externalClusterProvider.ListNodes(ctx, externalCluster)
+	nodes, err := externalClusterProvider.ListNodes(ctx, userInfo, externalCluster)
 	if err != nil {
 		return "", fmt.Errorf("failed to fetch container runtime: not able to list nodes %w", err)
 	}
