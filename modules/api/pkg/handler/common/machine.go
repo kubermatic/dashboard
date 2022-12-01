@@ -500,6 +500,14 @@ func PatchMachineDeployment(ctx context.Context, userInfoGetter provider.UserInf
 		return nil, fmt.Errorf("cannot decode patched cluster: %w", err)
 	}
 
+	// validate min/max replicas
+	if patchedNodeDeployment.Spec.MaxReplicas != nil && patchedNodeDeployment.Spec.Replicas > *patchedNodeDeployment.Spec.MaxReplicas {
+		return nil, utilerrors.NewBadRequest("replica count (%d) cannot be higher then autoscaler maxreplicas (%d)", patchedNodeDeployment.Spec.Replicas, *patchedNodeDeployment.Spec.MaxReplicas)
+	}
+	if patchedNodeDeployment.Spec.MinReplicas != nil && patchedNodeDeployment.Spec.Replicas > *patchedNodeDeployment.Spec.MinReplicas {
+		return nil, utilerrors.NewBadRequest("replica count (%d) cannot be lower then autoscaler minreplicas (%d)", patchedNodeDeployment.Spec.Replicas, *patchedNodeDeployment.Spec.MinReplicas)
+	}
+
 	kversion, err := semverlib.NewVersion(patchedNodeDeployment.Spec.Template.Versions.Kubelet)
 	if err != nil {
 		return nil, utilerrors.NewBadRequest("failed to parse kubelet version: %v", err)

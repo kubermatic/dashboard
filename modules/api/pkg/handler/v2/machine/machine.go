@@ -32,11 +32,15 @@ import (
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
+	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 )
 
 func CreateMachineDeployment(sshKeyProvider provider.SSHKeyProvider, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, seedsGetter provider.SeedsGetter, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(createMachineDeploymentReq)
+		if err := req.ValidateCreateNodeDeploymentReq(); err != nil {
+			return nil, utilerrors.NewBadRequest(err.Error())
+		}
 		return handlercommon.CreateMachineDeployment(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, sshKeyProvider, seedsGetter, req.Body, req.ProjectID, req.ClusterID)
 	}
 }
@@ -71,6 +75,22 @@ func DecodeCreateMachineDeployment(c context.Context, r *http.Request) (interfac
 	}
 
 	return req, nil
+}
+
+func (r *createMachineDeploymentReq) ValidateCreateNodeDeploymentReq() error {
+	var msg string
+
+	if r.Body.Spec.MaxReplicas != nil && r.Body.Spec.Replicas > *r.Body.Spec.MaxReplicas {
+		msg += fmt.Sprintf("replica count (%d) cannot be higher then autoscaler maxreplicas (%d).", r.Body.Spec.Replicas, *r.Body.Spec.MaxReplicas)
+	}
+	if r.Body.Spec.MinReplicas != nil && r.Body.Spec.Replicas < *r.Body.Spec.MinReplicas {
+		msg += fmt.Sprintf("replica count (%d) cannot be lower then autoscaler minreplicas (%d).", r.Body.Spec.Replicas, *r.Body.Spec.MinReplicas)
+	}
+
+	if msg != "" {
+		return fmt.Errorf(msg)
+	}
+	return nil
 }
 
 // GetSeedCluster returns the SeedCluster object.
