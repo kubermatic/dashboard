@@ -56,7 +56,7 @@ func TestListNodesEndpoint(t *testing.T) {
 			HTTPStatus:       http.StatusOK,
 			ProjectToSync:    test.GenDefaultProject().Name,
 			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
-				genExternalCluster(test.GenDefaultProject().Name, "clusterAbcID")),
+				test.GenExternalCluster(test.GenDefaultProject().Name, "clusterAbcID")),
 			ExistingKubeObjs: defaultNodes,
 			ClusterToSync:    "clusterAbcID",
 			ExistingAPIUser:  test.GenDefaultAPIUser(),
@@ -69,7 +69,8 @@ func TestListNodesEndpoint(t *testing.T) {
 			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
 				// add admin user
 				genUser("John", "john@acme.com", true),
-				genExternalCluster(test.GenDefaultProject().Name, "clusterAbcID"),
+				test.GenBinding("my-first-project-ID", "john@acme.com", "editors"),
+				test.GenExternalCluster(test.GenDefaultProject().Name, "clusterAbcID"),
 			),
 			ExistingKubeObjs: defaultNodes,
 			ClusterToSync:    "clusterAbcID",
@@ -83,7 +84,7 @@ func TestListNodesEndpoint(t *testing.T) {
 			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
 				// add admin user
 				genUser("John", "john@acme.com", false),
-				genExternalCluster(test.GenDefaultProject().Name, "clusterAbcID"),
+				test.GenExternalCluster(test.GenDefaultProject().Name, "clusterAbcID"),
 			),
 			ClusterToSync:   "clusterAbcID",
 			ExistingAPIUser: test.GenAPIUser("John", "john@acme.com"),
@@ -134,7 +135,7 @@ func TestGetNodeEndpoint(t *testing.T) {
 			ExpectedResponse: `{"id":"node1","name":"node1","creationTimestamp":"0001-01-01T00:00:00Z","spec":{"cloud":{},"operatingSystem":{},"versions":{"kubelet":"v1.15.12-gke.2"}},"status":{"machineName":"","capacity":{"cpu":"0","memory":"0"},"allocatable":{"cpu":"290","memory":"687202304"},"nodeInfo":{"kernelVersion":"4.14","containerRuntime":"","containerRuntimeVersion":"containerd://1.2.8","kubeletVersion":"v1.15.12-gke.2","operatingSystem":"linux","architecture":"amd64"}}}`,
 			HTTPStatus:       http.StatusOK,
 			ProjectToSync:    test.GenDefaultProject().Name,
-			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(genExternalCluster(
+			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(test.GenExternalCluster(
 				test.GenDefaultProject().Name, "clusterAbcID"),
 			),
 			ExistingKubeObjs: []ctrlruntimeclient.Object{defaultNode},
@@ -150,7 +151,8 @@ func TestGetNodeEndpoint(t *testing.T) {
 			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
 				// add admin user
 				genUser("John", "john@acme.com", true),
-				genExternalCluster(test.GenDefaultProject().Name, "clusterAbcID"),
+				test.GenBinding("my-first-project-ID", "john@acme.com", "editors"),
+				test.GenExternalCluster(test.GenDefaultProject().Name, "clusterAbcID"),
 			),
 			ExistingKubeObjs: []ctrlruntimeclient.Object{defaultNode},
 			ClusterToSync:    "clusterAbcID",
@@ -165,7 +167,7 @@ func TestGetNodeEndpoint(t *testing.T) {
 			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
 				// add admin user
 				genUser("John", "john@acme.com", false),
-				genExternalCluster(test.GenDefaultProject().Name, "clusterAbcID"),
+				test.GenExternalCluster(test.GenDefaultProject().Name, "clusterAbcID"),
 			),
 			ExistingKubeObjs: []ctrlruntimeclient.Object{defaultNode},
 			ClusterToSync:    "clusterAbcID",
@@ -228,7 +230,7 @@ func TestGetClusterNodesMetrics(t *testing.T) {
 				{ObjectMeta: metav1.ObjectMeta{Name: "mars"}, Status: corev1.NodeStatus{Allocatable: map[corev1.ResourceName]resource.Quantity{"cpu": cpuQuantity, "memory": memoryQuantity}}},
 			},
 			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
-				genExternalCluster(test.GenDefaultProject().Name, "clusterAbcID"),
+				test.GenExternalCluster(test.GenDefaultProject().Name, "clusterAbcID"),
 			),
 			ExistingAPIUser: test.GenDefaultAPIUser(),
 			ExistingNodeMetrics: []*v1beta1.NodeMetrics{
@@ -254,7 +256,8 @@ func TestGetClusterNodesMetrics(t *testing.T) {
 			},
 			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
 				genUser("John", "john@acme.com", true),
-				genExternalCluster(test.GenDefaultProject().Name, "clusterAbcID"),
+				test.GenBinding("my-first-project-ID", "john@acme.com", "editors"),
+				test.GenExternalCluster(test.GenDefaultProject().Name, "clusterAbcID"),
 			),
 			ExistingAPIUser: test.GenAPIUser("John", "john@acme.com"),
 			ExistingNodeMetrics: []*v1beta1.NodeMetrics{
@@ -280,7 +283,7 @@ func TestGetClusterNodesMetrics(t *testing.T) {
 			},
 			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
 				genUser("John", "john@acme.com", false),
-				genExternalCluster(test.GenDefaultProject().Name, "clusterAbcID"),
+				test.GenExternalCluster(test.GenDefaultProject().Name, "clusterAbcID"),
 			),
 			ExistingAPIUser: test.GenAPIUser("John", "john@acme.com"),
 			ExistingNodeMetrics: []*v1beta1.NodeMetrics{
