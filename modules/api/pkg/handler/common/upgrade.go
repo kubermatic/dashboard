@@ -31,7 +31,6 @@ import (
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	kubermaticv1helper "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1/helper"
 	"k8c.io/kubermatic/v2/pkg/resources"
-	ksemver "k8c.io/kubermatic/v2/pkg/semver"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 	"k8c.io/kubermatic/v2/pkg/validation/nodeupdate"
 	"k8c.io/kubermatic/v2/pkg/version"
@@ -173,13 +172,17 @@ func isRestrictedByKubeletVersions(controlPlaneVersion *version.Version, mds []c
 	return false, nil
 }
 
-func GetKubeOneUpgradesEndpoint(ctx context.Context, externalCluster *kubermaticv1.ExternalCluster, currentVersion *ksemver.Semver, configGetter provider.KubermaticConfigurationGetter) (interface{}, error) {
+func GetKubeOneUpgradesEndpoint(ctx context.Context, userInfo *provider.UserInfo, externalCluster *kubermaticv1.ExternalCluster, clusterProvider provider.ExternalClusterProvider, configGetter provider.KubermaticConfigurationGetter) (interface{}, error) {
 	providerName := externalCluster.Spec.CloudSpec.KubeOne.ProviderName
 	providerType := kubermaticv1.ProviderType(providerName)
 	if providerName == resources.KubeOneEquinix {
 		providerType = kubermaticv1.PacketCloudProvider
 	}
 
+	currentVersion, err := clusterProvider.GetVersion(ctx, userInfo, externalCluster)
+	if err != nil {
+		return nil, err
+	}
 	config, err := configGetter(ctx)
 	if err != nil {
 		return nil, err

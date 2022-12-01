@@ -36,6 +36,7 @@ import (
 	"go.uber.org/zap"
 
 	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
+	providerconfig "github.com/kubermatic/machine-controller/pkg/providerconfig/types"
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/handler/auth"
@@ -1418,6 +1419,30 @@ func GenClusterWithOpenstackProjectAuth(cluster *kubermaticv1.Cluster) *kubermat
 		},
 	}
 	return cluster
+}
+
+func GenExternalCluster(projectName, clusterName string) *kubermaticv1.ExternalCluster {
+	return &kubermaticv1.ExternalCluster{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:   clusterName,
+			Labels: map[string]string{kubermaticv1.ProjectIDLabelKey: projectName},
+			OwnerReferences: []metav1.OwnerReference{
+				{
+					APIVersion: kubermaticv1.SchemeGroupVersion.String(),
+					Kind:       kubermaticv1.ProjectKindName,
+					Name:       projectName,
+				},
+			},
+		},
+		Spec: kubermaticv1.ExternalClusterSpec{
+			HumanReadableName:   clusterName,
+			KubeconfigReference: &providerconfig.GlobalSecretKeySelector{},
+			CloudSpec: kubermaticv1.ExternalClusterCloudSpec{
+				ProviderName: kubermaticv1.ExternalClusterBringYourOwnProvider,
+				BringYourOwn: &kubermaticv1.ExternalClusterBringYourOwnCloudSpec{},
+			},
+		},
+	}
 }
 
 func GenDefaultExternalClusterNodes() ([]ctrlruntimeclient.Object, error) {

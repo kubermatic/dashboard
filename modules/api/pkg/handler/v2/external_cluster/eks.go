@@ -722,7 +722,7 @@ func patchEKSCluster(ctx context.Context, oldCluster, newCluster *apiv2.External
 	return newCluster, nil
 }
 
-func getEKSNodeGroups(ctx context.Context, cluster *kubermaticv1.ExternalCluster, secretKeySelector provider.SecretKeySelectorValueFunc, clusterProvider provider.ExternalClusterProvider) ([]apiv2.ExternalClusterMachineDeployment, error) {
+func getEKSNodeGroups(ctx context.Context, userInfo *provider.UserInfo, cluster *kubermaticv1.ExternalCluster, secretKeySelector provider.SecretKeySelectorValueFunc, clusterProvider provider.ExternalClusterProvider) ([]apiv2.ExternalClusterMachineDeployment, error) {
 	cloudSpec := cluster.Spec.CloudSpec.EKS
 	creds, err := eksprovider.GetCredentialsForCluster(cloudSpec, secretKeySelector)
 	if err != nil {
@@ -743,7 +743,7 @@ func getEKSNodeGroups(ctx context.Context, cluster *kubermaticv1.ExternalCluster
 
 	machineDeployments := make([]apiv2.ExternalClusterMachineDeployment, 0, len(nodeGroups))
 
-	nodes, err := clusterProvider.ListNodes(ctx, cluster)
+	nodes, err := clusterProvider.ListNodes(ctx, userInfo, cluster)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
@@ -761,7 +761,7 @@ func getEKSNodeGroups(ctx context.Context, cluster *kubermaticv1.ExternalCluster
 	return machineDeployments, err
 }
 
-func getEKSNodeGroup(ctx context.Context, cluster *kubermaticv1.ExternalCluster, nodeGroupName string, secretKeySelector provider.SecretKeySelectorValueFunc, clusterProvider provider.ExternalClusterProvider) (*apiv2.ExternalClusterMachineDeployment, error) {
+func getEKSNodeGroup(ctx context.Context, userInfo *provider.UserInfo, cluster *kubermaticv1.ExternalCluster, nodeGroupName string, secretKeySelector provider.SecretKeySelectorValueFunc, clusterProvider provider.ExternalClusterProvider) (*apiv2.ExternalClusterMachineDeployment, error) {
 	cloudSpec := cluster.Spec.CloudSpec.EKS
 
 	creds, err := eksprovider.GetCredentialsForCluster(cloudSpec, secretKeySelector)
@@ -774,11 +774,12 @@ func getEKSNodeGroup(ctx context.Context, cluster *kubermaticv1.ExternalCluster,
 		return nil, err
 	}
 
-	return getEKSMachineDeployment(ctx, client, cluster, nodeGroupName, clusterProvider)
+	return getEKSMachineDeployment(ctx, client, userInfo, cluster, nodeGroupName, clusterProvider)
 }
 
 func getEKSMachineDeployment(ctx context.Context,
 	client *awsprovider.ClientSet,
+	userInfo *provider.UserInfo,
 	cluster *kubermaticv1.ExternalCluster,
 	nodeGroupName string,
 	clusterProvider provider.ExternalClusterProvider) (*apiv2.ExternalClusterMachineDeployment, error) {
@@ -789,7 +790,7 @@ func getEKSMachineDeployment(ctx context.Context,
 		return nil, err
 	}
 
-	nodes, err := clusterProvider.ListNodes(ctx, cluster)
+	nodes, err := clusterProvider.ListNodes(ctx, userInfo, cluster)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}

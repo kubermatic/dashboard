@@ -372,11 +372,13 @@ func DeleteNodegroup(ctx context.Context, client *awsprovider.ClientSet, cluster
 }
 
 func ListUpgrades(ctx context.Context,
+	userInfo *provider.UserInfo,
 	cluster *kubermaticv1.ExternalCluster,
 	clusterProvider provider.ExternalClusterProvider,
 	configGetter provider.KubermaticConfigurationGetter) ([]*apiv1.MasterVersion, error) {
 	upgradeVersions := []*apiv1.MasterVersion{}
-	currentVersion, err := clusterProvider.GetVersion(ctx, cluster)
+
+	currentVersion, err := clusterProvider.GetVersion(ctx, userInfo, cluster)
 	if err != nil {
 		return nil, err
 	}

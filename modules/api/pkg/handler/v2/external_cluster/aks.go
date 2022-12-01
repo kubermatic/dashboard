@@ -539,7 +539,7 @@ func patchAKSCluster(ctx context.Context, oldCluster, newCluster *apiv2.External
 	return newCluster, nil
 }
 
-func getAKSNodePools(ctx context.Context, cluster *kubermaticv1.ExternalCluster, secretKeySelector provider.SecretKeySelectorValueFunc, clusterProvider provider.ExternalClusterProvider) ([]apiv2.ExternalClusterMachineDeployment, error) {
+func getAKSNodePools(ctx context.Context, userInfo *provider.UserInfo, cluster *kubermaticv1.ExternalCluster, secretKeySelector provider.SecretKeySelectorValueFunc, clusterProvider provider.ExternalClusterProvider) ([]apiv2.ExternalClusterMachineDeployment, error) {
 	cloud := cluster.Spec.CloudSpec
 
 	cred, err := aks.GetCredentialsForCluster(cloud.AKS, secretKeySelector)
@@ -558,13 +558,13 @@ func getAKSNodePools(ctx context.Context, cluster *kubermaticv1.ExternalCluster,
 
 	poolProfiles := aksCluster.Properties.AgentPoolProfiles
 
-	return getAKSMachineDeployments(ctx, poolProfiles, cluster, clusterProvider)
+	return getAKSMachineDeployments(ctx, userInfo, poolProfiles, cluster, clusterProvider)
 }
 
-func getAKSMachineDeployments(ctx context.Context, poolProfiles []*armcontainerservice.ManagedClusterAgentPoolProfile, cluster *kubermaticv1.ExternalCluster, clusterProvider provider.ExternalClusterProvider) ([]apiv2.ExternalClusterMachineDeployment, error) {
+func getAKSMachineDeployments(ctx context.Context, userInfo *provider.UserInfo, poolProfiles []*armcontainerservice.ManagedClusterAgentPoolProfile, cluster *kubermaticv1.ExternalCluster, clusterProvider provider.ExternalClusterProvider) ([]apiv2.ExternalClusterMachineDeployment, error) {
 	machineDeployments := make([]apiv2.ExternalClusterMachineDeployment, 0, len(poolProfiles))
 
-	nodes, err := clusterProvider.ListNodes(ctx, cluster)
+	nodes, err := clusterProvider.ListNodes(ctx, userInfo, cluster)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
@@ -577,7 +577,7 @@ func getAKSMachineDeployments(ctx context.Context, poolProfiles []*armcontainers
 	return machineDeployments, nil
 }
 
-func getAKSNodePool(ctx context.Context, cluster *kubermaticv1.ExternalCluster, nodePoolName string, secretKeySelector provider.SecretKeySelectorValueFunc, credentialsReference *providerconfig.GlobalSecretKeySelector, clusterProvider provider.ExternalClusterProvider) (*apiv2.ExternalClusterMachineDeployment, error) {
+func getAKSNodePool(ctx context.Context, userInfo *provider.UserInfo, cluster *kubermaticv1.ExternalCluster, nodePoolName string, secretKeySelector provider.SecretKeySelectorValueFunc, credentialsReference *providerconfig.GlobalSecretKeySelector, clusterProvider provider.ExternalClusterProvider) (*apiv2.ExternalClusterMachineDeployment, error) {
 	cloud := cluster.Spec.CloudSpec
 
 	cred, err := aks.GetCredentialsForCluster(cloud.AKS, secretKeySelector)
@@ -606,11 +606,11 @@ func getAKSNodePool(ctx context.Context, cluster *kubermaticv1.ExternalCluster, 
 		return nil, fmt.Errorf("no nodePool found with the name: %v", nodePoolName)
 	}
 
-	return getAKSMachineDeployment(ctx, poolProfile, cluster, clusterProvider)
+	return getAKSMachineDeployment(ctx, userInfo, poolProfile, cluster, clusterProvider)
 }
 
-func getAKSMachineDeployment(ctx context.Context, poolProfile *armcontainerservice.ManagedClusterAgentPoolProfile, cluster *kubermaticv1.ExternalCluster, clusterProvider provider.ExternalClusterProvider) (*apiv2.ExternalClusterMachineDeployment, error) {
-	nodes, err := clusterProvider.ListNodes(ctx, cluster)
+func getAKSMachineDeployment(ctx context.Context, userInfo *provider.UserInfo, poolProfile *armcontainerservice.ManagedClusterAgentPoolProfile, cluster *kubermaticv1.ExternalCluster, clusterProvider provider.ExternalClusterProvider) (*apiv2.ExternalClusterMachineDeployment, error) {
+	nodes, err := clusterProvider.ListNodes(ctx, userInfo, cluster)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
