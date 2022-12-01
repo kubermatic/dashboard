@@ -30,6 +30,7 @@ export enum ExternalClusterProvider {
   AKS = 'aks',
   EKS = 'eks',
   GKE = 'gke',
+  KubeOne = 'kubeone',
 }
 
 const PROVIDER_DISPLAY_NAMES = new Map<ExternalClusterProvider, string>([
@@ -37,6 +38,7 @@ const PROVIDER_DISPLAY_NAMES = new Map<ExternalClusterProvider, string>([
   [ExternalClusterProvider.EKS, 'EKS'],
   [ExternalClusterProvider.GKE, 'GKE'],
   [ExternalClusterProvider.Custom, 'Custom'],
+  [ExternalClusterProvider.KubeOne, 'KubeOne'],
 ]);
 
 export function getExternalProviderDisplayName(provider: ExternalClusterProvider): string {

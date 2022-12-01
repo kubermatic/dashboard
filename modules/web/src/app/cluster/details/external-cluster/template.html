@@ -270,14 +270,14 @@ limitations under the License.
     </mat-card-content>
   </mat-card>
 
-  <km-external-machine-deployment-list *ngIf="provider !== Provider.Custom"
+  <km-external-machine-deployment-list *ngIf="provider !== Provider.Custom && provider !== Provider.KubeOne"
                                        [cluster]="cluster"
                                        [machineDeployments]="machineDeployments"
                                        [projectID]="projectID"
                                        [isClusterRunning]="isRunning()"
                                        [isInitialized]="areMachineDeploymentsInitialized"></km-external-machine-deployment-list>
 
-  <km-external-node-list *ngIf="provider === Provider.Custom"
+  <km-external-node-list *ngIf="provider === Provider.Custom || provider === Provider.KubeOne"
                          [cluster]="cluster"
                          [nodes]="nodes"
                          [nodesMetrics]="nodesMetrics"
