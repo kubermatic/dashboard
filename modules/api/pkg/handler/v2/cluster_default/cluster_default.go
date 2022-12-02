@@ -1,5 +1,5 @@
 /*
-Copyright 2021 The Kubermatic Kubernetes Platform contributors.
+Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,6 +21,9 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/go-kit/kit/endpoint"
+	"github.com/gorilla/mux"
+
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
@@ -33,10 +36,8 @@ import (
 	"k8c.io/kubermatic/v2/pkg/defaulting"
 	"k8c.io/kubermatic/v2/pkg/resources"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
-	"k8s.io/utils/pointer"
 
-	"github.com/go-kit/kit/endpoint"
-	"github.com/gorilla/mux"
+	"k8s.io/utils/pointer"
 )
 
 // getDefaultClusterReq represents a request for retrieving a default spec for the cluster.
@@ -106,7 +107,7 @@ func GetDefaultClusterEndpoint(
 		}
 
 		// Order of priority for defaulting sources:
-		// 1. Seed configuraion.
+		// 1. Seed configuration.
 		// 2. Kubermatic configuration.
 		// 3. Seed scoped default Cluster Template.
 		//
@@ -250,6 +251,7 @@ func initializeCloudProviderSpec(dc string, provider kubermaticv1.ProviderType) 
 		ProviderName:   string(provider),
 	}
 
+	// We intentionally keep the cloud spec empty in the default cluster spec since it mostly depends on the cloud credentials.
 	switch provider {
 	case kubermaticv1.AWSCloudProvider:
 		cloudSpec.AWS = &kubermaticv1.AWSCloudSpec{}
