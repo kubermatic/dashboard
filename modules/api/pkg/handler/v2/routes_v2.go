@@ -34,6 +34,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/v2/backupcredentials"
 	"k8c.io/dashboard/v2/pkg/handler/v2/backupdestinations"
 	"k8c.io/dashboard/v2/pkg/handler/v2/cluster"
+	clusterdefault "k8c.io/dashboard/v2/pkg/handler/v2/cluster_default"
 	clustertemplate "k8c.io/dashboard/v2/pkg/handler/v2/cluster_template"
 	"k8c.io/dashboard/v2/pkg/handler/v2/cniversion"
 	"k8c.io/dashboard/v2/pkg/handler/v2/constraint"
@@ -1414,6 +1415,11 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 	mux.Methods(http.MethodGet).
 		Path("/providers/{provider_name}/dc/{dc}/networkdefaults").
 		Handler(r.getNetworkDefaults())
+
+	// Defines an endpoint to retrieve the default cluster spec for a given provider and datacenter.
+	mux.Methods(http.MethodGet).
+		Path("/providers/{provider_name}/dc/{dc}/defaultcluster").
+		Handler(r.getDefaultCluster())
 
 	// Defines endpoints to interact with resource quotas
 	mux.Methods(http.MethodGet).
@@ -8229,6 +8235,31 @@ func (r Routing) getNetworkDefaults() http.Handler {
 			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 		)(networkdefaults.GetNetworkDefaultsEndpoint(r.seedsGetter, r.userInfoGetter, r.kubermaticConfigGetter)),
 		networkdefaults.DecodeGetNetworkDefaultsReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /providers/{provider_name}/dc/{dc}/defaultcluster defaultCluster getDefaultCluster
+//
+//	Retrieves the default cluster spec for the given provider and datacenter.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: Cluster
+//	  401: empty
+//	  403: empty
+func (r Routing) getDefaultCluster() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(clusterdefault.GetDefaultClusterEndpoint(r.seedsGetter, r.userInfoGetter, r.kubermaticConfigGetter)),
+		clusterdefault.DecodeGetDefaultClusterReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)

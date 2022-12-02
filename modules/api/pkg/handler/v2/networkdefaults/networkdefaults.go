@@ -108,8 +108,6 @@ func GetNetworkDefaultsEndpoint(
 			return nil, err
 		}
 
-		networkDefaults := generateNetworkDefaults(kubermaticv1.ProviderType(req.ProviderName))
-
 		// Fetching the defaulting ClusterTemplate.
 
 		privilegedClusterProvider := ctx.Value(middleware.PrivilegedClusterProviderContextKey).(kubermaticprovider.PrivilegedClusterProvider)
@@ -129,20 +127,7 @@ func GetNetworkDefaultsEndpoint(
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 
-		// Check if kubermatic config has Expose strategy
-		if config.Spec.ExposeStrategy != "" {
-			networkDefaults.ClusterExposeStrategy = config.Spec.ExposeStrategy
-		}
-		// Seed config takes priority over kubermatic config
-		if seed.Spec.ExposeStrategy != "" {
-			networkDefaults.ClusterExposeStrategy = seed.Spec.ExposeStrategy
-		}
-		// Using network defaults from the template defaults when it's available
-		if defaultingTemplate != nil {
-			networkDefaults = overrideNetworkDefaultsByDefaultingTemplate(networkDefaults, defaultingTemplate.Spec.ClusterNetwork, kubermaticv1.ProviderType(req.ProviderName), defaultingTemplate.Spec.ExposeStrategy)
-			networkDefaults.ClusterExposeStrategy = defaultingTemplate.Spec.ExposeStrategy
-		}
-
+		networkDefaults := GenerateNetworkDefaults(kubermaticv1.ProviderType(req.ProviderName), seed, config, defaultingTemplate)
 		return networkDefaults, nil
 	}
 }
@@ -209,6 +194,26 @@ func overrideNetworkDefaultsByDefaultingTemplate(networkDefaults apiv2.NetworkDe
 
 	if defaultClusterNetwork.NodeCIDRMaskSizeIPv6 != nil {
 		networkDefaults.IPv6.NodeCIDRMaskSize = *defaultClusterNetwork.NodeCIDRMaskSizeIPv6
+	}
+
+	return networkDefaults
+}
+
+func GenerateNetworkDefaults(provider kubermaticv1.ProviderType, seed *kubermaticv1.Seed, config *kubermaticv1.KubermaticConfiguration, defaultClusterTemplate *kubermaticv1.ClusterTemplate) apiv2.NetworkDefaults {
+	networkDefaults := generateNetworkDefaults(provider)
+
+	// Check if kubermatic config has Expose strategy
+	if config.Spec.ExposeStrategy != "" {
+		networkDefaults.ClusterExposeStrategy = config.Spec.ExposeStrategy
+	}
+	// Seed config takes priority over kubermatic config
+	if seed.Spec.ExposeStrategy != "" {
+		networkDefaults.ClusterExposeStrategy = seed.Spec.ExposeStrategy
+	}
+	// Using network defaults from the template defaults when it's available
+	if defaultClusterTemplate != nil {
+		networkDefaults = overrideNetworkDefaultsByDefaultingTemplate(networkDefaults, defaultClusterTemplate.Spec.ClusterNetwork, provider, defaultClusterTemplate.Spec.ExposeStrategy)
+		networkDefaults.ClusterExposeStrategy = defaultClusterTemplate.Spec.ExposeStrategy
 	}
 
 	return networkDefaults

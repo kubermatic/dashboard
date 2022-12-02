@@ -24438,6 +24438,54 @@
         }
       }
     },
+    "/providers/{provider_name}/dc/{dc}/defaultcluster": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "defaultCluster"
+        ],
+        "summary": "Retrieves the default cluster spec for the given provider and datacenter.",
+        "operationId": "getDefaultCluster",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProviderName",
+            "name": "provider_name",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "DC",
+            "name": "dc",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cluster",
+            "schema": {
+              "$ref": "#/definitions/Cluster"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/providers/{provider_name}/dc/{dc}/networkdefaults": {
       "get": {
         "produces": [
