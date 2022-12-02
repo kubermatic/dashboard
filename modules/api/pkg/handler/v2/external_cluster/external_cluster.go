@@ -1112,8 +1112,7 @@ func convertClusterToAPIWithStatus(ctx context.Context, userInfo *provider.UserI
 			State:         apiv2.ErrorExternalClusterState,
 			StatusMessage: "Can't access cluster via kubeconfig. Please check the credentials privileges.",
 		}
-	}
-	if version != nil {
+	} else {
 		apiCluster.Spec.Version = *version
 	}
 	return apiCluster
