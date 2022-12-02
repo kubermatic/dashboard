@@ -629,7 +629,7 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/providers/gcp/sizes").
-		Handler(r.listProjectGCPSizes())
+		Handler(r.listProjectGCPVMSizes())
 
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/providers/gcp/{dc}/zones").
