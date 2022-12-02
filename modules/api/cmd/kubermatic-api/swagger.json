@@ -16964,35 +16964,6 @@
         }
       }
     },
-    "/api/v2/projects/{project_id}/disktypes": {
-      "get": {
-        "description": "List disktypes for a given project",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "project"
-        ],
-        "operationId": "listProjectGCPDisk",
-        "responses": {
-          "200": {
-            "description": "GCPDiskTypeList",
-            "schema": {
-              "$ref": "#/definitions/GCPDiskTypeList"
-            }
-          },
-          "default": {
-            "description": "errorResponse",
-            "schema": {
-              "$ref": "#/definitions/errorResponse"
-            }
-          }
-        }
-      }
-    },
     "/api/v2/projects/{project_id}/etcdbackupconfigs": {
       "get": {
         "description": "List etcd backup configs for a given project",
@@ -20193,6 +20164,85 @@
             "description": "EKSVPCList",
             "schema": {
               "$ref": "#/definitions/EKSVPCList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/gcp/disktypes": {
+      "get": {
+        "description": "List disktypes for a given project",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "project"
+        ],
+        "operationId": "listProjectGCPDiskTypes",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "ServiceAccount",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Zone",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GCPDiskTypeList",
+            "schema": {
+              "$ref": "#/definitions/GCPDiskTypeList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/gcp/networks": {
+      "get": {
+        "description": "Lists available GCP networks",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "gcp"
+        ],
+        "operationId": "listProjectGCPNetworks",
+        "responses": {
+          "200": {
+            "description": "GCPNetworkList",
+            "schema": {
+              "$ref": "#/definitions/GCPNetworkList"
             }
           },
           "default": {

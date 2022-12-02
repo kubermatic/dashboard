@@ -254,7 +254,7 @@ type ClientService interface {
 
 	ListNodesForCluster(params *ListNodesForClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListNodesForClusterOK, error)
 
-	ListProjectGCPDisk(params *ListProjectGCPDiskParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectGCPDiskOK, error)
+	ListProjectGCPDiskTypes(params *ListProjectGCPDiskTypesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectGCPDiskTypesOK, error)
 
 	ListProjects(params *ListProjectsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectsOK, error)
 
@@ -4636,22 +4636,22 @@ func (a *Client) ListNodesForCluster(params *ListNodesForClusterParams, authInfo
 }
 
 /*
-ListProjectGCPDisk List disktypes for a given project
+ListProjectGCPDiskTypes List disktypes for a given project
 */
-func (a *Client) ListProjectGCPDisk(params *ListProjectGCPDiskParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectGCPDiskOK, error) {
+func (a *Client) ListProjectGCPDiskTypes(params *ListProjectGCPDiskTypesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectGCPDiskTypesOK, error) {
 	// TODO: Validate the params before sending
 	if params == nil {
-		params = NewListProjectGCPDiskParams()
+		params = NewListProjectGCPDiskTypesParams()
 	}
 	op := &runtime.ClientOperation{
-		ID:                 "listProjectGCPDisk",
+		ID:                 "listProjectGCPDiskTypes",
 		Method:             "GET",
-		PathPattern:        "/api/v2/projects/{project_id}/disktypes",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/gcp/disktypes",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
 		Params:             params,
-		Reader:             &ListProjectGCPDiskReader{formats: a.formats},
+		Reader:             &ListProjectGCPDiskTypesReader{formats: a.formats},
 		AuthInfo:           authInfo,
 		Context:            params.Context,
 		Client:             params.HTTPClient,
@@ -4664,12 +4664,12 @@ func (a *Client) ListProjectGCPDisk(params *ListProjectGCPDiskParams, authInfo r
 	if err != nil {
 		return nil, err
 	}
-	success, ok := result.(*ListProjectGCPDiskOK)
+	success, ok := result.(*ListProjectGCPDiskTypesOK)
 	if ok {
 		return success, nil
 	}
 	// unexpected success response
-	unexpectedSuccess := result.(*ListProjectGCPDiskDefault)
+	unexpectedSuccess := result.(*ListProjectGCPDiskTypesDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
