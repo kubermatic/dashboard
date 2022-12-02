@@ -26632,7 +26632,7 @@
       "type": "object",
       "properties": {
         "name": {
-          "description": "Name of the Application.\nShould be a valid lowercase RFC1123 domain name",
+          "description": "Name of the Application",
           "type": "string",
           "x-go-name": "Name"
         },
@@ -26642,7 +26642,7 @@
           "x-go-name": "Version"
         }
       },
-      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "ApplicationSource": {
       "type": "object",
@@ -32790,7 +32790,7 @@
           "x-go-name": "Name"
         }
       },
-      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v1"
     },
     "NetworkDefaults": {
       "type": "object",
