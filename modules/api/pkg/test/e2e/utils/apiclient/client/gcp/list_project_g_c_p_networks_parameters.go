@@ -67,6 +67,9 @@ type ListProjectGCPNetworksParams struct {
 	// ServiceAccount.
 	ServiceAccount *string
 
+	// ProjectID.
+	ProjectID string
+
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -142,6 +145,17 @@ func (o *ListProjectGCPNetworksParams) SetServiceAccount(serviceAccount *string)
 	o.ServiceAccount = serviceAccount
 }
 
+// WithProjectID adds the projectID to the list project g c p networks params
+func (o *ListProjectGCPNetworksParams) WithProjectID(projectID string) *ListProjectGCPNetworksParams {
+	o.SetProjectID(projectID)
+	return o
+}
+
+// SetProjectID adds the projectId to the list project g c p networks params
+func (o *ListProjectGCPNetworksParams) SetProjectID(projectID string) {
+	o.ProjectID = projectID
+}
+
 // WriteToRequest writes these params to a swagger request
 func (o *ListProjectGCPNetworksParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -164,6 +178,11 @@ func (o *ListProjectGCPNetworksParams) WriteToRequest(r runtime.ClientRequest, r
 		if err := r.SetHeaderParam("ServiceAccount", *o.ServiceAccount); err != nil {
 			return err
 		}
+	}
+
+	// path param project_id
+	if err := r.SetPathParam("project_id", o.ProjectID); err != nil {
+		return err
 	}
 
 	if len(res) > 0 {

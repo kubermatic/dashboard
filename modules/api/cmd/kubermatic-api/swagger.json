@@ -20248,6 +20248,13 @@
             "type": "string",
             "name": "Credential",
             "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
           }
         ],
         "responses": {
