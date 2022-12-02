@@ -60,6 +60,13 @@ ListProjectGCPNetworksParams contains all the parameters to send to the API endp
 	Typically these are written to a http.Request.
 */
 type ListProjectGCPNetworksParams struct {
+
+	// Credential.
+	Credential *string
+
+	// ServiceAccount.
+	ServiceAccount *string
+
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -113,6 +120,28 @@ func (o *ListProjectGCPNetworksParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithCredential adds the credential to the list project g c p networks params
+func (o *ListProjectGCPNetworksParams) WithCredential(credential *string) *ListProjectGCPNetworksParams {
+	o.SetCredential(credential)
+	return o
+}
+
+// SetCredential adds the credential to the list project g c p networks params
+func (o *ListProjectGCPNetworksParams) SetCredential(credential *string) {
+	o.Credential = credential
+}
+
+// WithServiceAccount adds the serviceAccount to the list project g c p networks params
+func (o *ListProjectGCPNetworksParams) WithServiceAccount(serviceAccount *string) *ListProjectGCPNetworksParams {
+	o.SetServiceAccount(serviceAccount)
+	return o
+}
+
+// SetServiceAccount adds the serviceAccount to the list project g c p networks params
+func (o *ListProjectGCPNetworksParams) SetServiceAccount(serviceAccount *string) {
+	o.ServiceAccount = serviceAccount
+}
+
 // WriteToRequest writes these params to a swagger request
 func (o *ListProjectGCPNetworksParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -120,6 +149,22 @@ func (o *ListProjectGCPNetworksParams) WriteToRequest(r runtime.ClientRequest, r
 		return err
 	}
 	var res []error
+
+	if o.Credential != nil {
+
+		// header param Credential
+		if err := r.SetHeaderParam("Credential", *o.Credential); err != nil {
+			return err
+		}
+	}
+
+	if o.ServiceAccount != nil {
+
+		// header param ServiceAccount
+		if err := r.SetHeaderParam("ServiceAccount", *o.ServiceAccount); err != nil {
+			return err
+		}
+	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)

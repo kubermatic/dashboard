@@ -52,6 +52,7 @@ func (req gcpTypesNoCredentialReq) GetSeedCluster() apiv1.SeedCluster {
 }
 
 // GCPCommonReq represents a request with common parameters for GCP.
+// swagger:parameters listProjectGCPNetworks
 type GCPCommonReq struct {
 	// in: header
 	// name: ServiceAccount
