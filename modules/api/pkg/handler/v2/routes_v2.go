@@ -1518,7 +1518,7 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 		Handler(r.getSeedOverview())
 }
 
-// swagger:route GET /api/v2/projects/{project_id}/disktypes project listProjectGCPDisk
+// swagger:route GET /api/v2/projects/{project_id}/providers/gcp/disktypes project listProjectGCPDiskTypes
 //
 //	List disktypes for a given project
 //
@@ -1565,7 +1565,7 @@ func (r Routing) listProjectGCPSubnetworks() http.Handler {
 	)
 }
 
-// swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/providers/gcp/networks gcp listProjectGCPNetworks
+// swagger:route GET /api/v2/projects/{project_id}/providers/gcp/networks gcp listProjectGCPNetworks
 //
 // Lists available GCP networks
 //
