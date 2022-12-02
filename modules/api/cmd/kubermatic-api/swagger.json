@@ -20338,6 +20338,35 @@
         ],
         "summary": "Lists GCP VM sizes.",
         "operationId": "listProjectGCPVMSizes",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "ServiceAccount",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Zone",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "DC",
+            "in": "query"
+          }
+        ],
         "responses": {
           "200": {
             "description": "GCPMachineSizeList",

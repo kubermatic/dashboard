@@ -103,7 +103,7 @@ type GCPProjectSubnetReq struct {
 }
 
 // GCPProjectMachineTypesReq represents a request for GCP machine types within the context of a KKP project.
-// swagger:parameters listProjectGCPSizes
+// swagger:parameters listProjectGCPVMSizes
 type GCPProjectMachineTypesReq struct {
 	GCPProjectCommonReq
 	Zone string
@@ -242,7 +242,7 @@ func DecodeProjectGCPZones(c context.Context, r *http.Request) (interface{}, err
 	return req, nil
 }
 
-func DecodeProjectGCPSizes(c context.Context, r *http.Request) (interface{}, error) {
+func DecodeProjectGCPVMSizes(c context.Context, r *http.Request) (interface{}, error) {
 	var req GCPProjectMachineTypesReq
 
 	project, err := common.DecodeProjectRequest(c, r)
@@ -381,7 +381,7 @@ func ListProjectGCPSubnetworks(presetProvider provider.PresetProvider, userInfoG
 	}
 }
 
-func ListProjectGCPSizes(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, settingsProvider provider.SettingsProvider, seedsGetter provider.SeedsGetter) endpoint.Endpoint {
+func ListProjectGCPVMSizes(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, settingsProvider provider.SettingsProvider, seedsGetter provider.SeedsGetter) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		listReq, ok := request.(GCPProjectMachineTypesReq)
 		if !ok {

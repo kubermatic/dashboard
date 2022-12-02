@@ -60,6 +60,22 @@ ListProjectGCPVMSizesParams contains all the parameters to send to the API endpo
 	Typically these are written to a http.Request.
 */
 type ListProjectGCPVMSizesParams struct {
+
+	// Credential.
+	Credential *string
+
+	// DC.
+	DC *string
+
+	// ServiceAccount.
+	ServiceAccount *string
+
+	// Zone.
+	Zone *string
+
+	// ProjectID.
+	ProjectID string
+
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -113,6 +129,61 @@ func (o *ListProjectGCPVMSizesParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithCredential adds the credential to the list project g c p VM sizes params
+func (o *ListProjectGCPVMSizesParams) WithCredential(credential *string) *ListProjectGCPVMSizesParams {
+	o.SetCredential(credential)
+	return o
+}
+
+// SetCredential adds the credential to the list project g c p VM sizes params
+func (o *ListProjectGCPVMSizesParams) SetCredential(credential *string) {
+	o.Credential = credential
+}
+
+// WithDC adds the dC to the list project g c p VM sizes params
+func (o *ListProjectGCPVMSizesParams) WithDC(dC *string) *ListProjectGCPVMSizesParams {
+	o.SetDC(dC)
+	return o
+}
+
+// SetDC adds the dC to the list project g c p VM sizes params
+func (o *ListProjectGCPVMSizesParams) SetDC(dC *string) {
+	o.DC = dC
+}
+
+// WithServiceAccount adds the serviceAccount to the list project g c p VM sizes params
+func (o *ListProjectGCPVMSizesParams) WithServiceAccount(serviceAccount *string) *ListProjectGCPVMSizesParams {
+	o.SetServiceAccount(serviceAccount)
+	return o
+}
+
+// SetServiceAccount adds the serviceAccount to the list project g c p VM sizes params
+func (o *ListProjectGCPVMSizesParams) SetServiceAccount(serviceAccount *string) {
+	o.ServiceAccount = serviceAccount
+}
+
+// WithZone adds the zone to the list project g c p VM sizes params
+func (o *ListProjectGCPVMSizesParams) WithZone(zone *string) *ListProjectGCPVMSizesParams {
+	o.SetZone(zone)
+	return o
+}
+
+// SetZone adds the zone to the list project g c p VM sizes params
+func (o *ListProjectGCPVMSizesParams) SetZone(zone *string) {
+	o.Zone = zone
+}
+
+// WithProjectID adds the projectID to the list project g c p VM sizes params
+func (o *ListProjectGCPVMSizesParams) WithProjectID(projectID string) *ListProjectGCPVMSizesParams {
+	o.SetProjectID(projectID)
+	return o
+}
+
+// SetProjectID adds the projectId to the list project g c p VM sizes params
+func (o *ListProjectGCPVMSizesParams) SetProjectID(projectID string) {
+	o.ProjectID = projectID
+}
+
 // WriteToRequest writes these params to a swagger request
 func (o *ListProjectGCPVMSizesParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -120,6 +191,61 @@ func (o *ListProjectGCPVMSizesParams) WriteToRequest(r runtime.ClientRequest, re
 		return err
 	}
 	var res []error
+
+	if o.Credential != nil {
+
+		// header param Credential
+		if err := r.SetHeaderParam("Credential", *o.Credential); err != nil {
+			return err
+		}
+	}
+
+	if o.DC != nil {
+
+		// query param DC
+		var qrDC string
+
+		if o.DC != nil {
+			qrDC = *o.DC
+		}
+		qDC := qrDC
+		if qDC != "" {
+
+			if err := r.SetQueryParam("DC", qDC); err != nil {
+				return err
+			}
+		}
+	}
+
+	if o.ServiceAccount != nil {
+
+		// header param ServiceAccount
+		if err := r.SetHeaderParam("ServiceAccount", *o.ServiceAccount); err != nil {
+			return err
+		}
+	}
+
+	if o.Zone != nil {
+
+		// query param Zone
+		var qrZone string
+
+		if o.Zone != nil {
+			qrZone = *o.Zone
+		}
+		qZone := qrZone
+		if qZone != "" {
+
+			if err := r.SetQueryParam("Zone", qZone); err != nil {
+				return err
+			}
+		}
+	}
+
+	// path param project_id
+	if err := r.SetPathParam("project_id", o.ProjectID); err != nil {
+		return err
+	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)

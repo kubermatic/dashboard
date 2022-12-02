@@ -1619,12 +1619,12 @@ func (r Routing) listProjectGCPZones() http.Handler {
 //	Responses:
 //	  default: errorResponse
 //	  200: GCPMachineSizeList
-func (r Routing) listProjectGCPSizes() http.Handler {
+func (r Routing) listProjectGCPVMSizes() http.Handler {
 	return httptransport.NewServer(
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(provider.ListProjectGCPSizes(r.presetProvider, r.userInfoGetter, r.settingsProvider, r.seedsGetter)),
+		)(provider.ListProjectGCPVMSizes(r.presetProvider, r.userInfoGetter, r.settingsProvider, r.seedsGetter)),
 		provider.DecodeProjectGCPSizes,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
