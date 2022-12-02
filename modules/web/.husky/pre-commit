@@ -16,5 +16,14 @@
 . "$(dirname "$0")/_/husky.sh"
 cd modules/web/.husky
 
-npx lint-staged
-npm run check
+# If there are no changes in modules/web, exit the hook early so we don't run on BE-only changes.
+# Since we cd into husky dir, run git diff based on git root directory
+web_dir_path="$(git rev-parse --show-toplevel)/modules/web"
+
+if git diff --quiet -- $web_dir_path || git diff --quiet --cached -- $web_dir_path
+then
+  npx lint-staged
+  npm run check
+else
+  exit 0
+fi
