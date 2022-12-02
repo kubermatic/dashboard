@@ -1625,7 +1625,7 @@ func (r Routing) listProjectGCPVMSizes() http.Handler {
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
 		)(provider.ListProjectGCPVMSizes(r.presetProvider, r.userInfoGetter, r.settingsProvider, r.seedsGetter)),
-		provider.DecodeProjectGCPSizes,
+		provider.DecodeProjectGCPVMSizes,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
