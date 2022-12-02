@@ -16,6 +16,10 @@
 
 @mixin theme-sidenav-field-component($colors) {
   .nav-field-label {
+    &:not(.expanded) {
+      background-color: map.get($colors, side-nav-background-color);
+    }
+
     &.expanded {
       background-color: map.get($colors, sidenav-background-active);
 
@@ -31,7 +35,7 @@
       }
     }
 
-    &:hover {
+    &:hover:not(.expanded) {
       background-color: map.get($colors, sidenav-background-hover);
     }
   }
@@ -45,9 +49,7 @@
     button {
       background-color: map.get($colors, text);
     }
-  }
 
-  .collapsed-side-nav-bar {
     &:hover {
       background-color: map.get($colors, sidenav-background-hover);
     }
@@ -59,5 +61,63 @@
     button {
       background-color: map.get($colors, primary-dark);
     }
+  }
+
+  .sub-menu-item {
+    &:not(.active) {
+      background-color: map.get($colors, side-nav-background-color) !important;
+
+      a {
+        &:hover {
+          background-color: map.get($colors, sidenav-background-hover);
+
+          span {
+            color: map.get($colors, primary-dark);
+          }
+        }
+      }
+    }
+
+    &.active {
+      background-color: map.get($colors, side-nav-background-color);
+
+      a {
+        span {
+          color: map.get($colors, primary-dark);
+        }
+
+        &::after {
+          background-color: map.get($colors, primary);
+        }
+      }
+    }
+  }
+
+  .collapsed-sub-menu-item {
+    span {
+      color: map.get($colors, text);
+    }
+
+    &:hover {
+      span {
+        color: map.get($colors, primary-dark);
+      }
+    }
+
+    &.active {
+      background-color: transparent !important;
+
+      span {
+        color: map.get($colors, primary-dark);
+      }
+
+      &::after {
+        background-color: map.get($colors, primary);
+      }
+    }
+  }
+
+  .side-nav-end {
+    background-color: map.get($colors, side-nav-background-color);
   }
 }

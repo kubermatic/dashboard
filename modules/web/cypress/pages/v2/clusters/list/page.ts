@@ -42,10 +42,6 @@ class Buttons extends PageOptions {
     return this._get('#km-nav-item-clusters');
   }
 
-  get resourcesSideNavItem(): Cypress.Chainable {
-    return this._get('#km-side-nav-field-Resources');
-  }
-
   get externalClusters(): Cypress.Chainable {
     return this._get('#km-nav-item-external-clusters');
   }

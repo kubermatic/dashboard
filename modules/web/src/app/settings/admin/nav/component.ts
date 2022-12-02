@@ -12,33 +12,42 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {isEnterpriseEdition} from '@app/dynamic/common';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {environment} from '@environments/environment';
 import {Member} from '@shared/entity/member';
 import {CustomLink, UserSettings} from '@shared/entity/settings';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {maxScreenWidth} from '@shared/constants/common';
+import {BehaviorSubject, Subject} from 'rxjs';
+import {debounceTime, takeUntil} from 'rxjs/operators';
 import {HistoryService} from '@core/services/history';
-
+import {AdminPanelSections, AdminPanelView, AdminPanelViewDisplayName} from '@app/shared/entity/common';
+import {DynamicModule} from '@app/dynamic/module-registry';
 @Component({
   selector: 'km-admin-sidenav',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
 export class AdminSidenavComponent implements OnInit, OnDestroy {
+  readonly isEnterpriseEdition = DynamicModule.isEnterpriseEdition;
+  readonly adminPanelView = AdminPanelView;
+  readonly adminPanelViewDisplayName = AdminPanelViewDisplayName;
+  readonly adminPanelSections = AdminPanelSections;
   environment: any = environment;
   customLinks: CustomLink[] = [];
   settings: UserSettings;
   currentUser: Member;
+  screenWidth = 0;
 
+  private readonly _debounceTime = 500;
   private _unsubscribe = new Subject<void>();
+  private _isSidenavCollapsed = false;
+  private _screenWidth = new BehaviorSubject<number>(window.innerWidth);
 
-  get isEnterpriseEdition(): boolean {
-    return isEnterpriseEdition();
+  get isSidenavCollapsed(): boolean {
+    return this._isSidenavCollapsed || this.screenWidth < maxScreenWidth;
   }
 
   constructor(
@@ -49,11 +58,19 @@ export class AdminSidenavComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this._userService.currentUser.pipe(takeUntil(this._unsubscribe)).subscribe(u => (this.currentUser = u));
-    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(s => (this.settings = s));
+    this._screenWidth
+      .pipe(debounceTime(this._debounceTime))
+      .pipe(takeUntil(this._unsubscribe))
+      .subscribe(width => (this.screenWidth = width));
+
+    this._userService.currentUser.pipe(takeUntil(this._unsubscribe)).subscribe(user => (this.currentUser = user));
+    this._userService.currentUserSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
+      this.settings = settings;
+      this._isSidenavCollapsed = this.settings.collapseSidenav;
+    });
     this._settingsService.adminSettings
       .pipe(takeUntil(this._unsubscribe))
-      .subscribe(s => (this.customLinks = s.customLinks));
+      .subscribe(settings => (this.customLinks = settings.customLinks));
   }
 
   ngOnDestroy(): void {
@@ -61,7 +78,16 @@ export class AdminSidenavComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event): void {
+    this._screenWidth.next(event.target.innerWidth);
+  }
+
   goBack(): void {
     this._historyService.goBack('/projects');
+  }
+
+  getRouterLink(view: string): string {
+    return `/settings/${view}`;
   }
 }

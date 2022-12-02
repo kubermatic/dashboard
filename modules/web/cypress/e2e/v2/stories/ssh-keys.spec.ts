@@ -55,7 +55,6 @@ describe('SSH Key Management Story', () => {
   });
 
   it('should go to the clusters page', () => {
-    Pages.Clusters.List.Buttons.resourcesSideNavItem.click();
     Pages.Clusters.List.visit();
     Pages.expect(View.Clusters.Default);
   });

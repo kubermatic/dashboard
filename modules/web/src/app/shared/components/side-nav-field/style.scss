@@ -44,8 +44,8 @@
 .nav-field-label {
   cursor: pointer;
   height: 45px;
-  margin: 0 0 10px;
   padding: 10px;
+  z-index: 1;
 
   a {
     i:last-child {
@@ -57,4 +57,10 @@
 
 .menu-label {
   margin: 0 0 0 15px;
+}
+
+.side-nav-end {
+  height: 150px;
+  width: variables.$sidenav-width;
+  z-index: 2;
 }

@@ -13,15 +13,13 @@
 // limitations under the License.
 
 import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {DefaultsComponent} from '@app/settings/admin/defaults/component';
+import {CustomLinksFormComponent} from '@app/settings/admin/custom-link-form/component';
+import {CustomizationComponent} from '@app/settings/admin/customization/component';
+import {AdminSettingsInterfaceRoutingModule} from '@app/settings/admin/customization/routing';
+import {SharedModule} from '@shared/module';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: DefaultsComponent,
-  },
-];
-
-@NgModule({imports: [RouterModule.forChild(routes)], exports: [RouterModule]})
-export class AdminSettingsDefaultsRoutingModule {}
+@NgModule({
+  imports: [SharedModule, AdminSettingsInterfaceRoutingModule],
+  declarations: [CustomizationComponent, CustomLinksFormComponent],
+})
+export class AdminSettingsCustomizationModule {}

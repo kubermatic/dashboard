@@ -1,0 +1,64 @@
+<!--
+Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<mat-card>
+  <mat-card-header>
+    <mat-card-title fxFlex
+                    fxLayout="row"
+                    fxLayoutAlign=" center">
+      <div fxFlex>Customization</div>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div fxLayout="column"
+         fxLayoutGap="32px"
+         class="admin-settings">
+      <div fxFlex
+           fxLayout="row">
+        <div fxFlex="16%"
+             fxLayout="row"
+             fxLayoutAlign=" center"
+             class="entry-label">
+          <span>Custom Links</span>
+          <div class="km-icon-info km-pointer"
+               matTooltip="Customize your theme or improve the workflow by adding links in the sidebar or footer."></div>
+        </div>
+        <div fxFlex
+             fxLayout="column">
+          <km-custom-links-form [(customLinks)]="settings.customLinks"
+                                [apiCustomLinks]="apiSettings.customLinks"
+                                (customLinksChange)="onSettingsChange()"></km-custom-links-form>
+          <div fxLayout="row">
+            <mat-checkbox [(ngModel)]="settings.displayAPIDocs"
+                          id="km-api-docs-setting"
+                          (change)="onSettingsChange()">Display API Docs
+            </mat-checkbox>
+            <mat-checkbox [(ngModel)]="settings.displayTermsOfService"
+                          id="km-tos-setting"
+                          (change)="onSettingsChange()">Display Terms of Service
+            </mat-checkbox>
+            <mat-checkbox [(ngModel)]="settings.displayDemoInfo"
+                          id="km-demo-info-setting"
+                          (change)="onSettingsChange()">Display Demo Information
+            </mat-checkbox>
+            <km-spinner-with-confirmation [isSaved]="isDisplayLinksEqual()"></km-spinner-with-confirmation>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </mat-card-content>
+</mat-card>

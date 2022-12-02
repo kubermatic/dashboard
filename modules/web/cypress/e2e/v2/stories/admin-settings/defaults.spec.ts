@@ -47,13 +47,8 @@ describe('Admin Settings - Defaults Story', () => {
 
     Pages.AdminSettings.Defaults.Elements.enableClusterCleanupCheckboxInput.should(Condition.NotBeChecked);
     Pages.AdminSettings.Defaults.Elements.enforceClusterCleanupCheckboxInput.should(Condition.NotBeChecked);
-  });
 
-  it('should go to the admin settings and check default values - interface page', () => {
-    Pages.AdminSettings.Interface.visit();
-    Pages.expect(View.AdminSettings.Interface);
-
-    Pages.AdminSettings.Interface.Elements.enableKubernetesDashboardCheckboxInput.should(Condition.BeChecked);
+    Pages.AdminSettings.Interface.Elements.enableKubernetesDashboardCheckboxInput.should(Condition.NotBeChecked);
     Pages.AdminSettings.Interface.Elements.enableOIDCCheckboxInput.should(Condition.NotBeChecked);
     Pages.AdminSettings.Interface.Elements.enableExternalClustersCheckboxInput.should(Condition.BeChecked);
   });
@@ -64,7 +59,6 @@ describe('Admin Settings - Defaults Story', () => {
   });
 
   it('should go to the clusters page', () => {
-    Pages.Clusters.List.Buttons.resourcesSideNavItem.click();
     Pages.Clusters.List.visit();
     Pages.expect(View.Clusters.Default);
   });
@@ -115,9 +109,6 @@ describe('Admin Settings - Defaults Story', () => {
   });
 
   it('should go to the admin settings and update default values - interface page', () => {
-    Pages.AdminSettings.Interface.visit();
-    Pages.expect(View.AdminSettings.Interface);
-
     Pages.AdminSettings.Interface.selectEnableKubernetesDashboard(false);
     Pages.AdminSettings.Interface.selectEnableOIDCKubeconfig(true);
     Pages.AdminSettings.Interface.selectEnableExternalClusterImport(false);
@@ -130,7 +121,6 @@ describe('Admin Settings - Defaults Story', () => {
   it('should go to clusters view and make sure external clusters are not available', () => {
     Pages.Projects.open(projectName);
     Pages.expect(View.Overview.Default);
-    Pages.Clusters.List.Buttons.resourcesSideNavItem.click();
     Pages.Clusters.List.visit();
     Pages.expect(View.Clusters.Default);
     Pages.Clusters.List.Buttons.anyTab.should(Condition.NotExist);

@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FeatureGateService} from '@app/core/services/feature-gate';
 import {NotificationService} from '@core/services/notification';
 import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
@@ -25,17 +24,14 @@ import {Subject} from 'rxjs';
 import {debounceTime, switchMap, take, takeUntil} from 'rxjs/operators';
 
 @Component({
-  selector: 'km-defaults',
+  selector: 'km-Customization',
   styleUrls: ['style.scss'],
   templateUrl: 'template.html',
 })
-export class DefaultsComponent implements OnInit, OnDestroy {
+export class CustomizationComponent implements OnInit, OnDestroy {
   user: Member;
   settings: AdminSettings; // Local settings copy. User can edit it.
   apiSettings: AdminSettings; // Original settings from the API. Cannot be edited by the user.
-  interfaceTypeUrl = '';
-  isOIDCKubeCfgEndpointEnabled = true;
-  isOpenIDAuthPluginEnabled = true;
 
   private readonly _debounceTime = 500;
   private _settingsChange = new Subject<void>();
@@ -44,17 +40,11 @@ export class DefaultsComponent implements OnInit, OnDestroy {
   constructor(
     private readonly _userService: UserService,
     private readonly _settingsService: SettingsService,
-    private readonly _notificationService: NotificationService,
-    private readonly _featureGatesService: FeatureGateService
+    private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
     this._userService.currentUser.pipe(take(1)).subscribe(user => (this.user = user));
-    this._featureGatesService.featureGates.pipe(takeUntil(this._unsubscribe)).subscribe(featureGates => {
-      this.isOIDCKubeCfgEndpointEnabled = !!featureGates?.oidcKubeCfgEndpoint;
-      this.isOpenIDAuthPluginEnabled = !!featureGates?.openIDAuthPlugin;
-      this._verifyEnableKubernetesDashboardRequirements();
-    });
 
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       if (!_.isEqual(settings, this.apiSettings)) {
@@ -87,37 +77,12 @@ export class DefaultsComponent implements OnInit, OnDestroy {
     return _.isEqual(a, b);
   }
 
-  isMLALoggingEqual(): boolean {
+  isDisplayLinksEqual(): boolean {
     return (
-      this.isEqual(this.settings.mlaOptions.loggingEnabled, this.apiSettings.mlaOptions.loggingEnabled) &&
-      this.isEqual(this.settings.mlaOptions.loggingEnforced, this.apiSettings.mlaOptions.loggingEnforced)
+      this.isEqual(this.settings.displayAPIDocs, this.apiSettings.displayAPIDocs) &&
+      this.isEqual(this.settings.displayDemoInfo, this.apiSettings.displayDemoInfo) &&
+      this.isEqual(this.settings.displayTermsOfService, this.apiSettings.displayTermsOfService)
     );
-  }
-
-  isMLAMonitoringEqual(): boolean {
-    return (
-      this.isEqual(this.settings.mlaOptions.monitoringEnabled, this.apiSettings.mlaOptions.monitoringEnabled) &&
-      this.isEqual(this.settings.mlaOptions.monitoringEnforced, this.apiSettings.mlaOptions.monitoringEnforced)
-    );
-  }
-
-  onOIDCKubeconfigSettingsChange(): void {
-    if (this.settings.enableWebTerminal) {
-      this.settings.enableWebTerminal = false;
-    }
-    this.onSettingsChange();
-  }
-
-  isKubernetesDashboardFeatureGatesEnabled(): boolean {
-    return this.isOIDCKubeCfgEndpointEnabled && this.isOpenIDAuthPluginEnabled;
-  }
-
-  private _verifyEnableKubernetesDashboardRequirements() {
-    // Note: Kubernetes Dashboard feature requires both feature gates from admin side to be enabled.
-    if ((!this.isOIDCKubeCfgEndpointEnabled || !this.isOpenIDAuthPluginEnabled) && this.settings.enableDashboard) {
-      this.settings.enableDashboard = false;
-      this.onSettingsChange();
-    }
   }
 
   private _applySettings(settings: AdminSettings): void {

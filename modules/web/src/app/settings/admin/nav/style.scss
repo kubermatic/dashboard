@@ -15,36 +15,14 @@
 @use 'mixins';
 @use 'variables';
 
-$sidenav-item-height: 45px;
-$sidenav-item-margin: 10px;
-
 .sidenav {
   @include mixins.size(variables.$sidenav-width, 100%);
 
+  overflow: hidden;
   overflow-y: auto;
-  padding: (variables.$content-padding + variables.$toolbar-height) 0 0 10px;
+  padding-top: (variables.$content-padding + variables.$toolbar-height);
 
-  .menu-item {
-    height: $sidenav-item-height;
-    margin: 0 0 (1.5 * $sidenav-item-margin) $sidenav-item-margin;
-
-    a {
-      border-radius: variables.$border-radius;
-      display: flex;
-      font-size: variables.$font-size-subhead;
-      height: $sidenav-item-height;
-      padding: $sidenav-item-margin;
-      text-decoration: none;
-
-      i {
-        @include mixins.size(24px);
-
-        margin-right: 20px;
-
-        &.km-icon-arrow-left {
-          @include mixins.size(16px);
-        }
-      }
-    }
+  &.collapse-sidenav {
+    @include mixins.size(variables.$sidenav-width-collapsed, 100%);
   }
 }

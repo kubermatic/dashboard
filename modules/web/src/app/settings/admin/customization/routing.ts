@@ -14,14 +14,14 @@
 
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {DefaultsComponent} from '@app/settings/admin/defaults/component';
+import {CustomizationComponent} from '@app/settings/admin/customization/component';
 
 const routes: Routes = [
   {
     path: '',
-    component: DefaultsComponent,
+    component: CustomizationComponent,
   },
 ];
 
 @NgModule({imports: [RouterModule.forChild(routes)], exports: [RouterModule]})
-export class AdminSettingsDefaultsRoutingModule {}
+export class AdminSettingsInterfaceRoutingModule {}
