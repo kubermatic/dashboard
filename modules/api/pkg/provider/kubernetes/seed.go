@@ -23,8 +23,8 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
-	"k8c.io/kubermatic/v2/pkg/resources/reconciling"
 	"k8c.io/kubermatic/v2/pkg/util/restmapper"
+	"k8c.io/reconciler/pkg/reconciling"
 
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -75,11 +75,11 @@ func (p *SeedProvider) CreateOrUpdateKubeconfigSecretForSeed(ctx context.Context
 func (p *SeedProvider) ensureKubeconfigSecret(ctx context.Context, seed *kubermaticv1.Seed, secretData map[string][]byte) (*corev1.ObjectReference, error) {
 	name := fmt.Sprintf("kubeconfig-%s", seed.Name)
 
-	creators := []reconciling.NamedSecretCreatorGetter{
-		seedKubeconfigSecretCreatorGetter(name, secretData),
+	reconcilers := []reconciling.NamedSecretReconcilerFactory{
+		seedKubeconfigSecretReconcilerFactory(name, secretData),
 	}
 
-	if err := reconciling.ReconcileSecrets(ctx, creators, seed.Namespace, p.clientPrivileged); err != nil {
+	if err := reconciling.ReconcileSecrets(ctx, reconcilers, seed.Namespace, p.clientPrivileged); err != nil {
 		return nil, err
 	}
 
@@ -90,8 +90,8 @@ func (p *SeedProvider) ensureKubeconfigSecret(ctx context.Context, seed *kuberma
 	}, nil
 }
 
-func seedKubeconfigSecretCreatorGetter(name string, secretData map[string][]byte) reconciling.NamedSecretCreatorGetter {
-	return func() (string, reconciling.SecretCreator) {
+func seedKubeconfigSecretReconcilerFactory(name string, secretData map[string][]byte) reconciling.NamedSecretReconcilerFactory {
+	return func() (string, reconciling.SecretReconciler) {
 		return name, func(existing *corev1.Secret) (*corev1.Secret, error) {
 			existing.Data = secretData
 			return existing, nil
