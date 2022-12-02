@@ -33,9 +33,9 @@ import (
 	"k8c.io/dashboard/v2/pkg/provider/cloud/kubevirt"
 	kvmanifests "k8c.io/dashboard/v2/pkg/provider/cloud/kubevirt/manifests"
 	kubernetesprovider "k8c.io/dashboard/v2/pkg/provider/kubernetes"
+	"k8c.io/dashboard/v2/pkg/resources/reconciling"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/log"
-	"k8c.io/kubermatic/v2/pkg/resources/reconciling"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -198,10 +198,10 @@ func KubeVirtInstancetypes(ctx context.Context, kubeconfig string, datacenterNam
 	for _, it := range instancetypes.items {
 		if it.Category() == apiv2.InstancetypeKubermatic {
 			if cluster != nil {
-				instancetypeCreators := []reconciling.NamedKvInstancetypeV1alpha1VirtualMachineInstancetypeCreatorGetter{
-					instancetypeCreator(it),
+				instancetypeReconcilers := []reconciling.NamedVirtualMachineInstancetypeReconcilerFactory{
+					instancetypeReconciler(it),
 				}
-				if err := reconciling.ReconcileKvInstancetypeV1alpha1VirtualMachineInstancetypes(ctx, instancetypeCreators, cluster.Status.NamespaceName, client); err != nil {
+				if err := reconciling.ReconcileVirtualMachineInstancetypes(ctx, instancetypeReconcilers, cluster.Status.NamespaceName, client); err != nil {
 					return nil, err
 				}
 			}
@@ -285,10 +285,10 @@ func KubeVirtPreferences(ctx context.Context, kubeconfig string, cluster *kuberm
 	for _, it := range preferences.items {
 		if it.Category() == apiv2.InstancetypeKubermatic {
 			if cluster != nil {
-				preferenceCreators := []reconciling.NamedKvInstancetypeV1alpha1VirtualMachinePreferenceCreatorGetter{
-					preferenceCreator(it),
+				preferenceReconcilers := []reconciling.NamedVirtualMachinePreferenceReconcilerFactory{
+					preferenceReconciler(it),
 				}
-				if err := reconciling.ReconcileKvInstancetypeV1alpha1VirtualMachinePreferences(ctx, preferenceCreators, cluster.Status.NamespaceName, client); err != nil {
+				if err := reconciling.ReconcileVirtualMachinePreferences(ctx, preferenceReconcilers, cluster.Status.NamespaceName, client); err != nil {
 					return nil, err
 				}
 			}
@@ -298,8 +298,8 @@ func KubeVirtPreferences(ctx context.Context, kubeconfig string, cluster *kuberm
 	return res, nil
 }
 
-func instancetypeCreator(w instancetypeWrapper) reconciling.NamedKvInstancetypeV1alpha1VirtualMachineInstancetypeCreatorGetter {
-	return func() (string, reconciling.KvInstancetypeV1alpha1VirtualMachineInstancetypeCreator) {
+func instancetypeReconciler(w instancetypeWrapper) reconciling.NamedVirtualMachineInstancetypeReconcilerFactory {
+	return func() (string, reconciling.VirtualMachineInstancetypeReconciler) {
 		return w.GetObjectMeta().GetName(), func(it *kvinstancetypev1alpha1.VirtualMachineInstancetype) (*kvinstancetypev1alpha1.VirtualMachineInstancetype, error) {
 			it.Labels = w.GetObjectMeta().GetLabels()
 			it.Spec = w.Spec()
@@ -308,8 +308,8 @@ func instancetypeCreator(w instancetypeWrapper) reconciling.NamedKvInstancetypeV
 	}
 }
 
-func preferenceCreator(w preferenceWrapper) reconciling.NamedKvInstancetypeV1alpha1VirtualMachinePreferenceCreatorGetter {
-	return func() (string, reconciling.KvInstancetypeV1alpha1VirtualMachinePreferenceCreator) {
+func preferenceReconciler(w preferenceWrapper) reconciling.NamedVirtualMachinePreferenceReconcilerFactory {
+	return func() (string, reconciling.VirtualMachinePreferenceReconciler) {
 		return w.GetObjectMeta().GetName(), func(it *kvinstancetypev1alpha1.VirtualMachinePreference) (*kvinstancetypev1alpha1.VirtualMachinePreference, error) {
 			it.Labels = w.GetObjectMeta().GetLabels()
 			it.Spec = w.Spec()
