@@ -52,7 +52,6 @@ func (req gcpTypesNoCredentialReq) GetSeedCluster() apiv1.SeedCluster {
 }
 
 // GCPCommonReq represents a request with common parameters for GCP.
-// swagger:parameters listProjectGCPNetworks
 type GCPCommonReq struct {
 	// in: header
 	// name: ServiceAccount
@@ -63,6 +62,7 @@ type GCPCommonReq struct {
 }
 
 // GCPProjectCommonReq represents a project based request.
+// swagger:parameters listProjectGCPNetworks
 type GCPProjectCommonReq struct {
 	GCPCommonReq
 	common.ProjectReq
@@ -156,11 +156,29 @@ func DecodeGCPSubnetworksNoCredentialReq(c context.Context, r *http.Request) (in
 	return req, nil
 }
 
-func DecodeGCPCommonReq(c context.Context, r *http.Request) (interface{}, error) {
+func decodeGCPCommonReq(c context.Context, r *http.Request) (interface{}, error) {
 	var req GCPCommonReq
 
 	req.ServiceAccount = r.Header.Get("ServiceAccount")
 	req.Credential = r.Header.Get("Credential")
+
+	return req, nil
+}
+
+func DecodeProjectGCPCommonReq(c context.Context, r *http.Request) (interface{}, error) {
+	var req GCPProjectCommonReq
+
+	commonReq, err := decodeGCPCommonReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+	req.GCPCommonReq = commonReq.(GCPCommonReq)
+
+	project, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+	req.ProjectReq = project.(common.ProjectReq)
 
 	return req, nil
 }
@@ -174,7 +192,7 @@ func DecodeProjectGCPDisktypes(c context.Context, r *http.Request) (interface{},
 	}
 	req.ProjectReq = project.(common.ProjectReq)
 
-	commonReq, err := DecodeGCPCommonReq(c, r)
+	commonReq, err := decodeGCPCommonReq(c, r)
 	if err != nil {
 		return nil, err
 	}
@@ -194,7 +212,7 @@ func DecodeProjectGCPSubnetworks(c context.Context, r *http.Request) (interface{
 	}
 	req.ProjectReq = project.(common.ProjectReq)
 
-	commonReq, err := DecodeGCPCommonReq(c, r)
+	commonReq, err := decodeGCPCommonReq(c, r)
 	if err != nil {
 		return nil, err
 	}
@@ -214,7 +232,7 @@ func DecodeProjectGCPZones(c context.Context, r *http.Request) (interface{}, err
 	}
 	req.ProjectReq = project.(common.ProjectReq)
 
-	commonReq, err := DecodeGCPCommonReq(c, r)
+	commonReq, err := decodeGCPCommonReq(c, r)
 	if err != nil {
 		return nil, err
 	}
@@ -233,7 +251,7 @@ func DecodeProjectGCPSizes(c context.Context, r *http.Request) (interface{}, err
 	}
 	req.ProjectReq = project.(common.ProjectReq)
 
-	commonReq, err := DecodeGCPCommonReq(c, r)
+	commonReq, err := decodeGCPCommonReq(c, r)
 	if err != nil {
 		return nil, err
 	}

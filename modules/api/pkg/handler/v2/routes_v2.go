@@ -1581,7 +1581,7 @@ func (r Routing) listProjectGCPNetworks() http.Handler {
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
 		)(provider.ListProjectGCPNetworks(r.presetProvider, r.userInfoGetter)),
-		provider.DecodeGCPCommonReq,
+		provider.DecodeProjectGCPCommonReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
