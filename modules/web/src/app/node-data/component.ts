@@ -155,8 +155,14 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       [Controls.OperatingSystemProfile]: this._builder.control({
         main: this.selectedOperatingSystemProfile || '',
       }),
-      [Controls.MaxReplicas]: this._builder.control(this._nodeDataService.nodeData.maxReplicas, Validators.max(this.MaxReplicasCount)),
-      [Controls.MinReplicas]: this._builder.control(this._nodeDataService.nodeData.minReplicas, Validators.min(this.MinReplicasCount)),
+      [Controls.MaxReplicas]: this._builder.control(
+        this._nodeDataService.nodeData.maxReplicas,
+        Validators.max(this.MaxReplicasCount)
+      ),
+      [Controls.MinReplicas]: this._builder.control(
+        this._nodeDataService.nodeData.minReplicas,
+        Validators.min(this.MinReplicasCount)
+      ),
     });
 
     if (this.isDialogView()) {
