@@ -159,7 +159,7 @@ func outputMachineDeployment(md *clusterv1alpha1.MachineDeployment) (*apiv1.Node
 		}
 	}
 
-	min, max, err := getAutoscalingRange(md)
+	min, max, err := getAutoscalingConfiguration(md)
 	if err != nil {
 		return nil, err
 	}
@@ -923,7 +923,7 @@ func selectedOperatingSystems(os apiv1.OperatingSystemSpec) int {
 	return counter
 }
 
-func getAutoscalingRange(md *clusterv1alpha1.MachineDeployment) (*uint32, *uint32, error) {
+func getAutoscalingConfiguration(md *clusterv1alpha1.MachineDeployment) (*uint32, *uint32, error) {
 	var minReplicas *uint32
 	if min, ok := md.Annotations[machineresource.AutoscalerMinSizeAnnotation]; ok && min != "" {
 		minInt, err := strconv.ParseInt(min, 10, 32)
