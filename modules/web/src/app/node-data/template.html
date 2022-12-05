@@ -212,6 +212,7 @@ limitations under the License.
 
     <km-label-form [ngClass]="isDialogView() ? 'additional-margin' : ''"
                    title="Node Labels"
+                   [asyncKeyValidators]=asyncLabelValidators
                    [labels]="labels"
                    (labelsChange)="onLabelsChange($event)"></km-label-form>
 
