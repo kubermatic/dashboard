@@ -159,7 +159,7 @@ func outputMachineDeployment(md *clusterv1alpha1.MachineDeployment) (*apiv1.Node
 		}
 	}
 
-	minReplicas, maxReplicas, err := getMinAndMaxReplicas(md)
+	autoscalingOpts, err := getAutoscalingOptions(md)
 	if err != nil {
 		return nil, err
 	}
@@ -185,10 +185,9 @@ func outputMachineDeployment(md *clusterv1alpha1.MachineDeployment) (*apiv1.Node
 				OperatingSystem: *operatingSystemSpec,
 				Cloud:           *cloudSpec,
 			},
-			Paused:        &md.Spec.Paused,
-			DynamicConfig: &hasDynamicConfig,
-			MinReplicas:   minReplicas,
-			MaxReplicas:   maxReplicas,
+			Paused:             &md.Spec.Paused,
+			DynamicConfig:      &hasDynamicConfig,
+			AutoscalingOptions: autoscalingOpts,
 		},
 		Status: md.Status,
 	}, nil
@@ -501,11 +500,15 @@ func PatchMachineDeployment(ctx context.Context, userInfoGetter provider.UserInf
 	}
 
 	// validate min/max replicas
-	if patchedNodeDeployment.Spec.MaxReplicas != nil && patchedNodeDeployment.Spec.Replicas > *patchedNodeDeployment.Spec.MaxReplicas {
-		return nil, utilerrors.NewBadRequest("replica count (%d) cannot be higher then autoscaler maxreplicas (%d)", patchedNodeDeployment.Spec.Replicas, *patchedNodeDeployment.Spec.MaxReplicas)
-	}
-	if patchedNodeDeployment.Spec.MinReplicas != nil && patchedNodeDeployment.Spec.Replicas > *patchedNodeDeployment.Spec.MinReplicas {
-		return nil, utilerrors.NewBadRequest("replica count (%d) cannot be lower then autoscaler minreplicas (%d)", patchedNodeDeployment.Spec.Replicas, *patchedNodeDeployment.Spec.MinReplicas)
+	if patchedNodeDeployment.Spec.AutoscalingOptions != nil {
+		max := patchedNodeDeployment.Spec.AutoscalingOptions.MaxReplicas
+		if max != nil && patchedNodeDeployment.Spec.Replicas > int32(*max) {
+			return nil, utilerrors.NewBadRequest("replica count (%d) cannot be higher then autoscaler maxreplicas (%d)", patchedNodeDeployment.Spec.Replicas, *max)
+		}
+		min := patchedNodeDeployment.Spec.AutoscalingOptions.MinReplicas
+		if min != nil && patchedNodeDeployment.Spec.Replicas < int32(*min) {
+			return nil, utilerrors.NewBadRequest("replica count (%d) cannot be lower then autoscaler minreplicas (%d)", patchedNodeDeployment.Spec.Replicas, *min)
+		}
 	}
 
 	kversion, err := semverlib.NewVersion(patchedNodeDeployment.Spec.Template.Versions.Kubelet)
@@ -921,22 +924,45 @@ func selectedOperatingSystems(os apiv1.OperatingSystemSpec) int {
 	return counter
 }
 
-func getMinAndMaxReplicas(md *clusterv1alpha1.MachineDeployment) (*int32, *int32, error) {
-	var minReplicas *int32
+func getAutoscalingOptions(md *clusterv1alpha1.MachineDeployment) (*apiv1.AutoscalingOptions, error) {
+	var minReplicas *uint32
 	if min, ok := md.Annotations[machineresource.AutoscalerMinSizeAnnotation]; ok && min != "" {
 		minInt, err := strconv.ParseInt(min, 10, 32)
 		if err != nil {
-			return nil, nil, fmt.Errorf("failed to read autoscaler min size annotation: %w", err)
+			return nil, fmt.Errorf("failed to read autoscaler min size annotation: %w", err)
 		}
-		minReplicas = pointer.Int32(int32(minInt))
+		minReplicas = pointer.Uint32(uint32(minInt))
 	}
-	var maxReplicas *int32
+
+	var maxReplicas *uint32
 	if max, ok := md.Annotations[machineresource.AutoscalerMaxSizeAnnotation]; ok && max != "" {
 		maxInt, err := strconv.ParseInt(max, 10, 32)
 		if err != nil {
-			return nil, nil, fmt.Errorf("failed to read autoscaler max size annotation: %w", err)
+			return nil, fmt.Errorf("failed to read autoscaler max size annotation: %w", err)
 		}
-		maxReplicas = pointer.Int32(int32(maxInt))
+		maxReplicas = pointer.Uint32(uint32(maxInt))
 	}
-	return minReplicas, maxReplicas, nil
+
+	if minReplicas != nil || maxReplicas != nil {
+		return &apiv1.AutoscalingOptions{
+			MinReplicas: minReplicas,
+			MaxReplicas: maxReplicas,
+		}, nil
+	}
+
+	return nil, nil
+}
+
+func ValidateAutoscalingOptions(spec *apiv1.NodeDeploymentSpec) (errMsg string) {
+	if spec.AutoscalingOptions != nil {
+		max := spec.AutoscalingOptions.MaxReplicas
+		if max != nil && spec.Replicas > int32(*max) {
+			errMsg += fmt.Sprintf("replica count (%d) cannot be higher then autoscaler maxreplicas (%d).", spec.Replicas, *max)
+		}
+		min := spec.AutoscalingOptions.MinReplicas
+		if min != nil && spec.Replicas < int32(*min) {
+			errMsg += fmt.Sprintf("replica count (%d) cannot be lower then autoscaler minreplicas (%d).", spec.Replicas, *min)
+		}
+	}
+	return errMsg
 }

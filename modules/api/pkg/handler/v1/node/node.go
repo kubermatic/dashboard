@@ -64,17 +64,9 @@ func DecodeCreateNodeDeployment(c context.Context, r *http.Request) (interface{}
 }
 
 func (r *createNodeDeploymentReq) ValidateCreateNodeDeploymentReq() error {
-	var msg string
-
-	if r.Body.Spec.MaxReplicas != nil && r.Body.Spec.Replicas > *r.Body.Spec.MaxReplicas {
-		msg += fmt.Sprintf("replica count (%d) cannot be higher then autoscaler maxreplicas (%d).", r.Body.Spec.Replicas, *r.Body.Spec.MaxReplicas)
-	}
-	if r.Body.Spec.MinReplicas != nil && r.Body.Spec.Replicas < *r.Body.Spec.MinReplicas {
-		msg += fmt.Sprintf("replica count (%d) cannot be lower then autoscaler minreplicas (%d).", r.Body.Spec.Replicas, *r.Body.Spec.MinReplicas)
-	}
-
-	if msg != "" {
-		return fmt.Errorf(msg)
+	errMsg := handlercommon.ValidateAutoscalingOptions(&r.Body.Spec)
+	if errMsg != "" {
+		return fmt.Errorf(errMsg)
 	}
 	return nil
 }

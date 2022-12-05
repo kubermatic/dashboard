@@ -102,17 +102,26 @@ func Deployment(c *kubermaticv1.Cluster, nd *apiv1.NodeDeployment, dc *kubermati
 	md.Spec.Replicas = &replicas
 
 	// Set autoscaler min and max replicas if present
-	if nd.Spec.MaxReplicas != nil {
+	if nd.Spec.AutoscalingOptions != nil {
 		if md.Annotations == nil {
 			md.Annotations = map[string]string{}
 		}
-		md.Annotations[AutoscalerMaxSizeAnnotation] = strconv.Itoa(int(*nd.Spec.MaxReplicas))
-	}
-	if nd.Spec.MinReplicas != nil {
-		if md.Annotations == nil {
-			md.Annotations = map[string]string{}
+		max := nd.Spec.AutoscalingOptions.MaxReplicas
+		if max != nil {
+			md.Annotations[AutoscalerMaxSizeAnnotation] = strconv.Itoa(int(*max))
+		} else {
+			delete(md.Annotations, AutoscalerMaxSizeAnnotation)
 		}
-		md.Annotations[AutoscalerMinSizeAnnotation] = strconv.Itoa(int(*nd.Spec.MinReplicas))
+
+		min := nd.Spec.AutoscalingOptions.MinReplicas
+		if min != nil {
+			md.Annotations[AutoscalerMinSizeAnnotation] = strconv.Itoa(int(*min))
+		} else {
+			delete(md.Annotations, AutoscalerMinSizeAnnotation)
+		}
+	} else if md.Annotations != nil {
+		delete(md.Annotations, AutoscalerMaxSizeAnnotation)
+		delete(md.Annotations, AutoscalerMinSizeAnnotation)
 	}
 
 	md.Spec.Template.Spec.Versions.Kubelet = nd.Spec.Template.Versions.Kubelet
