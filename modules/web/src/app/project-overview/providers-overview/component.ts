@@ -59,6 +59,7 @@ export class ProvidersOverviewComponent implements OnInit, OnChanges {
     {name: getExternalProviderDisplayName(ExternalClusterProvider.EKS), value: '#c76d03'},
     {name: getExternalProviderDisplayName(ExternalClusterProvider.GKE), value: '#32a350'},
     {name: getExternalProviderDisplayName(ExternalClusterProvider.Custom), value: '#006400'},
+    {name: getExternalProviderDisplayName(ExternalClusterProvider.KubeOne), value: '#00517d'},
   ];
 
   ngOnInit(): void {

@@ -514,6 +514,10 @@
   @include mixins.provider-image('/assets/images/clouds/customkubernetescluster.svg', 130px, 30px);
 }
 
+.km-provider-logo-kubeone {
+  @include mixins.provider-image('/assets/images/clouds/kubeone.svg', 130px, 30px);
+}
+
 .km-os-image-centos {
   @include mixins.background-image('/assets/images/os/centos.svg', 24px);
 }
