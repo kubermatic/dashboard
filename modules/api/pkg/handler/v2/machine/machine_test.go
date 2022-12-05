@@ -1728,9 +1728,9 @@ func TestPatchMachineDeployment(t *testing.T) {
 				genTestCluster(true),
 			),
 		},
-		// Scenario 11: Update autoscaling options - increase min
+		// Scenario 11: Update autoscaling configuration - increase min
 		{
-			Name: "Scenario 11: Update autoscaling options - increase min",
+			Name: "Scenario 11: Update autoscaling configuration - increase min",
 			Body: fmt.Sprintf(`{"spec":{"minReplicas": %d}}`, minReplicasUpdated),
 			ExpectedResponse: fmt.Sprintf(
 				`{"id":"venus","name":"venus","annotations":{"cluster.k8s.io/cluster-api-autoscaler-node-group-min-size":"%[1]v"},"creationTimestamp":"0001-01-01T00:00:00Z","spec":{"replicas":5,"template":{"cloud":{"digitalocean":{"size":"2GB","backups":false,"ipv6":false,"monitoring":false,"tags":["kubernetes","kubernetes-cluster-defClusterID","system-cluster-defClusterID","system-project-my-first-project-ID"]}},"operatingSystem":{"ubuntu":{"distUpgradeOnBoot":true}},"versions":{"kubelet":"v9.9.9"},"labels":{"system/cluster":"defClusterID","system/project":"my-first-project-ID"}},"paused":false,"dynamicConfig":false,"minReplicas":%[1]v},"status":{}}`,
@@ -1756,9 +1756,9 @@ func TestPatchMachineDeployment(t *testing.T) {
 				genTestCluster(true),
 			),
 		},
-		// Scenario 12: Unset autoscaling options - unset
+		// Scenario 12: Unset autoscaling configuration
 		{
-			Name:             "Scenario 12: Unset autoscaling options",
+			Name:             "Scenario 12: Unset autoscaling configuration",
 			Body:             `{"spec":{"minReplicas":null,"maxReplicas":null}}`,
 			ExpectedResponse: `{"id":"venus","name":"venus","creationTimestamp":"0001-01-01T00:00:00Z","spec":{"replicas":5,"template":{"cloud":{"digitalocean":{"size":"2GB","backups":false,"ipv6":false,"monitoring":false,"tags":["kubernetes","kubernetes-cluster-defClusterID","system-cluster-defClusterID","system-project-my-first-project-ID"]}},"operatingSystem":{"ubuntu":{"distUpgradeOnBoot":true}},"versions":{"kubelet":"v9.9.9"},"labels":{"system/cluster":"defClusterID","system/project":"my-first-project-ID"}},"paused":false,"dynamicConfig":false},"status":{}}`,
 			cluster:          "keen-snyder",
@@ -1782,9 +1782,9 @@ func TestPatchMachineDeployment(t *testing.T) {
 				genTestCluster(true),
 			),
 		},
-		// Scenario 13: Create autoscaling options
+		// Scenario 13: Create autoscaling configuration
 		{
-			Name: "Scenario 13: Create autoscaling options",
+			Name: "Scenario 13: Create autoscaling configuration",
 			Body: fmt.Sprintf(`{"spec":{"minReplicas": %[1]d,"maxReplicas": %[2]d}}`, minReplicas, maxReplicas),
 			ExpectedResponse: fmt.Sprintf(
 				`{"id":"venus","name":"venus","annotations":{"cluster.k8s.io/cluster-api-autoscaler-node-group-max-size":"%[1]v","cluster.k8s.io/cluster-api-autoscaler-node-group-min-size":"%[2]v"},"creationTimestamp":"0001-01-01T00:00:00Z","spec":{"replicas":1,"template":{"cloud":{"digitalocean":{"size":"2GB","backups":false,"ipv6":false,"monitoring":false,"tags":["kubernetes","kubernetes-cluster-defClusterID","system-cluster-defClusterID","system-project-my-first-project-ID"]}},"operatingSystem":{"ubuntu":{"distUpgradeOnBoot":true}},"versions":{"kubelet":"v9.9.9"},"labels":{"system/cluster":"defClusterID","system/project":"my-first-project-ID"}},"paused":false,"dynamicConfig":false,"minReplicas":%[2]d,"maxReplicas":%[1]d},"status":{}}`,
@@ -1793,6 +1793,24 @@ func TestPatchMachineDeployment(t *testing.T) {
 			),
 			cluster:          "keen-snyder",
 			HTTPStatus:       http.StatusOK,
+			project:          test.GenDefaultProject().Name,
+			ExistingAPIUser:  test.GenDefaultAPIUser(),
+			NodeDeploymentID: "venus",
+			ExistingMachineDeployments: []*clusterv1alpha1.MachineDeployment{
+				genTestMachineDeployment("venus", `{"cloudProvider":"digitalocean","cloudProviderSpec":{"token":"dummy-token","region":"fra1","size":"2GB"}, "operatingSystem":"ubuntu", "operatingSystemSpec":{"distUpgradeOnBoot":true}}`, nil, false),
+			},
+			ExistingKubermaticObjs: test.GenDefaultKubermaticObjects(
+				test.GenTestSeed(),
+				genTestCluster(true),
+			),
+		},
+		// Scenario 14: Use illegal autoscaling values
+		{
+			Name:             "Scenario 14: Use illegal autoscaling values",
+			Body:             fmt.Sprintf(`{"spec":{"minReplicas": %[1]d,"maxReplicas": %[2]d}}`, 0, -2),
+			ExpectedResponse: fmt.Sprintf(`{"error":{"code":400,"message":"cannot decode patched nodedeployment: {\"spec\":{\"minReplicas\": %d,\"maxReplicas\": %d}}"}}`, 0, -2),
+			cluster:          "keen-snyder",
+			HTTPStatus:       http.StatusBadRequest,
 			project:          test.GenDefaultProject().Name,
 			ExistingAPIUser:  test.GenDefaultAPIUser(),
 			NodeDeploymentID: "venus",

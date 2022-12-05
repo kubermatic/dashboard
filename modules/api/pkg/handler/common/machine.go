@@ -472,7 +472,7 @@ func PatchMachineDeployment(ctx context.Context, userInfoGetter provider.UserInf
 	}
 	var unmarshalPatched *apiv1.NodeDeployment
 	if err := json.Unmarshal(patch, &unmarshalPatched); err != nil {
-		return nil, fmt.Errorf("cannot decode patched nodedeployment: %w ===", err)
+		return nil, utilerrors.NewBadRequest("cannot decode patched nodedeployment: %s", patch)
 	}
 
 	selectedOperatingSystems := selectedOperatingSystems(unmarshalPatched.Spec.Template.OperatingSystem)
