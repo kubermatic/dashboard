@@ -32839,12 +32839,12 @@
         },
         "maxReplicas": {
           "type": "integer",
-          "format": "int32",
+          "format": "uint32",
           "x-go-name": "MaxReplicas"
         },
         "minReplicas": {
           "type": "integer",
-          "format": "int32",
+          "format": "uint32",
           "x-go-name": "MinReplicas"
         },
         "paused": {

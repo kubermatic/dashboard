@@ -2561,21 +2561,7 @@ type NodeDeploymentSpec struct {
 	MinReplicas *uint32 `json:"minReplicas,omitempty"`
 	// required: false
 	MaxReplicas *uint32 `json:"maxReplicas,omitempty"`
-	// required: false
-	// AutoscalingOptions *AutoscalingOptions `json:"autoscalingOptions,omitempty"`
-	// // required: false
-	// MinReplicas *int32 `json:"minReplicas,omitempty"`
-	// // required: false
-	// MaxReplicas *int32 `json:"maxReplicas,omitempty"`
 }
-
-// swagger:model AutoscalingOptions
-// type AutoscalingOptions struct {
-// 	// required: false
-// 	MinReplicas *uint32 `json:"minReplicas,omitempty"`
-// 	// required: false
-// 	MaxReplicas *uint32 `json:"maxReplicas,omitempty"`
-// }
 
 // Event is a report of an event somewhere in the cluster.
 // swagger:model Event
