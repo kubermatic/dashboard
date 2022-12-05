@@ -159,7 +159,7 @@ func outputMachineDeployment(md *clusterv1alpha1.MachineDeployment) (*apiv1.Node
 		}
 	}
 
-	min, max, err := getAutoscalingConfiguration(md)
+	minReplicaCount, maxReplicaCount, err := getAutoscalingConfiguration(md)
 	if err != nil {
 		return nil, err
 	}
@@ -187,8 +187,8 @@ func outputMachineDeployment(md *clusterv1alpha1.MachineDeployment) (*apiv1.Node
 			},
 			Paused:        &md.Spec.Paused,
 			DynamicConfig: &hasDynamicConfig,
-			MinReplicas:   min,
-			MaxReplicas:   max,
+			MinReplicas:   minReplicaCount,
+			MaxReplicas:   maxReplicaCount,
 		},
 		Status: md.Status,
 	}, nil
