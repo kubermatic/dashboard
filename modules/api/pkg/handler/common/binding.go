@@ -22,6 +22,7 @@ import (
 	"strings"
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
+	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	"k8c.io/dashboard/v2/pkg/handler/middleware"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
@@ -36,6 +37,8 @@ import (
 
 const (
 	UserClusterBindingComponentValue = "userClusterBinding"
+	ClusterScope                     = "Cluster"
+	NamespaceScope                   = "Namespace"
 )
 
 func BindUserToRoleEndpoint(ctx context.Context, userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, roleUser apiv1.RoleUser, projectID, clusterID, roleID, namespace string) (interface{}, error) {
@@ -415,6 +418,44 @@ func ListClusterRoleBindingEndpoint(ctx context.Context, userInfoGetter provider
 	}
 
 	return convertInternalClusterRoleBindingsToExternal(clusterRoleBindingList.Items), nil
+}
+
+func GetServiceAccountPermissions(ctx context.Context, client ctrlruntimeclient.Client, serviceAccount *corev1.ServiceAccount) ([]apiv2.Permission, error) {
+	clusterRoleBindingList := &rbacv1.ClusterRoleBindingList{}
+	if err := client.List(ctx, clusterRoleBindingList, ctrlruntimeclient.MatchingLabels{UserClusterComponentKey: UserClusterBindingComponentValue}); err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
+	}
+
+	roleBindingList := &rbacv1.RoleBindingList{}
+	if err := client.List(ctx, roleBindingList, ctrlruntimeclient.MatchingLabels{UserClusterComponentKey: UserClusterBindingComponentValue}); err != nil {
+		return nil, common.KubernetesErrorToHTTPError(err)
+	}
+
+	var permissions []apiv2.Permission
+	for _, clusterRoleBinding := range clusterRoleBindingList.Items {
+		for _, subject := range clusterRoleBinding.Subjects {
+			if subject.Kind == rbacv1.ServiceAccountKind && subject.Name == serviceAccount.Name && subject.Namespace == serviceAccount.Namespace {
+				permissions = append(permissions, apiv2.Permission{
+					Scope:       ClusterScope,
+					RoleRefName: clusterRoleBinding.RoleRef.Name,
+					Namespace:   "",
+				})
+			}
+		}
+	}
+
+	for _, roleBinding := range roleBindingList.Items {
+		for _, subject := range roleBinding.Subjects {
+			if subject.Kind == rbacv1.ServiceAccountKind && subject.Name == serviceAccount.Name && subject.Namespace == serviceAccount.Namespace {
+				permissions = append(permissions, apiv2.Permission{
+					Scope:       NamespaceScope,
+					RoleRefName: roleBinding.RoleRef.Name,
+					Namespace:   roleBinding.Namespace,
+				})
+			}
+		}
+	}
+	return permissions, nil
 }
 
 func convertInternalClusterRoleBindingsToExternal(clusterRoleBindings []rbacv1.ClusterRoleBinding) []*apiv1.ClusterRoleBinding {

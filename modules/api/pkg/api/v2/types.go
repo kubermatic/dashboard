@@ -1887,7 +1887,22 @@ type OperatingSystemProfile struct {
 // swagger:model ClusterServiceAccount
 type ClusterServiceAccount struct {
 	apiv1.ObjectMeta `json:",inline"`
-	Namespace        string `json:"namespace,omitempty"`
+
+	// Namespace is the namespace where the service account lives.
+	Namespace string `json:"namespace,omitempty"`
+}
+
+// Permission represents the permissions (i.e. role and clusterRole) associated to an object.
+// swagger:model Permission
+type Permission struct {
+	// Scope of the permission. Either "Cluster" or "Namespace".
+	Scope string `json:"scope"`
+
+	// RoleRefName is the name of the clusterRole or Role.
+	RoleRefName string `json:"roleRefName"`
+
+	// Namespace on which the permission is given. Empty if scope is Cluster
+	Namespace string `json:"namespace"`
 }
 
 // ApplicationDefinitionListItem is the object representing an ApplicationDefinitionListItem.

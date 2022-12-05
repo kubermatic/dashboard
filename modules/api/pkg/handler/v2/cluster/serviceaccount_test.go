@@ -822,6 +822,169 @@ func TestListClusterSAEndpoint(t *testing.T) {
 	}
 }
 
+func TestGetClusterSAPermissionsEndpoint(t *testing.T) {
+	t.Parallel()
+	saName := "test"
+	saNamespace := "default"
+
+	tests := []struct {
+		name                   string
+		expectedResponse       string
+		httpStatus             int
+		clusterToGet           string
+		existingKubermaticObjs []ctrlruntimeclient.Object
+		existingKubernetesObjs []ctrlruntimeclient.Object
+		existingAPIUser        *apiv1.User
+	}{
+		{
+			name:             "scenario 1: get permissions of SA",
+			expectedResponse: `[{"scope":"Cluster","roleRefName":"role-2","namespace":""},{"scope":"Namespace","roleRefName":"role-1","namespace":"default"},{"scope":"Namespace","roleRefName":"role-1","namespace":"kube-system"}]`,
+			httpStatus:       http.StatusOK,
+			clusterToGet:     test.GenDefaultCluster().Name,
+			existingKubermaticObjs: test.GenDefaultKubermaticObjects(
+				test.GenTestSeed(),
+				test.GenDefaultCluster(),
+			),
+			existingKubernetesObjs: []ctrlruntimeclient.Object{
+				&corev1.ServiceAccount{ObjectMeta: metav1.ObjectMeta{Namespace: saNamespace, Name: saName, Labels: map[string]string{cluster.ServiceAccountComponentKey: cluster.ServiceAccountComponentValue}}},
+				test.GenServiceAccountRoleBinding("test-rb", "default", "role-1",
+					[]rbacv1.Subject{
+						{Kind: rbacv1.GroupKind, Name: "a-group"},
+						{Kind: rbacv1.ServiceAccountKind, Name: saName, Namespace: saNamespace},
+						{Kind: rbacv1.UserKind, Name: "a-user"},
+					}),
+				test.GenServiceAccountRoleBinding("test-rb-2", "kube-system", "role-1", // check sa has perm in another ns
+					[]rbacv1.Subject{
+						{Kind: rbacv1.ServiceAccountKind, Name: saName, Namespace: saNamespace},
+					}),
+				test.GenServiceAccountClusterRoleBinding("test-crb", "role-2",
+					[]rbacv1.Subject{
+						{Kind: rbacv1.GroupKind, Name: "a-group"},
+						{Kind: rbacv1.ServiceAccountKind, Name: saName, Namespace: saNamespace},
+						{Kind: rbacv1.UserKind, Name: "a-user"},
+					}),
+				test.GenServiceAccountClusterRoleBinding("test-crb-2", "role-4",
+					[]rbacv1.Subject{
+						{Kind: rbacv1.ServiceAccountKind, Name: saName, Namespace: "another-ns"}, // ensure we check both ns 's name and sa's name
+					}),
+			},
+			existingAPIUser: test.GenDefaultAPIUser(),
+		},
+		{
+			name:             "scenario 2: SA has no permissions",
+			expectedResponse: `[]`,
+			httpStatus:       http.StatusOK,
+			clusterToGet:     test.GenDefaultCluster().Name,
+			existingKubermaticObjs: test.GenDefaultKubermaticObjects(
+				test.GenTestSeed(),
+				test.GenDefaultCluster(),
+			),
+			existingKubernetesObjs: []ctrlruntimeclient.Object{
+				&corev1.ServiceAccount{ObjectMeta: metav1.ObjectMeta{Namespace: saNamespace, Name: saName, Labels: map[string]string{cluster.ServiceAccountComponentKey: cluster.ServiceAccountComponentValue}}},
+			},
+			existingAPIUser: test.GenDefaultAPIUser(),
+		},
+		{
+			name:             "scenario 3: can not get permissions of SA that does not exist",
+			expectedResponse: `{"error":{"code":404,"message":"serviceaccounts \"test\" not found"}}`,
+			httpStatus:       http.StatusNotFound,
+			clusterToGet:     test.GenDefaultCluster().Name,
+			existingKubermaticObjs: test.GenDefaultKubermaticObjects(
+				test.GenTestSeed(),
+				test.GenDefaultCluster(),
+			),
+			existingKubernetesObjs: []ctrlruntimeclient.Object{},
+			existingAPIUser:        test.GenDefaultAPIUser(),
+		},
+		{
+			name:             "scenario 4: can not get permissions of sa that is not labeled",
+			expectedResponse: `{"error":{"code":403,"message":"can not get permission of service account which is not labeled component=clusterServiceAccount"}}`,
+			httpStatus:       http.StatusForbidden,
+			clusterToGet:     test.GenDefaultCluster().Name,
+			existingKubermaticObjs: test.GenDefaultKubermaticObjects(
+				test.GenTestSeed(),
+				test.GenDefaultCluster(),
+			),
+			existingKubernetesObjs: []ctrlruntimeclient.Object{
+				&corev1.ServiceAccount{ObjectMeta: metav1.ObjectMeta{Namespace: saNamespace, Name: saName}},
+			},
+			existingAPIUser: test.GenDefaultAPIUser(),
+		},
+		{
+			name:             "scenario 5: admin can get permissions of SA",
+			expectedResponse: `[{"scope":"Cluster","roleRefName":"role-2","namespace":""},{"scope":"Namespace","roleRefName":"role-1","namespace":"default"},{"scope":"Namespace","roleRefName":"role-1","namespace":"kube-system"}]`,
+			httpStatus:       http.StatusOK,
+			clusterToGet:     test.GenDefaultCluster().Name,
+			existingKubermaticObjs: test.GenDefaultKubermaticObjects(
+				test.GenTestSeed(),
+				test.GenDefaultCluster(),
+			),
+			existingKubernetesObjs: []ctrlruntimeclient.Object{
+				&corev1.ServiceAccount{ObjectMeta: metav1.ObjectMeta{Namespace: saNamespace, Name: saName, Labels: map[string]string{cluster.ServiceAccountComponentKey: cluster.ServiceAccountComponentValue}}},
+				test.GenServiceAccountRoleBinding("test-rb", "default", "role-1",
+					[]rbacv1.Subject{
+						{Kind: rbacv1.GroupKind, Name: "a-group"},
+						{Kind: rbacv1.ServiceAccountKind, Name: saName, Namespace: saNamespace},
+						{Kind: rbacv1.UserKind, Name: "a-user"},
+					}),
+				test.GenServiceAccountRoleBinding("test-rb-2", "kube-system", "role-1", // check sa has perm in another ns
+					[]rbacv1.Subject{
+						{Kind: rbacv1.ServiceAccountKind, Name: saName, Namespace: saNamespace},
+					}),
+				test.GenServiceAccountClusterRoleBinding("test-crb", "role-2",
+					[]rbacv1.Subject{
+						{Kind: rbacv1.GroupKind, Name: "a-group"},
+						{Kind: rbacv1.ServiceAccountKind, Name: saName, Namespace: saNamespace},
+						{Kind: rbacv1.UserKind, Name: "a-user"},
+					}),
+				test.GenServiceAccountClusterRoleBinding("test-crb-2", "role-4",
+					[]rbacv1.Subject{
+						{Kind: rbacv1.ServiceAccountKind, Name: saName, Namespace: "another-ns"}, // ensure we check both ns 's name and sa's name
+					}),
+			},
+			existingAPIUser: test.GenDefaultAdminAPIUser(),
+		},
+		{
+			name:             "scenario 6: user can get service account's permissions for Bob's cluster",
+			expectedResponse: `{"error":{"code":403,"message":"forbidden: \"john@acme.com\" doesn't belong to project my-first-project-ID"}}`,
+			httpStatus:       http.StatusForbidden,
+			clusterToGet:     test.GenDefaultCluster().Name,
+			existingKubermaticObjs: test.GenDefaultKubermaticObjects(
+				test.GenTestSeed(),
+				test.GenDefaultCluster(),
+				genUser("John", "john@acme.com", false),
+			),
+			existingKubernetesObjs: []ctrlruntimeclient.Object{
+				&corev1.ServiceAccount{ObjectMeta: metav1.ObjectMeta{Namespace: saNamespace, Name: saName}},
+			},
+			existingAPIUser: test.GenAPIUser("John", "john@acme.com"),
+		},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			var kubernetesObj []ctrlruntimeclient.Object
+			var kubeObj []ctrlruntimeclient.Object
+			var kubermaticObj []ctrlruntimeclient.Object
+			kubeObj = append(kubeObj, tc.existingKubernetesObjs...)
+			req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/v2/projects/%s/clusters/%s/serviceaccount/%s/%s/permissions", test.ProjectName, tc.clusterToGet, saNamespace, saName), strings.NewReader(""))
+			res := httptest.NewRecorder()
+
+			kubermaticObj = append(kubermaticObj, tc.existingKubermaticObjs...)
+			ep, _, err := test.CreateTestEndpointAndGetClients(*tc.existingAPIUser, nil, kubeObj, kubernetesObj, kubermaticObj, nil, hack.NewTestRouting)
+			if err != nil {
+				t.Fatalf("failed to create test endpoint: %v", err)
+			}
+
+			ep.ServeHTTP(res, req)
+
+			if res.Code != tc.httpStatus {
+				t.Fatalf("Expected HTTP status code %d, got %d: %s", tc.httpStatus, res.Code, res.Body.String())
+			}
+
+			test.CompareWithResult(t, res, tc.expectedResponse)
+		})
+	}
+}
 func TestCreateClusterSAReqValidate(t *testing.T) {
 	tests := []struct {
 		name             string

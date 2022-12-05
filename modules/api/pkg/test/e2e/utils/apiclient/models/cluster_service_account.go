@@ -36,7 +36,7 @@ type ClusterServiceAccount struct {
 	// Name represents human readable name for the resource
 	Name string `json:"name,omitempty"`
 
-	// namespace
+	// Namespace is the namespace where the service account lives.
 	Namespace string `json:"namespace,omitempty"`
 }
 

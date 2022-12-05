@@ -124,6 +124,37 @@ func CreateClusterSAEndpoint(userInfoGetter provider.UserInfoGetter, projectProv
 	}
 }
 
+func GetClusterSAPermissionsEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req, ok := request.(ClusterSAReq)
+		if !ok {
+			return nil, utilerrors.NewBadRequest("invalid request")
+		}
+
+		clusterProvider := ctx.Value(middleware.ClusterProviderContextKey).(provider.ClusterProvider)
+
+		cluster, err := handlercommon.GetCluster(ctx, projectProvider, privilegedProjectProvider, userInfoGetter, req.ProjectID, req.ClusterID, nil)
+		if err != nil {
+			return nil, err
+		}
+
+		client, err := common.GetClusterClient(ctx, userInfoGetter, clusterProvider, cluster, req.ProjectID)
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+
+		serviceAccount := &corev1.ServiceAccount{}
+		if err := client.Get(ctx, types.NamespacedName{Namespace: req.Namespace, Name: req.ServiceAccountID}, serviceAccount); err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+		if serviceAccount.GetLabels()[ServiceAccountComponentKey] != ServiceAccountComponentValue {
+			return nil, utilerrors.New(http.StatusForbidden, fmt.Sprintf("can not get permission of service account which is not labeled %s=%s", ServiceAccountComponentKey, ServiceAccountComponentValue))
+		}
+
+		return handlercommon.GetServiceAccountPermissions(ctx, client, serviceAccount)
+	}
+}
+
 func DeleteClusterSAKubeconigEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req, ok := request.(ClusterSAReq)
@@ -272,8 +303,8 @@ func (req CreateClusterSAReq) Validate() error {
 	return nil
 }
 
-// ClusterSAReq defines HTTP request for GetClusterSAKubeconigEndpoint and DeleteClusterSAKubeconigEndpoint
-// swagger:parameters getClusterServiceAccountKubeconfig deleteClusterServiceAccount
+// ClusterSAReq defines HTTP request for GetClusterSAKubeconigEndpoint and DeleteClusterSAKubeconigEndpoint GetClusterSAPermissionsEndpoint
+// swagger:parameters getClusterServiceAccountKubeconfig deleteClusterServiceAccount getClusterServiceAccountPermissions
 type ClusterSAReq struct {
 	common.ProjectReq
 	// in: path

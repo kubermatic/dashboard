@@ -16171,6 +16171,71 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/permissions": {
+      "get": {
+        "description": "get Service Account permissions",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "project"
+        ],
+        "operationId": "getClusterServiceAccountPermissions",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "ClusterID",
+            "name": "cluster_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "Namespace",
+            "name": "namespace",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "ServiceAccountID",
+            "name": "service_account_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Permission",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Permission"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/clusters/{cluster_id}/sshkeys": {
       "get": {
         "description": "Lists ssh keys that are assigned to the cluster\nThe returned collection is sorted by creation timestamp.",
@@ -27852,6 +27917,7 @@
           "x-go-name": "Name"
         },
         "namespace": {
+          "description": "Namespace is the namespace where the service account lives.",
           "type": "string",
           "x-go-name": "Namespace"
         }
@@ -34598,6 +34664,28 @@
         "type": "object"
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "Permission": {
+      "type": "object",
+      "title": "Permission represents the permissions (i.e. role and clusterRole) associated to an object.",
+      "properties": {
+        "namespace": {
+          "description": "Namespace on which the permission is given. Empty if scope is Cluster",
+          "type": "string",
+          "x-go-name": "Namespace"
+        },
+        "roleRefName": {
+          "description": "RoleRefName is the name of the clusterRole or Role.",
+          "type": "string",
+          "x-go-name": "RoleRefName"
+        },
+        "scope": {
+          "description": "Scope of the permission. Either \"Cluster\" or \"Namespace\".",
+          "type": "string",
+          "x-go-name": "Scope"
+        }
+      },
+      "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
     "PodDNSConfig": {
       "description": "PodDNSConfig defines the DNS parameters of a pod in addition to\nthose generated from DNSPolicy.",
