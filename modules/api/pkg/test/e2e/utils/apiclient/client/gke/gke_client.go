@@ -46,6 +46,10 @@ type ClientService interface {
 
 	ListGKEZones(params *ListGKEZonesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListGKEZonesOK, error)
 
+	ListProjectGCPVMSizes(params *ListProjectGCPVMSizesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectGCPVMSizesOK, error)
+
+	ListProjectGCPZones(params *ListProjectGCPZonesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectGCPZonesOK, error)
+
 	ListProjectGKEDiskTypes(params *ListProjectGKEDiskTypesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectGKEDiskTypesOK, error)
 
 	ListProjectGKEImages(params *ListProjectGKEImagesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectGKEImagesOK, error)
@@ -402,6 +406,86 @@ func (a *Client) ListGKEZones(params *ListGKEZonesParams, authInfo runtime.Clien
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListGKEZonesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectGCPVMSizes lists g c p VM sizes
+*/
+func (a *Client) ListProjectGCPVMSizes(params *ListProjectGCPVMSizesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectGCPVMSizesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectGCPVMSizesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectGCPVMSizes",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/gcp/vmsizes",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectGCPVMSizesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectGCPVMSizesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectGCPVMSizesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+	ListProjectGCPZones lists g c p zones
+
+	Produces
+
+application/json
+*/
+func (a *Client) ListProjectGCPZones(params *ListProjectGCPZonesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectGCPZonesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectGCPZonesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectGCPZones",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/gcp/zones",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectGCPZonesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectGCPZonesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectGCPZonesDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

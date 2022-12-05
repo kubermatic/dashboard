@@ -254,6 +254,8 @@ type ClientService interface {
 
 	ListNodesForCluster(params *ListNodesForClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListNodesForClusterOK, error)
 
+	ListProjectGCPDiskTypes(params *ListProjectGCPDiskTypesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectGCPDiskTypesOK, error)
+
 	ListProjects(params *ListProjectsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectsOK, error)
 
 	ListRole(params *ListRoleParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListRoleOK, error)
@@ -4630,6 +4632,44 @@ func (a *Client) ListNodesForCluster(params *ListNodesForClusterParams, authInfo
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListNodesForClusterDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectGCPDiskTypes List disktypes for a given project
+*/
+func (a *Client) ListProjectGCPDiskTypes(params *ListProjectGCPDiskTypesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectGCPDiskTypesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectGCPDiskTypesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectGCPDiskTypes",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/gcp/disktypes",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectGCPDiskTypesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectGCPDiskTypesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectGCPDiskTypesDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
