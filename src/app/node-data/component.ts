@@ -42,6 +42,8 @@ import {filter, finalize, switchMap, take, takeUntil, tap} from 'rxjs/operators'
 import {ParamsService, PathParam} from '@core/services/params';
 import {QuotaWidgetComponent} from '../dynamic/enterprise/quotas/quota-widget/component';
 import {OperatingSystemProfile} from '@shared/entity/operating-system-profile';
+import {AsyncValidators} from '@app/shared/validators/async.validators';
+import {ResourceType} from '@app/shared/entity/common';
 
 enum Controls {
   Name = 'name',
@@ -92,6 +94,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   @Input() showExtended = false;
   labels: object = {};
   taints: Taint[] = [];
+  asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.MachineDeployment)];
   selectedOperatingSystemProfile: string;
   supportedOperatingSystemProfiles: string[] = [];
   operatingSystemProfiles: OperatingSystemProfile[] = [];
