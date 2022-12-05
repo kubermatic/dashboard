@@ -102,25 +102,20 @@ func Deployment(c *kubermaticv1.Cluster, nd *apiv1.NodeDeployment, dc *kubermati
 	md.Spec.Replicas = &replicas
 
 	// Set autoscaler min and max replicas if present
-	if nd.Spec.AutoscalingOptions != nil {
-		if md.Annotations == nil {
-			md.Annotations = map[string]string{}
-		}
-		max := nd.Spec.AutoscalingOptions.MaxReplicas
-		if max != nil {
-			md.Annotations[AutoscalerMaxSizeAnnotation] = strconv.Itoa(int(*max))
-		} else {
-			delete(md.Annotations, AutoscalerMaxSizeAnnotation)
-		}
-
-		min := nd.Spec.AutoscalingOptions.MinReplicas
-		if min != nil {
-			md.Annotations[AutoscalerMinSizeAnnotation] = strconv.Itoa(int(*min))
-		} else {
-			delete(md.Annotations, AutoscalerMinSizeAnnotation)
-		}
-	} else if md.Annotations != nil {
+	if md.Annotations == nil {
+		md.Annotations = map[string]string{}
+	}
+	max := nd.Spec.MaxReplicas
+	if max != nil {
+		md.Annotations[AutoscalerMaxSizeAnnotation] = strconv.Itoa(int(*max))
+	} else {
 		delete(md.Annotations, AutoscalerMaxSizeAnnotation)
+	}
+
+	min := nd.Spec.MinReplicas
+	if min != nil {
+		md.Annotations[AutoscalerMinSizeAnnotation] = strconv.Itoa(int(*min))
+	} else {
 		delete(md.Annotations, AutoscalerMinSizeAnnotation)
 	}
 

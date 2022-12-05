@@ -2558,7 +2558,11 @@ type NodeDeploymentSpec struct {
 	// required: false
 	DynamicConfig *bool `json:"dynamicConfig,omitempty"`
 	// required: false
-	AutoscalingOptions *AutoscalingOptions `json:"autoscalingOptions,omitempty"`
+	MinReplicas *uint32 `json:"minReplicas,omitempty"`
+	// required: false
+	MaxReplicas *uint32 `json:"maxReplicas,omitempty"`
+	// required: false
+	// AutoscalingOptions *AutoscalingOptions `json:"autoscalingOptions,omitempty"`
 	// // required: false
 	// MinReplicas *int32 `json:"minReplicas,omitempty"`
 	// // required: false
@@ -2566,12 +2570,12 @@ type NodeDeploymentSpec struct {
 }
 
 // swagger:model AutoscalingOptions
-type AutoscalingOptions struct {
-	// required: false
-	MinReplicas *uint32 `json:"minReplicas,omitempty"`
-	// required: false
-	MaxReplicas *uint32 `json:"maxReplicas,omitempty"`
-}
+// type AutoscalingOptions struct {
+// 	// required: false
+// 	MinReplicas *uint32 `json:"minReplicas,omitempty"`
+// 	// required: false
+// 	MaxReplicas *uint32 `json:"maxReplicas,omitempty"`
+// }
 
 // Event is a report of an event somewhere in the cluster.
 // swagger:model Event

@@ -745,10 +745,8 @@ func TestGetMachineDeployment(t *testing.T) {
 					Replicas:      replicas,
 					Paused:        &paused,
 					DynamicConfig: pointer.Bool(false),
-					AutoscalingOptions: &apiv1.AutoscalingOptions{
-						MinReplicas: pointer.Uint32(5),
-						MaxReplicas: pointer.Uint32(7),
-					},
+					MinReplicas:   pointer.Uint32(5),
+					MaxReplicas:   pointer.Uint32(7),
 				},
 				Status: clusterv1alpha1.MachineDeploymentStatus{},
 			},
@@ -799,9 +797,7 @@ func TestGetMachineDeployment(t *testing.T) {
 					Replicas:      replicas,
 					Paused:        &paused,
 					DynamicConfig: pointer.Bool(false),
-					AutoscalingOptions: &apiv1.AutoscalingOptions{
-						MinReplicas: pointer.Uint32(5),
-					},
+					MinReplicas:   pointer.Uint32(5),
 				},
 				Status: clusterv1alpha1.MachineDeploymentStatus{},
 			},
@@ -1661,7 +1657,7 @@ func TestPatchMachineDeployment(t *testing.T) {
 			Name: "Scenario 8: Update replicas count in range",
 			Body: fmt.Sprintf(`{"spec":{"replicas":%v}}`, replicasUpdated),
 			ExpectedResponse: fmt.Sprintf(
-				`{"id":"venus","name":"venus","annotations":{"cluster.k8s.io/cluster-api-autoscaler-node-group-min-size":"%[2]v"},"creationTimestamp":"0001-01-01T00:00:00Z","spec":{"replicas":%[1]v,"template":{"cloud":{"digitalocean":{"size":"2GB","backups":false,"ipv6":false,"monitoring":false,"tags":["kubernetes","kubernetes-cluster-defClusterID","system-cluster-defClusterID","system-project-my-first-project-ID"]}},"operatingSystem":{"ubuntu":{"distUpgradeOnBoot":true}},"versions":{"kubelet":"v9.9.9"},"labels":{"system/cluster":"defClusterID","system/project":"my-first-project-ID"}},"paused":false,"dynamicConfig":false,"autoscalingOptions":{"minReplicas":%[2]v}},"status":{}}`,
+				`{"id":"venus","name":"venus","annotations":{"cluster.k8s.io/cluster-api-autoscaler-node-group-min-size":"%[2]v"},"creationTimestamp":"0001-01-01T00:00:00Z","spec":{"replicas":%[1]v,"template":{"cloud":{"digitalocean":{"size":"2GB","backups":false,"ipv6":false,"monitoring":false,"tags":["kubernetes","kubernetes-cluster-defClusterID","system-cluster-defClusterID","system-project-my-first-project-ID"]}},"operatingSystem":{"ubuntu":{"distUpgradeOnBoot":true}},"versions":{"kubelet":"v9.9.9"},"labels":{"system/cluster":"defClusterID","system/project":"my-first-project-ID"}},"paused":false,"dynamicConfig":false,"minReplicas":%[2]v},"status":{}}`,
 				replicasUpdated,
 				minReplicas,
 			),
@@ -1735,9 +1731,9 @@ func TestPatchMachineDeployment(t *testing.T) {
 		// Scenario 11: Update autoscaling options - increase min
 		{
 			Name: "Scenario 11: Update autoscaling options - increase min",
-			Body: fmt.Sprintf(`{"spec":{"autoscalingOptions":{"minReplicas": %d}}}`, minReplicasUpdated),
+			Body: fmt.Sprintf(`{"spec":{"minReplicas": %d}}`, minReplicasUpdated),
 			ExpectedResponse: fmt.Sprintf(
-				`{"id":"venus","name":"venus","annotations":{"cluster.k8s.io/cluster-api-autoscaler-node-group-min-size":"%[1]v"},"creationTimestamp":"0001-01-01T00:00:00Z","spec":{"replicas":5,"template":{"cloud":{"digitalocean":{"size":"2GB","backups":false,"ipv6":false,"monitoring":false,"tags":["kubernetes","kubernetes-cluster-defClusterID","system-cluster-defClusterID","system-project-my-first-project-ID"]}},"operatingSystem":{"ubuntu":{"distUpgradeOnBoot":true}},"versions":{"kubelet":"v9.9.9"},"labels":{"system/cluster":"defClusterID","system/project":"my-first-project-ID"}},"paused":false,"dynamicConfig":false,"autoscalingOptions":{"minReplicas":%[1]v}},"status":{}}`,
+				`{"id":"venus","name":"venus","annotations":{"cluster.k8s.io/cluster-api-autoscaler-node-group-min-size":"%[1]v"},"creationTimestamp":"0001-01-01T00:00:00Z","spec":{"replicas":5,"template":{"cloud":{"digitalocean":{"size":"2GB","backups":false,"ipv6":false,"monitoring":false,"tags":["kubernetes","kubernetes-cluster-defClusterID","system-cluster-defClusterID","system-project-my-first-project-ID"]}},"operatingSystem":{"ubuntu":{"distUpgradeOnBoot":true}},"versions":{"kubelet":"v9.9.9"},"labels":{"system/cluster":"defClusterID","system/project":"my-first-project-ID"}},"paused":false,"dynamicConfig":false,"minReplicas":%[1]v},"status":{}}`,
 				minReplicasUpdated,
 			),
 			cluster:          "keen-snyder",
@@ -1763,7 +1759,7 @@ func TestPatchMachineDeployment(t *testing.T) {
 		// Scenario 12: Unset autoscaling options - unset
 		{
 			Name:             "Scenario 12: Unset autoscaling options",
-			Body:             `{"spec":{"autoscalingOptions":null}}`,
+			Body:             `{"spec":{"minReplicas":null,"maxReplicas":null}}`,
 			ExpectedResponse: `{"id":"venus","name":"venus","creationTimestamp":"0001-01-01T00:00:00Z","spec":{"replicas":5,"template":{"cloud":{"digitalocean":{"size":"2GB","backups":false,"ipv6":false,"monitoring":false,"tags":["kubernetes","kubernetes-cluster-defClusterID","system-cluster-defClusterID","system-project-my-first-project-ID"]}},"operatingSystem":{"ubuntu":{"distUpgradeOnBoot":true}},"versions":{"kubelet":"v9.9.9"},"labels":{"system/cluster":"defClusterID","system/project":"my-first-project-ID"}},"paused":false,"dynamicConfig":false},"status":{}}`,
 			cluster:          "keen-snyder",
 			HTTPStatus:       http.StatusOK,
@@ -1789,9 +1785,9 @@ func TestPatchMachineDeployment(t *testing.T) {
 		// Scenario 13: Create autoscaling options
 		{
 			Name: "Scenario 13: Create autoscaling options",
-			Body: fmt.Sprintf(`{"spec":{"autoscalingOptions":{"minReplicas": %[1]d,"maxReplicas": %[2]d}}}`, minReplicas, maxReplicas),
+			Body: fmt.Sprintf(`{"spec":{"minReplicas": %[1]d,"maxReplicas": %[2]d}}`, minReplicas, maxReplicas),
 			ExpectedResponse: fmt.Sprintf(
-				`{"id":"venus","name":"venus","annotations":{"cluster.k8s.io/cluster-api-autoscaler-node-group-max-size":"%[1]v","cluster.k8s.io/cluster-api-autoscaler-node-group-min-size":"%[2]v"},"creationTimestamp":"0001-01-01T00:00:00Z","spec":{"replicas":1,"template":{"cloud":{"digitalocean":{"size":"2GB","backups":false,"ipv6":false,"monitoring":false,"tags":["kubernetes","kubernetes-cluster-defClusterID","system-cluster-defClusterID","system-project-my-first-project-ID"]}},"operatingSystem":{"ubuntu":{"distUpgradeOnBoot":true}},"versions":{"kubelet":"v9.9.9"},"labels":{"system/cluster":"defClusterID","system/project":"my-first-project-ID"}},"paused":false,"dynamicConfig":false,"autoscalingOptions":{"minReplicas":%[2]d,"maxReplicas":%[1]d}},"status":{}}`,
+				`{"id":"venus","name":"venus","annotations":{"cluster.k8s.io/cluster-api-autoscaler-node-group-max-size":"%[1]v","cluster.k8s.io/cluster-api-autoscaler-node-group-min-size":"%[2]v"},"creationTimestamp":"0001-01-01T00:00:00Z","spec":{"replicas":1,"template":{"cloud":{"digitalocean":{"size":"2GB","backups":false,"ipv6":false,"monitoring":false,"tags":["kubernetes","kubernetes-cluster-defClusterID","system-cluster-defClusterID","system-project-my-first-project-ID"]}},"operatingSystem":{"ubuntu":{"distUpgradeOnBoot":true}},"versions":{"kubelet":"v9.9.9"},"labels":{"system/cluster":"defClusterID","system/project":"my-first-project-ID"}},"paused":false,"dynamicConfig":false,"minReplicas":%[2]d,"maxReplicas":%[1]d},"status":{}}`,
 				maxReplicas,
 				minReplicas,
 			),
