@@ -39,6 +39,7 @@ import {KubeOneWizardStep, StepRegistry, steps} from './config';
 })
 export class KubeOneWizardComponent implements OnInit, OnDestroy {
   readonly StepRegistry = StepRegistry;
+  readonly View = View;
 
   form: FormGroup;
   project = {} as Project;
@@ -105,7 +106,7 @@ export class KubeOneWizardComponent implements OnInit, OnDestroy {
   onNext(cluster: ExternalCluster): void {
     this.creating = true;
     this._notificationService.success('Imported the KubeOne cluster');
-    this._router.navigate(['/projects', this.project.id, View.Clusters, View.ExternalClusters, cluster.id]);
+    this._router.navigate(['/projects', this.project.id, View.Clusters, View.KubeOneClusters, cluster.id]);
   }
 
   private _initForm(steps: KubeOneWizardStep[]): void {

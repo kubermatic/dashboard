@@ -75,6 +75,10 @@ function createRouting(): Routes {
           loadChildren: () => import('./cluster/module').then(m => m.ClusterModule),
         },
         {
+          path: 'projects/:projectID/kubeoneclusters',
+          loadChildren: () => import('./cluster/module').then(m => m.ClusterModule),
+        },
+        {
           path: 'projects/:projectID/clustertemplates',
           loadChildren: () => import('./cluster-template/module').then(m => m.ClusterTemplateModule),
         },

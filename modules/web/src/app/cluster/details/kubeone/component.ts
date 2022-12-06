@@ -164,7 +164,7 @@ export class KubeOneClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   goBack(): void {
-    this._router.navigate([`/projects/${this.projectID}/${View.ExternalClusters}`]);
+    this._router.navigate([`/projects/${this.projectID}/${View.KubeOneClusters}`]);
   }
 
   canDisconnect(): boolean {

@@ -97,7 +97,7 @@ export class PageTitleService {
     const projectId = this._params.get(PathParam.ProjectID);
     const clusterId = this._params.get(PathParam.ClusterID);
     const isExternal = this._params.getCurrentUrl().includes(`/${View.ExternalClusters}/`);
-    const isKubeOne = this._params.getCurrentUrl().includes(`/${View.KubeOne}/`);
+    const isKubeOne = this._params.getCurrentUrl().includes(`/${View.KubeOneClusters}/`);
 
     if (projectId && clusterId) {
       if (isExternal || isKubeOne) {
@@ -113,7 +113,7 @@ export class PageTitleService {
     const clusterId = this._params.get(PathParam.ClusterID);
     const machineDeploymentId = this._params.get(PathParam.MachineDeploymentID);
     const isExternal = this._params.getCurrentUrl().includes(`/${View.ExternalClusters}/`);
-    const isKubeOne = this._params.getCurrentUrl().includes(`/${View.KubeOne}/`);
+    const isKubeOne = this._params.getCurrentUrl().includes(`/${View.KubeOneClusters}/`);
 
     if (!projectId || !clusterId || !machineDeploymentId) {
       return of(null);

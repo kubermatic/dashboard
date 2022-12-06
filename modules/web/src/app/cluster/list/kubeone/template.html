@@ -1,5 +1,5 @@
 <!--
-Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@ limitations under the License.
 
 <mat-card class="km-card">
   <mat-card-header>
-    <mat-card-title>External Clusters</mat-card-title>
+    <mat-card-title>KubeOne Clusters</mat-card-title>
   </mat-card-header>
   <div fxLayout
        fxLayoutAlign=" center"
@@ -28,20 +28,12 @@ limitations under the License.
       <router-outlet name="quota-widget"
                      (activate)="onActivate($event)"></router-outlet>
     </div>
-    <button id="km-add-external-cluster-btn"
+    <button id="km-import-kubeone-cluster-btn"
             mat-flat-button
             [disabled]="!can(Permission.Create)"
-            (click)="addExternalCluster()">
+            (click)="importKubeOneCluster()">
       <i class="km-icon-mask km-icon-add"></i>
-      <span>Import External Cluster</span>
-    </button>
-
-    <button id="km-create-external-cluster-btn"
-            mat-flat-button
-            [disabled]="!can(Permission.Create)"
-            (click)="openWizard()">
-      <i class="km-icon-mask km-icon-add"></i>
-      <span>Create External Cluster</span>
+      <span>Import KubeOne Cluster</span>
     </button>
   </div>
 
@@ -75,8 +67,6 @@ limitations under the License.
           <div fxLayoutAlign=" center"
                fxLayoutGap="8px">
             <span>{{element.name}}</span>
-            <span *ngIf="element?.labels['is-imported'] === 'true'"
-                  class="km-label-primary">Imported</span>
           </div>
         </td>
       </ng-container>
@@ -88,11 +78,9 @@ limitations under the License.
         </th>
         <td mat-cell
             *matCellDef="let element">
-          <span [ngClass]="getProvider(element.cloud) === Provider.Custom ?
-              'km-provider-logo km-provider-logo-custom-external-cluster' : 'km-provider-logo km-provider-logo-'+getProvider(element.cloud)"></span>
+          <span class="km-provider-logo km-provider-logo-{{getProvider(element.cloud)}}"></span>
         </td>
       </ng-container>
-
 
       <ng-container [matColumnDef]="Column.Region">
         <th mat-header-cell
@@ -101,9 +89,6 @@ limitations under the License.
         </th>
         <td mat-cell
             *matCellDef="let element">
-          <ng-container *ngIf="element.cloud">
-            {{getRegion(element.cloud)}}
-          </ng-container>
         </td>
       </ng-container>
 
@@ -126,30 +111,18 @@ limitations under the License.
             *matCellDef="let element">
           <div fxLayoutAlign="end"
                class="km-table-actions">
-            <ng-container [ngSwitch]="!!element.deletionTimestamp">
-              <ng-container *ngSwitchCase="true">
-                <mat-spinner [diameter]="25"
-                             class="km-spinner"
-                             color="accent"></mat-spinner>
-              </ng-container>
-
-              <ng-container *ngSwitchCase="false">
-                <button mat-icon-button
-                        matTooltip="Disconnect Cluster"
-                        (click)="disconnectClusterDialog(element, $event)"
-                        [disabled]="!can(Permission.Delete)">
-                  <i class="km-icon-mask km-icon-disconnect"></i>
-                </button>
-                <button *ngIf="(!element?.labels || element?.labels['is-imported'] !== 'true') && !isClusterDeleted(element)"
-                        mat-icon-button
-                        [attr.id]="'km-delete-cluster-' + element.name"
-                        matTooltip="Delete Cluster"
-                        (click)="deleteClusterDialog(element, $event)"
-                        [disabled]="!can(Permission.Delete)">
-                  <i class="km-icon-mask km-icon-delete"></i>
-                </button>
-              </ng-container>
-            </ng-container>
+            <mat-spinner *ngIf="element.deletionTimestamp; else disconnectButton"
+                         [diameter]="25"
+                         class="km-spinner"
+                         color="accent"></mat-spinner>
+            <ng-template #disconnectButton>
+              <button mat-icon-button
+                      matTooltip="Disconnect Cluster"
+                      (click)="disconnectClusterDialog(element, $event)"
+                      [disabled]="!can(Permission.Delete)">
+                <i class="km-icon-mask km-icon-disconnect"></i>
+              </button>
+            </ng-template>
           </div>
         </td>
       </ng-container>
@@ -167,12 +140,12 @@ limitations under the License.
 
     <div class="km-row km-empty-list-msg"
          *ngIf="isInitialized && isEmpty(clusters)">
-      No external clusters available.
+      No clusters available.
     </div>
 
     <div class="km-row km-empty-list-msg"
          *ngIf="isInitialized && !isEmpty(clusters) && isEmpty(dataSource.filteredData)">
-      No external clusters found.
+      No clusters found.
     </div>
 
     <div class="km-row"
@@ -187,8 +160,3 @@ limitations under the License.
     </div>
   </mat-card-content>
 </mat-card>
-
-<ng-template #quotaWidget>
-  <router-outlet name="quota-widget"
-                 (activate)="onActivateQuotaWidgetWithoutCard($event)"></router-outlet>
-</ng-template>

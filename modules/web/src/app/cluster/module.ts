@@ -21,6 +21,7 @@ import {ExternalMachineDeploymentListComponent} from '@app/cluster/details/exter
 import {KubeOneClusterDetailsComponent} from '@app/cluster/details/kubeone/component';
 import {KubeOneMachineDeploymentDetailsComponent} from '@app/cluster/details/kubeone/machine-deployment-details/component';
 import {KubeOneMachineDeploymentListComponent} from '@app/cluster/details/kubeone/machine-deployment-list/component';
+import {KubeOneClusterListComponent} from '@app/cluster/list/kubeone/component';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '@app/node-data/config';
 import {NodeDataModule} from '@app/node-data/module';
 import {NodeService} from '@core/services/node';
@@ -133,6 +134,7 @@ const components: any[] = [
   UpdateExternalClusterMachineDeploymentDialogComponent,
   WebTerminalComponent,
   OverlayTerminalComponent,
+  KubeOneClusterListComponent,
   KubeOneClusterDetailsComponent,
   KubeOneMachineDeploymentListComponent,
   KubeOneMachineDeploymentDetailsComponent,

@@ -96,7 +96,7 @@ export class KubeOneMachineDeploymentListComponent implements OnInit, OnChanges,
 
   goToDetails(md: ExternalMachineDeployment): void {
     this._router.navigate([
-      `/projects/${this.projectID}/${View.Clusters}/${View.KubeOne}/${this.cluster.id}/md/${md.id}`,
+      `/projects/${this.projectID}/${View.Clusters}/${View.KubeOneClusters}/${this.cluster.id}/md/${md.id}`,
     ]);
   }
 
