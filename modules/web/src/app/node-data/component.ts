@@ -61,6 +61,8 @@ enum Controls {
   ProviderExtended = 'providerExtended',
   Kubelet = 'kubelet',
   OperatingSystemProfile = 'operatingSystemProfile',
+  MaxReplicas = 'maxReplicas',
+  MinReplicas = 'minReplicas',
 }
 
 @Component({
@@ -86,6 +88,9 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   readonly NodeProvider = NodeProvider;
   readonly Controls = Controls;
   readonly OperatingSystem = OperatingSystem;
+  readonly MinReplicasCount = 1;
+  readonly MaxReplicasCount = 1000;
+
   @Input() provider: NodeProvider;
   @Input() quotaWidget: TemplateRef<QuotaWidgetComponent>;
   labels: object = {};
@@ -153,6 +158,14 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       [Controls.OperatingSystemProfile]: this._builder.control({
         main: this.selectedOperatingSystemProfile || '',
       }),
+      [Controls.MaxReplicas]: this._builder.control(
+        this._nodeDataService.nodeData.maxReplicas,
+        Validators.max(this.MaxReplicasCount)
+      ),
+      [Controls.MinReplicas]: this._builder.control(
+        this._nodeDataService.nodeData.minReplicas,
+        Validators.min(this.MinReplicasCount)
+      ),
     });
 
     if (this.isDialogView()) {
@@ -213,6 +226,8 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     merge(
       this.form.get(Controls.Name).valueChanges,
       this.form.get(Controls.Count).valueChanges,
+      this.form.get(Controls.MaxReplicas).valueChanges,
+      this.form.get(Controls.MinReplicas).valueChanges,
       this.form.get(Controls.DynamicConfig).valueChanges,
       this.form.get(Controls.OperatingSystemProfile).valueChanges
     )
@@ -462,6 +477,8 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   private _getNodeData(): NodeData {
     return {
       count: this.form.get(Controls.Count).value,
+      maxReplicas: this.form.get(Controls.MaxReplicas).value ?? null,
+      minReplicas: this.form.get(Controls.MinReplicas).value ?? null,
       name: this.form.get(Controls.Name).value,
       dynamicConfig: this.form.get(Controls.DynamicConfig).value,
       operatingSystemProfile: this.form.get(Controls.OperatingSystemProfile).value?.[AutocompleteControls.Main],

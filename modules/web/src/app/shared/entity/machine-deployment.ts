@@ -29,6 +29,8 @@ export class MachineDeploymentSpec {
   template?: NodeSpec;
   paused?: boolean;
   dynamicConfig?: boolean;
+  minReplicas?: number;
+  maxReplicas?: number;
 }
 
 export class MachineDeploymentStatus {
@@ -49,6 +51,8 @@ export class MachineDeploymentSpecPatch {
   template?: NodeSpecPatch;
   paused?: boolean;
   dynamicConfig?: boolean;
+  minReplicas?: number;
+  maxReplicas?: number;
 }
 
 export class NodeSpecPatch {

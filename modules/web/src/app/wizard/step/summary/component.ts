@@ -80,6 +80,8 @@ export class SummaryStepComponent implements OnInit, OnDestroy {
         template: data.spec,
         replicas: data.count,
         dynamicConfig: data.dynamicConfig,
+        minReplicas: data.minReplicas,
+        maxReplicas: data.maxReplicas,
       },
     };
     if (data.operatingSystemProfile && this._clusterSpecService.cluster.spec.enableOperatingSystemManager) {

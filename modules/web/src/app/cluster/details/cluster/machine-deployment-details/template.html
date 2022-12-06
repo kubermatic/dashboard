@@ -73,6 +73,21 @@ limitations under the License.
                  matTooltip="Number of available machines may be higher than number of desired machines from the template if deployment is updating."></div>
           </div>
         </km-property>
+
+        <km-property *ngIf="machineDeployment.spec.maxReplicas">
+          <div key>Max Replicas</div>
+          <div value>
+            <span>{{machineDeployment.spec.maxReplicas}}</span>
+          </div>
+        </km-property>
+
+        <km-property *ngIf="machineDeployment.spec.minReplicas">
+          <div key>Min Replicas</div>
+          <div value>
+            <span>{{machineDeployment.spec.minReplicas}}</span>
+          </div>
+        </km-property>
+
         <km-property>
           <div key>Paused</div>
           <div value>{{machineDeployment.spec.paused}}</div>
