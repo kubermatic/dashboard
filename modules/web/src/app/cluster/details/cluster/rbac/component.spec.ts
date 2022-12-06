@@ -30,7 +30,6 @@ import {ClusterService} from '@core/services/cluster';
 import {ClusterMockService} from '@test/services/cluster-mock';
 import {AppConfigService} from '@app/config.service';
 import {AppConfigMockService} from '@test/services/app-config-mock';
-import {fakeBindings, fakeClusterBindings, fakeSimpleBindings, fakeSimpleClusterBindings} from '@test/data/rbac';
 
 describe('RBACComponent', () => {
   let fixture: ComponentFixture<RBACComponent>;
@@ -71,14 +70,4 @@ describe('RBACComponent', () => {
   it('should create the rbac cmp', waitForAsync(() => {
     expect(component).toBeTruthy();
   }));
-
-  it('should create simple cluster binding for rbac', () => {
-    const simpleClusterBindings = component.createSimpleClusterBinding(fakeClusterBindings());
-    expect(simpleClusterBindings).toEqual(fakeSimpleClusterBindings());
-  });
-
-  it('should create simple binding for rbac', () => {
-    const simpleBindings = component.createSimpleBinding(fakeBindings());
-    expect(simpleBindings).toEqual(fakeSimpleBindings());
-  });
 });

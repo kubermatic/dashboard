@@ -59,7 +59,7 @@ import {MachineDeploymentListComponent} from './details/cluster/machine-deployme
 import {MachineNetworksDisplayComponent} from './details/cluster/machine-networks-display/component';
 import {MLAComponent} from './details/cluster/mla/component';
 import {NodeListComponent} from './details/cluster/node-list/component';
-import {AddBindingComponent} from './details/cluster/rbac/add-binding/component';
+import {AddBindingComponent} from './details/cluster/rbac/dialog/add-binding/component';
 import {RBACComponent} from './details/cluster/rbac/component';
 import {RevokeTokenComponent} from './details/cluster/revoke-token/component';
 import {RuleGroupsComponent} from './details/cluster/mla/rule-groups/component';
@@ -80,6 +80,12 @@ import {ExternalClusterModule} from '@app/external-cluster-wizard/module';
 import {ExternalMachineDeploymentService} from '@app/core/services/external-machine-deployment';
 import {WebTerminalComponent} from '@app/cluster/details/cluster/web-terminal/component';
 import {OverlayTerminalComponent} from '@app/cluster/details/cluster/overlay-terminal/component';
+import {AddServiceAccountComponent} from './details/cluster/rbac/dialog/add-service-account/component';
+import {RBACServiceAccountComponent} from './details/cluster/rbac/component/service-account/component';
+import {AddServiceAccountBindingComponent} from './details/cluster/rbac/dialog/add-service-account-binding/component';
+import {ClusterServiceAccountService} from '@core/services/cluster-service-account';
+import {RBACServiceAccountDetailsComponent} from './details/cluster/rbac/component/service-account/service-account-detail/component';
+import {RBACUsersOrGroupsComponent} from './details/cluster/rbac/component/users-or-groups/component';
 
 const components: any[] = [
   ClusterDetailsComponent,
@@ -140,6 +146,11 @@ const components: any[] = [
   KubeOneMachineDeploymentListComponent,
   KubeOneMachineDeploymentDetailsComponent,
   ClusterMetricsComponent,
+  AddServiceAccountComponent,
+  AddServiceAccountBindingComponent,
+  RBACServiceAccountComponent,
+  RBACServiceAccountDetailsComponent,
+  RBACUsersOrGroupsComponent,
 ];
 
 @NgModule({
@@ -149,6 +160,7 @@ const components: any[] = [
   providers: [
     NodeService,
     ExternalMachineDeploymentService,
+    ClusterServiceAccountService,
     {
       provide: NODE_DATA_CONFIG,
       useValue: {mode: NodeDataMode.Dialog} as NodeDataConfig,

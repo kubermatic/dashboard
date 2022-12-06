@@ -24,7 +24,7 @@ import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';
 import {RBACService} from '@core/services/rbac';
 import {SharedModule} from '@shared/module';
-import {AddBindingComponent} from './component';
+import {AddBindingComponent} from 'app/cluster/details/cluster/rbac/dialog/add-binding/component';
 
 describe('AddBindingComponent', () => {
   let fixture: ComponentFixture<AddBindingComponent>;

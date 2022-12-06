@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <div class="dialog">
-  <km-dialog-title>Add Binding</km-dialog-title>
+  <km-dialog-title>Add {{ subjectType }} Binding</km-dialog-title>
   <mat-dialog-content>
     <mat-button-toggle-group group="bindingType"
                              (change)="changeView($event)">
@@ -28,25 +28,12 @@ limitations under the License.
       </mat-button-toggle>
     </mat-button-toggle-group>
 
-    <mat-button-toggle-group group="subjectType"
-                             class="toggle-subject-type"
-                             (change)="changeSubjectType($event)">
-      <mat-button-toggle value="user"
-                         [checked]="subjectType === 'user'">
-        User
-      </mat-button-toggle>
-      <mat-button-toggle value="group"
-                         [checked]="subjectType === 'group'">
-        Group
-      </mat-button-toggle>
-    </mat-button-toggle-group>
-
     <form [formGroup]="form"
           fxLayout="column"
           id="add-binding-form">
       <ng-container *ngIf="bindingType === 'cluster'">
         <mat-form-field fxFlex
-                        *ngIf="subjectType === 'user'">
+                        *ngIf="subjectType === Kind.User">
           <mat-label>User Email</mat-label>
           <input matInput
                  required
@@ -59,7 +46,7 @@ limitations under the License.
         </mat-form-field>
 
         <mat-form-field fxFlex
-                        *ngIf="subjectType === 'group'">
+                        *ngIf="subjectType === Kind.Group">
           <mat-label>Group</mat-label>
           <input matInput
                  required
@@ -89,7 +76,7 @@ limitations under the License.
 
       <ng-container *ngIf="bindingType === 'namespace'">
         <mat-form-field fxFlex
-                        *ngIf="subjectType === 'user'">
+                        *ngIf="subjectType === Kind.User">
           <mat-label>User Email</mat-label>
           <input matInput
                  required
@@ -102,7 +89,7 @@ limitations under the License.
         </mat-form-field>
 
         <mat-form-field fxFlex
-                        *ngIf="subjectType === 'group'">
+                        *ngIf="subjectType === Kind.Group">
           <mat-label>Group</mat-label>
           <input matInput
                  required

@@ -19,10 +19,11 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
 import {RBACService} from '@core/services/rbac';
 import {Cluster} from '@shared/entity/cluster';
-import {Binding, ClusterBinding, ClusterRoleName, CreateBinding, RoleName} from '@shared/entity/rbac';
+import {Binding, ClusterBinding, ClusterRoleName, CreateBinding, Kind, RoleName} from '@shared/entity/rbac';
 import _ from 'lodash';
 import {Observable, Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
+import {ClusterServiceAccountService} from '@core/services/cluster-service-account';
 
 export enum Controls {
   Email = 'email',
@@ -39,11 +40,12 @@ export enum Controls {
 export class AddBindingComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster;
   @Input() projectID: string;
+  @Input() subjectType = Kind.User;
 
+  readonly Kind = Kind;
   readonly controls = Controls;
   form: FormGroup;
   bindingType = 'cluster';
-  subjectType = 'user';
   clusterRoles: ClusterRoleName[] = [];
   roles: RoleName[] = [];
 
@@ -53,6 +55,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _rbacService: RBACService,
+    private readonly _clusterServiceAccountService: ClusterServiceAccountService,
     private readonly _matDialogRef: MatDialogRef<AddBindingComponent>,
     private readonly _notificationService: NotificationService
   ) {}
@@ -71,7 +74,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
       .subscribe(clusterRoles => (this.clusterRoles = _.sortBy(clusterRoles, cr => cr.name.toLowerCase())));
 
     this._rbacService
-      .getRoleNames(this.cluster.id, this.projectID)
+      .getNamespaceRoleNames(this.cluster.id, this.projectID)
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(roles => (this.roles = _.sortBy(roles, r => r.name.toLowerCase())));
 
@@ -86,6 +89,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
 
     this.setValidators();
     this.checkNamespaceState();
+    this.changeSubjectType();
   }
 
   ngOnDestroy(): void {
@@ -99,13 +103,10 @@ export class AddBindingComponent implements OnInit, OnDestroy {
     this.checkNamespaceState();
   }
 
-  changeSubjectType(event: MatButtonToggleChange): void {
-    this.form.get(Controls.Email).setValue('');
-    this.form.get(Controls.Group).setValue('');
-    this.subjectType = event.value;
+  changeSubjectType(): void {
     this.form.get(Controls.Email).clearValidators();
     this.form.get(Controls.Group).clearValidators();
-    if (this.subjectType === 'user') {
+    if (this.subjectType === Kind.User) {
       this.form.get(Controls.Email).setValidators([Validators.required]);
     } else {
       this.form.get(Controls.Group).setValidators([Validators.required]);
@@ -179,6 +180,9 @@ export class AddBindingComponent implements OnInit, OnDestroy {
           `Added the ${binding.subjects[binding.subjects.length - 1].name} cluster binding`
         )
       : this._notificationService.success(`Added the ${binding.subjects[binding.subjects.length - 1].name} binding`);
+    this._clusterServiceAccountService.update();
+    this._rbacService.refreshClusterBindings();
+    this._rbacService.refreshNamespaceBindings();
   }
 
   addClusterBinding(): Observable<ClusterBinding> {

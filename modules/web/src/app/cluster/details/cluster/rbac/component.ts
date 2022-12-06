@@ -14,20 +14,22 @@
 
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {MatTableDataSource} from '@angular/material/table';
 import {NotificationService} from '@core/services/notification';
 import {RBACService} from '@core/services/rbac';
 import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 import {Cluster} from '@shared/entity/cluster';
-import {Binding, ClusterBinding, SimpleBinding, SimpleClusterBinding} from '@shared/entity/rbac';
-import _ from 'lodash';
-import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
-import {AddBindingComponent} from './add-binding/component';
-import {combineLatest, iif, merge, of, Subject, timer} from 'rxjs';
+import {ClusterBinding, SimpleClusterBinding, Kind} from '@shared/entity/rbac';
+import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
+import {AddBindingComponent} from './dialog/add-binding/component';
+import {Subject, timer, iif} from 'rxjs';
 import {ClusterService} from '@core/services/cluster';
-import {Health} from '@shared/entity/health';
 import {AppConfigService} from '@app/config.service';
 import {isClusterRunning} from '@shared/utils/health-status';
+import {FormControl} from '@angular/forms';
+import {AddServiceAccountComponent} from './dialog/add-service-account/component';
+import {AddServiceAccountBindingComponent} from './dialog/add-service-account-binding/component';
+import {ClusterServiceAccountService} from '@core/services/cluster-service-account';
+import {ClusterServiceAccount} from '@shared/entity/cluster-service-account';
 
 @Component({
   selector: 'km-rbac',
@@ -37,44 +39,33 @@ import {isClusterRunning} from '@shared/utils/health-status';
 export class RBACComponent implements OnInit, OnDestroy {
   @Input() cluster: Cluster;
   @Input() projectID: string;
+
+  readonly RBACKind = Kind;
+  modes: Kind[] = [Kind.ServiceAccount, Kind.User, Kind.Group];
+  modeControl = new FormControl<Kind>(Kind.ServiceAccount);
+
   isClusterRunning: boolean;
-  clusterBindingsDataSource = new MatTableDataSource<SimpleClusterBinding>();
-  clusterBindingsDisplayedColumns: string[] = ['kind', 'name', 'clusterRole', 'actions'];
-  bindingsDataSource = new MatTableDataSource<SimpleBinding>();
-  bindingsDisplayedColumns: string[] = ['kind', 'name', 'clusterRole', 'namespace', 'actions'];
-  private readonly _refreshTime = 30;
+  private readonly _refreshTime = 10;
   private readonly _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
-  private _refresh = new Subject<void>();
   private _unsubscribe = new Subject<void>();
 
   constructor(
     private readonly _clusterService: ClusterService,
     private readonly _rbacService: RBACService,
+    private readonly _clusterServiceAccountService: ClusterServiceAccountService,
     private readonly _matDialog: MatDialog,
     private readonly _notificationService: NotificationService,
     private readonly _appConfigService: AppConfigService
   ) {}
 
   ngOnInit(): void {
-    merge(this._refreshTimer$, this._refresh)
+    this._refreshTimer$
       .pipe(
         switchMap(_ => this._clusterService.health(this.projectID, this.cluster.id)),
-        tap((health: Health) => (this.isClusterRunning = isClusterRunning(this.cluster, health))),
-        switchMap(_ =>
-          combineLatest([
-            iif(
-              () => this.isClusterRunning,
-              this._rbacService.getClusterBindings(this.cluster.id, this.projectID),
-              of([])
-            ),
-            iif(() => this.isClusterRunning, this._rbacService.getBindings(this.cluster.id, this.projectID), of([])),
-          ])
-        ),
         takeUntil(this._unsubscribe)
       )
-      .subscribe(([clusterBindings, bindings]) => {
-        this.clusterBindingsDataSource.data = this.createSimpleClusterBinding(clusterBindings);
-        this.bindingsDataSource.data = this.createSimpleBinding(bindings);
+      .subscribe(health => {
+        this.isClusterRunning = isClusterRunning(this.cluster, health);
       });
   }
 
@@ -83,61 +74,47 @@ export class RBACComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  createSimpleClusterBinding(bindings: ClusterBinding[]): SimpleClusterBinding[] {
-    const clusterBindingArray = [];
-    bindings.forEach(binding => {
-      if (binding.subjects) {
-        binding.subjects.map(subject => {
-          clusterBindingArray.push({
-            name: subject.name,
-            role: binding.roleRefName,
-            kind: subject.kind,
-          });
-        });
-      }
-    });
-    return clusterBindingArray;
-  }
-
-  createSimpleBinding(bindings: Binding[]): SimpleBinding[] {
-    const bindingArray = [];
-    bindings.forEach(binding => {
-      if (binding.subjects) {
-        binding.subjects.map(subject => {
-          bindingArray.push({
-            name: subject.name,
-            role: binding.roleRefName,
-            namespace: binding.namespace,
-            kind: subject.kind,
-          });
-        });
-      }
-    });
-    return bindingArray;
-  }
-
-  addBinding(event: Event): void {
-    event.stopPropagation();
+  addBinding(): void {
     const modal = this._matDialog.open(AddBindingComponent);
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.projectID = this.projectID;
+    modal.componentInstance.subjectType = this.modeControl.value;
     modal
       .afterClosed()
       .pipe(take(1))
-      .subscribe(_ => this._refresh.next());
+      .subscribe(_ => this._updateBindings());
   }
 
-  isLoadingData(data: SimpleBinding[] | SimpleClusterBinding[]): boolean {
-    return _.isEmpty(data) && !this.isClusterRunning;
+  addServiceAccount(): void {
+    const dialogRef = this._matDialog.open(AddServiceAccountComponent);
+    dialogRef.componentInstance.cluster = this.cluster;
+    dialogRef.componentInstance.projectID = this.projectID;
+
+    dialogRef
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(_ => {
+        this._updateBindings();
+      });
   }
 
-  hasNoData(data: SimpleBinding[] | SimpleClusterBinding[]): boolean {
-    return _.isEmpty(data) && this.isClusterRunning;
+  addServiceAccountBinding(clusterServiceAccount?: ClusterServiceAccount): void {
+    const dialogRef = this._matDialog.open<AddServiceAccountBindingComponent, unknown, ClusterBinding>(
+      AddServiceAccountBindingComponent
+    );
+    dialogRef.componentInstance.cluster = this.cluster;
+    dialogRef.componentInstance.projectID = this.projectID;
+    dialogRef.componentInstance.clusterServiceAccount = clusterServiceAccount;
+
+    dialogRef
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(_ => {
+        this._updateBindings();
+      });
   }
 
-  deleteClusterBinding(element: SimpleClusterBinding, event: Event): void {
-    event.stopPropagation();
-
+  deleteBinding(element: SimpleClusterBinding): void {
     const dialogConfig: MatDialogConfig = {
       data: {
         title: 'Delete Binding',
@@ -152,59 +129,41 @@ export class RBACComponent implements OnInit, OnDestroy {
 
     dialogRef
       .afterClosed()
-      .pipe(filter(isConfirmed => isConfirmed))
       .pipe(
+        filter(isConfirmed => isConfirmed),
         switchMap(_ =>
-          this._rbacService.deleteClusterBinding(
-            this.cluster.id,
-            this.projectID,
-            element.role,
-            element.kind,
-            element.name
+          iif(
+            () => !!element.namespace,
+            this._rbacService.deleteBinding(
+              this.cluster.id,
+              this.projectID,
+              element.clusterRole,
+              element.namespace,
+              element.kind,
+              element.name,
+              element.subjectNamespace
+            ),
+            this._rbacService.deleteClusterBinding(
+              this.cluster.id,
+              this.projectID,
+              element.clusterRole,
+              element.kind,
+              element.name,
+              element.subjectNamespace
+            )
           )
-        )
+        ),
+        take(1)
       )
-      .pipe(take(1))
       .subscribe(() => {
-        this._refresh.next();
+        this._updateBindings();
         this._notificationService.success(`Removed ${element.name} ${element.kind} from the binding`);
       });
   }
 
-  deleteBinding(element: SimpleBinding, event: Event): void {
-    event.stopPropagation();
-
-    const dialogConfig: MatDialogConfig = {
-      data: {
-        title: 'Delete Binding',
-        message: `Delete binding for ${element.kind.toLowerCase()} <b>${element.name}</b> of <b>${
-          this.cluster.name
-        }</b> cluster permanently?`,
-        confirmLabel: 'Delete',
-      },
-    };
-
-    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
-
-    dialogRef
-      .afterClosed()
-      .pipe(filter(isConfirmed => isConfirmed))
-      .pipe(
-        switchMap(_ =>
-          this._rbacService.deleteBinding(
-            this.cluster.id,
-            this.projectID,
-            element.role,
-            element.namespace,
-            element.kind,
-            element.name
-          )
-        )
-      )
-      .pipe(take(1))
-      .subscribe(() => {
-        this._refresh.next();
-        this._notificationService.success(`Removed ${element.name} ${element.kind} from the binding`);
-      });
+  private _updateBindings(): void {
+    this._clusterServiceAccountService.update();
+    this._rbacService.refreshClusterBindings();
+    this._rbacService.refreshNamespaceBindings();
   }
 }
