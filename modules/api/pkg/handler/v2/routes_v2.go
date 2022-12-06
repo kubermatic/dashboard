@@ -888,16 +888,16 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 				Path("/projects/{project_id}/providers/alibaba/vswitches").
 				Handler(r.listProjectAlibabaVSwitches())
 
-			// Anexia endpoints
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/anexia/vlans").
-				Handler(r.listProjectAnexiaVlans())
-
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/anexia/templates").
-				Handler(r.listProjectAnexiaTemplates())
-
 		*/
+
+	// Anexia endpoints
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/anexia/vlans").
+		Handler(r.listProjectAnexiaVlans())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/anexia/templates").
+		Handler(r.listProjectAnexiaTemplates())
 
 	// Defines a set of HTTP endpoints for various cloud providers
 	// Note that these endpoints don't require credentials as opposed to the ones defined under
@@ -6049,6 +6049,50 @@ func (r Routing) listProjectHetznerSizes() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(provider.HetznerProjectSizeEndpoint(r.presetProvider, r.userInfoGetter, r.seedsGetter, r.settingsProvider)),
 		provider.DecodeHetznerProjectSizesReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/anexia/vlans anexia listProjectAnexiaVlans
+//
+// Lists VLANs from Anexia.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AnexiaVlanList
+func (r Routing) listProjectAnexiaVlans() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.AnexiaProjectVlansEndpoint(r.presetProvider, r.userInfoGetter)),
+		provider.DecodeAnexiaProjectReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/anexia/templates anexia listProjectAnexiaTemplates
+//
+// Lists templates from Anexia.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AnexiaTemplateList
+func (r Routing) listProjectAnexiaTemplates() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.AnexiaProjectTemplatesEndpoint(r.presetProvider, r.userInfoGetter)),
+		provider.DecodeAnexiaProjectTemplateReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)

@@ -18,6 +18,7 @@ package provider
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/go-kit/kit/endpoint"
@@ -27,7 +28,58 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/handler/v2/cluster"
 	"k8c.io/dashboard/v2/pkg/provider"
+	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
+
+	"k8s.io/utils/pointer"
 )
+
+func AnexiaProjectVlansEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(anexiaProjectReq)
+
+		token := req.Token
+		userInfo, err := userInfoGetter(ctx, "")
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+
+		if len(req.Credential) > 0 {
+			preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(req.GetProjectID()), req.Credential)
+			if err != nil {
+				return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", req.Credential, userInfo.Email))
+			}
+			if credentials := preset.Spec.Anexia; credentials != nil {
+				token = credentials.Token
+			}
+		}
+
+		return providercommon.ListAnexiaVlans(ctx, token)
+	}
+}
+
+func AnexiaProjectTemplatesEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(anexiaProjectTemplateReq)
+
+		token := req.Token
+		userInfo, err := userInfoGetter(ctx, "")
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+
+		if len(req.Credential) > 0 {
+			preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(req.GetProjectID()), req.Credential)
+			if err != nil {
+				return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", req.Credential, userInfo.Email))
+			}
+			if credentials := preset.Spec.Anexia; credentials != nil {
+				token = credentials.Token
+			}
+		}
+
+		return providercommon.ListAnexiaTemplates(ctx, token, req.Location)
+	}
+}
 
 func AnexiaVlansWithClusterCredentialsEndpoint(projectProvider provider.ProjectProvider, privilegedProjectProvider provider.PrivilegedProjectProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
@@ -41,6 +93,54 @@ func AnexiaTemplatesWithClusterCredentialsEndpoint(projectProvider provider.Proj
 		req := request.(anexiaNoCredentialReq)
 		return providercommon.AnexiaTemplatesWithClusterCredentialsEndpoint(ctx, userInfoGetter, projectProvider, privilegedProjectProvider, seedsGetter, req.ProjectID, req.ClusterID)
 	}
+}
+
+// AnexiaReq represent a request for Anexia resources
+// swagger:parameters listProjectAnexiaVlans
+type anexiaProjectReq struct {
+	common.ProjectReq
+
+	// in: header
+	// Token Anexia token
+	Token string
+	// in: header
+	// Credential predefined Kubermatic credential name from the presets
+	Credential string
+}
+
+func DecodeAnexiaProjectReq(c context.Context, r *http.Request) (interface{}, error) {
+	projectReq, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return anexiaProjectReq{
+		ProjectReq: projectReq.(common.ProjectReq),
+		Token:      r.Header.Get("Token"),
+		Credential: r.Header.Get("Credential"),
+	}, nil
+}
+
+// anexiaProjectTemplateReq represent a request for Anexia template resources
+// swagger:parameters listProjectAnexiaTemplates
+type anexiaProjectTemplateReq struct {
+	anexiaProjectReq
+
+	// in: header
+	// Location Anexia location ID
+	Location string
+}
+
+func DecodeAnexiaProjectTemplateReq(c context.Context, r *http.Request) (interface{}, error) {
+	projectReq, err := DecodeAnexiaProjectReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return anexiaProjectTemplateReq{
+		anexiaProjectReq: projectReq.(anexiaProjectReq),
+		Location:         r.Header.Get("Location"),
+	}, nil
 }
 
 // anexiaNoCredentialReq represent a request for Anexia resources
