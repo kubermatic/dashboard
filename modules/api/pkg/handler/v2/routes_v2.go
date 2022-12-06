@@ -476,6 +476,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 		Path("/applicationdefinitions").
 		Handler(r.createApplicationDefinition())
 
+	mux.Methods(http.MethodPut).
+		Path("/applicationdefinitions/{appdef_name}").
+		Handler(r.updateApplicationDefinition())
+
 	// Define a set of endpoints for gatekeeper constraint templates
 	mux.Methods(http.MethodGet).
 		Path("/constrainttemplates").
@@ -8788,6 +8792,34 @@ func (r Routing) createApplicationDefinition() http.Handler {
 		)(applicationdefinition.CreateApplicationDefinition(r.userInfoGetter, r.applicationDefinitionProvider)),
 		applicationdefinition.DecodeCreateApplicationDefinition,
 		handler.SetStatusCreatedHeader(handler.EncodeJSON),
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route PUT /api/v2/applicationdefinitions/{appdef_name} applications updateApplicationDefinition
+//
+//	Updates the given ApplicationDefinition
+//
+//
+//	 Consumes:
+//	 - application/json
+//
+//	 Produces:
+//	 - application/json
+//
+//	 Responses:
+//	   default: errorResponse
+//	   200: ApplicationDefinition
+//	   401: empty
+//	   403: empty
+func (r Routing) updateApplicationDefinition() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(applicationdefinition.UpdateApplicationDefinition(r.userInfoGetter, r.applicationDefinitionProvider)),
+		applicationdefinition.DecodeUpdateApplicationDefinition,
+		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
 }

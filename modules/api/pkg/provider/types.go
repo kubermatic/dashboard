@@ -1329,6 +1329,12 @@ type ApplicationDefinitionProvider interface {
 	// Note that this function:
 	// is unsafe in a sense that it uses privileged account to get the resources
 	CreateUnsecured(ctx context.Context, appDef *appskubermaticv1.ApplicationDefinition) (*appskubermaticv1.ApplicationDefinition, error)
+
+	// Update updates an ApplicationDefinition
+	//
+	// Note that this function:
+	// is unsafe in a sense that it uses privileged account to get the resources
+	UpdateUnsecured(ctx context.Context, appDef *appskubermaticv1.ApplicationDefinition) (*appskubermaticv1.ApplicationDefinition, error)
 }
 
 type PrivilegedOperatingSystemProfileProvider interface {

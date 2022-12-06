@@ -9316,6 +9316,56 @@
             }
           }
         }
+      },
+      "put": {
+        "description": "Updates the given ApplicationDefinition",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "applications"
+        ],
+        "operationId": "updateApplicationDefinition",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "AppDefName",
+            "name": "appdef_name",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ApplicationDefinitionBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ApplicationDefinition",
+            "schema": {
+              "$ref": "#/definitions/ApplicationDefinition"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
       }
     },
     "/api/v2/cni/{cni_plugin_type}/versions": {

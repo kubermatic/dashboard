@@ -42,6 +42,17 @@ type createApplicationDefinitionReq struct {
 	Body apiv2.ApplicationDefinitionBody
 }
 
+// updateApplicationDefinitionReq defines HTTP request for updateApplicationDefinitionReq
+// swagger:parameters updateApplicationDefinition
+type updateApplicationDefinitionReq struct {
+	// in: path
+	AppDefName string `json:"appdef_name"`
+
+	// in: body
+	// required: true
+	Body apiv2.ApplicationDefinitionBody
+}
+
 func DecodeGetApplicationDefinition(c context.Context, r *http.Request) (interface{}, error) {
 	var req getApplicationDefinitionReq
 
@@ -56,6 +67,21 @@ func DecodeGetApplicationDefinition(c context.Context, r *http.Request) (interfa
 
 func DecodeCreateApplicationDefinition(c context.Context, r *http.Request) (interface{}, error) {
 	var req createApplicationDefinitionReq
+
+	if err := json.NewDecoder(r.Body).Decode(&req.Body); err != nil {
+		return nil, err
+	}
+	return req, nil
+}
+
+func DecodeUpdateApplicationDefinition(c context.Context, r *http.Request) (interface{}, error) {
+	var req updateApplicationDefinitionReq
+
+	appDefName, err := DecodeApplicationDefinitionName(c, r)
+	if err != nil {
+		return nil, err
+	}
+	req.AppDefName = appDefName
 
 	if err := json.NewDecoder(r.Body).Decode(&req.Body); err != nil {
 		return nil, err
