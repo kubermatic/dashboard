@@ -158,10 +158,12 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     if (this.isDialogView()) {
       this.form.addControl(Controls.Kubelet, this._builder.control(''));
       this.dialogEditMode = !!this._nodeDataService.nodeData.name;
-    }
 
-    if (this.dialogEditMode) {
-      this.form.get(Controls.Name).disable();
+      if (this.dialogEditMode) {
+        this.form.get(Controls.Name).disable();
+      } else {
+        this._nodeDataService.operatingSystemSpec = this._getOperatingSystemSpec();
+      }
     }
 
     this._init();
@@ -421,17 +423,16 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     }
   }
 
-  // Ubuntu otherwise
-  private _getDefaultSystemTemplate(provider: NodeProvider): OperatingSystem {
+  private _getDefaultSystemTemplate(provider: NodeProvider): OperatingSystem | null {
     switch (provider) {
       case NodeProvider.VSPHERE: {
         return this._datacenterSpec.spec.vsphere.templates
           ? (Object.keys(this._datacenterSpec.spec.vsphere.templates)[0] as OperatingSystem)
-          : OperatingSystem.Ubuntu;
+          : null;
       }
     }
 
-    return OperatingSystem.Ubuntu;
+    return null;
   }
 
   private _getDefaultOS(): OperatingSystem {
@@ -439,15 +440,23 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       return this._nodeDataService.operatingSystem;
     }
 
-    if (this.isProvider(NodeProvider.ANEXIA)) {
-      return OperatingSystem.Flatcar;
-    }
-
     if (this._datacenterSpec) {
-      return this._getDefaultSystemTemplate(this.provider);
+      const defaultSystemTemplateOS = this._getDefaultSystemTemplate(this.provider);
+      if (defaultSystemTemplateOS) {
+        return defaultSystemTemplateOS;
+      }
     }
 
-    return OperatingSystem.Ubuntu;
+    let defaultOS = OperatingSystem.Ubuntu;
+    if (this.isProvider(NodeProvider.ANEXIA)) {
+      defaultOS = OperatingSystem.Flatcar;
+    }
+
+    if (!this.isOperatingSystemSupported(defaultOS)) {
+      defaultOS = Object.values(OperatingSystem).find(os => this.isOperatingSystemSupported(os));
+    }
+
+    return defaultOS;
   }
 
   private _getNodeData(): NodeData {
