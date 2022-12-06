@@ -38,10 +38,11 @@ import {ClusterMetrics, NodeMetrics} from '@shared/entity/metrics';
 import {Node} from '@shared/entity/node';
 import {SSHKey} from '@shared/entity/ssh-key';
 import {merge, Observable, of, Subject, timer} from 'rxjs';
-import {catchError, shareReplay, switchMapTo} from 'rxjs/operators';
+import {catchError, shareReplay, switchMapTo, tap, startWith, distinctUntilChanged} from 'rxjs/operators';
 import {ExternalCluster, ExternalClusterModel, ExternalClusterPatch} from '@shared/entity/external-cluster';
 import {ExternalMachineDeployment} from '@shared/entity/external-machine-deployment';
 import {NodeProvider} from '@shared/model/NodeProviderConstants';
+import _ from 'lodash';
 
 @Injectable()
 export class ClusterService {
@@ -58,6 +59,9 @@ export class ClusterService {
   private _onClustersUpdate = new Subject<void>();
   private _onExternalClustersUpdate = new Subject<void>();
   private _location: string = window.location.protocol + '//' + window.location.host;
+
+  private _clusterHealthMap = new Map<string, Health>();
+
   providerSettingsPatchChanges$ = this._providerSettingsPatch.asObservable();
   onClusterUpdate = new Subject<void>();
   onExternalClusterUpdate = new Subject<void>();
@@ -283,8 +287,16 @@ export class ClusterService {
   }
 
   health(projectID: string, clusterID: string): Observable<Health> {
-    const url = `${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/health`;
-    return this._http.get<Health>(url).pipe(catchError(() => of<Health>({} as Health)));
+    const mapKey = projectID + '-' + clusterID;
+    const request$ = this._http
+      .get<Health>(`${this._newRestRoot}/projects/${projectID}/clusters/${clusterID}/health`)
+      .pipe(
+        distinctUntilChanged((prev, curr) => _.isEqual(prev, curr)),
+        tap(health => this._clusterHealthMap.set(mapKey, health)),
+        catchError(() => of<Health>(null))
+      );
+
+    return this._clusterHealthMap.has(mapKey) ? request$.pipe(startWith(this._clusterHealthMap.get(mapKey))) : request$;
   }
 
   upgradeMachineDeployments(projectID: string, clusterID: string, version: string): Observable<void> {

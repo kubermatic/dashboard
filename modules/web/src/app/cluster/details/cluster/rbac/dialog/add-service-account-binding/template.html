@@ -1,0 +1,85 @@
+<!--
+Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<div class="dialog">
+  <km-dialog-title>Add Service Account Binding</km-dialog-title>
+  <mat-dialog-content>
+    <form [formGroup]="form"
+          fxLayout="column">
+      <mat-button-toggle-group group="bindingType"
+                               [formControl]="bindingModeControl">
+        <mat-button-toggle [value]="BindingMode.Cluster"> Cluster </mat-button-toggle>
+        <mat-button-toggle [value]="BindingMode.Namespace"> Namespace </mat-button-toggle>
+      </mat-button-toggle-group>
+
+      <mat-form-field>
+        <mat-label>Service Account</mat-label>
+        <mat-select panelClass="km-add-dialog-dropdown"
+                    disableOptionCentering
+                    [formControl]="form.controls.serviceAccountID">
+          <mat-option *ngIf="!serviceAccounts.length"
+                      disabled>Loading...</mat-option>
+          <mat-option *ngFor="let serviceAccount of serviceAccounts"
+                      [value]="serviceAccount.id">
+            {{ serviceAccount.name }} <span class="km-text-muted">(Namespace: {{ serviceAccount.namespace }})</span>
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.controls.serviceAccountID.hasError('required')">
+          Service account is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Role</mat-label>
+        <mat-select panelClass="km-add-dialog-dropdown"
+                    disableOptionCentering
+                    [formControl]="form.controls.roleID">
+          <mat-option *ngIf="!namespaceRoles.length"
+                      disabled>Loading...</mat-option>
+          <mat-option *ngFor="let role of roles"
+                      [value]="role"> {{ role }} </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.controls.roleID.hasError('required')">
+          Role is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="bindingModeControl.value === BindingMode.Namespace">
+        <mat-label>Namespace</mat-label>
+        <mat-select panelClass="km-add-dialog-dropdown"
+                    [formControl]="form.controls.roleNamespace">
+          <mat-option *ngIf="!roleNamespacesMap"
+                      disabled>Loading...</mat-option>
+          <mat-option *ngIf="!roleNamespacesMap?.[form.controls.roleID.value]"
+                      disabled>Please select role first</mat-option>
+          <mat-option *ngFor="let roleNamespace of roleNamespacesMap?.[form.controls.roleID.value]"
+                      [value]="roleNamespace">{{ roleNamespace }}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.controls.roleNamespace.hasError('required')">
+          Namespace is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <km-button icon="km-icon-add"
+               label="Add Binding"
+               [disabled]="!form.valid"
+               [observable]="getObservable()"
+               (next)="onNext($event)">
+    </km-button>
+  </mat-dialog-actions>
+</div>
