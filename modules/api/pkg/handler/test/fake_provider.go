@@ -207,20 +207,16 @@ func (p *FakeExternalClusterProvider) CreateOrUpdateKubeconfigSecretForCluster(c
 	return p.Provider.CreateOrUpdateKubeconfigSecretForCluster(ctx, cluster, kubeconfig)
 }
 
-func (p *FakeExternalClusterProvider) CreateOrUpdateKubeOneSSHSecret(ctx context.Context, userInfo *provider.UserInfo, sshKey apiv2.KubeOneSSHKey, externalCluster *kubermaticv1.ExternalCluster) error {
-	return p.Provider.CreateOrUpdateKubeOneSSHSecret(ctx, userInfo, sshKey, externalCluster)
+func (p *FakeExternalClusterProvider) CreateOrUpdateKubeOneSSHSecret(ctx context.Context, userInfo *provider.UserInfo, namespace string, sshKey apiv2.KubeOneSSHKey, externalCluster *kubermaticv1.ExternalCluster) error {
+	return p.Provider.CreateOrUpdateKubeOneSSHSecret(ctx, userInfo, namespace, sshKey, externalCluster)
 }
 
-func (p *FakeExternalClusterProvider) CreateKubeOneClusterNamespace(ctx context.Context, externalCluster *kubermaticv1.ExternalCluster) error {
-	return p.Provider.CreateKubeOneClusterNamespace(ctx, externalCluster)
+func (p *FakeExternalClusterProvider) CreateOrUpdateKubeOneManifestSecret(ctx context.Context, userInfo *provider.UserInfo, namespace string, manifest string, externalCluster *kubermaticv1.ExternalCluster) error {
+	return p.Provider.CreateOrUpdateKubeOneManifestSecret(ctx, userInfo, namespace, manifest, externalCluster)
 }
 
-func (p *FakeExternalClusterProvider) CreateOrUpdateKubeOneManifestSecret(ctx context.Context, userInfo *provider.UserInfo, manifest string, externalCluster *kubermaticv1.ExternalCluster) error {
-	return p.Provider.CreateOrUpdateKubeOneManifestSecret(ctx, userInfo, manifest, externalCluster)
-}
-
-func (p *FakeExternalClusterProvider) CreateOrUpdateKubeOneCredentialSecret(ctx context.Context, userInfo *provider.UserInfo, cloud apiv2.KubeOneCloudSpec, externalCluster *kubermaticv1.ExternalCluster) error {
-	return p.Provider.CreateOrUpdateKubeOneCredentialSecret(ctx, userInfo, cloud, externalCluster)
+func (p *FakeExternalClusterProvider) CreateOrUpdateKubeOneCredentialSecret(ctx context.Context, userInfo *provider.UserInfo, namespace string, cloud apiv2.KubeOneCloudSpec, externalCluster *kubermaticv1.ExternalCluster) error {
+	return p.Provider.CreateOrUpdateKubeOneCredentialSecret(ctx, userInfo, namespace, cloud, externalCluster)
 }
 
 func (p *FakeExternalClusterProvider) New(ctx context.Context, userInfo *provider.UserInfo, project *kubermaticv1.Project, cluster *kubermaticv1.ExternalCluster) (*kubermaticv1.ExternalCluster, error) {

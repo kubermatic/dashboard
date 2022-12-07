@@ -53,25 +53,22 @@ func importKubeOneCluster(ctx context.Context, name string, userInfoGetter func(
 		KubeOne: &kubermaticv1.ExternalClusterKubeOneCloudSpec{},
 	}
 
-	err = clusterProvider.CreateKubeOneClusterNamespace(ctx, newCluster)
-	if err != nil {
-		return nil, common.KubernetesErrorToHTTPError(err)
-	}
-
 	userInfo, err := userInfoGetter(ctx, project.Name)
 	if err != nil {
 		return nil, err
 	}
-	err = clusterProvider.CreateOrUpdateKubeOneSSHSecret(ctx, userInfo, cloud.KubeOne.SSHKey, newCluster)
+
+	kubermaticNamespace := resources.KubermaticNamespace
+	err = clusterProvider.CreateOrUpdateKubeOneSSHSecret(ctx, userInfo, kubermaticNamespace, cloud.KubeOne.SSHKey, newCluster)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
-	err = clusterProvider.CreateOrUpdateKubeOneManifestSecret(ctx, userInfo, cloud.KubeOne.Manifest, newCluster)
+	err = clusterProvider.CreateOrUpdateKubeOneManifestSecret(ctx, userInfo, kubermaticNamespace, cloud.KubeOne.Manifest, newCluster)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
-	err = clusterProvider.CreateOrUpdateKubeOneCredentialSecret(ctx, userInfo, *cloud.KubeOne.CloudSpec, newCluster)
+	err = clusterProvider.CreateOrUpdateKubeOneCredentialSecret(ctx, userInfo, kubermaticNamespace, *cloud.KubeOne.CloudSpec, newCluster)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
