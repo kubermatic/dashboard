@@ -136,12 +136,12 @@ limitations under the License.
     </mat-card-content>
   </mat-card>
 
-  <km-external-machine-deployment-list *ngIf="machineDeployments?.length; else nodesList"
-                                       [cluster]="cluster"
-                                       [machineDeployments]="machineDeployments"
-                                       [projectID]="projectID"
-                                       [isClusterRunning]="isRunning()"
-                                       [isInitialized]="areMachineDeploymentsInitialized"></km-external-machine-deployment-list>
+  <km-kubeone-machine-deployment-list *ngIf="machineDeployments?.length; else nodesList"
+                                      [cluster]="cluster"
+                                      [machineDeployments]="machineDeployments"
+                                      [projectID]="projectID"
+                                      [isClusterRunning]="isRunning()"
+                                      [isInitialized]="areMachineDeploymentsInitialized"></km-kubeone-machine-deployment-list>
 
   <ng-template #nodesList>
     <km-external-node-list [cluster]="cluster"
