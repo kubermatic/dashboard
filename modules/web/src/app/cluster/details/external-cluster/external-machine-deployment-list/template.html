@@ -16,7 +16,7 @@ limitations under the License.
 <mat-card class="km-card keep-margin">
   <mat-card-header fxFlexAlign=" center">
     <mat-card-title>Machine Deployments</mat-card-title>
-    <button *ngIf="!cluster.cloud.bringYourOwn"
+    <button *ngIf="!cluster.cloud.bringYourOwn && !cluster.cloud.kubeOne"
             mat-flat-button
             fxLayoutAlign="center center"
             type="button"

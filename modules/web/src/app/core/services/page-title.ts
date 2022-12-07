@@ -97,11 +97,13 @@ export class PageTitleService {
     const projectId = this._params.get(PathParam.ProjectID);
     const clusterId = this._params.get(PathParam.ClusterID);
     const isExternal = this._params.getCurrentUrl().includes(`/${View.ExternalClusters}/`);
+    const isKubeOne = this._params.getCurrentUrl().includes(`/${View.KubeOne}/`);
 
-    if (projectId && clusterId && !isExternal) {
+    if (projectId && clusterId) {
+      if (isExternal || isKubeOne) {
+        return this._clusterService.externalCluster(projectId, clusterId);
+      }
       return this._clusterService.cluster(projectId, clusterId);
-    } else if (projectId && clusterId && isExternal) {
-      return this._clusterService.externalCluster(projectId, clusterId);
     }
     return of(null);
   }

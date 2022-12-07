@@ -114,12 +114,13 @@ export class SidenavComponent implements OnInit, OnDestroy {
     const isProjectAndUrlExists = !!urlArray.find(x => x === selectedProjectID) && !!urlArray.find(x => x === url);
     if (url === View.Clusters) {
       return (
-        (isProjectAndUrlExists && !urlArray.find(x => x === View.ExternalClusters)) ||
+        (isProjectAndUrlExists && !urlArray.find(x => x === View.ExternalClusters || x === View.KubeOne)) ||
         !!urlArray.find(x => x === View.Wizard)
       );
     } else if (url === View.ExternalClusters) {
       return (
-        isProjectAndUrlExists || !!urlArray.find(x => x === View.ExternalClusterWizard || x === View.KubeOneWizard)
+        isProjectAndUrlExists ||
+        !!urlArray.find(x => x === View.ExternalClusterWizard || x === View.KubeOne || x === View.KubeOneWizard)
       );
     }
     return isProjectAndUrlExists;

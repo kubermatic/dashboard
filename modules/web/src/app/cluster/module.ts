@@ -18,6 +18,7 @@ import {AnexiaProviderSettingsComponent} from '@app/cluster/details/cluster/edit
 import {ExternalMachineDeploymentDetailsComponent} from '@app/cluster/details/external-cluster/external-machine-deployment-details/component';
 import {ExternalAddMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/external-cluster-add-machine-deployment/component';
 import {ExternalMachineDeploymentListComponent} from '@app/cluster/details/external-cluster/external-machine-deployment-list/component';
+import {KubeOneClusterDetailsComponent} from '@app/cluster/details/kubeone/component';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '@app/node-data/config';
 import {NodeDataModule} from '@app/node-data/module';
 import {NodeService} from '@core/services/node';
@@ -130,6 +131,7 @@ const components: any[] = [
   UpdateExternalClusterMachineDeploymentDialogComponent,
   WebTerminalComponent,
   OverlayTerminalComponent,
+  KubeOneClusterDetailsComponent,
 ];
 
 @NgModule({
