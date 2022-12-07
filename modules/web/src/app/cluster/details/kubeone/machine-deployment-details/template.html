@@ -1,0 +1,83 @@
+<!--
+Copyright 2022 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<ng-container *ngIf="isInitialized()">
+  <km-cluster-panel [cluster]="cluster"
+                    [projectID]="projectID"></km-cluster-panel>
+
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title class="machine-deployment-name">
+        <i class="machine-deployment-health km-pointer"
+           [matTooltip]="machineDeploymentHealthStatus?.message"
+           [ngClass]="machineDeploymentHealthStatus?.icon"></i>
+        <span ngxClipboard
+              [cbContent]="machineDeployment.name"
+              matTooltip="Click to copy"
+              class="km-copy">{{machineDeployment.name}}</span>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="km-row">
+
+      <div class="km-content-wrap">
+        <km-property>
+          <div key>kubelet Version</div>
+          <div value>{{machineDeployment.spec.template.versions.kubelet}}</div>
+        </km-property>
+        <km-property>
+          <div key>Replicas</div>
+          <div value
+               fxLayout="row"
+               fxLayoutAlign=" center"
+               fxLayoutGap="4px">
+            <span>{{!!machineDeployment.status?.readyReplicas ? machineDeployment.status.readyReplicas : 0}}
+              / {{!!machineDeployment.spec?.replicas ? machineDeployment.spec.replicas : 0}}</span>
+            <div *ngIf="machineDeployment.status?.readyReplicas > machineDeployment.spec.replicas"
+                 class="km-icon-info km-pointer"
+                 matTooltip="Number of available machines may be higher than number of desired machines from the template if deployment is updating."></div>
+          </div>
+        </km-property>
+
+        <km-property>
+          <div value>
+            <span class="km-provider-logo km-provider-logo-{{clusterProvider}}"></span>
+          </div>
+        </km-property>
+
+        <km-property>
+          <div key>Created</div>
+          <div value>
+            <km-relative-time [date]="machineDeployment.creationTimestamp"></km-relative-time>
+          </div>
+        </km-property>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <km-external-node-list [cluster]="cluster"
+                         [nodes]="nodes"
+                         [nodesMetrics]="metrics"
+                         [projectID]="projectID"
+                         [isInitialized]="areNodesInitialized"></km-external-node-list>
+
+  <km-event-card [events]="events"></km-event-card>
+
+</ng-container>
+
+<ng-container *ngIf="!isInitialized()">
+  <mat-spinner [diameter]="25"
+               color="accent"
+               class="km-spinner"></mat-spinner>
+</ng-container>

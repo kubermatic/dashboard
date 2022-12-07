@@ -19,6 +19,7 @@ import {ExternalMachineDeploymentDetailsComponent} from '@app/cluster/details/ex
 import {ExternalAddMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/external-cluster-add-machine-deployment/component';
 import {ExternalMachineDeploymentListComponent} from '@app/cluster/details/external-cluster/external-machine-deployment-list/component';
 import {KubeOneClusterDetailsComponent} from '@app/cluster/details/kubeone/component';
+import {KubeOneMachineDeploymentDetailsComponent} from '@app/cluster/details/kubeone/machine-deployment-details/component';
 import {KubeOneMachineDeploymentListComponent} from '@app/cluster/details/kubeone/machine-deployment-list/component';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '@app/node-data/config';
 import {NodeDataModule} from '@app/node-data/module';
@@ -134,6 +135,7 @@ const components: any[] = [
   OverlayTerminalComponent,
   KubeOneClusterDetailsComponent,
   KubeOneMachineDeploymentListComponent,
+  KubeOneMachineDeploymentDetailsComponent,
 ];
 
 @NgModule({

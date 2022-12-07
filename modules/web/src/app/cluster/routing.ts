@@ -16,6 +16,7 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {ExternalMachineDeploymentDetailsComponent} from '@app/cluster/details/external-cluster/external-machine-deployment-details/component';
 import {KubeOneClusterDetailsComponent} from '@app/cluster/details/kubeone/component';
+import {KubeOneMachineDeploymentDetailsComponent} from '@app/cluster/details/kubeone/machine-deployment-details/component';
 import {AuthGuard, AuthzGuard} from '@core/services/auth/guard';
 import {ClusterDetailsComponent} from './details/cluster/component';
 import {MachineDeploymentDetailsComponent} from './details/cluster/machine-deployment-details/component';
@@ -76,6 +77,11 @@ const routes: Routes = [
   {
     path: 'kubeoneclusters/:clusterName',
     component: KubeOneClusterDetailsComponent,
+    canActivate: [AuthGuard, AuthzGuard],
+  },
+  {
+    path: 'kubeoneclusters/:clusterName/md/:machineDeploymentID',
+    component: KubeOneMachineDeploymentDetailsComponent,
     canActivate: [AuthGuard, AuthzGuard],
   },
 ];

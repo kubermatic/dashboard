@@ -13,9 +13,7 @@
 // limitations under the License.
 
 import {Component, Input} from '@angular/core';
-import {Router} from '@angular/router';
-import {View} from '@app/shared/entity/common';
-import {ParamsService} from '@core/services/params';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Cluster} from '@shared/entity/cluster';
 import {Datacenter} from '@shared/entity/datacenter';
 import {ExternalCluster} from '@shared/entity/external-cluster';
@@ -31,9 +29,7 @@ export class ClusterPanelComponent {
   @Input() datacenter: Datacenter;
   @Input() projectID: string;
 
-  private get _isExternalCluster(): boolean {
-    return this._params.getCurrentUrl().includes(`/${View.ExternalClusters}/`);
-  }
+  constructor(private readonly _router: Router, private _route: ActivatedRoute) {}
 
   get region(): string {
     if (
@@ -47,14 +43,7 @@ export class ClusterPanelComponent {
     return `${this.datacenter.spec.country} (${this.datacenter.spec.location})`;
   }
 
-  constructor(private readonly _router: Router, private readonly _params: ParamsService) {}
-
   goBack(): void {
-    if (this._isExternalCluster) {
-      this._router.navigate([`/projects/${this.projectID}/clusters/${View.ExternalClusters}/${this.cluster.id}`]);
-      return;
-    }
-
-    this._router.navigate(['/projects/' + this.projectID + '/clusters/' + this.cluster.id]);
+    this._router.navigate(['../../'], {relativeTo: this._route});
   }
 }
