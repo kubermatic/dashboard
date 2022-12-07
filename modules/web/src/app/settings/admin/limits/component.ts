@@ -1,4 +1,4 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,57 +13,39 @@
 // limitations under the License.
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FeatureGateService} from '@app/core/services/feature-gate';
 import {NotificationService} from '@core/services/notification';
 import {SettingsService} from '@core/services/settings';
-import {UserService} from '@core/services/user';
-import {Member} from '@shared/entity/member';
 import {AdminSettings} from '@shared/entity/settings';
-import {getEditionVersion, objectDiff} from '@shared/utils/common';
+import {objectDiff} from '@shared/utils/common';
 import _ from 'lodash';
 import {Subject} from 'rxjs';
-import {debounceTime, switchMap, take, takeUntil} from 'rxjs/operators';
+import {debounceTime, switchMap, takeUntil} from 'rxjs/operators';
 
 @Component({
-  selector: 'km-admin-settings-interface',
+  selector: 'km-limits',
   styleUrls: ['style.scss'],
   templateUrl: 'template.html',
 })
-export class InterfaceComponent implements OnInit, OnDestroy {
-  user: Member;
+export class LimitsComponent implements OnInit, OnDestroy {
   settings: AdminSettings; // Local settings copy. User can edit it.
   apiSettings: AdminSettings; // Original settings from the API. Cannot be edited by the user.
-  isOIDCKubeCfgEndpointEnabled = true;
-  isOpenIDAuthPluginEnabled = true;
-  editionVersion: string = getEditionVersion();
 
   private readonly _debounceTime = 500;
   private _settingsChange = new Subject<void>();
   private _unsubscribe = new Subject<void>();
 
   constructor(
-    private readonly _userService: UserService,
     private readonly _settingsService: SettingsService,
-    private readonly _notificationService: NotificationService,
-    private readonly _featureGatesService: FeatureGateService
+    private readonly _notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
-    this._userService.currentUser.pipe(take(1)).subscribe(user => (this.user = user));
-
-    this._featureGatesService.featureGates.pipe(takeUntil(this._unsubscribe)).subscribe(featureGates => {
-      this.isOIDCKubeCfgEndpointEnabled = !!featureGates?.oidcKubeCfgEndpoint;
-      this.isOpenIDAuthPluginEnabled = !!featureGates?.openIDAuthPlugin;
-      this._verifyEnableKubernetesDashboardRequirements();
-    });
-
     this._settingsService.adminSettings.pipe(takeUntil(this._unsubscribe)).subscribe(settings => {
       if (!_.isEqual(settings, this.apiSettings)) {
         if (this.apiSettings && !_.isEqual(this.apiSettings, this._settingsService.defaultAdminSettings)) {
           this._notificationService.success('Updated the admin settings');
         }
         this._applySettings(settings);
-        this._verifyEnableKubernetesDashboardRequirements();
       }
     });
 
@@ -81,41 +63,12 @@ export class InterfaceComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  onOIDCKubeconfigSettingsChange(): void {
-    if (this.settings.enableWebTerminal) {
-      this.settings.enableWebTerminal = false;
-    }
-    this.onSettingsChange();
-  }
-
   onSettingsChange(): void {
     this._settingsChange.next();
   }
 
   isEqual(a: any, b: any): boolean {
     return _.isEqual(a, b);
-  }
-
-  isDisplayLinksEqual(): boolean {
-    return (
-      this.isEqual(this.settings.displayAPIDocs, this.apiSettings.displayAPIDocs) &&
-      this.isEqual(this.settings.displayDemoInfo, this.apiSettings.displayDemoInfo) &&
-      this.isEqual(this.settings.displayTermsOfService, this.apiSettings.displayTermsOfService)
-    );
-  }
-
-  isKubernetesDashboardFeatureGatesEnabled(): boolean {
-    return this.isOIDCKubeCfgEndpointEnabled && this.isOpenIDAuthPluginEnabled;
-  }
-
-  private _verifyEnableKubernetesDashboardRequirements() {
-    // Note: Kubernetes Dashboard feature requires both feature gates from admin side to be enabled.
-    if (!this.isOIDCKubeCfgEndpointEnabled || !this.isOpenIDAuthPluginEnabled) {
-      if (this.settings.enableDashboard) {
-        this.settings.enableDashboard = false;
-        this.onSettingsChange();
-      }
-    }
   }
 
   private _applySettings(settings: AdminSettings): void {

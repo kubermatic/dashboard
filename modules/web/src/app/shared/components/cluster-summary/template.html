@@ -107,7 +107,7 @@ limitations under the License.
             </km-property>
 
             <km-property *ngIf="cluster.spec?.apiServerAllowedIPRanges?.cidrBlocks?.length">
-            <div key>Allowed IP Range for API server</div>
+              <div key>Allowed IP Range for API server</div>
               <div value>
                 <km-labels [labels]="cluster.spec.apiServerAllowedIPRanges.cidrBlocks"></km-labels>
               </div>
@@ -621,6 +621,16 @@ limitations under the License.
                                    label="Dynamic kubelet Config"
                                    [value]="machineDeployment.spec.dynamicConfig">
               </km-property-boolean>
+
+              <km-property *ngIf="machineDeployment.spec.maxReplicas as maxReplicas">
+                <div key>Max Replicas</div>
+                <div value>{{maxReplicas}}</div>
+              </km-property>
+
+              <km-property *ngIf="machineDeployment.spec.minReplicas as minReplicas">
+                <div key>Min Replicas</div>
+                <div value>{{minReplicas}}</div>
+              </km-property>
 
               <km-property *ngIf="displayTags(machineDeployment.spec.template.labels)">
                 <div key>Node Labels</div>

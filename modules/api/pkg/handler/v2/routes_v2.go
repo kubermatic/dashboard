@@ -34,6 +34,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/v2/backupcredentials"
 	"k8c.io/dashboard/v2/pkg/handler/v2/backupdestinations"
 	"k8c.io/dashboard/v2/pkg/handler/v2/cluster"
+	clusterdefault "k8c.io/dashboard/v2/pkg/handler/v2/cluster_default"
 	clustertemplate "k8c.io/dashboard/v2/pkg/handler/v2/cluster_template"
 	"k8c.io/dashboard/v2/pkg/handler/v2/cniversion"
 	"k8c.io/dashboard/v2/pkg/handler/v2/constraint"
@@ -622,6 +623,27 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 		Path("/projects/{project_id}/providers/gke/validatecredentials").
 		Handler(r.validateProjectGKECredentials())
 
+	// GCP endpoints
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/gcp/disktypes").
+		Handler(r.listProjectGCPDiskTypes())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/gcp/sizes").
+		Handler(r.listProjectGCPVMSizes())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/gcp/{dc}/zones").
+		Handler(r.listProjectGCPZones())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/gcp/networks").
+		Handler(r.listProjectGCPNetworks())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/gcp/{dc}/subnetworks").
+		Handler(r.listProjectGCPSubnetworks())
+
 	// EKS endpoints
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/providers/eks/validatecredentials").
@@ -809,26 +831,6 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 				Path("/projects/{project_id}/providers/aws/{dc}/securitygroups").
 				Handler(r.listProjectAWSSecurityGroups())
 
-			// GCP endpoints
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/gcp/disktypes").
-				Handler(r.listProjectGCPDiskTypes())
-
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/gcp/sizes").
-				Handler(r.listProjectGCPSizes())
-
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/gcp/{dc}/zones").
-				Handler(r.listProjectGCPZones())
-
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/gcp/networks").
-				Handler(r.listProjectGCPNetworks())
-
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/gcp/{dc}/subnetworks").
-				Handler(r.listProjectGCPSubnetworks())
 
 			// Digitalocean endpoints
 			mux.Methods(http.MethodGet).
@@ -886,16 +888,16 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 				Path("/projects/{project_id}/providers/alibaba/vswitches").
 				Handler(r.listProjectAlibabaVSwitches())
 
-			// Anexia endpoints
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/anexia/vlans").
-				Handler(r.listProjectAnexiaVlans())
-
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/anexia/templates").
-				Handler(r.listProjectAnexiaTemplates())
-
 		*/
+
+	// Anexia endpoints
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/anexia/vlans").
+		Handler(r.listProjectAnexiaVlans())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/anexia/templates").
+		Handler(r.listProjectAnexiaTemplates())
 
 	// Defines a set of HTTP endpoints for various cloud providers
 	// Note that these endpoints don't require credentials as opposed to the ones defined under
@@ -1415,6 +1417,11 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 		Path("/providers/{provider_name}/dc/{dc}/networkdefaults").
 		Handler(r.getNetworkDefaults())
 
+	// Defines an endpoint to retrieve the default cluster spec for a given provider and datacenter.
+	mux.Methods(http.MethodGet).
+		Path("/providers/{provider_name}/dc/{dc}/defaultcluster").
+		Handler(r.getDefaultCluster())
+
 	// Defines endpoints to interact with resource quotas
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/quota").
@@ -1515,6 +1522,119 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 	mux.Methods(http.MethodGet).
 		Path("/seeds/{seed_name}/overview").
 		Handler(r.getSeedOverview())
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/gcp/disktypes project listProjectGCPDiskTypes
+//
+//	List disktypes for a given project
+//
+//	Consumes:
+//	- application/json
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: GCPDiskTypeList
+func (r Routing) listProjectGCPDiskTypes() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.ListProjectGCPDiskTypes(r.presetProvider, r.userInfoGetter)),
+		provider.DecodeProjectGCPDisktypes,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/gcp/subnetworks gcp listProjectGCPSubnetworks
+//
+// Lists available GCP subnetworks
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: GCPSubnetworkList
+func (r Routing) listProjectGCPSubnetworks() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.ListProjectGCPSubnetworks(r.presetProvider, r.userInfoGetter, r.seedsGetter)),
+		provider.DecodeProjectGCPSubnetworks,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/gcp/networks gcp listProjectGCPNetworks
+//
+// Lists available GCP networks
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: GCPNetworkList
+func (r Routing) listProjectGCPNetworks() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.ListProjectGCPNetworks(r.presetProvider, r.userInfoGetter)),
+		provider.DecodeProjectGCPCommonReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/gcp/zones gke listProjectGCPZones
+//
+// Lists GCP zones.
+//
+//	Produces
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: GCPZoneList
+func (r Routing) listProjectGCPZones() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.ListProjectGCPZones(r.presetProvider, r.userInfoGetter, r.seedsGetter)),
+		provider.DecodeProjectGCPZones,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/gcp/vmsizes gke listProjectGCPVMSizes
+//
+// Lists GCP VM sizes.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: GCPMachineSizeList
+func (r Routing) listProjectGCPVMSizes() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.ListProjectGCPVMSizes(r.presetProvider, r.userInfoGetter, r.settingsProvider, r.seedsGetter)),
+		provider.DecodeProjectGCPVMSizes,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
 }
 
 // swagger:route POST /api/v2/projects/{project_id}/clusters project createClusterV2
@@ -5934,6 +6054,50 @@ func (r Routing) listProjectHetznerSizes() http.Handler {
 	)
 }
 
+// swagger:route GET /api/v2/projects/{project_id}/providers/anexia/vlans anexia listProjectAnexiaVlans
+//
+// Lists VLANs from Anexia.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AnexiaVlanList
+func (r Routing) listProjectAnexiaVlans() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.AnexiaProjectVlansEndpoint(r.presetProvider, r.userInfoGetter)),
+		provider.DecodeAnexiaProjectReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/anexia/templates anexia listProjectAnexiaTemplates
+//
+// Lists templates from Anexia.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AnexiaTemplateList
+func (r Routing) listProjectAnexiaTemplates() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(provider.AnexiaProjectTemplatesEndpoint(r.presetProvider, r.userInfoGetter)),
+		provider.DecodeAnexiaProjectTemplateReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
 // swagger:route GET /api/v2/seeds/{seed_name}/settings seed getSeedSettings
 //
 //	Gets the seed settings.
@@ -8229,6 +8393,31 @@ func (r Routing) getNetworkDefaults() http.Handler {
 			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
 		)(networkdefaults.GetNetworkDefaultsEndpoint(r.seedsGetter, r.userInfoGetter, r.kubermaticConfigGetter)),
 		networkdefaults.DecodeGetNetworkDefaultsReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /providers/{provider_name}/dc/{dc}/defaultcluster defaultCluster getDefaultCluster
+//
+//	Retrieves the default cluster spec for the given provider and datacenter.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: Cluster
+//	  401: empty
+//	  403: empty
+func (r Routing) getDefaultCluster() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(clusterdefault.GetDefaultClusterEndpoint(r.seedsGetter, r.userInfoGetter, r.kubermaticConfigGetter)),
+		clusterdefault.DecodeGetDefaultClusterReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)

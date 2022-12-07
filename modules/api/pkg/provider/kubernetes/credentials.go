@@ -41,8 +41,8 @@ import (
 	"k8c.io/kubermatic/v2/pkg/provider/cloud/vmwareclouddirector"
 	"k8c.io/kubermatic/v2/pkg/provider/cloud/vsphere"
 	"k8c.io/kubermatic/v2/pkg/resources"
-	"k8c.io/kubermatic/v2/pkg/resources/reconciling"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
+	"k8c.io/reconciler/pkg/reconciling"
 
 	corev1 "k8s.io/api/core/v1"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
@@ -108,12 +108,12 @@ func createOrUpdateCredentialSecretForCluster(ctx context.Context, seedClient ct
 }
 
 func ensureCredentialSecret(ctx context.Context, seedClient ctrlruntimeclient.Client, cluster *kubermaticv1.Cluster, secretData map[string][]byte) (*providerconfig.GlobalSecretKeySelector, error) {
-	creator, err := credentialSecretCreatorGetter(cluster.GetSecretName(), cluster.Labels, secretData)
+	reconciler, err := credentialSecretReconcilerFactory(cluster.GetSecretName(), cluster.Labels, secretData)
 	if err != nil {
 		return nil, err
 	}
 
-	if err := reconciling.ReconcileSecrets(ctx, []reconciling.NamedSecretCreatorGetter{creator}, resources.KubermaticNamespace, seedClient); err != nil {
+	if err := reconciling.ReconcileSecrets(ctx, []reconciling.NamedSecretReconcilerFactory{reconciler}, resources.KubermaticNamespace, seedClient); err != nil {
 		return nil, err
 	}
 
@@ -623,14 +623,12 @@ func createOrUpdateVMwareCloudDirectorSecret(ctx context.Context, seedClient ctr
 }
 
 func ensureCredentialKubeOneSecret(ctx context.Context, masterClient ctrlruntimeclient.Client, externalcluster *kubermaticv1.ExternalCluster, secretName, secretNamespace string, secretData map[string][]byte) (*providerconfig.GlobalSecretKeySelector, error) {
-	creator, err := credentialSecretCreatorGetter(secretName, externalcluster.Labels, secretData)
+	reconciler, err := credentialSecretReconcilerFactory(secretName, externalcluster.Labels, secretData)
 	if err != nil {
 		return nil, err
 	}
 
-	creators := []reconciling.NamedSecretCreatorGetter{creator}
-
-	if err := reconciling.ReconcileSecrets(ctx, creators, secretNamespace, masterClient); err != nil {
+	if err := reconciling.ReconcileSecrets(ctx, []reconciling.NamedSecretReconcilerFactory{reconciler}, secretNamespace, masterClient); err != nil {
 		return nil, err
 	}
 
@@ -946,13 +944,13 @@ func createOrUpdateKubeOneVMwareCloudDirectorSecret(ctx context.Context, cloud a
 	return nil
 }
 
-func credentialSecretCreatorGetter(secretName string, clusterLabels map[string]string, secretData map[string][]byte) (reconciling.NamedSecretCreatorGetter, error) {
+func credentialSecretReconcilerFactory(secretName string, clusterLabels map[string]string, secretData map[string][]byte) (reconciling.NamedSecretReconcilerFactory, error) {
 	projectID := clusterLabels[kubermaticv1.ProjectIDLabelKey]
 	if len(projectID) == 0 {
 		return nil, fmt.Errorf("cluster is missing '%s' label", kubermaticv1.ProjectIDLabelKey)
 	}
 
-	return func() (name string, create reconciling.SecretCreator) {
+	return func() (name string, reconciler reconciling.SecretReconciler) {
 		return secretName, func(existing *corev1.Secret) (*corev1.Secret, error) {
 			if existing.Labels == nil {
 				existing.Labels = map[string]string{}

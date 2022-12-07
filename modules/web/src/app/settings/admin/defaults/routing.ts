@@ -14,12 +14,12 @@
 
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {DefaultsAndLimitsComponent} from '@app/settings/admin/defaults/component';
+import {DefaultsComponent} from '@app/settings/admin/defaults/component';
 
 const routes: Routes = [
   {
     path: '',
-    component: DefaultsAndLimitsComponent,
+    component: DefaultsComponent,
   },
 ];
 

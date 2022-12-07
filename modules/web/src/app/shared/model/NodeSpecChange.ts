@@ -21,6 +21,8 @@ export class NodeData {
   count?: number;
   valid?: boolean;
   dynamicConfig?: boolean;
+  maxReplicas?: number;
+  minReplicas?: number;
 
   static NewEmptyNodeData(): NodeData {
     return {

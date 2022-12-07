@@ -137,6 +137,8 @@ export class NodeDataService {
       name: md.name,
       spec: md.spec.template,
       dynamicConfig: md.spec.dynamicConfig,
+      minReplicas: md.spec.minReplicas,
+      maxReplicas: md.spec.maxReplicas,
     } as NodeData;
   }
 

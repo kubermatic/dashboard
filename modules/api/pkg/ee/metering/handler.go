@@ -33,8 +33,8 @@ import (
 
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
-	"k8c.io/kubermatic/v2/pkg/resources/reconciling"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
+	"k8c.io/reconciler/pkg/reconciling"
 
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -185,14 +185,14 @@ func CreateOrUpdateCredentials(ctx context.Context, request interface{}, seedsGe
 }
 
 func ensureMeteringToolSecret(ctx context.Context, seedClient ctrlruntimeclient.Client, seed *kubermaticv1.Seed, secretData map[string][]byte) error {
-	creator := func() (name string, create reconciling.SecretCreator) {
+	reconciler := func() (name string, create reconciling.SecretReconciler) {
 		return SecretName, func(existing *corev1.Secret) (*corev1.Secret, error) {
 			existing.Data = secretData
 			return existing, nil
 		}
 	}
 
-	if err := reconciling.ReconcileSecrets(ctx, []reconciling.NamedSecretCreatorGetter{creator}, seed.Namespace, seedClient); err != nil {
+	if err := reconciling.ReconcileSecrets(ctx, []reconciling.NamedSecretReconcilerFactory{reconciler}, seed.Namespace, seedClient); err != nil {
 		return err
 	}
 

@@ -27,8 +27,8 @@ import (
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
 	appskubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
-	"k8c.io/kubermatic/v2/pkg/resources/reconciling"
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
+	"k8c.io/reconciler/pkg/reconciling"
 
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -90,10 +90,10 @@ func CreateApplicationInstallation(userInfoGetter provider.UserInfoGetter, proje
 		}
 
 		// check if namespace for CR already exists and create it if not
-		creators := []reconciling.NamedNamespaceCreatorGetter{
-			genericNamespaceCreator(req.Body.Namespace),
+		reconcilers := []reconciling.NamedNamespaceReconcilerFactory{
+			genericNamespaceReconciler(req.Body.Namespace),
 		}
-		if err := reconciling.ReconcileNamespaces(ctx, creators, "", client); err != nil {
+		if err := reconciling.ReconcileNamespaces(ctx, reconcilers, "", client); err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 
@@ -212,8 +212,8 @@ func UpdateApplicationInstallation(userInfoGetter provider.UserInfoGetter, proje
 	}
 }
 
-func genericNamespaceCreator(name string) reconciling.NamedNamespaceCreatorGetter {
-	return func() (string, reconciling.NamespaceCreator) {
+func genericNamespaceReconciler(name string) reconciling.NamedNamespaceReconcilerFactory {
+	return func() (string, reconciling.NamespaceReconciler) {
 		return name, func(n *corev1.Namespace) (*corev1.Namespace, error) {
 			return n, nil
 		}

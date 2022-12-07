@@ -58,6 +58,10 @@ type ClientService interface {
 
 	ListGCPZonesNoCredentialsV2(params *ListGCPZonesNoCredentialsV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListGCPZonesNoCredentialsV2OK, error)
 
+	ListProjectGCPNetworks(params *ListProjectGCPNetworksParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectGCPNetworksOK, error)
+
+	ListProjectGCPSubnetworks(params *ListProjectGCPSubnetworksParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectGCPSubnetworksOK, error)
+
 	SetTransport(transport runtime.ClientTransport)
 }
 
@@ -628,6 +632,82 @@ func (a *Client) ListGCPZonesNoCredentialsV2(params *ListGCPZonesNoCredentialsV2
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ListGCPZonesNoCredentialsV2Default)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectGCPNetworks Lists available GCP networks
+*/
+func (a *Client) ListProjectGCPNetworks(params *ListProjectGCPNetworksParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectGCPNetworksOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectGCPNetworksParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectGCPNetworks",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/gcp/networks",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectGCPNetworksReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectGCPNetworksOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectGCPNetworksDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectGCPSubnetworks Lists available GCP subnetworks
+*/
+func (a *Client) ListProjectGCPSubnetworks(params *ListProjectGCPSubnetworksParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectGCPSubnetworksOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectGCPSubnetworksParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectGCPSubnetworks",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/gcp/subnetworks",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectGCPSubnetworksReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectGCPSubnetworksOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectGCPSubnetworksDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

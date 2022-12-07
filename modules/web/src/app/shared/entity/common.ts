@@ -80,10 +80,49 @@ export enum ViewDisplayName {
   Access = 'Access',
 }
 
-export enum ProjectSidenavMainSection {
+export enum ProjectSidenavSection {
   Resources = 'Resources',
   Backups = 'etcd Backups',
   Access = 'Access',
+}
+
+export enum AdminPanelView {
+  Defaults = 'defaults',
+  Limits = 'limits',
+  Customization = 'customization',
+  SeedConfiguration = 'seeds',
+  Datacenters = 'datacenters',
+  ProviderPresets = 'presets',
+  BackupDestinations = 'backupdestinations',
+  ProjectQuotas = 'quotas',
+  OPA = 'opa',
+  RuleGroups = 'rulegroups',
+  Metering = 'metering',
+  Accounts = 'accounts',
+  Administrators = 'administrators',
+}
+
+export enum AdminPanelViewDisplayName {
+  Defaults = 'Defaults',
+  Limits = 'Limits',
+  Customization = 'Customization',
+  Datacenters = 'Datacenters',
+  SeedConfiguration = 'Seed Configuration',
+  ProviderPresets = 'Provider Presets',
+  BackupDestinations = 'Backup Destinations',
+  ProjectQuotas = 'Project Quotas',
+  OPA = 'Open Policy Agent',
+  RuleGroups = 'Rule Groups',
+  Metering = 'Metering',
+  Accounts = 'Accounts',
+  Administrators = 'Administrators',
+}
+
+export enum AdminPanelSections {
+  Interface = 'Interface',
+  ManageResources = 'Manage Resources',
+  Monitoring = 'Monitoring',
+  Users = 'Users',
 }
 
 export function getViewDisplayName(viewName: string): string {

@@ -20,21 +20,18 @@
 END OF TERMS AND CONDITIONS
 -->
 
-<!-- <km-dynamic-tab label="Groups"
-                [customTemplate]="buttonTemplate"> -->
-
 <mat-card class="km-card">
   <mat-card-header>
     <mat-card-title>Groups</mat-card-title>
-          <button id="km-add-group-btn"
-              fxLayoutAlign="center center"
-              mat-flat-button
-              type="button"
-              (click)="addGroup()"
-              [disabled]="!isAddEnabled()">
-        <i class="km-icon-mask km-icon-add"></i>
-        <span>Add Group</span>
-      </button>
+    <button id="km-add-group-btn"
+            fxLayoutAlign="center center"
+            mat-flat-button
+            type="button"
+            (click)="addGroup()"
+            [disabled]="!isAddEnabled()">
+      <i class="km-icon-mask km-icon-add"></i>
+      <span>Add Group</span>
+    </button>
   </mat-card-header>
   <mat-card-content>
     <table class="km-table"
@@ -126,23 +123,3 @@ END OF TERMS AND CONDITIONS
     </div>
   </mat-card-content>
 </mat-card>
-<!-- </km-dynamic-tab> -->
-
-<!-- <ng-template #buttonTemplate>
-  <div fxLayout
-       class="container">
-    <div fxFlex
-         fxLayoutAlign="end center"
-         fxLayoutGap="20px">
-      <button id="km-add-group-btn"
-              fxLayoutAlign="center center"
-              mat-flat-button
-              type="button"
-              (click)="addGroup()"
-              [disabled]="!isAddEnabled()">
-        <i class="km-icon-mask km-icon-add"></i>
-        <span>Add Group</span>
-      </button>
-    </div>
-  </div>
-</ng-template> -->

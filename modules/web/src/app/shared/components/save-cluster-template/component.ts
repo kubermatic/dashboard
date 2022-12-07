@@ -101,6 +101,8 @@ export class SaveClusterTemplateDialogComponent implements OnInit {
           template: this.data.nodeData.spec,
           replicas: this.data.nodeData.count,
           dynamicConfig: this.data.nodeData.dynamicConfig,
+          minReplicas: this.data.nodeData.minReplicas,
+          maxReplicas: this.data.nodeData.maxReplicas,
         },
       },
       userSshKeys: this._getClusterTemplateSSHKeys(),

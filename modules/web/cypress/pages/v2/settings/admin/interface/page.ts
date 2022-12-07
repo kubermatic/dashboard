@@ -36,7 +36,6 @@ export class Interface extends PageOptions implements Page {
       this._strategy?.onSettingsChange({
         enableDashboard: selected,
       });
-      Pages.AdminSettings.Elements.iconCheck.should(Condition.BeVisible);
       Pages.AdminSettings.Elements.iconCheck.should(Condition.NotBeVisible);
     });
   }

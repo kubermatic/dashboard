@@ -44,6 +44,8 @@ import {ParamsService, PathParam} from '@core/services/params';
 import {QuotaWidgetComponent} from '@dynamic/enterprise/quotas/quota-widget/component';
 import {OperatingSystemProfile} from '@shared/entity/operating-system-profile';
 import {DynamicModule} from '@dynamic/module-registry';
+import {AsyncValidators} from '@app/shared/validators/async.validators';
+import {ResourceType} from '@app/shared/entity/common';
 
 enum Controls {
   Name = 'name',
@@ -59,6 +61,8 @@ enum Controls {
   ProviderExtended = 'providerExtended',
   Kubelet = 'kubelet',
   OperatingSystemProfile = 'operatingSystemProfile',
+  MaxReplicas = 'maxReplicas',
+  MinReplicas = 'minReplicas',
 }
 
 @Component({
@@ -84,10 +88,14 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   readonly NodeProvider = NodeProvider;
   readonly Controls = Controls;
   readonly OperatingSystem = OperatingSystem;
+  readonly MinReplicasCount = 1;
+  readonly MaxReplicasCount = 1000;
+
   @Input() provider: NodeProvider;
   @Input() quotaWidget: TemplateRef<QuotaWidgetComponent>;
   labels: object = {};
   taints: Taint[] = [];
+  asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.MachineDeployment)];
   selectedOperatingSystemProfile: string;
   supportedOperatingSystemProfiles: string[] = [];
   operatingSystemProfiles: OperatingSystemProfile[] = [];
@@ -150,15 +158,25 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       [Controls.OperatingSystemProfile]: this._builder.control({
         main: this.selectedOperatingSystemProfile || '',
       }),
+      [Controls.MaxReplicas]: this._builder.control(
+        this._nodeDataService.nodeData.maxReplicas,
+        Validators.max(this.MaxReplicasCount)
+      ),
+      [Controls.MinReplicas]: this._builder.control(
+        this._nodeDataService.nodeData.minReplicas,
+        Validators.min(this.MinReplicasCount)
+      ),
     });
 
     if (this.isDialogView()) {
       this.form.addControl(Controls.Kubelet, this._builder.control(''));
       this.dialogEditMode = !!this._nodeDataService.nodeData.name;
-    }
 
-    if (this.dialogEditMode) {
-      this.form.get(Controls.Name).disable();
+      if (this.dialogEditMode) {
+        this.form.get(Controls.Name).disable();
+      } else {
+        this._nodeDataService.operatingSystemSpec = this._getOperatingSystemSpec();
+      }
     }
 
     this._init();
@@ -208,6 +226,8 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     merge(
       this.form.get(Controls.Name).valueChanges,
       this.form.get(Controls.Count).valueChanges,
+      this.form.get(Controls.MaxReplicas).valueChanges,
+      this.form.get(Controls.MinReplicas).valueChanges,
       this.form.get(Controls.DynamicConfig).valueChanges,
       this.form.get(Controls.OperatingSystemProfile).valueChanges
     )
@@ -418,17 +438,16 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
     }
   }
 
-  // Ubuntu otherwise
-  private _getDefaultSystemTemplate(provider: NodeProvider): OperatingSystem {
+  private _getDefaultSystemTemplate(provider: NodeProvider): OperatingSystem | null {
     switch (provider) {
       case NodeProvider.VSPHERE: {
         return this._datacenterSpec.spec.vsphere.templates
           ? (Object.keys(this._datacenterSpec.spec.vsphere.templates)[0] as OperatingSystem)
-          : OperatingSystem.Ubuntu;
+          : null;
       }
     }
 
-    return OperatingSystem.Ubuntu;
+    return null;
   }
 
   private _getDefaultOS(): OperatingSystem {
@@ -436,20 +455,30 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
       return this._nodeDataService.operatingSystem;
     }
 
-    if (this.isProvider(NodeProvider.ANEXIA)) {
-      return OperatingSystem.Flatcar;
-    }
-
     if (this._datacenterSpec) {
-      return this._getDefaultSystemTemplate(this.provider);
+      const defaultSystemTemplateOS = this._getDefaultSystemTemplate(this.provider);
+      if (defaultSystemTemplateOS) {
+        return defaultSystemTemplateOS;
+      }
     }
 
-    return OperatingSystem.Ubuntu;
+    let defaultOS = OperatingSystem.Ubuntu;
+    if (this.isProvider(NodeProvider.ANEXIA)) {
+      defaultOS = OperatingSystem.Flatcar;
+    }
+
+    if (!this.isOperatingSystemSupported(defaultOS)) {
+      defaultOS = Object.values(OperatingSystem).find(os => this.isOperatingSystemSupported(os));
+    }
+
+    return defaultOS;
   }
 
   private _getNodeData(): NodeData {
     return {
       count: this.form.get(Controls.Count).value,
+      maxReplicas: this.form.get(Controls.MaxReplicas).value ?? null,
+      minReplicas: this.form.get(Controls.MinReplicas).value ?? null,
       name: this.form.get(Controls.Name).value,
       dynamicConfig: this.form.get(Controls.DynamicConfig).value,
       operatingSystemProfile: this.form.get(Controls.OperatingSystemProfile).value?.[AutocompleteControls.Main],
