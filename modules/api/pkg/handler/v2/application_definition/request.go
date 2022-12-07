@@ -53,6 +53,13 @@ type updateApplicationDefinitionReq struct {
 	Body apiv2.ApplicationDefinitionBody
 }
 
+// deleteApplicationDefinitionReq defines HTTP request for deleteApplicationDefinitionReq
+// swagger:parameters deleteApplicationDefinition
+type deleteApplicationDefinitionReq struct {
+	// in: path
+	AppDefName string `json:"appdef_name"`
+}
+
 func DecodeGetApplicationDefinition(c context.Context, r *http.Request) (interface{}, error) {
 	var req getApplicationDefinitionReq
 
@@ -86,6 +93,18 @@ func DecodeUpdateApplicationDefinition(c context.Context, r *http.Request) (inte
 	if err := json.NewDecoder(r.Body).Decode(&req.Body); err != nil {
 		return nil, err
 	}
+	return req, nil
+}
+
+func DecodeDeleteApplicationDefinition(c context.Context, r *http.Request) (interface{}, error) {
+	var req deleteApplicationDefinitionReq
+
+	appDefName, err := DecodeApplicationDefinitionName(c, r)
+	if err != nil {
+		return nil, err
+	}
+	req.AppDefName = appDefName
+
 	return req, nil
 }
 

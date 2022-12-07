@@ -18,6 +18,7 @@ package applicationdefinition_test
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -338,6 +339,73 @@ func TestUpdateApplicationDefinitions(t *testing.T) {
 					t.Fatalf("failed to marshal expected response: %v", err)
 				}
 				test.CompareWithResult(t, res, string(b))
+			}
+		})
+	}
+}
+
+func TestDeleteApplicationDefinitions(t *testing.T) {
+	appname1 := "app1"
+	appname2 := "app2"
+	testcases := []struct {
+		Name                   string
+		ExistingAPIUser        *apiv1.User
+		AppToDelete            string
+		ExistingKubermaticObjs []ctrlruntimeclient.Object
+		ExpectedHTTPStatusCode int
+		ExpectedAppDefCount    int
+	}{
+		{
+			Name:                   "admin can delete an applicationdefinition",
+			ExistingAPIUser:        test.GenDefaultAdminAPIUser(),
+			ExistingKubermaticObjs: []ctrlruntimeclient.Object{genUser("Bob", "bob@acme.com", true), test.GenApplicationDefinition(appname1), test.GenApplicationDefinition(appname2)},
+			AppToDelete:            appname1,
+			ExpectedHTTPStatusCode: http.StatusOK,
+			ExpectedAppDefCount:    1,
+		},
+		{
+			Name:                   "user cannot update an applicationdefinition",
+			ExistingAPIUser:        test.GenAPIUser("John", "john@acme.com"),
+			ExistingKubermaticObjs: append(test.GenDefaultKubermaticObjects(), test.GenApplicationDefinition(appname1), test.GenApplicationDefinition(appname2)),
+			AppToDelete:            appname1,
+			ExpectedHTTPStatusCode: http.StatusForbidden,
+			ExpectedAppDefCount:    2,
+		},
+		{
+			Name:                   "try to update an applicationdefinition that does not exist",
+			ExistingAPIUser:        test.GenDefaultAdminAPIUser(),
+			ExistingKubermaticObjs: []ctrlruntimeclient.Object{genUser("Bob", "bob@acme.com", true), test.GenApplicationDefinition(appname1), test.GenApplicationDefinition(appname2)},
+			AppToDelete:            "does-not-exist",
+			ExpectedHTTPStatusCode: http.StatusNotFound,
+			ExpectedAppDefCount:    2,
+		},
+	}
+
+	for _, tc := range testcases {
+		t.Run(tc.Name, func(t *testing.T) {
+			requestURL := fmt.Sprintf("/api/v2/applicationdefinitions/%s", tc.AppToDelete)
+			req := httptest.NewRequest(http.MethodDelete, requestURL, nil)
+			res := httptest.NewRecorder()
+
+			ep, clients, err := test.CreateTestEndpointAndGetClients(*tc.ExistingAPIUser, nil, nil, nil, tc.ExistingKubermaticObjs, nil, hack.NewTestRouting)
+			if err != nil {
+				t.Fatalf("failed to create test endpoint due to: %v", err)
+			}
+
+			ep.ServeHTTP(res, req)
+
+			if res.Code != tc.ExpectedHTTPStatusCode {
+				t.Errorf("Expected HTTP status code %d, got %d: %s", tc.ExpectedHTTPStatusCode, res.Code, res.Body.String())
+				return
+			}
+
+			appDefs := &appskubermaticv1.ApplicationDefinitionList{}
+			if err := clients.FakeClient.List(context.Background(), appDefs); err != nil {
+				t.Fatalf("failed to list MachineDeployments: %v", err)
+			}
+
+			if count := len(appDefs.Items); tc.ExpectedAppDefCount != count {
+				t.Errorf("Expected %d  ApplicationInstallations but got %d", tc.ExpectedAppDefCount, count)
 			}
 		})
 	}

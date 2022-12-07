@@ -481,6 +481,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 		Path("/applicationdefinitions/{appdef_name}").
 		Handler(r.updateApplicationDefinition())
 
+	mux.Methods(http.MethodDelete).
+		Path("/applicationdefinitions/{appdef_name}").
+		Handler(r.deleteApplicationDefinition())
+
 	// Define a set of endpoints for gatekeeper constraint templates
 	mux.Methods(http.MethodGet).
 		Path("/constrainttemplates").
@@ -9008,6 +9012,31 @@ func (r Routing) updateApplicationDefinition() http.Handler {
 			middleware.UserSaver(r.userProvider),
 		)(applicationdefinition.UpdateApplicationDefinition(r.userInfoGetter, r.applicationDefinitionProvider)),
 		applicationdefinition.DecodeUpdateApplicationDefinition,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route DELETE /api/v2/applicationdefinitions/{appdef_name} applications deleteApplicationDefinition
+//
+//	Deletes the given ApplicationDefinition
+//
+//
+//	 Produces:
+//	 - application/json
+//
+//	 Responses:
+//	   default: errorResponse
+//	   200: empty
+//	   401: empty
+//	   403: empty
+func (r Routing) deleteApplicationDefinition() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(applicationdefinition.DeleteApplicationDefinition(r.userInfoGetter, r.applicationDefinitionProvider)),
+		applicationdefinition.DecodeDeleteApplicationDefinition,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
