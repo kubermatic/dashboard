@@ -20,13 +20,12 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/Azure/go-autorest/autorest/to"
-
 	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
-	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
+	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
+
 	kubeonev1beta2 "k8c.io/kubeone/pkg/apis/kubeone/v1beta2"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
@@ -205,30 +204,34 @@ func MigrateKubeOneToContainerd(ctx context.Context,
 	return newCluster, nil
 }
 
-func createAPIMachineDeployment(md clusterv1alpha1.MachineDeployment) apiv2.ExternalClusterMachineDeployment {
-	apimd := apiv2.ExternalClusterMachineDeployment{
-		NodeDeployment: apiv1.NodeDeployment{
-			ObjectMeta: apiv1.ObjectMeta{
-				ID:   md.Name,
-				Name: md.Name,
-			},
-			Spec: apiv1.NodeDeploymentSpec{
-				Replicas: to.Int32(md.Spec.Replicas),
-				Template: apiv1.NodeSpec{
-					Versions: apiv1.NodeVersionInfo{
-						Kubelet: to.String(&md.Spec.Template.Spec.Versions.Kubelet),
-					},
-				},
-			},
-			Status: clusterv1alpha1.MachineDeploymentStatus{
-				Replicas:      to.Int32(md.Spec.Replicas),
-				ReadyReplicas: to.Int32(md.Spec.Replicas),
-			},
-		},
-	}
+// func createAPIMachineDeployment(md clusterv1alpha1.MachineDeployment) (apiv2.ExternalClusterMachineDeployment, error) {
+// 	operatingSystemSpec, err := machineconversions.GetAPIV1OperatingSystemSpec(md.Spec.Template.Spec)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("failed to get operating system spec from machine deployment: %w", err)
+// 	}
 
-	return apimd
-}
+// 	apimd := apiv2.ExternalClusterMachineDeployment{
+// 		NodeDeployment: apiv1.NodeDeployment{
+// 			ObjectMeta: apiv1.ObjectMeta{
+// 				ID:          md.Name,
+// 				Name:        md.Name,
+// 				Annotations: md.Annotations,
+// 			},
+// 			Spec: apiv1.NodeDeploymentSpec{
+// 				Replicas: *md.Spec.Replicas,
+// 				Template: apiv1.NodeSpec{
+// 					Labels: label.FilterLabels(label.NodeDeploymentResourceType, md.Spec.Template.Spec.Labels),
+// 					Versions: apiv1.NodeVersionInfo{
+// 						Kubelet: md.Spec.Template.Spec.Versions.Kubelet,
+// 					},
+// 				},
+// 			},
+// 			Status: md.Status,
+// 		},
+// 	}
+
+// 	return apimd
+// }
 
 func getKubeOneMachineDeployment(ctx context.Context, userInfo *provider.UserInfo, mdName string, cluster *kubermaticv1.ExternalCluster, clusterProvider provider.ExternalClusterProvider) (*clusterv1alpha1.MachineDeployment, error) {
 	machineDeployment := &clusterv1alpha1.MachineDeployment{}
@@ -295,8 +298,12 @@ func getKubeOneAPIMachineDeployment(ctx context.Context,
 	if err != nil {
 		return nil, err
 	}
-	apiMD := createAPIMachineDeployment(*md)
-	return &apiMD, nil
+	nd, err := handlercommon.OutputMachineDeployment(md)
+	if err != nil {
+		return nil, err
+	}
+
+	return &apiv2.ExternalClusterMachineDeployment{NodeDeployment: *nd}, nil
 }
 
 func getKubeOneAPIMachineDeployments(ctx context.Context,
@@ -304,13 +311,18 @@ func getKubeOneAPIMachineDeployments(ctx context.Context,
 	cluster *kubermaticv1.ExternalCluster,
 	clusterProvider provider.ExternalClusterProvider) ([]apiv2.ExternalClusterMachineDeployment, error) {
 	mdList, err := getKubeOneMachineDeployments(ctx, userInfo, cluster, clusterProvider)
-	machineDeployments := make([]apiv2.ExternalClusterMachineDeployment, 0, len(mdList.Items))
+	nodeDeployments := make([]apiv2.ExternalClusterMachineDeployment, 0, len(mdList.Items))
 	if err != nil {
 		return nil, err
 	}
+
 	for _, md := range mdList.Items {
-		machineDeployments = append(machineDeployments, createAPIMachineDeployment(md))
+		nd, err := handlercommon.OutputMachineDeployment(&md)
+		if err != nil {
+			return nil, fmt.Errorf("failed to output machine deployment %s: %w", md.Name, err)
+		}
+		nodeDeployments = append(nodeDeployments, apiv2.ExternalClusterMachineDeployment{NodeDeployment: *nd})
 	}
 
-	return machineDeployments, nil
+	return nodeDeployments, nil
 }
