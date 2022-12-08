@@ -36,6 +36,8 @@ export class NodeService {
         template: nodeData.spec,
         replicas: nodeData.count,
         dynamicConfig: nodeData.dynamicConfig,
+        minReplicas: nodeData.minReplicas,
+        maxReplicas: nodeData.maxReplicas,
       },
     };
     if (nodeData.operatingSystemProfile) {
@@ -52,6 +54,8 @@ export class NodeService {
         replicas: data.nodeData.count,
         template: data.nodeData.spec,
         dynamicConfig: data.nodeData.dynamicConfig,
+        minReplicas: data.nodeData.minReplicas,
+        maxReplicas: data.nodeData.maxReplicas,
       },
     };
 
@@ -110,6 +114,8 @@ export class NodeService {
           name: md.name,
           spec: md.spec.template,
           dynamicConfig: md.spec.dynamicConfig,
+          minReplicas: md.spec.minReplicas,
+          maxReplicas: md.spec.maxReplicas,
         } as NodeData,
       },
     });

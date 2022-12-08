@@ -77,6 +77,14 @@ mat-button-toggle-group[group='operatingSystemGroup'] {
   }
 }
 
+.mat-card-header {
+  .mat-card-title {
+    i {
+      margin: 0 5px;
+    }
+  }
+}
+
 .additional-margin {
   margin-top: 16px;
 }
