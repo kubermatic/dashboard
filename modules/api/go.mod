@@ -66,7 +66,6 @@ require (
 	gopkg.in/square/go-jose.v2 v2.6.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.5.3
-	k8c.io/kubermatic/v2 v2.21.1-0.20221202132228-bd4abe02b7de
 	k8c.io/operating-system-manager v1.1.1
 	k8c.io/reconciler v0.3.1
 	k8s.io/api v0.25.4
@@ -111,6 +110,8 @@ replace (
 	go.opentelemetry.io/otel/trace => go.opentelemetry.io/otel/trace v0.20.0
 	go.opentelemetry.io/proto/otlp => go.opentelemetry.io/proto/otlp v0.7.0
 )
+
+require k8c.io/kubermatic/v2 v2.21.1-0.20221208091954-b39911917701
 
 require (
 	cloud.google.com/go/compute v1.12.1 // indirect
