@@ -303,7 +303,7 @@ func (req CreateClusterSAReq) Validate() error {
 	return nil
 }
 
-// ClusterSAReq defines HTTP request for GetClusterSAKubeconigEndpoint and DeleteClusterSAKubeconigEndpoint GetClusterSAPermissionsEndpoint
+// ClusterSAReq defines HTTP request for GetClusterSAKubeconigEndpoint, DeleteClusterSAKubeconigEndpoint, and GetClusterSAPermissionsEndpoint endpoints.
 // swagger:parameters getClusterServiceAccountKubeconfig deleteClusterServiceAccount getClusterServiceAccountPermissions
 type ClusterSAReq struct {
 	common.ProjectReq
