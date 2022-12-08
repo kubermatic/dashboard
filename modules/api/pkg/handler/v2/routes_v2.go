@@ -1516,6 +1516,10 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 		Handler(r.createClusterServiceAccount())
 
 	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/permissions").
+		Handler(r.getClusterServiceAccountPermissions())
+
+	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/kubeconfig").
 		Handler(r.getClusterServiceAccountKubeconfig())
 
@@ -9264,6 +9268,32 @@ func (r Routing) getClusterServiceAccountKubeconfig() http.Handler {
 		)(cluster.GetClusterSAKubeconigEndpoint(r.projectProvider, r.privilegedProjectProvider, r.userInfoGetter)),
 		cluster.DecodeClusterSAReq,
 		cluster.EncodeKubeconfig,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/permissions project getClusterServiceAccountPermissions
+//
+//	get Service Account permissions
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: []Permission
+//	  401: empty
+//	  403: empty
+func (r Routing) getClusterServiceAccountPermissions() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+			middleware.SetClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+			middleware.SetPrivilegedClusterProvider(r.clusterProviderGetter, r.seedsGetter),
+		)(cluster.GetClusterSAPermissionsEndpoint(r.userInfoGetter, r.projectProvider, r.privilegedProjectProvider)),
+		cluster.DecodeClusterSAReq,
+		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
 }

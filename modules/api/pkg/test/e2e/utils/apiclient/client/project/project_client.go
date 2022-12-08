@@ -142,6 +142,8 @@ type ClientService interface {
 
 	GetClusterServiceAccountKubeconfig(params *GetClusterServiceAccountKubeconfigParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetClusterServiceAccountKubeconfigOK, error)
 
+	GetClusterServiceAccountPermissions(params *GetClusterServiceAccountPermissionsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetClusterServiceAccountPermissionsOK, error)
+
 	GetClusterTemplate(params *GetClusterTemplateParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetClusterTemplateOK, error)
 
 	GetClusterUpgrades(params *GetClusterUpgradesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetClusterUpgradesOK, error)
@@ -2500,6 +2502,44 @@ func (a *Client) GetClusterServiceAccountKubeconfig(params *GetClusterServiceAcc
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*GetClusterServiceAccountKubeconfigDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+GetClusterServiceAccountPermissions get Service Account permissions
+*/
+func (a *Client) GetClusterServiceAccountPermissions(params *GetClusterServiceAccountPermissionsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetClusterServiceAccountPermissionsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetClusterServiceAccountPermissionsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "getClusterServiceAccountPermissions",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/clusters/{cluster_id}/serviceaccount/{namespace}/{service_account_id}/permissions",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &GetClusterServiceAccountPermissionsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetClusterServiceAccountPermissionsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*GetClusterServiceAccountPermissionsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
