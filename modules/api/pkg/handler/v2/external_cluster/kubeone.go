@@ -25,7 +25,6 @@ import (
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
-
 	kubeonev1beta2 "k8c.io/kubeone/pkg/apis/kubeone/v1beta2"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
 	"k8c.io/kubermatic/v2/pkg/resources"
@@ -203,35 +202,6 @@ func MigrateKubeOneToContainerd(ctx context.Context,
 
 	return newCluster, nil
 }
-
-// func createAPIMachineDeployment(md clusterv1alpha1.MachineDeployment) (apiv2.ExternalClusterMachineDeployment, error) {
-// 	operatingSystemSpec, err := machineconversions.GetAPIV1OperatingSystemSpec(md.Spec.Template.Spec)
-// 	if err != nil {
-// 		return nil, fmt.Errorf("failed to get operating system spec from machine deployment: %w", err)
-// 	}
-
-// 	apimd := apiv2.ExternalClusterMachineDeployment{
-// 		NodeDeployment: apiv1.NodeDeployment{
-// 			ObjectMeta: apiv1.ObjectMeta{
-// 				ID:          md.Name,
-// 				Name:        md.Name,
-// 				Annotations: md.Annotations,
-// 			},
-// 			Spec: apiv1.NodeDeploymentSpec{
-// 				Replicas: *md.Spec.Replicas,
-// 				Template: apiv1.NodeSpec{
-// 					Labels: label.FilterLabels(label.NodeDeploymentResourceType, md.Spec.Template.Spec.Labels),
-// 					Versions: apiv1.NodeVersionInfo{
-// 						Kubelet: md.Spec.Template.Spec.Versions.Kubelet,
-// 					},
-// 				},
-// 			},
-// 			Status: md.Status,
-// 		},
-// 	}
-
-// 	return apimd
-// }
 
 func getKubeOneMachineDeployment(ctx context.Context, userInfo *provider.UserInfo, mdName string, cluster *kubermaticv1.ExternalCluster, clusterProvider provider.ExternalClusterProvider) (*clusterv1alpha1.MachineDeployment, error) {
 	machineDeployment := &clusterv1alpha1.MachineDeployment{}
