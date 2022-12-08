@@ -83,3 +83,35 @@ func CreateApplicationDefinition(userInfoGetter provider.UserInfoGetter, applica
 		return appdef, nil
 	}
 }
+
+func UpdateApplicationDefinition(userInfoGetter provider.UserInfoGetter, applicationDefinitionProvider provider.ApplicationDefinitionProvider) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (response interface{}, err error) {
+		userInfo, err := userInfoGetter(ctx, "")
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+		if !userInfo.IsAdmin {
+			return nil, utilerrors.New(http.StatusForbidden, fmt.Sprintf("forbidden: \"%s\" doesn't have admin rights", userInfo.Email))
+		}
+
+		req, ok := request.(updateApplicationDefinitionReq)
+		if !ok {
+			return nil, utilerrors.NewBadRequest("invalid request")
+		}
+
+		curAppDef, err := applicationDefinitionProvider.GetUnsecured(ctx, req.AppDefName)
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+
+		reqAppDef := convertAPItoInternalApplicationDefinitionBody(&req.Body)
+		curAppDef.Spec = reqAppDef.Spec
+
+		resAppDef, err := applicationDefinitionProvider.UpdateUnsecured(ctx, curAppDef)
+		if err != nil {
+			return nil, common.KubernetesErrorToHTTPError(err)
+		}
+
+		return convertInternalToAPIApplicationDefinition(resAppDef), nil
+	}
+}

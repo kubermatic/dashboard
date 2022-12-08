@@ -68,3 +68,10 @@ func (p *ApplicationDefinitionProvider) CreateUnsecured(ctx context.Context, app
 	}
 	return appDef, nil
 }
+
+func (p *ApplicationDefinitionProvider) UpdateUnsecured(ctx context.Context, appDef *appskubermaticv1.ApplicationDefinition) (*appskubermaticv1.ApplicationDefinition, error) {
+	if err := p.privilegedClient.Update(ctx, appDef); err != nil {
+		return nil, err
+	}
+	return appDef, nil
+}
