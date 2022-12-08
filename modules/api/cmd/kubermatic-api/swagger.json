@@ -26920,6 +26920,9 @@
       "properties": {
         "source": {
           "$ref": "#/definitions/ApplicationSource"
+        },
+        "templateCredentials": {
+          "$ref": "#/definitions/DependencyCredentials"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
@@ -29142,6 +29145,15 @@
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "DependencyCredentials": {
+      "type": "object",
+      "properties": {
+        "helmCredentials": {
+          "$ref": "#/definitions/HelmCredentials"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/apps.kubermatic/v1"
     },
     "Digitalocean": {
       "type": "object",
