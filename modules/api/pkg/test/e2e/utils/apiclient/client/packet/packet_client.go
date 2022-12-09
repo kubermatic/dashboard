@@ -114,7 +114,7 @@ func (a *Client) ListPacketSizesNoCredentials(params *ListPacketSizesNoCredentia
 }
 
 /*
-ListPacketSizesNoCredentialsV2 Lists sizes from packet
+ListPacketSizesNoCredentialsV2 lists sizes from packet use equinix metal API endpoints instead
 */
 func (a *Client) ListPacketSizesNoCredentialsV2(params *ListPacketSizesNoCredentialsV2Params, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListPacketSizesNoCredentialsV2OK, error) {
 	// TODO: Validate the params before sending
