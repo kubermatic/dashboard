@@ -14,6 +14,10 @@
         "description": "Added support for defaulting vSphere tag category from seed when it is not specified in user cluster"
     },
     {
+        "category": "added",
+        "description": "Added support for Kubernetes v1.24.8, v1.23.14 and v1.22.16"
+    },
+    {
         "category": "changed",
         "description": "Updated KubeVirt CSI driver operator version to v0.1.3"
     },
