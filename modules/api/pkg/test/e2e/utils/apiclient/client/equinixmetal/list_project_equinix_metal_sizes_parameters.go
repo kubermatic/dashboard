@@ -70,8 +70,8 @@ type ListProjectEquinixMetalSizesParams struct {
 	// DatacenterName.
 	DatacenterName *string
 
-	// ProjectID.
-	ProjectID *string
+	// EquinixProjectID.
+	EquinixProjectID *string
 
 	// ProjectID.
 	ProjectID string
@@ -162,15 +162,15 @@ func (o *ListProjectEquinixMetalSizesParams) SetDatacenterName(datacenterName *s
 	o.DatacenterName = datacenterName
 }
 
-// WithProjectID adds the projectID to the list project equinix metal sizes params
-func (o *ListProjectEquinixMetalSizesParams) WithProjectID(projectID *string) *ListProjectEquinixMetalSizesParams {
-	o.SetProjectID(projectID)
+// WithEquinixProjectID adds the equinixProjectID to the list project equinix metal sizes params
+func (o *ListProjectEquinixMetalSizesParams) WithEquinixProjectID(equinixProjectID *string) *ListProjectEquinixMetalSizesParams {
+	o.SetEquinixProjectID(equinixProjectID)
 	return o
 }
 
-// SetProjectID adds the projectId to the list project equinix metal sizes params
-func (o *ListProjectEquinixMetalSizesParams) SetProjectID(projectID *string) {
-	o.ProjectID = projectID
+// SetEquinixProjectID adds the equinixProjectId to the list project equinix metal sizes params
+func (o *ListProjectEquinixMetalSizesParams) SetEquinixProjectID(equinixProjectID *string) {
+	o.EquinixProjectID = equinixProjectID
 }
 
 // WithProjectID adds the projectID to the list project equinix metal sizes params
@@ -216,10 +216,10 @@ func (o *ListProjectEquinixMetalSizesParams) WriteToRequest(r runtime.ClientRequ
 		}
 	}
 
-	if o.ProjectID != nil {
+	if o.EquinixProjectID != nil {
 
-		// header param ProjectID
-		if err := r.SetHeaderParam("ProjectID", *o.ProjectID); err != nil {
+		// header param EquinixProjectID
+		if err := r.SetHeaderParam("EquinixProjectID", *o.EquinixProjectID); err != nil {
 			return err
 		}
 	}

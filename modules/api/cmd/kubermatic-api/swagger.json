@@ -20455,7 +20455,7 @@
           },
           {
             "type": "string",
-            "name": "ProjectID",
+            "name": "EquinixProjectID",
             "in": "header"
           },
           {

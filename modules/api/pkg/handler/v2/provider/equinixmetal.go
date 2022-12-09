@@ -80,8 +80,8 @@ type EquinixMetalProjectSizesReq struct {
 	// name: APIKey
 	APIKey string
 	// in: header
-	// name: ProjectID
-	ProjectID string
+	// name: EquinixProjectID
+	EquinixProjectID string
 	// in: header
 	// name: Credential
 	Credential string
@@ -97,11 +97,11 @@ func DecodeEquinixMetalProjectSizesReq(ctx context.Context, r *http.Request) (in
 	}
 
 	return EquinixMetalProjectSizesReq{
-		ProjectReq:     projectReq.(common.ProjectReq),
-		APIKey:         r.Header.Get("APIKey"),
-		ProjectID:      r.Header.Get("ProjectID"),
-		Credential:     r.Header.Get("Credential"),
-		DatacenterName: r.Header.Get("DatacenterName"),
+		ProjectReq:       projectReq.(common.ProjectReq),
+		APIKey:           r.Header.Get("APIKey"),
+		EquinixProjectID: r.Header.Get("EquinixProjectID"),
+		Credential:       r.Header.Get("Credential"),
+		DatacenterName:   r.Header.Get("DatacenterName"),
 	}, nil
 }
 
@@ -109,7 +109,7 @@ func EquinixMetalProjectSizesEndpoint(presetProvider provider.PresetProvider, us
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(EquinixMetalProjectSizesReq)
 
-		projectID := req.ProjectID
+		projectID := req.EquinixProjectID
 		apiKey := req.APIKey
 
 		userInfo, err := userInfoGetter(ctx, "")
