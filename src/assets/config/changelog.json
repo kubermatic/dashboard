@@ -1,65 +1,57 @@
 {
-  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/release/v2.20/CHANGELOG.md#kubermatic-220",
+  "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.21.md#v2214",
   "entries": [
     {
       "category": "action-required",
-      "description": "Restored correct labels on the \"nodeport-proxy-envoy\" deployment. If upgrading from the affected version, please delete the existing deployment for each cluster with the \"LoadBalancer\" expose strategy."
+      "description": "Use \"registry.k8s.io\" instead of \"k8s.gcr.io\" for Kubernetes upstream images. It might be necessary to update firewall rules or mirror registries accordingly"
     },
     {
-      "category": "action-required",
-      "description": "Secret name for S3 credentials updated to \"kubermatic-s3-credentials\". In case the \"s3-credentials\" secret was manually created instead of using the \"minio\" chart, new secret \"kubermatic-s3-credentials\" must be created."
+        "category": "added",
+        "description": "Added UI and API support for configuring autoscaling on cluster nodes"
     },
     {
-      "category": "changed",
-      "description": "Migrated API group \"kubermatic.k8s.io\" to \"kubermatic.k8c.io\""
+        "category": "added",
+        "description": "Added support for defaulting vSphere tag category from seed when it is not specified in user cluster"
     },
     {
-      "category": "added",
-      "description": "Added option to get kubeconfig for external clusters"
+        "category": "added",
+        "description": "Added support for Kubernetes v1.24.9, v1.23.15 and v1.22.17"
     },
     {
-      "category": "added",
-      "description": "Added support for the Nutanix provider"
+        "category": "changed",
+        "description": "Updated KubeVirt CSI driver operator version to v0.1.3"
     },
     {
-      "category": "added",
-      "description": "Added the possibility for administrators to define default Rule Groups in the Admin Settings"
+        "category": "changed",
+        "description": "Updated to etcd 3.5.6 for Kubernetes 1.22+ to prevent potential data inconsistency issues during online defragmentation"
     },
     {
-      "category": "added",
-      "description": "Added support for application credentials to the Openstack preset creation wizard"
+        "category": "changed",
+        "description": "Updated OpenStack Cinder CSI to v1.24.5, v1.23.4, and v1.22.2"
     },
     {
-      "category": "added",
-      "description": "Added Nutanix CSI support"
+        "category": "changed",
+        "description": "Updated Anexia CCM (cloud-controller-manager) to version 1.5.0"
     },
     {
-      "category": "added",
-      "description": "Added allowed IP range for NodePorts support to the GCP, Azure, AWS and Openstack providers"
+        "category": "changed",
+        "description": "Updated machine-controller to v1.54.3"
     },
     {
-      "category": "changed",
-      "description": "Redesigned the cluster summary step"
+        "category": "fixed",
+        "description": "Fixed duplicate SourceRange entries for front-loadbalancer Service"
     },
     {
-      "category": "changed",
-      "description": "Updated default OS disk size for the Azure provider to 64GB when RHEL is selected"
+        "category": "fixed",
+        "description": "Fixed an issue where AllowedRegistry ConstraintTemplate was not being reconiciled by Gatekeeper"
     },
     {
-      "category": "fixed",
-      "description": "Fixed AWS cloud provider cleanup sometimes getting stuck when cleaning up tags"
+        "category": "fixed",
+        "description": "Fixed missing etcd metrics in Grafana etcd dashboards"
     },
     {
-      "category": "fixed",
-      "description": "Fixed Konnectivity authentication issue in some scenarios"
-    },
-    {
-      "category": "fixed",
-      "description": "Fixed applying resource requirements when using incomplete overrides"
-    },
-    {
-      "category": "fixed",
-      "description": "Fixed bad owner references for \"ClusterRoleBindings\""
+        "category": "fixed",
+        "description": "Added priority for public IP over private IP in front LoadBalancer service"
     }
   ]
 }
