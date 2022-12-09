@@ -2,10 +2,10 @@
   "externalChangelogURL": "https://github.com/kubermatic/kubermatic/blob/main/docs/changelogs/CHANGELOG-2.20.md#v22011",
   "entries": [
     {
-      "category": "action-required",
-      "description": "Use \"registry.k8s.io\" instead of \"k8s.gcr.io\" for Kubernetes upstream images. It might be necessary to update firewall rules or mirror registries accordingly"
+        "category": "action-required",
+        "description": "Use \"registry.k8s.io\" instead of \"k8s.gcr.io\" for Kubernetes upstream images. It might be necessary to update firewall rules or mirror registries accordingly"
     },
-        {
+    {
         "category": "added",
         "description": "Added support for Kubernetes v1.23.15 and v1.22.17"
     },
