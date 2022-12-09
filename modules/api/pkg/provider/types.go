@@ -725,13 +725,11 @@ type ExternalClusterProvider interface {
 
 	CreateOrUpdateCredentialSecretForCluster(ctx context.Context, cloud *apiv2.ExternalClusterCloudSpec, projectID, clusterID string) (*providerconfig.GlobalSecretKeySelector, error)
 
-	CreateKubeOneClusterNamespace(ctx context.Context, externalCluster *kubermaticv1.ExternalCluster) error
+	CreateOrUpdateKubeOneSSHSecret(ctx context.Context, userInfo *UserInfo, namespace string, sshKey apiv2.KubeOneSSHKey, externalCluster *kubermaticv1.ExternalCluster) error
 
-	CreateOrUpdateKubeOneSSHSecret(ctx context.Context, userInfo *UserInfo, sshKey apiv2.KubeOneSSHKey, externalCluster *kubermaticv1.ExternalCluster) error
+	CreateOrUpdateKubeOneManifestSecret(ctx context.Context, userInfo *UserInfo, namespace string, manifest string, externalCluster *kubermaticv1.ExternalCluster) error
 
-	CreateOrUpdateKubeOneManifestSecret(ctx context.Context, userInfo *UserInfo, manifest string, externalCluster *kubermaticv1.ExternalCluster) error
-
-	CreateOrUpdateKubeOneCredentialSecret(ctx context.Context, userInfo *UserInfo, cloud apiv2.KubeOneCloudSpec, externalCluster *kubermaticv1.ExternalCluster) error
+	CreateOrUpdateKubeOneCredentialSecret(ctx context.Context, userInfo *UserInfo, namespace string, cloud apiv2.KubeOneCloudSpec, externalCluster *kubermaticv1.ExternalCluster) error
 
 	GetVersion(ctx context.Context, userInfo *UserInfo, cluster *kubermaticv1.ExternalCluster) (*ksemver.Semver, error)
 

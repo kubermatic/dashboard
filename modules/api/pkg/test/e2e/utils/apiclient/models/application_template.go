@@ -20,6 +20,9 @@ type ApplicationTemplate struct {
 
 	// source
 	Source *ApplicationSource `json:"source,omitempty"`
+
+	// template credentials
+	TemplateCredentials *DependencyCredentials `json:"templateCredentials,omitempty"`
 }
 
 // Validate validates this application template
@@ -27,6 +30,10 @@ func (m *ApplicationTemplate) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateSource(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateTemplateCredentials(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -55,11 +62,34 @@ func (m *ApplicationTemplate) validateSource(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *ApplicationTemplate) validateTemplateCredentials(formats strfmt.Registry) error {
+	if swag.IsZero(m.TemplateCredentials) { // not required
+		return nil
+	}
+
+	if m.TemplateCredentials != nil {
+		if err := m.TemplateCredentials.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("templateCredentials")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("templateCredentials")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 // ContextValidate validate this application template based on the context it is used
 func (m *ApplicationTemplate) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateSource(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateTemplateCredentials(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -77,6 +107,22 @@ func (m *ApplicationTemplate) contextValidateSource(ctx context.Context, formats
 				return ve.ValidateName("source")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
 				return ce.ValidateName("source")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ApplicationTemplate) contextValidateTemplateCredentials(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.TemplateCredentials != nil {
+		if err := m.TemplateCredentials.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("templateCredentials")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("templateCredentials")
 			}
 			return err
 		}

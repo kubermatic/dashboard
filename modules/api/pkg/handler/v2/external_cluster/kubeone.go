@@ -20,11 +20,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/Azure/go-autorest/autorest/to"
-
 	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
-	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
+	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubeonev1beta2 "k8c.io/kubeone/pkg/apis/kubeone/v1beta2"
@@ -53,25 +51,22 @@ func importKubeOneCluster(ctx context.Context, name string, userInfoGetter func(
 		KubeOne: &kubermaticv1.ExternalClusterKubeOneCloudSpec{},
 	}
 
-	err = clusterProvider.CreateKubeOneClusterNamespace(ctx, newCluster)
-	if err != nil {
-		return nil, common.KubernetesErrorToHTTPError(err)
-	}
-
 	userInfo, err := userInfoGetter(ctx, project.Name)
 	if err != nil {
 		return nil, err
 	}
-	err = clusterProvider.CreateOrUpdateKubeOneSSHSecret(ctx, userInfo, cloud.KubeOne.SSHKey, newCluster)
+
+	kubermaticNamespace := resources.KubermaticNamespace
+	err = clusterProvider.CreateOrUpdateKubeOneSSHSecret(ctx, userInfo, kubermaticNamespace, cloud.KubeOne.SSHKey, newCluster)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
-	err = clusterProvider.CreateOrUpdateKubeOneManifestSecret(ctx, userInfo, cloud.KubeOne.Manifest, newCluster)
+	err = clusterProvider.CreateOrUpdateKubeOneManifestSecret(ctx, userInfo, kubermaticNamespace, cloud.KubeOne.Manifest, newCluster)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
-	err = clusterProvider.CreateOrUpdateKubeOneCredentialSecret(ctx, userInfo, *cloud.KubeOne.CloudSpec, newCluster)
+	err = clusterProvider.CreateOrUpdateKubeOneCredentialSecret(ctx, userInfo, kubermaticNamespace, *cloud.KubeOne.CloudSpec, newCluster)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
@@ -208,31 +203,6 @@ func MigrateKubeOneToContainerd(ctx context.Context,
 	return newCluster, nil
 }
 
-func createAPIMachineDeployment(md clusterv1alpha1.MachineDeployment) apiv2.ExternalClusterMachineDeployment {
-	apimd := apiv2.ExternalClusterMachineDeployment{
-		NodeDeployment: apiv1.NodeDeployment{
-			ObjectMeta: apiv1.ObjectMeta{
-				ID:   md.Name,
-				Name: md.Name,
-			},
-			Spec: apiv1.NodeDeploymentSpec{
-				Replicas: to.Int32(md.Spec.Replicas),
-				Template: apiv1.NodeSpec{
-					Versions: apiv1.NodeVersionInfo{
-						Kubelet: to.String(&md.Spec.Template.Spec.Versions.Kubelet),
-					},
-				},
-			},
-			Status: clusterv1alpha1.MachineDeploymentStatus{
-				Replicas:      to.Int32(md.Spec.Replicas),
-				ReadyReplicas: to.Int32(md.Spec.Replicas),
-			},
-		},
-	}
-
-	return apimd
-}
-
 func getKubeOneMachineDeployment(ctx context.Context, userInfo *provider.UserInfo, mdName string, cluster *kubermaticv1.ExternalCluster, clusterProvider provider.ExternalClusterProvider) (*clusterv1alpha1.MachineDeployment, error) {
 	machineDeployment := &clusterv1alpha1.MachineDeployment{}
 	userClusterClient, err := clusterProvider.GetClient(ctx, userInfo, cluster)
@@ -298,8 +268,12 @@ func getKubeOneAPIMachineDeployment(ctx context.Context,
 	if err != nil {
 		return nil, err
 	}
-	apiMD := createAPIMachineDeployment(*md)
-	return &apiMD, nil
+	nd, err := handlercommon.OutputMachineDeployment(md)
+	if err != nil {
+		return nil, err
+	}
+
+	return &apiv2.ExternalClusterMachineDeployment{NodeDeployment: *nd}, nil
 }
 
 func getKubeOneAPIMachineDeployments(ctx context.Context,
@@ -307,13 +281,18 @@ func getKubeOneAPIMachineDeployments(ctx context.Context,
 	cluster *kubermaticv1.ExternalCluster,
 	clusterProvider provider.ExternalClusterProvider) ([]apiv2.ExternalClusterMachineDeployment, error) {
 	mdList, err := getKubeOneMachineDeployments(ctx, userInfo, cluster, clusterProvider)
-	machineDeployments := make([]apiv2.ExternalClusterMachineDeployment, 0, len(mdList.Items))
+	nodeDeployments := make([]apiv2.ExternalClusterMachineDeployment, 0, len(mdList.Items))
 	if err != nil {
 		return nil, err
 	}
+
 	for _, md := range mdList.Items {
-		machineDeployments = append(machineDeployments, createAPIMachineDeployment(md))
+		nd, err := handlercommon.OutputMachineDeployment(&md)
+		if err != nil {
+			return nil, fmt.Errorf("failed to output machine deployment %s: %w", md.Name, err)
+		}
+		nodeDeployments = append(nodeDeployments, apiv2.ExternalClusterMachineDeployment{NodeDeployment: *nd})
 	}
 
-	return machineDeployments, nil
+	return nodeDeployments, nil
 }

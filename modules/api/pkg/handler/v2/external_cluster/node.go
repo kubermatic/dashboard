@@ -901,8 +901,11 @@ func PatchMachineDeploymentEndpoint(userInfoGetter provider.UserInfoGetter, proj
 			if err != nil {
 				return nil, err
 			}
-			md := createAPIMachineDeployment(*machineDeployment)
-			mdToPatch.NodeDeployment = md.NodeDeployment
+			nd, err := handlercommon.OutputMachineDeployment(machineDeployment)
+			if err != nil {
+				return nil, err
+			}
+			mdToPatch.NodeDeployment = *nd
 			if err := patchMD(&mdToPatch, &patchedMD, req.Patch); err != nil {
 				return nil, err
 			}
