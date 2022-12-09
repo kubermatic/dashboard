@@ -6,6 +6,10 @@
       "description": "Use \"registry.k8s.io\" instead of \"k8s.gcr.io\" for Kubernetes upstream images. It might be necessary to update firewall rules or mirror registries accordingly"
     },
     {
+        "category": "added",
+        "description": "Added support for Kubernetes v1.22.17"
+    },
+    {
         "category": "changed",
         "description": "Updated to etcd 3.5.6 for Kubernetes 1.22 to prevent potential data inconsistency issues during online defragmentation"
     },
