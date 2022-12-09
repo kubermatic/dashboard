@@ -15,7 +15,7 @@
     },
     {
         "category": "added",
-        "description": "Added support for Kubernetes v1.24.8, v1.23.14 and v1.22.16"
+        "description": "Added support for Kubernetes v1.24.9, v1.23.15 and v1.22.17"
     },
     {
         "category": "changed",
