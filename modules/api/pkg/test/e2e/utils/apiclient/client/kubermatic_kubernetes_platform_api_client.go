@@ -30,6 +30,7 @@ import (
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/default_cluster"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/digitalocean"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/eks"
+	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/equinixmetal"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/etcdbackupconfig"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/etcdrestore"
 	"k8c.io/dashboard/v2/pkg/test/e2e/utils/apiclient/client/gcp"
@@ -125,6 +126,7 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *Kubermatic
 	cli.DefaultCluster = default_cluster.New(transport, formats)
 	cli.Digitalocean = digitalocean.New(transport, formats)
 	cli.Eks = eks.New(transport, formats)
+	cli.Equinixmetal = equinixmetal.New(transport, formats)
 	cli.Etcdbackupconfig = etcdbackupconfig.New(transport, formats)
 	cli.Etcdrestore = etcdrestore.New(transport, formats)
 	cli.Gcp = gcp.New(transport, formats)
@@ -240,6 +242,8 @@ type KubermaticKubernetesPlatformAPI struct {
 
 	Eks eks.ClientService
 
+	Equinixmetal equinixmetal.ClientService
+
 	Etcdbackupconfig etcdbackupconfig.ClientService
 
 	Etcdrestore etcdrestore.ClientService
@@ -328,6 +332,7 @@ func (c *KubermaticKubernetesPlatformAPI) SetTransport(transport runtime.ClientT
 	c.DefaultCluster.SetTransport(transport)
 	c.Digitalocean.SetTransport(transport)
 	c.Eks.SetTransport(transport)
+	c.Equinixmetal.SetTransport(transport)
 	c.Etcdbackupconfig.SetTransport(transport)
 	c.Etcdrestore.SetTransport(transport)
 	c.Gcp.SetTransport(transport)
