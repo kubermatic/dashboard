@@ -93,11 +93,11 @@ func (o *GetNetworkDefaultsOK) IsCode(code int) bool {
 }
 
 func (o *GetNetworkDefaultsOK) Error() string {
-	return fmt.Sprintf("[GET /providers/{provider_name}/dc/{dc}/networkdefaults][%d] getNetworkDefaultsOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/networkdefaults][%d] getNetworkDefaultsOK  %+v", 200, o.Payload)
 }
 
 func (o *GetNetworkDefaultsOK) String() string {
-	return fmt.Sprintf("[GET /providers/{provider_name}/dc/{dc}/networkdefaults][%d] getNetworkDefaultsOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/networkdefaults][%d] getNetworkDefaultsOK  %+v", 200, o.Payload)
 }
 
 func (o *GetNetworkDefaultsOK) GetPayload() *models.NetworkDefaults {
@@ -155,11 +155,11 @@ func (o *GetNetworkDefaultsUnauthorized) IsCode(code int) bool {
 }
 
 func (o *GetNetworkDefaultsUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /providers/{provider_name}/dc/{dc}/networkdefaults][%d] getNetworkDefaultsUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/networkdefaults][%d] getNetworkDefaultsUnauthorized ", 401)
 }
 
 func (o *GetNetworkDefaultsUnauthorized) String() string {
-	return fmt.Sprintf("[GET /providers/{provider_name}/dc/{dc}/networkdefaults][%d] getNetworkDefaultsUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/networkdefaults][%d] getNetworkDefaultsUnauthorized ", 401)
 }
 
 func (o *GetNetworkDefaultsUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -206,11 +206,11 @@ func (o *GetNetworkDefaultsForbidden) IsCode(code int) bool {
 }
 
 func (o *GetNetworkDefaultsForbidden) Error() string {
-	return fmt.Sprintf("[GET /providers/{provider_name}/dc/{dc}/networkdefaults][%d] getNetworkDefaultsForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/networkdefaults][%d] getNetworkDefaultsForbidden ", 403)
 }
 
 func (o *GetNetworkDefaultsForbidden) String() string {
-	return fmt.Sprintf("[GET /providers/{provider_name}/dc/{dc}/networkdefaults][%d] getNetworkDefaultsForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/networkdefaults][%d] getNetworkDefaultsForbidden ", 403)
 }
 
 func (o *GetNetworkDefaultsForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -267,11 +267,11 @@ func (o *GetNetworkDefaultsDefault) IsCode(code int) bool {
 }
 
 func (o *GetNetworkDefaultsDefault) Error() string {
-	return fmt.Sprintf("[GET /providers/{provider_name}/dc/{dc}/networkdefaults][%d] getNetworkDefaults default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/networkdefaults][%d] getNetworkDefaults default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetNetworkDefaultsDefault) String() string {
-	return fmt.Sprintf("[GET /providers/{provider_name}/dc/{dc}/networkdefaults][%d] getNetworkDefaults default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/networkdefaults][%d] getNetworkDefaults default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetNetworkDefaultsDefault) GetPayload() *models.ErrorResponse {

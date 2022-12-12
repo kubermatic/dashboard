@@ -25,4 +25,8 @@ reconcileHelpers=pkg/resources/reconciling/zz_generated_reconcile.go
 go run k8c.io/reconciler/cmd/reconciler-gen --config hack/reconciling.yaml > $reconcileHelpers
 
 currentYear=$(date +%Y)
-sed -i "s/Copyright YEAR/Copyright $currentYear/g" $reconcileHelpers
+
+sed="sed"
+[ "$(command -v gsed)" ] && sed="gsed"
+
+$sed -i "s/Copyright YEAR/Copyright $currentYear/g" $reconcileHelpers

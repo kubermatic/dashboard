@@ -44,7 +44,7 @@ func (a *Client) GetNetworkDefaults(params *GetNetworkDefaultsParams, authInfo r
 	op := &runtime.ClientOperation{
 		ID:                 "getNetworkDefaults",
 		Method:             "GET",
-		PathPattern:        "/providers/{provider_name}/dc/{dc}/networkdefaults",
+		PathPattern:        "/api/v2/providers/{provider_name}/dc/{dc}/networkdefaults",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},

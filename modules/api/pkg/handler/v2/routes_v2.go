@@ -8436,7 +8436,7 @@ func (r Routing) listCNIPluginVersionsForCluster() http.Handler {
 	)
 }
 
-// swagger:route GET /providers/{provider_name}/dc/{dc}/networkdefaults networkdefaults getNetworkDefaults
+// swagger:route GET /api/v2/providers/{provider_name}/dc/{dc}/networkdefaults networkdefaults getNetworkDefaults
 //
 //	Retrieves the cluster networking defaults for the given provider and datacenter.
 //
@@ -8461,7 +8461,7 @@ func (r Routing) getNetworkDefaults() http.Handler {
 	)
 }
 
-// swagger:route GET /providers/{provider_name}/dc/{dc}/defaultcluster defaultCluster getDefaultCluster
+// swagger:route GET /api/v2/providers/{provider_name}/dc/{dc}/defaultcluster defaultCluster getDefaultCluster
 //
 //	Retrieves the default cluster spec for the given provider and datacenter.
 //
@@ -9244,7 +9244,7 @@ func (r Routing) listOperatingSystemProfiles() http.Handler {
 	)
 }
 
-// swagger:route GET /projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles operatingsystemprofile listOperatingSystemProfilesForCluster
+// swagger:route GET /api/v2/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles operatingsystemprofile listOperatingSystemProfilesForCluster
 //
 //	Lists all available Operating System Profiles for a cluster
 //
