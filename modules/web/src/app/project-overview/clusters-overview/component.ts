@@ -13,16 +13,16 @@
 // limitations under the License.
 
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
-import {ExternalCluster, ExternalClusterProvider, ExternalClusterState} from '@shared/entity/external-cluster';
-import {Cluster} from '@shared/entity/cluster';
 import {MatTableDataSource} from '@angular/material/table';
 import {Router} from '@angular/router';
-import {MachineDeploymentStatus} from '@shared/entity/machine-deployment';
-import _ from 'lodash';
-import {getClusterHealthStatus, HealthStatus, StatusIcon} from '@shared/utils/health-status';
+import {Cluster} from '@shared/entity/cluster';
+import {View} from '@shared/entity/common';
+import {ExternalCluster, ExternalClusterProvider, ExternalClusterState} from '@shared/entity/external-cluster';
 import {Health} from '@shared/entity/health';
+import {MachineDeploymentStatus} from '@shared/entity/machine-deployment';
 import {Project} from '@shared/entity/project';
-import {View} from '@app/shared/entity/common';
+import {getClusterHealthStatus, HealthStatus, StatusIcon} from '@shared/utils/health-status';
+import _ from 'lodash';
 
 @Component({
   selector: 'km-clusters-overview',
@@ -42,6 +42,7 @@ export class ClustersOverviewComponent implements OnInit, OnChanges {
   clusterDataSource = new MatTableDataSource<Cluster>();
   externalClusterColumns: string[] = ['status', 'name'];
   externalClusterDataSource = new MatTableDataSource<ExternalCluster>();
+  kubeOneClusterDataSource = new MatTableDataSource<ExternalCluster>();
   private readonly _maxElements = 10;
 
   constructor(private readonly _router: Router) {}
@@ -49,11 +50,13 @@ export class ClustersOverviewComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.clusterDataSource.data = this.clustersTop;
     this.externalClusterDataSource.data = this.externalClustersTop;
+    this.kubeOneClusterDataSource.data = this.kubeOneClustersTop;
   }
 
   ngOnChanges(): void {
     this.clusterDataSource.data = this.clustersTop;
     this.externalClusterDataSource.data = this.externalClustersTop;
+    this.kubeOneClusterDataSource.data = this.kubeOneClustersTop;
   }
 
   get clustersTop(): Cluster[] {
@@ -64,8 +67,21 @@ export class ClustersOverviewComponent implements OnInit, OnChanges {
   }
 
   get externalClustersTop(): ExternalCluster[] {
+    const externalClusters = this.externalClusters.filter(
+      cluster => ExternalCluster.getProvider(cluster.cloud) !== ExternalClusterProvider.KubeOne
+    );
     return _.take(
-      _.sortBy(this.externalClusters, c => c.name.toLowerCase()),
+      _.sortBy(externalClusters, c => c.name.toLowerCase()),
+      this._maxElements
+    );
+  }
+
+  get kubeOneClustersTop(): ExternalCluster[] {
+    const kubeOneClusters = this.externalClusters.filter(
+      cluster => ExternalCluster.getProvider(cluster.cloud) === ExternalClusterProvider.KubeOne
+    );
+    return _.take(
+      _.sortBy(kubeOneClusters, c => c.name.toLowerCase()),
       this._maxElements
     );
   }
@@ -123,5 +139,13 @@ export class ClustersOverviewComponent implements OnInit, OnChanges {
       ExternalCluster.getProvider(cluster.cloud) !== ExternalClusterProvider.Custom ||
       cluster.status.state !== ExternalClusterState.Error
     );
+  }
+
+  kubeOneClusterNavigate(cluster: ExternalCluster): void {
+    this._router.navigate(['/projects', this.project.id, View.Clusters, View.KubeOneClusters, cluster.id]);
+  }
+
+  kubeOneClustersNavigate(): void {
+    this._router.navigate(['/projects', this.project.id, View.KubeOneClusters]);
   }
 }
