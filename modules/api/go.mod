@@ -15,12 +15,12 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/resources/armsubscriptions v1.0.0
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/subscription/armsubscription v1.0.0
 	github.com/Azure/go-autorest/autorest/to v0.4.0
-	github.com/Masterminds/semver/v3 v3.1.1
-	github.com/aliyun/alibaba-cloud-sdk-go v1.62.39
+	github.com/Masterminds/semver/v3 v3.2.0
+	github.com/aliyun/alibaba-cloud-sdk-go v1.62.47
 	github.com/aws/aws-sdk-go-v2 v1.17.1
 	github.com/aws/aws-sdk-go-v2/config v1.18.3
 	github.com/aws/aws-sdk-go-v2/credentials v1.13.3
-	github.com/aws/aws-sdk-go-v2/service/ec2 v1.72.1
+	github.com/aws/aws-sdk-go-v2/service/ec2 v1.73.0
 	github.com/aws/aws-sdk-go-v2/service/eks v1.23.0
 	github.com/aws/aws-sdk-go-v2/service/iam v1.18.23
 	github.com/aws/aws-sdk-go-v2/service/sts v1.17.5
@@ -47,7 +47,7 @@ require (
 	github.com/gorilla/securecookie v1.1.1
 	github.com/gorilla/websocket v1.5.0
 	github.com/hetznercloud/hcloud-go v1.37.0
-	github.com/kubermatic/machine-controller v1.55.1-0.20221124124245-46f4fa63161f
+	github.com/kubermatic/machine-controller v1.55.1-0.20221208132905-d40a14dc25a8
 	github.com/minio/minio-go/v7 v7.0.44
 	github.com/onsi/ginkgo v1.16.5
 	github.com/open-policy-agent/frameworks/constraint v0.0.0-20221109005544-7de84dff5081 // v0.5.1
@@ -66,7 +66,7 @@ require (
 	gopkg.in/square/go-jose.v2 v2.6.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8c.io/kubeone v1.5.3
-	k8c.io/operating-system-manager v1.1.1
+	k8c.io/operating-system-manager v1.1.2-0.20221201183812-4f7c5a687353
 	k8c.io/reconciler v0.3.1
 	k8s.io/api v0.25.4
 	k8s.io/apiextensions-apiserver v0.25.4
@@ -77,7 +77,7 @@ require (
 	k8s.io/klog/v2 v2.80.1
 	k8s.io/kubectl v0.25.4
 	k8s.io/metrics v0.25.4
-	k8s.io/utils v0.0.0-20221108210102-8e77b1f39fe2
+	k8s.io/utils v0.0.0-20221128185143-99ec85e7a448
 	kubevirt.io/api v0.58.0
 	kubevirt.io/containerized-data-importer-api v1.55.1
 	sigs.k8s.io/controller-runtime v0.13.1
