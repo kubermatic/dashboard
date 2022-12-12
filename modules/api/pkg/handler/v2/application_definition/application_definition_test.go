@@ -395,17 +395,16 @@ func TestDeleteApplicationDefinitions(t *testing.T) {
 			ep.ServeHTTP(res, req)
 
 			if res.Code != tc.ExpectedHTTPStatusCode {
-				t.Errorf("Expected HTTP status code %d, got %d: %s", tc.ExpectedHTTPStatusCode, res.Code, res.Body.String())
-				return
+				t.Fatalf("Expected HTTP status code %d, got %d: %s", tc.ExpectedHTTPStatusCode, res.Code, res.Body.String())
 			}
 
 			appDefs := &appskubermaticv1.ApplicationDefinitionList{}
 			if err := clients.FakeClient.List(context.Background(), appDefs); err != nil {
-				t.Fatalf("failed to list MachineDeployments: %v", err)
+				t.Fatalf("failed to list ApplicationDefinitions: %v", err)
 			}
 
 			if count := len(appDefs.Items); tc.ExpectedAppDefCount != count {
-				t.Errorf("Expected %d  ApplicationInstallations but got %d", tc.ExpectedAppDefCount, count)
+				t.Errorf("Expected %d  ApplicationDefinitions but got %d", tc.ExpectedAppDefCount, count)
 			}
 		})
 	}
