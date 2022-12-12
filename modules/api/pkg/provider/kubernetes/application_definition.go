@@ -75,3 +75,15 @@ func (p *ApplicationDefinitionProvider) UpdateUnsecured(ctx context.Context, app
 	}
 	return appDef, nil
 }
+
+func (p *ApplicationDefinitionProvider) DeleteUnsecured(ctx context.Context, appDefName string) error {
+	appDef, err := p.GetUnsecured(ctx, appDefName)
+	if err != nil {
+		return err
+	}
+
+	if err := p.privilegedClient.Delete(ctx, appDef); err != nil {
+		return err
+	}
+	return nil
+}
