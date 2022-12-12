@@ -180,7 +180,7 @@ export class NumberStepperComponent implements AfterViewInit, OnDestroy, Control
   onIncrease(): void {
     this.onTouch();
 
-    if (this.max !== undefined && +(this._value ?? 0) + +this.step > this.max) {
+    if ((!!this.max || this.max === 0) && +(this._value ?? 0) + +this.step > this.max) {
       return;
     }
 
@@ -190,7 +190,7 @@ export class NumberStepperComponent implements AfterViewInit, OnDestroy, Control
   onDecrease(): void {
     this.onTouch();
 
-    if (this.min !== undefined && +(this._value ?? 0) - +this.step < this.min) {
+    if ((!!this.min || this.min === 0) && +(this._value ?? 0) - +this.step < this.min) {
       return;
     }
 
