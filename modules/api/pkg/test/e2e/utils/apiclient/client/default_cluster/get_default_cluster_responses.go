@@ -93,11 +93,11 @@ func (o *GetDefaultClusterOK) IsCode(code int) bool {
 }
 
 func (o *GetDefaultClusterOK) Error() string {
-	return fmt.Sprintf("[GET /providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultClusterOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultClusterOK  %+v", 200, o.Payload)
 }
 
 func (o *GetDefaultClusterOK) String() string {
-	return fmt.Sprintf("[GET /providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultClusterOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultClusterOK  %+v", 200, o.Payload)
 }
 
 func (o *GetDefaultClusterOK) GetPayload() *models.Cluster {
@@ -155,11 +155,11 @@ func (o *GetDefaultClusterUnauthorized) IsCode(code int) bool {
 }
 
 func (o *GetDefaultClusterUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultClusterUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultClusterUnauthorized ", 401)
 }
 
 func (o *GetDefaultClusterUnauthorized) String() string {
-	return fmt.Sprintf("[GET /providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultClusterUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultClusterUnauthorized ", 401)
 }
 
 func (o *GetDefaultClusterUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -206,11 +206,11 @@ func (o *GetDefaultClusterForbidden) IsCode(code int) bool {
 }
 
 func (o *GetDefaultClusterForbidden) Error() string {
-	return fmt.Sprintf("[GET /providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultClusterForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultClusterForbidden ", 403)
 }
 
 func (o *GetDefaultClusterForbidden) String() string {
-	return fmt.Sprintf("[GET /providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultClusterForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultClusterForbidden ", 403)
 }
 
 func (o *GetDefaultClusterForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -267,11 +267,11 @@ func (o *GetDefaultClusterDefault) IsCode(code int) bool {
 }
 
 func (o *GetDefaultClusterDefault) Error() string {
-	return fmt.Sprintf("[GET /providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultCluster default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultCluster default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetDefaultClusterDefault) String() string {
-	return fmt.Sprintf("[GET /providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultCluster default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/providers/{provider_name}/dc/{dc}/defaultcluster][%d] getDefaultCluster default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *GetDefaultClusterDefault) GetPayload() *models.ErrorResponse {

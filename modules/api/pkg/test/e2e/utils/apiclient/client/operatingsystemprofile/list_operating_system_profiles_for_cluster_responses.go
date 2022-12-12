@@ -93,11 +93,11 @@ func (o *ListOperatingSystemProfilesForClusterOK) IsCode(code int) bool {
 }
 
 func (o *ListOperatingSystemProfilesForClusterOK) Error() string {
-	return fmt.Sprintf("[GET /projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForClusterOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForClusterOK  %+v", 200, o.Payload)
 }
 
 func (o *ListOperatingSystemProfilesForClusterOK) String() string {
-	return fmt.Sprintf("[GET /projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForClusterOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForClusterOK  %+v", 200, o.Payload)
 }
 
 func (o *ListOperatingSystemProfilesForClusterOK) GetPayload() []*models.OperatingSystemProfile {
@@ -153,11 +153,11 @@ func (o *ListOperatingSystemProfilesForClusterUnauthorized) IsCode(code int) boo
 }
 
 func (o *ListOperatingSystemProfilesForClusterUnauthorized) Error() string {
-	return fmt.Sprintf("[GET /projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForClusterUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForClusterUnauthorized ", 401)
 }
 
 func (o *ListOperatingSystemProfilesForClusterUnauthorized) String() string {
-	return fmt.Sprintf("[GET /projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForClusterUnauthorized ", 401)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForClusterUnauthorized ", 401)
 }
 
 func (o *ListOperatingSystemProfilesForClusterUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -204,11 +204,11 @@ func (o *ListOperatingSystemProfilesForClusterForbidden) IsCode(code int) bool {
 }
 
 func (o *ListOperatingSystemProfilesForClusterForbidden) Error() string {
-	return fmt.Sprintf("[GET /projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForClusterForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForClusterForbidden ", 403)
 }
 
 func (o *ListOperatingSystemProfilesForClusterForbidden) String() string {
-	return fmt.Sprintf("[GET /projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForClusterForbidden ", 403)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForClusterForbidden ", 403)
 }
 
 func (o *ListOperatingSystemProfilesForClusterForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -265,11 +265,11 @@ func (o *ListOperatingSystemProfilesForClusterDefault) IsCode(code int) bool {
 }
 
 func (o *ListOperatingSystemProfilesForClusterDefault) Error() string {
-	return fmt.Sprintf("[GET /projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForCluster default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForCluster default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListOperatingSystemProfilesForClusterDefault) String() string {
-	return fmt.Sprintf("[GET /projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForCluster default  %+v", o._statusCode, o.Payload)
+	return fmt.Sprintf("[GET /api/v2/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles][%d] listOperatingSystemProfilesForCluster default  %+v", o._statusCode, o.Payload)
 }
 
 func (o *ListOperatingSystemProfilesForClusterDefault) GetPayload() *models.ErrorResponse {

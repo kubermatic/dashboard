@@ -13897,6 +13897,57 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles": {
+      "get": {
+        "description": "Lists all available Operating System Profiles for a cluster",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "operatingsystemprofile"
+        ],
+        "operationId": "listOperatingSystemProfilesForCluster",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "ClusterID",
+            "name": "cluster_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OperatingSystemProfile",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/OperatingSystemProfile"
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/clusters/{cluster_id}/providers/alibaba/instancetypes": {
       "get": {
         "description": "Lists available Alibaba Instance Types",
@@ -23831,6 +23882,102 @@
         }
       }
     },
+    "/api/v2/providers/{provider_name}/dc/{dc}/defaultcluster": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "defaultCluster"
+        ],
+        "summary": "Retrieves the default cluster spec for the given provider and datacenter.",
+        "operationId": "getDefaultCluster",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProviderName",
+            "name": "provider_name",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "DC",
+            "name": "dc",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cluster",
+            "schema": {
+              "$ref": "#/definitions/Cluster"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/providers/{provider_name}/dc/{dc}/networkdefaults": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "networkdefaults"
+        ],
+        "summary": "Retrieves the cluster networking defaults for the given provider and datacenter.",
+        "operationId": "getNetworkDefaults",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProviderName",
+            "name": "provider_name",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "DC",
+            "name": "dc",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "NetworkDefaults",
+            "schema": {
+              "$ref": "#/definitions/NetworkDefaults"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/empty"
+          },
+          "403": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/providers/{provider_name}/presets": {
       "get": {
         "description": "Lists presets for the provider",
@@ -24975,153 +25122,6 @@
               "items": {
                 "$ref": "#/definitions/User"
               }
-            }
-          },
-          "401": {
-            "$ref": "#/responses/empty"
-          },
-          "403": {
-            "$ref": "#/responses/empty"
-          },
-          "default": {
-            "description": "errorResponse",
-            "schema": {
-              "$ref": "#/definitions/errorResponse"
-            }
-          }
-        }
-      }
-    },
-    "/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles": {
-      "get": {
-        "description": "Lists all available Operating System Profiles for a cluster",
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "operatingsystemprofile"
-        ],
-        "operationId": "listOperatingSystemProfilesForCluster",
-        "parameters": [
-          {
-            "type": "string",
-            "x-go-name": "ProjectID",
-            "name": "project_id",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "x-go-name": "ClusterID",
-            "name": "cluster_id",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OperatingSystemProfile",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/OperatingSystemProfile"
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/responses/empty"
-          },
-          "403": {
-            "$ref": "#/responses/empty"
-          },
-          "default": {
-            "description": "errorResponse",
-            "schema": {
-              "$ref": "#/definitions/errorResponse"
-            }
-          }
-        }
-      }
-    },
-    "/providers/{provider_name}/dc/{dc}/defaultcluster": {
-      "get": {
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "defaultCluster"
-        ],
-        "summary": "Retrieves the default cluster spec for the given provider and datacenter.",
-        "operationId": "getDefaultCluster",
-        "parameters": [
-          {
-            "type": "string",
-            "x-go-name": "ProviderName",
-            "name": "provider_name",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "x-go-name": "DC",
-            "name": "dc",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Cluster",
-            "schema": {
-              "$ref": "#/definitions/Cluster"
-            }
-          },
-          "401": {
-            "$ref": "#/responses/empty"
-          },
-          "403": {
-            "$ref": "#/responses/empty"
-          },
-          "default": {
-            "description": "errorResponse",
-            "schema": {
-              "$ref": "#/definitions/errorResponse"
-            }
-          }
-        }
-      }
-    },
-    "/providers/{provider_name}/dc/{dc}/networkdefaults": {
-      "get": {
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "networkdefaults"
-        ],
-        "summary": "Retrieves the cluster networking defaults for the given provider and datacenter.",
-        "operationId": "getNetworkDefaults",
-        "parameters": [
-          {
-            "type": "string",
-            "x-go-name": "ProviderName",
-            "name": "provider_name",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "string",
-            "x-go-name": "DC",
-            "name": "dc",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "NetworkDefaults",
-            "schema": {
-              "$ref": "#/definitions/NetworkDefaults"
             }
           },
           "401": {

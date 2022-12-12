@@ -44,7 +44,7 @@ func (a *Client) GetDefaultCluster(params *GetDefaultClusterParams, authInfo run
 	op := &runtime.ClientOperation{
 		ID:                 "getDefaultCluster",
 		Method:             "GET",
-		PathPattern:        "/providers/{provider_name}/dc/{dc}/defaultcluster",
+		PathPattern:        "/api/v2/providers/{provider_name}/dc/{dc}/defaultcluster",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},

@@ -84,7 +84,7 @@ func (a *Client) ListOperatingSystemProfilesForCluster(params *ListOperatingSyst
 	op := &runtime.ClientOperation{
 		ID:                 "listOperatingSystemProfilesForCluster",
 		Method:             "GET",
-		PathPattern:        "/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles",
+		PathPattern:        "/api/v2/projects/{project_id}/clusters/{cluster_id}/operatingsystemprofiles",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"https"},
