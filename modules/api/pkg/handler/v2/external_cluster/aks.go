@@ -200,7 +200,6 @@ func DecodeAKSProjectVMSizesReq(c context.Context, r *http.Request) (interface{}
 		ProjectReq:    projectReq.(common.ProjectReq),
 		AKSVMSizesReq: vmSizesReq.(AKSVMSizesReq),
 	}, nil
-
 }
 
 func DecodeAKSClusterListReq(c context.Context, r *http.Request) (interface{}, error) {
