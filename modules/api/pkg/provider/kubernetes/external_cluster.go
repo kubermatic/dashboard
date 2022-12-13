@@ -501,7 +501,7 @@ func (p *ExternalClusterProvider) CreateOrUpdateKubeOneManifestSecret(ctx contex
 	}
 
 	// add secret key selectors to cluster object
-	externalCluster.Spec.CloudSpec.KubeOne.ManifestReference = *credentialRef
+	externalCluster.Spec.CloudSpec.KubeOne.ManifestReference = credentialRef
 
 	return nil
 }
@@ -532,7 +532,7 @@ func (p *ExternalClusterProvider) CreateOrUpdateKubeOneSSHSecret(ctx context.Con
 	}
 
 	// add secret key selectors to cluster object
-	externalCluster.Spec.CloudSpec.KubeOne.SSHReference = *credentialRef
+	externalCluster.Spec.CloudSpec.KubeOne.SSHReference = credentialRef
 
 	return nil
 }
