@@ -256,6 +256,14 @@ type ClientService interface {
 
 	ListNodesForCluster(params *ListNodesForClusterParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListNodesForClusterOK, error)
 
+	ListProjectAWSSecurityGroups(params *ListProjectAWSSecurityGroupsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) error
+
+	ListProjectAWSSizes(params *ListProjectAWSSizesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) error
+
+	ListProjectAWSSubnets(params *ListProjectAWSSubnetsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) error
+
+	ListProjectAWSVPCS(params *ListProjectAWSVPCSParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) error
+
 	ListProjectGCPDiskTypes(params *ListProjectGCPDiskTypesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectGCPDiskTypesOK, error)
 
 	ListProjects(params *ListProjectsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectsOK, error)
@@ -4673,6 +4681,134 @@ func (a *Client) ListNodesForCluster(params *ListNodesForClusterParams, authInfo
 	// unexpected success response
 	unexpectedSuccess := result.(*ListNodesForClusterDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectAWSSecurityGroups List available security groups
+*/
+func (a *Client) ListProjectAWSSecurityGroups(params *ListProjectAWSSecurityGroupsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) error {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectAWSSecurityGroupsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectAWSSecurityGroups",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/aws/{dc}/securitygroups",
+		ProducesMediaTypes: []string{"200: AWSSecurityGroupList", "application/json", "default: errorResponse"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectAWSSecurityGroupsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	_, err := a.transport.Submit(op)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+/*
+ListProjectAWSSizes Lists available AWS sizes
+*/
+func (a *Client) ListProjectAWSSizes(params *ListProjectAWSSizesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) error {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectAWSSizesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectAWSSizes",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/aws/sizes",
+		ProducesMediaTypes: []string{"200: AWSSizeList", "application/json", "default: errorResponse"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectAWSSizesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	_, err := a.transport.Submit(op)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+/*
+ListProjectAWSSubnets List available subnets
+*/
+func (a *Client) ListProjectAWSSubnets(params *ListProjectAWSSubnetsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) error {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectAWSSubnetsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectAWSSubnets",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/aws/{dc}/subnets",
+		ProducesMediaTypes: []string{"200: AWSSubnetList", "application/json", "default: errorResponse"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectAWSSubnetsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	_, err := a.transport.Submit(op)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+/*
+ListProjectAWSVPCS List VPCs for AWS
+*/
+func (a *Client) ListProjectAWSVPCS(params *ListProjectAWSVPCSParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) error {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectAWSVPCSParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectAWSVPCS",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/aws/{dc}/vpcs",
+		ProducesMediaTypes: []string{"200: AWSVPCList", "application/json", "default: errorResponse"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectAWSVPCSReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	_, err := a.transport.Submit(op)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 /*

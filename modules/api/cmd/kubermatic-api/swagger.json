@@ -19847,6 +19847,222 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/providers/aws/sizes": {
+      "get": {
+        "description": "Lists available AWS sizes",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "default: errorResponse",
+          "200: AWSSizeList"
+        ],
+        "tags": [
+          "project"
+        ],
+        "operationId": "listProjectAWSSizes",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "AccessKeyID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "SecretAccessKey",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleARN",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleExternalID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "VPC",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "Region",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "Architecture",
+            "description": "architecture query parameter. Supports: arm64 and x64 types.",
+            "name": "architecture",
+            "in": "query"
+          }
+        ]
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/aws/{dc}/securitygroups": {
+      "get": {
+        "description": "List available security groups",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "default: errorResponse",
+          "200: AWSSecurityGroupList"
+        ],
+        "tags": [
+          "project"
+        ],
+        "operationId": "listProjectAWSSecurityGroups",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "AccessKeyID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "SecretAccessKey",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleARN",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleExternalID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "VPC",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "DC",
+            "name": "dc",
+            "in": "path",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/aws/{dc}/subnets": {
+      "get": {
+        "description": "List available subnets",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "default: errorResponse",
+          "200: AWSSubnetList"
+        ],
+        "tags": [
+          "project"
+        ],
+        "operationId": "listProjectAWSSubnets",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "AccessKeyID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "SecretAccessKey",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleARN",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "AssumeRoleExternalID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "VPC",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "x-go-name": "DC",
+            "name": "dc",
+            "in": "path",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/aws/{dc}/vpcs": {
+      "get": {
+        "description": "List VPCs for AWS",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json",
+          "default: errorResponse",
+          "200: AWSVPCList"
+        ],
+        "tags": [
+          "project"
+        ],
+        "operationId": "listProjectAWSVPCS"
+      }
+    },
     "/api/v2/projects/{project_id}/providers/azure/availabilityzones": {
       "get": {
         "description": "Lists VM availability zones in an Azure region",
