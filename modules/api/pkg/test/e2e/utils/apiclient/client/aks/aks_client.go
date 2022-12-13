@@ -42,7 +42,15 @@ type ClientService interface {
 
 	ListAKSVersions(params *ListAKSVersionsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListAKSVersionsOK, error)
 
+	ListProjectAKSLocations(params *ListProjectAKSLocationsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAKSLocationsOK, error)
+
+	ListProjectAKSResourceGroups(params *ListProjectAKSResourceGroupsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAKSResourceGroupsOK, error)
+
+	ListProjectAKSVMSizes(params *ListProjectAKSVMSizesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAKSVMSizesOK, error)
+
 	ValidateAKSCredentials(params *ValidateAKSCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ValidateAKSCredentialsOK, error)
+
+	ValidateProjectAKSCredentials(params *ValidateProjectAKSCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ValidateProjectAKSCredentialsOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
 }
@@ -314,6 +322,120 @@ func (a *Client) ListAKSVersions(params *ListAKSVersionsParams, authInfo runtime
 }
 
 /*
+ListProjectAKSLocations lists a k s recommended locations
+*/
+func (a *Client) ListProjectAKSLocations(params *ListProjectAKSLocationsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAKSLocationsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectAKSLocationsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectAKSLocations",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/aks/locations",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectAKSLocationsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectAKSLocationsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectAKSLocationsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectAKSResourceGroups lists resource groups in an azure subscription
+*/
+func (a *Client) ListProjectAKSResourceGroups(params *ListProjectAKSResourceGroupsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAKSResourceGroupsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectAKSResourceGroupsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectAKSResourceGroups",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/aks/resourcegroups",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectAKSResourceGroupsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectAKSResourceGroupsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectAKSResourceGroupsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ListProjectAKSVMSizes lists a k s available VM sizes in an azure region
+*/
+func (a *Client) ListProjectAKSVMSizes(params *ListProjectAKSVMSizesParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ListProjectAKSVMSizesOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewListProjectAKSVMSizesParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "listProjectAKSVMSizes",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/aks/vmsizes",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ListProjectAKSVMSizesReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ListProjectAKSVMSizesOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ListProjectAKSVMSizesDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
 ValidateAKSCredentials Validates AKS credentials
 */
 func (a *Client) ValidateAKSCredentials(params *ValidateAKSCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ValidateAKSCredentialsOK, error) {
@@ -348,6 +470,44 @@ func (a *Client) ValidateAKSCredentials(params *ValidateAKSCredentialsParams, au
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*ValidateAKSCredentialsDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+ValidateProjectAKSCredentials Validates AKS credentials
+*/
+func (a *Client) ValidateProjectAKSCredentials(params *ValidateProjectAKSCredentialsParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*ValidateProjectAKSCredentialsOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewValidateProjectAKSCredentialsParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "validateProjectAKSCredentials",
+		Method:             "GET",
+		PathPattern:        "/api/v2/projects/{project_id}/providers/aks/validatecredentials",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"https"},
+		Params:             params,
+		Reader:             &ValidateProjectAKSCredentialsReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*ValidateProjectAKSCredentialsOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*ValidateProjectAKSCredentialsDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 
