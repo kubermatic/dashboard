@@ -25,7 +25,7 @@ type MasterVersion struct {
 	RestrictedByKubeletVersion bool `json:"restrictedByKubeletVersion,omitempty"`
 
 	// version
-	Version Version `json:"version,omitempty"`
+	Version string `json:"version,omitempty"`
 }
 
 // Validate validates this master version
