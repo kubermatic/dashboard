@@ -146,7 +146,7 @@ func GetDefaultClusterEndpoint(
 		defaultCluster = mapNetworkDefaultsToCluster(defaultClusterNetwork, defaultCluster)
 
 		// 5. Defaulting for Cluster Spec.
-		defaultCluster, err = defaultClusterSpec(ctx, kubermaticv1.ProviderType(req.ProviderName), req.DC, seed, config, defaultingTemplate, defaultCluster)
+		defaultCluster, err = defaultClusterSpec(ctx, kubermaticv1.ProviderType(req.ProviderName), req.DC, seed, config, defaultingTemplate, defaultCluster, defaultClusterNetwork)
 		if err != nil {
 			return nil, err
 		}
@@ -196,10 +196,10 @@ func mapNetworkDefaultsToCluster(networkDefaults apiv2.NetworkDefaults, cluster 
 	return cluster
 }
 
-func defaultClusterSpec(ctx context.Context, provider kubermaticv1.ProviderType, dc string, seed *kubermaticv1.Seed, config *kubermaticv1.KubermaticConfiguration, defaultClusterTemplate *kubermaticv1.ClusterTemplate, cluster *kubermaticv1.Cluster) (*kubermaticv1.Cluster, error) {
+func defaultClusterSpec(ctx context.Context, provider kubermaticv1.ProviderType, dc string, seed *kubermaticv1.Seed, config *kubermaticv1.KubermaticConfiguration, defaultClusterTemplate *kubermaticv1.ClusterTemplate, cluster *kubermaticv1.Cluster, networkDefaults apiv2.NetworkDefaults) (*kubermaticv1.Cluster, error) {
 	cluster.Spec.EnableUserSSHKeyAgent = pointer.Bool(true)
 	cluster.Spec.ContainerRuntime = resources.ContainerRuntimeContainerd
-	cluster.Spec.Cloud = initializeCloudProviderSpec(dc, provider)
+	cluster.Spec.Cloud = initializeCloudProviderSpec(dc, provider, networkDefaults)
 
 	if err := defaulting.DefaultClusterSpec(ctx, &cluster.Spec, defaultClusterTemplate, seed, config, nil); err != nil {
 		return nil, err
@@ -245,7 +245,7 @@ func convertInternalDefaultClusterToExternal(internalCluster *kubermaticv1.Clust
 	}
 }
 
-func initializeCloudProviderSpec(dc string, provider kubermaticv1.ProviderType) kubermaticv1.CloudSpec {
+func initializeCloudProviderSpec(dc string, provider kubermaticv1.ProviderType, networkDefaults apiv2.NetworkDefaults) kubermaticv1.CloudSpec {
 	cloudSpec := kubermaticv1.CloudSpec{
 		DatacenterName: dc,
 		ProviderName:   string(provider),
@@ -254,17 +254,33 @@ func initializeCloudProviderSpec(dc string, provider kubermaticv1.ProviderType) 
 	// We intentionally keep the cloud spec empty in the default cluster spec since it mostly depends on the cloud credentials.
 	switch provider {
 	case kubermaticv1.AWSCloudProvider:
-		cloudSpec.AWS = &kubermaticv1.AWSCloudSpec{}
+		cloudSpec.AWS = &kubermaticv1.AWSCloudSpec{
+			NodePortsAllowedIPRanges: &kubermaticv1.NetworkRanges{
+				CIDRBlocks: []string{networkDefaults.IPv4.NodePortsAllowedIPRange, networkDefaults.IPv6.NodePortsAllowedIPRange},
+			},
+		}
 	case kubermaticv1.AzureCloudProvider:
-		cloudSpec.Azure = &kubermaticv1.AzureCloudSpec{}
+		cloudSpec.Azure = &kubermaticv1.AzureCloudSpec{
+			NodePortsAllowedIPRanges: &kubermaticv1.NetworkRanges{
+				CIDRBlocks: []string{networkDefaults.IPv4.NodePortsAllowedIPRange, networkDefaults.IPv6.NodePortsAllowedIPRange},
+			},
+		}
 	case kubermaticv1.DigitaloceanCloudProvider:
 		cloudSpec.Digitalocean = &kubermaticv1.DigitaloceanCloudSpec{}
 	case kubermaticv1.GCPCloudProvider:
-		cloudSpec.GCP = &kubermaticv1.GCPCloudSpec{}
+		cloudSpec.GCP = &kubermaticv1.GCPCloudSpec{
+			NodePortsAllowedIPRanges: &kubermaticv1.NetworkRanges{
+				CIDRBlocks: []string{networkDefaults.IPv4.NodePortsAllowedIPRange, networkDefaults.IPv6.NodePortsAllowedIPRange},
+			},
+		}
 	case kubermaticv1.HetznerCloudProvider:
 		cloudSpec.Hetzner = &kubermaticv1.HetznerCloudSpec{}
 	case kubermaticv1.OpenstackCloudProvider:
-		cloudSpec.Openstack = &kubermaticv1.OpenstackCloudSpec{}
+		cloudSpec.Openstack = &kubermaticv1.OpenstackCloudSpec{
+			NodePortsAllowedIPRanges: &kubermaticv1.NetworkRanges{
+				CIDRBlocks: []string{networkDefaults.IPv4.NodePortsAllowedIPRange, networkDefaults.IPv6.NodePortsAllowedIPRange},
+			},
+		}
 	case kubermaticv1.PacketCloudProvider:
 		cloudSpec.Packet = &kubermaticv1.PacketCloudSpec{}
 	case kubermaticv1.KubevirtCloudProvider:
