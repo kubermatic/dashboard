@@ -44,53 +44,12 @@ limitations under the License.
               <div value>{{application.name}}</div>
             </km-property>
           </div>
+          <ng-container *ngTemplateOutlet="versions"></ng-container>
         </ng-container>
+
         <ng-template #editableFields>
-          <div fxFlex
-               fxLayout="row"
-               fxLayoutGap="30px">
-            <div fxFlex="100%"
-                 class="version-dropdown">
-              <mat-form-field>
-                <mat-label>Version</mat-label>
-                <mat-select [formControlName]="Controls.Version"
-                            disableOptionCentering
-                            required
-                            panelClass="km-add-dialog-dropdown"
-                            (selectionChange)="onVersionChanged($event.value)">
-                  <mat-option *ngFor="let version of applicationDefinition.spec?.versions"
-                              [value]="version.version">
-                    {{ version.version }}
-                  </mat-option>
-                </mat-select>
-                <mat-hint>Application version upgrades are currently not supported.</mat-hint>
-                <mat-error *ngIf="form.get(Controls.Version).hasError('required')">
-                  <strong>Required</strong>
-                </mat-error>
-              </mat-form-field>
-            </div>
-            <div class="version-icon">
-              <km-property>
-                <div key>Method</div>
-                <div value
-                     class="version-icon-value"
-                     fxLayoutAlign="center">
-                  <km-application-method-icon [method]="applicationMethod"></km-application-method-icon>
-                </div>
-              </km-property>
-            </div>
-            <div *ngIf="form.get(Controls.Version).value"
-                 class="version-icon">
-              <km-property>
-                <div key>Source</div>
-                <div value
-                     class="version-icon-value"
-                     fxLayoutAlign="center">
-                  <km-application-method-icon [method]="selectedVersionSource"></km-application-method-icon>
-                </div>
-              </km-property>
-            </div>
-          </div>
+          <ng-container *ngTemplateOutlet="versions"></ng-container>
+
           <mat-form-field>
             <mat-label>Namespace</mat-label>
             <input matInput
@@ -134,6 +93,56 @@ limitations under the License.
                                     [isOnlyYAML]="true"
                                     (dataValid)="onValuesConfigValidityChanged($event)"></km-validate-json-or-yaml>
         </div>
+
+        <ng-template #versions>
+          <ng-container *ngIf="applicationDefinition?.spec as applicationDefinitionSpec">
+            <div fxFlex
+                 fxLayout="row"
+                 fxLayoutGap="30px">
+              <div fxFlex="100%"
+                   class="version-dropdown">
+                <mat-form-field>
+                  <mat-label>Version</mat-label>
+                  <mat-select [formControlName]="Controls.Version"
+                              disableOptionCentering
+                              required
+                              panelClass="km-add-dialog-dropdown"
+                              (selectionChange)="onVersionChanged($event.value)">
+                    <mat-option *ngFor="let version of applicationDefinitionSpec?.versions"
+                                [value]="version.version">
+                      {{ version.version }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-hint>Application version upgrades are currently not supported.</mat-hint>
+                  <mat-error *ngIf="form.get(Controls.Version).hasError('required')">
+                    <strong>Required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="version-icon">
+                <km-property>
+                  <div key>Method</div>
+                  <div value
+                       class="version-icon-value"
+                       fxLayoutAlign="center">
+                    <km-application-method-icon [method]="applicationMethod"></km-application-method-icon>
+                  </div>
+                </km-property>
+              </div>
+              <div *ngIf="form.get(Controls.Version).value"
+                   class="version-icon">
+                <km-property>
+                  <div key>Source</div>
+                  <div value
+                       class="version-icon-value"
+                       fxLayoutAlign="center">
+                    <km-application-method-icon [method]="selectedVersionSource"></km-application-method-icon>
+                  </div>
+                </km-property>
+              </div>
+            </div>
+          </ng-container>
+        </ng-template>
       </div>
 
     </form>

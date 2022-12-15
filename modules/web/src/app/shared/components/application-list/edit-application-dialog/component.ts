@@ -121,8 +121,10 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
       this.valuesConfig = y.dump(this.application.spec.values);
     }
     this.form = this._builder.group({
+      [Controls.Version]: this._builder.control(this.application.spec.applicationRef?.version, Validators.required),
       [Controls.Values]: this._builder.control(this.valuesConfig),
     });
+
     if (!this.application.creationTimestamp) {
       this.form.addControl(
         Controls.Namespace,
@@ -139,18 +141,14 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
           this._duplicateNameValidator(),
         ])
       );
-      this.form.addControl(
-        Controls.Version,
-        this._builder.control(this.application.spec.applicationRef?.version, Validators.required)
-      );
-      this.applicationMethod = this.applicationDefinition.spec?.method;
-      this.onVersionChanged(this.application.spec.applicationRef?.version);
-
       this.form
         .get(Controls.Namespace)
         .valueChanges.pipe(takeUntil(this._unsubscribe))
         .subscribe(() => this.form.get(Controls.Name).updateValueAndValidity());
     }
+
+    this.applicationMethod = this.applicationDefinition.spec?.method;
+    this.onVersionChanged(this.application.spec.applicationRef?.version);
   }
 
   private _duplicateNameValidator(): ValidatorFn {
@@ -173,6 +171,10 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
       ...this.application,
       spec: {
         ...this.application.spec,
+        applicationRef: {
+          ...this.application.spec.applicationRef,
+          version: this.form.get(Controls.Version).value,
+        } as ApplicationRef,
         values: this._getValueConfig(),
       } as ApplicationSpec,
     } as Application;
@@ -184,10 +186,6 @@ export class EditApplicationDialogComponent implements OnInit, OnDestroy {
         namespace: this.form.get(Controls.Namespace).value,
         spec: {
           ...patch.spec,
-          applicationRef: {
-            ...patch.spec.applicationRef,
-            version: this.form.get(Controls.Version).value,
-          } as ApplicationRef,
           namespace: {
             ...patch.spec.namespace,
             name: this.form.get(Controls.Namespace).value,
