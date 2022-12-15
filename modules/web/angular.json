@@ -7,6 +7,7 @@
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
+      "prefix": "km",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -20,7 +21,11 @@
             "assets": [
               "src/assets",
               "src/favicon.png",
-              { "glob": "**/*", "input": "node_modules/monaco-editor", "output": "assets/monaco-editor" }
+              {
+                "glob": "**/*",
+                "input": "node_modules/monaco-editor",
+                "output": "assets/monaco-editor"
+              }
             ],
             "allowedCommonJsDependencies": [
               "country-code-lookup",
@@ -308,26 +313,6 @@
           "options": {
             "browserTarget": "kubermatic:build"
           }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "src/test.ts",
-            "karmaConfig": "./karma.conf.js",
-            "codeCoverage": true,
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.spec.json",
-            "scripts": [
-              "node_modules/jquery/dist/jquery.js"
-            ],
-            "styles": [
-              "src/assets/css/root.scss"
-            ],
-            "assets": [
-              "src/assets",
-              "src/favicon.png"
-            ]
-          }
         }
       }
     }
@@ -335,10 +320,10 @@
   "defaultProject": "kubermatic",
   "schematics": {
     "@schematics/angular:component": {
-      "prefix": "kubermatic"
+      "prefix": "km"
     },
     "@schematics/angular:directive": {
-      "prefix": "kubermatic"
+      "prefix": "km"
     },
     "@schematics/angular:guard": {},
     "@schematics/angular:interface": {},
