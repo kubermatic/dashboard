@@ -23,6 +23,8 @@ import (
 
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+
+	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 const (
@@ -31,11 +33,11 @@ const (
 )
 
 func CheckContainerRuntime(ctx context.Context,
-	userInfo *provider.UserInfo,
+	masterClient ctrlruntimeclient.Client,
 	externalCluster *kubermaticv1.ExternalCluster,
 	externalClusterProvider provider.ExternalClusterProvider,
 ) (string, error) {
-	nodes, err := externalClusterProvider.ListNodes(ctx, userInfo, externalCluster)
+	nodes, err := externalClusterProvider.ListNodes(ctx, masterClient, externalCluster)
 	if err != nil {
 		return "", fmt.Errorf("failed to fetch container runtime: not able to list nodes %w", err)
 	}

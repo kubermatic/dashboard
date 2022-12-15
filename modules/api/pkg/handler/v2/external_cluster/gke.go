@@ -41,6 +41,7 @@ import (
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
 	"k8s.io/apimachinery/pkg/util/sets"
+	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 const (
@@ -280,7 +281,7 @@ func patchGKECluster(ctx context.Context, oldCluster, newCluster *apiv2.External
 	return newCluster, gkeprovider.DecodeError(err)
 }
 
-func getGKENodePools(ctx context.Context, userInfo *provider.UserInfo, cluster *kubermaticv1.ExternalCluster, secretKeySelector provider.SecretKeySelectorValueFunc, credentialsReference *providerconfig.GlobalSecretKeySelector, clusterProvider provider.ExternalClusterProvider) ([]apiv2.ExternalClusterMachineDeployment, error) {
+func getGKENodePools(ctx context.Context, masterClient ctrlruntimeclient.Client, cluster *kubermaticv1.ExternalCluster, secretKeySelector provider.SecretKeySelectorValueFunc, credentialsReference *providerconfig.GlobalSecretKeySelector, clusterProvider provider.ExternalClusterProvider) ([]apiv2.ExternalClusterMachineDeployment, error) {
 	sa, err := secretKeySelector(credentialsReference, resources.GCPServiceAccount)
 	if err != nil {
 		return nil, err
@@ -298,7 +299,7 @@ func getGKENodePools(ctx context.Context, userInfo *provider.UserInfo, cluster *
 
 	machineDeployments := make([]apiv2.ExternalClusterMachineDeployment, 0, len(resp.NodePools))
 
-	nodes, err := clusterProvider.ListNodes(ctx, userInfo, cluster)
+	nodes, err := clusterProvider.ListNodes(ctx, masterClient, cluster)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
@@ -374,7 +375,7 @@ func createMachineDeploymentFromGKENodePoll(np *container.NodePool, readyReplica
 	return md
 }
 
-func getGKENodePool(ctx context.Context, userInfo *provider.UserInfo, cluster *kubermaticv1.ExternalCluster, nodeGroupName string, secretKeySelector provider.SecretKeySelectorValueFunc, credentialsReference *providerconfig.GlobalSecretKeySelector, clusterProvider provider.ExternalClusterProvider) (*apiv2.ExternalClusterMachineDeployment, error) {
+func getGKENodePool(ctx context.Context, masterClient ctrlruntimeclient.Client, cluster *kubermaticv1.ExternalCluster, nodeGroupName string, secretKeySelector provider.SecretKeySelectorValueFunc, credentialsReference *providerconfig.GlobalSecretKeySelector, clusterProvider provider.ExternalClusterProvider) (*apiv2.ExternalClusterMachineDeployment, error) {
 	sa, err := secretKeySelector(credentialsReference, resources.GCPServiceAccount)
 	if err != nil {
 		return nil, err
@@ -384,7 +385,7 @@ func getGKENodePool(ctx context.Context, userInfo *provider.UserInfo, cluster *k
 		return nil, err
 	}
 
-	return getGKEMachineDeployment(ctx, userInfo, svc, project, cluster, nodeGroupName, clusterProvider)
+	return getGKEMachineDeployment(ctx, masterClient, svc, project, cluster, nodeGroupName, clusterProvider)
 }
 
 func deleteGKENodePool(ctx context.Context, cluster *kubermaticv1.ExternalCluster, nodePoolID string, secretKeySelector provider.SecretKeySelectorValueFunc, credentialsReference *providerconfig.GlobalSecretKeySelector, clusterProvider provider.ExternalClusterProvider) error {
@@ -440,14 +441,14 @@ func patchGKEMachineDeployment(ctx context.Context, oldMD, newMD *apiv2.External
 	return newMD, nil
 }
 
-func getGKEMachineDeployment(ctx context.Context, userInfo *provider.UserInfo, svc *container.Service, projectID string, cluster *kubermaticv1.ExternalCluster, nodeGroupName string, clusterProvider provider.ExternalClusterProvider) (*apiv2.ExternalClusterMachineDeployment, error) {
+func getGKEMachineDeployment(ctx context.Context, masterClient ctrlruntimeclient.Client, svc *container.Service, projectID string, cluster *kubermaticv1.ExternalCluster, nodeGroupName string, clusterProvider provider.ExternalClusterProvider) (*apiv2.ExternalClusterMachineDeployment, error) {
 	req := svc.Projects.Zones.Clusters.NodePools.Get(projectID, cluster.Spec.CloudSpec.GKE.Zone, cluster.Spec.CloudSpec.GKE.Name, nodeGroupName)
 	np, err := req.Context(ctx).Do()
 	if err != nil {
 		return nil, gkeprovider.DecodeError(err)
 	}
 
-	nodes, err := clusterProvider.ListNodes(ctx, userInfo, cluster)
+	nodes, err := clusterProvider.ListNodes(ctx, masterClient, cluster)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}

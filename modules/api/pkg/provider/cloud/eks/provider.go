@@ -39,6 +39,7 @@ import (
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
 	"k8s.io/utils/pointer"
+	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 const (
@@ -372,13 +373,13 @@ func DeleteNodegroup(ctx context.Context, client *awsprovider.ClientSet, cluster
 }
 
 func ListUpgrades(ctx context.Context,
-	userInfo *provider.UserInfo,
+	masterClient ctrlruntimeclient.Client,
 	cluster *kubermaticv1.ExternalCluster,
 	clusterProvider provider.ExternalClusterProvider,
 	configGetter provider.KubermaticConfigurationGetter) ([]*apiv1.MasterVersion, error) {
 	upgradeVersions := []*apiv1.MasterVersion{}
 
-	currentVersion, err := clusterProvider.GetVersion(ctx, userInfo, cluster)
+	currentVersion, err := clusterProvider.GetVersion(ctx, masterClient, cluster)
 	if err != nil {
 		return nil, err
 	}
