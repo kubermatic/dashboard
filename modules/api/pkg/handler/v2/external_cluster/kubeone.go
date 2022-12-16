@@ -65,7 +65,6 @@ func importKubeOneCluster(ctx context.Context, name string, userInfoGetter func(
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
-
 	err = clusterProvider.CreateOrUpdateKubeOneCredentialSecret(ctx, userInfo, kubermaticNamespace, *cloud.KubeOne.CloudSpec, newCluster)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)

@@ -505,6 +505,7 @@ type ExternalClusterSpec struct {
 // ExternalClusterCloudSpec represents an object holding cluster cloud details
 // swagger:model ExternalClusterCloudSpec
 type ExternalClusterCloudSpec struct {
+	ProviderName string            `json:"providerName"`
 	GKE          *GKECloudSpec     `json:"gke,omitempty"`
 	EKS          *EKSCloudSpec     `json:"eks,omitempty"`
 	AKS          *AKSCloudSpec     `json:"aks,omitempty"`
@@ -515,6 +516,10 @@ type ExternalClusterCloudSpec struct {
 type BringYourOwnSpec struct{}
 
 type KubeOneSpec struct {
+	// ProviderName is the name of the cloud provider used, one of
+	// "aws", "azure", "digitalocean", "gcp",
+	// "hetzner", "nutanix", "openstack", "packet", "vsphere" KubeOne natively-supported providers
+	ProviderName string `json:"providerName"`
 	// Manifest Base64 encoded manifest
 	Manifest         string            `json:"manifest,omitempty"`
 	SSHKey           KubeOneSSHKey     `json:"sshKey,omitempty"`

@@ -1023,18 +1023,21 @@ func convertClusterToAPI(internalCluster *kubermaticv1.ExternalCluster) *apiv2.E
 
 	cluster.Cloud = &apiv2.ExternalClusterCloudSpec{}
 	if cloud.EKS != nil {
+		cluster.Cloud.ProviderName = string(kubermaticv1.ExternalClusterEKSProvider)
 		cluster.Cloud.EKS = &apiv2.EKSCloudSpec{
 			Name:   cloud.EKS.Name,
 			Region: cloud.EKS.Region,
 		}
 	}
 	if cloud.GKE != nil {
+		cluster.Cloud.ProviderName = string(kubermaticv1.ExternalClusterGKEProvider)
 		cluster.Cloud.GKE = &apiv2.GKECloudSpec{
 			Name: cloud.GKE.Name,
 			Zone: cloud.GKE.Zone,
 		}
 	}
 	if cloud.AKS != nil {
+		cluster.Cloud.ProviderName = string(kubermaticv1.ExternalClusterAKSProvider)
 		cluster.Cloud.AKS = &apiv2.AKSCloudSpec{
 			Name:          cloud.AKS.Name,
 			ResourceGroup: cloud.AKS.ResourceGroup,
@@ -1042,9 +1045,13 @@ func convertClusterToAPI(internalCluster *kubermaticv1.ExternalCluster) *apiv2.E
 		}
 	}
 	if cloud.KubeOne != nil {
-		cluster.Cloud.KubeOne = &apiv2.KubeOneSpec{}
+		cluster.Cloud.ProviderName = string(kubermaticv1.ExternalClusterKubeOneProvider)
+		cluster.Cloud.KubeOne = &apiv2.KubeOneSpec{
+			ProviderName: cloud.KubeOne.ProviderName,
+		}
 	}
 	if cloud.BringYourOwn != nil {
+		cluster.Cloud.ProviderName = string(kubermaticv1.ExternalClusterBringYourOwnProvider)
 		cluster.Cloud.BringYourOwn = &apiv2.BringYourOwnSpec{}
 	}
 
