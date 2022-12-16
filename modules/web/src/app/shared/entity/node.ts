@@ -228,14 +228,8 @@ export class KubeVirtNodeSpec {
   primaryDiskOSImage: string;
   primaryDiskStorageClassName: string;
   primaryDiskSize: string;
-  secondaryDisks?: KubeVirtSecondaryDisk[];
   nodeAffinityPreset?: KubeVirtNodeAffinityPreset;
   topologySpreadConstraints?: KubeVirtTopologySpreadConstraint[];
-}
-
-export class KubeVirtSecondaryDisk {
-  size: string;
-  storageClassName: string;
 }
 
 export class KubeVirtNodeAffinityPreset {
