@@ -1873,7 +1873,8 @@ type IPAMPoolDatacenterSettings struct {
 type ApplicationDefinition struct {
 	apiv1.ObjectMeta
 
-	Spec *appskubermaticv1.ApplicationDefinitionSpec `json:"spec"`
+	Labels map[string]string                           `json:"labels,omitempty"`
+	Spec   *appskubermaticv1.ApplicationDefinitionSpec `json:"spec"`
 }
 
 // swagger:model OperatingSystemProfile
@@ -1924,7 +1925,8 @@ type ApplicationDefinitionListItemSpec struct {
 type ApplicationDefinitionBody struct {
 	apiv1.ObjectMeta
 
-	Spec *appskubermaticv1.ApplicationDefinitionSpec
+	Labels map[string]string `json:"labels,omitempty"`
+	Spec   *appskubermaticv1.ApplicationDefinitionSpec
 }
 
 type DatacentersByProvider = map[string]ClustersByDatacenter

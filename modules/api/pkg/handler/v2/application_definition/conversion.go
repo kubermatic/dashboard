@@ -39,7 +39,8 @@ func convertInternalToAPIApplicationDefinition(appDef *appskubermaticv1.Applicat
 			CreationTimestamp: apiv1.Time(appDef.CreationTimestamp),
 			Name:              appDef.Name,
 		},
-		Spec: &appDef.Spec,
+		Spec:   &appDef.Spec,
+		Labels: appDef.Labels,
 	}
 }
 
@@ -50,7 +51,8 @@ func convertAPItoInternalApplicationDefinitionBody(appDef *apiv2.ApplicationDefi
 			APIVersion: appskubermaticv1.SchemeGroupVersion.String(),
 		},
 		ObjectMeta: metav1.ObjectMeta{
-			Name: appDef.Name,
+			Name:   appDef.Name,
+			Labels: appDef.Labels,
 		},
 		Spec: appskubermaticv1.ApplicationDefinitionSpec{
 			Description:   appDef.Spec.Description,
