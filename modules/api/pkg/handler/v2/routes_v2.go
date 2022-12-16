@@ -692,32 +692,6 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 		// TODO: implement provider-specific API endpoints and uncomment providers you implement.
 
 		/*
-
-			// AKS credentials
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/aks/validatecredentials").
-				Handler(r.validateProjectAKSCredentials())
-
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/aks/vmsizes").
-				Handler(r.listProjectAKSVMSizes())
-
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/aks/resourcegroups").
-				Handler(r.listProjectAKSResourceGroups())
-
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/aks/locations").
-				Handler(r.listProjectAKSLocations())
-
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/aks/modes").
-				Handler(r.listProjectAKSNodePoolModes())
-
-			mux.Methods(http.MethodGet).
-				Path("/projects/{project_id}/providers/aks/versions").
-				Handler(r.listProjectAKSVersions())
-
 			// Kubevirt endpoints
 			mux.Methods(http.MethodGet).
 				Path("/projects/{project_id}/providers/kubevirt/vmflavors").
@@ -764,6 +738,23 @@ func (r Routing) RegisterV2(mux *mux.Router, oidcKubeConfEndpoint bool, oidcCfg 
 	mux.Methods(http.MethodGet).
 		Path("/projects/{project_id}/providers/azure/vnets").
 		Handler(r.listProjectAzureVnets())
+
+	// AKS endpoints
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/aks/validatecredentials").
+		Handler(r.validateProjectAKSCredentials())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/aks/vmsizes").
+		Handler(r.listProjectAKSVMSizes())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/aks/resourcegroups").
+		Handler(r.listProjectAKSResourceGroups())
+
+	mux.Methods(http.MethodGet).
+		Path("/projects/{project_id}/providers/aks/locations").
+		Handler(r.listProjectAKSLocations())
 
 		/*
 
@@ -5963,6 +5954,94 @@ func (r Routing) listProjectAzureSubnets() http.Handler {
 	)
 }
 
+// swagger:route GET /api/v2/projects/{project_id}/providers/aks/validatecredentials aks validateProjectAKSCredentials
+//
+// Validates AKS credentials
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: empty
+func (r Routing) validateProjectAKSCredentials() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(externalcluster.AKSValidateCredentialsEndpoint(r.presetProvider, r.userInfoGetter, true)),
+		externalcluster.DecodeAKSProjectCommonReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/aks/vmsizes aks listProjectAKSVMSizes
+//
+// List AKS available VM sizes in an Azure region.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AKSVMSizeList
+func (r Routing) listProjectAKSVMSizes() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(externalcluster.ListAKSVMSizesEndpoint(r.presetProvider, r.userInfoGetter, true)),
+		externalcluster.DecodeAKSProjectVMSizesReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/aks/resourcegroups aks listProjectAKSResourceGroups
+//
+//	List resource groups in an Azure subscription.
+//
+//	Produces:
+//	- application/json
+//
+//	Responses:
+//	  default: errorResponse
+//	  200: AzureResourceGroupList
+func (r Routing) listProjectAKSResourceGroups() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(externalcluster.ListAKSResourceGroupsEndpoint(r.presetProvider, r.userInfoGetter, true)),
+		externalcluster.DecodeAKSProjectCommonReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
+// swagger:route GET /api/v2/projects/{project_id}/providers/aks/locations aks listProjectAKSLocations
+//
+// List AKS recommended Locations.
+//
+//	    Produces:
+//	    - application/json
+//
+//	    Responses:
+//		 default: errorResponse
+//		 200: AKSLocationList
+func (r Routing) listProjectAKSLocations() http.Handler {
+	return httptransport.NewServer(
+		endpoint.Chain(
+			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
+			middleware.UserSaver(r.userProvider),
+		)(externalcluster.ListAKSLocationsEndpoint(r.presetProvider, r.userInfoGetter, true)),
+		externalcluster.DecodeAKSProjectCommonReq,
+		handler.EncodeJSON,
+		r.defaultServerOptions()...,
+	)
+}
+
 // swagger:route GET /api/v2/projects/{project_id}/providers/nutanix/{dc}/clusters nutanix listProjectNutanixClusters
 //
 // List clusters from Nutanix.
@@ -7490,8 +7569,8 @@ func (r Routing) validateAKSCredentials() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(externalcluster.AKSValidateCredentialsEndpoint(r.presetProvider, r.userInfoGetter)),
-		externalcluster.DecodeAKSTypesReq,
+		)(externalcluster.AKSValidateCredentialsEndpoint(r.presetProvider, r.userInfoGetter, false)),
+		externalcluster.DecodeAKSCommonReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
 	)
@@ -7512,7 +7591,7 @@ func (r Routing) listAKSVMSizes() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(externalcluster.ListAKSVMSizesEndpoint(r.presetProvider, r.userInfoGetter)),
+		)(externalcluster.ListAKSVMSizesEndpoint(r.presetProvider, r.userInfoGetter, false)),
 		externalcluster.DecodeAKSVMSizesReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -7534,7 +7613,7 @@ func (r Routing) listAKSResourceGroups() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(externalcluster.ListAKSResourceGroupsEndpoint(r.presetProvider, r.userInfoGetter)),
+		)(externalcluster.ListAKSResourceGroupsEndpoint(r.presetProvider, r.userInfoGetter, false)),
 		externalcluster.DecodeAKSCommonReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
@@ -7556,7 +7635,7 @@ func (r Routing) listAKSLocations() http.Handler {
 		endpoint.Chain(
 			middleware.TokenVerifier(r.tokenVerifiers, r.userProvider),
 			middleware.UserSaver(r.userProvider),
-		)(externalcluster.ListAKSLocationsEndpoint(r.presetProvider, r.userInfoGetter)),
+		)(externalcluster.ListAKSLocationsEndpoint(r.presetProvider, r.userInfoGetter, false)),
 		externalcluster.DecodeAKSCommonReq,
 		handler.EncodeJSON,
 		r.defaultServerOptions()...,
