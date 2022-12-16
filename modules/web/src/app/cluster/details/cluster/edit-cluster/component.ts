@@ -364,9 +364,6 @@ export class EditClusterComponent implements OnInit, OnDestroy {
         admissionPlugins: this.form.get(Controls.AdmissionPlugins).value,
         podNodeSelectorAdmissionPluginConfig: this.podNodeSelectorAdmissionPluginConfig,
         containerRuntime: this.form.get(Controls.ContainerRuntime).value,
-        apiServerAllowedIPRanges: {
-          cidrBlocks: this.form.get(Controls.APIServerAllowedIPRanges).value?.tags,
-        } as NetworkRanges,
       } as ClusterSpecPatch,
     } as ClusterPatch;
 
@@ -376,7 +373,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
       };
     }
 
-    if (this.cluster.spec.exposeStrategy === ExposeStrategy.loadbalancer) {
+    if (this.isExposeStrategyLoadBalancer()) {
       patch.spec.apiServerAllowedIPRanges = this.getAPIServerAllowedIPRange();
     }
 
@@ -402,7 +399,7 @@ export class EditClusterComponent implements OnInit, OnDestroy {
   }
 
   private getAPIServerAllowedIPRange(): NetworkRanges {
-    if (this.cluster.spec.exposeStrategy !== ExposeStrategy.loadbalancer) {
+    if (!this.isExposeStrategyLoadBalancer()) {
       return null;
     }
     const apiServerAllowedIPRange = this.form.get(Controls.APIServerAllowedIPRanges).value?.tags;
