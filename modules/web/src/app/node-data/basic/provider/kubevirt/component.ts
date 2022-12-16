@@ -22,18 +22,12 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import {FormArray, FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
 import {InstanceDetailsDialogComponent} from '@app/node-data/basic/provider/kubevirt/instance-details/component';
 import {NodeDataService} from '@core/services/node-data/service';
 import {ComboboxControls, FilteredComboboxComponent} from '@shared/components/combobox/component';
-import {
-  KubeVirtNodeAffinityPreset,
-  KubeVirtNodeSpec,
-  KubeVirtSecondaryDisk,
-  NodeCloudSpec,
-  NodeSpec,
-} from '@shared/entity/node';
+import {KubeVirtNodeAffinityPreset, KubeVirtNodeSpec, NodeCloudSpec, NodeSpec} from '@shared/entity/node';
 import {
   KubeVirtAffinityPreset,
   KubeVirtInstanceType,
@@ -63,9 +57,6 @@ enum Controls {
   PrimaryDiskOSImage = 'primaryDiskOSImage',
   PrimaryDiskStorageClassName = 'primaryDiskStorageClassName',
   PrimaryDiskSize = 'primaryDiskSize',
-  SecondaryDisks = 'secondaryDisks',
-  SecondaryDiskStorageClass = 'secondaryDiskStorageClass',
-  SecondaryDiskSize = 'secondaryDiskSize',
   NodeAffinityPreset = 'nodeAffinityPreset',
   NodeAffinityPresetKey = 'nodeAffinityPresetKey',
   NodeAffinityPresetValues = 'nodeAffinityPresetValues',
@@ -118,7 +109,6 @@ export class KubeVirtBasicNodeDataComponent
   @ViewChild('storageClassCombobox')
   private _storageClassCombobox: FilteredComboboxComponent;
   readonly Controls = Controls;
-  readonly maxSecondaryDisks = 3;
   readonly affinityPresetOptions = [KubeVirtAffinityPreset.Hard, KubeVirtAffinityPreset.Soft];
   private readonly _instanceTypeIDSeparator = ':';
   private readonly _defaultCPUs = 2;
@@ -158,7 +148,6 @@ export class KubeVirtBasicNodeDataComponent
       [Controls.PrimaryDiskOSImage]: this._builder.control('', Validators.required),
       [Controls.PrimaryDiskStorageClassName]: this._builder.control('', Validators.required),
       [Controls.PrimaryDiskSize]: this._builder.control('10', Validators.required),
-      [Controls.SecondaryDisks]: this._builder.array([]),
       [Controls.NodeAffinityPreset]: this._builder.control(''),
       [Controls.NodeAffinityPresetKey]: this._builder.control(''),
       [Controls.NodeAffinityPresetValues]: this._builder.control(''),
@@ -205,16 +194,6 @@ export class KubeVirtBasicNodeDataComponent
     this.form.valueChanges
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._nodeDataService.nodeData = this._getNodeData()));
-
-    this.form
-      .get(Controls.SecondaryDisks)
-      .valueChanges.pipe(takeUntil(this._unsubscribe))
-      .subscribe(_ => {
-        const secondaryDisks = this._secondaryDisks;
-        this._nodeDataService.nodeData.spec.cloud.kubevirt.secondaryDisks = secondaryDisks?.length
-          ? secondaryDisks
-          : null;
-      });
   }
 
   ngAfterViewChecked(): void {
@@ -244,10 +223,6 @@ export class KubeVirtBasicNodeDataComponent
     return Object.keys(this._preferences?.preferences || {});
   }
 
-  get secondaryDisksFormArray(): FormArray {
-    return this.form.get(Controls.SecondaryDisks) as FormArray;
-  }
-
   get topologySpreadConstraints(): KubeVirtTopologySpreadConstraint[] {
     return this._nodeDataService.nodeData.spec.cloud.kubevirt?.topologySpreadConstraints || [];
   }
@@ -274,15 +249,6 @@ export class KubeVirtBasicNodeDataComponent
       return preferenceId.substring(preferenceId.indexOf(this._instanceTypeIDSeparator) + 1);
     }
     return preferenceId;
-  }
-
-  addSecondaryDisk(storageClass = '', size = '10'): void {
-    this.secondaryDisksFormArray.push(
-      this._builder.group({
-        [Controls.SecondaryDiskStorageClass]: this._builder.control(storageClass, Validators.required),
-        [Controls.SecondaryDiskSize]: this._builder.control(size, Validators.required),
-      })
-    );
   }
 
   onInstanceTypeChange(instanceTypeId: string): void {
@@ -537,12 +503,6 @@ export class KubeVirtBasicNodeDataComponent
       if (this._initialData.preference) {
         this.form.get(Controls.Preference).setValue(this._getSelectedPreferenceId(this._initialData.preference));
       }
-
-      if (this._initialData.secondaryDisks?.length) {
-        this._initialData.secondaryDisks.forEach(disk => {
-          this.addSecondaryDisk(disk.storageClassName, disk.size.match(/\d+/)[0]);
-        });
-      }
     }
   }
 
@@ -585,14 +545,5 @@ export class KubeVirtBasicNodeDataComponent
         } as NodeCloudSpec,
       } as NodeSpec,
     } as NodeData;
-  }
-
-  private get _secondaryDisks(): KubeVirtSecondaryDisk[] {
-    return this.secondaryDisksFormArray.controls.map(secondaryDiskFormGroup => {
-      return {
-        storageClassName: secondaryDiskFormGroup.get(Controls.SecondaryDiskStorageClass).value[ComboboxControls.Select],
-        size: `${secondaryDiskFormGroup.get(Controls.SecondaryDiskSize).value}Gi`,
-      };
-    });
   }
 }

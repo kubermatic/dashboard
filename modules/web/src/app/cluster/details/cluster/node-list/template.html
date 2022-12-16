@@ -317,10 +317,6 @@ limitations under the License.
                 <div key>Size</div>
                 <div value>{{element.spec.cloud.kubevirt.primaryDiskSize}}</div>
               </km-property>
-              <km-property *ngFor="let disk of element.spec.cloud.kubevirt?.secondaryDisks; let i = index;">
-                <div key>Secondary Disk {{i + 1}}</div>
-                <div value>{{disk.storageClassName}}, {{disk.size}}</div>
-              </km-property>
               <ng-container *ngIf="element.spec.cloud.kubevirt.nodeAffinityPreset as nodeAffinityPreset">
                 <km-property>
                   <div key>Node Affinity Preset</div>
