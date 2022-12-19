@@ -622,7 +622,7 @@ func createOrUpdateVMwareCloudDirectorSecret(ctx context.Context, seedClient ctr
 	return true, nil
 }
 
-func ensureCredentialKubeOneSecret(ctx context.Context, masterClient ctrlruntimeclient.Client, externalcluster *kubermaticv1.ExternalCluster, secretName, secretNamespace string, secretData map[string][]byte) (*providerconfig.GlobalSecretKeySelector, error) {
+func ensureKubeOneSecret(ctx context.Context, masterClient ctrlruntimeclient.Client, externalcluster *kubermaticv1.ExternalCluster, secretName, secretNamespace string, secretData map[string][]byte) (*providerconfig.GlobalSecretKeySelector, error) {
 	reconciler, err := credentialSecretReconcilerFactory(secretName, externalcluster.Labels, secretData)
 	if err != nil {
 		return nil, err
@@ -650,7 +650,7 @@ func createOrUpdateKubeOneAWSSecret(ctx context.Context, cloud apiv2.KubeOneClou
 	}
 
 	// move credentials into dedicated Secret
-	credentialRef, err := ensureCredentialKubeOneSecret(ctx, masterClient, externalCluster, secretName, kubermaticNamespace, map[string][]byte{
+	credentialRef, err := ensureKubeOneSecret(ctx, masterClient, externalCluster, secretName, kubermaticNamespace, map[string][]byte{
 		resources.AWSAccessKeyID:     []byte(cloud.AWS.AccessKeyID),
 		resources.AWSSecretAccessKey: []byte(cloud.AWS.SecretAccessKey),
 	})
@@ -679,7 +679,7 @@ func createOrUpdateKubeOneGCPSecret(ctx context.Context, cloud apiv2.KubeOneClou
 		return fmt.Errorf("failed to decode gcp credential: %w", err)
 	}
 	// move credentials into dedicated Secret
-	credentialRef, err := ensureCredentialKubeOneSecret(ctx, masterClient, externalCluster, secretName, kubermaticNamespace, map[string][]byte{
+	credentialRef, err := ensureKubeOneSecret(ctx, masterClient, externalCluster, secretName, kubermaticNamespace, map[string][]byte{
 		resources.GCPServiceAccount: sa,
 	})
 	if err != nil {
@@ -717,7 +717,7 @@ func createOrUpdateKubeOneAzureSecret(ctx context.Context, cloud apiv2.KubeOneCl
 	}
 
 	// move credentials into dedicated Secret
-	credentialRef, err := ensureCredentialKubeOneSecret(ctx, masterClient, externalCluster, secretName, kubermaticNamespace, map[string][]byte{
+	credentialRef, err := ensureKubeOneSecret(ctx, masterClient, externalCluster, secretName, kubermaticNamespace, map[string][]byte{
 		resources.AzureTenantID:       []byte(tenantID),
 		resources.AzureSubscriptionID: []byte(subscriptionID),
 		resources.AzureClientID:       []byte(clientID),
@@ -745,7 +745,7 @@ func createOrUpdateKubeOneDigitaloceanSecret(ctx context.Context, cloud apiv2.Ku
 	}
 
 	// move credentials into dedicated Secret
-	credentialRef, err := ensureCredentialKubeOneSecret(ctx, masterClient, externalCluster, secretName, kubermaticNamespace, map[string][]byte{
+	credentialRef, err := ensureKubeOneSecret(ctx, masterClient, externalCluster, secretName, kubermaticNamespace, map[string][]byte{
 		resources.DigitaloceanToken: []byte(token),
 	})
 	if err != nil {
@@ -772,7 +772,7 @@ func createOrUpdateKubeOneOpenstackSecret(ctx context.Context, cloud apiv2.KubeO
 	}
 
 	// move credentials into dedicated Secret
-	credentialRef, err := ensureCredentialKubeOneSecret(ctx, masterClient, externalCluster, secretName, kubermaticNamespace, map[string][]byte{
+	credentialRef, err := ensureKubeOneSecret(ctx, masterClient, externalCluster, secretName, kubermaticNamespace, map[string][]byte{
 		resources.OpenstackAuthURL:   []byte(authUrl),
 		resources.OpenstackUsername:  []byte(username),
 		resources.OpenstackPassword:  []byte(password),
@@ -801,7 +801,7 @@ func createOrUpdateKubeOneVSphereSecret(ctx context.Context, cloud apiv2.KubeOne
 	}
 
 	// move credentials into dedicated Secret
-	credentialRef, err := ensureCredentialKubeOneSecret(ctx, masterClient, externalCluster, secretName, kubermaticNamespace, map[string][]byte{
+	credentialRef, err := ensureKubeOneSecret(ctx, masterClient, externalCluster, secretName, kubermaticNamespace, map[string][]byte{
 		resources.VsphereUsername: []byte(username),
 		resources.VspherePassword: []byte(password),
 		resources.VsphereServer:   []byte(server),
@@ -829,7 +829,7 @@ func createOrUpdateKubeOneEquinixSecret(ctx context.Context, cloud apiv2.KubeOne
 	}
 
 	// move credentials into dedicated Secret
-	credentialRef, err := ensureCredentialKubeOneSecret(ctx, masterClient, externalCluster, secretName, kubermaticNamespace, map[string][]byte{
+	credentialRef, err := ensureKubeOneSecret(ctx, masterClient, externalCluster, secretName, kubermaticNamespace, map[string][]byte{
 		resources.PacketAPIKey:    []byte(apiKey),
 		resources.PacketProjectID: []byte(projectID),
 	})
@@ -855,7 +855,7 @@ func createOrUpdateKubeOneHetznerSecret(ctx context.Context, cloud apiv2.KubeOne
 	}
 
 	// move credentials into dedicated Secret
-	credentialRef, err := ensureCredentialKubeOneSecret(ctx, masterClient, externalCluster, secretName, kubermaticNamespace, map[string][]byte{
+	credentialRef, err := ensureKubeOneSecret(ctx, masterClient, externalCluster, secretName, kubermaticNamespace, map[string][]byte{
 		resources.HetznerToken: []byte(token),
 	})
 	if err != nil {
@@ -905,7 +905,7 @@ func createOrUpdateKubeOneNutanixSecret(ctx context.Context, cloud apiv2.KubeOne
 	}
 
 	// move credentials into dedicated Secret
-	credentialRef, err := ensureCredentialKubeOneSecret(ctx, masterClient, externalCluster, secretName, kubermaticNamespace, secretData)
+	credentialRef, err := ensureKubeOneSecret(ctx, masterClient, externalCluster, secretName, kubermaticNamespace, secretData)
 	if err != nil {
 		return err
 	}
@@ -928,7 +928,7 @@ func createOrUpdateKubeOneVMwareCloudDirectorSecret(ctx context.Context, cloud a
 	}
 
 	// move credentials into dedicated Secret
-	credentialRef, err := ensureCredentialKubeOneSecret(ctx, masterClient, externalCluster, secretName, kubermaticNamespace, map[string][]byte{
+	credentialRef, err := ensureKubeOneSecret(ctx, masterClient, externalCluster, secretName, kubermaticNamespace, map[string][]byte{
 		resources.VMwareCloudDirectorUsername:     []byte(username),
 		resources.VMwareCloudDirectorPassword:     []byte(password),
 		resources.VMwareCloudDirectorOrganization: []byte(organization),

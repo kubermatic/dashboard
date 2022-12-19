@@ -19339,6 +19339,249 @@
         }
       }
     },
+    "/api/v2/projects/{project_id}/providers/aks/locations": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "aks"
+        ],
+        "summary": "List AKS recommended Locations.",
+        "operationId": "listProjectAKSLocations",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "TenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "SubscriptionID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ClientID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ClientSecret",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "AKSLocationList",
+            "schema": {
+              "$ref": "#/definitions/AKSLocationList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/aks/resourcegroups": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "aks"
+        ],
+        "summary": "List resource groups in an Azure subscription.",
+        "operationId": "listProjectAKSResourceGroups",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "TenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "SubscriptionID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ClientID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ClientSecret",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "AzureResourceGroupList",
+            "schema": {
+              "$ref": "#/definitions/AzureResourceGroupList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/aks/validatecredentials": {
+      "get": {
+        "description": "Validates AKS credentials",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "aks"
+        ],
+        "operationId": "validateProjectAKSCredentials",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "TenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "SubscriptionID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ClientID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ClientSecret",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/empty"
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/projects/{project_id}/providers/aks/vmsizes": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "aks"
+        ],
+        "summary": "List AKS available VM sizes in an Azure region.",
+        "operationId": "listProjectAKSVMSizes",
+        "parameters": [
+          {
+            "type": "string",
+            "x-go-name": "ProjectID",
+            "name": "project_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "TenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "SubscriptionID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ClientID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ClientSecret",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "description": "Location - Resource location",
+            "name": "Location",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "AKSVMSizeList",
+            "schema": {
+              "$ref": "#/definitions/AKSVMSizeList"
+            }
+          },
+          "default": {
+            "description": "errorResponse",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v2/projects/{project_id}/providers/anexia/templates": {
       "get": {
         "produces": [
@@ -21792,6 +22035,33 @@
         ],
         "summary": "List AKS recommended Locations.",
         "operationId": "listAKSLocations",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "TenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "SubscriptionID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ClientID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ClientSecret",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
         "responses": {
           "200": {
             "description": "AKSLocationList",
@@ -21850,6 +22120,33 @@
         ],
         "summary": "List resource groups in an Azure subscription.",
         "operationId": "listAKSResourceGroups",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "TenantID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "SubscriptionID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ClientID",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "ClientSecret",
+            "in": "header"
+          },
+          {
+            "type": "string",
+            "name": "Credential",
+            "in": "header"
+          }
+        ],
         "responses": {
           "200": {
             "description": "AzureResourceGroupList",
@@ -26748,6 +27045,13 @@
           "type": "string",
           "x-go-name": "ID"
         },
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Labels"
+        },
         "name": {
           "description": "Name represents human readable name for the resource",
           "type": "string",
@@ -26790,6 +27094,13 @@
           "description": "ID unique value that identifies the resource generated by the server. Read-Only.",
           "type": "string",
           "x-go-name": "ID"
+        },
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Labels"
         },
         "name": {
           "description": "Name represents human readable name for the resource",

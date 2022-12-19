@@ -68,11 +68,12 @@ func GetUpgradesEndpoint(configGetter provider.KubermaticConfigurationGetter,
 			return upgrades, nil
 		}
 
-		userInfo, err := userInfoGetter(ctx, project.Name)
+		masterClient, err := clusterProvider.GetUserBasedMasterClient(ctx, project.Name, userInfoGetter)
 		if err != nil {
 			return nil, err
 		}
-		apiCluster := convertClusterToAPIWithStatus(ctx, userInfo, clusterProvider, privilegedClusterProvider, cluster)
+
+		apiCluster := convertClusterToAPIWithStatus(ctx, masterClient, clusterProvider, privilegedClusterProvider, cluster)
 		if apiCluster.Status.State != apiv2.RunningExternalClusterState {
 			return upgrades, nil
 		}
@@ -80,7 +81,7 @@ func GetUpgradesEndpoint(configGetter provider.KubermaticConfigurationGetter,
 		secretKeySelector := provider.SecretKeySelectorValueFuncFactory(ctx, privilegedClusterProvider.GetMasterClient())
 
 		if cloud.EKS != nil {
-			return eks.ListUpgrades(ctx, userInfo, cluster, clusterProvider, configGetter)
+			return eks.ListUpgrades(ctx, masterClient, cluster, clusterProvider, configGetter)
 		}
 		if cloud.GKE != nil {
 			sa, err := secretKeySelector(cloud.GKE.CredentialsReference, resources.GCPServiceAccount)
@@ -97,7 +98,7 @@ func GetUpgradesEndpoint(configGetter provider.KubermaticConfigurationGetter,
 			return aks.ListUpgrades(ctx, cred, cloud.AKS.ResourceGroup, cloud.AKS.Name)
 		}
 		if cloud.KubeOne != nil {
-			return handlercommon.GetKubeOneUpgradesEndpoint(ctx, userInfo, cluster, clusterProvider, configGetter)
+			return handlercommon.GetKubeOneUpgradesEndpoint(ctx, masterClient, cluster, clusterProvider, configGetter)
 		}
 
 		return nil, nil
@@ -120,11 +121,12 @@ func GetMachineDeploymentUpgradesEndpoint(userInfoGetter provider.UserInfoGetter
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 
-		userInfo, err := userInfoGetter(ctx, project.Name)
+		masterClient, err := clusterProvider.GetUserBasedMasterClient(ctx, project.Name, userInfoGetter)
 		if err != nil {
 			return nil, err
 		}
-		apiCluster := convertClusterToAPIWithStatus(ctx, userInfo, clusterProvider, privilegedClusterProvider, cluster)
+
+		apiCluster := convertClusterToAPIWithStatus(ctx, masterClient, clusterProvider, privilegedClusterProvider, cluster)
 		upgrades := make([]*apiv1.MasterVersion, 0)
 		cloud := cluster.Spec.CloudSpec
 		if cloud.ProviderName == kubermaticv1.ExternalClusterBringYourOwnProvider {

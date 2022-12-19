@@ -46,19 +46,15 @@ import (
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
 	"k8s.io/utils/pointer"
+	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 const (
 	AgentPoolModeSystem = "System"
 )
 
-// AKSTypesReq represent a request for AKS types.
-// swagger:parameters validateAKSCredentials
-type AKSTypesReq struct {
-	AKSCommonReq
-}
-
 // AKSCommonReq represent a request with common parameters for AKS.
+// swagger:parameters validateAKSCredentials listAKSResourceGroups listAKSLocations validateAKSCredentials
 type AKSCommonReq struct {
 	// in: header
 	// name: TenantID
@@ -77,14 +73,28 @@ type AKSCommonReq struct {
 	Credential string
 }
 
+// AKSProjectCommonReq represents a common request for AKS information from within a specific project.
+// swagger:parameters listProjectAKSResourceGroups listProjectAKSLocations validateProjectAKSCredentials
+type AKSProjectCommonReq struct {
+	common.ProjectReq
+	AKSCommonReq
+}
+
 // AKSVMSizesReq represent a request for AKS VM Sizes list.
 // swagger:parameters listAKSVMSizes
 type AKSVMSizesReq struct {
-	AKSTypesReq
+	AKSCommonReq
 	// Location - Resource location
 	// in: header
 	// name: Location
 	Location string
+}
+
+// AKSProjectVMSizesReq represents a request for AKS VM Sizes list with credentials from within a specific project.
+// swagger:parameters listProjectAKSVMSizes
+type AKSProjectVMSizesReq struct {
+	common.ProjectReq
+	AKSVMSizesReq
 }
 
 // aksNoCredentialReq represent a request for AKS resources
@@ -97,25 +107,14 @@ type aksNoCredentialReq struct {
 	Location string
 }
 
-func DecodeAKSTypesReq(c context.Context, r *http.Request) (interface{}, error) {
-	var req AKSTypesReq
+func DecodeAKSVMSizesReq(c context.Context, r *http.Request) (interface{}, error) {
+	var req AKSVMSizesReq
 
 	commonReq, err := DecodeAKSCommonReq(c, r)
 	if err != nil {
 		return nil, err
 	}
 	req.AKSCommonReq = commonReq.(AKSCommonReq)
-	return req, nil
-}
-
-func DecodeAKSVMSizesReq(c context.Context, r *http.Request) (interface{}, error) {
-	var req AKSVMSizesReq
-
-	typesReq, err := DecodeAKSTypesReq(c, r)
-	if err != nil {
-		return nil, err
-	}
-	req.AKSTypesReq = typesReq.(AKSTypesReq)
 	req.Location = r.Header.Get("Location")
 
 	return req, nil
@@ -170,6 +169,40 @@ func DecodeAKSCommonReq(c context.Context, r *http.Request) (interface{}, error)
 	return req, nil
 }
 
+func DecodeAKSProjectCommonReq(c context.Context, r *http.Request) (interface{}, error) {
+	commonReq, err := DecodeAKSCommonReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	projectReq, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return AKSProjectCommonReq{
+		ProjectReq:   projectReq.(common.ProjectReq),
+		AKSCommonReq: commonReq.(AKSCommonReq),
+	}, nil
+}
+
+func DecodeAKSProjectVMSizesReq(c context.Context, r *http.Request) (interface{}, error) {
+	vmSizesReq, err := DecodeAKSVMSizesReq(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	projectReq, err := common.DecodeProjectRequest(c, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return AKSProjectVMSizesReq{
+		ProjectReq:    projectReq.(common.ProjectReq),
+		AKSVMSizesReq: vmSizesReq.(AKSVMSizesReq),
+	}, nil
+}
+
 func DecodeAKSClusterListReq(c context.Context, r *http.Request) (interface{}, error) {
 	var req AKSClusterListReq
 
@@ -204,7 +237,7 @@ func ListAKSClustersEndpoint(userInfoGetter provider.UserInfoGetter, projectProv
 			return nil, utilerrors.NewBadRequest(err.Error())
 		}
 
-		cred, err := getAKSCredentialsFromReq(ctx, req.AKSCommonReq, userInfoGetter, presetProvider)
+		cred, err := getAKSCredentialsFromReq(ctx, req.AKSCommonReq, userInfoGetter, presetProvider, req.ProjectID)
 		if err != nil {
 			return nil, err
 		}
@@ -213,17 +246,34 @@ func ListAKSClustersEndpoint(userInfoGetter provider.UserInfoGetter, projectProv
 	}
 }
 
-func ListAKSVMSizesEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func ListAKSVMSizesEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req, ok := request.(AKSVMSizesReq)
-		if !ok {
-			return nil, utilerrors.NewBadRequest("invalid request")
+		var (
+			req       AKSVMSizesReq
+			projectID string
+		)
+
+		if !withProject {
+			commonReq, ok := request.(AKSVMSizesReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+			req = commonReq
+		} else {
+			projectReq, ok := request.(AKSProjectVMSizesReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+
+			projectID = projectReq.GetProjectID()
+			req = projectReq.AKSVMSizesReq
 		}
+
 		if err := req.Validate(); err != nil {
 			return nil, utilerrors.NewBadRequest(err.Error())
 		}
 
-		cred, err := getAKSCredentialsFromReq(ctx, req.AKSCommonReq, userInfoGetter, presetProvider)
+		cred, err := getAKSCredentialsFromReq(ctx, req.AKSCommonReq, userInfoGetter, presetProvider, projectID)
 		if err != nil {
 			return nil, err
 		}
@@ -232,17 +282,34 @@ func ListAKSVMSizesEndpoint(presetProvider provider.PresetProvider, userInfoGett
 	}
 }
 
-func ListAKSResourceGroupsEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func ListAKSResourceGroupsEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req, ok := request.(AKSCommonReq)
-		if !ok {
-			return nil, utilerrors.NewBadRequest("invalid request")
+		var (
+			req       AKSCommonReq
+			projectID string
+		)
+
+		if !withProject {
+			commonReq, ok := request.(AKSCommonReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+			req = commonReq
+		} else {
+			projectReq, ok := request.(AKSProjectCommonReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+
+			projectID = projectReq.GetProjectID()
+			req = projectReq.AKSCommonReq
 		}
+
 		if err := req.Validate(); err != nil {
 			return nil, utilerrors.NewBadRequest(err.Error())
 		}
 
-		cred, err := getAKSCredentialsFromReq(ctx, req, userInfoGetter, presetProvider)
+		cred, err := getAKSCredentialsFromReq(ctx, req, userInfoGetter, presetProvider, projectID)
 		if err != nil {
 			return nil, err
 		}
@@ -251,17 +318,34 @@ func ListAKSResourceGroupsEndpoint(presetProvider provider.PresetProvider, userI
 	}
 }
 
-func ListAKSLocationsEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func ListAKSLocationsEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req, ok := request.(AKSCommonReq)
-		if !ok {
-			return nil, utilerrors.NewBadRequest("invalid request")
+		var (
+			req       AKSCommonReq
+			projectID string
+		)
+
+		if !withProject {
+			commonReq, ok := request.(AKSCommonReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+			req = commonReq
+		} else {
+			projectReq, ok := request.(AKSProjectCommonReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+
+			projectID = projectReq.GetProjectID()
+			req = projectReq.AKSCommonReq
 		}
+
 		if err := req.Validate(); err != nil {
 			return nil, utilerrors.NewBadRequest(err.Error())
 		}
 
-		cred, err := getAKSCredentialsFromReq(ctx, req, userInfoGetter, presetProvider)
+		cred, err := getAKSCredentialsFromReq(ctx, req, userInfoGetter, presetProvider, projectID)
 		if err != nil {
 			return nil, err
 		}
@@ -294,17 +378,34 @@ func (req AKSCommonReq) Validate() error {
 	return nil
 }
 
-func AKSValidateCredentialsEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter) endpoint.Endpoint {
+func AKSValidateCredentialsEndpoint(presetProvider provider.PresetProvider, userInfoGetter provider.UserInfoGetter, withProject bool) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req, ok := request.(AKSTypesReq)
-		if !ok {
-			return nil, utilerrors.NewBadRequest("invalid request")
+		var (
+			req       AKSCommonReq
+			projectID string
+		)
+
+		if !withProject {
+			commonReq, ok := request.(AKSCommonReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+			req = commonReq
+		} else {
+			projectReq, ok := request.(AKSProjectCommonReq)
+			if !ok {
+				return nil, utilerrors.NewBadRequest("invalid request")
+			}
+
+			projectID = projectReq.GetProjectID()
+			req = projectReq.AKSCommonReq
 		}
+
 		if err := req.Validate(); err != nil {
 			return nil, utilerrors.NewBadRequest(err.Error())
 		}
 
-		cred, err := getAKSCredentialsFromReq(ctx, req.AKSCommonReq, userInfoGetter, presetProvider)
+		cred, err := getAKSCredentialsFromReq(ctx, req, userInfoGetter, presetProvider, projectID)
 		if err != nil {
 			return nil, err
 		}
@@ -317,7 +418,7 @@ func AKSValidateCredentialsEndpoint(presetProvider provider.PresetProvider, user
 	}
 }
 
-func getAKSCredentialsFromReq(ctx context.Context, req AKSCommonReq, userInfoGetter provider.UserInfoGetter, presetProvider provider.PresetProvider) (*resources.AKSCredentials, error) {
+func getAKSCredentialsFromReq(ctx context.Context, req AKSCommonReq, userInfoGetter provider.UserInfoGetter, presetProvider provider.PresetProvider, projectID string) (*resources.AKSCredentials, error) {
 	subscriptionID := req.SubscriptionID
 	clientID := req.ClientID
 	clientSecret := req.ClientSecret
@@ -329,7 +430,7 @@ func getAKSCredentialsFromReq(ctx context.Context, req AKSCommonReq, userInfoGet
 	}
 
 	if len(req.Credential) > 0 {
-		preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(""), req.Credential)
+		preset, err := presetProvider.GetPreset(ctx, userInfo, pointer.String(projectID), req.Credential)
 		if err != nil {
 			return nil, utilerrors.New(http.StatusInternalServerError, fmt.Sprintf("can not get preset %s for user %s", req.Credential, userInfo.Email))
 		}
@@ -539,7 +640,7 @@ func patchAKSCluster(ctx context.Context, oldCluster, newCluster *apiv2.External
 	return newCluster, nil
 }
 
-func getAKSNodePools(ctx context.Context, userInfo *provider.UserInfo, cluster *kubermaticv1.ExternalCluster, secretKeySelector provider.SecretKeySelectorValueFunc, clusterProvider provider.ExternalClusterProvider) ([]apiv2.ExternalClusterMachineDeployment, error) {
+func getAKSNodePools(ctx context.Context, masterClient ctrlruntimeclient.Client, cluster *kubermaticv1.ExternalCluster, secretKeySelector provider.SecretKeySelectorValueFunc, clusterProvider provider.ExternalClusterProvider) ([]apiv2.ExternalClusterMachineDeployment, error) {
 	cloud := cluster.Spec.CloudSpec
 
 	cred, err := aks.GetCredentialsForCluster(cloud.AKS, secretKeySelector)
@@ -558,13 +659,13 @@ func getAKSNodePools(ctx context.Context, userInfo *provider.UserInfo, cluster *
 
 	poolProfiles := aksCluster.Properties.AgentPoolProfiles
 
-	return getAKSMachineDeployments(ctx, userInfo, poolProfiles, cluster, clusterProvider)
+	return getAKSMachineDeployments(ctx, masterClient, poolProfiles, cluster, clusterProvider)
 }
 
-func getAKSMachineDeployments(ctx context.Context, userInfo *provider.UserInfo, poolProfiles []*armcontainerservice.ManagedClusterAgentPoolProfile, cluster *kubermaticv1.ExternalCluster, clusterProvider provider.ExternalClusterProvider) ([]apiv2.ExternalClusterMachineDeployment, error) {
+func getAKSMachineDeployments(ctx context.Context, masterClient ctrlruntimeclient.Client, poolProfiles []*armcontainerservice.ManagedClusterAgentPoolProfile, cluster *kubermaticv1.ExternalCluster, clusterProvider provider.ExternalClusterProvider) ([]apiv2.ExternalClusterMachineDeployment, error) {
 	machineDeployments := make([]apiv2.ExternalClusterMachineDeployment, 0, len(poolProfiles))
 
-	nodes, err := clusterProvider.ListNodes(ctx, userInfo, cluster)
+	nodes, err := clusterProvider.ListNodes(ctx, masterClient, cluster)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
@@ -577,7 +678,7 @@ func getAKSMachineDeployments(ctx context.Context, userInfo *provider.UserInfo, 
 	return machineDeployments, nil
 }
 
-func getAKSNodePool(ctx context.Context, userInfo *provider.UserInfo, cluster *kubermaticv1.ExternalCluster, nodePoolName string, secretKeySelector provider.SecretKeySelectorValueFunc, credentialsReference *providerconfig.GlobalSecretKeySelector, clusterProvider provider.ExternalClusterProvider) (*apiv2.ExternalClusterMachineDeployment, error) {
+func getAKSNodePool(ctx context.Context, masterClient ctrlruntimeclient.Client, cluster *kubermaticv1.ExternalCluster, nodePoolName string, secretKeySelector provider.SecretKeySelectorValueFunc, credentialsReference *providerconfig.GlobalSecretKeySelector, clusterProvider provider.ExternalClusterProvider) (*apiv2.ExternalClusterMachineDeployment, error) {
 	cloud := cluster.Spec.CloudSpec
 
 	cred, err := aks.GetCredentialsForCluster(cloud.AKS, secretKeySelector)
@@ -606,11 +707,11 @@ func getAKSNodePool(ctx context.Context, userInfo *provider.UserInfo, cluster *k
 		return nil, fmt.Errorf("no nodePool found with the name: %v", nodePoolName)
 	}
 
-	return getAKSMachineDeployment(ctx, userInfo, poolProfile, cluster, clusterProvider)
+	return getAKSMachineDeployment(ctx, masterClient, poolProfile, cluster, clusterProvider)
 }
 
-func getAKSMachineDeployment(ctx context.Context, userInfo *provider.UserInfo, poolProfile *armcontainerservice.ManagedClusterAgentPoolProfile, cluster *kubermaticv1.ExternalCluster, clusterProvider provider.ExternalClusterProvider) (*apiv2.ExternalClusterMachineDeployment, error) {
-	nodes, err := clusterProvider.ListNodes(ctx, userInfo, cluster)
+func getAKSMachineDeployment(ctx context.Context, masterClient ctrlruntimeclient.Client, poolProfile *armcontainerservice.ManagedClusterAgentPoolProfile, cluster *kubermaticv1.ExternalCluster, clusterProvider provider.ExternalClusterProvider) (*apiv2.ExternalClusterMachineDeployment, error) {
+	nodes, err := clusterProvider.ListNodes(ctx, masterClient, cluster)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}

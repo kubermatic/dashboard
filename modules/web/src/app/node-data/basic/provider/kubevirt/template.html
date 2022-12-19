@@ -146,58 +146,6 @@ limitations under the License.
                      required>
   </km-number-stepper>
 
-  <mat-card-header class="km-no-padding"
-                   fxLayoutAlign=" center">
-    <mat-card-title>Secondary Disks</mat-card-title>
-    <div fxFlex></div>
-    <button fxLayoutAlign="center center"
-            mat-flat-button
-            type="button"
-            color="quaternary"
-            matTooltip="Add secondary disk"
-            (click)="addSecondaryDisk()"
-            [disabled]="this.secondaryDisksFormArray.length >= this.maxSecondaryDisks">
-      <i class="km-icon-mask km-icon-add"></i>
-      <span>Add Disk</span>
-    </button>
-  </mat-card-header>
-
-  <div [formArrayName]="Controls.SecondaryDisks">
-    <div *ngFor="let control of secondaryDisksFormArray.controls; let i = index"
-         [formGroupName]="i">
-      <div fxFlex
-           fxLayoutGap="10px">
-        <km-combobox [options]="storageClasses"
-                     [formControlName]="Controls.SecondaryDiskStorageClass"
-                     [label]="storageClassLabel"
-                     inputLabel="Select storage class..."
-                     filterBy="name"
-                     required
-                     fxFlex>
-          <div *option="let storageClass">{{storageClass.name}}</div>
-        </km-combobox>
-        <km-number-stepper [formControlName]="Controls.SecondaryDiskSize"
-                           mode="errors"
-                           label="Size (GB)"
-                           min="10"
-                           step="10"
-                           required>
-        </km-number-stepper>
-        <button mat-icon-button
-                type="button"
-                matTooltip="Delete secondary disk"
-                (click)="secondaryDisksFormArray.removeAt(i)">
-          <i class="km-icon-mask km-icon-delete"></i>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <div *ngIf="secondaryDisksFormArray.length === 0"
-       class="no-secondary-disks-msg km-text-muted">
-    Optional disks that will be mounted to the nodes. Configure up to three disks.
-  </div>
-
   <km-expansion-panel expandLabel="ADVANCED SCHEDULING SETTINGS"
                       collapseLabel="ADVANCED SCHEDULING SETTINGS">
     <ng-container *ngTemplateOutlet="selectAffinityPreset;
