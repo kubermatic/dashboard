@@ -206,13 +206,8 @@ func (p *ExternalClusterProvider) GenerateClient(cfg *clientcmdapi.Config) (ctrl
 	return client, nil
 }
 
-func (p *ExternalClusterProvider) GetClient(ctx context.Context, userInfo *provider.UserInfo, cluster *kubermaticv1.ExternalCluster) (ctrlruntimeclient.Client, error) {
-	masterImpersonatedClient, err := createImpersonationClientWrapperFromUserInfo(userInfo, p.createMasterImpersonatedClient)
-	if err != nil {
-		return nil, err
-	}
-
-	secretKeyGetter := provider.SecretKeySelectorValueFuncFactory(ctx, masterImpersonatedClient)
+func (p *ExternalClusterProvider) GetClient(ctx context.Context, masterClient ctrlruntimeclient.Client, cluster *kubermaticv1.ExternalCluster) (ctrlruntimeclient.Client, error) {
+	secretKeyGetter := provider.SecretKeySelectorValueFuncFactory(ctx, masterClient)
 	rawKubeconfig, err := secretKeyGetter(cluster.Spec.KubeconfigReference, resources.KubeconfigSecretKey)
 	if err != nil {
 		return nil, err
@@ -224,13 +219,8 @@ func (p *ExternalClusterProvider) GetClient(ctx context.Context, userInfo *provi
 	return p.GenerateClient(cfg)
 }
 
-func (p *ExternalClusterProvider) GetVersion(ctx context.Context, userInfo *provider.UserInfo, cluster *kubermaticv1.ExternalCluster) (*ksemver.Semver, error) {
-	masterImpersonatedClient, err := createImpersonationClientWrapperFromUserInfo(userInfo, p.createMasterImpersonatedClient)
-	if err != nil {
-		return nil, err
-	}
-
-	secretKeyGetter := provider.SecretKeySelectorValueFuncFactory(ctx, masterImpersonatedClient)
+func (p *ExternalClusterProvider) GetVersion(ctx context.Context, masterClient ctrlruntimeclient.Client, cluster *kubermaticv1.ExternalCluster) (*ksemver.Semver, error) {
+	secretKeyGetter := provider.SecretKeySelectorValueFuncFactory(ctx, masterClient)
 	rawKubeconfig, err := secretKeyGetter(cluster.Spec.KubeconfigReference, resources.KubeconfigSecretKey)
 	if err != nil {
 		return nil, err
@@ -243,12 +233,13 @@ func (p *ExternalClusterProvider) GetVersion(ctx context.Context, userInfo *prov
 	if err != nil {
 		return nil, err
 	}
-	masterClient, err := kubernetes.NewForConfig(clientConfig)
+
+	client, err := kubernetes.NewForConfig(clientConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	version, err := masterClient.DiscoveryClient.ServerVersion()
+	version, err := client.DiscoveryClient.ServerVersion()
 	if err != nil {
 		return nil, err
 	}
@@ -304,8 +295,8 @@ func (p *ExternalClusterProvider) CreateOrUpdateKubeconfigSecretForCluster(ctx c
 	return nil
 }
 
-func (p *ExternalClusterProvider) ListNodes(ctx context.Context, userInfo *provider.UserInfo, cluster *kubermaticv1.ExternalCluster) (*corev1.NodeList, error) {
-	client, err := p.GetClient(ctx, userInfo, cluster)
+func (p *ExternalClusterProvider) ListNodes(ctx context.Context, masterClient ctrlruntimeclient.Client, cluster *kubermaticv1.ExternalCluster) (*corev1.NodeList, error) {
+	client, err := p.GetClient(ctx, masterClient, cluster)
 	if err != nil {
 		return nil, err
 	}
@@ -318,8 +309,8 @@ func (p *ExternalClusterProvider) ListNodes(ctx context.Context, userInfo *provi
 	return nodes, nil
 }
 
-func (p *ExternalClusterProvider) GetNode(ctx context.Context, userInfo *provider.UserInfo, cluster *kubermaticv1.ExternalCluster, nodeName string) (*corev1.Node, error) {
-	client, err := p.GetClient(ctx, userInfo, cluster)
+func (p *ExternalClusterProvider) GetNode(ctx context.Context, masterClient ctrlruntimeclient.Client, cluster *kubermaticv1.ExternalCluster, nodeName string) (*corev1.Node, error) {
+	client, err := p.GetClient(ctx, masterClient, cluster)
 	if err != nil {
 		return nil, err
 	}
@@ -332,8 +323,8 @@ func (p *ExternalClusterProvider) GetNode(ctx context.Context, userInfo *provide
 	return node, nil
 }
 
-func (p *ExternalClusterProvider) IsMetricServerAvailable(ctx context.Context, userInfo *provider.UserInfo, cluster *kubermaticv1.ExternalCluster) (bool, error) {
-	client, err := p.GetClient(ctx, userInfo, cluster)
+func (p *ExternalClusterProvider) IsMetricServerAvailable(ctx context.Context, masterClient ctrlruntimeclient.Client, cluster *kubermaticv1.ExternalCluster) (bool, error) {
+	client, err := p.GetClient(ctx, masterClient, cluster)
 	if err != nil {
 		return false, err
 	}
@@ -387,11 +378,11 @@ func kubeconfigSecretReconcilerFactory(cluster *kubermaticv1.ExternalCluster, se
 }
 
 func (p *ExternalClusterProvider) GetProviderPoolNodes(ctx context.Context,
-	userInfo *provider.UserInfo,
+	masterClient ctrlruntimeclient.Client,
 	cluster *kubermaticv1.ExternalCluster,
 	providerNodeLabel, providerNodePoolName string,
 ) ([]corev1.Node, error) {
-	nodes, err := p.ListNodes(ctx, userInfo, cluster)
+	nodes, err := p.ListNodes(ctx, masterClient, cluster)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
@@ -480,20 +471,35 @@ func (p *ExternalClusterProvider) GetMasterClient() ctrlruntimeclient.Client {
 	return p.clientPrivileged
 }
 
-func (p *ExternalClusterProvider) CreateOrUpdateKubeOneManifestSecret(ctx context.Context, userInfo *provider.UserInfo, kubermaticNamespace string, encodedManifest string, externalCluster *kubermaticv1.ExternalCluster) error {
+func (p *ExternalClusterProvider) GetUserBasedMasterClient(ctx context.Context, projectName string, userInfoGetter func(ctx context.Context, projectID string) (*provider.UserInfo, error)) (ctrlruntimeclient.Client, error) {
+	adminUserInfo, err := userInfoGetter(ctx, "")
+	if err != nil {
+		return nil, err
+	}
+	if adminUserInfo.IsAdmin {
+		return p.clientPrivileged, nil
+	}
+
+	userInfo, err := userInfoGetter(ctx, projectName)
+	if err != nil {
+		return nil, err
+	}
+	client, err := createImpersonationClientWrapperFromUserInfo(userInfo, p.createMasterImpersonatedClient)
+	if err != nil {
+		return nil, err
+	}
+	return client, nil
+}
+
+func (p *ExternalClusterProvider) CreateOrUpdateKubeOneManifestSecret(ctx context.Context, kubermaticNamespace string, encodedManifest string, externalCluster *kubermaticv1.ExternalCluster) error {
 	secretName := externalCluster.GetKubeOneManifestSecretName()
 	manifest, err := base64.StdEncoding.DecodeString(encodedManifest)
 	if err != nil {
 		return fmt.Errorf("failed to decode kubeone manifest: %w", err)
 	}
 
-	masterImpersonatedClient, err := createImpersonationClientWrapperFromUserInfo(userInfo, p.createMasterImpersonatedClient)
-	if err != nil {
-		return err
-	}
-
 	// move credentials into dedicated Secret
-	credentialRef, err := ensureCredentialKubeOneSecret(ctx, masterImpersonatedClient, externalCluster, secretName, kubermaticNamespace, map[string][]byte{
+	credentialRef, err := ensureKubeOneSecret(ctx, p.clientPrivileged, externalCluster, secretName, kubermaticNamespace, map[string][]byte{
 		resources.KubeOneManifest: manifest,
 	})
 	if err != nil {
@@ -506,7 +512,7 @@ func (p *ExternalClusterProvider) CreateOrUpdateKubeOneManifestSecret(ctx contex
 	return nil
 }
 
-func (p *ExternalClusterProvider) CreateOrUpdateKubeOneSSHSecret(ctx context.Context, userInfo *provider.UserInfo, kubermaticNamespace string, sshKey apiv2.KubeOneSSHKey, externalCluster *kubermaticv1.ExternalCluster) error {
+func (p *ExternalClusterProvider) CreateOrUpdateKubeOneSSHSecret(ctx context.Context, kubermaticNamespace string, sshKey apiv2.KubeOneSSHKey, externalCluster *kubermaticv1.ExternalCluster) error {
 	secretName := externalCluster.GetKubeOneSSHSecretName()
 
 	privateKey, err := base64.StdEncoding.DecodeString(sshKey.PrivateKey)
@@ -520,13 +526,8 @@ func (p *ExternalClusterProvider) CreateOrUpdateKubeOneSSHSecret(ctx context.Con
 		data[resources.KubeOneSSHPassphrase] = []byte(sshKey.Passphrase)
 	}
 
-	masterImpersonatedClient, err := createImpersonationClientWrapperFromUserInfo(userInfo, p.createMasterImpersonatedClient)
-	if err != nil {
-		return err
-	}
-
 	// move credentials into dedicated Secret
-	credentialRef, err := ensureCredentialKubeOneSecret(ctx, masterImpersonatedClient, externalCluster, secretName, kubermaticNamespace, data)
+	credentialRef, err := ensureKubeOneSecret(ctx, p.clientPrivileged, externalCluster, secretName, kubermaticNamespace, data)
 	if err != nil {
 		return err
 	}
@@ -538,71 +539,67 @@ func (p *ExternalClusterProvider) CreateOrUpdateKubeOneSSHSecret(ctx context.Con
 }
 
 // CreateOrUpdateKubeOneCredentialSecret creates a new secret for a credential.
-func (p *ExternalClusterProvider) CreateOrUpdateKubeOneCredentialSecret(ctx context.Context, userInfo *provider.UserInfo, kubermaticNamespace string, cloud apiv2.KubeOneCloudSpec, externalCluster *kubermaticv1.ExternalCluster) error {
-	masterImpersonatedClient, err := createImpersonationClientWrapperFromUserInfo(userInfo, p.createMasterImpersonatedClient)
-	if err != nil {
-		return err
-	}
-
+func (p *ExternalClusterProvider) CreateOrUpdateKubeOneCredentialSecret(ctx context.Context, kubermaticNamespace string, cloud apiv2.KubeOneCloudSpec, externalCluster *kubermaticv1.ExternalCluster) error {
+	masterClient := p.clientPrivileged
 	if cloud.AWS != nil {
 		externalCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneAWS
 		// don't replace this as ProviderName is required to name the credential
 		secretName := externalCluster.GetKubeOneCredentialsSecretName()
-		return createOrUpdateKubeOneAWSSecret(ctx, cloud, masterImpersonatedClient, secretName, kubermaticNamespace, externalCluster)
+		return createOrUpdateKubeOneAWSSecret(ctx, cloud, masterClient, secretName, kubermaticNamespace, externalCluster)
 	}
 	if cloud.GCP != nil {
 		externalCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneGCP
 		// don't replace this as ProviderName is required to name the credential
 		secretName := externalCluster.GetKubeOneCredentialsSecretName()
-		return createOrUpdateKubeOneGCPSecret(ctx, cloud, masterImpersonatedClient, secretName, kubermaticNamespace, externalCluster)
+		return createOrUpdateKubeOneGCPSecret(ctx, cloud, masterClient, secretName, kubermaticNamespace, externalCluster)
 	}
 	if cloud.Azure != nil {
 		externalCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneAzure
 		// don't replace this as ProviderName is required to name the credential
 		secretName := externalCluster.GetKubeOneCredentialsSecretName()
-		return createOrUpdateKubeOneAzureSecret(ctx, cloud, masterImpersonatedClient, secretName, kubermaticNamespace, externalCluster)
+		return createOrUpdateKubeOneAzureSecret(ctx, cloud, masterClient, secretName, kubermaticNamespace, externalCluster)
 	}
 	if cloud.DigitalOcean != nil {
 		externalCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneDigitalOcean
 		// don't replace this as ProviderName is required to name the credential
 		secretName := externalCluster.GetKubeOneCredentialsSecretName()
-		return createOrUpdateKubeOneDigitaloceanSecret(ctx, cloud, masterImpersonatedClient, secretName, kubermaticNamespace, externalCluster)
+		return createOrUpdateKubeOneDigitaloceanSecret(ctx, cloud, masterClient, secretName, kubermaticNamespace, externalCluster)
 	}
 	if cloud.VSphere != nil {
 		externalCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneVSphere
 		// don't replace this as ProviderName is required to name the credential
 		secretName := externalCluster.GetKubeOneCredentialsSecretName()
-		return createOrUpdateKubeOneVSphereSecret(ctx, cloud, masterImpersonatedClient, secretName, kubermaticNamespace, externalCluster)
+		return createOrUpdateKubeOneVSphereSecret(ctx, cloud, masterClient, secretName, kubermaticNamespace, externalCluster)
 	}
 	if cloud.Hetzner != nil {
 		externalCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneHetzner
 		// don't replace this as ProviderName is required to name the credential
 		secretName := externalCluster.GetKubeOneCredentialsSecretName()
-		return createOrUpdateKubeOneHetznerSecret(ctx, cloud, masterImpersonatedClient, secretName, kubermaticNamespace, externalCluster)
+		return createOrUpdateKubeOneHetznerSecret(ctx, cloud, masterClient, secretName, kubermaticNamespace, externalCluster)
 	}
 	if cloud.Equinix != nil {
 		externalCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneEquinix
 		// don't replace this as ProviderName is required to name the credential
 		secretName := externalCluster.GetKubeOneCredentialsSecretName()
-		return createOrUpdateKubeOneEquinixSecret(ctx, cloud, masterImpersonatedClient, secretName, kubermaticNamespace, externalCluster)
+		return createOrUpdateKubeOneEquinixSecret(ctx, cloud, masterClient, secretName, kubermaticNamespace, externalCluster)
 	}
 	if cloud.OpenStack != nil {
 		externalCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneOpenStack
 		// don't replace this as ProviderName is required to name the credential
 		secretName := externalCluster.GetKubeOneCredentialsSecretName()
-		return createOrUpdateKubeOneOpenstackSecret(ctx, cloud, masterImpersonatedClient, secretName, kubermaticNamespace, externalCluster)
+		return createOrUpdateKubeOneOpenstackSecret(ctx, cloud, masterClient, secretName, kubermaticNamespace, externalCluster)
 	}
 	if cloud.Nutanix != nil {
 		externalCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneNutanix
 		// don't replace this as ProviderName is required to name the credential
 		secretName := externalCluster.GetKubeOneCredentialsSecretName()
-		return createOrUpdateKubeOneNutanixSecret(ctx, cloud, masterImpersonatedClient, secretName, kubermaticNamespace, externalCluster)
+		return createOrUpdateKubeOneNutanixSecret(ctx, cloud, masterClient, secretName, kubermaticNamespace, externalCluster)
 	}
 	if cloud.VMwareCloudDirector != nil {
 		externalCluster.Spec.CloudSpec.KubeOne.ProviderName = resources.KubeOneVMwareCloudDirector
 		// don't replace this as ProviderName is required to name the credential
 		secretName := externalCluster.GetKubeOneCredentialsSecretName()
-		return createOrUpdateKubeOneVMwareCloudDirectorSecret(ctx, cloud, masterImpersonatedClient, secretName, kubermaticNamespace, externalCluster)
+		return createOrUpdateKubeOneVMwareCloudDirectorSecret(ctx, cloud, masterClient, secretName, kubermaticNamespace, externalCluster)
 	}
 	return nil
 }

@@ -172,14 +172,14 @@ func isRestrictedByKubeletVersions(controlPlaneVersion *version.Version, mds []c
 	return false, nil
 }
 
-func GetKubeOneUpgradesEndpoint(ctx context.Context, userInfo *provider.UserInfo, externalCluster *kubermaticv1.ExternalCluster, clusterProvider provider.ExternalClusterProvider, configGetter provider.KubermaticConfigurationGetter) (interface{}, error) {
+func GetKubeOneUpgradesEndpoint(ctx context.Context, masterClient ctrlruntimeclient.Client, externalCluster *kubermaticv1.ExternalCluster, clusterProvider provider.ExternalClusterProvider, configGetter provider.KubermaticConfigurationGetter) (interface{}, error) {
 	providerName := externalCluster.Spec.CloudSpec.KubeOne.ProviderName
 	providerType := kubermaticv1.ProviderType(providerName)
 	if providerName == resources.KubeOneEquinix {
 		providerType = kubermaticv1.PacketCloudProvider
 	}
 
-	currentVersion, err := clusterProvider.GetVersion(ctx, userInfo, externalCluster)
+	currentVersion, err := clusterProvider.GetVersion(ctx, masterClient, externalCluster)
 	if err != nil {
 		return nil, err
 	}

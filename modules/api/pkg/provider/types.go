@@ -717,31 +717,33 @@ type ExternalClusterProvider interface {
 
 	GenerateClient(cfg *clientcmdapi.Config) (ctrlruntimeclient.Client, error)
 
-	GetClient(ctx context.Context, userInfo *UserInfo, cluster *kubermaticv1.ExternalCluster) (ctrlruntimeclient.Client, error)
+	GetClient(ctx context.Context, masterClient ctrlruntimeclient.Client, cluster *kubermaticv1.ExternalCluster) (ctrlruntimeclient.Client, error)
+
+	GetUserBasedMasterClient(ctx context.Context, projectName string, userInfoGetter func(ctx context.Context, projectID string) (*UserInfo, error)) (ctrlruntimeclient.Client, error)
+
+	GetVersion(ctx context.Context, masterClient ctrlruntimeclient.Client, cluster *kubermaticv1.ExternalCluster) (*ksemver.Semver, error)
+
+	VersionsEndpoint(ctx context.Context, configGetter KubermaticConfigurationGetter, providerType kubermaticv1.ExternalClusterProviderType) ([]apiv1.MasterVersion, error)
 
 	ValidateKubeconfig(ctx context.Context, kubeconfig []byte) error
+
+	ListNodes(ctx context.Context, masterClient ctrlruntimeclient.Client, cluster *kubermaticv1.ExternalCluster) (*corev1.NodeList, error)
+
+	GetNode(ctx context.Context, masterClient ctrlruntimeclient.Client, cluster *kubermaticv1.ExternalCluster, nodeName string) (*corev1.Node, error)
+
+	GetProviderPoolNodes(ctx context.Context, masterClient ctrlruntimeclient.Client, cluster *kubermaticv1.ExternalCluster, providerNodeLabel, providerNodePoolName string) ([]corev1.Node, error)
+
+	IsMetricServerAvailable(ctx context.Context, masterClient ctrlruntimeclient.Client, cluster *kubermaticv1.ExternalCluster) (bool, error)
 
 	CreateOrUpdateKubeconfigSecretForCluster(ctx context.Context, cluster *kubermaticv1.ExternalCluster, kubeconfig []byte) error
 
 	CreateOrUpdateCredentialSecretForCluster(ctx context.Context, cloud *apiv2.ExternalClusterCloudSpec, projectID, clusterID string) (*providerconfig.GlobalSecretKeySelector, error)
 
-	CreateOrUpdateKubeOneSSHSecret(ctx context.Context, userInfo *UserInfo, namespace string, sshKey apiv2.KubeOneSSHKey, externalCluster *kubermaticv1.ExternalCluster) error
+	CreateOrUpdateKubeOneSSHSecret(ctx context.Context, namespace string, sshKey apiv2.KubeOneSSHKey, externalCluster *kubermaticv1.ExternalCluster) error
 
-	CreateOrUpdateKubeOneManifestSecret(ctx context.Context, userInfo *UserInfo, namespace string, manifest string, externalCluster *kubermaticv1.ExternalCluster) error
+	CreateOrUpdateKubeOneManifestSecret(ctx context.Context, namespace string, manifest string, externalCluster *kubermaticv1.ExternalCluster) error
 
-	CreateOrUpdateKubeOneCredentialSecret(ctx context.Context, userInfo *UserInfo, namespace string, cloud apiv2.KubeOneCloudSpec, externalCluster *kubermaticv1.ExternalCluster) error
-
-	GetVersion(ctx context.Context, userInfo *UserInfo, cluster *kubermaticv1.ExternalCluster) (*ksemver.Semver, error)
-
-	VersionsEndpoint(ctx context.Context, configGetter KubermaticConfigurationGetter, providerType kubermaticv1.ExternalClusterProviderType) ([]apiv1.MasterVersion, error)
-
-	ListNodes(ctx context.Context, userInfo *UserInfo, cluster *kubermaticv1.ExternalCluster) (*corev1.NodeList, error)
-
-	GetNode(ctx context.Context, userInfo *UserInfo, cluster *kubermaticv1.ExternalCluster, nodeName string) (*corev1.Node, error)
-
-	GetProviderPoolNodes(ctx context.Context, userInfo *UserInfo, cluster *kubermaticv1.ExternalCluster, providerNodeLabel, providerNodePoolName string) ([]corev1.Node, error)
-
-	IsMetricServerAvailable(ctx context.Context, userInfo *UserInfo, cluster *kubermaticv1.ExternalCluster) (bool, error)
+	CreateOrUpdateKubeOneCredentialSecret(ctx context.Context, namespace string, cloud apiv2.KubeOneCloudSpec, externalCluster *kubermaticv1.ExternalCluster) error
 }
 
 // ExternalClusterProvider declares the set of methods for interacting with external cluster.

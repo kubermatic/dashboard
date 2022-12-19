@@ -63,17 +63,18 @@ func ListNodesEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider p
 		}
 		var nodesV1 []*apiv2.ExternalClusterNode
 
-		userInfo, err := userInfoGetter(ctx, project.Name)
+		masterClient, err := clusterProvider.GetUserBasedMasterClient(ctx, project.Name, userInfoGetter)
 		if err != nil {
-			return nil, common.KubernetesErrorToHTTPError(err)
+			return nil, err
 		}
-		apiCluster := convertClusterToAPIWithStatus(ctx, userInfo, clusterProvider, privilegedClusterProvider, cluster)
+
+		apiCluster := convertClusterToAPIWithStatus(ctx, masterClient, clusterProvider, privilegedClusterProvider, cluster)
 
 		if apiCluster.Status.State != apiv2.RunningExternalClusterState {
 			return nodesV1, nil
 		}
 
-		nodes, err := clusterProvider.ListNodes(ctx, userInfo, cluster)
+		nodes, err := clusterProvider.ListNodes(ctx, masterClient, cluster)
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
@@ -115,23 +116,24 @@ func getClusterNodesMetrics(ctx context.Context, userInfoGetter provider.UserInf
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
-	userInfo, err := userInfoGetter(ctx, project.Name)
+	masterClient, err := clusterProvider.GetUserBasedMasterClient(ctx, project.Name, userInfoGetter)
 	if err != nil {
 		return nil, err
 	}
-	apiCluster := convertClusterToAPIWithStatus(ctx, userInfo, clusterProvider, privilegedClusterProvider, cluster)
+
+	apiCluster := convertClusterToAPIWithStatus(ctx, masterClient, clusterProvider, privilegedClusterProvider, cluster)
 
 	if apiCluster.Status.State != apiv2.RunningExternalClusterState {
 		return nodeMetrics, nil
 	}
 
-	isMetricServer, err := clusterProvider.IsMetricServerAvailable(ctx, userInfo, cluster)
+	isMetricServer, err := clusterProvider.IsMetricServerAvailable(ctx, masterClient, cluster)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
 	if isMetricServer {
-		client, err := clusterProvider.GetClient(ctx, userInfo, cluster)
+		client, err := clusterProvider.GetClient(ctx, masterClient, cluster)
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
@@ -215,11 +217,12 @@ func GetNodeEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider pro
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 
-		userInfo, err := userInfoGetter(ctx, project.Name)
+		masterClient, err := clusterProvider.GetUserBasedMasterClient(ctx, project.Name, userInfoGetter)
 		if err != nil {
-			return nil, common.KubernetesErrorToHTTPError(err)
+			return nil, err
 		}
-		node, err := clusterProvider.GetNode(ctx, userInfo, cluster, req.NodeID)
+
+		node, err := clusterProvider.GetNode(ctx, masterClient, cluster, req.NodeID)
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
@@ -247,11 +250,12 @@ func ListMachineDeploymentEndpoint(userInfoGetter provider.UserInfoGetter, proje
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 
-		userInfo, err := userInfoGetter(ctx, project.Name)
+		masterClient, err := clusterProvider.GetUserBasedMasterClient(ctx, project.Name, userInfoGetter)
 		if err != nil {
 			return nil, err
 		}
-		apiCluster := convertClusterToAPIWithStatus(ctx, userInfo, clusterProvider, privilegedClusterProvider, cluster)
+
+		apiCluster := convertClusterToAPIWithStatus(ctx, masterClient, clusterProvider, privilegedClusterProvider, cluster)
 		if apiCluster.Status.State != apiv2.RunningExternalClusterState {
 			return machineDeployments, nil
 		}
@@ -260,28 +264,28 @@ func ListMachineDeploymentEndpoint(userInfoGetter provider.UserInfoGetter, proje
 		secretKeySelector := provider.SecretKeySelectorValueFuncFactory(ctx, privilegedClusterProvider.GetMasterClient())
 
 		if cloud.GKE != nil {
-			np, err := getGKENodePools(ctx, userInfo, cluster, secretKeySelector, cloud.GKE.CredentialsReference, clusterProvider)
+			np, err := getGKENodePools(ctx, masterClient, cluster, secretKeySelector, cloud.GKE.CredentialsReference, clusterProvider)
 			if err != nil {
 				return nil, common.KubernetesErrorToHTTPError(err)
 			}
 			machineDeployments = np
 		}
 		if cloud.EKS != nil {
-			np, err := getEKSNodeGroups(ctx, userInfo, cluster, secretKeySelector, clusterProvider)
+			np, err := getEKSNodeGroups(ctx, masterClient, cluster, secretKeySelector, clusterProvider)
 			if err != nil {
 				return nil, common.KubernetesErrorToHTTPError(err)
 			}
 			machineDeployments = np
 		}
 		if cloud.AKS != nil {
-			np, err := getAKSNodePools(ctx, userInfo, cluster, secretKeySelector, clusterProvider)
+			np, err := getAKSNodePools(ctx, masterClient, cluster, secretKeySelector, clusterProvider)
 			if err != nil {
 				return nil, common.KubernetesErrorToHTTPError(err)
 			}
 			machineDeployments = np
 		}
 		if cloud.KubeOne != nil {
-			machineDeployments, err = getKubeOneAPIMachineDeployments(ctx, userInfo, cluster, clusterProvider)
+			machineDeployments, err = getKubeOneAPIMachineDeployments(ctx, masterClient, cluster, clusterProvider)
 			if err != nil {
 				return nil, common.KubernetesErrorToHTTPError(err)
 			}
@@ -347,36 +351,37 @@ func getMachineDeploymentNodes(ctx context.Context,
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
 
-	userInfo, err := userInfoGetter(ctx, projectID)
+	masterClient, err := clusterProvider.GetUserBasedMasterClient(ctx, project.Name, userInfoGetter)
 	if err != nil {
 		return nil, err
 	}
-	apiCluster := convertClusterToAPIWithStatus(ctx, userInfo, clusterProvider, privilegedClusterProvider, cluster)
+
+	apiCluster := convertClusterToAPIWithStatus(ctx, masterClient, clusterProvider, privilegedClusterProvider, cluster)
 	if apiCluster.Status.State != apiv2.RunningExternalClusterState {
 		return clusterNodes, nil
 	}
 
 	cloud := cluster.Spec.CloudSpec
 	if cloud.GKE != nil {
-		clusterNodes, err = clusterProvider.GetProviderPoolNodes(ctx, userInfo, cluster, resources.GKENodepoolNameLabel, machineDeploymentID)
+		clusterNodes, err = clusterProvider.GetProviderPoolNodes(ctx, masterClient, cluster, resources.GKENodepoolNameLabel, machineDeploymentID)
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 	}
 	if cloud.EKS != nil {
-		clusterNodes, err = clusterProvider.GetProviderPoolNodes(ctx, userInfo, cluster, resources.EKSNodeGroupNameLabel, machineDeploymentID)
+		clusterNodes, err = clusterProvider.GetProviderPoolNodes(ctx, masterClient, cluster, resources.EKSNodeGroupNameLabel, machineDeploymentID)
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 	}
 	if cloud.AKS != nil {
-		clusterNodes, err = clusterProvider.GetProviderPoolNodes(ctx, userInfo, cluster, resources.AKSNodepoolNameLabel, machineDeploymentID)
+		clusterNodes, err = clusterProvider.GetProviderPoolNodes(ctx, masterClient, cluster, resources.AKSNodepoolNameLabel, machineDeploymentID)
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 	}
 	if cloud.KubeOne != nil {
-		clusterNodes, err = clusterProvider.GetProviderPoolNodes(ctx, userInfo, cluster, NodeWorkerLabel, machineDeploymentID)
+		clusterNodes, err = clusterProvider.GetProviderPoolNodes(ctx, masterClient, cluster, NodeWorkerLabel, machineDeploymentID)
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
@@ -487,11 +492,11 @@ func ListMachineDeploymentEventsEndpoint(userInfoGetter provider.UserInfoGetter,
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
 
-		userInfo, err := userInfoGetter(ctx, req.ProjectID)
+		masterClient, err := clusterProvider.GetUserBasedMasterClient(ctx, req.ProjectID, userInfoGetter)
 		if err != nil {
 			return nil, err
 		}
-		client, err := clusterProvider.GetClient(ctx, userInfo, cluster)
+		client, err := clusterProvider.GetClient(ctx, masterClient, cluster)
 		if err != nil {
 			return nil, err
 		}
@@ -795,33 +800,34 @@ func GetMachineDeploymentEndpoint(userInfoGetter provider.UserInfoGetter, projec
 		cloud := cluster.Spec.CloudSpec
 		secretKeySelector := provider.SecretKeySelectorValueFuncFactory(ctx, privilegedClusterProvider.GetMasterClient())
 
-		userInfo, err := userInfoGetter(ctx, project.Name)
+		masterClient, err := clusterProvider.GetUserBasedMasterClient(ctx, project.Name, userInfoGetter)
 		if err != nil {
 			return nil, err
 		}
+
 		if cloud.EKS != nil {
-			np, err := getEKSNodeGroup(ctx, userInfo, cluster, req.MachineDeploymentID, secretKeySelector, clusterProvider)
+			np, err := getEKSNodeGroup(ctx, masterClient, cluster, req.MachineDeploymentID, secretKeySelector, clusterProvider)
 			if err != nil {
 				return nil, common.KubernetesErrorToHTTPError(err)
 			}
 			machineDeployment = *np
 		}
 		if cloud.GKE != nil {
-			np, err := getGKENodePool(ctx, userInfo, cluster, req.MachineDeploymentID, secretKeySelector, cloud.GKE.CredentialsReference, clusterProvider)
+			np, err := getGKENodePool(ctx, masterClient, cluster, req.MachineDeploymentID, secretKeySelector, cloud.GKE.CredentialsReference, clusterProvider)
 			if err != nil {
 				return nil, common.KubernetesErrorToHTTPError(err)
 			}
 			machineDeployment = *np
 		}
 		if cloud.AKS != nil {
-			np, err := getAKSNodePool(ctx, userInfo, cluster, req.MachineDeploymentID, secretKeySelector, cloud.AKS.CredentialsReference, clusterProvider)
+			np, err := getAKSNodePool(ctx, masterClient, cluster, req.MachineDeploymentID, secretKeySelector, cloud.AKS.CredentialsReference, clusterProvider)
 			if err != nil {
 				return nil, common.KubernetesErrorToHTTPError(err)
 			}
 			machineDeployment = *np
 		}
 		if cloud.KubeOne != nil {
-			md, err := getKubeOneAPIMachineDeployment(ctx, userInfo, req.MachineDeploymentID, cluster, clusterProvider)
+			md, err := getKubeOneAPIMachineDeployment(ctx, masterClient, req.MachineDeploymentID, cluster, clusterProvider)
 			if err != nil {
 				return nil, common.KubernetesErrorToHTTPError(err)
 			}
@@ -859,12 +865,13 @@ func PatchMachineDeploymentEndpoint(userInfoGetter provider.UserInfoGetter, proj
 		mdToPatch := apiv2.ExternalClusterMachineDeployment{}
 		patchedMD := apiv2.ExternalClusterMachineDeployment{}
 
-		userInfo, err := userInfoGetter(ctx, project.Name)
+		masterClient, err := clusterProvider.GetUserBasedMasterClient(ctx, project.Name, userInfoGetter)
 		if err != nil {
 			return nil, err
 		}
+
 		if cloud.EKS != nil {
-			md, err := getEKSNodeGroup(ctx, userInfo, cluster, req.MachineDeploymentID, secretKeySelector, clusterProvider)
+			md, err := getEKSNodeGroup(ctx, masterClient, cluster, req.MachineDeploymentID, secretKeySelector, clusterProvider)
 			if err != nil {
 				return nil, err
 			}
@@ -875,7 +882,7 @@ func PatchMachineDeploymentEndpoint(userInfoGetter provider.UserInfoGetter, proj
 			return patchEKSMachineDeployment(ctx, &mdToPatch, &patchedMD, secretKeySelector, cluster)
 		}
 		if cloud.GKE != nil {
-			md, err := getGKENodePool(ctx, userInfo, cluster, req.MachineDeploymentID, secretKeySelector, cloud.GKE.CredentialsReference, clusterProvider)
+			md, err := getGKENodePool(ctx, masterClient, cluster, req.MachineDeploymentID, secretKeySelector, cloud.GKE.CredentialsReference, clusterProvider)
 			if err != nil {
 				return nil, err
 			}
@@ -886,7 +893,7 @@ func PatchMachineDeploymentEndpoint(userInfoGetter provider.UserInfoGetter, proj
 			return patchGKEMachineDeployment(ctx, &mdToPatch, &patchedMD, cluster, secretKeySelector, cloud.GKE.CredentialsReference)
 		}
 		if cloud.AKS != nil {
-			md, err := getAKSNodePool(ctx, userInfo, cluster, req.MachineDeploymentID, secretKeySelector, cloud.AKS.CredentialsReference, clusterProvider)
+			md, err := getAKSNodePool(ctx, masterClient, cluster, req.MachineDeploymentID, secretKeySelector, cloud.AKS.CredentialsReference, clusterProvider)
 			if err != nil {
 				return nil, err
 			}
@@ -897,7 +904,7 @@ func PatchMachineDeploymentEndpoint(userInfoGetter provider.UserInfoGetter, proj
 			return patchAKSMachineDeployment(ctx, &mdToPatch, &patchedMD, secretKeySelector, cloud.AKS)
 		}
 		if cloud.KubeOne != nil {
-			machineDeployment, err := getKubeOneMachineDeployment(ctx, userInfo, req.MachineDeploymentID, cluster, clusterProvider)
+			machineDeployment, err := getKubeOneMachineDeployment(ctx, masterClient, req.MachineDeploymentID, cluster, clusterProvider)
 			if err != nil {
 				return nil, err
 			}
@@ -909,7 +916,7 @@ func PatchMachineDeploymentEndpoint(userInfoGetter provider.UserInfoGetter, proj
 			if err := patchMD(&mdToPatch, &patchedMD, req.Patch); err != nil {
 				return nil, err
 			}
-			return patchKubeOneMachineDeployment(ctx, userInfo, machineDeployment, &mdToPatch, &patchedMD, cluster, clusterProvider)
+			return patchKubeOneMachineDeployment(ctx, masterClient, machineDeployment, &mdToPatch, &patchedMD, cluster, clusterProvider)
 		}
 
 		return nil, fmt.Errorf("unsupported or missing cloud provider fields")
