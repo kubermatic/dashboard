@@ -120,4 +120,5 @@ export namespace Endpoint {
   export const Versions = '**/providers/*/versions';
   export const Changelog = '**/changelog.json';
   export const FeatureGates = '**/featuregates';
+  export const DefaultClusterBringYourOwn = '**/api/*/providers/bringyourown/dc/*/defaultcluster';
 }
