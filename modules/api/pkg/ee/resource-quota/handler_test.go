@@ -28,7 +28,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	resourcequota "k8c.io/dashboard/v2/pkg/ee/resource-quota"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -36,6 +35,7 @@ import (
 
 	apiv1 "k8c.io/dashboard/v2/pkg/api/v1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
+	resourcequota "k8c.io/dashboard/v2/pkg/ee/resource-quota"
 	"k8c.io/dashboard/v2/pkg/handler/test"
 	"k8c.io/dashboard/v2/pkg/handler/test/hack"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
