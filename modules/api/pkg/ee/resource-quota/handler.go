@@ -48,6 +48,8 @@ import (
 	"k8s.io/apimachinery/pkg/util/sets"
 )
 
+const DefaultProjectResourceQuotaLabel = "kkp-default-resource-quota"
+
 // swagger:parameters getResourceQuota deleteResourceQuota
 type getResourceQuota struct {
 	// in: path
@@ -667,6 +669,9 @@ func PutResourceQuota(ctx context.Context, request interface{}, provider provide
 		return err
 	}
 	newResourceQuota := originalResourceQuota.DeepCopy()
+
+	// if a resource quota is updated, its not a default quota anymore. Remove default label if it exists
+	delete(newResourceQuota.Labels, DefaultProjectResourceQuotaLabel)
 
 	crdQuota, err := convertToCRDQuota(req.Body)
 	if err != nil {
