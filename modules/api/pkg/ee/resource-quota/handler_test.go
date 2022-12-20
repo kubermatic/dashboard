@@ -28,6 +28,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	resourcequota "k8c.io/dashboard/v2/pkg/ee/resource-quota"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -53,8 +54,9 @@ func TestHandlerResourceQuotas(t *testing.T) {
 		ObjectMeta: metav1.ObjectMeta{
 			Name: fmt.Sprintf("project-%s", projectName),
 			Labels: map[string]string{
-				kubermaticv1.ResourceQuotaSubjectKindLabelKey: kubermaticv1.ProjectSubjectKind,
-				kubermaticv1.ResourceQuotaSubjectNameLabelKey: projectName,
+				kubermaticv1.ResourceQuotaSubjectKindLabelKey:  kubermaticv1.ProjectSubjectKind,
+				kubermaticv1.ResourceQuotaSubjectNameLabelKey:  projectName,
+				resourcequota.DefaultProjectResourceQuotaLabel: "true",
 			},
 		},
 		Spec: kubermaticv1.ResourceQuotaSpec{
@@ -181,6 +183,9 @@ func TestHandlerResourceQuotas(t *testing.T) {
 						resourceQuota.SubjectHumanReadableName,
 					)
 				}
+				if !resourceQuota.Default {
+					return fmt.Errorf("expected the quota to be a default quota")
+				}
 				return nil
 			},
 		},
@@ -243,6 +248,16 @@ func TestHandlerResourceQuotas(t *testing.T) {
 			existingObjects: existingObjects,
 			httpStatus:      http.StatusOK,
 			validateResp: func(resp *httptest.ResponseRecorder) error {
+				resourceQuota := &apiv2.ResourceQuota{}
+				err := json.Unmarshal(resp.Body.Bytes(), resourceQuota)
+				if err != nil {
+					return err
+				}
+
+				if resourceQuota.Default {
+					return fmt.Errorf("expected the quota not to be a default quota")
+				}
+
 				return nil
 			},
 		},
