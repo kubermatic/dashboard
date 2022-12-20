@@ -36061,6 +36061,10 @@
     "ResourceQuota": {
       "type": "object",
       "properties": {
+        "default": {
+          "type": "boolean",
+          "x-go-name": "Default"
+        },
         "name": {
           "type": "string",
           "x-go-name": "Name"
