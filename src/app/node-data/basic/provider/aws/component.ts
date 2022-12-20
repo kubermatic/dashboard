@@ -84,7 +84,7 @@ export class AWSBasicNodeDataComponent extends BaseFormValidator implements OnIn
   subnetLabel = SubnetState.Empty;
   selectedDiskType = '';
   private readonly _defaultDiskSize = 25;
-  private _diskTypes: string[] = ['standard', 'gp2', 'io1', 'sc1', 'st1'];
+  private _diskTypes: string[] = ['standard', 'gp2', 'gp3', 'io1', 'io2', 'sc1', 'st1'];
   diskTypes = this._diskTypes.map(type => ({name: type}));
   private _subnets: AWSSubnet[] = [];
   private _subnetMap: {[type: string]: AWSSubnet[]} = {};
