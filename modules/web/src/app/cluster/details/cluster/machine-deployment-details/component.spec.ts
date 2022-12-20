@@ -42,7 +42,7 @@ import {SettingsService} from '@core/services/settings';
 import {UserService} from '@core/services/user';
 import {SharedModule} from '@shared/module';
 import {NodeListComponent} from '../node-list/component';
-import {ClusterPanelComponent} from './cluster-panel/component';
+import {ClusterPanelComponent} from '../../shared/cluster-panel/component';
 import {MachineDeploymentDetailsComponent} from './component';
 import {MachineDeploymentService} from '@core/services/machine-deployment';
 import {getMachineDeploymentHealthStatus} from '@shared/utils/health-status';

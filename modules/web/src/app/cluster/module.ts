@@ -52,7 +52,7 @@ import {VSphereProviderSettingsComponent} from './details/cluster/edit-provider-
 import {EditSSHKeysComponent} from './details/cluster/edit-sshkeys/component';
 import {GatekeeperConfigComponent} from './details/cluster/gatekeeper-config/component';
 import {GatekeeperConfigDialog} from './details/cluster/gatekeeper-config/gatekeeper-config-dialog/component';
-import {ClusterPanelComponent} from './details/cluster/machine-deployment-details/cluster-panel/component';
+import {ClusterPanelComponent} from './details/shared/cluster-panel/component';
 import {MachineDeploymentDetailsComponent} from './details/cluster/machine-deployment-details/component';
 import {MachineDeploymentListComponent} from './details/cluster/machine-deployment-list/component';
 import {MachineNetworksDisplayComponent} from './details/cluster/machine-networks-display/component';
