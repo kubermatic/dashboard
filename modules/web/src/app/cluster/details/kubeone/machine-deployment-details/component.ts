@@ -43,7 +43,6 @@ export class KubeOneMachineDeploymentDetailsComponent implements OnInit, OnDestr
   events: Event[] = [];
   metrics: Map<string, NodeMetrics> = new Map<string, NodeMetrics>();
   cluster: ExternalCluster;
-  clusterProvider: string;
   projectID: string;
 
   private readonly _refreshTime = 10;
@@ -113,7 +112,6 @@ export class KubeOneMachineDeploymentDetailsComponent implements OnInit, OnDestr
       .pipe(take(1))
       .subscribe(c => {
         this.cluster = c;
-        this.clusterProvider = ExternalCluster.getProvider(this.cluster.cloud);
         this._isClusterLoaded = true;
       });
   }

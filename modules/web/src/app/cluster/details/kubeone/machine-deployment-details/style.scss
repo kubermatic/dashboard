@@ -40,6 +40,14 @@
 }
 
 .km-provider-logo {
-  margin-top: -10px;
+  margin-top: -4px;
   min-width: 132px;
+
+  &.km-provider-logo-aws {
+    min-width: 40px;
+  }
+
+  &.km-provider-logo-vmwareclouddirector {
+    min-width: 95px;
+  }
 }

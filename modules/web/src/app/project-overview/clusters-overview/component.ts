@@ -41,6 +41,7 @@ export class ClustersOverviewComponent implements OnInit, OnChanges {
   clusterColumns: string[] = ['status', 'name', 'machines'];
   clusterDataSource = new MatTableDataSource<Cluster>();
   externalClusterColumns: string[] = ['status', 'name'];
+  kubeOneClusterColumns: string[] = ['status', 'name', 'provider'];
   externalClusterDataSource = new MatTableDataSource<ExternalCluster>();
   kubeOneClusterDataSource = new MatTableDataSource<ExternalCluster>();
   private readonly _maxElements = 10;

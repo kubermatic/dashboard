@@ -50,7 +50,6 @@ export class KubeOneClusterDetailsComponent implements OnInit, OnDestroy {
   private _unsubscribe: Subject<void> = new Subject<void>();
   projectID: string;
   cluster: ExternalCluster;
-  provider: ExternalClusterProvider;
   machineDeployments: ExternalMachineDeployment[] = [];
   areMachineDeploymentsInitialized = false;
   clusterMetrics: ClusterMetrics;
@@ -86,7 +85,6 @@ export class KubeOneClusterDetailsComponent implements OnInit, OnDestroy {
         switchMap(_ => this._clusterService.externalCluster(this.projectID, clusterID)),
         tap(cluster => {
           this.cluster = cluster;
-          this.provider = ExternalCluster.getProvider(cluster.cloud);
         }),
         switchMap(_ =>
           forkJoin([

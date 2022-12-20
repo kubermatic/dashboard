@@ -20,6 +20,7 @@ export class KubeOneClusterSpec {
   containerRuntime?: string;
   manifest: string;
   sshKey: KubeOneSSHKeySpec;
+  providerName?: string;
 
   static newEmptyClusterEntity(): KubeOneClusterSpec {
     return {

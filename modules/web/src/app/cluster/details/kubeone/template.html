@@ -92,7 +92,7 @@ limitations under the License.
         <km-property>
           <div key>Provider</div>
           <div value>
-            <span class="km-provider-logo km-provider-logo-{{provider}}"></span>
+            <span class="km-provider-logo km-provider-logo-{{cluster.cloud.kubeOne?.providerName}}"></span>
           </div>
         </km-property>
         <km-property *ngIf="cluster.labels">
