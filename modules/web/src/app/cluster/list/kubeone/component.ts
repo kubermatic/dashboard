@@ -162,10 +162,6 @@ export class KubeOneClusterListComponent implements OnInit, OnChanges, OnDestroy
     return ExternalCluster.getStatusIcon(cluster);
   }
 
-  isClusterDeleted(cluster: ExternalCluster): boolean {
-    return ExternalCluster.isDeleted(cluster);
-  }
-
   disconnectClusterDialog(cluster: ExternalCluster, event: Event): void {
     event.stopPropagation();
     this._externalClusterService.showDisconnectClusterDialog(cluster, this._selectedProject.id);
@@ -187,8 +183,8 @@ export class KubeOneClusterListComponent implements OnInit, OnChanges, OnDestroy
     this._router.navigate(['projects', this._selectedProject.id, 'kubeone-wizard']);
   }
 
-  onActivate(component: QuotaWidgetComponent): void {
-    component.isExternalCluster = true;
+  onQuotaWidgetActivate(component: QuotaWidgetComponent): void {
+    component.isKubeOneCluster = true;
     component.showAsCard = false;
     component.showDetailsOnHover = false;
     this._projectService.onProjectChange

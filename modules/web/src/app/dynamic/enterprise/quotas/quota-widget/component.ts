@@ -57,6 +57,7 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   @Input() showEmptyPlaceholder = false;
   @Input() isExternalCluster = false;
   @Input() isImportedCluster = false;
+  @Input() isKubeOneCluster = false;
   @Input() showBorderOutline = true;
 
   quotaPercentage: QuotaVariables;
@@ -159,6 +160,7 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private _setShowNotApplicableText(): void {
-    this.isWidgetApplicableForExternalOrImportedCluster = this.isExternalCluster || this.isImportedCluster;
+    this.isWidgetApplicableForExternalOrImportedCluster =
+      this.isExternalCluster || this.isImportedCluster || this.isKubeOneCluster;
   }
 }

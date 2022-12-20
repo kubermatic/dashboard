@@ -68,7 +68,7 @@ END OF TERMS AND CONDITIONS
       </ng-template>
 
       <ng-template #notApplicableText>
-        Does not apply to {{ isImportedCluster ? 'imported' : 'external' }} clusters
+        Does not apply to {{ isImportedCluster ? 'imported' : isKubeOneCluster ? 'KubeOne' : 'external' }} clusters
       </ng-template>
 
       <ng-template #emptyPlaceholder>
