@@ -47,6 +47,10 @@ function createRouting(): Routes {
           loadChildren: () => import('./external-cluster-wizard/module').then(m => m.ExternalClusterModule),
         },
         {
+          path: 'projects/:projectID/kubeone-wizard',
+          loadChildren: () => import('./kubeone-wizard/module').then(m => m.KubeOneWizardModule),
+        },
+        {
           path: 'projects/:projectID/sshkeys',
           loadChildren: () => import('./sshkey/module').then(m => m.SSHKeyModule),
         },

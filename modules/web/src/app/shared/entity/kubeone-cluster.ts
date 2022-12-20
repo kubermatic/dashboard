@@ -12,11 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export enum ErrorType {
-  Required = 'required',
-  Min = 'min',
-  Max = 'max',
-  Pattern = 'pattern',
-  Number = 'number',
-  InvalidYaml = 'invalidYaml',
+export class KubeOneClusterSpec {
+  creationTimestamp?: Date;
+  deletionTimestamp?: Date;
+  id?: string;
+  cloudSpec: KubeOneCloudSpec;
+  containerRuntime?: string;
+  manifest: string;
+  sshKey: KubeOneSSHKeySpec;
+
+  static newEmptyClusterEntity(): KubeOneClusterSpec {
+    return {
+      cloudSpec: {} as KubeOneCloudSpec,
+    } as KubeOneClusterSpec;
+  }
+}
+
+export class KubeOneSSHKeySpec {
+  privateKey: string;
+  passphrase: string;
+}
+
+export class KubeOneCloudSpec {
+  aws?: KubeOneAWSCloudSpec;
+}
+
+export class KubeOneAWSCloudSpec {
+  accessKeyID: string;
+  secretAccessKey: string;
 }

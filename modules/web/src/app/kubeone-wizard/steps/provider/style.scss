@@ -12,11 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export enum ErrorType {
-  Required = 'required',
-  Min = 'min',
-  Max = 'max',
-  Pattern = 'pattern',
-  Number = 'number',
-  InvalidYaml = 'invalidYaml',
+@use 'variables';
+@use 'mixins';
+
+.no-data-warning {
+  font-size: variables.$font-size-body;
+  padding: 30px;
+  text-align: center;
+}
+
+.km-provider-logo {
+  background-position: center;
+}
+
+.mat-button-toggle {
+  .mat-button-toggle-button {
+    @include mixins.size(150px, 100%);
+  }
+}
+
+.mat-button-toggle-group[group='providerGroup'] {
+  margin-bottom: 0;
+  padding-bottom: variables.$content-padding;
 }

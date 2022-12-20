@@ -12,11 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export enum ErrorType {
-  Required = 'required',
-  Min = 'min',
-  Max = 'max',
-  Pattern = 'pattern',
-  Number = 'number',
-  InvalidYaml = 'invalidYaml',
-}
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {AuthGuard} from '@core/services/auth/guard';
+import {KubeOneWizardComponent} from './component';
+
+const routes: Routes = [
+  {
+    path: '',
+    component: KubeOneWizardComponent,
+    canActivate: [AuthGuard],
+  },
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
+})
+export class Routing {}

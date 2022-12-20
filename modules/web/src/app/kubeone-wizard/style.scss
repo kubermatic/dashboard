@@ -12,11 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export enum ErrorType {
-  Required = 'required',
-  Min = 'min',
-  Max = 'max',
-  Pattern = 'pattern',
-  Number = 'number',
-  InvalidYaml = 'invalidYaml',
+@use 'variables';
+
+.button-navigation {
+  margin-top: 30px;
+
+  km-button {
+    margin-left: 10px;
+  }
+}
+
+.wizard-step {
+  cursor: default;
+  font-size: variables.$font-size-subhead;
+  font-weight: 400;
+  margin-bottom: 0;
+  margin-top: 0;
+  padding-top: 8px;
+  user-select: none;
+
+  &.active {
+    font-weight: 500;
+  }
+
+  &.completed {
+    cursor: pointer;
+  }
+}
+
+mat-card {
+  &.mat-card {
+    margin: 0;
+    padding: 16px 30px 30px;
+  }
 }

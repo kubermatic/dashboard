@@ -12,8 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation} from '@angular/core';
 import {ThemeInformerService} from '@core/services/theme-informer';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 /**
  * Used to apply correct styling for the editor header.
@@ -30,14 +32,17 @@ export enum EditorHeaderClass {
   styleUrls: ['style.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class EditorComponent implements OnInit {
+export class EditorComponent implements OnInit, OnDestroy {
   @Input() header = '';
   @Input() headerClass: EditorHeaderClass = EditorHeaderClass.Dialog;
   @Input() height = '300px';
   @Input() language = 'yaml';
+  @Input() readonly = false;
   @Input() model: string;
   @Output() modelChange = new EventEmitter<string>();
   isFocused = false;
+
+  private readonly _unsubscribe = new Subject<void>();
 
   /**
    * All configuration options can be found at:
@@ -58,8 +63,23 @@ export class EditorComponent implements OnInit {
   constructor(private readonly _themeInformerService: ThemeInformerService) {}
 
   ngOnInit(): void {
-    this.options.theme = this._themeInformerService.isCurrentThemeDark ? 'vs-dark' : 'vs';
-    this.options.language = this.language.toLowerCase();
+    this.options = {
+      ...this.options,
+      language: this.language.toLowerCase(),
+      readOnly: this.readonly,
+    };
+
+    this._themeInformerService.isCurrentThemeDark$.pipe(takeUntil(this._unsubscribe)).subscribe(isDark => {
+      this.options = {
+        ...this.options,
+        theme: isDark ? 'vs-dark' : 'vs',
+      };
+    });
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   onInit(editor: any): void {

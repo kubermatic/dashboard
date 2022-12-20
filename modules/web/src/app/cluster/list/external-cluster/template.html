@@ -28,6 +28,13 @@ limitations under the License.
       <router-outlet name="quota-widget"
                      (activate)="onActivate($event)"></router-outlet>
     </div>
+    <button id="km-import-kubeone-cluster-btn"
+            mat-flat-button
+            [disabled]="!can(Permission.Create)"
+            (click)="importKubeOneCluster()">
+      <i class="km-icon-mask km-icon-add"></i>
+      <span>Import KubeOne Cluster</span>
+    </button>
     <button id="km-add-external-cluster-btn"
             mat-flat-button
             [disabled]="!can(Permission.Create)"

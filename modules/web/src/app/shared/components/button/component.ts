@@ -12,7 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {Observable, Subject} from 'rxjs';
 import {throttleTime} from 'rxjs/operators';
 
@@ -36,6 +45,8 @@ export class ButtonComponent<T> implements OnInit, OnDestroy {
   private _clicks = new Subject<void>();
   private readonly _throttleTime = 1000;
 
+  constructor(private readonly _cdr: ChangeDetectorRef) {}
+
   ngOnInit(): void {
     this._clicks.pipe(throttleTime(this._throttleTime)).subscribe(_ => {
       this._subscribe();
@@ -56,10 +67,12 @@ export class ButtonComponent<T> implements OnInit, OnDestroy {
       next: result => {
         this.next.emit(result);
         this.loading = false;
+        this._cdr.detectChanges();
       },
       error: _ => {
         this.error.next();
         this.loading = false;
+        this._cdr.detectChanges();
       },
     });
   }
