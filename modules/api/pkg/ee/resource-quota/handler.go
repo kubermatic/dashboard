@@ -689,7 +689,7 @@ func PutResourceQuota(ctx context.Context, request interface{}, provider provide
 }
 
 func convertToAPIStruct(resourceQuota *kubermaticv1.ResourceQuota, humanReadableSubjectName string) *apiv2.ResourceQuota {
-	return &apiv2.ResourceQuota{
+	rq := &apiv2.ResourceQuota{
 		Name:        resourceQuota.Name,
 		SubjectName: resourceQuota.Spec.Subject.Name,
 		SubjectKind: resourceQuota.Spec.Subject.Kind,
@@ -700,6 +700,12 @@ func convertToAPIStruct(resourceQuota *kubermaticv1.ResourceQuota, humanReadable
 		},
 		SubjectHumanReadableName: humanReadableSubjectName,
 	}
+
+	if resourceQuota.Labels != nil && resourceQuota.Labels[DefaultProjectResourceQuotaLabel] == "true" {
+		rq.Default = true
+	}
+
+	return rq
 }
 
 func DeleteResourceQuota(ctx context.Context, request interface{}, provider provider.ResourceQuotaProvider) error {

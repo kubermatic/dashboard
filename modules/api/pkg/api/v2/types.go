@@ -1713,6 +1713,7 @@ type ResourceQuota struct {
 	SubjectKind string `json:"subjectKind"`
 	// SubjectHumanReadableName contains the human-readable name for the subject(if applicable). Just filled as information in get/list.
 	SubjectHumanReadableName string              `json:"subjectHumanReadableName,omitempty"`
+	Default                  bool                `json:"default"`
 	Quota                    Quota               `json:"quota"`
 	Status                   ResourceQuotaStatus `json:"status"`
 }
