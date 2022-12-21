@@ -190,7 +190,6 @@ export class Mocks {
     {m: RequestType.POST, p: Endpoint.GatekeeperConfig, r: Mocks.defaultGatekeeperConfig},
     {m: RequestType.GET, p: Endpoint.Changelog, r: {}},
     {m: RequestType.GET, p: Endpoint.FeatureGates, r: {fixture: 'feature-gates.json'}},
-    {m: RequestType.GET, p: Endpoint.DefaultClusterBringYourOwn, r: {fixture: 'default-cluster-byo.json'}},
   ];
 
   static enabled(): boolean {

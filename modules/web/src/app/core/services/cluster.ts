@@ -338,7 +338,7 @@ export class ClusterService {
 
   getClusterDefaults(provider: NodeProvider, dc: string): Observable<Cluster> {
     const url = `${this._newRestRoot}/providers/${provider}/dc/${dc}/defaultcluster`;
-    return this._http.get<Cluster>(url).pipe(catchError(_ => of<Cluster>({} as Cluster)));
+    return this._http.get<Cluster>(url);
   }
 
   getAdmissionPlugins(version: string): Observable<string[]> {

@@ -357,14 +357,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(_ => (this._clusterSpecService.cluster = this._getClusterEntity()));
 
-    const clusterSpec = this._clusterSpecService?.cluster?.spec;
-    if (clusterSpec?.cloud?.dc) {
-      this.onLabelsChange(this._clusterSpecService.cluster.labels ?? null);
-
-      if (clusterSpec?.podNodeSelectorAdmissionPluginConfig) {
-        this.onPodNodeSelectorAdmissionPluginConfigChange(clusterSpec?.podNodeSelectorAdmissionPluginConfig);
-      }
-    }
+    this._handleClusterSpecChanges();
   }
 
   generateName(): void {
@@ -524,46 +517,72 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
       .getClusterDefaults(this._clusterSpecService.provider, this._clusterSpecService.datacenter)
       .pipe(filter(defaults => !!defaults && Object.keys(defaults).length > 0))
       .pipe(takeUntil(this._unsubscribe))
-      .pipe(finalize(() => (this.loadingClusterDefaults = false)))
-      .subscribe((defaults: Cluster) => {
-        this._clusterSpecService.cluster = defaults;
-        const clusterSpec = defaults?.spec;
+      .pipe(
+        finalize(() => {
+          this.loadingClusterDefaults = false;
+          this._cdr.detectChanges();
+        })
+      )
+      // eslint-disable-next-line complexity
+      .subscribe((cluster: Cluster) => {
+        this._clusterSpecService.cluster = cluster;
+        const clusterSpec = cluster?.spec;
 
         this.form.patchValue({
-          [Controls.Name]: this._clusterSpecService?.cluster?.name,
-          [Controls.Version]: clusterSpec?.version && clusterSpec?.version.slice(1), // remove the 'v' prefix
-          [Controls.ContainerRuntime]: clusterSpec?.containerRuntime,
-          [Controls.AuditLogging]: clusterSpec?.auditLogging?.enabled,
-          [Controls.AuditPolicyPreset]: clusterSpec?.auditLogging?.policyPreset,
-          [Controls.UserSSHKeyAgent]: clusterSpec?.enableUserSSHKeyAgent,
-          [Controls.OperatingSystemManager]: clusterSpec?.enableOperatingSystemManager,
-          [Controls.OPAIntegration]: clusterSpec?.opaIntegration?.enabled,
-          [Controls.Konnectivity]: clusterSpec?.clusterNetwork?.konnectivityEnabled,
-          [Controls.MLALogging]: clusterSpec?.mla?.loggingEnabled,
-          [Controls.KubernetesDashboardEnabled]: clusterSpec?.kubernetesDashboard?.enabled,
-          [Controls.MLAMonitoring]: clusterSpec?.mla?.monitoringEnabled,
-          [Controls.AdmissionPlugins]: clusterSpec?.admissionPlugins,
-          [Controls.EventRateLimitConfig]: clusterSpec?.eventRateLimitConfig,
-          [Controls.PodNodeSelectorAdmissionPluginConfig]: clusterSpec?.podNodeSelectorAdmissionPluginConfig,
-          [Controls.ProxyMode]: clusterSpec?.clusterNetwork?.proxyMode,
-          [Controls.CNIPluginVersion]: clusterSpec?.cniPlugin?.version ?? '',
-          [Controls.IPv4CIDRMaskSize]: clusterSpec?.clusterNetwork?.nodeCidrMaskSizeIPv4,
-          [Controls.IPv6CIDRMaskSize]: clusterSpec?.clusterNetwork?.nodeCidrMaskSizeIPv6,
-          [Controls.NodeLocalDNSCache]: clusterSpec?.clusterNetwork?.nodeLocalDNSCacheEnabled,
-          [Controls.ExposeStrategy]: clusterSpec?.exposeStrategy,
-          [Controls.APIServerAllowedIPRanges]: clusterSpec?.apiServerAllowedIPRanges?.cidrBlocks,
-          [Controls.IPv4PodsCIDR]: NetworkRanges.ipv4CIDR(clusterSpec?.clusterNetwork?.pods),
-          [Controls.IPv6PodsCIDR]: NetworkRanges.ipv6CIDR(clusterSpec?.clusterNetwork?.pods),
-          [Controls.IPv4ServicesCIDR]: NetworkRanges.ipv4CIDR(clusterSpec?.clusterNetwork?.services),
-          [Controls.IPv6ServicesCIDR]: NetworkRanges.ipv6CIDR(clusterSpec?.clusterNetwork?.services),
+          [Controls.Name]: this._clusterSpecService?.cluster?.name ?? this.controlValue(Controls.Name),
+          // remove the 'v' prefix from the version
+          [Controls.Version]:
+            (clusterSpec?.version && clusterSpec?.version.slice(1)) ?? this.controlValue(Controls.Version),
+          [Controls.ContainerRuntime]: clusterSpec?.containerRuntime ?? this.controlValue(Controls.ContainerRuntime),
+          [Controls.AuditLogging]: clusterSpec?.auditLogging?.enabled ?? this.controlValue(Controls.AuditLogging),
+          [Controls.AuditPolicyPreset]:
+            clusterSpec?.auditLogging?.policyPreset ?? this.controlValue(Controls.AuditPolicyPreset),
+          [Controls.UserSSHKeyAgent]: clusterSpec?.enableUserSSHKeyAgent ?? this.controlValue(Controls.UserSSHKeyAgent),
+          [Controls.OperatingSystemManager]:
+            clusterSpec?.enableOperatingSystemManager ?? this.controlValue(Controls.OperatingSystemManager),
+          [Controls.OPAIntegration]: clusterSpec?.opaIntegration?.enabled ?? this.controlValue(Controls.OPAIntegration),
+          [Controls.Konnectivity]:
+            clusterSpec?.clusterNetwork?.konnectivityEnabled ?? this.controlValue(Controls.Konnectivity),
+          [Controls.MLALogging]: clusterSpec?.mla?.loggingEnabled ?? this.controlValue(Controls.MLALogging),
+          [Controls.KubernetesDashboardEnabled]:
+            clusterSpec?.kubernetesDashboard?.enabled ?? this.controlValue(Controls.KubernetesDashboardEnabled),
+          [Controls.MLAMonitoring]: clusterSpec?.mla?.monitoringEnabled ?? this.controlValue(Controls.MLAMonitoring),
+          [Controls.AdmissionPlugins]: clusterSpec?.admissionPlugins ?? this.controlValue(Controls.AdmissionPlugins),
+          [Controls.EventRateLimitConfig]:
+            clusterSpec?.eventRateLimitConfig ?? this.controlValue(Controls.EventRateLimitConfig),
+          [Controls.Labels]: cluster?.labels ?? this.controlValue(Controls.Labels),
+          [Controls.PodNodeSelectorAdmissionPluginConfig]:
+            clusterSpec?.podNodeSelectorAdmissionPluginConfig ??
+            this.controlValue(Controls.PodNodeSelectorAdmissionPluginConfig),
+          [Controls.ProxyMode]: clusterSpec?.clusterNetwork?.proxyMode ?? this.controlValue(Controls.ProxyMode),
+          [Controls.CNIPluginVersion]: clusterSpec?.cniPlugin?.version ?? this.controlValue(Controls.CNIPluginVersion),
+          [Controls.IPv4CIDRMaskSize]:
+            clusterSpec?.clusterNetwork?.nodeCidrMaskSizeIPv4 ?? this.controlValue(Controls.IPv4CIDRMaskSize),
+          [Controls.IPv6CIDRMaskSize]:
+            clusterSpec?.clusterNetwork?.nodeCidrMaskSizeIPv6 ?? this.controlValue(Controls.IPv6CIDRMaskSize),
+          [Controls.NodeLocalDNSCache]:
+            clusterSpec?.clusterNetwork?.nodeLocalDNSCacheEnabled ?? this.controlValue(Controls.NodeLocalDNSCache),
+          [Controls.ExposeStrategy]: clusterSpec?.exposeStrategy ?? this.controlValue(Controls.ExposeStrategy),
+          [Controls.APIServerAllowedIPRanges]:
+            clusterSpec?.apiServerAllowedIPRanges?.cidrBlocks ?? this.controlValue(Controls.APIServerAllowedIPRanges),
+          [Controls.IPv4PodsCIDR]:
+            NetworkRanges.ipv4CIDR(clusterSpec?.clusterNetwork?.pods) ?? this.controlValue(Controls.IPv4PodsCIDR),
+          [Controls.IPv6PodsCIDR]:
+            NetworkRanges.ipv6CIDR(clusterSpec?.clusterNetwork?.pods) ?? this.controlValue(Controls.IPv6PodsCIDR),
+          [Controls.IPv4ServicesCIDR]:
+            NetworkRanges.ipv4CIDR(clusterSpec?.clusterNetwork?.services) ??
+            this.controlValue(Controls.IPv4ServicesCIDR),
+          [Controls.IPv6ServicesCIDR]:
+            NetworkRanges.ipv6CIDR(clusterSpec?.clusterNetwork?.services) ??
+            this.controlValue(Controls.IPv6ServicesCIDR),
         });
 
         // Selective patching of the form values to avoid trigger of valueChanges
         // and to avoid resetting of the form values.
         this.form.patchValue(
           {
-            [Controls.IPFamily]: clusterSpec?.clusterNetwork?.ipFamily,
-            [Controls.CNIPlugin]: clusterSpec?.cniPlugin?.type,
+            [Controls.IPFamily]: clusterSpec?.clusterNetwork?.ipFamily ?? this.controlValue(Controls.IPFamily),
+            [Controls.CNIPlugin]: clusterSpec?.cniPlugin?.type ?? this.controlValue(Controls.CNIPlugin),
           },
           {emitEvent: false}
         );
@@ -593,11 +612,25 @@ export class ClusterStepComponent extends StepBase implements OnInit, ControlVal
           });
         }
 
+        this._handleClusterSpecChanges();
         this._updateAvailableProxyModes();
         this._fetchCNIPlugins();
         this._defaultProxyMode = clusterSpec?.clusterNetwork?.proxyMode;
+        this.loadingClusterDefaults = false;
         this._cdr.detectChanges();
       });
+  }
+
+  private _handleClusterSpecChanges(): void {
+    const clusterSpec = this._clusterSpecService?.cluster?.spec;
+
+    if (clusterSpec?.cloud?.dc) {
+      this.onLabelsChange(this._clusterSpecService.cluster.labels ?? null);
+
+      if (clusterSpec?.podNodeSelectorAdmissionPluginConfig) {
+        this.onPodNodeSelectorAdmissionPluginConfigChange(clusterSpec?.podNodeSelectorAdmissionPluginConfig);
+      }
+    }
   }
 
   private _fetchCNIPlugins(): void {
