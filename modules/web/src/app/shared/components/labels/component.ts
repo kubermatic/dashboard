@@ -12,36 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {AfterViewInit, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 
 @Component({
   selector: 'km-labels',
   templateUrl: './template.html',
   styleUrls: ['style.scss'],
 })
-export class LabelsComponent implements OnInit, OnChanges, AfterViewInit {
+export class LabelsComponent implements OnInit, OnChanges {
   @Input() labels = {};
   @Input() limit: number;
   @Input() emptyMessage = '';
   @Input() oneLineLimit = false;
+  @ViewChild('chipListLabels') chipListLabels: ElementRef;
+
   labelKeys: string[] = [];
   showHiddenLabels = false;
-  showAndHideExtraLabels = false;
-
-  get showLabelsText(): string {
-    return this.showHiddenLabels ? 'SHOW ALL' : 'HIDE ALL';
-  }
-
-  constructor(private readonly _cdr: ChangeDetectorRef) {}
+  hideExtraLabels = false;
 
   ngOnInit(): void {
     this._updateLabelKeys();
-    this.oneLineLimit && this._checkLabelsHeight();
-  }
-
-  ngAfterViewInit(): void {
-    this.oneLineLimit && this._checkLabelsHeight();
-    this._cdr.detectChanges();
   }
 
   ngOnChanges(_: SimpleChanges): void {
@@ -62,16 +52,18 @@ export class LabelsComponent implements OnInit, OnChanges, AfterViewInit {
     return hiddenLabels;
   }
 
-  showAndHideAllLabels(): void {
+  toggleHiddenLabels(): void {
     this.showHiddenLabels = !this.showHiddenLabels;
   }
 
-  private _checkLabelsHeight(): void {
-    const labelsElem = 30;
-    if (document.getElementById('km-labels').offsetHeight > labelsElem) {
-      this.showAndHideExtraLabels = true;
-      this.showHiddenLabels = true;
+  checkLabelsHeight(): boolean {
+    const labelsElem = 32;
+    if (this.chipListLabels?.nativeElement?.parentElement.offsetHeight > labelsElem) {
+      this.hideExtraLabels = true;
+    } else {
+      this.hideExtraLabels = false;
     }
+    return this.oneLineLimit && this.hideExtraLabels;
   }
 
   private _updateLabelKeys(): void {
