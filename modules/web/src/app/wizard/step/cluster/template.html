@@ -14,7 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<form [formGroup]="form">
+<ng-container *ngIf="loadingClusterDefaults">
+  <mat-spinner [diameter]="25"
+               class="km-spinner"
+               color="accent"></mat-spinner>
+</ng-container>
+
+
+<form *ngIf="!loadingClusterDefaults" [formGroup]="form">
   <div fxLayout="row"
        fxLayout.md="column"
        fxLayout.sm="column"

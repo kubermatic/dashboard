@@ -124,6 +124,7 @@ export class ChipListComponent implements OnChanges, OnDestroy, ControlValueAcce
   writeValue(tags: string[]): void {
     if (!_.isEmpty(tags)) {
       this.form.get(Controls.Tags).setValue(tags, {emitEvent: false});
+      this.tags = tags;
     }
   }
 

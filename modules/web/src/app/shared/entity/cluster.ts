@@ -354,21 +354,6 @@ export class ClusterNetwork {
   konnectivityEnabled?: boolean;
 }
 
-export class ClusterNetworkDefaults {
-  ipv4?: NetworkDefaultsIPFamily;
-  ipv6?: NetworkDefaultsIPFamily;
-  nodeLocalDNSCacheEnabled?: boolean;
-  proxyMode?: ProxyMode;
-  clusterExposeStrategy?: ExposeStrategy;
-}
-
-export class NetworkDefaultsIPFamily {
-  nodeCidrMaskSize: number;
-  nodePortsAllowedIPRange: string;
-  podsCidr: string;
-  servicesCidr: string;
-}
-
 export class CNIPluginConfig {
   type: string;
   version: string;
