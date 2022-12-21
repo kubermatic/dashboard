@@ -104,6 +104,18 @@ limitations under the License.
           </km-property>
         </div>
       </div>
+      <div *ngIf="project?.labels"
+           fxLayoutAlign=" center"
+           fxLayoutGap="15px">
+        <i class="km-icon-mask km-icon-labels"></i>
+        <km-property>
+          <div key>Labels</div>
+          <div value>
+            <km-labels oneLineLimit=true
+                       [labels]="project?.labels"></km-labels>
+          </div>
+        </km-property>
+      </div>
     </mat-card-content>
   </mat-card>
 

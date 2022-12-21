@@ -14,8 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<km-tab-card [verticalMargin]="false">
-  <km-tab label="Cluster Distribution">
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      Cluster Distribution
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+
     <div #chartContainer
          [ngSwitch]="clusters.length + externalClusters.length > 0"
          [ngClass]="{'empty': clusters.length + externalClusters.length < 1}"
@@ -32,5 +38,6 @@ limitations under the License.
       </ngx-charts-pie-chart>
       <div *ngSwitchCase="false">No clusters available.</div>
     </div>
-  </km-tab>
-</km-tab-card>
+  </mat-card-content>
+
+</mat-card>

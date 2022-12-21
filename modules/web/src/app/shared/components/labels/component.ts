@@ -12,20 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 
 @Component({
   selector: 'km-labels',
   templateUrl: './template.html',
+  styleUrls: ['style.scss'],
 })
-export class LabelsComponent implements OnInit, OnChanges {
+export class LabelsComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() labels = {};
   @Input() limit: number;
   @Input() emptyMessage = '';
+  @Input() oneLineLimit = false;
   labelKeys: string[] = [];
+  showHiddenLabels = false;
+  showAndHideExtraLabels = false;
+
+  get showLabelsText(): string {
+    return this.showHiddenLabels ? 'SHOW ALL' : 'HIDE ALL';
+  }
+
+  constructor(private readonly _cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this._updateLabelKeys();
+    this.oneLineLimit && this._checkLabelsHeight();
+  }
+
+  ngAfterViewInit(): void {
+    this.oneLineLimit && this._checkLabelsHeight();
+    this._cdr.detectChanges();
   }
 
   ngOnChanges(_: SimpleChanges): void {
@@ -44,6 +60,18 @@ export class LabelsComponent implements OnInit, OnChanges {
       }
     }
     return hiddenLabels;
+  }
+
+  showAndHideAllLabels(): void {
+    this.showHiddenLabels = !this.showHiddenLabels;
+  }
+
+  private _checkLabelsHeight(): void {
+    const labelsElem = 30;
+    if (document.getElementById('km-labels').offsetHeight > labelsElem) {
+      this.showAndHideExtraLabels = true;
+      this.showHiddenLabels = true;
+    }
   }
 
   private _updateLabelKeys(): void {
