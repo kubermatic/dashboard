@@ -668,10 +668,12 @@ func createNewEKSCluster(ctx context.Context, eksClusterSpec *apiv2.EKSClusterSp
 	return eksprovider.CreateCluster(ctx, client, clusterSpec, eksCloudSpec.Name)
 }
 
-func createOrImportEKSCluster(ctx context.Context, name string, userInfoGetter provider.UserInfoGetter, project *kubermaticv1.Project, spec *apiv2.ExternalClusterSpec, cloud *apiv2.ExternalClusterCloudSpec, clusterProvider provider.ExternalClusterProvider, privilegedClusterProvider provider.PrivilegedExternalClusterProvider) (*kubermaticv1.ExternalCluster, error) {
+func createOrImportEKSCluster(ctx context.Context, name string, userInfoGetter provider.UserInfoGetter, project *kubermaticv1.Project, cluster *apiv2.ExternalCluster, clusterProvider provider.ExternalClusterProvider, privilegedClusterProvider provider.PrivilegedExternalClusterProvider) (*kubermaticv1.ExternalCluster, error) {
 	isImported := resources.ExternalClusterIsImportedTrue
 
-	fields := reflect.ValueOf(cloud.EKS).Elem()
+	eksCloudSpec := cluster.Cloud.EKS
+	eksClusterSpec := cluster.Spec.EKSClusterSpec
+	fields := reflect.ValueOf(eksCloudSpec).Elem()
 	for i := 0; i < fields.NumField(); i++ {
 		yourjsonTags := fields.Type().Field(i).Tag.Get("required")
 		if strings.Contains(yourjsonTags, "true") && fields.Field(i).IsZero() {
@@ -679,8 +681,8 @@ func createOrImportEKSCluster(ctx context.Context, name string, userInfoGetter p
 		}
 	}
 
-	if spec != nil && spec.EKSClusterSpec != nil {
-		if err := createNewEKSCluster(ctx, spec.EKSClusterSpec, cloud.EKS); err != nil {
+	if cluster.Spec != nil && eksClusterSpec != nil {
+		if err := createNewEKSCluster(ctx, eksClusterSpec, eksCloudSpec); err != nil {
 			return nil, err
 		}
 		isImported = resources.ExternalClusterIsImportedFalse
@@ -689,16 +691,15 @@ func createOrImportEKSCluster(ctx context.Context, name string, userInfoGetter p
 	newCluster := genExternalCluster(name, project.Name, isImported)
 	newCluster.Spec.CloudSpec = kubermaticv1.ExternalClusterCloudSpec{
 		EKS: &kubermaticv1.ExternalClusterEKSCloudSpec{
-			Name:   cloud.EKS.Name,
-			Region: cloud.EKS.Region,
+			Name:   eksCloudSpec.Name,
+			Region: eksCloudSpec.Region,
 		},
 	}
 
-	keyRef, err := clusterProvider.CreateOrUpdateCredentialSecretForCluster(ctx, cloud, project.Name, newCluster.Name)
+	err := clusterProvider.CreateOrUpdateCredentialSecret(ctx, nil, newCluster)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
-	newCluster.Spec.CloudSpec.EKS.CredentialsReference = keyRef
 
 	return createNewCluster(ctx, userInfoGetter, clusterProvider, privilegedClusterProvider, newCluster, project)
 }

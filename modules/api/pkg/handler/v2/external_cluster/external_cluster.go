@@ -179,6 +179,10 @@ func CreateEndpoint(
 
 		cloud := req.Body.Cloud
 		spec := req.Body.Spec
+		externalCluster := &apiv2.ExternalCluster{
+			Spec:  spec,
+			Cloud: cloud,
+		}
 
 		// connect cluster by kubeconfig
 		if cloud == nil {
@@ -195,7 +199,7 @@ func CreateEndpoint(
 			if err := clusterProvider.ValidateKubeconfig(ctx, config); err != nil {
 				return nil, err
 			}
-			if err := clusterProvider.CreateOrUpdateKubeconfigSecretForCluster(ctx, newCluster, config); err != nil {
+			if err := clusterProvider.CreateOrUpdateKubeconfigSecret(ctx, newCluster, config); err != nil {
 				return nil, common.KubernetesErrorToHTTPError(err)
 			}
 
@@ -214,7 +218,7 @@ func CreateEndpoint(
 					req.Body.Cloud.GKE.ServiceAccount = credentials.ServiceAccount
 				}
 			}
-			createdCluster, err := createOrImportGKECluster(ctx, req.Body.Name, userInfoGetter, project, spec, cloud, clusterProvider, privilegedClusterProvider)
+			createdCluster, err := createOrImportGKECluster(ctx, req.Body.Name, userInfoGetter, project, externalCluster, clusterProvider, privilegedClusterProvider)
 			if err != nil {
 				return nil, common.KubernetesErrorToHTTPError(err)
 			}
@@ -231,7 +235,7 @@ func CreateEndpoint(
 				}
 			}
 
-			createdCluster, err := createOrImportEKSCluster(ctx, req.Body.Name, userInfoGetter, project, spec, cloud, clusterProvider, privilegedClusterProvider)
+			createdCluster, err := createOrImportEKSCluster(ctx, req.Body.Name, userInfoGetter, project, externalCluster, clusterProvider, privilegedClusterProvider)
 			if err != nil {
 				return nil, common.KubernetesErrorToHTTPError(err)
 			}
@@ -251,7 +255,7 @@ func CreateEndpoint(
 				}
 			}
 
-			createdCluster, err := createOrImportAKSCluster(ctx, req.Body.Name, userInfoGetter, project, spec, cloud, clusterProvider, privilegedClusterProvider)
+			createdCluster, err := createOrImportAKSCluster(ctx, req.Body.Name, userInfoGetter, project, externalCluster, clusterProvider, privilegedClusterProvider)
 			if err != nil {
 				return nil, common.KubernetesErrorToHTTPError(err)
 			}
@@ -269,7 +273,6 @@ func CreateEndpoint(
 			if err != nil {
 				return nil, common.KubernetesErrorToHTTPError(err)
 			}
-
 			apiCluster := convertClusterToAPI(createdCluster)
 			apiCluster.Status = apiv2.ExternalClusterStatus{State: apiv2.ProvisioningExternalClusterState}
 			return apiCluster, nil
@@ -582,7 +585,7 @@ func UpdateEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider prov
 			if err := clusterProvider.ValidateKubeconfig(ctx, config); err != nil {
 				return nil, err
 			}
-			if err := clusterProvider.CreateOrUpdateKubeconfigSecretForCluster(ctx, cluster, config); err != nil {
+			if err := clusterProvider.CreateOrUpdateKubeconfigSecret(ctx, cluster, config); err != nil {
 				return nil, common.KubernetesErrorToHTTPError(err)
 			}
 		}
@@ -634,7 +637,7 @@ func PatchEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provi
 		if err != nil {
 			return nil, common.KubernetesErrorToHTTPError(err)
 		}
-		clusterToPatch.Spec = apiv2.ExternalClusterSpec{
+		clusterToPatch.Spec = &apiv2.ExternalClusterSpec{
 			Version: *version,
 		}
 
@@ -996,6 +999,7 @@ func genExternalCluster(name, projectID, isImported string) *kubermaticv1.Extern
 }
 
 func createNewCluster(ctx context.Context, userInfoGetter provider.UserInfoGetter, clusterProvider provider.ExternalClusterProvider, privilegedClusterProvider provider.PrivilegedExternalClusterProvider, cluster *kubermaticv1.ExternalCluster, project *kubermaticv1.Project) (*kubermaticv1.ExternalCluster, error) {
+	cluster.Spec.Pause = true
 	adminUserInfo, err := userInfoGetter(ctx, "")
 	if err != nil {
 		return nil, err
@@ -1030,21 +1034,18 @@ func convertClusterToAPI(internalCluster *kubermaticv1.ExternalCluster) *apiv2.E
 
 	cluster.Cloud = &apiv2.ExternalClusterCloudSpec{}
 	if cloud.EKS != nil {
-		cluster.Cloud.ProviderName = string(kubermaticv1.ExternalClusterEKSProvider)
 		cluster.Cloud.EKS = &apiv2.EKSCloudSpec{
 			Name:   cloud.EKS.Name,
 			Region: cloud.EKS.Region,
 		}
 	}
 	if cloud.GKE != nil {
-		cluster.Cloud.ProviderName = string(kubermaticv1.ExternalClusterGKEProvider)
 		cluster.Cloud.GKE = &apiv2.GKECloudSpec{
 			Name: cloud.GKE.Name,
 			Zone: cloud.GKE.Zone,
 		}
 	}
 	if cloud.AKS != nil {
-		cluster.Cloud.ProviderName = string(kubermaticv1.ExternalClusterAKSProvider)
 		cluster.Cloud.AKS = &apiv2.AKSCloudSpec{
 			Name:          cloud.AKS.Name,
 			ResourceGroup: cloud.AKS.ResourceGroup,
@@ -1052,13 +1053,11 @@ func convertClusterToAPI(internalCluster *kubermaticv1.ExternalCluster) *apiv2.E
 		}
 	}
 	if cloud.KubeOne != nil {
-		cluster.Cloud.ProviderName = string(kubermaticv1.ExternalClusterKubeOneProvider)
 		cluster.Cloud.KubeOne = &apiv2.KubeOneSpec{
 			ProviderName: cloud.KubeOne.ProviderName,
 		}
 	}
 	if cloud.BringYourOwn != nil {
-		cluster.Cloud.ProviderName = string(kubermaticv1.ExternalClusterBringYourOwnProvider)
 		cluster.Cloud.BringYourOwn = &apiv2.BringYourOwnSpec{}
 	}
 
@@ -1124,10 +1123,13 @@ func convertClusterToAPIWithStatus(ctx context.Context, masterClient ctrlruntime
 	if err != nil && apiCluster.Status.State == apiv2.RunningExternalClusterState {
 		apiCluster.Status = apiv2.ExternalClusterStatus{
 			State:         apiv2.ErrorExternalClusterState,
-			StatusMessage: "Can't access cluster via kubeconfig. Please check the credentials privileges.",
+			StatusMessage: "Can't access cluster via kubeconfig," + "error: " + err.Error(),
 		}
 	}
 	if version != nil {
+		if apiCluster.Spec == nil {
+			apiCluster.Spec = &apiv2.ExternalClusterSpec{}
+		}
 		apiCluster.Spec.Version = *version
 	}
 	return apiCluster

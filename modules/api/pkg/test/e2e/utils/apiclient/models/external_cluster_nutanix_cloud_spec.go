@@ -12,10 +12,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// KubeOneNutanixCloudSpec KubeOneNutanixCloudSpec specifies the access data to Nutanix.
+// ExternalClusterNutanixCloudSpec ExternalClusterNutanixCloudSpec specifies the access data to Nutanix.
 //
-// swagger:model KubeOneNutanixCloudSpec
-type KubeOneNutanixCloudSpec struct {
+// swagger:model ExternalClusterNutanixCloudSpec
+type ExternalClusterNutanixCloudSpec struct {
 
 	// allow insecure
 	AllowInsecure bool `json:"allowInsecure,omitempty"`
@@ -49,18 +49,18 @@ type KubeOneNutanixCloudSpec struct {
 	Username string `json:"username,omitempty"`
 }
 
-// Validate validates this kube one nutanix cloud spec
-func (m *KubeOneNutanixCloudSpec) Validate(formats strfmt.Registry) error {
+// Validate validates this external cluster nutanix cloud spec
+func (m *ExternalClusterNutanixCloudSpec) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this kube one nutanix cloud spec based on context it is used
-func (m *KubeOneNutanixCloudSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this external cluster nutanix cloud spec based on context it is used
+func (m *ExternalClusterNutanixCloudSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *KubeOneNutanixCloudSpec) MarshalBinary() ([]byte, error) {
+func (m *ExternalClusterNutanixCloudSpec) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -68,8 +68,8 @@ func (m *KubeOneNutanixCloudSpec) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *KubeOneNutanixCloudSpec) UnmarshalBinary(b []byte) error {
-	var res KubeOneNutanixCloudSpec
+func (m *ExternalClusterNutanixCloudSpec) UnmarshalBinary(b []byte) error {
+	var res ExternalClusterNutanixCloudSpec
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

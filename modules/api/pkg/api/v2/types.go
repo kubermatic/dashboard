@@ -410,7 +410,7 @@ type MLAAdminSetting struct {
 type ExternalCluster struct {
 	apiv1.ObjectMeta `json:",inline"`
 	Labels           map[string]string         `json:"labels,omitempty"`
-	Spec             ExternalClusterSpec       `json:"spec,omitempty"`
+	Spec             *ExternalClusterSpec      `json:"spec,omitempty"`
 	Cloud            *ExternalClusterCloudSpec `json:"cloud,omitempty"`
 	Status           ExternalClusterStatus     `json:"status"`
 }
@@ -505,7 +505,6 @@ type ExternalClusterSpec struct {
 // ExternalClusterCloudSpec represents an object holding cluster cloud details
 // swagger:model ExternalClusterCloudSpec
 type ExternalClusterCloudSpec struct {
-	ProviderName string            `json:"providerName"`
 	GKE          *GKECloudSpec     `json:"gke,omitempty"`
 	EKS          *EKSCloudSpec     `json:"eks,omitempty"`
 	AKS          *AKSCloudSpec     `json:"aks,omitempty"`
@@ -535,45 +534,47 @@ type KubeOneSSHKey struct {
 }
 
 type KubeOneCloudSpec struct {
-	AWS                 *KubeOneAWSCloudSpec                 `json:"aws,omitempty"`
-	GCP                 *KubeOneGCPCloudSpec                 `json:"gcp,omitempty"`
-	Azure               *KubeOneAzureCloudSpec               `json:"azure,omitempty"`
-	DigitalOcean        *KubeOneDigitalOceanCloudSpec        `json:"digitalocean,omitempty"`
-	OpenStack           *KubeOneOpenStackCloudSpec           `json:"openstack,omitempty"`
-	Equinix             *KubeOneEquinixCloudSpec             `json:"equinix,omitempty"`
-	Hetzner             *KubeOneHetznerCloudSpec             `json:"hetzner,omitempty"`
-	VSphere             *KubeOneVSphereCloudSpec             `json:"vsphere,omitempty"`
-	VMwareCloudDirector *KubeOneVMwareCloudDirectorCloudSpec `json:"vmwareclouddirector,omitempty"`
-	Nutanix             *KubeOneNutanixCloudSpec             `json:"nutanix,omitempty"`
+	AWS                 *ExternalClusterAWSCloudSpec                 `json:"aws,omitempty"`
+	GCP                 *ExternalClusterGCPCloudSpec                 `json:"gcp,omitempty"`
+	Azure               *ExternalClusterAzureCloudSpec               `json:"azure,omitempty"`
+	DigitalOcean        *ExternalClusterDigitalOceanCloudSpec        `json:"digitalocean,omitempty"`
+	OpenStack           *ExternalClusterOpenStackCloudSpec           `json:"openstack,omitempty"`
+	Equinix             *ExternalClusterEquinixCloudSpec             `json:"equinix,omitempty"`
+	Hetzner             *ExternalClusterHetznerCloudSpec             `json:"hetzner,omitempty"`
+	VSphere             *ExternalClusterVSphereCloudSpec             `json:"vsphere,omitempty"`
+	VMwareCloudDirector *ExternalClusterVMwareCloudDirectorCloudSpec `json:"vmwareclouddirector,omitempty"`
+	Nutanix             *ExternalClusterNutanixCloudSpec             `json:"nutanix,omitempty"`
 }
 
-// KubeOneAWSCloudSpec specifies access data to Amazon Web Services.
-type KubeOneAWSCloudSpec struct {
-	AccessKeyID     string `json:"accessKeyID"`
-	SecretAccessKey string `json:"secretAccessKey"`
+// ExternalClusterAWSCloudSpec specifies access data to Amazon Web Services.
+type ExternalClusterAWSCloudSpec struct {
+	AccessKeyID          string `json:"accessKeyID"`
+	SecretAccessKey      string `json:"secretAccessKey"`
+	AssumeRoleARN        string `json:"assumeRoleARN"`
+	AssumeRoleExternalID string `json:"assumeRoleExternalID"`
 }
 
-// KubeOneGCPCloudSpec specifies access data to GCP.
-type KubeOneGCPCloudSpec struct {
+// ExternalClusterGCPCloudSpec specifies access data to GCP.
+type ExternalClusterGCPCloudSpec struct {
 	ServiceAccount string `json:"serviceAccount"`
 }
 
-// KubeOneAzureCloudSpec specifies access credentials to Azure cloud.
-type KubeOneAzureCloudSpec struct {
+// ExternalClusterAzureCloudSpec specifies access credentials to Azure cloud.
+type ExternalClusterAzureCloudSpec struct {
 	TenantID       string `json:"tenantID"`
 	SubscriptionID string `json:"subscriptionID"`
 	ClientID       string `json:"clientID"`
 	ClientSecret   string `json:"clientSecret"`
 }
 
-// KubeOneDigitalOceanCloudSpec specifies access data to DigitalOcean.
-type KubeOneDigitalOceanCloudSpec struct {
+// ExternalClusterDigitalOceanCloudSpec specifies access data to DigitalOcean.
+type ExternalClusterDigitalOceanCloudSpec struct {
 	// Token is used to authenticate with the DigitalOcean API.
 	Token string `json:"token"`
 }
 
-// KubeOneOpenStackCloudSpec specifies access data to an OpenStack cloud.
-type KubeOneOpenStackCloudSpec struct {
+// ExternalClusterOpenStackCloudSpec specifies access data to an OpenStack cloud.
+type ExternalClusterOpenStackCloudSpec struct {
 	AuthURL  string `json:"authURL"`
 	Username string `json:"username"`
 	Password string `json:"password"`
@@ -587,15 +588,15 @@ type KubeOneOpenStackCloudSpec struct {
 	Region string `json:"region"`
 }
 
-// KubeOneVSphereCloudSpec credentials represents a credential for accessing vSphere.
-type KubeOneVSphereCloudSpec struct {
+// ExternalClusterVSphereCloudSpec credentials represents a credential for accessing vSphere.
+type ExternalClusterVSphereCloudSpec struct {
 	Server   string `json:"server"`
 	Username string `json:"username"`
 	Password string `json:"password"`
 }
 
-// KubeOneVMwareCloudDirectorCloudSpec represents credentials for accessing VMWare Cloud Director.
-type KubeOneVMwareCloudDirectorCloudSpec struct {
+// ExternalClusterVMwareCloudDirectorCloudSpec represents credentials for accessing VMWare Cloud Director.
+type ExternalClusterVMwareCloudDirectorCloudSpec struct {
 	URL          string `json:"url"`
 	Username     string `json:"username"`
 	Password     string `json:"password"`
@@ -603,20 +604,20 @@ type KubeOneVMwareCloudDirectorCloudSpec struct {
 	VDC          string `json:"vdc"`
 }
 
-// KubeOneEquinixCloudSpec specifies access data to a Equinix cloud.
-type KubeOneEquinixCloudSpec struct {
+// ExternalClusterEquinixCloudSpec specifies access data to a Equinix cloud.
+type ExternalClusterEquinixCloudSpec struct {
 	APIKey    string `json:"apiKey"`
 	ProjectID string `json:"projectID"`
 }
 
-// KubeOneHetznerCloudSpec specifies access data to hetzner cloud.
-type KubeOneHetznerCloudSpec struct {
+// ExternalClusterHetznerCloudSpec specifies access data to hetzner cloud.
+type ExternalClusterHetznerCloudSpec struct {
 	// Token is used to authenticate with the Hetzner cloud API.
 	Token string `json:"token"`
 }
 
-// KubeOneNutanixCloudSpec specifies the access data to Nutanix.
-type KubeOneNutanixCloudSpec struct {
+// ExternalClusterNutanixCloudSpec specifies the access data to Nutanix.
+type ExternalClusterNutanixCloudSpec struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 	// Endpoint is the Nutanix API (Prism Central) endpoint

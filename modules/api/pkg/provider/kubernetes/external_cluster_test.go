@@ -260,7 +260,7 @@ func TestCreateOrUpdateCloudSecretForCluster(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			credentialRef, err := provider.CreateOrUpdateCredentialSecretForCluster(context.Background(), tc.cloudSpec, tc.projectID, tc.clusterID)
+			err := provider.CreateOrUpdateCredentialSecret(context.Background(), nil, tc.externalCluster)
 			if err != nil {
 				t.Fatal(err)
 			}

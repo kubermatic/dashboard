@@ -51,17 +51,15 @@ func importKubeOneCluster(ctx context.Context, name string, userInfoGetter func(
 		KubeOne: &kubermaticv1.ExternalClusterKubeOneCloudSpec{},
 	}
 
-	kubermaticNamespace := resources.KubermaticNamespace
-	err = clusterProvider.CreateOrUpdateKubeOneSSHSecret(ctx, kubermaticNamespace, cloud.KubeOne.SSHKey, newCluster)
+	err = clusterProvider.CreateOrUpdateKubeOneSSHSecret(ctx, cloud.KubeOne.SSHKey, newCluster)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
-	err = clusterProvider.CreateOrUpdateKubeOneManifestSecret(ctx, kubermaticNamespace, cloud.KubeOne.Manifest, newCluster)
+	err = clusterProvider.CreateOrUpdateKubeOneManifestSecret(ctx, cloud.KubeOne.Manifest, newCluster)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
-
-	err = clusterProvider.CreateOrUpdateKubeOneCredentialSecret(ctx, kubermaticNamespace, *cloud.KubeOne.CloudSpec, newCluster)
+	err = clusterProvider.CreateOrUpdateCredentialSecret(ctx, cloud.KubeOne.CloudSpec, newCluster)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}

@@ -553,11 +553,13 @@ func checkCreateClusterReqValidity(cloudSpec *apiv2.AKSCloudSpec, clusterSpec *a
 	return checkCreatePoolReqValidity(agentPoolProfiles)
 }
 
-func createOrImportAKSCluster(ctx context.Context, name string, userInfoGetter provider.UserInfoGetter, project *kubermaticv1.Project, spec *apiv2.ExternalClusterSpec, cloud *apiv2.ExternalClusterCloudSpec, clusterProvider provider.ExternalClusterProvider, privilegedClusterProvider provider.PrivilegedExternalClusterProvider) (*kubermaticv1.ExternalCluster, error) {
+func createOrImportAKSCluster(ctx context.Context, name string, userInfoGetter provider.UserInfoGetter, project *kubermaticv1.Project, cluster *apiv2.ExternalCluster, clusterProvider provider.ExternalClusterProvider, privilegedClusterProvider provider.PrivilegedExternalClusterProvider) (*kubermaticv1.ExternalCluster, error) {
 	isImported := resources.ExternalClusterIsImportedTrue
 
+	aksCloudSpec := cluster.Cloud.AKS
+	aksClusterSpec := cluster.Spec.AKSClusterSpec
 	// check whether required fields for cluster import are provided
-	fields := reflect.ValueOf(cloud.AKS).Elem()
+	fields := reflect.ValueOf(aksCloudSpec).Elem()
 	for i := 0; i < fields.NumField(); i++ {
 		yourjsonTags := fields.Type().Field(i).Tag.Get("required")
 		if strings.Contains(yourjsonTags, "true") && fields.Field(i).IsZero() {
@@ -566,22 +568,22 @@ func createOrImportAKSCluster(ctx context.Context, name string, userInfoGetter p
 	}
 
 	// If Spec is not nil, it is interpreted as create cluster on the provider.
-	isCreation := (spec != nil && spec.AKSClusterSpec != nil)
+	isCreation := (cluster.Spec != nil && aksClusterSpec != nil)
 
 	if err := aks.ValidateCredentialsPermissions(ctx, resources.AKSCredentials{
-		TenantID:       cloud.AKS.TenantID,
-		ClientID:       cloud.AKS.ClientID,
-		SubscriptionID: cloud.AKS.SubscriptionID,
-		ClientSecret:   cloud.AKS.ClientSecret,
-	}, cloud.AKS.ResourceGroup, isCreation); err != nil {
+		TenantID:       aksCloudSpec.TenantID,
+		ClientID:       aksCloudSpec.ClientID,
+		SubscriptionID: aksCloudSpec.SubscriptionID,
+		ClientSecret:   aksCloudSpec.ClientSecret,
+	}, aksCloudSpec.ResourceGroup, isCreation); err != nil {
 		return nil, err
 	}
 
 	if isCreation {
-		if err := checkCreateClusterReqValidity(cloud.AKS, spec.AKSClusterSpec); err != nil {
+		if err := checkCreateClusterReqValidity(aksCloudSpec, aksClusterSpec); err != nil {
 			return nil, err
 		}
-		if err := createNewAKSCluster(ctx, spec.AKSClusterSpec, cloud.AKS); err != nil {
+		if err := createNewAKSCluster(ctx, aksClusterSpec, aksCloudSpec); err != nil {
 			return nil, err
 		}
 		isImported = resources.ExternalClusterIsImportedFalse
@@ -589,16 +591,15 @@ func createOrImportAKSCluster(ctx context.Context, name string, userInfoGetter p
 	newCluster := genExternalCluster(name, project.Name, isImported)
 	newCluster.Spec.CloudSpec = kubermaticv1.ExternalClusterCloudSpec{
 		AKS: &kubermaticv1.ExternalClusterAKSCloudSpec{
-			Name:          cloud.AKS.Name,
-			ResourceGroup: cloud.AKS.ResourceGroup,
-			Location:      cloud.AKS.Location,
+			Name:          aksCloudSpec.Name,
+			ResourceGroup: aksCloudSpec.ResourceGroup,
+			Location:      aksCloudSpec.Location,
 		},
 	}
-	keyRef, err := clusterProvider.CreateOrUpdateCredentialSecretForCluster(ctx, cloud, project.Name, newCluster.Name)
+	err := clusterProvider.CreateOrUpdateCredentialSecret(ctx, nil, newCluster)
 	if err != nil {
 		return nil, common.KubernetesErrorToHTTPError(err)
 	}
-	newCluster.Spec.CloudSpec.AKS.CredentialsReference = keyRef
 
 	return createNewCluster(ctx, userInfoGetter, clusterProvider, privilegedClusterProvider, newCluster, project)
 }

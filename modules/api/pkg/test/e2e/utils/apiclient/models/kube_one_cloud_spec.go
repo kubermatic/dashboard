@@ -19,34 +19,34 @@ import (
 type KubeOneCloudSpec struct {
 
 	// aws
-	Aws *KubeOneAWSCloudSpec `json:"aws,omitempty"`
+	Aws *ExternalClusterAWSCloudSpec `json:"aws,omitempty"`
 
 	// azure
-	Azure *KubeOneAzureCloudSpec `json:"azure,omitempty"`
+	Azure *ExternalClusterAzureCloudSpec `json:"azure,omitempty"`
 
 	// digitalocean
-	Digitalocean *KubeOneDigitalOceanCloudSpec `json:"digitalocean,omitempty"`
+	Digitalocean *ExternalClusterDigitalOceanCloudSpec `json:"digitalocean,omitempty"`
 
 	// equinix
-	Equinix *KubeOneEquinixCloudSpec `json:"equinix,omitempty"`
+	Equinix *ExternalClusterEquinixCloudSpec `json:"equinix,omitempty"`
 
 	// gcp
-	Gcp *KubeOneGCPCloudSpec `json:"gcp,omitempty"`
+	Gcp *ExternalClusterGCPCloudSpec `json:"gcp,omitempty"`
 
 	// hetzner
-	Hetzner *KubeOneHetznerCloudSpec `json:"hetzner,omitempty"`
+	Hetzner *ExternalClusterHetznerCloudSpec `json:"hetzner,omitempty"`
 
 	// nutanix
-	Nutanix *KubeOneNutanixCloudSpec `json:"nutanix,omitempty"`
+	Nutanix *ExternalClusterNutanixCloudSpec `json:"nutanix,omitempty"`
 
 	// openstack
-	Openstack *KubeOneOpenStackCloudSpec `json:"openstack,omitempty"`
+	Openstack *ExternalClusterOpenStackCloudSpec `json:"openstack,omitempty"`
 
 	// vmwareclouddirector
-	Vmwareclouddirector *KubeOneVMwareCloudDirectorCloudSpec `json:"vmwareclouddirector,omitempty"`
+	Vmwareclouddirector *ExternalClusterVMwareCloudDirectorCloudSpec `json:"vmwareclouddirector,omitempty"`
 
 	// vsphere
-	Vsphere *KubeOneVSphereCloudSpec `json:"vsphere,omitempty"`
+	Vsphere *ExternalClusterVSphereCloudSpec `json:"vsphere,omitempty"`
 }
 
 // Validate validates this kube one cloud spec

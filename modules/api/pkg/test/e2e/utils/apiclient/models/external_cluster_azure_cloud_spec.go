@@ -12,10 +12,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// KubeOneAzureCloudSpec KubeOneAzureCloudSpec specifies access credentials to Azure cloud.
+// ExternalClusterAzureCloudSpec ExternalClusterAzureCloudSpec specifies access credentials to Azure cloud.
 //
-// swagger:model KubeOneAzureCloudSpec
-type KubeOneAzureCloudSpec struct {
+// swagger:model ExternalClusterAzureCloudSpec
+type ExternalClusterAzureCloudSpec struct {
 
 	// client ID
 	ClientID string `json:"clientID,omitempty"`
@@ -30,18 +30,18 @@ type KubeOneAzureCloudSpec struct {
 	TenantID string `json:"tenantID,omitempty"`
 }
 
-// Validate validates this kube one azure cloud spec
-func (m *KubeOneAzureCloudSpec) Validate(formats strfmt.Registry) error {
+// Validate validates this external cluster azure cloud spec
+func (m *ExternalClusterAzureCloudSpec) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this kube one azure cloud spec based on context it is used
-func (m *KubeOneAzureCloudSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this external cluster azure cloud spec based on context it is used
+func (m *ExternalClusterAzureCloudSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *KubeOneAzureCloudSpec) MarshalBinary() ([]byte, error) {
+func (m *ExternalClusterAzureCloudSpec) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -49,8 +49,8 @@ func (m *KubeOneAzureCloudSpec) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *KubeOneAzureCloudSpec) UnmarshalBinary(b []byte) error {
-	var res KubeOneAzureCloudSpec
+func (m *ExternalClusterAzureCloudSpec) UnmarshalBinary(b []byte) error {
+	var res ExternalClusterAzureCloudSpec
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

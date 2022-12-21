@@ -735,15 +735,13 @@ type ExternalClusterProvider interface {
 
 	IsMetricServerAvailable(ctx context.Context, masterClient ctrlruntimeclient.Client, cluster *kubermaticv1.ExternalCluster) (bool, error)
 
-	CreateOrUpdateKubeconfigSecretForCluster(ctx context.Context, cluster *kubermaticv1.ExternalCluster, kubeconfig []byte) error
+	CreateOrUpdateKubeconfigSecret(ctx context.Context, cluster *kubermaticv1.ExternalCluster, kubeconfig []byte) error
 
-	CreateOrUpdateCredentialSecretForCluster(ctx context.Context, cloud *apiv2.ExternalClusterCloudSpec, projectID, clusterID string) (*providerconfig.GlobalSecretKeySelector, error)
+	CreateOrUpdateCredentialSecret(ctx context.Context, cloud *apiv2.KubeOneCloudSpec, externalCluster *kubermaticv1.ExternalCluster) error
 
-	CreateOrUpdateKubeOneSSHSecret(ctx context.Context, namespace string, sshKey apiv2.KubeOneSSHKey, externalCluster *kubermaticv1.ExternalCluster) error
+	CreateOrUpdateKubeOneSSHSecret(ctx context.Context, sshKey apiv2.KubeOneSSHKey, externalCluster *kubermaticv1.ExternalCluster) error
 
-	CreateOrUpdateKubeOneManifestSecret(ctx context.Context, namespace string, manifest string, externalCluster *kubermaticv1.ExternalCluster) error
-
-	CreateOrUpdateKubeOneCredentialSecret(ctx context.Context, namespace string, cloud apiv2.KubeOneCloudSpec, externalCluster *kubermaticv1.ExternalCluster) error
+	CreateOrUpdateKubeOneManifestSecret(ctx context.Context, manifest string, externalCluster *kubermaticv1.ExternalCluster) error
 }
 
 // ExternalClusterProvider declares the set of methods for interacting with external cluster.

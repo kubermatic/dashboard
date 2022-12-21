@@ -12,10 +12,10 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// KubeOneOpenStackCloudSpec KubeOneOpenStackCloudSpec specifies access data to an OpenStack cloud.
+// ExternalClusterOpenStackCloudSpec ExternalClusterOpenStackCloudSpec specifies access data to an OpenStack cloud.
 //
-// swagger:model KubeOneOpenStackCloudSpec
-type KubeOneOpenStackCloudSpec struct {
+// swagger:model ExternalClusterOpenStackCloudSpec
+type ExternalClusterOpenStackCloudSpec struct {
 
 	// auth URL
 	AuthURL string `json:"authURL,omitempty"`
@@ -39,18 +39,18 @@ type KubeOneOpenStackCloudSpec struct {
 	Username string `json:"username,omitempty"`
 }
 
-// Validate validates this kube one open stack cloud spec
-func (m *KubeOneOpenStackCloudSpec) Validate(formats strfmt.Registry) error {
+// Validate validates this external cluster open stack cloud spec
+func (m *ExternalClusterOpenStackCloudSpec) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this kube one open stack cloud spec based on context it is used
-func (m *KubeOneOpenStackCloudSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validates this external cluster open stack cloud spec based on context it is used
+func (m *ExternalClusterOpenStackCloudSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (m *KubeOneOpenStackCloudSpec) MarshalBinary() ([]byte, error) {
+func (m *ExternalClusterOpenStackCloudSpec) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -58,8 +58,8 @@ func (m *KubeOneOpenStackCloudSpec) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *KubeOneOpenStackCloudSpec) UnmarshalBinary(b []byte) error {
-	var res KubeOneOpenStackCloudSpec
+func (m *ExternalClusterOpenStackCloudSpec) UnmarshalBinary(b []byte) error {
+	var res ExternalClusterOpenStackCloudSpec
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
