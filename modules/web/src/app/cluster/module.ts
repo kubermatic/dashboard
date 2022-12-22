@@ -18,6 +18,11 @@ import {AnexiaProviderSettingsComponent} from '@app/cluster/details/cluster/edit
 import {ExternalMachineDeploymentDetailsComponent} from '@app/cluster/details/external-cluster/external-machine-deployment-details/component';
 import {ExternalAddMachineDeploymentDialogComponent} from '@app/cluster/details/external-cluster/external-cluster-add-machine-deployment/component';
 import {ExternalMachineDeploymentListComponent} from '@app/cluster/details/external-cluster/external-machine-deployment-list/component';
+import {KubeOneClusterDetailsComponent} from '@app/cluster/details/kubeone/component';
+import {KubeOneMachineDeploymentDetailsComponent} from '@app/cluster/details/kubeone/machine-deployment-details/component';
+import {KubeOneMachineDeploymentListComponent} from '@app/cluster/details/kubeone/machine-deployment-list/component';
+import {ClusterMetricsComponent} from '@app/cluster/details/shared/cluster-metrics/component';
+import {KubeOneClusterListComponent} from '@app/cluster/list/kubeone/component';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '@app/node-data/config';
 import {NodeDataModule} from '@app/node-data/module';
 import {NodeService} from '@core/services/node';
@@ -48,7 +53,7 @@ import {VSphereProviderSettingsComponent} from './details/cluster/edit-provider-
 import {EditSSHKeysComponent} from './details/cluster/edit-sshkeys/component';
 import {GatekeeperConfigComponent} from './details/cluster/gatekeeper-config/component';
 import {GatekeeperConfigDialog} from './details/cluster/gatekeeper-config/gatekeeper-config-dialog/component';
-import {ClusterPanelComponent} from './details/cluster/machine-deployment-details/cluster-panel/component';
+import {ClusterPanelComponent} from './details/shared/cluster-panel/component';
 import {MachineDeploymentDetailsComponent} from './details/cluster/machine-deployment-details/component';
 import {MachineDeploymentListComponent} from './details/cluster/machine-deployment-list/component';
 import {MachineNetworksDisplayComponent} from './details/cluster/machine-networks-display/component';
@@ -130,6 +135,11 @@ const components: any[] = [
   UpdateExternalClusterMachineDeploymentDialogComponent,
   WebTerminalComponent,
   OverlayTerminalComponent,
+  KubeOneClusterListComponent,
+  KubeOneClusterDetailsComponent,
+  KubeOneMachineDeploymentListComponent,
+  KubeOneMachineDeploymentDetailsComponent,
+  ClusterMetricsComponent,
 ];
 
 @NgModule({

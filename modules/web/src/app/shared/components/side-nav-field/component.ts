@@ -113,9 +113,15 @@ export class SideNavExpansionMenuComponent implements AfterViewChecked, OnInit {
     const urlArray = this._router.routerState.snapshot.url.split('/');
     const urlExists = !!urlArray.find(x => x === url);
     if (url === View.Clusters) {
-      return (urlExists && !urlArray.find(x => x === View.ExternalClusters)) || !!urlArray.find(x => x === View.Wizard);
+      return (
+        (urlExists && !urlArray.find(x => x === View.ExternalClusters || x === View.KubeOneClusters)) ||
+        !!urlArray.find(x => x === View.Wizard)
+      );
     } else if (url === View.ExternalClusters) {
-      return urlExists || !!urlArray.find(x => x === View.ExternalClusterWizard || x === View.KubeOneWizard);
+      return (
+        urlExists ||
+        !!urlArray.find(x => x === View.ExternalClusterWizard || x === View.KubeOneClusters || x === View.KubeOneWizard)
+      );
     }
     return urlExists;
   }

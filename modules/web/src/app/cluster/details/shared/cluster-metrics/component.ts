@@ -1,4 +1,4 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,15 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@use 'mixins';
+import {Component, Input} from '@angular/core';
+import {ClusterMetrics} from '@shared/entity/metrics';
 
-@include mixins.breakpoint('small') {
-  .btn-text-default {
-    display: none;
-  }
-}
-
-.km-provider-logo {
-  background-position: left;
-  margin: 0 8px 0 0;
+@Component({
+  selector: 'km-cluster-metrics',
+  templateUrl: './template.html',
+})
+export class ClusterMetricsComponent {
+  @Input() clusterMetrics: ClusterMetrics;
 }

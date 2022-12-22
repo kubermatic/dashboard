@@ -127,6 +127,10 @@ export class CreateResourcePanelComponent implements OnInit, OnDestroy {
     this._router.navigate([`/projects/${this.project.id}/external-cluster-wizard`]);
   }
 
+  openKubeOneClusterWizard(): void {
+    this._router.navigate(['/projects', this.project.id, View.KubeOneWizard]);
+  }
+
   createClusterFromTemplate(): void {
     this.close();
     const dialog = this._matDialog.open<AddClusterFromTemplateDialogComponent, AddClusterFromTemplateDialogData>(

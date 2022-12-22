@@ -1,0 +1,137 @@
+<!--
+Copyright 2022 The Kubermatic Kubernetes Platform contributors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<ng-container *ngIf="cluster">
+  <div class="cluster-detail-actions">
+    <button mat-flat-button
+            color="tertiary"
+            (click)="goBack()"
+            fxLayoutAlign="center center"
+            matTooltip="Go back to the cluster list">
+      <i class="km-icon-mask km-icon-arrow-left"></i>
+    </button>
+    <div fxFlex></div>
+  </div>
+
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title fxFlex
+                      fxLayout="row"
+                      fxLayoutAlign=" center"
+                      class="cluster-name"
+                      fxLayoutGap="20px">
+        <i [matTooltip]="getStatus()"
+           [ngClass]="getStatusColor()"
+           class="cluster-health km-pointer"></i>
+        <span ngxClipboard
+              [cbContent]="cluster.name"
+              matTooltip="Click to copy"
+              class="cluster-name km-copy">{{cluster.name}}</span>
+        <span class="km-label-primary">KubeOne</span>
+      </mat-card-title>
+
+      <button color="alternative"
+              fxLayoutAlign="center center"
+              mat-flat-button
+              type="button"
+              kmThrottleClick
+              (throttleClick)="downloadKubeconfig()"
+              [disabled]="!isRunning()">
+        <i class="km-icon-mask km-icon-download"></i>
+        <span>Get Kubeconfig</span>
+      </button>
+      <div class="provider-menu">
+        <button mat-icon-button
+                color="tertiary"
+                class="provider-menu-btn"
+                [matMenuTriggerFor]="menu">
+          <i class="km-icon-mask km-icon-points-menu"></i>
+        </button>
+        <mat-menu #menu="matMenu"
+                  class="km-provider-edit-settings">
+          <button id="km-disconnect-external-cluster-btn"
+                  mat-menu-item
+                  (click)="disconnectCluster()"
+                  [disabled]="!canDisconnect()">
+            Disconnect Cluster
+          </button>
+        </mat-menu>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content class="km-row">
+      <div class="km-content-wrap">
+        <km-version-picker [cluster]="cluster"
+                           [isClusterRunning]="isRunning()"
+                           [upgrades]="canEdit() ? upgrades : []"
+                           [hasUpgradeOptions]="hasUpgrades()"
+                           [isClusterExternal]="true"
+                           *ngIf="cluster?.spec?.version"></km-version-picker>
+        <km-property>
+          <div key>Cluster ID</div>
+          <div value
+               ngxClipboard
+               [cbContent]="cluster?.id"
+               matTooltip="Click to copy"
+               class="km-copy">
+            {{cluster?.id}}
+          </div>
+        </km-property>
+        <km-property>
+          <div key>Provider</div>
+          <div value>
+            <span class="km-provider-logo km-provider-logo-{{cluster.cloud.kubeOne?.providerName}}"></span>
+          </div>
+        </km-property>
+        <km-property *ngIf="cluster.labels">
+          <div key>Labels</div>
+          <div value>
+            <km-labels [labels]="cluster.labels"></km-labels>
+          </div>
+        </km-property>
+        <km-property>
+          <div key>Imported</div>
+          <div value>
+            <km-relative-time [date]="cluster.creationTimestamp"></km-relative-time>
+          </div>
+        </km-property>
+      </div>
+
+      <km-cluster-metrics [clusterMetrics]="clusterMetrics"></km-cluster-metrics>
+    </mat-card-content>
+  </mat-card>
+
+  <km-kubeone-machine-deployment-list *ngIf="machineDeployments?.length; else nodesList"
+                                      [cluster]="cluster"
+                                      [machineDeployments]="machineDeployments"
+                                      [projectID]="projectID"
+                                      [isClusterRunning]="isRunning()"
+                                      [isInitialized]="areMachineDeploymentsInitialized"></km-kubeone-machine-deployment-list>
+
+  <ng-template #nodesList>
+    <km-external-node-list [cluster]="cluster"
+                           [nodes]="nodes"
+                           [nodesMetrics]="nodesMetrics"
+                           [projectID]="projectID"
+                           [isInitialized]="areNodesInitialized"></km-external-node-list>
+  </ng-template>
+
+  <km-event-card [events]="events"></km-event-card>
+</ng-container>
+
+<mat-spinner [diameter]="25"
+             *ngIf="!cluster"
+             color="accent"
+             class="km-spinner"></mat-spinner>

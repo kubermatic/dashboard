@@ -243,30 +243,8 @@ limitations under the License.
         </km-property>
       </div>
 
-      <div class="km-content-wrap"
-           *ngIf="clusterMetrics">
-        <km-property-usage name="Nodes CPU Usage"
-                           unit="millicores"
-                           [used]="clusterMetrics?.nodes?.cpuTotalMillicores"
-                           [total]="clusterMetrics?.nodes?.cpuAvailableMillicores"
-                           *ngIf="clusterMetrics?.nodes?.cpuTotalMillicores"></km-property-usage>
+      <km-cluster-metrics [clusterMetrics]="clusterMetrics"></km-cluster-metrics>
 
-        <km-property-usage name="Nodes Memory Usage"
-                           unit="MiB"
-                           [used]="clusterMetrics?.nodes?.memoryTotalBytes"
-                           [total]="clusterMetrics?.nodes?.memoryAvailableBytes"
-                           *ngIf="clusterMetrics?.nodes?.memoryTotalBytes"></km-property-usage>
-
-        <km-property-usage name="Control Plane CPU Usage"
-                           unit="millicores"
-                           [used]="clusterMetrics?.controlPlane?.cpuTotalMillicores"
-                           *ngIf="clusterMetrics?.controlPlane?.cpuTotalMillicores"></km-property-usage>
-
-        <km-property-usage name="Control Plane Memory Usage"
-                           unit="MiB"
-                           [used]="clusterMetrics?.controlPlane?.memoryTotalBytes"
-                           *ngIf="clusterMetrics?.controlPlane?.memoryTotalBytes"></km-property-usage>
-      </div>
     </mat-card-content>
   </mat-card>
 

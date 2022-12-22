@@ -56,6 +56,19 @@ limitations under the License.
          [matTooltip]="projectViewOnlyToolTip"
          [matTooltipDisabled]="canCreateCluster"
          [matRippleDisabled]="!canCreateCluster"
+         (click)="canCreateCluster ? openKubeOneClusterWizard(): null">
+      <i class="km-icon-mask km-icon-cluster"
+         [ngClass]="{'km-muted-bg': !canCreateCluster}"></i>
+      <span>Import KubeOne Cluster</span>
+    </div>
+    <div class="entry"
+         [ngClass]="{'km-text-muted': !canCreateCluster, 'km-option-hover-bg km-pointer': canCreateCluster}"
+         fxLayoutAlign=" center"
+         fxLayoutGap="10px"
+         matRipple
+         [matTooltip]="projectViewOnlyToolTip"
+         [matTooltipDisabled]="canCreateCluster"
+         [matRippleDisabled]="!canCreateCluster"
          (click)="canCreateCluster ? openExternalClusterWizard(): null">
       <i class="km-icon-mask km-icon-cluster"
          [ngClass]="{'km-muted-bg': !canCreateCluster}"></i>

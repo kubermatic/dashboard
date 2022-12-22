@@ -12,33 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export class KubeOneClusterSpec {
-  creationTimestamp?: Date;
-  deletionTimestamp?: Date;
-  id?: string;
-  cloudSpec: KubeOneCloudSpec;
-  containerRuntime?: string;
-  manifest: string;
-  sshKey: KubeOneSSHKeySpec;
-  providerName?: string;
+@use 'mixins';
+@use 'variables';
 
-  static newEmptyClusterEntity(): KubeOneClusterSpec {
-    return {
-      cloudSpec: {} as KubeOneCloudSpec,
-    } as KubeOneClusterSpec;
+.cluster-detail-actions .mat-icon-button i {
+  @include mixins.size(24px);
+}
+
+.mat-card-header {
+  .mat-card-title {
+    &.cluster-name {
+      font-weight: 500;
+      padding: 0;
+
+      .cluster-health {
+        font-size: variables.$font-size-subhead;
+        margin: 2px 20px 0 -5px;
+      }
+    }
   }
 }
 
-export class KubeOneSSHKeySpec {
-  privateKey: string;
-  passphrase: string;
+.km-provider-logo {
+  max-height: unset;
+  max-width: unset;
+  min-width: 120px;
 }
 
-export class KubeOneCloudSpec {
-  aws?: KubeOneAWSCloudSpec;
+.provider-menu {
+  align-items: center;
+  display: flex;
+  margin-left: 10px;
 }
 
-export class KubeOneAWSCloudSpec {
-  accessKeyID: string;
-  secretAccessKey: string;
+.mat-icon.km-icon-edit {
+  @include mixins.size(18px);
 }

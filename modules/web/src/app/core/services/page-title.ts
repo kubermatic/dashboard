@@ -97,11 +97,13 @@ export class PageTitleService {
     const projectId = this._params.get(PathParam.ProjectID);
     const clusterId = this._params.get(PathParam.ClusterID);
     const isExternal = this._params.getCurrentUrl().includes(`/${View.ExternalClusters}/`);
+    const isKubeOne = this._params.getCurrentUrl().includes(`/${View.KubeOneClusters}/`);
 
-    if (projectId && clusterId && !isExternal) {
+    if (projectId && clusterId) {
+      if (isExternal || isKubeOne) {
+        return this._clusterService.externalCluster(projectId, clusterId);
+      }
       return this._clusterService.cluster(projectId, clusterId);
-    } else if (projectId && clusterId && isExternal) {
-      return this._clusterService.externalCluster(projectId, clusterId);
     }
     return of(null);
   }
@@ -111,13 +113,14 @@ export class PageTitleService {
     const clusterId = this._params.get(PathParam.ClusterID);
     const machineDeploymentId = this._params.get(PathParam.MachineDeploymentID);
     const isExternal = this._params.getCurrentUrl().includes(`/${View.ExternalClusters}/`);
+    const isKubeOne = this._params.getCurrentUrl().includes(`/${View.KubeOneClusters}/`);
 
     if (!projectId || !clusterId || !machineDeploymentId) {
       return of(null);
     }
 
     return iif(
-      () => isExternal,
+      () => isExternal || isKubeOne,
       this._clusterService.externalMachineDeployment(projectId, clusterId, machineDeploymentId),
       this._machineDeploymentService.get(machineDeploymentId, clusterId, projectId)
     );

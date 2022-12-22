@@ -12,33 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export class KubeOneClusterSpec {
-  creationTimestamp?: Date;
-  deletionTimestamp?: Date;
-  id?: string;
-  cloudSpec: KubeOneCloudSpec;
-  containerRuntime?: string;
-  manifest: string;
-  sshKey: KubeOneSSHKeySpec;
-  providerName?: string;
+@use 'variables';
 
-  static newEmptyClusterEntity(): KubeOneClusterSpec {
-    return {
-      cloudSpec: {} as KubeOneCloudSpec,
-    } as KubeOneClusterSpec;
+.mat-card {
+  .mat-card-header {
+    .mat-card-title {
+      padding-left: 30px;
+    }
   }
 }
 
-export class KubeOneSSHKeySpec {
-  privateKey: string;
-  passphrase: string;
+.machine-deployment-health {
+  text-align: center;
+  vertical-align: middle;
 }
 
-export class KubeOneCloudSpec {
-  aws?: KubeOneAWSCloudSpec;
-}
-
-export class KubeOneAWSCloudSpec {
-  accessKeyID: string;
-  secretAccessKey: string;
+.km-table-actions,
+.machine-deployment-action {
+  align-self: center;
+  height: 48px;
+  vertical-align: middle;
 }
