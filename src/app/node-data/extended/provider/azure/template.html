@@ -18,6 +18,7 @@ limitations under the License.
       fxLayoutGap="8px">
   <km-label-form title="Provider Tags"
                  [labels]="tags"
+                 noValidators="true"
                  (labelsChange)="onTagsChange($event)"
                  [formControlName]="Controls.Tags"></km-label-form>
 
