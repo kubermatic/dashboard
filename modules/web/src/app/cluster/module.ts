@@ -21,6 +21,7 @@ import {ExternalMachineDeploymentListComponent} from '@app/cluster/details/exter
 import {KubeOneClusterDetailsComponent} from '@app/cluster/details/kubeone/component';
 import {KubeOneMachineDeploymentDetailsComponent} from '@app/cluster/details/kubeone/machine-deployment-details/component';
 import {KubeOneMachineDeploymentListComponent} from '@app/cluster/details/kubeone/machine-deployment-list/component';
+import {ClusterMetricsComponent} from '@app/cluster/details/shared/cluster-metrics/component';
 import {KubeOneClusterListComponent} from '@app/cluster/list/kubeone/component';
 import {NODE_DATA_CONFIG, NodeDataConfig, NodeDataMode} from '@app/node-data/config';
 import {NodeDataModule} from '@app/node-data/module';
@@ -138,6 +139,7 @@ const components: any[] = [
   KubeOneClusterDetailsComponent,
   KubeOneMachineDeploymentListComponent,
   KubeOneMachineDeploymentDetailsComponent,
+  ClusterMetricsComponent,
 ];
 
 @NgModule({
