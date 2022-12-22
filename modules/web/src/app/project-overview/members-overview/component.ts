@@ -59,7 +59,7 @@ export class MembersOverviewComponent {
       : '-';
   }
 
-  membersAndGroupsNavigate(): void {
+  navigateToMembers(): void {
     this._router.navigate(['/projects/' + this.project.id + '/members']);
   }
 }

@@ -245,6 +245,13 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  getNumberOfLabels(labels: object): number {
+    if (labels) {
+      return Object.keys(labels).length;
+    }
+    return 0;
+  }
+
   private _filter(project: Project, query: string): boolean {
     query = query.toLowerCase();
 

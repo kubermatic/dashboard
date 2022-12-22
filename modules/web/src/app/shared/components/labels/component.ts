@@ -12,17 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 
 @Component({
   selector: 'km-labels',
   templateUrl: './template.html',
+  styleUrls: ['style.scss'],
 })
 export class LabelsComponent implements OnInit, OnChanges {
   @Input() labels = {};
   @Input() limit: number;
   @Input() emptyMessage = '';
+  @Input() oneLineLimit = false;
+  @ViewChild('chipListLabels') chipListLabels: ElementRef;
+
   labelKeys: string[] = [];
+  showHiddenLabels = false;
+  hideExtraLabels = false;
 
   ngOnInit(): void {
     this._updateLabelKeys();
@@ -44,6 +50,20 @@ export class LabelsComponent implements OnInit, OnChanges {
       }
     }
     return hiddenLabels;
+  }
+
+  toggleHiddenLabels(): void {
+    this.showHiddenLabels = !this.showHiddenLabels;
+  }
+
+  checkLabelsHeight(): boolean {
+    const labelsElem = 32;
+    if (this.chipListLabels?.nativeElement?.parentElement.offsetHeight > labelsElem) {
+      this.hideExtraLabels = true;
+    } else {
+      this.hideExtraLabels = false;
+    }
+    return this.oneLineLimit && this.hideExtraLabels;
   }
 
   private _updateLabelKeys(): void {

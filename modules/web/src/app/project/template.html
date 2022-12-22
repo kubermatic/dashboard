@@ -84,8 +84,7 @@ limitations under the License.
                 </th>
                 <td mat-cell
                     *matCellDef="let element">
-                  <km-labels [labels]="element.labels"
-                             [limit]="2"></km-labels>
+                  {{getNumberOfLabels(element.labels)}}
                 </td>
               </ng-container>
 
