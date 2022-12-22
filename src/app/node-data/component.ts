@@ -32,9 +32,11 @@ import {Datacenter} from '@shared/entity/datacenter';
 import {OperatingSystemSpec, Taint} from '@shared/entity/node';
 import {NodeProvider, NodeProviderConstants, OperatingSystem} from '@shared/model/NodeProviderConstants';
 import {NodeData} from '@shared/model/NodeSpecChange';
+import {AsyncValidators} from '@shared/validators/async-label-form.validator';
 import {BaseFormValidator} from '@shared/validators/base-form.validator';
 import {merge, of} from 'rxjs';
 import {filter, switchMap, take, takeUntil, tap} from 'rxjs/operators';
+import {ResourceType} from '@app/shared/entity/common';
 
 enum Controls {
   Name = 'name',
@@ -79,6 +81,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   @Input() showExtended = false;
   labels: object = {};
   taints: Taint[] = [];
+  asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.MachineDeployment)];
   dialogEditMode = false;
 
   get providerDisplayName(): string {
