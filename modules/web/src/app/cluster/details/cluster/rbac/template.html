@@ -46,16 +46,17 @@ limitations under the License.
       </mat-form-field>
     </div>
 
-  <ng-template #icons let-mode>
-    <ng-container [ngSwitch]="mode">
-      <i *ngSwitchCase="RBACKind.ServiceAccount"
-         class="km-icon-mask km-icon-serviceaccount"></i>
-      <i *ngSwitchCase="RBACKind.Group"
-         class="km-icon-mask km-icon-group"></i>
-      <i *ngSwitchCase="RBACKind.User"
-         class="km-icon-mask km-user"></i>
-    </ng-container>
-  </ng-template>
+    <ng-template #icons
+                 let-mode>
+      <ng-container [ngSwitch]="mode">
+        <i *ngSwitchCase="RBACKind.ServiceAccount"
+           class="km-icon-mask km-icon-serviceaccount"></i>
+        <i *ngSwitchCase="RBACKind.Group"
+           class="km-icon-mask km-icon-group"></i>
+        <i *ngSwitchCase="RBACKind.User"
+           class="km-icon-mask km-user"></i>
+      </ng-container>
+    </ng-template>
 
     <div [ngSwitch]="modeControl.value"
          fxLayout="row"

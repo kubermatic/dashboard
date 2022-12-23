@@ -12,72 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {
-  Binding,
-  ClusterBinding,
-  ClusterRoleName,
-  RoleName,
-  SimpleBinding,
-  SimpleClusterBinding,
-} from '@shared/entity/rbac';
+import {Binding, ClusterBinding, ClusterRoleName, Kind, RoleName} from '@shared/entity/rbac';
 
 export function fakeClusterBinding(): ClusterBinding {
   return {
     subjects: [
       {
-        kind: 'User',
+        kind: Kind.User,
         name: 'test-3@example.com',
+        namespace: 'default',
       },
     ],
     roleRefName: 'role-2',
   };
-}
-
-export function fakeClusterBindings(): ClusterBinding[] {
-  return [
-    {
-      subjects: [
-        {
-          kind: 'User',
-          name: 'test-1@example.com',
-        },
-        {
-          kind: 'User',
-          name: 'test-2@example.com',
-        },
-      ],
-      roleRefName: 'role-1',
-    },
-    {
-      subjects: [
-        {
-          kind: 'User',
-          name: 'test-3@example.com',
-        },
-      ],
-      roleRefName: 'role-2',
-    },
-  ];
-}
-
-export function fakeSimpleClusterBindings(): SimpleClusterBinding[] {
-  return [
-    {
-      name: 'test-1@example.com',
-      role: 'role-1',
-      kind: 'User',
-    },
-    {
-      name: 'test-2@example.com',
-      role: 'role-1',
-      kind: 'User',
-    },
-    {
-      name: 'test-3@example.com',
-      role: 'role-2',
-      kind: 'User',
-    },
-  ];
 }
 
 export function fakeBinding(): Binding {
@@ -85,74 +32,21 @@ export function fakeBinding(): Binding {
     namespace: 'default',
     subjects: [
       {
-        kind: 'User',
+        kind: Kind.User,
         name: 'test-1@example.com',
+        namespace: 'default',
       },
     ],
     roleRefName: 'role-1',
   };
 }
 
-export function fakeBindings(): Binding[] {
-  return [
-    {
-      namespace: 'default',
-      subjects: [
-        {
-          kind: 'User',
-          name: 'test-1@example.com',
-        },
-      ],
-      roleRefName: 'role-1',
-    },
-    {
-      namespace: 'default',
-      subjects: [
-        {
-          kind: 'User',
-          name: 'test-2@example.com',
-        },
-      ],
-      roleRefName: 'role-2',
-    },
-    {
-      namespace: 'test',
-      subjects: [
-        {
-          kind: 'User',
-          name: 'test-10@example.com',
-        },
-      ],
-      roleRefName: 'role-10',
-    },
-  ];
-}
-
-export function fakeSimpleBindings(): SimpleBinding[] {
-  return [
-    {
-      name: 'test-1@example.com',
-      role: 'role-1',
-      namespace: 'default',
-      kind: 'User',
-    },
-    {
-      name: 'test-2@example.com',
-      role: 'role-2',
-      namespace: 'default',
-      kind: 'User',
-    },
-    {
-      name: 'test-10@example.com',
-      role: 'role-10',
-      namespace: 'test',
-      kind: 'User',
-    },
-  ];
-}
-
 export function fakeClusterRoleNames(): ClusterRoleName[] {
   return [{name: 'role-1'}, {name: 'role-2'}, {name: 'role-3'}];
+}
+
+export function fakeNamespaceRoleNames(): ClusterRoleName[] {
+  return [{name: 'namespace-1'}, {name: 'namespace-2'}, {name: 'namespace-3'}];
 }
 
 export function fakeRoleNames(): RoleName[] {

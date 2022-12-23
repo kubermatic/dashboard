@@ -30,6 +30,8 @@ import {ClusterService} from '@core/services/cluster';
 import {ClusterMockService} from '@test/services/cluster-mock';
 import {AppConfigService} from '@app/config.service';
 import {AppConfigMockService} from '@test/services/app-config-mock';
+import {ClusterServiceAccountService} from '@core/services/cluster-service-account';
+import {ClusterServiceAccountMockService} from '@test/services/cluster-service-account-mock';
 
 describe('RBACComponent', () => {
   let fixture: ComponentFixture<RBACComponent>;
@@ -50,6 +52,7 @@ describe('RBACComponent', () => {
         {provide: RBACService, useValue: rbacMock},
         {provide: Router, useClass: RouterStub},
         {provide: ClusterService, useClass: ClusterMockService},
+        {provide: ClusterServiceAccountService, useClass: ClusterServiceAccountMockService},
         {provide: AppConfigService, useClass: AppConfigMockService},
         MatDialog,
         GoogleAnalyticsService,
