@@ -19,11 +19,13 @@ package externalcluster
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	clusterv1alpha1 "github.com/kubermatic/machine-controller/pkg/apis/cluster/v1alpha1"
 	apiv2 "k8c.io/dashboard/v2/pkg/api/v2"
 	handlercommon "k8c.io/dashboard/v2/pkg/handler/common"
 	"k8c.io/dashboard/v2/pkg/handler/v1/common"
+	kuberneteshelper "k8c.io/dashboard/v2/pkg/kubernetes"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubeonev1beta2 "k8c.io/kubeone/pkg/apis/kubeone/v1beta2"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -31,12 +33,18 @@ import (
 	utilerrors "k8c.io/kubermatic/v2/pkg/util/errors"
 
 	corev1 "k8s.io/api/core/v1"
+
 	"k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/sets"
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/yaml"
+)
+
+const (
+	// NodeRegionLabel is the label on kubernetes control plane region.
+	NodeRegionLabel = "topology.kubernetes.io/region"
 )
 
 func importKubeOneCluster(ctx context.Context, name string, userInfoGetter func(ctx context.Context, projectID string) (*provider.UserInfo, error), project *kubermaticv1.Project, cloud *apiv2.ExternalClusterCloudSpec, clusterProvider provider.ExternalClusterProvider, privilegedClusterProvider provider.PrivilegedExternalClusterProvider) (*kubermaticv1.ExternalCluster, error) {
@@ -290,4 +298,37 @@ func getKubeOneAPIMachineDeployments(ctx context.Context,
 	}
 
 	return nodeDeployments, nil
+}
+
+func getKubeOneClusterDetails(ctx context.Context,
+	apiCluster *apiv2.ExternalCluster,
+	masterClient ctrlruntimeclient.Client,
+	cluster *kubermaticv1.ExternalCluster,
+	clusterProvider provider.ExternalClusterProvider) error {
+	var containerRuntime, region string
+
+	clusterClient, err := clusterProvider.GetClient(ctx, masterClient, cluster)
+	if err != nil {
+		return err
+	}
+
+	nodes, err := kuberneteshelper.ListControlPlaneNode(ctx, clusterClient)
+	if err != nil {
+		return err
+	}
+
+	for _, node := range nodes.Items {
+		region = node.Labels[NodeRegionLabel]
+		containerRuntimeVersion := node.Status.NodeInfo.ContainerRuntimeVersion
+		strSlice := strings.Split(containerRuntimeVersion, ":")
+		containerRuntime = strSlice[0]
+
+		clusterSpec := &apiv2.KubeOneClusterSpec{
+			ContainerRuntime: containerRuntime,
+			Region:           region,
+		}
+		apiCluster.Spec.KubeOneClusterSpec = clusterSpec
+	}
+
+	return nil
 }

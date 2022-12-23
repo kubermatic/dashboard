@@ -21,8 +21,13 @@ import (
 	"fmt"
 	"strings"
 
+	corev1 "k8s.io/api/core/v1"
+
+	"github.com/pkg/errors"
 	"k8c.io/dashboard/v2/pkg/provider"
 	kubermaticv1 "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+	"k8s.io/apimachinery/pkg/labels"
+	"k8s.io/apimachinery/pkg/selection"
 
 	ctrlruntimeclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
@@ -37,18 +42,45 @@ func CheckContainerRuntime(ctx context.Context,
 	externalCluster *kubermaticv1.ExternalCluster,
 	externalClusterProvider provider.ExternalClusterProvider,
 ) (string, error) {
-	nodes, err := externalClusterProvider.ListNodes(ctx, masterClient, externalCluster)
+	clusterClient, err := externalClusterProvider.GetClient(ctx, masterClient, externalCluster)
 	if err != nil {
-		return "", fmt.Errorf("failed to fetch container runtime: not able to list nodes %w", err)
+		return "", err
 	}
-	for _, node := range nodes.Items {
-		if _, ok := node.Labels[NodeControlPlaneLabel]; ok {
-			containerRuntimeVersion := node.Status.NodeInfo.ContainerRuntimeVersion
-			strSlice := strings.Split(containerRuntimeVersion, ":")
-			for _, containerRuntime := range strSlice {
-				return containerRuntime, nil
-			}
-		}
+
+	controlPlaneNode, err := ListControlPlaneNode(ctx, clusterClient)
+	if err != nil {
+		return "", fmt.Errorf("failed to fetch container runtime: not able to list control plane nodes %w", err)
 	}
-	return "", fmt.Errorf("failed to fetch container runtime: no control plane nodes found with label %s", NodeControlPlaneLabel)
+
+	for _, node := range controlPlaneNode.Items {
+		containerRuntimeVersion := node.Status.NodeInfo.ContainerRuntimeVersion
+		strSlice := strings.Split(containerRuntimeVersion, ":")
+		return strSlice[0], nil
+	}
+
+	return "", fmt.Errorf("failed to fetch container runtime")
+}
+
+func ListControlPlaneNode(ctx context.Context, clusterClient ctrlruntimeclient.Client) (*corev1.NodeList, error) {
+	nodeReq, err := labels.NewRequirement(NodeControlPlaneLabel, selection.Exists, []string{})
+	if err != nil {
+		return nil, errors.Wrap(err, "error creating selector requirement")
+	}
+
+	selector := labels.NewSelector().Add(*nodeReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "error converting node label requirement to selector")
+	}
+
+	nodes := &corev1.NodeList{}
+	listOpts := &ctrlruntimeclient.ListOptions{
+		Limit:         1,
+		LabelSelector: selector,
+	}
+	err = clusterClient.List(ctx, nodes, listOpts)
+	if err != nil {
+		return nil, err
+	}
+
+	return nodes, nil
 }

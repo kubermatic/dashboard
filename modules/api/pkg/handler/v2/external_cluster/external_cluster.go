@@ -23,6 +23,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"regexp"
 
 	jsonpatch "github.com/evanphx/json-patch"
 	"github.com/go-kit/kit/endpoint"
@@ -55,6 +56,7 @@ const (
 	normalType       = "normal"
 	DeleteAction     = "delete"
 	DisconnectAction = "disconnect"
+	Base64           = "^(?:[A-Za-z0-9+\\/]{4})*(?:[A-Za-z0-9+\\/]{2}==|[A-Za-z0-9+\\/]{3}=|[A-Za-z0-9+\\/]{4})$"
 )
 
 // createClusterReq defines HTTP request for createExternalCluster
@@ -103,12 +105,20 @@ func (req createClusterReq) Validate() error {
 }
 
 func DecodeManifestFromKubeOneReq(encodedManifest string) (*kubeonev1beta2.KubeOneCluster, error) {
+	var err error
+	var manifest []byte
+	rxBase64 := regexp.MustCompile(Base64)
 	kubeOneCluster := &kubeonev1beta2.KubeOneCluster{}
 
-	manifest, err := base64.StdEncoding.DecodeString(encodedManifest)
-	if err != nil {
-		return nil, utilerrors.NewBadRequest(err.Error())
+	if rxBase64.MatchString(encodedManifest) {
+		manifest, err = base64.StdEncoding.DecodeString(encodedManifest)
+		if err != nil {
+			return nil, utilerrors.NewBadRequest(err.Error())
+		}
+	} else {
+		manifest = []byte(encodedManifest)
 	}
+
 	if err := yaml.UnmarshalStrict(manifest, kubeOneCluster); err != nil {
 		return nil, err
 	}
@@ -507,6 +517,12 @@ func GetEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provide
 		}
 		if cloud.GKE != nil {
 			apiCluster, err = getGKEClusterDetails(ctx, apiCluster, secretKeySelector, cloud.GKE)
+			if err != nil {
+				return nil, err
+			}
+		}
+		if cloud.KubeOne != nil {
+			err := getKubeOneClusterDetails(ctx, apiCluster, masterClient, cluster, clusterProvider)
 			if err != nil {
 				return nil, err
 			}
@@ -1049,7 +1065,9 @@ func convertClusterToAPI(internalCluster *kubermaticv1.ExternalCluster) *apiv2.E
 		}
 	}
 	if cloud.KubeOne != nil {
-		cluster.Cloud.KubeOne = &apiv2.KubeOneSpec{}
+		cluster.Cloud.KubeOne = &apiv2.KubeOneSpec{
+			ProviderName: cloud.KubeOne.ProviderName,
+		}
 	}
 	if cloud.BringYourOwn != nil {
 		cluster.Cloud.BringYourOwn = &apiv2.BringYourOwnSpec{}

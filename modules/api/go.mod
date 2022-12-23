@@ -65,7 +65,7 @@ require (
 	google.golang.org/api v0.103.0
 	gopkg.in/square/go-jose.v2 v2.6.0
 	gopkg.in/yaml.v3 v3.0.1
-	k8c.io/kubeone v1.5.3
+	k8c.io/kubeone v1.5.4
 	k8c.io/operating-system-manager v1.1.2-0.20221201183812-4f7c5a687353
 	k8c.io/reconciler v0.3.1
 	k8s.io/api v0.25.4
@@ -111,7 +111,10 @@ replace (
 	go.opentelemetry.io/proto/otlp => go.opentelemetry.io/proto/otlp v0.7.0
 )
 
-require k8c.io/kubermatic/v2 v2.21.1-0.20221208091954-b39911917701
+require (
+	github.com/pkg/errors v0.9.1
+	k8c.io/kubermatic/v2 v2.21.1-0.20221212090404-ec5780e39357
+)
 
 require (
 	cloud.google.com/go/compute v1.12.1 // indirect
@@ -221,7 +224,6 @@ require (
 	github.com/pelletier/go-toml/v2 v2.0.1 // indirect
 	github.com/peterhellberg/link v1.2.0 // indirect
 	github.com/pkg/browser v0.0.0-20210911075715-681adbf594b8 // indirect
-	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/pquerna/cachecontrol v0.1.0 // indirect
 	github.com/prometheus/client_model v0.3.0 // indirect
