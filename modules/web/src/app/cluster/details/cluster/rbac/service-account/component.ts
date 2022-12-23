@@ -22,7 +22,7 @@ import {Cluster} from '@shared/entity/cluster';
 import {ClusterBinding, Binding, SimpleClusterBinding, Kind, ClusterServiceAccount} from '@shared/entity/rbac';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
-import {ConfirmationDialogComponent} from '@app/shared/components/confirmation-dialog/component';
+import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialog/component';
 
 enum BindingMode {
   Cluster = 'Cluster',

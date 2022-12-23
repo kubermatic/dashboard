@@ -35,11 +35,11 @@ export enum Controls {
 }
 
 @Component({
-  selector: 'km-add-binding',
+  selector: 'km-add-binding-dialog',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class AddServiceAccountComponent implements OnInit, OnDestroy {
+export class AddServiceAccountDialogComponent implements OnInit, OnDestroy {
   private readonly _unsubscribe = new Subject<void>();
   readonly Controls = Controls;
 
@@ -52,7 +52,7 @@ export class AddServiceAccountComponent implements OnInit, OnDestroy {
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _rbacService: RBACService,
-    private readonly _matDialogRef: MatDialogRef<AddServiceAccountComponent>,
+    private readonly _matDialogRef: MatDialogRef<AddServiceAccountDialogComponent>,
     private readonly _notificationService: NotificationService,
     private readonly _clusterServiceAccountService: ClusterServiceAccountService
   ) {}

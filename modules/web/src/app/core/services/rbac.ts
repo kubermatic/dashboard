@@ -17,6 +17,8 @@ import {Injectable} from '@angular/core';
 import {Observable, timer, startWith, Subject, merge} from 'rxjs';
 
 import {environment} from '@environments/environment';
+import _ from 'lodash';
+import {map, switchMap, tap, distinctUntilChanged} from 'rxjs/operators';
 import {
   Binding,
   ClusterBinding,
@@ -27,15 +29,13 @@ import {
   RoleName,
 } from '@shared/entity/rbac';
 import {ClusterNamespace} from '@shared/entity/cluster-namespace';
-import {map, switchMap, tap, distinctUntilChanged} from 'rxjs/operators';
-import {AppConfigService} from 'app/config.service';
-import _ from 'lodash';
+import {AppConfigService} from '@app/config.service';
 
 @Injectable()
 export class RBACService {
-  private _newRestRoot: string = environment.newRestRoot;
   private readonly _refreshTime = 10;
-  private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * this._refreshTime);
+  private _newRestRoot: string = environment.newRestRoot;
+  private _refreshTimer$ = timer(0, this._appConfigService.getRefreshTimeBase() * this._refreshTime);
 
   private _refreshClusterBindings$ = new Subject<void>();
   private _refreshNamespaceBindings$ = new Subject<void>();
@@ -46,7 +46,7 @@ export class RBACService {
   private _clusterBindingMap = new Map<string, ClusterBinding[]>();
   private _namespaceBindingsMap = new Map<string, Binding[]>();
 
-  constructor(private readonly _http: HttpClient, private readonly _appConfig: AppConfigService) {}
+  constructor(private readonly _http: HttpClient, private readonly _appConfigService: AppConfigService) {}
 
   getClusterRoleNames(clusterID: string, projectID: string): Observable<ClusterRoleName[]> {
     const mapKey = projectID + '-' + clusterID;

@@ -20,14 +20,14 @@ import {ConfirmationDialogComponent} from '@shared/components/confirmation-dialo
 import {Cluster} from '@shared/entity/cluster';
 import {ClusterBinding, SimpleClusterBinding, Kind} from '@shared/entity/rbac';
 import {filter, switchMap, take, takeUntil} from 'rxjs/operators';
-import {AddBindingComponent} from './dialog/add-binding/component';
+import {AddBindingDialogComponent} from './add-binding-dialog/component';
 import {Subject, timer, iif} from 'rxjs';
 import {ClusterService} from '@core/services/cluster';
 import {AppConfigService} from '@app/config.service';
 import {isClusterRunning} from '@shared/utils/health-status';
 import {FormControl} from '@angular/forms';
-import {AddServiceAccountComponent} from './dialog/add-service-account/component';
-import {AddServiceAccountBindingComponent} from './dialog/add-service-account-binding/component';
+import {AddServiceAccountDialogComponent} from './add-service-account-dialog/component';
+import {AddServiceAccountBindingDialogComponent} from './add-service-account-binding-dialog/component';
 import {ClusterServiceAccountService} from '@core/services/cluster-service-account';
 import {ClusterServiceAccount} from '@shared/entity/rbac';
 
@@ -75,7 +75,7 @@ export class RBACComponent implements OnInit, OnDestroy {
   }
 
   addBinding(): void {
-    const modal = this._matDialog.open(AddBindingComponent);
+    const modal = this._matDialog.open(AddBindingDialogComponent);
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.projectID = this.projectID;
     modal.componentInstance.subjectType = this.modeControl.value;
@@ -86,7 +86,7 @@ export class RBACComponent implements OnInit, OnDestroy {
   }
 
   addServiceAccount(): void {
-    const dialogRef = this._matDialog.open(AddServiceAccountComponent);
+    const dialogRef = this._matDialog.open(AddServiceAccountDialogComponent);
     dialogRef.componentInstance.cluster = this.cluster;
     dialogRef.componentInstance.projectID = this.projectID;
 
@@ -99,8 +99,8 @@ export class RBACComponent implements OnInit, OnDestroy {
   }
 
   addServiceAccountBinding(clusterServiceAccount?: ClusterServiceAccount): void {
-    const dialogRef = this._matDialog.open<AddServiceAccountBindingComponent, unknown, ClusterBinding>(
-      AddServiceAccountBindingComponent
+    const dialogRef = this._matDialog.open<AddServiceAccountBindingDialogComponent, unknown, ClusterBinding>(
+      AddServiceAccountBindingDialogComponent
     );
     dialogRef.componentInstance.cluster = this.cluster;
     dialogRef.componentInstance.projectID = this.projectID;

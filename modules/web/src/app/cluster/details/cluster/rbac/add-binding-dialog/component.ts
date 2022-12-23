@@ -32,11 +32,11 @@ export enum Controls {
 }
 
 @Component({
-  selector: 'km-add-binding',
+  selector: 'km-add-binding-dialog',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
-export class AddBindingComponent implements OnInit, OnDestroy {
+export class AddBindingDialogComponent implements OnInit, OnDestroy {
   readonly Kind = Kind;
   readonly controls = Controls;
 
@@ -55,7 +55,7 @@ export class AddBindingComponent implements OnInit, OnDestroy {
   constructor(
     private readonly _builder: FormBuilder,
     private readonly _rbacService: RBACService,
-    private readonly _matDialogRef: MatDialogRef<AddBindingComponent>,
+    private readonly _matDialogRef: MatDialogRef<AddBindingDialogComponent>,
     private readonly _notificationService: NotificationService
   ) {}
 

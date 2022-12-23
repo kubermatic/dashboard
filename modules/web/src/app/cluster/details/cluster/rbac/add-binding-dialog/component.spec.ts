@@ -24,11 +24,11 @@ import {MatDialogRefMock} from '@test/services/mat-dialog-ref-mock';
 import {CoreModule} from '@core/module';
 import {RBACService} from '@core/services/rbac';
 import {SharedModule} from '@shared/module';
-import {AddBindingComponent} from 'app/cluster/details/cluster/rbac/dialog/add-binding/component';
+import {AddBindingDialogComponent} from '@app/cluster/details/cluster/rbac/add-binding-dialog/component';
 
 describe('AddBindingComponent', () => {
-  let fixture: ComponentFixture<AddBindingComponent>;
-  let component: AddBindingComponent;
+  let fixture: ComponentFixture<AddBindingDialogComponent>;
+  let component: AddBindingDialogComponent;
 
   beforeEach(waitForAsync(() => {
     const rbacMock = {
@@ -45,7 +45,7 @@ describe('AddBindingComponent', () => {
 
     TestBed.configureTestingModule({
       imports: [BrowserModule, BrowserAnimationsModule, SharedModule, CoreModule],
-      declarations: [AddBindingComponent],
+      declarations: [AddBindingDialogComponent],
       providers: [
         {provide: RBACService, useValue: rbacMock},
         {provide: MatDialogRef, useClass: MatDialogRefMock},
@@ -55,7 +55,7 @@ describe('AddBindingComponent', () => {
   }));
 
   beforeEach(waitForAsync(() => {
-    fixture = TestBed.createComponent(AddBindingComponent);
+    fixture = TestBed.createComponent(AddBindingDialogComponent);
     component = fixture.componentInstance;
     component.cluster = fakeDigitaloceanCluster();
     component.projectID = fakeProject().id;
