@@ -29,7 +29,7 @@ import {FormControl} from '@angular/forms';
 import {AddServiceAccountComponent} from './dialog/add-service-account/component';
 import {AddServiceAccountBindingComponent} from './dialog/add-service-account-binding/component';
 import {ClusterServiceAccountService} from '@core/services/cluster-service-account';
-import {ClusterServiceAccount} from '@shared/entity/cluster-service-account';
+import {ClusterServiceAccount} from '@shared/entity/rbac';
 
 @Component({
   selector: 'km-rbac',

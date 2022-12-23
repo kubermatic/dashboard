@@ -30,6 +30,15 @@ export class ClusterBinding {
   subjects: Subjects[];
 }
 
+export class ClusterServiceAccount {
+  id?: string;
+  name: string;
+  namespace: string;
+  creationTimestamp?: string;
+  deletionTimestamp?: string;
+  annotations?: Record<string, string>;
+}
+
 export class Namespace {
   name: string;
 }

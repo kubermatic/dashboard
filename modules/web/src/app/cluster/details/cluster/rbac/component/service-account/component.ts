@@ -1,4 +1,4 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,10 +17,9 @@ import {ClusterServiceAccountService} from '@core/services/cluster-service-accou
 import {RBACService} from '@core/services/rbac';
 import {Subject, combineLatest} from 'rxjs';
 import {takeUntil, map, filter, switchMap, take} from 'rxjs/operators';
-import {ClusterServiceAccount} from '@shared/entity/cluster-service-account';
 import {MatTableDataSource} from '@angular/material/table';
 import {Cluster} from '@shared/entity/cluster';
-import {ClusterBinding, Binding, SimpleClusterBinding, Kind} from '@shared/entity/rbac';
+import {ClusterBinding, Binding, SimpleClusterBinding, Kind, ClusterServiceAccount} from '@shared/entity/rbac';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {NotificationService} from '@core/services/notification';
 import {ConfirmationDialogComponent} from '@app/shared/components/confirmation-dialog/component';
@@ -44,29 +43,22 @@ enum Column {
   styleUrls: ['./style.scss'],
 })
 export class RBACServiceAccountComponent implements OnInit, OnDestroy {
-  private _unsubscribe$ = new Subject<void>();
-
-  readonly BindingMode = BindingMode;
+  private readonly _unsubscribe = new Subject<void>();
   readonly Column = Column;
   columns = [Column.StateArrow, Column.Name, Column.Namespace, Column.Actions];
+  isLoading = true;
+  dataSource = new MatTableDataSource<ClusterServiceAccount>();
+  bindingDetails: Record<string, SimpleClusterBinding[]>;
+  clusterServiceAccountExpansion: Record<string, boolean> = {};
 
   @Input() cluster: Cluster;
   @Input() projectID: string;
   @Output() addBindingToServiceAccount = new EventEmitter<ClusterServiceAccount>();
   @Output() deleteBinding = new EventEmitter<SimpleClusterBinding>();
 
-  clusterServiceAccountExpansion: Record<string, boolean> = {};
-
-  isLoading = true;
-
-  dataSource = new MatTableDataSource<ClusterServiceAccount>();
-  bindingDetails: Record<string, SimpleClusterBinding[]>;
-
   constructor(
-    // @ts-ignore
-    private readonly _matDialog: MatDialog,
     private readonly _rbacService: RBACService,
-    // @ts-ignore
+    private readonly _matDialog: MatDialog,
     private readonly _notificationService: NotificationService,
     private readonly _clusterServiceAccountService: ClusterServiceAccountService
   ) {}
@@ -77,8 +69,8 @@ export class RBACServiceAccountComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this._unsubscribe$.next();
-    this._unsubscribe$.complete();
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   expandRow({id}: ClusterServiceAccount): void {
@@ -91,7 +83,7 @@ export class RBACServiceAccountComponent implements OnInit, OnDestroy {
 
   download(serviceAccount: ClusterServiceAccount): void {
     window.open(
-      this._clusterServiceAccountService.kubeconfig(
+      this._clusterServiceAccountService.getKubeconfigUrl(
         this.projectID,
         this.cluster.id,
         serviceAccount.namespace,
@@ -104,7 +96,7 @@ export class RBACServiceAccountComponent implements OnInit, OnDestroy {
   deleteServiceAccount(element: ClusterServiceAccount): void {
     const dialogConfig: MatDialogConfig = {
       data: {
-        title: 'Delete Binding',
+        title: 'Delete Service Account',
         message: `Delete service account <b>${element.name}</b> of <b>${this.cluster.name}</b> cluster permanently?`,
         confirmLabel: 'Delete',
       },
@@ -140,11 +132,14 @@ export class RBACServiceAccountComponent implements OnInit, OnDestroy {
   private _getServiceAccounts(): void {
     this._clusterServiceAccountService
       .get(this.projectID, this.cluster.id)
-      .pipe(takeUntil(this._unsubscribe$))
+      .pipe(takeUntil(this._unsubscribe))
       .subscribe(serviceAccount => {
         this.dataSource.data = serviceAccount;
         this.clusterServiceAccountExpansion = serviceAccount.reduce(
-          (prev: Record<string, boolean>, {id}) => ({...prev, [id]: false}),
+          (prev: Record<string, boolean>, {id}) => ({
+            ...prev,
+            [id]: false,
+          }),
           {}
         );
 
@@ -166,14 +161,16 @@ export class RBACServiceAccountComponent implements OnInit, OnDestroy {
 
     const clusterBindings$ = this._rbacService
       .getClusterBindings(this.cluster.id, this.projectID)
-      .pipe(map(clusterBindings => mapBinding(clusterBindings)));
+      .pipe(map(clusterBindings => mapBinding(clusterBindings)))
+      .pipe(takeUntil(this._unsubscribe));
 
     const namespaceBindings$ = this._rbacService
       .getNamespaceBindings(this.cluster.id, this.projectID)
-      .pipe(map(bindings => mapBinding(bindings)));
+      .pipe(map(bindings => mapBinding(bindings)))
+      .pipe(takeUntil(this._unsubscribe));
 
     combineLatest([clusterBindings$, namespaceBindings$])
-      .pipe(takeUntil(this._unsubscribe$))
+      .pipe(takeUntil(this._unsubscribe))
       .subscribe(([clusterBindings = [], namespaceBindings = []]) => {
         this.bindingDetails = [...clusterBindings, ...namespaceBindings].reduce(
           (prev, {subjects, roleRefName: clusterRole, namespace}) => {

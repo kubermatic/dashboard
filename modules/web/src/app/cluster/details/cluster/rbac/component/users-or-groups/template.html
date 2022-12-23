@@ -1,5 +1,5 @@
 <!--
-Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,13 +13,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-
 <table *ngIf="!isLoading; else loading"
        class="km-table"
        mat-table
        matSort
-       matSortActive="name"
        matSortDirection="asc"
+       [matSortActive]="Column.Scope"
        [dataSource]="dataSource">
   <ng-container [matColumnDef]="Column.Scope">
     <th mat-header-cell
@@ -98,8 +97,8 @@ limitations under the License.
       [attr.id]="row.id"></tr>
 </table>
 
-<div class="km-row km-empty-list-msg"
-     *ngIf="!isLoading && !dataSource.data.length">
+<div *ngIf="!isLoading && !dataSource.data?.length"
+     class="km-row km-empty-list-msg">
   No bindings available.
 </div>
 

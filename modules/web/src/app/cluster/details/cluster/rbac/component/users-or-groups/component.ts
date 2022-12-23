@@ -1,4 +1,4 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -41,21 +41,19 @@ enum Column {
 })
 export class RBACUsersOrGroupsComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();
+  readonly Column = Column;
+  readonly RBACType = Kind;
+  columns = [Column.Scope, Column.User, Column.ClusterRole, Column.Namespace, Column.Actions];
+
+  isLoading = true;
+  dataSource = new MatTableDataSource<SimpleClusterBinding>();
+  clusterBindings: ClusterBinding[] = [];
+  namespaceBindings: Binding[] = [];
 
   @Input() cluster: Cluster;
   @Input() projectID: string;
   @Input() rbacType = Kind.User;
-
   @Output() deleteBinding = new EventEmitter<SimpleClusterBinding>();
-
-  readonly Column = Column;
-  readonly RBACType = Kind;
-
-  columns = [Column.Scope, Column.User, Column.ClusterRole, Column.Namespace, Column.Actions];
-  dataSource = new MatTableDataSource<SimpleClusterBinding>();
-  clusterBinding: ClusterBinding[] = [];
-  namespaceBinding: Binding[] = [];
-  isLoading = true;
 
   constructor(private readonly _rbacService: RBACService) {}
 
@@ -92,8 +90,8 @@ export class RBACUsersOrGroupsComponent implements OnInit, OnDestroy {
     combineLatest([clusterBindings$, namespaceBindings$])
       .pipe(takeUntil(this._unsubscribe))
       .subscribe(([clusterBindings = [], namespaceBindings = []]) => {
-        this.clusterBinding = clusterBindings;
-        this.namespaceBinding = namespaceBindings as Binding[];
+        this.clusterBindings = clusterBindings;
+        this.namespaceBindings = namespaceBindings as Binding[];
 
         this.dataSource.data = [...clusterBindings, ...namespaceBindings].reduce(
           (prev, {subjects = [], roleRefName, namespace}) => {

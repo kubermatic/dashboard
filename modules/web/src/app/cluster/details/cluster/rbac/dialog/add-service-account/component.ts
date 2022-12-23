@@ -1,4 +1,4 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,11 +22,16 @@ import {Observable, Subject, of} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {Cluster} from '@shared/entity/cluster';
 import {ControlsOf} from '@shared/model/shared';
-import {ClusterServiceAccount} from '@shared/entity/cluster-service-account';
+import {ClusterServiceAccount} from '@shared/entity/rbac';
 
 interface AddServiceAccountControls {
   name: string;
   namespace: string;
+}
+
+export enum Controls {
+  Name = 'name',
+  Namespace = 'namespace',
 }
 
 @Component({
@@ -35,13 +40,14 @@ interface AddServiceAccountControls {
   styleUrls: ['./style.scss'],
 })
 export class AddServiceAccountComponent implements OnInit, OnDestroy {
-  private _unsubscribe$ = new Subject<void>();
+  private readonly _unsubscribe = new Subject<void>();
+  readonly Controls = Controls;
+
+  namespaces: string[] = [];
+  form: FormGroup<ControlsOf<AddServiceAccountControls>>;
 
   @Input() cluster: Cluster;
   @Input() projectID: string;
-
-  form: FormGroup<ControlsOf<AddServiceAccountControls>>;
-  namespaces: string[] = [];
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -57,8 +63,8 @@ export class AddServiceAccountComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this._unsubscribe$.next();
-    this._unsubscribe$.complete();
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   getObservable(): Observable<ClusterServiceAccount> {
@@ -68,28 +74,25 @@ export class AddServiceAccountComponent implements OnInit, OnDestroy {
 
     return this._clusterServiceAccountService
       .post(this.projectID, this.cluster.id, this.form.value as ClusterServiceAccount)
-      .pipe(takeUntil(this._unsubscribe$));
+      .pipe(takeUntil(this._unsubscribe));
   }
 
   onNext(serviceAccount: ClusterServiceAccount): void {
     this._matDialogRef.close(serviceAccount);
     this._notificationService.success(`Added the ${serviceAccount.name} service account`);
-    this._clusterServiceAccountService.update();
-    this._rbacService.refreshClusterBindings();
-    this._rbacService.refreshNamespaceBindings();
   }
 
   private _initForm(): void {
     this.form = this._builder.nonNullable.group({
-      name: this._builder.control('', [Validators.required]),
-      namespace: this._builder.control('', [Validators.required]),
+      [Controls.Name]: this._builder.control('', [Validators.required]),
+      [Controls.Namespace]: this._builder.control('', [Validators.required]),
     });
   }
 
   private _getClusterNamespaces(): void {
     this._rbacService
       .getClusterNamespaces(this.projectID, this.cluster.id)
-      .pipe(takeUntil(this._unsubscribe$))
+      .pipe(takeUntil(this._unsubscribe))
       .subscribe(namespaces => {
         this.namespaces = namespaces;
       });

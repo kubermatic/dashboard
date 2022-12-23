@@ -1,5 +1,5 @@
 <!--
-Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-
 <div class="dialog">
   <km-dialog-title>Add Service Account Binding</km-dialog-title>
   <mat-dialog-content>
@@ -61,10 +60,12 @@ limitations under the License.
         <mat-label>Namespace</mat-label>
         <mat-select panelClass="km-add-dialog-dropdown"
                     [formControl]="form.controls.roleNamespace">
+
+          <!--          Todo: Update-->
           <mat-option *ngIf="!roleNamespacesMap"
                       disabled>Loading...</mat-option>
-          <mat-option *ngIf="!roleNamespacesMap?.[form.controls.roleID.value]"
-                      disabled>Please select role first</mat-option>
+          <mat-option *ngIf="!form.controls.roleID.value"
+                      disabled>Please select role</mat-option>
           <mat-option *ngFor="let roleNamespace of roleNamespacesMap?.[form.controls.roleID.value]"
                       [value]="roleNamespace">{{ roleNamespace }}</mat-option>
         </mat-select>

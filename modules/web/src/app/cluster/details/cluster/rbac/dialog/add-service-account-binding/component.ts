@@ -1,4 +1,4 @@
-// Copyright 2020 The Kubermatic Kubernetes Platform contributors.
+// Copyright 2022 The Kubermatic Kubernetes Platform contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,13 +18,12 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {ClusterServiceAccountService} from '@core/services/cluster-service-account';
 import {NotificationService} from '@core/services/notification';
 import {RBACService} from '@core/services/rbac';
+import _ from 'lodash';
 import {Observable, Subject, of, startWith} from 'rxjs';
 import {takeUntil, map} from 'rxjs/operators';
 import {Cluster} from '@shared/entity/cluster';
 import {ControlsOf} from '@shared/model/shared';
-import {ClusterServiceAccount} from '@shared/entity/cluster-service-account';
-import _ from 'lodash';
-import {ClusterBinding} from '@shared/entity/rbac';
+import {ClusterBinding, ClusterServiceAccount} from '@shared/entity/rbac';
 
 type AddServiceAccountBindingControls = {
   serviceAccountID: string;
@@ -37,30 +36,32 @@ enum BindingMode {
   Namespace = 'Namespace',
 }
 
+export enum Controls {
+  ServiceAccountID = 'serviceAccountID',
+  RoleID = 'roleID',
+}
+
 @Component({
   selector: 'km-add-service-account-binding',
   templateUrl: './template.html',
   styleUrls: ['./style.scss'],
 })
 export class AddServiceAccountBindingComponent implements OnInit, OnDestroy {
-  private _unsubscribe$ = new Subject<void>();
-
+  private readonly _unsubscribe = new Subject<void>();
   readonly BindingMode = BindingMode;
+
+  bindingModeControl = new FormControl(BindingMode.Cluster);
+  namespaces: string[] = [];
+  namespaceRoles: string[] = [];
+  clusterRoles: string[] = [];
+  roles: string[] = [];
+  roleNamespacesMap: Record<string, string[]>; // Record of roleId and Namespaces associated with that role
+  serviceAccounts: ClusterServiceAccount[] = [];
+  form: FormGroup<ControlsOf<AddServiceAccountBindingControls>>;
 
   @Input() cluster: Cluster;
   @Input() projectID: string;
   @Input() clusterServiceAccount?: ClusterServiceAccount;
-
-  form: FormGroup<ControlsOf<AddServiceAccountBindingControls>>;
-
-  serviceAccounts: ClusterServiceAccount[] = [];
-  namespaceRoles: string[] = [];
-  /*** Record of roleId and Namespaces associated with that role */
-  roleNamespacesMap: Record<string, string[]>;
-  namespaces: string[] = [];
-  clusterRoles: string[] = [];
-  roles: string[] = [];
-  bindingModeControl = new FormControl(BindingMode.Cluster);
 
   constructor(
     private readonly _builder: FormBuilder,
@@ -78,8 +79,8 @@ export class AddServiceAccountBindingComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this._unsubscribe$.next();
-    this._unsubscribe$.complete();
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   getObservable(): Observable<Record<string, never>> {
@@ -114,12 +115,14 @@ export class AddServiceAccountBindingComponent implements OnInit, OnDestroy {
 
   private _initForm(): void {
     this.form = this._builder.nonNullable.group({
-      serviceAccountID: this._builder.control<string>(this.clusterServiceAccount?.name ?? null, [Validators.required]),
-      roleID: this._builder.control<string>(null, [Validators.required]),
+      [Controls.ServiceAccountID]: this._builder.control<string>(this.clusterServiceAccount?.name ?? null, [
+        Validators.required,
+      ]),
+      [Controls.RoleID]: this._builder.control<string>(null, [Validators.required]),
     });
 
     this.bindingModeControl.valueChanges
-      .pipe(startWith(this.bindingModeControl.value), takeUntil(this._unsubscribe$))
+      .pipe(startWith(this.bindingModeControl.value), takeUntil(this._unsubscribe))
       .subscribe(bindingMode => {
         this.form.controls.roleID.reset();
         this._setRoles();
@@ -131,14 +134,10 @@ export class AddServiceAccountBindingComponent implements OnInit, OnDestroy {
       });
   }
 
-  private _setRoles(): void {
-    this.roles = this.bindingModeControl.value === BindingMode.Cluster ? this.clusterRoles : this.namespaceRoles;
-  }
-
   private _getServiceAccounts(): void {
     this._clusterServiceAccountService
       .get(this.projectID, this.cluster.id)
-      .pipe(takeUntil(this._unsubscribe$))
+      .pipe(takeUntil(this._unsubscribe))
       .subscribe(serviceAccounts => {
         this.serviceAccounts = serviceAccounts;
       });
@@ -149,7 +148,7 @@ export class AddServiceAccountBindingComponent implements OnInit, OnDestroy {
       .getNamespaceRoleNames(this.cluster.id, this.projectID)
       .pipe(
         map(roles => _.sortBy(roles, role => role.name.toLowerCase())),
-        takeUntil(this._unsubscribe$)
+        takeUntil(this._unsubscribe)
       )
       .subscribe(roles => {
         this.namespaceRoles = roles.map(role => role.name);
@@ -164,11 +163,15 @@ export class AddServiceAccountBindingComponent implements OnInit, OnDestroy {
       .pipe(
         map(clusterRoles => clusterRoles.map(clusterRole => clusterRole.name)),
         map(clusterRoles => _.sortBy(clusterRoles, clusterRole => clusterRole.toLowerCase())),
-        takeUntil(this._unsubscribe$)
+        takeUntil(this._unsubscribe)
       )
       .subscribe(clusterRoles => {
         this.clusterRoles = clusterRoles;
         this._setRoles();
       });
+  }
+
+  private _setRoles(): void {
+    this.roles = this.bindingModeControl.value === BindingMode.Cluster ? this.clusterRoles : this.namespaceRoles;
   }
 }

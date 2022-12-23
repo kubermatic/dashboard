@@ -15,11 +15,11 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '@environments/environment';
-import {merge, startWith, Subject, timer, Observable} from 'rxjs';
-import {AppConfigService} from '@app/config.service';
-import {ClusterServiceAccount} from '@shared/entity/cluster-service-account';
-import {switchMap, tap, distinctUntilChanged} from 'rxjs/operators';
 import _ from 'lodash';
+import {merge, Observable, startWith, Subject, timer} from 'rxjs';
+import {distinctUntilChanged, switchMap, tap} from 'rxjs/operators';
+import {AppConfigService} from '@app/config.service';
+import {ClusterServiceAccount} from '@shared/entity/rbac';
 
 interface ServiceAccountBinding {
   serviceAccountNamespace: string;
@@ -70,11 +70,15 @@ export class ClusterServiceAccountService {
     projectID: string,
     clusterID: string,
     roleID: string,
-    {name: serviceAccount, namespace: serviceAccountNamespace}: ClusterServiceAccount
+    serviceAccount: ClusterServiceAccount
   ): Observable<Record<string, never>> {
+    const body: ServiceAccountBinding = {
+      serviceAccount: serviceAccount.name,
+      serviceAccountNamespace: serviceAccount.namespace,
+    };
     return this._http.post<Record<string, never>>(
       `${this._restRoot}/projects/${projectID}/clusters/${clusterID}/clusterroles/${roleID}/clusterbindings`,
-      {serviceAccountNamespace, serviceAccount} as ServiceAccountBinding
+      body
     );
   }
 
@@ -83,11 +87,15 @@ export class ClusterServiceAccountService {
     clusterID: string,
     roleNamespace: string,
     roleID: string,
-    {name: serviceAccount, namespace: serviceAccountNamespace}: ClusterServiceAccount
+    serviceAccount: ClusterServiceAccount
   ): Observable<Record<string, never>> {
+    const body: ServiceAccountBinding = {
+      serviceAccount: serviceAccount.name,
+      serviceAccountNamespace: serviceAccount.namespace,
+    };
     return this._http.post<Record<string, never>>(
       `${this._restRoot}/projects/${projectID}/clusters/${clusterID}/roles/${roleNamespace}/${roleID}/bindings`,
-      {serviceAccountNamespace, serviceAccount} as ServiceAccountBinding
+      body
     );
   }
 
@@ -102,7 +110,7 @@ export class ClusterServiceAccountService {
     );
   }
 
-  kubeconfig(projectID: string, clusterID: string, namespace: string, serviceAccountID: string): string {
+  getKubeconfigUrl(projectID: string, clusterID: string, namespace: string, serviceAccountID: string): string {
     return `${this._restRoot}/projects/${projectID}/clusters/${clusterID}/serviceaccount/${namespace}/${serviceAccountID}/kubeconfig`;
   }
 }
