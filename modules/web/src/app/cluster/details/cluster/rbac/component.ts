@@ -74,7 +74,8 @@ export class RBACComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  addBinding(): void {
+  addBinding(event: Event): void {
+    event.stopPropagation();
     const modal = this._matDialog.open(AddBindingDialogComponent);
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.projectID = this.projectID;
@@ -85,7 +86,8 @@ export class RBACComponent implements OnInit, OnDestroy {
       .subscribe(_ => this._updateBindings());
   }
 
-  addServiceAccount(): void {
+  addServiceAccount($event: Event): void {
+    $event.stopPropagation();
     const dialogRef = this._matDialog.open(AddServiceAccountDialogComponent);
     dialogRef.componentInstance.cluster = this.cluster;
     dialogRef.componentInstance.projectID = this.projectID;

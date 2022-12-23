@@ -29,14 +29,7 @@ limitations under the License.
           <mat-select-trigger fxLayout="row"
                               fxLayoutGap="10px"
                               fxLayoutAlign=" center">
-            <ng-container [ngSwitch]="modeControl.value">
-              <i *ngSwitchCase="RBACKind.ServiceAccount"
-                 class="km-icon-mask km-icon-serviceaccount"></i>
-              <i *ngSwitchCase="RBACKind.Group"
-                 class="km-icon-mask km-icon-group"></i>
-              <i *ngSwitchCase="RBACKind.User"
-                 class="km-icon-mask km-user"></i>
-            </ng-container>
+            <ng-container *ngTemplateOutlet="icons; context: {$implicit: modeControl.value}"></ng-container>
             <span>{{modeControl.value}}</span>
           </mat-select-trigger>
 
@@ -45,20 +38,24 @@ limitations under the License.
             <div fxLayout="row"
                  fxLayoutGap="10px"
                  fxLayoutAlign=" center">
-              <ng-container [ngSwitch]="mode">
-                <i *ngSwitchCase="RBACKind.ServiceAccount"
-                   class="km-icon-mask km-icon-serviceaccount"></i>
-                <i *ngSwitchCase="RBACKind.Group"
-                   class="km-icon-mask km-icon-group"></i>
-                <i *ngSwitchCase="RBACKind.User"
-                   class="km-icon-mask km-user"></i>
-              </ng-container>
+              <ng-container *ngTemplateOutlet="icons; context: {$implicit: mode}"></ng-container>
               <span>{{mode}}</span>
             </div>
           </mat-option>
         </mat-select>
       </mat-form-field>
     </div>
+
+  <ng-template #icons let-mode>
+    <ng-container [ngSwitch]="mode">
+      <i *ngSwitchCase="RBACKind.ServiceAccount"
+         class="km-icon-mask km-icon-serviceaccount"></i>
+      <i *ngSwitchCase="RBACKind.Group"
+         class="km-icon-mask km-icon-group"></i>
+      <i *ngSwitchCase="RBACKind.User"
+         class="km-icon-mask km-user"></i>
+    </ng-container>
+  </ng-template>
 
     <div [ngSwitch]="modeControl.value"
          fxLayout="row"
@@ -69,7 +66,7 @@ limitations under the License.
                 color="quaternary"
                 *ngIf="isClusterRunning"
                 fxLayoutAlign="center center"
-                (click)="addServiceAccount()">
+                (click)="addServiceAccount($event)">
           <i class="km-icon-mask km-icon-add"></i>
           <span>Add Service Account</span>
         </button>
@@ -85,28 +82,26 @@ limitations under the License.
       </ng-container>
 
       <ng-container *ngSwitchCase="RBACKind.User">
-        <button mat-flat-button
-                color="quaternary"
-                *ngIf="isClusterRunning"
-                fxLayoutAlign="center center"
-                (click)="addBinding()">
-          <i class="km-icon-mask km-icon-add"></i>
-          <span>Add Binding</span>
-        </button>
+        <ng-container *ngTemplateOutlet="userAndGroupBindingButton"></ng-container>
       </ng-container>
 
       <ng-container *ngSwitchCase="RBACKind.Group">
-        <button mat-flat-button
-                color="quaternary"
-                *ngIf="isClusterRunning"
-                fxLayoutAlign="center center"
-                (click)="addBinding($event)">
-          <i class="km-icon-mask km-icon-add"></i>
-          <span>Add Binding</span>
-        </button>
+        <ng-container *ngTemplateOutlet="userAndGroupBindingButton"></ng-container>
       </ng-container>
     </div>
   </div>
+
+
+  <ng-template #userAndGroupBindingButton>
+    <button mat-flat-button
+            color="quaternary"
+            *ngIf="isClusterRunning"
+            fxLayoutAlign="center center"
+            (click)="addBinding($event)">
+      <i class="km-icon-mask km-icon-add"></i>
+      <span>Add Binding</span>
+    </button>
+  </ng-template>
 
   <ng-container [ngSwitch]="modeControl.value">
     <ng-container *ngSwitchCase="RBACKind.ServiceAccount">
