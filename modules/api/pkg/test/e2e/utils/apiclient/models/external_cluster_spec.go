@@ -18,14 +18,17 @@ import (
 // swagger:model ExternalClusterSpec
 type ExternalClusterSpec struct {
 
-	// akscluster spec
-	AksclusterSpec *AKSClusterSpec `json:"aksclusterSpec,omitempty"`
+	// aks cluster spec
+	AksClusterSpec *AKSClusterSpec `json:"aksClusterSpec,omitempty"`
 
-	// ekscluster spec
-	EksclusterSpec *EKSClusterSpec `json:"eksclusterSpec,omitempty"`
+	// eks cluster spec
+	EksClusterSpec *EKSClusterSpec `json:"eksClusterSpec,omitempty"`
 
-	// gkecluster spec
-	GkeclusterSpec *GKEClusterSpec `json:"gkeclusterSpec,omitempty"`
+	// gke cluster spec
+	GkeClusterSpec *GKEClusterSpec `json:"gkeClusterSpec,omitempty"`
+
+	// kube one cluster spec
+	KubeOneClusterSpec *KubeOneClusterSpec `json:"kubeOneClusterSpec,omitempty"`
 
 	// version
 	Version Semver `json:"version,omitempty"`
@@ -35,15 +38,19 @@ type ExternalClusterSpec struct {
 func (m *ExternalClusterSpec) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateAksclusterSpec(formats); err != nil {
+	if err := m.validateAksClusterSpec(formats); err != nil {
 		res = append(res, err)
 	}
 
-	if err := m.validateEksclusterSpec(formats); err != nil {
+	if err := m.validateEksClusterSpec(formats); err != nil {
 		res = append(res, err)
 	}
 
-	if err := m.validateGkeclusterSpec(formats); err != nil {
+	if err := m.validateGkeClusterSpec(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateKubeOneClusterSpec(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -57,17 +64,17 @@ func (m *ExternalClusterSpec) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *ExternalClusterSpec) validateAksclusterSpec(formats strfmt.Registry) error {
-	if swag.IsZero(m.AksclusterSpec) { // not required
+func (m *ExternalClusterSpec) validateAksClusterSpec(formats strfmt.Registry) error {
+	if swag.IsZero(m.AksClusterSpec) { // not required
 		return nil
 	}
 
-	if m.AksclusterSpec != nil {
-		if err := m.AksclusterSpec.Validate(formats); err != nil {
+	if m.AksClusterSpec != nil {
+		if err := m.AksClusterSpec.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("aksclusterSpec")
+				return ve.ValidateName("aksClusterSpec")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("aksclusterSpec")
+				return ce.ValidateName("aksClusterSpec")
 			}
 			return err
 		}
@@ -76,17 +83,17 @@ func (m *ExternalClusterSpec) validateAksclusterSpec(formats strfmt.Registry) er
 	return nil
 }
 
-func (m *ExternalClusterSpec) validateEksclusterSpec(formats strfmt.Registry) error {
-	if swag.IsZero(m.EksclusterSpec) { // not required
+func (m *ExternalClusterSpec) validateEksClusterSpec(formats strfmt.Registry) error {
+	if swag.IsZero(m.EksClusterSpec) { // not required
 		return nil
 	}
 
-	if m.EksclusterSpec != nil {
-		if err := m.EksclusterSpec.Validate(formats); err != nil {
+	if m.EksClusterSpec != nil {
+		if err := m.EksClusterSpec.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("eksclusterSpec")
+				return ve.ValidateName("eksClusterSpec")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("eksclusterSpec")
+				return ce.ValidateName("eksClusterSpec")
 			}
 			return err
 		}
@@ -95,17 +102,36 @@ func (m *ExternalClusterSpec) validateEksclusterSpec(formats strfmt.Registry) er
 	return nil
 }
 
-func (m *ExternalClusterSpec) validateGkeclusterSpec(formats strfmt.Registry) error {
-	if swag.IsZero(m.GkeclusterSpec) { // not required
+func (m *ExternalClusterSpec) validateGkeClusterSpec(formats strfmt.Registry) error {
+	if swag.IsZero(m.GkeClusterSpec) { // not required
 		return nil
 	}
 
-	if m.GkeclusterSpec != nil {
-		if err := m.GkeclusterSpec.Validate(formats); err != nil {
+	if m.GkeClusterSpec != nil {
+		if err := m.GkeClusterSpec.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("gkeclusterSpec")
+				return ve.ValidateName("gkeClusterSpec")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("gkeclusterSpec")
+				return ce.ValidateName("gkeClusterSpec")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ExternalClusterSpec) validateKubeOneClusterSpec(formats strfmt.Registry) error {
+	if swag.IsZero(m.KubeOneClusterSpec) { // not required
+		return nil
+	}
+
+	if m.KubeOneClusterSpec != nil {
+		if err := m.KubeOneClusterSpec.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("kubeOneClusterSpec")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("kubeOneClusterSpec")
 			}
 			return err
 		}
@@ -135,15 +161,19 @@ func (m *ExternalClusterSpec) validateVersion(formats strfmt.Registry) error {
 func (m *ExternalClusterSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.contextValidateAksclusterSpec(ctx, formats); err != nil {
+	if err := m.contextValidateAksClusterSpec(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
-	if err := m.contextValidateEksclusterSpec(ctx, formats); err != nil {
+	if err := m.contextValidateEksClusterSpec(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
-	if err := m.contextValidateGkeclusterSpec(ctx, formats); err != nil {
+	if err := m.contextValidateGkeClusterSpec(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.contextValidateKubeOneClusterSpec(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -157,14 +187,14 @@ func (m *ExternalClusterSpec) ContextValidate(ctx context.Context, formats strfm
 	return nil
 }
 
-func (m *ExternalClusterSpec) contextValidateAksclusterSpec(ctx context.Context, formats strfmt.Registry) error {
+func (m *ExternalClusterSpec) contextValidateAksClusterSpec(ctx context.Context, formats strfmt.Registry) error {
 
-	if m.AksclusterSpec != nil {
-		if err := m.AksclusterSpec.ContextValidate(ctx, formats); err != nil {
+	if m.AksClusterSpec != nil {
+		if err := m.AksClusterSpec.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("aksclusterSpec")
+				return ve.ValidateName("aksClusterSpec")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("aksclusterSpec")
+				return ce.ValidateName("aksClusterSpec")
 			}
 			return err
 		}
@@ -173,14 +203,14 @@ func (m *ExternalClusterSpec) contextValidateAksclusterSpec(ctx context.Context,
 	return nil
 }
 
-func (m *ExternalClusterSpec) contextValidateEksclusterSpec(ctx context.Context, formats strfmt.Registry) error {
+func (m *ExternalClusterSpec) contextValidateEksClusterSpec(ctx context.Context, formats strfmt.Registry) error {
 
-	if m.EksclusterSpec != nil {
-		if err := m.EksclusterSpec.ContextValidate(ctx, formats); err != nil {
+	if m.EksClusterSpec != nil {
+		if err := m.EksClusterSpec.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("eksclusterSpec")
+				return ve.ValidateName("eksClusterSpec")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("eksclusterSpec")
+				return ce.ValidateName("eksClusterSpec")
 			}
 			return err
 		}
@@ -189,14 +219,30 @@ func (m *ExternalClusterSpec) contextValidateEksclusterSpec(ctx context.Context,
 	return nil
 }
 
-func (m *ExternalClusterSpec) contextValidateGkeclusterSpec(ctx context.Context, formats strfmt.Registry) error {
+func (m *ExternalClusterSpec) contextValidateGkeClusterSpec(ctx context.Context, formats strfmt.Registry) error {
 
-	if m.GkeclusterSpec != nil {
-		if err := m.GkeclusterSpec.ContextValidate(ctx, formats); err != nil {
+	if m.GkeClusterSpec != nil {
+		if err := m.GkeClusterSpec.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("gkeclusterSpec")
+				return ve.ValidateName("gkeClusterSpec")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("gkeclusterSpec")
+				return ce.ValidateName("gkeClusterSpec")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ExternalClusterSpec) contextValidateKubeOneClusterSpec(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.KubeOneClusterSpec != nil {
+		if err := m.KubeOneClusterSpec.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("kubeOneClusterSpec")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("kubeOneClusterSpec")
 			}
 			return err
 		}
