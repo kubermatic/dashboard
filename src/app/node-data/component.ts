@@ -86,7 +86,7 @@ export class NodeDataComponent extends BaseFormValidator implements OnInit, OnDe
   readonly NodeProvider = NodeProvider;
   readonly Controls = Controls;
   readonly OperatingSystem = OperatingSystem;
-  readonly MinReplicasCount = 1;
+  readonly MinReplicasCount = 0;
   readonly MaxReplicasCount = 1000;
 
   @Input() provider: NodeProvider;
