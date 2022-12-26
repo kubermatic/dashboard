@@ -92,11 +92,11 @@ func patchKubeOneCluster(ctx context.Context,
 	if oldCluster.Spec.Version != newCluster.Spec.Version {
 		return UpgradeKubeOneCluster(ctx, cluster, oldCluster, newCluster, clusterProvider, masterClient)
 	}
-	if oldCluster.Cloud.KubeOne.ContainerRuntime != newCluster.Cloud.KubeOne.ContainerRuntime {
-		if oldCluster.Cloud.KubeOne.ContainerRuntime == resources.ContainerRuntimeDocker {
+	if oldCluster.Spec.ContainerRuntime != newCluster.Spec.ContainerRuntime {
+		if oldCluster.Spec.ContainerRuntime == resources.ContainerRuntimeDocker {
 			return MigrateKubeOneToContainerd(ctx, cluster, oldCluster, newCluster, clusterProvider, masterClient)
 		} else {
-			return nil, fmt.Errorf("Operation not supported: only migration from docker to containerd is supported: %s", oldCluster.Cloud.KubeOne.ContainerRuntime)
+			return nil, fmt.Errorf("Operation not supported: only migration from docker to containerd is supported: %s", oldCluster.Spec.ContainerRuntime)
 		}
 	}
 
@@ -127,7 +127,7 @@ func UpgradeKubeOneCluster(ctx context.Context,
 		Kubernetes: upgradeVersion,
 	}
 
-	if oldCluster.Cloud.KubeOne.ContainerRuntime == resources.ContainerRuntimeDocker {
+	if oldCluster.Spec.ContainerRuntime == resources.ContainerRuntimeDocker {
 		cluster.ContainerRuntime.Containerd = nil
 		if upgradeVersion >= "1.24" {
 			return nil, utilerrors.NewBadRequest("container runtime is \"docker\". Support for docker will be removed with Kubernetes 1.24 release.")
@@ -163,7 +163,7 @@ func MigrateKubeOneToContainerd(ctx context.Context,
 ) (*apiv2.ExternalCluster, error) {
 	kubeOneSpec := externalCluster.Spec.CloudSpec.KubeOne
 	manifest := kubeOneSpec.ManifestReference
-	wantedContainerRuntime := newCluster.Cloud.KubeOne.ContainerRuntime
+	wantedContainerRuntime := newCluster.Spec.ContainerRuntime
 
 	if externalCluster.Status.Condition.Phase == kubermaticv1.ExternalClusterPhaseReconciling {
 		return nil, utilerrors.NewBadRequest("Operation is not allowed: Another operation: (Upgrading) is in progress, please wait for it to finish before starting a new operation.")
@@ -323,9 +323,9 @@ func getKubeOneClusterDetails(ctx context.Context,
 		containerRuntime = strSlice[0]
 
 		clusterSpec := &apiv2.KubeOneClusterSpec{
-			ContainerRuntime: containerRuntime,
-			Region:           region,
+			Region: region,
 		}
+		apiCluster.Spec.ContainerRuntime = containerRuntime
 		apiCluster.Spec.KubeOneClusterSpec = clusterSpec
 	}
 

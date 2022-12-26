@@ -17,9 +17,6 @@ import (
 // swagger:model KubeOneClusterSpec
 type KubeOneClusterSpec struct {
 
-	// container runtime
-	ContainerRuntime string `json:"containerRuntime,omitempty"`
-
 	// region
 	Region string `json:"region,omitempty"`
 }

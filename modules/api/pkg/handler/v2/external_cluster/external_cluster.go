@@ -681,7 +681,7 @@ func PatchEndpoint(userInfoGetter provider.UserInfoGetter, projectProvider provi
 			if err != nil {
 				return nil, err
 			}
-			clusterToPatch.Cloud.KubeOne.ContainerRuntime = containerRuntime
+			clusterToPatch.Spec.ContainerRuntime = containerRuntime
 			if err := patchCluster(clusterToPatch, patchedCluster, req.Patch); err != nil {
 				return nil, err
 			}

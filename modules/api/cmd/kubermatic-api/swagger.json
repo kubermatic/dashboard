@@ -30867,6 +30867,10 @@
         "aksClusterSpec": {
           "$ref": "#/definitions/AKSClusterSpec"
         },
+        "containerRuntime": {
+          "type": "string",
+          "x-go-name": "ContainerRuntime"
+        },
         "eksClusterSpec": {
           "$ref": "#/definitions/EKSClusterSpec"
         },
@@ -32666,10 +32670,6 @@
     "KubeOneClusterSpec": {
       "type": "object",
       "properties": {
-        "containerRuntime": {
-          "type": "string",
-          "x-go-name": "ContainerRuntime"
-        },
         "region": {
           "type": "string",
           "x-go-name": "Region"
@@ -32838,10 +32838,6 @@
       "properties": {
         "cloudSpec": {
           "$ref": "#/definitions/KubeOneCloudSpec"
-        },
-        "containerRuntime": {
-          "type": "string",
-          "x-go-name": "ContainerRuntime"
         },
         "manifest": {
           "description": "Manifest Base64 encoded manifest",

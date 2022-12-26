@@ -18,6 +18,9 @@ import (
 // swagger:model ExternalClusterSpec
 type ExternalClusterSpec struct {
 
+	// container runtime
+	ContainerRuntime string `json:"containerRuntime,omitempty"`
+
 	// aks cluster spec
 	AksClusterSpec *AKSClusterSpec `json:"aksClusterSpec,omitempty"`
 
