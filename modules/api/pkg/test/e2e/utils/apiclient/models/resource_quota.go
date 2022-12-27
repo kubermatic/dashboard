@@ -18,8 +18,8 @@ import (
 // swagger:model ResourceQuota
 type ResourceQuota struct {
 
-	// default
-	Default bool `json:"default,omitempty"`
+	// is default
+	IsDefault bool `json:"isDefault,omitempty"`
 
 	// name
 	Name string `json:"name,omitempty"`

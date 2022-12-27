@@ -36061,9 +36061,9 @@
     "ResourceQuota": {
       "type": "object",
       "properties": {
-        "default": {
+        "isDefault": {
           "type": "boolean",
-          "x-go-name": "Default"
+          "x-go-name": "IsDefault"
         },
         "name": {
           "type": "string",
