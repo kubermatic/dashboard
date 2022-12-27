@@ -670,7 +670,7 @@ func PutResourceQuota(ctx context.Context, request interface{}, provider provide
 	}
 	newResourceQuota := originalResourceQuota.DeepCopy()
 
-	// if a resource quota is updated, its not a default quota anymore. Remove default label if it exists
+	// if a resource quota is updated, it's not a default quota anymore. Remove default label if it exists
 	delete(newResourceQuota.Labels, DefaultProjectResourceQuotaLabel)
 
 	crdQuota, err := convertToCRDQuota(req.Body)
@@ -702,7 +702,7 @@ func convertToAPIStruct(resourceQuota *kubermaticv1.ResourceQuota, humanReadable
 	}
 
 	if resourceQuota.Labels != nil && resourceQuota.Labels[DefaultProjectResourceQuotaLabel] == "true" {
-		rq.Default = true
+		rq.IsDefault = true
 	}
 
 	return rq

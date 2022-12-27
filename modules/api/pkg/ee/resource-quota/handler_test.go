@@ -183,7 +183,7 @@ func TestHandlerResourceQuotas(t *testing.T) {
 						resourceQuota.SubjectHumanReadableName,
 					)
 				}
-				if !resourceQuota.Default {
+				if !resourceQuota.IsDefault {
 					return fmt.Errorf("expected the quota to be a default quota")
 				}
 				return nil
@@ -254,7 +254,7 @@ func TestHandlerResourceQuotas(t *testing.T) {
 					return err
 				}
 
-				if resourceQuota.Default {
+				if resourceQuota.IsDefault {
 					return fmt.Errorf("expected the quota not to be a default quota")
 				}
 
