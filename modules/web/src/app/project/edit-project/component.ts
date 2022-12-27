@@ -22,6 +22,18 @@ import _ from 'lodash';
 import {ProjectService} from '@core/services/project';
 import {Observable} from 'rxjs';
 import {AsyncValidators} from '@shared/validators/async.validators';
+import {QuotaService} from '@app/dynamic/enterprise/quotas/service';
+import {QuotaDetails} from '@app/shared/entity/quota';
+import {UserService} from '@app/core/services/user';
+import {Member} from '@app/shared/entity/member';
+
+enum Controls {
+  Name = 'name',
+  Labels = 'labels',
+  CPUQuota = 'cpuQuota',
+  MemoryQuota = 'memoryQuota',
+  StorageQuota = 'storageQuota',
+}
 
 @Component({
   selector: 'km-edit-project',
@@ -31,26 +43,49 @@ export class EditProjectComponent implements OnInit {
   @Input() project: Project;
   labels: object;
   form: FormGroup;
+  projectQouta: QuotaDetails;
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Project)];
+  controls = Controls;
+  user: Member;
+  isMember: boolean;
 
   constructor(
     private readonly _projectService: ProjectService,
     private readonly _matDialogRef: MatDialogRef<EditProjectComponent>,
-    private readonly _notificationService: NotificationService
+    private readonly _notificationService: NotificationService,
+    private readonly _quotaService: QuotaService,
+    private readonly _userService: UserService
   ) {}
 
   ngOnInit(): void {
     this.labels = _.cloneDeep(this.project.labels);
 
+    this._userService.currentUser.subscribe(user => (this.user = user));
     this.form = new FormGroup({
-      name: new FormControl(this.project.name, [Validators.required]),
-      labels: new FormControl(''),
+      [Controls.Name]: new FormControl(this.project.name, [Validators.required]),
+      [Controls.Labels]: new FormControl(''),
+      [Controls.CPUQuota]: new FormControl(''),
+      [Controls.MemoryQuota]: new FormControl(''),
+      [Controls.StorageQuota]: new FormControl(''),
     });
+
+    this.isMember = !!this.user.projects.find(project => project.id === this.project.id);
+
+    if (this.isMember) {
+      this._quotaService.getProjectQuota(this.project.id).subscribe(quota => {
+        if (quota) {
+          this.projectQouta = quota;
+          this.form.get(Controls.CPUQuota).setValue(this.projectQouta.quota.cpu);
+          this.form.get(Controls.MemoryQuota).setValue(this.projectQouta.quota.memory);
+          this.form.get(Controls.StorageQuota).setValue(this.projectQouta.quota.storage);
+        }
+      });
+    }
   }
 
   getObservable(): Observable<Project> {
     const project: ProjectModel = {
-      name: this.form.controls.name.value,
+      name: this.form?.controls?.name?.value,
       labels: this.labels,
     };
 
@@ -69,6 +104,13 @@ export class EditProjectComponent implements OnInit {
 
   onNext(project: Project): void {
     this._matDialogRef.close(project);
+
+    const quotaVariables = {
+      cpu: this.form?.controls?.cpuQuota?.value,
+      memory: this.form?.controls?.memoryQuota?.value,
+      storage: this.form?.controls?.storageQuota?.value,
+    };
+    this._quotaService.updateQuota(this.projectQouta?.name, quotaVariables).subscribe();
     this._notificationService.success(`Updated the ${this.project.name} project`);
   }
 }

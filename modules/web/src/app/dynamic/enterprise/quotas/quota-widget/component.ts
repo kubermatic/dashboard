@@ -110,7 +110,7 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getProgressBarAccent(percentage: number): ThemePalette {
-    const warn = 90;
+    const warn = 100;
     if (percentage >= warn) return 'warn';
 
     const accent = 70;

@@ -546,7 +546,7 @@ export class ProjectComponent implements OnInit, OnChanges, OnDestroy {
     component.projectId = projectId;
     component.showIcon = this.showCards;
     component.showAsCard = false;
-    component.showDetailsOnHover = false;
+    component.showDetailsOnHover = true;
     component.showBorderOutline = false;
     component.showEmptyPlaceholder = showEmptyPlaceholder;
   }
