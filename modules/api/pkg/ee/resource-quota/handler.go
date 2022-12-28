@@ -62,20 +62,20 @@ type calculateProjectResourceQuotaUpdate struct {
 	Body struct {
 		Replicas int `json:"replicas"`
 		// DiskSizeGB will be processed only for those providers which don't have the disk size in their API objects, like AWS, Alibabla and GCP.
-		DiskSizeGB          int                        `json:"diskSizeGB,omitempty"`
-		AlibabaInstanceType *apiv1.AlibabaInstanceType `json:"alibabaInstanceType,omitempty"`
-		AnexiaNodeSpec      *apiv1.AnexiaNodeSpec      `json:"anexiaNodeSpec,omitempty"`
-		AWSSize             *apiv1.AWSSize             `json:"awsSize,omitempty"`
-		AzureSize           *apiv1.AzureSize           `json:"azureSize,omitempty"`
-		DOSize              *apiv1.DigitaloceanSize    `json:"doSize,omitempty"`
-		EquinixSize         *apiv1.PacketSize          `json:"equinixSize,omitempty"`
-		GCPSize             *apiv1.GCPMachineSize      `json:"gcpSize,omitempty"`
-		HetznerSize         *apiv1.HetznerSize         `json:"hetznerSize,omitempty"`
-		// TODO Kubevirt
-		NutanixNodeSpec    *apiv1.NutanixNodeSpec             `json:"nutanixNodeSpec,omitempty"`
-		OpenstackSize      *apiv1.OpenstackSize               `json:"openstackSize,omitempty"`
-		VMDirectorNodeSpec *apiv1.VMwareCloudDirectorNodeSpec `json:"vmDirectorNodeSpec,omitempty"`
-		VSphereNodeSpec    *apiv1.VSphereNodeSpec             `json:"vSphereNodeSpec,omitempty"`
+		DiskSizeGB          int                                `json:"diskSizeGB,omitempty"`
+		AlibabaInstanceType *apiv1.AlibabaInstanceType         `json:"alibabaInstanceType,omitempty"`
+		AnexiaNodeSpec      *apiv1.AnexiaNodeSpec              `json:"anexiaNodeSpec,omitempty"`
+		AWSSize             *apiv1.AWSSize                     `json:"awsSize,omitempty"`
+		AzureSize           *apiv1.AzureSize                   `json:"azureSize,omitempty"`
+		DOSize              *apiv1.DigitaloceanSize            `json:"doSize,omitempty"`
+		EquinixSize         *apiv1.PacketSize                  `json:"equinixSize,omitempty"`
+		GCPSize             *apiv1.GCPMachineSize              `json:"gcpSize,omitempty"`
+		HetznerSize         *apiv1.HetznerSize                 `json:"hetznerSize,omitempty"`
+		KubevirtNodeSize    *apiv1.KubevirtNodeSize            `json:"kubevirtNodeSize,omitempty"`
+		NutanixNodeSpec     *apiv1.NutanixNodeSpec             `json:"nutanixNodeSpec,omitempty"`
+		OpenstackSize       *apiv1.OpenstackSize               `json:"openstackSize,omitempty"`
+		VMDirectorNodeSpec  *apiv1.VMwareCloudDirectorNodeSpec `json:"vmDirectorNodeSpec,omitempty"`
+		VSphereNodeSpec     *apiv1.VSphereNodeSpec             `json:"vSphereNodeSpec,omitempty"`
 	}
 }
 
@@ -322,6 +322,10 @@ func getResourceDetailsFromRequest(req calculateProjectResourceQuotaUpdate) (*ku
 		if err = getHetznerResourceDetails(req, nc); err != nil {
 			return nil, err
 		}
+	case req.Body.KubevirtNodeSize != nil:
+		if err = getKubevirtResourceDetails(req, nc); err != nil {
+			return nil, err
+		}
 	case req.Body.NutanixNodeSpec != nil:
 		if err = getNutanixResourceDetails(req, nc); err != nil {
 			return nil, err
@@ -490,6 +494,37 @@ func getHetznerResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kube
 	if err := nc.WithStorage(req.Body.HetznerSize.Disk, "G"); err != nil {
 		return err
 	}
+	return nil
+}
+
+func getKubevirtResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kubermaticprovider.NodeCapacity) error {
+	cpus, err := strconv.Atoi(req.Body.KubevirtNodeSize.CPUs)
+	if err != nil {
+		return fmt.Errorf("error converting kubevirt node size cpus %q to int: %w", req.Body.KubevirtNodeSize.CPUs, err)
+	}
+	nc.WithCPUCount(cpus)
+
+	memory, err := resource.ParseQuantity(req.Body.KubevirtNodeSize.Memory)
+	if err != nil {
+		return fmt.Errorf("error parsing kubevirt node memory %q to resource quantity: %w", req.Body.KubevirtNodeSize.Memory, err)
+	}
+	nc.Memory = &memory
+
+	storage, err := resource.ParseQuantity(req.Body.KubevirtNodeSize.PrimaryDiskSize)
+	if err != nil {
+		return fmt.Errorf("failed to parse kubevirt node storage %q to resource quantity: %w", req.Body.KubevirtNodeSize.PrimaryDiskSize, err)
+	}
+
+	// Add all secondary disks
+	for _, d := range req.Body.KubevirtNodeSize.SecondaryDisks {
+		secondaryStorage, err := resource.ParseQuantity(d.Size)
+		if err != nil {
+			return fmt.Errorf("failed to parse kubevirt secondary node storage %q to resource quantity: %w", d.Size, err)
+		}
+		storage.Add(secondaryStorage)
+	}
+	nc.Storage = &storage
+	
 	return nil
 }
 
