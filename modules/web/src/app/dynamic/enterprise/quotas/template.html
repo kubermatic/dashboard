@@ -72,7 +72,19 @@ END OF TERMS AND CONDITIONS
             class="km-header-cell p-5"
             mat-sort-header>Memory (GB)</th>
         <td mat-cell
-            *matCellDef="let element">{{element?.quota?.memory}}</td>
+            *matCellDef="let element">
+          <div *ngIf="element.quota.memory"
+               fxLayout="row"
+               fxLayoutAlign=" center"
+               fxLayoutGap="10px">
+            <mat-progress-bar value
+                              class="property-usage-bar"
+                              mode="determinate"
+                              [color]="getprogressBarData(element.subjectName, 'memory').color"
+                              [value]="getprogressBarData(element.subjectName, 'memory').value"></mat-progress-bar>
+            <spann>{{getprogressBarData(element.subjectName, 'memory').useageQuota}}</spann>
+          </div>
+        </td>
       </ng-container>
 
       <ng-container [matColumnDef]="Column.CPU">
@@ -81,7 +93,19 @@ END OF TERMS AND CONDITIONS
             class="km-header-cell p-5"
             mat-sort-header>CPU</th>
         <td mat-cell
-            *matCellDef="let element">{{element?.quota?.cpu}}</td>
+            *matCellDef="let element">
+          <div *ngIf="element.quota.cpu"
+               fxLayout="row"
+               fxLayoutAlign=" center"
+               fxLayoutGap="10px">
+            <mat-progress-bar value
+                              class="property-usage-bar"
+                              mode="determinate"
+                              [color]="getprogressBarData(element.subjectName, 'cpu').color"
+                              [value]="getprogressBarData(element.subjectName, 'cpu').value"></mat-progress-bar>
+            <span>{{getprogressBarData(element.subjectName, 'cpu').useageQuota}}</span>
+          </div>
+        </td>
       </ng-container>
 
       <ng-container [matColumnDef]="Column.Storage">
@@ -90,7 +114,19 @@ END OF TERMS AND CONDITIONS
             class="km-header-cell p-5"
             mat-sort-header>Disk (GB)</th>
         <td mat-cell
-            *matCellDef="let element">{{element?.quota?.storage}}</td>
+            *matCellDef="let element">
+          <div *ngIf="element.quota.storage"
+               fxLayout="row"
+               fxLayoutAlign=" center"
+               fxLayoutGap="10px">
+            <mat-progress-bar value
+                              class="property-usage-bar"
+                              mode="determinate"
+                              [color]="getprogressBarData(element.subjectName, 'storage').color"
+                              [value]="getprogressBarData(element.subjectName, 'storage').value"></mat-progress-bar>
+            <span>{{getprogressBarData(element.subjectName, 'storage').useageQuota}}</span>
+          </div>
+        </td>
       </ng-container>
 
       <ng-container [matColumnDef]="Column.Actions">
