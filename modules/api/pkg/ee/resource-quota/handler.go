@@ -286,6 +286,9 @@ func CalculateResourceQuotaUpdateForProject(ctx context.Context, request interfa
 
 func getResourceDetailsFromRequest(req calculateProjectResourceQuotaUpdate) (*kubermaticv1.ResourceDetails, error) {
 	nc := kubermaticprovider.NewNodeCapacity()
+	nc.CPUCores = &resource.Quantity{}
+	nc.Memory = &resource.Quantity{}
+	nc.Storage = &resource.Quantity{}
 
 	var err error
 
@@ -344,17 +347,6 @@ func getResourceDetailsFromRequest(req calculateProjectResourceQuotaUpdate) (*ku
 		}
 	default:
 		return nil, fmt.Errorf("provider set in request not supported: %v", req.Body)
-	}
-
-	// if some resource is not set, default it
-	if nc.CPUCores == nil {
-		nc.CPUCores = &resource.Quantity{}
-	}
-	if nc.Memory == nil {
-		nc.Memory = &resource.Quantity{}
-	}
-	if nc.Storage == nil {
-		nc.Storage = &resource.Quantity{}
 	}
 
 	// Multiply by replicas count
