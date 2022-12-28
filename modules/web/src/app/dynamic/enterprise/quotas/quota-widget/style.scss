@@ -43,7 +43,7 @@
 
     &.widget-border {
       border-radius: variables.$border-radius;
-      padding: 0 10px;
+      padding: 0 0 0 10px;
 
       km-property {
         padding-top: 6px;
@@ -93,7 +93,7 @@
 
     &.no-card {
       left: auto;
-      top: 87px;
+      top: 135px;
       width: 272px;
     }
   }
@@ -119,5 +119,15 @@
         min-width: 100px;
       }
     }
+  }
+
+  // .quota-detail-collapsed {
+  //   span {
+  //     margin-right: 185px;
+  //   }
+  // }
+
+  .quota-bars-collapsed {
+    width: 230px;
   }
 }

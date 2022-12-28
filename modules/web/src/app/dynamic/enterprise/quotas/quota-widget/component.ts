@@ -36,6 +36,7 @@ import {getPercentage} from '@shared/utils/common';
 import {Member} from '@shared/entity/member';
 import {UserService} from '@core/services/user';
 import {QuotaService} from '../service';
+import {maxScreenWidth} from '@shared/constants/common';
 
 @Component({
   selector: 'km-quota-widget',
@@ -66,6 +67,7 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   showWarning: boolean;
   isWidgetApplicableForExternalOrImportedCluster: boolean;
   showDetails$ = this._showDetails$.asObservable().pipe(debounceTime(this._debounce));
+  iscollapsed = window.innerWidth < maxScreenWidth;
 
   readonly quotaLimit = 100;
 
@@ -81,6 +83,10 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
     this._showDetails$.next(false);
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event): void {
+    this.iscollapsed = event.target.innerWidth < maxScreenWidth;
+  }
   constructor(
     private readonly _cdr: ChangeDetectorRef,
     private readonly _userService: UserService,
