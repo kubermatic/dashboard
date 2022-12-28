@@ -48,6 +48,8 @@ import (
 	"k8s.io/apimachinery/pkg/util/sets"
 )
 
+const DefaultProjectResourceQuotaLabel = "kkp-default-resource-quota"
+
 // swagger:parameters getResourceQuota deleteResourceQuota
 type getResourceQuota struct {
 	// in: path
@@ -668,6 +670,9 @@ func PutResourceQuota(ctx context.Context, request interface{}, provider provide
 	}
 	newResourceQuota := originalResourceQuota.DeepCopy()
 
+	// if a resource quota is updated, it's not a default quota anymore. Remove default label if it exists
+	delete(newResourceQuota.Labels, DefaultProjectResourceQuotaLabel)
+
 	crdQuota, err := convertToCRDQuota(req.Body)
 	if err != nil {
 		return utilerrors.NewBadRequest(err.Error())
@@ -684,7 +689,7 @@ func PutResourceQuota(ctx context.Context, request interface{}, provider provide
 }
 
 func convertToAPIStruct(resourceQuota *kubermaticv1.ResourceQuota, humanReadableSubjectName string) *apiv2.ResourceQuota {
-	return &apiv2.ResourceQuota{
+	rq := &apiv2.ResourceQuota{
 		Name:        resourceQuota.Name,
 		SubjectName: resourceQuota.Spec.Subject.Name,
 		SubjectKind: resourceQuota.Spec.Subject.Kind,
@@ -695,6 +700,12 @@ func convertToAPIStruct(resourceQuota *kubermaticv1.ResourceQuota, humanReadable
 		},
 		SubjectHumanReadableName: humanReadableSubjectName,
 	}
+
+	if resourceQuota.Labels != nil && resourceQuota.Labels[DefaultProjectResourceQuotaLabel] == "true" {
+		rq.IsDefault = true
+	}
+
+	return rq
 }
 
 func DeleteResourceQuota(ctx context.Context, request interface{}, provider provider.ResourceQuotaProvider) error {
