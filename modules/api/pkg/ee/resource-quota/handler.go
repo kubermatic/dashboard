@@ -524,7 +524,7 @@ func getKubevirtResourceDetails(req calculateProjectResourceQuotaUpdate, nc *kub
 		storage.Add(secondaryStorage)
 	}
 	nc.Storage = &storage
-	
+
 	return nil
 }
 
