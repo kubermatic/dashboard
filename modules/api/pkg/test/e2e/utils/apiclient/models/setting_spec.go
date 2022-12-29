@@ -60,6 +60,9 @@ type SettingSpec struct {
 	// custom links
 	CustomLinks CustomLinks `json:"customLinks,omitempty"`
 
+	// default quota
+	DefaultQuota *DefaultProjectResourceQuota `json:"defaultQuota,omitempty"`
+
 	// machine deployment VM resource quota
 	MachineDeploymentVMResourceQuota *MachineFlavorFilter `json:"machineDeploymentVMResourceQuota,omitempty"`
 
@@ -85,6 +88,10 @@ func (m *SettingSpec) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateCustomLinks(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateDefaultQuota(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -145,6 +152,25 @@ func (m *SettingSpec) validateCustomLinks(formats strfmt.Registry) error {
 			return ce.ValidateName("customLinks")
 		}
 		return err
+	}
+
+	return nil
+}
+
+func (m *SettingSpec) validateDefaultQuota(formats strfmt.Registry) error {
+	if swag.IsZero(m.DefaultQuota) { // not required
+		return nil
+	}
+
+	if m.DefaultQuota != nil {
+		if err := m.DefaultQuota.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("defaultQuota")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("defaultQuota")
+			}
+			return err
+		}
 	}
 
 	return nil
@@ -257,6 +283,10 @@ func (m *SettingSpec) ContextValidate(ctx context.Context, formats strfmt.Regist
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateDefaultQuota(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateMachineDeploymentVMResourceQuota(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -308,6 +338,22 @@ func (m *SettingSpec) contextValidateCustomLinks(ctx context.Context, formats st
 			return ce.ValidateName("customLinks")
 		}
 		return err
+	}
+
+	return nil
+}
+
+func (m *SettingSpec) contextValidateDefaultQuota(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.DefaultQuota != nil {
+		if err := m.DefaultQuota.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("defaultQuota")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("defaultQuota")
+			}
+			return err
+		}
 	}
 
 	return nil

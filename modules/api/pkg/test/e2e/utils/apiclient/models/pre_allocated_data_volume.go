@@ -17,6 +17,9 @@ import (
 // swagger:model PreAllocatedDataVolume
 type PreAllocatedDataVolume struct {
 
+	// annotations
+	Annotations map[string]string `json:"annotations,omitempty"`
+
 	// name
 	Name string `json:"name,omitempty"`
 
