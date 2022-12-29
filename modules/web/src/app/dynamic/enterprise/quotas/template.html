@@ -80,9 +80,9 @@ END OF TERMS AND CONDITIONS
             <mat-progress-bar value
                               class="property-usage-bar"
                               mode="determinate"
-                              [color]="getprogressBarData(element.subjectName, 'memory').color"
-                              [value]="getprogressBarData(element.subjectName, 'memory').value"></mat-progress-bar>
-            <spann>{{getprogressBarData(element.subjectName, 'memory').useageQuota}}</spann>
+                              [color]="getProgressBarData(element.subjectName, resourceType.Memory).color"
+                              [value]="getProgressBarData(element.subjectName, resourceType.Memory).value"></mat-progress-bar>
+            <spann>{{getProgressBarData(element.subjectName, resourceType.Memory).usageQuota}}</spann>
           </div>
         </td>
       </ng-container>
@@ -101,9 +101,9 @@ END OF TERMS AND CONDITIONS
             <mat-progress-bar value
                               class="property-usage-bar"
                               mode="determinate"
-                              [color]="getprogressBarData(element.subjectName, 'cpu').color"
-                              [value]="getprogressBarData(element.subjectName, 'cpu').value"></mat-progress-bar>
-            <span>{{getprogressBarData(element.subjectName, 'cpu').useageQuota}}</span>
+                              [color]="getProgressBarData(element.subjectName, resourceType.CPU).color"
+                              [value]="getProgressBarData(element.subjectName, resourceType.CPU).value"></mat-progress-bar>
+            <span>{{getProgressBarData(element.subjectName, resourceType.CPU).usageQuota}}</span>
           </div>
         </td>
       </ng-container>
@@ -122,9 +122,9 @@ END OF TERMS AND CONDITIONS
             <mat-progress-bar value
                               class="property-usage-bar"
                               mode="determinate"
-                              [color]="getprogressBarData(element.subjectName, 'storage').color"
-                              [value]="getprogressBarData(element.subjectName, 'storage').value"></mat-progress-bar>
-            <span>{{getprogressBarData(element.subjectName, 'storage').useageQuota}}</span>
+                              [color]="getProgressBarData(element.subjectName, resourceType.Storage).color"
+                              [value]="getProgressBarData(element.subjectName, resourceType.Storage).value"></mat-progress-bar>
+            <span>{{getProgressBarData(element.subjectName, resourceType.Storage).usageQuota}}</span>
           </div>
         </td>
       </ng-container>

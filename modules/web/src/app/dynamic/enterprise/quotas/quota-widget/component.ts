@@ -28,7 +28,6 @@ import {
   OnChanges,
   SimpleChanges,
 } from '@angular/core';
-import {ThemePalette} from '@angular/material/core';
 import {debounceTime, take, takeUntil, map, filter} from 'rxjs/operators';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {QuotaDetails, QuotaVariables} from '@shared/entity/quota';
@@ -37,6 +36,7 @@ import {Member} from '@shared/entity/member';
 import {UserService} from '@core/services/user';
 import {QuotaService} from '../service';
 import {maxScreenWidth} from '@shared/constants/common';
+import {getProgressBarAccent} from '../utils/common';
 
 @Component({
   selector: 'km-quota-widget',
@@ -60,6 +60,8 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   @Input() isImportedCluster = false;
   @Input() isKubeOneCluster = false;
   @Input() showBorderOutline = true;
+  @Input() collapsible = false;
+  @Input() projectViewType = '';
 
   quotaPercentage: QuotaVariables;
   quotaDetails: QuotaDetails;
@@ -67,7 +69,8 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   showWarning: boolean;
   isWidgetApplicableForExternalOrImportedCluster: boolean;
   showDetails$ = this._showDetails$.asObservable().pipe(debounceTime(this._debounce));
-  iscollapsed = window.innerWidth < maxScreenWidth;
+  isCollapsed: boolean;
+  getProgressBarAccent = getProgressBarAccent;
 
   readonly quotaLimit = 100;
 
@@ -85,8 +88,16 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
 
   @HostListener('window:resize', ['$event'])
   onResize(event): void {
-    this.iscollapsed = event.target.innerWidth < maxScreenWidth;
+    this.isCollapsed = event.target.innerWidth < maxScreenWidth && this.collapsible;
   }
+
+  get classForQuotaDetailInSelectProjectView(): string {
+    if (this.projectViewType) {
+      return `quota-detail-project-${this.projectViewType}-view`;
+    }
+    return '';
+  }
+
   constructor(
     private readonly _cdr: ChangeDetectorRef,
     private readonly _userService: UserService,
@@ -95,6 +106,7 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit(): void {
     this.isLoading = true;
+    this.isCollapsed = window.innerWidth < maxScreenWidth && this.collapsible;
     this._initSubscriptions();
     this._setShowNotApplicableText();
   }
@@ -115,16 +127,6 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  getProgressBarAccent(percentage: number): ThemePalette {
-    const warn = 100;
-    if (percentage >= warn) return 'warn';
-
-    const accent = 70;
-    if (percentage >= accent) return 'accent';
-
-    return 'primary';
-  }
-
   private _initSubscriptions(): void {
     this._userService.currentUser.pipe(take(1)).subscribe(user => {
       this._user = user;
@@ -136,7 +138,7 @@ export class QuotaWidgetComponent implements OnInit, OnChanges, OnDestroy {
   private _subscribeToQuotaDetails(): void {
     const quota$ = this._user.isAdmin
       ? this._quotaService.quotas.pipe(map(quotas => quotas.find(({subjectName}) => subjectName === this.projectId)))
-      : this._quotaService.getProjectQuota(this.projectId);
+      : this._quotaService.getLiveProjectQuota(this.projectId);
 
     quota$.pipe(filter(Boolean), takeUntil(this._unsubscribe)).subscribe(quotaDetails => {
       this.quotaDetails = quotaDetails;

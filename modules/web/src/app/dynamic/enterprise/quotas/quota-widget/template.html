@@ -45,7 +45,7 @@ END OF TERMS AND CONDITIONS
       <i *ngIf="showIcon"
          class="km-icon-mask km-icon-quota"></i>
 
-      <ng-container *ngIf="!iscollapsed"
+      <ng-container *ngIf="!isCollapsed"
                     [ngTemplateOutlet]="!isWidgetApplicableForExternalOrImportedCluster ? quotaBars : notApplicableText"></ng-container>
 
       <ng-template #quotaBars>
@@ -77,10 +77,10 @@ END OF TERMS AND CONDITIONS
     </div>
 
     <mat-card class="km-quota-details"
-              [ngClass]="{ 'no-card': !showAsCard && showDetailsOnHover }"
+              [ngClass]="classForQuotaDetailInSelectProjectView"
               *ngIf="showDetails$ | async">
 
-      <mat-card-content *ngIf="!iscollapsed"
+      <mat-card-content *ngIf="!isCollapsed && quotaDetails"
                         fxLayout="column">
         <div class="km-detail-row">Project Quota</div>
 
@@ -138,22 +138,25 @@ END OF TERMS AND CONDITIONS
           </div>
         </ng-template>
       </mat-card-content>
-      <mat-card-content *ngIf="iscollapsed">
+      <mat-card-content *ngIf="isCollapsed">
         <div>Project Quota</div>
-        <ng-container [ngTemplateOutlet]="progressBar"
+        <ng-container *ngIf="quotaDetails.quota.cpu"
+                      [ngTemplateOutlet]="progressBar"
                       [ngTemplateOutletContext]=" {label: 'CPU', percentage: quotaPercentage.cpu,
                       resourceData: quotaDetails.quota.cpu,
-                      globalResourceData: quotaDetails.status.globalUsage.cpu}"></ng-container>
+                      globalResourceData: quotaDetails.status.globalUsage.cpu ?? 0}"></ng-container>
 
-        <ng-container [ngTemplateOutlet]="progressBar"
+        <ng-container *ngIf="quotaDetails.quota.memory"
+                      [ngTemplateOutlet]="progressBar"
                       [ngTemplateOutletContext]=" {label: 'Memory', percentage: quotaPercentage.memory,
                         resourceData: quotaDetails.quota.memory,
-                        globalResourceData: quotaDetails.status.globalUsage.memory}"></ng-container>
+                        globalResourceData: quotaDetails.status.globalUsage.memory ?? 0}"></ng-container>
 
-        <ng-container [ngTemplateOutlet]="progressBar"
+        <ng-container *ngIf="quotaDetails.quota.storage"
+                      [ngTemplateOutlet]="progressBar"
                       [ngTemplateOutletContext]=" {label: 'Disc', percentage: quotaPercentage.storage,
                         resourceData: quotaDetails.quota.storage,
-                        globalResourceData: quotaDetails.status.globalUsage.storage}"></ng-container>
+                        globalResourceData: quotaDetails.status.globalUsage.storage ?? 0 }"></ng-container>
       </mat-card-content>
     </mat-card>
 
@@ -169,11 +172,11 @@ END OF TERMS AND CONDITIONS
              fxLayoutGap="4px"
              fxLayoutAlign="space-between center">
           <span>{{label}}</span>
-          <span *ngIf="iscollapsed">{{globalResourceData}}/{{resourceData}}</span>
+          <span *ngIf="isCollapsed">{{globalResourceData}}/{{resourceData}}</span>
         </div>
         <mat-progress-bar value
                           class="property-usage-bar"
-                          [ngClass]="{'quota-bars-collapsed': iscollapsed}"
+                          [ngClass]="{'quota-bars-collapsed': isCollapsed}"
                           mode="determinate"
                           [color]="getProgressBarAccent(percentage)"
                           [value]="percentage ?? 1"

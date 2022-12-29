@@ -45,9 +45,9 @@ export class EditProjectComponent implements OnInit {
   form: FormGroup;
   projectQouta: QuotaDetails;
   asyncLabelValidators = [AsyncValidators.RestrictedLabelKeyName(ResourceType.Project)];
-  controls = Controls;
   user: Member;
   isMember: boolean;
+  readonly Controls = Controls;
 
   constructor(
     private readonly _projectService: ProjectService,
@@ -61,26 +61,7 @@ export class EditProjectComponent implements OnInit {
     this.labels = _.cloneDeep(this.project.labels);
 
     this._userService.currentUser.subscribe(user => (this.user = user));
-    this.form = new FormGroup({
-      [Controls.Name]: new FormControl(this.project.name, [Validators.required]),
-      [Controls.Labels]: new FormControl(''),
-      [Controls.CPUQuota]: new FormControl(''),
-      [Controls.MemoryQuota]: new FormControl(''),
-      [Controls.StorageQuota]: new FormControl(''),
-    });
-
-    this.isMember = !!this.user.projects.find(project => project.id === this.project.id);
-
-    if (this.isMember) {
-      this._quotaService.getProjectQuota(this.project.id).subscribe(quota => {
-        if (quota) {
-          this.projectQouta = quota;
-          this.form.get(Controls.CPUQuota).setValue(this.projectQouta.quota.cpu);
-          this.form.get(Controls.MemoryQuota).setValue(this.projectQouta.quota.memory);
-          this.form.get(Controls.StorageQuota).setValue(this.projectQouta.quota.storage);
-        }
-      });
-    }
+    this._initForm();
   }
 
   getObservable(): Observable<Project> {
@@ -112,5 +93,28 @@ export class EditProjectComponent implements OnInit {
     };
     this._quotaService.updateQuota(this.projectQouta?.name, quotaVariables).subscribe();
     this._notificationService.success(`Updated the ${this.project.name} project`);
+  }
+
+  private _initForm(): void {
+    this.form = new FormGroup({
+      [Controls.Name]: new FormControl(this.project.name, [Validators.required]),
+      [Controls.Labels]: new FormControl(''),
+      [Controls.CPUQuota]: new FormControl(''),
+      [Controls.MemoryQuota]: new FormControl(''),
+      [Controls.StorageQuota]: new FormControl(''),
+    });
+
+    this.isMember = !!this.user.projects.find(project => project.id === this.project.id);
+
+    if (this.isMember) {
+      this._quotaService.getProjectQuota(this.project.id).subscribe(quota => {
+        if (quota) {
+          this.projectQouta = quota;
+          this.form.get(Controls.CPUQuota).setValue(this.projectQouta.quota.cpu);
+          this.form.get(Controls.MemoryQuota).setValue(this.projectQouta.quota.memory);
+          this.form.get(Controls.StorageQuota).setValue(this.projectQouta.quota.storage);
+        }
+      });
+    }
   }
 }
