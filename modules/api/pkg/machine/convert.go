@@ -271,7 +271,7 @@ func GetAPIV2NodeCloudSpec(machineSpec clusterv1alpha1.MachineSpec) (*apiv1.Node
 			cloudSpec.VMwareCloudDirector.Metadata = *config.Metadata
 		}
 
-	case providerconfig.CloudProviderEquinixMetal:
+	case providerconfig.CloudProviderEquinixMetal, providerconfig.CloudProviderPacket:
 		config := &equinixmetal.RawConfig{}
 		if err := json.Unmarshal(decodedProviderSpec.CloudProviderSpec.Raw, &config); err != nil {
 			return nil, fmt.Errorf("failed to parse equinixmetal config: %w", err)
