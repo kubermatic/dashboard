@@ -14186,6 +14186,13 @@
         "parameters": [
           {
             "type": "string",
+            "x-go-name": "Architecture",
+            "description": "architecture query parameter. Supports: arm64 and x64 types.",
+            "name": "architecture",
+            "in": "query"
+          },
+          {
+            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -14197,13 +14204,6 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
-          },
-          {
-            "type": "string",
-            "x-go-name": "Architecture",
-            "description": "architecture query parameter. Supports: arm64 and x64 types.",
-            "name": "architecture",
-            "in": "query"
           }
         ],
         "responses": {
@@ -14720,6 +14720,11 @@
         "parameters": [
           {
             "type": "string",
+            "name": "DatacenterName",
+            "in": "header"
+          },
+          {
+            "type": "string",
             "x-go-name": "ProjectID",
             "name": "project_id",
             "in": "path",
@@ -14731,11 +14736,6 @@
             "name": "cluster_id",
             "in": "path",
             "required": true
-          },
-          {
-            "type": "string",
-            "name": "DatacenterName",
-            "in": "header"
           }
         ],
         "responses": {
@@ -29454,6 +29454,9 @@
           "description": "DNSPolicy represents the dns policy for the pod. Valid values are 'ClusterFirstWithHostNet', 'ClusterFirst',\n'Default' or 'None'. Defaults to \"ClusterFirst\". DNS parameters given in DNSConfig will be merged with the\npolicy selected with DNSPolicy.",
           "type": "string",
           "x-go-name": "DNSPolicy"
+        },
+        "images": {
+          "$ref": "#/definitions/ImageSources"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -29658,6 +29661,16 @@
         },
         "templates": {
           "$ref": "#/definitions/ImageList"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "DefaultProjectResourceQuota": {
+      "description": "DefaultProjectResourceQuota contains the default resource quota which will be set for all\nprojects that do not have a custom quota already set.",
+      "type": "object",
+      "properties": {
+        "quota": {
+          "$ref": "#/definitions/ResourceDetails"
         }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -31956,6 +31969,24 @@
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
     },
+    "HTTPSource": {
+      "type": "object",
+      "title": "HTTPSource represents list of standard VM images with http-source.",
+      "properties": {
+        "imageCloning": {
+          "$ref": "#/definitions/ImageCloning"
+        },
+        "operatingSystems": {
+          "description": "OperatingSystems represents list of supported operating-systems with their URLs.",
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/OSVersions"
+          },
+          "x-go-name": "OperatingSystems"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
     "HealthStatus": {
       "type": "string",
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
@@ -32186,11 +32217,43 @@
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
+    "ImageCloning": {
+      "type": "object",
+      "title": "ImageCloning represents options for kubevirt disk-image cloning.",
+      "properties": {
+        "enable": {
+          "description": "Enable allows you to enable/disable cloning of standard images. When this option is enabled,\ndownloading images from the http source destination will happen only once. Later,\nMachine Controller will clone the disks using DataVolumes with the cloning source.",
+          "type": "boolean",
+          "x-go-name": "Enable"
+        },
+        "storageClass": {
+          "description": "StorageClass represents storage-class for DataVolumes of standard images.",
+          "type": "string",
+          "x-go-name": "StorageClass"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
     "ImageList": {
       "type": "object",
       "title": "ImageList defines a map of operating system and the image to use.",
       "additionalProperties": {
         "type": "string"
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
+    "ImageSources": {
+      "type": "object",
+      "title": "ImageSources represents standard VM Image sources.",
+      "properties": {
+        "enableCustomImages": {
+          "description": "EnableCustomImages allows to enable/disable the usage of custom-disks (defaults to false).",
+          "type": "boolean",
+          "x-go-name": "EnableCustomImages"
+        },
+        "http": {
+          "$ref": "#/definitions/HTTPSource"
+        }
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
@@ -32899,7 +32962,7 @@
           "x-go-name": "Kubeconfig"
         },
         "preAllocatedDataVolumes": {
-          "description": "PreAllocatedDataVolumes holds list of preallocated DataVolumes which can be used as reference for DataVolume cloning.",
+          "description": "PreAllocatedDataVolumes represents a list of DataVolumes that are tied to cluster lifecycle and can be referenced by machines.\nCustom Images are a good example of this use case.",
           "type": "array",
           "items": {
             "$ref": "#/definitions/PreAllocatedDataVolume"
@@ -34498,6 +34561,14 @@
       },
       "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
+    "OSVersions": {
+      "type": "object",
+      "title": "OSVersions defines a map of OS version and the URL to download the image.",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
+    },
     "ObjectMeta": {
       "description": "ObjectMeta defines the set of fields that objects returned from the API have",
       "type": "object",
@@ -35393,6 +35464,13 @@
     "PreAllocatedDataVolume": {
       "type": "object",
       "properties": {
+        "annotations": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-go-name": "Annotations"
+        },
         "name": {
           "type": "string",
           "x-go-name": "Name"
@@ -36041,6 +36119,22 @@
         }
       },
       "x-go-package": "k8c.io/dashboard/v2/pkg/api/v2"
+    },
+    "ResourceDetails": {
+      "type": "object",
+      "title": "ResourceDetails holds the CPU, Memory and Storage quantities.",
+      "properties": {
+        "cpu": {
+          "$ref": "#/definitions/Quantity"
+        },
+        "memory": {
+          "$ref": "#/definitions/Quantity"
+        },
+        "storage": {
+          "$ref": "#/definitions/Quantity"
+        }
+      },
+      "x-go-package": "k8c.io/kubermatic/v2/pkg/apis/kubermatic/v1"
     },
     "ResourceLabelMap": {
       "type": "object",
@@ -36745,6 +36839,9 @@
           "type": "integer",
           "format": "int8",
           "x-go-name": "DefaultNodeCount"
+        },
+        "defaultQuota": {
+          "$ref": "#/definitions/DefaultProjectResourceQuota"
         },
         "displayAPIDocs": {
           "description": "DisplayDemoInfo controls whether a a link to the KKP API documentation is shown in the footer.",
